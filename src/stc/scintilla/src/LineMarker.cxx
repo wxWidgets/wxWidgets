@@ -13,6 +13,10 @@
 #include "XPM.h"
 #include "LineMarker.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 void LineMarker::RefreshColourPalette(Palette &pal, bool want) {
 	pal.WantFind(fore, want);
 	pal.WantFind(back, want);

@@ -28,16 +28,7 @@
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
 
-class WXDLLIMPEXP_CORE wxScrollBar;
-
-#ifdef WXMAKINGDLL_STC
-    #define WXDLLIMPEXP_STC WXEXPORT
-#elif defined(WXUSINGDLL)
-    #define WXDLLIMPEXP_STC WXIMPORT
-#else // not making nor using DLL
-    #define WXDLLIMPEXP_STC
-#endif
-
+class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 // SWIG can't handle "#if" type of conditionals, only "#ifdef"
 #ifdef SWIG
@@ -78,8 +69,8 @@ struct SCNotification;
 
 #ifndef SWIG
 extern WXDLLIMPEXP_STC const wxChar* wxSTCNameStr;
-class  WXDLLIMPEXP_STC wxStyledTextCtrl;
-class  WXDLLIMPEXP_STC wxStyledTextEvent;
+class  WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;
+class  WXDLLIMPEXP_FWD_STC wxStyledTextEvent;
 #endif
 
 //----------------------------------------------------------------------
@@ -142,6 +133,9 @@ public:
     //
     void StyleSetSpec(int styleNum, const wxString& spec);
 
+
+    // Get the font of a style.
+    wxFont StyleGetFont(int style);
 
 
     // Set style size, face, bold, italic, and underline attributes from
@@ -451,6 +445,8 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_DCLICK,     1674)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_CALLTIP_CLICK,      1675)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_SELECTION, 1676)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_INDICATOR_CLICK,    1677)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_INDICATOR_RELEASE,  1678)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -479,7 +475,9 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_HOTSPOT_CLICK,
         wxEVT_STC_HOTSPOT_DCLICK,
         wxEVT_STC_CALLTIP_CLICK,
-        wxEVT_STC_AUTOCOMP_SELECTION
+        wxEVT_STC_AUTOCOMP_SELECTION,
+        wxEVT_STC_INDICATOR_CLICK,
+        wxEVT_STC_INDICATOR_RELEASE
     };
 #endif
 
@@ -514,6 +512,9 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_HOTSPOT_DCLICK(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_CALLTIP_CLICK(id, fn))     DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK          id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_SELECTION(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION     id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_STC_INDICATOR_CLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_CLICK        id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_STC_INDICATOR_RELEASE(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_RELEASE    id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
+
 #endif
 
 #endif // wxUSE_STC

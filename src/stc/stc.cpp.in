@@ -110,7 +110,9 @@ DEFINE_EVENT_TYPE( wxEVT_STC_ZOOM )
 DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_CLICK )
 DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_DCLICK )
 DEFINE_EVENT_TYPE( wxEVT_STC_CALLTIP_CLICK )
-DEFINE_EVENT_TYPE( wxEVT_STC_AUTOCOMP_SELECTION )    
+DEFINE_EVENT_TYPE( wxEVT_STC_AUTOCOMP_SELECTION )
+DEFINE_EVENT_TYPE( wxEVT_STC_INDICATOR_CLICK )
+DEFINE_EVENT_TYPE( wxEVT_STC_INDICATOR_RELEASE )
 
 
 
@@ -301,6 +303,25 @@ void wxStyledTextCtrl::StyleSetSpec(int styleNum, const wxString& spec) {
 }
 
 
+// Get the font of a style
+wxFont wxStyledTextCtrl::StyleGetFont(int style) {
+    wxFont font;
+    font.SetPointSize(StyleGetSize(style));
+    font.SetFaceName(StyleGetFaceName(style));
+    if( StyleGetBold(style) )
+        font.SetWeight(wxFONTWEIGHT_BOLD);
+    else
+        font.SetWeight(wxFONTWEIGHT_NORMAL);
+
+    if( StyleGetItalic(style) )
+        font.SetStyle(wxFONTSTYLE_ITALIC);
+    else
+        font.SetStyle(wxFONTSTYLE_NORMAL);
+
+    return font;
+}
+
+
 // Set style size, face, bold, italic, and underline attributes from
 // a wxFont's attributes.
 void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
@@ -315,7 +336,7 @@ void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
     bool           italic   = font.GetStyle() != wxNORMAL;
     bool           under    = font.GetUnderlined();
     wxFontEncoding encoding = font.GetEncoding();
-    
+
     StyleSetFontAttr(styleNum, size, faceName, bold, italic, under, encoding);
 }
 
@@ -419,7 +440,7 @@ void wxStyledTextCtrl::StyleSetCharacterSet(int style, int characterSet)
         case wxSTC_CHARSET_CYRILLIC:
             encoding = wxFONTENCODING_ISO8859_5;
             break;
-                
+
         case wxSTC_CHARSET_8859_15:
             encoding = wxFONTENCODING_ISO8859_15;;
             break;
@@ -615,7 +636,7 @@ wxCharBuffer wxStyledTextCtrl::GetSelectedTextRaw()
     if (!len) {
         wxCharBuffer empty;
         return empty;
-    }        
+    }
 
     wxCharBuffer buf(len);
     SendMsg(SCI_GETSELTEXT, 0, (long)buf.data());
@@ -633,7 +654,7 @@ wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
     if (!len) {
         wxCharBuffer empty;
         return empty;
-    }        
+    }
 
     wxCharBuffer buf(len);
     TextRange tr;
@@ -800,7 +821,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
         }
 #endif
     }
-    
+
     evt.Skip();
 }
 
@@ -957,7 +978,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         SetEventText(evt, scn.text, strlen(scn.text));
         evt.SetPosition(scn.lParam);
         break;
-        
+
     case SCN_USERLISTSELECTION:
         evt.SetEventType(wxEVT_STC_USERLISTSELECTION);
         evt.SetListType(scn.listType);
@@ -997,7 +1018,15 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_CALLTIPCLICK:
         evt.SetEventType(wxEVT_STC_CALLTIP_CLICK);
         break;
-       
+
+    case SCN_INDICATORCLICK:
+        evt.SetEventType(wxEVT_STC_INDICATOR_CLICK);
+        break;
+
+    case SCN_INDICATORRELEASE:
+        evt.SetEventType(wxEVT_STC_INDICATOR_RELEASE);
+        break;
+
     default:
         return;
     }

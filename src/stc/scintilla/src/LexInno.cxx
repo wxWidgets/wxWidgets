@@ -20,6 +20,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 static void ColouriseInnoDoc(unsigned int startPos, int length, int, WordList *keywordLists[], Accessor &styler) {
 	int state = SCE_INNO_DEFAULT;
 	char chPrev;
@@ -172,14 +176,14 @@ static void ColouriseInnoDoc(unsigned int startPos, int length, int, WordList *k
 			case SCE_INNO_STRING_DOUBLE:
 				if (ch == '"' || isEOL) {
 					state = SCE_INNO_DEFAULT;
-					styler.ColourTo(i,SCE_INNO_DEFAULT);
+					styler.ColourTo(i,SCE_INNO_STRING_DOUBLE);
 				}
 				break;
 
 			case SCE_INNO_STRING_SINGLE:
 				if (ch == '\'' || isEOL) {
 					state = SCE_INNO_DEFAULT;
-					styler.ColourTo(i,SCE_INNO_DEFAULT);
+					styler.ColourTo(i,SCE_INNO_STRING_SINGLE);
 				}
 				break;
 

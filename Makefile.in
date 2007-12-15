@@ -215,6 +215,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_CellBuffer.o \
 	wxscintilla_CharClassify.o \
 	wxscintilla_ContractionState.o \
+	wxscintilla_Decoration.o \
 	wxscintilla_Document.o \
 	wxscintilla_DocumentAccessor.o \
 	wxscintilla_Editor.o \
@@ -224,7 +225,9 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_KeyWords.o \
 	wxscintilla_LexAPDL.o \
 	wxscintilla_LexAU3.o \
+	wxscintilla_LexASY.o \
 	wxscintilla_LexAVE.o \
+	wxscintilla_LexAbaqus.o \
 	wxscintilla_LexAda.o \
 	wxscintilla_LexAsm.o \
 	wxscintilla_LexAsn1.o \
@@ -233,18 +236,21 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexBasic.o \
 	wxscintilla_LexBullant.o \
 	wxscintilla_LexCLW.o \
+	wxscintilla_LexCmake.o \
 	wxscintilla_LexCPP.o \
 	wxscintilla_LexCSS.o \
 	wxscintilla_LexCaml.o \
 	wxscintilla_LexCsound.o \
 	wxscintilla_LexConf.o \
 	wxscintilla_LexCrontab.o \
+	wxscintilla_LexD.o \
 	wxscintilla_LexEScript.o \
 	wxscintilla_LexEiffel.o \
 	wxscintilla_LexErlang.o \
 	wxscintilla_LexFlagship.o \
 	wxscintilla_LexForth.o \
 	wxscintilla_LexFortran.o \
+	wxscintilla_LexGAP.o \
 	wxscintilla_LexGui4Cli.o \
 	wxscintilla_LexHTML.o \
 	wxscintilla_LexHaskell.o \
@@ -262,11 +268,14 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexOpal.o \
 	wxscintilla_LexOthers.o \
 	wxscintilla_LexPB.o \
+	wxscintilla_LexPLM.o \
 	wxscintilla_LexPOV.o \
+	wxscintilla_LexProgress.o \
 	wxscintilla_LexPS.o \
 	wxscintilla_LexPascal.o \
 	wxscintilla_LexPerl.o \
 	wxscintilla_LexPython.o \
+	wxscintilla_LexR.o \
 	wxscintilla_LexRebol.o \
 	wxscintilla_LexRuby.o \
 	wxscintilla_LexSQL.o \
@@ -282,8 +291,10 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexVerilog.o \
 	wxscintilla_LexYAML.o \
 	wxscintilla_LineMarker.o \
+	wxscintilla_PositionCache.o \
 	wxscintilla_PropSet.o \
 	wxscintilla_RESearch.o \
+	wxscintilla_RunStyles.o \
 	wxscintilla_ScintillaBase.o \
 	wxscintilla_Style.o \
 	wxscintilla_StyleContext.o \
@@ -13235,6 +13246,9 @@ wxscintilla_CharClassify.o: $(srcdir)/src/stc/scintilla/src/CharClassify.cxx
 wxscintilla_ContractionState.o: $(srcdir)/src/stc/scintilla/src/ContractionState.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/ContractionState.cxx
 
+wxscintilla_Decoration.o: $(srcdir)/src/stc/scintilla/src/Decoration.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/Decoration.cxx
+
 wxscintilla_Document.o: $(srcdir)/src/stc/scintilla/src/Document.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/Document.cxx
 
@@ -13262,8 +13276,14 @@ wxscintilla_LexAPDL.o: $(srcdir)/src/stc/scintilla/src/LexAPDL.cxx
 wxscintilla_LexAU3.o: $(srcdir)/src/stc/scintilla/src/LexAU3.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexAU3.cxx
 
+wxscintilla_LexASY.o: $(srcdir)/src/stc/scintilla/src/LexASY.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexASY.cxx
+
 wxscintilla_LexAVE.o: $(srcdir)/src/stc/scintilla/src/LexAVE.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexAVE.cxx
+
+wxscintilla_LexAbaqus.o: $(srcdir)/src/stc/scintilla/src/LexAbaqus.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexAbaqus.cxx
 
 wxscintilla_LexAda.o: $(srcdir)/src/stc/scintilla/src/LexAda.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexAda.cxx
@@ -13289,6 +13309,9 @@ wxscintilla_LexBullant.o: $(srcdir)/src/stc/scintilla/src/LexBullant.cxx
 wxscintilla_LexCLW.o: $(srcdir)/src/stc/scintilla/src/LexCLW.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexCLW.cxx
 
+wxscintilla_LexCmake.o: $(srcdir)/src/stc/scintilla/src/LexCmake.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexCmake.cxx
+
 wxscintilla_LexCPP.o: $(srcdir)/src/stc/scintilla/src/LexCPP.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexCPP.cxx
 
@@ -13307,6 +13330,9 @@ wxscintilla_LexConf.o: $(srcdir)/src/stc/scintilla/src/LexConf.cxx
 wxscintilla_LexCrontab.o: $(srcdir)/src/stc/scintilla/src/LexCrontab.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexCrontab.cxx
 
+wxscintilla_LexD.o: $(srcdir)/src/stc/scintilla/src/LexD.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexD.cxx
+
 wxscintilla_LexEScript.o: $(srcdir)/src/stc/scintilla/src/LexEScript.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexEScript.cxx
 
@@ -13324,6 +13350,9 @@ wxscintilla_LexForth.o: $(srcdir)/src/stc/scintilla/src/LexForth.cxx
 
 wxscintilla_LexFortran.o: $(srcdir)/src/stc/scintilla/src/LexFortran.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexFortran.cxx
+
+wxscintilla_LexGAP.o: $(srcdir)/src/stc/scintilla/src/LexGAP.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexGAP.cxx
 
 wxscintilla_LexGui4Cli.o: $(srcdir)/src/stc/scintilla/src/LexGui4Cli.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexGui4Cli.cxx
@@ -13376,8 +13405,14 @@ wxscintilla_LexOthers.o: $(srcdir)/src/stc/scintilla/src/LexOthers.cxx
 wxscintilla_LexPB.o: $(srcdir)/src/stc/scintilla/src/LexPB.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexPB.cxx
 
+wxscintilla_LexPLM.o: $(srcdir)/src/stc/scintilla/src/LexPLM.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexPLM.cxx
+
 wxscintilla_LexPOV.o: $(srcdir)/src/stc/scintilla/src/LexPOV.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexPOV.cxx
+
+wxscintilla_LexProgress.o: $(srcdir)/src/stc/scintilla/src/LexProgress.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexProgress.cxx
 
 wxscintilla_LexPS.o: $(srcdir)/src/stc/scintilla/src/LexPS.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexPS.cxx
@@ -13390,6 +13425,9 @@ wxscintilla_LexPerl.o: $(srcdir)/src/stc/scintilla/src/LexPerl.cxx
 
 wxscintilla_LexPython.o: $(srcdir)/src/stc/scintilla/src/LexPython.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexPython.cxx
+
+wxscintilla_LexR.o: $(srcdir)/src/stc/scintilla/src/LexR.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexR.cxx
 
 wxscintilla_LexRebol.o: $(srcdir)/src/stc/scintilla/src/LexRebol.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LexRebol.cxx
@@ -13436,11 +13474,17 @@ wxscintilla_LexYAML.o: $(srcdir)/src/stc/scintilla/src/LexYAML.cxx
 wxscintilla_LineMarker.o: $(srcdir)/src/stc/scintilla/src/LineMarker.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/LineMarker.cxx
 
+wxscintilla_PositionCache.o: $(srcdir)/src/stc/scintilla/src/PositionCache.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/PositionCache.cxx
+
 wxscintilla_PropSet.o: $(srcdir)/src/stc/scintilla/src/PropSet.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/PropSet.cxx
 
 wxscintilla_RESearch.o: $(srcdir)/src/stc/scintilla/src/RESearch.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/RESearch.cxx
+
+wxscintilla_RunStyles.o: $(srcdir)/src/stc/scintilla/src/RunStyles.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/RunStyles.cxx
 
 wxscintilla_ScintillaBase.o: $(srcdir)/src/stc/scintilla/src/ScintillaBase.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/ScintillaBase.cxx

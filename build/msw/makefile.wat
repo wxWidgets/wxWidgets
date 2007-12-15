@@ -3135,6 +3135,7 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_CellBuffer.obj &
 	$(OBJS)\wxscintilla_CharClassify.obj &
 	$(OBJS)\wxscintilla_ContractionState.obj &
+	$(OBJS)\wxscintilla_Decoration.obj &
 	$(OBJS)\wxscintilla_Document.obj &
 	$(OBJS)\wxscintilla_DocumentAccessor.obj &
 	$(OBJS)\wxscintilla_Editor.obj &
@@ -3144,7 +3145,9 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_KeyWords.obj &
 	$(OBJS)\wxscintilla_LexAPDL.obj &
 	$(OBJS)\wxscintilla_LexAU3.obj &
+	$(OBJS)\wxscintilla_LexASY.obj &
 	$(OBJS)\wxscintilla_LexAVE.obj &
+	$(OBJS)\wxscintilla_LexAbaqus.obj &
 	$(OBJS)\wxscintilla_LexAda.obj &
 	$(OBJS)\wxscintilla_LexAsm.obj &
 	$(OBJS)\wxscintilla_LexAsn1.obj &
@@ -3153,18 +3156,21 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexBasic.obj &
 	$(OBJS)\wxscintilla_LexBullant.obj &
 	$(OBJS)\wxscintilla_LexCLW.obj &
+	$(OBJS)\wxscintilla_LexCmake.obj &
 	$(OBJS)\wxscintilla_LexCPP.obj &
 	$(OBJS)\wxscintilla_LexCSS.obj &
 	$(OBJS)\wxscintilla_LexCaml.obj &
 	$(OBJS)\wxscintilla_LexCsound.obj &
 	$(OBJS)\wxscintilla_LexConf.obj &
 	$(OBJS)\wxscintilla_LexCrontab.obj &
+	$(OBJS)\wxscintilla_LexD.obj &
 	$(OBJS)\wxscintilla_LexEScript.obj &
 	$(OBJS)\wxscintilla_LexEiffel.obj &
 	$(OBJS)\wxscintilla_LexErlang.obj &
 	$(OBJS)\wxscintilla_LexFlagship.obj &
 	$(OBJS)\wxscintilla_LexForth.obj &
 	$(OBJS)\wxscintilla_LexFortran.obj &
+	$(OBJS)\wxscintilla_LexGAP.obj &
 	$(OBJS)\wxscintilla_LexGui4Cli.obj &
 	$(OBJS)\wxscintilla_LexHTML.obj &
 	$(OBJS)\wxscintilla_LexHaskell.obj &
@@ -3182,11 +3188,14 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexOpal.obj &
 	$(OBJS)\wxscintilla_LexOthers.obj &
 	$(OBJS)\wxscintilla_LexPB.obj &
+	$(OBJS)\wxscintilla_LexPLM.obj &
 	$(OBJS)\wxscintilla_LexPOV.obj &
+	$(OBJS)\wxscintilla_LexProgress.obj &
 	$(OBJS)\wxscintilla_LexPS.obj &
 	$(OBJS)\wxscintilla_LexPascal.obj &
 	$(OBJS)\wxscintilla_LexPerl.obj &
 	$(OBJS)\wxscintilla_LexPython.obj &
+	$(OBJS)\wxscintilla_LexR.obj &
 	$(OBJS)\wxscintilla_LexRebol.obj &
 	$(OBJS)\wxscintilla_LexRuby.obj &
 	$(OBJS)\wxscintilla_LexSQL.obj &
@@ -3202,8 +3211,10 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexVerilog.obj &
 	$(OBJS)\wxscintilla_LexYAML.obj &
 	$(OBJS)\wxscintilla_LineMarker.obj &
+	$(OBJS)\wxscintilla_PositionCache.obj &
 	$(OBJS)\wxscintilla_PropSet.obj &
 	$(OBJS)\wxscintilla_RESearch.obj &
+	$(OBJS)\wxscintilla_RunStyles.obj &
 	$(OBJS)\wxscintilla_ScintillaBase.obj &
 	$(OBJS)\wxscintilla_Style.obj &
 	$(OBJS)\wxscintilla_StyleContext.obj &
@@ -5269,6 +5280,9 @@ $(OBJS)\wxscintilla_CharClassify.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\
 $(OBJS)\wxscintilla_ContractionState.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\ContractionState.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_Decoration.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\Decoration.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_Document.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\Document.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
@@ -5296,7 +5310,13 @@ $(OBJS)\wxscintilla_LexAPDL.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexAP
 $(OBJS)\wxscintilla_LexAU3.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexAU3.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_LexASY.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexASY.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_LexAVE.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexAVE.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_LexAbaqus.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexAbaqus.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexAda.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexAda.cxx
@@ -5323,6 +5343,9 @@ $(OBJS)\wxscintilla_LexBullant.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\Le
 $(OBJS)\wxscintilla_LexCLW.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexCLW.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_LexCmake.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexCmake.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_LexCPP.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexCPP.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
@@ -5341,6 +5364,9 @@ $(OBJS)\wxscintilla_LexConf.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexCo
 $(OBJS)\wxscintilla_LexCrontab.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexCrontab.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_LexD.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexD.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_LexEScript.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexEScript.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
@@ -5357,6 +5383,9 @@ $(OBJS)\wxscintilla_LexForth.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexF
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexFortran.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexFortran.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_LexGAP.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexGAP.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexGui4Cli.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexGui4Cli.cxx
@@ -5410,7 +5439,13 @@ $(OBJS)\wxscintilla_LexOthers.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\Lex
 $(OBJS)\wxscintilla_LexPB.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexPB.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_LexPLM.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexPLM.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_LexPOV.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexPOV.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_LexProgress.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexProgress.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexPS.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexPS.cxx
@@ -5423,6 +5458,9 @@ $(OBJS)\wxscintilla_LexPerl.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexPe
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexPython.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexPython.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_LexR.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexR.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexRebol.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexRebol.cxx
@@ -5470,10 +5508,16 @@ $(OBJS)\wxscintilla_LexYAML.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LexYA
 $(OBJS)\wxscintilla_LineMarker.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\LineMarker.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_PositionCache.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\PositionCache.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_PropSet.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\PropSet.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_RESearch.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\RESearch.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_RunStyles.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\RunStyles.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_ScintillaBase.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\ScintillaBase.cxx

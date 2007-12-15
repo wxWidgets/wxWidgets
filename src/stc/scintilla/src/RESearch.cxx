@@ -16,6 +16,7 @@
  * Converted to modern function prototypes.
  * Put all global/static variables into an object so this code can be
  * used from multiple threads, etc.
+ * Some extensions by Philippe Lhoste PhiLho(a)GMX.net
  *
  * These routines are the PUBLIC DOMAIN equivalents of regex
  * routines as found in 4.nBSD UN*X, with minor extensions.
@@ -58,30 +59,37 @@
  *      [2]     .       matches any character.
  *
  *      [3]     \       matches the character following it, except:
- *                      - \a, \b, \f, \n, \t, \v match the
- *                      corresponding C escape char;
+ *                      - \a, \b, \f, \n, \r, \t, \v match the corresponding C
+ *                      escape char, respectively BEL, BS, FF, LF, CR, TAB and VT;
+ *                      Note that \r and \n are never matched because Scintilla
+ *                      regex searches are made line per line
+ *                      (stripped of end-of-line chars).
  *                      - if not in posix mode, when followed by a
  *                      left or right round bracket (see [7]);
  *                      - when followed by a digit 1 to 9 (see [8]);
  *                      - when followed by a left or right angle bracket
- *                      (see [9]).
- *                      It is used as an escape character for all
- *                      other meta-characters, and itself. When used
- *                      in a set ([4]), it is treated as an ordinary
- *                      character (except for escape chars).
+ *                      (see [9]);
+ *                      - when followed by d, D, s, S, w or W (see [10]);
+ *                      - when followed by x and two hexa digits (see [11].
+ *                      Backslash is used as an escape character for all
+ *                      other meta-characters, and itself.
  *
  *      [4]     [set]   matches one of the characters in the set.
  *                      If the first character in the set is "^",
- *                      it matches a character NOT in the set, i.e.
- *                      complements the set. A shorthand S-E (start-end)
- *                      is used to specify a set of characters S upto
- *                      E, inclusive. The special characters "]" and
- *                      "-" have no special meaning if they appear
- *                      as the first chars in the set. To include both,
- *                      put - first: [-]A-Z]:
- *                      [-]|] matches these 2 chars,
- *                      []-|] matches from ] to | chars.
+ *                      it matches the characters NOT in the set, i.e.
+ *                      complements the set. A shorthand S-E (start dash end)
+ *                      is used to specify a set of characters S up to
+ *                      E, inclusive. S and E must be characters, otherwise
+ *                      the dash is taken literally (eg. in expression [\d-a]).
+ *                      The special characters "]" and "-" have no special
+ *                      meaning if they appear as the first chars in the set.
+ *                      To include both, put - first: [-]A-Z]
+ *                      (or just backslash them).
  *                      examples:        match:
+ *
+ *                              [-]|]    matches these 3 chars,
+ *
+ *                              []-|]    matches from ] to | chars
  *
  *                              [a-z]    any lowercase alpha
  *
@@ -92,13 +100,15 @@
  *
  *                              [a-zA-Z] any alpha
  *
- *      [5]     *       any regular expression form [1] to [4], followed by
- *                      closure char (*) matches zero or more matches of
- *                      that form.
+ *      [5]     *       any regular expression form [1] to [4]
+ *                      (except [7], [8] and [9] forms of [3]),
+ *                      followed by closure char (*)
+ *                      matches zero or more matches of that form.
  *
  *      [6]     +       same as [5], except it matches one or more.
+ *                      Both [5] and [6] are greedy (they match as much as possible).
  *
- *      [7]             a regular expression in the form [1] to [10], enclosed
+ *      [7]             a regular expression in the form [1] to [12], enclosed
  *                      as \(form\) (or (form) with posix flag) matches what
  *                      form matches. The enclosure creates a set of tags,
  *                      used for [8] and for pattern substitution.
@@ -112,14 +122,30 @@
  *                      pattern matching to the beginning of a word, and/or
  *                      the end of a word. A word is defined to be a character
  *                      string beginning and/or ending with the characters
- *                      A-Z a-z 0-9 and _. It must also be preceded and/or
+ *                      A-Z a-z 0-9 and _. Scintilla extends this definition
+ *                      by user setting. The word must also be preceded and/or
  *                      followed by any character outside those mentioned.
  *
- *      [10]            a composite regular expression xy where x and y
- *                      are in the form [1] to [10] matches the longest
+ *      [10]    \l      a backslash followed by d, D, s, S, w or W,
+ *                      becomes a character class (both inside and
+ *                      outside sets []).
+ *                        d: decimal digits
+ *                        D: any char except decimal digits
+ *                        s: whitespace (space, \t \n \r \f \v)
+ *                        S: any char except whitespace (see above)
+ *                        w: alphanumeric & underscore (changed by user setting)
+ *                        W: any char except alphanumeric & underscore (see above)
+ *
+ *      [11]    \xHH    a backslash followed by x and two hexa digits,
+ *                      becomes the character whose Ascii code is equal
+ *                      to these digits. If not followed by two digits,
+ *                      it is 'x' char itself.
+ *
+ *      [12]            a composite regular expression xy where x and y
+ *                      are in the form [1] to [11] matches the longest
  *                      match of x followed by a match for y.
  *
- *      [11]    ^       a regular expression starting with a ^ character
+ *      [13]    ^       a regular expression starting with a ^ character
  *              $       and/or ending with a $ character, restricts the
  *                      pattern matching to the beginning of the line,
  *                      or the end of line. [anchors] Elsewhere in the
@@ -143,11 +169,11 @@
  *
  * Notes:
  *
- *	This implementation uses a bit-set representation for character
- *	classes for speed and compactness. Each character is represented
- *	by one bit in a 256-bit block. Thus, CCL always takes a
+ *  This implementation uses a bit-set representation for character
+ *  classes for speed and compactness. Each character is represented
+ *  by one bit in a 256-bit block. Thus, CCL always takes a
  *	constant 32 bytes in the internal nfa, and RESearch::Execute does a single
- *	bit comparison to locate the character in the set.
+ *  bit comparison to locate the character in the set.
  *
  * Examples:
  *
@@ -180,6 +206,10 @@
 #pragma warning(disable: 4514)
 #endif
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 #define OKP     1
 #define NOP     0
 
@@ -204,7 +234,7 @@
 #define BLKIND  0370
 #define BITIND  07
 
-const char bitarr[] = {1,2,4,8,16,32,64,'\200'};
+const char bitarr[] = { 1, 2, 4, 8, 16, 32, 64, '\200' };
 
 #define badpat(x)	(*nfa = END, x)
 
@@ -212,7 +242,7 @@ const char bitarr[] = {1,2,4,8,16,32,64,'\200'};
  * Character classification table for word boundary operators BOW
  * and EOW is passed in by the creator of this object (Scintilla
  * Document). The Document default state is that word chars are:
- * 0-9,a-z, A-Z and _
+ * 0-9, a-z, A-Z and _
  */
 
 RESearch::RESearch(CharClassify *charClassTable) {
@@ -227,14 +257,14 @@ RESearch::~RESearch() {
 void RESearch::Init() {
 	sta = NOP;                  /* status of lastpat */
 	bol = 0;
-	for (int i=0; i<MAXTAG; i++)
+	for (int i = 0; i < MAXTAG; i++)
 		pat[i] = 0;
-	for (int j=0; j<BITBLK; j++)
+	for (int j = 0; j < BITBLK; j++)
 		bittab[j] = 0;
 }
 
 void RESearch::Clear() {
-	for (int i=0; i<MAXTAG; i++) {
+	for (int i = 0; i < MAXTAG; i++) {
 		delete []pat[i];
 		pat[i] = 0;
 		bopat[i] = NOTFOUND;
@@ -244,12 +274,12 @@ void RESearch::Clear() {
 
 bool RESearch::GrabMatches(CharacterIndexer &ci) {
 	bool success = true;
-	for (unsigned int i=0; i<MAXTAG; i++) {
+	for (unsigned int i = 0; i < MAXTAG; i++) {
 		if ((bopat[i] != NOTFOUND) && (eopat[i] != NOTFOUND)) {
 			unsigned int len = eopat[i] - bopat[i];
 			pat[i] = new char[len + 1];
 			if (pat[i]) {
-				for (unsigned int j=0; j<len; j++)
+				for (unsigned int j = 0; j < len; j++)
 					pat[i][j] = ci.CharAt(bopat[i] + j);
 				pat[i][len] = '\0';
 			} else {
@@ -260,27 +290,27 @@ bool RESearch::GrabMatches(CharacterIndexer &ci) {
 	return success;
 }
 
-void RESearch::ChSet(char c) {
+void RESearch::ChSet(unsigned char c) {
 	bittab[((c) & BLKIND) >> 3] |= bitarr[(c) & BITIND];
 }
 
-void RESearch::ChSetWithCase(char c, bool caseSensitive) {
+void RESearch::ChSetWithCase(unsigned char c, bool caseSensitive) {
 	if (caseSensitive) {
 		ChSet(c);
 	} else {
 		if ((c >= 'a') && (c <= 'z')) {
 			ChSet(c);
-			ChSet(static_cast<char>(c - 'a' + 'A'));
+			ChSet(static_cast<unsigned char>(c - 'a' + 'A'));
 		} else if ((c >= 'A') && (c <= 'Z')) {
 			ChSet(c);
-			ChSet(static_cast<char>(c - 'A' + 'a'));
+			ChSet(static_cast<unsigned char>(c - 'A' + 'a'));
 		} else {
 			ChSet(c);
 		}
 	}
 }
 
-const char escapeValue(char ch) {
+const unsigned char escapeValue(unsigned char ch) {
 	switch (ch) {
 	case 'a':	return '\a';
 	case 'b':	return '\b';
@@ -291,6 +321,119 @@ const char escapeValue(char ch) {
 	case 'v':	return '\v';
 	}
 	return 0;
+}
+
+static int GetHexaChar(unsigned char hd1, unsigned char hd2) {
+	int hexValue = 0;
+	if (hd1 >= '0' && hd1 <= '9') {
+		hexValue += 16 * (hd1 - '0');
+	} else if (hd1 >= 'A' && hd1 <= 'F') {
+		hexValue += 16 * (hd1 - 'A' + 10);
+	} else if (hd1 >= 'a' && hd1 <= 'f') {
+		hexValue += 16 * (hd1 - 'a' + 10);
+	} else
+		return -1;
+	if (hd2 >= '0' && hd2 <= '9') {
+		hexValue += hd2 - '0';
+	} else if (hd2 >= 'A' && hd2 <= 'F') {
+		hexValue += hd2 - 'A' + 10;
+	} else if (hd2 >= 'a' && hd2 <= 'f') {
+		hexValue += hd2 - 'a' + 10;
+	} else
+		return -1;
+	return hexValue;
+}
+
+/**
+ * Called when the parser finds a backslash not followed
+ * by a valid expression (like \( in non-Posix mode).
+ * @param pat: pointer on the char after the backslash.
+ * @param incr: (out) number of chars to skip after expression evaluation.
+ * @return the char if it resolves to a simple char,
+ * or -1 for a char class. In this case, bittab is changed.
+ */
+int RESearch::GetBackslashExpression(
+		const char *pat,
+		int &incr) {
+	// Since error reporting is primitive and messages are not used anyway,
+	// I choose to interpret unexpected syntax in a logical way instead
+	// of reporting errors. Otherwise, we can stick on, eg., PCRE behavior.
+	incr = 0;	// Most of the time, will skip the char "naturally".
+	int c;
+	int result = -1;
+	unsigned char bsc = *pat;
+	if (!bsc) {
+		// Avoid overrun
+		result = '\\';	// \ at end of pattern, take it literally
+		return result;
+	}
+
+	switch (bsc) {
+	case 'a':
+	case 'b':
+	case 'n':
+	case 'f':
+	case 'r':
+	case 't':
+	case 'v':
+		result = escapeValue(bsc);
+		break;
+	case 'x': {
+			unsigned char hd1 = *(pat + 1);
+			unsigned char hd2 = *(pat + 2);
+			int hexValue = GetHexaChar(hd1, hd2);
+			if (hexValue >= 0) {
+				result = hexValue;
+				incr = 2;	// Must skip the digits
+			} else {
+				result = 'x';	// \x without 2 digits: see it as 'x'
+			}
+		}
+		break;
+	case 'd':
+		for (c = '0'; c <= '9'; c++) {
+			ChSet(static_cast<unsigned char>(c));
+		}
+		break;
+	case 'D':
+		for (c = 0; c < MAXCHR; c++) {
+			if (c < '0' || c > '9') {
+				ChSet(static_cast<unsigned char>(c));
+			}
+		}
+		break;
+	case 's':
+		ChSet(' ');
+		ChSet('\t');
+		ChSet('\n');
+		ChSet('\r');
+		ChSet('\f');
+		ChSet('\v');
+		break;
+	case 'S':
+		for (c = 0; c < MAXCHR; c++) {
+			if (c != ' ' && !(c >= 0x09 && c <= 0x0D)) {
+				ChSet(static_cast<unsigned char>(c));
+			}
+		}
+	case 'w':
+		for (c = 0; c < MAXCHR; c++) {
+			if (iswordc(static_cast<unsigned char>(c))) {
+				ChSet(static_cast<unsigned char>(c));
+			}
+		}
+		break;
+	case 'W':
+		for (c = 0; c < MAXCHR; c++) {
+			if (!iswordc(static_cast<unsigned char>(c))) {
+				ChSet(static_cast<unsigned char>(c));
+			}
+		}
+		break;
+	default:
+		result = bsc;
+	}
+	return result;
 }
 
 const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, bool posix) {
@@ -304,7 +447,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 
 	int n;
 	char mask;             /* xor mask -CCL/NCL */
-	int c1, c2;
+	int c1, c2, prevChar;
 
 	if (!pat || !length)
 		if (sta)
@@ -318,7 +461,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 		if (mp > mpMax)
 			return badpat("Pattern too long");
 		lp = mp;
-		switch(*p) {
+		switch (*p) {
 
 		case '.':               /* match any char  */
 			*mp++ = ANY;
@@ -344,6 +487,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 
 		case '[':               /* match char class */
 			*mp++ = CCL;
+			prevChar = 0;
 
 			i++;
 			if (*++p == '^') {
@@ -355,41 +499,89 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 
 			if (*p == '-') {	/* real dash */
 				i++;
+				prevChar = *p;
 				ChSet(*p++);
 			}
 			if (*p == ']') {	/* real brace */
 				i++;
+				prevChar = *p;
 				ChSet(*p++);
 			}
 			while (*p && *p != ']') {
-				if (*p == '-' && *(p+1) && *(p+1) != ']') {
-					i++;
-					p++;
-					c1 = *(p-2) + 1;
-					i++;
-					c2 = *p++;
-					while (c1 <= c2) {
-						ChSetWithCase(static_cast<char>(c1++), caseSensitive);
+				if (*p == '-') {
+					if (prevChar < 0) {
+						// Previous def. was a char class like \d, take dash literally
+						prevChar = *p;
+						ChSet(*p);
+					} else if (*(p+1)) {
+						if (*(p+1) != ']') {
+							c1 = prevChar + 1;
+							i++;
+							c2 = *++p;
+							if (c2 == '\\') {
+								if (!*(p+1))	// End of RE
+									return badpat("Missing ]");
+								else {
+									i++;
+									p++;
+									int incr;
+									c2 = GetBackslashExpression(p, incr);
+									i += incr;
+									p += incr;
+									if (c2 >= 0) {
+										// Convention: \c (c is any char) is case sensitive, whatever the option
+										ChSet(static_cast<unsigned char>(c2));
+										prevChar = c2;
+									} else {
+										// bittab is already changed
+										prevChar = -1;
+									}
+								}
+							}
+							if (prevChar < 0) {
+								// Char after dash is char class like \d, take dash literally
+								prevChar = '-';
+								ChSet('-');
+							} else {
+								// Put all chars between c1 and c2 included in the char set
+								while (c1 <= c2) {
+									ChSetWithCase(static_cast<unsigned char>(c1++), caseSensitive);
+								}
+							}
+						} else {
+							// Dash before the ], take it literally
+							prevChar = *p;
+							ChSet(*p);
+						}
+					} else {
+						return badpat("Missing ]");
 					}
 				} else if (*p == '\\' && *(p+1)) {
 					i++;
 					p++;
-					char escape = escapeValue(*p);
-					if (escape)
-						ChSetWithCase(escape, caseSensitive);
-					else
-						ChSetWithCase(*p, caseSensitive);
-					i++;
-					p++;
+					int incr;
+					int c = GetBackslashExpression(p, incr);
+					i += incr;
+					p += incr;
+					if (c >= 0) {
+						// Convention: \c (c is any char) is case sensitive, whatever the option
+						ChSet(static_cast<unsigned char>(c));
+						prevChar = c;
+					} else {
+						// bittab is already changed
+						prevChar = -1;
+					}
 				} else {
-					i++;
-					ChSetWithCase(*p++, caseSensitive);
+					prevChar = *p;
+					ChSetWithCase(*p, caseSensitive);
 				}
+				i++;
+				p++;
 			}
 			if (!*p)
 				return badpat("Missing ]");
 
-			for (n = 0; n < BITBLK; bittab[n++] = (char) 0)
+			for (n = 0; n < BITBLK; bittab[n++] = 0)
 				*mp++ = static_cast<char>(mask ^ bittab[n]);
 
 			break;
@@ -401,7 +593,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 			lp = sp;		/* previous opcode */
 			if (*lp == CLO)		/* equivalence... */
 				break;
-			switch(*lp) {
+			switch (*lp) {
 
 			case BOL:
 			case BOT:
@@ -429,8 +621,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 
 		case '\\':              /* tags, backrefs... */
 			i++;
-			switch(*++p) {
-
+			switch (*++p) {
 			case '<':
 				*mp++ = BOW;
 				break;
@@ -454,19 +645,8 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 				if (tagc > n) {
 					*mp++ = static_cast<char>(REF);
 					*mp++ = static_cast<char>(n);
-				}
-				else
+				} else
 					return badpat("Undetermined reference");
-				break;
-			case 'a':
-			case 'b':
-			case 'n':
-			case 'f':
-			case 'r':
-			case 't':
-			case 'v':
-				*mp++ = CHR;
-				*mp++ = escapeValue(*p);
 				break;
 			default:
 				if (!posix && *p == '(') {
@@ -474,8 +654,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 						tagstk[++tagi] = tagc;
 						*mp++ = BOT;
 						*mp++ = static_cast<char>(tagc++);
-					}
-					else
+					} else
 						return badpat("Too many \\(\\) pairs");
 				} else if (!posix && *p == ')') {
 					if (*sp == BOT)
@@ -483,12 +662,22 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 					if (tagi > 0) {
 						*mp++ = static_cast<char>(EOT);
 						*mp++ = static_cast<char>(tagstk[tagi--]);
-					}
-					else
+					} else
 						return badpat("Unmatched \\)");
 				} else {
-					*mp++ = CHR;
-					*mp++ = *p;
+					int incr;
+					int c = GetBackslashExpression(p, incr);
+					i += incr;
+					p += incr;
+					if (c >= 0) {
+						*mp++ = CHR;
+						*mp++ = static_cast<unsigned char>(c);
+					} else {
+						*mp++ = CCL;
+						mask = 0;
+						for (n = 0; n < BITBLK; bittab[n++] = 0)
+							*mp++ = static_cast<char>(mask ^ bittab[n]);
+					}
 				}
 			}
 			break;
@@ -499,8 +688,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 					tagstk[++tagi] = tagc;
 					*mp++ = BOT;
 					*mp++ = static_cast<char>(tagc++);
-				}
-				else
+				} else
 					return badpat("Too many () pairs");
 			} else if (posix && *p == ')') {
 				if (*sp == BOT)
@@ -508,18 +696,22 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 				if (tagi > 0) {
 					*mp++ = static_cast<char>(EOT);
 					*mp++ = static_cast<char>(tagstk[tagi--]);
-				}
-				else
+				} else
 					return badpat("Unmatched )");
-			} else if (caseSensitive) {
-				*mp++ = CHR;
-				*mp++ = *p;
 			} else {
-				*mp++ = CCL;
-				mask = 0;
-				ChSetWithCase(*p, false);
-				for (n = 0; n < BITBLK; bittab[n++] = (char) 0)
-					*mp++ = static_cast<char>(mask ^ bittab[n]);
+				unsigned char c = *p;
+				if (!c)	// End of RE
+					c = '\\';	// We take it as raw backslash
+				if (caseSensitive || !iswordc(c)) {
+					*mp++ = CHR;
+					*mp++ = c;
+				} else {
+					*mp++ = CCL;
+					mask = 0;
+					ChSetWithCase(c, false);
+					for (n = 0; n < BITBLK; bittab[n++] = 0)
+						*mp++ = static_cast<char>(mask ^ bittab[n]);
+				}
 			}
 			break;
 		}
@@ -553,9 +745,8 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
  *  respectively.
  *
  */
-
 int RESearch::Execute(CharacterIndexer &ci, int lp, int endp) {
-	char c;
+	unsigned char c;
 	int ep = NOTFOUND;
 	char *ap = nfa;
 
@@ -564,7 +755,7 @@ int RESearch::Execute(CharacterIndexer &ci, int lp, int endp) {
 
 	Clear();
 
-	switch(*ap) {
+	switch (*ap) {
 
 	case BOL:			/* anchored: match from BOL only */
 		ep = PMatch(ci, lp, endp, ap);
@@ -651,7 +842,7 @@ int RESearch::PMatch(CharacterIndexer &ci, int lp, int endp, char *ap) {
 	int are;	/* to save the line ptr.  */
 
 	while ((op = *ap++) != END)
-		switch(op) {
+		switch (op) {
 
 		case CHR:
 			if (ci.CharAt(lp++) != *ap++)
@@ -699,7 +890,7 @@ int RESearch::PMatch(CharacterIndexer &ci, int lp, int endp, char *ap) {
 			break;
 		case CLO:
 			are = lp;
-			switch(*ap) {
+			switch (*ap) {
 
 			case ANY:
 				while (lp < endp)
@@ -749,7 +940,7 @@ int RESearch::PMatch(CharacterIndexer &ci, int lp, int endp, char *ap) {
  *      tagged subpattern does not exist, null is substituted.
  */
 int RESearch::Substitute(CharacterIndexer &ci, char *src, char *dst) {
-	char c;
+	unsigned char c;
 	int  pin;
 	int bp;
 	int ep;
@@ -758,7 +949,7 @@ int RESearch::Substitute(CharacterIndexer &ci, char *src, char *dst) {
 		return 0;
 
 	while ((c = *src++) != 0) {
-		switch(c) {
+		switch (c) {
 
 		case '&':
 			pin = 0;
@@ -783,6 +974,7 @@ int RESearch::Substitute(CharacterIndexer &ci, char *src, char *dst) {
 				return 0;
 		}
 	}
-	*dst = (char) 0;
+	*dst = '\0';
 	return 1;
 }
+

@@ -19,34 +19,35 @@
 #include "KeyWords.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
+#include "CharacterSet.h"
 
-#define KEYWORD_BOXHEADER 1
-#define KEYWORD_FOLDCONTRACTED 2
-
-static bool IsOKBeforeRE(int ch) {
-	return (ch == '(') || (ch == '=') || (ch == ',');
-}
-
-static inline bool IsAWordChar(int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
-}
-
-static inline bool IsAWordStart(int ch) {
-	return (ch < 0x80) && (isalpha(ch) || ch == '_');
-}
-
-static inline bool IsADoxygenChar(int ch) {
-	return (ch < 0x80 && islower(ch)) || ch == '$' || ch == '@' ||
-		ch == '\\' || ch == '&' || ch == '<' ||
-		ch == '>' || ch == '#' || ch == '{' ||
-		ch == '}' || ch == '[' || ch == ']';
-}
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
 
 static bool IsSpaceEquiv(int state) {
 	return (state <= SCE_C_COMMENTDOC) ||
 		// including SCE_C_DEFAULT, SCE_C_COMMENT, SCE_C_COMMENTLINE
 		(state == SCE_C_COMMENTLINEDOC) || (state == SCE_C_COMMENTDOCKEYWORD) ||
 		(state == SCE_C_COMMENTDOCKEYWORDERROR);
+}
+
+// Preconditions: sc.currentPos points to a character after '+' or '-'.
+// The test for pos reaching 0 should be redundant,
+// and is in only for safety measures.
+// Limitation: this code will give the incorrect answer for code like
+// a = b+++/ptn/...
+// Putting a space between the '++' post-inc operator and the '+' binary op
+// fixes this, and is highly recommended for readability anyway.
+static bool FollowsPostfixOperator(StyleContext &sc, Accessor &styler) {
+	int pos = (int) sc.currentPos;
+	while (--pos > 0) {
+		char ch = styler[pos];
+		if (ch == '+' || ch == '-') {
+			return styler[pos - 1] == ch;
+		}
+	}
+	return false;
 }
 
 static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
@@ -58,6 +59,18 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 	WordList &keywords4 = *keywordlists[3];
 
 	bool stylingWithinPreprocessor = styler.GetPropertyInt("styling.within.preprocessor") != 0;
+
+	CharacterSet setOKBeforeRE(CharacterSet::setNone, "([{=,:;!%^&*|?~+-");
+	CharacterSet setCouldBePostOp(CharacterSet::setNone, "+-");
+
+	CharacterSet setDoxygen(CharacterSet::setLower, "$@\\&<>#{}[]");
+
+	CharacterSet setWordStart(CharacterSet::setAlpha, "_", 0x80, true);
+	CharacterSet setWord(CharacterSet::setAlphaNum, "._", 0x80, true);
+	if (styler.GetPropertyInt("lexer.cpp.allow.dollars", 1) != 0) {
+		setWordStart.Add('$');
+		setWord.Add('$');
+	}
 
 	int chPrevNonWhite = ' ';
 	int visibleChars = 0;
@@ -97,7 +110,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 
 		if (sc.atLineStart) {
 			if (sc.state == SCE_C_STRING) {
-				// Prevent SCE_C_STRINGEOL from leaking back to previous line which 
+				// Prevent SCE_C_STRINGEOL from leaking back to previous line which
 				// ends with a line continuation by locking in the state upto this position.
 				sc.SetState(SCE_C_STRING);
 			}
@@ -126,12 +139,12 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				break;
 			case SCE_C_NUMBER:
 				// We accept almost anything because of hex. and number suffixes
-				if (!IsAWordChar(sc.ch)) {
+				if (!setWord.Contains(sc.ch)) {
 					sc.SetState(SCE_C_DEFAULT);
 				}
 				break;
 			case SCE_C_IDENTIFIER:
-				if (!IsAWordChar(sc.ch) || (sc.ch == '.')) {
+				if (!setWord.Contains(sc.ch) || (sc.ch == '.')) {
 					char s[1000];
 					if (caseSensitive) {
 						sc.GetCurrent(s, sizeof(s));
@@ -201,14 +214,14 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.ChangeState(SCE_C_COMMENTDOCKEYWORDERROR);
 					sc.Forward();
 					sc.ForwardSetState(SCE_C_DEFAULT);
-				} else if (!IsADoxygenChar(sc.ch)) {
+				} else if (!setDoxygen.Contains(sc.ch)) {
 					char s[100];
 					if (caseSensitive) {
 						sc.GetCurrent(s, sizeof(s));
 					} else {
 						sc.GetCurrentLowered(s, sizeof(s));
 					}
-					if (!isspace(sc.ch) || !keywords3.InList(s + 1)) {
+					if (!IsASpace(sc.ch) || !keywords3.InList(s + 1)) {
 						sc.ChangeState(SCE_C_COMMENTDOCKEYWORDERROR);
 					}
 					sc.SetState(styleBeforeDCKeyword);
@@ -283,7 +296,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 				} else {
 					sc.SetState(SCE_C_NUMBER);
 				}
-			} else if (IsAWordStart(sc.ch) || (sc.ch == '@')) {
+			} else if (setWordStart.Contains(sc.ch) || (sc.ch == '@')) {
 				if (lastWordWasUUID) {
 					sc.SetState(SCE_C_UUID);
 					lastWordWasUUID = false;
@@ -303,7 +316,8 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.SetState(SCE_C_COMMENTLINEDOC);
 				else
 					sc.SetState(SCE_C_COMMENTLINE);
-			} else if (sc.ch == '/' && IsOKBeforeRE(chPrevNonWhite)) {
+			} else if (sc.ch == '/' && setOKBeforeRE.Contains(chPrevNonWhite) &&
+				(!setCouldBePostOp.Contains(chPrevNonWhite) || !FollowsPostfixOperator(sc, styler))) {
 				sc.SetState(SCE_C_REGEX);	// JavaScript's RegEx
 			} else if (sc.ch == '\"') {
 				sc.SetState(SCE_C_STRING);
@@ -343,8 +357,8 @@ static bool IsStreamCommentStyle(int style) {
 // Store both the current line's fold level and the next lines in the
 // level store to make it easy to pick up with each increment
 // and to make it possible to fiddle the current level for "} else {".
-static void FoldNoBoxCppDoc(unsigned int startPos, int length, int initStyle,
-                            Accessor &styler) {
+static void FoldCppDoc(unsigned int startPos, int length, int initStyle,
+					   WordList *[], Accessor &styler) {
 	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
 	bool foldPreprocessor = styler.GetPropertyInt("fold.preprocessor") != 0;
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
@@ -368,9 +382,9 @@ static void FoldNoBoxCppDoc(unsigned int startPos, int length, int initStyle,
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 		if (foldComment && IsStreamCommentStyle(style)) {
-			if (!IsStreamCommentStyle(stylePrev)) {
+			if (!IsStreamCommentStyle(stylePrev) && (stylePrev != SCE_C_COMMENTLINEDOC)) {
 				levelNext++;
-			} else if (!IsStreamCommentStyle(styleNext) && !atEOL) {
+			} else if (!IsStreamCommentStyle(styleNext) && (styleNext != SCE_C_COMMENTLINEDOC) && !atEOL) {
 				// Comments don't end at end of line and the next character may be unstyled.
 				levelNext--;
 			}
@@ -428,14 +442,9 @@ static void FoldNoBoxCppDoc(unsigned int startPos, int length, int initStyle,
 			levelMinCurrent = levelCurrent;
 			visibleChars = 0;
 		}
-		if (!isspacechar(ch))
+		if (!IsASpace(ch))
 			visibleChars++;
 	}
-}
-
-static void FoldCppDoc(unsigned int startPos, int length, int initStyle, WordList *[],
-                       Accessor &styler) {
-	FoldNoBoxCppDoc(startPos, length, initStyle, styler);
 }
 
 static const char * const cppWordLists[] = {

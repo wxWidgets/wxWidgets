@@ -29,6 +29,7 @@
 	    src/stc/scintilla/src/CellBuffer.cxx
 	    src/stc/scintilla/src/CharClassify.cxx
 	    src/stc/scintilla/src/ContractionState.cxx
+            src/stc/scintilla/src/Decoration.cxx
 	    src/stc/scintilla/src/Document.cxx
 	    src/stc/scintilla/src/DocumentAccessor.cxx
 	    src/stc/scintilla/src/Editor.cxx
@@ -38,7 +39,9 @@
 	    src/stc/scintilla/src/KeyWords.cxx
 	    src/stc/scintilla/src/LexAPDL.cxx
 	    src/stc/scintilla/src/LexAU3.cxx
+            src/stc/scintilla/src/LexASY.cxx
 	    src/stc/scintilla/src/LexAVE.cxx
+            src/stc/scintilla/src/LexAbaqus.cxx
 	    src/stc/scintilla/src/LexAda.cxx
 	    src/stc/scintilla/src/LexAsm.cxx
 	    src/stc/scintilla/src/LexAsn1.cxx
@@ -47,18 +50,21 @@
 	    src/stc/scintilla/src/LexBasic.cxx
 	    src/stc/scintilla/src/LexBullant.cxx
 	    src/stc/scintilla/src/LexCLW.cxx
+            src/stc/scintilla/src/LexCmake.cxx
 	    src/stc/scintilla/src/LexCPP.cxx
 	    src/stc/scintilla/src/LexCSS.cxx
 	    src/stc/scintilla/src/LexCaml.cxx
 	    src/stc/scintilla/src/LexCsound.cxx
 	    src/stc/scintilla/src/LexConf.cxx
 	    src/stc/scintilla/src/LexCrontab.cxx
+            src/stc/scintilla/src/LexD.cxx
 	    src/stc/scintilla/src/LexEScript.cxx
 	    src/stc/scintilla/src/LexEiffel.cxx
 	    src/stc/scintilla/src/LexErlang.cxx
 	    src/stc/scintilla/src/LexFlagship.cxx
 	    src/stc/scintilla/src/LexForth.cxx
 	    src/stc/scintilla/src/LexFortran.cxx
+            src/stc/scintilla/src/LexGAP.cxx
 	    src/stc/scintilla/src/LexGui4Cli.cxx
 	    src/stc/scintilla/src/LexHTML.cxx
 	    src/stc/scintilla/src/LexHaskell.cxx
@@ -76,11 +82,14 @@
 	    src/stc/scintilla/src/LexOpal.cxx
 	    src/stc/scintilla/src/LexOthers.cxx
 	    src/stc/scintilla/src/LexPB.cxx
+            src/stc/scintilla/src/LexPLM.cxx
 	    src/stc/scintilla/src/LexPOV.cxx
+	    src/stc/scintilla/src/LexProgress.cxx
 	    src/stc/scintilla/src/LexPS.cxx
 	    src/stc/scintilla/src/LexPascal.cxx
 	    src/stc/scintilla/src/LexPerl.cxx
 	    src/stc/scintilla/src/LexPython.cxx
+            src/stc/scintilla/src/LexR.cxx
 	    src/stc/scintilla/src/LexRebol.cxx
 	    src/stc/scintilla/src/LexRuby.cxx
 	    src/stc/scintilla/src/LexSQL.cxx
@@ -96,8 +105,10 @@
 	    src/stc/scintilla/src/LexVerilog.cxx
 	    src/stc/scintilla/src/LexYAML.cxx
 	    src/stc/scintilla/src/LineMarker.cxx
+            src/stc/scintilla/src/PositionCache.cxx
 	    src/stc/scintilla/src/PropSet.cxx
 	    src/stc/scintilla/src/RESearch.cxx
+            src/stc/scintilla/src/RunStyles.cxx
 	    src/stc/scintilla/src/ScintillaBase.cxx
 	    src/stc/scintilla/src/Style.cxx
 	    src/stc/scintilla/src/StyleContext.cxx

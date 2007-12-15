@@ -21,7 +21,7 @@ H_TEMPLATE    = os.path.abspath('./stc.h.in')
 CPP_TEMPLATE  = os.path.abspath('./stc.cpp.in')
 H_DEST        = os.path.abspath('../../include/wx/stc/stc.h')
 CPP_DEST      = os.path.abspath('./stc.cpp')
-DOCSTR_DEST   = os.path.abspath('../../wxPython/contrib/stc/_stc_gendocs.i')
+DOCSTR_DEST   = os.path.abspath('../../../wxPython/contrib/stc/_stc_gendocs.i')
 
 
 # Value prefixes to convert
@@ -37,16 +37,17 @@ valPrefixes = [('SCI_', ''),
 ]
 
 # Message function values that should have a CMD_ constant generated
-cmdValues = [ (2300, 2349),
-              2011,
+cmdValues = [ 2011,
               2013,
               (2176, 2180),
+              (2300, 2349),
               (2390, 2393),
               (2395, 2396),
               2404,
               (2413, 2416),
               (2426, 2442),
               (2450, 2455),
+              2518,
             ]
 
 
@@ -225,11 +226,27 @@ methodOverrideMap = {
     'SetMarginSensitiveN' : ('SetMarginSensitive', 0, 0, 0),
     'GetMarginSensitiveN' : ('GetMarginSensitive', 0, 0, 0),
 
+
+    'StyleGetFore' : ('StyleGetForeground', 0, 0, 0),
+    'StyleGetBack' : ('StyleGetBackground', 0, 0, 0),
     'StyleSetFore' : ('StyleSetForeground', 0, 0, 0),
     'StyleSetBack' : ('StyleSetBackground', 0, 0, 0),
     'SetSelFore' : ('SetSelForeground', 0, 0, 0),
     'SetSelBack' : ('SetSelBackground', 0, 0, 0),
     'SetCaretFore' : ('SetCaretForeground', 0, 0, 0),
+    'StyleGetFont' : 
+    ('StyleGetFaceName',
+     'wxString %s(int style);',
+      '''wxString %s(int style) {
+         long msg = %s;
+         long len = SendMsg(msg, style, 0);
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, style, (long)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+         ('Get the font facename of a style',)),
     'StyleSetFont' : ('StyleSetFaceName', 0, 0, 0),
     'StyleSetCharacterSet' : (None, 0, 0, 0),
     
@@ -266,7 +283,9 @@ methodOverrideMap = {
     'IndicGetStyle' : ('IndicatorGetStyle', 0, 0, 0),
     'IndicSetFore' : ('IndicatorSetForeground', 0, 0, 0),
     'IndicGetFore' : ('IndicatorGetForeground', 0, 0, 0),
-
+    'IndicSetUnder': ('IndicatorSetUnder', 0, 0, 0),
+    'IndicGetUnder': ('IndicatorGetUnder', 0, 0, 0),
+    
     'SetWhitespaceFore' : ('SetWhitespaceForeground', 0, 0, 0),
     'SetWhitespaceBack' : ('SetWhitespaceBackground', 0, 0, 0),
 
@@ -488,6 +507,8 @@ methodOverrideMap = {
 
     'SetHotspotActiveFore' : ('SetHotspotActiveForeground', 0, 0, 0),
     'SetHotspotActiveBack' : ('SetHotspotActiveBackground', 0, 0, 0),
+    'GetHotspotActiveFore' : ('GetHotspotActiveForeground', 0, 0, 0),
+    'GetHotspotActiveBack' : ('GetHotspotActiveBackground', 0, 0, 0),
     
     'GetCaretLineBack' : ('GetCaretLineBackground', 0, 0, 0),
     'SetCaretLineBack' : ('SetCaretLineBackground', 0, 0, 0),
@@ -625,6 +646,9 @@ methodOverrideMap = {
     'GetCursor' : ('GetSTCCursor', 0, 0, 0),
 
     'LoadLexerLibrary' : (None, 0,0,0),
+
+    'SetPositionCache' : ('SetPositionCacheSize', 0, 0, 0),
+    'GetPositionCache' : ('GetPositionCacheSize', 0, 0, 0),
 
 
     '' : ('', 0, 0, 0),

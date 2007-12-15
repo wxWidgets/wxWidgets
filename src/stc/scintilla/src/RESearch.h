@@ -9,6 +9,10 @@
 #ifndef RESEARCH_H
 #define RESEARCH_H
 
+#ifdef SCI_NAMESPACE
+namespace Scintilla {
+#endif
+
 /*
  * The following defines are not meant to be changeable.
  * They are for readability only.
@@ -34,9 +38,9 @@ public:
 	int Execute(CharacterIndexer &ci, int lp, int endp);
 	int Substitute(CharacterIndexer &ci, char *src, char *dst);
 
-	enum {MAXTAG=10};
-	enum {MAXNFA=2048};
-	enum {NOTFOUND=-1};
+	enum { MAXTAG=10 };
+	enum { MAXNFA=2048 };
+	enum { NOTFOUND=-1 };
 
 	int bopat[MAXTAG];
 	int eopat[MAXTAG];
@@ -45,16 +49,17 @@ public:
 private:
 	void Init();
 	void Clear();
-	void ChSet(char c);
-	void ChSetWithCase(char c, bool caseSensitive);
+	void ChSet(unsigned char c);
+	void ChSetWithCase(unsigned char c, bool caseSensitive);
+	int GetBackslashExpression(const char *pat, int &incr);
 
 	int PMatch(CharacterIndexer &ci, int lp, int endp, char *ap);
 
 	int bol;
-	int  tagstk[MAXTAG]; /* subpat tag stack */
+	int tagstk[MAXTAG];  /* subpat tag stack */
 	char nfa[MAXNFA];    /* automaton */
 	int sta;
-	char bittab[BITBLK]; /* bit table for CCL pre-set bits */
+	unsigned char bittab[BITBLK]; /* bit table for CCL pre-set bits */
 	int failure;
 	CharClassify *charClass;
 	bool iswordc(unsigned char x) {
@@ -62,4 +67,9 @@ private:
 	}
 };
 
+#ifdef SCI_NAMESPACE
+}
 #endif
+
+#endif
+

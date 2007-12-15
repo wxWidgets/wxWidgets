@@ -25,6 +25,9 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
 
 static bool IsMatlabCommentChar(int c) {
 	return (c == '%') ;
@@ -100,11 +103,19 @@ static void ColouriseMatlabOctaveDoc(
 				transpose = true;
 			}
 		} else if (sc.state == SCE_MATLAB_STRING) {
-			if (sc.ch == '\'' && sc.chPrev != '\\') {
+			if (sc.ch == '\\') {
+				if (sc.chNext == '\"' || sc.chNext == '\'' || sc.chNext == '\\') {
+					sc.Forward();
+				}
+			} else if (sc.ch == '\'') {
 				sc.ForwardSetState(SCE_MATLAB_DEFAULT);
 			}
 		} else if (sc.state == SCE_MATLAB_DOUBLEQUOTESTRING) {
-			if (sc.ch == '"' && sc.chPrev != '\\') {
+			if (sc.ch == '\\') {
+				if (sc.chNext == '\"' || sc.chNext == '\'' || sc.chNext == '\\') {
+					sc.Forward();
+				}
+			} else if (sc.ch == '\"') {
 				sc.ForwardSetState(SCE_MATLAB_DEFAULT);
 			}
 		} else if (sc.state == SCE_MATLAB_COMMENT || sc.state == SCE_MATLAB_COMMAND) {
@@ -126,7 +137,7 @@ static void ColouriseMatlabOctaveDoc(
 					sc.SetState(SCE_MATLAB_STRING);
 				}
 			} else if (sc.ch == '"') {
-              sc.SetState(SCE_MATLAB_DOUBLEQUOTESTRING);
+				sc.SetState(SCE_MATLAB_DOUBLEQUOTESTRING);
 			} else if (isdigit(sc.ch) || (sc.ch == '.' && isdigit(sc.chNext))) {
 				sc.SetState(SCE_MATLAB_NUMBER);
 			} else if (isalpha(sc.ch)) {
@@ -148,17 +159,17 @@ static void ColouriseMatlabOctaveDoc(
 
 static void ColouriseMatlabDoc(unsigned int startPos, int length, int initStyle,
                                WordList *keywordlists[], Accessor &styler) {
-  ColouriseMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsMatlabCommentChar);
+	ColouriseMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsMatlabCommentChar);
 }
 
 static void ColouriseOctaveDoc(unsigned int startPos, int length, int initStyle,
                                WordList *keywordlists[], Accessor &styler) {
-  ColouriseMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveCommentChar);
+	ColouriseMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveCommentChar);
 }
 
 static void FoldMatlabOctaveDoc(unsigned int startPos, int length, int,
-                          WordList *[], Accessor &styler,
-                          bool (*IsComment)(Accessor&,int,int)) {
+                                WordList *[], Accessor &styler,
+                                bool (*IsComment)(Accessor&, int, int)) {
 
 	int endPos = startPos + length;
 
@@ -202,12 +213,12 @@ static void FoldMatlabOctaveDoc(unsigned int startPos, int length, int,
 
 static void FoldMatlabDoc(unsigned int startPos, int length, int initStyle,
                           WordList *keywordlists[], Accessor &styler) {
-  FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsMatlabComment);
+	FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsMatlabComment);
 }
 
 static void FoldOctaveDoc(unsigned int startPos, int length, int initStyle,
                           WordList *keywordlists[], Accessor &styler) {
-  FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveComment);
+	FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveComment);
 }
 
 static const char * const matlabWordListDesc[] = {

@@ -334,7 +334,7 @@ void ScintillaWX::DoStartDrag() {
         result = source.DoDragDrop(evt.GetDragAllowMove());
         if (result == wxDragMove && dropWentOutside)
             ClearSelection();
-        inDragDrop = false;
+        inDragDrop = ddNone;
         SetDragPosition(invalidPosition);
     }
 #endif // wxUSE_DRAG_AND_DROP

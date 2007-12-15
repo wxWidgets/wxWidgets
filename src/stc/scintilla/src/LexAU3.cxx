@@ -42,6 +42,9 @@
 // Sep 27, 2005   - Fixed the SentKey lexing logic in case of multiple sentkeys.
 // Mar 12, 2006   - Fixed issue with <> coloring as String in stead of Operator in rare occasions.
 // Apr  8, 2006   - Added support for AutoIt3 Standard UDF library (SCE_AU3_UDF)
+// Mar  9, 2007   - Fixed bug with + following a String getting the wrong Color.
+// Jun 20, 2007   - Fixed Commentblock issue when LF's are used as EOL.
+// Jul 26, 2007   - Fixed #endregion undetected bug.
 //
 // Copyright for Scintilla: 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -61,6 +64,10 @@
 #include "KeyWords.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
+
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
 
 static inline bool IsTypeCharacter(const int ch)
 {
@@ -246,7 +253,12 @@ static void ColouriseAU3Doc(unsigned int startPos,
 				//Reset at line end
 				if (sc.atLineEnd) {
 					ci=0;
-					sc.SetState(SCE_AU3_COMMENTBLOCK);
+					if ((strcmp(s, "#ce")== 0 || strcmp(s, "#comments-end")== 0))
+						if (sc.atLineEnd) 
+							sc.SetState(SCE_AU3_DEFAULT);
+						else	
+							sc.SetState(SCE_AU3_COMMENTBLOCK);
+					break;
 				}
 				//skip rest of line when a ; is encountered
 				if (sc.chPrev == ';') {
@@ -265,12 +277,12 @@ static void ColouriseAU3Doc(unsigned int startPos,
 					break;
 				}
 				if (!(IsAWordChar(sc.ch) || (sc.ch == '-' && strcmp(s, "#comments") == 0))) {
-					if ((strcmp(s, "#ce")== 0 || strcmp(s, "#comments-end")== 0)) 
-						sc.SetState(SCE_AU3_COMMENT);  // set to comment line for the rest of the line
+					if ((strcmp(s, "#ce")== 0 || strcmp(s, "#comments-end")== 0))
+							sc.SetState(SCE_AU3_COMMENT);  // set to comment line for the rest of the line
 					else
 						ci=2;  // line doesn't begin with #CE so skip the rest of the line
 				}
-                break;
+				break;
 			}
             case SCE_AU3_COMMENT:
             {
@@ -304,6 +316,7 @@ static void ColouriseAU3Doc(unsigned int startPos,
 						{
 							sc.ChangeState(SCE_AU3_COMMENTBLOCK);
 							sc.SetState(SCE_AU3_COMMENTBLOCK);
+							break;
 						}
 						else if (keywords.InList(s)) {
 							sc.ChangeState(SCE_AU3_KEYWORD);
@@ -424,6 +437,7 @@ static void ColouriseAU3Doc(unsigned int startPos,
 				{
 					sc.ForwardSetState(SCE_AU3_DEFAULT);
 					si=0;
+					break;
 				}
                 if (sc.atLineEnd)
 				{
@@ -433,6 +447,7 @@ static void ColouriseAU3Doc(unsigned int startPos,
 					if (!IsContinuationLine(lineCurrent,styler)) 
 					{
 						sc.SetState(SCE_AU3_DEFAULT);
+						break;
 					}
 				}
 				// find Sendkeys in a STRING
@@ -686,7 +701,7 @@ static void FoldAU3Doc(unsigned int startPos, int length, int, WordList *[], Acc
 	// vars for getting first word to check for keywords
 	bool FirstWordStart = false;
 	bool FirstWordEnd = false;
-	char szKeyword[10]="";
+	char szKeyword[11]="";
 	int	 szKeywordlen = 0;
 	char szThen[5]="";
 	int	 szThenlen = 0;

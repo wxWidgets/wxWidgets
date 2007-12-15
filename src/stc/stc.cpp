@@ -110,7 +110,9 @@ DEFINE_EVENT_TYPE( wxEVT_STC_ZOOM )
 DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_CLICK )
 DEFINE_EVENT_TYPE( wxEVT_STC_HOTSPOT_DCLICK )
 DEFINE_EVENT_TYPE( wxEVT_STC_CALLTIP_CLICK )
-DEFINE_EVENT_TYPE( wxEVT_STC_AUTOCOMP_SELECTION )    
+DEFINE_EVENT_TYPE( wxEVT_STC_AUTOCOMP_SELECTION )
+DEFINE_EVENT_TYPE( wxEVT_STC_INDICATOR_CLICK )
+DEFINE_EVENT_TYPE( wxEVT_STC_INDICATOR_RELEASE )
 
 
 
@@ -642,6 +644,81 @@ void wxStyledTextCtrl::StyleSetUnderline(int style, bool underline) {
     SendMsg(2059, style, underline);
 }
 
+// Get the foreground colour of a style.
+wxColour wxStyledTextCtrl::StyleGetForeground(int style) {
+    long c = SendMsg(2481, style, 0);
+    return wxColourFromLong(c);
+}
+
+// Get the background colour of a style.
+wxColour wxStyledTextCtrl::StyleGetBackground(int style) {
+    long c = SendMsg(2482, style, 0);
+    return wxColourFromLong(c);
+}
+
+// Get is a style bold or not.
+bool wxStyledTextCtrl::StyleGetBold(int style) {
+    return SendMsg(2483, style, 0) != 0;
+}
+
+// Get is a style italic or not.
+bool wxStyledTextCtrl::StyleGetItalic(int style) {
+    return SendMsg(2484, style, 0) != 0;
+}
+
+// Get the size of characters of a style.
+int wxStyledTextCtrl::StyleGetSize(int style) {
+    return SendMsg(2485, style, 0);
+}
+
+// Get the font facename of a style
+wxString wxStyledTextCtrl::StyleGetFaceName(int style) {
+         long msg = 2486;
+         long len = SendMsg(msg, style, 0);
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, style, (long)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);
+}
+
+// Get is a style to have its end of line filled or not.
+bool wxStyledTextCtrl::StyleGetEOLFilled(int style) {
+    return SendMsg(2487, style, 0) != 0;
+}
+
+// Get is a style underlined or not.
+bool wxStyledTextCtrl::StyleGetUnderline(int style) {
+    return SendMsg(2488, style, 0) != 0;
+}
+
+// Get is a style mixed case, or to force upper or lower case.
+int wxStyledTextCtrl::StyleGetCase(int style) {
+    return SendMsg(2489, style, 0);
+}
+
+// Get the character set of the font in a style.
+int wxStyledTextCtrl::StyleGetCharacterSet(int style) {
+    return SendMsg(2490, style, 0);
+}
+
+// Get is a style visible or not.
+bool wxStyledTextCtrl::StyleGetVisible(int style) {
+    return SendMsg(2491, style, 0) != 0;
+}
+
+// Get is a style changeable or not (read only).
+// Experimental feature, currently buggy.
+bool wxStyledTextCtrl::StyleGetChangeable(int style) {
+    return SendMsg(2492, style, 0) != 0;
+}
+
+// Get is a style a hotspot or not.
+bool wxStyledTextCtrl::StyleGetHotSpot(int style) {
+    return SendMsg(2493, style, 0) != 0;
+}
+
 // Set a style to be mixed case, or to force upper or lower case.
 void wxStyledTextCtrl::StyleSetCase(int style, int caseForce) {
     SendMsg(2060, style, caseForce);
@@ -670,6 +747,16 @@ int wxStyledTextCtrl::GetSelAlpha() {
 // Set the alpha of the selection.
 void wxStyledTextCtrl::SetSelAlpha(int alpha) {
     SendMsg(2478, alpha, 0);
+}
+
+// Is the selection end of line filled?
+bool wxStyledTextCtrl::GetSelEOLFilled() {
+    return SendMsg(2479, 0, 0) != 0;
+}
+
+// Set the selection to have its end of line filled or not.
+void wxStyledTextCtrl::SetSelEOLFilled(bool filled) {
+    SendMsg(2480, filled, 0);
 }
 
 // Set the foreground colour of the caret.
@@ -748,6 +835,16 @@ void wxStyledTextCtrl::IndicatorSetForeground(int indic, const wxColour& fore) {
 wxColour wxStyledTextCtrl::IndicatorGetForeground(int indic) {
     long c = SendMsg(2083, indic, 0);
     return wxColourFromLong(c);
+}
+
+// Set an indicator to draw under text or over(default).
+void wxStyledTextCtrl::IndicatorSetUnder(int indic, bool under) {
+    SendMsg(2510, indic, under);
+}
+
+// Retrieve whether indicator drawn under or over text.
+bool wxStyledTextCtrl::IndicatorGetUnder(int indic) {
+    return SendMsg(2511, indic, 0) != 0;
 }
 
 // Set the foreground colour of all whitespace and whether to use this setting.
@@ -1033,13 +1130,13 @@ bool wxStyledTextCtrl::GetUseHorizontalScrollBar() {
 }
 
 // Show or hide indentation guides.
-void wxStyledTextCtrl::SetIndentationGuides(bool show) {
-    SendMsg(2132, show, 0);
+void wxStyledTextCtrl::SetIndentationGuides(int indentView) {
+    SendMsg(2132, indentView, 0);
 }
 
 // Are the indentation guides visible?
-bool wxStyledTextCtrl::GetIndentationGuides() {
-    return SendMsg(2133, 0, 0) != 0;
+int wxStyledTextCtrl::GetIndentationGuides() {
+    return SendMsg(2133, 0, 0);
 }
 
 // Set the highlighted indentation guide column.
@@ -1660,6 +1757,16 @@ int wxStyledTextCtrl::GetScrollWidth() {
     return SendMsg(2275, 0, 0);
 }
 
+// Sets whether the maximum width line displayed is used to set scroll width.
+void wxStyledTextCtrl::SetScrollWidthTracking(bool tracking) {
+    SendMsg(2516, tracking, 0);
+}
+
+// Retrieve whether the scroll width tracks wide lines.
+bool wxStyledTextCtrl::GetScrollWidthTracking() {
+    return SendMsg(2517, 0, 0) != 0;
+}
+
 // Measure the pixel width of some text in a particular style.
 // NUL terminated text argument.
 // Does not handle tab or control characters.
@@ -1921,6 +2028,11 @@ void wxStyledTextCtrl::DelWordLeft() {
 // Delete the word to the right of the caret.
 void wxStyledTextCtrl::DelWordRight() {
     SendMsg(2336, 0, 0);
+}
+
+// Delete the word to the right of the caret, but not the trailing non-word characters.
+void wxStyledTextCtrl::DelWordRightEnd() {
+    SendMsg(2518, 0, 0);
 }
 
 // Cut the line containing the caret.
@@ -2297,9 +2409,21 @@ void wxStyledTextCtrl::SetHotspotActiveForeground(bool useSetting, const wxColou
     SendMsg(2410, useSetting, wxColourAsLong(fore));
 }
 
+// Get the fore colour for active hotspots.
+wxColour wxStyledTextCtrl::GetHotspotActiveForeground() {
+    long c = SendMsg(2494, 0, 0);
+    return wxColourFromLong(c);
+}
+
 // Set a back colour for active hotspots.
 void wxStyledTextCtrl::SetHotspotActiveBackground(bool useSetting, const wxColour& back) {
     SendMsg(2411, useSetting, wxColourAsLong(back));
+}
+
+// Get the back colour for active hotspots.
+wxColour wxStyledTextCtrl::GetHotspotActiveBackground() {
+    long c = SendMsg(2495, 0, 0);
+    return wxColourFromLong(c);
 }
 
 // Enable / Disable underlining active hotspots.
@@ -2307,9 +2431,19 @@ void wxStyledTextCtrl::SetHotspotActiveUnderline(bool underline) {
     SendMsg(2412, underline, 0);
 }
 
+// Get whether underlining for active hotspots.
+bool wxStyledTextCtrl::GetHotspotActiveUnderline() {
+    return SendMsg(2496, 0, 0) != 0;
+}
+
 // Limit hotspots to single line so hotspots on two lines don't merge.
 void wxStyledTextCtrl::SetHotspotSingleLine(bool singleLine) {
     SendMsg(2421, singleLine, 0);
+}
+
+// Get the HotspotSingleLine property
+bool wxStyledTextCtrl::GetHotspotSingleLine() {
+    return SendMsg(2497, 0, 0) != 0;
 }
 
 // Move caret between paragraphs (delimited by empty lines).
@@ -2523,6 +2657,76 @@ int wxStyledTextCtrl::GetCaretLineBackAlpha() {
     return SendMsg(2471, 0, 0);
 }
 
+// Set the style of the caret to be drawn.
+void wxStyledTextCtrl::SetCaretStyle(int caretStyle) {
+    SendMsg(2512, caretStyle, 0);
+}
+
+// Returns the current style of the caret.
+int wxStyledTextCtrl::GetCaretStyle() {
+    return SendMsg(2513, 0, 0);
+}
+
+// Set the indicator used for IndicatorFillRange and IndicatorClearRange
+void wxStyledTextCtrl::SetIndicatorCurrent(int indicator) {
+    SendMsg(2500, indicator, 0);
+}
+
+// Get the current indicator
+int wxStyledTextCtrl::GetIndicatorCurrent() {
+    return SendMsg(2501, 0, 0);
+}
+
+// Set the value used for IndicatorFillRange
+void wxStyledTextCtrl::SetIndicatorValue(int value) {
+    SendMsg(2502, value, 0);
+}
+
+// Get the current indicator vaue
+int wxStyledTextCtrl::GetIndicatorValue() {
+    return SendMsg(2503, 0, 0);
+}
+
+// Turn a indicator on over a range.
+void wxStyledTextCtrl::IndicatorFillRange(int position, int fillLength) {
+    SendMsg(2504, position, fillLength);
+}
+
+// Turn a indicator off over a range.
+void wxStyledTextCtrl::IndicatorClearRange(int position, int clearLength) {
+    SendMsg(2505, position, clearLength);
+}
+
+// Are any indicators present at position?
+int wxStyledTextCtrl::IndicatorAllOnFor(int position) {
+    return SendMsg(2506, position, 0);
+}
+
+// What value does a particular indicator have at at a position?
+int wxStyledTextCtrl::IndicatorValueAt(int indicator, int position) {
+    return SendMsg(2507, indicator, position);
+}
+
+// Where does a particular indicator start?
+int wxStyledTextCtrl::IndicatorStart(int indicator, int position) {
+    return SendMsg(2508, indicator, position);
+}
+
+// Where does a particular indicator end?
+int wxStyledTextCtrl::IndicatorEnd(int indicator, int position) {
+    return SendMsg(2509, indicator, position);
+}
+
+// Set number of entries in position cache
+void wxStyledTextCtrl::SetPositionCacheSize(int size) {
+    SendMsg(2514, size, 0);
+}
+
+// How many entries are allocated to the position cache?
+int wxStyledTextCtrl::GetPositionCacheSize() {
+    return SendMsg(2515, 0, 0);
+}
+
 // Start notifying the container of all key presses and commands.
 void wxStyledTextCtrl::StartRecord() {
     SendMsg(3001, 0, 0);
@@ -2663,6 +2867,25 @@ void wxStyledTextCtrl::StyleSetSpec(int styleNum, const wxString& spec) {
 }
 
 
+// Get the font of a style
+wxFont wxStyledTextCtrl::StyleGetFont(int style) {
+    wxFont font;
+    font.SetPointSize(StyleGetSize(style));
+    font.SetFaceName(StyleGetFaceName(style));
+    if( StyleGetBold(style) )
+        font.SetWeight(wxFONTWEIGHT_BOLD);
+    else
+        font.SetWeight(wxFONTWEIGHT_NORMAL);
+
+    if( StyleGetItalic(style) )
+        font.SetStyle(wxFONTSTYLE_ITALIC);
+    else
+        font.SetStyle(wxFONTSTYLE_NORMAL);
+
+    return font;
+}
+
+
 // Set style size, face, bold, italic, and underline attributes from
 // a wxFont's attributes.
 void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
@@ -2677,7 +2900,7 @@ void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
     bool           italic   = font.GetStyle() != wxNORMAL;
     bool           under    = font.GetUnderlined();
     wxFontEncoding encoding = font.GetEncoding();
-    
+
     StyleSetFontAttr(styleNum, size, faceName, bold, italic, under, encoding);
 }
 
@@ -2781,7 +3004,7 @@ void wxStyledTextCtrl::StyleSetCharacterSet(int style, int characterSet)
         case wxSTC_CHARSET_CYRILLIC:
             encoding = wxFONTENCODING_ISO8859_5;
             break;
-                
+
         case wxSTC_CHARSET_8859_15:
             encoding = wxFONTENCODING_ISO8859_15;;
             break;
@@ -2977,7 +3200,7 @@ wxCharBuffer wxStyledTextCtrl::GetSelectedTextRaw()
     if (!len) {
         wxCharBuffer empty;
         return empty;
-    }        
+    }
 
     wxCharBuffer buf(len);
     SendMsg(SCI_GETSELTEXT, 0, (long)buf.data());
@@ -2995,7 +3218,7 @@ wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
     if (!len) {
         wxCharBuffer empty;
         return empty;
-    }        
+    }
 
     wxCharBuffer buf(len);
     TextRange tr;
@@ -3162,7 +3385,7 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
         }
 #endif
     }
-    
+
     evt.Skip();
 }
 
@@ -3319,7 +3542,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         SetEventText(evt, scn.text, strlen(scn.text));
         evt.SetPosition(scn.lParam);
         break;
-        
+
     case SCN_USERLISTSELECTION:
         evt.SetEventType(wxEVT_STC_USERLISTSELECTION);
         evt.SetListType(scn.listType);
@@ -3359,7 +3582,15 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_CALLTIPCLICK:
         evt.SetEventType(wxEVT_STC_CALLTIP_CLICK);
         break;
-       
+
+    case SCN_INDICATORCLICK:
+        evt.SetEventType(wxEVT_STC_INDICATOR_CLICK);
+        break;
+
+    case SCN_INDICATORRELEASE:
+        evt.SetEventType(wxEVT_STC_INDICATOR_RELEASE);
+        break;
+
     default:
         return;
     }

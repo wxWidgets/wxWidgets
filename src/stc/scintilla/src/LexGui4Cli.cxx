@@ -36,6 +36,10 @@ val SCE_GC_OPERATOR=9
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 #define debug Platform::DebugPrintf
 
 static inline bool IsAWordChar(const int ch) {

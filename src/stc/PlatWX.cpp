@@ -21,6 +21,10 @@
 
 #include <ctype.h>
 
+#if wxUSE_DISPLAY
+#include "wx/display.h"
+#endif
+
 #include "wx/encconv.h"
 #include "wx/listctrl.h"
 #include "wx/mstream.h"
@@ -155,7 +159,7 @@ void Font::Create(const char *faceName, int characterSet, int size, bool bold, b
                     false,
                     stc2wx(faceName),
                     encoding);
-    font->SetNoAntiAliasing(!extraFontFlag);
+    //font->SetNoAntiAliasing(!extraFontFlag);
     id = font;
 }
 
@@ -720,6 +724,19 @@ void Window::SetTitle(const char *s) {
     GETWIN(id)->SetLabel(stc2wx(s));
 }
 
+
+// Returns rectangle of monitor pt is on
+PRectangle Window::GetMonitorRect(Point pt) {
+    wxRect rect;
+    if (! id) return PRectangle();
+#if wxUSE_DISPLAY
+    // Get the display the point is found on
+    int n = wxDisplay::GetFromPoint(wxPoint(pt.x, pt.y));
+    wxDisplay dpy(n == wxNOT_FOUND ? 0 : n);
+    rect = dpy.GetGeometry();
+#endif
+    return PRectangleFromwxRect(rect);
+}
 
 //----------------------------------------------------------------------
 // Helper classes for ListBox
@@ -1543,10 +1560,10 @@ wxString stc2wx(const char* str, size_t len)
     if (!len)
         return wxEmptyString;
 
-    size_t wclen = UCS2Length(str, len);
+    size_t wclen = UTF16Length(str, len);
     wxWCharBuffer buffer(wclen+1);
 
-    size_t actualLen = UCS2FromUTF8(str, len, buffer.data(), wclen+1);
+    size_t actualLen = UTF16FromUTF8(str, len, buffer.data(), wclen+1);
     return wxString(buffer.data(), actualLen);
 }
 
@@ -1565,7 +1582,7 @@ const wxWX2MBbuf wx2stc(const wxString& str)
     size_t len           = UTF8Length(wcstr, wclen);
 
     wxCharBuffer buffer(len+1);
-    UTF8FromUCS2(wcstr, wclen, buffer.data(), len);
+    UTF8FromUTF16(wcstr, wclen, buffer.data(), len);
 
     // TODO check NULL termination!!
 

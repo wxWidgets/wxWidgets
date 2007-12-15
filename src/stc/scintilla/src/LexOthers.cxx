@@ -20,6 +20,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 static bool Is0To9(char ch) {
 	return (ch >= '0') && (ch <= '9');
 }
@@ -125,7 +129,7 @@ static void ColouriseBatchLine(
 			styler.ColourTo(startLine + offset + 1, SCE_BAT_IDENTIFIER);
 			offset += 2;
 			// Check for External Command / Program
-			if (!isspacechar(lineBuffer[offset])) {
+			if (offset < lengthLine && !isspacechar(lineBuffer[offset])) {
 				cmdLoc = offset;
 			}
 		// Check for Environment Variable (%x...%)
@@ -136,7 +140,7 @@ static void ColouriseBatchLine(
 			styler.ColourTo(startLine + offset, SCE_BAT_IDENTIFIER);
 			offset++;
 			// Check for External Command / Program
-			if (!isspacechar(lineBuffer[offset])) {
+			if (offset < lengthLine && !isspacechar(lineBuffer[offset])) {
 				cmdLoc = offset;
 			}
 		}
@@ -371,6 +375,7 @@ static void ColouriseBatchLine(
 				offset -= (wbl - wbo);
 			// Check for Local Variable (%%a)
 			} else if (
+				(wbl > 2) &&
 				(wordBuffer[1] == '%') &&
 				(wordBuffer[2] != '%') &&
 				(!IsBOperator(wordBuffer[2])) &&
@@ -473,6 +478,7 @@ static void ColouriseBatchDoc(
 		}
 	}
 	if (linePos > 0) {	// Last line does not have ending characters
+		lineBuffer[linePos] = '\0';
 		ColouriseBatchLine(lineBuffer, linePos, startLine, startPos + length - 1,
 		                   keywordlists, styler);
 	}
@@ -720,6 +726,12 @@ static void ColouriseMakeLine(
 	int lastNonSpace = -1;
 	unsigned int state = SCE_MAKE_DEFAULT;
 	bool bSpecial = false;
+
+	// check for a tab character in column 0 indicating a command
+	bool bCommand = false;
+	if ((lengthLine > 0) && (lineBuffer[0] == '\t'))
+		bCommand = true;
+
 	// Skip initial spaces
 	while ((i < lengthLine) && isspacechar(lineBuffer[i])) {
 		i++;
@@ -740,14 +752,24 @@ static void ColouriseMakeLine(
 			styler.ColourTo(startLine + i, state);
 			state = SCE_MAKE_DEFAULT;
 		}
-		if (!bSpecial) {
+
+		// skip identifier and target styling if this is a command line
+		if (!bSpecial && !bCommand) {
 			if (lineBuffer[i] == ':') {
-				// We should check that no colouring was made since the beginning of the line,
-				// to avoid colouring stuff like /OUT:file
-				if (lastNonSpace >= 0)
-					styler.ColourTo(startLine + lastNonSpace, SCE_MAKE_TARGET);
-				styler.ColourTo(startLine + i - 1, SCE_MAKE_DEFAULT);
-				styler.ColourTo(startLine + i, SCE_MAKE_OPERATOR);
+				if (((i + 1) < lengthLine) && (lineBuffer[i + 1] == '=')) {
+					// it's a ':=', so style as an identifier
+					if (lastNonSpace >= 0)
+						styler.ColourTo(startLine + lastNonSpace, SCE_MAKE_IDENTIFIER);
+					styler.ColourTo(startLine + i - 1, SCE_MAKE_DEFAULT);
+					styler.ColourTo(startLine + i + 1, SCE_MAKE_OPERATOR);
+				} else {
+					// We should check that no colouring was made since the beginning of the line,
+					// to avoid colouring stuff like /OUT:file
+					if (lastNonSpace >= 0)
+						styler.ColourTo(startLine + lastNonSpace, SCE_MAKE_TARGET);
+					styler.ColourTo(startLine + i - 1, SCE_MAKE_DEFAULT);
+					styler.ColourTo(startLine + i, SCE_MAKE_OPERATOR);
+				}
 				bSpecial = true;	// Only react to the first ':' of the line
 				state = SCE_MAKE_DEFAULT;
 			} else if (lineBuffer[i] == '=') {
@@ -796,7 +818,7 @@ static bool strstart(const char *haystack, const char *needle) {
 	return strncmp(haystack, needle, strlen(needle)) == 0;
 }
 
-static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLine) {
+static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLine, int &startValue) {
 	if (lineBuffer[0] == '>') {
 		// Command or return status
 		return SCE_ERR_CMD;
@@ -879,7 +901,9 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 		// Microsoft: <filename>(<line>,<column>)<message>
 		// CTags: \t<message>
 		// Lua 5 traceback: \t<filename>:<line>:<message>
+		// Lua 5.1: <exe>: <filename>:<line>:<message>
 		bool initialTab = (lineBuffer[0] == '\t');
+		bool initialColonPart = false;
 		enum { stInitial,
 			stGccStart, stGccDigit, stGcc,
 			stMsStart, stMsDigit, stMsBracket, stMsVc, stMsDigitComma, stMsDotNet,
@@ -894,10 +918,12 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 			if (state == stInitial) {
 				if (ch == ':') {
 					// May be GCC, or might be Lua 5 (Lua traceback same but with tab prefix)
-					if ((chNext != '\\') && (chNext != '/')) {
+					if ((chNext != '\\') && (chNext != '/') && (chNext != ' ')) {
 						// This check is not completely accurate as may be on
 						// GTK+ with a file name that includes ':'.
-						state = stGccStart;
+						state = stGccStart;						
+					} else if (chNext == ' ') { // indicates a Lua 5.1 error message
+						initialColonPart = true;
 					}
 				} else if ((ch == '(') && Is1To9(chNext) && (!initialTab)) {
 					// May be Microsoft
@@ -912,6 +938,7 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 			} else if (state == stGccDigit) {	// <filename>:<line>
 				if (ch == ':') {
 					state = stGcc;	// :9.*: is GCC
+					startValue = i + 1;
 					break;
 				} else if (!Is0To9(ch)) {
 					state = stUnrecognized;
@@ -972,7 +999,7 @@ static int RecogniseErrorListLine(const char *lineBuffer, unsigned int lengthLin
 			}
 		}
 		if (state == stGcc) {
-			return SCE_ERR_GCC;
+			return initialColonPart ? SCE_ERR_LUA : SCE_ERR_GCC;
 		} else if ((state == stMsVc) || (state == stMsDotNet)) {
 			return SCE_ERR_MS;
 		} else if ((state == stCtagsStringDollar) || (state == stCtags)) {
@@ -987,8 +1014,16 @@ static void ColouriseErrorListLine(
     char *lineBuffer,
     unsigned int lengthLine,
     unsigned int endPos,
-    Accessor &styler) {
-	styler.ColourTo(endPos, RecogniseErrorListLine(lineBuffer, lengthLine));
+    Accessor &styler,
+	bool valueSeparate) {
+	int startValue = -1;
+	int style = RecogniseErrorListLine(lineBuffer, lengthLine, startValue);
+	if (valueSeparate && (startValue >= 0)) {
+		styler.ColourTo(endPos - (lengthLine - startValue), style);
+		styler.ColourTo(endPos, SCE_ERR_VALUE);
+	} else {
+		styler.ColourTo(endPos, style);
+	}
 }
 
 static void ColouriseErrorListDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) {
@@ -996,17 +1031,18 @@ static void ColouriseErrorListDoc(unsigned int startPos, int length, int, WordLi
 	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
 	unsigned int linePos = 0;
+	bool valueSeparate = styler.GetPropertyInt("lexer.errorlist.value.separate", 0) != 0;
 	for (unsigned int i = startPos; i < startPos + length; i++) {
 		lineBuffer[linePos++] = styler[i];
 		if (AtEOL(styler, i) || (linePos >= sizeof(lineBuffer) - 1)) {
 			// End of line (or of line buffer) met, colourise it
 			lineBuffer[linePos] = '\0';
-			ColouriseErrorListLine(lineBuffer, linePos, i, styler);
+			ColouriseErrorListLine(lineBuffer, linePos, i, styler, valueSeparate);
 			linePos = 0;
 		}
 	}
 	if (linePos > 0) {	// Last line does not have ending characters
-		ColouriseErrorListLine(lineBuffer, linePos, startPos + length - 1, styler);
+		ColouriseErrorListLine(lineBuffer, linePos, startPos + length - 1, styler, valueSeparate);
 	}
 }
 

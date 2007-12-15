@@ -255,6 +255,10 @@ SOURCE=..\..\src\stc\scintilla\src\ContractionState.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\Decoration.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\Document.cxx
 # End Source File
 # Begin Source File
@@ -287,11 +291,19 @@ SOURCE=..\..\src\stc\scintilla\src\LexAPDL.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexASY.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexAU3.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\LexAVE.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexAbaqus.cxx
 # End Source File
 # Begin Source File
 
@@ -339,6 +351,10 @@ SOURCE=..\..\src\stc\scintilla\src\LexCaml.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexCmake.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexConf.cxx
 # End Source File
 # Begin Source File
@@ -348,6 +364,10 @@ SOURCE=..\..\src\stc\scintilla\src\LexCrontab.cxx
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\LexCsound.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexD.cxx
 # End Source File
 # Begin Source File
 
@@ -372,6 +392,10 @@ SOURCE=..\..\src\stc\scintilla\src\LexForth.cxx
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\LexFortran.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexGAP.cxx
 # End Source File
 # Begin Source File
 
@@ -443,6 +467,10 @@ SOURCE=..\..\src\stc\scintilla\src\LexPB.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexPLM.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexPOV.cxx
 # End Source File
 # Begin Source File
@@ -459,7 +487,15 @@ SOURCE=..\..\src\stc\scintilla\src\LexPerl.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexProgress.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexPython.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexR.cxx
 # End Source File
 # Begin Source File
 
@@ -523,11 +559,19 @@ SOURCE=..\..\src\stc\scintilla\src\LineMarker.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\PositionCache.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\PropSet.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\RESearch.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\RunStyles.cxx
 # End Source File
 # Begin Source File
 

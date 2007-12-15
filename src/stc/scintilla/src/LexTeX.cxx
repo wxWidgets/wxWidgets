@@ -12,6 +12,10 @@
 
 // If you run into strange boundary cases, just tell me and I'll look into it.
 
+
+// TeX Folding code added by instanton (soft_share@126.com) with borrowed code from VisualTeX source by Alex Romanenko.
+// Version: June 22, 2007
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -26,6 +30,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 #include "StyleContext.h"
+
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
 
 // val SCE_TEX_DEFAULT = 0
 // val SCE_TEX_SPECIAL = 1
@@ -169,9 +177,9 @@ static void ColouriseTeXDoc(
 	styler.StartSegment(startPos) ;
 
 	bool processComment   = styler.GetPropertyInt("lexer.tex.comment.process",   0) == 1 ;
-    bool useKeywords      = styler.GetPropertyInt("lexer.tex.use.keywords",      1) == 1 ;
+	bool useKeywords      = styler.GetPropertyInt("lexer.tex.use.keywords",      1) == 1 ;
 	bool autoIf           = styler.GetPropertyInt("lexer.tex.auto.if",           1) == 1 ;
-    int  defaultInterface = styler.GetPropertyInt("lexer.tex.interface.default", 1) ;
+	int  defaultInterface = styler.GetPropertyInt("lexer.tex.interface.default", 1) ;
 
 	char key[100] ;
 	int  k ;
@@ -272,7 +280,202 @@ static void ColouriseTeXDoc(
 }
 
 
-// Hooks into the system:
+static inline bool isNumber(int ch) {
+	return
+      (ch == '0') || (ch == '1') || (ch == '2') || 
+      (ch == '3') || (ch == '4') || (ch == '5') || 
+      (ch == '6') || (ch == '7') || (ch == '8') || (ch == '9');
+}
+
+static inline bool isWordChar(int ch) {
+	return ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z'));
+}
+
+static int ParseTeXCommand(unsigned int pos, Accessor &styler, char *command)
+{
+  int length=0;
+  char ch=styler.SafeGetCharAt(pos+1);
+  
+  if(ch==',' || ch==':' || ch==';' || ch=='%'){
+      command[0]=ch;
+      command[1]=0;
+	  return 1;
+  }
+
+  // find end
+     while(isWordChar(ch) && !isNumber(ch) && ch!='_' && ch!='.' && length<100){
+          command[length]=ch;
+          length++;
+          ch=styler.SafeGetCharAt(pos+length+1);
+     }
+     
+  command[length]='\0';   
+  if(!length) return 0;
+  return length+1;
+}
+
+static int classifyFoldPointTeXPaired(const char* s) {
+	int lev=0; 
+	if (!(isdigit(s[0]) || (s[0] == '.'))){
+		if (strcmp(s, "begin")==0||strcmp(s,"FoldStart")==0||
+			strcmp(s,"abstract")==0||strcmp(s,"unprotect")==0||
+			strcmp(s,"title")==0||strncmp(s,"start",5)==0||strncmp(s,"Start",5)==0||
+			strcmp(s,"documentclass")==0||strncmp(s,"if",2)==0
+			)
+			lev=1;
+		if (strcmp(s, "end")==0||strcmp(s,"FoldStop")==0||
+			strcmp(s,"maketitle")==0||strcmp(s,"protect")==0||
+			strncmp(s,"stop",4)==0||strncmp(s,"Stop",4)==0||
+			strcmp(s,"fi")==0
+			) 
+		lev=-1;
+	}
+	return lev;
+}
+
+static int classifyFoldPointTeXUnpaired(const char* s) {
+	int lev=0; 
+	if (!(isdigit(s[0]) || (s[0] == '.'))){
+		if (strcmp(s,"part")==0||
+			strcmp(s,"chapter")==0||
+			strcmp(s,"section")==0||
+			strcmp(s,"subsection")==0||
+			strcmp(s,"subsubsection")==0||
+			strcmp(s,"CJKfamily")==0||
+			strcmp(s,"appendix")==0||
+			strcmp(s,"Topic")==0||strcmp(s,"topic")==0||
+			strcmp(s,"subject")==0||strcmp(s,"subsubject")==0||
+			strcmp(s,"def")==0||strcmp(s,"gdef")==0||strcmp(s,"edef")==0||
+			strcmp(s,"xdef")==0||strcmp(s,"framed")==0||
+			strcmp(s,"frame")==0||
+			strcmp(s,"foilhead")==0||strcmp(s,"overlays")==0||strcmp(s,"slide")==0
+			){
+			    lev=1;
+			}
+	}
+	return lev;
+}
+
+static bool IsTeXCommentLine(int line, Accessor &styler) {
+	int pos = styler.LineStart(line);
+	int eol_pos = styler.LineStart(line + 1) - 1;
+	
+	int startpos = pos;
+
+	while (startpos<eol_pos){
+		char ch = styler[startpos];
+		if (ch!='%' && ch!=' ') return false;
+		else if (ch=='%') return true;
+		startpos++;
+	}		
+
+	return false;
+}
+
+// FoldTeXDoc: borrowed from VisualTeX with modifications
+
+static void FoldTexDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) 
+{
+	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+	unsigned int endPos = startPos+length;
+	int visibleChars=0;
+	int lineCurrent=styler.GetLine(startPos);
+	int levelPrev=styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
+	int levelCurrent=levelPrev;
+	char chNext=styler[startPos];
+	char buffer[100]="";
+	
+	for (unsigned int i=startPos; i < endPos; i++) {
+		char ch=chNext;
+		chNext=styler.SafeGetCharAt(i+1);
+		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
+
+        if(ch=='\\') {
+            ParseTeXCommand(i, styler, buffer);
+			levelCurrent += classifyFoldPointTeXPaired(buffer)+classifyFoldPointTeXUnpaired(buffer);
+		}
+
+		if((ch == '\r' || ch=='\n') && (chNext == '\\')){
+            ParseTeXCommand(i+1, styler, buffer);
+			levelCurrent -= classifyFoldPointTeXUnpaired(buffer);
+		}
+
+	char chNext2;
+	char chNext3;
+	char chNext4;
+	char chNext5;
+	chNext2=styler.SafeGetCharAt(i+2);
+	chNext3=styler.SafeGetCharAt(i+3);
+	chNext4=styler.SafeGetCharAt(i+4);
+	chNext5=styler.SafeGetCharAt(i+5);
+
+	bool atEOfold = (ch == '%') && 
+			(chNext == '%') && (chNext2=='}') && 
+				(chNext3=='}')&& (chNext4=='-')&& (chNext5=='-');
+
+	bool atBOfold = (ch == '%') && 
+			(chNext == '%') && (chNext2=='-') && 
+				(chNext3=='-')&& (chNext4=='{')&& (chNext5=='{');
+
+	if(atBOfold){
+		levelCurrent+=1;
+	}
+
+	if(atEOfold){
+		levelCurrent-=1;
+	}
+	
+	if(ch=='\\' && chNext=='['){
+		levelCurrent+=1;
+	}
+	
+	if(ch=='\\' && chNext==']'){
+		levelCurrent-=1;
+	}
+
+	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+
+	if (foldComment && atEOL && IsTeXCommentLine(lineCurrent, styler))
+        {
+            if (lineCurrent==0 && IsTeXCommentLine(lineCurrent + 1, styler)
+				)
+                levelCurrent++;
+            else if (lineCurrent!=0 && !IsTeXCommentLine(lineCurrent - 1, styler)
+               && IsTeXCommentLine(lineCurrent + 1, styler)
+				)
+                levelCurrent++;
+            else if (lineCurrent!=0 && IsTeXCommentLine(lineCurrent - 1, styler) &&
+                     !IsTeXCommentLine(lineCurrent+1, styler))
+                levelCurrent--;
+        }
+
+//---------------------------------------------------------------------------------------------	
+		
+		if (atEOL) {
+			int lev = levelPrev;
+			if (visibleChars == 0 && foldCompact)
+				lev |= SC_FOLDLEVELWHITEFLAG;
+			if ((levelCurrent > levelPrev) && (visibleChars > 0))
+				lev |= SC_FOLDLEVELHEADERFLAG;
+			if (lev != styler.LevelAt(lineCurrent)) {
+				styler.SetLevel(lineCurrent, lev);
+			}
+			lineCurrent++;
+			levelPrev = levelCurrent;
+			visibleChars = 0;
+		}
+
+		if (!isspacechar(ch))
+			visibleChars++;
+	}
+
+	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
+	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
+	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
+}
+
+
+
 
 static const char * const texWordListDesc[] = {
     "TeX, eTeX, pdfTeX, Omega",
@@ -285,4 +488,4 @@ static const char * const texWordListDesc[] = {
 	0,
 } ;
 
-LexerModule lmTeX(SCLEX_TEX, ColouriseTeXDoc, "tex", 0, texWordListDesc);
+LexerModule lmTeX(SCLEX_TEX,   ColouriseTeXDoc, "tex", FoldTexDoc, texWordListDesc);

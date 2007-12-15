@@ -36,8 +36,10 @@
 #include "Accessor.h"
 #include "KeyWords.h"
 #endif
+#include "SplitVector.h"
+#include "Partitioning.h"
+#include "RunStyles.h"
 #include "ContractionState.h"
-#include "SVector.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
 #include "KeyMap.h"
@@ -46,7 +48,9 @@
 #include "Style.h"
 #include "ViewStyle.h"
 #include "AutoComplete.h"
+#include "Decoration.h"
 #include "Document.h"
+#include "PositionCache.h"
 #include "Editor.h"
 #include "ScintillaBase.h"
 

@@ -21,6 +21,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 /*
    TODO:
    o  _Param should be a new lexical type

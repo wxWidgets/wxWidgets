@@ -49,7 +49,10 @@ static inline bool isSafeDigit(char ch) {
 }
 
 static inline bool isSafeWordcharOrHigh(char ch) {
-    return isHighBitChar(ch) || iswordchar(ch);
+    // Error: scintilla's KeyWords.h includes '.' as a word-char
+    // we want to separate things that can take methods from the
+    // methods.
+    return isHighBitChar(ch) || isalnum(ch) || ch == '_';
 }
 
 static bool inline iswhitespace(char ch) {
@@ -95,7 +98,7 @@ static bool keywordIsModifier(const char *word,
                               Accessor &styler);
 
 static int ClassifyWordRb(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, char *prevWord) {
-	char s[100];
+	char s[MAX_KEYWORD_LENGTH];
     unsigned int i, j;
 	unsigned int lim = end - start + 1; // num chars to copy
 	if (lim >= MAX_KEYWORD_LENGTH) {
@@ -238,6 +241,74 @@ static bool currLineContainsHereDelims(int& startPos,
     return true;
 }
 
+// This class is used by the enter and exit methods, so it needs
+// to be hoisted out of the function.
+
+class QuoteCls {
+    public:
+    int  Count;
+    char Up;
+    char Down;
+    QuoteCls() {
+        this->New();
+    }
+    void New() {
+        Count = 0;
+        Up    = '\0';
+        Down  = '\0';
+    }
+    void Open(char u) {
+        Count++;
+        Up    = u;
+        Down  = opposite(Up);
+    }
+    QuoteCls(const QuoteCls& q) {
+        // copy constructor -- use this for copying in
+        Count = q.Count;
+        Up    = q.Up;
+        Down  = q.Down;
+    }
+    QuoteCls& operator=(const QuoteCls& q) { // assignment constructor
+        if (this != &q) {
+            Count = q.Count;
+            Up    = q.Up;
+            Down  = q.Down;
+        }
+		return *this;
+    }
+            
+};
+
+
+static void enterInnerExpression(int  *p_inner_string_types,
+                                 int  *p_inner_expn_brace_counts,
+                                 QuoteCls *p_inner_quotes,
+                                 int&  inner_string_count,
+                                 int&  state,
+                                 int&  brace_counts,
+                                 QuoteCls curr_quote
+                                 ) {
+    p_inner_string_types[inner_string_count] = state;
+    state = SCE_RB_DEFAULT;
+    p_inner_expn_brace_counts[inner_string_count] = brace_counts;
+    brace_counts = 0;
+    p_inner_quotes[inner_string_count] = curr_quote;
+    ++inner_string_count;
+}
+
+static void exitInnerExpression(int *p_inner_string_types,
+                                 int *p_inner_expn_brace_counts,
+                                 QuoteCls *p_inner_quotes,
+                                 int& inner_string_count,
+                                 int& state,
+                                 int&  brace_counts,
+                                 QuoteCls& curr_quote
+                                ) {
+    --inner_string_count;
+    state = p_inner_string_types[inner_string_count];
+    brace_counts = p_inner_expn_brace_counts[inner_string_count];
+    curr_quote = p_inner_quotes[inner_string_count];
+}
 
 static bool isEmptyLine(int pos,
                         Accessor &styler) {
@@ -288,7 +359,7 @@ static int skipWhitespace(int startPos,
 //
 // iPrev points to the start of <<
 
-static bool sureThisIsHeredoc(int iPrev, 
+static bool sureThisIsHeredoc(int iPrev,
                               Accessor &styler,
                               char *prevWord) {
                     
@@ -605,25 +676,6 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 	};
 	HereDocCls HereDoc;	
 
-	class QuoteCls {
-		public:
-		int  Count;
-		char Up;
-		char Down;
-		QuoteCls() {
-			this->New();
-		}
-		void New() {
-			Count = 0;
-			Up    = '\0';
-			Down  = '\0';
-		}
-		void Open(char u) {
-			Count++;
-			Up    = u;
-			Down  = opposite(Up);
-		}
-	};
 	QuoteCls Quote;
 
     int numDots = 0;  // For numbers --
@@ -643,6 +695,7 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 
 	char chPrev = styler.SafeGetCharAt(startPos - 1);
 	char chNext = styler.SafeGetCharAt(startPos);
+	bool is_real_number = true;   // Differentiate between constants and ?-sequences.
 	// Ruby uses a different mask because bad indentation is marked by oring with 32
 	styler.StartAt(startPos, 127);
 	styler.StartSegment(startPos);
@@ -654,8 +707,39 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
                              SCE_RB_STRING_QW,
                              SCE_RB_STRING_QX};
     static const char* q_chars = "qQrwWx";
-    
-	for (int i = startPos; i < lengthDoc; i++) {
+
+    // In most cases a value of 2 should be ample for the code in the
+    // Ruby library, and the code the user is likely to enter.
+    // For example,
+    // fu_output_message "mkdir #{options[:mode] ? ('-m %03o ' % options[:mode]) : ''}#{list.join ' '}"
+    //     if options[:verbose]
+    // from fileutils.rb nests to a level of 2
+    // If the user actually hits a 6th occurrence of '#{' in a double-quoted
+    // string (including regex'es, %Q, %<sym>, %w, and other strings
+    // that interpolate), it will stay as a string.  The problem with this
+    // is that quotes might flip, a 7th '#{' will look like a comment,
+    // and code-folding might be wrong.
+
+    // If anyone runs into this problem, I recommend raising this
+    // value slightly higher to replacing the fixed array with a linked
+    // list.  Keep in mind this code will be called everytime the lexer
+    // is invoked.
+
+#define INNER_STRINGS_MAX_COUNT 5
+    // These vars track our instances of "...#{,,,%Q<..#{,,,}...>,,,}..."
+    int inner_string_types[INNER_STRINGS_MAX_COUNT];
+    // Track # braces when we push a new #{ thing
+    int inner_expn_brace_counts[INNER_STRINGS_MAX_COUNT];
+    QuoteCls inner_quotes[INNER_STRINGS_MAX_COUNT];
+    int inner_string_count = 0;
+    int brace_counts = 0;   // Number of #{ ... } things within an expression
+
+    int i;
+	for (i = 0; i < INNER_STRINGS_MAX_COUNT; i++) {
+        inner_string_types[i] = 0;
+        inner_expn_brace_counts[i] = 0;
+    }
+	for (i = startPos; i < lengthDoc; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
 		char chNext2 = styler.SafeGetCharAt(i + 2);
@@ -690,6 +774,7 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
             if (isSafeDigit(ch)) {
             	styler.ColourTo(i - 1, state);
 				state = SCE_RB_NUMBER;
+                is_real_number = true;
                 numDots = 0;
             } else if (isHighBitChar(ch) || iswordstart(ch)) {
             	styler.ColourTo(i - 1, state);
@@ -885,7 +970,7 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 						chNext = styler.SafeGetCharAt(i + 1);
                         have_string = true;
                     }
-                } else if (!isSafeWordcharOrHigh(chNext)) {
+                } else if (preferRE && !isSafeWordcharOrHigh(chNext)) {
                     // Ruby doesn't allow high bit chars here,
                     // but the editor host might
                     state = SCE_RB_STRING_QQ;
@@ -898,6 +983,16 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
                     // stay in default
                     preferRE = true;
                 }
+            } else if (ch == '?') {
+                styler.ColourTo(i - 1, state);
+                if (iswhitespace(chNext) || chNext == '\n' || chNext == '\r') {
+                    styler.ColourTo(i, SCE_RB_OPERATOR);
+                } else {
+                    // It's the start of a character code escape sequence
+                    // Color it as a number.
+                    state = SCE_RB_NUMBER;
+                    is_real_number = false;
+                }
             } else if (isoperator(ch) || ch == '.') {
 				styler.ColourTo(i - 1, state);
 				styler.ColourTo(i, SCE_RB_OPERATOR);
@@ -909,7 +1004,20 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
                 // we aren't ending an object exp'n, and ops
                 // like : << / are unary operators.
                 
-                preferRE = (strchr(")}].", ch) == NULL);
+                if (ch == '{') {
+                    ++brace_counts;
+                    preferRE = true;
+                } else if (ch == '}' && --brace_counts < 0
+                           && inner_string_count > 0) {
+                    styler.ColourTo(i, SCE_RB_OPERATOR);
+                    exitInnerExpression(inner_string_types,
+                                        inner_expn_brace_counts,
+                                        inner_quotes,
+                                        inner_string_count,
+                                        state, brace_counts, Quote);
+                } else {
+                    preferRE = (strchr(")}].", ch) == NULL);
+                }
                 // Stay in default state
             } else if (isEOLChar(ch)) {
                 // Make sure it's a true line-end, with no backslash
@@ -984,7 +1092,37 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
                 }
             }
         } else if (state == SCE_RB_NUMBER) {
-            if (isSafeAlnumOrHigh(ch) || ch == '_') {
+            if (!is_real_number) {
+                if (ch != '\\') {
+                    styler.ColourTo(i, state);
+                    state = SCE_RB_DEFAULT;
+                    preferRE = false;
+                } else if (strchr("\\ntrfvaebs", chNext)) {
+                    // Terminal escape sequence -- handle it next time
+                    // Nothing more to do this time through the loop
+                } else if (chNext == 'C' || chNext == 'M') {
+                    if (chNext2 != '-') {
+                        // \C or \M ends the sequence -- handle it next time
+                    } else {
+                        // Move from abc?\C-x
+                        //               ^
+                        // to
+                        //                 ^
+                        i += 2;
+                        ch = chNext2;
+                        chNext = styler.SafeGetCharAt(i + 1);
+                    }
+                } else if (chNext == 'c') {
+                    // Stay here, \c is a combining sequence
+                    advance_char(i, ch, chNext, chNext2); // pass by ref
+                } else {
+                    // ?\x, including ?\\ is final.
+                    styler.ColourTo(i + 1, state);
+                    state = SCE_RB_DEFAULT;
+                    preferRE = false;
+                    advance_char(i, ch, chNext, chNext2);
+                }
+            } else if (isSafeAlnumOrHigh(ch) || ch == '_') {
                 // Keep going
             } else if (ch == '.' && ++numDots == 1) {
                 // Keep going
@@ -1155,30 +1293,47 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
                 Quote.Count++;
                 
             } else if (ch == '#' ) {
-                //todo: distinguish comments from pound chars
-                // for now, handle as comment
-                styler.ColourTo(i - 1, state);
-                bool inEscape = false;
-                while (++i < lengthDoc) {
-                    ch = styler.SafeGetCharAt(i);
-                    if (ch == '\\') {
-                        inEscape = true;
-                    } else if (isEOLChar(ch)) {
-                        // Comment inside a regex
-                        styler.ColourTo(i - 1, SCE_RB_COMMENTLINE);
-                        break;
-                    } else if (inEscape) {
-                        inEscape = false;  // don't look at char
-                    } else if (ch == Quote.Down) {
-                        // Have the regular handler deal with this
-                        // to get trailing modifiers.
-                        i--;
-                        ch = styler[i];
-						break;
+                if (chNext == '{'
+                    && inner_string_count < INNER_STRINGS_MAX_COUNT) {
+                    // process #{ ... }
+                    styler.ColourTo(i - 1, state);
+                    styler.ColourTo(i + 1, SCE_RB_OPERATOR);
+                    enterInnerExpression(inner_string_types,
+                                         inner_expn_brace_counts,
+                                         inner_quotes,
+                                         inner_string_count,
+                                         state,
+                                         brace_counts,
+                                         Quote);
+                    preferRE = true;
+                    // Skip one
+                    advance_char(i, ch, chNext, chNext2);
+                } else {
+                    //todo: distinguish comments from pound chars
+                    // for now, handle as comment
+                    styler.ColourTo(i - 1, state);
+                    bool inEscape = false;
+                    while (++i < lengthDoc) {
+                        ch = styler.SafeGetCharAt(i);
+                        if (ch == '\\') {
+                            inEscape = true;
+                        } else if (isEOLChar(ch)) {
+                            // Comment inside a regex
+                            styler.ColourTo(i - 1, SCE_RB_COMMENTLINE);
+                            break;
+                        } else if (inEscape) {
+                            inEscape = false;  // don't look at char
+                        } else if (ch == Quote.Down) {
+                            // Have the regular handler deal with this
+                            // to get trailing modifiers.
+                            i--;
+                            ch = styler[i];
+                            break;
+                        }
                     }
+                    chNext = styler.SafeGetCharAt(i + 1);
+                    chNext2 = styler.SafeGetCharAt(i + 2);
                 }
-                chNext = styler.SafeGetCharAt(i + 1);
-                chNext2 = styler.SafeGetCharAt(i + 2);
             }
         // Quotes of all kinds...
         } else if (state == SCE_RB_STRING_Q || state == SCE_RB_STRING_QQ || 
@@ -1199,6 +1354,23 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
                 }
             } else if (ch == Quote.Up) {
                 Quote.Count++;
+            } else if (ch == '#' && chNext == '{'
+                       && inner_string_count < INNER_STRINGS_MAX_COUNT
+                       && state != SCE_RB_CHARACTER
+                       && state != SCE_RB_STRING_Q) {
+                // process #{ ... }
+                styler.ColourTo(i - 1, state);
+                styler.ColourTo(i + 1, SCE_RB_OPERATOR);
+                enterInnerExpression(inner_string_types,
+                                     inner_expn_brace_counts,
+                                     inner_quotes,
+                                     inner_string_count,
+                                     state,
+                                     brace_counts,
+                                     Quote);
+                preferRE = true;
+                // Skip one
+                advance_char(i, ch, chNext, chNext2);
             }
         }
             

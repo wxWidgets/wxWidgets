@@ -20,6 +20,10 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#ifdef SCI_NAMESPACE
+using namespace Scintilla;
+#endif
+
 // Internal state, highlighted as number
 #define SCE_B_FILENUMBER SCE_B_DEFAULT+100
 
@@ -118,20 +122,27 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			// VB doubles quotes to preserve them, so just end this string
 			// state now as a following quote will start again
 			if (sc.ch == '\"') {
-				if (tolower(sc.chNext) == 'c') {
+				if (sc.chNext == '\"') {
 					sc.Forward();
+				} else {
+					if (tolower(sc.chNext) == 'c') {
+						sc.Forward();
+					}
+					sc.ForwardSetState(SCE_B_DEFAULT);
 				}
-				sc.ForwardSetState(SCE_B_DEFAULT);
 			} else if (sc.atLineEnd) {
+				visibleChars = 0;
 				sc.ChangeState(SCE_B_STRINGEOL);
 				sc.ForwardSetState(SCE_B_DEFAULT);
 			}
 		} else if (sc.state == SCE_B_COMMENT) {
 			if (sc.atLineEnd) {
+				visibleChars = 0;
 				sc.ForwardSetState(SCE_B_DEFAULT);
 			}
 		} else if (sc.state == SCE_B_PREPROCESSOR) {
 			if (sc.atLineEnd) {
+				visibleChars = 0;
 				sc.ForwardSetState(SCE_B_DEFAULT);
 			}
 		} else if (sc.state == SCE_B_FILENUMBER) {
@@ -157,6 +168,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			}
 		} else if (sc.state == SCE_B_DATE) {
 			if (sc.atLineEnd) {
+				visibleChars = 0;
 				sc.ChangeState(SCE_B_STRINGEOL);
 				sc.ForwardSetState(SCE_B_DEFAULT);
 			} else if (sc.ch == '#') {
