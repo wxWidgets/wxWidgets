@@ -48,7 +48,7 @@
 
 <build>
     <name>Linux x86_64 wxGTK Trunk</name>
-    <sandbox>td162.testdrive.hp.com</sandbox>
+    <sandbox>td163.testdrive.hp.com</sandbox>
     <builddir>td_gtk</builddir>
     <scheduler>trunk_quick</scheduler>
 
