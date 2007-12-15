@@ -224,13 +224,15 @@ GdkBitmap *wxMask::GetBitmap() const
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class wxBitmapRefData: public wxObjectRefData
+class wxBitmapRefData : public wxGDIRefData
 {
 public:
     wxBitmapRefData();
     wxBitmapRefData(const wxBitmapRefData& data);
     bool Create(int width, int height, int bpp);
     virtual ~wxBitmapRefData();
+
+    virtual bool IsOk() const { return m_pixmap || m_bitmap; }
 
     GdkPixmap      *m_pixmap;
     GdkBitmap      *m_bitmap;
@@ -360,12 +362,12 @@ wxBitmap::wxBitmap( int width, int height, int depth )
     Create( width, height, depth );
 }
 
-wxObjectRefData *wxBitmap::CreateRefData() const
+wxGDIRefData *wxBitmap::CreateGDIRefData() const
 {
     return new wxBitmapRefData;
 }
 
-wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));
 }
@@ -1135,12 +1137,6 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
 
 wxBitmap::~wxBitmap()
 {
-}
-
-bool wxBitmap::IsOk() const
-{
-    return (m_refData != NULL) &&
-           (M_BMPDATA->m_bitmap || M_BMPDATA->m_pixmap);
 }
 
 int wxBitmap::GetHeight() const

@@ -27,10 +27,8 @@ public:
 
     virtual ~wxColour();
 
-    bool IsOk() const { return m_refData != NULL; }
-
-    bool operator == ( const wxColour& col ) const;
-    bool operator != ( const wxColour& col ) const { return !(*this == col); }
+    bool operator==(const wxColour& col) const;
+    bool operator!=(const wxColour& col) const { return !(*this == col); }
 
     unsigned char Red() const;
     unsigned char Green() const;

@@ -64,7 +64,6 @@ protected:
 // ========================================================================
 class WXDLLEXPORT wxBitmap: public wxGDIObject
 {
-    DECLARE_DYNAMIC_CLASS(wxBitmap)
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -116,8 +115,6 @@ public:
     // get the given part of bitmap
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
     int GetWidth() const;
     int GetHeight() const;
     int GetDepth() const;
@@ -140,10 +137,6 @@ public:
 
     int GetBitmapType() const;
 
-    // wxObjectRefData
-    wxObjectRefData *CreateRefData() const;
-    wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
-
     // wxCocoa
     WX_NSBitmapImageRep GetNSBitmapImageRep();
     void SetNSBitmapImageRep(WX_NSBitmapImageRep bitmapImageRep);
@@ -151,6 +144,12 @@ public:
 
     static void InitStandardHandlers() { }
     static void CleanUpHandlers() { }
+
+protected:
+    wxGDIRefData *CreateGDIRefData() const;
+    wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
+    DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
 class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
@@ -158,5 +157,4 @@ class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
     DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
-#endif
-    // __WX_COCOA_BITMAP_H__
+#endif // __WX_COCOA_BITMAP_H__

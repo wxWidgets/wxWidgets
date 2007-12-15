@@ -84,9 +84,6 @@ public:
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     virtual ~wxBitmap();
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
-
     static void InitStandardHandlers();
 
     bool Create(int width, int height, int depth = -1);
@@ -138,8 +135,8 @@ public:
     WXDisplay *GetDisplay() const;
 
 protected:
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)

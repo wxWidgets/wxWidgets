@@ -15,38 +15,40 @@
 #include "wx/bitmap.h"
 
 // Cursor
-class WXDLLEXPORT wxCursor: public wxGDIObject
+class WXDLLEXPORT wxCursor : public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxCursor)
-
 public:
-  wxCursor();
+    wxCursor();
 
-  wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
-    const char maskBits[] = NULL);
+    wxCursor(const char bits[], int width, int height,
+             int hotSpotX = -1, int hotSpotY = -1,
+             const char maskBits[] = NULL);
 
     wxCursor(const wxImage & image) ;
     wxCursor(const char **bits) ;
     wxCursor(char **bits) ;
     wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
-        int hotSpotX = 0, int hotSpotY = 0);
+             int hotSpotX = 0, int hotSpotY = 0);
 
-  wxCursor(int cursor_type);
-  virtual ~wxCursor();
+    wxCursor(int cursor_type);
+    virtual ~wxCursor();
 
-  bool CreateFromXpm(const char **bits) ;
-  virtual bool Ok() const { return IsOk(); }
-  virtual bool IsOk() const ;
+    bool CreateFromXpm(const char **bits) ;
 
     void MacInstall() const ;
 
-  void SetHCURSOR(WXHCURSOR cursor);
-  inline WXHCURSOR GetHCURSOR() const ;
-private :
+    void SetHCURSOR(WXHCURSOR cursor);
+    WXHCURSOR GetHCURSOR() const;
+
+private:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
     void CreateFromImage(const wxImage & image) ;
+
+    DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 
 extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);
 
-#endif
-    // _WX_CURSOR_H_
+#endif // _WX_CURSOR_H_

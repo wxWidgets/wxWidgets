@@ -59,9 +59,6 @@ public:
                 ,unsigned char* pBlue
                ) const;
 
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk(void) const { return (m_refData != NULL) ; }
-
     virtual bool FreeResource(bool bForce = false);
 
     inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }

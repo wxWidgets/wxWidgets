@@ -26,7 +26,7 @@
 // wxBrush
 //-----------------------------------------------------------------------------
 
-class wxBrushRefData: public wxObjectRefData
+class wxBrushRefData : public wxGDIRefData
 {
 public:
     wxBrushRefData(const wxColour& clr = wxNullColour, int style = wxSOLID)
@@ -40,6 +40,8 @@ public:
         m_colour = data.m_colour;
         m_style = data.m_style;
     }
+
+    virtual bool IsOk() const { return m_colour.IsOk(); }
 
     void SetStyle(int style)
     {
@@ -78,11 +80,6 @@ bool wxBrush::operator==(const wxBrush& brush) const
 {
 #warning "this is incorrect (MGL too)"
     return m_refData == brush.m_refData;
-}
-
-bool wxBrush::IsOk() const
-{
-    return ((m_refData) && M_BRUSHDATA->m_colour.Ok());
 }
 
 int wxBrush::GetStyle() const
@@ -136,12 +133,12 @@ void wxBrush::SetStipple(const wxBitmap& WXUNUSED(stipple))
     wxFAIL_MSG( wxT("brushes with stipple bitmaps not implemented") );
 }
 
-wxObjectRefData *wxBrush::CreateRefData() const
+wxGDIRefData *wxBrush::CreateGDIRefData() const
 {
     return new wxBrushRefData;
 }
 
-wxObjectRefData *wxBrush::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxBrush::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBrushRefData(*(wxBrushRefData *)data);
 }

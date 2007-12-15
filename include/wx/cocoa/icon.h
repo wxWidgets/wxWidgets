@@ -18,9 +18,8 @@
 // ========================================================================
 // wxIcon
 // ========================================================================
-class WXDLLEXPORT wxIcon: public wxGDIObject
+class WXDLLEXPORT wxIcon : public wxGDIObject
 {
-    DECLARE_DYNAMIC_CLASS(wxIcon)
 public:
     wxIcon();
 
@@ -49,14 +48,18 @@ public:
     // ctors, assignment operators...), but it's ok to have such function
     void CopyFromBitmap(const wxBitmap& bmp);
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
     int GetWidth() const;
     int GetHeight() const;
 
     WX_NSImage GetNSImage() const;
     bool CreateFromXpm(const char **bits);
+
+protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxIcon)
 };
 
-#endif
-    // _WX_COCOA_ICON_H__
+#endif // _WX_COCOA_ICON_H__

@@ -54,11 +54,6 @@ wxColour& wxColour::operator=(CGColorRef col)
     return *this;
 }
 
-bool wxColour::IsOk() const 
-{
-    return m_cgColour; 
-}
-
 void wxColour::InitRGBA (ChannelType r, ChannelType g, ChannelType b, ChannelType a)
 {
     m_red = r;

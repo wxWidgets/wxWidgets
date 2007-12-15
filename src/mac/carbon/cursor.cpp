@@ -29,13 +29,22 @@ IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
 
 class WXDLLEXPORT wxCursorRefData: public wxGDIRefData
 {
-    friend class wxCursor;
-
-    DECLARE_NO_COPY_CLASS(wxCursorRefData)
-
 public:
     wxCursorRefData();
+    wxCursorRefData(const wxCursorRefData& cursor);
     virtual ~wxCursorRefData();
+
+    virtual bool IsOk() const
+    {
+        if ( m_hCursor != NULL )
+            return true;
+#if !wxMAC_USE_COCOA
+        if ( m_themeCursor != -1 )
+            return true;
+#endif
+
+        return false;
+    }
 
 protected:
 #if wxMAC_USE_COCOA
@@ -47,6 +56,10 @@ protected:
     bool        m_isColorCursor;
     long        m_themeCursor;
 #endif
+
+    friend class wxCursor;
+
+    DECLARE_NO_ASSIGN_CLASS(wxCursorRefData)
 };
 
 #define M_CURSORDATA wx_static_cast(wxCursorRefData*, m_refData)
@@ -208,6 +221,21 @@ wxCursorRefData::wxCursorRefData()
 #endif
 }
 
+wxCursorRefData::wxCursorRefData(const wxCursorRefData& cursor)
+{
+    // FIXME: need to copy the cursor
+    m_hCursor = NULL;
+
+#if wxMAC_USE_COCOA
+    wxUnusedVar(cursor);
+#else
+    m_disposeHandle = false;
+    m_releaseHandle = false;
+    m_isColorCursor = cursor.m_isColorCursor;
+    m_themeCursor = cursor.m_themeCursor;
+#endif
+}
+
 wxCursorRefData::~wxCursorRefData()
 {
 #if wxMAC_USE_COCOA
@@ -258,6 +286,16 @@ wxCursor::wxCursor(char **bits)
     (void) CreateFromXpm((const char **)bits);
 }
 
+wxGDIRefData *wxCursor::CreateGDIRefData() const
+{
+    return new wxCursorRefData;
+}
+
+wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxCursorRefData(*wx_static_cast(const wxCursorRefData *, data));
+}
+
 bool wxCursor::CreateFromXpm(const char **bits)
 {
 #if wxUSE_IMAGE
@@ -275,15 +313,6 @@ bool wxCursor::CreateFromXpm(const char **bits)
 WXHCURSOR wxCursor::GetHCURSOR() const
 {
     return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0);
-}
-
-bool wxCursor::IsOk() const
-{
-#if wxMAC_USE_COCOA
-    return GetHCURSOR() != NULL;
-#else
-    return (m_refData != NULL && ( M_CURSORDATA->m_hCursor != NULL || M_CURSORDATA->m_themeCursor != -1 ) ) ;
-#endif
 }
 
 #if !wxMAC_USE_COCOA

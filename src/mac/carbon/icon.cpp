@@ -26,21 +26,25 @@ IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject)
 class WXDLLEXPORT wxIconRefData : public wxGDIRefData
 {
 public:
-    wxIconRefData();
+    wxIconRefData() { Init(); }
     wxIconRefData( WXHICON iconref, int desiredWidth, int desiredHeight );
     virtual ~wxIconRefData() { Free(); }
-    
-    void Init();
+
+    virtual bool IsOk() const { return m_iconRef != NULL; }
+
     virtual void Free();
-    
+
     void SetWidth( int width ) { m_width = width; }
     void SetHeight( int height ) { m_height = height; }
-    
+
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
-    
+
     WXHICON GetHICON() const { return (WXHICON) m_iconRef; }
-    private :
+
+private:
+    void Init();
+
     IconRef m_iconRef;
     int m_width;
     int m_height;
@@ -50,7 +54,7 @@ public:
 wxIconRefData::wxIconRefData( WXHICON icon, int desiredWidth, int desiredHeight )
 {
     m_iconRef = MAC_WXHICON( icon ) ;
-    
+
     // Standard sizes
     SetWidth( desiredWidth == -1 ? 32 : desiredWidth ) ;
     SetHeight( desiredHeight == -1 ? 32 : desiredHeight ) ;
@@ -59,6 +63,8 @@ wxIconRefData::wxIconRefData( WXHICON icon, int desiredWidth, int desiredHeight 
 void wxIconRefData::Init()
 {
     m_iconRef = NULL ;
+    m_width =
+    m_height = 0;
 }
 
 void wxIconRefData::Free()
@@ -117,6 +123,16 @@ wxIcon::~wxIcon()
 {
 }
 
+wxGDIRefData *wxIcon::CreateGDIRefData() const
+{
+    return new wxIconRefData;
+}
+
+wxGDIRefData *wxIcon::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxIconRefData(*wx_static_cast(const wxIconRefData *, data));
+}
+
 WXHICON wxIcon::GetHICON() const
 {
     wxASSERT( Ok() ) ;
@@ -153,11 +169,6 @@ void wxIcon::SetWidth( int WXUNUSED(width) )
 
 void wxIcon::SetHeight( int WXUNUSED(height) )
 {
-}
-
-bool wxIcon::IsOk() const
-{
-    return m_refData != NULL ;
 }
 
 bool wxIcon::LoadFile(
@@ -200,34 +211,34 @@ bool wxIcon::LoadFile(
         }
         else
         {
-        	IconRef iconRef = NULL ;
-        	
-        	// first look in the resource fork
-        	if ( iconRef == NULL )
-        	{
-	        	Str255 theName ;
+            IconRef iconRef = NULL ;
 
-	        	wxMacStringToPascal( filename , theName ) ;
-	        	Handle resHandle = GetNamedResource( 'icns' , theName ) ;
-	        	if ( resHandle != 0L )
-	        	{
-					IconFamilyHandle iconFamily = (IconFamilyHandle) resHandle ;
+            // first look in the resource fork
+            if ( iconRef == NULL )
+            {
+                Str255 theName ;
+
+                wxMacStringToPascal( filename , theName ) ;
+                Handle resHandle = GetNamedResource( 'icns' , theName ) ;
+                if ( resHandle != 0L )
+                {
+                    IconFamilyHandle iconFamily = (IconFamilyHandle) resHandle ;
                     HLock((Handle) iconFamily);
                     OSStatus err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &iconRef );
                     HUnlock((Handle) iconFamily);
                     wxASSERT_MSG( err == noErr , wxT("Error when constructing icon ref") );
                     ReleaseResource( resHandle ) ;
-	        	}
-  			}
+                }
+              }
             if ( iconRef == NULL )
             {
                 // TODO add other attempts to load it from files etc here
             }
-	   		if ( iconRef )
-	   		{
-               	m_refData = new wxIconRefData( (WXHICON) iconRef, desiredWidth, desiredHeight ) ;
-	        	return true ;
-	   		}      	
+               if ( iconRef )
+               {
+                   m_refData = new wxIconRefData( (WXHICON) iconRef, desiredWidth, desiredHeight ) ;
+                return true ;
+               }
         }
 
         if ( theId != 0 )

@@ -51,6 +51,8 @@ class WXDLLEXPORT wxIconBundleRefData : public wxGDIRefData
 public:
     // default and copy ctors and assignment operators are ok
 
+    virtual bool IsOk() const { return !m_icons.empty(); }
+
 protected:
     wxIconArray m_icons;
 
@@ -84,12 +86,12 @@ wxIconBundle::wxIconBundle(const wxIcon& icon)
     AddIcon(icon);
 }
 
-wxObjectRefData *wxIconBundle::CreateRefData() const
+wxGDIRefData *wxIconBundle::CreateGDIRefData() const
 {
     return new wxIconBundleRefData;
 }
 
-wxObjectRefData *wxIconBundle::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxIconBundle::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxIconBundleRefData(*wx_static_cast(const wxIconBundleRefData *, data));
 }
@@ -97,11 +99,6 @@ wxObjectRefData *wxIconBundle::CloneRefData(const wxObjectRefData *data) const
 void wxIconBundle::DeleteIcons()
 {
     UnRef();
-}
-
-bool wxIconBundle::IsOk() const
-{
-    return M_ICONBUNDLEDATA && !M_ICONBUNDLEDATA->m_icons.IsEmpty();
 }
 
 void wxIconBundle::AddIcon(const wxString& file, long type)

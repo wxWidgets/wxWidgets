@@ -46,8 +46,6 @@ public:
     wxIconBundle& operator=(const wxIconBundle& ic)
         { if ( this != &ic) Ref(ic); return *this; }
 
-    virtual bool IsOk() const;
-
 
     // adds all the icons contained in the file to the collection,
     // if the collection already contains icons with the same
@@ -87,8 +85,8 @@ public:
     bool IsEmpty() const { return GetIconCount() == 0; }
 
 protected:
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     // delete all icons

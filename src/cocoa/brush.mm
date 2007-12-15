@@ -159,12 +159,12 @@ wxBrush::wxBrush(const wxBitmap& stipple)
     m_refData = new wxBrushRefData(stipple);
 }
 
-wxObjectRefData *wxBrush::CreateRefData() const
+wxGDIRefData *wxBrush::CreateGDIRefData() const
 {
     return new wxBrushRefData;
 }
 
-wxObjectRefData *wxBrush::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxBrush::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBrushRefData(*(wxBrushRefData *)data);
 }

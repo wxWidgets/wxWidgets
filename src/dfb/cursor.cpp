@@ -22,11 +22,13 @@
 // wxCursorRefData
 //-----------------------------------------------------------------------------
 
-class wxCursorRefData: public wxObjectRefData
+class wxCursorRefData : public wxGDIRefData
 {
 public:
     wxCursorRefData(const wxBitmap& bmp = wxNullBitmap, int id = -1)
         : m_id(id), m_bitmap(bmp) {}
+
+    virtual bool IsOk() const { return m_bitmap.IsOk(); }
 
     int      m_id;
     wxBitmap m_bitmap;
@@ -63,17 +65,12 @@ wxCursor::wxCursor(const wxString& cursor_file,
 #warning "FIXME"
 }
 
-bool wxCursor::IsOk() const
-{
-    return m_refData && M_CURSOR->m_bitmap.Ok();
-}
-
-wxObjectRefData *wxCursor::CreateRefData() const
+wxGDIRefData *wxCursor::CreateGDIRefData() const
 {
     return new wxCursorRefData;
 }
 
-wxObjectRefData *wxCursor::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxCursorRefData(*(wxCursorRefData *)data);
 }

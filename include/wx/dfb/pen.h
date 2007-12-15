@@ -57,13 +57,9 @@ public:
     wxDash* GetDash() const;
     wxBitmap *GetStipple() const;
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
-
 protected:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     DECLARE_DYNAMIC_CLASS(wxPen)
 };

@@ -895,12 +895,12 @@ wxFont::~wxFont()
 // real implementation
 // ----------------------------------------------------------------------------
 
-wxObjectRefData *wxFont::CreateRefData() const
+wxGDIRefData *wxFont::CreateGDIRefData() const
 {
     return new wxFontRefData();
 }
 
-wxObjectRefData *wxFont::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxFontRefData(*wx_static_cast(const wxFontRefData *, data));
 }

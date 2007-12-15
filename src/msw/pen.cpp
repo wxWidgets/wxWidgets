@@ -469,12 +469,12 @@ bool wxPen::IsFree() const
     return M_PENDATA && !M_PENDATA->HasHPEN();
 }
 
-wxObjectRefData* wxPen::CreateRefData() const
+wxGDIRefData* wxPen::CreateGDIRefData() const
 {
     return new wxPenRefData;
 }
 
-wxObjectRefData* wxPen::CloneRefData(const wxObjectRefData* data) const
+wxGDIRefData* wxPen::CloneGDIRefData(const wxGDIRefData* data) const
 {
     return new wxPenRefData(*wx_static_cast(const wxPenRefData*, data));
 }

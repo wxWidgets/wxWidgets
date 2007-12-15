@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxPen;
 // wxPen
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPen: public wxGDIObject
+class WXDLLEXPORT wxPen : public wxGDIObject
 {
 public:
     wxPen() {}
@@ -56,16 +56,12 @@ public:
     wxDash* GetDash() const;
     wxBitmap *GetStipple() const;
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
-
     // implementation:
     void* GetPixPattern() const;
 
 protected:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPen)

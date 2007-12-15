@@ -344,6 +344,16 @@ wxFont::~wxFont()
 {
 }
 
+wxGDIRefData *wxFont::CreateGDIRefData() const
+{
+    return new wxFontRefData;
+}
+
+wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxFontRefData(*wx_static_cast(const wxFontRefData *, data));
+}
+
 // ----------------------------------------------------------------------------
 // change the font attributes
 // ----------------------------------------------------------------------------

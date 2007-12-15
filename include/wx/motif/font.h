@@ -107,7 +107,11 @@ public:
     // like the function above but does a copy for XmFontList
     WXFontType GetFontTypeC(WXDisplay* display) const;
     static WXString GetFontTag();
+
 protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
     virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );
 
     void Unshare();
@@ -116,5 +120,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFont)
 };
 
-#endif
-// _WX_FONT_H_
+#endif // _WX_FONT_H_

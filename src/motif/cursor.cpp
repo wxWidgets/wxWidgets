@@ -49,15 +49,16 @@ WX_DECLARE_LIST(wxXCursor, wxXCursorList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxXCursorList)
 
-class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
+class WXDLLEXPORT wxCursorRefData: public wxGDIRefData
 {
-    friend class wxCursor;
 public:
     wxCursorRefData();
     virtual ~wxCursorRefData();
 
     wxXCursorList m_cursors;  // wxXCursor objects, one per display
     wxStockCursor m_cursorId; // wxWidgets standard cursor id
+
+    friend class wxCursor;
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
@@ -293,9 +294,14 @@ wxCursor::~wxCursor()
 {
 }
 
-bool wxCursor::IsOk() const
+wxGDIRefData *wxCursor::CreateGDIRefData() const
 {
-    return m_refData != NULL;
+    return new wxCursorRefData;
+}
+
+wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxCursorRefData(*wx_static_cast(const wxCursorRefData *, data));
 }
 
 // Motif-specific: create/get a cursor for the current display

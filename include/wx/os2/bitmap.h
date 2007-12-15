@@ -216,9 +216,8 @@ protected:
 
     bool CreateFromImage(const wxImage& image, int depth);
 
-   // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     bool CopyFromIconOrCursor(const wxGDIImage& rIcon);

@@ -91,9 +91,10 @@ public:
 
     GdkFont* GetInternalFont(float scale = 1.0) const;
 
-    // no data :-)
-
 protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
     virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );
 
 private:

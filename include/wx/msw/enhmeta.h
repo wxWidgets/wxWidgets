@@ -13,6 +13,7 @@
 #define _WX_MSW_ENHMETA_H_
 
 #include "wx/dc.h"
+#include "wx/gdiobj.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dataobj.h"
@@ -22,12 +23,12 @@
 // wxEnhMetaFile: encapsulation of Win32 HENHMETAFILE
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxEnhMetaFile : public wxObject
+class WXDLLEXPORT wxEnhMetaFile : public wxGDIObject
 {
 public:
     wxEnhMetaFile(const wxString& file = wxEmptyString) : m_filename(file)
         { Init(); }
-    wxEnhMetaFile(const wxEnhMetaFile& metafile) : wxObject()
+    wxEnhMetaFile(const wxEnhMetaFile& metafile) : wxGDIObject()
         { Init(); Assign(metafile); }
     wxEnhMetaFile& operator=(const wxEnhMetaFile& metafile)
         { Free(); Assign(metafile); return *this; }
@@ -39,8 +40,7 @@ public:
     bool Play(wxDC *dc, wxRect *rectBound = (wxRect *)NULL);
 
     // accessors
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_hMF != 0; }
+    virtual bool IsOk() const { return m_hMF != 0; }
 
     wxSize GetSize() const;
     int GetWidth() const { return GetSize().x; }
@@ -61,6 +61,11 @@ protected:
     void Init();
     void Free();
     void Assign(const wxEnhMetaFile& mf);
+
+    // we don't use these functions (but probably should) but have to implement
+    // them as they're pure virtual in the base class
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     wxString m_filename;

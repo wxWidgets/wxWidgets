@@ -13,6 +13,7 @@
 #define _WX_PALMOS_ENHMETA_H_
 
 #include "wx/dc.h"
+#include "wx/gdiobj.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dataobj.h"
@@ -22,7 +23,7 @@
 // wxEnhMetaFile: encapsulation of Win32 HENHMETAFILE
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxEnhMetaFile : public wxObject
+class WXDLLEXPORT wxEnhMetaFile : public wxGDIObject
 {
 public:
     wxEnhMetaFile(const wxString& file = wxEmptyString) : m_filename(file)
@@ -39,8 +40,7 @@ public:
     bool Play(wxDC *dc, wxRect *rectBound = (wxRect *)NULL);
 
     // accessors
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_hMF != 0; }
+    virtual bool IsOk() const { return m_hMF != 0; }
 
     wxSize GetSize() const;
     int GetWidth() const { return GetSize().x; }

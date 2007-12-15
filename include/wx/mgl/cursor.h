@@ -10,8 +10,7 @@
 #ifndef __WX_CURSOR_H__
 #define __WX_CURSOR_H__
 
-#include "wx/defs.h"
-#include "wx/object.h"
+#include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
 class MGLCursor;
@@ -20,7 +19,7 @@ class MGLCursor;
 // wxCursor
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCursor: public wxObject
+class WXDLLEXPORT wxCursor : public wxGDIObject
 {
 public:
 
@@ -33,8 +32,6 @@ public:
              long flags = wxBITMAP_TYPE_CUR_RESOURCE,
              int hotSpotX = 0, int hotSpotY = 0);
     virtual ~wxCursor();
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
 
     // implementation
     MGLCursor *GetMGLCursor() const;

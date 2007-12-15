@@ -26,7 +26,7 @@
 // wxPen
 //-----------------------------------------------------------------------------
 
-class wxPenRefData: public wxObjectRefData
+class wxPenRefData : public wxGDIRefData
 {
 public:
     wxPenRefData(const wxColour& clr = wxNullColour, int style = wxSOLID)
@@ -37,6 +37,8 @@ public:
 
     wxPenRefData(const wxPenRefData& data)
         : m_style(data.m_style), m_colour(data.m_colour) {}
+
+    virtual bool IsOk() const { return m_colour.IsOk(); }
 
     void SetStyle(int style)
     {
@@ -189,17 +191,12 @@ wxBitmap *wxPen::GetStipple() const
     return NULL;
 }
 
-bool wxPen::IsOk() const
-{
-    return ((m_refData) && M_PENDATA->m_colour.Ok());
-}
-
-wxObjectRefData *wxPen::CreateRefData() const
+wxGDIRefData *wxPen::CreateGDIRefData() const
 {
     return new wxPenRefData;
 }
 
-wxObjectRefData *wxPen::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxPen::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxPenRefData(*(wxPenRefData *)data);
 }

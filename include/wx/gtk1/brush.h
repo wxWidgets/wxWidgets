@@ -36,11 +36,8 @@ public:
     wxBrush( const wxBitmap &stippleBitmap );
     virtual ~wxBrush();
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_refData != NULL; }
-
-    bool operator == ( const wxBrush& brush ) const;
-    bool operator != (const wxBrush& brush) const { return !(*this == brush); }
+    bool operator==(const wxBrush& brush) const;
+    bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 
     virtual int GetStyle() const;
     wxColour &GetColour() const;
@@ -52,9 +49,8 @@ public:
     void SetStipple( const wxBitmap& stipple );
 
 private:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     DECLARE_DYNAMIC_CLASS(wxBrush)
 };

@@ -34,7 +34,7 @@
 #endif
 
 
-IMPLEMENT_DYNAMIC_CLASS(wxGDIObject, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxGDIObject, wxObject)
 
 
 WXDLLIMPEXP_DATA_CORE(wxBrushList*) wxTheBrushList;

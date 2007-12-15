@@ -21,7 +21,7 @@
 // wxBrush
 //-----------------------------------------------------------------------------
 
-class wxBrushRefData: public wxObjectRefData
+class wxBrushRefData: public wxGDIRefData
 {
 public:
     wxBrushRefData()
@@ -30,7 +30,7 @@ public:
     }
 
     wxBrushRefData( const wxBrushRefData& data )
-        : wxObjectRefData()
+        : wxGDIRefData()
     {
         m_style = data.m_style;
         m_stipple = data.m_stipple;
@@ -80,17 +80,17 @@ wxBrush::~wxBrush()
     // m_refData unrefed in ~wxObject
 }
 
-wxObjectRefData *wxBrush::CreateRefData() const
+wxGDIRefData *wxBrush::CreateGDIRefData() const
 {
     return new wxBrushRefData;
 }
 
-wxObjectRefData *wxBrush::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxBrush::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBrushRefData(*(wxBrushRefData *)data);
 }
 
-bool wxBrush::operator == ( const wxBrush& brush ) const
+bool wxBrush::operator==(const wxBrush& brush) const
 {
     if (m_refData == brush.m_refData) return true;
 

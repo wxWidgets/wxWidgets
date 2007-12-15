@@ -14,12 +14,8 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxCursorRefData: public wxObjectRefData
+class WXDLLEXPORT wxCursorRefData : public wxGDIRefData
 {
-    DECLARE_NO_COPY_CLASS(wxCursorRefData)
-
-    friend class WXDLLIMPEXP_FWD_CORE wxBitmap;
-    friend class WXDLLIMPEXP_FWD_CORE wxCursor;
 public:
     wxCursorRefData();
     virtual ~wxCursorRefData();
@@ -27,6 +23,11 @@ public:
 protected:
     int m_width, m_height;
     WX_NSCursor m_hCursor;
+
+    friend class WXDLLIMPEXP_FWD_CORE wxBitmap;
+    friend class WXDLLIMPEXP_FWD_CORE wxCursor;
+
+    DECLARE_NO_COPY_CLASS(wxCursorRefData)
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
@@ -35,31 +36,26 @@ protected:
 // Cursor
 class WXDLLEXPORT wxCursor: public wxBitmap
 {
-  DECLARE_DYNAMIC_CLASS(wxCursor)
-
 public:
-  wxCursor();
+    wxCursor();
 
-  wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
-    const char maskBits[] = NULL);
+    wxCursor(const char bits[], int width, int height,
+             int hotSpotX = -1, int hotSpotY = -1,
+             const char maskBits[] = NULL);
 
-  wxCursor(const wxString& name, long flags = 0,
-   int hotSpotX = 0, int hotSpotY = 0);
+    wxCursor(const wxString& name, long flags = 0,
+             int hotSpotX = 0, int hotSpotY = 0);
 
-  wxCursor(int cursor_type);
-  virtual ~wxCursor();
+    wxCursor(int cursor_type);
+    virtual ~wxCursor();
 
-  virtual bool Ok() const { return IsOk(); }
-  virtual bool IsOk() const { return m_refData ; }
+    // FIXME: operator==() is wrong!
+    bool operator==(const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
+    bool operator!=(const wxCursor& cursor) const { return !(*this == cursor); }
 
-  inline bool operator == (const wxCursor& cursor) const { return m_refData == cursor.m_refData; }
-  inline bool operator != (const wxCursor& cursor) const { return m_refData != cursor.m_refData; }
+    WX_NSCursor GetNSCursor() const { return M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0; }
 
-  inline WX_NSCursor GetNSCursor() const
-  {
-    return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0);
-  }
-
+    DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 
 extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);

@@ -47,7 +47,7 @@ public:
 
     // Construct a mask from a mono bitmap (black meaning show pixels, white meaning transparent)
     wxMask(const wxBitmap& bitmap);
-    
+
     // implementation helper only : construct a mask from a 32 bit memory buffer
     wxMask(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
@@ -61,10 +61,10 @@ public:
 
     void Init() ;
 
-    // a 8 bit depth mask 
+    // a 8 bit depth mask
     void* GetRawAccess() const;
     int GetBytesPerRow() const { return m_bytesPerRow ; }
-    // renders/updates native representation when necessary 
+    // renders/updates native representation when necessary
     void RealizeNative() ;
 
     WXHBITMAP GetHBITMAP() const ;
@@ -134,8 +134,6 @@ public:
     // copies the contents and mask of the given (colour) icon to the bitmap
     virtual bool CopyFromIcon(const wxIcon& icon);
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
     int GetWidth() const;
     int GetHeight() const;
     int GetDepth() const;
@@ -163,7 +161,7 @@ public:
     bool HasAlpha() const;
     void UseAlpha();
 
-    // returns the 'native' implementation, a GWorldPtr for the content and one for the mask 
+    // returns the 'native' implementation, a GWorldPtr for the content and one for the mask
     WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;
 
     // returns a CGImageRef which must released after usage with CGImageRelease
@@ -181,9 +179,8 @@ public:
     void EndRawAccess() ;
 
 protected:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 };
-#endif
-  // _WX_BITMAP_H_
+
+#endif // _WX_BITMAP_H_

@@ -41,7 +41,7 @@ public:
     }
 
     // accessors
-    bool IsOk() const
+    virtual bool IsOk() const
     {
         if (m_hHandle == 0)
             return false;
@@ -187,9 +187,6 @@ public:
         pData->m_hHandle = hHandle;
     }
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return GetHandle() != 0; }
-
     int GetWidth() const { return IsNull() ? 0 : GetGDIImageData()->m_nWidth; }
     int GetHeight() const { return IsNull() ? 0 : GetGDIImageData()->m_nHeight; }
     int GetDepth() const { return IsNull() ? 0 : GetGDIImageData()->m_nDepth; }
@@ -232,6 +229,7 @@ public:
 protected:
     // create the data for the derived class here
     virtual wxGDIImageRefData* CreateData() const = 0;
+    virtual wxGDIRefData *CreateGDIRefData() const { return CreateData(); }
 
     static wxGDIImageHandlerList    ms_handlers;
 };

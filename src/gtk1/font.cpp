@@ -54,7 +54,7 @@ WX_DECLARE_HASH_MAP(int, GdkFont *, wxIntegerHash, wxIntegerEqual,
 // wxFontRefData
 // ----------------------------------------------------------------------------
 
-class wxFontRefData : public wxObjectRefData
+class wxFontRefData : public wxGDIRefData
 {
 public:
     // from broken down font parameters, also default ctor
@@ -291,7 +291,7 @@ void wxFontRefData::InitFromNative()
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
-             : wxObjectRefData()
+             : wxGDIRefData()
 {
     m_pointSize = data.m_pointSize;
     m_family = data.m_family;
@@ -534,6 +534,16 @@ void wxFont::Unshare()
 
 wxFont::~wxFont()
 {
+}
+
+wxGDIRefData *wxFont::CreateGDIRefData() const
+{
+    return new wxFontRefData;
+}
+
+wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxFontRefData(*wx_static_cast(const wxFontRefData *, data));
 }
 
 // ----------------------------------------------------------------------------

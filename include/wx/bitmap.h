@@ -133,9 +133,6 @@ public:
     static void InitStandardHandlers();
     */
 
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const = 0;
-
     virtual int GetHeight() const = 0;
     virtual int GetWidth() const = 0;
     virtual int GetDepth() const = 0;

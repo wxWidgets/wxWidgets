@@ -160,6 +160,16 @@ wxRegion::~wxRegion()
     // m_refData unrefed in ~wxObject
 }
 
+wxGDIRefData *wxRegion::CreateGDIRefData() const
+{
+    return new wxRegionRefData;
+}
+
+wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxRegionRefData(*wx_static_cast(const wxRegionRefData *, data));
+}
+
 //-----------------------------------------------------------------------------
 //# Modify region
 //-----------------------------------------------------------------------------

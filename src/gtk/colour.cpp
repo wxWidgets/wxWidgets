@@ -20,7 +20,7 @@
 // wxColour
 //-----------------------------------------------------------------------------
 
-class wxColourRefData: public wxObjectRefData
+class wxColourRefData : public wxGDIRefData
 {
 public:
     wxColourRefData(guint16 red, guint16 green, guint16 blue, guint16 alpha)

@@ -52,16 +52,12 @@ public:
     virtual int GetStyle() const;
     wxBitmap *GetStipple() const;
 
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const
-    {   return (m_refData != NULL); }
-
-    // wxObjectRefData
-    wxObjectRefData *CreateRefData() const;
-    wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
-
     // wxCocoa
     WX_NSColor GetNSColor();
+
+protected:
+    wxGDIRefData *CreateGDIRefData() const;
+    wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 };
 
 #endif // __WX_COCOA_BRUSH_H__

@@ -45,10 +45,8 @@ public:
 
     virtual bool FromString(const wxString& str);
 
-    bool IsOk() const { return m_refData != NULL; }
-
-    bool operator == ( const wxColour& col ) const;
-    bool operator != ( const wxColour& col ) const { return !(*this == col); }
+    bool operator==(const wxColour& col) const;
+    bool operator!=(const wxColour& col) const { return !(*this == col); }
 
     unsigned char Red() const;
     unsigned char Green() const;
@@ -62,8 +60,8 @@ public:
 
 protected:
     // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     virtual void
     InitRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);

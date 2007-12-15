@@ -78,14 +78,12 @@ public:
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
     wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     virtual ~wxBitmap();
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
 
     bool Create(int width, int height, int depth = -1);
 
-    int GetHeight() const;
-    int GetWidth() const;
-    int GetDepth() const;
+    virtual int GetHeight() const;
+    virtual int GetWidth() const;
+    virtual int GetDepth() const;
 
     wxImage ConvertToImage() const;
 
@@ -134,8 +132,8 @@ public:
 protected:
     bool CreateFromImage(const wxImage& image, int depth);
 
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     // to be called from CreateFromImage only!

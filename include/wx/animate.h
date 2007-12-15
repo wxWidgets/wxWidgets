@@ -31,7 +31,7 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxAnimationCtrlNameStr[];
 // wxAnimationBase
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxAnimationBase : public wxGDIObject
+class WXDLLIMPEXP_ADV wxAnimationBase : public wxObject
 {
 public:
     wxAnimationBase() {}

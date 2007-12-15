@@ -70,13 +70,15 @@ void wxBitmapToPixPattern(const wxBitmap& bitmap,
 // wxBrush
 //-----------------------------------------------------------------------------
 
-class wxBrushRefData: public wxObjectRefData
+class wxBrushRefData : public wxGDIRefData
 {
 public:
     wxBrushRefData();
     wxBrushRefData(const wxBrushRefData& data);
 
-    bool operator == (const wxBrushRefData& data) const
+    virtual bool IsOk() const { return m_colour.IsOk(); }
+
+    bool operator==(const wxBrushRefData& data) const
     {
         return (m_style == data.m_style &&
                 m_stipple.IsSameAs(data.m_stipple) &&
@@ -164,11 +166,6 @@ bool wxBrush::operator != (const wxBrush& brush) const
     return m_refData != brush.m_refData;
 }
 
-bool wxBrush::IsOk() const
-{
-    return ((m_refData) && M_BRUSHDATA->m_colour.Ok());
-}
-
 int wxBrush::GetStyle() const
 {
     if (m_refData == NULL)
@@ -252,12 +249,12 @@ void wxBrush::SetStipple(const wxBitmap& stipple)
         M_BRUSHDATA->m_style = wxSTIPPLE;
 }
 
-wxObjectRefData *wxBrush::CreateRefData() const
+wxGDIRefData *wxBrush::CreateGDIRefData() const
 {
     return new wxBrushRefData;
 }
 
-wxObjectRefData *wxBrush::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxBrush::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBrushRefData(*(wxBrushRefData *)data);
 }

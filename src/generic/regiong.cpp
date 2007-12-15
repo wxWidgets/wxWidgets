@@ -176,12 +176,12 @@ protected:
 // wxRegionRefData
 // ========================================================================
 
-class wxRegionRefData : public wxObjectRefData,
+class wxRegionRefData : public wxGDIRefData,
                         public REGION
 {
 public:
     wxRegionRefData()
-        : wxObjectRefData(),
+        : wxGDIRefData(),
           REGION()
     {
         size = 1;
@@ -194,7 +194,7 @@ public:
     }
 
     wxRegionRefData(const wxPoint& topLeft, const wxPoint& bottomRight)
-        : wxObjectRefData(),
+        : wxGDIRefData(),
           REGION()
     {
         rects = (BOX*)malloc(sizeof(BOX));
@@ -208,7 +208,7 @@ public:
     }
 
     wxRegionRefData(const wxRect& rect)
-        : wxObjectRefData(),
+        : wxGDIRefData(),
           REGION(rect)
     {
         rects = (BOX*)malloc(sizeof(BOX));
@@ -216,7 +216,7 @@ public:
     }
 
     wxRegionRefData(const wxRegionRefData& refData)
-        : wxObjectRefData(),
+        : wxGDIRefData(),
           REGION()
     {
         size = refData.size;
@@ -276,12 +276,12 @@ void wxRegionGeneric::Clear()
     UnRef();
 }
 
-wxObjectRefData *wxRegionGeneric::CreateRefData() const
+wxGDIRefData *wxRegionGeneric::CreateGDIRefData() const
 {
     return new wxRegionRefData;
 }
 
-wxObjectRefData *wxRegionGeneric::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxRegionGeneric::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxRegionRefData(*(wxRegionRefData *)data);
 }

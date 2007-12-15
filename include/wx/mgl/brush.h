@@ -27,17 +27,15 @@ class WXDLLIMPEXP_FWD_CORE wxBrush;
 // wxBrush
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBrush: public wxBrushBase
+class WXDLLEXPORT wxBrush : public wxBrushBase
 {
 public:
     wxBrush() {}
     wxBrush(const wxColour &colour, int style = wxSOLID);
     wxBrush(const wxBitmap &stippleBitmap);
-    virtual ~wxBrush() {}
-    bool operator == (const wxBrush& brush) const;
-    bool operator != (const wxBrush& brush) const;
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
+
+    bool operator==(const wxBrush& brush) const;
+    bool operator!=(const wxBrush& brush) const;
 
     virtual int GetStyle() const;
     wxColour &GetColour() const;
@@ -54,9 +52,8 @@ public:
     void* GetPixPattern() const;
 
 protected:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBrush)

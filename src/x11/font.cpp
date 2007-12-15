@@ -93,7 +93,7 @@ wxXFont::~wxXFont()
 // wxFontRefData
 // ----------------------------------------------------------------------------
 
-class wxFontRefData: public wxObjectRefData
+class wxFontRefData: public wxGDIRefData
 {
 friend class wxFont;
 
@@ -402,7 +402,7 @@ void wxFontRefData::InitFromNative()
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
-             : wxObjectRefData()
+             : wxGDIRefData()
 {
     m_pointSize = data.m_pointSize;
     m_family = data.m_family;
@@ -684,6 +684,16 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 
 wxFont::~wxFont()
 {
+}
+
+wxGDIRefData *wxFont::CreateGDIRefData() const
+{
+    return new wxFontRefData;
+}
+
+wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxFontRefData(*wx_static_cast(const wxFontRefData *, data));
 }
 
 // ----------------------------------------------------------------------------

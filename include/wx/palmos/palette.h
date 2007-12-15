@@ -41,9 +41,6 @@ public:
   int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
   bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
-  virtual bool Ok() const { return IsOk(); }
-  virtual bool IsOk(void) const { return (m_refData != NULL) ; }
-
   virtual bool FreeResource(bool force = false);
 
   inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }

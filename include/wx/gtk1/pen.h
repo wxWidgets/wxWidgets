@@ -40,11 +40,8 @@ public:
     wxPen( const wxColour &colour, int width = 1, int style = wxSOLID );
     virtual ~wxPen();
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_refData != NULL; }
-
-    bool operator == ( const wxPen& pen ) const;
-    bool operator != (const wxPen& pen) const { return !(*this == pen); }
+    bool operator==(const wxPen& pen) const;
+    bool operator!=(const wxPen& pen) const { return !(*this == pen); }
 
     void SetColour( const wxColour &colour );
     void SetColour( unsigned char red, unsigned char green, unsigned char blue );
@@ -64,9 +61,8 @@ public:
     wxDash* GetDash() const;
 
 private:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     DECLARE_DYNAMIC_CLASS(wxPen)
 };

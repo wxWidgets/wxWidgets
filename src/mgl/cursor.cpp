@@ -175,11 +175,6 @@ wxCursor::~wxCursor()
     // wxObject unrefs data
 }
 
-bool wxCursor::IsOk() const
-{
-    return (m_refData != NULL);
-}
-
 MGLCursor *wxCursor::GetMGLCursor() const
 {
     return M_CURSORDATA->m_cursor;

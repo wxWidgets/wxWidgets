@@ -21,12 +21,12 @@ wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
+class WXDLLIMPEXP_CORE wxBitmapHandler : public wxBitmapHandlerBase
 {
     DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
-class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
+class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
 {
 public:
     wxBitmap() {}
@@ -38,9 +38,6 @@ public:
 #if wxUSE_IMAGE
     wxBitmap(const wxImage& image, int depth = -1);
 #endif
-
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
 
     bool Create(const wxIDirectFBSurfacePtr& surface);
     bool Create(int width, int height, int depth = -1);
@@ -86,9 +83,8 @@ public:
     wxIDirectFBSurfacePtr GetDirectFBSurface() const;
 
 protected:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     bool CreateWithFormat(int width, int height, int dfbFormat);
 

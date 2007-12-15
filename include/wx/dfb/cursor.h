@@ -11,7 +11,7 @@
 #ifndef _WX_DFB_CURSOR_H_
 #define _WX_DFB_CURSOR_H_
 
-#include "wx/object.h"
+#include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
@@ -20,7 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxBitmap;
 // wxCursor
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxCursor: public wxObject
+class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
 {
 public:
     wxCursor() {}
@@ -32,16 +32,13 @@ public:
              long flags = wxBITMAP_TYPE_CUR_RESOURCE,
              int hotSpotX = 0, int hotSpotY = 0);
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
-
     // implementation
     wxBitmap GetBitmap() const;
 
 protected:
     // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     DECLARE_DYNAMIC_CLASS(wxCursor)
 };

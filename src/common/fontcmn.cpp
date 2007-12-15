@@ -341,11 +341,6 @@ bool wxFontBase::operator==(const wxFont& font) const
            );
 }
 
-bool wxFontBase::operator!=(const wxFont& font) const
-{
-    return !(*this == font);
-}
-
 wxString wxFontBase::GetFamilyString() const
 {
     wxCHECK_MSG( Ok(), wxT("wxDEFAULT"), wxT("invalid font") );

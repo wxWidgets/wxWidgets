@@ -155,13 +155,9 @@ public:
     // from the string representation of wxNativeFontInfo
     static wxFont *New(const wxString& strNativeFontDesc);
 
-    // was the font successfully created?
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_refData != NULL; }
-
     // comparison
-    bool operator == (const wxFont& font) const;
-    bool operator != (const wxFont& font) const;
+    bool operator==(const wxFont& font) const;
+    bool operator!=(const wxFont& font) const { return !(*this == font); }
 
     // accessors: get the font characteristics
     virtual int GetPointSize() const = 0;

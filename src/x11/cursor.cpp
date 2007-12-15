@@ -19,6 +19,7 @@
     #include "wx/utils.h"
     #include "wx/icon.h"
     #include "wx/gdicmn.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/x11/private.h"
@@ -31,7 +32,7 @@
 // wxCursor
 //-----------------------------------------------------------------------------
 
-class wxCursorRefData: public wxObjectRefData
+class wxCursorRefData: public wxGDIRefData
 {
 public:
 
@@ -143,9 +144,14 @@ wxCursor::~wxCursor()
 {
 }
 
-bool wxCursor::IsOk() const
+wxGDIRefData *wxCursor::CreateGDIRefData() const
 {
-    return (m_refData != NULL);
+    return new wxCursorRefData;
+}
+
+wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxCursorRefData(*wx_static_cast(const wxCursorRefData *, data));
 }
 
 WXCursor wxCursor::GetCursor() const

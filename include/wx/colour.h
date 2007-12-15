@@ -92,9 +92,6 @@ public:
     // accessors
     // ---------
 
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const = 0;
-
     virtual ChannelType Red() const = 0;
     virtual ChannelType Green() const = 0;
     virtual ChannelType Blue() const = 0;
@@ -119,6 +116,23 @@ protected:
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) = 0;
 
     virtual bool FromString(const wxString& s);
+
+    // wxColour doesn't use reference counted data (at least not in all ports)
+    // so provide stubs for the functions which need to be defined if we do use
+    // them
+    virtual wxGDIRefData *CreateGDIRefData() const
+    {
+        wxFAIL_MSG( "must be overridden if used" );
+
+        return NULL;
+    }
+
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
+    {
+        wxFAIL_MSG( "must be overridden if used" );
+
+        return NULL;
+    }
 };
 
 

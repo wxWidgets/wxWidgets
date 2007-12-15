@@ -181,11 +181,13 @@ GdkBitmap *wxMask::GetBitmap() const
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class wxBitmapRefData: public wxObjectRefData
+class wxBitmapRefData: public wxGDIRefData
 {
 public:
     wxBitmapRefData();
     virtual ~wxBitmapRefData();
+
+    virtual bool IsOk() const { return m_pixmap || m_pixbuf; }
 
     GdkPixmap      *m_pixmap;
     GdkPixbuf      *m_pixbuf;
@@ -597,15 +599,6 @@ wxImage wxBitmap::ConvertToImage() const
 
 #endif // wxUSE_IMAGE
 
-bool wxBitmap::IsOk() const
-{
-    return (m_refData != NULL) &&
-           (
-              M_BMPDATA->m_pixbuf ||
-              M_BMPDATA->m_pixmap
-           );
-}
-
 int wxBitmap::GetHeight() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
@@ -930,12 +923,12 @@ bool wxBitmap::HasAlpha() const
         gdk_pixbuf_get_has_alpha(M_BMPDATA->m_pixbuf);
 }
 
-wxObjectRefData* wxBitmap::CreateRefData() const
+wxGDIRefData* wxBitmap::CreateGDIRefData() const
 {
     return new wxBitmapRefData;
 }
 
-wxObjectRefData* wxBitmap::CloneRefData(const wxObjectRefData* data) const
+wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 {
     const wxBitmapRefData* oldRef = wx_static_cast(const wxBitmapRefData*, data);
     wxBitmapRefData* newRef = new wxBitmapRefData;

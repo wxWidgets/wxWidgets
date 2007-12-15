@@ -30,9 +30,6 @@ public:
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }
 
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const { return (m_refData != NULL); }
-
     // Override in order to recreate the pen
     void SetColour(const wxColour& col);
     void SetColour(unsigned char r, unsigned char g, unsigned char b);
@@ -61,8 +58,8 @@ public:
     virtual bool IsFree() const;
 
 protected:
-    virtual wxObjectRefData* CreateRefData() const;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+    virtual wxGDIRefData* CreateGDIRefData() const;
+    virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const;
 
     // same as FreeResource() + RealizeResource()
     bool Recreate();

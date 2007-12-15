@@ -12,40 +12,38 @@
 #ifndef _WX_CURSOR_H_
 #define _WX_CURSOR_H_
 
-#include "wx/bitmap.h"
+#include "wx/gdiobj.h"
 
-#if wxUSE_IMAGE
-#include "wx/image.h"
-#endif
+class WXDLLIMPEXP_FWD_CORE wxImage;
 
 //-----------------------------------------------------------------------------
 // wxCursor
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxCursor: public wxObject
+class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
 {
 public:
-
     wxCursor();
     wxCursor( int cursorId );
 #if wxUSE_IMAGE
     wxCursor( const wxImage & image );
 #endif
+
     wxCursor( const char bits[], int width, int  height,
               int hotSpotX=-1, int hotSpotY=-1,
               const char maskBits[]=0, wxColour *fg=0, wxColour *bg=0 );
     virtual ~wxCursor();
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const;
 
     // implementation
 
     WXCursor GetCursor() const;
 
+protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 
-
-#endif
-    // _WX_CURSOR_H_
+#endif // _WX_CURSOR_H_

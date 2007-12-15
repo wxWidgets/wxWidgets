@@ -94,6 +94,16 @@ wxMetafile::~wxMetafile()
 {
 }
 
+wxGDIRefData *wxMetafile::CreateGDIRefData() const
+{
+    return new wxMetafileRefData;
+}
+
+wxGDIRefData *wxMetafile::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxMetafileRefData(wx_static_cast(wxMetafileRefData *, data));
+}
+
 bool wxMetafile::SetClipboard(int width, int height)
 {
 #if !wxUSE_CLIPBOARD

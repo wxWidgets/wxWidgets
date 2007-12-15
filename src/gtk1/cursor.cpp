@@ -31,10 +31,9 @@ extern bool g_isIdle;
 // wxCursor
 //-----------------------------------------------------------------------------
 
-class wxCursorRefData: public wxObjectRefData
+class wxCursorRefData : public wxGDIRefData
 {
-  public:
-
+public:
     wxCursorRefData();
     virtual ~wxCursorRefData();
 
@@ -316,14 +315,19 @@ wxCursor::~wxCursor()
 {
 }
 
-bool wxCursor::IsOk() const
-{
-    return (m_refData != NULL);
-}
-
 GdkCursor *wxCursor::GetCursor() const
 {
     return M_CURSORDATA->m_cursor;
+}
+
+wxGDIRefData *wxCursor::CreateGDIRefData() const
+{
+    return new wxCursorRefData;
+}
+
+wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxCursorRefData(*wx_static_cast(const wxCursorRefData *, data));
 }
 
 //-----------------------------------------------------------------------------

@@ -266,12 +266,12 @@ wxPen::wxPen(const wxBitmap& stipple, int width)
     m_refData = new wxPenRefData(wxNullColour,width,wxSTIPPLE,stipple);
 }
 
-wxObjectRefData *wxPen::CreateRefData() const
+wxGDIRefData *wxPen::CreateGDIRefData() const
 {
     return new wxPenRefData;
 }
 
-wxObjectRefData *wxPen::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxPen::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxPenRefData(*(wxPenRefData *)data);
 }

@@ -81,9 +81,6 @@ public:
     inline bool   operator != (const wxPen& rPen) const
         { return !(*this == rPen); }
 
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk(void) const { return (m_refData != NULL); }
-
     //
     // Override in order to recreate the pen
     //

@@ -211,7 +211,7 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
         m_bitmapMask = new wxMask(*data.m_bitmapMask);
 
     // FIXME: we don't copy m_hBitmap currently but we should, see wxBitmap::
-    //        CloneRefData()
+    //        CloneGDIRefData()
 
     wxASSERT_MSG( !data.m_isDIB,
                     _T("can't copy bitmap locked for raw access!") );
@@ -250,7 +250,7 @@ wxGDIImageRefData *wxBitmap::CreateData() const
     return new wxBitmapRefData;
 }
 
-wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *dataOrig) const
+wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *dataOrig) const
 {
     const wxBitmapRefData *
         data = wx_static_cast(const wxBitmapRefData *, dataOrig);
@@ -277,16 +277,17 @@ wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *dataOrig) const
         self->m_refData = new wxBitmapRefData(*data);
     }
 
+    wxBitmapRefData * const
+        selfdata = wx_static_cast(wxBitmapRefData *, m_refData);
+
     // copy also the mask
     wxMask * const maskSrc = data->GetMask();
     if ( maskSrc )
     {
-        wxBitmapRefData *selfdata = wx_static_cast(wxBitmapRefData *, m_refData);
-
         selfdata->SetMask(new wxMask(*maskSrc));
     }
 
-    return m_refData;
+    return selfdata;
 }
 
 bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,

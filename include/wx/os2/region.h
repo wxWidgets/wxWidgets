@@ -64,8 +64,8 @@ public:
     void   SetPS(HPS hPS);
 
 protected:
-    virtual wxObjectRefData* CreateData(void) const;
-    virtual wxObjectRefData* CloneData(const wxObjectRefData* pData) const;
+    virtual wxGDIRefData* CreateData(void) const;
+    virtual wxGDIRefData* CloneData(const wxGDIRefData* pData) const;
 
     virtual bool DoIsEqual(const wxRegion& region) const;
     virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const;

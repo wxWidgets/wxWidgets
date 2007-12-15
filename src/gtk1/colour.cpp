@@ -26,7 +26,7 @@
 // wxColour
 //-----------------------------------------------------------------------------
 
-class wxColourRefData: public wxObjectRefData
+class wxColourRefData : public wxGDIRefData
 {
 public:
     wxColourRefData()
@@ -40,7 +40,6 @@ public:
     }
 
     wxColourRefData(const wxColourRefData& data)
-        : wxObjectRefData()
     {
         m_color = data.m_color;
         m_colormap = data.m_colormap;
@@ -159,12 +158,12 @@ bool wxColour::operator == ( const wxColour& col ) const
                      own->green == other->green;
 }
 
-wxObjectRefData *wxColour::CreateRefData() const
+wxGDIRefData *wxColour::CreateGDIRefData() const
 {
     return new wxColourRefData;
 }
 
-wxObjectRefData *wxColour::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxColour::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxColourRefData(*(wxColourRefData *)data);
 }

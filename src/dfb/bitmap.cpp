@@ -246,7 +246,7 @@ static DFBSurfacePixelFormat DepthToFormat(int depth)
 // wxBitmapRefData
 //-----------------------------------------------------------------------------
 
-class wxBitmapRefData: public wxObjectRefData
+class wxBitmapRefData: public wxGDIRefData
 {
 public:
     wxBitmapRefData()
@@ -274,6 +274,8 @@ public:
         delete m_palette;
 #endif
     }
+
+    virtual bool IsOk() const { return m_surface; }
 
     wxIDirectFBSurfacePtr m_surface;
     wxMask               *m_mask;
@@ -458,11 +460,6 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     wxFAIL_MSG( "not implemented" );
 }
 
-bool wxBitmap::IsOk() const
-{
-    return (m_refData != NULL && M_BITMAP->m_surface);
-}
-
 int wxBitmap::GetHeight() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid bitmap") );
@@ -644,12 +641,12 @@ wxIDirectFBSurfacePtr wxBitmap::GetDirectFBSurface() const
     return M_BITMAP->m_surface;
 }
 
-wxObjectRefData *wxBitmap::CreateRefData() const
+wxGDIRefData *wxBitmap::CreateGDIRefData() const
 {
     return new wxBitmapRefData;
 }
 
-wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBitmapRefData(*(wxBitmapRefData *)data);
 }

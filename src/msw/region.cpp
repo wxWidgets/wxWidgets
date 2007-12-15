@@ -143,12 +143,12 @@ wxRegion::~wxRegion()
     // m_refData unrefed in ~wxObject
 }
 
-wxObjectRefData *wxRegion::CreateRefData() const
+wxGDIRefData *wxRegion::CreateGDIRefData() const
 {
     return new wxRegionRefData;
 }
 
-wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxRegionRefData(*(wxRegionRefData *)data);
 }

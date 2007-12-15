@@ -16,48 +16,51 @@
 #include "wx/colour.h"
 #include "wx/bitmap.h"
 
-class WXDLLIMPEXP_FWD_CORE wxPen;
-
 // Pen
-class WXDLLEXPORT wxPen: public wxGDIObject
+class WXDLLEXPORT wxPen : public wxGDIObject
 {
-  DECLARE_DYNAMIC_CLASS(wxPen)
 public:
-  wxPen();
-  wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
-  wxPen(const wxBitmap& stipple, int width);
-  virtual ~wxPen();
+    wxPen();
+    wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
+    wxPen(const wxBitmap& stipple, int width);
+    virtual ~wxPen();
 
-  bool operator == (const wxPen& pen) const;
-  bool operator != (const wxPen& pen) const { return !(*this == pen); }
+    bool operator==(const wxPen& pen) const;
+    bool operator!=(const wxPen& pen) const { return !(*this == pen); }
 
-  // Override in order to recreate the pen
-  void SetColour(const wxColour& col) ;
-  void SetColour(unsigned char r, unsigned char g, unsigned char b) ;
+    // Override in order to recreate the pen
+    void SetColour(const wxColour& col) ;
+    void SetColour(unsigned char r, unsigned char g, unsigned char b) ;
 
-  void SetWidth(int width)  ;
-  void SetStyle(int style)  ;
-  void SetStipple(const wxBitmap& stipple)  ;
-  void SetDashes(int nb_dashes, const wxDash *dash)  ;
-  void SetJoin(int join)  ;
-  void SetCap(int cap)  ;
+    void SetWidth(int width)  ;
+    void SetStyle(int style)  ;
+    void SetStipple(const wxBitmap& stipple)  ;
+    void SetDashes(int nb_dashes, const wxDash *dash)  ;
+    void SetJoin(int join)  ;
+    void SetCap(int cap)  ;
 
-  wxColour& GetColour() const ;
-  int GetWidth() const;
-  int GetStyle() const;
-  int GetJoin() const;
-  int GetCap() const;
-  int GetDashes(wxDash **ptr) const;
+    wxColour& GetColour() const ;
+    int GetWidth() const;
+    int GetStyle() const;
+    int GetJoin() const;
+    int GetCap() const;
+    int GetDashes(wxDash **ptr) const;
 
-  wxBitmap *GetStipple() const ;
+    wxBitmap *GetStipple() const ;
 
-// Implementation
+    // Implementation
 
-  // Useful helper: create the brush resource
-  bool RealizeResource();
+    // Useful helper: create the brush resource
+    bool RealizeResource();
+
+protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     void Unshare();
+
+    DECLARE_DYNAMIC_CLASS(wxPen)
 };
 
 #endif

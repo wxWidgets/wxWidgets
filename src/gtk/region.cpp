@@ -32,7 +32,7 @@
 // wxRegionRefData: private class containing the information about the region
 // ----------------------------------------------------------------------------
 
-class wxRegionRefData : public wxObjectRefData
+class wxRegionRefData : public wxGDIRefData
 {
 public:
     wxRegionRefData()
@@ -41,7 +41,7 @@ public:
     }
 
     wxRegionRefData(const wxRegionRefData& refData)
-        : wxObjectRefData()
+        : wxGDIRefData()
     {
         m_region = gdk_region_copy(refData.m_region);
     }
@@ -119,12 +119,12 @@ wxRegion::~wxRegion()
     // m_refData unrefed in ~wxObject
 }
 
-wxObjectRefData *wxRegion::CreateRefData() const
+wxGDIRefData *wxRegion::CreateGDIRefData() const
 {
     return new wxRegionRefData;
 }
 
-wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxRegion::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxRegionRefData(*(wxRegionRefData *)data);
 }

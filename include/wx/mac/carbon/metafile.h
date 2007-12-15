@@ -37,9 +37,8 @@ class wxMetafileRefData ;
 
 #define M_METAFILEDATA ((wxMetafileRefData *)m_refData)
 
-class WXDLLEXPORT wxMetafile: public wxGDIObject
+class WXDLLEXPORT wxMetafile : public wxGDIObject
 {
-    DECLARE_DYNAMIC_CLASS(wxMetafile)
 public:
     wxMetafile(const wxString& file = wxEmptyString);
     virtual ~wxMetafile(void);
@@ -49,8 +48,6 @@ public:
     virtual bool SetClipboard(int width = 0, int height = 0);
 
     virtual bool Play(wxDC *dc);
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const ;
 
     wxSize GetSize() const;
     int GetWidth() const { return GetSize().x; }
@@ -65,6 +62,12 @@ public:
     // backwards compatibility
     void SetPICT(void* pictHandle) ;
 #endif
+
+protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
+    DECLARE_DYNAMIC_CLASS(wxMetafile)
 };
 
 
@@ -89,7 +92,7 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
 
     wxMetafile*   m_metaFile;
-  
+
 private:
     DECLARE_CLASS(wxMetafileDCImpl)
     DECLARE_NO_COPY_CLASS(wxMetafileDCImpl)
@@ -105,19 +108,19 @@ class WXDLLEXPORT wxMetafileDC: public wxDC
                     const wxString& description = wxEmptyString ) :
       wxDC( new wxMetafileDCImpl( this, filename, width, height, description) )
     { }
-                    
-    wxMetafile *GetMetafile() const 
+
+    wxMetafile *GetMetafile() const
        { return ((wxMetafileDCImpl*)m_pimpl)->GetMetaFile(); }
-       
+
     wxMetafile *Close()
        { return ((wxMetafileDCImpl*)m_pimpl)->Close(); }
-       
+
 private:
     DECLARE_CLASS(wxMetafileDC)
     DECLARE_NO_COPY_CLASS(wxMetafileDC)
 };
-                    
-          
+
+
 /*
  * Pass filename of existing non-placeable metafile, and bounding box.
  * Adds a placeable metafile header, sets the mapping mode to anisotropic,
@@ -141,7 +144,7 @@ class WXDLLEXPORT wxMetafileDataObject : public wxDataObjectSimple
 {
 public:
   // ctors
-  wxMetafileDataObject() 
+  wxMetafileDataObject()
     : wxDataObjectSimple(wxDF_METAFILE) {  };
   wxMetafileDataObject(const wxMetafile& metafile)
     : wxDataObjectSimple(wxDF_METAFILE), m_metafile(metafile) { }

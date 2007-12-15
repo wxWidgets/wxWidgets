@@ -21,7 +21,7 @@ class WXDLLIMPEXP_FWD_CORE wxBrush;
 // Brush
 class WXDLLEXPORT wxBrush: public wxBrushBase
 {
- public:
+public:
     wxBrush();
     wxBrush(const wxColour& col, int style = wxSOLID);
     wxBrush(const wxBitmap& stipple);
@@ -32,20 +32,19 @@ class WXDLLEXPORT wxBrush: public wxBrushBase
     virtual void SetStyle(int style)  ;
     virtual void SetStipple(const wxBitmap& stipple)  ;
 
-    bool operator == (const wxBrush& brush) const;
-    bool operator != (const wxBrush& brush) const
-        { return !(*this == brush); }
+    bool operator==(const wxBrush& brush) const;
+    bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 
     const wxColour& GetColour() const ;
     virtual int GetStyle() const ;
     wxBitmap *GetStipple() const ;
 
 protected:
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
 private:
-    DECLARE_DYNAMIC_CLASS(wxBrush)    
+    DECLARE_DYNAMIC_CLASS(wxBrush)
 };
 
-#endif
-    // _WX_BRUSH_H_
+#endif // _WX_BRUSH_H_

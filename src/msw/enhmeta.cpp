@@ -69,6 +69,21 @@ static inline const wxChar *GetMetaFileName(const wxString& fn)
 // wxEnhMetaFile
 // ----------------------------------------------------------------------------
 
+wxGDIRefData *wxEnhMetaFile::CreateGDIRefData() const
+{
+    wxFAIL_MSG( _T("must be implemented if used") );
+
+    return NULL;
+}
+
+wxGDIRefData *
+wxEnhMetaFile::CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
+{
+    wxFAIL_MSG( _T("must be implemented if used") );
+
+    return NULL;
+}
+
 void wxEnhMetaFile::Init()
 {
     if ( m_filename.empty() )

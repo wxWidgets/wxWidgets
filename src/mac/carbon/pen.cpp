@@ -19,9 +19,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 
-class WXDLLEXPORT wxPenRefData: public wxGDIRefData
+class WXDLLEXPORT wxPenRefData : public wxGDIRefData
 {
-    friend class WXDLLIMPEXP_FWD_CORE wxPen;
 public:
     wxPenRefData();
     wxPenRefData(const wxPenRefData& data);
@@ -33,28 +32,30 @@ public:
     {
         // we intentionally don't compare m_hPen fields here
         return m_style == data.m_style &&
-               m_width == data.m_width &&
-               m_join == data.m_join &&
-               m_cap == data.m_cap &&
-               m_colour == data.m_colour &&
-               (m_style != wxSTIPPLE || m_stipple.IsSameAs(data.m_stipple)) &&
-               (m_style != wxUSER_DASH ||
-                (m_nbDash == data.m_nbDash &&
-                    memcmp(m_dash, data.m_dash, m_nbDash*sizeof(wxDash)) == 0));
+            m_width == data.m_width &&
+            m_join == data.m_join &&
+            m_cap == data.m_cap &&
+            m_colour == data.m_colour &&
+            (m_style != wxSTIPPLE || m_stipple.IsSameAs(data.m_stipple)) &&
+            (m_style != wxUSER_DASH ||
+             (m_nbDash == data.m_nbDash &&
+              memcmp(m_dash, data.m_dash, m_nbDash*sizeof(wxDash)) == 0));
     }
 
 protected:
-  int           m_width;
-  int           m_style;
-  int           m_join ;
-  int           m_cap ;
-  wxBitmap      m_stipple ;
-  int           m_nbDash ;
-  wxDash *      m_dash ;
-  wxColour      m_colour;
-/* TODO: implementation
-  WXHPEN        m_hPen;
-*/
+    int           m_width;
+    int           m_style;
+    int           m_join ;
+    int           m_cap ;
+    wxBitmap      m_stipple ;
+    int           m_nbDash ;
+    wxDash *      m_dash ;
+    wxColour      m_colour;
+    /* TODO: implementation
+       WXHPEN        m_hPen;
+       */
+
+    friend class WXDLLIMPEXP_FWD_CORE wxPen;
 };
 
 wxPenRefData::wxPenRefData()
@@ -126,7 +127,17 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     RealizeResource();
 }
 
-bool wxPen::operator == (const wxPen& pen) const
+wxGDIRefData *wxPen::CreateGDIRefData() const
+{
+    return new wxPenRefData;
+}
+
+wxGDIRefData *wxPen::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxPenRefData(*wx_static_cast(const wxPenRefData *, data));
+}
+
+bool wxPen::operator==(const wxPen& pen) const
 {
     const wxPenRefData *penData = (wxPenRefData *)pen.m_refData;
 
@@ -134,39 +145,39 @@ bool wxPen::operator == (const wxPen& pen) const
     return m_refData ? penData && *M_PENDATA == *penData : !penData;
 }
 
-wxColour& wxPen::GetColour() const 
-{ 
-    return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); 
+wxColour& wxPen::GetColour() const
+{
+    return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour);
 }
 
-int wxPen::GetWidth() const 
-{ 
-    return (M_PENDATA ? M_PENDATA->m_width : 0); 
+int wxPen::GetWidth() const
+{
+    return (M_PENDATA ? M_PENDATA->m_width : 0);
 }
 
-int wxPen::GetStyle() const 
-{ 
-    return (M_PENDATA ? M_PENDATA->m_style : 0); 
+int wxPen::GetStyle() const
+{
+    return (M_PENDATA ? M_PENDATA->m_style : 0);
 }
 
-int wxPen::GetJoin() const 
-{ 
-    return (M_PENDATA ? M_PENDATA->m_join : 0); 
+int wxPen::GetJoin() const
+{
+    return (M_PENDATA ? M_PENDATA->m_join : 0);
 }
 
-int wxPen::GetCap() const 
-{ 
-    return (M_PENDATA ? M_PENDATA->m_cap : 0); 
+int wxPen::GetCap() const
+{
+    return (M_PENDATA ? M_PENDATA->m_cap : 0);
 }
 
-int wxPen::GetDashes(wxDash **ptr) const 
+int wxPen::GetDashes(wxDash **ptr) const
 {
     *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
 }
 
-wxBitmap *wxPen::GetStipple() const 
-{ 
-    return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); 
+wxBitmap *wxPen::GetStipple() const
+{
+    return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL);
 }
 
 void wxPen::Unshare()

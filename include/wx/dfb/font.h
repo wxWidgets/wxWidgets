@@ -71,9 +71,8 @@ public:
     wxIDirectFBFontPtr GetDirectFBFont(bool antialiased) const;
 
 protected:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)

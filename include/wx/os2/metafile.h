@@ -39,6 +39,8 @@ public:
     wxMetafileRefData(void);
     virtual ~wxMetafileRefData(void);
 
+    virtual bool IsOk() const { return m_metafile != 0; }
+
 public:
     WXHANDLE m_metafile;
     int m_windowsMappingMode;
@@ -58,8 +60,6 @@ public:
     virtual bool SetClipboard(int width = 0, int height = 0);
 
     virtual bool Play(wxDC *dc);
-    inline bool Ok() const { return IsOk(); }
-    inline bool IsOk(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
 
     // Implementation
     inline WXHANDLE GetHMETAFILE(void) { return M_METAFILEDATA->m_metafile; }

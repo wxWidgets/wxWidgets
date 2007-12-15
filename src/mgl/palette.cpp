@@ -63,11 +63,6 @@ wxPalette::~wxPalette()
 {
 }
 
-bool wxPalette::IsOk(void) const
-{
-    return (m_refData != NULL);
-}
-
 bool wxPalette::Create(int n,
                        const unsigned char *red,
                        const unsigned char *green,

@@ -110,15 +110,6 @@ public:
     virtual bool RealizeResource();
 
 protected:
-    /*! @abstract   Helper method for COW.
-        @discussion
-        wxFont can be considered a mutable holder of an immutable opaque implementation object.
-        All methods that mutate the font should first call Unshare() to ensure that mutating
-        the implementation object does not cause another wxFont that happened to share the
-        same ref data to mutate.
-     */
-    void Unshare();
-
     /*! @abstract   Internal constructor with ref data
         @discussion
         Takes ownership of @a refData.  That is, it is assumed that refData has either just been
@@ -128,6 +119,10 @@ protected:
     explicit wxFont(wxFontRefData *refData)
     {   Create(refData); }
     bool Create(wxFontRefData *refData);
+
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)
 };

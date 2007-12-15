@@ -12,7 +12,6 @@
 #ifndef _WX_PALETTE_H_
 #define _WX_PALETTE_H_
 
-#include "wx/gdiobj.h"
 #include "wx/list.h"
 
 class WXDLLIMPEXP_FWD_CORE wxPalette;
@@ -45,7 +44,7 @@ protected:
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
 
-class WXDLLEXPORT wxPalette: public wxPaletteBase
+class WXDLLEXPORT wxPalette : public wxPaletteBase
 {
     DECLARE_DYNAMIC_CLASS(wxPalette)
 
@@ -58,16 +57,16 @@ public:
     int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
     bool GetRGB(int pixel, unsigned char *red, unsigned char *green, unsigned char *blue) const;
 
-    virtual bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const { return (m_refData != NULL) ; }
-
     // X-specific
     WXColormap GetXColormap(WXDisplay* display = NULL) const;
     bool TransferBitmap(void *data, int depth, int size);
     bool TransferBitmap8(unsigned char *data, unsigned long size, void *dest, unsigned int bpp);
     unsigned long *GetXPixArray(WXDisplay* display, int *pix_array_n);
     void PutXColormap(WXDisplay* display, WXColormap cmap, bool destroyable);
+
+protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 };
 
-#endif
-// _WX_PALETTE_H_
+#endif // _WX_PALETTE_H_

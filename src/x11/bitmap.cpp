@@ -227,7 +227,7 @@ bool wxMask::Create( const wxBitmap& bitmap )
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class wxBitmapRefData: public wxObjectRefData
+class wxBitmapRefData : public wxGDIRefData
 {
 public:
     wxBitmapRefData();
@@ -236,6 +236,8 @@ public:
 
     // shouldn't be called more than once as it doesn't free the existing data
     bool Create(int width, int height, int depth);
+
+    virtual bool IsOk() const { return m_pixmap || m_bitmap; }
 
     Pixmap          m_pixmap;
     Pixmap          m_bitmap;
@@ -430,12 +432,12 @@ wxBitmap::wxBitmap(const char* const* bits)
     Create(bits, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
-wxObjectRefData *wxBitmap::CreateRefData() const
+wxGDIRefData *wxBitmap::CreateGDIRefData() const
 {
     return new wxBitmapRefData;
 }
 
-wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *data) const
+wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));
 }
@@ -932,11 +934,6 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int depth )
 
 wxBitmap::~wxBitmap()
 {
-}
-
-bool wxBitmap::IsOk() const
-{
-    return (m_refData != NULL);
 }
 
 int wxBitmap::GetHeight() const

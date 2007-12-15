@@ -37,16 +37,24 @@ IMPLEMENT_ABSTRACT_CLASS(wxMetafileDCImpl, wxGCDCImpl)
 
 #define M_METAFILEREFDATA( a ) ((wxMetafileRefData*)(a).GetRefData())
 
-class wxMetafileRefData: public wxGDIRefData
+class wxMetafileRefData : public wxGDIRefData
 {
 public:
+    // default ctor needed for CreateGDIRefData(), must be initialized later
+    wxMetafileRefData() { Init(); }
+
     // creates a metafile from memory, assumes ownership
     wxMetafileRefData(CFDataRef data);
+
     // prepares a recording metafile
     wxMetafileRefData( int width, int height);
+
     // prepares a metafile to be read from a file (if filename is not empty)
     wxMetafileRefData( const wxString& filename);
+
     virtual ~wxMetafileRefData();
+
+    virtual bool IsOk() const { return m_data != NULL; }
 
     void Init();
 
@@ -162,9 +170,14 @@ wxMetaFile::~wxMetaFile()
 {
 }
 
-bool wxMetaFile::IsOk() const
+wxGDIRefData *wxMetaFile::CreateGDIRefData() const
 {
-    return (M_METAFILEDATA && (M_METAFILEDATA->GetData() != NULL));
+    return new wxMetafileRefData;
+}
+
+wxGDIRefData *wxMetaFile::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxMetafileRefData(*wx_static_cast(const wxMetafileRefData *, data));
 }
 
 WXHMETAFILE wxMetaFile::GetHMETAFILE() const

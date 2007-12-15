@@ -38,9 +38,6 @@ public:
     wxPen( const wxBitmap &stipple, int width );
     virtual ~wxPen();
 
-    bool Ok() const { return IsOk(); }
-    bool IsOk() const { return m_refData != NULL; }
-
     bool operator == ( const wxPen& pen ) const;
     bool operator != (const wxPen& pen) const { return !(*this == pen); }
 
@@ -64,12 +61,10 @@ public:
     wxBitmap* GetStipple() const;
 
 protected:
-    // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     DECLARE_DYNAMIC_CLASS(wxPen)
 };
 
-#endif
-// _WX_PEN_H_
+#endif // _WX_PEN_H_
