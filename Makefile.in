@@ -2984,7 +2984,6 @@ COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_HDR =  \
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
 	wx/animate.h \
-	wx/animdecod.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
@@ -3027,7 +3026,6 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
 	wx/animate.h \
-	wx/animdecod.h \
 	wx/bmpcbox.h \
 	wx/calctrl.h \
 	wx/dataview.h \
@@ -3227,6 +3225,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/accel.h \
 	wx/access.h \
 	wx/anidecod.h \
+	wx/animdecod.h \
 	wx/artprov.h \
 	wx/bitmap.h \
 	wx/bookctrl.h \

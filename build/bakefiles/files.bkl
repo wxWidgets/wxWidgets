@@ -840,6 +840,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/accel.h
     wx/access.h
     wx/anidecod.h
+    wx/animdecod.h
     wx/artprov.h
     wx/bitmap.h
     wx/bookctrl.h
@@ -2803,7 +2804,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_CMN_HDR" hints="files">
     wx/aboutdlg.h
     wx/animate.h
-    wx/animdecod.h
     wx/bmpcbox.h
     wx/calctrl.h
     wx/dataview.h
