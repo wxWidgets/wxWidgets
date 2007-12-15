@@ -10,28 +10,28 @@
 #ifndef __GTKDCCLIENTH__
 #define __GTKDCCLIENTH__
 
-#include "wx/dc.h"
+#include "wx/gtk1/dc.h"
 #include "wx/window.h"
 
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_CORE wxWindowDC;
-class WXDLLIMPEXP_FWD_CORE wxPaintDC;
-class WXDLLIMPEXP_FWD_CORE wxClientDC;
+class WXDLLIMPEXP_FWD_CORE wxWindowDCImpl;
+class WXDLLIMPEXP_FWD_CORE wxPaintDCImpl;
+class WXDLLIMPEXP_FWD_CORE wxClientDCImpl;
 
 //-----------------------------------------------------------------------------
-// wxWindowDC
+// wxWindowDCImpl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
+class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxGTKDCImpl
 {
 public:
-    wxWindowDC();
-    wxWindowDC( wxWindow *win );
+    wxWindowDCImpl(wxDC *owner);
+    wxWindowDCImpl(wxDC *owner, wxWindow *win);
 
-    virtual ~wxWindowDC();
+    virtual ~wxWindowDCImpl();
 
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }
@@ -124,38 +124,38 @@ public:
     GdkWindow *GetWindow() { return m_window; }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+    DECLARE_DYNAMIC_CLASS(wxWindowDCImpl)
 };
 
 //-----------------------------------------------------------------------------
-// wxClientDC
+// wxClientDCImpl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxClientDC : public wxWindowDC
+class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 {
 public:
-    wxClientDC() { }
-    wxClientDC( wxWindow *win );
+    wxClientDCImpl(wxDC *owner) : wxWindowDCImpl(owner) { }
+    wxClientDCImpl(wxDC *owner, wxWindow *win);
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
+    DECLARE_DYNAMIC_CLASS(wxClientDCImpl)
 };
 
 //-----------------------------------------------------------------------------
-// wxPaintDC
+// wxPaintDCImpl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPaintDC : public wxClientDC
+class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
 {
 public:
-    wxPaintDC() { }
-    wxPaintDC( wxWindow *win );
+    wxPaintDCImpl(wxDC *owner) : wxClientDCImpl(owner) { }
+    wxPaintDCImpl(wxDC *owner, wxWindow *win);
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+    DECLARE_DYNAMIC_CLASS(wxPaintDCImpl)
 };
 
 #endif // __GTKDCCLIENTH__

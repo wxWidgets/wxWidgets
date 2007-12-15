@@ -10,21 +10,17 @@
 #ifndef __GTKDCH__
 #define __GTKDCH__
 
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_CORE wxDC;
+#include "wx/dc.h"
 
 //-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDC : public wxDCBase
+class WXDLLIMPEXP_CORE wxGTKDCImpl : public wxDCImpl
 {
 public:
-    wxDC();
-    virtual ~wxDC() { }
+    wxGTKDCImpl(wxDC *owner);
+    virtual ~wxGTKDCImpl() { }
 
 #if wxUSE_PALETTE
     void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };

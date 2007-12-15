@@ -10,8 +10,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/dcscreen.h"
-
 #ifndef WX_PRECOMP
     #include "wx/window.h"
 #endif
@@ -20,21 +18,24 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
+#include "wx/gtk1/dcscreen.h"
+
 //-----------------------------------------------------------------------------
 // global data initialization
 //-----------------------------------------------------------------------------
 
-GdkWindow *wxScreenDC::sm_overlayWindow  = (GdkWindow*) NULL;
-int wxScreenDC::sm_overlayWindowX = 0;
-int wxScreenDC::sm_overlayWindowY = 0;
+GdkWindow *wxScreenDCImpl::sm_overlayWindow  = (GdkWindow*) NULL;
+int wxScreenDCImpl::sm_overlayWindowX = 0;
+int wxScreenDCImpl::sm_overlayWindowY = 0;
 
 //-----------------------------------------------------------------------------
-// wxScreenDC
+// wxScreenDCImpl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC,wxPaintDC)
+IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxPaintDCImpl)
 
-wxScreenDC::wxScreenDC()
+wxScreenDCImpl::wxScreenDCImpl(wxScreenDC *owner)
+              : wxPaintDCImpl(owner)
 {
     m_ok = false;
     m_cmap = gdk_colormap_get_system();
@@ -50,32 +51,15 @@ wxScreenDC::wxScreenDC()
     gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
 }
 
-wxScreenDC::~wxScreenDC()
+wxScreenDCImpl::~wxScreenDCImpl()
 {
     gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
     gdk_gc_set_subwindow( m_brushGC, GDK_CLIP_BY_CHILDREN );
     gdk_gc_set_subwindow( m_textGC, GDK_CLIP_BY_CHILDREN );
     gdk_gc_set_subwindow( m_bgGC, GDK_CLIP_BY_CHILDREN );
-
-    EndDrawingOnTop();
 }
 
-bool wxScreenDC::StartDrawingOnTop( wxWindow * )
-{
-    return true;
-}
-
-bool wxScreenDC::StartDrawingOnTop( wxRect * )
-{
-    return true;
-}
-
-bool wxScreenDC::EndDrawingOnTop()
-{
-    return true;
-}
-
-void wxScreenDC::DoGetSize(int *width, int *height) const
+void wxScreenDCImpl::DoGetSize(int *width, int *height) const
 {
     wxDisplaySize(width, height);
 }

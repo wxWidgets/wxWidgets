@@ -22,7 +22,7 @@
 // wxPen
 //-----------------------------------------------------------------------------
 
-class wxPenRefData: public wxObjectRefData
+class wxPenRefData : public wxGDIRefData
 {
 public:
     wxPenRefData()
@@ -36,7 +36,7 @@ public:
     }
 
     wxPenRefData( const wxPenRefData& data )
-        : wxObjectRefData()
+        : wxGDIRefData()
     {
         m_style = data.m_style;
         m_width = data.m_width;

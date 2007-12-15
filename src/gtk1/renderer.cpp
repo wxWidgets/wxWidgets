@@ -29,11 +29,11 @@
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/dc.h"
-    #include "wx/dcclient.h"
 #endif
 
 #include <gtk/gtk.h>
 #include "wx/gtk1/win_gtk.h"
+#include "wx/gtk1/dcclient.h"
 
 // RR: After a correction to the orientation of the sash
 //     this doesn't seem to be required anymore and it
@@ -141,7 +141,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         NULL,
         button,
         "button",
-        dc.XLOG2DEV(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
+        dc.LogicalToDeviceX(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
     );
 }
 
@@ -309,9 +309,10 @@ wxRendererGTK::DrawDropArrow(wxWindow *WXUNUSED(win),
     // work for wxMemoryDC. So that is why we assume wxDC
     // is wxWindowDC (wxClientDC, wxMemoryDC and wxPaintDC
     // are derived from it) and use its m_window.
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    wxWindowDCImpl * const impl = wxDynamicCast(dc.GetImpl(), wxWindowDCImpl);
+    wxCHECK_RET( impl, "must have a window DC" );
+
+    GdkWindow* gdk_window = impl->GetGDKWindow();
 
     // draw arrow so that there is even space horizontally
     // on both sides
@@ -362,9 +363,10 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     GtkWidget *button = GetButtonWidget();
 
     // for reason why we do this, see DrawDropArrow
-    GdkWindow* gdk_window = dc.GetGDKWindow();
-    wxASSERT_MSG( gdk_window,
-                  wxT("cannot use wxRendererNative on wxDC of this type") );
+    wxWindowDCImpl * const impl = wxDynamicCast(dc.GetImpl(), wxWindowDCImpl);
+    wxCHECK_RET( impl, "must have a window DC" );
+
+    GdkWindow* gdk_window = impl->GetGDKWindow();
 
     // draw button
     GtkStateType state;

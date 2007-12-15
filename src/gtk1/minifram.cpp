@@ -21,6 +21,7 @@
 #include "gtk/gtk.h"
 #include "wx/gtk1/win_gtk.h"
 #include "wx/gtk1/private.h"
+#include "wx/gtk1/dcclient.h"
 
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
@@ -103,7 +104,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
         gdk_gc_unref( gc );
 
         // Hack alert
-        dc.m_window = pizza->bin_window;
+        wx_static_cast(wxClientDCImpl *, dc.GetImpl())->m_window = pizza->bin_window;
         dc.SetTextForeground( *wxWHITE );
         dc.DrawText( win->GetTitle(), 6, 3 );
     }
@@ -149,7 +150,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
         gdk_gc_unref( gc );
 
         // Hack alert
-        dc.m_window = pizza->bin_window;
+        wx_static_cast(wxClientDCImpl *, dc.GetImpl())->m_window = pizza->bin_window;
         dc.SetTextForeground( *wxWHITE );
         dc.DrawText( win->GetTitle(), 6, 3 );
     }
