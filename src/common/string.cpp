@@ -1348,7 +1348,7 @@ wxString& wxString::MakeLower()
 
 // some compilers (VC++ 6.0 not to name them) return true for a call to
 // isspace('\xEA') in the C locale which seems to be broken to me, but we have
-// to live with this by checking that the character is a 7 bit one - even if 
+// to live with this by checking that the character is a 7 bit one - even if
 // this may fail to detect some spaces (I don't know if Unicode doesn't have
 // space-like symbols somewhere except in the first 128 chars), it is arguably
 // still better than trimming away accented letters
@@ -1444,61 +1444,62 @@ int wxString::Find(wxUniChar ch, bool bFromEnd) const
     #define DO_IF_NOT_WINCE(x)
 #endif
 
-#define WX_STRING_TO_INT_TYPE(val, base, func)                              \
-    wxCHECK_MSG( val, false, _T("NULL output pointer") );                   \
+#define WX_STRING_TO_INT_TYPE(out, base, func, T)                           \
+    wxCHECK_MSG( out, false, _T("NULL output pointer") );                   \
     wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );  \
                                                                             \
     DO_IF_NOT_WINCE( errno = 0; )                                           \
                                                                             \
     const wxStringCharType *start = wx_str();                               \
     wxStringCharType *end;                                                  \
-    *val = func(start, &end, base);                                         \
+    T val = func(start, &end, base);                                        \
                                                                             \
     /* return true only if scan was stopped by the terminating NUL and */   \
     /* if the string was not empty to start with and no under/overflow */   \
     /* occurred: */                                                         \
-    return !*end && (end != start)                                          \
-        DO_IF_NOT_WINCE( && (errno != ERANGE) )
+    if ( *end || end == start DO_IF_NOT_WINCE(|| errno == ERANGE) )         \
+        return false;                                                       \
+    *out = val;                                                             \
+    return true
 
-bool wxString::ToLong(long *val, int base) const
+bool wxString::ToLong(long *pVal, int base) const
 {
-    WX_STRING_TO_INT_TYPE(val, base, wxStrtol);
+    WX_STRING_TO_INT_TYPE(pVal, base, wxStrtol, long);
 }
 
-bool wxString::ToULong(unsigned long *val, int base) const
+bool wxString::ToULong(unsigned long *pVal, int base) const
 {
-    WX_STRING_TO_INT_TYPE(val, base, wxStrtoul);
+    WX_STRING_TO_INT_TYPE(pVal, base, wxStrtoul, unsigned long);
 }
 
-bool wxString::ToLongLong(wxLongLong_t *val, int base) const
+bool wxString::ToLongLong(wxLongLong_t *pVal, int base) const
 {
-    WX_STRING_TO_INT_TYPE(val, base, wxStrtoll);
+    WX_STRING_TO_INT_TYPE(pVal, base, wxStrtoll, wxLongLong_t);
 }
 
-bool wxString::ToULongLong(wxULongLong_t *val, int base) const
+bool wxString::ToULongLong(wxULongLong_t *pVal, int base) const
 {
-    WX_STRING_TO_INT_TYPE(val, base, wxStrtoull);
+    WX_STRING_TO_INT_TYPE(pVal, base, wxStrtoull, wxULongLong_t);
 }
 
-bool wxString::ToDouble(double *val) const
+bool wxString::ToDouble(double *pVal) const
 {
-    wxCHECK_MSG( val, false, _T("NULL pointer in wxString::ToDouble") );
+    wxCHECK_MSG( pVal, false, _T("NULL output pointer") );
 
-#ifndef __WXWINCE__
-    errno = 0;
-#endif
+    DO_IF_NOT_WINCE( errno = 0; )
 
     const wxChar *start = c_str();
     wxChar *end;
-    *val = wxStrtod(start, &end);
+    double val = wxStrtod(start, &end);
 
     // return true only if scan was stopped by the terminating NUL and if the
     // string was not empty to start with and no under/overflow occurred
-    return !*end && (end != start)
-#ifndef __WXWINCE__
-        && (errno != ERANGE)
-#endif
-    ;
+    if ( *end || end == start DO_IF_NOT_WINCE(|| errno == ERANGE) )
+        return false;
+
+    *pVal = val;
+
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -1620,7 +1621,7 @@ int wxString::DoPrintfUtf8(const char *format, ...)
     an undersized buffer and no other errno are defined we treat those two
     as meaning hard errors and everything else gets the old behavior which
     is to keep looping and increasing buffer size until the function succeeds.
- 
+
     In practice it's impossible to determine before compilation which behavior
     may be used.  The vswprintf function may have vsnprintf-like behavior or
     vice-versa.  Behavior detected on one release can theoretically change
@@ -1730,7 +1731,7 @@ static int DoStringPrintfV(wxString& str,
         else if ( len >= size )
         {
 #if wxUSE_WXVSNPRINTF
-            // we know that our own implementation of wxVsnprintf() returns 
+            // we know that our own implementation of wxVsnprintf() returns
             // size+1 when there's not enough space but that's not the size
             // of the required buffer!
             size *= 2;      // so we just double the current size of the buffer

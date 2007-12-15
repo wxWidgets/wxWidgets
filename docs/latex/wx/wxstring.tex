@@ -1205,8 +1205,8 @@ powerful means of converting wxString to C string.
 
 Attempts to convert the string to a floating point number. Returns \true on
 success (the number is stored in the location pointed to by \arg{val}) or \false
-if the string does not represent such number (the value of \arg{val} shouldn't
-be used in this case).
+if the string does not represent such number (the value of \arg{val} is not
+modified in this case).
 
 \wxheading{See also}
 
@@ -1221,8 +1221,8 @@ be used in this case).
 Attempts to convert the string to a signed integer in base {\it base}. Returns
 \true on success in which case the number is stored in the location
 pointed to by \arg{val} or \false if the string does not represent a
-valid number in the given base (the value of \arg{val} shouldn't
-be used in this case).
+valid number in the given base (the value of \arg{val} is not modified
+in this case).
 
 The value of {\it base} must be comprised between $2$ and $36$, inclusive, or
 be a special value $0$ which means that the usual rules of {\tt C} numbers are
@@ -1262,8 +1262,8 @@ with C99 support and Microsoft Visual C++ version 7 and higher do support this.
 Attempts to convert the string to an unsigned integer in base {\it base}.
 Returns \true on success in which case the number is stored in the
 location pointed to by \arg{val} or \false if the string does not
-represent a valid number in the given base (the value of \arg{val} shouldn't
-be used in this case). Please notice that this function
+represent a valid number in the given base (the value of \arg{val} is not
+modified in this case). Please notice that this function
 behaves in the same way as the standard \texttt{strtoul()} and so it simply
 converts negative numbers to unsigned representation instead of rejecting them
 (e.g. $-1$ is returned as \texttt{ULONG\_MAX}).
