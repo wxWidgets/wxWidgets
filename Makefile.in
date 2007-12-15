@@ -608,6 +608,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/palmos/apptrait.h \
 	wx/palmos/chkconf.h \
 	wx/palmos/mimetype.h \
+	wx/palmos/missing.h \
 	wx/palmos/stdpaths.h \
 	wx/msdos/mimetype.h \
 	wx/fs_inet.h \
@@ -763,6 +764,7 @@ ALL_BASE_SOURCES =  \
 	src/palmos/dir.cpp \
 	src/palmos/prefconf.cpp \
 	src/palmos/snglinst.cpp \
+	src/palmos/stdall.c \
 	src/palmos/thread.cpp \
 	src/palmos/utils.cpp \
 	src/palmos/utilsexc.cpp \
@@ -2105,6 +2107,7 @@ COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
 	wx/unix/utilsx11.h \
 	wx/x11/bitmap.h \
 	wx/x11/brush.h \
+	wx/x11/palette.h \
 	wx/x11/pen.h \
 	wx/x11/region.h
 @COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = $(COND_TOOLKIT_MOTIF_LOWLEVEL_HDR)
@@ -2575,7 +2578,6 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/menuitem.h \
 	wx/motif/minifram.h \
 	wx/motif/msgdlg.h \
-	wx/motif/palette.h \
 	wx/motif/popupwin.h \
 	wx/motif/print.h \
 	wx/motif/private.h \
@@ -4256,6 +4258,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_displayx11.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
+	monodll_palette.o \
 	monodll_pen.o \
 	monodll_region.o \
 	monodll_utilsx.o
@@ -4722,7 +4725,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_menuitem.o \
 	monodll_minifram.o \
 	monodll_msgdlg.o \
-	monodll_palette.o \
 	monodll_popupwin.o \
 	monodll_radiobox.o \
 	monodll_radiobut.o \
@@ -5124,6 +5126,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_displayx11.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
+	monodll_palette.o \
 	monodll_pen.o \
 	monodll_region.o \
 	monodll_utilsx.o
@@ -6151,6 +6154,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_displayx11.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
+	monolib_palette.o \
 	monolib_pen.o \
 	monolib_region.o \
 	monolib_utilsx.o
@@ -6617,7 +6621,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_menuitem.o \
 	monolib_minifram.o \
 	monolib_msgdlg.o \
-	monolib_palette.o \
 	monolib_popupwin.o \
 	monolib_radiobox.o \
 	monolib_radiobut.o \
@@ -7020,6 +7023,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_displayx11.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
+	monolib_palette.o \
 	monolib_pen.o \
 	monolib_region.o \
 	monolib_utilsx.o
@@ -8325,6 +8329,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_displayx11.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
+	coredll_palette.o \
 	coredll_pen.o \
 	coredll_region.o \
 	coredll_utilsx.o
@@ -8791,7 +8796,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_menuitem.o \
 	coredll_minifram.o \
 	coredll_msgdlg.o \
-	coredll_palette.o \
 	coredll_popupwin.o \
 	coredll_radiobox.o \
 	coredll_radiobut.o \
@@ -9194,6 +9198,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_displayx11.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
+	coredll_palette.o \
 	coredll_pen.o \
 	coredll_region.o \
 	coredll_utilsx.o
@@ -9824,6 +9829,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_displayx11.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
+	corelib_palette.o \
 	corelib_pen.o \
 	corelib_region.o \
 	corelib_utilsx.o
@@ -10290,7 +10296,6 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_menuitem.o \
 	corelib_minifram.o \
 	corelib_msgdlg.o \
-	corelib_palette.o \
 	corelib_popupwin.o \
 	corelib_radiobox.o \
 	corelib_radiobut.o \
@@ -10693,6 +10698,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_displayx11.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
+	corelib_palette.o \
 	corelib_pen.o \
 	corelib_region.o \
 	corelib_utilsx.o
@@ -15844,6 +15850,27 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_data.o: $(srcdir)/src/os2/data.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/data.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_palette.o: $(srcdir)/src/x11/palette.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_palette.o: $(srcdir)/src/x11/palette.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_palette.o: $(srcdir)/src/msw/palette.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_palette.o: $(srcdir)/src/msw/palette.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monodll_palette.o: $(srcdir)/src/mgl/palette.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_palette.o: $(srcdir)/src/mac/carbon/palette.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/palette.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_palette.o: $(srcdir)/src/os2/palette.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_utilsx.o: $(srcdir)/src/x11/utilsx.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/utilsx.cpp
 
@@ -15942,27 +15969,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_palette.o: $(srcdir)/src/msw/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_palette.o: $(srcdir)/src/msw/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_palette.o: $(srcdir)/src/x11/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_palette.o: $(srcdir)/src/mgl/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_palette.o: $(srcdir)/src/motif/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/palette.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_palette.o: $(srcdir)/src/mac/carbon/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/palette.cpp
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_palette.o: $(srcdir)/src/os2/palette.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_printdlg.o: $(srcdir)/src/msw/printdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/printdlg.cpp
@@ -20326,6 +20332,27 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_data.o: $(srcdir)/src/os2/data.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/data.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_palette.o: $(srcdir)/src/x11/palette.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_palette.o: $(srcdir)/src/x11/palette.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_palette.o: $(srcdir)/src/msw/palette.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_palette.o: $(srcdir)/src/msw/palette.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monolib_palette.o: $(srcdir)/src/mgl/palette.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_palette.o: $(srcdir)/src/mac/carbon/palette.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/palette.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_palette.o: $(srcdir)/src/os2/palette.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_utilsx.o: $(srcdir)/src/x11/utilsx.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/utilsx.cpp
 
@@ -20424,27 +20451,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_palette.o: $(srcdir)/src/msw/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_palette.o: $(srcdir)/src/msw/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_palette.o: $(srcdir)/src/x11/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_palette.o: $(srcdir)/src/mgl/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_palette.o: $(srcdir)/src/motif/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/palette.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_palette.o: $(srcdir)/src/mac/carbon/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/palette.cpp
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_palette.o: $(srcdir)/src/os2/palette.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_printdlg.o: $(srcdir)/src/msw/printdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/printdlg.cpp
@@ -25363,6 +25369,27 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_data.o: $(srcdir)/src/os2/data.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/data.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@coredll_palette.o: $(srcdir)/src/x11/palette.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@coredll_palette.o: $(srcdir)/src/x11/palette.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_palette.o: $(srcdir)/src/msw/palette.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_palette.o: $(srcdir)/src/msw/palette.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@coredll_palette.o: $(srcdir)/src/mgl/palette.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_palette.o: $(srcdir)/src/mac/carbon/palette.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/palette.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_palette.o: $(srcdir)/src/os2/palette.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1@coredll_utilsx.o: $(srcdir)/src/x11/utilsx.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/utilsx.cpp
 
@@ -25461,27 +25488,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@coredll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_palette.o: $(srcdir)/src/msw/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_palette.o: $(srcdir)/src/msw/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_palette.o: $(srcdir)/src/x11/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_palette.o: $(srcdir)/src/mgl/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_palette.o: $(srcdir)/src/motif/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/palette.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_palette.o: $(srcdir)/src/mac/carbon/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/palette.cpp
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_palette.o: $(srcdir)/src/os2/palette.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_printdlg.o: $(srcdir)/src/msw/printdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/printdlg.cpp
@@ -28441,6 +28447,27 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_data.o: $(srcdir)/src/os2/data.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/data.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1@corelib_palette.o: $(srcdir)/src/x11/palette.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@corelib_palette.o: $(srcdir)/src/x11/palette.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_palette.o: $(srcdir)/src/msw/palette.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_palette.o: $(srcdir)/src/msw/palette.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@corelib_palette.o: $(srcdir)/src/mgl/palette.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_palette.o: $(srcdir)/src/mac/carbon/palette.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/palette.cpp
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_palette.o: $(srcdir)/src/os2/palette.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1@corelib_utilsx.o: $(srcdir)/src/x11/utilsx.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/utilsx.cpp
 
@@ -28539,27 +28566,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@corelib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_palette.o: $(srcdir)/src/msw/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_palette.o: $(srcdir)/src/msw/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/palette.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_palette.o: $(srcdir)/src/x11/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/palette.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_palette.o: $(srcdir)/src/mgl/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/palette.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_palette.o: $(srcdir)/src/motif/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/palette.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_palette.o: $(srcdir)/src/mac/carbon/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/palette.cpp
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_palette.o: $(srcdir)/src/os2/palette.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/palette.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_printdlg.o: $(srcdir)/src/msw/printdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/printdlg.cpp

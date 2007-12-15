@@ -1319,6 +1319,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(XWIN_LOWLEVEL_SRC)
     src/x11/bitmap.cpp
     src/x11/brush.cpp
+    src/x11/palette.cpp
     src/x11/pen.cpp
     src/x11/region.cpp
     src/x11/utilsx.cpp
@@ -1327,6 +1328,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(XWIN_LOWLEVEL_HDR)
     wx/x11/bitmap.h
     wx/x11/brush.h
+    wx/x11/palette.h
     wx/x11/pen.h
     wx/x11/region.h
 </set>
@@ -1366,7 +1368,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/motif/menuitem.cpp
     src/motif/minifram.cpp
     src/motif/msgdlg.cpp
-    src/motif/palette.cpp
     src/motif/popupwin.cpp
     src/motif/radiobox.cpp
     src/motif/radiobut.cpp
@@ -1453,7 +1454,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/menuitem.h
     wx/motif/minifram.h
     wx/motif/msgdlg.h
-    wx/motif/palette.h
     wx/motif/popupwin.h
     wx/motif/print.h
     wx/motif/private.h
