@@ -3963,14 +3963,16 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
             }
             else // not a valid month name
             {
-                wday = GetWeekDayFromName(token, Name_Full | Name_Abbr);
-                if ( wday != Inv_WeekDay )
+                WeekDay wday2 = GetWeekDayFromName(token, Name_Full | Name_Abbr);
+                if ( wday2 != Inv_WeekDay )
                 {
                     // a week day
                     if ( haveWDay )
                     {
                         break;
                     }
+
+                    wday = wday2;
 
                     haveWDay = true;
                 }

@@ -189,6 +189,7 @@ private:
         CPPUNIT_TEST( TestTimeTicks );
         CPPUNIT_TEST( TestParceRFC822 );
         CPPUNIT_TEST( TestDateParse );
+        CPPUNIT_TEST( TestDateTimeParse );
         CPPUNIT_TEST( TestTimeArithmetics );
         CPPUNIT_TEST( TestDSTBug );
         CPPUNIT_TEST( TestDateOnly );
@@ -205,6 +206,7 @@ private:
     void TestTimeTicks();
     void TestParceRFC822();
     void TestDateParse();
+    void TestDateTimeParse();
     void TestTimeArithmetics();
     void TestDSTBug();
     void TestDateOnly();
@@ -799,7 +801,7 @@ void DateTimeTestCase::TestDateParse()
         // some invalid ones too
         { _T("29 Feb 2006") },
         { _T("31/04/06") },
-        { _T("bloordyblop") }
+        { _T("bloordyblop") },
     };
 
     // special cases
@@ -811,6 +813,37 @@ void DateTimeTestCase::TestDateParse()
     {
         wxDateTime dt;
         if ( dt.ParseDate(parseTestDates[n].str) )
+        {
+            CPPUNIT_ASSERT( parseTestDates[n].good );
+
+            CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+        }
+        else // failed to parse
+        {
+            CPPUNIT_ASSERT( !parseTestDates[n].good );
+        }
+    }
+}
+
+void DateTimeTestCase::TestDateTimeParse()
+{
+    static const struct ParseTestData
+    {
+        const wxChar *str;
+        Date date;              // NB: this should be in UTC
+        bool good;
+    } parseTestDates[] =
+    {
+        { _T("Thu 22 Nov 2007 07:40:00 PM"),
+         { 22, wxDateTime::Nov, 2007, 19, 40, 0}, true },
+    };
+
+    // special cases
+    wxDateTime dt;
+    for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
+    {
+        wxDateTime dt;
+        if ( dt.ParseDateTime(parseTestDates[n].str) )
         {
             CPPUNIT_ASSERT( parseTestDates[n].good );
 

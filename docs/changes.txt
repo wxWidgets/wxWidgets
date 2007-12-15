@@ -291,6 +291,10 @@ wxX11:
 2.8.8
 -----
 
+All:
+
+- Fixed bug with parsing some dates in wxDateTime (Bob Pesner)
+
 All (GUI):
 
 - Added wxWindow::GetNextSibling() and GetPrevSibling()
