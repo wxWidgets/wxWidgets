@@ -37,6 +37,7 @@ public:
 
     // process a single message
     virtual void ProcessMessage(WXMSG *msg);
+    virtual void WakeUp();
 
 protected:
     // should we exit the loop?

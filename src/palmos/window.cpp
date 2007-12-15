@@ -76,6 +76,7 @@
 #include "wx/notebook.h"
 #include "wx/listctrl.h"
 
+#ifndef __WXUNIVERSAL__
 #include <Window.h>
 
 // ---------------------------------------------------------------------------
@@ -247,7 +248,7 @@ bool wxGetKeyState(wxKeyCode key)
 
 void wxWindowPalm::Init()
 {
-    m_handle = 0;
+    m_hWnd = 0;
 }
 
 // Destructor
@@ -445,7 +446,7 @@ void wxWindowPalm::Thaw()
 
 void wxWindowPalm::Refresh(bool eraseBack, const wxRect *rect)
 {
-    WinHandle handle = (WinHandle)GetWinHandle();
+    WinHandle handle = (WinHandle)GetHWND();
     if(handle)
     {
         if(rect)
@@ -754,5 +755,5 @@ bool wxWindowPalm::UnregisterHotKey(int hotkeyId)
 {
     return false;
 }
-
+#endif // # __WXUNIVERSAL__
 #endif // wxUSE_HOTKEY

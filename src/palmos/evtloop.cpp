@@ -135,3 +135,8 @@ bool wxGUIEventLoop::Dispatch()
     return false;
 }
 
+void wxGUIEventLoop::WakeUp()
+{
+    return;
+}
+

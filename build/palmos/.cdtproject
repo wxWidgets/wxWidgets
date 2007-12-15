@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?eclipse-cdt version="2.0"?>
+
 <cdtproject id="org.eclipse.cdt.make.core.make">
-    <extension id="org.eclipse.cdt.make.core.MakeScannerProvider" point="org.eclipse.cdt.core.ScannerInfoProvider"/>
-    <extension id="org.eclipse.cdt.core.Elf" point="org.eclipse.cdt.core.BinaryParser"/>
-    <data>
-        <item id="org.eclipse.cdt.make.core.makeScannerInfo">
-            <includePath path="$(SDK6_LOCATION)headers"/>
-            <includePath path="$(SDK6_LOCATION)headers\EntryNums"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix\arm"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix\arpa"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix\machine"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix\machine\arm"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix\machine\x86"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix\net"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix\netinet"/>
-            <includePath path="$(SDK6_LOCATION)headers\posix\sys"/>
-            <includePath path="$(SDK6_LOCATION)headers\streams"/>
-            <definedSymbol symbol="__arm__"/>
-        </item>
-    </data>
+<extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.PE"/>
+<data>
+        
+    <item id="org.eclipse.cdt.core.pathentry">
+<pathentry kind="src" path=""/>
+<pathentry kind="out" path=""/>
+<pathentry kind="mac" path="" name="__arm__" value="1"/>
+<pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
+</item>
+</data>
 </cdtproject>

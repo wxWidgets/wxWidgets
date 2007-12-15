@@ -122,10 +122,12 @@ bool wxGetEnv(const wxString& var, wxString *value)
     return false;
 }
 
+#if ! WXWIN_COMPATIBILITY_2_8
 bool wxSetEnv(const wxString& var, const wxChar *value)
 {
     return false;
 }
+#endif // ! WXWIN_COMPATIBILITY_2_8
 
 bool wxUnsetEnv(const wxString& var)
 {

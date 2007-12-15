@@ -32,7 +32,7 @@ LDFLAGS =
 CPP = $(CC) /EP /nologo
 
 # What type of library to build? [0,1]
-SHARED = 0
+SHARED = 1
 
 # Build wxUniversal instead of native port? [0,1]
 WXUNIV = 0

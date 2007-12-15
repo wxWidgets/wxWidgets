@@ -132,8 +132,9 @@ public:
     // simple accessors
     // ----------------
 
-    virtual WXWINHANDLE GetWinHandle() const { return m_handle; }
-    virtual WXWidget GetHandle() const { return GetWinHandle(); }
+    WXHWND GetHWND() const { return m_hWnd; }
+    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
+    virtual WXWidget GetHandle() const { return GetHWND(); }
 
     // event handlers
     // --------------
@@ -208,7 +209,7 @@ public:
 
 protected:
     // the window handle
-    WXWINHANDLE m_handle;
+    WXHWND                m_hWnd;
     WXFORMPTR FrameForm;
 
     WXFORMPTR GetFormPtr();

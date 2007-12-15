@@ -21,6 +21,10 @@
 */
 #ifdef __MWERKS__
 #   include <stddef.h>
+
+#  if !defined(__WXMAC__) && !defined(__WINDOWS__) && !defined(WIN32) && !defined(_WIN32_WCE)
+#    define __PALMOS__ 0x05000000
+#  endif
 #endif
 
 /*
@@ -94,13 +98,13 @@
 
 #if defined(__PALMOS__)
 #   if __PALMOS__ == 0x06000000
-#       define __WXPALMOS6__
+#       define __WXPALMOS6__ 1
 #   endif
 #   if __PALMOS__ == 0x05000000
-#       define __WXPALMOS5__
+#       define __WXPALMOS5__ 1
 #   endif
 #   ifndef __WXPALMOS__
-#       define __WXPALMOS__
+#       define __WXPALMOS__ 1
 #   endif
 #   ifdef __WXMSW__
 #       undef __WXMSW__
@@ -678,5 +682,30 @@
 #ifdef __DARWIN__
     #include <AvailabilityMacros.h>
 #endif
+
+#if defined (__WXPALMOS__)
+#include "wx/palmos/missing.h"
+#endif // __WXPALMOS__
+
+#if !defined (__WXPALMOS5__)
+#define POSSEC_APPBASE
+#define POSSEC_ARCHIVE
+#define POSSEC_CLNTDATA
+#define POSSEC_CMDLINE
+#define POSSEC_CONFIG
+#define POSSEC_DATETIME
+#define POSSEC_DATETIME2
+#define POSSEC_DATSTRM
+#define POSSEC_DIRCMN
+#define POSSEC_DYNARRAY
+#define POSSEC_DYNLIB
+#define POSSEC_DYNLOAD
+#define POSSEC_ENCCONV
+#define POSSEC_EXTENDED
+#define POSSEC_FFILE
+#define POSSEC_FILE
+#define POSSEC_FILECONF
+#define POSSEC_FILEFN
+#endif // __WXPALMOS5__
 
 #endif /* _WX_PLATFORM_H_ */

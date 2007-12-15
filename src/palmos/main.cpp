@@ -48,12 +48,12 @@ int wxEntry()
      */
     wxArrayString args;
     int argc = args.GetCount();
-
     // +1 here for the terminating NULL
     wxChar **argv = new wxChar *[argc + 1];
     for ( int i = 0; i < argc; i++ )
     {
-        argv[i] = wxStrdup(args[i]);
+        //argv[i] = wxStrdup(args[i]);
+        argv[i] = wxStrdup(wxConvLibc.cMB2WX(args[i]));
     }
 
     // argv[] must be NULL-terminated

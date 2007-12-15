@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DC_H_
-#define _WX_DC_H_
+#ifndef _WX_PALM_DC_H_
+#define _WX_PALM_DC_H_
 
 #include "wx/defs.h"
 #include "wx/dc.h"
@@ -41,11 +41,13 @@ public:
 };
 #endif
 
-class WXDLLEXPORT wxDC : public wxDCBase
+// this is an ABC: use one of the derived classes to create a DC associated
+// with a window, screen, printer and so on
+class WXDLLEXPORT wxPalmDCImpl: public wxDCImpl
 {
 public:
-    wxDC();
-    virtual ~wxDC();
+    wxPalmDCImpl(wxDC *owner, WXHDC hDC);
+    virtual ~wxPalmDCImpl();
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -71,46 +73,31 @@ public:
 
     virtual wxCoord GetCharHeight() const;
     virtual wxCoord GetCharWidth() const;
-    virtual void DoGetTextExtent(const wxString& string,
-                                 wxCoord *x, wxCoord *y,
-                                 wxCoord *descent = NULL,
-                                 wxCoord *externalLeading = NULL,
-                                 const wxFont *theFont = NULL) const;
-    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     virtual bool CanDrawBitmap() const;
     virtual bool CanGetTextExtent() const;
     virtual int GetDepth() const;
     virtual wxSize GetPPI() const;
 
+
     virtual void SetMapMode(int mode);
     virtual void SetUserScale(double x, double y);
-    virtual void SetSystemScale(double x, double y);
     virtual void SetLogicalScale(double x, double y);
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
+
     virtual void SetLogicalFunction(int function);
 
-    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
-    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const ;
-    
     // implementation from now on
     // --------------------------
 
     virtual void SetRop(WXHDC cdc);
     virtual void SelectOldObjects(WXHDC dc);
 
-    wxWindow *GetWindow() const { return m_canvas; }
     void SetWindow(wxWindow *win)
     {
-        m_canvas = win;
+        m_window = win;
 
 #if wxUSE_PALETTE
         // if we have palettes use the correct one for this window
@@ -119,7 +106,7 @@ public:
     }
 
     WXHDC GetHDC() const { return m_hDC; }
-    void SetHDC(WXHDC dc, bool bOwnsDC = FALSE)
+    void SetHDC(WXHDC dc, bool bOwnsDC = false)
     {
         m_hDC = dc;
         m_bOwnsDC = bOwnsDC;
@@ -147,9 +134,51 @@ public:
     static void ClearCache();
 #endif
 
+    // RTL related functions
+    // ---------------------
+
+    // get or change the layout direction (LTR or RTL) for this dc,
+    // wxLayout_Default is returned if layout direction is not supported
+    virtual wxLayoutDirection GetLayoutDirection() const;
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
+
 protected:
+    void Init()
+    {
+        m_bOwnsDC = false;
+        m_hDC = NULL;
+
+        m_oldBitmap = NULL;
+        m_oldPen = NULL;
+        m_oldBrush = NULL;
+        m_oldFont = NULL;
+
+#if wxUSE_PALETTE
+        m_oldPalette = NULL;
+#endif // wxUSE_PALETTE
+    }
+
+    // create an uninitialized DC: this should be only used by the derived
+    // classes
+    wxPalmDCImpl( wxDC *owner ) : wxDCImpl( owner ) { Init(); }
+
+    void RealizeScaleAndOrigin();
+
+public:
+    virtual void DoGetTextExtent(const wxString& string,
+                                 wxCoord *x, wxCoord *y,
+                                 wxCoord *descent = NULL,
+                                 wxCoord *externalLeading = NULL,
+                                 const wxFont *theFont = NULL) const;
+    virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
+
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              int style = wxFLOOD_SURFACE);
+
+    virtual void DoGradientFillLinear(const wxRect& rect,
+                                      const wxColour& initialColour,
+                                      const wxColour& destColour,
+                                      wxDirection nDirection = wxEAST);
 
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
 
@@ -170,11 +199,15 @@ protected:
                                         double radius);
     virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
+#if wxUSE_SPLINES
+    virtual void DoDrawSpline(const wxPointList *points);
+#endif
+
     virtual void DoCrossHair(wxCoord x, wxCoord y);
 
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
-                              bool useMask = FALSE);
+                              bool useMask = false);
 
     virtual void DoDrawText(const wxString& text, wxCoord x, wxCoord y);
     virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -182,7 +215,15 @@ protected:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
+
+    virtual bool DoStretchBlit(wxCoord xdest, wxCoord ydest,
+                               wxCoord dstWidth, wxCoord dstHeight,
+                               wxDC *source,
+                               wxCoord xsrc, wxCoord ysrc,
+                               wxCoord srcWidth, wxCoord srcHeight,
+                               int rop = wxCOPY, bool useMask = false,
+                               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     // this is gnarly - we can't even call this function DoSetClippingRegion()
     // because of virtual function hiding
@@ -192,7 +233,6 @@ protected:
     virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
                                   wxCoord *w, wxCoord *h) const;
 
-    virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
 
     virtual void DoDrawLines(int n, wxPoint points[],
@@ -203,6 +243,11 @@ protected:
     virtual void DoDrawPolyPolygon(int n, int count[], wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
                                    int fillStyle = wxODDEVEN_RULE);
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const
+    {
+        return subrect == NULL ? GetSelectedBitmap()
+                               : GetSelectedBitmap().GetSubBitmap(*subrect);
+    }
 
 
 #if wxUSE_PALETTE
@@ -210,17 +255,29 @@ protected:
     // (tell windows to translate pixel from other palettes to our custom one
     // and vice versa)
     // Realize tells it to also reset the system palette to this one.
-    void DoSelectPalette(bool realize = FALSE);
+    void DoSelectPalette(bool realize = false);
 
     // Find out what palette our parent window has, then select it into the dc
     void InitializePalette();
 #endif // wxUSE_PALETTE
 
+protected:
     // common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
 
     // common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
     void SetClippingHrgn(WXHRGN hrgn);
+
+    // implementation of DoGetSize() for wxScreen/PrinterDC: this simply
+    // returns the size of the entire device this DC is associated with
+    //
+    // notice that we intentionally put it in a separate function instead of
+    // DoGetSize() itself because we want it to remain pure virtual both
+    // because each derived class should take care to define it as needed (this
+    // implementation is not at all always appropriate) and because we want
+    // wxDC to be an ABC to prevent it from being created directly
+    void GetDeviceSize(int *width, int *height) const;
+
 
     // MSW-specific member variables
     // -----------------------------
@@ -249,12 +306,12 @@ protected:
 #endif // wxUSE_PALETTE
 
 #if wxUSE_DC_CACHEING
-    static wxList     sm_bitmapCache;
-    static wxList     sm_dcCache;
+    static wxObjectList     sm_bitmapCache;
+    static wxObjectList     sm_dcCache;
 #endif
 
-    DECLARE_DYNAMIC_CLASS(wxDC)
-    DECLARE_NO_COPY_CLASS(wxDC)
+    DECLARE_CLASS(wxPalmDCImpl)
+    DECLARE_NO_COPY_CLASS(wxPalmDCImpl)
 };
 
 // ----------------------------------------------------------------------------
@@ -262,15 +319,50 @@ protected:
 // only/mainly)
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxDCTempImpl : public wxPalmDCImpl
+{
+public:
+    // construct a temporary DC with the specified HDC and size (it should be
+    // specified whenever we know it for this HDC)
+    wxDCTempImpl(wxDC *owner, WXHDC hdc, const wxSize& size )
+        : wxPalmDCImpl( owner, hdc ),
+          m_size(size)
+    {
+    }
+
+    virtual ~wxDCTempImpl()
+    {
+        // prevent base class dtor from freeing it
+        SetHDC((WXHDC)NULL);
+    }
+
+    virtual void DoGetSize(int *w, int *h) const
+    {
+        wxASSERT_MSG( m_size.IsFullySpecified(),
+                      _T("size of this DC hadn't been set and is unknown") );
+
+        if ( w )
+            *w = m_size.x;
+        if ( h )
+            *h = m_size.y;
+    }
+
+private:
+    // size of this DC must be explicitly set by SetSize() as we have no way to
+    // find it ourselves
+    const wxSize m_size;
+
+    DECLARE_NO_COPY_CLASS(wxDCTempImpl)
+};
+
 class WXDLLEXPORT wxDCTemp : public wxDC
 {
 public:
-    wxDCTemp(WXHDC hdc) { SetHDC(hdc); }
-    virtual ~wxDCTemp() { SetHDC((WXHDC)NULL); }
-
-private:
-    DECLARE_NO_COPY_CLASS(wxDCTemp)
+    wxDCTemp(WXHDC hdc, const wxSize& size = wxDefaultSize)
+        : wxDC(new wxDCTempImpl(this, hdc, size))
+    {
+    }
 };
 
 #endif
-    // _WX_DC_H_
+    // _WX_PALM_DC_H_

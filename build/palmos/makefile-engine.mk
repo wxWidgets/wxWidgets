@@ -160,7 +160,9 @@ endif
 ###############################################################################
 # Compile and Link Settings
 
+ifeq ($(TARGET_FORMAT), )
 TARGET_FORMAT=PalmOS6
+endif
 
 # Compiler settings... compiler + optimizations + debug
 # This is a makefile for Palm OS 6 so the compilers used are as follows:
@@ -428,6 +430,7 @@ SLD_SIM_OBJ := $(addprefix $(SIM_OBJ_DIR)/, $(addsuffix .o, $(SLD_BASENAME)))
 VPATH :=
 VPATH += $(addprefix :, $(subst  ,:, $(filter-out $($(subst, :, ,$(VPATH))), $(SOURCE_PATHS) $(RESOURCE_PATHS) )))
 
+# -I "$(SDK_LOCATION)include" -I "$(SDK_LOCATION)include/Core/System" #
 SYSTEM_INCLUDES = $(SYSTEM_INCLUDE_PATHS) -I "$(SDK_LOCATION)headers" -I "$(SDK_LOCATION)headers/posix"
 INCLUDES = $(LOCAL_INCLUDE_PATHS) $(foreach path, $(SOURCE_PATHS), $(addprefix -I, $(path))) $(SYSTEM_INCLUDES) $(PRE_INCLUDE_PATHS)
 CPP_INCLUDES = -I "$(TOOLS_DIR)include/stlport"
@@ -602,10 +605,15 @@ $(RSC_OBJ_DIR)/%.trc : %.XRD makefile
 $(SLD_OBJ) : makefile
 	@echo "...Processing definition file for Device..."
 	"$(TOOLS_DIR)pslib" -inDef "$(SLD_FILE)" $(PSLIB_DEV_FLAGS) -outObjStartup $@ -type '$(DB_TYPE)' -creator '$(CREATOR_ID)' -execName $(DATABASE_NAME)
+	$(INSTALL_DIR) $(incdir)/wx/
+	$(INSTALL_DATA) ../../include/wx/palmos/setup0.h $(incdir)/wx/setup.h
+	
 	
 $(SLD_SIM_OBJ) : makefile
 	@echo "...Processing definition file for Simulator..."
 	"$(TOOLS_DIR)pslib" -inDef "$(SLD_FILE)" $(PSLIB_SIM_FLAGS) -outSimStartup $@ -outSimRsrc $(SIM_OBJ_DIR)/acod0000.bin  -outSimDefs $(SIM_OBJ_DIR)/gcc_link.def -type '$(DB_TYPE)' -creator '$(CREATOR_ID)' -execName $(DATABASE_NAME)
+	$(INSTALL_DIR) $(incdir)/wx/
+	$(INSTALL_DATA) ../../include/wx/palmos/setup0.h $(incdir)/wx/setup.h
 
 # Linking step
 $(LINKER_OUTPUT) : $(OBJS)

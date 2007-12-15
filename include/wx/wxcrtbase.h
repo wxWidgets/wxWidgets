@@ -28,11 +28,17 @@
         include this one!
  */
 
+#if !defined(__WXPALMOS5__)
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <wctype.h>
+#if defined(__WXPALMOS__)
+    #include <wchar.h>
+#else
+    #include <wctype.h>
+#endif
 #include <time.h>
+#endif
 
 #if defined(__WINDOWS__) && !defined(__WXWINCE__)
     #include <io.h>
@@ -157,7 +163,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrstrW    wcsstr
 
 /* these functions are not defined under CE, at least in VC8 CRT */
-#ifndef __WXWINCE__
+#if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
     #define wxCRT_StrcollA   strcoll
     #define wxCRT_StrxfrmA   strxfrm
 
@@ -232,7 +238,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
          * quick hack should do until one can be written.
          */
         #define wxCRT_StricmpA StrCaselessCompare
-        #define wxCRT_StrnicmpA strnicmp
+        #define wxCRT_StrnicmpA StrNCaselessCompare
     #elif defined(__SYMANTEC__) || defined(__VISUALC__) || \
             (defined(__MWERKS__) && defined(__INTEL__))
         #define wxCRT_StricmpA _stricmp
@@ -401,7 +407,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
                                   stdio.h
    ------------------------------------------------------------------------- */
 
-#if defined(__UNIX__) || defined(__WXMAC__)
+#if defined(__UNIX__) || defined(__WXMAC__) || defined(__WXPALMOS__)
     #define wxMBFILES 1
 #else
     #define wxMBFILES 0
@@ -559,6 +565,9 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     So use our own replacements in both cases.
  */
 #if defined(__MWERKS__) && defined(__MSL__)
+    #define wxNEED_WX_MBSTOWCS
+#endif
+#if defined(__WXPALMOS__)
     #define wxNEED_WX_MBSTOWCS
 #endif
 

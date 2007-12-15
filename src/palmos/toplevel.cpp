@@ -167,6 +167,9 @@ void wxTopLevelWindowPalm::DoShowWindow(int nShowCmd)
 
 bool wxTopLevelWindowPalm::Show(bool show)
 {
+    if (true != show) {
+	    return true;
+    }
     FrmDrawForm((FormType *)FrameForm);
 
     wxPaintEvent event(m_windowId);

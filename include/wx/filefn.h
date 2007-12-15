@@ -15,6 +15,7 @@
 #include "wx/list.h"
 #include "wx/arrstr.h"
 
+#ifndef __WXPALMOS5__
 #ifdef __WXWINCE__
     #include "wx/msw/wince/time.h"
     #include "wx/msw/private.h"
@@ -39,6 +40,7 @@
         #include <unix.h>
     #endif
 #endif
+#endif // !__WXPALMOS5__
 
 #ifdef __OS2__
 // need to check for __OS2__ first since currently both
@@ -88,9 +90,11 @@
     #include <unix.h>
 #endif
 
+#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
     #include  <fcntl.h>       // O_RDONLY &c
 #endif
+#endif // !__WXPALMOS5__
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -115,6 +119,8 @@
 #elif defined(__SYMANTEC__)
     typedef long off_t;
 #elif defined(__MWERKS__) && !defined(__INTEL__) && !defined(__MACH__)
+    typedef long off_t;
+#elif defined(__WXPALMOS5__)
     typedef long off_t;
 #endif
 
@@ -613,6 +619,9 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 // platform independent versions
 #if defined(__UNIX__) && !defined(__OS2__)
   // CYGWIN also uses UNIX settings
+  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
+  #define wxPATH_SEP          wxPATH_SEP_UNIX
+#elif defined(__WXPALMOS__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
 #elif defined(__MAC__)

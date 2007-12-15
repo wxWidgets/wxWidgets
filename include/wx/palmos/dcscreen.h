@@ -12,24 +12,19 @@
 #ifndef _WX_DCSCREEN_H_
 #define _WX_DCSCREEN_H_
 
-#include "wx/dcclient.h"
+#include "wx/dcscreen.h"
+#include "wx/palmos/dc.h"
 
-class WXDLLEXPORT wxScreenDC : public wxWindowDC
+class WXDLLEXPORT wxScreenDCImpl : public wxPalmDCImpl
 {
 public:
     // Create a DC representing the whole screen
-    wxScreenDC();
+    wxScreenDCImpl( wxScreenDC *owner );
 
-    // Compatibility with X's requirements for drawing on top of all windows
-    static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return TRUE; }
-    static bool StartDrawingOnTop(wxRect* WXUNUSED(rect) = NULL) { return TRUE; }
-    static bool EndDrawingOnTop() { return TRUE; }
+    virtual void DoGetSize(int *w, int *h) const;
 
-protected:
-    virtual void DoGetSize(int *width, int *height) const;
-
-private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxScreenDC)
+    DECLARE_CLASS(wxScreenDCImpl)
+    DECLARE_NO_COPY_CLASS(wxScreenDCImpl)
 };
 
 #endif

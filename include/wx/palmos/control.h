@@ -48,7 +48,7 @@ public:
     virtual bool IsShown() const;
 
     virtual void SetLabel(const wxString& label);
-    virtual wxString GetLabel();
+    //virtual wxString GetLabel();
 
     // implementation from now on
     // --------------------------

@@ -120,10 +120,12 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
     return wxPORT_PALMOS;
 }
 
+#if wxUSE_TIMER
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
     return new wxPalmOSTimerImpl(timer);
 };
+#endif // wxUSE_TIMER
 
 wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
@@ -227,17 +229,21 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
+    wxChar **argv_tmp;
+    argv_tmp = argv;
+    // src/palmos/main.cpp
     // our cmd line arguments are allocated inside wxEntry(HINSTANCE), they
     // don't come from main(), so we have to free them
-
     while ( argc )
     {
         // m_argv elements were allocated by wxStrdup()
-        free(argv[--argc]);
+        if (argv_tmp[--argc]) {
+            free((void *)(argv_tmp[--argc]));
+        }
     }
-
     // but m_argv itself -- using new[]
-    delete [] argv;
+    delete [] argv_tmp;
+    //argv = NULL;
 }
 
 // ----------------------------------------------------------------------------

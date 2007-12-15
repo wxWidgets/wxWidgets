@@ -29,24 +29,28 @@
 					<value>1</value>
 				</dictionary>
 				<dictionary>
-					<key>SDK</key>
-					<value>com.palmsource.eclipse.sdk.palmos6</value>
+					<key>PROJECT_VERSION</key>
+					<value>10100</value>
 				</dictionary>
 				<dictionary>
 					<key>DB_RESET_INSTALL</key>
 					<value>false</value>
 				</dictionary>
 				<dictionary>
-					<key>APP_NAME</key>
-					<value>wxWidgets</value>
+					<key>SDK</key>
+					<value>com.palmsource.eclipse.sdk.palmos6</value>
 				</dictionary>
 				<dictionary>
-					<key>PROJECT_NAME</key>
+					<key>APP_NAME</key>
 					<value>wxWidgets</value>
 				</dictionary>
 				<dictionary>
 					<key>OS_API</key>
 					<value>Protein</value>
+				</dictionary>
+				<dictionary>
+					<key>PROJECT_NAME</key>
+					<value>wxWidgets</value>
 				</dictionary>
 				<dictionary>
 					<key>PROJECT_TYPE</key>
@@ -115,6 +119,47 @@
 				</dictionary>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.make.core.ScannerConfigBuilder</name>
+			<arguments>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.ScannerConfigDiscoveryEnabled</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.makeBuilderParserId</key>
+					<value>org.eclipse.cdt.make.core.GCCScannerInfoConsoleParser</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.esiProviderCommandEnabled</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.siProblemGenerationEnabled</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.useDefaultESIProviderCmd</key>
+					<value>false</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.makeBuilderParserEnabled</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.esiProviderArguments</key>
+					<value>-E -P -v ${plugin_state_location}/${specs_file}</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.esiProviderParserId</key>
+					<value>org.eclipse.cdt.make.core.GCCSpecsConsoleParser</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.esiProviderCommand</key>
+					<value>gcc</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>com.palmsource.eclipse.palmos6dev.palmOSProteinNature</nature>
@@ -122,5 +167,6 @@
 		<nature>org.eclipse.cdt.core.cnature</nature>
 		<nature>org.eclipse.cdt.make.core.makeNature</nature>
 		<nature>org.eclipse.cdt.core.ccnature</nature>
+		<nature>org.eclipse.cdt.make.core.ScannerConfigNature</nature>
 	</natures>
 </projectDescription>

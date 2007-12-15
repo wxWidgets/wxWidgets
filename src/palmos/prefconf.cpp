@@ -178,11 +178,13 @@ bool wxPrefConfig::DoReadLong(const wxString& key, long *plResult) const
     return false;
 }
 
-bool DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
+#if wxUSE_BASE64
+bool wxPrefConfig::DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
 {
     /* TODO */
     return false;
 }
+#endif // wxUSE_BASE64
 
 bool wxPrefConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
@@ -196,11 +198,13 @@ bool wxPrefConfig::DoWriteLong(const wxString& key, long lValue)
     return false;
 }
 
-bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
+#if wxUSE_BASE64
+bool wxPrefConfig::DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf)
 {
     /* TODO */
     return false;
 }
+#endif // wxUSE_BASE64
 
 // ----------------------------------------------------------------------------
 // renaming

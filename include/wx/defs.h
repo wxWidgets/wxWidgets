@@ -204,6 +204,9 @@
             #define false ((bool)0)
         #endif
         #define HAVE_BOOL
+    #elif defined(__WXPALMOS__)
+        /*  Palm OS supports bool */
+        #define HAVE_BOOL
     #endif /*  compilers */
 #endif /*  HAVE_BOOL */
 
@@ -563,7 +566,7 @@ typedef int wxWindowID;
 /*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
 /*  it must not be defined as "(void *)0" which is standard for C but completely */
 /*  breaks C++ code) */
-#ifndef __HANDHELDPC__
+#if !defined(__HANDHELDPC__) && !defined(__PALMOS__)
 #include <stddef.h>
 #endif
 
@@ -751,7 +754,9 @@ enum {  wxDefaultCoord = -1 };
 /*  ---------------------------------------------------------------------------- */
 
 #if defined(__WXPALMOS__) || defined(__MINGW32__)
+  #if !defined(__MWERKS__)
     #include <sys/types.h>
+  #endif
 #endif
 
 /*  chars are always one byte (by definition), shorts are always two (in */
@@ -807,7 +812,9 @@ typedef wxUint16 wxWord;
     #define SIZEOF_LONG 4
     #define SIZEOF_WCHAR_T 2
     #define SIZEOF_SIZE_T 4
-    #define wxSIZE_T_IS_UINT
+    #ifdef __WXPALMOS6__
+        #define wxSIZE_T_IS_UINT
+    #endif
     #define SIZEOF_VOID_P 4
     #define SIZEOF_SIZE_T 4
 #elif defined(__WINDOWS__)
@@ -1058,7 +1065,11 @@ inline void *wxUIntToPtr(wxUIntPtr p)
         #error "See the documentation on the 'longlong' pragma."
     #endif
 #elif defined(__WXPALMOS__)
-    #define wxLongLong_t int64_t
+    #if defined(__WXPALMOS6__)
+        #define wxLongLong_t int64_t
+    #else
+        #define wxLongLong_t long long
+    #endif /* __WXPALMOS6__ */
     #define wxLongLongSuffix ll
     #define wxLongLongFmtSpec _T("ll")
 #elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
@@ -1082,7 +1093,11 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 #ifdef wxLongLong_t
 
     #ifdef __WXPALMOS__
+    #if defined(__WXPALMOS6__)
         #define wxULongLong_t uint64_t
+    #else
+        #define wxULongLong_t unsigned long long
+    #endif /* __WXPALMOS6__ */
     #else
         #define wxULongLong_t unsigned wxLongLong_t
     #endif

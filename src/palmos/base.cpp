@@ -28,8 +28,8 @@
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
-
 #include "wx/recguard.h"
+#include "wx/evtloop.h" // wxEventLoop
 
 // ============================================================================
 // wxConsoleAppTraits implementation
@@ -52,4 +52,18 @@ bool wxConsoleAppTraits::DoMessageFromThreadWait()
 {
     return true;
 }
+
+WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
+{
+    // TODO
+    return 0;
+}
+
+#if wxUSE_CONSOLE_EVENTLOOP
+wxEventLoopBase *
+wxConsoleAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop;
+}
+#endif // wxUSE_CONSOLE_EVENTLOOP
 

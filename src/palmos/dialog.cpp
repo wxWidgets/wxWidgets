@@ -147,11 +147,14 @@ bool wxDialog::Create(wxWindow *parent,
                       long style,
                       const wxString& name)
 {
-    return false;
+    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
+        return false;
+    return true;
 }
 
 wxDialog::~wxDialog()
 {
+    Show (false);
 }
 
 // ----------------------------------------------------------------------------
@@ -165,7 +168,7 @@ wxWindow *wxDialog::FindSuitableParent() const
 
 bool wxDialog::Show(bool show)
 {
-    return false;
+    return wxTopLevelWindowPalm::Show (show);
 }
 
 void wxDialog::Raise()
@@ -175,6 +178,9 @@ void wxDialog::Raise()
 // show dialog modally
 int wxDialog::ShowModal()
 {
+    if (errNone == FrmDoDialog ((FormType *)wxTopLevelWindow::GetForm())) {
+        return 0;
+    }
     return -1;
 }
 

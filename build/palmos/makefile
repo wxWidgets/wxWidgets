@@ -10,6 +10,9 @@
 #	2. Review the other settings as needed.
 #
 ## --------------------------------------------------------------------------
+INSTALL=install
+INSTALL_DATA=${INSTALL} -m 644
+INSTALL_DIR=${INSTALL} -d
 
 SHELL = /bin/sh
 ## conditionally include an auto-generated.mk for dynamic definitions
@@ -42,13 +45,17 @@ PRC_NAME = wxWidgets.prc
 # TODO: Update all sources and resources
 
 BASE_CMN_SRC = \
+../../src/common/arrstr.cpp \
 ../../src/common/appbase.cpp \
 ../../src/common/archive.cpp \
+../../src/common/btncmn.cpp \
 ../../src/common/clntdata.cpp \
 ../../src/common/cmdline.cpp \
 ../../src/common/config.cpp \
+../../src/common/convauto.cpp \
 ../../src/common/datetime.cpp \
 ../../src/common/datstrm.cpp \
+../../src/common/dcbufcmn.cpp \
 ../../src/common/dircmn.cpp \
 ../../src/common/dynarray.cpp \
 ../../src/common/dynlib.cpp \
@@ -84,15 +91,20 @@ BASE_CMN_SRC = \
 ../../src/common/strconv.cpp \
 ../../src/common/stream.cpp \
 ../../src/common/string.cpp \
+../../src/common/stringimpl.cpp \
+../../src/common/stringops.cpp \
+../../src/common/strvararg.cpp \
 ../../src/common/sysopt.cpp \
 ../../src/common/textbuf.cpp \
 ../../src/common/textfile.cpp \
 ../../src/common/tokenzr.cpp \
 ../../src/common/txtstrm.cpp \
+../../src/common/unichar.cpp \
 ../../src/common/uri.cpp \
 ../../src/common/variant.cpp \
 ../../src/common/wfstream.cpp \
-../../src/common/wxchar.cpp \
+../../src/common/wxcrt.cpp \
+../../src/common/wxprintf.cpp \
 ../../src/common/xti.cpp \
 ../../src/common/xtistrm.cpp \
 ../../src/common/zipstrm.cpp \
@@ -130,6 +142,7 @@ NET_CMN_SRC = \
 ../../src/common/url.cpp
 
 PALMOS_LOWLEVEL_SRC = \
+../../src/palmos/stdall.c \
 ../../src/palmos/app.cpp \
 ../../src/palmos/bitmap.cpp \
 ../../src/palmos/brush.cpp \
@@ -280,6 +293,7 @@ GUI_CMN_SRC = \
 ../../src/common/settcmn.cpp \
 ../../src/common/sizer.cpp \
 ../../src/common/statbar.cpp \
+../../src/common/stattextcmn.cpp \
 ../../src/common/stockitem.cpp \
 ../../src/common/tbarbase.cpp \
 ../../src/common/textcmn.cpp \
@@ -451,6 +465,9 @@ $(XML_SRC) \
 $(OPENGL_SRC) \
 ../../src/palmos/progdlg.cpp
 
+#include othersrc.mak
+#SOURCES += $(OTHER_SRC)
+
 RESOURCES = ../../include/wx/palmos/wxWidgets.xrd ../../include/wx/palmos/Version.xrd
 DEFS_FILE = ../../include/wx/palmos/wxWidgets.def
 SLD_FILE = ../../include/wx/palmos/wxWidgets.sld
@@ -500,7 +517,10 @@ DEBUG_OR_RELEASE=Debug
 # Set the target platform for the build; either Device or Simulator
 # Use Device as a target for emulator builds.
 #
-TARGET_PLATFORM=Simulator
+#TARGET_PLATFORM=Simulator
+TARGET_PLATFORM=Device
+
+#TARGET_FORMAT=PalmOS4
 
 # Specify the level of optimization that you want:
 # NONE, SOME, FULL, INTRAPROCEDURAL, INTERPROCEDURAL, INLINING.
@@ -535,7 +555,8 @@ ADDITIONAL_SIM_LINK_LIBRARIES =
 # Additionally, you must explicly specify the "-I" prior to each
 # path included in this variable.  Spaces are used to separate
 # each path from each other.
-LOCAL_INCLUDE_PATHS = -Irsc -I../../lib/gcc_lib/palmos -I../../include
+incdir=../../lib/gcc_lib/palmos
+LOCAL_INCLUDE_PATHS = -Irsc -I$(incdir) -I../../include
 LOCAL_SIM_INCLUDE_PATHS = $(LOCAL_INCLUDE_PATHS)
 
 # Additional paths to look for #include <header>

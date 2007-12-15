@@ -288,6 +288,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/palmos/dir.cpp
     src/palmos/prefconf.cpp
     src/palmos/snglinst.cpp
+    src/palmos/stdall.c
     src/palmos/thread.cpp
     src/palmos/utils.cpp
     src/palmos/utilsexc.cpp
@@ -303,6 +304,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/palmos/apptrait.h
     wx/palmos/chkconf.h
     wx/palmos/mimetype.h
+    wx/palmos/missing.h
     wx/palmos/stdpaths.h
 </set>
 

@@ -403,11 +403,9 @@ void wxStripExtension(wxString& buffer)
 template<typename CharType>
 static CharType *wxDoRealPath (CharType *path)
 {
+  static const CharType SEP = wxFILE_SEP_PATH;
 #ifdef __WXMSW__
-  static const CharType SEP = wxT('\\');
   wxUnix2DosFilename(path);
-#else
-  static const CharType SEP = wxT('/');
 #endif
   if (path[0] && path[1]) {
     /* MATTHEW: special case "/./x" */
@@ -539,11 +537,11 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
     trimchars[2] = wxT('\t');
     trimchars[3] = 0;
 
+    static const CharType SEP = wxFILE_SEP_PATH;
 #ifdef __WXMSW__
-    const CharType     SEP = wxT('\\');
-#else
-    const CharType     SEP = wxT('/');
+    //wxUnix2DosFilename(path);
 #endif
+
     buf[0] = wxT('\0');
     if (name.empty())
         return buf;

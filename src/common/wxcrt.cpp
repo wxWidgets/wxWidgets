@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/crt.h"
+#include "wx/strconv.h" // wxMBConv::cWC2MB()
 
 #define _ISOC9X_SOURCE 1 // to get vsscanf()
 #define _BSD_SOURCE    1 // to still get strdup()
@@ -29,12 +30,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
     #include <time.h>
     #include <locale.h>
 #else
     #include "wx/msw/wince/time.h"
 #endif
+#endif // !__WXPALMOS5__
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"

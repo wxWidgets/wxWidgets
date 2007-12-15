@@ -7,7 +7,7 @@ endif
 
 # This value is unescaped.  Either quote the value or escape special characters when you use it.
 ifeq ($(SDK_LOCATION), )
-   SDK_LOCATION = C:/Program Files/PalmSource/Palm OS Developer Suite/sdk-6/
+   SDK_LOCATION = C:/Program Files/PalmSource/Palm OS Developer Suite/sdk-6.1/
 endif
 
 ifeq ($(SDK_VERSION), )
@@ -34,24 +34,28 @@ ifeq ($(VERSION), )
    VERSION = 1
 endif
 
-ifeq ($(DB_RESET_INSTALL), )
-   DB_RESET_INSTALL = false
+ifeq ($(PROJECT_VERSION), )
+   PROJECT_VERSION = 10100
 endif
 
 ifeq ($(SDK), )
    SDK = com.palmsource.eclipse.sdk.palmos6
 endif
 
+ifeq ($(DB_RESET_INSTALL), )
+   DB_RESET_INSTALL = false
+endif
+
 ifeq ($(APP_NAME), )
    APP_NAME = wxWidgets
 endif
 
-ifeq ($(OS_API), )
-   OS_API = Protein
-endif
-
 ifeq ($(PROJECT_NAME), )
    PROJECT_NAME = wxWidgets
+endif
+
+ifeq ($(OS_API), )
+   OS_API = Protein
 endif
 
 ifeq ($(PROJECT_TYPE), )

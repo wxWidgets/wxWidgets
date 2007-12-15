@@ -17,6 +17,8 @@
 // headers
 // ---------------------------------------------------------------------------
 
+#include <string.h>
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -25,6 +27,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/image.h"
     #include "wx/window.h"
     #include "wx/dc.h"
     #include "wx/utils.h"
@@ -39,16 +42,20 @@
 #endif
 
 #include "wx/sysopt.h"
-#include "wx/dynload.h"
+#include "wx/dynlib.h"
 
 #ifdef wxHAVE_RAW_BITMAP
 #include "wx/rawbmp.h"
 #endif
 
-#include <string.h>
+#include "wx/palmos/dc.h"
 
 #ifndef AC_SRC_ALPHA
-#define AC_SRC_ALPHA 1
+    #define AC_SRC_ALPHA 1
+#endif
+
+#ifndef LAYOUT_RTL
+    #define LAYOUT_RTL 1
 #endif
 
 /* Quaternary raster codes */
@@ -56,18 +63,48 @@
 #define MAKEROP4(fore,back) (DWORD)((((back) << 8) & 0xFF000000) | (fore))
 #endif
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxDCBase)
+// apparently with MicroWindows it is possible that HDC is 0 so we have to
+// check for this ourselves
+#ifdef __WXMICROWIN__
+    #define WXMICROWIN_CHECK_HDC if ( !GetHDC() ) return;
+    #define WXMICROWIN_CHECK_HDC_RET(x) if ( !GetHDC() ) return x;
+#else
+    #define WXMICROWIN_CHECK_HDC
+    #define WXMICROWIN_CHECK_HDC_RET(x)
+#endif
+
+IMPLEMENT_ABSTRACT_CLASS(wxPalmDCImpl, wxDCImpl)
 
 // ---------------------------------------------------------------------------
 // constants
 // ---------------------------------------------------------------------------
 
-static const int VIEWPORT_EXTENT = 1000;
+// ROPs which don't have standard names (see "Ternary Raster Operations" in the
+// MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
+#define DSTCOPY 0x00AA0029      // a.k.a. NOP operation
 
-static const int MM_POINTS = 9;
-static const int MM_METRIC = 10;
+// ----------------------------------------------------------------------------
+// macros for logical <-> device coords conversion
+// ----------------------------------------------------------------------------
 
-#define DSTCOPY 0x00AA0029
+/*
+   We currently let Windows do all the translations itself so these macros are
+   not really needed (any more) but keep them to enhance readability of the
+   code by allowing to see where are the logical and where are the device
+   coordinates used.
+ */
+
+#ifdef __WXWINCE__
+    #define XLOG2DEV(x) ((x-m_logicalOriginX)*m_signX)
+    #define YLOG2DEV(y) ((y-m_logicalOriginY)*m_signY)
+    #define XDEV2LOG(x) ((x)*m_signX+m_logicalOriginX)
+    #define YDEV2LOG(y) ((y)*m_signY+m_logicalOriginY)
+#else
+    #define XLOG2DEV(x) (x)
+    #define YLOG2DEV(y) (y)
+    #define XDEV2LOG(x) (x)
+    #define YDEV2LOG(y) (y)
+#endif
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -77,27 +114,77 @@ static const int MM_METRIC = 10;
 // private classes
 // ----------------------------------------------------------------------------
 
+#if wxUSE_DYNLIB_CLASS
+
+// helper class to cache dynamically loaded libraries and not attempt reloading
+// them if it fails
+class wxOnceOnlyDLLLoader
+{
+public:
+    // ctor argument must be a literal string as we don't make a copy of it!
+    wxOnceOnlyDLLLoader(const wxChar *dllName)
+        : m_dllName(dllName)
+    {
+    }
+
+
+    // return the symbol with the given name or NULL if the DLL not loaded
+    // or symbol not present
+    void *GetSymbol(const wxChar *name)
+    {
+        // we're prepared to handle errors here
+        wxLogNull noLog;
+
+        if ( m_dllName )
+        {
+            m_dll.Load(m_dllName);
+
+            // reset the name whether we succeeded or failed so that we don't
+            // try again the next time
+            m_dllName = NULL;
+        }
+
+        return m_dll.IsLoaded() ? m_dll.GetSymbol(name) : NULL;
+    }
+
+    void Unload()
+    {
+        if ( m_dll.IsLoaded() )
+        {
+            m_dll.Unload();
+        }
+    }
+
+private:
+    wxDynamicLibrary m_dll;
+    const wxChar *m_dllName;
+};
+
+#endif // wxUSE_DYNLIB_CLASS
+
 // ===========================================================================
 // implementation
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-// wxDC
+// wxPalmDCImpl
 // ---------------------------------------------------------------------------
 
-// Default constructor
-wxDC::wxDC()
+wxPalmDCImpl::wxPalmDCImpl( wxDC *owner, WXHDC hDC ) :
+    wxDCImpl( owner )
 {
+    Init();
+    m_hDC = hDC;
 }
 
-wxDC::~wxDC()
+wxPalmDCImpl::~wxPalmDCImpl()
 {
 }
 
 // This will select current objects out of the DC,
 // which is what you have to do before deleting the
 // DC.
-void wxDC::SelectOldObjects(WXHDC dc)
+void wxPalmDCImpl::SelectOldObjects(WXHDC dc)
 {
 }
 
@@ -105,29 +192,30 @@ void wxDC::SelectOldObjects(WXHDC dc)
 // clipping
 // ---------------------------------------------------------------------------
 
-void wxDC::UpdateClipBox()
+void wxPalmDCImpl::UpdateClipBox()
 {
 }
 
 void
-wxDC::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+wxPalmDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
 {
 }
 
 // common part of DoSetClippingRegion() and DoSetClippingRegionAsRegion()
-void wxDC::SetClippingHrgn(WXHRGN hrgn)
+void wxPalmDCImpl::SetClippingHrgn(WXHRGN hrgn)
+{
+    wxCHECK_RET( hrgn, wxT("invalid clipping region") );
+}
+
+void wxPalmDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
 }
 
-void wxDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
+void wxPalmDCImpl::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
 }
 
-void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
-{
-}
-
-void wxDC::DestroyClippingRegion()
+void wxPalmDCImpl::DestroyClippingRegion()
 {
 }
 
@@ -135,17 +223,17 @@ void wxDC::DestroyClippingRegion()
 // query capabilities
 // ---------------------------------------------------------------------------
 
-bool wxDC::CanDrawBitmap() const
+bool wxPalmDCImpl::CanDrawBitmap() const
 {
     return false;
 }
 
-bool wxDC::CanGetTextExtent() const
+bool wxPalmDCImpl::CanGetTextExtent() const
 {
     return false;
 }
 
-int wxDC::GetDepth() const
+int wxPalmDCImpl::GetDepth() const
 {
     return 0;
 }
@@ -154,51 +242,58 @@ int wxDC::GetDepth() const
 // drawing
 // ---------------------------------------------------------------------------
 
-void wxDC::Clear()
+void wxPalmDCImpl::Clear()
 {
 }
 
-bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
-{
-    return false;
-}
-
-bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+bool wxPalmDCImpl::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
+                       wxCoord WXUNUSED_IN_WINCE(y),
+                       const wxColour& WXUNUSED_IN_WINCE(col),
+                       int WXUNUSED_IN_WINCE(style))
 {
     return false;
 }
 
-void wxDC::DoCrossHair(wxCoord x, wxCoord y)
+bool wxPalmDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+{
+    return false;
+}
+
+void wxPalmDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
 }
 
-void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxPalmDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
 }
 
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
 // and ending at (x2, y2)
-void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
+void wxPalmDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
                      wxCoord x2, wxCoord y2,
                      wxCoord xc, wxCoord yc)
 {
 }
 
-void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
+void wxPalmDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
                            wxCoord width, wxCoord height)
 {
 }
 
-void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
+void wxPalmDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
 }
 
-void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
+void wxPalmDCImpl::DoDrawPolygon(int n,
+                         wxPoint points[],
+                         wxCoord xoffset,
+                         wxCoord yoffset,
+                         int WXUNUSED_IN_WINCE(fillStyle))
 {
 }
 
 void
-wxDC::DoDrawPolyPolygon(int n,
+wxPalmDCImpl::DoDrawPolyPolygon(int n,
                         int count[],
                         wxPoint points[],
                         wxCoord xoffset,
@@ -207,43 +302,50 @@ wxDC::DoDrawPolyPolygon(int n,
 {
 }
 
-void wxDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
+void wxPalmDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
 }
 
-void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxPalmDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
 }
 
-void wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
+void wxPalmDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
 }
 
-void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxPalmDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
 }
 
-void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
+#if wxUSE_SPLINES
+void wxPalmDCImpl::DoDrawSpline(const wxPointList *points)
+{
+}
+#endif
+
+// Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
+void wxPalmDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
 }
 
-void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
+void wxPalmDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
 }
 
-void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
+void wxPalmDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
 {
 }
 
-void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
+void wxPalmDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
 }
 
-void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
+void wxPalmDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
 }
 
-void wxDC::DoDrawRotatedText(const wxString& text,
+void wxPalmDCImpl::DoDrawRotatedText(const wxString& text,
                              wxCoord x, wxCoord y,
                              double angle)
 {
@@ -255,62 +357,66 @@ void wxDC::DoDrawRotatedText(const wxString& text,
 
 #if wxUSE_PALETTE
 
-void wxDC::DoSelectPalette(bool realize)
+void wxPalmDCImpl::DoSelectPalette(bool realize)
 {
 }
 
-void wxDC::SetPalette(const wxPalette& palette)
+void wxPalmDCImpl::SetPalette(const wxPalette& palette)
 {
 }
 
-void wxDC::InitializePalette()
+void wxPalmDCImpl::InitializePalette()
 {
 }
 
 #endif // wxUSE_PALETTE
 
-void wxDC::SetFont(const wxFont& font)
+// SetFont/Pen/Brush() really ask to be implemented as a single template
+// function... but doing it is not worth breaking OpenWatcom build <sigh>
+
+void wxPalmDCImpl::SetFont(const wxFont& font)
 {
 }
 
-void wxDC::SetPen(const wxPen& pen)
+void wxPalmDCImpl::SetPen(const wxPen& pen)
 {
 }
 
-void wxDC::SetBrush(const wxBrush& brush)
+void wxPalmDCImpl::SetBrush(const wxBrush& brush)
 {
 }
 
-void wxDC::SetBackground(const wxBrush& brush)
+void wxPalmDCImpl::SetBackground(const wxBrush& brush)
 {
 }
 
-void wxDC::SetBackgroundMode(int mode)
+void wxPalmDCImpl::SetBackgroundMode(int mode)
 {
 }
 
-void wxDC::SetLogicalFunction(int function)
+void wxPalmDCImpl::SetLogicalFunction(int function)
 {
 }
 
-void wxDC::SetRop(WXHDC dc)
+void wxPalmDCImpl::SetRop(WXHDC dc)
 {
 }
 
-bool wxDC::StartDoc(const wxString& WXUNUSED(message))
+bool wxPalmDCImpl::StartDoc(const wxString& WXUNUSED(message))
 {
+    // We might be previewing, so return true to let it continue.
     return true;
 }
 
-void wxDC::EndDoc()
+void wxPalmDCImpl::EndDoc()
 {
 }
 
-void wxDC::StartPage()
+void wxPalmDCImpl::StartPage()
 {
 }
 
-void wxDC::EndPage()
+void wxPalmDCImpl::EndPage()
 {
 }
 
@@ -318,126 +424,96 @@ void wxDC::EndPage()
 // text metrics
 // ---------------------------------------------------------------------------
 
-wxCoord wxDC::GetCharHeight() const
+wxCoord wxPalmDCImpl::GetCharHeight() const
 {
     return 0;
 }
 
-wxCoord wxDC::GetCharWidth() const
+wxCoord wxPalmDCImpl::GetCharWidth() const
 {
     return 0;
 }
 
-void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
+void wxPalmDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxCoord *descent, wxCoord *externalLeading,
                            const wxFont *font) const
 {
 }
 
 
-bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
+// Each element of the array will be the width of the string up to and
+// including the coresoponding character in text.
+
+bool wxPalmDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
     return false;
 }
 
-
-
-
-void wxDC::SetMapMode(int mode)
+void wxPalmDCImpl::RealizeScaleAndOrigin()
 {
 }
 
-void wxDC::SetUserScale(double x, double y)
+void wxPalmDCImpl::SetMapMode(int mode)
 {
 }
 
-void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
+void wxPalmDCImpl::SetUserScale(double x, double y)
 {
 }
 
-void wxDC::SetSystemScale(double x, double y)
+void wxPalmDCImpl::SetAxisOrientation(bool xLeftRight,
+                              bool yBottomUp)
 {
 }
 
-void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
+void wxPalmDCImpl::SetLogicalOrigin(wxCoord x, wxCoord y)
 {
 }
 
-void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
+void wxPalmDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 {
-}
-
-// ---------------------------------------------------------------------------
-// coordinates transformations
-// ---------------------------------------------------------------------------
-
-wxCoord wxDC::DeviceToLogicalX(wxCoord x) const
-{
-    return 0;
-}
-
-wxCoord wxDC::DeviceToLogicalXRel(wxCoord x) const
-{
-    return 0;
-}
-
-wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
-{
-    return 0;
-}
-
-wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
-{
-    return 0;
-}
-
-wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
-{
-    return 0;
-}
-
-wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
-{
-    return 0;
-}
-
-wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
-{
-    return 0;
-}
-
-wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
-{
-    return 0;
 }
 
 // ---------------------------------------------------------------------------
 // bit blit
 // ---------------------------------------------------------------------------
 
-bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
-                  wxCoord width, wxCoord height,
-                  wxDC *source, wxCoord xsrc, wxCoord ysrc,
+bool wxPalmDCImpl::DoBlit(wxCoord dstX, wxCoord dstY,
+                  wxCoord dstWidth, wxCoord dstHeight,
+                  wxDC *source,
+                  wxCoord srcX, wxCoord srcY,
                   int rop, bool useMask,
-                  wxCoord xsrcMask, wxCoord ysrcMask)
+                  wxCoord srcMaskX, wxCoord srcMaskY)
 {
     return false;
 }
 
-void wxDC::DoGetSize(int *w, int *h) const
+bool wxPalmDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
+                         wxCoord dstWidth, wxCoord dstHeight,
+                         wxDC *source,
+                         wxCoord xsrc, wxCoord ysrc,
+                         wxCoord srcWidth, wxCoord srcHeight,
+                         int rop, bool useMask,
+                         wxCoord xsrcMask, wxCoord ysrcMask)
+{
+    return false;
+}
+
+void wxPalmDCImpl::GetDeviceSize(int *width, int *height) const
 {
 }
 
-void wxDC::DoGetSizeMM(int *w, int *h) const
+void wxPalmDCImpl::DoGetSizeMM(int *w, int *h) const
 {
 }
 
-wxSize wxDC::GetPPI() const
+wxSize wxPalmDCImpl::GetPPI() const
 {
     return wxSize(0, 0);
 }
 
-void wxDC::SetLogicalScale(double x, double y)
+// For use by wxWidgets only, unless custom units are required.
+void wxPalmDCImpl::SetLogicalScale(double x, double y)
 {
 }
 
@@ -447,11 +523,22 @@ void wxDC::SetLogicalScale(double x, double y)
 
 #if wxUSE_DC_CACHEING
 
-wxList wxDC::sm_bitmapCache;
-wxList wxDC::sm_dcCache;
+/*
+ * This implementation is a bit ugly and uses the old-fashioned wxList class, so I will
+ * improve it in due course, either using arrays, or simply storing pointers to one
+ * entry for the bitmap, and two for the DCs. -- JACS
+ */
+
+wxObjectList wxPalmDCImpl::sm_bitmapCache;
+wxObjectList wxPalmDCImpl::sm_dcCache;
 
 wxDCCacheEntry::wxDCCacheEntry(WXHBITMAP hBitmap, int w, int h, int depth)
 {
+    m_bitmap = hBitmap;
+    m_dc = 0;
+    m_width = w;
+    m_height = h;
+    m_depth = depth;
 }
 
 wxDCCacheEntry::wxDCCacheEntry(WXHDC hDC, int depth)
@@ -462,33 +549,34 @@ wxDCCacheEntry::~wxDCCacheEntry()
 {
 }
 
-wxDCCacheEntry* wxDC::FindBitmapInCache(WXHDC dc, int w, int h)
+wxDCCacheEntry* wxPalmDCImpl::FindBitmapInCache(WXHDC dc, int w, int h)
 {
     return NULL;
 }
 
-wxDCCacheEntry* wxDC::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
+wxDCCacheEntry* wxPalmDCImpl::FindDCInCache(wxDCCacheEntry* notThis, WXHDC dc)
 {
     return NULL;
 }
 
-void wxDC::AddToBitmapCache(wxDCCacheEntry* entry)
+void wxPalmDCImpl::AddToBitmapCache(wxDCCacheEntry* entry)
 {
 }
 
-void wxDC::AddToDCCache(wxDCCacheEntry* entry)
+void wxPalmDCImpl::AddToDCCache(wxDCCacheEntry* entry)
 {
 }
 
-void wxDC::ClearCache()
+void wxPalmDCImpl::ClearCache()
 {
 }
 
+// Clean up cache at app exit
 class wxDCModule : public wxModule
 {
 public:
     virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDC::ClearCache(); }
+    virtual void OnExit() { wxPalmDCImpl::ClearCache(); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDCModule)
@@ -497,3 +585,40 @@ private:
 IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 
 #endif // wxUSE_DC_CACHEING
+
+void wxPalmDCImpl::DoGradientFillLinear (const wxRect& rect,
+                                 const wxColour& initialColour,
+                                 const wxColour& destColour,
+                                 wxDirection nDirection)
+{
+}
+
+#if wxUSE_DYNLIB_CLASS
+
+wxLayoutDirection wxPalmDCImpl::GetLayoutDirection() const
+{
+    DWORD layout = wxGetDCLayout(GetHdc());
+
+    if ( layout == (DWORD)-1 )
+        return wxLayout_Default;
+
+    return layout & LAYOUT_RTL ? wxLayout_RightToLeft : wxLayout_LeftToRight;
+}
+
+void wxPalmDCImpl::SetLayoutDirection(wxLayoutDirection dir)
+{
+}
+
+#else // !wxUSE_DYNLIB_CLASS
+
+// we can't provide RTL support without dynamic loading, so stub it out
+wxLayoutDirection wxPalmDCImpl::GetLayoutDirection() const
+{
+    return wxLayout_Default;
+}
+
+void wxPalmDCImpl::SetLayoutDirection(wxLayoutDirection WXUNUSED(dir))
+{
+}
+
+#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
