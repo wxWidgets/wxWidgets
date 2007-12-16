@@ -30,6 +30,7 @@
 #include <ATSUnicode.h>
 #endif
 
+#include <map>
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
@@ -300,7 +301,7 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
                 CFRelease(symTraits);
             }
         }
-        // Create the font descriptor with our attributes and input size.
+        // Create the font descriptor with our attributes
         descriptor = CTFontDescriptorCreateWithAttributes(attributes);
         check(descriptor != NULL);
 
@@ -402,17 +403,46 @@ void wxFontRefData::MacFindFont()
                 }
             }
 
-            wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
+            
             CTFontSymbolicTraits traits = 0;
 
             if (m_weight == wxBOLD)
                 traits |= kCTFontBoldTrait;
             if (m_style == wxITALIC || m_style == wxSLANT)
                 traits |= kCTFontItalicTrait;
-
+     
+// use font descriptor caching
+#if 1
+            wxString lookupname = wxString::Format( "%s_%ld", m_faceName, traits );
+            
+            static std::map< std::wstring , wxCFRef< CTFontDescriptorRef > > fontdescriptorcache ;
+            
+            m_ctFontDescriptor = fontdescriptorcache[ std::wstring(lookupname.wc_str()) ];
+            if ( !m_ctFontDescriptor )
+            {
+                wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
+                m_ctFontDescriptor.reset( wxMacCreateCTFontDescriptor( cf, traits ) );
+                fontdescriptorcache[ std::wstring(lookupname.wc_str()) ] = m_ctFontDescriptor;
+            }
+#else
+            wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
             m_ctFontDescriptor.reset( wxMacCreateCTFontDescriptor( cf, traits ) );
-
+#endif
+            
+// use font caching
+#if 1
+            wxString lookupnameWithSize = wxString::Format( "%s_%ld_%ld", m_faceName, traits, m_pointSize );
+            
+            static std::map< std::wstring , wxCFRef< CTFontRef > > fontcache ;
+            m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];
+            if ( !m_ctFont )
+            {
+                m_ctFont.reset( CTFontCreateWithFontDescriptor( m_ctFontDescriptor, m_pointSize, NULL ) );
+                fontcache[ std::wstring(lookupnameWithSize.wc_str()) ] = m_ctFont;
+            }
+#else
             m_ctFont.reset( CTFontCreateWithFontDescriptor( m_ctFontDescriptor, m_pointSize, NULL ) );
+#endif
         }
 #if wxMAC_USE_ATSU_TEXT == 0
         OSStatus status = noErr;
