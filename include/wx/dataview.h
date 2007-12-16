@@ -677,7 +677,8 @@ public:
         m_col(-1),
         m_model(NULL),
         m_value(wxNullVariant),
-        m_column(NULL)
+        m_column(NULL),
+        m_pos(-1,-1)
         { }
 
     wxDataViewEvent(const wxDataViewEvent& event)
@@ -686,7 +687,8 @@ public:
         m_col(event.m_col),
         m_model(event.m_model),
         m_value(event.m_value),
-        m_column(event.m_column)
+        m_column(event.m_column),
+        m_pos(m_pos)
         { }
 
     wxDataViewItem GetItem() const { return m_item; }
@@ -704,6 +706,10 @@ public:
     // for wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only
     void SetDataViewColumn( wxDataViewColumn *col ) { m_column = col; }
     wxDataViewColumn *GetDataViewColumn() const { return m_column; }
+    
+    // for wxEVT_DATAVIEW_CONTEXT_MENU only
+    wxPoint GetPosition() const;
+    void SetPosition( int x, int y ) { m_pos.x = x; m_pos.y = y; }
 
     virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
 
@@ -713,6 +719,7 @@ protected:
     wxDataViewModel    *m_model;
     wxVariant           m_value;
     wxDataViewColumn   *m_column;
+    wxPoint             m_pos;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
@@ -729,6 +736,8 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, -1)
+    
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, -1)
 
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, -1)
@@ -753,6 +762,8 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_ITEM_EDITING_STARTED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_EDITING_STARTED, id, fn)
 #define EVT_DATAVIEW_ITEM_EDITING_DONE(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_EDITING_DONE, id, fn)
 #define EVT_DATAVIEW_ITEM_VALUE_CHANGED(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_VALUE_CHANGED, id, fn)
+
+#define EVT_DATAVIEW_ITEM_CONTEXT_MENU(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_CONTEXT_MENU, id, fn)
 
 #define EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_CLICK, id, fn)
 #define EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_RIGHT_CLICK, id, fn)
