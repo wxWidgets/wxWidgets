@@ -325,9 +325,16 @@ bool wxBitmap::CreateWithFormat(int width, int height, int dfbFormat)
 }
 
 #if wxUSE_IMAGE
-wxBitmap::wxBitmap(const wxImage& image, int depth)
+wxBitmap::wxBitmap(const wxImage& imageOrig, int depth)
 {
-    wxCHECK_RET( image.Ok(), wxT("invalid image") );
+    wxCHECK_RET( imageOrig.Ok(), wxT("invalid image") );
+
+    wxImage image(imageOrig);
+
+    // convert mask to alpha channel, because wxMask isn't implemented yet
+    // FIXME: don't do this, implement proper wxMask support
+    if ( image.HasMask() )
+        image.InitAlpha();
 
     DFBSurfacePixelFormat format = DepthToFormat(depth);
     if ( format == DSPF_UNKNOWN && image.HasAlpha() )
@@ -362,9 +369,6 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
                 return;
         }
     }
-
-    // FIXME: implement mask creation from image's mask (or alpha channel?)
-    wxASSERT_MSG( !image.HasMask(), "image masks are ignored for now" );
 }
 
 wxImage wxBitmap::ConvertToImage() const
