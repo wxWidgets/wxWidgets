@@ -103,7 +103,7 @@ public:
     virtual wxSize GetPPI() const;
 
     virtual void DestroyClippingRegion();
-    WXWindow GetWindow() const { return m_window; }
+    WXWindow X11GetWindow() const { return m_window; }
 
     virtual void ComputeScaleAndOrigin();
 

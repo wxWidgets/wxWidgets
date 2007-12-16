@@ -1487,6 +1487,14 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
     }
     else // use_bitmap_method
     {
+        wxDCImpl *impl = srcDC->GetImpl();
+        wxWindowDCImpl *x11_impl = wxDynamicCast(impl, wxWindowDCImpl);
+        if (!x11_impl)
+        {
+            SetLogicalFunction( old_logical_func );
+            return false;
+        }
+        
         if ((width != ww) || (height != hh))
         {
             /* Draw source window into a bitmap as we cannot scale
@@ -1506,7 +1514,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
 
             // copy including child window contents
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, IncludeInferiors );
-            XCopyArea( (Display*) m_display, (Window) srcDC->GetWindow(), (Window) bitmap.GetPixmap(),
+            XCopyArea( (Display*) m_display, (Window) x11_impl->X11GetWindow(), (Window) bitmap.GetPixmap(),
                        (GC) m_penGC, xsrc, ysrc, width, height, 0, 0 );
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, ClipByChildren );
 
@@ -1524,10 +1532,10 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
         else
         {
             // No scaling and not a memory dc with a mask either
-
+            
             // copy including child window contents
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, IncludeInferiors );
-            XCopyArea( (Display*) m_display, (Window) srcDC->GetWindow(), (Window) m_x11window,
+            XCopyArea( (Display*) m_display, (Window) x11_impl->X11GetWindow(), (Window) m_x11window,
                        (GC) m_penGC, xsrc, ysrc, width, height, xx, yy );
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, ClipByChildren );
         }
