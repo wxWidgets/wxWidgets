@@ -1224,7 +1224,7 @@ void wxDataViewColumn::SetInternalWidth( int width )
 
 void wxDataViewColumn::SetWidth( int width )
 {
-    m_owner->m_headerArea->UpdateDisplay();
+    if (m_owner->m_headerArea) m_owner->m_headerArea->UpdateDisplay();
 
     SetInternalWidth(width);
 }
