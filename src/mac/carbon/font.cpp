@@ -413,7 +413,7 @@ void wxFontRefData::MacFindFont()
      
 // use font descriptor caching
 #if 1
-            wxString lookupname = wxString::Format( "%s_%ld", m_faceName, traits );
+            wxString lookupname = wxString::Format( "%s_%ld", m_faceName.c_str(), traits );
             
             static std::map< std::wstring , wxCFRef< CTFontDescriptorRef > > fontdescriptorcache ;
             
@@ -431,7 +431,7 @@ void wxFontRefData::MacFindFont()
             
 // use font caching
 #if 1
-            wxString lookupnameWithSize = wxString::Format( "%s_%ld_%ld", m_faceName, traits, m_pointSize );
+            wxString lookupnameWithSize = wxString::Format( "%s_%ld_%ld", m_faceName.c_str(), traits, m_pointSize );
             
             static std::map< std::wstring , wxCFRef< CTFontRef > > fontcache ;
             m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];
