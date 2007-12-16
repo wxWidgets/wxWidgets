@@ -175,7 +175,7 @@ int wxDialog::ShowModal()
     // forbidden
     if ( !GetParent() && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
     {
-        wxWindow *parent = wxTheApp->GetTopWindow();
+        wxWindow * const parent = GetParentForModalDialog();
         if ( parent && parent != this )
         {
             m_parent = parent;
