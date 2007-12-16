@@ -3233,8 +3233,8 @@ void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
 
 static gboolean
 gtk_dataview_motion_notify_callback( GtkWidget *widget,
-                                   GdkEventMotion *gdk_event,
-                                   wxDataViewCtrl *dv )
+                                     GdkEventMotion *gdk_event,
+                                     wxDataViewCtrl *dv )
 {
     if (gdk_event->is_hint)
     {
@@ -3273,6 +3273,47 @@ gtk_dataview_motion_notify_callback( GtkWidget *widget,
     return FALSE;
 }
 
+//-----------------------------------------------------------------------------
+// "button_press_event"
+//-----------------------------------------------------------------------------
+
+static gboolean
+gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
+                                    GdkEventButton *gdk_event,
+                                    wxDataViewCtrl *dv )
+{
+    if ((gdk_event->button == 3) && (gdk_event->type == GDK_BUTTON_PRESS))
+    {
+        GtkTreePath *path = NULL;
+        GtkTreeViewColumn *column = NULL;
+        gint cell_x = 0;
+        gint cell_y = 0;
+        if (gtk_tree_view_get_path_at_pos(
+            GTK_TREE_VIEW(dv->GtkGetTreeView()),
+            (int) gdk_event->x, (int) gdk_event->y,
+            &path,
+            &column,
+            &cell_x,
+            &cell_y))
+        {
+            if (path)
+            {
+                GtkTreeIter iter;
+                dv->GtkGetInternal()->get_iter( &iter, path );
+
+                wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, dv->GetId() );
+                wxDataViewItem item( (void*) iter.user_data );;
+                event.SetItem( item );
+                event.SetModel( dv->GetModel() );
+                bool ret = dv->HandleWindowEvent( event );
+                gtk_tree_path_free( path );
+                return ret;
+             }
+        }
+    }
+
+    return FALSE;
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase)
 
@@ -3379,6 +3420,9 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     g_signal_connect (m_treeview, "motion_notify_event",
                       G_CALLBACK (gtk_dataview_motion_notify_callback), this);
 
+    g_signal_connect (m_treeview, "button_press_event",
+                      G_CALLBACK (gtk_dataview_button_press_callback), this);
+                      
     return true;
 }
 

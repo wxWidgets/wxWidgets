@@ -518,6 +518,8 @@ public:
     void OnHeaderRightClick( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
 
+    void OnContextMenu( wxDataViewEvent &event );
+
     void OnRightClick( wxMouseEvent &event );
     void OnGoto( wxCommandEvent &event);
 
@@ -609,6 +611,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderClick)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
+
+    EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
     
     EVT_RIGHT_UP(MyFrame::OnRightClick)
 END_EVENT_TABLE()
@@ -866,6 +870,15 @@ void MyFrame::OnCollapsed( wxDataViewEvent &event )
     
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, Item: %s", title );
+}
+
+void MyFrame::OnContextMenu( wxDataViewEvent &event )
+{
+    if (!m_log)
+        return;
+    
+    wxString title = m_music_model->GetTitle( event.GetItem() );
+    wxLogMessage("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s", title );
 }
 
 void MyFrame::OnHeaderClick( wxDataViewEvent &event )
