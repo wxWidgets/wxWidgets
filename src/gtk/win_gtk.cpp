@@ -10,6 +10,8 @@
 #include "wx/defs.h"
 #include "wx/gtk/win_gtk.h"
 
+#include <gdk/gdkx.h>
+
 /*
 wxPizza is a custom GTK+ widget derived from GtkFixed.  A custom widget
 is needed to adapt GTK+ to wxWidgets needs in 3 areas: scrolling, window
@@ -166,6 +168,8 @@ static void realize(GtkWidget* widget)
         else
             gdk_window_reparent(widget->window, pizza->m_backing_window, border_x, border_y);
         gdk_window_resize(widget->window, w, h);
+        
+        gdk_window_set_back_pixmap( pizza->m_backing_window, None, False );
     }
 }
 
