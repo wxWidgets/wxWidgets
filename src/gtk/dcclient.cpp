@@ -1439,17 +1439,16 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
         else
         {
             // No scaling and not a memory dc with a mask either
-#if wxUSE_NEW_DC
             GdkWindow* window = NULL;
             wxDCImpl *impl = source->GetImpl();
             wxWindowDCImpl *gtk_impl = wxDynamicCast(impl, wxWindowDCImpl);
             if (gtk_impl)
                 window = gtk_impl->GetGDKWindow();
-#else            
-            GdkWindow* window = source->GetGDKWindow();
-#endif
             if ( !window )
+            {
+                SetLogicalFunction( old_logical_func );
                 return false;
+            }
 
             // copy including child window contents
             gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
