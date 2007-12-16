@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/dc.h
 // Purpose:     wxDC class
-// Author:      Vadim Zeitlin
+// Author:      Vadim Zeitlin 
 // Modified by:
 // Created:     05/25/99
 // RCS-ID:      $Id$
@@ -187,7 +187,8 @@ public:
     virtual void DoGetSize(int *width, int *height) const = 0;
     void GetSize(int *width, int *height) const
     {
-        return DoGetSize(width, height);
+        DoGetSize(width, height);
+        return ;
     }
 
     wxSize GetSize() const
