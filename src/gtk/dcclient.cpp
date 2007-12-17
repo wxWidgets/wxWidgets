@@ -14,20 +14,18 @@
 #define XCopyPlane XCOPYPLANE
 #endif
 
-#include "wx/dc.h"
-#include "wx/dcclient.h"
+#include "wx/gtk/dcclient.h"
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/log.h"
     #include "wx/dcmemory.h"
-    #include "wx/math.h" // for floating-point functions
+    #include "wx/math.h"
     #include "wx/image.h"
     #include "wx/module.h"
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/scrolwin.h"
 
 #include "wx/gtk/private.h"
 
@@ -69,7 +67,7 @@ extern GtkWidget *wxGetRootWindow();
 // constants
 //-----------------------------------------------------------------------------
 
-const double RAD2DEG  = 180.0 / M_PI;
+static const double RAD2DEG  = 180.0 / M_PI;
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -83,8 +81,6 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 //-----------------------------------------------------------------------------
 // temporary implementation of the missing GDK function
 //-----------------------------------------------------------------------------
-
-#include "gdk/gdkprivate.h"
 
 static
 void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
@@ -1484,7 +1480,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     bool underlined = m_font.IsOk() && m_font.GetUnderlined();
 
-    const wxCharBuffer data = wxGTK_CONV( text );
+    wxCharBuffer data = wxGTK_CONV(text);
     if ( !data )
         return;
     size_t datalen = strlen(data);
@@ -1494,7 +1490,6 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     static bool pangoOk = !wx_pango_version_check(1, 16, 0);
 
     bool needshack = underlined && !pangoOk;
-    char *hackstring = NULL;
 
     if (needshack)
     {
@@ -1506,27 +1501,19 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         // empty space characters and give them a dummy colour attribute.
         // This will force Pango to underline the leading/trailing spaces, too.
 
-        // need to realloc the string to prepend & append our special characters
-        hackstring = (char*)malloc((datalen+7)*sizeof(char));
-
+        wxCharBuffer data_tmp(datalen + 6);
         // copy the leading U+200C ZERO WIDTH NON-JOINER encoded in UTF8 format
-        strcpy(hackstring, "\342\200\214");
-
+        memcpy(data_tmp.data(), "\342\200\214", 3);
         // copy the user string
-        memcpy(&hackstring[3], data, datalen);
-
+        memcpy(data_tmp.data() + 3, data, datalen);
         // copy the trailing U+200C ZERO WIDTH NON-JOINER encoded in UTF8 format
-        strcpy(&hackstring[datalen+3], "\342\200\214");
+        memcpy(data_tmp.data() + 3 + datalen, "\342\200\214", 3);
 
-        // the special characters that we added require 6 additional bytes:
+        data = data_tmp;
         datalen += 6;
+    }
 
-        pango_layout_set_text(m_layout, hackstring, datalen);
-    }
-    else
-    {
-        pango_layout_set_text(m_layout, data, datalen);
-    }
+    pango_layout_set_text(m_layout, data, datalen);
 
     if (underlined)
     {
@@ -1621,9 +1608,6 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     height = wxCoord(height / m_scaleY);
     CalcBoundingBox (x + width, y + height);
     CalcBoundingBox (x, y);
-
-    if (hackstring)
-        free(hackstring);
 }
 
 
