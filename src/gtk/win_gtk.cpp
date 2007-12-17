@@ -10,8 +10,6 @@
 #include "wx/defs.h"
 #include "wx/gtk/win_gtk.h"
 
-#include <gdk/gdkx.h>
-
 /*
 wxPizza is a custom GTK+ widget derived from GtkFixed.  A custom widget
 is needed to adapt GTK+ to wxWidgets needs in 3 areas: scrolling, window
@@ -66,29 +64,28 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
 
         if (pizza->m_is_scrollable)
         {
-            // backing window is inside border
+            // two windows, both same size
             gdk_window_move_resize(pizza->m_backing_window,
                 alloc->x + border_x, alloc->y + border_y, w, h);
+            if (is_resize)
+                gdk_window_resize(widget->window, w, h);
+        }
+        else if (pizza->m_backing_window)
+        {
+            // two windows, widget->window is smaller by border widths (need to
+            // move widget->window as well as resize because border can change)
+            gdk_window_move_resize(pizza->m_backing_window,
+                alloc->x, alloc->y, alloc->width, alloc->height);
+            gdk_window_move_resize(widget->window, border_x, border_y, w, h);
         }
         else
         {
-            // border window (or only window if
-            // no-scroll no-border) is full size
-            GdkWindow* window = pizza->m_backing_window;
-            if (window == NULL)
-                window = widget->window;
-            gdk_window_move_resize(
-                window, alloc->x, alloc->y, alloc->width, alloc->height);
+            // one window
+            gdk_window_move_resize(widget->window,
+                alloc->x, alloc->y, alloc->width, alloc->height);
         }
         if (is_resize && pizza->m_backing_window)
         {
-            // main window is inside border
-            if (pizza->m_is_scrollable)
-                gdk_window_resize(widget->window, w, h);
-            else
-                // need move as well as resize because border can change
-                gdk_window_move_resize(widget->window, border_x, border_y, w, h);
-
             // wxWidgets turns off redraw-on-allocate by default,
             // so border area needs to be invalidated
             if (border_x > 1 || border_y > 1)
@@ -168,8 +165,11 @@ static void realize(GtkWidget* widget)
         else
             gdk_window_reparent(widget->window, pizza->m_backing_window, border_x, border_y);
         gdk_window_resize(widget->window, w, h);
-        
-        gdk_window_set_back_pixmap( pizza->m_backing_window, None, False );
+
+        // Parts of m_backing_window which are supposed to be obscured may be
+        // exposed temporarily while resizing. Setting the backing pixmap to
+        // None prevents those areas from being briefly painted black.
+        gdk_window_set_back_pixmap(pizza->m_backing_window, NULL, false);
     }
 }
 
