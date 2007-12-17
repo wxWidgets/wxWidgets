@@ -51,8 +51,8 @@
 #include "cross.xbm"
 #define  num_hatches 6
 
-#define IS_15_PIX_HATCH(s) ((s)==wxCROSSDIAG_HATCH || (s)==wxHORIZONTAL_HATCH || (s)==wxVERTICAL_HATCH)
-#define IS_16_PIX_HATCH(s) ((s)!=wxCROSSDIAG_HATCH && (s)!=wxHORIZONTAL_HATCH && (s)!=wxVERTICAL_HATCH)
+#define IS_15_PIX_HATCH(s) ((s)==wxCROSS_HATCH || (s)==wxHORIZONTAL_HATCH || (s)==wxVERTICAL_HATCH)
+#define IS_16_PIX_HATCH(s) ((s)==wxBDIAGONAL_HATCH || (s)==wxCROSSDIAG_HATCH || (s)==wxFDIAGONAL_HATCH)
 
 
 static GdkPixmap  *hatches[num_hatches];
