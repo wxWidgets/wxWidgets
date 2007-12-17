@@ -2323,6 +2323,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/notebook.h
     wx/mac/palette.h
     wx/mac/pen.h
+    wx/mac/popupwin.h
     wx/mac/pnghand.h
     wx/mac/pngread.h
     wx/mac/printdlg.h
@@ -2406,6 +2407,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/notebook.h
     wx/mac/carbon/palette.h
     wx/mac/carbon/pen.h
+    wx/mac/carbon/popupwin.h
     wx/mac/carbon/pnghand.h
     wx/mac/carbon/pngread.h
     wx/mac/carbon/printdlg.h
