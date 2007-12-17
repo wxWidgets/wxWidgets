@@ -44,6 +44,10 @@ public:
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
 #endif
+#if wxUSE_THREADS && defined(__WXGTK20__)
+    virtual void MutexGuiEnter();
+    virtual void MutexGuiLeave();
+#endif
 
 #if (defined(__WXMAC__) || defined(__WXCOCOA__)) && wxUSE_STDPATHS
     virtual wxStandardPathsBase& GetStandardPaths();

@@ -1800,12 +1800,12 @@ static void DeleteThread(wxThread *This)
     }
 }
 
-void wxMutexGuiEnter()
+void wxMutexGuiEnterImpl()
 {
     gs_mutexGui->Lock();
 }
 
-void wxMutexGuiLeave()
+void wxMutexGuiLeaveImpl()
 {
     gs_mutexGui->Unlock();
 }

@@ -557,11 +557,11 @@ void wxThreadModule::OnExit()
 // not a mutex, so the names are a bit confusing
 // ----------------------------------------------------------------------------
 
-void WXDLLIMPEXP_BASE wxMutexGuiEnter()
+void wxMutexGuiEnterImpl()
 {
 }
 
-void WXDLLIMPEXP_BASE wxMutexGuiLeave()
+void wxMutexGuiLeaveImpl()
 {
 }
 

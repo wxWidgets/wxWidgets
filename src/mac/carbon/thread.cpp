@@ -1679,7 +1679,7 @@ void wxThreadModule::OnExit()
 // GUI Serialization copied from MSW implementation
 // ----------------------------------------------------------------------------
 
-void WXDLLIMPEXP_BASE wxMutexGuiEnter()
+void wxMutexGuiEnterImpl()
 {
     // this would dead lock everything...
     wxASSERT_MSG( !wxThread::IsMain(),
@@ -1701,7 +1701,7 @@ void WXDLLIMPEXP_BASE wxMutexGuiEnter()
     gs_critsectGui->Enter();
 }
 
-void WXDLLIMPEXP_BASE wxMutexGuiLeave()
+void wxMutexGuiLeaveImpl()
 {
     wxCriticalSectionLocker enter(*gs_critsectWaitingForGui);
 

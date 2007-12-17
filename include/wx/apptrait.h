@@ -133,6 +133,11 @@ public:
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) = 0;
 #endif
 
+#if wxUSE_THREADS
+    virtual void MutexGuiEnter();
+    virtual void MutexGuiLeave();
+#endif
+
     // functions returning port-specific information
     // ------------------------------------------------------------------------
 

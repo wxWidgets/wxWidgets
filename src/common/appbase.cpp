@@ -664,6 +664,31 @@ void wxAppTraitsBase::SetLocale()
 }
 #endif
 
+#if wxUSE_THREADS
+void wxMutexGuiEnterImpl();
+void wxMutexGuiLeaveImpl();
+
+void wxAppTraitsBase::MutexGuiEnter()
+{
+    wxMutexGuiEnterImpl();
+}
+
+void wxAppTraitsBase::MutexGuiLeave()
+{
+    wxMutexGuiLeaveImpl();
+}
+
+void WXDLLIMPEXP_BASE wxMutexGuiEnter()
+{
+    wxAppConsoleBase::GetInstance()->GetTraits()->MutexGuiEnter();
+}
+
+void WXDLLIMPEXP_BASE wxMutexGuiLeave()
+{
+    wxAppConsoleBase::GetInstance()->GetTraits()->MutexGuiLeave();
+}
+#endif // wxUSE_THREADS
+
 #ifdef __WXDEBUG__
 
 bool wxAppTraitsBase::ShowAssertDialog(const wxString& msgOriginal)

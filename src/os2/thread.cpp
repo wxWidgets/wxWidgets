@@ -985,7 +985,7 @@ void WXDLLEXPORT wxWakeUpMainThread()
 #endif
 }
 
-void WXDLLEXPORT wxMutexGuiEnter()
+void wxMutexGuiEnterImpl()
 {
     // this would dead lock everything...
     wxASSERT_MSG( !wxThread::IsMain(),
@@ -1007,7 +1007,7 @@ void WXDLLEXPORT wxMutexGuiEnter()
     gs_pCritsectGui->Enter();
 }
 
-void WXDLLEXPORT wxMutexGuiLeave()
+void wxMutexGuiLeaveImpl()
 {
     wxCriticalSectionLocker enter(*gs_pCritsectWaitingForGui);
 
