@@ -53,9 +53,6 @@
 #include "verti.xbm"
 #include "cross.xbm"
 
-#define IS_15_PIX_HATCH(s) ((s)==wxCROSSDIAG_HATCH || (s)==wxHORIZONTAL_HATCH || (s)==wxVERTICAL_HATCH)
-#define IS_16_PIX_HATCH(s) ((s)!=wxCROSSDIAG_HATCH && (s)!=wxHORIZONTAL_HATCH && (s)!=wxVERTICAL_HATCH)
-
 static GdkPixmap* hatches[wxLAST_HATCH - wxFIRST_HATCH + 1];
 
 extern GtkWidget *wxGetRootWindow();
@@ -535,6 +532,46 @@ void wxWindowDCImpl::DoCrossHair( wxCoord x, wxCoord y )
     }
 }
 
+void wxWindowDCImpl::DrawingSetup(GdkGC*& gc, bool& originChanged)
+{
+    gc = m_brushGC;
+    GdkPixmap* pixmap = NULL;
+    const int style = m_brush.GetStyle();
+
+    if (style == wxSTIPPLE || style == wxSTIPPLE_MASK_OPAQUE)
+    {
+        const wxBitmap* stipple = m_brush.GetStipple();
+        if (stipple->IsOk())
+        {
+            if (style == wxSTIPPLE)
+                pixmap = stipple->GetPixmap();
+            else if (stipple->GetMask())
+            {
+                pixmap = stipple->GetPixmap();
+                gc = m_textGC;
+            }
+        }
+    }
+    else if (m_brush.IsHatch())
+    {
+        pixmap = GetHatch(style);
+    }
+
+    int origin_x = 0;
+    int origin_y = 0;
+    if (pixmap)
+    {
+        int w, h;
+        gdk_drawable_get_size(pixmap, &w, &h);
+        origin_x = m_deviceOriginX % w;
+        origin_y = m_deviceOriginY % h;
+    }
+
+    originChanged = origin_x || origin_y;
+    if (originChanged)
+        gdk_gc_set_ts_origin(gc, origin_x, origin_y);
+}
+
 void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
                             wxCoord xc, wxCoord yc )
 {
@@ -580,38 +617,14 @@ void wxWindowDCImpl::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
     {
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
-            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
-            {
-                gdk_gc_set_ts_origin( m_textGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_arc( m_gdkwindow, m_textGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
-                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            } else
-            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (m_brush.GetStyle() == wxSTIPPLE)
-            {
-                gdk_gc_set_ts_origin( m_brushGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            }
-            else
-            {
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
-            }
+            GdkGC* gc;
+            bool originChanged;
+            DrawingSetup(gc, originChanged);
+
+            gdk_draw_arc(m_gdkwindow, gc, true, xxc-r, yyc-r, 2*r, 2*r, alpha1, alpha2);
+
+            if (originChanged)
+                gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
@@ -650,38 +663,14 @@ void wxWindowDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxC
 
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
-            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
-            {
-                gdk_gc_set_ts_origin( m_textGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_arc( m_gdkwindow, m_textGC, TRUE, xx, yy, ww, hh, start, end );
-                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            } else
-            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (m_brush.GetStyle() == wxSTIPPLE)
-            {
-                gdk_gc_set_ts_origin( m_brushGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            }
-            else
-            {
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
-            }
+            GdkGC* gc;
+            bool originChanged;
+            DrawingSetup(gc, originChanged);
+
+            gdk_draw_arc(m_gdkwindow, gc, true, xx, yy, ww, hh, start, end);
+
+            if (originChanged)
+                gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
@@ -767,38 +756,14 @@ void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wx
     {
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
-            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
-            {
-                gdk_gc_set_ts_origin( m_textGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_polygon( m_gdkwindow, m_textGC, TRUE, gdkpoints, n );
-                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            } else
-            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-                gdk_draw_polygon( m_gdkwindow, m_brushGC, TRUE, gdkpoints, n );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-                gdk_draw_polygon( m_gdkwindow, m_brushGC, TRUE, gdkpoints, n );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (m_brush.GetStyle() == wxSTIPPLE)
-            {
-                gdk_gc_set_ts_origin( m_brushGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_polygon( m_gdkwindow, m_brushGC, TRUE, gdkpoints, n );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            }
-            else
-            {
-                gdk_draw_polygon( m_gdkwindow, m_brushGC, TRUE, gdkpoints, n );
-            }
+            GdkGC* gc;
+            bool originChanged;
+            DrawingSetup(gc, originChanged);
+
+            gdk_draw_polygon(m_gdkwindow, gc, true, gdkpoints, n);
+
+            if (originChanged)
+                gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
@@ -842,38 +807,14 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
     {
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
-            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
-            {
-                gdk_gc_set_ts_origin( m_textGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_rectangle( m_gdkwindow, m_textGC, TRUE, xx, yy, ww, hh );
-                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            } else
-            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (m_brush.GetStyle() == wxSTIPPLE)
-            {
-                gdk_gc_set_ts_origin( m_brushGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            }
-            else
-            {
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh );
-            }
+            GdkGC* gc;
+            bool originChanged;
+            DrawingSetup(gc, originChanged);
+
+            gdk_draw_rectangle(m_gdkwindow, gc, true, xx, yy, ww, hh);
+
+            if (originChanged)
+                gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
@@ -959,63 +900,19 @@ void wxWindowDCImpl::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width
 
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
-            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
-            {
-                gdk_gc_set_ts_origin( m_textGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_rectangle( m_gdkwindow, m_textGC, TRUE, xx+rr, yy, ww-dd+1, hh );
-                gdk_draw_rectangle( m_gdkwindow, m_textGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
-                gdk_draw_arc( m_gdkwindow, m_textGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_textGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_textGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_textGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
-                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            } else
-            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (m_brush.GetStyle() == wxSTIPPLE)
-            {
-                gdk_gc_set_ts_origin( m_brushGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            }
-            else
-            {
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
-                gdk_draw_rectangle( m_gdkwindow, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
-            }
+            GdkGC* gc;
+            bool originChanged;
+            DrawingSetup(gc, originChanged);
+
+            gdk_draw_rectangle(m_gdkwindow, gc, true, xx+rr, yy, ww-dd+1, hh);
+            gdk_draw_rectangle(m_gdkwindow, gc, true, xx, yy+rr, ww, hh-dd+1);
+            gdk_draw_arc(m_gdkwindow, gc, true, xx, yy, dd, dd, 90*64, 90*64);
+            gdk_draw_arc(m_gdkwindow, gc, true, xx+ww-dd, yy, dd, dd, 0, 90*64);
+            gdk_draw_arc(m_gdkwindow, gc, true, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64);
+            gdk_draw_arc(m_gdkwindow, gc, true, xx, yy+hh-dd, dd, dd, 180*64, 90*64);
+
+            if (originChanged)
+                gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
@@ -1053,38 +950,14 @@ void wxWindowDCImpl::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord
     {
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
-            if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
-            {
-                gdk_gc_set_ts_origin( m_textGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_arc( m_gdkwindow, m_textGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
-                gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            } else
-            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
-            {
-                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            } else
-            if (m_brush.GetStyle() == wxSTIPPLE)
-            {
-                gdk_gc_set_ts_origin( m_brushGC,
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
-                                      m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
-                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
-            }
-            else
-            {
-                gdk_draw_arc( m_gdkwindow, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
-            }
+            GdkGC* gc;
+            bool originChanged;
+            DrawingSetup(gc, originChanged);
+
+            gdk_draw_arc(m_gdkwindow, gc, true, xx, yy, ww, hh, 0, 360*64);
+
+            if (originChanged)
+                gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)

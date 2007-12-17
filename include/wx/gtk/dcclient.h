@@ -124,6 +124,9 @@ public:
 
     virtual GdkWindow *GetGDKWindow() const { return m_gdkwindow; }
 
+private:
+    void DrawingSetup(GdkGC*& gc, bool& originChanged);
+
     DECLARE_ABSTRACT_CLASS(wxWindowDCImpl)
 };
 
