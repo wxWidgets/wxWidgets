@@ -31,6 +31,7 @@
 #endif
 
 #include <map>
+#include <string>
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
