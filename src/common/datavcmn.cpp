@@ -326,6 +326,29 @@ wxDataViewIndexListModel::~wxDataViewIndexListModel()
 {
 }
 
+void wxDataViewIndexListModel::Reset( unsigned int new_size )
+{
+    if (m_useHash)
+    {
+        m_hash.Clear();
+    
+        // IDs are ordered until an item gets deleted or inserted
+        m_ordered = true;
+        
+        // build initial index
+        unsigned int i;
+        for (i = 1; i < new_size+1; i++)
+            m_hash.Add( (void*) i );
+        m_lastIndex = new_size + 1;
+    }
+    else
+    {
+        m_lastIndex = new_size-1;
+    }
+    
+    wxDataViewModel::Cleared();
+}
+
 void wxDataViewIndexListModel::RowPrepended()
 {
     if (m_useHash)
@@ -549,7 +572,7 @@ unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, 
         return 0;
 
     children = m_hash;
-
+    
     return m_hash.GetCount();
 }
 

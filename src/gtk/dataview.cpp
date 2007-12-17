@@ -525,9 +525,13 @@ wxgtk_tree_model_iter_next (GtkTreeModel  *tree_model,
                             GtkTreeIter   *iter)
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
+    
+    if (wxtree_model->stamp != iter->stamp)
+       wxPrintf( "crash\n" );
+
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
     g_return_val_if_fail (wxtree_model->stamp == iter->stamp, FALSE);
-
+    
     return wxtree_model->internal->iter_next( iter );
 }
 
@@ -1062,6 +1066,9 @@ public:
     virtual bool Cleared();
     virtual void Resort();
 
+    void SetGtkModel( GtkWxTreeModel *model ) { m_wxgtk_model = model; }
+
+private:
     GtkWxTreeModel      *m_wxgtk_model;
     wxDataViewModel     *m_wx_model;
     wxDataViewCtrl      *m_owner;
@@ -1184,10 +1191,15 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
 
 bool wxGtkDataViewModelNotifier::Cleared()
 {
-    // TODO: delete everything
-
+    gtk_tree_view_set_model( GTK_TREE_VIEW(m_owner->m_treeview), NULL );
+    
+    // this will create a new GTK model
     m_owner->GtkGetInternal()->Cleared();
+    
+    SetGtkModel( m_owner->GtkGetInternal()->GetGtkModel() );
 
+    gtk_tree_view_set_model( GTK_TREE_VIEW(m_owner->m_treeview), GTK_TREE_MODEL(m_wxgtk_model) );
+    
     return false;
 }
 
@@ -2610,6 +2622,22 @@ void wxDataViewCtrlInternal::BuildBranch( wxGtkTreeModelNode *node )
     }
 }
 
+bool wxDataViewCtrlInternal::Cleared()
+{
+    if (m_root)
+    {
+        delete m_root;
+        InitTree();
+    }   
+    
+    // Create new GTK model
+    g_object_unref( m_gtk_model );
+    m_gtk_model = wxgtk_tree_model_new();
+    m_gtk_model->internal = this;
+    
+    return true;
+}
+
 void wxDataViewCtrlInternal::Resort()
 {
     if (!m_wx_model->IsIndexListModel())
@@ -2662,11 +2690,6 @@ bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned 
     event.SetItem( item );
     m_owner->HandleWindowEvent( event );
 
-    return true;
-}
-
-bool wxDataViewCtrlInternal::Cleared()
-{
     return true;
 }
 
@@ -3332,6 +3355,7 @@ wxDataViewCtrl::~wxDataViewCtrl()
 void wxDataViewCtrl::Init()
 {
     m_notifier = NULL;
+    m_internal = NULL;
 }
 
 bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -3441,6 +3465,15 @@ void wxDataViewCtrl::OnInternalIdle()
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {
+    if (GetModel())
+    {
+        delete m_internal;
+        m_internal = NULL;
+        
+        delete m_notifier;
+        m_notifier = NULL;
+    }
+    
     if (!wxDataViewCtrlBase::AssociateModel( model ))
         return false;
 

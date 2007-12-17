@@ -367,7 +367,12 @@ public:
 
   virtual bool Cleared(void)
   {
-    return (this->m_dataViewControlPtr->RemoveItems() == noErr);
+    bool noFailureFlag = (this->m_dataViewControlPtr->RemoveItems() == noErr);
+    wxDataViewItem item;
+    wxDataViewItemArray array;
+    GetOwner()->GetChildren( item, array );
+    ItemsAdded( item, array );
+    return noFailureFlag;
   } /* Cleared(void) */
 
   virtual void Resort(void)

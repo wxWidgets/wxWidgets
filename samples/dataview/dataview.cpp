@@ -369,16 +369,22 @@ class MyListModel: public wxDataViewIndexListModel
 public:
     MyListModel() : 
 #ifdef __WXMAC__
-        wxDataViewIndexListModel( 1000 )
+        wxDataViewIndexListModel( 1000 + 100 )
 #else
-        wxDataViewIndexListModel( 100000 )
+        wxDataViewIndexListModel( 100000 + 100 )
 #endif
     {
+#ifdef __WXMAC__
+        m_virtualItems = 1000;
+#else
+        m_virtualItems = 100000;
+#endif
+
         unsigned int i;
         for (i = 0; i < 100; i++)
         {
             wxString str;
-            str.Printf( "row number %d", i );
+            str.Printf( "Test %d", i );
             m_array.Add( str );
         }
         
@@ -396,6 +402,9 @@ public:
     void DeleteItem( const wxDataViewItem &item )
     {
         unsigned int row = GetRow( item );
+        if (row >= m_array.GetCount())
+           return;
+           
         m_array.RemoveAt( row );
         RowDeleted( row );
     }
@@ -407,7 +416,8 @@ public:
         for (i = 0; i < items.GetCount(); i++)
         {
             unsigned int row = GetRow( items[i] );
-            rows.Add( row );
+            if (row < m_array.GetCount())
+                rows.Add( row );
         }
 
         // Sort in descending order so that the last
@@ -426,6 +436,8 @@ public:
     
     void AddMany()
     {
+        m_virtualItems += 1000;
+        Reset( m_array.GetCount() + m_virtualItems );
     }
 
     // implementation of base class virtuals to define model
@@ -443,11 +455,6 @@ public:
         return "string";
     }
     
-    virtual unsigned int GetRowCount()
-    {
-        return m_array.GetCount();
-    }
-    
     virtual void GetValue( wxVariant &variant, 
                            unsigned int row, unsigned int col ) const
     {
@@ -456,7 +463,7 @@ public:
             if (row >= m_array.GetCount())
             {
                 wxString str;
-                str.Printf( "row %d", row );
+                str.Printf( "row %d", row - m_array.GetCount() );
                 variant = str;
             }
             else
@@ -471,10 +478,10 @@ public:
         } else
         if (col==2)
         {
-            if ((row % 2) == 1)
-                variant = "Blue";
+            if (row >= m_array.GetCount())
+                variant = "plain";
             else
-                variant = "Italic";
+                variant = "blue italic";
         }
     }
     
@@ -483,10 +490,11 @@ public:
         if (col != 2)
             return false;
             
-        if ((row % 2) == 1)
+        if (row < m_array.GetCount())
+        {
             attr.SetColour( *wxBLUE );
-        else
             attr.SetItalic( true );
+        }
         
         return true;            
     }
@@ -508,6 +516,7 @@ public:
     
     wxArrayString    m_array;
     wxIcon           m_icon;
+    int              m_virtualItems;
 };
 
 // -------------------------------------

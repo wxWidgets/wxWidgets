@@ -73,6 +73,16 @@ Returns the position of given {\it item}.
 
 Override this to allow getting values from the model.
 
+
+\membersection{wxDataViewIndexListModel::Reset}\label{wxdataviewindexlistmodelreset}
+
+\func{void}{Reset}{\param{unsigned int }{new\_size}}
+
+Call this after if the data has to be read again from
+the model. This is useful after major changes when
+calling the methods below (possibly thousands of times)
+doesn't make sense.
+
 \membersection{wxDataViewIndexListModel::RowAppended}\label{wxdataviewindexlistmodelrowappended}
 
 \func{void}{RowAppended}{\void}

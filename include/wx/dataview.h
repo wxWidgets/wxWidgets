@@ -248,6 +248,7 @@ public:
     void RowsDeleted( const wxArrayInt &rows );
     void RowChanged( unsigned int row );
     void RowValueChanged( unsigned int row, unsigned int col );
+    void Reset( unsigned int new_size );
 
     // convert to/from row/wxDataViewItem
 

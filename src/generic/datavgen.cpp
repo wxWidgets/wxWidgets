@@ -2206,9 +2206,11 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 
 bool wxDataViewMainWindow::Cleared()
 {
-    SortPrepare();
-
     DestroyTree();
+    
+    SortPrepare();
+    BuildTree( GetOwner()->GetModel() );
+    
     UpdateDisplay();
 
     return true;
