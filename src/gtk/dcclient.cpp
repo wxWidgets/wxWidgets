@@ -52,14 +52,11 @@
 #include "horiz.xbm"
 #include "verti.xbm"
 #include "cross.xbm"
-#define  num_hatches 6
 
 #define IS_15_PIX_HATCH(s) ((s)==wxCROSSDIAG_HATCH || (s)==wxHORIZONTAL_HATCH || (s)==wxVERTICAL_HATCH)
 #define IS_16_PIX_HATCH(s) ((s)!=wxCROSSDIAG_HATCH && (s)!=wxHORIZONTAL_HATCH && (s)!=wxVERTICAL_HATCH)
 
-
-static GdkPixmap  *hatches[num_hatches];
-static GdkPixmap **hatch_bitmap = (GdkPixmap **) NULL;
+static GdkPixmap* hatches[wxLAST_HATCH - wxFIRST_HATCH + 1];
 
 extern GtkWidget *wxGetRootWindow();
 
@@ -77,6 +74,37 @@ static inline double dmax(double a, double b) { return a > b ? a : b; }
 static inline double dmin(double a, double b) { return a < b ? a : b; }
 
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+
+static GdkPixmap* GetHatch(int style)
+{
+    wxASSERT(style >= wxFIRST_HATCH && style <= wxLAST_HATCH);
+    const int i = style - wxFIRST_HATCH;
+    if (hatches[i] == NULL)
+    {
+        switch (style)
+        {
+        case wxBDIAGONAL_HATCH:
+            hatches[i] = gdk_bitmap_create_from_data(NULL, bdiag_bits, bdiag_width, bdiag_height);
+            break;
+        case wxCROSSDIAG_HATCH:
+            hatches[i] = gdk_bitmap_create_from_data(NULL, cdiag_bits, cdiag_width, cdiag_height);
+            break;
+        case wxCROSS_HATCH:
+            hatches[i] = gdk_bitmap_create_from_data(NULL, cross_bits, cross_width, cross_height);
+            break;
+        case wxFDIAGONAL_HATCH:
+            hatches[i] = gdk_bitmap_create_from_data(NULL, fdiag_bits, fdiag_width, fdiag_height);
+            break;
+        case wxHORIZONTAL_HATCH:
+            hatches[i] = gdk_bitmap_create_from_data(NULL, horiz_bits, horiz_width, horiz_height);
+            break;
+        case wxVERTICAL_HATCH:
+            hatches[i] = gdk_bitmap_create_from_data(NULL, verti_bits, verti_width, verti_height);
+            break;
+        }
+    }
+    return hatches[i];
+}
 
 //-----------------------------------------------------------------------------
 // temporary implementation of the missing GDK function
@@ -424,17 +452,6 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
     gdk_gc_set_clip_rectangle( m_brushGC, (GdkRectangle *) NULL );
     gdk_gc_set_clip_rectangle( m_textGC, (GdkRectangle *) NULL );
     gdk_gc_set_clip_rectangle( m_bgGC, (GdkRectangle *) NULL );
-
-    if (!hatch_bitmap)
-    {
-        hatch_bitmap    = hatches;
-        hatch_bitmap[0] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, bdiag_bits, bdiag_width, bdiag_height );
-        hatch_bitmap[1] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, cdiag_bits, cdiag_width, cdiag_height );
-        hatch_bitmap[2] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, fdiag_bits, fdiag_width, fdiag_height );
-        hatch_bitmap[3] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, cross_bits, cross_width, cross_height );
-        hatch_bitmap[4] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, horiz_bits, horiz_width, horiz_height );
-        hatch_bitmap[5] = gdk_bitmap_create_from_data( (GdkWindow *) NULL, verti_bits, verti_width, verti_height );
-    }
 }
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
@@ -2085,8 +2102,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
     if (m_brush.IsHatch())
     {
         gdk_gc_set_fill( m_brushGC, GDK_STIPPLED );
-        int num = m_brush.GetStyle() - wxBDIAGONAL_HATCH;
-        gdk_gc_set_stipple( m_brushGC, hatches[num] );
+        gdk_gc_set_stipple(m_brushGC, GetHatch(m_brush.GetStyle()));
     }
 }
 
@@ -2130,8 +2146,7 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
     if (m_backgroundBrush.IsHatch())
     {
         gdk_gc_set_fill( m_bgGC, GDK_STIPPLED );
-        int num = m_backgroundBrush.GetStyle() - wxBDIAGONAL_HATCH;
-        gdk_gc_set_stipple( m_bgGC, hatches[num] );
+        gdk_gc_set_stipple(m_bgGC, GetHatch(m_backgroundBrush.GetStyle()));
     }
 }
 
@@ -2535,4 +2550,10 @@ bool wxDCModule::OnInit()
 void wxDCModule::OnExit()
 {
     wxCleanUpGCPool();
+
+    for (int i = wxLAST_HATCH - wxFIRST_HATCH; i--; )
+    {
+        if (hatches[i])
+            g_object_unref(hatches[i]);
+    }
 }
