@@ -1559,72 +1559,52 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         pango_attr_list_unref(attrs);
     }
 
-    int w,h;
-
-    if (fabs(m_scaleY - 1.0) > 0.00001)
+    int oldSize = 0;
+    const bool isScaled = fabs(m_scaleY - 1.0) > 0.00001;
+    if (isScaled)
     {
          // If there is a user or actually any scale applied to
          // the device context, scale the font.
 
          // scale font description
-         gint oldSize = pango_font_description_get_size( m_fontdesc );
-         double size = oldSize;
-         size = size * m_scaleY;
-         pango_font_description_set_size( m_fontdesc, (gint)size );
+        oldSize = pango_font_description_get_size(m_fontdesc);
+        pango_font_description_set_size(m_fontdesc, int(oldSize * m_scaleY));
 
          // actually apply scaled font
          pango_layout_set_font_description( m_layout, m_fontdesc );
+    }
 
-         pango_layout_get_pixel_size( m_layout, &w, &h );
-         if ( m_backgroundMode == wxSOLID )
-         {
-            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
-            gdk_draw_rectangle(m_gdkwindow, m_textGC, TRUE, x, y, w, h);
-            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
-         }
+    int w, h;
+    pango_layout_get_pixel_size(m_layout, &w, &h);
+    if (m_backgroundMode == wxSOLID)
+    {
+        gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
+        gdk_draw_rectangle(m_gdkwindow, m_textGC, true, x, y, w, h);
+        gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
+    }
 
-         // Draw layout.
-         if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
-             gdk_draw_layout( m_gdkwindow, m_textGC, x-w, y, m_layout );
-         else
-             gdk_draw_layout( m_gdkwindow, m_textGC, x, y, m_layout );
+    // Draw layout.
+    int x_rtl = x;
+    if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
+        x_rtl -= w;
+    gdk_draw_layout(m_gdkwindow, m_textGC, x_rtl, y, m_layout);
 
+    if (isScaled)
+    {
          // reset unscaled size
          pango_font_description_set_size( m_fontdesc, oldSize );
 
          // actually apply unscaled font
          pango_layout_set_font_description( m_layout, m_fontdesc );
     }
-    else
-    {
-        pango_layout_get_pixel_size( m_layout, &w, &h );
-        if ( m_backgroundMode == wxSOLID )
-        {
-            gdk_gc_set_foreground(m_textGC, m_textBackgroundColour.GetColor());
-            gdk_draw_rectangle(m_gdkwindow, m_textGC, TRUE, x, y, w, h);
-            gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
-        }
-
-        // Draw layout.
-        if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
-            gdk_draw_layout( m_gdkwindow, m_textGC, x-w, y, m_layout );
-        else
-            gdk_draw_layout( m_gdkwindow, m_textGC, x, y, m_layout );
-    }
-
     if (underlined)
     {
         // undo underline attributes setting:
         pango_layout_set_attributes(m_layout, NULL);
     }
 
-    wxCoord width = w;
-    wxCoord height = h;
-
-    width = wxCoord(width / m_scaleX);
-    height = wxCoord(height / m_scaleY);
-    CalcBoundingBox (x + width, y + height);
-    CalcBoundingBox (x, y);
+    CalcBoundingBox(x + int(w / m_scaleX), y + int(h / m_scaleY));
+    CalcBoundingBox(x, y);
 }
 
 
