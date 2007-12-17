@@ -35,7 +35,7 @@ xcopy /s/q/i . "%BUILDDIR%" || (rmdir /s/q "%BUILDDIR%" &amp; exit 1)
 -->
 <xsl:template name="profile">
 <command>
-set BUILDDIR=%USERPROFILE%\build
+for %I in ("%USERPROFILE%") do set BUILDDIR=%~sI\build
 </command>
 </xsl:template>
 
@@ -73,6 +73,7 @@ cd /d "%BUILDDIR%"
 
 <xsl:template name="prologue-cygwin">
 call h:\cygwin\cyg-vars.bat
+PATH=%PATH%;%BUILDDIR%\lib
 cd /d "%BUILDDIR%"
 sh -c \
 </xsl:template>
