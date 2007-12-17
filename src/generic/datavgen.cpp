@@ -2048,6 +2048,13 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
+    if (!m_root)
+    {
+        m_count++;
+        UpdateDisplay();
+        return true;
+    }
+    
     SortPrepare();
 
     wxDataViewTreeNode * node;
@@ -2081,6 +2088,19 @@ void DestroyTreeHelper( wxDataViewTreeNode * node);
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                                        const wxDataViewItem& item)
 {
+    if (!m_root)
+    {
+        m_count--;
+        if( m_currentRow > GetRowCount() )
+            m_currentRow = m_count - 1;
+
+        m_selection.Empty();
+        
+        UpdateDisplay();
+
+        return true;
+    }
+
     wxDataViewTreeNode * node = FindNode(parent);
 
     wxCHECK_MSG( node != NULL, false, "item not found" );

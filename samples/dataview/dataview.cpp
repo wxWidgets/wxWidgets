@@ -353,6 +353,17 @@ private:
     bool                m_classicalMusicIsKnownToControl;
 };
 
+
+static int my_sort_reverse( int *v1, int *v2 )
+{
+   return *v2-*v1;
+}
+
+static int my_sort( int *v1, int *v2 )
+{
+   return *v1-*v2;
+}
+
 class MyListModel: public wxDataViewIndexListModel
 {
 public:
@@ -387,6 +398,34 @@ public:
         unsigned int row = GetRow( item );
         m_array.RemoveAt( row );
         RowDeleted( row );
+    }
+    
+    void DeleteItems( const wxDataViewItemArray &items )
+    {
+        wxArrayInt rows;
+        unsigned int i;
+        for (i = 0; i < items.GetCount(); i++)
+        {
+            unsigned int row = GetRow( items[i] );
+            rows.Add( row );
+        }
+
+        // Sort in descending order so that the last
+        // row will be deleted first. Otherwise the
+        // remaining indeces would all be wrong.
+        rows.Sort( my_sort_reverse );
+        for (i = 0; i < rows.GetCount(); i++)
+            m_array.RemoveAt( rows[i] );
+
+        // This is just to test if wxDataViewCtrl can
+        // cope with removing rows not sorted in 
+        // descending order
+        rows.Sort( my_sort );
+        RowsDeleted( rows );
+    }
+    
+    void AddMany()
+    {
     }
 
     // implementation of base class virtuals to define model
@@ -522,6 +561,7 @@ public:
 
     void OnRightClick( wxMouseEvent &event );
     void OnGoto( wxCommandEvent &event);
+    void OnAddMany( wxCommandEvent &event);
 
 private:
     wxDataViewCtrl* m_musicCtrl;
@@ -552,7 +592,7 @@ bool MyApp::OnInit(void)
 
     // build the first frame
     MyFrame *frame = 
-        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 40, 40, 800, 440);
+        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 40, 40, 800, 540);
     frame->Show(true);
 
     SetTopWindow(frame);
@@ -583,7 +623,8 @@ enum
      
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
-    ID_GOTO             = 202
+    ID_GOTO             = 202,
+    ID_ADD_MANY         = 203
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -595,6 +636,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
     EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
+    EVT_BUTTON( ID_ADD_MANY, MyFrame::OnAddMany)
     
     EVT_DATAVIEW_ITEM_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
     
@@ -696,9 +738,12 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer->Add( new wxButton( this, ID_DELETE_MUSIC, "Delete selected"), 0, wxALL, 10 );
     button_sizer->Add( new wxButton( this, ID_DELETE_YEAR, "Delete \"Year\" column"), 0, wxALL, 10 );
     button_sizer->Add( 10, 10, 1 );
-    button_sizer->Add( new wxButton( this, ID_PREPEND_LIST, "Prepend"), 0, wxALL, 10 );
-    button_sizer->Add( new wxButton( this, ID_DELETE_LIST, "Delete selected"), 0, wxALL, 10 );
-    button_sizer->Add( new wxButton( this, ID_GOTO, "Goto 50"), 0, wxALL, 10 );
+    wxFlexGridSizer *grid_sizer = new wxFlexGridSizer( 2, 2 );
+    grid_sizer->Add( new wxButton( this, ID_PREPEND_LIST, "Prepend"), 0, wxALL, 2 );
+    grid_sizer->Add( new wxButton( this, ID_DELETE_LIST, "Delete selected"), 0, wxALL, 2 );
+    grid_sizer->Add( new wxButton( this, ID_GOTO, "Goto 50"), 0, wxALL, 2 );
+    grid_sizer->Add( new wxButton( this, ID_ADD_MANY, "Add 1000"), 0, wxALL, 2 );
+    button_sizer->Add( grid_sizer, 0, wxALL, 10 );
     
     main_sizer->Add( button_sizer, 0, wxGROW, 0 );
 
@@ -783,9 +828,8 @@ void MyFrame::OnDeleteList( wxCommandEvent& WXUNUSED(event) )
 {
     wxDataViewItemArray items;
     int len = m_listCtrl->GetSelections( items );
-    for( int i = 0; i < len; i ++ )
-        if (items[i].IsOk())
-            m_list_model->DeleteItem( items[i] );
+    if (len > 0)
+        m_list_model->DeleteItems( items );
 }
 
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
@@ -924,6 +968,12 @@ void MyFrame::OnGoto(wxCommandEvent& WXUNUSED(event))
     wxDataViewItem item = m_list_model->GetItem( 50 );
     m_listCtrl->EnsureVisible(item,m_col);
 }
+
+void MyFrame::OnAddMany(wxCommandEvent& WXUNUSED(event))
+{
+    m_list_model->AddMany();
+}
+
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {

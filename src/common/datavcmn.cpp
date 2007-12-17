@@ -385,6 +385,8 @@ void wxDataViewIndexListModel::RowDeleted( unsigned int row )
 {
     if (m_useHash)
     {
+        m_ordered = false;
+        
         wxDataViewItem item( m_hash[row] );
         wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
         m_hash.RemoveAt( row );
@@ -394,6 +396,47 @@ void wxDataViewIndexListModel::RowDeleted( unsigned int row )
         wxDataViewItem item( (void*) row );
         wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
         m_lastIndex++;
+    }
+}
+
+static int my_sort( int *v1, int *v2 )
+{
+   return *v2-*v1;
+}
+
+void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
+{
+    wxArrayInt sorted = rows;
+    sorted.Sort( my_sort );
+    
+    if (m_useHash)
+    {
+        m_ordered = false;
+        
+        wxDataViewItemArray array;
+        unsigned int i;
+        for (i = 0; i < rows.GetCount(); i++)
+        {
+            wxDataViewItem item( m_hash[rows[i]] );
+            array.Add( item );
+        }
+        wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
+        
+        for (i = 0; i < sorted.GetCount(); i++)
+           m_hash.RemoveAt( sorted[i] );
+    }
+    else
+    {
+        wxDataViewItemArray array;
+        unsigned int i;
+        for (i = 0; i < sorted.GetCount(); i++)
+        {
+            wxDataViewItem item( (void*) sorted[i] );
+            array.Add( item );
+        }
+        wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
+    
+        m_lastIndex -= rows.GetCount();
     }
 }
 

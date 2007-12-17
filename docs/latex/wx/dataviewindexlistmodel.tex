@@ -91,6 +91,14 @@ Call this after a row has been changed.
 
 Call this after a row has been deleted.
 
+\membersection{wxDataViewIndexListModel::RowsDeleted}\label{wxdataviewindexlistmodelrowdeleted}
+
+\func{void}{RowsDeleted}{\param{const wxArrayInt &}{rows}}
+
+Call this after rows have been deleted. The array will internally
+get copied and sorted in descending order so that the rows with
+the highest position will be deleted first.
+
 \membersection{wxDataViewIndexListModel::RowInserted}\label{wxdataviewindexlistmodelrowinserted}
 
 \func{void}{RowInserted}{\param{unsigned int }{before}}
