@@ -176,10 +176,11 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
     PMResolution res;
     PMPrinter printer;
     PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
+#if 0 // MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
     PMPrinterGetOutputResolution( printer,  
         (PMPrintSettings) m_macPrintSettings,  &res) ;
     // TODO transfer ? into page format ?
+    // may fail !
 #else
     PMTag tag = kPMMaxSquareResolution;
     PMPrinterGetPrinterResolution(printer, tag, &res);
@@ -415,7 +416,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     PMResolution res;
     wxMacCarbonPrintData* nativeData = (wxMacCarbonPrintData*)
           (m_printDialogData.GetPrintData().GetNativeData());
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
+#if 0 // MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
     PMPrinter printer;
     PMSessionGetCurrentPrinter(nativeData->m_macPrintSession, &printer);
     PMPrinterGetOutputResolution( printer, nativeData->m_macPrintSettings, &res) ;
