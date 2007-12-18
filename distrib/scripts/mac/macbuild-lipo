@@ -16,8 +16,8 @@ do_lipo_build(){
     DIR="bld-$1"
     
     if [ "$1" = "ppc" ]; then
-        export CXX="g++-3.3 -arch ppc -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
-        export CC="gcc-3.3 -arch ppc -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+        export CXX="g++-3.3 -arch ppc -DMAC_OS_X_VERSION_MAX_ALLOWED=1040"
+        export CC="gcc-3.3 -arch ppc -DMAC_OS_X_VERSION_MAX_ALLOWED=1040"
         export MACOSX_DEPLOYMENT_TARGET=10.3
     else
         export CXX="g++-4.0 -arch i386"

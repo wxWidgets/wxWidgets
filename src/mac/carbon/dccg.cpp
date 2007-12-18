@@ -35,12 +35,16 @@
 #include "wx/mac/private.h"
 
 
-#ifndef wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-#define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
-#endif
-
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 typedef float CGFloat ;
+#endif
+
+#ifndef wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 1
+#else
+    #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
+#endif
 #endif
 
 //-----------------------------------------------------------------------------
@@ -1561,13 +1565,16 @@ void wxDC::SetLogicalFunction( int function )
 
     m_logicalFunction = function ;
 #if wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-    CGContextRef cgContext = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
-    if ( m_logicalFunction == wxCOPY )
-        CGContextSetBlendMode( cgContext, kCGBlendModeNormal ) ;
-    else if ( m_logicalFunction == wxINVERT )
-        CGContextSetBlendMode( cgContext, kCGBlendModeExclusion ) ;
-    else
-        CGContextSetBlendMode( cgContext, kCGBlendModeNormal ) ;
+    if ( CGContextSetBlendMode != 0 )
+    {
+        CGContextRef cgContext = ((wxMacCGContext*)(m_graphicContext))->GetNativeContext() ;
+        if ( m_logicalFunction == wxCOPY )
+            CGContextSetBlendMode( cgContext, kCGBlendModeNormal ) ;
+        else if ( m_logicalFunction == wxINVERT || m_logicalFunction == wxXOR )
+            CGContextSetBlendMode( cgContext, kCGBlendModeExclusion ) ;
+        else
+            CGContextSetBlendMode( cgContext, kCGBlendModeNormal ) ;
+    }
 #endif
 }
 
