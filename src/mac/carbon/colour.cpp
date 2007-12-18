@@ -26,6 +26,15 @@ wxColour::wxColour(const RGBColor& col)
     InitRGBColor(col);
 }
 
+wxColour::wxColour( const wxColour& col )
+{
+    m_red = col.m_red;
+    m_green = col.m_green;
+    m_blue = col.m_blue;
+    m_alpha = col.m_alpha;
+    m_cgColour = col.m_cgColour;
+}
+
 wxColour::wxColour(CGColorRef col)
 {
     InitCGColorRef(col);
@@ -51,6 +60,16 @@ wxColour& wxColour::operator=(const RGBColor& col)
 wxColour& wxColour::operator=(CGColorRef col)
 {
     InitCGColorRef(col);
+    return *this;
+}
+
+wxColour& wxColour::operator=(const wxColour& col)
+{
+    m_red = col.m_red;
+    m_green = col.m_green;
+    m_blue = col.m_blue;
+    m_alpha = col.m_alpha;
+    m_cgColour = col.m_cgColour;
     return *this;
 }
 
