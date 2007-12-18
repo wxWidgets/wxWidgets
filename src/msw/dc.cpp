@@ -282,7 +282,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
 wxColourChanger::wxColourChanger(wxMSWDCImpl& dc) : m_dc(dc)
 {
     const wxBrush& brush = dc.GetBrush();
-    if ( brush.Ok() && brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    if ( brush.IsOk() && brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
     {
         HDC hdc = GetHdcOf(dc);
         m_colFgOld = ::GetTextColor(hdc);
@@ -291,13 +291,13 @@ wxColourChanger::wxColourChanger(wxMSWDCImpl& dc) : m_dc(dc)
         // note that Windows convention is opposite to wxWidgets one, this is
         // why text colour becomes the background one and vice versa
         const wxColour& colFg = dc.GetTextForeground();
-        if ( colFg.Ok() )
+        if ( colFg.IsOk() )
         {
             ::SetBkColor(hdc, colFg.GetPixel());
         }
 
         const wxColour& colBg = dc.GetTextBackground();
-        if ( colBg.Ok() )
+        if ( colBg.IsOk() )
         {
             ::SetTextColor(hdc, colBg.GetPixel());
         }
@@ -378,7 +378,7 @@ void wxMSWDCImpl::SelectOldObjects(WXHDC dc)
         {
             ::SelectObject((HDC) dc, (HBITMAP) m_oldBitmap);
 #ifdef __WXDEBUG__
-            if (m_selectedBitmap.Ok())
+            if (m_selectedBitmap.IsOk())
             {
                 m_selectedBitmap.SetSelectedInto(NULL);
             }
@@ -601,8 +601,8 @@ void wxMSWDCImpl::Clear()
     {
         // No, I think we should simply ignore this if printing on e.g.
         // a printer DC.
-        // wxCHECK_RET( m_selectedBitmap.Ok(), wxT("this DC can't be cleared") );
-        if (!m_selectedBitmap.Ok())
+        // wxCHECK_RET( m_selectedBitmap.IsOk(), wxT("this DC can't be cleared") );
+        if (!m_selectedBitmap.IsOk())
             return;
 
         rect.left = -m_deviceOriginX; rect.top = -m_deviceOriginY;
@@ -743,7 +743,7 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     wxCoord xxx2 = (wxCoord) (xxc+ray);
     wxCoord yyy2 = (wxCoord) (yyc+ray);
 
-    if ( m_brush.Ok() && m_brush.GetStyle() != wxTRANSPARENT )
+    if ( m_brush.IsOk() && m_brush.GetStyle() != wxTRANSPARENT )
     {
         // Have to add 1 to bottom-right corner of rectangle
         // to make semi-circles look right (crooked line otherwise).
@@ -794,7 +794,7 @@ void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
     WXMICROWIN_CHECK_HDC
 
     COLORREF color = 0x00ffffff;
-    if (m_pen.Ok())
+    if (m_pen.IsOk())
     {
         color = m_pen.GetColour().GetPixel();
     }
@@ -1178,7 +1178,7 @@ void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
     WXMICROWIN_CHECK_HDC
 
-    wxCHECK_RET( icon.Ok(), wxT("invalid icon in DrawIcon") );
+    wxCHECK_RET( icon.IsOk(), wxT("invalid icon in DrawIcon") );
 
 #ifdef __WIN32__
     ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, NULL, DI_NORMAL);
@@ -1194,7 +1194,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 {
     WXMICROWIN_CHECK_HDC
 
-    wxCHECK_RET( bmp.Ok(), _T("invalid bitmap in wxMSWDCImpl::DrawBitmap") );
+    wxCHECK_RET( bmp.IsOk(), _T("invalid bitmap in wxMSWDCImpl::DrawBitmap") );
 
     int width = bmp.GetWidth(),
         height = bmp.GetHeight();
@@ -1290,11 +1290,11 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
         COLORREF old_textground = ::GetTextColor(GetHdc());
         COLORREF old_background = ::GetBkColor(GetHdc());
-        if (m_textForegroundColour.Ok())
+        if (m_textForegroundColour.IsOk())
         {
             ::SetTextColor(GetHdc(), m_textForegroundColour.GetPixel() );
         }
-        if (m_textBackgroundColour.Ok())
+        if (m_textBackgroundColour.IsOk())
         {
             ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
         }
@@ -1343,11 +1343,11 @@ void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     WXMICROWIN_CHECK_HDC
 
     // prepare for drawing the text
-    if ( m_textForegroundColour.Ok() )
+    if ( m_textForegroundColour.IsOk() )
         SetTextColor(GetHdc(), m_textForegroundColour.GetPixel());
 
     DWORD old_background = 0;
-    if ( m_textBackgroundColour.Ok() )
+    if ( m_textBackgroundColour.IsOk() )
     {
         old_background = SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
     }
@@ -1372,7 +1372,7 @@ void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     // restore the old parameters (text foreground colour may be left because
     // it never is set to anything else, but background should remain
     // transparent even if we just drew an opaque string)
-    if ( m_textBackgroundColour.Ok() )
+    if ( m_textBackgroundColour.IsOk() )
         (void)SetBkColor(GetHdc(), old_background);
 
     SetBkMode(GetHdc(), TRANSPARENT);
@@ -1388,7 +1388,7 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     // "else" part below to avoid that DrawRotatedText(angle = 180) and
     // DrawRotatedText(angle = 0) use different fonts (we can't use the default
     // font for drawing rotated fonts unfortunately)
-    if ( (angle == 0.0) && m_font.Ok() )
+    if ( (angle == 0.0) && m_font.IsOk() )
     {
         DoDrawText(text, x, y);
     }
@@ -1398,7 +1398,7 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
         // NB: don't take DEFAULT_GUI_FONT (a.k.a. wxSYS_DEFAULT_GUI_FONT)
         //     because it's not TrueType and so can't have non zero
         //     orientation/escapement under Win9x
-        wxFont font = m_font.Ok() ? m_font : *wxSWISS_FONT;
+        wxFont font = m_font.IsOk() ? m_font : *wxSWISS_FONT;
         HFONT hfont = (HFONT)font.GetResourceHandle();
         LOGFONT lf;
         if ( ::GetObject(hfont, sizeof(lf), &lf) == 0 )
@@ -1465,7 +1465,7 @@ void wxMSWDCImpl::DoSelectPalette(bool realize)
         m_oldPalette = 0;
     }
 
-    if ( m_palette.Ok() )
+    if ( m_palette.IsOk() )
     {
         HPALETTE oldPal = ::SelectPalette(GetHdc(),
                                           GetHpaletteOf(m_palette),
@@ -1480,7 +1480,7 @@ void wxMSWDCImpl::DoSelectPalette(bool realize)
 
 void wxMSWDCImpl::SetPalette(const wxPalette& palette)
 {
-    if ( palette.Ok() )
+    if ( palette.IsOk() )
     {
         m_palette = palette;
         DoSelectPalette(true);
@@ -1518,7 +1518,7 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
     if ( font == m_font )
         return;
 
-    if ( font.Ok() )
+    if ( font.IsOk() )
     {
         HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(font));
         if ( hfont == HGDI_ERROR )
@@ -1556,7 +1556,7 @@ void wxMSWDCImpl::SetPen(const wxPen& pen)
     if ( pen == m_pen )
         return;
 
-    if ( pen.Ok() )
+    if ( pen.IsOk() )
     {
         HGDIOBJ hpen = ::SelectObject(GetHdc(), GetHpenOf(pen));
         if ( hpen == HGDI_ERROR )
@@ -1594,12 +1594,12 @@ void wxMSWDCImpl::SetBrush(const wxBrush& brush)
     if ( brush == m_brush )
         return;
 
-    if ( brush.Ok() )
+    if ( brush.IsOk() )
     {
         // we must make sure the brush is aligned with the logical coordinates
         // before selecting it
         wxBitmap *stipple = brush.GetStipple();
-        if ( stipple && stipple->Ok() )
+        if ( stipple && stipple->IsOk() )
         {
             if ( !::SetBrushOrgEx
                     (
@@ -1648,7 +1648,7 @@ void wxMSWDCImpl::SetBackground(const wxBrush& brush)
 
     m_backgroundBrush = brush;
 
-    if ( m_backgroundBrush.Ok() )
+    if ( m_backgroundBrush.IsOk() )
     {
         (void)SetBkColor(GetHdc(), m_backgroundBrush.GetColour().GetPixel());
     }
@@ -1769,7 +1769,7 @@ void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
     HFONT hfontOld;
     if ( font )
     {
-        wxASSERT_MSG( font->Ok(), _T("invalid font in wxMSWDCImpl::GetTextExtent") );
+        wxASSERT_MSG( font->IsOk(), _T("invalid font in wxMSWDCImpl::GetTextExtent") );
 
         hfontOld = (HFONT)::SelectObject(GetHdc(), GetHfontOf(*font));
     }
@@ -2044,8 +2044,8 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     // if either the source or destination has alpha channel, we must use
     // AlphaBlt() as other function don't handle it correctly
     const wxBitmap& bmpSrc = msw_impl->GetSelectedBitmap();
-    if ( bmpSrc.Ok() && (bmpSrc.HasAlpha() ||
-            (m_selectedBitmap.Ok() && m_selectedBitmap.HasAlpha())) )
+    if ( bmpSrc.IsOk() && (bmpSrc.HasAlpha() ||
+            (m_selectedBitmap.IsOk() && m_selectedBitmap.HasAlpha())) )
     {
         if ( AlphaBlt(GetHdc(), xdest, ydest, dstWidth, dstHeight,
                       xsrc, ysrc, srcWidth, srcHeight, GetHdcOf(*msw_impl), bmpSrc) )
@@ -2057,7 +2057,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     {
         mask = bmpSrc.GetMask();
 
-        if ( !(bmpSrc.Ok() && mask && mask->GetMaskBitmap()) )
+        if ( !(bmpSrc.IsOk() && mask && mask->GetMaskBitmap()) )
         {
             // don't give assert here because this would break existing
             // programs - just silently ignore useMask parameter
@@ -2072,11 +2072,11 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
     COLORREF old_textground = ::GetTextColor(GetHdc());
     COLORREF old_background = ::GetBkColor(GetHdc());
-    if (m_textForegroundColour.Ok())
+    if (m_textForegroundColour.IsOk())
     {
         ::SetTextColor(GetHdc(), m_textForegroundColour.GetPixel() );
     }
-    if (m_textBackgroundColour.Ok())
+    if (m_textBackgroundColour.IsOk())
     {
         ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
     }
@@ -2234,7 +2234,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         // FIXME: use appropriate WinCE functions
 #ifndef __WXWINCE__
         const int caps = ::GetDeviceCaps(GetHdc(), RASTERCAPS);
-        if ( bmpSrc.Ok() && (caps & RC_STRETCHDIB) )
+        if ( bmpSrc.IsOk() && (caps & RC_STRETCHDIB) )
         {
             DIBSECTION ds;
             wxZeroMemory(ds);
@@ -2536,7 +2536,7 @@ static bool AlphaBlt(HDC hdcDst,
                      HDC hdcSrc,
                      const wxBitmap& bmp)
 {
-    wxASSERT_MSG( bmp.Ok() && bmp.HasAlpha(), _T("AlphaBlt(): invalid bitmap") );
+    wxASSERT_MSG( bmp.IsOk() && bmp.HasAlpha(), _T("AlphaBlt(): invalid bitmap") );
     wxASSERT_MSG( hdcDst && hdcSrc, _T("AlphaBlt(): invalid HDC") );
 
     // do we have AlphaBlend() and company in the headers?
