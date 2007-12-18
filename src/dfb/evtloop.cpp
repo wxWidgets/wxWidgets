@@ -27,7 +27,7 @@
 
 #include "wx/thread.h"
 #include "wx/generic/private/timer.h"
-#include "wx/private/selectdispatcher.h"
+#include "wx/private/fdiodispatcher.h"
 #include "wx/dfb/private.h"
 #include "wx/nonownedwnd.h"
 
@@ -141,7 +141,7 @@ void wxGUIEventLoop::OnNextIteration()
 
 #if wxUSE_SOCKETS
     // handle any pending socket events:
-    wxSelectDispatcher::DispatchPending();
+    wxFDIODispatcher::DispatchPending();
 #endif
 }
 
