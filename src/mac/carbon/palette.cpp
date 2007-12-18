@@ -14,6 +14,7 @@
 #if wxUSE_PALETTE
 
 #include "wx/palette.h"
+#include "wx/colour.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPalette, wxGDIObject)
 
