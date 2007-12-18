@@ -3032,7 +3032,7 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
 
     m_scrollView = NULL ;
     TXNFrameOptions frameOptions = FrameOptionsFromWXStyle( style ) ;
-    if (( frameOptions & (kTXNWantVScrollBarMask | kTXNWantHScrollBarMask)) || !(frameOptions &kTXNSingleLineOnlyMask))
+    if (( frameOptions & (kTXNWantVScrollBarMask | kTXNWantHScrollBarMask)) || (frameOptions &kTXNSingleLineOnlyMask))
     {
         if ( frameOptions & (kTXNWantVScrollBarMask | kTXNWantHScrollBarMask) )
         {
