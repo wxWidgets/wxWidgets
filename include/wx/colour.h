@@ -55,7 +55,18 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLEXPORT)
 //               code redundancy in all native wxColour implementations
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxColourBase : public wxGDIObject
+#ifdef __WXMAC__
+#define wxCOLOUR_IS_GDIOBJECT 0
+#else
+#define wxCOLOUR_IS_GDIOBJECT 1
+#endif
+
+class WXDLLEXPORT wxColourBase : public 
+#if wxCOLOUR_IS_GDIOBJECT
+    wxGDIObject
+#else
+    wxObject
+#endif
 {
 public:
     // type of a single colour component
@@ -101,7 +112,13 @@ public:
     // implemented in colourcmn.cpp
     virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;
 
-
+#if !wxCOLOUR_IS_GDIOBJECT
+    virtual bool IsOk() const= 0;
+    
+    // older version, for backwards compatibility only (but not deprecated
+    // because it's still widely used)
+    bool Ok() const { return IsOk(); }
+#endif
 
     // old, deprecated
     // ---------------
@@ -117,6 +134,7 @@ protected:
 
     virtual bool FromString(const wxString& s);
 
+#if wxCOLOUR_IS_GDIOBJECT
     // wxColour doesn't use reference counted data (at least not in all ports)
     // so provide stubs for the functions which need to be defined if we do use
     // them
@@ -133,6 +151,7 @@ protected:
 
         return NULL;
     }
+#endif
 };
 
 
