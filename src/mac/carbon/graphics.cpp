@@ -12,6 +12,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/graphics.h"
+#include "wx/private/graphics.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -285,9 +286,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
 {
     Init();
 
-    CGFloat components[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 ,
-            pen.GetColour().Blue() / 255.0 , pen.GetColour().Alpha() / 255.0 } ;
-    m_color.reset( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
+    m_color.reset( pen.GetColour().CreateCGColor() ) ;
 
     // TODO: * m_dc->m_scaleX
     m_width = pen.GetWidth();
@@ -1780,7 +1779,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         CGColorRef col = fref->GetColour().GetPixel();
         CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
         wxCFRef<CFNumberRef> underlined( CFNumberCreate(NULL, kCFNumberSInt32Type, &ustyle) ); 
-        CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName, kCTUnderlineStyleAttributeName };
+         CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName, kCTUnderlineStyleAttributeName };
         CFTypeRef values[] = { font, col, underlined };
         wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values, 
                                                         WXSIZEOF( keys ), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks) );
