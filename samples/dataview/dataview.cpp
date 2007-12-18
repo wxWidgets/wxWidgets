@@ -481,7 +481,7 @@ public:
             if (row >= m_array.GetCount())
                 variant = "plain";
             else
-                variant = "blue italic";
+                variant = "blue";
         }
     }
     

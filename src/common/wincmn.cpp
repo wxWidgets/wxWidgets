@@ -1105,7 +1105,7 @@ wxWindowBase::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
 wxColour wxWindowBase::GetBackgroundColour() const
 {
-    if ( !m_backgroundColour.Ok() )
+    if ( !m_backgroundColour.IsOk() )
     {
         wxASSERT_MSG( !m_hasBgCol, _T("we have invalid explicit bg colour?") );
 
@@ -1133,7 +1133,7 @@ wxColour wxWindowBase::GetForegroundColour() const
     {
         wxColour colFg = GetDefaultAttributes().colFg;
 
-        if ( !colFg.Ok() )
+        if ( !colFg.IsOk() )
             colFg = GetClassDefaultAttributes().colFg;
 
         return colFg;
@@ -1147,7 +1147,7 @@ bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
     if ( colour == m_backgroundColour )
         return false;
 
-    m_hasBgCol = colour.Ok();
+    m_hasBgCol = colour.IsOk();
     if ( m_backgroundStyle != wxBG_STYLE_CUSTOM )
         m_backgroundStyle = m_hasBgCol ? wxBG_STYLE_COLOUR : wxBG_STYLE_SYSTEM;
 
@@ -1162,7 +1162,7 @@ bool wxWindowBase::SetForegroundColour( const wxColour &colour )
     if (colour == m_foregroundColour )
         return false;
 
-    m_hasFgCol = colour.Ok();
+    m_hasFgCol = colour.IsOk();
     m_inheritFgCol = m_hasFgCol;
     m_foregroundColour = colour;
     SetThemeEnabled( !m_hasFgCol && !m_backgroundColour.Ok() );
@@ -1187,12 +1187,12 @@ bool wxWindowBase::SetCursor(const wxCursor& cursor)
 wxFont wxWindowBase::GetFont() const
 {
     // logic is the same as in GetBackgroundColour()
-    if ( !m_font.Ok() )
+    if ( !m_font.IsOk() )
     {
         wxASSERT_MSG( !m_hasFont, _T("we have invalid explicit font?") );
 
         wxFont font = GetDefaultAttributes().font;
-        if ( !font.Ok() )
+        if ( !font.IsOk() )
             font = GetClassDefaultAttributes().font;
 
         return font;
@@ -1210,7 +1210,7 @@ bool wxWindowBase::SetFont(const wxFont& font)
     }
 
     m_font = font;
-    m_hasFont = font.Ok();
+    m_hasFont = font.IsOk();
     m_inheritFont = m_hasFont;
 
     InvalidateBestSize();

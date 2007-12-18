@@ -1924,7 +1924,6 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     m_hasFocus = false;
 
-    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
     SetBackgroundColour( *wxWHITE );
 
     m_penRule = wxPen(GetRuleColour(), 1, wxSOLID);
@@ -1945,6 +1944,279 @@ wxDataViewMainWindow::~wxDataViewMainWindow()
 {
     DestroyTree();
     delete m_renameTimer;
+}
+
+void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
+{
+    wxDataViewModel *model = GetOwner()->GetModel();
+    wxAutoBufferedPaintDC dc( this );
+
+#ifdef __WXMSW__
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    dc.SetBrush( wxBrush( GetBackgroundColour()) );
+    dc.SetBrush( *wxWHITE_BRUSH );
+    wxSize size( GetClientSize() );
+    dc.DrawRectangle( 0,0,size.x,size.y );
+#endif
+
+    // prepare the DC
+    GetOwner()->PrepareDC( dc );
+    dc.SetFont( GetFont() );
+
+    wxRect update = GetUpdateRegion().GetBox();
+    m_owner->CalcUnscrolledPosition( update.x, update.y, &update.x, &update.y );
+
+    // compute which items needs to be redrawn
+    unsigned int item_start = wxMax( 0, (update.y / m_lineHeight) );
+    unsigned int item_count =
+        wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1),
+               (int)(GetRowCount( ) - item_start));
+    unsigned int item_last = item_start + item_count;
+
+    // compute which columns needs to be redrawn
+    unsigned int cols = GetOwner()->GetColumnCount();
+    unsigned int col_start = 0;
+    unsigned int x_start = 0;
+    for (x_start = 0; col_start < cols; col_start++)
+    {
+        wxDataViewColumn *col = GetOwner()->GetColumn(col_start);
+        if (col->IsHidden())
+            continue;      // skip it!
+
+        unsigned int w = col->GetWidth();
+        if (x_start+w >= (unsigned int)update.x)
+            break;
+
+        x_start += w;
+    }
+
+    unsigned int col_last = col_start;
+    unsigned int x_last = x_start;
+    for (; col_last < cols; col_last++)
+    {
+        wxDataViewColumn *col = GetOwner()->GetColumn(col_last);
+        if (col->IsHidden())
+            continue;      // skip it!
+
+        if (x_last > (unsigned int)update.GetRight())
+            break;
+
+        x_last += col->GetWidth();
+    }
+
+    // Draw horizontal rules if required
+    if ( m_owner->HasFlag(wxDV_HORIZ_RULES) )
+    {
+        dc.SetPen(m_penRule);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+        for (unsigned int i = item_start; i <= item_last+1; i++)
+        {
+            int y = i * m_lineHeight;
+            dc.DrawLine(x_start, y, x_last, y);
+        }
+    }
+
+    // Draw vertical rules if required
+    if ( m_owner->HasFlag(wxDV_VERT_RULES) )
+    {
+        dc.SetPen(m_penRule);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+        int x = x_start;
+        for (unsigned int i = col_start; i < col_last; i++)
+        {
+            wxDataViewColumn *col = GetOwner()->GetColumn(i);
+            if (col->IsHidden())
+                continue;       // skip it
+
+            dc.DrawLine(x, item_start * m_lineHeight,
+                        x, item_last * m_lineHeight);
+
+            x += col->GetWidth();
+        }
+
+        // Draw last vertical rule
+        dc.DrawLine(x, item_start * m_lineHeight,
+                    x, item_last * m_lineHeight);
+    }
+
+    // redraw the background for the items which are selected/current
+    for (unsigned int item = item_start; item < item_last; item++)
+    {
+        bool selected = m_selection.Index( item ) != wxNOT_FOUND;
+        if (selected || item == m_currentRow)
+        {
+            int flags = selected ? (int)wxCONTROL_SELECTED : 0;
+            if (item == m_currentRow)
+                flags |= wxCONTROL_CURRENT;
+            if (m_hasFocus)
+                flags |= wxCONTROL_FOCUSED;
+
+            wxRect rect( x_start, item*m_lineHeight, x_last, m_lineHeight );
+            wxRendererNative::Get().DrawItemSelectionRect
+                                (
+                                    this,
+                                    dc,
+                                    rect,
+                                    flags
+                                );
+        }
+    }
+
+    wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
+    if (!expander)
+    {
+        // TODO: last column for RTL support
+        expander = GetOwner()->GetColumn( 0 );
+        GetOwner()->SetExpanderColumn(expander);
+    }
+
+    // redraw all cells for all rows which must be repainted and for all columns
+    wxRect cell_rect;
+    cell_rect.x = x_start;
+    cell_rect.height = m_lineHeight;        // -1 is for the horizontal rules
+    for (unsigned int i = col_start; i < col_last; i++)
+    {
+        wxDataViewColumn *col = GetOwner()->GetColumn( i );
+        wxDataViewRenderer *cell = col->GetRenderer();
+        cell_rect.width = col->GetWidth();
+
+        if (col->IsHidden())
+            continue;       // skipt it!
+
+
+        for (unsigned int item = item_start; item < item_last; item++)
+        {
+            // get the cell value and set it into the renderer
+            wxVariant value;
+            wxDataViewTreeNode *node = NULL;
+            wxDataViewItem dataitem;
+            
+            if (m_root)
+            {
+                node = GetTreeNodeByRow(item);
+                if( node == NULL )
+                    continue;
+
+                dataitem = node->GetItem();
+
+                if ((i > 0) && model->IsContainer(dataitem) && !model->HasContainerColumns(dataitem))
+                    continue;
+            }
+            else
+            {
+                dataitem = wxDataViewItem( (void*) item );
+            }
+
+            model->GetValue( value, dataitem, col->GetModelColumn());
+            cell->SetValue( value );
+            
+            if (cell->GetWantsAttr())
+            {
+                wxDataViewItemAttr attr;
+                bool ret = model->GetAttr( dataitem, col->GetModelColumn(), attr );
+                if (ret)
+                    cell->SetAttr( attr );
+                cell->SetHasAttr( ret );
+            }
+
+            // update the y offset
+            cell_rect.y = item * m_lineHeight;
+
+            //Draw the expander here.
+            int indent = 0;
+            if ((m_root) && (col == expander))
+            {
+                indent = node->GetIndentLevel();
+                
+                //Calculate the indent first
+                indent = cell_rect.x + GetOwner()->GetIndent() * indent;
+
+                int expander_width = m_lineHeight - 2*EXPANDER_MARGIN;
+                // change the cell_rect.x to the appropriate pos
+                int  expander_x = indent + EXPANDER_MARGIN , expander_y = cell_rect.y + EXPANDER_MARGIN ;
+                indent = indent + m_lineHeight ;  //try to use the m_lineHeight as the expander space
+                dc.SetPen( m_penExpander );
+                dc.SetBrush( wxNullBrush );
+                if( node->HasChildren() )
+                {
+                    wxRect rect( expander_x , expander_y, expander_width, expander_width);
+                    int flag = 0;
+                    if (m_underMouse == node)
+                    {
+                        flag |= wxCONTROL_CURRENT;
+                    }
+                    if( node->IsOpen() )
+                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag|wxCONTROL_EXPANDED );
+                    else
+                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
+                }
+                else
+                {
+                     // I am wondering whether we should draw dot lines between tree nodes
+                     if (node)
+                         delete node;
+                     // Yes, if the node does not have any child, it must be a leaf which 
+                     // mean that it is a temporarily created by GetTreeNodeByRow
+                }
+
+                 //force the expander column to left-center align
+                 cell->SetAlignment( wxALIGN_CENTER_VERTICAL );
+            }
+
+
+            // cannot be bigger than allocated space
+            wxSize size = cell->GetSize();
+            // Because of the tree structure indent, here we should minus the width of the cell for drawing
+            size.x = wxMin( size.x + 2*PADDING_RIGHTLEFT, cell_rect.width - indent );
+            // size.y = wxMin( size.y, cell_rect.height );
+            size.y = cell_rect.height;
+
+            wxRect item_rect(cell_rect.GetTopLeft(), size);
+            int align = cell->GetAlignment();
+
+            // horizontal alignment:
+            item_rect.x = cell_rect.x;
+            if (align & wxALIGN_CENTER_HORIZONTAL)
+                item_rect.x = cell_rect.x + (cell_rect.width / 2) - (size.x / 2);
+            else if (align & wxALIGN_RIGHT)
+                item_rect.x = cell_rect.x + cell_rect.width - size.x;
+            //else: wxALIGN_LEFT is the default
+
+            // vertical alignment:
+            item_rect.y = cell_rect.y;
+            if (align & wxALIGN_CENTER_VERTICAL)
+                item_rect.y = cell_rect.y + (cell_rect.height / 2) - (size.y / 2);
+            else if (align & wxALIGN_BOTTOM)
+                item_rect.y = cell_rect.y + cell_rect.height - size.y;
+            //else: wxALIGN_TOP is the default
+
+            // add padding
+            item_rect.x += PADDING_RIGHTLEFT;
+            item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
+
+            //Here we add the tree indent
+            item_rect.x += indent;
+
+            int state = 0;
+            if (m_hasFocus && (m_selection.Index(item) != wxNOT_FOUND))
+                state |= wxDATAVIEW_CELL_SELECTED;
+
+            // TODO: it would be much more efficient to create a clipping
+            //       region for the entire column being rendered (in the OnPaint
+            //       of wxDataViewMainWindow) instead of a single clip region for
+            //       each cell. However it would mean that each renderer should
+            //       respect the given wxRect's top & bottom coords, eventually
+            //       violating only the left & right coords - however the user can
+            //       make its own renderer and thus we cannot be sure of that.
+            dc.SetClippingRegion( item_rect );
+            cell->Render( item_rect, &dc, state );
+            dc.DestroyClippingRegion();
+        }
+
+        cell_rect.x += cell_rect.width;
+    }
 }
 
 void wxDataViewMainWindow::OnRenameTimer()
@@ -2293,273 +2565,6 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
         }
     }
     m_owner->Scroll( sx, sy );
-}
-
-void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
-{
-    wxDataViewModel *model = GetOwner()->GetModel();
-    wxAutoBufferedPaintDC dc( this );
-
-    // prepare the DC
-    dc.SetBackground(GetBackgroundColour());
-    dc.Clear();
-    GetOwner()->PrepareDC( dc );
-    dc.SetFont( GetFont() );
-
-    wxRect update = GetUpdateRegion().GetBox();
-    m_owner->CalcUnscrolledPosition( update.x, update.y, &update.x, &update.y );
-
-    // compute which items needs to be redrawn
-    unsigned int item_start = wxMax( 0, (update.y / m_lineHeight) );
-    unsigned int item_count =
-        wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1),
-               (int)(GetRowCount( ) - item_start));
-    unsigned int item_last = item_start + item_count;
-
-    // compute which columns needs to be redrawn
-    unsigned int cols = GetOwner()->GetColumnCount();
-    unsigned int col_start = 0;
-    unsigned int x_start = 0;
-    for (x_start = 0; col_start < cols; col_start++)
-    {
-        wxDataViewColumn *col = GetOwner()->GetColumn(col_start);
-        if (col->IsHidden())
-            continue;      // skip it!
-
-        unsigned int w = col->GetWidth();
-        if (x_start+w >= (unsigned int)update.x)
-            break;
-
-        x_start += w;
-    }
-
-    unsigned int col_last = col_start;
-    unsigned int x_last = x_start;
-    for (; col_last < cols; col_last++)
-    {
-        wxDataViewColumn *col = GetOwner()->GetColumn(col_last);
-        if (col->IsHidden())
-            continue;      // skip it!
-
-        if (x_last > (unsigned int)update.GetRight())
-            break;
-
-        x_last += col->GetWidth();
-    }
-
-    // Draw horizontal rules if required
-    if ( m_owner->HasFlag(wxDV_HORIZ_RULES) )
-    {
-        dc.SetPen(m_penRule);
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-        for (unsigned int i = item_start; i <= item_last+1; i++)
-        {
-            int y = i * m_lineHeight;
-            dc.DrawLine(x_start, y, x_last, y);
-        }
-    }
-
-    // Draw vertical rules if required
-    if ( m_owner->HasFlag(wxDV_VERT_RULES) )
-    {
-        dc.SetPen(m_penRule);
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-        int x = x_start;
-        for (unsigned int i = col_start; i < col_last; i++)
-        {
-            wxDataViewColumn *col = GetOwner()->GetColumn(i);
-            if (col->IsHidden())
-                continue;       // skip it
-
-            dc.DrawLine(x, item_start * m_lineHeight,
-                        x, item_last * m_lineHeight);
-
-            x += col->GetWidth();
-        }
-
-        // Draw last vertical rule
-        dc.DrawLine(x, item_start * m_lineHeight,
-                    x, item_last * m_lineHeight);
-    }
-
-    // redraw the background for the items which are selected/current
-    for (unsigned int item = item_start; item < item_last; item++)
-    {
-        bool selected = m_selection.Index( item ) != wxNOT_FOUND;
-        if (selected || item == m_currentRow)
-        {
-            int flags = selected ? (int)wxCONTROL_SELECTED : 0;
-            if (item == m_currentRow)
-                flags |= wxCONTROL_CURRENT;
-            if (m_hasFocus)
-                flags |= wxCONTROL_FOCUSED;
-
-            wxRect rect( x_start, item*m_lineHeight, x_last, m_lineHeight );
-            wxRendererNative::Get().DrawItemSelectionRect
-                                (
-                                    this,
-                                    dc,
-                                    rect,
-                                    flags
-                                );
-        }
-    }
-
-    wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
-    if (!expander)
-    {
-        // TODO: last column for RTL support
-        expander = GetOwner()->GetColumn( 0 );
-        GetOwner()->SetExpanderColumn(expander);
-    }
-
-    // redraw all cells for all rows which must be repainted and for all columns
-    wxRect cell_rect;
-    cell_rect.x = x_start;
-    cell_rect.height = m_lineHeight;        // -1 is for the horizontal rules
-    for (unsigned int i = col_start; i < col_last; i++)
-    {
-        wxDataViewColumn *col = GetOwner()->GetColumn( i );
-        wxDataViewRenderer *cell = col->GetRenderer();
-        cell_rect.width = col->GetWidth();
-
-        if (col->IsHidden())
-            continue;       // skipt it!
-
-
-        for (unsigned int item = item_start; item < item_last; item++)
-        {
-            // get the cell value and set it into the renderer
-            wxVariant value;
-            wxDataViewTreeNode *node = NULL;
-            wxDataViewItem dataitem;
-            
-            if (m_root)
-            {
-                node = GetTreeNodeByRow(item);
-                if( node == NULL )
-                    continue;
-
-                dataitem = node->GetItem();
-
-                if ((i > 0) && model->IsContainer(dataitem) && !model->HasContainerColumns(dataitem))
-                    continue;
-            }
-            else
-            {
-                dataitem = wxDataViewItem( (void*) item );
-            }
-
-            model->GetValue( value, dataitem, col->GetModelColumn());
-            cell->SetValue( value );
-            
-            if (cell->GetWantsAttr())
-            {
-                wxDataViewItemAttr attr;
-                bool ret = model->GetAttr( dataitem, col->GetModelColumn(), attr );
-                if (ret)
-                    cell->SetAttr( attr );
-                cell->SetHasAttr( ret );
-            }
-
-            // update the y offset
-            cell_rect.y = item * m_lineHeight;
-
-            //Draw the expander here.
-            int indent = 0;
-            if ((m_root) && (col == expander))
-            {
-                indent = node->GetIndentLevel();
-                
-                //Calculate the indent first
-                indent = cell_rect.x + GetOwner()->GetIndent() * indent;
-
-                int expander_width = m_lineHeight - 2*EXPANDER_MARGIN;
-                // change the cell_rect.x to the appropriate pos
-                int  expander_x = indent + EXPANDER_MARGIN , expander_y = cell_rect.y + EXPANDER_MARGIN ;
-                indent = indent + m_lineHeight ;  //try to use the m_lineHeight as the expander space
-                dc.SetPen( m_penExpander );
-                dc.SetBrush( wxNullBrush );
-                if( node->HasChildren() )
-                {
-                    wxRect rect( expander_x , expander_y, expander_width, expander_width);
-                    int flag = 0;
-                    if (m_underMouse == node)
-                    {
-                        flag |= wxCONTROL_CURRENT;
-                    }
-                    if( node->IsOpen() )
-                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag|wxCONTROL_EXPANDED );
-                    else
-                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
-                }
-                else
-                {
-                     // I am wondering whether we should draw dot lines between tree nodes
-                     if (node)
-                         delete node;
-                     // Yes, if the node does not have any child, it must be a leaf which 
-                     // mean that it is a temporarily created by GetTreeNodeByRow
-                }
-
-                 //force the expander column to left-center align
-                 cell->SetAlignment( wxALIGN_CENTER_VERTICAL );
-            }
-
-
-            // cannot be bigger than allocated space
-            wxSize size = cell->GetSize();
-            // Because of the tree structure indent, here we should minus the width of the cell for drawing
-            size.x = wxMin( size.x + 2*PADDING_RIGHTLEFT, cell_rect.width - indent );
-            // size.y = wxMin( size.y, cell_rect.height );
-            size.y = cell_rect.height;
-
-            wxRect item_rect(cell_rect.GetTopLeft(), size);
-            int align = cell->GetAlignment();
-
-            // horizontal alignment:
-            item_rect.x = cell_rect.x;
-            if (align & wxALIGN_CENTER_HORIZONTAL)
-                item_rect.x = cell_rect.x + (cell_rect.width / 2) - (size.x / 2);
-            else if (align & wxALIGN_RIGHT)
-                item_rect.x = cell_rect.x + cell_rect.width - size.x;
-            //else: wxALIGN_LEFT is the default
-
-            // vertical alignment:
-            item_rect.y = cell_rect.y;
-            if (align & wxALIGN_CENTER_VERTICAL)
-                item_rect.y = cell_rect.y + (cell_rect.height / 2) - (size.y / 2);
-            else if (align & wxALIGN_BOTTOM)
-                item_rect.y = cell_rect.y + cell_rect.height - size.y;
-            //else: wxALIGN_TOP is the default
-
-            // add padding
-            item_rect.x += PADDING_RIGHTLEFT;
-            item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
-
-            //Here we add the tree indent
-            item_rect.x += indent;
-
-            int state = 0;
-            if (m_hasFocus && (m_selection.Index(item) != wxNOT_FOUND))
-                state |= wxDATAVIEW_CELL_SELECTED;
-
-            // TODO: it would be much more efficient to create a clipping
-            //       region for the entire column being rendered (in the OnPaint
-            //       of wxDataViewMainWindow) instead of a single clip region for
-            //       each cell. However it would mean that each renderer should
-            //       respect the given wxRect's top & bottom coords, eventually
-            //       violating only the left & right coords - however the user can
-            //       make its own renderer and thus we cannot be sure of that.
-            dc.SetClippingRegion( item_rect );
-            cell->Render( item_rect, &dc, state );
-            dc.DestroyClippingRegion();
-        }
-
-        cell_rect.x += cell_rect.width;
-    }
 }
 
 int wxDataViewMainWindow::GetCountPerPage() const
