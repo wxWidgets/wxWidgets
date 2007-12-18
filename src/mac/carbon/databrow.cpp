@@ -132,6 +132,10 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
       attributes |= kDataBrowserAttributeListViewDrawColumnDividers;
     else
       attributes &= ~kDataBrowserAttributeListViewDrawColumnDividers;
+      
+    if ((style & wxDV_ROW_LINES) != 0)
+      attributes |= kDataBrowserAttributeListViewAlternatingRowColors;
+      
     (void) this->SetAttributes(attributes);
   } /* if */
 
@@ -566,7 +570,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserCompareProc(DataBrow
                               columnIndex,sortOrder != kDataBrowserOrderDecreasing) < 0);
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserCompareProc(DataBrowserItemID, DataBrowserItemID, DataBrowserPropertyID) */
 
-void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice)
+void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemState state, Rect const* rectangle, SInt16 WXUNUSED(bitDepth), Boolean WXUNUSED(colorDevice))
 {
   DataBrowserTableViewColumnIndex columnIndex;
 
