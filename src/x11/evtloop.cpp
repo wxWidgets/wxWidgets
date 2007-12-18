@@ -32,13 +32,13 @@
 #include "wx/private/fdiodispatcher.h"
 #include "wx/unix/private.h"
 #include "wx/x11/private.h"
-#include "X11/Xlib.h"
 #include "wx/generic/private/timer.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
 #endif
 
+#include <X11/Xlib.h>
 #include <sys/time.h>
 #include <unistd.h>
 
