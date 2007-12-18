@@ -785,7 +785,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxDataViewTreeCtrl *treectrl2 = new wxDataViewTreeCtrl( this, -1, wxDefaultPosition, wxSize(300,200) );
     
-    wxImageList *ilist = new wxImageList;
+    wxImageList *ilist = new wxImageList( 16, 16 );
     ilist->Add( wxIcon(small1_xpm) );
     treectrl2->SetImageList( ilist );
     
