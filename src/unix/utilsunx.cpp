@@ -1392,8 +1392,8 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
         }
         else // !wxEXEC_NOEVENTS
         {
-            // endProcData->pid will be set to 0 from GTK_EndProcessDetector when the
-            // process terminates
+            // endProcData->pid will be set to 0 from
+            // wxHandleProcessTermination when the process terminates
             while ( endProcData->pid != 0 )
             {
                 bool idle = true;
