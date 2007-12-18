@@ -18,7 +18,7 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
 
-#include "wx/graphics.h"
+#include "wx/private/graphics.h"
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
