@@ -28,6 +28,7 @@ public:
 
     // default
     wxColour() { }
+    wxColour( const wxColour& col );
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // dtor
@@ -59,6 +60,7 @@ public:
     wxColour(const RGBColor& col);
     wxColour& operator=(const RGBColor& col);
     wxColour& operator=(CGColorRef col);
+    wxColour& operator=(const wxColour& col);
 
 protected :
 
