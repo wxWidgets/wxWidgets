@@ -176,7 +176,7 @@ void wxGCDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 
 bool wxGCDCImpl::StartDoc( const wxString& WXUNUSED(message) ) 
 {
-    return false;
+    return true;
 }
 
 void wxGCDCImpl::EndDoc() 
