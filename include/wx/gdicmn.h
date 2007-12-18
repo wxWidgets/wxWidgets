@@ -537,7 +537,7 @@ public:
     // return true if the point is (not strcitly) inside the rect
     bool Contains(int x, int y) const;
     bool Contains(const wxPoint& pt) const { return Contains(pt.x, pt.y); }
-    // return true if the rectangle is (not strcitly) inside the rect
+    // return true if the rectangle 'rect' is (not strictly) inside this rect
     bool Contains(const wxRect& rect) const;
 
 #if WXWIN_COMPATIBILITY_2_6
