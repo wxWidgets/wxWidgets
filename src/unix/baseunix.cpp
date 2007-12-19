@@ -33,6 +33,7 @@
 #include "wx/apptrait.h"
 #include "wx/unix/execute.h"
 #include "wx/evtloop.h"
+#include "wx/gsocket.h"
 
 #include "wx/unix/private/timer.h"
 

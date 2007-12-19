@@ -69,6 +69,31 @@ EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 1
 EXTRALIBS_FOR_BASE =  
 !endif
+__client___depname =
+!ifeq USE_GUI 1
+__client___depname = $(OBJS)\client.exe
+!endif
+__server___depname =
+!ifeq USE_GUI 1
+__server___depname = $(OBJS)\server.exe
+!endif
+__WXLIB_CORE_p =
+!ifeq MONOLITHIC 0
+__WXLIB_CORE_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
+!endif
+__LIB_TIFF_p =
+!ifeq USE_GUI 1
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
+!endif
+__LIB_JPEG_p =
+!ifeq USE_GUI 1
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+!endif
+__LIB_PNG_p =
+!ifeq USE_GUI 1
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
+!endif
 __DEBUGINFO =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
@@ -86,22 +111,22 @@ __DEBUGINFO = -d0
 !ifeq DEBUG_INFO 1
 __DEBUGINFO = -d2
 !endif
-__DEBUGINFO_1 =
+__DEBUGINFO_3 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = debug all
+__DEBUGINFO_3 = debug all
 !endif
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = 
+__DEBUGINFO_3 = 
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_1 = 
+__DEBUGINFO_3 = 
 !endif
 !ifeq DEBUG_INFO 1
-__DEBUGINFO_1 = debug all
+__DEBUGINFO_3 = debug all
 !endif
 __OPTIMIZEFLAG =
 !ifeq BUILD debug
@@ -137,42 +162,6 @@ __EXCEPTIONSFLAG =
 !endif
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG = -xs
-!endif
-__WXLIB_CORE_p =
-!ifeq MONOLITHIC 0
-__WXLIB_CORE_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
-!endif
-__WXLIB_NET_p =
-!ifeq MONOLITHIC 0
-__WXLIB_NET_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
-!endif
-__WXLIB_BASE_p =
-!ifeq MONOLITHIC 0
-__WXLIB_BASE_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__WXLIB_MONO_p =
-!ifeq MONOLITHIC 1
-__WXLIB_MONO_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__LIB_TIFF_p =
-!ifeq USE_GUI 1
-__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
-!endif
-__LIB_JPEG_p =
-!ifeq USE_GUI 1
-__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
-!endif
-__LIB_PNG_p =
-!ifeq USE_GUI 1
-__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
-!endif
-__GDIPLUS_LIB_p =
-!ifeq USE_GDIPLUS 1
-__GDIPLUS_LIB_p = gdiplus.lib
 !endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
@@ -214,6 +203,25 @@ __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
 !endif
+__WXLIB_NET_p =
+!ifeq MONOLITHIC 0
+__WXLIB_NET_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+!endif
+__WXLIB_BASE_p =
+!ifeq MONOLITHIC 0
+__WXLIB_BASE_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__WXLIB_MONO_p =
+!ifeq MONOLITHIC 1
+__WXLIB_MONO_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__GDIPLUS_LIB_p =
+!ifeq USE_GDIPLUS 1
+__GDIPLUS_LIB_p = gdiplus.lib
+!endif
 
 ### Variables: ###
 
@@ -242,6 +250,22 @@ SERVER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(CXXFLAGS)
 SERVER_OBJECTS =  &
 	$(OBJS)\server_server.obj
+BASECLIENT_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
+	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
+	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=.\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) &
+	-dwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+BASECLIENT_OBJECTS =  &
+	$(OBJS)\baseclient_baseclient.obj
+BASESERVER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
+	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
+	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=.\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) &
+	-dwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+BASESERVER_OBJECTS =  &
+	$(OBJS)\baseserver_baseserver.obj
 
 
 all : $(OBJS)
@@ -250,7 +274,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\client.exe $(OBJS)\server.exe
+all : .SYMBOLIC $(__client___depname) $(__server___depname) $(OBJS)\baseclient.exe $(OBJS)\baseserver.exe
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -260,30 +284,60 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
 	-if exist $(OBJS)\client.exe del $(OBJS)\client.exe
 	-if exist $(OBJS)\server.exe del $(OBJS)\server.exe
+	-if exist $(OBJS)\baseclient.exe del $(OBJS)\baseclient.exe
+	-if exist $(OBJS)\baseserver.exe del $(OBJS)\baseserver.exe
 
+!ifeq USE_GUI 1
 $(OBJS)\client.exe :  $(CLIENT_OBJECTS) $(OBJS)\client_client.res
 	@%create $(OBJS)\client.lbc
 	@%append $(OBJS)\client.lbc option quiet
 	@%append $(OBJS)\client.lbc name $^@
 	@%append $(OBJS)\client.lbc option caseexact
-	@%append $(OBJS)\client.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\client.lbc $(LDFLAGS) $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(CLIENT_OBJECTS)) do @%append $(OBJS)\client.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\client.lbc library %i
 	@%append $(OBJS)\client.lbc option resource=$(OBJS)\client_client.res
 	@for %i in () do @%append $(OBJS)\client.lbc option stack=%i
 	wlink @$(OBJS)\client.lbc
+!endif
 
+!ifeq USE_GUI 1
 $(OBJS)\server.exe :  $(SERVER_OBJECTS) $(OBJS)\server_server.res
 	@%create $(OBJS)\server.lbc
 	@%append $(OBJS)\server.lbc option quiet
 	@%append $(OBJS)\server.lbc name $^@
 	@%append $(OBJS)\server.lbc option caseexact
-	@%append $(OBJS)\server.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\server.lbc $(LDFLAGS) $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(SERVER_OBJECTS)) do @%append $(OBJS)\server.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\server.lbc library %i
 	@%append $(OBJS)\server.lbc option resource=$(OBJS)\server_server.res
 	@for %i in () do @%append $(OBJS)\server.lbc option stack=%i
 	wlink @$(OBJS)\server.lbc
+!endif
+
+$(OBJS)\baseclient.exe :  $(BASECLIENT_OBJECTS)
+	@%create $(OBJS)\baseclient.lbc
+	@%append $(OBJS)\baseclient.lbc option quiet
+	@%append $(OBJS)\baseclient.lbc name $^@
+	@%append $(OBJS)\baseclient.lbc option caseexact
+	@%append $(OBJS)\baseclient.lbc $(LDFLAGS) $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) system nt ref 'main_'
+	@for %i in ($(BASECLIENT_OBJECTS)) do @%append $(OBJS)\baseclient.lbc file %i
+	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\baseclient.lbc library %i
+	@%append $(OBJS)\baseclient.lbc
+	@for %i in () do @%append $(OBJS)\baseclient.lbc option stack=%i
+	wlink @$(OBJS)\baseclient.lbc
+
+$(OBJS)\baseserver.exe :  $(BASESERVER_OBJECTS)
+	@%create $(OBJS)\baseserver.lbc
+	@%append $(OBJS)\baseserver.lbc option quiet
+	@%append $(OBJS)\baseserver.lbc name $^@
+	@%append $(OBJS)\baseserver.lbc option caseexact
+	@%append $(OBJS)\baseserver.lbc $(LDFLAGS) $(__DEBUGINFO_3)  libpath $(LIBDIRNAME) system nt ref 'main_'
+	@for %i in ($(BASESERVER_OBJECTS)) do @%append $(OBJS)\baseserver.lbc file %i
+	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\baseserver.lbc library %i
+	@%append $(OBJS)\baseserver.lbc
+	@for %i in () do @%append $(OBJS)\baseserver.lbc option stack=%i
+	wlink @$(OBJS)\baseserver.lbc
 
 $(OBJS)\client_client.obj :  .AUTODEPEND .\client.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CLIENT_CXXFLAGS) $<
@@ -296,4 +350,10 @@ $(OBJS)\server_server.obj :  .AUTODEPEND .\server.cpp
 
 $(OBJS)\server_server.res :  .AUTODEPEND .\server.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+
+$(OBJS)\baseclient_baseclient.obj :  .AUTODEPEND .\baseclient.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASECLIENT_CXXFLAGS) $<
+
+$(OBJS)\baseserver_baseserver.obj :  .AUTODEPEND .\baseserver.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASESERVER_CXXFLAGS) $<
 

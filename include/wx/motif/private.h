@@ -13,7 +13,8 @@
 #define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
-#include "X11/Xlib.h"
+#include <X11/Xlib.h>
+#include <Xm/Xm.h>
 #include "wx/evtloop.h"
 
 class WXDLLIMPEXP_FWD_CORE wxFont;

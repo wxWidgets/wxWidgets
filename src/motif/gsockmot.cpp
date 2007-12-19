@@ -1,22 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:    src/motif/gsockmot.cpp
-// Project: GSocket (Generic Socket) for WX
-// Purpose: GSocket: Motif part
-// CVSID:   $Id$
-// Licence: wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// Name:        motif/gsockmot.cpp
+// Purpose:     implementation of wxMotif-specific socket event handling
+// Author:      Guilhem Lavaux, Vadim Zeitlin
+// Created:     1999
+// RCS-ID:      $Id$
+// Copyright:   (c) 1999, 2007 wxWidgets dev team
+// Licence:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if wxUSE_SOCKETS
 
-#include <stdlib.h>
-#include <X11/Intrinsic.h>
+#include <X11/Intrinsic.h>      // XtAppAdd/RemoveInput()
+#include "wx/motif/private.h"   // wxGetAppContext()
 #include "wx/gsocket.h"
-#include "wx/unix/gsockunx.h"
+#include "wx/apptrait.h"
 
-extern "C" XtAppContext wxGetAppContext();
+extern "C" {
 
 static void _GSocket_Motif_Input(XtPointer data, int *WXUNUSED(fid),
                                  XtInputId *WXUNUSED(id))
@@ -34,109 +36,35 @@ static void _GSocket_Motif_Output(XtPointer data, int *WXUNUSED(fid),
     socket->Detected_Write();
 }
 
-bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
-{
-    return true;
 }
 
-bool GSocketGUIFunctionsTableConcrete::OnInit(void)
+class MotifSocketManager : public GSocketInputBasedManager
 {
-    return 1;
-}
-
-void GSocketGUIFunctionsTableConcrete::OnExit(void)
-{
-}
-
-bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
-{
-    int *m_id;
-
-    socket->m_gui_dependent = (char *)malloc(sizeof(int)*2);
-    m_id = (int *)(socket->m_gui_dependent);
-
-    m_id[0] = -1;
-    m_id[1] = -1;
-
-    return true;
-}
-
-void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
-{
-    free(socket->m_gui_dependent);
-}
-
-void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
-{
-    int *m_id = (int *)(socket->m_gui_dependent);
-    int c;
-
-    if (socket->m_fd == -1)
-        return;
-
-    switch (event)
+public:
+    virtual int AddInput(GSocket *socket, SocketDir d)
     {
-        case GSOCK_LOST:       /* fall-through */
-        case GSOCK_INPUT:      c = 0; break;
-        case GSOCK_OUTPUT:     c = 1; break;
-        case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-        default: return;
+        return XtAppAddInput
+               (
+                    wxGetAppContext(),
+                    socket->m_fd,
+                    (XtPointer)(d == FD_OUTPUT ? XtInputWriteMask
+                                               : XtInputReadMask),
+                    d == FD_OUTPUT ? _GSocket_Motif_Output
+                                   : _GSocket_Motif_Input,
+                    socket
+               );
     }
 
-    if (m_id[c] != -1)
-        XtRemoveInput(m_id[c]);
-
-    if (c == 0)
+    virtual void RemoveInput(int fd)
     {
-        m_id[0] = XtAppAddInput(wxGetAppContext(), socket->m_fd,
-                                (XtPointer *)XtInputReadMask,
-                                (XtInputCallbackProc) _GSocket_Motif_Input,
-                                (XtPointer) socket);
+        XtRemoveInput(fd);
     }
-    else
-    {
-        m_id[1] = XtAppAddInput(wxGetAppContext(), socket->m_fd,
-                                (XtPointer *)XtInputWriteMask,
-                                (XtInputCallbackProc) _GSocket_Motif_Output,
-                                (XtPointer) socket);
-    }
-}
+};
 
-void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSocketEvent event)
+GSocketManager *wxGUIAppTraits::GetSocketManager()
 {
-    int *m_id = (int *)(socket->m_gui_dependent);
-    int c;
-
-    switch (event)
-    {
-        case GSOCK_LOST:       /* fall-through */
-        case GSOCK_INPUT:      c = 0; break;
-        case GSOCK_OUTPUT:     c = 1; break;
-        case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-        default: return;
-    }
-
-    if (m_id[c] != -1)
-        XtRemoveInput(m_id[c]);
-
-    m_id[c] = -1;
+    static MotifSocketManager s_manager;
+    return &s_manager;
 }
 
-void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
-{
-    Install_Callback(socket, GSOCK_INPUT);
-    Install_Callback(socket, GSOCK_OUTPUT);
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
-{
-    Uninstall_Callback(socket, GSOCK_INPUT);
-    Uninstall_Callback(socket, GSOCK_OUTPUT);
-}
-
-#else /* !wxUSE_SOCKETS */
-
-/* some compilers don't like having empty source files */
-static int wxDummyGsockVar = 0;
-
-#endif /* wxUSE_SOCKETS/!wxUSE_SOCKETS */
+#endif // wxUSE_SOCKETS

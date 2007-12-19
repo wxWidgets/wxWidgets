@@ -2,25 +2,23 @@
  * Project:     GSocket (Generic Socket)
  * Name:        gsocket.h
  * Author:      Guilhem Lavaux
- *              Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
+ *              Guillermo Rodriguez Garcia <guille@iies.es>
  * Copyright:   (c) Guilhem Lavaux
+ *              (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
  * Licence:     wxWindows Licence
  * Purpose:     GSocket include file (system independent)
  * CVSID:       $Id$
  * -------------------------------------------------------------------------
  */
 
-#ifndef __GSOCKET_H
-#define __GSOCKET_H
+#ifndef _WX_GSOCKET_H_
+#define _WX_GSOCKET_H_
 
-#ifndef __GSOCKET_STANDALONE__
 #include "wx/defs.h"
 
+#if wxUSE_SOCKETS
+
 #include "wx/dlimpexp.h" /* for WXDLLIMPEXP_NET */
-
-#endif
-
-#if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
 #include <stddef.h>
 
@@ -37,27 +35,24 @@
 #include <stdlib.h>
 #endif
 
-class GSocket;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct _GAddress GAddress;
 
-typedef enum {
+enum GAddressType
+{
   GSOCK_NOFAMILY = 0,
   GSOCK_INET,
   GSOCK_INET6,
   GSOCK_UNIX
-} GAddressType;
+};
 
-typedef enum {
+enum GSocketStream
+{
   GSOCK_STREAMED,
   GSOCK_UNSTREAMED
-} GSocketStream;
+};
 
-typedef enum {
+enum GSocketError
+{
   GSOCK_NOERROR = 0,
   GSOCK_INVOP,
   GSOCK_IOERR,
@@ -69,19 +64,21 @@ typedef enum {
   GSOCK_TIMEDOUT,
   GSOCK_MEMERR,
   GSOCK_OPTERR
-} GSocketError;
+};
 
 /* See below for an explanation on how events work.
  */
-typedef enum {
+enum GSocketEvent
+{
   GSOCK_INPUT  = 0,
   GSOCK_OUTPUT = 1,
   GSOCK_CONNECTION = 2,
   GSOCK_LOST = 3,
   GSOCK_MAX_EVENT = 4
-} GSocketEvent;
+};
 
-enum {
+enum
+{
   GSOCK_INPUT_FLAG = 1 << GSOCK_INPUT,
   GSOCK_OUTPUT_FLAG = 1 << GSOCK_OUTPUT,
   GSOCK_CONNECTION_FLAG = 1 << GSOCK_CONNECTION,
@@ -90,54 +87,99 @@ enum {
 
 typedef int GSocketEventFlags;
 
+class GSocket;
+
 typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
                                 char *cdata);
 
+/*
+   Class providing hooks abstracting the differences between console and GUI
+   applications for socket code.
 
-/* Functions tables for internal use by GSocket code: */
-
-/* Actually this is a misnomer now, but reusing this name means I don't
-   have to ifdef app traits or common socket code */
-class GSocketGUIFunctionsTable
+   We also have different implementations of this class for different platforms
+   allowing us to keep more things in the common code but the main reason for
+   its existence is that we want the same socket code work differently
+   depending on whether it's used from a console or a GUI program. This is
+   achieved by implementing the virtual methods of this class differently in
+   the objects returned by wxConsoleAppTraits::GetSocketFunctionsTable() and
+   the same method in wxGUIAppTraits.
+ */
+class GSocketManager
 {
 public:
-    // needed since this class declares virtual members
-    virtual ~GSocketGUIFunctionsTable() { }
+    // set the manager to use, we don't take ownership of it
+    //
+    // this should be called before GSocket_Init(), i.e. before the first
+    // wxSocket object is created, otherwise the manager returned by
+    // wxAppTraits::GetSocketManager() will be used
+    static void Set(GSocketManager *manager);
+
+    // return the manager to use
+    //
+    // this initializes the manager at first use
+    static GSocketManager *Get()
+    {
+        if ( !ms_manager )
+            Init();
+
+        return ms_manager;
+    }
+
+    // called before the first wxSocket is created and should do the
+    // initializations needed in order to use the network
+    //
+    // return true if initialized successfully
     virtual bool OnInit() = 0;
+
+    // undo the initializations of OnInit()
     virtual void OnExit() = 0;
-    virtual bool CanUseEventLoop() = 0;
+
+
+    // do manager-specific socket initializations (and undo it): this is called
+    // in the beginning/end of the socket initialization/destruction
     virtual bool Init_Socket(GSocket *socket) = 0;
     virtual void Destroy_Socket(GSocket *socket) = 0;
-#ifndef __WINDOWS__
+
     virtual void Install_Callback(GSocket *socket, GSocketEvent event) = 0;
     virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event) = 0;
-#endif
+
     virtual void Enable_Events(GSocket *socket) = 0;
     virtual void Disable_Events(GSocket *socket) = 0;
+
+    virtual ~GSocketManager() { }
+
+private:
+    // get the manager to use if we don't have it yet
+    static void Init();
+
+    static GSocketManager *ms_manager;
 };
+
+#if defined(__WINDOWS__)
+    #include "wx/msw/gsockmsw.h"
+#else
+    #include "wx/unix/gsockunx.h"
+#endif
 
 
 /* Global initializers */
 
-/* Sets GUI functions callbacks. Must be called *before* GSocket_Init
-   if the app uses async sockets. */
-void GSocket_SetGUIFunctions(GSocketGUIFunctionsTable *guifunc);
-
-/* GSocket_Init() must be called at the beginning */
-int GSocket_Init(void);
+/* GSocket_Init() must be called at the beginning (but after calling
+ * GSocketManager::Set() if a custom manager should be used) */
+bool GSocket_Init();
 
 /* GSocket_Cleanup() must be called at the end */
-void GSocket_Cleanup(void);
+void GSocket_Cleanup();
 
 
 /* Constructors / Destructors */
 
-GSocket *GSocket_new(void);
+GSocket *GSocket_new();
 
 
 /* GAddress */
 
-GAddress *GAddress_new(void);
+GAddress *GAddress_new();
 GAddress *GAddress_copy(GAddress *address);
 void GAddress_destroy(GAddress *address);
 
@@ -185,16 +227,6 @@ unsigned short GAddress_INET6_GetPort(GAddress *address);
 GSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
 GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+#endif /* wxUSE_SOCKETS */
 
-# if defined(__WINDOWS__)
-#  include "wx/msw/gsockmsw.h"
-# else
-#  include "wx/unix/gsockunx.h"
-# endif
-
-#endif    /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
-
-#endif    /* __GSOCKET_H */
+#endif /* _WX_GSOCKET_H_ */

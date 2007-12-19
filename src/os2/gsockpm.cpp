@@ -31,34 +31,6 @@ static void _GSocket_PM_Output(void *data)
     socket->Detected_Write();
 }
 
-bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
-{   return true; }
-
-bool GSocketGUIFunctionsTableConcrete::OnInit(void)
-{
-    return 1;
-}
-
-void GSocketGUIFunctionsTableConcrete::OnExit(void)
-{
-}
-
-bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
-{
-    int *m_id;
-    socket->m_gui_dependent = (char *)malloc(sizeof(int)*2);
-    m_id = (int *)(socket->m_gui_dependent);
-
-    m_id[0] = -1;
-    m_id[1] = -1;
-    return true;
-}
-
-void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
-{
-    free(socket->m_gui_dependent);
-}
-
 void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
 {
     int *m_id = (int *)(socket->m_gui_dependent);

@@ -5,6 +5,7 @@
 // Created:     08.24.06
 // RCS-ID:      $Id$
 // Copyright:   (c) 2006 Angel vidal
+//              (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -21,205 +22,114 @@
 
 #if wxUSE_SOCKETS && wxUSE_SELECT_DISPATCHER
 
-#include "wx/private/gsocketiohandler.h"
+#include "wx/apptrait.h"
 #include "wx/unix/private.h"
-#include "wx/gsocket.h"
-#include "wx/unix/gsockunx.h"
+#include "wx/private/gsocketiohandler.h"
 
 // ============================================================================
 // implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxGSocketIOHandler
+// GSocketSelectManager
 // ----------------------------------------------------------------------------
 
-wxGSocketIOHandler::wxGSocketIOHandler(GSocket* socket)
-                  : m_socket(socket),
-                    m_flags(0)
+class GSocketSelectManager : public GSocketFDBasedManager
 {
+public:
+    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
+    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
+};
 
+void GSocketSelectManager::Install_Callback(GSocket *socket,
+                                            GSocketEvent event)
+{
+    const int fd = socket->m_fd;
+
+    if ( fd == -1 )
+        return;
+
+    const SocketDir d = GetDirForEvent(socket, event);
+
+    wxFDIODispatcher * const dispatcher = wxFDIODispatcher::Get();
+    if ( !dispatcher )
+        return;
+
+    wxGSocketIOHandler *& handler = socket->m_handler;
+
+    // we should register the new handlers but modify the existing ones in place
+    bool registerHandler;
+    if ( handler )
+    {
+        registerHandler = false;
+    }
+    else // no existing handler
+    {
+        registerHandler = true;
+        handler = new wxGSocketIOHandler(socket);
+    }
+
+    FD(socket, d) = fd;
+    if (d == FD_INPUT)
+    {
+        handler->AddFlag(wxFDIO_INPUT);
+    }
+    else
+    {
+        handler->AddFlag(wxFDIO_OUTPUT);
+    }
+
+    if ( registerHandler )
+        dispatcher->RegisterFD(fd, handler, handler->GetFlags());
+    else
+        dispatcher->ModifyFD(fd, handler, handler->GetFlags());
 }
 
-void wxGSocketIOHandler::OnReadWaiting()
+void GSocketSelectManager::Uninstall_Callback(GSocket *socket,
+                                              GSocketEvent event)
 {
-    m_socket->Detected_Read();
+    const SocketDir d = GetDirForEvent(socket, event);
+
+    const int fd = FD(socket, d);
+    if ( fd == -1 )
+        return;
+
+    FD(socket, d) = -1;
+
+    const wxFDIODispatcherEntryFlags
+        flag = d == FD_INPUT ? wxFDIO_INPUT : wxFDIO_OUTPUT;
+
+    wxFDIODispatcher * const dispatcher = wxFDIODispatcher::Get();
+    if ( !dispatcher )
+        return;
+
+    wxGSocketIOHandler *& handler = socket->m_handler;
+    if ( handler )
+    {
+        handler->RemoveFlag(flag);
+
+        if ( !handler->GetFlags() )
+        {
+            dispatcher->UnregisterFD(fd);
+            delete handler;
+            socket->m_handler = NULL;
+        }
+        else
+        {
+            dispatcher->ModifyFD(fd, handler, handler->GetFlags());
+        }
+    }
+    else
+    {
+        dispatcher->UnregisterFD(fd);
+    }
 }
 
-void wxGSocketIOHandler::OnWriteWaiting()
+GSocketManager *wxAppTraits::GetSocketManager()
 {
-    m_socket->Detected_Write();
-}
+    static GSocketSelectManager s_manager;
 
-void wxGSocketIOHandler::OnExceptionWaiting()
-{
-    m_socket->Detected_Read();
-}
-
-int wxGSocketIOHandler::GetFlags() const
-{
-    return m_flags;
-}
-
-
-void wxGSocketIOHandler::RemoveFlag(wxFDIODispatcherEntryFlags flag)
-{
-    m_flags &= ~flag;
-}
-
-void wxGSocketIOHandler::AddFlag(wxFDIODispatcherEntryFlags flag)
-{
-    m_flags |= flag;
-}
-
-// ----------------------------------------------------------------------------
-// GSocket interface
-// ----------------------------------------------------------------------------
-
-bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
-{
-    return true;
-}
-
-bool GSocketGUIFunctionsTableConcrete::OnInit()
-{
-    return true;
-}
-
-void GSocketGUIFunctionsTableConcrete::OnExit()
-{
-}
-
-bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
-{
-  int *m_id;
-
-  socket->m_gui_dependent = (char *)malloc(sizeof(int)*2);
-  m_id = (int *)(socket->m_gui_dependent);
-
-  m_id[0] = -1;
-  m_id[1] = -1;
-
-  return true;
-}
-
-void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
-{
-  free(socket->m_gui_dependent);
-}
-
-void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket,
-                                                        GSocketEvent event)
-{
-  int *m_id = (int *)(socket->m_gui_dependent);
-  const int fd = socket->m_fd;
-
-  if ( fd == -1 )
-    return;
-
-  int c;
-  switch (event)
-  {
-    case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break;
-    case GSOCK_OUTPUT:     c = 1; break;
-    case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-    default: return;
-  }
-
-  wxFDIODispatcher * const dispatcher = wxFDIODispatcher::Get();
-  if ( !dispatcher )
-      return;
-
-  wxGSocketIOHandler *& handler = socket->m_handler;
-
-  // we should register the new handlers but modify the existing ones in place
-  bool registerHandler;
-  if ( handler )
-  {
-      registerHandler = false;
-  }
-  else // no existing handler
-  {
-      registerHandler = true;
-      handler = new wxGSocketIOHandler(socket);
-  }
-
-  if (c == 0)
-  {
-      m_id[0] = fd;
-      handler->AddFlag(wxFDIO_INPUT);
-  }
-  else
-  {
-      m_id[1] = fd;
-      handler->AddFlag(wxFDIO_OUTPUT);
-  }
-
-  if ( registerHandler )
-      dispatcher->RegisterFD(fd, handler, handler->GetFlags());
-  else
-      dispatcher->ModifyFD(fd, handler, handler->GetFlags());
-}
-
-void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket,
-                                                          GSocketEvent event)
-{
-  int *m_id = (int *)(socket->m_gui_dependent);
-  int c;
-
-  switch (event)
-  {
-    case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break;
-    case GSOCK_OUTPUT:     c = 1; break;
-    case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-    default: return;
-  }
-
-  if ( m_id[c] == -1 )
-      return;
-
-  int fd = m_id[c];
-  m_id[c] = -1;
-
-  const wxFDIODispatcherEntryFlags flag = c == 0 ? wxFDIO_INPUT : wxFDIO_OUTPUT;
-
-  wxFDIODispatcher * const dispatcher = wxFDIODispatcher::Get();
-  if ( !dispatcher )
-      return;
-
-  wxGSocketIOHandler *& handler = socket->m_handler;
-  if ( handler )
-  {
-      handler->RemoveFlag(flag);
-
-      if ( !handler->GetFlags() )
-      {
-          dispatcher->UnregisterFD(fd);
-          delete handler;
-      }
-      else
-      {
-          dispatcher->ModifyFD(fd, handler, handler->GetFlags());
-      }
-  }
-  else
-  {
-      dispatcher->UnregisterFD(fd);
-  }
-}
-
-void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
-{
-  Install_Callback(socket, GSOCK_INPUT);
-  Install_Callback(socket, GSOCK_OUTPUT);
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
-{
-  Uninstall_Callback(socket, GSOCK_INPUT);
-  Uninstall_Callback(socket, GSOCK_OUTPUT);
+    return &s_manager;
 }
 
 #endif // wxUSE_SOCKETS

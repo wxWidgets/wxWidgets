@@ -165,7 +165,7 @@ Major new features in this release
 - wxWidgets may now use either wchar_t (UTF-16/32) or UTF-8 internally,
   depending on what is optimal for the target platform.
 
-- Events loops and timers can now be used in wxBase, without GUI.
+- Events loops, timers and sockets can now be used in wxBase, without GUI.
 
 
 2.9.0

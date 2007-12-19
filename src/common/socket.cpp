@@ -40,6 +40,7 @@
 #include "wx/sckaddr.h"
 #include "wx/stopwatch.h"
 #include "wx/thread.h"
+#include "wx/evtloop.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"
@@ -101,6 +102,50 @@ public:
   DECLARE_NO_COPY_CLASS(wxSocketState)
 };
 
+// ============================================================================
+// GSocketManager
+// ============================================================================
+
+GSocketManager *GSocketManager::ms_manager = NULL;
+
+/* static */
+void GSocketManager::Set(GSocketManager *manager)
+{
+    wxASSERT_MSG( !ms_manager, "too late to set manager now" );
+
+    ms_manager = manager;
+}
+
+/* static */
+void GSocketManager::Init()
+{
+    wxASSERT_MSG( !ms_manager, "shouldn't be initialized twice" );
+
+    /*
+        Details: Initialize() creates a hidden window as a sink for socket
+        events, such as 'read completed'. wxMSW has only one message loop
+        for the main thread. If Initialize is called in a secondary thread,
+        the socket window will be created for the secondary thread, but
+        since there is no message loop on this thread, it will never
+        receive events and all socket operations will time out.
+        BTW, the main thread must not be stopped using sleep or block
+        on a semaphore (a bad idea in any case) or socket operations
+        will time out.
+
+        On the Mac side, Initialize() stores a pointer to the CFRunLoop for
+        the main thread. Because secondary threads do not have run loops,
+        adding event notifications to the "Current" loop would have no
+        effect at all, events would never fire.
+    */
+    wxASSERT_MSG( wxIsMainThread(),
+                    "sockets must be initialized from the main thread" );
+
+    wxAppConsole * const app = wxAppConsole::GetInstance();
+    wxCHECK_RET( app, "sockets can't be initialized without wxApp" );
+
+    ms_manager = app->GetTraits()->GetSocketManager();
+}
+
 // ==========================================================================
 // wxSocketBase
 // ==========================================================================
@@ -122,31 +167,6 @@ bool wxSocketBase::Initialize()
 {
     if ( !m_countInit++ )
     {
-        /*
-            Details: Initialize() creates a hidden window as a sink for socket
-            events, such as 'read completed'. wxMSW has only one message loop
-            for the main thread. If Initialize is called in a secondary thread,
-            the socket window will be created for the secondary thread, but
-            since there is no message loop on this thread, it will never
-            receive events and all socket operations will time out.
-            BTW, the main thread must not be stopped using sleep or block
-            on a semaphore (a bad idea in any case) or socket operations
-            will time out.
-
-            On the Mac side, Initialize() stores a pointer to the CFRunLoop for
-            the main thread. Because secondary threads do not have run loops,
-            adding event notifications to the "Current" loop would have no
-            effect at all, events would never fire.
-        */
-        wxASSERT_MSG( wxIsMainThread(),
-            wxT("Call wxSocketBase::Initialize() from the main thread first!"));
-
-        wxAppTraits *traits = wxAppConsole::GetInstance() ?
-                              wxAppConsole::GetInstance()->GetTraits() : NULL;
-        GSocketGUIFunctionsTable *functions =
-            traits ? traits->GetSocketGUIFunctionsTable() : NULL;
-        GSocket_SetGUIFunctions(functions);
-
         if ( !GSocket_Init() )
         {
             m_countInit--;
@@ -161,7 +181,7 @@ bool wxSocketBase::Initialize()
 void wxSocketBase::Shutdown()
 {
     // we should be initialized
-    wxASSERT_MSG( m_countInit, _T("extra call to Shutdown()") );
+    wxASSERT_MSG( m_countInit > 0, _T("extra call to Shutdown()") );
     if ( --m_countInit == 0 )
     {
         GSocket_Cleanup();
@@ -695,7 +715,9 @@ bool wxSocketBase::_Wait(long seconds,
   else
     timeout = m_timeout * 1000;
 
-  bool has_event_loop = wxTheApp->GetTraits() ? (wxTheApp->GetTraits()->GetSocketGUIFunctionsTable() ? true : false) : false;
+  // check if we are using event loop or not: normally we do in GUI but not in
+  // console applications but this can be overridden
+  const bool has_event_loop = wxEventLoop::GetActive() != NULL;
 
   // Wait in an active polling loop.
   //
@@ -1009,6 +1031,8 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
 void wxSocketBase::Notify(bool notify)
 {
     m_notify = notify;
+    if (m_socket)
+        m_socket->Notify(notify);
 }
 
 void wxSocketBase::SetNotify(wxSocketEventFlags flags)
@@ -1096,8 +1120,8 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
         return;
     }
 
-        // Setup the socket as server
-
+    // Setup the socket as server
+    m_socket->Notify(m_notify);
     m_socket->SetLocal(addr_man.GetAddress());
 
     if (GetFlags() & wxSOCKET_REUSEADDR) {
@@ -1123,6 +1147,8 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
     m_socket->SetCallback(GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                   GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                                   wx_socket_callback, (char *)this);
+
+    wxLogTrace( wxTRACE_Socket, _T("wxSocketServer on fd %d"), m_socket->m_fd );
 }
 
 // --------------------------------------------------------------------------
@@ -1310,6 +1336,9 @@ bool wxSocketClient::DoConnect(wxSockAddress& addr_man, wxSockAddress* local, bo
   m_socket->SetPeer(addr_man.GetAddress());
   err = m_socket->Connect(GSOCK_STREAMED);
 
+  //this will register for callbacks - must be called after m_socket->m_fd was initialized
+  m_socket->Notify(m_notify);
+
   if (!wait)
     m_socket->SetNonBlocking(0);
 
@@ -1365,6 +1394,7 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
         wxFAIL_MSG( _T("datagram socket not new'd") );
         return;
     }
+    m_socket->Notify(m_notify);
     // Setup the socket as non connection oriented
     m_socket->SetLocal(addr.GetAddress());
     if (flags & wxSOCKET_REUSEADDR)

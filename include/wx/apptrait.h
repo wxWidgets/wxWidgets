@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 class WXDLLIMPEXP_FWD_BASE wxTimer;
 class WXDLLIMPEXP_FWD_BASE wxTimerImpl;
 
-class GSocketGUIFunctionsTable;
+class GSocketManager;
 
 
 // ----------------------------------------------------------------------------
@@ -116,13 +116,9 @@ public:
     virtual void RemoveFromPendingDelete(wxObject *object) = 0;
 
 #if wxUSE_SOCKETS
-    // return table of GUI callbacks for GSocket code or NULL in wxBase. This
-    // is needed because networking classes are in their own library and so
-    // they can't directly call GUI functions (the same net library can be
-    // used in both GUI and base apps). To complicate it further, GUI library
-    // ("wxCore") doesn't depend on networking library and so only a functions
-    // table can be passed around
-    virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable() = 0;
+    // return socket manager: this is usually different for console and GUI
+    // applications (although some ports use the same implementation for both)
+    virtual GSocketManager *GetSocketManager() = 0;
 #endif
 
     // create a new, port specific, instance of the event loop used by wxApp
@@ -220,9 +216,6 @@ public:
     virtual wxFontMapper *CreateFontMapper();
 #endif // wxUSE_FONTMAP
     virtual wxRendererNative *CreateRenderer();
-#if wxUSE_SOCKETS
-    virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable();
-#endif
 
 #ifdef __WXDEBUG__
     virtual bool ShowAssertDialog(const wxString& msg);
@@ -264,9 +257,6 @@ public:
     virtual wxFontMapper *CreateFontMapper();
 #endif // wxUSE_FONTMAP
     virtual wxRendererNative *CreateRenderer();
-#if wxUSE_SOCKETS
-    virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable();
-#endif
 
 #ifdef __WXDEBUG__
     virtual bool ShowAssertDialog(const wxString& msg);

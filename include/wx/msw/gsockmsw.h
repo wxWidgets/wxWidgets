@@ -8,20 +8,8 @@
  * -------------------------------------------------------------------------
  */
 
-#ifndef __GSOCK_MSW_H
-#define __GSOCK_MSW_H
-
-#ifndef __GSOCKET_STANDALONE__
-#include "wx/setup.h"
-#endif
-
-#if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
-
-#ifndef __GSOCKET_STANDALONE__
-#include "wx/gsocket.h"
-#else
-#include "gsocket.h"
-#endif
+#ifndef _WX_MSW_GSOCKMSW_H_
+#define _WX_MSW_GSOCKMSW_H_
 
 #include "wx/msw/wrapwin.h"
 
@@ -34,18 +22,6 @@
 #if defined(__WXWINCE__) || defined(__CYGWIN__)
 #include <winsock.h>
 #endif
-
-class GSocketGUIFunctionsTableConcrete: public GSocketGUIFunctionsTable
-{
-public:
-    virtual bool OnInit();
-    virtual void OnExit();
-    virtual bool CanUseEventLoop();
-    virtual bool Init_Socket(GSocket *socket);
-    virtual void Destroy_Socket(GSocket *socket);
-    virtual void Enable_Events(GSocket *socket);
-    virtual void Disable_Events(GSocket *socket);
-};
 
 /* Definition of GSocket */
 class GSocket
@@ -62,6 +38,8 @@ public:
   GAddress *GetPeer();
   GSocketError SetServer();
   GSocket *WaitConnection();
+  // not used under MSW
+  void Notify(bool) { }
   bool SetReusable();
   bool SetBroadcast();
   bool DontDoBind();
@@ -123,10 +101,6 @@ public:
   int m_msgnumber;
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Definition of GAddress */
 struct _GAddress
 {
@@ -149,10 +123,4 @@ GSocketError _GAddress_translate_to  (GAddress *address,
 GSocketError _GAddress_Init_INET(GAddress *address);
 GSocketError _GAddress_Init_UNIX(GAddress *address);
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
-
-#endif  /* __GSOCK_MSW_H */
+#endif  /* _WX_MSW_GSOCKMSW_H_ */

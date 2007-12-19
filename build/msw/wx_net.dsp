@@ -298,6 +298,10 @@ SOURCE=..\..\src\msw\gsocket.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\gsockmsw.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\urlmsw.cpp
 # End Source File
 # Begin Source File

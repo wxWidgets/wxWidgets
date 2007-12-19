@@ -194,19 +194,11 @@ static void SetDefaultEndpointModes(EndpointRef ep , void *data )
 */
 }
 
-/* Global initialisers */
-
-void GSocket_SetGUIFunctions(GSocketGUIFunctionsTable *table)
+bool GSocket_Init()
 {
-    // do nothing, wxMac doesn't have wxBase-GUI separation yet
+    return true;
 }
 
-int GSocket_Init()
-{
-    return 1;
-}
-
-bool GSocket_Verify_Inited() ;
 bool GSocket_Verify_Inited()
 {
     OSStatus err ;

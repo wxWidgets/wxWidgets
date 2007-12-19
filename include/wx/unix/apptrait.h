@@ -67,6 +67,17 @@ public:
 #if defined(__WXDEBUG__) && defined(__WXGTK20__)
     virtual bool ShowAssertDialog(const wxString& msg);
 #endif
+
+    // GTK+ and Motif integrate sockets directly in their main loop, the other
+    // Unix ports do it at wxEventLoop level
+    //
+    // TODO: Should we use XtAddInput() for wxX11 too? Or, vice versa, if there
+    //       is no advantage in doing this compared to the generic way
+    //       currently used by wxX11, should we continue to use GTK/Motif-
+    //       specific stuff?
+#if wxUSE_SOCKETS && (defined(__WXGTK__) || defined(__WXMOTIF__))
+    virtual GSocketManager *GetSocketManager();
+#endif
 };
 
 #endif // wxUSE_GUI

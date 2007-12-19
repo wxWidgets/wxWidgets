@@ -62,6 +62,14 @@ SERVER_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
 	$(CXXFLAGS)
 SERVER_OBJECTS =  \
 	server_server.o
+BASECLIENT_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
+	$(CPPFLAGS) $(CXXFLAGS)
+BASECLIENT_OBJECTS =  \
+	baseclient_baseclient.o
+BASESERVER_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
+	$(CPPFLAGS) $(CXXFLAGS)
+BASESERVER_OBJECTS =  \
+	baseserver_baseserver.o
 
 ### Conditionally set variables: ###
 
@@ -87,7 +95,7 @@ endif
 
 ### Targets: ###
 
-all: test_for_selected_wxbuild client server
+all: test_for_selected_wxbuild client server baseclient baseserver
 
 install: all
 
@@ -98,6 +106,8 @@ clean:
 	rm -f ./*.d
 	rm -f client
 	rm -f server
+	rm -f baseclient
+	rm -f baseserver
 
 test_for_selected_wxbuild: 
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
@@ -108,11 +118,23 @@ client: $(CLIENT_OBJECTS)
 server: $(SERVER_OBJECTS)
 	$(CXX) -o $@ $(SERVER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,net,base`
 
+baseclient: $(BASECLIENT_OBJECTS)
+	$(CXX) -o $@ $(BASECLIENT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs net,base`
+
+baseserver: $(BASESERVER_OBJECTS)
+	$(CXX) -o $@ $(BASESERVER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs net,base`
+
 client_client.o: ./client.cpp
 	$(CXX) -c -o $@ $(CLIENT_CXXFLAGS) $(CPPDEPS) $<
 
 server_server.o: ./server.cpp
 	$(CXX) -c -o $@ $(SERVER_CXXFLAGS) $(CPPDEPS) $<
+
+baseclient_baseclient.o: ./baseclient.cpp
+	$(CXX) -c -o $@ $(BASECLIENT_CXXFLAGS) $(CPPDEPS) $<
+
+baseserver_baseserver.o: ./baseserver.cpp
+	$(CXX) -c -o $@ $(BASESERVER_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 

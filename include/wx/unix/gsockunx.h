@@ -8,36 +8,10 @@
  * -------------------------------------------------------------------------
  */
 
-#ifndef __GSOCK_UNX_H
-#define __GSOCK_UNX_H
-
-#ifndef __GSOCKET_STANDALONE__
-#include "wx/setup.h"
-#endif
+#ifndef _WX_UNIX_GSOCKUNX_H_
+#define _WX_UNIX_GSOCKUNX_H_
 
 class wxGSocketIOHandler;
-
-#if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
-
-#ifndef __GSOCKET_STANDALONE__
-#include "wx/gsocket.h"
-#else
-#include "gsocket.h"
-#endif
-
-class GSocketGUIFunctionsTableConcrete : public GSocketGUIFunctionsTable
-{
-public:
-    virtual bool OnInit();
-    virtual void OnExit();
-    virtual bool CanUseEventLoop();
-    virtual bool Init_Socket(GSocket *socket);
-    virtual void Destroy_Socket(GSocket *socket);
-    virtual void Install_Callback(GSocket *socket, GSocketEvent event);
-    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event);
-    virtual void Enable_Events(GSocket *socket);
-    virtual void Disable_Events(GSocket *socket);
-};
 
 class GSocket
 {
@@ -70,6 +44,8 @@ public:
     GSocketError GetSockOpt(int level, int optname, void *optval, int *optlen);
     GSocketError SetSockOpt(int level, int optname,
         const void *optval, int optlen);
+    //attach or detach from main loop
+    void Notify(bool flag);
     virtual void Detected_Read();
     virtual void Detected_Write();
     void SetInitialSocketBuffers(int recv, int send)
@@ -79,6 +55,9 @@ public:
     }
 
 protected:
+    //enable or disable event callback using gsocket gui callback table
+    void EnableEvents(bool flag = true);
+    void DisableEvents() { EnableEvents(false); }
     void Enable(GSocketEvent event);
     void Disable(GSocketEvent event);
     GSocketError Input_Timeout();
@@ -108,18 +87,18 @@ public:
   bool m_dobind;
   unsigned long m_timeout;
 
+  // true if socket should fire events
+  bool m_use_events;
+
   /* Callbacks */
   GSocketEventFlags m_detected;
   GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
   char *m_data[GSOCK_MAX_EVENT];
 
-  char *m_gui_dependent;
-
+  // pointer for storing extra (usually GUI-specific) data
+  void *m_gui_dependent;
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 /* Definition of GAddress */
 struct _GAddress
 {
@@ -131,15 +110,6 @@ struct _GAddress
 
   GSocketError m_error;
 };
-#ifdef __cplusplus
-}
-#endif  /* __cplusplus */
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 
 /* GAddress */
 
@@ -150,11 +120,121 @@ GSocketError _GAddress_translate_to  (GAddress *address,
 GSocketError _GAddress_Init_INET(GAddress *address);
 GSocketError _GAddress_Init_UNIX(GAddress *address);
 
+// A version of GSocketManager which uses FDs for socket IO
+//
+// This class uses GSocket::m_gui_dependent field to store the 2 (for input and
+// output) FDs associated with the socket.
+class GSocketFDBasedManager : public GSocketManager
+{
+public:
+    // no special initialization/cleanup needed when using FDs
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { }
 
-#ifdef __cplusplus
-}
-#endif  /* __cplusplus */
+    // allocate/free the storage we need
+    virtual bool Init_Socket(GSocket *socket)
+    {
+        socket->m_gui_dependent = malloc(sizeof(int)*2);
+        int * const fds = wx_static_cast(int *, socket->m_gui_dependent);
 
-#endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
+        fds[0] = -1;
+        fds[1] = -1;
 
-#endif  /* __GSOCK_UNX_H */
+        return true;
+    }
+    virtual void Destroy_Socket(GSocket *socket)
+    {
+        free(socket->m_gui_dependent);
+    }
+
+    virtual void Enable_Events(GSocket *socket)
+    {
+        Install_Callback(socket, GSOCK_INPUT);
+        Install_Callback(socket, GSOCK_OUTPUT);
+    }
+    virtual void Disable_Events(GSocket *socket)
+    {
+        Uninstall_Callback(socket, GSOCK_INPUT);
+        Uninstall_Callback(socket, GSOCK_OUTPUT);
+    }
+
+protected:
+    // identifies either input or output direction
+    //
+    // NB: the values of this enum shouldn't change
+    enum SocketDir
+    {
+        FD_INPUT,
+        FD_OUTPUT
+    };
+
+    // get the FD index corresponding to the given GSocketEvent
+    SocketDir GetDirForEvent(GSocket *socket, GSocketEvent event)
+    {
+        switch ( event )
+        {
+            default:
+                wxFAIL_MSG( "unexpected socket event" );
+                // fall through
+
+            case GSOCK_LOST:
+                // fall through
+
+            case GSOCK_INPUT:
+                return FD_INPUT;
+
+            case GSOCK_OUTPUT:
+                return FD_OUTPUT;
+
+            case GSOCK_CONNECTION:
+                // FIXME: explain this?
+                return socket->m_server ? FD_INPUT : FD_OUTPUT;
+        }
+    }
+
+    // access the FDs we store
+    int& FD(GSocket *socket, SocketDir d)
+    {
+        return wx_static_cast(int *, socket->m_gui_dependent)[d];
+    }
+};
+
+// Common base class for all ports using X11-like (and hence implemented in
+// X11, Motif and GTK) AddInput() and RemoveInput() functions
+class GSocketInputBasedManager : public GSocketFDBasedManager
+{
+public:
+    virtual void Install_Callback(GSocket *socket, GSocketEvent event)
+    {
+        wxCHECK_RET( socket->m_fd != -1,
+                        "shouldn't be called on invalid socket" );
+
+        const SocketDir d = GetDirForEvent(socket, event);
+
+        int& fd = FD(socket, d);
+        if ( fd != -1 )
+            RemoveInput(fd);
+
+        fd = AddInput(socket, d);
+    }
+
+    virtual void Uninstall_Callback(GSocket *socket, GSocketEvent event)
+    {
+        const SocketDir d = GetDirForEvent(socket, event);
+
+        int& fd = FD(socket, d);
+        if ( fd != -1 )
+        {
+            RemoveInput(fd);
+            fd = -1;
+        }
+    }
+
+private:
+    // these functions map directly to XtAdd/RemoveInput() or
+    // gdk_input_add/remove()
+    virtual int AddInput(GSocket *socket, SocketDir d) = 0;
+    virtual void RemoveInput(int fd) = 0;
+};
+
+#endif  /* _WX_UNIX_GSOCKUNX_H_ */

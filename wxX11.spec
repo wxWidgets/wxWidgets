@@ -258,6 +258,7 @@ wx/xtistrm.h
 wx/zipstrm.h
 wx/zstream.h
 wx/private/fdiodispatcher.h
+wx/private/gsocketiohandler.h
 wx/private/selectdispatcher.h
 wx/unix/app.h
 wx/unix/apptbase.h

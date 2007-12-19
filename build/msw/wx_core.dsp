@@ -1435,10 +1435,6 @@ SOURCE=..\..\src\msw\graphics.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\gsockmsw.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\msw\helpchm.cpp
 # End Source File
 # Begin Source File

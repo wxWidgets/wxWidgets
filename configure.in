@@ -7219,6 +7219,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 else
     SAMPLES_SUBDIRS="console"
+    if test "$wxUSE_SOCKETS" = "yes" ; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
+    fi
 fi
 
 
@@ -7852,7 +7855,14 @@ for subdir in $SUBDIRS; do
             dnl don't take all samples/utils, just those which build with
             dnl wxBase
             if test ${subdir} = "samples"; then
-                makefiles="samples/Makefile.in samples/console/Makefile.in"
+                dnl only take those samples which compile in the current
+                dnl configuration and which exist
+                makefiles="samples/Makefile.in $makefiles"
+                for sample in `echo $SAMPLES_SUBDIRS`; do
+                    if test -d $srcdir/samples/$sample; then
+                        makefiles="samples/$sample/Makefile.in $makefiles"
+                    fi
+                done
             elif test ${subdir} = "utils"; then
                 makefiles=""
                 for util in HelpGen tex2rtf ; do

@@ -545,28 +545,3 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
     wxPendingDelete.DeleteObject(object);
 }
 
-#if wxUSE_SOCKETS
-
-#if defined(__WINDOWS__)
-    #include "wx/msw/gsockmsw.h"
-#elif defined(__UNIX__) || defined(__DARWIN__) || defined(__OS2__)
-    #include "wx/unix/gsockunx.h"
-#elif defined(__WXMAC__)
-    #include <MacHeaders.c>
-    #define OTUNIXERRORS 1
-    #include <OpenTransport.h>
-    #include <OpenTransportProviders.h>
-    #include <OpenTptInternet.h>
-
-    #include "wx/mac/gsockmac.h"
-#else
-    #error "Must include correct GSocket header here"
-#endif
-
-GSocketGUIFunctionsTable* wxGUIAppTraitsBase::GetSocketGUIFunctionsTable()
-{
-    static GSocketGUIFunctionsTableConcrete table;
-    return &table;
-}
-
-#endif
