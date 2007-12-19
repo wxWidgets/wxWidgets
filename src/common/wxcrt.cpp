@@ -167,26 +167,17 @@ char* wxSetlocale(int category, const char *locale)
     char *rv = NULL ;
     if ( locale != NULL && locale[0] == 0 )
     {
-        locale_t lt = newlocale(LC_ALL_MASK, "", NULL);
-        if ( lt )
-        {
-            rv = (char*) querylocale( LC_ALL_MASK, lt );
-            freelocale(lt);
-        }
-        if ( rv == NULL || rv[0] == 0  || strcmp( rv , "C" ) == 0 || strcmp( rv, "POSIX" ) == 0 )
-        {
-            // we have to emulate the behaviour under OS X
-            wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
-            wxCFStringRef str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
-            wxString langFull = str.AsString()+"_";
-            str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
-            langFull += str.AsString();
-            rv = setlocale(category, langFull.c_str());
-        }
-        else
-        {
-            rv = setlocale(category, rv);
-        }
+        // the attempt to use newlocale(LC_ALL_MASK, "", NULL);
+        // here in order to deduce the language along the environment vars rules
+        // lead to strange crashes later...
+
+        // we have to emulate the behaviour under OS X
+        wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
+        wxCFStringRef str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
+        wxString langFull = str.AsString()+"_";
+        str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
+        langFull += str.AsString();
+        rv = setlocale(category, langFull.c_str());
     }
     else
         rv = setlocale(category, locale);
