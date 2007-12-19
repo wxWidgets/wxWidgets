@@ -162,6 +162,7 @@ public:
 #if wxUSE_MOUSEWHEEL
     void HandleOnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
+    void HandleOnChildFocus(wxChildFocusEvent& event);
 
     // FIXME: this is needed for now for wxPlot compilation, should be removed
     //        once it is fixed!

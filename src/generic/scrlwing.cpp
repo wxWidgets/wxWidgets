@@ -241,6 +241,12 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         return true;
     }
 
+    if ( evType == wxEVT_CHILD_FOCUS )
+    {
+        m_scrollHelper->HandleOnChildFocus((wxChildFocusEvent &)event);
+        return true;
+    }
+
     // reset the skipped flag (which might have been set to true in
     // ProcessEvent() above) to be able to test it below
     bool wasSkipped = event.GetSkipped();
@@ -1344,6 +1350,75 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
 }
 
 #endif // wxUSE_MOUSEWHEEL
+
+void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
+{
+    // this event should be processed by all windows in parenthood chain,
+    // e.g. so that nested wxScrolledWindows work correctly
+    event.Skip();
+
+    // find the immediate child under which the window receiving focus is:
+    wxWindow *win = event.GetWindow();
+    while ( win->GetParent() != m_targetWindow )
+    {
+        win = win->GetParent();
+        wxCHECK_RET( win, "incorrectly sent wxChildFocusEvent - not our child" );
+    }
+
+    // if the child is not fully visible, try to scroll it into view:
+    int stepx, stepy;
+    GetScrollPixelsPerUnit(&stepx, &stepy);
+
+    // NB: we don't call CalcScrolledPosition() on win->GetPosition() here,
+    //     because children' positions are already scrolled
+    wxRect winrect(win->GetPosition(), win->GetSize());
+    wxSize view(m_targetWindow->GetClientSize());
+
+    int startx, starty;
+    GetViewStart(&startx, &starty);
+
+    // first in vertical direction:
+    if ( stepy > 0 )
+    {
+        int diff = 0;
+
+        if ( winrect.GetTop() < 0 )
+        {
+            diff = winrect.GetTop();
+        }
+        else if ( winrect.GetBottom() > view.y )
+        {
+            diff = winrect.GetBottom() - view.y + 1;
+            // round up to next scroll step if we can't get exact position,
+            // so that the window is fully visible:
+            diff += stepy - 1;
+        }
+
+        starty = (starty * stepy + diff) / stepy;
+    }
+
+    // then horizontal:
+    if ( stepx > 0 )
+    {
+        int diff = 0;
+
+        if ( winrect.GetLeft() < 0 )
+        {
+            diff = winrect.GetLeft();
+        }
+        else if ( winrect.GetRight() > view.x )
+        {
+            diff = winrect.GetRight() - view.x + 1;
+            // round up to next scroll step if we can't get exact position,
+            // so that the window is fully visible:
+            diff += stepx - 1;
+        }
+
+        startx = (startx * stepx + diff) / stepx;
+    }
+
+    Scroll(startx, starty);
+}
 
 // ----------------------------------------------------------------------------
 // wxScrolledWindow implementation
