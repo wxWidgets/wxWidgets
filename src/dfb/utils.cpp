@@ -128,9 +128,3 @@ bool wxGetKeyState(wxKeyCode key)
 void wxBell()
 {
 }
-
-int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
-{
-    wxFAIL_MSG( "wxAddProcessCallback not implemented" );
-    return 0;
-}

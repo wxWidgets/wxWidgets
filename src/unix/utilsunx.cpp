@@ -44,6 +44,10 @@
 #include "wx/unix/execute.h"
 #include "wx/unix/private.h"
 
+#ifdef wxHAS_GENERIC_PROCESS_CALLBACK
+#include "wx/private/fdiodispatcher.h"
+#endif
+
 #include <pwd.h>
 #include <sys/wait.h>       // waitpid()
 
@@ -1435,6 +1439,78 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
         return execData.pid;
     }
 }
+
+#if wxHAS_GENERIC_PROCESS_CALLBACK
+struct wxEndProcessFDIOHandler : public wxFDIOHandler
+{
+    wxEndProcessFDIOHandler(wxEndProcessData *data, int fd)
+        : m_data(data), m_fd(fd)
+    {}
+
+    virtual void OnReadWaiting()
+        { wxFAIL_MSG("this isn't supposed to happen"); }
+    virtual void OnWriteWaiting()
+        { wxFAIL_MSG("this isn't supposed to happen"); }
+
+    virtual void OnExceptionWaiting()
+    {
+        int pid = (m_data->pid > 0) ? m_data->pid : -(m_data->pid);
+        int status = 0;
+
+        // has the process really terminated?
+        int rc = waitpid(pid, &status, WNOHANG);
+        if ( rc == 0 )
+        {
+            // This can only happen if the child application closes our dummy
+            // pipe that is used to monitor its lifetime; in that case, our
+            // best bet is to pretend the process did terminate, because
+            // otherwise wxExecute() would hang indefinitely
+            // (OnExceptionWaiting() won't be called again, the descriptor
+            // is closed now).
+            wxLogDebug("Child process (PID %i) still alive, even though notification was received that it terminated.", pid);
+        }
+        else if ( rc == -1 )
+        {
+            // As above, if waitpid() fails, the best we can do is to log the
+            // error and pretend the child terminated:
+            wxLogSysError(_("Failed to check child process' status"));
+        }
+
+        // set exit code to -1 if something bad happened
+        m_data->exitcode = (rc > 0 && WIFEXITED(status))
+                           ? WEXITSTATUS(status)
+                           : -1;
+
+        wxLogTrace("exec",
+                   "Child process (PID %i) terminated with exit code %i",
+                   pid, m_data->exitcode);
+
+        // child exited, end waiting
+        wxFDIODispatcher::Get()->UnregisterFD(m_fd);
+        close(m_fd);
+
+        m_data->fdioHandler = NULL;
+        wxHandleProcessTermination(m_data);
+
+        delete this;
+    }
+
+    wxEndProcessData *m_data;
+    int m_fd;
+};
+
+int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
+{
+    proc_data->fdioHandler = new wxEndProcessFDIOHandler(proc_data, fd);
+    wxFDIODispatcher::Get()->RegisterFD
+                             (
+                                 fd,
+                                 proc_data->fdioHandler,
+                                 wxFDIO_EXCEPTION
+                             );
+    return fd; // unused, but return something unique for the tag
+}
+#endif // wxHAS_GENERIC_PROCESS_CALLBACK
 
 #endif // wxUSE_GUI
 #if wxUSE_BASE

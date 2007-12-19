@@ -15,15 +15,27 @@
 class WXDLLIMPEXP_FWD_BASE wxProcess;
 class wxStreamTempInputBuffer;
 
+#if defined(__WXDFB__) || defined(__WXX11__)
+    #define wxHAS_GENERIC_PROCESS_CALLBACK 1
+#endif
+
+#ifdef wxHAS_GENERIC_PROCESS_CALLBACK
+struct wxEndProcessFDIOHandler;
+#endif
+
 // if pid > 0, the execution is async and the data is freed in the callback
 // executed when the process terminates, if pid < 0, the execution is
 // synchronous and the caller (wxExecute) frees the data
 struct wxEndProcessData
 {
-    int pid,                // pid of the process
-        tag;                // port dependent value
+    int pid;                // pid of the process
+    int tag;                // port dependent value
     wxProcess *process;     // if !NULL: notified on process termination
     int  exitcode;          // the exit code
+
+#ifdef wxHAS_GENERIC_PROCESS_CALLBACK
+    wxEndProcessFDIOHandler *fdioHandler;
+#endif
 };
 
 // struct in which information is passed from wxExecute() to wxAppTraits
@@ -67,8 +79,19 @@ struct wxExecuteData
 // callback function and is common to all ports (src/unix/utilsunx.cpp)
 extern WXDLLIMPEXP_BASE void wxHandleProcessTermination(wxEndProcessData *proc_data);
 
-// this function is called to associate the port-specific callback with the
+// This function is called to associate the port-specific callback with the
 // child process. The return valus is port-specific.
+//
+// The file descriptor 'fd' is descriptor of a dummy pipe opened between the
+// parent and the child. No data are written to or read from this pipe, its
+// sole purpose is that the child process will close it when it terminates and
+// the parent will be notified about it if it looks at 'fd' (e.g. using
+// select()).
+//
+// wxAddProcessCallback() does whatever is necessary to ensure that 'fd' is
+// periodically (typically every event loop iteration) checked for its status
+// and that wxHandleProcessTermination() is called once 'fd' indicates the
+// child terminated.
 extern WXDLLIMPEXP_CORE int wxAddProcessCallback(wxEndProcessData *proc_data, int fd);
 
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
