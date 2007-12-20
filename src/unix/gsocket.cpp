@@ -872,8 +872,10 @@ void GSocket::Notify(bool flag)
 {
     if (flag == m_use_events)
         return;
+#if wxUSE_THREADS
     // it is not safe to attach or detach i/o descriptor in child thread
     wxASSERT_MSG( wxThread::IsMain(), "should be called in main thread only" );
+#endif
     m_use_events = flag;
     EnableEvents(flag);
 }
