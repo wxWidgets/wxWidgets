@@ -703,16 +703,12 @@ protected:
 // wxTextCtrl events
 // ----------------------------------------------------------------------------
 
-#if !WXWIN_COMPATIBILITY_EVENT_TYPES
-
 BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED, 7)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER, 8)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL, 13)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN, 14)
 END_DECLARE_EVENT_TYPES()
-
-#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
 
 class WXDLLEXPORT wxTextUrlEvent : public wxCommandEvent
 {

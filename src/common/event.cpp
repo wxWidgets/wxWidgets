@@ -144,8 +144,6 @@ wxList *wxPendingEvents = (wxList *)NULL;
     wxCriticalSection *wxPendingEventsLocker = (wxCriticalSection *)NULL;
 #endif
 
-#if !WXWIN_COMPATIBILITY_EVENT_TYPES
-
 // common event types are defined here, other event types are defined by the
 // components which use them
 
@@ -157,13 +155,9 @@ DEFINE_EVENT_TYPE(wxEVT_IDLE)
 DEFINE_EVENT_TYPE(wxEVT_SOCKET)
 DEFINE_EVENT_TYPE(wxEVT_TIMER)
 
-#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
-
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
-
-#if !WXWIN_COMPATIBILITY_EVENT_TYPES
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_CHECKBOX_CLICKED)
@@ -317,8 +311,6 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_ENTER)
 // Help events
 DEFINE_EVENT_TYPE(wxEVT_HELP)
 DEFINE_EVENT_TYPE(wxEVT_DETAILED_HELP)
-
-#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
 
 #endif // wxUSE_GUI
 
@@ -778,13 +770,6 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
 #endif
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-long wxKeyEvent::KeyCode() const
-{
-    return m_keyCode;
-}
-#endif // WXWIN_COMPATIBILITY_2_6
-
 wxWindowCreateEvent::wxWindowCreateEvent(wxWindow *win)
 {
     SetEventType(wxEVT_CREATE);
@@ -1069,11 +1054,7 @@ wxEvtHandler::~wxEvtHandler()
               it != end;
               ++it )
         {
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-            wxEventTableEntry *entry = (wxEventTableEntry*)*it;
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)*it;
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
             if (entry->m_callbackUserData)
                 delete entry->m_callbackUserData;
@@ -1376,17 +1357,8 @@ void wxEvtHandler::Connect( int id, int lastId,
                             wxObject *userData,
                             wxEvtHandler* eventSink )
 {
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-    wxEventTableEntry *entry = new wxEventTableEntry;
-    entry->m_eventType = eventType;
-    entry->m_id = id;
-    entry->m_lastId = lastId;
-    entry->m_fn = func;
-    entry->m_callbackUserData = userData;
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     wxDynamicEventTableEntry *entry =
         new wxDynamicEventTableEntry(eventType, id, lastId, func, userData, eventSink);
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
     if (!m_dynamicEvents)
         m_dynamicEvents = new wxList;
@@ -1406,11 +1378,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
     wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
     {
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-            wxEventTableEntry *entry = (wxEventTableEntry*)node->GetData();
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
-            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
+        wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
 
         if ((entry->m_id == id) &&
             ((entry->m_lastId == lastId) || (lastId == wxID_ANY)) &&
@@ -1438,11 +1406,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
     wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
     {
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-        wxEventTableEntry *entry = (wxEventTableEntry*)node->GetData();
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
         wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
         // get next node before (maybe) calling the event handler as it could
         // call Disconnect() invalidating the current node
@@ -1450,17 +1414,10 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 
         if ((event.GetEventType() == entry->m_eventType) && (entry->m_fn != 0))
         {
-            wxEvtHandler *handler =
-#if !WXWIN_COMPATIBILITY_EVENT_TYPES
-                                    entry->m_eventSink ? entry->m_eventSink
-                                                       :
-#endif
-                                                         this;
-
+            wxEvtHandler *handler = entry->m_eventSink ? entry->m_eventSink
+                                                       : this;
             if ( ProcessEventIfMatches(*entry, handler, event) )
-            {
                 return true;
-            }
         }
     }
 

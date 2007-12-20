@@ -53,47 +53,6 @@ typedef int wxEventType;
 // handler only a function with proper parameter list can be given.
 #define wxStaticCastEvent(type, val) wx_static_cast(type, val)
 
-// in previous versions of wxWidgets the event types used to be constants
-// which created difficulties with custom/user event types definition
-//
-// starting from wxWidgets 2.4 the event types are now dynamically assigned
-// using wxNewEventType() which solves this problem, however at price of
-// several incompatibilities:
-//
-//  a) event table macros declaration changed, it now uses wxEventTableEntry
-//     ctor instead of initialisation from an agregate - the macro
-//     DECLARE_EVENT_TABLE_ENTRY may be used to write code which can compile
-//     with all versions of wxWidgets
-//
-//  b) event types can't be used as switch() cases as they're not really
-//     constant any more - there is no magic solution here, you just have to
-//     change the switch()es to if()s
-//
-// if these are real problems for you, define WXWIN_COMPATIBILITY_EVENT_TYPES
-// as 1 to get 100% old behaviour, however you won't be able to use the
-// libraries using the new dynamic event type allocation in such case, so avoid
-// it if possible.
-#ifndef WXWIN_COMPATIBILITY_EVENT_TYPES
-    #define WXWIN_COMPATIBILITY_EVENT_TYPES 0
-#endif
-
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-
-#define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
-    { type, winid, idLast, fn, obj }
-
-#define BEGIN_DECLARE_EVENT_TYPES() enum {
-#define END_DECLARE_EVENT_TYPES() };
-#define DECLARE_EVENT_TYPE(name, value) name = wxEVT_FIRST + value,
-#define DECLARE_LOCAL_EVENT_TYPE(name, value) name = wxEVT_USER_FIRST + value,
-#define DECLARE_EXPORTED_EVENT_TYPE(expdecl, name, value) \
-    DECLARE_LOCAL_EVENT_TYPE(name, value)
-#define DEFINE_EVENT_TYPE(name)
-#define DEFINE_LOCAL_EVENT_TYPE(name)
-
-
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
-
 #define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
     wxEventTableEntry(type, winid, idLast, fn, obj)
 
@@ -111,21 +70,12 @@ typedef int wxEventType;
 // generate a new unique event type
 extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
-
 BEGIN_DECLARE_EVENT_TYPES()
-
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-    wxEVT_NULL = 0,
-    wxEVT_FIRST = 10000,
-    wxEVT_USER_FIRST = wxEVT_FIRST + 2000,
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     // it is important to still have these as constants to avoid
     // initialization order related problems
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_NULL, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_FIRST, 10000)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_BASE, wxEVT_USER_FIRST, wxEVT_FIRST + 2000)
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED, 1)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHECKBOX_CLICKED, 2)
@@ -133,13 +83,6 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_SELECTED, 4)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, 5)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, 6)
-    // now they are in wx/textctrl.h
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED, 7)
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER, 8)
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL, 13)
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN, 14)
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_MENU_SELECTED, 9)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_SLIDER_UPDATED, 10)
     DECLARE_EVENT_TYPE(wxEVT_COMMAND_RADIOBOX_SELECTED, 11)
@@ -312,9 +255,7 @@ END_DECLARE_EVENT_TYPES()
 // wx/textctrl.h in all ports [yet], so declare it here as well
 //
 // still, any new code using it should include wx/textctrl.h explicitly
-#if !WXWIN_COMPATIBILITY_EVENT_TYPES
-    extern const wxEventType WXDLLIMPEXP_CORE wxEVT_COMMAND_TEXT_UPDATED;
-#endif
+extern const wxEventType WXDLLIMPEXP_CORE wxEVT_COMMAND_TEXT_UPDATED;
 
 // the predefined constants for the number of times we propagate event
 // upwards window child-parent chain
@@ -993,11 +934,6 @@ public:
 
     // Get Y position
     wxCoord GetY() const { return m_y; }
-
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, Use GetKeyCode instead.
-    wxDEPRECATED( long KeyCode() const );
-#endif // WXWIN_COMPATIBILITY_2_6
 
     virtual wxEvent *Clone() const { return new wxKeyEvent(*this); }
 
@@ -2169,25 +2105,6 @@ private:
 // as a wxObject method even though it can only be a wxEvtHandler one
 typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
-// we can't have ctors nor base struct in backwards compatibility mode or
-// otherwise we won't be able to initialize the objects with an agregate, so
-// we have to keep both versions
-#if WXWIN_COMPATIBILITY_EVENT_TYPES
-
-struct WXDLLIMPEXP_BASE wxEventTableEntry
-{
-    // For some reason, this can't be wxEventType, or VC++ complains.
-    int m_eventType;            // main event type
-    int m_id;                   // control/menu/toolbar id
-    int m_lastId;               // used for ranges of ids
-    wxObjectEventFunction m_fn; // function to call: not wxEventFunction,
-                                // because of dependency problems
-
-    wxObject* m_callbackUserData;
-};
-
-#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
-
 // struct containing the members common to static and dynamic event tables
 // entries
 struct WXDLLIMPEXP_BASE wxEventTableEntryBase
@@ -2266,8 +2183,6 @@ struct WXDLLIMPEXP_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
 
     DECLARE_NO_COPY_CLASS(wxDynamicEventTableEntry)
 };
-
-#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
 
 // ----------------------------------------------------------------------------
 // wxEventTable: an array of event entries terminated with {0, 0, 0, 0, 0}
