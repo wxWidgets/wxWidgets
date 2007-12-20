@@ -258,9 +258,9 @@ static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
 // wxNotebook
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxBookCtrlBase)
 
-BEGIN_EVENT_TABLE(wxNotebook, wxControl)
+BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
 
@@ -402,7 +402,7 @@ int wxNotebook::DoSetSelection( size_t page, int flags )
     if ( !(flags & SetSelection_SendEvent) )
     {
         // reconnect to signals
-        
+
         g_signal_connect (m_widget, "switch_page",
                           G_CALLBACK (gtk_notebook_page_changing_callback), this);
 
@@ -658,7 +658,7 @@ bool wxNotebook::InsertPage( size_t position,
 
     /* show the label */
     gtk_widget_show( GTK_WIDGET(nb_page->m_label) );
-    
+
     if (select && (m_pagesData.GetCount() > 1))
     {
         SetSelection( position );

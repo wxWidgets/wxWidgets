@@ -93,6 +93,14 @@ int wxMessageDialog::ShowModal()
         msStyle |= MB_ICONINFORMATION;
     else if (wxStyle & wxICON_QUESTION)
         msStyle |= MB_ICONQUESTION;
+    else
+    {
+        int majorVersion, minorVersion;
+        wxGetOsVersion(& majorVersion, & minorVersion);
+
+        if ( majorVersion >= 6 )
+            msStyle |= MB_ICONINFORMATION;
+    }
 
     if ( wxStyle & wxSTAY_ON_TOP )
         msStyle |= MB_TOPMOST;

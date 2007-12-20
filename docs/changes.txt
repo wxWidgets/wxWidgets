@@ -103,6 +103,8 @@ All (GUI):
   smaller than the minimal size.
 - Added <scrollrate> parameter to wxScrolledWindow XRC handler.
 - wxRichTextCtrl performance has been improved considerably.
+- wxNotebook RTTI corrected, so now wxDynamicCast(notebook, wxBookCtrlBase)
+  works.
 
 All (Unix):
 
