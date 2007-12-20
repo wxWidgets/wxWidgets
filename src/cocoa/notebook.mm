@@ -134,7 +134,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 // ========================================================================
 // wxNotebook
 // ========================================================================
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
 BEGIN_EVENT_TABLE(wxNotebook, wxNotebookBase)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxNotebook,NSTabView,NSView,NSView)

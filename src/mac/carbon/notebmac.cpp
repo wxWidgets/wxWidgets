@@ -34,7 +34,7 @@
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 
-BEGIN_EVENT_TABLE(wxNotebook, wxControl)
+BEGIN_EVENT_TABLE(wxNotebook, wxBookCtrlBase)
     EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, wxNotebook::OnSelChange)
 
     EVT_SIZE(wxNotebook::OnSize)
@@ -42,7 +42,7 @@ BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxBookCtrlBase)
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 
 
