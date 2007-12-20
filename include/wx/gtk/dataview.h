@@ -7,13 +7,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDATAVIEWCTRLH__
-#define __GTKDATAVIEWCTRLH__
+#ifndef _WX_GTKDATAVIEWCTRL_H_
+#define _WX_GTKDATAVIEWCTRL_H_
 
-#include "wx/defs.h"
-#include "wx/object.h"
 #include "wx/list.h"
-#include "wx/control.h"
 
 // --------------------------------------------------------- 
 // classes
@@ -409,6 +406,8 @@ public:
     GtkWidget *GtkGetTreeView() { return m_treeview; }
     wxDataViewCtrlInternal* GtkGetInternal() { return m_internal; }
 
+    virtual void OnInternalIdle();
+
 protected:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
@@ -424,16 +423,12 @@ private:
     wxDataViewCtrlInternal  *m_internal;
     wxDataViewColumnList     m_cols;
 
-    
-    virtual void OnInternalIdle();
-    
     void GtkEnableSelectionEvents();
     void GtkDisableSelectionEvents();
     
-private:
     DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
     DECLARE_NO_COPY_CLASS(wxDataViewCtrl)
 };
 
 
-#endif // __GTKDATAVIEWCTRLH__
+#endif // _WX_GTKDATAVIEWCTRL_H_
