@@ -1613,7 +1613,7 @@ void wxWindowDCImpl::DoGetTextExtent(const wxString &string,
 
     // ensure that theFont is always non-NULL
     if ( !theFont || !theFont->IsOk() )
-        theFont = wx_const_cast(wxFont *, &m_font);
+        theFont = &m_font;
 
     // and use it if it's valid
     if ( theFont->IsOk() )
@@ -1633,24 +1633,19 @@ void wxWindowDCImpl::DoGetTextExtent(const wxString &string,
         return;
     }
 
-    pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
+    pango_layout_set_text(m_layout, dataUTF8, -1);
 
+    int h;
+    pango_layout_get_pixel_size(m_layout, width, &h);
     if (descent)
     {
-        int h;
-        pango_layout_get_pixel_size( m_layout, width, &h );
         PangoLayoutIter *iter = pango_layout_get_iter(m_layout);
         int baseline = pango_layout_iter_get_baseline(iter);
         pango_layout_iter_free(iter);
         *descent = h - PANGO_PIXELS(baseline);
-
-        if (height)
-            *height = (wxCoord) h;
     }
-    else
-    {
-        pango_layout_get_pixel_size( m_layout, width, height );
-    }
+    if (height)
+        *height = h;
 
     // Reset old font description
     if (theFont->IsOk())
@@ -1677,7 +1672,7 @@ bool wxWindowDCImpl::DoGetPartialTextExtents(const wxString& text,
         return false;
     }
 
-    pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
+    pango_layout_set_text(m_layout, dataUTF8, -1);
 
     // Calculate the position of each character based on the widths of
     // the previous characters
@@ -1809,57 +1804,39 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
     int req_nb_dash;
     const wxGTKDash *req_dash;
 
-    GdkLineStyle lineStyle = GDK_LINE_SOLID;
+    GdkLineStyle lineStyle = GDK_LINE_ON_OFF_DASH;
     switch (m_pen.GetStyle())
     {
         case wxUSER_DASH:
-        {
-            lineStyle = GDK_LINE_ON_OFF_DASH;
             req_nb_dash = m_pen.GetDashCount();
             req_dash = (wxGTKDash*)m_pen.GetDash();
             break;
-        }
         case wxDOT:
-        {
-            lineStyle = GDK_LINE_ON_OFF_DASH;
             req_nb_dash = 2;
             req_dash = dotted;
             break;
-        }
         case wxLONG_DASH:
-        {
-            lineStyle = GDK_LINE_ON_OFF_DASH;
             req_nb_dash = 2;
             req_dash = wxCoord_dashed;
             break;
-        }
         case wxSHORT_DASH:
-        {
-            lineStyle = GDK_LINE_ON_OFF_DASH;
             req_nb_dash = 2;
             req_dash = short_dashed;
             break;
-        }
         case wxDOT_DASH:
-        {
-//            lineStyle = GDK_LINE_DOUBLE_DASH;
-            lineStyle = GDK_LINE_ON_OFF_DASH;
             req_nb_dash = 4;
             req_dash = dotted_dashed;
             break;
-        }
 
         case wxTRANSPARENT:
         case wxSTIPPLE_MASK_OPAQUE:
         case wxSTIPPLE:
         case wxSOLID:
         default:
-        {
             lineStyle = GDK_LINE_SOLID;
             req_dash = (wxGTKDash*)NULL;
             req_nb_dash = 0;
             break;
-        }
     }
 
     if (req_dash && req_nb_dash)
@@ -1886,18 +1863,12 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         case wxCAP_BUTT:       { capStyle = GDK_CAP_BUTT;       break; }
         case wxCAP_ROUND:
         default:
-        {
             if (width <= 1)
             {
                 width = 0;
                 capStyle = GDK_CAP_NOT_LAST;
             }
-            else
-            {
-                capStyle = GDK_CAP_ROUND;
-            }
             break;
-        }
     }
 
     GdkJoinStyle joinStyle = GDK_JOIN_ROUND;
@@ -1974,29 +1945,35 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
 
     if (!m_gdkwindow) return;
 
-    m_backgroundBrush.GetColour().CalcPixel( m_cmap );
-    gdk_gc_set_background( m_brushGC, m_backgroundBrush.GetColour().GetColor() );
-    gdk_gc_set_background( m_penGC, m_backgroundBrush.GetColour().GetColor() );
-    gdk_gc_set_background( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
-    gdk_gc_set_foreground( m_bgGC, m_backgroundBrush.GetColour().GetColor() );
+    wxColor color = m_backgroundBrush.GetColour();
+    color.CalcPixel(m_cmap);
+    const GdkColor* gdkColor = color.GetColor();
+    gdk_gc_set_background(m_brushGC, gdkColor);
+    gdk_gc_set_background(m_penGC,   gdkColor);
+    gdk_gc_set_background(m_bgGC,    gdkColor);
+    gdk_gc_set_foreground(m_bgGC,    gdkColor);
+
 
     gdk_gc_set_fill( m_bgGC, GDK_SOLID );
 
-    if ((m_backgroundBrush.GetStyle() == wxSTIPPLE) && (m_backgroundBrush.GetStipple()->IsOk()))
+    if (m_backgroundBrush.GetStyle() == wxSTIPPLE)
     {
-        if (m_backgroundBrush.GetStipple()->GetDepth() != 1)
+        const wxBitmap* stipple = m_backgroundBrush.GetStipple();
+        if (stipple->IsOk())
         {
-            gdk_gc_set_fill( m_bgGC, GDK_TILED );
-            gdk_gc_set_tile( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
-        }
-        else
-        {
-            gdk_gc_set_fill( m_bgGC, GDK_STIPPLED );
-            gdk_gc_set_stipple( m_bgGC, m_backgroundBrush.GetStipple()->GetPixmap() );
+            if (stipple->GetDepth() != 1)
+            {
+                gdk_gc_set_fill(m_bgGC, GDK_TILED);
+                gdk_gc_set_tile(m_bgGC, stipple->GetPixmap());
+            }
+            else
+            {
+                gdk_gc_set_fill(m_bgGC, GDK_STIPPLED);
+                gdk_gc_set_stipple(m_bgGC, stipple->GetPixmap());
+            }
         }
     }
-
-    if (m_backgroundBrush.IsHatch())
+    else if (m_backgroundBrush.IsHatch())
     {
         gdk_gc_set_fill( m_bgGC, GDK_STIPPLED );
         gdk_gc_set_stipple(m_bgGC, GetHatch(m_backgroundBrush.GetStyle()));
@@ -2146,10 +2123,11 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
     wxDC::DoSetClippingRegion( xx, yy, ww, hh );
 #endif
 
-    gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_brushGC, m_currentClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_textGC, m_currentClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_bgGC, m_currentClippingRegion.GetRegion() );
+    GdkRegion* gdkRegion = m_currentClippingRegion.GetRegion();
+    gdk_gc_set_clip_region(m_penGC,   gdkRegion);
+    gdk_gc_set_clip_region(m_brushGC, gdkRegion);
+    gdk_gc_set_clip_region(m_textGC,  gdkRegion);
+    gdk_gc_set_clip_region(m_bgGC,    gdkRegion);
 }
 
 void wxWindowDCImpl::DoSetClippingRegionAsRegion( const wxRegion &region  )
@@ -2182,10 +2160,11 @@ void wxWindowDCImpl::DoSetClippingRegionAsRegion( const wxRegion &region  )
     wxDC::DoSetClippingRegion( xx, yy, ww, hh );
 #endif
 
-    gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_brushGC, m_currentClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_textGC, m_currentClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_bgGC, m_currentClippingRegion.GetRegion() );
+    GdkRegion* gdkRegion = m_currentClippingRegion.GetRegion();
+    gdk_gc_set_clip_region(m_penGC,   gdkRegion);
+    gdk_gc_set_clip_region(m_brushGC, gdkRegion);
+    gdk_gc_set_clip_region(m_textGC,  gdkRegion);
+    gdk_gc_set_clip_region(m_bgGC,    gdkRegion);
 }
 
 void wxWindowDCImpl::DestroyClippingRegion()
@@ -2207,20 +2186,14 @@ void wxWindowDCImpl::DestroyClippingRegion()
 
     if (!m_gdkwindow) return;
 
-    if (m_currentClippingRegion.IsEmpty())
-    {
-        gdk_gc_set_clip_rectangle( m_penGC, (GdkRectangle *) NULL );
-        gdk_gc_set_clip_rectangle( m_brushGC, (GdkRectangle *) NULL );
-        gdk_gc_set_clip_rectangle( m_textGC, (GdkRectangle *) NULL );
-        gdk_gc_set_clip_rectangle( m_bgGC, (GdkRectangle *) NULL );
-    }
-    else
-    {
-        gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
-        gdk_gc_set_clip_region( m_brushGC, m_currentClippingRegion.GetRegion() );
-        gdk_gc_set_clip_region( m_textGC, m_currentClippingRegion.GetRegion() );
-        gdk_gc_set_clip_region( m_bgGC, m_currentClippingRegion.GetRegion() );
-    }
+    GdkRegion* gdkRegion = NULL;
+    if (!m_currentClippingRegion.IsEmpty())
+        gdkRegion = m_currentClippingRegion.GetRegion();
+
+    gdk_gc_set_clip_region(m_penGC,   gdkRegion);
+    gdk_gc_set_clip_region(m_brushGC, gdkRegion);
+    gdk_gc_set_clip_region(m_textGC,  gdkRegion);
+    gdk_gc_set_clip_region(m_bgGC,    gdkRegion);
 }
 
 void wxWindowDCImpl::Destroy()
