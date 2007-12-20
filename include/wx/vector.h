@@ -207,7 +207,7 @@ private:
 
 #if WXWIN_COMPATIBILITY_2_8
 template<typename T>
-typename wxVector<T>::size_type wxVector<T>::erase(size_type n)
+inline typename wxVector<T>::size_type wxVector<T>::erase(size_type n)
 {
     erase(begin() + n);
     return n;
