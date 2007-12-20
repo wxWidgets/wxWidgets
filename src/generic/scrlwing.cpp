@@ -1359,6 +1359,10 @@ void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
 
     // find the immediate child under which the window receiving focus is:
     wxWindow *win = event.GetWindow();
+
+    if ( win == m_targetWindow )
+        return; // nothing to do
+
     while ( win->GetParent() != m_targetWindow )
     {
         win = win->GetParent();
