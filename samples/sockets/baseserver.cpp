@@ -510,7 +510,7 @@ wxThread::ExitCode ThreadWorker::Entry()
 
         if (signature[0] == 0xCE)
         {
-            LogWorker(m_peer,_("This server does not support test2 from GUI client"));
+            LogWorker(m_peer,_("This server does not support test2 from GUI client"),LOG_ERROR);
             e.m_workerFailed = true;
             e.m_exit = true;
             return 0;
@@ -603,7 +603,7 @@ EventWorker::DoRead()
                     unsigned char type = m_signature[0];
                     if (type == 0xCE)
                     {
-                        LogWorker(m_peer,_("This server does not support test2 from GUI client"));
+                        LogWorker(m_peer,_("This server does not support test2 from GUI client"),LOG_ERROR);
                         m_written = -1; //wxSOCKET_LOST will interpret this as failure
                         m_socket->Close();
                     }
