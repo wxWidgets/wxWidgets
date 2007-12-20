@@ -15,9 +15,6 @@
 #include <gtk/gtk.h>
 
 #include "wx/gtk/private/string.h"
-#include "wx/gtk/dc.h"
-#include "wx/gtk/dcclient.h"
-#include "wx/gtk/dcmemory.h"
 
 // pango_version_check symbol is quite recent ATM (4/2007)... so we
 // use our own wrapper which implements a smart trick.
