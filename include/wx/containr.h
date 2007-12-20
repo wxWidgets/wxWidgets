@@ -126,6 +126,7 @@ void classname::SetFocusIgnoringChildren() \
 void classname::OnChildFocus(wxChildFocusEvent& event) \
 { \
     m_container.SetLastFocus(event.GetWindow()); \
+    event.Skip(); \
 } \
  \
 void classname::OnFocus(wxFocusEvent& event) \
