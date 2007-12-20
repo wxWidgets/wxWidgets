@@ -124,11 +124,6 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 // accounts for string changes done by wxArgNormalizer<>
 //
 // Note that this class can _only_ be used for function arguments!
-#ifdef __VISUALC__
-    // "struct 'wx[W]CharBuffer<T>' needs to have dll-interface to be used by
-    // clients of class 'wxString'" - this is private, we don't care
-    #pragma warning (disable:4251)
-#endif
 class WXDLLIMPEXP_BASE wxFormatString
 {
 public:
@@ -185,9 +180,6 @@ private:
 private:
     wxCharBuffer  m_char;
     wxWCharBuffer m_wchar;
-#ifdef __VISUALC__
-    #pragma warning (default:4251)
-#endif
 
     // NB: we can use a pointer here, because wxFormatString is only used
     //     as function argument, so it has shorter life than the string

@@ -2587,12 +2587,6 @@ private:
 private:
   wxStringImpl m_impl;
 
-#ifdef __VISUALC__
-    // "struct 'ConvertedBuffer<T>' needs to have dll-interface to be used by
-    // clients of class 'wxString'" - this is private, we don't care
-    #pragma warning (disable:4251)
-#endif
-
   // buffers for compatibility conversion from (char*)c_str() and
   // (wchar_t*)c_str():
   // FIXME-UTF8: bechmark various approaches to keeping compatibility buffers
@@ -2619,10 +2613,6 @@ private:
 #endif
 #if !wxUSE_UNICODE_WCHAR
   ConvertedBuffer<wchar_t> m_convertedToWChar;
-#endif
-
-#ifdef __VISUALC__
-    #pragma warning (default:4251)
 #endif
 
 #if wxUSE_UNICODE_UTF8
