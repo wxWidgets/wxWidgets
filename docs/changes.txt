@@ -105,6 +105,7 @@ All (GUI):
 - wxRichTextCtrl performance has been improved considerably.
 - wxNotebook RTTI corrected, so now wxDynamicCast(notebook, wxBookCtrlBase)
   works.
+- When focus is set to wxScrolledWindow child, scroll it into view.
 
 All (Unix):
 

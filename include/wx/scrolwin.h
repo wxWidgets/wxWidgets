@@ -163,6 +163,10 @@ public:
     void HandleOnMouseWheel(wxMouseEvent& event);
 #endif // wxUSE_MOUSEWHEEL
 
+#if wxABI_VERSION >= 20808
+    void HandleOnChildFocus(wxChildFocusEvent& event);
+#endif
+
     // FIXME: this is needed for now for wxPlot compilation, should be removed
     //        once it is fixed!
     void OnScroll(wxScrollWinEvent& event) { HandleOnScroll(event); }
