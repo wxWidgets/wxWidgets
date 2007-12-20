@@ -96,7 +96,7 @@
 
 <build>
     <name>OSX 10.4 Intel wxMac Stable</name>
-    <sandbox>td186.testdrive.hp.com</sandbox>
+    <sandbox>td187.testdrive.hp.com</sandbox>
     <builddir>td_mac_stable</builddir>
     <scheduler>stable_quick</scheduler>
 
@@ -355,7 +355,7 @@
 <build>
     <name>Cygwin no-cygwin wxMSW Trunk</name>
     <builddir>td_nocygwin</builddir>
-    <sandbox>td166.testdrive.hp.com</sandbox>
+    <sandbox>td163.testdrive.hp.com</sandbox>
     <scheduler>monday_0600</scheduler>
 
     <steps>
