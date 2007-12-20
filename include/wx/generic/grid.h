@@ -1312,6 +1312,7 @@ public:
     int      GetCellHighlightPenWidth() const { return m_cellHighlightPenWidth; }
     int      GetCellHighlightROPenWidth() const { return m_cellHighlightROPenWidth; }
 
+    void     SetUseNativeColLabels( bool native = true );
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
     void     SetLabelBackgroundColour( const wxColour& );
@@ -1834,6 +1835,8 @@ protected:
     int        m_minAcceptableColWidth;
     wxArrayInt m_colWidths;
     wxArrayInt m_colRights;
+    
+    bool m_nativeColumnLabels;
 
     // get the col/row coords
     int GetColWidth(int col) const;

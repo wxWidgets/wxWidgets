@@ -100,6 +100,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_VTABLE, GridFrame::OnVTable)
     EVT_MENU( ID_BUGS_TABLE, GridFrame::OnBugsTable)
     EVT_MENU( ID_SMALL_GRID, GridFrame::OnSmallGrid)
+    EVT_MENU( ID_TABULAR_GRID, GridFrame::OnTabularGrid)
 
     EVT_MENU( ID_DESELECT_CELL, GridFrame::DeselectCell)
     EVT_MENU( ID_DESELECT_COL, GridFrame::DeselectCol)
@@ -146,6 +147,7 @@ GridFrame::GridFrame()
     fileMenu->Append( ID_VTABLE, _T("&Virtual table test\tCtrl-V"));
     fileMenu->Append( ID_BUGS_TABLE, _T("&Bugs table test\tCtrl-B"));
     fileMenu->Append( ID_SMALL_GRID, _T("&Small Grid test\tCtrl-S"));
+    fileMenu->Append( ID_TABULAR_GRID, _T("&Tabular Grid test\tCtrl-T"));
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, _T("E&xit\tAlt-X") );
 
@@ -1117,6 +1119,65 @@ void GridFrame::OnSmallGrid(wxCommandEvent& )
     frame->Show(true);
 }
 
+// ----------------------------------------------------------------------------
+// MyGridCellAttrProvider
+// ----------------------------------------------------------------------------
+
+MyGridCellAttrProvider::MyGridCellAttrProvider()
+{
+    m_attrForOddRows = new wxGridCellAttr;
+    m_attrForOddRows->SetBackgroundColour(*wxLIGHT_GREY);
+}
+
+MyGridCellAttrProvider::~MyGridCellAttrProvider()
+{
+    m_attrForOddRows->DecRef();
+}
+
+wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
+                           wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const
+{
+    wxGridCellAttr *attr = wxGridCellAttrProvider::GetAttr(row, col, kind);
+
+    if ( row % 2 )
+    {
+        if ( !attr )
+        {
+            attr = m_attrForOddRows;
+            attr->IncRef();
+        }
+        else
+        {
+            if ( !attr->HasBackgroundColour() )
+            {
+                wxGridCellAttr *attrNew = attr->Clone();
+                attr->DecRef();
+                attr = attrNew;
+                attr->SetBackgroundColour(*wxLIGHT_GREY);
+            }
+        }
+    }
+
+    return attr;
+}
+
+// ----------------------------------------------------------------------------
+
+void GridFrame::OnTabularGrid(wxCommandEvent& )
+{
+    wxFrame* frame = new wxFrame(NULL, wxID_ANY, _T("A small tabular Grid"),
+                                 wxDefaultPosition, wxSize(640, 480));
+    wxGrid* grid = new wxGrid(frame, wxID_ANY, wxPoint(10,10), wxSize(40,40),
+                              wxWANTS_CHARS | wxBORDER_SUNKEN);
+    grid->SetRowLabelSize( 0 );
+    grid->DisableDragRowSize();
+    grid->SetUseNativeColLabels();
+    grid->CreateGrid(10,10);
+    grid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+    frame->Show(true);
+}
+
 void GridFrame::OnVTable(wxCommandEvent& )
 {
     static long s_sizeGrid = 10000;
@@ -1165,48 +1226,6 @@ void MyGridCellRenderer::Draw(wxGrid& grid,
     dc.SetPen(*wxGREEN_PEN);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawEllipse(rect);
-}
-
-// ----------------------------------------------------------------------------
-// MyGridCellAttrProvider
-// ----------------------------------------------------------------------------
-
-MyGridCellAttrProvider::MyGridCellAttrProvider()
-{
-    m_attrForOddRows = new wxGridCellAttr;
-    m_attrForOddRows->SetBackgroundColour(*wxLIGHT_GREY);
-}
-
-MyGridCellAttrProvider::~MyGridCellAttrProvider()
-{
-    m_attrForOddRows->DecRef();
-}
-
-wxGridCellAttr *MyGridCellAttrProvider::GetAttr(int row, int col,
-                           wxGridCellAttr::wxAttrKind  kind /* = wxGridCellAttr::Any */) const
-{
-    wxGridCellAttr *attr = wxGridCellAttrProvider::GetAttr(row, col, kind);
-
-    if ( row % 2 )
-    {
-        if ( !attr )
-        {
-            attr = m_attrForOddRows;
-            attr->IncRef();
-        }
-        else
-        {
-            if ( !attr->HasBackgroundColour() )
-            {
-                wxGridCellAttr *attrNew = attr->Clone();
-                attr->DecRef();
-                attr = attrNew;
-                attr->SetBackgroundColour(*wxLIGHT_GREY);
-            }
-        }
-    }
-
-    return attr;
 }
 
 // ============================================================================

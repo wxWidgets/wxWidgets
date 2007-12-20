@@ -4515,6 +4515,7 @@ void wxGrid::Init()
     m_dragRowOrCol = -1;
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
+    m_nativeColumnLabels = false;
 
     m_waitForSlowClick = false;
 
@@ -7912,19 +7913,6 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 
     wxRect rect;
 
-#if 0
-def __WXGTK20__
-    rect.SetX( 1 );
-    rect.SetY( GetRowTop(row) + 1 );
-    rect.SetWidth( m_rowLabelWidth - 2 );
-    rect.SetHeight( GetRowHeight(row) - 2 );
-
-    CalcScrolledPosition( 0, rect.y, NULL, &rect.y );
-
-    wxWindowDC *win_dc = (wxWindowDC*) &dc;
-
-    wxRendererNative::Get().DrawHeaderButton( win_dc->m_owner, dc, rect, 0 );
-#else
     int rowTop = GetRowTop(row),
         rowBottom = GetRowBottom(row) - 1;
 
@@ -7936,7 +7924,6 @@ def __WXGTK20__
     dc.SetPen( *wxWHITE_PEN );
     dc.DrawLine( 1, rowTop, 1, rowBottom );
     dc.DrawLine( 1, rowTop, m_rowLabelWidth - 1, rowTop );
-#endif
 
     dc.SetBackgroundMode( wxTRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
@@ -7950,6 +7937,18 @@ def __WXGTK20__
     rect.SetWidth( m_rowLabelWidth - 4 );
     rect.SetHeight( GetRowHeight(row) - 4 );
     DrawTextRectangle( dc, GetRowLabelValue( row ), rect, hAlign, vAlign );
+}
+
+void wxGrid::SetUseNativeColLabels( bool native )
+{
+    m_nativeColumnLabels = native;
+    if (native)
+    {
+        int height = wxRendererNative::Get().GetHeaderButtonHeight( this );
+        SetColLabelSize( height );
+    }
+    
+    m_colLabelWin->Refresh();
 }
 
 void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
@@ -7975,29 +7974,30 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
 
     wxRect rect;
 
-#if 0
-def __WXGTK20__
-    rect.SetX( colLeft + 1 );
-    rect.SetY( 1 );
-    rect.SetWidth( GetColWidth(col) - 2 );
-    rect.SetHeight( m_colLabelHeight - 2 );
+    if (m_nativeColumnLabels)
+    {
+        rect.SetX( colLeft);
+        rect.SetY( 0 );
+        rect.SetWidth( GetColWidth(col));
+        rect.SetHeight( m_colLabelHeight );
 
-    wxWindowDC *win_dc = (wxWindowDC*) &dc;
+        wxWindowDC *win_dc = (wxWindowDC*) &dc;
+        wxRendererNative::Get().DrawHeaderButton( win_dc->GetWindow(), dc, rect, 0 );
+    }
+    else
+    {
+        int colRight = GetColRight(col) - 1;
 
-    wxRendererNative::Get().DrawHeaderButton( win_dc->m_owner, dc, rect, 0 );
-#else
-    int colRight = GetColRight(col) - 1;
-
-    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID) );
-    dc.DrawLine( colRight, 0, colRight, m_colLabelHeight - 1 );
-    dc.DrawLine( colLeft, 0, colRight, 0 );
-    dc.DrawLine( colLeft, m_colLabelHeight - 1,
+        dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID) );
+        dc.DrawLine( colRight, 0, colRight, m_colLabelHeight - 1 );
+        dc.DrawLine( colLeft, 0, colRight, 0 );
+        dc.DrawLine( colLeft, m_colLabelHeight - 1,
                  colRight + 1, m_colLabelHeight - 1 );
 
-    dc.SetPen( *wxWHITE_PEN );
-    dc.DrawLine( colLeft, 1, colLeft, m_colLabelHeight - 1 );
-    dc.DrawLine( colLeft, 1, colRight, 1 );
-#endif
+        dc.SetPen( *wxWHITE_PEN );
+        dc.DrawLine( colLeft, 1, colLeft, m_colLabelHeight - 1 );
+        dc.DrawLine( colLeft, 1, colRight, 1 );
+    }
 
     dc.SetBackgroundMode( wxTRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
