@@ -1621,6 +1621,20 @@ wxWindow-derived class to ensure that background is painted correctly.
 Equivalent to calling \helpref{Show}{wxwindowshow}({\tt false}).
 
 
+\membersection{wxWindow::HideWithEffect}\label{wxwindowhidewitheffect}
+
+\func{virtual bool}{HideWithEffect}{\param{wxShowEffect }{effect}, \param{unsigned }{timeout = $0$}, \param{wxDirection }{dir = wxBOTTOM}}
+
+This function hides a window, like \helpref{Hide()}{wxwindowhide}, but using a
+special visual effect if possible.
+
+The parameters of this function are the same as for 
+\helpref{ShowWithEffect()}{wxwindowshowwitheffect}, please see their
+description there.
+
+\newsince{2.9.0}
+
+
 \membersection{wxWindow::InheritAttributes}\label{wxwindowinheritattributes}
 
 \func{void}{InheritAttributes}{\void}
