@@ -1440,7 +1440,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     }
 }
 
-#if wxHAS_GENERIC_PROCESS_CALLBACK
+#ifdef wxHAS_GENERIC_PROCESS_CALLBACK
 struct wxEndProcessFDIOHandler : public wxFDIOHandler
 {
     wxEndProcessFDIOHandler(wxEndProcessData *data, int fd)
