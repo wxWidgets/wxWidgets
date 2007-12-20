@@ -902,8 +902,7 @@ protected:
 
     void AdjustPropLastItem(wxSizer *psz, wxSizerItem *itemLast);    
     
-private:
-    DECLARE_DYNAMIC_CLASS(wxWrapSizer);
+    DECLARE_DYNAMIC_CLASS(wxWrapSizer)
 };
 
 //---------------------------------------------------------------------------
