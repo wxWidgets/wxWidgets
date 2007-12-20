@@ -84,9 +84,6 @@ IMPLEMENT_ABSTRACT_CLASS(wxMSWDCImpl, wxDCImpl)
 
 static const int VIEWPORT_EXTENT = 1000;
 
-static const int MM_POINTS = 9;
-static const int MM_METRIC = 10;
-
 // ROPs which don't have standard names (see "Ternary Raster Operations" in the
 // MSDN docs for how this and other numbers in wxDC::Blit() are obtained)
 #define DSTCOPY 0x00AA0029      // a.k.a. NOP operation
@@ -1141,13 +1138,13 @@ void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
 
     // Swap start and end positions if the end angle is less than the start angle.
     if (ea < sa) {
-	int temp;
-	temp = rx2;
-	rx2 = rx1;
-	rx1 = temp;
-	temp = ry2;
-	ry2 = ry1;
-	ry1 = temp;
+        int temp;
+        temp = rx2;
+        rx2 = rx1;
+        rx1 = temp;
+        temp = ry2;
+        ry2 = ry1;
+        ry1 = temp;
     }
 
     // draw pie with NULL_PEN first and then outline otherwise a line is
@@ -1890,7 +1887,6 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
     ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
     ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
 #endif
-
 }
 
 void wxMSWDCImpl::SetMapMode(int mode)
