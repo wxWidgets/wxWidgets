@@ -33,10 +33,6 @@
 #include "wx/fontutil.h"
 #include "wx/sysopt.h"
 
-#ifdef __WXDEBUG__
-    #include "wx/thread.h"
-#endif
-
 #include <ctype.h>
 
 #include "wx/gtk/private.h"
@@ -205,22 +201,9 @@ wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 GdkEvent    *g_lastMouseEvent = (GdkEvent*) NULL;
 int          g_lastButtonNumber = 0;
 
-extern bool g_mainThreadLocked;
-
 //-----------------------------------------------------------------------------
 // debug
 //-----------------------------------------------------------------------------
-
-#ifdef __WXDEBUG__
-
-#if wxUSE_THREADS
-#   define DEBUG_MAIN_THREAD if (wxThread::IsMain() && g_mainThreadLocked) printf("gui reentrance");
-#else
-#   define DEBUG_MAIN_THREAD
-#endif
-#else
-#define DEBUG_MAIN_THREAD
-#endif // Debug
 
 // the trace mask used for the focus debugging messages
 #define TRACE_FOCUS _T("focus")
@@ -336,8 +319,6 @@ gtk_window_expose_callback( GtkWidget*,
                             GdkEventExpose *gdk_event,
                             wxWindow *win )
 {
-    DEBUG_MAIN_THREAD
-
 #if 0
     if (win->GetName())
     {
@@ -894,8 +875,6 @@ gtk_window_key_press_callback( GtkWidget *widget,
                                GdkEventKey *gdk_event,
                                wxWindow *win )
 {
-    DEBUG_MAIN_THREAD
-
     if (!win->m_hasVMT)
         return FALSE;
     if (g_blockEventsOnDrag)
@@ -1108,8 +1087,6 @@ gtk_window_key_release_callback( GtkWidget * WXUNUSED(widget),
                                  GdkEventKey *gdk_event,
                                  wxWindowGTK *win )
 {
-    DEBUG_MAIN_THREAD
-
     if (!win->m_hasVMT)
         return FALSE;
 
@@ -1277,8 +1254,6 @@ bool wxWindowGTK::GTKProcessEvent(wxEvent& event) const
 
 int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
 {
-    DEBUG_MAIN_THREAD
-
     if (!m_hasVMT)
         return FALSE;
     if (g_blockEventsOnDrag)
@@ -1633,8 +1608,6 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
 static gboolean
 window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 {
-    DEBUG_MAIN_THREAD
-
     if (gdk_event->direction != GDK_SCROLL_UP &&
         gdk_event->direction != GDK_SCROLL_DOWN)
     {
@@ -1675,8 +1648,6 @@ gtk_window_focus_in_callback( GtkWidget * WXUNUSED(widget),
                               GdkEventFocus *WXUNUSED(event),
                               wxWindow *win )
 {
-    DEBUG_MAIN_THREAD
-
     if (win->m_imData)
         gtk_im_context_focus_in(win->m_imData->context);
 
@@ -1725,8 +1696,6 @@ gtk_window_focus_out_callback( GtkWidget * WXUNUSED(widget),
                                GdkEventFocus * WXUNUSED(gdk_event),
                                wxWindowGTK *win )
 {
-    DEBUG_MAIN_THREAD
-
     if (win->m_imData)
         gtk_im_context_focus_out(win->m_imData->context);
 
@@ -1889,8 +1858,6 @@ gtk_scrollbar_value_changed(GtkRange* range, wxWindow* win)
 static gboolean
 gtk_scrollbar_button_press_event(GtkRange*, GdkEventButton*, wxWindow* win)
 {
-    DEBUG_MAIN_THREAD
-
     g_blockEventsOnScroll = true;
     win->m_mouseButtonDown = true;
 
@@ -1924,8 +1891,6 @@ gtk_scrollbar_event_after(GtkRange* range, GdkEvent* event, wxWindow* win)
 static gboolean
 gtk_scrollbar_button_release_event(GtkRange* range, GdkEventButton*, wxWindow* win)
 {
-    DEBUG_MAIN_THREAD
-
     g_blockEventsOnScroll = false;
     win->m_mouseButtonDown = false;
     // If thumb tracking
@@ -1948,8 +1913,6 @@ gtk_scrollbar_button_release_event(GtkRange* range, GdkEventButton*, wxWindow* w
 static void
 gtk_window_realized_callback(GtkWidget* widget, wxWindow* win)
 {
-    DEBUG_MAIN_THREAD
-
     if (win->m_imData)
     {
         gtk_im_context_set_client_window( win->m_imData->context,
@@ -4117,8 +4080,6 @@ static inline bool IsScrollIncrement(double increment, double x)
 
 wxEventType wxWindowGTK::GetScrollEventType(GtkRange* range)
 {
-    DEBUG_MAIN_THREAD
-
     wxASSERT(range == m_scrollBar[0] || range == m_scrollBar[1]);
 
     const int barIndex = range == m_scrollBar[1];

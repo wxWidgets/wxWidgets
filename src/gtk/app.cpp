@@ -48,8 +48,6 @@
 // global data
 //-----------------------------------------------------------------------------
 
-bool   g_mainThreadLocked = false;
-
 static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
 
 //-----------------------------------------------------------------------------
@@ -218,25 +216,6 @@ bool wxApp::DoIdle()
     return false;
 }
 
-#if wxUSE_THREADS
-
-static GPollFunc wxgs_poll_func;
-
-extern "C" {
-static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
-{
-    g_mainThreadLocked = true;
-
-    gint res = (*wxgs_poll_func)(ufds, nfds, timeout);
-
-    g_mainThreadLocked = false;
-
-    return res;
-}
-}
-
-#endif // wxUSE_THREADS
-
 //-----------------------------------------------------------------------------
 // Access to the root window global
 //-----------------------------------------------------------------------------
@@ -354,9 +333,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         g_thread_init(NULL);
         gdk_threads_init();
     }
-
-    wxgs_poll_func = g_main_context_get_poll_func(NULL);
-    g_main_context_set_poll_func(NULL, wxapp_poll_func);
 #endif // wxUSE_THREADS
 
     // We should have the wxUSE_WCHAR_T test on the _outside_
