@@ -1742,6 +1742,11 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         return;
 
     wxMemoryDC dc;
+
+    // use the same layout direction as the window DC uses to ensure that the
+    // text is rendered correctly
+    dc.SetLayoutDirection(raw_dc->GetLayoutDirection());
+
     wxBitmap bmp;
     size_t i;
     size_t page_count = m_pages.GetCount();
