@@ -53,41 +53,70 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <!--                               UNIX                                     -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
-<set var="BASE_UNIX_SRC" hints="files">
-    src/common/gsocketiohandler.cpp
+
+<!-- Files used on all Unix systems, including Darwin -->
+<set var="BASE_UNIX_AND_DARWIN_SRC" hints="files">
     src/common/fdiodispatcher.cpp
     src/common/selectdispatcher.cpp
     src/unix/appunix.cpp
     src/unix/baseunix.cpp
-    src/unix/dir.cpp
-    src/unix/dlunix.cpp
-    src/unix/epolldispatcher.cpp
     src/unix/evtloopunix.cpp
-    src/unix/mimetype.cpp
+    src/unix/dlunix.cpp
     src/unix/snglinst.cpp
-    src/unix/stackwalk.cpp
     src/unix/stdpaths.cpp
-    src/unix/threadpsx.cpp
     src/unix/timerunx.cpp
 </set>
-<set var="BASE_AND_GUI_UNIX_SRC" hints="files">
-    src/unix/utilsunx.cpp
-</set>
-<set var="BASE_UNIX_HDR" hints="files">
+
+<set var="BASE_UNIX_AND_DARWIN_HDR" hints="files">
     wx/private/fdiodispatcher.h
-    wx/private/gsocketiohandler.h
     wx/private/selectdispatcher.h
     wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
     wx/unix/chkconf.h
-    wx/unix/execute.h
     wx/unix/evtloop.h
-    wx/unix/mimetype.h
     wx/unix/pipe.h
-    wx/unix/private.h
-    wx/unix/stackwalk.h
     wx/unix/stdpaths.h
+</set>
+
+<!--
+    Files used on all Unix systems, including Darwin with any port but wxMac
+    (this is really an aberration, we should also use these files for wxMac,
+     it's not done because of some OS 9 support leftovers only now)
+ -->
+<set var="BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC" hints="files">
+    $(BASE_UNIX_AND_DARWIN_SRC)
+    src/unix/dir.cpp
+    src/unix/mimetype.cpp
+    src/unix/threadpsx.cpp
+</set>
+
+<set var="BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR" hints="files">
+    $(BASE_UNIX_AND_DARWIN_HDR)
+    wx/unix/execute.h
+    wx/unix/mimetype.h
+    wx/unix/private.h
+</set>
+
+<!--
+    Files used on all non-Darwin Unix systems (because Darwin provides other,
+    better, native equivalents of the functionality they implement (e.g.
+    CFSocket instead of BSD sockets) or doesn't provide it at all (epoll,
+    backtrace())
+ -->
+<set var="BASE_UNIX_SRC" hints="files">
+    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
+    src/common/gsocketiohandler.cpp
+    src/unix/epolldispatcher.cpp
+    src/unix/stackwalk.cpp
+</set>
+<set var="BASE_AND_GUI_UNIX_SRC" hints="files">
+    src/unix/utilsunx.cpp
+</set>
+<set var="BASE_UNIX_HDR" hints="files">
+    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
+    wx/private/gsocketiohandler.h
+    wx/unix/stackwalk.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -216,36 +245,20 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Base files used only by OS X builds (not CarbonLib or Classic)  -->
 <set var="BASE_MACOSX_WXMAC_SRC" hints="files">
     $(BASE_MAC_SRC)
-    src/common/fdiodispatcher.cpp
-    src/common/selectdispatcher.cpp
-    src/unix/appunix.cpp
-    src/unix/baseunix.cpp
-    src/unix/evtloopunix.cpp
-    src/unix/dlunix.cpp
-    src/unix/snglinst.cpp
-    src/unix/stdpaths.cpp
-    src/unix/timerunx.cpp
+    $(BASE_UNIX_AND_DARWIN_SRC)
 </set>
 <set var="BASE_MACOSX_WXMAC_HDR" hints="files">
     $(BASE_MAC_HDR)
-    wx/private/fdiodispatcher.h
-    wx/private/selectdispatcher.h
-    wx/unix/app.h
-    wx/unix/apptbase.h
-    wx/unix/apptrait.h
-    wx/unix/chkconf.h
-    wx/unix/evtloop.h
-    wx/unix/pipe.h
-    wx/unix/stdpaths.h
+    $(BASE_UNIX_AND_DARWIN_HDR)
 </set>
 
 <!-- Base files used by non-wxMac OS X builds -->
 <set var="BASE_MACOSX_NOTWXMAC_SRC" hints="files">
-    $(BASE_UNIX_SRC)
+    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
     $(BASE_COREFOUNDATION_SRC)
 </set>
 <set var="BASE_MACOSX_NOTWXMAC_HDR" hints="files">
-    $(BASE_UNIX_HDR)
+    $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
     $(BASE_COREFOUNDATION_HDR)
 </set>
 
