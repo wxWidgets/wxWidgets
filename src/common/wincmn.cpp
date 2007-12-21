@@ -881,8 +881,11 @@ bool wxWindowBase::Enable(bool enable)
 
 bool wxWindowBase::IsShownOnScreen() const
 {
+    // A window is shown on screen if it itself is shown and so are all its
+    // parents. But if a window is toplevel one, then its always visible on
+    // screen if IsShown() returns true, even if it has a hidden parent.
     return IsShown() &&
-           (GetParent() == NULL || GetParent()->IsShownOnScreen());
+           (IsTopLevel() || GetParent() == NULL || GetParent()->IsShownOnScreen());
 }
 
 // ----------------------------------------------------------------------------
