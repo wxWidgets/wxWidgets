@@ -27,6 +27,7 @@
     #include "wx/frame.h"
     #include "wx/dialog.h"
     #include "wx/button.h"
+    #include "wx/scrolwin.h"
 #endif
 
 #include "wx/gbsizer.h"
@@ -236,7 +237,16 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
         wxXmlNode *nd = m_node;
         m_node = parentNode;
         if (GetSize() == wxDefaultSize)
-            sizer->Fit(m_parentAsWindow);
+        {
+            if ( wxDynamicCast(m_parentAsWindow, wxScrolledWindow) != NULL )
+            {
+                sizer->FitInside(m_parentAsWindow);
+            }
+            else
+            {
+                sizer->Fit(m_parentAsWindow);
+            }
+        }
         m_node = nd;
 
         if (m_parentAsWindow->IsTopLevel())
