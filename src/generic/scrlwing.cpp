@@ -35,10 +35,9 @@
     #include "wx/utils.h"
     #include "wx/panel.h"
     #include "wx/dcclient.h"
-    #if wxUSE_TIMER
-        #include "wx/timer.h"
-    #endif
+    #include "wx/timer.h"
     #include "wx/sizer.h"
+    #include "wx/settings.h"
 #endif
 
 #ifdef __WXMAC__
@@ -1059,29 +1058,6 @@ wxSize wxScrollHelper::ScrollGetBestVirtualSize() const
     return clientSize;
 }
 
-// return the window best size from the given best virtual size
-wxSize
-wxScrollHelper::ScrollGetWindowSizeForVirtualSize(const wxSize& size) const
-{
-    // Only use the content to set the window size in the direction
-    // where there's no scrolling; otherwise we're going to get a huge
-    // window in the direction in which scrolling is enabled
-    int ppuX, ppuY;
-    GetScrollPixelsPerUnit(&ppuX, &ppuY);
-
-    wxSize minSize = m_win->GetMinSize();
-    if ( !minSize.IsFullySpecified() )
-        minSize = m_win->GetSize();
-
-    wxSize best(size);
-    if (ppuX > 0)
-        best.x = minSize.x;
-    if (ppuY > 0)
-        best.y = minSize.y;
-
-    return best;
-}
-
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
@@ -1468,6 +1444,46 @@ void wxScrolledWindow::OnPaint(wxPaintEvent& event)
     m_handler->ResetDrawnFlag();
 
     event.Skip();
+}
+
+wxSize wxScrolledWindow::DoGetBestSize() const
+{
+    // NB: We don't do this in WX_FORWARD_TO_SCROLL_HELPER, because not
+    //     all scrollable windows should behave like this, only those that
+    //     contain children controls within scrollable area
+    //     (i.e., wxScrolledWindow) and other some scrollable windows may
+    //     have different DoGetBestSize() implementation (e.g. wxTreeCtrl).
+
+    wxSize best = wxPanel::DoGetBestSize();
+
+    if ( GetAutoLayout() )
+    {
+        // Only use the content to set the window size in the direction
+        // where there's no scrolling; otherwise we're going to get a huge
+        // window in the direction in which scrolling is enabled
+        int ppuX, ppuY;
+        GetScrollPixelsPerUnit(&ppuX, &ppuY);
+
+        // NB: This code used to use *current* size if min size wasn't
+        //     specified, presumably to get some reasonable (i.e., larger than
+        //     minimal) size.  But that's a wrong thing to do in GetBestSize(),
+        //     so we use minimal size as specified. If the app needs some
+        //     minimal size for its scrolled window, it should set it and put
+        //     the window into sizer as expandable so that it can use all space
+        //     available to it.
+        //
+        //     See also http://svn.wxwidgets.org/viewvc/wx?view=rev&revision=45864
+
+        wxSize minSize = GetMinSize();
+
+        if ( ppuX > 0 )
+            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+
+        if ( ppuY > 0 )
+            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+    }
+
+    return best;
 }
 
 #ifdef __WXMSW__

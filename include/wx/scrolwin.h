@@ -196,7 +196,6 @@ protected:
     bool ScrollLayout();
     void ScrollDoSetVirtualSize(int x, int y);
     wxSize ScrollGetBestVirtualSize() const;
-    wxSize ScrollGetWindowSizeForVirtualSize(const wxSize& size) const;
 
     // change just the target window (unlike SetWindow which changes m_win as
     // well)
@@ -246,10 +245,7 @@ public:                                                                       \
     virtual void DoSetVirtualSize(int x, int y)                               \
         { ScrollDoSetVirtualSize(x, y); }                                     \
     virtual wxSize GetBestVirtualSize() const                                 \
-        { return ScrollGetBestVirtualSize(); }                                \
-protected:                                                                    \
-    virtual wxSize GetWindowSizeForVirtualSize(const wxSize& size) const      \
-        { return ScrollGetWindowSizeForVirtualSize(size); }
+        { return ScrollGetBestVirtualSize(); }
 
 // include the declaration of wxScrollHelperNative if needed
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
@@ -298,6 +294,8 @@ public:
     WX_FORWARD_TO_SCROLL_HELPER()
 
 protected:
+    virtual wxSize DoGetBestSize() const;
+
     // this is needed for wxEVT_PAINT processing hack described in
     // wxScrollHelperEvtHandler::ProcessEvent()
     void OnPaint(wxPaintEvent& event);
