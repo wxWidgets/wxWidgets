@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 25 September 2007                                                   *
+ * Date : 10 December 2007                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -81,9 +81,6 @@
 /* Define this if your version of GTK+ is greater than 2.0 */
 #ifdef VMS_GTK2
 #define __WXGTK20__ 1
-
-/* Define this if your version of GTK+ is greater than 2.4 */
-#define __WXGTK24__ 1
 
 /* Define this if your version of GTK+ is greater than 2.6 */
 #define __WXGTK26__ 1
@@ -191,7 +188,7 @@ typedef pid_t GPid;
 
 
 #ifndef wxUSE_UNICODE
-#if defined( __WXX11__ )
+#if defined( __WXX11__ ) || defined ( __WXMOTIF__ )
     #define wxUSE_UNICODE 0
 #else
     #define wxUSE_UNICODE 1
@@ -270,6 +267,8 @@ typedef pid_t GPid;
 
 #define wxUSE_SOCKETS       1
 #include <socket.h>
+
+#define wxUSE_IPV6          0
 
 #define wxUSE_FILESYSTEM    1
 
@@ -425,6 +424,8 @@ typedef pid_t GPid;
 #define wxUSE_IMAGLIST      1
 
 #define wxUSE_MENUS         1
+
+#define wxUSE_NOTIFICATION_MESSAGE 1
 
 #define wxUSE_SASH          1
 
@@ -608,6 +609,8 @@ typedef pid_t GPid;
 
 #define wxUSE_OWNER_DRAWN 0
 
+#define wxUSE_TASKBARICON_BALLOONS 0
+
 #define wxUSE_UXTHEME           0
 
 #define wxUSE_INKEDIT  0
@@ -619,10 +622,6 @@ typedef pid_t GPid;
 
 
 #define wxUSE_CRASHREPORT 0
-
-
-
-#define wxUSE_BITMAP_MESSAGE         0
 
 /* --- end MSW options --- */
 
@@ -1179,9 +1178,6 @@ typedef pid_t GPid;
 
 /* Define if you have pango_font_family_is_monospace() (Pango >= 1.3.3) */
 #undef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
-
-/* Define if gtk_icon_size_lookup is missing from the GTK+ headers */
-#undef NEED_GTK_ICON_SIZE_LOOKUP
 
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT

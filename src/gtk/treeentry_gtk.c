@@ -7,6 +7,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
+#ifdef __VMS
+#include <types.h>
+typedef pid_t GPid;
+#define G_GNUC_INTERNAL 
+#endif
+
 #include "wx/gtk/treeentry_gtk.h"
 
 /*

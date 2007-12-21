@@ -14,6 +14,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/motif/dc.h"

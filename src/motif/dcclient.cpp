@@ -46,6 +46,7 @@
     #include "wx/dcmemory.h"
     #include "wx/math.h"
     #include "wx/image.h"
+    #include "wx/dcclient.h"
 #endif
 
 #ifdef __VMS__

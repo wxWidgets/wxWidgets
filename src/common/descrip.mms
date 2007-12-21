@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 29 September 2007                                                   *
+# Date : 26 November 2007                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -78,9 +78,6 @@ OBJECTS = \
 		datacmn.obj,\
 		datetime.obj,\
 		datstrm.obj,\
-		db.obj,\
-		dbgrid.obj,\
-		dbtable.obj,\
 		dcbase.obj,\
 		dcbufcmn.obj,\
 		dircmn.obj,\
@@ -223,7 +220,7 @@ OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 OBJECTS_X11_2=gsocketiohandler.obj,fdiodispatcher.obj,selectdispatcher.obj
 
 
-OBJECTS_GTK2=fontutilcmn.obj
+OBJECTS_GTK2=fontutilcmn.obj,cairo.obj
 
 SOURCES = \
 		accelcmn.cpp,\
@@ -238,6 +235,7 @@ SOURCES = \
 		bmpbase.cpp,\
 		btncmn.cpp,\
 		bookctrl.cpp,\
+		cairo.cpp,\
 		choiccmn.cpp,\
 		clipcmn.cpp,\
 		clntdata.cpp,\
@@ -254,9 +252,6 @@ SOURCES = \
 		datacmn.cpp,\
 		datetime.cpp,\
 		datstrm.cpp,\
-		db.cpp,\
-		dbgrid.cpp,\
-		dbtable.cpp,\
 		dcbase.cpp,\
 		dcbufcmn.cpp,\
 		dircmn.cpp,\
@@ -476,9 +471,6 @@ ctrlsub.obj : ctrlsub.cpp
 datacmn.obj : datacmn.cpp
 datetime.obj : datetime.cpp
 datstrm.obj : datstrm.cpp
-db.obj : db.cpp
-dbgrid.obj : dbgrid.cpp
-dbtable.obj : dbtable.cpp
 dcbase.obj : dcbase.cpp
 dcbufcmn.obj : dcbufcmn.cpp
 dircmn.obj : dircmn.cpp
@@ -630,3 +622,4 @@ listctrlcmn.obj : listctrlcmn.cpp
 srchcmn.obj : srchcmn.cpp
 textentrycmn.obj : textentrycmn.cpp
 filectrlcmn.obj : filectrlcmn.cpp
+cairo.obj : cairo.cpp

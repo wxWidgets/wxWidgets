@@ -16,6 +16,7 @@
     #include "wx/utils.h"
     #include "wx/window.h"
     #include "wx/frame.h"
+    #include "wx/dcscreen.h"
 #endif
 
 #ifdef __VMS__

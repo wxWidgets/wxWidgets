@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 5 September 2007                                                    *
+# Date : 23 November 2007                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -65,8 +65,6 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.controls]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [-.db]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.dialogs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.dialup]
@@ -127,8 +125,6 @@ gtk2 : [.include.wx]setup.h
 	set default [-.config]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.controls]
-#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	set default [-.db]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.dialogs]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
@@ -191,8 +187,6 @@ x11 : [.include.wx]setup.h
 	set default [-.config]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.controls]
-#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	set default [-.db]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.dialogs]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)

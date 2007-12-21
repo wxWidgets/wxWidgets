@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 30 September 2007                                                   *
+# Date : 20 December 2007                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -46,21 +46,17 @@ CC_DEFINE =
 
 OBJECTS = \
 		aboutdlgg.obj,\
-		animateg.obj,\
 		busyinfo.obj,\
 		calctrl.obj,\
 		caret.obj,\
 		choicbkg.obj,\
 		choicdgg.obj,\
-		colrdlgg.obj,\
-		clrpickerg.obj,\
 		datectlg.obj,\
 		dcpsg.obj,\
 		dirctrlg.obj,\
 		dirdlgg.obj,\
 		fdrepdlg.obj,\
 		fontdlgg.obj,\
-		fontpickerg.obj,\
 		grid.obj,\
 		gridctrl.obj,\
 		gridsel.obj,\
@@ -95,7 +91,7 @@ OBJECTS = \
 		hyperlinkg.obj,\
 		filepickerg.obj,\
 		bmpcboxg.obj,\
-		filectrlg.obj,srchctlg.obj
+		filectrlg.obj,srchctlg.obj,notifmsgg.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -164,44 +160,50 @@ SOURCES = \
 		hyperlinkg.cpp,\
 		filepickerg.cpp,\
 		vscroll.cpp,\
-		icon.cpp,bmpcboxg.cpp,filectrlg.cpp,srchctlg.cpp
+		icon.cpp,bmpcboxg.cpp,filectrlg.cpp,srchctlg.cpp,notifmsgg.cpp
 
 .ifdef __WXMOTIF__
-OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
-	combog.obj
+OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
+	combog.obj,animateg.obj,colrdlgg.obj,clrpickerg.obj,fontpickerg.obj,\
+	paletteg.obj
 .else
 .ifdef __WXX11__
-OBJECTS0=,accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
+OBJECTS0=accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
 	listbkg.obj,mdig.obj,spinctlg.obj,splash.obj,timer.obj,\
-	vlbox.obj,vscroll.obj,combog.obj,icon.obj,collpaneg.obj
+	vlbox.obj,vscroll.obj,combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
+	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj
 .else
 .ifdef __WXGTK__
-OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
-	vscroll.obj,combog.obj,icon.obj,collpaneg.obj
+OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
+	vscroll.obj,combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
+	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj
 .else
-OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
+OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
 	vscroll.obj,combog.obj,icon.obj
 .endif
 .endif
 .endif
 
 all : $(SOURCES)
-	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)$(OBJECTS0)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS),$(OBJECTS0)
 .ifdef __WXMOTIF__
-	library/crea [--.lib]libwx_motif.olb $(OBJECTS)$(OBJECTS0)
+	library/crea [--.lib]libwx_motif.olb $(OBJECTS),$(OBJECTS0)
 .else
 .ifdef __WXGTK__
-	library/crea [--.lib]libwx_gtk.olb $(OBJECTS)$(OBJECTS0)
+	library/crea [--.lib]libwx_gtk.olb $(OBJECTS),$(OBJECTS0)
 .else
 .ifdef __WXGTK2__
-	library/crea [--.lib]libwx_gtk2.olb $(OBJECTS)$(OBJECTS0)
+	library/crea [--.lib]libwx_gtk2.olb $(OBJECTS),$(OBJECTS0)
 .else
 .ifdef __WXX11__
-	library/crea [--.lib]libwx_x11_univ.olb $(OBJECTS)$(OBJECTS0)
+	library/crea [--.lib]libwx_x11_univ.olb $(OBJECTS),$(OBJECTS0)
 .endif
 .endif
 .endif
 .endif
+
+$(OBJECTS) : [--.include.wx]setup.h
+$(OBJECTS0) : [--.include.wx]setup.h
 
 aboutdlgg.obj : aboutdlgg.cpp
 accel.obj : accel.cpp
@@ -277,3 +279,4 @@ filepickerg.obj : filepickerg.cpp
 bmpcboxg.obj : bmpcboxg.cpp
 filectrlg.obj : filectrlg.cpp
 srchctlg.obj : srchctlg.cpp
+notifmsgg.obj : notifmsgg.cpp

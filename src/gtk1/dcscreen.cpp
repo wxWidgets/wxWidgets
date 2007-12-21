@@ -18,6 +18,7 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
+#include "wx/dcscreen.h"
 #include "wx/gtk1/dcscreen.h"
 
 //-----------------------------------------------------------------------------

@@ -19,6 +19,7 @@
 #endif
 
 #include "gtk/gtk.h"
+#include "wx/dcclient.h"
 #include "wx/gtk1/win_gtk.h"
 #include "wx/gtk1/private.h"
 #include "wx/gtk1/dcclient.h"

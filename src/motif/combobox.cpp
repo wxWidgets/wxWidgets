@@ -121,6 +121,8 @@ void wxComboBox::DoSetSize(int x, int y,
     wxWindow::DoSetSize(x, y, width, DoGetBestSize().y, sizeFlags);
 }
 
+#if 0
+// Already defined in include/motif/combobox.h
 wxString wxComboBox::GetValue() const
 {
     char *s = XmComboBoxGetString ((Widget) m_mainWidget);
@@ -133,6 +135,7 @@ wxString wxComboBox::GetValue() const
     else
         return wxEmptyString;
 }
+#endif
 
 void wxComboBox::SetValue(const wxString& value)
 {
@@ -184,7 +187,7 @@ void wxComboBox::DoDeleteOneItem(unsigned int n)
     m_noStrings--;
 }
 
-void wxComboBox::DoClear()
+void wxComboBox::Clear()
 {
     XmComboBoxDeleteAllItems((Widget) m_mainWidget);
     m_stringList.Clear();

@@ -10,6 +10,7 @@
 #ifndef __GTKDCMEMORYH__
 #define __GTKDCMEMORYH__
 
+#include "wx/dcmemory.h"
 #include "wx/gtk1/dcclient.h"
 
 //-----------------------------------------------------------------------------
