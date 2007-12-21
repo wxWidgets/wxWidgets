@@ -39,6 +39,7 @@
         #include "wx/timer.h"
     #endif
     #include "wx/sizer.h"
+    #include "wx/settings.h"
 #endif
 
 #ifdef __WXMAC__
@@ -1064,14 +1065,12 @@ wxScrollHelper::ScrollGetWindowSizeForVirtualSize(const wxSize& size) const
     GetScrollPixelsPerUnit(&ppuX, &ppuY);
 
     wxSize minSize = m_win->GetMinSize();
-    if ( !minSize.IsFullySpecified() )
-        minSize = m_win->GetSize();
 
     wxSize best(size);
     if (ppuX > 0)
-        best.x = minSize.x;
+        best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
     if (ppuY > 0)
-        best.y = minSize.y;
+        best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
 
     return best;
 }
