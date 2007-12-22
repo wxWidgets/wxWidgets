@@ -566,7 +566,7 @@ public:
     const wxDCImpl *GetImpl() const
         { return m_pimpl; }
 
-    wxWindow *GetWindow()
+    wxWindow *GetWindow() const
         { return m_pimpl->GetWindow(); }
 
     bool IsOk() const
