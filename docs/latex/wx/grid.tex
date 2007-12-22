@@ -24,11 +24,35 @@ relationship between the various grid classes and has a summary of the
 keyboard shortcuts and mouse functions provided by wxGrid.
 
 wxGrid has been greatly expanded and redesigned for wxWidgets 2.2
-onwards. If you have been using the old wxGrid class you will probably
-want to have a look at the \helpref{wxGrid classes overview}{gridoverview} to see
-how things have changed. The new grid classes are reasonably backward-compatible
+onwards. The new grid classes are reasonably backward-compatible
 but there are some exceptions. There are also easier ways of doing many things compared to
 the previous implementation.
+
+A \helpref{wxGridTableBase}{wxgridtablebase} class holds the actual
+data to be displayed by a wxGrid class. One or more wxGrid classes
+may act as a view for one table class. 
+The default table class is called wxGridStringTable and
+holds an array of strings. An instance of such a class is created
+by \helpref{wxGrid::CreateGrid}{wxgridcreategrid}.
+
+\helpref{wxGridCellRenderer}{wxgridcellrenderer} is the abstract base
+class for rendereing contents in a cell. The following renderers are
+predefined:
+\helpref{wxGridCellStringRenderer}{wxgridcellstringrenderer},
+\helpref{wxGridCellBoolRenderer}{wxgridcellboolrenderer},
+\helpref{wxGridCellFloatRenderer}{wxgridcellfloatrenderer},
+\helpref{wxGridCellNumberRenderer}{wxgridcellnumberrenderer}. The
+look of a cell can be further defined using \helpref{wxGridCellAttr}{wxgridcellattr}.
+An object of this type may be returned by \helpref{wxGridTableBase::GetAttr}{wxgridtablebasegetattr}.
+
+\helpref{wxGridCellEditor}{wxgridcelleditor} is the abstract base
+class for editing the value of a cell. The following editors are
+predefined:
+\helpref{wxGridCellTextEditor}{wxgridcelltexteditor}
+\helpref{wxGridCellBoolEditor}{wxgridcellbooleditor}
+\helpref{wxGridCellChoiceEditor}{wxgridcellchoiceeditor}
+\helpref{wxGridCellNumberEditor}{wxgridcellnumbereditor}.
+
 
 \wxheading{Derived from}
 
