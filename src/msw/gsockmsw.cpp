@@ -311,7 +311,19 @@ void GSocketMSWManager::Destroy_Socket(GSocket *socket)
   /* Remove the socket from the list */
   EnterCriticalSection(&critical);
   if ( socket->IsOk() )
-      socketList[(socket->m_msgnumber - WM_USER)] = NULL;
+  {
+      const int msgnum = socket->m_msgnumber;
+
+      // we need to remove any pending messages for this socket to avoid having
+      // them sent to a new socket which could reuse the same message number as
+      // soon as we destroy this one
+      MSG msg;
+      while ( ::PeekMessage(&msg, hWin, msgnum, msgnum, PM_REMOVE) )
+          ;
+
+      socketList[msgnum - WM_USER] = NULL;
+  }
+
   LeaveCriticalSection(&critical);
 }
 

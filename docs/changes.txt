@@ -299,6 +299,10 @@ All (GUI):
 
 - Added wxWindow::GetNextSibling() and GetPrevSibling()
 
+wxMSW:
+
+- Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse)
+
 
 2.8.7
 -----
