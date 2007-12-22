@@ -1315,6 +1315,8 @@ public:
     void     SetUseNativeColLabels( bool native = true );
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
+    void     HideRowLabels() { SetRowLabelSize( 0 ); }
+    void     HideColLabels() { SetColLabelSize( 0 ); }
     void     SetLabelBackgroundColour( const wxColour& );
     void     SetLabelTextColour( const wxColour& );
     void     SetLabelFont( const wxFont& );
