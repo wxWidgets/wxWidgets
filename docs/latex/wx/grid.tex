@@ -105,10 +105,93 @@ The ...\_CMD\_... variant also takes a window identifier.
 \helpref{SetTable}{wxgridsettable}
 
 
+\membersection{Cursor movement}\label{wxgridcursormovement}
 
-\membersection{Display format}\label{wxgriddisplayformat}
+\helpref{wxGrid::MoveCursorUp}{wxgridmovecursorup}\\
+\helpref{wxGrid::MoveCursorDown}{wxgridmovecursordown}\\
+\helpref{wxGrid::MoveCursorLeft}{wxgridmovecursorleft}\\
+\helpref{wxGrid::MoveCursorRight}{wxgridmovecursorright}\\
+\helpref{wxGrid::MoveCursorPageUp}{wxgridmovecursorup}\\
+\helpref{wxGrid::MoveCursorPageDown}{wxgridmovecursordown}\\
+\helpref{wxGrid::MoveCursorUpBlock}{wxgridmovecursorupblock}\\
+\helpref{wxGrid::MoveCursorDownBlock}{wxgridmovecursordownblock}\\
+\helpref{wxGrid::MoveCursorLeftBlock}{wxgridmovecursorleftblock}\\
+\helpref{wxGrid::MoveCursorRightBlock}{wxgridmovecursorrightblock}
 
 
+\membersection{Grid line formatting}\label{wxgridlineformatting}
+
+\helpref{wxGrid::EnableGridLines}{wxgridenablegridlines}\\
+\helpref{wxGrid::GridLinesEnabled}{wxgridgridlinesenabled}\\
+\helpref{wxGrid::SetGridLineColour}{wxgridsetgridlinecolour}\\
+\helpref{wxGrid::GetGridLineColour}{wxgridgetgridlinecolour}\\
+\helpref{wxGrid::GetDefaultGridLinePen}{wxgridgetdefaultgridlinepen}\\
+\helpref{wxGrid::GetRowGridLinePen}{wxgridgetrowgridlinepen}\\
+\helpref{wxGrid::GetColGridLinePen}{wxgridgetcolgridlinepen}
+
+\membersection{Row and column label value and format}\label{wxgridrowcoulmlabelformat}
+
+\helpref{wxGrid::SetRowLabelValue}{wxgridsetrowlabelvalue}\\
+\helpref{wxGrid::SetColLabelValue}{wxgridsetcollabelvalue}\\
+\helpref{wxGrid::GetRowLabelValue}{wxgridgetrowlabelvalue}\\
+\helpref{wxGrid::GetColLabelValue}{wxgridgetcollabelvalue}\\
+\helpref{wxGrid::SetUseNativeColLabels}{wxgridsetsenativecollabels}\\
+\helpref{wxGrid::HideColLabels}{wxgridhidecollabels}\\
+\helpref{wxGrid::HideRowLabels}{wxgridhiderowlabels}\\
+\helpref{wxGrid::SetRowLabelSize}{wxgridsetrowlabelsize}\\
+\helpref{wxGrid::SetColLabelSize}{wxgridsetcollabelsize}\\
+\helpref{wxGrid::GetRowLabelSize}{wxgridgetrowlabelsize}\\
+\helpref{wxGrid::GetColLabelSize}{wxgridgetcollabelsize}\\
+\helpref{wxGrid::AutoSizeRowLabelSize}{wxgridautosizerowlabelsize}\\
+\helpref{wxGrid::AutoSizeColLabelSize}{wxgridautosizecollabelsize}\\
+\helpref{wxGrid::GetDefaultRowLabelSize}{wxgridgetdefaultrowlabelsize}\\
+\helpref{wxGrid::GetDefaultColLabelSize}{wxgridgetdefaultcollabelsize}\\
+\helpref{wxGrid::SetRowLabelAlignment}{wxgridsetrowlabelalignment}\\
+\helpref{wxGrid::SetColLabelAlignment}{wxgridsetcollabelalignment}\\
+\helpref{wxGrid::GetRowLabelAlignment}{wxgridgetrowlabelalignment}\\
+\helpref{wxGrid::GetColLabelAlignment}{wxgridgetcollabelalignment}\\
+\helpref{wxGrid::SetLabelFont}{wxgridsetlabelfont}\\
+\helpref{wxGrid::SetLabelTextColour}{wxgridsetlabeltextcolour}\\
+\helpref{wxGrid::SetLabelBackgroundColour}{wxgridsetlabelbackgroundcolour}\\
+\helpref{wxGrid::GetLabelFont}{wxgridgetlabelfont}\\
+\helpref{wxGrid::GetLabelBackgroundColour}{wxgridgetlabelbackgroundcolour}\\
+\helpref{wxGrid::GetLabelTextColour}{wxgridgetlabeltextcolour}\\
+%\helpref{wxGrid::SetColLabelTextOrientation}{wxgridsetcollabeltextorientation}\\
+%\helpref{wxGrid::GetColLabelTextOrientation}{wxgridgetcollabeltextorientation}
+wxGrid::SetColLabelTextOrientation\\
+wxGrid::GetColLabelTextOrientation
+
+\membersection{Cell, row and column user-resizing and dragging}\label{wxgridcellrowcolresizing}
+
+\helpref{wxGrid::EnableDragRowSize}{wxgridenabledragrowsize}\\
+\helpref{wxGrid::EnableDragColSize}{wxgridenabledragcolsize}\\
+\helpref{wxGrid::CanDragRowSize}{wxgridcandragrowsize}\\
+\helpref{wxGrid::CanDragColSize}{wxgridcandragcolsize}\\
+\helpref{wxGrid::EnableDragColMove}{wxgridenabledragcolmove}\\
+\helpref{wxGrid::CanDragColMove}{wxgridcandragcolmove}\\
+\helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}\\
+\helpref{wxGrid::CanDragGridSize}{wxgridcandraggridsize}\\
+\helpref{wxGrid::GetColAt}{wxgridgetcolat}\\
+\helpref{wxGrid::SetColPos}{wxgridsetcolpos}\\
+\helpref{wxGrid::GetColPos}{wxgridgetcolpos}\\
+%\helpref{wxGrid::EnableDragCell}{wxgridenabledragcell}\\
+%\helpref{wxGrid::CanDragCell}{wxgridcandragcell}
+wxGrid::EnableDragCell\\
+wxGrid::CanDragCell
+
+\membersection{Autoresizing and cell size constraints}\label{wxgridautoresizingandcellconstriants}
+
+\helpref{wxGrid::AutoSizeColumn}{wxgridautosizecolumn}\\
+\helpref{wxGrid::AutoSizeRow}{wxgridautosizerow}\\
+\helpref{wxGrid::AutoSizeColumns}{wxgridautosizecolumns}\\
+\helpref{wxGrid::AutoSizeRows}{wxgridautosizerows}\\
+\helpref{wxGrid::AutoSize}{wxgridautosize}\\
+\helpref{wxGrid::SetColMinimalWidth}{wxgridsetcolminimalwidth}\\
+\helpref{wxGrid::SetRowMinimalHeight}{wxgridsetrowminimalheight}\\
+\helpref{wxGrid::SetColMinimalAcceptableWidth}{wxgridsetcolminimalacceptablewidth}\\
+\helpref{wxGrid::SetRowMinimalAcceptableHeight}{wxgridsetrowminimalacceptableheight}\\
+\helpref{wxGrid::GetColMinimalAcceptableWidth}{wxgridgetcolminimalacceptablewidth}\\
+\helpref{wxGrid::GetRowMinimalAcceptableHeight}{wxgridgetrowminimalacceptableheight}
 
 \membersection{Selection functions}\label{wxgridselectionfunctions}
 
@@ -1152,6 +1235,23 @@ Returned number of whole cols visible.
 Hides the in-place cell edit control.
 
 
+\membersection{wxGrid::HideColLabels}\label{wxgridhidecollabels}
+
+\func{void}{HideColLabels}{\void}
+
+Hides the column labels by calling \helpref{SetColLabelSize}{wxgridsetcollabelsize}
+with a size of 0. Show labels again by calling that method with
+a width greater than 0.
+
+
+\membersection{wxGrid::HideRowLabels}\label{wxgridhiderowlabels}
+
+\func{void}{HideRowLabels}{\void}
+
+Hides the row labels by calling \helpref{SetRowLabelSize}{wxgridsetrowlabelsize}
+with a size of 0. Show labels again by calling that method with
+a width greater than 0.
+
 
 \membersection{wxGrid::InitColWidths}\label{wxgridinitcolwidths}
 
@@ -2000,6 +2100,15 @@ application involves complex or non-string data or data sets that are too large 
 wholly in memory.
 
 
+\membersection{wxGrid::SetUseNativeColLabels}\label{wxgridsetsenativecollabels}
+
+\func{void}{SetUseNativeColLabels}{\param{bool }{native= true}}
+
+Call this in order to make the column labels use a native look by using
+\helpref{wxRenderer::DrawHeaderButton}{wxrenderernativedrawheaderbutton}
+internally. There is no equivalent method for drawing row columns as
+there is not native look for that. This option is useful when using
+wxGrid for displaying tables and not as a spread-sheet.
 
 \membersection{wxGrid::ShowCellEditControl}\label{wxgridshowcelleditcontrol}
 
