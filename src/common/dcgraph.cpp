@@ -28,9 +28,12 @@
     #include "wx/region.h"
 #endif
 
+#include "wx/dcclient.h"
+
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
 #endif
+
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -154,7 +157,7 @@ void wxGCDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool W
     {
         m_graphicContext->SetPen(*wxTRANSPARENT_PEN);
         m_graphicContext->SetBrush( wxBrush( m_textBackgroundColour , wxSOLID ) );
-        m_graphicContext->DrawRectangle( x , y , bmp.GetWidth() , bmp.GetHeight() );        
+        m_graphicContext->DrawRectangle( x , y , bmp.GetWidth() , bmp.GetHeight() );
         m_graphicContext->SetBrush( wxBrush( m_textForegroundColour , wxSOLID ) );
         m_graphicContext->DrawBitmap( bmp, x , y , bmp.GetWidth() , bmp.GetHeight() );
         m_graphicContext->SetBrush( m_graphicContext->CreateBrush(m_brush));
@@ -175,12 +178,12 @@ void wxGCDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
     m_graphicContext->DrawIcon( icon , x, y, w, h );
 }
 
-bool wxGCDCImpl::StartDoc( const wxString& WXUNUSED(message) ) 
+bool wxGCDCImpl::StartDoc( const wxString& WXUNUSED(message) )
 {
     return true;
 }
 
-void wxGCDCImpl::EndDoc() 
+void wxGCDCImpl::EndDoc()
 {
 }
 
@@ -188,10 +191,10 @@ void wxGCDCImpl::StartPage()
 {
 }
 
-void wxGCDCImpl::EndPage() 
+void wxGCDCImpl::EndPage()
 {
 }
-    
+
 void wxGCDCImpl::Flush()
 {
 #ifdef __WXMAC__
@@ -266,7 +269,7 @@ void wxGCDCImpl::DestroyClippingRegion()
     int width, height ;
     GetOwner()->GetSize( &width , &height ) ;
     m_graphicContext->Clip( DeviceToLogicalX(0) , DeviceToLogicalY(0) , DeviceToLogicalXRel(width), DeviceToLogicalYRel(height) );
-    
+
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
 
@@ -342,7 +345,7 @@ int wxGCDCImpl::GetDepth() const
 }
 
 void wxGCDCImpl::ComputeScaleAndOrigin()
-{    
+{
     wxDCImpl::ComputeScaleAndOrigin();
 
     if ( m_graphicContext )
@@ -403,7 +406,7 @@ void wxGCDCImpl::SetBrush( const wxBrush &brush )
         m_graphicContext->SetBrush( m_brush );
     }
 }
- 
+
 void wxGCDCImpl::SetBackground( const wxBrush &brush )
 {
     if (m_backgroundBrush == brush)
@@ -787,7 +790,7 @@ bool wxGCDCImpl::DoStretchBlit(
     if ( logical_func == wxNO_OP )
         return true;
     else if ( !m_graphicContext->SetLogicalFunction( logical_func ) )
-    
+
     {
         wxFAIL_MSG( wxT("Blitting is only supported with wxCOPY logical operation.") );
         return false;
