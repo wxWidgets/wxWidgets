@@ -56,7 +56,7 @@ bool wxOverlayImpl::IsOk()
     return m_window != NULL;
 }
 
-void wxOverlayImpl::Init(wxWindowDC *dc, int x, int y, int width, int height)
+void wxOverlayImpl::Init(wxDC *dc, int x, int y, int width, int height)
 {
     wxCHECK_RET( dc, "NULL dc pointer" );
     wxASSERT_MSG( !IsOk() , _("You cannot Init an overlay twice") );
@@ -80,7 +80,7 @@ void wxOverlayImpl::Init(wxWindowDC *dc, int x, int y, int width, int height)
     m_window->AddOverlay(this);
 }
 
-void wxOverlayImpl::BeginDrawing(wxWindowDC *dc)
+void wxOverlayImpl::BeginDrawing(wxDC *dc)
 {
     wxCHECK_RET( dc, "NULL dc pointer" );
 
@@ -102,12 +102,12 @@ void wxOverlayImpl::BeginDrawing(wxWindowDC *dc)
     m_isEmpty = false;
 }
 
-void wxOverlayImpl::EndDrawing(wxWindowDC *WXUNUSED(dc))
+void wxOverlayImpl::EndDrawing(wxDC *WXUNUSED(dc))
 {
     m_window->RefreshWindowRect(m_rect);
 }
 
-void wxOverlayImpl::Clear(wxWindowDC *WXUNUSED(dc))
+void wxOverlayImpl::Clear(wxDC *WXUNUSED(dc))
 {
     wxASSERT_MSG( IsOk(),
                   "You cannot Clear an overlay that is not initialized" );
