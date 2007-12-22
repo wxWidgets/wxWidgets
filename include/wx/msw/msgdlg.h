@@ -22,12 +22,17 @@ public:
                     const wxPoint& WXUNUSED(pos) = wxDefaultPosition)
         : wxMessageDialogBase(parent, message, caption, style)
     {
+        m_hook = NULL;
     }
 
 
     virtual int ShowModal();
 
-protected:
+private:
+    static WXLRESULT wxCALLBACK HookFunction(int code, WXWPARAM, WXLPARAM);
+
+    WXHANDLE m_hook; // HHOOK used to position the message box
+
     DECLARE_DYNAMIC_CLASS(wxMessageDialog)
     DECLARE_NO_COPY_CLASS(wxMessageDialog)
 };

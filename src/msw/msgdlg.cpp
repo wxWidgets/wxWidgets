@@ -24,6 +24,7 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
+    #include "wx/hashmap.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -34,6 +35,65 @@
 #endif
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
+
+// there can potentially be one message box per thread so we use a hash map
+// with thread ids as keys and (currently shown) message boxes as values
+//
+// TODO: replace this with wxTLS once it's available
+WX_DECLARE_HASH_MAP(unsigned long, wxMessageDialog *,
+                    wxIntegerHash, wxIntegerEqual,
+                    wxMessageDialogMap);
+
+namespace
+{
+
+wxMessageDialogMap& HookMap()
+{
+    static wxMessageDialogMap s_Map;
+
+    return s_Map;
+}
+
+} // anonymous namespace
+
+/* static */
+WXLRESULT wxCALLBACK
+wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // Find the thread-local instance of wxMessageDialog
+    const DWORD tid = ::GetCurrentThreadId();
+    wxMessageDialogMap::iterator node = HookMap().find(tid);
+    wxCHECK_MSG( node != HookMap().end(), false,
+                    wxT("bogus thread id in wxMessageDialog::Hook") );
+
+    wxMessageDialog *  const wnd = node->second;
+
+    const HHOOK hhook = (HHOOK)wnd->m_hook;
+    const LRESULT rc = ::CallNextHookEx(hhook, code, wParam, lParam);
+
+    if ( code == HC_ACTION && lParam )
+    {
+        const CWPRETSTRUCT * const s = (CWPRETSTRUCT *)lParam;
+
+        if ( s->message == HCBT_ACTIVATE )
+        {
+            // we won't need this hook any longer
+            ::UnhookWindowsHookEx(hhook);
+            wnd->m_hook = NULL;
+            HookMap().erase(tid);
+
+            if ( wnd->GetMessageDialogStyle() & wxCENTER )
+            {
+                wnd->SetHWND(s->hwnd);
+                wnd->Center(); // center on parent
+                wnd->SetHWND(NULL);
+            }
+            //else: default behaviour, center on screen
+        }
+    }
+
+    return rc;
+}
 
 int wxMessageDialog::ShowModal()
 {
@@ -109,6 +169,15 @@ int wxMessageDialog::ShowModal()
         message.Prepend(wxString(wchRLM, 2));
     }
 #endif // wxUSE_UNICODE
+
+    // install the hook if we need to position the dialog in a non-default way
+    if ( wxStyle & wxCENTER )
+    {
+        const DWORD tid = ::GetCurrentThreadId();
+        m_hook = ::SetWindowsHookEx(WH_CALLWNDPROCRET,
+                                    &wxMessageDialog::HookFunction, NULL, tid);
+        HookMap()[tid] = this;
+    }
 
     // do show the dialog
     int msAns = MessageBox(hWnd, message.wx_str(), m_caption.wx_str(), msStyle);

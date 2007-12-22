@@ -650,10 +650,10 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_MSGDLG
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageDialog dialog(NULL,
+    wxMessageDialog dialog(this,
                            _T("This is a message box\nA long, long string to test out the message box properly"),
                            _T("Message box text"),
-                           wxNO_DEFAULT | wxYES_NO | wxCANCEL | wxICON_INFORMATION);
+                           wxCENTER | wxNO_DEFAULT | wxYES_NO | wxCANCEL | wxICON_INFORMATION);
 
     if ( dialog.SetYesNoLabels(_T("Answer &Yes"),_T("Answer &No")) )
     {
