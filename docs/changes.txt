@@ -299,6 +299,7 @@ All (GUI):
 
 - Added wxWindow::GetNextSibling() and GetPrevSibling()
 - Improve wximage::ResampleBox() (Mihai Ciocarlie)
+- Implemented ScrollList() in generic wxListCtrl (Tim Kosse)
 
 wxMSW:
 

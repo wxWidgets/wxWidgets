@@ -580,6 +580,8 @@ public:
     // bring the selected item into view, scrolling to it if necessary
     void MoveToItem(size_t item);
 
+    bool ScrollList( int WXUNUSED(dx), int dy );
+
     // bring the current item into view
     void MoveToFocus() { MoveToItem(m_current); }
 
@@ -3314,6 +3316,34 @@ void wxListMainWindow::MoveToItem(size_t item)
     }
 }
 
+bool wxListMainWindow::ScrollList(int WXUNUSED(dx), int dy)
+{
+    if ( !InReportView() )
+    {
+        // TODO: this should work in all views but is not implemented now
+        return false;
+    }
+
+    size_t top, bottom;
+    GetVisibleLinesRange(&top, &bottom);
+
+    if ( bottom == (size_t)-1 )
+        return 0;
+
+    ResetVisibleLinesRange();
+
+    int hLine = GetLineHeight();
+
+    Scroll(-1, top + dy / hLine);
+
+#ifdef __WXMAC__
+    // see comment in MoveToItem() for why we do this
+    ResetVisibleLinesRange();
+#endif
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // keyboard handling
 // ----------------------------------------------------------------------------
@@ -5570,9 +5600,9 @@ long wxGenericListCtrl::InsertColumn( long col, const wxString &heading,
     return InsertColumn( col, item );
 }
 
-bool wxGenericListCtrl::ScrollList( int WXUNUSED(dx), int WXUNUSED(dy) )
+bool wxGenericListCtrl::ScrollList( int dx, int dy )
 {
-    return 0;
+    return m_mainWin->ScrollList(dx, dy);
 }
 
 // Sort items.
