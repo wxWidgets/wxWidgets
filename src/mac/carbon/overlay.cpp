@@ -105,7 +105,7 @@ OSStatus wxOverlayImpl::CreateOverlayWindow()
     return err;
 }
 
-void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height )
+void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
 {
     wxASSERT_MSG( !IsOk() , _("You cannot Init an overlay twice") );
 
@@ -132,7 +132,7 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
     wxASSERT_MSG(  err == noErr , _("Couldn't init the context on the overlay window") );
 }
 
-void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
+void wxOverlayImpl::BeginDrawing( wxDC* dc)
 {
     wxDCImpl *impl = dc->GetImpl();
     wxWindowDCImpl *win_impl = wxDynamicCast(impl,wxWindowDCImpl);
@@ -144,7 +144,7 @@ void wxOverlayImpl::BeginDrawing( wxWindowDC* dc)
     }
 }
 
-void wxOverlayImpl::EndDrawing( wxWindowDC* dc)
+void wxOverlayImpl::EndDrawing( wxDC* dc)
 {
     wxDCImpl *impl = dc->GetImpl();
     wxWindowDCImpl *win_impl = wxDynamicCast(impl,wxWindowDCImpl);
@@ -154,7 +154,7 @@ void wxOverlayImpl::EndDrawing( wxWindowDC* dc)
     CGContextFlush( m_overlayContext );
 }
 
-void wxOverlayImpl::Clear(wxWindowDC* WXUNUSED(dc))
+void wxOverlayImpl::Clear(wxDC* WXUNUSED(dc))
 {
     wxASSERT_MSG( IsOk() , _("You cannot Clear an overlay that is not inited") );
     CGRect box  = CGRectMake( m_x - 1, m_y - 1 , m_width + 2 , m_height + 2 );
