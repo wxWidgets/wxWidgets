@@ -179,6 +179,10 @@
 // global variables
 // ---------------------------------------------------------------------------
 
+#if wxUSE_MENUS_NATIVE
+extern wxMenu *wxCurrentPopupMenu;
+#endif
+
 #ifdef __WXWINCE__
 extern       wxChar *wxCanvasClassName;
 #else
