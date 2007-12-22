@@ -25,14 +25,9 @@ class WXDLLEXPORT wxColour: public wxColourBase
 public:
     // constructors
     // ------------
-
-    // default
-    wxColour() { }
-    wxColour( const wxColour& col );
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
-    // dtor
-    virtual ~wxColour();
+    // default copy ctor and dtor are ok
 
     // accessors
     virtual bool IsOk() const { return m_cgColour; }
@@ -44,14 +39,14 @@ public:
 
     // comparison
     bool operator == (const wxColour& colour) const;
-    
+
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
     CGColorRef GetPixel() const { return m_cgColour; };
-    
+
     CGColorRef GetCGColor() const { return m_cgColour; };
     CGColorRef CreateCGColor() const { return wxCFRetain( (CGColorRef)m_cgColour ); };
-    
+
     void GetRGBColor( RGBColor *col ) const;
 
     // Mac-specific ctor and assignment operator from the native colour
@@ -63,8 +58,6 @@ public:
     wxColour& operator=(const wxColour& col);
 
 protected :
-
-
     virtual void
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a);
     void InitRGBColor( const RGBColor& col );

@@ -38,8 +38,6 @@ class WXDLLEXPORT wxColour : public wxColourBase
 public:
     // constructors
     // ------------
-
-    wxColour() {}
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     virtual ~wxColour();

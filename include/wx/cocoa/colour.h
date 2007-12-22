@@ -24,24 +24,10 @@ class WXDLLEXPORT wxColour : public wxColourBase
 public:
     // constructors
     // ------------
-
-    // default
-    wxColour() { Init(); }
-
-    // the other standard ones: notice that we can't use
-    // DEFINE_STD_WXCOLOUR_CONSTRUCTORS here because we need to call Init() to
-    // initialize m_cocoaNSColor and the macro doesn't do it
-    wxColour( ChannelType red, ChannelType green, ChannelType blue,
-              ChannelType alpha = wxALPHA_OPAQUE )
-        { Init(); Set(red, green, blue, alpha); }
-    wxColour(unsigned long colRGB) { Init(); Set(colRGB); }
-    wxColour(const wxString& colourName) { Init(); Set(colourName); }
-    wxColour(const char *colourName) { Init(); Set(colourName); }
-    wxColour(const wchar_t *colourName) { Init(); Set(colourName); }
+    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // initialization using existing NSColor
     wxColour( WX_NSColor aColor );
-
 
     // copy ctors and assignment operators
     wxColour( const wxColour& col );

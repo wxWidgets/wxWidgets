@@ -18,18 +18,21 @@
 
 class WXDLLIMPEXP_FWD_CORE wxColour;
 
-// the standard wxColour constructors;
-// this macro avoids to repeat these lines across all colour.h files, since
-// Set() is a virtual function and thus cannot be called by wxColourBase
-// constructors
+// A macro to define the standard wxColour constructors:
+//
+// It avoids the need to repeat these lines across all colour.h files, since
+// Set() is a virtual function and thus cannot be called by wxColourBase ctors
 #define DEFINE_STD_WXCOLOUR_CONSTRUCTORS                                      \
-    wxColour( ChannelType red, ChannelType green, ChannelType blue,           \
-              ChannelType alpha = wxALPHA_OPAQUE )                            \
-        { Set(red, green, blue, alpha); }                                     \
-    wxColour( unsigned long colRGB ) { Set(colRGB); }                         \
-    wxColour(const wxString& colourName) { Set(colourName); }                 \
-    wxColour(const char *colourName) { Set(colourName); }                     \
-    wxColour(const wchar_t *colourName) { Set(colourName); }
+    wxColour() { Init(); }                                                    \
+    wxColour(ChannelType red,                                                 \
+             ChannelType green,                                               \
+             ChannelType blue,                                                \
+             ChannelType alpha = wxALPHA_OPAQUE)                              \
+        { Init(); Set(red, green, blue, alpha); }                             \
+    wxColour(unsigned long colRGB) { Init(); Set(colRGB    ); }               \
+    wxColour(const wxString& colourName) { Init(); Set(colourName); }         \
+    wxColour(const char *colourName) { Init(); Set(colourName); }             \
+    wxColour(const wchar_t *colourName) { Init(); Set(colourName); }
 
 
 // flags for wxColour -> wxString conversion (see wxColour::GetAsString)
@@ -129,6 +132,10 @@ public:
 #endif
 
 protected:
+    // Some ports need Init() and while we don't, provide a stub so that the
+    // ports which don't need it are not forced to define it
+    void Init() { }
+
     virtual void
     InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a) = 0;
 

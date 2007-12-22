@@ -36,9 +36,6 @@ class WXDLLIMPEXP_CORE wxColour : public wxColourBase
 public:
     // constructors
     // ------------
-
-    // default
-    wxColour() { }
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     virtual ~wxColour();

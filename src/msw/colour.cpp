@@ -74,10 +74,6 @@ void wxColour::Init()
     m_green = 0;
 }
 
-wxColour::~wxColour()
-{
-}
-
 void wxColour::InitRGBA(unsigned char r, unsigned char g, unsigned char b,
                         unsigned char a)
 {
