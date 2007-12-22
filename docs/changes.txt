@@ -107,6 +107,7 @@ All (GUI):
   works.
 - When focus is set to wxScrolledWindow child, scroll it into view.
 - Improve wximage::ResampleBox() (Mihai Ciocarlie)
+- Implemented ScrollList() in generic wxListCtrl (Tim Kosse)
 
 All (Unix):
 
