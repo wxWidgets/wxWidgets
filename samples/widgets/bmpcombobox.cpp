@@ -145,7 +145,6 @@ protected:
 
     // helpers for creating bitmaps
     wxBitmap CreateBitmap(const wxColour& colour);
-    wxBitmap CreateRandomBitmap(wxString* pStr);
     wxBitmap LoadBitmap(const wxString& filepath);
     wxBitmap QueryBitmap(wxString* pStr);
 
@@ -553,13 +552,22 @@ void BitmapComboBoxWidgetsPage::OnButtonAddSeveral(wxCommandEvent& WXUNUSED(even
 
 void BitmapComboBoxWidgetsPage::OnButtonAddSeveralWithImages(wxCommandEvent& WXUNUSED(event))
 {
-    int i;
-
-    for ( i=0; i<4; i++ )
+    static const struct TestEntry
     {
-        wxString s;
-        wxBitmap bmp = CreateRandomBitmap(&s);
-        m_combobox->Append(s, bmp);
+        const char *text;
+        unsigned long rgb;
+    } s_entries[] =
+    {
+        { "Red circle",     0x0000ff },
+        { "Blue circle",    0xff0000 },
+        { "Green circle",   0x00ff00 },
+        { "Black circle",   0x000000 },
+    };
+
+    for ( int i = 0; i < WXSIZEOF(s_entries); i++ )
+    {
+        const TestEntry& e = s_entries[i];
+        m_combobox->Append(e.text, CreateBitmap(wxColour(e.rgb)));
     }
 }
 
@@ -870,47 +878,4 @@ wxBitmap BitmapComboBoxWidgetsPage::CreateBitmap(const wxColour& colour)
     return bmp;
 }
 
-wxBitmap BitmapComboBoxWidgetsPage::CreateRandomBitmap( wxString* pStr )
-{
-    int i = rand() % 6;
-    const wxChar* str = wxT("");
-    wxBitmap bmp;
-
-    if ( i == 0 )
-    {
-        str = wxT("Red Circle");
-        bmp = CreateBitmap( *wxRED );
-    }
-    else if ( i == 1 )
-    {
-        str = wxT("Green Circle");
-        bmp = CreateBitmap( *wxGREEN );
-    }
-    else if ( i == 2 )
-    {
-        str = wxT("Blue Circle");
-        bmp = CreateBitmap( *wxBLUE );
-    }
-    else if ( i == 3 )
-    {
-        str = wxT("Black Circle");
-        bmp = CreateBitmap( *wxBLACK );
-    }
-    else if ( i == 4 )
-    {
-        str = wxT("Cyan Circle");
-        bmp = CreateBitmap( *wxCYAN );
-    }
-    else if ( i == 5 )
-    {
-        str = wxT("Light Grey Circle");
-        bmp = CreateBitmap( *wxLIGHT_GREY );
-    }
-
-    if ( pStr )
-        *pStr = str;
-
-    return bmp;
-}
-
-#endif //wxUSE_BITMAPCOMBOBOX
+#endif // wxUSE_BITMAPCOMBOBOX
