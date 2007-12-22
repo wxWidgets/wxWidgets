@@ -17,7 +17,7 @@
 wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
-class WXDLLIMPEXP_FWD_CORE wxWindowDC;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 
 class wxOverlayImpl
 {
@@ -27,10 +27,10 @@ public:
 
     void Reset();
     bool IsOk();
-    void Init(wxWindowDC* dc, int x , int y , int width , int height);
-    void BeginDrawing(wxWindowDC* dc);
-    void EndDrawing(wxWindowDC* dc);
-    void Clear(wxWindowDC* dc);
+    void Init(wxDC* dc, int x , int y , int width , int height);
+    void BeginDrawing(wxDC* dc);
+    void EndDrawing(wxDC* dc);
+    void Clear(wxDC* dc);
 
     // wxDFB specific methods:
     bool IsEmpty() const { return m_isEmpty; }
