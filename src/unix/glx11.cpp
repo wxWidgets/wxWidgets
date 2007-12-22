@@ -68,26 +68,26 @@ wxGLContext::~wxGLContext()
     glXDestroyContext( wxGetX11Display(), m_glContext );
 }
 
-void wxGLContext::SetCurrent(const wxGLCanvas& win) const
+bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
     if ( !m_glContext )
-        return;
+        return false;
 
     const Window xid = win.GetXWindow();
-    wxCHECK_RET( xid, _T("window must be shown") );
+    wxCHECK2_MSG( xid, return false, _T("window must be shown") );
 
-    MakeCurrent(xid, m_glContext);
+    return MakeCurrent(xid, m_glContext);
 }
 
 // wrapper around glXMakeContextCurrent/glXMakeCurrent depending on GLX
 // version
 /* static */
-void wxGLContext::MakeCurrent(GLXDrawable drawable, GLXContext context)
+bool wxGLContext::MakeCurrent(GLXDrawable drawable, GLXContext context)
 {
     if (wxGLCanvas::GetGLXVersion() >= 13)
-        glXMakeContextCurrent( wxGetX11Display(), drawable, drawable, context);
+        return glXMakeContextCurrent( wxGetX11Display(), drawable, drawable, context);
     else // GLX <= 1.2 doesn't have glXMakeContextCurrent()
-        glXMakeCurrent( wxGetX11Display(), drawable, context);
+        return glXMakeCurrent( wxGetX11Display(), drawable, context);
 }
 
 // ============================================================================
@@ -351,12 +351,13 @@ int wxGLCanvasX11::GetGLXVersion()
     return s_glxVersion;
 }
 
-void wxGLCanvasX11::SwapBuffers()
+bool wxGLCanvasX11::SwapBuffers()
 {
     const Window xid = GetXWindow();
-    wxCHECK_RET( xid, _T("window must be shown") );
+    wxCHECK2_MSG( xid, return false, _T("window must be shown") );
 
     glXSwapBuffers(wxGetX11Display(), xid);
+    return true;
 }
 
 bool wxGLCanvasX11::IsShownOnScreen() const

@@ -28,7 +28,7 @@ public:
     wxGLContext(wxGLCanvas *win, const wxGLContext* other = NULL);
     virtual ~wxGLContext();
 
-    virtual void SetCurrent(const wxGLCanvas& win) const;
+    virtual bool SetCurrent(const wxGLCanvas& win) const;
 
     HGLRC GetGLRC() const { return m_glContext; }
 
@@ -67,7 +67,7 @@ public:
     virtual ~wxGLCanvas();
 
     // implement wxGLCanvasBase methods
-    virtual void SwapBuffers();
+    virtual bool SwapBuffers();
 
 
     // MSW-specific helpers

@@ -200,12 +200,14 @@ wxGLContext::~wxGLContext()
     wglDeleteContext(m_glContext);
 }
 
-void wxGLContext::SetCurrent(const wxGLCanvas& win) const
+bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
     if ( !wglMakeCurrent(win.GetHDC(), m_glContext) )
     {
         wxLogLastError(_T("wglMakeCurrent"));
+        return false;
     }
+    return true;
 }
 
 // ============================================================================
@@ -313,10 +315,14 @@ bool wxGLCanvas::Create(wxWindow *parent,
 // operations
 // ----------------------------------------------------------------------------
 
-void wxGLCanvas::SwapBuffers()
+bool wxGLCanvas::SwapBuffers()
 {
     if ( !::SwapBuffers(m_hDC) )
+    {
+        return false;
         wxLogLastError(_T("SwapBuffers"));
+    }
+    return true;
 }
 
 // ----------------------------------------------------------------------------

@@ -66,7 +66,7 @@ public:
      */
 
     // set this context as the current one
-    virtual void SetCurrent(const wxGLCanvas& win) const = 0;
+    virtual bool SetCurrent(const wxGLCanvas& win) const = 0;
 };
 
 // ----------------------------------------------------------------------------
@@ -99,10 +99,10 @@ public:
     // ----------
 
     // set the given context associated with this window as the current one
-    void SetCurrent(const wxGLContext& context) const;
+    bool SetCurrent(const wxGLContext& context) const;
 
     // flush the back buffer (if we have it)
-    virtual void SwapBuffers() = 0;
+    virtual bool SwapBuffers() = 0;
 
 
     // accessors

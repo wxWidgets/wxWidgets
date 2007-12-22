@@ -127,7 +127,7 @@ Ignored under most platforms.}
 
 \membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent}
 
-\func{void}{SetCurrent}{ \param{const wxGLContext&}{ context} }
+\func{bool}{SetCurrent}{ \param{const wxGLContext&}{ context} }
 
 Makes the OpenGL state that is represented by the OpenGL rendering context
 \arg{context} current, i.e. it will be used by all subsequent OpenGL calls.
@@ -138,6 +138,8 @@ called with this window as parameter.
 Note that this function may only be called when the window is shown on screen,
 in particular it can't usually be called from the constructor as the window
 isn't yet shown at this moment.
+
+Returns \false if an error occurred.
 
 
 \membersection{wxGLCanvas::SetColour}\label{wxglcanvassetcolour}
@@ -150,8 +152,10 @@ wxWidgets colour database to find a named colour.
 
 \membersection{wxGLCanvas::SwapBuffers}\label{wxglcanvasswapbuffers}
 
-\func{void}{SwapBuffers}{\void}
+\func{bool}{SwapBuffers}{\void}
 
 Swaps the double-buffer of this window, making the back-buffer the front-buffer and vice versa,
 so that the output of the previous OpenGL commands is displayed on the window.
+
+Returns \false if an error occurred.
 

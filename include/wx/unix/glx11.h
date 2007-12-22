@@ -23,11 +23,11 @@ public:
     wxGLContext(wxGLCanvas *win, const wxGLContext *other = NULL);
     virtual ~wxGLContext();
 
-    virtual void SetCurrent(const wxGLCanvas& win) const;
+    virtual bool SetCurrent(const wxGLCanvas& win) const;
 
 private:
     // attach context to the drawable or unset it (if NULL)
-    static void MakeCurrent(GLXDrawable drawable, GLXContext context);
+    static bool MakeCurrent(GLXDrawable drawable, GLXContext context);
 
     GLXContext m_glContext;
 
@@ -57,7 +57,7 @@ public:
     // implement wxGLCanvasBase methods
     // --------------------------------
 
-    virtual void SwapBuffers();
+    virtual bool SwapBuffers();
 
 
     // X11-specific methods
