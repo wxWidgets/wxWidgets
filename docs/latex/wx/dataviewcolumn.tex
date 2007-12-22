@@ -17,9 +17,10 @@ These flags define behaviour of the column:
 \begin{verbatim}
 enum wxDataViewColumnFlags
 {
-    wxDATAVIEW_COL_RESIZABLE  = 1,    // the user can resize the column
-    wxDATAVIEW_COL_SORTABLE   = 2,    // same as SetSortable()
-    wxDATAVIEW_COL_HIDDEN     = 4     // column is hidden
+    wxDATAVIEW_COL_RESIZABLE    = 1,    // the user can resize the column
+    wxDATAVIEW_COL_SORTABLE     = 2,    // same as SetSortable()
+    wxDATAVIEW_COL_REORDERABLE  = 4,    // column can be reordered
+    wxDATAVIEW_COL_HIDDEN       = 8     // column is hidden
 };
 \end{verbatim}
 }
