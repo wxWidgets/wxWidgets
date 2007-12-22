@@ -298,6 +298,7 @@ All:
 All (GUI):
 
 - Added wxWindow::GetNextSibling() and GetPrevSibling()
+- Improve wximage::ResampleBox() (Mihai Ciocarlie)
 
 wxMSW:
 
