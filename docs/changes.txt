@@ -112,6 +112,10 @@ All (Unix):
 - Fixed shared libraries do not depend on GStreamer when built with
   --enable-media; only wxMedia library depends on it now.
 
+wxMSW:
+
+- Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse)
+
 wxGTK:
 
 
