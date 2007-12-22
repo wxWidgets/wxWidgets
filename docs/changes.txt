@@ -106,6 +106,7 @@ All (GUI):
 - wxNotebook RTTI corrected, so now wxDynamicCast(notebook, wxBookCtrlBase)
   works.
 - When focus is set to wxScrolledWindow child, scroll it into view.
+- Improve wximage::ResampleBox() (Mihai Ciocarlie)
 
 All (Unix):
 
