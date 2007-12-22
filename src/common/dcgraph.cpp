@@ -114,6 +114,7 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxWindowDC& dc ) :
 {
     Init();
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
+    m_window = dc.GetWindow();
 }
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc ) :
