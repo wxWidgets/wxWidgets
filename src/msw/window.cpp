@@ -179,10 +179,6 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-#if wxUSE_MENUS_NATIVE
-wxMenu *wxCurrentPopupMenu = NULL;
-#endif // wxUSE_MENUS_NATIVE
-
 #ifdef __WXWINCE__
 extern       wxChar *wxCanvasClassName;
 #else
@@ -2219,7 +2215,6 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     point.x = x;
     point.y = y;
     ::ClientToScreen(hWnd, &point);
-    wxCurrentPopupMenu = menu;
 #if defined(__WXWINCE__)
     static const UINT flags = 0;
 #else // !__WXWINCE__
@@ -2247,8 +2242,6 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     // destroyed as soon as we return (it can be a local variable in the caller
     // for example) and so we do need to process the event immediately
     wxYieldForCommandsOnly();
-
-    wxCurrentPopupMenu = NULL;
 
     menu->SetInvokingWindow(NULL);
 

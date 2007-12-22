@@ -1046,9 +1046,8 @@ public:
     // show popup menu at the given position, generate events for the items
     // selected in it
     bool PopupMenu(wxMenu *menu, const wxPoint& pos = wxDefaultPosition)
-        { return DoPopupMenu(menu, pos.x, pos.y); }
-    bool PopupMenu(wxMenu *menu, int x, int y)
-        { return DoPopupMenu(menu, x, y); }
+        { return PopupMenu(menu, pos.x, pos.y); }
+    bool PopupMenu(wxMenu *menu, int x, int y);
 
     // simply return the id of the selected item or wxID_NONE without
     // generating any events

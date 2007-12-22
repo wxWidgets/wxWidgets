@@ -1804,7 +1804,6 @@ bool wxWindowOS2::DoPopupMenu( wxMenu* pMenu, int nX, int nY )
         DoGetSize(0,&nHeight);
         nY = nHeight - nY;
     }
-    wxCurrentPopupMenu = pMenu;
 
     ::WinPopupMenu( hWndParent
                    ,hWndOwner
@@ -1825,7 +1824,6 @@ bool wxWindowOS2::DoPopupMenu( wxMenu* pMenu, int nX, int nY )
         ::WinDispatchMsg(vHabmain, (PQMSG)&vMsg);
     }
 
-    wxCurrentPopupMenu = NULL;
     pMenu->SetInvokingWindow(NULL);
     return true;
 } // end of wxWindowOS2::DoPopupMenu

@@ -85,6 +85,11 @@
 // Windows List
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
 
+// globals
+#if wxUSE_MENUS_NATIVE
+wxMenu *wxCurrentPopupMenu = NULL;
+#endif // wxUSE_MENUS_NATIVE
+
 // ----------------------------------------------------------------------------
 // static data
 // ----------------------------------------------------------------------------
@@ -316,6 +321,11 @@ wxWindowBase::~wxWindowBase()
     // Just in case we've loaded a top-level window via LoadNativeDialog but
     // we weren't a dialog class
     wxTopLevelWindows.DeleteObject((wxWindow*)this);
+
+    // The associated popup menu can still be alive, disassociate from it in
+    // this case
+    if ( wxCurrentPopupMenu && wxCurrentPopupMenu->GetInvokingWindow() == this )
+        wxCurrentPopupMenu->SetInvokingWindow(NULL);
 
     wxASSERT_MSG( GetChildren().GetCount() == 0, wxT("children not destroyed") );
 
@@ -2244,6 +2254,17 @@ void wxWindowBase::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 // ----------------------------------------------------------------------------
 
 #if wxUSE_MENUS
+
+bool wxWindowBase::PopupMenu(wxMenu *menu, int x, int y)
+{
+    wxCHECK_MSG( menu, false, "can't popup NULL menu" );
+
+    wxCurrentPopupMenu = menu;
+    const bool rc = DoPopupMenu(menu, x, y);
+    wxCurrentPopupMenu = NULL;
+
+    return rc;
+}
 
 // this is used to pass the id of the selected item from the menu event handler
 // to the main function itself
