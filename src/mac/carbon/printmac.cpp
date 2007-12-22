@@ -80,12 +80,12 @@ void wxMacCarbonPrintData::ValidateOrCreate()
     OSStatus err = noErr ;
     if ( m_macPrintSession == kPMNoReference )
     {
-        err = PMCreateSession( (PMPrintSession *) &m_macPrintSession ) ;
+        err = PMCreateSession( &m_macPrintSession ) ;
     }
     //  Set up a valid PageFormat object.
     if ( m_macPageFormat == kPMNoPageFormat)
     {
-        err = PMCreatePageFormat((PMPageFormat *) &m_macPageFormat);
+        err = PMCreatePageFormat(&m_macPageFormat);
 
         //  Note that PMPageFormat is not session-specific, but calling
         //  PMSessionDefaultPageFormat assigns values specific to the printer
@@ -93,21 +93,21 @@ void wxMacCarbonPrintData::ValidateOrCreate()
         if ((err == noErr) &&
             ( m_macPageFormat != kPMNoPageFormat))
         {
-            err = PMSessionDefaultPageFormat((PMPrintSession) m_macPrintSession,
-                (PMPageFormat) m_macPageFormat);
+            err = PMSessionDefaultPageFormat(m_macPrintSession,
+                m_macPageFormat);
         }
     }
     else
     {
-        err = PMSessionValidatePageFormat((PMPrintSession) m_macPrintSession,
-            (PMPageFormat) m_macPageFormat,
+        err = PMSessionValidatePageFormat(m_macPrintSession,
+            m_macPageFormat,
             kPMDontWantBoolean);
     }
 
     //  Set up a valid PrintSettings object.
     if ( m_macPrintSettings == kPMNoPrintSettings)
     {
-        err = PMCreatePrintSettings((PMPrintSettings *) &m_macPrintSettings);
+        err = PMCreatePrintSettings( &m_macPrintSettings);
 
         //  Note that PMPrintSettings is not session-specific, but calling
         //  PMSessionDefaultPrintSettings assigns values specific to the printer
@@ -115,14 +115,14 @@ void wxMacCarbonPrintData::ValidateOrCreate()
         if ((err == noErr) &&
             ( m_macPrintSettings != kPMNoPrintSettings))
         {
-            err = PMSessionDefaultPrintSettings((PMPrintSession) m_macPrintSession,
-                (PMPrintSettings) m_macPrintSettings);
+            err = PMSessionDefaultPrintSettings(m_macPrintSession,
+               m_macPrintSettings);
         }
     }
     else
     {
-        err = PMSessionValidatePrintSettings((PMPrintSession) m_macPrintSession,
-            (PMPrintSettings) m_macPrintSettings,
+        err = PMSessionValidatePrintSettings( m_macPrintSession,
+            m_macPrintSettings,
             kPMDontWantBoolean);
     }
 }
