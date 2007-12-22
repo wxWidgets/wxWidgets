@@ -1556,6 +1556,7 @@ void MyCanvas::OnMouseUp(wxMouseEvent &event)
 {
     if ( m_rubberBand )
     {
+        ReleaseMouse();
         {
             wxClientDC dc( this );
             PrepareDC( dc );
