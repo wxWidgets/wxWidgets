@@ -44,6 +44,7 @@
     #include "wx/scrolbar.h"
     #include "wx/layout.h"
     #include "wx/sizer.h"
+    #include "wx/menu.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_DRAG_AND_DROP
