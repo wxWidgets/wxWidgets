@@ -34,11 +34,15 @@
 #include "wx/image.h"
 #include "wx/artprov.h"
 #include "wx/dcgraph.h"
+#include "wx/overlay.h"
 
 #define wxTEST_GRAPHICS 1
 
+#define TEST_CAIRO_EVERYWHERE 0
+
 #if wxTEST_GRAPHICS
 #include "wx/graphics.h"
+#include "wx/dcgraph.h"
 #if wxUSE_GRAPHICS_CONTEXT == 0
 #undef wxTEST_GRAPHICS
 #define wxTEST_GRAPHICS 0
@@ -171,6 +175,8 @@ public:
 
     void OnPaint(wxPaintEvent &event);
     void OnMouseMove(wxMouseEvent &event);
+    void OnMouseDown(wxMouseEvent &event);
+    void OnMouseUp(wxMouseEvent &event);
 
     void ToShow(ScreenToShow show) { m_show = show; Refresh(); }
 
@@ -212,6 +218,10 @@ private:
     wxBitmap     m_smile_bmp;
     wxIcon       m_std_icon;
     bool         m_clip;
+    wxOverlay    m_overlay;
+    bool         m_rubberBand;
+    wxPoint      m_anchorpoint;
+    wxPoint      m_currentpoint;
 #if wxUSE_GRAPHICS_CONTEXT
     bool         m_useContext ;
 #endif
@@ -421,6 +431,8 @@ void MyApp::DeleteBitmaps()
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT  (MyCanvas::OnPaint)
     EVT_MOTION (MyCanvas::OnMouseMove)
+    EVT_LEFT_DOWN (MyCanvas::OnMouseDown)
+    EVT_LEFT_UP (MyCanvas::OnMouseUp)
 END_EVENT_TABLE()
 
 #include "smile.xpm"
@@ -434,6 +446,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_smile_bmp = wxBitmap(smile_xpm);
     m_std_icon = wxArtProvider::GetIcon(wxART_INFORMATION);
     m_clip = false;
+    m_rubberBand = false;
 #if wxUSE_GRAPHICS_CONTEXT
     m_useContext = false;
 #endif
@@ -1366,12 +1379,21 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     }
 }
 
+#if TEST_CAIRO_EVERYWHERE
+extern wxGraphicsRenderer* gCairoRenderer;
+#endif
+
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxPaintDC pdc(this);
 
 #if wxUSE_GRAPHICS_CONTEXT
+#if TEST_CAIRO_EVERYWHERE
+    wxGCDC gdc;
+    gdc.SetGraphicsContext( gCairoRenderer->CreateContext( pdc ) );
+#else
      wxGCDC gdc( pdc ) ;
+#endif
     wxDC &dc = m_useContext ? (wxDC&) gdc : (wxDC&) pdc ;
 #else
     wxDC &dc = pdc ;
@@ -1479,19 +1501,80 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 void MyCanvas::OnMouseMove(wxMouseEvent &event)
 {
 #if wxUSE_STATUSBAR
-    wxClientDC dc(this);
-    PrepareDC(dc);
-    m_owner->PrepareDC(dc);
+    {
+        wxClientDC dc(this);
+        PrepareDC(dc);
+        m_owner->PrepareDC(dc);
 
-    wxPoint pos = event.GetPosition();
-    long x = dc.DeviceToLogicalX( pos.x );
-    long y = dc.DeviceToLogicalY( pos.y );
-    wxString str;
-    str.Printf( wxT("Current mouse position: %d,%d"), (int)x, (int)y );
-    m_owner->SetStatusText( str );
+        wxPoint pos = event.GetPosition();
+        long x = dc.DeviceToLogicalX( pos.x );
+        long y = dc.DeviceToLogicalY( pos.y );
+        wxString str;
+        str.Printf( wxT("Current mouse position: %d,%d"), (int)x, (int)y );
+        m_owner->SetStatusText( str );
+    }
+    
+    if ( m_rubberBand )
+    {
+        int x,y, xx, yy ;
+        event.GetPosition(&x,&y);
+        CalcUnscrolledPosition( x, y, &xx, &yy );
+        m_currentpoint = wxPoint( xx , yy ) ;
+        wxRect newrect ( m_anchorpoint , m_currentpoint ) ;
+
+        wxClientDC dc( this ) ;
+        PrepareDC( dc ) ;
+
+        wxDCOverlay overlaydc( m_overlay, &dc );
+        overlaydc.Clear();
+#if __WXMAC__
+        dc.SetPen( *wxGREY_PEN );
+        dc.SetBrush( wxColour( 192,192,192,64 ) );
+#else
+        dc.SetPen( wxPen( *wxLIGHT_GREY, 2, wxSOLID ) );
+        dc.SetBrush( *wxTRANSPARENT_BRUSH );
+#endif
+        dc.DrawRectangle( newrect );
+    }
 #else
     wxUnusedVar(event);
 #endif // wxUSE_STATUSBAR
+}
+
+void MyCanvas::OnMouseDown(wxMouseEvent &event)
+{
+	int x,y,xx,yy ;
+	event.GetPosition(&x,&y);
+    CalcUnscrolledPosition( x, y, &xx, &yy );
+    m_anchorpoint = wxPoint( xx , yy ) ;
+    m_currentpoint = m_anchorpoint ;
+    m_rubberBand = true ;
+    CaptureMouse() ;
+}
+
+void MyCanvas::OnMouseUp(wxMouseEvent &event)
+{
+    if ( m_rubberBand )
+    {
+        {
+            wxClientDC dc( this );
+            PrepareDC( dc );
+            wxDCOverlay overlaydc( m_overlay, &dc );
+            overlaydc.Clear();
+        }
+        m_overlay.Reset();
+        m_rubberBand = false;
+
+        int x,y,xx,yy ;
+        event.GetPosition(&x,&y);
+        CalcUnscrolledPosition( x, y, &xx, &yy );
+        
+        wxString str;
+        str.Printf( wxT("Rectangle selection from %d,%d to %d,%d"), 
+            m_anchorpoint.x, m_anchorpoint.y , (int)xx, (int)yy );
+        wxMessageBox( str , wxT("Rubber-Banding") );
+
+    }
 }
 
 // ----------------------------------------------------------------------------
