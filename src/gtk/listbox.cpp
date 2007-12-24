@@ -33,7 +33,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 
 //-----------------------------------------------------------------------------
 // data
@@ -447,7 +446,7 @@ wxListBox::~wxListBox()
 int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
                              unsigned int pos,
                              void **clientData,
-                             wxClientDataType WXUNUSED(type))
+                             wxClientDataType type)
 {
     wxCHECK_MSG( m_treeview != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
@@ -472,15 +471,15 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
                 (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb,
                             this);
 
-        if (clientData)
-            gtk_tree_entry_set_userdata(entry, clientData[i]);
-
         GtkTreeIter itercur;
         gtk_list_store_insert_before(m_liststore, &itercur, pIter);
 
         GtkSetItem(itercur, entry);
 
         g_object_unref (entry);
+
+        if (clientData)
+            AssignNewItemClientData(GtkGetIndexFor(itercur), clientData, i, type);
     }
 
     return pos + numItems - 1;
