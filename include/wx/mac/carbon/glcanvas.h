@@ -26,7 +26,7 @@ public:
     wxGLContext(wxGLCanvas *win, const wxGLContext *other = NULL);
     virtual ~wxGLContext();
 
-    virtual void SetCurrent(const wxGLCanvas& win) const;
+    virtual bool SetCurrent(const wxGLCanvas& win) const;
 
     // Mac-specific
     AGLContext GetAGLContext() const { return m_aglContext; }
@@ -61,7 +61,7 @@ public:
     virtual ~wxGLCanvas();
 
     // implement wxGLCanvasBase methods
-    virtual void SwapBuffers();
+    virtual bool SwapBuffers();
 
 
     // Mac-specific functions

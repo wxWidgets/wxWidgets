@@ -75,20 +75,27 @@ wxGLContext::~wxGLContext()
     }
 }
 
-void wxGLContext::SetCurrent(const wxGLCanvas& win) const
+bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
     if ( !m_aglContext )
-        return;
+        return false;
 
     AGLDrawable drawable = (AGLDrawable)GetWindowPort(
                                 MAC_WXHWND(win.MacGetTopLevelWindowRef()));
     if ( !aglSetDrawable(m_aglContext, drawable) )
+    {
         wxLogAGLError("aglSetDrawable");
+        return false;
+    }
 
     if ( !aglSetCurrentContext(m_aglContext) )
+    {
         wxLogAGLError("aglSetCurrentContext");
+        return false;
+    }
 
     wx_const_cast(wxGLCanvas&, win).SetViewport();
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -305,12 +312,13 @@ wxGLCanvas::~wxGLCanvas()
         aglDestroyPixelFormat(m_aglFormat);
 }
 
-void wxGLCanvas::SwapBuffers()
+bool wxGLCanvas::SwapBuffers()
 {
     AGLContext context = aglGetCurrentContext();
-    wxCHECK_RET( context, _T("should have current context") );
+    wxCHECK_MSG(context, false, _T("should have current context"));
 
     aglSwapBuffers(context);
+    return true;
 }
 
 void wxGLCanvas::SetViewport()
