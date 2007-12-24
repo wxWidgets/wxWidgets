@@ -453,8 +453,7 @@ inline size_t wxStrspn_String(const wxString& s1, const T& s2)
     size_t pos = s1.find_first_not_of(s2);
     return pos == wxString::npos ? s1.length() : pos;
 }
-WX_STR_FUNC_NO_INVERT(size_t, wxStrspn,
-                      wxCRT_StrspnA, wxCRT_StrspnW, wxStrspn_String)
+WX_STR_FUNC(size_t, wxStrspn, wxCRT_StrspnA, wxCRT_StrspnW, wxStrspn_String)
 
 template<typename T>
 inline size_t wxStrcspn_String(const wxString& s1, const T& s2)
@@ -462,8 +461,7 @@ inline size_t wxStrcspn_String(const wxString& s1, const T& s2)
     size_t pos = s1.find_first_of(s2);
     return pos == wxString::npos ? s1.length() : pos;
 }
-WX_STR_FUNC_NO_INVERT(size_t, wxStrcspn,
-                      wxCRT_StrcspnA, wxCRT_StrcspnW, wxStrcspn_String)
+WX_STR_FUNC(size_t, wxStrcspn, wxCRT_StrcspnA, wxCRT_StrcspnW, wxStrcspn_String)
 
 #undef WX_STR_DECL
 #undef WX_STR_CALL
