@@ -63,11 +63,11 @@ wxWidgets/CE Compilation
 
 NOTE: to generate targets not in the standard project files,
 you should rebuild the project files using Bakefile.
-Also, if you are building from a CVS version of wxWidgets,
+Also, if you are building from a SVN version of wxWidgets,
 you need to create eVC++ project files or get them from
 somewhere, such as the daily makefile builds here:
 
-http://biolpc22.york.ac.uk/pub/CVS_Makefiles/
+http://biolpc22.york.ac.uk/pub/Daily_Makefiles/
 
 See technote docs/tech/tn0016.txt for details on using Bakefile,
 and you can get Bakefile from:
