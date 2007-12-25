@@ -46,7 +46,7 @@ files into a suitable directory such as c:\wx.
 General installation notes
 ==========================
 
-If installing from the CVS server, copy include/wx/msw/setup0.h to
+If installing from the SVN server, copy include/wx/msw/setup0.h to
 include/wx/msw/setup.h and edit the resulting file to choose
 the features you would like to compile wxWidgets with[out].
 
@@ -392,7 +392,7 @@ Metrowerks CodeWarrior compilation
    included in wxMSW-2.8.x.zip and the setup version.
 
 2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if
-   you are working from the CVS version) to make sure the settings reflect
+   you are working from the SVN version) to make sure the settings reflect
    what you want.  If you aren't sure, leave it alone and go with the
    default settings.  A few notes:
        - Don't use wxUSE_DEBUG_NEW_ALWAYS: it doesn't mix well with MSL
@@ -410,10 +410,10 @@ Metrowerks CodeWarrior compilation
    need to do the following by hand:
       (1) Create the directories lib\cw7msw\include\wx and copy the file
           include\wx\msw\setup.h (or include\wx\msw\setup0.h if you are
-          working from the CVS version) to lib\cw7msw\include\wx\setup.h
+          working from the SVN version) to lib\cw7msw\include\wx\setup.h
       (2) Create the directories lib\cw7mswd\include\wx and copy the file
           include\wx\msw\setup.h (or include\wx\msw\setup0.h if you are
-          working from the CVS version) to lib\cw7mswd\include\wx\setup.h
+          working from the SVN version) to lib\cw7mswd\include\wx\setup.h
 
 5. Import src\wxWidgetsW7.xml to create the project file wxWidgetsW7.mcp.
    Store this project file in directory src.  You may get warnings about
