@@ -100,7 +100,7 @@ template<> inline EventParamType wxMacGetEventParamType<CGContextRef>() { return
  template<> EventParamType wxMacGetEventParamType<GWorldPtr>() { return typeGWorldPtr; }
  */
 
-class wxMacCarbonEvent
+class WXDLLEXPORT wxMacCarbonEvent
 {
 
 public :
@@ -243,9 +243,9 @@ typedef wxMacUPP<NMProcPtr,NMUPP,NewNMUPP,DisposeNMUPP> wxMacNMUPP;
 
 #if wxUSE_GUI
 
-class wxMacToolTipTimer ;
+class WXDLLIMPEXP_FWD_CORE wxMacToolTipTimer ;
 
-class wxMacToolTip
+class WXDLLEXPORT wxMacToolTip
 {
 public :
     wxMacToolTip() ;
@@ -304,10 +304,10 @@ private :
     WindowRef m_data;
 };
 
-void wxMacRectToNative( const wxRect *wx , Rect *n );
-void wxMacNativeToRect( const Rect *n , wxRect* wx );
-void wxMacPointToNative( const wxPoint* wx , Point *n );
-void wxMacNativeToPoint( const Point *n , wxPoint* wx );
+WXDLLIMPEXP_CORE void wxMacRectToNative( const wxRect *wx , Rect *n );
+WXDLLIMPEXP_CORE void wxMacNativeToRect( const Rect *n , wxRect* wx );
+WXDLLIMPEXP_CORE void wxMacPointToNative( const wxPoint* wx , Point *n );
+WXDLLIMPEXP_CORE void wxMacNativeToPoint( const Point *n , wxPoint* wx );
 
 WXDLLIMPEXP_CORE wxWindow * wxFindControlFromMacControl(ControlRef inControl );
 WXDLLIMPEXP_CORE wxTopLevelWindowMac* wxFindWinFromMacWindow( WindowRef inWindow );
@@ -331,7 +331,7 @@ enum {
 };
 #endif
 
-class wxMacControl : public wxObject
+class WXDLLEXPORT wxMacControl : public wxObject
 {
 public :
     wxMacControl( wxWindow* peer , bool isRootControl = false );
@@ -510,7 +510,7 @@ protected :
 // basing on DataBrowserItemIDs
 //
 
-class wxMacDataBrowserControl : public wxMacControl
+class WXDLLEXPORT wxMacDataBrowserControl : public wxMacControl
 {
 public :
     wxMacDataBrowserControl( wxWindow* peer, const wxPoint& pos, const wxSize& size, long style);
@@ -663,7 +663,7 @@ const DataBrowserPropertyID kMinColumnId = 1050;
 
 // base API for high-level databrowser operations
 
-class wxMacListControl
+class WXDLLEXPORT wxMacListControl
 {
 public:
     virtual void            MacDelete( unsigned int n ) = 0;
@@ -693,7 +693,7 @@ enum DataItemType {
     DataItem_Text
 };
 
-class wxMacDataItem
+class WXDLLEXPORT wxMacDataItem
 {
 public :
     wxMacDataItem();
@@ -745,7 +745,7 @@ const wxMacDataItemPtr wxMacDataBrowserRootContainer = NULL;
 
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxMacDataItemPtr, wxArrayMacDataItemPtr, class WXDLLIMPEXP_CORE);
 
-class wxMacDataItemBrowserControl : public wxMacDataBrowserControl, public wxMacListControl
+class WXDLLEXPORT wxMacDataItemBrowserControl : public wxMacDataBrowserControl, public wxMacListControl
 {
 public :
     wxMacDataItemBrowserControl( wxWindow* peer , const wxPoint& pos, const wxSize& size, long style);
@@ -878,7 +878,7 @@ private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataItemBrowserControl)
 };
 
-class wxMacDataItemBrowserSelectionSuppressor
+class WXDLLEXPORT wxMacDataItemBrowserSelectionSuppressor
 {
 public :
     wxMacDataItemBrowserSelectionSuppressor(wxMacDataItemBrowserControl *browser);
@@ -896,7 +896,7 @@ private :
 
 // exposed for reuse in wxCheckListBox
 
-class wxMacListBoxItem : public wxMacDataItem
+class WXDLLEXPORT wxMacListBoxItem : public wxMacDataItem
 {
 public :
     wxMacListBoxItem();
@@ -908,7 +908,7 @@ public :
         DataBrowserItemDataRef itemData ) const;
 };
 
-class wxMacDataBrowserListControl : public wxMacDataItemBrowserControl
+class WXDLLEXPORT wxMacDataBrowserListControl : public wxMacDataItemBrowserControl
 {
 public:
     wxMacDataBrowserListControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style );
@@ -941,7 +941,7 @@ CGColorSpaceRef WXDLLIMPEXP_CORE wxMacGetGenericRGBColorSpace(void);
 
 // toplevel.cpp
 
-class wxMacDeferredWindowDeleter : public wxObject
+class WXDLLEXPORT wxMacDeferredWindowDeleter : public wxObject
 {
 public :
     wxMacDeferredWindowDeleter( WindowRef windowRef );
@@ -993,7 +993,7 @@ void wxMacGlobalToLocal( WindowRef window , Point*pt );
 
 bool wxMacInitCocoa();
 
-class wxMacAutoreleasePool
+class WXDLLEXPORT wxMacAutoreleasePool
 {
 public :
     wxMacAutoreleasePool();
