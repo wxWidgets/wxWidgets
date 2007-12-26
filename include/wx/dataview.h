@@ -448,6 +448,7 @@ public:
     virtual void SetTitle( const wxString &title ) = 0;
     virtual void SetAlignment( wxAlignment align ) = 0;
     virtual void SetSortable( bool sortable ) = 0;
+    virtual void SetReorderable(bool reorderable) = 0;
     virtual void SetResizeable( bool resizeable ) = 0;
     virtual void SetHidden( bool hidden ) = 0;
     virtual void SetSortOrder( bool ascending ) = 0;
@@ -470,9 +471,10 @@ public:
 
     virtual int GetFlags() const;
 
-    virtual bool IsSortable() const = 0;
-    virtual bool IsResizeable() const = 0;
     virtual bool IsHidden() const = 0;
+    virtual bool IsReorderable() const = 0;
+    virtual bool IsResizeable() const = 0;
+    virtual bool IsSortable() const = 0;
     virtual bool IsSortOrderAscending() const = 0;
 
     const wxBitmap &GetBitmap() const       { return m_bitmap; }

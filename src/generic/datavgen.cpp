@@ -1199,6 +1199,11 @@ void wxDataViewColumn::SetSortable( bool sortable )
         GetOwner()->OnColumnChange();
 }
 
+void wxDataViewColumn::SetReorderable( bool reorderable )
+{
+    // TODO
+}
+
 void wxDataViewColumn::SetSortOrder( bool ascending )
 {
     m_ascending = ascending;

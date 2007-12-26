@@ -301,6 +301,7 @@ public:
     virtual void SetMinWidth( int minWidth );
     virtual void SetWidth( int width );
 
+    virtual void SetReorderable( bool reorderable );
 
     // getters:
 
@@ -314,6 +315,8 @@ public:
 
     virtual int GetWidth() const;
     virtual int GetMinWidth() const;
+    
+    virtual bool IsReorderable() const;
 
     // implementation
     GtkWidget* GetGtkHandle() { return m_column; }

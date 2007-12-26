@@ -40,7 +40,7 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
 #ifdef __WXDEBUG__
 void wxDataViewItem::Print(const wxString& text) const
 {
-    wxPrintf("item %s: %l\n", text, (long)m_id);
+    wxPrintf(wxT("item %s: %l\n"), text.GetData(), (long)m_id);
 }
 #endif
 
@@ -801,6 +801,7 @@ void wxDataViewColumnBase::SetFlags(int flags)
     SetSortable((flags & wxDATAVIEW_COL_SORTABLE) != 0);
     SetResizeable((flags & wxDATAVIEW_COL_RESIZABLE) != 0);
     SetHidden((flags & wxDATAVIEW_COL_HIDDEN) != 0);
+    SetReorderable((flags & wxDATAVIEW_COL_REORDERABLE) != 0);
 }
 
 // ---------------------------------------------------------
@@ -1162,7 +1163,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED)
 // -------------------------------------
 
 wxDataViewSpinRenderer::wxDataViewSpinRenderer( int min, int max, wxDataViewCellMode mode, int alignment ) :
-   wxDataViewCustomRenderer( "long", mode, alignment )
+   wxDataViewCustomRenderer(wxT("long"), mode, alignment )
 {
     m_min = min;
     m_max = max;
@@ -1186,7 +1187,7 @@ bool wxDataViewSpinRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVarian
 bool wxDataViewSpinRenderer::Render( wxRect rect, wxDC *dc, int state )
 {
     wxString str;
-    str.Printf( "%d", (int) m_data );
+    str.Printf(wxT("%d"), (int) m_data );
     RenderText( str, 0, rect, dc, state );
     return true;
 }
@@ -1647,12 +1648,12 @@ wxDataViewTreeCtrl::wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
     store->DecRef();
     
 #if !defined(__WXGTK20__) || defined(wxUSE_GENERICDATAVIEWCTRL)
-    wxDataViewColumn *col = AppendIconTextColumn( "", 0, wxDATAVIEW_CELL_INERT, 40 );
+    wxDataViewColumn *col = AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_INERT,40);
     
     wxSize cient_size = GetClientSize();
     col->SetWidth( size.x );
 #else
-    AppendIconTextColumn( "", 0, wxDATAVIEW_CELL_INERT, 40 );
+    AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_INERT,40);
 #endif    
 }
 

@@ -2509,6 +2509,15 @@ void wxDataViewColumn::SetWidth( int width )
     gtk_tree_view_column_set_fixed_width( GTK_TREE_VIEW_COLUMN(m_column), width );
 }
 
+void wxDataViewColumn::SetReorderable( bool reorderable )
+{
+    gtk_tree_view_column_set_reorderable( GTK_TREE_VIEW_COLUMN(m_column), reorderable );
+}
+
+bool wxDataViewColumn::IsReorderable() const
+{
+    return gtk_tree_view_column_get_reorderable( GTK_TREE_VIEW_COLUMN(m_column) );
+}
 
 //-----------------------------------------------------------------------------
 // wxGtkTreeModelNode

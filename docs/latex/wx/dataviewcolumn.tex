@@ -82,6 +82,12 @@ Returns the renderer of this wxDataViewColumn.
 
 See also \helpref{wxDataViewRenderer}{wxdataviewrenderer}.
 
+\membersection{wxDataViewColumn::GetReorderable}\label{wxdataviewcolumngetreorderable}
+
+\func{bool}{GetReorderable}{\void}
+
+Returns true if the column is reorderable.
+
 \membersection{wxDataViewColumn::GetSortable}\label{wxdataviewcolumngetsortable}
 
 \func{bool}{GetSortable}{\void}
@@ -115,6 +121,14 @@ Set the alignment of the column header.
 \func{void}{SetBitmap}{\param{const wxBitmap\& }{bitmap}}
 
 Set the bitmap of the column header.
+
+\membersection{wxDataViewColumn::SetReorderable}\label{wxdataviewcolumnsetreorderable}
+
+\func{void}{SetReorderable}{\param{bool }{reorderable}}
+
+Indicate wether the column can be reordered by the
+user using the mouse. This is typically implemented 
+visually by dragging the header button around.
 
 \membersection{wxDataViewColumn::SetSortOrder}\label{wxdataviewcolumnsetsortorder}
 

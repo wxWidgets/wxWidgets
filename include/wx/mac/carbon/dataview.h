@@ -144,42 +144,6 @@ public:
   }
 
 //
-// in-place editing
-//
-  virtual void CancelEditing()
-  {
-  }
-
-  virtual wxControl* CreateEditorCtrl(wxWindow * WXUNUSED(parent), wxRect WXUNUSED(labelRect), const wxVariant& WXUNUSED(value))
-  {
-    return NULL;
-  }
-
-  virtual bool FinishEditing()
-  {
-    return false;
-  }
-
-  wxControl* GetEditorCtrl(void) const
-  {
-    return this->m_editorCtrlPtr;
-  }
-  virtual bool GetValueFromEditorCtrl(wxControl* WXUNUSED(editor), wxVariant& WXUNUSED(value))
-  {
-    return false;
-  }
-
-  virtual bool HasEditorCtrl(void)
-  {
-    return false;
-  }
-
-  virtual bool StartEditing(wxDataViewItem const& WXUNUSED(item), wxRect WXUNUSED(labelRect)) 
-  {
-    return false;
-  }
-  
-//
 // device context handling
 //
   virtual wxDC* GetDC(void); // creates a device context and keeps it
@@ -423,6 +387,10 @@ public:
   {
     return false; // not implemented
   }
+  virtual bool IsReorderable(void) const
+  {
+    return ((this->m_flags & wxDATAVIEW_COL_REORDERABLE) != 0);
+  }
   virtual bool IsResizeable(void) const
   {
     return ((this->m_flags & wxDATAVIEW_COL_RESIZABLE) != 0);
@@ -442,13 +410,14 @@ public:
   virtual void SetHidden(bool WXUNUSED(hidden))
   {
   }
-  virtual void SetMaxWidth  (int maxWidth);
-  virtual void SetMinWidth  (int minWidth);
-  virtual void SetResizeable(bool resizeable);
-  virtual void SetSortable  (bool sortable);
-  virtual void SetSortOrder (bool ascending);
-  virtual void SetTitle     (wxString const& title);
-  virtual void SetWidth     (int  width);
+  virtual void SetMaxWidth   (int maxWidth);
+  virtual void SetMinWidth   (int minWidth);
+  virtual void SetReorderable(bool reorderable);
+  virtual void SetResizeable (bool resizeable);
+  virtual void SetSortable   (bool sortable);
+  virtual void SetSortOrder  (bool ascending);
+  virtual void SetTitle      (wxString const& title);
+  virtual void SetWidth      (int  width);
 
 //
 // implementation
@@ -496,7 +465,7 @@ class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase
 {
 public:
  // Constructors / destructor:
-  wxDataViewCtrl()
+  wxDataViewCtrl(void)
   {
     this->Init();
   }
@@ -556,9 +525,22 @@ public:
  // adds all children of the passed parent to the control; if 'parentItem' is invalid the root(s) is/are added:
   void AddChildrenLevel(wxDataViewItem const& parentItem);
 
+ // finishes editing of custom items; if no custom item is currently edited the method does nothing
+  void FinishCustomItemEditing(void);
+
  // returns a pointer to a column;
  // in case the pointer cannot be found NULL is returned:
   wxDataViewColumn* GetColumnPtr(WXDataBrowserPropertyID propertyID) const;
+ // returns the current being rendered item of the customized renderer (this item is only valid during editing)
+  wxDataViewItem const& GetCustomRendererItem(void) const
+  {
+    return this->m_CustomRendererItem;
+  }
+ // returns a pointer to a customized renderer (this pointer is only valid during editing)
+  wxDataViewCustomRenderer* GetCustomRendererPtr(void) const
+  {
+    return this->m_CustomRendererPtr;
+  }
 
  // checks if currently a delete process is running:
   bool IsDeleting(void) const
@@ -579,7 +561,17 @@ public:
     return this->m_cgContext;
   }
 
- /// sets the flag indicating a deletion process:
+ // sets the currently being edited item of the custom renderer
+  void SetCustomRendererItem(wxDataViewItem const& NewItem)
+  {
+    this->m_CustomRendererItem = NewItem;
+  }
+ // sets the custom renderer
+  void SetCustomRendererPtr(wxDataViewCustomRenderer* NewCustomRendererPtr)
+  {
+    this->m_CustomRendererPtr = NewCustomRendererPtr;
+  }
+ // sets the flag indicating a deletion process:
   void SetDeleting(bool deleting)
   {
     this->m_Deleting = deleting;
@@ -609,7 +601,11 @@ private:
                    // try to update data into variables that are already deleted; this flag will ignore all variable update requests during item deletion
 
   void* m_cgContext; // pointer to core graphics context
+
+  wxDataViewCustomRenderer* m_CustomRendererPtr; // pointer to a valid custom renderer while editing; this class does NOT own the pointer
   
+  wxDataViewItem m_CustomRendererItem; // currently edited item by the customerenderer; it is invalid while not editing
+
   ColumnPointerHashMapType m_ColumnPointers; // all column pointers are stored in a hash map with the property ID as a key
 
  // wxWidget internal stuff:

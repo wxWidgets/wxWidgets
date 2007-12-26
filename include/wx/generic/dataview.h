@@ -328,7 +328,7 @@ public:
     virtual void SetResizeable( bool resizeable );
     virtual void SetHidden( bool hidden );
     virtual void SetSortOrder( bool ascending );
-
+    virtual void SetReorderable( bool reorderable );
 
     // getters:
 
@@ -347,7 +347,8 @@ public:
     virtual bool IsHidden() const
         { return (m_flags & wxDATAVIEW_COL_HIDDEN) != 0; }
     virtual bool IsSortOrderAscending() const;
-
+    virtual bool IsReorderable() const
+        { return (m_flags & wxDATAVIEW_COL_REORDERABLE) != 0; }
 
 private:
     int                      m_width;

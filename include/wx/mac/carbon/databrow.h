@@ -140,7 +140,7 @@ public:
   OSStatus RemoveColumnByIndex   (DataBrowserTableViewColumnIndex index);
 
   OSStatus SetColumnIndex     (DataBrowserPropertyID propertyID, DataBrowserTableViewColumnIndex index);
-  OSStatus SetDisclosureColumn(DataBrowserPropertyID propertyID, Boolean expandableRows=true);
+  OSStatus SetDisclosureColumn(DataBrowserPropertyID propertyID, Boolean expandableRows=false);
   OSStatus SetPropertyFlags   (DataBrowserPropertyID propertyID, DataBrowserPropertyFlags flags);
 
 //
@@ -218,17 +218,31 @@ public:
 
 protected :
 //
-// callback functions
+// standard callback functions
 //
-  static pascal Boolean  DataBrowserCompareProc         (ControlRef browser, DataBrowserItemID itemOneID, DataBrowserItemID itemTwoID, DataBrowserPropertyID sortProperty);
-  static pascal void     DataBrowserDrawItemProc        (ControlRef browser, DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice);
-  static pascal OSStatus DataBrowserGetSetItemDataProc  (ControlRef browser, DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemDataRef itemData, Boolean getValue);
-  static pascal void     DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef itemData);
+  static pascal Boolean  DataBrowserCompareProc          (ControlRef browser, DataBrowserItemID itemOneID, DataBrowserItemID itemTwoID, DataBrowserPropertyID sortProperty);
+  static pascal void     DataBrowserGetContextualMenuProc(ControlRef browser, MenuRef* menu, UInt32* helpType, CFStringRef* helpItemString, AEDesc* selection);
+  static pascal OSStatus DataBrowserGetSetItemDataProc   (ControlRef browser, DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemDataRef itemData, Boolean getValue);
+  static pascal void     DataBrowserItemNotificationProc (ControlRef browser, DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef itemData);
 
-  virtual Boolean  DataBrowserCompareProc         (DataBrowserItemID itemOneID, DataBrowserItemID itemTwoID, DataBrowserPropertyID sortProperty) = 0;
-  virtual void     DataBrowserDrawItemProc        (DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice) = 0;
-  virtual OSStatus DataBrowserGetSetItemDataProc  (DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemDataRef itemData, Boolean getValue) = 0;
-  virtual void     DataBrowserItemNotificationProc(DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef itemData) = 0;
+  virtual Boolean  DataBrowserCompareProc          (DataBrowserItemID itemOneID, DataBrowserItemID itemTwoID, DataBrowserPropertyID sortProperty) = 0;
+  virtual void     DataBrowserGetContextualMenuProc(MenuRef* menu, UInt32* helpType, CFStringRef* helpItemString, AEDesc* selection) = 0;
+  virtual OSStatus DataBrowserGetSetItemDataProc   (DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemDataRef itemData, Boolean getValue) = 0;
+  virtual void     DataBrowserItemNotificationProc (DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef itemData) = 0;
+
+//
+// callback functions for customized types
+//
+  static pascal void                      DataBrowserDrawItemProc(ControlRef browser, DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice);
+  static pascal Boolean                   DataBrowserEditItemProc(ControlRef browser, DataBrowserItemID itemID, DataBrowserPropertyID propertyID, CFStringRef theString, Rect* maxEditTextRect, Boolean* shrinkToFit);
+  static pascal Boolean                   DataBrowserHitTestProc (ControlRef browser, DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Rect const* mouseRect);
+  static pascal DataBrowserTrackingResult DataBrowserTrackingProc(ControlRef browser, DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Point startPt, EventModifiers modifiers);
+
+  virtual void                      DataBrowserDrawItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice) = 0;
+  virtual Boolean                   DataBrowserEditItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, CFStringRef theString, Rect* maxEditTextRect, Boolean* shrinkToFit) = 0;
+  virtual Boolean                   DataBrowserHitTestProc (DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Rect const* mouseRect) = 0;
+  virtual DataBrowserTrackingResult DataBrowserTrackingProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Point startPt, EventModifiers modifiers) = 0;
+
 private:
 //
 // wxWidget internal stuff
@@ -282,12 +296,20 @@ public:
 
 protected:
 //
-// callback functions (inherited from wxMacDataBrowserTableViewControl)
+// standard callback functions (inherited from wxMacDataBrowserTableViewControl)
 //
-  virtual Boolean  DataBrowserCompareProc         (DataBrowserItemID itemOneID, DataBrowserItemID itemTwoID, DataBrowserPropertyID sortProperty);
-  virtual void     DataBrowserDrawItemProc        (DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice);
-  virtual void     DataBrowserItemNotificationProc(DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef itemData);
-  virtual OSStatus DataBrowserGetSetItemDataProc  (DataBrowserItemID itemID, DataBrowserPropertyID property, DataBrowserItemDataRef itemData, Boolean getValue);
+  virtual Boolean  DataBrowserCompareProc          (DataBrowserItemID itemOneID, DataBrowserItemID itemTwoID, DataBrowserPropertyID sortProperty);
+  virtual void     DataBrowserItemNotificationProc (DataBrowserItemID itemID, DataBrowserItemNotification message, DataBrowserItemDataRef itemData);
+  virtual void     DataBrowserGetContextualMenuProc(MenuRef* menu, UInt32* helpType, CFStringRef* helpItemString, AEDesc* selection);
+  virtual OSStatus DataBrowserGetSetItemDataProc   (DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemDataRef itemData, Boolean getValue);
+
+//
+// callback functions for customized types (inherited from wxMacDataBrowserTableViewControl)
+//
+  virtual void                      DataBrowserDrawItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice);
+  virtual Boolean                   DataBrowserEditItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, CFStringRef theString, Rect* maxEditTextRect, Boolean* shrinkToFit);
+  virtual Boolean                   DataBrowserHitTestProc (DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Rect const* mouseRect);
+  virtual DataBrowserTrackingResult DataBrowserTrackingProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Point startPt, EventModifiers modifiers);
 
 private:
 };
