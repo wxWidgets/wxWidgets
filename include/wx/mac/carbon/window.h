@@ -19,7 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowMac;
 
-class wxMacControl ;
+class WXDLLIMPEXP_FWD_CORE wxMacControl ;
 
 class WXDLLEXPORT wxWindowMac: public wxWindowBase
 {
