@@ -1201,7 +1201,10 @@ void wxDataViewColumn::SetSortable( bool sortable )
 
 void wxDataViewColumn::SetReorderable( bool reorderable )
 {
-    // TODO
+    if (reorderable)
+        m_flags |= wxDATAVIEW_COL_REORDERABLE;
+    else
+        m_flags &= ~wxDATAVIEW_COL_REORDERABLE;
 }
 
 void wxDataViewColumn::SetSortOrder( bool ascending )
@@ -1440,8 +1443,19 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
 
         case HDN_BEGINDRAG:
             // user has started to reorder a column
+            if (!GetColumn(nmHDR->iItem)->IsReorderable())
+            {
+                // veto it!
+                *result = TRUE;
+            }
             break;
 
+        case HDN_ENDDRAG:       // user has finished reordering a column
+            {
+               // TODO: How to query the new position here?
+            }
+            break;
+            
         case HDN_ITEMCHANGING:
             if (nmHDR->pitem != NULL &&
                 (nmHDR->pitem->mask & HDI_WIDTH) != 0)
@@ -1458,7 +1472,6 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
 
         case HDN_ITEMCHANGED:   // user is resizing a column
         case HDN_ENDTRACK:      // user has finished resizing a column
-        case HDN_ENDDRAG:       // user has finished reordering a column
 
             // update the width of the modified column:
             if (nmHDR->pitem != NULL &&
