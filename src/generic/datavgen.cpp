@@ -140,6 +140,8 @@ public:
 
     // called Refresh afterwards
     virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
+    
+    virtual bool CanApplyThemeBorder() const { return false; }
 
 protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
