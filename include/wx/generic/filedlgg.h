@@ -71,13 +71,13 @@ public:
     virtual wxString GetPath() const
         { return m_filectrl->GetPath(); }
     virtual void GetPaths(wxArrayString& paths) const
-        { return m_filectrl->GetPaths(paths); }
+        { m_filectrl->GetPaths(paths); }
     virtual wxString GetDirectory() const
         { return m_filectrl->GetDirectory(); }
     virtual wxString GetFilename() const
         { return m_filectrl->GetFilename(); }
     virtual void GetFilenames(wxArrayString& files) const
-        { return m_filectrl->GetFilenames(files); }
+        { m_filectrl->GetFilenames(files); }
     virtual wxString GetWildcard() const
         { return m_filectrl->GetWildcard(); }
     virtual int GetFilterIndex() const
