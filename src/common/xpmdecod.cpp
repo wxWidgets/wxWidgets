@@ -664,7 +664,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     int count;
     unsigned width, height, colors_cnt, chars_per_pixel;
     size_t i, j, i_key;
-    wxChar key[64];
+    char key[64];
     const char *clr_def;
     bool hasMask;
     wxXPMColourMap clr_tbl;
@@ -692,7 +692,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
         return wxNullImage;
 
     img.SetMask(false);
-    key[chars_per_pixel] = wxT('\0');
+    key[chars_per_pixel] = '\0';
     hasMask = false;
 
     /*
@@ -712,7 +712,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
         }
 
         for (i_key = 0; i_key < chars_per_pixel; i_key++)
-            key[i_key] = (wxChar)xmpColLine[i_key];
+            key[i_key] = xmpColLine[i_key];
         clr_def = ParseColor(xmpColLine + chars_per_pixel);
 
         if ( clr_def == NULL )
@@ -766,6 +766,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     unsigned char *img_data = img.GetData();
     wxXPMColourMap::iterator entry;
     wxXPMColourMap::iterator end = clr_tbl.end();
+    wxString keyString;
 
     for (j = 0; j < height; j++)
     {
@@ -781,10 +782,11 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
 
             for (i_key = 0; i_key < chars_per_pixel; i_key++)
             {
-                key[i_key] = (wxChar)xpmImgLine[chars_per_pixel * i + i_key];
+                key[i_key] = xpmImgLine[chars_per_pixel * i + i_key];
             }
 
-            entry = clr_tbl.find(key);
+            keyString = key;
+            entry = clr_tbl.find(keyString);
             if ( entry == end )
             {
                 wxLogError(_("XPM: Malformed pixel data!"));
