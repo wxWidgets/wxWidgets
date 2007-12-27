@@ -1281,14 +1281,16 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     m_owner = parent;
 
     m_scrollOffsetX = 0;
-    m_buttonHeight = wxRendererNative::Get().GetHeaderButtonHeight( this ) + 10;
+    m_buttonHeight = wxRendererNative::Get().GetHeaderButtonHeight( this );
 
     int x = pos.x == wxDefaultCoord ? 0 : pos.x,
         y = pos.y == wxDefaultCoord ? 0 : pos.y,
         w = size.x == wxDefaultCoord ? 1 : size.x,
-        h = size.y == wxDefaultCoord ? m_buttonHeight : size.y;
+        h = m_buttonHeight;
 
-    if ( !CreateControl(parent, id, pos, size, 0, wxDefaultValidator, name) )
+    wxSize new_size(w,h);
+
+    if ( !CreateControl(parent, id, pos, new_size, 0, wxDefaultValidator, name) )
         return false;
 
     // create the native WC_HEADER window:
