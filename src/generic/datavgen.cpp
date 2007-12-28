@@ -137,6 +137,8 @@ public:
     // called when any column setting is changed and/or changed
     // the column count
     virtual void UpdateDisplay();
+    
+    virtual void OnInternalIdle();
 
     // called Refresh afterwards
     virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
@@ -155,8 +157,9 @@ protected:
     wxDataViewColumn *GetColumnFromHeader(NMHEADER *nmHDR)
         { return GetColumn(GetColumnIdxFromHeader(nmHDR)); }
         
-    int m_scrollOffsetX;
-    int m_buttonHeight;
+    int   m_scrollOffsetX;
+    int   m_buttonHeight;
+    bool  m_delayedUpdate;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewHeaderWindowMSW)
@@ -1281,6 +1284,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     m_owner = parent;
 
     m_scrollOffsetX = 0;
+    m_delayedUpdate = false;
     m_buttonHeight = wxRendererNative::Get().GetHeaderButtonHeight( this );
 
     int x = pos.x == wxDefaultCoord ? 0 : pos.x,
@@ -1333,7 +1337,16 @@ wxDataViewHeaderWindowMSW::~wxDataViewHeaderWindow()
 
 wxSize wxDataViewHeaderWindowMSW::DoGetBestSize() const
 {
-    return wxSize(80, m_buttonHeight );
+    return wxSize( 80, m_buttonHeight+2 );
+}
+
+void wxDataViewHeaderWindowMSW::OnInternalIdle()
+{
+    if (m_delayedUpdate)
+    {
+        m_delayedUpdate = false;
+        UpdateDisplay();
+    }
 }
 
 void wxDataViewHeaderWindowMSW::UpdateDisplay()
@@ -1456,7 +1469,10 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
 
         case HDN_ENDDRAG:       // user has finished reordering a column
             {
-               // TODO: How to query the new position here?
+               wxDataViewColumn *col = GetColumn(nmHDR->iItem);
+               unsigned int new_pos = nmHDR->pitem->iOrder;
+               m_owner->ColumnMoved( col, new_pos );
+               m_delayedUpdate = true;
             }
             break;
             
@@ -3963,6 +3979,15 @@ wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
         i ++;
     }
     return NULL;
+}
+
+void wxDataViewCtrl::ColumnMoved( wxDataViewColumn* col, unsigned int new_pos )
+{
+    if (new_pos > m_cols.GetCount()) return;
+    m_cols.DeleteObject( col );
+    m_cols.Insert( new_pos, col );
+    
+    m_clientArea->UpdateDisplay();
 }
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )

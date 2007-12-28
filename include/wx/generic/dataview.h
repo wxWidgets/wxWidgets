@@ -469,6 +469,9 @@ public:     // utility functions not part of the API
         return GetClientSize().GetWidth() / GetColumnCount();
     }
 
+    // called by header window after reorder
+    void ColumnMoved( wxDataViewColumn* col, unsigned int new_pos );
+
     // updates the header window after a change in a column setting
     void OnColumnChange();
 
