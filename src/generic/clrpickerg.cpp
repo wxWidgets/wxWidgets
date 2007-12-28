@@ -51,7 +51,7 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
 
     // create this button
     if (!wxBitmapButton::Create( parent, id, m_bitmap, pos,
-                           size, style, validator, name ))
+                           size, style | wxBU_AUTODRAW, validator, name ))
     {
         wxFAIL_MSG( wxT("wxGenericColourButton creation failed") );
         return false;
@@ -105,19 +105,27 @@ void wxGenericColourButton::UpdateColour()
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( wxBrush(m_colour) );
     dc.DrawRectangle( 0,0,m_bitmap.GetWidth(),m_bitmap.GetHeight() );
+    
+//    if ( HasFlag(wxCLRP_SHOW_LABEL) )
+    {
+        wxColour col( ~m_colour.Red(), ~m_colour.Green(), ~m_colour.Blue() );
+        dc.SetTextForeground( col );
+        dc.SetFont( GetFont() );
+        dc.DrawText( m_colour.GetAsString(wxC2S_HTML_SYNTAX), 0, 0 );
+    }
+    
     dc.SelectObject( wxNullBitmap );
     SetBitmapLabel( m_bitmap );
-    
-#if 0
-    if ( HasFlag(wxCLRP_SHOW_LABEL) )
-        SetLabel(m_colour.GetAsString(wxC2S_HTML_SYNTAX));
-#endif
 }
 
 wxSize wxGenericColourButton::DoGetBestSize() const
 {
     wxSize sz(wxBitmapButton::DoGetBestSize());
+#ifdef __WXMAC__
     sz.y += 6;
+#else
+    sz.y += 2;
+#endif
     sz.x += 30;
     if ( HasFlag(wxCLRP_SHOW_LABEL) )
         return sz;
