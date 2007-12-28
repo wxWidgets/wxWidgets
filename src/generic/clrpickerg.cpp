@@ -106,7 +106,7 @@ void wxGenericColourButton::UpdateColour()
     dc.SetBrush( wxBrush(m_colour) );
     dc.DrawRectangle( 0,0,m_bitmap.GetWidth(),m_bitmap.GetHeight() );
     
-//    if ( HasFlag(wxCLRP_SHOW_LABEL) )
+    if ( HasFlag(wxCLRP_SHOW_LABEL) )
     {
         wxColour col( ~m_colour.Red(), ~m_colour.Green(), ~m_colour.Blue() );
         dc.SetTextForeground( col );
