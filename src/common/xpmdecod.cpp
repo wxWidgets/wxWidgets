@@ -265,7 +265,7 @@ typedef struct
 
 #define myRGB(r,g,b)   ((wxUint32)r<<16|(wxUint32)g<<8|(wxUint32)b)
 
-static rgbRecord theRGBRecords[] =
+static const rgbRecord theRGBRecords[] =
 {
     {"aliceblue", myRGB(240, 248, 255)},
     {"antiquewhite", myRGB(250, 235, 215)},
@@ -504,7 +504,7 @@ static rgbRecord theRGBRecords[] =
     {"yellowgreen", myRGB(50, 216, 56)},
     {NULL, myRGB(0, 0, 0)}
 };
-static int numTheRGBRecords = 235;
+static const int numTheRGBRecords = 235;
 
 static unsigned char ParseHexadecimal(char digit1, char digit2)
 {
@@ -666,10 +666,10 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     size_t i, j, i_key;
     char key[64];
     const char *clr_def;
-    bool hasMask;
     wxXPMColourMap clr_tbl;
     wxXPMColourMap::iterator it;
     wxString maskKey;
+    wxString keyString;
 
     /*
      *  Read hints and initialize structures:
@@ -688,12 +688,10 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     //     8bit RGB...
     wxCHECK_MSG(chars_per_pixel < 64, wxNullImage, wxT("XPM colormaps this large not supported."));
 
-    if ( !img.Create(width, height) )
+    if (!img.Create(width, height, false))
         return wxNullImage;
 
-    img.SetMask(false);
     key[chars_per_pixel] = '\0';
-    hasMask = false;
 
     /*
      *  Create colour map:
@@ -731,32 +729,41 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
             return wxNullImage;
         }
 
+        keyString = key;
         if ( isNone )
-        {
-            hasMask = true;
-            maskKey = key;
-        }
+            maskKey = keyString;
 
-        clr_tbl[key] = clr_data;
+        clr_tbl[keyString] = clr_data;
     }
 
     // deal with the mask: we must replace pseudo-colour "None" with the mask
     // colour (which can be any colour not otherwise used in the image)
-    if (hasMask)
+    if (!maskKey.empty())
     {
-        unsigned char r, g, b;
-        if ( !img.FindFirstUnusedColour(&r, &g, &b) )
+        wxLongToLongHashMap rgb_table;
+        long rgb;
+        const size_t n = clr_tbl.size();
+        wxXPMColourMap::const_iterator iter = clr_tbl.begin();
+        for (i = 0; i < n; ++i, ++iter)
+        {
+            const wxXPMColourMapData& data = iter->second;
+            rgb = (data.R << 16) + (data.G << 8) + data.B;
+            rgb_table[rgb];
+        }
+        for (rgb = 0; rgb <= 0xffffff && rgb_table.count(rgb); ++rgb)
+            ;
+        if (rgb > 0xffffff)
         {
             wxLogError(_("XPM: no colors left to use for mask!"));
             return wxNullImage;
         }
 
-        clr_tbl[maskKey].R = r;
-        clr_tbl[maskKey].G = g;
-        clr_tbl[maskKey].B = b;
+        wxXPMColourMapData& maskData = clr_tbl[maskKey];
+        maskData.R = wxByte(rgb >> 16);
+        maskData.G = wxByte(rgb >> 8);
+        maskData.B = wxByte(rgb);
 
-        img.SetMask(true);
-        img.SetMaskColour(r, g, b);
+        img.SetMaskColour(maskData.R, maskData.G, maskData.B);
     }
 
     /*
@@ -766,7 +773,6 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     unsigned char *img_data = img.GetData();
     wxXPMColourMap::iterator entry;
     wxXPMColourMap::iterator end = clr_tbl.end();
-    wxString keyString;
 
     for (j = 0; j < height; j++)
     {
@@ -797,12 +803,10 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
                 // each remaining pixel if we don't bail out
                 return wxNullImage;
             }
-            else
-            {
-                img_data[0] = entry->second.R;
-                img_data[1] = entry->second.G;
-                img_data[2] = entry->second.B;
-            }
+
+            img_data[0] = entry->second.R;
+            img_data[1] = entry->second.G;
+            img_data[2] = entry->second.B;
         }
     }
 
