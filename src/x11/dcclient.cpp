@@ -1255,7 +1255,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     else
         XCopyArea( (Display*) m_display, (Pixmap) use_bitmap.GetPixmap(), (Window) m_x11window,
             (GC) m_penGC, 0, 0, ww, hh, xx, yy );
-
+            
     // remove mask again if any
     if (setClipMask)
     {
@@ -1458,7 +1458,6 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
 
         // Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
         // drawing a mono-bitmap (XBitmap) we use the current text GC
-
         if (is_mono)
             XCopyPlane( (Display*) m_display, (Pixmap) use_bitmap.GetBitmap(), (Window) m_x11window,
                 (GC) m_textGC, xsrc, ysrc, width, height, xx, yy, 1 );
@@ -1514,7 +1513,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
 
             // copy including child window contents
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, IncludeInferiors );
-            XCopyArea( (Display*) m_display, (Window) x11_impl->X11GetWindow(), (Window) bitmap.GetPixmap(),
+            XCopyArea( (Display*) m_display, (Window) x11_impl->GetX11Window(), (Window) bitmap.GetPixmap(),
                        (GC) m_penGC, xsrc, ysrc, width, height, 0, 0 );
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, ClipByChildren );
 
@@ -1532,10 +1531,9 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
         else
         {
             // No scaling and not a memory dc with a mask either
-            
             // copy including child window contents
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, IncludeInferiors );
-            XCopyArea( (Display*) m_display, (Window) x11_impl->X11GetWindow(), (Window) m_x11window,
+            XCopyArea( (Display*) m_display, (Window) x11_impl->GetX11Window(), (Window) m_x11window,
                        (GC) m_penGC, xsrc, ysrc, width, height, xx, yy );
             XSetSubwindowMode( (Display*) m_display, (GC) m_penGC, ClipByChildren );
         }
