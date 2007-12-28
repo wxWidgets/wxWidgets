@@ -1359,7 +1359,8 @@ void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
     while ( win->GetParent() != m_targetWindow )
     {
         win = win->GetParent();
-        wxCHECK_RET( win, wxT("incorrectly sent wxChildFocusEvent - not our child") );
+        if ( !win )
+            return; // event is not from a child of the target window
     }
 
     // if the child is not fully visible, try to scroll it into view:
