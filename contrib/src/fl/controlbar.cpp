@@ -726,6 +726,10 @@ void wxFrameLayout::SetBarState( cbBarInfo* pBar, int newState, bool updateNow )
                     mFloatedFrames.Erase( pNode );
 
                     pFFrm->Show( false );
+
+                    // Workaround assert that causes a crash on the next time something tries to CaptureMouse
+                    if (pFFrm->HasCapture()) pFFrm->ReleaseMouse();
+
                     pFFrm->Destroy(); break;
                 }
 
