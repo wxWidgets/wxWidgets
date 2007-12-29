@@ -66,6 +66,9 @@ bool wxDialog::Show( bool show )
         EndModal( wxID_CANCEL );
     }
 
+    if (show && CanDoLayoutAdaptation())
+        DoLayoutAdaptation();
+
     bool ret = wxWindow::Show( show );
 
     if (show) InitDialog();

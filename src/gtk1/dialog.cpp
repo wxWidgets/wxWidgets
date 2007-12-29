@@ -162,6 +162,9 @@ bool wxDialog::Show( bool show )
         GtkOnSize( m_x, m_y, m_width, m_height );
     }
 
+    if (show && CanDoLayoutAdaptation())
+        DoLayoutAdaptation();
+
     bool ret = wxWindow::Show( show );
 
     if (show) InitDialog();

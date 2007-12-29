@@ -103,6 +103,9 @@ public:
     void SetBookCtrl(wxBookCtrlBase* book) { m_bookCtrl = book; }
     wxBookCtrlBase* GetBookCtrl() const { return m_bookCtrl; }
 
+    // Override function in base
+    virtual wxWindow* GetContentWindow() const;
+
     // Set and get the inner sizer
     void SetInnerSize(wxSizer* sizer) { m_innerSizer = sizer; }
     wxSizer* GetInnerSizer() const { return m_innerSizer ; }

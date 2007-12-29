@@ -1,0 +1,48 @@
+\section{\class{wxDialogLayoutAdapter}}\label{wxdialoglayoutadapter}
+
+This abstract class is the base for classes that help wxWidgets peform run-time layout adaptation of dialogs. Principally,
+this is to cater for small displays by making part of the dialog scroll, but the application developer may find other
+uses for layout adaption.
+
+By default, there is one instance of wxStandardDialogLayoutAdapter
+which can perform adaptation for most custom dialogs and dialogs with book controls
+such as \helpref{wxPropertySheetDialog}{wxpropertysheetdialog}.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/dialog.h>
+
+\wxheading{Library}
+
+\helpref{wxCore}{librarieslist}
+
+\wxheading{See also}
+
+\helpref{Automatic scrolling dialogs}{autoscrollingdialogs}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxDialogLayoutAdapter::wxDialogLayoutAdapter}\label{wxdialoglayoutadapterctor}
+
+\func{}{wxDialogLayoutAdapter}{\void}
+
+Default constructor.
+
+\membersection{wxDialogLayoutAdapter::CanDoLayoutAdaptation}\label{wxdialoglayoutadaptercandolayoutadaptation}
+
+\func{bool}{CanDoLayoutAdaptation}{\param{wxDialog*}{ dialog}}
+
+Override this to returns \true if adaptation can and should be done.
+
+\membersection{wxDialogLayoutAdapter::DoLayoutAdaptation}\label{wxdialoglayoutadapterdolayoutadaptation}
+
+\func{bool}{DoLayoutAdaptation}{\param{wxDialog*}{ dialog}}
+
+Override this to perform layout adaptation, such as making parts of the dialog scroll and resizing the dialog to fit the display.
+Normally this function will be called just before the dialog is shown.
+

@@ -71,7 +71,7 @@ bool wxDialog::Create(wxWindow *parent,
 
 void wxDialog::OnApply(wxCommandEvent &WXUNUSED(event))
 {
-    if ( Validate() ) 
+    if ( Validate() )
         TransferDataFromWindow();
 }
 
@@ -150,9 +150,12 @@ bool wxDialog::Show(bool show)
             EndModal(wxID_CANCEL);
     }
 
+    if (show && CanDoLayoutAdaptation())
+        DoLayoutAdaptation();
+
     bool ret = wxDialogBase::Show(show);
 
-    if ( show ) 
+    if ( show )
         InitDialog();
 
     return ret;

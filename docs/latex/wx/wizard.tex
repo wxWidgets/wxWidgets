@@ -26,6 +26,16 @@ using either the non-default constructor or a default one followed by call to th
 want the wizard to show and call \helpref{RunWizard}{wxwizardrunwizard}.
 Finally, don't forget to call {\tt wizard->Destroy()}, otherwise your application will hang on exit due to an undestroyed window.
 
+You can supply a bitmap to display on the left of the wizard, either for all pages
+or for individual pages. If you need to have the bitmap resize to the height of the wizard,
+call \helpref{wxWizard::SetBitmapPlacement}{wxwizardsetbitmapplacement} and if necessary,\rtfsp
+\helpref{wxWizard::SetBitmapBackgroundColour}{wxwizardsetbitmapbackgroundcolour} and \helpref{wxWizard::SetMinimumBitmapWidth}{wxwizardsetminimumbitmapheight}.
+
+To make wizard pages scroll when the display is too small to fit the whole dialog, you can switch
+layout adaptation on globally with \helpref{wxDialog::EnableLayoutAdaptation}{wxdialogenablelayoutadaptation} or
+per dialog with \helpref{wxDialog::SetLayoutAdaptationMode}{wxdialogsetlayoutadaptationmode}. For more
+about layout adaptation, see \helpref{Automatic scrolling dialogs}{autoscrollingdialogs}.
+
 \wxheading{Derived from}
 
 \helpref{wxDialog}{wxdialog}\\
@@ -167,12 +177,44 @@ from a single one and you should call {\it Fit} separately for the others.
 
 Returns the bitmap used for the wizard.
 
+
+\membersection{wxWizard::GetBitmapBackgroundColour}\label{wxwizardgetbitmapbackgroundcolour}
+
+\constfunc{const wxColour\&}{GetBitmapBackgroundColour}{\void}
+
+Returns the colour that should be used to fill the area not taken up by the wizard or page bitmap,
+if a non-zero bitmap placement flag has been set.
+
+See also \helpref{wxWizard::SetBitmapPlacement}{wxwizardsetbitmapplacement}.
+
+
+
+\membersection{wxWizard::GetBitmapPlacement}\label{wxwizardgetbitmapplacement}
+
+\func{int}{GetBitmapPlacement}{\void}
+
+Returns the flags indicating how the wizard or page bitmap should be expanded and positioned to fit the
+page height. By default, placement is 0 (no expansion is done).
+
+See also \helpref{wxWizard::SetBitmapPlacement}{wxwizardsetbitmapplacement} for the possible values.
+
+
 \membersection{wxWizard::GetCurrentPage}\label{wxwizardgetcurrentpage}
 
 \constfunc{wxWizardPage*}{GetCurrentPage}{\void}
 
 Get the current page while the wizard is running. {\tt NULL} is returned if 
 \helpref{RunWizard()}{wxwizardrunwizard} is not being executed now.
+
+
+\membersection{wxWizard::GetMinimumBitmapWidth}\label{wxwizardgetminimumbitmapwidth}
+
+\constfunc{int}{GetMinimumBitmapWidth}{\void}
+
+Returns the minimum width for the bitmap that will be constructed to contain the actual wizard or page bitmap
+if a non-zero bitmap placement flag has been set.
+
+See also \helpref{wxWizard::SetBitmapPlacement}{wxwizardsetbitmapplacement}.
 
 
 \membersection{wxWizard::GetPageAreaSizer}\label{wxwizardgetpageareasizer}
@@ -255,6 +297,50 @@ can not be {\tt NULL}.
 \func{void}{SetBitmap}{\param{const wxBitmap\& }{bitmap}}
 
 Sets the bitmap used for the wizard.
+
+
+\membersection{wxWizard::SetBitmapBackgroundColour}\label{wxwizardsetbitmapbackgroundcolour}
+
+\func{void}{SetBitmapBackgroundColour}{\param{const wxColour\&}{ colour}}
+
+Sets the colour that should be used to fill the area not taken up by the wizard or page bitmap,
+if a non-zero bitmap placement flag has been set.
+
+See also \helpref{wxWizard::SetBitmapPlacement}{wxwizardsetbitmapplacement}.
+
+
+\membersection{wxWizard::SetBitmapPlacement}\label{wxwizardsetbitmapplacement}
+
+\func{void}{SetBitmapPlacement}{\param{int}{ placement}}
+
+Sets the flags indicating how the wizard or page bitmap should be expanded and positioned to fit the
+page height. By default, placement is 0 (no expansion is done). {\it placement} is a bitlist with the
+following possible values:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxWIZARD\_VALIGN\_TOP}}{Aligns the bitmap at the top.}
+\twocolitem{\windowstyle{wxWIZARD\_VALIGN\_CENTRE}}{Centres the bitmap vertically.}
+\twocolitem{\windowstyle{wxWIZARD\_VALIGN\_BOTTOM}}{Aligns the bitmap at the bottom.}
+\twocolitem{\windowstyle{wxWIZARD\_HALIGN\_LEFT}}{Left-aligns the bitmap.}
+\twocolitem{\windowstyle{wxWIZARD\_HALIGN\_CENTRE}}{Centres the bitmap horizontally.}
+\twocolitem{\windowstyle{wxWIZARD\_HALIGN\_RIGHT}}{Right-aligns the bitmap.}
+\twocolitem{\windowstyle{wxWIZARD\_TILE}}{}
+\end{twocollist}
+
+See also \helpref{wxWizard::SetMinimumBitmapWidth}{wxwizardsetminimumbitmapwidth}.
+
+
+\membersection{wxWizard::SetMinimumBitmapWidth}\label{wxwizardsetminimumbitmapwidth}
+
+\func{void}{SetMinimumBitmapWidth}{\param{int}{ width}}
+
+Sets the minimum width for the bitmap that will be constructed to contain the actual wizard or page bitmap
+if a non-zero bitmap placement flag has been set. If this is not set when using bitmap placement, the initial
+layout may be incorrect.
+
+See also \helpref{wxWizard::SetBitmapPlacement}{wxwizardsetbitmapplacement}.
+
+
 
 \membersection{wxWizard::SetPageSize}\label{wxwizardsetpagesize}
 

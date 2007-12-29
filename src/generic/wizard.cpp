@@ -228,6 +228,8 @@ wxSize wxWizardSizer::GetMaxChildSize()
         maxOfMin.IncTo(SiblingSize(child));
     }
 
+    // No longer applicable since we may change sizes when size adaptation is done
+#if 0
 #ifdef __WXDEBUG__
     if ( m_childSize.IsFullySpecified() && m_childSize != maxOfMin )
     {
@@ -239,6 +241,7 @@ wxSize wxWizardSizer::GetMaxChildSize()
         return m_childSize;
     }
 #endif // __WXDEBUG__
+#endif
 
     if ( m_owner->m_started )
     {
@@ -293,6 +296,9 @@ void wxWizard::Init()
     m_started = false;
     m_wasModal = false;
     m_usingSizer = false;
+    m_bitmapBackgroundColour = *wxWHITE;
+    m_bitmapPlacement = 0;
+    m_bitmapMinimumWidth = 115;
 }
 
 bool wxWizard::Create(wxWindow *parent,
@@ -337,7 +343,11 @@ void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
 #if wxUSE_STATBMP
     if ( m_bitmap.Ok() )
     {
-        m_statbmp = new wxStaticBitmap(this, wxID_ANY, m_bitmap);
+        wxSize bitmapSize(wxDefaultSize);
+        if (GetBitmapPlacement())
+            bitmapSize.x = GetMinimumBitmapWidth();
+
+        m_statbmp = new wxStaticBitmap(this, wxID_ANY, m_bitmap, wxDefaultPosition, bitmapSize);
         m_sizerBmpAndPage->Add(
             m_statbmp,
             0, // No horizontal stretching
@@ -617,17 +627,21 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
 #if wxUSE_STATBMP
     // update the bitmap if:it changed
+    wxBitmap bmp;
     if ( m_statbmp )
     {
-        wxBitmap bmp = m_page->GetBitmap();
+        bmp = m_page->GetBitmap();
         if ( !bmp.Ok() )
             bmp = m_bitmap;
 
         if ( !bmpPrev.Ok() )
             bmpPrev = m_bitmap;
 
-        if ( !bmp.IsSameAs(bmpPrev) )
-            m_statbmp->SetBitmap(bmp);
+        if (!GetBitmapPlacement())
+        {
+            if ( !bmp.IsSameAs(bmpPrev) )
+                m_statbmp->SetBitmap(bmp);
+        }
     }
 #endif // wxUSE_STATBMP
 
@@ -663,15 +677,38 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     {
         m_started = true;
 
-        if ( wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA )
-        {
-            GetSizer()->SetSizeHints(this);
-            if ( m_posWizard == wxDefaultPosition )
-                CentreOnScreen();
-        }
+        DoWizardLayout();
+    }
+
+    if (GetBitmapPlacement())
+    {
+        ResizeBitmap(bmp);
+    
+        if ( !bmp.IsSameAs(bmpPrev) )
+            m_statbmp->SetBitmap(bmp);
+    
+        if (m_usingSizer)
+            m_sizerPage->RecalcSizes();
     }
 
     return true;
+}
+
+/// Do fit, and adjust to screen size if necessary
+void wxWizard::DoWizardLayout()
+{
+    if ( wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA )
+    {
+        if (CanDoLayoutAdaptation())
+            DoLayoutAdaptation();
+        else
+            GetSizer()->SetSizeHints(this);
+
+        if ( m_posWizard == wxDefaultPosition )
+            CentreOnScreen();
+    }
+
+    SetLayoutAdaptationDone(true);
 }
 
 bool wxWizard::RunWizard(wxWizardPage *firstPage)
@@ -861,6 +898,128 @@ wxWizardEvent::wxWizardEvent(wxEventType type, int id, bool direction, wxWizardP
     // add the active page to the event data
     m_direction = direction;
     m_page = page;
+}
+
+/// Do the adaptation
+bool wxWizard::DoLayoutAdaptation()
+{
+    wxWindowList windows;
+    wxWindowList pages;
+
+    // Make all the pages (that use sizers) scrollable
+    for ( wxSizerItemList::compatibility_iterator node = m_sizerPage->GetChildren().GetFirst(); node; node = node->GetNext() )
+    {
+        wxSizerItem * const item = node->GetData();
+        if ( item->IsWindow() )
+        {
+            wxWizardPage* page = wxDynamicCast(item->GetWindow(), wxWizardPage);
+            if (page)
+            {
+                while (page)
+                {
+                    if (!pages.Find(page) && page->GetSizer())
+                    {
+                        // Create a scrolled window and reparent
+                        wxScrolledWindow* scrolledWindow = new wxScrolledWindow(page, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxVSCROLL|wxHSCROLL|wxBORDER_NONE);
+                        wxSizer* oldSizer = page->GetSizer();
+                        
+                        wxSizer* newSizer = new wxBoxSizer(wxVERTICAL);
+                        newSizer->Add(scrolledWindow,1, wxEXPAND, 0);
+                        
+                        page->SetSizer(newSizer, false /* don't delete the old sizer */);
+                        
+                        scrolledWindow->SetSizer(oldSizer);
+                        
+                        wxStandardDialogLayoutAdapter::DoReparentControls(page, scrolledWindow);
+                        
+                        pages.Append(page);
+                        windows.Append(scrolledWindow);
+                    }
+                    page = page->GetNext();
+                }
+            }
+        }
+    }
+
+    wxStandardDialogLayoutAdapter::DoFitWithScrolling(this, windows);
+
+    SetLayoutAdaptationDone(true);
+
+    return true;
+}
+
+bool wxWizard::ResizeBitmap(wxBitmap& bmp)
+{
+    if (!GetBitmapPlacement())
+        return false;
+
+    if (bmp.Ok())
+    {
+        wxSize pageSize = m_sizerPage->GetSize();
+        int bitmapWidth = wxMax(bmp.GetWidth(), GetMinimumBitmapWidth());
+        int bitmapHeight = pageSize.y;
+
+        if (bmp.GetHeight() != bitmapHeight)
+        {
+            wxBitmap bitmap(bitmapWidth, bitmapHeight);
+            {
+                wxMemoryDC dc;
+                dc.SelectObject(bitmap);
+                dc.SetBackground(wxBrush(m_bitmapBackgroundColour));
+                dc.Clear();
+
+                if (GetBitmapPlacement() & wxWIZARD_TILE)
+                {
+                    TileBitmap(wxRect(0, 0, bitmapWidth, bitmapHeight), dc, bmp);
+                }
+                else
+                {
+                    int x, y;
+
+                    if (GetBitmapPlacement() & wxWIZARD_HALIGN_LEFT)
+                        x = 0;
+                    else if (GetBitmapPlacement() & wxWIZARD_HALIGN_RIGHT)
+                        x = bitmapWidth - GetBitmap().GetWidth();
+                    else
+                        x = (bitmapWidth - GetBitmap().GetWidth())/2;
+
+                    if (GetBitmapPlacement() & wxWIZARD_VALIGN_TOP)
+                        y = 0;
+                    else if (GetBitmapPlacement() & wxWIZARD_VALIGN_BOTTOM)
+                        y = bitmapHeight - GetBitmap().GetHeight();
+                    else
+                        y = (bitmapHeight - GetBitmap().GetHeight())/2;
+
+                    dc.DrawBitmap(bmp, x, y, true);
+                    dc.SelectObject(wxNullBitmap);
+                }
+            }
+
+            bmp = bitmap;
+        }
+    }
+
+    return true;
+}
+
+bool wxWizard::TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap)
+{
+    int w = bitmap.GetWidth();
+    int h = bitmap.GetHeight();
+
+    wxMemoryDC dcMem;
+
+    dcMem.SelectObjectAsSource(bitmap);
+
+    int i, j;
+    for (i = rect.x; i < rect.x + rect.width; i += w)
+    {
+        for (j = rect.y; j < rect.y + rect.height; j+= h)
+            dc.Blit(i, j, bitmap.GetWidth(), bitmap.GetHeight(), & dcMem, 0, 0);
+    }
+    dcMem.SelectObject(wxNullBitmap);
+
+    return true;
 }
 
 #endif // wxUSE_WIZARDDLG

@@ -68,17 +68,40 @@ public:
     // show the prev/next page, but call TransferDataFromWindow on the current
     // page first and return false without changing the page if
     // TransferDataFromWindow() returns false - otherwise, returns true
-    bool ShowPage(wxWizardPage *page, bool goingForward = true);
+    virtual bool ShowPage(wxWizardPage *page, bool goingForward = true);
 
     // do fill the dialog with controls
     // this is app-overridable to, for example, set help and tooltip text
     virtual void DoCreateControls();
 
+    // Do the adaptation
+    virtual bool DoLayoutAdaptation();
+
+    // Set/get bitmap background colour
+    void SetBitmapBackgroundColour(const wxColour& colour) { m_bitmapBackgroundColour = colour; }
+    const wxColour& GetBitmapBackgroundColour() const { return m_bitmapBackgroundColour; }
+
+    // Set/get bitmap placement (centred, tiled etc.)
+    void SetBitmapPlacement(int placement) { m_bitmapPlacement = placement; }
+    int GetBitmapPlacement() const { return m_bitmapPlacement; }
+
+    // Set/get minimum bitmap width
+    void SetMinimumBitmapWidth(int w) { m_bitmapMinimumWidth = w; }
+    int GetMinimumBitmapWidth() const { return m_bitmapMinimumWidth; }
+
+    // Tile bitmap
+    static bool TileBitmap(const wxRect& rect, wxDC& dc, const wxBitmap& bitmap);
+
 protected:
     // for compatibility only, doesn't do anything any more
     void FinishLayout() { }
 
-private:
+    // Do fit, and adjust to screen size if necessary
+    virtual void DoWizardLayout();
+
+    // Resize bitmap if necessary
+    virtual bool ResizeBitmap(wxBitmap& bmp);
+
     // was the dialog really created?
     bool WasCreated() const { return m_btnPrev != NULL; }
 
@@ -126,6 +149,15 @@ private:
 
     // Actual position and size of pages
     wxWizardSizer *m_sizerPage;
+
+    // Bitmap background colour if resizing bitmap
+    wxColour    m_bitmapBackgroundColour;
+
+    // Bitmap placement flags
+    int         m_bitmapPlacement;
+
+    // Minimum bitmap width
+    int         m_bitmapMinimumWidth;
 
     friend class wxWizardSizer;
 

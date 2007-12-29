@@ -103,6 +103,9 @@ bool wxDialog::Show(bool show)
         // nothing to do
         return false;
 
+    if (show && CanDoLayoutAdaptation())
+        DoLayoutAdaptation();
+
     if ( show )
         // usually will result in TransferDataToWindow() being called
         InitDialog();

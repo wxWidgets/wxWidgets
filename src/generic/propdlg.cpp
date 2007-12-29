@@ -225,4 +225,10 @@ void wxPropertySheetDialog::OnIdle(wxIdleEvent& event)
     }
 }
 
+// Override function in base
+wxWindow* wxPropertySheetDialog::GetContentWindow() const
+{
+    return GetBookCtrl();
+}
+
 #endif // wxUSE_BOOKCTRL

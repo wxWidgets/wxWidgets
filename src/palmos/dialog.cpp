@@ -168,6 +168,9 @@ wxWindow *wxDialog::FindSuitableParent() const
 
 bool wxDialog::Show(bool show)
 {
+    if (show && CanDoLayoutAdaptation())
+        DoLayoutAdaptation();
+
     return wxTopLevelWindowPalm::Show (show);
 }
 
@@ -178,6 +181,9 @@ void wxDialog::Raise()
 // show dialog modally
 int wxDialog::ShowModal()
 {
+    if (show && CanDoLayoutAdaptation())
+        DoLayoutAdaptation();
+
     if (errNone == FrmDoDialog ((FormType *)wxTopLevelWindow::GetForm())) {
         return 0;
     }

@@ -15,6 +15,7 @@ A dialog box is a window with a title bar and sometimes a system menu, which
 can be moved around the screen. It can contain controls and other windows and
 is often used to allow the user to make some choice or to answer a question.
 
+Dialogs can be made scrollable, automatically: please see \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for further details.
 
 \wxheading{Dialog Buttons}
 
@@ -30,8 +31,6 @@ instead, see \helpref{SetAffirmativeId}{wxdialogsetaffirmativeid} and
 Also notice that the \helpref{CreateButtonSizer()}{wxdialogcreatebuttonsizer} 
 should be used to create the buttons appropriate for the current platform and
 positioned correctly (including their order which is platform-dependent).
-
-
 
 \wxheading{Derived from}
 
@@ -177,6 +176,22 @@ individual dialog boxes.}
 
 Destructor. Deletes any child windows before deleting the physical window.
 
+\membersection{wxDialog::AddMainButtonId}\label{wxdialogaddmainbuttonid}
+
+\func{void}{AddMainButtonId}{\param{wxWindowID}{ id}}
+
+Adds an identifier to be regarded as a main button for the non-scrolling area of a dialog.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
+
+\membersection{wxDialog::CanDoLayoutAdaptation}\label{wxdialogcandolayoutadaptation}
+
+\func{bool}{CanDoLayoutAdapation}{\void}
+
+Returns \true if this dialog can and should perform layout adaptation using \helpref{DoLayoutAdaptation}{wxdialogdolayoutadaptation}, usually if
+the dialog is too large to fit on the display.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
 
 \membersection{wxDialog::Centre}\label{wxdialogcentre}
 
@@ -241,6 +256,13 @@ wxHELP, wxNO\_DEFAULT.
 
 The sizer lays out the buttons in a manner appropriate to the platform.
 
+\membersection{wxDialog::DoLayoutAdaptation}\label{wxdialogdolayoutadaptation}
+
+\func{bool}{DoLayoutAdapation}{\void}
+
+Performs layout adaptation, usually if the dialog is too large to fit on the display.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
 
 \membersection{wxDialog::DoOK}\label{wxdialogdook}
 
@@ -250,6 +272,14 @@ This function is called when the titlebar OK button is pressed (PocketPC only).
 A command event for the identifier returned by GetAffirmativeId is sent by
 default. You can override this function. If the function returns false, wxWidgets
 will call Close() for the dialog.
+
+\membersection{wxDialog::EnableLayoutAdaptation}\label{wxdialogenablelayoutadaptation}
+
+\func{static void}{EnableLayoutAdaptation}{\param{bool}{ enable}}
+
+A static function enabling or disabling layout adaptation for all dialogs.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
 
 
 \membersection{wxDialog::EndModal}\label{wxdialogendmodal}
@@ -281,6 +311,13 @@ dialog.
 
 \helpref{wxDialog::SetAffirmativeId}{wxdialogsetaffirmativeid}
 
+\membersection{wxDialog::GetContentWindow}\label{wxdialoggetcontentwindow}
+
+\constfunc{wxWindow*}{GetContentWindow}{\void}
+
+Override this to return a window containing the main content of the dialog. This is
+particularly useful when the dialog implements pages, such as wxPropertySheetDialog,
+and allows the \helpref{layout adaptation code}{wxdialogoverview} to know that only the pages need to be made scrollable.
 
 \membersection{wxDialog::GetEscapeId}\label{wxdialoggetescapeid}
 
@@ -293,6 +330,50 @@ button to.
 
 \helpref{wxDialog::SetEscapeId}{wxdialogsetescapeid}
 
+
+\membersection{wxDialog::GetLayoutAdaptationDone}\label{wxdialoggetlayoutadaptationdone}
+
+\constfunc{bool}{GetLayoutAdaptationDone}{\void}
+
+Returns \true if the dialog has been adapted, usually by making it scrollable to work with a small display.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
+
+
+\membersection{wxDialog::GetLayoutAdaptationLevel}\label{wxdialoggetlayoutadaptationlevel}
+
+\func{int}{GetLayoutAdaptationLevel}{\void}
+
+Gets a value representing the aggressiveness of search for buttons and sizers to be in the non-scrolling part of a layout-adapted dialog.
+Zero switches off adaptation, and 3 allows search for standard buttons anywhere in the dialog.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
+
+
+\membersection{wxDialog::GetLayoutAdaptationMode}\label{wxdialoggetlayoutadaptationmode}
+
+\constfunc{wxDialogLayoutAdaptationMode}{GetLayoutAdaptationMode}{\void}
+
+Gets the adaptation mode, overriding the global adaptation flag.
+
+See also \helpref{SetLayoutAdaptationMode}{wxdialogsetlayoutadaptationmode} and \helpref{Automatic scrolling dialogs}{autoscrollingdialogs}.
+
+\membersection{wxDialog::GetLayoutAdapter}\label{wxdialoggetlayoutadapter}
+
+\func{static wxDialogLayoutAdapter*}{GetLayoutAdapter}{\void}
+
+A static function getting the current layout adapter object.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
+
+
+\membersection{wxDialog::GetMainButtonIds}\label{wxdialoggetmainbuttonids}
+
+\func{wxArrayInt\&}{GetMainButtonIds}{\void}
+
+Returns an array of identifiers to be regarded as the main buttons for the non-scrolling area of a dialog.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
 
 \membersection{wxDialog::GetReturnCode}\label{wxdialoggetreturncode}
 
@@ -350,6 +431,24 @@ Returns true if the dialog box is iconized. Windows only.
 \wxheading{Remarks}
 
 Always returns false under Windows since dialogs cannot be iconized.
+
+
+\membersection{wxDialog::IsLayoutAdaptationEnabled}\label{wxdialogislayoutadaptationenabled}
+
+\func{static bool}{IsLayoutAdaptationEnabled}{\void}
+
+A static function returning \true if layout adaptation is enabled for all dialogs.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
+
+
+\membersection{wxDialog::IsMainButton}\label{wxdialogismainbutton}
+
+\constfunc{bool}{IsMainButton}{\param{wxWindowID\& }{id}}
+
+Returns \true if {\it id} is in the array of identifiers to be regarded as the main buttons for the non-scrolling area of a dialog.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
 
 
 \membersection{wxDialog::IsModal}\label{wxdialogismodal}
@@ -446,6 +545,53 @@ Sets the icons for this dialog.
 \docparam{icons}{The icons to associate with this dialog.}
 
 See also \helpref{wxIconBundle}{wxiconbundle}.
+
+
+\membersection{wxDialog::SetLayoutAdaptationDone}\label{wxdialogsetlayoutadaptationdone}
+
+\func{void}{SetLayoutAdaptationDone}{\param{bool }{done}}
+
+Marks the dialog as having been adapted, usually by making it scrollable to work with a small display.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
+
+
+\membersection{wxDialog::SetLayoutAdaptationLevel}\label{wxdialogsetlayoutadaptationlevel}
+
+\func{void}{SetLayoutAdaptationLevel}{\param{int }{level}}
+
+Sets the aggressiveness of search for buttons and sizers to be in the non-scrolling part of a layout-adapted dialog.
+Zero switches off adaptation, and 3 allows search for standard buttons anywhere in the dialog.
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
+
+
+\membersection{wxDialog::SetLayoutAdaptationMode}\label{wxdialogsetlayoutadaptationmode}
+
+\func{void}{SetLayoutAdaptationMode}{\param{wxDialogLayoutAdaptationMode }{mode}}
+
+Sets the adaptation mode, overriding the global adaptation flag. {\it mode} may be one of the following values:
+
+\begin{verbatim}
+enum wxDialogLayoutAdaptationMode
+{
+    wxDIALOG_ADAPTATION_MODE_DEFAULT = 0,   // use global adaptation enabled status
+    wxDIALOG_ADAPTATION_MODE_ENABLED = 1,   // enable this dialog overriding global status
+    wxDIALOG_ADAPTATION_MODE_DISABLED = 2   // disable this dialog overriding global status
+};
+\end{verbatim}
+
+See also \helpref{Automatic scrolling dialogs}{autoscrollingdialogs} for more on layout adaptation.
+
+
+\membersection{wxDialog::SetLayoutAdapter}\label{wxdialogsetlayoutadapter}
+
+\func{static wxDialogLayoutAdapter*}{SetLayoutAdapter}{\param{wxDialogLayoutAdapter*}{ adapter}}
+
+A static function for setting the current layout adapter object, returning the old adapter. If you call this, you should
+delete the old adapter object.
+
+See also \helpref{wxDialogLayoutAdapter}{wxdialoglayoutadapter} and \helpref{Automatic scrolling dialogs}{autoscrollingdialogs}.
 
 
 \membersection{wxDialog::SetModal}\label{wxdialogsetmodal}

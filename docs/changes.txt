@@ -249,6 +249,12 @@ All (GUI):
   to wxRichTextBuffer to reduce wxFont consumption and increase performance.
 - Optimize wxGenericTreeCtrl::Collapse/ExpandAllChildren(). (Szczepan Holyszewski)
 - Added <scrollrate> parameter to wxScrolledWindow XRC handler.
+- Added support for automatic dialog scrolling, via the new wxDialogLayoutAdapter
+  class and various new wxDialog functions. See the topic "Automatic Scrolling
+  Dialogs" in the manual for further details.
+- Added support for resizing wxWizard bitmaps to the current page height,
+  via SetBitmapPlacement, SetBitmapBackgroundColour and SetMinimumBitmapWidth.
+  Also made it easier to derive from wxWizard and override behaviour.
 
 wxGTK:
 

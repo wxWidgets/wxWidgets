@@ -212,6 +212,9 @@ bool wxDialog::Show( bool bShow )
 
     if (bShow)
     {
+        if (CanDoLayoutAdaptation())
+            DoLayoutAdaptation();
+
         // this usually will result in TransferDataToWindow() being called
         // which will change the controls values so do it before showing as
         // otherwise we could have some flicker
