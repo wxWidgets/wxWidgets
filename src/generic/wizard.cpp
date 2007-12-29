@@ -41,7 +41,9 @@
 
 #include "wx/statline.h"
 
+#include "wx/scrolwin.h"
 #include "wx/wizard.h"
+#include "wx/dcmemory.h"
 
 // ----------------------------------------------------------------------------
 // wxWizardSizer
