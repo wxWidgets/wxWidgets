@@ -265,8 +265,12 @@ struct _GtkWxTreeModelClass
 static GtkWxTreeModel *wxgtk_tree_model_new          (void);
 static void         wxgtk_tree_model_init            (GtkWxTreeModel       *tree_model);
 static void         wxgtk_tree_model_class_init      (GtkWxTreeModelClass  *klass);
-static void         wxgtk_tree_model_tree_model_init (GtkTreeModelIface    *iface);
-static void         wxgtk_tree_model_sortable_init   (GtkTreeSortableIface *iface);
+
+static void         wxgtk_tree_model_tree_model_init (GtkTreeModelIface       *iface);
+static void         wxgtk_tree_model_sortable_init   (GtkTreeSortableIface    *iface);
+static void         wxgtk_tree_model_drag_source_init(GtkTreeDragSourceIface  *iface);
+static void         wxgtk_tree_model_drag_dest_init  (GtkTreeDragDestIface    *iface);
+
 static void         wxgtk_tree_model_finalize        (GObject           *object);
 static GtkTreeModelFlags wxgtk_tree_model_get_flags  (GtkTreeModel      *tree_model);
 static gint         wxgtk_tree_model_get_n_columns   (GtkTreeModel      *tree_model);
@@ -300,22 +304,36 @@ static gboolean     wxgtk_tree_model_iter_parent     (GtkTreeModel      *tree_mo
 
 /* sortable */
 static gboolean wxgtk_tree_model_get_sort_column_id    (GtkTreeSortable       *sortable,
-						      gint                     *sort_column_id,
-						      GtkSortType              *order);
+                                                        gint                  *sort_column_id,
+						        GtkSortType           *order);
 static void     wxgtk_tree_model_set_sort_column_id    (GtkTreeSortable       *sortable,
-						      gint                      sort_column_id,
-						      GtkSortType               order);
+                                                        gint                   sort_column_id,
+                                                        GtkSortType            order);
 static void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable       *sortable,
-						      gint                      sort_column_id,
-						      GtkTreeIterCompareFunc    func,
-						      gpointer                  data,
-						      GtkDestroyNotify          destroy);
+                                                        gint                   sort_column_id,
+                                                        GtkTreeIterCompareFunc func,
+                                                        gpointer               data,
+                                                        GtkDestroyNotify       destroy);
 static void     wxgtk_tree_model_set_default_sort_func (GtkTreeSortable       *sortable,
-						      GtkTreeIterCompareFunc    func,
-						      gpointer                  data,
-						      GtkDestroyNotify          destroy);
+                                                        GtkTreeIterCompareFunc func,
+                                                        gpointer               data,
+                                                        GtkDestroyNotify       destroy);
 static gboolean wxgtk_tree_model_has_default_sort_func (GtkTreeSortable       *sortable);
 
+/* drag'n'drop */
+static gboolean wxgtk_tree_model_row_draggable         (GtkTreeDragSource     *drag_source,
+                                                        GtkTreePath           *path);
+static gboolean wxgtk_tree_model_drag_data_delete      (GtkTreeDragSource     *drag_source,
+                                                        GtkTreePath           *path);
+static gboolean wxgtk_tree_model_drag_data_get         (GtkTreeDragSource     *drag_source,
+                                                        GtkTreePath           *path,
+                                                        GtkSelectionData      *selection_data);
+static gboolean wxgtk_tree_model_drag_data_received    (GtkTreeDragDest       *drag_dest,
+                                                        GtkTreePath           *dest,
+                                                        GtkSelectionData      *selection_data);
+static gboolean wxgtk_tree_model_row_drop_possible     (GtkTreeDragDest       *drag_dest,
+                                                        GtkTreePath           *dest_path,
+						        GtkSelectionData      *selection_data);
 
 
 static GObjectClass *list_parent_class = NULL;
@@ -354,6 +372,20 @@ gtk_wx_tree_model_get_type (void)
             NULL
         };
 
+        static const GInterfaceInfo drag_source_iface_info =
+        {
+            (GInterfaceInitFunc) wxgtk_tree_model_drag_source_init,
+            NULL,
+            NULL
+        };
+
+        static const GInterfaceInfo drag_dest_iface_info =
+        {
+            (GInterfaceInitFunc) wxgtk_tree_model_drag_dest_init,
+            NULL,
+            NULL
+        };
+
         tree_model_type = g_type_register_static (G_TYPE_OBJECT, "GtkWxTreeModel",
                                                 &tree_model_info, (GTypeFlags)0 );
 
@@ -363,6 +395,12 @@ gtk_wx_tree_model_get_type (void)
         g_type_add_interface_static (tree_model_type,
                                      GTK_TYPE_TREE_SORTABLE,
                                      &sortable_iface_info);
+        g_type_add_interface_static (tree_model_type,
+                                     GTK_TYPE_TREE_DRAG_DEST,
+                                     &drag_dest_iface_info);
+        g_type_add_interface_static (tree_model_type,
+                                     GTK_TYPE_TREE_DRAG_SOURCE,
+                                     &drag_source_iface_info);
     }
 
     return tree_model_type;
@@ -408,6 +446,21 @@ wxgtk_tree_model_sortable_init (GtkTreeSortableIface *iface)
     iface->set_sort_func = wxgtk_tree_model_set_sort_func;
     iface->set_default_sort_func = wxgtk_tree_model_set_default_sort_func;
     iface->has_default_sort_func = wxgtk_tree_model_has_default_sort_func;
+}
+
+static void         
+wxgtk_tree_model_drag_source_init(GtkTreeDragSourceIface  *iface)
+{
+    iface->row_draggable = wxgtk_tree_model_row_draggable;
+    iface->drag_data_delete = wxgtk_tree_model_drag_data_delete;
+    iface->drag_data_get = wxgtk_tree_model_drag_data_get;
+}
+
+static void         
+wxgtk_tree_model_drag_dest_init  (GtkTreeDragDestIface    *iface)
+{
+    iface->drag_data_received = wxgtk_tree_model_drag_data_received;
+    iface->row_drop_possible = wxgtk_tree_model_row_drop_possible;
 }
 
 static void
@@ -593,10 +646,76 @@ wxgtk_tree_model_iter_parent (GtkTreeModel *tree_model,
     return wxtree_model->internal->iter_parent( iter, child );
 }
 
-/* sortable */
-gboolean wxgtk_tree_model_get_sort_column_id    (GtkTreeSortable        *sortable,
-						      gint                     *sort_column_id,
-						      GtkSortType              *order)
+/* drag'n'drop iface */
+static gboolean 
+wxgtk_tree_model_row_draggable (GtkTreeDragSource *drag_source,
+                                GtkTreePath       *path)
+{
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) drag_source;
+    
+    wxPrintf( "draggable 1\n");
+    
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (tree_model), FALSE);
+    
+    wxPrintf( "draggable 2\n");
+    
+    return TRUE;
+}
+
+static gboolean 
+wxgtk_tree_model_drag_data_delete (GtkTreeDragSource *drag_source,
+                                   GtkTreePath       *path)
+{
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) drag_source;
+    
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (tree_model), FALSE);
+    
+    return FALSE;
+}
+
+static gboolean 
+wxgtk_tree_model_drag_data_get (GtkTreeDragSource *drag_source,
+                                GtkTreePath       *path,
+                                GtkSelectionData  *selection_data)
+{
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) drag_source;
+    
+    wxPrintf( "drag_get_data\n");
+    
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (tree_model), FALSE);
+    
+    return FALSE;
+}
+
+static gboolean 
+wxgtk_tree_model_drag_data_received (GtkTreeDragDest  *drag_dest,
+                                     GtkTreePath      *dest,
+                                     GtkSelectionData *selection_data)
+{
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) drag_dest;
+    
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (tree_model), FALSE);
+    
+    return FALSE;
+}
+
+static gboolean 
+wxgtk_tree_model_row_drop_possible (GtkTreeDragDest  *drag_dest,
+                                    GtkTreePath      *dest_path,
+				    GtkSelectionData *selection_data)
+{
+    GtkWxTreeModel *tree_model = (GtkWxTreeModel *) drag_dest;
+    
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (tree_model), FALSE);
+    
+    return FALSE;
+}
+
+/* sortable iface */
+static gboolean 
+wxgtk_tree_model_get_sort_column_id (GtkTreeSortable *sortable,
+                                     gint            *sort_column_id,
+                                     GtkSortType     *order)
 {
     GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
 
@@ -622,9 +741,10 @@ gboolean wxgtk_tree_model_get_sort_column_id    (GtkTreeSortable        *sortabl
 
 wxDataViewColumn *gs_lastLeftClickHeader = NULL;
 
-void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
-						      gint                      sort_column_id,
-						      GtkSortType               order)
+static void     
+wxgtk_tree_model_set_sort_column_id (GtkTreeSortable *sortable,
+                                     gint             sort_column_id,
+                                     GtkSortType      order)
 {
     GtkWxTreeModel *tree_model = (GtkWxTreeModel *) sortable;
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
@@ -654,11 +774,12 @@ void     wxgtk_tree_model_set_sort_column_id  (GtkTreeSortable        *sortable,
     gs_lastLeftClickHeader = NULL;
 }
 
-void     wxgtk_tree_model_set_sort_func         (GtkTreeSortable          *sortable,
-						 gint                      WXUNUSED(sort_column_id),
-						 GtkTreeIterCompareFunc    func,
-						 gpointer                  WXUNUSED(data),
-						 GtkDestroyNotify          WXUNUSED(destroy) )
+static void     
+wxgtk_tree_model_set_sort_func (GtkTreeSortable        *sortable,
+                                gint                    WXUNUSED(sort_column_id),
+                                GtkTreeIterCompareFunc  func,
+                                gpointer                WXUNUSED(data),
+                                GtkDestroyNotify        WXUNUSED(destroy) )
 {
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (sortable) );
     g_return_if_fail (func != NULL);
@@ -1717,7 +1838,8 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
         Init(mode, align);
 }
 
-void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
+void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, 
+                                           wxRect WXUNUSED(cell), wxDC *WXUNUSED(dc), int WXUNUSED(state) )
 {
 #if 0
     wxDataViewCtrl *view = GetOwner()->GetOwner();
@@ -1854,12 +1976,12 @@ bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewProgressRenderer::GetValue( wxVariant &value ) const
+bool wxDataViewProgressRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
 {
     return false;
 }
 
-bool wxDataViewProgressRenderer::Render( wxRect cell, wxDC *dc, int state )
+bool wxDataViewProgressRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     double pct = (double)m_value / 100.0;
     wxRect bar = cell;
@@ -1946,7 +2068,7 @@ bool wxDataViewDateRenderer::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewDateRenderer::GetValue( wxVariant &value ) const
+bool wxDataViewDateRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
 {
     return false;
 }
@@ -1967,7 +2089,7 @@ wxSize wxDataViewDateRenderer::GetSize() const
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateRenderer::Activate( wxRect cell, wxDataViewModel *model,
+bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *model,
                                        const wxDataViewItem &item, unsigned int col )
 {
     wxVariant variant;
