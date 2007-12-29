@@ -42,6 +42,7 @@
 #include "wx/module.h"
 #include "wx/private/stattext.h"
 #include "wx/bookctrl.h"
+#include "wx/scrolwin.h"
 
 #if wxUSE_DISPLAY
 #include "wx/display.h"
