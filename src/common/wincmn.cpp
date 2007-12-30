@@ -87,9 +87,9 @@
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
 
 // globals
-#if wxUSE_MENUS_NATIVE
+#if wxUSE_MENUS
 wxMenu *wxCurrentPopupMenu = NULL;
-#endif // wxUSE_MENUS_NATIVE
+#endif // wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // static data
