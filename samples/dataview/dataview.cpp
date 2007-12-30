@@ -346,6 +346,38 @@ public:
         return count;
     }
     
+    // DnD 
+    
+    virtual bool IsDraggable( const wxDataViewItem &item )
+        { 
+            // only drag items
+            return (!IsContainer(item)); 
+        }
+        
+    virtual size_t GetDragDataSize( const wxDataViewItem &item, const wxDataFormat &WXUNUSED(format) )
+        {
+            wxPrintf( "GetDragDataSize\n" );
+        
+            MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+            wxString data;
+            data += node->m_title; data += wxT(" ");
+            data += node->m_artist;
+            return strlen( data.utf8_str() ) + 1;
+        }
+    virtual bool GetDragData( const wxDataViewItem &item, const wxDataFormat &WXUNUSED(format), 
+                              void* dest, size_t WXUNUSED(size) )
+        {
+            wxPrintf( "GetDragData\n" );
+            
+            MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+            wxString data;
+            data += node->m_title; data += wxT(" ");
+            data += node->m_artist;
+            wxCharBuffer buffer( data.utf8_str() );
+            memcpy( dest, buffer, strlen(buffer)+1 );
+            return true;
+        }
+    
 private:
     MyMusicModelNode*   m_root;
     MyMusicModelNode*   m_pop;

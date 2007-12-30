@@ -191,6 +191,15 @@ public:
         { return false; }
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const = 0;
 
+    // define DnD capabilities
+    virtual bool IsDraggable( const wxDataViewItem &WXUNUSED(item) )
+        { return false; }
+    virtual size_t GetDragDataSize( const wxDataViewItem &WXUNUSED(item), const wxDataFormat &WXUNUSED(format) )
+        { return 0; }
+    virtual bool GetDragData( const wxDataViewItem &WXUNUSED(item), const wxDataFormat &WXUNUSED(format), 
+                              void* WXUNUSED(data), size_t WXUNUSED(size) )
+        { return FALSE; }
+
     // delegated notifiers
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     virtual bool ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items );
