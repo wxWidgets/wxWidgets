@@ -11,7 +11,10 @@
 
 \section{\class{wxMaximizeEvent}}\label{wxmaximizeevent}
 
-An event being sent when the frame is maximized or restored.
+An event being sent when a top level window is maximized. Notice that it is
+not sent when the window is restored to its original size after it had been
+maximized, only a normal \helpref{wxSizeEvent}{wxsizeevent} is generated in
+this case.
 
 \wxheading{Derived from}
 
@@ -48,5 +51,5 @@ member function that takes a wxMaximizeEvent argument.
 
 \func{}{wxMaximizeEvent}{\param{int }{id = 0}}
 
-Constructor.
+Constructor. Only used by wxWidgets internally.
 
