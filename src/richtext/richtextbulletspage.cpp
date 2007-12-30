@@ -11,6 +11,8 @@
 
 #if wxUSE_RICHTEXT
 
+#include "wx/spinctrl.h"
+
 #include "wx/richtext/richtextbulletspage.h"
 
 #include "wx/richtext/richtextsymboldlg.h"
@@ -286,13 +288,13 @@ void wxRichTextBulletsPage::CreateControls()
     m_styleListBox->Append(_("Symbol"));
     m_styleListBox->Append(_("Bitmap"));
     m_styleListBox->Append(_("Standard"));
-    
+
     m_symbolCtrl->Append(_("*"));
     m_symbolCtrl->Append(_("-"));
     m_symbolCtrl->Append(_(">"));
     m_symbolCtrl->Append(_("+"));
     m_symbolCtrl->Append(_("~"));
-    
+
     wxArrayString standardBulletNames;
     if (wxRichTextBuffer::GetRenderer())
         wxRichTextBuffer::GetRenderer()->EnumerateStandardBulletNames(standardBulletNames);
@@ -353,12 +355,12 @@ bool wxRichTextBulletsPage::TransferDataFromWindow()
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_RIGHT_PARENTHESIS;
         if (m_periodCtrl->GetValue())
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_PERIOD;
-            
+
         if (m_bulletAlignmentCtrl->GetSelection() == 1)
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE;
         else if (m_bulletAlignmentCtrl->GetSelection() == 2)
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT;
-        // Left is implied            
+        // Left is implied
 
         attr->SetBulletStyle(bulletStyle);
     }
@@ -373,7 +375,7 @@ bool wxRichTextBulletsPage::TransferDataFromWindow()
         attr->SetBulletText(m_symbolCtrl->GetValue());
         attr->SetBulletFont(m_symbolFontCtrl->GetValue());
     }
-    
+
     return true;
 }
 
@@ -514,7 +516,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     m_previewCtrl->BeginStyle(normalParaAttr);
     m_previewCtrl->WriteText(s_para3);
     m_previewCtrl->EndStyle();
-    
+
     m_previewCtrl->NumberList(wxRichTextRange(0, m_previewCtrl->GetLastPosition()+1));
 
     m_previewCtrl->Thaw();
