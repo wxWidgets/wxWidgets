@@ -5603,9 +5603,20 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 wxTextDataObject data;
                 wxTheClipboard->GetData(data);
                 wxString text(data.GetText());
-                text.Replace(_T("\r\n"), _T("\n"));
-
-                InsertTextWithUndo(position+1, text, GetRichTextCtrl());
+#ifdef __WXMSW__
+                wxString text2;
+                text2.Alloc(text.Length()+1);
+                size_t i;
+                for (i = 0; i < text.Length(); i++)
+                {
+                    wxChar ch = text[i];
+                    if (ch != wxT('\r'))
+                        text2 += ch;
+                }
+#else
+                wxString text2 = text;
+#endif
+                InsertTextWithUndo(position+1, text2, GetRichTextCtrl());
 
                 success = true;
             }
