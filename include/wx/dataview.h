@@ -24,6 +24,8 @@
 #include "wx/icon.h"
 #include "wx/imaglist.h"
 
+class WXDLLIMPEXP_FWD_CORE wxDataFormat;
+
 #if defined(__WXGTK20__)
     // for testing
     // #define wxUSE_GENERICDATAVIEWCTRL 1
@@ -96,7 +98,7 @@ WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 class WXDLLIMPEXP_ADV wxDataViewModelNotifier
 {
 public:
-    wxDataViewModelNotifier() { }
+    wxDataViewModelNotifier() { m_owner = NULL; }
     virtual ~wxDataViewModelNotifier() { m_owner = NULL; }
 
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item ) = 0;
@@ -406,7 +408,8 @@ class WXDLLIMPEXP_ADV wxDataViewIconText: public wxObject
 {
 public:
     wxDataViewIconText( const wxString &text = wxEmptyString, const wxIcon& icon = wxNullIcon )
-    { m_icon = icon; m_text = text; }
+        : m_text(text), m_icon(icon)
+    { }
     wxDataViewIconText( const wxDataViewIconText &other )
     { m_icon = other.m_icon; m_text = other.m_text; }
 

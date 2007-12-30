@@ -23,6 +23,7 @@
     #include "wx/icon.h"
     #include "wx/list.h"
     #include "wx/settings.h"
+    #include "wx/dataobj.h"
     #include "wx/crt.h"
 #endif
 
