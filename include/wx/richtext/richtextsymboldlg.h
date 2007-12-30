@@ -18,13 +18,14 @@
 
 #include "wx/dialog.h"
 #include "wx/vscroll.h"
-#include "wx/combobox.h"
-#include "wx/stattext.h"
-#include "wx/textctrl.h"
 
 /*!
  * Forward declarations
  */
+
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxComboBox;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
 ////@begin forward declarations
 class wxSymbolListCtrl;

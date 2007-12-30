@@ -11,6 +11,8 @@
 
 #if wxUSE_RICHTEXT
 
+#include "wx/spinctrl.h"
+
 #include "wx/richtext/richtextbulletspage.h"
 
 #include "wx/richtext/richtextsymboldlg.h"

@@ -16,11 +16,6 @@
  * Includes
  */
 
-////@begin includes
-#include "wx/statline.h"
-#include "wx/spinctrl.h"
-////@end includes
-
 /*!
  * Forward declarations
  */
