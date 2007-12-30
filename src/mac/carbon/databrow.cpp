@@ -9,23 +9,24 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/wxprec.h"
+
 #ifndef wxUSE_GENERICDATAVIEWCTRL
 
-#include <limits>
-
-#include "wx/wxprec.h"
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/toplevel.h"
     #include "wx/font.h"
+    #include "wx/settings.h"
+    #include "wx/utils.h"
 #endif
 
 #include "wx/dataview.h"
-#include "wx/utils.h"
-
 #include "wx/mac/carbon/databrow.h"
 #include "wx/mac/private.h"
 #include "wx/mac/uma.h"
+
+#include <limits>
 
 // ============================================================================
 // Variables used globally in databrow.cpp
