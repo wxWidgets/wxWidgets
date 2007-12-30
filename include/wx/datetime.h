@@ -421,7 +421,20 @@ public:
     {
     public:
         TimeZone(TZ tz);
+
+        // don't use this ctor, it doesn't work for negative offsets (but can't
+        // be removed or changed to avoid breaking ABI in 2.8)
         TimeZone(wxDateTime_t offset = 0) { m_offset = offset; }
+
+#if wxABI_VERSION >= 20808
+        // create time zone object with the given offset
+        static TimeZone Make(long offset)
+        {
+            TimeZone tz;
+            tz.m_offset = offset;
+            return tz;
+        }
+#endif // wxABI 2.8.8+
 
         long GetOffset() const { return m_offset; }
 

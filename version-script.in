@@ -27,6 +27,7 @@
 # public symbols added in 2.8.8 (please keep in alphabetical order):
 @WX_VERSION_TAG@.8 {
     global:
+        *TimeZone*Make*;
         *wxScrollHelper*HandleOnChildFocus*;
         *wxWindowBase*Get*Sibling*;
 };

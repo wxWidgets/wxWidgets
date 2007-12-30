@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All:
 
 - Fixed bug with parsing some dates in wxDateTime (Bob Pesner)
+- Fixed bug with parsing negative time zones in wxDateTime::ParseRfc822Date()
 
 All (GUI):
 
