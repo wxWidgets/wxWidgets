@@ -418,7 +418,16 @@ public:
     {
     public:
         TimeZone(TZ tz);
-        TimeZone(wxDateTime_t offset = 0) { m_offset = offset; }
+
+        // create time zone object with the given offset
+        TimeZone(long offset = 0) { m_offset = offset; }
+
+        static TimeZone Make(long offset)
+        {
+            TimeZone tz;
+            tz.m_offset = offset;
+            return tz;
+        }
 
         long GetOffset() const { return m_offset; }
 

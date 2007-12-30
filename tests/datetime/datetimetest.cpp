@@ -750,17 +750,23 @@ void DateTimeTestCase::TestParceRFC822()
     {
         {
             _T("Sat, 18 Dec 1999 00:46:40 +0100"),
-            { 17, wxDateTime::Dec, 1999, 23, 46, 40, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 17, wxDateTime::Dec, 1999, 23, 46, 40 },
             true
         },
         {
             _T("Wed, 1 Dec 1999 05:17:20 +0300"),
-            {  1, wxDateTime::Dec, 1999, 2, 17, 20, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            {  1, wxDateTime::Dec, 1999, 2, 17, 20 },
             true
         },
         {
             _T("Sun, 28 Aug 2005 03:31:30 +0200"),
-            {  28, wxDateTime::Aug, 2005, 1, 31, 30, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            {  28, wxDateTime::Aug, 2005, 1, 31, 30 },
+            true
+        },
+
+        {
+            _T("Sat, 18 Dec 1999 10:48:30 -0500"),
+            {  18, wxDateTime::Dec, 1999, 15, 48, 30 },
             true
         },
     };
