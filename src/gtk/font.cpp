@@ -41,13 +41,6 @@
 static const int wxDEFAULT_FONT_SIZE = 12;
 
 // ----------------------------------------------------------------------------
-// wxScaledFontList: maps the font sizes to the GDK fonts for the given font
-// ----------------------------------------------------------------------------
-
-WX_DECLARE_HASH_MAP(int, GdkFont *, wxIntegerHash, wxIntegerEqual,
-                    wxScaledFontList);
-
-// ----------------------------------------------------------------------------
 // wxFontRefData
 // ----------------------------------------------------------------------------
 
