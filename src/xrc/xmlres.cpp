@@ -65,7 +65,7 @@ public:
 #endif
 };
 
-class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord>
+class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
 {
     // this is a class so that it can be forward-declared
 };
@@ -108,6 +108,11 @@ wxXmlResource::~wxXmlResource()
 {
     ClearHandlers();
 
+    for ( wxXmlResourceDataRecords::iterator i = m_data->begin();
+          i != m_data->end(); ++i )
+    {
+        delete *i;
+    }
     delete m_data;
 }
 
@@ -187,8 +192,8 @@ bool wxXmlResource::Load(const wxString& filemask)
         else // a single resource URL
 #endif // wxUSE_FILESYSTEM
         {
-            wxXmlResourceDataRecord drec;
-            drec.File = fnd;
+            wxXmlResourceDataRecord *drec = new wxXmlResourceDataRecord;
+            drec->File = fnd;
             Data().push_back(drec);
         }
 
@@ -221,14 +226,14 @@ bool wxXmlResource::Unload(const wxString& filename)
 #if wxUSE_FILESYSTEM
         if ( isArchive )
         {
-            if ( i->File.StartsWith(fnd) )
+            if ( (*i)->File.StartsWith(fnd) )
                 unloaded = true;
             // don't break from the loop, we can have other matching files
         }
         else // a single resource URL
 #endif // wxUSE_FILESYSTEM
         {
-            if ( i->File == fnd )
+            if ( (*i)->File == fnd )
             {
                 Data().erase(i);
                 unloaded = true;
@@ -445,27 +450,29 @@ bool wxXmlResource::UpdateResources()
     for ( wxXmlResourceDataRecords::iterator i = Data().begin();
           i != Data().end(); ++i )
     {
-        modif = (i->Doc == NULL);
+        wxXmlResourceDataRecord* const rec = *i;
+
+        modif = (rec->Doc == NULL);
 
         if (!modif && !(m_flags & wxXRC_NO_RELOADING))
         {
 #           if wxUSE_FILESYSTEM
-            file = fsys.OpenFile(i->File);
+            file = fsys.OpenFile(rec->File);
 #           if wxUSE_DATETIME
-            modif = file && file->GetModificationTime() > i->Time;
+            modif = file && file->GetModificationTime() > rec->Time;
 #           else // wxUSE_DATETIME
             modif = true;
 #           endif // wxUSE_DATETIME
             if (!file)
             {
-                wxLogError(_("Cannot open file '%s'."), i->File.c_str());
+                wxLogError(_("Cannot open file '%s'."), rec->File);
                 rt = false;
             }
             wxDELETE(file);
             wxUnusedVar(file);
 #           else // wxUSE_FILESYSTEM
 #           if wxUSE_DATETIME
-            modif = wxDateTime(wxFileModificationTime(i->File)) > i->Time;
+            modif = wxDateTime(wxFileModificationTime(rec->File)) > rec->Time;
 #           else // wxUSE_DATETIME
             modif = true;
 #           endif // wxUSE_DATETIME
@@ -474,42 +481,41 @@ bool wxXmlResource::UpdateResources()
 
         if (modif)
         {
-            wxLogTrace(_T("xrc"),
-                       _T("opening file '%s'"), i->File.c_str());
+            wxLogTrace(_T("xrc"), _T("opening file '%s'"), rec->File);
 
             wxInputStream *stream = NULL;
 
 #           if wxUSE_FILESYSTEM
-            file = fsys.OpenFile(i->File);
+            file = fsys.OpenFile(rec->File);
             if (file)
                 stream = file->GetStream();
 #           else
-            stream = new wxFileInputStream(i->File);
+            stream = new wxFileInputStream(rec->File);
 #           endif
 
             if (stream)
             {
-                delete i->Doc;
-                i->Doc = new wxXmlDocument;
+                delete rec->Doc;
+                rec->Doc = new wxXmlDocument;
             }
-            if (!stream || !i->Doc->Load(*stream, encoding))
+            if (!stream || !rec->Doc->Load(*stream, encoding))
             {
                 wxLogError(_("Cannot load resources from file '%s'."),
-                           i->File.c_str());
-                wxDELETE(i->Doc);
+                           rec->File);
+                wxDELETE(rec->Doc);
                 rt = false;
             }
-            else if (i->Doc->GetRoot()->GetName() != wxT("resource"))
+            else if (rec->Doc->GetRoot()->GetName() != wxT("resource"))
             {
-                wxLogError(_("Invalid XRC resource '%s': doesn't have root node 'resource'."), i->File.c_str());
-                wxDELETE(i->Doc);
+                wxLogError(_("Invalid XRC resource '%s': doesn't have root node 'resource'."), rec->File);
+                wxDELETE(rec->Doc);
                 rt = false;
             }
             else
             {
                 long version;
                 int v1, v2, v3, v4;
-                wxString verstr = i->Doc->GetRoot()->GetAttribute(
+                wxString verstr = rec->Doc->GetRoot()->GetAttribute(
                                       wxT("version"), wxT("0.0.0.0"));
                 if (wxSscanf(verstr.c_str(), wxT("%i.%i.%i.%i"),
                     &v1, &v2, &v3, &v4) == 4)
@@ -524,12 +530,12 @@ bool wxXmlResource::UpdateResources()
                     rt = false;
                 }
 
-                ProcessPlatformProperty(i->Doc->GetRoot());
+                ProcessPlatformProperty(rec->Doc->GetRoot());
 #if wxUSE_DATETIME
 #if wxUSE_FILESYSTEM
-                i->Time = file->GetModificationTime();
+                rec->Time = file->GetModificationTime();
 #else // wxUSE_FILESYSTEM
-                i->Time = wxDateTime(wxFileModificationTime(i->File));
+                rec->Time = wxDateTime(wxFileModificationTime(rec->File));
 #endif // wxUSE_FILESYSTEM
 #endif // wxUSE_DATETIME
             }
@@ -609,15 +615,16 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name,
     for ( wxXmlResourceDataRecords::const_iterator f = Data().begin();
           f != Data().end(); ++f )
     {
-        if ( f->Doc == NULL || f->Doc->GetRoot() == NULL )
+        wxXmlResourceDataRecord* const rec = *f;
+        if ( rec->Doc == NULL || rec->Doc->GetRoot() == NULL )
             continue;
 
-        wxXmlNode* found = DoFindResource(f->Doc->GetRoot(),
+        wxXmlNode* found = DoFindResource(rec->Doc->GetRoot(),
                                           name, classname, recursive);
         if ( found )
         {
 #if wxUSE_FILESYSTEM
-            m_curFileSystem.ChangePathTo(f->File);
+            m_curFileSystem.ChangePathTo(rec->File);
 #endif
             return found;
         }
