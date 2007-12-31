@@ -140,7 +140,7 @@ Font::~Font() {
 
 void Font::Create(const char *faceName, int characterSet,
                   int size, bool bold, bool italic,
-                  bool WXUNUSED(extraFontFlag)) {
+                  bool extraFontFlag) {
     Release();
 
     // The minus one is done because since Scintilla uses SC_SHARSET_DEFAULT
@@ -160,7 +160,7 @@ void Font::Create(const char *faceName, int characterSet,
                     false,
                     stc2wx(faceName),
                     encoding);
-    //font->SetNoAntiAliasing(!extraFontFlag);
+    font->SetNoAntiAliasing(!extraFontFlag);
     id = font;
 }
 
@@ -1234,13 +1234,14 @@ void ListBoxImpl::Append(char *s, int type) {
 void ListBoxImpl::Append(const wxString& text, int type) {
     long count  = GETLB(id)->GetItemCount();
     long itemID  = GETLB(id)->InsertItem(count, wxEmptyString);
+    ling idx = -1;
     GETLB(id)->SetItem(itemID, 1, text);
     maxStrWidth = wxMax(maxStrWidth, text.length());
     if (type != -1) {
         wxCHECK_RET(imgTypeMap, wxT("Unexpected NULL imgTypeMap"));
-        long idx = imgTypeMap->Item(type);
-        GETLB(id)->SetItemImage(itemID, idx, idx);
+        idx = imgTypeMap->Item(type);
     }
+    GETLB(id)->SetItemImage(itemID, idx, idx);
 }
 
 void ListBoxImpl::SetList(const char* list, char separator, char typesep) {
