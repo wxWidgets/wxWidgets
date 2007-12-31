@@ -80,14 +80,14 @@ wxString wxTextBuffer::Translate(const wxString& text, wxTextFileType type)
     wxString eol = GetEOL(type), result;
 
     // optimization: we know that the length of the new string will be about
-    // the same as the length of the old one, so prealloc memory to aviod
+    // the same as the length of the old one, so prealloc memory to avoid
     // unnecessary relocations
     result.Alloc(text.Len());
 
     wxChar chLast = 0;
-    for ( const wxChar *pc = text.c_str(); *pc; pc++ )
+    for ( wxString::const_iterator i = text.begin(); i != text.end(); ++i )
     {
-        wxChar ch = *pc;
+        wxChar ch = *i;
         switch ( ch ) {
             case _T('\n'):
                 // Dos/Unix line termination
