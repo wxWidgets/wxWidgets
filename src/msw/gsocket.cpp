@@ -58,6 +58,9 @@
 #if wxUSE_SOCKETS
 
 #include "wx/gsocket.h"
+#include "wx/link.h"
+
+wxFORCE_LINK_MODULE(gsockmsw)
 
 #ifdef __WXWINCE__
 #ifndef isdigit

@@ -38,6 +38,9 @@
 
 #include "wx/gsocket.h"
 #include "wx/apptrait.h"
+#include "wx/link.h"
+
+wxFORCE_LINK_THIS_MODULE(gsockmsw)
 
 extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
 #define INSTANCE wxGetInstance()
@@ -470,6 +473,6 @@ static struct ManagerSetter
         static GSocketMSWManager s_manager;
         wxAppTraits::SetDefaultSocketManager(&s_manager);
     }
-} gsm_managerSetter;
+} gs_managerSetter;
 
 #endif  // wxUSE_SOCKETS
