@@ -48,13 +48,12 @@ wxCursorRefData::~wxCursorRefData()
 
 //-----------------------------------------------------------------------------
 
-#define M_CURSORDATA ((wxCursorRefData *)m_refData)
+#define M_CURSORDATA wx_static_cast(wxCursorRefData*, m_refData)
 
-IMPLEMENT_DYNAMIC_CLASS(wxCursor,wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
 
 wxCursor::wxCursor()
 {
-
 }
 
 wxCursor::wxCursor( int cursorId )
@@ -66,8 +65,8 @@ wxCursor::wxCursor( int cursorId )
     {
         case wxCURSOR_BLANK:
             {
-                static const gchar bits[] = { 0 };
-                static /* const -- not in GTK1 */ GdkColor color = { 0, 0, 0, 0 };
+                const char bits[] = { 0 };
+                const GdkColor color = { 0, 0, 0, 0 };
 
                 GdkPixmap *pixmap = gdk_bitmap_create_from_data(NULL, bits, 1, 1);
                 M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(pixmap,
@@ -75,6 +74,7 @@ wxCursor::wxCursor( int cursorId )
                                                                     &color,
                                                                     &color,
                                                                     0, 0);
+                g_object_unref(pixmap);
             }
             return;
 
