@@ -548,10 +548,6 @@ protected:
                                    void *data,
                                    const wxListKey& key = wxDefaultListKey) = 0;
 
-// Can't access these from derived classes otherwise (bug in Salford C++?)
-#ifdef __SALFORDC__
-public:
-#endif
 
     // ctors
         // from an array

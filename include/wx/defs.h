@@ -103,15 +103,6 @@
     #endif /* VC++ 8 */
 #endif /*  __VISUALC__ */
 
-/*  suppress some Salford C++ warnings */
-#ifdef __SALFORDC__
-#   pragma suppress 353             /*  Possible nested comments */
-#   pragma suppress 593             /*  Define not used */
-#   pragma suppress 61              /*  enum has no name (doesn't suppress!) */
-#   pragma suppress 106             /*  unnamed, unused parameter */
-#   pragma suppress 571             /*  Virtual function hiding */
-#endif /*  __SALFORDC__ */
-
 /*  suppress some Borland C++ warnings */
 #ifdef __BORLANDC__
 #   pragma warn -inl                /*  Functions containing reserved words and certain constructs are not expanded inline */

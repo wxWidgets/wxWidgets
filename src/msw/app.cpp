@@ -61,7 +61,7 @@
 
 // OLE is used for drag-and-drop, clipboard, OLE Automation..., but some
 // compilers don't support it (missing headers, libs, ...)
-#if defined(__GNUWIN32_OLD__) || defined(__SYMANTEC__) || defined(__SALFORDC__)
+#if defined(__GNUWIN32_OLD__) || defined(__SYMANTEC__)
     #undef wxUSE_OLE
 
     #define  wxUSE_OLE 0

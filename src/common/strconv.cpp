@@ -44,10 +44,6 @@
     #define wxHAVE_WIN32_MB2WC
 #endif
 
-#ifdef __SALFORDC__
-    #include <clib.h>
-#endif
-
 #ifdef HAVE_ICONV
     #include <iconv.h>
     #include "wx/thread.h"

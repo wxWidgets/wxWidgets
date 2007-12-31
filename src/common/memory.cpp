@@ -39,7 +39,7 @@
 #include "wx/ioswrap.h"
 
 #if !defined(__WATCOMC__) && !(defined(__VMS__) && ( __VMS_VER < 70000000 ) )\
-     && !defined( __MWERKS__ ) && !defined(__SALFORDC__)
+     && !defined( __MWERKS__ )
 #include <memory.h>
 #endif
 

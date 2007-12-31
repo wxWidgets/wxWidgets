@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        file.cpp
+// Name:        src/common/file.cpp
 // Purpose:     wxFile - encapsulates low-level "file descriptor"
 //              wxTempFile
 // Author:      Vadim Zeitlin
@@ -26,28 +26,26 @@
 // standard
 #if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 
-#ifndef __SALFORDC__
-    #define   WIN32_LEAN_AND_MEAN
-    #define   NOSERVICE
-    #define   NOIME
-    #define   NOATOM
-    #define   NOGDI
-    #define   NOGDICAPMASKS
-    #define   NOMETAFILE
-    #define   NOMINMAX
-    #define   NOMSG
-    #define   NOOPENFILE
-    #define   NORASTEROPS
-    #define   NOSCROLL
-    #define   NOSOUND
-    #define   NOSYSMETRICS
-    #define   NOTEXTMETRIC
-    #define   NOWH
-    #define   NOCOMM
-    #define   NOKANJI
-    #define   NOCRYPT
-    #define   NOMCX
-#endif
+#define   WIN32_LEAN_AND_MEAN
+#define   NOSERVICE
+#define   NOIME
+#define   NOATOM
+#define   NOGDI
+#define   NOGDICAPMASKS
+#define   NOMETAFILE
+#define   NOMINMAX
+#define   NOMSG
+#define   NOOPENFILE
+#define   NORASTEROPS
+#define   NOSCROLL
+#define   NOSOUND
+#define   NOSYSMETRICS
+#define   NOTEXTMETRIC
+#define   NOWH
+#define   NOCOMM
+#define   NOKANJI
+#define   NOCRYPT
+#define   NOMCX
 
 #elif defined(__WXMSW__) && defined(__WXWINCE__)
     #include  "wx/msw/missing.h"
@@ -98,18 +96,6 @@
         R_OK = 4    //          read
     };
 #endif // W_OK
-
-#ifdef __SALFORDC__
-    #include <unix.h>
-#endif
-
-// some broken compilers don't have 3rd argument in open() and creat()
-#ifdef __SALFORDC__
-    #define ACCESS(access)
-    #define stat    _stat
-#else // normal compiler
-    #define ACCESS(access)  , (access)
-#endif // Salford C
 
 // wxWidgets
 #ifndef WX_PRECOMP
@@ -200,8 +186,8 @@ bool wxFile::Create(const wxString& fileName, bool bOverwrite, int accessMode)
     // otherwise we only create the new file and fail if it already exists
     int fd = wxOpen( fileName,
                      O_BINARY | O_WRONLY | O_CREAT |
-                     (bOverwrite ? O_TRUNC : O_EXCL)
-                     ACCESS(accessMode) );
+                     (bOverwrite ? O_TRUNC : O_EXCL),
+                     accessMode );
     if ( fd == -1 )
     {
         wxLogSysError(_("can't create file '%s'"), fileName);
@@ -252,7 +238,7 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
     accessMode &= wxS_IRUSR | wxS_IWUSR;
 #endif // __WINDOWS__
 
-    int fd = wxOpen( fileName, flags ACCESS(accessMode));
+    int fd = wxOpen( fileName, flags, accessMode);
 
     if ( fd == -1 )
     {
@@ -435,7 +421,7 @@ bool wxFile::Eof() const
 
     wxFileOffset iRc;
 
-#if defined(__DOS__) || defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ ) || defined(__SALFORDC__)
+#if defined(__DOS__) || defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ )
     // @@ this doesn't work, of course, on unseekable file descriptors
     wxFileOffset ofsCur = Tell(),
     ofsMax = Length();

@@ -60,7 +60,7 @@
 #endif
 
 #if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
-#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__SALFORDC__) && !defined(__WXWINCE__) && !defined(__CYGWIN__)
+#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ ) && !defined(__WXWINCE__) && !defined(__CYGWIN__)
     #include <direct.h>
     #include <dos.h>
     #include <io.h>
@@ -83,11 +83,6 @@
                     // this (3.1 I believe) and how to test for it.
                     // If this works for Borland 4.0 as well, then no worries.
     #include <dir.h>
-#endif
-
-#ifdef __SALFORDC__
-    #include <dir.h>
-    #include <unix.h>
 #endif
 
 #ifndef __WXPALMOS5__

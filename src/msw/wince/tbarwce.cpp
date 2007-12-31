@@ -42,7 +42,7 @@
     #include "wx/control.h"
 #endif
 
-#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
+#if !defined(__GNUWIN32__)
     #include "malloc.h"
 #endif
 

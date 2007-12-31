@@ -33,10 +33,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef __SALFORDC__
-    #include <clib.h>
-#endif
-
 IMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator)
 
 BEGIN_EVENT_TABLE(wxTextValidator, wxValidator)

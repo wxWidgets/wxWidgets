@@ -133,8 +133,6 @@ inline int Stricmp(const char *psz1, const char *psz2)
   return _stricmp(psz1, psz2);
 #elif defined(__SC__)
   return _stricmp(psz1, psz2);
-#elif defined(__SALFORDC__)
-  return stricmp(psz1, psz2);
 #elif defined(__BORLANDC__)
   return stricmp(psz1, psz2);
 #elif defined(__WATCOMC__)

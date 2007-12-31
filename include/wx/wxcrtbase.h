@@ -229,7 +229,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
  * versions */
 #if !defined(wxCRT_StricmpA)
     #if defined(__BORLANDC__) || defined(__WATCOMC__) || \
-            defined(__SALFORDC__) || defined(__VISAGECPP__) || \
+            defined(__VISAGECPP__) || \
             defined(__EMX__) || defined(__DJGPP__)
         #define wxCRT_StricmpA stricmp
         #define wxCRT_StrnicmpA strnicmp

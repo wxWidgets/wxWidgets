@@ -42,10 +42,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef __SALFORDC__
-    #include <clib.h>
-#endif
-
 // allocating extra space for each string consumes more memory but speeds up
 // the concatenation operations (nLen is the current string's length)
 // NB: EXTRA_ALLOC must be >= 0!

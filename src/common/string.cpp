@@ -35,10 +35,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef __SALFORDC__
-    #include <clib.h>
-#endif
-
 #include "wx/hashmap.h"
 
 // string handling functions used by wxString:

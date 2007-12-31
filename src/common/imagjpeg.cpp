@@ -57,10 +57,6 @@ typedef boolean wxjpeg_boolean;
 // For JPEG library error handling
 #include <setjmp.h>
 
-#ifdef __SALFORDC__
-#undef FAR
-#endif
-
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------

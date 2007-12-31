@@ -45,7 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if !defined(__MWERKS__) && !defined(__SALFORDC__)
+#if !defined(__MWERKS__)
     #include <memory.h>
 #endif
 

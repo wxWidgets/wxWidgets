@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/imagepng.cpp
+// Name:        src/common/imagpng.cpp
 // Purpose:     wxImage PNG handler
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -41,12 +41,6 @@
 
 // For memcpy
 #include <string.h>
-
-#ifdef __SALFORDC__
-#ifdef FAR
-#undef FAR
-#endif
-#endif
 
 // ----------------------------------------------------------------------------
 // constants

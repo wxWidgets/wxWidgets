@@ -193,10 +193,6 @@ src/makelib.vc
 src/makeg95.env
 src/makeprog.g95
 src/makelib.g95
-src/makesl.env
-src/makeprog.sl
-src/makelib.sl
-src/salford.lnk
 src/maketwin.env
 src/makefile.bcc
 src/makefile.vc
