@@ -16,7 +16,6 @@
 
 #ifdef __VMS__
 #pragma message disable nosimpint
-#define XtDisplay XTDISPLAY
 #endif
 #include <Xm/Xm.h>
 #include <Xm/ScrollBar.h>

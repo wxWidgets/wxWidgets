@@ -27,10 +27,6 @@
 #endif
 
 #ifdef __VMS__
-#define XtDisplay XTDISPLAY
-#define XtParent XTPARENT
-#define XtScreen XTSCREEN
-#define XtWindow XTWINDOW
 #pragma message disable nosimpint
 #endif
 

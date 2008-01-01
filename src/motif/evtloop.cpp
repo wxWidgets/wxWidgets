@@ -17,11 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __VMS
-#define XtParent XTPARENT
-#define XtDisplay XTDISPLAY
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 

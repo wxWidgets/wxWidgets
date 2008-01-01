@@ -14,7 +14,6 @@
 
 #ifdef __VMS
 #define XShapeQueryExtension XSHAPEQUERYEXTENSION
-#define XtDisplay XTDISPLAY
 #endif
 
 #include "wx/x11/privx.h"

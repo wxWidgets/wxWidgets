@@ -12,10 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __VMS
-#define XtDisplay XTDISPLAY
-#endif
-
 #include "wx/radiobut.h"
 
 #ifndef WX_PRECOMP

@@ -14,10 +14,6 @@
 
 #if wxUSE_RADIOBOX
 
-#ifdef __VMS
-#define XtDisplay XTDISPLAY
-#endif
-
 #include "wx/radiobox.h"
 
 #ifndef WX_PRECOMP
