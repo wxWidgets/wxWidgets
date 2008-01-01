@@ -295,13 +295,6 @@ A synonym for \helpref{Centre}{wxwindowcentre}.
 A synonym for \helpref{CentreOnParent}{wxwindowcentreonparent}.
 
 
-\membersection{wxWindow::CenterOnScreen}\label{wxwindowcenteronscreen}
-
-\func{void}{CenterOnScreen}{\param{int}{ direction}}
-
-A synonym for \helpref{CentreOnScreen}{wxwindowcentreonscreen}.
-
-
 \membersection{wxWindow::Centre}\label{wxwindowcentre}
 
 \func{void}{Centre}{\param{int}{ direction = wxBOTH}}
@@ -349,24 +342,7 @@ window is not a top level window, then behaviour is the same as
 
 \wxheading{See also}
 
-\helpref{wxWindow::CentreOnScreen}{wxwindowcenteronscreen}
-
-
-\membersection{wxWindow::CentreOnScreen}\label{wxwindowcentreonscreen}
-
-\func{void}{CentreOnScreen}{\param{int}{ direction = wxBOTH}}
-
-Centres the window on screen. This only works for top level windows -
-otherwise, the window will still be centered on its parent.
-
-\wxheading{Parameters}
-
-\docparam{direction}{Specifies the direction for the centering. May be {\tt wxHORIZONTAL}, {\tt wxVERTICAL}\rtfsp
-or {\tt wxBOTH}.}
-
-\wxheading{See also}
-
-\helpref{wxWindow::CentreOnParent}{wxwindowcenteronparent}
+\helpref{wxTopLevelWindow::CentreOnScreen}{wxtoplevelwindowcenteronscreen}
 
 
 \membersection{wxWindow::ClearBackground}\label{wxwindowclearbackground}

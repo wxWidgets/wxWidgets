@@ -44,6 +44,29 @@ Returns \true if the platform supports making the window translucent.
 \helpref{wxTopLevelWindow::SetTransparent}{wxtoplevelwindowsettransparent}
 
 
+\membersection{wxWindow::CenterOnScreen}\label{wxtoplevelwindowcenteronscreen}
+
+\func{void}{CenterOnScreen}{\param{int}{ direction}}
+
+A synonym for \helpref{CentreOnScreen}{wxtoplevelwindowcentreonscreen}.
+
+
+\membersection{wxTopLevelWindow::CentreOnScreen}\label{wxtoplevelwindowcentreonscreen}
+
+\func{void}{CentreOnScreen}{\param{int}{ direction = wxBOTH}}
+
+Centres the window on screen.
+
+\wxheading{Parameters}
+
+\docparam{direction}{Specifies the direction for the centering. May be {\tt wxHORIZONTAL}, {\tt wxVERTICAL}\rtfsp
+or {\tt wxBOTH}.}
+
+\wxheading{See also}
+
+\helpref{wxWindow::CentreOnParent}{wxwindowcenteronparent}
+
+
 \membersection{wxTopLevelWindow::EnableCloseButton}\label{wxtoplevelenableclosebutton}
 
 \func{bool}{EnableCloseButton}{\param{bool}{ enable = true}}
