@@ -21,7 +21,6 @@
 #include "wx/wxprec.h"
 
 #ifdef __VMS
-#define XtDisplay XTDISPLAY
 #pragma message disable nosimpint
 #include "wx/vms_x_fix.h"
 #endif

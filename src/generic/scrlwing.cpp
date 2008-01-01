@@ -25,10 +25,6 @@
     #pragma hdrstop
 #endif
 
-#ifdef __VMS
-#define XtDisplay XTDISPLAY
-#endif
-
 #include "wx/scrolwin.h"
 
 #ifndef WX_PRECOMP

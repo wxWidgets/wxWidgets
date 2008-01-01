@@ -640,6 +640,15 @@
 # define wxVMS_USE_STD
 #endif
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#ifdef __WXMOTIF__
+#define XtParent XTPARENT
+#define XtScreen XTSCREEN
+#define XtWindow XTWINDOW
+#endif
+#endif
+
 /* Choose which method we will use for updating menus
  * - in OnIdle, or when we receive a wxEVT_MENU_OPEN event.
  * Presently, only Windows and GTK+ support wxEVT_MENU_OPEN.

@@ -33,8 +33,6 @@
 
 #ifdef __VMS__
 #pragma message disable nosimpint
-#define XtDisplay XTDISPLAY
-#define XtWindow XTWINDOW
 #endif
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>

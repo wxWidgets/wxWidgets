@@ -12,10 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __VMS
-#define XtScreen XTSCREEN
-#endif
-
 #include "wx/bmpbuttn.h"
 
 #ifdef __VMS__

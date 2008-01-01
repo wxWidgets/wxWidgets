@@ -20,10 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __VMS
-#define XtParent XTPARENT
-#endif
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>

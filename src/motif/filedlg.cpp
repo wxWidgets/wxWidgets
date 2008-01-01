@@ -12,12 +12,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __VMS
-#define XtDisplay XTDISPLAY
-#define XtParent XTPARENT
-#define XtWindow XTWINDOW
-#endif
-
 #include "wx/filedlg.h"
 
 #ifndef WX_PRECOMP

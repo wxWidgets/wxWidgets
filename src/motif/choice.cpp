@@ -14,11 +14,6 @@
 
 #if wxUSE_CHOICE
 
-#ifdef __VMS
-#define XtDisplay XTDISPLAY
-#define XtParent XTPARENT
-#endif
-
 #include "wx/choice.h"
 
 #ifndef WX_PRECOMP

@@ -24,11 +24,6 @@
     #include "wx/arrstr.h"
 #endif
 
-#ifdef __VMS
-#define XtParent XTPARENT
-#define XtDisplay XTDISPLAY
-#endif
-
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
