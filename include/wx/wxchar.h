@@ -251,6 +251,9 @@
 /* and _() in wxWidgets sources */
 #define wxT(x)       _T(x)
 
+/* this macro exists only for forward compatibility with wx 3.0 */
+#define wxS(x)       _T(x)
+
 /* a helper macro allowing to make another macro Unicode-friendly, see below */
 #define wxAPPLY_T(x) _T(x)
 
