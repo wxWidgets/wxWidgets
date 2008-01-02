@@ -297,7 +297,11 @@ private:
 
     // this is the replacement of DoLogNumberOfRepeats() (which has to be kept
     // to avoid breaking ABI in this version)
-    unsigned LogLastRepetitionCountIfNeeded();
+    unsigned LogLastRepeatIfNeeded();
+
+    // implementation of the function above which supposes that the caller had
+    // already locked gs_prevCS
+    unsigned LogLastRepeatIfNeededUnlocked();
 };
 
 // ----------------------------------------------------------------------------

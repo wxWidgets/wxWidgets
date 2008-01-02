@@ -287,13 +287,18 @@ wxCRIT_SECT_DECLARE(gs_prevCS);
 unsigned wxLog::DoLogNumberOfRepeats()
 {
     wxLog * const pLogger = GetActiveTarget();
-    return pLogger ? pLogger->LogLastRepetitionCountIfNeeded() : 0u;
+    return pLogger ? pLogger->LogLastRepeatIfNeeded() : 0u;
 }
 
-unsigned wxLog::LogLastRepetitionCountIfNeeded()
+unsigned wxLog::LogLastRepeatIfNeeded()
 {
     wxCRIT_SECT_LOCKER(lock, gs_prevCS);
 
+    return LogLastRepeatIfNeededUnlocked();
+}
+
+unsigned wxLog::LogLastRepeatIfNeededUnlocked()
+{
     long retval = ms_prevCounter;
     if ( ms_prevCounter > 0 )
     {
@@ -315,7 +320,7 @@ unsigned wxLog::LogLastRepetitionCountIfNeeded()
 
 wxLog::~wxLog()
 {
-    LogLastRepetitionCountIfNeeded();
+    LogLastRepeatIfNeeded();
 }
 
 /* static */
@@ -339,7 +344,7 @@ void wxLog::OnLog(wxLogLevel level, const wxChar *szString, time_t t)
                     return;
                 }
 
-                pLogger->LogLastRepetitionCountIfNeeded();
+                pLogger->LogLastRepeatIfNeededUnlocked();
 
                 // reset repetition counter for a new message
                 ms_prevString = szString;
