@@ -159,7 +159,7 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
 #ifdef __WINDOWS__
     ::MessageBox(NULL, text.wx_str(), title.wx_str(), MB_OK | MB_ICONSTOP);
 #else
-    wxFprintf(stderr, _T("%s: %s\n"), title.c_str(), text.c_str());
+    wxFprintf(stderr, wxS("%s: %s\n"), title.c_str(), text.c_str());
     fflush(stderr);
 #endif
 }
@@ -168,7 +168,7 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
 // always terminate the program
 void wxVLogFatalError(const wxString& format, va_list argptr)
 {
-    wxSafeShowMessage(_T("Fatal Error"), wxString::FormatV(format, argptr));
+    wxSafeShowMessage(wxS("Fatal Error"), wxString::FormatV(format, argptr));
 
 #ifdef __WXWINCE__
     ExitThread(3);
@@ -279,7 +279,7 @@ void wxDoLogVerboseUtf8(const char *format, ...)
   {
     if ( wxLog::IsEnabled() && wxLog::IsAllowedTraceMask(mask) ) {
       wxString msg;
-      msg << _T("(") << mask << _T(") ") << wxString::FormatV(format, argptr);
+      msg << wxS("(") << mask << wxS(") ") << wxString::FormatV(format, argptr);
 
       wxLog::OnLog(wxLOG_Trace, msg, time(NULL));
     }
@@ -472,7 +472,7 @@ unsigned wxLog::LogLastRepetitionCountIfNeeded()
                             ms_prevCounter),
                    ms_prevCounter);
 #else
-        msg.Printf(wxT("The previous message was repeated %lu times."),
+        msg.Printf(wxS("The previous message was repeated %lu times."),
                    ms_prevCounter);
 #endif
         ms_prevCounter = 0;
@@ -627,7 +627,7 @@ void wxLog::TimeStamp(wxString *str)
                     ms_timestamp, wxLocaltime_r(&timeNow, &tm));
 
         str->Empty();
-        *str << buf << wxT(": ");
+        *str << buf << wxS(": ");
     }
 #endif // wxUSE_DATETIME
 }
@@ -673,8 +673,8 @@ void wxLog::DoLog(wxLogLevel level, const wxString& szString, time_t t)
         case wxLOG_Debug:
 #ifdef __WXDEBUG__
             {
-                wxString msg = level == wxLOG_Trace ? wxT("Trace: ")
-                                                    : wxT("Debug: ");
+                wxString msg = level == wxLOG_Trace ? wxS("Trace: ")
+                                                    : wxS("Debug: ");
                 msg << szString;
                 LogString(msg, t);
             }
@@ -692,7 +692,7 @@ void wxLog::DoLogString(const wxString& szString, time_t t)
     DoLogString((const char*)szString.mb_str(), t);
     DoLogString((const wchar_t*)szString.wc_str(), t);
 #else
-    wxFAIL_MSG(wxT("DoLogString must be overriden if it's called."));
+    wxFAIL_MSG(wxS("DoLogString must be overriden if it's called."));
     wxUnusedVar(szString);
     wxUnusedVar(t);
 #endif
@@ -722,7 +722,7 @@ void wxLogBuffer::Flush()
     if ( !m_str.empty() )
     {
         wxMessageOutputBest out;
-        out.Printf(_T("%s"), m_str.c_str());
+        out.Printf(wxS("%s"), m_str.c_str());
         m_str.clear();
     }
 }
@@ -742,7 +742,7 @@ void wxLogBuffer::DoLog(wxLogLevel level, const wxString& szString, time_t t)
                 str += szString;
 
                 wxMessageOutputDebug dbgout;
-                dbgout.Printf(_T("%s\n"), str.c_str());
+                dbgout.Printf(wxS("%s\n"), str.c_str());
             }
 #endif // __WXDEBUG__
             break;
@@ -754,7 +754,7 @@ void wxLogBuffer::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 
 void wxLogBuffer::DoLogString(const wxString& szString, time_t WXUNUSED(t))
 {
-    m_str << szString << _T("\n");
+    m_str << szString << wxS("\n");
 }
 
 // ----------------------------------------------------------------------------
@@ -776,7 +776,7 @@ void wxLogStderr::DoLogString(const wxString& szString, time_t WXUNUSED(t))
     str << szString;
 
     wxFputs(str, m_fp);
-    wxFputc(_T('\n'), m_fp);
+    wxFputc(wxS('\n'), m_fp);
     fflush(m_fp);
 
     // under GUI systems such as Windows or Mac, programs usually don't have
@@ -789,7 +789,7 @@ void wxLogStderr::DoLogString(const wxString& szString, time_t WXUNUSED(t))
         if ( traits && !traits->HasStderr() )
         {
             wxMessageOutputDebug dbgout;
-            dbgout.Printf(_T("%s\n"), str.c_str());
+            dbgout.Printf(wxS("%s\n"), str.c_str());
         }
     }
 }
@@ -924,7 +924,7 @@ wxLogLevel      wxLog::ms_logLevel     = wxLOG_Max;  // log everything by defaul
 
 size_t          wxLog::ms_suspendCount = 0;
 
-wxString        wxLog::ms_timestamp(wxT("%X"));  // time only, no date
+wxString        wxLog::ms_timestamp(wxS("%X"));  // time only, no date
 
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 wxArrayString   wxLog::ms_aTraceMasks;
@@ -1004,7 +1004,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     {
         // if this happens, something is seriously wrong, so don't use _() here
         // for safety
-        wxSprintf(s_szBuf, _T("unknown error %lx"), nErrCode);
+        wxSprintf(s_szBuf, wxS("unknown error %lx"), nErrCode);
         return s_szBuf;
     }
 
@@ -1015,7 +1015,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     if( lpMsgBuf != 0 )
     {
         wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
-        s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxT('\0');
+        s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxS('\0');
 
         LocalFree(lpMsgBuf);
 
@@ -1024,14 +1024,14 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
         size_t len = wxStrlen(s_szBuf);
         if ( len > 0 ) {
             // truncate string
-            if ( s_szBuf[len - 2] == wxT('\r') )
-                s_szBuf[len - 2] = wxT('\0');
+            if ( s_szBuf[len - 2] == wxS('\r') )
+                s_szBuf[len - 2] = wxS('\0');
         }
     }
     else
 #endif // !__SMARTPHONE__
     {
-        s_szBuf[0] = wxT('\0');
+        s_szBuf[0] = wxS('\0');
     }
 
     return s_szBuf;

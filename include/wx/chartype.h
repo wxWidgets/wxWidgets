@@ -214,11 +214,9 @@
 #endif
 
 /* define char type used by wxString internal representation: */
-#if wxUSE_UNICODE_UTF8
-    typedef char wxStringCharType;
-#elif wxUSE_UNICODE_WCHAR
+#if wxUSE_UNICODE_WCHAR
     typedef wchar_t wxStringCharType;
-#else
+#else /* wxUSE_UNICODE_UTF8 || ANSI */
     typedef char wxStringCharType;
 #endif
 
@@ -242,6 +240,18 @@
         #define _T(x) wxCONCAT_HELPER(L, x)
     #endif /* ASCII/Unicode */
 #endif /* !defined(_T) */
+
+/*
+   wxS ("wx string") macro can be used to create literals using the same
+   representation as wxString does internally, i.e. wchar_t in Unicode build
+   under Windows or char in UTF-8-based Unicode builds and (deprecated) ANSI
+   builds everywhere (see wxStringCharType definition above).
+ */
+#if wxUSE_UNICODE_WCHAR
+    #define wxS(x) wxCONCAT_HELPER(L, x)
+#else /* wxUSE_UNICODE_UTF8 || ANSI */
+    #define wxS(x) x
+#endif
 
 /* although global macros with such names are normally bad, we want to have  */
 /* another name for _T() which should be used to avoid confusion between     */
