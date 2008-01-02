@@ -16,14 +16,9 @@ None
 
 \helpref{wxStreamBase}{wxstreambase}
 
-% ---------------------------------------------------------------------------
-% Members
-% ---------------------------------------------------------------------------
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-% -----------
-% ctor & dtor
-% -----------
+
 \membersection{wxStreamBuffer::wxStreamBuffer}\label{wxstreambufferctor}
 
 \func{}{wxStreamBuffer}{\param{wxStreamBase\&}{ stream}, \param{BufMode}{ mode}}
@@ -72,6 +67,7 @@ program.
 
 \helpref{wxStreamBuffer:SetBufferIO}{wxstreambuffersetbufferio}
 
+
 \membersection{wxStreamBuffer::\destruct{wxStreamBuffer}}\label{wxstreambufferdtor}
 
 \func{}{wxStreamBuffer}{\destruct{wxStreamBuffer}}
@@ -79,9 +75,121 @@ program.
 Destructor. It finalizes all IO calls and frees all internal buffers if
 necessary.
 
-% -----------
-% Filtered IO
-% -----------
+
+\membersection{wxStreamBuffer::FillBuffer}\label{wxstreambufferfillbuffer}
+
+\func{bool}{FillBuffer}{\void}
+
+Fill the IO buffer.
+
+
+\membersection{wxStreamBuffer::Fixed}\label{wxstreambufferfixed}
+
+\func{void}{Fixed}{\param{bool}{ fixed}}
+
+Toggles the fixed flag. Usually this flag is toggled at the same time as 
+{\it flushable}. This flag allows (when it has the false value) or forbids
+(when it has the true value) the stream buffer to resize dynamically the IO buffer.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer::SetBufferIO}{wxstreambuffersetbufferio}
+
+
+\membersection{wxStreamBuffer::Flushable}\label{wxstreambufferflushable}
+
+\func{void}{Flushable}{\param{bool}{ flushable}}
+
+Toggles the flushable flag. If {\it flushable} is disabled, no data are sent
+to the parent stream.
+
+
+\membersection{wxStreamBuffer::FlushBuffer}\label{wxstreambufferflushbuffer}
+
+\func{bool}{FlushBuffer}{\void}
+
+Flushes the IO buffer.
+
+
+\membersection{wxStreamBuffer::GetBufferEnd}\label{wxstreambuffergetbufferend}
+
+\constfunc{void *}{GetBufferEnd}{\void}
+
+Returns a pointer on the end of the stream buffer.
+
+
+\membersection{wxStreamBuffer::GetBufferPos}\label{wxstreambuffergetbufferpos}
+
+\constfunc{void *}{GetBufferPos}{\void}
+
+Returns a pointer on the current position of the stream buffer.
+
+
+\membersection{wxStreamBuffer::GetBufferSize}\label{wxstreambuffergetbuffersize}
+
+\constfunc{size\_t}{GetBufferSize}{\void}
+
+Returns the size of the buffer.
+
+
+\membersection{wxStreamBuffer::GetBufferStart}\label{wxstreambuffergetbufferstart}
+
+\constfunc{void *}{GetBufferStart}{\void}
+
+Returns a pointer on the start of the stream buffer.
+
+
+\membersection{wxStreamBuffer::GetChar}\label{wxstreambuffergetchar}
+
+\func{char}{GetChar}{\void}
+
+Gets a single char from the stream buffer. It acts like the Read call.
+
+\wxheading{Problem}
+
+You aren't directly notified if an error occurred during the IO call.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer::Read}{wxstreambufferread}
+
+
+\membersection{wxStreamBuffer::GetDataLeft}\label{wxstreambuffergetdataleft}
+
+\func{size\_t}{GetDataLeft}{\void}
+
+Returns the amount of available data in the buffer.
+
+
+\membersection{wxStreamBuffer::GetIntPosition}\label{wxstreambuffergetintposition}
+
+\constfunc{off\_t}{GetIntPosition}{\void}
+
+Returns the current position (counted in bytes) in the stream buffer.
+
+
+\membersection{wxStreamBuffer::GetLastAccess}\label{wxstreambuffergetlastaccess}
+
+\constfunc{size\_t}{GetLastAccess}{\void}
+
+Returns the amount of bytes read during the last IO call to the parent stream.
+
+
+\membersection{wxStreamBuffer::PutChar}\label{wxstreambufferputchar}
+
+\func{void}{PutChar}{\param{char }{c}}
+
+Puts a single char to the stream buffer.
+
+\wxheading{Problem}
+
+You aren't directly notified if an error occurred during the IO call.
+
+\wxheading{See also}
+
+\helpref{wxStreamBuffer::Read}{wxstreambufferwrite}
+
+
 \membersection{wxStreamBuffer::Read}\label{wxstreambufferread}
 
 \func{size\_t}{Read}{\param{void *}{buffer}, \param{size\_t }{size}}
@@ -106,58 +214,13 @@ any more data in the current buffer.
 
 \helpref{wxStreamBuffer::Write}{wxstreambufferwrite}
 
-\membersection{wxStreamBuffer::Write}\label{wxstreambufferwrite}
 
-\func{size\_t}{Write}{\param{const void *}{buffer}, \param{size\_t }{size}}
+\membersection{wxStreamBuffer::ResetBuffer}\label{wxstreambufferresetbuffer}
 
-Writes a block of the specified {\it size} using data of {\it buffer}. The data
-are cached in a buffer before being sent in one block to the stream.
+\func{void}{ResetBuffer}{\void}
 
-\func{size\_t}{Write}{\param{wxStreamBuffer *}{buffer}}
+Resets to the initial state variables concerning the buffer.
 
-See \helpref{Read}{wxstreambufferread}.
-
-\membersection{wxStreamBuffer::GetChar}\label{wxstreambuffergetchar}
-
-\func{char}{GetChar}{\void}
-
-Gets a single char from the stream buffer. It acts like the Read call.
-
-\wxheading{Problem}
-
-You aren't directly notified if an error occurred during the IO call.
-
-\wxheading{See also}
-
-\helpref{wxStreamBuffer::Read}{wxstreambufferread}
-
-\membersection{wxStreamBuffer::PutChar}\label{wxstreambufferputchar}
-
-\func{void}{PutChar}{\param{char }{c}}
-
-Puts a single char to the stream buffer.
-
-\wxheading{Problem}
-
-You aren't directly notified if an error occurred during the IO call.
-
-\wxheading{See also}
-
-\helpref{wxStreamBuffer::Read}{wxstreambufferwrite}
-
-\membersection{wxStreamBuffer::Tell}\label{wxstreambuffertell}
-
-\constfunc{off\_t}{Tell}{\void}
-
-Gets the current position in the stream. This position is calculated from
-the {\it real} position in the stream and from the internal buffer position: so
-it gives you the position in the {\it real} stream counted from the start of
-the stream.
-
-\wxheading{Return value}
-
-Returns the current position in the stream if possible, wxInvalidOffset in the
-other case.
 
 \membersection{wxStreamBuffer::Seek}\label{wxstreambufferseek}
 
@@ -178,25 +241,6 @@ Changes the current position.
 
 Upon successful completion, it returns the new offset as measured in bytes from
 the beginning of the stream. Otherwise, it returns wxInvalidOffset.
-
-% --------------
-% Buffer control
-% --------------
-\membersection{wxStreamBuffer::ResetBuffer}\label{wxstreambufferresetbuffer}
-
-\func{void}{ResetBuffer}{\void}
-
-Resets to the initial state variables concerning the buffer.
-
-
-\membersection{wxStreamBuffer::Truncate}\label{wxstreambuffertruncate}
-
-\func{void}{Truncate}{\void}
-
-Truncates the buffer to the current position.
-
-Note: Truncate() cannot be used to enlarge the buffer. This is
-usually not needed since the buffer expands automatically.
 
 
 \membersection{wxStreamBuffer::SetBufferIO}\label{wxstreambuffersetbufferio}
@@ -239,29 +283,6 @@ The created IO buffer is growable by the object.
 \helpref{wxStreamBuffer::Fixed}{wxstreambufferfixed}\\
 \helpref{wxStreamBuffer::Flushable}{wxstreambufferflushable}
 
-\membersection{wxStreamBuffer::GetBufferStart}\label{wxstreambuffergetbufferstart}
-
-\constfunc{void *}{GetBufferStart}{\void}
-
-Returns a pointer on the start of the stream buffer.
-
-\membersection{wxStreamBuffer::GetBufferEnd}\label{wxstreambuffergetbufferend}
-
-\constfunc{void *}{GetBufferEnd}{\void}
-
-Returns a pointer on the end of the stream buffer.
-
-\membersection{wxStreamBuffer::GetBufferPos}\label{wxstreambuffergetbufferpos}
-
-\constfunc{void *}{GetBufferPos}{\void}
-
-Returns a pointer on the current position of the stream buffer.
-
-\membersection{wxStreamBuffer::GetIntPosition}\label{wxstreambuffergetintposition}
-
-\constfunc{off\_t}{GetIntPosition}{\void}
-
-Returns the current position (counted in bytes) in the stream buffer.
 
 \membersection{wxStreamBuffer::SetIntPosition}\label{wxstreambuffersetintposition}
 
@@ -274,61 +295,47 @@ Sets the current position (in bytes) in the stream buffer.
 Since it is a very low-level function, there is no check on the position:
 specifying an invalid position can induce unexpected results.
 
-\membersection{wxStreamBuffer::GetLastAccess}\label{wxstreambuffergetlastaccess}
 
-\constfunc{size\_t}{GetLastAccess}{\void}
-
-Returns the amount of bytes read during the last IO call to the parent stream.
-
-\membersection{wxStreamBuffer::Fixed}\label{wxstreambufferfixed}
-
-\func{void}{Fixed}{\param{bool}{ fixed}}
-
-Toggles the fixed flag. Usually this flag is toggled at the same time as 
-{\it flushable}. This flag allows (when it has the false value) or forbids
-(when it has the true value) the stream buffer to resize dynamically the IO buffer.
-
-\wxheading{See also}
-
-\helpref{wxStreamBuffer::SetBufferIO}{wxstreambuffersetbufferio}
-
-\membersection{wxStreamBuffer::Flushable}\label{wxstreambufferflushable}
-
-\func{void}{Flushable}{\param{bool}{ flushable}}
-
-Toggles the flushable flag. If {\it flushable} is disabled, no data are sent
-to the parent stream.
-
-\membersection{wxStreamBuffer::FlushBuffer}\label{wxstreambufferflushbuffer}
-
-\func{bool}{FlushBuffer}{\void}
-
-Flushes the IO buffer.
-
-\membersection{wxStreamBuffer::FillBuffer}\label{wxstreambufferfillbuffer}
-
-\func{bool}{FillBuffer}{\void}
-
-Fill the IO buffer.
-
-\membersection{wxStreamBuffer::GetBufferSize}\label{wxstreambuffergetbuffersize}
-
-\constfunc{size\_t}{GetBufferSize}{\void}
-
-Returns the size of the buffer.
-
-\membersection{wxStreamBuffer::GetDataLeft}\label{wxstreambuffergetdataleft}
-
-\func{size\_t}{GetDataLeft}{\void}
-
-Returns the amount of available data in the buffer.
-
-% --------------
-% Administration
-% --------------
 \membersection{wxStreamBuffer::Stream}\label{wxstreambufferstream}
 
 \func{wxStreamBase*}{Stream}{\void}
 
 Returns the parent stream of the stream buffer.
+
+
+\membersection{wxStreamBuffer::Tell}\label{wxstreambuffertell}
+
+\constfunc{off\_t}{Tell}{\void}
+
+Gets the current position in the stream. This position is calculated from
+the {\it real} position in the stream and from the internal buffer position: so
+it gives you the position in the {\it real} stream counted from the start of
+the stream.
+
+\wxheading{Return value}
+
+Returns the current position in the stream if possible, wxInvalidOffset in the
+other case.
+
+
+\membersection{wxStreamBuffer::Truncate}\label{wxstreambuffertruncate}
+
+\func{void}{Truncate}{\void}
+
+Truncates the buffer to the current position.
+
+Note: Truncate() cannot be used to enlarge the buffer. This is
+usually not needed since the buffer expands automatically.
+
+
+\membersection{wxStreamBuffer::Write}\label{wxstreambufferwrite}
+
+\func{size\_t}{Write}{\param{const void *}{buffer}, \param{size\_t }{size}}
+
+Writes a block of the specified {\it size} using data of {\it buffer}. The data
+are cached in a buffer before being sent in one block to the stream.
+
+\func{size\_t}{Write}{\param{wxStreamBuffer *}{buffer}}
+
+See \helpref{Read}{wxstreambufferread}.
 
