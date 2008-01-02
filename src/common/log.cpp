@@ -320,7 +320,6 @@ unsigned wxLog::LogLastRepeatIfNeededUnlocked()
 
 wxLog::~wxLog()
 {
-    LogLastRepeatIfNeeded();
 }
 
 /* static */
@@ -502,7 +501,7 @@ void wxLog::DoLogString(const wxChar *WXUNUSED(szString), time_t WXUNUSED(t))
 
 void wxLog::Flush()
 {
-    // nothing to do here
+    LogLastRepeatIfNeeded();
 }
 
 /*static*/ bool wxLog::IsAllowedTraceMask(const wxChar *mask)
