@@ -23,6 +23,10 @@
 
 #include "wx/utils.h"
 
+#include "wx/beforestd.h"
+#include <new> // for placement new
+#include "wx/afterstd.h"
+
 template<typename T>
 class wxVector
 {
@@ -47,7 +51,13 @@ public:
 
     void clear()
     {
-        delete[] m_values;
+        // call destructors of stored objects:
+        for ( size_type i = 0; i < m_size; i++ )
+        {
+            m_values[i].~value_type();
+        }
+
+        free(m_values);
         m_values = NULL;
         m_size = m_capacity = 0;
     }
@@ -60,7 +70,7 @@ public:
         // increase the size twice, unless we're already too big or unless
         // more is requested
         //
-        // NB: casts to size_t are needed to suppress mingw32 warnings about
+        // NB: casts to size_type are needed to suppress mingw32 warnings about
         //     mixing enums and ints in the same expression
         const size_type increment = m_size > 0
                                      ? wxMin(m_size, (size_type)ALLOC_MAX_SIZE)
@@ -68,16 +78,8 @@ public:
         if ( m_capacity + increment > n )
             n = m_capacity + increment;
 
-        value_type *mem = new value_type[n];
+        m_values = (value_type*)realloc(m_values, n * sizeof(value_type));
 
-        if ( m_values )
-        {
-            for ( size_type i = 0; i < m_size; ++i )
-                mem[i] = m_values[i];
-            delete[] m_values;
-        }
-
-        m_values = mem;
         m_capacity = n;
     }
 
@@ -105,7 +107,17 @@ public:
     void push_back(const value_type& v)
     {
         reserve(size() + 1);
-        m_values[m_size++] = v;
+
+        // use placement new to initialize new object in preallocated place in
+        // m_values and store 'v' in it:
+        void* const place = m_values + m_size;
+        new(place) value_type(v);
+
+        // only increase m_size if the ctor didn't throw an exception; notice
+        // that if it _did_ throw, everything is OK, because we only increased
+        // vector's capacity so far and possibly written some data to
+        // uninitialized memory at the end of m_values
+        m_size++;
     }
 
     void pop_back()
@@ -139,16 +151,50 @@ public:
 
     iterator insert(iterator it, const value_type& v = value_type())
     {
-        size_t idx = it - begin();
+        // NB: this must be done before reserve(), because reserve()
+        //     invalidates iterators!
+        const size_t idx = it - begin();
+        const size_t after = end() - it;
 
         reserve(size() + 1);
 
-        // unless we're inserting at the end, move following values out of
+        // unless we're inserting at the end, move following elements out of
         // the way:
-        for ( size_t n = m_size; n != idx; --n )
-            m_values[n] = m_values[n-1];
+        if ( after > 0 )
+        {
+            memmove(m_values + idx + 1,
+                    m_values + idx,
+                    after * sizeof(value_type));
+        }
 
-        m_values[idx] = v;
+#if wxUSE_EXCEPTIONS
+        try
+        {
+#endif
+            // use placement new to initialize new object in preallocated place
+            // in m_values and store 'v' in it:
+            void* const place = m_values + idx;
+            new(place) value_type(v);
+#if wxUSE_EXCEPTIONS
+        }
+        catch ( ... )
+        {
+            // if the ctor threw an exception, we need to move all the elements
+            // back to their original positions in m_values
+            if ( after > 0 )
+            {
+                memmove(m_values + idx,
+                        m_values + idx + 1,
+                        after * sizeof(value_type));
+            }
+
+            throw; // rethrow the exception
+        }
+#endif // wxUSE_EXCEPTIONS
+
+        // increment m_size only if ctor didn't throw -- if it did, we'll be
+        // left with m_values larger than necessary, but number of elements will
+        // be the same
         m_size++;
 
         return begin() + idx;
@@ -165,20 +211,25 @@ public:
             return first;
         wxASSERT( first < end() && last <= end() );
 
-        size_type index = first - begin();
-        size_type count = last - first;
+        const size_type idx = first - begin();
+        const size_type count = last - first;
+        const size_type after = end() - last;
 
-        // move the remaining values over to the freed space:
-        for ( iterator i = last; i < end(); ++i )
-            *(i - count) = *i;
+        // erase elements by calling their destructors:
+        for ( iterator i = first; i < last; ++i )
+            i->~value_type();
 
-        // erase items behind the new end of m_values:
-        for ( iterator j = end() - count; j < end(); ++j )
-            *j = value_type();
+        // once that's done, move following elements over to the freed space:
+        if ( after > 0 )
+        {
+            memmove(m_values + idx,
+                    m_values + idx + count,
+                    after * sizeof(value_type));
+        }
 
         m_size -= count;
 
-        return begin() + index;
+        return begin() + idx;
     }
 
 #if WXWIN_COMPATIBILITY_2_8
