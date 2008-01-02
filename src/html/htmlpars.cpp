@@ -564,13 +564,13 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
         const wxStringCharType *ent_s = entity.wx_str();
         const wxStringCharType *format;
 
-        if (ent_s[1] == wxSTRING_TEXT('x') || ent_s[1] == wxSTRING_TEXT('X'))
+        if (ent_s[1] == wxS('x') || ent_s[1] == wxS('X'))
         {
-            format = wxSTRING_TEXT("%x");
+            format = wxS("%x");
             ent_s++;
         }
         else
-            format = wxSTRING_TEXT("%u");
+            format = wxS("%u");
         ent_s++;
 
         if (wxSscanf(ent_s, format, &code) != 1)
@@ -580,7 +580,7 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
     {
         // store the literals in wx's internal representation (either char*
         // in UTF-8 or wchar_t*) for best performance:
-        #define ENTITY(name, code) { wxSTRING_TEXT(name), code }
+        #define ENTITY(name, code) { wxS(name), code }
 
         static wxHtmlEntityInfo substitutions[] = {
             ENTITY("AElig", 198),

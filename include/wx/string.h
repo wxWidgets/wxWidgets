@@ -78,14 +78,6 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 #define   wxMBSTRINGCAST (char *)(const char *)
 #define   wxWCSTRINGCAST (wchar_t *)(const wchar_t *)
 
-// like _T(), but for literals in wxString's internal representation, i.e.
-// char* in UTF-8 build and wxChar* otherwise:
-#if wxUSE_UNICODE_UTF8
-    #define wxSTRING_TEXT(str) str
-#else
-    #define wxSTRING_TEXT(str) _T(str)
-#endif
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------

@@ -69,8 +69,8 @@ bool wxIsCDATAElement(const wxChar *tag)
 
 bool wxIsCDATAElement(const wxString& tag)
 {
-    return (wxStrcmp(tag.wx_str(), wxSTRING_TEXT("SCRIPT")) == 0) ||
-           (wxStrcmp(tag.wx_str(), wxSTRING_TEXT("STYLE")) == 0);
+    return (wxStrcmp(tag.wx_str(), wxS("SCRIPT")) == 0) ||
+           (wxStrcmp(tag.wx_str(), wxS("STYLE")) == 0);
 }
 
 wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
@@ -472,8 +472,8 @@ bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
     // handle colours defined in HTML 4.0 first:
     if (str.length() > 1 && str[0] != _T('#'))
     {
-        #define HTML_COLOUR(name, r, g, b)                        \
-            if (str.IsSameAs(wxSTRING_TEXT(name), false))         \
+        #define HTML_COLOUR(name, r, g, b)              \
+            if (str.IsSameAs(wxS(name), false))         \
                 { clr->Set(r, g, b); return true; }
         HTML_COLOUR("black",   0x00,0x00,0x00)
         HTML_COLOUR("silver",  0xC0,0xC0,0xC0)
