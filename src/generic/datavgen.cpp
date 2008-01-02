@@ -137,17 +137,17 @@ public:
     // called when any column setting is changed and/or changed
     // the column count
     virtual void UpdateDisplay();
-    
+
     virtual void OnInternalIdle();
 
     // called Refresh afterwards
     virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL);
-    
-    virtual bool CanApplyThemeBorder() const { return false; }
+
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
 protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-    
+
     virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
 
     wxSize DoGetBestSize() const;
@@ -156,7 +156,7 @@ protected:
 
     wxDataViewColumn *GetColumnFromHeader(NMHEADER *nmHDR)
         { return GetColumn(GetColumnIdxFromHeader(nmHDR)); }
-        
+
     int   m_scrollOffsetX;
     int   m_buttonHeight;
     bool  m_delayedUpdate;
@@ -748,7 +748,7 @@ bool wxDataViewTextRendererAttr::Render( wxRect cell, wxDC *dc, int WXUNUSED(sta
             colour = dc->GetTextForeground();
             dc->SetTextForeground( m_attr.GetColour() );
         }
-        
+
         if (m_attr.GetBold() || m_attr.GetItalic())
         {
              font = dc->GetFont();
@@ -760,22 +760,22 @@ bool wxDataViewTextRendererAttr::Render( wxRect cell, wxDC *dc, int WXUNUSED(sta
              dc->SetFont( myfont );
         }
     }
-    
+
     dc->DrawText( m_text, cell.x, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
-    
+
     // restore dc
     if (m_hasAttr)
     {
         if (m_attr.HasColour())
             dc->SetTextForeground( colour );
-            
+
         if (m_attr.GetBold() || m_attr.GetItalic())
             dc->SetFont( font );
     }
-    
+
     return true;
 }
-        
+
 
 // ---------------------------------------------------------
 // wxDataViewBitmapRenderer
@@ -1300,10 +1300,10 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     // create the native WC_HEADER window:
     WXHWND hwndParent = (HWND)parent->GetHandle();
     WXDWORD msStyle = WS_CHILD | HDS_DRAGDROP | HDS_BUTTONS | HDS_HORZ | HDS_HOTTRACK | HDS_FULLDRAG;
-    
+
     if ( m_isShown )
         msStyle |= WS_VISIBLE;
-    
+
     m_hWnd = CreateWindowEx(0,
                             WC_HEADER,
                             (LPCTSTR) NULL,
@@ -1326,7 +1326,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     // the following is required to get the default win's font for
     // header windows and must be done befor sending the HDM_LAYOUT msg
     SetFont(GetFont());
-    
+
     return true;
 }
 
@@ -1475,7 +1475,7 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
                m_delayedUpdate = true;
             }
             break;
-            
+
         case HDN_ITEMCHANGING:
             if (nmHDR->pitem != NULL &&
                 (nmHDR->pitem->mask & HDI_WIDTH) != 0)
@@ -1599,7 +1599,7 @@ void wxDataViewHeaderWindowMSW::ScrollWindow(int dx, int WXUNUSED(dy),
                                              const wxRect * WXUNUSED(rect))
 {
     m_scrollOffsetX += dx;
-    
+
     GetParent()->Layout();
 }
 
@@ -1964,6 +1964,8 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     SetBackgroundColour( *wxWHITE );
 
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+
     m_penRule = wxPen(GetRuleColour(), 1, wxSOLID);
 
     //Here I compose a pen can draw black lines, maybe there are something system colour to use
@@ -2130,7 +2132,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxVariant value;
             wxDataViewTreeNode *node = NULL;
             wxDataViewItem dataitem;
-            
+
             if (m_root)
             {
                 node = GetTreeNodeByRow(item);
@@ -2149,7 +2151,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
-            
+
             if (cell->GetWantsAttr())
             {
                 wxDataViewItemAttr attr;
@@ -2167,7 +2169,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             if ((m_root) && (col == expander))
             {
                 indent = node->GetIndentLevel();
-                
+
                 //Calculate the indent first
                 indent = cell_rect.x + GetOwner()->GetIndent() * indent;
 
@@ -2195,7 +2197,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                      // I am wondering whether we should draw dot lines between tree nodes
                      if (node)
                          delete node;
-                     // Yes, if the node does not have any child, it must be a leaf which 
+                     // Yes, if the node does not have any child, it must be a leaf which
                      // mean that it is a temporarily created by GetTreeNodeByRow
                 }
 
@@ -2364,7 +2366,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         UpdateDisplay();
         return true;
     }
-    
+
     SortPrepare();
 
     wxDataViewTreeNode * node;
@@ -2405,7 +2407,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
             m_currentRow = m_count - 1;
 
         m_selection.Empty();
-        
+
         UpdateDisplay();
 
         return true;
@@ -2517,10 +2519,10 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 bool wxDataViewMainWindow::Cleared()
 {
     DestroyTree();
-    
+
     SortPrepare();
     BuildTree( GetOwner()->GetModel() );
-    
+
     UpdateDisplay();
 
     return true;
@@ -3914,7 +3916,7 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
     model->AddNotifier( m_notifier );
 
     m_clientArea->DestroyTree();
-    
+
     m_clientArea->BuildTree(model);
 
     m_clientArea->UpdateDisplay();
@@ -3986,7 +3988,7 @@ void wxDataViewCtrl::ColumnMoved( wxDataViewColumn* col, unsigned int new_pos )
     if (new_pos > m_cols.GetCount()) return;
     m_cols.DeleteObject( col );
     m_cols.Insert( new_pos, col );
-    
+
     m_clientArea->UpdateDisplay();
 }
 
