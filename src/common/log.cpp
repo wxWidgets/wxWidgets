@@ -490,7 +490,17 @@ unsigned wxLog::LogLastRepeatIfNeededUnlocked()
 
 wxLog::~wxLog()
 {
-    LogLastRepeatIfNeeded();
+    // Flush() must be called before destroying the object as otherwise some
+    // messages could be lost
+    if ( ms_prevCounter )
+    {
+        wxMessageOutputDebug().Printf
+        (
+            wxS("Last repeated message (\"%s\", %lu times) wasn't output"),
+            ms_prevString,
+            ms_prevCounter
+        );
+    }
 }
 
 /* static */
@@ -705,7 +715,7 @@ void wxLog::DoLogString(const wxString& szString, time_t t)
 
 void wxLog::Flush()
 {
-    // nothing to do here
+    LogLastRepeatIfNeeded();
 }
 
 /*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
