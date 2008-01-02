@@ -308,9 +308,13 @@ protected:
     // log a message indicating the number of times the previous message was
     // repeated if ms_prevCounter > 0, does nothing otherwise; return the old
     // value of ms_prevCounter
-    unsigned LogLastRepetitionCountIfNeeded();
+    unsigned LogLastRepeatIfNeeded();
 
 private:
+    // implement of LogLastRepeatIfNeeded(): it assumes that the
+    // caller had already locked ms_prevCS
+    unsigned LogLastRepeatIfNeededUnlocked();
+
     // static variables
     // ----------------
 

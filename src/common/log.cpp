@@ -457,10 +457,15 @@ void WXDLLIMPEXP_BASE wxVLogSysError(unsigned long err, const wxString& format, 
 // wxLog class implementation
 // ----------------------------------------------------------------------------
 
-unsigned wxLog::LogLastRepetitionCountIfNeeded()
+unsigned wxLog::LogLastRepeatIfNeeded()
 {
     wxCRIT_SECT_LOCKER(lock, ms_prevCS);
 
+    return LogLastRepeatIfNeededUnlocked();
+}
+
+unsigned wxLog::LogLastRepeatIfNeededUnlocked()
+{
     const unsigned count = ms_prevCounter;
 
     if ( ms_prevCounter )
@@ -485,7 +490,7 @@ unsigned wxLog::LogLastRepetitionCountIfNeeded()
 
 wxLog::~wxLog()
 {
-    LogLastRepetitionCountIfNeeded();
+    LogLastRepeatIfNeeded();
 }
 
 /* static */
@@ -509,7 +514,7 @@ void wxLog::OnLog(wxLogLevel level, const wxString& szString, time_t t)
                     return;
                 }
 
-                pLogger->LogLastRepetitionCountIfNeeded();
+                pLogger->LogLastRepeatIfNeededUnlocked();
 
                 // reset repetition counter for a new message
                 ms_prevString = szString;

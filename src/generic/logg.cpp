@@ -275,7 +275,7 @@ void wxLogGui::Flush()
     // do it right now to block any new calls to Flush() while we're here
     m_bHasMessages = false;
 
-    const unsigned repeatCount = LogLastRepetitionCountIfNeeded();
+    const unsigned repeatCount = LogLastRepeatIfNeeded();
 
     wxString appName = wxTheApp->GetAppDisplayName();
 
