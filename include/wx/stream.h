@@ -444,7 +444,7 @@ public:
     void *GetBufferStart() const { return m_buffer_start; }
     void *GetBufferEnd() const { return m_buffer_end; }
     void *GetBufferPos() const { return m_buffer_pos; }
-    size_t GetBufferSize() const { return m_buffer_size; }
+    size_t GetBufferSize() const { return m_buffer_end - m_buffer_start; }
     size_t GetIntPosition() const { return m_buffer_pos - m_buffer_start; }
     void SetIntPosition(size_t pos) { m_buffer_pos = m_buffer_start + pos; }
     size_t GetLastAccess() const { return m_buffer_end - m_buffer_start; }
@@ -459,7 +459,7 @@ public:
 
     // misc accessors
     wxStreamBase *GetStream() const { return m_stream; }
-    bool HasBuffer() const { return m_buffer_size != 0; }
+    bool HasBuffer() const { return m_buffer_start != m_buffer_end; }
 
     bool IsFixed() const { return m_fixed; }
     bool IsFlushable() const { return m_flushable; }
@@ -498,10 +498,6 @@ protected:
     char *m_buffer_start,
          *m_buffer_end,
          *m_buffer_pos;
-
-    // the buffer size
-    // FIXME: isn't it the same as m_buffer_end - m_buffer_start? (VZ)
-    size_t m_buffer_size;
 
     // the stream we're associated with
     wxStreamBase *m_stream;

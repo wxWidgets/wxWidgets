@@ -63,7 +63,6 @@ void wxStreamBuffer::InitBuffer()
     m_buffer_start =
     m_buffer_end =
     m_buffer_pos = NULL;
-    m_buffer_size = 0;
 
     // if we are going to allocate the buffer, we should free it later as well
     m_destroybuf = true;
@@ -106,7 +105,6 @@ wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
     m_buffer_start = buffer.m_buffer_start;
     m_buffer_end = buffer.m_buffer_end;
     m_buffer_pos = buffer.m_buffer_pos;
-    m_buffer_size = buffer.m_buffer_size;
     m_fixed = buffer.m_fixed;
     m_flushable = buffer.m_flushable;
     m_stream = buffer.m_stream;
@@ -156,8 +154,6 @@ void wxStreamBuffer::SetBufferIO(void *start,
     m_buffer_start = (char *)start;
     m_buffer_end   = m_buffer_start + len;
 
-    m_buffer_size = len;
-
     // if we own it, we free it
     m_destroybuf = takeOwnership;
 
@@ -195,7 +191,7 @@ void wxStreamBuffer::ResetBuffer()
 void wxStreamBuffer::Truncate()
 {
     size_t new_size = m_buffer_pos - m_buffer_start;
-    if ( new_size == m_buffer_size )
+    if ( m_buffer_pos == m_buffer_end )
         return;
 
     if ( !new_size )
@@ -209,8 +205,7 @@ void wxStreamBuffer::Truncate()
     wxCHECK_RET( new_size, _T("shrinking buffer shouldn't fail") );
 
     m_buffer_start = new_start;
-    m_buffer_size = new_size;
-    m_buffer_end = m_buffer_start + m_buffer_size;
+    m_buffer_end = m_buffer_start + new_size;
     m_buffer_pos = m_buffer_end;
 }
 
@@ -223,7 +218,7 @@ bool wxStreamBuffer::FillBuffer()
     if ( !inStream )
         return false;
 
-    size_t count = inStream->OnSysRead(m_buffer_start, m_buffer_size);
+    size_t count = inStream->OnSysRead(GetBufferStart(), GetBufferSize());
     if ( !count )
         return false;
 
@@ -293,24 +288,26 @@ void wxStreamBuffer::PutToBuffer(const void *buffer, size_t size)
         else // !m_fixed
         {
             // realloc the buffer to have enough space for the data
-            size_t delta = m_buffer_pos - m_buffer_start;
-
-            char *startOld = m_buffer_start;
-            m_buffer_size += size;
-            m_buffer_start = (char *)realloc(m_buffer_start, m_buffer_size);
-            if ( !m_buffer_start )
+            if ( m_buffer_pos + size > m_buffer_end )
             {
-                // don't leak memory if realloc() failed
-                m_buffer_start = startOld;
-                m_buffer_size -= size;
+                size_t delta = m_buffer_pos - m_buffer_start;
+                size_t new_size = delta + size;
 
-                // what else can we do?
-                return;
-            }
+                char *startOld = m_buffer_start;
+                m_buffer_start = (char *)realloc(m_buffer_start, new_size);
+                if ( !m_buffer_start )
+                {
+                    // don't leak memory if realloc() failed
+                    m_buffer_start = startOld;
 
-            // adjust the pointers invalidated by realloc()
-            m_buffer_pos = m_buffer_start + delta;
-            m_buffer_end = m_buffer_start + m_buffer_size;
+                    // what else can we do?
+                    return;
+                }
+
+                // adjust the pointers invalidated by realloc()
+                m_buffer_pos = m_buffer_start + delta;
+                m_buffer_end = m_buffer_start + new_size;
+            } // else: the buffer is big enough
         }
     }
 
