@@ -3309,10 +3309,20 @@ void wxListMainWindow::MoveToItem(size_t item)
     }
     else // !report
     {
+        int sx = -1,
+            sy = -1;
+
         if (rect.x-view_x < 5)
-            Scroll( (rect.x - 5) / SCROLL_UNIT_X, -1 );
+            sx = (rect.x - 5) / SCROLL_UNIT_X;
         if (rect.x + rect.width - 5 > view_x + client_w)
-            Scroll( (rect.x + rect.width - client_w + SCROLL_UNIT_X) / SCROLL_UNIT_X, -1 );
+            sx = (rect.x + rect.width - client_w + SCROLL_UNIT_X) / SCROLL_UNIT_X;
+
+        if (rect.y-view_y < 5)
+            sy = (rect.y - 5) / hLine;
+        if (rect.y + rect.height - 5 > view_y + client_h)
+            sy = (rect.y + rect.height - client_h + hLine) / hLine;
+
+        Scroll(sx, sy);
     }
 }
 
