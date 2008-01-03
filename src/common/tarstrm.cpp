@@ -1083,12 +1083,12 @@ void wxTarOutputStream::Init(wxTarFormat format)
     m_extendedHdr = NULL;
     m_extendedSize = 0;
     m_lasterror = m_parent_o_stream->GetLastError();
+    m_endrecWritten = false;
 }
 
 wxTarOutputStream::~wxTarOutputStream()
 {
-    if (m_tarsize)
-        Close();
+    Close();
     delete m_hdr;
     delete m_hdr2;
     delete [] m_extendedHdr;
@@ -1207,9 +1207,9 @@ bool wxTarOutputStream::CloseEntry()
 
 bool wxTarOutputStream::Close()
 {
-    if (!CloseEntry())
+    if (!CloseEntry() || (m_tarsize == 0 && m_endrecWritten))
         return false;
-
+ 
     memset(m_hdr, 0, sizeof(*m_hdr));
     int count = (RoundUpSize(m_tarsize + 2 * TAR_BLOCKSIZE, m_BlockingFactor)
                     - m_tarsize) / TAR_BLOCKSIZE;
@@ -1219,6 +1219,7 @@ bool wxTarOutputStream::Close()
     m_tarsize = 0;
     m_tarstart = wxInvalidOffset;
     m_lasterror = m_parent_o_stream->GetLastError();
+    m_endrecWritten = true;
     return IsOk();
 }
 

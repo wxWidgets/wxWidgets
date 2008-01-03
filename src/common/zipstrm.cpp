@@ -1463,11 +1463,13 @@ bool wxZipInputStream::LoadEndRecord()
     m_TotalEntries = endrec.GetTotalEntries();
     m_Comment = endrec.GetComment();
 
+    wxUint32 magic = m_TotalEntries ? CENTRAL_MAGIC : END_MAGIC;
+
     // Now find the central-directory. we have the file offset of
     // the CD, so look there first.
     if (m_parent_i_stream->SeekI(endrec.GetOffset()) != wxInvalidOffset &&
-            ReadSignature() == CENTRAL_MAGIC) {
-        m_signature = CENTRAL_MAGIC;
+            ReadSignature() == magic) {
+        m_signature = magic;
         m_position = endrec.GetOffset();
         m_offsetAdjustment = 0;
         return true;
@@ -1477,8 +1479,8 @@ bool wxZipInputStream::LoadEndRecord()
     // to a self extractor, so take the CD size (also in endrec), subtract
     // it from the file offset of the end-central-directory and look there.
     if (m_parent_i_stream->SeekI(endPos - endrec.GetSize())
-            != wxInvalidOffset && ReadSignature() == CENTRAL_MAGIC) {
-        m_signature = CENTRAL_MAGIC;
+            != wxInvalidOffset && ReadSignature() == magic) {
+        m_signature = magic;
         m_position = endPos - endrec.GetSize();
         m_offsetAdjustment = m_position - endrec.GetOffset();
         return true;
@@ -1988,6 +1990,7 @@ void wxZipOutputStream::Init(int level)
     m_comp = NULL;
     m_level = level;
     m_offsetAdjustment = wxInvalidOffset;
+    m_endrecWritten = false;
 }
 
 wxZipOutputStream::~wxZipOutputStream()
@@ -2287,7 +2290,9 @@ bool wxZipOutputStream::Close()
 {
     CloseEntry();
 
-    if (m_lasterror == wxSTREAM_WRITE_ERROR) {
+    if (m_lasterror == wxSTREAM_WRITE_ERROR
+        || (m_entries.size() == 0 && m_endrecWritten))
+    {
         wxFilterOutputStream::Close();
         return false;
     }
@@ -2312,6 +2317,7 @@ bool wxZipOutputStream::Close()
     endrec.Write(*m_parent_o_stream, GetConv());
 
     m_lasterror = m_parent_o_stream->GetLastError();
+    m_endrecWritten = true;
     
     if (!wxFilterOutputStream::Close() || !IsOk())
         return false;
