@@ -1088,8 +1088,8 @@ bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 
 IMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDCImpl, wxDCImpl)
 
-wxGtkPrinterDCImpl::wxGtkPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& data ) :
-   wxDCImpl( owner )
+wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& data)
+                  : wxDCImpl( owner )
 {
     m_printData = data;
 
@@ -2251,25 +2251,51 @@ int wxGtkPrinterDCImpl::GetResolution()
 IMPLEMENT_CLASS(wxGtkPrintPreview, wxPrintPreviewBase)
 
 void wxGtkPrintPreview::Init(wxPrintout * WXUNUSED(printout),
-                                    wxPrintout * WXUNUSED(printoutForPrinting))
+                             wxPrintout * WXUNUSED(printoutForPrinting),
+                             wxPrintData *data)
 {
     DetermineScaling();
+
+    // convert wxPrintQuality to resolution (input pointer can be NULL)
+    wxPrintQuality quality = data ? data->GetQuality() : wxPRINT_QUALITY_MEDIUM;
+    switch ( quality )
+    {
+        case wxPRINT_QUALITY_HIGH:
+            m_resolution = 1200;
+            break;
+
+        default:
+            wxFAIL_MSG( "unknown print quality" );
+            // fall through
+
+        case wxPRINT_QUALITY_MEDIUM:
+            m_resolution = 600;
+            break;
+
+        case wxPRINT_QUALITY_LOW:
+            m_resolution = 300;
+            break;
+
+        case wxPRINT_QUALITY_DRAFT:
+            m_resolution = 150;
+            break;
+    }
 }
 
 wxGtkPrintPreview::wxGtkPrintPreview(wxPrintout *printout,
-                                                   wxPrintout *printoutForPrinting,
-                                                   wxPrintDialogData *data)
-                        : wxPrintPreviewBase(printout, printoutForPrinting, data)
+                                     wxPrintout *printoutForPrinting,
+                                     wxPrintDialogData *data)
+                 : wxPrintPreviewBase(printout, printoutForPrinting, data)
 {
-    Init(printout, printoutForPrinting);
+    Init(printout, printoutForPrinting, data ? &data->GetPrintData() : NULL);
 }
 
 wxGtkPrintPreview::wxGtkPrintPreview(wxPrintout *printout,
-                                                   wxPrintout *printoutForPrinting,
-                                                   wxPrintData *data)
-                        : wxPrintPreviewBase(printout, printoutForPrinting, data)
+                                     wxPrintout *printoutForPrinting,
+                                     wxPrintData *data)
+                 : wxPrintPreviewBase(printout, printoutForPrinting, data)
 {
-    Init(printout, printoutForPrinting);
+    Init(printout, printoutForPrinting, data);
 }
 
 wxGtkPrintPreview::~wxGtkPrintPreview()
@@ -2301,15 +2327,13 @@ void wxGtkPrintPreview::DetermineScaling()
         m_previewPrintout->SetPPIScreen( (int) ((ScreenPixels.GetWidth() * 25.4) / ScreenMM.GetWidth()),
                                          (int) ((ScreenPixels.GetHeight() * 25.4) / ScreenMM.GetHeight()) );
 
-        // TODO !!!!!!!!!!!!!!!      
-        int resolution = 600;
-        m_previewPrintout->SetPPIPrinter( resolution, resolution );
+        m_previewPrintout->SetPPIPrinter( m_resolution, m_resolution );
 
         // Get width and height in points (1/72th of an inch)
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
 
-        sizeDevUnits.x = wxRound((double)sizeDevUnits.x * (double)resolution / 72.0);
-        sizeDevUnits.y = wxRound((double)sizeDevUnits.y * (double)resolution / 72.0);
+        sizeDevUnits.x = wxRound((double)sizeDevUnits.x * (double)m_resolution / 72.0);
+        sizeDevUnits.y = wxRound((double)sizeDevUnits.y * (double)m_resolution / 72.0);
         wxSize sizeTenthsMM(paper->GetSize());
         wxSize sizeMM(sizeTenthsMM.x / 10, sizeTenthsMM.y / 10);
 
@@ -2330,7 +2354,7 @@ void wxGtkPrintPreview::DetermineScaling()
         m_previewPrintout->SetPaperRectPixels(wxRect(0, 0, m_pageWidth, m_pageHeight));
 
         // At 100%, the page should look about page-size on the screen.
-        m_previewScaleX = 0.8 * 72.0 / (double)resolution;
+        m_previewScaleX = 0.8 * 72.0 / (double)m_resolution;
         m_previewScaleY = m_previewScaleX;
     }
 }

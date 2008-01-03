@@ -332,11 +332,16 @@ public:
     virtual void DetermineScaling();
 
 private:
-    void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);
+    void Init(wxPrintout *printout,
+              wxPrintout *printoutForPrinting,
+              wxPrintData *data);
+
+    // resolution to use in DPI
+    int m_resolution;
 
     DECLARE_CLASS(wxGtkPrintPreview)
 };
 
-#endif
+#endif // wxUSE_GTKPRINT
 
-#endif
+#endif // _WX_GTK_PRINT_H_
