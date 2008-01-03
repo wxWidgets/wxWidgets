@@ -201,8 +201,29 @@ wxCursor::wxCursor( const wxImage & image )
         return;
     }
 
+    unsigned long keyMaskColor = 0;
+    GdkPixmap* mask;
+    if (bHasMask)
+    {
+        keyMaskColor = wxImageHistogram::MakeKey(
+            image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
+        // get mask before image is modified
+        wxBitmap bitmap(image, 1);
+        mask = bitmap.GetMask()->GetBitmap();
+        g_object_ref(mask);
+    }
+    else
+    {
+        const int size = ((w + 7) / 8) * h;
+        char* bits = new char[size];
+        memset(bits, 0xff, size);
+        mask = gdk_bitmap_create_from_data(
+            wxGetRootWindow()->window, bits, w, h);
+        delete[] bits;
+    }
+
     // modify image so wxBitmap can be used to convert to pixmap
-    image_copy.UnShare();
+    image_copy.SetMask(false);
     int i, j;
     wxByte* data = image_copy.GetData();
     for (j = 0; j < h; j++)
@@ -219,27 +240,7 @@ wxCursor::wxCursor( const wxImage & image )
             }
         }
     }
-
     wxBitmap bitmap(image_copy, 1);
-
-    unsigned long keyMaskColor = 0;
-    GdkPixmap* mask;
-    if (bHasMask)
-    {
-        keyMaskColor = wxImageHistogram::MakeKey(
-            image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
-        mask = bitmap.GetMask()->GetBitmap();
-        g_object_ref(mask);
-    }
-    else
-    {
-        const int size = ((w + 7) / 8) * h;
-        char* bits = new char[size];
-        memset(bits, 0xff, size);
-        mask = gdk_bitmap_create_from_data(
-            bitmap.GetPixmap(), bits, w, h);
-        delete[] bits;
-    }
 
     // find the most frequent color(s)
     wxImageHistogram histogram;
