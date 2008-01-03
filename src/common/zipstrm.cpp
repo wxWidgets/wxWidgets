@@ -2287,7 +2287,7 @@ bool wxZipOutputStream::Close()
 {
     CloseEntry();
 
-    if (m_lasterror == wxSTREAM_WRITE_ERROR) {
+    if (m_lasterror == wxSTREAM_WRITE_ERROR || m_entries.size() == 0) {
         wxFilterOutputStream::Close();
         return false;
     }
