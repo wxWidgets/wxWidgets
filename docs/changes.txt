@@ -118,8 +118,7 @@ All (Unix):
 wxMSW:
 
 - Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse)
-
-wxGTK:
+- Fix setting icons when they have non-default (16*16 and 32*32) sizes
 
 
 

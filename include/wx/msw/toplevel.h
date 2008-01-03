@@ -180,6 +180,11 @@ protected:
 #endif // __SMARTPHONE__ && __WXWINCE__
 
 private:
+    // helper of SetIcons(): calls gets the icon with the size specified by the
+    // given system metrics (SM_C{X|Y}[SM]ICON) from the bundle and sets it
+    // using WM_SETICON with the specified wParam (ICOM_SMALL or ICON_BIG)
+    void DoSelectAndSetIcon(const wxIconBundle& icons, int smX, int smY, int i);
+
 
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     void* m_activateInfo;
