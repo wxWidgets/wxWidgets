@@ -43,7 +43,7 @@
 
     #include <stdlib.h>
     #ifndef _CRTBLD
-        // Need when builded with pure MS SDK
+        // Needed when building with pure MS SDK
         #define _CRTBLD
     #endif
 
@@ -54,7 +54,7 @@
 
     // this define works around a bug with inline declarations of new, see
     //
-    //      http://support.microsoft.com/support/kb/articles/Q140/8/58.asp
+    //      http://support.microsoft.com/kb/q140858/
     //
     // for the details
     #define new  WXDEBUG_NEW
