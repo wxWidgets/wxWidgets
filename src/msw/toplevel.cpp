@@ -965,25 +965,26 @@ wxString wxTopLevelWindowMSW::GetTitle() const
     return GetLabel();
 }
 
+void wxTopLevelWindowMSW::DoSelectAndSetIcon(const wxIconBundle& icons,
+                                             int smX,
+                                             int smY,
+                                             int i)
+{
+    const wxSize size(::GetSystemMetrics(smX), ::GetSystemMetrics(smY));
+
+    const wxIcon icon = icons.GetIconOfExactSize(size);
+    if ( icon.Ok() )
+    {
+        ::SendMessage(GetHwnd(), WM_SETICON, i, (LPARAM)GetHiconOf(icon));
+    }
+}
+
 void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 {
     wxTopLevelWindowBase::SetIcons(icons);
 
-#if !defined(__WXMICROWIN__)
-    const wxIcon& sml = icons.GetIconOfExactSize(16);
-    if( sml.Ok() )
-    {
-        ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_SMALL,
-                       (LPARAM)GetHiconOf(sml) );
-    }
-
-    const wxIcon& big = icons.GetIconOfExactSize(32);
-    if( big.Ok() )
-    {
-        ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_BIG,
-                       (LPARAM)GetHiconOf(big) );
-    }
-#endif // !__WXMICROWIN__
+    DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
+    DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG);
 }
 
 bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)

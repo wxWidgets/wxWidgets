@@ -312,6 +312,7 @@ All (GUI):
 wxMSW:
 
 - Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse)
+- Fix setting icons when they have non-default (16*16 and 32*32) sizes
 
 
 2.8.7
