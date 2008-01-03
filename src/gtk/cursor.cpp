@@ -74,6 +74,7 @@ wxCursor::wxCursor( int cursorId )
                                                                     &color,
                                                                     &color,
                                                                     0, 0);
+                g_object_unref(pixmap);
             }
             return;
 
