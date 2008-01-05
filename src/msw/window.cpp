@@ -6099,10 +6099,18 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
             break;
 
         default:
-            if ( isVirtual )
-                *isVirtual = false;
-            vk = (WXWORD)wxk;
-            break;
+            // check to see if its one of the OEM key codes.
+            BYTE vks = LOBYTE(VkKeyScan(wxk));
+            if ( vks != -1 )
+            {
+                vk = vks;
+            }
+            else
+            {
+                if ( isVirtual )
+                    *isVirtual = false;
+                vk = (WXWORD)wxk;
+            }
     }
 
     return vk;
