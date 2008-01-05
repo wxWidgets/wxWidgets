@@ -261,15 +261,24 @@ bool wxGtkPrintNativeData::TransferTo( wxPrintData &data )
     if(!m_config)
         return false;
 
-    GtkPrintQuality quality = gtk_print_settings_get_quality(m_config);
-    if (quality == GTK_PRINT_QUALITY_HIGH)
-        data.SetQuality(wxPRINT_QUALITY_HIGH);
-    else if (quality == GTK_PRINT_QUALITY_LOW)
-        data.SetQuality(wxPRINT_QUALITY_LOW);
-    else if (quality == GTK_PRINT_QUALITY_DRAFT)
-        data.SetQuality(wxPRINT_QUALITY_DRAFT);
-    else
-        data.SetQuality(wxPRINT_QUALITY_MEDIUM);
+    int resolution = gtk_print_settings_get_resolution(m_config);
+    if ( resolution > 0 )
+    {
+        // if resolution is explicitly set, use it
+        data.SetQuality(resolution);
+    }
+    else // use more vague "quality"
+    {
+        GtkPrintQuality quality = gtk_print_settings_get_quality(m_config);
+        if (quality == GTK_PRINT_QUALITY_HIGH)
+            data.SetQuality(wxPRINT_QUALITY_HIGH);
+        else if (quality == GTK_PRINT_QUALITY_LOW)
+            data.SetQuality(wxPRINT_QUALITY_LOW);
+        else if (quality == GTK_PRINT_QUALITY_DRAFT)
+            data.SetQuality(wxPRINT_QUALITY_DRAFT);
+        else
+            data.SetQuality(wxPRINT_QUALITY_MEDIUM);
+    }
 
     data.SetNoCopies(gtk_print_settings_get_n_copies(m_config));
 
@@ -891,6 +900,12 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
 {
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
     wxGtkPrintNativeData *native = (wxGtkPrintNativeData*) printdata.GetNativeData();
+
+    // We need to update printdata with the new data from the dialog and we
+    // have to do this here because this method needs this new data and we
+    // cannot update it earlier
+    native->SetPrintConfig(gtk_print_operation_get_print_settings(operation));
+    printdata.ConvertFromNative();
 
     SetPrintContext(context);
     native->SetPrintContext( context );
