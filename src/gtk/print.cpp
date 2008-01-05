@@ -2269,8 +2269,6 @@ void wxGtkPrintPreview::Init(wxPrintout * WXUNUSED(printout),
                              wxPrintout * WXUNUSED(printoutForPrinting),
                              wxPrintData *data)
 {
-    DetermineScaling();
-
     // convert wxPrintQuality to resolution (input pointer can be NULL)
     wxPrintQuality quality = data ? data->GetQuality() : wxPRINT_QUALITY_MEDIUM;
     switch ( quality )
@@ -2283,10 +2281,6 @@ void wxGtkPrintPreview::Init(wxPrintout * WXUNUSED(printout),
             wxFAIL_MSG( "unknown print quality" );
             // fall through
 
-        case wxPRINT_QUALITY_MEDIUM:
-            m_resolution = 600;
-            break;
-
         case wxPRINT_QUALITY_LOW:
             m_resolution = 300;
             break;
@@ -2294,7 +2288,25 @@ void wxGtkPrintPreview::Init(wxPrintout * WXUNUSED(printout),
         case wxPRINT_QUALITY_DRAFT:
             m_resolution = 150;
             break;
+
+        default:
+            if ( quality > 0 )
+            {
+                // positive values directly indicate print resolution
+                m_resolution = quality;
+                break;
+            }
+
+            wxFAIL_MSG( "unknown print quality" );
+            // fall through
+
+        case wxPRINT_QUALITY_MEDIUM:
+            m_resolution = 600;
+            break;
+
     }
+
+    DetermineScaling();
 }
 
 wxGtkPrintPreview::wxGtkPrintPreview(wxPrintout *printout,
