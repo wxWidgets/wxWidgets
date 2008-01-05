@@ -136,12 +136,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
 // global variables
 // ----------------------------------------------------------------------------
 
-// To put pending event handlers
-wxList *wxPendingEvents = (wxList *)NULL;
+// List containing event handlers with pending events (each handler can occur
+// at most once here)
+wxList *wxPendingEvents = NULL;
 
 #if wxUSE_THREADS
     // protects wxPendingEvents list
-    wxCriticalSection *wxPendingEventsLocker = (wxCriticalSection *)NULL;
+    wxCriticalSection *wxPendingEventsLocker = NULL;
 #endif
 
 // common event types are defined here, other event types are defined by the
@@ -1067,22 +1068,27 @@ wxEvtHandler::~wxEvtHandler()
         m_pendingEvents->DeleteContents(true);
     delete m_pendingEvents;
 
-#if wxUSE_THREADS
 #  if !defined(__VISAGECPP__)
     delete m_eventsLocker;
 #  endif
 
     // Remove us from wxPendingEvents if necessary.
-    if(wxPendingEventsLocker)
-        wxENTER_CRIT_SECT(*wxPendingEventsLocker);
     if ( wxPendingEvents )
     {
-        // Delete all occurences of this from the list of pending events
-        while (wxPendingEvents->DeleteObject(this)) { } // Do nothing
+        if(wxPendingEventsLocker)
+            wxENTER_CRIT_SECT(*wxPendingEventsLocker);
+
+        if ( wxPendingEvents->DeleteObject(this) )
+        {
+            // check that we were present only once in the list
+            wxASSERT_MSG( !wxPendingEvents->Find(this),
+                          "Handler occurs twice in wxPendingEvents list" );
+        }
+        //else: we weren't in this list at all, it's ok
+
+        if(wxPendingEventsLocker)
+            wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
     }
-    if(wxPendingEventsLocker)
-        wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
-#endif
 
     // we only delete object data, not untyped
     if ( m_clientDataType == wxClientData_Object )
@@ -1139,7 +1145,8 @@ void wxEvtHandler::AddPendingEvent(const wxEvent& event)
 
     if ( !wxPendingEvents )
         wxPendingEvents = new wxList;
-    wxPendingEvents->Append(this);
+    if ( !wxPendingEvents->Find(this) )
+        wxPendingEvents->Append(this);
 
     wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
 
@@ -1150,43 +1157,35 @@ void wxEvtHandler::AddPendingEvent(const wxEvent& event)
 
 void wxEvtHandler::ProcessPendingEvents()
 {
-    // this method is only called by wxApp if this handler does have
-    // pending events
-    wxCHECK_RET( m_pendingEvents,
-                 wxT("Please call wxApp::ProcessPendingEvents() instead") );
-
     wxENTER_CRIT_SECT( Lock() );
 
-    // we leave the loop once we have processed all events that were present at
-    // the start of ProcessPendingEvents because otherwise we could get into
-    // infinite loop if the pending event handler execution resulted in another
-    // event being posted
-    size_t n = m_pendingEvents->size();
-    for ( wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
-          node;
-          node = m_pendingEvents->GetFirst() )
-    {
-        wxEvent *event = (wxEvent *)node->GetData();
+    // this method is only called by wxApp if this handler does have
+    // pending events
+    wxCHECK_RET( m_pendingEvents && !m_pendingEvents->IsEmpty(),
+                 "should have pending events if called" );
 
-        // It's importan we remove event from list before processing it.
-        // Else a nested event loop, for example from a modal dialog, might
-        // process the same event again.
+    wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
+    wxEvent * const event = wx_static_cast(wxEvent *, node->GetData());
 
-        m_pendingEvents->Erase(node);
+    // it's important we remove event from list before processing it, else a
+    // nested event loop, for example from a modal dialog, might process the
+    // same event again.
+    m_pendingEvents->Erase(node);
 
-        wxLEAVE_CRIT_SECT( Lock() );
-
-        ProcessEvent(*event);
-
-        delete event;
-
-        wxENTER_CRIT_SECT( Lock() );
-
-        if ( --n == 0 )
-            break;
-    }
+    // if there are no more pending events left, we don't need to stay in this
+    // list
+    if ( m_pendingEvents->IsEmpty() )
+        wxPendingEvents->DeleteObject(this);
 
     wxLEAVE_CRIT_SECT( Lock() );
+
+    ProcessEvent(*event);
+
+    // careful: this object could have been deleted by the event handler
+    // executed by the above ProcessEvent() call, so we can't access any fields
+    // of this object any more
+
+    delete event;
 }
 
 /*
