@@ -154,7 +154,7 @@ static void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags
                      rect.height );
 #elif (defined(__WXMAC__))
 
-#if wxMAC_USE_CORE_GRAPHICS 
+#if wxMAC_USE_CORE_GRAPHICS
     {
         CGRect cgrect = CGRectMake( rect.x , rect.y , rect.width, rect.height ) ;
 
@@ -2735,7 +2735,19 @@ void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
 
     int newPage = -1;
 
-    if (key == WXK_RIGHT)
+    int forwardKey, backwardKey;
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        forwardKey = WXK_LEFT;
+        backwardKey = WXK_RIGHT;
+    }
+    else
+     {
+        forwardKey = WXK_RIGHT;
+        backwardKey = WXK_LEFT;
+    }
+
+    if (key == forwardKey)
     {
         if (m_pages.GetCount() > 1)
         {
@@ -2745,7 +2757,7 @@ void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
                 newPage = GetActivePage() + 1;
         }
     }
-    else if (key == WXK_LEFT)
+    else if (key == backwardKey)
     {
         if (m_pages.GetCount() > 1)
         {
@@ -3008,7 +3020,7 @@ wxAuiNotebook::~wxAuiNotebook()
 {
     // Indicate we're deleting pages
     m_isBeingDeleted = true;
-    
+
     while ( GetPageCount() > 0 )
         DeletePage(0);
 
@@ -3208,7 +3220,7 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     wxASSERT_MSG(page, wxT("page pointer must be non-NULL"));
     if (!page)
         return false;
-    
+
     page->Reparent(this);
 
     wxAuiNotebookPage info;
