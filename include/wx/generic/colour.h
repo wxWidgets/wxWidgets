@@ -23,11 +23,12 @@ public:
     DEFINE_STD_WXCOLOUR_CONSTRUCTORS
 
     // copy ctors and assignment operators
-    wxColour(const wxColour& col);
-    wxColour& operator=(const wxColour& col);
+    wxColour(const wxColour& col)
+    {
+        *this = col;
+    }
 
-    // dtor
-    virtual ~wxColour();
+    wxColour& operator=(const wxColour& col);
 
     // accessors
     virtual bool IsOk() const { return m_isInit; }
