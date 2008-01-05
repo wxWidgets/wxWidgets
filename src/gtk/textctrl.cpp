@@ -614,7 +614,6 @@ void wxTextCtrl::Init()
     SetUpdateFont(false);
 
     m_text = NULL;
-    m_freezeCount = 0;
     m_showPositionOnThaw = NULL;
     m_gdkHandCursor = NULL;
     m_gdkXTermCursor = NULL;
@@ -1719,58 +1718,50 @@ wxSize wxTextCtrl::DoGetBestSize() const
 // freeze/thaw
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::Freeze()
+void wxTextCtrl::DoFreeze()
 {
     wxCHECK_RET(m_text != NULL, wxT("invalid text ctrl"));
 
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        if (m_freezeCount++ == 0)
-        {
-            // freeze textview updates and remove buffer
-            g_signal_connect (m_text, "expose_event",
-                              G_CALLBACK (gtk_text_exposed_callback), this);
-            g_signal_connect (m_widget, "expose_event",
-                              G_CALLBACK (gtk_text_exposed_callback), this);
-            gtk_widget_set_sensitive(m_widget, false);
-            g_object_ref(m_buffer);
-            GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
-            GtkTextMark* mark = GTK_TEXT_VIEW(m_text)->first_para_mark;
-            gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
-            // gtk_text_view_set_buffer adds its own reference
-            g_object_unref(buf_new);
-            // This mark should be deleted when the buffer is changed,
-            // but it's not (in GTK+ up to at least 2.10.6).
-            // Otherwise these anonymous marks start to build up in the buffer,
-            // and Freeze takes longer and longer each time it is called.
-            if (GTK_IS_TEXT_MARK(mark) && !gtk_text_mark_get_deleted(mark))
-                gtk_text_buffer_delete_mark(m_buffer, mark);
-        }
+        // freeze textview updates and remove buffer
+        g_signal_connect (m_text, "expose_event",
+                          G_CALLBACK (gtk_text_exposed_callback), this);
+        g_signal_connect (m_widget, "expose_event",
+                          G_CALLBACK (gtk_text_exposed_callback), this);
+        gtk_widget_set_sensitive(m_widget, false);
+        g_object_ref(m_buffer);
+        GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
+        GtkTextMark* mark = GTK_TEXT_VIEW(m_text)->first_para_mark;
+        gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
+        // gtk_text_view_set_buffer adds its own reference
+        g_object_unref(buf_new);
+        // This mark should be deleted when the buffer is changed,
+        // but it's not (in GTK+ up to at least 2.10.6).
+        // Otherwise these anonymous marks start to build up in the buffer,
+        // and Freeze takes longer and longer each time it is called.
+        if (GTK_IS_TEXT_MARK(mark) && !gtk_text_mark_get_deleted(mark))
+            gtk_text_buffer_delete_mark(m_buffer, mark);
     }
 }
 
-void wxTextCtrl::Thaw()
+void wxTextCtrl::DoThaw()
 {
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        wxCHECK_RET(m_freezeCount != 0, _T("Thaw() without matching Freeze()"));
-
-        if (--m_freezeCount == 0)
+        // Reattach buffer and thaw textview updates
+        gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
+        g_object_unref(m_buffer);
+        gtk_widget_set_sensitive(m_widget, true);
+        g_signal_handlers_disconnect_by_func (m_widget,
+                (gpointer) gtk_text_exposed_callback, this);
+        g_signal_handlers_disconnect_by_func (m_text,
+                (gpointer) gtk_text_exposed_callback, this);
+        if (m_showPositionOnThaw != NULL)
         {
-            // Reattach buffer and thaw textview updates
-            gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
-            g_object_unref(m_buffer);
-            gtk_widget_set_sensitive(m_widget, true);
-            g_signal_handlers_disconnect_by_func (m_widget,
-                    (gpointer) gtk_text_exposed_callback, this);
-            g_signal_handlers_disconnect_by_func (m_text,
-                    (gpointer) gtk_text_exposed_callback, this);
-            if (m_showPositionOnThaw != NULL)
-            {
-                gtk_text_view_scroll_mark_onscreen(
-                    GTK_TEXT_VIEW(m_text), m_showPositionOnThaw);
-                m_showPositionOnThaw = NULL;
-            }
+            gtk_text_view_scroll_mark_onscreen(
+                GTK_TEXT_VIEW(m_text), m_showPositionOnThaw);
+            m_showPositionOnThaw = NULL;
         }
     }
 }

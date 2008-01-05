@@ -524,8 +524,6 @@ void wxWindowMSW::Init()
     m_mouseInWindow = false;
     m_lastKeydownProcessed = false;
 
-    m_frozenness = 0;
-
     m_hWnd = 0;
     m_hDWP = 0;
 
@@ -1606,29 +1604,21 @@ static inline void SendSetRedraw(HWND hwnd, bool on)
 #endif
 }
 
-void wxWindowMSW::Freeze()
+void wxWindowMSW::DoFreeze()
 {
-    if ( !m_frozenness++ )
-    {
-        if ( IsShown() )
-            SendSetRedraw(GetHwnd(), false);
-    }
+    if ( IsShown() )
+        SendSetRedraw(GetHwnd(), false);
 }
 
-void wxWindowMSW::Thaw()
+void wxWindowMSW::DoThaw()
 {
-    wxASSERT_MSG( m_frozenness > 0, _T("Thaw() without matching Freeze()") );
-
-    if ( --m_frozenness == 0 )
+    if ( IsShown() )
     {
-        if ( IsShown() )
-        {
-            SendSetRedraw(GetHwnd(), true);
+        SendSetRedraw(GetHwnd(), true);
 
-            // we need to refresh everything or otherwise the invalidated area
-            // is not going to be repainted
-            Refresh();
-        }
+        // we need to refresh everything or otherwise the invalidated area
+        // is not going to be repainted
+        Refresh();
     }
 }
 

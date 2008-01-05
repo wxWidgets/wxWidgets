@@ -201,7 +201,6 @@ wxRichTextCtrl::~wxRichTextCtrl()
 /// Member initialisation
 void wxRichTextCtrl::Init()
 {
-    m_freezeCount = 0;
     m_contextMenu = NULL;
     m_caret = NULL;
     m_caretPosition = -1;
@@ -217,25 +216,13 @@ void wxRichTextCtrl::Init()
     m_caretPositionForDefaultStyle = -2;
 }
 
-/// Call Freeze to prevent refresh
-void wxRichTextCtrl::Freeze()
+void wxRichTextCtrl::DoThaw()
 {
-    m_freezeCount ++;
-}
-
-/// Call Thaw to refresh
-void wxRichTextCtrl::Thaw()
-{
-    m_freezeCount --;
-
-    if (m_freezeCount == 0)
-    {
-        if (GetBuffer().GetDirty())
-            LayoutContent();
-        else
-            SetupScrollbars();
-        Refresh(false);
-    }
+    if (GetBuffer().GetDirty())
+        LayoutContent();
+    else
+        SetupScrollbars();
+    Refresh(false);
 }
 
 /// Clear all text
@@ -248,7 +235,7 @@ void wxRichTextCtrl::Clear()
     m_caretAtLineStart = false;
     m_selectionRange.SetRange(-2, -2);
 
-    if (m_freezeCount == 0)
+    if (!IsFrozen())
     {
         LayoutContent();
         Refresh(false);
@@ -269,10 +256,11 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #else
         wxPaintDC dc(this);
 #endif
-        PrepareDC(dc);
 
-        if (m_freezeCount > 0)
+        if (IsFrozen())
             return;
+
+        PrepareDC(dc);
 
         dc.SetFont(GetFont());
 
@@ -1789,7 +1777,7 @@ void wxRichTextCtrl::OnScroll(wxScrollWinEvent& event)
 /// Set up scrollbars, e.g. after a resize
 void wxRichTextCtrl::SetupScrollbars(bool atTop)
 {
-    if (m_freezeCount)
+    if (IsFrozen())
         return;
 
     if (GetBuffer().IsEmpty())

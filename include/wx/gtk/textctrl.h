@@ -121,11 +121,6 @@ public:
 
     void SetUpdateFont(bool WXUNUSED(update)) { }
 
-    // GTK+ textctrl is so dumb that you need to freeze/thaw it manually to
-    // avoid horrible flicker/scrolling back and forth
-    virtual void Freeze();
-    virtual void Thaw();
-
     // implementation only from now on
 
     // tell the control to ignore next text changed signal
@@ -148,9 +143,6 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    // has the control been frozen by Freeze()?
-    bool IsFrozen() const { return m_freezeCount > 0; }
-
 protected:
     // wxGTK-specific: called recursively by Enable,
     // to give widgets an oppprtunity to correct their colours after they
@@ -161,6 +153,9 @@ protected:
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
+
+    virtual void DoFreeze();
+    virtual void DoThaw();
 
     // common part of all ctors
     void Init();
@@ -217,8 +212,6 @@ private:
     // a dummy one when frozen
     GtkTextBuffer *m_buffer;
 
-    // number of calls to Freeze() minus number of calls to Thaw()
-    unsigned m_freezeCount;
     GtkTextMark* m_showPositionOnThaw;
 
     // For wxTE_AUTO_URL

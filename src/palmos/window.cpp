@@ -432,14 +432,6 @@ bool wxWindowPalm::Reparent(wxWindowBase *parent)
     return false;
 }
 
-void wxWindowPalm::Freeze()
-{
-}
-
-void wxWindowPalm::Thaw()
-{
-}
-
 void wxWindowPalm::Refresh(bool eraseBack, const wxRect *rect)
 {
     WinHandle handle = (WinHandle)GetHWND();

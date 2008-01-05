@@ -782,7 +782,6 @@ void wxGenericTreeCtrl::Init()
     m_textCtrl = NULL;
 
     m_renameTimer = NULL;
-    m_freezeCount = 0;
 
     m_findTimer = NULL;
 
@@ -1646,7 +1645,7 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
     }
 
     item->Expand();
-    if ( !m_freezeCount )
+    if ( !IsFrozen() )
     {
         CalculatePositions();
 
@@ -3517,13 +3516,13 @@ void wxGenericTreeCtrl::CalculatePositions()
 
 void wxGenericTreeCtrl::Refresh(bool eraseBackground, const wxRect *rect)
 {
-    if ( !m_freezeCount )
+    if ( !IsFrozen() )
         wxTreeCtrlBase::Refresh(eraseBackground, rect);
 }
 
 void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 {
-    if (m_dirty || m_freezeCount)
+    if (m_dirty || IsFrozen() )
         return;
 
     wxSize client = GetClientSize();
@@ -3540,7 +3539,7 @@ void wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem *item)
 
 void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 {
-    if (m_dirty || m_freezeCount)
+    if (m_dirty || IsFrozen() )
         return;
 
     wxRect rect;
@@ -3553,7 +3552,7 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
 
 void wxGenericTreeCtrl::RefreshSelected()
 {
-    if (m_freezeCount)
+    if (IsFrozen())
         return;
 
     // TODO: this is awfully inefficient, we should keep the list of all
@@ -3564,7 +3563,7 @@ void wxGenericTreeCtrl::RefreshSelected()
 
 void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
 {
-    if (m_freezeCount)
+    if (IsFrozen())
         return;
 
     if ( item->IsSelected() )
@@ -3578,22 +3577,12 @@ void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
     }
 }
 
-void wxGenericTreeCtrl::Freeze()
+void wxGenericTreeCtrl::DoThaw()
 {
-    m_freezeCount++;
-}
-
-void wxGenericTreeCtrl::Thaw()
-{
-    wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen tree control?") );
-
-    if ( --m_freezeCount == 0 )
-    {
-        if ( m_dirty )
-            DoDirtyProcessing();
-        else
-            Refresh();
-    }
+    if ( m_dirty )
+        DoDirtyProcessing();
+    else
+        Refresh();
 }
 
 // ----------------------------------------------------------------------------
@@ -3654,7 +3643,7 @@ wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
 void wxGenericTreeCtrl::DoDirtyProcessing()
 {
-    if (m_freezeCount)
+    if (IsFrozen())
         return;
 
     m_dirty = false;

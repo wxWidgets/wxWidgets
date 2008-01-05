@@ -83,9 +83,6 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
     virtual void Update();
-    virtual void Freeze();
-    virtual void Thaw();
-    virtual bool IsFrozen() const { return m_frozenness > 0; }
 
     virtual void SetWindowStyleFlag(long style);
     virtual void SetExtraStyle(long exStyle);
@@ -503,6 +500,9 @@ protected:
 
     virtual void DoEnable(bool enable);
 
+    virtual void DoFreeze();
+    virtual void DoThaw();
+
     // this simply moves/resizes the given HWND which is supposed to be our
     // sibling (this is useful for controls which are composite at MSW level
     // and for which DoMoveWindow() is not enough)
@@ -555,8 +555,6 @@ private:
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
 
-    
-
     // current defer window position operation handle (may be NULL)
     WXHANDLE m_hDWP;
 
@@ -566,10 +564,6 @@ protected:
     // this window before the group of deferred changes is completed.
     wxPoint     m_pendingPosition;
     wxSize      m_pendingSize;
-
-    // number of calls to Freeze() minus number of calls to Thaw()
-    // protected so that wxTopLevelWindowMSW can access it
-    unsigned int m_frozenness;
 
 private:
 #ifdef __POCKETPC__

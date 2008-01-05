@@ -1172,55 +1172,50 @@ bool wxTopLevelWindowMSW::CanSetTransparent()
 }
 
 
-void wxTopLevelWindowMSW::Freeze()
+void wxTopLevelWindowMSW::DoFreeze()
 {
-    if ( !m_frozenness++) {
-        if (IsShown()) {
-            for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-                node;
-                node = node->GetNext() )
-            {
-                wxWindow *child = node->GetData();
-                if ( child->IsTopLevel() )
-                    continue;
-                else
-                    child->Freeze();
-            }
-        }
-    }
-}
-
-void wxTopLevelWindowMSW::Thaw()
-{
-    wxASSERT_MSG( m_frozenness > 0, _T("Thaw() without matching Freeze()") );
-    if ( --m_frozenness == 0 )
+    if ( IsShown() )
     {
-        if ( IsShown() ) {
-            for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-                node;
-                node = node->GetNext() )
-            {
-                wxWindow *child = node->GetData();
-                if ( child->IsTopLevel() )
-                    continue;
-                else
-                    child->Thaw();
-            }
-        }
-    }
-}
+        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxWindow *child = node->GetData();
+            if ( child->IsTopLevel() )
+                continue;
 
-
-void wxTopLevelWindowMSW::AddChild(wxWindowBase *child )
-{
-    //adding a child while frozen will assert when thawn,
-    // so freeze it
-    if (child && !child->IsTopLevel() && IsFrozen()) {
-        //need to match our current freeze level
-        for (unsigned int ii=0;ii< m_frozenness;ii++) {
             child->Freeze();
         }
     }
+}
+
+void wxTopLevelWindowMSW::DoThaw()
+{
+    if ( IsShown() )
+    {
+        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+        {
+            wxWindow *child = node->GetData();
+            if ( child->IsTopLevel() )
+                continue;
+
+            child->Thaw();
+        }
+    }
+}
+
+
+void wxTopLevelWindowMSW::AddChild(wxWindowBase *child)
+{
+    // adding a child while frozen will assert when thawn, so freeze it as if
+    // it had been already present when we were frozen
+    if ( child && !child->IsTopLevel() && IsFrozen() )
+    {
+        child->Freeze();
+    }
+
     wxTopLevelWindowBase::AddChild(child);
 }
 

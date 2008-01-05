@@ -1109,12 +1109,12 @@ void wxWindowOS2::Update()
     ::WinUpdateWindow(GetHwnd());
 } // end of wxWindowOS2::Update
 
-void wxWindowOS2::Freeze()
+void wxWindowOS2::DoFreeze()
 {
    ::WinSendMsg(GetHwnd(), WM_VRNDISABLED, (MPARAM)0, (MPARAM)0);
 } // end of wxWindowOS2::Freeze
 
-void wxWindowOS2::Thaw()
+void wxWindowOS2::DoThaw()
 {
    ::WinSendMsg(GetHwnd(), WM_VRNENABLED, (MPARAM)TRUE, (MPARAM)0);
 

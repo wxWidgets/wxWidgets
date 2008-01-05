@@ -75,10 +75,6 @@ public:
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
 
-    //Top level windows have different freeze semantics on Windows
-    virtual void Freeze();
-    virtual void Thaw();
-
     virtual void AddChild( wxWindowBase *child );
 
 
@@ -141,6 +137,10 @@ protected:
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoGetSize(int *width, int *height) const;
 #endif // __WXWINCE__
+
+    // Top level windows have different freeze semantics on Windows
+    virtual void DoFreeze();
+    virtual void DoThaw();
 
     // helper of SetIcons(): calls gets the icon with the size specified by the
     // given system metrics (SM_C{X|Y}[SM]ICON) from the bundle and sets it

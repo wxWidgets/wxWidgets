@@ -550,7 +550,6 @@ void wxWindowMGL::Init()
     // mgl specific:
     m_wnd = NULL;
     m_isShown = true;
-    m_frozen = false;
     m_paintMGLDC = NULL;
     m_eraseBackground = -1;
 }
@@ -1119,26 +1118,24 @@ void wxWindowMGL::Refresh(bool eraseBack, const wxRect *rect)
 
 void wxWindowMGL::Update()
 {
-    if ( !m_frozen )
+    if ( !IsFrozen() )
         MGL_wmUpdateDC(g_winMng);
 }
 
-void wxWindowMGL::Freeze()
+void wxWindowMGL::DoFreeze()
 {
-    m_frozen = true;
     m_refreshAfterThaw = false;
 }
 
-void wxWindowMGL::Thaw()
+void wxWindowMGL::DoThaw()
 {
-    m_frozen = false;
     if ( m_refreshAfterThaw )
         Refresh();
 }
 
 void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
 {
-    if ( m_frozen )
+    if ( IsFrozen() )
     {
         // Don't paint anything if the window is frozen.
         m_refreshAfterThaw = true;

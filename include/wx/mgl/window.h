@@ -68,8 +68,6 @@ public:
     virtual void Refresh(bool eraseBackground = true,
                          const wxRect *rect = (const wxRect *) NULL);
     virtual void Update();
-    virtual void Freeze();
-    virtual void Thaw();
 
     virtual bool SetCursor(const wxCursor &cursor);
     virtual bool SetFont(const wxFont &font) { m_font = font; return true; }
@@ -100,11 +98,14 @@ public:
     void OnInternalIdle();
 
 protected:
+    virtual void DoFreeze();
+    virtual void DoThaw();
+
+
     // the window handle
     struct window_t      *m_wnd;
     // whether there should be wxEraseEvent before wxPaintEvent or not
     // (see wxWindow::Refresh)
-    bool                  m_frozen:1;
     bool                  m_refreshAfterThaw:1;
     int                   m_eraseBackground;
 

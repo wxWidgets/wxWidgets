@@ -139,11 +139,6 @@ public:
 
     void SetModified() { m_modified = true; }
 
-    // GTK+ textctrl is so dumb that you need to freeze/thaw it manually to
-    // avoid horrible flicker/scrolling back and forth
-    virtual void Freeze();
-    virtual void Thaw();
-
     // textctrl specific scrolling
     virtual bool ScrollLines(int lines);
     virtual bool ScrollPages(int pages);
@@ -169,6 +164,10 @@ protected:
 
     // common part of all ctors
     void Init();
+
+    // overridden wxWindow methods
+    virtual void DoFreeze();
+    virtual void DoThaw();
 
     // get the vertical adjustment, if any, NULL otherwise
     GtkAdjustment *GetVAdj() const;

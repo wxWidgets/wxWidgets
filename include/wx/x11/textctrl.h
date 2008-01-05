@@ -205,9 +205,6 @@ public:
 
     void SetModified() { m_modified = true; }
 
-    virtual void Freeze();
-    virtual void Thaw();
-
     // textctrl specific scrolling
     virtual bool ScrollLines(int lines);
     virtual bool ScrollPages(int pages);

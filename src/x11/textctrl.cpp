@@ -2375,18 +2375,6 @@ wxSize wxTextCtrl::DoGetBestSize() const
     }
 }
 
-// ----------------------------------------------------------------------------
-// freeze/thaw
-// ----------------------------------------------------------------------------
-
-void wxTextCtrl::Freeze()
-{
-}
-
-void wxTextCtrl::Thaw()
-{
-}
-
 void wxTextCtrl::OnSetFocus( wxFocusEvent& event )
 {
     // To hide or show caret, as appropriate

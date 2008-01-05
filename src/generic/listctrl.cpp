@@ -600,9 +600,9 @@ public:
         SetFocusIgnoringChildren();
     }
 
-    // suspend/resume redrawing the control
-    void Freeze();
-    void Thaw();
+    // we don't draw anything while we're frozen so we must refresh ourselves
+    // when we're thawed to make sure the changes are displayed correctly
+    virtual void DoThaw() { Refresh(); }
 
     void OnRenameTimer();
     bool OnRenameAccept(size_t itemEdit, const wxString& value);
@@ -849,9 +849,6 @@ private:
     // the brushes to use for item highlighting when we do/don't have focus
     wxBrush *m_highlightBrush,
             *m_highlightUnfocusedBrush;
-
-    // if this is > 0, the control is frozen and doesn't redraw itself
-    size_t m_freezeCount;
 
     // wrapper around the text control currently used for in place editing or
     // NULL if no item is being edited
@@ -2283,8 +2280,6 @@ void wxListMainWindow::Init()
     m_lineLastClicked =
     m_lineSelectSingleOnUp =
     m_lineBeforeLastClicked = (size_t)-1;
-
-    m_freezeCount = 0;
 }
 
 wxListMainWindow::wxListMainWindow()
@@ -2703,32 +2698,23 @@ void wxListMainWindow::RefreshSelected()
     }
 }
 
-void wxListMainWindow::Freeze()
-{
-    m_freezeCount++;
-}
-
-void wxListMainWindow::Thaw()
-{
-    wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen list control?") );
-
-    if ( --m_freezeCount == 0 )
-        Refresh();
-}
-
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     // Note: a wxPaintDC must be constructed even if no drawing is
     // done (a Windows requirement).
     wxPaintDC dc( this );
 
-    if ( IsEmpty() || m_freezeCount )
+    if ( IsEmpty() || IsFrozen() )
+    {
         // nothing to draw or not the moment to draw it
         return;
+    }
 
     if ( m_dirty )
+    {
         // delay the repainting until we calculate all the items positions
         return;
+    }
 
     PrepareDC( dc );
 
@@ -5920,12 +5906,12 @@ void wxGenericListCtrl::Refresh(bool eraseBackground, const wxRect *rect)
     }
 }
 
-void wxGenericListCtrl::Freeze()
+void wxGenericListCtrl::DoFreeze()
 {
     m_mainWin->Freeze();
 }
 
-void wxGenericListCtrl::Thaw()
+void wxGenericListCtrl::DoThaw()
 {
     m_mainWin->Thaw();
 }

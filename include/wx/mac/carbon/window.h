@@ -62,9 +62,6 @@ public:
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = NULL );
-    virtual void Freeze();
-    virtual void Thaw();
-    virtual bool IsFrozen() const;
 
     virtual void Update() ;
     virtual void ClearBackground();
@@ -85,6 +82,9 @@ public:
 protected:
     virtual void DoEnable( bool enable );
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+
+    virtual void DoFreeze();
+    virtual void DoThaw();
 
 public:
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
@@ -261,9 +261,6 @@ public:
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;
-
-    // number of calls to Freeze() minus number of calls to Thaw()
-    unsigned int        m_frozenness;
 
     // the peer object, allowing for cleaner API support
     wxMacControl *       m_peer ;

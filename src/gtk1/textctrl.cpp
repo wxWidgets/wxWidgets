@@ -1290,7 +1290,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
 // freeze/thaw
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::Freeze()
+void wxTextCtrl::DoFreeze()
 {
     if ( HasFlag(wxTE_MULTILINE) )
     {
@@ -1298,7 +1298,7 @@ void wxTextCtrl::Freeze()
     }
 }
 
-void wxTextCtrl::Thaw()
+void wxTextCtrl::DoThaw()
 {
     if ( HasFlag(wxTE_MULTILINE) )
     {

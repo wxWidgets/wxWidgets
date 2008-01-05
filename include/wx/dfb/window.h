@@ -75,9 +75,6 @@ public:
     virtual void Refresh(bool eraseBackground = true,
                          const wxRect *rect = (const wxRect *) NULL);
     virtual void Update();
-    virtual void Freeze();
-    virtual void Thaw();
-    virtual bool IsFrozen() const { return m_frozenness > 0; }
 
     virtual bool SetCursor(const wxCursor &cursor);
     virtual bool SetFont(const wxFont &font) { m_font = font; return true; }
@@ -127,6 +124,8 @@ protected:
 
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
+
+    virtual void DoThaw();
 
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call
@@ -182,9 +181,6 @@ private:
     // position of the window (relative to the parent, not used by wxTLW, so
     // don't access it directly)
     wxRect m_rect;
-
-    // number of calls to Freeze() minus number of calls to Thaw()
-    unsigned m_frozenness;
 
     // overlays for this window (or NULL if it doesn't have any)
     wxDfbOverlaysList *m_overlays;

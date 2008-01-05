@@ -73,8 +73,6 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = NULL );
     virtual void Update();
-    virtual void Freeze();
-    virtual void Thaw();
 
     virtual bool SetCursor( const wxCursor &cursor );
     virtual bool SetFont( const wxFont &font );
@@ -270,9 +268,6 @@ private:
     bool HandleMove(int x, int y);
     bool HandleMoving(wxRect& rect);
     bool HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags);
-
-    // number of calls to Freeze() minus number of calls to Thaw()
-    unsigned int m_frozenness;
 
     DECLARE_DYNAMIC_CLASS(wxWindowPalm)
     DECLARE_NO_COPY_CLASS(wxWindowPalm)

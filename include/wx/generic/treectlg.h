@@ -197,8 +197,6 @@ public:
     virtual bool SetBackgroundColour(const wxColour& colour);
     virtual bool SetForegroundColour(const wxColour& colour);
 
-    virtual void Freeze();
-    virtual void Thaw();
     virtual void Refresh(bool eraseBackground = true, const wxRect *rect = NULL);
 
     virtual bool SetFont( const wxFont &font );
@@ -253,7 +251,6 @@ protected:
     bool                 m_lastOnSame;  // last click on the same item as prev
     wxImageList         *m_imageListButtons;
 
-    int                  m_freezeCount;
     int                  m_dragCount;
     wxPoint              m_dragStart;
     wxGenericTreeItem   *m_dropTarget;
@@ -272,6 +269,9 @@ protected:
 
     // the common part of all ctors
     void Init();
+
+    // overridden wxWindow methods 
+    virtual void DoThaw();
 
     // misc helpers
     void SendDeleteEvent(wxGenericTreeItem *itemBeingDeleted);

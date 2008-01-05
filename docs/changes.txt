@@ -68,6 +68,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   sizes of the sizer items to be in the same proportion as the items
   proportions to return to the old behaviour.
 
+- wxWindow::Freeze/Thaw() are not virtual any more, if you overrode them in
+  your code you need to override DoFreeze/Thaw() instead now.
+
+
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
 
@@ -128,7 +132,7 @@ Changes in behaviour which may result in compilation errors
 
 - Removed global GetLine() function from wx/protocol/protocol.h, use
   wxProtocol::ReadLine() instead.
-  
+
 - wxVariant no longer derives from wxObject. wxVariantData also no longer
   derives from wxObject; instead of using wxDynamicCast with wxVariantData you
   can use the macro wxDynamicCastVariantData with the same arguments.

@@ -174,9 +174,6 @@ public:
     virtual void Refresh(bool eraseBackground = true,
                          const wxRect *rect = NULL);
 
-    virtual void Freeze();
-    virtual void Thaw();
-
     virtual bool SetBackgroundColour( const wxColour &colour );
     virtual bool SetForegroundColour( const wxColour &colour );
     virtual wxColour GetBackgroundColour() const;
@@ -217,6 +214,9 @@ protected:
     virtual void DoScreenToClient( int *x, int *y ) const;
 
     virtual wxSize DoGetBestSize() const;
+
+    virtual void DoFreeze();
+    virtual void DoThaw();
 
     // return the text for the given column of the given item
     virtual wxString OnGetItemText(long item, long column) const;

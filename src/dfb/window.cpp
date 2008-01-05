@@ -79,7 +79,6 @@ END_EVENT_TABLE()
 void wxWindowDFB::Init()
 {
     m_isShown = true;
-    m_frozenness = 0;
     m_tlw = NULL;
     m_overlays = NULL;
 }
@@ -638,20 +637,10 @@ void wxWindowDFB::Update()
     GetParent()->Update();
 }
 
-void wxWindowDFB::Freeze()
+void wxWindowDFB::DoThaw()
 {
-    m_frozenness++;
-}
-
-void wxWindowDFB::Thaw()
-{
-    wxASSERT_MSG( IsFrozen(), "Thaw() without matching Freeze()" );
-
-    if ( --m_frozenness == 0 )
-    {
-        if ( IsShown() )
-            DoRefreshWindow();
-    }
+    if ( IsShown() )
+        DoRefreshWindow();
 }
 
 void wxWindowDFB::PaintWindow(const wxRect& rect)
@@ -1080,7 +1069,7 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
     return wxFindWindowAtPoint(pt = wxGetMousePosition());
 }
 
-wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
+wxWindow* wxFindWindowAtPoint(const wxPoint& WXUNUSED(pt))
 {
     wxFAIL_MSG( "wxFindWindowAtPoint not implemented" );
     return NULL;

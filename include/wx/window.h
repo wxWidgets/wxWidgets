@@ -858,13 +858,19 @@ public:
     virtual void ClearBackground();
 
         // freeze the window: don't redraw it until it is thawed
-    virtual void Freeze() { }
+    void Freeze() { if ( !m_freezeCount++ ) DoFreeze(); }
 
         // thaw the window: redraw it after it had been frozen
-    virtual void Thaw() { }
+    void Thaw()
+    {
+        wxASSERT_MSG( m_freezeCount, "Thaw() without matching Freeze()" );
+
+        if ( !--m_freezeCount )
+            DoThaw();
+    }
 
         // return true if window had been frozen and not unthawed yet
-    virtual bool IsFrozen() const { return false; }
+    bool IsFrozen() const { return m_freezeCount != 0; }
 
         // adjust DC for drawing on this window
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
@@ -1563,6 +1569,12 @@ protected:
     // implements the window variants
     virtual void DoSetWindowVariant( wxWindowVariant variant ) ;
 
+
+    // really freeze/thaw the window (should have port-specific implementation)
+    virtual void DoFreeze() { }
+    virtual void DoThaw() { }
+
+
     // Must be called when mouse capture is lost to send
     // wxMouseCaptureLostEvent to windows on capture stack.
     static void NotifyCaptureLost();
@@ -1583,10 +1595,18 @@ private:
 
     // the stack of windows which have captured the mouse
     static struct WXDLLIMPEXP_FWD_CORE wxWindowNext *ms_winCaptureNext;
+
     // the window that currently has mouse capture
     static wxWindow *ms_winCaptureCurrent;
+
     // indicates if execution is inside CaptureMouse/ReleaseMouse
     static bool ms_winCaptureChanging;
+
+
+    // number of Freeze() calls minus the number of Thaw() calls: we're frozen
+    // (i.e. not being updated) if it is positive
+    unsigned int m_freezeCount;
+
 
     DECLARE_ABSTRACT_CLASS(wxWindowBase)
     DECLARE_NO_COPY_CLASS(wxWindowBase)

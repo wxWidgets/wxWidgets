@@ -212,6 +212,8 @@ wxWindowBase::wxWindowBase()
 
     // VZ: this one shouldn't exist...
     m_isBeingDeleted = false;
+
+    m_freezeCount = 0;
 }
 
 // common part of window creation process

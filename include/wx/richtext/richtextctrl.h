@@ -263,15 +263,6 @@ public:
     virtual void SelectAll();
     virtual void SetEditable(bool editable);
 
-    /// Call Freeze to prevent refresh
-    virtual void Freeze();
-
-    /// Call Thaw to refresh
-    virtual void Thaw();
-
-    /// Call Thaw to refresh
-    virtual bool IsFrozen() const { return m_freezeCount > 0; }
-
     virtual bool HasSelection() const;
 
 ///// Functionality specific to wxRichTextCtrl
@@ -772,13 +763,11 @@ protected:
 
     virtual void DoSetValue(const wxString& value, int flags = 0);
 
+    virtual void DoThaw();
+
 
 // Data members
 private:
-
-    /// Allows nested Freeze/Thaw
-    int                     m_freezeCount;
-
 #if wxRICHTEXT_BUFFERED_PAINTING
     /// Buffer bitmap
     wxBitmap                m_bufferBitmap;

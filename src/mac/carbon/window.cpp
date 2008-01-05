@@ -865,7 +865,6 @@ wxWindowMac::wxWindowMac(wxWindowMac *parent,
 void wxWindowMac::Init()
 {
     m_peer = NULL ;
-    m_frozenness = 0 ;
     m_macAlpha = 255 ;
     m_cgContextRef = NULL ;
 
@@ -2091,36 +2090,23 @@ void wxWindowMac::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
     }
 }
 
-void wxWindowMac::Freeze()
+void wxWindowMac::DoFreeze()
 {
 #if TARGET_API_MAC_OSX
-    if ( !m_frozenness++ )
-    {
-        if ( m_peer && m_peer->Ok() )
-            m_peer->SetDrawingEnabled( false ) ;
-    }
+    if ( m_peer && m_peer->Ok() )
+        m_peer->SetDrawingEnabled( false ) ;
 #endif
 }
 
-void wxWindowMac::Thaw()
+void wxWindowMac::DoThaw()
 {
 #if TARGET_API_MAC_OSX
-    wxASSERT_MSG( m_frozenness > 0, wxT("Thaw() without matching Freeze()") );
-
-    if ( !--m_frozenness )
+    if ( m_peer && m_peer->Ok() )
     {
-        if ( m_peer && m_peer->Ok() )
-        {
-            m_peer->SetDrawingEnabled( true ) ;
-            m_peer->InvalidateWithChildren() ;
-        }
+        m_peer->SetDrawingEnabled( true ) ;
+        m_peer->InvalidateWithChildren() ;
     }
 #endif
-}
-
-bool wxWindowMac::IsFrozen() const
-{
-    return m_frozenness != 0;
 }
 
 wxWindowMac *wxGetActiveWindow()

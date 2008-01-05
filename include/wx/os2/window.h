@@ -92,9 +92,7 @@ public:
     virtual void     Refresh( bool          bEraseBackground = true
                              ,const wxRect* pRect = (const wxRect *)NULL
                             );
-    virtual void     Freeze(void);
     virtual void     Update(void);
-    virtual void     Thaw(void);
     virtual void     SetWindowStyleFlag(long lStyle);
     virtual bool     SetCursor(const wxCursor& rCursor);
     virtual bool     SetFont(const wxFont& rFont);
@@ -416,6 +414,9 @@ public:
     PSWP GetSwp(void) {return &m_vWinSwp;}
 
 protected:
+    virtual void     DoFreeze(void);
+    virtual void     DoThaw(void);
+
     // PM can't create some MSW styles natively but can perform these after
     // creation by sending messages
     typedef enum extra_flags { kFrameToolWindow = 0x0001
