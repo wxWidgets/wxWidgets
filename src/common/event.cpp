@@ -1028,11 +1028,6 @@ wxEvtHandler::wxEvtHandler()
     m_enabled = true;
     m_dynamicEvents = (wxList *) NULL;
     m_pendingEvents = (wxList *) NULL;
-#if wxUSE_THREADS
-#  if !defined(__VISAGECPP__)
-    m_eventsLocker = new wxCriticalSection;
-#  endif
-#endif
 
     // no client data (yet)
     m_clientData = NULL;
@@ -1067,10 +1062,6 @@ wxEvtHandler::~wxEvtHandler()
     if (m_pendingEvents)
         m_pendingEvents->DeleteContents(true);
     delete m_pendingEvents;
-
-#  if !defined(__VISAGECPP__)
-    delete m_eventsLocker;
-#  endif
 
     // Remove us from wxPendingEvents if necessary.
     if ( wxPendingEvents )
@@ -1108,14 +1099,6 @@ bool wxEvtHandler::ProcessThreadEvent(const wxEvent& event)
     return true;
 }
 
-void wxEvtHandler::ClearEventLocker()
-{
-#if !defined(__VISAGECPP__)
-    delete m_eventsLocker;
-    m_eventsLocker = NULL;
-#endif
-}
-
 #endif // wxUSE_THREADS
 
 void wxEvtHandler::AddPendingEvent(const wxEvent& event)
@@ -1129,14 +1112,14 @@ void wxEvtHandler::AddPendingEvent(const wxEvent& event)
     wxCHECK_RET( eventCopy,
                  _T("events of this type aren't supposed to be posted") );
 
-    wxENTER_CRIT_SECT( Lock() );
+    wxENTER_CRIT_SECT( m_pendingEventsLock );
 
     if ( !m_pendingEvents )
       m_pendingEvents = new wxList;
 
     m_pendingEvents->Append(eventCopy);
 
-    wxLEAVE_CRIT_SECT( Lock() );
+    wxLEAVE_CRIT_SECT( m_pendingEventsLock );
 
     // 2) Add this event handler to list of event handlers that
     //    have pending events.
@@ -1157,7 +1140,7 @@ void wxEvtHandler::AddPendingEvent(const wxEvent& event)
 
 void wxEvtHandler::ProcessPendingEvents()
 {
-    wxENTER_CRIT_SECT( Lock() );
+    wxENTER_CRIT_SECT( m_pendingEventsLock );
 
     // this method is only called by wxApp if this handler does have
     // pending events
@@ -1177,7 +1160,7 @@ void wxEvtHandler::ProcessPendingEvents()
     if ( m_pendingEvents->IsEmpty() )
         wxPendingEvents->DeleteObject(this);
 
-    wxLEAVE_CRIT_SECT( Lock() );
+    wxLEAVE_CRIT_SECT( m_pendingEventsLock );
 
     ProcessEvent(*event);
 

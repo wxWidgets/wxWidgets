@@ -23,15 +23,13 @@
 #endif
 
 #include "wx/dynarray.h"
+#include "wx/thread.h"
 
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_BASE wxList;
-#if wxUSE_THREADS
-    class WXDLLIMPEXP_FWD_BASE wxCriticalSection;
-#endif
 #if wxUSE_GUI
     class WXDLLIMPEXP_FWD_CORE wxDC;
     class WXDLLIMPEXP_FWD_CORE wxMenu;
@@ -2359,10 +2357,6 @@ public:
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
     bool SearchDynamicEventTable( wxEvent& event );
 
-#if wxUSE_THREADS
-    void ClearEventLocker();
-#endif // wxUSE_THREADS
-
     // Avoid problems at exit by cleaning up static hash table gracefully
     void ClearEventHashTable() { GetEventHashTable().Clear(); }
 
@@ -2402,18 +2396,9 @@ protected:
     wxList*             m_pendingEvents;
 
 #if wxUSE_THREADS
-#if defined (__VISAGECPP__)
-    const wxCriticalSection& Lock() const { return m_eventsLocker; }
-    wxCriticalSection& Lock() { return m_eventsLocker; }
-
-    wxCriticalSection   m_eventsLocker;
-#  else
-    const wxCriticalSection& Lock() const { return *m_eventsLocker; }
-    wxCriticalSection& Lock() { return *m_eventsLocker; }
-
-    wxCriticalSection*  m_eventsLocker;
-#  endif
-#endif
+    // critical section protecting m_pendingEvents
+    wxCriticalSection m_pendingEventsLock;
+#endif // wxUSE_THREADS
 
     // Is event handler enabled?
     bool                m_enabled;
