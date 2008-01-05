@@ -2277,10 +2277,6 @@ void wxGtkPrintPreview::Init(wxPrintout * WXUNUSED(printout),
             m_resolution = 1200;
             break;
 
-        default:
-            wxFAIL_MSG( "unknown print quality" );
-            // fall through
-
         case wxPRINT_QUALITY_LOW:
             m_resolution = 300;
             break;
