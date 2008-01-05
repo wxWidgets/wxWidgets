@@ -767,7 +767,7 @@ int wxStandardDialogLayoutAdapter::DoMustScroll(wxDialog* dialog, wxSize& window
 #if wxUSE_DISPLAY
     displaySize = wxDisplay(wxDisplay::GetFromWindow(dialog)).GetClientArea().GetSize();
 #else
-    displaySize = wxGetClientDisplayRect();
+    displaySize = wxGetClientDisplayRect().GetSize();
 #endif
 
     int flags = 0;
