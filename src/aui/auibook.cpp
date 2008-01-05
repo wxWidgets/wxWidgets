@@ -2581,7 +2581,19 @@ void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
 
     int newPage = -1;
 
-    if (key == WXK_RIGHT)
+    int forwardKey, backwardKey;
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+    {
+        forwardKey = WXK_LEFT;
+        backwardKey = WXK_RIGHT;
+    }
+    else
+     {
+        forwardKey = WXK_RIGHT;
+        backwardKey = WXK_LEFT;
+    }
+
+    if (key == forwardKey)
     {
         if (m_pages.GetCount() > 1)
         {
@@ -2591,7 +2603,7 @@ void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
                 newPage = GetActivePage() + 1;
         }
     }
-    else if (key == WXK_LEFT)
+    else if (key == backwardKey)
     {
         if (m_pages.GetCount() > 1)
         {
@@ -3070,7 +3082,7 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     wxASSERT_MSG(page, wxT("page pointer must be non-NULL"));
     if (!page)
         return false;
-    
+
     page->Reparent(this);
 
     wxAuiNotebookPage info;
