@@ -359,21 +359,21 @@ void wxAppConsoleBase::ProcessPendingEvents()
 
     if (wxPendingEvents)
     {
-        // iterate until the list becomes empty
+        // iterate until the list becomes empty: the handlers remove themselves
+        // from it when they don't have any more pending events
         wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
         while (node)
         {
-            wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
-            wxPendingEvents->Erase(node);
-
             // In ProcessPendingEvents(), new handlers might be add
             // and we can safely leave the critical section here.
             wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 
+            wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
             handler->ProcessPendingEvents();
 
             wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
+            // restart as the iterators could have been invalidated
             node = wxPendingEvents->GetFirst();
         }
     }
