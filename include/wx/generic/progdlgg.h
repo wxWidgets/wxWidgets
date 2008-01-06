@@ -30,29 +30,29 @@ class WXDLLEXPORT wxProgressDialog : public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxProgressDialog)
 public:
-   /* Creates and displays dialog, disables event handling for other
+    /* Creates and displays dialog, disables event handling for other
        frames or parent frame to avoid recursion problems.
        @param title title for window
        @param message message to display in window
        @param maximum value for status bar, if <= 0, no bar is shown
        @param parent window or NULL
        @param style is the bit mask of wxPD_XXX constants from wx/defs.h
-   */
-   wxProgressDialog(const wxString &title, wxString const &message,
-                    int maximum = 100,
-                    wxWindow *parent = NULL,
-                    int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
-   /* Destructor.
-       Re-enables event handling for other windows.
-   */
-   virtual ~wxProgressDialog();
+    */
+    wxProgressDialog(const wxString& title, const wxString& message,
+                     int maximum = 100,
+                     wxWindow *parent = NULL,
+                     int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
+    /* Destructor.
+        Re-enables event handling for other windows.
+    */
+    virtual ~wxProgressDialog();
 
-   /* Update the status bar to the new value.
+    /* Update the status bar to the new value.
        @param value new value
        @param newmsg if used, new message to display
        @returns true if ABORT button has not been pressed
-   */
-   virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
+    */
+    virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
 
     /* Switches the dialog to use a gauge in indeterminate mode and calls
        wxGauge::Pulse() to show to the user a bit of progress */
@@ -61,63 +61,63 @@ public:
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() { wxDialog::Update(); }
 
-   /* Can be called to continue after the cancel button has been pressed, but
+    /* Can be called to continue after the cancel button has been pressed, but
        the program decided to continue the operation (e.g., user didn't
        confirm it)
-   */
-   void Resume();
+    */
+    void Resume();
 
-   virtual bool Show( bool show = true );
+    virtual bool Show( bool show = true );
 
 protected:
-   // callback for optional abort button
-   void OnCancel(wxCommandEvent& event);
+    // callback for optional abort button
+    void OnCancel(wxCommandEvent&);
 
-   // callback for optional skip button
-   void OnSkip(wxCommandEvent& event);
+    // callback for optional skip button
+    void OnSkip(wxCommandEvent&);
 
-   // callback to disable "hard" window closing
-   void OnClose(wxCloseEvent& event);
+    // callback to disable "hard" window closing
+    void OnClose(wxCloseEvent&);
 
-   // must be called to reenable the other windows temporarily disabled while
-   // the dialog was shown
-   void ReenableOtherWindows();
+    // must be called to reenable the other windows temporarily disabled while
+    // the dialog was shown
+    void ReenableOtherWindows();
 
 private:
-   // create the label with given text and another one to show the time nearby
-   // as the next windows in the sizer, returns the created control
-   wxStaticText *CreateLabel(const wxString& text, wxSizer *sizer);
+    // create the label with given text and another one to show the time nearby
+    // as the next windows in the sizer, returns the created control
+    wxStaticText *CreateLabel(const wxString& text, wxSizer *sizer);
 
     // updates the label message
-   void UpdateMessage(const wxString &newmsg);
+    void UpdateMessage(const wxString &newmsg);
 
-   // common part of Update() and Pulse(), returns true if not cancelled
-   bool DoAfterUpdate(bool *skip);
+    // common part of Update() and Pulse(), returns true if not cancelled
+    bool DoAfterUpdate(bool *skip);
 
-   // shortcuts for enabling buttons
-   void EnableClose();
-   void EnableSkip(bool enable=true);
-   void EnableAbort(bool enable=true);
-   inline void DisableSkip() { EnableSkip(false); }
-   inline void DisableAbort() { EnableAbort(false); }
+    // shortcuts for enabling buttons
+    void EnableClose();
+    void EnableSkip(bool enable = true);
+    void EnableAbort(bool enable = true);
+    void DisableSkip() { EnableSkip(false); }
+    void DisableAbort() { EnableAbort(false); }
 
-   // the status bar
-   wxGauge *m_gauge;
-   // the message displayed
-   wxStaticText *m_msg;
-   // displayed elapsed, estimated, remaining time
-   class wxStaticText *m_elapsed,
-                      *m_estimated,
-                      *m_remaining;
-   // time when the dialog was created
-   unsigned long m_timeStart;
-   // time when the dialog was closed or cancelled
-   unsigned long m_timeStop;
-   // time between the moment the dialog was closed/cancelled and resume
-   unsigned long m_break;
+    // the status bar
+    wxGauge *m_gauge;
+    // the message displayed
+    wxStaticText *m_msg;
+    // displayed elapsed, estimated, remaining time
+    wxStaticText *m_elapsed,
+                 *m_estimated,
+                 *m_remaining;
+    // time when the dialog was created
+    unsigned long m_timeStart;
+    // time when the dialog was closed or cancelled
+    unsigned long m_timeStop;
+    // time between the moment the dialog was closed/cancelled and resume
+    unsigned long m_break;
 
-   // parent top level window (may be NULL)
-   wxWindow *m_parentTop;
+    // parent top level window (may be NULL)
+    wxWindow *m_parentTop;
 
     // continue processing or not (return value for Update())
     enum
