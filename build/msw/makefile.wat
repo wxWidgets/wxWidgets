@@ -406,6 +406,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_validate.obj &
 	$(OBJS)\monodll_valtext.obj &
 	$(OBJS)\monodll_wincmn.obj &
+	$(OBJS)\monodll_windowid.obj &
 	$(OBJS)\monodll_xpmdecod.obj &
 	$(OBJS)\monodll_busyinfo.obj &
 	$(OBJS)\monodll_buttonbar.obj &
@@ -638,6 +639,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_validate.obj &
 	$(OBJS)\monodll_valtext.obj &
 	$(OBJS)\monodll_wincmn.obj &
+	$(OBJS)\monodll_windowid.obj &
 	$(OBJS)\monodll_xpmdecod.obj &
 	$(OBJS)\monodll_busyinfo.obj &
 	$(OBJS)\monodll_buttonbar.obj &
@@ -1058,6 +1060,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_validate.obj &
 	$(OBJS)\monolib_valtext.obj &
 	$(OBJS)\monolib_wincmn.obj &
+	$(OBJS)\monolib_windowid.obj &
 	$(OBJS)\monolib_xpmdecod.obj &
 	$(OBJS)\monolib_busyinfo.obj &
 	$(OBJS)\monolib_buttonbar.obj &
@@ -1290,6 +1293,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_validate.obj &
 	$(OBJS)\monolib_valtext.obj &
 	$(OBJS)\monolib_wincmn.obj &
+	$(OBJS)\monolib_windowid.obj &
 	$(OBJS)\monolib_xpmdecod.obj &
 	$(OBJS)\monolib_busyinfo.obj &
 	$(OBJS)\monolib_buttonbar.obj &
@@ -1641,6 +1645,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_validate.obj &
 	$(OBJS)\coredll_valtext.obj &
 	$(OBJS)\coredll_wincmn.obj &
+	$(OBJS)\coredll_windowid.obj &
 	$(OBJS)\coredll_xpmdecod.obj &
 	$(OBJS)\coredll_busyinfo.obj &
 	$(OBJS)\coredll_buttonbar.obj &
@@ -1873,6 +1878,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_validate.obj &
 	$(OBJS)\coredll_valtext.obj &
 	$(OBJS)\coredll_wincmn.obj &
+	$(OBJS)\coredll_windowid.obj &
 	$(OBJS)\coredll_xpmdecod.obj &
 	$(OBJS)\coredll_busyinfo.obj &
 	$(OBJS)\coredll_buttonbar.obj &
@@ -2113,6 +2119,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_validate.obj &
 	$(OBJS)\corelib_valtext.obj &
 	$(OBJS)\corelib_wincmn.obj &
+	$(OBJS)\corelib_windowid.obj &
 	$(OBJS)\corelib_xpmdecod.obj &
 	$(OBJS)\corelib_busyinfo.obj &
 	$(OBJS)\corelib_buttonbar.obj &
@@ -2345,6 +2352,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_validate.obj &
 	$(OBJS)\corelib_valtext.obj &
 	$(OBJS)\corelib_wincmn.obj &
+	$(OBJS)\corelib_windowid.obj &
 	$(OBJS)\corelib_xpmdecod.obj &
 	$(OBJS)\corelib_busyinfo.obj &
 	$(OBJS)\corelib_buttonbar.obj &
@@ -7438,6 +7446,11 @@ $(OBJS)\monodll_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_windowid.obj :  .AUTODEPEND ..\..\src\common\windowid.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_xpmdecod.obj :  .AUTODEPEND ..\..\src\common\xpmdecod.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -9634,6 +9647,11 @@ $(OBJS)\monolib_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_windowid.obj :  .AUTODEPEND ..\..\src\common\windowid.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11895,6 +11913,11 @@ $(OBJS)\coredll_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_windowid.obj :  .AUTODEPEND ..\..\src\common\windowid.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_xpmdecod.obj :  .AUTODEPEND ..\..\src\common\xpmdecod.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13297,6 +13320,11 @@ $(OBJS)\corelib_valtext.obj :  .AUTODEPEND ..\..\src\common\valtext.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_wincmn.obj :  .AUTODEPEND ..\..\src\common\wincmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_windowid.obj :  .AUTODEPEND ..\..\src\common\windowid.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

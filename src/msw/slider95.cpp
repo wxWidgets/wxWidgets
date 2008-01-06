@@ -135,6 +135,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
 void wxSlider::Init()
 {
     m_labels = NULL;
+    m_labelIds = NULL;
 
     m_pageSize = 1;
     m_lineSize = 1;
@@ -204,10 +205,13 @@ wxSlider::Create(wxWindow *parent,
     if ( m_windowStyle & wxSL_LABELS )
     {
         m_labels = new wxSubwindows(SliderLabel_Last);
+        m_labelIds = new wxWindowIDRef[SliderLabel_Last];
 
         HWND hwndParent = GetHwndOf(parent);
         for ( size_t n = 0; n < SliderLabel_Last; n++ )
         {
+            m_labelIds[n] = NewControlId();
+
             (*m_labels)[n] = ::CreateWindow
                                (
                                     wxT("STATIC"),
@@ -215,7 +219,7 @@ wxSlider::Create(wxWindow *parent,
                                     WS_CHILD | WS_VISIBLE | SS_CENTER,
                                     0, 0, 0, 0,
                                     hwndParent,
-                                    (HMENU)NewControlId(),
+                                    (HMENU)(wxWindowID)m_labelIds[n],
                                     wxGetInstance(),
                                     NULL
                                );
@@ -282,6 +286,7 @@ WXDWORD wxSlider::MSWGetStyle(long style, WXDWORD *exstyle) const
 wxSlider::~wxSlider()
 {
     delete m_labels;
+    delete[] m_labelIds;
 }
 
 // ----------------------------------------------------------------------------

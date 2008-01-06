@@ -106,7 +106,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
                 wstyle,
                 0, 0, 0, 0,
                 GetHwndOf(parent),
-                (HMENU)m_windowId,
+                (HMENU)m_windowId.GetValue(),
                 wxGetInstance(),
                 NULL
              );

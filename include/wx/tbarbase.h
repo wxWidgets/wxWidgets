@@ -210,7 +210,7 @@ protected:
 
     // tool parameters
     int m_toolStyle;    // see enum wxToolBarToolStyle
-    int m_id;           // the tool id, wxID_SEPARATOR for separator
+    wxWindowIDRef m_id; // the tool id, wxID_SEPARATOR for separator
     wxItemKind m_kind;  // for normal buttons may be wxITEM_NORMAL/CHECK/RADIO
 
     // as controls have their own client data, no need to waste memory

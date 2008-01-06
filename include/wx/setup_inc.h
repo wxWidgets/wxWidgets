@@ -882,6 +882,16 @@
 // wxValidator class and related methods
 #define wxUSE_VALIDATORS 1
 
+// Use reference counted ID management: this means that wxWidgets will track
+// the automatically allocated ids (those used when you use wxID_ANY when
+// creating a window, menu or toolbar item &c) instead of just supposing that
+// the program never runs out of them. This is mostly useful only under wxMSW
+// where the total ids range is limited to SHRT_MIN..SHRT_MAX and where
+// long-running programs can run into problems with ids reuse without this. On
+// the other platforms, where the ids have the full int range, this shouldn't
+// be necessary.
+#define wxUSE_AUTOID_MANAGEMENT defined(__WXMSW__)
+
 // ----------------------------------------------------------------------------
 // common dialogs
 // ----------------------------------------------------------------------------

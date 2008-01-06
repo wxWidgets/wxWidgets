@@ -158,6 +158,7 @@ protected:
 
     // the buttons we contain
     wxSubwindows *m_radioButtons;
+    wxWindowIDRef *m_radioButtonIds;
 
     // array of widths and heights of the buttons, may be wxDefaultCoord if the
     // corresponding quantity should be computed

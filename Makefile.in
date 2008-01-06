@@ -3223,6 +3223,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/validate.h \
 	wx/valtext.h \
 	wx/window.h \
+	wx/windowid.h \
 	wx/wupdlock.h \
 	wx/accel.h \
 	wx/access.h \
@@ -3892,6 +3893,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_validate.o \
 	monodll_valtext.o \
 	monodll_wincmn.o \
+	monodll_windowid.o \
 	monodll_xpmdecod.o \
 	monodll_busyinfo.o \
 	monodll_buttonbar.o \
@@ -4074,6 +4076,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_validate.o \
 	monodll_valtext.o \
 	monodll_wincmn.o \
+	monodll_windowid.o \
 	monodll_xpmdecod.o \
 	monodll_busyinfo.o \
 	monodll_buttonbar.o \
@@ -5780,6 +5783,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_validate.o \
 	monolib_valtext.o \
 	monolib_wincmn.o \
+	monolib_windowid.o \
 	monolib_xpmdecod.o \
 	monolib_busyinfo.o \
 	monolib_buttonbar.o \
@@ -5962,6 +5966,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_validate.o \
 	monolib_valtext.o \
 	monolib_wincmn.o \
+	monolib_windowid.o \
 	monolib_xpmdecod.o \
 	monolib_busyinfo.o \
 	monolib_buttonbar.o \
@@ -7949,6 +7954,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_validate.o \
 	coredll_valtext.o \
 	coredll_wincmn.o \
+	coredll_windowid.o \
 	coredll_xpmdecod.o \
 	coredll_busyinfo.o \
 	coredll_buttonbar.o \
@@ -8131,6 +8137,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_validate.o \
 	coredll_valtext.o \
 	coredll_wincmn.o \
+	coredll_windowid.o \
 	coredll_xpmdecod.o \
 	coredll_busyinfo.o \
 	coredll_buttonbar.o \
@@ -9441,6 +9448,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_validate.o \
 	corelib_valtext.o \
 	corelib_wincmn.o \
+	corelib_windowid.o \
 	corelib_xpmdecod.o \
 	corelib_busyinfo.o \
 	corelib_buttonbar.o \
@@ -9623,6 +9631,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_validate.o \
 	corelib_valtext.o \
 	corelib_wincmn.o \
+	corelib_windowid.o \
 	corelib_xpmdecod.o \
 	corelib_busyinfo.o \
 	corelib_buttonbar.o \
@@ -17589,6 +17598,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_wincmn.o: $(srcdir)/src/common/wincmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/wincmn.cpp
 
+@COND_USE_GUI_1@monodll_windowid.o: $(srcdir)/src/common/windowid.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/windowid.cpp
+
 @COND_USE_GUI_1@monodll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/xpmdecod.cpp
 
@@ -22049,6 +22061,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_wincmn.o: $(srcdir)/src/common/wincmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/wincmn.cpp
+
+@COND_USE_GUI_1@monolib_windowid.o: $(srcdir)/src/common/windowid.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/windowid.cpp
 
 @COND_USE_GUI_1@monolib_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/xpmdecod.cpp
@@ -27027,6 +27042,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_wincmn.o: $(srcdir)/src/common/wincmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/wincmn.cpp
 
+@COND_USE_GUI_1@coredll_windowid.o: $(srcdir)/src/common/windowid.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/windowid.cpp
+
 @COND_USE_GUI_1@coredll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/xpmdecod.cpp
 
@@ -30086,6 +30104,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_wincmn.o: $(srcdir)/src/common/wincmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/wincmn.cpp
+
+@COND_USE_GUI_1@corelib_windowid.o: $(srcdir)/src/common/windowid.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/windowid.cpp
 
 @COND_USE_GUI_1@corelib_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/xpmdecod.cpp

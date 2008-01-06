@@ -646,6 +646,10 @@ SOURCE=..\..\src\common\wincmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\windowid.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\xpmdecod.cpp
 # End Source File
 # End Group
@@ -6373,6 +6377,10 @@ SOURCE=..\..\include\wx\vscroll.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\window.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\windowid.h
 # End Source File
 # Begin Source File
 

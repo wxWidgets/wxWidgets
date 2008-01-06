@@ -409,6 +409,8 @@
 
 #define wxUSE_VALIDATORS 0
 
+#define wxUSE_AUTOID_MANAGEMENT defined(__WXMSW__)
+
 
 #define wxUSE_COMMON_DIALOGS 0
 

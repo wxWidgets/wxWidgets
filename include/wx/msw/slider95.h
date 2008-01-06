@@ -117,7 +117,8 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     // the labels windows, if any
-    wxSubwindows *m_labels;
+    wxSubwindows  *m_labels;
+    wxWindowIDRef *m_labelIds;
 
     int           m_rangeMin;
     int           m_rangeMax;

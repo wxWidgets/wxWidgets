@@ -145,7 +145,7 @@ public:
     }
 
 protected:
-    int           m_id;             // numeric id of the item >= 0 or wxID_ANY or wxID_SEPARATOR
+    wxWindowIDRef m_id;             // numeric id of the item >= 0 or wxID_ANY or wxID_SEPARATOR
     wxMenu       *m_parentMenu,     // the menu we belong to
                  *m_subMenu;        // our sub menu or NULL
     wxString      m_text,           // label of the item

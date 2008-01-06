@@ -694,7 +694,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   if ( id != wxID_ANY )
     m_windowId = id;
   else
-    m_windowId = (int)NewControlId();
+    m_windowId = NewControlId();
 
   if ( parent )
   {
