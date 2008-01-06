@@ -113,7 +113,6 @@ bool wxEventLoop::Dispatch()
 {
     wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
 
-    gtk_main_iteration();
-
-    return true;
+    // gtk_main_iteration() returns TRUE only if gtk_main_quit() was called
+    return !gtk_main_iteration();
 }
