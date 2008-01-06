@@ -295,9 +295,7 @@ bool wxTextEntry::AutoCompleteFileNames()
     static wxDynamicLibrary s_dllShlwapi;
     if ( s_pfnSHAutoComplete == (SHAutoComplete_t)-1 )
     {
-        wxLogNull noLog;
-
-        if ( !s_dllShlwapi.Load(_T("shlwapi.dll"), wxDL_VERBATIM) )
+        if ( !s_dllShlwapi.Load(_T("shlwapi.dll"), wxDL_VERBATIM | wxDL_QUIET) )
         {
             s_pfnSHAutoComplete = NULL;
         }

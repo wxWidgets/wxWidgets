@@ -513,9 +513,7 @@ wxDisplayFactoryWin32Base::wxDisplayFactoryWin32Base()
     {
         ms_supportsMultimon = 0;
 
-        wxDynamicLibrary dllUser32(_T("user32.dll"));
-
-        wxLogNull noLog;
+        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
 
         if ( (wxDL_INIT_FUNC(gs_, MonitorFromPoint, dllUser32)) == NULL ||
              (wxDL_INIT_FUNC(gs_, MonitorFromWindow, dllUser32)) == NULL ||
@@ -588,9 +586,7 @@ wxDisplayFactoryMultimon::wxDisplayFactoryMultimon()
     // implementation
     EnumDisplayMonitors_t pfnEnumDisplayMonitors;
     {
-        wxLogNull noLog;
-
-        wxDynamicLibrary dllUser32(_T("user32.dll"));
+        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
         if ( (wxDL_INIT_FUNC(pfn, EnumDisplayMonitors, dllUser32)) == NULL )
             return;
     }
@@ -735,7 +731,7 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
     static ChangeDisplaySettingsEx_t pfnChangeDisplaySettingsEx = NULL;
     if ( !pfnChangeDisplaySettingsEx )
     {
-        wxDynamicLibrary dllUser32(_T("user32.dll"));
+        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
         if ( dllUser32.IsLoaded() )
         {
             wxDL_INIT_FUNC_AW(pfn, ChangeDisplaySettingsEx, dllUser32);
@@ -805,13 +801,7 @@ wxDisplayFactoryDirectDraw::wxDisplayFactoryDirectDraw()
     if ( !ms_supportsMultimon )
         return;
 
-#if wxUSE_LOG
-    // suppress the errors if ddraw.dll is not found, we're prepared to handle
-    // this
-    wxLogNull noLog;
-#endif
-
-    m_dllDDraw.Load(_T("ddraw.dll"));
+    m_dllDDraw.Load(_T("ddraw.dll"), wxDL_VERBATIM | wxDL_QUIET);
 
     if ( !m_dllDDraw.IsLoaded() )
         return;

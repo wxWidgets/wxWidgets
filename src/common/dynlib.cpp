@@ -101,7 +101,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
     m_handle = RawLoad(libname, flags);
 #endif
 
-    if ( m_handle == 0 )
+    if ( m_handle == 0 && !(flags & wxDL_QUIET) )
     {
 #ifdef wxHAVE_DYNLIB_ERROR
         Error();

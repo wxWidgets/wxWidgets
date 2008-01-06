@@ -725,9 +725,7 @@ wxWindowMSW::MSWShowWithEffect(bool show,
     static bool s_initDone = false;
     if ( !s_initDone )
     {
-        wxLogNull noLog;
-
-        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM);
+        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
         wxDL_INIT_FUNC(s_pfn, AnimateWindow, dllUser32);
 
         s_initDone = true;

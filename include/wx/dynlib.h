@@ -75,6 +75,8 @@ enum wxDLFlags
     wxDL_NOSHARE    = 0x00000010,   // load new DLL, don't reuse already loaded
                                     // (only for wxPluginManager)
 
+    wxDL_QUIET      = 0x00000020,   // don't log an error if failed to load
+
     wxDL_DEFAULT    = wxDL_NOW      // default flags correspond to Win32
 };
 
@@ -112,8 +114,11 @@ enum wxPluginCategory
 // with "_t" but it doesn't define a variable but just assigns the loaded value
 // to it and also allows to pass it the prefix to be used instead of hardcoding
 // "pfn" (the prefix can be "m_" or "gs_pfn" or whatever)
+//
+// notice that this function doesn't generate error messages if the symbol
+// couldn't be loaded, the caller should generate the appropriate message
 #define wxDL_INIT_FUNC(pfx, name, dynlib) \
-    pfx ## name = (name ## _t)(dynlib).GetSymbol(#name)
+    pfx ## name = (name ## _t)(dynlib).RawGetSymbol(#name)
 
 #ifdef __WXMSW__
 
