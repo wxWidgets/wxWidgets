@@ -269,6 +269,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_OS2_SRC" hints="files">
     src/common/fdiodispatcher.cpp
     src/common/selectdispatcher.cpp
+    src/common/gsocketiohandler.cpp
     src/unix/appunix.cpp
     src/unix/evtloopunix.cpp
     src/unix/timerunx.cpp
@@ -284,6 +285,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_OS2_HDR" hints="files">
     wx/private/fdiodispatcher.h
     wx/private/selectdispatcher.h
+    wx/private/gsocketiohandler.h
     wx/unix/app.h
     wx/os2/apptbase.h
     wx/os2/apptrait.h

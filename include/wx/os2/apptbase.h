@@ -27,6 +27,12 @@ public:
 
     // Clean up message queue.
     virtual void TerminateGui(unsigned long ulHab);
+#if wxUSE_SOCKETS
+    // returns the select()-based socket manager for console applications which
+    // is also used by some ports (wxX11, wxDFB) in the GUI build (hence it is
+    // here and not in wxConsoleAppTraits)
+    virtual GSocketManager *GetSocketManager();
+#endif
 };
 
 #endif // _WX_OS2_APPTBASE_H_

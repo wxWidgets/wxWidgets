@@ -47,6 +47,9 @@ public:
 #ifdef __WXGTK__
     virtual wxString GetDesktopEnvironment() const;
 #endif
+#if wxUSE_SOCKETS
+    virtual GSocketManager *GetSocketManager();
+#endif
 };
 
 #endif // wxUSE_GUI

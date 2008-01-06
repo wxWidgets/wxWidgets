@@ -31,67 +31,32 @@ static void _GSocket_PM_Output(void *data)
     socket->Detected_Write();
 }
 
-void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
+class PMSocketManager : public GSocketInputBasedManager
 {
-    int *m_id = (int *)(socket->m_gui_dependent);
-    int c;
-
-    if (socket->m_fd == -1)
-        return;
-
-    switch (event)
+public:
+    virtual int AddInput(GSocket *socket, SocketDir d)
     {
-        case GSOCK_LOST:       /* fall-through */
-        case GSOCK_INPUT:      c = 0; break;
-        case GSOCK_OUTPUT:     c = 1; break;
-        case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-        default: return;
+
+      if (d == FD_OUTPUT)
+          return wxTheApp->AddSocketHandler(socket->m_fd, wxSockWriteMask,
+					    _GSocket_PM_Output, (void *)socket);
+      else
+          return wxTheApp->AddSocketHandler(socket->m_fd, wxSockReadMask,
+					  _GSocket_PM_Input, (void *)socket);
     }
 
-    if (m_id[c] != -1)
-        wxTheApp->RemoveSocketHandler(m_id[c]);
-
-    if (c == 0)
+    virtual void RemoveInput(int fd)
     {
-        m_id[0] = wxTheApp->AddSocketHandler(socket->m_fd, wxSockReadMask,
-                                             _GSocket_PM_Input, (void *)socket);
+        wxTheApp->RemoveSocketHandler(fd);
     }
-    else
-    {
-        m_id[1] = wxTheApp->AddSocketHandler(socket->m_fd, wxSockWriteMask,
-                                             _GSocket_PM_Output, (void *)socket);
-    }
-}
+};
 
-void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSocketEvent event)
+GSocketManager *wxGUIAppTraits::GetSocketManager()
 {
-    int *m_id = (int *)(socket->m_gui_dependent);
-    int c;
-    switch (event)
-    {
-        case GSOCK_LOST:       /* fall-through */
-        case GSOCK_INPUT:      c = 0; break;
-        case GSOCK_OUTPUT:     c = 1; break;
-        case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
-        default: return;
-    }
-    if (m_id[c] != -1)
-        wxTheApp->RemoveSocketHandler(m_id[c]);
-
-    m_id[c] = -1;
+    static GTKSocketManager s_manager;
+    return &s_manager;
 }
 
-void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
-{
-    Install_Callback(socket, GSOCK_INPUT);
-    Install_Callback(socket, GSOCK_OUTPUT);
-}
-
-void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
-{
-    Uninstall_Callback(socket, GSOCK_INPUT);
-    Uninstall_Callback(socket, GSOCK_OUTPUT);
-}
 
 #else /* !wxUSE_SOCKETS */
 
