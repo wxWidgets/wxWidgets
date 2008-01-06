@@ -771,19 +771,27 @@ void DateTimeTestCase::TestParceRFC822()
         },
     };
 
-    for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
+    for ( unsigned n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
+        const wxChar * const datestr = parseTestDates[n].rfc822;
+
         wxDateTime dt;
-        if ( dt.ParseRfc822Date(parseTestDates[n].rfc822) )
+        if ( dt.ParseRfc822Date(datestr) )
         {
-            CPPUNIT_ASSERT( parseTestDates[n].good );
+            WX_ASSERT_MESSAGE(
+                ("Erroneously parsed \"%s\"", datestr),
+                parseTestDates[n].good
+            );
 
             wxDateTime dtReal = parseTestDates[n].date.DT().FromUTC();
             CPPUNIT_ASSERT_EQUAL( dtReal, dt );
         }
         else // failed to parse
         {
-            CPPUNIT_ASSERT( !parseTestDates[n].good );
+            WX_ASSERT_MESSAGE(
+                ("Failed to parse \"%s\"", datestr),
+                !parseTestDates[n].good
+            );
         }
     }
 }

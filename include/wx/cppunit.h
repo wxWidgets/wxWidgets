@@ -87,6 +87,12 @@
 // Use this macro to compare a size_t with a literal integer
 #define WX_ASSERT_SIZET_EQUAL(n, m) CPPUNIT_ASSERT_EQUAL(((size_t)n), m)
 
+
+// Use this macro to assert with the given formatted message (it should contain
+// the format string and arguments in a separate pair of parentheses)
+#define WX_ASSERT_MESSAGE(msg, cond) \
+    CPPUNIT_ASSERT_MESSAGE(std::string(wxString::Format msg .mb_str()), (cond))
+
 ///////////////////////////////////////////////////////////////////////////////
 // define stream inserter for wxString if it's not defined in the main library,
 // we need it to output the test failures involving wxString
