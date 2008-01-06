@@ -596,13 +596,13 @@ if [ -x test_gui ]; then ./test_gui; fi
     <xsl:param name="content"/>
     <xsl:param name="name"/>
     <xsl:choose>
-        <xsl:when test="$name = 'sunday'">0</xsl:when>
-        <xsl:when test="$name = 'monday'">1</xsl:when>
-        <xsl:when test="$name = 'tuesday'">2</xsl:when>
-        <xsl:when test="$name = 'wednesday'">3</xsl:when>
-        <xsl:when test="$name = 'thursday'">4</xsl:when>
-        <xsl:when test="$name = 'friday'">5</xsl:when>
-        <xsl:when test="$name = 'saturday'">6</xsl:when>
+        <xsl:when test="$name = 'monday'">0</xsl:when>
+        <xsl:when test="$name = 'tuesday'">1</xsl:when>
+        <xsl:when test="$name = 'wednesday'">2</xsl:when>
+        <xsl:when test="$name = 'thursday'">3</xsl:when>
+        <xsl:when test="$name = 'friday'">4</xsl:when>
+        <xsl:when test="$name = 'saturday'">5</xsl:when>
+        <xsl:when test="$name = 'sunday'">6</xsl:when>
     </xsl:choose>
 </xsl:template>
 
@@ -610,13 +610,13 @@ if [ -x test_gui ]; then ./test_gui; fi
     <xsl:param name="content"/>
     <xsl:param name="number"/>
     <xsl:choose>
-        <xsl:when test="$number = '0'">sunday</xsl:when>
-        <xsl:when test="$number = '1'">monday</xsl:when>
-        <xsl:when test="$number = '2'">tuesday</xsl:when>
-        <xsl:when test="$number = '3'">wednesday</xsl:when>
-        <xsl:when test="$number = '4'">thursday</xsl:when>
-        <xsl:when test="$number = '5'">friday</xsl:when>
-        <xsl:when test="$number = '6'">saturday</xsl:when>
+        <xsl:when test="$number = '0'">monday</xsl:when>
+        <xsl:when test="$number = '1'">tuesday</xsl:when>
+        <xsl:when test="$number = '2'">wednesday</xsl:when>
+        <xsl:when test="$number = '3'">thursday</xsl:when>
+        <xsl:when test="$number = '4'">friday</xsl:when>
+        <xsl:when test="$number = '5'">saturday</xsl:when>
+        <xsl:when test="$number = '6'">sunday</xsl:when>
     </xsl:choose>
 </xsl:template>
 
