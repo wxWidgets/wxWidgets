@@ -30,9 +30,11 @@
 
 #include <string.h>
 
+#include "wx/os2/dc.h"
+#include "wx/os2/dcclient.h"
 #include "wx/os2/private.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxPMDCImpl, wxDCImpl)
 
 //
 // wxWidgets uses the Microsoft convention that the origin is the UPPER left.
@@ -156,8 +158,8 @@ int SetBkMode(
 // wxDCCacheEntry
 // ---------------------------------------------------------------------------
 
-wxList wxDC::m_svBitmapCache;
-wxList wxDC::m_svDCCache;
+wxList wxPMDCImpl::m_svBitmapCache;
+wxList wxPMDCImpl::m_svDCCache;
 
 wxDCCacheEntry::wxDCCacheEntry(
   WXHBITMAP                         hBitmap
@@ -193,7 +195,7 @@ wxDCCacheEntry::~wxDCCacheEntry()
         ::GpiDestroyPS(m_hPS);
 } // end of wxDCCacheEntry::~wxDCCacheEntry
 
-wxDCCacheEntry* wxDC::FindBitmapInCache(
+wxDCCacheEntry* wxPMDCImpl::FindBitmapInCache(
   HPS                               hPS
 , int                               nWidth
 , int                               nHeight
@@ -260,7 +262,7 @@ wxDCCacheEntry* wxDC::FindBitmapInCache(
     return pEntry;
 } // end of FindBitmapInCache
 
-wxDCCacheEntry* wxDC::FindDCInCache(
+wxDCCacheEntry* wxPMDCImpl::FindDCInCache(
   wxDCCacheEntry*                   pNotThis
 , HPS                               hPS
 )
@@ -289,23 +291,23 @@ wxDCCacheEntry* wxDC::FindDCInCache(
                                                                );
     AddToDCCache(pEntry);
     return pEntry;
-} // end of wxDC::FindDCInCache
+} // end of wxPMDCImpl::FindDCInCache
 
-void wxDC::AddToBitmapCache(
+void wxPMDCImpl::AddToBitmapCache(
   wxDCCacheEntry*                   pEntry
 )
 {
     m_svBitmapCache.Append(pEntry);
-} // end of wxDC::AddToBitmapCache
+} // end of wxPMDCImpl::AddToBitmapCache
 
-void wxDC::AddToDCCache(
+void wxPMDCImpl::AddToDCCache(
   wxDCCacheEntry*                   pEntry
 )
 {
     m_svDCCache.Append(pEntry);
-} // end of wxDC::AddToDCCache
+} // end of wxPMDCImpl::AddToDCCache
 
-void wxDC::ClearCache()
+void wxPMDCImpl::ClearCache()
 {
     m_svBitmapCache.DeleteContents(true);
     m_svBitmapCache.Clear();
@@ -313,14 +315,14 @@ void wxDC::ClearCache()
     m_svDCCache.DeleteContents(true);
     m_svDCCache.Clear();
     m_svDCCache.DeleteContents(false);
-} // end of wxDC::ClearCache
+} // end of wxPMDCImpl::ClearCache
 
 // Clean up cache at app exit
 class wxDCModule : public wxModule
 {
 public:
     virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDC::ClearCache(); }
+    virtual void OnExit() { wxPMDCImpl::ClearCache(); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDCModule)
@@ -334,28 +336,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 // wxDC
 // ---------------------------------------------------------------------------
 
-wxDC::wxDC(void)
+wxPMDCImpl::wxPMDCImpl( wxDC *owner, WXHDC hDC ) :
+    wxDCImpl( owner )
 {
-    m_pCanvas      = NULL;
+    Init();
+    m_hDC          = hDC;
+} // end of wxPMDCImpl::wxPMDCImpl
 
-    m_hOldBitmap   = 0;
-    m_hOldPen      = 0;
-    m_hOldBrush    = 0;
-    m_hOldFont     = 0;
-    m_hOldPalette  = 0;
-
-    m_bOwnsDC      = false;
-    m_hDC          = 0;
-    m_hOldPS       = NULL;
-    m_hPS          = NULL;
-    m_bIsPaintTime = false; // True at Paint Time
-
-    m_pen.SetColour(*wxBLACK);
-    m_brush.SetColour(*wxWHITE);
-
-} // end of wxDC::wxDC
-
-wxDC::~wxDC(void)
+wxPMDCImpl::~wxPMDCImpl(void)
 {
     if ( m_hDC != 0 )
     {
@@ -384,12 +372,12 @@ wxDC::~wxDC(void)
             }
         }
     }
-} // end of wxDC::~wxDC
+} // end of wxPMDCImpl::~wxDC
 
 // This will select current objects out of the DC,
 // which is what you have to do before deleting the
 // DC.
-void wxDC::SelectOldObjects(
+void wxPMDCImpl::SelectOldObjects(
   WXHDC                             hPS
 )
 {
@@ -419,7 +407,7 @@ void wxDC::SelectOldObjects(
     m_font            = wxNullFont;
     m_backgroundBrush = wxNullBrush;
     m_vSelectedBitmap = wxNullBitmap;
-} // end of wxDC::SelectOldObjects
+} // end of wxPMDCImpl::SelectOldObjects
 
 // ---------------------------------------------------------------------------
 // clipping
@@ -437,7 +425,7 @@ void wxDC::SelectOldObjects(
     m_clipY2 = (wxCoord) YDEV2LOG(rect.yBottom); \
 }
 
-void wxDC::DoSetClippingRegion(
+void wxPMDCImpl::DoSetClippingRegion(
   wxCoord                           vX
 , wxCoord                           vY
 , wxCoord                           vWidth
@@ -454,9 +442,9 @@ void wxDC::DoSetClippingRegion(
     vRect.yBottom = vY;
     ::GpiIntersectClipRectangle(m_hPS, &vRect);
     DO_SET_CLIPPING_BOX()
-} // end of wxDC::DoSetClippingRegion
+} // end of wxPMDCImpl::DoSetClippingRegion
 
-void wxDC::DoSetClippingRegionAsRegion(
+void wxPMDCImpl::DoSetClippingRegionAsRegion(
   const wxRegion&                   rRegion
 )
 {
@@ -469,9 +457,9 @@ void wxDC::DoSetClippingRegionAsRegion(
                         ,&hRgnOld
                        );
     DO_SET_CLIPPING_BOX()
-} // end of wxDC::DoSetClippingRegionAsRegion
+} // end of wxPMDCImpl::DoSetClippingRegionAsRegion
 
-void wxDC::DestroyClippingRegion(void)
+void wxPMDCImpl::DestroyClippingRegion(void)
 {
     if (m_clipping && m_hPS)
     {
@@ -492,26 +480,26 @@ void wxDC::DestroyClippingRegion(void)
          ::GpiSetClipRegion(m_hPS, hRgn, &hRgnOld);
      }
     ResetClipping();
-} // end of wxDC::DestroyClippingRegion
+} // end of wxPMDCImpl::DestroyClippingRegion
 
 // ---------------------------------------------------------------------------
 // query capabilities
 // ---------------------------------------------------------------------------
 
-bool wxDC::CanDrawBitmap() const
+bool wxPMDCImpl::CanDrawBitmap() const
 {
     return true;
 }
 
-bool wxDC::CanGetTextExtent() const
+bool wxPMDCImpl::CanGetTextExtent() const
 {
     LONG                            lTechnology = 0L;
 
     ::DevQueryCaps(GetHDC(), CAPS_TECHNOLOGY, 1L, &lTechnology);
     return (lTechnology == CAPS_TECH_RASTER_DISPLAY) || (lTechnology == CAPS_TECH_RASTER_PRINTER);
-} // end of wxDC::CanGetTextExtent
+} // end of wxPMDCImpl::CanGetTextExtent
 
-int wxDC::GetDepth() const
+int wxPMDCImpl::GetDepth() const
 {
     LONG                            lArray[CAPS_COLOR_BITCOUNT];
     int                             nBitsPerPixel = 0;
@@ -525,13 +513,13 @@ int wxDC::GetDepth() const
         nBitsPerPixel = (int)lArray[CAPS_COLOR_BITCOUNT];
     }
     return nBitsPerPixel;
-} // end of wxDC::GetDepth
+} // end of wxPMDCImpl::GetDepth
 
 // ---------------------------------------------------------------------------
 // drawing
 // ---------------------------------------------------------------------------
 
-void wxDC::Clear()
+void wxPMDCImpl::Clear()
 {
     //
     // If this is a canvas DC then just fill with the background color
@@ -546,9 +534,9 @@ void wxDC::Clear()
     }
     else
     ::GpiErase(m_hPS);
-} // end of wxDC::Clear
+} // end of wxPMDCImpl::Clear
 
-bool wxDC::DoFloodFill(
+bool wxPMDCImpl::DoFloodFill(
   wxCoord                           vX
 , wxCoord                           vY
 , const wxColour&                   rCol
@@ -573,9 +561,9 @@ bool wxDC::DoFloodFill(
         bSuccess = true;
 
     return bSuccess;
-} // end of wxDC::DoFloodFill
+} // end of wxPMDCImpl::DoFloodFill
 
-bool wxDC::DoGetPixel(
+bool wxPMDCImpl::DoGetPixel(
   wxCoord                           vX
 , wxCoord                           vY
 , wxColour*                         pCol
@@ -597,9 +585,9 @@ bool wxDC::DoGetPixel(
                   ,GetBValue(lColor)
                  );
     return true;
-} // end of wxDC::DoGetPixel
+} // end of wxPMDCImpl::DoGetPixel
 
-void wxDC::DoCrossHair(
+void wxPMDCImpl::DoCrossHair(
   wxCoord                           vX
 , wxCoord                           vY
 )
@@ -631,9 +619,9 @@ void wxDC::DoCrossHair(
     ::GpiLine(m_hPS, &vPoint[3]);
     CalcBoundingBox(vX1, vY1);
     CalcBoundingBox(vX2, vY2);
-} // end of wxDC::DoCrossHair
+} // end of wxPMDCImpl::DoCrossHair
 
-void wxDC::DoDrawLine(
+void wxPMDCImpl::DoDrawLine(
   wxCoord                           vX1
 , wxCoord                           vY1
 , wxCoord                           vX2
@@ -677,7 +665,7 @@ void wxDC::DoDrawLine(
     ::GpiLine(m_hPS, &vPoint[1]);
     CalcBoundingBox(vX1, vY1);
     CalcBoundingBox(vX2, vY2);
-} // end of wxDC::DoDrawLine
+} // end of wxPMDCImpl::DoDrawLine
 
 //////////////////////////////////////////////////////////////////////////////
 // Draws an arc of a circle, centred on (xc, yc), with starting point (x1, y1)
@@ -685,7 +673,7 @@ void wxDC::DoDrawLine(
 // current brush for filling the shape. The arc is drawn in an anticlockwise
 // direction from the start point to the end point.
 //////////////////////////////////////////////////////////////////////////////
-void wxDC::DoDrawArc(
+void wxPMDCImpl::DoDrawArc(
   wxCoord                           vX1
 , wxCoord                           vY1
 , wxCoord                           vX2
@@ -775,9 +763,9 @@ void wxDC::DoDrawArc(
     CalcBoundingBox( (wxCoord)(vXc + dRadius)
                     ,(wxCoord)(vYc + dRadius)
                    );
-} // end of wxDC::DoDrawArc
+} // end of wxPMDCImpl::DoDrawArc
 
-void wxDC::DoDrawCheckMark(
+void wxPMDCImpl::DoDrawCheckMark(
   wxCoord                           vX1
 , wxCoord                           vY1
 , wxCoord                           vWidth
@@ -824,9 +812,9 @@ void wxDC::DoDrawCheckMark(
     CalcBoundingBox( vX2
                     ,vY2
                    );
-} // end of wxDC::DoDrawCheckMark
+} // end of wxPMDCImpl::DoDrawCheckMark
 
-void wxDC::DoDrawPoint(
+void wxPMDCImpl::DoDrawPoint(
   wxCoord                           vX
 , wxCoord                           vY
 )
@@ -845,9 +833,9 @@ void wxDC::DoDrawPoint(
     CalcBoundingBox( vX
                     ,vY
                    );
-} // end of wxDC::DoDrawPoint
+} // end of wxPMDCImpl::DoDrawPoint
 
-void wxDC::DoDrawPolygon( int n,
+void wxPMDCImpl::DoDrawPolygon( int n,
                           wxPoint vPoints[],
                           wxCoord vXoffset,
                           wxCoord vYoffset,
@@ -911,9 +899,9 @@ void wxDC::DoDrawPolygon( int n,
     ::GpiMove(m_hPS, &vPlgn.aPointl[0]);
     lHits = ::GpiPolygons(m_hPS, ulCount, &vPlgn, flOptions, flModel);
     free(vPlgn.aPointl);
-} // end of wxDC::DoDrawPolygon
+} // end of wxPMDCImpl::DoDrawPolygon
 
-void wxDC::DoDrawLines(
+void wxPMDCImpl::DoDrawLines(
   int                               n
 , wxPoint                           vPoints[]
 , wxCoord                           vXoffset
@@ -961,9 +949,9 @@ void wxDC::DoDrawLines(
             ::GpiLine(m_hPS, &vPoint);
         }
     }
-} // end of wxDC::DoDrawLines
+} // end of wxPMDCImpl::DoDrawLines
 
-void wxDC::DoDrawRectangle(
+void wxPMDCImpl::DoDrawRectangle(
   wxCoord                           vX
 , wxCoord                           vY
 , wxCoord                           vWidth
@@ -1050,9 +1038,9 @@ void wxDC::DoDrawRectangle(
     }
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX2, vY2);
-} // end of wxDC::DoDrawRectangle
+} // end of wxPMDCImpl::DoDrawRectangle
 
-void wxDC::DoDrawRoundedRectangle(
+void wxPMDCImpl::DoDrawRoundedRectangle(
   wxCoord                           vX
 , wxCoord                           vY
 , wxCoord                           vWidth
@@ -1143,10 +1131,10 @@ void wxDC::DoDrawRoundedRectangle(
 
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX2, vY2);
-} // end of wxDC::DoDrawRoundedRectangle
+} // end of wxPMDCImpl::DoDrawRoundedRectangle
 
 // Draw Ellipse within box (x,y) - (x+width, y+height)
-void wxDC::DoDrawEllipse(
+void wxPMDCImpl::DoDrawEllipse(
   wxCoord                           vX
 , wxCoord                           vY
 , wxCoord                           vWidth
@@ -1186,9 +1174,9 @@ void wxDC::DoDrawEllipse(
 
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX2, vY2);
-} // end of wxDC::DoDrawEllipse
+} // end of wxPMDCImpl::DoDrawEllipse
 
-void wxDC::DoDrawEllipticArc(
+void wxPMDCImpl::DoDrawEllipticArc(
   wxCoord                           vX
 , wxCoord                           vY
 , wxCoord                           vWidth
@@ -1245,9 +1233,9 @@ void wxDC::DoDrawEllipticArc(
 
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX2, vY2);
-} // end of wxDC::DoDrawEllipticArc
+} // end of wxPMDCImpl::DoDrawEllipticArc
 
-void wxDC::DoDrawIcon(
+void wxPMDCImpl::DoDrawIcon(
   const wxIcon&                     rIcon
 , wxCoord                           vX
 , wxCoord                           vY
@@ -1270,9 +1258,9 @@ void wxDC::DoDrawIcon(
     }
     CalcBoundingBox(vX, vY);
     CalcBoundingBox(vX + rIcon.GetWidth(), vY + rIcon.GetHeight());
-} // end of wxDC::DoDrawIcon
+} // end of wxPMDCImpl::DoDrawIcon
 
-void wxDC::DoDrawBitmap(
+void wxPMDCImpl::DoDrawBitmap(
   const wxBitmap&                   rBmp
 , wxCoord                           vX
 , wxCoord                           vY
@@ -1365,9 +1353,9 @@ void wxDC::DoDrawBitmap(
                 //
                 // Need to get a background color for mask blitting
                 //
-                if (IsKindOf(CLASSINFO(wxWindowDC)))
+                if (IsKindOf(CLASSINFO(wxWindowDCImpl)))
                 {
-                    wxWindowDC*             pWindowDC = wxDynamicCast(this, wxWindowDC);
+                    wxWindowDCImpl*  pWindowDC = wxDynamicCast(this, wxWindowDCImpl);
 
                     lColor = pWindowDC->m_pCanvas->GetBackgroundColour().GetPixel();
                 }
@@ -1675,9 +1663,9 @@ void wxDC::DoDrawBitmap(
             ::GpiSetBackColor((HPS)GetHPS(), lOldBackGround);
         }
     }
-} // end of wxDC::DoDrawBitmap
+} // end of wxPMDCImpl::DoDrawBitmap
 
-void wxDC::DoDrawText(
+void wxPMDCImpl::DoDrawText(
   const wxString&                   rsText
 , wxCoord                           vX
 , wxCoord                           vY
@@ -1692,11 +1680,11 @@ void wxDC::DoDrawText(
                );
 
     CalcBoundingBox(vX, vY);
-    GetTextExtent(rsText, &vWidth, &vHeight);
+    GetOwner()->GetTextExtent(rsText, &vWidth, &vHeight);
     CalcBoundingBox((vX + vWidth), (vY + vHeight));
-} // end of wxDC::DoDrawText
+} // end of wxPMDCImpl::DoDrawText
 
-void wxDC::DrawAnyText( const wxString& rsText,
+void wxPMDCImpl::DrawAnyText( const wxString& rsText,
                         wxCoord vX,
                         wxCoord vY )
 {
@@ -1729,10 +1717,10 @@ void wxDC::DrawAnyText( const wxString& rsText,
     SetBkMode( m_hPS
               ,m_backgroundMode
              );
-    GetTextExtent( rsText
-                  ,&vTextX
-                  ,&vTextY
-                 );
+    GetOwner()->GetTextExtent( rsText
+                              ,&vTextX
+                              ,&vTextY
+                             );
     vPtlStart.x = vX;
     if (!(m_vRclPaint.yTop == 0 &&
           m_vRclPaint.yBottom == 0 &&
@@ -1777,7 +1765,7 @@ void wxDC::DrawAnyText( const wxString& rsText,
              );
 }
 
-void wxDC::DoDrawRotatedText(
+void wxPMDCImpl::DoDrawRotatedText(
   const wxString&                   rsText
 , wxCoord                           vX
 , wxCoord                           vY
@@ -1848,7 +1836,7 @@ void wxDC::DoDrawRotatedText(
 // set GDI objects
 // ---------------------------------------------------------------------------
 
-void wxDC::DoSelectPalette( bool WXUNUSED(bRealize) )
+void wxPMDCImpl::DoSelectPalette( bool WXUNUSED(bRealize) )
 {
     //
     // Set the old object temporarily, in case the assignment deletes an object
@@ -1867,9 +1855,9 @@ void wxDC::DoSelectPalette( bool WXUNUSED(bRealize) )
         if (!m_hOldPalette)
             m_hOldPalette = (WXHPALETTE)hOldPal;
     }
-} // end of wxDC::DoSelectPalette
+} // end of wxPMDCImpl::DoSelectPalette
 
-void wxDC::InitializePalette()
+void wxPMDCImpl::InitializePalette()
 {
     if (wxDisplayDepth() <= 8 )
     {
@@ -1890,9 +1878,9 @@ void wxDC::InitializePalette()
             DoSelectPalette();
         }
     }
-} // end of wxDC::InitializePalette
+} // end of wxPMDCImpl::InitializePalette
 
-void wxDC::SetPalette(
+void wxPMDCImpl::SetPalette(
   const wxPalette&                  rPalette
 )
 {
@@ -1911,9 +1899,9 @@ void wxDC::SetPalette(
     HPALETTE                    hOldPal = ::GpiSelectPalette((HDC) m_hPS, (HPALETTE) m_palette.GetHPALETTE());
     if (!m_hOldPalette)
         m_hOldPalette = (WXHPALETTE)hOldPal;
-} // end of wxDC::SetPalette
+} // end of wxPMDCImpl::SetPalette
 
-void wxDC::SetFont(
+void wxPMDCImpl::SetFont(
   const wxFont&                     rFont
 )
 {
@@ -1938,19 +1926,17 @@ void wxDC::SetFont(
         HFONT                       hFont = m_font.GetResourceHandle();
         if (hFont == (HFONT) NULL)
         {
-            wxLogDebug(wxT("::SelectObject failed in wxDC::SetFont."));
+            wxLogDebug(wxT("::SelectObject failed in wxPMDCImpl::SetFont."));
         }
         if (!m_hOldFont)
             m_hOldFont = (WXHFONT) hFont;
     }
-} // end of wxDC::SetFont
+} // end of wxPMDCImpl::SetFont
 
-void wxDC::SetPen(
+void wxPMDCImpl::SetPen(
   const wxPen&                      rPen
 )
 {
-    wxCHECK_RET( Ok(), wxT("invalid window dc") );
-
     if (m_pen == rPen)
         return;
     m_pen = rPen;
@@ -1982,12 +1968,10 @@ void wxDC::SetPen(
     }
 }
 
-void wxDC::SetBrush(
+void wxPMDCImpl::SetBrush(
   const wxBrush&                    rBrush
 )
 {
-    wxCHECK_RET( Ok(), wxT("invalid window dc") );
-
     if (m_hOldBrush)
         m_hOldBrush = 0L;
     m_brush = rBrush;
@@ -2016,9 +2000,9 @@ void wxDC::SetBrush(
                 m_hOldBrush = (WXHWND)m_brush.GetPS();
         }
     }
-} // end of wxDC::SetBrush
+} // end of wxPMDCImpl::SetBrush
 
-void wxDC::SetBackground(const wxBrush& rBrush)
+void wxPMDCImpl::SetBackground(const wxBrush& rBrush)
 {
     m_backgroundBrush = rBrush;
 
@@ -2026,20 +2010,20 @@ void wxDC::SetBackground(const wxBrush& rBrush)
     {
         (void)::GpiSetBackColor((HPS)m_hPS, m_backgroundBrush.GetColour().GetPixel());
     }
-} // end of wxDC::SetBackground
+} // end of wxPMDCImpl::SetBackground
 
-void wxDC::SetBackgroundMode(int nMode)
+void wxPMDCImpl::SetBackgroundMode(int nMode)
 {
     m_backgroundMode = nMode;
-} // end of wxDC::SetBackgroundMode
+} // end of wxPMDCImpl::SetBackgroundMode
 
-void wxDC::SetLogicalFunction(int nFunction)
+void wxPMDCImpl::SetLogicalFunction(int nFunction)
 {
     m_logicalFunction = nFunction;
     SetRop((WXHDC)m_hDC);
-} // wxDC::SetLogicalFunction
+} // wxPMDCImpl::SetLogicalFunction
 
-void wxDC::SetRop(WXHDC hDC)
+void wxPMDCImpl::SetRop(WXHDC hDC)
 {
     if (!hDC || m_logicalFunction < 0)
         return;
@@ -2099,31 +2083,31 @@ void wxDC::SetRop(WXHDC hDC)
             break;
     }
     ::GpiSetMix((HPS)hDC, lCRop);
-} // end of wxDC::SetRop
+} // end of wxPMDCImpl::SetRop
 
-bool wxDC::StartDoc( const wxString& WXUNUSED(rsMessage) )
+bool wxPMDCImpl::StartDoc( const wxString& WXUNUSED(rsMessage) )
 {
     // We might be previewing, so return true to let it continue.
     return true;
-} // end of wxDC::StartDoc
+} // end of wxPMDCImpl::StartDoc
 
-void wxDC::EndDoc()
+void wxPMDCImpl::EndDoc()
 {
-} // end of wxDC::EndDoc
+} // end of wxPMDCImpl::EndDoc
 
-void wxDC::StartPage()
+void wxPMDCImpl::StartPage()
 {
-} // end of wxDC::StartPage
+} // end of wxPMDCImpl::StartPage
 
-void wxDC::EndPage()
+void wxPMDCImpl::EndPage()
 {
-} // end of wxDC::EndPage
+} // end of wxPMDCImpl::EndPage
 
 // ---------------------------------------------------------------------------
 // text metrics
 // ---------------------------------------------------------------------------
 
-wxCoord wxDC::GetCharHeight() const
+wxCoord wxPMDCImpl::GetCharHeight() const
 {
     FONTMETRICS                     vFM; // metrics structure
 
@@ -2134,7 +2118,7 @@ wxCoord wxDC::GetCharHeight() const
     return YDEV2LOGREL(vFM.lXHeight);
 }
 
-wxCoord wxDC::GetCharWidth() const
+wxCoord wxPMDCImpl::GetCharWidth() const
 {
     FONTMETRICS                     vFM; // metrics structure
 
@@ -2145,7 +2129,7 @@ wxCoord wxDC::GetCharWidth() const
     return XDEV2LOGREL(vFM.lAveCharWidth);
 }
 
-void wxDC::DoGetTextExtent(
+void wxPMDCImpl::DoGetTextExtent(
   const wxString&                   rsString
 , wxCoord*                          pvX
 , wxCoord*                          pvY
@@ -2174,6 +2158,14 @@ void wxDC::DoGetTextExtent(
     //
     // In world coordinates.
     //
+    if (!m_hPS)
+    {
+	(void)wxMessageBox( _T("wxWidgets core library")
+			    ,"Using uninitialized DC for measuring text!\n"
+			    ,wxICON_INFORMATION
+			    );
+    }
+	
     bRc = ::GpiQueryTextBox( m_hPS
                             ,l
                             ,rsString.char_str()
@@ -2186,7 +2178,7 @@ void wxDC::DoGetTextExtent(
        sError = wxPMErrorToStr(vErrorCode);
        // DEBUG
        wxSprintf(zMsg, _T("GpiQueryTextBox for %s: failed with Error: %lx - %s"), rsString.c_str(), vErrorCode, sError.c_str());
-       (void)wxMessageBox( _T("wxWidgets Menu sample")
+       (void)wxMessageBox( _T("wxWidgets core library")
                           ,zMsg
                           ,wxICON_INFORMATION
                          );
@@ -2218,7 +2210,7 @@ void wxDC::DoGetTextExtent(
         *pvExternalLeading = vFM.lExternalLeading;
 }
 
-void wxDC::SetMapMode(
+void wxPMDCImpl::SetMapMode(
   int                               nMode
 )
 {
@@ -2297,27 +2289,27 @@ void wxDC::SetMapMode(
     
     ComputeScaleAndOrigin();
     
-}; // end of wxDC::SetMapMode
+}; // end of wxPMDCImpl::SetMapMode
 
-void wxDC::SetUserScale( double dX,
+void wxPMDCImpl::SetUserScale( double dX,
                          double dY )
 {
     m_userScaleX = dX;
     m_userScaleY = dY;
 
     SetMapMode(m_mappingMode);
-} // end of wxDC::SetUserScale
+} // end of wxPMDCImpl::SetUserScale
 
-void wxDC::SetAxisOrientation( bool bXLeftRight,
+void wxPMDCImpl::SetAxisOrientation( bool bXLeftRight,
                                bool bYBottomUp )
 {
     m_signX = bXLeftRight ? 1 : -1;
     m_signY = bYBottomUp ? -1 : 1;
 
     SetMapMode(m_mappingMode);
-} // end of wxDC::SetAxisOrientation
+} // end of wxPMDCImpl::SetAxisOrientation
 
-void wxDC::SetLogicalOrigin(
+void wxPMDCImpl::SetLogicalOrigin(
   wxCoord                           vX
 , wxCoord                           vY
 )
@@ -2334,9 +2326,9 @@ void wxDC::SetLogicalOrigin(
     ::GpiSetPageViewport( m_hPS
                          ,&vRect
                         );
-}; // end of wxDC::SetLogicalOrigin
+}; // end of wxPMDCImpl::SetLogicalOrigin
 
-void wxDC::SetDeviceOrigin(
+void wxPMDCImpl::SetDeviceOrigin(
   wxCoord                           vX
 , wxCoord                           vY
 )
@@ -2355,13 +2347,13 @@ void wxDC::SetDeviceOrigin(
     ::GpiSetPageViewport( m_hPS
                          ,&vRect
                         );
-}; // end of wxDC::SetDeviceOrigin
+}; // end of wxPMDCImpl::SetDeviceOrigin
 
 // ---------------------------------------------------------------------------
 // bit blit
 // ---------------------------------------------------------------------------
 
-bool wxDC::DoBlit( wxCoord vXdest,
+bool wxPMDCImpl::DoBlit( wxCoord vXdest,
                    wxCoord vYdest,
                    wxCoord vWidth,
                    wxCoord vHeight,
@@ -2378,9 +2370,18 @@ bool wxDC::DoBlit( wxCoord vXdest,
     COLORREF                        vOldTextColor;
     COLORREF                        vOldBackground = ::GpiQueryBackColor(m_hPS);
 
+    wxDCImpl *impl = pSource->GetImpl();
+    wxPMDCImpl *pm_impl = wxDynamicCast( impl, wxPMDCImpl );
+    if (!pm_impl)
+    {
+        // TODO: Do we want to be able to blit
+        //       from other DCs too?
+        return false;
+    }
+
     if (bUseMask)
     {
-        const wxBitmap&             rBmp = pSource->m_vSelectedBitmap;
+        const wxBitmap&             rBmp = pm_impl->GetSelectedBitmap();
 
         pMask = rBmp.GetMask();
         if (!(rBmp.Ok() && pMask && pMask->GetMaskBitmap()))
@@ -2470,7 +2471,7 @@ bool wxDC::DoBlit( wxCoord vXdest,
             // create a temp buffer bitmap and DCs to access it and the mask
             //
             wxDCCacheEntry*         pDCCacheEntry1    = FindDCInCache( NULL
-                                                                      ,pSource->GetHPS()
+                                                                      ,pm_impl->GetHPS()
                                                                      );
             wxDCCacheEntry*         pDCCacheEntry2    = FindDCInCache( pDCCacheEntry1
                                                                       ,GetHPS()
@@ -2631,7 +2632,7 @@ bool wxDC::DoBlit( wxCoord vXdest,
                                                     };
 
         bSuccess = (::GpiBitBlt( m_hPS
-                                ,pSource->GetHPS()
+                                ,pm_impl->GetHPS()
                                 ,4L
                                 ,aPoint
                                 ,lRop
@@ -2653,7 +2654,7 @@ bool wxDC::DoBlit( wxCoord vXdest,
     return bSuccess;
 }
 
-void wxDC::DoGetSize( int* pnWidth,
+void wxPMDCImpl::DoGetSize( int* pnWidth,
                       int* pnHeight ) const
 {
     LONG lArray[CAPS_HEIGHT];
@@ -2667,9 +2668,9 @@ void wxDC::DoGetSize( int* pnWidth,
         *pnWidth  = lArray[CAPS_WIDTH];
         *pnHeight = lArray[CAPS_HEIGHT];
     }
-}; // end of wxDC::DoGetSize(
+}; // end of wxPMDCImpl::DoGetSize(
 
-void wxDC::DoGetSizeMM( int* pnWidth,
+void wxPMDCImpl::DoGetSizeMM( int* pnWidth,
                         int* pnHeight ) const
 {
     LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
@@ -2694,9 +2695,9 @@ void wxDC::DoGetSizeMM( int* pnWidth,
             *pnHeight = (nVertRes/1000) * nHeight;
         }
     }
-}; // end of wxDC::DoGetSizeMM
+}; // end of wxPMDCImpl::DoGetSizeMM
 
-wxSize wxDC::GetPPI() const
+wxSize wxPMDCImpl::GetPPI() const
 {
     LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
     int                             nWidth = 0;
@@ -2722,10 +2723,10 @@ wxSize wxDC::GetPPI() const
     }
     wxSize ppisize(nWidth, nHeight);
     return ppisize;
-} // end of wxDC::GetPPI
+} // end of wxPMDCImpl::GetPPI
 
-void wxDC::SetLogicalScale( double dX, double dY )
+void wxPMDCImpl::SetLogicalScale( double dX, double dY )
 {
     m_logicalScaleX = dX;
     m_logicalScaleY = dY;
-}; // end of wxDC::SetLogicalScale
+}; // end of wxPMDCImpl::SetLogicalScale

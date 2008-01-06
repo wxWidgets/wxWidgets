@@ -13,6 +13,7 @@
 #define _WX_DC_H_
 
 #include "wx/defs.h"
+#include "wx/dc.h"
 
 // ---------------------------------------------------------------------------
 // macros
@@ -94,13 +95,15 @@ public:
 }; // end of CLASS wxDCCacheEntry
 #endif
 
-class WXDLLEXPORT wxDC : public wxDCBase
+// this is an ABC: use one of the derived classes to create a DC associated
+// with a window, screen, printer and so on
+class WXDLLEXPORT wxPMDCImpl : public wxDCImpl
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
 
 public:
-    wxDC(void);
-    virtual ~wxDC();
+    wxPMDCImpl(wxDC *owner, WXHDC hDC);
+    virtual ~wxPMDCImpl();
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -124,13 +127,7 @@ public:
 
     virtual wxCoord GetCharHeight(void) const;
     virtual wxCoord GetCharWidth(void) const;
-    virtual void    DoGetTextExtent( const wxString& rsString
-                                    ,wxCoord*        pX
-                                    ,wxCoord*        pY
-                                    ,wxCoord*        pDescent = NULL
-                                    ,wxCoord*        pExternalLeading = NULL
-                                    ,const wxFont*   pTheFont = NULL
-                                   ) const;
+
     virtual bool    CanDrawBitmap(void) const;
     virtual bool    CanGetTextExtent(void) const;
     virtual int     GetDepth(void) const;
@@ -197,6 +194,39 @@ public:
 #endif
 
 protected:
+    void Init()
+    {
+	m_pCanvas      = NULL;
+	m_hOldBitmap   = 0;
+	m_hOldPen      = 0;
+	m_hOldBrush    = 0;
+	m_hOldFont     = 0;
+#if wxUSE_PALETTE
+        m_hOldPalette  = 0;
+#endif // wxUSE_PALETTE
+
+	m_bOwnsDC      = false;
+	m_hDC          = 0;
+	m_hOldPS       = NULL;
+	m_hPS          = NULL;
+	m_bIsPaintTime = false; // True at Paint Time
+
+	m_pen.SetColour(*wxBLACK);
+	m_brush.SetColour(*wxWHITE);
+    }
+
+    // create an uninitialized DC: this should be only used by the derived
+    // classes
+    wxPMDCImpl( wxDC *owner ) : wxDCImpl( owner ) { Init(); }
+
+public:
+    virtual void    DoGetTextExtent( const wxString& rsString
+                                    ,wxCoord*        pX
+                                    ,wxCoord*        pY
+                                    ,wxCoord*        pDescent = NULL
+                                    ,wxCoord*        pExternalLeading = NULL
+                                    ,const wxFont*   pTheFont = NULL
+                                   ) const;
     virtual bool DoFloodFill( wxCoord         vX
                              ,wxCoord         vY
                              ,const wxColour& rCol
@@ -322,6 +352,7 @@ protected:
     void InitializePalette(void);
 #endif // wxUSE_PALETTE
 
+protected:
     //
     // common part of DoDrawText() and DoDrawRotatedText()
     //

@@ -16,28 +16,24 @@
 
 #include "wx/dc.h"
 #include "wx/cmndata.h"
+#include "wx/os2/dc.h"
 
-class WXDLLEXPORT wxPrinterDC: public wxDC
+class WXDLLEXPORT wxPrinterDCImpl: public wxPMDCImpl
 {
  public:
-    // Create a printer DC [obsolete]
-    wxPrinterDC( const wxString& rsDriver
-                ,const wxString& rsDevice
-                ,const wxString& rsOutput
-                ,bool            bInteractive = TRUE
-                ,int             nOrientation = wxPORTRAIT
-               );
+    // Create a printer DC
 
     // Create from print data
-    wxPrinterDC(const wxPrintData& rData);
-    wxPrinterDC(WXHDC hTheDC);
+    wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& rData );
+    wxPrinterDCImpl( wxPrinterDC *owner, WXHDC hTheDC);
 
-    bool StartDoc(const wxString& rsMessage);
-    void EndDoc(void);
-    void StartPage(void);
-    void EndPage(void);
+    // override some base class virtuals
+    virtual bool StartDoc(const wxString& rsMessage);
+    virtual void EndDoc(void);
+    virtual void StartPage(void);
+    virtual void EndPage(void);
 
-    wxRect GetPaperRect();
+    virtual wxRect GetPaperRect();
 
 protected:
     virtual void DoDrawBitmap( const wxBitmap& rBmp
@@ -63,7 +59,8 @@ protected:
 
     wxPrintData                     m_printData;
 private:
-    DECLARE_CLASS(wxPrinterDC)
+    DECLARE_CLASS(wxPrinterDCImpl)
+    DECLARE_NO_COPY_CLASS(wxPrinterDCImpl)
 }; // end of CLASS wxPrinterDC
 
 // Gets an HDC for the specified printer configuration

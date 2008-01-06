@@ -15,6 +15,7 @@
 #if wxUSE_PRINTING_ARCHITECTURE
 
 #include "wx/dcprint.h"
+#include "wx/os2/dcprint.h"
 
 #define INCL_DEV
 #define INCL_GPI
@@ -31,98 +32,10 @@
 
 #include "wx/os2/private.h"
 
-IMPLEMENT_CLASS(wxPrinterDC, wxDC)
+IMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxPMDCImpl)
 
-
-// This form is deprecated
-wxPrinterDC::wxPrinterDC( const wxString& rsDriverName,
-                          const wxString& rsDeviceName,
-                          const wxString& rsFile,
-                          bool bInteractive,
-                          int nOrientation )
-{
-    DEVOPENSTRUC    vDevOpen = { (char*)rsDeviceName.wx_str()
-                                ,(char*)rsDriverName.wx_str()
-                                ,NULL
-                                ,NULL
-                                ,NULL
-                                ,NULL
-                                ,NULL
-                                ,NULL
-                                ,NULL
-                               };
-
-    m_isInteractive = bInteractive;
-
-    if (!rsFile.IsNull() && !rsFile.empty())
-        m_printData.SetFilename(rsFile);
-
-/*
-    Implement PM's version of this
-#if wxUSE_COMMON_DIALOGS
-    if (interactive)
-    {
-        PRINTDLG pd;
-
-        pd.lStructSize = sizeof( PRINTDLG );
-        pd.hwndOwner=(HWND) NULL;
-        pd.hDevMode=(HANDLE)NULL;
-        pd.hDevNames=(HANDLE)NULL;
-        pd.Flags=PD_RETURNDC | PD_NOSELECTION | PD_NOPAGENUMS;
-        pd.nFromPage=0;
-        pd.nToPage=0;
-        pd.nMinPage=0;
-        pd.nMaxPage=0;
-        pd.nCopies=1;
-        pd.hInstance=(HINSTANCE)NULL;
-
-        if ( PrintDlg( &pd ) != 0 )
-        {
-            m_hDC = (WXHDC) pd.hDC;
-            m_ok = true;
-        }
-        else
-        {
-            m_ok = false;
-            return;
-        }
-    }
-    else
-#endif
-*/
-        if ( !rsDriverName.empty() &&
-             !rsDeviceName.empty() &&
-             !rsFile.empty() )
-        {
-            m_hDC = (WXHDC) ::DevOpenDC( vHabmain
-                                        ,OD_QUEUED
-                                        ,"*"
-                                        ,5L
-                                        ,(PDEVOPENDATA)&vDevOpen
-                                        ,NULLHANDLE
-                                       );
-            m_ok = m_hDC ? true: false;
-        }
-        else
-        {
-            wxPrintData             vPrintData;
-
-            vPrintData.SetOrientation(nOrientation);
-            m_hDC = wxGetPrinterDC(vPrintData);
-            m_ok = m_hDC ? true: false;
-        }
-
-        if (m_hDC)
-        {
-            //     int width = GetDeviceCaps(m_hDC, VERTRES);
-            //     int height = GetDeviceCaps(m_hDC, HORZRES);
-            SetMapMode(wxMM_TEXT);
-        }
-        SetBrush(*wxBLACK_BRUSH);
-        SetPen(*wxBLACK_PEN);
-} // end of wxPrinterDC::wxPrinterDC
-
-wxPrinterDC::wxPrinterDC( const wxPrintData& rPrintData )
+wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& rPrintData ) :
+    wxPMDCImpl( owner )
 {
     m_printData = rPrintData;
     m_isInteractive = false;
@@ -134,7 +47,8 @@ wxPrinterDC::wxPrinterDC( const wxPrintData& rPrintData )
     SetPen(*wxBLACK_PEN);
 } // end of wxPrinterDC::wxPrinterDC
 
-wxPrinterDC::wxPrinterDC( WXHDC hTheDC )
+wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, WXHDC hTheDC ) :
+    wxPMDCImpl( owner )
 {
     m_isInteractive = false;
     m_hDC = hTheDC;
@@ -147,7 +61,7 @@ wxPrinterDC::wxPrinterDC( WXHDC hTheDC )
     SetPen(*wxBLACK_PEN);
 } // end of wxPrinterDC::wxPrinterDC
 
-void wxPrinterDC::Init()
+void wxPrinterDCImpl::Init()
 {
     if (m_hDC)
     {
@@ -158,7 +72,7 @@ void wxPrinterDC::Init()
     }
 } // end of wxPrinterDC::Init
 
-bool wxPrinterDC::StartDoc(const wxString& WXUNUSED(rsMessage))
+bool wxPrinterDCImpl::StartDoc(const wxString& WXUNUSED(rsMessage))
 {
 /* TODO:  PM's implementation
    DOCINFO docinfo;
@@ -207,24 +121,24 @@ bool wxPrinterDC::StartDoc(const wxString& WXUNUSED(rsMessage))
     return true;
 } // end of wxPrinterDC::StartDoc
 
-void wxPrinterDC::EndDoc()
+void wxPrinterDCImpl::EndDoc()
 {
 //    if (m_hDC) ::EndDoc((HDC) m_hDC);
 } // end of wxPrinterDC::EndDoc
 
-void wxPrinterDC::StartPage()
+void wxPrinterDCImpl::StartPage()
 {
 //    if (m_hDC)
 //        ::StartPage((HDC) m_hDC);
 } // end of wxPrinterDC::StartPage
 
-void wxPrinterDC::EndPage()
+void wxPrinterDCImpl::EndPage()
 {
 //    if (m_hDC)
 //        ::EndPage((HDC) m_hDC);
 } // end of wxPrinterDC::EndPage
 
-wxRect wxPrinterDC::GetPaperRect()
+wxRect wxPrinterDCImpl::GetPaperRect()
 {
     // Use page rect if we can't get paper rect.
     wxCoord w, h;
@@ -342,10 +256,10 @@ WXHDC WXDLLEXPORT wxGetPrinterDC( const wxPrintData& WXUNUSED(rPrintDataConst) )
     return (WXHDC) hDC;
 } // end of wxGetPrinterDC
 
-void wxPrinterDC::DoDrawBitmap( const wxBitmap& rBmp,
-                                wxCoord WXUNUSED(vX),
-                                wxCoord WXUNUSED(vY),
-                                bool WXUNUSED(bUseMask))
+void wxPrinterDCImpl::DoDrawBitmap( const wxBitmap& rBmp,
+                                    wxCoord WXUNUSED(vX),
+                                    wxCoord WXUNUSED(vY),
+                                    bool WXUNUSED(bUseMask))
 {
     wxCHECK_RET( rBmp.Ok(), _T("invalid bitmap in wxPrinterDC::DrawBitmap") );
 
@@ -356,23 +270,23 @@ void wxPrinterDC::DoDrawBitmap( const wxBitmap& rBmp,
 
 } // end of wxPrinterDC::DoDrawBitmap
 
-bool wxPrinterDC::DoBlit( wxCoord WXUNUSED(vXdest),
-                          wxCoord WXUNUSED(vYdest),
-                          wxCoord WXUNUSED(vWidth),
-                          wxCoord WXUNUSED(vHeight),
-                          wxDC* WXUNUSED(pSource),
-                          wxCoord WXUNUSED(vXsrc),
-                          wxCoord WXUNUSED(vYsrc),
-                          int WXUNUSED(nRop),
-                          bool WXUNUSED(bUseMask),
-                          wxCoord WXUNUSED(xsrcMask),
-                          wxCoord WXUNUSED(ysrcMask) )
+bool wxPrinterDCImpl::DoBlit( wxCoord WXUNUSED(vXdest),
+                              wxCoord WXUNUSED(vYdest),
+                              wxCoord WXUNUSED(vWidth),
+                              wxCoord WXUNUSED(vHeight),
+                              wxDC* WXUNUSED(pSource),
+                              wxCoord WXUNUSED(vXsrc),
+                              wxCoord WXUNUSED(vYsrc),
+                              int WXUNUSED(nRop),
+                              bool WXUNUSED(bUseMask),
+                              wxCoord WXUNUSED(xsrcMask),
+                              wxCoord WXUNUSED(ysrcMask) )
 {
     bool bSuccess = true;
 
     // TODO:
 
     return bSuccess;
-} // end of wxPrintDC::DoBlit
+} // end of wxPrintDCImpl::DoBlit
 
 #endif //wxUSE_PRINTING_ARCHITECTURE

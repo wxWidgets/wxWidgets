@@ -9,36 +9,26 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DCSCREEN_H_
-#define _WX_DCSCREEN_H_
+#ifndef _WX_OS2_DCSCREEN_H_
+#define _WX_OS2_DCSCREEN_H_
 
-#include "wx/dcclient.h"
+#include "wx/dcscreen.h"
+#include "wx/os2/dc.h"
 
-class WXDLLEXPORT wxScreenDC: public wxWindowDC
+class WXDLLEXPORT wxScreenDCImpl: public wxPMDCImpl
 {
  public:
-    //
     // Create a DC representing the whole screen
-    //
-    wxScreenDC();
+    wxScreenDCImpl( wxScreenDC *owner );
 
-    //
-    // Compatibility with X's requirements for
-    // drawing on top of all windows
-    //
-    static bool StartDrawingOnTop(wxWindow* WXUNUSED(pWindow)) { return TRUE; }
-    static bool StartDrawingOnTop(wxRect* WXUNUSED(prect) = NULL) { return TRUE; }
-    static bool EndDrawingOnTop() { return TRUE; }
-
-protected:
     virtual void DoGetSize( int* pnWidth
                            ,int* pnHeight
                           ) const;
 
 private:
-  DECLARE_DYNAMIC_CLASS(wxScreenDC)
+    DECLARE_CLASS(wxScreenDCImpl)
+    DECLARE_NO_COPY_CLASS(wxScreenDCImpl)
 }; // end of CLASS wxScreenDC
 
 #endif
     // _WX_DCSCREEN_H_
-
