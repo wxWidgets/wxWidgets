@@ -73,6 +73,12 @@ wxGnomeVFSLibrary::wxGnomeVFSLibrary()
 
 wxGnomeVFSLibrary::~wxGnomeVFSLibrary()
 {
+    // we crash on exit later (i.e. after main() finishes) if we unload this
+    // library, apparently it inserts some hooks in other libraries to which we
+    // link implicitly (GTK+ itself?) which are not uninstalled when it's
+    // unloaded resulting in this crash, so just leave it in memory -- it's a
+    // lesser evil
+    m_libGnomeVFS.Detach();
 }
 
 bool wxGnomeVFSLibrary::IsOk()
