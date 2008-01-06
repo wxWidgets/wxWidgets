@@ -168,6 +168,14 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // GetBestSize will work properly now, so set the best size if needed
     SetInitialSize(size);
 
+    // Win9x and 2000 don't draw correctly the images with alpha channel so we
+    // need to draw them ourselves and it's easier to just always do it rather
+    // than check if we have an image with alpha or not
+    if ( wxGetWinVersion() <= wxWinVersion_2000 )
+    {
+        Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBitmap::DoPaintManually));
+    }
+
     return true;
 }
 
@@ -238,6 +246,25 @@ wxSize wxStaticBitmap::DoGetBestSize() const
 
     // this is completely arbitrary
     return wxSize(16, 16);
+}
+
+void wxStaticBitmap::DoPaintManually(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+
+    const wxSize size(GetSize());
+    const wxBitmap bmp(GetBitmap());
+
+    // Clear the background
+    dc.SetBrush(GetBackgroundColour());
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(0, 0, size.GetWidth(), size.GetHeight());
+
+    // Draw the image in the middle
+    dc.DrawBitmap(bmp,
+                  (size.GetWidth() - bmp.GetWidth()) / 2,
+                  (size.GetHeight() - bmp.GetHeight()) / 2,
+                  true /* use mask */);
 }
 
 void wxStaticBitmap::SetImage( const wxGDIImage* image )

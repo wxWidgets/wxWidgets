@@ -70,6 +70,11 @@ protected:
     void SetImage(const wxGDIImage* image);
     void SetImageNoCopy( wxGDIImage* image );
 
+    // draw the bitmap ourselves here if the OS can't do it correctly (if it
+    // can we leave it to it)
+    void DoPaintManually(wxPaintEvent& event);
+
+
     // we can have either an icon or a bitmap
     bool m_isIcon;
     wxGDIImage *m_image;
