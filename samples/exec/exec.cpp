@@ -81,14 +81,18 @@ public:
 
 // Define an array of process pointers used by MyFrame
 class MyPipedProcess;
-WX_DEFINE_ARRAY_PTR(MyPipedProcess *, MyProcessesArray);
+WX_DEFINE_ARRAY_PTR(MyPipedProcess *, MyPipedProcessesArray);
+
+class MyProcess;
+WX_DEFINE_ARRAY_PTR(MyProcess *, MyProcessesArray);
 
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
 public:
-    // ctor(s)
+    // ctor and dtor
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    virtual ~MyFrame();
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -122,6 +126,9 @@ public:
     void OnProcessTerminated(MyPipedProcess *process);
     wxListBox *GetLogListBox() const { return m_lbox; }
 
+    // for MyProcess
+    void OnAsyncTermination(MyProcess *process);
+
 private:
     void ShowOutput(const wxString& cmd,
                     const wxArrayString& output,
@@ -129,30 +136,11 @@ private:
 
     void DoAsyncExec(const wxString& cmd);
 
-    void AddAsyncProcess(MyPipedProcess *process)
-    {
-        if ( m_running.IsEmpty() )
-        {
-            // we want to start getting the timer events to ensure that a
-            // steady stream of idle events comes in -- otherwise we
-            // wouldn't be able to poll the child process input
-            m_timerIdleWakeUp.Start(100);
-        }
-        //else: the timer is already running
+    void AddAsyncProcess(MyProcess *process) { m_allAsync.push_back(process); }
 
-        m_running.Add(process);
-    }
+    void AddPipedProcess(MyPipedProcess *process);
+    void RemovePipedProcess(MyPipedProcess *process);
 
-    void RemoveAsyncProcess(MyPipedProcess *process)
-    {
-        m_running.Remove(process);
-
-        if ( m_running.IsEmpty() )
-        {
-            // we don't need to get idle events all the time any more
-            m_timerIdleWakeUp.Stop();
-        }
-    }
 
     // the PID of the last process we launched asynchronously
     long m_pidLast;
@@ -174,7 +162,11 @@ private:
 
     wxListBox *m_lbox;
 
-    MyProcessesArray m_running;
+    // array of running processes with redirected IO
+    MyPipedProcessesArray m_running;
+
+    // array of all asynchrously running processes
+    MyProcessesArray m_allAsync;
 
     // the idle event wake up timer
     wxTimer m_timerIdleWakeUp;
@@ -501,6 +493,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif // wxUSE_STATUSBAR
 }
 
+MyFrame::~MyFrame()
+{
+    // any processes left until now must be deleted manually: normally this is
+    // done when the associated process terminates but it must be still running
+    // if this didn't happen until now
+    for ( size_t n = 0; n < m_allAsync.size(); n++ )
+    {
+        delete m_allAsync[n];
+    }
+}
+
 // ----------------------------------------------------------------------------
 // event handlers: file and help menu
 // ----------------------------------------------------------------------------
@@ -637,20 +640,23 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::DoAsyncExec(const wxString& cmd)
 {
-    wxProcess *process = new MyProcess(this, cmd);
+    MyProcess * const process = new MyProcess(this, cmd);
     m_pidLast = wxExecute(cmd, wxEXEC_ASYNC, process);
     if ( !m_pidLast )
     {
-        wxLogError( _T("Execution of '%s' failed."), cmd.c_str() );
+        wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
 
         delete process;
     }
     else
     {
-        wxLogStatus( _T("Process %ld (%s) launched."),
-            m_pidLast, cmd.c_str() );
+        wxLogStatus(_T("Process %ld (%s) launched."), m_pidLast, cmd.c_str());
 
         m_cmdLast = cmd;
+
+        // the parent frame keeps track of all async processes as it needs to
+        // free them if we exit before the child process terminates
+        AddAsyncProcess(process);
     }
 }
 
@@ -772,7 +778,7 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
         }
         else
         {
-            AddAsyncProcess(process);
+            AddPipedProcess(process);
         }
     }
 
@@ -801,9 +807,9 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
     long pid = wxExecute(cmd, wxEXEC_ASYNC, process);
     if ( pid )
     {
-        wxLogStatus( _T("Process %ld (%s) launched."), pid, cmd.c_str() );
+        wxLogStatus(_T("Process %ld (%s) launched."), pid, cmd.c_str());
 
-        AddAsyncProcess(process);
+        AddPipedProcess(process);
     }
     else
     {
@@ -1019,9 +1025,41 @@ void MyFrame::OnTimer(wxTimerEvent& WXUNUSED(event))
 
 void MyFrame::OnProcessTerminated(MyPipedProcess *process)
 {
-    RemoveAsyncProcess(process);
+    RemovePipedProcess(process);
 }
 
+void MyFrame::OnAsyncTermination(MyProcess *process)
+{
+    m_allAsync.Remove(process);
+
+    delete process;
+}
+
+void MyFrame::AddPipedProcess(MyPipedProcess *process)
+{
+    if ( m_running.IsEmpty() )
+    {
+        // we want to start getting the timer events to ensure that a
+        // steady stream of idle events comes in -- otherwise we
+        // wouldn't be able to poll the child process input
+        m_timerIdleWakeUp.Start(100);
+    }
+    //else: the timer is already running
+
+    m_running.Add(process);
+    m_allAsync.Add(process);
+}
+
+void MyFrame::RemovePipedProcess(MyPipedProcess *process)
+{
+    m_running.Remove(process);
+
+    if ( m_running.IsEmpty() )
+    {
+        // we don't need to get idle events all the time any more
+        m_timerIdleWakeUp.Stop();
+    }
+}
 
 void MyFrame::ShowOutput(const wxString& cmd,
                          const wxArrayString& output,
@@ -1052,8 +1090,7 @@ void MyProcess::OnTerminate(int pid, int status)
     wxLogStatus(m_parent, _T("Process %u ('%s') terminated with exit code %d."),
                 pid, m_cmd.c_str(), status);
 
-    // we're not needed any more
-    delete this;
+    m_parent->OnAsyncTermination(this);
 }
 
 // ----------------------------------------------------------------------------

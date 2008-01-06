@@ -38,6 +38,7 @@
 #include "wx/process.h"
 #include "wx/thread.h"
 #include "wx/apptrait.h"
+#include "wx/vector.h"
 
 
 #include "wx/msw/private.h"
@@ -101,6 +102,13 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 static const wxChar *wxMSWEXEC_WNDCLASSNAME = wxT("_wxExecute_Internal_Class");
 static const wxChar *gs_classForHiddenWindow = NULL;
 
+// event used to wake up threads waiting in wxExecuteThread
+static HANDLE gs_heventShutdown = NULL;
+
+// handles of all threads monitoring the execution of asynchronously running
+// processes
+static wxVector<HANDLE> gs_asyncThreads;
+
 // ----------------------------------------------------------------------------
 // private types
 // ----------------------------------------------------------------------------
@@ -131,6 +139,43 @@ public:
     virtual bool OnInit() { return true; }
     virtual void OnExit()
     {
+        if ( gs_heventShutdown )
+        {
+            // stop any threads waiting for the termination of asynchronously
+            // running processes
+            if ( !::SetEvent(gs_heventShutdown) )
+            {
+                wxLogDebug(_T("Failed to set shutdown event in wxExecuteModule"));
+            }
+
+            ::CloseHandle(gs_heventShutdown);
+            gs_heventShutdown = NULL;
+
+            // now wait until they terminate
+            if ( !gs_asyncThreads.empty() )
+            {
+                const size_t numThreads = gs_asyncThreads.size();
+
+                if ( ::WaitForMultipleObjects
+                       (
+                        numThreads,
+                        &gs_asyncThreads[0],
+                        TRUE,   // wait for all of them to become signalled
+                        3000    // long but finite value
+                       ) == WAIT_TIMEOUT )
+                {
+                    wxLogDebug(_T("Failed to stop all wxExecute monitor threads"));
+                }
+
+                for ( size_t n = 0; n < numThreads; n++ )
+                {
+                    ::CloseHandle(gs_asyncThreads[n]);
+                }
+
+                gs_asyncThreads.clear();
+            }
+        }
+
         if ( *gs_classForHiddenWindow )
         {
             if ( !::UnregisterClass(wxMSWEXEC_WNDCLASSNAME, wxGetInstance()) )
@@ -145,6 +190,8 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxExecuteModule)
 };
+
+IMPLEMENT_DYNAMIC_CLASS(wxExecuteModule, wxModule)
 
 #if wxUSE_STREAMS && !defined(__WXWINCE__)
 
@@ -281,22 +328,48 @@ static DWORD __stdcall wxExecuteThread(void *arg)
 {
     wxExecuteData * const data = (wxExecuteData *)arg;
 
-    if ( ::WaitForSingleObject(data->hProcess, INFINITE) != WAIT_OBJECT_0 )
+    // create the shutdown event if we're the first thread starting to wait
+    if ( !gs_heventShutdown )
     {
-        wxLogDebug(_T("Waiting for the process termination failed!"));
+        // create a manual initially non-signalled event object
+        gs_heventShutdown = ::CreateEvent(NULL, TRUE, FALSE, NULL);
+        if ( !gs_heventShutdown )
+        {
+            wxLogDebug(_T("CreateEvent() in wxExecuteThread failed"));
+        }
     }
 
-    // get the exit code
-    if ( !::GetExitCodeProcess(data->hProcess, &data->dwExitCode) )
+    HANDLE handles[2] = { data->hProcess, gs_heventShutdown };
+    switch ( ::WaitForMultipleObjects(2, handles, FALSE, INFINITE) )
     {
-        wxLogLastError(wxT("GetExitCodeProcess"));
+        case WAIT_OBJECT_0:
+            // process terminated, get its exit code
+            if ( !::GetExitCodeProcess(data->hProcess, &data->dwExitCode) )
+            {
+                wxLogLastError(wxT("GetExitCodeProcess"));
+            }
+
+            wxASSERT_MSG( data->dwExitCode != STILL_ACTIVE,
+                          wxT("process should have terminated") );
+
+            // send a message indicating process termination to the window
+            ::SendMessage(data->hWnd, wxWM_PROC_TERMINATED, 0, (LPARAM)data);
+            break;
+
+        case WAIT_OBJECT_0 + 1:
+            // we're shutting down but the process is still running -- leave it
+            // run but clean up the associated data
+            if ( !data->state )
+            {
+                delete data;
+            }
+            //else: exiting while synchronously executing process is still
+            //      running? this shouldn't happen...
+            break;
+
+        default:
+            wxLogDebug(_T("Waiting for the process termination failed!"));
     }
-
-    wxASSERT_MSG( data->dwExitCode != STILL_ACTIVE,
-                  wxT("process should have terminated") );
-
-    // send a message indicating process termination to the window
-    ::SendMessage(data->hWnd, wxWM_PROC_TERMINATED, 0, (LPARAM)data);
 
     return 0;
 }
@@ -321,7 +394,7 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
         {
             // we're executing synchronously, tell the waiting thread
             // that the process finished
-            data->state = 0;
+            data->state = false;
         }
         else
         {
@@ -850,7 +923,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
         return pi.dwProcessId;
     }
 
-    ::CloseHandle(hThread);
+    gs_asyncThreads.push_back(hThread);
 
 #if wxUSE_IPC && !defined(__WXWINCE__)
     // second part of DDE hack: now establish the DDE conversation with the
