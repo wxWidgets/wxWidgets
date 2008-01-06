@@ -82,7 +82,7 @@
 
 <build>
     <name>OSX 10.4 PowerPC wxMac Trunk</name>
-    <sandbox>td179.testdrive.hp.com</sandbox>
+    <sandbox>td153.testdrive.hp.com</sandbox>
     <builddir>td_mac</builddir>
     <scheduler>trunk_quick</scheduler>
 
@@ -114,7 +114,7 @@
 
 <build>
     <name>MinGW32 wxMSW Trunk</name>
-    <sandbox>td185.testdrive.hp.com</sandbox>
+    <sandbox>td157.testdrive.hp.com</sandbox>
     <builddir>td_msw</builddir>
     <scheduler>trunk_quick</scheduler>
 
