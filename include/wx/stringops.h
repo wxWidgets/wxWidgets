@@ -36,17 +36,17 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
     static void DecIter(wxStringImpl::const_iterator& i) { --i; }
 
     // moves the iterator by n Unicode characters
-    static wxStringImpl::iterator AddToIter(const wxStringImpl::iterator& i, int n)
+    static wxStringImpl::iterator AddToIter(const wxStringImpl::iterator& i, ptrdiff_t n)
         { return i + n; }
-    static wxStringImpl::const_iterator AddToIter(const wxStringImpl::const_iterator& i, int n)
+    static wxStringImpl::const_iterator AddToIter(const wxStringImpl::const_iterator& i, ptrdiff_t n)
         { return i + n; }
 
     // returns distance of the two iterators in Unicode characters
-    static int DiffIters(const wxStringImpl::iterator& i1,
-                         const wxStringImpl::iterator& i2)
+    static ptrdiff_t DiffIters(const wxStringImpl::iterator& i1,
+                               const wxStringImpl::iterator& i2)
         { return i1 - i2; }
-    static int DiffIters(const wxStringImpl::const_iterator& i1,
-                         const wxStringImpl::const_iterator& i2)
+    static ptrdiff_t DiffIters(const wxStringImpl::const_iterator& i1,
+                               const wxStringImpl::const_iterator& i2)
         { return i1 - i2; }
 
     // encodes the character to a form used to represent it in internal
@@ -97,18 +97,18 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     }
 
     template<typename Iterator>
-    static Iterator AddToIter(const Iterator& i, int n)
+    static Iterator AddToIter(const Iterator& i, ptrdiff_t n)
     {
         Iterator out(i);
 
         if ( n > 0 )
         {
-            for ( int j = 0; j < n; ++j )
+            for ( ptrdiff_t j = 0; j < n; ++j )
                 IncIter(out);
         }
         else if ( n < 0 )
         {
-            for ( int j = 0; j > n; --j )
+            for ( ptrdiff_t j = 0; j > n; --j )
                 DecIter(out);
         }
 
@@ -116,9 +116,9 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     }
 
     template<typename Iterator>
-    static int DiffIters(Iterator i1, Iterator i2)
+    static ptrdiff_t DiffIters(Iterator i1, Iterator i2)
     {
-        int dist = 0;
+        ptrdiff_t dist = 0;
 
         if ( i1 < i2 )
         {

@@ -219,21 +219,13 @@ public:
             return tmp;                                                       \
         }                                                                     \
                                                                               \
-        iterator_name operator+(int n) const                                  \
+        iterator_name operator+(ptrdiff_t n) const                            \
             { return iterator_name(m_ptr + n); }                              \
-        iterator_name operator+(size_t n) const                               \
-            { return iterator_name(m_ptr + n); }                              \
-        iterator_name operator-(int n) const                                  \
+        iterator_name operator-(ptrdiff_t n) const                            \
             { return iterator_name(m_ptr - n); }                              \
-        iterator_name operator-(size_t n) const                               \
-            { return iterator_name(m_ptr - n); }                              \
-        iterator_name& operator+=(int n)                                      \
+        iterator_name& operator+=(ptrdiff_t n)                                \
             { m_ptr += n; return *this; }                                     \
-        iterator_name& operator+=(size_t n)                                   \
-            { m_ptr += n; return *this; }                                     \
-        iterator_name& operator-=(int n)                                      \
-            { m_ptr -= n; return *this; }                                     \
-        iterator_name& operator-=(size_t n)                                   \
+        iterator_name& operator-=(ptrdiff_t n)                                \
             { m_ptr -= n; return *this; }                                     \
                                                                               \
         difference_type operator-(const iterator_name& i) const               \

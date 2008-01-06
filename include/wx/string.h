@@ -237,22 +237,12 @@ public:
     wxCStrData operator+(size_t n) const
         { return wxCStrData(m_str, m_offset + n, m_owned); }
 
-    // and these for "str.c_str() + n - 2":
-    wxCStrData operator-(int n) const
+    // and these for "str.c_str() + (p2 - p1)" (it also works for any integer
+    // expression but it must be ptrdiff_t and not e.g. int to work in this
+    // example):
+    wxCStrData operator-(ptrdiff_t n) const
     {
-        wxASSERT_MSG( n <= (int)m_offset,
-                      _T("attempt to construct address before the beginning of the string") );
-        return wxCStrData(m_str, m_offset - n, m_owned);
-    }
-    wxCStrData operator-(long n) const
-    {
-        wxASSERT_MSG( n <= (int)m_offset,
-                      _T("attempt to construct address before the beginning of the string") );
-        return wxCStrData(m_str, m_offset - n, m_owned);
-    }
-    wxCStrData operator-(size_t n) const
-    {
-        wxASSERT_MSG( n <= m_offset,
+        wxASSERT_MSG( n <= (ptrdiff_t)m_offset,
                       _T("attempt to construct address before the beginning of the string") );
         return wxCStrData(m_str, m_offset - n, m_owned);
     }
@@ -603,24 +593,14 @@ public:
               return tmp;                                                   \
           }                                                                 \
                                                                             \
-          iterator_name& operator+=(int n)                                  \
+          iterator_name& operator+=(ptrdiff_t n)                            \
           {                                                                 \
               m_cur = wxStringOperations::AddToIter(m_cur, n);              \
               return *this;                                                 \
           }                                                                 \
-          iterator_name& operator+=(size_t n)                               \
-          {                                                                 \
-              m_cur = wxStringOperations::AddToIter(m_cur, (int)n);         \
-              return *this;                                                 \
-          }                                                                 \
-          iterator_name& operator-=(int n)                                  \
+          iterator_name& operator-=(ptrdiff_t n)                            \
           {                                                                 \
               m_cur = wxStringOperations::AddToIter(m_cur, -n);             \
-              return *this;                                                 \
-          }                                                                 \
-          iterator_name& operator-=(size_t n)                               \
-          {                                                                 \
-              m_cur = wxStringOperations::AddToIter(m_cur, -(int)n);        \
               return *this;                                                 \
           }                                                                 \
                                                                             \
@@ -682,14 +662,10 @@ public:
       reference operator*()
         { return wxUniCharRef::CreateForString(m_node, m_cur); }
 
-      iterator operator+(int n) const
+      iterator operator+(ptrdiff_t n) const
         { return iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
-      iterator operator+(size_t n) const
-        { return iterator(str(), wxStringOperations::AddToIter(m_cur, (int)n)); }
-      iterator operator-(int n) const
+      iterator operator-(ptrdiff_t n) const
         { return iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
-      iterator operator-(size_t n) const
-        { return iterator(str(), wxStringOperations::AddToIter(m_cur, -(int)n)); }
 
   private:
       iterator(wxString *str, underlying_iterator ptr)
@@ -723,14 +699,10 @@ public:
       reference operator*() const
         { return wxStringOperations::DecodeChar(m_cur); }
 
-      const_iterator operator+(int n) const
+      const_iterator operator+(ptrdiff_t n) const
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
-      const_iterator operator+(size_t n) const
-        { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, (int)n)); }
-      const_iterator operator-(int n) const
+      const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
-      const_iterator operator-(size_t n) const
-        { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, -(int)n)); }
 
   private:
       // for internal wxString use only:
@@ -758,14 +730,10 @@ public:
       reference operator*()
         { return wxUniCharRef::CreateForString(m_cur); }
 
-      iterator operator+(int n) const
+      iterator operator+(ptrdiff_t n) const
         { return iterator(wxStringOperations::AddToIter(m_cur, n)); }
-      iterator operator+(size_t n) const
-        { return iterator(wxStringOperations::AddToIter(m_cur, (int)n)); }
-      iterator operator-(int n) const
+      iterator operator-(ptrdiff_t n) const
         { return iterator(wxStringOperations::AddToIter(m_cur, -n)); }
-      iterator operator-(size_t n) const
-        { return iterator(wxStringOperations::AddToIter(m_cur, -(int)n)); }
 
   private:
       // for internal wxString use only:
@@ -789,14 +757,10 @@ public:
       reference operator*() const
         { return wxStringOperations::DecodeChar(m_cur); }
 
-      const_iterator operator+(int n) const
+      const_iterator operator+(ptrdiff_t n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, n)); }
-      const_iterator operator+(size_t n) const
-        { return const_iterator(wxStringOperations::AddToIter(m_cur, (int)n)); }
-      const_iterator operator-(int n) const
+      const_iterator operator-(ptrdiff_t n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, -n)); }
-      const_iterator operator-(size_t n) const
-        { return const_iterator(wxStringOperations::AddToIter(m_cur, -(int)n)); }
 
   private:
       // for internal wxString use only:
@@ -844,21 +808,13 @@ public:
         { reverse_iterator_impl tmp = *this; ++m_cur; return tmp; }
 
       // NB: explicit <T> in the functions below is to keep BCC 5.5 happy
-      reverse_iterator_impl operator+(int n) const
+      reverse_iterator_impl operator+(ptrdiff_t n) const
         { return reverse_iterator_impl<T>(m_cur - n); }
-      reverse_iterator_impl operator+(size_t n) const
-        { return reverse_iterator_impl<T>(m_cur - n); }
-      reverse_iterator_impl operator-(int n) const
+      reverse_iterator_impl operator-(ptrdiff_t n) const
         { return reverse_iterator_impl<T>(m_cur + n); }
-      reverse_iterator_impl operator-(size_t n) const
-        { return reverse_iterator_impl<T>(m_cur + n); }
-      reverse_iterator_impl operator+=(int n)
+      reverse_iterator_impl operator+=(ptrdiff_t n)
         { m_cur -= n; return *this; }
-      reverse_iterator_impl operator+=(size_t n)
-        { m_cur -= n; return *this; }
-      reverse_iterator_impl operator-=(int n)
-        { m_cur += n; return *this; }
-      reverse_iterator_impl operator-=(size_t n)
+      reverse_iterator_impl operator-=(ptrdiff_t n)
         { m_cur += n; return *this; }
 
       unsigned operator-(const reverse_iterator_impl& i) const
@@ -2637,21 +2593,13 @@ private:
 
 // string iterator operators that satisfy STL Random Access Iterator
 // requirements:
-inline wxString::iterator operator+(int n, wxString::iterator i)
+inline wxString::iterator operator+(ptrdiff_t n, wxString::iterator i)
   { return i + n; }
-inline wxString::iterator operator+(size_t n, wxString::iterator i)
+inline wxString::const_iterator operator+(ptrdiff_t n, wxString::const_iterator i)
   { return i + n; }
-inline wxString::const_iterator operator+(int n, wxString::const_iterator i)
+inline wxString::reverse_iterator operator+(ptrdiff_t n, wxString::reverse_iterator i)
   { return i + n; }
-inline wxString::const_iterator operator+(size_t n, wxString::const_iterator i)
-  { return i + n; }
-inline wxString::reverse_iterator operator+(int n, wxString::reverse_iterator i)
-  { return i + n; }
-inline wxString::reverse_iterator operator+(size_t n, wxString::reverse_iterator i)
-  { return i + n; }
-inline wxString::const_reverse_iterator operator+(int n, wxString::const_reverse_iterator i)
-  { return i + n; }
-inline wxString::const_reverse_iterator operator+(size_t n, wxString::const_reverse_iterator i)
+inline wxString::const_reverse_iterator operator+(ptrdiff_t n, wxString::const_reverse_iterator i)
   { return i + n; }
 
 // notice that even though for many compilers the friend declarations above are
