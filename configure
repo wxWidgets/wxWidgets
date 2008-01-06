@@ -1850,6 +1850,7 @@ Optional Features:
   --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)
   --enable-uxtheme        enable support for Windows XP themed look (Win32 only)
   --enable-wxdib          use wxDIB class (Win32 only)
+  --enable-autoidman      use automatic ids management
   --disable-largefile     omit support for large files
   --disable-gtktest       do not try to compile and run a test GTK+ program
   --disable-gtktest       Do not try to compile and run a test GTK program
@@ -13650,6 +13651,50 @@ fi
             fi
           else
             result=$wxUSE_DIB
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-autoidman" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-autoidman... $ECHO_C" >&6; }
+          # Check whether --enable-autoidman was given.
+if test "${enable_autoidman+set}" = set; then
+  enableval=$enable_autoidman;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_autoidman='wxUSE_AUTOID_MANAGEMENT=yes'
+                          else
+                            wx_cv_use_autoidman='wxUSE_AUTOID_MANAGEMENT=no'
+                          fi
+
+else
+
+                          wx_cv_use_autoidman='wxUSE_AUTOID_MANAGEMENT=${'DEFAULT_wxUSE_AUTOID_MANAGEMENT":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_autoidman"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_AUTOID_MANAGEMENT = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_AUTOID_MANAGEMENT
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -45855,6 +45900,12 @@ _ACEOF
 
 fi
 
+if test "$wxUSE_AUTOID_MANAGEMENT" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_AUTOID_MANAGEMENT 1
+_ACEOF
+
+fi
 
 if test "$USE_WIN32" = 1 ; then
     if test "$wxUSE_INICONF" = "yes"; then

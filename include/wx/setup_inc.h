@@ -890,7 +890,11 @@
 // long-running programs can run into problems with ids reuse without this. On
 // the other platforms, where the ids have the full int range, this shouldn't
 // be necessary.
-#define wxUSE_AUTOID_MANAGEMENT defined(__WXMSW__)
+#ifdef __WXMSW__
+#define wxUSE_AUTOID_MANAGEMENT 1
+#else
+#define wxUSE_AUTOID_MANAGEMENT 0
+#endif
 
 // ----------------------------------------------------------------------------
 // common dialogs

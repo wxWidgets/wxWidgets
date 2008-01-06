@@ -1037,12 +1037,21 @@ public:
 
     // conversion to/from text: all conversions from text return the pointer to
     // the next character following the date specification (i.e. the one where
-    // the scan had to stop) or NULL on failure.
+    // the scan had to stop) or NULL on failure; for the versions returning
+    // iterators, end iterator is returned instead of NULL
     // ------------------------------------------------------------------------
 
         // parse a string in RFC 822 format (found e.g. in mail headers and
         // having the form "Wed, 10 Feb 1999 19:07:07 +0100")
-    const wxChar *ParseRfc822Date(const wxChar* date);
+    wxString::const_iterator ParseRfc822Date(const wxString& date);
+    const wchar_t *ParseRfc822Date(const wchar_t* date)
+    {
+    }
+
+    const char *ParseRfc822Date(const char* date)
+    {
+    }
+
         // parse a date/time in the given format (see strptime(3)), fill in
         // the missing (in the string) fields with the values of dateDef (by
         // default, they will not change if they had valid values or will

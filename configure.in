@@ -917,6 +917,7 @@ WX_ARG_FEATURE(ps-in-msw,   [  --enable-ps-in-msw      use PS printing in wxMSW 
 WX_ARG_FEATURE(ownerdrawn,  [  --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)], wxUSE_OWNER_DRAWN)
 WX_ARG_FEATURE(uxtheme,     [  --enable-uxtheme        enable support for Windows XP themed look (Win32 only)], wxUSE_UXTHEME)
 WX_ARG_FEATURE(wxdib,       [  --enable-wxdib          use wxDIB class (Win32 only)], wxUSE_DIB)
+WX_ARG_FEATURE(autoidman,   [  --enable-autoidman      use automatic ids management], wxUSE_AUTOID_MANAGEMENT)
 
 fi
 dnl for GUI only
@@ -6979,7 +6980,11 @@ if test "$wxUSE_MSW" = 1 ; then
 
 fi
 dnl wxUSE_MSW = 1
-    
+
+dnl not quite MSW-only although mostly useful to disable this under MSW
+if test "$wxUSE_AUTOID_MANAGEMENT" = "yes"; then
+    AC_DEFINE(wxUSE_AUTOID_MANAGEMENT)
+fi
 
 if test "$USE_WIN32" = 1 ; then
     if test "$wxUSE_INICONF" = "yes"; then
