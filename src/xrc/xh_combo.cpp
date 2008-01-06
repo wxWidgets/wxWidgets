@@ -22,6 +22,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/combobox.h"
+    #include "wx/textctrl.h"    // for wxTE_PROCESS_ENTER
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxComboBoxXmlHandler, wxXmlResourceHandler)
