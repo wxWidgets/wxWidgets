@@ -318,6 +318,11 @@ wxMSW:
 - Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse)
 - Fix setting icons when they have non-default (16*16 and 32*32) sizes
 
+wxGTK:
+
+- Return false from wxEventLoop::Dispatch() if gtk_main_quit() was called and
+  so the loop should exit (Rodolfo Schulz de Lima)
+
 
 2.8.7
 -----
