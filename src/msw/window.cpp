@@ -6101,7 +6101,7 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
         default:
             // check to see if its one of the OEM key codes.
             BYTE vks = LOBYTE(VkKeyScan(wxk));
-            if ( vks != -1 )
+            if ( vks != 0xff )
             {
                 vk = vks;
             }
