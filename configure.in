@@ -906,7 +906,7 @@ WX_ARG_FEATURE(tga,         [  --enable-tga            use tga images (TGA file 
 WX_ARG_FEATURE(iff,         [  --enable-iff            use iff images (IFF file format)], wxUSE_IFF)
 WX_ARG_FEATURE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
 WX_ARG_FEATURE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
-WX_ARG_FEATURE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
+WX_ARG_FEATURE(ico_cur,     [  --enable-ico_cur        use Windows ICO and CUR formats], wxUSE_ICO_CUR)
 
 dnl ---------------------------------------------------------------------------
 dnl wxMSW-only options

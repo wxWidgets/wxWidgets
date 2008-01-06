@@ -1844,7 +1844,7 @@ Optional Features:
   --enable-iff            use iff images (IFF file format)
   --enable-pnm            use pnm images (PNM file format)
   --enable-xpm            use xpm images (XPM file format)
-  --enable-icocur         use Windows ICO and CUR formats
+  --enable-ico_cur        use Windows ICO and CUR formats
   --enable-dccache        cache temporary wxDC objects (Win32 only)
   --enable-ps-in-msw      use PS printing in wxMSW (Win32 only)
   --enable-ownerdrawn     use owner drawn controls (Win32 and OS/2 only)
