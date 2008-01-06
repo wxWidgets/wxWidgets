@@ -176,7 +176,7 @@ public:
             }
         }
 
-        if ( *gs_classForHiddenWindow )
+        if ( gs_classForHiddenWindow )
         {
             if ( !::UnregisterClass(wxMSWEXEC_WNDCLASSNAME, wxGetInstance()) )
             {
