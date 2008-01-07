@@ -168,6 +168,11 @@ public:
             wxT("German Requiem"), wxT("Johannes Brahms"), 1868 ) );
         m_classicalMusicIsKnownToControl = false;
     }
+
+    ~MyMusicModel()
+    {
+        delete m_root;
+    }
     
     // helper method for wxLog
     
@@ -575,6 +580,7 @@ class MyFrame : public wxFrame
 {
 public:
     MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h);
+    ~MyFrame();
 
 public:
     void OnQuit(wxCommandEvent& event);
@@ -832,7 +838,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     child = treectrl2->AppendItem( parent,wxT("Child 1"), 0 );
     child = treectrl2->AppendItem( parent,wxT("Child 2"), 0 );
     child = treectrl2->AppendItem( parent,wxT("Child 3"), 0 );
-    
+
     bottom_sizer->Add( treectrl2 );
     
     // main sizer
@@ -840,6 +846,11 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     main_sizer->Add( bottom_sizer, 0, wxGROW );
     
     SetSizer( main_sizer );
+}
+
+MyFrame::~MyFrame()
+{
+    delete wxLog::SetActiveTarget(m_logOld);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )

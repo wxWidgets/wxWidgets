@@ -146,8 +146,9 @@ counted object to which this class points.
 
 \constfunc{T*}{operator->}{\void}
 
-Gets a pointer to the reference counted object to which
-this class points. Same as \helpref{get}{wxobjectdataptrget}.
+Returns a pointer to the reference counted object to which
+this class points. If this the internal pointer is NULL,
+this method will assert in debug mode.
 
 \membersection{wxObjectDataPtr<T>::operator=}\label{wxobjectdataptroperatorassign}
 

@@ -456,7 +456,12 @@ public:
     }
 
     T *get() const { return m_ptr; }
-    T *operator->() const { return get(); }
+    
+    T *operator->() const
+    { 
+        wxASSERT(m_ptr != NULL);    
+        return get(); 
+    }
 
     void reset(T *ptr)
     {
@@ -480,8 +485,6 @@ public:
         if (m_ptr) 
             m_ptr->DecRef(); 
         m_ptr = ptr; 
-        if (m_ptr)
-            m_ptr->IncRef(); 
         return *this;
     }
 
