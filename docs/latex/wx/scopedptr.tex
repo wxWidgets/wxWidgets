@@ -1,0 +1,73 @@
+\section{\class{wxScopedPtr<T>}}\label{wxscopedptrtemplate}
+
+A scoped pointer template class. It is the template version of
+the old-style \helpref{scoped pointer macros}{wxscopedptr}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<ptr\_scpd.h>
+
+\wxheading{Data structures}
+
+{\small \begin{verbatim}
+typedef T element\_type
+\end{verbatim}}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxScopedPtr<T>::wxScopedPtr<T>}\label{wxscopedptrtemplatewxscopedptrtemplate}
+
+\func{wxEXPLICIT}{wxScopedPtr<T>}{\param{T * }{ptr = NULL}}
+
+Constructor.
+
+\membersection{wxScopedPtr<T>::\destruct{wxScopedPtr<T>}}\label{wxscopedptrtemplatedtor}
+
+\func{}{\destruct{wxScopedPtr<T>}}{\void}
+
+Destructor.
+
+\membersection{wxScopedPtr<T>::get}\label{wxscopedptrtemplateget}
+
+\constfunc{T *}{get}{\void}
+
+Returns pointer to object or NULL.
+
+\membersection{wxScopedPtr<T>::operator*}\label{wxscopedptrtemplateoperatorptrt}
+
+\constfunc{T \&}{operator*}{\void}
+
+Returns pointer to object. If the pointer is NULL this method will 
+cause an assert in debug mode.
+
+\membersection{wxScopedPtr<T>::operator->}\label{wxscopedptrtemplateoperatorderef}
+
+\constfunc{T *}{operator->}{\void}
+
+Returns pointer to object. If the pointer is NULL this method will 
+cause an assert in debug mode.
+
+\membersection{wxScopedPtr<T>::release}\label{wxscopedptrtemplaterelease}
+
+\func{T*}{release}{\void}
+
+Returns pointer to object or NULL.
+
+\membersection{wxScopedPtr<T>::reset}\label{wxscopedptrtemplatereset}
+
+\func{void}{reset}{\param{T * }{ptr = NULL}}
+
+Reset pointer. Afterwards the caller is responsible for deleting
+the data contained in the scoped pointer before.
+
+\membersection{wxScopedPtr<T>::swap}\label{wxscopedptrtemplateswap}
+
+\func{void}{swap}{\param{wxScopedPtr<T> \& }{ot}}
+
+Swaps pointers.
+
