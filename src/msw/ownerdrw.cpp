@@ -40,48 +40,83 @@
 #define SPI_GETKEYBOARDCUES 0x100A
 #endif
 
+#ifndef DSS_HIDEPREFIX
+#define DSS_HIDEPREFIX  0x0200
+#endif
+
 class wxMSWSystemMenuFontModule : public wxModule
 {
 public:
     virtual bool OnInit()
     {
-        WinStruct<NONCLIENTMETRICS> nm;
-        ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &nm, 0);
-
-        ms_systemMenuButtonWidth = nm.iMenuHeight;
-
-        // iMenuHeight is the menu bar height and the menu items are less tall,
-        // although I don't know by how much -- below is the value for my system
-        ms_systemMenuHeight = nm.iMenuHeight - 4;
-
-        // create menu font
-        wxNativeFontInfo info;
-        memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
-        ms_systemMenuFont = new wxFont(info);
-
-        if ( ::SystemParametersInfo(SPI_GETKEYBOARDCUES, 0,
-                                    &ms_showCues, 0) == 0 )
-        {
-            // if it's not supported, we must be on an old Windows version
-            // which always shows them
-            ms_showCues = true;
-        }
-
         return true;
     }
 
     virtual void OnExit()
     {
-        delete ms_systemMenuFont;
-        ms_systemMenuFont = NULL;
+        if ( ms_systemMenuFont )
+        {
+            delete ms_systemMenuFont;
+            ms_systemMenuFont = NULL;
+        }
+    }
+
+    static const wxFont& GetSystemMenuFont()
+    {
+        if ( !ms_systemMenuFont )
+            DoInitFont();
+
+        return *ms_systemMenuFont;
+    }
+
+    static int GetSystemMenuHeight()
+    {
+        if ( !ms_systemMenuHeight )
+            DoInitMetrics();
+
+        return ms_systemMenuHeight;
+    }
+
+    static bool AlwaysShowCues()
+    {
+        if ( !ms_systemMenuHeight )
+            DoInitMetrics();
+
+        return ms_alwaysShowCues;
+    }
+
+private:
+    static void DoInitMetrics()
+    {
+        WinStruct<NONCLIENTMETRICS> nm;
+        ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &nm, 0);
+
+        // iMenuHeight is the menu bar height and the menu items are less tall,
+        // although I don't know by how much -- below is the value for my system
+        ms_systemMenuHeight = nm.iMenuHeight - 4;
+
+        if ( ::SystemParametersInfo(SPI_GETKEYBOARDCUES, 0,
+                                    &ms_alwaysShowCues, 0) == 0 )
+        {
+            // if it's not supported, we must be on an old Windows version
+            // which always shows them
+            ms_alwaysShowCues = true;
+        }
+    }
+
+    static void DoInitFont()
+    {
+        WinStruct<NONCLIENTMETRICS> nm;
+        ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &nm, 0);
+
+        ms_systemMenuFont = new wxFont(wxNativeFontInfo(nm.lfMenuFont));
     }
 
     static wxFont* ms_systemMenuFont;
-    static int ms_systemMenuButtonWidth;
     static int ms_systemMenuHeight;
-    static bool ms_showCues;
+    static bool ms_alwaysShowCues;
 
-private:
+
     DECLARE_DYNAMIC_CLASS(wxMSWSystemMenuFontModule)
 };
 
@@ -90,9 +125,8 @@ private:
 // SystemParametersInfo() call.
 
 wxFont* wxMSWSystemMenuFontModule::ms_systemMenuFont = NULL;
-int wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth = 18;
-int wxMSWSystemMenuFontModule::ms_systemMenuHeight = 18;
-bool wxMSWSystemMenuFontModule::ms_showCues = true;
+int wxMSWSystemMenuFontModule::ms_systemMenuHeight = 0;
+bool wxMSWSystemMenuFontModule::ms_alwaysShowCues = false;
 
 IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
 
@@ -170,7 +204,7 @@ wxFont wxOwnerDrawn::GetFontToUse() const
     if ( !font.Ok() )
     {
         if ( IsMenuItem() )
-            font = *wxMSWSystemMenuFontModule::ms_systemMenuFont;
+            font = wxMSWSystemMenuFontModule::GetSystemMenuFont();
 
         if ( !font.Ok() )
             font = *wxNORMAL_FONT;
@@ -241,7 +275,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
     *pwidth += 4;
 
     // make sure that this item is at least as tall as the system menu height
-    const size_t heightStd = wxMSWSystemMenuFontModule::ms_systemMenuHeight;
+    const size_t heightStd = wxMSWSystemMenuFontModule::GetSystemMenuHeight();
     if ( *pheight < heightStd )
       *pheight = heightStd;
 
@@ -361,14 +395,28 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
         SIZE sizeRect;
         ::GetTextExtentPoint32(hdc, strMenuText.c_str(), strMenuText.length(), &sizeRect);
-        ::DrawState(hdc, NULL, NULL,
-                    (LPARAM)strMenuText.wx_str(),
-                    strMenuText.length(),
-                    xText, rc.y + (int) ((rc.GetHeight()-sizeRect.cy)/2.0), // centre text vertically
-                    rc.GetWidth()-margin, sizeRect.cy,
-                    DST_PREFIXTEXT |
-                    (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0) |
-                    (((st & wxODHidePrefix) && !wxMSWSystemMenuFontModule::ms_showCues) ? 512 : 0)); // 512 == DSS_HIDEPREFIX
+
+        int flags = DST_PREFIXTEXT;
+        if ( (st & wxODDisabled) && !(st & wxODSelected) )
+            flags |= DSS_DISABLED;
+
+        if ( (st & wxODHidePrefix) &&
+                !wxMSWSystemMenuFontModule::AlwaysShowCues() )
+            flags |= DSS_HIDEPREFIX;
+
+        ::DrawState
+        (
+            hdc,
+            NULL,
+            NULL,
+            (LPARAM)strMenuText.wx_str(),
+            strMenuText.length(),
+            xText,
+            rc.y + (rc.GetHeight() - sizeRect.cy + 1)/2, // centre vertically
+            rc.GetWidth() - margin,
+            sizeRect.cy,
+            flags
+        );
 
         // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO
         // as the last parameter in DrawState() (at least with Windows98). So we have
