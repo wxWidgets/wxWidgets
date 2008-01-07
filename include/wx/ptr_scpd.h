@@ -30,6 +30,76 @@
 
 #include "wx/defs.h"
 
+// ----------------------------------------------------------------------------
+// wxScopedPtr: A scoped pointer 
+// ----------------------------------------------------------------------------
+
+template <class T> 
+class wxScopedPtr
+{                                   
+private:                            
+    T * m_ptr;                      
+                                    
+    wxScopedPtr(wxScopedPtr const &);             
+    wxScopedPtr & operator=(wxScopedPtr const &); 
+                                    
+public:                             
+    typedef T element_type;
+    
+    wxEXPLICIT wxScopedPtr(T * ptr = NULL) 
+    : m_ptr(ptr) { }                
+                                    
+    ~wxScopedPtr()
+    {
+       if (m_ptr)
+           delete m_ptr;
+    }
+                                    
+    void reset(T * ptr = NULL)      
+    {                               
+        if (m_ptr != ptr)           
+        {                           
+            delete m_ptr;           
+            m_ptr = ptr;            
+        }                           
+    }                               
+                                    
+    T *release()                    
+    {                               
+        T *ptr = m_ptr;             
+        m_ptr = NULL;               
+        return ptr;                 
+    }                               
+                                    
+    T & operator*() const           
+    {                               
+        wxASSERT(m_ptr != NULL);    
+        return *m_ptr;              
+    }                               
+                                    
+    T * operator->() const          
+    {                               
+        wxASSERT(m_ptr != NULL);    
+        return m_ptr;               
+    }                               
+                                    
+    T * get() const                 
+    {                               
+        return m_ptr;               
+    }                               
+                                    
+    void swap(wxScopedPtr & ot)            
+    {                               
+        T * tmp = ot.m_ptr;         
+        ot.m_ptr = m_ptr;           
+        m_ptr = tmp;                
+    }                               
+};
+
+// ----------------------------------------------------------------------------
+// old macro based implementation
+// ----------------------------------------------------------------------------
+
 /*
    checked deleters are used to make sure that the type being deleted is really
    a complete type.: otherwise sizeof() would result in a compile-time error
@@ -62,16 +132,10 @@
         delete [] ptr;                                                        \
     } wxPOST_NO_WARNING_SCOPE(scope_var2)
 
-/* These scoped pointers are *not* assignable and cannot be used
-   within a container.  Look for wxDECLARE_SHARED_PTR for this
-   functionality.
-
-   In addition, the type being used *must* be complete at the time
+/* The type being used *must* be complete at the time
    that wxDEFINE_SCOPED_* is called or a compiler error will result.
    This is because the class checks for the completeness of the type
-   being used.
-*/
-
+   being used. */
 
 #define wxDECLARE_SCOPED_PTR(T, name) \
 class name                          \

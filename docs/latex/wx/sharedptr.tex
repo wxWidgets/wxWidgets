@@ -1,0 +1,71 @@
+\section{\class{wxSharedPtr<T>}}\label{wxsharedptr}
+
+A smart pointer with non-intrusive reference counting.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<ptr\_shrd.h>
+
+\wxheading{Data structures}
+
+{\small \begin{verbatim}
+typedef T element\_type
+\end{verbatim}}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxSharedPtr<T>::wxSharedPtr<T>}\label{wxsharedptrwxsharedptr}
+
+\func{wxEXPLICIT}{wxSharedPtr<T>}{\param{T* }{ptr = NULL}}
+
+\func{}{wxSharedPtr<T>}{\param{const wxSharedPtr<T>\& }{tocopy}}
+
+Constructors.
+
+\membersection{wxSharedPtr<T>::\destruct{wxSharedPtr<T>}}\label{wxsharedptrdtor}
+
+\func{}{\destruct{wxSharedPtr<T>}}{\void}
+
+Destructor.
+
+\membersection{wxSharedPtr<T>::get}\label{wxsharedptrget}
+
+\constfunc{T*}{get}{\void}
+
+Returns pointer to its object or NULL.
+
+\membersection{wxSharedPtr<T>::operator*}\label{wxsharedptroperatorptrt}
+
+\constfunc{T\&}{operator*}{\void}
+
+Returns pointer to its object or NULL.
+
+\membersection{wxSharedPtr<T>::operator->}\label{wxsharedptroperatorderef}
+
+\constfunc{T*}{operator->}{\void}
+
+Returns pointer to its object or NULL.
+
+\membersection{wxSharedPtr<T>::operator=}\label{wxsharedptroperatorassign}
+
+\func{wxSharedPtr<T>\& operator}{operator=}{\param{const wxSharedPtr<T>\& }{tocopy}}
+
+Assignment operator.
+
+\membersection{wxSharedPtr<T>::unique}\label{wxsharedptrunique}
+
+\constfunc{bool}{unique}{\void}
+
+Returns true if this is the only pointer pointing to its object.
+
+\membersection{wxSharedPtr<T>::use\_count}\label{wxsharedptruse\_count}
+
+\constfunc{long}{use\_count}{\void}
+
+Returns the number of pointers pointing to its object.
+
