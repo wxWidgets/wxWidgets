@@ -40,7 +40,8 @@ public:
     {
         for ( size_t n = 0; n < m_count; n++ )
         {
-            ::DestroyWindow(m_hwnds[n]);
+            if ( m_hwnds[n] )
+                ::DestroyWindow(m_hwnds[n]);
         }
 
         free(m_hwnds);
@@ -95,7 +96,8 @@ public:
         int sw = show ? SW_SHOW : SW_HIDE;
         for ( size_t n = 0; n < m_count; n++ )
         {
-            ::ShowWindow(m_hwnds[n], sw);
+            if ( m_hwnds[n] )
+                ::ShowWindow(m_hwnds[n], sw);
         }
     }
 
@@ -104,7 +106,8 @@ public:
     {
         for ( size_t n = 0; n < m_count; n++ )
         {
-            ::EnableWindow(m_hwnds[n], enable);
+            if ( m_hwnds[n] )
+                ::EnableWindow(m_hwnds[n], enable);
         }
     }
 
@@ -116,10 +119,13 @@ public:
 
         for ( size_t n = 0; n < m_count; n++ )
         {
-            ::SendMessage(m_hwnds[n], WM_SETFONT, (WPARAM)hfont, 0);
+            if ( m_hwnds[n] )
+            {
+                ::SendMessage(m_hwnds[n], WM_SETFONT, (WPARAM)hfont, 0);
 
-            // otherwise the window might not be redrawn correctly
-            ::InvalidateRect(m_hwnds[n], NULL, FALSE /* don't erase bg */);
+                // otherwise the window might not be redrawn correctly
+                ::InvalidateRect(m_hwnds[n], NULL, FALSE /* don't erase bg */);
+            }
         }
     }
 
@@ -129,10 +135,14 @@ public:
         wxRect r;
         for ( size_t n = 0; n < m_count; n++ )
         {
-            RECT rc;
-            ::GetWindowRect(m_hwnds[n], &rc);
+            if ( m_hwnds[n] )
+            {
+                RECT rc;
 
-            r.Union(wxRectFromRECT(rc));
+                ::GetWindowRect(m_hwnds[n], &rc);
+
+                r.Union(wxRectFromRECT(rc));
+            }
         }
 
         return r;
