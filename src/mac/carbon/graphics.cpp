@@ -23,6 +23,7 @@
     #include "wx/image.h"
 #endif
 
+#include "wx/strconv.h"
 #include "wx/mac/uma.h"
 
 #ifdef __MSL__
@@ -728,11 +729,20 @@ public:
     ~wxMacCoreGraphicsFontData();
 
     virtual ATSUStyle GetATSUStyle() { return m_macATSUIStyle; }
+#if !wxUSE_UNICODE
+    const wxMBConv& GetConverter() const { return m_conv; }
+#endif
 private :
     ATSUStyle m_macATSUIStyle;
+#if !wxUSE_UNICODE
+    wxCSConv m_conv;
+#endif
 };
 
 wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) : wxGraphicsObjectRefData( renderer )
+#if !wxUSE_UNICODE
+    , m_conv( font.GetEncoding() == wxFONTENCODING_DEFAULT ? wxFONTENCODING_SYSTEM : font.GetEncoding() )
+#endif
 {
     m_macATSUIStyle = NULL;
 
@@ -1751,7 +1761,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
     ubuf = (UniChar*) malloc( unicharlen + 2 );
     converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 );
 #else
-    const wxWCharBuffer wchar = str.wc_str( wxConvLocal );
+    const wxWCharBuffer wchar = str.wc_str( ((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetConverter() );
     size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
     ubuf = (UniChar*) malloc( unicharlen + 2 );
     converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
@@ -1761,7 +1771,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
 #if wxUSE_UNICODE
     ubuf = (UniChar*) str.wc_str();
 #else
-    wxWCharBuffer wchar = str.wc_str( wxConvLocal );
+    wxWCharBuffer wchar = str.wc_str( ((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetConverter() );
     chars = wxWcslen( wchar.data() );
     ubuf = (UniChar*) wchar.data();
 #endif
@@ -1876,7 +1886,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     ubuf = (UniChar*) malloc( unicharlen + 2 );
     converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 );
 #else
-    const wxWCharBuffer wchar = str.wc_str( wxConvLocal );
+    const wxWCharBuffer wchar = str.wc_str( ((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetConverter() );
     size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
     ubuf = (UniChar*) malloc( unicharlen + 2 );
     converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
@@ -1886,7 +1896,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
 #if wxUSE_UNICODE
     ubuf = (UniChar*) str.wc_str();
 #else
-    wxWCharBuffer wchar = str.wc_str( wxConvLocal );
+    wxWCharBuffer wchar = str.wc_str( ((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetConverter() );
     chars = wxWcslen( wchar.data() );
     ubuf = (UniChar*) wchar.data();
 #endif
@@ -1938,7 +1948,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
     ubuf = (UniChar*) malloc( unicharlen + 2 );
     converter.WC2MB( (char*) ubuf , text.wc_str(), unicharlen + 2 );
 #else
-    const wxWCharBuffer wchar = text.wc_str( wxConvLocal );
+    const wxWCharBuffer wchar = text.wc_str( ((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetConverter() );
     size_t unicharlen = converter.WC2MB( NULL , wchar.data() , 0 );
     ubuf = (UniChar*) malloc( unicharlen + 2 );
     converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 );
@@ -1948,7 +1958,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 #if wxUSE_UNICODE
     ubuf = (UniChar*) text.wc_str();
 #else
-    wxWCharBuffer wchar = text.wc_str( wxConvLocal );
+    wxWCharBuffer wchar = text.wc_str( ((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetConverter() );
     chars = wxWcslen( wchar.data() );
     ubuf = (UniChar*) wchar.data();
 #endif
