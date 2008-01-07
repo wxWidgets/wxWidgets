@@ -105,6 +105,8 @@ public:
     // set the XFLD
     void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
+    wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_) { }
+
     LOGFONT      lf;
 #elif defined(__WXPM__)
     // OS/2 native structures that define a font
