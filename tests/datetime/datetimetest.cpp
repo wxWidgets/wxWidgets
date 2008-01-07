@@ -602,15 +602,15 @@ void DateTimeTestCase::TestTimeFormat()
     static const struct
     {
         CompareKind compareKind;
-        const wxChar *format;
+        const char *format;
     } formatTestFormats[] =
     {
-       { CompareYear, _T("---> %c") }, // %c could use 2 digit years
-       { CompareDate, _T("Date is %A, %d of %B, in year %Y") },
-       { CompareYear, _T("Date is %x, time is %X") }, // %x could use 2 digits
-       { CompareTime, _T("Time is %H:%M:%S or %I:%M:%S %p") },
-       { CompareNone, _T("The day of year: %j, the week of year: %W") },
-       { CompareDate, _T("ISO date without separators: %Y%m%d") },
+       { CompareYear, "---> %c" }, // %c could use 2 digit years
+       { CompareDate, "Date is %A, %d of %B, in year %Y" },
+       { CompareYear, "Date is %x, time is %X" }, // %x could use 2 digits
+       { CompareTime, "Time is %H:%M:%S or %I:%M:%S %p" },
+       { CompareNone, "The day of year: %j, the week of year: %W" },
+       { CompareDate, "ISO date without separators: %Y%m%d" },
     };
 
     static const Date formatTestDates[] =
@@ -633,7 +633,7 @@ void DateTimeTestCase::TestTimeFormat()
         wxDateTime dt = formatTestDates[d].DT();
         for ( size_t n = 0; n < WXSIZEOF(formatTestFormats); n++ )
         {
-            const wxChar *fmt = formatTestFormats[n].format;
+            const char *fmt = formatTestFormats[n].format;
             wxString s = dt.Format(fmt);
 
             // what can we recover?
@@ -641,7 +641,7 @@ void DateTimeTestCase::TestTimeFormat()
 
             // convert back
             wxDateTime dt2;
-            const wxChar *result = dt2.ParseFormat(s.c_str(), fmt);
+            const char *result = dt2.ParseFormat(s, fmt);
             if ( !result )
             {
                 // converion failed - should it have?
@@ -690,22 +690,22 @@ void DateTimeTestCase::TestTimeSpanFormat()
     static const struct TimeSpanFormatTestData
     {
         long h, min, sec, msec;
-        const wxChar *fmt;
-        const wxChar *result;
+        const char *fmt;
+        const char *result;
     } testSpans[] =
     {
-        {   12, 34, 56, 789, _T("%H:%M:%S.%l"),   _T("12:34:56.789")          },
-        {    1,  2,  3,   0, _T("%H:%M:%S"),      _T("01:02:03")              },
-        {    1,  2,  3,   0, _T("%S"),            _T("3723")                  },
-        {   -1, -2, -3,   0, _T("%S"),            _T("-3723")                 },
-        {   -1, -2, -3,   0, _T("%H:%M:%S"),      _T("-01:02:03")             },
-        {   26,  0,  0,   0, _T("%H"),            _T("26")                    },
-        {   26,  0,  0,   0, _T("%D, %H"),        _T("1, 02")                 },
-        {  -26,  0,  0,   0, _T("%H"),            _T("-26")                   },
-        {  -26,  0,  0,   0, _T("%D, %H"),        _T("-1, 02")                },
-        {  219,  0,  0,   0, _T("%H"),            _T("219")                   },
-        {  219,  0,  0,   0, _T("%D, %H"),        _T("9, 03")                 },
-        {  219,  0,  0,   0, _T("%E, %D, %H"),    _T("1, 2, 03")              },
+        {   12, 34, 56, 789, "%H:%M:%S.%l",   "12:34:56.789"          },
+        {    1,  2,  3,   0, "%H:%M:%S",      "01:02:03"              },
+        {    1,  2,  3,   0, "%S",            "3723"                  },
+        {   -1, -2, -3,   0, "%S",            "-3723"                 },
+        {   -1, -2, -3,   0, "%H:%M:%S",      "-01:02:03"             },
+        {   26,  0,  0,   0, "%H",            "26"                    },
+        {   26,  0,  0,   0, "%D, %H",        "1, 02"                 },
+        {  -26,  0,  0,   0, "%H",            "-26"                   },
+        {  -26,  0,  0,   0, "%D, %H",        "-1, 02"                },
+        {  219,  0,  0,   0, "%H",            "219"                   },
+        {  219,  0,  0,   0, "%D, %H",        "9, 03"                 },
+        {  219,  0,  0,   0, "%E, %D, %H",    "1, 2, 03"              },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(testSpans); n++ )
@@ -743,29 +743,29 @@ void DateTimeTestCase::TestParceRFC822()
 {
     static const struct ParseTestData
     {
-        const wxChar *rfc822;
+        const char *rfc822;
         Date date;              // NB: this should be in UTC
         bool good;
     } parseTestDates[] =
     {
         {
-            _T("Sat, 18 Dec 1999 00:46:40 +0100"),
+            "Sat, 18 Dec 1999 00:46:40 +0100",
             { 17, wxDateTime::Dec, 1999, 23, 46, 40 },
             true
         },
         {
-            _T("Wed, 1 Dec 1999 05:17:20 +0300"),
+            "Wed, 1 Dec 1999 05:17:20 +0300",
             {  1, wxDateTime::Dec, 1999, 2, 17, 20 },
             true
         },
         {
-            _T("Sun, 28 Aug 2005 03:31:30 +0200"),
+            "Sun, 28 Aug 2005 03:31:30 +0200",
             {  28, wxDateTime::Aug, 2005, 1, 31, 30 },
             true
         },
 
         {
-            _T("Sat, 18 Dec 1999 10:48:30 -0500"),
+            "Sat, 18 Dec 1999 10:48:30 -0500",
             {  18, wxDateTime::Dec, 1999, 15, 48, 30 },
             true
         },
@@ -773,7 +773,7 @@ void DateTimeTestCase::TestParceRFC822()
 
     for ( unsigned n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
-        const wxChar * const datestr = parseTestDates[n].rfc822;
+        const char * const datestr = parseTestDates[n].rfc822;
 
         wxDateTime dt;
         if ( dt.ParseRfc822Date(datestr) )
@@ -801,21 +801,21 @@ void DateTimeTestCase::TestDateParse()
 {
     static const struct ParseTestData
     {
-        const wxChar *str;
+        const char *str;
         Date date;              // NB: this should be in UTC
         bool good;
     } parseTestDates[] =
     {
-        { _T("21 Mar 2006"), { 21, wxDateTime::Mar, 2006 }, true },
-        { _T("29 Feb 1976"), { 29, wxDateTime::Feb, 1976 }, true },
-        { _T("Feb 29 1976"), { 29, wxDateTime::Feb, 1976 }, true },
-        { _T("31/03/06"),    { 31, wxDateTime::Mar,    6 }, true },
-        { _T("31/03/2006"),  { 31, wxDateTime::Mar, 2006 }, true },
+        { "21 Mar 2006", { 21, wxDateTime::Mar, 2006 }, true },
+        { "29 Feb 1976", { 29, wxDateTime::Feb, 1976 }, true },
+        { "Feb 29 1976", { 29, wxDateTime::Feb, 1976 }, true },
+        { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true },
+        { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true },
 
         // some invalid ones too
-        { _T("29 Feb 2006") },
-        { _T("31/04/06") },
-        { _T("bloordyblop") },
+        { "29 Feb 2006" },
+        { "31/04/06" },
+        { "bloordyblop" },
     };
 
     // special cases
@@ -843,12 +843,12 @@ void DateTimeTestCase::TestDateTimeParse()
 {
     static const struct ParseTestData
     {
-        const wxChar *str;
+        const char *str;
         Date date;              // NB: this should be in UTC
         bool good;
     } parseTestDates[] =
     {
-        { _T("Thu 22 Nov 2007 07:40:00 PM"),
+        { "Thu 22 Nov 2007 07:40:00 PM",
          { 22, wxDateTime::Nov, 2007, 19, 40, 0}, true },
     };
 

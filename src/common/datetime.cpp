@@ -368,8 +368,8 @@ static const wxDateTime::wxDateTime_t gs_cumulatedDays[2][MONTHS_IN_YEAR] =
 // global data
 // ----------------------------------------------------------------------------
 
-const wxChar * wxDefaultDateTimeFormat = wxT("%c");
-const wxChar * wxDefaultTimeSpanFormat = wxT("%H:%M:%S");
+const char *wxDefaultDateTimeFormat = "%c";
+const char *wxDefaultTimeSpanFormat = "%H:%M:%S";
 
 // in the fine tradition of ANSI C we use our equivalent of (time_t)-1 to
 // indicate an invalid wxDateTime object
@@ -511,13 +511,13 @@ static wxString CallStrftime(const wxString& format, const tm* tm)
 #endif
 
 // Unicode-friendly strptime() wrapper
-static const wxChar *
-CallStrptime(const wxChar *input, const char *fmt, tm *tm)
+static const wxStringCharType *
+CallStrptime(const wxStringCharType *input, const char *fmt, tm *tm)
 {
     // the problem here is that strptime() returns pointer into the string we
     // passed to it while we're really interested in the pointer into the
     // original, Unicode, string so we try to transform the pointer back
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
     wxCharBuffer inputMB(wxConvertWX2MB(input));
 #else // ASCII
     const char * const inputMB = input;
@@ -527,7 +527,7 @@ CallStrptime(const wxChar *input, const char *fmt, tm *tm)
     if ( !result )
         return NULL;
 
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
     // FIXME: this is wrong in presence of surrogates &c
     return input + (result - inputMB.data());
 #else // ASCII
@@ -643,7 +643,9 @@ struct tm *wxDateTime::GetTmNow(struct tm *tmstruct)
 }
 
 // scans all digits (but no more than len) and returns the resulting number
-static bool GetNumericToken(size_t len, const wxChar*& p, unsigned long *number)
+static bool GetNumericToken(size_t len,
+                            const wxStringCharType*& p,
+                            unsigned long *number)
 {
     size_t n = 1;
     wxString s;
@@ -659,7 +661,7 @@ static bool GetNumericToken(size_t len, const wxChar*& p, unsigned long *number)
 }
 
 // scans all alphabetic characters and returns the resulting string
-static wxString GetAlphaToken(const wxChar*& p)
+static wxString GetAlphaToken(const wxStringCharType*& p)
 {
     wxString s;
     while ( wxIsalpha(*p) )
@@ -2689,12 +2691,12 @@ wxString wxDateTime::Format(const wxString& format, const TimeZone& tz) const
 // RFC822 time specs.
 //
 // TODO a great candidate for using reg exps
-const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
+const char *
+wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
 {
-    wxCHECK_MSG( date, (wxChar *)NULL, _T("NULL pointer in wxDateTime::Parse") );
-
-    const wxChar *p = date;
-    const wxChar *comma = wxStrchr(p, _T(','));
+    // TODO: rewrite using iterators instead of wxChar pointers
+    const wxStringCharType *p = date.wx_str();
+    const wxStringCharType *comma = wxStrchr(p, wxS(','));
     if ( comma )
     {
         // the part before comma is the weekday
@@ -2707,7 +2709,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
         {
             wxLogDebug(_T("no space after weekday in RFC822 time spec"));
 
-            return (wxChar *)NULL;
+            return NULL;
         }
 
         p++; // skip space
@@ -2718,7 +2720,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     {
         wxLogDebug(_T("day number expected in RFC822 time spec, none found"));
 
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     wxDateTime_t day = (wxDateTime_t)(*p++ - _T('0'));
@@ -2730,7 +2732,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
     if ( *p++ != _T(' ') )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     // the following 3 letters specify the month
@@ -2764,21 +2766,21 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     {
         wxLogDebug(_T("Invalid RFC 822 month name '%s'"), monName.c_str());
 
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     p += 3;
 
     if ( *p++ != _T(' ') )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     // next is the year
     if ( !wxIsdigit(*p) )
     {
         // no year?
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     int year = *p++ - _T('0');
@@ -2786,7 +2788,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     if ( !wxIsdigit(*p) )
     {
         // should have at least 2 digits in the year
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     year *= 10;
@@ -2801,7 +2803,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
         if ( !wxIsdigit(*p) )
         {
             // no 3 digit years please
-            return (wxChar *)NULL;
+            return NULL;
         }
 
         year *= 10;
@@ -2810,20 +2812,20 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
     if ( *p++ != _T(' ') )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     // time is in the format hh:mm:ss and seconds are optional
     if ( !wxIsdigit(*p) )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     wxDateTime_t hour = (wxDateTime_t)(*p++ - _T('0'));
 
     if ( !wxIsdigit(*p) )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     hour *= 10;
@@ -2831,19 +2833,19 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
     if ( *p++ != _T(':') )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     if ( !wxIsdigit(*p) )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     wxDateTime_t min = (wxDateTime_t)(*p++ - _T('0'));
 
     if ( !wxIsdigit(*p) )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     min *= 10;
@@ -2854,14 +2856,14 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     {
         if ( !wxIsdigit(*p) )
         {
-            return (wxChar *)NULL;
+            return NULL;
         }
 
         sec = (wxDateTime_t)(*p++ - _T('0'));
 
         if ( !wxIsdigit(*p) )
         {
-            return (wxChar *)NULL;
+            return NULL;
         }
 
         sec *= 10;
@@ -2870,7 +2872,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
     if ( *p++ != _T(' ') )
     {
-        return (wxChar *)NULL;
+        return NULL;
     }
 
     // and now the interesting part: the timezone
@@ -2882,7 +2884,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
         if ( !wxIsdigit(*p) || !wxIsdigit(*(p + 1)) )
         {
-            return (wxChar *)NULL;
+            return NULL;
         }
 
         // hours
@@ -2892,7 +2894,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 
         if ( !wxIsdigit(*p) || !wxIsdigit(*(p + 1)) )
         {
-            return (wxChar *)NULL;
+            return NULL;
         }
 
         // minutes
@@ -2924,7 +2926,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
             {
                 wxLogDebug(_T("Invalid militaty timezone '%c'"), *p);
 
-                return (wxChar *)NULL;
+                return NULL;
             }
 
             offset = offsets[*p++ - _T('A')];
@@ -2959,7 +2961,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
             {
                 wxLogDebug(_T("Unknown RFC 822 timezone '%s'"), p);
 
-                return (wxChar *)NULL;
+                return NULL;
             }
 
             p += tz.length();
@@ -2973,7 +2975,11 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     Set(day, mon, year, hour, min, sec);
     MakeFromTimezone(TimeZone::Make(offset*SEC_PER_MIN));
 
-    return p;
+    const size_t endpos = p - date.wx_str();
+    if ( end )
+        *end = date.begin() + endpos;
+
+    return date.c_str() + endpos;
 }
 
 #ifdef __WINDOWS__
@@ -3136,12 +3142,13 @@ static wxString GetLocaleDateFormat()
 
 #endif // __WINDOWS__
 
-const wxChar *wxDateTime::ParseFormat(const wxChar *date,
-                                      const wxString& format,
-                                      const wxDateTime& dateDef)
+const char *
+wxDateTime::ParseFormat(const wxString& date,
+                        const wxString& format,
+                        const wxDateTime& dateDef,
+                        wxString::const_iterator *end)
 {
-    wxCHECK_MSG( date && !format.empty(), (wxChar *)NULL,
-                 _T("NULL pointer in wxDateTime::ParseFormat()") );
+    wxCHECK_MSG( !format.empty(), NULL, "format can't be empty" );
 
     wxString str;
     unsigned long num;
@@ -3169,7 +3176,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
     wxDateTime::Month mon = Inv_Month;
     int year = 0;
 
-    const wxChar *input = date;
+    const wxStringCharType *input = date.wx_str();
     for ( wxString::const_iterator fmt = format.begin(); fmt != format.end(); ++fmt )
     {
         if ( *fmt != _T('%') )
@@ -3190,7 +3197,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( *input++ != *fmt )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
             }
 
@@ -3243,7 +3250,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     if ( wday == Inv_WeekDay )
                     {
                         // no match
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
                 }
                 haveWDay = true;
@@ -3257,7 +3264,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     if ( mon == Inv_Month )
                     {
                         // no match
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
                 }
                 haveMon = true;
@@ -3267,25 +3274,16 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 {
                     wxDateTime dt;
 
-                    // this is the format which corresponds to ctime() output
-                    // and strptime("%c") should parse it, so try it first
-                    static const wxChar *fmtCtime = _T("%a %b %d %H:%M:%S %Y");
+                    const wxString inc(input);
 
-                    const wxChar *result = dt.ParseFormat(input, fmtCtime);
-                    if ( !result )
-                    {
-                        result = dt.ParseFormat(input, _T("%x %X"));
-                    }
-
-                    if ( !result )
-                    {
-                        result = dt.ParseFormat(input, _T("%X %x"));
-                    }
-
-                    if ( !result )
+                    // try the format which corresponds to ctime() output first
+                    wxString::const_iterator endc;
+                    if ( !dt.ParseFormat(inc, wxS("%a %b %d %H:%M:%S %Y"), &endc) &&
+                            !dt.ParseFormat(inc, wxS("%x %X"), &endc) &&
+                                !dt.ParseFormat(inc, wxS("%X %x"), &endc) )
                     {
                         // we've tried everything and still no match
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
 
                     Tm tm = dt.GetTm();
@@ -3301,7 +3299,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     mon = tm.mon;
                     mday = tm.mday;
 
-                    input = result;
+                    input += endc - inc.begin();
                 }
                 break;
 
@@ -3310,7 +3308,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                         (num > 31) || (num < 1) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 // we can't check whether the day range is correct yet, will
@@ -3323,7 +3321,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) || (num > 23) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveHour = true;
@@ -3334,7 +3332,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) || !num || (num > 12) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveHour = true;
@@ -3346,7 +3344,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) || !num || (num > 366) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveYDay = true;
@@ -3357,7 +3355,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) || !num || (num > 12) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveMon = true;
@@ -3368,7 +3366,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) || (num > 59) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveMin = true;
@@ -3381,7 +3379,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
 
                     GetAmPmStrings(&am, &pm);
                     if (am.empty() && pm.empty())
-                        return (wxChar *)NULL;  // no am/pm strings defined
+                        return NULL;  // no am/pm strings defined
                     if ( token.CmpNoCase(pm) == 0 )
                     {
                         isPM = true;
@@ -3389,7 +3387,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     else if ( token.CmpNoCase(am) != 0 )
                     {
                         // no match
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
                 }
                 break;
@@ -3401,7 +3399,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     if ( !input )
                     {
                         // no match
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
 
                     haveHour = haveMin = haveSec = true;
@@ -3420,7 +3418,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     if ( !input )
                     {
                         // no match
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
 
                     haveHour = haveMin = true;
@@ -3435,7 +3433,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) || (num > 61) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveSec = true;
@@ -3449,7 +3447,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     if ( !input )
                     {
                         // no match
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
 
                     haveHour = haveMin = haveSec = true;
@@ -3465,7 +3463,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) || (wday > 6) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveWDay = true;
@@ -3480,7 +3478,8 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 {
                     struct tm tm;
 
-                    const wxChar *result = CallStrptime(input, "%x", &tm);
+                    const wxStringCharType *
+                        result = CallStrptime(input, "%x", &tm);
                     if ( result )
                     {
                         input = result;
@@ -3506,7 +3505,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     // Windows for the right way of formatting the date:
                     fmtDate = GetLocaleDateFormat();
                     if ( fmtDate.empty() )
-#endif
+#endif // __WINDOWS__
                     {
                         if ( IsWestEuropeanCountry(GetCountry()) ||
                              GetCountry() == Russia )
@@ -3521,29 +3520,29 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                         }
                     }
 
-                    const wxChar *result = dt.ParseFormat(input, fmtDate);
-
-                    if ( !result && !fmtDateAlt.empty() )
+                    const wxString indate(input);
+                    wxString::const_iterator endDate;
+                    if ( !dt.ParseFormat(indate, fmtDate, &endDate) )
                     {
-                        // ok, be nice and try another one
-                        result = dt.ParseFormat(input, fmtDateAlt);
-                    }
-
-                    if ( !result )
-                    {
-                        // bad luck
-                        return (wxChar *)NULL;
+                        // try another one if we have it
+                        if ( fmtDateAlt.empty() ||
+                                !dt.ParseFormat(indate, fmtDateAlt, &endDate) )
+                        {
+                            return NULL;
+                        }
                     }
 
                     Tm tm = dt.GetTm();
 
-                    haveDay = haveMon = haveYear = true;
+                    haveDay =
+                    haveMon =
+                    haveYear = true;
 
                     year = tm.year;
                     mon = tm.mon;
                     mday = tm.mday;
 
-                    input = result;
+                    input += endDate - indate.begin();
                 }
 
                 break;
@@ -3556,7 +3555,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     input = CallStrptime(input, "%X", &tm);
                     if ( !input )
                     {
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
 
                     haveHour = haveMin = haveSec = true;
@@ -3584,7 +3583,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                     if ( !result )
                     {
                         // no match
-                        return (wxChar *)NULL;
+                        return NULL;
                     }
 
                     haveHour = haveMin = haveSec = true;
@@ -3603,7 +3602,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) || (num > 99) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveYear = true;
@@ -3617,7 +3616,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( !GetNumericToken(width, input, &num) )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
 
                 haveYear = true;
@@ -3632,7 +3631,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 if ( *input++ != _T('%') )
                 {
                     // no match
-                    return (wxChar *)NULL;
+                    return NULL;
                 }
                 break;
 
@@ -3642,7 +3641,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 // fall through
 
             default:            // not a known format spec
-                return (wxChar *)NULL;
+                return NULL;
         }
     }
 
@@ -3681,7 +3680,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
         {
             wxLogDebug(_T("bad month day in wxDateTime::ParseFormat"));
 
-            return (wxChar *)NULL;
+            return NULL;
         }
 
         tm.mon = mon;
@@ -3693,7 +3692,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
         {
             wxLogDebug(_T("bad year day in wxDateTime::ParseFormat"));
 
-            return (wxChar *)NULL;
+            return NULL;
         }
 
         Tm tm2 = wxDateTime(1, Jan, tm.year).SetToYearDay(yday).GetTm();
@@ -3736,66 +3735,75 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
         return NULL;
     }
 
-    return input;
+    const size_t endpos = input - date.wx_str();
+    if ( end )
+        *end = date.begin() + endpos;
+
+    return date.c_str() + endpos;
 }
 
-const wxChar *wxDateTime::ParseDateTime(const wxChar *date)
+const char *
+wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
 {
-    wxCHECK_MSG( date, (wxChar *)NULL, _T("NULL pointer in wxDateTime::Parse") );
-
     // Set to current day and hour, so strings like '14:00' becomes today at
     // 14, not some other random date
     wxDateTime dtDate = wxDateTime::Today();
     wxDateTime dtTime = wxDateTime::Today();
 
-    const wxChar* pchTime;
+    wxString::const_iterator
+        endTime,
+        endDate,
+        endBoth;
 
-    // Try to parse the beginning of the string as a date
-    const wxChar* pchDate = dtDate.ParseDate(date);
-
-    // We got a date in the beginning, see if there is a time specified after the date
-    if ( pchDate )
+    // If we got a date in the beginning, see if there is a time specified
+    // after the date
+    if ( dtDate.ParseDate(date, &endDate) )
     {
         // Skip spaces, as the ParseTime() function fails on spaces
-        while ( wxIsspace(*pchDate) )
-            pchDate++;
+        while ( endDate != date.end() && wxIsspace(*endDate) )
+            ++endDate;
 
-        pchTime = dtTime.ParseTime(pchDate);
+        const wxString timestr(endDate, date.end());
+        if ( !dtTime.ParseTime(timestr, &endTime) )
+            return NULL;
+
+        endBoth = endDate + (endTime - timestr.begin());
     }
     else // no date in the beginning
     {
-        // check and see if we have a time followed by a date
-        pchTime = dtTime.ParseTime(date);
-        if ( pchTime )
-        {
-            while ( wxIsspace(*pchTime) )
-                pchTime++;
+        // check if we have a time followed by a date
+        if ( !dtTime.ParseTime(date, &endTime) )
+            return NULL;
 
-            pchDate = dtDate.ParseDate(pchTime);
-        }
+        while ( endTime != date.end() && wxIsspace(*endTime) )
+            ++endTime;
+
+        const wxString datestr(endTime, date.end());
+        if ( !dtDate.ParseDate(datestr, &endDate) )
+            return NULL;
+
+        endBoth = endTime + (endDate - datestr.begin());
     }
-
-    // If we have a date specified, set our own data to the same date
-    if ( !pchDate || !pchTime )
-        return NULL;
 
     Set(dtDate.GetDay(), dtDate.GetMonth(), dtDate.GetYear(),
         dtTime.GetHour(), dtTime.GetMinute(), dtTime.GetSecond(),
         dtTime.GetMillisecond());
 
     // Return endpoint of scan
-    return pchDate > pchTime ? pchDate : pchTime;
+    if ( end )
+        *end = endBoth;
+
+    return date.c_str() + (endBoth - date.begin());
 }
 
-const wxChar *wxDateTime::ParseDate(const wxChar *date)
+const char *
+wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
 {
     // this is a simplified version of ParseDateTime() which understands only
     // "today" (for wxDate compatibility) and digits only otherwise (and not
     // all esoteric constructions ParseDateTime() knows about)
 
-    wxCHECK_MSG( date, (wxChar *)NULL, _T("NULL pointer in wxDateTime::Parse") );
-
-    const wxChar *p = date;
+    const wxStringCharType *p = date.wx_str();
     while ( wxIsspace(*p) )
         p++;
 
@@ -3830,7 +3838,11 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                     *this += wxDateSpan::Days(dayDiffFromToday);
                 }
 
-                return p;
+                const size_t endpos = p - date.wx_str();
+
+                if ( end )
+                    *end = date.begin() + endpos;
+                return date.c_str() + endpos;
             }
         }
     }
@@ -3854,7 +3866,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
     // tokenize the string
     size_t nPosCur = 0;
-    static const wxChar *dateDelimiters = _T(".,/-\t\r\n ");
+    static const wxStringCharType *dateDelimiters = wxS(".,/-\t\r\n ");
     wxStringTokenizer tok(p, dateDelimiters);
     while ( tok.HasMoreTokens() )
     {
@@ -4115,7 +4127,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 // inconsistency detected
                 wxLogDebug(_T("ParseDate: inconsistent day/weekday."));
 
-                return (wxChar *)NULL;
+                return NULL;
             }
         }
     }
@@ -4135,13 +4147,16 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
         p--;
     }
 
-    return p;
+    const size_t endpos = p - date.wx_str();
+    if ( end )
+        *end = date.begin() + endpos;
+
+    return date.c_str() + endpos;
 }
 
-const wxChar *wxDateTime::ParseTime(const wxChar *time)
+const char *
+wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
 {
-    wxCHECK_MSG( time, (wxChar *)NULL, _T("NULL pointer in wxDateTime::Parse") );
-
     // first try some extra things
     static const struct
     {
@@ -4163,56 +4178,35 @@ const wxChar *wxDateTime::ParseTime(const wxChar *time)
             // casts required by DigitalMars
             Set(stdTimes[n].hour, wxDateTime_t(0), wxDateTime_t(0));
 
-            return time + len;
+            if ( end )
+                *end = time.begin() + len;
+
+            return time.c_str() + len;
         }
     }
 
     // try all time formats we may think about in the order from longest to
     // shortest
-
-    // 12hour with AM/PM?
-    const wxChar *result = ParseFormat(time, _T("%I:%M:%S %p"));
-
-    if ( !result )
+    static const char *timeFormats[] =
     {
-        // normally, it's the same, but why not try it?
-        result = ParseFormat(time, _T("%H:%M:%S"));
+        "%I:%M:%S %p",  // 12hour with AM/PM
+        "%H:%M:%S",     // could be the same or 24 hour one so try it too
+        "%I:%M %p",     // 12hour with AM/PM but without seconds
+        "%H:%M:%S",     // and a possibly 24 hour version without seconds
+        "%X",           // possibly something from above or maybe something
+                        // completely different -- try it last
+
+        // TODO: parse timezones
+    };
+
+    for ( size_t nFmt = 0; nFmt < WXSIZEOF(timeFormats); nFmt++ )
+    {
+        const char *result = ParseFormat(time, timeFormats[nFmt], end);
+        if ( result )
+            return result;
     }
 
-    if ( !result )
-    {
-        // 12hour with AM/PM but without seconds?
-        result = ParseFormat(time, _T("%I:%M %p"));
-    }
-
-    if ( !result )
-    {
-        // without seconds?
-        result = ParseFormat(time, _T("%H:%M"));
-    }
-
-    if ( !result )
-    {
-        // just the hour and AM/PM?
-        result = ParseFormat(time, _T("%I %p"));
-    }
-
-    if ( !result )
-    {
-        // just the hour?
-        result = ParseFormat(time, _T("%H"));
-    }
-
-    if ( !result )
-    {
-        // parse the standard format: normally it is one of the formats above
-        // but it may be set to something completely different by the user
-        result = ParseFormat(time, _T("%X"));
-    }
-
-    // TODO: parse timezones
-
-    return result;
+    return NULL;
 }
 
 // ----------------------------------------------------------------------------

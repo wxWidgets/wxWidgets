@@ -355,6 +355,14 @@ format. As an example, \helpref{ParseDateTime}{wxdatetimeparsedatetime} can
 parse the strings such as {\tt "tomorrow"}, {\tt "March first"} and even
 {\tt "next Sunday"}.
 
+Finally notice that each of the parsing functions is available in several
+overloads: if the input string is a narrow (\texttt{char *}) string, then a
+narrow pointer is returned. If the input string is a wide string, a wide char
+pointer is returned. Finally, if the input parameter is a wxString, a narrow
+char pointer is also returned for backwards compatibility but there is also an
+additional argument of wxString::const\_iterator type in which, if it is not
+\NULL, an iterator pointing to the end of the scanned string part is returned.
+
 \helpref{ParseRfc822Date}{wxdatetimeparserfc822date}\\
 \helpref{ParseFormat}{wxdatetimeparseformat}\\
 \helpref{ParseDateTime}{wxdatetimeparsedatetime}\\
@@ -1169,9 +1177,13 @@ as wxTimeSpan.
 
 \membersection{wxDateTime::ParseRfc822Date}\label{wxdatetimeparserfc822date}
 
-\func{const wxChar *}{ParseRfc822Date}{\param{const wxChar* }{date}}
+\func{const char *}{ParseRfc822Date}{\param{const wxString\& }{date}, \param{wxString::const\_iterator *}{end = \NULL}}
 
-Parses the string {\it date} looking for a date formatted according to the RFC
+\func{const char *}{ParseRfc822Date}{\param{const char* }{date}}
+
+\func{const wchar\_t *}{ParseRfc822Date}{\param{const wchar\_t* }{date}}
+
+Parses the string \arg{date} looking for a date formatted according to the RFC
 822 in it. The exact description of this format may, of course, be found in
 the RFC (section $5$), but, briefly, this is the format used in the headers of
 Internet email messages and one of the most common strings expressing date in
@@ -1190,7 +1202,11 @@ free ways, you should use \helpref{ParseDateTime}{wxdatetimeparsedatetime} or
 
 \membersection{wxDateTime::ParseFormat}\label{wxdatetimeparseformat}
 
-\func{const wxChar *}{ParseFormat}{\param{const wxChar *}{date}, \param{const wxChar *}{format = wxDefaultDateTimeFormat}, \param{const wxDateTime\& }{dateDef = wxDefaultDateTime}}
+\func{const char *}{ParseFormat}{\param{const wxString\& }{date}, \param{const wxString\& }{format = wxDefaultDateTimeFormat}, \param{const wxDateTime\& }{dateDef = wxDefaultDateTime}, \param{wxString::const\_iterator *}{end = \NULL}}
+
+\func{const char *}{ParseFormat}{\param{const char *}{date}, \param{const wxString\& }{format = wxDefaultDateTimeFormat}, \param{const wxDateTime\& }{dateDef = wxDefaultDateTime}}
+
+\func{const wchar\_t *}{ParseFormat}{\param{const wchar\_t *}{date}, \param{const wxString\& }{format = wxDefaultDateTimeFormat}, \param{const wxDateTime\& }{dateDef = wxDefaultDateTime}}
 
 This function parses the string {\it date} according to the given
 {\it format}. The system {\tt strptime(3)} function is used whenever available,
@@ -1215,7 +1231,11 @@ the character which stopped the scan.
 
 \membersection{wxDateTime::ParseDateTime}\label{wxdatetimeparsedatetime}
 
-\func{const wxChar *}{ParseDateTime}{\param{const wxChar *}{datetime}}
+\func{const char *}{ParseDateTime}{\param{const wxString\& }{datetime}, \param{wxString::const\_iterator *}{end = \NULL}}
+
+\func{const char *}{ParseDateTime}{\param{const char *}{datetime}}
+
+\func{const wchar\_t *}{ParseDateTime}{\param{const wchar\_t *}{datetime}}
 
 Parses the string {\it datetime} containing the date and time in free format.
 This function tries as hard as it can to interpret the given string as date
@@ -1229,7 +1249,11 @@ the character which stopped the scan.
 
 \membersection{wxDateTime::ParseDate}\label{wxdatetimeparsedate}
 
-\func{const wxChar *}{ParseDate}{\param{const wxChar *}{date}}
+\func{const char *}{ParseDate}{\param{const wxString\& }{date}, \param{wxString::const\_iterator *}{end = \NULL}}
+
+\func{const char *}{ParseDate}{\param{const char *}{date}}
+
+\func{const wchar\_t *}{ParseDate}{\param{const wchar\_t *}{date}}
 
 This function is like \helpref{ParseDateTime}{wxdatetimeparsedatetime}, but it
 only allows the date to be specified. It is thus less flexible then
@@ -1242,7 +1266,11 @@ the character which stopped the scan.
 
 \membersection{wxDateTime::ParseTime}\label{wxdatetimeparsetime}
 
-\func{const wxChar *}{ParseTime}{\param{const wxChar *}{time}}
+\func{const char *}{ParseTime}{\param{const wxString\& }{time}, \param{wxString::const\_iterator *}{end = \NULL}}
+
+\func{const char *}{ParseTime}{\param{const char *}{time}}
+
+\func{const wchar\_t *}{ParseTime}{\param{const wchar\_t *}{time}}
 
 This functions is like \helpref{ParseDateTime}{wxdatetimeparsedatetime}, but
 only allows the time to be specified in the input string.

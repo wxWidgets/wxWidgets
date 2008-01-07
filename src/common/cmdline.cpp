@@ -806,8 +806,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                         case wxCMD_LINE_VAL_DATE:
                             {
                                 wxDateTime dt;
-                                // FIXME-UTF8: ParseDate API will need changes
-                                const wxChar *res = dt.ParseDate(value.c_str());
+                                const char *res = dt.ParseDate(value);
                                 if ( !res || *res )
                                 {
                                     errorMsg << wxString::Format(_("Option '%s': '%s' cannot be converted to a date."),
