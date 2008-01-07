@@ -1508,14 +1508,23 @@ public:
     { return compare(s); }
     // same as Cmp() but not case-sensitive
   int CmpNoCase(const wxString& s) const;
+
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
   bool IsSameAs(const wxString& str, bool compareWithCase = true) const
-    { return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0; }
+  {
+#if !wxUSE_UNICODE_UTF8
+      // in UTF-8 build, length() is O(n) and doing this would be _slower_
+      if ( length() != str.length() )
+          return false;
+#endif
+      return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0;
+  }
   bool IsSameAs(const char *str, bool compareWithCase = true) const
     { return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0; }
   bool IsSameAs(const wchar_t *str, bool compareWithCase = true) const
     { return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0; }
+
   bool IsSameAs(const wxCStrData& str, bool compareWithCase = true) const
     { return IsSameAs(str.AsString(), compareWithCase); }
   bool IsSameAs(const wxCharBuffer& str, bool compareWithCase = true) const
@@ -2844,12 +2853,10 @@ wxDEFINE_ALL_COMPARISONS(const wxChar *, const wxString&, wxCMP_WXCHAR_STRING)
 
 #undef wxCMP_WXCHAR_STRING
 
-// note that there is an optimization in operator==() and !=(): we (quickly)
-// checks the strings length first, before comparing their data
 inline bool operator==(const wxString& s1, const wxString& s2)
-    { return (s1.Len() == s2.Len()) && (s1.Cmp(s2) == 0); }
+    { return s1.IsSameAs(s2); }
 inline bool operator!=(const wxString& s1, const wxString& s2)
-    { return (s1.Len() != s2.Len()) || (s1.Cmp(s2) != 0); }
+    { return !s1.IsSameAs(s2); }
 inline bool operator< (const wxString& s1, const wxString& s2)
     { return s1.Cmp(s2) < 0; }
 inline bool operator> (const wxString& s1, const wxString& s2)
