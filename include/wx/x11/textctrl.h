@@ -21,7 +21,6 @@
 
 #include "wx/scrolwin.h"
 #include "wx/arrstr.h"
-#include "wx/datetime.h"
 
 //-----------------------------------------------------------------------------
 // classes
