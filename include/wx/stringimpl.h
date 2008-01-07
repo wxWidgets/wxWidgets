@@ -247,7 +247,7 @@ public:
                                                                               \
     private:                                                                  \
         /* for wxStringImpl use only */                                       \
-        operator pointer() const { return m_ptr; }                            \
+        pointer GetPtr() const { return m_ptr; }                              \
                                                                               \
         friend class wxStringImpl;                                            \
                                                                               \
@@ -401,7 +401,7 @@ public:
   wxStringImpl& append(size_t n, wxStringCharType ch);
     // append from first to last
   wxStringImpl& append(const_iterator first, const_iterator last)
-    { ConcatSelf(last - first, first); return *this; }
+    { ConcatSelf(last - first, first.GetPtr()); return *this; }
 
     // same as `this_string = str'
   wxStringImpl& assign(const wxStringImpl& str)
@@ -451,7 +451,7 @@ public:
   iterator insert(iterator it, wxStringCharType ch)
     { size_t idx = it - begin(); insert(idx, 1, ch); return begin() + idx; }
   void insert(iterator it, const_iterator first, const_iterator last)
-    { insert(it - begin(), first, last - first); }
+    { insert(it - begin(), first.GetPtr(), last - first); }
   void insert(iterator it, size_type n, wxStringCharType ch)
     { insert(it - begin(), n, ch); }
 
@@ -498,7 +498,7 @@ public:
     { return replace(first - begin(), last - first, n, c); }
   wxStringImpl& replace(iterator first, iterator last,
                         const_iterator first1, const_iterator last1)
-    { return replace(first - begin(), last - first, first1, last1 - first1); }
+    { return replace(first - begin(), last - first, first1.GetPtr(), last1 - first1); }
 
     // swap two strings
   void swap(wxStringImpl& str);

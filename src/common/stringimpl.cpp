@@ -180,7 +180,7 @@ wxStringImpl::wxStringImpl(const_iterator first, const_iterator last)
 {
   if ( last >= first )
   {
-    InitWith(first, 0, last - first);
+    InitWith(first.GetPtr(), 0, last - first);
   }
   else
   {
