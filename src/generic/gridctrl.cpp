@@ -65,7 +65,8 @@ wxString wxGridCellDateTimeRenderer::GetString(const wxGrid& grid, int row, int 
     {
         void * tempval = table->GetValueAsCustom(row, col,wxGRID_VALUE_DATETIME);
 
-        if (tempval){
+        if (tempval)
+        {
             val = *((wxDateTime *)tempval);
             hasDatetime = true;
             delete (wxDateTime *)tempval;
@@ -76,13 +77,14 @@ wxString wxGridCellDateTimeRenderer::GetString(const wxGrid& grid, int row, int 
     if (!hasDatetime )
     {
         text = table->GetValue(row, col);
-        hasDatetime = (val.ParseFormat(text.c_str(), m_iformat, m_dateDef) != (wxChar *)NULL) ;
+        const char * const end = val.ParseFormat(text, m_iformat, m_dateDef);
+        hasDatetime = end && !*end;
     }
 
     if ( hasDatetime )
         text = val.Format(m_oformat, m_tz );
 
-    //If we faild to parse string just show what we where given?
+    // If we failed to parse string just show what we where given?
     return text;
 }
 
