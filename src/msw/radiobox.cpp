@@ -129,7 +129,7 @@ void wxRadioBox::Init()
 {
     m_selectedButton = wxNOT_FOUND;
     m_radioButtons = NULL;
-    m_radioButtonIds = NULL;
+    m_dummyButton = NULL;
     m_radioWidth = NULL;
     m_radioHeight = NULL;
 }
@@ -156,8 +156,17 @@ bool wxRadioBox::Create(wxWindow *parent,
     wxUnusedVar(val);
 #endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 
+    // We need an extra one to keep track of the 'dummy' item we
+    // create to end the radio group, so it will be destroyed and
+    // it's id will be released.  But we want it separate from the
+    // other buttons since the wxSubwindows will operate on it as
+    // well and we just want to ignore it until destroying it.
+    // For instance, we don't want the bounding box of the radio
+    // buttons to include the dummy button
     m_radioButtons = new wxSubwindows(n);
-    m_radioButtonIds = new wxWindowIDRef[n + 1];
+    m_dummyButton = new wxSubwindows(1);
+
+
     m_radioWidth = new int[n];
     m_radioHeight = new int[n];
 
@@ -169,14 +178,14 @@ bool wxRadioBox::Create(wxWindow *parent,
         if ( i == 0 )
             styleBtn |= WS_GROUP;
 
-        m_radioButtonIds[i] = NewControlId();
+        wxWindowIDRef subid = NewControlId();
 
         HWND hwndBtn = ::CreateWindow(_T("BUTTON"),
                                       choices[i].wx_str(),
                                       styleBtn,
                                       0, 0, 0, 0,   // will be set in SetSize()
                                       GetHwndOf(parent),
-                                      (HMENU)(wxWindowID)m_radioButtonIds[i],
+                                      (HMENU)subid.GetValue(),
                                       wxGetInstance(),
                                       NULL);
 
@@ -187,21 +196,29 @@ bool wxRadioBox::Create(wxWindow *parent,
             return false;
         }
 
-        (*m_radioButtons)[i] = hwndBtn;
+        // Keep track of the subwindow
+        m_radioButtons->Set(i, hwndBtn, subid);
 
         SubclassRadioButton((WXHWND)hwndBtn);
 
-        m_subControls.Add(m_radioButtonIds[i]);
+        // Also, make it a subcontrol of this control
+        m_subControls.Add(subid);
     }
 
     // Create a dummy radio control to end the group.
-    m_radioButtonIds[n] = NewControlId();
+    wxWindowIDRef subid = NewControlId();
 
-    (void)::CreateWindow(_T("BUTTON"),
+    HWND dummy = ::CreateWindow(_T("BUTTON"),
                          wxEmptyString,
                          WS_GROUP | BS_AUTORADIOBUTTON | WS_CHILD,
                          0, 0, 0, 0, GetHwndOf(parent),
-                         (HMENU)(wxWindowID)m_radioButtonIds[n], wxGetInstance(), NULL);
+                         (HMENU)subid.GetValue(), wxGetInstance(), NULL);
+
+    // Keep track of the subwindow so it will be destroyed when the radio
+    // box is and it's id will be freed.
+    // Also, do we need to consider this dummy item a subcontrol and add it
+    // to m_subControls
+    m_dummyButton->Set(0, dummy, subid);
 
     m_radioButtons->SetFont(GetFont());
 
@@ -241,7 +258,7 @@ wxRadioBox::~wxRadioBox()
     m_isBeingDeleted = true;
 
     delete m_radioButtons;
-    delete[] m_radioButtonIds;
+    delete m_dummyButton;
     delete[] m_radioWidth;
     delete[] m_radioHeight;
 }

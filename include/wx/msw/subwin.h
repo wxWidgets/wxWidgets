@@ -32,6 +32,7 @@ public:
 
         m_count = n;
         m_hwnds = (HWND *)calloc(n, sizeof(HWND));
+        m_ids = new wxWindowIDRef[n];
     }
 
     // non-virtual dtor, this class is not supposed to be used polymorphically
@@ -43,6 +44,7 @@ public:
         }
 
         free(m_hwnds);
+        delete [] m_ids;
     }
 
     // get the number of subwindows
@@ -56,10 +58,19 @@ public:
         return m_hwnds[n];
     }
 
-    HWND& operator[](size_t n) { return Get(n); }
     HWND operator[](size_t n) const
     {
         return wx_const_cast(wxSubwindows *, this)->Get(n);
+    }
+
+    // initialize the given window: id will be stored in wxWindowIDRef ensuring
+    // that it is not reused while this object exists
+    void Set(size_t n, HWND hwnd, wxWindowID id)
+    {
+        wxASSERT_MSG( n < m_count, _T("subwindow index out of range") );
+
+        m_hwnds[n] = hwnd;
+        m_ids[n] = id;
     }
 
     // check if we have this window
@@ -139,6 +150,9 @@ private:
 
     // the HWNDs we contain
     HWND *m_hwnds;
+
+    // the IDs of the windows
+    wxWindowIDRef *m_ids;
 
 
     DECLARE_NO_COPY_CLASS(wxSubwindows)

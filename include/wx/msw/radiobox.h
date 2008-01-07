@@ -158,7 +158,9 @@ protected:
 
     // the buttons we contain
     wxSubwindows *m_radioButtons;
-    wxWindowIDRef *m_radioButtonIds;
+
+    // and the special dummy button used only as a tab group boundary
+    wxSubwindows *m_dummyButton;
 
     // array of widths and heights of the buttons, may be wxDefaultCoord if the
     // corresponding quantity should be computed
