@@ -1,0 +1,78 @@
+\section{\class{wxWeakRef<T>}}\label{wxweakref}
+
+A weak reference to an object of type T, where T has type 
+\helpref{wxTrackableBase}{wxTrackableBase} as one of its
+base classes  (in a static or dynamic sense).
+
+\begin{verbatim}
+class MyClass: public Foo, public TrackableBase
+{
+   // whatever
+}
+
+typedef wxWeakRef<MyClass> MyClassRef;
+\end{verbatim}
+
+\wxheading{Derived from}
+
+wxTrackerNode
+
+\wxheading{Include files}
+
+<weakref.h>
+
+\wxheading{Data structures}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxWeakRef<T>::wxWeakRef<T>}\label{wxweakrefwxweakref}
+
+\func{}{wxWeakRef<T>}{\param{T* }{pobj = NULL}}
+
+Constructor.
+
+\membersection{wxWeakRef<T>::\destruct{wxWeakRef<T>}}\label{wxweakrefdtor}
+
+\func{}{\destruct{wxWeakRef<T>}}{\void}
+
+Destructor.
+
+\membersection{wxWeakRef<T>::T*}\label{wxweakreft}
+
+\func{operator}{T*}{\void}
+
+Returns pointer to tracked object or NULL.
+
+\membersection{wxWeakRef<T>::operator->}\label{wxweakrefoperatorderef}
+
+\func{T*}{operator->}{\void}
+
+Returns pointer to tracked object or NULL.
+
+\membersection{wxWeakRef<T>::operator=}\label{wxweakrefoperatorassign}
+
+\func{T* operator}{operator=}{\param{T* }{pobj}}
+
+Assigns pointer to trackable object to this weak reference.
+
+\membersection{wxWeakRef<T>::Assign}\label{wxweakrefassign}
+
+\func{void}{Assign}{\param{T* }{pobj}}
+
+This uses static\_cast if possible or dynamic\_cast otherwise.
+
+\membersection{wxWeakRef<T>::GetTrackable}\label{wxweakrefgettrackable}
+
+\func{wxTrackableBase*}{GetTrackable}{\param{T* }{pobj}}
+
+Returns the trackable objects to which the weak reference
+points or NULL if it has been destroyed.
+
+\membersection{wxWeakRef<T>::OnObjectDestroy}\label{wxweakrefonobjectdestroy}
+
+\func{virtual void}{OnObjectDestroy}{\void}
+
+Called when the tracked object is destroyed. Be default sets
+internal pointer to NULL.
+

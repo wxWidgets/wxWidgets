@@ -1,9 +1,12 @@
 \section{\class{wxVector<T>}}\label{wxvector}
 
-wxVector is a template which implements most of the std::vector
-class and can be used like. If wxWidgets is compiled in STL mode,
-wxVector will just be a typedef to std::vector. You should
-refer to the STL documentation for further information.
+wxVector<T> is a template class which implements most of the std::vector
+class and can be used like it. If wxWidgets is compiled in STL mode,
+wxVector will just be a typedef to std::vector. Just like for std::vector,
+objects stored in wxVector<T> need to be {\it assignable} but don't have to
+be {\it default constructible}.
+
+You can refer to the STL documentation for further information.
 
 \wxheading{Derived from}
 

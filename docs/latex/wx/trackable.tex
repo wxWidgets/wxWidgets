@@ -1,0 +1,48 @@
+
+\section{\class{wxTrackableBase}}\label{wxtrackablebase}
+
+Add-on base class for a trackable object. This class maintains
+an internal linked list of classes of type wxTrackerNode and
+calls OnObjectDestroy() on them if this object is destroyed.
+The most common usage is by using the \helpref{wxWeakRef<T>}{wxweakref}
+class template which automates this. This class has no public
+API. Its only use is by deriving another class from it to
+make it trackable.
+
+\begin{verbatim}
+class MyClass: public Foo, public TrackableBase
+{
+   // whatever
+}
+
+typedef wxWeakRef<MyClass> MyClassRef;
+\end{verbatim}
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<tracker.h>
+
+\wxheading{Data structures}
+
+
+\section{\class{wxTrackable}}\label{wxtrackable}
+
+The only difference to \helpref{wxTrackableBase}{wxtrackablebase} is
+that this class adds a virtual table to enable dynamic\_cast query for
+wxTrackable.
+
+\wxheading{Derived from}
+
+\helpref{wxTrackableBase}{wxtrackablebase}
+
+\wxheading{Include files}
+
+<tracker.h>
+
+\wxheading{Data structures}
+
+

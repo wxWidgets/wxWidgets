@@ -11,18 +11,17 @@
 
 \section{\class{wxList<T>}}\label{wxlist}
 
-The wxList<T> class provides linked list functionality. It has been written
+The wxList<T> class provides linked list functionality. It has been rewritten
 to be type safe and to provide the full API of the STL std::list container and
 should be used like it. The exception is that wxList<T> actually stores
 pointers and therefore its iterators return pointers and not references
 to the actual objets in the list (see example below) and {\it value\_type} 
-is defined as {\it T*}.
+is defined as {\it T*}. wxList<T> destroys an object after removing it only
+if \helpref{DeleteContents}{wxlistdeletecontents} has been called.
 
-
-Unfortunately, the
-new wxList<T> class requires that you declare and define each wxList<T>
-class in your program. This is done with {\it WX\_DECLARE\_LIST} and 
-{\it WX\_DEFINE\_LIST} macros (see example). We hope that we'll be able
+wxList<T> is not a real template and it requires that you declare and define 
+each wxList<T> class in your program. This is done with {\it WX\_DECLARE\_LIST}
+and {\it WX\_DEFINE\_LIST} macros (see example). We hope that we'll be able
 to provide a proper template class providing both the STL std::list
 and the old wxList API in the future.
 

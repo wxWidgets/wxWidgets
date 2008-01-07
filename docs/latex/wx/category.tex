@@ -373,7 +373,17 @@ of these classes provide a subset or almost complete STL API.
 \twocolitem{\helpref{wxHashSet<T>}{wxhashset}}{A type-safe hash set implementation(macro based)}
 \twocolitem{\helpref{wxHashTable}{wxhashtable}}{A simple hash table implementation (deprecated, use wxHashMap)}
 \twocolitem{\helpref{wxList<T>}{wxlist}}{A type-safe linked list implementation (macro based)}
-\twocolitem{\helpref{wxVector<T>}{wxvector}}{Template base vector implementation}
+\twocolitem{\helpref{wxVector<T>}{wxvector}}{Template base vector implementation identical to std::vector}
+\end{twocollist}
+
+{\large {\bf Smart pointers}}
+
+wxWidgets provides a few smart pointer class templates.
+
+\twocolwidtha{6cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxWeakRef<T>}{wxweakref}}{A weak reference}
+\twocolitem{\helpref{wxObjectDataPtr<T>}{wxobjectdataptr}}{A shared pointer using intrusive reference counting}
 \end{twocollist}
 
 {\large {\bf Run-time class information system}}
