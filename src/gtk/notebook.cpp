@@ -465,7 +465,12 @@ bool wxNotebook::DeleteAllPages()
 
 wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
 {
-    wxNotebookPage *client = wxNotebookBase::DoRemovePage(page);
+    // We cannot remove the page yet, as GTK sends the "switch_page"
+    // signal before it has removed the notebook-page from its
+    // corresponding list. Thus, if we were to remove the page from
+    // m_pages at this point, the two lists of pages would be out
+    // of sync during the PAGE_CHANGING/PAGE_CHANGED events.
+    wxNotebookPage *client = GetPage(page);
     if ( !client )
         return NULL;
 
@@ -474,13 +479,16 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
 
     // we don't need to unparent the client->m_widget; GTK+ will do
     // that for us (and will throw a warning if we do it!)
-
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
+
+    // It's safe to remove the page now.
+    wxASSERT_MSG(GetPage(page) == client, wxT("pages changed during delete"));
+    wxNotebookBase::DoRemovePage(page);
 
     wxGtkNotebookPage* p = GetNotebookPage(page);
     m_pagesData.DeleteObject(p);
     delete p;
-
+    
     return client;
 }
 
