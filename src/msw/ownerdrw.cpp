@@ -16,9 +16,10 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_OWNER_DRAWN
+
 #ifndef WX_PRECOMP
     #include "wx/window.h"
-    #include "wx/msw/private.h"
     #include "wx/font.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
@@ -33,7 +34,7 @@
 #include "wx/ownerdrw.h"
 #include "wx/fontutil.h"
 
-#if wxUSE_OWNER_DRAWN
+#include "wx/msw/private.h"
 
 #ifndef SPI_GETKEYBOARDCUES
 #define SPI_GETKEYBOARDCUES 0x100A
@@ -42,27 +43,29 @@
 class wxMSWSystemMenuFontModule : public wxModule
 {
 public:
-
     virtual bool OnInit()
     {
-        ms_systemMenuFont = new wxFont;
-
-#if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
-        NONCLIENTMETRICS nm;
-        nm.cbSize = sizeof(NONCLIENTMETRICS);
-        SystemParametersInfo(SPI_GETNONCLIENTMETRICS,0,&nm,0);
+        WinStruct<NONCLIENTMETRICS> nm;
+        ::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &nm, 0);
 
         ms_systemMenuButtonWidth = nm.iMenuHeight;
-        ms_systemMenuHeight = nm.iMenuHeight;
+
+        // iMenuHeight is the menu bar height and the menu items are less tall,
+        // although I don't know by how much -- below is the value for my system
+        ms_systemMenuHeight = nm.iMenuHeight - 4;
 
         // create menu font
         wxNativeFontInfo info;
         memcpy(&info.lf, &nm.lfMenuFont, sizeof(LOGFONT));
-        ms_systemMenuFont->Create(info);
+        ms_systemMenuFont = new wxFont(info);
 
-        if (SystemParametersInfo(SPI_GETKEYBOARDCUES, 0, &ms_showCues, 0) == 0)
+        if ( ::SystemParametersInfo(SPI_GETKEYBOARDCUES, 0,
+                                    &ms_showCues, 0) == 0 )
+        {
+            // if it's not supported, we must be on an old Windows version
+            // which always shows them
             ms_showCues = true;
-#endif
+        }
 
         return true;
     }
@@ -74,9 +77,10 @@ public:
     }
 
     static wxFont* ms_systemMenuFont;
-    static int ms_systemMenuButtonWidth;   // windows clean install default
-    static int ms_systemMenuHeight;        // windows clean install default
+    static int ms_systemMenuButtonWidth;
+    static int ms_systemMenuHeight;
     static bool ms_showCues;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMSWSystemMenuFontModule)
 };
@@ -86,8 +90,8 @@ private:
 // SystemParametersInfo() call.
 
 wxFont* wxMSWSystemMenuFontModule::ms_systemMenuFont = NULL;
-int wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth = 18;   // windows clean install default
-int wxMSWSystemMenuFontModule::ms_systemMenuHeight = 18;        // windows clean install default
+int wxMSWSystemMenuFontModule::ms_systemMenuButtonWidth = 18;
+int wxMSWSystemMenuFontModule::ms_systemMenuHeight = 18;
 bool wxMSWSystemMenuFontModule::ms_showCues = true;
 
 IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
@@ -138,7 +142,6 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
     m_isMenuItem   = bMenuItem;
     m_nHeight      = 0;
     m_nMarginWidth = ms_nLastMarginWidth;
-    m_nMinHeight   = wxMSWSystemMenuFontModule::ms_systemMenuHeight;
 }
 
 wxOwnerDrawn::~wxOwnerDrawn()
@@ -151,7 +154,7 @@ bool wxOwnerDrawn::IsMenuItem() const
 }
 
 
-// these items will be set during the first invocation of the c'tor,
+// these items will be set during the first invocation of the ctor,
 // because the values will be determined by checking the system settings,
 // which is a chunk of code
 size_t wxOwnerDrawn::ms_nDefaultMarginWidth = 0;
@@ -216,10 +219,9 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
     // increase size to accommodate bigger bitmaps if necessary
     if (m_bmpChecked.Ok())
     {
-        // Is BMP height larger then text height?
-        size_t adjustedHeight = m_bmpChecked.GetHeight() +
-                                  2*wxSystemSettings::GetMetric(wxSYS_EDGE_Y);
-        if (*pheight < adjustedHeight)
+        // Is BMP height larger than text height?
+        size_t adjustedHeight = m_bmpChecked.GetHeight();
+        if ( *pheight < adjustedHeight )
             *pheight = adjustedHeight;
 
         const size_t widthBmp = m_bmpChecked.GetWidth();
@@ -239,8 +241,9 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
     *pwidth += 4;
 
     // make sure that this item is at least as tall as the system menu height
-    if ( *pheight < m_nMinHeight )
-      *pheight = m_nMinHeight;
+    const size_t heightStd = wxMSWSystemMenuFontModule::ms_systemMenuHeight;
+    if ( *pheight < heightStd )
+      *pheight = heightStd;
 
     // remember height for use in OnDrawItem
     m_nHeight = *pheight;

@@ -164,7 +164,6 @@ private:
             m_bmpDisabled;
 
   size_t    m_nHeight,      // font height
-            m_nMinHeight,   // minimum height, as determined by user's system settings
             m_nMarginWidth; // space occupied by bitmap to the left of the item
 };
 
