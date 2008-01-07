@@ -3395,7 +3395,7 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('r'):       // time as %I:%M:%S %p
                 {
                     wxDateTime dt;
-                    input = dt.ParseFormat(input, _T("%I:%M:%S %p"));
+                    input = dt.ParseFormat(input, wxS("%I:%M:%S %p"));
                     if ( !input )
                     {
                         // no match
@@ -3414,7 +3414,7 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('R'):       // time as %H:%M
                 {
                     wxDateTime dt;
-                    input = dt.ParseFormat(input, _T("%H:%M"));
+                    input = dt.ParseFormat(input, wxS("%H:%M"));
                     if ( !input )
                     {
                         // no match

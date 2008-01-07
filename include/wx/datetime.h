@@ -1108,11 +1108,18 @@ public:
         return date + (end - datestr.begin());
     }
 
+    const wchar_t *ParseFormat(const wchar_t *date,
+                               const wchar_t *format = wxDefaultDateTimeFormat,
+                               const wxDateTime& dateDef = wxDefaultDateTime)
+    {
+        return ParseFormat(date, wxString(format), dateDef);
+    }
+
     const char *ParseFormat(const char *date,
-                            const wxString& format = wxDefaultDateTimeFormat,
+                            const char *format = wxDefaultDateTimeFormat,
                             const wxDateTime& dateDef = wxDefaultDateTime)
     {
-        return ParseFormat(wxString(date), format, dateDef);
+        return ParseFormat(wxString(date), wxString(format), dateDef);
     }
 
         // parse a string containing the date/time in "free" format, this
