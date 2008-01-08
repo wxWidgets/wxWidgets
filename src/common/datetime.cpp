@@ -3574,10 +3574,11 @@ wxDateTime::ParseFormat(const wxString& date,
                     // common cases
                     wxDateTime dt;
 
-                    const wxChar *result = dt.ParseFormat(input, _T("%T"));
+                    const wxStringCharType *
+                        result = dt.ParseFormat(input, wxS("%T"));
                     if ( !result )
                     {
-                        result = dt.ParseFormat(input, _T("%r"));
+                        result = dt.ParseFormat(input, wxS("%r"));
                     }
 
                     if ( !result )
@@ -3586,7 +3587,9 @@ wxDateTime::ParseFormat(const wxString& date,
                         return NULL;
                     }
 
-                    haveHour = haveMin = haveSec = true;
+                    haveHour =
+                    haveMin =
+                    haveSec = true;
 
                     Tm tm = dt.GetTm();
                     hour = tm.hour;
