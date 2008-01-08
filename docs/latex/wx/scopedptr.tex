@@ -44,6 +44,15 @@ Destructor.
 
 Returns pointer to object or NULL.
 
+\membersection{wxScopedPtr<T>::operator unspecified\_bool\_type}\label{wxscopedptrtemplateoperatorbool}
+
+\constfunc{}{operator unspecified\_bool\_type}{\void}
+
+Conversion to a boolean expression (in a variant which is not 
+convertable to anything but a boolean expression). If this class
+contains a valid pointer it will return {\it true}, if it contains
+a NULL pointer it will return {\it false}.
+
 \membersection{wxScopedPtr<T>::operator*}\label{wxscopedptrtemplateoperatorreft}
 
 \constfunc{T \&}{operator*}{\void}

@@ -457,6 +457,20 @@ public:
 
     T *get() const { return m_ptr; }
     
+    // test for pointer validity: defining conversion to unspecified_bool_type
+    // and not more obvious bool to avoid implicit conversions to integer types
+    typedef T *(wxObjectDataPtr<T>::*unspecified_bool_type)() const;
+    operator unspecified_bool_type() const
+    {
+        return m_ptr ? &wxObjectDataPtr<T>::get : NULL;
+    }
+
+    T& operator*() const
+    { 
+        wxASSERT(m_ptr != NULL);    
+        return *(m_ptr);
+    }
+    
     T *operator->() const
     { 
         wxASSERT(m_ptr != NULL);    

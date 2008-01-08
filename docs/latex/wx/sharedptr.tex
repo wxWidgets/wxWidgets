@@ -49,6 +49,15 @@ Destructor.
 
 Returns pointer to its object or NULL.
 
+\membersection{wxSharedPtr<T>::operator unspecified\_bool\_type}\label{wxsharedptroperatorbool}
+
+\constfunc{}{operator unspecified\_bool\_type}{\void}
+
+Conversion to a boolean expression (in a variant which is not 
+convertable to anything but a boolean expression). If this class
+contains a valid pointer it will return {\it true}, if it contains
+a NULL pointer it will return {\it false}.
+
 \membersection{wxSharedPtr<T>::operator*}\label{wxsharedptroperatorreft}
 
 \constfunc{T\&}{operator*}{\void}

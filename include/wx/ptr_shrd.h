@@ -55,6 +55,17 @@ public:
         return *this;
     }
 
+    // test for pointer validity: defining conversion to unspecified_bool_type
+    // and not more obvious bool to avoid implicit conversions to integer types
+    typedef T *(wxSharedPtr<T>::*unspecified_bool_type)() const;
+    operator unspecified_bool_type() const
+    {
+        if (m_ref && m_ref->m_ptr)
+           return  &wxSharedPtr<T>::get;
+        else
+           return NULL;
+    }
+
     T& operator*() const
     { 
         wxASSERT(m_ref != NULL);    
@@ -83,7 +94,6 @@ public:
     
     bool unique()   const    { return (m_ref ? m_ref->m_count == 1 : true); }
     long use_count() const   { return (m_ref ? (long)m_ref->m_count : 0); }
-    operator bool() const    { return (get() != NULL); }
 
 private:
 

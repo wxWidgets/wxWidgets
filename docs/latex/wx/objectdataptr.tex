@@ -1,17 +1,27 @@
 \section{\class{wxObjectDataPtr<T>}}\label{wxobjectdataptr}
 
-This is helper template class to avoid memleaks because of missing calls
-to \helpref{wxObjectRefData::DecRef}{wxobjectrefdatadecref}.
+This is helper template class primarily written to avoid memory 
+leaks because of missing calls to \helpref{wxObjectRefData::DecRef}{wxobjectrefdatadecref}.
 
-Despite the name this template can actually be used for any
-class implementing the reference counting interface and it
-does not use or depend on wxObject.
+Despite the name this template can actually be used as a
+smart pointer for any class implementing the reference
+counting interface and it does not use or depend on wxObject.
+
+The difference to \helpref{wxSharedPtr}{wxsharedptr} is that
+wxObjectDataPtr relies on the reference counting to be in
+the class pointed to where as wxSharedPtr implements the
+reference counting itself.
 
 \wxheading{See also}
 
 \helpref{wxObject}{wxobject},
 \helpref{wxObjectRefData}{wxobjectrefdata},
 \helpref{Reference counting}{trefcount}
+
+\helpref{wxSharedPtr}{wxsharedptr}, 
+\helpref{wxScopedPtr}{wxscopedptrtemplate},
+\helpref{wxWeakRef}{wxweakref}
+
 
 \wxheading{Derived from}
 
@@ -33,8 +43,6 @@ typedef T element_type
 
 \begin{verbatim}
 
-// include file
-
 class MyCarRefData: public wxObjectRefData
 {
 public:
@@ -46,11 +54,6 @@ public:
         m_price = data.m_price;
     }
 
-    bool operator == (const MyCarRefData& data) const
-    {
-        return m_price == data.m_price;
-    }
-    
     void SetPrice( int price )  { m_price = price; }
     int GetPrice()              { return m_price; }
     
@@ -61,61 +64,45 @@ protected:
 class MyCar
 {
 public:
-    MyCar( int price );
-    MyCar( const MyCar& data );
+    MyCar( int price ) : m_data( new MyCarRefData )
+    {
+        m_data->SetPrice( price );
+    }
     
-    bool operator == ( const MyCar& car ) const;
-    bool operator != (const MyCar& car) const { return !(*this == car); }
+    MyCar& operator =( const MyCar& tocopy )
+    {
+        m_data = tocopy.m_data;
+        return *this;
+    }
+    
+    bool operator == ( const MyCar& other ) const
+    {
+        if (m_data.get() == other.m_data.get()) return true;
+        return (m_data->GetPrice() == other.m_data->GetPrice());
+    }
 
-    void SetPrice( int price );
-    int GetPrice() const;
+    void SetPrice( int price )
+    {
+       UnShare();
+       m_data->SetPrice( price );
+    }
+    
+    int GetPrice() const
+    {
+       return m_data->GetPrice();
+    }
 
-    wxObjectRefPtr<MyCarRefData> m_data;
+    wxObjectDataPtr<MyCarRefData> m_data;
     
 protected:
-    void UnShare();
-};
-
-
-// implementation
-
-MyCar::MyCar( int price )
-{
-    m_data = new MyCarRefData;
-    m_data.get()->SetPrice( price );
-}
-
-MyCar::MyCar( const MyCar& car )
-{
-    m_data.reset( car.m_data.get() );
-}
-
-bool MyCar::operator == ( const MyCar& car ) const
-{
-    if (m_data.get() == car.m_data.get()) return true;
-
-    return (*m_data.get() == *car.m_data.get());
-}
-
-void MyCar::SetPrice( int price )
-{
-    UnShare();
-        
-    m_data.get()->SetPrice( price );
-}
-
-int MyCar::GetPrice() const
-{
-    return m_data.get()->GetPrice();
-}
-
-void MyCar::UnShare()
-{
-    if (m_data.get()->GetCount() == 1)
-        return;
+    void UnShare()
+    {
+        if (m_data->GetRefCount() == 1)
+            return;
     
-    m_data.reset( new MyCarRefData( *m_data.get() ) );
-}
+        m_data.reset( new MyCarRefData( *m_data ) );
+    }
+};
 
 \end{verbatim}
 
@@ -141,6 +128,22 @@ class will point to, as well.
 
 Calls \helpref{DecRef}{wxobjectrefdatadecref} on the reference
 counted object to which this class points.
+
+\membersection{wxObjectDataPtr<T>::operator unspecified\_bool\_type}\label{wxobjectdataptroperatorbool}
+
+\constfunc{}{operator unspecified\_bool\_type}{\void}
+
+Conversion to a boolean expression (in a variant which is not 
+convertable to anything but a boolean expression). If this class
+contains a valid pointer it will return {\it true}, if it contains
+a NULL pointer it will return {\it false}.
+
+\membersection{wxObjectDataPtr<T>::operator*}\label{wxobjectdataptroperatorreft}
+
+\constfunc{T \&}{operator*}{\void}
+
+Returns a reference to the object. If the internal pointer is NULL
+this method will cause an assert in debug mode.
 
 \membersection{wxObjectDataPtr<T>::operator->}\label{wxobjectdataptroperatorpointer}
 

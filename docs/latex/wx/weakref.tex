@@ -50,7 +50,6 @@ difference between the two base classes is that wxTrackableBase
 has no virtual member functions (no VTable), and thus cannot be detected
 through \texttt{dynamic\_cast<>}.
 
-
 \wxheading{Predefined types}
 
 The following types of weak references are predefined: 
@@ -69,6 +68,10 @@ wxTrackerNode
 \wxheading{Include files}
 
 <weakref.h>
+
+\wxheading{See also}
+
+\helpref{wxSharedPtr}{wxsharedptr}, \helpref{wxScopedPtr}{wxscopedptrtemplate}
 
 \wxheading{Data structures}
 
@@ -101,6 +104,15 @@ Destructor.
 \constfunc{T *}{get}{\void}
 
 Returns pointer to the tracked object or NULL.
+
+\membersection{wxWeakRef<T>::operator unspecified\_bool\_type}\label{wxweakrefoperatorbool}
+
+\constfunc{}{operator unspecified\_bool\_type}{\void}
+
+Conversion to a boolean expression (in a variant which is not 
+convertable to anything but a boolean expression). If this class
+contains a valid pointer it will return {\it true}, if it contains
+a NULL pointer it will return {\it false}.
 
 
 \membersection{wxWeakRef<T>::operator*}\label{wxweakrefoperatorreft}
