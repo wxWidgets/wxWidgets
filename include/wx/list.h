@@ -80,7 +80,7 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 #if !defined(__VISUALC__) || __VISUALC__ >= 1300 // == !VC6
 
 template<class T>
-class WXDLLIMPEXP_BASE wxList_SortFunction
+class wxList_SortFunction
 {
 public:
     wxList_SortFunction(wxSortCompareFunction f) : m_f(f) { }
