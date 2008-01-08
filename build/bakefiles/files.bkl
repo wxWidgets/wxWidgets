@@ -507,6 +507,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/power.h
     wx/process.h
     wx/ptr_scpd.h
+    wx/ptr_shrd.h
     wx/recguard.h
     wx/regex.h
     wx/scopeguard.h
@@ -935,6 +936,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/prntbase.h
     wx/progdlg.h
     wx/ptr_scpd.h
+    wx/ptr_shrd.h
     wx/quantize.h
     wx/rawbmp.h
     wx/region.h
