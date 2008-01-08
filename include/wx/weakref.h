@@ -25,6 +25,14 @@ public:
 
     virtual ~wxWeakRef() { Assign(NULL); }
 
+    // test for pointer validity: defining conversion to unspecified_bool_type
+    // and not more obvious bool to avoid implicit conversions to integer types
+    typedef T *(wxWeakRef<T>::*unspecified_bool_type)() const;
+    operator unspecified_bool_type() const
+    {
+        return m_pobj ? &wxWeakRef<T>::get : NULL;
+    }
+
     T * get() const                 
     {                               
         return m_pobj;
