@@ -11,6 +11,7 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_DATAVIEWCTRL
 #ifndef wxUSE_GENERICDATAVIEWCTRL
 
 #ifndef WX_PRECOMP
@@ -1084,3 +1085,4 @@ DataBrowserTrackingResult wxMacDataViewDataBrowserListViewControl::DataBrowserTr
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserTrackingProc(DataBrowserItemID, DataBrowserPropertyID, Rect const*, Point, EventModifiers) */
 
 #endif // wxUSE_GENERICDATAVIEWCTRL
+#endif // wxUSE_DATAVIEWCTRL
