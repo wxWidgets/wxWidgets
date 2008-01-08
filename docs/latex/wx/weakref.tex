@@ -3,8 +3,7 @@
 {\bf wxWeakRef} is a template class for weak references to wxWidgets objects, 
 such as {\bf wxEvtHandler}, {\bf wxWindow} and {\bf wxObject}. A weak 
 reference behaves much like an ordinary pointer, but when the object pointed 
-to goes out of scope (is destroyed), the weak reference is automatically 
-reset to a NULL pointer. 
+is destroyed, the weak reference is automatically reset to a NULL pointer. 
 
 wxWeakref<T> can be used whenever one must keep a pointer to an object 
 that does not directly own, and that may be destroyed before the object 
@@ -31,9 +30,10 @@ wxWeakref<T> is a small object and the mechanism behind it is fast
     wxASSERT( wr==NULL );
 \end{verbatim}
 
-wxWeakref<T> works for any objects that are derived from {\bf wxTrackableBase} 
-or {\bf wxTrackable}. By default, wxEvtHandler and wxWindow derive from 
-wxTrackableBase. However, wxObject does not, so types like {\bf wxFont} and 
+wxWeakref<T> works for any objects that are derived from 
+\helpref{wxTrackableBase}{wxtrackablebase} or \helpref{wxTrackable}{wxtrackable}.
+By default, wxEvtHandler and wxWindow derive from wxTrackableBase. However, 
+wxObject does not, so types like {\bf wxFont} and 
 {\bf wxColour} are not trackable. The example below shows how to create a 
 wxObject derived class that is trackable: 
 
@@ -70,6 +70,13 @@ wxTrackerNode
 <weakref.h>
 
 \wxheading{Data structures}
+
+{\small% 
+\begin{verbatim}
+typedef T element_type
+\end{verbatim}
+}%
+
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
