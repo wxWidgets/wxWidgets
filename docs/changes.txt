@@ -201,6 +201,8 @@ All:
   Linnakangas).
 - wxVariant::Unshare allows exclusive allocation of data that must be shared,
   if the wxVariantData::Clone function is implemented.
+- Added wxWeakRef<T>, wxScopedPtr<T>, wxSharedPtr<T> class templates
+- Added wxVector<T> class templates
 
 All (Unix):
 
@@ -208,6 +210,7 @@ All (Unix):
 
 All (GUI):
 
+- Added wxDataViewCtrl class and helper classes
 - Added {wxTextCtrl,wxComboBox}::AutoComplete() and AutoCompleteFileNames()
 - Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty).
 - Added wxNotificationMessage class for non-intrusive notifications
@@ -274,6 +277,7 @@ wxGTK:
 - Added support for colour cursors (Pascal Monasse).
 - Pass current control text to EVT_TEXT handler for wxSpinCtrl (John Ratliff).
 - Added gtk.tlw.can-set-transparency system option.
+- Added support for GTK+ print backend
 
 wxMac:
 
@@ -283,6 +287,7 @@ wxMac:
 - Allow accelerators to be used with buttons too (Ryan Wilcox).
 - Support resource forks in wxCopyFile() (Hank Schultz).
 - Implement wxLocale::GetInfo() using CFLocale
+- Added native wxCollapsiblePane
 
 wxMSW:
 
