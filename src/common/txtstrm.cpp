@@ -18,21 +18,13 @@
 
 #if wxUSE_STREAMS
 
+#include "wx/txtstrm.h"
+
 #ifndef WX_PRECOMP
     #include "wx/crt.h"
 #endif
 
-#include "wx/txtstrm.h"
 #include <ctype.h>
-
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// Unix: "\n"
-// Dos:  "\r\n"
-// Mac:  "\r"
 
 // ----------------------------------------------------------------------------
 // wxTextInputStream
@@ -109,7 +101,7 @@ wxChar wxTextInputStream::NextNonSeparators()
 
         if (c != wxT('\n') &&
             c != wxT('\r') &&
-            !m_separators.Contains(c))
+            m_separators.Find(c) < 0)
           return c;
     }
 
@@ -229,7 +221,7 @@ wxString wxTextInputStream::ReadWord()
         if(c == wxEOT)
             break;
 
-        if (m_separators.Contains(c))
+        if (m_separators.Find(c) >= 0)
             break;
 
         if (EatEOL(c))
