@@ -480,7 +480,7 @@ bool wxQTMediaBackend::Load(const wxURI& location)
     const char* theURIString;
 
 #if wxUSE_UNICODE
-    wxCharBuffer buf = wxConvLocal.cWC2MB(theURI, theURI.length(), &len);
+    wxCharBuffer buf = wxConvLocal.cWC2MB(theURI.wc_str(), theURI.length(), &len);
     theURIString = buf;
 #else
     theURIString = theURI;
@@ -1126,7 +1126,7 @@ void wxQTMediaBackend::MacVisibilityChanged()
 // Suggestion from Greg Hazel to repaint the movie when idle
 // (on pause also)
 //---------------------------------------------------------------------------
-void wxQTMediaEvtHandler::OnEraseBackground(wxEraseEvent& evt)
+void wxQTMediaEvtHandler::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 {
     // Work around Nasty OSX drawing bug:
     // http://lists.apple.com/archives/QuickTime-API/2002/Feb/msg00311.html
@@ -1201,7 +1201,7 @@ pascal Boolean wxQTMediaBackend::MCFilterProc(
 // messages to our moviecontroller so it can receive mouse clicks etc.
 //---------------------------------------------------------------------------
 pascal OSStatus wxQTMediaBackend::WindowEventHandler(
-    EventHandlerCallRef inHandlerCallRef,
+    EventHandlerCallRef WXUNUSED(inHandlerCallRef),
     EventRef inEvent,
     void *inUserData)
 {
