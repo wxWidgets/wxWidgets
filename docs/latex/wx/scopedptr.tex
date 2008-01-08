@@ -40,12 +40,12 @@ Destructor.
 
 Returns pointer to object or NULL.
 
-\membersection{wxScopedPtr<T>::operator*}\label{wxscopedptrtemplateoperatorptrt}
+\membersection{wxScopedPtr<T>::operator*}\label{wxscopedptrtemplateoperatorreft}
 
 \constfunc{T \&}{operator*}{\void}
 
-Returns pointer to object. If the pointer is NULL this method will 
-cause an assert in debug mode.
+Returns a reference to the object. If the internal pointer is NULL
+this method will cause an assert in debug mode.
 
 \membersection{wxScopedPtr<T>::operator->}\label{wxscopedptrtemplateoperatorderef}
 
@@ -58,7 +58,7 @@ cause an assert in debug mode.
 
 \func{T*}{release}{\void}
 
-Returns pointer to object or NULL.
+Releases the current pointer and returns NULL.
 
 \membersection{wxScopedPtr<T>::reset}\label{wxscopedptrtemplatereset}
 

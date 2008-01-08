@@ -3,7 +3,7 @@
 // Purpose:     wxWeakRef - Generic weak references for wxWidgets
 // Author:      Arne Steinarson
 // Created:     2007-12-27
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Arne Steinarson
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -19,19 +19,42 @@ template<class T>
 class wxWeakRef : public wxTrackerNode
 {
 public:
+    typedef T element_type;
+    
     wxWeakRef(T *pobj = NULL) : m_pobj(NULL) { Assign(pobj); }
 
     virtual ~wxWeakRef() { Assign(NULL); }
 
-    // Smart pointer functions
-    operator T*(){ return m_pobj; }
-    T* operator->(){ return m_pobj; }
+    T * get() const                 
+    {                               
+        return m_pobj;
+    }                               
+    
+    T* operator->()
+    { 
+        wxASSERT(m_pobj != NULL);    
+        return m_pobj; 
+    }
+    
+    T& operator*() const           
+    {                               
+        wxASSERT(m_pobj != NULL);    
+        return *m_pobj;              
+    }                               
+                                    
     T* operator=(T *pobj)
     {
         Assign(pobj);
         return m_pobj;
     }
 
+    // Assign from another weak ref, point to same object
+    T* operator = (const wxWeakRef<T> &wr)
+    { 
+        Assign(wr); 
+        return m_pobj; 
+    }
+    
     virtual void OnObjectDestroy()
     {
         // Tracked object itself removes us from list of trackers
@@ -39,16 +62,12 @@ public:
         m_pobj = NULL;
     }
 
-    virtual wxTrackerNodeType GetType() { return WeakRef; }
-
 protected:
-    wxTrackableBase *GetTrackable(T *pobj)
-    {
-        // this uses static_cast if possible or dynamic_cast otherwise
-        return wxTrackableCaster<T, wxHasBase<T, wxTrackableBase>::value>
-                ::Cast(pobj);
-    }
+    friend class wxTrackableBase; 
+    friend class wxEvtHandler;
 
+    virtual wxTrackerNodeType GetType() { return WeakRef; }
+    
     void Assign(T* pobj)
     {
         if ( m_pobj == pobj )
@@ -58,18 +77,28 @@ protected:
         if ( m_pobj )
         {
             // Remove ourselves from object tracker list
-            GetTrackable(m_pobj)->RemoveNode(this);
+            // This does static_cast if available, otherwise it tries dynamic cast
+            wxTrackableBase *pt = wxTrackableCaster<T,wxHasBase<T,wxTrackableBase>::value >::Cast(m_pobj);
+            wxASSERT(pt);
+            pt->RemoveNode(this);
             m_pobj = NULL;
         }
 
         // Now set new trackable object
         if ( pobj )
         {
-            wxTrackableBase * const pt = GetTrackable(pobj);
-            wxCHECK_RET( pt, "type must derive from wxTrackableBase" );
-
-            pt->AddNode(this);
-            m_pobj = pobj;
+            wxTrackableBase *pt = wxTrackableCaster<T,wxHasBase<T,wxTrackableBase>::value >::Cast(pobj);
+            if( pt )
+            {
+                pt->AddNode( this );
+                m_pobj = pobj;
+            }
+            else
+            {
+                // If the tracked we want to track does not support wxTackableBase, then 
+                // log a message and keep the NULL object pointer. 
+                wxLogWarning( _T("wxWeakRef::Assign - Type does not provide wxTrackableBase - resetting tracked object") );
+            }
         }
     }
 

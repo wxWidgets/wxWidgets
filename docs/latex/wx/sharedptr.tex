@@ -41,11 +41,12 @@ Destructor.
 
 Returns pointer to its object or NULL.
 
-\membersection{wxSharedPtr<T>::operator*}\label{wxsharedptroperatorptrt}
+\membersection{wxSharedPtr<T>::operator*}\label{wxsharedptroperatorreft}
 
 \constfunc{T\&}{operator*}{\void}
 
-Returns pointer to its object or NULL.
+Returns a reference to the object. If the internal pointer is NULL this
+method will cause an assert in debug mode.
 
 \membersection{wxSharedPtr<T>::operator->}\label{wxsharedptroperatorderef}
 
@@ -70,4 +71,11 @@ Returns true if this is the only pointer pointing to its object.
 \constfunc{long}{use\_count}{\void}
 
 Returns the number of pointers pointing to its object.
+
+\membersection{wxSharedPtr<T>::reset}\label{wxsharedptrreset}
+
+\func{void}{reset}{\param{T * }{ptr = NULL}}
+
+Reset pointer to {\it ptr}. Afterwards the caller is responsible
+for deleting the data contained in the pointer before.
 
