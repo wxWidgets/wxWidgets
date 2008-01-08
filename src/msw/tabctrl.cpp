@@ -98,7 +98,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
     tabStyle,    // Styles and defaults.
     x, y, width, height,                    // Standard size and position.
     (HWND) parent->GetHWND(),               // Parent window
-    (HMENU)m_windowId,                      // ID.
+    (HMENU)m_windowId.GetValue(),           // ID.
     wxGetInstance(),                        // Current instance.
     NULL );                                 // No class data.
 
