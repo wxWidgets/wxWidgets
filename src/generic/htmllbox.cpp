@@ -603,6 +603,11 @@ void wxSimpleHtmlListBox::DoClear()
     UpdateCount();
 }
 
+void wxSimpleHtmlListBox::Clear()
+{
+    DoClear();
+}
+
 void wxSimpleHtmlListBox::DoDeleteOneItem(unsigned int n)
 {
     m_items.RemoveAt(n);

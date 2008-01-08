@@ -268,8 +268,8 @@ public:
 
     virtual void SetString(unsigned int n, const wxString& s);
 
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int n);
+    // resolve ambiguity between wxItemContainer and wxVListBox versions
+    void Clear();
 
 protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,
@@ -282,10 +282,14 @@ protected:
     virtual void *DoGetItemClientData(unsigned int n) const
         { return m_HTMLclientData[n]; }
 
+    // wxItemContainer methods
+    virtual void DoClear();
+    virtual void DoDeleteOneItem(unsigned int n);
+
     // calls wxHtmlListBox::SetItemCount() and RefreshAll()
     void UpdateCount();
 
-    // overload these functions just to change their visibility: users of
+    // override these functions just to change their visibility: users of
     // wxSimpleHtmlListBox shouldn't be allowed to call them directly!
     virtual void SetItemCount(size_t count)
         { wxHtmlListBox::SetItemCount(count); }
