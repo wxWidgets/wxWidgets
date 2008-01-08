@@ -227,7 +227,7 @@ bool wxCrashReportImpl::Generate(int flags, EXCEPTION_POINTERS *ep)
     }
     else // dbghelp.dll couldn't be loaded
     {
-        Output(wxDbgHelpDLL::GetErrorMessage());
+        Output(_T("%s"), wxDbgHelpDLL::GetErrorMessage().c_str());
     }
 #else // !wxUSE_DBGHELP
     wxUnusedVar(flags);
