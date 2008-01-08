@@ -1,16 +1,17 @@
 \section{\class{wxWeakRef<T>}}\label{wxweakref}
 
-{\bf wxWeakRef} is a template class for weak references to wxWidgets objects, 
-such as {\bf wxEvtHandler}, {\bf wxWindow} and {\bf wxObject}. A weak 
-reference behaves much like an ordinary pointer, but when the object pointed 
-is destroyed, the weak reference is automatically reset to a NULL pointer. 
+wxWeakRef is a template class for weak references to wxWidgets objects, 
+such as \helpref{wxEvtHandler}{wxevthandler}, \helpref{wxWindow}{wxwindow} and 
+\helpref{wxObject}{wxobject}. A weak reference behaves much like an ordinary
+pointer, but when the object pointed is destroyed, the weak reference is
+automatically reset to a NULL pointer. 
 
 wxWeakref<T> can be used whenever one must keep a pointer to an object 
 that does not directly own, and that may be destroyed before the object 
 holding the reference. 
 
 wxWeakref<T> is a small object and the mechanism behind it is fast 
-({\bf O(1)}). So the overall cost of using it is small. 
+(\textbf{O(1)}). So the overall cost of using it is small. 
 
 
 \wxheading{Example}
@@ -33,9 +34,9 @@ wxWeakref<T> is a small object and the mechanism behind it is fast
 wxWeakref<T> works for any objects that are derived from 
 \helpref{wxTrackableBase}{wxtrackablebase} or \helpref{wxTrackable}{wxtrackable}.
 By default, wxEvtHandler and wxWindow derive from wxTrackableBase. However, 
-wxObject does not, so types like {\bf wxFont} and 
-{\bf wxColour} are not trackable. The example below shows how to create a 
-wxObject derived class that is trackable: 
+wxObject does not, so types like \helpref{wxFont}{wxfont} and 
+\helpref{wxColour}{wxcolour} are not trackable. The example below shows how to
+create a wxObject derived class that is trackable: 
 
 \begin{verbatim}
     class wxMyTrackableObject : public wxObject, public wxTrackable { 
@@ -43,11 +44,11 @@ wxObject derived class that is trackable:
     }; 
 \end{verbatim}
 
-{\bf Note:} Custom trackable objects should derive from wxTrackable 
-if one wants to reference them from a {\bf wxWeakRef<wxObject>}. The 
+\textbf{Note:} Custom trackable objects should derive from wxTrackable 
+if one wants to reference them from a \texttt{wxWeakRef<wxObject>}. The 
 difference between the two base classes is that wxTrackableBase 
 has no virtual member functions (no VTable), and thus cannot be detected
-through {\bf dynamic_cast<>}.
+through \texttt{dynamic\_cast<>}.
 
 
 \wxheading{Predefined types}
