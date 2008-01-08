@@ -73,7 +73,7 @@ struct wxTrackableBase {
     wxTrackerNode* GetFirst( ){ return m_first; }
 
     // If trying to copy this object, then do not copy its ref list.
-    wxTrackableBase& operator = (const wxTrackableBase& other) { return *this; }
+    wxTrackableBase& operator = (const wxTrackableBase& WXUNUSED(other)) { return *this; }
     
 protected:    
     wxTrackerNode *m_first;

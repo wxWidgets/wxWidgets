@@ -1014,6 +1014,43 @@ void wxEventHashTable::GrowEventTypeTable()
 
 
 // ----------------------------------------------------------------------------
+// wxEventConnectionRef
+// ----------------------------------------------------------------------------
+
+// Below functions are mostly short but kept in cpp file to simplify setting 
+// breakpoints (GDB)
+wxEventConnectionRef::wxEventConnectionRef(wxEvtHandler *src, wxEvtHandler *sink) 
+    : m_src(src), m_sink(sink), m_refCount(1) 
+{ 
+    wxASSERT( m_sink );
+    m_sink->AddNode( this );
+}
+
+wxEventConnectionRef::~wxEventConnectionRef() 
+{ 
+}
+
+void wxEventConnectionRef::OnObjectDestroy( )
+{
+    if( m_src )
+        m_src->OnSinkDestroyed( m_sink );
+    // It is safe to delete this tracker object here 
+    delete this;
+}
+
+void wxEventConnectionRef::DecRef( ) 
+{ 
+    if( !--m_refCount )
+    {
+        // The sink holds the only external pointer to this object
+        if( m_sink )
+            m_sink->RemoveNode(this);
+        delete this;
+    }
+}
+
+
+// ----------------------------------------------------------------------------
 // wxEvtHandler
 // ----------------------------------------------------------------------------
 
@@ -1052,6 +1089,19 @@ wxEvtHandler::~wxEvtHandler()
         {
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)*it;
 
+            // Remove ourselves from sink destructor notifications 
+            // (this has usually been been done, in wxTrackable destructor)
+            wxEvtHandler *eventSink = entry->m_eventSink;
+            if( eventSink )
+            {
+	            wxEventConnectionRef *pecr = FindRefInTrackerList( eventSink );
+	            if( pecr )
+	            {
+	                eventSink->RemoveNode( pecr );
+	                delete pecr;
+	            }
+            }
+            
             if (entry->m_callbackUserData)
                 delete entry->m_callbackUserData;
             delete entry;
@@ -1347,6 +1397,16 @@ void wxEvtHandler::Connect( int id, int lastId,
 
     // Insert at the front of the list so most recent additions are found first
     m_dynamicEvents->Insert( (wxObject*) entry );
+    
+    // Make sure we get to know when a sink is destroyed 
+    if( eventSink )
+    {
+        wxEventConnectionRef *pecr = FindRefInTrackerList( eventSink );
+        if( pecr )
+            pecr->IncRef( );
+        else
+            pecr = new wxEventConnectionRef(this,eventSink);
+    }
 }
 
 bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
@@ -1356,6 +1416,14 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
 {
     if (!m_dynamicEvents)
         return false;
+
+    // Remove connection from tracker node (wxEventConnectionRef)
+    if( eventSink )
+    {
+        wxEventConnectionRef *pecr = FindRefInTrackerList( eventSink );
+        if( pecr )
+            pecr->DecRef( );
+    }
 
     wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
@@ -1445,6 +1513,47 @@ void *wxEvtHandler::DoGetClientData() const
                   wxT("this window doesn't have void client data") );
 
     return m_clientData;
+}
+
+// A helper func to find an wxEventConnectionRef object 
+wxEventConnectionRef* wxEvtHandler::FindRefInTrackerList( wxEvtHandler *eventSink )
+{
+    wxASSERT(eventSink);
+    for( wxTrackerNode *ptn=eventSink->GetFirst(); ptn; ptn=ptn->m_nxt )
+    {
+        // Only want wxEventConnectionRef nodes here 
+        if( ptn->GetType()!=wxTrackerNode::EventConnectionRef )
+            continue;
+        wxEventConnectionRef *pecr = static_cast<wxEventConnectionRef*>(ptn);
+        if( pecr && pecr->m_src==this )
+        {
+            wxASSERT( pecr->m_sink==eventSink );
+            return pecr;
+        }
+    }
+    return NULL;
+}
+
+void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
+{
+    wxASSERT(m_dynamicEvents);
+    
+    // remove all connections with this sink
+    wxList::compatibility_iterator node = m_dynamicEvents->GetFirst(), node_nxt;
+    while (node)
+    {
+        wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+        node_nxt = node->GetNext();
+        
+        if( entry->m_eventSink==sink )
+        {
+            if (entry->m_callbackUserData)
+                delete entry->m_callbackUserData;
+            m_dynamicEvents->Erase( node );
+            delete entry;
+        }
+        node = node_nxt;
+    }
 }
 
 #endif // wxUSE_BASE
