@@ -934,7 +934,9 @@ void MyAutoTimedScrollingWindow::OnDraw(wxDC& dc)
     wxBrush selBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)
             , wxSOLID);
     dc.SetPen(*wxTRANSPARENT_PEN);
-    wxString str = sm_testData;
+    const wxString str = sm_testData;
+    size_t strLength = str.length();
+    wxString::const_iterator str_i;
 
     // draw the characters
     // 1. for each update region
@@ -945,6 +947,7 @@ void MyAutoTimedScrollingWindow::OnDraw(wxDC& dc)
         for (int chY = updRectInGChars.y
                 ; chY <= updRectInGChars.y + updRectInGChars.height; ++chY) {
             // 3. for each character in the row
+            bool isFirstX = true;
             for (int chX = updRectInGChars.x
                     ; chX <= updRectInGChars.x + updRectInGChars.width
                     ; ++chX) {
@@ -966,10 +969,15 @@ void MyAutoTimedScrollingWindow::OnDraw(wxDC& dc)
                 size_t charIndex = chY * sm_lineLen + chX;
                 if (chY < sm_lineCnt &&
                     chX < sm_lineLen &&
-                    charIndex < str.Length())
+                    charIndex < strLength)
                 {
-                    dc.DrawText(str.Mid(charIndex,1),
-                                charPos.x, charPos.y);
+                    if (isFirstX)
+                    {
+                        str_i = str.begin() + charIndex;
+                        isFirstX = false;
+                    }
+                    dc.DrawText(*str_i, charPos.x, charPos.y);
+                    ++str_i;
                 }
             }
         }
