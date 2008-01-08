@@ -1307,7 +1307,7 @@ void wxTextCtrl::DoSetSelection(long from, long to, int flags)
     else
 #endif // wxUSE_RICHEDIT
     {
-        ::SendMessage(hWnd, EM_SETSEL, from, to);
+        wxTextEntry::DoSetSelection(from, to, flags);
     }
 
     if ( (flags & SetSel_Scroll) && !IsFrozen() )
