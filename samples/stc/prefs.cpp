@@ -59,50 +59,50 @@ const CommonInfo g_CommonPrefs = {
 //----------------------------------------------------------------------------
 // keywordlists
 // C++
-wxChar* CppWordlist1 =
-    _T("asm auto bool break case catch char class const const_cast ")
-    _T("continue default delete do double dynamic_cast else enum explicit ")
-    _T("export extern false float for friend goto if inline int long ")
-    _T("mutable namespace new operator private protected public register ")
-    _T("reinterpret_cast return short signed sizeof static static_cast ")
-    _T("struct switch template this throw true try typedef typeid ")
-    _T("typename union unsigned using virtual void volatile wchar_t ")
-    _T("while");
-wxChar* CppWordlist2 =
-    _T("file");
-wxChar* CppWordlist3 =
-    _T("a addindex addtogroup anchor arg attention author b brief bug c ")
-    _T("class code date def defgroup deprecated dontinclude e em endcode ")
-    _T("endhtmlonly endif endlatexonly endlink endverbatim enum example ")
-    _T("exception f$ f[ f] file fn hideinitializer htmlinclude ")
-    _T("htmlonly if image include ingroup internal invariant interface ")
-    _T("latexonly li line link mainpage name namespace nosubgrouping note ")
-    _T("overload p page par param post pre ref relates remarks return ")
-    _T("retval sa section see showinitializer since skip skipline struct ")
-    _T("subsection test throw todo typedef union until var verbatim ")
-    _T("verbinclude version warning weakgroup $ @ \"\" & < > # { }");
+char* CppWordlist1 =
+    "asm auto bool break case catch char class const const_cast "
+    "continue default delete do double dynamic_cast else enum explicit "
+    "export extern false float for friend goto if inline int long "
+    "mutable namespace new operator private protected public register "
+    "reinterpret_cast return short signed sizeof static static_cast "
+    "struct switch template this throw true try typedef typeid "
+    "typename union unsigned using virtual void volatile wchar_t "
+    "while";
+char* CppWordlist2 =
+    "file";
+char* CppWordlist3 =
+    "a addindex addtogroup anchor arg attention author b brief bug c "
+    "class code date def defgroup deprecated dontinclude e em endcode "
+    "endhtmlonly endif endlatexonly endlink endverbatim enum example "
+    "exception f$ f[ f] file fn hideinitializer htmlinclude "
+    "htmlonly if image include ingroup internal invariant interface "
+    "latexonly li line link mainpage name namespace nosubgrouping note "
+    "overload p page par param post pre ref relates remarks return "
+    "retval sa section see showinitializer since skip skipline struct "
+    "subsection test throw todo typedef union until var verbatim "
+    "verbinclude version warning weakgroup $ @ \"\" & < > # { }";
 
 // Python
-wxChar* PythonWordlist1 =
-    _T("and assert break class continue def del elif else except exec ")
-    _T("finally for from global if import in is lambda None not or pass ")
-    _T("print raise return try while yield");
-wxChar* PythonWordlist2 =
-    _T("ACCELERATORS ALT AUTO3STATE AUTOCHECKBOX AUTORADIOBUTTON BEGIN ")
-    _T("BITMAP BLOCK BUTTON CAPTION CHARACTERISTICS CHECKBOX CLASS ")
-    _T("COMBOBOX CONTROL CTEXT CURSOR DEFPUSHBUTTON DIALOG DIALOGEX ")
-    _T("DISCARDABLE EDITTEXT END EXSTYLE FONT GROUPBOX ICON LANGUAGE ")
-    _T("LISTBOX LTEXT MENU MENUEX MENUITEM MESSAGETABLE POPUP PUSHBUTTON ")
-    _T("RADIOBUTTON RCDATA RTEXT SCROLLBAR SEPARATOR SHIFT STATE3 ")
-    _T("STRINGTABLE STYLE TEXTINCLUDE VALUE VERSION VERSIONINFO VIRTKEY");
+char* PythonWordlist1 =
+    "and assert break class continue def del elif else except exec "
+    "finally for from global if import in is lambda None not or pass "
+    "print raise return try while yield";
+char* PythonWordlist2 =
+    "ACCELERATORS ALT AUTO3STATE AUTOCHECKBOX AUTORADIOBUTTON BEGIN "
+    "BITMAP BLOCK BUTTON CAPTION CHARACTERISTICS CHECKBOX CLASS "
+    "COMBOBOX CONTROL CTEXT CURSOR DEFPUSHBUTTON DIALOG DIALOGEX "
+    "DISCARDABLE EDITTEXT END EXSTYLE FONT GROUPBOX ICON LANGUAGE "
+    "LISTBOX LTEXT MENU MENUEX MENUITEM MESSAGETABLE POPUP PUSHBUTTON "
+    "RADIOBUTTON RCDATA RTEXT SCROLLBAR SEPARATOR SHIFT STATE3 "
+    "STRINGTABLE STYLE TEXTINCLUDE VALUE VERSION VERSIONINFO VIRTKEY";
 
 
 //----------------------------------------------------------------------------
 //! languages
 const LanguageInfo g_LanguagePrefs [] = {
     // C++
-    {_T("C++"),
-     _T("*.c;*.cc;*.cpp;*.cxx;*.cs;*.h;*.hh;*.hpp;*.hxx;*.sma"),
+    {"C++",
+     "*.c;*.cc;*.cpp;*.cxx;*.cs;*.h;*.hh;*.hpp;*.hxx;*.sma",
      wxSTC_LEX_CPP,
      {{mySTC_TYPE_DEFAULT, NULL},
       {mySTC_TYPE_COMMENT, NULL},
@@ -138,8 +138,8 @@ const LanguageInfo g_LanguagePrefs [] = {
       {-1, NULL}},
      mySTC_FOLD_COMMENT | mySTC_FOLD_COMPACT | mySTC_FOLD_PREPROC},
     // Python
-    {_T("Python"),
-     _T("*.py;*.pyw"),
+    {"Python",
+     "*.py;*.pyw",
      wxSTC_LEX_PYTHON,
      {{mySTC_TYPE_DEFAULT, NULL},
       {mySTC_TYPE_COMMENT_LINE, NULL},
@@ -175,8 +175,8 @@ const LanguageInfo g_LanguagePrefs [] = {
       {-1, NULL}},
      mySTC_FOLD_COMMENTPY | mySTC_FOLD_QUOTESPY},
     // * (any)
-    {(const wxChar *)DEFAULT_LANGUAGE,
-     _T("*.*"),
+    {wxTRANSLATE(DEFAULT_LANGUAGE),
+     "*.*",
      wxSTC_LEX_PROPERTIES,
      {{mySTC_TYPE_DEFAULT, NULL},
       {mySTC_TYPE_DEFAULT, NULL},

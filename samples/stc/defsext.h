@@ -24,7 +24,7 @@
 // declarations
 //============================================================================
 
-#define DEFAULT_LANGUAGE _("<default>")
+#define DEFAULT_LANGUAGE "<default>"
 
 #define PAGE_COMMON _("Common")
 #define PAGE_LANGUAGES _("Languages")

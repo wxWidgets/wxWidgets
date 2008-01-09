@@ -439,7 +439,7 @@ bool Edit::InitializePrefs (const wxString &name) {
             StyleSetUnderline (Nr, (curType.fontstyle & mySTC_STYLE_UNDERL) > 0);
             StyleSetVisible (Nr, (curType.fontstyle & mySTC_STYLE_HIDDEN) == 0);
             StyleSetCase (Nr, curType.lettercase);
-            const wxChar *pwords = curInfo->styles[Nr].words;
+            const char *pwords = curInfo->styles[Nr].words;
             if (pwords) {
                 SetKeyWords (keywordnr, pwords);
                 keywordnr += 1;
