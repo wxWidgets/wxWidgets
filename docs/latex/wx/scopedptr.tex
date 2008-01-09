@@ -72,13 +72,15 @@ cause an assert in debug mode.
 \func{T*}{release}{\void}
 
 Releases the current pointer and returns it.
+Afterwards the caller is responsible for deleting
+the data contained in the scoped pointer before.
 
 \membersection{wxScopedPtr<T>::reset}\label{wxscopedptrtemplatereset}
 
 \func{void}{reset}{\param{T * }{ptr = NULL}}
 
-Reset pointer. Afterwards the caller is responsible for deleting
-the data contained in the scoped pointer before.
+Reset pointer to the value of {\it ptr}. The
+previous pointer will be deleted.
 
 \membersection{wxScopedPtr<T>::swap}\label{wxscopedptrtemplateswap}
 

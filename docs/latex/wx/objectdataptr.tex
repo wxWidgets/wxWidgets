@@ -5,7 +5,8 @@ leaks because of missing calls to \helpref{wxObjectRefData::DecRef}{wxobjectrefd
 
 Despite the name this template can actually be used as a
 smart pointer for any class implementing the reference
-counting interface and it does not use or depend on wxObject.
+counting interface which only consists of the two methods
+{\bf T::IncRef()} and {\bf T::DecRef()}.
 
 The difference to \helpref{wxSharedPtr}{wxsharedptr} is that
 wxObjectDataPtr relies on the reference counting to be in
@@ -114,7 +115,9 @@ protected:
 \func{wxEXPLICIT}{wxObjectDataPtr<T>}{\param{T* }{ptr = NULL}}
 
 Constructor. {\it ptr} is a pointer to the reference
-counted object to which this class points.
+counted object to which this class points. If {\it ptr}
+is not NULL {\bf T::IncRef()} will be called on the
+object.
 
 \func{}{wxObjectDataPtr<T>}{\param{const wxObjectDataPtr<T>\& }{tocopy}}
 
@@ -126,8 +129,8 @@ class will point to, as well.
 
 \func{}{\destruct{wxObjectDataPtr<T>}}{\void}
 
-Calls \helpref{DecRef}{wxobjectrefdatadecref} on the reference
-counted object to which this class points.
+Decreases the reference count of the object to which this
+class points.
 
 \membersection{wxObjectDataPtr<T>::operator unspecified\_bool\_type}\label{wxobjectdataptroperatorbool}
 
@@ -173,4 +176,5 @@ this class points.
 \func{void}{reset}{\param{T* }{ptr}}
 
 Reset this class to {\it ptr} which points to a reference
-counted object.
+counted object and calls {\bf T::DecRef()} on the previously
+owned object.

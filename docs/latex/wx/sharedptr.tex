@@ -23,7 +23,8 @@ typedef T element_type
 
 \wxheading{See also}
 
-\helpref{wxScopedPtr}{wxscopedptrtemplate}, \helpref{wxWeakRef}{wxweakref}
+\helpref{wxScopedPtr}{wxscopedptrtemplate}, \helpref{wxWeakRef}{wxweakref},
+\helpref{wxObjectDataPtr}{wxobjectdataptr}
 
 
 \latexignore{\rtfignore{\wxheading{Members}}}
@@ -76,7 +77,7 @@ Returns pointer to its object or NULL.
 \func{wxSharedPtr<T>\& operator}{operator=}{\param{const wxSharedPtr<T>\& }{tocopy}}
 
 Assignment operator. Releases any previously held pointer
-and creates a reference to same object as {\it topcopy}.
+and creates a reference to the same object as {\it topcopy}.
 
 \membersection{wxSharedPtr<T>::operator=}\label{wxsharedptroperatorassign2}
 
@@ -101,6 +102,6 @@ Returns the number of pointers pointing to its object.
 
 \func{void}{reset}{\param{T * }{ptr = NULL}}
 
-Reset pointer to {\it ptr}. Afterwards the caller is responsible
-for deleting the data contained in the pointer before.
+Reset pointer to {\it ptr}. If the reference count of the
+previously owned pointer was 1 it will be deleted.
 
