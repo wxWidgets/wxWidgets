@@ -298,8 +298,12 @@ bool wxDocument::SaveAs()
 #else
     wxString filter = docTemplate->GetFileFilter() ;
 #endif
+    wxString defaultDir = docTemplate->GetDirectory();
+    if (defaultDir.IsEmpty())
+        defaultDir = wxPathOnly(GetFilename());
+
     wxString tmp = wxFileSelector(_("Save As"),
-            docTemplate->GetDirectory(),
+            defaultDir,
             wxFileNameFromPath(GetFilename()),
             docTemplate->GetDefaultExtension(),
             filter,
