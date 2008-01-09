@@ -77,9 +77,9 @@
 #endif
 
 #if defined(__DARWIN__)
-	#include "wx/mac/corefoundation/cfref.h"
-	#include <CoreFoundation/CFLocale.h>
-	#include "wx/mac/corefoundation/cfstring.h"
+    #include "wx/mac/corefoundation/cfref.h"
+    #include <CoreFoundation/CFLocale.h>
+    #include "wx/mac/corefoundation/cfstring.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1935,10 +1935,10 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     wxString langFull;
 #ifdef __WXMAC__
     wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
-    
-    // because the locale identifier (kCFLocaleIdentifier) is formatted a little bit differently, eg 
+
+    // because the locale identifier (kCFLocaleIdentifier) is formatted a little bit differently, eg
     // az_Cyrl_AZ@calendar=buddhist;currency=JPY we just recreate the base info as expected by wx here
-    
+
     wxCFStringRef str(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleLanguageCode)));
     langFull = str.AsString()+"_";
     str.reset(wxCFRetain((CFStringRef)CFLocaleGetValue(userLocaleRef, kCFLocaleCountryCode)));
@@ -2590,6 +2590,18 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
+    wxUint32 lcid = LOCALE_USER_DEFAULT;
+
+    if (wxGetLocale())
+    {
+        const wxLanguageInfo *info = GetLanguageInfo(wxGetLocale()->GetLanguage());
+        if (info)
+        {                         ;
+            lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
+                                     SORT_DEFAULT);
+        }
+    }
+
     wxString str;
     wxChar buffer[256];
     size_t count;
@@ -2597,7 +2609,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
     switch (index)
     {
         case wxLOCALE_DECIMAL_POINT:
-            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, buffer, 256);
+            count = ::GetLocaleInfo(lcid, LOCALE_SDECIMAL, buffer, 256);
             if (!count)
                 str << wxS(".");
             else
@@ -2605,14 +2617,14 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             break;
 #if 0
         case wxSYS_LIST_SEPARATOR:
-            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, buffer, 256);
+            count = ::GetLocaleInfo(lcid, LOCALE_SLIST, buffer, 256);
             if (!count)
                 str << wxS(",");
             else
                 str << buffer;
             break;
         case wxSYS_LEADING_ZERO: // 0 means no leading zero, 1 means leading zero
-            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ILZERO, buffer, 256);
+            count = ::GetLocaleInfo(lcid, LOCALE_ILZERO, buffer, 256);
             if (!count)
                 str << wxS("0");
             else
