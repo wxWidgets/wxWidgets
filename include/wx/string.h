@@ -657,7 +657,14 @@ public:
       iterator(const iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
       iterator& operator=(const iterator& i)
-        { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
+      {
+          if (&i != this)
+          {
+              m_cur = i.m_cur;
+              m_node.set(i.str(), &m_cur);
+          }
+          return *this;
+      }
 
       reference operator*()
         { return wxUniCharRef::CreateForString(m_node, m_cur); }
@@ -692,7 +699,14 @@ public:
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
 
       const_iterator& operator=(const const_iterator& i)
-        { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
+      {
+          if (&i != this)
+          {
+              m_cur = i.m_cur;
+              m_node.set(i.str(), &m_cur);
+          }
+          return *this;
+      }
       const_iterator& operator=(const iterator& i)
         { m_cur = i.m_cur; m_node.set(i.str(), &m_cur); return *this; }
 
@@ -1324,7 +1338,7 @@ public:
   // overloaded assignment
     // from another wxString
   wxString& operator=(const wxString& stringSrc)
-    { m_impl = stringSrc.m_impl; return *this; }
+    { if (&stringSrc != this) m_impl = stringSrc.m_impl; return *this; }
   wxString& operator=(const wxCStrData& cstr)
     { return *this = cstr.AsString(); }
     // from a character

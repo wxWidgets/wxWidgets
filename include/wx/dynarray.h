@@ -334,11 +334,6 @@ public:                                                               \
   name() { }                                                          \
   ~name() { }                                                         \
                                                                       \
-  name& operator=(const name& src)                                    \
-    { base* temp = (base*) this;                                      \
-      (*temp) = ((const base&)src);                                   \
-      return *this; }                                                 \
-                                                                      \
   T& operator[](size_t uiIndex) const                                 \
     { return (T&)(base::operator[](uiIndex)); }                       \
   T& Item(size_t uiIndex) const                                       \

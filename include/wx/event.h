@@ -778,7 +778,7 @@ public:
 
     virtual wxEvent *Clone() const { return new wxMouseEvent(*this); }
 
-    wxMouseEvent& operator=(const wxMouseEvent& event) { Assign(event); return *this; }
+    wxMouseEvent& operator=(const wxMouseEvent& event) { if (&event != this) Assign(event); return *this; }
 
 public:
     wxCoord m_x, m_y;
@@ -940,22 +940,24 @@ public:
     // example)
     wxKeyEvent& operator=(const wxKeyEvent& evt)
     {
-        m_x = evt.m_x;
-        m_y = evt.m_y;
+        if (&evt != this)
+        {
+            m_x = evt.m_x;
+            m_y = evt.m_y;
 
-        m_keyCode = evt.m_keyCode;
+            m_keyCode = evt.m_keyCode;
 
-        m_controlDown = evt.m_controlDown;
-        m_shiftDown = evt.m_shiftDown;
-        m_altDown = evt.m_altDown;
-        m_metaDown = evt.m_metaDown;
-        m_scanCode = evt.m_scanCode;
-        m_rawCode = evt.m_rawCode;
-        m_rawFlags = evt.m_rawFlags;
+            m_controlDown = evt.m_controlDown;
+            m_shiftDown = evt.m_shiftDown;
+            m_altDown = evt.m_altDown;
+            m_metaDown = evt.m_metaDown;
+            m_scanCode = evt.m_scanCode;
+            m_rawCode = evt.m_rawCode;
+            m_rawFlags = evt.m_rawFlags;
 #if wxUSE_UNICODE
-        m_uniChar = evt.m_uniChar;
+            m_uniChar = evt.m_uniChar;
 #endif
-
+        }
         return *this;
     }
 
@@ -2284,7 +2286,7 @@ protected:
     
 private:
     // It makes no sense to copy objects of this class 
-    wxEventConnectionRef& operator = (const wxEventConnectionRef& WXUNUSED(other)) { wxASSERT(0); return *this; } 
+    wxEventConnectionRef& operator = (const wxEventConnectionRef& WXUNUSED(other)) { wxFAIL; return *this; } 
 };
 
 

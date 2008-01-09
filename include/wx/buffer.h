@@ -105,9 +105,12 @@ public:
 
     wxCharTypeBuffer& operator=(const wxCharTypeBuffer& src)
     {
-        if ( m_owned )
-            free(m_str);
-        CopyFrom(src);
+        if (&src != this)
+        {
+            if ( m_owned )
+                free(m_str);
+            CopyFrom(src);
+        }
         return *this;
     }
 
@@ -317,9 +320,12 @@ public:
 
     wxMemoryBuffer& operator=(const wxMemoryBuffer& src)
     {
-        m_bufdata->DecRef();
-        m_bufdata = src.m_bufdata;
-        m_bufdata->IncRef();
+        if (&src != this)
+        {
+            m_bufdata->DecRef();
+            m_bufdata = src.m_bufdata;
+            m_bufdata->IncRef();
+        }
         return *this;
     }
 

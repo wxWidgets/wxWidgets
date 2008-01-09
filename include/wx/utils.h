@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_UTILSH__
-#define _WX_UTILSH__
+#ifndef _WX_UTILS_H_
+#define _WX_UTILS_H_
 
 // ----------------------------------------------------------------------------
 // headers
@@ -136,7 +136,7 @@ class WXDLLIMPEXP_BASE wxPlatform
 public:
     wxPlatform() { Init(); }
     wxPlatform(const wxPlatform& platform) { Copy(platform); }
-    void operator = (const wxPlatform& platform) { Copy(platform); }
+    void operator = (const wxPlatform& platform) { if (&platform != this) Copy(platform); }
     void Copy(const wxPlatform& platform);
 
     // Specify an optional default value

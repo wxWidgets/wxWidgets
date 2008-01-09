@@ -161,7 +161,7 @@ public: \
  \
         Iterator() : m_node(0), m_ht(0) {} \
         Iterator( Node* node, const Self* ht ) \
-            : m_node(node), m_ht((Self*)ht) {} \
+            : m_node(node), m_ht(wx_const_cast(Self*, ht)) {} \
         bool operator ==( const Iterator& it ) const \
             { return m_node == it.m_node; } \
         bool operator !=( const Iterator& it ) const \
@@ -204,7 +204,7 @@ public: \
         const_iterator() : Iterator() {} \
         const_iterator(iterator i) : Iterator(i) {} \
         const_iterator( Node* node, const Self* ht ) \
-            : Iterator( node, (Self*)ht ) {} \
+            : Iterator(node, wx_const_cast(Self*, ht)) {} \
         const_iterator& operator++() { PlusPlus();return *this; } \
         const_iterator operator++(int) { const_iterator it=*this;PlusPlus();return it; } \
         const_reference operator *() const { return m_node->m_value; } \
@@ -236,12 +236,15 @@ public: \
  \
     const Self& operator=( const Self& ht ) \
     { \
-         clear(); \
-         m_hasher = ht.m_hasher; \
-         m_equals = ht.m_equals; \
-         m_getKey = ht.m_getKey; \
-         m_items = ht.m_items; \
-         HashCopy( ht ); \
+         if (&ht != this) \
+         { \
+             clear(); \
+             m_hasher = ht.m_hasher; \
+             m_equals = ht.m_equals; \
+             m_getKey = ht.m_getKey; \
+             m_items = ht.m_items; \
+             HashCopy( ht ); \
+         } \
          return *this; \
     } \
  \
@@ -407,7 +410,8 @@ public: \
     typedef const KEY_T const_t1; \
     typedef const VALUE_T const_t2; \
  \
-    CLASSNAME( const const_t1& f, const const_t2& s ):first(t1(f)),second(t2(s)) {} \
+    CLASSNAME(const const_t1& f, const const_t2& s) \
+        : first(wx_const_cast(t1&, f)), second(wx_const_cast(t2&, s)) {} \
  \
     t1 first; \
     t2 second; \

@@ -96,7 +96,7 @@ public:
     bool operator&&(bool v) const { return (bool)*this && v; }
 
     // Assignment operators:
-    wxUniChar& operator=(const wxUniChar& c) { m_value = c.m_value; return *this; }
+    wxUniChar& operator=(const wxUniChar& c) { if (&c != this) m_value = c.m_value; return *this; }
     wxUniChar& operator=(const wxUniCharRef& c);
     wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
     wxUniChar& operator=(unsigned char c) { m_value = From8bit((char)c); return *this; }
@@ -218,7 +218,7 @@ public:
 #endif
 
     wxUniCharRef& operator=(const wxUniCharRef& c)
-        { return *this = c.UniChar(); }
+        { if (&c != this) *this = c.UniChar(); return *this; }
 
     wxUniCharRef& operator=(char c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(unsigned char c) { return *this = wxUniChar(c); }

@@ -22,8 +22,8 @@
   like the old class.
 */
 
-#ifndef _WX_LISTH__
-#define _WX_LISTH__
+#ifndef _WX_LIST_H_
+#define _WX_LIST_H_
 
 // -----------------------------------------------------------------------------
 // headers
@@ -469,7 +469,7 @@ protected:
     virtual void DeleteData() { }
 public:
     // for wxList::iterator
-    void** GetDataPtr() const { return &(((wxNodeBase*)this)->m_data); }
+    void** GetDataPtr() const { return &(wx_const_cast(wxNodeBase*, this)->m_data); }
 private:
     // optional key stuff
     wxListKeyValue m_key;
@@ -732,7 +732,7 @@ private:
             : wxListBase(count, (void **)elements) { }                      \
                                                                             \
         name& operator=(const name& list)                                   \
-            { Assign(list); return *this; }                                 \
+            { if (&list != this) Assign(list); return *this; }              \
                                                                             \
         nodetype *GetFirst() const                                          \
             { return (nodetype *)wxListBase::GetFirst(); }                  \
@@ -1178,7 +1178,7 @@ public:
 
 #if !wxUSE_STL
     wxList& operator=(const wxList& list)
-        { Assign(list); return *this; }
+        { if (&list != this) Assign(list); return *this; }
 
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
@@ -1214,7 +1214,14 @@ public:
         // inefficient!)
     wxStringList(const wxStringList& other) : wxStringListBase() { DeleteContents(true); DoCopy(other); }
     wxStringList& operator=(const wxStringList& other)
-        { Clear(); DoCopy(other); return *this; }
+    {
+        if (&other != this)
+        {
+            Clear();
+            DoCopy(other);
+        }
+        return *this;
+    }
 
     // operations
         // makes a copy of the string

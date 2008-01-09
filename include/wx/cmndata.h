@@ -87,17 +87,20 @@ public:
 
     wxFontData& operator=(const wxFontData& data)
     {
-        wxObject::operator=(data);
-        m_fontColour     = data.m_fontColour;
-        m_showHelp       = data.m_showHelp;
-        m_allowSymbols   = data.m_allowSymbols;
-        m_enableEffects  = data.m_enableEffects;
-        m_initialFont    = data.m_initialFont;
-        m_chosenFont     = data.m_chosenFont;
-        m_minSize        = data.m_minSize;
-        m_maxSize        = data.m_maxSize;
-        m_encoding       = data.m_encoding;
-        m_encodingInfo   = data.m_encodingInfo;
+        if (&data != this)
+        {
+            wxObject::operator=(data);
+            m_fontColour     = data.m_fontColour;
+            m_showHelp       = data.m_showHelp;
+            m_allowSymbols   = data.m_allowSymbols;
+            m_enableEffects  = data.m_enableEffects;
+            m_initialFont    = data.m_initialFont;
+            m_chosenFont     = data.m_chosenFont;
+            m_minSize        = data.m_minSize;
+            m_maxSize        = data.m_maxSize;
+            m_encoding       = data.m_encoding;
+            m_encodingInfo   = data.m_encodingInfo;
+        }
         return *this;
     }
 

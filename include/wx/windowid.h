@@ -72,7 +72,8 @@ public:
 
     wxWindowIDRef& operator=(const wxWindowIDRef& id)
     {
-        Assign(id.m_id);
+        if (&id != this)
+            Assign(id.m_id);
         return *this;
     }
 

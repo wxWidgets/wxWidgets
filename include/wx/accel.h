@@ -68,7 +68,8 @@ public:
 
     wxAcceleratorEntry& operator=(const wxAcceleratorEntry& entry)
     {
-        Set(entry.m_flags, entry.m_keyCode, entry.m_command, entry.m_item);
+        if (&entry != this)
+            Set(entry.m_flags, entry.m_keyCode, entry.m_command, entry.m_item);
         return *this;
     }
 
