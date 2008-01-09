@@ -2739,8 +2739,8 @@ bool wxLocale::IsAvailable(int lang)
         return false;
 
 #elif defined(__UNIX__)
-    
-    // Test if setting the locale works, then set it back. 
+
+    // Test if setting the locale works, then set it back.
     wxMB2WXbuf oldLocale = wxSetlocale(LC_ALL, wxEmptyString);
     wxMB2WXbuf tmp = wxSetlocaleTryUTF(LC_ALL, info->CanonicalName);
     if ( !tmp )
@@ -2751,8 +2751,8 @@ bool wxLocale::IsAvailable(int lang)
             return false;
     }
     // restore the original locale
-    wxSetlocale(LC_ALL, oldLocale);    
-#endif 
+    wxSetlocale(LC_ALL, oldLocale);
+#endif
 
     return true;
 }
@@ -2818,6 +2818,18 @@ bool wxLocale::AddCatalog(const wxChar *szDomain,
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
+    wxUint32 lcid = LOCALE_USER_DEFAULT;
+
+    if (wxGetLocale())
+    {
+        const wxLanguageInfo *info = GetLanguageInfo(wxGetLocale()->GetLanguage());
+        if (info)
+        {                         ;
+            lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
+                                     SORT_DEFAULT);
+        }
+    }
+
     wxString str;
     wxChar buffer[256];
     size_t count;
@@ -2825,7 +2837,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
     switch (index)
     {
         case wxLOCALE_DECIMAL_POINT:
-            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, buffer, 256);
+            count = ::GetLocaleInfo(lcid, LOCALE_SDECIMAL, buffer, 256);
             if (!count)
                 str << wxT(".");
             else
@@ -2833,14 +2845,14 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             break;
 #if 0
         case wxSYS_LIST_SEPARATOR:
-            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, buffer, 256);
+            count = ::GetLocaleInfo(lcid, LOCALE_SLIST, buffer, 256);
             if (!count)
                 str << wxT(",");
             else
                 str << buffer;
             break;
         case wxSYS_LEADING_ZERO: // 0 means no leading zero, 1 means leading zero
-            count = ::GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ILZERO, buffer, 256);
+            count = ::GetLocaleInfo(lcid, LOCALE_ILZERO, buffer, 256);
             if (!count)
                 str << wxT("0");
             else

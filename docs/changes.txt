@@ -93,8 +93,8 @@ Major new features in 2.8 release
 
 All:
 
-- Fixed bug with parsing some dates in wxDateTime (Bob Pesner)
-- Fixed bug with parsing negative time zones in wxDateTime::ParseRfc822Date()
+- Fixed bug with parsing some dates in wxDateTime (Bob Pesner).
+- Fixed bug with parsing negative time zones in wxDateTime::ParseRfc822Date().
 
 All (GUI):
 
@@ -107,8 +107,9 @@ All (GUI):
 - wxNotebook RTTI corrected, so now wxDynamicCast(notebook, wxBookCtrlBase)
   works.
 - When focus is set to wxScrolledWindow child, scroll it into view.
-- Improve wximage::ResampleBox() (Mihai Ciocarlie)
-- Implemented ScrollList() in generic wxListCtrl (Tim Kosse)
+- Improve wximage::ResampleBox() (Mihai Ciocarlie).
+- Implemented ScrollList() in generic wxListCtrl (Tim Kosse).
+- SaveAs in docview takes into account path now.
 
 All (Unix):
 
@@ -117,13 +118,14 @@ All (Unix):
 
 wxMSW:
 
-- Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse)
-- Fix setting icons when they have non-default (16*16 and 32*32) sizes
+- Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse).
+- Fix setting icons when they have non-default (16*16 and 32*32) sizes.
+- Fixed wxLocale::GetInfo to use the C locale.
 
 wxGTK:
 
 - Return false from wxEventLoop::Dispatch() if gtk_main_quit() was called and
-  so the loop should exit (Rodolfo Schulz de Lima)
+  so the loop should exit (Rodolfo Schulz de Lima).
 
 
 2.8.7
