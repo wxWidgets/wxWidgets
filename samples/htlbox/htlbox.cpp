@@ -121,6 +121,7 @@ public:
     void OnSetSelBgCol(wxCommandEvent& event);
     void OnSetSelFgCol(wxCommandEvent& event);
 
+    void OnClear(wxCommandEvent& event);
 
     void OnUpdateUISelectAll(wxUpdateUIEvent& event);
 
@@ -176,6 +177,8 @@ enum
     HtmlLbox_SetSelBgCol,
     HtmlLbox_SetSelFgCol,
 
+    HtmlLbox_Clear,
+
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
@@ -202,6 +205,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HtmlLbox_SetBgCol, MyFrame::OnSetBgCol)
     EVT_MENU(HtmlLbox_SetSelBgCol, MyFrame::OnSetSelBgCol)
     EVT_MENU(HtmlLbox_SetSelFgCol, MyFrame::OnSetSelFgCol)
+
+    EVT_MENU(HtmlLbox_Clear, MyFrame::OnClear)
 
     EVT_UPDATE_UI(HtmlLbox_SelectAll, MyFrame::OnUpdateUISelectAll)
 
@@ -266,6 +271,9 @@ MyFrame::MyFrame()
                       _T("Set &selection background...\tCtrl-S"));
     menuHLbox->AppendCheckItem(HtmlLbox_SetSelFgCol,
                                _T("Keep &foreground in selection\tCtrl-F"));
+
+    menuHLbox->AppendSeparator();
+    menuHLbox->Append(HtmlLbox_Clear, _T("&Clear\tCtrl-L"));
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
@@ -461,6 +469,11 @@ void MyFrame::OnSetSelFgCol(wxCommandEvent& event)
         GetMyBox()->SetChangeSelFg(!event.IsChecked());
         GetMyBox()->Refresh();
     }
+}
+
+void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
+{
+    m_hlbox->Clear();
 }
 
 void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
