@@ -1039,12 +1039,9 @@ static wxLongLong_t wxCRT_DoStrtoll(const T* nptr, T** endptr, int base)
 
     if ( sign == wxT('-') )
     {
-        if ( uval <= wxULL(wxINT64_MAX+1) )
+        if (uval <= (wxULongLong_t)wxINT64_MAX + 1)
         {
-            if ( uval == wxULL(wxINT64_MAX+1))
-                val = -((wxLongLong_t)wxINT64_MAX) - 1;
-            else
-                val = -((wxLongLong_t)uval);
+            val = -(wxLongLong_t)uval;
         }
         else
         {

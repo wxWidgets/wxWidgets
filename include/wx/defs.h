@@ -928,7 +928,7 @@ typedef wxUint32 wxDword;
     #define wxINT64_MIN LLONG_MIN
 #else
     #define wxINT64_MAX wxLL(9223372036854775807)
-    #define wxINT64_MIN wxLL(-9223372036854775807-1)
+    #define wxINT64_MIN (wxLL(-9223372036854775807)-1)
 #endif
 
 /*
