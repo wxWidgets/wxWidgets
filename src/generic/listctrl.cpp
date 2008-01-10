@@ -2161,7 +2161,7 @@ void wxListTextCtrlWrapper::Finish( bool setfocus )
     wxPendingDelete.Append( this );
     
     if (setfocus)
-        m_owner->SetFocus();
+        m_owner->SetFocusIgnoringChildren();
 }
 
 bool wxListTextCtrlWrapper::AcceptChanges()
