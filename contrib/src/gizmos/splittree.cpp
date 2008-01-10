@@ -98,6 +98,19 @@ void wxRemotelyScrolledTreeCtrl::HideVScrollbar()
 #endif
 }
 
+void wxRemotelyScrolledTreeCtrl::SetScrollbar(int orient,
+                               int pos,
+                               int thumbVisible,
+                               int range,
+                               bool update)
+{
+#ifndef __WXMSW__
+    if (orient == wxVERTICAL)
+        range = 0;
+#endif
+    wxWindow::SetScrollbar(orient, pos, thumbVisible, range, update);
+}
+
 // Number of pixels per user unit (0 or -1 for no scrollbar)
 // Length of virtual canvas in user units
 // Length of page in user units
@@ -447,6 +460,10 @@ void wxRemotelyScrolledTreeCtrl::OnScroll(wxScrollWinEvent& event)
     scrollWin->GetViewStart(& x, & y);
 
     ScrollToLine(-1, y);
+
+#ifndef __WXMSW__
+    m_yScrollPosition = GetScrollPos(wxVERTICAL);
+#endif
 }
 
 /*

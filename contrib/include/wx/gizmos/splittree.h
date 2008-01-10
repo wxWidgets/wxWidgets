@@ -80,6 +80,13 @@ public:
     // In case we're using the generic tree control.
     virtual int GetScrollPos(int orient) const;
 
+    // Override to suppress vertical scrollbar
+    virtual void SetScrollbar(int orient,
+                               int pos,
+                               int thumbVisible,
+                               int range,
+                               bool update);
+
 //// Helpers
     void HideVScrollbar();
 
