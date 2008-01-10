@@ -1116,8 +1116,10 @@ wxEvtHandler::~wxEvtHandler()
     // Remove us from wxPendingEvents if necessary.
     if ( wxPendingEvents )
     {
+#if wxUSE_THREADS
         if(wxPendingEventsLocker)
             wxENTER_CRIT_SECT(*wxPendingEventsLocker);
+#endif
 
         if ( wxPendingEvents->DeleteObject(this) )
         {
@@ -1127,8 +1129,10 @@ wxEvtHandler::~wxEvtHandler()
         }
         //else: we weren't in this list at all, it's ok
 
+#if wxUSE_THREADS
         if(wxPendingEventsLocker)
             wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
+#endif
     }
 
     // we only delete object data, not untyped
