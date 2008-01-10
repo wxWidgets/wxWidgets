@@ -54,7 +54,7 @@ public:
         // call destructors of stored objects:
         for ( size_type i = 0; i < m_size; i++ )
         {
-            m_values[i].~value_type();
+            m_values[i].~T();
         }
 
         free(m_values);
