@@ -258,35 +258,6 @@ wxWindow *wxFindFocusedChild(wxWindowGTK *win)
     return (wxWindow *)NULL;
 }
 
-static void GetScrollbarWidth(GtkWidget* widget, int& w, int& h)
-{
-    GtkScrolledWindow* scroll_window = GTK_SCROLLED_WINDOW(widget);
-    GtkScrolledWindowClass* scroll_class = GTK_SCROLLED_WINDOW_CLASS(GTK_OBJECT_GET_CLASS(scroll_window));
-    GtkRequisition scroll_req;
-
-    w = 0;
-    if (scroll_window->vscrollbar_visible)
-    {
-        scroll_req.width = 2;
-        scroll_req.height = 2;
-        (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(scroll_window->vscrollbar) )->size_request )
-            (scroll_window->vscrollbar, &scroll_req );
-        w = scroll_req.width +
-            scroll_class->scrollbar_spacing;
-    }
-
-    h = 0;
-    if (scroll_window->hscrollbar_visible)
-    {
-        scroll_req.width = 2;
-        scroll_req.height = 2;
-        (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(scroll_window->hscrollbar) )->size_request )
-            (scroll_window->hscrollbar, &scroll_req );
-        h = scroll_req.height +
-            scroll_class->scrollbar_spacing;
-    }
-}
-
 //-----------------------------------------------------------------------------
 // "size_request" of m_widget
 //-----------------------------------------------------------------------------
@@ -2139,7 +2110,6 @@ void wxWindowGTK::Init()
     m_noExpose = false;
     m_nativeSizeEvent = false;
 
-    m_hasScrolling = false;
     m_isScrolling = false;
     m_mouseButtonDown = false;
 
@@ -2731,19 +2701,27 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
 
     if (m_wxwindow)
     {
-        int dw = 0;
-        int dh = 0;
-
-        if (m_hasScrolling)
-            GetScrollbarWidth(m_widget, dw, dh);
+        // if window is scrollable, account for scrollbars
+        for (int i = 0; i < 2 && m_scrollBar[i]; i++)
+        {
+            GtkRequisition req;
+            GtkAdjustment* adj = gtk_range_get_adjustment(m_scrollBar[i]);
+            // if scrollbar enabled
+            if (adj->upper > adj->page_size)
+            {
+                gtk_widget_size_request(GTK_WIDGET(m_scrollBar[i]), &req);
+                if (i == ScrollDir_Horz)
+                    h -= req.height;
+                else
+                    w -= req.width;
+            }
+        }
 
         int border_x, border_y;
         WX_PIZZA(m_wxwindow)->get_border_widths(border_x, border_y);
-        dw += 2 * border_x;
-        dh += 2 * border_y;
+        w -= 2 * border_x;
+        h -= 2 * border_y;
 
-        w -= dw;
-        h -= dh;
         if (w < 0)
             w = 0;
         if (h < 0)
@@ -3997,11 +3975,7 @@ void wxWindowGTK::SetScrollbar(int orient,
     GtkRange* const sb = m_scrollBar[dir];
     wxCHECK_RET( sb, _T("this window is not scrollable") );
 
-    if (range > 0)
-    {
-        m_hasScrolling = true;
-    }
-    else
+    if (range <= 0)
     {
         // GtkRange requires upper > lower
         range =

@@ -121,10 +121,6 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
 
 void wxScrollHelperNative::AdjustScrollbars()
 {
-    // this flag indicates which window has the scrollbars
-    m_win->m_hasScrolling = m_xScrollPixelsPerLine != 0 ||
-                                m_yScrollPixelsPerLine != 0;
-
     int vw, vh;
     m_targetWindow->GetVirtualSize( &vw, &vh );
 
