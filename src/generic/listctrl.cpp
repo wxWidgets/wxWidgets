@@ -464,7 +464,7 @@ public:
 
     wxTextCtrl *GetText() const { return m_text; }
 
-    void AcceptChangesAndFinish();
+    void EndEdit( bool discardChanges );
 
 protected:
     void OnChar( wxKeyEvent &event );
@@ -472,14 +472,13 @@ protected:
     void OnKillFocus( wxFocusEvent &event );
 
     bool AcceptChanges();
-    void Finish();
+    void Finish( bool setfocus );
 
 private:
     wxListMainWindow   *m_owner;
     wxTextCtrl         *m_text;
     wxString            m_startValue;
     size_t              m_itemEdited;
-    bool                m_finished;
     bool                m_aboutToFinish;
 
     DECLARE_EVENT_TABLE()
@@ -593,11 +592,10 @@ public:
         return m_textctrlWrapper ? m_textctrlWrapper->GetText() : NULL;
     }
 
-    void FinishEditing(wxTextCtrl *text)
+    void ResetTextControl(wxTextCtrl *text)
     {
         delete text;
         m_textctrlWrapper = NULL;
-        SetFocusIgnoringChildren();
     }
 
     // we don't draw anything while we're frozen so we must refresh ourselves
@@ -2120,7 +2118,6 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
 {
     m_owner = owner;
     m_text = text;
-    m_finished = false;
     m_aboutToFinish = false;
 
     wxRect rectLabel = owner->GetLineLabelRect(itemEdit);
@@ -2136,17 +2133,35 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
     m_text->PushEventHandler(this);
 }
 
-void wxListTextCtrlWrapper::Finish()
+void wxListTextCtrlWrapper::EndEdit(bool discardChanges)
 {
-    if ( !m_finished )
+    m_aboutToFinish = true;
+    
+    if ( discardChanges )
     {
-        m_finished = true;
-
-        m_text->RemoveEventHandler(this);
-        m_owner->FinishEditing(m_text);
-
-        wxPendingDelete.Append( this );
+        m_owner->OnRenameCancelled(m_itemEdited);
+           
+        Finish( true );
     }
+    else
+    {
+        // Notify the owner about the changes
+        AcceptChanges();
+
+        // Even if vetoed, close the control (consistent with MSW)
+        Finish( true );
+    }
+}
+
+void wxListTextCtrlWrapper::Finish( bool setfocus )
+{
+    m_text->RemoveEventHandler(this);
+    m_owner->ResetTextControl( m_text );
+
+    wxPendingDelete.Append( this );
+    
+    if (setfocus)
+        m_owner->SetFocus();
 }
 
 bool wxListTextCtrlWrapper::AcceptChanges()
@@ -2168,28 +2183,16 @@ bool wxListTextCtrlWrapper::AcceptChanges()
     return true;
 }
 
-void wxListTextCtrlWrapper::AcceptChangesAndFinish()
-{
-    m_aboutToFinish = true;
-
-    // Notify the owner about the changes
-    AcceptChanges();
-
-    // Even if vetoed, close the control (consistent with MSW)
-    Finish();
-}
-
 void wxListTextCtrlWrapper::OnChar( wxKeyEvent &event )
 {
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
-            AcceptChangesAndFinish();
+            EndEdit( false );
             break;
 
         case WXK_ESCAPE:
-            m_owner->OnRenameCancelled( m_itemEdited );
-            Finish();
+            EndEdit( true );
             break;
 
         default:
@@ -2199,35 +2202,32 @@ void wxListTextCtrlWrapper::OnChar( wxKeyEvent &event )
 
 void wxListTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
 {
-    if (m_finished)
+    if (m_aboutToFinish)
     {
-        event.Skip();
-        return;
+        // auto-grow the textctrl:
+        wxSize parentSize = m_owner->GetSize();
+        wxPoint myPos = m_text->GetPosition();
+        wxSize mySize = m_text->GetSize();
+        int sx, sy;
+        m_text->GetTextExtent(m_text->GetValue() + _T("MM"), &sx, &sy);
+        if (myPos.x + sx > parentSize.x)
+            sx = parentSize.x - myPos.x;
+       if (mySize.x > sx)
+            sx = mySize.x;
+       m_text->SetSize(sx, wxDefaultCoord);
     }
-
-    // auto-grow the textctrl:
-    wxSize parentSize = m_owner->GetSize();
-    wxPoint myPos = m_text->GetPosition();
-    wxSize mySize = m_text->GetSize();
-    int sx, sy;
-    m_text->GetTextExtent(m_text->GetValue() + _T("MM"), &sx, &sy);
-    if (myPos.x + sx > parentSize.x)
-        sx = parentSize.x - myPos.x;
-    if (mySize.x > sx)
-        sx = mySize.x;
-    m_text->SetSize(sx, wxDefaultCoord);
-
+    
     event.Skip();
 }
 
 void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 {
-    if ( !m_finished && !m_aboutToFinish )
+    if ( !m_aboutToFinish )
     {
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
 
-        Finish();
+        Finish( false );
     }
 
     // We must let the native text control handle focus
@@ -2991,7 +2991,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     // listctrl because the order of events is different (or something like
     // that), so explicitly end the edit if it is active.
     if ( event.LeftDown() && m_textctrlWrapper )
-        m_textctrlWrapper->AcceptChangesAndFinish();
+        m_textctrlWrapper->EndEdit( false );
 #endif // __WXMAC__
 
     if ( event.LeftDown() )

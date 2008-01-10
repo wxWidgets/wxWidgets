@@ -92,7 +92,7 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
 public:
     wxTreeTextCtrl(wxGenericTreeCtrl *owner, wxGenericTreeItem *item);
 
-    void EndEdit(bool discardChanges = false);
+    void EndEdit( bool discardChanges );
     
     const wxGenericTreeItem* item() const { return m_itemEdited; }
 
@@ -102,7 +102,7 @@ protected:
     void OnKillFocus( wxFocusEvent &event );
 
     bool AcceptChanges();
-    void Finish( bool setfocus = true );
+    void Finish( bool setfocus );
 
 private:
     wxGenericTreeCtrl  *m_owner;
@@ -392,7 +392,7 @@ void wxTreeTextCtrl::EndEdit(bool discardChanges)
     {
         m_owner->OnRenameCancelled(m_itemEdited);
            
-        Finish();
+        Finish( true );
     }
     else
     {
@@ -400,7 +400,7 @@ void wxTreeTextCtrl::EndEdit(bool discardChanges)
         AcceptChanges();
 
         // Even if vetoed, close the control (consistent with MSW)
-        Finish();
+        Finish( true );
     }
 }
 
