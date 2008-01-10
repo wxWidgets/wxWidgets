@@ -59,7 +59,7 @@ WX_DEFINE_LIST(ItemList)
 class wxDataViewCtrlInternal
 {
 public:
-    wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataViewModel *wx_model, GtkWxTreeModel *owner );
+    wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataViewModel *wx_model, GtkWxTreeModel *gtk_model );
     ~wxDataViewCtrlInternal();
 
     // model iface
