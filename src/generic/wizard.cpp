@@ -682,13 +682,13 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         DoWizardLayout();
     }
 
-    if (GetBitmapPlacement())
+    if (GetBitmapPlacement() && m_statbmp)
     {
         ResizeBitmap(bmp);
-    
+
         if ( !bmp.IsSameAs(bmpPrev) )
             m_statbmp->SetBitmap(bmp);
-    
+
         if (m_usingSizer)
             m_sizerPage->RecalcSizes();
     }
@@ -924,16 +924,16 @@ bool wxWizard::DoLayoutAdaptation()
                         // Create a scrolled window and reparent
                         wxScrolledWindow* scrolledWindow = new wxScrolledWindow(page, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxVSCROLL|wxHSCROLL|wxBORDER_NONE);
                         wxSizer* oldSizer = page->GetSizer();
-                        
+
                         wxSizer* newSizer = new wxBoxSizer(wxVERTICAL);
                         newSizer->Add(scrolledWindow,1, wxEXPAND, 0);
-                        
+
                         page->SetSizer(newSizer, false /* don't delete the old sizer */);
-                        
+
                         scrolledWindow->SetSizer(oldSizer);
-                        
+
                         wxStandardDialogLayoutAdapter::DoReparentControls(page, scrolledWindow);
-                        
+
                         pages.Append(page);
                         windows.Append(scrolledWindow);
                     }
@@ -961,7 +961,7 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
         int bitmapWidth = wxMax(bmp.GetWidth(), GetMinimumBitmapWidth());
         int bitmapHeight = pageSize.y;
 
-        if (bmp.GetHeight() != bitmapHeight)
+        if (!m_statbmp->GetBitmap().Ok() || m_statbmp->GetBitmap().GetHeight() != bitmapHeight)
         {
             wxBitmap bitmap(bitmapWidth, bitmapHeight);
             {
@@ -981,16 +981,16 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
                     if (GetBitmapPlacement() & wxWIZARD_HALIGN_LEFT)
                         x = 0;
                     else if (GetBitmapPlacement() & wxWIZARD_HALIGN_RIGHT)
-                        x = bitmapWidth - GetBitmap().GetWidth();
+                        x = bitmapWidth - bmp.GetWidth();
                     else
-                        x = (bitmapWidth - GetBitmap().GetWidth())/2;
+                        x = (bitmapWidth - bmp.GetWidth())/2;
 
                     if (GetBitmapPlacement() & wxWIZARD_VALIGN_TOP)
                         y = 0;
                     else if (GetBitmapPlacement() & wxWIZARD_VALIGN_BOTTOM)
-                        y = bitmapHeight - GetBitmap().GetHeight();
+                        y = bitmapHeight - bmp.GetHeight();
                     else
-                        y = (bitmapHeight - GetBitmap().GetHeight())/2;
+                        y = (bitmapHeight - bmp.GetHeight())/2;
 
                     dc.DrawBitmap(bmp, x, y, true);
                     dc.SelectObject(wxNullBitmap);
