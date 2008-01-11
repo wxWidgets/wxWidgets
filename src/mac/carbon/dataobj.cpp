@@ -735,7 +735,7 @@ void wxBitmapDataObject::Clear()
     m_pictCreated = false;
 }
 
-bool wxBitmapDataObject::GetDataHere( void *pBuf ) const
+bool wxBitmapDataObject::GetDataHere( const wxDataFormat& format, void *pBuf ) const
 {
     if (m_pictHandle == NULL)
     {
@@ -746,13 +746,19 @@ bool wxBitmapDataObject::GetDataHere( void *pBuf ) const
     if (pBuf == NULL)
         return false;
 
+    if ( format != GetPreferredFormat() )
+        return false;
+
     memcpy( pBuf, *(Handle)m_pictHandle, GetHandleSize( (Handle)m_pictHandle ) );
 
     return true;
 }
 
-size_t wxBitmapDataObject::GetDataSize() const
+size_t wxBitmapDataObject::GetDataSize( const wxDataFormat& format ) const
 {
+    if ( format != GetPreferredFormat() )
+        return 0;
+
     if (m_pictHandle != NULL)
         return GetHandleSize( (Handle)m_pictHandle );
     else
@@ -770,7 +776,43 @@ Handle MacCreateDataReferenceHandle(Handle theDataHandle)
     return dataRef;
 }
 
-bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
+size_t wxBitmapDataObject::GetDataSize() const 
+{ 
+    return GetDataSize(GetPreferredFormat()); 
+}
+
+bool wxBitmapDataObject::GetDataHere(void *buf) const 
+{ 
+    return GetDataHere(GetPreferredFormat(), buf); 
+}
+
+bool wxBitmapDataObject::SetData(size_t len, const void *buf) 
+{   
+    return SetData(GetPreferredFormat(), len, buf); 
+}
+
+size_t wxBitmapDataObject::GetFormatCount(Direction WXUNUSED(dir) ) const 
+{ 
+#if wxMAC_USE_CORE_GRAPHICS
+    return 2;
+#else
+    return 1;
+#endif
+}
+
+static wxDataFormat s_pict( _T("com.apple.pict") ); 
+
+void wxBitmapDataObject::GetAllFormats(wxDataFormat *formats,
+                               wxDataObjectBase::Direction WXUNUSED(dir) ) const
+{
+    *formats++ = wxDataFormat( wxDF_BITMAP );
+#if wxMAC_USE_CORE_GRAPHICS
+    *formats = s_pict;
+#endif
+}
+
+
+bool wxBitmapDataObject::SetData( const wxDataFormat& format, size_t nSize, const void *pBuf )
 {
     Clear();
 
@@ -778,14 +820,30 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
         return false;
 
 #if wxMAC_USE_CORE_GRAPHICS
-    Handle picHandle = NewHandle( nSize );
-    memcpy( *picHandle, pBuf, nSize );
-    m_pictHandle = picHandle;
+    Handle picHandle = NULL ;
+    m_pictHandle = NewHandle( nSize );
+    memcpy( *(Handle) m_pictHandle, pBuf, nSize );
+    
+    if ( format == s_pict )
+    {
+        // pict for IO expects a 512 byte header
+        picHandle = NewHandle( nSize + 512 );
+        memset( *picHandle , 0 , 512 );
+        memcpy( *picHandle+512, pBuf, nSize );
+    }
+    else
+    {
+        picHandle = (Handle) m_pictHandle;
+    }
+
     CGImageRef cgImageRef = 0;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     if ( UMAGetSystemVersion() >= 0x1040 )
     {
-        CFDataRef data = CFDataCreateWithBytesNoCopy( kCFAllocatorDefault, (const UInt8*) pBuf, nSize, kCFAllocatorNull);
+        CFDataRef data = NULL; 
+        
+        HLock( picHandle );
+        data = CFDataCreateWithBytesNoCopy( kCFAllocatorDefault, (const UInt8*) *picHandle, GetHandleSize(picHandle), kCFAllocatorNull);
         CGImageSourceRef source = CGImageSourceCreateWithData( data, NULL );
         if ( source )
         {
@@ -793,6 +851,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
         }
         CFRelease( source );
         CFRelease( data );
+        HUnlock( picHandle );
     }
     else
 #endif
@@ -800,7 +859,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     {
         // import from TIFF
         GraphicsImportComponent importer = 0;
-        OSStatus err = OpenADefaultComponent(GraphicsImporterComponentType, kQTFileTypeTIFF, &importer);
+        OSStatus err = OpenADefaultComponent(GraphicsImporterComponentType, s_pict == format ? kQTFileTypePicture : kQTFileTypeTIFF, &importer);
         if (noErr == err)
         {
             if ( picHandle )
@@ -817,6 +876,10 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
         }
     }
 #endif
+    if ( format == s_pict )
+    {
+        DisposeHandle( picHandle );
+    }
     if ( cgImageRef )
     {
         m_bitmap.Create( CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
