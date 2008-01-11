@@ -235,6 +235,7 @@ bool wxXmlResource::Unload(const wxString& filename)
         {
             if ( (*i)->File == fnd )
             {
+                delete *i;
                 Data().erase(i);
                 unloaded = true;
 
