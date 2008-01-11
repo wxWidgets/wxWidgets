@@ -35,20 +35,15 @@ public:
     virtual size_t GetDataSize() const ;
     virtual bool GetDataHere(void *buf) const ;
     virtual bool SetData(size_t len, const void *buf);
-    // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const
-    {
-        return GetDataSize();
-    }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
-    {
-        return GetDataHere(buf);
-    }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
-    {
-        return SetData(len, buf);
-    }
 
+    // virtuals, we aren't breaking binary compat here
+    virtual size_t GetFormatCount(Direction WXUNUSED(dir) = Get) const;
+    virtual void GetAllFormats(wxDataFormat *formats,
+                               wxDataObjectBase::Direction WXUNUSED(dir) = Get) const;
+
+    virtual size_t GetDataSize(const wxDataFormat& format) const;
+    virtual bool GetDataHere(const wxDataFormat& format, void *pBuf) const;
+    virtual bool SetData(const wxDataFormat& format, size_t nLen, const void* pBuf);
 protected :
     void Init() ;
     void Clear() ;
