@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 26 November 2007                                                    *
+# Date : 10 January 2008                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -207,7 +207,8 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		filepickercmn.obj,\
 		fontpickercmn.obj,\
 		pickerbase.obj,\
-		listctrlcmn.obj
+		listctrlcmn.obj,gsocketiohandler.obj,fdiodispatcher.obj,\
+		selectdispatcher.obj,overlaycmn.obj,windowid.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -216,8 +217,6 @@ OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
 	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
 	combocmn.obj
-
-OBJECTS_X11_2=gsocketiohandler.obj,fdiodispatcher.obj,selectdispatcher.obj
 
 
 OBJECTS_GTK2=fontutilcmn.obj,cairo.obj
@@ -326,6 +325,7 @@ SOURCES = \
 		mstream.cpp,\
 		nbkbase.cpp,\
 		object.cpp,\
+		overlaycmn.cpp,\
 		paper.cpp,\
 		platinfo.cpp,\
 		popupcmn.cpp,\
@@ -432,16 +432,21 @@ all : $(SOURCES)
 .else
 .ifdef __WXX11__
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_X11)
-	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_X11_2)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS1)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS2)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS_X11)
-	library [--.lib]libwx_x11_univ.olb $(OBJECTS_X11_2)
 .endif
 .endif
 .endif
 .endif
+
+$(OBJECTS) : [--.include.wx]setup.h
+$(OBJECTS1) : [--.include.wx]setup.h
+$(OBJECTS2) : [--.include.wx]setup.h
+$(OBJECTS_X11) : [--.include.wx]setup.h
+$(OBJECTS_GTK2) : [--.include.wx]setup.h
+$(OBJECTS_MOTIF) : [--.include.wx]setup.h
 
 accelcmn.obj : accelcmn.cpp
 anidecod.obj : anidecod.cpp
@@ -623,3 +628,5 @@ srchcmn.obj : srchcmn.cpp
 textentrycmn.obj : textentrycmn.cpp
 filectrlcmn.obj : filectrlcmn.cpp
 cairo.obj : cairo.cpp
+overlaycmn.obj : overlaycmn.cpp
+windowid.obj : windowid.cpp

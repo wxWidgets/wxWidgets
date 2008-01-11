@@ -439,6 +439,11 @@ typedef pid_t GPid;
 
 #define wxUSE_VALIDATORS 1
 
+#ifdef __WXMSW__
+#define wxUSE_AUTOID_MANAGEMENT 0
+#else
+#define wxUSE_AUTOID_MANAGEMENT 0
+#endif
 
 #define wxUSE_COMMON_DIALOGS 1
 
@@ -1229,5 +1234,6 @@ typedef pid_t GPid;
 #define wxHAS_WORKING_GTK_DC_BLIT 1
 
 #undef HAVE_SYS_SELECT_H
+
 
 #endif /* __WX_SETUP_H__ */

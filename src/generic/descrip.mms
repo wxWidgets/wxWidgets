@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 20 December 2007                                                    *
+# Date : 3 January 2008                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -164,8 +164,7 @@ SOURCES = \
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
-	combog.obj,animateg.obj,colrdlgg.obj,clrpickerg.obj,fontpickerg.obj,\
-	paletteg.obj
+	combog.obj,animateg.obj,colrdlgg.obj,clrpickerg.obj,fontpickerg.obj
 .else
 .ifdef __WXX11__
 OBJECTS0=accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
