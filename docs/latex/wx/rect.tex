@@ -272,6 +272,17 @@ means:
 \helpref{Deflate}{wxrectdeflate}
 
 
+\membersection{wxRect::Intersect}\label{wxrectintersect}
+
+\constfunc{wxRect}{Intersect}{\param{const wxRect\& }{rect}}
+
+\func{wxRect\&}{Intersect}{\param{const wxRect\& }{rect}}
+
+Modifies the rectangle to contain the overlapping box of this rectangle and the
+one passed in as parameter. The const version returns the new rectangle, the
+other one modifies this rectangle in place.
+
+
 \membersection{wxRect::Intersects}\label{wxrectintersects}
 
 \constfunc{bool}{Intersects}{\param{const wxRect\& }{rect}}
@@ -386,4 +397,5 @@ Like \helpref{Union}{wxrectunion} but don't treat empty rectangles specially.
 \func{wxRect\&}{operator $*=$}{\param{const wxRect\& }{r}}
 
 Returns the intersection of two rectangles (which may be empty).
+
 
