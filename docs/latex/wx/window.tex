@@ -3594,8 +3594,11 @@ only the sizer will have effect.
 
 \func{void}{SetSizerAndFit}{\param{wxSizer* }{sizer}, \param{bool }{deleteOld=true}}
 
-The same as \helpref{SetSizer}{wxwindowsetsizer}, except it also sets the size hints
-for the window based on the sizer's minimum size.
+This method calls \helpref{SetSizer}{wxwindowsetsizer} and then 
+\helpref{wxSizer::SetSizeHints}{wxsizersetsizehints} which sets the initial
+window size to the size needed to accommodate all sizer elements and sets the
+size hints which, if this window is a top level one, prevent the user from
+resizing it to be less than this minimial size.
 
 
 \membersection{wxWindow::SetThemeEnabled}\label{wxwindowsetthemeenabled}

@@ -527,9 +527,11 @@ passed to it. This only makes sense when {\it window} is actually a
 wxDialog, since SetSizeHints only has any effect in these classes. 
 It does nothing in normal windows or controls.
 
-This method is commonly invoked in the constructor of a toplevel window itself
-(see the sample in the description of \helpref{wxBoxSizer}{wxboxsizer}) if the
+This method is implicitly used by \helpref{wxWindow::SetSizerAndFit}{wxwindowsetsizerandfit} 
+which is commonly invoked in the constructor of a toplevel window itself (see
+the sample in the description of \helpref{wxBoxSizer}{wxboxsizer}) if the
 toplevel window is resizable.
+
 
 \membersection{wxSizer::SetVirtualSizeHints}\label{wxsizersetvirtualsizehints}
 

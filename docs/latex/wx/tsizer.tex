@@ -259,9 +259,9 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
      0,                // make vertically unstretchable
      wxALIGN_CENTER ); // no border and centre horizontally
 
-  SetSizer( topsizer );      // use the sizer for layout
-
-  topsizer->SetSizeHints( this );   // set size hints to honour minimum size
+  SetSizerAndFit(topsizer); // use the sizer for layout and size window
+                            // accordingly and prevent it from being resized
+                            // to smaller size
 }
 \end{verbatim}
 
@@ -302,9 +302,7 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
      button_sizer,
      wxSizerFlags(0).Center() ); 
 
-  SetSizer( topsizer );      // use the sizer for layout
-
-  topsizer->SetSizeHints( this );   // set size hints to honour minimum size
+  SetSizerAndFit(topsizer); // use the sizer for layout and set size and hints
 }
 \end{verbatim}
 
