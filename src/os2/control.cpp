@@ -22,6 +22,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/os2/dc.h"
 #include "wx/os2/private.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
@@ -215,7 +216,8 @@ WXHBRUSH wxControl::OnCtlColor(WXHDC    hWxDC,
 void wxControl::OnEraseBackground( wxEraseEvent& rEvent )
 {
     RECTL                           vRect;
-    HPS                             hPS = rEvent.GetDC()->GetHPS();
+    wxPMDCImpl                     *impl = (wxPMDCImpl*) rEvent.GetDC()->GetImpl();
+    HPS                             hPS = impl->GetHPS();
     SIZEL                           vSize = {0,0};
 
     ::GpiSetPS(hPS, &vSize, PU_PELS | GPIF_DEFAULT);
