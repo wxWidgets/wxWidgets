@@ -59,10 +59,57 @@ wxConnectionBase::wxConnectionBase(const wxConnectionBase& copy)
 }
 
 
-wxConnectionBase::~wxConnectionBase(void)
+wxConnectionBase::~wxConnectionBase()
 {
-  if ( m_deletebufferwhendone && m_buffer )
+  if ( m_deletebufferwhendone )
     delete m_buffer;
+}
+
+/* static */
+wxString wxConnectionBase::GetTextFromData(const void* data,
+                                           size_t size,
+                                           wxIPCFormat fmt)
+{
+    wxString s;
+    switch ( fmt )
+    {
+        case wxIPC_TEXT:
+            // normally the string should be NUL-terminated and size should
+            // include the total size of the buffer, including NUL -- but don't
+            // crash (by trying to access (size_t)-1 bytes) if it doesn't
+            if ( size )
+                size--;
+
+            s = wxString(wx_static_cast(const char *, data), size);
+            break;
+
+#if wxUSE_UNICODE
+        // TODO: we should handle both wxIPC_UTF16TEXT and wxIPC_UTF32TEXT here
+        //       for inter-platform IPC
+        case wxIPC_UNICODETEXT:
+            wxASSERT_MSG( !(size % sizeof(wchar_t)), "invalid buffer size" );
+            if ( size )
+            {
+                size /= sizeof(wchar_t);
+                size--;
+            }
+
+            s = wxString(wx_static_cast(const wchar_t *, data), size);
+            break;
+
+        case wxIPC_UTF8TEXT:
+            if ( size )
+                size--;
+
+            s = wxString::FromUTF8(wx_static_cast(const char *, data), size);
+            break;
+#endif // wxUSE_UNICODE
+
+        default:
+            wxFAIL_MSG( "non-string IPC format in GetTextFromData()" );
+    }
+
+    return s;
 }
 
 void *wxConnectionBase::GetBufferAtLeast( size_t bytes )

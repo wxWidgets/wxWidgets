@@ -117,7 +117,7 @@ to be called. Returns true if successful.
 Called by the client application to execute a command on the
 server. Can also be used to transfer arbitrary data to the server
 (similar to \helpref{wxConnection::Poke}{wxconnectionpoke} in
-that respect). Causes the server connection's \helpref{wxConnection::OnExecute}{wxconnectiononexecute} 
+that respect). Causes the server connection's \helpref{wxConnection::OnExec}{wxconnectiononexec} 
 member to be called. Returns true if successful.
 
 \membersection{wxConnection::Disconnect}\label{wxconnectiondisconnect}
@@ -150,9 +150,9 @@ applications should generally override {\bf OnDisconnect}
 (finally calling the inherited method as well) so that they know
 the connection object is no longer available.
 
-\membersection{wxConnection::OnExecute}\label{wxconnectiononexecute}
+\membersection{wxConnection::OnExec}\label{wxconnectiononexec}
 
-\func{virtual bool}{OnExecute}{\param{const wxString\& }{topic}, \param{const void* }{data}, \param{size\_t }{size}, \param{wxIPCFormat}{ format}}
+\func{virtual bool}{OnExec}{\param{const wxString\& }{topic}, \param{const wxString\& }{data}}
 
 Message sent to the server application when the client notifies
 it to execute the given data, using \helpref{Execute}{wxconnectionexecute}.

@@ -127,11 +127,18 @@ public:
 
 
   // Callbacks to SERVER - override at will
-  virtual bool OnExecute(const wxString& WXUNUSED(topic),
-                         const void *WXUNUSED(data),
-                         size_t WXUNUSED(size),
-                         wxIPCFormat WXUNUSED(format))
+  virtual bool OnExec(const wxString& WXUNUSED(topic),
+                      const wxString& WXUNUSED(data))
       { return false; }
+
+  // deprecated function kept for backwards compatibility: usually you will
+  // want to override OnExec() above instead which receives its data in a more
+  // convenient format
+  virtual bool OnExecute(const wxString& topic,
+                         const void *data,
+                         size_t size,
+                         wxIPCFormat format)
+      { return OnExec(topic, GetTextFromData(data, size, format)); }
 
   virtual const void *OnRequest(const wxString& WXUNUSED(topic),
                                 const wxString& WXUNUSED(item),
@@ -166,6 +173,17 @@ public:
   virtual bool OnDisconnect() { delete this; return true; }
 
 
+  // converts from the data and format into a wxString automatically
+  //
+  // this function accepts data in all of wxIPC_TEXT, wxIPC_UNICODETEXT, and
+  // wxIPC_UTF8TEXT formats but asserts if the format is anything else
+  //
+  // notice that the size parameter here contains the total size of the data,
+  // including the terminating '\0' or L'\0'
+  static
+  wxString GetTextFromData(const void *data, size_t size, wxIPCFormat format);
+
+
   // return a buffer at least this size, reallocating buffer if needed
   // returns NULL if using an inadequate user buffer which can't be resized
   void *GetBufferAtLeast(size_t bytes);
@@ -184,7 +202,7 @@ private:
   bool          m_deletebufferwhendone;
 
 protected:
-  bool          m_connected;   
+  bool          m_connected;
 
   DECLARE_NO_ASSIGN_CLASS(wxConnectionBase)
   DECLARE_CLASS(wxConnectionBase)

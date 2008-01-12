@@ -157,6 +157,8 @@ Deprecated methods and their replacements
 - wxXmlProperty class was renamed to wxXmlAttribute in order to use standard
   terminology. Corresponding wxXmlNode methods were renamed to use
   "Attribute" instead of "Property" or "Prop" in their names.
+- wxConnection::OnExecute() is not formally deprecated yet but new code should
+  use simpler OnExec() version which is called with wxString argument
 
 
 Major new features in this release
