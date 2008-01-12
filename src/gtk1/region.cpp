@@ -187,7 +187,9 @@ bool wxRegion::DoUnionWithRect(const wxRect& r)
         rect.width = r.width;
         rect.height = r.height;
 
-        gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
+        GdkRegion *reg = gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
+        gdk_region_destroy( M_REGIONDATA->m_region );
+        M_REGIONDATA->m_region = reg;
     }
 
     return TRUE;
