@@ -33,11 +33,6 @@ void wxColour::Init()
     m_cRed = m_cBlue = m_cGreen = 0;
 } // end of wxColour::Init
 
-wxColour::wxColour ()
-{
-    Init();
-} // end of wxColour::wxColour
-
 wxColour::wxColour( const wxColour& rCol )
 {
     *this = rCol;
