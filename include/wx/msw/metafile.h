@@ -69,6 +69,10 @@ public:
     int GetWindowsMappingMode() const { return M_METAFILEDATA->m_windowsMappingMode; }
     void SetWindowsMappingMode(int mm);
 
+protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMetafile)
 };
@@ -76,8 +80,9 @@ private:
 class WXDLLEXPORT wxMetafileDCImpl: public wxMSWDCImpl
 {
 public:
-    wxMetafileDCImpl(const wxString& file = wxEmptyString);
-    wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg);
+    wxMetafileDCImpl(wxDC *owner, const wxString& file = wxEmptyString);
+    wxMetafileDCImpl(wxDC *owner, const wxString& file,
+                     int xext, int yext, int xorg, int yorg);
     virtual ~wxMetafileDCImpl();
 
     virtual wxMetafile *Close();
@@ -97,9 +102,6 @@ public:
 protected:
     virtual void DoGetSize(int *width, int *height) const;
 
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
-
     int           m_windowsMappingMode;
     wxMetafile*   m_metaFile;
 
@@ -113,13 +115,15 @@ class WXDLLEXPORT wxMetafileDC: public wxDC
 public:
     // Don't supply origin and extent
     // Supply them to wxMakeMetaFilePlaceable instead.
-    wxMetafileDC(const wxString& file);
-       { m_pimpl = new wxMetafileDCImpl( this, file ); }
+    wxMetafileDC(const wxString& file)
+        : wxDC(new wxMetafileDCImpl( this, file ))
+        { }
 
     // Supply origin and extent (recommended).
     // Then don't need to supply them to wxMakeMetaFilePlaceable.
     wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg)
-       { m_pimpl = new wxMetafileDCImpl( this, file, xext, yext, xorg, yorg ); }
+        : wxDC(new wxMetafileDCImpl( this, file, xext, yext, xorg, yorg ))
+        { }
 
     wxMetafile *GetMetafile() const 
        { return ((wxMetafileDCImpl*)m_pimpl)->GetMetaFile(); }

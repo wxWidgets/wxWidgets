@@ -101,7 +101,7 @@ wxGDIRefData *wxMetafile::CreateGDIRefData() const
 
 wxGDIRefData *wxMetafile::CloneGDIRefData(const wxGDIRefData *data) const
 {
-    return new wxMetafileRefData(wx_static_cast(wxMetafileRefData *, data));
+    return new wxMetafileRefData(*wx_static_cast(const wxMetafileRefData *, data));
 }
 
 bool wxMetafile::SetClipboard(int width, int height)
@@ -166,7 +166,8 @@ void wxMetafile::SetWindowsMappingMode(int mm)
 
 // Original constructor that does not takes origin and extent. If you use this,
 // *DO* give origin/extent arguments to wxMakeMetafilePlaceable.
-wxMetafileDC::wxMetafileDC(const wxString& file)
+wxMetafileDCImpl::wxMetafileDCImpl(wxDC *owner, const wxString& file)
+    : wxMSWDCImpl(owner)
 {
     m_metaFile = NULL;
     m_minX = 10000;
@@ -193,7 +194,9 @@ wxMetafileDC::wxMetafileDC(const wxString& file)
 
 // New constructor that takes origin and extent. If you use this, don't
 // give origin/extent arguments to wxMakeMetafilePlaceable.
-wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, int yorg)
+wxMetafileDCImpl::wxMetafileDCImpl(wxDC *owner, const wxString& file,
+                                   int xext, int yext, int xorg, int yorg)
+    : wxMSWDCImpl(owner)
 {
     m_minX = 10000;
     m_minY = 10000;
@@ -214,15 +217,15 @@ wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, i
     SetMapMode(wxMM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
 }
 
-wxMetafileDC::~wxMetafileDC()
+wxMetafileDCImpl::~wxMetafileDCImpl()
 {
     m_hDC = 0;
 }
 
-void wxMetafileDC::DoGetTextExtent(const wxString& string,
-                                   wxCoord *x, wxCoord *y,
-                                   wxCoord *descent, wxCoord *externalLeading,
-                                   const wxFont *theFont) const
+void wxMetafileDCImpl::DoGetTextExtent(const wxString& string,
+                                       wxCoord *x, wxCoord *y,
+                                       wxCoord *descent, wxCoord *externalLeading,
+                                       const wxFont *theFont) const
 {
     const wxFont *fontToUse = theFont;
     if (!fontToUse)
@@ -246,7 +249,7 @@ void wxMetafileDC::DoGetTextExtent(const wxString& string,
         *externalLeading = tm.tmExternalLeading;
 }
 
-void wxMetafileDC::DoGetSize(int *width, int *height) const
+void wxMetafileDCImpl::DoGetSize(int *width, int *height) const
 {
     wxCHECK_RET( m_refData, _T("invalid wxMetafileDC") );
 
@@ -256,7 +259,7 @@ void wxMetafileDC::DoGetSize(int *width, int *height) const
         *height = M_METAFILEDATA->m_height;
 }
 
-wxMetafile *wxMetafileDC::Close()
+wxMetafile *wxMetafileDCImpl::Close()
 {
     SelectOldObjects(m_hDC);
     HANDLE mf = CloseMetaFile((HDC) m_hDC);
@@ -271,7 +274,7 @@ wxMetafile *wxMetafileDC::Close()
     return NULL;
 }
 
-void wxMetafileDC::SetMapMode(int mode)
+void wxMetafileDCImpl::SetMapMode(int mode)
 {
     m_mappingMode = mode;
 
