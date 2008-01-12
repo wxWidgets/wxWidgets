@@ -223,6 +223,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // USE_SETTINGS_DIALOG
 
     EVT_MENU(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,  MyFrame::OnStandardButtonsSizerDialog)
+    EVT_MENU(DIALOGS_TEST_DEFAULT_ACTION,           MyFrame::OnTestDefaultActionDialog)
 
     EVT_MENU(DIALOGS_REQUEST,                       MyFrame::OnRequestUserAttention)
 #if wxUSE_NOTIFICATION_MESSAGE
@@ -439,6 +440,7 @@ bool MyApp::OnInit()
     menuDlg->AppendSubMenu(menuNotif, "&User notifications");
 
     menuDlg->Append(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG, _T("&Standard Buttons Sizer Dialog"));
+    menuDlg->Append(DIALOGS_TEST_DEFAULT_ACTION, _T("&Test dialog default action"));
 
     menuDlg->AppendSeparator();
     menuDlg->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
@@ -1219,6 +1221,66 @@ void MyFrame::OnNotifMsgHide(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnStandardButtonsSizerDialog(wxCommandEvent& WXUNUSED(event))
 {
     StdButtonSizerDialog  dialog(this);
+    dialog.ShowModal();
+}
+
+// TestDefaultAction
+
+#define ID_CATCH_LISTBOX_DCLICK 100
+#define ID_LISTBOX              101
+
+BEGIN_EVENT_TABLE(TestDefaultActionDialog, wxDialog)
+    EVT_CHECKBOX(ID_CATCH_LISTBOX_DCLICK,    TestDefaultActionDialog::OnCatchListBoxDClick)
+    EVT_LISTBOX_DCLICK(ID_LISTBOX,           TestDefaultActionDialog::OnListBoxDClick)
+END_EVENT_TABLE()
+
+TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
+  wxDialog( parent, -1, "Test default action" )
+{
+    m_catchListBoxDClick = false;
+
+    wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
+    
+    wxFlexGridSizer *grid_sizer = new wxFlexGridSizer( 2, 5, 5 );
+    
+    wxListBox *listbox = new wxListBox( this, ID_LISTBOX );
+    listbox->Append( "String 1" );
+    listbox->Append( "String 2" );
+    listbox->Append( "String 3" );
+    listbox->Append( "String 4" );
+    grid_sizer->Add( listbox );
+    
+    grid_sizer->Add( new wxCheckBox( this, ID_CATCH_LISTBOX_DCLICK, "Catch DoubleClick from wxListBox" ), 0, wxALIGN_CENTRE_VERTICAL );
+    
+    grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), 0 ), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl without wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
+    
+    grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), wxTE_PROCESS_ENTER ), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl with wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
+    
+    main_sizer->Add( grid_sizer, 0, wxALL, 10 );
+    
+    wxSizer *button_sizer = CreateSeparatedButtonSizer( wxOK|wxCANCEL );
+    if (button_sizer)
+        main_sizer->Add( button_sizer, 0, wxALL|wxGROW, 5 );
+        
+    SetSizer( main_sizer );
+    main_sizer->SetSizeHints( this );
+}
+    
+void TestDefaultActionDialog::OnListBoxDClick(wxCommandEvent& event)
+{
+    event.Skip( !m_catchListBoxDClick );
+}
+
+void TestDefaultActionDialog::OnCatchListBoxDClick(wxCommandEvent& WXUNUSED(event))
+{
+    m_catchListBoxDClick = !m_catchListBoxDClick;
+}
+
+void MyFrame::OnTestDefaultActionDialog(wxCommandEvent& WXUNUSED(event))
+{
+    TestDefaultActionDialog dialog( this );
     dialog.ShowModal();
 }
 

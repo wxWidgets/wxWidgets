@@ -169,6 +169,22 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+class TestDefaultActionDialog: public wxDialog
+{
+public:
+    TestDefaultActionDialog( wxWindow *parent );
+    
+    void OnListBoxDClick(wxCommandEvent& event);
+    void OnCatchListBoxDClick(wxCommandEvent& event);
+    
+private:
+    bool   m_catchListBoxDClick;
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+
 #if USE_SETTINGS_DIALOG
 // Property sheet dialog
 class SettingsDialog: public wxPropertySheetDialog
@@ -314,6 +330,9 @@ public:
 #endif // wxUSE_NOTIFICATION_MESSAGE
 
     void OnStandardButtonsSizerDialog(wxCommandEvent& event);
+    
+    void OnTestDefaultActionDialog(wxCommandEvent& event);
+    
     void OnExit(wxCommandEvent& event);
 
 private:
@@ -402,7 +421,8 @@ enum
     DIALOGS_PROPERTY_SHEET,
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,
     DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
-    DIALOGS_STANDARD_BUTTON_SIZER_DIALOG
+    DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,
+    DIALOGS_TEST_DEFAULT_ACTION
 };
 
 #endif

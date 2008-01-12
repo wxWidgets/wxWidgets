@@ -33,6 +33,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 
 //-----------------------------------------------------------------------------
 // data
@@ -182,6 +183,67 @@ gtk_listitem_changed_callback(GtkTreeSelection * WXUNUSED(selection),
             g_object_unref (entry);
         }
     }
+}
+}
+
+//-----------------------------------------------------------------------------
+// "key_press_event"
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gint
+gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
+                                GdkEventKey *gdk_event,
+                                wxListBox *listbox )
+{
+    if ((gdk_event->keyval == GDK_Return) || 
+        (gdk_event->keyval == GDK_ISO_Enter) ||
+        (gdk_event->keyval == GDK_KP_Enter))
+    {
+        int index = listbox->GetSelection();
+        if (index != wxNOT_FOUND)
+        {
+            wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
+            event.SetEventObject( listbox );
+            
+            GtkTreeEntry* entry = listbox->GtkGetEntry( index );
+
+            // indicate that this is a selection
+            event.SetExtraLong( 1 );
+
+            event.SetInt( index );
+            event.SetString(wxConvUTF8.cMB2WX(gtk_tree_entry_get_label(entry)));
+
+            if ( listbox->HasClientObjectData() )
+                event.SetClientObject(
+                    (wxClientData*) gtk_tree_entry_get_userdata(entry)
+                                 );
+            else if ( listbox->HasClientUntypedData() )
+                event.SetClientData( gtk_tree_entry_get_userdata(entry) );
+
+            bool ret = listbox->HandleWindowEvent( event );
+
+            g_object_unref (entry);
+            
+            if (!ret)
+            {
+                // DClick not handled -> invoke default action
+                wxWindow *tlw = wxGetTopLevelParent( listbox );
+                if (tlw)
+                {
+                    GtkWindow *gtk_window = GTK_WINDOW( tlw->GetHandle() );
+                    if (gtk_window)
+                        gtk_window_activate_default( gtk_window );
+                }
+            }
+            
+            // Always intercept, otherwise we'd get another dclick
+            // event from row_activated
+            return TRUE;
+        }
+    }
+    
+    return FALSE;
 }
 }
 
@@ -424,6 +486,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     g_signal_connect_after(m_treeview, "row-activated",
                      G_CALLBACK(gtk_listbox_row_activated_callback), this);
 
+    // for intercepting dclick generation by <ENTER>
+    g_signal_connect (m_treeview, "key_press_event",
+                      G_CALLBACK (gtk_listbox_key_press_callback),
+                           this);
     m_parent->DoAddChild( this );
 
     PostCreation(size);
