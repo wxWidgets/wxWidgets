@@ -58,7 +58,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLEXPORT)
 //               code redundancy in all native wxColour implementations
 //-----------------------------------------------------------------------------
 
-#if defined( __WXMAC__ ) || defined( __WXMSW__ )
+#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXPM__ )
 #define wxCOLOUR_IS_GDIOBJECT 0
 #else
 #define wxCOLOUR_IS_GDIOBJECT 1

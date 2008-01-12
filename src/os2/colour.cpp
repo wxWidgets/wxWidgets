@@ -22,7 +22,7 @@
 #define INCL_PM
 #include<os2.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxColour, wxGDIObject)
+IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 
 // Colour
 
