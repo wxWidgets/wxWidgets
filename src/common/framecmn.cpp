@@ -171,7 +171,8 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
 
 void wxFrameBase::SendSizeEvent()
 {
-    wxSizeEvent event( GetSize(), GetId() );
+    const wxSize size = GetSize();
+    wxSizeEvent event( size, GetId() );
     event.SetEventObject( this );
     GetEventHandler()->AddPendingEvent( event );
 
@@ -179,8 +180,12 @@ void wxFrameBase::SendSizeEvent()
     // SendSizeEvent is typically called when a toolbar is shown
     // or hidden, but sending the size event alone is not enough
     // to trigger a full layout.
-    ((wxFrame*)this)->GtkOnSize();
-#endif
+    ((wxFrame*)this)->GtkOnSize(
+#ifndef __WXGTK20__
+        0, 0, size.x, size.y
+#endif // __WXGTK20__
+    );
+#endif // __WXGTK__
 }
 
 
