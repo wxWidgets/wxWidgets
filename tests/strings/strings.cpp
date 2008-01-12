@@ -36,6 +36,7 @@ private:
         CPPUNIT_TEST( PChar );
         CPPUNIT_TEST( Format );
         CPPUNIT_TEST( Constructors );
+        CPPUNIT_TEST( StaticConstructors );
         CPPUNIT_TEST( Extraction );
         CPPUNIT_TEST( Trim );
         CPPUNIT_TEST( Find );
@@ -64,6 +65,7 @@ private:
     void PChar();
     void Format();
     void Constructors();
+    void StaticConstructors();
     void Extraction();
     void Trim();
     void Find();
@@ -159,25 +161,49 @@ void StringTestCase::Format()
 
 void StringTestCase::Constructors()
 {
-    #define TEST_CTOR(args, res)                                               \
-        {                                                                      \
-            wxString s args ;                                                  \
-            CPPUNIT_ASSERT( s == res );                                        \
-        }
+    WX_ASSERT_STR_EQUAL( "", wxString('Z', 0) );
+    WX_ASSERT_STR_EQUAL( "Z", wxString('Z') );
+    WX_ASSERT_STR_EQUAL( "ZZZZ", wxString('Z', 4) );
+    WX_ASSERT_STR_EQUAL( "Hell", wxString("Hello", 4) );
+    WX_ASSERT_STR_EQUAL( "Hello", wxString("Hello", 5) );
 
-    TEST_CTOR((_T('Z'), 4), _T("ZZZZ"));
-    TEST_CTOR((_T("Hello"), 4), _T("Hell"));
-    TEST_CTOR((_T("Hello"), 5), _T("Hello"));
+#if wxUSE_UNICODE
+    WX_ASSERT_STR_EQUAL( L"", wxString(L'Z', 0) );
+    WX_ASSERT_STR_EQUAL( L"Z", wxString(L'Z') );
+    WX_ASSERT_STR_EQUAL( L"ZZZZ", wxString(L'Z', 4) );
+    WX_ASSERT_STR_EQUAL( L"Hell", wxString(L"Hello", 4) );
+    WX_ASSERT_STR_EQUAL( L"Hello", wxString(L"Hello", 5) );
+#endif // wxUSE_UNICODE
 
-    static const wxChar *s = _T("?really!");
-    const wxChar *start = wxStrchr(s, _T('r'));
-    const wxChar *end = wxStrchr(s, _T('!'));
-    TEST_CTOR((start, end), _T("really"));
+    static const char *s = "?really!";
+    const char *start = wxStrchr(s, 'r');
+    const char *end = wxStrchr(s, '!');
+    WX_ASSERT_STR_EQUAL( "really", wxString(start, end) );
 
     // test if creating string from NULL C pointer works:
-    TEST_CTOR(((char*)NULL), "");
+    WX_ASSERT_STR_EQUAL( "", wxString((const char *)NULL) );
 }
 
+void StringTestCase::StaticConstructors()
+{
+    WX_ASSERT_STR_EQUAL( "", wxString::FromAscii("") );
+    WX_ASSERT_STR_EQUAL( "", wxString::FromAscii("Hello", 0) );
+    WX_ASSERT_STR_EQUAL( "Hell", wxString::FromAscii("Hello", 4) );
+    WX_ASSERT_STR_EQUAL( "Hello", wxString::FromAscii("Hello", 5) );
+    WX_ASSERT_STR_EQUAL( "Hello", wxString::FromAscii("Hello") );
+
+    // FIXME: this doesn't work currently but should!
+    //WX_ASSERT_SIZET_EQUAL( 1, wxString::FromAscii("", 1).length() );
+
+
+    WX_ASSERT_STR_EQUAL( "", wxString::FromUTF8("") );
+    WX_ASSERT_STR_EQUAL( "", wxString::FromUTF8("Hello", 0) );
+    WX_ASSERT_STR_EQUAL( "Hell", wxString::FromUTF8("Hello", 4) );
+    WX_ASSERT_STR_EQUAL( "Hello", wxString::FromUTF8("Hello", 5) );
+    WX_ASSERT_STR_EQUAL( "Hello", wxString::FromUTF8("Hello") );
+
+    //WX_ASSERT_SIZET_EQUAL( 1, wxString::FromUTF8("", 1).length() );
+}
 
 void StringTestCase::Extraction()
 {
