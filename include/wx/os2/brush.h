@@ -46,8 +46,6 @@ protected:
 // Brush
 class WXDLLEXPORT wxBrush: public wxBrushBase
 {
-    DECLARE_DYNAMIC_CLASS(wxBrush)
-
 public:
     wxBrush();
     wxBrush(const wxColour& rCol, int nStyle = wxSOLID);
@@ -79,7 +77,13 @@ public:
     virtual WXHANDLE GetResourceHandle(void) const;
     bool     FreeResource(bool bForce = false);
     bool     IsFree(void) const;
-    void     Unshare(void);
+
+protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxBrush)
 }; // end of CLASS wxBrush
 
 #endif

@@ -327,38 +327,33 @@ bool wxPen::IsFree() const
     return (M_PENDATA && M_PENDATA->m_hPen == 0);
 }
 
-void wxPen::Unshare()
+wxGDIRefData* wxPen::CreateGDIRefData() const
 {
-    // Don't change shared data
-    if (!m_refData)
-    {
-        m_refData = new wxPenRefData();
-    }
-    else
-    {
-        wxPenRefData* ref = new wxPenRefData(*(wxPenRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
-} // end of wxPen::Unshare
+    return new wxPenRefData;
+}
+
+wxGDIRefData* wxPen::CloneGDIRefData(const wxGDIRefData* data) const
+{
+    return new wxPenRefData(*wx_static_cast(const wxPenRefData*, data));
+}
 
 void wxPen::SetColour( const wxColour& rColour )
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_vColour = rColour;
     RealizeResource();
 } // end of wxPen::SetColour
 
 void wxPen::SetColour( unsigned char cRed, unsigned char cGreen, unsigned char cBlue)
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_vColour.Set(cRed, cGreen, cBlue);
     RealizeResource();
 } // end of wxPen::SetColour
 
 void wxPen::SetPS( HPS hPS )
 {
-    Unshare();
+    AllocExclusive();
     if (M_PENDATA->m_hPen)
         ::GpiDestroyPS(M_PENDATA->m_hPen);
     M_PENDATA->m_hPen = hPS;
@@ -369,7 +364,7 @@ void wxPen::SetWidth(
   int                               nWidth
 )
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_nWidth = nWidth;
     RealizeResource();
 } // end of wxPen::SetWidth
@@ -378,7 +373,7 @@ void wxPen::SetStyle(
   int                               nStyle
 )
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_nStyle = nStyle;
     RealizeResource();
 } // end of wxPen::SetStyle
@@ -387,7 +382,7 @@ void wxPen::SetStipple(
   const wxBitmap&                   rStipple
 )
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_vStipple = rStipple;
     M_PENDATA->m_nStyle = wxSTIPPLE;
     RealizeResource();
@@ -405,7 +400,7 @@ void wxPen::SetJoin(
   int                               nJoin
 )
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_nJoin = nJoin;
     RealizeResource();
 } // end of wxPen::SetJoin
@@ -414,7 +409,7 @@ void wxPen::SetCap(
   int                               nCap
 )
 {
-    Unshare();
+    AllocExclusive();
     M_PENDATA->m_nCap = nCap;
     RealizeResource();
 } // end of wxPen::SetCap

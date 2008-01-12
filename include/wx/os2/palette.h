@@ -32,8 +32,6 @@ public:
 
 class WXDLLEXPORT wxPalette: public wxPaletteBase
 {
-    DECLARE_DYNAMIC_CLASS(wxPalette)
-
 public:
     wxPalette();
 
@@ -64,6 +62,13 @@ public:
     inline WXHPALETTE GetHPALETTE(void) const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
     void              SetHPALETTE(WXHPALETTE hPalette);
     void              SetPS(HPS hPS);
+
+protected:
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPalette)
 }; // end of CLASS wxPalette
 
 #endif

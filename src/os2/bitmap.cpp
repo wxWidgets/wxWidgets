@@ -94,11 +94,6 @@ void wxBitmapRefData::Free()
 // wxBitmap creation
 // ----------------------------------------------------------------------------
 
-wxGDIRefData* wxBitmap::CreateGDIRefData() const
-{
-    return new wxBitmapRefData;
-}
-
 wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
 {
     return new wxBitmapRefData(*wx_static_cast(const wxBitmapRefData *, data));

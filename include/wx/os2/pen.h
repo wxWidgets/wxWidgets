@@ -58,7 +58,6 @@ protected:
 // Pen
 class WXDLLEXPORT wxPen : public wxGDIObject
 {
-    DECLARE_DYNAMIC_CLASS(wxPen)
 public:
     wxPen();
     wxPen( const wxColour& rColour
@@ -124,11 +123,19 @@ public:
     bool     FreeResource(bool bForce = false);
     virtual WXHANDLE GetResourceHandle(void) const;
     bool     IsFree(void) const;
-    void     Unshare(void);
 
 private:
     LINEBUNDLE                     m_vLineBundle;
     AREABUNDLE                     m_vAreaBundle;
+
+protected:
+    virtual wxGDIRefData* CreateGDIRefData() const;
+    virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const;
+
+    // same as FreeResource() + RealizeResource()
+    bool Recreate();
+
+    DECLARE_DYNAMIC_CLASS(wxPen)
 }; // end of CLASS wxPen
 
 extern int wx2os2PenStyle(int nWxStyle);

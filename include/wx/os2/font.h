@@ -113,7 +113,9 @@ public:
 protected:
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& rInfo);
 
-    void Unshare(void);
+    // implement wxObject virtuals which are used by AllocExclusive()
+    virtual wxGDIRefData *CreateGDIRefData() const;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)

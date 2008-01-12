@@ -64,8 +64,8 @@ public:
     void   SetPS(HPS hPS);
 
 protected:
-    virtual wxGDIRefData* CreateData(void) const;
-    virtual wxGDIRefData* CloneData(const wxGDIRefData* pData) const;
+    virtual wxGDIRefData* CreateGDIRefData(void) const;
+    virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* pData) const;
 
     virtual bool DoIsEqual(const wxRegion& region) const;
     virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const;
@@ -82,7 +82,6 @@ protected:
 
 class WXDLLEXPORT wxRegionIterator : public wxObject
 {
-DECLARE_DYNAMIC_CLASS(wxRegionIterator);
 public:
     wxRegionIterator();
     wxRegionIterator(const wxRegion& rRegion);
@@ -110,6 +109,8 @@ private:
     long                            m_lNumRects;
     wxRegion                        m_vRegion;
     wxRect*                         m_pRects;
+
+    DECLARE_DYNAMIC_CLASS(wxRegionIterator)
 }; // end of wxRegionIterator
 
 #endif // _WX_OS2_REGION_H_

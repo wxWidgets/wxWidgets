@@ -74,7 +74,7 @@ public:
         WXHCURSOR                   m_hCursor;
     };
 
-    UINT                            m_uId;
+    unsigned int                    m_uId;
 };
 
 // ----------------------------------------------------------------------------
@@ -204,7 +204,7 @@ public:
     }
     void SetSize(const wxSize& rSize) { SetSize(rSize.x, rSize.y); }
 
-    UINT GetId(void) const
+    unsigned int GetId(void) const
     {
         wxGDIImageRefData*          pData;
 
@@ -214,7 +214,7 @@ public:
         else
             return pData->m_uId;
     } // end of WxWinGdi_CGDIImage::GetId
-    void SetId(UINT uId)
+    void SetId(unsigned int uId)
     {
         wxGDIImageRefData*          pData;
 
@@ -230,6 +230,15 @@ protected:
     // create the data for the derived class here
     virtual wxGDIImageRefData* CreateData() const = 0;
     virtual wxGDIRefData *CreateGDIRefData() const { return CreateData(); }
+
+    // we can't [efficiently] clone objects of this class
+    virtual wxGDIRefData *
+    CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
+    {
+        wxFAIL_MSG( _T("must be implemented if used") );
+
+        return NULL;
+    }
 
     static wxGDIImageHandlerList    ms_handlers;
 };

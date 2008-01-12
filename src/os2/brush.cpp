@@ -234,40 +234,23 @@ bool wxBrush::IsFree() const
   return (M_BRUSHDATA && (M_BRUSHDATA->m_hBrush == 0));
 } // end of wxBrush::IsFree
 
-void wxBrush::Unshare()
-{
-    //
-    // Don't change shared data
-    //
-    if (!m_refData)
-    {
-        m_refData = new wxBrushRefData();
-    }
-    else
-    {
-        wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
-} // end of wxBrush::Unshare
-
 void wxBrush::SetColour( const wxColour& rColour )
 {
-    Unshare();
+    AllocExclusive();
     M_BRUSHDATA->m_vColour = rColour;
     RealizeResource();
 }
 
 void wxBrush::SetColour(unsigned char cRed, unsigned char cGreen, unsigned char cBlue)
 {
-    Unshare();
+    AllocExclusive();
     M_BRUSHDATA->m_vColour.Set( cRed, cGreen, cBlue );
     RealizeResource();
 } // end of wxBrush::SetColour
 
 void wxBrush::SetStyle(int nStyle)
 {
-    Unshare();
+    AllocExclusive();
     M_BRUSHDATA->m_nStyle = nStyle;
     RealizeResource();
 } // end of wxBrush::SetStyle
@@ -276,7 +259,7 @@ void wxBrush::SetStipple(
   const wxBitmap&                   rStipple
 )
 {
-    Unshare();
+    AllocExclusive();
     M_BRUSHDATA->m_vStipple = rStipple;
     RealizeResource();
 } // end of wxBrush::SetStipple
@@ -285,7 +268,7 @@ void wxBrush::SetPS(
   HPS                               hPS
 )
 {
-    Unshare();
+    AllocExclusive();
     if (M_BRUSHDATA->m_hBrush)
         ::GpiDestroyPS(M_BRUSHDATA->m_hBrush);
     M_BRUSHDATA->m_hBrush = hPS;
@@ -304,3 +287,12 @@ bool wxBrush::operator == (
     return ( *(wxBrushRefData*)m_refData == *(wxBrushRefData*)brush.m_refData );
 } // end of wxBrush::operator ==
 
+wxGDIRefData *wxBrush::CreateGDIRefData() const
+{
+    return new wxBrushRefData;
+}
+
+wxGDIRefData *wxBrush::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxBrushRefData(*(const wxBrushRefData *)data);
+}

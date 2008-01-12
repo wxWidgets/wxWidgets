@@ -216,7 +216,6 @@ protected:
 
     bool CreateFromImage(const wxImage& image, int depth);
 
-    virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
@@ -343,7 +342,7 @@ public:
 private:
     inline virtual bool Load( wxGDIImage*     WXUNUSED(pImage)
                              ,const wxString& WXUNUSED(rName)
-                             ,HPS             WXUNUSED(hPs)
+                             ,WXHANDLE        WXUNUSED(hPs)
                              ,long            WXUNUSED(lFlags)
                              ,int             WXUNUSED(nDesiredWidth)
                              ,int             WXUNUSED(nDesiredHeight)
