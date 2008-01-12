@@ -12,9 +12,9 @@
 #if wxUSE_SOCKETS
 
 #include <stdlib.h>
-#include "wx/unix/gsockunx.h"
 #include "wx/gsocket.h"
 #include "wx/app.h"
+#include "wx/apptrait.h"
 
 #define wxSockReadMask  0x01
 #define wxSockWriteMask 0x02
@@ -53,7 +53,7 @@ public:
 
 GSocketManager *wxGUIAppTraits::GetSocketManager()
 {
-    static GTKSocketManager s_manager;
+    static PMSocketManager s_manager;
     return &s_manager;
 }
 
