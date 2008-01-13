@@ -1095,6 +1095,10 @@ SOURCE=..\..\include\wx\convauto.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\meta\convertible.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\cpp.h
 # End Source File
 # Begin Source File
@@ -1116,6 +1120,10 @@ SOURCE=..\..\include\wx\dde.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\debug.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\meta\defs.h
 # End Source File
 # Begin Source File
 
@@ -1231,6 +1239,10 @@ SOURCE=..\..\include\wx\init.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\meta\int2type.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\intl.h
 # End Source File
 # Begin Source File
@@ -1320,6 +1332,10 @@ SOURCE=..\..\include\wx\process.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\ptr_scpd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ptr_shrd.h
 # End Source File
 # Begin Source File
 
@@ -1415,6 +1431,10 @@ SOURCE=..\..\include\wx\tokenzr.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\tracker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\txtstrm.h
 # End Source File
 # Begin Source File
@@ -1448,6 +1468,10 @@ SOURCE=..\..\include\wx\version.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\volume.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\weakref.h
 # End Source File
 # Begin Source File
 

@@ -6132,10 +6132,6 @@ SOURCE=..\..\include\wx\propdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\ptr_scpd.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\quantize.h
 # End Source File
 # Begin Source File

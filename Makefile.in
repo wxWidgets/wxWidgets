@@ -383,6 +383,7 @@ ALL_BASE_HEADERS =  \
 	wx/power.h \
 	wx/process.h \
 	wx/ptr_scpd.h \
+	wx/ptr_shrd.h \
 	wx/recguard.h \
 	wx/regex.h \
 	wx/scopeguard.h \
@@ -407,6 +408,7 @@ ALL_BASE_HEADERS =  \
 	wx/thrimpl.cpp \
 	wx/timer.h \
 	wx/tokenzr.h \
+	wx/tracker.h \
 	wx/txtstrm.h \
 	wx/types.h \
 	wx/unichar.h \
@@ -416,6 +418,7 @@ ALL_BASE_HEADERS =  \
 	wx/vector.h \
 	wx/version.h \
 	wx/volume.h \
+	wx/weakref.h \
 	wx/wfstream.h \
 	wx/wx.h \
 	wx/wxchar.h \
@@ -427,6 +430,9 @@ ALL_BASE_HEADERS =  \
 	wx/xtistrm.h \
 	wx/zipstrm.h \
 	wx/zstream.h \
+	wx/meta/convertible.h \
+	wx/meta/defs.h \
+	wx/meta/int2type.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
 	wx/gsocket.h \
@@ -525,6 +531,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/power.h \
 	wx/process.h \
 	wx/ptr_scpd.h \
+	wx/ptr_shrd.h \
 	wx/recguard.h \
 	wx/regex.h \
 	wx/scopeguard.h \
@@ -549,6 +556,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/thrimpl.cpp \
 	wx/timer.h \
 	wx/tokenzr.h \
+	wx/tracker.h \
 	wx/txtstrm.h \
 	wx/types.h \
 	wx/unichar.h \
@@ -558,6 +566,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/vector.h \
 	wx/version.h \
 	wx/volume.h \
+	wx/weakref.h \
 	wx/wfstream.h \
 	wx/wx.h \
 	wx/wxchar.h \
@@ -569,6 +578,9 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/xtistrm.h \
 	wx/zipstrm.h \
 	wx/zstream.h \
+	wx/meta/convertible.h \
+	wx/meta/defs.h \
+	wx/meta/int2type.h \
 	wx/private/fdiodispatcher.h \
 	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
@@ -751,6 +763,7 @@ ALL_BASE_SOURCES =  \
 	src/mac/corefoundation/utilsexc_base.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
+	src/common/gsocketiohandler.cpp \
 	src/unix/appunix.cpp \
 	src/unix/evtloopunix.cpp \
 	src/unix/timerunx.cpp \
@@ -1928,6 +1941,7 @@ COND_TOOLKIT_X11_BASE_MACOSX_HDR =  \
 COND_PLATFORM_OS2_1_BASE_PLATFORM_HDR =  \
 	wx/private/fdiodispatcher.h \
 	wx/private/selectdispatcher.h \
+	wx/private/gsocketiohandler.h \
 	wx/unix/app.h \
 	wx/os2/apptbase.h \
 	wx/os2/apptrait.h \
@@ -3299,7 +3313,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/printdlg.h \
 	wx/prntbase.h \
 	wx/progdlg.h \
-	wx/ptr_scpd.h \
 	wx/quantize.h \
 	wx/rawbmp.h \
 	wx/region.h \
@@ -3505,6 +3518,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
+	monodll_gsocketiohandler.o \
 	monodll_appunix.o \
 	monodll_evtloopunix.o \
 	monodll_timerunx.o \
@@ -5395,6 +5409,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
+	monolib_gsocketiohandler.o \
 	monolib_appunix.o \
 	monolib_evtloopunix.o \
 	monolib_timerunx.o \
@@ -7322,6 +7337,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
+	basedll_gsocketiohandler.o \
 	basedll_appunix.o \
 	basedll_evtloopunix.o \
 	basedll_timerunx.o \
@@ -7535,6 +7551,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
+	baselib_gsocketiohandler.o \
 	baselib_appunix.o \
 	baselib_evtloopunix.o \
 	baselib_timerunx.o \
@@ -13716,9 +13733,6 @@ monodll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp $(MONODLL_ODEP)
 monodll_zstream.o: $(srcdir)/src/common/zstream.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/zstream.cpp
 
-monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
 monodll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
 
@@ -14642,6 +14656,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
+
+@COND_PLATFORM_UNIX_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_PLATFORM_OS2_1@monodll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
@@ -18180,9 +18200,6 @@ monolib_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp $(MONOLIB_ODEP)
 monolib_zstream.o: $(srcdir)/src/common/zstream.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/zstream.cpp
 
-monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
 monolib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
 
@@ -19106,6 +19123,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
+
+@COND_PLATFORM_UNIX_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_PLATFORM_OS2_1@monolib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
@@ -22644,9 +22667,6 @@ basedll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp $(BASEDLL_ODEP)
 basedll_zstream.o: $(srcdir)/src/common/zstream.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/zstream.cpp
 
-basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
 basedll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
 
@@ -23021,6 +23041,12 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
+
+@COND_PLATFORM_UNIX_1@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_PLATFORM_OS2_1@basedll_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@basedll_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
@@ -23412,9 +23438,6 @@ baselib_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp $(BASELIB_ODEP)
 baselib_zstream.o: $(srcdir)/src/common/zstream.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/zstream.cpp
 
-baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
-
 baselib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
 
@@ -23789,6 +23812,12 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
+
+@COND_PLATFORM_OS2_1@baselib_gsocketiohandler.o: $(srcdir)/src/common/gsocketiohandler.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/gsocketiohandler.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp

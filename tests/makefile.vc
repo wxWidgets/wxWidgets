@@ -76,7 +76,9 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_atomic.obj \
 	$(OBJS)\test_queue.obj \
 	$(OBJS)\test_uris.obj \
-	$(OBJS)\test_vectors.obj
+	$(OBJS)\test_vectors.obj \
+	$(OBJS)\test_evtconnection.obj \
+	$(OBJS)\test_weakref.obj
 TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_23)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_gui.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -572,6 +574,12 @@ $(OBJS)\test_uris.obj: .\uris\uris.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_vectors.obj: .\vectors\vectors.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_evtconnection.obj: .\weakref\evtconnection.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_weakref.obj: .\weakref\weakref.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp

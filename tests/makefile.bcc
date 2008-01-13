@@ -83,7 +83,9 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_atomic.obj \
 	$(OBJS)\test_queue.obj \
 	$(OBJS)\test_uris.obj \
-	$(OBJS)\test_vectors.obj
+	$(OBJS)\test_vectors.obj \
+	$(OBJS)\test_evtconnection.obj \
+	$(OBJS)\test_weakref.obj
 TEST_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_1) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -487,6 +489,12 @@ $(OBJS)\test_uris.obj: .\uris\uris.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_vectors.obj: .\vectors\vectors.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_evtconnection.obj: .\weakref\evtconnection.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_weakref.obj: .\weakref\weakref.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc

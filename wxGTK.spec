@@ -284,6 +284,7 @@ wx/platinfo.h
 wx/power.h
 wx/process.h
 wx/ptr_scpd.h
+wx/ptr_shrd.h
 wx/recguard.h
 wx/regex.h
 wx/scopeguard.h
@@ -308,6 +309,7 @@ wx/thread.h
 wx/thrimpl.cpp
 wx/timer.h
 wx/tokenzr.h
+wx/tracker.h
 wx/txtstrm.h
 wx/types.h
 wx/unichar.h
@@ -317,6 +319,7 @@ wx/variant.h
 wx/vector.h
 wx/version.h
 wx/volume.h
+wx/weakref.h
 wx/wfstream.h
 wx/wx.h
 wx/wxchar.h
@@ -328,6 +331,9 @@ wx/xti.h
 wx/xtistrm.h
 wx/zipstrm.h
 wx/zstream.h
+wx/meta/convertible.h
+wx/meta/defs.h
+wx/meta/int2type.h
 wx/private/fdiodispatcher.h
 wx/private/selectdispatcher.h
 wx/unix/app.h
