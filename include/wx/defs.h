@@ -444,6 +444,21 @@ typedef short int WXTYPE;
     #endif
 #endif /* HAVE_WOSTREAM */
 
+// ----------------------------------------------------------------------------
+// other C++ features
+// ----------------------------------------------------------------------------
+
+#ifndef HAVE_PARTIAL_SPECIALIZATION
+    // be optimistic by default
+    #define HAVE_PARTIAL_SPECIALIZATION
+#endif
+
+#ifdef __VISUALC__
+    #if __VISUALC__ < 1310
+        #undef HAVE_PARTIAL_SPECIALIZATION
+    #endif
+#endif // __VISUALC__
+
 /*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
 /*  ---------------------------------------------------------------------------- */

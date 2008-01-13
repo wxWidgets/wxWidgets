@@ -2,7 +2,7 @@
 // Name:        wx/weakref.h
 // Purpose:     wxWeakRef - Generic weak references for wxWidgets
 // Author:      Arne Steinarson
-// Created:     2007-12-27
+// Created:     27 Dec 07
 // RCS-ID:      $Id$
 // Copyright:   (c) 2007 Arne Steinarson
 // Licence:     wxWindows licence
@@ -11,19 +11,243 @@
 #ifndef _WX_WEAKREF_H_
 #define _WX_WEAKREF_H_
 
-#include <wx/tracker.h>
+#include "wx/tracker.h"
 
-// A weak reference to an object of type T, where T has type wxTrackable
-// as one of its base classes (in a static or dynamic sense).
-template<class T>
-class wxWeakRef : public wxTrackerNode
+#include "wx/meta/convertible.h"
+#include "wx/meta/int2type.h"
+
+template <class T>
+struct wxIsStaticTrackable
+{
+    enum { value = wxConvertibleTo<T, wxTrackable>::value };
+};
+
+// Weak ref implementation when T has wxTrackable as a known base class
+template <class T>
+class wxWeakRefStatic : public wxTrackerNode
 {
 public:
-    typedef T element_type;
-    
-    wxWeakRef(T *pobj = NULL) : m_pobj(NULL) { Assign(pobj); }
+    wxWeakRefStatic() : m_pobj(NULL) { }
 
-    virtual ~wxWeakRef() { Assign(NULL); }
+    void Release()
+    {
+        // Release old object if any
+        if ( m_pobj )
+        {
+            // Remove ourselves from object tracker list
+            wxTrackable *pt = static_cast<wxTrackable*>(m_pobj);
+            pt->RemoveNode(this);
+            m_pobj = NULL;
+        }
+    }
+
+protected:
+    void Assign(T* pobj)
+    {
+        if ( m_pobj == pobj )
+            return;
+
+        Release();
+
+        // Now set new trackable object
+        if ( pobj )
+        {
+            // Add ourselves to object tracker list
+            wxTrackable *pt = static_cast<wxTrackable*>(pobj);
+            pt->AddNode(this);
+            m_pobj = pobj;
+        }
+    }
+
+    void AssignCopy( const wxWeakRefStatic& wr )
+    {
+        Assign( wr.m_pobj );
+    }
+
+    virtual void OnObjectDestroy()
+    {
+        // Tracked object itself removes us from list of trackers
+        wxASSERT( m_pobj!=NULL );
+        m_pobj = NULL;
+    }
+
+    T *m_pobj;
+};
+
+#ifdef HAVE_PARTIAL_SPECIALIZATION
+
+template<class T,bool use_static>
+struct wxWeakRefImpl;
+
+// Intermediate class, to select the static case above.
+template <class T>
+struct wxWeakRefImpl<T, true> : public wxWeakRefStatic<T>
+{
+    enum { value = 1 };
+};
+
+// Weak ref implementation when T does not have wxTrackable as known base class
+template<class T>
+struct wxWeakRefImpl<T, false> : public wxTrackerNode
+{
+    void Release()
+    {
+        // Release old object if any
+        if ( m_pobj )
+        {
+            // Remove ourselves from object tracker list
+            m_ptbase->RemoveNode(this);
+            m_pobj = NULL;
+            m_ptbase = NULL;
+        }
+    }
+
+protected:
+    wxWeakRefImpl() : m_pobj(NULL), m_ptbase(NULL) { }
+
+    // Assign receives most derived class here and can use that
+    template <class TDerived>
+    void Assign( TDerived* pobj )
+    {
+        AssignHelper( pobj, wxInt2Type<wxIsStaticTrackable<TDerived>::value>() );
+    }
+
+    template <class TDerived>
+    void AssignHelper(TDerived* pobj, wxInt2Type<true>)
+    {
+        wxTrackable *ptbase = static_cast<wxTrackable*>(pobj);
+        DoAssign( pobj, ptbase );
+    }
+
+#ifdef HAVE_DYNAMIC_CAST
+    void AssignHelper(T* pobj, wxInt2Type<false>)
+    {
+        // A last way to get a trackable pointer
+        wxTrackable *ptbase = dynamic_cast<wxTrackable*>(pobj);
+        if ( ptbase )
+        {
+            DoAssign( pobj, ptbase );
+        }
+        else
+        {
+            wxFAIL_MSG( "Tracked class should inherit from wxTrackable" );
+
+            Release();
+        }
+    }
+#endif // HAVE_DYNAMIC_CAST
+
+    void AssignCopy(const wxWeakRefImpl& wr)
+    {
+        DoAssign( wr.m_pobj, wr.m_ptbase );
+    }
+
+    void DoAssign( T* pobj, wxTrackable *ptbase ) {
+        if( m_pobj==pobj ) return;
+        Release();
+
+        // Now set new trackable object
+        if( pobj )
+        {
+            // Add ourselves to object tracker list
+            wxASSERT( ptbase );
+            ptbase->AddNode( this );
+            m_pobj = pobj;
+            m_ptbase = ptbase;
+        }
+    }
+
+    virtual void OnObjectDestroy()
+    {
+        // Tracked object itself removes us from list of trackers
+        wxASSERT( m_pobj!=NULL );
+        m_pobj = NULL;
+        m_ptbase = NULL;
+    }
+
+    T *m_pobj;
+    wxTrackable *m_ptbase;
+};
+
+#endif // HAVE_PARTIAL_SPECIALIZATION
+
+
+// A weak reference to an object of type T, where T has type wxTrackable
+// (usually statically but if not dynamic_cast<> is tried).
+template <class T>
+class wxWeakRef : public
+#ifdef HAVE_PARTIAL_SPECIALIZATION
+                  wxWeakRefImpl<T, wxIsStaticTrackable<T>::value>
+#else
+                  wxWeakRefStatic<T>
+#endif
+{
+public:
+    // Default ctor
+    wxWeakRef() { }
+
+    // When we have the full type here, static_cast<> will always work
+    // (or give a straight compiler error).
+    template <class TDerived>
+    wxWeakRef(TDerived* pobj)
+    {
+        Assign(pobj);
+    }
+
+    template <class TDerived>
+    wxWeakRef<T>& operator=(TDerived* pobj)
+    {
+        Assign(pobj);
+        return *this;
+    }
+
+    wxWeakRef<T>& operator=(const wxWeakRef<T>& wr)
+    {
+        AssignCopy(wr);
+        return *this;
+    }
+
+    virtual ~wxWeakRef() { Release(); }
+
+    // Smart pointer functions
+    T& operator*() const { return *m_pobj; }
+    T* operator->() const { return m_pobj; }
+
+    T* get() const { return m_pobj; }
+
+    // test for pointer validity: defining conversion to unspecified_bool_type
+    // and not more obvious bool to avoid implicit conversions to integer types
+    typedef T *(wxWeakRef<T>::*unspecified_bool_type)() const;
+    operator unspecified_bool_type() const
+    {
+        return this->m_pobj ? &wxWeakRef<T>::get : NULL;
+    }
+};
+
+
+// Weak ref implementation assign objects are queried for wxTrackable
+// using dynamic_cast<>
+template<class T>
+class wxWeakRefDynamic : public wxTrackerNode
+{
+public:
+    wxWeakRefDynamic() : m_pobj(NULL) { }
+
+    wxWeakRefDynamic(T* pobj) : m_pobj(pobj)
+    {
+        Assign(pobj);
+    }
+
+    virtual ~wxWeakRefDynamic() { Release(); }
+
+    // Smart pointer functions
+    T& operator * (){ wxASSERT(this->m_pobj); return *m_pobj; }
+    T* operator -> (){ wxASSERT(this->m_pobj); return m_pobj; }
+    T* operator = (T* pobj) { Assign(pobj); return m_pobj; }
+
+    T* get(){ return this->m_pobj; }
+
+    // operator T* (){ return this->m_pobj; }
 
     // test for pointer validity: defining conversion to unspecified_bool_type
     // and not more obvious bool to avoid implicit conversions to integer types
@@ -33,92 +257,68 @@ public:
         return m_pobj ? &wxWeakRef<T>::get : NULL;
     }
 
-    T * get() const                 
-    {                               
-        return m_pobj;
-    }                               
-    
-    T* operator->()
-    { 
-        wxASSERT(m_pobj != NULL);    
-        return m_pobj; 
-    }
-    
-    T& operator*() const           
-    {                               
-        wxASSERT(m_pobj != NULL);    
-        return *m_pobj;              
-    }                               
-                                    
-    T* operator=(T *pobj)
-    {
-        Assign(pobj);
-        return m_pobj;
-    }
-
     // Assign from another weak ref, point to same object
-    T* operator = (const wxWeakRef<T> &wr)
-    { 
-        Assign(wr); 
-        return m_pobj; 
-    }
-    
-    virtual void OnObjectDestroy()
+    T* operator = (const wxWeakRef<T> &wr) { Assign( wr.get() ); return this->m_pobj; }
+
+    void Release()
     {
-        // Tracked object itself removes us from list of trackers
-        wxASSERT( m_pobj );
-        m_pobj = NULL;
-    }
-
-protected:
-    friend class wxTrackableBase; 
-    friend class wxEvtHandler;
-
-    virtual wxTrackerNodeType GetType() { return WeakRef; }
-    
-    void Assign(T* pobj)
-    {
-        if ( m_pobj == pobj )
-            return;
-
-        // First release old object if any
-        if ( m_pobj )
+        // Release old object if any
+        if( m_pobj )
         {
             // Remove ourselves from object tracker list
-            // This does static_cast if available, otherwise it tries dynamic cast
-            wxTrackableBase *pt = wxTrackableCaster<T,wxHasBase<T,wxTrackableBase>::value >::Cast(m_pobj);
+            wxTrackable *pt = dynamic_cast<wxTrackable*>(m_pobj);
             wxASSERT(pt);
             pt->RemoveNode(this);
             m_pobj = NULL;
         }
+    }
+
+protected:
+    void Assign(T *pobj)
+    {
+        if ( m_pobj == pobj )
+            return;
+
+        Release();
 
         // Now set new trackable object
         if ( pobj )
         {
-            wxTrackableBase *pt = wxTrackableCaster<T,wxHasBase<T,wxTrackableBase>::value >::Cast(pobj);
-            if( pt )
+            // Add ourselves to object tracker list
+            wxTrackable *pt = dynamic_cast<wxTrackable*>(pobj);
+            if ( pt )
             {
-                pt->AddNode( this );
+                pt->AddNode(this);
                 m_pobj = pobj;
             }
             else
             {
-                // If the tracked we want to track does not support wxTackableBase, then 
-                // log a message and keep the NULL object pointer. 
-                wxLogWarning( _T("wxWeakRef::Assign - Type does not provide wxTrackableBase - resetting tracked object") );
+                // If the object we want to track does not support wxTackable, then
+                // log a message and keep the NULL object pointer.
+                wxFAIL_MSG( "Tracked class should inherit from wxTrackable" );
             }
         }
+    }
+
+    void AssignCopy(const wxWeakRefDynamic& wr)
+    {
+        Assign(wr.m_pobj);
+    }
+
+    virtual void OnObjectDestroy()
+    {
+        wxASSERT_MSG( m_pobj, "tracked object should have removed us itself" );
+
+        m_pobj = NULL;
     }
 
     T *m_pobj;
 };
 
 // Provide some basic types of weak references
-class WXDLLIMPEXP_FWD_BASE wxObject;
 class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
-class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_BASE wxWindow;
 
-typedef wxWeakRef<wxObject>      wxObjectRef;
 typedef wxWeakRef<wxEvtHandler>  wxEvtHandlerRef;
 typedef wxWeakRef<wxWindow>      wxWindowRef;
 

@@ -39,6 +39,7 @@ class WXDLLIMPEXP_FWD_BASE wxList;
 #endif // wxUSE_GUI
 
 class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
+class wxEventConnectionRef;
 
 // ----------------------------------------------------------------------------
 // Event types
@@ -2259,43 +2260,10 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
-// wxEventConnectionRef: A class that represents all connections between two event 
-// handlers and enables automatic disconnect when an event handler sink goes 
-// out of scope. Each connection/disconnect increases/decreases ref count, and
-// when zero the node goes out of scope. 
-// ----------------------------------------------------------------------------
-
-struct wxEventConnectionRef : public wxTrackerNode {
-
-    wxEventConnectionRef() : m_src(0), m_sink(0), m_refCount(0) { }
-    wxEventConnectionRef( wxEvtHandler *src, wxEvtHandler *sink );
-    virtual ~wxEventConnectionRef();
-        
-    // The sink is being destroyed 
-    virtual void OnObjectDestroy( );
-    virtual wxTrackerNodeType GetType( ){ return EventConnectionRef; } 
-    
-    void IncRef( ) { m_refCount++; }
-    void DecRef( );
-
-protected:   
-    wxEvtHandler *m_src, *m_sink;
-    int m_refCount;
-    
-    friend class wxEvtHandler;
-    
-private:
-    // It makes no sense to copy objects of this class 
-    wxEventConnectionRef& operator = (const wxEventConnectionRef& WXUNUSED(other)) { wxFAIL; return *this; } 
-};
-
-
-
-// ----------------------------------------------------------------------------
 // wxEvtHandler: the base class for all objects handling wxWidgets events
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject, public wxTrackableBase
+class WXDLLIMPEXP_BASE wxEvtHandler : public wxObject, public wxTrackable
 {
 public:
     wxEvtHandler();
@@ -2463,10 +2431,59 @@ protected:
     virtual void *DoGetClientData() const;
 
     // Search tracker objects for event connection with this sink
-    wxEventConnectionRef *FindRefInTrackerList( wxEvtHandler *eventSink );
+    wxEventConnectionRef *FindRefInTrackerList(wxEvtHandler *eventSink);
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEvtHandler)
+};
+
+// ----------------------------------------------------------------------------
+// wxEventConnectionRef represents all connections between two event handlers
+// and enables automatic disconnect when an event handler sink goes out of
+// scope. Each connection/disconnect increases/decreases ref count, and
+// when it reaches zero the node goes out of scope.
+// ----------------------------------------------------------------------------
+
+class wxEventConnectionRef : public wxTrackerNode
+{
+public:
+    wxEventConnectionRef() : m_src(NULL), m_sink(NULL), m_refCount(0) { }
+    wxEventConnectionRef(wxEvtHandler *src, wxEvtHandler *sink)
+        : m_src(src), m_sink(sink), m_refCount(1)
+    {
+        m_sink->AddNode(this);
+    }
+
+    // The sink is being destroyed
+    virtual void OnObjectDestroy( )
+    {
+        if ( m_src )
+            m_src->OnSinkDestroyed( m_sink );
+        delete this;
+    }
+
+    virtual wxEventConnectionRef *ToEventConnection() { return this; }
+
+    void IncRef() { m_refCount++; }
+    void DecRef()
+    {
+        if ( !--m_refCount )
+        {
+            // The sink holds the only external pointer to this object
+            if ( m_sink )
+                m_sink->RemoveNode(this);
+            delete this;
+        }
+    }
+
+private:
+    wxEvtHandler *m_src,
+                 *m_sink;
+    int m_refCount;
+
+    friend class wxEvtHandler;
+
+    DECLARE_NO_ASSIGN_CLASS(wxEventConnectionRef)
 };
 
 // Post a message to the given eventhandler which will be processed during the

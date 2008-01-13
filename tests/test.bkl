@@ -70,6 +70,8 @@
             thread/queue.cpp
             uris/uris.cpp
             vectors/vectors.cpp
+            weakref/evtconnection.cpp
+            weakref/weakref.cpp
         </sources>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>

@@ -1,5 +1,4 @@
-
-\section{\class{wxTrackableBase}}\label{wxtrackablebase}
+\section{\class{wxTrackable}}\label{wxtrackable}
 
 Add-on base class for a trackable object. This class maintains
 an internal linked list of classes of type wxTrackerNode and
@@ -10,7 +9,7 @@ API. Its only use is by deriving another class from it to
 make it trackable.
 
 \begin{verbatim}
-class MyClass: public Foo, public TrackableBase
+class MyClass: public Foo, public wxTrackable
 {
    // whatever
 }
@@ -31,18 +30,7 @@ No base class
 
 \section{\class{wxTrackable}}\label{wxtrackable}
 
-The only difference to \helpref{wxTrackableBase}{wxtrackablebase} is
-that this class adds a virtual table to enable dynamic\_cast query for
-wxTrackable.
-
-\wxheading{Derived from}
-
-\helpref{wxTrackableBase}{wxtrackablebase}
-
 \wxheading{Include files}
 
 <tracker.h>
-
-\wxheading{Data structures}
-
 

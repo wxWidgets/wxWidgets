@@ -6,11 +6,11 @@ such as \helpref{wxEvtHandler}{wxevthandler}, \helpref{wxWindow}{wxwindow} and
 pointer, but when the object pointed is destroyed, the weak reference is
 automatically reset to a NULL pointer. 
 
-wxWeakref<T> can be used whenever one must keep a pointer to an object 
-that does not directly own, and that may be destroyed before the object 
+wxWeakRef<T> can be used whenever one must keep a pointer to an object 
+that one does not directly own, and that may be destroyed before the object
 holding the reference. 
 
-wxWeakref<T> is a small object and the mechanism behind it is fast 
+wxWeakRef<T> is a small object and the mechanism behind it is fast 
 (\textbf{O(1)}). So the overall cost of using it is small. 
 
 
@@ -31,9 +31,8 @@ wxWeakref<T> is a small object and the mechanism behind it is fast
     wxASSERT( wr==NULL );
 \end{verbatim}
 
-wxWeakref<T> works for any objects that are derived from 
-\helpref{wxTrackableBase}{wxtrackablebase} or \helpref{wxTrackable}{wxtrackable}.
-By default, wxEvtHandler and wxWindow derive from wxTrackableBase. However, 
+wxWeakRef<T> works for any objects that are derived from \helpref{wxTrackable}{wxtrackable}.
+By default, wxEvtHandler and wxWindow derive from wxTrackable. However, 
 wxObject does not, so types like \helpref{wxFont}{wxfont} and 
 \helpref{wxColour}{wxcolour} are not trackable. The example below shows how to
 create a wxObject derived class that is trackable: 
@@ -44,18 +43,11 @@ create a wxObject derived class that is trackable:
     }; 
 \end{verbatim}
 
-\textbf{Note:} Custom trackable objects should derive from wxTrackable 
-if one wants to reference them from a \texttt{wxWeakRef<wxObject>}. The 
-difference between the two base classes is that wxTrackableBase 
-has no virtual member functions (no VTable), and thus cannot be detected
-through \texttt{dynamic\_cast<>}.
-
 \wxheading{Predefined types}
 
 The following types of weak references are predefined: 
 
 \begin{verbatim}
-typedef wxWeakRef<wxObject>      wxObjectRef;
 typedef wxWeakRef<wxEvtHandler>  wxEvtHandlerRef;
 typedef wxWeakRef<wxWindow>      wxWindowRef;
 \end{verbatim}
@@ -134,7 +126,7 @@ method will cause an assert in debug mode.
 
 \membersection{wxWeakRef<T>::operator=}\label{wxweakrefoperatorassign}
 
-\func{T* operator}{operator=}{\param{T* }{pobj}}
+\func{T*}{operator=}{\param{T* }{pobj}}
 
 Releases the currently tracked object and starts tracking {\it pobj}.
 A weak reference may be reset by passing {\it NULL} as {\it pobj}.
@@ -142,10 +134,17 @@ A weak reference may be reset by passing {\it NULL} as {\it pobj}.
 
 \membersection{wxWeakRef<T>::operator =}\label{wxweakrefoperatorassign2}
 
-\func{T* operator}{operator =}{\param{wxWeakRef<T>\& }{wr}}
+\func{T*}{operator =}{\param{wxWeakRef<T>\& }{wr}}
 
 Release currently tracked object and start tracking the same object as
 the wxWeakRef {\it wr}.
+
+
+\membersection{wxWeakRef<T>::Release}\label{wxweakrefrelease}
+
+\func{void}{Release}{\void}
+
+Release currently tracked object and rests object reference.
 
 
 \membersection{wxWeakRef<T>::OnObjectDestroy}\label{wxweakrefonobjectdestroy}
