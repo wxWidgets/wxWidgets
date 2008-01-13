@@ -1029,6 +1029,8 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
                                                    static_cast<int>(1+rectangle->right-rectangle->left),static_cast<int>(1+rectangle->bottom-rectangle->top)),
                                             dataViewCustomRendererPtr->GetDC(),((state == kDataBrowserItemIsSelected) ? wxDATAVIEW_CELL_SELECTED : 0)));
   dataViewCustomRendererPtr->GetDC()->DestroyClippingRegion(); // probably not necessary
+  // avoid stale information about the DC carried over
+  dataViewCustomRendererPtr->SetDC( NULL );
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID, DataBrowserPropertyID, DataBrowserItemState, Rect const*, SInt16, Boolean) */
 
 Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserEditItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, CFStringRef theString, Rect* maxEditTextRect, Boolean* shrinkToFit)
