@@ -100,6 +100,8 @@
 
 #include "wx/string.h"
 
+#include <iostream>
+
 inline std::ostream& operator<<(std::ostream& o, const wxString& s)
 {
 #if wxUSE_UNICODE
@@ -108,6 +110,26 @@ inline std::ostream& operator<<(std::ostream& o, const wxString& s)
     return o << s.c_str();
 #endif
 }
+
+#ifdef wxLongLong_t
+
+#include "wx/longlong.h"
+
+inline std::ostream& operator<<(std::ostream& ostr, wxLongLong_t ll)
+{
+    ostr << wxLongLong(ll).ToString();
+
+    return ostr;
+}
+
+inline std::ostream& operator<<(std::ostream& ostr, unsigned wxLongLong_t llu)
+{
+    ostr << wxULongLong(llu).ToString();
+
+    return ostr;
+}
+
+#endif // wxLongLong_t
 
 #endif // !wxUSE_STD_IOSTREAM
 

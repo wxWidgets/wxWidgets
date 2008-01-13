@@ -424,7 +424,8 @@ void ArraysTestCase::wxStringArraySplitJoinTest()
                    wxT("<title>Initial page of Mozilla Firefox</title>")
                    wxT("</meta></head></html>");
 
-    for (size_t i=0; i < WXSIZEOF(separators); i++)
+    size_t i;
+    for (i = 0; i < WXSIZEOF(separators); i++)
     {
         wxArrayString arr = wxSplit(str, separators[i]);
         CPPUNIT_ASSERT( str == wxJoin(arr, separators[i]) );
@@ -441,7 +442,7 @@ void ArraysTestCase::wxStringArraySplitJoinTest()
         };
     wxArrayString theArr(WXSIZEOF(arr), arr);
 
-    for (size_t i=0; i < WXSIZEOF(separators); i++)
+    for (i = 0; i < WXSIZEOF(separators); i++)
     {
         wxString string = wxJoin(theArr, separators[i]);
         CPPUNIT_ASSERT( theArr == wxSplit(string, separators[i]) );

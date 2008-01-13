@@ -115,10 +115,12 @@ void VarArgTestCase::CharPrintf()
 
     // test char used as integer:
     #ifdef _MSC_VER
+        #pragma warning(disable:4305) // truncation of constant value in VC6
         #pragma warning(disable:4309) // truncation of constant value
     #endif
     c = 240;
     #ifdef _MSC_VER
+        #pragma warning(default:4305) // truncation of constant value in VC6
         #pragma warning(default:4309)
     #endif
     s.Printf("value is %i (int)", c);

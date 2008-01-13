@@ -64,7 +64,7 @@ private:
     // create the test file with the given contents
     static void CreateTestFile(const char *contents)
     {
-        return CreateTestFile(strlen(contents), contents);
+        CreateTestFile(strlen(contents), contents);
     }
 
     // create the test file with the given contents (version must be used if

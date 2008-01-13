@@ -3,7 +3,7 @@
 // Purpose:     Unit test for wxMessageQueue
 // Author:      Evgeniy Tarassov
 // Created:     31/10/2007
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Evgeniy Tarassov
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,14 +34,14 @@ class QueueTestCase : public CppUnit::TestCase
 public:
     QueueTestCase() { }
 
-private:
-    typedef wxMessageQueue<int> Queue;
-
     enum WaitTestType
     {
         WaitWithTimeout = 0,
         WaitInfinitlyLong
     };
+
+private:
+    typedef wxMessageQueue<int> Queue;
 
     // This class represents a thread that waits (following WaitTestType type)
     // for exactly maxMsgCount messages from its message queue and if another

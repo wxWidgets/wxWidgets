@@ -473,6 +473,12 @@ void HashesTestCase::LLongHashMapTest()  { HashMapTest<myLLongHashMap>();    }
 void HashesTestCase::ULLongHashMapTest() { HashMapTest<myULLongHashMap>();   }
 #endif
 
+#ifdef __VISUALC__
+    #if __VISUALC__ <= 1200
+        #pragma warning(disable:4284) // operator->() returns a non-UDT
+    #endif
+#endif // __VISUALC__
+
 // test compilation of basic set types
 WX_DECLARE_HASH_SET( int*, wxPointerHash, wxPointerEqual, myPtrHashSet );
 WX_DECLARE_HASH_SET( long, wxIntegerHash, wxIntegerEqual, myLongHashSet );

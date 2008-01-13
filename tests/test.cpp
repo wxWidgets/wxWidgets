@@ -29,10 +29,7 @@ using CppUnit::TestFactoryRegistry;
 using CppUnit::TextUi::TestRunner;
 using CppUnit::CompilerOutputter;
 
-using std::string;
-using std::vector;
-using std::auto_ptr;
-using std::cout;
+using namespace std;
 
 #if wxUSE_GUI
     typedef wxApp TestAppBase;

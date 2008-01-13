@@ -36,8 +36,6 @@ class AtomicTestCase : public CppUnit::TestCase
 public:
     AtomicTestCase() { }
 
-private:
-
     enum ETestType
     {
         IncAndDecMixed,
@@ -45,6 +43,7 @@ private:
         DecOnly
     };
 
+private:
     class MyThread : public wxThread
     {
     public:

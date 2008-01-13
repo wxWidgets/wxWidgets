@@ -1202,7 +1202,8 @@ void CorruptionTestCase::runTest()
     wxFileOffset len = in.GetLength();
 
     // try flipping one byte in the archive
-    for (int pos = 0; pos < len; pos++) {
+    int pos;
+    for (pos = 0; pos < len; pos++) {
         char n = in[pos];
         in[pos] = ~n;
         ExtractArchive(in);
@@ -1211,7 +1212,7 @@ void CorruptionTestCase::runTest()
     }
 
     // try zeroing one byte in the archive
-    for (int pos = 0; pos < len; pos++) {
+    for (pos = 0; pos < len; pos++) {
         char n = in[pos];
         in[pos] = 0;
         ExtractArchive(in);

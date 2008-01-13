@@ -463,8 +463,8 @@ void VsnprintfTestCase::WrongFormatStrings()
 
 void VsnprintfTestCase::BigToSmallBuffer()
 {
-    char bufa[1024], bufa2[16], bufa3[4], bufa4;
-
+    // VC6 can't compile this code
+#if !defined(__VISUALC__) || (__VISUALC__ >= 1310)
 #if wxUSE_UNICODE
     wchar_t bufw[1024], bufw2[16], bufw3[4], bufw4;
     Misc(bufw, 1024);
@@ -473,10 +473,12 @@ void VsnprintfTestCase::BigToSmallBuffer()
     Misc(&bufw4, 1);
 #endif // wxUSE_UNICODE
 
+    char bufa[1024], bufa2[16], bufa3[4], bufa4;
     Misc(bufa, 1024);
     Misc(bufa2, 16);
     Misc(bufa3, 4);
     Misc(&bufa4, 1);
+#endif // !VC6
 }
 
 void VsnprintfTestCase::DoMisc(
