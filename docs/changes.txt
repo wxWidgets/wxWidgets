@@ -264,6 +264,8 @@ All (GUI):
 - Added support for resizing wxWizard bitmaps to the current page height,
   via SetBitmapPlacement, SetBitmapBackgroundColour and SetMinimumBitmapWidth.
   Also made it easier to derive from wxWizard and override behaviour.
+- Added wxWrapSizer
+- Made wxSizer::Fit() set the client size of the target window
 
 wxGTK:
 
