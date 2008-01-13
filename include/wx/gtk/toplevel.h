@@ -131,7 +131,7 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
-    // override these methods to take into account tool/menu/statusbars
+    virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
 
     // string shown in the title bar

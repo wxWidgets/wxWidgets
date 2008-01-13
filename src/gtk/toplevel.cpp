@@ -955,6 +955,14 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     }
 }
 
+void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
+{
+    if (m_deferShow && !m_isShown)
+        // Since client size is being explicitly set, don't change it later
+        m_deferShow = false;
+    wxTopLevelWindowBase::DoSetClientSize(width, height);
+}
+
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
 {
     wxASSERT_MSG(m_widget, wxT("invalid frame"));
