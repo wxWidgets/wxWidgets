@@ -838,7 +838,6 @@ wxSize wxSizer::Fit( wxWindow *window )
 {
     // take the min size by default and limit it by max size
     wxSize size = GetMinWindowSize(window);
-    wxSize sizeMax = GetMaxWindowSize(window);
 
     wxTopLevelWindow *tlw = wxDynamicCast(window, wxTopLevelWindow);
     if ( tlw )
@@ -846,31 +845,52 @@ wxSize wxSizer::Fit( wxWindow *window )
         // hack for small screen devices where TLWs are always full screen
         if ( tlw->IsAlwaysMaximized() )
         {
-            size = tlw->GetSize();
+            // do nothing
+            return tlw->GetSize();
         }
-        else // normal situation
+        
+        // limit the window to the size of the display it is on
+        int disp = wxDisplay::GetFromWindow(window);
+        if ( disp == wxNOT_FOUND )
         {
-            // limit the window to the size of the display it is on
-            int disp = wxDisplay::GetFromWindow(window);
-            if ( disp == wxNOT_FOUND )
-            {
-                // or, if we don't know which one it is, of the main one
-                disp = 0;
-            }
-
-            sizeMax = wxDisplay(disp).GetClientArea().GetSize();
+            // or, if we don't know which one it is, of the main one
+            disp = 0;
         }
+
+        wxSize sizeMax = wxDisplay(disp).GetClientArea().GetSize();
+        
+        // space for decorations and toolbars etc.
+        wxSize tlw_client_size = tlw->GetClientSize();
+        wxSize tlw_size = tlw->GetSize();
+        sizeMax.x -= tlw_size.x - tlw_client_size.x;
+        sizeMax.y -= tlw_size.y - tlw_client_size.y;
+        
+        if ( sizeMax.x != wxDefaultCoord && size.x > sizeMax.x )
+                size.x = sizeMax.x;
+        if ( sizeMax.y != wxDefaultCoord && size.y > sizeMax.y )
+                size.y = sizeMax.y;
+
+        // set client size
+        tlw->SetClientSize( size );
+        
+        // return entire size
+        return tlw->GetSize();
     }
+    else
+    {
+        wxSize sizeMax = GetMaxWindowSize(window);
+        
+        if ( sizeMax.x != wxDefaultCoord && size.x > sizeMax.x )
+                size.x = sizeMax.x;
+        if ( sizeMax.y != wxDefaultCoord && size.y > sizeMax.y )
+                size.y = sizeMax.y;
 
-    if ( sizeMax.x != wxDefaultCoord && size.x > sizeMax.x )
-        size.x = sizeMax.x;
-    if ( sizeMax.y != wxDefaultCoord && size.y > sizeMax.y )
-        size.y = sizeMax.y;
+        // set client size
+        window->SetClientSize( size );
 
-
-    window->SetSize( size );
-
-    return size;
+        // return entire size
+        return window->GetSize();
+    }
 }
 
 void wxSizer::FitInside( wxWindow *window )
