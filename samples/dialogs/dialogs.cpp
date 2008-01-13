@@ -1265,7 +1265,7 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
         main_sizer->Add( button_sizer, 0, wxALL|wxGROW, 5 );
         
     SetSizer( main_sizer );
-    main_sizer->SetSizeHints( this );
+    main_sizer->Fit( this );
 }
     
 void TestDefaultActionDialog::OnListBoxDClick(wxCommandEvent& event)
