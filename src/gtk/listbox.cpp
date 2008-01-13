@@ -203,6 +203,7 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
         int index = listbox->GetSelection();
         if (index != wxNOT_FOUND)
         {
+        
             wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
             event.SetEventObject( listbox );
             
@@ -221,11 +222,12 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
             else if ( listbox->HasClientUntypedData() )
                 event.SetClientData( gtk_tree_entry_get_userdata(entry) );
 
-            bool ret = listbox->HandleWindowEvent( event );
+            /* bool ret = */ listbox->HandleWindowEvent( event );
 
             g_object_unref (entry);
             
-            if (!ret)
+//          wxMac and wxMSW always invoke default action
+//          if (!ret)
             {
                 // DClick not handled -> invoke default action
                 wxWindow *tlw = wxGetTopLevelParent( listbox );
