@@ -1660,14 +1660,7 @@ wxDataViewTreeCtrl::wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
     AssociateModel( store );
     store->DecRef();
     
-#if !defined(__WXGTK20__) || defined(wxUSE_GENERICDATAVIEWCTRL)
-    wxDataViewColumn *col = AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_INERT,40);
-    
-    wxSize cient_size = GetClientSize();
-    col->SetWidth( size.x );
-#else
-    AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_INERT,40);
-#endif    
+    AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_INERT,-1);
 }
 
 wxDataViewTreeCtrl::~wxDataViewTreeCtrl()
@@ -1786,10 +1779,11 @@ void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 
 void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
 {
-#if !defined(__WXGTK20__) || defined(wxUSE_GENERICDATAVIEWCTRL)
+#if defined(wxUSE_GENERICDATAVIEWCTRL)
     wxSize size = GetClientSize();
     wxDataViewColumn *col = GetColumn( 0 );
-    if (col) col->SetWidth( size.x );
+    if (col) 
+       col->SetWidth( size.x );
 #endif
     event.Skip( true );
 }

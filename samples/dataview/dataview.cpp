@@ -28,6 +28,9 @@
 #include "wx/dataview.h"
 #include "wx/spinctrl.h"
 
+#include "wx/ptr_shrd.h"
+#include "wx/vector.h"
+
 #ifndef __WXMSW__
     #include "../sample.xpm"
 #endif
@@ -64,10 +67,8 @@ static const char *small1_xpm[] = {
 };
 
 
-
 #define DEFAULT_ALIGN                   wxALIGN_LEFT
 #define DATAVIEW_DEFAULT_STYLE          (wxDV_MULTIPLE|wxDV_HORIZ_RULES|wxDV_VERT_RULES)
-
 
 // -------------------------------------
 // MyMusicModel
@@ -803,7 +804,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxBoxSizer *bottom_sizer = new wxBoxSizer( wxHORIZONTAL );
     
-    m_log = new wxTextCtrl( this, -1,wxString(), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    m_log = new wxTextCtrl( this, -1, wxString(), wxDefaultPosition, wxSize(100,200), wxTE_MULTILINE );
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_log));
     wxLogMessage(_("This is the log window"));
 
@@ -812,23 +813,23 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     // wxDataViewTreeStore
 
     wxDataViewCtrl *treectrl = new wxDataViewCtrl( this, -1, 
-        wxDefaultPosition, wxSize(300,200), wxDV_NO_HEADER );
+        wxDefaultPosition, wxSize(100,200), wxDV_NO_HEADER );
         
     wxDataViewTreeStore *store = new wxDataViewTreeStore;
     wxDataViewItem parent = store->AppendContainer( wxDataViewItem(0),wxT("Root 1"), wxIcon(small1_xpm) );
     wxDataViewItem child = store->AppendItem( parent,wxT("Child 1"), wxIcon(small1_xpm) );
     child = store->AppendItem( parent,wxT("Child 2"), wxIcon(small1_xpm) );
-    child = store->AppendItem( parent,wxT("Child 3"), wxIcon(small1_xpm) );
+    child = store->AppendItem( parent,wxT("Child 3, very long, long, long, long"), wxIcon(small1_xpm) );
     treectrl->AssociateModel( store );
     store->DecRef();
 
-    treectrl->AppendIconTextColumn(wxT("no label"), 0, wxDATAVIEW_CELL_INERT, 200 );
+    treectrl->AppendIconTextColumn(wxT("no label"), 0, wxDATAVIEW_CELL_INERT, -1 );
 
-    bottom_sizer->Add( treectrl );
+    bottom_sizer->Add( treectrl, 1 );
 
     // wxDataViewTreeCtrl
 
-    wxDataViewTreeCtrl *treectrl2 = new wxDataViewTreeCtrl( this, -1, wxDefaultPosition, wxSize(300,200) );
+    wxDataViewTreeCtrl *treectrl2 = new wxDataViewTreeCtrl( this, -1, wxDefaultPosition, wxSize(100,200) );
     
     wxImageList *ilist = new wxImageList( 16, 16 );
     ilist->Add( wxIcon(small1_xpm) );
@@ -837,9 +838,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     parent = treectrl2->AppendContainer( wxDataViewItem(0),wxT("Root 1"), 0 );
     child = treectrl2->AppendItem( parent,wxT("Child 1"), 0 );
     child = treectrl2->AppendItem( parent,wxT("Child 2"), 0 );
-    child = treectrl2->AppendItem( parent,wxT("Child 3"), 0 );
+    child = treectrl2->AppendItem( parent,wxT("Child 3, very long, long, long, long"), 0 );
 
-    bottom_sizer->Add( treectrl2 );
+    bottom_sizer->Add( treectrl2, 1 );
     
     // main sizer
     

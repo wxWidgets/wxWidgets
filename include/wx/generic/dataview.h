@@ -357,6 +357,7 @@ private:
     wxAlignment              m_align;
     wxString                 m_title;
     bool                     m_ascending;
+    bool                     m_autosize;
 
     void Init(int width);
 
@@ -478,11 +479,11 @@ public:     // utility functions not part of the API
     wxWindow *GetMainWindow() { return (wxWindow*) m_clientArea; }
 
 private:
-    wxDataViewColumnList m_cols;
-    wxDataViewModelNotifier *m_notifier;
-    wxDataViewMainWindow        *m_clientArea;
-    wxDataViewHeaderWindow      *m_headerArea;
-    wxDataViewColumn* m_sortingColumn;
+    wxDataViewColumnList      m_cols;
+    wxDataViewModelNotifier  *m_notifier;
+    wxDataViewMainWindow     *m_clientArea;
+    wxDataViewHeaderWindow   *m_headerArea;
+    wxDataViewColumn         *m_sortingColumn;
 
 private:
     void OnSize( wxSizeEvent &event );

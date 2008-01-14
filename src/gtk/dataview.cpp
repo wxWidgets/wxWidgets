@@ -2149,7 +2149,7 @@ bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
     return true;
 }
 
-bool wxDataViewIconTextRenderer::GetValue( wxVariant &value ) const
+bool wxDataViewIconTextRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
 {
     return false;
 }
@@ -2182,12 +2182,14 @@ wxSize wxDataViewIconTextRenderer::GetSize() const
     return size;
 }
 
-wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl( 
+    wxWindow *WXUNUSED(parent), wxRect WXUNUSED(labelRect), const wxVariant &WXUNUSED(value) )
 {
     return NULL;
 }
 
-bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( 
+   wxControl* WXUNUSED(editor), wxVariant &WXUNUSED(value) )
 {
     return false;
 }
@@ -2198,7 +2200,7 @@ bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVa
 
 
 static gboolean
-gtk_dataview_header_button_press_callback( GtkWidget *widget,
+gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
                                            GdkEventButton *gdk_event,
                                            wxDataViewColumn *column )
 {
@@ -2239,7 +2241,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 }
 
 
-static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
+static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
                             GtkCellRenderer *renderer,
                             GtkTreeModel *model,
                             GtkTreeIter *iter,
@@ -2435,14 +2437,7 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
     SetFlags( flags );
     SetAlignment( align );
 
-    // NOTE: we prefer not to call SetMinWidth(wxDVC_DEFAULT_MINWIDTH);
-    //       as GTK+ is smart and unless explicitely told, will set the minimal
-    //       width to the title's lenght, which is a better default
-
-    // the GTK_TREE_VIEW_COLUMN_FIXED is required by the "fixed height" mode
-    // that we use for the wxDataViewCtrl
-    gtk_tree_view_column_set_fixed_width( column, width < 0 ? wxDVC_DEFAULT_WIDTH : width );
-    gtk_tree_view_column_set_sizing( column, GTK_TREE_VIEW_COLUMN_FIXED );
+    SetWidth( width );
 
     gtk_tree_view_column_pack_end( column, renderer, TRUE );
 
@@ -2646,7 +2641,16 @@ int wxDataViewColumn::GetWidth() const
 
 void wxDataViewColumn::SetWidth( int width )
 {
-    gtk_tree_view_column_set_fixed_width( GTK_TREE_VIEW_COLUMN(m_column), width );
+    if (width < 0)
+    {
+        gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_AUTOSIZE );
+    }
+    else
+    {
+        gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_FIXED );
+            
+        gtk_tree_view_column_set_fixed_width( GTK_TREE_VIEW_COLUMN(m_column), width );
+    }
 }
 
 void wxDataViewColumn::SetReorderable( bool reorderable )
@@ -3337,7 +3341,7 @@ wxGtkTreeModelNode *wxDataViewCtrlInternal::FindParentNode( const wxDataViewItem
 //-----------------------------------------------------------------------------
 
 static void
-wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCtrl *dv )
+wxdataview_selection_changed_callback( GtkTreeSelection* WXUNUSED(selection), wxDataViewCtrl *dv )
 {
     if (!GTK_WIDGET_REALIZED(dv->m_widget))
         return;
@@ -3349,8 +3353,8 @@ wxdataview_selection_changed_callback( GtkTreeSelection* selection, wxDataViewCt
 }
 
 static void
-wxdataview_row_activated_callback( GtkTreeView* treeview, GtkTreePath *path,
-                                   GtkTreeViewColumn *column, wxDataViewCtrl *dv )
+wxdataview_row_activated_callback( GtkTreeView* WXUNUSED(treeview), GtkTreePath *path,
+                                   GtkTreeViewColumn *WXUNUSED(column), wxDataViewCtrl *dv )
 {
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, dv->GetId() );
 
@@ -3363,8 +3367,8 @@ wxdataview_row_activated_callback( GtkTreeView* treeview, GtkTreePath *path,
 }
 
 static gboolean
-wxdataview_test_expand_row_callback( GtkTreeView* treeview, GtkTreeIter* iter,
-                                     GtkTreePath *path, wxDataViewCtrl *dv )
+wxdataview_test_expand_row_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
+                                     GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, dv->GetId() );
 
@@ -3377,8 +3381,8 @@ wxdataview_test_expand_row_callback( GtkTreeView* treeview, GtkTreeIter* iter,
 }
 
 static void
-wxdataview_row_expanded_callback( GtkTreeView* treeview, GtkTreeIter* iter,
-                                  GtkTreePath *path, wxDataViewCtrl *dv )
+wxdataview_row_expanded_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
+                                  GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, dv->GetId() );
 
@@ -3389,8 +3393,8 @@ wxdataview_row_expanded_callback( GtkTreeView* treeview, GtkTreeIter* iter,
 }
 
 static gboolean
-wxdataview_test_collapse_row_callback( GtkTreeView* treeview, GtkTreeIter* iter,
-                                       GtkTreePath *path, wxDataViewCtrl *dv )
+wxdataview_test_collapse_row_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
+                                       GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, dv->GetId() );
 
@@ -3403,8 +3407,8 @@ wxdataview_test_collapse_row_callback( GtkTreeView* treeview, GtkTreeIter* iter,
 }
 
 static void
-wxdataview_row_collapsed_callback( GtkTreeView* treeview, GtkTreeIter* iter,
-                                   GtkTreePath *path, wxDataViewCtrl *dv )
+wxdataview_row_collapsed_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
+                                   GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, dv->GetId() );
 
@@ -3436,7 +3440,7 @@ static void wxInsertChildInDataViewCtrl( wxWindowGTK* parent, wxWindowGTK* child
 
 static
 void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
-                                     GtkAllocation *alloc,
+                                     GtkAllocation *WXUNUSED(gtk_alloc),
                                      wxDataViewCtrl *win )
 {
     wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
@@ -3464,7 +3468,7 @@ void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_dataview_motion_notify_callback( GtkWidget *widget,
+gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
                                      GdkEventMotion *gdk_event,
                                      wxDataViewCtrl *dv )
 {
@@ -3600,7 +3604,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     gtk_tree_view_enable_model_drag_source( GTK_TREE_VIEW(m_treeview), 
        GDK_BUTTON1_MASK, &gs_target, 1, (GdkDragAction) GDK_ACTION_COPY );
     
-
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
         gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), TRUE );
@@ -3718,6 +3721,15 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
 
     m_cols.Append( col );
 
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        if (gtk_tree_view_column_get_sizing( GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) ) !=
+               GTK_TREE_VIEW_COLUMN_FIXED)
+           gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), FALSE );
+    }
+#endif
+
     gtk_tree_view_append_column( GTK_TREE_VIEW(m_treeview),
                                  GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) );
 
@@ -3730,6 +3742,15 @@ bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
         return false;
 
     m_cols.Insert( col );
+
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        if (gtk_tree_view_column_get_sizing( GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()) ) !=
+               GTK_TREE_VIEW_COLUMN_FIXED)
+           gtk_tree_view_set_fixed_height_mode( GTK_TREE_VIEW(m_treeview), FALSE );
+    }
+#endif
 
     gtk_tree_view_insert_column( GTK_TREE_VIEW(m_treeview),
                                  GTK_TREE_VIEW_COLUMN(col->GetGtkHandle()), 0 );

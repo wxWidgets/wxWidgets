@@ -1147,6 +1147,8 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     SetTitle(title);
     SetFlags(flags);
 
+    m_autosize = width < 0;  // TODO
+    
     Init(width < 0 ? wxDVC_DEFAULT_WIDTH : width);
 }
 
