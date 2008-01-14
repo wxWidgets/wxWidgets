@@ -110,6 +110,8 @@ All (GUI):
 - Improve wximage::ResampleBox() (Mihai Ciocarlie).
 - Implemented ScrollList() in generic wxListCtrl (Tim Kosse).
 - SaveAs in docview takes into account path now.
+- Fixed wxXmlResource::GetText() to convert data to current locale's
+  charset in ANSI build.
 
 All (Unix):
 
