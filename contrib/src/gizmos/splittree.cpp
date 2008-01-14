@@ -98,6 +98,26 @@ void wxRemotelyScrolledTreeCtrl::HideVScrollbar()
 #endif
 }
 
+void wxRemotelyScrolledTreeCtrl::DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const
+{
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
+    if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
+    {
+        wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
+        * yy = 0;
+        int yyy;
+        win->wxGenericTreeCtrl::DoCalcScrolledPosition(x, y, xx, & yyy);
+
+        wxScrolledWindow* scrolledWindow = GetScrolledWindow();
+        if (scrolledWindow)
+        {
+            int xxx;
+            scrolledWindow->DoCalcScrolledPosition(x, y, & xxx, yy);
+        }
+    }
+#endif
+}
+
 void wxRemotelyScrolledTreeCtrl::SetScrollbar(int orient,
                                int pos,
                                int thumbVisible,
@@ -132,7 +152,7 @@ void wxRemotelyScrolledTreeCtrl::SetScrollbars(
     if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
     {
         wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
-        win->wxGenericTreeCtrl::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY, noUnitsX, 0, xPos, 0, /* noRefresh */ true);
+        win->wxGenericTreeCtrl::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY, noUnitsX, noUnitsY, xPos, yPos, /* noRefresh */ true);
 
         wxScrolledWindow* scrolledWindow = GetScrolledWindow();
         if (scrolledWindow)
