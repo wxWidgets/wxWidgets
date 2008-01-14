@@ -44,8 +44,10 @@ public:
            ,int        nWidth
            ,int        nHeight
           );
-    inline wxIcon(const char** ppData) { CreateIconFromXpm(ppData); }
-    inline wxIcon(char** ppData) { CreateIconFromXpm((const char**)ppData); }
+    wxIcon(const char* const* ppData) { CreateIconFromXpm(ppData); }
+#ifdef wxNEEDS_CHARPP
+    wxIcon(char** ppData) { CreateIconFromXpm(wx_const_cast(const char* const*, ppData)); }
+#endif
     wxIcon( const wxString& rName
            ,long            lFlags = wxBITMAP_TYPE_ICO_RESOURCE
            ,int             nDesiredWidth = -1
@@ -77,7 +79,7 @@ protected:
     {
         return new wxIconRefData;
     }
-    void    CreateIconFromXpm(const char **ppData);
+    void    CreateIconFromXpm(const char* const* ppData);
 
 private:
     bool                            m_bIsXpm;

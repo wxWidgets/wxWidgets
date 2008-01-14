@@ -25,15 +25,14 @@ public:
              const char maskBits[] = NULL);
 
     wxCursor(const wxImage & image) ;
-    wxCursor(const char **bits) ;
-    wxCursor(char **bits) ;
+    wxCursor(const char* const* bits);
     wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_MACCURSOR_RESOURCE,
              int hotSpotX = 0, int hotSpotY = 0);
 
     wxCursor(int cursor_type);
     virtual ~wxCursor();
 
-    bool CreateFromXpm(const char **bits) ;
+    bool CreateFromXpm(const char* const* bits);
 
     void MacInstall() const ;
 

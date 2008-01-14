@@ -128,7 +128,7 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 #endif // __WXMICROWIN__
 }
 
-void wxIcon::CreateIconFromXpm(const char **data)
+void wxIcon::CreateIconFromXpm(const char* const* data)
 {
     wxBitmap bmp(data);
     CopyFromBitmap(bmp);

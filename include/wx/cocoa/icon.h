@@ -23,8 +23,7 @@ class WXDLLEXPORT wxIcon : public wxGDIObject
 public:
     wxIcon();
 
-    wxIcon(const char **data) { CreateFromXpm(data); }
-    wxIcon(char **data) { CreateFromXpm((const char**)data); }
+    wxIcon(const char* const* data) { CreateFromXpm(data); }
     wxIcon(const char bits[], int width , int height );
     wxIcon(const wxString& name, int flags = wxBITMAP_TYPE_ICON_RESOURCE,
         int desiredWidth = -1, int desiredHeight = -1);
@@ -52,7 +51,7 @@ public:
     int GetHeight() const;
 
     WX_NSImage GetNSImage() const;
-    bool CreateFromXpm(const char **bits);
+    bool CreateFromXpm(const char* const* bits);
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

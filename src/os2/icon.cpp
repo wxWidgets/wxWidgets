@@ -85,9 +85,7 @@ wxIcon::~wxIcon()
 {
 }
 
-void wxIcon::CreateIconFromXpm(
-  const char**                      ppData
-)
+void wxIcon::CreateIconFromXpm(const char* const* ppData)
 {
     wxBitmap                        vBmp(ppData);
 

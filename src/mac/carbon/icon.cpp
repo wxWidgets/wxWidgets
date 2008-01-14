@@ -90,13 +90,7 @@ wxIcon::wxIcon( const char bits[], int width, int height )
     CopyFromBitmap( bmp ) ;
 }
 
-wxIcon::wxIcon( const char **bits )
-{
-    wxBitmap bmp( bits ) ;
-    CopyFromBitmap( bmp ) ;
-}
-
-wxIcon::wxIcon( char **bits )
+wxIcon::wxIcon(const char* const* bits)
 {
     wxBitmap bmp( bits ) ;
     CopyFromBitmap( bmp ) ;

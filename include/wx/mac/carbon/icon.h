@@ -20,8 +20,7 @@ class WXDLLEXPORT wxIcon : public wxGDIObject
 public:
     wxIcon();
 
-    wxIcon(const char **data);
-    wxIcon(char **data);
+    wxIcon(const char* const* data);
     wxIcon(const char bits[], int width , int height );
     wxIcon(const wxString& name, int flags = wxBITMAP_TYPE_ICON_RESOURCE,
          int desiredWidth = -1, int desiredHeight = -1);

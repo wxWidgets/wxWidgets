@@ -110,7 +110,7 @@ wxGDIRefData *wxIcon::CloneGDIRefData(const wxGDIRefData *data) const
     return new wxIconRefData(*wx_static_cast(const wxIconRefData *, data));
 }
 
-bool wxIcon::CreateFromXpm(const char **xpm)
+bool wxIcon::CreateFromXpm(const char* const* xpm)
 {
     wxBitmap bitmap(xpm);
     CopyFromBitmap(bitmap);

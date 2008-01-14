@@ -48,10 +48,10 @@ public:
     wxIcon(const char bits[], int width, int height);
 
         // from XPM data
-    wxIcon(const char **data) { CreateIconFromXpm(data); }
-
-    wxIcon(char **data) { CreateIconFromXpm((const char **)data); }
-
+    wxIcon(const char* const* data) { CreateIconFromXpm(data); }
+#ifdef wxNEEDS_CHARPP
+    wxIcon(char **data) { CreateIconFromXpm(wx_const_cast(const char* const*, data)); }
+#endif
         // from resource/file
     wxIcon(const wxString& name,
            long type = wxBITMAP_TYPE_ICO_RESOURCE,
@@ -85,7 +85,7 @@ protected:
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
     // create from XPM data
-    void CreateIconFromXpm(const char **data);
+    void CreateIconFromXpm(const char* const* data);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxIcon)
