@@ -967,7 +967,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
 #else
             // The string is internally stored as UTF-8, we have to convert
             // it into system's default encoding so that it can be displayed:
-            return wxString(str2.mb_str(wxConvUTF8), wxConvLocal);
+            return wxString(str2.wc_str(wxConvUTF8), wxConvLocal);
 #endif
         }
     }
