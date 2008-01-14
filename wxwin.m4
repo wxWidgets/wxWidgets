@@ -937,13 +937,6 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
         dnl to their final values if they were set to 'auto'
         if test "$DEBUG" = "auto"; then
             DEBUG=$WX_DEBUG
-
-            dnl in case user wants a BUILD=debug/release var...
-            if test "$DEBUG" = "1"; then
-                BUILD="debug"
-            elif test "$DEBUG" = ""; then
-                BUILD="release"
-            fi
         fi
         if test "$UNICODE" = "auto"; then
             UNICODE=$WX_UNICODE
@@ -953,6 +946,13 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
         fi
         if test "$TOOLKIT" = "auto"; then
             TOOLKIT=$WX_PORT
+        fi
+
+        dnl in case the user needs a BUILD=debug/release var...
+        if test "$DEBUG" = "1"; then
+            BUILD="debug"
+        elif test "$DEBUG" = ""; then
+            BUILD="release"
         fi
 
         dnl respect the DEBUG variable adding the optimize/debug flags
