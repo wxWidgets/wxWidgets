@@ -87,9 +87,14 @@ bool wxToolbook::Create(wxWindow *parent,
                             wxDefaultValidator, name) )
         return false;
 
-    int orient = wxTB_HORIZONTAL;
-    if ( (style & (wxBK_LEFT | wxBK_RIGHT)) != 0)
-        orient = wxTB_VERTICAL;
+    int tbFlags = wxTB_TEXT | wxTB_FLAT | wxBORDER_NONE;
+    if ( (style & (wxBK_LEFT | wxBK_RIGHT)) != 0 )
+        tbFlags |= wxTB_VERTICAL;
+    else
+        tbFlags |= wxTB_HORIZONTAL;
+
+    if ( style & wxTBK_HORZ_LAYOUT )
+        tbFlags |= wxTB_HORZ_LAYOUT;
 
     // TODO: make more configurable
 
@@ -102,7 +107,7 @@ bool wxToolbook::Create(wxWindow *parent,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    orient|wxTB_TEXT|wxTB_FLAT|wxNO_BORDER
+                    tbFlags
                  );
     }
     else
@@ -114,7 +119,7 @@ bool wxToolbook::Create(wxWindow *parent,
                     wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    orient|wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER|wxNO_BORDER
+                    tbFlags | wxTB_NODIVIDER
                  );
     }
 

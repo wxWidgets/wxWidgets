@@ -28,6 +28,9 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING;
 // Use wxButtonToolBar
 #define wxBK_BUTTONBAR            0x0100
 
+// Use wxTB_HORZ_LAYOUT style for the controlling toolbar
+#define wxTBK_HORZ_LAYOUT          0x8000
+
 // ----------------------------------------------------------------------------
 // wxToolbook
 // ----------------------------------------------------------------------------
