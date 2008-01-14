@@ -99,7 +99,7 @@ bool wxToolbook::Create(wxWindow *parent,
     // TODO: make more configurable
 
 #if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
-    if (style & wxBK_BUTTONBAR)
+    if (style & wxTBK_BUTTONBAR)
     {
         m_bookctrl = new wxButtonToolBar
                  (

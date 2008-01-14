@@ -41,12 +41,15 @@ wxBookCtrlBase (see \helpref{wxBookCtrl overview}{wxbookctrloverview})\\
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxBK\_DEFAULT}}{Choose the default location for the
-labels depending on the current platform (currently always the top).}
+\twocolitem{\windowstyle{wxTBK\_BUTTONBAR}}{Use wxButtonToolBar-based
+implementation under Mac OS (ignored under other platforms.)}
 \twocolitem{\windowstyle{wxTBK\_HORZ\_LAYOUT}}{Shows the text and the icons
 alongside, not vertically stacked (only implement under Windows and GTK 2
 platforms as it relies on \texttt{wxTB\_HORZ\_LAYOUT} flag support).}
 \end{twocollist}
+
+The common wxBookCtrl styles described in this control 
+\helpref{overview}{wxbookctrloverview} are also supported.
 
 \wxheading{See also}
 

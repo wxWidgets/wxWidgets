@@ -151,7 +151,7 @@ wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 #if wxUSE_TOOLBOOK
 #if defined(__WXMAC__) && wxUSE_TOOLBAR && wxUSE_BMPBUTTON
     if (GetSheetStyle() & wxPROPSHEET_BUTTONTOOLBOOK)
-        bookCtrl = new wxToolbook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style|wxBK_BUTTONBAR );
+        bookCtrl = new wxToolbook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style|wxTBK_BUTTONBAR );
     else
 #endif
     if ((GetSheetStyle() & wxPROPSHEET_TOOLBOOK) || (GetSheetStyle() & wxPROPSHEET_BUTTONTOOLBOOK))
