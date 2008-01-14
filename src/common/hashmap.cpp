@@ -103,7 +103,7 @@ void _wxHashTableBase2::DeleteNodes( size_t buckets,
 
         while( node )
         {
-            tmp = node->m_nxt;
+            tmp = node->m_next;
             dtor( node );
             node = tmp;
         }
@@ -126,9 +126,9 @@ void _wxHashTableBase2::CopyHashTable( _wxHashTable_NodeBase** srcTable,
         {
             size_t bucket = func( dst, node );
 
-            nextnode = node->m_nxt;
+            nextnode = node->m_next;
             _wxHashTable_NodeBase* newnode = proc( node );
-            newnode->m_nxt = dstTable[bucket];
+            newnode->m_next = dstTable[bucket];
             dstTable[bucket] = newnode;
         }
     }
