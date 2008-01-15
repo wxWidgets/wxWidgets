@@ -1188,6 +1188,9 @@ dnl We need to quote the next line where we don't need macros and do need [] in 
     else
         wxUSE_MACOSX_VERSION_MIN=
     fi
+elif test "x$wxUSE_MACOSX_VERSION_MIN" == "x"; then
+    # otherwise configure stops on leopard for universal_binary
+    wxUSE_MACOSX_VERSION_MIN=10.4
 fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then

@@ -17703,6 +17703,9 @@ echo "$as_me: WARNING: Could not determine deployment target from SDKSettings.pl
     else
         wxUSE_MACOSX_VERSION_MIN=
     fi
+elif test "x$wxUSE_MACOSX_VERSION_MIN" == "x"; then
+    # otherwise configure stops on leopard for universal_binary
+    wxUSE_MACOSX_VERSION_MIN=10.4
 fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
