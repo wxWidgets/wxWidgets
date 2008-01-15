@@ -246,9 +246,27 @@ void wxHtmlTagsCache::QueryTag(const wxString::const_iterator& at,
         }
         while (Cache()[m_CachePos].Key != at);
     }
-    *end1 = Cache()[m_CachePos].End1;
-    *end2 = Cache()[m_CachePos].End2;
-    *hasEnding = (Cache()[m_CachePos].type == wxHtmlCacheItem::Type_Normal);
+
+    switch ( Cache()[m_CachePos].type )
+    {
+        case wxHtmlCacheItem::Type_Normal:
+            *end1 = Cache()[m_CachePos].End1;
+            *end2 = Cache()[m_CachePos].End2;
+            *hasEnding = true;
+            break;
+
+        case wxHtmlCacheItem::Type_EndingTag:
+            wxFAIL_MSG("QueryTag called for ending tag - can't be");
+            // but if it does happen, fall through, better than crashing
+
+        case wxHtmlCacheItem::Type_NoMatchingEndingTag:
+            // If input HTML is invalid and there's no closing tag for this
+            // one, pretend that it runs all the way to the end of input
+            *end1 = inputEnd;
+            *end2 = inputEnd;
+            *hasEnding = false;
+            break;
+    }
 }
 
 

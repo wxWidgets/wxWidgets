@@ -126,13 +126,11 @@ public:
     // returns ending position of _internal_ block of text as iterator
     // into parser's source string (see wxHtmlParser::GetSource()):
     // bla bla bla <MYTAG> bla bla intenal text*</MYTAG> bla bla
-    wxString::const_iterator GetEndIter1() const
-        { wxASSERT(m_hasEnding); return m_End1; }
+    wxString::const_iterator GetEndIter1() const { return m_End1; }
     // returns end position 2 as iterator
     // into parser's source string (see wxHtmlParser::GetSource()):
     // bla bla bla <MYTAG> bla bla internal text</MYTAG>* bla bla
-    wxString::const_iterator GetEndIter2() const
-        { wxASSERT(m_hasEnding); return m_End2; }
+    wxString::const_iterator GetEndIter2() const { return m_End2; }
 
 #if WXWIN_COMPATIBILITY_2_8
     // use GetBeginIter(), GetEndIter1() and GetEndIter2() instead
