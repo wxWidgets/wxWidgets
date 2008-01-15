@@ -277,7 +277,7 @@ for arg do
     *)
         # We validate the parameters later ...
 
-        if [ "$_name" = "cxxflags" ] || [ "$_name" = "cppflags" ]; then
+        if [ "$_name" = "cxxflags" ] || [ "$_name" = "cppflags" ] || [ "$_name" = "cflags" ]; then
             cxx_parameters="${cxx_parameters:+$cxx_parameters }$arg"
         elif [ "$_name" = "libs" ]; then
             libs_parameters="${libs_parameters:+$libs_parameters }$arg"
