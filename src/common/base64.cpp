@@ -132,7 +132,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
 
                 // force the loop to stop and an error to be returned
                 n = -1;
-                srcLen = 0;
+                srcLen = 1;
                 break;
 
             case PAD:
@@ -156,7 +156,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
                 {
                     // force the loop terminate with an error
                     n = -1;
-                    srcLen = 0;
+                    srcLen = 1;
                 }
                 break;
 
@@ -165,7 +165,7 @@ wxBase64Decode(void *dst_, size_t dstLen,
                 {
                     // nothing is allowed after the end so provoke error return
                     n = -1;
-                    srcLen = 0;
+                    srcLen = 1;
                     break;
                 }
 
@@ -194,7 +194,11 @@ wxBase64Decode(void *dst_, size_t dstLen,
     if ( n )
     {
         if ( posErr )
-            *posErr = p - src;
+        {
+            // notice that the error was on a previous position as we did one
+            // extra "p++" in the loop line after it
+            *posErr = p - src - 1;
+        }
 
         return wxCONV_FAILED;
     }

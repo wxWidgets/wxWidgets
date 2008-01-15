@@ -90,6 +90,7 @@ private:
         CPPUNIT_TEST( EncodeDecodePatternB );
         CPPUNIT_TEST( EncodeDecodePatternC );
         CPPUNIT_TEST( EncodeDecodeRandom );
+        CPPUNIT_TEST( DecodeInvalid );
     CPPUNIT_TEST_SUITE_END();
 
     void EncodeDecodeEmpty();
@@ -102,6 +103,7 @@ private:
     void EncodeDecodePatternB();
     void EncodeDecodePatternC();
     void EncodeDecodeRandom();
+    void DecodeInvalid();
 
     DECLARE_NO_COPY_CLASS(Base64TestCase)
 };
@@ -231,6 +233,38 @@ void Base64TestCase::EncodeDecodeRandom()
     size_t realsize = size;
     CPPUNIT_ASSERT(wxBase64Decode(buff2, realsize, (char *)buff, size));
     CPPUNIT_ASSERT(wxBase64Encode(buff2, size, buff2, realsize));
+}
+
+void Base64TestCase::DecodeInvalid()
+{
+    size_t rc, posErr;
+    rc = wxBase64Decode(NULL, 0, "one two!", wxNO_LEN,
+                        wxBase64DecodeMode_Strict, &posErr);
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
+    WX_ASSERT_SIZET_EQUAL( 3, posErr );
+
+    rc = wxBase64Decode(NULL, 0, "one two!", wxNO_LEN,
+                        wxBase64DecodeMode_SkipWS, &posErr);
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
+    WX_ASSERT_SIZET_EQUAL( 7, posErr );
+
+    rc = wxBase64Decode(NULL, 0, "? QQ==", wxNO_LEN,
+                        wxBase64DecodeMode_SkipWS, &posErr);
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, rc);
+    WX_ASSERT_SIZET_EQUAL( 0, posErr );
+
+    posErr = (size_t)-1;
+    rc = wxBase64Decode(NULL, 0, " QQ==", wxNO_LEN,
+                        wxBase64DecodeMode_SkipWS, &posErr);
+    WX_ASSERT_SIZET_EQUAL( 1, rc );
+    WX_ASSERT_SIZET_EQUAL( -1, posErr );
+
+    rc = wxBase64Decode(NULL, 0, "? QQ==", wxNO_LEN,
+                        wxBase64DecodeMode_Relaxed, &posErr);
+    WX_ASSERT_SIZET_EQUAL( 1, rc );
+    WX_ASSERT_SIZET_EQUAL( -1, posErr );
+
+    CPPUNIT_ASSERT( !wxBase64Decode("wxGetApp()").GetDataLen() );
 }
 
 #endif // wxUSE_BASE64
