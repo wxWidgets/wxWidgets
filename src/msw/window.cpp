@@ -2128,19 +2128,19 @@ int wxWindowMSW::GetCharWidth() const
 void wxWindowMSW::GetTextExtent(const wxString& string,
                              int *x, int *y,
                              int *descent, int *externalLeading,
-                             const wxFont *theFont) const
+                             const wxFont *fontToUse) const
 {
-    wxASSERT_MSG( !theFont || theFont->Ok(),
+    wxASSERT_MSG( !fontToUse || fontToUse->Ok(),
                     _T("invalid font in GetTextExtent()") );
 
-    wxFont fontToUse;
-    if (theFont)
-        fontToUse = *theFont;
+    HFONT hfontToUse;
+    if ( fontToUse )
+        hfontToUse = GetHfontOf(*fontToUse);
     else
-        fontToUse = GetFont();
+        hfontToUse = GetHfontOf(GetFont());
 
     WindowHDC hdc(GetHwnd());
-    SelectInHDC selectFont(hdc, GetHfontOf(fontToUse));
+    SelectInHDC selectFont(hdc, hfontToUse);
 
     SIZE sizeRect;
     TEXTMETRIC tm;
