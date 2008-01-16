@@ -115,7 +115,7 @@ All (GUI):
 
 All (Unix):
 
-- Fixed shared libraries do not depend on GStreamer when built with
+- Fixed shared libraries to not depend on GStreamer when built with
   --enable-media; only wxMedia library depends on it now.
 
 wxMSW:
@@ -123,6 +123,7 @@ wxMSW:
 - Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse).
 - Fix setting icons when they have non-default (16*16 and 32*32) sizes.
 - Fixed wxLocale::GetInfo to use the C locale.
+- Don't enable disabled windows when showing them (Harry McKame).
 
 wxGTK:
 
