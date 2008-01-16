@@ -1934,20 +1934,30 @@ Performs a keyboard navigation action inside this window.
 See \helpref{Navigate}{wxwindownavigate} for more information.
 
 
-\membersection{wxWindow::NextControlId}\label{wxwindownextcontrolid}
+\membersection{wxWindow::NewControlId}\label{wxwindownewcontrolid}
 
-\func{static int}{NextControlId}{\param{int }{winid}}
+\func{static wxWindowID}{NewControlId}{\param{int}{ count = 1}}
 
-If two controls are created consecutively using \texttt{wxID\_ANY} id, this
-function allows to retrieve the effective id of the latter control from the id
-of the former. This is useful for example to find the control following its 
-\helpref{wxStaticText}{wxstatictext} label if only the id of or pointer to the
-label is available to the caller but it is known that the two controls were
-created together.
+Create a new ID or range of IDs that are not currently in use.  The
+IDs will be reserved until assigned to a \helpref{wxWindowIDRef}{windowidsoverview}
+or unreserved with \helpref{UnreserveControlId}{wxwindowunreservecontrolid}.
+
+See \helpref{Window IDs overview}{windowidsoverview} for more information.
+
+\wxheading{Parameters}
+
+\docparam{count}{The number of sequential IDs to reserve.}
+
+\wxheading{Return value}
+
+Returns the ID or the first ID of the range, or wxID_NONE if enough
+free IDs were not available.
 
 \wxheading{See also}
 
-\helpref{PrevControlId}{wxwindowprevcontrolid}
+\helpref{UnreserveControlId}{wxwindowunreservecontrolid}
+\helpref{wxIdManager}{wxidmanager}
+\helpref{Window IDs overview}{windowidsoverview}
 
 
 %% VZ: wxWindow::OnXXX() functions should not be documented but I'm leaving
@@ -2507,15 +2517,6 @@ implements the following methods:\par
 \twocolitem{{\bf PopupMenuXY(menu, x, y)}}{Specifies position with two integers (x, y)}
 \end{twocollist}}
 }
-
-
-\membersection{wxWindow::PrevControlId}\label{wxwindowprevcontrolid}
-
-\func{static int}{PrevControlId}{\param{int }{winid}}
-
-This is similar to \helpref{NextControlId}{wxwindownextcontrolid} but returns
-the id of the control created just before the one with the given \arg{winid}.
-
 
 \membersection{wxWindow::PushEventHandler}\label{wxwindowpusheventhandler}
 
@@ -3897,6 +3898,25 @@ This function is currently only implemented under MSW.
 
 \helpref{wxWindow::RegisterHotKey}{wxwindowregisterhotkey}
 
+\membersection{wxWindow::UnreserveControlId}\label{wxwindowunreservecontrolid}
+
+\func{static void}{UnreserveControlId}{\param{wxWindowID}{ id}, \param{int}{ count = 1}}
+
+Unreserve an ID or range of IDs that was reserved by \helpref{NewControlId}{wxwindownewcontrolid}.
+
+See \helpref{Window IDs overview}{windowidsoverview} for more information.
+
+\wxheading{Parameters}
+
+\docparam{id}{The starting ID of the range of IDs to unreserve.}
+
+\docparam{count}{The number of sequential IDs to unreserve.}
+
+\wxheading{See also}
+
+\helpref{NewControlId}{wxwindownewcontrolid}
+\helpref{wxIdManager}{wxidmanager}
+\helpref{Window IDs overview}{windowidsoverview}
 
 \membersection{wxWindow::Update}\label{wxwindowupdate}
 
