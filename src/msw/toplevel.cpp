@@ -660,10 +660,14 @@ bool wxTopLevelWindowMSW::Show(bool show)
         }
         else // just show
         {
-           if ( GetWindowStyle() & wxFRAME_TOOL_WINDOW )
-               nShowCmd = SW_SHOWNA;
-           else
-               nShowCmd = SW_SHOW;
+            // we shouldn't use SW_SHOW which also activates the window for
+            // tool frames (as they shouldn't steal focus from the main window)
+            // nor for the currently disabled windows as they would be enabled
+            // as a side effect
+            if ( HasFlag(wxFRAME_TOOL_WINDOW) || !IsEnabled() )
+                nShowCmd = SW_SHOWNA;
+            else
+                nShowCmd = SW_SHOW;
         }
     }
     else // hide

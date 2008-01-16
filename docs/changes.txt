@@ -321,11 +321,15 @@ All (GUI):
 - Added wxWindow::GetNextSibling() and GetPrevSibling()
 - Improve wximage::ResampleBox() (Mihai Ciocarlie)
 - Implemented ScrollList() in generic wxListCtrl (Tim Kosse)
+- Fixed wxXmlResource::GetText() to convert data to current locale's
+  charset in ANSI build.
 
 wxMSW:
 
 - Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse)
 - Fix setting icons when they have non-default (16*16 and 32*32) sizes
+- Fixed wxLocale::GetInfo to use the C locale.
+- Don't enable disabled windows when showing them (Harry McKame).
 
 wxGTK:
 
