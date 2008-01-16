@@ -65,7 +65,7 @@
     #define __WX_BO_COMPILER ",GCC " \
             __WX_BO_STRINGIZE(__GNUC__) "." __WX_BO_STRINGIZE(__GNUC_MINOR__)
 #elif defined(__VISUALC__)
-    #define __WX_BO_COMPILER ",Visual C++"
+    #define __WX_BO_COMPILER ",Visual C++ " __WX_BO_STRINGIZE(_MSC_VER)
 #elif defined(__BORLANDC__)
     #define __WX_BO_COMPILER ",Borland C++"
 #elif defined(__DIGITALMARS__)
