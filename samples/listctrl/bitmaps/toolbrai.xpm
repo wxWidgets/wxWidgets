@@ -1,5 +1,5 @@
 /* XPM */
-static char * toolbrai_xpm[] = {
+static const char *const toolbrai_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "32 32 4 1",
 /* colors */

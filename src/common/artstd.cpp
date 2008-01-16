@@ -88,9 +88,6 @@ protected:
 // XPMs with the art
 // ----------------------------------------------------------------------------
 
-// XPM hack: make the arrays const
-#define static static const
-
 #if defined(__WXGTK__)
     #include "../../art/gtk/info.xpm"
     #include "../../art/gtk/error.xpm"
@@ -151,9 +148,6 @@ protected:
 #include "../../art/quit.xpm"
 #include "../../art/find.xpm"
 #include "../../art/findrepl.xpm"
-
-
-#undef static
 
 wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
 {

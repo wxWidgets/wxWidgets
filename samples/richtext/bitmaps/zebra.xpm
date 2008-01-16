@@ -1,5 +1,5 @@
 /* XPM */
-static char *zebra_xpm[] = {
+static const char *const zebra_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "200 167 236 2",
 "`  c #A68369",

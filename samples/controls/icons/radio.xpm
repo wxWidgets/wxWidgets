@@ -1,5 +1,5 @@
 /* XPM */
-static char * radio_xpm[] = {
+static const char *const radio_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 5 1",
 /* colors */

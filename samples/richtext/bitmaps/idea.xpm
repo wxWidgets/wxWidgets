@@ -1,5 +1,5 @@
 /* XPM */
-static char *idea_xpm[] = {
+static const char *const idea_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 9 1",
 "$ c Black",

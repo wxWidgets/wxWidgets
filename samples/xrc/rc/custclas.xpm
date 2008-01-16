@@ -1,5 +1,5 @@
 /* XPM */
-static char * custclas_xpm[] = {
+static const char *const custclas_xpm[] = {
 "16 16 7 1",
 " 	c None",
 ".	c #EBF70E",

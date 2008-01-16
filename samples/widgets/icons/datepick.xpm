@@ -1,5 +1,5 @@
 /* XPM */
-static char *datepick_xpm[] = {
+static const char *const datepick_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 163 2",
 "   c None",

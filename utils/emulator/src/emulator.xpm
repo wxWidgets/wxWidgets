@@ -1,5 +1,5 @@
 /* XPM */
-static char * emulator_xpm[] = {
+static const char *const emulator_xpm[] = {
 "32 32 17 1",
 "( 	c #000000",
 ".	c #000000",

@@ -1,5 +1,5 @@
 /* XPM */
-static char *choicebk_xpm[] = {
+static const char *const choicebk_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 16 1",
 "  c Gray0",

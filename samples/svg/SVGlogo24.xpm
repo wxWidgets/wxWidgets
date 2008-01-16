@@ -1,5 +1,5 @@
 /* XPM */
-static char *svgbitmap_xpm[] = {
+static const char *const svgbitmap_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "64 48 256 2",
 "   c #550000",

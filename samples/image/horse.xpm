@@ -1,5 +1,5 @@
 /* XPM */
-static char * horse_xpm[] = {
+static const char *const horse_xpm[] = {
 "200 200 257 2",
 "  	c None",
 ". 	c #0A0A0A",

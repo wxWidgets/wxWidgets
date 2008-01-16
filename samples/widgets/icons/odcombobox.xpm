@@ -1,5 +1,5 @@
 /* XPM */
-static char *odcombobox_xpm[] = {
+static const char *const odcombobox_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 16 1",
 "  c Gray0",

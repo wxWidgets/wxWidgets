@@ -1,5 +1,5 @@
 /* XPM */
-static char *dirpicker_xpm[]={
+static const char *const dirpicker_xpm[]={
 "32 32 178 2",
 "   c None",
 "f6 c #9BACC2",

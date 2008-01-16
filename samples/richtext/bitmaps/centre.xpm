@@ -1,5 +1,5 @@
 /* XPM */
-static char *centre_xpm[] = {
+static const char *const centre_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 2 1",
 ". c #4D4D4D",

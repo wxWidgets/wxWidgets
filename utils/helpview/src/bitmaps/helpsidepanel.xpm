@@ -1,5 +1,5 @@
 /* XPM */
-static char * helpsidepanel_xpm[] = {
+static const char *const helpsidepanel_xpm[] = {
 "16 15 17 1",
 " 	c None",
 ".	c #000000",

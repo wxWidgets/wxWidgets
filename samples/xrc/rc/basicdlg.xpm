@@ -1,5 +1,5 @@
 /* XPM */
-static char * basicdlg_xpm[] = {
+static const char *const basicdlg_xpm[] = {
 "16 16 5 1",
 " 	c None",
 ".	c #000000",

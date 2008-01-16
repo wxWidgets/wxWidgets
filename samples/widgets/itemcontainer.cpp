@@ -68,7 +68,7 @@ private:
 
 ItemContainerWidgetsPage::ItemContainerWidgetsPage(WidgetsBookCtrl *book,
                                                    wxImageList *image_list,
-                                                   char* icon[])
+                                                   const char *const icon[])
 : WidgetsPage(book, image_list, icon), m_trackedDataObjects(0)
 {
     m_items.Add(_T("This"));

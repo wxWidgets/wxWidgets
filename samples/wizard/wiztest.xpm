@@ -1,5 +1,5 @@
 /* XPM */
-static char *wiztest_xpm[] = {
+static const char *const wiztest_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "116 260 29 1",
 ". c Black",

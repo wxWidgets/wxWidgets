@@ -1,5 +1,5 @@
 /* XPM */
-static char *tooltodo_xpm[] = {
+static const char *const tooltodo_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 156 2",
 "0  c #A08020",

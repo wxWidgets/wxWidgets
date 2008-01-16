@@ -1,5 +1,5 @@
 /* XPM */
-static char * south_xpm[] = {
+static const char *const south_xpm[] = {
 "16 16 3 1",
 " 	c None",
 ".	c Black",

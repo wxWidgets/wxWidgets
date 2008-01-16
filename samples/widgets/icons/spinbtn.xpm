@@ -1,5 +1,5 @@
 /* XPM */
-static char *spinbtn_xpm[] = {
+static const char *const spinbtn_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 2 1",
 "$ c None",

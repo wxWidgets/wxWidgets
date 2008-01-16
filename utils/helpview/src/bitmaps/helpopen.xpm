@@ -1,5 +1,5 @@
 /* XPM */
-static char *helpopen_xpm[] = {
+static const char *const helpopen_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 15 36 1",
 ", c #AAC1E8",

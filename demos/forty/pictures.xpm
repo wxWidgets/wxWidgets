@@ -1,5 +1,5 @@
 /* XPM */
-static char *Pictures[] = {
+static const char *const Pictures[] = {
 /* width height num_colors chars_per_pixel */
 "   120    45        8            1",
 /* colors */

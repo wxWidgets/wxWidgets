@@ -1,5 +1,5 @@
 /* XPM */
-static char *italic_xpm[] = {
+static const char *const italic_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 3 1",
 ". c Black",

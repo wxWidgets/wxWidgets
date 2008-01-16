@@ -1,5 +1,5 @@
 /* XPM */
-static char *filepicker_xpm[]={
+static const char *const filepicker_xpm[]={
 "32 32 179 2",
 "   c None",
 "f= c #97C4E7",

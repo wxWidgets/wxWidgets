@@ -1,5 +1,5 @@
 /* XPM */
-static char *tex2rtf_xpm[] = {
+static const char *const tex2rtf_xpm[] = {
 /* width height num_colors chars_per_pixel */
 "    32    32        3            1",
 /* colors */

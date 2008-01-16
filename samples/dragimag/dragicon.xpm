@@ -1,5 +1,5 @@
 /* XPM */
-static char *dragicon_xpm[] = {
+static const char *const dragicon_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 6 1",
 "  c Black",

@@ -1,5 +1,5 @@
 /* XPM */
-static char *clrpicker_xpm[]={
+static const char *const clrpicker_xpm[]={
 "32 32 158 2",
 "   c None",
 "** c Black",

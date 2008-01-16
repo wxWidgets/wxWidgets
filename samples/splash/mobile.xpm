@@ -1,5 +1,5 @@
 /* XPM */
-static const char *mobile_xpm[] = {
+static const char *const mobile_xpm[] = {
 /* columns rows colors chars-per-pixel */ 
 "144 108 129 2",
 "   c #020202",

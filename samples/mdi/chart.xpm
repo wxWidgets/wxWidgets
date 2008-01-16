@@ -1,5 +1,5 @@
 /* XPM */
-static char *chart_xpm[] = {
+static const char *const chart_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 7 1",
 "  c black",

@@ -86,7 +86,7 @@ enum Orient
 class BookWidgetsPage : public WidgetsPage
 {
 public:
-    BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, char* icon[]);
+    BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, const char *const icon[]);
     virtual ~BookWidgetsPage();
 
     virtual wxControl *GetWidget() const { return m_book; }
@@ -192,7 +192,7 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-BookWidgetsPage::BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, char* icon[])
+BookWidgetsPage::BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, const char *const icon[])
                 :WidgetsPage(book, imaglist, icon)
 {
     // init everything

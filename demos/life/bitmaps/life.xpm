@@ -1,5 +1,5 @@
 /* XPM */
-static char * life_xpm[] = {
+static const char *const life_xpm[] = {
 "151 73 5 1",
 " 	c None",
 ".	c #808080",

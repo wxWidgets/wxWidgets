@@ -1,5 +1,5 @@
 /* XPM */
-static char * helpback_xpm[] = {
+static const char *const helpback_xpm[] = {
 "16 15 3 1",
 " 	c None",
 ".	c Black",

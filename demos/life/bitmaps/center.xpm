@@ -1,5 +1,5 @@
 /* XPM */
-static char * center_xpm[] = {
+static const char *const center_xpm[] = {
 "16 16 3 1",
 " 	c None",
 ".	c Black",
