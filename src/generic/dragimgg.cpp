@@ -249,13 +249,13 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
     m_isDirty = false;
     m_isDirty = false;
 
-    window->CaptureMouse();
-
     if (m_cursor.Ok())
     {
         m_oldCursor = window->GetCursor();
         window->SetCursor(m_cursor);
     }
+
+    window->CaptureMouse();
 
     // Make a copy of the window so we can repair damage done as the image is
     // dragged.
