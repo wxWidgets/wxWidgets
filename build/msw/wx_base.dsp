@@ -1123,10 +1123,6 @@ SOURCE=..\..\include\wx\debug.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\meta\defs.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\defs.h
 # End Source File
 # Begin Source File

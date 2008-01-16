@@ -431,7 +431,6 @@ ALL_BASE_HEADERS =  \
 	wx/zipstrm.h \
 	wx/zstream.h \
 	wx/meta/convertible.h \
-	wx/meta/defs.h \
 	wx/meta/int2type.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
@@ -579,7 +578,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/zipstrm.h \
 	wx/zstream.h \
 	wx/meta/convertible.h \
-	wx/meta/defs.h \
 	wx/meta/int2type.h \
 	wx/private/fdiodispatcher.h \
 	wx/private/selectdispatcher.h \

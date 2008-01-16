@@ -555,7 +555,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/zipstrm.h
     wx/zstream.h
     wx/meta/convertible.h
-    wx/meta/defs.h
     wx/meta/int2type.h
 </set>
 

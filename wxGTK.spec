@@ -332,7 +332,6 @@ wx/xtistrm.h
 wx/zipstrm.h
 wx/zstream.h
 wx/meta/convertible.h
-wx/meta/defs.h
 wx/meta/int2type.h
 wx/private/fdiodispatcher.h
 wx/private/selectdispatcher.h
