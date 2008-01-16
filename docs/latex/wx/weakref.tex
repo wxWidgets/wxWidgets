@@ -17,7 +17,6 @@ wxWeakRef<T> is a small object and the mechanism behind it is fast
 \wxheading{Example}
 
 \begin{verbatim}
-    wxWindow *parent = /* Get parent window from somewhere */;
     wxWindow *wnd = new wxWindow( parent, wxID_ANY, "wxWindow" );
     wxWeakRef<wxWindow> wr = wnd;  
     wxWindowRef wr2 = wnd;        // Same as above, but using a typedef
@@ -97,15 +96,12 @@ Destructor.
 
 Returns pointer to the tracked object or NULL.
 
-\membersection{wxWeakRef<T>::operator unspecified\_bool\_type}\label{wxweakrefoperatorbool}
+\membersection{wxWeakRef<T>::operator T*}\label{wxweakrefoperatorconvt}
 
-\constfunc{}{operator unspecified\_bool\_type}{\void}
+\constfunc{T*}{operator*}{\void}
 
-Conversion to a boolean expression (in a variant which is not 
-convertable to anything but a boolean expression). If this class
-contains a valid pointer it will return {\it true}, if it contains
-a NULL pointer it will return {\it false}.
-
+Implicit conversion to T*. Returns pointer to the tracked
+object or NULL.
 
 \membersection{wxWeakRef<T>::operator*}\label{wxweakrefoperatorreft}
 
