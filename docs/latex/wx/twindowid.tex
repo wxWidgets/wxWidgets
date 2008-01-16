@@ -10,9 +10,9 @@
 
 Various contols and other parts of wxWidgets need an ID.  Sometimes the
 ID may be directly provided by the use or have a predefined value, such as
-wxID_OPEN.  Often, however, the value of the ID is unimportant and is created
-automatically by calling \helpref{wxWindow::NewControlId}{wxwindownewcontrolid}
-or by passing wxID_ANY as the ID of an object.
+\texttt{wxID\_OPEN}. Often, however, the value of the ID is unimportant and is
+created automatically by calling \helpref{wxWindow::NewControlId}{wxwindownewcontrolid} 
+or by passing \texttt{wxID\_ANY} as the ID of an object.
 
 There are two ways to generate an ID.  One way, is to start at a negative number,
 and for each new ID, return the next smallest number.  This is fine for systems
