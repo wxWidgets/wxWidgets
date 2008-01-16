@@ -42,11 +42,11 @@
     #define USE_ICONS_IN_BOOK 1
 #endif
 
-class WXDLLEXPORT wxCheckBox;
-class WXDLLEXPORT wxSizer;
-class WXDLLEXPORT wxImageList;
-class WXDLLEXPORT wxTextCtrl;
-class WXDLLEXPORT WidgetsBookCtrl;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
+class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE WidgetsBookCtrl;
 
 class WidgetsPageInfo;
 

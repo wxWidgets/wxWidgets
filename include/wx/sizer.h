@@ -858,7 +858,7 @@ private:
 
 // this sizer works with wxNotebook/wxListbook/... and sizes the control to
 // fit its pages
-class WXDLLEXPORT wxBookCtrlBase;
+class WXDLLIMPEXP_FWD_CORE wxBookCtrlBase;
 
 class WXDLLEXPORT wxBookCtrlSizer : public wxSizer
 {
@@ -889,7 +889,7 @@ private:
 
 // before wxBookCtrlBase we only had wxNotebookSizer, keep it for backwards
 // compatibility
-class WXDLLEXPORT wxNotebook;
+class WXDLLIMPEXP_FWD_CORE wxNotebook;
 
 class WXDLLEXPORT wxNotebookSizer : public wxBookCtrlSizer
 {

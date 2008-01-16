@@ -15,9 +15,9 @@
 #include "wx/dialog.h"
 #include "wx/artprov.h"
 
-class WXDLLEXPORT wxListCtrl;
-class WXDLLEXPORT wxListEvent;
-class WXDLLEXPORT wxStaticBitmap;
+class WXDLLIMPEXP_FWD_CORE wxListCtrl;
+class WXDLLIMPEXP_FWD_CORE wxListEvent;
+class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;
 
 class wxArtBrowserDialog : public wxDialog
 {
