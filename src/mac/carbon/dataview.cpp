@@ -992,6 +992,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
 
   ::SetDataBrowserTableViewHiliteStyle( this->m_peer->GetControlRef(), kDataBrowserTableViewFillHilite );
 
+  ::SetDataBrowserTableViewGeometry( this->m_peer->GetControlRef(), true, false );
+  
   return true;
 } /* wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator) */
 
@@ -1456,6 +1458,19 @@ void wxDataViewCtrl::OnSize(wxSizeEvent& event)
         dataViewCustomRendererPtr->SetDC(NULL); // reset DC because DC has changed
     } /* if */
   } /* for */
+  
+  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
+  ControlRef ref = MacDataViewListCtrlPtr->GetControlRef();
+  if (NoOfColumns == 1)
+  {
+     ::SetDataBrowserHasScrollBars( ref, false, true );
+     ::AutoSizeDataBrowserListViewColumns( ref );
+  }
+  if (NoOfColumns > 1)
+  {
+     ::SetDataBrowserHasScrollBars( ref, true, true );
+  }
+  
   event.Skip();
 } /* wxDataViewCtrl::OnSize(wxSizeEvent&) */
 
