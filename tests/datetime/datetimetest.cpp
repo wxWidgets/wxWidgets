@@ -28,7 +28,7 @@
 // need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
 static wxSTD ostream& operator<<(wxSTD ostream& ostr, const wxDateTime& dt)
 {
-    ostr << dt.FormatISODate() << _T(" ") << dt.FormatISOTime();
+    ostr << dt.FormatISODate() << " " << dt.FormatISOTime();
 
     return ostr;
 }
