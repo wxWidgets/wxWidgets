@@ -289,7 +289,7 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
            ReleaseMouse();
         m_mouseCaptured = false;
     }
-    else if (event.Moving() && !event.Dragging())
+    else if ((event.Moving() || event.Leaving()) && !event.Dragging())
     {
         // Just change the cursor if required
         if ( sashHit != wxSASH_NONE )
