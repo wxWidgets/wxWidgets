@@ -207,21 +207,14 @@ public:
         return *this;
     }
 
-    virtual ~wxWeakRef() { Release(); }
+    virtual ~wxWeakRef() { this->Release(); }
 
     // Smart pointer functions
-    T& operator*() const { return *m_pobj; }
-    T* operator->() const { return m_pobj; }
+    T& operator*() const { return *this->m_pobj; }
+    T* operator->() const { return this->m_pobj; }
 
-    T* get() const { return m_pobj; }
-
-    // test for pointer validity: defining conversion to unspecified_bool_type
-    // and not more obvious bool to avoid implicit conversions to integer types
-    typedef T *(wxWeakRef<T>::*unspecified_bool_type)() const;
-    operator unspecified_bool_type() const
-    {
-        return this->m_pobj ? &wxWeakRef<T>::get : NULL;
-    }
+    T* get() const { return this->m_pobj; }
+    operator T*() const { return get(); }
 };
 
 
