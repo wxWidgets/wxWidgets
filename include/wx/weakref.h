@@ -59,7 +59,7 @@ protected:
         }
     }
 
-    void AssignCopy( const wxWeakRefStatic& wr )
+    void AssignCopy(const wxWeakRefStatic& wr)
     {
         Assign( wr.m_pobj );
     }
@@ -139,7 +139,7 @@ protected:
 
     void AssignCopy(const wxWeakRefImpl& wr)
     {
-        DoAssign( wr.m_pobj, wr.m_ptbase );
+        DoAssign(wr.m_pobj, wr.m_ptbase);
     }
 
     void DoAssign( T* pobj, wxTrackable *ptbase ) {
@@ -220,7 +220,7 @@ public:
 
 // Weak ref implementation assign objects are queried for wxTrackable
 // using dynamic_cast<>
-template<class T>
+template <class T>
 class wxWeakRefDynamic : public wxTrackerNode
 {
 public:
@@ -291,11 +291,6 @@ protected:
                 wxFAIL_MSG( "Tracked class should inherit from wxTrackable" );
             }
         }
-    }
-
-    void AssignCopy(const wxWeakRefDynamic& wr)
-    {
-        Assign(wr.m_pobj);
     }
 
     virtual void OnObjectDestroy()
