@@ -38,19 +38,6 @@ private:
 class wxTrackable
 {
 public:
-    wxTrackable() : m_first(NULL) { }
-
-    ~wxTrackable()
-    {
-        // Notify all registered refs
-        while ( m_first )
-        {
-            wxTrackerNode * const first = m_first;
-            m_first = first->m_nxt;
-            first->OnObjectDestroy();
-        }
-    }
-
     void AddNode(wxTrackerNode *prn)
     {
         prn->m_nxt = m_first;
@@ -74,9 +61,31 @@ public:
     wxTrackerNode *GetFirst() const { return m_first; }
 
 protected:
-    wxTrackerNode *m_first;
+    // this class is only supposed to be used as a base class but never be
+    // created nor destroyed directly so all ctors and dtor are protected
 
-    DECLARE_NO_COPY_CLASS(wxTrackable)
+    wxTrackable() : m_first(NULL) { }
+
+    // copy ctor and assignment operator intentionally do not copy m_first: the
+    // objects which track the original trackable shouldn't track the new copy
+    wxTrackable(const wxTrackable& WXUNUSED(other)) : m_first(NULL) { }
+    wxTrackable& operator=(const wxTrackable& WXUNUSED(other)) { return *this; }
+
+    // dtor is not virtual: this class is not supposed to be used
+    // polymorphically and adding a virtual table to it would add unwanted
+    // overhead
+    ~wxTrackable()
+    {
+        // Notify all registered refs
+        while ( m_first )
+        {
+            wxTrackerNode * const first = m_first;
+            m_first = first->m_nxt;
+            first->OnObjectDestroy();
+        }
+    }
+
+    wxTrackerNode *m_first;
 };
 
 #endif // _WX_TRACKER_H_
