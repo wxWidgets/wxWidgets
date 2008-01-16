@@ -566,6 +566,7 @@ WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image form
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
+WX_ARG_WITH(libiconv,      [  --with-libiconv         use libiconv (character conversion)], wxUSE_LIBICONV)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
 WX_ARG_WITHOUT(gnomeprint, [  --without-gnomeprint    don't use GNOME printing libraries], wxUSE_LIBGNOMEPRINT)
@@ -4201,9 +4202,10 @@ dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
 
 dnl check for available version of iconv()
-
-AM_ICONV
-LIBS="$LIBICONV $LIBS"
+if test "$wxUSE_LIBICONV" != "no" ; then
+    AM_ICONV
+    LIBS="$LIBICONV $LIBS"
+fi
 
 dnl check for POSIX signals if we need them
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
