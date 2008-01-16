@@ -226,15 +226,6 @@ void WeakRefTestCase::DeleteTest()
     wxEvtHandlerRef wre(peh);
     wxWeakRef<wxEvtHandler> wro(peh);
 
-    // test size of references (see that it has selected right base class)
-#ifdef HAVE_PARTIAL_SPECIALIZATION
-    CPPUNIT_ASSERT_EQUAL( sizeof(void*)*3, sizeof(wre) );
-    CPPUNIT_ASSERT_EQUAL( sizeof(void*)*4, sizeof(wro) );
-#else
-    CPPUNIT_ASSERT_EQUAL( sizeof(void*)*3, sizeof(wre) );
-    CPPUNIT_ASSERT_EQUAL( sizeof(void*)*3, sizeof(wro) );
-#endif
-
     CPPUNIT_ASSERT( wre.get() == peh );
     CPPUNIT_ASSERT( wro.get() == peh );
 
