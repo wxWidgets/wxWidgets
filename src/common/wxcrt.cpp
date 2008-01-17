@@ -281,21 +281,6 @@ static int vwscanf(const wchar_t *format, va_list argptr)
     return -1;
 }
 
-static int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
-{
-    // The best we can do without proper Unicode support in glibc is to
-    // convert the strings into MB representation and run ANSI version
-    // of the function. This doesn't work with %c and %s because of difference
-    // in size of char and wchar_t, though.
-
-    wxCHECK_MSG( wxStrstr(format, _T("%s")) == NULL, -1,
-                 _T("incomplete vswscanf implementation doesn't allow %s") );
-    wxCHECK_MSG( wxStrstr(format, _T("%c")) == NULL, -1,
-                 _T("incomplete vswscanf implementation doesn't allow %c") );
-
-    return vsscanf(wxConvLibc.cWX2MB(ws), wxConvLibc.cWX2MB(format), argptr);
-}
-
 static int vfwscanf(FILE *stream, const wchar_t *format, va_list argptr)
 {
     wxFAIL_MSG( _T("TODO") );
@@ -326,6 +311,23 @@ static int vwprintf(const wchar_t *format, va_list argptr)
 }
 
 #endif // wxNEED_WPRINTF
+
+#ifdef wxNEED_VSWSCANF
+static int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
+{
+    // The best we can do without proper Unicode support in glibc is to
+    // convert the strings into MB representation and run ANSI version
+    // of the function. This doesn't work with %c and %s because of difference
+    // in size of char and wchar_t, though.
+
+    wxCHECK_MSG( wxStrstr(format, _T("%s")) == NULL, -1,
+                 _T("incomplete vswscanf implementation doesn't allow %s") );
+    wxCHECK_MSG( wxStrstr(format, _T("%c")) == NULL, -1,
+                 _T("incomplete vswscanf implementation doesn't allow %c") );
+
+    return vsscanf(wxConvLibc.cWX2MB(ws), wxConvLibc.cWX2MB(format), argptr);
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxPrintf(), wxScanf() and relatives

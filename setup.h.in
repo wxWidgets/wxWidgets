@@ -1070,6 +1070,9 @@
 /* Define this if you have _vsnwprintf */
 #undef HAVE__VSNWPRINTF
 
+/* vswscanf() */
+#undef HAVE_VSWSCANF
+
 /* Define if fseeko and ftello are available.  */
 #undef HAVE_FSEEKO
 

@@ -35304,7 +35304,7 @@ done
     esac
 
 
-  for wx_func in putws fputws wprintf vswprintf
+  for wx_func in putws fputws wprintf vswprintf vswscanf
   do
     { echo "$as_me:$LINENO: checking for $wx_func" >&5
 echo $ECHO_N "checking for $wx_func... $ECHO_C" >&6; }

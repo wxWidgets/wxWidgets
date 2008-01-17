@@ -4174,7 +4174,7 @@ if test "$wxUSE_UNICODE" = yes; then
             fi
     esac
 
-    WX_CHECK_FUNCS(putws fputws wprintf vswprintf,,,
+    WX_CHECK_FUNCS(putws fputws wprintf vswprintf vswscanf,,,
                    [$wchar_headers])
 
     dnl MinGW has a vswprintf with a different prototype, and

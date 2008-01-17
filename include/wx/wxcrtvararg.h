@@ -196,6 +196,9 @@
 #if wxUSE_UNICODE && !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_WPRINTF)
     #define wxNEED_WPRINTF
 #endif
+#if wxUSE_UNICODE && !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_VSWSCANF)
+    #define wxNEED_VSWSCANF
+#endif
 
 
 #if defined(wxNEED_WPRINTF)
@@ -232,11 +235,14 @@
     int wxCRT_ScanfW(const wchar_t *format, ...);
     int wxCRT_SscanfW(const wchar_t *str, const wchar_t *format, ...);
     int wxCRT_FscanfW(FILE *stream, const wchar_t *format, ...);
-    int wxCRT_VsscanfW(const wchar_t *str, const wchar_t *format, va_list ap);
 #else
     #define wxCRT_ScanfW     wxVMS_USE_STD wscanf
     #define wxCRT_SscanfW    wxVMS_USE_STD swscanf
     #define wxCRT_FscanfW    wxVMS_USE_STD fwscanf
+#endif
+#ifdef wxNEED_VSWSCANF
+    int wxCRT_VsscanfW(const wchar_t *str, const wchar_t *format, va_list ap);
+#else
     #define wxCRT_VsscanfW   wxVMS_USE_STD vswscanf
 #endif
 
