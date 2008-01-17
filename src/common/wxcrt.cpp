@@ -1295,15 +1295,15 @@ int wxVsscanf(const char *str, const char *format, va_list ap)
 int wxVsscanf(const wchar_t *str, const wchar_t *format, va_list ap)
     { return wxCRT_VsscanfW(str, format, ap); }
 int wxVsscanf(const wxCharBuffer& str, const char *format, va_list ap)
-    { return wxCRT_VsscanfA(str, format, ap); }
+    { return wxCRT_VsscanfA(wx_static_cast(const char*, str), format, ap); }
 int wxVsscanf(const wxWCharBuffer& str, const wchar_t *format, va_list ap)
     { return wxCRT_VsscanfW(str, format, ap); }
 int wxVsscanf(const wxString& str, const char *format, va_list ap)
-    { return wxCRT_VsscanfA(str.mb_str(), format, ap); }
+    { return wxCRT_VsscanfA(wx_static_cast(const char*, str.mb_str()), format, ap); }
 int wxVsscanf(const wxString& str, const wchar_t *format, va_list ap)
     { return wxCRT_VsscanfW(str.wc_str(), format, ap); }
 int wxVsscanf(const wxCStrData& str, const char *format, va_list ap)
-    { return wxCRT_VsscanfA(str.AsCharBuf(), format, ap); }
+    { return wxCRT_VsscanfA(wx_static_cast(const char*, str.AsCharBuf()), format, ap); }
 int wxVsscanf(const wxCStrData& str, const wchar_t *format, va_list ap)
     { return wxCRT_VsscanfW(str.AsWCharBuf(), format, ap); }
 #endif // HAVE_NO_VSSCANF
