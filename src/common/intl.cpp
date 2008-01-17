@@ -970,8 +970,10 @@ private:
 class wxMsgCatalog
 {
 public:
+#if !wxUSE_UNICODE
     wxMsgCatalog() { m_conv = NULL; }
     ~wxMsgCatalog();
+#endif
 
     // load the catalog from disk (szDirPrefix corresponds to language)
     bool Load(const wxString& dirPrefix, const wxString& name,
@@ -990,9 +992,11 @@ private:
     wxMessagesHash  m_messages; // all messages in the catalog
     wxString        m_name;     // name of the domain
 
+#if !wxUSE_UNICODE
     // the conversion corresponding to this catalog charset if we installed it
     // as the global one
     wxCSConv *m_conv;
+#endif
 
     wxPluralFormsCalculatorPtr  m_pluralFormsCalculator;
 };
@@ -1434,6 +1438,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 // wxMsgCatalog class
 // ----------------------------------------------------------------------------
 
+#if !wxUSE_UNICODE
 wxMsgCatalog::~wxMsgCatalog()
 {
     if ( m_conv )
@@ -1448,6 +1453,7 @@ wxMsgCatalog::~wxMsgCatalog()
         delete m_conv;
     }
 }
+#endif // !wxUSE_UNICODE
 
 bool wxMsgCatalog::Load(const wxString& dirPrefix, const wxString& name,
                         const wxString& msgIdCharset, bool bConvertEncoding)
@@ -1461,6 +1467,7 @@ bool wxMsgCatalog::Load(const wxString& dirPrefix, const wxString& name,
 
     file.FillHash(m_messages, msgIdCharset, bConvertEncoding);
 
+#if !wxUSE_UNICODE
     // we should use a conversion compatible with the message catalog encoding
     // in the GUI if we don't convert the strings to the current conversion but
     // as the encoding is global, only change it once, otherwise we could get
@@ -1476,6 +1483,7 @@ bool wxMsgCatalog::Load(const wxString& dirPrefix, const wxString& name,
         wxConvUI =
         m_conv = new wxCSConv(file.GetCharset());
     }
+#endif // !wxUSE_UNICODE
 
     return true;
 }
