@@ -116,9 +116,8 @@ public:
 
     // implementation-only from now on
 
-    // Unlike some other platforms, this must get called if you override it.
-    // It sets the viewport correctly and update the context.
-    // You shouldn't call glViewport yourself either (use SetViewport if you must reset it.)
+    // Unlike some other platforms, this must get called if you override it,
+    // i.e. don't forget "event.Skip()" in your EVT_SIZE handler
     void OnSize(wxSizeEvent& event);
 
     virtual void MacSuperChangedPosition();
