@@ -209,7 +209,7 @@ bool wxEnhMetaFile::SetClipboard(int WXUNUSED(width), int WXUNUSED(height))
 }
 
 // ----------------------------------------------------------------------------
-// wxEnhMetaFileDC
+// wxEnhMetaFileDCImpl
 // ----------------------------------------------------------------------------
 
 class wxEnhMetaFileDCImpl : public wxMSWDCImpl
@@ -233,24 +233,11 @@ private:
 };
 
 
-IMPLEMENT_ABSTRACT_CLASS(wxEnhMetaFileDC, wxDC)
-
-wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
-                                 int width, int height,
-                                 const wxString& description)
-               : wxDC(new wxEnhMetaFileDCImpl(this,
-                                              filename,
-                                              width, height,
-                                              description))
-{
-}
-
-
 wxEnhMetaFileDCImpl::wxEnhMetaFileDCImpl( wxEnhMetaFileDC* owner,
                                  const wxString& filename,
                                  int width, int height,
                                  const wxString& description )
-   : wxMSWDCImpl( owner )
+                   : wxMSWDCImpl( owner )
 {
     m_width = width;
     m_height = height;
@@ -313,6 +300,31 @@ wxEnhMetaFileDCImpl::~wxEnhMetaFileDCImpl()
 {
     // avoid freeing it in the base class dtor
     m_hDC = 0;
+}
+
+// ----------------------------------------------------------------------------
+// wxEnhMetaFileDC
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxEnhMetaFileDC, wxDC)
+
+wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
+                                 int width, int height,
+                                 const wxString& description)
+               : wxDC(new wxEnhMetaFileDCImpl(this,
+                                              filename,
+                                              width, height,
+                                              description))
+{
+}
+
+wxEnhMetaFile *wxEnhMetaFileDC::Close()
+{
+    wxEnhMetaFileDCImpl * const
+        impl = wx_static_cast(wxEnhMetaFileDCImpl *, GetImpl());
+    wxCHECK_MSG( impl, NULL, _T("no wxEnhMetaFileDC implementation") );
+
+    return impl->Close();
 }
 
 #if wxUSE_DRAG_AND_DROP

@@ -87,6 +87,10 @@ public:
                     int width = 0, int height = 0,
                     const wxString& description = wxEmptyString);
 
+    // obtain a pointer to the new metafile (caller should delete it)
+    wxEnhMetaFile *Close();
+
+private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEnhMetaFileDC)
 };
 
