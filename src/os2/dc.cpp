@@ -2218,13 +2218,13 @@ void wxPMDCImpl::SetMapMode(
     int                             nPixelHeight = 0;
     int                             nMmWidth = 1;
     int                             nMmHeight = 1;
-    LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
+    LONG                            lArray[CAPS_VERTICAL_RESOLUTION+1];
 
     m_mappingMode = nMode;
 
     if(::DevQueryCaps( m_hDC
-                      ,CAPS_FAMILY
-                      ,CAPS_VERTICAL_RESOLUTION
+                      ,CAPS_FAMILY                  // id of first item
+                      ,CAPS_VERTICAL_RESOLUTION+1   // number of items wanted
                       ,lArray
                      ))
     {
@@ -2236,15 +2236,15 @@ void wxPMDCImpl::SetMapMode(
         lHorzRes  = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
         lVertRes  = lArray[CAPS_VERTICAL_RESOLUTION];   // returns pel/meter
         nMmWidth  = (lHorzRes/1000) * nPixelWidth;
-        nMmWidth = (lVertRes/1000) * nPixelHeight;
+        nMmHeight = (lVertRes/1000) * nPixelHeight;
     }
     if ((nPixelWidth == 0) || (nPixelHeight == 0) || (nMmWidth == 0) || (nMmHeight == 0))
     {
         return;
     }
 
-    double                          dMm2pixelsX = nPixelWidth/nMmWidth;
-    double                          dMm2pixelsY = nPixelHeight/nMmHeight;
+    double dMm2pixelsX = nPixelWidth/(double)nMmWidth;
+    double dMm2pixelsY = nPixelHeight/(double)nMmHeight;
 
     switch (nMode)
     {
@@ -2274,6 +2274,7 @@ void wxPMDCImpl::SetMapMode(
             m_logicalScaleY = 1.0;
             break;
     }
+
     SIZEL                           vSize;
     ULONG                           ulOptions;
 
@@ -2283,10 +2284,6 @@ void wxPMDCImpl::SetMapMode(
         ulOptions = PU_ARBITRARY | GPIF_DEFAULT;
         ::GpiSetPS(m_hPS, &vSize, ulOptions);
     }
-    m_nWindowExtX = (int)MS_XDEV2LOG(VIEWPORT_EXTENT);
-    m_nWindowExtY = (int)MS_YDEV2LOG(VIEWPORT_EXTENT);
-    // ????
-    
     ComputeScaleAndOrigin();
     
 }; // end of wxPMDCImpl::SetMapMode
