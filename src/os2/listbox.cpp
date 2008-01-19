@@ -29,6 +29,7 @@
     #include "wx/window.h"
 #endif
 
+#include "wx/os2/dcclient.h"
 #include "wx/os2/private.h"
 
 #define INCL_M
@@ -738,12 +739,13 @@ bool wxListBox::OS2OnDraw (
 
     wxCHECK(pData, false );
 
-    wxDC    vDc;
+    wxClientDC    vDc(this);
+    wxPMDCImpl *impl = (wxPMDCImpl*) vDc.GetImpl();
     wxPoint pt1( pDrawStruct->rclItem.xLeft, pDrawStruct->rclItem.yTop );
     wxPoint pt2( pDrawStruct->rclItem.xRight, pDrawStruct->rclItem.yBottom );
     wxRect  vRect( pt1, pt2 );
 
-    vDc.SetHPS(pDrawStruct->hps);
+    impl->SetHPS(pDrawStruct->hps);
 
     if (pDrawStruct->fsAttribute == pDrawStruct->fsAttributeOld)
     {

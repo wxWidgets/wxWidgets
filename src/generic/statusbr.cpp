@@ -241,13 +241,6 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 
     dc.SetBackgroundMode(wxTRANSPARENT);
 
-#ifdef __WXPM__
-    wxColour vColor;
-
-    vColor = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR);
-    ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, vColor.GetPixel());
-#endif
-
     for (int i = 0; i < m_nFields; i ++)
         DrawField(dc, i);
 }

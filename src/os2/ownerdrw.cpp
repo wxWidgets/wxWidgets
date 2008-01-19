@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/ownerdrw.h"
+#include "wx/os2/dcclient.h"
 
 // ============================================================================
 // implementation of wxOwnerDrawn class
@@ -78,8 +79,8 @@ bool wxOwnerDrawn::OnMeasureItem( size_t* pWidth,
     }
     vDC.SetFont(GetFont());
     vDC.GetTextExtent( sStr
-                      ,(long *)pWidth
-                      ,(long *)pHeight
+                      ,(wxCoord *)pWidth
+                      ,(wxCoord *)pHeight
                      );
     if (!m_strAccel.empty())
     {
@@ -155,8 +156,9 @@ bool wxOwnerDrawn::OnMeasureItem( size_t* pWidth,
     // Make sure that this item is at least as
     // tall as the user's system settings specify
     //
-    if (*pHeight < m_nMinHeight)
-        *pHeight = m_nMinHeight;
+    const size_t heightStd = 6;		 // FIXME: get value from the system
+    if ( *pHeight < heightStd )
+      *pHeight = heightStd;
     m_nHeight = *pHeight;                // remember height for use in OnDrawItem
     return true;
 } // end of wxOwnerDrawn::OnMeasureItem
@@ -179,7 +181,8 @@ bool wxOwnerDrawn::OnDrawItem( wxDC& rDC,
     //
 
     CHARBUNDLE                      vCbnd;
-    HPS                             hPS= rDC.GetHPS();
+    wxPMDCImpl                      *impl = (wxPMDCImpl*) rDC.GetImpl();
+    HPS                             hPS= impl->GetHPS();
     wxColour                        vColBack;
     wxColour                        vColText;
     COLORREF                        vRef;
@@ -333,13 +336,13 @@ bool wxOwnerDrawn::OnDrawItem( wxDC& rDC,
         bFoundMnemonic = true;
         sTmp.Remove(nIndex);
         rDC.GetTextExtent( sTmp
-                          ,(long *)&nWidth
-                          ,(long *)&nHeight
+                          ,(wxCoord *)&nWidth
+                          ,(wxCoord *)&nHeight
                          );
         sTmp = sFullString[(size_t)(nIndex + 1)];
         rDC.GetTextExtent( sTmp
-                          ,(long *)&nCharWidth
-                          ,(long *)&nHeight
+                          ,(wxCoord *)&nCharWidth
+                          ,(wxCoord *)&nHeight
                          );
         sFullString.Replace(sTgt.c_str(), wxEmptyString, true);
     }
@@ -348,7 +351,7 @@ bool wxOwnerDrawn::OnDrawItem( wxDC& rDC,
     // Draw the main item text sans the accel text
     //
     POINTL                      vPntStart = {nX, rRect.y + 4};
-    ::GpiCharStringAt( rDC.GetHPS()
+    ::GpiCharStringAt( impl->GetHPS()
                       ,&vPntStart
                       ,sFullString.length()
                       ,sFullString.char_str()
@@ -378,15 +381,15 @@ bool wxOwnerDrawn::OnDrawItem( wxDC& rDC,
         size_t                      nHeight;
 
         rDC.GetTextExtent( sAccel
-                          ,(long *)&nWidth
-                          ,(long *)&nHeight
+                          ,(wxCoord *)&nWidth
+                          ,(wxCoord *)&nHeight
                          );
         //
         // Back off the starting position from the right edge
         //
         vPntStart.x = rRect.width - (nWidth + 7);
         vPntStart.y = rRect.y + 4;
-        ::GpiCharStringAt( rDC.GetHPS()
+        ::GpiCharStringAt( impl->GetHPS()
                           ,&vPntStart
                           ,sAccel.length()
                           ,sAccel.char_str()

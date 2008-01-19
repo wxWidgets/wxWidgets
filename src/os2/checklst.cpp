@@ -33,6 +33,7 @@
     #include "wx/font.h"
 #endif
 
+#include "wx/os2/dc.h"
 #include "wx/ownerdrw.h"
 
 #define INCL_PM
@@ -112,7 +113,9 @@ bool wxCheckListBoxItem::OnDrawItem ( wxDC& rDc,
 {
     wxRect vRect = rRect;
 
-    ::WinQueryWindowRect( m_pParent->GetHWND(), &rDc.m_vRclPaint );
+
+    wxPMDCImpl *impl = (wxPMDCImpl*) rDc.GetImpl();
+    ::WinQueryWindowRect( m_pParent->GetHWND(), &impl->m_vRclPaint );
     if (IsChecked())
         eStat = (wxOwnerDrawn::wxODStatus)(eStat | wxOwnerDrawn::wxODChecked);
 
@@ -167,8 +170,8 @@ bool wxCheckListBoxItem::OnDrawItem ( wxDC& rDc,
             //
             HBITMAP hChkBmp = ::WinGetSysBitmap( HWND_DESKTOP, SBMP_MENUCHECK );
             POINTL  vPoint = {nX, nOldY + 3};
-
-            ::WinDrawBitmap( rDc.GetHPS(),
+            wxPMDCImpl *impl = (wxPMDCImpl*) rDc.GetImpl();
+            ::WinDrawBitmap( impl->GetHPS(),
                              hChkBmp,
                              NULL,
                              &vPoint,

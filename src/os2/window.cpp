@@ -51,6 +51,8 @@
     #include <stdio.h>
 #endif
 
+#include "wx/os2/dcclient.h"
+
 #if wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
 #endif
@@ -121,7 +123,7 @@
 QMSG                      s_currentMsg;
 
 #if wxUSE_MENUS_NATIVE
-wxMenu*                   wxCurrentPopupMenu = NULL;
+extern wxMenu*            wxCurrentPopupMenu;
 #endif // wxUSE_MENUS_NATIVE
 
 // ---------------------------------------------------------------------------
@@ -1784,10 +1786,6 @@ bool wxWindowOS2::DoPopupMenu( wxMenu* pMenu, int nX, int nY )
     bool bIsWaiting = true;
     int nHeight;
 
-    // Protect against recursion
-    if (wxCurrentPopupMenu)
-        return false;
-
     pMenu->SetInvokingWindow(this);
     pMenu->UpdateUI();
 
@@ -3204,7 +3202,7 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
                                  WXDRAWITEMSTRUCT* pItemStruct )
 {
 #if wxUSE_OWNER_DRAWN
-    wxDC                            vDc;
+    wxClientDC                      vDc(this);
 
 #if wxUSE_MENUS_NATIVE
     //
@@ -3223,8 +3221,10 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
                                           ,pMeasureStruct->rclItem.xRight - pMeasureStruct->rclItem.xLeft
                                           ,pMeasureStruct->rclItem.yTop - pMeasureStruct->rclItem.yBottom
                                          );
-        vDc.SetHDC( hDC, false );
-        vDc.SetHPS( pMeasureStruct->hps );
+
+	wxPMDCImpl *impl = (wxPMDCImpl*) vDc.GetImpl();
+        impl->SetHDC( hDC, false );
+        impl->SetHPS( pMeasureStruct->hps );
         //
         // Load the wxWidgets Pallete and set to RGB mode
         //
@@ -3485,7 +3485,7 @@ void wxWindow::OnPaint (
   wxPaintEvent&                     rEvent
 )
 {
-    HDC                             hDC = (HDC)wxPaintDC::FindDCInCache((wxWindow*) rEvent.GetEventObject());
+    HDC                             hDC = (HDC)wxPaintDCImpl::FindDCInCache((wxWindow*) rEvent.GetEventObject());
 
     if (hDC != 0)
     {
@@ -3670,10 +3670,10 @@ bool wxWindowOS2::HandleEraseBkgnd( WXHDC hDC )
     if (vSwp.fl & SWP_MINIMIZE)
         return true;
 
-    wxDC vDC;
-
-    vDC.m_hPS = (HPS)hDC; // this is really a PS
-    vDC.SetWindow((wxWindow*)this);
+    wxClientDC vDC(this);
+    wxPMDCImpl *impl = (wxPMDCImpl*) vDC.GetImpl();
+    impl->SetHDC(hDC);
+    impl->SetHPS((HPS)hDC); // this is really a PS
 
     wxEraseEvent vEvent(m_windowId, &vDC);
 
@@ -3681,14 +3681,15 @@ bool wxWindowOS2::HandleEraseBkgnd( WXHDC hDC )
 
     rc = HandleWindowEvent(vEvent);
 
-    vDC.m_hPS = NULLHANDLE;
+    impl->SetHPS(NULLHANDLE);
     return true;
 } // end of wxWindowOS2::HandleEraseBkgnd
 
 void wxWindowOS2::OnEraseBackground(wxEraseEvent& rEvent)
 {
     RECTL   vRect;
-    HPS     hPS = rEvent.GetDC()->GetHPS();
+    wxPMDCImpl *impl = (wxPMDCImpl*) rEvent.GetDC()->GetImpl();
+    HPS     hPS = impl->GetHPS();
     APIRET  rc;
     LONG    lColor = m_backgroundColour.GetPixel();
 

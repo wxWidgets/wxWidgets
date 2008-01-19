@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/tooltip.h"
+#include "wx/os2/dcclient.h"
 
 bool wxToolBar::m_bInitialized = false;
 
@@ -601,7 +602,8 @@ void wxToolBar::OnPaint (
         return;
     nCount++;
 
-    ::WinFillRect(vDc.GetHPS(), &vDc.m_vRclPaint, GetBackgroundColour().GetPixel());
+    wxPMDCImpl *impl = (wxPMDCImpl*) vDc.GetImpl();
+    ::WinFillRect(impl->GetHPS(), &impl->m_vRclPaint, GetBackgroundColour().GetPixel());
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
           node = node->GetNext() )
