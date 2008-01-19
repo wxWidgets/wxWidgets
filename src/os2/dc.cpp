@@ -513,16 +513,16 @@ bool wxDC::CanGetTextExtent() const
 
 int wxDC::GetDepth() const
 {
-    LONG                            lArray[CAPS_COLOR_BITCOUNT];
+    LONG                            lCapsColorBitcount;
     int                             nBitsPerPixel = 0;
 
     if(::DevQueryCaps( GetHDC()
-                      ,CAPS_FAMILY
                       ,CAPS_COLOR_BITCOUNT
-                      ,lArray
+                      ,1L
+                      ,&lCapsColorBitcount
                      ))
     {
-        nBitsPerPixel = (int)lArray[CAPS_COLOR_BITCOUNT];
+        nBitsPerPixel = (int)lCapsColorBitcount;
     }
     return nBitsPerPixel;
 } // end of wxDC::GetDepth
@@ -2712,55 +2712,59 @@ bool wxDC::DoBlit( wxCoord vXdest,
 void wxDC::DoGetSize( int* pnWidth,
                       int* pnHeight ) const
 {
-    LONG lArray[CAPS_HEIGHT];
+    LONG lArray[CAPS_HEIGHT+1];
 
     if(::DevQueryCaps( m_hDC
                       ,CAPS_FAMILY
-                      ,CAPS_HEIGHT
+                      ,CAPS_HEIGHT+1
                       ,lArray
                      ))
     {
-        *pnWidth  = lArray[CAPS_WIDTH];
-        *pnHeight = lArray[CAPS_HEIGHT];
+        if (pnWidth)
+            *pnWidth  = lArray[CAPS_WIDTH];
+        if (pnHeight)
+            *pnHeight = lArray[CAPS_HEIGHT];
     }
 }; // end of wxDC::DoGetSize(
 
 void wxDC::DoGetSizeMM( int* pnWidth,
                         int* pnHeight ) const
 {
-    LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
+    LONG                            lArray[CAPS_VERTICAL_RESOLUTION+1];
 
     if(::DevQueryCaps( m_hDC
                       ,CAPS_FAMILY
-                      ,CAPS_VERTICAL_RESOLUTION
+                      ,CAPS_VERTICAL_RESOLUTION+1
                       ,lArray
                      ))
     {
         if(pnWidth)
         {
-            int nWidth = lArray[CAPS_WIDTH];
-            int nHorzRes  = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
-            *pnWidth  = (nHorzRes/1000) * nWidth;
+            int nWidth   = lArray[CAPS_WIDTH];
+            int nHorzRes = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
+            // use fp to avoid returning 0 if nHorzRes < 1000
+            *pnWidth  = (int)((nHorzRes/1000.0) * nWidth);
         }
 
         if(pnHeight)
         {
-            int nHeight   = lArray[CAPS_HEIGHT];
+            int nHeight  = lArray[CAPS_HEIGHT];
             int nVertRes = lArray[CAPS_VERTICAL_RESOLUTION];   // returns pel/meter
-            *pnHeight = (nVertRes/1000) * nHeight;
+            // use fp to avoid returning 0 if nVertRes < 1000
+            *pnHeight = (int)((nVertRes/1000.0) * nHeight);
         }
     }
 }; // end of wxDC::DoGetSizeMM
 
 wxSize wxDC::GetPPI() const
 {
-    LONG                            lArray[CAPS_VERTICAL_RESOLUTION];
+    LONG                            lArray[CAPS_VERTICAL_RESOLUTION+1];
     int                             nWidth = 0;
     int                             nHeight = 0;
 
     if(::DevQueryCaps( m_hDC
                       ,CAPS_FAMILY
-                      ,CAPS_VERTICAL_RESOLUTION
+                      ,CAPS_VERTICAL_RESOLUTION+1
                       ,lArray
                      ))
     {
