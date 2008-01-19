@@ -2141,13 +2141,15 @@ void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
     event.Skip();
 }
 
-void wxTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
+void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
 {
     // be sure the caret remains invisible if the user had hidden it
     if ( !m_isNativeCaretShown )
     {
         ::HideCaret(GetHwnd());
     }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
