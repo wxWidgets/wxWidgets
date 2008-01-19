@@ -1073,7 +1073,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttrEx& attr, wxXmlNode* node, bool is
             attr.SetTextColour(value);
     }
 
-    value = node->GetPropVal(wxT("backgroundcolor"), wxEmptyString);
+    value = node->GetPropVal(wxT("bgcolor"), wxEmptyString);
     if (!value.empty())
     {
         if (value[0] == wxT('#'))
