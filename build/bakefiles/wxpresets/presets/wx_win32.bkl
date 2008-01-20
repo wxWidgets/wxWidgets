@@ -146,12 +146,11 @@
     <define-wxlib-name>html</define-wxlib-name>
     <define-wxlib-name>adv</define-wxlib-name>
     <define-wxlib-name>qa</define-wxlib-name>
-    <define-wxlib-name>gl</define-wxlib-name>
     <define-wxlib-name>aui</define-wxlib-name>
     <define-wxlib-name>stc</define-wxlib-name>
     <define-wxlib-name>richtext</define-wxlib-name>
 
-
+    <!-- NOTE: The GL lib is not part of the monolithic build; treat it as a contrib! -->
 
 
 
@@ -185,10 +184,14 @@
         <if cond="value=='xrc'"><sys-lib>$(WXLIB_XRC_NAME)</sys-lib></if>
         <if cond="value=='html'"><sys-lib>$(WXLIB_HTML_NAME)</sys-lib></if>
         <if cond="value=='adv'"><sys-lib>$(WXLIB_ADV_NAME)</sys-lib></if>
-        <if cond="value=='gl'"><sys-lib>$(WXLIB_GL_NAME)</sys-lib></if>
         <if cond="value=='qa'"><sys-lib>$(WXLIB_QA_NAME)</sys-lib></if>
         <if cond="value=='aui'"><sys-lib>$(WXLIB_AUI_NAME)</sys-lib></if>
         <if cond="value=='richtext'"><sys-lib>$(WXLIB_RICHTEXT_NAME)</sys-lib></if>
+
+        <!-- The GL lib isn't part of the monolithic build, treat it as a contrib: -->
+        <if cond="value=='gl'">
+            <sys-lib>wx$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
+        </if>
 
         <if cond="value=='stc'">
             <!-- wxSTC requires also the basic scintilla library
