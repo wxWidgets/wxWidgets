@@ -408,7 +408,7 @@ dnl     WXRC_CHECK([HAVE_WXRC=1], [HAVE_WXRC=0])
 dnl     if test "x$HAVE_WXRC" != x1; then
 dnl         AC_MSG_ERROR([
 dnl                The wxrc program was not installed or not found.
-dnl     
+dnl
 dnl                Please check the wxWidgets installation.
 dnl         ])
 dnl     fi
@@ -437,13 +437,13 @@ dnl
 AC_DEFUN([WXRC_CHECK],
 [
   AC_ARG_VAR([WXRC], [Path to wxWidget's wxrc resource compiler])
-    
+
   if test "x$WX_CONFIG_NAME" = x; then
     AC_MSG_ERROR([The wxrc tests must run after wxWidgets test.])
   else
-    
+
     AC_MSG_CHECKING([for wxrc])
-    
+
     if test "x$WXRC" = x ; then
       dnl wx-config --utility is a new addition to wxWidgets:
       _WX_PRIVATE_CHECK_VERSION(2,5,3)
@@ -459,7 +459,7 @@ AC_DEFUN([WXRC_CHECK],
       AC_MSG_RESULT([$WXRC])
       ifelse([$1], , :, [$1])
     fi
-    
+
     AC_SUBST(WXRC)
   fi
 ])
@@ -467,11 +467,11 @@ AC_DEFUN([WXRC_CHECK],
 dnl ---------------------------------------------------------------------------
 dnl WX_LIKE_LIBNAME([output-var] [prefix], [name])
 dnl
-dnl Sets the "output-var" variable to the name of a library named with same 
+dnl Sets the "output-var" variable to the name of a library named with same
 dnl wxWidgets rule.
-dnl E.g. for output-var=='lib', name=='test', prefix='mine', sets 
+dnl E.g. for output-var=='lib', name=='test', prefix='mine', sets
 dnl      the $lib variable to:
-dnl          'mine_gtk2ud_test-2.8' 
+dnl          'mine_gtk2ud_test-2.8'
 dnl      if WX_PORT=gtk2, WX_UNICODE=1, WX_DEBUG=1 and WX_RELEASE=28
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_LIKE_LIBNAME],
@@ -749,7 +749,7 @@ AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
 
 
 dnl ---------------------------------------------------------------------------
-dnl _WX_SELECTEDCONFIG_CHECKFOR([RESULTVAR], [STRING], [MSG] 
+dnl _WX_SELECTEDCONFIG_CHECKFOR([RESULTVAR], [STRING], [MSG]
 dnl                             [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
 dnl
 dnl Outputs the given MSG. Then searches the given STRING in the wxWidgets
@@ -764,9 +764,9 @@ AC_DEFUN([_WX_SELECTEDCONFIG_CHECKFOR],
             dnl so we will detect the wxWidgets relative build setting and use it
             AC_MSG_CHECKING([$3])
 
-            dnl set WX_$1 variable to 1 if the $WX_SELECTEDCONFIG contains the $2 
+            dnl set WX_$1 variable to 1 if the $WX_SELECTEDCONFIG contains the $2
             dnl string or to 0 otherwise.
-            dnl NOTE: 'expr match STRING REGEXP' cannot be used since on Mac it 
+            dnl NOTE: 'expr match STRING REGEXP' cannot be used since on Mac it
             dnl       doesn't work; we use 'expr STRING : REGEXP' instead
             WX_$1=$(expr "$WX_SELECTEDCONFIG" : ".*$2.*")
 
@@ -951,7 +951,7 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
         dnl in case the user needs a BUILD=debug/release var...
         if test "$DEBUG" = "1"; then
             BUILD="debug"
-        elif test "$DEBUG" = ""; then
+        elif test "$DEBUG" = "0" -o "$DEBUG" = ""; then
             BUILD="release"
         fi
 
@@ -1012,7 +1012,7 @@ AC_DEFUN([WX_STANDARD_OPTIONS_SUMMARY_MSG],
 dnl ---------------------------------------------------------------------------
 dnl WX_STANDARD_OPTIONS_SUMMARY_MSG_BEGIN, WX_STANDARD_OPTIONS_SUMMARY_MSG_END
 dnl
-dnl Like WX_STANDARD_OPTIONS_SUMMARY_MSG macro but these two macros also gives info 
+dnl Like WX_STANDARD_OPTIONS_SUMMARY_MSG macro but these two macros also gives info
 dnl about the configuration of the package which used the wxpresets.
 dnl
 dnl Typical usage:
