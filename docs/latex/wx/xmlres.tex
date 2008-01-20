@@ -96,7 +96,7 @@ allocated on the heap, since it will be delete by
 
 \membersection{wxXmlResource::AttachUnknownControl}\label{wxxmlresourceattachunknowncontrol}
 
-\func{bool}{AttachUnknownControl}{\param{const wxString\& }{name}, \param{wxWindow* }{control}, \param{wxWindow* }{parent = NULL}}
+\func{bool}{AttachUnknownControl}{\param{const wxString\& }{name}, \param{wxWindow* }{control}, \param{wxWindow* }{parent = \NULL}}
 
 Attaches an unknown control to the given panel/window/dialog.
 Unknown controls are used in conjunction with <object class="unknown">.
@@ -214,18 +214,30 @@ Loads an icon resource from a file.
 
 \func{wxMenu*}{LoadMenu}{\param{const wxString\& }{name}}
 
-Loads menu from resource. Returns NULL on failure.
+Loads menu from resource. Returns \NULL on failure.
 
 
 \membersection{wxXmlResource::LoadMenuBar}\label{wxxmlresourceloadmenubar}
 
 \func{wxMenuBar*}{LoadMenuBar}{\param{wxWindow* }{parent}, \param{const wxString\& }{name}}
 
-Loads a menubar from resource. Returns NULL on failure.
-
 \func{wxMenuBar*}{LoadMenuBar}{\param{const wxString\& }{name}}
 
-Loads a menubar from resource. Returns NULL on failure.
+Loads a menubar from resource. Returns \NULL on failure.
+
+
+\membersection{wxXmlResource::LoadObject}\label{wxxmlresourceloadobject}
+
+\func{wxObject*}{LoadObject}{\param{wxWindow* }{parent}, \param{const wxString\& }{name}, \param{const wxString\& }{classname}}
+
+\func{bool}{LoadObject}{\param{wxObject* }{instance}, \param{wxWindow* }{parent}, \param{const wxString\& }{name}, \param{const wxString\& }{classname}}
+
+Load an object from the resource specifying both the resource name and the
+class name.
+
+The first overload lets you load nonstandard container windows and returns \NULL
+on failure. The second one lets you finish the creation of an existing
+instance and returns \false on failure.
 
 
 \membersection{wxXmlResource::LoadPanel}\label{wxxmlresourceloadpanel}
@@ -251,7 +263,7 @@ Loads a toolbar.
 
 \func{wxXmlResource*}{Set}{\param{wxXmlResource* }{res}}
 
-Sets the global resources object and returns a pointer to the previous one (may be NULL).
+Sets the global resources object and returns a pointer to the previous one (may be \NULL).
 
 
 \membersection{wxXmlResource::SetFlags}\label{wxxmlresourcesetflags}
