@@ -16,6 +16,8 @@
 
 #if wxUSE_VALIDATORS
 
+class WXDLLIMPEXP_FWD_BASE wxDateTime;
+
 class WXDLLEXPORT wxGenericValidator: public wxValidator
 {
 DECLARE_CLASS(wxGenericValidator)
@@ -24,6 +26,9 @@ public:
   wxGenericValidator(int* val);
   wxGenericValidator(wxString* val);
   wxGenericValidator(wxArrayInt* val);
+#if wxUSE_DATETIME
+  wxGenericValidator(wxDateTime* val);
+#endif // wxUSE_DATETIME
   wxGenericValidator(const wxGenericValidator& copyFrom);
 
   virtual ~wxGenericValidator(){}
@@ -52,6 +57,9 @@ protected:
   int*        m_pInt;
   wxString*   m_pString;
   wxArrayInt* m_pArrayInt;
+#if wxUSE_DATETIME
+  wxDateTime* m_pDateTime;
+#endif // wxUSE_DATETIME
 
 private:
 // Cannot use

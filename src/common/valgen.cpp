@@ -38,6 +38,7 @@
 #endif
 
 #include "wx/spinctrl.h"
+#include "wx/datectrl.h"
 
 #if wxUSE_SPINBTN
     #include "wx/spinbutt.h"
@@ -74,6 +75,16 @@ wxGenericValidator::wxGenericValidator(wxArrayInt *val)
     m_pArrayInt = val;
 }
 
+#if wxUSE_DATETIME
+
+wxGenericValidator::wxGenericValidator(wxDateTime *val)
+{
+    Initialize();
+    m_pDateTime = val;
+}
+
+#endif // wxUSE_DATETIME
+
 wxGenericValidator::wxGenericValidator(const wxGenericValidator& val)
     : wxValidator()
 {
@@ -88,6 +99,9 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
     m_pInt = val.m_pInt;
     m_pString = val.m_pString;
     m_pArrayInt = val.m_pArrayInt;
+#if wxUSE_DATETIME
+    m_pDateTime = val.m_pDateTime;
+#endif // wxUSE_DATETIME
 
     return true;
 }
@@ -208,6 +222,19 @@ bool wxGenericValidator::TransferToWindow(void)
         if (m_pInt)
         {
             pControl->SetValue(*m_pInt) ;
+            return true;
+        }
+    } else
+#endif
+
+    // date time controls
+#if wxUSE_DATEPICKCTRL
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxDatePickerCtrl)) )
+    {
+        wxDatePickerCtrl* pControl = (wxDatePickerCtrl*) m_validatorWindow;
+        if (m_pDateTime)
+        {
+            pControl->SetValue(*m_pDateTime) ;
             return true;
         }
     } else
@@ -458,6 +485,19 @@ bool wxGenericValidator::TransferFromWindow(void)
     } else
 #endif
 
+    // DATE TIME CONTROLS ************************************
+#if wxUSE_DATEPICKCTRL
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxDatePickerCtrl)) )
+    {
+        wxDatePickerCtrl* pControl = (wxDatePickerCtrl*) m_validatorWindow;
+        if (m_pDateTime)
+        {
+            *m_pDateTime = pControl->GetValue() ;
+            return true;
+        }
+    } else
+#endif
+
     // STRING CONTROLS ************************************
 #if wxUSE_BUTTON
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxButton)) )
@@ -597,7 +637,9 @@ void wxGenericValidator::Initialize()
     m_pInt = 0;
     m_pString = 0;
     m_pArrayInt = 0;
+#if wxUSE_DATETIME
+    m_pDateTime = 0;
+#endif // wxUSE_DATETIME
 }
 
-#endif
-  // wxUSE_VALIDATORS
+#endif // wxUSE_VALIDATORS
