@@ -228,7 +228,7 @@ bool wxGenericValidator::TransferToWindow(void)
 #endif
 
     // date time controls
-#if wxUSE_DATEPICKCTRL
+#if 0 // wxUSE_DATEPICKCTRL -- temporary fix for shared build linking
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxDatePickerCtrl)) )
     {
         wxDatePickerCtrl* pControl = (wxDatePickerCtrl*) m_validatorWindow;
@@ -486,7 +486,7 @@ bool wxGenericValidator::TransferFromWindow(void)
 #endif
 
     // DATE TIME CONTROLS ************************************
-#if wxUSE_DATEPICKCTRL
+#if 0 // wxUSE_DATEPICKCTRL -- temporary fix for shared build linking
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxDatePickerCtrl)) )
     {
         wxDatePickerCtrl* pControl = (wxDatePickerCtrl*) m_validatorWindow;
