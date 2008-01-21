@@ -620,6 +620,11 @@ public:
 
     static wxWindow *DoFindFocus() /* = 0: implement in derived classes */;
 
+        // return true if the window has focus (handles composite windows
+        // correctly - returns true if GetMainWindowOfCompositeControl()
+        // has focus)
+    virtual bool HasFocus() const;
+
         // can this window have focus in principle?
         //
         // the difference between AcceptsFocus[FromKeyboard]() and CanAcceptFocus

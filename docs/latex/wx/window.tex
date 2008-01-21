@@ -624,7 +624,8 @@ Note that this is a static function, so it can be called without needing a wxWin
 
 \wxheading{See also}
 
-\helpref{wxWindow::SetFocus}{wxwindowsetfocus}
+\helpref{wxWindow::SetFocus}{wxwindowsetfocus},
+\helpref{wxWindow::HasFocus}{wxwindowhasfocus}
 
 
 
@@ -1554,6 +1555,18 @@ extra styles.
 \constfunc{bool}{HasFlag}{\param{int }{flag}}
 
 Returns \texttt{true} if the window has the given \arg{flag} bit set.
+
+
+\membersection{wxWindow::HasFocus}\label{wxwindowhasfocus}
+
+\constfunc{virtual bool}{HasFocus}{\void}
+
+Returns \true if the window (or in case of composite controls, its main
+child window) has focus.
+
+\wxheading{See also}
+
+\helpref{FindFocus}{wxwindowfindfocus}
 
 
 \membersection{wxWindow::HasMultiplePages}\label{wxwindowhasmultiplepages}
@@ -3083,8 +3096,9 @@ This sets the window to receive keyboard input.
 
 \wxheading{See also}
 
-\helpref{wxFocusEvent}{wxfocusevent}
-\helpref{wxPanel::SetFocus}{wxpanelsetfocus}
+\helpref{HasFocus}{wxwindowhasfocus},
+\helpref{wxFocusEvent}{wxfocusevent},
+\helpref{wxPanel::SetFocus}{wxpanelsetfocus},
 \helpref{wxPanel::SetFocusIgnoringChildren}{wxpanelsetfocusignoringchildren}
 
 
