@@ -127,6 +127,8 @@ public:
     wxGridRowLabelWindow( wxGrid *parent, wxWindowID id,
                           const wxPoint &pos, const wxSize &size );
 
+    virtual bool AcceptsFocus() const { return false; }
+
 private:
     wxGrid   *m_owner;
 
@@ -150,6 +152,8 @@ public:
     wxGridColLabelWindow( wxGrid *parent, wxWindowID id,
                           const wxPoint &pos, const wxSize &size );
 
+    virtual bool AcceptsFocus() const { return false; }
+
 private:
     wxGrid   *m_owner;
 
@@ -172,6 +176,8 @@ public:
     wxGridCornerLabelWindow() { m_owner = (wxGrid *)NULL; }
     wxGridCornerLabelWindow( wxGrid *parent, wxWindowID id,
                              const wxPoint &pos, const wxSize &size );
+
+    virtual bool AcceptsFocus() const { return false; }
 
 private:
     wxGrid *m_owner;
@@ -1785,7 +1791,12 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     {
         if ( isSelected )
         {
-            dc.SetBrush( wxBrush(grid.GetSelectionBackground(), wxSOLID) );
+            wxColour clr;
+            if ( wxWindow::FindFocus() == grid.GetGridWindow() )
+                clr = grid.GetSelectionBackground();
+            else
+                clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+            dc.SetBrush( wxBrush(clr, wxSOLID) );
         }
         else
         {
@@ -1819,7 +1830,13 @@ void wxGridCellStringRenderer::SetTextColoursAndFont(const wxGrid& grid,
     {
         if ( isSelected )
         {
-            dc.SetTextBackground( grid.GetSelectionBackground() );
+            wxColour clr;
+            if ( wxWindow::FindFocus() ==
+                 wx_const_cast(wxGrid&, grid).GetGridWindow() )
+                clr = grid.GetSelectionBackground();
+            else
+                clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+            dc.SetTextBackground( clr );
             dc.SetTextForeground( grid.GetSelectionForeground() );
         }
         else
@@ -4066,6 +4083,34 @@ void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 
 void wxGridWindow::OnFocus(wxFocusEvent& event)
 {
+    // current cell cursor {dis,re}appears on focus change:
+    wxRect cursor = m_owner->CellToRect(m_owner->GetGridCursorRow(),
+                                        m_owner->GetGridCursorCol());
+    Refresh(true, &cursor);
+
+    // and if we have any selection, it has to be repainted, because it
+    // uses different colour when the grid is not focused:
+    if ( m_owner->IsSelection() )
+    {
+        Refresh();
+    }
+    else
+    {
+        // NB: Note that this code is in "else" branch only because the other
+        //     branch refreshes everything and so there's no point in calling
+        //     Refresh() again, *not* because it should only be done if
+        //     !IsSelection(). If the above code is ever optimized to refresh
+        //     only selected area, this needs to be moved out of the "else"
+        //     branch so that it's always executed.
+
+        // current cell cursor {dis,re}appears on focus change:
+        const wxGridCellCoords cursorCoords(m_owner->GetGridCursorRow(),
+                                            m_owner->GetGridCursorCol());
+        const wxRect cursor =
+            m_owner->BlockToDeviceRect(cursorCoords, cursorCoords);
+        Refresh(true, &cursor);
+    }
+
     if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
         event.Skip();
 }
@@ -7601,6 +7646,10 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
 
 void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
 {
+    // don't show highlight when the grid doesn't have focus
+    if ( wxWindow::FindFocus() != m_gridWin )
+        return;
+
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
 

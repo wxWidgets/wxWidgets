@@ -112,6 +112,8 @@ All (GUI):
 - SaveAs in docview takes into account path now.
 - Fixed wxXmlResource::GetText() to convert data to current locale's
   charset in ANSI build.
+- wxGrid now indicates focus by using different colour for selection
+  and hiding cell cursor when it doesn't have focus.
 
 All (Unix):
 
