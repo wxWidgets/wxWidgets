@@ -581,7 +581,8 @@ static wxString FileToCppArray(wxString filename, int num)
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
 
     const size_t lng = wx_truncate_cast(size_t, offset);
-    wxASSERT_MSG( lng == offset, wxT("Huge file not supported") );
+    wxASSERT_MSG( wx_static_cast(wxFileOffset, lng) == offset,
+                  wxT("Huge file not supported") );
 
     snum.Printf(_T("%i"), num);
     output.Printf(_T("static size_t xml_res_size_") + snum + _T(" = %i;\n"), lng);
@@ -734,7 +735,8 @@ static wxString FileToPythonArray(wxString filename, int num)
     wxASSERT_MSG( offset >= 0 , wxT("Invalid file length") );
 
     const size_t lng = wx_truncate_cast(size_t, offset);
-    wxASSERT_MSG( offset == lng, wxT("Huge file not supported") );
+    wxASSERT_MSG( wx_static_cast(wxFileOffset, lng) == offset,
+                  wxT("Huge file not supported") );
 
     snum.Printf(_T("%i"), num);
     output = "    xml_res_file_" + snum + " = '''\\\n";
