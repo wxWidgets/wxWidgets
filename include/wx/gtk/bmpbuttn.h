@@ -51,10 +51,10 @@ public:
     // implementation
     // --------------
 
-    void HasFocus();
-    void NotFocus();
-    void StartSelect();
-    void EndSelect();
+    void GTKHasFocus();
+    void GTKNotFocus();
+    void GTKStartSelect();
+    void GTKEndSelect();
 
     bool         m_hasFocus:1;
     bool         m_isSelected:1;
