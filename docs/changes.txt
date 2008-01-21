@@ -39,12 +39,21 @@ changes:
   bit text, the new wxIPC_UTF8TEXT format is used for transferring wxStrings.
 
 
-wxODBC library removal
-----------------------
+wxODBC and contrib libraries removal
+------------------------------------
 
 wxODBC library was unmaintained since several years and we couldn't continue
 supporting it any longer so it was removed. Please use any of the other open
 source ODBC libraries in the future projects.
+
+Also the "applet", "deprecated", "fl", "mmedia" and "plot" contrib libraries
+were removed as they were unmaintained and broken since several years.
+The "gizmos", "ogl", "net" and "foldbar" contribs have been moved to
+wxCode (see http://wxcode.sourceforge.net/complist.php); they are now
+open for futher development by volunteers.
+
+The "stc" and "svg" contribs instead have been moved respectively into a new
+"official" library stc and in the core lib.
 
 
 Changes in behaviour not resulting in compilation errors, please read this!
