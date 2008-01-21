@@ -224,15 +224,27 @@ void GTK_EndProcessDetector(gpointer data, gint source,
    int status = 0;
    int rc = waitpid(pid, &status, WNOHANG);
 
-   if ( rc == 0 )
-   {
-       // no, it didn't exit yet, continue waiting
-       return;
-   }
+    if ( rc == 0 )
+    {
+        // This can only happen if the child application closes our dummy
+        // pipe that is used to monitor its lifetime; in that case, our
+        // best bet is to pretend the process did terminate, because
+        // otherwise wxExecute() would hang indefinitely
+        // (OnExceptionWaiting() won't be called again, the descriptor
+        // is closed now).
+        wxLogDebug("Child process (PID %i) still alive, even though notification was received that it terminated.", pid);
+    }
+    else if ( rc == -1 )
+    {
+        // As above, if waitpid() fails, the best we can do is to log the
+        // error and pretend the child terminated:
+        wxLogSysError(_("Failed to check child process' status"));
+    }
 
    // set exit code to -1 if something bad happened
-   proc_data->exitcode = rc != -1 && WIFEXITED(status) ? WEXITSTATUS(status)
-                                                      : -1;
+   proc_data->exitcode = (rc > 0 && WIFEXITED(status))
+                         ? WEXITSTATUS(status)
+                         : -1;
 
    // child exited, end waiting
    close(source);
