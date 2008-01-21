@@ -21,8 +21,6 @@
 
 #else // !wxUSE_STL
 
-#include "wx/utils.h"
-
 #include "wx/beforestd.h"
 #include <new> // for placement new
 #include "wx/afterstd.h"
