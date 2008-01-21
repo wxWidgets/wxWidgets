@@ -4145,12 +4145,8 @@ wxGrid::wxGrid( wxWindow *parent,
                  const wxSize& size,
                  long style,
                  const wxString& name )
-  : wxScrolledWindow( parent, id, pos, size, (style | wxWANTS_CHARS), name ),
-    m_colMinWidths(GRID_HASH_SIZE),
-    m_rowMinHeights(GRID_HASH_SIZE)
 {
-    Create();
-    SetInitialSize(size);
+    Create(parent, id, pos, size, style, name);
 }
 
 bool wxGrid::Create(wxWindow *parent, wxWindowID id,
