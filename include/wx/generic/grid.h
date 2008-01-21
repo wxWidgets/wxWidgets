@@ -1625,6 +1625,8 @@ public:
 
     // override some base class functions
     virtual bool Enable(bool enable = true);
+    virtual wxWindow *GetMainWindowOfCompositeControl()
+        { return (wxWindow*)m_gridWin; }
 
 
     // ------ For compatibility with previous wxGrid only...

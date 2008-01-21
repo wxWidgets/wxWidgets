@@ -132,11 +132,13 @@ public:
                     int additionalStyle = 0,
                     const wxString& name = wxPanelNameStr)
         : wxWindow(owner, id, pos, size,
-                   wxWANTS_CHARS | wxBORDER_NONE | additionalStyle,
+                   wxBORDER_NONE | additionalStyle,
                    name)
     {
         m_owner = owner;
     }
+
+    virtual bool AcceptsFocus() const { return false; }
 
     wxGrid *GetOwner() { return m_owner; }
 
@@ -160,9 +162,6 @@ private:
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );
-    void OnKeyDown( wxKeyEvent& event );
-    void OnKeyUp( wxKeyEvent& );
-    void OnChar( wxKeyEvent& );
 
     DECLARE_DYNAMIC_CLASS(wxGridRowLabelWindow)
     DECLARE_EVENT_TABLE()
@@ -181,9 +180,6 @@ private:
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );
-    void OnKeyDown( wxKeyEvent& event );
-    void OnKeyUp( wxKeyEvent& );
-    void OnChar( wxKeyEvent& );
 
     DECLARE_DYNAMIC_CLASS(wxGridColLabelWindow)
     DECLARE_EVENT_TABLE()
@@ -201,9 +197,6 @@ public:
 private:
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );
-    void OnKeyDown( wxKeyEvent& event );
-    void OnKeyUp( wxKeyEvent& );
-    void OnChar( wxKeyEvent& );
     void OnPaint( wxPaintEvent& event );
 
     DECLARE_DYNAMIC_CLASS(wxGridCornerLabelWindow)
@@ -226,6 +219,8 @@ public:
                   wxWindowID id, const wxPoint &pos, const wxSize &size );
 
     void ScrollWindow( int dx, int dy, const wxRect *rect );
+
+    virtual bool AcceptsFocus() const { return true; }
 
 private:
     wxGridRowLabelWindow     *m_rowLabelWin;
@@ -1811,7 +1806,12 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     {
         if ( isSelected )
         {
-            dc.SetBrush( wxBrush(grid.GetSelectionBackground(), wxSOLID) );
+            wxColour clr;
+            if ( grid.HasFocus() )
+                clr = grid.GetSelectionBackground();
+            else
+                clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+            dc.SetBrush( wxBrush(clr, wxSOLID) );
         }
         else
         {
@@ -1845,7 +1845,12 @@ void wxGridCellStringRenderer::SetTextColoursAndFont(const wxGrid& grid,
     {
         if ( isSelected )
         {
-            dc.SetTextBackground( grid.GetSelectionBackground() );
+            wxColour clr;
+            if ( grid.HasFocus() )
+                clr = grid.GetSelectionBackground();
+            else
+                clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+            dc.SetTextBackground( clr );
             dc.SetTextForeground( grid.GetSelectionForeground() );
         }
         else
@@ -3774,9 +3779,6 @@ BEGIN_EVENT_TABLE( wxGridRowLabelWindow, wxGridSubwindow )
     EVT_PAINT( wxGridRowLabelWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridRowLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridRowLabelWindow::OnMouseEvent )
-    EVT_KEY_DOWN( wxGridRowLabelWindow::OnKeyDown )
-    EVT_KEY_UP( wxGridRowLabelWindow::OnKeyUp )
-    EVT_CHAR( wxGridRowLabelWindow::OnChar )
 END_EVENT_TABLE()
 
 wxGridRowLabelWindow::wxGridRowLabelWindow( wxGrid *parent,
@@ -3816,27 +3818,6 @@ void wxGridRowLabelWindow::OnMouseWheel( wxMouseEvent& event )
     m_owner->GetEventHandler()->ProcessEvent( event );
 }
 
-// This seems to be required for wxMotif otherwise the mouse
-// cursor must be in the cell edit control to get key events
-//
-void wxGridRowLabelWindow::OnKeyDown( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
-void wxGridRowLabelWindow::OnKeyUp( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
-void wxGridRowLabelWindow::OnChar( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
 //////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridColLabelWindow, wxWindow )
@@ -3845,9 +3826,6 @@ BEGIN_EVENT_TABLE( wxGridColLabelWindow, wxGridSubwindow )
     EVT_PAINT( wxGridColLabelWindow::OnPaint )
     EVT_MOUSEWHEEL( wxGridColLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridColLabelWindow::OnMouseEvent )
-    EVT_KEY_DOWN( wxGridColLabelWindow::OnKeyDown )
-    EVT_KEY_UP( wxGridColLabelWindow::OnKeyUp )
-    EVT_CHAR( wxGridColLabelWindow::OnChar )
 END_EVENT_TABLE()
 
 wxGridColLabelWindow::wxGridColLabelWindow( wxGrid *parent,
@@ -3890,27 +3868,6 @@ void wxGridColLabelWindow::OnMouseWheel( wxMouseEvent& event )
     m_owner->GetEventHandler()->ProcessEvent( event );
 }
 
-// This seems to be required for wxMotif otherwise the mouse
-// cursor must be in the cell edit control to get key events
-//
-void wxGridColLabelWindow::OnKeyDown( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
-void wxGridColLabelWindow::OnKeyUp( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
-void wxGridColLabelWindow::OnChar( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
 //////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridCornerLabelWindow, wxWindow )
@@ -3919,9 +3876,6 @@ BEGIN_EVENT_TABLE( wxGridCornerLabelWindow, wxGridSubwindow )
     EVT_MOUSEWHEEL( wxGridCornerLabelWindow::OnMouseWheel )
     EVT_MOUSE_EVENTS( wxGridCornerLabelWindow::OnMouseEvent )
     EVT_PAINT( wxGridCornerLabelWindow::OnPaint )
-    EVT_KEY_DOWN( wxGridCornerLabelWindow::OnKeyDown )
-    EVT_KEY_UP( wxGridCornerLabelWindow::OnKeyUp )
-    EVT_CHAR( wxGridCornerLabelWindow::OnChar )
 END_EVENT_TABLE()
 
 wxGridCornerLabelWindow::wxGridCornerLabelWindow( wxGrid *parent,
@@ -3973,27 +3927,6 @@ void wxGridCornerLabelWindow::OnMouseWheel( wxMouseEvent& event )
     m_owner->GetEventHandler()->ProcessEvent(event);
 }
 
-// This seems to be required for wxMotif otherwise the mouse
-// cursor must be in the cell edit control to get key events
-//
-void wxGridCornerLabelWindow::OnKeyDown( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
-void wxGridCornerLabelWindow::OnKeyUp( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
-void wxGridCornerLabelWindow::OnChar( wxKeyEvent& event )
-{
-    if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
-        event.Skip();
-}
-
 //////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNAMIC_CLASS( wxGridWindow, wxWindow )
@@ -4017,7 +3950,8 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
                             const wxPoint &pos,
                             const wxSize &size )
             : wxGridSubwindow(parent, id, pos, size,
-                              wxCLIP_CHILDREN, wxT("grid window") )
+                              wxWANTS_CHARS | wxCLIP_CHILDREN,
+                              wxT("grid window") )
 {
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
@@ -4087,6 +4021,29 @@ void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 
 void wxGridWindow::OnFocus(wxFocusEvent& event)
 {
+    // and if we have any selection, it has to be repainted, because it
+    // uses different colour when the grid is not focused:
+    if ( m_owner->IsSelection() )
+    {
+        Refresh();
+    }
+    else
+    {
+        // NB: Note that this code is in "else" branch only because the other
+        //     branch refreshes everything and so there's no point in calling
+        //     Refresh() again, *not* because it should only be done if
+        //     !IsSelection(). If the above code is ever optimized to refresh
+        //     only selected area, this needs to be moved out of the "else"
+        //     branch so that it's always executed.
+
+        // current cell cursor {dis,re}appears on focus change:
+        const wxGridCellCoords cursorCoords(m_owner->GetGridCursorRow(),
+                                            m_owner->GetGridCursorCol());
+        const wxRect cursor =
+            m_owner->BlockToDeviceRect(cursorCoords, cursorCoords);
+        Refresh(true, &cursor);
+    }
+
     if ( !m_owner->GetEventHandler()->ProcessEvent( event ) )
         event.Skip();
 }
@@ -7638,6 +7595,10 @@ void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
 
 void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
 {
+    // don't show highlight when the grid doesn't have focus
+    if ( !HasFocus() )
+        return;
+
     int row = m_currentCellCoords.GetRow();
     int col = m_currentCellCoords.GetCol();
 
