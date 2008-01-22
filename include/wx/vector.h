@@ -22,13 +22,91 @@
 #else // !wxUSE_STL
 
 #include "wx/utils.h"
+#include "wx/meta/movable.h"
+#include "wx/meta/if.h"
 
 #include "wx/beforestd.h"
 #include <new> // for placement new
 #include "wx/afterstd.h"
 
+namespace wxPrivate
+{
+
+// These templates encapsulate memory operations for use by wxVector; there are
+// two implementations, both in generic way for any C++ types and as an
+// optimized version for "movable" types that uses realloc() and memmove().
+
+// version for movable types:
+template<typename T>
+struct wxVectorMemOpsMovable
+{
+    static void Free(T* array)
+        { free(array); }
+
+    static T* Realloc(T* old, size_t newCapacity, size_t WXUNUSED(occupiedSize))
+        { return (T*)realloc(old, newCapacity * sizeof(T)); }
+
+    static void MemmoveBackward(T* dest, T* source, size_t count)
+        { memmove(dest, source, count * sizeof(T)); }
+
+    static void MemmoveForward(T* dest, T* source, size_t count)
+        { memmove(dest, source, count * sizeof(T)); }
+};
+
+// generic version for non-movable types:
+template<typename T>
+struct wxVectorMemOpsGeneric
+{
+    static void Free(T* array)
+        { ::operator delete(array); }
+
+    static T* Realloc(T* old, size_t newCapacity, size_t occupiedSize)
+    {
+        T *mem = (T*)::operator new(newCapacity * sizeof(T));
+        for ( size_t i = 0; i < occupiedSize; i++ )
+        {
+            new(mem + i) T(old[i]);
+            old[i].~T();
+        }
+        ::operator delete(old);
+        return mem;
+    }
+
+    static void MemmoveBackward(T* dest, T* source, size_t count)
+    {
+        wxASSERT( dest < source );
+        T* destptr = dest;
+        T* sourceptr = source;
+        for ( size_t i = count; i > 0; --i, ++destptr, ++sourceptr )
+        {
+            new(destptr) T(*sourceptr);
+            sourceptr->~T();
+        }
+    }
+
+    static void MemmoveForward(T* dest, T* source, size_t count)
+    {
+        wxASSERT( dest > source );
+        T* destptr = dest + count - 1;
+        T* sourceptr = source + count - 1;
+        for ( size_t i = count; i > 0; --i, --destptr, --sourceptr )
+        {
+            new(destptr) T(*sourceptr);
+            sourceptr->~T();
+        }
+    }
+};
+
+
+} // namespace wxPrivate
+
 template<typename T>
 class wxVector
+    // this cryptic expression means "derive from wxVectorMemOpsMovable if
+    // type T is movable type, otherwise derive from wxVectorMemOpsGeneric
+    : private wxIf< wxIsMovable<T>::value,
+                    wxPrivate::wxVectorMemOpsMovable<T>,
+                    wxPrivate::wxVectorMemOpsGeneric<T> >::value
 {
 public:
     typedef size_t size_type;
@@ -57,7 +135,7 @@ public:
             m_values[i].~T();
         }
 
-        free(m_values);
+        Free(m_values);
         m_values = NULL;
         m_size = m_capacity = 0;
     }
@@ -78,8 +156,7 @@ public:
         if ( m_capacity + increment > n )
             n = m_capacity + increment;
 
-        m_values = (value_type*)realloc(m_values, n * sizeof(value_type));
-
+        m_values = Realloc(m_values, n * sizeof(value_type), m_size);
         m_capacity = n;
     }
 
@@ -162,9 +239,7 @@ public:
         // the way:
         if ( after > 0 )
         {
-            memmove(m_values + idx + 1,
-                    m_values + idx,
-                    after * sizeof(value_type));
+            MemmoveForward(m_values + idx + 1, m_values + idx, after);
         }
 
 #if wxUSE_EXCEPTIONS
@@ -183,9 +258,7 @@ public:
             // back to their original positions in m_values
             if ( after > 0 )
             {
-                memmove(m_values + idx,
-                        m_values + idx + 1,
-                        after * sizeof(value_type));
+                MemmoveBackward(m_values + idx, m_values + idx + 1, after);
             }
 
             throw; // rethrow the exception
@@ -217,14 +290,12 @@ public:
 
         // erase elements by calling their destructors:
         for ( iterator i = first; i < last; ++i )
-            i->~value_type();
+            i->~T();
 
         // once that's done, move following elements over to the freed space:
         if ( after > 0 )
         {
-            memmove(m_values + idx,
-                    m_values + idx + count,
-                    after * sizeof(value_type));
+            MemmoveBackward(m_values + idx, m_values + idx + count, after);
         }
 
         m_size -= count;

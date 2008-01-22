@@ -23,9 +23,47 @@
 
 #include "wx/vector.h"
 
-// --------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// simple class capable of detecting leaks of its objects
+// ----------------------------------------------------------------------------
+
+class CountedObject
+{
+public:
+    CountedObject(int n = 0) : m_n(n) { ms_count++; }
+    CountedObject(const CountedObject& co) : m_n(co.m_n) { ms_count++; }
+    ~CountedObject() { ms_count--; }
+
+    int GetValue() const { return m_n; }
+
+    static int GetCount() { return ms_count; }
+
+private:
+    static int ms_count;
+
+    int m_n;
+};
+
+int CountedObject::ms_count = 0;
+
+// ----------------------------------------------------------------------------
+// simple class capable of checking it's this pointer validity
+// ----------------------------------------------------------------------------
+
+class SelfPointingObject
+{
+public:
+    SelfPointingObject() { m_self = this; }
+    SelfPointingObject(const SelfPointingObject&) { m_self = this; }
+    ~SelfPointingObject() { CPPUNIT_ASSERT( this == m_self ); }
+
+private:
+    SelfPointingObject *m_self;
+};
+
+// ----------------------------------------------------------------------------
 // test class
-// --------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class VectorsTestCase : public CppUnit::TestCase
 {
@@ -38,12 +76,16 @@ private:
         CPPUNIT_TEST( Insert );
         CPPUNIT_TEST( Erase );
         CPPUNIT_TEST( Iterators );
+        CPPUNIT_TEST( Objects );
+        CPPUNIT_TEST( NonPODs );
     CPPUNIT_TEST_SUITE_END();
 
     void PushPopTest();
     void Insert();
     void Erase();
     void Iterators();
+    void Objects();
+    void NonPODs();
 
     DECLARE_NO_COPY_CLASS(VectorsTestCase)
 };
@@ -154,4 +196,42 @@ void VectorsTestCase::Iterators()
     {
         CPPUNIT_ASSERT_EQUAL( value, *i );
     }
+}
+
+void VectorsTestCase::Objects()
+{
+    wxVector<CountedObject> v;
+    v.push_back(CountedObject(1));
+    v.push_back(CountedObject(2));
+    v.push_back(CountedObject(3));
+
+    v.erase(v.begin());
+    WX_ASSERT_SIZET_EQUAL( 2, v.size() );
+    CPPUNIT_ASSERT_EQUAL( 2, CountedObject::GetCount() );
+
+    v.clear();
+    CPPUNIT_ASSERT_EQUAL( 0, CountedObject::GetCount() );
+}
+
+void VectorsTestCase::NonPODs()
+{
+    wxVector<SelfPointingObject> v;
+    v.push_back(SelfPointingObject());
+    v.push_back(SelfPointingObject());
+    v.push_back(SelfPointingObject());
+
+    v.erase(v.begin());
+    v.clear();
+
+    // try the same with wxString, which is not POD, but is implemented in
+    // a movable way (this won't assert, but would crash or show some memory
+    // problems under Valgrind if wxString couldn't be safely moved with
+    // memmove()):
+    wxVector<wxString> vs;
+    vs.push_back("one");
+    vs.push_back("two");
+    vs.push_back("three");
+
+    vs.erase(vs.begin());
+    vs.clear();
 }
