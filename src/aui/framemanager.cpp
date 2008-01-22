@@ -610,6 +610,17 @@ wxAuiManager::~wxAuiManager()
     }
 #endif
 
+    // We need to remove any reference to this wxAuiManager in any of the
+    // wxAuiFloatingFrames associated with this manager in case they haven't
+    // been deleted just yet.
+    // We need an array copy since Unregister removes the items.
+    wxAuiFloatingFramePtrArray array_copy = m_floating_frames;
+    int i, count = array_copy.GetCount();
+    for (i = 0; i < count; ++i)
+    {
+        UnregisterFloatingFrame(array_copy.Item(i));
+    }
+
     delete m_art;
 }
 
@@ -617,7 +628,9 @@ wxAuiManager::~wxAuiManager()
 wxAuiFloatingFrame* wxAuiManager::CreateFloatingFrame(wxWindow* parent,
                                                       const wxAuiPaneInfo& pane_info)
 {
-    return new wxAuiFloatingFrame(parent, this, pane_info);
+    wxAuiFloatingFrame* frame = new wxAuiFloatingFrame(parent, this, pane_info);
+    RegisterFloatingFrame(frame);
+    return frame;
 }
 
 bool wxAuiManager::CanDockPanel(const wxAuiPaneInfo & WXUNUSED(p))
@@ -625,6 +638,37 @@ bool wxAuiManager::CanDockPanel(const wxAuiPaneInfo & WXUNUSED(p))
     // if a key modifier is pressed while dragging the frame,
     // don't dock the window
     return !(wxGetKeyState(WXK_CONTROL) || wxGetKeyState(WXK_ALT));
+}
+
+// registers a floating frame with this manager (see header)
+void wxAuiManager::RegisterFloatingFrame(wxAuiFloatingFrame* frame)
+{
+    frame->SetOwnerManager(this);
+    int i, count = m_floating_frames.GetCount();
+    for (i = 0; i < count; ++i)
+    {
+        wxAuiFloatingFrame* f = m_floating_frames.Item(i);
+        if (f == frame)
+            // this frame is already registered
+            return;
+    }
+    m_floating_frames.Add(frame);
+}
+
+// unregisters a floating frame from this manager (see header)
+void wxAuiManager::UnregisterFloatingFrame(wxAuiFloatingFrame* frame)
+{
+    frame->SetOwnerManager(NULL);
+    int i, count = m_floating_frames.GetCount();
+    for (i = 0; i < count; ++i)
+    {
+        wxAuiFloatingFrame* f = m_floating_frames.Item(i);
+        if (f == frame)
+        {
+            m_floating_frames.Remove(f);
+            return;
+        }
+    }
 }
 
 // GetPane() looks up a wxAuiPaneInfo structure based

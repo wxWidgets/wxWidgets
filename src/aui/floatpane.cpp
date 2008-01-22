@@ -73,10 +73,13 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
 wxAuiFloatingFrame::~wxAuiFloatingFrame()
 {
     // if we do not do this, then we can crash...
-    if(m_owner_mgr && m_owner_mgr->m_action_window == this)
+    if(m_owner_mgr)
     {
-        m_owner_mgr->m_action_window = NULL;
+        if(m_owner_mgr->m_action_window == this)
+            m_owner_mgr->m_action_window = NULL;
+        m_owner_mgr->UnregisterFloatingFrame(this);
     }
+
     m_mgr.UnInit();
 }
 
@@ -133,7 +136,7 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
             size = pane.min_size;
         if (size == wxDefaultSize)
             size = m_pane_window->GetSize();
-        if (pane.HasGripper())
+        if (m_owner_mgr && pane.HasGripper())
         {
             if (pane.HasGripperTop())
                 size.y += m_owner_mgr->m_art->GetMetric(wxAUI_DOCKART_GRIPPER_SIZE);
@@ -150,16 +153,28 @@ wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const
     return m_owner_mgr;
 }
 
+void wxAuiFloatingFrame::SetOwnerManager(wxAuiManager* owner_mgr)
+{
+    // we want to allow for NULL here to avoid crashing in dtor
+    m_owner_mgr = owner_mgr;
+}
 
 void wxAuiFloatingFrame::OnSize(wxSizeEvent& event)
 {
-    m_owner_mgr->OnFloatingPaneResized(m_pane_window, event.GetSize());
+    if (m_owner_mgr)
+    {
+        m_owner_mgr->OnFloatingPaneResized(m_pane_window, event.GetSize());
+    }
 }
 
 void wxAuiFloatingFrame::OnClose(wxCloseEvent& evt)
 {
-    m_owner_mgr->OnFloatingPaneClosed(m_pane_window, evt);
-    if (!evt.GetVeto()) {
+    if (m_owner_mgr)
+    {
+        m_owner_mgr->OnFloatingPaneClosed(m_pane_window, evt);
+    }
+    if (!evt.GetVeto())
+    {
         m_mgr.DetachPane(m_pane_window);
         Destroy();
     }
@@ -271,25 +286,34 @@ void wxAuiFloatingFrame::OnIdle(wxIdleEvent& event)
 void wxAuiFloatingFrame::OnMoveStart()
 {
     // notify the owner manager that the pane has started to move
-    m_owner_mgr->OnFloatingPaneMoveStart(m_pane_window);
+    if (m_owner_mgr)
+    {
+        m_owner_mgr->OnFloatingPaneMoveStart(m_pane_window);
+    }
 }
 
 void wxAuiFloatingFrame::OnMoving(const wxRect& WXUNUSED(window_rect), wxDirection dir)
 {
     // notify the owner manager that the pane is moving
-    m_owner_mgr->OnFloatingPaneMoving(m_pane_window, dir);
+    if (m_owner_mgr)
+    {
+        m_owner_mgr->OnFloatingPaneMoving(m_pane_window, dir);
+    }
     m_lastDirection = dir;
 }
 
 void wxAuiFloatingFrame::OnMoveFinished()
 {
     // notify the owner manager that the pane has finished moving
-    m_owner_mgr->OnFloatingPaneMoved(m_pane_window, m_lastDirection);
+    if (m_owner_mgr)
+    {
+        m_owner_mgr->OnFloatingPaneMoved(m_pane_window, m_lastDirection);
+    }
 }
 
 void wxAuiFloatingFrame::OnActivate(wxActivateEvent& event)
 {
-    if (event.GetActive())
+    if (m_owner_mgr && event.GetActive())
     {
         m_owner_mgr->OnFloatingPaneActivated(m_pane_window);
     }
