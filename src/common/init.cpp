@@ -179,7 +179,11 @@ static void ConvertArgsToUnicode(int argc, char **argv)
     int wargc = 0;
     for ( int i = 0; i < argc; i++ )
     {
+#ifdef __DARWIN__
+        wxWCharBuffer buf(wxConvFileName->cMB2WX(argv[i]));
+#else
         wxWCharBuffer buf(wxConvLocal.cMB2WX(argv[i]));
+#endif
         if ( !buf )
         {
             wxLogWarning(_("Command line argument %d couldn't be converted to Unicode and will be ignored."),
