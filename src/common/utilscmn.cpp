@@ -1081,6 +1081,20 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 
 #ifdef __UNIX__
 
+    // Our best best is to use xdg-open from freedesktop.org cross-desktop
+    // compatibility suite xdg-utils
+    // (see http://portland.freedesktop.org/wiki/) -- this is installed on
+    // most modern distributions and may be tweaked by them to handle
+    // distribution specifics. Only if that fails, try to find the right
+    // browser ourselves.
+    wxString path, xdg_open;
+    if ( wxGetEnv("PATH", &path) &&
+         wxFindFileInPath(&xdg_open, path, "xdg-open") )
+    {
+        if ( wxExecute(xdg_open + " " + url) )
+            return true;
+    }
+
     wxString desktop = wxTheApp->GetTraits()->GetDesktopEnvironment();
 
     // GNOME and KDE desktops have some applications which should be always installed
