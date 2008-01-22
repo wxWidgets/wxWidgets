@@ -96,7 +96,6 @@ public:
     virtual size_t GetPageCount() const { return m_pages.size(); }
 
     // get the panel which represents the given page
-    wxWindow *GetPage(size_t n) { return m_pages[n]; }
     wxWindow *GetPage(size_t n) const { return m_pages[n]; }
 
     // get the current page or NULL if none
