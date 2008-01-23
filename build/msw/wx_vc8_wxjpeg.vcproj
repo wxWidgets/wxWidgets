@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="wxexpat"
-	ProjectGUID="{7241B23E-E94C-5F2A-9B5F-F13827AC9730}"
+	Name="wxjpeg"
+	ProjectGUID="{4BDDC25D-2967-5450-8439-107D28E7B5D7}"
 	>
 	<Platforms>
 		<Platform
@@ -24,7 +24,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivudll\wxexpat"
+			IntermediateDirectory="vc_mswunivudll\wxjpeg"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -48,19 +48,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_LIB"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivudll\wxexpat\"
-				ObjectFile="vc_mswunivudll\wxexpat\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxexpat.pdb"
+				AssemblerListingLocation="vc_mswunivudll\wxjpeg\"
+				ObjectFile="vc_mswunivudll\wxjpeg\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxjpeg.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -70,15 +70,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll"
-				PreprocessorDefinitions="COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu"
+				PreprocessorDefinitions=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxexpat.lib"
+				OutputFile="..\..\lib\vc_dll\wxjpeg.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -89,7 +89,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxexpat.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxjpeg.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -102,7 +102,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivuddll\wxexpat"
+			IntermediateDirectory="vc_mswunivuddll\wxjpeg"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -126,19 +126,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_LIB;_DEBUG"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivuddll\wxexpat\"
-				ObjectFile="vc_mswunivuddll\wxexpat\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxexpatd.pdb"
+				AssemblerListingLocation="vc_mswunivuddll\wxjpeg\"
+				ObjectFile="vc_mswunivuddll\wxjpeg\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxjpegd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -148,15 +148,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud"
+				PreprocessorDefinitions="_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxexpatd.lib"
+				OutputFile="..\..\lib\vc_dll\wxjpegd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -167,7 +167,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxexpat.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxjpeg.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -180,7 +180,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswudll\wxexpat"
+			IntermediateDirectory="vc_mswudll\wxjpeg"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -204,19 +204,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_LIB"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswudll\wxexpat\"
-				ObjectFile="vc_mswudll\wxexpat\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxexpat.pdb"
+				AssemblerListingLocation="vc_mswudll\wxjpeg\"
+				ObjectFile="vc_mswudll\wxjpeg\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxjpeg.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -226,15 +226,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll"
-				PreprocessorDefinitions="COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu"
+				PreprocessorDefinitions=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxexpat.lib"
+				OutputFile="..\..\lib\vc_dll\wxjpeg.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -245,7 +245,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxexpat.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxjpeg.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -258,7 +258,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswuddll\wxexpat"
+			IntermediateDirectory="vc_mswuddll\wxjpeg"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -282,19 +282,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_LIB;_DEBUG"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswuddll\wxexpat\"
-				ObjectFile="vc_mswuddll\wxexpat\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxexpatd.pdb"
+				AssemblerListingLocation="vc_mswuddll\wxjpeg\"
+				ObjectFile="vc_mswuddll\wxjpeg\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxjpegd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -304,15 +304,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_dll"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud"
+				PreprocessorDefinitions="_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxexpatd.lib"
+				OutputFile="..\..\lib\vc_dll\wxjpegd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -323,7 +323,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxexpat.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxjpeg.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -336,7 +336,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivu\wxexpat"
+			IntermediateDirectory="vc_mswunivu\wxjpeg"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -360,19 +360,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_LIB"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivu\wxexpat\"
-				ObjectFile="vc_mswunivu\wxexpat\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxexpat.pdb"
+				AssemblerListingLocation="vc_mswunivu\wxjpeg\"
+				ObjectFile="vc_mswunivu\wxjpeg\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxjpeg.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -382,15 +382,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib"
-				PreprocessorDefinitions="COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu"
+				PreprocessorDefinitions=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxexpat.lib"
+				OutputFile="..\..\lib\vc_lib\wxjpeg.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -401,7 +401,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxexpat.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxjpeg.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -414,7 +414,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivud\wxexpat"
+			IntermediateDirectory="vc_mswunivud\wxjpeg"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -438,19 +438,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_LIB;_DEBUG"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivud\wxexpat\"
-				ObjectFile="vc_mswunivud\wxexpat\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxexpatd.pdb"
+				AssemblerListingLocation="vc_mswunivud\wxjpeg\"
+				ObjectFile="vc_mswunivud\wxjpeg\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxjpegd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -460,15 +460,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud"
+				PreprocessorDefinitions="_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxexpatd.lib"
+				OutputFile="..\..\lib\vc_lib\wxjpegd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -479,7 +479,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxexpat.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxjpeg.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -492,7 +492,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswu\wxexpat"
+			IntermediateDirectory="vc_mswu\wxjpeg"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -516,19 +516,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_LIB"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswu\wxexpat\"
-				ObjectFile="vc_mswu\wxexpat\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxexpat.pdb"
+				AssemblerListingLocation="vc_mswu\wxjpeg\"
+				ObjectFile="vc_mswu\wxjpeg\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxjpeg.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -538,15 +538,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib"
-				PreprocessorDefinitions="COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu"
+				PreprocessorDefinitions=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxexpat.lib"
+				OutputFile="..\..\lib\vc_lib\wxjpeg.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -557,7 +557,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxexpat.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxjpeg.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -570,7 +570,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswud\wxexpat"
+			IntermediateDirectory="vc_mswud\wxjpeg"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -594,19 +594,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_LIB;_DEBUG"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswud\wxexpat\"
-				ObjectFile="vc_mswud\wxexpat\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxexpatd.pdb"
+				AssemblerListingLocation="vc_mswud\wxjpeg\"
+				ObjectFile="vc_mswud\wxjpeg\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxjpegd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -616,15 +616,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\lib\vc_lib"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud"
+				PreprocessorDefinitions="_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxexpatd.lib"
+				OutputFile="..\..\lib\vc_lib\wxjpegd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -635,7 +635,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxexpat.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxjpeg.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -656,13 +656,142 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
-				RelativePath="..\..\src\expat\lib\xmlparse.c"
+				RelativePath="..\..\src\jpeg\jcapimin.c"
 			/>
 			<File
-				RelativePath="..\..\src\expat\lib\xmlrole.c"
+				RelativePath="..\..\src\jpeg\jcapistd.c"
 			/>
 			<File
-				RelativePath="..\..\src\expat\lib\xmltok.c"
+				RelativePath="..\..\src\jpeg\jccoefct.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jccolor.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcdctmgr.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jchuff.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcinit.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcmainct.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcmarker.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcmaster.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcomapi.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcparam.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcphuff.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcprepct.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jcsample.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jctrans.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdapimin.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdapistd.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdatadst.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdatasrc.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdcoefct.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdcolor.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jddctmgr.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdhuff.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdinput.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdmainct.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdmarker.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdmaster.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdmerge.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdphuff.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdpostct.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdsample.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jdtrans.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jerror.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jfdctflt.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jfdctfst.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jfdctint.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jidctflt.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jidctfst.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jidctint.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jidctred.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jmemmgr.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jmemnobs.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jquant1.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jquant2.c"
+			/>
+			<File
+				RelativePath="..\..\src\jpeg\jutils.c"
 			/>
 		</Filter>
 	</Files>

@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="wxzlib"
-	ProjectGUID="{BBD158B4-DD7E-5F19-A495-E4ABAFE10158}"
+	Name="wxexpat"
+	ProjectGUID="{3E2CE61B-B4B7-5120-8EE3-65ECC0BE055E}"
 	>
 	<Platforms>
 		<Platform
@@ -24,7 +24,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivudll\wxzlib"
+			IntermediateDirectory="vc_mswunivudll\wxexpat"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -48,19 +48,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB"
+				PreprocessorDefinitions="_LIB;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivudll\wxzlib\"
-				ObjectFile="vc_mswunivudll\wxzlib\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxzlib.pdb"
+				AssemblerListingLocation="vc_mswunivudll\wxexpat\"
+				ObjectFile="vc_mswunivudll\wxexpat\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxexpat.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -70,15 +70,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions=""
+				AdditionalIncludeDirectories="..\..\lib\vc_dll"
+				PreprocessorDefinitions="COMPILED_FROM_DSP"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxzlib.lib"
+				OutputFile="..\..\lib\vc_dll\wxexpat.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -89,7 +89,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxzlib.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxexpat.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -102,7 +102,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivuddll\wxzlib"
+			IntermediateDirectory="vc_mswunivuddll\wxexpat"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -126,19 +126,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG"
+				PreprocessorDefinitions="_LIB;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivuddll\wxzlib\"
-				ObjectFile="vc_mswunivuddll\wxzlib\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxzlibd.pdb"
+				AssemblerListingLocation="vc_mswunivuddll\wxexpat\"
+				ObjectFile="vc_mswunivuddll\wxexpat\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxexpatd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -148,15 +148,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="_DEBUG"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll"
+				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxzlibd.lib"
+				OutputFile="..\..\lib\vc_dll\wxexpatd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -167,7 +167,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxzlib.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxexpat.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -180,7 +180,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswudll\wxzlib"
+			IntermediateDirectory="vc_mswudll\wxexpat"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -204,19 +204,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB"
+				PreprocessorDefinitions="_LIB;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswudll\wxzlib\"
-				ObjectFile="vc_mswudll\wxzlib\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxzlib.pdb"
+				AssemblerListingLocation="vc_mswudll\wxexpat\"
+				ObjectFile="vc_mswudll\wxexpat\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxexpat.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -226,15 +226,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions=""
+				AdditionalIncludeDirectories="..\..\lib\vc_dll"
+				PreprocessorDefinitions="COMPILED_FROM_DSP"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxzlib.lib"
+				OutputFile="..\..\lib\vc_dll\wxexpat.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -245,7 +245,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxzlib.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxexpat.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -258,7 +258,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswuddll\wxzlib"
+			IntermediateDirectory="vc_mswuddll\wxexpat"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -282,19 +282,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG"
+				PreprocessorDefinitions="_LIB;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswuddll\wxzlib\"
-				ObjectFile="vc_mswuddll\wxzlib\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxzlibd.pdb"
+				AssemblerListingLocation="vc_mswuddll\wxexpat\"
+				ObjectFile="vc_mswuddll\wxexpat\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxexpatd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -304,15 +304,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="_DEBUG"
+				AdditionalIncludeDirectories="..\..\lib\vc_dll"
+				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxzlibd.lib"
+				OutputFile="..\..\lib\vc_dll\wxexpatd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -323,7 +323,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxzlib.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxexpat.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -336,7 +336,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivu\wxzlib"
+			IntermediateDirectory="vc_mswunivu\wxexpat"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -360,19 +360,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB"
+				PreprocessorDefinitions="_LIB;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivu\wxzlib\"
-				ObjectFile="vc_mswunivu\wxzlib\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxzlib.pdb"
+				AssemblerListingLocation="vc_mswunivu\wxexpat\"
+				ObjectFile="vc_mswunivu\wxexpat\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxexpat.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -382,15 +382,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions=""
+				AdditionalIncludeDirectories="..\..\lib\vc_lib"
+				PreprocessorDefinitions="COMPILED_FROM_DSP"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxzlib.lib"
+				OutputFile="..\..\lib\vc_lib\wxexpat.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -401,7 +401,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxzlib.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxexpat.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -414,7 +414,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivud\wxzlib"
+			IntermediateDirectory="vc_mswunivud\wxexpat"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -438,19 +438,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG"
+				PreprocessorDefinitions="_LIB;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivud\wxzlib\"
-				ObjectFile="vc_mswunivud\wxzlib\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxzlibd.pdb"
+				AssemblerListingLocation="vc_mswunivud\wxexpat\"
+				ObjectFile="vc_mswunivud\wxexpat\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxexpatd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -460,15 +460,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="_DEBUG"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib"
+				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxzlibd.lib"
+				OutputFile="..\..\lib\vc_lib\wxexpatd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -479,7 +479,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxzlib.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxexpat.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -492,7 +492,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswu\wxzlib"
+			IntermediateDirectory="vc_mswu\wxexpat"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -516,19 +516,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB"
+				PreprocessorDefinitions="_LIB;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswu\wxzlib\"
-				ObjectFile="vc_mswu\wxzlib\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxzlib.pdb"
+				AssemblerListingLocation="vc_mswu\wxexpat\"
+				ObjectFile="vc_mswu\wxexpat\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxexpat.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -538,15 +538,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions=""
+				AdditionalIncludeDirectories="..\..\lib\vc_lib"
+				PreprocessorDefinitions="COMPILED_FROM_DSP"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxzlib.lib"
+				OutputFile="..\..\lib\vc_lib\wxexpat.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -557,7 +557,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxzlib.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxexpat.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -570,7 +570,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswud\wxzlib"
+			IntermediateDirectory="vc_mswud\wxexpat"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -594,19 +594,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG"
+				PreprocessorDefinitions="_LIB;_DEBUG;COMPILED_FROM_DSP"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswud\wxzlib\"
-				ObjectFile="vc_mswud\wxzlib\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxzlibd.pdb"
+				AssemblerListingLocation="vc_mswud\wxexpat\"
+				ObjectFile="vc_mswud\wxexpat\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxexpatd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -616,15 +616,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="_DEBUG"
+				AdditionalIncludeDirectories="..\..\lib\vc_lib"
+				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxzlibd.lib"
+				OutputFile="..\..\lib\vc_lib\wxexpatd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -635,7 +635,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxzlib.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxexpat.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -656,40 +656,13 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
-				RelativePath="..\..\src\zlib\adler32.c"
+				RelativePath="..\..\src\expat\lib\xmlparse.c"
 			/>
 			<File
-				RelativePath="..\..\src\zlib\compress.c"
+				RelativePath="..\..\src\expat\lib\xmlrole.c"
 			/>
 			<File
-				RelativePath="..\..\src\zlib\crc32.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\deflate.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\gzio.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\infback.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\inffast.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\inflate.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\inftrees.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\trees.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\uncompr.c"
-			/>
-			<File
-				RelativePath="..\..\src\zlib\zutil.c"
+				RelativePath="..\..\src\expat\lib\xmltok.c"
 			/>
 		</Filter>
 	</Files>

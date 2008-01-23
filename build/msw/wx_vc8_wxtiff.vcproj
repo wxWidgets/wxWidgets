@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="wxscintilla"
-	ProjectGUID="{442230CE-5954-5824-A339-CBFB4F351E93}"
+	Name="wxtiff"
+	ProjectGUID="{6C6028A1-9741-536A-A4CC-AD9D5A21EFE9}"
 	>
 	<Platforms>
 		<Platform
@@ -24,7 +24,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivudll\wxscintilla"
+			IntermediateDirectory="vc_mswunivudll\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -48,19 +48,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_LIB"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivudll\wxscintilla\"
-				ObjectFile="vc_mswunivudll\wxscintilla\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxscintilla.pdb"
+				AssemblerListingLocation="vc_mswunivudll\wxtiff\"
+				ObjectFile="vc_mswunivudll\wxtiff\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxtiff.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -70,15 +70,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
+				PreprocessorDefinitions=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxscintilla.lib"
+				OutputFile="..\..\lib\vc_dll\wxtiff.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -89,7 +89,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxscintilla.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxtiff.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -102,7 +102,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivuddll\wxscintilla"
+			IntermediateDirectory="vc_mswunivuddll\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -126,19 +126,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_LIB;_DEBUG"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivuddll\wxscintilla\"
-				ObjectFile="vc_mswunivuddll\wxscintilla\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxscintillad.pdb"
+				AssemblerListingLocation="vc_mswunivuddll\wxtiff\"
+				ObjectFile="vc_mswunivuddll\wxtiff\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxtiffd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -148,15 +148,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
+				PreprocessorDefinitions="_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxscintillad.lib"
+				OutputFile="..\..\lib\vc_dll\wxtiffd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -167,7 +167,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxscintilla.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxtiff.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -180,7 +180,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswudll\wxscintilla"
+			IntermediateDirectory="vc_mswudll\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -204,19 +204,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_LIB"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswudll\wxscintilla\"
-				ObjectFile="vc_mswudll\wxscintilla\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxscintilla.pdb"
+				AssemblerListingLocation="vc_mswudll\wxtiff\"
+				ObjectFile="vc_mswudll\wxtiff\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxtiff.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -226,15 +226,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
+				PreprocessorDefinitions=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxscintilla.lib"
+				OutputFile="..\..\lib\vc_dll\wxtiff.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -245,7 +245,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxscintilla.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxtiff.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -258,7 +258,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswuddll\wxscintilla"
+			IntermediateDirectory="vc_mswuddll\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -282,19 +282,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_LIB;_DEBUG"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswuddll\wxscintilla\"
-				ObjectFile="vc_mswuddll\wxscintilla\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxscintillad.pdb"
+				AssemblerListingLocation="vc_mswuddll\wxtiff\"
+				ObjectFile="vc_mswuddll\wxtiff\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxtiffd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -304,15 +304,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
+				PreprocessorDefinitions="_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_dll\wxscintillad.lib"
+				OutputFile="..\..\lib\vc_dll\wxtiffd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -323,7 +323,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxscintilla.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxtiff.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -336,7 +336,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivu\wxscintilla"
+			IntermediateDirectory="vc_mswunivu\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -360,19 +360,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_LIB"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivu\wxscintilla\"
-				ObjectFile="vc_mswunivu\wxscintilla\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxscintilla.pdb"
+				AssemblerListingLocation="vc_mswunivu\wxtiff\"
+				ObjectFile="vc_mswunivu\wxtiff\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxtiff.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -382,15 +382,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
+				PreprocessorDefinitions=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxscintilla.lib"
+				OutputFile="..\..\lib\vc_lib\wxtiff.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -401,7 +401,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxscintilla.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxtiff.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -414,7 +414,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivud\wxscintilla"
+			IntermediateDirectory="vc_mswunivud\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -438,19 +438,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_LIB;_DEBUG"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswunivud\wxscintilla\"
-				ObjectFile="vc_mswunivud\wxscintilla\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxscintillad.pdb"
+				AssemblerListingLocation="vc_mswunivud\wxtiff\"
+				ObjectFile="vc_mswunivud\wxtiff\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxtiffd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -460,15 +460,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
+				PreprocessorDefinitions="_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxscintillad.lib"
+				OutputFile="..\..\lib\vc_lib\wxtiffd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -479,7 +479,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxscintilla.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxtiff.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -492,7 +492,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswu\wxscintilla"
+			IntermediateDirectory="vc_mswu\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -516,19 +516,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
 				MinimalRebuild="false"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_LIB"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswu\wxscintilla\"
-				ObjectFile="vc_mswu\wxscintilla\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxscintilla.pdb"
+				AssemblerListingLocation="vc_mswu\wxtiff\"
+				ObjectFile="vc_mswu\wxtiff\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxtiff.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -538,15 +538,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
+				PreprocessorDefinitions=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxscintilla.lib"
+				OutputFile="..\..\lib\vc_lib\wxtiff.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -557,7 +557,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxscintilla.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxtiff.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -570,7 +570,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswud\wxscintilla"
+			IntermediateDirectory="vc_mswud\wxtiff"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -594,19 +594,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_LIB;_DEBUG"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
-				AssemblerListingLocation="vc_mswud\wxscintilla\"
-				ObjectFile="vc_mswud\wxscintilla\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxscintillad.pdb"
+				AssemblerListingLocation="vc_mswud\wxtiff\"
+				ObjectFile="vc_mswud\wxtiff\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxtiffd.pdb"
 				WarningLevel="1"
 				SuppressStartupBanner="true"
 			/>
@@ -616,15 +616,15 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
+				PreprocessorDefinitions="_DEBUG"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxscintillad.lib"
+				OutputFile="..\..\lib\vc_lib\wxtiffd.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -635,7 +635,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxscintilla.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxtiff.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -656,280 +656,112 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\AutoComplete.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_aux.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\CallTip.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_close.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\CellBuffer.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_codec.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\CharClassify.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_color.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\ContractionState.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_compress.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\Decoration.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_dir.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\Document.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_dirinfo.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\DocumentAccessor.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_dirread.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\Editor.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_dirwrite.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\ExternalLexer.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_dumpmode.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\Indicator.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_error.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\KeyMap.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_extension.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\KeyWords.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_fax3.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAPDL.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_fax3sm.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexASY.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_flush.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAU3.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_getimage.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAVE.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_jpeg.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAbaqus.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_luv.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAda.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_lzw.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAsm.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_next.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexAsn1.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_ojpeg.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexBaan.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_open.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexBash.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_packbits.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexBasic.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_pixarlog.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexBullant.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_predict.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCLW.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_print.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCPP.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_read.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCSS.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_strip.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCaml.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_swab.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCmake.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_thunder.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexConf.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_tile.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCrontab.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_version.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexCsound.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_warning.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexD.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_win32.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexEScript.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_write.c"
 			/>
 			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexEiffel.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexErlang.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexFlagship.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexForth.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexFortran.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexGAP.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexGui4Cli.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexHTML.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexHaskell.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexInno.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexKix.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexLisp.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexLout.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexLua.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMMIXAL.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMPT.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMSSQL.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMatlab.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexMetapost.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexNsis.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexOpal.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexOthers.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPB.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPLM.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPOV.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPS.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPascal.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPerl.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexProgress.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexPython.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexR.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexRebol.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexRuby.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSQL.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexScriptol.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSmalltalk.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSpecman.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexSpice.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexTADS3.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexTCL.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexTeX.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexVB.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexVHDL.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexVerilog.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LexYAML.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\LineMarker.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\PositionCache.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\PropSet.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\RESearch.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\RunStyles.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\ScintillaBase.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\Style.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\StyleContext.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\UniConversion.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\ViewStyle.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\WindowAccessor.cxx"
-			/>
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\XPM.cxx"
+				RelativePath="..\..\src\tiff\libtiff\tif_zip.c"
 			/>
 		</Filter>
 	</Files>

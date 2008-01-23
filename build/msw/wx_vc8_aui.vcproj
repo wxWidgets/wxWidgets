@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="gl"
-	ProjectGUID="{C1419AE5-EDDE-5969-AEA0-6B46BC48FAEE}"
+	Name="aui"
+	ProjectGUID="{B361C000-79E7-5B8A-8F5F-BC0168C7002E}"
 	>
 	<Platforms>
 		<Platform
@@ -24,7 +24,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivudll\gl"
+			IntermediateDirectory="vc_mswunivudll\aui"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -54,17 +54,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_GL"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_AUI"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivudll\wxprec_gldll.pch"
-				AssemblerListingLocation="vc_mswunivudll\gl\"
-				ObjectFile="vc_mswunivudll\gl\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290u_gl_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswunivudll\wxprec_auidll.pch"
+				AssemblerListingLocation="vc_mswunivudll\aui\"
+				ObjectFile="vc_mswunivudll\aui\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290u_aui_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -75,23 +75,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290u_gl_vc_custom;WXUSINGDLL;WXMAKINGDLL_GL"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290u_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmswuniv29u_core.lib wxbase29u.lib  opengl32.lib glu32.lib"
+				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmswuniv29u_adv.lib ..\..\lib\vc_dll\wxmswuniv29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxmswuniv290u_gl_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmswuniv290u_aui_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_gl.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_aui.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290u_gl_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290u_aui_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -102,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_gl.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_aui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -115,7 +115,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivuddll\gl"
+			IntermediateDirectory="vc_mswunivuddll\aui"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -145,17 +145,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_GL"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_AUI"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_gldll.pch"
-				AssemblerListingLocation="vc_mswunivuddll\gl\"
-				ObjectFile="vc_mswunivuddll\gl\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290ud_gl_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_auidll.pch"
+				AssemblerListingLocation="vc_mswunivuddll\aui\"
+				ObjectFile="vc_mswunivuddll\aui\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290ud_aui_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -166,23 +166,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290ud_gl_vc_custom;WXUSINGDLL;WXMAKINGDLL_GL"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290ud_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmswuniv29ud_core.lib wxbase29ud.lib  opengl32.lib glu32.lib"
+				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmswuniv29ud_adv.lib ..\..\lib\vc_dll\wxmswuniv29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxmswuniv290ud_gl_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmswuniv290ud_aui_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29ud_gl.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29ud_aui.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290ud_gl_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290ud_aui_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -193,7 +193,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_gl.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_aui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -206,7 +206,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswudll\gl"
+			IntermediateDirectory="vc_mswudll\aui"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -236,17 +236,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_GL"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_AUI"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswudll\wxprec_gldll.pch"
-				AssemblerListingLocation="vc_mswudll\gl\"
-				ObjectFile="vc_mswudll\gl\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290u_gl_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswudll\wxprec_auidll.pch"
+				AssemblerListingLocation="vc_mswudll\aui\"
+				ObjectFile="vc_mswudll\aui\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290u_aui_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -257,23 +257,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290u_gl_vc_custom;WXUSINGDLL;WXMAKINGDLL_GL"
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290u_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmsw29u_core.lib wxbase29u.lib  opengl32.lib glu32.lib"
+				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmsw29u_adv.lib ..\..\lib\vc_dll\wxmsw29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxmsw290u_gl_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw290u_aui_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_gl.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_aui.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290u_gl_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290u_aui_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -284,7 +284,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_gl.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_aui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -297,7 +297,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswuddll\gl"
+			IntermediateDirectory="vc_mswuddll\aui"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -327,17 +327,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_GL"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_AUI"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswuddll\wxprec_gldll.pch"
-				AssemblerListingLocation="vc_mswuddll\gl\"
-				ObjectFile="vc_mswuddll\gl\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290ud_gl_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswuddll\wxprec_auidll.pch"
+				AssemblerListingLocation="vc_mswuddll\aui\"
+				ObjectFile="vc_mswuddll\aui\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290ud_aui_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -348,23 +348,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290ud_gl_vc_custom;WXUSINGDLL;WXMAKINGDLL_GL"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290ud_aui_vc_custom;WXUSINGDLL;WXMAKINGDLL_AUI"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wxmsw29ud_core.lib wxbase29ud.lib  opengl32.lib glu32.lib"
+				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmsw29ud_adv.lib ..\..\lib\vc_dll\wxmsw29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxmsw290ud_gl_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw290ud_aui_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_gl.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_aui.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290ud_gl_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290ud_aui_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -375,7 +375,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_gl.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_aui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -388,7 +388,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivu\gl"
+			IntermediateDirectory="vc_mswunivu\aui"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -425,10 +425,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivu\wxprec_gllib.pch"
-				AssemblerListingLocation="vc_mswunivu\gl\"
-				ObjectFile="vc_mswunivu\gl\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29u_gl.pdb"
+				PrecompiledHeaderFile="vc_mswunivu\wxprec_auilib.pch"
+				AssemblerListingLocation="vc_mswunivu\aui\"
+				ObjectFile="vc_mswunivu\aui\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29u_aui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -446,7 +446,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmswuniv29u_gl.lib"
+				OutputFile="..\..\lib\vc_lib\wxmswuniv29u_aui.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -457,7 +457,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_gl.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_aui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -470,7 +470,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivud\gl"
+			IntermediateDirectory="vc_mswunivud\aui"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -507,10 +507,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivud\wxprec_gllib.pch"
-				AssemblerListingLocation="vc_mswunivud\gl\"
-				ObjectFile="vc_mswunivud\gl\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29ud_gl.pdb"
+				PrecompiledHeaderFile="vc_mswunivud\wxprec_auilib.pch"
+				AssemblerListingLocation="vc_mswunivud\aui\"
+				ObjectFile="vc_mswunivud\aui\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29ud_aui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -528,7 +528,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmswuniv29ud_gl.lib"
+				OutputFile="..\..\lib\vc_lib\wxmswuniv29ud_aui.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -539,7 +539,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_gl.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_aui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -552,7 +552,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswu\gl"
+			IntermediateDirectory="vc_mswu\aui"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -589,10 +589,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswu\wxprec_gllib.pch"
-				AssemblerListingLocation="vc_mswu\gl\"
-				ObjectFile="vc_mswu\gl\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29u_gl.pdb"
+				PrecompiledHeaderFile="vc_mswu\wxprec_auilib.pch"
+				AssemblerListingLocation="vc_mswu\aui\"
+				ObjectFile="vc_mswu\aui\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29u_aui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -610,7 +610,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29u_gl.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw29u_aui.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -621,7 +621,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_gl.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_aui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -634,7 +634,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswud\gl"
+			IntermediateDirectory="vc_mswud\aui"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -671,10 +671,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswud\wxprec_gllib.pch"
-				AssemblerListingLocation="vc_mswud\gl\"
-				ObjectFile="vc_mswud\gl\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29ud_gl.pdb"
+				PrecompiledHeaderFile="vc_mswud\wxprec_auilib.pch"
+				AssemblerListingLocation="vc_mswud\aui\"
+				ObjectFile="vc_mswud\aui\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29ud_aui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -692,7 +692,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29ud_gl.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw29ud_aui.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -703,7 +703,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_gl.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_aui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -790,17 +790,11 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\src\common\glcmn.cpp"
-			/>
 		</Filter>
 		<Filter
 			Name="MSW Sources"
 			UniqueIdentifier="{D030D8C2-53EE-5B96-8F89-D78157B06140}"
 			>
-			<File
-				RelativePath="..\..\src\msw\glcanvas.cpp"
-			/>
 			<File
 				RelativePath="..\..\src\msw\version.rc"
 				>
@@ -1043,16 +1037,49 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\msw\glcanvas.h"
-			/>
 		</Filter>
 		<Filter
 			Name="Common Headers"
 			UniqueIdentifier="{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}"
 			>
 			<File
-				RelativePath="..\..\include\wx\glcanvas.h"
+				RelativePath="..\..\include\wx\aui\aui.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\aui\auibook.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\aui\dockart.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\aui\floatpane.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\aui\framemanager.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\aui\tabmdi.h"
+			/>
+		</Filter>
+		<Filter
+			Name="Source Files"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			>
+			<File
+				RelativePath="..\..\src\aui\auibook.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\aui\dockart.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\aui\floatpane.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\aui\framemanager.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\aui\tabmdi.cpp"
 			/>
 		</Filter>
 	</Files>

@@ -10,7 +10,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="wxregex"
-	ProjectGUID="{A838C38F-2556-5F13-B8C1-6B0938D9AA94}"
+	ProjectGUID="{078F4E39-D258-54B5-B1B1-4905D10E06DC}"
 	>
 	<Platforms>
 		<Platform
@@ -90,7 +90,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxregex.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxregex.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -169,7 +169,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxregex.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxregex.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -248,7 +248,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxregex.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxregex.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -327,7 +327,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_wxregex.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_wxregex.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -406,7 +406,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxregex.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxregex.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -485,7 +485,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxregex.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxregex.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -564,7 +564,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxregex.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxregex.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -643,7 +643,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_wxregex.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_wxregex.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool

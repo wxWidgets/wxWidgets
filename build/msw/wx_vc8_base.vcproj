@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="adv"
-	ProjectGUID="{9F3781AE-672F-5189-897D-C3FA4EECE1E2}"
+	Name="base"
+	ProjectGUID="{9B9B8541-3661-5AD8-8DFF-0BE67FBF1A37}"
 	>
 	<Platforms>
 		<Platform
@@ -24,7 +24,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivudll\adv"
+			IntermediateDirectory="vc_mswunivudll\base"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -54,17 +54,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_ADV"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivudll\wxprec_advdll.pch"
-				AssemblerListingLocation="vc_mswunivudll\adv\"
-				ObjectFile="vc_mswunivudll\adv\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290u_adv_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswunivudll\wxprec_basedll.pch"
+				AssemblerListingLocation="vc_mswunivudll\base\"
+				ObjectFile="vc_mswunivudll\base\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase290u_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -75,23 +75,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290u_adv_vc_custom;WXUSINGDLL;WXMAKINGDLL_ADV"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase290u_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmswuniv29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
+				AdditionalDependencies="wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxmswuniv290u_adv_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase290u_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_adv.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxbase29u.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290u_adv_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase290u_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -102,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_adv.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_base.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -115,7 +115,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivuddll\adv"
+			IntermediateDirectory="vc_mswunivuddll\base"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -145,17 +145,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_ADV"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_advdll.pch"
-				AssemblerListingLocation="vc_mswunivuddll\adv\"
-				ObjectFile="vc_mswunivuddll\adv\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290ud_adv_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_basedll.pch"
+				AssemblerListingLocation="vc_mswunivuddll\base\"
+				ObjectFile="vc_mswunivuddll\base\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase290ud_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -166,23 +166,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290ud_adv_vc_custom;WXUSINGDLL;WXMAKINGDLL_ADV"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase290ud_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmswuniv29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
+				AdditionalDependencies="wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxmswuniv290ud_adv_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase290ud_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29ud_adv.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxbase29ud.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290ud_adv_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase290ud_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -193,7 +193,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_adv.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_base.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -206,7 +206,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswudll\adv"
+			IntermediateDirectory="vc_mswudll\base"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -236,17 +236,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_ADV"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswudll\wxprec_advdll.pch"
-				AssemblerListingLocation="vc_mswudll\adv\"
-				ObjectFile="vc_mswudll\adv\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290u_adv_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswudll\wxprec_basedll.pch"
+				AssemblerListingLocation="vc_mswudll\base\"
+				ObjectFile="vc_mswudll\base\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase290u_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -257,23 +257,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290u_adv_vc_custom;WXUSINGDLL;WXMAKINGDLL_ADV"
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase290u_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmsw29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
+				AdditionalDependencies="wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxmsw290u_adv_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase290u_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_adv.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxbase29u.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290u_adv_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase290u_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -284,7 +284,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_adv.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_base.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -297,7 +297,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswuddll\adv"
+			IntermediateDirectory="vc_mswuddll\base"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -327,17 +327,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_ADV"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswuddll\wxprec_advdll.pch"
-				AssemblerListingLocation="vc_mswuddll\adv\"
-				ObjectFile="vc_mswuddll\adv\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290ud_adv_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswuddll\wxprec_basedll.pch"
+				AssemblerListingLocation="vc_mswuddll\base\"
+				ObjectFile="vc_mswuddll\base\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase290ud_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -348,23 +348,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290ud_adv_vc_custom;WXUSINGDLL;WXMAKINGDLL_ADV"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase290ud_vc_custom;wxUSE_GUI=0;WXMAKINGDLL_BASE;wxUSE_BASE=1"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmsw29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
+				AdditionalDependencies="wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxmsw290ud_adv_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxbase290ud_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_adv.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxbase29ud.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290ud_adv_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase290ud_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -375,7 +375,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_adv.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_base.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -388,7 +388,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivu\adv"
+			IntermediateDirectory="vc_mswunivu\base"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -418,17 +418,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING"
+				PreprocessorDefinitions="_LIB;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_GUI=0;wxUSE_BASE=1"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivu\wxprec_advlib.pch"
-				AssemblerListingLocation="vc_mswunivu\adv\"
-				ObjectFile="vc_mswunivu\adv\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29u_adv.pdb"
+				PrecompiledHeaderFile="vc_mswunivu\wxprec_baselib.pch"
+				AssemblerListingLocation="vc_mswunivu\base\"
+				ObjectFile="vc_mswunivu\base\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxbase29u.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -439,14 +439,14 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_GUI=0;wxUSE_BASE=1"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmswuniv29u_adv.lib"
+				OutputFile="..\..\lib\vc_lib\wxbase29u.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -457,7 +457,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_adv.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_base.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -470,7 +470,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivud\adv"
+			IntermediateDirectory="vc_mswunivud\base"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -500,17 +500,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING"
+				PreprocessorDefinitions="_LIB;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0;wxUSE_BASE=1"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivud\wxprec_advlib.pch"
-				AssemblerListingLocation="vc_mswunivud\adv\"
-				ObjectFile="vc_mswunivud\adv\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29ud_adv.pdb"
+				PrecompiledHeaderFile="vc_mswunivud\wxprec_baselib.pch"
+				AssemblerListingLocation="vc_mswunivud\base\"
+				ObjectFile="vc_mswunivud\base\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxbase29ud.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -521,14 +521,14 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0;wxUSE_BASE=1"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmswuniv29ud_adv.lib"
+				OutputFile="..\..\lib\vc_lib\wxbase29ud.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -539,7 +539,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_adv.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_base.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -552,7 +552,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswu\adv"
+			IntermediateDirectory="vc_mswu\base"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -582,17 +582,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;__WXMSW__;_UNICODE;WXBUILDING"
+				PreprocessorDefinitions="_LIB;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_GUI=0;wxUSE_BASE=1"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswu\wxprec_advlib.pch"
-				AssemblerListingLocation="vc_mswu\adv\"
-				ObjectFile="vc_mswu\adv\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29u_adv.pdb"
+				PrecompiledHeaderFile="vc_mswu\wxprec_baselib.pch"
+				AssemblerListingLocation="vc_mswu\base\"
+				ObjectFile="vc_mswu\base\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxbase29u.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -603,14 +603,14 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING"
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;wxUSE_GUI=0;wxUSE_BASE=1"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29u_adv.lib"
+				OutputFile="..\..\lib\vc_lib\wxbase29u.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -621,7 +621,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_adv.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_base.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -634,7 +634,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswud\adv"
+			IntermediateDirectory="vc_mswud\base"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -664,17 +664,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING"
+				PreprocessorDefinitions="_LIB;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0;wxUSE_BASE=1"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswud\wxprec_advlib.pch"
-				AssemblerListingLocation="vc_mswud\adv\"
-				ObjectFile="vc_mswud\adv\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29ud_adv.pdb"
+				PrecompiledHeaderFile="vc_mswud\wxprec_baselib.pch"
+				AssemblerListingLocation="vc_mswud\base\"
+				ObjectFile="vc_mswud\base\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxbase29ud.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -685,14 +685,14 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0;wxUSE_BASE=1"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29ud_adv.lib"
+				OutputFile="..\..\lib\vc_lib\wxbase29ud.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -703,7 +703,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_adv.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_base.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -723,10 +723,43 @@
 			UniqueIdentifier="{A6A5C30D-BDB6-5050-906D-10A96065136C}"
 			>
 			<File
-				RelativePath="..\..\src\common\animatecmn.cpp"
+				RelativePath="..\..\src\common\appbase.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\common\datavcmn.cpp"
+				RelativePath="..\..\src\common\arcall.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\arcfind.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\archive.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\arrstr.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\base64.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\clntdata.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\cmdline.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\config.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\convauto.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\datetime.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\datstrm.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\dircmn.cpp"
 			/>
 			<File
 				RelativePath="..\..\src\common\dummy.cpp"
@@ -797,10 +830,267 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\common\hyperlnkcmn.cpp"
+				RelativePath="..\..\src\common\dynarray.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\common\taskbarcmn.cpp"
+				RelativePath="..\..\src\common\dynlib.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\dynload.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\encconv.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\event.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\evtloopcmn.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\extended.c"
+				>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\src\common\ffile.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\file.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\fileback.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\fileconf.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\filefn.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\filename.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\filesys.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\filtall.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\filtfind.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\fmapbase.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\fs_arc.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\fs_filter.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\fs_mem.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\hash.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\hashmap.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\init.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\intl.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\ipcbase.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\list.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\log.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\longlong.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\memory.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\mimecmn.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\module.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\msgout.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\mstream.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\object.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\platinfo.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\powercmn.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\process.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\regex.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\sstream.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\stdpbase.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\stopwatch.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\strconv.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\stream.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\string.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\stringimpl.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\stringops.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\strvararg.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\sysopt.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\tarstrm.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\textbuf.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\textfile.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\timercmn.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\timerimpl.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\tokenzr.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\txtstrm.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\unichar.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\uri.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\utilscmn.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\variant.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\wfstream.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\wxcrt.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\wxprintf.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\xti.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\xtistrm.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\zipstrm.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\common\zstream.cpp"
 			/>
 		</Filter>
 		<Filter
@@ -808,39 +1098,64 @@
 			UniqueIdentifier="{D030D8C2-53EE-5B96-8F89-D78157B06140}"
 			>
 			<File
-				RelativePath="..\..\src\msw\aboutdlg.cpp"
+				RelativePath="..\..\src\msw\basemsw.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\msw\datectrl.cpp"
-				>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\msw\joystick.cpp"
+				RelativePath="..\..\src\msw\crashrpt.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\msw\notifmsg.cpp"
+				RelativePath="..\..\src\msw\dde.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\msw\sound.cpp"
+				RelativePath="..\..\src\msw\debughlp.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\msw\taskbar.cpp"
+				RelativePath="..\..\src\msw\dir.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\dlmsw.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\evtloop.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\main.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\mimetype.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\mslu.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\power.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\regconf.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\registry.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\snglinst.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\stackwalk.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\stdpaths.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\thread.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\timer.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\utils.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\utilsexc.cpp"
 			/>
 			<File
 				RelativePath="..\..\src\msw\version.rc"
@@ -862,70 +1177,8 @@
 					ExcludedFromBuild="true"
 				/>
 			</File>
-		</Filter>
-		<Filter
-			Name="Generic Sources"
-			UniqueIdentifier="{FEA0C02F-F300-53BA-B784-52A5086B8093}"
-			>
 			<File
-				RelativePath="..\..\src\generic\aboutdlgg.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\animateg.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\bmpcboxg.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\calctrl.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\datavgen.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\datectlg.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\editlbox.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\grid.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\gridctrl.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\gridsel.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\helpext.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\hyperlinkg.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\laywin.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\notifmsgg.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\odcombo.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\propdlg.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\sashwin.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\splash.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\tipdlg.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\generic\wizard.cpp"
+				RelativePath="..\..\src\msw\volume.cpp"
 			/>
 		</Filter>
 		<Filter
@@ -1058,7 +1311,25 @@
 			UniqueIdentifier="{5AFFF20E-29F9-512B-B80A-7DC45976CDAC}"
 			>
 			<File
-				RelativePath="..\..\include\wx\msw\datectrl.h"
+				RelativePath="..\..\include\wx\msw\apptbase.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\apptrait.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\chkconf.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\crashrpt.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\dde.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\debughlp.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\gccpriv.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\genrcdefs.h"
@@ -1153,72 +1424,51 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\joystick.h"
+				RelativePath="..\..\include\wx\msw\libraries.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\msw\notifmsg.h"
+				RelativePath="..\..\include\wx\msw\mimetype.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\msw\sound.h"
+				RelativePath="..\..\include\wx\msw\mslu.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\msw\taskbar.h"
+				RelativePath="..\..\include\wx\msw\private.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\regconf.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\registry.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\seh.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\stackwalk.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\stdpaths.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\winundef.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\wrapcctl.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\wrapcdlg.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\wrapwin.h"
 			/>
 		</Filter>
 		<Filter
-			Name="Generic Headers"
-			UniqueIdentifier="{61C63C83-EF8C-51CA-A418-51936E7FCD4A}"
+			Name="wxHTML Headers"
+			UniqueIdentifier="{B4103426-A5DB-5CF0-A30E-BC9546513AAF}"
 			>
 			<File
-				RelativePath="..\..\include\wx\generic\aboutdlgg.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\animate.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\bmpcbox.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\calctrl.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\dataview.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\datectrl.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\grid.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\gridctrl.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\gridsel.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\helpext.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\hyperlink.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\laywin.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\notifmsg.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\propdlg.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\sashwin.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\splash.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\generic\wizard.h"
+				RelativePath="..\..\include\wx\html\forcelnk.h"
 			/>
 		</Filter>
 		<Filter
@@ -1226,70 +1476,382 @@
 			UniqueIdentifier="{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}"
 			>
 			<File
-				RelativePath="..\..\include\wx\aboutdlg.h"
+				RelativePath="..\..\include\wx\afterstd.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\animate.h"
+				RelativePath="..\..\include\wx\app.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\bmpcbox.h"
+				RelativePath="..\..\include\wx\apptrait.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\calctrl.h"
+				RelativePath="..\..\include\wx\archive.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\dataview.h"
+				RelativePath="..\..\include\wx\arrstr.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\datectrl.h"
+				RelativePath="..\..\include\wx\atomic.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\dateevt.h"
+				RelativePath="..\..\include\wx\base64.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\dcbuffer.h"
+				RelativePath="..\..\include\wx\beforestd.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\editlbox.h"
+				RelativePath="..\..\include\wx\buffer.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\grid.h"
+				RelativePath="..\..\include\wx\build.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\hyperlink.h"
+				RelativePath="..\..\include\wx\chartype.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\joystick.h"
+				RelativePath="..\..\include\wx\chkconf.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\laywin.h"
+				RelativePath="..\..\include\wx\clntdata.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\notifmsg.h"
+				RelativePath="..\..\include\wx\cmdargs.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\odcombo.h"
+				RelativePath="..\..\include\wx\cmdline.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\propdlg.h"
+				RelativePath="..\..\include\wx\confbase.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\sashwin.h"
+				RelativePath="..\..\include\wx\config.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\sound.h"
+				RelativePath="..\..\include\wx\containr.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\splash.h"
+				RelativePath="..\..\include\wx\convauto.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\taskbar.h"
+				RelativePath="..\..\include\wx\meta\convertible.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\tipdlg.h"
+				RelativePath="..\..\include\wx\cpp.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\wizard.h"
+				RelativePath="..\..\include\wx\crt.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\datetime.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\datstrm.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\dde.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\debug.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\defs.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\dir.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\dlimpexp.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\dynarray.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\dynlib.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\dynload.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\encconv.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\event.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\except.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\features.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\ffile.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\file.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\fileconf.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\filefn.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\filename.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\filesys.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\flags.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\fontenc.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\fontmap.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\fs_arc.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\fs_filter.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\fs_mem.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\fs_zip.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\hash.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\hashmap.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\hashset.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\iconloc.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\meta\if.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\init.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\meta\int2type.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\intl.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\iosfwrap.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\ioswrap.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\ipc.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\ipcbase.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\link.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\list.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\log.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\longlong.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\math.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\memconf.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\memory.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\memtext.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\mimetype.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\module.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\meta\movable.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msgout.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\mstream.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\object.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\platform.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\platinfo.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\power.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\process.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\ptr_scpd.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\ptr_shrd.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\recguard.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\regex.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\scopeguard.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\snglinst.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\sstream.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\stack.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\stackwalk.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\stdpaths.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\stockitem.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\stopwatch.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\strconv.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\stream.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\string.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\stringimpl.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\stringops.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\strvararg.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\sysopt.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\tarstrm.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\textbuf.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\textfile.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\thread.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\timer.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\tokenzr.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\tracker.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\txtstrm.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\types.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\unichar.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\uri.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\utils.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\variant.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\vector.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\version.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\volume.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\weakref.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\wfstream.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\wx.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\wxchar.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\wxcrt.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\wxcrtbase.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\wxcrtvararg.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\wxprec.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\xti.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\xtistrm.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\zipstrm.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\zstream.h"
 			/>
 		</Filter>
 	</Files>

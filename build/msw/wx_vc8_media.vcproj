@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="net"
-	ProjectGUID="{FA6EBF6E-9163-5231-B96D-2426847EF942}"
+	Name="media"
+	ProjectGUID="{3FCADF33-E2F4-5D9C-9300-A5995BDA9378}"
 	>
 	<Platforms>
 		<Platform
@@ -24,7 +24,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivudll\net"
+			IntermediateDirectory="vc_mswunivudll\media"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -54,17 +54,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_NET"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_MEDIA"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivudll\wxprec_netdll.pch"
-				AssemblerListingLocation="vc_mswunivudll\net\"
-				ObjectFile="vc_mswunivudll\net\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase290u_net_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswunivudll\wxprec_mediadll.pch"
+				AssemblerListingLocation="vc_mswunivudll\media\"
+				ObjectFile="vc_mswunivudll\media\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290u_media_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -75,23 +75,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase290u_net_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_NET"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290u_media_vc_custom;WXUSINGDLL;WXMAKINGDLL_MEDIA"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxbase29u.lib"
+				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmswuniv29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxbase290u_net_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmswuniv290u_media_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxbase29u_net.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_media.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase290u_net_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290u_media_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -102,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_net.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_media.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -115,7 +115,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivuddll\net"
+			IntermediateDirectory="vc_mswunivuddll\media"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -145,17 +145,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_NET"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_MEDIA"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_netdll.pch"
-				AssemblerListingLocation="vc_mswunivuddll\net\"
-				ObjectFile="vc_mswunivuddll\net\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase290ud_net_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_mediadll.pch"
+				AssemblerListingLocation="vc_mswunivuddll\media\"
+				ObjectFile="vc_mswunivuddll\media\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290ud_media_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -166,23 +166,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase290ud_net_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_NET"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290ud_media_vc_custom;WXUSINGDLL;WXMAKINGDLL_MEDIA"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxbase29ud.lib"
+				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmswuniv29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxbase290ud_net_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmswuniv290ud_media_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxbase29ud_net.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29ud_media.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase290ud_net_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290ud_media_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -193,7 +193,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_net.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_media.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -206,7 +206,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswudll\net"
+			IntermediateDirectory="vc_mswudll\media"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -236,17 +236,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_NET"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_MEDIA"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswudll\wxprec_netdll.pch"
-				AssemblerListingLocation="vc_mswudll\net\"
-				ObjectFile="vc_mswudll\net\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase290u_net_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswudll\wxprec_mediadll.pch"
+				AssemblerListingLocation="vc_mswudll\media\"
+				ObjectFile="vc_mswudll\media\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290u_media_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -257,23 +257,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase290u_net_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_NET"
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290u_media_vc_custom;WXUSINGDLL;WXMAKINGDLL_MEDIA"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxbase29u.lib"
+				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmsw29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxbase290u_net_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw290u_media_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxbase29u_net.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_media.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase290u_net_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290u_media_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -284,7 +284,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_net.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_media.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -297,7 +297,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswuddll\net"
+			IntermediateDirectory="vc_mswuddll\media"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -327,17 +327,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_NET"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_MEDIA"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswuddll\wxprec_netdll.pch"
-				AssemblerListingLocation="vc_mswuddll\net\"
-				ObjectFile="vc_mswuddll\net\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxbase290ud_net_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswuddll\wxprec_mediadll.pch"
+				AssemblerListingLocation="vc_mswuddll\media\"
+				ObjectFile="vc_mswuddll\media\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290ud_media_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -348,23 +348,23 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase290ud_net_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_NET"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290ud_media_vc_custom;WXUSINGDLL;WXMAKINGDLL_MEDIA"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxbase29ud.lib"
+				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ..\..\lib\vc_dll\wxmsw29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
 				AdditionalOptions=""
-				OutputFile="..\..\lib\vc_dll\wxbase290ud_net_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw290ud_media_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxbase29ud_net.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_media.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxbase290ud_net_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290ud_media_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -375,7 +375,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_net.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_media.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -388,7 +388,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivu\net"
+			IntermediateDirectory="vc_mswunivu\media"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -418,17 +418,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_GUI=0"
+				PreprocessorDefinitions="_LIB;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivu\wxprec_netlib.pch"
-				AssemblerListingLocation="vc_mswunivu\net\"
-				ObjectFile="vc_mswunivu\net\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxbase29u_net.pdb"
+				PrecompiledHeaderFile="vc_mswunivu\wxprec_medialib.pch"
+				AssemblerListingLocation="vc_mswunivu\media\"
+				ObjectFile="vc_mswunivu\media\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29u_media.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -439,14 +439,14 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_GUI=0"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxbase29u_net.lib"
+				OutputFile="..\..\lib\vc_lib\wxmswuniv29u_media.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -457,7 +457,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_net.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_media.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -470,7 +470,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivud\net"
+			IntermediateDirectory="vc_mswunivud\media"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -500,17 +500,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0"
+				PreprocessorDefinitions="_LIB;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivud\wxprec_netlib.pch"
-				AssemblerListingLocation="vc_mswunivud\net\"
-				ObjectFile="vc_mswunivud\net\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxbase29ud_net.pdb"
+				PrecompiledHeaderFile="vc_mswunivud\wxprec_medialib.pch"
+				AssemblerListingLocation="vc_mswunivud\media\"
+				ObjectFile="vc_mswunivud\media\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29ud_media.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -521,14 +521,14 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxbase29ud_net.lib"
+				OutputFile="..\..\lib\vc_lib\wxmswuniv29ud_media.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -539,7 +539,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_net.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_media.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -552,7 +552,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswu\net"
+			IntermediateDirectory="vc_mswu\media"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -582,17 +582,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="2"
-				PreprocessorDefinitions="_LIB;__WXMSW__;_UNICODE;WXBUILDING;wxUSE_GUI=0"
+				PreprocessorDefinitions="_LIB;__WXMSW__;_UNICODE;WXBUILDING"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswu\wxprec_netlib.pch"
-				AssemblerListingLocation="vc_mswu\net\"
-				ObjectFile="vc_mswu\net\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxbase29u_net.pdb"
+				PrecompiledHeaderFile="vc_mswu\wxprec_medialib.pch"
+				AssemblerListingLocation="vc_mswu\media\"
+				ObjectFile="vc_mswu\media\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29u_media.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -603,14 +603,14 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;wxUSE_GUI=0"
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxbase29u_net.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw29u_media.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -621,7 +621,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_net.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_media.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -634,7 +634,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswud\net"
+			IntermediateDirectory="vc_mswud\media"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -664,17 +664,17 @@
 				ExceptionHandling="1"
 				AdditionalOptions=""
 				RuntimeLibrary="3"
-				PreprocessorDefinitions="_LIB;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0"
+				PreprocessorDefinitions="_LIB;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING"
 				BasicRuntimeChecks="3"
 				DebugInformationFormat="3"
 				Detect64BitPortabilityProblems="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswud\wxprec_netlib.pch"
-				AssemblerListingLocation="vc_mswud\net\"
-				ObjectFile="vc_mswud\net\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxbase29ud_net.pdb"
+				PrecompiledHeaderFile="vc_mswud\wxprec_medialib.pch"
+				AssemblerListingLocation="vc_mswud\media\"
+				ObjectFile="vc_mswud\media\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29ud_media.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 			/>
@@ -685,14 +685,14 @@
 				Name="VCResourceCompilerTool"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;wxUSE_GUI=0"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxbase29ud_net.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw29ud_media.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -703,7 +703,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_net.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_media.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -791,34 +791,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\src\common\fs_inet.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\ftp.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\http.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\protocol.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\sckaddr.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\sckfile.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\sckipc.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\sckstrm.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\socket.cpp"
-			/>
-			<File
-				RelativePath="..\..\src\common\url.cpp"
+				RelativePath="..\..\src\common\mediactrlcmn.cpp"
 			/>
 		</Filter>
 		<Filter
@@ -826,13 +799,16 @@
 			UniqueIdentifier="{D030D8C2-53EE-5B96-8F89-D78157B06140}"
 			>
 			<File
-				RelativePath="..\..\src\msw\gsocket.cpp"
+				RelativePath="..\..\src\msw\ole\activex.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\msw\gsockmsw.cpp"
+				RelativePath="..\..\src\msw\mediactrl_am.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\msw\urlmsw.cpp"
+				RelativePath="..\..\src\msw\mediactrl_qt.cpp"
+			/>
+			<File
+				RelativePath="..\..\src\msw\mediactrl_wmp10.cpp"
 			/>
 			<File
 				RelativePath="..\..\src\msw\version.rc"
@@ -985,6 +961,9 @@
 			UniqueIdentifier="{5AFFF20E-29F9-512B-B80A-7DC45976CDAC}"
 			>
 			<File
+				RelativePath="..\..\include\wx\msw\ole\activex.h"
+			/>
+			<File
 				RelativePath="..\..\include\wx\msw\genrcdefs.h"
 				>
 				<FileConfiguration
@@ -1076,46 +1055,13 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\include\wx\msw\gsockmsw.h"
-			/>
 		</Filter>
 		<Filter
 			Name="Common Headers"
 			UniqueIdentifier="{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}"
 			>
 			<File
-				RelativePath="..\..\include\wx\protocol\file.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\fs_inet.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\protocol\ftp.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\gsocket.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\protocol\http.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\protocol\protocol.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\sckaddr.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\sckipc.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\sckstrm.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\socket.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\url.h"
+				RelativePath="..\..\include\wx\mediactrl.h"
 			/>
 		</Filter>
 	</Files>
