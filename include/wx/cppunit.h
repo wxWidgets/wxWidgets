@@ -111,7 +111,9 @@ inline std::ostream& operator<<(std::ostream& o, const wxString& s)
 #endif
 }
 
-#ifdef wxLongLong_t
+// VC6 doesn't provide overloads for operator<<(__int64) in its stream classes
+// so do it ourselves
+#if defined(__VISUALC6__) && defined(wxLongLong_t)
 
 #include "wx/longlong.h"
 
@@ -129,7 +131,7 @@ inline std::ostream& operator<<(std::ostream& ostr, unsigned wxLongLong_t llu)
     return ostr;
 }
 
-#endif // wxLongLong_t
+#endif // VC6 && wxLongLong_t
 
 #endif // !wxUSE_STD_IOSTREAM
 
