@@ -80,6 +80,7 @@ public:
     // In case we're using the generic tree control.
     virtual int GetScrollPos(int orient) const;
 
+#if wxABI_VERSION >= 20808
     // Override to suppress vertical scrollbar
     virtual void SetScrollbar(int orient,
                                int pos,
@@ -89,6 +90,8 @@ public:
 
     // Override to get scroll values from companion window
     virtual void DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const;
+#endif
+
 //// Helpers
     void HideVScrollbar();
 

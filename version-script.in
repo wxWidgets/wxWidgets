@@ -28,6 +28,8 @@
 @WX_VERSION_TAG@.8 {
     global:
         *TimeZone*Make*;
+        *wxRemotelyScrolledTreeCtrl*DoCalcScrolledPosition*;
+        *wxRemotelyScrolledTreeCtrl*SetScrollbar*;
         *wxScrollHelper*HandleOnChildFocus*;
         *wxWindowBase*Get*Sibling*;
 };
