@@ -87,6 +87,8 @@ public:
                                int range,
                                bool update);
 
+    // Override to get scroll values from companion window
+    virtual void DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const;
 //// Helpers
     void HideVScrollbar();
 
