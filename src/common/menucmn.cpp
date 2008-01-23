@@ -452,7 +452,7 @@ bool wxMenuBase::SendEvent(int id, int checked)
     {
         wxEvtHandler *handler = GetEventHandler();
         if ( handler )
-            processed = handler->ProcessEvent(event);
+            processed = handler->SafelyProcessEvent(event);
     }
 
     // Try the window the menu was popped up from (and up through the
@@ -465,7 +465,7 @@ bool wxMenuBase::SendEvent(int id, int checked)
             wxWindow *win = menu->GetInvokingWindow();
             if ( win )
             {
-                processed = win->GetEventHandler()->ProcessEvent(event);
+                processed = win->GetEventHandler()->SafelyProcessEvent(event);
                 break;
             }
 
