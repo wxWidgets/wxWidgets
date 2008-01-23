@@ -19,7 +19,7 @@
                 we don't want to clutter the source tree with these files.
     -->
 
-    <disable-formats>dmars,dmars_smake,msevc4prj,msvs2003prj</disable-formats>
+    <disable-formats>dmars,dmars_smake,msevc4prj</disable-formats>
 
 
     <!-- These wildcards match all .bkl files in wxWidgets tree: -->
