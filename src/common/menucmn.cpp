@@ -465,7 +465,7 @@ bool wxMenuBase::SendEvent(int id, int checked)
             wxWindow *win = menu->GetInvokingWindow();
             if ( win )
             {
-                processed = win->GetEventHandler()->SafelyProcessEvent(event);
+                processed = win->HandleWindowEvent(event);
                 break;
             }
 
