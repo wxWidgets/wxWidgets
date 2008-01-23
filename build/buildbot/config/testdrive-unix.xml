@@ -96,7 +96,7 @@
 
 <build>
     <name>OSX 10.4 Intel wxMac Stable</name>
-    <sandbox>td187.testdrive.hp.com</sandbox>
+    <sandbox>td165.testdrive.hp.com</sandbox>
     <builddir>td_mac_stable</builddir>
     <scheduler>stable_quick</scheduler>
 
