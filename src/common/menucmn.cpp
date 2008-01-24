@@ -152,8 +152,6 @@ void wxMenuBase::Init(long style)
 wxMenuBase::~wxMenuBase()
 {
     WX_CLEAR_LIST(wxMenuItemList, m_items);
-
-    // Actually, in GTK, the submenus have to get deleted first.
 }
 
 // ----------------------------------------------------------------------------

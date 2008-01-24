@@ -1009,13 +1009,6 @@ wxMenu::~wxMenu()
        if ( m_owner )
            gtk_widget_destroy( m_menu );
    }
-
-   // This must come after we release GTK resources above. Otherwise, GTK will
-   // give warnings/errors when attempting to free accelerator resources from
-   // child items that just were destroyed (the m_menu widget can contain
-   // references to accelerators in child items. Problem detected when removing
-   // a menu from a wxMenuBar, and the removed menu had submenus with accelerators.)
-   WX_CLEAR_LIST(wxMenuItemList, m_items);
 }
 
 void wxMenu::SetLayoutDirection(const wxLayoutDirection dir)
