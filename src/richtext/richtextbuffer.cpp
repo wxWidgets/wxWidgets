@@ -1682,7 +1682,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                         // Removes the given style from the paragraph
                         wxRichTextRemoveStyle(newPara->GetAttributes(), style);
                     }
-                    if (resetExistingStyle)
+                    else if (resetExistingStyle)
                         newPara->GetAttributes() = wholeStyle;
                     else
                     {
@@ -1762,7 +1762,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                             // Removes the given style from the paragraph
                             wxRichTextRemoveStyle(child->GetAttributes(), style);
                         }
-                        if (resetExistingStyle)
+                        else if (resetExistingStyle)
                             child->GetAttributes() = characterAttributes;
                         else
                         {
