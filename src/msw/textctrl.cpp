@@ -1928,17 +1928,6 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     switch ( param )
     {
-        case EN_SETFOCUS:
-        case EN_KILLFOCUS:
-            {
-                wxFocusEvent event(param == EN_KILLFOCUS ? wxEVT_KILL_FOCUS
-                                                         : wxEVT_SET_FOCUS,
-                                   m_windowId);
-                event.SetEventObject(this);
-                HandleWindowEvent(event);
-            }
-            break;
-
         case EN_CHANGE:
             SendUpdateEvent();
             break;
@@ -1954,7 +1943,9 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             }
             break;
 
-            // the other edit notification messages are not processed
+            // the other edit notification messages are not processed (or, in
+            // the case of EN_{SET/KILL}FOCUS were already handled at WM_SET/
+            // KILLFOCUS level)
         default:
             return false;
     }

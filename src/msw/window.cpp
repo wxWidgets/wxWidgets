@@ -3978,15 +3978,6 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
     }
 #endif // wxUSE_CARET
 
-#if wxUSE_TEXTCTRL
-    // If it's a wxTextCtrl don't send the event as it will be done
-    // after the control gets to process it from EN_FOCUS handler
-    if ( wxDynamicCastThis(wxTextCtrl) )
-    {
-        return false;
-    }
-#endif // wxUSE_TEXTCTRL
-
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
     event.SetEventObject(this);
 
@@ -4005,16 +3996,6 @@ bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
         m_caret->OnKillFocus();
     }
 #endif // wxUSE_CARET
-
-#if wxUSE_TEXTCTRL
-    // If it's a wxTextCtrl don't send the event as it will be done
-    // after the control gets to process it.
-    wxTextCtrl *ctrl = wxDynamicCastThis(wxTextCtrl);
-    if ( ctrl )
-    {
-        return false;
-    }
-#endif
 
     // Don't send the event when in the process of being deleted.  This can
     // only cause problems if the event handler tries to access the object.
