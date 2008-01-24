@@ -971,7 +971,8 @@ void wxMenu::Init()
     m_menu = gtk_menu_new();
     // NB: keep reference to the menu so that it is not destroyed behind
     //     our back by GTK+ e.g. when it is removed from menubar:
-    gtk_widget_ref(m_menu);
+    g_object_ref(m_menu);
+    gtk_object_sink(GTK_OBJECT(m_menu));
 
     m_owner = (GtkWidget*) NULL;
 
@@ -1000,7 +1001,7 @@ wxMenu::~wxMenu()
    if ( GTK_IS_WIDGET( m_menu ))
    {
        // see wxMenu::Init
-       gtk_widget_unref( m_menu );
+       g_object_unref(m_menu);
        g_object_unref( m_accel );
 
        // if the menu is inserted in another menu at this time, there was
