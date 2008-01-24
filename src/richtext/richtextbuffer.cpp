@@ -61,6 +61,7 @@ inline void wxCheckSetFont(wxDC& dc, const wxFont& font)
             font1.GetFamily() == font.GetFamily() &&
             font1.GetStyle() == font.GetStyle() &&
             font1.GetWeight() == font.GetWeight() &&
+            font1.GetUnderlined() == font.GetUnderlined() &&
             font1.GetFaceName() == font.GetFaceName())
             return;
     }
