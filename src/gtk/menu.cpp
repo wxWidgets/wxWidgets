@@ -1070,8 +1070,6 @@ void wxMenu::Init()
 
 wxMenu::~wxMenu()
 {
-   WX_CLEAR_LIST(wxMenuItemList, m_items);
-
    if ( GTK_IS_WIDGET( m_menu ))
    {
        // see wxMenu::Init
