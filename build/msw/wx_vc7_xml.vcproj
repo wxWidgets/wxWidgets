@@ -669,7 +669,7 @@
 						Description="Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswunivu\wx\setup.h"
 						Outputs="..\..\lib\vc_dll\mswunivu\wx\setup.h"
-						AdditionalDependencies="$(SOURCE) &quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Universal Debug|Win32">
@@ -678,7 +678,7 @@
 						Description="Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswunivud\wx\setup.h"
 						Outputs="..\..\lib\vc_dll\mswunivud\wx\setup.h"
-						AdditionalDependencies="$(SOURCE) &quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Release|Win32"/>
@@ -691,7 +691,7 @@
 						Description="Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswunivu\wx\setup.h"
 						Outputs="..\..\lib\vc_lib\mswunivu\wx\setup.h"
-						AdditionalDependencies="$(SOURCE) &quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Universal Debug|Win32">
@@ -700,7 +700,7 @@
 						Description="Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswunivud\wx\setup.h"
 						Outputs="..\..\lib\vc_lib\mswunivud\wx\setup.h"
-						AdditionalDependencies="$(SOURCE) &quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"/>
@@ -720,7 +720,7 @@
 						Description="Creating ..\..\lib\vc_dll\mswu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswu\wx\setup.h"
 						Outputs="..\..\lib\vc_dll\mswu\wx\setup.h"
-						AdditionalDependencies="$(SOURCE) &quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Debug|Win32">
@@ -729,7 +729,7 @@
 						Description="Creating ..\..\lib\vc_dll\mswud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswud\wx\setup.h"
 						Outputs="..\..\lib\vc_dll\mswud\wx\setup.h"
-						AdditionalDependencies="$(SOURCE) &quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Universal Release|Win32"/>
@@ -742,7 +742,7 @@
 						Description="Creating ..\..\lib\vc_lib\mswu\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswu\wx\setup.h"
 						Outputs="..\..\lib\vc_lib\mswu\wx\setup.h"
-						AdditionalDependencies="$(SOURCE) &quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -751,7 +751,7 @@
 						Description="Creating ..\..\lib\vc_lib\mswud\wx\setup.h"
 						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswud\wx\setup.h"
 						Outputs="..\..\lib\vc_lib\mswud\wx\setup.h"
-						AdditionalDependencies="$(SOURCE) &quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
@@ -767,7 +767,7 @@
 						Description="Creating ..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;$(SOURCE)&quot; &quot;..\..\lib\vc_dll\mswunivu\wx\msw&quot;"/>
+						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswunivu\wx\msw&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Universal Debug|Win32">
@@ -776,7 +776,7 @@
 						Description="Creating ..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h"
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;$(SOURCE)&quot; &quot;..\..\lib\vc_dll\mswunivud\wx\msw&quot;"/>
+						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswunivud\wx\msw&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Release|Win32">
@@ -785,7 +785,7 @@
 						Description="Creating ..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h"
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;$(SOURCE)&quot; &quot;..\..\lib\vc_dll\mswu\wx\msw&quot;"/>
+						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswu\wx\msw&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="DLL Debug|Win32">
@@ -794,7 +794,7 @@
 						Description="Creating ..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h"
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;$(SOURCE)&quot; &quot;..\..\lib\vc_dll\mswud\wx\msw&quot;"/>
+						AdditionalDependencies="&quot;..\..\lib\vc_dll\mswud\wx\msw&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Universal Release|Win32">
@@ -803,7 +803,7 @@
 						Description="Creating ..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h"
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;$(SOURCE)&quot; &quot;..\..\lib\vc_lib\mswunivu\wx\msw&quot;"/>
+						AdditionalDependencies="&quot;..\..\lib\vc_lib\mswunivu\wx\msw&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Universal Debug|Win32">
@@ -812,7 +812,7 @@
 						Description="Creating ..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h"
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;$(SOURCE)&quot; &quot;..\..\lib\vc_lib\mswunivud\wx\msw&quot;"/>
+						AdditionalDependencies="&quot;..\..\lib\vc_lib\mswunivud\wx\msw&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
@@ -821,7 +821,7 @@
 						Description="Creating ..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h"
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;$(SOURCE)&quot; &quot;..\..\lib\vc_lib\mswu\wx\msw&quot;"/>
+						AdditionalDependencies="&quot;..\..\lib\vc_lib\mswu\wx\msw&quot;"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -830,7 +830,7 @@
 						Description="Creating ..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h"
 						CommandLine="cl /EP /nologo &quot;$(InputPath)&quot; &gt; &quot;..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h&quot;"
 						Outputs="..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h"
-						AdditionalDependencies="&quot;$(SOURCE)&quot; &quot;..\..\lib\vc_lib\mswud\wx\msw&quot;"/>
+						AdditionalDependencies="&quot;..\..\lib\vc_lib\mswud\wx\msw&quot;"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
