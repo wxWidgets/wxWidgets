@@ -2224,6 +2224,8 @@ void wxRichTextCtrl::SetInsertionPoint(long pos)
     SelectNone();
 
     m_caretPosition = pos - 1;
+
+    PositionCaret();
 }
 
 void wxRichTextCtrl::SetInsertionPointEnd()
