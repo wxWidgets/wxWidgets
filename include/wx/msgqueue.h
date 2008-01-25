@@ -19,6 +19,8 @@
 
 #if wxUSE_THREADS
 
+#include "wx/stopwatch.h"
+
 #include "wx/beforestd.h"
 #include <queue>
 #include "wx/afterstd.h"
