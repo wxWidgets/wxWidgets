@@ -200,6 +200,7 @@ bool wxRichTextXMLHandler::ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node)
                 if (!data.empty())
                 {
                     wxRichTextImage* imageObj = new wxRichTextImage(para);
+                    GetStyle(imageObj->GetAttributes(), child, false);
                     para->AppendChild(imageObj);
 
                     wxStringInputStream strStream(data);
@@ -720,6 +721,8 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
     {
         wxRichTextImage& imageObj = (wxRichTextImage&) obj;
 
+        wxString style = CreateStyle(obj.GetAttributes(), false);
+
         if (imageObj.GetImage().Ok() && !imageObj.GetImageBlock().Ok())
             imageObj.MakeBlock();
 
@@ -728,11 +731,11 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
         if (!imageObj.GetImageBlock().Ok())
         {
             // No data
-            OutputString(stream, wxT(">"), convMem, convFile);
+            OutputString(stream, style + wxT(">"), convMem, convFile);
         }
         else
         {
-            OutputString(stream, wxString::Format(wxT(" imagetype=\"%d\">"), (int) imageObj.GetImageBlock().GetImageType()));
+            OutputString(stream, wxString::Format(wxT(" imagetype=\"%d\"") + style + wxT(">"), (int) imageObj.GetImageBlock().GetImageType()));
         }
 
         OutputIndentation(stream, indent+1);
