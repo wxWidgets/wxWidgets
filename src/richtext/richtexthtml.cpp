@@ -129,7 +129,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
                 }
 
                 wxRichTextImage* image = wxDynamicCast(obj, wxRichTextImage);
-                if( image && !image->IsEmpty())
+                if( image && (!image->IsEmpty() || image->GetImageBlock().GetData()))
                     WriteImage( image, stream );
 
                 node2 = node2->GetNext();
