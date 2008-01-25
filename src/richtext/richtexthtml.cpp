@@ -85,8 +85,6 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
         str << wxT("<html><head></head><body>\n");
 
-    str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">");
-
     OutputFont(currentParaStyle, str);
 
     m_font = false;
@@ -147,8 +145,6 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     CloseLists(-1, str);
 
     str << wxT("</font>");
-
-    str << wxT("</td></tr></table><p>");
 
     if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
         str << wxT("</body></html>");
@@ -219,9 +215,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(
 {
     if (thisStyle.HasPageBreak())
     {
-        str << wxT("</tr></td></table>");
         str << wxT("<div style=\"page-break-after:always\"></div>\n");
-        str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">");
     }
 
     if (thisStyle.HasLeftIndent() && thisStyle.GetLeftIndent() != 0)
@@ -293,9 +287,11 @@ void wxRichTextHTMLHandler::EndParagraphFormatting(const wxTextAttr& WXUNUSED(cu
         if (thisStyle.HasFont())
             stream << wxT("</font>");
 
-        stream << wxT("</td></tr></table>\n");
+        stream << wxT("</td></tr></table></p>\n");
         m_inTable = false;
     }
+    else
+        stream << wxT("</p>\n");
 }
 
 /// Closes lists to level (-1 means close all)
