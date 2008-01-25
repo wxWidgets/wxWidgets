@@ -360,7 +360,7 @@ public:
     // accessors
     bool HasTextColour() const { return m_colText.Ok() && HasFlag(wxTEXT_ATTR_TEXT_COLOUR) ; }
     bool HasBackgroundColour() const { return m_colBack.Ok() && HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) ; }
-    bool HasAlignment() const { return (m_textAlignment != wxTEXT_ALIGNMENT_DEFAULT) || HasFlag(wxTEXT_ATTR_ALIGNMENT) ; }
+    bool HasAlignment() const { return (m_textAlignment != wxTEXT_ALIGNMENT_DEFAULT) && HasFlag(wxTEXT_ATTR_ALIGNMENT) ; }
     bool HasTabs() const { return HasFlag(wxTEXT_ATTR_TABS) ; }
     bool HasLeftIndent() const { return HasFlag(wxTEXT_ATTR_LEFT_INDENT); }
     bool HasRightIndent() const { return HasFlag(wxTEXT_ATTR_RIGHT_INDENT); }
