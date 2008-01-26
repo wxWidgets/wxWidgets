@@ -341,6 +341,7 @@ wxMSW:
 - Fix setting icons when they have non-default (16*16 and 32*32) sizes
 - Fixed wxLocale::GetInfo to use the C locale.
 - Don't enable disabled windows when showing them (Harry McKame).
+- Fix assert when using owner-drawn menu items with the newest (Vista) SDK
 
 wxGTK:
 
