@@ -169,7 +169,7 @@ correctly sized. }
 
 \func{}{\destruct{wxWindow}}{\void}
 
-Destructor. Deletes all subwindows, then deletes itself. Instead of using
+Destructor. Deletes all sub-windows, then deletes itself. Instead of using
 the {\bf delete} operator explicitly, you should normally
 use \helpref{wxWindow::Destroy}{wxwindowdestroy} so that wxWidgets
 can delete a window only when it is safe to do so, in idle time.
@@ -816,7 +816,7 @@ transparency level.}
 
 Merges the window's best size into the min size and returns the
 result.  This is the value used by sizers to determine the appropriate
-ammount of sapce to allocate for the widget.
+ammount of space to allocate for the widget.
 
 \wxheading{See also}
 
@@ -1827,7 +1827,7 @@ This is just a wrapper for \helpref{ScrollLines}{wxwindowscrolllines}$(-1)$.
 
 \func{void}{Lower}{\void}
 
-Lowers the window to the bottom of the window hierarchy (z-order).
+Lowers the window to the bottom of the window hierarchy (Z-order).
 
 \wxheading{See also}
 
@@ -2567,7 +2567,7 @@ remove the event handler.
 
 \func{void}{Raise}{\void}
 
-Raises the window to the top of the window hierarchy (z-order).
+Raises the window to the top of the window hierarchy (Z-order).
 
 In current version of wxWidgets this works both for managed and child windows.
 
@@ -3530,7 +3530,7 @@ a wxWidgets-supplied default height.\\
 a wxWidgets-supplied default size.\\
 {\bf wxSIZE\_USE\_EXISTING}: existing dimensions should be used
 if $wxDefaultCoord$ values are supplied.\\
-{\bf wxSIZE\_ALLOW\_MINUS\_ONE}: allow negative dimensions (ie. value of $wxDefaultCoord$) to be interpreted
+{\bf wxSIZE\_ALLOW\_MINUS\_ONE}: allow negative dimensions (i.e. value of $wxDefaultCoord$) to be interpreted
 as real dimensions, not default values.
 {\bf wxSIZE\_FORCE}: normally, if the position and the size of the window are
 already the same as the parameters of this function, nothing is done. but with
