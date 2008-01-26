@@ -44,6 +44,10 @@
 #endif
 
 #include "wx/thread.h"
+#include "wx/ptr_scpd.h"
+
+wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
+wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -1167,7 +1171,7 @@ void wxEvtHandler::ProcessPendingEvents()
                  "should have pending events if called" );
 
     wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
-    wxEvent * const event = wx_static_cast(wxEvent *, node->GetData());
+    wxEventPtr event(wx_static_cast(wxEvent *, node->GetData()));
 
     // it's important we remove event from list before processing it, else a
     // nested event loop, for example from a modal dialog, might process the
@@ -1186,8 +1190,6 @@ void wxEvtHandler::ProcessPendingEvents()
     // careful: this object could have been deleted by the event handler
     // executed by the above ProcessEvent() call, so we can't access any fields
     // of this object any more
-
-    delete event;
 }
 
 /*
