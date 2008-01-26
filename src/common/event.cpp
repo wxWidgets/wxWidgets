@@ -41,6 +41,11 @@
     #endif // wxUSE_GUI
 #endif
 
+#include "wx/ptr_scpd.h"
+
+wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
+wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -1170,9 +1175,9 @@ void wxEvtHandler::ProcessPendingEvents()
           node;
           node = m_pendingEvents->GetFirst() )
     {
-        wxEvent *event = (wxEvent *)node->GetData();
+        wxEventPtr event(wx_static_cast(wxEvent *, node->GetData()));
 
-        // It's importan we remove event from list before processing it.
+        // It's important we remove event from list before processing it.
         // Else a nested event loop, for example from a modal dialog, might
         // process the same event again.
 
@@ -1181,8 +1186,6 @@ void wxEvtHandler::ProcessPendingEvents()
         wxLEAVE_CRIT_SECT( Lock() );
 
         ProcessEvent(*event);
-
-        delete event;
 
         wxENTER_CRIT_SECT( Lock() );
 
