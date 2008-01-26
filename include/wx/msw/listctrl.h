@@ -442,6 +442,11 @@ private:
     // process NM_CUSTOMDRAW notification message
     WXLPARAM OnCustomDraw(WXLPARAM lParam);
 
+    // set the extended styles for the control (used by Create() and
+    // UpdateStyle()), only should be called if InReportView()
+    void MSWSetExListStyles();
+
+
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxListCtrl)
