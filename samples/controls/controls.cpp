@@ -1312,11 +1312,10 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
 
 #if wxUSE_CHOICE
 
-static const wxChar *GetDataString(wxClientData *data)
+static wxString GetDataString(wxClientData *data)
 {
-    return (
-      data ? wx_static_cast(wxStringClientData *, data)->GetData() : wxString("none")
-    ).c_str();
+    return data ? wx_static_cast(wxStringClientData *, data)->GetData()
+                : wxString("none");
 }
 
 void MyPanel::OnChoice( wxCommandEvent &event )
@@ -1334,8 +1333,8 @@ void MyPanel::OnChoice( wxCommandEvent &event )
                  _T("data \"%s\"/\"%s\""),
                  (int)event.GetInt(),
                  sel,
-                 event.GetString().c_str(),
-                 choice->GetStringSelection().c_str(),
+                 event.GetString(),
+                 choice->GetStringSelection(),
                  GetDataString(dataEvt),
                  GetDataString(dataCtrl));
 }
