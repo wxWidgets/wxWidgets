@@ -2460,15 +2460,22 @@ bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
         return false;
 
     char buf[4096];
-    do
+    for ( ;; )
     {
         stream.Read(buf, WXSIZEOF(buf));
 
         const size_t nRead = stream.LastRead();
-        if ( !nRead || !file.Write(buf, nRead) )
+        if ( !nRead )
+        {
+            if ( stream.Eof() )
+                break;
+
+            return false;
+        }
+
+        if ( !file.Write(buf, nRead) )
             return false;
     }
-    while ( !stream.Eof() );
 
     return true;
 }
