@@ -222,8 +222,8 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
     wxArrayString items;
     wxArrayPtrVoid itemsData;
-    items.Alloc(count);
-    itemsData.Alloc(count);
+    items.Alloc(count - 1);
+    itemsData.Alloc(count - 1);
     for ( unsigned i = 0; i < count; i++ )
     {
         if ( i != n )
@@ -235,11 +235,15 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
     wxChoice::DoClear();
 
-    void ** const data = &itemsData[0];
-    if ( HasClientObjectData() )
-        Append(items, wx_reinterpret_cast(wxClientData **, data));
-    else
-        Append(items, data);
+    if ( count > 1 )
+    {
+        void ** const data = &itemsData[0];
+        if ( HasClientObjectData() )
+            Append(items, wx_reinterpret_cast(wxClientData **, data));
+        else
+            Append(items, data);
+    }
+    //else: the control is now empty, nothing to append
 }
 
 int wxChoice::FindString( const wxString &string, bool bCase ) const
