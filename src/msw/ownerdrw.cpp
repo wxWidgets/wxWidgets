@@ -50,7 +50,21 @@ public:
 #if defined(__WXMSW__) && defined(__WIN32__) && defined(SM_CXMENUCHECK)
         NONCLIENTMETRICS nm;
         nm.cbSize = sizeof(NONCLIENTMETRICS);
-        SystemParametersInfo(SPI_GETNONCLIENTMETRICS,0,&nm,0);
+        if ( !::SystemParametersInfo(SPI_GETNONCLIENTMETRICS,0,&nm,0) )
+        {
+#if WINVER >= 0x0600
+            // a new field has been added to NONCLIENTMETRICS under Vista, so
+            // the call to SystemParametersInfo() fails if we use the struct
+            // size incorporating this new value on an older system -- retry
+            // without it
+            nm.cbSize -= sizeof(int);
+            if ( !::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &nm, 0) )
+#endif // WINVER >= 0x0600
+            {
+                // maybe we should initialize the struct with some defaults?
+                wxLogLastError(_T("SystemParametersInfo(SPI_GETNONCLIENTMETRICS)"));
+            }
+        }
 
         ms_systemMenuButtonWidth = nm.iMenuHeight;
         ms_systemMenuHeight = nm.iMenuHeight;
