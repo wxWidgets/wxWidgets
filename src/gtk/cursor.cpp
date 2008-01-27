@@ -82,7 +82,7 @@ wxCursor::wxCursor( int cursorId )
         case wxCURSOR_ARROW:            // fall through to default
         case wxCURSOR_DEFAULT:          gdk_cur = GDK_LEFT_PTR; break;
         case wxCURSOR_RIGHT_ARROW:      gdk_cur = GDK_RIGHT_PTR; break;
-        case wxCURSOR_HAND:             gdk_cur = GDK_HAND1; break;
+        case wxCURSOR_HAND:             gdk_cur = GDK_HAND2; break;
         case wxCURSOR_CROSS:            gdk_cur = GDK_CROSSHAIR; break;
         case wxCURSOR_SIZEWE:           gdk_cur = GDK_SB_H_DOUBLE_ARROW; break;
         case wxCURSOR_SIZENS:           gdk_cur = GDK_SB_V_DOUBLE_ARROW; break;
