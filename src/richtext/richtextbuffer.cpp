@@ -2474,6 +2474,29 @@ bool wxRichTextParagraphLayoutBox::ApplyStyleSheet(wxRichTextStyleSheet* styleSh
 
     int foundCount = 0;
 
+    wxRichTextAttr attr(GetBasicStyle());
+    if (GetBasicStyle().HasParagraphStyleName())
+    {
+        wxRichTextParagraphStyleDefinition* paraDef = styleSheet->FindParagraphStyle(GetBasicStyle().GetParagraphStyleName());
+        if (paraDef)
+        {
+            attr.Apply(paraDef->GetStyleMergedWithBase(styleSheet));
+            SetBasicStyle(attr);
+            foundCount ++;
+        }
+    }
+
+    if (GetBasicStyle().HasCharacterStyleName())
+    {
+        wxRichTextCharacterStyleDefinition* charDef = styleSheet->FindCharacterStyle(GetBasicStyle().GetCharacterStyleName());
+        if (charDef)
+        {
+            attr.Apply(charDef->GetStyleMergedWithBase(styleSheet));
+            SetBasicStyle(attr);
+            foundCount ++;
+        }
+    }
+
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
