@@ -68,9 +68,6 @@ bool MyApp::OnInit(void)
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon(_T("doc")));
 #endif
-#ifdef __X__
-  frame->SetIcon(wxIcon(_T("doc.xbm")));
-#endif
 
   //// Make a menubar
   wxMenu *file_menu = new wxMenu;
