@@ -288,9 +288,9 @@ void FileNameTestCase::TestNormalize()
 
     static struct FileNameTest
     {
-        const wxChar *original;
+        const wxString original;
         int flags;
-        const wxChar *expected;
+        const wxString expected;
     } tests[] =
     {
         // test wxPATH_NORM_ENV_VARS
