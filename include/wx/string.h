@@ -1343,7 +1343,15 @@ public:
     { return *this = cstr.AsString(); }
     // from a character
   wxString& operator=(wxUniChar ch)
-    { m_impl = wxStringOperations::EncodeChar(ch); return *this; }
+  {
+#if wxUSE_UNICODE_UTF8
+    if ( !ch.IsAscii() )
+        m_impl = wxStringOperations::EncodeChar(ch);
+    else
+#endif
+        m_impl = (wxStringCharType)ch;
+    return *this;
+  }
   wxString& operator=(wxUniCharRef ch)
     { return operator=((wxUniChar)ch); }
   wxString& operator=(char ch)
@@ -2242,8 +2250,15 @@ public:
     // find the first occurence of character ch after nStart
   size_t find(wxUniChar ch, size_t nStart = 0) const
   {
-    return PosFromImpl(m_impl.find(wxStringOperations::EncodeChar(ch),
-                                   PosToImpl(nStart)));
+#if wxUSE_UNICODE_UTF8
+    if ( !ch.IsAscii() )
+        return PosFromImpl(m_impl.find(wxStringOperations::EncodeChar(ch),
+                                       PosToImpl(nStart)));
+    else
+#endif
+        return PosFromImpl(m_impl.find((wxStringCharType)ch,
+                                       PosToImpl(nStart)));
+
   }
   size_t find(wxUniCharRef ch, size_t nStart = 0) const
     {  return find(wxUniChar(ch), nStart); }
@@ -2280,8 +2295,14 @@ public:
     // as find, but from the end
   size_t rfind(wxUniChar ch, size_t nStart = npos) const
   {
-    return PosFromImpl(m_impl.rfind(wxStringOperations::EncodeChar(ch),
-                                    PosToImpl(nStart)));
+#if wxUSE_UNICODE_UTF8
+    if ( !ch.IsAscii() )
+        return PosFromImpl(m_impl.rfind(wxStringOperations::EncodeChar(ch),
+                                        PosToImpl(nStart)));
+    else
+#endif
+        return PosFromImpl(m_impl.rfind((wxStringCharType)ch,
+                                        PosToImpl(nStart)));
   }
   size_t rfind(wxUniCharRef ch, size_t nStart = npos) const
     {  return rfind(wxUniChar(ch), nStart); }
@@ -2519,7 +2540,15 @@ public:
     { return operator+=(s.data()); }
       // string += char
   wxString& operator+=(wxUniChar ch)
-    { m_impl += wxStringOperations::EncodeChar(ch); return *this; }
+  {
+#if wxUSE_UNICODE_UTF8
+    if ( !ch.IsAscii() )
+        m_impl += wxStringOperations::EncodeChar(ch);
+    else
+#endif
+        m_impl += (wxStringCharType)ch;
+    return *this;
+  }
   wxString& operator+=(wxUniCharRef ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(int ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(char ch) { return *this += wxUniChar(ch); }
