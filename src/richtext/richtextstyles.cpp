@@ -714,17 +714,14 @@ wxString wxRichTextStyleListBox::GetStyleToShowInIdleTime(wxRichTextCtrl* ctrl, 
 {
     int adjustedCaretPos = ctrl->GetAdjustedCaretPosition(ctrl->GetCaretPosition());
 
-    wxRichTextParagraph* para = ctrl->GetBuffer().GetParagraphAtPosition(adjustedCaretPos);
-    wxRichTextObject* obj = ctrl->GetBuffer().GetLeafObjectAtPosition(adjustedCaretPos);
-
     wxString styleName;
+
+    wxTextAttr attr;
+    ctrl->GetStyle(adjustedCaretPos, attr);
 
     // Take into account current default style just chosen by user
     if (ctrl->IsDefaultStyleShowing())
     {
-        wxTextAttr attr;
-
-        ctrl->GetStyle(adjustedCaretPos, attr);
         wxRichTextApplyStyle(attr, ctrl->GetDefaultStyleEx());
 
         if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_CHARACTER) &&
@@ -737,20 +734,20 @@ wxString wxRichTextStyleListBox::GetStyleToShowInIdleTime(wxRichTextCtrl* ctrl, 
                           !attr.GetListStyleName().IsEmpty())
             styleName = attr.GetListStyleName();
     }
-    else if (obj && (styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_CHARACTER) &&
-             !obj->GetAttributes().GetCharacterStyleName().IsEmpty())
+    else if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_CHARACTER) &&
+             !attr.GetCharacterStyleName().IsEmpty())
     {
-        styleName = obj->GetAttributes().GetCharacterStyleName();
+        styleName = attr.GetCharacterStyleName();
     }
-    else if (para && (styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_PARAGRAPH) &&
-             !para->GetAttributes().GetParagraphStyleName().IsEmpty())
+    else if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_PARAGRAPH) &&
+             !attr.GetParagraphStyleName().IsEmpty())
     {
-        styleName = para->GetAttributes().GetParagraphStyleName();
+        styleName = attr.GetParagraphStyleName();
     }
-    else if (para && (styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_LIST) &&
-             !para->GetAttributes().GetListStyleName().IsEmpty())
+    else if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_LIST) &&
+             !attr.GetListStyleName().IsEmpty())
     {
-        styleName = para->GetAttributes().GetListStyleName();
+        styleName = attr.GetListStyleName();
     }
 
     return styleName;
