@@ -3006,9 +3006,17 @@ to \helpref{wxBase64Encode}{wxbase64encode}.
 
 \membersection{wxCONCAT}\label{wxconcat}
 
-\func{}{wxCONCAT}{\param{}{x}, \param{}{y}}
+\func{}{wxCONCAT}{\param{}{x1}, \param{}{x2}}
 
-This macro returns the concatenation of two tokens \arg{x} and \arg{y}.
+\func{}{wxCONCAT3}{\param{}{x1}, \param{}{x2}, \param{}{x3}}
+
+\func{}{wxCONCAT4}{\param{}{x1}, \param{}{x2}, \param{}{x3}, \param{}{x4}}
+
+\func{}{wxCONCAT5}{\param{}{x1}, \param{}{x2}, \param{}{x3}, \param{}{x4}, \param{}{x5}}
+
+These macro return the concatenation of the tokens passed as their arguments.
+Unlike when using the preprocessor \texttt{##} operator, the arguments undergo
+the macro expansion before being concatenated.
 
 
 \membersection{wxDECLARE\_APP}\label{wxdeclareapp}
