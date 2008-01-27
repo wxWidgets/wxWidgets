@@ -41,10 +41,12 @@
     #endif // wxUSE_GUI
 #endif
 
-#include "wx/ptr_scpd.h"
+#if wxUSE_BASE
+    #include "wx/ptr_scpd.h"
 
-wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
-wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
+    wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
+    wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
+#endif // wxUSE_BASE
 
 // ----------------------------------------------------------------------------
 // wxWin macros
