@@ -20,6 +20,9 @@
 #include "wx/panel.h"
 #include "wx/notebook.h"
 
+class WXDLLIMPEXP_FWD_CORE wxIcon;
+class WXDLLIMPEXP_FWD_CORE wxIconBundle;
+
 extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[];
 
 
@@ -162,6 +165,7 @@ public:
 #endif
 
     // no icon
+    void SetIcon(const wxIcon& WXUNUSED(icon)) { }
     virtual void SetIcons( const wxIconBundle& WXUNUSED(icons) ) { }
 
     // no maximize etc
