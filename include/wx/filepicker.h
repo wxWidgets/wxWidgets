@@ -361,10 +361,8 @@ private:
 // wxFileDirPickerEvent: used by wxFilePickerCtrl and wxDirPickerCtrl only
 // ----------------------------------------------------------------------------
 
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, wxEVT_COMMAND_FILEPICKER_CHANGED, 1102)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, wxEVT_COMMAND_DIRPICKER_CHANGED, 1103)
-END_DECLARE_EVENT_TYPES()
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_FILEPICKER_CHANGED;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_DIRPICKER_CHANGED;
 
 class WXDLLIMPEXP_CORE wxFileDirPickerEvent : public wxCommandEvent
 {

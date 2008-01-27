@@ -88,10 +88,7 @@ inline void wxHyperlinkCtrlBase::CheckParams(const wxString&, const wxString&, l
 // wxHyperlinkEvent
 // ----------------------------------------------------------------------------
 
-// Declare an event identifier.
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_HYPERLINK, 3700)
-END_DECLARE_EVENT_TYPES()
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_HYPERLINK;
 
 //
 // An event fired when the user clicks on the label in a hyperlink control.
@@ -138,7 +135,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_HYPERLINK, id, wxHyperlinkEventHandler(fn))
 
 #ifdef _WX_DEFINE_DATE_EVENTS_
-    DEFINE_EVENT_TYPE(wxEVT_COMMAND_HYPERLINK)
+    const wxEventType wxEVT_COMMAND_HYPERLINK = wxNewEventType();
 
     IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
 #endif

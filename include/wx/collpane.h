@@ -51,9 +51,7 @@ public:
 // event types and macros
 // ----------------------------------------------------------------------------
 
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, wxEVT_COMMAND_COLLPANE_CHANGED, 1102)
-END_DECLARE_EVENT_TYPES()
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_COLLPANE_CHANGED;
 
 class WXDLLIMPEXP_CORE wxCollapsiblePaneEvent : public wxCommandEvent
 {

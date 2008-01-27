@@ -152,10 +152,8 @@ public:
 // wxDialUpManager events
 // ----------------------------------------------------------------------------
 
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED, 450)
-    DECLARE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED, 451)
-END_DECLARE_EVENT_TYPES()
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_DIALUP_CONNECTED;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_DIALUP_DISCONNECTED;
 
 // the event class for the dialup events
 class WXDLLEXPORT wxDialUpEvent : public wxEvent

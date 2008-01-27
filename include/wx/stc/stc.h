@@ -2575,7 +2575,7 @@ public:
                int    startPos,
                int    endPos,
                wxDC*  draw,
-               wxDC*  target, 
+               wxDC*  target,
                wxRect renderRect,
                wxRect pageRect);
 
@@ -3525,7 +3525,7 @@ public:
 
     // Set the font encoding to be used by a style.
     void StyleSetFontEncoding(int style, wxFontEncoding encoding);
-    
+
 
     // Perform one of the operations defined by the wxSTC_CMD_* constants.
     void CmdKeyExecute(int cmd);
@@ -3592,13 +3592,13 @@ public:
     bool GetUseAntiAliasing();
 
 
-    
+
     // The following methods are nearly equivallent to their similarly named
     // cousins above.  The difference is that these methods bypass wxString
     // and always use a char* even if used in a unicode build of wxWidgets.
     // In that case the character data will be utf-8 encoded since that is
     // what is used internally by Scintilla in unicode builds.
-    
+
     // Add text to the document at current position.
     void AddTextRaw(const char* text);
 
@@ -3785,36 +3785,34 @@ private:
 
 
 #ifndef SWIG
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_CHANGE,             1650)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_STYLENEEDED,        1651)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_CHARADDED,          1652)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_SAVEPOINTREACHED,   1653)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_SAVEPOINTLEFT,      1654)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_ROMODIFYATTEMPT,    1655)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_KEY,                1656)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_DOUBLECLICK,        1657)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_UPDATEUI,           1658)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_MODIFIED,           1659)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_MACRORECORD,        1660)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_MARGINCLICK,        1661)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_NEEDSHOWN,          1662)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_PAINTED,            1664)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_USERLISTSELECTION,  1665)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_URIDROPPED,         1666)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_DWELLSTART,         1667)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_DWELLEND,           1668)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_START_DRAG,         1669)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_DRAG_OVER,          1670)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_DO_DROP,            1671)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_ZOOM,               1672)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_CLICK,      1673)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_DCLICK,     1674)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_CALLTIP_CLICK,      1675)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_SELECTION, 1676)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_INDICATOR_CLICK,    1677)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_INDICATOR_RELEASE,  1678)
-END_DECLARE_EVENT_TYPES()
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_CHANGE;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_STYLENEEDED;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_CHARADDED;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_SAVEPOINTREACHED;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_SAVEPOINTLEFT;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_ROMODIFYATTEMPT;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_KEY;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_DOUBLECLICK;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_UPDATEUI;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_MODIFIED;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_MACRORECORD;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_MARGINCLICK;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_NEEDSHOWN;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_PAINTED;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_USERLISTSELECTION;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_URIDROPPED;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_DWELLSTART;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_DWELLEND;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_START_DRAG;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_DRAG_OVER;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_DO_DROP;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_ZOOM;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_HOTSPOT_CLICK;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_HOTSPOT_DCLICK;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_CALLTIP_CLICK;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_AUTOCOMP_SELECTION;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_INDICATOR_CLICK;
+extern WXDLLIMPEXP_STC const wxEventType wxEVT_STC_INDICATOR_RELEASE;
 #else
     enum {
         wxEVT_STC_CHANGE,
@@ -3877,10 +3875,10 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_ZOOM(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ZOOM,                  id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_HOTSPOT_CLICK(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_CLICK,         id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_HOTSPOT_DCLICK(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_STC_CALLTIP_CLICK(id, fn))     DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK          id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_STC_CALLTIP_CLICK(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK          id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_SELECTION(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION     id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_INDICATOR_CLICK(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_CLICK        id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_STC_INDICATOR_RELEASE(id, fn)    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_RELEASE    id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_STC_INDICATOR_RELEASE(id, fn)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_INDICATOR_RELEASE      id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 
 #endif
 

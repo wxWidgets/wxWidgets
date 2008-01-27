@@ -160,9 +160,7 @@ private:
 // wxColourPickerEvent: used by wxColourPickerCtrl only
 // ----------------------------------------------------------------------------
 
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, wxEVT_COMMAND_COLOURPICKER_CHANGED, 1102)
-END_DECLARE_EVENT_TYPES()
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_COLOURPICKER_CHANGED;
 
 class WXDLLIMPEXP_CORE wxColourPickerEvent : public wxCommandEvent
 {

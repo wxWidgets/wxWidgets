@@ -203,10 +203,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxSashWindow)
 };
 
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,
-                                wxEVT_SASH_DRAGGED, wxEVT_FIRST + 1200)
-END_DECLARE_EVENT_TYPES()
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_SASH_DRAGGED;
 
 enum wxSashDragStatus
 {

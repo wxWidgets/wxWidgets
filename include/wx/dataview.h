@@ -131,8 +131,8 @@ class WXDLLIMPEXP_ADV wxDataViewItemAttr
 {
 public:
     // ctors
-    wxDataViewItemAttr() 
-    { 
+    wxDataViewItemAttr()
+    {
         m_bold = false;
         m_italic = false;
     }
@@ -141,11 +141,11 @@ public:
     void SetColour(const wxColour& colour) { m_colour = colour; }
     void SetBold( bool set ) { m_bold = set; }
     void SetItalic( bool set ) { m_italic = set; }
-    
+
     // accessors
     bool HasColour() const { return m_colour.Ok(); }
     const wxColour& GetColour() const { return m_colour; }
-    
+
     bool GetBold() const { return m_bold; }
     bool GetItalic() const { return m_italic; }
 
@@ -198,7 +198,7 @@ public:
         { return false; }
     virtual size_t GetDragDataSize( const wxDataViewItem &WXUNUSED(item), const wxDataFormat &WXUNUSED(format) )
         { return 0; }
-    virtual bool GetDragData( const wxDataViewItem &WXUNUSED(item), const wxDataFormat &WXUNUSED(format), 
+    virtual bool GetDragData( const wxDataViewItem &WXUNUSED(item), const wxDataFormat &WXUNUSED(format),
                               void* WXUNUSED(data), size_t WXUNUSED(size) )
         { return FALSE; }
 
@@ -222,7 +222,7 @@ public:
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
                          unsigned int column, bool ascending );
     virtual bool HasDefaultCompare() const { return false; }
-    
+
     // internal
     virtual bool IsIndexListModel() const { return false; }
 
@@ -251,7 +251,7 @@ public:
 
     virtual bool GetAttr( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
         { return false; }
-        
+
     void RowPrepended();
     void RowInserted( unsigned int before );
     void RowAppended();
@@ -286,7 +286,7 @@ public:
     // internal
     virtual bool IsIndexListModel() const { return true; }
     unsigned int GetLastIndex() const { return m_lastIndex; }
-    
+
 private:
     wxDataViewItemArray m_hash;
     unsigned int m_lastIndex;
@@ -723,7 +723,7 @@ public:
     // for wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only
     void SetDataViewColumn( wxDataViewColumn *col ) { m_column = col; }
     wxDataViewColumn *GetDataViewColumn() const { return m_column; }
-    
+
     // for wxEVT_DATAVIEW_CONTEXT_MENU only
     wxPoint GetPosition() const;
     void SetPosition( int x, int y ) { m_pos.x = x; m_pos.y = y; }
@@ -742,25 +742,23 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
 };
 
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, -1)
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED;
 
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, -1)
-    
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, -1)
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED;
 
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, -1)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, -1)
-END_DECLARE_EVENT_TYPES()
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU;
+
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED;
 
 typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 
@@ -987,7 +985,7 @@ public:
 
     void SetImageList( wxImageList *imagelist );
     wxImageList* GetImageList() { return m_imageList; }
-    
+
     wxDataViewItem AppendItem( const wxDataViewItem& parent,
         const wxString &text, int icon = -1, wxClientData *data = NULL );
     wxDataViewItem PrependItem( const wxDataViewItem& parent,
