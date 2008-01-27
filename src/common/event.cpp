@@ -44,10 +44,13 @@
 #endif
 
 #include "wx/thread.h"
-#include "wx/ptr_scpd.h"
 
-wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
-wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
+#if wxUSE_BASE
+    #include "wx/ptr_scpd.h"
+
+    wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
+    wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)
+#endif // wxUSE_BASE
 
 // ----------------------------------------------------------------------------
 // wxWin macros
