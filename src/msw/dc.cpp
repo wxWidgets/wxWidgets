@@ -2028,23 +2028,23 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
     WXMICROWIN_CHECK_HDC_RET(false)
 
-    wxDCImpl *impl = source->GetImpl();
-    wxMSWDCImpl *msw_impl = wxDynamicCast( impl, wxMSWDCImpl );
-    if (!msw_impl)
+    wxMSWDCImpl *implSrc = wxDynamicCast( source->GetImpl(), wxMSWDCImpl );
+    if ( !implSrc )
     {
-        // TODO: Do we want to be able to blit
-        //       from other DCs too?
+        // TODO: Do we want to be able to blit from other DCs too?
         return false;
     }
 
+    const HDC hdcSrc = GetHdcOf(*implSrc);
+
     // if either the source or destination has alpha channel, we must use
     // AlphaBlt() as other function don't handle it correctly
-    const wxBitmap& bmpSrc = msw_impl->GetSelectedBitmap();
+    const wxBitmap& bmpSrc = implSrc->GetSelectedBitmap();
     if ( bmpSrc.IsOk() && (bmpSrc.HasAlpha() ||
             (m_selectedBitmap.IsOk() && m_selectedBitmap.HasAlpha())) )
     {
         if ( AlphaBlt(GetHdc(), xdest, ydest, dstWidth, dstHeight,
-                      xsrc, ysrc, srcWidth, srcHeight, GetHdcOf(*msw_impl), bmpSrc) )
+                      xsrc, ysrc, srcWidth, srcHeight, hdcSrc, bmpSrc) )
             return true;
     }
 
@@ -2124,7 +2124,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                             (
                             GetHdc(),
                             xdest, ydest, dstWidth, dstHeight,
-                            GetHdcOf(*msw_impl),
+                            hdcSrc,
                             xsrc, ysrc,
                             (HBITMAP)mask->GetMaskBitmap(),
                             xsrcMask, ysrcMask,
@@ -2143,7 +2143,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
 #if wxUSE_DC_CACHEING
             // create a temp buffer bitmap and DCs to access it and the mask
-            wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, msw_impl->GetHDC());
+            wxDCCacheEntry* dcCacheEntry1 = FindDCInCache(NULL, hdcSrc);
             dc_mask = (HDC) dcCacheEntry1->m_dc;
 
             wxDCCacheEntry* dcCacheEntry2 = FindDCInCache(dcCacheEntry1, GetHDC());
@@ -2155,7 +2155,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
             buffer_bmap = (HBITMAP) bitmapCacheEntry->m_bitmap;
 #else // !wxUSE_DC_CACHEING
             // create a temp buffer bitmap and DCs to access it and the mask
-            dc_mask = ::CreateCompatibleDC(GetHdcOf(*source));
+            dc_mask = ::CreateCompatibleDC(hdcSrc);
             dc_buffer = ::CreateCompatibleDC(GetHdc());
             buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), dstWidth, dstHeight);
 #endif // wxUSE_DC_CACHEING/!wxUSE_DC_CACHEING
@@ -2175,7 +2175,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
             // copy src to buffer using selected raster op
             if ( !::StretchBlt(dc_buffer, 0, 0, (int)dstWidth, (int)dstHeight,
-                           GetHdcOf(*msw_impl), xsrc, ysrc, srcWidth, srcHeight, dwRop) )
+                               hdcSrc, xsrc, ysrc, srcWidth, srcHeight, dwRop) )
             {
                 wxLogLastError(wxT("StretchBlt"));
             }
@@ -2286,7 +2286,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                     (
                         GetHdc(),
                         xdest, ydest, dstWidth, dstHeight,
-                        GetHdcOf(*msw_impl),
+                        hdcSrc,
                         xsrc, ysrc, srcWidth, srcHeight,
                         dwRop
                     ) )
@@ -2306,7 +2306,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                         GetHdc(),
                         xdest, ydest,
                         (int)dstWidth, (int)dstHeight,
-                        GetHdcOf(*msw_impl),
+                        hdcSrc,
                         xsrc, ysrc,
                         dwRop
                     ) )
