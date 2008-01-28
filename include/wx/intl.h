@@ -48,7 +48,7 @@ enum wxLayoutDirection
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)
-#define wxTRANSLATE(str) (str)
+#define wxTRANSLATE(str) str
 
 // ----------------------------------------------------------------------------
 // forward decls
@@ -605,7 +605,7 @@ inline const wxString& wxGetTranslation(const wxString& str1,
     #define wxPLURAL(sing, plur, n)  ((n) == 1 ? (sing) : (plur))
 #endif
 
-#define wxTRANSLATE(str) (str)
+#define wxTRANSLATE(str) str
 
 // NB: we use a template here in order to avoid using
 //     wxLocale::GetUntranslatedString() above, which would be required if
