@@ -325,7 +325,8 @@ static int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
     wxCHECK_MSG( wxStrstr(format, _T("%c")) == NULL, -1,
                  _T("incomplete vswscanf implementation doesn't allow %c") );
 
-    return vsscanf(wxConvLibc.cWX2MB(ws), wxConvLibc.cWX2MB(format), argptr);
+    return vsscanf(wx_static_cast(const char*, wxConvLibc.cWX2MB(ws)),
+        wxConvLibc.cWX2MB(format), argptr);
 }
 #endif
 
