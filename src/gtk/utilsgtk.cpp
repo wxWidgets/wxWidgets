@@ -552,7 +552,7 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
             names.push_back(wxGetNameFromGtkOptionEntry(&entries[n]));
 
             const gchar * const entryDesc = entries[n].description;
-            desc.push_back(entryDesc ? wxString(entryDesc) : _T(""));
+            desc.push_back(wxString(entryDesc));
         }
 
         g_option_group_free (gtkOpts);
