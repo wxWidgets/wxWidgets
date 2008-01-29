@@ -56,7 +56,7 @@ WX_DECLARE_TYPE_MOVABLE(wxULongLong_t)
 // Visual C++ 6.0 can't compile partial template specializations and as this is
 // only an optimization, we can live with pointers not being recognized as
 // movable types under VC6
-#if !wxCHECK_VISUALC_VERSION(7)
+#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
 
 // pointers are movable:
 template<typename T>
