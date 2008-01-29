@@ -32,8 +32,16 @@ struct wxIfImpl
 {
     template<typename TTrue, typename TFalse> struct Result
     {
-        // intentionally don't define value here, this shouldn't be actually
-        // used, it's here just to work around a compiler bug
+        // unfortunately we also need to define value here because otherwise
+        // Result::value is not recognized as a class neither and it has to be
+        // complete too -- at least make it unusable because it really, really
+        // should never be used
+        class value
+        {
+        private:
+            value();
+            ~value();
+        };
     };
 }
 #endif // VC++ <= 6
@@ -45,7 +53,7 @@ struct wxIfImpl<true>
 {
     template<typename TTrue, typename TFalse> struct Result
     {
-        typedef TTrue value;
+        struct value : TTrue { };
     };
 };
 
@@ -55,7 +63,7 @@ struct wxIfImpl<false>
 {
     template<typename TTrue, typename TFalse> struct Result
     {
-        typedef TFalse value;
+        struct value : TFalse { };
     };
 };
 
@@ -67,8 +75,11 @@ struct wxIfImpl<false>
 //
 // See wxVector<T> in vector.h for usage example
 template<bool Cond, typename TTrue, typename TFalse>
-struct wxIf : wxPrivate::wxIfImpl<Cond>::template Result<TTrue, TFalse>
+struct wxIf
 {
+    // notice that value can't be a typedef, VC6 refuses to use it as a base
+    // class in this case
+    struct value : wxPrivate::wxIfImpl<Cond>::Result<TTrue, TFalse>::value { };
 };
 
 #endif // _WX_META_IF_H_
