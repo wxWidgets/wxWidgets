@@ -53,6 +53,11 @@ WX_DECLARE_TYPE_MOVABLE(wxLongLong_t)
 WX_DECLARE_TYPE_MOVABLE(wxULongLong_t)
 #endif
 
+// Visual C++ 6.0 can't compile partial template specializations and as this is
+// only an optimization, we can live with pointers not being recognized as
+// movable types under VC6
+#ifndef __VISUALC6__
+
 // pointers are movable:
 template<typename T>
 struct wxIsMovable<T*>
@@ -64,6 +69,8 @@ struct wxIsMovable<const T*>
 {
     enum { value = true };
 };
+
+#endif // !__VISUALC6__
 
 // Our implementation of wxString is written in such way that it's safe to move
 // it around. OTOH, we don't know anything about std::string.
