@@ -2640,9 +2640,11 @@ This function is only available under Windows.
 
 \membersection{::wxSetCursor}\label{wxsetcursor}
 
-\func{void}{wxSetCursor}{\param{wxCursor *}{cursor}}
+\func{void}{wxSetCursor}{\param{const wxCursor\&}{ cursor}}
 
-Globally sets the cursor; only has an effect in Windows and GTK.
+Globally sets the cursor; only has an effect on Windows, Mac and GTK+. You should
+call this function with wxNullCursor to restore the system cursor.
+
 See also \helpref{wxCursor}{wxcursor}, \helpref{wxWindow::SetCursor}{wxwindowsetcursor}.
 
 
