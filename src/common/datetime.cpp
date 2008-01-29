@@ -138,13 +138,6 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #include <wtime.h>
 #endif
 
-// define a special symbol for VC8 instead of writing tests for 1400 repeatedly
-#ifdef __VISUALC__
-    #if __VISUALC__ >= 1400
-        #define __VISUALC8__
-    #endif
-#endif
-
 #if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
     #if defined(__WXPALMOS__)
         #define WX_GMTOFF_IN_TM

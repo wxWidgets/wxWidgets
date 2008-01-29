@@ -464,6 +464,27 @@
      */
 #    if defined(_MSC_VER) && !defined(__MWERKS__)
 #        define __VISUALC__ _MSC_VER
+
+    /*
+       define special symbols for different VC version instead of writing tests
+       for magic numbers such as 1200, 1300 &c repeatedly
+     */
+#   if __VISUALC__ < 1100
+#       error "This Visual C++ version is too old and not supported any longer."
+#   elif __VISUALC__ < 1200
+#       define __VISUALC5__
+#   elif __VISUALC__ < 1300
+#       define __VISUALC6__
+#   elif __VISUALC__ < 1400
+#       define __VISUALC7__
+#   elif __VISUALC__ < 1500
+#       define __VISUALC8__
+#   elif __VISUALC__ < 1600
+#       define __VISUALC9__
+#   else
+#       pragma message("Please update this code for the next VC++ version")
+#   endif
+
 #    elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
 #        define __BORLANDC__
 #    elif defined(__WATCOMC__)
