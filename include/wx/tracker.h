@@ -35,7 +35,7 @@ private:
 };
 
 // Add-on base class for a trackable object.
-class wxTrackable
+class WXDLLIMPEXP_BASE wxTrackable
 {
 public:
     void AddNode(wxTrackerNode *prn)
