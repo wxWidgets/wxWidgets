@@ -667,7 +667,9 @@ wxCursor::~wxCursor()
 }
 
 // Global cursor setting
+wxCursor gGlobalCursor;
 void wxSetCursor(const wxCursor& cursor)
 {
     cursor.MacInstall() ;
+    gGlobalCursor = cursor;
 }
