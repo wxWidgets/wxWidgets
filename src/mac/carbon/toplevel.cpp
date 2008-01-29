@@ -563,11 +563,16 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
         wxWindow* cursorTarget = currentMouseWindow ;
         wxPoint cursorPoint( wxevent.m_x , wxevent.m_y ) ;
 
-        while ( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
+        extern wxCursor gGlobalCursor;
+
+        if (!gGlobalCursor.IsOk())
         {
-            cursorTarget = cursorTarget->GetParent() ;
-            if ( cursorTarget )
-                cursorPoint += cursorTarget->GetPosition();
+            while ( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
+            {
+                cursorTarget = cursorTarget->GetParent() ;
+                if ( cursorTarget )
+                    cursorPoint += cursorTarget->GetPosition();
+            }
         }
 
     }

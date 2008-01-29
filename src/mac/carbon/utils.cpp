@@ -126,6 +126,8 @@ void wxBeginBusyCursor(const wxCursor *cursor)
     {
         gMacStoredActiveCursor = gMacCurrentCursor;
         cursor->MacInstall();
+
+        wxSetCursor(*cursor);
     }
     //else: nothing to do, already set
 }
@@ -140,6 +142,8 @@ void wxEndBusyCursor()
     {
         gMacStoredActiveCursor.MacInstall();
         gMacStoredActiveCursor = wxNullCursor;
+
+        wxSetCursor(wxNullCursor);
     }
 }
 

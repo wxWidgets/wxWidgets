@@ -123,8 +123,8 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     wxCursor oldCursor = win->GetCursor();
     win->SetCursor(cursor);
 
-#ifdef __WXMSW__
-    //    wxSetCursor(cursor);
+#ifdef __WXMAC__
+    wxSetCursor(cursor);
 #endif
 
     m_status = false;
@@ -148,6 +148,10 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
 #endif
 
     win->SetCursor(oldCursor);
+
+#ifdef __WXMAC__
+    wxSetCursor(wxNullCursor);
+#endif
 
     if (m_status)
     {
