@@ -237,9 +237,6 @@ public:
     // is this window transparent for the mouse events (as wxStaticBox is)?
     virtual bool IsTransparentForMouse() const { return false; }
 
-    // is this a radiobutton (used by radiobutton code itself only)?
-    virtual bool IsRadioButton() const { return false; }
-
     // Common scroll event handling code for wxWindow and wxScrollBar
     wxEventType GetScrollEventType(GtkRange* range);
 
