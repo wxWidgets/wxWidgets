@@ -560,6 +560,17 @@
 #endif
 
 /*
+   This macro can be used to test the Visual C++ version.
+*/
+#ifndef __VISUALC__
+#   define wxVISUALC_VERSION(major) 0
+#   define wxCHECK_VISUALC_VERSION(major) 0
+#else
+#   define wxVISUALC_VERSION(major) ( (6 + major) * 100 )
+#   define wxCHECK_VISUALC_VERSION(major) ( __VISUALC__ >= wxVISUALC_VERSION(major) )
+#endif
+
+/*
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
