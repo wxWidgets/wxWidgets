@@ -19,6 +19,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/dcscreen.h"
 #include "wx/dfb/dcscreen.h"
 #include "wx/dfb/private.h"
 

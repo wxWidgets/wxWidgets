@@ -17,19 +17,8 @@
 class WXDLLIMPEXP_CORE wxMemoryDCImpl : public wxDFBDCImpl
 {
 public:
-    wxMemoryDCImpl(wxMemoryDC *owner)
-        : wxDFBDCImpl(owner)
-    {
-        Init();
-    }
-
-    wxMemoryDCImpl(wxMemoryDC *owner, wxBitmap& bitmap)
-        : wxDFBDCImpl(owner)
-    {
-        Init();
-        DoSelect(bitmap);
-    }
-
+    wxMemoryDCImpl(wxMemoryDC *owner);
+    wxMemoryDCImpl(wxMemoryDC *owner, wxBitmap& bitmap);
     wxMemoryDCImpl(wxMemoryDC *owner, wxDC *dc); // create compatible DC
 
     // override wxMemoryDC-specific base class virtual methods

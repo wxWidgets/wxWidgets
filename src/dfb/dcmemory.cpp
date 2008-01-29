@@ -23,6 +23,7 @@
     #include "wx/bitmap.h"
 #endif
 
+#include "wx/dcmemory.h"
 #include "wx/dfb/dcmemory.h"
 #include "wx/dfb/private.h"
 
@@ -40,6 +41,19 @@ IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl, wxDFBDCImpl)
 
 void wxMemoryDCImpl::Init()
 {
+}
+
+wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC *owner)
+              : wxDFBDCImpl(owner)
+{
+    Init();
+}
+
+wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC *owner, wxBitmap& bitmap)
+              : wxDFBDCImpl(owner)
+{
+    Init();
+    DoSelect(bitmap);
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl(wxMemoryDC *owner, wxDC *WXUNUSED(dc))
