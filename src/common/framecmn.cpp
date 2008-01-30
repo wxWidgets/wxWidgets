@@ -211,8 +211,7 @@ bool wxFrameBase::ProcessCommand(int id)
         }
     }
 
-    GetEventHandler()->ProcessEvent(commandEvent);
-    return true;
+    return HandleWindowEvent(commandEvent);
 #else // !wxUSE_MENUS
     wxUnusedVar(id);
 
