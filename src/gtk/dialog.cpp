@@ -139,7 +139,7 @@ void wxDialog::EndModal( int retCode )
 
     if (!IsModal())
     {
-        wxFAIL_MSG( wxT("wxDialog:EndModal called twice") );
+        wxFAIL_MSG( "either wxDialog:EndModal called twice or ShowModal wasn't called" );
         return;
     }
 
