@@ -53,7 +53,11 @@ struct wxIfImpl<true>
 {
     template<typename TTrue, typename TFalse> struct Result
     {
+#if defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(7)
         struct value : TTrue { };
+#else
+        typedef TTrue value;
+#endif
     };
 };
 
@@ -63,7 +67,11 @@ struct wxIfImpl<false>
 {
     template<typename TTrue, typename TFalse> struct Result
     {
+#if defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(7)
         struct value : TFalse { };
+#else
+        typedef TFalse value;
+#endif
     };
 };
 
@@ -77,9 +85,15 @@ struct wxIfImpl<false>
 template<bool Cond, typename TTrue, typename TFalse>
 struct wxIf
 {
+#if defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(7)
     // notice that value can't be a typedef, VC6 refuses to use it as a base
     // class in this case
     struct value : wxPrivate::wxIfImpl<Cond>::Result<TTrue, TFalse>::value { };
+#else // !VC6++
+    typedef typename wxPrivate::wxIfImpl<Cond>
+                     ::template Result<TTrue, TFalse>::value
+            value;
+#endif
 };
 
 #endif // _WX_META_IF_H_
