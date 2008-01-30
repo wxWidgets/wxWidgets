@@ -974,6 +974,9 @@ wxTextCtrl::StreamIn(const wxString& value,
 
     const size_t len = conv.MB2WC(NULL, value.mb_str(), value.length());
 
+    if (len == wxCONV_FAILED)
+        return false;
+
 #if wxUSE_WCHAR_T
     wxWCharBuffer wchBuf(len);
     wchar_t *wpc = wchBuf.data();
@@ -1066,7 +1069,8 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
         // conversion but what else can we do)
         wxCSConv conv(encoding);
         size_t lenNeeded = conv.WC2MB(NULL, wchBuf, 0);
-        if ( lenNeeded++ )
+
+        if ( lenNeeded != wxCONV_FAILED && lenNeeded++ )
         {
             conv.WC2MB(wxStringBuffer(out, lenNeeded), wchBuf, lenNeeded);
         }
