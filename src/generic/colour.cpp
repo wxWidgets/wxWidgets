@@ -35,6 +35,18 @@ void wxColour::Init()
     m_isInit = false;
 }
 
+void wxColour::InitRGBA(unsigned char r,
+                        unsigned char g,
+                        unsigned char b,
+                        unsigned char a)
+{
+    m_red = r;
+    m_green = g;
+    m_blue = b;
+    m_alpha = a;
+    m_isInit = true;
+}
+
 wxColour& wxColour::operator=(const wxColour& col)
 {
     m_red = col.m_red;
