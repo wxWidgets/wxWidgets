@@ -104,7 +104,7 @@ template<typename T>
 class wxVector
 {
 private:
-    // Tthis cryptic expression means "typedef Ops to wxVectorMemOpsMovable if
+    // This cryptic expression means "typedef Ops to wxVectorMemOpsMovable if
     // type T is movable type, otherwise to wxVectorMemOpsGeneric".
     //
     // Note that we use typedef instead of privately deriving from this (which
