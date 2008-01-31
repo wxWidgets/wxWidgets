@@ -102,12 +102,19 @@ struct wxVectorMemOpsGeneric
 
 template<typename T>
 class wxVector
-    // this cryptic expression means "derive from wxVectorMemOpsMovable if
-    // type T is movable type, otherwise derive from wxVectorMemOpsGeneric
-    : private wxIf< wxIsMovable<T>::value,
-                    wxPrivate::wxVectorMemOpsMovable<T>,
-                    wxPrivate::wxVectorMemOpsGeneric<T> >::value
 {
+private:
+    // Tthis cryptic expression means "typedef Ops to wxVectorMemOpsMovable if
+    // type T is movable type, otherwise to wxVectorMemOpsGeneric".
+    //
+    // Note that we use typedef instead of privately deriving from this (which
+    // would allowed us to omit "Ops::" prefixes below) to keep VC6 happy,
+    // it can't compile code that derives from wxIf<...>::value.
+    typedef typename wxIf< wxIsMovable<T>::value,
+                           wxPrivate::wxVectorMemOpsMovable<T>,
+                           wxPrivate::wxVectorMemOpsGeneric<T> >::value
+            Ops;
+
 public:
     typedef size_t size_type;
     typedef T value_type;
@@ -135,7 +142,7 @@ public:
             m_values[i].~T();
         }
 
-        Free(m_values);
+        Ops::Free(m_values);
         m_values = NULL;
         m_size = m_capacity = 0;
     }
@@ -156,7 +163,7 @@ public:
         if ( m_capacity + increment > n )
             n = m_capacity + increment;
 
-        m_values = Realloc(m_values, n * sizeof(value_type), m_size);
+        m_values = Ops::Realloc(m_values, n * sizeof(value_type), m_size);
         m_capacity = n;
     }
 
@@ -239,7 +246,7 @@ public:
         // the way:
         if ( after > 0 )
         {
-            MemmoveForward(m_values + idx + 1, m_values + idx, after);
+            Ops::MemmoveForward(m_values + idx + 1, m_values + idx, after);
         }
 
 #if wxUSE_EXCEPTIONS
@@ -258,7 +265,7 @@ public:
             // back to their original positions in m_values
             if ( after > 0 )
             {
-                MemmoveBackward(m_values + idx, m_values + idx + 1, after);
+                Ops::MemmoveBackward(m_values + idx, m_values + idx + 1, after);
             }
 
             throw; // rethrow the exception
@@ -295,7 +302,7 @@ public:
         // once that's done, move following elements over to the freed space:
         if ( after > 0 )
         {
-            MemmoveBackward(m_values + idx, m_values + idx + count, after);
+            Ops::MemmoveBackward(m_values + idx, m_values + idx + count, after);
         }
 
         m_size -= count;
