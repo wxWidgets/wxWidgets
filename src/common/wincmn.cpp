@@ -317,10 +317,12 @@ wxWindowBase::~wxWindowBase()
     // we weren't a dialog class
     wxTopLevelWindows.DeleteObject((wxWindow*)this);
 
+#if wxUSE_MENUS
     // The associated popup menu can still be alive, disassociate from it in
     // this case
     if ( wxCurrentPopupMenu && wxCurrentPopupMenu->GetInvokingWindow() == this )
         wxCurrentPopupMenu->SetInvokingWindow(NULL);
+#endif // wxUSE_MENUS
 
     wxASSERT_MSG( GetChildren().GetCount() == 0, wxT("children not destroyed") );
 
