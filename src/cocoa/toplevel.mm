@@ -352,20 +352,25 @@ wxString wxTopLevelWindowCocoa::GetTitle() const
 wxWindow* wxTopLevelWindowCocoa::SetDefaultItem(wxWindow *win)
 {
     wxWindow *old = wxTopLevelWindowBase::SetDefaultItem(win);
-    NSView *newView = win->GetNSView();
 
     NSCell *newCell;
-    // newView does not have to be an NSControl, we only cast to NSControl*
-    // to silence the warning about cell not being implemented.
-    if(newView != nil && [newView respondsToSelector:@selector(cell)])
-        newCell = [(NSControl*)newView cell];
+    if(win != NULL)
+    {
+        NSView *newView = win->GetNSView();
+        // newView does not have to be an NSControl, we only cast to NSControl*
+        // to silence the warning about cell not being implemented.
+        if(newView != nil && [newView respondsToSelector:@selector(cell)])
+            newCell = [(NSControl*)newView cell];
+        else
+            newCell = nil;
+    
+        if(newCell != nil && ![newCell isKindOfClass:[NSButtonCell class]])
+        {   // It's not an NSButtonCell, set the default to nil.
+            newCell = nil;
+        }
+    }
     else
         newCell = nil;
-
-    if(newCell != nil && ![newCell isKindOfClass:[NSButtonCell class]])
-    {   // It's not an NSButtonCell, set the default to nil.
-        newCell = nil;
-    }
 
     [GetNSWindow() setDefaultButtonCell:(NSButtonCell*)newCell];
     return old;
