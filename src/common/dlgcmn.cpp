@@ -529,6 +529,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
 {
     if (dialog->GetSizer())
     {
+#if wxUSE_BOOKCTRL
         wxBookCtrlBase* bookContentWindow = wxDynamicCast(dialog->GetContentWindow(), wxBookCtrlBase);
 
         if (bookContentWindow)
@@ -564,6 +565,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
             FitWithScrolling(dialog, windows);
         }
         else
+#endif // wxUSE_BOOKCTRL
         {
             // If we have an arbitrary dialog, create a scrolling area for the main content, and a button sizer
             // for the main buttons.
