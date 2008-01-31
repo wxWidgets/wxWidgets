@@ -114,7 +114,7 @@
 
 <build>
     <name>MinGW32 wxMSW Trunk</name>
-    <sandbox>td157.testdrive.hp.com</sandbox>
+    <sandbox>td165.testdrive.hp.com</sandbox>
     <builddir>td_msw</builddir>
     <scheduler>trunk_quick</scheduler>
 
