@@ -169,7 +169,8 @@ void wxClientDCImpl::InitDC()
     }
 
     // clip the DC to avoid overwriting the non client area
-    SetClippingRegion(wxPoint(0,0), m_window->GetClientSize());
+    wxSize size = m_window->GetClientSize();
+    DoSetClippingRegion(0, 0, size.x, size.y);
 #endif // __WXUNIVERSAL__ || __WXWINCE__
 }
 
