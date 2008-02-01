@@ -33,12 +33,10 @@
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
+static void
 gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 {
     win->GTKInitImplicitContext();
-
-    return FALSE;
 }
 }
 
@@ -49,7 +47,7 @@ gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
+static void
 gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
     wxPaintEvent event( win->GetId() );
@@ -58,8 +56,6 @@ gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 
     win->m_exposed = false;
     win->GetUpdateRegion().Clear();
-
-    return FALSE;
 }
 }
 
@@ -222,9 +218,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
     wxWindow::Create( parent, id, pos, size, style, name );
 
-    m_glWidget = m_wxwindow;
-
-    gtk_widget_set_double_buffered( m_glWidget, FALSE );
+    gtk_widget_set_double_buffered(m_wxwindow, false);
 
 #if WXWIN_COMPATIBILITY_2_8
     g_signal_connect(m_wxwindow, "realize",       G_CALLBACK(gtk_glwindow_realized_callback), this);

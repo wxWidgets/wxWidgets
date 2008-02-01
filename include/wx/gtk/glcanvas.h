@@ -92,7 +92,6 @@ public:
     // implementation from now on
     void OnInternalIdle();
 
-    GtkWidget        *m_glWidget;
     bool              m_exposed;
 
 #if WXWIN_COMPATIBILITY_2_8
