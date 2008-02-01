@@ -24,6 +24,7 @@ function that takes a wxRichTextEvent argument.
 \twocolitem{{\bf EVT\_RICHTEXT\_STYLESHEET\_REPLACED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_REPLACED event, generated when the control's stylesheet has been replaced, for example when a file is loaded into the control. Valid event functions: GetOldStyleSheet, GetNewStyleSheet.}
 \twocolitem{{\bf EVT\_RICHTEXT\_CONTENT\_INSERTED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_CONTENT\_INSERTED event, generated when content has been inserted into the control. Valid event functions: GetPosition, GetRange.}
 \twocolitem{{\bf EVT\_RICHTEXT\_CONTENT\_DELETED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_CONTENT\_DELETED event, generated when content has been deleted from the control. Valid event functions: GetPosition, GetRange.}
+\twocolitem{{\bf EVT\_RICHTEXT\_BUFFER\_RESET(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_BUFFER\_RESET event, generated when the buffer has been reset by deleting all content. You can use this to set a default style for the first new paragraph.}
 \end{twocollist}%
  
 \wxheading{Derived from}
