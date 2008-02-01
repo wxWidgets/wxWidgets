@@ -100,6 +100,34 @@ gtk_glcanvas_size_callback(GtkWidget *WXUNUSED(widget),
 }
 }
 
+//-----------------------------------------------------------------------------
+// emission hook for "parent-set"
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean
+parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void* data)
+{
+    wxGLCanvas* win = (wxGLCanvas*)data;
+    if (g_value_peek_pointer(&param_values[0]) == win->m_wxwindow)
+    {
+        const XVisualInfo* xvi = win->GetXVisualInfo();
+        GdkVisual* visual = gtk_widget_get_visual(win->m_wxwindow);
+        if (GDK_VISUAL_XVISUAL(visual)->visualid != xvi->visualid)
+        {
+            GdkScreen* screen = gtk_widget_get_screen(win->m_wxwindow);
+            visual = gdk_x11_screen_lookup_visual(screen, xvi->visualid);
+            GdkColormap* colormap = gdk_colormap_new(visual, false);
+            gtk_widget_set_colormap(win->m_wxwindow, colormap);
+            g_object_unref(colormap);
+        }
+        // remove hook
+        return false;
+    }
+    return true;
+}
+}
+
 //---------------------------------------------------------------------------
 // wxGlCanvas
 //---------------------------------------------------------------------------
@@ -186,26 +214,15 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if ( !InitVisual(attribList) )
         return false;
 
-    XVisualInfo * const xvi = GetXVisualInfo();
-
-    GdkVisual *visual;
-    GdkColormap *colormap;
+    // watch for the "parent-set" signal on m_wxwindow so we can set colormap
+    // before m_wxwindow is realized (which will occur before
+    // wxWindow::Create() returns if parent is already visible)
+    unsigned sig_id = g_signal_lookup("parent-set", GTK_TYPE_WIDGET);
+    g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, NULL);
 
     wxWindow::Create( parent, id, pos, size, style, name );
 
     m_glWidget = m_wxwindow;
-
-    GdkScreen *screen = gtk_widget_get_screen( m_glWidget );
-    colormap = gdk_screen_get_default_colormap(screen);
-    visual = gdk_colormap_get_visual(colormap);
-
-    if (GDK_VISUAL_XVISUAL(visual)->visualid != xvi->visualid)
-    {
-        visual = gdk_x11_screen_lookup_visual( screen, xvi->visualid );
-        colormap = gdk_colormap_new(visual, FALSE);
-    }
-
-    gtk_widget_set_colormap( m_glWidget, colormap );
 
     gtk_widget_set_double_buffered( m_glWidget, FALSE );
 
