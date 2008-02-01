@@ -22,7 +22,7 @@
     #include "wx/log.h"
 #endif
 
-#if WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_6 && wxUSE_ZIPSTREAM
     #include "wx/zipstrm.h"
 #else
     #include "wx/archive.h"
@@ -399,7 +399,7 @@ wxFSFile* wxArchiveFSHandler::OpenFile(
 
     if (s && s->IsOk())
     {
-#if WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_6 && wxUSE_ZIPSTREAM
         if (factory->IsKindOf(CLASSINFO(wxZipClassFactory)))
             ((wxZipInputStream*)s)->m_allowSeeking = true;
 #endif // WXWIN_COMPATIBILITY_2_6
