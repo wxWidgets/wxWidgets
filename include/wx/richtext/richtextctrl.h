@@ -894,6 +894,7 @@ extern WXDLLIMPEXP_RICHTEXT const wxEventType wxEVT_COMMAND_RICHTEXT_CONTENT_INS
 extern WXDLLIMPEXP_RICHTEXT const wxEventType wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED;
 extern WXDLLIMPEXP_RICHTEXT const wxEventType wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED;
 extern WXDLLIMPEXP_RICHTEXT const wxEventType wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED;
+extern WXDLLIMPEXP_RICHTEXT const wxEventType wxEVT_COMMAND_RICHTEXT_BUFFER_RESET;
 
 typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
 
@@ -917,6 +918,7 @@ typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
 #define EVT_RICHTEXT_CONTENT_DELETED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_STYLE_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_SELECTION_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_BUFFER_RESET(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_BUFFER_RESET, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 
 #endif
     // wxUSE_RICHTEXT

@@ -2419,6 +2419,15 @@ void wxRichTextParagraphLayoutBox::Reset()
 {
     Clear();
 
+    wxRichTextBuffer* buffer = wxDynamicCast(this, wxRichTextBuffer);
+    if (buffer && GetRichTextCtrl())
+    {
+        wxRichTextEvent event(wxEVT_COMMAND_RICHTEXT_BUFFER_RESET, GetRichTextCtrl()->GetId());
+        event.SetEventObject(GetRichTextCtrl());
+
+        buffer->SendEvent(event, true);
+    }
+
     AddParagraph(wxEmptyString);
 
     Invalidate(wxRICHTEXT_ALL);

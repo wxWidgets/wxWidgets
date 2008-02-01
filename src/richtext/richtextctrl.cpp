@@ -54,6 +54,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_BUFFER_RESET)
 
 IMPLEMENT_CLASS( wxRichTextCtrl, wxControl )
 
@@ -140,12 +141,6 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     }
 
-    GetBuffer().Reset();
-    GetBuffer().SetRichTextCtrl(this);
-
-    SetCaret(new wxCaret(this, wxRICHTEXT_DEFAULT_CARET_WIDTH, 16));
-    GetCaret()->Show();
-
     if (style & wxTE_READONLY)
         SetEditable(false);
 
@@ -169,6 +164,12 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+
+    GetBuffer().Reset();
+    GetBuffer().SetRichTextCtrl(this);
+
+    SetCaret(new wxCaret(this, wxRICHTEXT_DEFAULT_CARET_WIDTH, 16));
+    GetCaret()->Show();
 
     // Tell the sizers to use the given or best size
     SetInitialSize(size);
