@@ -837,7 +837,7 @@ void wxSizer::DeleteWindows()
 wxSize wxSizer::Fit( wxWindow *window )
 {
     // take the min size by default and limit it by max size
-    wxSize size = GetMinWindowSize(window);
+    wxSize size = GetMinClientSize(window);
 
     wxTopLevelWindow *tlw = wxDynamicCast(window, wxTopLevelWindow);
     if ( tlw )
@@ -878,7 +878,7 @@ wxSize wxSizer::Fit( wxWindow *window )
     }
     else
     {
-        wxSize sizeMax = GetMaxWindowSize(window);
+        wxSize sizeMax = GetMaxClientSize(window);
         
         if ( sizeMax.x != wxDefaultCoord && size.x > sizeMax.x )
                 size.x = sizeMax.x;
