@@ -34,16 +34,12 @@ public:
                 long style = 0,
                 const wxString &name = wxStaticTextNameStr );
 
-    wxString GetLabel() const;
     void SetLabel( const wxString &label );
 
     bool SetFont( const wxFont &font );
-    bool SetForegroundColour( const wxColour& colour );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-
-
 
     // implementation
     // --------------
