@@ -1968,6 +1968,19 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
 WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+    // we must handle clipboard events before calling MSWWindowProc, otherwise
+    // the event would be handled twice if there's a handler for it in user
+    // code:
+    switch ( nMsg )
+    {
+        case WM_CUT:
+        case WM_COPY:
+        case WM_PASTE:
+            if ( HandleClipboardEvent(nMsg) )
+                return 0;
+            break;
+    }
+
     WXLRESULT lRc = wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 
     switch ( nMsg )
@@ -2009,13 +2022,6 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     lRc = lDlgCode;
                 }
             }
-            break;
-
-        case WM_CUT:
-        case WM_COPY:
-        case WM_PASTE:
-            if ( HandleClipboardEvent(nMsg) )
-                lRc = 0;
             break;
     }
 
