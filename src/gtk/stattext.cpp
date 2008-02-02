@@ -71,9 +71,9 @@ bool wxStaticText::Create(wxWindow *parent,
 
     if (GetLayoutDirection() == wxLayout_RightToLeft)
     {
-         if (justify == GTK_JUSTIFY_RIGHT)
+        if (justify == GTK_JUSTIFY_RIGHT)
             justify = GTK_JUSTIFY_LEFT;
-         if (justify == GTK_JUSTIFY_LEFT)
+        else if (justify == GTK_JUSTIFY_LEFT)
             justify = GTK_JUSTIFY_RIGHT;
     }
 
