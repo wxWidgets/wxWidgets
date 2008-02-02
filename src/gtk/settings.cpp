@@ -414,7 +414,7 @@ static bool GetFrameExtents(GdkWindow* window, int* left, int* right, int* top, 
         Atom type;
         int format;
         gulong nitems, bytes_after;
-        long* data = NULL;
+        guchar* data;
         success = XGetWindowProperty(
             gdk_x11_drawable_get_xdisplay(window),
             gdk_x11_drawable_get_xid(window),
@@ -422,17 +422,18 @@ static bool GetFrameExtents(GdkWindow* window, int* left, int* right, int* top, 
             0, 4,
             false,
             XA_CARDINAL,
-            &type, &format, &nitems, &bytes_after, (guchar**)&data
+            &type, &format, &nitems, &bytes_after, &data
             ) == Success;
         if (success)
         {
             success = data && nitems == 4;
             if (success)
             {
-                if (left)   *left   = int(data[0]);
-                if (right)  *right  = int(data[1]);
-                if (top)    *top    = int(data[2]);
-                if (bottom) *bottom = int(data[3]);
+                long* p = (long*)data;
+                if (left)   *left   = int(p[0]);
+                if (right)  *right  = int(p[1]);
+                if (top)    *top    = int(p[2]);
+                if (bottom) *bottom = int(p[3]);
             }
             if (data)
                 XFree(data);

@@ -392,17 +392,18 @@ static gboolean property_notify_event(
         Atom type;
         int format;
         gulong nitems, bytes_after;
-        long* data = NULL;
+        guchar* data;
         Status status = XGetWindowProperty(
             gdk_x11_drawable_get_xdisplay(event->window),
             gdk_x11_drawable_get_xid(event->window),
             xproperty,
             0, 4, false, XA_CARDINAL,
-            &type, &format, &nitems, &bytes_after, (guchar**)&data);
+            &type, &format, &nitems, &bytes_after, &data);
         if (status == Success && data && nitems == 4)
         {
+            long* p = (long*)data;
             const wxSize decorSize =
-                wxSize(int(data[0] + data[1]), int(data[2] + data[3]));
+                wxSize(int(p[0] + p[1]), int(p[2] + p[3]));
             if (win->m_decorSize != decorSize)
             {
                 const wxSize diff = decorSize - win->m_decorSize;

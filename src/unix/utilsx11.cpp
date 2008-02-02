@@ -382,20 +382,20 @@ static bool wxKwinRunning(Display *display, Window rootWnd)
 {
     wxMAKE_ATOM(KWIN_RUNNING, display);
 
-    long *data;
+    unsigned char* data;
     Atom type;
     int format;
     unsigned long nitems, after;
     if (XGetWindowProperty(display, rootWnd,
                            KWIN_RUNNING, 0, 1, False, KWIN_RUNNING,
                            &type, &format, &nitems, &after,
-                           (unsigned char**)&data) != Success)
+                           &data) != Success)
     {
         return false;
     }
 
     bool retval = (type == KWIN_RUNNING &&
-                   nitems == 1 && data && data[0] == 1);
+                   nitems == 1 && data && ((long*)data)[0] == 1);
     XFree(data);
     return retval;
 }

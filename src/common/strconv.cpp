@@ -1981,7 +1981,7 @@ wxMBConv_iconv::wxMBConv_iconv(const char *name)
                 if ( m2w != ICONV_T_INVALID )
                 {
                     char    buf[2], *bufPtr;
-                    wchar_t wbuf[2], *wbufPtr;
+                    wchar_t wbuf[2];
                     size_t  insz, outsz;
                     size_t  res;
 
@@ -1990,12 +1990,12 @@ wxMBConv_iconv::wxMBConv_iconv(const char *name)
                     wbuf[0] = 0;
                     insz = 2;
                     outsz = SIZEOF_WCHAR_T * 2;
-                    wbufPtr = wbuf;
+                    char* wbufPtr = (char*)wbuf;
                     bufPtr = buf;
 
                     res = iconv(
                         m2w, ICONV_CHAR_CAST(&bufPtr), &insz,
-                        (char**)&wbufPtr, &outsz);
+                        &wbufPtr, &outsz);
 
                     if (ICONV_FAILED(res, insz))
                     {
@@ -2091,16 +2091,16 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 
     size_t outbuf = n * SIZEOF_WCHAR_T;
     size_t res, cres;
-    // VS: Use these instead of psz, buf because iconv() modifies its arguments:
-    wchar_t *bufPtr = buf;
     const char *pszPtr = psz;
 
     if (buf)
     {
+        char* bufPtr = (char*)buf;
+
         // have destination buffer, convert there
         cres = iconv(m2w,
                      ICONV_CHAR_CAST(&pszPtr), &inbuf,
-                     (char**)&bufPtr, &outbuf);
+                     &bufPtr, &outbuf);
         res = n - (outbuf / SIZEOF_WCHAR_T);
 
         if (ms_wcNeedsSwap)
@@ -2123,12 +2123,12 @@ size_t wxMBConv_iconv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 
         do
         {
-            bufPtr = tbuf;
+            char* bufPtr = (char*)tbuf;
             outbuf = 8 * SIZEOF_WCHAR_T;
 
             cres = iconv(m2w,
                          ICONV_CHAR_CAST(&pszPtr), &inbuf,
-                         (char**)&bufPtr, &outbuf );
+                         &bufPtr, &outbuf );
 
             res += 8 - (outbuf / SIZEOF_WCHAR_T);
         }
@@ -2153,8 +2153,8 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 #endif
 
     size_t inlen = wxWcslen(psz);
-    size_t inbuf = inlen * SIZEOF_WCHAR_T;
-    size_t outbuf = n;
+    size_t inbuflen = inlen * SIZEOF_WCHAR_T;
+    size_t outbuflen = n;
     size_t res, cres;
 
     wchar_t *tmpbuf = 0;
@@ -2164,7 +2164,7 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         // need to copy to temp buffer to switch endianness
         // (doing WC_BSWAP twice on the original buffer won't help, as it
         //  could be in read-only memory, or be accessed in some other thread)
-        tmpbuf = (wchar_t *)malloc(inbuf + SIZEOF_WCHAR_T);
+        tmpbuf = (wchar_t *)malloc(inbuflen + SIZEOF_WCHAR_T);
         for ( size_t i = 0; i < inlen; i++ )
             tmpbuf[n] = WC_BSWAP(psz[i]);
 
@@ -2172,12 +2172,13 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         psz = tmpbuf;
     }
 
+    char* inbuf = (char*)psz;
     if (buf)
     {
         // have destination buffer, convert there
-        cres = iconv( w2m, ICONV_CHAR_CAST(&psz), &inbuf, &buf, &outbuf );
+        cres = iconv(w2m, ICONV_CHAR_CAST(&inbuf), &inbuflen, &buf, &outbuflen);
 
-        res = n - outbuf;
+        res = n - outbuflen;
 
         // NB: iconv was given only wcslen(psz) characters on input, and so
         //     it couldn't convert the trailing zero. Let's do it ourselves
@@ -2194,11 +2195,11 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         do
         {
             buf = tbuf;
-            outbuf = 16;
+            outbuflen = 16;
 
-            cres = iconv( w2m, ICONV_CHAR_CAST(&psz), &inbuf, &buf, &outbuf );
+            cres = iconv(w2m, ICONV_CHAR_CAST(&inbuf), &inbuflen, &buf, &outbuflen);
 
-            res += 16 - outbuf;
+            res += 16 - outbuflen;
         }
         while ((cres == (size_t)-1) && (errno == E2BIG));
     }
@@ -2208,7 +2209,7 @@ size_t wxMBConv_iconv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
         free(tmpbuf);
     }
 
-    if (ICONV_FAILED(cres, inbuf))
+    if (ICONV_FAILED(cres, inbuflen))
     {
         wxLogTrace(TRACE_STRCONV, wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
         return wxCONV_FAILED;
