@@ -1881,13 +1881,6 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 }
             }
             break;
-
-        case WM_CUT:
-        case WM_COPY:
-        case WM_PASTE:
-            if ( HandleClipboardEvent(nMsg) )
-                lRc = 0;
-            break;
     }
 
     return lRc;

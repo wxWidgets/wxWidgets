@@ -205,13 +205,6 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                 }
             }
             break;
-
-        case WM_CUT:
-        case WM_COPY:
-        case WM_PASTE:
-            if( win->HandleClipboardEvent( message ) )
-                return 0;
-            break;
     }
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
@@ -302,6 +295,11 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
 
         case WM_KILLFOCUS:
             return HandleKillFocus((WXHWND)wParam);
+
+        case WM_CUT:
+        case WM_COPY:
+        case WM_PASTE:
+            return HandleClipboardEvent(msg);
     }
 
     return false;

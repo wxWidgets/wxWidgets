@@ -3164,6 +3164,12 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 #endif // wxUSE_HOTKEY
 
+        case WM_CUT:
+        case WM_COPY:
+        case WM_PASTE:
+            processed = HandleClipboardEvent(message);
+            break;
+
         case WM_HSCROLL:
         case WM_VSCROLL:
             {
