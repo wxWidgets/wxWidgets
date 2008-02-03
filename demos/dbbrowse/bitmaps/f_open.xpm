@@ -1,5 +1,5 @@
 /* XPM */
-static char *FolderOpen_xpm[] = {
+static const char * FolderOpen_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 15 57 1",
 "u c #83A5DD",

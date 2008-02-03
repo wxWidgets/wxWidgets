@@ -1,5 +1,5 @@
 /* XPM */
-static char * dnd_copy_xpm[] = {
+static const char * dnd_copy_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "32 32 6 1",
 /* colors */

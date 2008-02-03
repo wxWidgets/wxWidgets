@@ -1,5 +1,5 @@
 /* XPM */
-static char *plot_up_xpm[] = {
+static const char * plot_up_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "20 18 8 1",
 "  c Gray0",

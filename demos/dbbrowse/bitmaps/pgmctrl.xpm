@@ -1,5 +1,5 @@
 /* XPM */
-static char *pgmctrl_xpm[] = {
+static const char * pgmctrl_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 4 1",
 ". c #FFFFFF",

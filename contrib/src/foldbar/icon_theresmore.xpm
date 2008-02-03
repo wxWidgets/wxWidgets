@@ -1,5 +1,5 @@
 /* XPM */
-static char *icon_theresmore[] = {
+static const char * icon_theresmore[] = {
 "7 10 16 2",
 "00 c black",
 "01 c none",

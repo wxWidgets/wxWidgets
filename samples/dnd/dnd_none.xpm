@@ -1,5 +1,5 @@
 /* XPM */
-static char * dnd_none_xpm[] = {
+static const char * dnd_none_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "32 32 6 1",
 /* colors */

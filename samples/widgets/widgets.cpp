@@ -921,7 +921,7 @@ WidgetsPageInfo *WidgetsPage::ms_widgetPages = NULL;
 
 WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          wxImageList *imaglist,
-                         char* icon[])
+                         const char* icon[])
            : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
                      wxNO_FULL_REPAINT_ON_RESIZE |

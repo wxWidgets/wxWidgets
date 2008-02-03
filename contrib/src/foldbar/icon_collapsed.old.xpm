@@ -1,5 +1,5 @@
 /* XPM */
-static char * icon_collapsed[] = {
+static const char * icon_collapsed[] = {
 "16 16 3 1",
 " 	c #00FFFF",
 ".	c None",

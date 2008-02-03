@@ -91,7 +91,7 @@ class WidgetsPage : public wxPanel
 public:
     WidgetsPage(WidgetsBookCtrl *book,
                 wxImageList *imaglist,
-                char* icon[]);
+                const char* icon[]);
 
     // return the control shown by this page
     virtual wxControl *GetWidget() const = 0;

@@ -1,5 +1,5 @@
 /* XPM */
-static char * DocClosed_xpm[] = {
+static const char * DocClosed_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 4 1",
 /* colors */

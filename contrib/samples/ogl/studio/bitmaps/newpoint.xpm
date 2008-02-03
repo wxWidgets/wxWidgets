@@ -1,5 +1,5 @@
 /* XPM */
-static char *newpoint_xpm[] = {
+static const char * newpoint_xpm[] = {
 /* width height num_colors chars_per_pixel */
 "    16    15        3            1",
 /* colors */

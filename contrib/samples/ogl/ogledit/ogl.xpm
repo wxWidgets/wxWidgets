@@ -1,5 +1,5 @@
 /* XPM */
-static char * ogl_xpm[] = {
+static const char * ogl_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "32 32 7 1",
 /* colors */
