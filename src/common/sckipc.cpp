@@ -69,7 +69,7 @@ enum
 #endif
 
 // All sockets will be created with the following flags
-#define SCKIPC_FLAGS (wxSOCKET_WAITALL)
+#define SCKIPC_FLAGS (wxSOCKET_WAITALL|wxSOCKET_REUSEADDR)
 
 // headers needed for umask()
 #ifdef __UNIX_LIKE__
