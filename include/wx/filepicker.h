@@ -237,6 +237,7 @@ public:     // overrides
         { return wxEVT_COMMAND_FILEPICKER_CHANGED; }
 
 protected:
+    virtual
     wxFileDirPickerWidgetBase *CreatePicker(wxWindow *parent,
                                             const wxString& path,
                                             const wxString& message,
@@ -332,6 +333,7 @@ public:     // overrides
         { return wxEVT_COMMAND_DIRPICKER_CHANGED; }
 
 protected:
+    virtual
     wxFileDirPickerWidgetBase *CreatePicker(wxWindow *parent,
                                             const wxString& path,
                                             const wxString& message,
