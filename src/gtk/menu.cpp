@@ -27,16 +27,6 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/mnemonics.h"
 
-// FIXME: is this right? somehow I don't think so (VZ)
-
-#define gtk_accel_group_attach(g, o) gtk_window_add_accel_group((o), (g))
-#define gtk_accel_group_detach(g, o) gtk_window_remove_accel_group((o), (g))
-//#define gtk_menu_ensure_uline_accel_group(m) gtk_menu_get_accel_group(m)
-
-#define ACCEL_OBJECT        GtkWindow
-#define ACCEL_OBJECTS(a)    (a)->acceleratables
-#define ACCEL_OBJ_CAST(obj) ((GtkWindow*) obj)
-
 // we use normal item but with a special id for the menu title
 static const int wxGTK_TITLE_ID = -3;
 
@@ -174,9 +164,8 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
         top_frame = top_frame->GetParent();
 
     // support for native hot keys
-    ACCEL_OBJECT *obj = ACCEL_OBJ_CAST(top_frame->m_widget);
-    if ( menu->m_accel && g_slist_find( ACCEL_OBJECTS(menu->m_accel), obj ) )
-        gtk_accel_group_detach( menu->m_accel, obj );
+    if (menu->m_accel && g_slist_find(menu->m_accel->acceleratables, top_frame->m_widget))
+        gtk_window_remove_accel_group(GTK_WINDOW(top_frame->m_widget), menu->m_accel);
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
@@ -197,9 +186,8 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
         top_frame = top_frame->GetParent();
 
     // support for native hot keys
-    ACCEL_OBJECT *obj = ACCEL_OBJ_CAST(top_frame->m_widget);
-    if ( !g_slist_find( ACCEL_OBJECTS(menu->m_accel), obj ) )
-        gtk_accel_group_attach( menu->m_accel, obj );
+    if (menu->m_accel && g_slist_find(menu->m_accel->acceleratables, top_frame->m_widget))
+        gtk_window_add_accel_group(GTK_WINDOW(top_frame->m_widget), menu->m_accel);
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
@@ -383,7 +371,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return (wxMenu*) NULL;
 
-    gtk_menu_item_remove_submenu( GTK_MENU_ITEM(menu->m_owner) );
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu->m_owner), NULL);
     gtk_container_remove(GTK_CONTAINER(m_menubar), menu->m_owner);
 
     gtk_widget_destroy( menu->m_owner );
