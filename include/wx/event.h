@@ -2491,9 +2491,12 @@ inline void wxPostEvent(wxEvtHandler *dest, const wxEvent& event)
 }
 
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
+typedef void (wxEvtHandler::*wxIdleEventFunction)(wxIdleEvent&);
 
 #define wxEventHandler(func) \
     (wxObjectEventFunction)wxStaticCastEvent(wxEventFunction, &func)
+#define wxIdleEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxIdleEventFunction, &func)
 
 #if wxUSE_GUI
 
@@ -2541,7 +2544,6 @@ typedef void (wxEvtHandler::*wxInitDialogEventFunction)(wxInitDialogEvent&);
 typedef void (wxEvtHandler::*wxSysColourChangedEventFunction)(wxSysColourChangedEvent&);
 typedef void (wxEvtHandler::*wxDisplayChangedEventFunction)(wxDisplayChangedEvent&);
 typedef void (wxEvtHandler::*wxUpdateUIEventFunction)(wxUpdateUIEvent&);
-typedef void (wxEvtHandler::*wxIdleEventFunction)(wxIdleEvent&);
 typedef void (wxEvtHandler::*wxCloseEventFunction)(wxCloseEvent&);
 typedef void (wxEvtHandler::*wxShowEventFunction)(wxShowEvent&);
 typedef void (wxEvtHandler::*wxIconizeEventFunction)(wxIconizeEvent&);
@@ -2601,8 +2603,6 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxDisplayChangedEventFunction, &func)
 #define wxUpdateUIEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxUpdateUIEventFunction, &func)
-#define wxIdleEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxIdleEventFunction, &func)
 #define wxCloseEventHandler(func) \
     (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCloseEventFunction, &func)
 #define wxShowEventHandler(func) \
