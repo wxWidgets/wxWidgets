@@ -102,7 +102,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
-    m_style = style;
     m_invokingWindow = NULL;
 
 #if wxUSE_LIBHILDON

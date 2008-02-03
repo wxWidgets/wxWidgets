@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKMENUH__
-#define __GTKMENUH__
+#ifndef _WX_GTKMENU_H_
+#define _WX_GTKMENU_H_
 
 //-----------------------------------------------------------------------------
 // wxMenuBar
@@ -50,14 +50,13 @@ public:
     void SetInvokingWindow( wxWindow *win );
     void UnsetInvokingWindow( wxWindow *win );
 
+private:
     // common part of Append and Insert
     bool GtkAppend(wxMenu *menu, const wxString& title, int pos=-1);
 
     GtkWidget       *m_menubar;
-    long             m_style;
     wxWindow        *m_invokingWindow;
 
-private:
     void Init(size_t n, wxMenu *menus[], const wxString titles[], long style);
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
@@ -111,4 +110,4 @@ private:
 };
 
 #endif
-    // __GTKMENUH__
+    // _WX_GTKMENU_H_
