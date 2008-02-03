@@ -1128,21 +1128,21 @@ public:
         // provide compatibility overloads for them
     bool ParseISODate(const wxString& date)
     {
-        const wxStringCharType *p = ParseFormat(date, wxS("%Y-%m-%d"));
-        return p && !*p;
+        wxString::const_iterator end;
+        return ParseFormat(date, wxS("%Y-%m-%d"), &end) && end == date.end();
     }
 
-    bool ParseISOTime(const wxString& date)
+    bool ParseISOTime(const wxString& time)
     {
-        const wxStringCharType *p = ParseFormat(date, wxS("%H:%M:%S"));
-        return p && !*p;
+        wxString::const_iterator end;
+        return ParseFormat(time, wxS("%H:%M:%S"), &end) && end == time.end();
     }
 
-    bool ParseISOCombined(const wxString& date, char sep = 'T')
+    bool ParseISOCombined(const wxString& datetime, char sep = 'T')
     {
+        wxString::const_iterator end;
         const wxString fmt = wxS("%Y-%m-%d") + wxString(sep) + wxS("%H:%M:%S");
-        const wxStringCharType *p = ParseFormat(date, fmt.wx_str());
-        return p && !*p;
+        return ParseFormat(datetime, fmt, &end) && end == datetime.end();
     }
 
         // parse a string containing the date/time in "free" format, this
