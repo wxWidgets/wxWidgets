@@ -8207,7 +8207,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
         }
         else
         {
-            lines.Add( value.Mid(startPos, pos) );
+            lines.Add( tVal.Mid(startPos, pos) );
         }
 
         startPos += pos + 1;
@@ -8215,7 +8215,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
 
     if ( startPos < (int)value.length() )
     {
-        lines.Add( value.Mid( startPos ) );
+        lines.Add( tVal.Mid( startPos ) );
     }
 }
 
