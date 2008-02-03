@@ -1109,7 +1109,7 @@ public:
     }
 
     const char *ParseFormat(const char *date,
-                            const wxString& format = L"%c",
+                            const wxString& format = "%c",
                             const wxDateTime& dateDef = wxDefaultDateTime)
     {
         return ParseFormat(wxString(date), format, dateDef);
@@ -1120,6 +1120,29 @@ public:
                             const wxDateTime& dateDef = wxDefaultDateTime)
     {
         return ParseFormat(wxString(date), wxString(format), dateDef);
+    }
+
+        // parse a string containing date, time or both in ISO 8601 format
+        //
+        // notice that these functions are new in wx 3.0 and so we don't
+        // provide compatibility overloads for them
+    bool ParseISODate(const wxString& date)
+    {
+        const wxStringCharType *p = ParseFormat(date, wxS("%Y-%m-%d"));
+        return p && !*p;
+    }
+
+    bool ParseISOTime(const wxString& date)
+    {
+        const wxStringCharType *p = ParseFormat(date, wxS("%H:%M:%S"));
+        return p && !*p;
+    }
+
+    bool ParseISOCombined(const wxString& date, char sep = 'T')
+    {
+        const wxString fmt = wxS("%Y-%m-%d") + wxString(sep) + wxS("%H:%M:%S");
+        const wxStringCharType *p = ParseFormat(date, fmt.wx_str());
+        return p && !*p;
     }
 
         // parse a string containing the date/time in "free" format, this
@@ -1191,15 +1214,20 @@ public:
     wxString Format(const wxString& format = wxDefaultDateTimeFormat,
                     const TimeZone& tz = Local) const;
         // preferred date representation for the current locale
-    wxString FormatDate() const { return Format(_T("%x")); }
+    wxString FormatDate() const { return Format(wxS("%x")); }
         // preferred time representation for the current locale
-    wxString FormatTime() const { return Format(_T("%X")); }
+    wxString FormatTime() const { return Format(wxS("%X")); }
         // returns the string representing the date in ISO 8601 format
         // (YYYY-MM-DD)
-    wxString FormatISODate() const { return Format(_T("%Y-%m-%d")); }
+    wxString FormatISODate() const { return Format(wxS("%Y-%m-%d")); }
         // returns the string representing the time in ISO 8601 format
         // (HH:MM:SS)
-    wxString FormatISOTime() const { return Format(_T("%H:%M:%S")); }
+    wxString FormatISOTime() const { return Format(wxS("%H:%M:%S")); }
+        // return the combined date time representation in ISO 8601 format; the
+        // separator character should be 'T' according to the standard but it
+        // can also be useful to set it to ' '
+    wxString FormatISOCombined(char sep = 'T') const
+        { return FormatISODate() + sep + FormatISOTime(); }
 
     // implementation
     // ------------------------------------------------------------------------

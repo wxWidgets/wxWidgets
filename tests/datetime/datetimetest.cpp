@@ -27,7 +27,7 @@
 // need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
 static std::ostream& operator<<(std::ostream& ostr, const wxDateTime& dt)
 {
-    ostr << dt.FormatISODate() << " " << dt.FormatISOTime();
+    ostr << dt.FormatISOCombined(' ');
 
     return ostr;
 }
@@ -188,6 +188,7 @@ private:
         CPPUNIT_TEST( TestTimeTicks );
         CPPUNIT_TEST( TestParceRFC822 );
         CPPUNIT_TEST( TestDateParse );
+        CPPUNIT_TEST( TestDateParseISO );
         CPPUNIT_TEST( TestDateTimeParse );
         CPPUNIT_TEST( TestTimeArithmetics );
         CPPUNIT_TEST( TestDSTBug );
@@ -205,6 +206,7 @@ private:
     void TestTimeTicks();
     void TestParceRFC822();
     void TestDateParse();
+    void TestDateParseISO();
     void TestDateTimeParse();
     void TestTimeArithmetics();
     void TestDSTBug();
@@ -830,6 +832,80 @@ void DateTimeTestCase::TestDateParse()
             CPPUNIT_ASSERT( parseTestDates[n].good );
 
             CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+        }
+        else // failed to parse
+        {
+            CPPUNIT_ASSERT( !parseTestDates[n].good );
+        }
+    }
+}
+
+void DateTimeTestCase::TestDateParseISO()
+{
+    static const struct
+    {
+        const char *str;
+        Date date;              // NB: this should be in UTC
+        bool good;
+    } parseTestDates[] =
+    {
+        { "2006-03-21", { 21, wxDateTime::Mar, 2006 }, true },
+        { "1976-02-29", { 29, wxDateTime::Feb, 1976 }, true },
+        { "0006-03-31", { 31, wxDateTime::Mar,    6 }, true },
+
+        // some invalid ones too
+        { "2006:03:31" },
+        { "31/04/06" },
+        { "bloordyblop" },
+        { "" },
+    };
+
+    static const struct
+    {
+        const char *str;
+        wxDateTime::wxDateTime_t hour, min, sec;
+        bool good;
+    } parseTestTimes[] =
+    {
+        { "13:42:17", 13, 42, 17, true },
+        { "02:17:01",  2, 17,  1, true },
+
+        // some invalid ones too
+        { "66:03:31" },
+        { "31/04/06" },
+        { "bloordyblop" },
+        { "" },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
+    {
+        wxDateTime dt;
+        if ( dt.ParseISODate(parseTestDates[n].str) )
+        {
+            CPPUNIT_ASSERT( parseTestDates[n].good );
+
+            CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
+
+            for ( size_t m = 0; m < WXSIZEOF(parseTestTimes); m++ )
+            {
+                wxString dtCombined;
+                dtCombined << parseTestDates[n].str
+                           << 'T'
+                           << parseTestTimes[m].str;
+
+                if ( dt.ParseISOCombined(dtCombined) )
+                {
+                    CPPUNIT_ASSERT( parseTestTimes[m].good );
+
+                    CPPUNIT_ASSERT_EQUAL( parseTestTimes[m].hour, dt.GetHour()) ;
+                    CPPUNIT_ASSERT_EQUAL( parseTestTimes[m].min, dt.GetMinute()) ;
+                    CPPUNIT_ASSERT_EQUAL( parseTestTimes[m].sec, dt.GetSecond()) ;
+                }
+                else // failed to parse combined date/time
+                {
+                    CPPUNIT_ASSERT( !parseTestTimes[m].good );
+                }
+            }
         }
         else // failed to parse
         {
