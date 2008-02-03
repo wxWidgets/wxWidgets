@@ -95,6 +95,13 @@ public:
     // free the global GL visual, called by wxGLApp
     static void FreeDefaultVisualInfo();
 
+    // initializes XVisualInfo (in any case) and, if supported, GLXFBConfig
+    //
+    // returns false if XVisualInfo couldn't be initialized, otherwise caller
+    // is responsible for freeing the pointers
+    static bool InitXVisualInfo(const int *attribList,
+                                GLXFBConfig **pFBC, XVisualInfo **pXVisual);
+
 private:
     // fills in glattrs with attributes defined by wxattrs which must be
     // 0-terminated if it is non-NULL
@@ -102,13 +109,6 @@ private:
     // n is the max size of glattrs, false is returned if we overflow it, it
     // should be at least 16 to accommodate the default attributes
     static bool ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n);
-
-    // initializes XVisualInfo (in any case) and, if supported, GLXFBConfig
-    //
-    // returns false if XVisualInfo couldn't be initialized, otherwise caller
-    // is responsible for freeing the pointers
-    static bool InitXVisualInfo(const int *attribList,
-                                GLXFBConfig **pFBC, XVisualInfo **pXVisual);
 
 
     // this is only used if it's supported i.e. if GL >= 1.3

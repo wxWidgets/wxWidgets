@@ -125,6 +125,17 @@ and so on.
 Ignored under most platforms.}
 
 
+\membersection{wxGLCanvas::IsDisplaySupported}\label{wxglcanvasisdisplaysupported}
+
+\func{static bool}{IsDisplaySupported}{ \param{const int *}{ attribList = \NULL} }
+
+Determines if a canvas having the specified attributes is available.
+
+\docparam{attribList}{See \arg{attribList} for \helpref{wxGLCanvas::wxGLCanvas}{wxglcanvasconstr}.}
+
+Returns \true if attributes are supported.
+
+
 \membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent}
 
 \func{bool}{SetCurrent}{ \param{const wxGLContext&}{ context} }

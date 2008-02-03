@@ -108,6 +108,9 @@ public:
     // accessors
     // ---------
 
+    // check if the given attributes are supported without creating a canvas
+    static bool IsDisplaySupported(const int *attribList);
+
     const wxPalette *GetPalette() const { return &m_palette; }
 
     // miscellaneous helper functions

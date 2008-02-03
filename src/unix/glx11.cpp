@@ -297,6 +297,24 @@ wxGLCanvasX11::InitXVisualInfo(const int *attribList,
     return *pXVisual != NULL;
 }
 
+/* static */
+bool
+wxGLCanvasBase::IsDisplaySupported(const int *attribList)
+{
+    GLXFBConfig *fbc = NULL;
+    XVisualInfo *vi = NULL;
+
+    const bool
+        isSupported = wxGLCanvasX11::InitXVisualInfo(attribList, &fbc, &vi);
+
+    if ( fbc )
+        XFree(fbc);
+    if ( vi )
+        XFree(vi);
+
+    return isSupported;
+}
+
 // ----------------------------------------------------------------------------
 // default visual management
 // ----------------------------------------------------------------------------

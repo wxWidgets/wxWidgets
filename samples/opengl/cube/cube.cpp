@@ -385,6 +385,11 @@ MyFrame::MyFrame()
 
     SetClientSize(400, 400);
     Show();
+
+    // test IsDisplaySupported() function:
+    static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
+    wxLogStatus("Double-buffered display %s supported",
+                wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");
 }
 
 void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))

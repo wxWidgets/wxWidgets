@@ -312,6 +312,19 @@ wxGLCanvas::~wxGLCanvas()
         aglDestroyPixelFormat(m_aglFormat);
 }
 
+/* static */
+bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
+{
+    AGLPixelFormat aglFormat = ChoosePixelFormat(attribList);
+
+    if ( !aglFormat )
+       return false;
+
+    aglDestroyPixelFormat(aglFormat);
+
+    return true;
+}
+
 bool wxGLCanvas::SwapBuffers()
 {
     AGLContext context = aglGetCurrentContext();

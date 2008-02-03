@@ -450,6 +450,14 @@ wxGLCanvas::ChooseMatchingPixelFormat(HDC hdc,
     return ::ChoosePixelFormat(hdc, ppfd);
 }
 
+/* static */
+bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
+{
+    // We need a device context to test the pixel format, so get one
+    // for the root window.
+    return wxGLCanvas::ChooseMatchingPixelFormat(ScreenHDC(), attribList) > 0;
+}
+
 bool wxGLCanvas::DoSetup(const int *attribList)
 {
     PIXELFORMATDESCRIPTOR pfd;
