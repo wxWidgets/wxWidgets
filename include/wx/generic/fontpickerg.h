@@ -16,7 +16,7 @@
 #include "wx/cmndata.h"
 
 //-----------------------------------------------------------------------------
-// wxGenericFontButton: a button which brings up a wxColourDialog
+// wxGenericFontButton: a button which brings up a wxFontDialog
 //-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxGenericFontButton : public wxButton,
@@ -44,8 +44,8 @@ public:     // API extensions specific for wxGenericFontButton
     // user can override this to init font data in a different way
     virtual void InitFontData();
 
-    // returns the font data shown in wxColourDialog
-    wxFontData *GetFontData() { return &ms_data; }
+    // returns the font data shown in wxFontDialog
+    wxFontData *GetFontData() { return &m_data; }
 
 
 public:
@@ -66,10 +66,7 @@ protected:
 
     void UpdateFont();
 
-    // the colour data shown in wxColourPickerCtrlGeneric
-    // controls. This member is static so that all colour pickers
-    // in the program share the same set of custom colours.
-    static wxFontData ms_data;
+    wxFontData m_data;
 
 private:
    DECLARE_DYNAMIC_CLASS(wxGenericFontButton)

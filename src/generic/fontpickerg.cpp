@@ -35,7 +35,6 @@
 // implementation
 // ============================================================================
 
-wxFontData wxGenericFontButton::ms_data;
 IMPLEMENT_DYNAMIC_CLASS(wxGenericFontButton, wxButton)
 
 // ----------------------------------------------------------------------------
@@ -73,22 +72,22 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
 
 void wxGenericFontButton::InitFontData()
 {
-    ms_data.SetAllowSymbols(true);
-    ms_data.SetColour(*wxBLACK);
-    ms_data.EnableEffects(true);
+    m_data.SetAllowSymbols(true);
+    m_data.SetColour(*wxBLACK);
+    m_data.EnableEffects(true);
 }
 
 void wxGenericFontButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 {
     // update the wxFontData to be shown in the the dialog
-    ms_data.SetInitialFont(m_selectedFont);
+    m_data.SetInitialFont(m_selectedFont);
 
     // create the font dialog and display it
-    wxFontDialog dlg(this, ms_data);
+    wxFontDialog dlg(this, m_data);
     if (dlg.ShowModal() == wxID_OK)
     {
-        ms_data = dlg.GetFontData();
-        SetSelectedFont(ms_data.GetChosenFont());
+        m_data = dlg.GetFontData();
+        SetSelectedFont(m_data.GetChosenFont());
 
         // fire an event
         wxFontPickerEvent event(this, GetId(), m_selectedFont);
@@ -101,7 +100,7 @@ void wxGenericFontButton::UpdateFont()
     if ( !m_selectedFont.Ok() )
         return;
 
-    SetForegroundColour(ms_data.GetColour());
+    SetForegroundColour(m_data.GetColour());
 
     if (HasFlag(wxFNTP_USEFONT_FOR_LABEL))
     {
