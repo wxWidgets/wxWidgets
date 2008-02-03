@@ -123,6 +123,9 @@ typedef std::vector<MyDirectory> ArrayOfDirectories;
 but is not that complicated and allows the code to be compiled with any, however
 dumb, C++ compiler in the world.
 
+Remember to #include <wx/arrimpl.cpp> just before each WX\_DEFINE\_OBJARRAY 
+ocurrence in your code, even if you have several in the same file.
+
 Things are much simpler for wxArray and wxSortedArray however: it is enough
 just to write
 
@@ -259,6 +262,7 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 \membersection{Adding items}\label{arrayadding}
 
 \helpref{Add}{wxarrayadd}\\
+\helpref{AddAt}{wxarrayaddat}\\
 \helpref{Insert}{wxarrayinsert}\\
 \helpref{SetCount}{wxarraysetcount}\\
 \helpref{WX\_APPEND\_ARRAY}{wxappendarray}\\
@@ -275,6 +279,7 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 \membersection{Searching and sorting}\label{arraysearchingandsorting}
 
 \helpref{Index}{wxarrayindex}\\
+\helpref{IndexForInsert}{wxarrayindexforinsert}\\
 \helpref{Sort}{wxarraysort}
 
 %%%%% MEMBERS HERE %%%%%
@@ -341,7 +346,7 @@ int CompareInts(int n1, int n2)
     return n1 - n2;
 }
 
-wxSortedArrayInt sorted(CompareInts);
+MySortedArrayInt sorted(CompareInts);
 
 int CompareMyClassObjects(MyClass *item1, MyClass *item2)
 {
@@ -349,7 +354,7 @@ int CompareMyClassObjects(MyClass *item1, MyClass *item2)
     return Stricmp(item1->GetAddress(), item2->GetAddress());
 }
 
-wxArrayOfMyClass another(CompareMyClassObjects);
+ArrayOfMyClass another(CompareMyClassObjects);
 \end{verbatim}
 
 \membersection{WX\_DECLARE\_OBJARRAY}\label{wxdeclareobjarray}
@@ -484,6 +489,8 @@ done by wxArray and wxSortedArray versions - you may use
 
 \func{void}{Add}{\param{T }{item}, \param{size\_t}{ copies = $1$}}
 
+\func{size\_t}{Add}{\param{T }{item}}
+
 \func{void}{Add}{\param{T *}{item}}
 
 \func{void}{Add}{\param{T \&}{item}, \param{size\_t}{ copies = $1$}}
@@ -491,8 +498,9 @@ done by wxArray and wxSortedArray versions - you may use
 Appends the given number of {\it copies} of the {\it item} to the array
 consisting of the elements of type {\it T}.
 
-The first version is used with wxArray and wxSortedArray. The second and the
-third are used with wxObjArray. There is an important difference between
+The first version is used with wxArray. The second is used with wxSortedArray,
+returning the index where {\it item} is stored. The third and the
+fourth ones are used with wxObjArray. There is an important difference between
 them: if you give a pointer to the array, it will take ownership of it, i.e.
 will delete it when the item is deleted from the array. If you give a reference
 to the array, however, the array will make a copy of the item and will not take
@@ -505,6 +513,20 @@ You may also use \helpref{WX\_APPEND\_ARRAY}{wxappendarray} macro to append all
 elements of one array to another one but it is more efficient to use
 {\it copies} parameter and modify the elements in place later if you plan to
 append a lot of items.
+
+\membersection{wxSortedArray::AddAt}\label{wxarrayaddat}
+
+\func{void}{AddAt}{\param{T }{item}, \param{size\_t}{ index}}
+
+Inserts the given {\it item} into the array in the specified {\it index}
+ position.
+
+Be aware that you will set out the order of the array if you give a wrong
+ position.
+
+This function is useful in conjunction with 
+\helpref{IndexForInsert}{wxarrayindexforinsert} for a common operation
+of "insert only if not found".
 
 \membersection{wxArray::Alloc}\label{wxarrayalloc}
 
@@ -570,6 +592,20 @@ element in the array and so will only succeed if this element had been
 previously added to the array, but fail even if another, identical, element is
 in the array.
 
+\membersection{wxSortedArray::IndexForInsert}\label{wxarrayindexforinsert}
+
+\constfunc{size\_t}{IndexForInsert}{\param{T }{item}}
+
+Search for a place to insert {\it item} into the sorted array (binary search).
+The index returned is just before the first existing item that is greater or equal
+(according to the compare function) to the given {\it item}.
+
+You have to do extra work to know if the {\it item} already exists in array.
+
+This function is useful in conjunction with 
+\helpref{AddAt}{wxarrayaddat} for a common operation
+of "insert only if not found".
+
 \membersection{wxArray::Insert}\label{wxarrayinsert}
 
 \func{void}{Insert}{\param{T }{item}, \param{size\_t }{n}, \param{size\_t }{copies = $1$}}
@@ -581,6 +617,9 @@ in the array.
 Insert the given number of {\it copies} of the {\it item} into the array before
 the existing item {\it n} - thus, {\it Insert(something, 0u)} will insert an
 item in such way that it will become the first array element.
+
+wxSortedArray doesn't have this function because inserting in wrong place
+would break its sorted condition.
 
 Please see \helpref{Add()}{wxarrayadd} for explanation of the differences
 between the overloaded versions of this function.
