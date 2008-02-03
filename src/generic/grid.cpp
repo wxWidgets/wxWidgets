@@ -8213,7 +8213,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
         startPos += pos + 1;
     }
 
-    if ( startPos < (int)value.length() )
+    if ( startPos < (int)tVal.length() )
     {
         lines.Add( tVal.Mid( startPos ) );
     }
