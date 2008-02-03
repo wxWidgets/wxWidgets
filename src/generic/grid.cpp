@@ -4665,17 +4665,26 @@ void wxGrid::CalcWindowSizes()
         }
     }
 
+    // the grid may be too small to have enough space for the labels yet, don't
+    // size the windows to negative sizes in this case
+    int gw = cw - m_rowLabelWidth;
+    int gh = ch - m_colLabelHeight;
+    if (gw < 0)
+        gw = 0;
+    if (gh < 0)
+        gh = 0;
+
     if ( m_cornerLabelWin && m_cornerLabelWin->IsShown() )
         m_cornerLabelWin->SetSize( 0, 0, m_rowLabelWidth, m_colLabelHeight );
 
     if ( m_colLabelWin && m_colLabelWin->IsShown() )
-        m_colLabelWin->SetSize( m_rowLabelWidth, 0, cw - m_rowLabelWidth, m_colLabelHeight );
+        m_colLabelWin->SetSize( m_rowLabelWidth, 0, gw, m_colLabelHeight );
 
     if ( m_rowLabelWin && m_rowLabelWin->IsShown() )
-        m_rowLabelWin->SetSize( 0, m_colLabelHeight, m_rowLabelWidth, ch - m_colLabelHeight );
+        m_rowLabelWin->SetSize( 0, m_colLabelHeight, m_rowLabelWidth, gh );
 
     if ( m_gridWin && m_gridWin->IsShown() )
-        m_gridWin->SetSize( m_rowLabelWidth, m_colLabelHeight, cw - m_rowLabelWidth, ch - m_colLabelHeight );
+        m_gridWin->SetSize( m_rowLabelWidth, m_colLabelHeight, gw, gh );
 }
 
 // this is called when the grid table sends a message
