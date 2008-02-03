@@ -784,10 +784,12 @@ wxString wxTextCtrl::GetRange(long from, long to) const
                    encoding = font.GetEncoding();
                 }
 
+#if wxUSE_INTL
                 if ( encoding == wxFONTENCODING_SYSTEM )
                 {
                     encoding = wxLocale::GetSystemEncoding();
                 }
+#endif // wxUSE_INTL
 
                 if ( encoding == wxFONTENCODING_SYSTEM )
                 {
