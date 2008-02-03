@@ -186,7 +186,7 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
         top_frame = top_frame->GetParent();
 
     // support for native hot keys
-    if (menu->m_accel && g_slist_find(menu->m_accel->acceleratables, top_frame->m_widget))
+    if (menu->m_accel && !g_slist_find(menu->m_accel->acceleratables, top_frame->m_widget))
         gtk_window_add_accel_group(GTK_WINDOW(top_frame->m_widget), menu->m_accel);
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
