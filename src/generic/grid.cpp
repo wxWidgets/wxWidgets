@@ -8106,6 +8106,7 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
 // Split multi-line text up into an array of strings.
 // Any existing contents of the string array are preserved.
 //
+// TODO: refactor wxTextFile::Read() and reuse the same code from here
 void wxGrid::StringToLines( const wxString& value, wxArrayString& lines ) const
 {
     int startPos = 0;
@@ -8126,7 +8127,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines ) const
         }
         else
         {
-            lines.Add( value.Mid(startPos, pos) );
+            lines.Add( tVal.Mid(startPos, pos) );
         }
 
         startPos += pos + 1;
@@ -8134,7 +8135,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines ) const
 
     if ( startPos < (int)value.length() )
     {
-        lines.Add( value.Mid( startPos ) );
+        lines.Add( tVal.Mid( startPos ) );
     }
 }
 
