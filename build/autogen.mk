@@ -51,8 +51,12 @@ configure: configure.in aclocal.m4 autoconf_inc.m4 autoconf_m4f
 	$(AUTOCONF) -B $(AUTOHACKS_PREPEND_INCLUDE_DIR)
 
 ACLOCAL_SOURCES = \
-  build/aclocal/bakefile.m4 \
+  build/aclocal/ac_raf_func_which_getservbyname_r.m4 \
+  build/aclocal/atomic_builtins.m4 \
+  build/aclocal/ax_func_which_gethostbyname_r.m4 \
+  build/aclocal/bakefile-dllar.m4 \
   build/aclocal/bakefile-lang.m4 \
+  build/aclocal/bakefile.m4 \
   build/aclocal/cppunit.m4 \
   build/aclocal/gst-element-check.m4 \
   build/aclocal/gtk-2.0.m4 \
