@@ -1,5 +1,5 @@
 dnl
-dnl  This file is part of Bakefile (http://bakefile.sourceforge.net)
+dnl  This file is part of Bakefile (http://www.bakefile.org)
 dnl
 dnl  Copyright (C) 2003-2007 Vaclav Slavik and others
 dnl
@@ -126,7 +126,7 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
                 PLATFORM_BEOS=1
             ;;
             * )
-                dnl wxWidgets-specific: allow unknown Unix systems
+	        dnl wxWidgets-specific: allow unknown Unix systems
                 dnl AC_MSG_ERROR([Unknown platform: $BAKEFILE_FORCE_PLATFORM])
             ;;
         esac
@@ -331,7 +331,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
         chmod +x shared-ld-sh
 
         SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
-        SHARED_LD_MODULE_CXX="$SHARED_LD_MODULE_CC"
+        SHARED_LD_MODULE_CXX="CXX=\$(CXX) $SHARED_LD_MODULE_CC"
 
         dnl Most apps benefit from being fully binded (its faster and static
         dnl variables initialized at startup work).
@@ -489,7 +489,8 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
     SONAME_FLAG=
 
     case "${BAKEFILE_HOST}" in
-      *-*-linux* | *-*-freebsd* | *-*-k*bsd*-gnu )
+      *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
+      *-*-k*bsd*-gnu | *-*-mirbsd* )
         if test "x$SUNCXX" = "xyes"; then
             SONAME_FLAG="-h "
         else
@@ -639,18 +640,21 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     AC_CHECK_TOOL(STRIP, strip, :)
     AC_CHECK_TOOL(NM, nm, :)
 
-    case ${BAKEFILE_HOST} in
-        *-hp-hpux* )
-            dnl HP-UX install doesn't handle the "-d" switch so don't
-            dnl use it there
-            INSTALL_DIR="mkdir -p"
-            ;;
-        * )
-            dnl we must refer to makefile's $(INSTALL) variable and not
-            dnl current value of shell variable, hence the single quoting:
-            INSTALL_DIR='$(INSTALL) -d'
-            ;;
-    esac
+    dnl This check is necessary because "install -d" doesn't exist on
+    dnl all platforms (e.g. HP/UX), see http://www.bakefile.org/ticket/80
+    AC_MSG_CHECKING([for command to install directories])
+    INSTALL_TEST_DIR=acbftest$$
+    $INSTALL -d $INSTALL_TEST_DIR > /dev/null 2>&1
+    if test $? = 0 -a -d $INSTALL_TEST_DIR; then
+        rmdir $INSTALL_TEST_DIR
+        dnl we must refer to makefile's $(INSTALL) variable and not
+        dnl current value of shell variable, hence the single quoting:
+        INSTALL_DIR='$(INSTALL) -d'
+        AC_MSG_RESULT([$INSTALL -d])
+    else
+        INSTALL_DIR="mkdir -p"
+        AC_MSG_RESULT([mkdir -p])
+    fi
     AC_SUBST(INSTALL_DIR)
 
     LDFLAGS_GUI=
@@ -798,6 +802,12 @@ AC_DEFUN([AC_BAKEFILE],
 [
     AC_PREREQ([2.58])
 
+    dnl We need to always run C/C++ compiler tests, but it's also possible
+    dnl for the user to call these macros manually, hence this instead of
+    dnl simply calling these macros. See http://www.bakefile.org/ticket/64
+    AC_REQUIRE([AC_BAKEFILE_PROG_CC])
+    AC_REQUIRE([AC_BAKEFILE_PROG_CXX])
+
     if test "x$BAKEFILE_HOST" = "x"; then
                if test "x${host}" = "x" ; then
                        AC_MSG_ERROR([You must call the autoconf "CANONICAL_HOST" macro in your configure.ac (or .in) file.])
@@ -818,7 +828,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_BAKEFILE_DEPS
     AC_BAKEFILE_RES_COMPILERS
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.2"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.3"
 
     dnl includes autoconf_inc.m4:
     $1
@@ -846,7 +856,7 @@ D='$'
 cat <<EOF >bk-deps
 #!/bin/sh
 
-# This script is part of Bakefile (http://bakefile.sourceforge.net) autoconf
+# This script is part of Bakefile (http://www.bakefile.org) autoconf
 # script. It is used to track C/C++ files dependencies in portable way.
 #
 # Permission is given to use this file in any way.
@@ -860,10 +870,8 @@ mkdir -p ${D}DEPSDIR
 if test ${D}DEPSMODE = gcc ; then
     ${D}* ${D}{DEPSFLAG}
     status=${D}?
-    if test ${D}{status} != 0 ; then
-        exit ${D}{status}
-    fi
-    # move created file to the location we want it in:
+
+    # determine location of created files:
     while test ${D}# -gt 0; do
         case "${D}1" in
             -o )
@@ -880,6 +888,14 @@ if test ${D}DEPSMODE = gcc ; then
     done
     depfile=\`basename ${D}srcfile | sed -e 's/\\..*${D}/.d/g'\`
     depobjname=\`echo ${D}depfile |sed -e 's/\\.d/.o/g'\`
+    
+    # if the compiler failed, we're done:
+    if test ${D}{status} != 0 ; then
+        rm -f ${D}depfile
+        exit ${D}{status}
+    fi
+
+    # move created file to the location we want it in:
     if test -f ${D}depfile ; then
         sed -e "s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
         rm -f ${D}depfile
@@ -969,6 +985,10 @@ objects=""
 linking_flag="-dynamiclib"
 ldargs="-r -keep_private_externs -nostdlib"
 
+if test "x${D}CXX" = "x"; then
+    CXX="c++"
+fi
+
 while test ${D}# -gt 0; do
     case ${D}1 in
 
@@ -979,6 +999,12 @@ while test ${D}# -gt 0; do
        -o|-compatibility_version|-current_version|-framework|-undefined|-install_name)
         # collect these options and values
         args="${D}{args} ${D}1 ${D}2"
+        shift
+        ;;
+       
+       -arch|-isysroot)
+        # collect these options and values
+        ldargs="${D}{ldargs} ${D}1 ${D}2"
         shift
         ;;
 
@@ -1021,9 +1047,9 @@ status=0
 # Link one module containing all the others
 #
 if test ${D}{verbose} = 1; then
-    echo "c++ ${D}{ldargs} ${D}{objects} -o master.${D}${D}.o"
+    echo "${D}CXX ${D}{ldargs} ${D}{objects} -o master.${D}${D}.o"
 fi
-c++ ${D}{ldargs} ${D}{objects} -o master.${D}${D}.o
+${D}CXX ${D}{ldargs} ${D}{objects} -o master.${D}${D}.o
 status=${D}?
 
 #
@@ -1032,9 +1058,9 @@ status=${D}?
 #
 if test ${D}{status} = 0; then
     if test ${D}{verbose} = 1; then
-        echo "c++ ${D}{linking_flag} master.${D}${D}.o ${D}{args}"
+        echo "${D}CXX ${D}{linking_flag} master.${D}${D}.o ${D}{args}"
     fi
-    c++ ${D}{linking_flag} master.${D}${D}.o ${D}{args}
+    ${D}CXX ${D}{linking_flag} master.${D}${D}.o ${D}{args}
     status=${D}?
 fi
 
@@ -1057,7 +1083,7 @@ D='$'
 cat <<EOF >bk-make-pch
 #!/bin/sh
 
-# This script is part of Bakefile (http://bakefile.sourceforge.net) autoconf
+# This script is part of Bakefile (http://www.bakefile.org) autoconf
 # script. It is used to generated precompiled headers.
 #
 # Permission is given to use this file in any way.
