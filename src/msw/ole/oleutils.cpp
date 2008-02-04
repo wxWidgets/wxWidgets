@@ -83,11 +83,15 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 #if wxUSE_UNICODE
     wxString str(bStr);
 #else
-    int len = SysStringLen(bStr) + 1;
-    char    *buf = new char[len];
-    (void)wcstombs( buf, bStr, len);
-    wxString str(buf);
-    delete[] buf;
+    wxString str;
+    const int len = SysStringLen(bStr) + 1;
+    if ( !::WideCharToMultiByte(CP_ACP, 0 /* no flags */,
+                                bStr, len,
+                                wxStringBuffer(str, len), len,
+                                NULL, NULL /* no default char */) )
+    {
+        str.clear();
+    }
 #endif
     return str;
 }
