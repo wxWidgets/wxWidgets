@@ -80,19 +80,21 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
     if ( !bStr )
         return wxString();
 
+    const int len = SysStringLen(bStr);
+
 #if wxUSE_UNICODE
-    wxString str(bStr);
+    wxString str(bStr, len);
 #else
     wxString str;
-    const int len = SysStringLen(bStr) + 1;
     if ( !::WideCharToMultiByte(CP_ACP, 0 /* no flags */,
-                                bStr, len,
+                                bStr, len + 1 /* include last NUL */,
                                 wxStringBuffer(str, len), len,
                                 NULL, NULL /* no default char */) )
     {
         str.clear();
     }
 #endif
+
     return str;
 }
 
