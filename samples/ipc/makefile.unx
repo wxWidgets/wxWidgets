@@ -62,6 +62,14 @@ IPCSERVER_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
 	$(CPPFLAGS) $(CXXFLAGS)
 IPCSERVER_OBJECTS =  \
 	ipcserver_server.o
+BASEIPCCLIENT_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
+	$(CPPFLAGS) $(CXXFLAGS)
+BASEIPCCLIENT_OBJECTS =  \
+	baseipcclient_baseclient.o
+BASEIPCSERVER_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` \
+	$(CPPFLAGS) $(CXXFLAGS)
+BASEIPCSERVER_OBJECTS =  \
+	baseipcserver_baseserver.o
 
 ### Conditionally set variables: ###
 
@@ -87,7 +95,7 @@ endif
 
 ### Targets: ###
 
-all: test_for_selected_wxbuild ipcclient ipcserver
+all: test_for_selected_wxbuild ipcclient ipcserver baseipcclient baseipcserver
 
 install: all
 
@@ -98,6 +106,8 @@ clean:
 	rm -f ./*.d
 	rm -f ipcclient
 	rm -f ipcserver
+	rm -f baseipcclient
+	rm -f baseipcserver
 
 test_for_selected_wxbuild: 
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
@@ -108,11 +118,23 @@ ipcclient: $(IPCCLIENT_OBJECTS)
 ipcserver: $(IPCSERVER_OBJECTS)
 	$(CXX) -o $@ $(IPCSERVER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,net,base`
 
+baseipcclient: $(BASEIPCCLIENT_OBJECTS)
+	$(CXX) -o $@ $(BASEIPCCLIENT_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs net,base`
+
+baseipcserver: $(BASEIPCSERVER_OBJECTS)
+	$(CXX) -o $@ $(BASEIPCSERVER_OBJECTS) $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs net,base`
+
 ipcclient_client.o: ./client.cpp
 	$(CXX) -c -o $@ $(IPCCLIENT_CXXFLAGS) $(CPPDEPS) $<
 
 ipcserver_server.o: ./server.cpp
 	$(CXX) -c -o $@ $(IPCSERVER_CXXFLAGS) $(CPPDEPS) $<
+
+baseipcclient_baseclient.o: ./baseclient.cpp
+	$(CXX) -c -o $@ $(BASEIPCCLIENT_CXXFLAGS) $(CPPDEPS) $<
+
+baseipcserver_baseserver.o: ./baseserver.cpp
+	$(CXX) -c -o $@ $(BASEIPCSERVER_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 

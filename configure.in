@@ -7241,6 +7241,9 @@ else
     if test "$wxUSE_SOCKETS" = "yes" ; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
     fi
+    if test "$wxUSE_IPC" = "yes" ; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ipc"
+    fi
 fi
 
 
