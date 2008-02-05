@@ -87,8 +87,8 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
 #else
     wxString str;
     if ( !::WideCharToMultiByte(CP_ACP, 0 /* no flags */,
-                                bStr, len + 1 /* include last NUL */,
-                                wxStringBuffer(str, len), len,
+                                bStr, len /* not necessary NUL-terminated */,
+                                wxStringBuffer(str, len + 1), len + 1,
                                 NULL, NULL /* no default char */) )
     {
         str.clear();
