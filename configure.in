@@ -2234,7 +2234,7 @@ if test "$wxUSE_REGEX" != "no"; then
     AC_DEFINE(wxUSE_REGEX)
 
     if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_REGEX" = "yes"; then
-        AC_MSG_WARN([Defaulting to the the builtin regex library for Unicode build.])
+        AC_MSG_WARN([Defaulting to the builtin regex library for Unicode build.])
         wxUSE_REGEX=builtin
     fi
 

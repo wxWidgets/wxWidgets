@@ -25874,8 +25874,8 @@ _ACEOF
 
 
     if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_REGEX" = "yes"; then
-        { echo "$as_me:$LINENO: WARNING: Defaulting to the the builtin regex library for Unicode build." >&5
-echo "$as_me: WARNING: Defaulting to the the builtin regex library for Unicode build." >&2;}
+        { echo "$as_me:$LINENO: WARNING: Defaulting to the builtin regex library for Unicode build." >&5
+echo "$as_me: WARNING: Defaulting to the builtin regex library for Unicode build." >&2;}
         wxUSE_REGEX=builtin
     fi
 
