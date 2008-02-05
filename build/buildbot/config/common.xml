@@ -60,6 +60,31 @@
 <nightly-schedulers name="daily"/>
 
 <!--
+    Map SVN user ids to email addresses.
+-->
+
+<emaillookup name="wx-devs">
+    <xi:include href="include/wx-devs.xml" xpointer="xpointer(//*[@id='MW'])"/>
+</emaillookup>
+
+<!--
+    Notify people on the blame list when a build goes from good to bad.
+-->
+
+<mailnotifier>
+    <mode>problem</mode>
+    <lookup>wx-devs</lookup>
+</mailnotifier>
+
+<!--
+    Log every build to a mailing list.
+-->
+
+<mailnotifier>
+    <extraRecipient>mike.wetherell -at- ntlworld.com</extraRecipient>
+</mailnotifier>
+
+<!--
     Track SVN changes using the wx-cvs mailing list.
     The <prefix> is subtracted from the paths in the 'Modified Files:'
     section, the remainder is then assumed to give the branch and filename.

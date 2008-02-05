@@ -739,4 +739,52 @@ if [ -x test_gui ]; then ./test_gui; fi
     </xsl:choose>
 </xsl:template>
 
+<!--
+    email - substitute '@' for ' -at- ' in email addresses.
+-->
+<xsl:template name="emailfield">
+    <xsl:param name="content"/>
+    <xsl:param name="addr"/>
+    <xsl:variable name="at"> -at- </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="contains($addr, $at)">
+            <xsl:value-of select="substring-before($addr, $at)"/>
+            <xsl:text>@</xsl:text>
+            <xsl:value-of select="substring-after($addr, $at)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$addr"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template name="email">
+    <xsl:param name="content"/>
+    <xsl:param name="id"/>
+    <email id="{$id}"><emailfield addr="{$content}"/></email>
+</xsl:template>
+
+<xsl:template name="fromaddr">
+    <xsl:param name="content"/>
+    <fromaddr><emailfield addr="{$content}"/></fromaddr>
+</xsl:template>
+
+<xsl:template name="extraRecipient">
+    <xsl:param name="content"/>
+    <extraRecipient><emailfield addr="{$content}"/></extraRecipient>
+</xsl:template>
+
+<!--
+    mailnotifier - add a default value for <fromaddr> to <mailnotifier>
+-->
+<xsl:template name="mailnotifier">
+    <xsl:param name="content"/>
+    <mailnotifier>
+        <defaults content="{$content}">
+            <fromaddr>wx-dev -at- lists.wxwidgets.org</fromaddr>
+        </defaults>
+        <xsl:copy-of select="$content"/>
+    </mailnotifier>
+</xsl:template>
+
 </bot>
