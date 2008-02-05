@@ -77,6 +77,8 @@ void wxDialog::SetModal( bool flag )
 wxDialog::~wxDialog()
 {
     m_isBeingDeleted = true;
+
+    // if the dialog is modal, this will end its event loop
     Show(false);
 }
 

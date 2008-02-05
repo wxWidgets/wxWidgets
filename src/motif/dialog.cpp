@@ -183,6 +183,9 @@ wxDialog::~wxDialog()
 {
     m_isBeingDeleted = true;
 
+    // if the dialog is modal, this will end its event loop
+    Show(false);
+
     delete m_eventLoop;
 
     if (m_mainWidget)
@@ -240,6 +243,9 @@ bool wxDialog::Show( bool show )
 {
     if( !wxWindowBase::Show( show ) )
         return false;
+
+    if ( !show && IsModal() )
+        EndModal(wxID_CANCEL);
 
     m_isShown = show;
 

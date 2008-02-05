@@ -71,9 +71,18 @@ bool wxDialog::Show( bool show )
 
     bool ret = wxWindow::Show( show );
 
-    if (show) InitDialog();
+    if (show)
+        InitDialog();
 
     return ret;
+}
+
+wxDialog::~wxDialog()
+{
+    m_isBeingDeleted = true;
+
+    // if the dialog is modal, this will end its event loop
+    Show(false);
 }
 
 bool wxDialog::IsModal() const
