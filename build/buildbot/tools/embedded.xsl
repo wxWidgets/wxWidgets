@@ -2,7 +2,7 @@
 
 <!--
     Name:       embedded.xsl
-    Purpose:    Embedded XSLT
+    Purpose:    Used by check.sh for offline checking of the configuration.
     Author:     Mike Wetherell
     RCS-ID:     $Id$
     Copyright:  (c) 2007 Mike Wetherell
@@ -108,18 +108,9 @@
 <template mode="copy-xsl" match="*[//xsl:template[not(ancestor::*[name() != name(/*)])]/@name = name()]">
     <choose>
         <when test="ancestor::xsl:template[@name = name(current())]">
-            <XSL:choose>
-                <XSL:when test="name() = '{name()}'">
-                    <XSL:copy>
-                        <call-template name="copy-xsl-children"/>
-                    </XSL:copy>
-                </XSL:when>
-                <XSL:otherwise>
-                    <copy>
-                        <call-template name="copy-xsl-children"/>
-                    </copy>
-                </XSL:otherwise>
-            </XSL:choose>
+            <copy>
+                <call-template name="copy-xsl-children"/>
+            </copy>
         </when>
         <otherwise>
             <call-template name="expand">
@@ -195,21 +186,16 @@
         </if>
 
         <for-each select="@*">
-            <variable name="expr">
-                <call-template name="before">
-                    <with-param name="string" select="substring-after(., '{')"/>
-                    <with-param name="target">}</with-param>
-                </call-template>
-            </variable>
+            <variable name="len" select="string-length(.)"/>
             <choose>
-                <when test="string-length($expr) = string-length(.) - 2">
-                    <XSL:with-param name="{name()}" select="{$expr}"/>
+                <when test="substring(., 1, 1) = '{' and
+                            substring(., $len, 1) = '}'">
+                    <XSL:with-param name="{name()}"
+                                    select="{substring(., 2, $len - 2)}"/>
                 </when>
                 <otherwise>
                     <XSL:with-param name="{name()}">
-                        <call-template name="avt">
-                            <with-param name="string" select="."/>
-                        </call-template>
+                        <call-template name="avt"/>
                     </XSL:with-param>
                 </otherwise>
             </choose>
@@ -318,7 +304,7 @@
 </template>
 
 <template name="avt">
-    <param name="string"/>
+    <param name="string" select="."/>
 
     <variable name="before1" select="substring-before(concat($string, '{'), '{')"/>
     <variable name="len1" select="string-length($before1)"/>
