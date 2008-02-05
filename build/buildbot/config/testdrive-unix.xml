@@ -42,7 +42,7 @@
     at once with make -j.
 -->
 
-<!-- 
+<!--
     Unix Quick Builds
 -->
 
@@ -76,7 +76,7 @@
     </steps>
 </build>
 
-<!-- 
+<!--
     Mac Quick Builds
 -->
 
@@ -108,7 +108,7 @@
     </steps>
 </build>
 
-<!-- 
+<!--
     Windows Quick Builds
 -->
 
@@ -138,7 +138,7 @@
     </steps>
 </build>
 
-<!-- 
+<!--
     Daily builds
 -->
 
@@ -196,7 +196,7 @@
     X11, motif and gtk+-2. For locations see cygwin-opts/cygwin-x-opts
     below.
 -->
-    
+
 <!--  for wxBase or wxMSW -->
 <xsl:variable name="cygwin-opts">
     --host=i686-pc-cygwin
@@ -206,8 +206,8 @@
 <!-- for wxX11, wxMotif, wxGTK -->
 <xsl:variable name="cygwin-x-opts">
     <xsl:value-of select="$cygwin-opts"/>
-    --x-includes=$HOME/cygwin/usr/X11R6/include 
-    --x-libraries=$HOME/cygwin/usr/X11R6/lib 
+    --x-includes=$HOME/cygwin/usr/X11R6/include
+    --x-libraries=$HOME/cygwin/usr/X11R6/lib
     PKG_CONFIG_PATH=$HOME/opt/cygwin/pkgconfig
 </xsl:variable>
 

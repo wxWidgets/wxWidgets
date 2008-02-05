@@ -48,7 +48,7 @@
     <!--
         The name of a scheduler that will trigger this build. common.xml
         currently defines:
-        
+
         * 'trunk_quick' and 'stable_quick'. These trigger a build after
           every source change on the trunk and stable branches respectively.
 
@@ -61,7 +61,7 @@
 
         An empty <scheduler/> element takes its value from the previous build
         incremented in the following way:
-        
+
         * Weekly schedulers are incremented by a day, monday_0600 becomes
           tuesday_0600, and at the end of the week the time is also bumped by
           an hour, saturday_0600 becomes sunday_0700.
