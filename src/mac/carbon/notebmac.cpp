@@ -187,7 +187,7 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
     wxCHECK_MSG( IS_VALID_PAGE(nPage), false, wxT("SetPageText: invalid notebook page") );
 
     wxNotebookPage *page = m_pages[nPage];
-    page->SetLabel(strText);
+    page->SetLabel(wxStripMenuCodes(strText));
     MacSetupTabs();
 
     return true;
@@ -281,7 +281,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     // don't show pages by default (we'll need to adjust their size first)
     pPage->Show( false ) ;
 
-    pPage->SetLabel( strText );
+    pPage->SetLabel( wxStripMenuCodes(strText) );
 
     m_images.Insert( imageId, nPage );
 
