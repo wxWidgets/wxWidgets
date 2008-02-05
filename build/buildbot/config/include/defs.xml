@@ -781,7 +781,7 @@ if [ -x test_gui ]; then ./test_gui; fi
     <xsl:param name="content"/>
     <mailnotifier>
         <defaults content="{$content}">
-            <fromaddr>wx-dev -at- lists.wxwidgets.org</fromaddr>
+            <fromaddr>noreply -at- wxsite.net</fromaddr>
         </defaults>
         <xsl:copy-of select="$content"/>
     </mailnotifier>
