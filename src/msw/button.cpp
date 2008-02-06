@@ -367,26 +367,32 @@ wxWindow *wxButton::SetDefault()
     return winOldDefault;
 }
 
-// special version of wxGetTopLevelParent() which is safe to call when the
-// parent is being destroyed: wxGetTopLevelParent() would just return NULL in
-// this case because wxWindow version of IsTopLevel() is used when it's called
-// during window destruction instead of wxTLW one, but we want to distinguish
-// between these cases
+// return the top level parent window if it's not being deleted yet, otherwise
+// return NULL
 static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
 {
-    for ( ; win; win = win->GetParent() )
+    for ( ;; )
     {
-        if ( win->IsTopLevel() )
+        // IsTopLevel() will return false for a wxTLW being deleted, so we also
+        // need the parent test for this case
+        wxWindow * const parent = win->GetParent();
+        if ( !parent || win->IsTopLevel() )
         {
             if ( win->IsBeingDeleted() )
                 return NULL;
+
             break;
         }
+
+        win = parent;
     }
 
     wxASSERT_MSG( win, _T("button without top level parent?") );
 
-    return wxDynamicCast(win, wxTopLevelWindow);
+    wxTopLevelWindow * const tlw = wxDynamicCast(win, wxTopLevelWindow);
+    wxASSERT_MSG( tlw, _T("logic error in GetTLWParentIfNotBeingDeleted()") );
+
+    return tlw;
 }
 
 // set this button as being currently default
