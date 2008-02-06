@@ -132,7 +132,7 @@ private:
 class WXDLLIMPEXP_GL wxGLApp : public wxGLAppBase
 {
 public:
-    wxGLApp();
+    wxGLApp() : wxGLAppBase() { }
 
     // implement wxGLAppBase method
     virtual bool InitGLVisual(const int *attribList)
