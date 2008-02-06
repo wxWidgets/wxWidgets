@@ -21,6 +21,8 @@ typedef struct CGRect NSRect;
 typedef struct _NSRect NSRect;
 #endif
 
+struct objc_object;
+
 class wxWindow;
 
 WX_DECLARE_OBJC_HASHMAP(NSView);
@@ -32,7 +34,7 @@ public:
     void AssociateNSView(WX_NSView cocoaNSView);
     void DisassociateNSView(WX_NSView cocoaNSView);
 protected:
-    static void *sm_cocoaObserver;
+    static struct objc_object *sm_cocoaObserver;
 public:
     virtual wxWindow* GetWxWindow() const
     {   return NULL; }

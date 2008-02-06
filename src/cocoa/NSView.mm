@@ -28,6 +28,7 @@
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSString.h>
 #include "wx/cocoa/objc/NSView.h"
+#include "wx/cocoa/ObjcRef.h"
 
 // ----------------------------------------------------------------------------
 // globals
@@ -215,5 +216,7 @@ WX_DECLARE_GET_OBJC_CLASS(wxNSViewNotificationObserver,NSObject)
 @end // implementation wxNSViewNotificationObserver
 WX_IMPLEMENT_GET_OBJC_CLASS(wxNSViewNotificationObserver,NSObject)
 
-void *wxCocoaNSView::sm_cocoaObserver = [[WX_GET_OBJC_CLASS(wxNSViewNotificationObserver) alloc] init];
-
+// New CF-retained observer (this should have been using wxObjcAutoRefFromAlloc to begin with)
+wxObjcAutoRefFromAlloc<wxNSViewNotificationObserver*> s_cocoaNSViewObserver([[WX_GET_OBJC_CLASS(wxNSViewNotificationObserver) alloc] init]);
+// For compatibility with old code
+id wxCocoaNSView::sm_cocoaObserver = s_cocoaNSViewObserver;
