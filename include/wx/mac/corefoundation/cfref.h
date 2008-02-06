@@ -17,6 +17,11 @@
 #ifndef _WX_MAC_COREFOUNDATION_CFREF_H__
 #define _WX_MAC_COREFOUNDATION_CFREF_H__
 
+// Include unistd to ensure that NULL is defined
+#include <unistd.h>
+// Include AvailabilityMacros for DEPRECATED_ATTRIBUTE
+#include <AvailabilityMacros.h>
+
 // #include <CoreFoundation/CFBase.h>
 /* Don't include CFBase.h such that this header can be included from public
  * headers with minimal namespace pollution.
