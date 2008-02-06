@@ -236,6 +236,8 @@ void wxRichTextCtrl::Clear()
     m_caretAtLineStart = false;
     m_selectionRange.SetRange(-2, -2);
 
+    Scroll(0,0);
+
     if (!IsFrozen())
     {
         LayoutContent();
