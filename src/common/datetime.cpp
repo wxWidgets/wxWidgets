@@ -93,7 +93,7 @@ const long wxDateTime::TIME_T_FACTOR = 1000l;
 
 template<> void wxStringReadValue(const wxString &s , wxDateTime &data )
 {
-    data.ParseFormat(s,"%Y-%m-%d %H:%M:%S");
+    data.ParseFormat(s,"%Y-%m-%d %H:%M:%S", NULL);
 }
 
 template<> void wxStringWriteValue(wxString &s , const wxDateTime &data )
