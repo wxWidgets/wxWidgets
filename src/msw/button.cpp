@@ -376,11 +376,12 @@ static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
 {
     for ( ; win; win = win->GetParent() )
     {
-        if ( win->IsBeingDeleted() )
-            return NULL;
-
         if ( win->IsTopLevel() )
+        {
+            if ( win->IsBeingDeleted() )
+                return NULL;
             break;
+        }
     }
 
     wxASSERT_MSG( win, _T("button without top level parent?") );
