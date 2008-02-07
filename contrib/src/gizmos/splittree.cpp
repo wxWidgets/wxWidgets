@@ -38,6 +38,7 @@
 #endif
 
 #include "wx/gizmos/splittree.h"
+#include "wx/renderer.h"
 #include <math.h>
 
 /*
@@ -639,6 +640,12 @@ bool wxThinSplitterWindow::SashHitTest(int x, int y, int WXUNUSED(tolerance))
 
 void wxThinSplitterWindow::DrawSash(wxDC& dc)
 {
+    wxRendererNative::Get().DrawSplitterBorder
+                           (
+                               this,
+                               dc,
+                               GetClientRect()
+                           );
     if ( m_sashPosition == 0 || !m_windowTwo)
         return;
     if (GetWindowStyle() & wxSP_NOSASH)
