@@ -601,7 +601,12 @@ bool wxVarScrollHelperBase::DoScrollToUnit(size_t unit)
     }
     else // scroll the window
     {
+        // Avoid scrolling visible parts of the screen on Mac
+#ifdef __WXMAC__
+        if (m_physicalScrolling && m_targetWindow->IsShownOnScreen())
+#else
         if ( m_physicalScrolling )
+#endif
         {
             wxCoord dx = 0,
                     dy = GetUnitsSize(GetVisibleBegin(), unitFirstOld);
