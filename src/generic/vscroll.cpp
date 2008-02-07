@@ -382,6 +382,12 @@ bool wxVScrolledWindow::ScrollToLine(size_t line)
     }
     else // overlap between the lines we showed before and should show now
     {
+        // Avoid scrolling visible parts of the screen on Mac
+#ifdef __WXMAC__
+        if (!IsShownOnScreen())
+            Refresh();
+        else
+#endif
         ScrollWindow(0, GetLinesHeight(GetVisibleBegin(), lineFirstOld));
     }
 
