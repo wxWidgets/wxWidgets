@@ -1106,6 +1106,8 @@ dnl Support the old --enable-universal_binary in case anyone was using it.
         OSX_UNIV_OPTS="-arch ppc -arch i386"
         CXXFLAGS="$OSX_UNIV_OPTS $CXXFLAGS"
         CFLAGS="$OSX_UNIV_OPTS $CFLAGS"
+        OBJCXXFLAGS="$OSX_UNIV_OPTS $OBJCXXFLAGS"
+        OBJCFLAGS="$OSX_UNIV_OPTS $OBJCFLAGS"
         LDFLAGS="$OSX_UNIV_OPTS $LDFLAGS"
         dnl NOTE: Only the compiler driver needs arch flags.  The link editor
         dnl is incapable of using them but the compiler driver (which we use
@@ -7306,6 +7308,8 @@ CPPFLAGS=`echo $WXCONFIG_CPPFLAGS \
 C_AND_CXX_FLAGS="$DEBUG_CFLAGS $PROFILE_FLAGS $OPTIMISE_CFLAGS"
 CFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $CFLAGS `
 CXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $CXXFLAGS `
+OBJCFLAGS=`echo $WXCONFIG_CFLAGS $CWARNINGS $C_AND_CXX_FLAGS $OBJCFLAGS `
+OBJCXXFLAGS=`echo $WXCONFIG_CXXFLAGS $C_AND_CXX_FLAGS $OBJCXXFLAGS `
 
 dnl now that we added WXCONFIG_CPPFLAGS to CPPFLAGS we can add the wx-config
 dnl only stuff to it
@@ -7616,7 +7620,11 @@ then
         AC_MSG_WARN([*** see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=13361])
     fi
 
-    CPPFLAGS="-DWX_PRECOMP $CPPFLAGS"
+    # Our WX_PRECOMP flag does not make sense for any language except C++ because
+    # the headers that benefit from precompilation are mostly C++ headers.
+    CXXFLAGS="-DWX_PRECOMP $CXXFLAGS"
+    # When Bakefile can do multi-language PCH (e.g. C++ and Objective-C++) enable this:
+    #OBJCXXFLAGS="-DWX_PRECOMP $CXXFLAGS"
 fi
 
 dnl HACK ALERT!!
