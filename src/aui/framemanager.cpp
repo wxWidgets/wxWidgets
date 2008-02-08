@@ -2307,7 +2307,8 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                 LayoutAddDock(middle, *arr.Item(row), uiparts, spacer_only);
         }
 
-        cont->Add(middle, 1, wxEXPAND);
+        if (middle->GetChildren().GetCount() > 0)
+            cont->Add(middle, 1, wxEXPAND);
 
 
 
