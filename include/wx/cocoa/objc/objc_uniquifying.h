@@ -83,6 +83,32 @@ struct UniquifiedName
     }
 };
 
+/*! @function   HidePointerFromGC
+    @abstract   Returns an l-value whose location the compiler cannot know.
+    @discussion
+    The compiler-generated Objective-C class structures are located in the static data area.
+    They are by design Objective-C objects in their own right which makes the compiler issue
+    write barriers as if they were located in the GC-managed heap as most Objective-C objects.
+
+    By accepting and returning a reference to any pointer type we can set any i-var of an
+    Objective-C object that is a pointer to another Objective-C object without the compiler
+    generating an objc_assign_ivar write barrier.  It will instad generate an
+    objc_assign_strongCast write barrier which is the appropriate write-barrier when assigning
+    pointers to Objective-C objects located in unknown memory.
+
+    For instance:
+    Class *someClass = ...;
+    HidePointerFromGC(someClass->isa) = ...;
+ */
+template <typename ObjcType>
+inline ObjcType * & HidePointerFromGC(ObjcType * &p) __attribute__((always_inline));
+
+template <typename ObjcType>
+inline ObjcType * & HidePointerFromGC(ObjcType * &p)
+{
+    return p;
+}
+
 template <typename ObjcType>
 class wxObjcClassInitializer
 {
@@ -131,9 +157,9 @@ private:
 
         // In any object hierarchy a metaclass's metaclass is always the root class's metaclass
         // Therefore, our superclass's metaclass's metaclass should already be the root class's metaclass
-        theClassData.isa->isa = theClassData.super_class->isa->isa;
+        HidePointerFromGC(theClassData.isa->isa) = theClassData.super_class->isa->isa;
         // A metaclass's superclass is always the superclass's metaclass.
-        theClassData.isa->super_class = theClassData.super_class->isa;
+        HidePointerFromGC(theClassData.isa->super_class) = theClassData.super_class->isa;
         // Fix up the compiler generated metaclass struct to use the new name
         theClassData.isa->name = sm_theUniquifiedClassName;
 
