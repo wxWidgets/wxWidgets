@@ -99,10 +99,10 @@ inline void wxGCSafeRelease(Type *r)
 #else
 // NOTE: When not compiling Objective-C, declare these functions such that they can be
 // used by other inline-implemented methods.  Since those methods in turn will not actually
-// be used from non-ObjC code the compiler ought not to emit them.  If it emits an out
-// of line copy of functions using these functions then presumably it will have also emitted
-// in at least one source file an out of line copy of these functions and there will be
-// no problem at link time.
+// be used from non-ObjC code the compiler ought not emit them.  If it emits an out of
+// line copy of those methods then presumably it will have also emitted at least one
+// out of line copy of these functions from at least one Objective-C++ translation unit.
+// That means the out of line implementation will be available at link time.
 
 template <class Type>
 inline Type * wxGCSafeRetain(Type *r);
