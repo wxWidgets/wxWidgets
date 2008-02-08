@@ -15,7 +15,7 @@
 // Reuse wxCFRef-related code (e.g. wxCFRetain/wxCFRelease)
 #include "wx/mac/corefoundation/cfref.h"
 
-// NOTE WELL: We can only know which Objective-C runtime is being used when compiling Objective-C.
+// NOTE WELL: We can only know whether or not GC can be used when compiling Objective-C.
 // Therefore we cannot implement these functions except when compiling Objective-C.
 #ifdef __OBJC__
 /*! @function   wxGCSafeRetain
@@ -58,7 +58,7 @@
 template <class Type>
 inline Type * wxGCSafeRetain(Type *r)
 {
-#ifdef __NEXT_RUNTIME__
+#ifdef __OBJC_GC__
     return static_cast<Type*>(wxCFRetain(r));
 #else
     return [r retain];
@@ -90,7 +90,7 @@ inline Type * wxGCSafeRetain(Type *r)
 template <class Type>
 inline void wxGCSafeRelease(Type *r)
 {
-#ifdef __NEXT_RUNTIME__
+#ifdef __OBJC_GC__
     wxCFRelease(r);
 #else
     [r release];
@@ -99,7 +99,10 @@ inline void wxGCSafeRelease(Type *r)
 #else
 // NOTE: When not compiling Objective-C, declare these functions such that they can be
 // used by other inline-implemented methods.  Since those methods in turn will not actually
-// be used from non-ObjC code there is no problem.
+// be used from non-ObjC code the compiler ought not to emit them.  If it emits an out
+// of line copy of functions using these functions then presumably it will have also emitted
+// in at least one source file an out of line copy of these functions and there will be
+// no problem at link time.
 
 template <class Type>
 inline Type * wxGCSafeRetain(Type *r);
