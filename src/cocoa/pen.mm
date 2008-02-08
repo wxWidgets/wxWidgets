@@ -17,6 +17,8 @@
     #include "wx/colour.h"
 #endif //WX_PRECOMP
 
+#include "wx/cocoa/ObjcRef.h"
+
 #import <AppKit/NSColor.h>
 
 // ========================================================================
@@ -133,13 +135,13 @@ inline wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_nbDash = data.m_nbDash;
     m_dash = data.m_dash;
     m_stipple = data.m_stipple;
-    m_cocoaNSColor = [data.m_cocoaNSColor retain];
+    m_cocoaNSColor = wxGCSafeRetain(data.m_cocoaNSColor);
     m_cocoaDash = NULL;
 }
 
 inline void wxPenRefData::FreeCocoaNSColor()
 {
-    [m_cocoaNSColor release];
+    wxGCSafeRelease(m_cocoaNSColor);
     m_cocoaNSColor = nil;
 }
 
@@ -156,7 +158,7 @@ inline WX_NSColor wxPenRefData::GetNSColor()
         switch( m_style )
         {
         case wxTRANSPARENT:
-            m_cocoaNSColor = [[NSColor clearColor] retain];
+            m_cocoaNSColor = wxGCSafeRetain([NSColor clearColor]);
             break;
         case wxSTIPPLE:
 //  wxBitmap isn't implemented yet
@@ -181,6 +183,7 @@ inline WX_NSColor wxPenRefData::GetNSColor()
             if(!colour_NSColor)
                 colour_NSColor = [NSColor clearColor];
             m_cocoaNSColor = [colour_NSColor copyWithZone:nil];
+            [wxGCSafeRetain(m_cocoaNSColor) release]; // retain in GC. no change in RR.
             break;
         }
     }

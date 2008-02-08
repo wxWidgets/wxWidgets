@@ -26,6 +26,7 @@
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/trackingrectmanager.h"
 #include "wx/mac/corefoundation/cfref.h"
+#include "wx/cocoa/ObjcRef.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSRunLoop.h>
@@ -1109,8 +1110,8 @@ void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
     bool need_debug = cocoaNSView || m_cocoaNSView;
     if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxWindowCocoa=%p::SetNSView [m_cocoaNSView=%p retainCount]=%d"),this,m_cocoaNSView,[m_cocoaNSView retainCount]);
     DisassociateNSView(m_cocoaNSView);
-    [cocoaNSView retain];
-    [m_cocoaNSView release];
+    wxGCSafeRetain(cocoaNSView);
+    wxGCSafeRelease(m_cocoaNSView);
     m_cocoaNSView = cocoaNSView;
     AssociateNSView(m_cocoaNSView);
     if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxWindowCocoa=%p::SetNSView [cocoaNSView=%p retainCount]=%d"),this,cocoaNSView,[cocoaNSView retainCount]);

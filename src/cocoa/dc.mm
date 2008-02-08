@@ -20,6 +20,7 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/ObjcRef.h"
 
 #import <AppKit/NSBezierPath.h>
 #import <AppKit/NSTextStorage.h>
@@ -75,11 +76,16 @@ inline void CocoaSetPenForNSBezierPath(wxPen &pen, NSBezierPath *bezpath)
 
 void wxCocoaDCImpl::CocoaInitializeTextSystem()
 {
+    wxAutoNSAutoreleasePool pool;
+
     wxASSERT_MSG(!sm_cocoaNSTextStorage && !sm_cocoaNSLayoutManager && !sm_cocoaNSTextContainer,wxT("Text system already initalized!  BAD PROGRAMMER!"));
 
-    sm_cocoaNSTextStorage = [[NSTextStorage alloc] init];
+    // FIXME: Never released
+    sm_cocoaNSTextStorage = wxGCSafeRetain([[[NSTextStorage alloc] init] autorelease]);
 
-    sm_cocoaNSLayoutManager = [[NSLayoutManager alloc] init];
+    // FIXME: Never released
+    sm_cocoaNSLayoutManager = wxGCSafeRetain([[[NSLayoutManager alloc] init] autorelease]);
+
     [sm_cocoaNSTextStorage addLayoutManager:sm_cocoaNSLayoutManager];
     // NSTextStorage retains NSLayoutManager, but so do we
     // [sm_cocoaNSLayoutManager release]; [sm_cocoaNSLayoutManager retain];
@@ -87,7 +93,8 @@ void wxCocoaDCImpl::CocoaInitializeTextSystem()
     // NOTE:  initWithContainerSize is the designated initializer, but the
     // Apple CircleView sample gets away with just calling init, which
     // is all we really need for our purposes.
-    sm_cocoaNSTextContainer = [[NSTextContainer alloc] init];
+    // FIXME: Never released
+    sm_cocoaNSTextContainer = wxGCSafeRetain([[[NSTextContainer alloc] init] autorelease]);
     [sm_cocoaNSLayoutManager addTextContainer:sm_cocoaNSTextContainer];
     // NSLayoutManager retains NSTextContainer, but so do we
     // [sm_cocoaNSTextContainer release]; [sm_cocoaNSTextContainer retain];

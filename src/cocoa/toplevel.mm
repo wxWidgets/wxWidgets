@@ -32,6 +32,7 @@
 
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
+#include "wx/cocoa/ObjcRef.h"
 
 #include "wx/cocoa/objc/NSView.h"
 #include "wx/cocoa/objc/NSWindow.h"
@@ -190,8 +191,8 @@ void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
     bool need_debug = cocoaNSWindow || m_cocoaNSWindow;
     if(need_debug) wxLogTrace(wxTRACE_COCOA_RetainRelease,wxT("wxTopLevelWindowCocoa=%p::SetNSWindow [m_cocoaNSWindow=%p retainCount]=%d"),this,m_cocoaNSWindow,[m_cocoaNSWindow retainCount]);
     DisassociateNSWindow(m_cocoaNSWindow);
-    [cocoaNSWindow retain];
-    [m_cocoaNSWindow release];
+    wxGCSafeRetain(cocoaNSWindow);
+    wxGCSafeRelease(m_cocoaNSWindow);
     m_cocoaNSWindow = cocoaNSWindow;
     // NOTE: We are no longer using posing so we won't get events on the
     // window's view unless it was explicitly created as the wx view class.
