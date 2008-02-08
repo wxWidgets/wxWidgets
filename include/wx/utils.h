@@ -733,8 +733,15 @@ inline struct _XDisplay *wxGetX11Display()
 // wxYield(): these functions are obsolete, please use wxApp methods instead!
 // ----------------------------------------------------------------------------
 
+// avoid redeclaring this function here if it had been already declated by
+// wx/app.h, this results in warnings from g++ with -Wredundant-decls
+#ifndef wx_YIELD_DECLARED
+#define wx_YIELD_DECLARED
+
 // Yield to other apps/messages
 WXDLLIMPEXP_BASE bool wxYield();
+
+#endif // wx_YIELD_DECLARED
 
 // Like wxYield, but fails silently if the yield is recursive.
 WXDLLIMPEXP_BASE bool wxYieldIfNeeded();
