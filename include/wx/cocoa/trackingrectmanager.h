@@ -32,7 +32,7 @@ public:
 protected:
     wxWindow *m_window;
     bool m_isTrackingRectActive;
-    int m_trackingRectTag;
+    NSInteger m_trackingRectTag;
     NSRect m_trackingRectInWindowCoordinates;
 private:
     wxCocoaTrackingRectManager();
