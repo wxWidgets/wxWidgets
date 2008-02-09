@@ -172,6 +172,21 @@ bool wxChoice::Create(wxWindow *parent,
                   style, validator, name);
 }
 
+void wxChoice::SetLabel(const wxString& label)
+{
+    if ( FindString(label) == wxNOT_FOUND )
+    {
+        // unless we explicitly do this here, CB_GETCURSEL will continue to
+        // return the index of the previously selected item which will result
+        // in wrongly replacing the value being set now with the previously
+        // value if the user simply opens and closes (without selecting
+        // anything) the combobox popup
+        SetSelection(-1);
+    }
+
+    wxChoiceBase::SetLabel(label);
+}
+
 bool wxChoice::MSWShouldPreProcessMessage(WXMSG *pMsg)
 {
     MSG *msg = (MSG *) pMsg;

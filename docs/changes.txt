@@ -130,6 +130,8 @@ wxMSW:
 - Fix assert when using owner-drawn menu items with the newest (Vista) SDK.
 - Fixed wxTextCtrl to not process clipboard events twice if there's
   a custom wxEVT_COMMAND_TEXT_* event handler.
+- Fix wxComboBox to not lose the current value if it was programmatically set
+  to a value not in a list of choices on popup close (Kolya Kosenko)
 
 wxGTK:
 

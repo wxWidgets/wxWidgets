@@ -66,6 +66,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxChoiceNameStr);
 
+    virtual void SetLabel(const wxString& label);
+
     virtual void Delete(unsigned int n);
     virtual void Clear();
 
