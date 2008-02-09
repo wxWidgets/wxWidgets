@@ -564,7 +564,7 @@ void BitmapComboBoxWidgetsPage::OnButtonAddSeveralWithImages(wxCommandEvent& WXU
         { "Black circle",   0x000000 },
     };
 
-    for ( int i = 0; i < WXSIZEOF(s_entries); i++ )
+    for ( unsigned i = 0; i < WXSIZEOF(s_entries); i++ )
     {
         const TestEntry& e = s_entries[i];
         m_combobox->Append(e.text, CreateBitmap(wxColour(e.rgb)));
