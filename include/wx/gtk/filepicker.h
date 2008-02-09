@@ -99,15 +99,6 @@ public:     // overrides
     // event handler for the click
     void OnDialogOK(wxCommandEvent &);
 
-    // GtkFileChooserButton does not support GTK_FILE_CHOOSER_ACTION_SAVE
-    // so we replace it with GTK_FILE_CHOOSER_ACTION_OPEN; since wxFD_SAVE
-    // is not supported, wxFD_OVERWRITE_PROMPT isn't too...
-    virtual long GetDialogStyle() const
-    {
-         return (wxGenericFileButton::GetDialogStyle() &
-                     ~(wxFD_SAVE | wxFD_OVERWRITE_PROMPT)) | wxFD_OPEN;
-    }
-
     virtual void SetPath(const wxString &str);
 
     // see macro defined above
