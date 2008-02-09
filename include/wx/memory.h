@@ -207,6 +207,9 @@ public:
 
 typedef void (wxMemStruct::*PmSFV) ();
 
+// Type of the app function that can be installed and called at wxWidgets shutdown
+// (after all other registered files with global destructors have been closed down).
+typedef void (*wxShutdownNotifyFunction)();
 
 /*
   Debugging class. This will only have a single instance, but it's
@@ -307,6 +310,8 @@ public:
     // This function is used to output the dump
     static void OutputDumpLine(const wxChar *szFormat, ...);
 
+    static void SetShutdownNotifyFunction(wxShutdownNotifyFunction shutdownFn);
+
 private:
     // Store these here to allow access to the list without
     // needing to have a wxMemStruct object.
@@ -316,23 +321,25 @@ private:
     // Set to false if we're not checking all previous nodes when
     // we do a new. Set to true when we are.
     static bool                 m_checkPrevious;
+
+    // Holds a pointer to an optional application function to call at shutdown.
+    static wxShutdownNotifyFunction sm_shutdownFn;
+
+    // Have to access our shutdown hook
+    friend class wxDebugContextDumpDelayCounter;
 };
 
 // Final cleanup (e.g. deleting the log object and doing memory leak checking)
 // will be delayed until all wxDebugContextDumpDelayCounter objects have been
 // destructed. Adding one wxDebugContextDumpDelayCounter per file will delay
 // memory leak checking until after destructing all global objects.
+
 class WXDLLIMPEXP_BASE wxDebugContextDumpDelayCounter
 {
 public:
-    wxDebugContextDumpDelayCounter() {
-        sm_count++;
-    }
+    wxDebugContextDumpDelayCounter();
+    ~wxDebugContextDumpDelayCounter();
 
-    ~wxDebugContextDumpDelayCounter() {
-        sm_count--;
-        if(!sm_count) DoDump();
-    }
 private:
     void DoDump();
     static int sm_count;
