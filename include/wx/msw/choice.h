@@ -66,6 +66,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxChoiceNameStr);
 
+    virtual void SetLabel(const wxString& label);
+
     virtual unsigned int GetCount() const;
     virtual int GetSelection() const;
     virtual int GetCurrentSelection() const;
