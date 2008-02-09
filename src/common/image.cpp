@@ -1283,6 +1283,26 @@ void wxImage::Paste( const wxImage &image, int x, int y )
         return;
     }
 
+    // Copy over the alpha channel from the original image
+    if ( image.HasAlpha() )
+    {
+        if ( !HasAlpha() )
+            InitAlpha();
+
+        unsigned char* source_data = image.GetAlpha() + xx + yy*image.GetWidth();
+        int source_step = image.GetWidth();
+
+        unsigned char* target_data = GetAlpha() + (x+xx) + (y+yy)*M_IMGDATA->m_width;
+        int target_step = M_IMGDATA->m_width;
+
+        for (int j = 0; j < height; j++,
+                                    source_data += source_step,
+                                    target_data += target_step)
+        {
+            memcpy( target_data, source_data, width );
+        }
+    }
+
     if (!HasMask() && image.HasMask())
     {
         unsigned char r = image.GetMaskRed();
