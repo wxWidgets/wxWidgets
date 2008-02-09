@@ -162,6 +162,11 @@ public:
     // Implementation only from now on
     // -------------------------------
 
+    wxMDIParentFrame* GetMDIParent() const
+    {
+        return wxStaticCast(wxFrame::GetParent(), wxMDIParentFrame);
+    }
+
     // Handlers
     bool HandleMDIActivate(long bActivate, WXHWND, WXHWND);
     bool HandleWindowPosChanging(void *lpPos);
