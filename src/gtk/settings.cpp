@@ -46,7 +46,8 @@ struct wxSystemObjects
              m_colBtnText,
              m_colMenuItemHighlight,
              m_colTooltip,
-             m_colTooltipText;
+             m_colTooltipText,
+             m_colMenubarBg;
 
     wxFont m_fontSystem;
 };
@@ -65,6 +66,7 @@ void wxClearGtkSystemObjects()
     gs_objects.m_colMenuItemHighlight = wxColour();
     gs_objects.m_colTooltip = wxColour();
     gs_objects.m_colTooltipText = wxColour();
+    gs_objects.m_colMenubarBg = wxColour();
     gs_objects.m_fontSystem = wxNullFont;
 }
 
@@ -78,7 +80,8 @@ enum wxGtkWidgetType
     wxGTK_BUTTON,
     wxGTK_LIST,
     wxGTK_MENUITEM,
-    wxGTK_TEXTCTRL
+    wxGTK_TEXTCTRL,
+    wxGTK_MENUBAR, 
 };
 
 // the colour we need
@@ -118,6 +121,11 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 
         case wxGTK_MENUITEM:
             widget = gtk_menu_item_new();
+            
+        case wxGTK_MENUBAR:
+            widget = gtk_menu_bar_new();
+            break;
+            
     }
 
     GtkStyle *def = gtk_rc_get_style( widget );
@@ -183,7 +191,6 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_BTNFACE:
-        case wxSYS_COLOUR_MENUBAR:
         case wxSYS_COLOUR_3DLIGHT:
             if (!gs_objects.m_colBtnFace.Ok())
             {
@@ -206,6 +213,19 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
                 gs_objects.m_colWindow = wxColor(gdkColor);
             }
             color = gs_objects.m_colWindow;
+            break;
+
+
+        case wxSYS_COLOUR_MENUBAR:
+            if (!gs_objects.m_colMenubarBg.Ok())
+            {
+                gdkColor.red =
+                gdkColor.green = 0;
+                gdkColor.blue = 0x9c40;
+                GetColourFromGTKWidget(gdkColor,wxGTK_MENUBAR);
+                gs_objects.m_colMenubarBg = wxColor(gdkColor);
+            }
+            color = gs_objects.m_colMenubarBg;
             break;
 
         case wxSYS_COLOUR_3DDKSHADOW:
