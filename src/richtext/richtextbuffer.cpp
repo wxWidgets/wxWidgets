@@ -7209,7 +7209,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichTextFontTable, wxObject)
 wxRichTextFontTable::wxRichTextFontTable()
 {
     m_refData = new wxRichTextFontTableData;
-    m_refData->IncRef();
 }
 
 wxRichTextFontTable::wxRichTextFontTable(const wxRichTextFontTable& table)
