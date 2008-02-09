@@ -196,6 +196,8 @@
 
 #define wxUSE_THREADS 0
 
+#define wxUSE_WEAKREF 0
+
 #define wxUSE_STREAMS       0
 
 #define wxUSE_STD_IOSTREAM  0

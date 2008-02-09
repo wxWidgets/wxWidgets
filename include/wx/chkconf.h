@@ -291,6 +291,14 @@
 #   endif
 #endif /* wxUSE_VARIANT */
 
+#ifndef wxUSE_WEAKREF
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_WEAKREF must be defined."
+#   else
+#       define wxUSE_WEAKREF 0
+#   endif
+#endif /* wxUSE_WEAKREF */
+
 /*
    Section 1b: all these tests are for GUI only.
 

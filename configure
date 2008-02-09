@@ -1706,7 +1706,9 @@ Optional Features:
   --enable-log            use logging system
   --enable-longlong       use wxLongLong class
   --enable-mimetype       use wxMimeTypesManager
+  --enable-printfposparam use wxVsnprintf() which supports positional parameters
   --enable-snglinst       use wxSingleInstanceChecker class
+  --enable-sound          use wxSound class
   --enable-stdpaths       use wxStandardPaths class
   --enable-stopwatch      use wxStopWatch class
   --enable-streams        use wxStream etc classes
@@ -1715,13 +1717,10 @@ Optional Features:
   --enable-textbuf        use wxTextBuffer class
   --enable-textfile       use wxTextFile class
   --enable-timer          use wxTimer class
-  --enable-sound          use wxSound class
-  --enable-mediactrl      use wxMediaCtrl class
-  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix
-  --enable-printfposparam use wxVsnprintf() which supports positional parameters
+  --enable-variant        use wxVariant class
+  --enable-weakref        make wxEvtHandler trackable with wxWeakRef<>
   --enable-zipstream      use wxZip streams
   --enable-url            use wxURL class
-  --enable-variant        use wxVariant class
   --enable-protocol       use wxProtocol class
   --enable-protocol-http  HTTP support in wxProtocol
   --enable-protocol-ftp   FTP support in wxProtocol
@@ -1738,16 +1737,18 @@ Optional Features:
   --enable-aui            use AUI docking library
   --enable-stc            use wxStyledTextCtrl library
   --enable-constraints    use layout-constraints system
-  --enable-printarch      use printing architecture
-  --enable-mdi            use multiple document interface architecture
-  --enable-mdidoc         use docview architecture with MDI
   --enable-loggui         use standard GUI logger
   --enable-logwin         use wxLogWindow
   --enable-logdialog      use wxLogDialog
+  --enable-mdi            use multiple document interface architecture
+  --enable-mdidoc         use docview architecture with MDI
+  --enable-mediactrl      use wxMediaCtrl class
+  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix
   --enable-webkit         use wxWebKitCtrl (Mac)
   --enable-richtext       use wxRichTextCtrl
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-postscript     use wxPostscriptDC device context (default for gtk+)
+  --enable-printarch      use printing architecture
   --enable-svg            use wxSVGFileDC device context
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
@@ -7252,6 +7253,50 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-printfposparam" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-printfposparam... $ECHO_C" >&6; }
+          # Check whether --enable-printfposparam was given.
+if test "${enable_printfposparam+set}" = set; then
+  enableval=$enable_printfposparam;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_printfposparam='wxUSE_PRINTF_POS_PARAMS=yes'
+                          else
+                            wx_cv_use_printfposparam='wxUSE_PRINTF_POS_PARAMS=no'
+                          fi
+
+else
+
+                          wx_cv_use_printfposparam='wxUSE_PRINTF_POS_PARAMS=${'DEFAULT_wxUSE_PRINTF_POS_PARAMS":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_printfposparam"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_PRINTF_POS_PARAMS = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_PRINTF_POS_PARAMS
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-snglinst" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-snglinst... $ECHO_C" >&6; }
           # Check whether --enable-snglinst was given.
@@ -7280,6 +7325,50 @@ fi
             fi
           else
             result=$wxUSE_SNGLINST_CHECKER
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-sound" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-sound... $ECHO_C" >&6; }
+          # Check whether --enable-sound was given.
+if test "${enable_sound+set}" = set; then
+  enableval=$enable_sound;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_sound='wxUSE_SOUND=yes'
+                          else
+                            wx_cv_use_sound='wxUSE_SOUND=no'
+                          fi
+
+else
+
+                          wx_cv_use_sound='wxUSE_SOUND=${'DEFAULT_wxUSE_SOUND":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_sound"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_SOUND = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_SOUND
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -7648,34 +7737,34 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-sound" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-sound... $ECHO_C" >&6; }
-          # Check whether --enable-sound was given.
-if test "${enable_sound+set}" = set; then
-  enableval=$enable_sound;
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-variant" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-variant... $ECHO_C" >&6; }
+          # Check whether --enable-variant was given.
+if test "${enable_variant+set}" = set; then
+  enableval=$enable_variant;
                           if test "$enableval" = yes; then
-                            wx_cv_use_sound='wxUSE_SOUND=yes'
+                            wx_cv_use_variant='wxUSE_VARIANT=yes'
                           else
-                            wx_cv_use_sound='wxUSE_SOUND=no'
+                            wx_cv_use_variant='wxUSE_VARIANT=no'
                           fi
 
 else
 
-                          wx_cv_use_sound='wxUSE_SOUND=${'DEFAULT_wxUSE_SOUND":-$defaultval}"
+                          wx_cv_use_variant='wxUSE_VARIANT=${'DEFAULT_wxUSE_VARIANT":-$defaultval}"
 
 fi
 
 
-          eval "$wx_cv_use_sound"
+          eval "$wx_cv_use_variant"
 
           if test x"$enablestring" = xdisable; then
-            if test $wxUSE_SOUND = yes; then
+            if test $wxUSE_VARIANT = yes; then
               result=no
             else
               result=yes
             fi
           else
-            result=$wxUSE_SOUND
+            result=$wxUSE_VARIANT
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -7692,122 +7781,34 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mediactrl" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-mediactrl... $ECHO_C" >&6; }
-          # Check whether --enable-mediactrl was given.
-if test "${enable_mediactrl+set}" = set; then
-  enableval=$enable_mediactrl;
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-weakref" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-weakref... $ECHO_C" >&6; }
+          # Check whether --enable-weakref was given.
+if test "${enable_weakref+set}" = set; then
+  enableval=$enable_weakref;
                           if test "$enableval" = yes; then
-                            wx_cv_use_mediactrl='wxUSE_MEDIACTRL=yes'
+                            wx_cv_use_weakref='wxUSE_WEAKREF=yes'
                           else
-                            wx_cv_use_mediactrl='wxUSE_MEDIACTRL=no'
+                            wx_cv_use_weakref='wxUSE_WEAKREF=no'
                           fi
 
 else
 
-                          wx_cv_use_mediactrl='wxUSE_MEDIACTRL=${'DEFAULT_wxUSE_MEDIACTRL":-$defaultval}"
+                          wx_cv_use_weakref='wxUSE_WEAKREF=${'DEFAULT_wxUSE_WEAKREF":-$defaultval}"
 
 fi
 
 
-          eval "$wx_cv_use_mediactrl"
+          eval "$wx_cv_use_weakref"
 
           if test x"$enablestring" = xdisable; then
-            if test $wxUSE_MEDIACTRL = yes; then
+            if test $wxUSE_WEAKREF = yes; then
               result=no
             else
               result=yes
             fi
           else
-            result=$wxUSE_MEDIACTRL
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-gstreamer8" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-gstreamer8... $ECHO_C" >&6; }
-          # Check whether --enable-gstreamer8 was given.
-if test "${enable_gstreamer8+set}" = set; then
-  enableval=$enable_gstreamer8;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=yes'
-                          else
-                            wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=no'
-                          fi
-
-else
-
-                          wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=${'DEFAULT_wxUSE_GSTREAMER8":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_gstreamer8"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_GSTREAMER8 = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_GSTREAMER8
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-printfposparam" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-printfposparam... $ECHO_C" >&6; }
-          # Check whether --enable-printfposparam was given.
-if test "${enable_printfposparam+set}" = set; then
-  enableval=$enable_printfposparam;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_printfposparam='wxUSE_PRINTF_POS_PARAMS=yes'
-                          else
-                            wx_cv_use_printfposparam='wxUSE_PRINTF_POS_PARAMS=no'
-                          fi
-
-else
-
-                          wx_cv_use_printfposparam='wxUSE_PRINTF_POS_PARAMS=${'DEFAULT_wxUSE_PRINTF_POS_PARAMS":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_printfposparam"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_PRINTF_POS_PARAMS = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_PRINTF_POS_PARAMS
+            result=$wxUSE_WEAKREF
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -7897,50 +7898,6 @@ fi
             fi
           else
             result=$wxUSE_URL
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-variant" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-variant... $ECHO_C" >&6; }
-          # Check whether --enable-variant was given.
-if test "${enable_variant+set}" = set; then
-  enableval=$enable_variant;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_variant='wxUSE_VARIANT=yes'
-                          else
-                            wx_cv_use_variant='wxUSE_VARIANT=no'
-                          fi
-
-else
-
-                          wx_cv_use_variant='wxUSE_VARIANT=${'DEFAULT_wxUSE_VARIANT":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_variant"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_VARIANT = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_VARIANT
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -8667,138 +8624,6 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-printarch" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-printarch... $ECHO_C" >&6; }
-          # Check whether --enable-printarch was given.
-if test "${enable_printarch+set}" = set; then
-  enableval=$enable_printarch;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_printarch='wxUSE_PRINTING_ARCHITECTURE=yes'
-                          else
-                            wx_cv_use_printarch='wxUSE_PRINTING_ARCHITECTURE=no'
-                          fi
-
-else
-
-                          wx_cv_use_printarch='wxUSE_PRINTING_ARCHITECTURE=${'DEFAULT_wxUSE_PRINTING_ARCHITECTURE":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_printarch"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_PRINTING_ARCHITECTURE = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_PRINTING_ARCHITECTURE
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mdi" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-mdi... $ECHO_C" >&6; }
-          # Check whether --enable-mdi was given.
-if test "${enable_mdi+set}" = set; then
-  enableval=$enable_mdi;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_mdi='wxUSE_MDI=yes'
-                          else
-                            wx_cv_use_mdi='wxUSE_MDI=no'
-                          fi
-
-else
-
-                          wx_cv_use_mdi='wxUSE_MDI=${'DEFAULT_wxUSE_MDI":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_mdi"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_MDI = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_MDI
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mdidoc" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-mdidoc... $ECHO_C" >&6; }
-          # Check whether --enable-mdidoc was given.
-if test "${enable_mdidoc+set}" = set; then
-  enableval=$enable_mdidoc;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_mdidoc='wxUSE_MDI_ARCHITECTURE=yes'
-                          else
-                            wx_cv_use_mdidoc='wxUSE_MDI_ARCHITECTURE=no'
-                          fi
-
-else
-
-                          wx_cv_use_mdidoc='wxUSE_MDI_ARCHITECTURE=${'DEFAULT_wxUSE_MDI_ARCHITECTURE":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_mdidoc"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_MDI_ARCHITECTURE = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_MDI_ARCHITECTURE
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-loggui" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-loggui... $ECHO_C" >&6; }
           # Check whether --enable-loggui was given.
@@ -8915,6 +8740,182 @@ fi
             fi
           else
             result=$wxUSE_LOGDIALOG
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mdi" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-mdi... $ECHO_C" >&6; }
+          # Check whether --enable-mdi was given.
+if test "${enable_mdi+set}" = set; then
+  enableval=$enable_mdi;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_mdi='wxUSE_MDI=yes'
+                          else
+                            wx_cv_use_mdi='wxUSE_MDI=no'
+                          fi
+
+else
+
+                          wx_cv_use_mdi='wxUSE_MDI=${'DEFAULT_wxUSE_MDI":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_mdi"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_MDI = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_MDI
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mdidoc" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-mdidoc... $ECHO_C" >&6; }
+          # Check whether --enable-mdidoc was given.
+if test "${enable_mdidoc+set}" = set; then
+  enableval=$enable_mdidoc;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_mdidoc='wxUSE_MDI_ARCHITECTURE=yes'
+                          else
+                            wx_cv_use_mdidoc='wxUSE_MDI_ARCHITECTURE=no'
+                          fi
+
+else
+
+                          wx_cv_use_mdidoc='wxUSE_MDI_ARCHITECTURE=${'DEFAULT_wxUSE_MDI_ARCHITECTURE":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_mdidoc"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_MDI_ARCHITECTURE = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_MDI_ARCHITECTURE
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mediactrl" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-mediactrl... $ECHO_C" >&6; }
+          # Check whether --enable-mediactrl was given.
+if test "${enable_mediactrl+set}" = set; then
+  enableval=$enable_mediactrl;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_mediactrl='wxUSE_MEDIACTRL=yes'
+                          else
+                            wx_cv_use_mediactrl='wxUSE_MEDIACTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_mediactrl='wxUSE_MEDIACTRL=${'DEFAULT_wxUSE_MEDIACTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_mediactrl"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_MEDIACTRL = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_MEDIACTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-gstreamer8" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-gstreamer8... $ECHO_C" >&6; }
+          # Check whether --enable-gstreamer8 was given.
+if test "${enable_gstreamer8+set}" = set; then
+  enableval=$enable_gstreamer8;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=yes'
+                          else
+                            wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=no'
+                          fi
+
+else
+
+                          wx_cv_use_gstreamer8='wxUSE_GSTREAMER8=${'DEFAULT_wxUSE_GSTREAMER8":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_gstreamer8"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_GSTREAMER8 = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_GSTREAMER8
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -9091,6 +9092,50 @@ fi
             fi
           else
             result=$wxUSE_POSTSCRIPT
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-printarch" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-printarch... $ECHO_C" >&6; }
+          # Check whether --enable-printarch was given.
+if test "${enable_printarch+set}" = set; then
+  enableval=$enable_printarch;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_printarch='wxUSE_PRINTING_ARCHITECTURE=yes'
+                          else
+                            wx_cv_use_printarch='wxUSE_PRINTING_ARCHITECTURE=no'
+                          fi
+
+else
+
+                          wx_cv_use_printarch='wxUSE_PRINTING_ARCHITECTURE=${'DEFAULT_wxUSE_PRINTING_ARCHITECTURE":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_printarch"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_PRINTING_ARCHITECTURE = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_PRINTING_ARCHITECTURE
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -44322,6 +44367,13 @@ fi
 if test "$wxUSE_VARIANT" = "yes"; then
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_VARIANT 1
+_ACEOF
+
+fi
+
+if test "$wxUSE_WEAKREF" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_WEAKREF 1
 _ACEOF
 
 fi

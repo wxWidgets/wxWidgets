@@ -706,7 +706,9 @@ WX_ARG_FEATURE(geometry,      [  --enable-geometry       use geometry class], wx
 WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wxUSE_LOG)
 WX_ARG_FEATURE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
 WX_ARG_FEATURE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
+WX_ARG_FEATURE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
 WX_ARG_FEATURE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
+WX_ARG_FEATURE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_FEATURE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths class], wxUSE_STDPATHS)
 WX_ARG_FEATURE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_FEATURE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
@@ -715,14 +717,12 @@ WX_ARG_FEATURE(tarstream,     [  --enable-tarstream      use wxTar streams], wxU
 WX_ARG_FEATURE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
 WX_ARG_FEATURE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
 WX_ARG_FEATURE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
-WX_ARG_FEATURE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
-WX_ARG_FEATURE(mediactrl,     [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
-WX_ARG_FEATURE(gstreamer8,    [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
-WX_ARG_FEATURE(printfposparam,[  --enable-printfposparam use wxVsnprintf() which supports positional parameters], wxUSE_PRINTF_POS_PARAMS)
+WX_ARG_FEATURE(variant,       [  --enable-variant        use wxVariant class], wxUSE_VARIANT)
+WX_ARG_FEATURE(weakref,       [  --enable-weakref        make wxEvtHandler trackable with wxWeakRef<>], wxUSE_WEAKREF)
 WX_ARG_FEATURE(zipstream,     [  --enable-zipstream      use wxZip streams], wxUSE_ZIPSTREAM)
 
+dnl URL-related classes
 WX_ARG_FEATURE(url,           [  --enable-url            use wxURL class], wxUSE_URL)
-WX_ARG_FEATURE(variant,       [  --enable-variant        use wxVariant class], wxUSE_VARIANT)
 WX_ARG_FEATURE(protocol,      [  --enable-protocol       use wxProtocol class], wxUSE_PROTOCOL)
 WX_ARG_FEATURE(protocol_http, [  --enable-protocol-http  HTTP support in wxProtocol], wxUSE_PROTOCOL_HTTP)
 WX_ARG_FEATURE(protocol_ftp,  [  --enable-protocol-ftp   FTP support in wxProtocol], wxUSE_PROTOCOL_FTP)
@@ -748,16 +748,18 @@ WX_ARG_FEATURE(xrc,         [  --enable-xrc            use XRC resources sub-lib
 WX_ARG_FEATURE(aui,         [  --enable-aui            use AUI docking library], wxUSE_AUI)
 WX_ARG_FEATURE(stc,         [  --enable-stc            use wxStyledTextCtrl library], wxUSE_STC)
 WX_ARG_FEATURE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
-WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
-WX_ARG_FEATURE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI)
-WX_ARG_FEATURE(mdidoc,      [  --enable-mdidoc         use docview architecture with MDI], wxUSE_MDI_ARCHITECTURE)
 WX_ARG_FEATURE(loggui,      [  --enable-loggui         use standard GUI logger], wxUSE_LOGGUI)
 WX_ARG_FEATURE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LOGWINDOW)
 WX_ARG_FEATURE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
+WX_ARG_FEATURE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI)
+WX_ARG_FEATURE(mdidoc,      [  --enable-mdidoc         use docview architecture with MDI], wxUSE_MDI_ARCHITECTURE)
+WX_ARG_FEATURE(mediactrl,   [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
+WX_ARG_FEATURE(gstreamer8,  [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
 WX_ARG_FEATURE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
 WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
 WX_ARG_FEATURE(graphics_ctx,[  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
+WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
 
 dnl ---------------------------------------------------------------------------
@@ -6050,6 +6052,10 @@ fi
 
 if test "$wxUSE_VARIANT" = "yes"; then
     AC_DEFINE(wxUSE_VARIANT)
+fi
+
+if test "$wxUSE_WEAKREF" = "yes"; then
+    AC_DEFINE(wxUSE_WEAKREF)
 fi
 
 if test "$wxUSE_FS_INET" = "yes"; then
