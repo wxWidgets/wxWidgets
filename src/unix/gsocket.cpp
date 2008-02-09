@@ -1198,11 +1198,16 @@ int GSocket::Read(char *buffer, int size)
     else
       ret = Recv_Dgram(buffer, size);
 
-    /* If recv returned zero, then the connection has been gracefully closed.
-     * Otherwise, recv has returned an error (-1), in which case we have lost the
-     * socket only if errno does _not_ indicate that there may be more data to read.
+    /*
+     * If recv returned zero for a TCP socket (if m_stream == NULL, it's an UDP
+     * socket and empty datagrams are possible), then the connection has been
+     * gracefully closed.
+     *
+     * Otherwise, recv has returned an error (-1), in which case we have lost
+     * the socket only if errno does _not_ indicate that there may be more data
+     * to read.
      */
-    if (ret == 0)
+    if ((ret == 0) && m_stream)
     {
       /* Make sure wxSOCKET_LOST event gets sent and shut down the socket */
       if (m_use_events)
@@ -1777,9 +1782,17 @@ void GSocket::Detected_Read()
     }
     else if (num == 0)
     {
-      /* graceful shutdown */
-      CALL_CALLBACK(this, GSOCK_LOST);
-      Shutdown();
+      if (m_stream)
+      {
+        /* graceful shutdown */
+        CALL_CALLBACK(this, GSOCK_LOST);
+        Shutdown();
+      }
+      else
+      {
+        /* Empty datagram received */
+        CALL_CALLBACK(this, GSOCK_INPUT);
+      }
     }
     else
     {
