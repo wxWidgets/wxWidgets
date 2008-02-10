@@ -119,40 +119,6 @@ static wxImage DrawDice(int size, unsigned num)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// MyApp: the application object
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_APP(MyApp)
-
-bool MyApp::OnInit()
-{
-    if ( !wxApp::OnInit() )
-        return false;
-
-    // Create the main window
-    new MyFrame();
-
-    return true;
-}
-
-int MyApp::OnExit()
-{
-    delete m_glContext;
-
-    return wxApp::OnExit();
-}
-
-TestGLContext& MyApp::GetContext(wxGLCanvas *canvas)
-{
-    if ( !m_glContext )
-        m_glContext = new TestGLContext(canvas);
-    else
-        m_glContext->SetCurrent(*canvas);
-
-    return *m_glContext;
-}
-
-// ----------------------------------------------------------------------------
 // TestGLContext
 // ----------------------------------------------------------------------------
 
@@ -167,7 +133,7 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas)
     glEnable(GL_LIGHT0);
     glEnable(GL_TEXTURE_2D);
 
-    // add slightly more light, the default lightning is rather dark
+    // add slightly more light, the default lighting is rather dark
     GLfloat ambient[] = { 0.5, 0.5, 0.5, 0.5 };
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 
@@ -272,19 +238,61 @@ void TestGLContext::DrawRotatedCube(float xangle, float yangle)
     CheckGLError();
 }
 
+
+// ----------------------------------------------------------------------------
+// MyApp: the application object
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_APP(MyApp)
+
+bool MyApp::OnInit()
+{
+    if ( !wxApp::OnInit() )
+        return false;
+
+    new MyFrame();
+
+    return true;
+}
+
+int MyApp::OnExit()
+{
+    delete m_glContext;
+
+    return wxApp::OnExit();
+}
+
+TestGLContext& MyApp::GetContext(wxGLCanvas *canvas)
+{
+    if ( !m_glContext )
+    {
+        // Create the OpenGL context for the first window which needs it:
+        // subsequently created windows will all share the same context.
+        m_glContext = new TestGLContext(canvas);
+    }
+
+    m_glContext->SetCurrent(*canvas);
+
+    return *m_glContext;
+}
+
 // ----------------------------------------------------------------------------
 // TestGLCanvas
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
-    EVT_SIZE(TestGLCanvas::OnSize)
     EVT_PAINT(TestGLCanvas::OnPaint)
-
     EVT_KEY_DOWN(TestGLCanvas::OnKeyDown)
 END_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent)
-            : wxGLCanvas(parent, wxID_ANY, NULL /* attribs */)
+    // With perspective OpenGL graphics, the wxFULL_REPAINT_ON_RESIZE style
+    // flag should always be set, because even making the canvas smaller should
+    // be followed by a paint event that updates the entire canvas with new
+    // viewport settings.
+    : wxGLCanvas(parent, wxID_ANY, NULL /* attribs */,
+                 wxDefaultPosition, wxDefaultSize,
+                 wxFULL_REPAINT_ON_RESIZE)
 {
     m_xangle =
     m_yangle = 30;
@@ -292,27 +300,22 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent)
 
 void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+    // This is required even though dc is not used otherwise.
     wxPaintDC dc(this);
 
+    // Set the OpenGL viewport according to the client size of this canvas.
+    // This is done here rather than in a wxSizeEvent handler because our
+    // OpenGL rendering context (and thus viewport setting) is used with
+    // multiple canvases: If we updated the viewport in the wxSizeEvent
+    // handler, changing the size of one canvas causes a viewport setting that
+    // is wrong when next another canvas is repainted.
+    const wxSize ClientSize = GetClientSize();
+
+    glViewport(0, 0, ClientSize.x, ClientSize.y);
+
+    // Render the graphics and swap the buffers.
     wxGetApp().GetContext(this).DrawRotatedCube(m_xangle, m_yangle);
-
     SwapBuffers();
-}
-
-void TestGLCanvas::OnSize(wxSizeEvent& event)
-{
-    // don't prevent default processing from taking place
-    event.Skip();
-
-    if ( !IsShownOnScreen() )
-        return;
-
-    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-    int w, h;
-    GetClientSize(&w, &h);
-
-    wxGetApp().GetContext(this);
-    glViewport(0, 0, w, h);
 }
 
 void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
@@ -354,6 +357,7 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
 
     Refresh(false);
 }
+
 
 // ----------------------------------------------------------------------------
 // MyFrame: main application window
@@ -400,6 +404,6 @@ void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnNewWindow( wxCommandEvent& WXUNUSED(event) )
 {
-    (void) new MyFrame();
+    new MyFrame();
 }
 

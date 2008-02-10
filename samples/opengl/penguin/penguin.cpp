@@ -94,8 +94,10 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     menuBar->Append(helpMenu, wxT("&Help"));
     SetMenuBar(menuBar);
 
+    Show(true);
+
     m_canvas = new TestGLCanvas(this, wxID_ANY, wxDefaultPosition,
-        wxSize(300, 300), wxSUNKEN_BORDER);
+        GetClientSize(), wxSUNKEN_BORDER);
 }
 
 // File|Open... command
@@ -139,10 +141,21 @@ BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_MOUSE_EVENTS(TestGLCanvas::OnMouse)
 END_EVENT_TABLE()
 
-TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
-    const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-    : wxGLCanvas(parent, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name)
+TestGLCanvas::TestGLCanvas(wxWindow *parent,
+                           wxWindowID id,
+                           const wxPoint& pos,
+                           const wxSize& size,
+                           long style,
+                           const wxString& name)
+    : wxGLCanvas(parent, id, NULL, pos, size,
+                 style | wxFULL_REPAINT_ON_RESIZE, name)
 {
+    // Explicitly create a new rendering context instance for this canvas.
+    m_glRC = new wxGLContext(this);
+
+    // Make the new context current (activate it for use) with this canvas.
+    SetCurrent(*m_glRC);
+
     m_gldata.initialized = false;
 
     // initialize view matrix
@@ -154,6 +167,7 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
 
 TestGLCanvas::~TestGLCanvas()
 {
+    delete m_glRC;
 }
 
 void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
@@ -161,11 +175,7 @@ void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
     // must always be here
     wxPaintDC dc(this);
 
-#ifndef __WXMOTIF__
-    if (!GetContext()) return;
-#endif
-
-    SetCurrent();
+    SetCurrent(*m_glRC);
 
     // Initialize OpenGL
     if (!m_gldata.initialized)
@@ -195,11 +205,11 @@ void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
     SwapBuffers();
 }
 
-void TestGLCanvas::OnSize(wxSizeEvent& event)
+void TestGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    // this is also necessary to update the context on some platforms
-    wxGLCanvas::OnSize(event);
-    // Reset the OpenGL view aspect
+    // Reset the OpenGL view aspect.
+    // This is OK only because there is only one canvas that uses the context.
+    // See the cube sample for that case that multiple canvases are made current with one context.
     ResetProjectionMode();
 }
 
@@ -293,18 +303,21 @@ void TestGLCanvas::InitGL()
 
 void TestGLCanvas::ResetProjectionMode()
 {
+    // This is normally only necessary if there is more than one wxGLCanvas
+    // or more than one wxGLContext in the application.
+    SetCurrent(*m_glRC);
+
     int w, h;
     GetClientSize(&w, &h);
-#ifndef __WXMOTIF__
-    if ( GetContext() )
-#endif
-    {
-        SetCurrent();
-        glViewport(0, 0, (GLint) w, (GLint) h);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective(45.0f, (GLfloat)w/h, 1.0, 100.0);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-    }
+
+    // It's up to the application code to update the OpenGL viewport settings.
+    // In order to avoid extensive context switching, consider doing this in
+    // OnPaint() rather than here, though.
+    glViewport(0, 0, (GLint) w, (GLint) h);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0f, (GLfloat)w/h, 1.0, 100.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }

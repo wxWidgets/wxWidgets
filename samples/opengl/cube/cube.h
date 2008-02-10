@@ -29,12 +29,13 @@ private:
 };
 
 // Define a new application type
-class MyApp: public wxApp
+class MyApp : public wxApp
 {
 public:
     MyApp() { m_glContext = NULL; }
 
-    // get the context we use creating it on demand (and set it as current)
+    // Returns the shared context used by all frames and sets it as current for
+    // the given canvas.
     TestGLContext& GetContext(wxGLCanvas *canvas);
 
     // virtual wxApp methods
@@ -47,7 +48,7 @@ private:
 };
 
 // Define a new frame type
-class MyFrame: public wxFrame
+class MyFrame : public wxFrame
 {
 public:
     MyFrame();
@@ -55,8 +56,6 @@ public:
 private:
     void OnClose(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
-    void OnDefRotateLeftKey(wxCommandEvent& event);
-    void OnDefRotateRightKey(wxCommandEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
@@ -68,7 +67,6 @@ public:
 
 private:
     void OnPaint(wxPaintEvent& event);
-    void OnSize(wxSizeEvent& event);
     void OnKeyDown(wxKeyEvent& event);
 
     // angles of rotation around x- and y- axis
@@ -79,4 +77,3 @@ private:
 };
 
 #endif // _WX_CUBE_H_
-

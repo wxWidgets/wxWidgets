@@ -33,6 +33,8 @@
     #include <GL/glu.h>
 #endif
 
+#include <sstream>
+
 #include "dxfrenderer.h"
 
 #include "wx/listimpl.cpp"
@@ -435,6 +437,22 @@ bool DXFRenderer::ParseTables(wxInputStream& stream)
     return false;
 }
 
+// This method is used instead of numStr.ToDouble(d) because the latter
+// (wxString::ToDouble()) takes the systems proper locale into account,
+// whereas the implementation below works with the default locale.
+// (Converting numbers that are formatted in the default locale can fail
+//  with system locales that use e.g. the comma as the decimal separator.)
+static double ToDouble(const wxString& numStr)
+{
+    double             d;
+    std::string        numStr_(numStr.c_str());
+    std::istringstream iss(numStr_);
+
+    iss >> d;
+
+    return d;
+}
+
 // parse entities section: save 3DFACE and LINE entities
 bool DXFRenderer::ParseEntities(wxInputStream& stream)
 {
@@ -490,8 +508,8 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
             state = 2;
         else if (state > 0)
         {
-            double d;
-            line2.ToDouble(&d);
+            const double d=ToDouble(line2);
+
             if (line1 == wxT("10"))
                 v[0].x = d;
             else if (line1 == wxT("20"))

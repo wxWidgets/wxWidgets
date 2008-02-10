@@ -31,6 +31,7 @@ extern "C"
 
 #include "dxfrenderer.h"
 
+
 // OpenGL view data
 struct GLData
 {
@@ -40,40 +41,40 @@ struct GLData
     float zoom;                 // field of view in degrees
 };
 
+
 // Define a new application type
-class MyApp: public wxApp
+class MyApp : public wxApp
 {
 public:
-    bool OnInit();
+    virtual bool OnInit();
 };
+
 
 // Define a new frame type
 class TestGLCanvas;
 
-class MyFrame: public wxFrame
+
+class MyFrame : public wxFrame
 {
 public:
     MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
-        const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
+            const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
 
     void OnMenuFileOpen(wxCommandEvent& event);
     void OnMenuFileExit(wxCommandEvent& event);
     void OnMenuHelpAbout(wxCommandEvent& event);
 
-#if wxUSE_GLCANVAS
-    void SetCanvas( TestGLCanvas *canvas ) { m_canvas = canvas; }
+    void SetCanvas(TestGLCanvas *canvas) { m_canvas = canvas; }
     TestGLCanvas *GetCanvas() { return m_canvas; }
 
 private:
     TestGLCanvas *m_canvas;
-#endif
 
     DECLARE_EVENT_TABLE()
 };
 
-#if wxUSE_GLCANVAS
 
-class TestGLCanvas: public wxGLCanvas
+class TestGLCanvas : public wxGLCanvas
 {
 public:
     TestGLCanvas(wxWindow *parent, wxWindowID id = wxID_ANY,
@@ -81,7 +82,7 @@ public:
         const wxSize& size = wxDefaultSize, long style = 0,
         const wxString& name = wxT("TestGLCanvas"));
 
-    ~TestGLCanvas();
+    virtual ~TestGLCanvas();
 
     void LoadDXF(const wxString& filename);
 
@@ -95,13 +96,12 @@ private:
     void InitGL();
     void ResetProjectionMode();
 
-    GLData m_gldata;
-    DXFRenderer m_renderer;
+    wxGLContext* m_glRC;
+    GLData       m_gldata;
+    DXFRenderer  m_renderer;
 
+    DECLARE_NO_COPY_CLASS(TestGLCanvas)
     DECLARE_EVENT_TABLE()
 };
 
-#endif // #if wxUSE_GLCANVAS
-
 #endif // #ifndef _WX_PENGUIN_H_
-
