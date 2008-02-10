@@ -2888,7 +2888,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
         userLocaleRefRaw = CFLocaleCreate
                            (
                                 kCFAllocatorDefault,
-                                wxCFStringRef(wxGetLocale()->GetCanonicalName())
+                                wxMacCFStringHolder(wxGetLocale()->GetCanonicalName())
                            );
     }
     else // no current locale, use the default one
@@ -2913,7 +2913,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             wxFAIL_MSG( "Unknown locale info" );
     }
 
-    wxCFStringRef
+    wxMacCFStringHolder
         str(CFStringCreateCopy(NULL, static_cast<CFStringRef>(cfstr)));
     return str.AsString();
 }
