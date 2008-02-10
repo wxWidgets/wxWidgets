@@ -65,8 +65,11 @@ void XLocaleTestCase::TestCtor()
     CPPUNIT_ASSERT( wxXLocale("C").IsOk() );
 #ifdef wxHAS_XLOCALE_SUPPORT
     CPPUNIT_ASSERT( wxXLocale(wxLANGUAGE_FRENCH).IsOk() );
-    CPPUNIT_ASSERT( wxXLocale("fr_FR").IsOk() );
+#ifdef __WXMSW__
     CPPUNIT_ASSERT( wxXLocale("french").IsOk() );
+#else
+    CPPUNIT_ASSERT( wxXLocale("fr_FR").IsOk() );
+#endif
 #endif
     CPPUNIT_ASSERT( !wxXLocale("bloordyblop").IsOk() );
 }
@@ -169,7 +172,9 @@ void XLocaleTestCase::TestCtypeFunctions()
     TestCtypeFunctionsWith(wxCLocale);
 
 #ifdef wxHAS_XLOCALE_SUPPORT
-    wxXLocale locFR("fr_FR");
+    wxXLocale locFR(wxLANGUAGE_FRENCH);
+    CPPUNIT_ASSERT( locFR.IsOk() ); // doesn't make sense to continue otherwise
+
     TestCtypeFunctionsWith(locFR);
 
     CPPUNIT_ASSERT( wxIsalpha_l('é', locFR) );

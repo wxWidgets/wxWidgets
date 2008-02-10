@@ -88,7 +88,11 @@ wxXLocale::wxXLocale(wxLanguage lang)
     }
     else
     {
+#ifdef __WXMSW__
+        Init(info->Description);
+#else
         Init(info->CanonicalName);
+#endif
     }
 }
 
