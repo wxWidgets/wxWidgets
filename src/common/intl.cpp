@@ -2650,7 +2650,22 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
-    wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
+    CFLocaleRef userLocaleRefRaw;
+    if ( wxGetLocale() )
+    {
+        userLocaleRefRaw = CFLocaleCreate
+                           (
+                                kCFAllocatorDefault,
+                                wxCFStringRef(wxGetLocale()->GetCanonicalName())
+                           );
+    }
+    else // no current locale, use the default one
+    {
+        userLocaleRefRaw = CFLocaleCopyCurrent();
+    }
+
+    wxCFRef<CFLocaleRef> userLocaleRef(userLocaleRefRaw);
+
     CFTypeRef cfstr;
     switch ( index )
     {
