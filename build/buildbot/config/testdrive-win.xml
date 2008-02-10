@@ -46,7 +46,7 @@
     <name>VC++ 8 IA64 Stable</name>
     <builddir>wd_msw_ia64_stable</builddir>
     <scheduler/>
-    <make>nmake -f makefile.vc USE_GUI=0</make>
+    <make>nmake -f makefile.vc</make>
 
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
