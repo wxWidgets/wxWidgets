@@ -148,20 +148,20 @@ void XLocaleTestCase::TestCtypeFunctionsWith(const wxXLocale& loc)
     CPPUNIT_ASSERT( !wxIsxdigit_l('z', loc) );
 
     // tolower
-    CPPUNIT_ASSERT_EQUAL( 'a', wxTolower_l('A', loc) );
-    CPPUNIT_ASSERT_EQUAL( 'a', wxTolower_l('a', loc) );
-    CPPUNIT_ASSERT_EQUAL( 'z', wxTolower_l('Z', loc) );
-    CPPUNIT_ASSERT_EQUAL( 'z', wxTolower_l('z', loc) );
-    CPPUNIT_ASSERT_EQUAL( '0', wxTolower_l('0', loc) );
-    CPPUNIT_ASSERT_EQUAL( '9', wxTolower_l('9', loc) );
+    CPPUNIT_ASSERT_EQUAL( 'a', (char)wxTolower_l('A', loc) );
+    CPPUNIT_ASSERT_EQUAL( 'a', (char)wxTolower_l('a', loc) );
+    CPPUNIT_ASSERT_EQUAL( 'z', (char)wxTolower_l('Z', loc) );
+    CPPUNIT_ASSERT_EQUAL( 'z', (char)wxTolower_l('z', loc) );
+    CPPUNIT_ASSERT_EQUAL( '0', (char)wxTolower_l('0', loc) );
+    CPPUNIT_ASSERT_EQUAL( '9', (char)wxTolower_l('9', loc) );
 
     // toupper
-    CPPUNIT_ASSERT_EQUAL( 'A', wxToupper_l('A', loc) );
-    CPPUNIT_ASSERT_EQUAL( 'A', wxToupper_l('a', loc) );
-    CPPUNIT_ASSERT_EQUAL( 'Z', wxToupper_l('Z', loc) );
-    CPPUNIT_ASSERT_EQUAL( 'Z', wxToupper_l('z', loc) );
-    CPPUNIT_ASSERT_EQUAL( '0', wxToupper_l('0', loc) );
-    CPPUNIT_ASSERT_EQUAL( '9', wxToupper_l('9', loc) );
+    CPPUNIT_ASSERT_EQUAL( 'A', (char)wxToupper_l('A', loc) );
+    CPPUNIT_ASSERT_EQUAL( 'A', (char)wxToupper_l('a', loc) );
+    CPPUNIT_ASSERT_EQUAL( 'Z', (char)wxToupper_l('Z', loc) );
+    CPPUNIT_ASSERT_EQUAL( 'Z', (char)wxToupper_l('z', loc) );
+    CPPUNIT_ASSERT_EQUAL( '0', (char)wxToupper_l('0', loc) );
+    CPPUNIT_ASSERT_EQUAL( '9', (char)wxToupper_l('9', loc) );
 }
 
 void XLocaleTestCase::TestCtypeFunctions()
