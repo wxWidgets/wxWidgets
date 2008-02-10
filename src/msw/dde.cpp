@@ -636,16 +636,16 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
 
     DWORD result;
     bool ok = DdeClientTransaction(realData,
-                                    realSize,
-                                    GetHConv(),
-                                    NULL,
-                                    // MSDN: if the transaction specified by
-                                    // the wType parameter does not pass data
-                                    // or is XTYP_EXECUTE, wFmt should be zero.
-                                    0,
-                                    XTYP_EXECUTE,
-                                    DDE_TIMEOUT,
-                                    &result) != 0;
+                                   realSize*sizeof(wxChar),
+                                   GetHConv(),
+                                   NULL,
+                                   // MSDN: if the transaction specified by
+                                   // the wType parameter does not pass data
+                                   // or is XTYP_EXECUTE, wFmt should be zero.
+                                   0,
+                                   XTYP_EXECUTE,
+                                   DDE_TIMEOUT,
+                                   &result) != 0;
 
     if ( !ok )
     {
