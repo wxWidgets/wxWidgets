@@ -268,7 +268,6 @@ private:
 
     #endif // wxUSE_UNICDE (ctype functions)
 #else // !wxHAS_XLOCALE_SUPPORT
-
     // ctype functions
     int WXDLLIMPEXP_BASE wxIsalnum_l(const wxUniChar& c, const wxXLocale& loc);
     int WXDLLIMPEXP_BASE wxIsalpha_l(const wxUniChar& c, const wxXLocale& loc);
@@ -281,10 +280,8 @@ private:
     int WXDLLIMPEXP_BASE wxIsspace_l(const wxUniChar& c, const wxXLocale& loc);
     int WXDLLIMPEXP_BASE wxIsupper_l(const wxUniChar& c, const wxXLocale& loc);
     int WXDLLIMPEXP_BASE wxIsxdigit_l(const wxUniChar& c, const wxXLocale& loc);
-    wxUniChar WXDLLIMPEXP_BASE wxTolower_l(const wxUniChar& c, const wxXLocale& loc);
-    wxUniChar WXDLLIMPEXP_BASE wxToupper_l(const wxUniChar& c, const wxXLocale& loc);
-
-
+    int WXDLLIMPEXP_BASE wxTolower_l(const wxUniChar& c, const wxXLocale& loc);
+    int WXDLLIMPEXP_BASE wxToupper_l(const wxUniChar& c, const wxXLocale& loc);
 #endif // wxHAS_XLOCALE_SUPPORT/!wxHAS_XLOCALE_SUPPORT
 
 #endif // wxUSE_XLOCALE

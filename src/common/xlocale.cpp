@@ -199,7 +199,7 @@ GEN_ISFUNC(wxIsspace_l, CTYPE_SPACE)
 GEN_ISFUNC(wxIsupper_l, CTYPE_UPPER)
 GEN_ISFUNC(wxIsxdigit_l, CTYPE_XDIGIT)
 
-wxUniChar wxTolower_l(const wxUniChar& c, const wxXLocale& loc)
+int wxTolower_l(const wxUniChar& c, const wxXLocale& loc)
 {
     wxCHECK(loc.IsOk(), false);
 
@@ -211,7 +211,7 @@ wxUniChar wxTolower_l(const wxUniChar& c, const wxXLocale& loc)
     return c;
 }
 
-wxUniChar wxToupper_l(const wxUniChar& c, const wxXLocale& loc)
+int wxToupper_l(const wxUniChar& c, const wxXLocale& loc)
 {
     wxCHECK(loc.IsOk(), false);
 
