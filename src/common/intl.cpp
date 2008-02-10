@@ -2910,7 +2910,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             break;
 
         default:
-            wxFAIL_MSG( "Unknown locale info" );
+            wxFAIL_MSG( _T("Unknown locale info") );
     }
 
     wxMacCFStringHolder
