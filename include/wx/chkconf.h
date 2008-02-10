@@ -121,6 +121,14 @@
 #   endif
 #endif /* !defined(wxUSE_DYNAMIC_LOADER) */
 
+#ifndef wxUSE_INTL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_INTL must be defined."
+#   else
+#       define wxUSE_INTL 0
+#   endif
+#endif /* !defined(wxUSE_INTL) */
+
 #ifndef wxUSE_LOG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_LOG must be defined."
@@ -298,6 +306,14 @@
 #       define wxUSE_WEAKREF 0
 #   endif
 #endif /* wxUSE_WEAKREF */
+
+#ifndef wxUSE_XLOCALE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_XLOCALE must be defined."
+#   else
+#       define wxUSE_XLOCALE 0
+#   endif
+#endif /* !defined(wxUSE_XLOCALE) */
 
 /*
    Section 1b: all these tests are for GUI only.
@@ -1028,7 +1044,11 @@
 #  include "wx/x11/chkconf.h"
 #endif
 
-#ifdef __UNIX__
+/*
+    __UNIX__ is also defined under Cygwin but we shouldn't perform these checks
+    there if we're building wxMSW.
+ */
+#if defined(__UNIX__) && !defined(__WXMSW__)
 #   include "wx/unix/chkconf.h"
 #endif
 
