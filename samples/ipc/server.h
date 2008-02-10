@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "connection.h"
+
 #define ID_START         10000
 #define ID_DISCONNECT    10001
 #define ID_ADVISE         10002
@@ -17,7 +19,6 @@
 
 // Define a new application
 class MyServer;
-class MyConnection;
 class MyFrame;
 
 class MyApp : public wxApp
@@ -63,12 +64,9 @@ protected:
     DECLARE_EVENT_TABLE()
 };
 
-class MyConnection : public wxConnection
+class MyConnection : public MyConnectionBase
 {
 public:
-    MyConnection();
-    ~MyConnection();
-
     virtual bool OnExecute(const wxString& topic, const void *data, size_t size, wxIPCFormat format);
     virtual const void *OnRequest(const wxString& topic, const wxString& item, size_t *size, wxIPCFormat format);
     virtual bool OnPoke(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
@@ -76,10 +74,9 @@ public:
     virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
     virtual bool DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format);
     virtual bool OnDisconnect();
-protected:
-    void Log(const wxString& command, const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
-public:
+
     wxString        m_sAdvise;
+
 protected:
     wxString        m_sRequestDate;
     char            m_achRequestBytes[3];

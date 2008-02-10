@@ -33,6 +33,8 @@
 // we're using TCP/IP or real DDE.
 #include "ipcsetup.h"
 
+#include "connection.h"
+
 #include "wx/timer.h"
 #include "wx/datetime.h"
 
@@ -42,7 +44,6 @@
 
 // Define a new application
 class MyServer;
-class MyConnection;
 
 class MyApp : public wxApp
 {
@@ -56,12 +57,9 @@ protected:
 
 DECLARE_APP(MyApp)
 
-class MyConnection : public wxConnection, public wxTimer
+class MyConnection : public MyConnectionBase, public wxTimer
 {
 public:
-    MyConnection();
-    virtual ~MyConnection();
-
     virtual bool Disconnect() { return wxConnection::Disconnect(); }
     virtual bool OnExecute(const wxString& topic, const void *data, size_t size, wxIPCFormat format);
     virtual const void *OnRequest(const wxString& topic, const wxString& item, size_t *size, wxIPCFormat format);
@@ -72,10 +70,6 @@ public:
     virtual bool OnDisconnect();
     virtual void Notify();
 
-protected:
-    void Log(const wxString& command, const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
-
-public:
     wxString        m_sAdvise;
 
 protected:
@@ -182,14 +176,6 @@ void MyServer::Disconnect()
 // MyConnection
 // ----------------------------------------------------------------------------
 
-MyConnection::MyConnection()
-{
-}
-
-MyConnection::~MyConnection()
-{
-}
-
 bool MyConnection::OnExecute(const wxString& topic,
     const void *data, size_t size, wxIPCFormat format)
 {
@@ -272,47 +258,6 @@ void MyConnection::Notify()
         Advise(m_sAdvise, bytes, 3, wxIPC_PRIVATE);
         // this works, but the log treats it as a string now
 //        m_connection->Advise(m_connection->m_sAdvise, bytes, 3, wxIPC_TEXT );
-    }
-}
-
-void MyConnection::Log(const wxString& command, const wxString& topic,
-    const wxString& item, const void *data, size_t size, wxIPCFormat format)
-{
-    wxString s;
-    if (topic.IsEmpty() && item.IsEmpty())
-        s.Printf(_T("%s("), command.c_str());
-    else if (topic.IsEmpty())
-        s.Printf(_T("%s(\"%s\","), command.c_str(), item.c_str());
-    else if (item.IsEmpty())
-        s.Printf(_T("%s(\"%s\","), command.c_str(), topic.c_str());
-    else
-        s.Printf(_T("%s(\"%s\",\"%s\","), command.c_str(), topic.c_str(), item.c_str());
-
-    switch (format)
-    {
-      case wxIPC_TEXT:
-      case wxIPC_UTF8TEXT:
-#if !wxUSE_UNICODE || wxUSE_UNICODE_UTF8
-        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), data, size);
-#else
-        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), wxConvUTF8.cMB2WC((const char*)data), size);
-#endif
-        break;
-      case wxIPC_PRIVATE:
-        if (size == 3)
-        {
-            char *bytes = (char *)data;
-            wxLogMessage(_T("%s'%c%c%c',%d)"), s.c_str(), bytes[0], bytes[1], bytes[2], size);
-        }
-        else
-            wxLogMessage(_T("%s...,%d)"), s.c_str(), size);
-        break;
-      case wxIPC_INVALID:
-        wxLogMessage(_T("%s[invalid data],%d)"), s.c_str(), size);
-        break;
-      default:
-        wxLogMessage(_T("%s[unknown data],%d)"), s.c_str(), size);
-        break;
     }
 }
 

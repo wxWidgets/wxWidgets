@@ -33,6 +33,8 @@
 // we're using TCP/IP or real DDE.
 #include "ipcsetup.h"
 
+#include "connection.h"
+
 #include "wx/timer.h"
 #include "wx/datetime.h"
 
@@ -43,7 +45,6 @@
 
 // Define a new application
 class MyClient;
-class MyConnection;
 
 class MyApp: public wxApp
 {
@@ -55,20 +56,14 @@ protected:
     MyClient         *m_client;
 };
 
-class MyConnection: public wxConnection
+class MyConnection : public MyConnectionBase
 {
 public:
-    MyConnection();
-    virtual ~MyConnection();
     virtual bool DoExecute(const void *data, size_t size, wxIPCFormat format);
     virtual const void *Request(const wxString& item, size_t *size = NULL, wxIPCFormat format = wxIPC_TEXT);
     virtual bool DoPoke(const wxString& item, const void* data, size_t size, wxIPCFormat format);
     virtual bool OnAdvise(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
     virtual bool OnDisconnect();
-
-protected:
-    void Log(const wxString& command, const wxString& topic,
-        const wxString& item, const void *data, size_t size, wxIPCFormat format);
 };
 
 class MyClient: public wxClient, public wxTimer
@@ -194,12 +189,11 @@ void MyClient::Notify()
             wxString s = _T("Date");
             m_connection->Execute(s);
             m_connection->Execute((const char *)s.c_str(), s.length() + 1);
-#if wxUSE_DDE_FOR_IPC
-            wxLogMessage(_T("DDE Execute can only be used to send text strings, not arbitrary data.\nThe type argument will be ignored, text truncated, converted to Unicode and null terminated."));
-#endif
             char bytes[3];
-            bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
-            m_connection->Execute(bytes, 3, wxIPC_PRIVATE);
+            bytes[0] = '1';
+            bytes[1] = '2';
+            bytes[2] = '3';
+            m_connection->Execute(bytes, WXSIZEOF(bytes));
             break;
         }
         case 3:
@@ -219,55 +213,6 @@ void MyClient::Notify()
 // ----------------------------------------------------------------------------
 // MyConnection
 // ----------------------------------------------------------------------------
-
-MyConnection::MyConnection()
-{
-}
-
-MyConnection::~MyConnection()
-{
-}
-
-void MyConnection::Log(const wxString& command, const wxString& topic,
-    const wxString& item, const void *data, size_t size, wxIPCFormat format)
-{
-    wxString s;
-    if (topic.IsEmpty() && item.IsEmpty())
-        s.Printf(_T("%s("), command.c_str());
-    else if (topic.IsEmpty())
-        s.Printf(_T("%s(item=\"%s\","), command.c_str(), item.c_str());
-    else if (item.IsEmpty())
-        s.Printf(_T("%s(topic=\"%s\","), command.c_str(), topic.c_str());
-    else
-        s.Printf(_T("%s(topic=\"%s\",item=\"%s\","), command.c_str(), topic.c_str(), item.c_str());
-
-    switch (format)
-    {
-      case wxIPC_TEXT:
-      case wxIPC_UTF8TEXT:
-#if !wxUSE_UNICODE || wxUSE_UNICODE_UTF8
-        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), data, size);
-#else
-        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), wxConvUTF8.cMB2WC((const char*)data), size);
-#endif
-        break;
-      case wxIPC_PRIVATE:
-        if (size == 3)
-        {
-            char *bytes = (char *)data;
-            wxLogMessage(_T("%s'%c%c%c',%d)"), s.c_str(), bytes[0], bytes[1], bytes[2], size);
-        }
-        else
-            wxLogMessage(_T("%s...,%d)"), s.c_str(), size);
-        break;
-      case wxIPC_INVALID:
-        wxLogMessage(_T("%s[invalid data],%d)"), s.c_str(), size);
-        break;
-      default:
-        wxLogMessage(_T("%s[unknown data],%d)"), s.c_str(), size);
-        break;
-    }
-}
 
 bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, const void *data,
     size_t size, wxIPCFormat format)

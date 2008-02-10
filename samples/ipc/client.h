@@ -9,6 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#include "connection.h"
+
 #define ID_START         10000
 #define ID_DISCONNECT    10001
 #define ID_STARTADVISE    10002
@@ -23,7 +25,6 @@
 
 // Define a new application
 class MyClient;
-class MyConnection;
 class MyFrame;
 
 class MyApp: public wxApp
@@ -78,7 +79,7 @@ protected:
     DECLARE_EVENT_TABLE()
 };
 
-class MyConnection: public wxConnection
+class MyConnection : public MyConnectionBase
 {
 public:
     virtual bool DoExecute(const void *data, size_t size, wxIPCFormat format);
@@ -86,9 +87,6 @@ public:
     virtual bool DoPoke(const wxString& item, const void* data, size_t size, wxIPCFormat format);
     virtual bool OnAdvise(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
     virtual bool OnDisconnect();
-protected:
-    void Log(const wxString& command, const wxString& topic,
-        const wxString& item, const void *data, size_t size, wxIPCFormat format);
 };
 
 class MyClient: public wxClient

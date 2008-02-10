@@ -304,15 +304,6 @@ void MyServer::Advise()
 // MyConnection
 // ----------------------------------------------------------------------------
 
-MyConnection::MyConnection()
-            : wxConnection()
-{
-}
-
-MyConnection::~MyConnection()
-{
-}
-
 bool MyConnection::OnExecute(const wxString& topic,
     const void *data, size_t size, wxIPCFormat format)
 {
@@ -376,47 +367,6 @@ bool MyConnection::OnStopAdvise(const wxString& topic,
     m_sAdvise.Empty();
     wxGetApp().GetFrame()->Enable();
     return true;
-}
-
-void MyConnection::Log(const wxString& command, const wxString& topic,
-    const wxString& item, const void *data, size_t size, wxIPCFormat format)
-{
-    wxString s;
-    if (topic.IsEmpty() && item.IsEmpty())
-        s.Printf(_T("%s("), command.c_str());
-    else if (topic.IsEmpty())
-        s.Printf(_T("%s(\"%s\","), command.c_str(), item.c_str());
-    else if (item.IsEmpty())
-        s.Printf(_T("%s(\"%s\","), command.c_str(), topic.c_str());
-    else
-        s.Printf(_T("%s(\"%s\",\"%s\","), command.c_str(), topic.c_str(), item.c_str());
-
-    switch (format)
-    {
-      case wxIPC_TEXT:
-      case wxIPC_UTF8TEXT:
-#if !wxUSE_UNICODE || wxUSE_UNICODE_UTF8
-        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), data, size);
-#else
-        wxLogMessage(_T("%s\"%s\",%d)"), s.c_str(), wxConvUTF8.cMB2WC((const char*)data), size);
-#endif
-        break;
-      case wxIPC_PRIVATE:
-        if (size == 3)
-        {
-            char *bytes = (char *)data;
-            wxLogMessage(_T("%s'%c%c%c',%d)"), s.c_str(), bytes[0], bytes[1], bytes[2], size);
-        }
-        else
-            wxLogMessage(_T("%s...,%d)"), s.c_str(), size);
-        break;
-      case wxIPC_INVALID:
-        wxLogMessage(_T("%s[invalid data],%d)"), s.c_str(), size);
-        break;
-      default:
-        wxLogMessage(_T("%s[unknown data],%d)"), s.c_str(), size);
-        break;
-    }
 }
 
 bool MyConnection::DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format)
