@@ -62,6 +62,24 @@ PREP="$WORKDIR/PREP"
 STDERR="$WORKDIR/STDERR"
 ERR=0
 
+# Filter to show lines of genertated XSLT when they are mentioned.
+showxslt() {
+    awk '{
+            print;
+            if (sub(/.*generated XSLT line */, "") && sub(/[^0-9].*/, ""))
+            {
+                system("sed -ne "$0"p '$XSLT'");
+            }
+         }'
+}
+
+# Test it works as old version of awk don't have sub or system functions.
+if showxslt </dev/null 2>/dev/null; then
+    SHOWXSLT=showxslt
+else
+    SHOWXSLT=cat
+fi
+
 # Change the names of the temporary files in an error message to something
 # to something more informative
 errout()
@@ -71,14 +89,7 @@ errout()
     if [ -s "$STDERR" ]; then
         sed "s|file ${WORKPAT}|${WORKPAT}|g;\
              s|${WORKPAT}/XSLT|generated XSLT|g;\
-             s|${WORKPAT}/PREP|$NAME (preprocessed)|g" "$STDERR" |
-        awk '{
-                print;
-                if (sub(/.*generated XSLT line */, "") && sub(/[^0-9].*/, ""))
-                {
-                    system("sed -ne "$0"p '$XSLT'");
-                }
-             }'
+             s|${WORKPAT}/PREP|$NAME (preprocessed)|g" "$STDERR" | $SHOWXSLT
     fi
 }
 
