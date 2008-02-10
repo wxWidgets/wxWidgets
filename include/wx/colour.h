@@ -58,7 +58,11 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLEXPORT)
 //               code redundancy in all native wxColour implementations
 //-----------------------------------------------------------------------------
 
-#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXPM__ )
+/*  Transition from wxGDIObject to wxObject is incomplete.  If your port does
+    not need the wxGDIObject machinery to handle colors, please add it to the
+    list of ports which do not need it.
+ */
+#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXPM__ ) || defined( __WXCOCOA__ )
 #define wxCOLOUR_IS_GDIOBJECT 0
 #else
 #define wxCOLOUR_IS_GDIOBJECT 1
