@@ -198,31 +198,31 @@ private:
     #define wxCRT_Toupper_lA wxXLOCALE_IDENT(toupper_l)
 
     inline int wxIsalnum_l(char c, const wxXLocale& loc)
-        { return wxCRT_Isalnum_lA(c, loc.Get()); }
+        { return wxCRT_Isalnum_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIsalpha_l(char c, const wxXLocale& loc)
-        { return wxCRT_Isalpha_lA(c, loc.Get()); }
+        { return wxCRT_Isalpha_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIscntrl_l(char c, const wxXLocale& loc)
-        { return wxCRT_Iscntrl_lA(c, loc.Get()); }
+        { return wxCRT_Iscntrl_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIsdigit_l(char c, const wxXLocale& loc)
-        { return wxCRT_Isdigit_lA(c, loc.Get()); }
+        { return wxCRT_Isdigit_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIsgraph_l(char c, const wxXLocale& loc)
-        { return wxCRT_Isgraph_lA(c, loc.Get()); }
+        { return wxCRT_Isgraph_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIslower_l(char c, const wxXLocale& loc)
-        { return wxCRT_Islower_lA(c, loc.Get()); }
+        { return wxCRT_Islower_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIsprint_l(char c, const wxXLocale& loc)
-        { return wxCRT_Isprint_lA(c, loc.Get()); }
+        { return wxCRT_Isprint_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIspunct_l(char c, const wxXLocale& loc)
-        { return wxCRT_Ispunct_lA(c, loc.Get()); }
+        { return wxCRT_Ispunct_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIsspace_l(char c, const wxXLocale& loc)
-        { return wxCRT_Isspace_lA(c, loc.Get()); }
+        { return wxCRT_Isspace_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIsupper_l(char c, const wxXLocale& loc)
-        { return wxCRT_Isupper_lA(c, loc.Get()); }
+        { return wxCRT_Isupper_lA(wx_static_cast(unsigned char, c), loc.Get()); }
     inline int wxIsxdigit_l(char c, const wxXLocale& loc)
-        { return wxCRT_Isxdigit_lA(c, loc.Get()); }
-    inline char wxTolower_l(char c, const wxXLocale& loc)
-        { return wxCRT_Tolower_lA(c, loc.Get()); }
-    inline char wxToupper_l(char c, const wxXLocale& loc)
-        { return wxCRT_Toupper_lA(c, loc.Get()); }
+        { return wxCRT_Isxdigit_lA(wx_static_cast(unsigned char, c), loc.Get()); }
+    inline int wxTolower_l(char c, const wxXLocale& loc)
+        { return wxCRT_Tolower_lA(wx_static_cast(unsigned char, c), loc.Get()); }
+    inline int wxToupper_l(char c, const wxXLocale& loc)
+        { return wxCRT_Toupper_lA(wx_static_cast(unsigned char, c), loc.Get()); }
 
     #if wxUSE_UNICODE
         #define wxCRT_Isalnum_lW wxXLOCALE_IDENT(iswalnum_l)
