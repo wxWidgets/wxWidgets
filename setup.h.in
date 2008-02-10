@@ -231,6 +231,8 @@
 
 #define wxUSE_INTL          0
 
+#define wxUSE_XLOCALE       0
+
 #define wxUSE_DATETIME      0
 
 #define wxUSE_TIMER         0
@@ -1107,6 +1109,9 @@
 
 /* Define if getgrgid_r is available. */
 #undef HAVE_GETGRGID_R
+
+/* Define if locale_t is available */
+#undef HAVE_LOCALE_T
 
 /* -------------------------------------------------------------------------
    Win32 adjustments section

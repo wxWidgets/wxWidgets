@@ -664,6 +664,7 @@ dnl optional non GUI features
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_FEATURE(intl,          [  --enable-intl           use internationalization system], wxUSE_INTL)
+WX_ARG_FEATURE(xlocale,       [  --enable-xlocale        use x-locale support (requires wxLocale)], wxUSE_XLOCALE)
 WX_ARG_FEATURE(config,        [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
 
 WX_ARG_FEATURE(protocols,     [  --enable-protocols      use wxProtocol and derived classes], wxUSE_PROTOCOL)
@@ -5557,6 +5558,13 @@ if test "$wxUSE_INTL" = "yes" ; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS internat"
     GUIDIST="$GUIDIST INTL_DIST"
   fi
+fi
+
+if test "$wxUSE_XLOCALE" == "yes" ; then
+    AC_DEFINE(wxUSE_XLOCALE)
+    AC_CHECK_TYPES(locale_t,,,
+                   [#include <xlocale.h>
+                    #include <locale.h>])
 fi
 
 if test "$wxUSE_LOG" = "yes"; then

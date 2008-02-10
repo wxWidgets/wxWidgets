@@ -98,7 +98,8 @@ TEST_OBJECTS =  \
 	test_uris.o \
 	test_vectors.o \
 	test_evtconnection.o \
-	test_weakref.o
+	test_weakref.o \
+	test_xlocale.o
 TEST_ODEP =  $(___pch_testprec_test_testprec_h_gch___depname)
 TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -464,6 +465,9 @@ test_evtconnection.o: $(srcdir)/weakref/evtconnection.cpp $(TEST_ODEP)
 
 test_weakref.o: $(srcdir)/weakref/weakref.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/weakref/weakref.cpp
+
+test_xlocale.o: $(srcdir)/xlocale/xlocale.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/xlocale/xlocale.cpp
 
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include

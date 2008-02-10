@@ -427,6 +427,7 @@ ALL_BASE_HEADERS =  \
 	wx/wxcrtbase.h \
 	wx/wxcrtvararg.h \
 	wx/wxprec.h \
+	wx/xlocale.h \
 	wx/xti.h \
 	wx/xtistrm.h \
 	wx/zipstrm.h \
@@ -576,6 +577,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/wxcrtbase.h \
 	wx/wxcrtvararg.h \
 	wx/wxprec.h \
+	wx/xlocale.h \
 	wx/xti.h \
 	wx/xtistrm.h \
 	wx/zipstrm.h \
@@ -718,6 +720,7 @@ ALL_BASE_SOURCES =  \
 	src/common/wfstream.cpp \
 	src/common/wxcrt.cpp \
 	src/common/wxprintf.cpp \
+	src/common/xlocale.cpp \
 	src/common/xti.cpp \
 	src/common/xtistrm.cpp \
 	src/common/zipstrm.cpp \
@@ -902,6 +905,7 @@ MONODLL_OBJECTS =  \
 	monodll_wfstream.o \
 	monodll_wxcrt.o \
 	monodll_wxprintf.o \
+	monodll_xlocale.o \
 	monodll_xti.o \
 	monodll_xtistrm.o \
 	monodll_zipstrm.o \
@@ -1016,6 +1020,7 @@ MONOLIB_OBJECTS =  \
 	monolib_wfstream.o \
 	monolib_wxcrt.o \
 	monolib_wxprintf.o \
+	monolib_xlocale.o \
 	monolib_xti.o \
 	monolib_xtistrm.o \
 	monolib_zipstrm.o \
@@ -1128,6 +1133,7 @@ BASEDLL_OBJECTS =  \
 	basedll_wfstream.o \
 	basedll_wxcrt.o \
 	basedll_wxprintf.o \
+	basedll_xlocale.o \
 	basedll_xti.o \
 	basedll_xtistrm.o \
 	basedll_zipstrm.o \
@@ -1223,6 +1229,7 @@ BASELIB_OBJECTS =  \
 	baselib_wfstream.o \
 	baselib_wxcrt.o \
 	baselib_wxprintf.o \
+	baselib_xlocale.o \
 	baselib_xti.o \
 	baselib_xtistrm.o \
 	baselib_zipstrm.o \
@@ -13778,6 +13785,9 @@ monodll_wxcrt.o: $(srcdir)/src/common/wxcrt.cpp $(MONODLL_ODEP)
 monodll_wxprintf.o: $(srcdir)/src/common/wxprintf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/wxprintf.cpp
 
+monodll_xlocale.o: $(srcdir)/src/common/xlocale.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/xlocale.cpp
+
 monodll_xti.o: $(srcdir)/src/common/xti.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/xti.cpp
 
@@ -18280,6 +18290,9 @@ monolib_wxcrt.o: $(srcdir)/src/common/wxcrt.cpp $(MONOLIB_ODEP)
 
 monolib_wxprintf.o: $(srcdir)/src/common/wxprintf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/wxprintf.cpp
+
+monolib_xlocale.o: $(srcdir)/src/common/xlocale.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/xlocale.cpp
 
 monolib_xti.o: $(srcdir)/src/common/xti.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/xti.cpp
@@ -22784,6 +22797,9 @@ basedll_wxcrt.o: $(srcdir)/src/common/wxcrt.cpp $(BASEDLL_ODEP)
 basedll_wxprintf.o: $(srcdir)/src/common/wxprintf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/wxprintf.cpp
 
+basedll_xlocale.o: $(srcdir)/src/common/xlocale.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/xlocale.cpp
+
 basedll_xti.o: $(srcdir)/src/common/xti.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/xti.cpp
 
@@ -23590,6 +23606,9 @@ baselib_wxcrt.o: $(srcdir)/src/common/wxcrt.cpp $(BASELIB_ODEP)
 
 baselib_wxprintf.o: $(srcdir)/src/common/wxprintf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/wxprintf.cpp
+
+baselib_xlocale.o: $(srcdir)/src/common/xlocale.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/xlocale.cpp
 
 baselib_xti.o: $(srcdir)/src/common/xti.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/xti.cpp

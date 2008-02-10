@@ -377,6 +377,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_wfstream.obj \
 	$(OBJS)\monodll_wxcrt.obj \
 	$(OBJS)\monodll_wxprintf.obj \
+	$(OBJS)\monodll_xlocale.obj \
 	$(OBJS)\monodll_xti.obj \
 	$(OBJS)\monodll_xtistrm.obj \
 	$(OBJS)\monodll_zipstrm.obj \
@@ -514,6 +515,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_wfstream.obj \
 	$(OBJS)\monolib_wxcrt.obj \
 	$(OBJS)\monolib_wxprintf.obj \
+	$(OBJS)\monolib_xlocale.obj \
 	$(OBJS)\monolib_xti.obj \
 	$(OBJS)\monolib_xtistrm.obj \
 	$(OBJS)\monolib_zipstrm.obj \
@@ -648,6 +650,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_wfstream.obj \
 	$(OBJS)\basedll_wxcrt.obj \
 	$(OBJS)\basedll_wxprintf.obj \
+	$(OBJS)\basedll_xlocale.obj \
 	$(OBJS)\basedll_xti.obj \
 	$(OBJS)\basedll_xtistrm.obj \
 	$(OBJS)\basedll_zipstrm.obj \
@@ -766,6 +769,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_wfstream.obj \
 	$(OBJS)\baselib_wxcrt.obj \
 	$(OBJS)\baselib_wxprintf.obj \
+	$(OBJS)\baselib_xlocale.obj \
 	$(OBJS)\baselib_xti.obj \
 	$(OBJS)\baselib_xtistrm.obj \
 	$(OBJS)\baselib_zipstrm.obj \
@@ -5387,6 +5391,9 @@ $(OBJS)\monodll_wxcrt.obj: ..\..\src\common\wxcrt.cpp
 $(OBJS)\monodll_wxprintf.obj: ..\..\src\common\wxprintf.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\wxprintf.cpp
 
+$(OBJS)\monodll_xlocale.obj: ..\..\src\common\xlocale.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\xlocale.cpp
+
 $(OBJS)\monodll_xti.obj: ..\..\src\common\xti.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\xti.cpp
 
@@ -7489,6 +7496,9 @@ $(OBJS)\monolib_wxcrt.obj: ..\..\src\common\wxcrt.cpp
 
 $(OBJS)\monolib_wxprintf.obj: ..\..\src\common\wxprintf.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\wxprintf.cpp
+
+$(OBJS)\monolib_xlocale.obj: ..\..\src\common\xlocale.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\xlocale.cpp
 
 $(OBJS)\monolib_xti.obj: ..\..\src\common\xti.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\xti.cpp
@@ -9593,6 +9603,9 @@ $(OBJS)\basedll_wxcrt.obj: ..\..\src\common\wxcrt.cpp
 $(OBJS)\basedll_wxprintf.obj: ..\..\src\common\wxprintf.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\wxprintf.cpp
 
+$(OBJS)\basedll_xlocale.obj: ..\..\src\common\xlocale.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\xlocale.cpp
+
 $(OBJS)\basedll_xti.obj: ..\..\src\common\xti.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\xti.cpp
 
@@ -9895,6 +9908,9 @@ $(OBJS)\baselib_wxcrt.obj: ..\..\src\common\wxcrt.cpp
 
 $(OBJS)\baselib_wxprintf.obj: ..\..\src\common\wxprintf.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\wxprintf.cpp
+
+$(OBJS)\baselib_xlocale.obj: ..\..\src\common\xlocale.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\xlocale.cpp
 
 $(OBJS)\baselib_xti.obj: ..\..\src\common\xti.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\xti.cpp

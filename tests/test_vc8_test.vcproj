@@ -1017,6 +1017,9 @@
 				RelativePath=".\regex\wxregextest.cpp"
 			/>
 			<File
+				RelativePath=".\xlocale\xlocale.cpp"
+			/>
+			<File
 				RelativePath=".\archive\ziptest.cpp"
 			/>
 			<File

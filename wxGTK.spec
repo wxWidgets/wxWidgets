@@ -327,6 +327,7 @@ wx/wxcrt.h
 wx/wxcrtbase.h
 wx/wxcrtvararg.h
 wx/wxprec.h
+wx/xlocale.h
 wx/xti.h
 wx/xtistrm.h
 wx/zipstrm.h
@@ -344,11 +345,11 @@ wx/unix/chkconf.h
 wx/unix/evtloop.h
 wx/unix/pipe.h
 wx/unix/stdpaths.h
+wx/unix/stackwalk.h
 wx/unix/execute.h
 wx/unix/mimetype.h
 wx/unix/private.h
 wx/private/gsocketiohandler.h
-wx/unix/stackwalk.h
 wx/fs_inet.h
 wx/gsocket.h
 wx/protocol/file.h

@@ -551,6 +551,10 @@ SOURCE=..\..\src\common\wxprintf.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\xlocale.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\xti.cpp
 # End Source File
 # Begin Source File
@@ -1504,6 +1508,10 @@ SOURCE=..\..\include\wx\wxcrtvararg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wxprec.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xlocale.h
 # End Source File
 # Begin Source File
 

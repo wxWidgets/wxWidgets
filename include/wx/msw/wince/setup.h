@@ -371,6 +371,21 @@
 // i18n support: _() macro, wxLocale class. Requires wxTextFile.
 #define wxUSE_INTL          1
 
+// Provide wxFoo_l() functions similar to standard foo() functions but taking
+// an extra locale parameter.
+//
+// Notice that this is fully implemented only for the systems providing POSIX
+// xlocale support or Microsoft Visual C++ >= 8 (which provides proprietary
+// almost-equivalent of xlocale functions), otherwise wxFoo_l() functions will
+// only work for the current user locale and "C" locale. You can use
+// wxHAS_XLOCALE_SUPPORT to test whether the full support is available.
+//
+// Default is 1
+//
+// Recommended setting: 1 but may be disabled if you are writing programs
+// running only in C locale anyhow
+#define wxUSE_XLOCALE       1
+
 // Set wxUSE_DATETIME to 1 to compile the wxDateTime and related classes which
 // allow to manipulate dates, times and time intervals. wxDateTime replaces the
 // old wxTime and wxDate classes which are still provided for backwards

@@ -416,6 +416,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/wfstream.cpp
     src/common/wxcrt.cpp
     src/common/wxprintf.cpp
+    src/common/xlocale.cpp
     src/common/xti.cpp
     src/common/xtistrm.cpp
     src/common/zipstrm.cpp
@@ -550,6 +551,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wxcrtbase.h
     wx/wxcrtvararg.h
     wx/wxprec.h
+    wx/xlocale.h
     wx/xti.h
     wx/xtistrm.h
     wx/zipstrm.h

@@ -78,7 +78,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_uris.obj \
 	$(OBJS)\test_vectors.obj \
 	$(OBJS)\test_evtconnection.obj \
-	$(OBJS)\test_weakref.obj
+	$(OBJS)\test_weakref.obj \
+	$(OBJS)\test_xlocale.obj
 TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_23)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_gui.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -581,6 +582,9 @@ $(OBJS)\test_evtconnection.obj: .\weakref\evtconnection.cpp
 
 $(OBJS)\test_weakref.obj: .\weakref\weakref.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\weakref\weakref.cpp
+
+$(OBJS)\test_xlocale.obj: .\xlocale\xlocale.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\xlocale\xlocale.cpp
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) /Yctestprec.h .\dummy.cpp

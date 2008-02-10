@@ -1081,6 +1081,9 @@
 				RelativePath="..\..\src\common\wxprintf.cpp"
 			/>
 			<File
+				RelativePath="..\..\src\common\xlocale.cpp"
+			/>
+			<File
 				RelativePath="..\..\src\common\xti.cpp"
 			/>
 			<File
@@ -1840,6 +1843,9 @@
 			/>
 			<File
 				RelativePath="..\..\include\wx\wxprec.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\xlocale.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\xti.h"

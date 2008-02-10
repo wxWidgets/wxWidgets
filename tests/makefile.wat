@@ -285,7 +285,8 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_uris.obj &
 	$(OBJS)\test_vectors.obj &
 	$(OBJS)\test_evtconnection.obj &
-	$(OBJS)\test_weakref.obj
+	$(OBJS)\test_weakref.obj &
+	$(OBJS)\test_xlocale.obj
 TEST_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -525,6 +526,9 @@ $(OBJS)\test_evtconnection.obj :  .AUTODEPEND .\weakref\evtconnection.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_weakref.obj :  .AUTODEPEND .\weakref\weakref.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_xlocale.obj :  .AUTODEPEND .\xlocale\xlocale.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_gui_sample.res :  .AUTODEPEND .\..\samples\sample.rc

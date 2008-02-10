@@ -85,7 +85,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_uris.obj \
 	$(OBJS)\test_vectors.obj \
 	$(OBJS)\test_evtconnection.obj \
-	$(OBJS)\test_weakref.obj
+	$(OBJS)\test_weakref.obj \
+	$(OBJS)\test_xlocale.obj
 TEST_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_1) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -496,6 +497,9 @@ $(OBJS)\test_evtconnection.obj: .\weakref\evtconnection.cpp
 
 $(OBJS)\test_weakref.obj: .\weakref\weakref.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\weakref\weakref.cpp
+
+$(OBJS)\test_xlocale.obj: .\xlocale\xlocale.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\xlocale\xlocale.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\include -i. $(__DLLFLAG_p_3) -i.\..\samples -dNOPCH .\..\samples\sample.rc

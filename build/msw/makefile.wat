@@ -3314,6 +3314,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_wfstream.obj &
 	$(OBJS)\monodll_wxcrt.obj &
 	$(OBJS)\monodll_wxprintf.obj &
+	$(OBJS)\monodll_xlocale.obj &
 	$(OBJS)\monodll_xti.obj &
 	$(OBJS)\monodll_xtistrm.obj &
 	$(OBJS)\monodll_zipstrm.obj &
@@ -3451,6 +3452,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_wfstream.obj &
 	$(OBJS)\monolib_wxcrt.obj &
 	$(OBJS)\monolib_wxprintf.obj &
+	$(OBJS)\monolib_xlocale.obj &
 	$(OBJS)\monolib_xti.obj &
 	$(OBJS)\monolib_xtistrm.obj &
 	$(OBJS)\monolib_zipstrm.obj &
@@ -3586,6 +3588,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_wfstream.obj &
 	$(OBJS)\basedll_wxcrt.obj &
 	$(OBJS)\basedll_wxprintf.obj &
+	$(OBJS)\basedll_xlocale.obj &
 	$(OBJS)\basedll_xti.obj &
 	$(OBJS)\basedll_xtistrm.obj &
 	$(OBJS)\basedll_zipstrm.obj &
@@ -3704,6 +3707,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_wfstream.obj &
 	$(OBJS)\baselib_wxcrt.obj &
 	$(OBJS)\baselib_wxprintf.obj &
+	$(OBJS)\baselib_xlocale.obj &
 	$(OBJS)\baselib_xti.obj &
 	$(OBJS)\baselib_xtistrm.obj &
 	$(OBJS)\baselib_zipstrm.obj &
@@ -5759,6 +5763,9 @@ $(OBJS)\monodll_wxcrt.obj :  .AUTODEPEND ..\..\src\common\wxcrt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_wxprintf.obj :  .AUTODEPEND ..\..\src\common\wxprintf.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xlocale.obj :  .AUTODEPEND ..\..\src\common\xlocale.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
@@ -7966,6 +7973,9 @@ $(OBJS)\monolib_wxcrt.obj :  .AUTODEPEND ..\..\src\common\wxcrt.cpp
 $(OBJS)\monolib_wxprintf.obj :  .AUTODEPEND ..\..\src\common\wxprintf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_xlocale.obj :  .AUTODEPEND ..\..\src\common\xlocale.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -10171,6 +10181,9 @@ $(OBJS)\basedll_wxcrt.obj :  .AUTODEPEND ..\..\src\common\wxcrt.cpp
 $(OBJS)\basedll_wxprintf.obj :  .AUTODEPEND ..\..\src\common\wxprintf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_xlocale.obj :  .AUTODEPEND ..\..\src\common\xlocale.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10472,6 +10485,9 @@ $(OBJS)\baselib_wxcrt.obj :  .AUTODEPEND ..\..\src\common\wxcrt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_wxprintf.obj :  .AUTODEPEND ..\..\src\common\wxprintf.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_xlocale.obj :  .AUTODEPEND ..\..\src\common\xlocale.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
