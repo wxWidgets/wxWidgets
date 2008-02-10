@@ -77,6 +77,8 @@ wxXLocale& wxXLocale::GetCLocale()
     return *gs_cLocale;
 }
 
+#ifdef wxHAS_XLOCALE_SUPPORT
+
 wxXLocale::wxXLocale(wxLanguage lang)
 {
     const wxLanguageInfo * const info = wxLocale::GetLanguageInfo(lang);
@@ -89,8 +91,6 @@ wxXLocale::wxXLocale(wxLanguage lang)
         Init(info->CanonicalName);
     }
 }
-
-#ifdef wxHAS_XLOCALE_SUPPORT
 
 #if wxCHECK_VISUALC_VERSION(8)
 
@@ -203,7 +203,7 @@ wxUniChar wxTolower_l(const wxUniChar& c, const wxXLocale& loc)
 {
     wxCHECK(loc.IsOk(), false);
 
-    if(CTYPE_TEST(c, CTYPE_UPPER))
+    if(CTYPE_TEST(c.GetValue(), CTYPE_UPPER))
     {
         return c - 'A' + 'a';
     }
@@ -215,7 +215,7 @@ wxUniChar wxToupper_l(const wxUniChar& c, const wxXLocale& loc)
 {
     wxCHECK(loc.IsOk(), false);
 
-    if(CTYPE_TEST(c, CTYPE_LOWER))
+    if(CTYPE_TEST(c.GetValue(), CTYPE_LOWER))
     {
         return c - 'a' + 'A';
     }
