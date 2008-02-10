@@ -58,6 +58,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_UNIX_AND_DARWIN_SRC" hints="files">
     src/common/fdiodispatcher.cpp
     src/common/selectdispatcher.cpp
+    src/unix/epolldispatcher.cpp
     src/unix/appunix.cpp
     src/unix/baseunix.cpp
     src/unix/evtloopunix.cpp
@@ -65,6 +66,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/snglinst.cpp
     src/unix/stdpaths.cpp
     src/unix/timerunx.cpp
+    src/unix/stackwalk.cpp
 </set>
 
 <set var="BASE_UNIX_AND_DARWIN_HDR" hints="files">
@@ -77,6 +79,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/evtloop.h
     wx/unix/pipe.h
     wx/unix/stdpaths.h
+    wx/unix/stackwalk.h
 </set>
 
 <!--
@@ -107,8 +110,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_UNIX_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
     src/common/gsocketiohandler.cpp
-    src/unix/epolldispatcher.cpp
-    src/unix/stackwalk.cpp
 </set>
 <set var="BASE_AND_GUI_UNIX_SRC" hints="files">
     src/unix/utilsunx.cpp
@@ -116,7 +117,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
     wx/private/gsocketiohandler.h
-    wx/unix/stackwalk.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
