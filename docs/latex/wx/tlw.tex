@@ -330,18 +330,20 @@ A simpler interface for setting the size hints than
 \param{const wxSize\&}{ maxSize=wxDefaultSize}, \param{const wxSize\&}{ incSize=wxDefaultSize}}
 
 Allows specification of minimum and maximum window sizes, and window size increments.
-If a pair of values is not set (or set to -1), the default values will be used.
+If a pair of values is not set (or set to -1), no constraints will be used.
 
 \docparam{incW}{Specifies the increment for sizing the width (GTK/Motif/Xt only).}
 
 \docparam{incH}{Specifies the increment for sizing the height (GTK/Motif/Xt only).}
 
-\docparam{incSize}{Increment size (GTK/Motif/Xt only).}
+\docparam{incSize}{Increment size (only taken into account under X11-based
+ports such as wxGTK/wxMotif/wxX11).}
 
 \wxheading{Remarks}
 
-If this function is called, the user will not be able to size the window outside
-the given bounds. The resizing increments are only significant under GTK, Motif or Xt.
+Notice that this function not only prevents the user from resizing the window
+outside the given bounds but it also prevents the program itself from doing it
+using \helpref{SetSize}{wxwindowsetsize}.
 
 
 \membersection{wxTopLevelWindow::SetRightMenu}\label{wxtoplevelwindowsetrightmenu}

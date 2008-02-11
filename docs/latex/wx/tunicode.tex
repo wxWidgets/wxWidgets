@@ -198,3 +198,10 @@ ANSI ones (using \helpref{wxMBConv classes}{mbconvclasses})
 and construct wxString objects from Unicode strings (presumably read
 from some external file or elsewhere).
 
+\subsection{Traps for the unwary}
+
+\begin{itemize}
+    \item Casting c\_str() to void* is now char*, not wxChar*
+    \item Passing c\_str(), mb\_str() or wc\_str() to variadic functions
+doesn't work
+\end{itemize}

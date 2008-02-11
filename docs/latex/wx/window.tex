@@ -3547,6 +3547,10 @@ The first form sets the position and optionally size, of the window.
 Parameters may be $wxDefaultCoord$ to indicate either that a default should be supplied
 by wxWidgets, or that the current value of the dimension should be used.
 
+Notice that for \helpref{top level window}{wxtoplevelwindow} the size will not
+be changed if it is outside of the valid range as set by 
+\helpref{SetSizeHints}{wxtoplevelwindowsetsizehints}.
+
 \wxheading{See also}
 
 \helpref{wxWindow::Move}{wxwindowmove}
