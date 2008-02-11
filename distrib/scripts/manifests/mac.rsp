@@ -60,6 +60,7 @@ include/wx/mac/carbon/private/*.h
 include/wx/mac/private/*.h
 
 include/wx/mac/corefoundation/*.h
+include/wx/mac/corefoundation/private/*.h
 
 samples/minimal/minimal.xcode/project.pbxproj
 samples/minimal/minimal.xcodeproj/project.pbxproj
