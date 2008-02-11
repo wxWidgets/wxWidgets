@@ -1023,6 +1023,38 @@ wxUint32 wxLanguageInfo::GetLCID() const
     return MAKELCID(MAKELANGID(WinLang, WinSublang), SORT_DEFAULT);
 }
 
+wxString wxLanguageInfo::GetLocaleName() const
+{
+    wxString locale;
+
+    const LCID lcid = GetLCID();
+
+    wxChar buffer[256];
+    buffer[0] = _T('\0');
+    if ( !::GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, WXSIZEOF(buffer)) )
+    {
+        wxLogLastError(_T("GetLocaleInfo(LOCALE_SENGLANGUAGE)"));
+        return locale;
+    }
+
+    locale << buffer;
+    if ( ::GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY,
+                         buffer, WXSIZEOF(buffer)) > 0 )
+    {
+        locale << _T('_') << buffer;
+    }
+
+    if ( ::GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE,
+                         buffer, WXSIZEOF(buffer)) > 0 )
+    {
+        if ( buffer[0] != _T('0') || buffer[1] != _T('\0') )
+            locale << _T('.') << buffer;
+        //else: this locale doesn't use ANSI code page
+    }
+
+    return locale;
+}
+
 #endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
@@ -1806,7 +1838,7 @@ bool wxLocale::Init(int language, int flags)
         //     Unicode.  Therefore wxSetlocale call failed, but we don't want
         //     to report it as an error -- so that at least message catalogs
         //     can be used. Watch for code marked with
-        //     #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS bellow.
+        //     #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS below.
         #define SETLOCALE_FAILS_ON_UNICODE_LANGS
     #endif
 
@@ -1820,49 +1852,38 @@ bool wxLocale::Init(int language, int flags)
         }
         else
         {
-            int codepage
-                         #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
-                         = -1
-                         #endif
-                         ;
             const wxUint32 lcid = info->GetLCID();
 
             // FIXME
 #ifndef __WXWINCE__
-            SetThreadLocale(lcid);
+            // change locale used by Windows functions
+            ::SetThreadLocale(lcid);
 #endif
-            // NB: we must translate LCID to CRT's setlocale string ourselves,
-            //     because SetThreadLocale does not modify change the
-            //     interpretation of setlocale(LC_ALL, "") call:
-            wxChar buffer[256];
-            buffer[0] = wxS('\0');
-            GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
-            locale << buffer;
-            if (GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256) > 0)
-                locale << wxS("_") << buffer;
-            if (GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE, buffer, 256) > 0)
+            // and also call setlocale() to change locale used by the CRT
+            locale = info->GetLocaleName();
+            if ( locale.empty() )
             {
-                codepage = wxAtoi(buffer);
-                if (codepage != 0)
-                    locale << wxS(".") << buffer;
-            }
-            if (locale.empty())
-            {
-                wxLogLastError(wxS("SetThreadLocale"));
                 ret = false;
             }
-            else
+            else // have a valid locale
             {
-            // FIXME
+                // FIXME
 #ifndef __WXWINCE__
                 retloc = wxSetlocale(LC_ALL, locale);
 #endif
 #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
-                if (codepage == 0 && retloc == NULL)
+                if ( !retloc )
                 {
-                    retloc = "C";
+                    // GetLocaleName() returns a string without period only if
+                    // there is no associated ANSI code page
+                    if ( locale.find(_T('.')) == wxString::npos )
+                    {
+                        retloc = "C";
+                    }
+                    //else: locale has code page information and hence this is
+                    //      a real error
                 }
-#endif
+#endif // SETLOCALE_FAILS_ON_UNICODE_LANGS
             }
         }
     }
