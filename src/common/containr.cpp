@@ -316,7 +316,10 @@ wxRadioButton* wxGetSelectedButtonInGroup(wxRadioButton *btn)
 
 void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
 {
-    wxWindow *parent = m_winParent->GetParent();
+    // for a TLW we shouldn't involve the parent window, it has nothing to do
+    // with keyboard navigation inside this TLW
+    wxWindow *parent = m_winParent->IsTopLevel() ? NULL
+                                                 : m_winParent->GetParent();
 
     // the event is propagated downwards if the event emitter was our parent
     bool goingDown = event.GetEventObject() == parent;
