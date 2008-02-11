@@ -1248,12 +1248,15 @@ wxInputStream& wxBufferedInputStream::Read(void *buf, size_t size)
         size -= m_lastcount;
         buf = (char *)buf + m_lastcount;
 
-        // the call to wxStreamBuffer::Read() below will reset our m_lastcount,
-        // so save it
+        // the call to wxStreamBuffer::Read() below may reset our m_lastcount
+        // (but it also may not do it if the buffer is associated to another
+        // existing stream and wasn't created by us), so save it
         size_t countOld = m_lastcount;
 
-        m_i_streambuf->Read(buf, size);
+        // the new count of the bytes read is the count of bytes read this time
+        m_lastcount = m_i_streambuf->Read(buf, size);
 
+        // plus those we had read before
         m_lastcount += countOld;
     }
 
