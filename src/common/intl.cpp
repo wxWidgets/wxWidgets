@@ -1013,6 +1013,19 @@ static wxArrayString gs_searchPrefixes;
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// wxLanguageInfo
+// ----------------------------------------------------------------------------
+
+#ifdef __WXMSW__
+
+wxUint32 wxLanguageInfo::GetLCID() const
+{
+    return MAKELCID(MAKELANGID(WinLang, WinSublang), SORT_DEFAULT);
+}
+
+#endif // __WXMSW__
+
+// ----------------------------------------------------------------------------
 // wxMsgCatalogFile class
 // ----------------------------------------------------------------------------
 
@@ -1812,8 +1825,8 @@ bool wxLocale::Init(int language, int flags)
                          = -1
                          #endif
                          ;
-            wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
-                                     SORT_DEFAULT);
+            const wxUint32 lcid = info->GetLCID();
+
             // FIXME
 #ifndef __WXWINCE__
             SetThreadLocale(lcid);
@@ -2510,12 +2523,7 @@ bool wxLocale::IsAvailable(int lang)
     if ( !info->WinLang )
         return false;
 
-    if ( !::IsValidLocale
-            (
-                MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
-                         SORT_DEFAULT),
-                LCID_INSTALLED
-            ) )
+    if ( !::IsValidLocale(info->GetLCID(), LCID_INSTALLED) )
         return false;
 
 #elif defined(__UNIX__)
@@ -2603,11 +2611,8 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
     if (wxGetLocale())
     {
         const wxLanguageInfo *info = GetLanguageInfo(wxGetLocale()->GetLanguage());
-        if (info)
-        {                         ;
-            lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang),
-                                     SORT_DEFAULT);
-        }
+        if ( info )
+            lcid = info->GetLCID();
     }
 
     wxString str;
