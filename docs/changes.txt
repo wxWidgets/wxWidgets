@@ -139,6 +139,7 @@ wxGTK:
 
 - Return false from wxEventLoop::Dispatch() if gtk_main_quit() was called and
   so the loop should exit (Rodolfo Schulz de Lima).
+- Implement wxListBox::EnsureVisible() (Andreas Kling)
 - Fixed wxCURSOR_HAND to map to GDK_HAND2 and not GDK_HAND1, for consistency
   with other applications.
 

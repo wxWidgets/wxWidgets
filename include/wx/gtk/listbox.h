@@ -74,6 +74,8 @@ public:
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
 
+    virtual void EnsureVisible(int n);
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
@@ -118,6 +120,9 @@ protected:
 
 private:
     void Init(); //common construction
+
+    // common part of DoSetFirstItem() and EnsureVisible()
+    void DoScrollToCell(int n, float alignY, float alignX);
 
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };
