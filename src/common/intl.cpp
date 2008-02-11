@@ -1622,27 +1622,11 @@ bool wxLocale::Init(const wxString& name,
                  wxS("no locale to set in wxLocale::Init()") );
   }
 
-#ifdef __WXWINCE__
-  // FIXME: I'm guessing here
-  wxChar localeName[256];
-  int ret = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLANGUAGE, localeName,
-      256);
-  if (ret != 0)
-  {
-    m_pszOldLocale = wxStrdup(wxConvLibc.cWC2MB(localeName));
-  }
-  else
-    m_pszOldLocale = NULL;
-
-  // TODO: how to find languageId
-  // SetLocaleInfo(languageId, SORT_DEFAULT, localeName);
-#else
   const char *oldLocale = wxSetlocale(LC_ALL, szLocale);
   if ( oldLocale )
       m_pszOldLocale = wxStrdup(oldLocale);
   else
       m_pszOldLocale = NULL;
-#endif
 
   if ( m_pszOldLocale == NULL )
     wxLogError(_("locale '%s' can not be set."), szLocale);
@@ -1854,11 +1838,13 @@ bool wxLocale::Init(int language, int flags)
         {
             const wxUint32 lcid = info->GetLCID();
 
-            // FIXME
+            // Windows CE doesn't have SetThreadLocale() and there doesn't seem
+            // to be any equivalent
 #ifndef __WXWINCE__
             // change locale used by Windows functions
             ::SetThreadLocale(lcid);
 #endif
+
             // and also call setlocale() to change locale used by the CRT
             locale = info->GetLocaleName();
             if ( locale.empty() )
@@ -1867,10 +1853,8 @@ bool wxLocale::Init(int language, int flags)
             }
             else // have a valid locale
             {
-                // FIXME
-#ifndef __WXWINCE__
                 retloc = wxSetlocale(LC_ALL, locale);
-#endif
+
 #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
                 if ( !retloc )
                 {
@@ -1889,12 +1873,8 @@ bool wxLocale::Init(int language, int flags)
     }
     else
     {
-            // FIXME
-#ifndef __WXWINCE__
         retloc = wxSetlocale(LC_ALL, wxEmptyString);
-#else
-        retloc = NULL;
-#endif
+
 #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
         if (retloc == NULL)
         {
@@ -1906,7 +1886,7 @@ bool wxLocale::Init(int language, int flags)
                 retloc = "C";
             }
         }
-#endif
+#endif // SETLOCALE_FAILS_ON_UNICODE_LANGS
     }
 
     if ( !retloc )
@@ -2365,12 +2345,7 @@ const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
 
 wxString wxLocale::GetSysName() const
 {
-            // FIXME
-#ifndef __WXWINCE__
     return wxSetlocale(LC_ALL, NULL);
-#else
-    return wxEmptyString;
-#endif
 }
 
 // clean up
@@ -2387,10 +2362,7 @@ wxLocale::~wxLocale()
     // restore old locale pointer
     wxSetLocale(m_pOldLocale);
 
-    // FIXME
-#ifndef __WXWINCE__
     wxSetlocale(LC_ALL, m_pszOldLocale);
-#endif
     free((wxChar *)m_pszOldLocale);     // const_cast
 }
 
