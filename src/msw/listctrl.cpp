@@ -934,14 +934,15 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 
     wxConvertToMSWFlags(state, stateMask, lvItem);
 
+    const bool changingFocus = (stateMask & wxLIST_STATE_FOCUSED) &&
+                                    (state & wxLIST_STATE_FOCUSED);
+
     // for the virtual list controls we need to refresh the previously focused
     // item manually when changing focus without changing selection
     // programmatically because otherwise it keeps its focus rectangle until
     // next repaint (yet another comctl32 bug)
     long focusOld;
-    if ( IsVirtual() &&
-         (stateMask & wxLIST_STATE_FOCUSED) &&
-         (state & wxLIST_STATE_FOCUSED) )
+    if ( IsVirtual() && changingFocus )
     {
         focusOld = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
     }
@@ -967,6 +968,16 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
         {
             RefreshItem(focusOld);
         }
+    }
+
+    // we expect the selection anchor, i.e. the item from which multiple
+    // selection (such as performed with e.g. Shift-arrows) starts, to be the
+    // same as the currently focused item but the native control doesn't update
+    // it when we change focus and leaves at the last item it set itself focus
+    // to, so do it explicitly
+    if ( changingFocus && !HasFlag(wxLC_SINGLE_SEL) )
+    {
+        ListView_SetSelectionMark(GetHwnd(), item);
     }
 
     return true;
