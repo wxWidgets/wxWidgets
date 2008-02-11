@@ -610,12 +610,23 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
             (UniChar*)str.wc_str() , str.Len() ) );
 #else
         wxMBConvUTF16 converter ;
-        size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
-        UniChar *unibuf = new UniChar[ unicharlen / sizeof(UniChar) + 1 ] ;
-        converter.WC2MB( (char*)unibuf , str.wc_str() , unicharlen ) ;
-        reset( CFStringCreateWithCharacters( kCFAllocatorDefault ,
-            unibuf , unicharlen / sizeof(UniChar) ) );
-        delete[] unibuf ;
+        size_t unicharbytes = converter.FromWChar( NULL , 0 , str.wc_str() , str.Length() ) ;
+        wxASSERT( unicharbytes != wxCONV_FAILED );
+        if ( unicharbytes == wxCONV_FAILED )
+        {
+            // create an empty string
+            reset( wxCFRetain( CFSTR("") ) );
+        }
+        else
+        {
+            // unicharbytes: number of bytes needed for UTF-16 encoded string (without terminating null)
+            // unichars: number of UTF-16 characters (without terminating null)
+            size_t unichars = unicharbytes /  sizeof(UniChar) ;
+            UniChar *unibuf = new UniChar[ unichars ] ;
+            converter.FromWChar( (char*)unibuf , unicharbytes , str.wc_str() , str.Length() ) ;
+            reset( CFStringCreateWithCharacters( kCFAllocatorDefault , unibuf , unichars ) ) ;
+            delete[] unibuf ;
+        }
 #endif
 #else // not wxUSE_UNICODE
         reset( CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
