@@ -532,24 +532,27 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
                   wxIsKindOf(m_winLastFocused, wxRadioButton) &&
                   !m_winLastFocused->HasFlag(wxRB_SINGLE) )
         {
+            wxRadioButton * const
+                lastBtn = wx_static_cast(wxRadioButton *, m_winLastFocused);
+
             // cursor keys don't navigate out of a radio button group so
             // find the correct radio button to focus
             if ( forward )
             {
-                child = wxGetNextButtonInGroup((wxRadioButton*)m_winLastFocused);
+                child = wxGetNextButtonInGroup(lastBtn);
                 if ( !child )
                 {
                     // no next button in group, set it to the first button
-                    child = wxGetFirstButtonInGroup((wxRadioButton*)m_winLastFocused);
+                    child = wxGetFirstButtonInGroup(lastBtn);
                 }
             }
             else
             {
-                child = wxGetPreviousButtonInGroup((wxRadioButton*)m_winLastFocused);
+                child = wxGetPreviousButtonInGroup(lastBtn);
                 if ( !child )
                 {
                     // no previous button in group, set it to the last button
-                    child = wxGetLastButtonInGroup((wxRadioButton*)m_winLastFocused);
+                    child = wxGetLastButtonInGroup(lastBtn);
                 }
             }
 
