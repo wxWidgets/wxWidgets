@@ -315,9 +315,10 @@ int wxNotebook::GetSelection() const
 void wxNotebook::CocoaDelegate_tabView_didSelectTabViewItem(WX_NSTabViewItem tabViewItem)
 {
     // FIXME: oldSel probably == newSel
-    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, GetId(),
+    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, GetId(),
         [GetNSTabView() indexOfTabViewItem:tabViewItem], GetSelection());
     event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 bool wxNotebook::CocoaDelegate_tabView_shouldSelectTabViewItem(WX_NSTabViewItem tabViewItem)
