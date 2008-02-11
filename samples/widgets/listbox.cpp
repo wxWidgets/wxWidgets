@@ -68,6 +68,8 @@ enum
     ListboxPage_DeleteText,
     ListboxPage_DeleteSel,
     ListboxPage_Listbox,
+    ListboxPage_EnsureVisible,
+    ListboxPage_EnsureVisibleText,
     ListboxPage_ContainerTests
 };
 
@@ -91,6 +93,7 @@ protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
     void OnButtonChange(wxCommandEvent& event);
+    void OnButtonEnsureVisible(wxCommandEvent& event);
     void OnButtonDelete(wxCommandEvent& event);
     void OnButtonDeleteSel(wxCommandEvent& event);
     void OnButtonClear(wxCommandEvent& event);
@@ -106,6 +109,7 @@ protected:
 
     void OnUpdateUIAddSeveral(wxUpdateUIEvent& event);
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
+    void OnUpdateUIEnsureVisibleButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event);
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
@@ -115,6 +119,11 @@ protected:
 
     // (re)create the listbox
     void CreateLbox();
+
+    // read the value of a listbox item index from the given control, return
+    // false if it's invalid
+    bool GetValidIndexFromText(const wxTextCtrl *text, int *n = NULL) const;
+
 
     // listbox parameters
     // ------------------
@@ -160,6 +169,7 @@ protected:
     // the text entries for "Add/change string" and "Delete" buttons
     wxTextCtrl *m_textAdd,
                *m_textChange,
+               *m_textEnsureVisible,
                *m_textDelete;
 
 private:
@@ -176,6 +186,7 @@ BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ListboxPage_Change, ListboxWidgetsPage::OnButtonChange)
     EVT_BUTTON(ListboxPage_Delete, ListboxWidgetsPage::OnButtonDelete)
     EVT_BUTTON(ListboxPage_DeleteSel, ListboxWidgetsPage::OnButtonDeleteSel)
+    EVT_BUTTON(ListboxPage_EnsureVisible, ListboxWidgetsPage::OnButtonEnsureVisible)
     EVT_BUTTON(ListboxPage_Clear, ListboxWidgetsPage::OnButtonClear)
     EVT_BUTTON(ListboxPage_Add, ListboxWidgetsPage::OnButtonAdd)
     EVT_BUTTON(ListboxPage_AddSeveral, ListboxWidgetsPage::OnButtonAddSeveral)
@@ -184,6 +195,7 @@ BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
 
     EVT_TEXT_ENTER(ListboxPage_AddText, ListboxWidgetsPage::OnButtonAdd)
     EVT_TEXT_ENTER(ListboxPage_DeleteText, ListboxWidgetsPage::OnButtonDelete)
+    EVT_TEXT_ENTER(ListboxPage_EnsureVisibleText, ListboxWidgetsPage::OnButtonEnsureVisible)
 
     EVT_UPDATE_UI(ListboxPage_Reset, ListboxWidgetsPage::OnUpdateUIResetButton)
     EVT_UPDATE_UI(ListboxPage_AddSeveral, ListboxWidgetsPage::OnUpdateUIAddSeveral)
@@ -193,6 +205,7 @@ BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(ListboxPage_Change, ListboxWidgetsPage::OnUpdateUIDeleteSelButton)
     EVT_UPDATE_UI(ListboxPage_ChangeText, ListboxWidgetsPage::OnUpdateUIDeleteSelButton)
     EVT_UPDATE_UI(ListboxPage_DeleteSel, ListboxWidgetsPage::OnUpdateUIDeleteSelButton)
+    EVT_UPDATE_UI(ListboxPage_EnsureVisible, ListboxWidgetsPage::OnUpdateUIEnsureVisibleButton)
 
     EVT_LISTBOX(ListboxPage_Listbox, ListboxWidgetsPage::OnListbox)
     EVT_LISTBOX_DCLICK(ListboxPage_Listbox, ListboxWidgetsPage::OnListboxDClick)
@@ -307,6 +320,13 @@ void ListboxWidgetsPage::CreateContent()
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
+    btn = new wxButton(this, ListboxPage_EnsureVisible, _T("Make item &visible"));
+    m_textEnsureVisible = new wxTextCtrl(this, ListboxPage_EnsureVisibleText, wxEmptyString);
+    sizerRow->Add(btn, 0, wxRIGHT, 5);
+    sizerRow->Add(m_textEnsureVisible, 1, wxLEFT, 5);
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+    sizerRow = new wxBoxSizer(wxHORIZONTAL);
     btn = new wxButton(this, ListboxPage_Delete, _T("&Delete this item"));
     m_textDelete = new wxTextCtrl(this, ListboxPage_DeleteText, wxEmptyString);
     sizerRow->Add(btn, 0, wxRIGHT, 5);
@@ -415,6 +435,30 @@ void ListboxWidgetsPage::CreateLbox()
 }
 
 // ----------------------------------------------------------------------------
+// miscellaneous helpers
+// ----------------------------------------------------------------------------
+
+bool
+ListboxWidgetsPage::GetValidIndexFromText(const wxTextCtrl *text, int *n) const
+{
+    unsigned long idx;
+    if ( !text->GetValue().ToULong(&idx) || (idx >= m_lbox->GetCount()) )
+    {
+        // don't give the warning if we're just testing but do give it if we
+        // want to retrieve the value as this is only done in answer to a user
+        // action
+        if ( n )
+            wxLogWarning("Invalid index \"%s\"", text->GetValue());
+        return false;
+    }
+
+    if ( n )
+        *n = idx;
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
 
@@ -436,11 +480,21 @@ void ListboxWidgetsPage::OnButtonChange(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void ListboxWidgetsPage::OnButtonEnsureVisible(wxCommandEvent& WXUNUSED(event))
+{
+    int n;
+    if ( !GetValidIndexFromText(m_textEnsureVisible, &n) )
+    {
+        return;
+    }
+
+    m_lbox->EnsureVisible(n);
+}
+
 void ListboxWidgetsPage::OnButtonDelete(wxCommandEvent& WXUNUSED(event))
 {
-    unsigned long n;
-    if ( !m_textDelete->GetValue().ToULong(&n) ||
-            (n >= (unsigned)m_lbox->GetCount()) )
+    int n;
+    if ( !GetValidIndexFromText(m_textDelete, &n) )
     {
         return;
     }
@@ -504,11 +558,14 @@ void ListboxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   m_chkVScroll->GetValue() );
 }
 
+void ListboxWidgetsPage::OnUpdateUIEnsureVisibleButton(wxUpdateUIEvent& event)
+{
+    event.Enable(GetValidIndexFromText(m_textEnsureVisible));
+}
+
 void ListboxWidgetsPage::OnUpdateUIDeleteButton(wxUpdateUIEvent& event)
 {
-    unsigned long n;
-    event.Enable(m_textDelete->GetValue().ToULong(&n) &&
-                    (n < (unsigned)m_lbox->GetCount()));
+    event.Enable(GetValidIndexFromText(m_textDelete));
 }
 
 void ListboxWidgetsPage::OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event)

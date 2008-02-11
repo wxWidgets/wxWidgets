@@ -846,7 +846,7 @@ void wxListBox::GtkSetSelection(int n, const bool select, const bool blockEvent)
     m_blockEvent = false;
 }
 
-void wxListBox::DoSetFirstItem( int n )
+void wxListBox::DoScrollToCell(int n, float alignY, float alignX)
 {
     wxCHECK_RET( m_treeview, wxT("invalid listbox") );
     wxCHECK_RET( IsValid(n), wxT("invalid index"));
@@ -864,9 +864,19 @@ void wxListBox::DoSetFirstItem( int n )
 
     // Scroll to the desired cell (0.0 == topleft alignment)
     gtk_tree_view_scroll_to_cell(m_treeview, path, NULL,
-                                 TRUE, 0.0f, 0.0f);
+                                 TRUE, alignY, alignX);
 
     gtk_tree_path_free(path);
+}
+
+void wxListBox::DoSetFirstItem(int n)
+{
+    DoScrollToCell(n, 0, 0);
+}
+
+void wxListBox::EnsureVisible(int n)
+{
+    DoScrollToCell(n, 0.5, 0);
 }
 
 // ----------------------------------------------------------------------------
