@@ -1527,7 +1527,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 
         wxDCOverlay overlaydc( m_overlay, &dc );
         overlaydc.Clear();
-#if __WXMAC__
+#ifdef __WXMAC__
         dc.SetPen( *wxGREY_PEN );
         dc.SetBrush( wxColour( 192,192,192,64 ) );
 #else
