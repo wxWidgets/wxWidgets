@@ -82,10 +82,7 @@
 
     <!--    All the possible mixes for the wx library names          -->
     <set var="WXLIB_BASE_NAME">
-        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">wxbase$(WX_VERSION)</if>
-        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">wxbase$(WX_VERSION)d</if>
-        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">wxbase$(WX_VERSION)u</if>
-        <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">wxbase$(WX_VERSION)ud</if>
+        <if cond="WX_MONOLITHIC=='0'">wxbase$(WX_VERSION)$(WXLIBPOSTFIX)</if>
 
         <!--
             the trick used to support monolithic builds is here: when the
@@ -93,27 +90,15 @@
             WX_MONOLITHIC=1, then the base library is translated to the
             monolithic library
         -->
-        <if cond="WX_MONOLITHIC=='1' and WX_UNICODE=='0' and WX_DEBUG=='0'">wx$(WX_PORT)$(WX_VERSION)</if>
-        <if cond="WX_MONOLITHIC=='1' and WX_UNICODE=='0' and WX_DEBUG=='1'">wx$(WX_PORT)$(WX_VERSION)d</if>
-        <if cond="WX_MONOLITHIC=='1' and WX_UNICODE=='1' and WX_DEBUG=='0'">wx$(WX_PORT)$(WX_VERSION)u</if>
-        <if cond="WX_MONOLITHIC=='1' and WX_UNICODE=='1' and WX_DEBUG=='1'">wx$(WX_PORT)$(WX_VERSION)ud</if>
+        <if cond="WX_MONOLITHIC=='1'">wx$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)</if>
     </set>
 
 
     <!--   Libraries whose name is prefixed with 'wxbase'            -->
     <define-global-tag name="define-wxbase-lib-name">
         <set var="WXLIB_$(value.upper())_NAME">
-            <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">
-                wxbase$(WX_VERSION)_$(value)
-            </if>
-            <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">
-                wxbase$(WX_VERSION)d_$(value)
-            </if>
-            <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">
-                wxbase$(WX_VERSION)u_$(value)
-            </if>
-            <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">
-                wxbase$(WX_VERSION)ud_$(value)
+            <if cond="WX_MONOLITHIC=='0'">
+                wxbase$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)
             </if>
     </set>
     </define-global-tag>
@@ -125,17 +110,8 @@
     <!--   Libraries whose name is prefixed with 'wx' only          -->
     <define-global-tag name="define-wxlib-name">
         <set var="WXLIB_$(value.upper())_NAME">
-            <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='0'">
-                wx$(WX_PORT)$(WX_VERSION)_$(value)
-            </if>
-            <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='0' and WX_DEBUG=='1'">
-                wx$(WX_PORT)$(WX_VERSION)d_$(value)
-            </if>
-            <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='0'">
-                wx$(WX_PORT)$(WX_VERSION)u_$(value)
-            </if>
-            <if cond="WX_MONOLITHIC=='0' and WX_UNICODE=='1' and WX_DEBUG=='1'">
-                wx$(WX_PORT)$(WX_VERSION)ud_$(value)
+            <if cond="WX_MONOLITHIC=='0'">
+                wx$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)
             </if>
         </set>
     </define-global-tag>
