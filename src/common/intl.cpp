@@ -1016,6 +1016,25 @@ static wxArrayString gs_searchPrefixes;
 // wxLanguageInfo
 // ----------------------------------------------------------------------------
 
+// helper used by wxLanguageInfo::GetLocaleName() and elsewhere to determine
+// whether the locale is Unicode-only (it is if this function returns empty
+// string)
+static wxString wxGetANSICodePageForLocale(LCID lcid)
+{
+    wxString cp;
+
+    wxChar buffer[16];
+    if ( ::GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE,
+                         buffer, WXSIZEOF(buffer)) > 0 )
+    {
+        if ( buffer[0] != _T('0') || buffer[1] != _T('\0') )
+            cp = buffer;
+        //else: this locale doesn't use ANSI code page
+    }
+
+    return cp;
+}
+
 #ifdef __WXMSW__
 
 wxUint32 wxLanguageInfo::GetLCID() const
@@ -1044,12 +1063,10 @@ wxString wxLanguageInfo::GetLocaleName() const
         locale << _T('_') << buffer;
     }
 
-    if ( ::GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE,
-                         buffer, WXSIZEOF(buffer)) > 0 )
+    const wxString cp = wxGetANSICodePageForLocale(lcid);
+    if ( !cp.empty() )
     {
-        if ( buffer[0] != _T('0') || buffer[1] != _T('\0') )
-            locale << _T('.') << buffer;
-        //else: this locale doesn't use ANSI code page
+        locale << _T('.') << cp;
     }
 
     return locale;
@@ -1815,26 +1832,15 @@ bool wxLocale::Init(int language, int flags)
 #endif // __AIX__
 
 #elif defined(__WIN32__)
-
-    #if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
-        // NB: setlocale() from msvcrt.dll (used by VC++ and Mingw)
-        //     can't set locale to language that can only be written using
-        //     Unicode.  Therefore wxSetlocale call failed, but we don't want
-        //     to report it as an error -- so that at least message catalogs
-        //     can be used. Watch for code marked with
-        //     #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS below.
-        #define SETLOCALE_FAILS_ON_UNICODE_LANGS
-    #endif
-
     const char *retloc = "C";
-    if (language != wxLANGUAGE_DEFAULT)
+    if ( language != wxLANGUAGE_DEFAULT )
     {
-        if (info->WinLang == 0)
+        if ( info->WinLang == 0 )
         {
             wxLogWarning(wxS("Locale '%s' not supported by OS."), name.c_str());
             // retloc already set to "C"
         }
-        else
+        else // language supported by Windows
         {
             const wxUint32 lcid = info->GetLCID();
 
@@ -1854,40 +1860,29 @@ bool wxLocale::Init(int language, int flags)
             else // have a valid locale
             {
                 retloc = wxSetlocale(LC_ALL, locale);
-
-#ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
-                if ( !retloc )
-                {
-                    // GetLocaleName() returns a string without period only if
-                    // there is no associated ANSI code page
-                    if ( locale.find(_T('.')) == wxString::npos )
-                    {
-                        retloc = "C";
-                    }
-                    //else: locale has code page information and hence this is
-                    //      a real error
-                }
-#endif // SETLOCALE_FAILS_ON_UNICODE_LANGS
             }
         }
     }
-    else
+    else // language == wxLANGUAGE_DEFAULT
     {
         retloc = wxSetlocale(LC_ALL, wxEmptyString);
-
-#ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
-        if (retloc == NULL)
-        {
-            wxChar buffer[16];
-            if (GetLocaleInfo(LOCALE_USER_DEFAULT,
-                              LOCALE_IDEFAULTANSICODEPAGE, buffer, 16) > 0 &&
-                 wxStrcmp(buffer, wxS("0")) == 0)
-            {
-                retloc = "C";
-            }
-        }
-#endif // SETLOCALE_FAILS_ON_UNICODE_LANGS
     }
+
+#if wxUSE_UNICODE && (defined(__VISUALC__) || defined(__MINGW32__))
+    // VC++ setlocale() (also used by Mingw) can't set locale to languages that
+    // can only be written using Unicode, therefore wxSetlocale() call fails
+    // for such languages but we don't want to report it as an error -- so that
+    // at least message catalogs can be used.
+    if ( !retloc )
+    {
+        if ( wxGetANSICodePageForLocale(LOCALE_USER_DEFAULT).empty() )
+        {
+            // we set the locale to a Unicode-only language, don't treat the
+            // inability of CRT to use it as an error
+            retloc = "C";
+        }
+    }
+#endif // CRT not handling Unicode-only languages
 
     if ( !retloc )
         ret = false;
