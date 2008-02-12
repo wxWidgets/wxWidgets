@@ -1789,7 +1789,7 @@ bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
 
     // Make a copy of the region
     RgnHandle  shapeRegion = NewRgn();
-    CopyRgn( (RgnHandle)region.GetWXHRGN(), shapeRegion );
+    HIShapeGetAsQDRgn( region.GetWXHRGN(), shapeRegion );
 
     // Dispose of any shape region we may already have
     RgnHandle oldRgn = (RgnHandle)GetWRefCon( (WindowRef)MacGetWindowRef() );
