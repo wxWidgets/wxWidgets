@@ -88,14 +88,7 @@ wxXLocale::wxXLocale(wxLanguage lang)
     }
     else
     {
-        wxString loc;
-#ifdef __WXMSW__
-        loc = info->Description;
-#else
-        loc = info->CanonicalName;
-#endif
-
-        Init(loc.c_str());
+        Init(info->GetLocaleName().c_str());
     }
 }
 
