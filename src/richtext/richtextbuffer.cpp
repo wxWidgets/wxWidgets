@@ -1007,15 +1007,18 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
         wxChar ch = text[i];
         if (ch == wxT('\n') || ch == wxT('\r'))
         {
-            wxRichTextPlainText* plainText = (wxRichTextPlainText*) para->GetChildren().GetFirst()->GetData();
-            plainText->SetText(line);
+            if (i != (len-1))
+            {
+                wxRichTextPlainText* plainText = (wxRichTextPlainText*) para->GetChildren().GetFirst()->GetData();
+                plainText->SetText(line);
 
-            para = new wxRichTextParagraph(wxEmptyString, this, pStyle, cStyle);
+                para = new wxRichTextParagraph(wxEmptyString, this, pStyle, cStyle);
 
-            AppendChild(para);
+                AppendChild(para);
 
-            lastPara = para;
-            line = wxEmptyString;
+                lastPara = para;
+                line = wxEmptyString;
+            }
         }
         else
             line += ch;
@@ -1073,6 +1076,8 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
     wxRichTextParagraph* para = GetParagraphAtPosition(position);
     if (para)
     {
+        wxTextAttrEx originalAttr = para->GetAttributes();
+
         wxRichTextObjectList::compatibility_iterator node = m_children.Find(para);
 
         // Now split at this position, returning the object to insert the new
@@ -1092,11 +1097,6 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             // Iterate through the fragment paragraph inserting the content into this paragraph.
             wxRichTextParagraph* firstPara = wxDynamicCast(firstParaNode->GetData(), wxRichTextParagraph);
             wxASSERT (firstPara != NULL);
-
-            // Apply the new paragraph attributes to the existing paragraph
-            wxTextAttr attr(para->GetAttributes());
-            wxRichTextApplyStyle(attr, firstPara->GetAttributes());
-            para->SetAttributes(attr);
 
             wxRichTextObjectList::compatibility_iterator objectNode = firstPara->GetChildren().GetFirst();
             while (objectNode)
@@ -1145,13 +1145,27 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             wxRichTextParagraph* firstPara = wxDynamicCast(firstParaNode->GetData(), wxRichTextParagraph);
             wxASSERT(firstPara != NULL);
 
+            para->SetAttributes(firstPara->GetAttributes());
+
+            // Save empty paragraph attributes for appending later
+            // These are character attributes deliberately set for a new paragraph. Without this,
+            // we couldn't pass default attributes when appending a new paragraph.
+            wxTextAttrEx emptyParagraphAttributes;
+
             wxRichTextObjectList::compatibility_iterator objectNode = firstPara->GetChildren().GetFirst();
+
+            if (objectNode && firstPara->GetChildren().GetCount() == 1 && objectNode->GetData()->IsEmpty())
+                emptyParagraphAttributes = objectNode->GetData()->GetAttributes();
+
             while (objectNode)
             {
-                wxRichTextObject* newObj = objectNode->GetData()->Clone();
+                if (!objectNode->GetData()->IsEmpty())
+                {
+                    wxRichTextObject* newObj = objectNode->GetData()->Clone();
 
-                // Append
-                para->AppendChild(newObj);
+                    // Append
+                    para->AppendChild(newObj);
+                }
 
                 objectNode = objectNode->GetNext();
             }
@@ -1165,22 +1179,10 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             wxRichTextObjectList::compatibility_iterator i = fragment.GetChildren().GetFirst()->GetNext();
             wxRichTextParagraph* finalPara = para;
 
+            bool needExtraPara = (!i || !fragment.GetPartialParagraph());
+
             // If there was only one paragraph, we need to insert a new one.
-            if (!i)
-            {
-                finalPara = new wxRichTextParagraph;
-
-                // TODO: These attributes should come from the subsequent paragraph
-                // when originally deleted, since the subsequent para takes on
-                // the previous para's attributes.
-                finalPara->SetAttributes(firstPara->GetAttributes());
-
-                if (nextParagraph)
-                    InsertChild(finalPara, nextParagraph);
-                else
-                    AppendChild(finalPara);
-            }
-            else while (i)
+            while (i)
             {
                 wxRichTextParagraph* para = wxDynamicCast(i->GetData(), wxRichTextParagraph);
                 wxASSERT( para != NULL );
@@ -1195,6 +1197,18 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
                 i = i->GetNext();
             }
 
+            // If there was only one paragraph, or we have full paragraphs in our fragment,
+            // we need to insert a new one.
+            if (needExtraPara)
+            {
+                finalPara = new wxRichTextParagraph;
+
+                if (nextParagraph)
+                    InsertChild(finalPara, nextParagraph);
+                else
+                    AppendChild(finalPara);
+            }
+
             // 4. Add back the remaining content.
             if (finalPara)
             {
@@ -1204,10 +1218,14 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
                 if (finalPara->GetChildCount() == 0)
                 {
                     wxRichTextPlainText* text = new wxRichTextPlainText(wxEmptyString);
+                    text->SetAttributes(emptyParagraphAttributes);
 
                     finalPara->AppendChild(text);
                 }
             }
+
+            if (finalPara && finalPara != para)
+                finalPara->SetAttributes(originalAttr);
 
             return true;
         }
@@ -1392,6 +1410,7 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
 {
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
 
+    wxRichTextParagraph* firstPara = NULL;
     while (node)
     {
         wxRichTextParagraph* obj = wxDynamicCast(node->GetData(), wxRichTextParagraph);
@@ -1406,58 +1425,75 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
             // Deletes the content of this object within the given range
             obj->DeleteRange(range);
 
+            wxRichTextRange thisRange = obj->GetRange();
+
             // If the whole paragraph is within the range to delete,
             // delete the whole thing.
-            if (range.GetStart() <= obj->GetRange().GetStart() && range.GetEnd() >= obj->GetRange().GetEnd())
+            if (range.GetStart() <= thisRange.GetStart() && range.GetEnd() >= thisRange.GetEnd())
             {
                 // Delete the whole object
                 RemoveChild(obj, true);
+                obj = NULL;
             }
+            else if (!firstPara)
+                firstPara = obj;
+
             // If the range includes the paragraph end, we need to join this
             // and the next paragraph.
-            else if (range.Contains(obj->GetRange().GetEnd()))
+            if (range.GetEnd() <= thisRange.GetEnd())
             {
                 // We need to move the objects from the next paragraph
                 // to this paragraph
 
-                if (next)
+                wxRichTextParagraph* nextParagraph = NULL;
+                if ((range.GetEnd() < thisRange.GetEnd()) && obj)
+                    nextParagraph = obj;
+                else
                 {
-                    wxRichTextParagraph* nextParagraph = wxDynamicCast(next->GetData(), wxRichTextParagraph);
-                    next = next->GetNext();
-                    if (nextParagraph)
-                    {
-                        // Delete the stuff we need to delete
-                        nextParagraph->DeleteRange(range);
-
-                        // Move the objects to the previous para
-                        wxRichTextObjectList::compatibility_iterator node1 = nextParagraph->GetChildren().GetFirst();
-
-                        while (node1)
-                        {
-                            wxRichTextObject* obj1 = node1->GetData();
-
-                            // If the object is empty, optimise it out
-                            if (obj1->IsEmpty())
-                            {
-                                delete obj1;
-                            }
-                            else
-                            {
-                                obj->AppendChild(obj1);
-                            }
-
-                            wxRichTextObjectList::compatibility_iterator next1 = node1->GetNext();
-                            nextParagraph->GetChildren().Erase(node1);
-
-                            node1 = next1;
-                        }
-
-                        // Delete the paragraph
-                        RemoveChild(nextParagraph, true);
-
-                    }
+                    // We're ending at the end of the paragraph, so merge the _next_ paragraph.
+                    if (next)
+                        nextParagraph = wxDynamicCast(next->GetData(), wxRichTextParagraph);
                 }
 
+                bool applyFinalParagraphStyle = firstPara && nextParagraph && nextParagraph != firstPara;
+
+                wxTextAttrEx nextParaAttr;
+                if (applyFinalParagraphStyle)
+                    nextParaAttr = nextParagraph->GetAttributes();
+
+                if (firstPara && nextParagraph && firstPara != nextParagraph)
+                {
+                    // Move the objects to the previous para
+                    wxRichTextObjectList::compatibility_iterator node1 = nextParagraph->GetChildren().GetFirst();
+
+                    while (node1)
+                    {
+                        wxRichTextObject* obj1 = node1->GetData();
+
+                        // If the object is empty, optimise it out
+                        if (obj1->IsEmpty())
+                        {
+                            delete obj1;
+                        }
+                        else
+                        {
+                            firstPara->AppendChild(obj1);
+                        }
+
+                        wxRichTextObjectList::compatibility_iterator next1 = node1->GetNext();
+                        nextParagraph->GetChildren().Erase(node1);
+
+                        node1 = next1;
+                    }
+
+                    // Delete the paragraph
+                    RemoveChild(nextParagraph, true);
+                }
+
+                if (applyFinalParagraphStyle)
+                    firstPara->SetAttributes(nextParaAttr);
+
+                return true;
             }
         }
 
@@ -4662,6 +4698,7 @@ bool wxRichTextPlainText::Merge(wxRichTextObject* object)
     if (textObject)
     {
         m_text += textObject->GetText();
+        wxRichTextApplyStyle(m_attributes, textObject->GetAttributes());
         return true;
     }
     else
@@ -4794,21 +4831,14 @@ bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagr
 
     action->GetNewParagraphs() = paragraphs;
 
-    if (p)
-    {
-        wxRichTextObjectList::compatibility_iterator node = m_children.GetLast();
-        while (node)
-        {
-            wxRichTextParagraph* obj = (wxRichTextParagraph*) node->GetData();
-            obj->SetAttributes(*p);
-            node = node->GetPrevious();
-        }
-    }
-
     action->SetPosition(pos);
 
+    wxRichTextRange range = wxRichTextRange(pos, pos + paragraphs.GetRange().GetEnd() - 1);
+    if (!paragraphs.GetPartialParagraph())
+        range.SetEnd(range.GetEnd()+1);
+
     // Set the range we'll need to delete in Undo
-    action->SetRange(wxRichTextRange(pos, pos + paragraphs.GetRange().GetEnd() - 1));
+    action->SetRange(range);
 
     SubmitAction(action);
 
@@ -4877,6 +4907,10 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
 
     if (p)
         newPara->SetAttributes(*p);
+
+    // Use the default character style
+    if (!GetDefaultStyle().IsDefault() && newPara->GetChildren().GetFirst())
+        newPara->GetChildren().GetFirst()->GetData()->SetAttributes(GetDefaultStyle());
 
     // Set the range we'll need to delete in Undo
     action->SetRange(wxRichTextRange(pos, pos));
