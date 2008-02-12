@@ -104,7 +104,9 @@
         <set var="RCDEFS_H">
             <if cond="TOOLKIT=='MSW'">msw/rcdefs.h</if>
         </set>
-        <headers>
+
+
+        <data-files-tree>
             <srcdir>
                 $(BUILDDIR)/lib/wx/include/$(TOOLCHAIN_FULLNAME)/wx
             </srcdir>
@@ -114,15 +116,19 @@
             <install-to>
                 $(LIBDIR)/wx/include/$(TOOLCHAIN_FULLNAME)/wx
             </install-to>
-        </headers>
+        </data-files-tree>
 
-        <headers>
+        <!-- FIXME: make this use <headers> once it supports prefix removal -->
+        <if cond="BAKEFILE_VERSION!='0.2.3'">
+            <warning>is it time to use per-target &lt;headers&gt; now?</warning>
+        </if>
+        <data-files-tree>
             <srcdir>$(SRCDIR)/include</srcdir>
             <files>$(ALL_HEADERS)</files>
             <install-to>
                 $(INCLUDEDIR)/wx-$(WX_RELEASE)$(WX_FLAVOUR)
             </install-to>
-        </headers>
+        </data-files-tree>
 
         <!-- Locales: -->
         <using module="gettext"/>
