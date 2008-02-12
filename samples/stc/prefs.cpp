@@ -59,7 +59,7 @@ const CommonInfo g_CommonPrefs = {
 //----------------------------------------------------------------------------
 // keywordlists
 // C++
-char* CppWordlist1 =
+const char* CppWordlist1 =
     "asm auto bool break case catch char class const const_cast "
     "continue default delete do double dynamic_cast else enum explicit "
     "export extern false float for friend goto if inline int long "
@@ -68,9 +68,9 @@ char* CppWordlist1 =
     "struct switch template this throw true try typedef typeid "
     "typename union unsigned using virtual void volatile wchar_t "
     "while";
-char* CppWordlist2 =
+const char* CppWordlist2 =
     "file";
-char* CppWordlist3 =
+const char* CppWordlist3 =
     "a addindex addtogroup anchor arg attention author b brief bug c "
     "class code date def defgroup deprecated dontinclude e em endcode "
     "endhtmlonly endif endlatexonly endlink endverbatim enum example "
@@ -83,11 +83,11 @@ char* CppWordlist3 =
     "verbinclude version warning weakgroup $ @ \"\" & < > # { }";
 
 // Python
-char* PythonWordlist1 =
+const char* PythonWordlist1 =
     "and assert break class continue def del elif else except exec "
     "finally for from global if import in is lambda None not or pass "
     "print raise return try while yield";
-char* PythonWordlist2 =
+const char* PythonWordlist2 =
     "ACCELERATORS ALT AUTO3STATE AUTOCHECKBOX AUTORADIOBUTTON BEGIN "
     "BITMAP BLOCK BUTTON CAPTION CHARACTERISTICS CHECKBOX CLASS "
     "COMBOBOX CONTROL CTEXT CURSOR DEFPUSHBUTTON DIALOG DIALOGEX "

@@ -709,7 +709,7 @@ EditProperties::EditProperties (Edit *edit,
 // EditPrint
 //----------------------------------------------------------------------------
 
-EditPrint::EditPrint (Edit *edit, wxChar *title)
+EditPrint::EditPrint (Edit *edit, const wxChar *title)
               : wxPrintout(title) {
     m_edit = edit;
     m_printed = 0;
