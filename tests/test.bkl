@@ -92,6 +92,7 @@
             geometry/size.cpp
             geometry/point.cpp
             config/config.cpp
+            controls/clientsize.cpp
             controls/textctrltest.cpp
         </sources>
         <wx-lib>core</wx-lib>

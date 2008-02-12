@@ -650,6 +650,8 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx">
 			<File
+				RelativePath=".\controls\clientsize.cpp"/>
+			<File
 				RelativePath=".\config\config.cpp"/>
 			<File
 				RelativePath=".\dummy.cpp">

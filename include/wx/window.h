@@ -355,6 +355,10 @@ public:
         return wxRect(GetClientAreaOrigin(), GetClientSize());
     }
 
+    // client<->window size conversion
+    virtual wxSize ClientToWindowSize(const wxSize& size) const;
+    virtual wxSize WindowToClientSize(const wxSize& size) const;
+
         // get the size best suited for the window (in fact, minimal
         // acceptable size using which it will still look "nice" in
         // most situations)

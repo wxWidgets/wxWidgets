@@ -808,6 +808,9 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
+				RelativePath=".\controls\clientsize.cpp"
+			/>
+			<File
 				RelativePath=".\config\config.cpp"
 			/>
 			<File

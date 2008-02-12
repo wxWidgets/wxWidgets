@@ -713,6 +713,22 @@ wxPoint wxWindowBase::GetClientAreaOrigin() const
     return wxPoint(0,0);
 }
 
+wxSize wxWindowBase::ClientToWindowSize(const wxSize& size) const
+{
+    const wxSize diff(GetSize() - GetClientSize());
+
+    return wxSize(size.x == -1 ? -1 : size.x + diff.x,
+                  size.y == -1 ? -1 : size.y + diff.y);
+}
+
+wxSize wxWindowBase::WindowToClientSize(const wxSize& size) const
+{
+    const wxSize diff(GetSize() - GetClientSize());
+
+    return wxSize(size.x == -1 ? -1 : size.x - diff.x,
+                  size.y == -1 ? -1 : size.y - diff.y);
+}
+
 void wxWindowBase::SetWindowVariant( wxWindowVariant variant )
 {
     if ( m_windowVariant != variant )

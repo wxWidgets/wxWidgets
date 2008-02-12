@@ -380,6 +380,23 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+\membersection{wxWindow::ClientToWindowSize}\label{wxwindowclienttowindowsize}
+
+\func{virtual wxSize}{ClientToWindowSize}{\param{const wxSize\&}{ size}}
+
+Converts client area size \arg{size} to corresponding window size. In other
+words, the returned value is what would \helpref{GetSize}{wxwindowgetsize}
+return if this window had client area of given size.
+Components with $wxDefaultCoord$ value are left unchanged.
+
+Note that the conversion is not always exact, it assumes that non-client area
+doesn't change and so doesn't take into account things like menu bar
+(un)wrapping or (dis)appearance of the scrollbars.
+
+\wxheading{See also}
+
+\helpref{wxWindow::WindowToClientSize}{wxwindowwindowtoclientsize}
+
 
 \membersection{wxWindow::Close}\label{wxwindowclose}
 
@@ -4033,3 +4050,19 @@ Interface Guidelines forbid moving the mouse cursor programmatically.
 
 \docparam{y}{The new y position for the cursor.}
 
+\membersection{wxWindow::WindowToClientSize}\label{wxwindowwindowtoclientsize}
+
+\func{virtual wxSize}{WindowToClientSize}{\param{const wxSize\&}{ size}}
+
+Converts window size \arg{size} to corresponding client area size. In other
+words, the returned value is what would
+\helpref{GetClientSize}{wxwindowgetclientsize} return if this window had
+given window size. Components with $wxDefaultCoord$ value are left unchanged. 
+
+Note that the conversion is not always exact, it assumes that non-client area
+doesn't change and so doesn't take into account things like menu bar
+(un)wrapping or (dis)appearance of the scrollbars.
+
+\wxheading{See also}
+
+\helpref{wxWindow::ClientToWindowSize}{wxwindowclienttowindowsize}
