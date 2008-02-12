@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 10 December 2007                                                   *
+ * Date : 11 February 2008                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -216,6 +216,8 @@ typedef pid_t GPid;
 
 #define wxUSE_THREADS 1
 
+#define wxUSE_WEAKREF 1
+
 #define wxUSE_STREAMS       1
 
 #define wxUSE_STD_IOSTREAM  0
@@ -248,6 +250,8 @@ typedef pid_t GPid;
 
 #define wxUSE_INTL          1
 #include <locale.h>
+
+#define wxUSE_XLOCALE 1
 
 #define wxUSE_DATETIME      1
 
@@ -1198,6 +1202,9 @@ typedef pid_t GPid;
 
 /* Define if getgrgid_r is available. */
 #undef HAVE_GETGRGID_R
+
+/* Define if locale_t is available */
+#undef HAVE_LOCALE_T
 
 /* ---------------------------------------------------------------------
    Win32 adjustments section
