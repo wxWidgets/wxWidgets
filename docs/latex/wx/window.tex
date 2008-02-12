@@ -1534,6 +1534,24 @@ Returns the value previously passed to
 \helpref{wxWindow::SetWindowVariant}{wxwindowsetwindowvariant}.
 
 
+\membersection{wxWindow::HandleAsNavigationKey}\label{wxwindowhandleasnavigationkey}
+
+\func{bool}{HandleAsNavigationKey}{\param{const wxKeyEvent\&}{ event}}
+
+This function will generate the appropriate call to
+\helpref{Navigate}{wxwindownavigate} if the key event is one normally used for
+keyboard navigation and return \true in this case.
+
+\wxheading{Return value}
+
+Returns \true if the key pressed was for navigation and was handled, \false
+otherwise.
+
+\wxheading{See also}
+
+\helpref{Navigate}{wxwindownavigate}
+
+
 \membersection{wxWindow::HandleWindowEvent}\label{wxwindowhandlewindowevent}
 
 \func{bool}{HandleWindowEvent}{\param{wxEvent\& }{event}}
@@ -1952,7 +1970,8 @@ changed.
 You may wish to call this from a text control custom keypress handler to do the default
 navigation behaviour for the tab key, since the standard default behaviour for
 a multiline text control with the wxTE\_PROCESS\_TAB style is to insert a tab
-and not navigate to the next control. See also \helpref{wxNavigationKeyEvent}{wxnavigationkeyevent}.
+and not navigate to the next control. See also \helpref{wxNavigationKeyEvent}{wxnavigationkeyevent} and
+\helpref{HandleAsNavigationKey}{wxwindowhandleasnavigationkey}.
 
 
 \membersection{wxWindow::NavigateIn}\label{wxwindownavigatein}

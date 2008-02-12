@@ -3456,16 +3456,8 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
     ke.SetEventObject( parent );
     if (parent->GetEventHandler()->ProcessEvent( ke )) return;
 
-    if (event.GetKeyCode() == WXK_TAB)
-    {
-        wxNavigationKeyEvent nevent;
-        nevent.SetWindowChange( event.ControlDown() );
-        nevent.SetDirection( !event.ShiftDown() );
-        nevent.SetEventObject( GetParent()->GetParent() );
-        nevent.SetCurrentFocus( m_parent );
-        if (GetParent()->GetParent()->GetEventHandler()->ProcessEvent( nevent ))
-            return;
-    }
+    if ( HandleAsNavigationKey(event) )
+        return;
 
     // no item -> nothing to do
     if (!HasCurrent())

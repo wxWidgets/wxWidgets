@@ -602,13 +602,7 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
         case WXK_TAB:
             // Since we are using wxWANTS_CHARS we need to send navigation
             // events for the tabs on MSW
-            {
-                wxNavigationKeyEvent ne;
-                ne.SetDirection(!event.ShiftDown());
-                ne.SetCurrentFocus(this);
-                ne.SetEventObject(this);
-                GetParent()->GetEventHandler()->ProcessEvent(ne);
-            }
+            HandleAsNavigationKey(event);
             // fall through to default
 #endif
         default:

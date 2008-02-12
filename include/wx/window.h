@@ -680,6 +680,11 @@ public:
     bool Navigate(int flags = wxNavigationKeyEvent::IsForward)
         { return m_parent && ((wxWindowBase *)m_parent)->DoNavigateIn(flags); }
 
+    // this function will generate the appropriate call to Navigate() if the
+    // key event is one normally used for keyboard navigation and return true
+    // in this case
+    bool HandleAsNavigationKey(const wxKeyEvent& event);
+
         // move this window just before/after the specified one in tab order
         // (the other window must be our sibling!)
     void MoveBeforeInTabOrder(wxWindow *win)

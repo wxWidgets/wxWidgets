@@ -1651,22 +1651,8 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
     }
     else // no popup
     {
-        int keycode = event.GetKeyCode();
-
-        if ( keycode == WXK_TAB )
-        {
-            wxNavigationKeyEvent evt;
-
-            wxWindow* mainCtrl = GetMainWindowOfCompositeControl();
-
-            evt.SetFlags(wxNavigationKeyEvent::FromTab|
-                         (!event.ShiftDown() ? wxNavigationKeyEvent::IsForward
-                                             : wxNavigationKeyEvent::IsBackward));
-            evt.SetEventObject(mainCtrl);
-            evt.SetCurrentFocus(mainCtrl);
-            mainCtrl->GetParent()->GetEventHandler()->AddPendingEvent(evt);
+        if ( HandleAsNavigationKey(event) )
             return;
-        }
 
         if ( IsKeyPopupToggle(event) )
         {
@@ -1682,6 +1668,8 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
             event.Skip();
             return;
         }
+
+        int keycode = event.GetKeyCode();
 
         if ( (comboStyle & wxCB_READONLY) ||
              (keycode != WXK_RIGHT && keycode != WXK_LEFT) )

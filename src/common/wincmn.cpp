@@ -2700,10 +2700,31 @@ bool wxWindowBase::DoNavigateIn(int flags)
     return false;
 #else // !wxHAS_NATIVE_TAB_TRAVERSAL
     wxNavigationKeyEvent eventNav;
+    wxWindow *focused = FindFocus();
+    eventNav.SetCurrentFocus(focused);
+    eventNav.SetEventObject(focused);
     eventNav.SetFlags(flags);
-    eventNav.SetEventObject(FindFocus());
     return GetEventHandler()->ProcessEvent(eventNav);
 #endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
+}
+
+bool wxWindowBase::HandleAsNavigationKey(const wxKeyEvent& event)
+{
+    if ( event.GetKeyCode() != WXK_TAB )
+        return false;
+
+    int flags = wxNavigationKeyEvent::FromTab;
+
+    if ( event.ShiftDown() )
+        flags |= wxNavigationKeyEvent::IsBackward;
+    else
+        flags |= wxNavigationKeyEvent::IsForward;
+
+    if ( event.ControlDown() )
+        flags |= wxNavigationKeyEvent::WinChange;
+
+    Navigate(flags);
+    return true;
 }
 
 void wxWindowBase::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
