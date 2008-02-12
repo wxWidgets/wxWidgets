@@ -1016,6 +1016,8 @@ static wxArrayString gs_searchPrefixes;
 // wxLanguageInfo
 // ----------------------------------------------------------------------------
 
+#ifdef __WXMSW__
+
 // helper used by wxLanguageInfo::GetLocaleName() and elsewhere to determine
 // whether the locale is Unicode-only (it is if this function returns empty
 // string)
@@ -1034,8 +1036,6 @@ static wxString wxGetANSICodePageForLocale(LCID lcid)
 
     return cp;
 }
-
-#ifdef __WXMSW__
 
 wxUint32 wxLanguageInfo::GetLCID() const
 {
