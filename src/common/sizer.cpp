@@ -861,10 +861,7 @@ wxSize wxSizer::Fit( wxWindow *window )
         sizeMax = wxDisplay(disp).GetClientArea().GetSize();
 
         // space for decorations and toolbars etc.
-        wxSize tlw_client_size = tlw->GetClientSize();
-        wxSize tlw_size = tlw->GetSize();
-        sizeMax.x -= tlw_size.x - tlw_client_size.x;
-        sizeMax.y -= tlw_size.y - tlw_client_size.y;
+        sizeMax = tlw->WindowToClientSize(sizeMax);
     }
     else
     {
@@ -931,12 +928,7 @@ wxSize wxSizer::GetMaxWindowSize( wxWindow *window ) const
 
 wxSize wxSizer::GetMinWindowSize( wxWindow *window )
 {
-    wxSize      minSize( GetMinSize() );
-    wxSize      size( window->GetSize() );
-    wxSize      client_size( window->GetClientSize() );
-
-    return wxSize( minSize.x+size.x-client_size.x,
-                   minSize.y+size.y-client_size.y );
+    return window->ClientToWindowSize(GetMinSize());
 }
 
 // TODO on mac we need a function that determines how much free space this
@@ -944,18 +936,7 @@ wxSize wxSizer::GetMinWindowSize( wxWindow *window )
 // space around the controls
 wxSize wxSizer::GetMaxClientSize( wxWindow *window ) const
 {
-    wxSize maxSize( window->GetMaxSize() );
-
-    if ( maxSize != wxDefaultSize )
-    {
-        wxSize size( window->GetSize() );
-        wxSize client_size( window->GetClientSize() );
-
-        return wxSize( maxSize.x + client_size.x - size.x,
-                       maxSize.y + client_size.y - size.y );
-    }
-    else
-        return wxDefaultSize;
+    return window->WindowToClientSize(window->GetMaxSize());
 }
 
 wxSize wxSizer::GetMinClientSize( wxWindow *WXUNUSED(window) )
