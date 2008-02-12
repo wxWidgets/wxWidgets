@@ -93,7 +93,7 @@ public:
     wxTreeTextCtrl(wxGenericTreeCtrl *owner, wxGenericTreeItem *item);
 
     void EndEdit( bool discardChanges );
-    
+
     const wxGenericTreeItem* item() const { return m_itemEdited; }
 
 protected:
@@ -387,11 +387,11 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
 void wxTreeTextCtrl::EndEdit(bool discardChanges)
 {
     m_aboutToFinish = true;
-    
+
     if ( discardChanges )
     {
         m_owner->OnRenameCancelled(m_itemEdited);
-           
+
         Finish( true );
     }
     else
@@ -485,7 +485,7 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
     {
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
-            
+
         Finish( false );
     }
 
@@ -802,21 +802,12 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
                                const wxString& name )
 {
 #ifdef __WXMAC__
-    int major,minor;
-    wxGetOsVersion( &major, &minor );
+    int major, minor;
+    wxGetOsVersion(&major, &minor);
 
-    style &= ~wxTR_LINES_AT_ROOT;
-    style |= wxTR_NO_LINES;
     if (major < 10)
         style |= wxTR_ROW_LINES;
-        
-    if (style == 0 || style & wxTR_DEFAULT_STYLE)
-        style |= wxTR_FULL_ROW_HIGHLIGHT;
-        
 #endif // __WXMAC__
-#ifdef __WXGTK20__
-    style |= wxTR_NO_LINES;
-#endif
 
     if ( !wxControl::Create( parent, id, pos, size,
                              style|wxHSCROLL|wxVSCROLL,
@@ -1906,7 +1897,7 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId, bool select)
     {
         wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
         wxCHECK_RET( item, wxT("SelectItem(): invalid tree item") );
-        
+
         wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
         if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
             return;
@@ -2264,7 +2255,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 #else
             rect.x -= 1;
             rect.width += 2;
-        
+
             int flags = wxCONTROL_SELECTED;
             if (m_hasFocus)
                 flags |= wxCONTROL_FOCUSED;
@@ -2291,7 +2282,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             {
                 rect.x -= 1;
                 rect.width += 2;
-                
+
                 int flags = wxCONTROL_SELECTED;
                 if (m_hasFocus)
                     flags |= wxCONTROL_FOCUSED;

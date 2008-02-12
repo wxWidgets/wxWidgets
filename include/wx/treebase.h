@@ -175,10 +175,15 @@ enum wxTreeItemIcon
 
 #define wxTR_FULL_ROW_HIGHLIGHT      0x2000     // highlight full horz space
 
-#ifdef __WXGTK20__
-#define wxTR_DEFAULT_STYLE           (wxTR_HAS_BUTTONS | wxTR_NO_LINES)
+// make the default control appearance look more native-like depending on the
+// platform
+#if defined(__WXGTK20__)
+    #define wxTR_DEFAULT_STYLE       (wxTR_HAS_BUTTONS | wxTR_NO_LINES)
+#elif defined(__WXMAC__)
+    #define wxTR_DEFAULT_STYLE \
+        (wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxTR_FULL_ROW_HIGHLIGHT)
 #else
-#define wxTR_DEFAULT_STYLE           (wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
+    #define wxTR_DEFAULT_STYLE       (wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
 #endif
 
 #if WXWIN_COMPATIBILITY_2_6
