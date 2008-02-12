@@ -104,6 +104,7 @@ All (GUI):
   smaller than the minimal size.
 - Added <scrollrate> parameter to wxScrolledWindow XRC handler.
 - wxRichTextCtrl performance has been improved considerably.
+- Several wxRichTextCtrl style, paste and undo bugs fixed.
 - wxNotebook RTTI corrected, so now wxDynamicCast(notebook, wxBookCtrlBase)
   works.
 - When focus is set to wxScrolledWindow child, scroll it into view.
