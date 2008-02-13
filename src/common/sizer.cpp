@@ -834,8 +834,10 @@ void wxSizer::DeleteWindows()
     }
 }
 
-wxSize wxSizer::Fit( wxWindow *window )
+wxSize wxSizer::ComputeFittingClientSize(wxWindow *window)
 {
+    wxCHECK_MSG( window, wxDefaultSize, "window can't be NULL" );
+
     // take the min size by default and limit it by max size
     wxSize size = GetMinClientSize(window);
     wxSize sizeMax;
@@ -846,8 +848,7 @@ wxSize wxSizer::Fit( wxWindow *window )
         // hack for small screen devices where TLWs are always full screen
         if ( tlw->IsAlwaysMaximized() )
         {
-            // do nothing
-            return tlw->GetSize();
+            return tlw->GetClientSize();
         }
 
         // limit the window to the size of the display it is on
@@ -873,8 +874,22 @@ wxSize wxSizer::Fit( wxWindow *window )
     if ( sizeMax.y != wxDefaultCoord && size.y > sizeMax.y )
             size.y = sizeMax.y;
 
+    return size;
+}
+
+wxSize wxSizer::ComputeFittingWindowSize(wxWindow *window)
+{
+    wxCHECK_MSG( window, wxDefaultSize, "window can't be NULL" );
+
+    return window->ClientToWindowSize(ComputeFittingClientSize(window));
+}
+
+wxSize wxSizer::Fit( wxWindow *window )
+{
+    wxCHECK_MSG( window, wxDefaultSize, "window can't be NULL" );
+
     // set client size
-    window->SetClientSize( size );
+    window->SetClientSize(ComputeFittingClientSize(window));
 
     // return entire size
     return window->GetSize();

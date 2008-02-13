@@ -601,6 +601,9 @@ public:
 
     virtual void Layout();
 
+    wxSize ComputeFittingClientSize(wxWindow *window);
+    wxSize ComputeFittingWindowSize(wxWindow *window);
+
     wxSize Fit( wxWindow *window );
     void FitInside( wxWindow *window );
     void SetSizeHints( wxWindow *window );
