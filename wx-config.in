@@ -805,7 +805,8 @@ if not user_mask_fits "$this_config" ; then
                 decho "--> $prefix/bin/$_last_chance $_legacy_args"
             fi
 
-            export WXCONFIG_DELEGATED=yes
+            WXCONFIG_DELEGATED=yes
+            export WXCONFIG_DELEGATED
             $prefix/bin/$_last_chance $_legacy_args
             exit
 
@@ -844,7 +845,8 @@ EOF
                 decho "--> $wxconfdir/$best_delegate $*"
             fi
 
-            export WXCONFIG_DELEGATED=yes
+            WXCONFIG_DELEGATED=yes
+            export WXCONFIG_DELEGATED
             $wxconfdir/$best_delegate $*
             exit
         fi
@@ -866,7 +868,8 @@ EOF
         decho "--> $wxconfdir/`find_eligible_delegates $configmask` $*"
     fi
 
-    export WXCONFIG_DELEGATED=yes
+    WXCONFIG_DELEGATED=yes
+    export WXCONFIG_DELEGATED
     $wxconfdir/`find_eligible_delegates $configmask` $*
     exit
 fi
