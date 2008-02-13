@@ -342,8 +342,6 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
         m_dragging = true;
         CaptureMouse();
 
-        SelectNone();
-
         bool caretAtLineStart = false;
 
         if (hit & wxRICHTEXT_HITTEST_BEFORE)
@@ -359,8 +357,24 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
             position --;
         }
 
+        long oldCaretPos = m_caretPosition;
+
         MoveCaret(position, caretAtLineStart);
         SetDefaultStyleToCursorStyle();
+
+        if (event.ShiftDown())
+        {
+            bool extendSel = false;
+            if (m_selectionRange.GetStart() == -2)
+                extendSel = ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
+            else
+                extendSel = ExtendSelection(m_caretPosition, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
+
+            if (extendSel)
+                Refresh(false);
+        }
+        else
+            SelectNone();
     }
 
     event.Skip();
