@@ -293,6 +293,10 @@ wxMDIChildFrame::~wxMDIChildFrame()
 {
     if (m_menuBar)
         delete m_menuBar;
+
+    // wxMDIClientWindow does not get redrawn properly after last child is removed
+    if (m_parent && m_parent->GetChildren().size() <= 1)
+        gtk_widget_queue_draw(m_parent->m_widget);
 }
 
 bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
