@@ -1863,15 +1863,12 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id_)
 // utility used by wxListCtrl::MSWOnNotify and by wxDataViewHeaderWindowMSW::MSWOnNotify
 int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
 {
-    wxASSERT(nmhdr && ptClick);
-
-    // find the column clicked: we have to search for it
-    // ourselves as the notification message doesn't provide
-    // this info
+    // find the column clicked: we have to search for it ourselves as the
+    // notification message doesn't provide this info
 
     // where did the click occur?
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
-    if (nmhdr->code == GN_CONTEXTMENU)
+    if ( nmhdr->code == GN_CONTEXTMENU )
     {
         *ptClick = ((NMRGINFO*)nmhdr)->ptAction;
     }
@@ -1882,19 +1879,27 @@ int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
         wxLogLastError(_T("GetCursorPos"));
     }
 
-    if ( !::ScreenToClient(nmhdr->hwndFrom, ptClick) )
+    // we need to use listctrl coordinates for the event point so this is what
+    // we return in ptClick, but for comparison with Header_GetItemRect()
+    // result below we need to use header window coordinates
+    POINT ptClickHeader = *ptClick;
+    if ( !::ScreenToClient(nmhdr->hwndFrom, &ptClickHeader) )
     {
-        wxLogLastError(_T("ScreenToClient(header)"));
+        wxLogLastError(_T("ScreenToClient(listctrl header)"));
     }
 
-    int colCount = Header_GetItemCount(nmhdr->hwndFrom);
+    if ( !::ScreenToClient(::GetParent(nmhdr->hwndFrom), ptClick) )
+    {
+        wxLogLastError(_T("ScreenToClient(listctrl)"));
+    }
 
-    RECT rect;
+    const int colCount = Header_GetItemCount(nmhdr->hwndFrom);
     for ( int col = 0; col < colCount; col++ )
     {
+        RECT rect;
         if ( Header_GetItemRect(nmhdr->hwndFrom, col, &rect) )
         {
-            if ( ::PtInRect(&rect, *ptClick) )
+            if ( ::PtInRect(&rect, ptClickHeader) )
             {
                 return col;
             }
