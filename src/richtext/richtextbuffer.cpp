@@ -5091,7 +5091,7 @@ bool wxRichTextBuffer::BeginBatchUndo(const wxString& cmdName)
         wxASSERT(m_batchedCommand == NULL);
         if (m_batchedCommand)
         {
-            GetCommandProcessor()->Submit(m_batchedCommand);
+            GetCommandProcessor()->Store(m_batchedCommand);
         }
         m_batchedCommand = new wxRichTextCommand(cmdName);
     }
@@ -5111,7 +5111,7 @@ bool wxRichTextBuffer::EndBatchUndo()
 
     if (m_batchedCommandDepth == 0)
     {
-        GetCommandProcessor()->Submit(m_batchedCommand);
+        GetCommandProcessor()->Store(m_batchedCommand);
         m_batchedCommand = NULL;
     }
 
@@ -5122,7 +5122,15 @@ bool wxRichTextBuffer::EndBatchUndo()
 bool wxRichTextBuffer::SubmitAction(wxRichTextAction* action)
 {
     if (BatchingUndo() && m_batchedCommand && !SuppressingUndo())
+    {
+        wxRichTextCommand* cmd = new wxRichTextCommand(action->GetName());
+        cmd->AddAction(action);
+        cmd->Do();
+        cmd->GetActions().Clear();
+        delete cmd;
+
         m_batchedCommand->AddAction(action);
+    }
     else
     {
         wxRichTextCommand* cmd = new wxRichTextCommand(action->GetName());
