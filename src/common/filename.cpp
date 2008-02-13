@@ -2282,7 +2282,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 #elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__OS2__) || (defined(__DOS__) && defined(__WATCOMC__))
     // no need to test for IsDir() here
     wxStructStat stBuf;
-    if ( wxStat( GetFullPath().fn_str(), &stBuf) == 0 )
+    if ( stat( GetFullPath().fn_str(), &stBuf) == 0 )
     {
         if ( dtAccess )
             dtAccess->Set(stBuf.st_atime);
