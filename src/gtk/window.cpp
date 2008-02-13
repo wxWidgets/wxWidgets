@@ -187,11 +187,6 @@ static bool g_captureWindowHasMouse = false;
 
 wxWindowGTK  *g_focusWindow = (wxWindowGTK*) NULL;
 
-// the last window which had the focus - this is normally never NULL (except
-// if we never had focus at all) as even when g_focusWindow is NULL it still
-// keeps its previous value
-wxWindowGTK *g_focusWindowLast = (wxWindowGTK*) NULL;
-
 // If a window get the focus set but has not been realized
 // yet, defer setting the focus to idle time.
 wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
@@ -1622,7 +1617,6 @@ gtk_window_focus_in_callback( GtkWidget * WXUNUSED(widget),
     if (win->m_imData)
         gtk_im_context_focus_in(win->m_imData->context);
 
-    g_focusWindowLast =
     g_focusWindow = win;
 
     wxLogTrace(TRACE_FOCUS,
