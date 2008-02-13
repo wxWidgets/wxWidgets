@@ -50,7 +50,9 @@ typedef HRESULT (WINAPI *SHGetSpecialFolderPath_t)(HWND, LPTSTR, int, BOOL);
 // ----------------------------------------------------------------------------
 
 // used in our wxLogTrace messages
-static const wxChar *TRACE_MASK = _T("stdpaths");
+#if wxUSE_LOG && wxUSE_LOG_DEBUG
+    static const wxChar *TRACE_MASK = _T("stdpaths");
+#endif
 
 #ifndef CSIDL_APPDATA
     #define CSIDL_APPDATA         0x001a
