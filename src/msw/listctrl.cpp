@@ -1862,28 +1862,40 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // where did the click occur?
                     POINT ptClick;
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
-                  if(nmhdr->code == GN_CONTEXTMENU) {
-                      ptClick = ((NMRGINFO*)nmhdr)->ptAction;
-                  } else
+                    if ( nmhdr->code == GN_CONTEXTMENU )
+                    {
+                        ptClick = ((NMRGINFO*)nmhdr)->ptAction;
+                    }
+                    else
 #endif //__WXWINCE__
                     if ( !::GetCursorPos(&ptClick) )
                     {
                         wxLogLastError(_T("GetCursorPos"));
                     }
 
-                    if ( !::ScreenToClient(GetHwnd(), &ptClick) )
+                    // we need to use listctrl coordinates for the event point
+                    // but for comparison with Header_GetItemRect() result
+                    // below we need to use header window coordinates
+                    POINT ptClickList = ptClick;
+                    if ( ::ScreenToClient(GetHwnd(), &ptClickList) )
+                    {
+                        event.m_pointDrag.x = ptClickList.x;
+                        event.m_pointDrag.y = ptClickList.y;
+                    }
+                    else
+                    {
+                        wxLogLastError(_T("ScreenToClient(listctrl)"));
+                    }
+
+                    if ( !::ScreenToClient(hwndHdr, &ptClick) )
                     {
                         wxLogLastError(_T("ScreenToClient(listctrl header)"));
                     }
 
-                    event.m_pointDrag.x = ptClick.x;
-                    event.m_pointDrag.y = ptClick.y;
-
-                    int colCount = Header_GetItemCount(hwndHdr);
-
-                    RECT rect;
+                    const int colCount = Header_GetItemCount(hwndHdr);
                     for ( int col = 0; col < colCount; col++ )
                     {
+                        RECT rect;
                         if ( Header_GetItemRect(hwndHdr, col, &rect) )
                         {
                             if ( ::PtInRect(&rect, ptClick) )
