@@ -122,7 +122,7 @@ void wxGLContext::SetCurrent(const wxGLCanvas& win) const
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
+static void
 gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 {
     if (!win->m_glContext && win->m_createImplicitContext)
@@ -133,8 +133,6 @@ gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 
         win->m_glContext = new wxGLContext(win, share);
     }
-
-    return FALSE;
 }
 }
 
@@ -143,7 +141,7 @@ gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
+static void
 gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
     // CF: Can the "if" line be removed, and the code unconditionally (always) be run?
@@ -156,8 +154,6 @@ gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
         win->m_exposed = false;
         win->GetUpdateRegion().Clear();
     }
-
-    return FALSE;
 }
 }
 
@@ -198,6 +194,43 @@ gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, w
     wxSizeEvent event( wxSize(win->m_width,win->m_height), win->GetId() );
     event.SetEventObject( win );
     win->GetEventHandler()->ProcessEvent( event );
+}
+}
+
+//-----------------------------------------------------------------------------
+// emission hook for "parent-set"
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean
+parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void* data)
+{
+    wxGLCanvas* win = (wxGLCanvas*)data;
+    if (g_value_peek_pointer(&param_values[0]) == win->m_wxwindow)
+    {
+        const XVisualInfo* xvi = (XVisualInfo*)win->m_vi;
+        GdkVisual* visual = gtk_widget_get_visual(win->m_wxwindow);
+        if (GDK_VISUAL_XVISUAL(visual)->visualid != xvi->visualid)
+        {
+#if GTK_CHECK_VERSION(2, 2, 0)
+            if (gtk_check_version(2, 2, 0) == NULL)
+            {
+                GdkScreen* screen = gtk_widget_get_screen(win->m_wxwindow);
+                visual = gdk_x11_screen_lookup_visual(screen, xvi->visualid);
+            }
+            else
+#endif
+            {
+                visual = gdkx_visual_get(xvi->visualid);
+            }
+            GdkColormap* colormap = gdk_colormap_new(visual, false);
+            gtk_widget_set_colormap(win->m_wxwindow, colormap);
+            g_object_unref(colormap);
+        }
+        // remove hook
+        return false;
+    }
+    return true;
 }
 }
 
@@ -316,40 +349,15 @@ bool wxGLCanvas::Create( wxWindow *parent,
     m_vi = vi;  // save for later use
 
     wxCHECK_MSG( m_vi, false, _T("required visual couldn't be found") );
-    GdkVisual *visual;
-    GdkColormap *colormap;
 
-    // MR: This needs a fix for lower gtk+ versions too. Might need to rethink logic (FIXME)
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,2,0)
-    if (!gtk_check_version(2,2,0))
-    {
-        wxWindow::Create( parent, id, pos, size, style, name );
+    // watch for the "parent-set" signal on m_wxwindow so we can set colormap
+    // before m_wxwindow is realized (which will occur before
+    // wxWindow::Create() returns if parent is already visible)
+    unsigned sig_id = g_signal_lookup("parent-set", GTK_TYPE_WIDGET);
+    g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, NULL);
 
-        m_glWidget = m_wxwindow;
-
-        GdkScreen *screen = gtk_widget_get_screen( m_glWidget );
-        colormap = gdk_screen_get_default_colormap(screen);
-        visual = gdk_colormap_get_visual(colormap);
-
-        if (GDK_VISUAL_XVISUAL(visual)->visualid != vi->visualid)
-        {
-            visual = gdk_x11_screen_lookup_visual( screen, vi->visualid );
-            colormap = gdk_colormap_new(visual, FALSE);
-        }
-
-        gtk_widget_set_colormap( m_glWidget, colormap );
-    }
-    else
-#endif
-    {
-        visual = gdkx_visual_get( vi->visualid );
-        colormap = gdk_colormap_new( visual, TRUE );
-
-        gtk_widget_push_colormap( colormap );
-
-        wxWindow::Create( parent, id, pos, size, style, name );
-        m_glWidget = m_wxwindow;
-    }
+    wxWindow::Create(parent, id, pos, size, style, name);
+    m_glWidget = m_wxwindow;
 
     gtk_widget_set_double_buffered( m_glWidget, FALSE );
 
@@ -357,11 +365,6 @@ bool wxGLCanvas::Create( wxWindow *parent,
     g_signal_connect(m_wxwindow, "map",           G_CALLBACK(gtk_glwindow_map_callback),      this);
     g_signal_connect(m_wxwindow, "expose_event",  G_CALLBACK(gtk_glwindow_expose_callback),   this);
     g_signal_connect(m_widget,   "size_allocate", G_CALLBACK(gtk_glcanvas_size_callback),     this);
-
-    if (gtk_check_version(2,2,0) != NULL)
-    {
-        gtk_widget_pop_colormap();
-    }
 
     // if our parent window is already visible, we had been realized before we
     // connected to the "realize" signal and hence our m_glContext hasn't been
