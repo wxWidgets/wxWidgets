@@ -2927,7 +2927,7 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
     // attributes are applied.
     wxTextAttr attr(GetStyleSheet() ? def->GetStyleMergedWithBase(GetStyleSheet()) : def->GetStyle());
 
-    int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE;
+    int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_RESET;
 
     if (def->IsKindOf(CLASSINFO(wxRichTextListStyleDefinition)))
     {
