@@ -49,7 +49,9 @@
 
 #include "isosurf.h"
 
+#if !defined(__WXMSW__) && !defined(__WXPM__)
 #include "../../sample.xpm"
+#endif
 
 // The following part is taken largely unchanged from the original C Version
 
@@ -253,7 +255,7 @@ bool MyApp::OnInit()
         wxDefaultPosition, wxDefaultSize);
 
     // Give it an icon
-    frame->SetIcon(wxIcon(_T("mondrian")));
+    frame->SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *fileMenu = new wxMenu;
