@@ -135,6 +135,8 @@ wxMSW:
   a custom wxEVT_COMMAND_TEXT_* event handler.
 - Fix wxComboBox to not lose the current value if it was programmatically set
   to a value not in a list of choices on popup close (Kolya Kosenko)
+- Switching wxListCtrl to report mode from another one now uses full row
+  highlight, just as if the control were created in report mode initially
 
 wxGTK:
 

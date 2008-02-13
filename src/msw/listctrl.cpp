@@ -338,15 +338,21 @@ bool wxListCtrl::Create(wxWindow *parent,
     // GetTextColour will always return black
     SetTextColour(GetDefaultAttributes().colFg);
 
+    if ( InReportView() )
+        MSWSetExListStyles();
+
+    return true;
+}
+
+void wxListCtrl::MSWSetExListStyles()
+{
     // for comctl32.dll v 4.70+ we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
-    if ( InReportView() && wxApp::GetComCtl32Version() >= 470 )
+    if ( wxApp::GetComCtl32Version() >= 470 )
     {
         ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
                       0, LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT | LVS_EX_SUBITEMIMAGES);
     }
-
-    return true;
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -445,6 +451,11 @@ void wxListCtrl::UpdateStyle()
         if ( dwStyleOld != dwStyleNew )
         {
             ::SetWindowLong(GetHwnd(), GWL_STYLE, dwStyleNew);
+
+            // if we switched to the report view, set the extended styles for
+            // it too
+            if ( !(dwStyleOld & LVS_REPORT) && (dwStyleNew & LVS_REPORT) )
+                MSWSetExListStyles();
         }
     }
 }
