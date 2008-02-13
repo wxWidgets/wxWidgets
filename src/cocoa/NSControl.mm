@@ -23,6 +23,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/cocoa/objc/objc_uniquifying.h"
+#include "wx/cocoa/ObjcRef.h"
 #include "wx/cocoa/NSControl.h"
 
 #import <Foundation/NSObject.h>
@@ -56,5 +57,8 @@ WX_IMPLEMENT_GET_OBJC_CLASS(wxNSControlTarget,NSObject)
 // ============================================================================
 WX_IMPLEMENT_OBJC_INTERFACE(NSControl)
 
-struct objc_object *wxCocoaNSControl::sm_cocoaTarget = [[WX_GET_OBJC_CLASS(wxNSControlTarget) alloc] init];
+// New CF-retained observer (this should have been using wxObjcAutoRefFromAlloc to begin with)
+wxObjcAutoRefFromAlloc<wxNSControlTarget*> s_cocoaNSControlTarget = [[WX_GET_OBJC_CLASS(wxNSControlTarget) alloc] init];
+// For compatibility with old code
+struct objc_object *wxCocoaNSControl::sm_cocoaTarget = s_cocoaNSControlTarget;
 
