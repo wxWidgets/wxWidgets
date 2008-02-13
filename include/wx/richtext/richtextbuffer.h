@@ -195,6 +195,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 
 #define wxRICHTEXT_INSERT_NONE                              0x00
 #define wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE     0x01
+#define wxRICHTEXT_INSERT_INTERACTIVE                       0x02
 
 /*!
  * wxRichTextFontTable

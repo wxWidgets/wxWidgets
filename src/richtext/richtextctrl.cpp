@@ -596,7 +596,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             GetBuffer().InsertTextWithUndo(newPos+1, text, this);
         }
         else
-            GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+            GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE|wxRICHTEXT_INSERT_INTERACTIVE);
 
         EndBatchUndo();
         SetDefaultStyleToCursorStyle();

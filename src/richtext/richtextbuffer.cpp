@@ -1159,13 +1159,10 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
 
             while (objectNode)
             {
-                if (!objectNode->GetData()->IsEmpty())
-                {
-                    wxRichTextObject* newObj = objectNode->GetData()->Clone();
+                wxRichTextObject* newObj = objectNode->GetData()->Clone();
 
-                    // Append
-                    para->AppendChild(newObj);
-                }
+                // Append
+                para->AppendChild(newObj);
 
                 objectNode = objectNode->GetNext();
             }
@@ -1212,7 +1209,8 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             // 4. Add back the remaining content.
             if (finalPara)
             {
-                finalPara->MoveFromList(savedObjects);
+                if (nextObject)
+                    finalPara->MoveFromList(savedObjects);
 
                 // Ensure there's at least one object
                 if (finalPara->GetChildCount() == 0)
@@ -4272,11 +4270,11 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     wxString str = m_text;
     wxString toRemove = wxRichTextLineBreakChar;
     str.Replace(toRemove, wxT(" "));
+    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+        str.MakeUpper();
 
     long len = range.GetLength();
     wxString stringChunk = str.Mid(range.GetStart() - offset, (size_t) len);
-    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
-        stringChunk.MakeUpper();
 
     int charHeight = dc.GetCharHeight();
 
@@ -4903,17 +4901,45 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
     action->GetNewParagraphs().AppendChild(newPara);
     action->GetNewParagraphs().UpdateRanges();
     action->GetNewParagraphs().SetPartialParagraph(false);
+    wxRichTextParagraph* para = GetParagraphAtPosition(pos, false);
+    long pos1 = pos;
+
+    if (flags & wxRICHTEXT_INSERT_INTERACTIVE)
+    {
+        if (para && para->GetRange().GetEnd() == pos)
+            pos1 ++;
+    }
+
     action->SetPosition(pos);
 
     if (p)
         newPara->SetAttributes(*p);
 
     // Use the default character style
+    // Use the default character style
     if (!GetDefaultStyle().IsDefault() && newPara->GetChildren().GetFirst())
-        newPara->GetChildren().GetFirst()->GetData()->SetAttributes(GetDefaultStyle());
+    {
+        // Check whether the default style merely reflects the paragraph/basic style,
+        // in which case don't apply it.
+        wxTextAttrEx defaultStyle(GetDefaultStyle());
+        wxTextAttrEx toApply;
+        if (para)
+        {
+            wxRichTextAttr combinedAttr = para->GetCombinedAttributes();
+            wxTextAttrEx newAttr;
+            // This filters out attributes that are accounted for by the current
+            // paragraph/basic style
+            wxRichTextApplyStyle(toApply, defaultStyle, & combinedAttr);
+        }
+        else
+            toApply = defaultStyle;
+
+        if (!toApply.IsDefault())
+            newPara->GetChildren().GetFirst()->GetData()->SetAttributes(toApply);
+    }
 
     // Set the range we'll need to delete in Undo
-    action->SetRange(wxRichTextRange(pos, pos));
+    action->SetRange(wxRichTextRange(pos1, pos1));
 
     SubmitAction(action);
 
@@ -6129,7 +6155,7 @@ bool wxRichTextAction::Do()
                 wxPoint firstVisiblePt = m_ctrl->GetFirstVisiblePoint();
                 int lastY = firstVisiblePt.y + clientSize.y;
 
-                wxRichTextParagraph* para = m_buffer->GetParagraphAtPosition(GetPosition());
+                wxRichTextParagraph* para = m_buffer->GetParagraphAtPosition(GetRange().GetStart());
                 wxRichTextObjectList::compatibility_iterator node = m_buffer->GetChildren().Find(para);
                 while (node)
                 {
@@ -6162,9 +6188,9 @@ bool wxRichTextAction::Do()
             }
 #endif
 
-            m_buffer->InsertFragment(GetPosition(), m_newParagraphs);
+            m_buffer->InsertFragment(GetRange().GetStart(), m_newParagraphs);
             m_buffer->UpdateRanges();
-            m_buffer->Invalidate(GetRange());
+            m_buffer->Invalidate(wxRichTextRange(GetRange().GetStart()-1, GetRange().GetEnd()));
 
             long newCaretPosition = GetPosition() + m_newParagraphs.GetRange().GetLength();
 
