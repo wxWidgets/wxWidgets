@@ -96,19 +96,6 @@ src/png/scripts/makefile*
 src/png/scripts/*.com
 src/png/scripts/*.def
 
-src/iodbc/AUTHORS
-src/iodbc/COPYING
-src/iodbc/autoconfig
-src/iodbc/Changes.log
-src/iodbc/IAFA-PACKAGE
-src/iodbc/INSTALL
-src/iodbc/NEWS
-src/iodbc/README
-src/iodbc/*.c
-src/iodbc/*.h
-src/iodbc/*.ci
-src/iodbc/*.exp
-
 include/wx/wx_setup.vms
 include/wx/common/*.h
 include/wx/generic/*.h
