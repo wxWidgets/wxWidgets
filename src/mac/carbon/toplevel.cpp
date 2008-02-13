@@ -1712,7 +1712,7 @@ void wxTopLevelWindowMac::MacSetUnifiedAppearance( bool set )
     // for wx.
     // TODO: Determine if we need this on Leopard as well. (should be harmless either way,
     // though)
-    SetBackgroundColour( wxSYS_COLOUR_WINDOW ) ;
+    SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ) ;
 }
 
 bool wxTopLevelWindowMac::MacGetUnifiedAppearance() const
