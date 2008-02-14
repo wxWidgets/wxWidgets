@@ -629,7 +629,6 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             return true;
 
         case wxTOOL_STYLE_CONTROL:
-#if 1
             GtkWidget* align = gtk_alignment_new(0.5, 0.5, 0, 0);
             gtk_widget_show(align);
             gtk_container_add((GtkContainer*)align, tool->GetControl()->m_widget);
@@ -640,15 +639,6 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                        (const char *) NULL,
                                        posGtk
                                       );
-#else
-            gtk_toolbar_insert_widget(
-                                       m_toolbar,
-                                       tool->GetControl()->m_widget,
-                                       (const char *) NULL,
-                                       (const char *) NULL,
-                                       posGtk
-                                      );
-#endif
             // release reference obtained by wxInsertChildInToolBar
             g_object_unref(tool->GetControl()->m_widget);
             break;
