@@ -756,7 +756,7 @@ wxString wxRichTextStyleListBox::GetStyleToShowInIdleTime(wxRichTextCtrl* ctrl, 
 /// Auto-select from style under caret in idle time
 void wxRichTextStyleListBox::OnIdle(wxIdleEvent& event)
 {
-    if (CanAutoSetSelection() && GetRichTextCtrl() && wxWindow::FindFocus() != this)
+    if (CanAutoSetSelection() && GetRichTextCtrl() && IsShownOnScreen() && wxWindow::FindFocus() != this)
     {
         wxString styleName = GetStyleToShowInIdleTime(GetRichTextCtrl(), GetStyleType());
 
@@ -1114,7 +1114,7 @@ void wxRichTextStyleComboCtrl::OnIdle(wxIdleEvent& event)
     if ( !richtext )
         return;
 
-    if ( !IsPopupShown() && wxWindow::FindFocus() != this )
+    if ( !IsPopupShown() && IsShownOnScreen() && wxWindow::FindFocus() != this )
     {
         wxString styleName =
             wxRichTextStyleListBox::GetStyleToShowInIdleTime(richtext, m_stylePopup->GetStyleType());
