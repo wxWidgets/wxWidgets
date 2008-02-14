@@ -449,11 +449,23 @@ public:
     virtual void SetMinSize(const wxSize& minSize) { m_minWidth = minSize.x; m_minHeight = minSize.y; }
     virtual void SetMaxSize(const wxSize& maxSize) { m_maxWidth = maxSize.x; m_maxHeight = maxSize.y; }
 
+        // Like Set*Size, but for client, not window, size
+    virtual void SetMinClientSize(const wxSize& size)
+        { SetMinSize(ClientToWindowSize(size)); }
+    virtual void SetMaxClientSize(const wxSize& size)
+        { SetMaxSize(ClientToWindowSize(size)); }
+
         // Override these methods to impose restrictions on min/max size.
         // The easier way is to call SetMinSize() and SetMaxSize() which
         // will have the same effect. Doing both is non-sense.
     virtual wxSize GetMinSize() const { return wxSize(m_minWidth, m_minHeight); }
     virtual wxSize GetMaxSize() const { return wxSize(m_maxWidth, m_maxHeight); }
+
+        // Like Get*Size, but for client, not window, size
+    virtual wxSize GetMinClientSize() const
+        { return WindowToClientSize(GetMinSize()); }
+    virtual wxSize GetMaxClientSize() const
+        { return WindowToClientSize(GetMaxSize()); }
 
         // Get the min and max values one by one
     int GetMinWidth() const { return GetMinSize().x; }

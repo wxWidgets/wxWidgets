@@ -1160,12 +1160,33 @@ the button text. This function can be useful for meta-programs (such as testing
 tools or special-needs access programs) which need to identify windows
 by name.
 
+
+\membersection{wxWindow::GetMaxClientSize}\label{wxwindowgetmaxclientsize}
+
+\constfunc{wxSize}{GetMaxClientSize}{\void}
+
+Returns the maximum size of window's client area. 
+This is an indication to the sizer layout mechanism that this is the maximum
+possible size as well as the upper bound on window's size settable using
+\helpref{SetClientSize}{wxwindowsetclientsize}. 
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetMaxSize}{wxwindowgetmaxsize}
+
+
 \membersection{wxWindow::GetMaxSize}\label{wxwindowgetmaxsize}
 
 \constfunc{wxSize}{GetMaxSize}{\void}
 
-Returns the maximum size of the window, an indication to the sizer layout mechanism
-that this is the maximum possible size. 
+Returns the maximum size of the window. This is an indication to the sizer
+layout mechanism that this is the maximum possible size as well as the upper
+bound on window's size settable using \helpref{SetSize}{wxwindowsetsize}. 
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetMaxClientSize}{wxwindowgetmaxclientsize}
+
 
 \membersection{wxWindow::GetMinSize}\label{wxwindowgetminsize}
 
@@ -1175,6 +1196,26 @@ Returns the minimum size of the window, an indication to the sizer layout mechan
 that this is the minimum required size. It normally just returns the value set
 by \helpref{SetMinSize}{wxwindowsetminsize}, but it can be overridden to do the
 calculation on demand.
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetMinClientSize}{wxwindowgetminclientsize}
+
+
+\membersection{wxWindow::GetMinClientSize}\label{wxwindowgetminclientsize}
+
+\constfunc{virtual wxSize}{GetMinClientSize}{\void}
+
+Returns the minimum size of window's client area, an indication to the sizer
+layout mechanism that this is the minimum required size of its client area. It
+normally just returns the value set by
+\helpref{SetMinClientSize}{wxwindowsetminclientsize}, but it can be overridden
+to do the calculation on demand.
+
+\wxheading{See also}
+
+\helpref{wxWindow::GetMinSize}{wxwindowgetminsize}
+
 
 \membersection{wxWindow::GetName}\label{wxwindowgetname}
 
@@ -3299,6 +3340,23 @@ Sets the window's label.
 Sets the maximum size of the window, to indicate to the sizer layout mechanism
 that this is the maximum possible size.
 
+\wxheading{See also}
+
+\helpref{wxWindow::SetMaxClientSize}{wxwindowsetmaxclientsize}
+
+
+\membersection{wxWindow::SetMaxClientSize}\label{wxwindowsetmaxclientsize}
+
+\func{void}{SetMaxClientSize}{\param{const wxSize\& }{size}}
+
+Sets the maximum \emph{client} size of the window, to indicate to the sizer
+layout mechanism that this is the maximum possible size of its client area.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetMaxSize}{wxwindowsetmaxsize}
+
+
 \membersection{wxWindow::SetMinSize}\label{wxwindowsetminsize}
 
 \func{void}{SetMinSize}{\param{const wxSize\& }{size}}
@@ -3307,6 +3365,25 @@ Sets the minimum size of the window, to indicate to the sizer layout mechanism
 that this is the minimum required size. You may need to call this
 if you change the window size after construction and before adding
 to its parent sizer.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetMinClientSize}{wxwindowsetminclientsize}
+
+
+\membersection{wxWindow::SetMinClientSize}\label{wxwindowsetminclientsize}
+
+\func{void}{SetMinClientSize}{\param{const wxSize\& }{size}}
+
+Sets the minimum \emph{client} size of the window, to indicate to the sizer
+layout mechanism that this is the minimum required size of window's client
+area. You may need to call this if you change the window size after
+construction and before adding to its parent sizer.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetMinSize}{wxwindowsetminsize}
+
 
 \membersection{wxWindow::SetName}\label{wxwindowsetname}
 
