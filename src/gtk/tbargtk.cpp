@@ -247,27 +247,6 @@ static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
 }
 }
 
-extern "C" {
-static
-void gtktoolwidget_size_callback( GtkWidget *widget,
-                                  GtkAllocation *alloc,
-                                  wxWindow *win )
-{
-    // this shouldn't happen...
-    if (win->GetParent()->m_wxwindow) return;
-    
-    wxSize size = win->GetEffectiveMinSize();
-    if (size.y != alloc->height)
-    {
-        GtkAllocation alloc2;
-        alloc2.x = alloc->x;
-        alloc2.y = (alloc->height - size.y + 3) / 2;
-        alloc2.width = alloc->width;
-        alloc2.height = size.y;
-        gtk_widget_size_allocate( widget, &alloc2 );
-    }
-}
-}
 //-----------------------------------------------------------------------------
 // InsertChild callback for wxToolBar
 //-----------------------------------------------------------------------------
@@ -504,20 +483,18 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             return true;
 
         case wxTOOL_STYLE_CONTROL:
+            GtkWidget* align = gtk_alignment_new(0.5, 0.5, 0, 0);
+            gtk_widget_show(align);
+            gtk_container_add((GtkContainer*)align, tool->GetControl()->m_widget);
             gtk_toolbar_insert_widget(
                                        m_toolbar,
-                                       tool->GetControl()->m_widget,
+                                       align,
                                        (const char *) NULL,
                                        (const char *) NULL,
                                        posGtk
                                       );
             // release reference obtained by wxInsertChildInToolBar
             g_object_unref(tool->GetControl()->m_widget);
-
-            // connect after in order to correct size_allocate events
-            g_signal_connect_after (tool->GetControl()->m_widget, "size_allocate",
-                          G_CALLBACK (gtktoolwidget_size_callback), tool->GetControl());
-                                      
             break;
     }
 
