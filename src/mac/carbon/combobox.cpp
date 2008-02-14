@@ -370,7 +370,6 @@ bool wxComboBox::Create(wxWindow *parent,
         return false;
     }
 
-    m_choice = new wxComboBoxChoice(this, style );
     wxSize csize = size;
     if ( style & wxCB_READONLY )
     {
@@ -385,6 +384,7 @@ bool wxComboBox::Create(wxWindow *parent,
             csize.y += 2 * TEXTFOCUSBORDER ;
         }
     }
+    m_choice = new wxComboBoxChoice(this, style );
 
     DoSetSize(pos.x, pos.y, csize.x, csize.y);
 
