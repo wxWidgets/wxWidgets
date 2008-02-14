@@ -345,7 +345,7 @@ static void gst_state_change_callback(GstElement *play,
 // Called by gstreamer when the media is done playing ("end of stream")
 //-----------------------------------------------------------------------------
 extern "C" {
-static void gst_finish_callback(GstElement *play,
+static void gst_finish_callback(GstElement *WXUNUSED(play),
                                 wxGStreamerMediaBackend* be)
 {
     wxLogTrace(wxTRACE_GStreamer, wxT("gst_finish_callback"));
@@ -362,11 +362,11 @@ static void gst_finish_callback(GstElement *play,
 // on the command line as well for those who want extra traces.
 //-----------------------------------------------------------------------------
 extern "C" {
-static void gst_error_callback(GstElement *play,
-                               GstElement *src,
+static void gst_error_callback(GstElement *WXUNUSED(play),
+                               GstElement *WXUNUSED(src),
                                GError     *err,
                                gchar      *debug,
-                               wxGStreamerMediaBackend* be)
+                               wxGStreamerMediaBackend* WXUNUSED(be))
 {
     wxString sError;
     sError.Printf(wxT("gst_error_callback\n")
@@ -388,7 +388,7 @@ static void gst_error_callback(GstElement *play,
 //-----------------------------------------------------------------------------
 extern "C" {
 static void gst_notify_caps_callback(GstPad* pad,
-                                     GParamSpec* pspec,
+                                     GParamSpec* WXUNUSED(pspec),
                                      wxGStreamerMediaBackend* be)
 {
     wxLogTrace(wxTRACE_GStreamer, wxT("gst_notify_caps_callback"));
@@ -410,8 +410,8 @@ static void gst_notify_caps_callback(GstPad* pad,
 //-----------------------------------------------------------------------------
 #if GST_VERSION_MAJOR > 0 || GST_VERSION_MINOR >= 10
 extern "C" {
-static void gst_notify_stream_info_callback(GstElement* element,
-                                            GParamSpec* pspec,
+static void gst_notify_stream_info_callback(GstElement* WXUNUSED(element),
+                                            GParamSpec* WXUNUSED(pspec),
                                             wxGStreamerMediaBackend* be)
 {
     wxLogTrace(wxTRACE_GStreamer, wxT("gst_notify_stream_info_callback"));
@@ -461,7 +461,7 @@ static void gst_desired_size_changed_callback(GstElement * play,
 //-----------------------------------------------------------------------------
 #if GST_VERSION_MAJOR > 0 || GST_VERSION_MINOR >= 10
 extern "C" {
-static gboolean gst_bus_async_callback(GstBus* bus,
+static gboolean gst_bus_async_callback(GstBus* WXUNUSED(bus),
                                        GstMessage* message,
                                        wxGStreamerMediaBackend* be)
 {
@@ -1433,7 +1433,10 @@ wxLongLong wxGStreamerMediaBackend::GetDuration()
 // Called when the window is moved - GStreamer takes care of this
 // for us so nothing is needed
 //-----------------------------------------------------------------------------
-void wxGStreamerMediaBackend::Move(int x, int y, int w, int h)
+void wxGStreamerMediaBackend::Move(int WXUNUSED(x),
+                                   int WXUNUSED(y),
+                                   int WXUNUSED(w),
+                                   int WXUNUSED(h))
 {
 }
 
@@ -1491,6 +1494,8 @@ bool wxGStreamerMediaBackend::SetPlaybackRate(double dRate)
         m_dRate = dRate;
         return true;
     }
+#else
+    wxUnusedVar(dRate);
 #endif
 #endif
 
