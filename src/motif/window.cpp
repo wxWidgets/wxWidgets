@@ -1657,7 +1657,7 @@ void wxWindow::OnInternalIdle()
 {
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 

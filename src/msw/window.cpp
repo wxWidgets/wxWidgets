@@ -1570,7 +1570,7 @@ void wxWindowMSW::OnInternalIdle()
     }
 #endif // !HAVE_TRACKMOUSEEVENT
 
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
