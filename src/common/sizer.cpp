@@ -921,12 +921,16 @@ void wxSizer::SetSizeHints( wxWindow *window )
     // Preserve the window's max size hints, but set the
     // lower bound according to the sizer calculations.
 
-    wxSize size = Fit( window );
+    // This is equivalent to calling Fit(), except that we need to set
+    // the size hints _in between_ the two steps performed by Fit
+    // (1. ComputeFittingClientSize, 2. SetClientSize). That's because
+    // otherwise SetClientSize() could have no effect if there already are
+    // size hints in effect that forbid requested client size.
 
-    window->SetSizeHints( size.x,
-                          size.y,
-                          window->GetMaxWidth(),
-                          window->GetMaxHeight() );
+    const wxSize clientSize = ComputeFittingClientSize(window);
+
+    window->SetMinClientSize(clientSize);
+    window->SetClientSize(clientSize);
 }
 
 #if WXWIN_COMPATIBILITY_2_8
