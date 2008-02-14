@@ -118,8 +118,14 @@ The listbox contents are sorted in alphabetical order.
     CocoaCreateNSScrollView();
     SetInitialFrameRect(pos,size);
 
-    // Force showing of a vertical scrollbar
     [m_wxCocoaScrollView->GetNSScrollView() setHasVerticalScroller:YES];
+    // Pre-10.3: Always show vertical scroller, never show horizontal scroller
+    // Post-10.3: Show scrollers dynamically (turn them both on, set auto-hide)
+    if([m_wxCocoaScrollView->GetNSScrollView() respondsToSelector:@selector(setAutohidesScrollers:)])
+    {
+        [m_wxCocoaScrollView->GetNSScrollView() setHasHorizontalScroller:YES];
+        [m_wxCocoaScrollView->GetNSScrollView() setAutohidesScrollers:YES];
+    }
 
     // Set up extended/multiple selection flags
     if ((style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE))
