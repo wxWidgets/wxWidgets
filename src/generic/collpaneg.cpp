@@ -170,62 +170,21 @@ void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
     }
 
 
-    //
-    // NB: the following block of code has been accurately designed to
-    //     as much flicker-free as possible; be careful when modifying it!
-    //
+    wxTopLevelWindow *top =
+        wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if ( !top )
+        return;
 
-    wxTopLevelWindow *
-        top = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-    if ( top )
-    {
-        // NB: don't Layout() the 'top' window as its size has not been correctly
-        //     updated yet and we don't want to do an initial Layout() with the old
-        //     size immediately followed by a SetClientSize/Fit call for the new
-        //     size; that would provoke flickering!
+    wxSizer *sizer = top->GetSizer();
+    if ( !sizer )
+        return;
 
-        if (top->GetSizer())
-#ifdef __WXGTK__
-        // FIXME: the SetSizeHints() call would be required also for GTK+ for
-        //        the expanded->collapsed transition. Unfortunately if we
-        //        enable this line, then the GTK+ top window won't always be
-        //        resized by the SetClientSize() call below! As a side effect
-        //        of this dirty fix, the minimal size for the pane window is
-        //        not set in GTK+ and the user can hide it shrinking the "top"
-        //        window...
-        if (IsCollapsed())
-#endif
-            top->GetSizer()->SetSizeHints(top);
+    const wxSize newBestSize = sizer->ComputeFittingClientSize(top);
+    top->SetMinClientSize(newBestSize);
 
-
-        // we shouldn't attempt to resize a maximized window, whatever happens
-        if ( !top->IsMaximized() )
-        {
-            if ( IsCollapsed() )
-            {
-                // expanded -> collapsed transition
-                if (top->GetSizer())
-                {
-                    // we have just set the size hints...
-                    wxSize szClient = top->GetSizer()->CalcMin();
-
-                    // use SetClientSize() and not SetSize() otherwise the size for
-                    // e.g. a wxFrame with a menubar wouldn't be correctly set
-                    top->SetClientSize(szClient);
-                }
-                else
-                    top->Layout();
-            }
-            else
-            {
-                // collapsed -> expanded transition
-
-                // force our parent to "fit", i.e. expand so that it can honour
-                // our minimal size
-                top->Fit();
-            }
-        }
-    }
+    // we shouldn't attempt to resize a maximized window, whatever happens
+    if ( !top->IsMaximized() )
+        top->SetClientSize(newBestSize);
 }
 
 void wxGenericCollapsiblePane::Collapse(bool collapse)
