@@ -23,12 +23,14 @@
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/ObjcRef.h"
+#include "wx/cocoa/private/scrollview.h"
 #include "wx/cocoa/NSTableDataSource.h"
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSEnumerator.h>
 #import <AppKit/NSTableView.h>
 #import <AppKit/NSTableColumn.h>
+#import <AppKit/NSScrollView.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
@@ -115,6 +117,9 @@ The listbox contents are sorted in alphabetical order.
     // NSScrollView seems to be the only reasonable solution.
     CocoaCreateNSScrollView();
     SetInitialFrameRect(pos,size);
+
+    // Force showing of a vertical scrollbar
+    [m_wxCocoaScrollView->GetNSScrollView() setHasVerticalScroller:YES];
 
     // Set up extended/multiple selection flags
     if ((style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE))
