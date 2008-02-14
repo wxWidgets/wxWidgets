@@ -2958,7 +2958,7 @@ void wxWindowGTK::OnInternalIdle()
         }
     }
 
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 

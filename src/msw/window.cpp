@@ -1479,7 +1479,7 @@ void wxWindowMSW::OnInternalIdle()
     }
 #endif // !HAVE_TRACKMOUSEEVENT
 
-    if (wxUpdateUIEvent::CanUpdate(this) && IsShown())
+    if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
@@ -1574,7 +1574,7 @@ void wxWindowMSW::Thaw()
             {
                 SendSetRedraw(GetHwnd(), true);
             }
-            
+
             // we need to refresh everything or otherwise the invalidated area
             // is not going to be repainted
             Refresh();
