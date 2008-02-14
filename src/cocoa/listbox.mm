@@ -22,6 +22,7 @@
 
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/ObjcRef.h"
 #include "wx/cocoa/NSTableDataSource.h"
 
 #import <Foundation/NSArray.h>
@@ -83,7 +84,7 @@ The listbox contents are sorted in alphabetical order.
         return false;
 
     // Provide the data
-    m_cocoaItems = [[NSMutableArray arrayWithCapacity:n] retain];
+    m_cocoaItems = wxGCSafeRetain([NSMutableArray arrayWithCapacity:n]);
     for(int i=0; i < n; i++)
     {
         [m_cocoaItems addObject: wxNSStringWithWxString(choices[i])];
@@ -129,7 +130,8 @@ wxListBox::~wxListBox()
 {
     [GetNSTableView() setDataSource: nil];
     [m_cocoaDataSource release];
-    [m_cocoaItems release];
+    wxGCSafeRelease(m_cocoaItems);
+    m_cocoaItems = nil;
     DisassociateNSTableView(GetNSTableView());
 }
 
