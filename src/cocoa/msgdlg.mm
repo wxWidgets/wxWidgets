@@ -70,6 +70,7 @@ wxCocoaMessageDialog::wxCocoaMessageDialog(wxWindow *parent,
     m_ok  = _("OK");
     m_cancel = _("Cancel");
 
+    SetMessageDialogStyle(style);
 }
 
 wxCocoaMessageDialog::~wxCocoaMessageDialog()
