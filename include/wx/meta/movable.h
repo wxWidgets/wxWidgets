@@ -14,6 +14,17 @@
 #include "wx/defs.h"
 #include "wx/string.h" // for wxIsMovable<wxString> specialization
 
+// This macro declares something called "value" inside a class declaration.
+//
+// It has to be used because VC6 doesn't handle initialization of the static
+// variables in the class declaration itself while BCC5.82 doesn't understand
+// enums (it compiles the template fine but can't use it later)
+#if defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(7)
+    #define wxDEFINE_TEMPLATE_BOOL_VALUE(val) enum { value = val }
+#else
+    #define wxDEFINE_TEMPLATE_BOOL_VALUE(val) static const bool value = val
+#endif
+
 // Helper to decide if an object of type T is "movable", i.e. if it can be
 // copied to another memory location using memmove() or realloc() C functions.
 // C++ only gurantees that POD types (including primitive types) are
@@ -21,8 +32,7 @@
 template<typename T>
 struct wxIsMovable
 {
-    // NB: enum, because VC6 can't handle "static const bool value = true;"
-    enum { value = false };
+    wxDEFINE_TEMPLATE_BOOL_VALUE(false);
 };
 
 // Macro to add wxIsMovable<T> specialization for given type that marks it
@@ -30,7 +40,7 @@ struct wxIsMovable
 #define WX_DECLARE_TYPE_MOVABLE(type)                       \
     template<> struct wxIsMovable<type>                     \
     {                                                       \
-        enum { value = true };                              \
+        wxDEFINE_TEMPLATE_BOOL_VALUE(true);                 \
     };
 
 WX_DECLARE_TYPE_MOVABLE(bool)
@@ -62,12 +72,13 @@ WX_DECLARE_TYPE_MOVABLE(wxULongLong_t)
 template<typename T>
 struct wxIsMovable<T*>
 {
-    enum { value = true };
+    static const bool value = true;
 };
+
 template<typename T>
 struct wxIsMovable<const T*>
 {
-    enum { value = true };
+    static const bool value = true;
 };
 
 #endif // !VC++ < 7
@@ -80,6 +91,5 @@ struct wxIsMovable<const T*>
 #if !wxUSE_STL
 WX_DECLARE_TYPE_MOVABLE(wxString)
 #endif
-
 
 #endif // _WX_META_MOVABLE_H_
