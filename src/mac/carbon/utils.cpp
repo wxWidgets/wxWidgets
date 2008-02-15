@@ -641,13 +641,25 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 #if wxUSE_BASE
 
+#ifdef __DARWIN__
+#include <sys/utsname.h>
+#endif
+
 wxString wxGetOsDescription()
 {
+#ifdef __DARWIN__
+    char data[128];
+    struct utsname name;
+    uname(&name);
+    sprintf(data, "Mac OS X (%s %s %s)", name.sysname, name.release, name.machine);
+    return wxString(data, wxConvUTF8);
+#else
 #ifdef WXWIN_OS_DESCRIPTION
     // use configure generated description if available
     return wxString(wxT("MacOS (")) + wxT(WXWIN_OS_DESCRIPTION) + wxString(wxT(")"));
 #else
     return wxT("MacOS"); //TODO:define further
+#endif
 #endif
 }
 
