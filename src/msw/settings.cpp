@@ -377,11 +377,7 @@ static const int gs_metricsMap[] =
 #else
     -1,
 #endif
-#ifdef SM_SWAPBUTTON
     SM_SWAPBUTTON,
-#else
-    -1,
-#endif
     -1   // wxSYS_DCLICK_MSEC - not available as system metric
 };
 

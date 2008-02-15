@@ -6101,10 +6101,6 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
     return vk;
 }
 
-#ifndef SM_SWAPBUTTON
-    #define SM_SWAPBUTTON 23
-#endif
-
 // small helper for wxGetKeyState() and wxGetMouseState()
 static inline bool wxIsKeyDown(WXWORD vk)
 {
