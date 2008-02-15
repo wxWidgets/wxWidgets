@@ -317,8 +317,10 @@ wxString wxGetOsDescription()
     char data[128];
     struct utsname name;
     uname(&name);
-    sprintf(data, "Mac OS X (%s %s %s)", name.sysname, name.release, name.machine);
-    return wxString(data, wxConvUTF8);
+	return wxString::Format(_T("Mac OS X (%s %s %s)"),
+			wxString::FromAscii(name.sysname).c_str(),
+			wxString::FromAscii(name.release).c_str(),
+			wxString::FromAscii(name.machine).c_str());
 }
 
 #ifndef __DARWIN__
