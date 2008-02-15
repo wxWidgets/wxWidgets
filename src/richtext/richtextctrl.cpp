@@ -2305,6 +2305,7 @@ void wxRichTextCtrl::SetSelection(long from, long to)
     }
 
     DoSetSelection(from, to);
+    SetDefaultStyleToCursorStyle();
 }
 
 void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCaret))
