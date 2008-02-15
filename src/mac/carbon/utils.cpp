@@ -37,9 +37,8 @@
 
 // #include "MoreFilesX.h"
 
-#ifndef __DARWIN__
-    #include <Threads.h>
-    #include <Sound.h>
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+    #include <AudioToolbox/AudioServices.h>
 #endif
 
 #if wxUSE_GUI
@@ -87,8 +86,16 @@ extern bool WXDLLEXPORT wxIsDebuggerRunning()
 // Emit a beeeeeep
 void wxBell()
 {
-#ifndef __LP64__
-    SysBeep(30);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+    if ( AudioServicesPlayAlertSound )
+        AudioServicesPlayAlertSound(kUserPreferredAlert);
+    else
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+        SysBeep(30);
+#else
+    {
+    }
 #endif
 }
 
@@ -303,14 +310,15 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 #if wxUSE_BASE
 
+#include <sys/utsname.h>
+
 wxString wxGetOsDescription()
 {
-#ifdef WXWIN_OS_DESCRIPTION
-    // use configure generated description if available
-    return wxString(wxT("MacOS (")) + wxT(WXWIN_OS_DESCRIPTION) + wxString(wxT(")"));
-#else
-    return wxT("MacOS"); //TODO:define further
-#endif
+    char data[128];
+    struct utsname name;
+    uname(&name);
+    sprintf(data, "Mac OS X (%s %s %s)", name.sysname, name.release, name.machine);
+    return wxString(data, wxConvUTF8);
 }
 
 #ifndef __DARWIN__
