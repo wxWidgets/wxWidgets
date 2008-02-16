@@ -1468,15 +1468,7 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
                     {
                         wxRichTextObject* obj1 = node1->GetData();
 
-                        // If the object is empty, optimise it out
-                        if (obj1->IsEmpty())
-                        {
-                            delete obj1;
-                        }
-                        else
-                        {
-                            firstPara->AppendChild(obj1);
-                        }
+                        firstPara->AppendChild(obj1);
 
                         wxRichTextObjectList::compatibility_iterator next1 = node1->GetNext();
                         nextParagraph->GetChildren().Erase(node1);
@@ -1486,6 +1478,13 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
 
                     // Delete the paragraph
                     RemoveChild(nextParagraph, true);
+                }
+
+                // Avoid empty paragraphs
+                if (firstPara && firstPara->GetChildren().GetCount() == 0)
+                {
+                    wxRichTextPlainText* text = new wxRichTextPlainText(wxEmptyString);
+                    firstPara->AppendChild(text);
                 }
 
                 if (applyFinalParagraphStyle)
