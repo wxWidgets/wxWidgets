@@ -135,6 +135,11 @@ WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf )
     return stat( wxConvFile.cWX2MB( file_name ), buf );
 }
 
+WXDLLEXPORT int wxStat( const char *file_name, wxStructStat *buf )
+{
+    return stat( file_name , buf );
+}
+
 WXDLLEXPORT int wxLstat( const wxChar *file_name, wxStructStat *buf )
 {
     return lstat( wxConvFile.cWX2MB( file_name ), buf );
