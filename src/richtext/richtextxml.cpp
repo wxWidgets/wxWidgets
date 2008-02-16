@@ -491,6 +491,59 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
     OutputString(stream, str.Mid(last, i - last), convMem, convFile);
 }
 
+static wxString AttributeToXML(const wxString& str)
+{
+    wxString str1;
+    size_t i, last, len;
+    wxChar c;
+
+    len = str.Len();
+    last = 0;
+    for (i = 0; i < len; i++)
+    {
+        c = str.GetChar(i);
+
+        // Original code excluded "&amp;" but we _do_ want to convert
+        // the ampersand beginning &amp; because otherwise when read in,
+        // the original "&amp;" becomes "&".
+
+        if (c == wxT('<') || c == wxT('>') || c == wxT('"') ||
+            (c == wxT('&') /* && (str.Mid(i+1, 4) != wxT("amp;")) */ ))
+        {
+            str1 += str.Mid(last, i - last);
+            switch (c)
+            {
+            case wxT('<'):
+                str1 += wxT("&lt;");
+                break;
+            case wxT('>'):
+                str1 += wxT("&gt;");
+                break;
+            case wxT('&'):
+                str1 += wxT("&amp;");
+                break;
+            case wxT('"'):
+                str1 += wxT("&quot;");
+                break;
+            default: break;
+            }
+            last = i + 1;
+        }
+        else if (wxUChar(c) > 127)
+        {
+            str1 += str.Mid(last, i - last);
+
+            wxString s(wxT("&#"));
+            s << (int) c;
+            s << wxT(";");
+            str1 += s;
+            last = i + 1;
+        }
+    }
+    str1 += str.Mid(last, i - last);
+    return str1;
+}
+
 inline static void OutputIndentation(wxOutputStream& stream, int indent)
 {
     wxString str = wxT("\n");
@@ -930,7 +983,7 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttr& attr, bool isPara)
         str << wxT(" characterstyle=\"") << wxString(attr.GetCharacterStyleName()) << wxT("\"");
 
     if (attr.HasURL())
-        str << wxT(" url=\"") << attr.GetURL() << wxT("\"");
+        str << wxT(" url=\"") << AttributeToXML(attr.GetURL()) << wxT("\"");
 
     if (isPara)
     {
