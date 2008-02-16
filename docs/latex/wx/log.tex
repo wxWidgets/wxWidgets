@@ -399,6 +399,54 @@ Remove the {\it mask} from the list of allowed masks for
 
 See also: \helpref{AddTraceMask}{wxlogaddtracemask}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogBuffer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogBuffer}}\label{wxlogbuffer}
+
+wxLogBuffer is a very simple implementation of log sink which simply collects
+all the logged messages in a string (except the debug messages which are output
+in the usual way immediately as we're presumably not interested in collecting
+them for later). The messages from different log function calls are separated
+by the new lines.
+
+All the messages collected so far can be shown to the user (and the current
+buffer cleared) by calling the overloaded \helpref{Flush()}{wxlogbufferflush} 
+method.
+
+\wxheading{Derived from}
+
+\helpref{wxLog}{wxlog}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\wxheading{Library}
+
+\helpref{wxBase}{librarieslist}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogBuffer::GetBuffer}\label{wxlogbuffergetbuffer}
+
+\func{const wxString\& }{GetBuffer}{\void}
+
+Returns the current buffer contains. Messages from different log function calls
+are separated with the new lines in the buffer.
+
+The buffer can be cleared by \helpref{Flush()}{wxlogbufferflush} which will
+also show the current contents to the user.
+
+
+\membersection{wxLogBuffer::Flush}\label{wxlogbufferflush}
+
+\func{virtual void}{Flush}{\void}
+
+Shows all the messages collected so far to the user (using a message box in the
+GUI applications or by printing them out to the console in text mode) and
+clears the internal buffer.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogChain %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxLogChain}}\label{wxlogchain}
