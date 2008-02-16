@@ -116,6 +116,7 @@ All (GUI):
 - wxGrid now indicates focus by using different colour for selection
   and hiding cell cursor when it doesn't have focus.
 - Added alpha support to wxImage::Paste() (Steven Van Ingelgem)
+- Use current date when opening popup in generic wxDatePickerCtrl.
 
 All (Unix):
 
