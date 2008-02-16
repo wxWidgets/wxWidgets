@@ -59,7 +59,7 @@ public:
 
     // extra methods available only in this (generic) implementation
     bool SetFormat(const wxString& fmt);
-    wxCalendarCtrl *GetCalendar() const { return m_cal; }
+    wxCalendarCtrl *GetCalendar() const;
 
 
     // implementation only from now on
@@ -78,7 +78,6 @@ private:
     void OnSize(wxSizeEvent& event);
     void OnFocus(wxFocusEvent& event);
 
-    wxCalendarCtrl *m_cal;
     wxComboCtrl* m_combo;
     wxCalendarComboPopup* m_popup;
 
