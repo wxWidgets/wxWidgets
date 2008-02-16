@@ -173,12 +173,25 @@
 </build>
 
 <build>
+    <name>HP-UX 11i PA-RISC gcc wxMotif Head Tarball</name>
+    <sandbox>td192.testdrive.hp.com</sandbox>
+    <builddir>td_hpux_pa</builddir>
+    <scheduler>daily_0800</scheduler>
+
+    <steps>
+        <fetch branch="Daily_HEAD/wxMotif.tar.gz"/>
+        <setup/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
     <name>HP-UX 11i PA-RISC gcc wxMotif Stable</name>
     <sandbox>td192.testdrive.hp.com</sandbox>
     <builddir>td_hpux_pa_stable</builddir>
     <scheduler>daily_0600</scheduler>
-
-    <schedule></schedule>
 
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>

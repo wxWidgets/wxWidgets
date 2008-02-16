@@ -33,6 +33,36 @@ cp -pR . $BUILDDIR || { cd; rm -rf $BUILDDIR; exit 1; }
 </xsl:template>
 
 <!--
+    unarchive - post fetch <command> run by <fetch>
+
+    Usage: <unarchive/>
+
+    The command is executed in the $HOME directory on the remote machine,
+    it is used to extract the fetched archive to the build directory.
+-->
+<xsl:template name="unarchive">
+<command>
+mkdir -p $TOPDIR
+chown $USER $TOPDIR
+rm -rf $BUILDDIR
+SOURCE=`echo $SOURCE | sed "s|^[^/]|$HOME/&amp;|"`
+cd $TOPDIR
+case $SOURCE in
+    *.tar.gz)
+        gunzip -c $SOURCE | tar xf -
+        ;;
+    *.tar.bz2)
+        bunzip2 -c $SOURCE | tar xf -
+        ;;
+    *.zip)
+        unzip $SOURCE
+        ;;
+esac
+mv wx* $BUILDDIR
+</command>
+</xsl:template>
+
+<!--
     configure - make disable-precomp-headers a default configure option for
                 the testdrive, and post process the Makefiles to use ccache.
 

@@ -47,6 +47,7 @@
     <xsl:param name="branch" select="'trunk'"/>
     <xsl:variable name="nodes" select="exsl:node-set($content)"/>
     <testdrive-svn>
+        <profile/>
         <xsl:if test="not($nodes/svnurl)">
             <xsl:if test="not($nodes/baseURL)">
                 <baseURL><SVN_URL/></baseURL>
@@ -56,11 +57,36 @@
             </xsl:if>
         </xsl:if>
         <xsl:if test="not($nodes/command)">
-            <profile/>
             <post-checkout/>
         </xsl:if>
         <xsl:copy-of select="$content"/>
     </testdrive-svn>
+</xsl:template>
+
+<!--
+    fatch - fetch an source tarball/zip over http or ftp.
+
+    Usage:
+        <fetch branch="Daily_HEAD/wxX11.tar.gz"/>
+    
+    Fetches the URL given by <baseURL>/$branch, where the current default
+    for <baseURL> is "http://biolpc22.york.ac.uk/pub".
+
+    The archive is then extracted by executing <profile/> then <unarchive/>
+    on the remote machine.
+-->
+<xsl:template name="fetch">
+    <xsl:param name="content"/>
+    <xsl:param name="branch">Daily_HEAD/wxWidgets.tar.gz</xsl:param>
+    <wget>
+        <profile/>
+        <defaults content="{$content}">
+            <baseURL><SNAPSHOT_URL/></baseURL>
+            <defaultBranch><xsl:value-of select="$branch"/></defaultBranch>
+            <unarchive/>
+        </defaults>
+        <xsl:copy-of select="$content"/>
+    </wget>
 </xsl:template>
 
 <!--
@@ -82,7 +108,8 @@
     <steps>
         <xsl:for-each select="exsl:node-set($content)/*">
             <xsl:choose>
-                <xsl:when test="contains(name(), 'svn')">
+                <xsl:when test="contains(name(), 'svn') or
+                                contains(name(), 'get')">
                     <xsl:copy-of select="."/>
                 </xsl:when>
                 <xsl:otherwise>
