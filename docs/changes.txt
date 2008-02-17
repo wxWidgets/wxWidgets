@@ -148,6 +148,8 @@ wxGTK:
 - Implement wxListBox::EnsureVisible() (Andreas Kling)
 - Fixed wxCURSOR_HAND to map to GDK_HAND2 and not GDK_HAND1, for consistency
   with other applications.
+- Fix wxNotebook::GetPage{Text,Image}() when they were called from the page
+  change event handler for the first added page (Mikkel S).
 
 wxMac:
 
