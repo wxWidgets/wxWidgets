@@ -2230,6 +2230,15 @@ bool wxFileName::Touch()
 #endif // platforms
 }
 
+#ifdef wxNEED_WX_UNISTD_H
+
+static int wxStat( const char *file_name, wxStructStat *buf )
+{
+    return stat( file_name , buf );
+}
+
+#endif
+
 bool wxFileName::GetTimes(wxDateTime *dtAccess,
                           wxDateTime *dtMod,
                           wxDateTime *dtCreate) const
@@ -2282,7 +2291,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 #elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__OS2__) || (defined(__DOS__) && defined(__WATCOMC__))
     // no need to test for IsDir() here
     wxStructStat stBuf;
-    if ( stat( GetFullPath().fn_str(), &stBuf) == 0 )
+    if ( wxStat( GetFullPath().fn_str(), &stBuf) == 0 )
     {
         if ( dtAccess )
             dtAccess->Set(stBuf.st_atime);
