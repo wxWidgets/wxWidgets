@@ -422,7 +422,6 @@ enum wxFileKind
         #if defined(__DMC__)
             typedef unsigned long mode_t;
         #endif
-        WXDLLIMPEXP_BASE int wxStat( const char *file_name, wxStructStat *buf );
         WXDLLIMPEXP_BASE int wxStat( const wxChar *file_name, wxStructStat *buf );
         WXDLLIMPEXP_BASE int wxLstat( const wxChar *file_name, wxStructStat *buf );
         WXDLLIMPEXP_BASE int wxAccess( const wxChar *pathname, int mode );
