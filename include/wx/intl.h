@@ -10,6 +10,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// WARNING: Parts of this file are generated. See misc/languages/README for
+// details.
+
 #ifndef _WX_INTL_H_
 #define _WX_INTL_H_
 
@@ -296,6 +299,7 @@ enum wxLanguage
     wxLANGUAGE_UZBEK,
     wxLANGUAGE_UZBEK_CYRILLIC,
     wxLANGUAGE_UZBEK_LATIN,
+    wxLANGUAGE_VALENCIAN,
     wxLANGUAGE_VIETNAMESE,
     wxLANGUAGE_VOLAPUK,
     wxLANGUAGE_WELSH,
