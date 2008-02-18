@@ -1996,8 +1996,13 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     // for now we don't use the encoding, although we probably should (doing
     // translations of the msg catalogs on the fly as required) (TODO)
     //
-    // we don't use the modifiers neither but we probably should translate
-    // "euro" into iso885915
+    // we need the modified for languages like Valencian: ca_ES@valencia
+    // though, remember it
+    wxString modifier;
+    size_t posModifier = langFull.find_first_of(wxS("@"));
+    if ( posModifier != wxString::npos )
+        modifier = langFull.Mid(posModifier);
+
     size_t posEndLang = langFull.find_first_of(wxS("@."));
     if ( posEndLang != wxString::npos )
     {
@@ -2043,11 +2048,24 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         }
 
         // 1. Try to find the language either as is:
-        for ( i = 0; i < count; i++ )
+        // a) With modifier if set
+        if ( !modifier.empty() )
         {
-            if ( ms_languagesDB->Item(i).CanonicalName == langFull )
+            wxString langFullWithModifier = langFull + modifier;
+            for ( i = 0; i < count; i++ )
             {
-                break;
+                if ( ms_languagesDB->Item(i).CanonicalName == langFullWithModifier )
+                    break;
+            }
+        }
+
+        // b) Without modifier
+        if ( modifier.empty() || i == count )
+        {
+            for ( i = 0; i < count; i++ )
+            {
+                if ( ms_languagesDB->Item(i).CanonicalName == langFull )
+                    break;
             }
         }
 
