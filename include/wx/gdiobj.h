@@ -36,7 +36,7 @@ class WXDLLIMPEXP_CORE wxGDIObject : public wxObject
 {
 public:
     // checks if the object can be used
-    bool IsOk() const
+    virtual bool IsOk() const
     {
         // the cast here is safe because the derived classes always create
         // wxGDIRefData objects
