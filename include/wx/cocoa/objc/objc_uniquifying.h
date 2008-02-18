@@ -296,6 +296,16 @@ inline objc_class * wxObjcCompilerInformation<ObjcClass>::GetCompiledClass() \
         return objc_getClass(#ObjcSuperClass); \
     }
 
+// The WX_IMPLEMENT_OBJC_GET_UNIQUIFIED_SUPERCLASS macro implements the template
+// specialization to get the superclass when the superclass is another uniquified
+// Objective-C class.
+#define WX_IMPLEMENT_OBJC_GET_UNIQUIFIED_SUPERCLASS(ObjcClass,ObjcSuperClass) \
+    template <> \
+    inline objc_class* wxObjcCompilerInformation<ObjcClass>::GetSuperclass() \
+    { \
+        return wx_GetObjcClass_ ## ObjcSuperClass(); \
+    }
+
 // The WX_IMPLEMENT_OBJC_CLASS_NAME macro implements the template specialization
 // of the sm_theClassName constant.  As soon as this specialization is in place
 // sizeof(sm_theClassName) will return the number of bytes at compile time.
@@ -303,16 +313,30 @@ inline objc_class * wxObjcCompilerInformation<ObjcClass>::GetCompiledClass() \
     template <> \
     const char wxObjcCompilerInformation<ObjcClass>::sm_theClassName[] = #ObjcClass;
 
-// The WX_IMPLEMENT_GET_OBJC_CLASS macro combines all of these together and adds
-// a global wx_GetObjcClass_ObjcClass() function.
-#define WX_IMPLEMENT_GET_OBJC_CLASS(ObjcClass,ObjcSuperClass) \
-    WX_IMPLEMENT_OBJC_GET_COMPILED_CLASS(ObjcClass) \
-    WX_IMPLEMENT_OBJC_GET_SUPERCLASS(ObjcClass,ObjcSuperClass) \
-    WX_IMPLEMENT_OBJC_CLASS_NAME(ObjcClass) \
+// The WX_IMPLEMENT_OBJC_GET_OBJC_CLASS macro is the final one that actually provides
+// the wx_GetObjcClass_XXX function that will be called in lieu of asking the Objective-C
+// runtime for the class.  All the others are really machinery to make this happen.
+#define WX_IMPLEMENT_OBJC_GET_OBJC_CLASS(ObjcClass) \
     objc_class* wx_GetObjcClass_ ## ObjcClass() \
     { \
         return wxObjcClassInitializer<ObjcClass>::Get(); \
     }
+
+// The WX_IMPLEMENT_GET_OBJC_CLASS macro combines all of these together
+// for the case when the superclass is a non-uniquified class.
+#define WX_IMPLEMENT_GET_OBJC_CLASS(ObjcClass,ObjcSuperClass) \
+    WX_IMPLEMENT_OBJC_GET_COMPILED_CLASS(ObjcClass) \
+    WX_IMPLEMENT_OBJC_GET_SUPERCLASS(ObjcClass,ObjcSuperClass) \
+    WX_IMPLEMENT_OBJC_CLASS_NAME(ObjcClass) \
+    WX_IMPLEMENT_OBJC_GET_OBJC_CLASS(ObjcClass)
+
+// The WX_IMPLEMENT_GET_OBJC_CLASS_WITH_UNIQUIFIED_SUPERCLASS macro combines all
+// of these together for the case when the superclass is another uniquified class.
+#define WX_IMPLEMENT_GET_OBJC_CLASS_WITH_UNIQUIFIED_SUPERCLASS(ObjcClass,ObjcSuperClass) \
+    WX_IMPLEMENT_OBJC_GET_COMPILED_CLASS(ObjcClass) \
+    WX_IMPLEMENT_OBJC_GET_UNIQUIFIED_SUPERCLASS(ObjcClass,ObjcSuperClass) \
+    WX_IMPLEMENT_OBJC_CLASS_NAME(ObjcClass) \
+    WX_IMPLEMENT_OBJC_GET_OBJC_CLASS(ObjcClass)
 
 // The WX_GET_OBJC_CLASS macro is intended to wrap the class name when the class
 // is used as a message receiver (e.g. for calling class methods).  When
@@ -326,6 +350,8 @@ inline objc_class * wxObjcCompilerInformation<ObjcClass>::GetCompiledClass() \
 #define WX_DECLARE_GET_OBJC_CLASS(ObjcClass,ObjcSuperClass)
 // Define WX_IMPLEMENT_GET_OBJC_CLASS as nothing
 #define WX_IMPLEMENT_GET_OBJC_CLASS(ObjcClass,ObjcSuperClass)
+// Define WX_IMPLEMENT_GET_OBJC_CLASS_WITH_UNIQUIFIED_SUPERCLASS as nothing
+#define WX_IMPLEMENT_GET_OBJC_CLASS_WITH_UNIQUIFIED_SUPERCLASS(ObjcClass,ObjcSuperClass)
 
 // Define WX_GET_OBJC_CLASS macro to output the class name and let the compiler do the normal thing
 // The WX_GET_OBJC_CLASS macro is intended to wrap the class name when the class
