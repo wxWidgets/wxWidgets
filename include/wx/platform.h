@@ -275,15 +275,18 @@
 #endif
 
 
-/* test for old versions of Borland C, normally need at least 5.82, Turbo explorer, 
-   available for free at http://www.turboexplorer.com/downloads 
+/*
+   test for old versions of Borland C, normally need at least 5.82, Turbo
+   explorer, available for free at http://www.turboexplorer.com/downloads 
 */
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x550)
-#error "This version of wxWidgets requires a newer version of Borland - we recommend 5.82 (Turbo Explorer); You may at your own risk remove this line and try your system"
+#   error "wxWidgets requires a newer version of Borland, we recommend upgrading to 5.82 (Turbo Explorer). You may at your own risk remove this line and try building but be prepared to get build errors."
 #endif /* __BORLANDC__ */
 
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x582) && (__BORLANDC__ > 0x559)
-#error "This version of wxWidgets has problems with Borland 5.6; we recommend getting Borland 5.82 (Turbo Explorer); You may at your own risk remove this line and try your system"
+#   ifndef _USE_OLD_RW_STL
+#       error "wxWidgets is incompatible with default Borland C++ 5.6 STL library, please add -D_USE_OLD_RW_STL to your bcc32.cfg to use RogueWave STL implementation."
+#   endif
 #endif /* __BORLANDC__ */
 
 
