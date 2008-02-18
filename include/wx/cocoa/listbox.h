@@ -84,6 +84,7 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
+    virtual wxSize DoGetBestSize() const;
 // pure virtuals from wxListBoxBase
     virtual bool IsSelected(int n) const;
     virtual int GetSelections(wxArrayInt& aSelections) const;

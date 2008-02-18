@@ -173,6 +173,20 @@ The listbox contents are sorted in alphabetical order.
     return true;
 }
 
+wxSize wxListBox::DoGetBestSize() const
+{
+    wxSize size = wxControlWithItems::DoGetBestSize();
+    // Limit best size to 100x100. It can be smaller if none of the items are very
+    // wide or if there aren't many items, but anything bigger than 100x100 ought
+    // to be asked for by the programmer. The 100x100 size is based on being barely
+    // enough for a scroller to be usable.
+    if(size.GetWidth() > 100)
+        size.SetWidth(100);
+    if(size.GetHeight() > 100)
+        size.SetHeight(100);
+    return size;
+}
+
 wxListBox::~wxListBox()
 {
     [GetNSTableView() setDataSource: nil];
