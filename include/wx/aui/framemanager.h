@@ -121,6 +121,7 @@ enum wxAuiPaneInsertLevel
 
 
 // forwards and array declarations
+class WXDLLIMPEXP_FWD_AUI wxAuiFloatingFrame;
 class wxAuiDockUIPart;
 class wxAuiPaneButton;
 class wxAuiPaneInfo;
@@ -133,6 +134,7 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiDockInfo, wxAuiDockInfoArray, WXDLLIMPEXP
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiDockUIPart, wxAuiDockUIPartArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiPaneButton, wxAuiPaneButtonArray, WXDLLIMPEXP_AUI);
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiPaneInfo, wxAuiPaneInfoArray, WXDLLIMPEXP_AUI);
+WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxAuiFloatingFrame*, wxAuiFloatingFramePtrArray, class WXDLLIMPEXP_AUI);
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxAuiPaneInfo*, wxAuiPaneInfoPtrArray, class WXDLLIMPEXP_AUI);
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxAuiDockInfo*, wxAuiDockInfoPtrArray, class WXDLLIMPEXP_AUI);
 #endif // SWIG
@@ -419,8 +421,6 @@ public:
 
 
 
-class WXDLLIMPEXP_FWD_AUI wxAuiFloatingFrame;
-
 class WXDLLIMPEXP_AUI wxAuiManager : public wxEvtHandler
 {
     friend class wxAuiFloatingFrame;
@@ -510,6 +510,12 @@ public:
     wxDEPRECATED( wxFrame* GetFrame() const );
 
 protected:
+
+    // Sometimes floating frames are deleted after wxAuiManager, so we need
+    // to clear m_owner_mgr in the floating frame to avoid a crash. To do so,
+    // we register frames with wxAuiManager so it can keep track.
+    void RegisterFloatingFrame(wxAuiFloatingFrame* frame);
+    void UnregisterFloatingFrame(wxAuiFloatingFrame* frame);
 
     void UpdateHintWindowConfig();
 
@@ -601,6 +607,7 @@ protected:
     wxAuiPaneInfoArray m_panes;     // array of panes structures
     wxAuiDockInfoArray m_docks;     // array of docks structures
     wxAuiDockUIPartArray m_uiparts; // array of UI parts (captions, buttons, etc)
+    wxAuiFloatingFramePtrArray m_floating_frames; // array of floating frames
 
     int m_action;                // current mouse action
     wxPoint m_action_start;      // position where the action click started
