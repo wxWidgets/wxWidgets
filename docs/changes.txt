@@ -124,6 +124,7 @@ All (Unix):
   --enable-media; only wxMedia library depends on it now.
 - wxLaunchDefaultBrowser() now uses xdg-open if available.
 - Don't close UDP socket if an empty datagram is received (Mikkel S)
+- Honour locale modifiers such a "@valencia" in system locale (Tim Kosse)
 
 wxMSW:
 
