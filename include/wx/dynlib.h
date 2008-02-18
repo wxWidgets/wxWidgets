@@ -42,14 +42,15 @@ class WXDLLIMPEXP_FWD_BASE wxDynamicLibraryDetailsCreator;
 // native version, even if configure detected presence of DLOPEN.
 #if defined(__OS2__) || defined(__EMX__) || defined(__WINDOWS__)
     typedef HMODULE             wxDllType;
+#elif defined(__DARWIN__)
+    // Don't include dlfcn.h on Darwin, we may be using our own replacements.
+    typedef void               *wxDllType;
 #elif defined(HAVE_DLOPEN)
     #include <dlfcn.h>
     typedef void               *wxDllType;
 #elif defined(HAVE_SHL_LOAD)
     #include <dl.h>
     typedef shl_t               wxDllType;
-#elif defined(__DARWIN__)
-    typedef void               *wxDllType;
 #elif defined(__WXMAC__)
     #include <CodeFragments.h>
     typedef CFragConnectionID   wxDllType;
