@@ -33,23 +33,6 @@
 #import <AppKit/NSScrollView.h>
 #import <AppKit/NSCell.h>
   
-// ============================================================================
-// @class wxCocoaListBoxNSTableDataSource
-// ============================================================================
-// 2.8 hack: We can't add an i-var to wxListBox so we add one here
-@interface wxCocoaListBoxNSTableDataSource : wxCocoaNSTableDataSource
-{
-    BOOL m_needsUpdate;
-}
-
-@end
-WX_DECLARE_GET_OBJC_CLASS(wxCocoaListBoxNSTableDataSource,wxCocoaNSTableDataSource)
-
-@implementation wxCocoaListBoxNSTableDataSource
-// No methods
-@end
-WX_IMPLEMENT_GET_OBJC_CLASS_WITH_UNIQUIFIED_SUPERCLASS(wxCocoaListBoxNSTableDataSource,wxCocoaNSTableDataSource)
-
 
 // ============================================================================
 // helper functions
@@ -87,7 +70,6 @@ static void _SetWidthOfTableColumnToFitItems(NSTableColumn *tableColumn, NSArray
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
-    EVT_IDLE(wxListBox::_WxCocoa_OnIdle)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxListBox,NSTableView,NSControl,NSView)
 
@@ -155,7 +137,7 @@ The listbox contents are sorted in alphabetical order.
     [GetNSTableView() setHeaderView: nil];
 
     // Set up the data source
-    m_cocoaDataSource = [[WX_GET_OBJC_CLASS(wxCocoaListBoxNSTableDataSource) alloc] init];
+    m_cocoaDataSource = [[WX_GET_OBJC_CLASS(wxCocoaNSTableDataSource) alloc] init];
     [GetNSTableView() setDataSource:m_cocoaDataSource];
 
     // Add the single column
@@ -202,17 +184,17 @@ wxListBox::~wxListBox()
 
 bool wxListBox::_WxCocoa_GetNeedsUpdate()
 {
-    return static_cast<wxCocoaListBoxNSTableDataSource*>(m_cocoaDataSource)->m_needsUpdate;
+    return m_needsUpdate;
 }
 
 void wxListBox::_WxCocoa_SetNeedsUpdate(bool needsUpdate)
 {
-    static_cast<wxCocoaListBoxNSTableDataSource*>(m_cocoaDataSource)->m_needsUpdate = needsUpdate;
+    m_needsUpdate = needsUpdate;
 }
 
-void wxListBox::_WxCocoa_OnIdle(wxIdleEvent &event)
+void wxListBox::OnInternalIdle()
 {
-    event.Skip();
+    wxControlWithItems::OnInternalIdle();
     if(_WxCocoa_GetNeedsUpdate())
     {
         _SetWidthOfTableColumnToFitItems([[GetNSTableView() tableColumns] objectAtIndex:0], m_cocoaItems);

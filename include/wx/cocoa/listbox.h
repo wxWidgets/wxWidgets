@@ -76,9 +76,10 @@ protected:
     WX_NSMutableArray m_cocoaItems;
     wxArrayPtrVoid m_itemClientData;
     struct objc_object *m_cocoaDataSource;
+    bool m_needsUpdate;
     inline bool _WxCocoa_GetNeedsUpdate();
     inline void _WxCocoa_SetNeedsUpdate(bool needsUpdate);
-    void _WxCocoa_OnIdle(wxIdleEvent &event);
+    virtual void OnInternalIdle();
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
