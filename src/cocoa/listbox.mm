@@ -31,9 +31,63 @@
 #import <AppKit/NSTableView.h>
 #import <AppKit/NSTableColumn.h>
 #import <AppKit/NSScrollView.h>
+#import <AppKit/NSCell.h>
+  
+// ============================================================================
+// @class wxCocoaListBoxNSTableDataSource
+// ============================================================================
+// 2.8 hack: We can't add an i-var to wxListBox so we add one here
+@interface wxCocoaListBoxNSTableDataSource : wxCocoaNSTableDataSource
+{
+    BOOL m_needsUpdate;
+}
+
+@end
+WX_DECLARE_GET_OBJC_CLASS(wxCocoaListBoxNSTableDataSource,wxCocoaNSTableDataSource)
+
+@implementation wxCocoaListBoxNSTableDataSource
+// No methods
+@end
+WX_IMPLEMENT_GET_OBJC_CLASS_WITH_UNIQUIFIED_SUPERCLASS(wxCocoaListBoxNSTableDataSource,wxCocoaNSTableDataSource)
+
+
+// ============================================================================
+// helper functions
+// ============================================================================
+
+static CGFloat _TableColumnMaxWidthForItems(NSTableColumn *tableColumn, NSArray *items)
+{
+    wxAutoNSAutoreleasePool pool;
+
+    NSCell *dataCell = [[[tableColumn dataCell] copy] autorelease];
+    CGFloat width = 0.0f;
+    NSEnumerator *itemEnum = [items objectEnumerator];
+    NSString *item;
+    while( (item = [itemEnum nextObject]) != nil )
+    {
+        [dataCell setStringValue: item];
+        NSSize itemSize = [dataCell cellSize];
+        CGFloat itemWidth = itemSize.width;
+        if(itemWidth > width)
+            width = itemWidth;
+    }
+    return width;
+}
+
+static void _SetWidthOfTableColumnToFitItems(NSTableColumn *tableColumn, NSArray *items)
+{
+    CGFloat width = _TableColumnMaxWidthForItems(tableColumn, items);
+    [tableColumn setWidth:width];
+    [tableColumn setMinWidth:width];
+}
+
+// ============================================================================
+// class wxListBox
+// ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
+    EVT_IDLE(wxListBox::_WxCocoa_OnIdle)
 END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxListBox,NSTableView,NSControl,NSView)
 
@@ -101,7 +155,7 @@ The listbox contents are sorted in alphabetical order.
     [GetNSTableView() setHeaderView: nil];
 
     // Set up the data source
-    m_cocoaDataSource = [[WX_GET_OBJC_CLASS(wxCocoaNSTableDataSource) alloc] init];
+    m_cocoaDataSource = [[WX_GET_OBJC_CLASS(wxCocoaListBoxNSTableDataSource) alloc] init];
     [GetNSTableView() setDataSource:m_cocoaDataSource];
 
     // Add the single column
@@ -133,7 +187,7 @@ The listbox contents are sorted in alphabetical order.
         [GetNSTableView() setAllowsMultipleSelection:true];
 
     [GetNSTableView() setAllowsColumnSelection:false];
-
+    _SetWidthOfTableColumnToFitItems(tableColumn, m_cocoaItems);
     return true;
 }
 
@@ -144,6 +198,28 @@ wxListBox::~wxListBox()
     wxGCSafeRelease(m_cocoaItems);
     m_cocoaItems = nil;
     DisassociateNSTableView(GetNSTableView());
+}
+
+bool wxListBox::_WxCocoa_GetNeedsUpdate()
+{
+    return static_cast<wxCocoaListBoxNSTableDataSource*>(m_cocoaDataSource)->m_needsUpdate;
+}
+
+void wxListBox::_WxCocoa_SetNeedsUpdate(bool needsUpdate)
+{
+    static_cast<wxCocoaListBoxNSTableDataSource*>(m_cocoaDataSource)->m_needsUpdate = needsUpdate;
+}
+
+void wxListBox::_WxCocoa_OnIdle(wxIdleEvent &event)
+{
+    event.Skip();
+    if(_WxCocoa_GetNeedsUpdate())
+    {
+        _SetWidthOfTableColumnToFitItems([[GetNSTableView() tableColumns] objectAtIndex:0], m_cocoaItems);
+        [GetNSTableView() tile];
+        [GetNSTableView() reloadData];
+        _WxCocoa_SetNeedsUpdate(false);
+    }
 }
 
 int wxListBox::CocoaDataSource_numberOfRows()
@@ -195,7 +271,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items, unsigned int p
         AssignNewItemClientData(pos, clientData, i, type);
     }
 
-    [GetNSTableView() reloadData];
+    _WxCocoa_SetNeedsUpdate(true);
     return pos - 1;
 }
 
@@ -205,7 +281,7 @@ void wxListBox::DoSetFirstItem(int n)
     void* pOld = m_itemClientData[n];
     m_itemClientData[n] = m_itemClientData[0];
     m_itemClientData[0] = pOld;
-    [GetNSTableView() reloadData];
+    _WxCocoa_SetNeedsUpdate(true);
 }
 
 
@@ -215,14 +291,14 @@ void wxListBox::DoClear()
 {
     [m_cocoaItems removeAllObjects];
     m_itemClientData.Clear();
-    [GetNSTableView() reloadData];
+    _WxCocoa_SetNeedsUpdate(true);
 }
 
 void wxListBox::DoDeleteOneItem(unsigned int n)
 {
     [m_cocoaItems removeObjectAtIndex:n];
     m_itemClientData.RemoveAt(n);
-    [GetNSTableView() reloadData];
+    _WxCocoa_SetNeedsUpdate(true);
 }
 
     // accessing strings
@@ -241,7 +317,7 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     wxAutoNSAutoreleasePool pool;
     [m_cocoaItems removeObjectAtIndex:n];
     [m_cocoaItems insertObject: wxNSStringWithWxString(s) atIndex: n];
-    [GetNSTableView() reloadData];
+    _WxCocoa_SetNeedsUpdate(true);
 }
 
 int wxListBox::FindString(const wxString& s, bool bCase) const
