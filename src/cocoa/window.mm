@@ -903,7 +903,14 @@ void wxWindowCocoaScrollView::Cocoa_FrameChanged(void)
     wxSizeEvent event(m_owner->GetSize(), m_owner->GetId());
     event.SetEventObject(m_owner);
     m_owner->HandleWindowEvent(event);
-    UpdateSizes();
+
+    /*  If the view is not a native one then it's being managed by wx.  In this case the control
+        may decide to change its virtual size and we must update the document view's size to
+        match.  For native views the virtual size will never have been set so we do not want
+        to use it at all.
+     */
+    if(!m_isNativeView)
+        UpdateSizes();
 }
 
 // ========================================================================
