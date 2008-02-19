@@ -130,7 +130,8 @@ wxMSW:
 
 - Fix rare bug with messages delivered to wrong wxSocket (Tim Kosse).
 - Fix setting icons when they have non-default (16*16 and 32*32) sizes.
-- Fixed wxLocale::GetInfo to use the C locale.
+- Fixed wxLocale::GetInfo() to use the CRT locale.
+- Return URLs which IE can open from wxFileSystem::FileNameToURL().
 - Don't enable disabled windows when showing them (Harry McKame).
 - Fix assert when using owner-drawn menu items with the newest (Vista) SDK.
 - Fixed wxTextCtrl to not process clipboard events twice if there's
