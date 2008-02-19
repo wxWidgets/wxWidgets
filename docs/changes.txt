@@ -142,6 +142,7 @@ wxMSW:
   highlight, just as if the control were created in report mode initially.
 - Use correct index of the right-clicked column in wxListCtrl in the
   corresponding event even when the control is scrolled horizontally.
+- Implement wxRadioBox::Reparent() correctly (Vince Harron).
 
 wxGTK:
 

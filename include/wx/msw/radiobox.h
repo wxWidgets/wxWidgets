@@ -111,6 +111,8 @@ public:
     }
 #endif // wxUSE_HELP
 
+    virtual bool Reparent(wxWindowBase *newParent);
+
     // we inherit a version always returning false from wxStaticBox, override
     // it to behave normally
     virtual bool AcceptsFocus() const { return wxControl::AcceptsFocus(); }
