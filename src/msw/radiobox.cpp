@@ -461,6 +461,25 @@ void wxRadioBox::DoSetItemToolTip(unsigned int item, wxToolTip *tooltip)
 
 #endif // wxUSE_TOOLTIPS
 
+bool wxRadioBox::Reparent(wxWindowBase *newParent)
+{
+    if ( !wxStaticBox::Reparent(newParent) )
+    {
+        return false;
+    }
+
+    HWND hwndParent = GetHwndOf(GetParent());
+    for ( size_t item = 0; item < m_radioButtons->GetCount(); item++ )
+    {
+        ::SetParent((*m_radioButtons)[item], hwndParent);
+    }
+#ifdef __WXWINCE__
+    // put static box under the buttons in the Z-order
+    SetWindowPos(GetHwnd(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
+#endif
+    return true;
+}
+
 WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxRadioBox, wxStaticBox, m_radioButtons)
 
 // ----------------------------------------------------------------------------
