@@ -151,7 +151,7 @@
  @li wxStaticBox: A static, or group box for visually grouping related controls
  @li wxListBox: A list of strings for single or multiple selection
  @li wxListCtrl: A control for displaying lists of strings and/or icons, plus a multicolumn report view
- @li wxListView: A simpler interface (fa&?cedil;ade) for wxListCtrl in report mode
+ @li wxListView: A simpler interface (fa&ccedil;ade) for wxListCtrl in report mode
  @li wxOwnerDrawnComboBox: A combobox with owner-drawn list items
  @li wxRichTextCtrl: Generic rich text editing control
  @li wxTextCtrl: Single or multiline text editing control
@@ -494,8 +494,8 @@
  @li wxDocManager: Manages the documents and views in an application
  @li wxDocChildFrame: A child frame for showing a document view
  @li wxDocParentFrame: A parent frame to contain views
- %@li wxMDIDocChildFrame: An MDI child frame for showing a document view
- %@li wxMDIDocParentFrame: An MDI parent frame to contain views
+<!--  %@li wxMDIDocChildFrame: An MDI child frame for showing a document view
+ %@li wxMDIDocParentFrame: An MDI parent frame to contain views  -->
 
 
  @section cat_printing Printing framework

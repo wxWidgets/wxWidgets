@@ -35,7 +35,8 @@
  Julian Smart, Robert Roebling, Vadim Zeitlin, Vaclav Slavik and many others.
 
  This manual contains a class reference and topic overviews.
- For a selection of wxWidgets tutorials, please see the documentation page on the \urlref{wxWidgets web site}{http://www.wxwidgets.org}.
+ For a selection of wxWidgets tutorials, please see the documentation page 
+ on the wxWidgets web site: http://www.wxwidgets.org.
 
  Please note that in the following, ``MS Windows" often refers to all
  platforms related to Microsoft Windows, including 32-bit and 64-bit
@@ -48,12 +49,10 @@
  class libraries already existed for cross-platform development,
  none met all of the following criteria:
 
- \begin{enumerate}\itemsep=0pt
- \item low price;
- \item source availability;
- \item simplicity of programming;
- \item support for a wide range of compilers.
- \end{enumerate}
+ @li low price;
+ @li source availability;
+ @li simplicity of programming;
+ @li support for a wide range of compilers.
 
  Since wxWidgets was started, several other free or almost-free
  GUI frameworks have emerged. However, none has the range of
@@ -94,33 +93,32 @@
  It is impossible to sum up the functionality of wxWidgets in a few paragraphs, but
  here are some of the benefits:
 
- \begin{itemize}\itemsep=0pt
- \item Low cost (free, in fact!)
- \item You get the source.
- \item Available on a variety of popular platforms.
- \item Works with almost all popular C++ compilers and Python.
- \item Over 70 example programs.
- \item Over 1000 pages of printable and on-line documentation.
- \item Simple-to-use, object-oriented API.
- \item Flexible event system.
- \item Graphics calls include lines, rounded rectangles, splines, polylines, etc.
- \item Constraint-based and sizer-based layouts.
- \item Print/preview and document/view architectures.
- \item Toolbar, notebook, tree control, advanced list control classes.
- \item PostScript generation under Unix, normal MS Windows printing on the PC.
- \item MDI (Multiple Document Interface) support.
- \item Can be used to create DLLs under Windows, dynamic libraries on Unix.
- \item Common dialogs for file browsing, printing, colour selection, etc.
- \item Under MS Windows, support for creating metafiles and copying
- them to the clipboard.
- \item An API for invoking help from applications.
- \item Ready-to-use HTML window (supporting a subset of HTML).
- \item Network support via a family of socket and protocol classes.
- \item Support for platform independent image processing.
- \item Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
- \item Includes Tex2RTF, to allow you to produce your own documentation
- in Windows Help, HTML and Word RTF formats.
- \end{itemize}
+ @li Low cost (free, in fact!)
+ @li You get the source.
+ @li Available on a variety of popular platforms.
+ @li Works with almost all popular C++ compilers and Python.
+ @li Over 70 example programs.
+ @li Over 1000 pages of printable and on-line documentation.
+ @li Simple-to-use, object-oriented API.
+ @li Flexible event system.
+ @li Graphics calls include lines, rounded rectangles, splines, polylines, etc.
+ @li Constraint-based and sizer-based layouts.
+ @li Print/preview and document/view architectures.
+ @li Toolbar, notebook, tree control, advanced list control classes.
+ @li PostScript generation under Unix, normal MS Windows printing on the PC.
+ @li MDI (Multiple Document Interface) support.
+ @li Can be used to create DLLs under Windows, dynamic libraries on Unix.
+ @li Common dialogs for file browsing, printing, colour selection, etc.
+ @li Under MS Windows, support for creating metafiles and copying them to the clipboard.
+ @li An API for invoking help from applications.
+ @li Ready-to-use HTML window (supporting a subset of HTML).
+ @li Network support via a family of socket and protocol classes.
+ @li Support for platform independent image processing.
+ @li Built-in support for many file formats (BMP, PNG, JPEG, GIF, XPM, PNM, PCX).
+ @li Includes Tex2RTF, to allow you to produce your own documentation
+     in Windows Help, HTML and Word RTF formats.
+
+
 
  @section requirements wxWidgets requirements
 
@@ -128,47 +126,42 @@
 
  (a) MS-Windows:
 
- \begin{enumerate}\itemsep=0pt
- \item A 32-bit or 64-bit PC running MS Windows.
- \item A Windows compiler: MS Visual C++ (embedded Visual C++ for wxWinCE
- port), Borland C++, Watcom C++, Cygwin, MinGW, Metrowerks CodeWarrior,
- Digital Mars C++. See {\tt install.txt} for details about compiler
- version supported.
- \end{enumerate}
+ @li A 32-bit or 64-bit PC running MS Windows.
+ @li A Windows compiler: MS Visual C++ (embedded Visual C++ for wxWinCE
+     port), Borland C++, Watcom C++, Cygwin, MinGW, Metrowerks CodeWarrior,
+     Digital Mars C++. See @c install.txt for details about compiler
+     version supported.
 
  (b) Unix:
 
- \begin{enumerate}\itemsep=0pt
- \item Almost any C++ compiler, including GNU C++ and many Unix vendors
- compilers such as Sun CC, HP-UX aCC or SGI mipsPro.
- \item Almost any Unix workstation, and one of: GTK+ 2.4 or higher (GTK+ 1.2.10
- may still be supported but wxGTK1 port is not maintained any longer and lacks
- many features of wxGTK2), Motif 1.2 or higher or Lesstif. If using the wxX11
- port, no such widget set is required.
- \end{enumerate}
+ @li Almost any C++ compiler, including GNU C++ and many Unix vendors
+     compilers such as Sun CC, HP-UX aCC or SGI mipsPro.
+ @li Almost any Unix workstation, and one of: GTK+ 2.4 or higher (GTK+ 1.2.10
+     may still be supported but wxGTK1 port is not maintained any longer and lacks
+     many features of wxGTK2), Motif 1.2 or higher or Lesstif. If using the wxX11
+     port, no such widget set is required.
 
  (c) Mac OS/Mac OS X:
 
- \begin{enumerate}\itemsep=0pt
- \item A PowerPC or Intel Mac running Mac OS X 10.3 or higher
- \item The Apple Developer Tools (eg. GNU C++) or MetroWerks CodeWarrior (not
- actively supported)
- \end{enumerate}
+ @li A PowerPC or Intel Mac running Mac OS X 10.3 or higher
+ @li The Apple Developer Tools (eg. GNU C++) or MetroWerks CodeWarrior (not
+     actively supported)
 
  Under all platforms it's recommended to have large amounts of free hard disk
  space. The exact amount needed depends on the port, compiler and build
  configurations but to give an example, a debug build of the library may take up
  to 500MB.
 
+
+
  @section where Availability and location of wxWidgets
 
- \winhelponly{wxWidgets is available by anonymous FTP and World Wide Web
- from ftp://biolpc22.york.ac.uk/pub and/or http://www.wxwidgets.org.}
- \winhelpignore{wxWidgets is available by anonymous FTP and World Wide Web
- from \urlref{ftp://biolpc22.york.ac.uk/pub}{ftp://biolpc22.york.ac.uk/pub}
- and/or \urlref{http://www.wxwidgets.org}{http://www.wxwidgets.org}.}
+ wxWidgets is available by anonymous FTP and World Wide Web
+ from ftp://biolpc22.york.ac.uk/pub and/or http://www.wxwidgets.org.
 
  You can also buy a CD-ROM using the form on the Web site.
+
+
 
  @section acknowledgements Acknowledgements
 
@@ -176,21 +169,19 @@
  it running and have provided an invaluable, extensive and high-quality amount of
  changes over the many of years of wxWidgets' life:
 
- \begin{description}\itemsep=0pt
- \item Julian Smart
- \item Vadim Zeitlin
- \item Robert Roebling
- \item Robin Dunn
- \item Stefan Csomor
- \item Vaclav Slavik
- \item Paul Cornett
- \item Wlodzimierz `ABX' Skiba
- \item Chris Elliott
- \item David Elliott
- \item Kevin Hock
- \item Stefan Neis
- \item Michael Wetherell
- \end{description}
+ @li Julian Smart
+ @li Vadim Zeitlin
+ @li Robert Roebling
+ @li Robin Dunn
+ @li Stefan Csomor
+ @li Vaclav Slavik
+ @li Paul Cornett
+ @li Wlodzimierz `ABX' Skiba
+ @li Chris Elliott
+ @li David Elliott
+ @li Kevin Hock
+ @li Stefan Neis
+ @li Michael Wetherell
 
  We would particularly like to thank the following peoples for their contributions
  to wxWidgets, and the many others who have been involved in the project over the years.
@@ -206,11 +197,11 @@
  Stefan Gunter, Bill Hale, Patrick Halke, Stefan Hammes, Guillaume Helle,
  Harco de Hilster, Cord Hockemeyer, Markus Holzem, Olaf Klein, Leif Jensen,
  Bart Jourquin, Guilhem Lavaux, Ron Lee, Jan Lessner, Nicholas Liebmann,
- Torsten Liermann, Per Lindqvist, Francesco Montorsi, Thomas Runge, Tatu M\"{a}nnist\"{o},
+ Torsten Liermann, Per Lindqvist, Francesco Montorsi, Thomas Runge, Tatu M&auml;nnist&ouml;,
  Scott Maxwell, Thomas Myers, Oliver Niedung, Ryan Norton, Hernan Otero,
  Ian Perrigo, Timothy Peters, Giordano Pezzoli, Harri Pasanen, Thomaso Paoletti,
  Garrett Potts, Marcel Rasche, Dino Scaringella, Jobst Schmalenbach, Arthur Seaton,
- Paul Shirley, Stein Somers, Petr Smilauer, Neil Smith, Kari Syst\"{a}, George Tasker,
+ Paul Shirley, Stein Somers, Petr Smilauer, Neil Smith, Kari Syst&auml;, George Tasker,
  Arthur Tetzlaff-Deas, Jonathan Tonberg, Jyrki Tuomi, Janos Vegh, Andrea Venturoli,
  David Webster, Otto Wyss, Xiaokun Zhu, Edward Zimmermann.
 
@@ -225,7 +216,8 @@
  from the source of which we have borrowed some spline drawing code.
  His copyright is included below.
 
- {\it XFig2.1 is copyright (c) 1985 by Supoj Sutanthavibul. Permission to
+ <em>
+ XFig2.1 is copyright (c) 1985 by Supoj Sutanthavibul. Permission to
  use, copy, modify, distribute, and sell this software and its
  documentation for any purpose is hereby granted without fee, provided
  that the above copyright notice appear in all copies and that both that
@@ -234,6 +226,7 @@
  publicity pertaining to distribution of the software without specific,
  written prior permission.  M.I.T. makes no representations about the
  suitability of this software for any purpose.  It is provided ``as is''
- without express or implied warranty.}
+ without express or implied warranty.
+ </em>
 
 */

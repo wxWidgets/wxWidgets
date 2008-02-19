@@ -11,13 +11,14 @@
 
  @page constants_page Constants
 
+ This chapter describes the constants defined by wxWidgets.
+
  @li @ref cppconst
-
-
- <hr>
-
-
- @section cppconst Preprocessor symbols defined by wxWidgets
-
+ @li @ref keycodes
+ @li @ref keymodifiers
+ @li @ref languagecodes
+ @li @ref stdevtid
+ @li @ref stockitems
+ @li @ref wxusedef
 
 */

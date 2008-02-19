@@ -255,7 +255,6 @@
  distribute such modifications or work under the terms of Section 1
  above, provided that you also meet all of these conditions:
 
- \begin{indented}{1cm}
  a) The modified work must itself be a software library.
 
  b) You must cause the files modified to carry prominent notices
@@ -278,7 +277,6 @@
  application-supplied function or table used by this function must
  be optional: if the application does not supply it, the square
  root function must still compute square roots.)
- \end{indented}
 
  These requirements apply to the modified work as a whole. If
  identifiable sections of that work are not derived from the Library,
@@ -376,7 +374,6 @@
  directing the user to the copy of this License. Also, you must do one
  of these things:
 
- \begin{indented}{1cm}
  a) Accompany the work with the complete corresponding
  machine-readable source code for the Library including whatever
  changes were used in the work (which must be distributed under
@@ -400,7 +397,6 @@
 
  d) Verify that the user has already received a copy of these
  materials or that you have already sent this user a copy.
- \end{indented}
 
  For an executable, the required form of the "work that uses the
  Library" must include any data and utility programs needed for
@@ -424,7 +420,6 @@
  the Library and of the other library facilities is otherwise
  permitted, and provided that you do these two things:
 
- \begin{indented}{1cm}
  a) Accompany the combined library with a copy of the same work
  based on the Library, uncombined with any other library
  facilities. This must be distributed under the terms of the
@@ -433,7 +428,6 @@
  b) Give prominent notice with the combined library of the fact
  that part of it is a work based on the Library, and explaining
  where to find the accompanying uncombined form of the same work.
- \end{indented}
 
  8. You may not copy, modify, sublicense, link with, or distribute
  the Library except as expressly provided under this License. Any
@@ -521,9 +515,9 @@
  of all derivatives of our free software and of promoting the sharing
  and reuse of software generally.
 
- \begin{center}
+ <center>
  NO WARRANTY
- \end{center}
+ </center>
 
  15. BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO
  WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE LAW.
