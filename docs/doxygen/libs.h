@@ -21,36 +21,36 @@
  @image html libs.gif
 
  Please note that arrows indicate the "depends from" relation and that
- all blue boxes depend from wxBase library (i.e. they are non-GUI libraries),
- and all green boxes depend from wxCore library (i.e. they are GUI libraries).
+ all blue boxes depend from @ref wxbase library (i.e. they are non-GUI libraries),
+ and all green boxes depend from @ref wxcore library (i.e. they are GUI libraries).
 
 
- @section wxBase wxBase
+ @section wxbase wxBase
 
  Every wxWidgets application must link against this library. It contains
  mandatory classes that any wxWidgets code depends on (e.g. wxString) and
  portability classes that abstract differences between platforms.
- wxBase can be used to develop console mode applications, it does not require
+ @ref wxbase can be used to develop console mode applications, it does not require
  any GUI libraries or running X Window System on Unix.
 
 
- @section wxCore wxCore
+ @section wxcore wxCore
 
  Basic GUI classes such as GDI classes or controls are in this library. All
  wxWidgets GUI applications must link against this library, only console mode
  applications don't.
 
- Requires wxBase.
+ Requires @ref wxbase.
 
 
- @section wxAui wxAui
+ @section wxaui wxAui
 
  This contains the Advanced User Interface docking library.
 
- Requires wxAdvanced, wxHTML, wxXML, wxCore, wxBase.
+ Requires @ref wxadv, @ref wxhtml, @ref wxxml, @ref wxcore, @ref wxbase.
 
 
- @section wxNet wxNet
+ @section wxnet wxNet
 
  Classes for network access:
 
@@ -60,24 +60,24 @@
  @li wxURL
  @li wxInternetFSHandler (a wxFileSystem handler)
 
- Requires wxBase.
+ Requires @ref wxbase.
 
 
- @section wxRichText wxRichText
+ @section wxrichtext wxRichText
 
  This contains generic rich text control functionality.
 
- Requires wxAdvanced, wxHTML, wxXML, wxCore, wxBase.
+ Requires @ref wxadv, @ref wxhtml, @ref wxxml, @ref wxcore, @ref wxbase.
 
 
- @section wxXML wxXML
+ @section wxxml wxXML
 
  This library contains simple classes for parsing XML documents.
 
- Requires wxBase.
+ Requires @ref wxbase.
 
 
- @section wxAdvanced wxAdvanced
+ @section wxadv wxAdvanced
 
  Advanced or rarely used GUI classes:
 
@@ -93,56 +93,57 @@
  @li wxSashWindow
  @li ...others
 
- Requires wxCore and wxBase.
+ Requires @ref wxcore and @ref wxbase.
 
 
- @section wxMedia wxMedia
+ @section wxmedia wxMedia
 
  Miscellaneous classes related to multimedia. Currently this library only
  contains wxMediaCtrl but more classes will be added in
  the future.
 
- Requires wxCore and wxBase.
+ Requires @ref wxcore and @ref wxbase.
 
 
- @section wxGL wxGL
+ @section wxgl wxGL
 
  This library contains wxGLCanvas class for integrating
  OpenGL library with wxWidgets. Unlike all others, this library is {\em not}
  part of the monolithic library, it is always built as separate library.
 
- Requires wxCore and wxBase.
+ Requires @ref wxcore and @ref wxbase.
 
 
- @section wxHTML wxHTML
+ @section wxhtml wxHTML
 
  Simple HTML renderer and other @ref html_overview are contained in this library, 
  as well as wxHtmlHelpController, wxBestHelpController and wxHtmlListBox.
 
- Requires wxCore and wxBase.
+ Requires @ref wxcore and @ref wxbase.
 
 
- @section wxQA wxQA
+ @section wxqa wxQA
 
  This is the library containing extra classes for quality assurance. Currently
  it only contains wxDebugReport and related classes,
  but more will be added to it in the future.
 
- Requires wxXML, wxCore, wxBase.
+ Requires @ref wxxml, @ref wxcore, @ref wxbase.
 
 
- @section wxXRC wxXRC
+ @section wxxrc wxXRC
 
  This library contains wxXmlResource class that
- provides access to XML resource files in XRC format
+ provides access to XML resource files in XRC format.
 
- Requires wxAdvanced, wxHTML, wxXML, wxCore, wxBase.
+ Requires @ref wxadv, @ref wxhtml, @ref wxxml, @ref wxcore, @ref wxbase.
 
 
- @section wxSTC wxSTC
+ @section wxstc wxSTC
 
  STC (Styled Text Control) is a wrapper around Scintilla, a syntax-highlighting text editor.
+ See http://www.scintilla.org for more info about Scintilla.
 
- Requires wxCore, wxBase.
+ Requires @ref wxcore, @ref wxbase.
 
 */
