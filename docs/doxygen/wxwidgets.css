@@ -11,7 +11,6 @@ H1 {
 }
 H2 {
 	font-size: 120%;
-    margin-left: 30px;
 }
 H3 {
 	font-size: 100%;
@@ -431,5 +430,15 @@ HR {
 }
 .directory img { 
 	vertical-align: -30%; 
+}
+
+
+
+/*
+ wxWidgets docs specific styles
+*/
+
+table.doctable {
+
 }
 
