@@ -13,6 +13,8 @@
 
  A classification of wxWidgets classes by category.
 
+ @beginInvisibleTable
+ <tr><td>
  @li @ref cat_manwnd
  @li @ref cat_miscwnd
  @li @ref cat_cmndlg
@@ -32,6 +34,7 @@
  @li @ref cat_logging
  @li @ref cat_debugging
  @li @ref cat_net
+ </td><td>
  @li @ref cat_ipc
  @li @ref cat_dvf
  @li @ref cat_printing
@@ -50,7 +53,8 @@
  @li @ref cat_gl
  @li @ref cat_appmanagement
  @li @ref cat_misc
-
+ </td></tr>
+ @endTable
 
  <hr>
 
@@ -719,7 +723,7 @@
  @section cat_misc Miscellaneous
 
  @li wxCaret: A caret (cursor) object
- @li wxConfig: Classes for configuration reading/writing (using either INI files or registry)
+ @li wxConfigBase: Classes for reading/writing the configuration settings
  @li wxTimer: Timer class
  @li wxStopWatch: Stop watch class
  @li wxMimeTypesManager: MIME-types manager class
