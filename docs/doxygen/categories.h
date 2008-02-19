@@ -73,7 +73,7 @@
  @li wxTipWindow: Shows text in a small window
  @li wxWizard: A wizard dialog
  
- See also the \helpref{Common dialogs overview}{commondialogsoverview}.
+ See also the @ref commondialogs_overview.
  
 
  @section cat_miscwnd Miscellaneous windows
@@ -99,7 +99,7 @@
  
  @section cat_cmndlg Common dialogs
  
- @ref commondialogsoverview
+ @ref commondialogs_overview
  
  Common dialogs are ready-made dialog classes which are frequently used
  in an application.
@@ -151,7 +151,7 @@
  @li wxStaticBox: A static, or group box for visually grouping related controls
  @li wxListBox: A list of strings for single or multiple selection
  @li wxListCtrl: A control for displaying lists of strings and/or icons, plus a multicolumn report view
- @li wxListView: A simpler interface ({\it fa\c{c}ade}) for wxListCtrl in report mode
+ @li wxListView: A simpler interface (fa&?cedil;ade) for wxListCtrl in report mode
  @li wxOwnerDrawnComboBox: A combobox with owner-drawn list items
  @li wxRichTextCtrl: Generic rich text editing control
  @li wxTextCtrl: Single or multiline text editing control
@@ -188,12 +188,13 @@
  @li wxMenuItem: Represents a single menu item
  
  
+
  @section cat_wxaui wxAUI - advanced user interface
  
  This is a new set of classes for writing a customizable application
  interface with built-in docking, floatable panes and a flexible
  MDI-like interface. Further classes for custom notebooks with
- draggable tabs etc. are in progress. See also \helpref{wxAUI overview}{wxauioverview}.
+ draggable tabs etc. are in progress. See also @ref wxaui_overview.
  
  @li wxAuiManager: The central class for managing the interface
  @li wxAuiNotebook: A replacement notebook class with extra features
@@ -210,7 +211,7 @@
  and will in almost all cases produce dialogs looking equally well on all platforms, the
  other is based on so-called constraints and is deprecated, though still available.
  
- @ref sizeroverview describes sizer-based layout.
+ @ref sizer_overview describes sizer-based layout.
  
  These are the classes relevant to sizer-based layout.
  
@@ -222,7 +223,7 @@
  @li wxStaticBoxSizer: Same as wxBoxSizer, but with a surrounding static box
  @li wxWrapSizer: A sizer which wraps its child controls as size permits
  
- @ref constraintsoverview describes constraints-based layout.
+ @ref constraints_overview describes constraints-based layout.
  
  These are the classes relevant to constraints-based window layout.
  
@@ -236,17 +237,17 @@
  
  @section cat_dc Device contexts
  
- @ref dcoverview
+ @ref dc_overview
  
  Device contexts are surfaces that may be drawn on, and provide an
  abstraction that allows parameterisation of your drawing code
  by passing different device contexts.
  
- @li wxAutoBufferedPaintDC: A helper device context for double buffered drawing inside \textbf{OnPaint}.
+ @li wxAutoBufferedPaintDC: A helper device context for double buffered drawing inside @b OnPaint.
  @li wxBufferedDC: A helper device context for double buffered drawing.
- @li wxBufferedPaintDC: A helper device context for double buffered drawing inside \textbf{OnPaint}.
- @li wxClientDC: A device context to access the client area outside {\bf OnPaint} events
- @li wxPaintDC: A device context to access the client area inside {\bf OnPaint} events
+ @li wxBufferedPaintDC: A helper device context for double buffered drawing inside @b OnPaint.
+ @li wxClientDC: A device context to access the client area outside @b OnPaint events
+ @li wxPaintDC: A device context to access the client area inside @b OnPaint events
  @li wxWindowDC: A device context to access the non-client area
  @li wxScreenDC: A device context to access the entire screen
  @li wxDC: The device context base class
@@ -259,7 +260,7 @@
  
  @section cat_gdi Graphics device interface
  
- @ref wxbitmapoverview
+ @ref bitmap_overview
  
  These classes are related to drawing on device contexts and windows.
  
@@ -284,25 +285,25 @@
  
  @section cat_events Events
  
- @ref eventhandlingoverview
+ @ref eventhandling_overview
  
  An event object contains information about a specific event. Event handlers
  (usually member functions) have a single, event argument. 
  
  @li wxActivateEvent: A window or application activation event
- @li wxCalendarEvent: Used with \helpref{wxCalendarCtrl}{wxcalendarctrl}
+ @li wxCalendarEvent: Used with wxCalendarCtrl
  @li wxCalculateLayoutEvent: Used to calculate window layout
  @li wxChildFocusEvent: A child window focus event
  @li wxClipboardTextEvent: A clipboard copy/cut/paste treebook event event
  @li wxCloseEvent: A close window or end session event
  @li wxCommandEvent: An event from a variety of standard controls
  @li wxContextMenuEvent: An event generated when the user issues a context menu command
- @li wxDateEvent: Used with \helpref{wxDatePickerCtrl}{wxdatepickerctrl}
- @li wxDialUpEvent: Event send by \helpref{wxDialUpManager}{wxdialupmanager}
+ @li wxDateEvent: Used with wxDatePickerCtrl
+ @li wxDialUpEvent: Event send by wxDialUpManager
  @li wxDropFilesEvent: A drop files event
  @li wxEraseEvent: An erase background event
  @li wxEvent: The event base class
- @li wxFindDialogEvent: Event sent by \helpref{wxFindReplaceDialog}{wxfindreplacedialog}
+ @li wxFindDialogEvent: Event sent by wxFindReplaceDialog
  @li wxFocusEvent: A window focus event
  @li wxKeyEvent: A keypress event
  @li wxIconizeEvent: An iconize/restore event
@@ -327,8 +328,8 @@
  @li wxScrollWinEvent: A scroll event from scrolled windows
  @li wxSizeEvent: A size event
  @li wxSocketEvent: A socket event
- @li wxSpinEvent: An event from \helpref{wxSpinButton}{wxspinbutton}
- @li wxSplitterEvent: An event from \helpref{wxSplitterWindow}{wxsplitterwindow}
+ @li wxSpinEvent: An event from wxSpinButton
+ @li wxSplitterEvent: An event from wxSplitterWindow
  @li wxSysColourChangedEvent: A system colour change event
  @li wxTimerEvent: A timer expiration event
  @li wxTreebookEvent: A treebook control event
@@ -341,7 +342,7 @@
  
  @section cat_val Validators
  
- @ref validatoroverview
+ @ref validator_overview
  
  These are the window validators, used for filtering and validating
  user input. 
@@ -376,13 +377,13 @@
  
  @section cat_containers Container classes
  
- @ref wxcontaineroverview
+ @ref container_overview
  
  These are classes, templates and class macros are used by wxWidgets. Most
  of these classes provide a subset or almost complete STL API.
  
  @li wxArray<T>: A type-safe dynamic array implementation (macro based)
- @li wxArrayString: An efficient container for storing \helpref{wxString}{wxstring} objects
+ @li wxArrayString: An efficient container for storing wxString objects
  @li wxHashMap<T>: A type-safe hash map implementation (macro based)
  @li wxHashSet<T>: A type-safe hash set implementation(macro based)
  @li wxHashTable: A simple hash table implementation (deprecated, use wxHashMap)
@@ -402,7 +403,7 @@
  
  @section cat_rtti Run-time class information system
  
- @ref runtimeclassoverview
+ @ref runtimeclass_overview
  
  wxWidgets supports run-time manipulation of class information, and dynamic
  creation of objects given class names. 
@@ -414,29 +415,28 @@
  
  @section cat_logging Logging features
  
- @ref wxlogoverview
+ @ref log_overview
  
  wxWidgets provides several classes and functions for message logging.
- Please see the \helpref{wxLog overview}{wxlogoverview} for more details. 
+ Please see the @ref log_overview for more details. 
  
  @li wxLog: The base log class
  @li wxLogStderr: Log messages to a C STDIO stream
  @li wxLogStream: Log messages to a C++ iostream
- @li wxLogTextCtrl: Log messages to a \helpref{wxTextCtrl}{wxtextctrl}
+ @li wxLogTextCtrl: Log messages to a wxTextCtrl
  @li wxLogWindow: Log messages to a log frame
  @li wxLogGui: Default log target for GUI programs
  @li wxLogNull: Temporarily suppress message logging
  @li wxLogChain: Allows to chain two log targets
  @li wxLogInterposer: Allows to filter the log messages
  @li wxLogInterposerTemp: Allows to filter the log messages
- \twocolitem{\helpref{wxStreamToTextRedirector}{wxstreamtotextredirector}}{Allows
- to redirect output sent to {\tt cout} to a \helpref{wxTextCtrl}{wxtextctrl}}
+ @li wxStreamToTextRedirector: Allows to redirect output sent to @c cout to a wxTextCtrl
  @li Log functions: Error and warning logging functions
  
  
  @section cat_debugging Debugging features
  
- @ref debuggingoverview
+ @ref debugging_overview
  
  wxWidgets supports some aspects of debugging an application through
  classes, functions and macros. 
@@ -470,7 +470,7 @@
  
  @section cat_ipc Interprocess communication
  
- @ref ipcoverview
+ @ref ipc_overview
  
  wxWidgets provides simple interprocess communications facilities
  based on Windows DDE, but available on most platforms using TCP. 
@@ -483,7 +483,7 @@
 
  @section cat_dvf Document-view framework
  
- @ref docviewoverview
+ @ref docview_overview
  
  wxWidgets supports a document/view framework which provides
  housekeeping for a document-centric application. 
@@ -500,7 +500,7 @@
  
  @section cat_printing Printing framework
  
- @ref printingoverview
+ @ref printing_overview
  
  A printing and previewing framework is implemented to
  make it relatively straightforward to provide document printing
@@ -523,7 +523,7 @@
  
  @section cat_dd Drag and drop and clipboard classes
  
- @ref wxdndoverview 
+ @ref dnd_overview 
  
  @li wxDataObject: Data object class
  @li wxDataFormat: Represents a data format
@@ -593,7 +593,7 @@
  
  @section cat_threading Threading classes
  
- @ref wxthreadoverview
+ @ref thread_overview
  
  wxWidgets provides a set of classes to make use of the native thread
  capabilities of the various platforms.
@@ -676,7 +676,7 @@
  
  @section cat_xrc XML-based resource system classes
  
- @ref xrcoverview XML-based resource system (XRC) overview
+ @ref xrc_overview
  
  Resources allow your application to create controls and other user interface elements
  from specifications stored in an XML format.
@@ -729,7 +729,7 @@
  @li wxAutomationObject: OLE automation class
  @li wxFontMapper: Font mapping, finding suitable font for given encoding
  @li wxEncodingConverter: Encoding conversions
- @li wxCalendarDateAttr: Used with \helpref{wxCalendarCtrl}{wxcalendarctrl}
+ @li wxCalendarDateAttr: Used with wxCalendarCtrl
  @li wxQuantize: Class to perform quantization, or colour reduction
  @li wxSingleInstanceChecker: Check that only single program instance is running
 

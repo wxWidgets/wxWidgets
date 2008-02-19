@@ -11,7 +11,7 @@
  
  @mainpage wxWidgets 2.9.0: A portable C++ and Python GUI toolkit
  @author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn, et al
- @date January, 2008
+ @date February, 2008
 
  @image html wx.png
 
