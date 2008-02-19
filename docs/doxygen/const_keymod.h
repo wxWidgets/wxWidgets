@@ -9,7 +9,7 @@
 
 /*!
 
-@page keymodifiers Key Modifiers
+ @page keymodifiers Key Modifiers
  
  Include file: @verbatim #include <wx/defs.h> @endverbatim
  

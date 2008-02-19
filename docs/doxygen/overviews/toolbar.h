@@ -89,7 +89,7 @@
  // Author:      Julian Smart
  // Modified by:
  // Created:     04/01/98
- // RCS-ID:      $Id: ttoolbar.tex 47878 2007-08-05 10:10:37Z JS $
+ // RCS-ID:      $Id$
  // Copyright:   (c) Julian Smart
  // License:    wxWindows license
  /////////////////////////////////////////////////////////////////////////////

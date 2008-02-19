@@ -14,5 +14,6 @@ cp wxwidgets.css out/html
 # affected files in the log file; remove it to make the log
 # more readable
 currpath=`pwd`/
-cat doxygen.log | sed -e "s|$currpath||g" >temp
+interfacepath=`cd ../../interface && pwd`/
+cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" >temp
 mv temp doxygen.log
