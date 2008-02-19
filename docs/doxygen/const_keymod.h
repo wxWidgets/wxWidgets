@@ -11,7 +11,7 @@
 
  @page keymodifiers Key Modifiers
  
- Include file: @verbatim #include <wx/defs.h> @endverbatim
+ @header{wx/defs.h}
  
  The following key modifier constants are defined:
  

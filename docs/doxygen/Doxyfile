@@ -47,42 +47,59 @@ SUBGROUPING            = YES
 # us to keep the headers readable and "implement" wxWidgets-specific commands.
 
 # event aliases
-ALIASES = beginEventTable="\section events Events\n"
-ALIASES += event{1}="\li \b \1"
-ALIASES += event{2}="\li \b \1, \2"
+ALIASES = beginEventTable="\section class_events Events\n"
+ALIASES += event{1}="\li \b <tt>\1</tt>"
+ALIASES += event{2}="\li \b <tt>\1, \2</tt>"
 ALIASES += endEventTable="\n"
 
 # style aliases
-ALIASES += beginStyleTable="\section styles Styles\n"
-ALIASES += style{1}="\li \b \1"
+ALIASES += beginStyleTable="\section class_styles Styles\n"
+ALIASES += style{1}="\li \b \c \1"
 ALIASES += endStyleTable="\n"
 
 # extra style aliases
-ALIASES += beginExtraStyleTable="\section extrastyles Extra Styles\n"
+ALIASES += beginExtraStyleTable="\section class_extrastyles Extra Styles\n"
 ALIASES += endExtraStyleTable="\n"
 
 # misc aliases
-ALIASES += library{1}="\section lib Library\n \b \1"
-ALIASES += seealso="\section sa See also\n"    # the default \sa command does not generate a \section!
-ALIASES += stdobjects="\section stdobj Predefined objects\n \b"
+ALIASES += library{1}="\section class_lib Library\n \ref \1"
+ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
+ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
+
+# IMPORTANT: the default \sa command does not generate a \section!
+ALIASES += seealso="\section class_sa See also\n"
+
+# IMPORTANT: the \headerfile command does not work everywhere we'd need it,
+#            e.g. in the constants page we need to specify an header file
+#            even if they're not inside a \class, \function or \struct command....
+ALIASES += header{1}="Include file:\n \verbatim #include <\1> @endverbatim"
 
 # some formatting aliases
-ALIASES += true="\b true"
-ALIASES += false="\b false"
-ALIASES += NULL="\b NULL"
+# NOTE: using <b> and <tt> tags is different from using \c \b because in the last case
+#       \c gets applied to the first word following and \b to the second word following;
+#       we want both bold and typetext attributes to be applied to the same word!
+ALIASES += true="<b><tt>true</tt></b>"
+ALIASES += false="<b><tt>false</tt></b>"
+ALIASES += NULL="<b><tt>NULL</tt></b>"
 
 # these are useful for creation of tables
-ALIASES += row{2}=""
+ALIASES += beginTable="<center><table class='doctable'>"
+ALIASES += beginInvisibleTable="<center><table class='doctable' border='0'>"
+ALIASES += row{2}="<tr><td>\1</td> <td>\2</td></tr>"
+ALIASES += row{3}="<tr><td>\1</td> <td>\2 \3</td></tr>"
+ALIASES += row{4}="<tr><td>\1</td> <td>\2 \3 \4</td></tr>"
+ALIASES += endTable="</table></center>"
 
-# NOTE: we could put aliases also for e.g. @wxDefaultSize, @wxDefaultPosition, @wxID_ANY, etc
+# NOTE: we could put aliases also for e.g. @wxDefaultSize, @wxDefaultPosition, @wxID_ANY, 
+#       @wxEmptyString, @wxNullIcon, etc etc
 
 # NOTE: these are important as you can't write in the docs
 #       just #ifdef since the # character is used by Doxygen
 #       for explicit linking; use the following aliases instead!
-ALIASES += ifdef="\b \c \#ifdef"
-ALIASES += ifndef="\b \c \#ifndef"
-ALIASES += if="\b \c \#if"          # NOTE: this overrides the Doxygen \if command
-ALIASES += endif="\b \c \#endif"
+ALIASES += ifdef="<b><tt>\#ifdef</tt></b>"
+ALIASES += ifndef="<b><tt>\#ifndef</tt></b>"
+ALIASES += if="<b><tt>\#if</tt></b>"          # NOTE: this overrides the Doxygen \if command
+ALIASES += endif="<b><tt>\#endif</tt></b>"
 
 
 #---------------------------------------------------------------------------

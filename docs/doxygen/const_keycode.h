@@ -11,9 +11,7 @@
 
  @page keycodes Keycodes
  
- Include file:
- 
- @verbatim #include <wx/defs.h> @endverbatim
+ @header{wx/defs.h}
  
  Keypresses are represented by an enumerated type, wxKeyCode. The possible
  values are the ASCII character codes, plus the following:
