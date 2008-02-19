@@ -10,7 +10,7 @@
 
  @page utilities_page Utilities and libraries supplied with wxWidgets
 
- In addition to the @ref librarieslist, some
+ In addition to the @ref libraries_page, some
  additional utilities are supplied in the @c utils hierarchy.
 
  For other user-contributed packages, please see the Contributions page

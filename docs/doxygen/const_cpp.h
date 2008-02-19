@@ -15,7 +15,7 @@
  by category (and sorted by alphabetical order inside each category).
  All of these macros except for the @c wxUSE_XXX variety is defined if the
  corresponding condition is @true and undefined if it isn't, so they should be
- always tested using @c #ifdef and not @c #if.
+ always tested using @ifdef and not @if.
 
  TODO: what can we use here instead of \twocolitem to keep text readable??
 
@@ -155,7 +155,7 @@
  macro corresponds to the compiler version: $1020$ for $4.2$ (the first supported
  version), $1100$ for $5.0$, $1200$ for $6.0$ and so on. For convenience, the
  symbols __VISUALCn__ are also defined for each major compiler version from
- 5 to 9, i.e. you can use tests such @c #ifdef __VISUALC7__} to test
+ 5 to 9, i.e. you can use tests such @ifdef __VISUALC7__} to test
  for compiler version being precisely 7.}
  \twocolitem{__XLC__}{AIX compiler}
  \twocolitem{__WATCOMC__}{Watcom C++. The value of this macro corresponds to
@@ -204,7 +204,7 @@
  includes a number of wxWidgets headers thus making it unnecessary to include
  them explicitly. However if this is not defined, you do need to include them
  and so the usual idiom which allows to support both cases is to first include
- @c wx/wxprec.h} and then, inside @c #ifndef WX_PRECOMP}, individual
+ @c wx/wxprec.h} and then, inside @ifndef WX_PRECOMP}, individual
  headers you need.}
  \twocolitem{_UNICODE and UNICODE}{both are defined if wxUSE_UNICODE is set to $1$}
  \twocolitem{wxUSE_GUI}{this particular feature test macro is defined to $1$

@@ -110,7 +110,7 @@
  [This is the first released version of the library GPL. It is
  numbered 2 because it goes with version 2 of the ordinary GPL.]
 
- @subsection Preamble
+ @section gnulicense_preamble Preamble
 
  The licenses for most software are designed to take away your
  freedom to share and change it. By contrast, the GNU General Public
@@ -545,7 +545,7 @@
  END OF TERMS AND CONDITIONS
  </center>
 
- @subsection Appendix: How to Apply These Terms to Your New Libraries
+ @section gnulicense_appendix Appendix: How to Apply These Terms to Your New Libraries
 
  If you develop a new library, and you want it to be of the greatest
  possible use to the public, we recommend making it free software that

@@ -506,13 +506,13 @@
  doesn't do a perfect job of converting the project files from eVC++ format.
  
  When you have converted the wxWidgets workspace, edit the configuration properties
- for each configuration and in the Librarian, add a relative path ..\..\lib to
+ for each configuration and in the Librarian, add a relative path ..\\..\\lib to
  each library path. For example: 
- <tt>..\$(PlatformName)\$(ConfigurationName)\wx_mono.lib</tt>.
+ <tt>..\\$(PlatformName)\\$(ConfigurationName)\\wx_mono.lib</tt>.
  
  Then, for a sample you want to compile, edit the configuration properties
  and make sure 
- <tt>..\..\lib\\$(PlatformName)\\$(ConfigurationName)</tt> 
+ <tt>..\\..\\lib\\$(PlatformName)\\$(ConfigurationName)</tt> 
  is in the Linker/General/Additional Library Directories property. 
  Also change the Linker/Input/Additional Dependencies property to something like 
  <tt>coredll.lib wx_mono.lib wx_wxjpeg.lib wx_wxpng.lib wx_wxzlib.lib wx_wxexpat.lib 

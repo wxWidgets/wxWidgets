@@ -194,7 +194,7 @@
  This is a new set of classes for writing a customizable application
  interface with built-in docking, floatable panes and a flexible
  MDI-like interface. Further classes for custom notebooks with
- draggable tabs etc. are in progress. See also @ref wxaui_overview.
+ draggable tabs etc. are in progress. See also @ref aui_overview.
 
  @li wxAuiManager: The central class for managing the interface
  @li wxAuiNotebook: A replacement notebook class with extra features
@@ -443,7 +443,7 @@
 
  @li wxDebugContext: Provides memory-checking facilities
  @li Debugging macros: Debug macros for assertion and checking
- @li WXDEBUG\_NEW: Use this macro to give further debugging information
+ @li WXDEBUG_NEW: Use this macro to give further debugging information
  @li wxDebugReport: Base class for creating debug reports in case of a program crash.
  @li wxDebugReportCompress: Class for creating compressed debug reports.
  @li wxDebugReportUpload: Class for uploading compressed debug reports via HTTP.

@@ -33,7 +33,7 @@
      };
  @endverbatim
  
- Notice that @c wxMOD\_CMD should be used instead of @c wxMOD_CONTROL 
+ Notice that @c wxMOD_CMD should be used instead of @c wxMOD_CONTROL 
  in portable code to account for the fact that although 
  @c Control modifier exists under Mac OS, it is not used for the same
  purpose as under Windows or Unix there while the special Mac-specific 

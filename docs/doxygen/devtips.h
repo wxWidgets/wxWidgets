@@ -69,7 +69,7 @@
 
  Most ports of wxWidgets can create either a static library or a shared
  library. wxWidgets can also be built in multilib and monolithic variants.
- See the @ref librarieslist for more information on these.
+ See the @ref libraries_page for more information on these.
 
 
 
@@ -198,8 +198,8 @@
  wxInt32, wxInt16, wxInt8, wxUint32, wxUint16 = wxWord, wxUint8 = wxByte
 
  where wxInt32 stands for a 32-bit signed integer type etc. You can also check
- which architecture the program is compiled on using the wxBYTE\_ORDER define
- which is either wxBIG\_ENDIAN or wxLITTLE\_ENDIAN (in the future maybe wxPDP\_ENDIAN
+ which architecture the program is compiled on using the wxBYTE_ORDER define
+ which is either wxBIG_ENDIAN or wxLITTLE_ENDIAN (in the future maybe wxPDP_ENDIAN
  as well).
 
  The macros handling bit-swapping with respect to the applications endianness
