@@ -61,6 +61,7 @@ src/regex/regex.3
 src/regex/regex.7
 
 include/wx/*.h
+include/wx/meta/*.h
 include/wx/*.inl
 include/wx/*.cpp
 include/wx/private/*.h
