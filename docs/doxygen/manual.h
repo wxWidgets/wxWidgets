@@ -16,16 +16,16 @@
  @image html wx.png
 
  @section Contents
- @li @ref copyright_page
- @li @ref introduction_page
- @li @ref multiplatform_page
- @li @ref utilities_page
- @li @ref strategies_page
- @li @ref libraries_page
- @li @ref constants_page
- @li @ref categories_page
- @li @ref topic_page
- @li @ref platformdetails_page
+ @li @subpage copyright_page
+ @li @subpage introduction_page
+ @li @subpage multiplatform_page
+ @li @subpage utilities_page
+ @li @subpage strategies_page
+ @li @subpage libraries_page
+ @li @subpage constants_page
+ @li @subpage categories_page
+ @li @subpage topic_page
+ @li @subpage platformdetails_page
 
  <!-- @li Alphabetical class reference
      @li Functions and macros  -->

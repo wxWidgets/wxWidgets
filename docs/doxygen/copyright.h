@@ -23,9 +23,8 @@
  Note that we use the old name wxWindows in the license, pending
  recognition of the new name by OSI.
 
- @ref wxlicense
-
- @ref gnulicense
+ @li @subpage wxlicense
+ @li @subpage gnulicense
 
 */
 
