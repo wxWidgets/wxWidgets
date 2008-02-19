@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page windowsizing_overview Window Sizing Overview
- 
+
  It can sometimes be confusing to keep track of the various
  size-related attributes of a #wxWindow, how they
  relate to each other, and how they interact with sizers. This document
@@ -27,15 +27,15 @@
  wants to calculate its own best size based on its content. The default
  @c DoGetBestSize() is designed for use in container windows,
  such as #wxPanel, and works something like this:
- 
- 
+
+
    If the window has a sizer then it is used to calculate the best size.
    Otherwise if the window has layout constraints then that is used to calculate the best size.
    Otherwise if the window has children then the best size is set to be large enough to show all the children.
    Otherwise if there are no children then the window's min size will be used for the best size.
    Otherwise if there is no min size set, then the current size is used for the best size.
- 
- 
+
+
  @b MinSize: The min size of a widget is a size that is normally
  explicitly set by the programmer either with the @c SetMinSize()
  method or the @c SetSizeHints() method. Most controls will also
@@ -93,7 +93,7 @@
  constraints instead of a sizer then the constraints algorithm is
  run. The @c Layout() method is what is called by the default
  @c EVT_SIZE handler for container windows.
- 
+
  */
- 
- 
+
+

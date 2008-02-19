@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page nonenglish_overview Writing non-English applications
- 
+
  This article describes how to write applications that communicate with
  the user in a language other than English. Unfortunately many languages use
  different charsets under Unix and Windows (and other platforms, to make
@@ -17,9 +17,9 @@
  many characters that it is impossible to use the same texts under all
  platforms.
  The wxWidgets library provides a mechanism that helps you avoid distributing many
- identical, only differently encoded, packages with your application 
+ identical, only differently encoded, packages with your application
  (e.g. help files and menu items in iso8859-13 and windows-1257). Thanks
- to this mechanism you can, for example, distribute only iso8859-13 data 
+ to this mechanism you can, for example, distribute only iso8859-13 data
  and it will be handled transparently under all systems.
  Please read #Internationalization which
  describes the locales concept.
@@ -27,11 +27,11 @@
  used, any encodings are meant and any encodings may be substituted there.
  @b Locales
  The best way to ensure correctly displayed texts in a GUI across platforms
- is to use locales. Write your in-code messages in English or without 
- diacritics and put real messages into the message catalog (see 
+ is to use locales. Write your in-code messages in English or without
+ diacritics and put real messages into the message catalog (see
  #Internationalization).
  A standard .po file begins with a header like this:
- 
+
  @code
  # SOME DESCRIPTIVE TITLE.
  # Copyright (C) YEAR Free Software Foundation, Inc.
@@ -48,18 +48,18 @@
  "Content-Type: text/plain; charset=CHARSET\n"
  "Content-Transfer-Encoding: ENCODING\n"
  @endcode
- 
+
  Note this particular line:
- 
+
  @code
  "Content-Type: text/plain; charset=CHARSET\n"
  @endcode
- 
+
  It specifies the charset used by the catalog. All strings in the catalog
  are encoded using this charset.
  You have to fill in proper charset information. Your .po file may look like this
- after doing so: 
- 
+ after doing so:
+
  @code
  # SOME DESCRIPTIVE TITLE.
  # Copyright (C) YEAR Free Software Foundation, Inc.
@@ -76,7 +76,7 @@
  "Content-Type: text/plain; charset=iso8859-2\n"
  "Content-Transfer-Encoding: 8bit\n"
  @endcode
- 
+
  (Make sure that the header is @b not marked as @e fuzzy.)
  wxWidgets is able to use this catalog under any supported platform
  (although iso8859-2 is a Unix encoding and is normally not understood by
@@ -97,25 +97,25 @@
  in the source code to English and putting the original strings into message
  catalog, you may configure wxWidgets to use non-English msgids and translate to
  English using message catalogs:
- 
- 
+
+
  If you use the program @c xgettext to extract the strings from
  the source code, specify the option @c --from-code=source code charset.
  Specify the source code language and charset as arguments to
  wxLocale::AddCatalog. For example:
- 
+
  @code
  locale.AddCatalog(_T("myapp"),
                    wxLANGUAGE_GERMAN, _T("iso-8859-1"));
  @endcode
- 
- 
- 
- 
+
+
+
+
  @b Font mapping
- You can use @ref mbconvclasses_overview and 
+ You can use @ref mbconvclasses_overview and
  #wxFontMapper to display text:
- 
+
  @code
  if (!wxFontMapper::Get()-IsEncodingAvailable(enc, facename))
  {
@@ -132,7 +132,7 @@
  }
  ...display text...
  @endcode
- 
+
  @b Converting data
  You may want to store all program data (created documents etc.) in
  the same encoding, let's say @c utf-8. You can use
@@ -143,21 +143,21 @@
  If you're using #wxHtmlHelpController there is
  no problem at all. You only need to make sure that all the HTML files contain
  the META tag, e.g.
- 
+
  @code
  meta http-equiv="Content-Type" content="text/html; charset=iso8859-2"
  @endcode
- 
+
  and that the hhp project file contains one additional line in the @c OPTIONS
  section:
- 
+
  @code
  Charset=iso8859-2
  @endcode
- 
+
  This additional entry tells the HTML help controller what encoding is used
  in contents and index tables.
- 
+
  */
- 
- 
+
+

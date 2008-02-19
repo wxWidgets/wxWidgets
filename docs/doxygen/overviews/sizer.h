@@ -7,12 +7,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page sizer_overview Sizer overview
- 
- Classes: #wxSizer, #wxGridSizer, 
- #wxFlexGridSizer, #wxBoxSizer, 
- #wxStaticBoxSizer, 
+
+ Classes: #wxSizer, #wxGridSizer,
+ #wxFlexGridSizer, #wxBoxSizer,
+ #wxStaticBoxSizer,
  #CreateButtonSizer
  Sizers, as represented by the wxSizer class and its descendants in
  the wxWidgets class hierarchy, have become the method of choice to
@@ -32,10 +32,10 @@
  @ref flexgridsizerprogramming_overview
  @ref staticboxsizerprogramming_overview
  #CreateButtonSizer
- 
- 
+
+
  @section ideabehindsizers The idea behind sizers
- 
+
  The layout algorithm used by sizers in wxWidgets is closely related to layout
  systems in other GUI toolkits, such as Java's AWT, the GTK toolkit or the Qt toolkit. It is
  based upon the idea of individual subwindows reporting their minimal required
@@ -57,9 +57,9 @@
  such as wrapping a static box around a dialog item (or another sizer). These sizers will
  be discussed one by one in the text below. For more detailed information on how to use sizers
  programmatically, please refer to the section @ref boxsizerprogramming_overview.
- 
+
  @section sizerscommonfeatures Common features
- 
+
  All sizers are containers, that is, they are used to lay out one dialog item (or several
  dialog items), which they contain. Such items are sometimes referred to as the children
  of the sizer. Independent of how the individual sizers lay out their children, all children
@@ -71,26 +71,26 @@
  calculate their size (such as a checkbox) whereas others (such as a listbox)
  don't have any natural width or height and thus require an explicit size. Some controls
  can calculate their height, but not their width (e.g. a single line text control):
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
+
  @b A border: The border is just empty space and is used to separate dialog items
  in a dialog. This border can either be all around, or at any combination of sides
  such as only above and below the control. The thickness of this border must be set
  explicitly, typically 5 points. The following samples show dialogs with only one
  dialog item (a button) and a border of 0, 5, and 10 pixels around the button:
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
  @b An alignment: Often, a dialog item is given more space than its minimal size
  plus its border. Depending on what flags are used for the respective dialog
  item, the dialog item can be made to fill out the available space entirely, i.e.
@@ -98,9 +98,9 @@
  the centre of the available space or to either side of the space. The following
  sample shows a listbox and three buttons in a horizontal box sizer; one button
  is centred, one is aligned at the top, one is aligned at the bottom:
- 
- 
- 
+
+
+
  @b A stretch factor: If a sizer contains more than one child and it is offered
  more space than its children and their borders need, the question arises how to
  distribute the surplus space among the children. For this purpose, a stretch
@@ -113,18 +113,18 @@
  three buttons, the first one has a stretch factor of 1 and thus gets stretched,
  whereas the other two buttons have a stretch factor of zero and keep their
  initial width:
- 
- 
- 
+
+
+
  Within wxDesigner, this stretch factor gets set from the @e Option menu.
- 
+
  @section sizershiding Hiding controls using sizers
- 
+
  You can hide controls contained in sizers the same way you would hide any control,
  using the wxWindow::Show method.
- However, wxSizer also offers a separate method which can tell the sizer not to 
+ However, wxSizer also offers a separate method which can tell the sizer not to
  consider that control in its size calculations.  To hide a window using the sizer,
- call wxSizer::Show.  You must then call Layout on the sizer 
+ call wxSizer::Show.  You must then call Layout on the sizer
  to force an update.
  This is useful when hiding parts of the interface, since you can avoid removing
  the controls from the sizer and having to add them back later.
@@ -140,24 +140,24 @@
  stretch factor determines how much the child can be stretched horizontally.
  The following sample shows the same dialog as in the last sample,
  only the box sizer is a vertical box sizer now:
- 
- 
- 
+
+
+
  @b wxStaticBoxSizer
  #wxStaticBoxSixer is the same as a wxBoxSizer, but surrounded by a
  static box. Here is a sample:
- 
- 
- 
+
+
+
  @b wxGridSizer
  #wxGridSizer is a two-dimensional sizer. All children are given the
  same size, which is the minimal size required by the biggest child, in
  this case the text control in the left bottom border. Either the number
  of columns or the number or rows is fixed and the grid sizer will grow
  in the respectively other orientation if new children are added:
- 
- 
- 
+
+
+
  For programming information, see #wxGridSizer.
  @b wxFlexGridSizer
  Another two-dimensional sizer derived from
@@ -167,12 +167,12 @@
  rows can be declared to be stretchable if the sizer is assigned
  a size different from the one it requested. The following sample shows
  the same dialog as the one above, but using a flex grid sizer:
- 
- 
- 
- 
+
+
+
+
  @section boxsizerprogramming Programming with wxBoxSizer
- 
+
  The basic idea behind a #wxBoxSizer is that windows will most often be laid out in rather
  simple basic geometry, typically in a row or a column or several hierarchies of either.
  As an example, we will construct a dialog that will contain a text field at the top and
@@ -185,7 +185,7 @@
  a thin border around all controls to make the dialog look nice and - to make matter worse -
  the buttons shall be centred as the width of the dialog changes.
  It is the unique feature of a box sizer, that it can grow in both directions (height and
- width) but can distribute its growth in the main direction (horizontal for a row) @e unevenly 
+ width) but can distribute its growth in the main direction (horizontal for a row) @e unevenly
  among its children. In our example case, the vertical sizer is supposed to propagate all its
  height changes to only the text area, not to the button area. This is determined by the @e proportion parameter
  when adding a window (or another sizer) to a sizer. It is interpreted
@@ -209,17 +209,17 @@
  Add() method using the binary or operator |. The sizer of the border also must be made known,
  and it is the third parameter in the Add() method. This means, that the entire behaviour of
  a sizer and its children can be controlled by the three parameters of the Add() method.
- 
+
  @code
  // we want to get a dialog that is stretchable because it
  // has a text ctrl at the top and two buttons at the bottom
- 
+
  MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString  )
          : wxDialog(parent, id, title, wxDefaultPosition, wxDefaultSize,
                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
  {
    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
- 
+
    // create text ctrl with minimal size 100x60
    topsizer-Add(
      new wxTextCtrl( this, -1, "My text.", wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
@@ -227,8 +227,8 @@
      wxEXPAND |    // make horizontally stretchable
      wxALL,        //   and make border all around
      10 );         // set border width to 10
- 
- 
+
+
    wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
    button_sizer-Add(
       new wxButton( this, wxID_OK, "OK" ),
@@ -240,103 +240,103 @@
       0,           // make horizontally unstretchable
       wxALL,       // make border all around (implicit top alignment)
       10 );        // set border width to 10
- 
+
    topsizer-Add(
       button_sizer,
       0,                // make vertically unstretchable
       wxALIGN_CENTER ); // no border and centre horizontally
- 
+
    SetSizerAndFit(topsizer); // use the sizer for layout and size window
                              // accordingly and prevent it from being resized
                              // to smaller size
  }
  @endcode
- 
+
  Note that the new way of specifying flags to wxSizer is via #wxSizerFlags.  This class greatly eases the burden of passing flags to a wxSizer.
  Here's how you'd do the previous example with wxSizerFlags:
- 
+
  @code
  // we want to get a dialog that is stretchable because it
  // has a text ctrl at the top and two buttons at the bottom
- 
+
  MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString  )
          : wxDialog(parent, id, title, wxDefaultPosition, wxDefaultSize,
                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
  {
    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
- 
-   // create text ctrl with minimal size 100x60 that is horizontally and 
+
+   // create text ctrl with minimal size 100x60 that is horizontally and
    // vertically stretchable with a border width of 10
    topsizer-Add(
      new wxTextCtrl( this, -1, "My text.", wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
      wxSizerFlags(1).Align().Expand().Border(wxALL, 10));
- 
+
    wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
- 
-   //create two buttons that are horizontally unstretchable, 
+
+   //create two buttons that are horizontally unstretchable,
    // with an all-around border with a width of 10 and implicit top alignment
    button_sizer-Add(
       new wxButton( this, wxID_OK, "OK" ),
-      wxSizerFlags(0).Align().Border(wxALL, 10));       
- 
+      wxSizerFlags(0).Align().Border(wxALL, 10));
+
    button_sizer-Add(
       new wxButton( this, wxID_CANCEL, "Cancel" ),
-      wxSizerFlags(0).Align().Border(wxALL, 10));    
- 
+      wxSizerFlags(0).Align().Border(wxALL, 10));
+
    //create a sizer with no border and centered horizontally
    topsizer-Add(
       button_sizer,
-      wxSizerFlags(0).Center() ); 
- 
+      wxSizerFlags(0).Center() );
+
    SetSizerAndFit(topsizer); // use the sizer for layout and set size and hints
  }
  @endcode
- 
- 
- 
+
+
+
  @section gridsizerprogramming Programming with wxGridSizer
- 
+
  #wxGridSizer is a sizer which lays out its children in a two-dimensional
  table with all table fields having the same size,
  i.e. the width of each field is the width of the widest child,
  the height of each field is the height of the tallest child.
- 
+
  @section flexgridsizerprogramming Programming with wxFlexGridSizer
- 
+
  #wxFlexGridSizer is a sizer which lays out its children in a two-dimensional
  table with all table fields in one row having the same
  height and all fields in one column having the same width, but all
  rows or all columns are not necessarily the same height or width as in
  the #wxGridSizer.
- 
+
  @section staticboxsizerprogramming Programming with wxStaticBoxSizer
- 
+
  #wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static
- box around the sizer. Note that this static box has to be created 
+ box around the sizer. Note that this static box has to be created
  separately.
- 
+
  @section createbuttonsizer CreateButtonSizer
- 
+
  As a convenience, CreateButtonSizer ( long flags ) can be used to create a standard button sizer
  in which standard buttons are displayed. The following flags can be passed to this function:
- 
- 
+
+
  @code
  wxYES_NO // Add Yes/No subpanel
      wxYES    // return wxID_YES
      wxNO     // return wxID_NO
      wxNO_DEFAULT // make the wxNO button the default, otherwise wxYES or wxOK button will be default
-     
+
      wxOK     // return wxID_OK
      wxCANCEL // return wxID_CANCEL
      wxHELP   // return wxID_HELP
-     
-     wxFORWARD   // return wxID_FORWARD  
-     wxBACKWARD  // return wxID_BACKWARD 
-     wxSETUP     // return wxID_SETUP    
+
+     wxFORWARD   // return wxID_FORWARD
+     wxBACKWARD  // return wxID_BACKWARD
+     wxSETUP     // return wxID_SETUP
      wxMORE      // return wxID_MORE
  @endcode
- 
+
  */
- 
- 
+
+

@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page dataobject_overview wxDataObject overview
- 
+
  Classes: #wxDataObject,
   #wxClipboard,
   #wxDataFormat,
@@ -22,7 +22,7 @@
  implement both of them using almost the same code - or, in other
  words, if you implement drag and drop support for your application, you get
  clipboard support for free and vice versa.
- At the heart of both clipboard and drag and drop operations lies the 
+ At the heart of both clipboard and drag and drop operations lies the
  #wxDataObject class. The objects of this class (or, to
  be precise, classes derived from it) represent the data which is being carried
  by the mouse during drag and drop operation or copied to or pasted from the
@@ -38,43 +38,43 @@
  should do.
  #The data provider (source) duties
  #The data receiver (target) duties
- 
- 
+
+
  @section wxdataobjectsource The data provider (source) duties
- 
- The data provider is responsible for creating a 
+
+ The data provider is responsible for creating a
  #wxDataObject containing the data to be
- transferred. Then it should either pass it to the clipboard using 
- #SetData function or to 
- #wxDropSource and call 
+ transferred. Then it should either pass it to the clipboard using
+ #SetData function or to
+ #wxDropSource and call
  #DoDragDrop function.
  The only (but important) difference is that the object for the clipboard
  transfer must always be created on the heap (i.e. using @c new) and it will
  be freed by the clipboard when it is no longer needed (indeed, it is not known
  in advance when, if ever, the data will be pasted from the clipboard). On the
- other hand, the object for drag and drop operation must only exist while 
+ other hand, the object for drag and drop operation must only exist while
  #DoDragDrop executes and may be safely deleted
  afterwards and so can be created either on heap or on stack (i.e. as a local
  variable).
  Another small difference is that in the case of clipboard operation, the
  application usually knows in advance whether it copies or cuts (i.e. copies and
  deletes) data - in fact, this usually depends on which menu item the user
- chose. But for drag and drop it can only know it after 
+ chose. But for drag and drop it can only know it after
  #DoDragDrop returns (from its return value).
- 
+
  @section wxdataobjecttarget The data receiver (target) duties
- 
+
  To receive (paste in usual terminology) data from the clipboard, you should
  create a #wxDataObject derived class which supports the
- data formats you need and pass it as argument to 
+ data formats you need and pass it as argument to
  wxClipboard::GetData. If it returns @false,
  no data in (any of) the supported format(s) is available. If it returns @true, the data has been successfully transferred to wxDataObject.
- For drag and drop case, the wxDropTarget::OnData 
+ For drag and drop case, the wxDropTarget::OnData
  virtual function will be called when a data object is dropped, from which the
- data itself may be requested by calling 
+ data itself may be requested by calling
  wxDropTarget::GetData method which fills
  the data object.
- 
+
  */
- 
- 
+
+

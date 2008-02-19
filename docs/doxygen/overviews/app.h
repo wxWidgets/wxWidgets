@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page app_overview wxApp overview
- 
+
  Classes: #wxApp
  A wxWidgets application does not have a @e main procedure; the equivalent is the
  #OnInit member defined for a class derived from wxApp.
@@ -18,7 +18,7 @@
  returns a boolean value which indicates whether processing should continue (@true) or not (@false).
  You call wxApp::SetTopWindow to let wxWidgets know
  about the top window.
- Note that the program's command line arguments, represented by @e argc 
+ Note that the program's command line arguments, represented by @e argc
  and @e argv, are available from within wxApp member functions.
  An application closes by destroying all windows. Because all frames must
  be destroyed for the application to exit, it is advisable to use parent
@@ -27,44 +27,44 @@
  is to explicitly delete child frames in the top-level frame's #wxCloseEvent
  handler.
  In emergencies the #wxExit function can be called to kill the
- application however normally the application shuts down automatically, 
+ application however normally the application shuts down automatically,
  @ref appshutdown_overview.
  An example of defining an application follows:
- 
+
  @code
  class DerivedApp : public wxApp
  {
  public:
    virtual bool OnInit();
  };
- 
+
  IMPLEMENT_APP(DerivedApp)
- 
+
  bool DerivedApp::OnInit()
  {
    wxFrame *the_frame = new wxFrame(@NULL, ID_MYFRAME, argv[0]);
    ...
    the_frame-Show(@true);
    SetTopWindow(the_frame);
- 
+
    return @true;
  }
  @endcode
- 
+
  Note the use of IMPLEMENT_APP(appClass), which allows wxWidgets to dynamically create an instance of the application object
  at the appropriate point in wxWidgets initialization. Previous versions of wxWidgets used
  to rely on the creation of a global application object, but this is no longer recommended,
  because required global initialization may not have been performed at application object
  construction time.
  You can also use DECLARE_APP(appClass) in a header file to declare the wxGetApp function which returns
- a reference to the application object. Otherwise you can only use the global 
+ a reference to the application object. Otherwise you can only use the global
  @c wxTheApp pointer which is of type @c wxApp *.
- 
+
  @ref appshutdown_overview
- 
- 
+
+
  @section wxappshutdownoverview Application shutdown
- 
+
  The application normally shuts down when the last of its top level windows is
  closed. This is normally the expected behaviour and means that it is enough to
  call #Close() in response to the @c "Exit" menu
@@ -72,18 +72,18 @@
  desirable wxApp::SetExitOnFrameDelete can
  be called to change it. Note that starting from wxWidgets 2.3.3 such logic
  doesn't apply for the windows shown before the program enters the main loop: in
- other words, you can safely show a dialog from 
+ other words, you can safely show a dialog from
  wxApp::OnInit and not be afraid that your application
  terminates when this dialog -- which is the last top level window for the
  moment -- is closed.
- 
- Another aspect of the application shutdown is #OnExit 
+
+ Another aspect of the application shutdown is #OnExit
  which is called when the application exits but @e before wxWidgets cleans up
  its internal structures. You should delete all wxWidgets object that you
  created by the time OnExit finishes. In particular, do @b not destroy them
  from application class' destructor!
  For example, this code may crash:
- 
+
  @code
  class MyApp : public wxApp
  {
@@ -92,12 +92,12 @@
      ...
  };
  @endcode
- 
- The reason for that is that @c m_helpCtrl is a member object and is 
- thus destroyed from MyApp destructor. But MyApp object is deleted after 
- wxWidgets structures that wxCHMHelpController depends on were 
+
+ The reason for that is that @c m_helpCtrl is a member object and is
+ thus destroyed from MyApp destructor. But MyApp object is deleted after
+ wxWidgets structures that wxCHMHelpController depends on were
  uninitialized! The solution is to destroy HelpCtrl in @e OnExit:
- 
+
  @code
  class MyApp : public wxApp
  {
@@ -105,21 +105,21 @@
      wxCHMHelpController *m_helpCtrl;
      ...
  };
- 
+
  bool MyApp::OnInit()
  {
    ...
    m_helpCtrl = new wxCHMHelpController;
    ...
  }
- 
+
  int MyApp::OnExit()
  {
    delete m_helpCtrl;
    return 0;
  }
  @endcode
- 
+
  */
- 
- 
+
+

@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page container_overview Container classes overview
- 
+
  Classes: #wxListT, #wxArrayT, #wxVectorT
  wxWidgets uses itself several container classes including doubly-linked lists
  and dynamic arrays (i.e. arrays which expand automatically when they become
@@ -28,7 +28,7 @@
  The list classes in wxWidgets are doubly-linked lists which may either own the
  objects they contain (meaning that the list deletes the object when it is
  removed from the list or the list itself is destroyed) or just store the
- pointers depending on whether you called or not 
+ pointers depending on whether you called or not
  wxList::DeleteContents method.
  Dynamic arrays resemble C arrays but with two important differences: they
  provide run-time range checking in debug builds and they automatically expand
@@ -48,7 +48,7 @@
  declaration), otherwise destructors of the container elements will not be
  called! As array classes never delete the items they contain anyhow, there is
  no WX_DEFINE_ARRAY macro for them.
- Examples of usage of these macros may be found in #wxList and 
+ Examples of usage of these macros may be found in #wxList and
  #wxArray documentation.
  Finally, wxWidgets predefines several commonly used container classes. wxList
  is defined for compatibility with previous versions as a list containing
@@ -59,7 +59,7 @@
  wxArrayString is somewhat special: it is an optimized version of wxArray which
  uses its knowledge about #wxString reference counting
  schema.
- 
+
  */
- 
- 
+
+

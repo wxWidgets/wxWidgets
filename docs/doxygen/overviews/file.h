@@ -7,10 +7,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page file_overview File classes and functions overview
- 
- Classes: #wxFile, #wxDir, #wxTempFile, 
+
+ Classes: #wxFile, #wxDir, #wxTempFile,
  #wxTextFile
  Functions: see @ref filefunctions_overview.
  wxWidgets provides some functions and classes to facilitate working with files.
@@ -32,7 +32,7 @@
  wxDir is a helper class for enumerating the files or subdirectories of a
  directory. It may be used to enumerate all files, only files satisfying the
  given template mask or only non-hidden files.
- 
+
  */
- 
- 
+
+

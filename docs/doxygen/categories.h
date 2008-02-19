@@ -12,7 +12,7 @@
  @page categories_page Classes by category
 
  A classification of wxWidgets classes by category.
- 
+
  @li @ref cat_manwnd
  @li @ref cat_miscwnd
  @li @ref cat_cmndlg
@@ -57,11 +57,11 @@
 
 
  @section cat_manwnd Managed windows
- 
+
  There are several types of window that are directly controlled by the
  window manager (such as MS Windows, or the Motif Window Manager).
  Frames and dialogs are similar in wxWidgets, but only dialogs may be modal.
- 
+
  @li wxTopLevelWindow: Any top level window, dialog or frame
  @li wxDialog: Dialog box
  @li wxFrame: Normal frame
@@ -72,14 +72,14 @@
  @li wxSplashScreen: Splash screen class
  @li wxTipWindow: Shows text in a small window
  @li wxWizard: A wizard dialog
- 
+
  See also the @ref commondialogs_overview.
- 
+
 
  @section cat_miscwnd Miscellaneous windows
- 
+
  The following are a variety of classes that are derived from wxWindow.
- 
+
  @li wxPanel: A window whose colour changes according to current user settings
  @li wxScrolledWindow: Window with automatically managed scrollbars
  @li wxGrid: A grid (table) window
@@ -95,15 +95,15 @@
  @li wxVScrolledWindow: As wxScrolledWindow but supports lines of variable height
  @li wxWizardPage: A base class for the page in wizard dialog.
  @li wxWizardPageSimple: A page in wizard dialog.
- 
- 
+
+
  @section cat_cmndlg Common dialogs
- 
+
  @ref commondialogs_overview
- 
+
  Common dialogs are ready-made dialog classes which are frequently used
  in an application.
- 
+
  @li wxDialog: Base class for common dialogs
  @li wxColourDialog: Colour chooser dialog
  @li wxDirDialog: Directory selector dialog
@@ -121,13 +121,13 @@
  @li wxSymbolPickerDialog: Symbol selector dialog
  @li wxRichTextFormattingDialog: A dialog for formatting the content of a wxRichTextCtrl
  @li wxWizard: A wizard dialog.
- 
- 
+
+
  @section cat_ctrl Controls
- 
+
  Typically, these are small windows which provide interaction with the user. Controls
  that are not static can have wxValidator associated with them.
- 
+
  @li wxAnimationCtrl: A control to display an animation
  @li wxControl: The base class for controls
  @li wxButton: Push button control, displaying text
@@ -166,55 +166,55 @@
  @li wxRadioButton: A round button to be used with others in a mutually exclusive way
  @li wxSlider: A slider that can be dragged by the user
  @li wxVListBox: A listbox supporting variable height rows
- 
- 
- 
+
+
+
  @section cat_miscpickers Miscellaneous pickers
- 
+
  A picker control is a control whose appearance and behaviour is highly platform-dependent.
- 
+
  @li wxColourPickerCtrl: A control which allows the user to choose a colour
  @li wxDirPickerCtrl: A control which allows the user to choose a directory
  @li wxFilePickerCtrl: A control which allows the user to choose a file
  @li wxFontPickerCtrl: A control which allows the user to choose a font
  @li wxDatePickerCtrl: Small date picker control
- 
- 
- 
+
+
+
  @section cat_menus Menus
- 
+
  @li wxMenu: Displays a series of menu items for selection
  @li wxMenuBar: Contains a series of menus for use with a frame
  @li wxMenuItem: Represents a single menu item
- 
- 
+
+
 
  @section cat_wxaui wxAUI - advanced user interface
- 
+
  This is a new set of classes for writing a customizable application
  interface with built-in docking, floatable panes and a flexible
  MDI-like interface. Further classes for custom notebooks with
  draggable tabs etc. are in progress. See also @ref wxaui_overview.
- 
+
  @li wxAuiManager: The central class for managing the interface
  @li wxAuiNotebook: A replacement notebook class with extra features
  @li wxAuiPaneInfo: Describes a single pane
  @li wxAuiDockArt: Art and metrics provider for customizing the docking user interface
  @li wxAuiTabArt: Art and metrics provider for customizing the notebook user interface
- 
- 
- 
+
+
+
  @section cat_winlayout Window layout
- 
+
  There are two different systems for laying out windows (and dialogs in particular).
  One is based upon so-called sizers and it requires less typing, thinking and calculating
  and will in almost all cases produce dialogs looking equally well on all platforms, the
  other is based on so-called constraints and is deprecated, though still available.
- 
+
  @ref sizer_overview describes sizer-based layout.
- 
+
  These are the classes relevant to sizer-based layout.
- 
+
  @li wxSizer: Abstract base class
  @li wxGridSizer: A sizer for laying out windows in a grid with all fields having the same size
  @li wxFlexGridSizer: A sizer for laying out windows in a flexible grid
@@ -222,27 +222,27 @@
  @li wxBoxSizer: A sizer for laying out windows in a row or column
  @li wxStaticBoxSizer: Same as wxBoxSizer, but with a surrounding static box
  @li wxWrapSizer: A sizer which wraps its child controls as size permits
- 
+
  @ref constraints_overview describes constraints-based layout.
- 
+
  These are the classes relevant to constraints-based window layout.
- 
+
  @li wxIndividualLayoutConstraint: Represents a single constraint dimension
  @li wxLayoutConstraints: Represents the constraints for a window class
- 
+
  Other layouting classes:
- 
+
  @li wxLayoutAlgorithm: An alternative window layout facility
- 
- 
+
+
  @section cat_dc Device contexts
- 
+
  @ref dc_overview
- 
+
  Device contexts are surfaces that may be drawn on, and provide an
  abstraction that allows parameterisation of your drawing code
  by passing different device contexts.
- 
+
  @li wxAutoBufferedPaintDC: A helper device context for double buffered drawing inside @b OnPaint.
  @li wxBufferedDC: A helper device context for double buffered drawing.
  @li wxBufferedPaintDC: A helper device context for double buffered drawing inside @b OnPaint.
@@ -256,14 +256,14 @@
  @li wxMirrorDC: A proxy device context allowing for simple mirroring.
  @li wxPostScriptDC: A device context for drawing into PostScript files
  @li wxPrinterDC: A device context for drawing to printers
- 
- 
+
+
  @section cat_gdi Graphics device interface
- 
+
  @ref bitmap_overview
- 
+
  These classes are related to drawing on device contexts and windows.
- 
+
  @li wxColour: Represents the red, blue and green elements of a colour
  @li wxDCClipper: Wraps the operations of setting and destroying the clipping region
  @li wxBitmap: Represents a bitmap
@@ -281,15 +281,15 @@
  @li wxPalette: Represents a table of indices into RGB values
  @li wxRegion: Represents a simple or complex region on a window or device context
  @li wxRendererNative: Abstracts high-level drawing primitives
- 
- 
+
+
  @section cat_events Events
- 
+
  @ref eventhandling_overview
- 
+
  An event object contains information about a specific event. Event handlers
- (usually member functions) have a single, event argument. 
- 
+ (usually member functions) have a single, event argument.
+
  @li wxActivateEvent: A window or application activation event
  @li wxCalendarEvent: Used with wxCalendarCtrl
  @li wxCalculateLayoutEvent: Used to calculate window layout
@@ -338,24 +338,24 @@
  @li wxWindowCreateEvent: A window creation event
  @li wxWindowDestroyEvent: A window destruction event
  @li wxWizardEvent: A wizard event
- 
- 
+
+
  @section cat_val Validators
- 
+
  @ref validator_overview
- 
+
  These are the window validators, used for filtering and validating
- user input. 
- 
+ user input.
+
  @li wxValidator: Base validator class
  @li wxTextValidator: Text control validator class
  @li wxGenericValidator: Generic control validator class
- 
- 
+
+
  @section cat_data Data structures
- 
- These are the data structure classes supported by wxWidgets. 
- 
+
+ These are the data structure classes supported by wxWidgets.
+
  @li wxCmdLineParser: Command line parser class
  @li wxDateSpan: A logical time interval.
  @li wxDateTime: A class for date/time manipulations
@@ -373,15 +373,15 @@
  @li wxTimeSpan: A time interval.
  @li wxURI: Represents a Uniform Resource Identifier
  @li wxVariant: A class for storing arbitrary types that may change at run-time
- 
- 
+
+
  @section cat_containers Container classes
- 
+
  @ref container_overview
- 
+
  These are classes, templates and class macros are used by wxWidgets. Most
  of these classes provide a subset or almost complete STL API.
- 
+
  @li wxArray<T>: A type-safe dynamic array implementation (macro based)
  @li wxArrayString: An efficient container for storing wxString objects
  @li wxHashMap<T>: A type-safe hash map implementation (macro based)
@@ -389,37 +389,37 @@
  @li wxHashTable: A simple hash table implementation (deprecated, use wxHashMap)
  @li wxList<T>: A type-safe linked list implementation (macro based)
  @li wxVector<T>: Template base vector implementation identical to std::vector
- 
- 
+
+
  @section cat_smartpointers Smart pointers
- 
+
  wxWidgets provides a few smart pointer class templates.
- 
+
  @li wxObjectDataPtr<T>: A shared pointer (using intrusive reference counting)
  @li wxScopedPtr<T>: A scoped pointer
  @li wxSharedPtr<T>: A shared pointer (using non-intrusive reference counting)
  @li wxWeakRef<T>: A weak reference
- 
- 
+
+
  @section cat_rtti Run-time class information system
- 
+
  @ref runtimeclass_overview
- 
+
  wxWidgets supports run-time manipulation of class information, and dynamic
- creation of objects given class names. 
- 
+ creation of objects given class names.
+
  @li wxClassInfo: Holds run-time class information
  @li wxObject: Root class for classes with run-time information
  @li RTTI macros: Macros for manipulating run-time information
- 
- 
+
+
  @section cat_logging Logging features
- 
+
  @ref log_overview
- 
+
  wxWidgets provides several classes and functions for message logging.
- Please see the @ref log_overview for more details. 
- 
+ Please see the @ref log_overview for more details.
+
  @li wxLog: The base log class
  @li wxLogStderr: Log messages to a C STDIO stream
  @li wxLogStream: Log messages to a C++ iostream
@@ -432,15 +432,15 @@
  @li wxLogInterposerTemp: Allows to filter the log messages
  @li wxStreamToTextRedirector: Allows to redirect output sent to @c cout to a wxTextCtrl
  @li Log functions: Error and warning logging functions
- 
- 
+
+
  @section cat_debugging Debugging features
- 
+
  @ref debugging_overview
- 
+
  wxWidgets supports some aspects of debugging an application through
- classes, functions and macros. 
- 
+ classes, functions and macros.
+
  @li wxDebugContext: Provides memory-checking facilities
  @li Debugging macros: Debug macros for assertion and checking
  @li WXDEBUG\_NEW: Use this macro to give further debugging information
@@ -449,12 +449,12 @@
  @li wxDebugReportUpload: Class for uploading compressed debug reports via HTTP.
  @li wxDebugReportPreview: Abstract base class for previewing the contents of a debug report.
  @li wxDebugReportPreviewStd: Standard implementation of wxDebugReportPreview.
- 
- 
+
+
  @section cat_net Networking classes
- 
- wxWidgets provides its own classes for socket based networking. 
- 
+
+ wxWidgets provides its own classes for socket based networking.
+
  @li wxDialUpManager: Provides functions to check the status of network connection and to establish one
  @li wxIPV4address: Represents an Internet address
  @li wxIPaddress: Represents an Internet address
@@ -465,29 +465,29 @@
  @li wxFTP: FTP protocol class
  @li wxHTTP: HTTP protocol class
  @li wxURL: Represents a Universal Resource Locator
- 
- 
- 
+
+
+
  @section cat_ipc Interprocess communication
- 
+
  @ref ipc_overview
- 
+
  wxWidgets provides simple interprocess communications facilities
- based on Windows DDE, but available on most platforms using TCP. 
- 
+ based on Windows DDE, but available on most platforms using TCP.
+
  @li wxClient, wxDDEClient: Represents a client
  @li wxConnection, wxDDEConnection: Represents the connection between a client and a server
  @li wxServer, wxDDEServer: Represents a server
- 
- 
+
+
 
  @section cat_dvf Document-view framework
- 
+
  @ref docview_overview
- 
+
  wxWidgets supports a document/view framework which provides
- housekeeping for a document-centric application. 
- 
+ housekeeping for a document-centric application.
+
  @li wxDocument: Represents a document
  @li wxView: Represents a view
  @li wxDocTemplate: Manages the relationship between a document class and a view class
@@ -496,16 +496,16 @@
  @li wxDocParentFrame: A parent frame to contain views
  %@li wxMDIDocChildFrame: An MDI child frame for showing a document view
  %@li wxMDIDocParentFrame: An MDI parent frame to contain views
- 
- 
+
+
  @section cat_printing Printing framework
- 
+
  @ref printing_overview
- 
+
  A printing and previewing framework is implemented to
  make it relatively straightforward to provide document printing
- facilities. 
- 
+ facilities.
+
  @li wxPreviewFrame: Frame for displaying a print preview
  @li wxPreviewCanvas: Canvas for displaying a print preview
  @li wxPreviewControlBar: Standard control bar for a print preview
@@ -518,13 +518,13 @@
  @li wxPrintData: Represents information about the document being printed
  @li wxPrintDialogData: Represents information about the print dialog
  @li wxPageSetupDialogData: Represents information about the page setup dialog
- 
- 
- 
+
+
+
  @section cat_dd Drag and drop and clipboard classes
- 
- @ref dnd_overview 
- 
+
+ @ref dnd_overview
+
  @li wxDataObject: Data object class
  @li wxDataFormat: Represents a data format
  @li wxTextDataObject: Text data object class
@@ -537,12 +537,12 @@
  @li wxFileDropTarget: File drop target class
  @li wxTextDropTarget: Text drop target class
  @li wxDropSource: Drop source class
- 
- 
+
+
  @section cat_file File related classes
- 
+
  wxWidgets has several small classes to work with disk files, see wxfileoverview for more details.
- 
+
  @li wxFileName: Operations with the file name and attributes
  @li wxDir: Class for enumerating files/subdirectories.
  @li wxDirTraverser: Class used together with wxDir for recursively enumerating the files/subdirectories
@@ -552,13 +552,13 @@
  @li wxTextFile: Class for working with text files as with arrays of lines
  @li wxStandardPaths: Paths for standard directories
  @li wxPathList: A class to help search multiple paths
- 
- 
+
+
  @section cat_streams Stream classes
- 
+
  wxWidgets has its own set of stream classes, as an alternative to often buggy standard stream
  libraries, and to provide enhanced functionality.
- 
+
  @li wxStreamBase: Stream base class
  @li wxStreamBuffer: Stream buffer class
  @li wxInputStream: Input stream class
@@ -589,15 +589,15 @@
  @li wxTarOutputStream: Output stream for writing from tar archives
  @li wxSocketInputStream: Socket input stream class
  @li wxSocketOutputStream: Socket output stream class
- 
- 
+
+
  @section cat_threading Threading classes
- 
+
  @ref thread_overview
- 
+
  wxWidgets provides a set of classes to make use of the native thread
  capabilities of the various platforms.
- 
+
  @li wxThread: Thread class
  @li wxThreadHelper: Manages background threads easily
  @li wxMutex: Mutex class
@@ -606,13 +606,13 @@
  @li wxCriticalSectionLocker: Critical section locker utility class
  @li wxCondition: Condition class
  @li wxSemaphore: Semaphore class
- 
- 
+
+
  @section cat_html HTML classes
- 
+
  wxWidgets provides a set of classes to display text in HTML format. These
  class include a help system based on the HTML widget.
- 
+
  @li wxHtmlHelpController: HTML help controller class
  @li wxHtmlWindow: HTML window class
  @li wxHtmlEasyPrinting: Simple class for printing HTML
@@ -621,13 +621,13 @@
  @li wxHtmlTagHandler: HTML tag handler, pluginable into wxHtmlParser
  @li wxHtmlWinParser: HTML parser class for wxHtmlWindow
  @li wxHtmlWinTagHandler: HTML tag handler, pluginable into wxHtmlWinParser
- 
- 
+
+
  @section cat_rich Rich text classes
- 
+
  wxWidgets provides a set of generic classes to edit and print simple rich text with character
  and paragraph formatting.
- 
+
  @li wxTextAttr: Attributes specifying text styling.
  @li wxRichTextCtrl: A rich text control.
  @li wxRichTextBuffer: The content of a rich text control.
@@ -647,46 +647,46 @@
  @li wxRichTextPrinting: A class for easy printing of rich text buffers.
  @li wxRichTextPrintout: A class used by wxRichTextPrinting.
  @li wxRichTextHeaderFooterData: Header and footer data specification.
- 
- 
+
+
  @section cat_stc Scintilla text editor classes
- 
+
  wxWidgets also provides a wrapper around the Scintilla text editor control, which is
  a control for plain-text editing with support for highlighting, smart indentation, etc.
- 
+
  @li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code editing component.
- 
- 
+
+
  @section cat_vfs Virtual file system classes
- 
+
  wxWidgets provides a set of classes that implement an extensible virtual file system,
  used internally by the HTML classes.
- 
+
  @li wxFSFile: Represents a file in the virtual file system
  @li wxFileSystem: Main interface for the virtual file system
  @li wxFileSystemHandler: Class used to announce file system type
- 
- 
+
+
  @section cat_xml XML classes
- 
+
  @li wxXmlDocument: A class to parse XML files
  @li wxXmlNode: A class which represents XML nodes
  @li wxXmlAttribute: A class which represent an XML attribute
- 
- 
+
+
  @section cat_xrc XML-based resource system classes
- 
+
  @ref xrc_overview
- 
+
  Resources allow your application to create controls and other user interface elements
  from specifications stored in an XML format.
- 
+
  @li wxXmlResource: The main class for working with resources
  @li wxXmlResourceHandler: The base class for XML resource handlers
- 
- 
+
+
  @section cat_help Online help
- 
+
  @li wxHelpController: Family of classes for controlling help windows
  @li wxHtmlHelpController: HTML help controller class
  @li wxContextHelp: Class to put application into context-sensitive help mode
@@ -695,29 +695,29 @@
  @li wxSimpleHelpProvider: Class for simple context-sensitive help provision
  @li wxHelpControllerHelpProvider: Class for context-sensitive help provision via a help controller
  @li wxToolTip: Class implementing tooltips
- 
- 
+
+
  @section cat_media Multimedia classes
- 
+
  @li wxMediaCtrl: Display multimedia contents.
- 
- 
+
+
  @section cat_gl OpenGL classes
- 
+
  @li wxGLCanvas: Canvas that you can render OpenGL calls to.
  @li wxGLContext: Class to ease sharing of OpenGL data resources.
- 
- 
+
+
  @section cat_appmanagement Application and process-management classes
- 
+
  @li wxApp: Application class
  @li wxCmdLineParser: Command line parser class
  @li wxDllLoader: Class to work with shared libraries.
  @li wxProcess: Process class
- 
- 
+
+
  @section cat_misc Miscellaneous
- 
+
  @li wxCaret: A caret (cursor) object
  @li wxConfig: Classes for configuration reading/writing (using either INI files or registry)
  @li wxTimer: Timer class

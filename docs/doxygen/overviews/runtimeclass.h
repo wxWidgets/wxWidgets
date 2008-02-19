@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page runtimeclass_overview Runtime class information (aka RTTI) overview
- 
+
  Classes: #wxObject, #wxClassInfo.
  One of the failings of C++ used to be that no run-time information was provided
  about a class and its position in the inheritance hierarchy.
@@ -54,58 +54,58 @@
  can simply call wxClassInfo::CreateObject.
  #wxClassInfo
  #Example
- 
- 
+
+
  @section wxclassinfooverview wxClassInfo
- 
+
  #Runtime class information (aka RTTI) overview
  Class: #wxClassInfo
  This class stores meta-information about classes. An application
  may use macros such as DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS
  to record run-time information about a class, including:
- 
- 
+
+
   its position in the inheritance hierarchy;
   the base class name(s) (up to two base classes are permitted);
   a string representation of the class name;
   a function that can be called to construct an instance of this class.
- 
- 
+
+
  The DECLARE_... macros declare a static wxClassInfo variable in a class, which is initialized
  by macros of the form IMPLEMENT_... in the implementation C++ file. Classes whose instances may be
  constructed dynamically are given a global constructor function which returns a new object.
  You can get the wxClassInfo for a class by using the CLASSINFO macro, e.g. CLASSINFO(wxFrame).
  You can get the wxClassInfo for an object using wxObject::GetClassInfo.
  See also #wxObject and #wxCreateDynamicObject.
- 
+
  @section runtimeclassinformationexample Example
- 
+
  In a header file frame.h:
- 
+
  @code
  class wxFrame : public wxWindow
  {
  DECLARE_DYNAMIC_CLASS(wxFrame)
- 
+
  private:
      wxString m_title;
- 
+
  public:
      ...
  };
  @endcode
- 
+
  In a C++ file frame.cpp:
- 
+
  @code
  IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
- 
+
  wxFrame::wxFrame()
  {
  ...
  }
  @endcode
- 
+
  */
- 
- 
+
+

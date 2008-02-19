@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page scrolling_overview Scrolling overview
- 
+
  Classes: #wxWindow, #wxScrolledWindow, #wxIcon, #wxScrollBar.
  Scrollbars come in various guises in wxWidgets. All windows have the potential
  to show a vertical scrollbar and/or a horizontal scrollbar: it is a basic capability of a window.
@@ -33,66 +33,66 @@
  @b The scrollbar model
  The function wxWindow::SetScrollbar gives a clue about
  the way a scrollbar is modeled. This function takes the following arguments:
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
  orientation
- 
- 
- 
- 
+
+
+
+
  Which scrollbar: wxVERTICAL or wxHORIZONTAL.
- 
- 
- 
- 
- 
+
+
+
+
+
  position
- 
- 
- 
- 
+
+
+
+
  The position of the scrollbar in scroll units.
- 
- 
- 
- 
- 
+
+
+
+
+
  visible
- 
- 
- 
- 
+
+
+
+
  The size of the visible portion of the scrollbar, in scroll units.
- 
- 
- 
- 
- 
+
+
+
+
+
  range
- 
- 
- 
- 
+
+
+
+
  The maximum position of the scrollbar.
- 
- 
- 
- 
- 
+
+
+
+
+
  refresh
- 
- 
- 
- 
+
+
+
+
  Whether the scrollbar should be repainted.
- 
- 
- 
- 
+
+
+
+
  @e orientation determines whether we're talking about
  the built-in horizontal or vertical scrollbar.
  @e position is simply the position of the 'thumb' (the bit you drag to scroll around).
@@ -110,12 +110,12 @@
  Let's say you wish to display 50 lines of text, using the same font.
  The window is sized so that you can only see 16 lines at a time.
  You would use:
- 
+
  @code
  SetScrollbar(wxVERTICAL, 0, 16, 50);
  @endcode
- 
- 
+
+
  Note that with the window at this size, the thumb position can never go
  above 50 minus 16, or 34.
  You can determine how many lines are currently visible by dividing the current view
@@ -125,7 +125,7 @@
  scrollbar calculations and SetScrollbar
  call into a function named AdjustScrollbars, which can be called initially and also
  from your #wxSizeEvent handler function.
- 
+
  */
- 
- 
+
+

@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page python_overview wxPython overview
- 
+
  This topic was written by Robin Dunn, author of the wxPython wrapper.
  @ref pwhat_overview
  @ref pwhy_overview
@@ -17,10 +17,10 @@
  @ref pusing_overview
  @ref pclasses_overview
  @ref phelp_overview
- 
- 
+
+
  @section wxpwhat What is wxPython?
- 
+
  wxPython is a blending of the wxWidgets GUI classes and the
  #Python programming language.
  @b Python
@@ -53,9 +53,9 @@
  toolkit (wxGTK) on most Unix/X-windows platforms. See the wxPython
  website #http://wxPython.org/ for
  details about getting wxPython working for you.
- 
+
  @section wxpwhy Why use wxPython?
- 
+
  So why would you want to use wxPython over just C++ and wxWidgets?
  Personally I prefer using Python for everything. I only use C++ when I
  absolutely have to eke more performance out of an algorithm, and even
@@ -68,9 +68,9 @@
  application in a few hours with Python that would normally take a few
  days or longer with C++. Converting a wxPython app to a C++/wxWidgets app
  should be a straight forward task.
- 
+
  @section wxpother Other Python GUIs
- 
+
  There are other GUI solutions out there for Python.
  @b Tkinter
  Tkinter is the de facto standard GUI for Python. It is available
@@ -107,9 +107,9 @@
  wrappers around some C or C++ toolkit or another, and most are not
  cross-platform compatible. See @ref Graphics_overview
  for a listing of a few of them.
- 
+
  @section wxpusing Using wxPython
- 
+
  @b First things first...
  I'm not going to try and teach the Python language here. You can do
  that at the http://www.python.org/doc/tut/tut.html.
@@ -119,14 +119,14 @@
  program in the @c wxPython/demo directory, named @c DialogUnits.py. If your
  Python and wxPython are properly installed, you should be able to run
  it by issuing this command:
- 
- 
+
+
      @b @c python DialogUnits.py
- 
- 
- 
- 
- 
+
+
+
+
+
  @code
  001: ## import all of the wxPython GUI package
  002: from wxPython.wx import *
@@ -203,12 +203,12 @@
  073: app.MainLoop()     # Tell it to start processing events
  074:
  @endcode
- 
- 
- 
+
+
+
  @b Things to notice
- 
- 
+
+
   At line 2 the wxPython classes, constants, and etc. are imported
  into the current module's namespace. If you prefer to reduce
  namespace pollution you can use "@c from wxPython import wx" and
@@ -255,17 +255,17 @@
  ignore it for now.)  The call to @c MainLoop at line 73 starts the event
  loop which continues until the application terminates or all the top
  level windows are closed.
- 
- 
- 
+
+
+
  @section wxpclasses wxWidgets classes implemented in wxPython
- 
+
  The following classes are supported in wxPython. Most provide nearly
  full implementations of the public interfaces specified in the C++
  documentation, others are less so. They will all be brought as close
  as possible to the C++ spec over time.
- 
- 
+
+
   #wxAcceleratorEntry
   #wxAcceleratorTable
   #wxActivateEvent
@@ -447,11 +447,11 @@
   #wxWindowDC
   #wxWindow
   #wxZipFSHandler
- 
- 
- 
+
+
+
  @section wxphelp Where to go for help
- 
+
  Since wxPython is a blending of multiple technologies, help comes from
  multiple sources. See
  #http://wxpython.org/ for details on
@@ -461,7 +461,7 @@
  #http://lists.wxwindows.org/mailman/listinfo/wxpython-users
  Or you can send mail directly to the list using this address:
  wxpython-users@lists.wxwindows.org
- 
+
  */
- 
- 
+
+

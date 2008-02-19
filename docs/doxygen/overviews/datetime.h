@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page datetime_overview Date and time classes overview
- 
+
  Classes: #wxDateTime, #wxDateSpan, #wxTimeSpan, #wxCalendarCtrl
  #Introduction
  @ref alldatetimeclasses_overview
@@ -20,89 +20,89 @@
  #Daylight saving time (DST)
  @ref tdateholidays_overview
  #Compatibility
- 
- 
+
+
  @section introductiontowxdatetime Introduction
- 
+
  wxWidgets provides a set of powerful classes to work with dates and times. Some
  of the supported features of #wxDateTime class are:
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
  Wide range
- 
- 
- 
- 
+
+
+
+
  The range of supported dates goes from about 4714 B.C. to
  some 480 million years in the future.
- 
- 
- 
- 
- 
+
+
+
+
+
  Precision
- 
- 
- 
- 
+
+
+
+
  Not using floating point calculations anywhere ensures that
  the date calculations don't suffer from rounding errors.
- 
- 
- 
- 
- 
+
+
+
+
+
  Many features
- 
- 
- 
- 
+
+
+
+
  Not only all usual calculations with dates are supported,
  but also more exotic week and year day calculations, work day testing, standard
  astronomical functions, conversion to and from strings in either strict or free
  format.
- 
- 
- 
- 
- 
+
+
+
+
+
  Efficiency
- 
- 
- 
- 
+
+
+
+
  Objects of wxDateTime are small (8 bytes) and working with
  them is fast
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
  @section alldatetimeclasses All date/time classes at a glance
- 
- There are 3 main classes declared in @c wx/datetime.h: except 
+
+ There are 3 main classes declared in @c wx/datetime.h: except
  #wxDateTime itself which represents an absolute
- moment in time, there are also two classes - 
+ moment in time, there are also two classes -
  #wxTimeSpan and #wxDateSpan - which
  represent the intervals of time.
- There are also helper classes which are used together with wxDateTime: 
+ There are also helper classes which are used together with wxDateTime:
  #wxDateTimeHolidayAuthority which is used
- to determine whether a given date is a holiday or not and 
+ to determine whether a given date is a holiday or not and
  #wxDateTimeWorkDays which is a derivation of this
  class for which (only) Saturdays and Sundays are the holidays. See more about
  these classes in the discussion of the #holidays.
  Finally, in other parts of this manual you may find mentions of wxDate and
  wxTime classes. @ref tdatecompatibility_overview are obsolete and
  superseded by wxDateTime.
- 
+
  @section wxdatetimecharacteristics wxDateTime characteristics
- 
+
  #wxDateTime stores the time as a signed number of
  milliseconds since the Epoch which is fixed, by convention, to Jan 1, 1970 -
  however this is not visible to the class users (in particular, dates prior to
@@ -116,7 +116,7 @@
  change if there is sufficient interest in doing it).
  Finally, the internal representation is time zone independent (always in GMT)
  and the time zones only come into play when a date is broken into
- year/month/day components. See more about #timezones 
+ year/month/day components. See more about #timezones
  below.
  Currently, the only supported calendar is Gregorian one (which is used even
  for the dates prior to the historic introduction of this calendar which was
@@ -124,13 +124,13 @@
  region, dependent). Future versions will probably have Julian calendar support
  as well and support for other calendars (Maya, Hebrew, Chinese...) is not
  ruled out.
- 
+
  @section dateandtimespansdifference Difference between wxDateSpan and wxTimeSpan
- 
+
  While there is only one logical way to represent an absolute moment in the
  time (and hence only one wxDateTime class), there are at least two methods to
  describe a time interval.
- First, there is the direct and self-explaining way implemented by 
+ First, there is the direct and self-explaining way implemented by
  #wxTimeSpan: it is just a difference in milliseconds
  between two moments in time. Adding or subtracting such an interval to
  wxDateTime is always well-defined and is a fast operation.
@@ -139,7 +139,7 @@
  that this is not the same as wxTimeSpan of 60*60*24*31 seconds because 'one
  month later' Feb 15 is Mar 15 and not Mar 17 or Mar 16 (depending on whether
  the year is leap or not).
- This is why there is another class for representing such intervals called 
+ This is why there is another class for representing such intervals called
  #wxDateSpan. It handles these sort of operations in the
  most natural way possible, but note that manipulating with intervals of
  this kind is not always well-defined. Consider, for example, Jan 31 + '1
@@ -153,78 +153,78 @@
  also more efficient). However, wxDateSpan may be very useful in situations
  when you do need to understand what 'in a month' means (of course, it is
  just @c wxDateTime::Now() + wxDateSpan::Month()).
- 
+
  @section tdatearithm Date arithmetics
- 
+
  Many different operations may be performed with the dates, however not all of
  them make sense. For example, multiplying a date by a number is an invalid
  operation, even though multiplying either of the time span classes by a number
  is perfectly valid.
  Here is what can be done:
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
  @b Addition
- 
- 
- 
- 
+
+
+
+
  a wxTimeSpan or wxDateSpan can be added to wxDateTime
  resulting in a new wxDateTime object and also 2 objects of the same span class
  can be added together giving another object of the same class.
- 
- 
- 
- 
- 
+
+
+
+
+
  @b Subtraction
- 
- 
- 
- 
+
+
+
+
  the same types of operations as above are
  allowed and, additionally, a difference between two wxDateTime objects can be
  taken and this will yield wxTimeSpan.
- 
- 
- 
- 
- 
+
+
+
+
+
  @b Multiplication
- 
- 
- 
- 
+
+
+
+
  a wxTimeSpan or wxDateSpan object can be
  multiplied by an integer number resulting in an object of the same type.
- 
- 
- 
- 
- 
+
+
+
+
+
  @b Unary minus
- 
- 
- 
- 
+
+
+
+
  a wxTimeSpan or wxDateSpan object may finally be
  negated giving an interval of the same magnitude but of opposite time
  direction.
- 
- 
- 
- 
- 
+
+
+
+
+
  For all these operations there are corresponding global (overloaded) operators
  and also member functions which are synonyms for them: Add(), Subtract() and
  Multiply(). Unary minus as well as composite assignment operations (like +=)
  are only implemented as members and Neg() is the synonym for unary minus.
- 
+
  @section tdatetimezones Time zone considerations
- 
+
  Although the time is always stored internally in GMT, you will usually work in
  the local time zone. Because of this, all wxDateTime constructors and setters
  which take the broken down date assume that these values are for the local
@@ -240,9 +240,9 @@
  In this (rare) case, you are still limited to the local time zone when
  constructing wxDateTime objects, i.e. there is no way to construct a
  wxDateTime corresponding to the given date in, say, Pacific Standard Time.
- To do it, you will need to call #ToTimezone or 
+ To do it, you will need to call #ToTimezone or
  #MakeTimezone methods to adjust the date for
- the target time zone. There are also special versions of these functions 
+ the target time zone. There are also special versions of these functions
  #ToUTC and #MakeUTC for
  the most common case - when the date should be constructed in UTC.
  You also can just retrieve the value for some time zone without converting the
@@ -257,16 +257,16 @@
  usually you will just use one of the @ref datetime_overview and
  let the conversion constructor do the job.
  I.e. you would just write
- 
+
  @code
  wxDateTime dt(...whatever...);
  printf("The time is %s in local time zone", dt.FormatTime().c_str());
  printf("The time is %s in GMT", dt.FormatTime(wxDateTime::GMT).c_str());
  @endcode
- 
- 
+
+
  @section tdatedst Daylight saving time (DST)
- 
+
  DST (a.k.a. 'summer time') handling is always a delicate task which is better
  left to the operating system which is supposed to be configured by the
  administrator to behave correctly. Unfortunately, when doing calculations with
@@ -280,18 +280,18 @@
  may perfectly well change in the future.
  The time zone handling #methods use these functions
  too, so they are subject to the same limitations.
- 
+
  @section tdateholidays wxDateTime and Holidays
- 
+
  TODO.
- 
+
  @section tdatecompatibility Compatibility
- 
+
  The old classes for date/time manipulations ported from wxWidgets version 1.xx
  are still included but are reimplemented in terms of wxDateTime. However, using
  them is strongly discouraged because they have a few quirks/bugs and were not
  'Y2K' compatible.
- 
+
  */
- 
- 
+
+

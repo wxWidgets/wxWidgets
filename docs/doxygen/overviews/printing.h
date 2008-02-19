@@ -7,18 +7,18 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page printing_overview Printing overview
- 
- Classes: #wxPrintout, 
- #wxPrinter, 
- #wxPrintPreview, 
- #wxPrinterDC, 
- #wxPostScriptDC, 
- #wxPrintDialog, 
- #wxPrintData, 
- #wxPrintDialogData, 
- #wxPageSetupDialog, 
+
+ Classes: #wxPrintout,
+ #wxPrinter,
+ #wxPrintPreview,
+ #wxPrinterDC,
+ #wxPostScriptDC,
+ #wxPrintDialog,
+ #wxPrintData,
+ #wxPrintDialogData,
+ #wxPageSetupDialog,
  #wxPageSetupDialogData
  The printing framework relies on the application to provide classes whose member
  functions can respond to particular requests, such as 'print this page' or 'does
@@ -42,10 +42,10 @@
  @ref topic16_overview
  @ref topic17_overview
  @ref topic18_overview
- 
- 
+
+
  @section topic9 #wxPrintout
- 
+
  A document's printing ability is represented in an application by a derived
  wxPrintout class. This class prints a page on request, and can be passed to the
  Print function of a wxPrinter object to actually print the document, or can be
@@ -55,7 +55,7 @@
  Notice the use of MyPrintout for both printing and previewing. All the preview
  user interface functionality is taken care of by wxWidgets. For more details on how
  MyPrintout is defined, please look at the printout sample code.
- 
+
  @code
  case WXPRINT_PRINT:
      {
@@ -75,7 +75,7 @@
        break;
      }
  @endcode
- 
+
  Class #wxPrintout assembles the printed page and (using
  your subclass's overrides) writes requested pages to a #wxDC that
  is passed to it. This wxDC could be a #wxMemoryDC (for
@@ -96,24 +96,24 @@
  can easily map your image to the printout withough getting into the details of
  screen and printer PPI and scaling. See the printing sample for examples of how
  these routines are used.
- 
+
  @section topic10 #wxPrinter
- 
+
  Class wxPrinter encapsulates the platform-dependent print function with a common
  interface. In most cases, you will not need to derive a class from wxPrinter;
  simply create a wxPrinter object in your Print function as in the example above.
- 
+
  @section topic11 #wxPrintPreview
- 
+
  Class wxPrintPreview manages the print preview process. Among other things, it
  constructs the wxDCs that get passed to your wxPrintout subclass for printing
  and manages the display of multiple pages, a zoomable preview image, and so
  forth. In most cases you will use this class as-is, but you can create your own
  subclass, for example, to change the layout or contents of the preview window.
- 
- 
+
+
  @section topic12 #wxPrinterDC
- 
+
  Class wxPrinterDC is the wxDC that represents the actual printed page under MSW
  and Mac. During printing, an object of this class will be passed to your derived
  wxPrintout object to draw upon. The size of the wxPrinterDC will depend on the
@@ -133,9 +133,9 @@
  wxPrinterDC-specific function
  wxPrinterDC::GetPaperRect returns the paper
  rectangle of the given wxPrinterDC.
- 
+
  @section topic13 #wxPostScriptDC
- 
+
  Class wxPostScriptDC is the wxDC that represents the actual printed page under
  GTK and other PostScript printing. During printing, an object of this class will
  be passed to your derived wxPrintout object to draw upon. The size of the
@@ -144,17 +144,17 @@
  Unlike a wxPrinterDC, there is no distinction between the page rectangle and the
  paper rectangle in a wxPostScriptDC; both rectangles are taken to represent the
  entire sheet of paper.
- 
+
  @section topic14 #wxPrintDialog
- 
+
  Class wxPrintDialog puts up the standard print dialog, which allows you to
  select the page range for printing (as well as many other print settings, which
  may vary from platform to platform). You provide an object of type
  #wxPrintDialogData to the wxPrintDialog at
  construction, which is used to populate the dialog.
- 
+
  @section topic15 #wxPrintData
- 
+
  Class wxPrintData is a subset of wxPrintDialogData that is used (internally) to
  initialize a wxPrinterDC or wxPostScriptDC. (In fact, a wxPrintData is a data
  member of a wxPrintDialogData and a wxPageSetupDialogData). Essentially,
@@ -162,17 +162,17 @@
  configure the wxPrinterDC or wxPostScriptDC (e.g., size, orientation, etc.). You
  might wish to create a global instance of this object to provide call-to-call
  persistence to your application's print settings.
- 
+
  @section topic16 #wxPrintDialogData
- 
+
  Class wxPrintDialogData contains the settings entered by the user in the print
  dialog. It contains such things as page range, number of copies, and so forth.
  In most cases, you won't need to access this information; the framework takes
  care of asking your wxPrintout derived object for the pages requested by the
  user.
- 
+
  @section topic17 #wxPageSetupDialog
- 
+
  Class wxPageSetupDialog puts up the standard page setup dialog, which allows you
  to specify the orientation, paper size, and related settings. You provide it
  with a wxPageSetupDialogData object at intialization, which is used to populate
@@ -183,9 +183,9 @@
  wxMacPageMarginsDialog (which, like wxPageSetupDialog, takes a
  wxPageSetupDialogData object in its constructor) to provide this capability; see
  the printing sample for an example.
- 
+
  @section topic18 #wxPageSetupDialogData
- 
+
  Class wxPageSetupDialogData contains settings affecting the page size (paper
  size), orientation, margins, and so forth. Note that not all platforms populate
  all fields; for example, the MSW page setup dialog lets you set the page margins
@@ -198,7 +198,7 @@
  queries these data structures to get information like the printed page range
  (from the wxPrintDialogData) or the paper size and/or page orientation (from the
  wxPageSetupDialogData).
- 
+
  */
- 
- 
+
+

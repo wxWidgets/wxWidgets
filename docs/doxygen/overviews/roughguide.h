@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page roughguide_overview Writing a wxWidgets application: a rough guide
- 
+
  To set a wxWidgets application going, you will need to derive a #wxApp class and
  override wxApp::OnInit.
  An application must have a top-level #wxFrame or #wxDialog window.
@@ -48,7 +48,7 @@
  and you may find it handy to maintain and search a list of paths using #wxPathList.
  There's a #miscellany of operating system and other functions.
  See also @ref classesbycat_overview for a list of classes.
- 
+
  */
- 
- 
+
+

@@ -8,7 +8,7 @@
 
 
 /*!
- 
+
  @mainpage wxWidgets 2.9.0: A portable C++ and Python GUI toolkit
  @author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn, et al
  @date February, 2008
@@ -27,7 +27,7 @@
  @li @ref topic_page
  @li @ref platformdetails_page
 
- <!-- @li Alphabetical class reference 
+ <!-- @li Alphabetical class reference
      @li Functions and macros  -->
 
 */

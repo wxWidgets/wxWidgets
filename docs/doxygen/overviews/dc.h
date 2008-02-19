@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page dc_overview Device context overview
- 
+
  Classes: #wxBufferedDC, #wxBufferedPaintDC, #wxDC, #wxPostScriptDC,
  #wxMetafileDC, #wxMemoryDC, #wxPrinterDC,
  #wxScreenDC, #wxClientDC, #wxPaintDC,
@@ -21,8 +21,8 @@
  This is @true of #wxScreenDC, #wxClientDC, #wxPaintDC,
  and #wxWindowDC. The following describes the differences between
  these device contexts and when you should use them.
- 
- 
+
+
   @b wxScreenDC. Use this to paint on the screen, as opposed to an individual window.
   @b wxClientDC. Use this to paint on the client area of window (the part without
  borders and other decorations), but do not use it from within an #wxPaintEvent.
@@ -30,11 +30,11 @@
  within a #wxPaintEvent.
   @b wxWindowDC. Use this to paint on the whole area of a window, including decorations.
  This may not be available on non-Windows platforms.
- 
- 
+
+
  To use a client, paint or window device context, create an object on the stack with
  the window as argument, for example:
- 
+
  @code
  void MyWindow::OnMyCmd(wxCommandEvent& event)
    {
@@ -42,12 +42,12 @@
      DrawMyPicture(dc);
    }
  @endcode
- 
+
  Try to write code so it is parameterised by wxDC - if you do this, the same piece of code may
  write to a number of different devices, by passing a different device context. This doesn't
  work for everything (for example not all device contexts support bitmap drawing) but
  will work most of the time.
- 
+
  */
- 
- 
+
+

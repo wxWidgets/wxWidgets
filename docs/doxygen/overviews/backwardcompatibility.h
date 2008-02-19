@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page backwardcompatibility_overview Backward compatibility
- 
+
  Many of the GUIs and platforms supported by wxWidgets are continuously
  evolving, and some of the new platforms wxWidgets now supports were quite
  unimaginable even a few years ago. In this environment wxWidgets must also
@@ -22,17 +22,17 @@
  @ref sourcecompatibility_overview
  @ref libbincompatibility_overview
  @ref appbincompatibility_overview
- 
- 
+
+
  @section versionnumbering The version numbering scheme
- 
+
  wxWidgets version numbers can have up to four components, with trailing
  zeros sometimes omitted:
- 
+
  @code
  major.minor.release.sub-release
  @endcode
- 
+
  A stable release of wxWidgets will have an even number for @c minor, e.g. @c 2.6.0.
  Stable, in this context, means that the API is not changing. In truth, some
  changes are permitted, but only those that are backward compatible. For
@@ -54,9 +54,9 @@
  incompatibilities. Compatibility is not broken gratuitously however, so
  many applications will require no changes or only small changes to work
  with the new version.
- 
+
  @section sourcecompatibility Source level compatibility
- 
+
  Later releases from a stable branch are backward compatible with earlier
  releases from the same branch at the source level.
  This means that, for example, if you develop your application using
@@ -68,90 +68,92 @@
  binary compatibility' below.
  Between minor versions, for example between @c 2.2.x, @c 2.4.x and @c 2.6.x, there will be some incompatibilities. Wherever possible the old way
  of doing something is kept alongside the new for a time wrapped inside:
- 
+
  @code
  #if WXWIN_COMPATIBILITY_2_4
          /* deprecated feature */
-         ...
-     #endif
- @endcode
- 
- By default the @c WXWIN_COMPATIBILITY@e _X_X macro is set
- to 1 for the previous stable branch, for example
- in @c 2.6.x @c WXWIN_COMPATIBILITY_2_4 = 1. For the next earlier
- stable branch the default is 0, so @c WXWIN_COMPATIBILITY_2_2 = 0
- for @c 2.6.x. Earlier than that, obsolete features are removed.
- These macros can be changed in @c setup.h. Or on UNIX-like systems you can
- set them using the @c --disable-compat24 and @c --enable-compat22
- options to @c configure.
- They can be useful in two ways:
- 
- 
-  Changing @c WXWIN_COMPATIBILITY_2_4 to 0 can be useful to
- find uses of deprecated features in your program.
-  Changing @c WXWIN_COMPATIBILITY_2_2 to 1 can be useful to
- compile a program developed using @c 2.2.x that no longer compiles
- with @c 2.6.x.
- 
- 
- A program requiring one of these macros to be 1 will become
- incompatible with some future version of wxWidgets, and you should consider
- updating it.
- 
- @section libbincompatibility Library binary compatibility
- 
- For some platforms, releases from a stable branch are not only source level
- compatible but can also be binary compatible.
- Binary compatibility makes it possible to get the maximum benefit from
- using shared libraries, also known as dynamic link libraries (DLLs) on
- Windows or dynamic shared libraries on OS X.
- For example, suppose several applications are installed on a system requiring
- wxWidgets @c 2.6.0, @c 2.6.1 and @c 2.6.2. Since @c 2.6.2 is
- backward compatible with the earlier versions, it should be enough to
- install just wxWidgets @c 2.6.2 shared libraries, and all the applications
- should be able to use them. If binary compatibility is not supported, then all
- the required versions @c 2.6.0, @c 2.6.1 and @c 2.6.2 must be
- installed side by side.
- Achieving this, without the user being required to have the source code
- and recompile everything, places many extra constraints on the changes
- that can be made within the stable branch. So it is not supported for all
- platforms, and not for all versions of wxWidgets. To date it has mainly
- been supported by wxGTK for UNIX-like platforms.
- Another practical consideration is that for binary compatibility to work,
- all the applications and libraries must have been compiled with compilers
- that are capable of producing compatible code; that is, they must use the
- same ABI (Application Binary Interface). Unfortunately most different C++
- compilers do not produce code compatible with each other, and often even
- different versions of the same compiler are not compatible.
- 
- @section appbincompatibility Application binary compatibility
- 
- The most important aspect of binary compatibility is that applications
- compiled with one version of wxWidgets, e.g. @c 2.6.1, continue to work
- with shared libraries of a later binary compatible version, for example @c 2.6.2.
- The converse can also be useful however. That is, it can be useful for a
- developer using a later version, e.g. @c 2.6.2 to be able to create binary
- application packages that will work with all binary compatible versions of
- the shared library starting with, for example @c 2.6.0.
- To do this the developer must, of course, avoid any features not available
- in the earlier versions. However this is not necessarily enough; in some
- cases an application compiled with a later version may depend on it even
- though the same code would compile fine against an earlier version.
- To help with this, a preprocessor symbol @c wxABI_VERSION can be defined
- during the compilation of the application (this would usually be done in the
- application's makefile or project settings). It should be set to the lowest
- version that is being targeted, as a number with two decimal digits for each
- component, for example @c wxABI_VERSION=20600 for @c 2.6.0.
- Setting @c wxABI_VERSION should prevent the application from implicitly
- depending on a later version of wxWidgets, and also disables any new features
- in the API, giving a compile time check that the source is compatible with
- the versions of wxWidgets being targeted.
- Uses of @c wxABI_VERSION are stripped out of the wxWidgets sources when
- each new development branch is created. Therefore it is only useful to help
- achieve compatibility with earlier versions with the same major
- and even minor version numbers. It won't, for example, help you write
- code compatible with @c 2.4.x using wxWidgets @c 2.6.x.
- 
- */
- 
- 
+...
+#endif
+@endcode
+
+By default the @c WXWIN_COMPATIBILITY@e _X_X macro is set
+    to 1 for the previous stable branch, for example
+        in @c 2.6.x @c WXWIN_COMPATIBILITY_2_4 = 1. For the next earlier
+            stable branch the default is 0, so @c WXWIN_COMPATIBILITY_2_2 = 0
+                            for @c 2.6.x. Earlier than that, obsolete features are removed.
+                                These macros can be changed in @c setup.h. Or on UNIX-like systems you can
+                                set them using the @c --disable-compat24 and @c --enable-compat22
+                                options to @c configure.
+                                They can be useful in two ways:
+
+
+Changing @c WXWIN_COMPATIBILITY_2_4 to 0 can be useful to
+find uses of deprecated features in your program.
+Changing @c WXWIN_COMPATIBILITY_2_2 to 1 can be useful to
+compile a program developed using @c 2.2.x that no longer compiles
+with @c 2.6.x.
+
+
+A program requiring one of these macros to be 1 will become
+incompatible with some future version of wxWidgets, and you should consider
+updating it.
+
+@section libbincompatibility Library binary compatibility
+
+For some platforms, releases from a stable branch are not only source level
+compatible but can also be binary compatible.
+Binary compatibility makes it possible to get the maximum benefit from
+using shared libraries, also known as dynamic link libraries (DLLs) on
+Windows or dynamic shared libraries on OS X.
+For example, suppose several applications are installed on a system requiring
+wxWidgets @c 2.6.0, @c 2.6.1 and @c 2.6.2. Since @c 2.6.2 is
+backward compatible with the earlier versions, it should be enough to
+install just wxWidgets @c 2.6.2 shared libraries, and all the applications
+should be able to use them. If binary compatibility is not supported, then all
+the required versions @c 2.6.0, @c 2.6.1 and @c 2.6.2 must be
+installed side by side.
+Achieving this, without the user being required to have the source code
+and recompile everything, places many extra constraints on the changes
+that can be made within the stable branch. So it is not supported for all
+platforms, and not for all versions of wxWidgets. To date it has mainly
+    been supported by wxGTK for UNIX-like platforms.
+        Another practical consideration is that for binary compatibility to work,
+            all the applications and libraries must have been compiled with compilers
+            that are capable of producing compatible code;
+that is, they must use the
+same ABI (Application Binary Interface). Unfortunately most different C++
+compilers do not produce code compatible with each other, and often even
+    different versions of the same compiler are not compatible.
+
+    @section appbincompatibility Application binary compatibility
+
+    The most important aspect of binary compatibility is that applications
+    compiled with one version of wxWidgets, e.g. @c 2.6.1, continue to work
+    with shared libraries of a later binary compatible version, for example @c 2.6.2.
+    The converse can also be useful however. That is, it can be useful for a
+        developer using a later version, e.g. @c 2.6.2 to be able to create binary
+        application packages that will work with all binary compatible versions of
+        the shared library starting with, for example @c 2.6.0.
+            To do this the developer must, of course, avoid any features not available
+                in the earlier versions. However this is not necessarily enough;
+in some
+cases an application compiled with a later version may depend on it even
+though the same code would compile fine against an earlier version.
+To help with this, a preprocessor symbol @c wxABI_VERSION can be defined
+during the compilation of the application (this would usually be done in the
+        application's makefile or project settings). It should be set to the lowest
+        version that is being targeted, as a number with two decimal digits for each
+        component, for example @c wxABI_VERSION=20600 for @c 2.6.0.
+        Setting @c wxABI_VERSION should prevent the application from implicitly
+        depending on a later version of wxWidgets, and also disables any new features
+        in the API, giving a compile time check that the source is compatible with
+        the versions of wxWidgets being targeted.
+        Uses of @c wxABI_VERSION are stripped out of the wxWidgets sources when
+        each new development branch is created. Therefore it is only useful to help
+        achieve compatibility with earlier versions with the same major
+        and even minor version numbers. It won't, for example, help you write
+        code compatible with @c 2.4.x using wxWidgets @c 2.6.x.
+
+        */
+
+

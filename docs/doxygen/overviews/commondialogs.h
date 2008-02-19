@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page commondialogs_overview Common dialogs overview
- 
+
  Classes: #wxColourDialog, #wxFontDialog,
  #wxPrintDialog, #wxFileDialog,
  #wxDirDialog, #wxTextEntryDialog,
@@ -36,10 +36,10 @@
  @ref messagedialog_overview
  @ref singlechoicedialog_overview
  @ref multichoicedialog_overview
- 
- 
+
+
  @section wxcolourdialogoverview wxColourDialog overview
- 
+
  Classes: #wxColourDialog, #wxColourData
  The wxColourDialog presents a colour selector to the user, and returns
  with colour information.
@@ -69,7 +69,7 @@
  a grey scale for the custom colours. If the user did not cancel
  the dialog, the application retrieves the selected colour and
  uses it to set the background of a window.
- 
+
  @code
  wxColourData data;
    data.SetChooseFull(@true);
@@ -78,7 +78,7 @@
      wxColour colour(i*16, i*16, i*16);
      data.SetCustomColour(i, colour);
    }
-       
+
    wxColourDialog dialog(this, );
    if (dialog.ShowModal() == wxID_OK)
    {
@@ -90,11 +90,11 @@
      myWindow-Refresh();
    }
  @endcode
- 
- 
- 
+
+
+
  @section wxfontdialogoverview wxFontDialog overview
- 
+
  Classes: #wxFontDialog, #wxFontData
  The wxFontDialog presents a font selector to the user, and returns
  with font and colour information.
@@ -117,12 +117,12 @@
  In the samples/dialogs directory, there is an example of using
  the wxFontDialog class. The application uses the returned font
  and colour for drawing text on a canvas. Here is an excerpt:
- 
+
  @code
  wxFontData data;
    data.SetInitialFont(canvasFont);
    data.SetColour(canvasTextColour);
-       
+
    wxFontDialog dialog(this, );
    if (dialog.ShowModal() == wxID_OK)
    {
@@ -132,19 +132,19 @@
      myWindow-Refresh();
    }
  @endcode
- 
- 
+
+
  @section wxprintdialogoverview wxPrintDialog overview
- 
+
  Classes: #wxPrintDialog, #wxPrintData
  This class represents the print and print setup common dialogs.
  You may obtain a #wxPrinterDC device context from
  a successfully dismissed print dialog.
  The samples/printing example shows how to use it: see @ref printing_overview for
  an excerpt from this example.
- 
+
  @section wxfiledialogoverview wxFileDialog overview
- 
+
  Classes: #wxFileDialog
  Pops up a file selector box. In Windows and GTK2.4+, this is the common
  file selector dialog. In X, this is a file selector box with somewhat less
@@ -163,51 +163,51 @@
  ignored if a default name is supplied.
  The wildcard may be a specification for multiple
  types of file with a description for each, such as:
- 
+
  @code
  "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
  @endcode
- 
- 
+
+
  @section wxdirdialogoverview wxDirDialog overview
- 
+
  Classes: #wxDirDialog
  This dialog shows a directory selector dialog, allowing the user to select a single
  directory.
- 
+
  @section wxtextentrydialogoverview wxTextEntryDialog overview
- 
+
  Classes: #wxTextEntryDialog
  This is a dialog with a text entry field. The value that the user
  entered is obtained using wxTextEntryDialog::GetValue.
- 
+
  @section wxpasswordentrydialogoverview wxPasswordEntryDialog overview
- 
+
  Classes: #wxPasswordEntryDialog
  This is a dialog with a password entry field. The value that the user
  entered is obtained using wxTextEntryDialog::GetValue.
- 
+
  @section wxmessagedialogoverview wxMessageDialog overview
- 
+
  Classes: #wxMessageDialog
  This dialog shows a message, plus buttons that can be chosen from OK, Cancel, Yes, and No.
  Under Windows, an optional icon can be shown, such as an exclamation mark or question mark.
  The return value of wxMessageDialog::ShowModal indicates
  which button the user pressed.
- 
+
  @section wxsinglechoicedialogoverview wxSingleChoiceDialog overview
- 
+
  Classes: #wxSingleChoiceDialog
  This dialog shows a list of choices, plus OK and (optionally) Cancel. The user can
  select one of them. The selection can be obtained from the dialog as an index,
  a string or client data.
- 
+
  @section wxmultichoicedialogoverview wxMultiChoiceDialog overview
- 
+
  Classes: #wxMultiChoiceDialog
  This dialog shows a list of choices, plus OK and (optionally) Cancel. The user can
  select one or more of them.
- 
+
  */
- 
- 
+
+

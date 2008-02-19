@@ -18,6 +18,6 @@
 
 
  @section cppconst Preprocessor symbols defined by wxWidgets
- 
+
 
 */

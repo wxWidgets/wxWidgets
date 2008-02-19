@@ -7,30 +7,30 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page dialog_overview wxDialog overview
- 
+
  Classes: #wxDialog, #wxDialogLayoutAdapter
  A dialog box is similar to a panel, in that it is a window which can
  be used for placing controls, with the following exceptions:
- 
- 
+
+
   A surrounding frame is implicitly created.
   Extra functionality is automatically given to the dialog box,
    such as tabbing between items (currently Windows only).
   If the dialog box is @e modal, the calling program is blocked
    until the dialog box is dismissed.
- 
- 
+
+
  For a set of dialog convenience functions, including file selection, see
  @ref dialogfunctions_overview.
  See also #wxTopLevelWindow and #wxWindow for inherited
  member functions. Validation of data in controls is covered in @ref validator_overview.
  @ref autoscrollingdialogs_overview
- 
- 
+
+
  @section autoscrollingdialogs Automatic scrolling dialogs
- 
+
  As an ever greater variety of mobile hardware comes to market, it becomes more imperative for wxWidgets applications to adapt
  to these platforms without putting too much burden on the programmer. One area where wxWidgets can help is in adapting
  dialogs for the lower resolution screens that inevitably accompany a smaller form factor. wxDialog therefore supplies
@@ -44,8 +44,8 @@
  standard adapter class wxStandardDialogLayoutAdapter) will
  make part of the dialog scrolling, leaving standard buttons in a non-scrolling part at the bottom of the dialog.
  This is done as follows, in wxDialogLayoutAdapter::DoLayoutAdaptation called from within wxDialog::Show or wxDialog::ShowModal:
- 
- 
+
+
   If wxDialog::GetContentWindow returns a window derived from wxBookCtrlBase, the pages are made scrollable and
  no other adaptation is done.
   wxWidgets looks for a #wxStdDialogButtonSizer and uses it for the non-scrolling part.
@@ -56,8 +56,8 @@
   All the children apart from standard buttons are reparented onto a new #wxScrolledWindow object,
  using the old top-level sizer for the scrolled window and creating a new top-level sizer to lay out the scrolled window and
  standard button sizer.
- 
- 
+
+
  @b Customising scrolling adaptation
  In addition to switching adaptation on and off globally and per dialog, you can choose how aggressively wxWidgets will
  search for standard buttons by setting wxDialog::SetLayoutAdaptationLevel. By default,
@@ -70,8 +70,8 @@
  You can also override wxDialog::CanDoLayoutAdaptation and wxDialog::DoLayoutAdaptation in a class derived from wxDialog.
  @b Situations where automatic scrolling adaptation may fail
  Because adaptation rearranges your sizer and window hierarchy, it is not fool-proof, and may fail in the following situations.
- 
- 
+
+
   The dialog doesn't use sizers.
   The dialog implementation makes assumptions about the window hierarchy, for example getting the parent of a control and casting to the dialog class.
   The dialog does custom painting and/or event handling not handled by the scrolled window. If this problem can be solved globally,
@@ -79,11 +79,11 @@
   The dialog has unusual layout, for example a vertical sizer containing a mixture of standard buttons and other controls.
   The dialog makes assumptions about the sizer hierarchy, for example to show or hide children of the top-level sizer. However, the original sizer hierarchy will still hold
  until Show or ShowModal is called.
- 
- 
+
+
  You can help make sure that your dialogs will continue to function after adaptation by:
- 
- 
+
+
   avoiding the above situations and assumptions;
   using #wxStdDialogButtonSizer;
   only making assumptions about hierarchy immediately after the dialog is created;
@@ -91,13 +91,13 @@
  for the purposes of manipulating child sizers and windows;
   overriding wxDialog::GetContentWindow to return a book control if your dialog implements pages: wxWidgets will then only make the pages
  scrollable.
- 
- 
+
+
  @b wxPropertySheetDialog and wxWizard
  Adaptation for wxPropertySheetDialog is always done by simply making the pages scrollable, since wxDialog::GetContentWindow returns
  the dialog's book control and this is handled by the standard layout adapter.
  wxWizard uses its own CanDoLayoutAdaptation and DoLayoutAdaptation functions rather than the global adapter: again, only the wizard pages are made scrollable.
- 
+
  */
- 
- 
+
+

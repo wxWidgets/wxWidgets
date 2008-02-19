@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page constraints_overview Constraints overview
- 
+
  Classes: #wxLayoutConstraints, #wxIndividualLayoutConstraint.
  @b Note: constraints are now deprecated and you should use #sizers instead.
  Objects of class wxLayoutConstraint can be associated with a window to define
@@ -17,8 +17,8 @@
  The class consists of the following eight constraints of class wxIndividualLayoutConstraint,
  some or all of which should be accessed directly to set the appropriate
  constraints.
- 
- 
+
+
   @b left: represents the left hand edge of the window
   @b right: represents the right hand edge of the window
   @b top: represents the top edge of the window
@@ -27,8 +27,8 @@
   @b height: represents the height of the window
   @b centreX: represents the horizontal centre point of the window
   @b centreY: represents the vertical centre point of the window
- 
- 
+
+
  The constraints are initially set to have the relationship wxUnconstrained,
  which means that their values should be calculated by looking at known constraints.
  To calculate the position and size of the control, the layout algorithm needs to
@@ -39,20 +39,20 @@
  dimension will not be changed which is useful for the dialog controls which
  often have the default size (e.g. the buttons whose size is determined by their
  label).
- The constrains calculation is done in wxWindow::Layout 
+ The constrains calculation is done in wxWindow::Layout
  function which evaluates constraints. To call it you can either call
  wxWindow::SetAutoLayout if the parent window
  is a frame, panel or a dialog to tell default OnSize handlers to call Layout
  automatically whenever the window size changes, or override OnSize and call
- Layout yourself (note that you do have to call 
+ Layout yourself (note that you do have to call
  #Layout yourself if the parent window is not a
  frame, panel or dialog).
  @ref constraintlayoutdetails_overview
  @ref layoutexamples_overview
- 
- 
+
+
  @section constraintlayoutdetails Constraint layout: more details
- 
+
  By default, windows do not have a wxLayoutConstraints object. In this case, much layout
  must be done explicitly, by performing calculations in OnSize members, except
  for the case of frames that have exactly one subwindow (not counting toolbar and
@@ -83,7 +83,7 @@
  an unconstrained @e width may be calculated from the @e left and @e right edges, if
  both are currently known. For edges and dimensions with user-supplied constraints, these
  constraints are evaluated if the inputs of the constraint are known.
- The algorithm stops when all child edges and dimension are known (success), or 
+ The algorithm stops when all child edges and dimension are known (success), or
  there are unknown edges or dimensions but there has been no change in this cycle (failure).
  It then sets all the window positions and sizes according to the values it has found.
  Because the algorithm is iterative, the order in which constraints are considered is
@@ -95,82 +95,82 @@
  right border IsSameAs(parent, wxRight) and then create the first one by
  specifying that it should be LeftOf() the second one than to do in a more
  natural left-to-right order.
- 
+
  @section layoutexamples Window layout examples
- 
- 
+
+
  @section subwindowlayoutexample Example 1: subwindow layout
- 
+
  This example specifies a panel and a window side by side,
  with a text subwindow below it.
- 
+
  @code
  frame-panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(1000, 500), 0);
    frame-scrollWindow = new MyScrolledWindow(frame, -1, wxPoint(0, 0), wxSize(400, 400), wxRETAINED);
    frame-text_window = new MyTextWindow(frame, -1, wxPoint(0, 250), wxSize(400, 250));
- 
+
    // Set constraints for panel subwindow
    wxLayoutConstraints *c1 = new wxLayoutConstraints;
- 
+
    c1-left.SameAs       (frame, wxLeft);
    c1-top.SameAs        (frame, wxTop);
    c1-right.PercentOf   (frame, wxWidth, 50);
    c1-height.PercentOf  (frame, wxHeight, 50);
- 
+
    frame-panel-SetConstraints(c1);
- 
+
    // Set constraints for scrollWindow subwindow
    wxLayoutConstraints *c2 = new wxLayoutConstraints;
- 
+
    c2-left.SameAs       (frame-panel, wxRight);
    c2-top.SameAs        (frame, wxTop);
    c2-right.SameAs      (frame, wxRight);
    c2-height.PercentOf  (frame, wxHeight, 50);
- 
+
    frame-scrollWindow-SetConstraints(c2);
- 
+
    // Set constraints for text subwindow
    wxLayoutConstraints *c3 = new wxLayoutConstraints;
    c3-left.SameAs       (frame, wxLeft);
    c3-top.Below         (frame-panel);
    c3-right.SameAs      (frame, wxRight);
    c3-bottom.SameAs     (frame, wxBottom);
- 
+
    frame-text_window-SetConstraints(c3);
  @endcode
- 
- 
+
+
  @section panelitemlayoutexample Example 2: panel item layout
- 
+
  This example sizes a button width to 80 percent of the panel width, and centres
  it horizontally. A listbox and multitext item are placed below it. The listbox
  takes up 40 percent of the panel width, and the multitext item takes up
  the remainder of the width. Margins of 5 pixels are used.
- 
+
  @code
  // Create some panel items
    wxButton *btn1 = new wxButton(frame-panel, -1, "A button") ;
- 
+
    wxLayoutConstraints *b1 = new wxLayoutConstraints;
    b1-centreX.SameAs    (frame-panel, wxCentreX);
    b1-top.SameAs        (frame-panel, wxTop, 5);
    b1-width.PercentOf   (frame-panel, wxWidth, 80);
    b1-height.PercentOf  (frame-panel, wxHeight, 10);
    btn1-SetConstraints(b1);
- 
+
    wxListBox *list = new wxListBox(frame-panel, -1, "A list",
                                    wxPoint(-1, -1), wxSize(200, 100));
- 
+
    wxLayoutConstraints *b2 = new wxLayoutConstraints;
    b2-top.Below         (btn1, 5);
    b2-left.SameAs       (frame-panel, wxLeft, 5);
    b2-width.PercentOf   (frame-panel, wxWidth, 40);
    b2-bottom.SameAs     (frame-panel, wxBottom, 5);
    list-SetConstraints(b2);
- 
+
    wxTextCtrl *mtext = new wxTextCtrl(frame-panel, -1, "Multiline text", "Some text",
                          wxPoint(-1, -1), wxSize(150, 100), wxTE_MULTILINE);
- 
+
    wxLayoutConstraints *b3 = new wxLayoutConstraints;
    b3-top.Below         (btn1, 5);
    b3-left.RightOf      (list, 5);
@@ -178,7 +178,7 @@
    b3-bottom.SameAs     (frame-panel, wxBottom, 5);
    mtext-SetConstraints(b3);
  @endcode
- 
+
  */
- 
- 
+
+

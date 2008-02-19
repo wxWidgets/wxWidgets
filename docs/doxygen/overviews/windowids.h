@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page windowids_overview Window IDs overview
- 
+
  @b See Also
  #wxIdManager
  wxWindow::NewControlId
@@ -17,14 +17,14 @@
  #Introduction
  @ref windowidstypes_overview
  @ref windowidsusing_overview
- 
- 
+
+
  @section windowidsoverviewintro Introduction
- 
+
  Various contols and other parts of wxWidgets need an ID.  Sometimes the
  ID may be directly provided by the use or have a predefined value, such as
  @c wxID_OPEN. Often, however, the value of the ID is unimportant and is
- created automatically by calling wxWindow::NewControlId 
+ created automatically by calling wxWindow::NewControlId
  or by passing @c wxID_ANY as the ID of an object.
  There are two ways to generate an ID.  One way, is to start at a negative number,
  and for each new ID, return the next smallest number.  This is fine for systems
@@ -42,9 +42,9 @@
  another.  This is accomplished by keeping a reference count for each of the IDs
  that can possibly be returned by wxWindow::NewControlId.
  Other IDs are not reference counted.
- 
+
  @section windowidsoverviewtypes Data types
- 
+
  A wxWindowID is just the integer type for a window ID.  It should be used almost
  everywhere.  To help keep track of the count for the automatically generated IDs,
  a new type, wxWindowIDRef exists, that can take the place of wxWindowID where needed.
@@ -61,15 +61,15 @@
  wxWindowIDRef can store both automatic IDs from wxWindow::NewControlId
  as well as normal IDs.  Reference counting is only done for the automatic IDs.  Also,
  wxWindowIDRef has conversion operators that allow it to be treated just like a wxWindowID.
- 
+
  @section windowidsoverviewusing Using wxWindowIDRef
- 
+
  A wxWindowIDRef should be used in place of a wxWindowID where you want to make sure the
  ID is not created again by wxWindow::NewControlId
  at least until the wxWindowIDRef is destroyed, usually when the associated object is destroyed.
  This is done already for windows, menu items, and tool bar items.
  It should only be used in the main thread, as it is not thread safe.
- 
+
  */
- 
- 
+
+

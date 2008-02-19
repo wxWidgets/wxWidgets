@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page unixprinting_overview Printing under Unix (GTK+)
- 
+
  Printing under Unix has always been a cause of problems as Unix
  does not provide a standard way to display text and graphics
  on screen and print it to a printer using the same application
@@ -33,8 +33,8 @@
  Note that the application will not require the GNOME print libraries
  to be installed in order to run (there will be no dependency on
  these libraries).
- In version GTK+ 2.10, support for printing has been added to GTK+ 
- itself. Beginning with version wxWidgets 2.9.X, the GTK+ port of 
+ In version GTK+ 2.10, support for printing has been added to GTK+
+ itself. Beginning with version wxWidgets 2.9.X, the GTK+ port of
  wxWidgets can make use of this feature
  if wxWidgets is configured accordingly and if the GTK+ version is = 2.10.
  You need to configure wxWidgets with the @e configure --with-gtkprint
@@ -45,7 +45,7 @@
  Note that the application will not require a GTK+ version = 2.10
  to be installed in order to run (there will be no dependency on
  this version).
- 
+
  */
- 
- 
+
+

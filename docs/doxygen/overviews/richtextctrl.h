@@ -7,25 +7,25 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page richtextctrl_overview wxRichTextCtrl overview
- 
+
  @b Major classes: #wxRichTextCtrl, #wxRichTextBuffer, #wxRichTextEvent
  @b Helper classes: #wxTextAttr, #wxRichTextRange
- @b File handler classes: #wxRichTextFileHandler, #wxRichTextHTMLHandler, 
+ @b File handler classes: #wxRichTextFileHandler, #wxRichTextHTMLHandler,
  #wxRichTextXMLHandler
- @b Style classes: #wxRichTextCharacterStyleDefinition, 
- #wxRichTextParagraphStyleDefinition, 
- #wxRichTextListStyleDefinition, 
+ @b Style classes: #wxRichTextCharacterStyleDefinition,
+ #wxRichTextParagraphStyleDefinition,
+ #wxRichTextListStyleDefinition,
  #wxRichTextStyleSheet
- @b Additional controls: #wxRichTextStyleComboCtrl, 
- #wxRichTextStyleListBox, 
+ @b Additional controls: #wxRichTextStyleComboCtrl,
+ #wxRichTextStyleListBox,
  #wxRichTextStyleListCtrl
- @b Printing classes: #wxRichTextPrinting, 
- #wxRichTextPrintout, 
+ @b Printing classes: #wxRichTextPrinting,
+ #wxRichTextPrintout,
  #wxRichTextHeaderFooterData
- @b Dialog classes: #wxRichTextStyleOrganiserDialog, 
- #wxRichTextFormattingDialog, 
+ @b Dialog classes: #wxRichTextStyleOrganiserDialog,
+ #wxRichTextFormattingDialog,
  #wxSymbolPickerDialog
  wxRichTextCtrl provides a generic implementation of a rich text editor that can handle different character
  styles, paragraph formatting, and images. It's aimed at editing 'natural' language text - if you need an editor
@@ -58,62 +58,62 @@
  former case.
  A good way to understand wxRichTextCtrl's capabilities is to compile and run the
  sample, @c samples/richtext, and browse the code. The following screenshot shows the sample in action:
- 
+
  @b Example
  The following code is taken from the sample, and adds text and styles to a rich text control programmatically.
- 
- 
+
+
  @code
  wxRichTextCtrl* richTextCtrl = new wxRichTextCtrl(splitter, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxBORDER_NONE|wxWANTS_CHARS);
- 
+
      wxFont textFont = wxFont(12, wxROMAN, wxNORMAL, wxNORMAL);
      wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
      wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
- 
+
      wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
- 
+
      m_richTextCtrl-SetFont(font);
- 
+
      wxRichTextCtrl& r = richTextCtrl;
- 
+
      r.BeginSuppressUndo();
- 
+
      r.BeginParagraphSpacing(0, 20);
- 
+
      r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
      r.BeginBold();
- 
+
      r.BeginFontSize(14);
      r.WriteText(wxT("Welcome to wxRichTextCtrl, a wxWidgets control for editing and presenting styled text and images"));
      r.EndFontSize();
      r.Newline();
- 
+
      r.BeginItalic();
      r.WriteText(wxT("by Julian Smart"));
      r.EndItalic();
- 
+
      r.EndBold();
- 
+
      r.Newline();
      r.WriteImage(wxBitmap(zebra_xpm));
- 
+
      r.EndAlignment();
- 
+
      r.Newline();
      r.Newline();
- 
+
      r.WriteText(wxT("What can you do with this thing? "));
      r.WriteImage(wxBitmap(smiley_xpm));
      r.WriteText(wxT(" Well, you can change text "));
- 
+
      r.BeginTextColour(wxColour(255, 0, 0));
      r.WriteText(wxT("colour, like this red bit."));
      r.EndTextColour();
- 
+
      r.BeginTextColour(wxColour(0, 0, 255));
      r.WriteText(wxT(" And this blue bit."));
      r.EndTextColour();
- 
+
      r.WriteText(wxT(" Naturally you can make things "));
      r.BeginBold();
      r.WriteText(wxT("bold "));
@@ -124,57 +124,57 @@
      r.BeginUnderline();
      r.WriteText(wxT("or underlined."));
      r.EndUnderline();
- 
+
      r.BeginFontSize(14);
      r.WriteText(wxT(" Different font sizes on the same line is allowed, too."));
      r.EndFontSize();
- 
+
      r.WriteText(wxT(" Next we'll show an indented paragraph."));
- 
+
      r.BeginLeftIndent(60);
      r.Newline();
- 
+
      r.WriteText(wxT("Indented paragraph."));
      r.EndLeftIndent();
- 
+
      r.Newline();
- 
+
      r.WriteText(wxT("Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."));
- 
+
      r.BeginLeftIndent(100, -40);
      r.Newline();
- 
+
      r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter."));
      r.EndLeftIndent();
- 
+
      r.Newline();
- 
+
      r.WriteText(wxT("Numbered bullets are possible, again using subindents:"));
- 
+
      r.BeginNumberedBullet(1, 100, 60);
      r.Newline();
- 
+
      r.WriteText(wxT("This is my first item. Note that wxRichTextCtrl doesn't automatically do numbering, but this will be added later."));
      r.EndNumberedBullet();
- 
+
      r.BeginNumberedBullet(2, 100, 60);
      r.Newline();
- 
+
      r.WriteText(wxT("This is my second item."));
      r.EndNumberedBullet();
- 
+
      r.Newline();
- 
+
      r.WriteText(wxT("The following paragraph is right-indented:"));
- 
+
      r.BeginRightIndent(200);
      r.Newline();
- 
+
      r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
      r.EndRightIndent();
- 
+
      r.Newline();
- 
+
      wxArrayInt tabs;
      tabs.Add(400);
      tabs.Add(600);
@@ -184,42 +184,42 @@
      attr.SetFlags(wxTEXT_ATTR_TABS);
      attr.SetTabs(tabs);
      r.SetDefaultStyle(attr);
-     
+
      r.WriteText(wxT("This line contains tabs:\tFirst tab\tSecond tab\tThird tab"));
- 
+
      r.Newline();
      r.WriteText(wxT("Other notable features of wxRichTextCtrl include:"));
- 
+
      r.BeginSymbolBullet(wxT('*'), 100, 60);
      r.Newline();
      r.WriteText(wxT("Compatibility with wxTextCtrl API"));
      r.EndSymbolBullet();
- 
+
      r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!"));
- 
+
      r.EndSuppressUndo();
  @endcode
- 
- 
+
+
  @ref topic19_overview
  @ref richtextctrldialogs_overview
  @ref topic22_overview
  @ref topic23_overview
- 
- 
+
+
  @section topic19 Programming with wxRichTextCtrl
- 
- 
+
+
  @section topic20 Starting to use wxRichTextCtrl
- 
+
  You need to include @c wx/richtext/richtextctrl.h in your source, and link
  with the appropriate wxWidgets library with @c richtext suffix. Put the rich text
  library first in your link line to avoid unresolved symbols.
  Then you can create a wxRichTextCtrl, with the wxWANT_CHARS style if you want tabs to
  be processed by the control rather than being used for navigation between controls.
- 
+
  @section topic21 wxRichTextCtrl and styles
- 
+
  Styling attributes are represented by #wxTextAttr.
  When setting a style, the flags of the attribute object determine which
  attributes are applied. When querying a style, the passed flags are ignored
@@ -229,8 +229,8 @@
  the content may be responsible for contributing different attributes to the final
  style you see on the screen.
  There are four main notions of style within a control:
- 
- 
+
+
   @b Basic style: the fundamental style of a control, onto which any other
  styles are layered. It provides default attributes, and changing the basic style
  may immediately change the look of the content depending on what other styles
@@ -244,20 +244,20 @@
  to wxRichTextCtrl::SetStyleEx.
   @b Character style: characters within each paragraph can have attributes.
  A single character, or a run of characters, can have a particular set of attributes.
- The character style can be with wxRichTextCtrl::SetStyle or 
+ The character style can be with wxRichTextCtrl::SetStyle or
  wxRichTextCtrl::SetStyleEx.
   @b Default style: this is the 'current' style that determines the
  style of content that is subsequently typed, pasted or programmatically inserted.
  The default style is set with wxRichTextCtrl::SetDefaultStyle.
- 
- 
+
+
  What you see on the screen is the dynamically @e combined style, found by merging
  the first three of the above style types (the fourth is only a guide for future content
  insertion and therefore does not affect the currently displayed content).
  To make all this more concrete, here are examples of where you might set these different
  styles:
- 
- 
+
+
   You might set the @b basic style to have a Times Roman font in 12 point,
  left-aligned, with two millimetres of spacing after each paragraph.
   You might set the @b paragraph style (for one particular paragraph) to
@@ -265,14 +265,14 @@
   You might set the @b character style of one particular word to bold.
   You might set the @b default style to be underlined, for subsequent
  inserted text.
- 
- 
+
+
  Naturally you can do any of these things either using your own UI, or programmatically.
  The basic wxTextCtrl doesn't make the same distinctions as wxRichTextCtrl regarding
  attribute storage. So we need finer control when setting and retrieving
  attributes. wxRichTextCtrl::SetStyleEx takes a @e flags parameter:
- 
- 
+
+
   wxRICHTEXT_SETSTYLE_OPTIMIZE specifies that the style should be changed only if
  the combined attributes are different from the attributes for the current object. This is important when
  applying styling that has been edited by the user, because he has just edited the @e combined (visible)
@@ -283,8 +283,8 @@
   wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY specifies that only content objects (text or images) within the given range
  should take on the attributes.
   wxRICHTEXT_SETSTYLE_WITH_UNDO specifies that the operation should be undoable.
- 
- 
+
+
  It's great to be able to change arbitrary attributes in a wxRichTextCtrl, but
  it can be unwieldy for the user or programmer to set attributes separately. Word processors have collections
  of styles that you can tailor or use as-is, and this means that you can set a heading with one click
@@ -301,9 +301,9 @@
  It relies on the fact that when you apply a named style, the style definition name is recorded in the
  content. So ApplyStyleSheet works by finding the paragraph attributes with style names and re-applying the definition's
  attributes to the paragraph. Currently, this works with paragraph and list style definitions only.
- 
+
  @section wxrichtextctrldialogs wxRichTextCtrl dialogs
- 
+
  wxRichTextCtrl comes with standard dialogs to make it easier to implement
  text editing functionality.
  #wxRichTextFormattingDialog can be used
@@ -323,9 +323,9 @@
  #wxSymbolPickerDialog lets the user insert a symbol from
  a specified font. It has no wxRichTextCtrl dependencies besides being included in
  the rich text library.
- 
+
  @section topic22 How wxRichTextCtrl is implemented
- 
+
  Data representation is handled by wxRichTextBuffer, and a wxRichTextCtrl
  always has one such buffer.
  The content is represented by a hierarchy of objects, all derived from
@@ -357,25 +357,25 @@
  to several objects with the same style where just one would do. So
  a Defragment function is called when updating the control's display, to ensure that
  the minimum number of objects is used.
- 
+
  @section topic23 wxRichTextCtrl roadmap
- 
+
  @b Bugs
  This is an incomplete list of bugs.
- 
- 
+
+
   Moving the caret up at the beginning of a line sometimes incorrectly positions the
  caret.
   As the selection is expanded, the text jumps slightly due to kerning differences between
  drawing a single text string versus drawing several fragments separately. This could
  be improved by using wxDC::GetPartialTextExtents to calculate exactly where the separate fragments
  should be drawn. Note that this problem also applies to separation of text fragments due to difference in their attributes.
- 
- 
+
+
  @b Features
  This is a list of some of the features that have yet to be implemented. Help with them will be appreciated.
- 
- 
+
+
   RTF input and output
   Conversion from HTML
   Open Office input and output
@@ -387,12 +387,12 @@
   Borders
   Text frames
   Justified text, in print/preview at least
- 
- 
+
+
  There are also things that could be done to take advantage of the underlying text capabilities of the platform;
  higher-level text formatting APIs are available on some platforms, such as Mac OS X, and some of translation from
  high level to low level wxDC API is unnecessary. However this would require additions to the wxWidgets API.
- 
+
  */
- 
- 
+
+

@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page referencenotes_overview Notes on using the reference
- 
+
  In the descriptions of the wxWidgets classes and their member
  functions, note that descriptions of inherited member functions are not
  duplicated in derived classes unless their behaviour is different. So in
@@ -26,7 +26,7 @@
  used by wxWidgets.
  The member functions are given in alphabetical order except for
  constructors and destructors which appear first.
- 
+
  */
- 
- 
+
+

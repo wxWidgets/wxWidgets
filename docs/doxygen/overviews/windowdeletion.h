@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page windowdeletion_overview Window deletion overview
- 
+
  Classes: #wxCloseEvent, #wxWindow
  Window deletion can be a confusing subject, so this overview is provided
  to help make it clear when and how you delete windows, or respond to user requests
@@ -24,7 +24,7 @@
  (wxCloseEvent::CanVeto returns @false), the window should always be destroyed, otherwise there is the option to
  ignore the request, or maybe wait until the user has answered a question
  before deciding whether it is safe to close. The handler for EVT_CLOSE should
- signal to the calling code if it does not destroy the window, by calling 
+ signal to the calling code if it does not destroy the window, by calling
  wxCloseEvent::Veto. Calling this provides useful information
  to the calling code.
  The wxCloseEvent handler should only call wxWindow::Destroy to
@@ -65,7 +65,7 @@
  or not delete the window.
  To update your code, you should provide an event table entry in your frame or
  dialog, using the EVT_CLOSE macro. The event handler function might look like this:
- 
+
  @code
  void MyFrame::OnCloseWindow(wxCloseEvent& event)
    {
@@ -73,10 +73,10 @@
      {
        wxMessageDialog* dialog = new wxMessageDialog(this,
          "Save changed data?", "My app", wxYES_NO|wxCANCEL);
- 
+
        int ans = dialog-ShowModal();
        dialog-Destroy();
- 
+
        switch (ans)
        {
          case wxID_YES:      // Save, then destroy, quitting app
@@ -97,7 +97,7 @@
      }
    }
  @endcode
- 
+
  @b How do I exit the application gracefully?
  A wxWidgets application automatically exits when the last top level window
  (#wxFrame or #wxDialog), is destroyed. Put
@@ -113,7 +113,7 @@
  close event handlers, though you can implement them if you wish. For consistency,
  continue to use the wxWindow::Destroy function instead
  of the @b delete operator when deleting these kinds of windows explicitly.
- 
+
  */
- 
- 
+
+

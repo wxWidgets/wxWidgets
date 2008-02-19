@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page aui_overview wxAUI overview
- 
+
  Class: #wxAuiManager, #wxAuiPaneInfo
  wxAUI stands for Advanced User Interface and the wxAUI framework
  aims to give its user a cutting edge interface for use with the
@@ -44,7 +44,7 @@
  platforms. Use existing wxWidgets code where possible, such as sizer
  implementation for frame management. Use classes included in wxCore
  and wxBase only. Use standard wxWidgets coding conventions.
- 
+
  */
- 
- 
+
+

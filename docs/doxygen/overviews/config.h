@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page config_overview wxConfig classes overview
- 
+
  Classes: #wxConfig
  This overview briefly describes what the config classes are and what they are
  for. All the details about how to use them may be found in the description of
@@ -20,16 +20,16 @@
  information. They were especially designed for this usage and, although may
  probably be used for many other things as well, should be limited to it. It
  means that this information should be:
- 
- 
+
+
   Typed, i.e. strings or numbers for the moment. You can not store
  binary data, for example.
   Small. For instance, it is not recommended to use the Windows
  registry for amounts of data more than a couple of kilobytes.
   Not performance critical, neither from speed nor from a memory
  consumption point of view.
- 
- 
+
+
  On the other hand, the features provided make them very useful for storing all
  kinds of small to medium volumes of hierarchically-organized, heterogeneous
  data. In short, this is a place where you can conveniently stuff all your data
@@ -41,7 +41,7 @@
  configuration files. Other (future) implementations of wxConfigBase might also
  understand GTK resource files or their analogues on the KDE side.
  In any case, each implementation of wxConfigBase does its best to
- make the data look the same way everywhere. Due to limitations of the underlying 
+ make the data look the same way everywhere. Due to limitations of the underlying
  physical storage, it may not implement 100% of the base class functionality.
  There are groups of entries and the entries themselves. Each entry contains either a string or a number
  (or a boolean value; support for other types of data such as dates or
@@ -50,9 +50,9 @@
  path are the group names, and each name may contain an arbitrary number of entries
  and subgroups. The path components are @b always separated with a slash,
  even though some implementations use the backslash internally. Further
- details (including how to read/write these entries) may be found in 
+ details (including how to read/write these entries) may be found in
  the documentation for #wxConfigBase.
- 
+
  */
- 
- 
+
+

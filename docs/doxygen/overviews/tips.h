@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page tips_overview wxTipProvider overview
- 
+
  Many "modern" Windows programs have a feature (some would say annoyance) of
  presenting the user tips at program startup. While this is probably useless to
  the advanced users of the program, the experience shows that the tips may be
@@ -17,7 +17,7 @@
  For a wxWidgets programmer, implementing this feature is extremely easy. To
  show a tip, it is enough to just call #wxShowTip function
  like this:
- 
+
  @code
  if ( ...show tips at startup?... )
      {
@@ -26,13 +26,13 @@
          delete tipProvider;
      }
  @endcode
- 
+
  Of course, you need to get the text of the tips from somewhere - in the example
  above, the text is supposed to be in the file tips.txt from where it is read by
  the @e tip provider. The tip provider is just an object of a class deriving
  from #wxTipProvider. It has to implement one pure
  virtual function of the base class: #GetTip.
- In the case of the tip provider created by 
+ In the case of the tip provider created by
  #wxCreateFileTipProvider, the tips are just
  the lines of the text file.
  If you want to implement your own tip provider (for example, if you wish to
@@ -44,33 +44,33 @@
  also need to remember whether to show tips or not (you shouldn't do it if the
  user unchecked "Show tips on startup" checkbox in the dialog), you will
  probably want to store both the index of the
- last shown tip (as returned by 
+ last shown tip (as returned by
  wxTipProvider::GetCurrentTip and the flag
  telling whether to show the tips at startup at all.
- In a tips.txt file, lines that begin with a # character are considered comments 
- and are automatically skipped. Blank lines and lines only having spaces are also 
+ In a tips.txt file, lines that begin with a # character are considered comments
+ and are automatically skipped. Blank lines and lines only having spaces are also
  skipped.
- You can easily add runtime-translation capacity by placing each line of the 
- tips.txt file inside the usual translation macro. For example, your tips.txt 
+ You can easily add runtime-translation capacity by placing each line of the
+ tips.txt file inside the usual translation macro. For example, your tips.txt
  file would look like this:
- 
+
  @code
  _("This is my first tip")
  _("This is my second tip")
  @endcode
- 
- Now add your tips.txt file into the list of files that gettext searches 
- for translatable strings. The tips will thus get included into your 
- generated .po file catalog and be translated at runtime along with the rest of 
- your application's translatable strings. 
- Note1: Each line in the tips.txt file needs to strictly begin with exactly the 
- 3 characters of underscore-parenthesis-doublequote, and end with 
- doublequote-parenthesis, as shown above. 
+
+ Now add your tips.txt file into the list of files that gettext searches
+ for translatable strings. The tips will thus get included into your
+ generated .po file catalog and be translated at runtime along with the rest of
+ your application's translatable strings.
+ Note1: Each line in the tips.txt file needs to strictly begin with exactly the
+ 3 characters of underscore-parenthesis-doublequote, and end with
+ doublequote-parenthesis, as shown above.
  Note2: Remember to escape any doublequote characters within the tip string with
  a backslash-doublequote.
- See the dialogs program in your samples folder for a working example inside a 
+ See the dialogs program in your samples folder for a working example inside a
  program.
- 
+
  */
- 
- 
+
+

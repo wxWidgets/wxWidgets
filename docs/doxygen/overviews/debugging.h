@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page debugging_overview Debugging overview
- 
+
  Classes, functions and macros: #wxDebugContext, #wxObject, #wxLog,
  @ref logfunctions_overview, @ref debugmacros_overview
  Various classes, functions and macros are provided in wxWidgets to help you debug
@@ -41,12 +41,12 @@
  underwrites (writing to memory in front of the object).
  If debugging mode is on and the symbols wxUSE_GLOBAL_MEMORY_OPERATORS and
  wxUSE_DEBUG_NEW_ALWAYS are set to 1 in setup.h, 'new' is defined to be:
- 
- 
+
+
  @code
  #define new new(__FILE__,__LINE__)
  @endcode
- 
+
  All occurrences of 'new' in wxWidgets and your own application will use
  the overridden form of the operator with two extra arguments. This means that the debugging
  output (and error messages reporting memory problems) will tell you what
@@ -59,28 +59,28 @@
  #wxASSERT is used to pop up an error message box when a condition
  is not @true. You can also use #wxASSERT_MSG to supply your
  own helpful error message. For example:
- 
- 
+
+
  @code
  void MyClass::MyFunction(wxObject* object)
    {
        wxASSERT_MSG( (object != @NULL), "object should not be @NULL in MyFunction!" );
- 
+
        ...
    };
  @endcode
- 
- 
+
+
  The message box allows you to continue execution or abort the program. If you are running
  the application inside a debugger, you will be able to see exactly where the problem was.
  @b Logging functions
  You can use the #wxLogDebug and #wxLogTrace functions to output debugging information in debug mode;
  it will do nothing for non-debugging code.
  @ref debugcontext_overview
- 
- 
+
+
  @section wxdebugcontextoverview wxDebugContext overview
- 
+
  @ref debugging_overview
  Class: #wxDebugContext
  wxDebugContext is a class for performing various debugging and memory tracing
@@ -93,27 +93,27 @@
  Check to check memory blocks for integrity.
  Here's an example of use. The SetCheckpoint ensures that only the
  allocations done after the checkpoint will be dumped.
- 
+
  @code
  wxDebugContext::SetCheckpoint();
- 
+
    wxDebugContext::SetFile("c:\\temp\\debug.log");
- 
+
    wxString *thing = new wxString;
- 
+
    char *ordinaryNonObject = new char[1000];
- 
+
    wxDebugContext::Dump();
    wxDebugContext::PrintStatistics();
  @endcode
- 
+
  You can use wxDebugContext if __WXDEBUG__ is defined, or you can use it
  at any other time (if wxUSE_DEBUG_CONTEXT is set to 1 in setup.h). It is not disabled
  in non-debug mode because you may not wish to recompile wxWidgets and your entire application
  just to make use of the error logging facility.
  Note: wxDebugContext::SetFile has a problem at present, so use the default stream instead.
  Eventually the logging will be done through the wxLog facilities instead.
- 
+
  */
- 
- 
+
+

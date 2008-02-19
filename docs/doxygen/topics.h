@@ -25,15 +25,15 @@
 
 
  @section topics_starting Starting with wxWidgets
- 
+
  @li @ref referencenotes_overview
  @li @ref roughguide_overview
  @li @ref helloworld_overview
  @li @ref samples_overview
  @li @ref python_overview
- 
+
  @section topics_programming Programming with wxWidgets
- 
+
  @li @ref backwardcompatibility_overview
  @li @ref runtimeclass_overview
  @li @ref trefcount_overview
@@ -50,9 +50,9 @@
  @li @ref windowdeletion_overview
  @li @ref windowids_overview
  @li @ref envvars_overview
- 
+
  @section topics_nongui Overviews of non-GUI classes
- 
+
  @li @ref string_overview
  @li @ref bufferclasses_overview
  @li @ref datetime_overview
@@ -65,18 +65,18 @@
  @li @ref resyn_overview
  @li @ref arc_overview
  @li @ref ipc_overview
- 
+
  @section topics_drawing Drawing related classes
- 
+
  @li @ref dc_overview
  @li @ref bitmap_overview
  @li @ref font_overview
  @li @ref fontencoding_overview
  @li @ref printing_overview
  @li @ref unixprinting_overview
- 
+
  @section topics_gui Overviews of GUI classes
- 
+
  @li @ref sizer_overview
  @li @ref xrc_overview
  @li @ref windowsizing_overview
@@ -86,9 +86,9 @@
  @li @ref dataobject_overview
  @li @ref dnd_overview
  @li @ref constraints_overview
- 
+
  @section topics_indivctrl Overviews of individual controls
- 
+
  @li @ref html_overview
  @li @ref richtextctrl_overview
  @li @ref aui_overview

@@ -7,9 +7,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page docview_overview Document/view overview
- 
+
  Classes: #wxDocument, #wxView, #wxDocTemplate,
  #wxDocManager, #wxDocParentFrame, #wxDocChildFrame,
  #wxDocMDIParentFrame, #wxDocMDIChildFrame,
@@ -29,8 +29,8 @@
  The framework is highly modular, allowing overriding and replacement of functionality
  and objects to achieve more than the default behaviour.
  These are the overall steps involved in creating an application based on the document/view framework:
- 
- 
+
+
   Define your own document and view classes, overriding a minimal set of
  member functions e.g. for input/output, drawing and initialization.
   Define any subwindows
@@ -45,37 +45,37 @@
   Construct a single wxDocManager instance at the beginning of your wxApp::OnInit, and then
  as many wxDocTemplate instances as necessary to define relationships between documents and
  views. For a simple application, there will be just one wxDocTemplate.
- 
- 
+
+
  If you wish to implement Undo/Redo, you need to derive your own class(es) from wxCommand
  and use wxCommandProcessor::Submit instead of directly executing code. The framework will
  take care of calling Undo and Do functions as appropriate, so long as the wxID_UNDO and
  wxID_REDO menu items are defined in the view menu.
  Here are a few examples of the tailoring you can do to go beyond the default framework
  behaviour:
- 
- 
+
+
   Override wxDocument::OnCreateCommandProcessor to define a different Do/Undo strategy,
  or a command history editor.
   Override wxView::OnCreatePrintout to create an instance of a derived #wxPrintout
  class, to provide multi-page document facilities.
   Override wxDocManager::SelectDocumentPath to provide a different file selector.
   Limit the maximum number of open documents and the maximum number of undo commands.
- 
- 
+
+
  Note that to activate framework functionality, you need to use some or all of
  the wxWidgets @ref predefinedids_overview in your menus.
  @b wxPerl note: The document/view framework is available in wxPerl. To use it,
  you will need the following statements in your application code:
- 
- 
- 
+
+
+
  @code
  use Wx::DocView;
  use Wx ':docview';   # import constants (optional)
  @endcode
- 
- 
+
+
  @ref document_overview
  @ref view_overview
  @ref doctemplate_overview
@@ -84,10 +84,10 @@
  @ref commandprocessor_overview
  @ref filehistory_overview
  @ref predefinedids_overview
- 
- 
+
+
  @section wxdocumentoverview wxDocument overview
- 
+
  @ref docview_overview
  Class: #wxDocument
  The wxDocument class can be used to model an application's file-based
@@ -117,9 +117,9 @@
  If you do not wish to use the wxWidgets method of creating document
  objects dynamically, you must override wxDocTemplate::CreateDocument
  to return an instance of the appropriate class.
- 
+
  @section wxviewoverview wxView overview
- 
+
  @ref docview_overview
  Class: #wxView
  The wxView class can be used to model the viewing and editing component of
@@ -138,9 +138,9 @@
  If you do not wish to use the wxWidgets method of creating view
  objects dynamically, you must override wxDocTemplate::CreateView
  to return an instance of the appropriate class.
- 
+
  @section wxdoctemplateoverview wxDocTemplate overview
- 
+
  @ref docview_overview
  Class: #wxDocTemplate
  The wxDocTemplate class is used to model the relationship between a
@@ -176,9 +176,9 @@
  objects dynamically, you must override wxDocTemplate::CreateDocument
  and wxDocTemplate::CreateView to return instances of the appropriate class.
  @e NOTE: the document template has nothing to do with the C++ template construct.
- 
+
  @section wxdocmanageroverview wxDocManager overview
- 
+
  @ref docview_overview
  Class: #wxDocManager
  The wxDocManager class is part of the document/view framework supported by wxWidgets,
@@ -192,9 +192,9 @@
  before any documents, views or templates are manipulated.
  There may be multiple wxDocManager instances in an application.
  See the example application in @c samples/docview.
- 
+
  @section wxcommandoverview wxCommand overview
- 
+
  @ref docview_overview
  Classes: #wxCommand, #wxCommandProcessor
  wxCommand is a base class for modelling an application command,
@@ -214,17 +214,17 @@
  and replays commands.
  An application can derive a new class for every command, or, more likely, use
  one class parameterized with an integer or string command identifier.
- 
+
  @section wxcommandprocessoroverview wxCommandProcessor overview
- 
+
  @ref docview_overview
  Classes: #wxCommandProcessor, #wxCommand
  wxCommandProcessor is a class that maintains a history of wxCommand
  instances, with undo/redo functionality built-in. Derive a new class from this
  if you want different behaviour.
- 
+
  @section wxfilehistoryoverview wxFileHistory overview
- 
+
  @ref docview_overview
  Classes: #wxFileHistory, #wxDocManager
  wxFileHistory encapsulates functionality to record the last few files visited, and
@@ -245,19 +245,19 @@
  @c wxID_FILE1 to @c wxID_FILE9.
  In order to respond to a file load command from one of these identifiers,
  you need to handle them using an event handler, for example:
- 
- 
+
+
  @code
  BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
      EVT_MENU(wxID_EXIT, wxDocParentFrame::OnExit)
      EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, wxDocParentFrame::OnMRUFile)
  END_EVENT_TABLE()
- 
+
  void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
  {
      Close();
  }
- 
+
  void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
  {
        wxString f(m_docManager-GetHistoryFile(event.GetId() - wxID_FILE1));
@@ -265,16 +265,16 @@
          (void)m_docManager-CreateDocument(f, wxDOC_SILENT);
  }
  @endcode
- 
- 
- 
+
+
+
  @section predefinedids wxWidgets predefined command identifiers
- 
+
  To allow communication between the application's menus and the
  document/view framework, several command identifiers are predefined for you
  to use in menus.
- 
- 
+
+
   wxID_OPEN (5000)
   wxID_CLOSE (5001)
   wxID_NEW (5002)
@@ -288,7 +288,7 @@
   wxID_PRINT (5010)
   wxID_PRINT_SETUP (5011)
   wxID_PREVIEW (5012)
- 
+
  */
- 
- 
+
+

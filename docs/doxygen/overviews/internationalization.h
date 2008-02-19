@@ -7,15 +7,15 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*!
- 
+
  @page internationalization_overview Internationalization
- 
+
  Although internationalization of an application (i18n for short) involves far
  more than just translating its text messages to another message - date, time and
  currency formats need changing too, some languages are written left to right
  and others right to left, character encoding may differ and many other things
  may need changing too - it is a necessary first step. wxWidgets provides
- facilities for message translation with its 
+ facilities for message translation with its
  #wxLocale class and is itself fully translated into several
  languages. Please consult wxWidgets home page for the most up-to-date
  translations - and if you translate it into one of the languages not done
@@ -34,10 +34,10 @@
  with @e msgfmt program (part of gettext package) and have the extension .mo.
  Only the binary files are needed during program execution.
  The program i18n involves several steps:
- 
- 
-  Translating the strings in the program text using 
- #wxGetTranslation or equivalently the 
+
+
+  Translating the strings in the program text using
+ #wxGetTranslation or equivalently the
  #_() macro.
   Extracting the strings to be translated from the program: this uses the
  work done in the previous step because @c xgettext program used for string
@@ -51,7 +51,7 @@
  language(s). It involves editing the .po file.
   Compiling the .po file into .mo file to be used by the program.
   Installing the .mo files with your application in the appropriate
- location for the target system which is the one returned by 
+ location for the target system which is the one returned by
  wxStandardPaths::GetLocalizedResourcesDir(wxStandardPaths::ResourceCat_Messages).
  If the message catalogs are not installed in this default location you may
  explicitly use #AddCatalogLookupPathPrefix() to
@@ -59,8 +59,8 @@
  default directory.
   Setting the appropriate locale in your program to use the strings for the
  given language: see #wxLocale.
- 
- 
+
+
  See also the http://www.gnu.org/software/gettext/manual/gettext.html.
  See also @ref nonenglish_overview.
  It focuses on handling charsets related problems.
@@ -73,7 +73,7 @@
  code can recognise them even when translated. wxWidgets does not provide translations for all of these
  currently. wxWidgets does not yet handle translated special key names such as Backspace,
  End, Insert, etc.
- 
+
  */
- 
- 
+
+
