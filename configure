@@ -41048,9 +41048,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
     HAVE_DL_FUNCS=0
     HAVE_SHL_FUNCS=0
     if test "$wxUSE_DYNAMIC_LOADER" = "yes" -o "$wxUSE_DYNLIB_CLASS" = "yes" ; then
-        if test "$USE_DARWIN" = 1; then
-                        HAVE_DL_FUNCS=1
-        elif test "$USE_DOS" = 1; then
+        if test "$USE_DOS" = 1; then
             HAVE_DL_FUNCS=0
         else
 
@@ -41421,7 +41419,7 @@ fi
 done
 
 
-                if test "$HAVE_DL_FUNCS" = 1; then
+                        if test "$HAVE_DL_FUNCS" = 1; then
 
 for ac_func in dlerror
 do
@@ -41525,7 +41523,7 @@ _ACEOF
 
 else
 
-                    echo "$as_me:$LINENO: checking for dlerror in -ldl" >&5
+                        echo "$as_me:$LINENO: checking for dlerror in -ldl" >&5
 echo $ECHO_N "checking for dlerror in -ldl... $ECHO_C" >&6
 if test "${ac_cv_lib_dl_dlerror+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -41600,7 +41598,11 @@ fi
 fi
 done
 
+            fi
         fi
+
+                if test "$USE_DARWIN" = 1; then
+                        HAVE_DL_FUNCS=1
         fi
 
         if test "$HAVE_DL_FUNCS" = 0; then
