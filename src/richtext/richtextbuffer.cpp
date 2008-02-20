@@ -1766,7 +1766,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                         splitPoint ++;
 
                     // Find last object
-                    if (splitPoint == newPara->GetRange().GetEnd() || splitPoint == (newPara->GetRange().GetEnd() - 1))
+                    if (splitPoint == newPara->GetRange().GetEnd())
                         lastObject = newPara->GetChildren().GetLast()->GetData();
                     else
                         // lastObject is set as a side-effect of splitting. It's

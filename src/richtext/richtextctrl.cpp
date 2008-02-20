@@ -2339,7 +2339,7 @@ void wxRichTextCtrl::Remove(long from, long to)
 {
     SelectNone();
 
-    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(from, to), this);
+    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(from, to-1), this);
 
     LayoutContent();
     if (!IsFrozen())
