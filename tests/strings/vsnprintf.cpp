@@ -316,7 +316,7 @@ void VsnprintfTestCase::LongLong()
 
 #ifdef __WXMSW__
     CMP3("123456789", "%I64d", (wxLongLong_t)123456789);
-    CMP3("123456789abcdef", "%I64x", (wxLongLong_t)0x123456789abcdef);
+    CMP3("123456789abcdef", "%I64x", wxLL(0x123456789abcdef));
 #endif
 }
 #endif
@@ -334,7 +334,7 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
     //     size.
     //
     //     Note that in the second case (i.e. when we're using our own implementation),
-    //     wxVsnprintf() will always return the number of characters which 
+    //     wxVsnprintf() will always return the number of characters which
 
     // test without positionals
     CMPTOSIZE(buffer, size, "123 444444444 - test - 555 -0.666",
@@ -415,7 +415,7 @@ static void DoMisc(
 
     va_list ap;
     va_start(ap, format);
-    
+
     int n = wxVsnprintf(buf, max, format, ap);
 
     va_end(ap);
