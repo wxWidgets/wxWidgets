@@ -663,14 +663,17 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
     url.Replace(g_nativePathString, g_unixPathString);
     url.Replace(wxT("%"), wxT("%25")); // '%'s must be replaced first!
     url.Replace(wxT("#"), wxT("%23"));
-#ifndef __WXMSW__
-    // even though encoding the colon is (AFAICS) the right thing to do, we
-    // shouldn't do this under Windows because IE refuses to handle the
-    // resulting file:// URLs and Firefox and Opera (and probably all the other
-    // browsers as they need to be IE-compatible anyhow) open both the versions
-    // with ':' and "%3A", so leave the colon alone to keep IE happy
+
+    // notice that all colons *must* be encoded in the paths used by
+    // wxFileSystem even though this makes URLs produced by this method
+    // unusable with IE under Windows as it requires "file:///c:/foo.bar" and
+    // doesn't accept "file:///c%3a/foo.bar" -- but then we never made any
+    // guarantees about general suitability of the strings returned by this
+    // method, they must work with wxFileSystem only and not encoding the colon
+    // breaks handling of "http://wherever/whatever.zip#zip:filename.ext" URLs
+    // so we really can't do this without heavy changes to the parsing code
+    // here, in particular in GetRightLocation()
     url.Replace(wxT(":"), wxT("%3A"));
-#endif // __WXMSW__
     url = wxT("file:") + url;
     return url;
 }
