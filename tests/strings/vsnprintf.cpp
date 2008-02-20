@@ -376,7 +376,7 @@ void VsnprintfTestCase::LongLong()
 
 #ifdef __WXMSW__
     CMP3("123456789", "%I64d", (wxLongLong_t)123456789);
-    CMP3("123456789abcdef", "%I64x", (wxLongLong_t)0x123456789abcdef);
+    CMP3("123456789abcdef", "%I64x", wxLL(0x123456789abcdef));
 #endif
 }
 #endif
