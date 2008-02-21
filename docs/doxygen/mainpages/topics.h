@@ -27,81 +27,81 @@
 
  @section page_topics_starting Starting with wxWidgets
 
- @li @subpage referencenotes_overview
- @li @subpage roughguide_overview
- @li @subpage helloworld_overview
- @li @subpage samples_overview
- @li @subpage python_overview
+ @li @subpage overview_referencenotes
+ @li @subpage overview_roughguide
+ @li @subpage overview_helloworld
+ @li @subpage overview_samples
+ @li @subpage overview_python
 
  @section page_topics_programming Programming with wxWidgets
 
- @li @subpage backwardcompatibility_overview
- @li @subpage runtimeclass_overview
- @li @subpage trefcount_overview
- @li @subpage app_overview
- @li @subpage unicode_overview
- @li @subpage mbconvclasses_overview
- @li @subpage internationalization_overview
- @li @subpage nonenglish_overview
- @li @subpage debugging_overview
- @li @subpage log_overview
- @li @subpage eventhandling_overview
- @li @subpage exceptions_overview
- @li @subpage windowstyles_overview
- @li @subpage windowdeletion_overview
- @li @subpage windowids_overview
- @li @subpage envvars_overview
+ @li @subpage overview_backwardcompat
+ @li @subpage overview_runtimeclass
+ @li @subpage overview_trefcount
+ @li @subpage overview_app
+ @li @subpage overview_unicode
+ @li @subpage overview_mbconvclasses
+ @li @subpage overview_internationalization
+ @li @subpage overview_nonenglish
+ @li @subpage overview_debugging
+ @li @subpage overview_log
+ @li @subpage overview_eventhandling
+ @li @subpage overview_exceptions
+ @li @subpage overview_windowstyles
+ @li @subpage overview_windowdeletion
+ @li @subpage overview_windowids
+ @li @subpage overview_envvars
 
  @section page_topics_nongui Overviews of non-GUI classes
 
- @li @subpage string_overview
- @li @subpage bufferclasses_overview
- @li @subpage datetime_overview
- @li @subpage container_overview
- @li @subpage file_overview
- @li @subpage stream_overview
- @li @subpage thread_overview
- @li @subpage config_overview
- @li @subpage fs_overview
- @li @subpage resyn_overview
- @li @subpage arc_overview
- @li @subpage ipc_overview
+ @li @subpage overview_string
+ @li @subpage overview_bufferclasses
+ @li @subpage overview_datetime
+ @li @subpage overview_container
+ @li @subpage overview_file
+ @li @subpage overview_stream
+ @li @subpage overview_thread
+ @li @subpage overview_config
+ @li @subpage overview_fs
+ @li @subpage overview_resyn
+ @li @subpage overview_arc
+ @li @subpage overview_ipc
 
  @section page_topics_drawing Drawing related classes
 
- @li @subpage dc_overview
- @li @subpage bitmap_overview
- @li @subpage font_overview
- @li @subpage fontencoding_overview
- @li @subpage printing_overview
- @li @subpage unixprinting_overview
+ @li @subpage overview_dc
+ @li @subpage overview_bitmap
+ @li @subpage overview_font
+ @li @subpage overview_fontencoding
+ @li @subpage overview_printing
+ @li @subpage overview_unixprinting
 
  @section page_topics_gui Overviews of GUI classes
 
- @li @subpage sizer_overview
- @li @subpage xrc_overview
- @li @subpage windowsizing_overview
- @li @subpage scrolling_overview
- @li @subpage dialog_overview
- @li @subpage validator_overview
- @li @subpage dataobject_overview
- @li @subpage dnd_overview
- @li @subpage constraints_overview
+ @li @subpage overview_sizer
+ @li @subpage overview_xrc
+ @li @subpage overview_windowsizing
+ @li @subpage overview_scrolling
+ @li @subpage overview_dialog
+ @li @subpage overview_validator
+ @li @subpage overview_dataobject
+ @li @subpage overview_dnd
+ @li @subpage overview_constraints
 
  @section page_topics_indivctrl Overviews of individual controls
 
- @li @subpage html_overview
- @li @subpage richtextctrl_overview
- @li @subpage aui_overview
- @li @subpage commondialogs_overview
- @li @subpage toolbar_overview
- @li @subpage grid_overview
- @li @subpage treectrl_overview
- @li @subpage listctrl_overview
- @li @subpage splitterwindow_overview
- @li @subpage imagelist_overview
- @li @subpage bookctrl_overview
- @li @subpage tips_overview
- @li @subpage docview_overview
+ @li @subpage overview_html
+ @li @subpage overview_richtextctrl
+ @li @subpage overview_aui
+ @li @subpage overview_commondialogs
+ @li @subpage overview_toolbar
+ @li @subpage overview_grid
+ @li @subpage overview_treectrl
+ @li @subpage overview_listctrl
+ @li @subpage overview_splitterwindow
+ @li @subpage overview_imagelist
+ @li @subpage overview_bookctrl
+ @li @subpage overview_tips
+ @li @subpage overview_docview
 
 */

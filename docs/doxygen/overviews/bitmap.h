@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap
+// Name:        bitmap.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -173,6 +173,5 @@
  @b Note: bitmap handlers are not implemented on all platforms, and new ones rarely need
  to be implemented since wxImage can be used for loading most formats, as noted earlier.
 
- */
-
+*/
 
