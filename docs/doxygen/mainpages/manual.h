@@ -21,7 +21,7 @@
  @li @subpage page_multiplatform
  @li @subpage page_utils
  @li @subpage page_strategies
- @li @subpage page_libraries
+ @li @subpage page_libs
  @li @subpage page_constants
  @li @subpage page_categories
  @li @subpage page_topics
