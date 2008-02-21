@@ -6269,7 +6269,11 @@ bool wxRichTextAction::Do()
             m_buffer->UpdateRanges();
             m_buffer->Invalidate(wxRichTextRange(GetRange().GetStart(), GetRange().GetStart()));
 
-            UpdateAppearance(GetRange().GetStart()-1, true /* send update event */);
+            long caretPos = GetRange().GetStart()-1;
+            if (caretPos >= m_buffer->GetRange().GetEnd())
+                caretPos --;
+
+            UpdateAppearance(caretPos, true /* send update event */);
 
             wxRichTextEvent cmdEvent(
                 wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED,
