@@ -1842,11 +1842,11 @@ bool wxLocale::Init(int language, int flags)
         }
         else // language supported by Windows
         {
-            const wxUint32 lcid = info->GetLCID();
-
             // Windows CE doesn't have SetThreadLocale() and there doesn't seem
             // to be any equivalent
 #ifndef __WXWINCE__
+            const wxUint32 lcid = info->GetLCID();
+
             // change locale used by Windows functions
             ::SetThreadLocale(lcid);
 #endif
