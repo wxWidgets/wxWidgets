@@ -857,7 +857,7 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
                         int fillStyle)
 {
 #ifdef __WXWINCE__
-    wxDCBase::DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle);
+    wxDCImpl::DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle);
 #else
     WXMICROWIN_CHECK_HDC
 
@@ -1015,7 +1015,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
 {
 #ifdef  __WXWINCE__
     // WinCE does not support ::PolyBezier so use generic version
-    wxDCBase::DoDrawSpline(points);
+    wxDCImpl::DoDrawSpline(points);
 #else
     // quadratic b-spline to cubic bezier spline conversion
     //
