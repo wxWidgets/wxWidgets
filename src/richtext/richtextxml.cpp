@@ -706,7 +706,16 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
         int last = 0;
         const wxString& text = textObj.GetText();
         int len = (int) text.Length();
-        for (i = 0; i < len; i++)
+
+        if (len == 0)
+        {
+            i = 0;
+            OutputIndentation(stream, indent);
+            OutputString(stream, wxT("<") + objectName, convMem, convFile);
+            OutputString(stream, style + wxT(">"), convMem, convFile);
+            OutputString(stream, wxT("</text>"), convMem, convFile);
+        }
+        else for (i = 0; i < len; i++)
         {
             int c = (int) text[i];
             if (c < 32 && c != 9 && c != 10 && c != 13)
