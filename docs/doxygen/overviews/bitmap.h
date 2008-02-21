@@ -8,19 +8,23 @@
 
 /*!
 
- @page bitmap_overview Bitmaps and icons overview
+ @page overview_bitmap Bitmaps and icons overview
 
  Classes: #wxBitmap, #wxBitmapHandler, #wxIcon, #wxCursor.
+
  The wxBitmap class encapsulates the concept of a platform-dependent bitmap,
  either monochrome or colour. Platform-specific methods for creating a
  wxBitmap object from an existing file are catered for, and
  this is an occasion where conditional compilation will sometimes be
  required.
+
  A bitmap created dynamically or loaded from a file can be selected
  into a memory device context (instance of #wxMemoryDC). This
  enables the bitmap to be copied to a window or memory device context
  using wxDC::Blit, or to be used as a drawing surface.
+
  See #wxMemoryDC for an example of drawing onto a bitmap.
+
  All wxWidgets platforms support XPMs for small bitmaps and icons.
  You may include the XPM inline as below, since it's C code, or you
  can load it at run-time.
@@ -30,7 +34,9 @@
  @endcode
 
  Sometimes you wish to use a .ico resource on Windows, and XPMs on
- other platforms (for example to take advantage of Windows' support for multiple icon resolutions).
+ other platforms (for example to take advantage of Windows' support for 
+ multiple icon resolutions).
+
  A macro, #wxICON, is available which creates an icon using an XPM
  on the appropriate platform, or an icon resource on Windows.
 
@@ -72,104 +78,100 @@
  platform (unlike the code above which doesn't deal with wxMac, wxX11, ...) and
  are more short and clear than versions with @c #ifdefs. Even better,
  use the same XPMs on all platforms.
- @ref supportedbitmapformats_overview
- @ref bitmaphandlers_overview
+
+ @li @ref overview_bitmap_supportedformats
+ @li @ref overview_bitmap_handlers
 
 
- @section supportedbitmapformats Supported bitmap file formats
+ <hr>
+
+
+ @section overview_bitmap_supportedformats Supported bitmap file formats
 
  The following lists the formats handled on different platforms. Note
  that missing or partially-implemented formats are automatically supplemented
  by the #wxImage to load the data, and then converting
  it to wxBitmap form. Note that using wxImage is the preferred way to
  load images in wxWidgets, with the exception of resources (XPM-files or
- native Windows resources). Writing an image format handler for wxImage
- is also far easier than writing one for wxBitmap, because wxImage has
- exactly one format on all platforms whereas wxBitmap can store pixel data
- very differently, depending on colour depths and platform.
+ native Windows resources).
+
+ Writing an image format handler for wxImage is also far easier than writing 
+ one for wxBitmap, because wxImage has exactly one format on all platforms 
+ whereas wxBitmap can store pixel data very differently, depending on colour 
+ depths and platform.
+
  @b wxBitmap
  Under Windows, wxBitmap may load the following formats:
 
-
-  Windows bitmap resource (wxBITMAP_TYPE_BMP_RESOURCE)
-  Windows bitmap file (wxBITMAP_TYPE_BMP)
-  XPM data and file (wxBITMAP_TYPE_XPM)
-  All formats that are supported by the #wxImage class.
-
+  @li Windows bitmap resource (wxBITMAP_TYPE_BMP_RESOURCE)
+  @li Windows bitmap file (wxBITMAP_TYPE_BMP)
+  @li XPM data and file (wxBITMAP_TYPE_XPM)
+  @li All formats that are supported by the #wxImage class.
 
  Under wxGTK, wxBitmap may load the following formats:
 
-
-  XPM data and file (wxBITMAP_TYPE_XPM)
-  All formats that are supported by the #wxImage class.
-
+  @li XPM data and file (wxBITMAP_TYPE_XPM)
+  @li All formats that are supported by the #wxImage class.
 
  Under wxMotif and wxX11, wxBitmap may load the following formats:
 
-
-  XBM data and file (wxBITMAP_TYPE_XBM)
-  XPM data and file (wxBITMAP_TYPE_XPM)
-  All formats that are supported by the #wxImage class.
+  @li XBM data and file (wxBITMAP_TYPE_XBM)
+  @li XPM data and file (wxBITMAP_TYPE_XPM)
+  @li All formats that are supported by the #wxImage class.
 
 
  @b wxIcon
  Under Windows, wxIcon may load the following formats:
 
-
-  Windows icon resource (wxBITMAP_TYPE_ICO_RESOURCE)
-  Windows icon file (wxBITMAP_TYPE_ICO)
-  XPM data and file (wxBITMAP_TYPE_XPM)
-
+  @li Windows icon resource (wxBITMAP_TYPE_ICO_RESOURCE)
+  @li Windows icon file (wxBITMAP_TYPE_ICO)
+  @li XPM data and file (wxBITMAP_TYPE_XPM)
 
  Under wxGTK, wxIcon may load the following formats:
 
-
-  XPM data and file (wxBITMAP_TYPE_XPM)
-  All formats that are supported by the #wxImage class.
-
+  @li XPM data and file (wxBITMAP_TYPE_XPM)
+  @li All formats that are supported by the #wxImage class.
 
  Under wxMotif and wxX11, wxIcon may load the following formats:
 
-
-  XBM data and file (wxBITMAP_TYPE_XBM)
-  XPM data and file (wxBITMAP_TYPE_XPM)
-  All formats that are supported by the #wxImage class.
+  @li XBM data and file (wxBITMAP_TYPE_XBM)
+  @li XPM data and file (wxBITMAP_TYPE_XPM)
+  @li All formats that are supported by the #wxImage class.
 
 
  @b wxCursor
  Under Windows, wxCursor may load the following formats:
 
-
-  Windows cursor resource (wxBITMAP_TYPE_CUR_RESOURCE)
-  Windows cursor file (wxBITMAP_TYPE_CUR)
-  Windows icon file (wxBITMAP_TYPE_ICO)
-  Windows bitmap file (wxBITMAP_TYPE_BMP)
-
+  @li Windows cursor resource (wxBITMAP_TYPE_CUR_RESOURCE)
+  @li Windows cursor file (wxBITMAP_TYPE_CUR)
+  @li Windows icon file (wxBITMAP_TYPE_ICO)
+  @li Windows bitmap file (wxBITMAP_TYPE_BMP)
 
  Under wxGTK, wxCursor may load the following formats (in additional
  to stock cursors):
 
-
-  None (stock cursors only).
-
+  @li None (stock cursors only).
 
  Under wxMotif and wxX11, wxCursor may load the following formats:
 
-
-  XBM data and file (wxBITMAP_TYPE_XBM)
-
+  @li XBM data and file (wxBITMAP_TYPE_XBM)
 
 
- @section bitmaphandlers Bitmap format handlers
+
+ @section overview_bitmap_handlers Bitmap format handlers
 
  To provide extensibility, the functionality for loading and saving bitmap formats
  is not implemented in the wxBitmap class, but in a number of handler classes,
  derived from wxBitmapHandler. There is a static list of handlers which wxBitmap
- examines when a file load/save operation is requested. Some handlers are provided as standard, but if you
+ examines when a file load/save operation is requested. 
+
+ Some handlers are provided as standard, but if you
  have special requirements, you may wish to initialise the wxBitmap class with
  some extra handlers which you write yourself or receive from a third party.
- To add a handler object to wxBitmap, your application needs to include the header which implements it, and
- then call the static function wxBitmap::AddHandler.
+
+ To add a handler object to wxBitmap, your application needs to include the header
+ which implements it, and then call the static function wxBitmap::AddHandler.
+
  @b Note: bitmap handlers are not implemented on all platforms, and new ones rarely need
  to be implemented since wxImage can be used for loading most formats, as noted earlier.
 
