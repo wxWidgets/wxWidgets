@@ -9,7 +9,7 @@
 
 /*!
 
- @page wxusedef wxUSE Preprocessor symbols defined by wxWidgets
+ @page page_wxusedef wxUSE preprocessor symbols defined by wxWidgets
 
  This section documents the wxUSE preprocessor symbols used in the wxWidgets
  source, grouped by category (and sorted by alphabetical order inside each
@@ -17,326 +17,343 @@
  active or not depends on their value: if defined as @c 1, feature is active,
  otherwise it is disabled. Because of this these symbols should be always tested
  using @if and not @ifdef.
- 
- @li @ref wxusedefmulti
- @li @ref wxusedefunix
- @li @ref wxusedefx11
- @li @ref wxusedefgtk
- @li @ref wxusedefmac
- @li @ref wxusedefmotif
- @li @ref wxusedefcocoa
- @li @ref wxusedefos2
- @li @ref wxusedefmsw
- @li @ref wxusedefuniv
+
+ @li @ref page_wxusedef_multi
+ @li @ref page_wxusedef_unix
+ @li @ref page_wxusedef_x11
+ @li @ref page_wxusedef_gtk
+ @li @ref page_wxusedef_mac
+ @li @ref page_wxusedef_motif
+ @li @ref page_wxusedef_cocoa
+ @li @ref page_wxusedef_os2
+ @li @ref page_wxusedef_msw
+ @li @ref page_wxusedef_univ
 
 
  <hr>
 
 
- TODO: what can we use here instead of \twocolitem to keep text readable??
+
+ @section page_wxusedef_multi Generic wxUSE preprocessor symbols
+ 
+ @beginDefList
+ @itemdef{wxUSE_ABOUTDLG, Use wxAboutDialogInfo class.}
+ @itemdef{wxUSE_ACCEL}{Use wxAcceleratorTable/Entry classes and support for them in wxMenu, wxMenuBar.}
+ @itemdef{wxUSE_AFM_FOR_POSTSCRIPT, In wxPostScriptDC class use AFM (adobe font metrics) file for character widths.}
+ @itemdef{wxUSE_ANIMATIONCTRL, Use wxAnimationCtrl class.}
+ @itemdef{wxUSE_APPLE_IEEE, IEEE Extended to/from double routines; see src/common/extended.c file.}
+ @itemdef{wxUSE_ARCHIVE_STREAMS, Enable streams for archive formats.}
+ @itemdef{wxUSE_AUI, Use AUI (dockable windows) library.}
+ @itemdef{wxUSE_BASE64, Enables Base64 support.}
+ @itemdef{wxUSE_BITMAPCOMBOBOX, Use wxBitmapComboBox class.}
+ @itemdef{wxUSE_BMPBUTTON, Use wxBitmapButton class.}
+ @itemdef{wxUSE_BUSYINFO, Use wxBusyInfo class.}
+ @itemdef{wxUSE_BUTTON, Use wxButton class.}
+ @itemdef{wxUSE_CALENDARCTRL, Use wxCalendarCtrl class.}
+ @itemdef{wxUSE_CARET, Use wxCaret class.}
+ @itemdef{wxUSE_CHECKBOX, Use wxCheckBox class.}
+ @itemdef{wxUSE_CHECKLISTBOX, Use wxCheckListBox class.}
+ @itemdef{wxUSE_CHOICE, Use wxChoice class.}
+ @itemdef{wxUSE_CHOICEBOOK, Use wxChoicebook class.}
+ @itemdef{wxUSE_CHOICEDLG}{Use wxSingleChoiceDialog, or wxMultiChoiceDialog classes.}
+ @itemdef{wxUSE_CLIPBOARD, Use wxClipboard class.}
+ @itemdef{wxUSE_CMDLINE_PARSER, Use wxCmdLineParser class.}
+ @itemdef{wxUSE_COLLPANE, Use wxCollapsiblePane class.}
+ @itemdef{wxUSE_COLOURDLG, Use wxColourDialog class.}
+ @itemdef{wxUSE_COLOURPICKERCTRL, Use wxColourPickerCtrl class.}
+ @itemdef{wxUSE_COMBOBOX, Use wxComboBox class.}
+ @itemdef{wxUSE_COMBOCTRL, Use wxComboCtrl class.}
+ @itemdef{wxUSE_CONFIG, Use wxConfig and related classes.}
+ @itemdef{wxUSE_CONFIG_NATIVE, When enabled use native OS configuration instead of the wxFileConfig class.}
+ @itemdef{wxUSE_CONSOLE_EVENTLOOP, Enable event loop in console programs.}
+ @itemdef{wxUSE_CONSTRAINTS, Use wxLayoutConstraints}
+ @itemdef{wxUSE_CONTROLS, If set to $0$, no classes deriving from wxControl can be used.}
+ @itemdef{wxUSE_DATAOBJ, Use wxDataObject and related classes.}
+ @itemdef{wxUSE_DATAVIEWCTRL, Use wxDataViewCtrl class.}
+ @itemdef{wxUSE_DATEPICKCTRL, Use wxDatePickerCtrl class.}
+ @itemdef{wxUSE_DATETIME, Use wxDateTime and related classes.}
+ @itemdef{wxUSE_DBGHELP, Use wxDbgHelpDLL class.}
+ @itemdef{wxUSE_DEBUG_CONTEXT, Use wxDebugContext class.}
+ @itemdef{wxUSE_DEBUG_NEW_ALWAYS, See Debugging overview}
+ @itemdef{wxUSE_DEBUGREPORT, Use wxDebugReport class.}
+ @itemdef{wxUSE_DIALUP_MANAGER, Use wxDialUpManager and related classes.}
+ @itemdef{wxUSE_DIRDLG, Use wxDirDialog class.}
+ @itemdef{wxUSE_DIRPICKERCTRL, Use wxDirPickerCtrl class.}
+ @itemdef{wxUSE_DISPLAY, Use wxDisplay and related classes.}
+ @itemdef{wxUSE_DOC_VIEW_ARCHITECTURE, Use wxDocument and related classes.}
+ @itemdef{wxUSE_DRAG_AND_DROP, Use Drag and drop classes.}
+ @itemdef{wxUSE_DRAGIMAGE, Use wxDragImage class.}
+ @itemdef{wxUSE_DYNAMIC_LOADER, Use wxPluginManager and related classes. Requires wxDynamicLibrary}
+ @itemdef{wxUSE_DYNLIB_CLASS, Use wxDynamicLibrary}
+ @itemdef{wxUSE_EDITABLELISTBOX, Use wxEditableListBox class.}
+ @itemdef{wxUSE_EXCEPTIONS, Use exception handling.}
+ @itemdef{wxUSE_EXPAT, enable XML support using expat parser.}
+ @itemdef{wxUSE_EXTENDED_RTTI, Use extended RTTI, see also Runtime class information (RTTI)}
+ @itemdef{wxUSE_FFILE, Use wxFFile class.}
+ @itemdef{wxUSE_FILE, Use wxFile class.}
+ @itemdef{wxUSE_FILECONFIG, Use wxFileConfig class.}
+ @itemdef{wxUSE_FILECTRL, Use wxFileCtrl class.}
+ @itemdef{wxUSE_FILEDLG, Use wxFileDialog class.}
+ @itemdef{wxUSE_FILEPICKERCTRL, Use wxFilePickerCtrl class.}
+ @itemdef{wxUSE_FILESYSTEM, Use wxFileSystem and related classes.}
+ @itemdef{wxUSE_FINDREPLDLG, Use wxFindReplaceDialog class.}
+ @itemdef{wxUSE_FONTDLG, Use wxFontDialog class.}
+ @itemdef{wxUSE_FONTENUM, Use wxFontEnumerator class.}
+ @itemdef{wxUSE_FONTMAP, Use wxFontMapper class.}
+ @itemdef{wxUSE_FONTPICKERCTRL, Use wxFontPickerCtrl class.}
+ @itemdef{wxUSE_FS_ARCHIVE, Use virtual archive filesystems like wxArchiveFSHandler in wxFileSystem class.}
+ @itemdef{wxUSE_FS_INET, Use virtual HTTP/FTP filesystems like wxInternetFSHandler in wxFileSystem class.}
+ @itemdef{wxUSE_FS_ZIP, Please use wxUSE_FS_ARCHIVE instead.}
+ @itemdef{wxUSE_FSVOLUME, Use wxFSVolume class.}
+ @itemdef{wxUSE_GAUGE, Use wxGauge class.}
+ @itemdef{wxUSE_GENERIC_DRAGIMAGE, Used in wxDragImage sample.}
+ @itemdef{wxUSE_GENERIC_DRAWELLIPSE, See comment in wx/dc.h file.}
+ @itemdef{wxUSE_GEOMETRY, Use common geometry classes}
+ @itemdef{wxUSE_GIF, Use GIF wxImageHandler}
+ @itemdef{wxUSE_GLCANVAS, Enables OpenGL support.}
+ @itemdef{wxUSE_GLOBAL_MEMORY_OPERATORS, Override global operators @c new and @c delete to use wxWidgets memory leak detection}
+ @itemdef{wxUSE_GRAPHICS_CONTEXT, Use wxGraphicsContext and related classes.}
+ @itemdef{wxUSE_GRID, Use wxGrid and related classes.}
+ @itemdef{wxUSE_GUI, Use the GUI classes; if set to $0$ only non-GUI classes are available.}
+ @itemdef{wxUSE_HELP, Use wxHelpController and related classes.}
+ @itemdef{wxUSE_HTML, Use wxHtmlWindow and related classes.}
+ @itemdef{wxUSE_HYPERLINKCTRL, Use wxHyperlinkCtrl}
+ @itemdef{wxUSE_ICO_CUR, Support Windows ICO and CUR formats.}
+ @itemdef{wxUSE_IFF, Enables the wxImage handler for Amiga IFF images.}
+ @itemdef{wxUSE_IMAGE, Use wxImage and related classes.}
+ @itemdef{wxUSE_IMAGLIST, Use wxImageList class.}
+ @itemdef{wxUSE_INTL, Use wxLocale and related classes.}
+ @itemdef{wxUSE_IOSTREAMH, Use header "iostream.h" instead of "iostream".}
+ @itemdef{wxUSE_IPC, Use interprocess communication classes.}
+ @itemdef{wxUSE_IPV6, Use experimental wxIPV6address and related classes.}
+ @itemdef{wxUSE_JOYSTICK, Use wxJoystick class.}
+ @itemdef{wxUSE_LIBJPEG, Enables JPEG format support (requires libjpeg).}
+ @itemdef{wxUSE_LIBPNG, Enables PNG format support (requires libpng). Also requires wxUSE_ZLIB.}
+ @itemdef{wxUSE_LIBTIFF, Enables TIFF format support (requires libtiff).}
+ @itemdef{wxUSE_LISTBOOK, Use wxListbook class.}
+ @itemdef{wxUSE_LISTBOX, Use wxListBox class.}
+ @itemdef{wxUSE_LISTCTRL, Use wxListCtrl class.}
+ @itemdef{wxUSE_LOG, Use wxLog and related classes.}
+ @itemdef{wxUSE_LOG_DEBUG, Enabled when wxLog used with __WXDEBUG__ defined.}
+ @itemdef{wxUSE_LOG_DIALOG, Use wxLogDialog class.}
+ @itemdef{wxUSE_LOGGUI, Use wxLogGui class.}
+ @itemdef{wxUSE_LOGWINDOW, Use wxLogFrame class.}
+ @itemdef{wxUSE_LONGLONG, Use wxLongLong class.}
+ @itemdef{wxUSE_LONGLONG_NATIVE, Use native <tt>long long</tt> type in wxLongLong implementation.}
+ @itemdef{wxUSE_LONGLONG_WX, Use generic wxLongLong implementation.}
+ @itemdef{wxUSE_MDI}{Use wxMDIParentFrame, and wxMDIChildFrame}
+ @itemdef{wxUSE_MDI_ARCHITECTURE, Use MDI-based document-view classes.}
+ @itemdef{wxUSE_MEDIACTRL, Use wxMediaCtrl.}
+ @itemdef{wxUSE_MEMORY_TRACING, Use wxWidgets memory leak detection, not recommended if using another memory debugging tool.}
+ @itemdef{wxUSE_MENUS, Use wxMenu and related classes.}
+ @itemdef{wxUSE_METAFILE, Use wxMetaFile and related classes.}
+ @itemdef{wxUSE_MIMETYPE, Use wxFileType class.}
+ @itemdef{wxUSE_MINIFRAME, Use wxMiniFrame class.}
+ @itemdef{wxUSE_MOUSEWHEEL, Support mouse wheel events.}
+ @itemdef{wxUSE_MSGDLG}{Use wxMessageDialog class and wxMessageBox function.}
+ @itemdef{wxUSE_NATIVE_STATUSBAR, Use native wxStatusBar class.}
+ @itemdef{wxUSE_NOTEBOOK, Use wxNotebook and related classes.}
+ @itemdef{wxUSE_NUMBERDLG, Use wxNumberEntryDialog class.}
+ @itemdef{wxUSE_ODCOMBOBOX, Use wxOwnerDrawnComboBox class.}
+ @itemdef{wxUSE_ON_FATAL_EXCEPTION, Catch signals in wxApp::OnFatalException method.}
+ @itemdef{wxUSE_OPENGL, Please use wxUSE_GLCANVAS to test for enabled OpenGL support instead.}
+ @itemdef{wxUSE_OWNER_DRAWN, Use interface for owner-drawn GUI elements.}
+ @itemdef{wxUSE_PALETTE, Use wxPalette and related classes.}
+ @itemdef{wxUSE_PCX, Enables wxImage PCX handler.}
+ @itemdef{wxUSE_PNM, Enables wxImage PNM handler.}
+ @itemdef{wxUSE_POPUPWIN, Use wxPopupWindow class.}
+ @itemdef{wxUSE_POSTSCRIPT, Use wxPostScriptPrinter class.}
+ @itemdef{wxUSE_PRINTF_POS_PARAMS, Use wxVsnprintf which supports positional parameters.}
+ @itemdef{wxUSE_PRINTING_ARCHITECTURE, Enable printer classes.}
+ @itemdef{wxUSE_PROGRESSDLG, Enables progress dialog classes.}
+ @itemdef{wxUSE_PROTOCOL, Use wxProtocol and derived classes.}
+ @itemdef{wxUSE_PROTOCOL_FILE, Use wxFileProto class. (requires wxProtocol)}
+ @itemdef{wxUSE_PROTOCOL_FTP}{Use wxFTP class. (requires wxProtocol)}
+ @itemdef{wxUSE_PROTOCOL_HTTP}{Use wxHTTP class. (requireswxProtocol)}
+ @itemdef{wxUSE_RADIOBOX, Use wxRadioBox class.}
+ @itemdef{wxUSE_RADIOBTN, Use wxRadioButton class.}
+ @itemdef{wxUSE_REGEX, Use wxRegEx class.}
+ @itemdef{wxUSE_RICHTEXT, Use wxRichTextCtrl class.}
+ @itemdef{wxUSE_RICHTEXT_XML_HANDLER, See src/xrc/xh_richtext.cpp file.}
+ @itemdef{wxUSE_SASH, Use wxSashWindow class.}
+ @itemdef{wxUSE_SCROLLBAR, Use wxScrollBar class.}
+ @itemdef{wxUSE_SEARCHCTRL, Use wxSearchCtrl class.}
+ @itemdef{wxUSE_SELECT_DISPATCHER, Use wxSelectDispatcher class.}
+ @itemdef{wxUSE_SLIDER, Use wxSlider class.}
+ @itemdef{wxUSE_SNGLINST_CHECKER, Use wxSingleInstanceChecker class.}
+ @itemdef{wxUSE_SOCKETS, Enables Network address classes.}
+ @itemdef{wxUSE_SOUND, Use wxSound class.}
+ @itemdef{wxUSE_SPINBTN, Use wxSpinButton class.}
+ @itemdef{wxUSE_SPINCTRL, Use wxSpinCtrl class.}
+ @itemdef{wxUSE_SPLASH, Use wxSplashScreen class.}
+ @itemdef{wxUSE_SPLINES, Provide methods for spline drawing in wxDC.}
+ @itemdef{wxUSE_SPLITTER, Use wxSplitterWindow class.}
+ @itemdef{wxUSE_STACKWALKER, Enables wxStackWalker and related classes.}
+ @itemdef{wxUSE_STARTUP_TIPS, Use startup tips, wxTipProvider class.}
+ @itemdef{wxUSE_STATBMP, Use wxStaticBitmap class.}
+ @itemdef{wxUSE_STATBOX, Use wxStaticBox class.}
+ @itemdef{wxUSE_STATLINE, Use wxStaticLine class.}
+ @itemdef{wxUSE_STATTEXT, Use wxStaticText class.}
+ @itemdef{wxUSE_STATUSBAR, Use wxStatusBar class.}
+ @itemdef{wxUSE_STC, Use wxStyledTextCtrl.}
+ @itemdef{wxUSE_STD_IOSTREAM, Use standard C++ stream classes.}
+ @itemdef{wxUSE_STD_STRING, Use standard C++ string classes.}
+ @itemdef{wxUSE_STDPATHS, Use wxStandardPaths class.}
+ @itemdef{wxUSE_STL, Use Standard Template Library for the container classes and wxString implementation.}
+ @itemdef{wxUSE_STOPWATCH, Use wxStopWatch class.}
+ @itemdef{wxUSE_STREAMS, Enable stream classes.}
+ @itemdef{wxUSE_SVG, Use wxSVGFileDC class.}
+ @itemdef{wxUSE_SYSTEM_OPTIONS, Use wxSystemOptions class.}
+ @itemdef{wxUSE_TAB_DIALOG, Use the obsolete wxTabControl class.}
+ @itemdef{wxUSE_TARSTREAM, Enable Tar files support.}
+ @itemdef{wxUSE_TASKBARICON, Use wxTaskBarIcon class.}
+ @itemdef{wxUSE_TEXTBUFFER, Use wxTextBuffer class.}
+ @itemdef{wxUSE_TEXTCTRL, Use wxTextCtrl class.}
+ @itemdef{wxUSE_TEXTDLG, Use wxTextEntryDialog class.}
+ @itemdef{wxUSE_TEXTFILE, Use wxTextFile class.}
+ @itemdef{wxUSE_TGA, Enable wxImage TGA handler.}
+ @itemdef{wxUSE_THREADS, Use wxThread and related classes.}
+ @itemdef{wxUSE_TIMER, Use wxTimer class.}
+ @itemdef{wxUSE_TIPWINDOW, Use wxTipWindow class.}
+ @itemdef{wxUSE_TOGGLEBTN, Use wxToggleButton class.}
+ @itemdef{wxUSE_TOOLBAR, Use wxToolBar class.}
+ @itemdef{wxUSE_TOOLBAR_NATIVE, Use native wxToolBar class.}
+ @itemdef{wxUSE_TOOLBOOK, Use wxToolbook class.}
+ @itemdef{wxUSE_TOOLTIPS, Use wxToolTip class.}
+ @itemdef{wxUSE_TREEBOOK, Use wxTreebook class.}
+ @itemdef{wxUSE_TREECTRL, Use wxTreeCtrl class.}
+ @itemdef{wxUSE_TTM_WINDOWFROMPOINT, Obsolete, do not use.}
+ @itemdef{wxUSE_UNICODE, Compiled with Unicode support.}
+ @itemdef{wxUSE_UNICODE_UTF8, Compiled with UTF8 support.}
+ @itemdef{wxUSE_UNICODE_WCHAR, Compiled with Unicode support and using wchar_t type.}
+ @itemdef{wxUSE_URL, Use wxURL class.}
+ @itemdef{wxUSE_URL_NATIVE, Use native support for some operations with wxURL.}
+ @itemdef{wxUSE_UTF8_LOCALE_ONLY, Build wxWidgets to support running only under UTF-8 (and C) locale. This eliminates the code necessary for conversions from the other locales and reduces the library size; useful for embedded systems.}
+ @itemdef{wxUSE_VALIDATORS, Use wxValidator class.}
+ @itemdef{wxUSE_VARIANT, Use wxVariant class.}
+ @itemdef{wxUSE_WIZARDDLG, Use wxWizard class.}
+ @itemdef{wxUSE_WXHTML_HELP, Use wxHtmlHelpController and related classes.}
+ @itemdef{wxUSE_XML, Use XML parsing classes.}
+ @itemdef{wxUSE_XPM}{Enable XPM reader for wxImage and wxBitmap classes.}
+ @itemdef{wxUSE_XRC, Use XRC XML-based resource system.}
+ @itemdef{wxUSE_ZIPSTREAM, Enable streams for Zip files.}
+ @itemdef{wxUSE_ZLIB}{Use wxZlibInput and wxZlibOutputStream classes, required by wxUSE_LIBPNG.}
+ @endDefList 
 
 
- @section wxusedefmulti Generic wxUSE preprocessor symbols
+ @section page_wxusedef_unix wxUSE preprocessor symbols used only under Unix platforms
+
+ @beginDefList
+ @itemdef{wxUSE_EPOLL_DISPATCHER, Use wxEpollDispatcher class. See also wxUSE_SELECT_DISPATCHER.}
+ @itemdef{wxUSE_GSTREAMER, Use GStreamer library in wxMediaCtrl.}
+ @itemdef{wxUSE_LIBMSPACK, Use libmspack library.}
+ @itemdef{wxUSE_LIBSDL, Use SDL for wxSound implementation.}
+ @itemdef{wxUSE_PLUGINS, See also wxUSE_LIBSDL.}
+ @itemdef{wxUSE_UNIX, Enabled on Unix Platform.}
+ @endDefList
+
+
+ @section page_wxusedef_x11 wxUSE preprocessor symbols used only in wxX11 Platform
+
+ @beginDefList
+ @itemdef{wxUSE_NANOX, Use NanoX.}
+ @itemdef{wxUSE_UNIV_TEXTCTRL, Use wxUniv's implementation of wxTextCtrl class.}
+ @endDefList
  
- \twocolitem{wxUSE_ABOUTDLG}{Use \helpref{wxAboutDialogInfo}{wxaboutdialoginfo} class.}
- \twocolitem{wxUSE_ACCEL}{Use \helpref{wxAcceleratorTable}{wxacceleratortable}/Entry classes and support for them in \helpref{wxMenu}{wxmenu}(Bar).}
- \twocolitem{wxUSE_AFM_FOR_POSTSCRIPT}{In \helpref{wxPostScriptDC}{wxpostscriptdc} class use AFM (adobe font metrics) file for character widths.}
- \twocolitem{wxUSE_ANIMATIONCTRL}{Use \helpref{wxAnimationCtrl}{wxanimationctrl} class.}
- \twocolitem{wxUSE_APPLE_IEEE}{IEEE Extended to/from double routines; see src/common/extended.c file.}
- \twocolitem{wxUSE_ARCHIVE_STREAMS}{Enable streams for archive formats.}
- \twocolitem{wxUSE_AUI}{Use AUI (dockable windows) library.}
- \twocolitem{wxUSE_BASE64}{Enables Base64 support.}
- \twocolitem{wxUSE_BITMAPCOMBOBOX}{Use \helpref{wxBitmapComboBox}{wxbitmapcombobox} class.}
- \twocolitem{wxUSE_BMPBUTTON}{Use \helpref{wxBitmapButton}{wxbitmapbutton} class.}
- \twocolitem{wxUSE_BUSYINFO}{Use \helpref{wxBusyInfo}{wxbusyinfo} class.}
- \twocolitem{wxUSE_BUTTON}{Use \helpref{wxButton}{wxbutton} class.}
- \twocolitem{wxUSE_CALENDARCTRL}{Use \helpref{wxCalendarCtrl}{wxcalendarctrl} class.}
- \twocolitem{wxUSE_CARET}{Use \helpref{wxCaret}{wxcaret} class.}
- \twocolitem{wxUSE_CHECKBOX}{Use \helpref{wxCheckBox}{wxcheckbox} class.}
- \twocolitem{wxUSE_CHECKLISTBOX}{Use \helpref{wxCheckListBox}{wxchecklistbox} class.}
- \twocolitem{wxUSE_CHOICE}{Use \helpref{wxChoice}{wxchoice} class.}
- \twocolitem{wxUSE_CHOICEBOOK}{Use \helpref{wxChoicebook}{wxchoicebook} class.}
- \twocolitem{wxUSE_CHOICEDLG}{Use \helpref{wxSingleChoiceDialog}{wxsinglechoicedialog} or \helpref{wxMultiChoiceDialog}{wxmultichoicedialog} classes.}
- \twocolitem{wxUSE_CLIPBOARD}{Use \helpref{wxClipboard}{wxclipboard} class.}
- \twocolitem{wxUSE_CMDLINE_PARSER}{Use \helpref{wxCmdLineParser}{wxcmdlineparser} class.}
- \twocolitem{wxUSE_COLLPANE}{Use \helpref{wxCollapsiblePane}{wxcollapsiblepane} class.}
- \twocolitem{wxUSE_COLOURDLG}{Use \helpref{wxColourDialog}{wxcolourdialog} class.}
- \twocolitem{wxUSE_COLOURPICKERCTRL}{Use \helpref{wxColourPickerCtrl}{wxcolourpickerctrl} class.}
- \twocolitem{wxUSE_COMBOBOX}{Use \helpref{wxComboBox}{wxcombobox} class.}
- \twocolitem{wxUSE_COMBOCTRL}{Use \helpref{wxComboCtrl}{wxcomboctrl} class.}
- \twocolitem{wxUSE_CONFIG}{Use \helpref{wxConfig}{wxconfigbase} and related classes.}
- \twocolitem{wxUSE_CONFIG_NATIVE}{When enabled use native OS configuration instead of the \helpref{wxFileConfig}{wxfileconfig} class.}
- \twocolitem{wxUSE_CONSOLE_EVENTLOOP}{Enable event loop in console programs.}
- \twocolitem{wxUSE_CONSTRAINTS}{Use \helpref{wxLayoutConstraints}{wxlayoutconstraints}}
- \twocolitem{wxUSE_CONTROLS}{If set to $0$, no classes deriving from \helpref{wxControl}{wxcontrol} can be used.}
- \twocolitem{wxUSE_DATAOBJ}{Use \helpref{wxDataObject}{wxdataobject} and related classes.}
- \twocolitem{wxUSE_DATAVIEWCTRL}{Use \helpref{wxDataViewCtrl}{wxdataviewctrl} class.}
- \twocolitem{wxUSE_DATEPICKCTRL}{Use \helpref{wxDatePickerCtrl}{wxdatepickerctrl} class.}
- \twocolitem{wxUSE_DATETIME}{Use \helpref{wxDateTime}{wxdatetime} and related classes.}
- \twocolitem{wxUSE_DBGHELP}{Use wxDbgHelpDLL class.}
- \twocolitem{wxUSE_DEBUG_CONTEXT}{Use \helpref{wxDebugContext}{wxdebugcontext} class.}
- \twocolitem{wxUSE_DEBUG_NEW_ALWAYS}{See \helpref{Debugging overview}{wxdebugcontextoverview}}
- \twocolitem{wxUSE_DEBUGREPORT}{Use \helpref{wxDebugReport}{wxdebugreport} class.}
- \twocolitem{wxUSE_DIALUP_MANAGER}{Use \helpref{wxDialUpManager}{wxdialupmanager} and related classes.}
- \twocolitem{wxUSE_DIRDLG}{Use \helpref{wxDirDialog}{wxdirdialog} class.}
- \twocolitem{wxUSE_DIRPICKERCTRL}{Use \helpref{wxDirPickerCtrl}{wxdirpickerctrl} class.}
- \twocolitem{wxUSE_DISPLAY}{Use \helpref{wxDisplay}{wxdisplay} and related classes.}
- \twocolitem{wxUSE_DOC_VIEW_ARCHITECTURE}{Use \helpref{wxDocument}{wxdocument} and related classes.}
- \twocolitem{wxUSE_DRAG_AND_DROP}{Use \helpref{Drag and drop}{wxdndoverview} classes.}
- \twocolitem{wxUSE_DRAGIMAGE}{Use \helpref{wxDragImage}{wxdragimage} class.}
- \twocolitem{wxUSE_DYNAMIC_LOADER}{Use wxPluginManager and related classes. Requires \helpref{wxDynamicLibrary}{wxdynamiclibrary}}
- \twocolitem{wxUSE_DYNLIB_CLASS}{Use \helpref{wxDynamicLibrary}{wxdynamiclibrary}}
- \twocolitem{wxUSE_EDITABLELISTBOX}{Use \helpref{wxEditableListBox}{wxeditablelistbox} class.}
- \twocolitem{wxUSE_EXCEPTIONS}{Use \helpref{exception handling}{exceptionsoverview}.}
- \twocolitem{wxUSE_EXPAT}{enable XML support using expat parser.}
- \twocolitem{wxUSE_EXTENDED_RTTI}{Use extended RTTI, see also \helpref{Runtime class information (RTTI)}{runtimeclassoverview}}
- \twocolitem{wxUSE_FFILE}{Use \helpref{wxFFile}{wxffile} class.}
- \twocolitem{wxUSE_FILE}{Use \helpref{wxFile}{wxfile} class.}
- \twocolitem{wxUSE_FILECONFIG}{Use \helpref{wxFileConfig}{wxfileconfig} class.}
- \twocolitem{wxUSE_FILECTRL}{Use \helpref{wxFileCtrl}{wxfilectrl} class.}
- \twocolitem{wxUSE_FILEDLG}{Use \helpref{wxFileDialog}{wxfiledialog} class.}
- \twocolitem{wxUSE_FILEPICKERCTRL}{Use \helpref{wxFilePickerCtrl}{wxfilepickerctrl} class.}
- \twocolitem{wxUSE_FILESYSTEM}{Use \helpref{wxFileSystem}{wxfilesystem} and related classes.}
- \twocolitem{wxUSE_FINDREPLDLG}{Use \helpref{wxFindReplaceDialog}{wxfindreplacedialog} class.}
- \twocolitem{wxUSE_FONTDLG}{Use \helpref{wxFontDialog}{wxfontdialog} class.}
- \twocolitem{wxUSE_FONTENUM}{Use \helpref{wxFontEnumerator}{wxfontenumerator} class.}
- \twocolitem{wxUSE_FONTMAP}{Use \helpref{wxFontMapper}{wxfontmapper} class.}
- \twocolitem{wxUSE_FONTPICKERCTRL}{Use \helpref{wxFontPickerCtrl}{wxfontpickerctrl} class.}
- \twocolitem{wxUSE_FS_ARCHIVE}{Use virtual archive filesystems like wxArchiveFSHandler in \helpref{wxFileSystem}{wxfilesystem} class.}
- \twocolitem{wxUSE_FS_INET}{Use virtual HTTP/FTP filesystems like wxInternetFSHandler in \helpref{wxFileSystem}{wxfilesystem} class.}
- \twocolitem{wxUSE_FS_ZIP}{Please use wxUSE_FS_ARCHIVE instead.}
- \twocolitem{wxUSE_FSVOLUME}{Use wxFSVolume class.}
- \twocolitem{wxUSE_GAUGE}{Use \helpref{wxGauge}{wxgauge} class.}
- \twocolitem{wxUSE_GENERIC_DRAGIMAGE}{Used in wxDragImage sample.}
- \twocolitem{wxUSE_GENERIC_DRAWELLIPSE}{See comment in wx/dc.h file.}
- \twocolitem{wxUSE_GEOMETRY}{Use common geometry classes}
- \twocolitem{wxUSE_GIF}{Use GIF \helpref{wxImageHandler}{wximagehandler}}
- \twocolitem{wxUSE_GLCANVAS}{Enables OpenGL support.}
- \twocolitem{wxUSE_GLOBAL_MEMORY_OPERATORS}{Override global operators \texttt{new} and \texttt{delete} to use wxWidgets memory leak detection}
- \twocolitem{wxUSE_GRAPHICS_CONTEXT}{Use \helpref{wxGraphicsContext}{wxgraphicscontext} and related classes.}
- \twocolitem{wxUSE_GRID}{Use \helpref{wxGrid}{wxgrid} and related classes.}
- \twocolitem{wxUSE_GUI}{Use the GUI classes; if set to $0$ only non-GUI classes are available.}
- \twocolitem{wxUSE_HELP}{Use \helpref{wxHelpController}{wxhelpcontroller} and related classes.}
- \twocolitem{wxUSE_HTML}{Use \helpref{wxHtmlWindow}{wxhtmlwindow} and related classes.}
- \twocolitem{wxUSE_HYPERLINKCTRL}{Use \helpref{wxHyperlinkCtrl}{wxhyperlinkctrl}}
- \twocolitem{wxUSE_ICO_CUR}{Support Windows ICO and CUR formats.}
- \twocolitem{wxUSE_IFF}{Enables the \helpref{wxImage}{wximage} handler for Amiga IFF images.}
- \twocolitem{wxUSE_IMAGE}{Use \helpref{wxImage}{wximage} and related classes.}
- \twocolitem{wxUSE_IMAGLIST}{Use \helpref{wxImageList}{wximagelist} class.}
- \twocolitem{wxUSE_INTL}{Use \helpref{wxLocale}{wxlocale} and related classes.}
- \twocolitem{wxUSE_IOSTREAMH}{Use header <iostream.h> instead of <iostream>.}
- \twocolitem{wxUSE_IPC}{Use interprocess communication classes.}
- \twocolitem{wxUSE_IPV6}{Use experimental \helpref{wxIPV6address}{wxipaddress} and related classes.}
- \twocolitem{wxUSE_JOYSTICK}{Use \helpref{wxJoystick}{wxjoystick} class.}
- \twocolitem{wxUSE_LIBJPEG}{Enables JPEG format support (requires libjpeg).}
- \twocolitem{wxUSE_LIBPNG}{Enables PNG format support (requires libpng). Also requires wxUSE_ZLIB.}
- \twocolitem{wxUSE_LIBTIFF}{Enables TIFF format support (requires libtiff).}
- \twocolitem{wxUSE_LISTBOOK}{Use \helpref{wxListbook}{wxlistbook} class.}
- \twocolitem{wxUSE_LISTBOX}{Use \helpref{wxListBox}{wxlistbox} class.}
- \twocolitem{wxUSE_LISTCTRL}{Use \helpref{wxListCtrl}{wxlistctrl} class.}
- \twocolitem{wxUSE_LOG}{Use \helpref{wxLog}{wxlog} and related classes.}
- \twocolitem{wxUSE_LOG_DEBUG}{Enabled when wxLog used with __WXDEBUG__ defined.}
- \twocolitem{wxUSE_LOG_DIALOG}{Use wxLogDialog class.}
- \twocolitem{wxUSE_LOGGUI}{Use \helpref{wxLogGui}{wxloggui} class.}
- \twocolitem{wxUSE_LOGWINDOW}{Use wxLogFrame class.}
- \twocolitem{wxUSE_LONGLONG}{Use \helpref{wxLongLong}{wxlonglong} class.}
- \twocolitem{wxUSE_LONGLONG_NATIVE}{Use native \texttt{long long} type in \helpref{wxLongLong}{wxlonglong} implementation.}
- \twocolitem{wxUSE_LONGLONG_WX}{Use generic wxLongLong implementation.}
- \twocolitem{wxUSE_MDI}{Use \helpref{wxMDIParentFrame}{wxmdiparentframe} and \helpref{wxMDIChildFrame}{wxmdichildframe}}
- \twocolitem{wxUSE_MDI_ARCHITECTURE}{Use MDI-based document-view classes.}
- \twocolitem{wxUSE_MEDIACTRL}{Use \helpref{wxMediaCtrl}{wxmediactrl}.}
- \twocolitem{wxUSE_MEMORY_TRACING}{Use wxWidgets memory leak detection, not recommended if using another memory debugging tool.}
- \twocolitem{wxUSE_MENUS}{Use \helpref{wxMenu}{wxmenu} and related classes.}
- \twocolitem{wxUSE_METAFILE}{Use \helpref{wxMetaFile}{wxmetafile} and related classes.}
- \twocolitem{wxUSE_MIMETYPE}{Use \helpref{wxFileType}{wxfiletype} class.}
- \twocolitem{wxUSE_MINIFRAME}{Use \helpref{wxMiniFrame}{wxminiframe} class.}
- \twocolitem{wxUSE_MOUSEWHEEL}{Support mouse wheel events.}
- \twocolitem{wxUSE_MSGDLG}{Use \helpref{wxMessageDialog}{wxmessagedialog} class and \helpref{wxMessageBox}{wxmessagebox} function.}
- \twocolitem{wxUSE_NATIVE_STATUSBAR}{Use native \helpref{wxStatusBar}{wxstatusbar} class.}
- \twocolitem{wxUSE_NOTEBOOK}{Use \helpref{wxNotebook}{wxnotebook} and related classes.}
- \twocolitem{wxUSE_NUMBERDLG}{Use wxNumberEntryDialog class.}
- \twocolitem{wxUSE_ODCOMBOBOX}{Use \helpref{wxOwnerDrawnComboBox}{wxownerdrawncombobox} class.}
- \twocolitem{wxUSE_ON_FATAL_EXCEPTION}{Catch signals in \helpref{wxApp::OnFatalException}{wxapponfatalexception} method.}
- \twocolitem{wxUSE_OPENGL}{Please use wxUSE_GLCANVAS to test for enabled OpenGL support instead.}
- \twocolitem{wxUSE_OWNER_DRAWN}{Use interface for owner-drawn GUI elements.}
- \twocolitem{wxUSE_PALETTE}{Use \helpref{wxPalette}{wxpalette} and related classes.}
- \twocolitem{wxUSE_PCX}{Enables \helpref{wxImage}{wximage} PCX handler.}
- \twocolitem{wxUSE_PNM}{Enables \helpref{wxImage}{wximage} PNM handler.}
- \twocolitem{wxUSE_POPUPWIN}{Use wxPopupWindow class.}
- \twocolitem{wxUSE_POSTSCRIPT}{Use wxPostScriptPrinter class.}
- \twocolitem{wxUSE_PRINTF_POS_PARAMS}{Use \helpref{wxVsnprintf}{wxvsnprintf} which supports positional parameters.}
- \twocolitem{wxUSE_PRINTING_ARCHITECTURE}{Enable printer classes.}
- \twocolitem{wxUSE_PROGRESSDLG}{Enables progress dialog classes.}
- \twocolitem{wxUSE_PROTOCOL}{Use \helpref{wxProtocol}{wxprotocol} and derived classes.}
- \twocolitem{wxUSE_PROTOCOL_FILE}{Use wxFileProto class. (requires \helpref{wxProtocol}{wxprotocol})}
- \twocolitem{wxUSE_PROTOCOL_FTP}{Use \helpref{wxFTP}{wxftp} class. (requires \helpref{wxProtocol}{wxprotocol})}
- \twocolitem{wxUSE_PROTOCOL_HTTP}{Use \helpref{wxHTTP}{wxhttp} class. (requires \helpref{wxProtocol}{wxprotocol})}
- \twocolitem{wxUSE_RADIOBOX}{Use \helpref{wxRadioBox}{wxradiobox} class.}
- \twocolitem{wxUSE_RADIOBTN}{Use \helpref{wxRadioButton}{wxradiobutton} class.}
- \twocolitem{wxUSE_REGEX}{Use \helpref{wxRegEx}{wxregex} class.}
- \twocolitem{wxUSE_RICHTEXT}{Use \helpref{wxRichTextCtrl}{wxrichtextctrl} class.}
- \twocolitem{wxUSE_RICHTEXT_XML_HANDLER}{See src/xrc/xh_richtext.cpp file.}
- \twocolitem{wxUSE_SASH}{Use \helpref{wxSashWindow}{wxsashwindow} class.}
- \twocolitem{wxUSE_SCROLLBAR}{Use \helpref{wxScrollBar}{wxscrollbar} class.}
- \twocolitem{wxUSE_SEARCHCTRL}{Use \helpref{wxSearchCtrl}{wxsearchctrl} class.}
- \twocolitem{wxUSE_SELECT_DISPATCHER}{Use wxSelectDispatcher class.}
- \twocolitem{wxUSE_SLIDER}{Use \helpref{wxSlider}{wxslider} class.}
- \twocolitem{wxUSE_SNGLINST_CHECKER}{Use \helpref{wxSingleInstanceChecker}{wxsingleinstancechecker} class.}
- \twocolitem{wxUSE_SOCKETS}{Enables Network address classes.}
- \twocolitem{wxUSE_SOUND}{Use \helpref{wxSound}{wxsound} class.}
- \twocolitem{wxUSE_SPINBTN}{Use \helpref{wxSpinButton}{wxspinbutton} class.}
- \twocolitem{wxUSE_SPINCTRL}{Use \helpref{wxSpinCtrl}{wxspinctrl} class.}
- \twocolitem{wxUSE_SPLASH}{Use \helpref{wxSplashScreen}{wxsplashscreen} class.}
- \twocolitem{wxUSE_SPLINES}{Provide methods for spline drawing in wxDC.}
- \twocolitem{wxUSE_SPLITTER}{Use \helpref{wxSplitterWindow}{wxsplitterwindow} class.}
- \twocolitem{wxUSE_STACKWALKER}{Enables \helpref{wxStackWalker}{wxstackwalker} and related classes.}
- \twocolitem{wxUSE_STARTUP_TIPS}{Use startup tips, \helpref{wxTipProvider}{wxtipprovider} class.}
- \twocolitem{wxUSE_STATBMP}{Use \helpref{wxStaticBitmap}{wxstaticbitmap} class.}
- \twocolitem{wxUSE_STATBOX}{Use \helpref{wxStaticBox}{wxstaticbox} class.}
- \twocolitem{wxUSE_STATLINE}{Use \helpref{wxStaticLine}{wxstaticline} class.}
- \twocolitem{wxUSE_STATTEXT}{Use \helpref{wxStaticText}{wxstatictext} class.}
- \twocolitem{wxUSE_STATUSBAR}{Use \helpref{wxStatusBar}{wxstatusbar} class.}
- \twocolitem{wxUSE_STC}{Use wxStyledTextCtrl.}
- \twocolitem{wxUSE_STD_IOSTREAM}{Use standard C++ stream classes.}
- \twocolitem{wxUSE_STD_STRING}{Use standard C++ string classes.}
- \twocolitem{wxUSE_STDPATHS}{Use \helpref{wxStandardPaths}{wxstandardpaths} class.}
- \twocolitem{wxUSE_STL}{Use Standard Template Library for the container classes and \helpref{wxString}{wxstring} implementation.}
- \twocolitem{wxUSE_STOPWATCH}{Use \helpref{wxStopWatch}{wxstopwatch} class.}
- \twocolitem{wxUSE_STREAMS}{Enable stream classes.}
- \twocolitem{wxUSE_SVG}{Use wxSVGFileDC class.}
- \twocolitem{wxUSE_SYSTEM_OPTIONS}{Use \helpref{wxSystemOptions}{wxsystemoptions} class.}
- \twocolitem{wxUSE_TAB_DIALOG}{Use the obsolete wxTabControl class.}
- \twocolitem{wxUSE_TARSTREAM}{Enable Tar files support.}
- \twocolitem{wxUSE_TASKBARICON}{Use \helpref{wxTaskBarIcon}{wxtaskbaricon} class.}
- \twocolitem{wxUSE_TEXTBUFFER}{Use wxTextBuffer class.}
- \twocolitem{wxUSE_TEXTCTRL}{Use \helpref{wxTextCtrl}{wxtextctrl} class.}
- \twocolitem{wxUSE_TEXTDLG}{Use \helpref{wxTextEntryDialog}{wxtextentrydialog} class.}
- \twocolitem{wxUSE_TEXTFILE}{Use \helpref{wxTextFile}{wxtextfile} class.}
- \twocolitem{wxUSE_TGA}{Enable \helpref{wxImage}{wximage} TGA handler.}
- \twocolitem{wxUSE_THREADS}{Use \helpref{wxThread}{wxthread} and related classes.}
- \twocolitem{wxUSE_TIMER}{Use \helpref{wxTimer}{wxtimer} class.}
- \twocolitem{wxUSE_TIPWINDOW}{Use \helpref{wxTipWindow}{wxtipwindow} class.}
- \twocolitem{wxUSE_TOGGLEBTN}{Use \helpref{wxToggleButton}{wxtogglebutton} class.}
- \twocolitem{wxUSE_TOOLBAR}{Use \helpref{wxToolBar}{wxtoolbar} class.}
- \twocolitem{wxUSE_TOOLBAR_NATIVE}{Use native \helpref{wxToolBar}{wxtoolbar} class.}
- \twocolitem{wxUSE_TOOLBOOK}{Use \helpref{wxToolbook}{wxtoolbook} class.}
- \twocolitem{wxUSE_TOOLTIPS}{Use \helpref{wxToolTip}{wxtooltip} class.}
- \twocolitem{wxUSE_TREEBOOK}{Use \helpref{wxTreebook}{wxtreebook} class.}
- \twocolitem{wxUSE_TREECTRL}{Use \helpref{wxTreeCtrl}{wxtreectrl} class.}
- \twocolitem{wxUSE_TTM_WINDOWFROMPOINT}{Obsolete, do not use.}
- \twocolitem{wxUSE_UNICODE}{Compiled with Unicode support.}
- \twocolitem{wxUSE_UNICODE_UTF8}{Compiled with UTF8 support.}
- \twocolitem{wxUSE_UNICODE_WCHAR}{Compiled with Unicode support and using wchar_t type.}
- \twocolitem{wxUSE_URL}{Use \helpref{wxURL}{wxurl} class.}
- \twocolitem{wxUSE_URL_NATIVE}{Use native support for some operations with \helpref{wxURL}{wxurl}.}
- \twocolitem{wxUSE_UTF8_LOCALE_ONLY}{Build wxWidgets to support running only under UTF-8 (and C) locale. This eliminates the code necessary for conversions from the other locales and reduces the library size; useful for embedded systems.}
- \twocolitem{wxUSE_VALIDATORS}{Use \helpref{wxValidator}{wxvalidator} class.}
- \twocolitem{wxUSE_VARIANT}{Use \helpref{wxVariant}{wxvariant} class.}
- \twocolitem{wxUSE_WIZARDDLG}{Use \helpref{wxWizard}{wxwizard} class.}
- \twocolitem{wxUSE_WXHTML_HELP}{Use \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} and related classes.}
- \twocolitem{wxUSE_XML}{Use XML parsing classes.}
- \twocolitem{wxUSE_XPM}{Enable XPM reader for \helpref{wxImage}{wximage} and \helpref{wxBitmap}{wxbitmap} classes.}
- \twocolitem{wxUSE_XRC}{Use XRC XML-based resource system.}
- \twocolitem{wxUSE_ZIPSTREAM}{Enable streams for Zip files.}
- \twocolitem{wxUSE_ZLIB}{Use \helpref{wxZlibInput}{wxzlibinputstream} and \helpref{wxZlibOutputStream}{wxzliboutputstream} classes, required by wxUSE_LIBPNG.}
+
+ @section page_wxusedef_gtk wxUSE preprocessor symbols used only in wxGTK port
  
+ @beginDefList
+ @itemdef{wxUSE_DETECT_SM, Use code to detect X11 session manager.}
+ @itemdef{wxUSE_GTKPRINT, Use GTK+ printing support.}
+ @itemdef{wxUSE_LIBGNOMEPRINT, Use GNOME printing support.}
+ @itemdef{wxUSE_LIBGNOMEVFS, Use GNOME VFS support. Currently has no effect. }
+ @itemdef{wxUSE_LIBHILDON, Use Hildon framework for Nokia 770. Currently has no effect. }
+ @endDefList
+
  
- @section wxusedefunix wxUSE preprocessor symbols used only under Unix platforms
+ @section page_wxusedef_mac wxUSE preprocessor symbols used only in wxMac port
  
- \twocolitem{wxUSE_EPOLL_DISPATCHER}{Use wxEpollDispatcher class. See also wxUSE_SELECT_DISPATCHER.}
- \twocolitem{wxUSE_GSTREAMER}{Use GStreamer library in \helpref{wxMediaCtrl}{wxmediactrl}.}
- \twocolitem{wxUSE_LIBMSPACK}{Use libmspack library.}
- \twocolitem{wxUSE_LIBSDL}{Use SDL for wxSound implementation.}
- \twocolitem{wxUSE_PLUGINS}{See also wxUSE_LIBSDL.}
- \twocolitem{wxUSE_UNIX}{Enabled on Unix Platform.}
+ @beginDefList
+ @itemdef{wxUSE_MAC_CRITICAL_REGION_MUTEX, See src/mac/carbon/thread.cpp file.}
+ @itemdef{wxUSE_MAC_PTHREADS_MUTEX, See src/mac/carbon/thread.cpp file.}
+ @itemdef{wxUSE_MAC_SEMAPHORE_MUTEX, See src/mac/carbon/thread.cpp file.}
+ @itemdef{wxUSE_WEBKIT, Use wxWebKitCtrl class.}
+ @endDefList
+
  
+ @section page_wxusedef_motif wxUSE preprocessor symbols used only in wxMotif port
  
- @section wxusedefx11 wxUSE preprocessor symbols used only in wxX11 Platform
+ @beginDefList
+ @itemdef{wxUSE_GADGETS, Use xmCascadeButtonGadgetClass, xmLabelGadgetClass, xmPushButtonGadgetClass and xmToggleButtonGadgetClass classes.}
+ @itemdef{wxUSE_INVISIBLE_RESIZE, See src/motif/dialog.cpp file.}
+ @endDefList
+
  
- \twocolitem{wxUSE_NANOX}{Use NanoX.}
- \twocolitem{wxUSE_UNIV_TEXTCTRL}{Use wxUniv's implementation of \helpref{wxTextCtrl}{wxtextctrl} class.}
+ @section page_wxusedef_cocoa wxUSE preprocessor symbols used only in Cocoa port
  
+ @beginDefList
+ @itemdef{wxUSE_OBJC_UNIQUIFYING, Enable Objective-C class name uniquifying.}
+ @endDefList
+
  
- @section wxusedefgtk wxUSE preprocessor symbols used only in wxGTK port
+ @section page_wxusedef_os2 wxUSE preprocessor symbols used only in OS2 port
  
- \twocolitem{wxUSE_DETECT_SM}{Use code to detect X11 session manager.}
- \twocolitem{wxUSE_GTKPRINT}{Use GTK+ printing support.}
- \twocolitem{wxUSE_LIBGNOMEPRINT}{Use GNOME printing support.}
- \twocolitem{wxUSE_LIBGNOMEVFS}{Use GNOME VFS support. Currently has no effect. }
- \twocolitem{wxUSE_LIBHILDON}{Use Hildon framework for Nokia 770. Currently has no effect. }
+ @beginDefList
+ @itemdef{wxUSE_CONSOLEDEBUG, See src/os2/app.cpp file.}
+ @itemdef{wxUSE_DDE, See src/os2/mimetype.cpp file.}
+ @itemdef{wxUSE_IMAGE_LOADING_IN_MSW, See src/os2/clipbrd.cpp file.}
+ @itemdef{wxUSE_IMAGE_LOADING_IN_OS2, See src/os2/gdiimage.cpp file.}
+ @itemdef{wxUSE_NET_API, Use NetBios32GetInfo API call.}
+ @itemdef{wxUSE_RESOURCE_LOADING_IN_OS2, See src/os2/gdiimage.cpp file.}
+ @endDefList
+
  
+ @section page_wxusedef_msw wxUSE preprocessor symbols used only in wxMSW port
  
- @section wxusedefmac wxUSE preprocessor symbols used only in wxMac port
+ @beginDefList
+ @itemdef{wxUSE_ACCESSIBILITY, Enable accessibility support}
+ @itemdef{wxUSE_ACTIVEX, Use wxActiveXContainer and related classes.}
+ @itemdef{wxUSE_COMBOCTRL_POPUP_ANIMATION, See wx/msw/combo.h file.}
+ @itemdef{wxUSE_COMCTL32_SAFELY, See src/msw/treectrl.cpp file.}
+ @itemdef{wxUSE_COMMON_DIALOGS, Enable use of windows common dialogs from header commdlg.h; example PRINTDLG.}
+ @itemdef{wxUSE_CRASHREPORT, Use wxCrashReport class.}
+ @itemdef{wxUSE_DATEPICKCTRL_GENERIC, Use generic wxDatePickerCtrl implementation in addition to the native one.}
+ @itemdef{wxUSE_DC_CACHEING, cache temporary wxDC objects.}
+ @itemdef{wxUSE_DIRECTDRAW, Enable use of the system include file ddraw.h.}
+ @itemdef{wxUSE_DDE_FOR_IPC, See wx/ipc.h file.}
+ @itemdef{wxUSE_ENH_METAFILE, Use wxEnhMetaFile.}
+ @itemdef{wxUSE_HOTKEY}{Use wxWindow::RegisterHotKey() and wxWindow::UnregisterHotKey}
+ @itemdef{wxUSE_INKEDIT, Use InkEdit library. Related to Tablet PCs.}
+ @itemdef{wxUSE_MS_HTML_HELP, Use wxCHMHelpController class.}
+ @itemdef{wxUSE_NO_MANIFEST, Use to prevent the auto generation, under MSVC, of manifest file needed by windows XP and above.}
+ @itemdef{wxUSE_NORLANDER_HEADERS, Using headers whose author is Anders Norlander.}
+ @itemdef{wxUSE_OLE, Enables OLE helper routines.}
+ @itemdef{wxUSE_OLE_AUTOMATION, Enable OLE automation utilities.}
+ @itemdef{wxUSE_OLE_CLIPBOARD, Use OLE clipboard.}
+ @itemdef{wxUSE_PENWINDOWS, See src/msw/penwin.cpp file.}
+ @itemdef{wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW, Use PS printing in wxMSW.}
+ @itemdef{wxUSE_PS_PRINTING, See src/msw/dcprint.cpp file.}
+ @itemdef{wxUSE_REGKEY, Use wxRegKey class.}
+ @itemdef{wxUSE_RICHEDIT, Enable use of riched32.dll in wxTextCtrl}
+ @itemdef{wxUSE_RICHEDIT2, Enable use of riched20.dll in wxTextCtrl}
+ @itemdef{wxUSE_VC_CRTDBG, See wx/msw/msvcrt.h file.}
+ @itemdef{wxUSE_UNICODE_MSLU, Use MSLU for Unicode support under Windows 9x systems.}
+ @itemdef{wxUSE_UXTHEME, Enable support for XP themes.}
+ @itemdef{wxUSE_WIN_METAFILES_ALWAYS, Use wxMetaFile even when wxUSE_ENH_METAFILE=$1$.}
+ @itemdef{wxUSE_WXDIB, Use wxDIB class.}
+ @itemdef{wxUSE_XPM_IN_MSW, See also wxUSE_XPM}
+ @endDefList
+
  
- \twocolitem{wxUSE_MAC_CRITICAL_REGION_MUTEX}{See src/mac/carbon/thread.cpp file.}
- \twocolitem{wxUSE_MAC_PTHREADS_MUTEX}{See src/mac/carbon/thread.cpp file.}
- \twocolitem{wxUSE_MAC_SEMAPHORE_MUTEX}{See src/mac/carbon/thread.cpp file.}
- \twocolitem{wxUSE_WEBKIT}{Use wxWebKitCtrl class.}
+ @section page_wxusedef_univ wxUSE preprocessor symbols used only in wxUniversal
  
- 
- @section wxusedefmotif wxUSE preprocessor symbols used only in wxMotif port
- 
- \twocolitem{wxUSE_GADGETS}{Use xmCascadeButtonGadgetClass, xmLabelGadgetClass, xmPushButtonGadgetClass and xmToggleButtonGadgetClass classes.}
- \twocolitem{wxUSE_INVISIBLE_RESIZE}{See src/motif/dialog.cpp file.}
- 
- 
- @section wxusedefcocoa wxUSE preprocessor symbols used only in Cocoa port
- 
- \twocolitem{wxUSE_OBJC_UNIQUIFYING}{Enable Objective-C class name uniquifying.}
- 
- 
- @section wxusedefos2 wxUSE preprocessor symbols used only in OS2 port
- 
- \twocolitem{wxUSE_CONSOLEDEBUG}{See src/os2/app.cpp file.}
- \twocolitem{wxUSE_DDE}{See src/os2/mimetype.cpp file.}
- \twocolitem{wxUSE_IMAGE_LOADING_IN_MSW}{See src/os2/clipbrd.cpp file.}
- \twocolitem{wxUSE_IMAGE_LOADING_IN_OS2}{See src/os2/gdiimage.cpp file.}
- \twocolitem{wxUSE_NET_API}{Use NetBios32GetInfo API call.}
- \twocolitem{wxUSE_RESOURCE_LOADING_IN_OS2}{See src/os2/gdiimage.cpp file.}
- 
- 
- @section wxusedefmsw wxUSE preprocessor symbols used only in wxMSW port
- 
- \twocolitem{wxUSE_ACCESSIBILITY}{Enable accessibility support}
- \twocolitem{wxUSE_ACTIVEX}{Use \helpref{wxActiveXContainer}{wxactivexcontainer} and related classes.}
- \twocolitem{wxUSE_COMBOCTRL_POPUP_ANIMATION}{See wx/msw/combo.h file.}
- \twocolitem{wxUSE_COMCTL32_SAFELY}{See src/msw/treectrl.cpp file.}
- \twocolitem{wxUSE_COMMON_DIALOGS}{Enable use of windows common dialogs from header commdlg.h; example PRINTDLG.}
- \twocolitem{wxUSE_CRASHREPORT}{Use wxCrashReport class.}
- \twocolitem{wxUSE_DATEPICKCTRL_GENERIC}{Use generic \helpref{wxDatePickerCtrl}{wxdatepickerctrl} implementation in addition to the native one.}
- \twocolitem{wxUSE_DC_CACHEING}{cache temporary \helpref{wxDC}{wxdc} objects.}
- \twocolitem{wxUSE_DIRECTDRAW}{Enable use of the system include file ddraw.h.}
- \twocolitem{wxUSE_DDE_FOR_IPC}{See wx/ipc.h file.}
- \twocolitem{wxUSE_ENH_METAFILE}{Use wxEnhMetaFile.}
- \twocolitem{wxUSE_HOTKEY}{Use \helpref{wxWindow::RegisterHotKey()}{wxwindowregisterhotkey} and \helpref{UnregisterHotKey}{wxwindowunregisterhotkey}}
- \twocolitem{wxUSE_INKEDIT}{Use InkEdit library. Related to Tablet PCs.}
- \twocolitem{wxUSE_MS_HTML_HELP}{Use \helpref{wxCHMHelpController}{wxhelpcontroller} class.}
- \twocolitem{wxUSE_NO_MANIFEST}{Use to prevent the auto generation, under MSVC, of manifest file needed by windows XP and above.}
- \twocolitem{wxUSE_NORLANDER_HEADERS}{Using headers whose author is Anders Norlander.}
- \twocolitem{wxUSE_OLE}{Enables OLE helper routines.}
- \twocolitem{wxUSE_OLE_AUTOMATION}{Enable OLE automation utilities.}
- \twocolitem{wxUSE_OLE_CLIPBOARD}{Use OLE clipboard.}
- \twocolitem{wxUSE_PENWINDOWS}{See src/msw/penwin.cpp file.}
- \twocolitem{wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW}{Use PS printing in wxMSW.}
- \twocolitem{wxUSE_PS_PRINTING}{See src/msw/dcprint.cpp file.}
- \twocolitem{wxUSE_REGKEY}{Use \helpref{wxRegKey}{wxregkey} class.}
- \twocolitem{wxUSE_RICHEDIT}{Enable use of riched32.dll in \helpref{wxTextCtrl}{wxtextctrl}}
- \twocolitem{wxUSE_RICHEDIT2}{Enable use of riched20.dll in \helpref{wxTextCtrl}{wxtextctrl}}
- \twocolitem{wxUSE_VC_CRTDBG}{See wx/msw/msvcrt.h file.}
- \twocolitem{wxUSE_UNICODE_MSLU}{Use MSLU for Unicode support under Windows 9x systems.}
- \twocolitem{wxUSE_UXTHEME}{Enable support for XP themes.}
- \twocolitem{wxUSE_WIN_METAFILES_ALWAYS}{Use \helpref{wxMetaFile}{wxmetafile} even when wxUSE_ENH_METAFILE=$1$.}
- \twocolitem{wxUSE_WXDIB}{Use wxDIB class.}
- \twocolitem{wxUSE_XPM_IN_MSW}{See also wxUSE_XPM}
- 
- 
- @section wxusedefuniv wxUSE preprocessor symbols used only in wxUniversal
- 
- \twocolitem{wxUSE_ALL_THEMES}{Use all themes in wxUniversal; See wx/univ/theme.h file.}
- \twocolitem{wxUSE_THEME_GTK}{Use GTK+ 1-like theme in wxUniversal}
- \twocolitem{wxUSE_THEME_METAL}{Use GTK+ 2-like theme in wxUniversal}
- \twocolitem{wxUSE_THEME_MONO}{Use simple monochrome theme in wxUniversal}
- \twocolitem{wxUSE_THEME_WIN32}{Use Win32-like theme in wxUniversal}
- 
+ @beginDefList
+ @itemdef{wxUSE_ALL_THEMES, Use all themes in wxUniversal; See wx/univ/theme.h file.}
+ @itemdef{wxUSE_THEME_GTK, Use GTK+ 1-like theme in wxUniversal}
+ @itemdef{wxUSE_THEME_METAL, Use GTK+ 2-like theme in wxUniversal}
+ @itemdef{wxUSE_THEME_MONO, Use simple monochrome theme in wxUniversal}
+ @itemdef{wxUSE_THEME_WIN32, Use Win32-like theme in wxUniversal}
+ @endDefList
 
 */
