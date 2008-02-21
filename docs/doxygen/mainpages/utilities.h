@@ -19,7 +19,7 @@
 
  @section page_utils_utils Utilities
 
- In addition to the @ref libraries_page, some
+ In addition to the @ref page_libs, some
  additional utilities are supplied in the @c utils hierarchy.
 
  For other user-contributed packages, please see the Contributions page

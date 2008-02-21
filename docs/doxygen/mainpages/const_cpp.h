@@ -17,8 +17,6 @@
  corresponding condition is @true and undefined if it isn't, so they should be
  always tested using @ifdef and not @if.
 
- TODO: what can we use here instead of \twocolitem to keep text readable??
-
  @li @ref page_cppconst_guisystem
  @li @ref page_cppconst_os
  @li @ref page_cppconst_cpu

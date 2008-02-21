@@ -69,7 +69,7 @@
 
  Most ports of wxWidgets can create either a static library or a shared
  library. wxWidgets can also be built in multilib and monolithic variants.
- See the @ref libraries_page for more information on these.
+ See the @ref page_libs for more information on these.
 
 
 
@@ -212,7 +212,7 @@
  One of the purposes of wxWidgets is to reduce the need for conditional
  compilation in source code, which can be messy and confusing to follow.
  However, sometimes it is necessary to incorporate platform-specific
- features (such as metafile use under MS Windows). The @ref wxusedef
+ features (such as metafile use under MS Windows). The @ref page_wxusedef
  symbols listed in the file @c setup.h may be used for this purpose,
  along with any user-supplied ones.
 

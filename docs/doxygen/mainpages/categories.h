@@ -77,7 +77,7 @@
  @li wxTipWindow: Shows text in a small window
  @li wxWizard: A wizard dialog
 
- See also the @ref commondialogs_overview.
+ See also the @ref overview_commondialogs.
 
 
  @section page_categories_miscwnd Miscellaneous windows
@@ -103,7 +103,7 @@
 
  @section page_categories_cmndlg Common dialogs
 
- @ref commondialogs_overview
+ @ref overview_commondialogs
 
  Common dialogs are ready-made dialog classes which are frequently used
  in an application.
@@ -198,7 +198,7 @@
  This is a new set of classes for writing a customizable application
  interface with built-in docking, floatable panes and a flexible
  MDI-like interface. Further classes for custom notebooks with
- draggable tabs etc. are in progress. See also @ref aui_overview.
+ draggable tabs etc. are in progress. See also @ref overview_aui.
 
  @li wxAuiManager: The central class for managing the interface
  @li wxAuiNotebook: A replacement notebook class with extra features
@@ -215,7 +215,7 @@
  and will in almost all cases produce dialogs looking equally well on all platforms, the
  other is based on so-called constraints and is deprecated, though still available.
 
- @ref sizer_overview describes sizer-based layout.
+ @ref overview_sizer describes sizer-based layout.
 
  These are the classes relevant to sizer-based layout.
 
@@ -227,7 +227,7 @@
  @li wxStaticBoxSizer: Same as wxBoxSizer, but with a surrounding static box
  @li wxWrapSizer: A sizer which wraps its child controls as size permits
 
- @ref constraints_overview describes constraints-based layout.
+ @ref overview_constraints describes constraints-based layout.
 
  These are the classes relevant to constraints-based window layout.
 
@@ -241,7 +241,7 @@
 
  @section page_categories_dc Device contexts
 
- @ref dc_overview
+ @ref overview_dc
 
  Device contexts are surfaces that may be drawn on, and provide an
  abstraction that allows parameterisation of your drawing code
@@ -264,7 +264,7 @@
 
  @section page_categories_gdi Graphics device interface
 
- @ref bitmap_overview
+ @ref overview_bitmap
 
  These classes are related to drawing on device contexts and windows.
 
@@ -289,7 +289,7 @@
 
  @section page_categories_events Events
 
- @ref eventhandling_overview
+ @ref overview_eventhandling
 
  An event object contains information about a specific event. Event handlers
  (usually member functions) have a single, event argument.
@@ -346,7 +346,7 @@
 
  @section page_categories_val Validators
 
- @ref validator_overview
+ @ref overview_validator
 
  These are the window validators, used for filtering and validating
  user input.
@@ -381,7 +381,7 @@
 
  @section page_categories_containers Container classes
 
- @ref container_overview
+ @ref overview_container
 
  These are classes, templates and class macros are used by wxWidgets. Most
  of these classes provide a subset or almost complete STL API.
@@ -407,7 +407,7 @@
 
  @section page_categories_rtti Run-time class information system
 
- @ref runtimeclass_overview
+ @ref overview_runtimeclass
 
  wxWidgets supports run-time manipulation of class information, and dynamic
  creation of objects given class names.
@@ -419,10 +419,10 @@
 
  @section page_categories_logging Logging features
 
- @ref log_overview
+ @ref overview_log
 
  wxWidgets provides several classes and functions for message logging.
- Please see the @ref log_overview for more details.
+ Please see the @ref overview_log for more details.
 
  @li wxLog: The base log class
  @li wxLogStderr: Log messages to a C STDIO stream
@@ -440,7 +440,7 @@
 
  @section page_categories_debugging Debugging features
 
- @ref debugging_overview
+ @ref overview_debugging
 
  wxWidgets supports some aspects of debugging an application through
  classes, functions and macros.
@@ -474,7 +474,7 @@
 
  @section page_categories_ipc Interprocess communication
 
- @ref ipc_overview
+ @ref overview_ipc
 
  wxWidgets provides simple interprocess communications facilities
  based on Windows DDE, but available on most platforms using TCP.
@@ -487,7 +487,7 @@
 
  @section page_categories_dvf Document-view framework
 
- @ref docview_overview
+ @ref overview_docview
 
  wxWidgets supports a document/view framework which provides
  housekeeping for a document-centric application.
@@ -504,7 +504,7 @@
 
  @section page_categories_printing Printing framework
 
- @ref printing_overview
+ @ref overview_printing
 
  A printing and previewing framework is implemented to
  make it relatively straightforward to provide document printing
@@ -527,7 +527,7 @@
 
  @section page_categories_dd Drag and drop and clipboard classes
 
- @ref dnd_overview
+ @ref overview_dnd
 
  @li wxDataObject: Data object class
  @li wxDataFormat: Represents a data format
@@ -545,7 +545,8 @@
 
  @section page_categories_file File related classes
 
- wxWidgets has several small classes to work with disk files, see wxfileoverview for more details.
+ wxWidgets has several small classes to work with disk files, see 
+ @ref overview_file for more details.
 
  @li wxFileName: Operations with the file name and attributes
  @li wxDir: Class for enumerating files/subdirectories.
@@ -597,7 +598,7 @@
 
  @section page_categories_threading Threading classes
 
- @ref thread_overview
+ @ref overview_thread
 
  wxWidgets provides a set of classes to make use of the native thread
  capabilities of the various platforms.
@@ -680,7 +681,7 @@
 
  @section page_categories_xrc XML-based resource system classes
 
- @ref xrc_overview
+ @ref overview_xrc
 
  Resources allow your application to create controls and other user interface elements
  from specifications stored in an XML format.

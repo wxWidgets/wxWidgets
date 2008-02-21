@@ -21,8 +21,8 @@
  @image html libs.gif
 
  Please note that arrows indicate the "depends from" relation and that
- all blue boxes depend from @ref wxbase library (i.e. they are non-GUI libraries),
- and all green boxes depend from @ref wxcore library (i.e. they are GUI libraries).
+ all blue boxes depend from @ref page_libs_wxbase library (i.e. they are non-GUI libraries),
+ and all green boxes depend from @ref page_libs_wxcore library (i.e. they are GUI libraries).
 
 
  <!--
@@ -37,8 +37,8 @@
  Every wxWidgets application must link against this library. It contains
  mandatory classes that any wxWidgets code depends on (e.g. wxString) and
  portability classes that abstract differences between platforms.
- @ref wxbase can be used to develop console mode applications, it does not require
- any GUI libraries or running X Window System on Unix.
+ wxBase can be used to develop console mode applications,
+ it does not require any GUI libraries or running X Window System on Unix.
 
 
  @section page_libs_wxcore wxCore
