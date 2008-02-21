@@ -101,7 +101,7 @@
  @li @subpage splitterwindow_overview
  @li @subpage imagelist_overview
  @li @subpage bookctrl_overview
- @li @subpage tipprovider_overview
+ @li @subpage tips_overview
  @li @subpage docview_overview
 
 */
