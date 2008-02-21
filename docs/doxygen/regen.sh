@@ -17,3 +17,8 @@ currpath=`pwd`/
 interfacepath=`cd ../../interface && pwd`/
 cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" >temp
 mv temp doxygen.log
+
+# filter out the following warning which we don't care about
+cat doxygen.log | grep -v ".*supplied.*as.*the.*argument.*is.*not.*an.*input.*file.*" >temp
+mv temp doxygen.log
+

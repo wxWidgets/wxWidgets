@@ -1,7 +1,7 @@
 #############################################################################
 ## Name:        Doxyfile
 ## Purpose:     Doxygen configuration file for wxWidgets manual
-## Author:      wxWidgets team
+## Author:      Francesco Montorsi
 ## RCS-ID:      $Id$
 ## Licence:     wxWindows license
 #############################################################################
@@ -62,7 +62,7 @@ ALIASES += beginExtraStyleTable="\section class_extrastyles Extra Styles\n"
 ALIASES += endExtraStyleTable="\n"
 
 # misc aliases
-ALIASES += library{1}="\section class_lib Library\n \ref \1"
+ALIASES += library{1}="\section class_lib Library\n \ref page_libraries_\1"
 ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
 ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
 
@@ -82,13 +82,46 @@ ALIASES += true="<b><tt>true</tt></b>"
 ALIASES += false="<b><tt>false</tt></b>"
 ALIASES += NULL="<b><tt>NULL</tt></b>"
 
-# these are useful for creation of tables
+# table aliases for 2 and 3 column tables
 ALIASES += beginTable="<center><table class='doctable'>"
 ALIASES += beginInvisibleTable="<center><table class='doctable' border='0'>"
-ALIASES += row{2}="<tr><td>\1</td> <td>\2</td></tr>"
-ALIASES += row{3}="<tr><td>\1</td> <td>\2 \3</td></tr>"
-ALIASES += row{4}="<tr><td>\1</td> <td>\2 \3 \4</td></tr>"
+ALIASES += row2col{2}="<tr><td>\1</td> <td>\2</td></tr>"
+ALIASES += row2col{3}="<tr><td>\1</td> <td>\2,\3</td></tr>"
+ALIASES += row2col{4}="<tr><td>\1</td> <td>\2,\3,\4</td></tr>"
+ALIASES += row2col{5}="<tr><td>\1</td> <td>\2,\3,\4,\5</td></tr>"
+ALIASES += row2col{6}="<tr><td>\1</td> <td>\2,\3,\4,\5,\6</td></tr>"
+ALIASES += row2col{7}="<tr><td>\1</td> <td>\2,\3,\4,\5,\6,\7</td></tr>"
+ALIASES += row2col{8}="<tr><td>\1</td> <td>\2,\3,\4,\5,\6,\7,\8</td></tr>"
+ALIASES += row2col{9}="<tr><td>\1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
+ALIASES += row2col{10}="<tr><td>\1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
+ALIASES += row3col{3}="<tr><td>\1</td> <td>\2</td> <td>\3</td></tr>"
+ALIASES += row3col{4}="<tr><td>\1</td> <td>\2</td> <td>\3,\4</td></tr>"
+ALIASES += row3col{5}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5</td></tr>"
+ALIASES += row3col{6}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6</td></tr>"
+ALIASES += row3col{7}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7</td></tr>"
+ALIASES += row3col{8}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8</td></tr>"
+ALIASES += row3col{9}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9</td></tr>"
+ALIASES += row3col{10}="<tr><td>\1</td> <td>\2</td> <td>\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
 ALIASES += endTable="</table></center>"
+
+# definition list aliases
+# a definition list currently is rendered as 2-column table but it may use as
+# well the <dl>, <dt> and <dd> HTML tags in future.
+# In any case a definition list differs from a table because of its semantic
+# nature and because it is always the association of a "title" with a "description"
+# (in contrast a table may have more than 2 columns of data)...
+ALIASES += beginDefList="<table class='doclist'>"
+ALIASES += itemdef{2}="<tr><td>\b \1</td> <td>\2</td></tr>"
+ALIASES += itemdef{3}="<tr><td>\b \1</td> <td>\2,\3</td></tr>"
+ALIASES += itemdef{4}="<tr><td>\b \1</td> <td>\2,\3,\4</td></tr>"
+ALIASES += itemdef{5}="<tr><td>\b \1</td> <td>\2,\3,\4,\5</td></tr>"
+ALIASES += itemdef{6}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6</td></tr>"
+ALIASES += itemdef{7}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7</td></tr>"
+ALIASES += itemdef{8}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8</td></tr>"
+ALIASES += itemdef{9}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
+ALIASES += itemdef{10}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
+ALIASES += endDefList="</table>"
+
 
 # NOTE: we could put aliases also for e.g. @wxDefaultSize, @wxDefaultPosition, @wxID_ANY, 
 #       @wxEmptyString, @wxNullIcon, etc etc
@@ -147,7 +180,7 @@ WARN_LOGFILE           = doxygen.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = . ./overviews ../../interface
+INPUT                  = ./mainpages ./overviews  #../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.txt
 RECURSIVE              = YES
