@@ -9,7 +9,7 @@
 
 /*!
 
- @page page_libraries Libraries list
+ @page page_libs Libraries list
 
  wxWidgets can be built either as a single large
  library (this is called the <em>monolithic build</em>) or as several smaller
@@ -32,7 +32,7 @@
  -->
 
 
- @section page_libraries_wxbase wxBase
+ @section page_libs_wxbase wxBase
 
  Every wxWidgets application must link against this library. It contains
  mandatory classes that any wxWidgets code depends on (e.g. wxString) and
@@ -41,23 +41,24 @@
  any GUI libraries or running X Window System on Unix.
 
 
- @section page_libraries_wxcore wxCore
+ @section page_libs_wxcore wxCore
 
  Basic GUI classes such as GDI classes or controls are in this library. All
  wxWidgets GUI applications must link against this library, only console mode
  applications don't.
 
- Requires @ref wxbase.
+ Requires @ref page_libs_wxbase.
 
 
- @section wxaui wxAui
+ @section page_libs_wxaui wxAui
 
  This contains the Advanced User Interface docking library.
 
- Requires @ref wxadv, @ref wxhtml, @ref wxxml, @ref wxcore, @ref wxbase.
+ Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml, 
+ @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
- @section wxnet wxNet
+ @section page_libs_wxnet wxNet
 
  Classes for network access:
 
@@ -67,24 +68,25 @@
  @li wxURL
  @li wxInternetFSHandler (a wxFileSystem handler)
 
- Requires @ref wxbase.
+ Requires @ref page_libs_wxbase.
 
 
- @section wxrichtext wxRichText
+ @section page_libs_wxrichtext wxRichText
 
  This contains generic rich text control functionality.
 
- Requires @ref wxadv, @ref wxhtml, @ref wxxml, @ref wxcore, @ref wxbase.
+ Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml, 
+ @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
- @section wxxml wxXML
+ @section page_libs_wxxml wxXML
 
  This library contains simple classes for parsing XML documents.
 
- Requires @ref wxbase.
+ Requires @ref page_libs_wxbase.
 
 
- @section wxadv wxAdvanced
+ @section page_libs_wxadv wxAdvanced
 
  Advanced or rarely used GUI classes:
 
@@ -100,57 +102,58 @@
  @li wxSashWindow
  @li ...others
 
- Requires @ref wxcore and @ref wxbase.
+ Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
 
 
- @section wxmedia wxMedia
+ @section page_libs_wxmedia wxMedia
 
  Miscellaneous classes related to multimedia. Currently this library only
  contains wxMediaCtrl but more classes will be added in
  the future.
 
- Requires @ref wxcore and @ref wxbase.
+ Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
 
 
- @section wxgl wxGL
+ @section page_libs_wxgl wxGL
 
  This library contains wxGLCanvas class for integrating
  OpenGL library with wxWidgets. Unlike all others, this library is {\em not}
  part of the monolithic library, it is always built as separate library.
 
- Requires @ref wxcore and @ref wxbase.
+ Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
 
 
- @section wxhtml wxHTML
+ @section page_libs_wxhtml wxHTML
 
  Simple HTML renderer and other @ref html_overview are contained in this library, 
  as well as wxHtmlHelpController, wxBestHelpController and wxHtmlListBox.
 
- Requires @ref wxcore and @ref wxbase.
+ Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
 
 
- @section wxqa wxQA
+ @section page_libs_wxqa wxQA
 
  This is the library containing extra classes for quality assurance. Currently
  it only contains wxDebugReport and related classes,
  but more will be added to it in the future.
 
- Requires @ref wxxml, @ref wxcore, @ref wxbase.
+ Requires @ref page_libs_wxxml, @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
- @section wxxrc wxXRC
+ @section page_libs_wxxrc wxXRC
 
  This library contains wxXmlResource class that
  provides access to XML resource files in XRC format.
 
- Requires @ref wxadv, @ref wxhtml, @ref wxxml, @ref wxcore, @ref wxbase.
+ Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml, 
+ @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
- @section wxstc wxSTC
+ @section page_libs_wxstc wxSTC
 
  STC (Styled Text Control) is a wrapper around Scintilla, a syntax-highlighting text editor.
  See http://www.scintilla.org for more info about Scintilla.
 
- Requires @ref wxcore, @ref wxbase.
+ Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 */

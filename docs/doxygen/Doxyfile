@@ -62,7 +62,7 @@ ALIASES += beginExtraStyleTable="\section class_extrastyles Extra Styles\n"
 ALIASES += endExtraStyleTable="\n"
 
 # misc aliases
-ALIASES += library{1}="\section class_lib Library\n \ref page_libraries_\1"
+ALIASES += library{1}="\section class_lib Library\n \ref page_libs_\1"
 ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
 ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
 
@@ -180,7 +180,7 @@ WARN_LOGFILE           = doxygen.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ./mainpages ./overviews  #../../interface
+INPUT                  = ./mainpages ./overviews # ../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.txt
 RECURSIVE              = YES
