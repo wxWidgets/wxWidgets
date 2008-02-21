@@ -37,7 +37,7 @@
 // The platform-specific locale type
 // If wxXLocale_t is not defined, then only "C" locale support is provided
 #ifdef wxHAS_XLOCALE_SUPPORT
-    #if wxCHECK_VISUALC_VERSION(8)
+    #if wxCHECK_VISUALC_VERSION(8) && !defined(__WXWINCE__)
         typedef _locale_t wxXLocale_t;
         #define wxXLOCALE_IDENT(name) _ ## name
     #elif defined(HAVE_LOCALE_T)
