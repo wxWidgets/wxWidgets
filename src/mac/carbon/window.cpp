@@ -124,6 +124,7 @@ END_EVENT_TABLE()
 // originating from native control
 //
 
+bool gMultipleScrollsBetweenPaints;
 
 void wxMacNativeToWindow( const wxWindowMac* window , RgnHandle handle )
 {
@@ -217,6 +218,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #if TARGET_API_MAC_OSX
         case kEventControlDraw :
             {
+                gMultipleScrollsBetweenPaints = false;
                 RgnHandle updateRgn = NULL ;
                 RgnHandle allocatedRgn = NULL ;
                 wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
@@ -1014,6 +1016,7 @@ void wxWindowMac::Init()
     m_peer = NULL ;
     m_frozenness = 0 ;
     m_macAlpha = 255 ;
+    gMultipleScrollsBetweenPaints = false;
 
 #if WXWIN_COMPATIBILITY_2_4
     m_backgroundTransparent = false;
@@ -2739,7 +2742,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         if ( rect )
             scrollrect.Intersect( *rect ) ;
 
-        if ( m_peer->GetNeedsDisplay() )
+        if ( gMultipleScrollsBetweenPaints )
         {
             // because HIViewScrollRect does not scroll the already invalidated area we have two options
             // in case there is already a pending redraw on that area
@@ -2796,6 +2799,11 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             child->SetSize( x + dx, y + dy, w, h, wxSIZE_AUTO|wxSIZE_ALLOW_MINUS_ONE );
         }
     }
+    
+    // this is set to false when the OS sends a paint event, so the only time
+    // this condition will evaluate true above is if we've re-entered ScrollWindow
+    // before a paint has occurred.
+    gMultipleScrollsBetweenPaints = true;
 }
 
 void wxWindowMac::MacOnScroll( wxScrollEvent &event )
