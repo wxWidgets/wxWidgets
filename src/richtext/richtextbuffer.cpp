@@ -959,7 +959,17 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text,
     wxTextAttr defaultCharStyle;
     wxTextAttr defaultParaStyle;
 
-    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
+    // If the default style is a named paragraph style, don't apply any character formatting
+    // to the initial text string.
+    if (GetDefaultStyle().HasParagraphStyleName() && GetStyleSheet())
+    {
+        wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(GetDefaultStyle().GetParagraphStyleName());
+        if (def)
+            defaultParaStyle = def->GetStyleMergedWithBase(GetStyleSheet());
+    }
+    else
+        wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
+
     wxTextAttr* pStyle = paraStyle ? paraStyle : (wxTextAttr*) & defaultParaStyle;
     wxTextAttr* cStyle = & defaultCharStyle;
 
@@ -982,7 +992,17 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
 
     wxTextAttr defaultCharStyle;
     wxTextAttr defaultParaStyle;
-    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
+
+    // If the default style is a named paragraph style, don't apply any character formatting
+    // to the initial text string.
+    if (GetDefaultStyle().HasParagraphStyleName() && GetStyleSheet())
+    {
+        wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(GetDefaultStyle().GetParagraphStyleName());
+        if (def)
+            defaultParaStyle = def->GetStyleMergedWithBase(GetStyleSheet());
+    }
+    else
+        wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 
     wxTextAttr* pStyle = paraStyle ? paraStyle : (wxTextAttr*) & defaultParaStyle;
     wxTextAttr* cStyle = & defaultCharStyle;
@@ -1048,7 +1068,17 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxT
 
     wxTextAttr defaultCharStyle;
     wxTextAttr defaultParaStyle;
-    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
+
+    // If the default style is a named paragraph style, don't apply any character formatting
+    // to the initial text string.
+    if (GetDefaultStyle().HasParagraphStyleName() && GetStyleSheet())
+    {
+        wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(GetDefaultStyle().GetParagraphStyleName());
+        if (def)
+            defaultParaStyle = def->GetStyleMergedWithBase(GetStyleSheet());
+    }
+    else
+        wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 
     wxTextAttr* pStyle = paraStyle ? paraStyle : (wxTextAttr*) & defaultParaStyle;
     wxTextAttr* cStyle = & defaultCharStyle;
