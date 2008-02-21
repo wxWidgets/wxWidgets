@@ -13,12 +13,12 @@
 
  This chapter describes the constants defined by wxWidgets.
 
- @li @ref cppconst
- @li @ref keycodes
- @li @ref keymodifiers
- @li @ref languagecodes
- @li @ref stdevtid
- @li @ref stockitems
- @li @ref wxusedef
+ @li @subpage cppconst
+ @li @subpage keycodes
+ @li @subpage keymodifiers
+ @li @subpage languagecodes
+ @li @subpage stdevtid
+ @li @subpage stockitems
+ @li @subpage wxusedef
 
 */
