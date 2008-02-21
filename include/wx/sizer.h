@@ -655,8 +655,6 @@ protected:
     // the window this sizer is used in, can be NULL
     wxWindow *m_containingWindow;
 
-    wxSize GetMaxWindowSize( wxWindow *window ) const;
-    wxSize GetMinWindowSize( wxWindow *window );
     wxSize GetMaxClientSize( wxWindow *window ) const;
     wxSize GetMinClientSize( wxWindow *window );
     wxSize VirtualFitSize( wxWindow *window );
