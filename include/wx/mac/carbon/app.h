@@ -124,6 +124,9 @@ public:
     // in response of a reopen-application apple event
     virtual void         MacReopenApp() ;
 
+    // Hide the application windows the same as the system hide command would do it.
+    void MacHideApp();
+
     DECLARE_EVENT_TABLE()
 };
 

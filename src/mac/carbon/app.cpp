@@ -1635,3 +1635,14 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     event.SetTimestamp(when);
     event.SetEventObject(focus);
 }
+
+
+void wxApp::MacHideApp()
+{
+    wxMacCarbonEvent event( kEventClassCommand , kEventCommandProcess );
+    HICommand command;
+    memset( &command, 0 , sizeof(command) );
+    command.commandID = kHICommandHide ;
+    event.SetParameter<HICommand>(kEventParamDirectObject, command );       
+    SendEventToApplication( event );
+}
