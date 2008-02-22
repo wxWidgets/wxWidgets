@@ -891,8 +891,12 @@ bool wxWindowBase::Enable(bool enable)
 
 bool wxWindowBase::IsShownOnScreen() const
 {
+#ifdef __WXMAC__
+    return ((wxWindowMac*)this)->MacIsReallyShown();
+#else
     return IsShown() &&
            (GetParent() == NULL || GetParent()->IsShownOnScreen());
+#endif
 }
 
 // ----------------------------------------------------------------------------
