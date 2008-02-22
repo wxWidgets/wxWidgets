@@ -56,6 +56,8 @@ public:
 
     virtual bool Show( bool show = true );
 
+    virtual bool IsShownOnScreen() const;
+
     virtual void SetFocus();
 
     virtual void WarpPointer( int x, int y );
