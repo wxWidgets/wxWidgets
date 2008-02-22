@@ -7,9 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifndef __BMPBUTTONH__
-#define __BMPBUTTONH__
+#ifndef _WX_GTK_BMPBUTTON_H_
+#define _WX_GTK_BMPBUTTON_H_
 
 // ----------------------------------------------------------------------------
 // wxBitmapButton
@@ -51,13 +50,10 @@ public:
     // implementation
     // --------------
 
-    void GTKHasFocus();
-    void GTKNotFocus();
-    void GTKStartSelect();
-    void GTKEndSelect();
-
-    bool         m_hasFocus:1;
-    bool         m_isSelected:1;
+    void GTKMouseEnters();
+    void GTKMouseLeaves();
+    void GTKPressed();
+    void GTKReleased();
 
 protected:
     virtual void OnSetBitmap();
@@ -67,7 +63,15 @@ protected:
     void Init();
 
 private:
+    void OnFocusChange(wxFocusEvent& event);
+
+    // true iff mouse hovers over the button
+    bool         m_mouseHovers;
+    // true iff the button is in pressed state
+    bool         m_isPressed;
+
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)
+    DECLARE_EVENT_TABLE()
 };
 
-#endif // __BMPBUTTONH__
+#endif // _WX_GTK_BMPBUTTON_H_
