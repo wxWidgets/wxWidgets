@@ -36,7 +36,7 @@
 #include <ctype.h>
 
 #include "wx/gtk/private.h"
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk/private/win_gtk.h"
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkx.h>
 

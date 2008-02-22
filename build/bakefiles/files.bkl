@@ -1056,7 +1056,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/region.h
     wx/gtk/tooltip.h
     wx/gtk/toplevel.h
-    wx/gtk/win_gtk.h
     wx/gtk/window.h
 </set>
 <set var="GTK_SRC" hints="files">

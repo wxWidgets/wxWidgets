@@ -2101,7 +2101,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/region.h \
 	wx/gtk/tooltip.h \
 	wx/gtk/toplevel.h \
-	wx/gtk/win_gtk.h \
 	wx/gtk/window.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@LOWLEVEL_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR)
 @COND_TOOLKIT_MAC@LOWLEVEL_HDR = 

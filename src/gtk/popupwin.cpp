@@ -19,7 +19,7 @@
 
 #include <gtk/gtk.h>
 
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk/private/win_gtk.h"
 
 //-----------------------------------------------------------------------------
 // "button_press"

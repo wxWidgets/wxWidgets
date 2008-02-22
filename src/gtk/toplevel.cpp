@@ -38,7 +38,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk/private/win_gtk.h"
 
 #include "wx/unix/utilsx11.h"
 

@@ -14,7 +14,7 @@
 #endif
 
 #include "wx/platform.h"
-#include "wx/gtk/win_gtk.h"
+#include "wx/gtk/private/win_gtk.h"
 
 #ifdef __cplusplus
 extern "C" {
