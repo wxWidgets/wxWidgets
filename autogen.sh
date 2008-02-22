@@ -1,2 +1,2 @@
 #!/bin/sh
-autoconf
+autoconf -B build/autoconf_prepend-include
