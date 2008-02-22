@@ -163,6 +163,13 @@ bool wxBitmapButton::Create( wxWindow *parent,
 
     PostCreation(size);
 
+    Connect(wxEVT_SET_FOCUS,
+            wxFocusEventHandler(wxBitmapButton::OnFocusChange),
+            NULL, this);
+    Connect(wxEVT_KILL_FOCUS,
+            wxFocusEventHandler(wxBitmapButton::OnFocusChange),
+            NULL, this);
+
     return true;
 }
 
@@ -201,6 +208,12 @@ void wxBitmapButton::OnSetBitmap()
     else if (m_isSelected)
         the_one = m_bmpSelected;
     else if (m_hasFocus)
+    {
+        // NB: this is misnomer, m_hasFocus doesn't mean "has focus", but
+        //     "mouse is over the window"
+        the_one = m_bmpHover;
+    }
+    else if (FindFocus() == this)
         the_one = m_bmpFocus;
     else
         the_one = m_bmpNormal;
@@ -261,6 +274,12 @@ void wxBitmapButton::StartSelect()
 void wxBitmapButton::EndSelect()
 {
     m_isSelected = false;
+    OnSetBitmap();
+}
+
+void wxBitmapButton::OnFocusChange(wxFocusEvent& event)
+{
+    event.Skip();
     OnSetBitmap();
 }
 

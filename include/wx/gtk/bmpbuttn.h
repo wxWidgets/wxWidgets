@@ -68,6 +68,8 @@ protected:
     void Init();
 
 private:
+    void OnFocusChange(wxFocusEvent& event);
+
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)
 };
 
