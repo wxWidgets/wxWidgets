@@ -3219,3 +3219,8 @@ wxByte wxWindowMac::GetTransparent() const
 {
     return m_macAlpha ;
 }
+
+bool wxWindowMac::IsShownOnScreen() const
+{
+    return ((wxWindowMac*)this)->MacIsReallyShown();
+}
