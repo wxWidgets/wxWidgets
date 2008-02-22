@@ -127,6 +127,11 @@ public:
     // in response of a reopen-application apple event
     virtual void         MacReopenApp() ;
 
+#if wxABI_VERSION >= 20808   
+    // Hide the application windows the same as the system hide command would do it.
+    void MacHideApp();
+#endif
+
     DECLARE_EVENT_TABLE()
 };
 
