@@ -82,6 +82,9 @@ ALIASES += true="<b><tt>true</tt></b>"
 ALIASES += false="<b><tt>false</tt></b>"
 ALIASES += NULL="<b><tt>NULL</tt></b>"
 
+# NOTE: we could put aliases also for e.g. @wxDefaultSize, @wxDefaultPosition, @wxID_ANY, 
+#       @wxEmptyString, @wxNullIcon, etc etc
+
 # table aliases for 2 and 3 column tables
 ALIASES += beginTable="<center><table class='doctable'>"
 ALIASES += beginInvisibleTable="<center><table class='doctable' border='0'>"
@@ -122,17 +125,20 @@ ALIASES += itemdef{9}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += itemdef{10}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
 ALIASES += endDefList="</table>"
 
-
-# NOTE: we could put aliases also for e.g. @wxDefaultSize, @wxDefaultPosition, @wxID_ANY, 
-#       @wxEmptyString, @wxNullIcon, etc etc
-
 # NOTE: these are important as you can't write in the docs
 #       just #ifdef since the # character is used by Doxygen
 #       for explicit linking; use the following aliases instead!
-ALIASES += ifdef="<b><tt>\#ifdef</tt></b>"
-ALIASES += ifndef="<b><tt>\#ifndef</tt></b>"
-ALIASES += if="<b><tt>\#if</tt></b>"          # NOTE: this overrides the Doxygen \if command
-ALIASES += endif="<b><tt>\#endif</tt></b>"
+#       However to avoid overwriting e.g. \if Doxygen command the _ character is postfixed
+ALIASES += ifdef_="<b><tt>\#ifdef</tt></b>"
+ALIASES += ifndef_="<b><tt>\#ifndef</tt></b>"
+ALIASES += if_="<b><tt>\#if</tt></b>"
+ALIASES += endif_="<b><tt>\#endif</tt></b>"
+
+# See ENABLED_SECTIONS configuration key for more info about these:
+ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL \n <b>wxPerl note</b>\n\n"
+ALIASES += endWxPerlOnly="\endif"
+ALIASES += beginWxPythonOnly="\if WXPYTHON_MANUAL \n <b>wxPython note</b>\n\n"
+ALIASES += endWxPythonOnly="\endif"
 
 
 #---------------------------------------------------------------------------
@@ -160,7 +166,10 @@ GENERATE_TODOLIST      = YES
 GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = YES
 GENERATE_DEPRECATEDLIST= YES
+
+# can contain WXPERL_MANUAL, WXPYTHON_MANUAL keywords
 ENABLED_SECTIONS       = 
+
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
 SHOW_DIRECTORIES       = NO

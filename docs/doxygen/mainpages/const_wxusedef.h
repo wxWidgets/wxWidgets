@@ -16,7 +16,7 @@
  category). These symbols are always defined and whether the given feature is
  active or not depends on their value: if defined as @c 1, feature is active,
  otherwise it is disabled. Because of this these symbols should be always tested
- using @if and not @ifdef.
+ using @if_ and not @ifdef_.
 
  @li @ref page_wxusedef_multi
  @li @ref page_wxusedef_unix

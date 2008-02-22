@@ -8,7 +8,7 @@
 
 /*!
 
- @page printing_overview Printing overview
+ @page overview_printing Printing overview
 
  Classes: #wxPrintout,
  #wxPrinter,

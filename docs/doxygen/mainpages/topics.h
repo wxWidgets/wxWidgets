@@ -93,7 +93,7 @@
  @li @subpage overview_html
  @li @subpage overview_richtextctrl
  @li @subpage overview_aui
- @li @subpage overview_commondialogs
+ @li @subpage overview_cmndlg
  @li @subpage overview_toolbar
  @li @subpage overview_grid
  @li @subpage overview_treectrl

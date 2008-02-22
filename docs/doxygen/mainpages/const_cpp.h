@@ -15,7 +15,7 @@
  by category (and sorted by alphabetical order inside each category).
  All of these macros except for the @c wxUSE_XXX variety is defined if the
  corresponding condition is @true and undefined if it isn't, so they should be
- always tested using @ifdef and not @if.
+ always tested using @ifdef_ and not @if_.
 
  @li @ref page_cppconst_guisystem
  @li @ref page_cppconst_os
@@ -161,14 +161,14 @@
  @itemdef{__VISAGECPP__, IBM Visual Age (OS/2)}
  @itemdef{__VISUALC__, Microsoft Visual C++, see also wxCHECK_VISUALC_VERSION. 
                        The value of this macro corresponds to the compiler version: 
-                       $1020$ for $4.2$ (the first supported version), $1100$ for 
-                       $5.0$, $1200$ for $6.0$ and so on. For convenience, the symbols 
+                       @c 1020 for @c 4.2 (the first supported version), @c 1100 for 
+                       @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols 
                        __VISUALCn__ are also defined for each major compiler version from
-                       5 to 9, i.e. you can use tests such @ifdef __VISUALC7__ to test
+                       5 to 9, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
                        for compiler version being precisely 7.}
  @itemdef{__XLC__, AIX compiler}
  @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
-                      the compiler version, $1100$ is $11.0$ and $1200$ is OpenWatcom.}
+                      the compiler version, @c 1100 is @c 11.0 and @c 1200 is OpenWatcom.}
  @itemdef{_WIN32_WCE, Windows CE version}
  @endDefList
 
@@ -208,20 +208,20 @@
  @itemdef{wxUSE_XXX,
           if defined as $1$, feature XXX is active, see the 
           @ref page_wxusedef (the symbols of this form are always defined,
-          use @if and not @ifdef to test for them)}
+          use @if_ and not @ifdef_ to test for them)}
  @itemdef{WX_PRECOMP,
           is defined if precompiled headers (PCH) are in use. In
           this case, @c wx/wxprec.h includes @c wx/wx.h which, in turn,
           includes a number of wxWidgets headers thus making it unnecessary to include
           them explicitly. However if this is not defined, you do need to include them
           and so the usual idiom which allows to support both cases is to first include
-          @c wx/wxprec.h} and then, inside @ifndef WX_PRECOMP, individual
+          @c wx/wxprec.h} and then, inside @ifndef_ WX_PRECOMP, individual
           headers you need.}
- @itemdef{_UNICODE and UNICODE, both are defined if wxUSE_UNICODE is set to $1$}
+ @itemdef{_UNICODE and UNICODE, both are defined if wxUSE_UNICODE is set to @c 1}
  @itemdef{wxUSE_GUI,
           this particular feature test macro is defined to $1$
           when compiling or using the library with the GUI features activated,
-          if it is defined as $0$, only wxBase is available.}
+          if it is defined as @c 0, only wxBase is available.}
  @itemdef{wxUSE_BASE,
           only used by wxWidgets internally (defined as $1$ when
           building wxBase code, either as a standalone library or as part of the
