@@ -1101,7 +1101,7 @@ void wxQTMediaBackend::MacVisibilityChanged()
     if(!m_mc || !m_ctrl->m_bLoaded)
         return; //not initialized yet
 
-    if(m_ctrl->MacIsReallyShown())
+    if(m_ctrl->IsShownOnScreen())
     {
         //The window is being shown again, so set the GWorld of the
         //controller back to the port of the parent WindowRef

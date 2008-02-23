@@ -1108,7 +1108,7 @@ void wxWindowMac::MacUpdateControlFont()
 {
     m_peer->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
     // do not trigger refreshes upon invisible and possible partly created objects
-    if ( MacIsReallyShown() )
+    if ( IsShownOnScreen() )
         Refresh() ;
 }
 
@@ -1673,7 +1673,7 @@ void wxWindowMac::MacInvalidateBorders()
     if ( m_peer == NULL )
         return ;
 
-    bool vis = MacIsReallyShown() ;
+    bool vis = IsShownOnScreen() ;
     if ( !vis )
         return ;
 
@@ -1942,7 +1942,7 @@ void wxWindowMac::SetLabel(const wxString& title)
         m_peer->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics) ) ;
 
     // do not trigger refreshes upon invisible and possible partly created objects
-    if ( MacIsReallyShown() )
+    if ( IsShownOnScreen() )
         Refresh() ;
 }
 
@@ -1987,31 +1987,6 @@ void wxWindowMac::MacEnabledStateChanged()
 //
 // status queries on the inherited window's state
 //
-
-bool wxWindowMac::MacIsReallyShown()
-{
-    // only under OSX the visibility of the TLW is taken into account
-    if ( m_isBeingDeleted )
-        return false ;
-
-#if TARGET_API_MAC_OSX
-    if ( m_peer && m_peer->Ok() )
-        return m_peer->IsVisible();
-#endif
-
-    wxWindow* win = this ;
-    while ( win->IsShown() )
-    {
-        if ( win->IsTopLevel() )
-            return true ;
-
-        win = win->GetParent() ;
-        if ( win == NULL )
-            return true ;
-    }
-
-    return false ;
-}
 
 bool wxWindowMac::MacIsReallyEnabled()
 {
@@ -2074,7 +2049,7 @@ void wxWindowMac::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
     if ( m_peer == NULL )
         return ;
 
-    if ( !MacIsReallyShown() )
+    if ( !IsShownOnScreen() )
         return ;
 
     if ( rect )
@@ -2614,7 +2589,7 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
 {
     static wxRegion emptyrgn ;
 
-    if ( !m_isBeingDeleted && MacIsReallyShown() /*m_peer->IsVisible() */ )
+    if ( !m_isBeingDeleted && IsShownOnScreen() )
     {
         MacUpdateClippedRects() ;
         if ( includeOuterStructures )
@@ -3222,5 +3197,10 @@ wxByte wxWindowMac::GetTransparent() const
 
 bool wxWindowMac::IsShownOnScreen() const
 {
-    return ((wxWindowMac*)this)->MacIsReallyShown();
+#if TARGET_API_MAC_OSX
+    if ( m_peer && m_peer->Ok() )
+        return m_peer->IsVisible();
+#endif
+
+    return wxWindowBase::IsShownOnScreen();
 }

@@ -415,7 +415,7 @@ void wxGLCanvas::MacTopLevelWindowChangedPosition()
 
 void wxGLCanvas::MacVisibilityChanged()
 {
-    if ( MacIsReallyShown() != m_macCanvasIsShown )
+    if ( IsShownOnScreen() != m_macCanvasIsShown )
     {
         m_macCanvasIsShown = !m_macCanvasIsShown;
         MacUpdateView();

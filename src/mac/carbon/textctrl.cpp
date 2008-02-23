@@ -486,7 +486,7 @@ void wxTextCtrl::MacSuperChangedPosition()
 
 void wxTextCtrl::MacVisibilityChanged()
 {
-    GetPeer()->VisibilityChanged( MacIsReallyShown() ) ;
+    GetPeer()->VisibilityChanged( IsShownOnScreen() ) ;
 }
 
 void wxTextCtrl::MacCheckSpelling(bool check)
@@ -2562,7 +2562,7 @@ void wxMacMLTEClassicControl::MacControlUserPaneDrawProc(wxInt16 WXUNUSED(thePar
     if ( textctrl == NULL )
         return ;
 
-    if ( textctrl->MacIsReallyShown() )
+    if ( textctrl->IsShownOnScreen() )
     {
         wxMacWindowClipper clipper( textctrl ) ;
         TXNDraw( m_txn , NULL ) ;
@@ -2575,7 +2575,7 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneHitTestProc(wxInt16 x, wxInt1
     ControlPartCode result = kControlNoPart;
 
     wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference( m_controlRef );
-    if ( (textctrl != NULL) && textctrl->MacIsReallyShown() )
+    if ( (textctrl != NULL) && textctrl->IsShownOnScreen() )
     {
         if (PtInRect( where, &m_txnControlBounds ))
         {
@@ -2602,7 +2602,7 @@ wxInt16 wxMacMLTEClassicControl::MacControlUserPaneTrackingProc( wxInt16 x, wxIn
     ControlPartCode result = kControlNoPart;
 
     wxTextCtrl* textctrl = (wxTextCtrl*) GetControlReference( m_controlRef );
-    if ( (textctrl != NULL) && textctrl->MacIsReallyShown() )
+    if ( (textctrl != NULL) && textctrl->IsShownOnScreen() )
     {
         Point startPt = { y , x } ;
 
@@ -2638,7 +2638,7 @@ void wxMacMLTEClassicControl::MacControlUserPaneIdleProc()
     if ( textctrl == NULL )
         return ;
 
-    if (textctrl->MacIsReallyShown())
+    if (textctrl->IsShownOnScreen())
     {
         if (IsControlActive(m_controlRef))
         {
@@ -2744,7 +2744,7 @@ wxMacMLTEClassicControl::wxMacMLTEClassicControl( wxTextCtrl *wxPeer,
 
     AdjustCreationAttributes( *wxWHITE , true ) ;
 
-    MacSetObjectVisibility( wxPeer->MacIsReallyShown() ) ;
+    MacSetObjectVisibility( wxPeer->IsShownOnScreen() ) ;
 
     {
         wxString st = str ;

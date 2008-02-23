@@ -195,7 +195,6 @@ public:
     virtual void        MacHiliteChanged() ;
     virtual wxInt32     MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
 
-    bool                MacIsReallyShown() ;
     bool                MacIsReallyEnabled() ;
     bool                MacIsReallyHilited() ;
 
