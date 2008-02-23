@@ -486,7 +486,7 @@ void wxTextCtrl::MacSuperChangedPosition()
 
 void wxTextCtrl::MacVisibilityChanged()
 {
-    GetPeer()->VisibilityChanged( IsShownOnScreen() ) ;
+    GetPeer()->VisibilityChanged( GetPeer()->IsVisible() );
 }
 
 void wxTextCtrl::MacCheckSpelling(bool check)
