@@ -276,7 +276,13 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
             break ;
 
         case kEventControlVisibilityChanged :
-            thisWindow->MacVisibilityChanged() ;
+            // we might have two native controls attributed to the same wxWindow instance
+            // eg a scrollview and an embedded textview, make sure we only fire for the 'outer'
+            // control, as otherwise native and wx visibility are different
+            if ( thisWindow->GetPeer() != NULL && thisWindow->GetPeer()->GetControlRef() == controlRef )
+            {
+                thisWindow->MacVisibilityChanged() ;
+            }
             break ;
 
         case kEventControlEnabledStateChanged :
@@ -3199,7 +3205,17 @@ bool wxWindowMac::IsShownOnScreen() const
 {
 #if TARGET_API_MAC_OSX
     if ( m_peer && m_peer->Ok() )
+    {
+        bool peerVis = m_peer->IsVisible();
+        bool wxVis = wxWindowBase::IsShownOnScreen();
+        if( peerVis != wxVis )
+        {
+            wxVis = wxWindowBase::IsShownOnScreen();
+            return wxVis;
+        }
+        
         return m_peer->IsVisible();
+    }
 #endif
 
     return wxWindowBase::IsShownOnScreen();
