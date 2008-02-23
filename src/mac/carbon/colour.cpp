@@ -103,17 +103,25 @@ void wxColour::InitCGColorRef( CGColorRef col )
 {
     m_cgColour.reset( col );
     size_t noComp = CGColorGetNumberOfComponents( col );
-    if ( noComp >=3 && noComp <= 4 )
+    if ( noComp >= 1 && noComp <= 4 )
     {
         // TODO verify whether we really are on a RGB color space
+        m_alpha = wxALPHA_OPAQUE;
         const CGFloat *components = CGColorGetComponents( col );
-        m_red = (int)(components[0]*255+0.5);
-        m_green = (int)(components[1]*255+0.5);
-        m_blue = (int)(components[2]*255+0.5);
-        if ( noComp == 4 )
-            m_alpha =  (int)(components[3]*255+0.5);
+        if ( noComp >= 3 )
+        {
+            m_red = (int)(components[0]*255+0.5);
+            m_green = (int)(components[1]*255+0.5);
+            m_blue = (int)(components[2]*255+0.5);
+            if ( noComp == 4 )
+                m_alpha =  (int)(components[3]*255+0.5);
+        }
         else
-            m_alpha = wxALPHA_OPAQUE;
+        {
+            m_red = (int)(components[0]*255+0.5);
+            m_green = (int)(components[0]*255+0.5);
+            m_blue = (int)(components[0]*255+0.5);
+        }
     }
     else
     {
