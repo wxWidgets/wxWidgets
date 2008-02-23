@@ -3210,6 +3210,12 @@ bool wxWindowMac::IsShownOnScreen() const
         bool wxVis = wxWindowBase::IsShownOnScreen();
         if( peerVis != wxVis )
         {
+            // CS : put a breakpoint here to investigate differences
+            // between native an wx visibilities
+            // the only place where I've encountered them until now
+            // are the hiding/showing sequences where the vis-changed event is 
+            // first sent to the innermost control, while wx does things
+            // from the outmost control
             wxVis = wxWindowBase::IsShownOnScreen();
             return wxVis;
         }
