@@ -110,4 +110,21 @@
 typedef	long int32;
 #endif
 
-#endif
+#ifdef _WIN32_WCE
+#   undef HAVE_FCNTL_H
+#   undef HAVE_SYS_TYPES_H
+
+    /*
+       CE headers don't define these standard constants (not even underscored
+       versions), provide our own replacements as they seem to be only used in
+       libtiff own code anyhow.
+     */
+#   define   O_RDONLY    0x0000
+#   define   O_WRONLY    0x0001
+#   define   O_RDWR      0x0002
+#   define   O_CREAT     0x0100
+#   define   O_TRUNC     0x0200
+#   define   O_EXCL      0x0400
+#endif /* _WIN32_WCE */
+
+#endif /* __APPLE__/!__APPLE__ */
