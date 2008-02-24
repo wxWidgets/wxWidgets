@@ -5,99 +5,88 @@ This note is aimed at people wishing to add documentation for a
 class to either the main wxWidgets manual, or to their own
 manual.
 
-wxWidgets uses Tex2RTF to process Latex-like input files (.tex)
-and output in HTML, WinHelp RTF and Word RTF. Tex2RTF is provided
-in the wxWidgets distribution and in the CVS archive, under
-utils/tex2rtf. Please start by perusing the Tex2RTF manual.
-See http://www.wxwidgets.org/tex2rtf/index.htm for a browseable
-manual and binaries for specific platforms.
+wxWidgets uses Doxygen to process header input files with embedded
+documentation in the form of C++ comments and output in HTML, and XML
+(Doxygen itself can also output Latex, manpages, RTF, PDF etc).
+See http://www.doxygen.org for more info about Doxygen.
 
-If adding to the existing manual in docs/latex/wx, you need to
-create a new .tex file, e.g. myclass.tex, and add it to the
-list of classes in classes.tex (in strict alphabetical order).
-You may also want to write a separate topic file, e.g. tmyclass.tex,
-and add the entry to topics.tex.  If applicable, also add an entry
-to category.tex.
+If you want to add documentation of a new class/function to the 
+existing manual in docs/doxygen, you need to create a new .h file,
+e.g. myclass.h, under the interface folder, which contains the public
+interface of the new class/function in C++ syntax.
+The documentation can then be added in form of Doxygen comments to
+the header file.
 
-If compiling a separate manual, copy an existing set of files from the
-wxWidgets manual or a contribution. Contribution documentation
-normally goes in the contrib/docs hierarchy, with the source
-going in a latex/mycontrib subdirectory.
+You may also want to write a separate topic file,
+e.g. docs/doxygen/overviews/myclass.h, and add the entry to
+docs/doxygen/mainpages/topics.h.
 
-You can generate a first pass at the myclass.tex file by
-compiling and running HelpGen (utils/helpgen).
+If applicable, also add an entry to docs/doxygen/mainpages/categories.h.
 
-Running Tex2RTF
+You can generate a first raw version of myclass.h simply taking its
+"real" header and removing all the private and protected sections and
+in general removing everything the user "shouldn't know": i.e. all things
+which are implementation details.
+
+
+Running Doxygen
 ===============
 
-See the Tex2RTF documentation, but here are some forms:
+First, make sure you have a recent version of Doxygen installed in your system.
 
 For HTML:
 
-  tex2rtf manual.tex manual.htm -html -twice
+  1) cd wxWidgets/docs/doxygen
+  2) run ./regen.sh [Unix]    or   regen.bat [Windows]
 
-Use of -twice allows Tex2RTF to resolve references. Note that
-if both filenames are given (first two parameters on the command
-line) then Tex2RTF will run in non-interactive mode.
+[TODO: istructions for generation of other formats]
 
-For WinHelp RTF:
-
-  tex2rtf manual.tex manual.rtf -winhelp -twice
-
-For Word RTF:
-
-  tex2rtf manual.tex manual.rtf -rtf -twice
-
-If you wish to have a GUI display show the status of what is happening
-as the conversion is happening, use the '-interactive' command line
-parameter, and then choose FILE|GO from the menu.  For example:
-
-   tex2rtf manual.tex manual.rtf -rtf -twice -interactive
-
-NOTE: You must be using the latest tex2rtf which was released with
-v2.2.0 of wxWidgets to use the -interactive switch
-
-If you wish to generate documentation for wxHTML Help Viewer
-(or Windows HTML Help), set htmlWorkshopFiles to true in your
-tex2rtf.ini file. See also the wxHTML Notes section in the
-wxWidgets manual. To further speed-up HTML help books loading
-in your application, you may use hhp2cached (utils/hhp2cached).
-
-src/msw/makefile.vc contains targets for generating various
-formats of documentation. You may like to do something similar if
-writing your own manual.
 
 Important Dos and Don'ts
 ========================
 
 DO:
 
-- put a space (or \rtfsp) at the end of a line or start of a line where
-  a command ends or starts the line. Otherwise, spaces will be
-  omitted in Word or WinHelp RTF. For example:
+- Doxygen supports both commands in the form \command and @command;
+  all wxWidgets documentation uses the @command form.
 
-  See \helpref{wxBitmap::wxBitmap}{wxbitmapconstr}\rtfsp
-  for a list of possible values.
+- strive to use dedicated Doxygen commands for e.g. notes, lists,
+  sections, etc. The "Special commands" page:
+    http://www.stack.nl/~dimitri/doxygen/commands.html
+  is your friend!
+  It's also very important to make a consistent use of the ALIASES
+  defined by wxWidgets' Doxyfile. Open that file for more info.
 
-- leave a blank line at the end of the class file. This is
-  important, or the Word RTF table of contents will be messed up.
+- when you write true, false and NULL with their C++ semantic meaning,
+  then use the @true, @false and @NULL commands.
 
-- leave a blank line between a heading and the next paragraph.
+- separe different paragraphs with an empty comment line.
+  This is important otherwise Doxygen puts everything in the same
+  paragraph making the result less readable.
 
-- test your changes, preferably converting the manual to WinHelp
-  format and running through the Windows help compiler to check
-  for missing labels, etc.
+- leave a blank comment line between a @section, @subsection, @page
+  and the next paragraph.
 
-- quote all '_' and '&' characters with a '\' character (e.g. "MY\_PROGRAM"
-  unless the '_' is inside a comment or a \begin{verbatim} ...
-  \end{verbatim} block
+- test your changes, both reading the generated HTML docs and by looking
+  at the "doxygen.log" file produced (which will warn you about any
+  eventual mistake found in the comments).
 
-- check that your changes/additions to any TEX documentation 
-  compiles before checking it in!  Use the '-checkcurlybraces' 
-  and '-checksyntax' commandline parameters (or the OPTIONS menu 
-  if running in GUI mode) to check for some of the more common 
-  mistakes.  See TROUBLESHOOTING below for more details
+- quote all the following characters prefixing them with a "@" char:
 
+         @  $  \  &  <  >  #  %
+
+- when using a Doxygen alias like @itemdef{}, you need to escape the
+  comma characters which appear on the first argument, otherwise Doxygen
+  will interpret them as the marker of the end of the first argument and
+  the beginning of the second argument's text.
+
+  E.g. if you want to define the item "wxEVT_MACRO(id, func)" you need to
+       write:
+            @itemdef{wxEVT_MACRO(id\, func), This is the description of the macro}
+
+  Also note that you need to escape only the commas of the first argument's text;
+  second argument can have up to 10 commas unescaped (see the Doxyfile for the
+  trick used to implement this).
 
 DON'T:
 
@@ -105,172 +94,161 @@ DON'T:
   The manual is intended to be a fluent, English document and
   not a collection of rough notes.
 
-- use non-alphanumeric characters in labels.
+- use non-alphanumeric characters in link anchors.
 
-- use incompatible Latex syntax, such as {\it \bf word} (use a pair
-  of braces for each formatting command).
 
-- leave multiple consecutive blank lines, or blank lines between
-  \items in a list.
-
-- use \verb$....$ syntax.  Instead use \tt{....} syntax
-
-- add the following tokens anywhere except on a line by themselves:
-	\begin{verbatim}
-	\begin{toocomplex}
-	\end{verbatim}
-	\end{toocomplex}
-	\verb
-	\begin{comment}
-	\end{comment}
-	\verbatiminput
-	\par
-	\input
-	\helpinput
-	\include
-	
-
-Troubleshooting
-===============
-
-Please see the troubleshooting section in the Tex2RTF manual, but
-here is one important tip:
-
-   If you get a "Macro not found: \end{document}" error,
-   this is a spurious side-effect of an earlier error, usually an
-   incorrect number of arguments to a command. The location of the
-   true error is then anywhere in the document.
-
-   To home in on the error, try putting \begin{comment}...\end{comment}
-   around much of the document, and then move the \begin{comment}
-   line down until the error manifests itself again. Note that
-   you can abort Tex2RTF after the syntax error stage by clicking
-   on the close button, so you don't have to wait while the whole
-   document is processed.
-
-   Before looking at a file in detail, you can comment out the
-   \input{myclass.tex} line in classes.tex using the single
-   line comment character (%) to see whether it was that file that
-   caused the problem.
-
-	When making changes/additions to the documentation, always use 
-	the '-checkcurlybraces' and '-checksyntax' commandline parameters
-	(or turn these options on in the GUI version via the OPTIONS menu 
-	choice), BEFORE checking in your changes.  These two debugging 
-	options will catch many of the more common mistakes that are made
-	while writing documents, plus they will catch some of the uses 
-	of TeX that are correct syntax-wise, but that tex2rtf cannot 
-	handle properly, and report the problems (usually along with
-	a filename and line number that they occur in!) in the programs
-	output window (GUI mode).
-
-Elements in a class file
-========================
+Documentation comment for a class
+=================================
 
 Start off with:
 
-\section{\class{wxMyClass}}\label{wxmyclass}
+/**
+ * @class wxMyClass
+ * @headerfile wx/myclass.h
+ *
+ * ...here goes the description... 
+ *
+ * @beginEventTable
+ * @event{EVT_SOME_EVENT(id, func)}:
+ *        Description for EVT_SOME_EVENT.
+ * @endEventTable
+ *
+ * @beginStyleTable
+ * @style{wxSOME_STYLE}:
+ *        Description for wxSOME_STYLE.
+ * ...
+ * @endStyleTable
+ *
+ * @beginExtraStyleTable
+ * @style{wxSOME_EXTRA_STYLE}:
+ *        Description for wxSOME_EXTRA_STYLE.
+ * ...
+ * @endExtraStyleTable
+ *
+ * @library{wxbase}
+ * @stdobjects
+ * ...here goes the list of predefined instances...
+ *
+ * @seealso
+ * ...here goes the see-also list...
+ * you can make references to topic overviews or other
+ * manual pages using the @ref command
+ */
 
-(note that labels can only go on sections such as \chapter,
-\section, \subsection, \membersection, but not on \wxheading, for
-example.)
+Note that the events, styles and extra-styles tables as
+well as @stdobjects and @seealso lists are optional.
 
-Describe the class briefly.
-
-Then there are several \wxheading sections:
-
-\wxheading{Derived from}
-
-List the base classes, with line breaks following each one (\\)
-except the last.
-
-\wxheading{Include files}
-
-List the relevant include files, for example:
-
-<wx/myclass.h>
-
-\wxheading{Predefined objects}
-
-List any predefined objects, such as:
-
-{\bf wxNullMyClass}
-
-\wxheading{See also}
-
-List any relevant classes or topics, using \helpref.
-
-\latexignore{\rtfignore{\wxheading{Members}}}
-
-This generates the required heading for the member definitions.
-Put the constructors first, then in alphabetical order, the other
-members.
-
-Here's an example of documentation for a member function:
-
-         --------------------:x-----------------------
-
-\membersection{wxBitmap::Create}\label{wxbitmapcreate}
-
-\func{virtual bool}{Create}{\param{int}{ width}, \param{int}{ height},
- \param{int}{ depth = -1}}
-
-Creates a fresh bitmap. If the final argument is omitted, the display depth of
-the screen is used.
-
-\func{virtual bool}{Create}{\param{void*}{ data}, \param{int}{ type},
- \param{int}{ width}, \param{int}{ height}, \param{int}{ depth = $-1$}}
-
-Creates a bitmap from the given data, which can be of arbitrary type.
-
-\wxheading{Parameters}
-
-\docparam{width}{The width of the bitmap in pixels.}
-
-\docparam{height}{The height of the bitmap in pixels.}
-
-\docparam{depth}{The depth of the bitmap in pixels. If this is -1, the screen depth is used.}
-
-\docparam{data}{Data whose type depends on the value of {\it type}.}
-
-\docparam{type}{A bitmap type identifier - see \helpref{wxBitmap::wxBitmap}{wxbitmapconstr} for a list
-of possible values.}
-
-\wxheading{Return value}
-
-\true if the call succeeded, \false otherwise.
-
-\wxheading{Remarks}
-
-The first form works on all platforms. The portability of the second form depends on the
-type of data.
-
-\wxheading{See also}
-
-\helpref{wxBitmap::wxBitmap}{wxbitmapconstr}
-
-         --------------------:x-----------------------
-
-Note the use of \docparam to document parameters; and the fact
-that several overloaded forms of the same member function are
-documented within the same \membersection.
+Also note that you shouldn't use the Doxygen builtin @sa command
+for the see-also list but rather the wxWidgets' alias @seealso
+in this case.
 
 
-Special forms:
+Documentation comment for a function
+====================================
 
-- for a const member function use \constfunc{} instead of \const
+Start off with:
 
-- for a function without parameters use \func{...}{Function}{\void}
+/**
+ * ...here goes the description of the function....
+ *
+ * @param param1
+ * ...here goes the description for the first parameter of this function
+ * @param param2
+ * ...here goes the description for the second parameter of this function
+ * ...
+ *
+ * @return
+ * ...here goes the description of what the function returns...
+ *
+ * @note ...here go any eventual notes about this function...
+ *
+ * @remarks ...here go any eventual remarks about this function...
+ *
+ * @sa ...here goes the see-also list...
+ */
 
-- but do NOT use \void for functions without return value, just "void"
+Note that the @return, @note, @remarks, @sa commands are optional.
 
-- for a virtual/static member function use \func{virtual/static ...}
+Also note that unlike for class' description, you should use the doxygen
+builtin @sa command here for see-also lists.
 
-- omit the return type for constructors: \func{}{MyClass}{...}
+The @param command has an optional attribute specifying the direction of 
+the attribute. Possible values are "in" and "out". E.g.
 
-- use \destruct macro for the destructors \func{}{\destruct{MyClass}}{\void}
+/**
+ * Copies bytes from a source memory area to a destination memory area,
+ * where both areas may not overlap.
+ * @param[out]     dest   The memory area to copy to.
+ * @param[in]      src    The memory area to copy from.
+ * @param[in]      n      The number of bytes to copy.
+ * @param[in,out]  pmisc  Used both as input and as output.
+ */
+void func(void *dest, const void *src, size_t n, void *pmisc);
 
-- use \true and \false instead of true/TRUE/{\tt true}/...
 
-- use \arg{paramname} to refer to the argument inside of the function
-  description
+Documentation comment for a topic overview
+==========================================
+
+Topic overviews are stored inside the docs/doxygen/overviews folder
+and are completely placed inside a single comment block in the form of:
+
+/*!
+
+ @page overview_tname wxSomeStuff overview
+
+ This page provides an overview of the wxSomeStuff and related classes.
+ ....
+
+ @li @ref overview_tname_intro
+ @li @ref overview_tname_details
+ ...
+
+ <hr>
+
+
+ @section overview_tname_intro Introduction
+
+ ...here goes the introduction to this topic...
+
+
+ @section overview_tname_details Details
+
+ ...here go the details to this topic...
+
+*/
+
+Note that there is a convention in the anchor link names.
+Doxygen in fact requires that for each @page, @section, @subsection, etc tag, 
+there is a corresponding link anchor.
+
+The following conventions are used in wxWidgets doxygen comments:
+
+1) all "main" pages of the manual (those which are placed in docs/doxygen/mainpages) 
+   have link anchors which begin with "page_"
+
+2) all topic overviews (those which are placed in docs/doxygen/overviews) have link 
+   anchors which begin with "overview_"
+
+3) all @section, @subsection, @subsubsection tags should have as link anchor name
+   the name of the parent section plus a specific word separed with an underscore; e.g.:
+
+/*!
+
+ @page overview_tname wxSomeStuff overview
+
+ @section overview_tname_intro Introduction
+  @subsection overview_tname_intro_firstpart First part
+  @subsection overview_tname_intro_secondpart Second part
+   @subsubsection overview_tname_intro_secondpart_sub Second part subsection
+  @subsection overview_tname_intro_thirdpart Third part
+
+ @section overview_tname_details Details
+ ...
+
+*/
+
+
+=== EOF ===
+
+Author: FM (under the lines of the previous technote about tex2rtf)
+Version: $Id$
