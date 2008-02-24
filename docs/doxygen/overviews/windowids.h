@@ -10,22 +10,24 @@
 
  @page overview_windowids Window IDs overview
 
- @b See Also
+ @seealso
  #wxIdManager
  wxWindow::NewControlId
  wxWindow::UnreserveControlId
- #Introduction
- @ref windowidstypes_overview
- @ref windowidsusing_overview
+
+ @li @ref introduction
+ @li @ref overview_windowidstypes
+ @li @ref overview_windowidsusing
 
 
- @section windowidsoverviewintro Introduction
+ @section introduction Introduction
 
  Various contols and other parts of wxWidgets need an ID.  Sometimes the
  ID may be directly provided by the use or have a predefined value, such as
  @c wxID_OPEN. Often, however, the value of the ID is unimportant and is
  created automatically by calling wxWindow::NewControlId
  or by passing @c wxID_ANY as the ID of an object.
+
  There are two ways to generate an ID.  One way, is to start at a negative number,
  and for each new ID, return the next smallest number.  This is fine for systems
  that can used the full range of negative numbers for an ID, as this provides
@@ -36,6 +38,7 @@
  If the program runs long enough, depending on the program itself, using this first
  method would cause the IDs to wrap around into the positive ID range and cause possible
  clashes with any directly specified ID values.
+
  The other way is to keep track of the IDs returned by wxWindow::NewControlId
  and don't return them again until the ID is completely free and not being used by
  any other objects.  This will make sure that the ID values do not clash with one
@@ -43,7 +46,7 @@
  that can possibly be returned by wxWindow::NewControlId.
  Other IDs are not reference counted.
 
- @section windowidsoverviewtypes Data types
+ @section overview_windowidstypes Data types
 
  A wxWindowID is just the integer type for a window ID.  It should be used almost
  everywhere.  To help keep track of the count for the automatically generated IDs,
@@ -54,15 +57,17 @@
  As the wxWindowIDRef gets destroyed or its value changes, it will decrease the count
  of the used ID.  When there are no more wxWindowIDRef types with the created ID, the
  ID is considered free and can then be used again by wxWindow::NewControlId.
+
  If a created ID is not assigned to a wxWindowIDRef, then it remains reserved until it
  is unreserved manually with wxWindow::UnreserveControlId.
  However, if it is assigned to a wxWindowIDRef, then it will be unreserved automatically
  and will be considered free when the count is 0, and should NOT be manually unreserved.
+
  wxWindowIDRef can store both automatic IDs from wxWindow::NewControlId
  as well as normal IDs.  Reference counting is only done for the automatic IDs.  Also,
  wxWindowIDRef has conversion operators that allow it to be treated just like a wxWindowID.
 
- @section windowidsoverviewusing Using wxWindowIDRef
+ @section overview_windowidsusing Using wxWindowIDRef
 
  A wxWindowIDRef should be used in place of a wxWindowID where you want to make sure the
  ID is not created again by wxWindow::NewControlId
