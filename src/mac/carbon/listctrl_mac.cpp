@@ -2297,9 +2297,26 @@ void wxListCtrl::RefreshItem(long item)
         return;
     }
 
-    wxRect rect;
-    GetItemRect(item, rect);
-    RefreshRect(rect);
+    if (m_dbImpl)
+    {
+        DataBrowserItemID id;
+
+        if ( !IsVirtual() )
+        {
+            wxMacDataItem* thisItem = m_dbImpl->GetItemFromLine(item);
+            id = (DataBrowserItemID) thisItem;
+        }
+        else
+            id = item+1;
+
+        m_dbImpl->wxMacDataBrowserControl::UpdateItems
+                  (
+                    kDataBrowserNoItem,
+                    1, &id,
+                    kDataBrowserItemNoProperty, // preSortProperty
+                    kDataBrowserNoItem // update all columns
+                  );
+    }
 }
 
 void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
@@ -2310,14 +2327,35 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
         return;
     }
 
-    wxRect rect1, rect2;
-    GetItemRect(itemFrom, rect1);
-    GetItemRect(itemTo, rect2);
+    if (m_dbImpl)
+    {
+        const long count = itemTo - itemFrom + 1;
+        DataBrowserItemID *ids = new DataBrowserItemID[count];
 
-    wxRect rect = rect1;
-    rect.height = rect2.GetBottom() - rect1.GetTop();
+        if ( !IsVirtual() )
+        {
+            for ( long i = 0; i < count; i++ )
+            {
+                wxMacDataItem* thisItem = m_dbImpl->GetItemFromLine(itemFrom+i);
+                ids[i] = (DataBrowserItemID) thisItem;
+            }
+        }
+        else
+        {
+            for ( long i = 0; i < count; i++ )
+                ids[i] = itemFrom+i+1;
+        }
 
-    RefreshRect(rect);
+        m_dbImpl->wxMacDataBrowserControl::UpdateItems
+                  (
+                    kDataBrowserNoItem,
+                    count, ids,
+                    kDataBrowserItemNoProperty, // preSortProperty
+                    kDataBrowserNoItem // update all columns
+                  );
+
+        delete[] ids;
+    }
 }
 
 void wxListCtrl::SetDropTarget( wxDropTarget *dropTarget )
