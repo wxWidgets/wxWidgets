@@ -20,11 +20,21 @@
 
 #include "wx/msgdlg.h"
 
+// there is no hook support under CE so we can't use the code for message box
+// positioning there
+#ifndef __WXWINCE__
+    #define wxUSE_MSGBOX_HOOK 1
+#else
+    #define wxUSE_MSGBOX_HOOK 0
+#endif
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
-    #include "wx/hashmap.h"
+    #if wxUSE_MSGBOX_HOOK
+        #include "wx/hashmap.h"
+    #endif
 #endif
 
 #include "wx/msw/private.h"
@@ -35,6 +45,8 @@
 #endif
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
+
+#if wxUSE_MSGBOX_HOOK
 
 // there can potentially be one message box per thread so we use a hash map
 // with thread ids as keys and (currently shown) message boxes as values
@@ -94,6 +106,9 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
 
     return rc;
 }
+
+#endif // wxUSE_MSGBOX_HOOK
+
 
 int wxMessageDialog::ShowModal()
 {
@@ -170,6 +185,7 @@ int wxMessageDialog::ShowModal()
     }
 #endif // wxUSE_UNICODE
 
+#if wxUSE_MSGBOX_HOOK
     // install the hook if we need to position the dialog in a non-default way
     if ( wxStyle & wxCENTER )
     {
@@ -178,6 +194,7 @@ int wxMessageDialog::ShowModal()
                                     &wxMessageDialog::HookFunction, NULL, tid);
         HookMap()[tid] = this;
     }
+#endif // wxUSE_MSGBOX_HOOK
 
     // do show the dialog
     int msAns = MessageBox(hWnd, message.wx_str(), m_caption.wx_str(), msStyle);
