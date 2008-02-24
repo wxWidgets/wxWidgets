@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"          // for wxDCTemp
 
 #include "wx/msw/uxtheme.h"
 

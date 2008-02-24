@@ -35,6 +35,7 @@
 #include "wx/splitter.h"
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 #include "wx/msw/uxtheme.h"
 
 // tmschema.h is in Win32 Platform SDK and might not be available with earlier

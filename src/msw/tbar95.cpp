@@ -47,6 +47,7 @@
 #include "wx/dcclient.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 
 #if wxUSE_UXTHEME
 #include "wx/msw/uxtheme.h"

@@ -52,6 +52,7 @@
 #include "wx/thread.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 #include "wx/msw/ole/oleutils.h"
 #include "wx/msw/private/timer.h"
 

@@ -40,6 +40,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 
 #if wxUSE_WXDIB
     #include "wx/msw/dib.h"

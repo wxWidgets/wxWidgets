@@ -34,6 +34,7 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/msw/dc.h"          // for wxDCTemp
 #include "wx/msw/uxtheme.h"
 #include "wx/renderer.h"
 
