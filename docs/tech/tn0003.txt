@@ -96,6 +96,15 @@ DON'T:
 
 - use non-alphanumeric characters in link anchors.
 
+- use Doxygen @b @c @e commands when referring to more than a single word;
+  in that case you need to use the <b>...</b>, <tt>...</tt>, <em>...</em>
+  HTML-style tags instead
+
+- use HTML style tags for creation of tables or lists.
+  Use wx aliases instead like @beginTable, @row2col, @row3col, @endTable and
+  @beginDefList, @itemdef, @endDefList, etc.
+  See the Doxyfile for more info.
+
 
 Documentation comment for a class
 =================================
