@@ -69,10 +69,10 @@
  one bitmap for each tool, because the toolbar generates all three images (normal,
  depressed and checked) from the single bitmap you give it.
 
- @ref usingtoolbarlibrary
+ @ref overview_usingtoolbarlibrary
 
 
- @section usingtoolbarlibrary Using the toolbar library
+ @section overview_usingtoolbarlibrary Using the toolbar library
 
  Include @c "wx/toolbar.h", or if using a class directly, one of:
 

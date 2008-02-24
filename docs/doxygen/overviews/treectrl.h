@@ -11,12 +11,14 @@
  @page overview_treectrl wxTreeCtrl overview
 
  Classes: #wxTreeCtrl, #wxImageList
+ 
  The tree control displays its items in a tree like structure. Each item has its
  own (optional) icon and a label. An item may be either collapsed (meaning that
  its children are not visible) or expanded (meaning that its children are
  shown). Each item in the tree is identified by its @e itemId which is of
  opaque data type @e wxTreeItemId. You can test whether an item is valid
  by calling wxTreeItemId::IsOk.
+
  The items text and image may be retrieved and changed with
  #GetItemText/#SetItemText
  and
@@ -25,6 +27,7 @@
  and another one for selected state which is set/retrieved with
  #SetItemSelectedImage/#GetItemSelectedImage
  functions, but this functionality might be unavailable on some platforms.
+
  Tree items have several attributes: an item may be selected or not, visible or
  not, bold or not. It may also be expanded or collapsed. All these attributes
  may be retrieved with the corresponding functions:
@@ -34,6 +37,7 @@
  selected, selecting another one (with
  #SelectItem) automatically unselects the
  previously selected one.
+
  In addition to its icon and label, a user-specific data structure may be associated
  with all tree items. If you wish to do it, you should derive a class from @e wxTreeItemData which is a very simple class having only one function @e GetId() which returns the id of the item this data is associated with. This
  data will be freed by the control itself when the associated item is deleted
@@ -42,6 +46,7 @@
  #SetItemData(@NULL) to prevent the tree from
  deleting the pointer second time). The associated data may be retrieved with
  #GetItemData() function.
+
  Working with trees is relatively straightforward if all the items are added to
  the tree at the moment of its creation. However, for large trees it may be
  very inefficient. To improve the performance you may want to delay adding the
@@ -52,6 +57,7 @@
  under the item being expanded should be added, but, of course, only when this
  event is received for the first time for this item - otherwise, the items would
  be added twice if the user expands/collapses/re-expands the branch.
+
  The tree control provides functions for enumerating its items. There are 3
  groups of enumeration functions: for the children of a given item, for the
  sibling of the given item and for the visible items (those which are currently
@@ -64,6 +70,7 @@
  #GetFirstChild and to
  #GetNextChild should be the same variable (and
  that nothing should be done with it by the user code).
+
  Among other features of the tree control are: item sorting with
  #SortChildren which uses the user-defined comparison
  function #OnCompareItems (by default the
@@ -72,6 +79,7 @@
  for implementing drag-and-drop in the tree) with
  #HitTest and editing of the tree item labels in
  place (see #EditLabel).
+
  Finally, the tree control has a keyboard interface: the cursor navigation (arrow) keys
  may be used to change the current selection. HOME and END are used to go to
  the first/last sibling of the current item. '+', '-' and '*' expand, collapse
