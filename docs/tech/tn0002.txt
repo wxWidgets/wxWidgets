@@ -28,7 +28,7 @@ First of all, here is what you will need:
       fine, but you'd have to use some kind of "for /s" loop with the
       command.com/cmd.exe.
 
-3. (at least read) access to the cvs is not necessary strictly speaking, but
+3. (at least read) access to the subversion is not necessary strictly speaking, but
    will make things a lot easier for you and others.
 
 

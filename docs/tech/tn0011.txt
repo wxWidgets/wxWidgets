@@ -18,7 +18,7 @@
        {wx}/build/bakefiles/wxpresets/presets/wx_win32.bkl
        {wx}/build/bakefiles/version.bkl {C:R:A}
        {wx}/build/script/win_docs.bat {windows doc and setup file}
-       {wx}/distrib/scripts/build-environ.cfg {cvs tar and zip files}
+       {wx}/distrib/scripts/build-environ.cfg {SVN tar and zip files}
        {wx}/include/wx/mac/carbon/config_xcode.h
 
    The script misc/scripts/inc_release can be used for incrementing
@@ -27,6 +27,8 @@
 2. When to update the version numbers:
 
    [ To be written... ]
+
+   See tn0020.txt for now.
 
 
 
