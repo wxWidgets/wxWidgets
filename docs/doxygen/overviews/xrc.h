@@ -16,122 +16,122 @@
  the application at run-time. XRC files can also be compiled into binary XRS files or C++
  code (the former makes it possible to store all resources in a single file and the latter
  is useful when you want to embed the resources into the executable).
+
  There are several advantages to using XRC resources.
 
-
-  Recompiling and linking an application is not necessary if the
+ @li Recompiling and linking an application is not necessary if the
  resources change.
-  If you use a dialog designer that generates C++ code, it can be hard
+ @li If you use a dialog designer that generates C++ code, it can be hard
  to reintegrate this into existing C++ code. Separation of resources and code
  is a more elegant solution.
-  You can choose between different alternative resource files at run time, if necessary.
-  The XRC format uses sizers for flexibility, allowing dialogs to be resizable
+ @li You can choose between different alternative resource files at run time, if necessary.
+ @li The XRC format uses sizers for flexibility, allowing dialogs to be resizable
  and highly portable.
-  The XRC format is a wxWidgets standard,
+ @li The XRC format is a wxWidgets standard,
  and can be generated or postprocessed by any program that understands it. As it is based
  on the XML standard, existing XML editors can be used for simple editing purposes.
 
 
  XRC was written by Vaclav Slavik.
- @ref xrcconcepts_overview
- @ref binaryresourcefiles_overview
- @ref embeddedresource_overview
- @ref xrccppsample_overview
- @ref xrcsample_overview
- @ref xrcfileformat_overview
- @ref xrccppheader_overview
- @ref newresourcehandlers_overview
+ @li @ref overview_xrcconcepts
+ @li @ref overview_binaryresourcefiles
+ @li @ref overview_embeddedresource
+ @li @ref overview_xrccppsample
+ @li @ref overview_xrcsample
+ @li @ref overview_xrcfileformat
+ @li @ref overview_xrccppheader
+ @li @ref overview_newresourcehandlers
 
 
- @section xrcconcepts XRC concepts
+ @section overview_xrcconcepts XRC concepts
 
  These are the typical steps for using XRC files in your application.
 
 
-  Include the appropriate headers: normally "wx/xrc/xmlres.h" will suffice;
-  If you are going to use @ref binaryresourcefiles_overview, install
+ @li Include the appropriate headers: normally "wx/xrc/xmlres.h" will suffice;
+ @li If you are going to use @ref binaryresourcefiles_overview, install
  wxFileSystem archive handler first with @c wxFileSystem::AddHandler(new wxArchiveFSHandler);
-  call @c wxXmlResource::Get()-InitAllHandlers() from your wxApp::OnInit function,
+ @li call @c wxXmlResource::Get()-InitAllHandlers() from your wxApp::OnInit function,
  and then call @c wxXmlResource::Get()-Load("myfile.xrc") to load the resource file;
-  to create a dialog from a resource, create it using the default constructor, and then
+ @li to create a dialog from a resource, create it using the default constructor, and then
  load it using for example @c wxXmlResource::Get()-LoadDialog(dlg, this, "dlg1");
-  set up event tables as usual but use the @c XRCID(str) macro to translate from XRC string names
+ @li set up event tables as usual but use the @c XRCID(str) macro to translate from XRC string names
  to a suitable integer identifier, for example @c EVT_MENU(XRCID("quit"), MyFrame::OnQuit).
-
 
  To create an XRC file, you can use one of the following methods.
 
-
-  Create the file by hand;
-  use #wxDesigner, a commercial dialog designer/RAD tool;
-  use #DialogBlocks, a commercial dialog editor;
-  use #XRCed, a wxPython-based
+ @li Create the file by hand;
+ @li use #wxDesigner, a commercial dialog designer/RAD tool;
+ @li use #DialogBlocks, a commercial dialog editor;
+ @li use #XRCed, a wxPython-based
  dialog editor that you can find in the @c wxPython/tools subdirectory of the wxWidgets
  CVS archive;
-  use #wxGlade, a GUI designer written in wxPython. At the moment it can generate Python, C++ and XRC;
+ @li use #wxGlade, a GUI designer written in wxPython. At the moment it can generate Python, C++ and XRC;
 
 
  A complete list of third-party tools that write to XRC can be found at #www.wxwidgets.org/lnk_tool.htm.
+
  It is highly recommended that you use a resource editing tool, since it's fiddly writing
  XRC files by hand.
+
  You can use wxXmlResource::Load in a number of ways.
  You can pass an XRC file (XML-based text resource file)
  or a @ref binaryresourcefiles_overview (extension ZIP or XRS) containing other XRC.
+
  You can also use @ref embeddedresource_overview
 
- @section binaryresourcefiles Using binary resource files
+ @section overview_binaryresourcefiles Using binary resource files
 
  To compile binary resource files, use the command-line wxrc utility. It takes one or more file parameters
  (the input XRC files) and the following switches and options:
 
-
-  -h (--help): show a help message
-  -v (--verbose): show verbose logging information
-  -c (--cpp-code): write C++ source rather than a XRS file
-  -e (--extra-cpp-code): if used together with -c, generates C++ header file
+ @li -h (--help): show a help message
+ @li -v (--verbose): show verbose logging information
+ @li -c (--cpp-code): write C++ source rather than a XRS file
+ @li -e (--extra-cpp-code): if used together with -c, generates C++ header file
  containing class definitions for the windows defined by the XRC file (see special subsection)
-  -u (--uncompressed): do not compress XML files (C++ only)
-  -g (--gettext): output underscore-wrapped strings that poEdit or gettext can scan. Outputs to stdout, or a file if -o is used
-  -n (--function) name: specify C++ function name (use with -c)
-  -o (--output) filename: specify the output file, such as resource.xrs or resource.cpp
-  -l (--list-of-handlers) filename: output a list of necessary handlers to this file
+ @li -u (--uncompressed): do not compress XML files (C++ only)
+ @li -g (--gettext): output underscore-wrapped strings that poEdit or gettext can scan. Outputs to stdout, or a file if -o is used
+ @li -n (--function) name: specify C++ function name (use with -c)
+ @li -o (--output) filename: specify the output file, such as resource.xrs or resource.cpp
+ @li -l (--list-of-handlers) filename: output a list of necessary handlers to this file
 
 
  For example:
 
  @code
- % wxrc resource.xrc
+   % wxrc resource.xrc
    % wxrc resource.xrc -o resource.xrs
    % wxrc resource.xrc -v -c -o resource.cpp
  @endcode
 
- @b Note
+ @note
  XRS file is essentially a renamed ZIP archive which means that you can manipulate
  it with standard ZIP tools. Note that if you are using XRS files, you have
  to initialize the #wxFileSystem archive handler first! It is a simple
  thing to do:
-
  @code
- #include wx/filesys.h
+   #include wx/filesys.h
    #include wx/fs_arc.h
    ...
    wxFileSystem::AddHandler(new wxArchiveFSHandler);
  @endcode
 
 
- @section embeddedresource Using embedded resources
+ @section overview_embeddedresource Using embedded resources
 
  It is sometimes useful to embed resources in the executable itself instead
  of loading an external file (e.g. when your app is small and consists only of one
  exe file). XRC provides means to convert resources into regular C++ file that
  can be compiled and included in the executable.
+
  Use the @c -c switch to
  @c wxrc utility to produce C++ file with embedded resources. This file will
  contain a function called @e InitXmlResource (unless you override this with
  a command line switch). Use it to load the resource:
 
  @code
- extern void InitXmlResource(); // defined in generated file
+   extern void InitXmlResource(); // defined in generated file
    ...
    wxXmlResource::Get()-InitAllHandlers();
    InitXmlResource();
@@ -139,7 +139,7 @@
  @endcode
 
 
- @section xrccppsample XRC C++ sample
+ @section overview_xrccppsample XRC C++ sample
 
  This is the C++ source file (xrcdemo.cpp) for the XRC sample.
 
@@ -264,7 +264,7 @@
  @endcode
 
 
- @section xrcsample XRC resource file sample
+ @section overview_xrcsample XRC resource file sample
 
  This is the XML file (resource.xrc) for the XRC sample.
 
@@ -426,12 +426,12 @@
  @endcode
 
 
- @section xrcfileformat XRC file format
+ @section overview_xrcfileformat XRC file format
 
  Please see Technical Note 14 (docs/tech/tn0014.txt) in your wxWidgets
  distribution.
 
- @section xrccppheader C++ header file generation
+ @section overview_xrccppheader C++ header file generation
 
  Using the @c -e switch together with @c -c, a C++ header file is written
  containing class definitions for the GUI windows defined in the XRC file.
@@ -439,10 +439,12 @@
  development.
  The classes can be used as basis for development, freeing the
  programmer from dealing with most of the XRC specifics (e.g. @c XRCCTRL).
+
  For each top level window defined in the XRC file a C++ class definition is
  generated, containing as class members the named widgets of the window.
  A default constructor for each class is also generated. Inside the constructor
  all XRC loading is done and all class members representing widgets are initialized.
+
  A simple example will help understand how the scheme works. Suppose you have
  a XRC file defining a top level window @c TestWnd_Base, which subclasses @c wxFrame (any
  other class like @c wxDialog will do also), and has subwidgets @c wxTextCtrl A and @c wxButton B.
@@ -535,11 +537,12 @@
  @endcode
 
 
- @section newresourcehandlers Adding new resource handlers
+ @section overview_newresourcehandlers Adding new resource handlers
 
  Adding a new resource handler is pretty easy.
  Typically, to add an handler for the @c MyControl class, you'll want to create
  the @c xh_mycontrol.h @c xh_mycontrol.cpp files.
+
  The header needs to contains the @c MyControlXmlHandler class definition:
 
  @code
