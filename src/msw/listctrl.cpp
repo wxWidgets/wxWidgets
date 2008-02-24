@@ -353,7 +353,11 @@ void wxListCtrl::MSWSetExListStyles()
         ::SendMessage
         (
             GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
+            // LVS_EX_LABELTIP shouldn't be used under Windows CE where it's
+            // not defined in the SDK headers
+#ifdef LVS_EX_LABELTIP
             LVS_EX_LABELTIP |
+#endif
             LVS_EX_FULLROWSELECT |
             LVS_EX_SUBITEMIMAGES |
             // normally this should be governed by a style as it's probably not

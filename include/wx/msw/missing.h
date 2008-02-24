@@ -219,7 +219,8 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
     #define LVS_EX_FULLROWSELECT 0x00000020
 #endif
 
-#ifndef LVS_EX_LABELTIP
+// LVS_EX_LABELTIP is not supported by Windows CE, don't define it there
+#if !defined(LVS_EX_LABELTIP) && !defined(__WXWINCE__)
     #define LVS_EX_LABELTIP 0x00004000
 #endif
 
