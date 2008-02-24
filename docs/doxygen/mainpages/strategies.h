@@ -54,12 +54,12 @@
  @subsection page_strategies_portability_usesizers Use sizers
 
  Don't use absolute panel item positioning if you can avoid it. Different GUIs have
- very differently sized panel items. Consider using the @ref sizer_overview instead.
+ very differently sized panel items. Consider using the @ref overview_sizers instead.
 
  @subsection page_strategies_portability_useresources Use wxWidgets resource files
 
  Use .xrc (wxWidgets resource files) where possible, because they can be easily changed
- independently of source code. See the @ref xrc_overview for more info.
+ independently of source code. See the @ref overview_xrc for more info.
 
 
 
@@ -120,6 +120,6 @@
  scattering wxASSERTs liberally to test for problems in your code as early as possible. 
  Forward thinking will save a surprising amount of time in the long run.
 
- See the @ref debugging_overview for further information.
+ See the @ref overview_debugging for further information.
 
 */

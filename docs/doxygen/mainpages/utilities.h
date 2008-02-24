@@ -31,7 +31,7 @@
  Helpview is a program for displaying wxWidgets HTML
  Help files. In many cases, you may wish to use the wxWidgets HTML
  Help classes from within your application, but this provides a
- handy stand-alone viewer. See @ref html_overview for more details.
+ handy stand-alone viewer. See @ref overview_html for more details.
  You can find it in @c samples/html/helpview.
 
  @subsection page_utils_utils_tex2rtf Tex2RTF
@@ -535,7 +535,7 @@
  and wxMutexGuiLeave functions, both of which are
  used and tested in the sample as well.
  
- See also @ref thread_overview and wxThread.
+ See also @ref overview_thread and wxThread.
  
  
  @subsection page_utils_samples_toolbar Toolbar sample

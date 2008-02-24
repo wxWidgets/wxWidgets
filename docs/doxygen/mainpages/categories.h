@@ -77,7 +77,7 @@
  @li wxTipWindow: Shows text in a small window
  @li wxWizard: A wizard dialog
 
- See also the @ref overview_commondialogs.
+ See also the @ref overview_cmndlg.
 
 
  @section page_categories_miscwnd Miscellaneous windows
@@ -103,7 +103,7 @@
 
  @section page_categories_cmndlg Common dialogs
 
- @ref overview_commondialogs
+ @ref overview_cmndlg
 
  Common dialogs are ready-made dialog classes which are frequently used
  in an application.

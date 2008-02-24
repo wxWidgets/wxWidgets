@@ -125,7 +125,7 @@
 
  @section page_libs_wxhtml wxHTML
 
- Simple HTML renderer and other @ref html_overview are contained in this library, 
+ Simple HTML renderer and other @ref overview_html are contained in this library,
  as well as wxHtmlHelpController, wxBestHelpController and wxHtmlListBox.
 
  Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
