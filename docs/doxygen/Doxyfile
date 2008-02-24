@@ -66,6 +66,15 @@ ALIASES += library{1}="\section class_lib Library\n \ref page_libs_\1"
 ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
 ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
 
+# FIXME: we could also introduce additional tags for adding wx-specific infos
+#        to the documented classes/functions; some ideas are:
+#          @category{GUI classes}
+#          @nativeimpl{wxgtk,wxmsw}
+#          @genericimpl{wxuniv,wxmac}
+#          @onlyfor{wxmsw}
+#          @appeareance{button.png}
+
+
 # IMPORTANT: the default \sa command does not generate a \section!
 ALIASES += seealso="\section class_sa See also\n"
 
@@ -82,7 +91,7 @@ ALIASES += true="<b><tt>true</tt></b>"
 ALIASES += false="<b><tt>false</tt></b>"
 ALIASES += NULL="<b><tt>NULL</tt></b>"
 
-# NOTE: we could put aliases also for e.g. @wxDefaultSize, @wxDefaultPosition, @wxID_ANY, 
+# FIXME: we could put aliases also for e.g. @wxDefaultSize, @wxDefaultPosition, @wxID_ANY, 
 #       @wxEmptyString, @wxNullIcon, etc etc
 
 # table aliases for 2 and 3 column tables
