@@ -607,6 +607,9 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
 // system DLL versions
 // ----------------------------------------------------------------------------
 
+// these functions have trivial inline implementations for CE
+#ifndef __WXWINCE__
+
 #if wxUSE_DYNLIB_CLASS
 
 namespace
@@ -741,6 +744,8 @@ int wxApp::GetShell32Version()
 }
 
 #endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
+
+#endif // !__WXWINCE__
 
 // ----------------------------------------------------------------------------
 // Yield to incoming messages

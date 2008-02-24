@@ -81,6 +81,26 @@ protected:
     DECLARE_NO_COPY_CLASS(wxApp)
 };
 
+#ifdef __WXWINCE__
+
+// under CE provide a dummy implementation of GetComCtl32Version() returning
+// the value passing all ">= 470" tests (which are the only ones used in our
+// code currently) as commctrl.dll under CE 2.0 and later support comctl32.dll
+// functionality
+inline int wxApp::GetComCtl32Version()
+{
+    return 471;
+}
+
+// this is not currently used at all under CE so it's not really clear what do
+// we need to return from here
+inline int wxApp::GetShell32Version()
+{
+    return 0;
+}
+
+#endif // __WXWINCE__
+
 // ----------------------------------------------------------------------------
 // MSW-specific wxEntry() overload and IMPLEMENT_WXWIN_MAIN definition
 // ----------------------------------------------------------------------------
