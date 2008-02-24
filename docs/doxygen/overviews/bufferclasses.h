@@ -19,15 +19,16 @@
  Secondly, wxWidgets uses, although only rarely currently, wxMemoryBuffer 
  for dealing with raw buffers in memory.
 
- @li @ref overview_bufferclasses_wxcb
+ @li @ref overview_bufferclasses_xcb
 
 
  <hr>
 
 
- @section overview_bufferclasses_wxcb wxXCharBuffer Overview
+ @section overview_bufferclasses_xcb wxXCharBuffer Overview
 
- @b General Usage
+ @subsection overview_bufferclasses_xcb_general General Usage
+
  As mentioned, wxCharBuffer and its wide character variant wxWCharBuffer deal 
  with c strings in memory.  They have two constructors, one in which you pass 
  the c string you want them to have a copy of, and another where you specify 
@@ -37,7 +38,8 @@
  can be used safely to c functions with variable arguments such as printf.  
  They also contain standard assignment, character access operators and a copy constructor.
 
- @b Destruction
+ @subsection overview_bufferclasses_xcb_destruct Destruction
+
  It should be noted that on destruction wxCharBuffer and its wide character 
  variant delete the c string that hold onto.  If you want to get the pointer 
  to the buffer and don't want wxCharBuffer to delete it on destruction, 
