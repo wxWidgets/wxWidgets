@@ -8,7 +8,7 @@
 
 /*!
 
- @page unicode_overview Unicode support in wxWidgets
+ @page overview_unicode Unicode support in wxWidgets
 
  This section briefly describes the state of the Unicode support in wxWidgets.
  Read it if you want to know more about how to write programs able to work with

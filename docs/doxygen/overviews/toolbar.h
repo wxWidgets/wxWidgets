@@ -8,7 +8,7 @@
 
 /*!
 
- @page toolbar_overview Toolbar overview
+ @page overview_toolbar Toolbar overview
 
  Classes: #wxToolBar
  The toolbar family of classes allows an application to use toolbars

@@ -8,7 +8,7 @@
 
 /*!
 
- @page validator_overview wxValidator overview
+ @page overview_validator wxValidator overview
 
  Classes: #wxValidator, #wxTextValidator,
  #wxGenericValidator

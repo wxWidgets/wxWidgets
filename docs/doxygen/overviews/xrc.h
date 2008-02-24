@@ -8,7 +8,7 @@
 
 /*!
 
- @page xrc_overview XML-based resource system overview
+ @page overview_xrc XML-based resource system overview
 
  Classes: #wxXmlResource, #wxXmlResourceHandler
  The XML-based resource system, known as XRC, allows user interface elements such as

@@ -8,7 +8,7 @@
 
 /*!
 
- @page windowstyles_overview Window styles
+ @page overview_windowstyles Window styles
 
  Window styles are used to specify alternative behaviour and appearances for windows, when they are
  created. The symbols are defined in such a way that they can be combined in a 'bit-list' using the

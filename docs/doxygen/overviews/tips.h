@@ -8,7 +8,7 @@
 
 /*!
 
- @page tips_overview wxTipProvider overview
+ @page overview_tips wxTipProvider overview
 
  Many "modern" Windows programs have a feature (some would say annoyance) of
  presenting the user tips at program startup. While this is probably useless to

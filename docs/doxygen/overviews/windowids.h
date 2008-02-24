@@ -8,7 +8,7 @@
 
 /*!
 
- @page windowids_overview Window IDs overview
+ @page overview_windowids Window IDs overview
 
  @b See Also
  #wxIdManager

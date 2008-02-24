@@ -8,7 +8,7 @@
 
 /*!
 
- @page unixprinting_overview Printing under Unix (GTK+)
+ @page overview_unixprinting Printing under Unix (GTK+)
 
  Printing under Unix has always been a cause of problems as Unix
  does not provide a standard way to display text and graphics

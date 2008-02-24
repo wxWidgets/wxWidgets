@@ -8,7 +8,7 @@
 
 /*!
 
- @page windowsizing_overview Window Sizing Overview
+ @page overview_windowsizing Window Sizing Overview
 
  It can sometimes be confusing to keep track of the various
  size-related attributes of a #wxWindow, how they

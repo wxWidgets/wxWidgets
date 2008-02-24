@@ -8,7 +8,7 @@
 
 /*!
 
- @page windowdeletion_overview Window deletion overview
+ @page overview_windowdeletion Window deletion overview
 
  Classes: #wxCloseEvent, #wxWindow
  Window deletion can be a confusing subject, so this overview is provided

@@ -8,7 +8,7 @@
 
 /*!
 
- @page treectrl_overview wxTreeCtrl overview
+ @page overview_treectrl wxTreeCtrl overview
 
  Classes: #wxTreeCtrl, #wxImageList
  The tree control displays its items in a tree like structure. Each item has its
