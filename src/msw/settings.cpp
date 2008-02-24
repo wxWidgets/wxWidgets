@@ -377,7 +377,13 @@ static const int gs_metricsMap[] =
 #else
     -1,
 #endif
+    // SM_SWAPBUTTON is not available under CE and it doesn't make sense to ask
+    // for it there
+#ifdef SM_SWAPBUTTON
     SM_SWAPBUTTON,
+#else
+    -1,
+#endif
     -1   // wxSYS_DCLICK_MSEC - not available as system metric
 };
 

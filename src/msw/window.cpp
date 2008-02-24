@@ -6084,6 +6084,9 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
             break;
 
         default:
+            // no VkKeyScan() under CE unfortunately, we need to test how does
+            // it handle OEM keys
+#ifndef __WXWINCE__
             // check to see if its one of the OEM key codes.
             BYTE vks = LOBYTE(VkKeyScan(wxk));
             if ( vks != 0xff )
@@ -6091,6 +6094,7 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
                 vk = vks;
             }
             else
+#endif // !__WXWINCE__
             {
                 if ( isVirtual )
                     *isVirtual = false;
@@ -6104,15 +6108,20 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
 // small helper for wxGetKeyState() and wxGetMouseState()
 static inline bool wxIsKeyDown(WXWORD vk)
 {
-    switch (vk)
+    // SM_SWAPBUTTON is not available under CE, so don't swap buttons there
+#ifdef SM_SWAPBUTTON
+    if ( vk == VK_LBUTTON || vk == VK_RBUTTON )
     {
-        case VK_LBUTTON:
-            if (GetSystemMetrics(SM_SWAPBUTTON)) vk = VK_RBUTTON;
-            break;
-        case VK_RBUTTON:
-            if (GetSystemMetrics(SM_SWAPBUTTON)) vk = VK_LBUTTON;
-            break;
+        if ( ::GetSystemMetrics(SM_SWAPBUTTON) )
+        {
+            if ( vk == VK_LBUTTON )
+                vk = VK_RBUTTON;
+            else // vk == VK_RBUTTON
+                vk = VK_LBUTTON;
+        }
     }
+#endif // SM_SWAPBUTTON
+
     // the low order bit indicates whether the key was pressed since the last
     // call and the high order one indicates whether it is down right now and
     // we only want that one
