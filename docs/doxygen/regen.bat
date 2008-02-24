@@ -8,8 +8,8 @@ doxygen
 
 REM this image is not automatically copied by Doxygen because it's not
 REM used in doxygen documentation but only in our html footer...
-copy images/powered-by-wxwidgets.png out/html
+copy images\powered-by-wxwidgets.png out\html
 
 REM this CSS is automatically copied by Doxygen because it's
 REM included by our custom html header...
-copy wxwidgets.css out/html
+copy wxwidgets.css out\html
