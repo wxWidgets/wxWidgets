@@ -45,10 +45,11 @@
 #undef wxUSE_JOYSTICK
 #define wxUSE_JOYSTICK 0
 
-// and they're disabled for WinCE in build/bakefiles/{tiff|regex}.bkl so can't
-// be enabled here
-#undef wxUSE_LIBTIFF
-#define wxUSE_LIBTIFF 0
+// libtiff doesn't build with eVC but is ok with VC8
+#if !wxCHECK_VISUALC_VERSION(8)
+    #undef wxUSE_LIBTIFF
+    #define wxUSE_LIBTIFF 0
+#endif
 
 // no MDI under CE
 #undef wxUSE_MDI
@@ -75,13 +76,14 @@
 #undef wxUSE_OWNER_DRAWN
 #define wxUSE_OWNER_DRAWN 0
 
-// libtiff and regex apparently don't compile with eVC (to check with eVC4?)
-// other MSW settings not supported by CE
 #undef wxUSE_PRINTING_ARCHITECTURE
 #define wxUSE_PRINTING_ARCHITECTURE 0
 
-#undef wxUSE_REGEX
-#define wxUSE_REGEX 0
+// regex doesn't build with eVC but is ok with VC8
+#if !wxCHECK_VISUALC_VERSION(8)
+    #undef wxUSE_REGEX
+    #define wxUSE_REGEX 0
+#endif
 
 #undef wxUSE_RICHEDIT
 #define wxUSE_RICHEDIT 0
@@ -95,9 +97,13 @@
     #define wxUSE_STDPATHS 0
 #endif // WCE_PLATFORM_STANDARDSDK
 
+// there is no support for balloon taskbar icons
+#undef wxUSE_TASKBARICON_BALLOONS
+#define wxUSE_TASKBARICON_BALLOONS 0
+
 // not sure if this is supported by eVC but VC8 SDK lacks the tooltips control
 // related declarations
-#if defined(__VISUALC__) && __VISUALC__ >= 1400
+#if wxCHECK_VISUALC_VERSION(8)
     #undef wxUSE_TOOLTIPS
     #define wxUSE_TOOLTIPS 0
 #endif
