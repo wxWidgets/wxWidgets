@@ -566,7 +566,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
         }
 #endif // __WXMSW__
 
-        if ( child->CanAcceptFocus() )
+        if ( child->CanAcceptFocusFromKeyboard() )
         {
             // if we're setting the focus to a child panel we should prevent it
             // from giving it to the child which had the focus the last time

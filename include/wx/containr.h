@@ -70,6 +70,11 @@ public:
     // wxListCtrl) and so should get focus for ourselves
     bool AcceptsFocusRecursively() const { return true; }
 
+    // this is used to determine whether we can accept focus when Tab or
+    // another navigation key is pressed -- we alsways can, for the same reason
+    // as mentioned above for AcceptsFocusRecursively()
+    bool AcceptsFocusFromKeyboard() const { return true; }
+
     // Call this when the number of children of the window changes.
     // If we have any children, this panel (used just as container for
     // them) shouldn't get focus for itself.
@@ -103,6 +108,7 @@ private:
 public:                                                                       \
     virtual bool AcceptsFocus() const;                                        \
     virtual bool AcceptsFocusRecursively() const;                             \
+    virtual bool AcceptsFocusFromKeyboard() const;                            \
     virtual void AddChild(wxWindowBase *child);                               \
     virtual void RemoveChild(wxWindowBase *child);                            \
     virtual void SetFocus();                                                  \
@@ -143,8 +149,12 @@ protected:                                                                    \
     bool classname::AcceptsFocus() const                                      \
     {                                                                         \
         return m_container.AcceptsFocus();                                    \
+    }                                                                         \
+                                                                              \
+    bool classname::AcceptsFocusFromKeyboard() const                          \
+    {                                                                         \
+        return m_container.AcceptsFocusFromKeyboard();                        \
     }
-
 
 #ifdef wxHAS_NATIVE_TAB_TRAVERSAL
 
