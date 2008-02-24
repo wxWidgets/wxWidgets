@@ -388,7 +388,9 @@ it if SHARED=1 unless you know what you are doing.
 
         <set var="TOOLKIT" overwrite="0">
             <if cond="FORMAT=='msevc4prj'">WINCE</if>
-            <if cond="FORMAT!='msevc4prj' and PLATFORM_WIN32=='1'">MSW</if>
+            <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='pocketpc2003'">WINCE</if>
+            <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='win32'">MSW</if>
+            <if cond="FORMAT not in ['msevc4prj','msvs2005prj'] and PLATFORM_WIN32=='1'">MSW</if>
             <if cond="PLATFORM_MSDOS=='1'">MGL</if>
             <if cond="PLATFORM_OS2=='1'">PM</if>
         </set>
@@ -475,14 +477,17 @@ Set the version of your Mingw installation here.
     </if>
 
     <!-- No need for wxUniv on embedded devices (yet): -->
-    <if cond="FORMAT=='msevc4prj'">
+    <if cond="FORMAT=='msevc4prj' or (FORMAT=='msvs2005prj' and MSVS_PLATFORMS=='pocketpc2003')">
         <set var="WXUNIV">0</set>
         <!-- Uploading debug reports from PDAs seems impractical -->
         <set var="USE_QA">0</set>
         <set var="MONOLITHIC">1</set> <!-- sic! -->
+        <set var="USE_OPENGL">0</set> <!-- need OpenGL ES support first -->
         <!-- RTTI and exceptions need separate cccrtti.lib with eVC4 -->
-        <set var="USE_RTTI">0</set>
-        <set var="USE_EXCEPTIONS">0</set>
+        <if cond="FORMAT=='msevc4prj'">
+            <set var="USE_RTTI">0</set>
+            <set var="USE_EXCEPTIONS">0</set>
+        </if>
     </if>
 
     <!-- Need for wxUniv within wxMGL: -->
