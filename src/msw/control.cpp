@@ -153,11 +153,11 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     if ( !m_hWnd )
     {
 #ifdef __WXDEBUG__
-        wxFAIL_MSG(wxString::Format
-                   (
-                    _T("CreateWindowEx(\"%s\", flags=%08x, ex=%08x) failed"),
-                    classname, (unsigned int)style, (unsigned int)exstyle
-                   ));
+        wxLogLastError(wxString::Format
+                       (
+                        _T("CreateWindowEx(\"%s\", flags=%08lx, ex=%08lx)"),
+                        classname, style, exstyle
+                       ));
 #endif // __WXDEBUG__
 
         return false;
