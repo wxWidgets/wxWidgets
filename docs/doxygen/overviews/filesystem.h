@@ -89,7 +89,7 @@
  @li @b wxMemoryFSHandler:
      This handler allows you to access
      data stored in memory (such as bitmaps) as if they were regular files.
-     See @ref memoryfshandler_overview for details.
+     See wxMemoryFSHandler for details.
      Include file is wx/fs_mem.h. URL is prefixed with memory:, e.g.
      "memory:myfile.htm"
 

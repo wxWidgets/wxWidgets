@@ -67,7 +67,7 @@
  @li Limit the maximum number of open documents and the maximum number of undo commands.
 
  Note that to activate framework functionality, you need to use some or all of
- the wxWidgets @ref predefinedids_overview in your menus.
+ the wxWidgets @ref overview_docview_predefid in your menus.
 
  @beginWxPerlOnly
  The document/view framework is available in wxPerl. To use it,

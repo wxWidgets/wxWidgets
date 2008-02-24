@@ -17,9 +17,9 @@
  @li @ref overview_eventhandling_prog
  @li @ref overview_eventhandling_pluggable
  @li @ref overview_eventhandling_winid
+ @li @ref overview_eventhandling_custom
+
  <!-- @li @ref overview_eventhandling_macros -->
- @li @ref overview_eventhandling_pluggable
- @li @ref overview_eventhandling_winid
 
 
  <hr>
@@ -40,10 +40,10 @@
 
  @code
  BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-   EVT_MENU    (wxID_EXIT, MyFrame::OnExit)
-   EVT_MENU    (DO_TEST,   MyFrame::DoTest)
-   EVT_SIZE    (           MyFrame::OnSize)
-   EVT_BUTTON  (BUTTON1,   MyFrame::OnButton1)
+   EVT_MENU(wxID_EXIT, MyFrame::OnExit)
+   EVT_MENU(DO_TEST, MyFrame::DoTest)
+   EVT_SIZE(MyFrame::OnSize)
+   EVT_BUTTON(BUTTON1, MyFrame::OnButton1)
  END_EVENT_TABLE()
  @endcode
 
@@ -165,7 +165,7 @@
  <b>Pay close attention to Step 5</b>.  People often overlook or get
  confused by this powerful feature of the wxWidgets event processing
  system.  To put it a different way, events set to propagate
- (see @ref overview_eventhandling_propagate)
+ (see wxEvent::ShouldPropagate)
  (most likely derived either directly or indirectly from wxCommandEvent)
  will travel up the containment hierarchy from child to parent until the
  maximal propagation level is reached or an event handler is found that
