@@ -20,6 +20,7 @@
  number of application could offer WYSIWYG under Unix. Equally,
  wxWidgets offered its own printing implementation using PostScript
  which never really matched the screen display.
+
  Starting with version 2.8.X, the GNOME project provides printing
  support through the libgnomeprint and libgnomeprintui libraries
  by which especially the font problem is mostly solved. Beginning
@@ -33,6 +34,7 @@
  Note that the application will not require the GNOME print libraries
  to be installed in order to run (there will be no dependency on
  these libraries).
+
  In version GTK+ 2.10, support for printing has been added to GTK+
  itself. Beginning with version wxWidgets 2.9.X, the GTK+ port of
  wxWidgets can make use of this feature
