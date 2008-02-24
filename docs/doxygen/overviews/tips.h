@@ -35,10 +35,12 @@
  In the case of the tip provider created by
  #wxCreateFileTipProvider, the tips are just
  the lines of the text file.
+
  If you want to implement your own tip provider (for example, if you wish to
  hardcode the tips inside your program), you just have to derive another class
- from wxTipProvider and pass a pointer to the object of this class to wxShowTip
- - then you don't need wxCreateFileTipProvider at all.
+ from wxTipProvider and pass a pointer to the object of this class to wxShowTip - 
+ then you don't need wxCreateFileTipProvider at all.
+
  You will probably want to save somewhere the index of the tip last
  shown - so that the program doesn't always show the same tip on startup. As you
  also need to remember whether to show tips or not (you shouldn't do it if the
@@ -47,9 +49,11 @@
  last shown tip (as returned by
  wxTipProvider::GetCurrentTip and the flag
  telling whether to show the tips at startup at all.
+
  In a tips.txt file, lines that begin with a # character are considered comments
  and are automatically skipped. Blank lines and lines only having spaces are also
  skipped.
+
  You can easily add runtime-translation capacity by placing each line of the
  tips.txt file inside the usual translation macro. For example, your tips.txt
  file would look like this:
@@ -63,11 +67,14 @@
  for translatable strings. The tips will thus get included into your
  generated .po file catalog and be translated at runtime along with the rest of
  your application's translatable strings.
+
  Note1: Each line in the tips.txt file needs to strictly begin with exactly the
  3 characters of underscore-parenthesis-doublequote, and end with
  doublequote-parenthesis, as shown above.
+
  Note2: Remember to escape any doublequote characters within the tip string with
  a backslash-doublequote.
+
  See the dialogs program in your samples folder for a working example inside a
  program.
 
