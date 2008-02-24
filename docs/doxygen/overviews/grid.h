@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        grid
+// Name:        grid.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -8,28 +8,33 @@
 
 /*!
 
- @page grid_overview wxGrid classes overview
+ @page overview_grid wxGrid classes overview
 
  Classes: #wxGrid
- #Introduction
- @ref simplewxgridexample_overview
- @ref complexwxgridexample_overview
- @ref gridclassesrelations_overview
- @ref keyboardandmouseinwxgrid_overview
+
+ @li @ref overview_grid_intro
+ @li @ref overview_grid_simpleexample
+ @li @ref overview_grid_complexexample
+ @li @ref overview_grid_classrelations
+ @li @ref overview_grid_keyboardmouse
 
 
- @section introductiontowxgrid Introduction
+ <hr>
+
+
+ @section overview_grid_intro Introduction
 
  wxGrid and its related classes are used for displaying and editing tabular data.
 
- @section simplewxgridexample Getting started: a simple example
+
+ @section overview_grid_simpleexample Getting started: a simple example
 
  For simple applications you need only refer to the wxGrid class in your
- code.  This example shows how you might create a grid in a frame or
+ code. This example shows how you might create a grid in a frame or
  dialog constructor and illustrates some of the formatting functions.
 
  @code
- // Create a wxGrid object
+     // Create a wxGrid object
 
      grid = new wxGrid( this,
                         -1,
@@ -66,18 +71,19 @@
  @endcode
 
 
- @section complexwxgridexample A more complex example
+ @section overview_grid_complexexample A more complex example
 
  Yet to be written
 
- @section wxgridclassesrelations How the wxGrid classes relate to each other
+
+ @section overview_grid_classrelations How the wxGrid classes relate to each other
 
  Yet to be written
 
- @section keyboardandmouseinwxgrid Keyboard and mouse actions
+
+ @section overview_grid_keyboardmouse Keyboard and mouse actions
 
  Yet to be written
 
- */
-
+*/
 

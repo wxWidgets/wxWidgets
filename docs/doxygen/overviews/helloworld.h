@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helloworld
+// Name:        helloworld.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -8,17 +8,17 @@
 
 /*!
 
- @page helloworld_overview wxWidgets Hello World sample
+ @page overview_helloworld wxWidgets Hello World sample
 
- As many people have requested a mini-sample to be published here
+ Many people have requested a mini-sample to be published here
  so that some quick judgment concerning syntax
- and basic principles can be made, you can now look at wxWidgets'
- "Hello World":
- You have to include wxWidgets' header files, of course. This can
- be done on a file by file basis (such as #include "wx/window.h")
- or using one global include (#include "wx/wx.h"). This is
+ and basic principles can be made, so here we go.
+
+ First, you have to include wxWidgets' header files, of course. This can
+ be done on a file by file basis (such as <tt>@#include "wx/window.h"</tt>)
+ or using one global include (<tt>@#include "wx/wx.h"</tt>). This is
  also useful on platforms which support precompiled headers such
- as all major compilers on the Windows platform.
+ as all major compilers on the Windows platform and GCC on Unix platforms.
 
  @code
  //
@@ -54,10 +54,11 @@
  giving it a menu and a status bar in its constructor. Also, any class
  that wishes to respond to any "event" (such as mouse clicks or
  messages from the menu or a button) must declare an event table
- using the macro below. Finally, the way to react to such events
- must be done in "handlers". In our sample, we react to two menu items,
- one for "Quit" and one for displaying an "About" window. These
- handlers should not be virtual.
+ using the macro below. 
+
+ Finally, the way to react to such events must be done in "handlers".
+ In our sample, we react to two menu items, one for "Quit" and one for
+ displaying an "About" window. These handlers should not be virtual.
 
  @code
  class MyFrame: public wxFrame
@@ -86,11 +87,13 @@
 
  We then proceed to actually implement an event table in which the events
  are routed to their respective handler functions in the class MyFrame.
+
  There are predefined macros for routing all common events, ranging from
  the selection of a list box entry to a resize event when a user resizes
  a window on the screen. If -1 is given as the ID, the given handler will be
  invoked for any event of the specified type, so that you could add just
  one entry in the event table for all menu commands or all button commands etc.
+
  The origin of the event can still be distinguished in the event handler as
  the (only) parameter in an event handler is a reference to a wxEvent object,
  which holds various information about the event (such as the ID of and a
@@ -120,9 +123,9 @@
  bool MyApp::OnInit()
  {
      MyFrame *frame = new MyFrame( "Hello World", wxPoint(50,50), wxSize(450,340) );
-     frame-Show( @true );
+     frame-Show( true );
      SetTopWindow( frame );
-     return @true;
+     return true;
  }
  @endcode
 
@@ -132,7 +135,7 @@
 
  @code
  MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-        : wxFrame((wxFrame *)@NULL, -1, title, pos, size)
+        : wxFrame((wxFrame *)NULL, -1, title, pos, size)
  {
      wxMenu *menuFile = new wxMenu;
 
@@ -158,7 +161,7 @@
  @code
  void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
  {
-     Close( @true );
+     Close( true );
  }
  @endcode
 
@@ -173,6 +176,5 @@
  }
  @endcode
 
- */
-
+*/
 
