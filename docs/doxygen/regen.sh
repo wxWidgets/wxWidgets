@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# $Id$
+
+# This bash script regenerates the HTML doxygen version of the
+# wxWidgets manual and adjusts the doxygen log to make it more
+# readable.
+
 doxygen
 
 # this image is not automatically copied by Doxygen because it's not
