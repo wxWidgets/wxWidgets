@@ -16,7 +16,7 @@ the bakefile_gen tool. Run it from $(wx)/build/bakefiles directory and it will
 regenerate all outdated makefiles. See $(wx)/build/bakefiles/README for more
 details.
 
-Note that it generates makefiles for samples and contrib libraries, too.
+Note that it generates makefiles for samples, too.
 
 IMPORTANT NOTE: Don't forget to run autoconf in wxWidgets root directory
                 (after running Bakefile) if you changed any conditional
@@ -49,18 +49,16 @@ and use bakefile_gen instead of running bakefile directly.
 2. Bakefile files organization
 ------------------------------
 
-Makefile are generated from .bkl files ("bakefiles") from three places:
+Makefile are generated from .bkl files ("bakefiles") from two places:
   - $(wx)/build/bakefiles directory
-  - $(wx)/contrib/build/* directories
   - samples directories
 $(wx)/build/bakefiles contains bakefiles for main library and support files
-that simplify writing bakefiles for contrib and samples.
+that simplify writing bakefiles for samples.
 
 Support files are:
   wxwin.py                - helper functions
   common.bkl
   common_samples.bkl
-  common_contrib.bkl      - shared definitions and templates
   config.bkl              - user-configurable build options
   make_dist.mk            - implementation of "make dist" on Unix
 
@@ -181,8 +179,7 @@ e) Regenerate all makefiles (don't forget to run autoconf)
 
 f) Update configure.in and wx-config.in to contain information about
    the library and needed linker flags:
-   * Add "foo" to either STD_BASE_LIBS or STD_GUI_LIBS in configure.in if
-     wxFoo is not to be treated as contrib library in monolithic build.
+   * Add "foo" to either STD_BASE_LIBS or STD_GUI_LIBS in configure.in.
    * If wxFoo links against additional libraries, add necessary linker
      flags and libraries to ldflags_foo and ldlibs_foo variables in
      wx-config.in (both are optional).

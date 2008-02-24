@@ -22,7 +22,7 @@ a) Do a fresh checkout using the command
        by this command, please modify CVSROOT/modules to include the missing
        files so that it works for the next release!
 
-   You also need the samples, demos and contrib directories, so change to
+   You also need the samples and demos directories, so change to
    wxWidgets directory created by the first cvs command and do "cvs up -d"
    for each of them. Of course, you can also check out everything (use
    wxWidgets module name instead of wxGTK) if the bandwidth and disk space
