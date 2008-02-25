@@ -37,7 +37,7 @@
 
  @li @subpage overview_backwardcompat
  @li @subpage overview_runtimeclass
- @li @subpage overview_trefcount
+ @li @subpage overview_refcount
  @li @subpage overview_app
  @li @subpage overview_unicode
  @li @subpage overview_mbconvclasses
@@ -63,7 +63,7 @@
  @li @subpage overview_thread
  @li @subpage overview_config
  @li @subpage overview_fs
- @li @subpage overview_resyn
+ @li @subpage overview_resyntax
  @li @subpage overview_arc
  @li @subpage overview_ipc
 
