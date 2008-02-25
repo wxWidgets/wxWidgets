@@ -47,6 +47,7 @@
 
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 
 // ----------------------------------------------------------------------------
 // private functions

@@ -32,6 +32,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 
 #include <windowsx.h>
 

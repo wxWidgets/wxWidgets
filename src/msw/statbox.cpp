@@ -41,6 +41,7 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
+#include "wx/msw/dc.h"
 
 // the values coincide with those in tmschema.h
 #define BP_GROUPBOX 4

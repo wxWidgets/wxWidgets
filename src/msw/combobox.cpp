@@ -394,9 +394,13 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 
 WXHWND wxComboBox::GetEditHWNDIfAvailable() const
 {
-    // we assume that the only child of the combobox is the edit window so it's
-    // unnecessary to pass "EDIT" as class name parameter
-    return (WXHWND)::FindWindowEx(GetHwnd(), NULL, NULL, NULL);
+    // notice that a slightly safer alternative could be to use FindWindowEx()
+    // but it's not available under WinCE so just take the first child for now
+    // to keep one version of the code for all platforms and fix it later if
+    // problems are discovered
+
+    // we assume that the only child of the combobox is the edit window
+    return (WXHWND)::GetWindow(GetHwnd(), GW_CHILD);
 }
 
 WXHWND wxComboBox::GetEditHWND() const

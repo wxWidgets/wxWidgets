@@ -36,6 +36,7 @@
 #include "wx/sysopt.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 
 #include <windowsx.h>
 #include "wx/msw/winundef.h"

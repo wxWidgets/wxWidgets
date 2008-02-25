@@ -35,6 +35,7 @@
 #include "wx/fontutil.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 
 #ifndef SPI_GETKEYBOARDCUES
 #define SPI_GETKEYBOARDCUES 0x100A
