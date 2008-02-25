@@ -10,7 +10,7 @@
 
  @page overview_container Container classes overview
 
- Classes: #wxListT, #wxArrayT, #wxVectorT
+ Classes: #wxList<T>, #wxArray<T>, #wxVector<T>
 
  wxWidgets uses itself several container classes including doubly-linked lists
  and dynamic arrays (i.e. arrays which expand automatically when they become
