@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/window.h"
     #include "wx/icon.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/msw/private.h"
