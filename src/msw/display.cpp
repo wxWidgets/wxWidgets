@@ -86,6 +86,13 @@
      { 0xB3A6F3E0, 0x2B43, 0x11CF, { 0xA2,0xDE,0x00,0xAA,0x00,0xB9,0x33,0x56 } };
 #endif // wxUSE_DIRECTDRAW
 
+// display functions are found in different DLLs under WinCE and normal Win32
+#ifdef __WXWINCE__
+static const wxChar displayDllName[] = _T("coredll.dll");
+#else
+static const wxChar displayDllName[] = _T("user32.dll");
+#endif
+
 // ----------------------------------------------------------------------------
 // typedefs for dynamically loaded Windows functions
 // ----------------------------------------------------------------------------
@@ -513,17 +520,17 @@ wxDisplayFactoryWin32Base::wxDisplayFactoryWin32Base()
     {
         ms_supportsMultimon = 0;
 
-        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
+        wxDynamicLibrary dllDisplay(displayDllName, wxDL_VERBATIM | wxDL_QUIET);
 
-        if ( (wxDL_INIT_FUNC(gs_, MonitorFromPoint, dllUser32)) == NULL ||
-             (wxDL_INIT_FUNC(gs_, MonitorFromWindow, dllUser32)) == NULL ||
-             (wxDL_INIT_FUNC_AW(gs_, GetMonitorInfo, dllUser32)) == NULL )
+        if ( (wxDL_INIT_FUNC(gs_, MonitorFromPoint, dllDisplay)) == NULL ||
+             (wxDL_INIT_FUNC(gs_, MonitorFromWindow, dllDisplay)) == NULL ||
+             (wxDL_INIT_FUNC_AW(gs_, GetMonitorInfo, dllDisplay)) == NULL )
             return;
 
         ms_supportsMultimon = 1;
 
-        // we can safely let dllUser32 go out of scope, the DLL itself will
-        // still remain loaded as all Win32 programs use it
+        // we can safely let dllDisplay go out of scope, the DLL itself will
+        // still remain loaded as all programs link to it statically anyhow
     }
 }
 
@@ -586,8 +593,8 @@ wxDisplayFactoryMultimon::wxDisplayFactoryMultimon()
     // implementation
     EnumDisplayMonitors_t pfnEnumDisplayMonitors;
     {
-        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
-        if ( (wxDL_INIT_FUNC(pfn, EnumDisplayMonitors, dllUser32)) == NULL )
+        wxDynamicLibrary dllDisplay(displayDllName, wxDL_VERBATIM | wxDL_QUIET);
+        if ( (wxDL_INIT_FUNC(pfn, EnumDisplayMonitors, dllDisplay)) == NULL )
             return;
     }
 
@@ -731,12 +738,12 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
     static ChangeDisplaySettingsEx_t pfnChangeDisplaySettingsEx = NULL;
     if ( !pfnChangeDisplaySettingsEx )
     {
-        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
-        if ( dllUser32.IsLoaded() )
+        wxDynamicLibrary dllDisplay(displayDllName, wxDL_VERBATIM | wxDL_QUIET);
+        if ( dllDisplay.IsLoaded() )
         {
-            wxDL_INIT_FUNC_AW(pfn, ChangeDisplaySettingsEx, dllUser32);
+            wxDL_INIT_FUNC_AW(pfn, ChangeDisplaySettingsEx, dllDisplay);
         }
-        //else: huh, no user32.dll??
+        //else: huh, no this DLL must always be present, what's going on??
 
 #ifndef __WXWINCE__
         if ( !pfnChangeDisplaySettingsEx )
