@@ -827,6 +827,8 @@ void wxHtmlHelpWindow::DisplayIndexItem(const wxHtmlHelpMergedIndexItem *it)
 bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
                                     wxHelpSearchMode mode)
 {
+    wxCHECK_MSG( !keyword.empty(), false, "must have a non empty keyword" );
+
     if (mode == wxHELP_SEARCH_ALL)
     {
         if ( !(m_SearchList &&
