@@ -75,6 +75,8 @@ DO:
 
          @  $  \  &  <  >  #  %
 
+  unless they appear inside a @code or @verbatim section.
+
 - when using a Doxygen alias like @itemdef{}, you need to escape the
   comma characters which appear on the first argument, otherwise Doxygen
   will interpret them as the marker of the end of the first argument and
