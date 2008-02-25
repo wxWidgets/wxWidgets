@@ -290,6 +290,13 @@ wxSize wxRadioButton::DoGetBestSize() const
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
         s_radioSize = dc.GetCharHeight();
+
+        // radio button bitmap size under CE is bigger than the font height,
+        // adding just one pixel seems to work fine for the default font but it
+        // would be nice to find some better way to find the correct height
+#ifdef __WXWINCE__
+        s_radioSize++;
+#endif // __WXWINCE__
     }
 
     wxString str = GetLabel();
