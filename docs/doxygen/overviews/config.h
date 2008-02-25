@@ -10,11 +10,11 @@
 
  @page overview_config wxConfig classes overview
 
- Classes: #wxConfig
+ Classes: wxConfigBase
 
  This overview briefly describes what the config classes are and what they are
  for. All the details about how to use them may be found in the description of
- the #wxConfigBase class and the documentation of the
+ the wxConfigBase class and the documentation of the
  file, registry and INI file based implementations mentions all the
  features/limitations specific to each one of these versions.
 
@@ -49,7 +49,7 @@
  There are groups of entries and the entries themselves. Each entry contains either 
  a string or a number (or a boolean value; support for other types of data such as  
  dates or timestamps is planned) and is identified by the full path to it: something
- like /MyApp/UserPreferences/Colors/Foreground. 
+ like @c /MyApp/UserPreferences/Colors/Foreground. 
 
  The previous elements in the path are the group names, and each name may 
  contain an arbitrary number of entries and subgroups.
@@ -57,6 +57,6 @@
  The path components are @b always separated with a slash,
  even though some implementations use the backslash internally. Further
  details (including how to read/write these entries) may be found in
- the documentation for #wxConfigBase.
+ the documentation for wxConfigBase.
 
 */

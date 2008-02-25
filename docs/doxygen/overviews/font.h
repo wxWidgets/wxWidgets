@@ -10,7 +10,7 @@
 
  @page overview_font wxFont overview
 
- Class: #wxFont, #wxFontDialog
+ Class: wxFont, wxFontDialog
 
  A font is an object which determines the appearance of text, primarily
  when drawing text to a window or device context. A font is determined by
@@ -30,8 +30,7 @@
           a default typeface will chosen based on the family.}
  @itemdef{Encoding,
           The font encoding (see @b wxFONTENCODING_XXX
-          constants and the @ref fontencoding_overview for more
-          details)}
+          constants and the @ref overview_fontencoding for more details)}
  @endDefList
 
  Specifying a family, rather than a specific typeface name, ensures a degree of
@@ -54,13 +53,17 @@
        current mapping mode. However, user scaling on a device context will also
        scale fonts under both environments.
 
+ @li @ref overview_font_nativeinfo
+
+
+ <hr>
 
 
  @section overview_font_nativeinfo Native font information
 
  An alternative way of choosing fonts is to use the native font description.
  This is the only acceptable solution if the user is allowed to choose the font
- using the #wxFontDialog because the selected font cannot
+ using the wxFontDialog because the selected font cannot
  be described using only the family name and so, if only family name is stored
  permanently, the user would almost surely see a different font in the program
  later.

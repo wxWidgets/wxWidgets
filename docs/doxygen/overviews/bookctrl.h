@@ -10,7 +10,7 @@
 
  @page overview_bookctrl wxBookCtrl overview
 
- Classes: #wxNotebook, #wxListbook, #wxChoicebook, #wxTreebook, #wxToolbook
+ Classes: wxNotebook, wxListbook, wxChoicebook, wxTreebook, wxToolbook
 
 
  @section overview_bookctrl_intro Introduction
@@ -19,19 +19,19 @@
  displayed one page at a time. wxWidgets has five variants of this control:
 
   @li wxNotebook: uses a row of tabs
-  @li wxListbook: controlled by a #wxListCtrl
-  @li wxChoicebook: controlled by a #wxChoice
-  @li wxTreebook: controlled by a #wxTreeCtrl
-  @li wxToolbook: controlled by a #wxToolBar
+  @li wxListbook: controlled by a wxListCtrl
+  @li wxChoicebook: controlled by a wxChoice
+  @li wxTreebook: controlled by a wxTreeCtrl
+  @li wxToolbook: controlled by a wxToolBar
 
- See @ref samplenotebook_overview for an example of wxBookCtrl usage.
+ See @ref page_utils_samples_notebook for an example of wxBookCtrl usage.
 
 
  @section overview_bookctrl_bestbookctrl Best book
 
  wxBookCtrl is mapped to the class best suited for a given platform.
- Currently it provides #wxChoicebook for smartphones equipped with
- WinCE, and #wxNotebook for all other platforms. The mapping consists of:
+ Currently it provides wxChoicebook for smartphones equipped with
+ WinCE, and wxNotebook for all other platforms. The mapping consists of:
 
  @beginTable
  @row2col{wxBookCtrl, wxChoicebook or wxNotebook}

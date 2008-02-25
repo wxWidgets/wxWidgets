@@ -10,7 +10,7 @@
 
  @page overview_container Container classes overview
 
- Classes: #wxList<T>, #wxArray<T>, #wxVector<T>
+ Classes: wxList<T>, wxArray<T>, wxVector<T>
 
  wxWidgets uses itself several container classes including doubly-linked lists
  and dynamic arrays (i.e. arrays which expand automatically when they become
@@ -57,7 +57,7 @@
  As array classes never delete the items they contain anyhow, there is
  no WX_DEFINE_ARRAY macro for them.
 
- Examples of usage of these macros may be found in #wxList and #wxArray documentation.
+ Examples of usage of these macros may be found in wxList and wxArray documentation.
 
  Finally, wxWidgets predefines several commonly used container classes. wxList
  is defined for compatibility with previous versions as a list containing
@@ -66,6 +66,6 @@
  array classes are defined: wxArrayInt, wxArrayLong, wxArrayPtrVoid and
  wxArrayString. The first three store elements of corresponding types, but
  wxArrayString is somewhat special: it is an optimized version of wxArray which
- uses its knowledge about #wxString reference counting schema.
+ uses its knowledge about wxString reference counting schema.
 
 */

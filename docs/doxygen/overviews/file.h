@@ -10,23 +10,23 @@
 
  @page overview_file File classes and functions overview
 
- Classes: #wxFile, #wxDir, #wxTempFile,  #wxTextFile
+ Classes: wxFile, wxDir, wxTempFile,  wxTextFile
 
  Functions: see @ref filefunctions_overview.
 
  wxWidgets provides some functions and classes to facilitate working with files.
  As usual, the accent is put on cross-platform features which explains, for
- example, the #wxTextFile class which may be used to convert
+ example, the wxTextFile class which may be used to convert
  between different types of text files (DOS/Unix/Mac).
 
  wxFile may be used for low-level IO. It contains all the usual functions to work
  with files (opening/closing, reading/writing, seeking, and so on) but compared with
  using standard C functions, has error checking (in case of an error a message
- is logged using #wxLog facilities) and closes the file
+ is logged using wxLog facilities) and closes the file
  automatically in the destructor which may be quite convenient.
 
  wxTempFile is a very small file designed to make replacing the files contents
- safer - see its #documentation for more details.
+ safer - see its documentation for more details.
 
  wxTextFile is a general purpose class for working with small text files on line
  by line basis. It is especially well suited for working with configuration files

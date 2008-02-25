@@ -30,12 +30,12 @@
 
  Three classes are used in order to provide virtual file systems mechanism:
 
- @li The #wxFSFile class provides information
+ @li The wxFSFile class provides information
      about opened file (name, input stream, mime type and anchor).
- @li The #wxFileSystem class is the interface.
+ @li The wxFileSystem class is the interface.
      Its main methods are ChangePathTo() and OpenFile(). This class
      is most often used by the end user.
- @li The #wxFileSystemHandler is the core
+ @li The wxFileSystemHandler is the core
      of virtual file systems mechanism. You can derive your own handler and pass 
      it to the VFS mechanism. You can derive your own handler and pass it to
      wxFileSystem's AddHandler() method. In the new handler you only need to

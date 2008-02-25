@@ -10,9 +10,9 @@
 
  @page overview_cmndlg Common dialogs overview
 
- Classes: #wxColourDialog, #wxFontDialog, #wxPrintDialog, #wxFileDialog,
-          #wxDirDialog, #wxTextEntryDialog, #wxPasswordEntryDialog,
-          #wxMessageDialog, #wxSingleChoiceDialog, #wxMultiChoiceDialog
+ Classes: wxColourDialog, wxFontDialog, wxPrintDialog, wxFileDialog,
+          wxDirDialog, wxTextEntryDialog, wxPasswordEntryDialog,
+          wxMessageDialog, wxSingleChoiceDialog, wxMultiChoiceDialog
 
  Common dialog classes and functions encapsulate commonly-needed dialog box requirements.
  They are all 'modal', grabbing the flow of control until the user dismisses the dialog,
@@ -44,7 +44,7 @@
 
  @section overview_cmndlg_colour wxColourDialog overview
 
- Classes: #wxColourDialog, #wxColourData
+ Classes: wxColourDialog, wxColourData
 
  The wxColourDialog presents a colour selector to the user, and returns
  with colour information.
@@ -106,7 +106,7 @@
 
  @section overview_cmndlg_font wxFontDialog overview
 
- Classes: #wxFontDialog, #wxFontData
+ Classes: wxFontDialog, wxFontData
 
  The wxFontDialog presents a font selector to the user, and returns
  with font and colour information.
@@ -155,10 +155,10 @@
 
  @section overview_cmndlg_print wxPrintDialog overview
 
- Classes: #wxPrintDialog, #wxPrintData
+ Classes: wxPrintDialog, wxPrintData
 
  This class represents the print and print setup common dialogs.
- You may obtain a #wxPrinterDC device context from
+ You may obtain a wxPrinterDC device context from
  a successfully dismissed print dialog.
 
  The samples/printing example shows how to use it: see @ref overview_printing for
@@ -168,7 +168,7 @@
 
  @section overview_cmndlg_file wxFileDialog overview
 
- Classes: #wxFileDialog
+ Classes: wxFileDialog
 
  Pops up a file selector box. In Windows and GTK2.4+, this is the common
  file selector dialog. In X, this is a file selector box with somewhat less
@@ -199,7 +199,7 @@
 
  @section overview_cmndlg_dir wxDirDialog overview
 
- Classes: #wxDirDialog
+ Classes: wxDirDialog
 
  This dialog shows a directory selector dialog, allowing the user to select
  a single directory.
@@ -208,7 +208,7 @@
 
  @section overview_cmndlg_textentry wxTextEntryDialog overview
 
- Classes: #wxTextEntryDialog
+ Classes: wxTextEntryDialog
 
  This is a dialog with a text entry field. The value that the user
  entered is obtained using wxTextEntryDialog::GetValue.
@@ -217,7 +217,7 @@
 
  @section overview_cmndlg_password wxPasswordEntryDialog overview
 
- Classes: #wxPasswordEntryDialog
+ Classes: wxPasswordEntryDialog
 
  This is a dialog with a password entry field. The value that the user
  entered is obtained using wxTextEntryDialog::GetValue.
@@ -226,7 +226,7 @@
 
  @section overview_cmndlg_msg wxMessageDialog overview
 
- Classes: #wxMessageDialog
+ Classes: wxMessageDialog
 
  This dialog shows a message, plus buttons that can be chosen from OK, Cancel, Yes, and No.
  Under Windows, an optional icon can be shown, such as an exclamation mark or question mark.
@@ -238,7 +238,7 @@
 
  @section overview_cmndlg_singlechoice wxSingleChoiceDialog overview
 
- Classes: #wxSingleChoiceDialog
+ Classes: wxSingleChoiceDialog
 
  This dialog shows a list of choices, plus OK and (optionally) Cancel. The user can
  select one of them. The selection can be obtained from the dialog as an index,
@@ -248,7 +248,7 @@
 
  @section overview_cmndlg_multichoice wxMultiChoiceDialog overview
 
- Classes: #wxMultiChoiceDialog
+ Classes: wxMultiChoiceDialog
 
  This dialog shows a list of choices, plus OK and (optionally) Cancel. The user can
  select one or more of them.

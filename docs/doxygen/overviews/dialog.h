@@ -10,7 +10,7 @@
 
  @page overview_dialog wxDialog overview
 
- Classes: #wxDialog, #wxDialogLayoutAdapter
+ Classes: wxDialog, wxDialogLayoutAdapter
 
  A dialog box is similar to a panel, in that it is a window which can
  be used for placing controls, with the following exceptions:
@@ -24,7 +24,7 @@
  For a set of dialog convenience functions, including file selection, see
  @ref overview_dialogfunctions.
 
- See also #wxTopLevelWindow and #wxWindow for inherited
+ See also wxTopLevelWindow and wxWindow for inherited
  member functions. Validation of data in controls is covered in @ref overview_validator.
 
 
@@ -35,7 +35,7 @@
  imperative for wxWidgets applications to adapt to these platforms without putting 
  too much burden on the programmer. One area where wxWidgets can help is in adapting
  dialogs for the lower resolution screens that inevitably accompany a smaller form factor.
- wxDialog therefore supplies a global #wxDialogLayoutAdapter class that implements 
+ wxDialog therefore supplies a global wxDialogLayoutAdapter class that implements 
  automatic scrolling adaptation for most sizer-based custom dialogs.
 
  Many applications should therefore be able to adapt to small displays with little 
@@ -55,13 +55,13 @@
 
  @li If wxDialog::GetContentWindow returns a window derived from wxBookCtrlBase, 
      the pages are made scrollable and no other adaptation is done.
- @li wxWidgets looks for a #wxStdDialogButtonSizer and uses it for the non-scrolling part.
- @li If that search failed, wxWidgets looks for a horizontal #wxBoxSizer with one or more
+ @li wxWidgets looks for a wxStdDialogButtonSizer and uses it for the non-scrolling part.
+ @li If that search failed, wxWidgets looks for a horizontal wxBoxSizer with one or more
      standard buttons, with identifiers such as @c wxID_OK and @c wxID_CANCEL.
  @li If that search failed too, wxWidgets finds 'loose' standard buttons (in any kind of sizer)
-     and adds them to a #wxStdDialogButtonSizer.
+     and adds them to a wxStdDialogButtonSizer.
      If no standard buttons were found, the whole dialog content will scroll.
- @li All the children apart from standard buttons are reparented onto a new #wxScrolledWindow 
+ @li All the children apart from standard buttons are reparented onto a new wxScrolledWindow 
      object, using the old top-level sizer for the scrolled window and creating a new top-level 
      sizer to lay out the scrolled window and standard button sizer.
 
@@ -77,7 +77,7 @@
  You can use wxDialog::AddMainButtonId to add identifiers for buttons that should also be
  treated as standard buttons for the non-scrolling area.
 
- You can derive your own class from #wxDialogLayoutAdapter or wxStandardDialogLayoutAdapter and call
+ You can derive your own class from wxDialogLayoutAdapter or wxStandardDialogLayoutAdapter and call
  wxDialog::SetLayoutAdapter, deleting the old object that this function returns. Override
  the functions CanDoLayoutAdaptation and DoLayoutAdaptation to test for adaptation applicability
  and perform the adaptation.
@@ -107,7 +107,7 @@
  You can help make sure that your dialogs will continue to function after adaptation by:
 
  @li avoiding the above situations and assumptions;
- @li using #wxStdDialogButtonSizer;
+ @li using wxStdDialogButtonSizer;
  @li only making assumptions about hierarchy immediately after the dialog is created;
  @li using an intermediate sizer under the main sizer, a @false top-level sizer that 
      can be relied on to exist for the purposes of manipulating child sizers and windows;

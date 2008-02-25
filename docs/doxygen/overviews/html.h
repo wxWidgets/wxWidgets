@@ -16,7 +16,7 @@
 
  wxHTML can be used as a generic rich text viewer - for example to display
  a nice About Box (like those of GNOME apps) or to display the result of
- database searching. There is a #wxFileSystem class which allows you to use 
+ database searching. There is a wxFileSystem class which allows you to use 
  your own virtual file systems.
 
  wxHtmlWindow supports tag handlers. This means that you can easily
@@ -45,15 +45,15 @@
 
  First of all, you must include @c wx/wxhtml.h.
 
- Class #wxHtmlWindow (derived from wxScrolledWindow) is used to display HTML documents.
+ Class wxHtmlWindow (derived from wxScrolledWindow) is used to display HTML documents.
 
  It has two important methods: wxHtmlWindow::LoadPage and wxHtmlWindow::SetPage.
  LoadPage loads and displays HTML file while SetPage displays directly the
  passed @b string. See the example:
 
  @code
-     mywin - LoadPage("test.htm");
-     mywin - SetPage("htmlbody"
+     mywin -> LoadPage("test.htm");
+     mywin -> SetPage("htmlbody"
                       "h1Error/h1"
                       "Some error occurred :-H)"
                       "/body/hmtl");
@@ -61,7 +61,7 @@
 
  @subsection overview_html_quickstart_disphelp Displaying Help
  
- See #wxHtmlHelpController.
+ See wxHtmlHelpController.
 
  @subsection overview_html_quickstart_settingup Setting up wxHtmlWindow
 
@@ -76,8 +76,8 @@
 
  @code
      html = new wxHtmlWindow(this);
-     html - SetRelatedFrame(this, "HTML : %%s");
-     html - SetRelatedStatusBar(0);
+     html -> SetRelatedFrame(this, "HTML : %%s");
+     html -> SetRelatedStatusBar(0);
  @endcode
 
  The first command associates the HTML object with its parent frame
@@ -106,13 +106,13 @@
  @section overview_html_printing HTML Printing
 
  The wxHTML library provides printing facilities with several levels of complexity.
- The easiest way to print an HTML document is to use @ref htmleasyprinting_overview. 
+ The easiest way to print an HTML document is to use @ref overview_htmleasyprinting. 
 
  It lets you print HTML documents with only one command and you don't have to worry
  about deriving from the wxPrintout class at all. It is only a simple wrapper around the
- #wxHtmlPrintout, normal wxWidgets printout class.
+ wxHtmlPrintout, normal wxWidgets printout class.
 
- And finally there is the low level class #wxHtmlDCRenderer which you can use to
+ And finally there is the low level class wxHtmlDCRenderer which you can use to
  render HTML into a rectangular area on any DC. 
 
  It supports rendering into multiple rectangles with the same
@@ -125,7 +125,7 @@
  wxHTML library uses a reduced version of MS HTML Workshop format.
  Tex2RTF can produce these files when generating HTML, if you set 
  @b htmlWorkshopFiles to @true in your tex2rtf.ini file.
- (See #wxHtmlHelpController for help controller description.)
+ (See wxHtmlHelpController for help controller description.)
 
  A @b book consists of three files: the header file, the contents file 
  and the index file.
@@ -223,14 +223,14 @@
  files of many different file formats.
 
  wxHtmlWindow::LoadPage can load not only HTML files but any known file. 
- To make a file type known to wxHtmlWindow you must create a #wxHtmlFilter filter and
+ To make a file type known to wxHtmlWindow you must create a wxHtmlFilter filter and
  register it using wxHtmlWindow::AddFilter.
 
 
  @section overview_html_cells Cells and Containers
 
- This article describes mechanism used by #wxHtmlWinParser and
- #wxHtmlWindow to parse and display HTML documents.
+ This article describes mechanism used by wxHtmlWinParser and
+ wxHtmlWindow to parse and display HTML documents.
 
  @subsection overview_html_cells_cells Cells
 
@@ -238,26 +238,28 @@
  fragments @b cells. Cell is for example one word, horizontal line, image
  or any other part of document. Each cell has width and height (except special
  "magic" cells with zero dimensions - e.g. colour changers or font changers).
- See #wxHtmlCell.
+ See wxHtmlCell.
 
  @subsection overview_html_cells_containers Containers
 
  Container is kind of cell that may contain sub-cells. Its size depends
  on number and sizes of its sub-cells (and also depends on width of window).
- See #wxHtmlContainerCell, wxHtmlCell::Layout.
+ See wxHtmlContainerCell, wxHtmlCell::Layout.
  This image shows the cells and containers: @image html contbox.bmp
 
  @subsection overview_html_cells_conttaghandler Using Containers in Tag Handler
 
- #wxHtmlWinParser provides a user-friendly way of managing containers. 
+ wxHtmlWinParser provides a user-friendly way of managing containers. 
  It is based on the idea of opening and closing containers.
 
- Use #OpenContainer to open new a container @e within an already opened container.
+ Use wxHtmlWinParser::OpenContainer to open new a container @e within an already 
+ opened container.
  This new container is a @e sub-container of the old one. (If you want to create a 
  new container with the same depth level you can call @c CloseContainer(); OpenContainer();.)
 
- Use #CloseContainer to close the container. This doesn't create a new container 
- with same depth level but it returns "control" to the parent container.
+ Use wxHtmlWinParser::CloseContainer to close the container. 
+ This doesn't create a new container with same depth level but it returns "control"
+ to the parent container.
  See explanation: @image html cont.bmp
 
  There clearly must be same number of calls to OpenContainer as to
@@ -288,7 +290,8 @@
  The result was that we had @e same depth level after executing.
  This is general rule that should be followed by tag handlers:
  leave depth level of containers unmodified (in other words, number of
- OpenContainer and CloseContainer calls should be same within #HandleTag's body).
+ OpenContainer and CloseContainer calls should be same within
+ wxHtmlTagHandler::HandleTag's body).
 
  Notice that it would be usually better to use wxHtmlContainerCell::InsertCell instead
  of adding text to the parser directly.
@@ -300,7 +303,7 @@
  Tag handler is class that understands particular HTML tag (or tags) and is
  able to interpret it.
 
- #wxHtmlWinParser has a static table of @b modules.
+ wxHtmlWinParser has a static table of @b modules.
  Each module contains one or more tag handlers. Each time a new wxHtmlWinParser
  object is constructed all modules are scanned and handlers are added
  to wxHtmlParser's list of available handlers (note: wxHtmlParser's list
@@ -308,14 +311,14 @@
 
  @subsection overview_html_handlers_howworks How it works
 
- Common tag handler's #HandleTag method works in four steps:
+ Common tag handler's wxHtmlTagHandler::HandleTag method works in four steps:
 
  @li Save state of parent parser into local variables
  @li Change parser state according to tag's params
  @li Parse text between the tag and paired ending tag (if present)
  @li Restore original parser state
 
- See #wxHtmlWinParser for methods for modifying parser's state. 
+ See wxHtmlWinParser for methods for modifying parser's state. 
  In general you can do things like opening/closing containers, changing colors, fonts etc.
 
  @subsection overview_html_handlers_custom Providing own tag handlers
@@ -332,7 +335,7 @@
 
  @subsection overview_html_handlers_tag Tag handlers
 
- The handler is derived from #wxHtmlWinTagHandler (or directly from #wxHtmlTagHandler).
+ The handler is derived from wxHtmlWinTagHandler (or directly from wxHtmlTagHandler).
 
  You can use set of macros to define the handler (see src/html/m_*.cpp files
  for details). Handler definition must start with @b TAG_HANDLER_BEGIN macro
@@ -346,7 +349,7 @@
      Starts handler definition. @e name is handler identifier (in fact
      part of class name), @e tags is string containing list of tags
      supported by this handler (in uppercase). This macro derives new class from
-     wxHtmlWinTagHandler and implements it is #GetSupportedTags method.
+     wxHtmlWinTagHandler and implements it is wxHtmlTagHandler::GetSupportedTags method.
      Example: TAG_HANDLER_BEGIN(FONTS, "B,I,U,T")
 
  @li @b TAG_HANDLER_VARS:
@@ -382,7 +385,7 @@
      Never used in wxHTML :-)
 
  @li @b TAG_HANDLER_PROC(@e varib):
-     This is very important macro. It defines #HandleTag
+     This is very important macro. It defines wxHtmlTagHandler::HandleTag
      method. @e varib is name of parameter passed to the method, usually
      @e tag. Body of method follows after this macro.
      Note than you must use { and }  !
@@ -404,7 +407,7 @@
 
  You can use set of 3 macros TAGS_MODULE_BEGIN, TAGS_MODULE_ADD and
  TAGS_MODULE_END to inherit new module from
- #wxHtmlTagsModule and to create instance of it.
+ wxHtmlTagsModule and to create instance of it.
 
  See macros reference:
 

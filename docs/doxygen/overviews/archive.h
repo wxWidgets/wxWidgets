@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        arc.h
+// Name:        archive.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -11,7 +11,7 @@
  @page overview_arc Archive formats such as zip
 
  The archive classes handle archive formats such as zip, tar, rar and cab.
- Currently #wxZip and #wxTar classes are included.
+ Currently wxZip and wxTar classes are included.
 
  For each archive type, there are the following classes (using zip here
  as an example):
@@ -23,14 +23,14 @@
  There are also abstract wxArchive classes that can be used to write code
  that can handle any of the archive types, see @ref overview_arc_generic.
 
- Also see #wxFileSystem for a higher level interface that
+ Also see wxFileSystem for a higher level interface that
  can handle archive files in a generic way.
 
  The classes are designed to handle archives on both seekable streams such
  as disk files, or non-seekable streams such as pipes and sockets
  (see @ref overview_arc_noseek).
 
- See also #wxFileSystem.
+ See also wxFileSystem.
 
  @li @ref overview_arc_create
  @li @ref overview_arc_extract
@@ -45,7 +45,8 @@
 
  @section overview_arc_create Creating an archive
 
- Call #PutNextEntry() to create each new entry in the archive, then write the entry's data.
+ Call wxArchiveOutputStream::PutNextEntry() to create each new entry in the archive,
+ then write the entry's data.
  Another call to PutNextEntry() closes the current entry and begins the next.
  For example:
 
@@ -56,10 +57,10 @@
      wxString sep(wxFileName::GetPathSeparator());
 
      zip.PutNextEntry(_T("entry1.txt"));
-     txt  _T("Some text for entry1.txt\n");
+     txt << _T("Some text for entry1.txt\n");
 
      zip.PutNextEntry(_T("subdir") + sep + _T("entry2.txt"));
-     txt  _T("Some text for subdir/entry2.txt\n");
+     txt << _T("Some text for subdir/entry2.txt\n");
  @endcode
 
  The name of each entry can be a full path, which makes it possible to
@@ -68,8 +69,8 @@
 
  @section overview_arc_extract Extracting an archive
 
- #GetNextEntry() returns a pointer to entry object containing the meta-data for 
- the next entry in the archive (and gives away ownership).
+ wxArchiveInputStream::GetNextEntry() returns a pointer to entry object containing the 
+ meta-data for the next entry in the archive (and gives away ownership).
 
  Reading from the input stream then returns the entry's data.
  Eof() becomes @true after an attempt has been made to read past the end of the entry's data.
@@ -82,10 +83,10 @@
      wxFFileInputStream in(_T("test.zip"));
      wxZipInputStream zip(in);
 
-     while (entry.reset(zip.GetNextEntry()), entry.get() != @NULL)
+     while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)
      {
          // access meta-data
-         wxString name = entry-GetName();
+         wxString name = entry->GetName();
          // read 'zip' to access the entry's data
      }
  @endcode
@@ -96,7 +97,7 @@
 
  To modify an existing archive, write a new copy of the archive to a new file,
  making any necessary changes along the way and transferring any unchanged
- entries using #CopyEntry().
+ entries using wxArchiveOutputStream::CopyEntry().
 
  For archive types which compress entry data, CopyEntry() is likely to be
  much more efficient than transferring the data using Read() and Write()
@@ -105,7 +106,7 @@
  In general modifications are not possible without rewriting the archive,
  though it may be possible in some limited cases. Even then, rewriting the
  archive is usually a better choice since a failure can be handled without
- losing the whole archive. #wxTempFileOutputStream can be helpful to do this.
+ losing the whole archive. wxTempFileOutputStream can be helpful to do this.
 
  For example to delete all entries matching the pattern "*.txt":
 
@@ -123,8 +124,8 @@
      outzip.CopyArchiveMetaData(inzip);
 
      // call CopyEntry for each entry except those matching the pattern
-     while (entry.reset(inzip.GetNextEntry()), entry.get() != @NULL)
-         if (!entry-GetName().Matches(_T("*.txt")))
+     while (entry.reset(inzip.GetNextEntry()), entry.get() != NULL)
+         if (!entry->GetName().Matches(_T("*.txt")))
              if (!outzip.CopyEntry(entry.release(), inzip))
                  break;
 
@@ -140,21 +141,21 @@
 
  @section overview_arc_byname Looking up an archive entry by name
 
- Also see #wxFileSystem for a higher level interface that is
+ Also see wxFileSystem for a higher level interface that is
  more convenient for accessing archive entries by name.
 
  To open just one entry in an archive, the most efficient way is
- to simply search for it linearly by calling #GetNextEntry() until the
- required entry is found. This works both for archives on seekable and
+ to simply search for it linearly by calling wxArchiveInputStream::GetNextEntry() 
+ until the required entry is found. This works both for archives on seekable and
  non-seekable streams.
 
  The format of filenames in the archive is likely to be different
  from the local filename format. For example zips and tars use
  unix style names, with forward slashes as the path separator,
  and absolute paths are not allowed. So if on Windows the file
- "C:\MYDIR\MYFILE.TXT" is stored, then when reading the entry back #GetName() 
- will return "MYDIR\MYFILE.TXT". The conversion into the internal format
- and back has lost some information.
+ "C:\MYDIR\MYFILE.TXT" is stored, then when reading the entry back 
+ wxArchiveEntry::GetName() will return "MYDIR\MYFILE.TXT". 
+ The conversion into the internal format and back has lost some information.
 
  So to avoid ambiguity when searching for an entry matching a local name,
  it is better to convert the local name to the archive's internal format
@@ -174,16 +175,17 @@
      do {
          entry.reset(zip.GetNextEntry());
      }
-     while (entry.get() != @NULL && entry-GetInternalName() != name);
+     while (entry.get() != NULL && entry->GetInternalName() != name);
 
-     if (entry.get() != @NULL) {
+     if (entry.get() != NULL) {
          // read the entry's data...
      }
  @endcode
 
  To access several entries randomly, it is most efficient to transfer the
  entire catalogue of entries to a container such as a std::map or a
- #wxHashMap then entries looked up by name can be opened using the #OpenEntry() method.
+ wxHashMap then entries looked up by name can be opened using the 
+ wxArchiveInputStream::OpenEntry() method.
 
  @code
      WX_DECLARE_STRING_HASH_MAP(wxZipEntry*, ZipCatalog);
@@ -196,8 +198,8 @@
      wxZipInputStream zip(in);
 
      // load the zip catalog
-     while ((entry = zip.GetNextEntry()) != @NULL) {
-         wxZipEntry*& current = cat[entry-GetInternalName()];
+     while ((entry = zip.GetNextEntry()) != NULL) {
+         wxZipEntry*& current = cat[entry->GetInternalName()];
          // some archive formats can have multiple entries with the same name
          // (e.g. tar) though it is an error in the case of zip
          delete current;
@@ -206,7 +208,7 @@
 
      // open an entry by name
      if ((it = cat.find(wxZipEntry::GetInternalName(localname))) != cat.end()) {
-         zip.OpenEntry(*it-second);
+         zip.OpenEntry(*it->second);
          // ... now read entry's data
      }
  @endcode
@@ -220,14 +222,14 @@
      wxFFileInputStream in2(_T("test.zip"));
      wxZipInputStream zip2(in2);
      if ((it = cat.find(wxZipEntry::GetInternalName(local2))) != cat.end())
-         zip2.OpenEntry(*it-second);
+         zip2.OpenEntry(*it->second);
  @endcode
 
 
 
  @section overview_arc_generic Generic archive programming
 
- Also see #wxFileSystem for a higher level interface that
+ Also see wxFileSystem for a higher level interface that
  can handle archive files in a generic way.
 
  The specific archive classes, such as the wxZip classes, inherit from
@@ -242,18 +244,18 @@
  instances of the classes without knowing which archive type is being used.
 
  To allow this there is a class factory for each archive type, derived from
- #wxArchiveClassFactory, that can create the other classes.
+ wxArchiveClassFactory, that can create the other classes.
 
  For example, given @e wxArchiveClassFactory* factory, streams and
  entries can be created like this:
 
  @code
      // create streams without knowing their type
-     auto_ptr<wxArchiveInputStream> inarc(factory-NewStream(in));
-     auto_ptr<wxArchiveOutputStream> outarc(factory-NewStream(out));
+     auto_ptr<wxArchiveInputStream> inarc(factory->NewStream(in));
+     auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
 
      // create an empty entry object
-     auto_ptr<wxArchiveEntry> entry(factory-NewEntry());
+     auto_ptr<wxArchiveEntry> entry(factory->NewEntry());
  @endcode
 
  For the factory itself, the static member wxArchiveClassFactory::Find().
@@ -265,7 +267,7 @@
      factory = wxArchiveClassFactory::Find(filename, wxSTREAM_FILEEXT);
 
      if (factory)
-         stream = factory-NewStream(new wxFFileInputStream(filename));
+         stream = factory->NewStream(new wxFFileInputStream(filename));
  @endcode
 
  @e Find does not give away ownership of the returned pointer, so it
@@ -280,27 +282,27 @@
  @code
      auto_ptr<wxInputStream> in(new wxFFileInputStream(filename));
 
-     if (in-IsOk())
+     if (in->IsOk())
      {
          // look for a filter handler, e.g. for '.gz'
          const wxFilterClassFactory *fcf;
          fcf = wxFilterClassFactory::Find(filename, wxSTREAM_FILEEXT);
          if (fcf) {
-             in.reset(fcf-NewStream(in.release()));
+             in.reset(fcf->NewStream(in.release()));
              // pop the extension, so if it was '.tar.gz' it is now just '.tar'
-             filename = fcf-PopExtension(filename);
+             filename = fcf->PopExtension(filename);
          }
 
          // look for a archive handler, e.g. for '.zip' or '.tar'
          const wxArchiveClassFactory *acf;
          acf = wxArchiveClassFactory::Find(filename, wxSTREAM_FILEEXT);
          if (acf) {
-             auto_ptr<wxArchiveInputStream> arc(acf-NewStream(in.release()));
+             auto_ptr<wxArchiveInputStream> arc(acf->NewStream(in.release()));
              auto_ptr<wxArchiveEntry> entry;
 
              // list the contents of the archive
-             while ((entry.reset(arc-GetNextEntry())), entry.get() != @NULL)
-                 std::wcout  entry-GetName().c_str()  "\n";
+             while ((entry.reset(arc->GetNextEntry())), entry.get() != NULL)
+                std::wcout << entry->GetName().c_str() << "\n";
          }
          else {
              wxLogError(_T("can't handle '%s'"), filename.c_str());
@@ -315,18 +317,20 @@
  In general, handling archives on non-seekable streams is done in the same
  way as for seekable streams, with a few caveats.
 
- The main limitation is that accessing entries randomly using #OpenEntry()
- is not possible, the entries can only be accessed sequentially in the order
- they are stored within the archive.
+ The main limitation is that accessing entries randomly using 
+ wxArchiveInputStream::OpenEntry() is not possible, the entries can only be 
+ accessed sequentially in the order they are stored within the archive.
 
  For each archive type, there will also be other limitations which will
  depend on the order the entries' meta-data is stored within the archive.
  These are not too difficult to deal with, and are outlined below.
 
- @b PutNextEntry and the entry size
+ @subsection overview_arc_noseek_entrysize PutNextEntry and the entry size
+
  When writing archives, some archive formats store the entry size before
  the entry's data (tar has this limitation, zip doesn't). In this case
- the entry's size must be passed to #PutNextEntry() or an error occurs.
+ the entry's size must be passed to wxArchiveOutputStream::PutNextEntry()
+ or an error occurs.
 
  This is only an issue on non-seekable streams, since otherwise the archive
  output stream can seek back and fix up the header once the size of the
@@ -336,11 +340,12 @@
  whenever it is known, and rely on the error message from the output
  stream when the operation is not supported.
 
- @b GetNextEntry and the weak reference mechanism
+ @subsection overview_arc_noseek_weak GetNextEntry and the weak reference mechanism
+
  Some archive formats do not store all an entry's meta-data before the
  entry's data (zip is an example). In this case, when reading from a
- non-seekable stream, #GetNextEntry() can only return a partially populated 
- #wxArchiveEntry object - not all the fields are set.
+ non-seekable stream, wxArchiveInputStream::GetNextEntry() can only return
+ a partially populated wxArchiveEntry object - not all the fields are set.
 
  The input stream then keeps a weak reference to the entry object and
  updates it when more meta-data becomes available. A weak reference being
@@ -353,72 +358,77 @@
  of wxArchiveEntry being fully populated when GetNextEntry() returns,
  with the the following exceptions:
 
- @li GetSize(): Guaranteed to be available after the entry has been read to #Eof(),
-                or #CloseEntry() has been called
+ @li wxArchiveEntry::GetSize(): guaranteed to be available after the 
+     entry has been read to wxInputStream::Eof(), or wxArchiveInputStream::CloseEntry()
+     has been called
 
- @li IsReadOnly(): Guaranteed to be available after the end of the archive has been 
-                   reached, i.e. after GetNextEntry() returns @NULL and Eof() is @true
+ @li wxArchiveEntry::IsReadOnly(): guaranteed to be available after the end of
+     the archive has been reached, i.e. after GetNextEntry() returns @NULL and
+     Eof() is @true
 
- This mechanism allows #CopyEntry() to always fully preserve entries' meta-data. 
- No matter what order order the meta-data occurs within the archive, the input stream 
- will always have read it before the output stream must write it.
+ This mechanism allows wxArchiveOutputStream::CopyEntry() to always fully 
+ preserve entries' meta-data. No matter what order order the meta-data occurs 
+ within the archive, the input stream will always have read it before the output
+ stream must write it.
 
- @b wxArchiveNotifier
+ @subsection overview_arc_noseek_notifier wxArchiveNotifier
+
  Notifier objects can be used to get a notification whenever an input
- stream updates a #wxArchiveEntry object's data
- via the weak reference mechanism.
+ stream updates a wxArchiveEntry object's data via the weak reference mechanism.
 
  Consider the following code which renames an entry in an archive.
  This is the usual way to modify an entry's meta-data, simply set the
- required field before writing it with #CopyEntry():
+ required field before writing it with wxArchiveOutputStream::CopyEntry():
 
  @code
-     auto_ptr<wxArchiveInputStream> arc(factory-NewStream(in));
-     auto_ptr<wxArchiveOutputStream> outarc(factory-NewStream(out));
+     auto_ptr<wxArchiveInputStream> arc(factory->NewStream(in));
+     auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
      auto_ptr<wxArchiveEntry> entry;
 
-     outarc-CopyArchiveMetaData(*arc);
+     outarc->CopyArchiveMetaData(*arc);
 
-     while (entry.reset(arc-GetNextEntry()), entry.get() != @NULL) {
-         if (entry-GetName() == from)
-             entry-SetName(to);
-         if (!outarc-CopyEntry(entry.release(), *arc))
+     while (entry.reset(arc->GetNextEntry()), entry.get() != NULL) {
+         if (entry->GetName() == from)
+             entry->SetName(to);
+         if (!outarc->CopyEntry(entry.release(), *arc))
              break;
      }
 
-     bool success = arc-Eof() && outarc-Close();
+     bool success = arc->Eof() && outarc->Close();
  @endcode
 
  However, for non-seekable streams, this technique cannot be used for
- fields such as #IsReadOnly(), which are not necessarily set when
- #GetNextEntry() returns. In this case a #wxArchiveNotifier can be used:
+ fields such as wxArchiveEntry::IsReadOnly(), which are not necessarily set when
+ wxArchiveInputStream::GetNextEntry() returns.
+
+ In this case a wxArchiveNotifier can be used:
 
  @code
  class MyNotifier : public wxArchiveNotifier
  {
  public:
-     void OnEntryUpdated(wxArchiveEntry& entry) { entry.SetIsReadOnly(@false); }
+     void OnEntryUpdated(wxArchiveEntry& entry) { entry.SetIsReadOnly(false); }
  };
  @endcode
 
- The meta-data changes are done in your notifier's #OnEntryUpdated() method,
- then #SetNotifier() is called before CopyEntry():
+ The meta-data changes are done in your notifier's wxArchiveNotifier::OnEntryUpdated() 
+ method, then wxArchiveEntry::SetNotifier() is called before CopyEntry():
 
  @code
-     auto_ptr<wxArchiveInputStream> arc(factory-NewStream(in));
-     auto_ptr<wxArchiveOutputStream> outarc(factory-NewStream(out));
+     auto_ptr<wxArchiveInputStream> arc(factory->NewStream(in));
+     auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
      auto_ptr<wxArchiveEntry> entry;
      MyNotifier notifier;
 
-     outarc-CopyArchiveMetaData(*arc);
+     outarc->CopyArchiveMetaData(*arc);
 
-     while (entry.reset(arc-GetNextEntry()), entry.get() != @NULL) {
-         entry-SetNotifier(notifier);
-         if (!outarc-CopyEntry(entry.release(), *arc))
+     while (entry.reset(arc->GetNextEntry()), entry.get() != NULL) {
+         entry->SetNotifier(notifier);
+         if (!outarc->CopyEntry(entry.release(), *arc))
              break;
      }
 
-     bool success = arc-Eof() && outarc-Close();
+     bool success = arc->Eof() && outarc->Close();
  @endcode
 
  SetNotifier() calls OnEntryUpdated() immediately, then the input

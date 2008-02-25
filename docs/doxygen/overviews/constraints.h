@@ -10,7 +10,7 @@
 
  @page overview_constraints Constraints overview
 
- Classes: #wxLayoutConstraints, #wxIndividualLayoutConstraint.
+ Classes: wxLayoutConstraints, wxIndividualLayoutConstraint.
 
  @note Constraints are now deprecated and you should use sizers instead (see wxSizer).
 
@@ -46,7 +46,7 @@
  constraints. To call it you can either call wxWindow::SetAutoLayout if the parent 
  window is a frame, panel or a dialog to tell default OnSize handlers to call Layout
  automatically whenever the window size changes, or override OnSize and call
- Layout yourself (note that you do have to call #Layout yourself if the parent 
+ Layout yourself (note that you do have to call wxWindow::Layout yourself if the parent 
  window is not a frame, panel or dialog).
 
  @li @ref overview_constraints_layout
@@ -117,38 +117,38 @@
  with a text subwindow below it.
 
  @code
-   frame-panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(1000, 500), 0);
-   frame-scrollWindow = new MyScrolledWindow(frame, -1, wxPoint(0, 0), wxSize(400, 400), wxRETAINED);
-   frame-text_window = new MyTextWindow(frame, -1, wxPoint(0, 250), wxSize(400, 250));
+   frame->panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(1000, 500), 0);
+   frame->scrollWindow = new MyScrolledWindow(frame, -1, wxPoint(0, 0), wxSize(400, 400), wxRETAINED);
+   frame->text_window = new MyTextWindow(frame, -1, wxPoint(0, 250), wxSize(400, 250));
 
    // Set constraints for panel subwindow
    wxLayoutConstraints *c1 = new wxLayoutConstraints;
 
-   c1-left.SameAs       (frame, wxLeft);
-   c1-top.SameAs        (frame, wxTop);
-   c1-right.PercentOf   (frame, wxWidth, 50);
-   c1-height.PercentOf  (frame, wxHeight, 50);
+   c1->left.SameAs       (frame, wxLeft);
+   c1->top.SameAs        (frame, wxTop);
+   c1->right.PercentOf   (frame, wxWidth, 50);
+   c1->height.PercentOf  (frame, wxHeight, 50);
 
-   frame-panel-SetConstraints(c1);
+   frame->panel->SetConstraints(c1);
 
    // Set constraints for scrollWindow subwindow
    wxLayoutConstraints *c2 = new wxLayoutConstraints;
 
-   c2-left.SameAs       (frame-panel, wxRight);
-   c2-top.SameAs        (frame, wxTop);
-   c2-right.SameAs      (frame, wxRight);
-   c2-height.PercentOf  (frame, wxHeight, 50);
+   c2->left.SameAs       (frame->panel, wxRight);
+   c2->top.SameAs        (frame, wxTop);
+   c2->right.SameAs      (frame, wxRight);
+   c2->height.PercentOf  (frame, wxHeight, 50);
 
-   frame-scrollWindow-SetConstraints(c2);
+   frame->scrollWindow->SetConstraints(c2);
 
    // Set constraints for text subwindow
    wxLayoutConstraints *c3 = new wxLayoutConstraints;
-   c3-left.SameAs       (frame, wxLeft);
-   c3-top.Below         (frame-panel);
-   c3-right.SameAs      (frame, wxRight);
-   c3-bottom.SameAs     (frame, wxBottom);
+   c3->left.SameAs       (frame, wxLeft);
+   c3->top.Below         (frame->panel);
+   c3->right.SameAs      (frame, wxRight);
+   c3->bottom.SameAs     (frame, wxBottom);
 
-   frame-text_window-SetConstraints(c3);
+   frame->text_window->SetConstraints(c3);
  @endcode
 
 
@@ -161,34 +161,34 @@
 
  @code
    // Create some panel items
-   wxButton *btn1 = new wxButton(frame-panel, -1, "A button") ;
+   wxButton *btn1 = new wxButton(frame->panel, ->1, "A button") ;
 
    wxLayoutConstraints *b1 = new wxLayoutConstraints;
-   b1-centreX.SameAs    (frame-panel, wxCentreX);
-   b1-top.SameAs        (frame-panel, wxTop, 5);
-   b1-width.PercentOf   (frame-panel, wxWidth, 80);
-   b1-height.PercentOf  (frame-panel, wxHeight, 10);
-   btn1-SetConstraints(b1);
+   b1->centreX.SameAs    (frame->panel, wxCentreX);
+   b1->top.SameAs        (frame->panel, wxTop, 5);
+   b1->width.PercentOf   (frame->panel, wxWidth, 80);
+   b1->height.PercentOf  (frame->panel, wxHeight, 10);
+   btn1->SetConstraints(b1);
 
-   wxListBox *list = new wxListBox(frame-panel, -1, "A list",
-                                   wxPoint(-1, -1), wxSize(200, 100));
+   wxListBox *list = new wxListBox(frame->panel, ->1, "A list",
+                                   wxPoint(->1, ->1), wxSize(200, 100));
 
    wxLayoutConstraints *b2 = new wxLayoutConstraints;
-   b2-top.Below         (btn1, 5);
-   b2-left.SameAs       (frame-panel, wxLeft, 5);
-   b2-width.PercentOf   (frame-panel, wxWidth, 40);
-   b2-bottom.SameAs     (frame-panel, wxBottom, 5);
-   list-SetConstraints(b2);
+   b2->top.Below         (btn1, 5);
+   b2->left.SameAs       (frame->panel, wxLeft, 5);
+   b2->width.PercentOf   (frame->panel, wxWidth, 40);
+   b2->bottom.SameAs     (frame->panel, wxBottom, 5);
+   list->SetConstraints(b2);
 
-   wxTextCtrl *mtext = new wxTextCtrl(frame-panel, -1, "Multiline text", "Some text",
-                         wxPoint(-1, -1), wxSize(150, 100), wxTE_MULTILINE);
+   wxTextCtrl *mtext = new wxTextCtrl(frame->panel, ->1, "Multiline text", "Some text",
+                         wxPoint(->1, ->1), wxSize(150, 100), wxTE_MULTILINE);
 
    wxLayoutConstraints *b3 = new wxLayoutConstraints;
-   b3-top.Below         (btn1, 5);
-   b3-left.RightOf      (list, 5);
-   b3-right.SameAs      (frame-panel, wxRight, 5);
-   b3-bottom.SameAs     (frame-panel, wxBottom, 5);
-   mtext-SetConstraints(b3);
+   b3->top.Below         (btn1, 5);
+   b3->left.RightOf      (list, 5);
+   b3->right.SameAs      (frame->panel, wxRight, 5);
+   b3->bottom.SameAs     (frame->panel, wxBottom, 5);
+   mtext->SetConstraints(b3);
  @endcode
 
 */

@@ -10,7 +10,7 @@
 
  @page overview_datetime Date and time classes overview
 
- Classes: #wxDateTime, #wxDateSpan, #wxTimeSpan, #wxCalendarCtrl
+ Classes: wxDateTime, wxDateSpan, wxTimeSpan, wxCalendarCtrl
 
  @li @ref overview_datetime_introduction
  @li @ref overview_datetime_classes
@@ -29,7 +29,7 @@
  @section overview_datetime_introduction Introduction
 
  wxWidgets provides a set of powerful classes to work with dates and times. Some
- of the supported features of #wxDateTime class are:
+ of the supported features of wxDateTime class are:
 
  @li Wide range: the range of supported dates goes from about 4714 B.C. to
      some 480 million years in the future.
@@ -49,15 +49,15 @@
 
  @section overview_datetime_classes All date/time classes at a glance
 
- There are 3 main classes declared in @c wx/datetime.h: except #wxDateTime itself 
+ There are 3 main classes declared in @c wx/datetime.h: except wxDateTime itself 
  which represents an absolute moment in time, there are also two classes -
- #wxTimeSpan and #wxDateSpan - which represent the intervals of time.
+ wxTimeSpan and wxDateSpan - which represent the intervals of time.
 
  There are also helper classes which are used together with wxDateTime:
- #wxDateTimeHolidayAuthority which is used to determine whether a given date 
- is a holiday or not and #wxDateTimeWorkDays which is a derivation of this
+ wxDateTimeHolidayAuthority which is used to determine whether a given date 
+ is a holiday or not and wxDateTimeWorkDays which is a derivation of this
  class for which (only) Saturdays and Sundays are the holidays. See more about
- these classes in the discussion of the #holidays.
+ these classes in the discussion of the holidays (see @ref overview_datetime_holidays).
 
  Finally, in other parts of this manual you may find mentions of wxDate and
  wxTime classes. @ref overview_datetime_compat are obsolete and
@@ -67,7 +67,7 @@
 
  @section overview_datetime_characteristics wxDateTime characteristics
 
- #wxDateTime stores the time as a signed number of
+ wxDateTime stores the time as a signed number of
  milliseconds since the Epoch which is fixed, by convention, to Jan 1, 1970 -
  however this is not visible to the class users (in particular, dates prior to
  the Epoch are handled just as well (or as bad) as the dates after it). But it
@@ -82,7 +82,8 @@
 
  Finally, the internal representation is time zone independent (always in GMT)
  and the time zones only come into play when a date is broken into
- year/month/day components. See more about #timezones below.
+ year/month/day components. See more about timezones below
+ (see @ref overview_datetime_timezones).
 
  Currently, the only supported calendar is Gregorian one (which is used even
  for the dates prior to the historic introduction of this calendar which was
@@ -100,7 +101,7 @@
  describe a time interval.
 
  First, there is the direct and self-explaining way implemented by
- #wxTimeSpan: it is just a difference in milliseconds
+ wxTimeSpan: it is just a difference in milliseconds
  between two moments in time. Adding or subtracting such an interval to
  wxDateTime is always well-defined and is a fast operation.
 
@@ -111,7 +112,7 @@
  the year is leap or not).
 
  This is why there is another class for representing such intervals called
- #wxDateSpan. It handles these sort of operations in the
+ wxDateSpan. It handles these sort of operations in the
  most natural way possible, but note that manipulating with intervals of
  this kind is not always well-defined. Consider, for example, Jan 31 + '1
  month': this will give Feb 28 (or 29), i.e. the last day of February and not
@@ -178,9 +179,10 @@
  In this (rare) case, you are still limited to the local time zone when
  constructing wxDateTime objects, i.e. there is no way to construct a
  wxDateTime corresponding to the given date in, say, Pacific Standard Time.
- To do it, you will need to call #ToTimezone or #MakeTimezone methods to adjust 
- the date for the target time zone. There are also special versions of these functions
- #ToUTC and #MakeUTC for the most common case - when the date should be constructed in UTC.
+ To do it, you will need to call wxDateTime::ToTimezone or wxDateTime::MakeTimezone
+ methods to adjust the date for the target time zone. There are also special
+ versions of these functions wxDateTime::ToUTC and wxDateTime::MakeUTC for
+ the most common case - when the date should be constructed in UTC.
 
  You also can just retrieve the value for some time zone without converting the
  object to it first. For this you may pass TimeZone argument to any of the
@@ -220,8 +222,8 @@
  (any information about other ones appreciated!) and even for them the rules
  may perfectly well change in the future.
 
- The time zone handling #methods use these functions
- too, so they are subject to the same limitations.
+ The time zone handling methods (see @ref overview_datetime_timezones) use
+ these functions too, so they are subject to the same limitations.
 
 
 

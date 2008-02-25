@@ -28,8 +28,8 @@
  library code wasn't exception-safe and so an exception propagating through it
  could result in memory and/or resource leaks, and also not very convenient.
 
- Starting from the version 2.5.1 wxWidgets becomes more exception-friendly. It
- still doesn't use the exceptions by itself but it should be now safe to use the
+ wxWidgets is exception-friendly.
+ It still doesn't use the exceptions by itself but it should be now safe to use the
  exceptions in the user code and the library tries to help you with this. Please
  note that making the library exception-safe is still work in progress.
 
@@ -45,20 +45,20 @@
  Another strategy is to use exceptions only to signal truly fatal errors. In
  this case you probably don't expect to recover from them and the default
  behaviour -- to simply terminate the program -- may be appropriate. If it is
- not, you may override #OnUnhandledException()
+ not, you may override wxApp::OnUnhandledException()
  in your wxApp-derived class to perform any clean up tasks. Note, however, that
  any information about the exact exception type is lost when this function is
- called, so if you need you should override #OnRun() and
+ called, so if you need you should override wxApp::OnRun() and
  add a try/catch clause around the call of the base class version. This would
  allow you to catch any exceptions generated during the execution of the main
  event loop. To deal with the exceptions which may arise during the program
  startup and/or shutdown you should insert try/catch clauses in
- #OnInit() and/or #OnExit() as well.
+ wxApp::OnInit() and/or wxApp::OnExit() as well.
 
  Finally, you may also want to continue running even when certain exceptions
  occur. If all of your exceptions may happen only in the event handlers of a
  single class (or only in the classes derived from it), you may centralize your
- exception handling code in #ProcessEvent
+ exception handling code in wxApp::ProcessEvent
  method of this class. If this is impractical, you may also consider overriding
  the wxApp::HandleEvent() which allows you to handle
  all the exceptions thrown by any event handler.

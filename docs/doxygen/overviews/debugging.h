@@ -10,8 +10,8 @@
 
  @page overview_debugging Debugging overview
 
- Classes, functions and macros: #wxDebugContext, #wxObject, #wxLog,
- @ref overview_logfunctions, @ref overview_debugmacros
+ Classes, functions and macros: wxDebugContext, wxObject, wxLog,
+                                @ref overview_logfunctions, @ref overview_debugmacros
 
  Various classes, functions and macros are provided in wxWidgets to help you debug
  your application. Most of these are only available if you compile both wxWidgets,
@@ -23,7 +23,7 @@
 
  @section overview_debugging_dbgctx wxDebugContext
 
- #wxDebugContext is a class that never gets instantiated, but ties together
+ wxDebugContext is a class that never gets instantiated, but ties together
  various static functions and variables. It allows you to dump all objects to that stream, 
  write statistics about object allocation, and check memory for errors.
 
@@ -97,7 +97,7 @@
 
  @section overview_debugging_dbgctx2 wxDebugContext overview
 
- Class: #wxDebugContext
+ Class: wxDebugContext
 
  wxDebugContext is a class for performing various debugging and memory tracing operations.
 

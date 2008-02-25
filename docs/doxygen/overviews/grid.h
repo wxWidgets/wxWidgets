@@ -10,7 +10,7 @@
 
  @page overview_grid wxGrid classes overview
 
- Classes: #wxGrid
+ Classes: wxGrid
 
  @li @ref overview_grid_intro
  @li @ref overview_grid_simpleexample

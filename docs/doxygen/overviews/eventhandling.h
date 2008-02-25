@@ -10,7 +10,7 @@
 
  @page overview_eventhandling Event handling overview
 
- Classes: #wxEvtHandler, #wxWindow, #wxEvent
+ Classes: wxEvtHandler, wxWindow, wxEvent
 
  @li @ref overview_eventhandling_introduction
  @li @ref overview_eventhandling_processing
@@ -64,10 +64,10 @@
  member function in a derived class will not have any effect. These member
  functions take an event argument, and the class of event differs according to
  the type of event and the class of the originating window. For size events,
- #wxSizeEvent is used. For menu commands and most control commands 
- (such as button presses), #wxCommandEvent is used. When controls get more
- complicated, then specific event classes are used, such as #wxTreeEvent for 
- events from #wxTreeCtrl windows.
+ wxSizeEvent is used. For menu commands and most control commands 
+ (such as button presses), wxCommandEvent is used. When controls get more
+ complicated, then specific event classes are used, such as wxTreeEvent for 
+ events from wxTreeCtrl windows.
 
  As well as the event table in the implementation file, there must also be a
  DECLARE_EVENT_TABLE macro somewhere in the class declaration. For example:
@@ -96,7 +96,7 @@
  Finally, if you don't like using macros for static initialization of the event
  tables you may also use wxEvtHandler::Connect to
  connect the events to the handlers dynamically, during run-time. See the
- @ref sampleevent_overview for an example of doing it.
+ @ref page_utils_samples_event for an example of doing it.
 
 
 
@@ -120,7 +120,7 @@
 
  To summarize, instead of explicitly calling the base class version as you
  would have done with C++ virtual functions (i.e. @e wxTextCtrl::OnChar()),
- you should instead call #Skip.
+ you should instead call wxEvent::Skip.
 
  In practice, this would look like this if the derived text control only
  accepts 'a' to 'z' and 'A' to 'Z':
@@ -151,7 +151,7 @@
  @li If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
      the function skips to step (6).
  @li If the object is a wxWindow, @b ProcessEvent is recursively called on the window's
-     #wxValidator. If this returns @true, the function exits.
+     wxValidator. If this returns @true, the function exits.
  @li @b SearchEventTable is called for this event handler. If this fails, the base
      class table is tried, and so on until no more tables exist or an appropriate 
      function was found, in which case the function exits.
@@ -183,7 +183,7 @@
  may be very difficult, if not impossible, to track down all the dialogs which
  may be popped up in a complex program (remember that some are created
  automatically by wxWidgets). If you need to specify a different behaviour for
- some reason, you can use #SetExtraStyle(wxWS_EX_BLOCK_EVENTS)
+ some reason, you can use wxWindow::SetExtraStyle(wxWS_EX_BLOCK_EVENTS)
  explicitly to prevent the events from being propagated beyond the given window
  or unset this flag for the dialogs which have it on by default.
 
@@ -203,24 +203,24 @@
  handler in the library itself. As this quite often causes confusion for users,
  here is a list of system events which will NOT get sent to the parent's event handler:
 
- @li #wxEvent: The event base class
- @li #wxActivateEvent: A window or application activation event
- @li #wxCloseEvent: A close window or end session event
- @li #wxEraseEvent: An erase background event
- @li #wxFocusEvent: A window focus event
- @li #wxKeyEvent: A keypress event
- @li #wxIdleEvent: An idle event
- @li #wxInitDialogEvent: A dialog initialisation event
- @li #wxJoystickEvent: A joystick event
- @li #wxMenuEvent: A menu event
- @li #wxMouseEvent: A mouse event
- @li #wxMoveEvent: A move event
- @li #wxPaintEvent: A paint event
- @li #wxQueryLayoutInfoEvent: Used to query layout information
- @li #wxSetCursorEvent: Used for special cursor processing based on current mouse position
- @li #wxSizeEvent: A size event
- @li #wxScrollWinEvent: A scroll event sent by a scrolled window (not a scroll bar)
- @li #wxSysColourChangedEvent: A system colour change event
+ @li wxEvent: The event base class
+ @li wxActivateEvent: A window or application activation event
+ @li wxCloseEvent: A close window or end session event
+ @li wxEraseEvent: An erase background event
+ @li wxFocusEvent: A window focus event
+ @li wxKeyEvent: A keypress event
+ @li wxIdleEvent: An idle event
+ @li wxInitDialogEvent: A dialog initialisation event
+ @li wxJoystickEvent: A joystick event
+ @li wxMenuEvent: A menu event
+ @li wxMouseEvent: A mouse event
+ @li wxMoveEvent: A move event
+ @li wxPaintEvent: A paint event
+ @li wxQueryLayoutInfoEvent: Used to query layout information
+ @li wxSetCursorEvent: Used for special cursor processing based on current mouse position
+ @li wxSizeEvent: A size event
+ @li wxScrollWinEvent: A scroll event sent by a scrolled window (not a scroll bar)
+ @li wxSysColourChangedEvent: A system colour change event
 
  In some cases, it might be desired by the programmer to get a certain number
  of system events in a parent window, for example all key events sent to, but not
@@ -231,9 +231,9 @@
 
  @section overview_eventhandling_prog Events generated by the user vs programmatically generated events
 
- While generically #wxEvents can be generated both by user
- actions (e.g. resize of a #wxWindow) and by calls to functions
- (e.g. wxWindow::SetSize), wxWidgets controls normally send #wxCommandEvent-derived 
+ While generically wxEvents can be generated both by user
+ actions (e.g. resize of a wxWindow) and by calls to functions
+ (e.g. wxWindow::SetSize), wxWidgets controls normally send wxCommandEvent-derived 
  events only for the user-generated events. The only @b exceptions to this rule are:
 
  @li wxNotebook::AddPage: No event-free alternatives
@@ -244,10 +244,11 @@
  @li wxTreeCtrl::Delete: No event-free alternatives
  @li wxTreeCtrl::DeleteAllItems: No event-free alternatives
  @li wxTreeCtrl::EditLabel: No event-free alternatives
- @li All #wxTextCtrl methods
+ @li All wxTextCtrl methods
 
  wxTextCtrl::ChangeValue can be used instead of wxTextCtrl::SetValue but the other
- functions, such as #Replace or #WriteText don't have event-free equivalents.
+ functions, such as wxTextCtrl::Replace or wxTextCtrl::WriteText don't have event-free
+ equivalents.
 
 
 
@@ -647,7 +648,7 @@
 
  In order to define a new event type, there are principally two choices.
  One is to define a entirely new event class (typically deriving from
- #wxEvent or #wxCommandEvent.
+ wxEvent or wxCommandEvent.
 
  The other is to use the existing event classes and give them an new event
  type. You'll have to define and declare a new event type using either way,
@@ -666,13 +667,13 @@
  You can ignore the @e value parameter of the DECLARE_EVENT_TYPE macro
  since it is used only for backwards compatibility with wxWidgets 2.0.x based
  applications where you have to give the event type ID an explicit value.
- See also the @ref sampleevent_overview for an example of code
+ See also the @ref page_utils_samples_event for an example of code
  defining and working with the custom event types.
 
 
  @subsection overview_eventhandling_custom_existing Using existing event classes
 
- If you just want to use a #wxCommandEvent with
+ If you just want to use a wxCommandEvent with
  a new event type, you can then use one of the generic event table macros
  listed below, without having to define a new macro yourself. This also
  has the advantage that you won't have to define a new wxEvent::Clone()
@@ -750,7 +751,7 @@
  class wxPlotEvent: public wxNotifyEvent
  {
  public:
-     wxPlotEvent( wxEventType commandType = wxEVT_@NULL, int id = 0 );
+     wxPlotEvent( wxEventType commandType = wxEVT_NULL, int id = 0 );
 
      // accessors
      wxPlotCurve *GetCurve()
@@ -770,7 +771,7 @@
  #define EVT_PLOT(id, fn) \
      DECLARE_EVENT_TABLE_ENTRY( wxEVT_PLOT_ACTION, id, -1, \
      (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNotifyEventFunction) \
-     wxStaticCastEvent( wxPlotEventFunction, & fn ), (wxObject *) @NULL ),
+     wxStaticCastEvent( wxPlotEventFunction, & fn ), (wxObject *) NULL ),
 
 
  // code implementing the event type and the event class
@@ -783,7 +784,7 @@
  // user code intercepting the event
 
  BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-   EVT_PLOT  (ID_MY_WINDOW,  MyFrame::OnPlot)
+   EVT_PLOT  (ID_MY_WINDOW, MyFrame::OnPlot)
  END_EVENT_TABLE()
 
  void MyFrame::OnPlot( wxPlotEvent  )
@@ -799,7 +800,7 @@
      wxPlotEvent event( wxEVT_PLOT_ACTION, GetId() );
      event.SetEventObject( this );
      event.SetCurve( m_curve );
-     GetEventHandler()-ProcessEvent( event );
+     GetEventHandler()->ProcessEvent( event );
  }
  @endcode
 

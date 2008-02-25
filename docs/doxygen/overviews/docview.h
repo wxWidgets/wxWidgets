@@ -10,9 +10,9 @@
 
  @page overview_docview Document/view overview
 
- Classes: #wxDocument, #wxView, #wxDocTemplate, #wxDocManager, #wxDocParentFrame, 
-          #wxDocChildFrame, #wxDocMDIParentFrame, #wxDocMDIChildFrame,
-          #wxCommand, #wxCommandProcessor
+ Classes: wxDocument, wxView, wxDocTemplate, wxDocManager, wxDocParentFrame, 
+          wxDocChildFrame, wxDocMDIParentFrame, wxDocMDIChildFrame,
+          wxCommand, wxCommandProcessor
 
  The document/view framework is found in most application frameworks, because it
  can dramatically simplify the code required to build many kinds of application.
@@ -61,7 +61,7 @@
 
  @li Override wxDocument::OnCreateCommandProcessor to define a different Do/Undo strategy,
      or a command history editor.
- @li Override wxView::OnCreatePrintout to create an instance of a derived #wxPrintout
+ @li Override wxView::OnCreatePrintout to create an instance of a derived wxPrintout
      class, to provide multi-page document facilities.
  @li Override wxDocManager::SelectDocumentPath to provide a different file selector.
  @li Limit the maximum number of open documents and the maximum number of undo commands.
@@ -94,11 +94,11 @@
 
  @section overview_docview_wxdoc wxDocument overview
 
- Class: #wxDocument
+ Class: wxDocument
 
  The wxDocument class can be used to model an application's file-based
  data. It is part of the document/view framework supported by wxWidgets,
- and cooperates with the #wxView, #wxDocTemplate and #wxDocManager classes.
+ and cooperates with the wxView, wxDocTemplate and wxDocManager classes.
  Using this framework can save a lot of routine user-interface programming,
  since a range of menu commands -- such as open, save, save as -- are supported
  automatically.
@@ -121,7 +121,7 @@
 
  Use the macros DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS in order
  to allow the framework to create document objects on demand. When you create
- a #wxDocTemplate object on application initialization, you
+ a wxDocTemplate object on application initialization, you
  should pass CLASSINFO(YourDocumentClass) to the wxDocTemplate constructor
  so that it knows how to create an instance of this class.
 
@@ -133,12 +133,12 @@
 
  @section overview_docview_wxview wxView overview
 
- Class: #wxView
+ Class: wxView
 
  The wxView class can be used to model the viewing and editing component of
  an application's file-based data. It is part of the document/view framework 
- supported by wxWidgets, and cooperates with the #wxDocument, #wxDocTemplate
- and #wxDocManager classes.
+ supported by wxWidgets, and cooperates with the wxDocument, wxDocTemplate
+ and wxDocManager classes.
 
  See the example application in @c samples/docview.
 
@@ -148,7 +148,7 @@
 
  Use the macros DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS in order
  to allow the framework to create view objects on demand. When you create
- a #wxDocTemplate object on application initialization, you
+ a wxDocTemplate object on application initialization, you
  should pass CLASSINFO(YourViewClass) to the wxDocTemplate constructor
  so that it knows how to create an instance of this class.
 
@@ -160,7 +160,7 @@
 
  @section overview_docview_wxdoctemplate wxDocTemplate overview
 
- Class: #wxDocTemplate
+ Class: wxDocTemplate
 
  The wxDocTemplate class is used to model the relationship between a
  document class and a view class. The application creates a document
@@ -187,7 +187,7 @@
  simplified.
 
  wxDocTemplate is part of the document/view framework supported by wxWidgets,
- and cooperates with the #wxView, #wxDocument and #wxDocManager classes.
+ and cooperates with the wxView, wxDocument and wxDocManager classes.
 
  See the example application in @c samples/docview.
 
@@ -205,10 +205,10 @@
 
  @section overview_docview_wxdocmanager wxDocManager overview
 
- Class: #wxDocManager
+ Class: wxDocManager
 
  The wxDocManager class is part of the document/view framework supported by wxWidgets,
- and cooperates with the #wxView, #wxDocument and #wxDocTemplate classes.
+ and cooperates with the wxView, wxDocument and wxDocTemplate classes.
 
  A wxDocManager instance coordinates documents, views and document templates. 
  It keeps a list of document and template instances, and much functionality is routed 
@@ -226,7 +226,7 @@
 
  @section overview_docview_wxcommand wxCommand overview
 
- Classes: #wxCommand, #wxCommandProcessor
+ Classes: wxCommand, wxCommandProcessor
 
  wxCommand is a base class for modelling an application command,
  which is an action usually performed by selecting a menu item, pressing
@@ -239,7 +239,7 @@
  as an object which can be manipulated by a framework or application.
 
  When a user interface event occurs, the application @e submits a command
- to a #wxCommandProcessor object to execute and store.
+ to a wxCommandProcessor object to execute and store.
 
  The wxWidgets document/view framework handles Undo and Redo by use of
  wxCommand and wxCommandProcessor objects. You might find further uses
@@ -253,7 +253,7 @@
 
  @section overview_docview_wxcommandproc wxCommandProcessor overview
 
- Classes: #wxCommandProcessor, #wxCommand
+ Classes: wxCommandProcessor, wxCommand
 
  wxCommandProcessor is a class that maintains a history of wxCommand
  instances, with undo/redo functionality built-in. Derive a new class from this
@@ -263,7 +263,7 @@
 
  @section overview_docview_filehistory wxFileHistory overview
 
- Classes: #wxFileHistory, #wxDocManager
+ Classes: wxFileHistory, wxDocManager
 
  wxFileHistory encapsulates functionality to record the last few files visited, and
  to allow the user to quickly load these files using the list appended to the File menu.
@@ -277,7 +277,7 @@
  Please notice that currently if the history already contained filenames when UseMenu() 
  is called (e.g. when initializing a second MDI child frame), the menu is not automatically
  initialized with the existing filenames in the history and so you need to call
- #AddFilesToMenu() after UseMenu() explicitly in order to initialize the menu with 
+ wxFileHistory::AddFilesToMenu() after UseMenu() explicitly in order to initialize the menu with 
  the existing list of MRU files (otherwise an assertion failure is raised in debug builds).
 
  The filenames are appended using menu identifiers in the range @c wxID_FILE1 to @c wxID_FILE9.
