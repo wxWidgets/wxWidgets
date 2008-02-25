@@ -81,6 +81,8 @@
             #include "wx/msw/debughlp.h"
         #endif
     #endif // wxUSE_STACKWALKER
+
+    #include "wx/recguard.h"
 #endif // __WXDEBUG__
 
 // wxABI_VERSION can be defined when compiling applications but it should be
@@ -826,19 +828,16 @@ static void wxDoOnAssert(const wxString& szFile,
                          const wxString& szMsg = wxEmptyString)
 {
     // FIXME MT-unsafe
-    static bool s_bInAssert = false;
+    static int s_bInAssert = 0;
 
-    if ( s_bInAssert )
+    wxRecursionGuard guard(s_bInAssert);
+    if ( guard.IsInside() )
     {
-        // He-e-e-e-elp!! we're trapped in endless loop
+        // can't use assert here to avoid infinite loops, so just trap
         wxTrap();
-
-        s_bInAssert = false;
 
         return;
     }
-
-    s_bInAssert = true;
 
     if ( !wxTheApp )
     {
@@ -853,8 +852,6 @@ static void wxDoOnAssert(const wxString& szFile,
         wxTheApp->OnAssertFailure(szFile.c_str(), nLine, szFunc.c_str(),
                                   szCond.c_str(), szMsg.c_str());
     }
-
-    s_bInAssert = false;
 }
 
 void wxOnAssert(const wxString& szFile,
