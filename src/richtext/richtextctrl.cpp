@@ -398,7 +398,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
         wxPoint logicalPt = event.GetLogicalPosition(dc);
         int hit = GetBuffer().HitTest(dc, logicalPt, position);
 
-        if (hit != wxRICHTEXT_HITTEST_NONE)
+        if ((hit != wxRICHTEXT_HITTEST_NONE) && !(hit & wxRICHTEXT_HITTEST_OUTSIDE))
         {
             wxRichTextEvent cmdEvent(
                 wxEVT_COMMAND_RICHTEXT_LEFT_CLICK,
@@ -642,7 +642,19 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         // so subtract 1 for deleted character and add 1 for conversion to character position.
         if (m_caretPosition > -1 && !HasSelection())
         {
-            GetBuffer().DeleteRangeWithUndo(wxRichTextRange(m_caretPosition, m_caretPosition), this);
+            bool processed = false;
+            if (event.CmdDown())
+            {
+                long pos = wxRichTextCtrl::FindNextWordPosition(-1);
+                if (pos != -1 && (pos < m_caretPosition))
+                {
+                    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(pos+1, m_caretPosition), this);
+                    processed = true;
+                }
+            }
+
+            if (!processed)
+                GetBuffer().DeleteRangeWithUndo(wxRichTextRange(m_caretPosition, m_caretPosition), this);
         }
         else
             DeleteSelectedContent();
@@ -1915,13 +1927,17 @@ bool wxRichTextCtrl::DoSaveFile(const wxString& filename, int fileType)
 /// Add a new paragraph of text to the end of the buffer
 wxRichTextRange wxRichTextCtrl::AddParagraph(const wxString& text)
 {
-    return GetBuffer().AddParagraph(text);
+    wxRichTextRange range = GetBuffer().AddParagraph(text);
+    LayoutContent();
+    return range;
 }
 
 /// Add an image
 wxRichTextRange wxRichTextCtrl::AddImage(const wxImage& image)
 {
-    return GetBuffer().AddImage(image);
+    wxRichTextRange range = GetBuffer().AddImage(image);
+    LayoutContent();
+    return range;
 }
 
 // ----------------------------------------------------------------------------
@@ -1957,6 +1973,9 @@ bool wxRichTextCtrl::SelectWord(long position)
     if (!para)
         return false;
 
+    if (position == para->GetRange().GetEnd())
+        position --;
+
     long positionStart = position;
     long positionEnd = position;
 
@@ -1983,6 +2002,9 @@ bool wxRichTextCtrl::SelectWord(long position)
     }
     if (positionEnd >= para->GetRange().GetEnd())
         positionEnd = para->GetRange().GetEnd();
+
+    if (positionEnd < positionStart)
+        return false;
 
     SetSelection(positionStart, positionEnd+1);
 
