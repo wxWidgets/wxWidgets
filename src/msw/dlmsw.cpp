@@ -239,11 +239,11 @@ wxDynamicLibraryDetailsCreator::EnumModulesProc(NameStr_t name,
 
     // fill in simple properties
     details->m_name = wxString::FromAscii(name);
-    details->m_address = wx_reinterpret_cast(void *, base);
+    details->m_address = wxUIntToPtr(base);
     details->m_length = size;
 
     // to get the version, we first need the full path
-    HMODULE hmod = wxGetModuleHandle(name, (void *)base);
+    HMODULE hmod = wxGetModuleHandle(name, details->m_address);
     if ( hmod )
     {
         wxString fullname = wxGetFullModuleName(hmod);

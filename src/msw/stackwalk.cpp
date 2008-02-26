@@ -293,7 +293,7 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
         if ( nLevel >= skip )
         {
             wxStackFrame frame(nLevel - skip,
-                               (void *)sf.AddrPC.Offset,
+                               wxUIntToPtr(sf.AddrPC.Offset),
                                sf.AddrFrame.Offset);
 
             OnStackFrame(frame);

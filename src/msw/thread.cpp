@@ -76,7 +76,7 @@
     #include <process.h>
 
     // the return type of the thread function entry point
-    typedef unsigned THREAD_RETVAL;
+    typedef wxUIntPtr THREAD_RETVAL;
 
     // the calling convention of the thread function entry point
     #define THREAD_CALLCONV __stdcall
@@ -85,6 +85,8 @@
     typedef DWORD THREAD_RETVAL;
     #define THREAD_CALLCONV WINAPI
 #endif
+
+static const THREAD_RETVAL THREAD_ERROR_EXIT = (THREAD_RETVAL)-1;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -514,7 +516,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 {
     wxON_BLOCK_EXIT1(DoThreadOnExit, thread);
 
-    THREAD_RETVAL rc = (THREAD_RETVAL)-1;
+    THREAD_RETVAL rc = THREAD_ERROR_EXIT;
 
     wxTRY
     {
@@ -523,7 +525,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
         {
             wxLogSysError(_("Can not start thread: error writing TLS."));
 
-            return (THREAD_RETVAL)-1;
+            return THREAD_ERROR_EXIT;
         }
 
         rc = (THREAD_RETVAL)thread->Entry();
@@ -536,7 +538,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
 /* static */
 THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
 {
-    THREAD_RETVAL rc = (THREAD_RETVAL)-1;
+    THREAD_RETVAL rc = THREAD_ERROR_EXIT;
 
     wxThread * const thread = (wxThread *)param;
 
@@ -555,7 +557,7 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
         else
             rc = DoThreadStart(thread);
     }
-    wxSEH_HANDLE((THREAD_RETVAL)-1)
+    wxSEH_HANDLE(THREAD_ERROR_EXIT)
 
 
     // save IsDetached because thread object can be deleted by joinable
@@ -662,7 +664,7 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
 
 wxThreadError wxThreadInternal::Kill()
 {
-    if ( !::TerminateThread(m_hThread, (DWORD)-1) )
+    if ( !::TerminateThread(m_hThread, THREAD_ERROR_EXIT) )
     {
         wxLogSysError(_("Couldn't terminate thread"));
 
@@ -688,7 +690,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
     // from Wait()) or ask it to terminate (when called from Delete())
     bool shouldDelete = threadToDelete != NULL;
 
-    wxThread::ExitCode rc = 0;
+    DWORD rc = 0;
 
     // we might need to resume the thread if it's currently stopped
     bool shouldResume = false;
@@ -821,16 +823,16 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
     // terminated if the "if" above hadn't been taken
     for ( ;; )
     {
-        if ( !::GetExitCodeThread(m_hThread, (LPDWORD)&rc) )
+        if ( !::GetExitCodeThread(m_hThread, &rc) )
         {
             wxLogLastError(wxT("GetExitCodeThread"));
 
-            rc = (wxThread::ExitCode)-1;
+            rc = THREAD_ERROR_EXIT;
 
             break;
         }
 
-        if ( (DWORD)rc != STILL_ACTIVE )
+        if ( rc != STILL_ACTIVE )
             break;
 
         // give the other thread some time to terminate, otherwise we may be
@@ -839,14 +841,13 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
     }
 
     if ( pRc )
-        *pRc = rc;
+        *pRc = wxUIntToPtr(rc);
 
     // we don't need the thread handle any more in any case
     Free();
 
 
-    return rc == (wxThread::ExitCode)-1 ? wxTHREAD_MISC_ERROR
-                                        : wxTHREAD_NO_ERROR;
+    return rc == THREAD_ERROR_EXIT ? wxTHREAD_MISC_ERROR : wxTHREAD_NO_ERROR;
 }
 
 bool wxThreadInternal::Suspend()
@@ -1096,12 +1097,12 @@ wxThreadError wxThread::Resume()
 
 wxThread::ExitCode wxThread::Wait()
 {
+    ExitCode rc = (ExitCode)THREAD_ERROR_EXIT;
+
     // although under Windows we can wait for any thread, it's an error to
     // wait for a detached one in wxWin API
-    wxCHECK_MSG( !IsDetached(), (ExitCode)-1,
+    wxCHECK_MSG( !IsDetached(), rc,
                  _T("wxThread::Wait(): can't wait for detached thread") );
-
-    ExitCode rc = (ExitCode)-1;
 
     (void)m_internal->WaitForTerminate(m_critsect, &rc);
 
@@ -1150,7 +1151,7 @@ void wxThread::Exit(ExitCode status)
     }
 
 #ifdef wxUSE_BEGIN_THREAD
-    _endthreadex((unsigned)status);
+    _endthreadex(wxPtrToUInt(status));
 #else // !VC++
     ::ExitThread((DWORD)status);
 #endif // VC++/!VC++
