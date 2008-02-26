@@ -393,6 +393,17 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                     return;
                 }
             }
+
+            // On enter key press, we must give a signal to default control, 
+            // Otherwise, nothing happens when pressing Enter from inside a 
+            // combo box in a dialog. 
+            wxWindow *top_frame = wxGetTopLevelParent(this);
+            if( top_frame && GTK_IS_WINDOW(top_frame->m_widget) )
+            {
+                GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
+                if ( window->default_widget )
+                    gtk_widget_activate( window->default_widget );
+            }
             break;
     }
 
