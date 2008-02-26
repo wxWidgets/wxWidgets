@@ -354,6 +354,8 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
     if (flags & wxTEXT_ATTR_FONT_ENCODING)
         m_fontEncoding = font.GetEncoding();
 
+    m_flags |= flags;
+
     return true;
 }
 
