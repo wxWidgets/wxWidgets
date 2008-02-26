@@ -13,13 +13,14 @@
 #if wxUSE_MINIFRAME
 
 #include "wx/minifram.h"
-#include "wx/gtk/dcclient.h"
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/image.h"
 #endif
+
+#include "wx/gtk/dcclient.h"
 
 #include <gtk/gtk.h>
 
@@ -59,8 +60,11 @@ static wxColor LightContrastColour(const wxColour& c)
 extern "C" {
 static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose* gdk_event, wxMiniFrame* win)
 {
-    if (!win->m_hasVMT || gdk_event->count > 0)
+    if (!win->m_hasVMT || gdk_event->count > 0 ||
+        gdk_event->window != widget->window)
+    {
         return false;
+    }
 
     gtk_paint_shadow (widget->style,
                       widget->window,
@@ -85,10 +89,7 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
         dc.DrawRectangle( win->m_width - 14, win->m_height-14, 14, 14 );
     }
 
-    if (!win->GetTitle().empty() &&
-        ((style & wxCAPTION) ||
-         (style & wxTINY_CAPTION_HORIZ) ||
-         (style & wxTINY_CAPTION_VERT)))
+    if (win->m_miniTitle && !win->GetTitle().empty())
     {
         dc.SetFont( *wxSMALL_FONT );
 
@@ -116,9 +117,11 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxMiniFrame *win )
+static gboolean
+gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, wxMiniFrame* win)
 {
-    if (!win->m_hasVMT) return FALSE;
+    if (!win->m_hasVMT || gdk_event->window != widget->window)
+        return false;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
 
@@ -150,8 +153,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         return TRUE;
     }
 
-    if ((style & wxCLOSE_BOX) &&
-        ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
+    if (win->m_miniTitle && (style & wxCLOSE_BOX))
     {
         if ((y > 3) && (y < 19) && (x > win->m_width-19) && (x < win->m_width-3))
         {
@@ -160,7 +162,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         }
     }
 
-    if (y > win->m_miniEdge-1 + 15) return TRUE;
+    if (y >= win->m_miniEdge + win->m_miniTitle)
+        return true;
 
     gdk_window_raise( win->m_widget->window );
 
@@ -192,12 +195,13 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxMiniFrame *win )
+static gboolean
+gtk_window_button_release_callback(GtkWidget* widget, GdkEventButton* gdk_event, wxMiniFrame* win)
 {
-    if (!win->m_hasVMT) return FALSE;
+    if (!win->m_hasVMT || gdk_event->window != widget->window)
+        return false;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
-
     if (!win->m_isDragging) return TRUE;
 
     win->m_isDragging = false;
@@ -226,11 +230,13 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 extern "C" {
 static gboolean
 gtk_window_leave_callback(GtkWidget *widget,
-                          GdkEventCrossing * WXUNUSED(gdk_event),
+                          GdkEventCrossing* gdk_event,
                           wxMiniFrame *win)
 {
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
+    if (gdk_event->window != widget->window)
+        return false;
 
     gdk_window_set_cursor( widget->window, NULL );
 
@@ -243,10 +249,11 @@ gtk_window_leave_callback(GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint
+static gboolean
 gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxMiniFrame *win )
 {
-    if (!win->m_hasVMT) return FALSE;
+    if (!win->m_hasVMT || gdk_event->window != widget->window)
+        return false;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
 
@@ -310,7 +317,8 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-    if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))
+    m_miniTitle = 0;
+    if (style & wxCAPTION)
         m_miniTitle = 16;
 
     if (style & wxRESIZE_BORDER)
@@ -358,8 +366,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
         gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
     }
 
-    if ((style & wxCLOSE_BOX) &&
-        ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
+    if (m_miniTitle && (style & wxCLOSE_BOX))
     {
         wxImage img = wxBitmap((const char*)close_bits, 16, 16).ConvertToImage();
         img.Replace(0,0,0,123,123,123);
