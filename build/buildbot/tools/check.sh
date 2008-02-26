@@ -1,7 +1,7 @@
 #!/bin/sh
 #############################################################################
 # Name:        check.sh
-# Purpose:     Check embedded xslt
+# Purpose:     Offline checker for the buildbot configuration files
 # Author:      Mike Wetherell
 # RCS-ID:      $Id$
 # Copyright:   (c) 2007 Mike Wetherell
@@ -10,7 +10,7 @@
 
 usage() {
     echo "Usage: $0 [options] FILE..."
-    echo "Check embedded xslt"
+    echo "Offline checker for the buildbot configuration files"
     echo
     echo "Options:"
     echo "  -g      generate xslt"
@@ -24,6 +24,14 @@ usage() {
 badopt() {
     echo "try '$0 -h' for more information" >&2
     exit 1
+}
+
+progcheck() {
+    prog="$1"
+    $prog --version >/dev/null 2>&1 || {
+        echo "$0: requires $prog, not found" >&2
+        exit 1
+    }
 }
 
 GENERATE=1
@@ -51,6 +59,12 @@ fi
 if [ $# -eq 0 ]; then
     usage
 fi
+
+XSLTPROC=xsltproc
+XMLLINT=xmllint
+
+progcheck $XSLTPROC
+progcheck $XMLLINT
 
 DIR="`dirname $0`"
 WORKDIR="${TMPDIR:-/tmp}/wx.$$"
@@ -102,7 +116,7 @@ generate()
 {
     INPUT="$1"
 
-    if xsltproc --xinclude -o "$XSLT" $DIR/embedded.xsl "$INPUT" 2>"$STDERR" &&
+    if $XSLTPROC --xinclude -o "$XSLT" $DIR/embedded.xsl "$INPUT" 2>"$STDERR" &&
        test \! -s "$STDERR"
     then
         if [ $MODE -eq $GENERATE ]; then
@@ -121,7 +135,7 @@ preprocess()
         return 0
     fi
 
-    if xsltproc --xinclude -o "$PREP" "$XSLT" "$INPUT" 2>"$STDERR" &&
+    if $XSLTPROC --xinclude -o "$PREP" "$XSLT" "$INPUT" 2>"$STDERR" &&
        test \! -s "$STDERR"
     then
         if [ $MODE -eq $PREPROCESS ]; then
@@ -140,7 +154,7 @@ validate()
         return 0
     fi
 
-    if xmllint --noout --schema $DIR/bot.xsd "$PREP" 2>"$STDERR"
+    if $XMLLINT --noout --schema $DIR/bot.xsd "$PREP" 2>"$STDERR"
     then
         errout "$NAME"
     else
