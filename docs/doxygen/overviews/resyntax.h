@@ -13,8 +13,6 @@
 A <em>regular expression</em> describes strings of characters. It's a  pattern
 that matches certain strings and doesn't match others.
 
-@seealso #wxRegEx
-
 @li @ref overview_resyntax_differentflavors
 @li @ref overview_resyntax_syntax
 @li @ref overview_resyntax_bracket
@@ -25,187 +23,160 @@ that matches certain strings and doesn't match others.
 @li @ref overview_resyntax_bre
 @li @ref overview_resyntax_characters
 
+@seealso
+
+@li #wxRegEx
+
 
 <hr>
 
 
-@section overview_resyntax_differentflavors Different Flavors of REs
+@section overview_resyntax_differentflavors Different Flavors of Regular Expressions
 
-Regular expressions ("RE''s), as defined by POSIX, come in two
-flavors: @e extended REs ("EREs'') and @e basic REs ("BREs''). EREs are roughly those
-of the traditional @e egrep, while BREs are roughly those of the traditional
-@e ed.  This implementation adds a third flavor, @e advanced REs ("AREs''), basically
+Regular expressions (RE), as defined by POSIX, come in two flavors:
+<em>extended regular expressions</em> (ERE) and <em>basic regular
+expressions</em> (BRE). EREs are roughly those of the traditional @e egrep,
+while BREs are roughly those of the traditional @e ed. This implementation
+adds a third flavor: <em>advanced regular expressions</em> (ARE), basically
 EREs with some significant extensions.
-This manual page primarily describes
-AREs. BREs mostly exist for backward compatibility in some old programs;
-they will be discussed at the #end. POSIX EREs are almost an exact subset
-of AREs. Features of AREs that are not present in EREs will be indicated.
+
+This manual page primarily describes AREs. BREs mostly exist for backward
+compatibility in some old programs. POSIX EREs are almost an exact subset of
+AREs. Features of AREs that are not present in EREs will be indicated.
 
 
 @section overview_resyntax_syntax Regular Expression Syntax
 
-These regular expressions are implemented using
-the package written by Henry Spencer, based on the 1003.2 spec and some
-(not quite all) of the Perl5 extensions (thanks, Henry!).  Much of the description
-of regular expressions below is copied verbatim from his manual entry.
-An ARE is one or more @e branches, separated by '@b |', matching anything that matches
-any of the branches.
-A branch is zero or more @e constraints or @e quantified
-atoms, concatenated. It matches a match for the first, followed by a match
-for the second, etc; an empty branch matches the empty string.
-A quantified atom is an @e atom possibly followed by a single @e quantifier. Without a quantifier,
-it matches a match for the atom. The quantifiers, and what a so-quantified
-atom matches, are:
+These regular expressions are implemented using the package written by Henry
+Spencer, based on the 1003.2 spec and some (not quite all) of the Perl5
+extensions (thanks, Henry!).  Much of the description of regular expressions
+below is copied verbatim from his manual entry.
 
+An ARE is one or more @e branches, separated by "|", matching anything that
+matches any of the branches.
 
+A branch is zero or more @e constraints or @e quantified atoms, concatenated.
+It matches a match for the first, followed by a match for the second, etc; an
+empty branch matches the empty string.
 
-@b *
+A quantified atom is an @e atom possibly followed by a single @e quantifier.
+Without a quantifier, it matches a match for the atom. The quantifiers, and
+what a so-quantified atom matches, are:
 
-a sequence of 0 or more matches of the atom
+@beginTable
+@row2col{ <tt>*</tt> ,
+    A sequence of 0 or more matches of the atom. }
+@row2col{ <tt>+</tt> ,
+    A sequence of 1 or more matches of the atom. }
+@row2col{ <tt>?</tt> ,
+    A sequence of 0 or 1 matches of the atom. }
+@row2col{ <tt>{m}</tt> ,
+    A sequence of exactly @e m matches of the atom. }
+@row2col{ <tt>{m\,}</tt> ,
+    A sequence of @e m or more matches of the atom. }
+@row2col{ <tt>{m\,n}</tt> ,
+    A sequence of @e m through @e n (inclusive) matches of the atom; @e m may
+    not exceed @e n. }
+@row2col{ <tt>*? +? ?? {m}? {m\,}? {m\,n}?</tt> ,
+    @e Non-greedy quantifiers, which match the same possibilities, but prefer
+    the smallest number rather than the largest number of matches (see
+    @ref overview_resyntax_matching). }
+@endTable
 
-@b +
+The forms using @b { and @b } are known as @e bounds. The numbers @e m and
+@e n are unsigned decimal integers with permissible values from 0 to 255
+inclusive. An atom is one of:
 
-a sequence of 1 or more matches of the atom
+@beginTable
+@row2col{ <tt>(re)</tt> ,
+    Where @e re is any regular expression, matches for @e re, with the match
+    captured for possible reporting. }
+@row2col{ <tt>(?:re)</tt> ,
+    As previous, but does no reporting (a "non-capturing" set of
+    parentheses). }
+@row2col{ <tt>()</tt> ,
+    Matches an empty string, captured for possible reporting. }
+@row2col{ <tt>(?:)</tt> ,
+    Matches an empty string, without reporting. }
+@row2col{ <tt>[chars]</tt> ,
+    A <em>bracket expression</em>, matching any one of the @e chars (see
+    @ref overview_resyntax_bracket for more details). }
+@row2col{ <tt>.</tt> ,
+    Matches any single character. }
+@row2col{ <tt>@\k</tt> ,
+    Where @e k is a non-alphanumeric character, matches that character taken
+    as an ordinary character, e.g. @\@\ matches a backslash character. }
+@row2col{ <tt>@\c</tt> ,
+    Where @e c is alphanumeric (possibly followed by other characters), an
+    @e escape (AREs only), see @ref overview_resyntax_escapes below. }
+@row2col{ <tt>@leftCurly</tt> ,
+    When followed by a character other than a digit, matches the left-brace
+    character "@leftCurly"; when followed by a digit, it is the beginning of a
+    @e bound (see above). }
+@row2col{ <tt>x</tt> ,
+    Where @e x is a single character with no other significance, matches that
+    character. }
+@endTable
 
-@b ?
+A @e constraint matches an empty string when specific conditions are met. A
+constraint may not be followed by a quantifier. The simple constraints are as
+follows; some more constraints are described later, under
+@ref overview_resyntax_escapes.
 
-a sequence of 0 or 1 matches of the atom
+@beginTable
+@row2col{ <tt>^</tt> ,
+    Matches at the beginning of a line. }
+@row2col{ <tt>@$</tt> ,
+    Matches at the end of a line. }
+@row2col{ <tt>(?=re)</tt> ,
+    @e Positive lookahead (AREs only), matches at any point where a substring
+    matching @e re begins. }
+@row2col{ <tt>(?!re)</tt> ,
+    @e Negative lookahead (AREs only), matches at any point where no substring
+    matching @e re begins. }
+@endTable
 
-@b {m}
-
-a sequence of exactly @e m matches of the atom
-
-@b {m,}
-
-a sequence of @e m or more matches of the atom
-
-@b {m,n}
-
-a sequence of @e m through @e n (inclusive)
-matches of the atom; @e m may not exceed @e n
-
-@b *?  +?  ??  {m}?  {m,}?  {m,n}?
-
-@e non-greedy quantifiers,
-which match the same possibilities, but prefer the
-smallest number rather than the largest number of matches (see #Matching)
-
-The forms using @b { and @b } are known as @e bounds. The numbers @e m and @e n are unsigned
-decimal integers with permissible values from 0 to 255 inclusive.
-An atom is one of:
-
-@b (re)
-
-(where @e re is any regular expression) matches a match for
-@e re, with the match noted for possible reporting
-
-@b (?:re)
-
-as previous, but
-does no reporting (a "non-capturing'' set of parentheses)
-
-@b ()
-
-matches an empty
-string, noted for possible reporting
-
-@b (?:)
-
-matches an empty string, without reporting
-
-@b [chars]
-
-a @e bracket expression, matching any one of the @e chars
-(see @ref resynbracket_overview for more detail)
-
-@b .
-
-matches any single character
-
-@b \k
-
-(where @e k is a non-alphanumeric character)
-matches that character taken as an ordinary character, e.g. \\ matches a backslash
-character
-
-@b \c
-
-where @e c is alphanumeric (possibly followed by other characters),
-an @e escape (AREs only), see #Escapes below
-
-@b {
-
-when followed by a character
-other than a digit, matches the left-brace character '@b {'; when followed by
-a digit, it is the beginning of a @e bound (see above)
-
-@b x
-
-where @e x is a single
-character with no other significance, matches that character.
-
-A @e constraint matches an empty string when specific conditions are met. A constraint may
-not be followed by a quantifier. The simple constraints are as follows;
-some more constraints are described later, under #Escapes.
-
-@b ^
-
-matches at the beginning of a line
-
-@b $
-
-matches at the end of a line
-
-@b (?=re)
-
-@e positive lookahead
-(AREs only), matches at any point where a substring matching @e re begins
-
-@b (?!re)
-
-@e negative lookahead (AREs only),
-matches at any point where no substring matching @e re begins
-
-
-
-The lookahead constraints may not contain back references
-(see later), and all parentheses within them are considered non-capturing.
-An RE may not end with '@b \'.
+The lookahead constraints may not contain back references (see later), and all
+parentheses within them are considered non-capturing. A RE may not end with
+"\".
 
 
 @section overview_resyntax_bracket Bracket Expressions
 
-A @e bracket expression is a list
-of characters enclosed in '@b []'. It normally matches any single character from
-the list (but see below). If the list begins with '@b ^', it matches any single
-character (but see below) @e not from the rest of the list.
-If two characters
-in the list are separated by '@b -', this is shorthand for the full @e range of
-characters between those two (inclusive) in the collating sequence, e.g.
-@b [0-9] in ASCII matches any decimal digit. Two ranges may not share an endpoint,
-so e.g. @b a-c-e is illegal. Ranges are very collating-sequence-dependent, and portable
-programs should avoid relying on them.
-To include a literal @b ] or @b - in the
-list, the simplest method is to enclose it in @b [. and @b .] to make it a collating
-element (see below). Alternatively, make it the first character (following
-a possible '@b ^'), or (AREs only) precede it with '@b \'.
-Alternatively, for '@b -', make
-it the last character, or the second endpoint of a range. To use a literal
-@b - as the first endpoint of a range, make it a collating element or (AREs
-only) precede it with '@b \'. With the exception of these, some combinations using
-@b [ (see next paragraphs), and escapes, all other special characters lose
-their special significance within a bracket expression.
-Within a bracket
-expression, a collating element (a character, a multi-character sequence
-that collates as if it were a single character, or a collating-sequence
-name for either) enclosed in @b [. and @b .] stands for the
-sequence of characters of that collating element.
-@e wxWidgets: Currently no multi-character collating elements are defined.
-So in @b [.X.], @e X can either be a single character literal or
-the name of a character. For example, the following are both identical
-@b [[.0.]-[.9.]] and @b [[.zero.]-[.nine.]] and mean the same as
-@b [0-9].
-See @ref resynchars_overview.
+A <em>bracket expression</em> is a list of characters enclosed in <tt>[]</tt>.
+It normally matches any single character from the list (but see below). If the
+list begins with @c ^, it matches any single character (but see below) @e not
+from the rest of the list.
+
+If two characters in the list are separated by <tt>-</tt>, this is shorthand
+for the full @e range of characters between those two (inclusive) in the
+collating sequence, e.g. <tt>[0-9]</tt> in ASCII matches any decimal digit.
+Two ranges may not share an endpoint, so e.g. <tt>a-c-e</tt> is illegal.
+Ranges are very collating-sequence-dependent, and portable programs should
+avoid relying on them.
+
+To include a literal <tt>]</tt> or <tt>-</tt> in the list, the simplest method
+is to enclose it in <tt>[.</tt> and <tt>.]</tt> to make it a collating element
+(see below). Alternatively, make it the first character (following a possible
+<tt>^</tt>), or (AREs only) precede it with <tt>@\</tt>. Alternatively, for
+<tt>-</tt>, make it the last character, or the second endpoint of a range. To
+use a literal <tt>-</tt> as the first endpoint of a range, make it a collating
+element or (AREs only) precede it with <tt>@\</tt>. With the exception of
+these, some combinations using <tt>[</tt> (see next paragraphs), and escapes,
+all other special characters lose their special significance within a bracket
+expression.
+
+Within a bracket expression, a collating element (a character, a
+multi-character sequence that collates as if it were a single character, or a
+collating-sequence name for either) enclosed in <tt>[.</tt> and <tt>.]</tt>
+stands for the sequence of characters of that collating element.
+
+@e wxWidgets: Currently no multi-character collating elements are defined. So
+in <tt>[.X.]</tt>, @c X can either be a single character literal or the name
+of a character. For example, the following are both identical:
+<tt>[[.0.]-[.9.]]</tt> and <tt>[[.zero.]-[.nine.]]</tt> and mean the same as
+<tt>[0-9]</tt>. See @ref overview_resyntax_characters.
+
 Within a bracket expression, a collating element enclosed in @b [= and @b =]
 is an equivalence class, standing for the sequences of characters of all
 collating elements equivalent to that one, including itself.
@@ -219,57 +190,20 @@ the name of a @e character class enclosed in @b [: and @b :] stands for the list
 of all characters (not all collating elements!) belonging to that class.
 Standard character classes are:
 
-
-
-@b alpha
-
-A letter.
-
-@b upper
-
-An upper-case letter.
-
-@b lower
-
-A lower-case letter.
-
-@b digit
-
-A decimal digit.
-
-@b xdigit
-
-A hexadecimal digit.
-
-@b alnum
-
-An alphanumeric (letter or digit).
-
-@b print
-
-An alphanumeric (same as alnum).
-
-@b blank
-
-A space or tab character.
-
-@b space
-
-A character producing white space in displayed text.
-
-@b punct
-
-A punctuation character.
-
-@b graph
-
-A character with a visible representation.
-
-@b cntrl
-
-A control character.
-
-
+@beginTable
+@row2col{ <tt>alpha</tt>  , A letter. }
+@row2col{ <tt>upper</tt>  , An upper-case letter. }
+@row2col{ <tt>lower</tt>  , A lower-case letter. }
+@row2col{ <tt>digit</tt>  , A decimal digit. }
+@row2col{ <tt>xdigit</tt> , A hexadecimal digit. }
+@row2col{ <tt>alnum</tt>  , An alphanumeric (letter or digit). }
+@row2col{ <tt>print</tt>  , An alphanumeric (same as alnum). }
+@row2col{ <tt>blank</tt>  , A space or tab character. }
+@row2col{ <tt>space</tt>  , A character producing white space in displayed text. }
+@row2col{ <tt>punct</tt>  , A punctuation character. }
+@row2col{ <tt>graph</tt>  , A character with a visible representation. }
+@row2col{ <tt>cntrl</tt>  , A control character. }
+@endTable
 
 A character class may not be used as an endpoint of a range.
 @e wxWidgets: In a non-Unicode build, these character classifications depend on the
@@ -288,13 +222,13 @@ use constraint escapes instead (see #Escapes below).
 @section overview_resyntax_escapes Escapes
 
 Escapes (AREs only),
-which begin with a @b \ followed by an alphanumeric character, come in several
+which begin with a <tt>@\</tt> followed by an alphanumeric character, come in several
 varieties: character entry, class shorthands, constraint escapes, and back
-references. A @b \ followed by an alphanumeric character but not constituting
+references. A <tt>@\</tt> followed by an alphanumeric character but not constituting
 a valid escape is illegal in AREs. In EREs, there are no escapes: outside
-a bracket expression, a @b \ followed by an alphanumeric character merely stands
+a bracket expression, a <tt>@\</tt> followed by an alphanumeric character merely stands
 for that character as an ordinary character, and inside a bracket expression,
-@b \ is an ordinary character. (The latter is the one actual incompatibility
+<tt>@\</tt> is an ordinary character. (The latter is the one actual incompatibility
 between EREs and AREs.)
 Character-entry escapes (AREs only) exist to make
 it easier to specify non-printing and otherwise inconvenient characters

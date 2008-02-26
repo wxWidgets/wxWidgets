@@ -95,8 +95,8 @@ ALIASES += NULL="<b><tt>NULL</tt></b>"
 #       @wxEmptyString, @wxNullIcon, etc etc
 
 # table aliases for 2 and 3 column tables
-ALIASES += beginTable="<center><table class='doctable'>"
-ALIASES += beginInvisibleTable="<center><table class='doctable' border='0'>"
+ALIASES += beginTable="<center><table class='doctable' border='1' cellspacing='0' cellpadding='3'>"
+ALIASES += beginInvisibleTable="<center><table class='doctable' border='0' cellspacing='0' cellpadding='4'>"
 ALIASES += row2col{2}="<tr><td>\1</td> <td>\2</td></tr>"
 ALIASES += row2col{3}="<tr><td>\1</td> <td>\2,\3</td></tr>"
 ALIASES += row2col{4}="<tr><td>\1</td> <td>\2,\3,\4</td></tr>"
@@ -148,6 +148,11 @@ ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL \n <b>wxPerl note</b>\n\n"
 ALIASES += endWxPerlOnly="\endif"
 ALIASES += beginWxPythonOnly="\if WXPYTHON_MANUAL \n <b>wxPython note</b>\n\n"
 ALIASES += endWxPythonOnly="\endif"
+
+# This is to get around a bug in Doxygen that prevents use of '{' or '}'
+# inside of any aliased command in parameters.
+ALIASES += leftCurly="{"
+ALIASES += rightCurly="}"
 
 
 #---------------------------------------------------------------------------
