@@ -507,9 +507,6 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 {
     bool ret wxDUMMY_INITIALIZE(false);
 
-    // init our fields
-    Init();
-
     wxSize sizeReal = size;
     if ( !sizeReal.IsFullySpecified() )
     {
