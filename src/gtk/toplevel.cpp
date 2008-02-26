@@ -268,7 +268,6 @@ gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget),
 }
 }
 
-
 //-----------------------------------------------------------------------------
 // "configure_event"
 //-----------------------------------------------------------------------------
@@ -404,54 +403,7 @@ static gboolean property_notify_event(
             long* p = (long*)data;
             const wxSize decorSize =
                 wxSize(int(p[0] + p[1]), int(p[2] + p[3]));
-            if (win->m_decorSize != decorSize)
-            {
-                const wxSize diff = decorSize - win->m_decorSize;
-                win->m_decorSize = decorSize;
-                bool resized = false;
-                if (win->m_deferShow)
-                {
-                    // keep overall size unchanged by shrinking m_widget,
-                    // if min size will allow it
-                    const wxSize minSize = win->GetMinSize();
-                    int w, h;
-                    win->GTKDoGetSize(&w, &h);
-                    if (w >= minSize.x && h >= minSize.y)
-                    {
-                        gtk_window_resize(GTK_WINDOW(win->m_widget), w, h);
-                        resized = true;
-                    }
-                }
-                if (!resized)
-                {
-                    // adjust overall size to match change in frame extents
-                    win->m_width  += diff.x;
-                    win->m_height += diff.y;
-                    if (win->m_width  < 0) win->m_width  = 0;
-                    if (win->m_height < 0) win->m_height = 0;
-                    if (!win->m_deferShow)
-                    {
-                        win->m_oldClientWidth = 0;
-                        gtk_widget_queue_resize(win->m_wxwindow);
-                    }
-                }
-            }
-            if (win->m_deferShow)
-            {
-                // gtk_widget_show() was deferred, do it now
-                win->m_deferShow = false;
-                win->GetClientSize(
-                    &win->m_oldClientWidth, &win->m_oldClientHeight);
-                wxSizeEvent sizeEvent(win->GetSize(), win->GetId());
-                sizeEvent.SetEventObject(win);
-                win->HandleWindowEvent(sizeEvent);
-
-                gtk_widget_show(win->m_widget);
-
-                wxShowEvent showEvent(win->GetId(), true);
-                showEvent.SetEventObject(win);
-                win->HandleWindowEvent(showEvent);
-            }
+            win->GTKUpdateDecorSize(decorSize);
         }
         if (data)
             XFree(data);
@@ -463,7 +415,6 @@ static gboolean property_notify_event(
 BEGIN_EVENT_TABLE(wxTopLevelWindowGTK, wxTopLevelWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxTopLevelWindowGTK::OnSysColourChanged)
 END_EVENT_TABLE()
-
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowGTK creation
@@ -988,6 +939,8 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int incW, int incH )
 {
     wxTopLevelWindowBase::DoSetSizeHints( minW, minH, maxW, maxH, incW, incH );
+    m_sizeIncHint.x = incW;
+    m_sizeIncHint.y = incH;
 
     const wxSize minSize = GetMinSize();
     const wxSize maxSize = GetMaxSize();
@@ -1021,6 +974,48 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
     }
     gtk_window_set_geometry_hints(
         (GtkWindow*)m_widget, NULL, &hints, (GdkWindowHints)hints_mask);
+}
+
+void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
+{
+    if (m_decorSize != decorSize)
+    {
+        const wxSize diff = decorSize - m_decorSize;
+        m_decorSize = decorSize;
+        SetSizeHints(GetMinSize(), GetMaxSize(), m_sizeIncHint);
+        if (m_deferShow)
+        {
+            // keep overall size unchanged by shrinking m_widget
+            int w, h;
+            GTKDoGetSize(&w, &h);
+            gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+        }
+        else
+        {
+            // adjust overall size to match change in frame extents
+            m_width  += diff.x;
+            m_height += diff.y;
+            if (m_width  < 0) m_width  = 0;
+            if (m_height < 0) m_height = 0;
+            m_oldClientWidth = 0;
+            gtk_widget_queue_resize(m_wxwindow);
+        }
+    }
+    if (m_deferShow)
+    {
+        // gtk_widget_show() was deferred, do it now
+        m_deferShow = false;
+        GetClientSize(&m_oldClientWidth, &m_oldClientHeight);
+        wxSizeEvent sizeEvent(GetSize(), GetId());
+        sizeEvent.SetEventObject(this);
+        HandleWindowEvent(sizeEvent);
+
+        gtk_widget_show(m_widget);
+
+        wxShowEvent showEvent(GetId(), true);
+        showEvent.SetEventObject(this);
+        HandleWindowEvent(showEvent);
+    }
 }
 
 void wxTopLevelWindowGTK::OnInternalIdle()

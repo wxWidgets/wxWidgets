@@ -114,6 +114,8 @@ public:
     // return the size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;
 
+    void GTKUpdateDecorSize(const wxSize& decorSize);
+
 protected:
     // give hints to the Window Manager for how the size
     // of the TLW can be changed by dragging
@@ -143,6 +145,8 @@ private:
 
     // is the frame currently grabbed explicitly by the application?
     bool m_grabbed;
+
+    wxSize m_sizeIncHint;
 };
 
 #endif // _WX_GTK_TOPLEVEL_H_
