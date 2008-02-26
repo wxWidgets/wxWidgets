@@ -90,10 +90,23 @@
 #   endif
 
     /*
+       When compiling with VC++ 7 /Wp64 option we get thousands of warnings for
+       conversion from size_t to int or long. Some precious few of them might
+       be worth looking into but unfortunately it seems infeasible to fix all
+       the other, harmless ones (e.g. inserting static_cast<int>(s.length())
+       everywhere this method is used though we are quite sure that using >4GB
+       strings is a bad idea anyhow) so just disable it globally for now.
+     */
+    #if wxCHECK_VISUALC_VERSION(7)
+        /* conversion from 'size_t' to 'unsigned long', possible loss of data */
+        #pragma warning(disable:4267)
+    #endif /* VC++ 7 or later */
+
+    /*
        VC++ 8 gives a warning when using standard functions such as sprintf,
        localtime, ... -- stop this madness, unless the user had already done it
      */
-    #if __VISUALC__ >= 1400
+    #if wxCHECK_VISUALC_VERSION(8)
         #ifndef _CRT_SECURE_NO_DEPRECATE
             #define _CRT_SECURE_NO_DEPRECATE 1
         #endif
@@ -949,12 +962,22 @@ typedef wxUint32 wxDword;
 /*
    Define an integral type big enough to contain all of long, size_t and void *.
  */
-#if SIZEOF_LONG >= SIZEOF_VOID_P && SIZEOF_LONG >= SIZEOF_SIZE_T
-    /* normal case */
-    typedef unsigned long wxUIntPtr;
-#elif SIZEOF_SIZE_T >= SIZEOF_VOID_P
-    /* Win64 case */
+#if SIZEOF_SIZE_T >= SIZEOF_VOID_P
+    /*
+       Win64 case: size_t is the only integral type big enough for "void *".
+
+       Notice that wxUIntPtr should be also defined as size_t when building
+       under Win32 with MSVC with /Wp64 option as otherwise any conversion
+       between ints and pointers results in a warning 4311 or 4312, even if it
+       is safe under Win32. Using size_t (declared with __w64) allows to avoid
+       them.
+     */
     typedef size_t wxUIntPtr;
+#elif SIZEOF_LONG >= SIZEOF_VOID_P
+    /*
+       Normal case when long is the largest integral type.
+     */
+    typedef unsigned long wxUIntPtr;
 #else
     /*
        This should never happen for the current architectures but if you're
