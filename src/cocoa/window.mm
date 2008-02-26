@@ -309,6 +309,12 @@ WX_IMPLEMENT_GET_OBJC_CLASS(wxDummyNSView,NSView)
 
 // ========================================================================
 // wxWindowCocoaHider
+//  NOTE: This class and method of hiding predates setHidden: support in
+//  the toolkit.  The hack used here is to replace the view with a stand-in
+//  that will be subject to the usual Cocoa resizing rules.
+//  When possible (i.e. when running on 10.3 or higher) we make it hidden
+//  mostly as an optimization so Cocoa doesn't have to consider it when
+//  drawing or finding key views.
 // ========================================================================
 wxWindowCocoaHider::wxWindowCocoaHider(wxWindow *owner)
 :   m_owner(owner)
@@ -319,6 +325,9 @@ wxWindowCocoaHider::wxWindowCocoaHider(wxWindow *owner)
         initWithFrame:[owner->GetNSViewForHiding() frame]];
     [m_dummyNSView setAutoresizingMask: [owner->GetNSViewForHiding() autoresizingMask]];
     AssociateNSView(m_dummyNSView);
+
+    if([m_dummyNSView respondsToSelector:@selector(setHidden:)])
+        [m_dummyNSView setHidden:YES];
 }
 
 wxWindowCocoaHider::~wxWindowCocoaHider()
@@ -1403,17 +1412,48 @@ bool wxWindow::Show(bool show)
         // If state isn't changing, return false
         if(!m_cocoaHider)
             return false;
+
+        // Replace the stand-in view with the real one and destroy the dummy view
         CocoaReplaceView(m_cocoaHider->GetNSView(), cocoaView);
         wxASSERT(![m_cocoaHider->GetNSView() superview]);
         delete m_cocoaHider;
         m_cocoaHider = NULL;
         wxASSERT([cocoaView superview]);
+
+        // Schedule an update of the key view loop (NOTE: 10.4+ only.. argh)
+        NSWindow *window = [cocoaView window];
+        if(window != nil)
+        {
+            // Delay this until returning to the event loop for a couple of reasons:
+            // 1. If a lot of stuff is shown/hidden we avoid recalculating needlessly
+            // 2. NSWindow does not seem to see the newly shown views if we do it right now.
+            if([window respondsToSelector:@selector(recalculateKeyViewLoop)])
+                [window performSelector:@selector(recalculateKeyViewLoop) withObject:nil afterDelay:0.0];
+        }
     }
     else
     {
         // If state isn't changing, return false
         if(m_cocoaHider)
             return false;
+
+        // Handle the first responder
+        NSWindow *window = [cocoaView window];
+        if(window != nil)
+        {
+            NSResponder *firstResponder = [window firstResponder];
+            if([firstResponder isKindOfClass:[NSView class]] && [(NSView*)firstResponder isDescendantOf:cocoaView])
+            {
+                BOOL didResign = [window makeFirstResponder:nil];
+                // If the current first responder (one of our subviews) refuses to give
+                // up its status, then fail now and don't hide this view
+                if(didResign == NO)
+                    return false;
+            }
+        }
+
+        // Create a new view to stand in for the real one (via wxWindowCocoaHider) and replace
+        // the real one with the stand in.
         m_cocoaHider = new wxWindowCocoaHider(this);
         // NOTE: replaceSubview:with will cause m_cocaNSView to be
         // (auto)released which balances out addSubview
