@@ -323,7 +323,7 @@ specific conditions are met, written as an escape:
 @endTable
 
 A word is defined as in the specification of <tt>[[:@<:]]</tt> and
-<tt>[[:>:]]</tt> above. Constraint escapes are illegal within bracket
+<tt>[[:@>:]]</tt> above. Constraint escapes are illegal within bracket
 expressions.
 
 A back reference (AREs only) matches the same string matched by the
@@ -343,103 +343,67 @@ back reference), and otherwise is taken as octal.
 
 @section overview_resyntax_metasyntax Metasyntax
 
-In addition to the main syntax described above,
-there are some special forms and miscellaneous syntactic facilities available.
+In addition to the main syntax described above, there are some special forms
+and miscellaneous syntactic facilities available.
+
 Normally the flavor of RE being used is specified by application-dependent
 means. However, this can be overridden by a @e director. If an RE of any flavor
-begins with '@b ***:', the rest of the RE is an ARE. If an RE of any flavor begins
-with '@b ***=', the rest of the RE is taken to be a literal string, with all
-characters considered ordinary characters.
-An ARE may begin with @e embedded options: a sequence @b (?xyz)
-(where @e xyz is one or more alphabetic characters)
-specifies options affecting the rest of the RE. These supplement, and can
-override, any options specified by the application. The available option
-letters are:
+begins with <tt>***:</tt>, the rest of the RE is an ARE. If an RE of any
+flavor begins with <tt>***=</tt>, the rest of the RE is taken to be a literal
+string, with all characters considered ordinary characters.
 
+An ARE may begin with <em>embedded options</em>: a sequence <tt>(?xyz)</tt>
+(where @e xyz is one or more alphabetic characters) specifies options affecting
+the rest of the RE. These supplement, and can override, any options specified
+by the application. The available option letters are:
 
+@beginTable
+@row2col{ <tt>b</tt> , Rest of RE is a BRE. }
+@row2col{ <tt>c</tt> , Case-sensitive matching (usual default). }
+@row2col{ <tt>e</tt> , Rest of RE is an ERE. }
+@row2col{ <tt>i</tt> , Case-insensitive matching (see
+                       @ref overview_resyntax_matching, below). }
+@row2col{ <tt>m</tt> , Historical synonym for @e n. }
+@row2col{ <tt>n</tt> , Newline-sensitive matching (see
+                       @ref overview_resyntax_matching, below). }
+@row2col{ <tt>p</tt> , Partial newline-sensitive matching (see
+                       @ref overview_resyntax_matching, below). }
+@row2col{ <tt>q</tt> , Rest of RE is a literal ("quoted") string, all ordinary
+                       characters. }
+@row2col{ <tt>s</tt> , Non-newline-sensitive matching (usual default). }
+@row2col{ <tt>t</tt> , Tight syntax (usual default; see below). }
+@row2col{ <tt>w</tt> , Inverse partial newline-sensitive ("weird") matching
+                       (see @ref overview_resyntax_matching, below). }
+@row2col{ <tt>x</tt> , Expanded syntax (see below). }
+@endTable
 
-@b b
+Embedded options take effect at the <tt>)</tt> terminating the sequence. They
+are available only at the start of an ARE, and may not be used later within it.
 
-rest of RE is a BRE
+In addition to the usual (@e tight) RE syntax, in which all characters are
+significant, there is an @e expanded syntax, available in AREs with the
+embedded x option. In the expanded syntax, white-space characters are ignored
+and all characters between a <tt>@#</tt> and the following newline (or the end
+of the RE) are ignored, permitting paragraphing and commenting a complex RE.
+There are three exceptions to that basic rule:
 
-@b c
+@li A white-space character or <tt>@#</tt> preceded by <tt>@\</tt> is retained.
+@li White space or <tt>@#</tt> within a bracket expression is retained.
+@li White space and comments are illegal within multi-character symbols like
+    the ARE <tt>(?:</tt> or the BRE <tt>\(</tt>.
 
-case-sensitive matching (usual default)
+Expanded-syntax white-space characters are blank, tab, newline, and any
+character that belongs to the @e space character class.
 
-@b e
+Finally, in an ARE, outside bracket expressions, the sequence <tt>(?@#ttt)</tt>
+(where @e ttt is any text not containing a <tt>)</tt>) is a comment, completely
+ignored. Again, this is not allowed between the characters of multi-character
+symbols like <tt>(?:</tt>. Such comments are more a historical artifact than a
+useful facility, and their use is deprecated; use the expanded syntax instead.
 
-rest of RE is an ERE
-
-@b i
-
-case-insensitive matching (see #Matching, below)
-
-@b m
-
-historical synonym for @b n
-
-@b n
-
-newline-sensitive matching (see #Matching, below)
-
-@b p
-
-partial newline-sensitive matching (see #Matching, below)
-
-@b q
-
-rest of RE
-is a literal ("quoted'') string, all ordinary characters
-
-@b s
-
-non-newline-sensitive matching (usual default)
-
-@b t
-
-tight syntax (usual default; see below)
-
-@b w
-
-inverse
-partial newline-sensitive ("weird'') matching (see #Matching, below)
-
-@b x
-
-expanded syntax (see below)
-
-
-
-Embedded options take effect at the @b ) terminating the
-sequence. They are available only at the start of an ARE, and may not be
-used later within it.
-In addition to the usual (@e tight) RE syntax, in which
-all characters are significant, there is an @e expanded syntax, available
-in AREs with the embedded
-x option. In the expanded syntax, white-space characters are ignored and
-all characters between a @b # and the following newline (or the end of the
-RE) are ignored, permitting paragraphing and commenting a complex RE. There
-are three exceptions to that basic rule:
-
-
-a white-space character or '@b #' preceded
-by '@b \' is retained
-white space or '@b #' within a bracket expression is retained
-white space and comments are illegal within multi-character symbols like
-the ARE '@b (?:' or the BRE '@b \('
-
-
-Expanded-syntax white-space characters are blank,
-tab, newline, and any character that belongs to the @e space character class.
-Finally, in an ARE, outside bracket expressions, the sequence '@b (?#ttt)' (where
-@e ttt is any text not containing a '@b )') is a comment, completely ignored. Again,
-this is not allowed between the characters of multi-character symbols like
-'@b (?:'. Such comments are more a historical artifact than a useful facility,
-and their use is deprecated; use the expanded syntax instead.
-@e None of these
-metasyntax extensions is available if the application (or an initial @b ***=
-director) has specified that the user's input be treated as a literal string
-rather than as an RE.
+@e None of these metasyntax extensions is available if the application (or an
+initial <tt>***=</tt> director) has specified that the user's input be treated
+as a literal string rather than as an RE.
 
 
 @section overview_resyntax_matching Matching
