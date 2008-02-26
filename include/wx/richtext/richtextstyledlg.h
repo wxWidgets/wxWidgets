@@ -33,6 +33,9 @@ class wxRichTextStyleListCtrl;
 class wxRichTextCtrl;
 ////@end forward declarations
 
+class WXDLLIMPEXP_FWD_CORE wxButton;
+class WXDLLIMPEXP_FWD_CORE wxCheckBox;
+
 /*!
  * Control identifiers
  */
