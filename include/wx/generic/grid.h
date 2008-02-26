@@ -1090,9 +1090,9 @@ WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
 class WXDLLIMPEXP_ADV wxGrid : public wxScrolledWindow
 {
 public:
-    wxGrid() ;
+    wxGrid();
 
-        wxGrid( wxWindow *parent,
+    wxGrid( wxWindow *parent,
             wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -1645,6 +1645,7 @@ public:
         : wxScrolledWindow( parent, wxID_ANY, wxPoint(x,y), wxSize(w,h),
                             (style|wxWANTS_CHARS), name )
         {
+            InitVars();
             Create();
         }
 
@@ -1989,6 +1990,7 @@ protected:
 
     void Create();
     void Init();
+    void InitVars();
     void CalcDimensions();
     void CalcWindowSizes();
     bool Redimension( wxGridTableMessage& );

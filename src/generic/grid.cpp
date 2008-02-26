@@ -4131,12 +4131,7 @@ END_EVENT_TABLE()
 
 wxGrid::wxGrid()
 {
-    // in order to make sure that a size event is not
-    // trigerred in a unfinished state
-    m_cornerLabelWin = NULL;
-    m_rowLabelWin = NULL;
-    m_colLabelWin = NULL;
-    m_gridWin = NULL;
+    InitVars();
 }
 
 wxGrid::wxGrid( wxWindow *parent,
@@ -4146,6 +4141,7 @@ wxGrid::wxGrid( wxWindow *parent,
                  long style,
                  const wxString& name )
 {
+    InitVars();
     Create(parent, id, pos, size, style, name);
 }
 
@@ -4203,15 +4199,8 @@ wxGrid::~wxGrid()
 
 void wxGrid::Create()
 {
-    // set to true by CreateGrid
-    m_created = false;
-
     // create the type registry
     m_typeRegistry = new wxGridTypeRegistry;
-    m_selection = NULL;
-
-    m_table = (wxGridTableBase *) NULL;
-    m_ownTable = false;
 
     m_cellEditCtrlEnabled = false;
 
@@ -4403,6 +4392,24 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
     }
 
     return m_created;
+}
+
+void wxGrid::InitVars()
+{
+    m_created = false;
+
+    m_cornerLabelWin = NULL;
+    m_rowLabelWin = NULL;
+    m_colLabelWin = NULL;
+    m_gridWin = NULL;
+
+    m_table = NULL;
+    m_ownTable = false;
+
+    m_selection = NULL;
+    m_defaultCellAttr = NULL;
+    m_typeRegistry = NULL;
+    m_winCapture = NULL;
 }
 
 void wxGrid::Init()
@@ -6818,7 +6825,7 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 {
     // Don't do anything if between Begin/EndBatch...
     // EndBatch() will do all this on the last nested one anyway.
-    if (! GetBatchCount())
+    if ( m_created && !GetBatchCount() )
     {
         // Refresh to get correct scrolled position:
         wxScrolledWindow::Refresh(eraseb, rect);
