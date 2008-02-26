@@ -177,18 +177,19 @@ of a character. For example, the following are both identical:
 <tt>[[.0.]-[.9.]]</tt> and <tt>[[.zero.]-[.nine.]]</tt> and mean the same as
 <tt>[0-9]</tt>. See @ref overview_resyntax_characters.
 
-Within a bracket expression, a collating element enclosed in @b [= and @b =]
-is an equivalence class, standing for the sequences of characters of all
-collating elements equivalent to that one, including itself.
-An equivalence class may not be an endpoint of a range.
-@e wxWidgets: Currently no equivalence classes are defined, so
-@b [=X=] stands for just the single character @e X.
-@e X can either be a single character literal or the name of a character,
-see @ref resynchars_overview.
-Within a bracket expression,
-the name of a @e character class enclosed in @b [: and @b :] stands for the list
-of all characters (not all collating elements!) belonging to that class.
-Standard character classes are:
+Within a bracket expression, a collating element enclosed in <tt>[=</tt> and
+<tt>=]</tt> is an equivalence class, standing for the sequences of characters
+of all collating elements equivalent to that one, including itself. An
+equivalence class may not be an endpoint of a range.
+
+@e wxWidgets: Currently no equivalence classes are defined, so <tt>[=X=]</tt>
+stands for just the single character @c X. @c X can either be a single
+character literal or the name of a character, see
+@ref overview_resyntax_characters.
+
+Within a bracket expression, the name of a @e character class enclosed in
+<tt>[:</tt> and <tt>:]</tt> stands for the list of all characters (not all
+collating elements!) belonging to that class. Standard character classes are:
 
 @beginTable
 @row2col{ <tt>alpha</tt>  , A letter. }
@@ -206,229 +207,138 @@ Standard character classes are:
 @endTable
 
 A character class may not be used as an endpoint of a range.
-@e wxWidgets: In a non-Unicode build, these character classifications depend on the
-current locale, and correspond to the values return by the ANSI C 'is'
-functions: isalpha, isupper, etc. In Unicode mode they are based on
-Unicode classifications, and are not affected by the current locale.
-There are two special cases of bracket expressions:
-the bracket expressions @b [[::]] and @b [[::]] are constraints, matching empty
-strings at the beginning and end of a word respectively.  A word is defined
-as a sequence of word characters that is neither preceded nor followed
-by word characters. A word character is an @e alnum character or an underscore
-(@b _). These special bracket expressions are deprecated; users of AREs should
-use constraint escapes instead (see #Escapes below).
+
+@e wxWidgets: In a non-Unicode build, these character classifications depend on
+the current locale, and correspond to the values return by the ANSI C "is"
+functions: <tt>isalpha</tt>, <tt>isupper</tt>, etc. In Unicode mode they are
+based on Unicode classifications, and are not affected by the current locale.
+
+There are two special cases of bracket expressions: the bracket expressions
+<tt>[[:@<:]]</tt> and <tt>[[:@>:]]</tt> are constraints, matching empty strings at
+the beginning and end of a word respectively.  A word is defined as a sequence
+of word characters that is neither preceded nor followed by word characters. A
+word character is an @e alnum character or an underscore (_). These special
+bracket expressions are deprecated; users of AREs should use constraint escapes
+instead (see escapes below).
 
 
 @section overview_resyntax_escapes Escapes
 
-Escapes (AREs only),
-which begin with a <tt>@\</tt> followed by an alphanumeric character, come in several
-varieties: character entry, class shorthands, constraint escapes, and back
-references. A <tt>@\</tt> followed by an alphanumeric character but not constituting
-a valid escape is illegal in AREs. In EREs, there are no escapes: outside
-a bracket expression, a <tt>@\</tt> followed by an alphanumeric character merely stands
-for that character as an ordinary character, and inside a bracket expression,
-<tt>@\</tt> is an ordinary character. (The latter is the one actual incompatibility
-between EREs and AREs.)
-Character-entry escapes (AREs only) exist to make
-it easier to specify non-printing and otherwise inconvenient characters
-in REs:
-
-
-
-@b \a
-
-alert (bell) character, as in C
-
-@b \b
-
-backspace, as in C
-
-@b \B
-
-synonym
-for @b \ to help reduce backslash doubling in some applications where there
-are multiple levels of backslash processing
-
-@b \c@e X
-
-(where X is any character)
-the character whose low-order 5 bits are the same as those of @e X, and whose
-other bits are all zero
-
-@b \e
-
-the character whose collating-sequence name is
-'@b ESC', or failing that, the character with octal value 033
-
-@b \f
-
-formfeed, as in C
-
-@b \n
-
-newline, as in C
-
-@b \r
-
-carriage return, as in C
-
-@b \t
-
-horizontal tab, as in C
-
-@b \u@e wxyz
-
-(where @e wxyz is exactly four hexadecimal digits)
-the Unicode
-character @b U+@e wxyz in the local byte ordering
-
-@b \U@e stuvwxyz
-
-(where @e stuvwxyz is
-exactly eight hexadecimal digits) reserved for a somewhat-hypothetical Unicode
-extension to 32 bits
-
-@b \v
-
-vertical tab, as in C are all available.
-
-@b \x@e hhh
-
-(where
-@e hhh is any sequence of hexadecimal digits) the character whose hexadecimal
-value is @b 0x@e hhh (a single character no matter how many hexadecimal digits
-are used).
-
-@b \0
-
-the character whose value is @b 0
-
-@b \@e xy
-
-(where @e xy is exactly two
-octal digits, and is not a @e back reference (see below)) the character whose
-octal value is @b 0@e xy
-
-@b \@e xyz
-
-(where @e xyz is exactly three octal digits, and is
-not a back reference (see below))
-the character whose octal value is @b 0@e xyz
-
-
-
-Hexadecimal digits are '@b 0'-'@b 9', '@b a'-'@b f', and '@b A'-'@b F'. Octal
-digits are '@b 0'-'@b 7'.
-The character-entry
-escapes are always taken as ordinary characters. For example, @b \135 is @b ] in
-ASCII, but @b \135 does not terminate a bracket expression. Beware, however,
-that some applications (e.g., C compilers) interpret  such sequences themselves
-before the regular-expression package gets to see them, which may require
-doubling (quadrupling, etc.) the '@b \'.
-Class-shorthand escapes (AREs only) provide
-shorthands for certain commonly-used character classes:
-
-
-
-@b \d
-
-@b [[:digit:]]
-
-@b \s
-
-@b [[:space:]]
-
-@b \w
-
-@b [[:alnum:]_] (note underscore)
-
-@b \D
-
-@b [^[:digit:]]
-
-@b \S
-
-@b [^[:space:]]
-
-@b \W
-
-@b [^[:alnum:]_] (note underscore)
-
-
-
-Within bracket expressions, '@b \d', '@b \s', and
-'@b \w' lose their outer brackets, and '@b \D',
-'@b \S', and '@b \W' are illegal. (So, for example,
-@b [a-c\d] is equivalent to @b [a-c[:digit:]].
-Also, @b [a-c\D], which is equivalent to
-@b [a-c^[:digit:]], is illegal.)
-A constraint escape (AREs only) is a constraint,
-matching the empty string if specific conditions are met, written as an
-escape:
-
-
-
-@b \A
-
-matches only at the beginning of the string
-(see #Matching, below,
-for how this differs from '@b ^')
-
-@b \m
-
-matches only at the beginning of a word
-
-@b \M
-
-matches only at the end of a word
-
-@b \y
-
-matches only at the beginning or end of a word
-
-@b \Y
-
-matches only at a point that is not the beginning or end of
-a word
-
-@b \Z
-
-matches only at the end of the string
-(see #Matching, below, for
-how this differs from '@b $')
-
-@b \@e m
-
-(where @e m is a nonzero digit) a @e back reference,
-see below
-
-@b \@e mnn
-
-(where @e m is a nonzero digit, and @e nn is some more digits,
-and the decimal value @e mnn is not greater than the number of closing capturing
-parentheses seen so far) a @e back reference, see below
-
-
-
-A word is defined
-as in the specification of @b [[::]] and @b [[::]] above. Constraint escapes are
-illegal within bracket expressions.
-A back reference (AREs only) matches
-the same string matched by the parenthesized subexpression specified by
-the number, so that (e.g.) @b ([bc])\1 matches @b bb or @b cc but not '@b bc'.
-The subexpression
-must entirely precede the back reference in the RE. Subexpressions are numbered
-in the order of their leading parentheses. Non-capturing parentheses do not
-define subexpressions.
-There is an inherent historical ambiguity between
-octal character-entry  escapes and back references, which is resolved by
-heuristics, as hinted at above. A leading zero always indicates an octal
-escape. A single non-zero digit, not followed by another digit, is always
-taken as a back reference. A multi-digit sequence not starting with a zero
-is taken as a back  reference if it comes after a suitable subexpression
-(i.e. the number is in the legal range for a back reference), and otherwise
-is taken as octal.
+Escapes (AREs only), which begin with a <tt>@\</tt> followed by an alphanumeric
+character, come in several varieties: character entry, class shorthands,
+constraint escapes, and back references. A <tt>@\</tt> followed by an
+alphanumeric character but not constituting a valid escape is illegal in AREs.
+In EREs, there are no escapes: outside a bracket expression, a <tt>@\</tt>
+followed by an alphanumeric character merely stands for that character as an
+ordinary character, and inside a bracket expression, <tt>@\</tt> is an ordinary
+character. (The latter is the one actual incompatibility between EREs and
+AREs.)
+
+Character-entry escapes (AREs only) exist to make it easier to specify
+non-printing and otherwise inconvenient characters in REs:
+
+@beginTable
+@row2col{ <tt>@\a</tt> , Alert (bell) character, as in C. }
+@row2col{ <tt>@\b</tt> , Backspace, as in C. }
+@row2col{ <tt>@\B</tt> ,
+    Synonym for <tt>@\</tt> to help reduce backslash doubling in some
+    applications where there are multiple levels of backslash processing. }
+@row2col{ <tt>@\cX</tt> ,
+    The character whose low-order 5 bits are the same as those of @e X, and
+    whose other bits are all zero, where @e X is any character. }
+@row2col{ <tt>@\e</tt> ,
+    The character whose collating-sequence name is @c ESC, or failing that,
+    the character with octal value 033. }
+@row2col{ <tt>@\f</tt> , Formfeed, as in C. }
+@row2col{ <tt>@\n</tt> , Newline, as in C. }
+@row2col{ <tt>@\r</tt> , Carriage return, as in C. }
+@row2col{ <tt>@\t</tt> , Horizontal tab, as in C. }
+@row2col{ <tt>@\uwxyz</tt> ,
+    The Unicode character <tt>U+wxyz</tt> in the local byte ordering, where
+    @e wxyz is exactly four hexadecimal digits. }
+@row2col{ <tt>@\Ustuvwxyz</tt> ,
+    Reserved for a somewhat-hypothetical Unicode extension to 32 bits, where
+    @e stuvwxyz is exactly eight hexadecimal digits. }
+@row2col{ <tt>@\v</tt> , Vertical tab, as in C are all available. }
+@row2col{ <tt>@\xhhh</tt> ,
+    The single character whose hexadecimal value is @e 0xhhh, where @e hhh is
+    any sequence of hexadecimal digits. }
+@row2col{ <tt>@\0</tt> , The character whose value is 0. }
+@row2col{ <tt>@\xy</tt> ,
+    The character whose octal value is @e 0xy, where @e xy is exactly two octal
+    digits, and is not a <em>back reference</em> (see below). }
+@row2col{ <tt>@\xyz</tt> ,
+    The character whose octal value is @e 0xyz, where @e xyz is exactly three
+    octal digits, and is not a <em>back reference</em> (see below). }
+@endTable
+
+Hexadecimal digits are 0-9, a-f, and A-F. Octal digits are 0-7.
+
+The character-entry escapes are always taken as ordinary characters. For
+example, <tt>@\135</tt> is <tt>]</tt> in ASCII, but <tt>@\135</tt> does not
+terminate a bracket expression. Beware, however, that some applications (e.g.,
+C compilers) interpret  such sequences themselves before the regular-expression
+package gets to see them, which may require doubling (quadrupling, etc.) the
+'<tt>@\</tt>'.
+
+Class-shorthand escapes (AREs only) provide shorthands for certain
+commonly-used character classes:
+
+@beginTable
+@row2col{ <tt>@\d</tt> , <tt>[[:digit:]]</tt> }
+@row2col{ <tt>@\s</tt> , <tt>[[:space:]]</tt> }
+@row2col{ <tt>@\w</tt> , <tt>[[:alnum:]_]</tt> (note underscore) }
+@row2col{ <tt>@\D</tt> , <tt>[^[:digit:]]</tt> }
+@row2col{ <tt>@\S</tt> , <tt>[^[:space:]]</tt> }
+@row2col{ <tt>@\W</tt> , <tt>[^[:alnum:]_]</tt> (note underscore) }
+@endTable
+
+Within bracket expressions, <tt>@\d</tt>, <tt>@\s</tt>, and <tt>@\w</tt> lose
+their outer brackets, and <tt>@\D</tt>, <tt>@\S</tt>, <tt>@\W</tt> are illegal.
+So, for example, <tt>[a-c@\d]</tt> is equivalent to <tt>[a-c[:digit:]]</tt>.
+Also, <tt>[a-c@\D]</tt>, which is equivalent to <tt>[a-c^[:digit:]]</tt>, is
+illegal.
+
+A constraint escape (AREs only) is a constraint, matching the empty string if
+specific conditions are met, written as an escape:
+
+@beginTable
+@row2col{ <tt>@\A</tt> , Matches only at the beginning of the string, see
+                         @ref overview_resyntax_matching for how this differs
+                         from <tt>^</tt>. }
+@row2col{ <tt>@\m</tt> , Matches only at the beginning of a word. }
+@row2col{ <tt>@\M</tt> , Matches only at the end of a word. }
+@row2col{ <tt>@\y</tt> , Matches only at the beginning or end of a word. }
+@row2col{ <tt>@\Y</tt> , Matches only at a point that is not the beginning or
+                         end of a word. }
+@row2col{ <tt>@\Z</tt> , Matches only at the end of the string, see
+                         @ref overview_resyntax_matching for how this differs
+                         from <tt>@$</tt>. }
+@row2col{ <tt>@\m</tt> , A <em>back reference</em>, where @e m is a non-zero
+                         digit. See below. }
+@row2col{ <tt>@\mnn</tt> ,
+    A <em>back reference</em>, where @e m is a nonzero digit, and @e nn is some
+    more digits, and the decimal value @e mnn is not greater than the number of
+    closing capturing parentheses seen so far. See below. }
+@endTable
+
+A word is defined as in the specification of <tt>[[:@<:]]</tt> and
+<tt>[[:>:]]</tt> above. Constraint escapes are illegal within bracket
+expressions.
+
+A back reference (AREs only) matches the same string matched by the
+parenthesized subexpression specified by the number. For example, "([bc])\1"
+matches "bb" or "cc" but not "bc". The subexpression must entirely precede the
+back reference in the RE.Subexpressions are numbered in the order of their
+leading parentheses. Non-capturing parentheses do not define subexpressions.
+
+There is an inherent historical ambiguity between octal character-entry escapes
+and back references, which is resolved by heuristics, as hinted at above. A
+leading zero always indicates an octal escape. A single non-zero digit, not
+followed by another digit, is always taken as a back reference. A multi-digit
+sequence not starting with a zero is taken as a back  reference if it comes
+after a suitable subexpression (i.e. the number is in the legal range for a
+back reference), and otherwise is taken as octal.
 
 
 @section overview_resyntax_metasyntax Metasyntax
@@ -651,7 +561,7 @@ the end of a parenthesized subexpression, and @b * is an ordinary character
 if it appears at the beginning of the RE or the beginning of a parenthesized
 subexpression (after a possible leading '@b ^'). Finally, single-digit back references
 are available, and @b \ and @b \ are synonyms
-for @b [[::]] and @b [[::]] respectively;
+for <tt>[[:@<:]]</tt> and <tt>[[:@>:]]</tt> respectively;
 no other escapes are available.
 
 
@@ -659,1051 +569,129 @@ no other escapes are available.
 
 Note that the character names are case sensitive.
 
-
-
-
-
-
-NUL
-
-
-
-
-'\0'
-
-
-
-
-
-SOH
-
-
-
-
-'\001'
-
-
-
-
-
-STX
-
-
-
-
-'\002'
-
-
-
-
-
-ETX
-
-
-
-
-'\003'
-
-
-
-
-
-EOT
-
-
-
-
-'\004'
-
-
-
-
-
-ENQ
-
-
-
-
-'\005'
-
-
-
-
-
-ACK
-
-
-
-
-'\006'
-
-
-
-
-
-BEL
-
-
-
-
-'\007'
-
-
-
-
-
-alert
-
-
-
-
-'\007'
-
-
-
-
-
-BS
-
-
-
-
-'\010'
-
-
-
-
-
-backspace
-
-
-
-
-'\b'
-
-
-
-
-
-HT
-
-
-
-
-'\011'
-
-
-
-
-
-tab
-
-
-
-
-'\t'
-
-
-
-
-
-LF
-
-
-
-
-'\012'
-
-
-
-
-
-newline
-
-
-
-
-'\n'
-
-
-
-
-
-VT
-
-
-
-
-'\013'
-
-
-
-
-
-vertical-tab
-
-
-
-
-'\v'
-
-
-
-
-
-FF
-
-
-
-
-'\014'
-
-
-
-
-
-form-feed
-
-
-
-
-'\f'
-
-
-
-
-
-CR
-
-
-
-
-'\015'
-
-
-
-
-
-carriage-return
-
-
-
-
-'\r'
-
-
-
-
-
-SO
-
-
-
-
-'\016'
-
-
-
-
-
-SI
-
-
-
-
-'\017'
-
-
-
-
-
-DLE
-
-
-
-
-'\020'
-
-
-
-
-
-DC1
-
-
-
-
-'\021'
-
-
-
-
-
-DC2
-
-
-
-
-'\022'
-
-
-
-
-
-DC3
-
-
-
-
-'\023'
-
-
-
-
-
-DC4
-
-
-
-
-'\024'
-
-
-
-
-
-NAK
-
-
-
-
-'\025'
-
-
-
-
-
-SYN
-
-
-
-
-'\026'
-
-
-
-
-
-ETB
-
-
-
-
-'\027'
-
-
-
-
-
-CAN
-
-
-
-
-'\030'
-
-
-
-
-
-EM
-
-
-
-
-'\031'
-
-
-
-
-
-SUB
-
-
-
-
-'\032'
-
-
-
-
-
-ESC
-
-
-
-
-'\033'
-
-
-
-
-
-IS4
-
-
-
-
-'\034'
-
-
-
-
-
-FS
-
-
-
-
-'\034'
-
-
-
-
-
-IS3
-
-
-
-
-'\035'
-
-
-
-
-
-GS
-
-
-
-
-'\035'
-
-
-
-
-
-IS2
-
-
-
-
-'\036'
-
-
-
-
-
-RS
-
-
-
-
-'\036'
-
-
-
-
-
-IS1
-
-
-
-
-'\037'
-
-
-
-
-
-US
-
-
-
-
-'\037'
-
-
-
-
-
-space
-
-
-
-
-' '
-
-
-
-
-
-exclamation-mark
-
-
-
-
-'!'
-
-
-
-
-
-quotation-mark
-
-
-
-
-'"'
-
-
-
-
-
-number-sign
-
-
-
-
-'#'
-
-
-
-
-
-dollar-sign
-
-
-
-
-'$'
-
-
-
-
-
-percent-sign
-
-
-
-
-'%'
-
-
-
-
-
-ampersand
-
-
-
-
-''
-
-
-
-
-
-apostrophe
-
-
-
-
-'\''
-
-
-
-
-
-left-parenthesis
-
-
-
-
-'('
-
-
-
-
-
-right-parenthesis
-
-
-
-
-')'
-
-
-
-
-
-asterisk
-
-
-
-
-'*'
-
-
-
-
-
-plus-sign
-
-
-
-
-'+'
-
-
-
-
-
-comma
-
-
-
-
-','
-
-
-
-
-
-hyphen
-
-
-
-
-'-'
-
-
-
-
-
-hyphen-minus
-
-
-
-
-'-'
-
-
-
-
-
-period
-
-
-
-
-'.'
-
-
-
-
-
-full-stop
-
-
-
-
-'.'
-
-
-
-
-
-slash
-
-
-
-
-'/'
-
-
-
-
-
-solidus
-
-
-
-
-'/'
-
-
-
-
-
-zero
-
-
-
-
-'0'
-
-
-
-
-
-one
-
-
-
-
-'1'
-
-
-
-
-
-two
-
-
-
-
-'2'
-
-
-
-
-
-three
-
-
-
-
-'3'
-
-
-
-
-
-four
-
-
-
-
-'4'
-
-
-
-
-
-five
-
-
-
-
-'5'
-
-
-
-
-
-six
-
-
-
-
-'6'
-
-
-
-
-
-seven
-
-
-
-
-'7'
-
-
-
-
-
-eight
-
-
-
-
-'8'
-
-
-
-
-
-nine
-
-
-
-
-'9'
-
-
-
-
-
-colon
-
-
-
-
-':'
-
-
-
-
-
-semicolon
-
-
-
-
-';'
-
-
-
-
-
-less-than-sign
-
-
-
-
-''
-
-
-
-
-
-equals-sign
-
-
-
-
-'='
-
-
-
-
-
-greater-than-sign
-
-
-
-
-''
-
-
-
-
-
-question-mark
-
-
-
-
-'?'
-
-
-
-
-
-commercial-at
-
-
-
-
-'@'
-
-
-
-
-
-left-square-bracket
-
-
-
-
-'['
-
-
-
-
-
-backslash
-
-
-
-
-'\'
-
-
-
-
-
-reverse-solidus
-
-
-
-
-'\'
-
-
-
-
-
-right-square-bracket
-
-
-
-
-']'
-
-
-
-
-
-circumflex
-
-
-
-
-'^'
-
-
-
-
-
-circumflex-accent
-
-
-
-
-'^'
-
-
-
-
-
-underscore
-
-
-
-
-'_'
-
-
-
-
-
-low-line
-
-
-
-
-'_'
-
-
-
-
-
-grave-accent
-
-
-
-
-'''
-
-
-
-
-
-left-brace
-
-
-
-
-'{'
-
-
-
-
-
-left-curly-bracket
-
-
-
-
-'{'
-
-
-
-
-
-vertical-line
-
-
-
-
-'|'
-
-
-
-
-
-right-brace
-
-
-
-
-'}'
-
-
-
-
-
-right-curly-bracket
-
-
-
-
-'}'
-
-
-
-
-
-tilde
-
-
-
-
-'~'
-
-
-
-
-
-DEL
-
-
-
-
-'\177'
+<center><table class='doctable' border='0' cellspacing='5' cellpadding='4'><tr>
+
+<td>
+@beginTable
+@row2col{ <tt>NUL</tt> , @\0 }
+@row2col{ <tt>SOH</tt> , @\001 }
+@row2col{ <tt>STX</tt> , @\002 }
+@row2col{ <tt>ETX</tt> , @\003 }
+@row2col{ <tt>EOT</tt> , @\004 }
+@row2col{ <tt>ENQ</tt> , @\005 }
+@row2col{ <tt>ACK</tt> , @\006 }
+@row2col{ <tt>BEL</tt> , @\007 }
+@row2col{ <tt>alert</tt> , @\007 }
+@row2col{ <tt>BS</tt> , @\010 }
+@row2col{ <tt>backspace</tt> , @\b }
+@row2col{ <tt>HT</tt> , @\011 }
+@row2col{ <tt>tab</tt> , @\t }
+@row2col{ <tt>LF</tt> , @\012 }
+@row2col{ <tt>newline</tt> , @\n }
+@row2col{ <tt>VT</tt> , @\013 }
+@row2col{ <tt>vertical-tab</tt> , @\v }
+@row2col{ <tt>FF</tt> , @\014 }
+@row2col{ <tt>form-feed</tt> , @\f }
+@endTable
+</td>
+
+<td>
+@beginTable
+@row2col{ <tt>CR</tt> , @\015 }
+@row2col{ <tt>carriage-return</tt> , @\r }
+@row2col{ <tt>SO</tt> , @\016 }
+@row2col{ <tt>SI</tt> , @\017 }
+@row2col{ <tt>DLE</tt> , @\020 }
+@row2col{ <tt>DC1</tt> , @\021 }
+@row2col{ <tt>DC2</tt> , @\022 }
+@row2col{ <tt>DC3</tt> , @\023 }
+@row2col{ <tt>DC4</tt> , @\024 }
+@row2col{ <tt>NAK</tt> , @\025 }
+@row2col{ <tt>SYN</tt> , @\026 }
+@row2col{ <tt>ETB</tt> , @\027 }
+@row2col{ <tt>CAN</tt> , @\030 }
+@row2col{ <tt>EM</tt> , @\031 }
+@row2col{ <tt>SUB</tt> , @\032 }
+@row2col{ <tt>ESC</tt> , @\033 }
+@row2col{ <tt>IS4</tt> , @\034 }
+@row2col{ <tt>FS</tt> , @\034 }
+@row2col{ <tt>IS3</tt> , @\035 }
+@endTable
+</td>
+
+<td>
+@beginTable
+@row2col{ <tt>GS</tt> , @\035 }
+@row2col{ <tt>IS2</tt> , @\036 }
+@row2col{ <tt>RS</tt> , @\036 }
+@row2col{ <tt>IS1</tt> , @\037 }
+@row2col{ <tt>US</tt> , @\037 }
+@row2col{ <tt>space</tt> , " " (space) }
+@row2col{ <tt>exclamation-mark</tt> , ! }
+@row2col{ <tt>quotation-mark</tt> , " }
+@row2col{ <tt>number-sign</tt> , @# }
+@row2col{ <tt>dollar-sign</tt> , @$ }
+@row2col{ <tt>percent-sign</tt> , @% }
+@row2col{ <tt>ampersand</tt> , @& }
+@row2col{ <tt>apostrophe</tt> , ' }
+@row2col{ <tt>left-parenthesis</tt> , ( }
+@row2col{ <tt>right-parenthesis</tt> , ) }
+@row2col{ <tt>asterisk</tt> , * }
+@row2col{ <tt>plus-sign</tt> , + }
+@row2col{ <tt>comma</tt> , \, }
+@row2col{ <tt>hyphen</tt> , - }
+@endTable
+</td>
+
+<td>
+@beginTable
+@row2col{ <tt>hyphen-minus</tt> , - }
+@row2col{ <tt>period</tt> , . }
+@row2col{ <tt>full-stop</tt> , . }
+@row2col{ <tt>slash</tt> , / }
+@row2col{ <tt>solidus</tt> , / }
+@row2col{ <tt>zero</tt> , 0 }
+@row2col{ <tt>one</tt> , 1 }
+@row2col{ <tt>two</tt> , 2 }
+@row2col{ <tt>three</tt> , 3 }
+@row2col{ <tt>four</tt> , 4 }
+@row2col{ <tt>five</tt> , 5 }
+@row2col{ <tt>six</tt> , 6 }
+@row2col{ <tt>seven</tt> , 7 }
+@row2col{ <tt>eight</tt> , 8 }
+@row2col{ <tt>nine</tt> , 9 }
+@row2col{ <tt>colon</tt> , : }
+@row2col{ <tt>semicolon</tt> , ; }
+@row2col{ <tt>less-than-sign</tt> , @< }
+@row2col{ <tt>equals-sign</tt> , = }
+@endTable
+</td>
+
+<td>
+@beginTable
+@row2col{ <tt>greater-than-sign</tt> , @> }
+@row2col{ <tt>question-mark</tt> , ? }
+@row2col{ <tt>commercial-at</tt> , @@ }
+@row2col{ <tt>left-square-bracket</tt> , [ }
+@row2col{ <tt>backslash</tt> , @\ }
+@row2col{ <tt>reverse-solidus</tt> , @\ }
+@row2col{ <tt>right-square-bracket</tt> , ] }
+@row2col{ <tt>circumflex</tt> , ^ }
+@row2col{ <tt>circumflex-accent</tt> , ^ }
+@row2col{ <tt>underscore</tt> , _ }
+@row2col{ <tt>low-line</tt> , _ }
+@row2col{ <tt>grave-accent</tt> , ' }
+@row2col{ <tt>left-brace</tt> , @leftCurly }
+@row2col{ <tt>left-curly-bracket</tt> , @leftCurly }
+@row2col{ <tt>vertical-line</tt> , | }
+@row2col{ <tt>right-brace</tt> , @rightCurly }
+@row2col{ <tt>right-curly-bracket</tt> , @rightCurly }
+@row2col{ <tt>tilde</tt> , ~ }
+@row2col{ <tt>DEL</tt> , @\177 }
+@endTable
+</td>
+
+</tr></table></center>
 
 */
 
