@@ -1175,7 +1175,8 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             wxRichTextParagraph* firstPara = wxDynamicCast(firstParaNode->GetData(), wxRichTextParagraph);
             wxASSERT(firstPara != NULL);
 
-            para->SetAttributes(firstPara->GetAttributes());
+            if (!(fragment.GetAttributes().GetFlags() & wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE))
+                para->SetAttributes(firstPara->GetAttributes());
 
             // Save empty paragraph attributes for appending later
             // These are character attributes deliberately set for a new paragraph. Without this,
@@ -1251,7 +1252,9 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
                 }
             }
 
-            if (finalPara && finalPara != para)
+            if ((fragment.GetAttributes().GetFlags() & wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE) && firstPara)
+                finalPara->SetAttributes(firstPara->GetAttributes());
+            else if (finalPara && finalPara != para)
                 finalPara->SetAttributes(originalAttr);
 
             return true;
@@ -1450,6 +1453,7 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
         if (!obj->GetRange().IsOutside(range))
         {
             wxRichTextRange thisRange = obj->GetRange();
+            wxTextAttrEx thisAttr = obj->GetAttributes();
 
             // Deletes the content of this object within the given range
             obj->DeleteRange(range);
@@ -1486,7 +1490,14 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
 
                 wxTextAttrEx nextParaAttr;
                 if (applyFinalParagraphStyle)
-                    nextParaAttr = nextParagraph->GetAttributes();
+                {
+                    // Special case when deleting the end of a paragraph - use _this_ paragraph's style,
+                    // not the next one.
+                    if (range.GetStart() == range.GetEnd() && range.GetStart() == thisRange.GetEnd())
+                        nextParaAttr = thisAttr;
+                    else
+                        nextParaAttr = nextParagraph->GetAttributes();
+                }
 
                 if (firstPara && nextParagraph && firstPara != nextParagraph)
                 {
@@ -5000,16 +5011,18 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
     wxRichTextParagraph* para = GetParagraphAtPosition(pos, false);
     long pos1 = pos;
 
+    if (p)
+        newPara->SetAttributes(*p);
+
     if (flags & wxRICHTEXT_INSERT_INTERACTIVE)
     {
         if (para && para->GetRange().GetEnd() == pos)
             pos1 ++;
+        if (newPara->GetAttributes().HasBulletNumber())
+            newPara->GetAttributes().SetBulletNumber(newPara->GetAttributes().GetBulletNumber()+1);
     }
 
     action->SetPosition(pos);
-
-    if (p)
-        newPara->SetAttributes(*p);
 
     // Use the default character style
     if (!GetDefaultStyle().IsDefault() && newPara->GetChildren().GetFirst())
@@ -5152,6 +5165,22 @@ bool wxRichTextBuffer::DeleteRangeWithUndo(const wxRichTextRange& range, wxRichT
 
     // Copy the fragment that we'll need to restore in Undo
     CopyFragment(range, action->GetOldParagraphs());
+
+    // See if we're deleting a paragraph marker, in which case we need to
+    // make a note not to copy the attributes from the 2nd paragraph to the 1st.
+    if (range.GetStart() == range.GetEnd())
+    {
+        wxRichTextParagraph* para = GetParagraphAtPosition(range.GetStart());
+        if (para && para->GetRange().GetEnd() == range.GetEnd())
+        {
+            wxRichTextParagraph* nextPara = GetParagraphAtPosition(range.GetStart()+1);
+            if (nextPara && nextPara != para)
+            {
+                action->GetOldParagraphs().GetChildren().GetFirst()->GetData()->SetAttributes(nextPara->GetAttributes());
+                action->GetOldParagraphs().GetAttributes().SetFlags(action->GetOldParagraphs().GetAttributes().GetFlags() | wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE);
+            }
+        }
+    }
 
     SubmitAction(action);
 
