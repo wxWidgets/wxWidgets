@@ -308,7 +308,8 @@ int wxRichTextCompositeObject::HitTest(wxDC& dc, const wxPoint& pt, long& textPo
         node = node->GetNext();
     }
 
-    return wxRICHTEXT_HITTEST_NONE;
+    textPosition = GetRange().GetEnd()-1;
+    return wxRICHTEXT_HITTEST_AFTER|wxRICHTEXT_HITTEST_OUTSIDE;
 }
 
 /// Finds the absolute position and row height for the given character position
@@ -3822,7 +3823,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
         wxSize lineSize = line->GetSize();
         wxRichTextRange lineRange = line->GetAbsoluteRange();
 
-        if (pt.y >= linePos.y && pt.y <= linePos.y + lineSize.y)
+        if (pt.y <= linePos.y + lineSize.y)
         {
             if (pt.x < linePos.x)
             {
@@ -5783,6 +5784,8 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 if (richTextBuffer)
                 {
                     InsertParagraphsWithUndo(position+1, *richTextBuffer, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+                    if (GetRichTextCtrl())
+                        GetRichTextCtrl()->ShowPosition(position + richTextBuffer->GetRange().GetEnd());
                     delete richTextBuffer;
                 }
             }
@@ -5805,6 +5808,9 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 wxString text2 = text;
 #endif
                 InsertTextWithUndo(position+1, text2, GetRichTextCtrl());
+
+                if (GetRichTextCtrl())
+                    GetRichTextCtrl()->ShowPosition(position + text2.Length());
 
                 success = true;
             }
