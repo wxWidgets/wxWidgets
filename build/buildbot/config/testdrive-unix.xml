@@ -48,7 +48,7 @@
 
 <build>
     <name>Linux x86_64 wxGTK Trunk</name>
-    <sandbox>td163.testdrive.hp.com</sandbox>
+    <sandbox>td189.testdrive.hp.com</sandbox>
     <builddir>td_gtk</builddir>
     <scheduler>trunk_quick</scheduler>
 
@@ -368,7 +368,7 @@
 <build>
     <name>Cygwin no-cygwin wxMSW Trunk</name>
     <builddir>td_nocygwin</builddir>
-    <sandbox>td163.testdrive.hp.com</sandbox>
+    <sandbox>td189.testdrive.hp.com</sandbox>
     <scheduler>monday_0600</scheduler>
 
     <steps>
