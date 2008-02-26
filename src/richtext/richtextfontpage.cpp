@@ -430,7 +430,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
 
     if (attr->HasTextColour())
     {
-        m_colourCtrl->SetBackgroundColour(attr->GetTextColour());
+        m_colourCtrl->SetColour(attr->GetTextColour());
         m_colourPresent = true;
     }
 
