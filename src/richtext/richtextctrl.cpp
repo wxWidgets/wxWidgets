@@ -2880,7 +2880,11 @@ bool wxRichTextCtrl::ApplyBoldToSelection()
     if (HasSelection())
         return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
     else
-        SetAndShowDefaultStyle(attr);
+    {
+        wxRichTextAttr current = GetDefaultStyleEx();
+        current.Apply(attr);
+        SetAndShowDefaultStyle(current);
+    }
     return true;
 }
 
@@ -2894,7 +2898,11 @@ bool wxRichTextCtrl::ApplyItalicToSelection()
     if (HasSelection())
         return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
     else
-        SetAndShowDefaultStyle(attr);
+    {
+        wxRichTextAttr current = GetDefaultStyleEx();
+        current.Apply(attr);
+        SetAndShowDefaultStyle(current);
+    }
     return true;
 }
 
@@ -2908,7 +2916,11 @@ bool wxRichTextCtrl::ApplyUnderlineToSelection()
     if (HasSelection())
         return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
     else
-        SetAndShowDefaultStyle(attr);
+    {
+        wxRichTextAttr current = GetDefaultStyleEx();
+        current.Apply(attr);
+        SetAndShowDefaultStyle(current);
+    }
     return true;
 }
 
@@ -2986,7 +2998,9 @@ bool wxRichTextCtrl::ApplyStyle(wxRichTextStyleDefinition* def)
         return SetStyleEx(GetSelectionRange(), attr, flags);
     else
     {
-        SetAndShowDefaultStyle(attr);
+        wxRichTextAttr current = GetDefaultStyleEx();
+        current.Apply(attr);
+        SetAndShowDefaultStyle(current);
         return true;
     }
 }
