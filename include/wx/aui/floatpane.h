@@ -20,13 +20,12 @@
 
 #if wxUSE_AUI
 
-#include "wx/frame.h"
-
-#if defined( __WXMSW__ ) || defined( __WXMAC__ ) ||  defined( __WXGTK__ )
-#include "wx/minifram.h"
-#define wxAuiFloatingFrameBaseClass wxMiniFrame
+#if wxUSE_MINIFRAME
+    #include "wx/minifram.h"
+    #define wxAuiFloatingFrameBaseClass wxMiniFrame
 #else
-#define wxAuiFloatingFrameBaseClass wxFrame
+    #include "wx/frame.h"
+    #define wxAuiFloatingFrameBaseClass wxFrame
 #endif
 
 class WXDLLIMPEXP_AUI wxAuiFloatingFrame : public wxAuiFloatingFrameBaseClass
