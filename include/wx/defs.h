@@ -472,6 +472,18 @@ typedef short int WXTYPE;
     #endif
 #endif // __VISUALC__
 
+
+#ifndef HAVE_TEMPLATE_OVERLOAD_RESOLUTION
+    // assume the compiler can use type or const expressions as template
+    // arguments if it supports partial specialization -- except if it's a
+    // Borland one which can't
+    #ifdef HAVE_PARTIAL_SPECIALIZATION && !defined(__BORLANDC__)
+        #define HAVE_TEMPLATE_OVERLOAD_RESOLUTION
+    #endif
+#endif // __BORLANDC__
+
+#endif // !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION)
+
 /*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
 /*  ---------------------------------------------------------------------------- */

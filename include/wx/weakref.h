@@ -74,8 +74,13 @@ protected:
     T *m_pobj;
 };
 
-#ifdef HAVE_PARTIAL_SPECIALIZATION
 
+#if !defined(HAVE_PARTIAL_SPECIALIZATION) || !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION)
+    #define USE_STATIC_WEAKREF
+#endif 
+
+
+#ifndef USE_STATIC_WEAKREF
 template<class T,bool use_static>
 struct wxWeakRefImpl;
 
@@ -169,17 +174,18 @@ protected:
     wxTrackable *m_ptbase;
 };
 
-#endif // HAVE_PARTIAL_SPECIALIZATION
+#endif // #ifndef USE_STATIC_WEAKREF
+
 
 
 // A weak reference to an object of type T, where T has type wxTrackable
 // (usually statically but if not dynamic_cast<> is tried).
 template <class T>
 class wxWeakRef : public
-#ifdef HAVE_PARTIAL_SPECIALIZATION
-                  wxWeakRefImpl<T, wxIsStaticTrackable<T>::value>
-#else
+#ifdef USE_STATIC_WEAKREF
                   wxWeakRefStatic<T>
+#else
+                  wxWeakRefImpl<T, wxIsStaticTrackable<T>::value>
 #endif
 {
 public:
