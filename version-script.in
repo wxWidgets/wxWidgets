@@ -31,6 +31,10 @@
         *TimeZone*Make*;
         *wxRemotelyScrolledTreeCtrl*DoCalcScrolledPosition*;
         *wxRemotelyScrolledTreeCtrl*SetScrollbar*;
+        *wxRichTextCtrl*GetTextCursor*;
+        *wxRichTextCtrl*GetURLCursor*;
+        *wxRichTextCtrl*SetTextCursor*;
+        *wxRichTextCtrl*SetURLCursor*;
         *wxScrollHelper*HandleOnChildFocus*;
         *wxWindowBase*Get*Sibling*;
 };
