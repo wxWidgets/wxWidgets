@@ -30,26 +30,21 @@
 #endif
 #endif
 
-#if (_WIN32_WCE >= 400) && !defined(wxNO_RTTI)
+// this library is only available for PocketPC targets using recent SDK and is
+// needed for RTTI support
+#if (_WIN32_WCE >= 400) && !defined(__WINCE_NET__) !defined(wxNO_RTTI)
     #pragma comment(lib,"ccrtrtti.lib")
 #endif
 
 #if defined(__WINCE_STANDARDSDK__)
     // DoDragDrop:
     #pragma comment(lib,"olece400.lib")
-#elif defined(__POCKETPC__)
-    // PocketPC build:
-    // DoDragDrop:
+#elif defined(__POCKETPC__) || defined(__SMARTPHONE__) || defined(__WINCE_NET__)
     #pragma comment(lib,"ceshell.lib")
-
     #pragma comment(lib,"aygshell.lib")
 #elif defined(__HANDHELDPC__)
     // Handheld PC builds. Maybe WindowsCE.NET 4.X needs another symbol.
     #pragma comment(lib,"ceshell.lib")
-#elif defined(__SMARTPHONE__)
-    // Smartphone build:
-    #pragma comment(lib,"ceshell.lib")
-    #pragma comment(lib,"aygshell.lib")
 #else
     #error "Unknown SDK, please fill-in missing pieces"
 #endif
