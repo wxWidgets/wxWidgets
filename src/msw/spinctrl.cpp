@@ -148,8 +148,7 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
 {
     wxSpinCtrl *spin = (wxSpinCtrl *)wxGetWindowUserData(hwnd);
 
-    // forward some messages (the key and focus ones only so far) to
-    // the spin ctrl
+    // forward some messages (mostly the key and focus ones) to the spin ctrl
     switch ( message )
     {
         case WM_SETFOCUS:
@@ -164,6 +163,12 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
         case WM_DEADCHAR:
         case WM_KEYUP:
         case WM_KEYDOWN:
+#ifdef WM_HELP
+        // we need to forward WM_HELP too to ensure that the context help
+        // associated with wxSpinCtrl is shown when the text control part of it
+        // is clicked with the "?" cursor
+        case WM_HELP:
+#endif
             spin->MSWWindowProc(message, wParam, lParam);
 
             // The control may have been deleted at this point, so check.
