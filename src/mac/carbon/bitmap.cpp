@@ -272,19 +272,21 @@ bool wxBitmapRefData::Create( int w , int h , int d )
     m_width = wxMax(1, w);
     m_height = wxMax(1, h);
     m_depth = d ;
+    m_hBitmap = NULL ;
 
     m_bytesPerRow = GetBestBytesPerRow( w * 4 ) ;
     size_t size = m_bytesPerRow * h ;
     void* data = m_memBuf.GetWriteBuf( size ) ;
-    memset( data , 0 , size ) ;
-    m_memBuf.UngetWriteBuf( size ) ;
+    if ( data != NULL )
+    {
+        memset( data , 0 , size ) ;
+        m_memBuf.UngetWriteBuf( size ) ;
 
-    m_hBitmap = NULL ;
-    m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst );
-    wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
-    CGContextTranslateCTM( m_hBitmap, 0,  m_height );
-    CGContextScaleCTM( m_hBitmap, 1, -1 );
-
+        m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst );
+        wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+        CGContextTranslateCTM( m_hBitmap, 0,  m_height );
+        CGContextScaleCTM( m_hBitmap, 1, -1 );
+    } /* data != NULL */
     m_ok = ( m_hBitmap != NULL ) ;
 
     return m_ok ;
@@ -881,51 +883,56 @@ wxBitmap::~wxBitmap()
 
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
 {
-    m_refData = new wxBitmapRefData( the_width , the_height , no_bits ) ;
+    wxBitmapRefData* bitmapRefData;
 
-    if ( no_bits == 1 )
+    m_refData = bitmapRefData = new wxBitmapRefData( the_width , the_height , no_bits ) ;
+
+    if (bitmapRefData->IsOk())
     {
-        int linesize = ( the_width / (sizeof(unsigned char) * 8)) ;
-        if ( the_width % (sizeof(unsigned char) * 8) )
-            linesize += sizeof(unsigned char);
-
-        unsigned char* linestart = (unsigned char*) bits ;
-        unsigned char* destptr = (unsigned char*) BeginRawAccess() ;
-
-        for ( int y = 0 ; y < the_height ; ++y , linestart += linesize, destptr += M_BITMAPDATA->GetBytesPerRow() )
+        if ( no_bits == 1 )
         {
-            unsigned char* destination = destptr;
-            int index, bit, mask;
+            int linesize = ( the_width / (sizeof(unsigned char) * 8)) ;
+            if ( the_width % (sizeof(unsigned char) * 8) )
+                linesize += sizeof(unsigned char);
 
-            for ( int x = 0 ; x < the_width ; ++x )
+            unsigned char* linestart = (unsigned char*) bits ;
+            unsigned char* destptr = (unsigned char*) BeginRawAccess() ;
+
+            for ( int y = 0 ; y < the_height ; ++y , linestart += linesize, destptr += M_BITMAPDATA->GetBytesPerRow() )
             {
-                index = x / 8 ;
-                bit = x % 8 ;
-                mask = 1 << bit ;
+                unsigned char* destination = destptr;
+                int index, bit, mask;
 
-                if ( linestart[index] & mask )
+                for ( int x = 0 ; x < the_width ; ++x )
                 {
-                    *destination++ = 0xFF ;
-                    *destination++ = 0 ;
-                    *destination++ = 0 ;
-                    *destination++ = 0 ;
-                }
-                else
-                {
-                    *destination++ = 0xFF ;
-                    *destination++ = 0xFF ;
-                    *destination++ = 0xFF ;
-                    *destination++ = 0xFF ;
+                    index = x / 8 ;
+                    bit = x % 8 ;
+                    mask = 1 << bit ;
+
+                    if ( linestart[index] & mask )
+                    {
+                        *destination++ = 0xFF ;
+                        *destination++ = 0 ;
+                        *destination++ = 0 ;
+                        *destination++ = 0 ;
+                    }
+                    else
+                    {
+                        *destination++ = 0xFF ;
+                        *destination++ = 0xFF ;
+                        *destination++ = 0xFF ;
+                        *destination++ = 0xFF ;
+                    }
                 }
             }
-        }
 
-        EndRawAccess() ;
-    }
-    else
-    {
-        wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
-    }
+            EndRawAccess() ;
+        }
+        else
+        {
+            wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
+        }
+    } /* bitmapRefData->IsOk() */
 }
 
 wxBitmap::wxBitmap(int w, int h, int d)
@@ -1127,63 +1134,68 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
     int width = image.GetWidth();
     int height = image.GetHeight();
 
-    m_refData = new wxBitmapRefData( width , height , depth ) ;
+    wxBitmapRefData* bitmapRefData;
+    
+    m_refData = bitmapRefData = new wxBitmapRefData( width , height , depth ) ;
 
-    // Create picture
-
-    bool hasAlpha = false ;
-
-    if ( image.HasMask() )
+    if ( bitmapRefData->IsOk())
     {
-        // takes precedence, don't mix with alpha info
-    }
-    else
-    {
-        hasAlpha = image.HasAlpha() ;
-    }
+        // Create picture
 
-    if ( hasAlpha )
-        UseAlpha() ;
+        bool hasAlpha = false ;
 
-    unsigned char* destinationstart = (unsigned char*) BeginRawAccess() ;
-    register unsigned char* data = image.GetData();
-    if ( destinationstart != NULL && data != NULL )
-    {
-        const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;
-        for (int y = 0; y < height; destinationstart += M_BITMAPDATA->GetBytesPerRow(), y++)
+        if ( image.HasMask() )
         {
-            unsigned char * destination = destinationstart;
-            for (int x = 0; x < width; x++)
-            {
-                if ( hasAlpha )
-                {
-                    const unsigned char a = *alpha++;
-                    *destination++ = a ;
-
-#if wxMAC_USE_PREMULTIPLIED_ALPHA
-                    *destination++ = ((*data++) * a + 127) / 255 ;
-                    *destination++ = ((*data++) * a + 127) / 255 ;
-                    *destination++ = ((*data++) * a + 127) / 255 ;
-#else
-                    *destination++ = *data++ ;
-                    *destination++ = *data++ ;
-                    *destination++ = *data++ ;
-#endif
-                }
-                else
-                {
-                    *destination++ = 0xFF ;
-                    *destination++ = *data++ ;
-                    *destination++ = *data++ ;
-                    *destination++ = *data++ ;
-                }
-            }
+            // takes precedence, don't mix with alpha info
+        }
+        else
+        {
+            hasAlpha = image.HasAlpha() ;
         }
 
-        EndRawAccess() ;
-    }
-    if ( image.HasMask() )
-        SetMask( new wxMask( *this , wxColour( image.GetMaskRed() , image.GetMaskGreen() , image.GetMaskBlue() ) ) ) ;
+        if ( hasAlpha )
+            UseAlpha() ;
+
+        unsigned char* destinationstart = (unsigned char*) BeginRawAccess() ;
+        register unsigned char* data = image.GetData();
+        if ( destinationstart != NULL && data != NULL )
+        {
+            const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;
+            for (int y = 0; y < height; destinationstart += M_BITMAPDATA->GetBytesPerRow(), y++)
+            {
+                unsigned char * destination = destinationstart;
+                for (int x = 0; x < width; x++)
+                {
+                    if ( hasAlpha )
+                    {
+                        const unsigned char a = *alpha++;
+                        *destination++ = a ;
+
+    #if wxMAC_USE_PREMULTIPLIED_ALPHA
+                        *destination++ = ((*data++) * a + 127) / 255 ;
+                        *destination++ = ((*data++) * a + 127) / 255 ;
+                        *destination++ = ((*data++) * a + 127) / 255 ;
+    #else
+                        *destination++ = *data++ ;
+                        *destination++ = *data++ ;
+                        *destination++ = *data++ ;
+    #endif
+                    }
+                    else
+                    {
+                        *destination++ = 0xFF ;
+                        *destination++ = *data++ ;
+                        *destination++ = *data++ ;
+                        *destination++ = *data++ ;
+                    }
+                }
+            }
+
+            EndRawAccess() ;
+        }
+        if ( image.HasMask() )
+            SetMask( new wxMask( *this , wxColour( image.GetMaskRed() , image.GetMaskGreen() , image.GetMaskBlue() ) ) ) ;
+    } /* bitmapRefData->IsOk() */
 }
 
 wxImage wxBitmap::ConvertToImage() const
