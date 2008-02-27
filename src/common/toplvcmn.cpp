@@ -118,15 +118,27 @@ bool wxTopLevelWindowBase::Destroy()
     if ( !wxPendingDelete.Member(this) )
         wxPendingDelete.Append(this);
 
-    if (wxTopLevelWindows.GetCount() > 1)
+    // normally we want to hide the window immediately so that it doesn't get
+    // stuck on the screen while it's being destroyed, however we shouldn't
+    // hide the last visible window as then we might not get any idle events
+    // any more as no events will be sent to the hidden window and without idle
+    // events we won't prune wxPendingDelete list and the application won't
+    // terminate
+    const wxWindowList::const_iterator end = wxTopLevelWindows.end();
+    for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
+                                     end = wxTopLevelWindows.end();
+          i != end;
+          ++i )
     {
-        // Hide it immediately. This should
-        // not be done if this TLW is the
-        // only one left since we then would
-        // risk not to get any idle events
-        // at all anymore during which we
-        // could delete any pending events.
-        Hide();
+        wxTopLevelWindow * const win = wx_static_cast(wxTopLevelWindow *, *i);
+        if ( win != this && win->IsShown() )
+        {
+            // there remains at least one other visible TLW, we can hide this
+            // one
+            Hide();
+
+            break;
+        }
     }
 
     return true;
