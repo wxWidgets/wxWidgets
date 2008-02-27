@@ -1376,7 +1376,7 @@ void wxEvtHandler::Connect( int id, int lastId,
 
 #if wxUSE_WEAKREF
     // Make sure we get to know when a sink is destroyed
-    if ( eventSink )
+    if ( eventSink && eventSink != this )
     {
         wxEventConnectionRef *evtConnRef = FindRefInTrackerList(eventSink);
         if ( evtConnRef )
@@ -1397,7 +1397,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
 
 #if wxUSE_WEAKREF
     // Remove connection from tracker node (wxEventConnectionRef)
-    if ( eventSink )
+    if ( eventSink && eventSink != this )
     {
         wxEventConnectionRef *evtConnRef = FindRefInTrackerList(eventSink);
         if ( evtConnRef )
