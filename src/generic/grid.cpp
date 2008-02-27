@@ -11111,6 +11111,20 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
 }
 
 // ----------------------------------------------------------------------------
+// drop target
+// ----------------------------------------------------------------------------
+
+#if wxUSE_DRAG_AND_DROP
+
+// this allow setting drop target directly on wxGrid
+void wxGrid::SetDropTarget(wxDropTarget *dropTarget)
+{
+    GetGridWindow()->SetDropTarget(dropTarget);
+}
+
+#endif // wxUSE_DRAG_AND_DROP
+
+// ----------------------------------------------------------------------------
 // grid event classes
 // ----------------------------------------------------------------------------
 

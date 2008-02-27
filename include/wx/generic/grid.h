@@ -1628,6 +1628,10 @@ public:
     virtual wxWindow *GetMainWindowOfCompositeControl()
         { return (wxWindow*)m_gridWin; }
 
+    // ------- drag and drop
+#if wxUSE_DRAG_AND_DROP
+    virtual void SetDropTarget(wxDropTarget *dropTarget);
+#endif // wxUSE_DRAG_AND_DROP
 
     // ------ For compatibility with previous wxGrid only...
     //
