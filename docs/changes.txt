@@ -142,6 +142,7 @@ wxMSW:
 - Use correct index of the right-clicked column in wxListCtrl in the
   corresponding event even when the control is scrolled horizontally.
 - Implement wxRadioBox::Reparent() correctly (Vince Harron).
+- Make context sensitive help work for the text part of wxSpinCtrl.
 
 wxGTK:
 
