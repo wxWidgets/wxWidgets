@@ -408,125 +408,129 @@ as a literal string rather than as an RE.
 
 @section overview_resyntax_matching Matching
 
-In the event that an RE could match more than
-one substring of a given string, the RE matches the one starting earliest
-in the string. If the RE could match more than one substring starting at
-that point, its choice is determined by its @e preference: either the longest
-substring, or the shortest.
-Most atoms, and all constraints, have no preference.
-A parenthesized RE has the same preference (possibly none) as the RE. A
-quantified atom with quantifier @b {m} or @b {m}? has the same preference (possibly
-none) as the atom itself. A quantified atom with other normal quantifiers
-(including @b {m,n} with @e m equal to @e n) prefers longest match. A quantified
-atom with other non-greedy quantifiers (including @b {m,n}? with @e m equal to
-@e n) prefers shortest match. A branch has the same preference as the first
-quantified atom in it which has a preference. An RE consisting of two or
-more branches connected by the @b | operator prefers longest match.
-Subject to the constraints imposed by the rules for matching the whole RE, subexpressions
-also match the longest or shortest possible substrings, based on their
-preferences, with subexpressions starting earlier in the RE taking priority
-over ones starting later. Note that outer subexpressions thus take priority
-over their component subexpressions.
-Note that the quantifiers @b {1,1} and
-@b {1,1}? can be used to force longest and shortest preference, respectively,
-on a subexpression or a whole RE.
-Match lengths are measured in characters,
-not collating elements. An empty string is considered longer than no match
-at all. For example, @b bb* matches the three middle characters
-of '@b abbbc', @b (week|wee)(night|knights)
-matches all ten characters of '@b weeknights', when @b (.*).* is matched against
-@b abc the parenthesized subexpression matches all three characters, and when
-@b (a*)* is matched against @b bc both the whole RE and the parenthesized subexpression
-match an empty string.
-If case-independent matching is specified, the effect
-is much as if all case distinctions had vanished from the alphabet. When
-an alphabetic that exists in multiple cases appears as an ordinary character
-outside a bracket expression, it is effectively transformed into a bracket
-expression containing both cases, so that @b x becomes '@b [xX]'. When it appears
-inside a bracket expression, all case counterparts of it are added to the
-bracket expression, so that @b [x] becomes @b [xX] and @b [^x] becomes '@b [^xX]'.
-If newline-sensitive
-matching is specified, @b . and bracket expressions using @b ^ will never match
-the newline character (so that matches will never cross newlines unless
-the RE explicitly arranges it) and @b ^ and @b $ will match the empty string after
-and before a newline respectively, in addition to matching at beginning
-and end of string respectively. ARE @b \A and @b \Z continue to match beginning
-or end of string @e only.
-If partial newline-sensitive matching is specified,
-this affects @b . and bracket expressions as with newline-sensitive matching,
-but not @b ^ and '@b $'.
-If inverse partial newline-sensitive matching is specified,
-this affects @b ^ and @b $ as with newline-sensitive matching, but not @b . and bracket
+In the event that an RE could match more than one substring of a given string,
+the RE matches the one starting earliest in the string. If the RE could match
+more than one substring starting at that point, the choice is determined by
+it's @e preference: either the longest substring, or the shortest.
+
+Most atoms, and all constraints, have no preference. A parenthesized RE has the
+same preference (possibly none) as the RE. A quantified atom with quantifier
+<tt>{m}</tt> or <tt>{m}?</tt> has the same preference (possibly none) as the
+atom itself. A quantified atom with other normal quantifiers (including
+<tt>{m,n}</tt> with @e m equal to @e n) prefers longest match. A quantified
+atom with other non-greedy quantifiers (including <tt>{m,n}?</tt> with @e m
+equal to @e n) prefers shortest match. A branch has the same preference as the
+first quantified atom in it which has a preference. An RE consisting of two or
+more branches connected by the @c | operator prefers longest match.
+
+Subject to the constraints imposed by the rules for matching the whole RE,
+subexpressions also match the longest or shortest possible substrings, based on
+their preferences, with subexpressions starting earlier in the RE taking
+priority over ones starting later. Note that outer subexpressions thus take
+priority over their component subexpressions.
+
+Note that the quantifiers <tt>{1,1}</tt> and <tt>{1,1}?</tt> can be used to
+force longest and shortest preference, respectively, on a subexpression or a
+whole RE.
+
+Match lengths are measured in characters, not collating elements. An empty
+string is considered longer than no match at all. For example, <tt>bb*</tt>
+matches the three middle characters of "abbbc",
+<tt>(week|wee)(night|knights)</tt> matches all ten characters of "weeknights",
+when <tt>(.*).*</tt> is matched against "abc" the parenthesized subexpression
+matches all three characters, and when <tt>(a*)*</tt> is matched against "bc"
+both the whole RE and the parenthesized subexpression match an empty string.
+
+If case-independent matching is specified, the effect is much as if all case
+distinctions had vanished from the alphabet. When an alphabetic that exists in
+multiple cases appears as an ordinary character outside a bracket expression,
+it is effectively transformed into a bracket expression containing both cases,
+so that @c x becomes @c [xX]. When it appears inside a bracket expression, all
+case counterparts of it are added to the bracket expression, so that @c [x]
+becomes @c [xX] and @c [^x] becomes @c [^xX].
+
+If newline-sensitive matching is specified, "." and bracket expressions using
+"^" will never match the newline character (so that matches will never cross
+newlines unless the RE explicitly arranges it) and "^" and "$" will match the
+empty string after and before a newline respectively, in addition to matching
+at beginning and end of string respectively. ARE <tt>@\A</tt> and <tt>@\Z</tt>
+continue to match beginning or end of string @e only.
+
+If partial newline-sensitive matching is specified, this affects "." and
+bracket expressions as with newline-sensitive matching, but not "^" and "$".
+
+If inverse partial newline-sensitive matching is specified, this affects "^"
+and "$" as with newline-sensitive matching, but not "." and bracket
 expressions. This isn't very useful but is provided for symmetry.
 
 
 @section overview_resyntax_limits Limits and Compatibility
 
-No particular limit is imposed on the length of REs. Programs
-intended to be highly portable should not employ REs longer than 256 bytes,
-as a POSIX-compliant implementation can refuse to accept such REs.
-The only
-feature of AREs that is actually incompatible with POSIX EREs is that @b \
-does not lose its special significance inside bracket expressions. All other
-ARE features use syntax which is illegal or has undefined or unspecified
-effects in POSIX EREs; the @b *** syntax of directors likewise is outside
-the POSIX syntax for both BREs and EREs.
-Many of the ARE extensions are
-borrowed from Perl, but some have been changed to clean them up, and a
-few Perl extensions are not present. Incompatibilities of note include '@b \b',
-'@b \B', the lack of special treatment for a trailing newline, the addition of
-complemented bracket expressions to the things affected by newline-sensitive
-matching, the restrictions on parentheses and back references in lookahead
-constraints, and the longest/shortest-match (rather than first-match) matching
-semantics.
-The matching rules for REs containing both normal and non-greedy
-quantifiers have changed since early beta-test versions of this package.
-(The new rules are much simpler and cleaner, but don't work as hard at guessing
-the user's real intentions.)
-Henry Spencer's original 1986 @e regexp package, still in widespread use,
-implemented an early version of today's EREs. There are four incompatibilities between @e regexp's
-near-EREs ('RREs' for short) and AREs. In roughly increasing order of significance:
+No particular limit is imposed on the length of REs. Programs intended to be
+highly portable should not employ REs longer than 256 bytes, as a
+POSIX-compliant implementation can refuse to accept such REs.
 
-In AREs, @b \ followed by an alphanumeric character is either an escape or
-an error, while in RREs, it was just another way of writing the  alphanumeric.
-This should not be a problem because there was no reason to write such
-a sequence in RREs.
-@b { followed by a digit in an ARE is the beginning of
-a bound, while in RREs, @b { was always an ordinary character. Such sequences
-should be rare, and will often result in an error because following characters
-will not look like a valid bound.
-In AREs, @b \ remains a special character
-within '@b []', so a literal @b \ within @b [] must be
-written '@b \\'. @b \\ also gives a literal
-@b \ within @b [] in RREs, but only truly paranoid programmers routinely doubled
-the backslash.
-AREs report the longest/shortest match for the RE, rather
-than the first found in a specified search order. This may affect some RREs
-which were written in the expectation that the first match would be reported.
-(The careful crafting of RREs to optimize the search order for fast matching
-is obsolete (AREs examine all possible matches in parallel, and their performance
-is largely insensitive to their complexity) but cases where the search
-order was exploited to deliberately  find a match which was @e not the longest/shortest
-will need rewriting.)
+The only feature of AREs that is actually incompatible with POSIX EREs is that
+<tt>@\</tt> does not lose its special significance inside bracket expressions.
+All other ARE features use syntax which is illegal or has undefined or
+unspecified effects in POSIX EREs; the <tt>***</tt> syntax of directors
+likewise is outside the POSIX syntax for both BREs and EREs.
+
+Many of the ARE extensions are borrowed from Perl, but some have been changed
+to clean them up, and a few Perl extensions are not present. Incompatibilities
+of note include <tt>@\b</tt>, <tt>@\B</tt>, the lack of special treatment for a
+trailing newline, the addition of complemented bracket expressions to the
+things affected by newline-sensitive matching, the restrictions on parentheses
+and back references in lookahead constraints, and the longest/shortest-match
+(rather than first-match) matching semantics.
+
+The matching rules for REs containing both normal and non-greedy quantifiers
+have changed since early beta-test versions of this package. The new rules are
+much simpler and cleaner, but don't work as hard at guessing the user's real
+intentions.
+
+Henry Spencer's original 1986 @e regexp package, still in widespread use,
+implemented an early version of today's EREs. There are four incompatibilities
+between @e regexp's near-EREs (RREs for short) and AREs. In roughly increasing
+order of significance:
+
+@li In AREs, <tt>@\</tt> followed by an alphanumeric character is either an
+    escape or an error, while in RREs, it was just another way of writing the
+    alphanumeric. This should not be a problem because there was no reason to
+    write such a sequence in RREs.
+@li @c { followed by a digit in an ARE is the beginning of a bound, while in
+    RREs, @c { was always an ordinary character. Such sequences should be rare,
+    and will often result in an error because following characters will not
+    look like a valid bound.
+@li In AREs, @c @\ remains a special character within @c [], so a literal @c @\
+    within @c [] must be written as <tt>@\@\</tt>. <tt>@\@\</tt> also gives a
+    literal @c @\ within @c [] in RREs, but only truly paranoid programmers
+    routinely doubled the backslash.
+@li AREs report the longest/shortest match for the RE, rather than the first
+    found in a specified search order. This may affect some RREs which were
+    written in the expectation that the first match would be reported. The
+    careful crafting of RREs to optimize the search order for fast matching is
+    obsolete (AREs examine all possible matches in parallel, and their
+    performance is largely insensitive to their complexity) but cases where the
+    search order was exploited to deliberately find a match which was @e not
+    the longest/shortest will need rewriting.
 
 
 @section overview_resyntax_bre Basic Regular Expressions
 
-BREs differ from EREs in
-several respects.  '@b |', '@b +', and @b ? are ordinary characters and there is no equivalent
-for their functionality. The delimiters for bounds
-are @b \{ and '@b \}', with @b { and
-@b } by themselves ordinary characters. The parentheses for nested subexpressions
-are @b \( and '@b \)', with @b ( and @b ) by themselves
-ordinary characters. @b ^ is an ordinary
+BREs differ from EREs in several respects. @c |, @c +, and @c ? are ordinary
+characters and there is no equivalent for their functionality. The delimiters
+for bounds are @c @\{ and @c @\}, with @c { and @c } by themselves ordinary
+characters. The parentheses for nested subexpressions are @c @\( and @c @\),
+with @c ( and @c ) by themselves ordinary characters. @c ^ is an ordinary
 character except at the beginning of the RE or the beginning of a parenthesized
-subexpression, @b $ is an ordinary character except at the end of the RE or
-the end of a parenthesized subexpression, and @b * is an ordinary character
-if it appears at the beginning of the RE or the beginning of a parenthesized
-subexpression (after a possible leading '@b ^'). Finally, single-digit back references
-are available, and @b \ and @b \ are synonyms
-for <tt>[[:@<:]]</tt> and <tt>[[:@>:]]</tt> respectively;
-no other escapes are available.
+subexpression, @c $ is an ordinary character except at the end of the RE or the
+end of a parenthesized subexpression, and @c * is an ordinary character if it
+appears at the beginning of the RE or the beginning of a parenthesized
+subexpression (after a possible leading <tt>^</tt>). Finally, single-digit back
+references are available, and @c @\@< and @c @\@> are synonyms for
+<tt>[[:@<:]]</tt> and <tt>[[:@>:]]</tt> respectively; no other escapes are
+available.
 
 
 @section overview_resyntax_characters Regular Expression Character Names
