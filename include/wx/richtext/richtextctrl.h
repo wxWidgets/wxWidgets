@@ -145,6 +145,18 @@ public:
     /// Get the threshold in character positions for doing layout optimization during sizing
     long GetDelayedLayoutThreshold() const { return m_delayedLayoutThreshold; }
 
+    /// Set text cursor
+    void SetTextCursor(const wxCursor& cursor ) { m_textCursor = cursor; }
+
+    /// Get text cursor
+    wxCursor GetTextCursor() const { return m_textCursor; }
+
+    /// Set URL cursor
+    void SetURLCursor(const wxCursor& cursor ) { m_urlCursor = cursor; }
+
+    /// Get URL cursor
+    wxCursor GetURLCursor() const { return m_urlCursor; }
+
 // Operations
 
     // editing
