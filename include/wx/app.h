@@ -509,6 +509,9 @@ public:
     // if it's unknown
     virtual wxLayoutDirection GetLayoutDirection() const;
 
+    // Change the theme used by the application, return true on success.
+    virtual bool SetNativeTheme(const wxString& WXUNUSED(theme)) { return false; }
+
 
     // command line parsing (GUI-specific)
     // ------------------------------------------------------------------------

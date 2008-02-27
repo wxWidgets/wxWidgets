@@ -251,6 +251,30 @@ wxApp::~wxApp()
 {
 }
 
+bool wxApp::SetNativeTheme(const wxString& theme)
+{
+    wxString path;
+    path = gtk_rc_get_theme_dir();
+    path += "/";
+    path += theme.utf8_str();
+    path += "/gtk-2.0/gtkrc";
+
+    if ( wxFileExists(path.utf8_str()) )
+        gtk_rc_add_default_file(path.utf8_str());
+    else if ( wxFileExists(theme.utf8_str()) )
+        gtk_rc_add_default_file(theme.utf8_str());
+    else
+    {
+        wxLogWarning("Theme \"%s\" not available.", theme);
+
+        return false;
+    }
+
+    gtk_rc_reparse_all_for_settings(gtk_settings_get_default(), TRUE);
+
+    return true;
+}
+
 bool wxApp::OnInitGui()
 {
     if ( !wxAppBase::OnInitGui() )

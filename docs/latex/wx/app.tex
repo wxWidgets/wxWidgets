@@ -734,6 +734,19 @@ know what you're doing if you call it.
 \helpref{wxApp::GetInstance}{wxappgetinstance}
 
 
+\membersection{wxApp::SetNativeTheme}\label{wxappsetnativetheme}
+
+\func{bool}{SetNativeTheme}{\param{const}{wxString\&}{theme}}
+
+Allows runtime switching of the UI environment theme. Currently implemented for wxGTK2-only.
+
+Return \true if theme was successfully changed.
+
+\wxheading{Parameters}
+
+\docparam{theme}{The name of the new theme or an absolute path to a gtkrc-theme-file}
+
+
 \membersection{wxApp::SetTopWindow}\label{wxappsettopwindow}
 
 \func{void}{SetTopWindow}{\param{wxWindow* }{window}}

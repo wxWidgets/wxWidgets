@@ -279,7 +279,8 @@ All (GUI):
 - Made wxSizer::Fit() set the client size of the target window
 - Add support for wxDatePickerCtrl in wxGenericValidator (Herry Ayen Yang)
 - Added wxWindow::HasFocus().
-- Added wxGLCanvas::IsDisplaySupported()
+- Added wxGLCanvas::IsDisplaySupported().
+- Added wxApp::SetNativeTheme() (Stefan H.).
 
 wxGTK:
 

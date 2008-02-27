@@ -36,6 +36,7 @@ public:
      * (palette/visual/colorcube). under wxMSW, OnInitGui() does nothing by
      * default. when overriding this method, the code in it is likely to be
      * platform dependent, otherwise use OnInit(). */
+    virtual bool SetNativeTheme(const wxString& theme);
     virtual bool OnInitGui();
 
     // override base class (pure) virtuals
