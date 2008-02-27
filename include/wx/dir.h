@@ -63,7 +63,7 @@ public:
     virtual wxDirTraverseResult OnDir(const wxString& dirname) = 0;
 
     // called for each directory which we couldn't open during our traversal
-    // of the directory tyree
+    // of the directory tree
     //
     // this method can also return either wxDIR_STOP, wxDIR_IGNORE or
     // wxDIR_CONTINUE but the latter is treated specially: it means to retry
@@ -95,7 +95,7 @@ public:
     // opens the directory for enumeration, use IsOpened() to test success
     wxDir(const wxString& dir);
 
-    // dtor cleans up the associated ressources
+    // dtor cleans up the associated resources
     ~wxDir();
 
     // open the directory for enumerating
