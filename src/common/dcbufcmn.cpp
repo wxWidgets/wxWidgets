@@ -59,6 +59,14 @@ public:
                     h > ms_buffer->GetHeight() )
         {
             delete ms_buffer;
+
+            // we must always return a valid bitmap but creating a bitmap of
+            // size 0 would fail, so create a 1*1 bitmap in this case
+            if ( !w )
+                w = 1;
+            if ( !h )
+                h = 1;
+
             ms_buffer = new wxBitmap(w, h);
         }
 
