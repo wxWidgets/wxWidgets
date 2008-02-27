@@ -157,7 +157,7 @@ void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
 void wxHyperlinkCtrl::DoContextMenu(const wxPoint &pos)
 {
     wxMenu *menuPopUp = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
-    menuPopUp->Append(wxHYPERLINKCTRL_POPUP_COPY_ID, wxT("Copy URL"));
+    menuPopUp->Append(wxHYPERLINKCTRL_POPUP_COPY_ID, _("&Copy URL"));
     PopupMenu( menuPopUp, pos );
     delete menuPopUp;
 }
