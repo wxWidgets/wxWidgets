@@ -200,16 +200,47 @@ bool wxFileTypeImpl::EnsureExtKeyExists()
 // get the command to use
 // ----------------------------------------------------------------------------
 
+static wxString wxFileTypeImplGetCurVer(const wxString& progId)
+{
+    wxRegKey key(wxRegKey::HKCR, progId + wxT("\\CurVer"));
+    if (key.Exists())
+    {
+        wxString value;
+        if (key.QueryValue(wxEmptyString, value))
+            return value;
+    }
+    return progId;
+}
+
 wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 {
     // suppress possible error messages
     wxLogNull nolog;
     wxString strKey;
 
-    if ( wxRegKey(wxRegKey::HKCR, m_ext + _T("\\shell")).Exists() )
+    {
+        wxRegKey explorerKey(wxRegKey::HKCU, wxT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\") + m_ext);
+        if (explorerKey.Exists())
+        {
+            if (explorerKey.Open(wxRegKey::Read))
+            {
+                if (explorerKey.QueryValue(wxT("Progid"), strKey))
+                {
+                    strKey = wxFileTypeImplGetCurVer(strKey);
+                }
+            }
+        }
+    }
+
+    if (!strKey && wxRegKey(wxRegKey::HKCR, m_ext + _T("\\shell")).Exists())
         strKey = m_ext;
-    if ( wxRegKey(wxRegKey::HKCR, m_strFileType + _T("\\shell")).Exists() )
-        strKey = m_strFileType;
+
+    if ( !strKey && !m_strFileType.empty())
+    {
+        wxString fileType = wxFileTypeImplGetCurVer(m_strFileType);
+        if (wxRegKey(wxRegKey::HKCR, fileType + _T("\\shell")).Exists())
+            strKey = fileType;
+    }
 
     if ( !strKey )
     {
