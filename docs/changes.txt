@@ -143,6 +143,10 @@ wxMSW:
   corresponding event even when the control is scrolled horizontally.
 - Implement wxRadioBox::Reparent() correctly (Vince Harron).
 - Make context sensitive help work for the text part of wxSpinCtrl.
+- wxFileType::GetCommand() now looks at Explorer associations and CurVer
+  for increased reliability and conformance to user expectations.
+- Fixed double Init() call in wxTopLevelWindow causing a memory leak on
+  SmartPhone.
 
 wxGTK:
 
