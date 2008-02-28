@@ -776,7 +776,7 @@ void wxMSWDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     rect.bottom = y2;
 
 #ifdef __WXWINCE__
-    DrawFrameControl(GetHdc(), &rect, DFC_BUTTON, DFCS_BUTTONCHECK);
+    DrawFrameControl(GetHdc(), &rect, DFC_BUTTON, DFCS_BUTTONCHECK | DFCS_CHECKED);
 #else
     DrawFrameControl(GetHdc(), &rect, DFC_MENU, DFCS_MENUCHECK);
 #endif
