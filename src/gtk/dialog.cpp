@@ -69,7 +69,7 @@ bool wxDialog::Show( bool show )
     if (show && CanDoLayoutAdaptation())
         DoLayoutAdaptation();
 
-    bool ret = wxWindow::Show( show );
+    bool ret = wxDialogBase::Show(show);
 
     if (show)
         InitDialog();
