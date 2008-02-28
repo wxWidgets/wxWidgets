@@ -144,8 +144,8 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                         label.wx_str(),     // the window name
                         style,              // the window style
                         x, y, w, h,         // the window position and size
-                        GetHwndOf(GetParent()),  // parent
-                        (HMENU)GetId(),     // child id
+                        GetHwndOf(GetParent()),         // parent
+                        (HMENU)wxUIntToPtr(GetId()),    // child id
                         wxGetInstance(),    // app instance
                         NULL                // creation parameters
                        );

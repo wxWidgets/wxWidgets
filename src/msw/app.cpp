@@ -355,8 +355,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     RegisterWindowClasses();
 
-    wxWinHandleHash = new wxWinHashTable(wxKEY_INTEGER, 100);
-
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
     wxSetKeyboardHook(true);
 #endif
@@ -510,10 +508,10 @@ bool wxApp::UnregisterWindowClasses()
 
 void wxApp::CleanUp()
 {
-    // all objects pending for deletion must be deleted first, otherwise we
-    // would crash when they use wxWinHandleHash (and UnregisterWindowClasses()
-    // call wouldn't succeed as long as any windows still exist), so call the
-    // base class method first and only then do our clean up
+    // all objects pending for deletion must be deleted first, otherwise
+    // UnregisterWindowClasses() call wouldn't succeed (because windows
+    // using the classes being unregistered still exist), so call the base
+    // class method first and only then do our clean up
     wxAppBase::CleanUp();
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
@@ -527,9 +525,6 @@ void wxApp::CleanUp()
     // which case the registration will fail after the first time if we don't
     // unregister the classes now
     UnregisterWindowClasses();
-
-    delete wxWinHandleHash;
-    wxWinHandleHash = NULL;
 
 #ifdef __WXWINCE__
     free( wxCanvasClassName );

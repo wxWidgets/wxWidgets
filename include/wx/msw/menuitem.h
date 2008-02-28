@@ -57,7 +57,7 @@ public:
     //
     // notice that it also returns the id as an unsigned int, as required by
     // Win32 API
-    unsigned GetMSWId() const;
+    WXWPARAM GetMSWId() const;
 
     // mark item as belonging to the given radio group
     void SetAsRadioGroupStart();

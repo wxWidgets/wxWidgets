@@ -338,7 +338,7 @@ bool wxPenRefData::Alloc()
        {
            case wxSTIPPLE:
                lb.lbStyle = BS_PATTERN;
-               lb.lbHatch = (LONG)m_stipple.GetHBITMAP();
+               lb.lbHatch = wxPtrToUInt(m_stipple.GetHBITMAP());
                break;
 
            case wxBDIAGONAL_HATCH:

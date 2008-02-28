@@ -853,7 +853,7 @@ bool wxFrame::HandlePaint()
             HDC hdc = ::BeginPaint(GetHwnd(), &ps);
 
             // Erase background before painting or we get white background
-            MSWDefWindowProc(WM_ICONERASEBKGND, (WORD)(LONG)ps.hdc, 0L);
+            MSWDefWindowProc(WM_ICONERASEBKGND, (WXWPARAM)ps.hdc, 0L);
 
             if ( hIcon )
             {
@@ -1118,7 +1118,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
                 const wxIcon& icon = GetIcon();
                 HICON hIcon = icon.Ok() ? GetHiconOf(icon)
                                         : (HICON)GetDefaultIcon();
-                rc = (long)hIcon;
+                rc = (WXLRESULT)hIcon;
                 processed = rc != 0;
             }
             break;

@@ -176,7 +176,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
                     msStyle,
                     0, 0, 0, 0,
                     GetWinHwnd(parent),
-                    (HMENU)m_windowId.GetValue(),
+                    (HMENU)wxUIntToPtr(m_windowId.GetValue()),
                     wxGetInstance(),
                     NULL
                    );

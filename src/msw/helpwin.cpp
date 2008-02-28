@@ -98,13 +98,14 @@ bool wxWinHelpController::KeywordSearch(const wxString& k,
 
     wxString str = GetValidFilename(m_helpFile);
 
-    return (WinHelp(GetSuitableHWND(this), str.wx_str(), HELP_PARTIALKEY, (DWORD)k.wx_str()) != 0);
+    return WinHelp(GetSuitableHWND(this), str.wx_str(), HELP_PARTIALKEY,
+                   (ULONG_PTR)k.wx_str()) != 0;
 }
 
 // Can't close the help window explicitly in WinHelp
 bool wxWinHelpController::Quit(void)
 {
-    return (WinHelp(GetSuitableHWND(this), 0, HELP_QUIT, 0L) != 0);
+    return WinHelp(GetSuitableHWND(this), 0, HELP_QUIT, 0) != 0;
 }
 
 // Append extension if necessary.

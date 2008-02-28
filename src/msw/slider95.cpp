@@ -217,7 +217,7 @@ wxSlider::Create(wxWindow *parent,
                             WS_CHILD | WS_VISIBLE | SS_CENTER,
                             0, 0, 0, 0,
                             hwndParent,
-                            (HMENU)lblid.GetValue(),
+                            (HMENU)wxUIntToPtr(lblid.GetValue()),
                             wxGetInstance(),
                             NULL
                          );

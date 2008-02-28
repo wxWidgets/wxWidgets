@@ -2778,6 +2778,17 @@ typedef void *          WXRECTANGLEPTR;
 #    define WXFAR
 #endif
 
+// we can't rely on Windows _W64 being defined as windows.h may not be included
+// so define our own equivalent: this should be used with types like WXLPARAM
+// or WXWPARAM which are 64 bit under Win64 to avoid warnings each time we cast
+// it to a pointer or a handle (which results in hundreds of warnings as Win32
+// API often passes pointers in them)
+#if wxCHECK_VISUALC_VERSION(7)
+    #define wxW64 __w64
+#else
+    #define wxW64
+#endif
+
 /*  Stand-ins for Windows types to avoid #including all of windows.h */
 typedef void *          WXHWND;
 typedef void *          WXHANDLE;
@@ -2814,13 +2825,13 @@ typedef void *          WXLPCREATESTRUCT;
 typedef WXHWND          WXWidget;
 
 #ifdef __WIN64__
-typedef unsigned __int64    WXWPARAM;
+typedef unsigned __int64   WXWPARAM;
 typedef __int64            WXLPARAM;
 typedef __int64            WXLRESULT;
 #else
-typedef unsigned int    WXWPARAM;
-typedef long            WXLPARAM;
-typedef long            WXLRESULT;
+typedef wxW64 unsigned int WXWPARAM;
+typedef wxW64 long         WXLPARAM;
+typedef wxW64 long         WXLRESULT;
 #endif
 
 #if defined(__GNUWIN32__) || defined(__WXMICROWIN__)

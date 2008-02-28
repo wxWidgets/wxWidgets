@@ -756,7 +756,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   wxWindowCreationHook hook(this);
 
   m_hWnd = (WXHWND)::SendMessage(GetWinHwnd(parent->GetClientWindow()),
-                                 WM_MDICREATE, 0, (LONG)(LPSTR)&mcs);
+                                 WM_MDICREATE, 0, (LPARAM)&mcs);
 
   if ( !m_hWnd )
   {
@@ -1430,14 +1430,15 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
             {
                 success = true;
                 ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
-                             (UINT)subMenu, _("&Window").wx_str());
+                             (UINT_PTR)subMenu, _("&Window").wx_str());
                 break;
             }
         }
 
         if ( !success )
         {
-            ::AppendMenu(hmenu, MF_POPUP, (UINT)subMenu, _("&Window").wx_str());
+            ::AppendMenu(hmenu, MF_POPUP,
+                         (UINT_PTR)subMenu, _("&Window").wx_str());
         }
     }
 

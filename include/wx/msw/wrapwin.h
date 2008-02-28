@@ -79,6 +79,7 @@
 // overwrite them if there is a chance that they're not defined
 #if !defined(_MSC_VER) || (_MSC_VER < 1300)
     #define UINT_PTR unsigned int
+    #define INT_PTR int
     #define LONG_PTR long
     #define ULONG_PTR unsigned long
     #define DWORD_PTR unsigned long

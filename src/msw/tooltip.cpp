@@ -105,7 +105,7 @@ public:
             uFlags |= TTF_TRANSPARENT;
         }
 
-        uId = (UINT)hwndOwner;
+        uId = (UINT_PTR)hwndOwner;
     }
 };
 
@@ -374,9 +374,12 @@ void wxToolTip::Add(WXHWND hWnd)
                 }
 
                 // only set a new width if it is bigger than the current setting
-                if (max > SendTooltipMessage(GetToolTipCtrl(), TTM_GETMAXTIPWIDTH, 0))
+                if ( max > SendTooltipMessage(GetToolTipCtrl(),
+                                              TTM_GETMAXTIPWIDTH, 0) )
+                {
                     SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
-                                       (void *)max);
+                                       wxUIntToPtr(max));
+                }
             }
             else
 #endif // comctl32.dll >= 4.70

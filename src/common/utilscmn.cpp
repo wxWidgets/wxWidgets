@@ -1033,7 +1033,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 
     ::ShellExecuteEx(&sei);
 
-    const int nResult = (int) sei.hInstApp;
+    const INT_PTR nResult = (INT_PTR)sei.hInstApp;
 
     // Firefox returns file not found for some reason, so make an exception
     // for it

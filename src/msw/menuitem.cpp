@@ -186,13 +186,13 @@ wxMenuItem::~wxMenuItem()
 // ----
 
 // return the id for calling Win32 API functions
-unsigned wxMenuItem::GetMSWId() const
+WXWPARAM wxMenuItem::GetMSWId() const
 {
     // we must use ids in unsigned short range with Windows functions, if we
     // pass ids > USHRT_MAX to them they get very confused (e.g. start
     // generating WM_COMMAND messages with negative high word of wParam), so
     // use the cast to ensure the id is in range
-    return m_subMenu ? wx_reinterpret_cast(unsigned, m_subMenu->GetHMenu())
+    return m_subMenu ? wxPtrToUInt(m_subMenu->GetHMenu())
                      : wx_static_cast(unsigned short, GetId());
 }
 

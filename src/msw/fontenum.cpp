@@ -99,7 +99,7 @@ private:
 
 #ifndef __WXMICROWIN__
 int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
-                                  DWORD dwStyle, LONG lParam);
+                                  DWORD dwStyle, LPARAM lParam);
 #endif
 
 // ============================================================================
@@ -269,7 +269,7 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 
 #ifndef __WXMICROWIN__
 int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
-                                  DWORD WXUNUSED(dwStyle), LONG lParam)
+                                  DWORD WXUNUSED(dwStyle), LPARAM lParam)
 {
 
     // we used to process TrueType fonts only, but there doesn't seem to be any

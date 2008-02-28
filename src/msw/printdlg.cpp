@@ -122,19 +122,18 @@ IMPLEMENT_CLASS(wxWindowsPrintNativeData, wxPrintNativeDataBase)
 
 wxWindowsPrintNativeData::wxWindowsPrintNativeData()
 {
-    m_devMode = (void*) NULL;
-    m_devNames = (void*) NULL;
+    m_devMode = NULL;
+    m_devNames = NULL;
     m_customWindowsPaperId = 0;
 }
 
 wxWindowsPrintNativeData::~wxWindowsPrintNativeData()
 {
-    HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
-    if ( hDevMode )
-        GlobalFree(hDevMode);
-    HGLOBAL hDevNames = (HGLOBAL)(DWORD) m_devNames;
-    if ( hDevNames )
-        GlobalFree(hDevNames);
+    if ( m_devMode )
+        ::GlobalFree(wx_static_cast(HGLOBAL, m_devMode));
+
+    if ( m_devNames )
+        ::GlobalFree(wx_static_cast(HGLOBAL, m_devNames));
 }
 
 bool wxWindowsPrintNativeData::IsOk() const
@@ -144,205 +143,194 @@ bool wxWindowsPrintNativeData::IsOk() const
 
 bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 {
-    HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
-    HGLOBAL hDevNames = (HGLOBAL)(DWORD) m_devNames;
-
-    if (!hDevMode)
-    {
+    if ( !m_devMode )
         return false;
+
+    GlobalPtrLock lockDevMode(m_devMode);
+
+    LPDEVMODE devMode = wx_static_cast(LPDEVMODE, lockDevMode.Get());
+
+    //// Orientation
+    if (devMode->dmFields & DM_ORIENTATION)
+        data.SetOrientation( devMode->dmOrientation );
+
+    //// Collation
+    if (devMode->dmFields & DM_COLLATE)
+    {
+        if (devMode->dmCollate == DMCOLLATE_TRUE)
+            data.SetCollate( true );
+        else
+            data.SetCollate( false );
+    }
+
+    //// Number of copies
+    if (devMode->dmFields & DM_COPIES)
+        data.SetNoCopies( devMode->dmCopies );
+
+    //// Bin
+    if (devMode->dmFields & DM_DEFAULTSOURCE) {
+        switch (devMode->dmDefaultSource) {
+            case DMBIN_ONLYONE        : data.SetBin(wxPRINTBIN_ONLYONE       ); break;
+            case DMBIN_LOWER          : data.SetBin(wxPRINTBIN_LOWER         ); break;
+            case DMBIN_MIDDLE         : data.SetBin(wxPRINTBIN_MIDDLE        ); break;
+            case DMBIN_MANUAL         : data.SetBin(wxPRINTBIN_MANUAL        ); break;
+            case DMBIN_ENVELOPE       : data.SetBin(wxPRINTBIN_ENVELOPE      ); break;
+            case DMBIN_ENVMANUAL      : data.SetBin(wxPRINTBIN_ENVMANUAL     ); break;
+            case DMBIN_AUTO           : data.SetBin(wxPRINTBIN_AUTO          ); break;
+            case DMBIN_TRACTOR        : data.SetBin(wxPRINTBIN_TRACTOR       ); break;
+            case DMBIN_SMALLFMT       : data.SetBin(wxPRINTBIN_SMALLFMT      ); break;
+            case DMBIN_LARGEFMT       : data.SetBin(wxPRINTBIN_LARGEFMT      ); break;
+            case DMBIN_LARGECAPACITY  : data.SetBin(wxPRINTBIN_LARGECAPACITY ); break;
+            case DMBIN_CASSETTE       : data.SetBin(wxPRINTBIN_CASSETTE      ); break;
+            case DMBIN_FORMSOURCE     : data.SetBin(wxPRINTBIN_FORMSOURCE    ); break;
+            default:
+                if (devMode->dmDefaultSource>=DMBIN_USER) {
+                    data.SetBin((wxPrintBin)((devMode->dmDefaultSource)-DMBIN_USER+(int)wxPRINTBIN_USER));
+                } else {
+                    data.SetBin(wxPRINTBIN_DEFAULT);
+                }
+                break;
+        }
+    } else {
+        data.SetBin(wxPRINTBIN_DEFAULT);
+    }
+    if (devMode->dmFields & DM_MEDIATYPE)
+    {
+        wxASSERT( (int)devMode->dmMediaType != wxPRINTMEDIA_DEFAULT );
+        data.SetMedia(devMode->dmMediaType);
+    }
+    //// Printer name
+    if (devMode->dmDeviceName[0] != 0)
+        // This syntax fixes a crash when using VS 7.1
+        data.SetPrinterName( wxString(devMode->dmDeviceName, CCHDEVICENAME) );
+
+    //// Colour
+    if (devMode->dmFields & DM_COLOR)
+    {
+        if (devMode->dmColor == DMCOLOR_COLOR)
+            data.SetColour( true );
+        else
+            data.SetColour( false );
     }
     else
+        data.SetColour( true );
+
+    //// Paper size
+
+    // We don't know size of user defined paper and some buggy drivers
+    // set both DM_PAPERSIZE and DM_PAPERWIDTH & DM_PAPERLENGTH. Since
+    // dmPaperSize >= DMPAPER_USER wouldn't be in wxWin's database, this
+    // code wouldn't set m_paperSize correctly.
+
+    bool foundPaperSize = false;
+    if ((devMode->dmFields & DM_PAPERSIZE) && (devMode->dmPaperSize < DMPAPER_USER))
     {
-        LPDEVMODE devMode = (LPDEVMODE)GlobalLock(hDevMode);
-
-        //// Orientation
-        if (devMode->dmFields & DM_ORIENTATION)
-            data.SetOrientation( devMode->dmOrientation );
-
-        //// Collation
-        if (devMode->dmFields & DM_COLLATE)
+        if (wxThePrintPaperDatabase)
         {
-            if (devMode->dmCollate == DMCOLLATE_TRUE)
-                data.SetCollate( true );
-            else
-                data.SetCollate( false );
-        }
-
-        //// Number of copies
-        if (devMode->dmFields & DM_COPIES)
-            data.SetNoCopies( devMode->dmCopies );
-
-        //// Bin
-        if (devMode->dmFields & DM_DEFAULTSOURCE) {
-            switch (devMode->dmDefaultSource) {
-                case DMBIN_ONLYONE        : data.SetBin(wxPRINTBIN_ONLYONE       ); break;
-                case DMBIN_LOWER          : data.SetBin(wxPRINTBIN_LOWER         ); break;
-                case DMBIN_MIDDLE         : data.SetBin(wxPRINTBIN_MIDDLE        ); break;
-                case DMBIN_MANUAL         : data.SetBin(wxPRINTBIN_MANUAL        ); break;
-                case DMBIN_ENVELOPE       : data.SetBin(wxPRINTBIN_ENVELOPE      ); break;
-                case DMBIN_ENVMANUAL      : data.SetBin(wxPRINTBIN_ENVMANUAL     ); break;
-                case DMBIN_AUTO           : data.SetBin(wxPRINTBIN_AUTO          ); break;
-                case DMBIN_TRACTOR        : data.SetBin(wxPRINTBIN_TRACTOR       ); break;
-                case DMBIN_SMALLFMT       : data.SetBin(wxPRINTBIN_SMALLFMT      ); break;
-                case DMBIN_LARGEFMT       : data.SetBin(wxPRINTBIN_LARGEFMT      ); break;
-                case DMBIN_LARGECAPACITY  : data.SetBin(wxPRINTBIN_LARGECAPACITY ); break;
-                case DMBIN_CASSETTE       : data.SetBin(wxPRINTBIN_CASSETTE      ); break;
-                case DMBIN_FORMSOURCE     : data.SetBin(wxPRINTBIN_FORMSOURCE    ); break;
-                default:
-                    if (devMode->dmDefaultSource>=DMBIN_USER) {
-                        data.SetBin((wxPrintBin)((devMode->dmDefaultSource)-DMBIN_USER+(int)wxPRINTBIN_USER));
-                    } else {
-                        data.SetBin(wxPRINTBIN_DEFAULT);
-                    }
-                    break;
-            }
-        } else {
-            data.SetBin(wxPRINTBIN_DEFAULT);
-        }
-        if (devMode->dmFields & DM_MEDIATYPE)
-        {
-            wxASSERT( (int)devMode->dmMediaType != wxPRINTMEDIA_DEFAULT );
-            data.SetMedia(devMode->dmMediaType);
-        }
-        //// Printer name
-        if (devMode->dmDeviceName[0] != 0)
-            // This syntax fixes a crash when using VS 7.1
-            data.SetPrinterName( wxString(devMode->dmDeviceName, CCHDEVICENAME) );
-
-        //// Colour
-        if (devMode->dmFields & DM_COLOR)
-        {
-            if (devMode->dmColor == DMCOLOR_COLOR)
-                data.SetColour( true );
-            else
-                data.SetColour( false );
-        }
-        else
-            data.SetColour( true );
-
-        //// Paper size
-
-        // We don't know size of user defined paper and some buggy drivers
-        // set both DM_PAPERSIZE and DM_PAPERWIDTH & DM_PAPERLENGTH. Since
-        // dmPaperSize >= DMPAPER_USER wouldn't be in wxWin's database, this
-        // code wouldn't set m_paperSize correctly.
-
-        bool foundPaperSize = false;
-        if ((devMode->dmFields & DM_PAPERSIZE) && (devMode->dmPaperSize < DMPAPER_USER))
-        {
-            if (wxThePrintPaperDatabase)
+            wxPrintPaperType* paper = wxThePrintPaperDatabase->FindPaperTypeByPlatformId(devMode->dmPaperSize);
+            if (paper)
             {
-                wxPrintPaperType* paper = wxThePrintPaperDatabase->FindPaperTypeByPlatformId(devMode->dmPaperSize);
-                if (paper)
-                {
-                    data.SetPaperId( paper->GetId() );
-                    data.SetPaperSize( wxSize(paper->GetWidth() / 10,paper->GetHeight() / 10) );
-                    m_customWindowsPaperId = 0;
-                    foundPaperSize = true;
-                }
-            }
-            else
-            {
-                // Shouldn't really get here
-                wxFAIL_MSG(wxT("Paper database wasn't initialized in wxPrintData::ConvertFromNative."));
-                data.SetPaperId( wxPAPER_NONE );
-                data.SetPaperSize( wxSize(0,0) );
+                data.SetPaperId( paper->GetId() );
+                data.SetPaperSize( wxSize(paper->GetWidth() / 10,paper->GetHeight() / 10) );
                 m_customWindowsPaperId = 0;
-
-                GlobalUnlock(hDevMode);
-                return false;
+                foundPaperSize = true;
             }
         }
-
-        if (!foundPaperSize) {
-            if ((devMode->dmFields & DM_PAPERWIDTH) && (devMode->dmFields & DM_PAPERLENGTH))
-            {
-                // DEVMODE is in tenths of a millimeter
-                data.SetPaperSize( wxSize(devMode->dmPaperWidth / 10, devMode->dmPaperLength / 10) );
-                data.SetPaperId( wxPAPER_NONE );
-                m_customWindowsPaperId = devMode->dmPaperSize;
-            }
-            else
-            {
-                // Often will reach this for non-standard paper sizes (sizes which
-                // wouldn't be in wxWidget's paper database). Setting
-                // m_customWindowsPaperId to devMode->dmPaperSize should be enough
-                // to get this paper size working.
-                data.SetPaperSize( wxSize(0,0) );
-                data.SetPaperId( wxPAPER_NONE );
-                m_customWindowsPaperId = devMode->dmPaperSize;
-            }
-        }
-
-        //// Duplex
-
-        if (devMode->dmFields & DM_DUPLEX)
+        else
         {
-            switch (devMode->dmDuplex)
-            {
-                case DMDUP_HORIZONTAL:   data.SetDuplex( wxDUPLEX_HORIZONTAL ); break;
-                case DMDUP_VERTICAL:     data.SetDuplex( wxDUPLEX_VERTICAL ); break;
-                default:
-                case DMDUP_SIMPLEX:      data.SetDuplex( wxDUPLEX_SIMPLEX ); break;
-            }
+            // Shouldn't really get here
+            wxFAIL_MSG(wxT("Paper database wasn't initialized in wxPrintData::ConvertFromNative."));
+            data.SetPaperId( wxPAPER_NONE );
+            data.SetPaperSize( wxSize(0,0) );
+            m_customWindowsPaperId = 0;
+
+            return false;
         }
-        else
-            data.SetDuplex( wxDUPLEX_SIMPLEX );
-
-        //// Quality
-
-        if (devMode->dmFields & DM_PRINTQUALITY)
-        {
-            switch (devMode->dmPrintQuality)
-            {
-                case DMRES_MEDIUM:  data.SetQuality( wxPRINT_QUALITY_MEDIUM ); break;
-                case DMRES_LOW:     data.SetQuality( wxPRINT_QUALITY_LOW ); break;
-                case DMRES_DRAFT:   data.SetQuality( wxPRINT_QUALITY_DRAFT ); break;
-                case DMRES_HIGH:    data.SetQuality( wxPRINT_QUALITY_HIGH ); break;
-                default:
-                {
-                    // TODO: if the printer fills in the resolution in DPI, how
-                    // will the application know if it's high, low, draft etc.??
-                    //                    wxFAIL_MSG("Warning: DM_PRINTQUALITY was not one of the standard values.");
-                    data.SetQuality( devMode->dmPrintQuality );
-                    break;
-
-                }
-            }
-        }
-        else
-            data.SetQuality( wxPRINT_QUALITY_HIGH );
-
-        if (devMode->dmDriverExtra > 0)
-            data.SetPrivData( (char *)devMode+devMode->dmSize, devMode->dmDriverExtra );
-        else
-            data.SetPrivData( NULL, 0 );
-
-        GlobalUnlock(hDevMode);
     }
 
-    if (hDevNames)
-    {
-        LPDEVNAMES lpDevNames = (LPDEVNAMES)GlobalLock(hDevNames);
-        if (lpDevNames)
+    if (!foundPaperSize) {
+        if ((devMode->dmFields & DM_PAPERWIDTH) && (devMode->dmFields & DM_PAPERLENGTH))
         {
-            // TODO: Unicode-ification
+            // DEVMODE is in tenths of a millimeter
+            data.SetPaperSize( wxSize(devMode->dmPaperWidth / 10, devMode->dmPaperLength / 10) );
+            data.SetPaperId( wxPAPER_NONE );
+            m_customWindowsPaperId = devMode->dmPaperSize;
+        }
+        else
+        {
+            // Often will reach this for non-standard paper sizes (sizes which
+            // wouldn't be in wxWidget's paper database). Setting
+            // m_customWindowsPaperId to devMode->dmPaperSize should be enough
+            // to get this paper size working.
+            data.SetPaperSize( wxSize(0,0) );
+            data.SetPaperId( wxPAPER_NONE );
+            m_customWindowsPaperId = devMode->dmPaperSize;
+        }
+    }
 
-            // Get the port name
-            // port is obsolete in WIN32
-            // m_printData.SetPortName((LPSTR)lpDevNames + lpDevNames->wDriverOffset);
+    //// Duplex
 
-            // Get the printer name
-            wxString printerName = (LPTSTR)lpDevNames + lpDevNames->wDeviceOffset;
+    if (devMode->dmFields & DM_DUPLEX)
+    {
+        switch (devMode->dmDuplex)
+        {
+            case DMDUP_HORIZONTAL:   data.SetDuplex( wxDUPLEX_HORIZONTAL ); break;
+            case DMDUP_VERTICAL:     data.SetDuplex( wxDUPLEX_VERTICAL ); break;
+            default:
+            case DMDUP_SIMPLEX:      data.SetDuplex( wxDUPLEX_SIMPLEX ); break;
+        }
+    }
+    else
+        data.SetDuplex( wxDUPLEX_SIMPLEX );
 
-            // Not sure if we should check for this mismatch
+    //// Quality
+
+    if (devMode->dmFields & DM_PRINTQUALITY)
+    {
+        switch (devMode->dmPrintQuality)
+        {
+            case DMRES_MEDIUM:  data.SetQuality( wxPRINT_QUALITY_MEDIUM ); break;
+            case DMRES_LOW:     data.SetQuality( wxPRINT_QUALITY_LOW ); break;
+            case DMRES_DRAFT:   data.SetQuality( wxPRINT_QUALITY_DRAFT ); break;
+            case DMRES_HIGH:    data.SetQuality( wxPRINT_QUALITY_HIGH ); break;
+            default:
+            {
+                // TODO: if the printer fills in the resolution in DPI, how
+                // will the application know if it's high, low, draft etc.??
+                //                    wxFAIL_MSG("Warning: DM_PRINTQUALITY was not one of the standard values.");
+                data.SetQuality( devMode->dmPrintQuality );
+                break;
+
+            }
+        }
+    }
+    else
+        data.SetQuality( wxPRINT_QUALITY_HIGH );
+
+    if (devMode->dmDriverExtra > 0)
+        data.SetPrivData( (char *)devMode+devMode->dmSize, devMode->dmDriverExtra );
+    else
+        data.SetPrivData( NULL, 0 );
+
+    if ( m_devNames )
+    {
+        GlobalPtrLock lockDevNames(m_devNames);
+        LPDEVNAMES lpDevNames = wx_static_cast(LPDEVNAMES, lockDevNames.Get());
+
+        // TODO: Unicode-ification
+
+        // Get the port name
+        // port is obsolete in WIN32
+        // m_printData.SetPortName((LPSTR)lpDevNames + lpDevNames->wDriverOffset);
+
+        // Get the printer name
+        wxString printerName = (LPTSTR)lpDevNames + lpDevNames->wDeviceOffset;
+
+        // Not sure if we should check for this mismatch
 //            wxASSERT_MSG( (m_printerName.empty() || (devName == m_printerName)), "Printer name obtained from DEVMODE and DEVNAMES were different!");
 
-            if (!printerName.empty())
-                data.SetPrinterName( printerName );
-
-            GlobalUnlock(hDevNames);
-        }
+        if (!printerName.empty())
+            data.SetPrinterName( printerName );
     }
 
     return true;
@@ -350,9 +338,8 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 
 bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 {
-    HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
-    HGLOBAL hDevNames = (HGLOBAL)(DWORD) m_devNames;
-    if (!hDevMode)
+    HGLOBAL hDevMode = wx_static_cast(HGLOBAL, m_devMode);
+    if ( !m_devMode )
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
         PRINTDLG pd;
@@ -398,7 +385,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         else
         {
             hDevMode = pd.hDevMode;
-            m_devMode = (void*)(long) hDevMode;
+            m_devMode = hDevMode;
             pd.hDevMode = NULL;
 
             // We'll create a new DEVNAMEs structure below.
@@ -415,7 +402,8 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 
     if ( hDevMode )
     {
-        LPDEVMODE devMode = (LPDEVMODE) GlobalLock(hDevMode);
+        GlobalPtrLock lockDevMode(hDevMode);
+        DEVMODE * const devMode = wx_static_cast(DEVMODE *, lockDevMode.Get());
 
         //// Orientation
         devMode->dmOrientation = (short)data.GetOrientation();
@@ -432,9 +420,9 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         wxString name = data.GetPrinterName();
         if (!name.empty())
         {
-            //int len = wxMin(31, m_printerName.Len());
-            wxStrncpy((wxChar*)devMode->dmDeviceName,name.c_str(),31);
-            devMode->dmDeviceName[31] = wxT('\0');
+            wxStrncpy(devMode->dmDeviceName, name.wx_str(),
+                      WXSIZEOF(devMode->dmDeviceName) - 1);
+            devMode->dmDeviceName[WXSIZEOF(devMode->dmDeviceName) - 1] = wxT('\0');
         }
 
         //// Colour
@@ -559,16 +547,15 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
             devMode->dmMediaType = data.GetMedia();
             devMode->dmFields |= DM_MEDIATYPE;
         }
-        GlobalUnlock(hDevMode);
     }
 
-    if ( hDevNames )
+    if ( m_devNames )
     {
-        GlobalFree(hDevNames);
+        ::GlobalFree(wx_static_cast(HGLOBAL, m_devNames));
     }
 
     // TODO: I hope it's OK to pass some empty strings to DEVNAMES.
-    m_devNames = (void*) (long) wxCreateDevNames(wxEmptyString, data.GetPrinterName(), wxEmptyString);
+    m_devNames = wxCreateDevNames(wxEmptyString, data.GetPrinterName(), wxEmptyString);
 
     return true;
 }
@@ -700,14 +687,14 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     if (pd->hDevNames)
         GlobalFree(pd->hDevNames);
 
-    pd->hDevMode = (HGLOBAL)(DWORD) native_data->GetDevMode();
-    native_data->SetDevMode( (void*) NULL);
+    pd->hDevMode = wx_static_cast(HGLOBAL, native_data->GetDevMode());
+    native_data->SetDevMode(NULL);
 
     // Shouldn't assert; we should be able to test Ok-ness at a higher level
     //wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
 
-    pd->hDevNames = (HGLOBAL)(DWORD) native_data->GetDevNames();
-    native_data->SetDevNames( (void*) NULL);
+    pd->hDevNames = wx_static_cast(HGLOBAL, native_data->GetDevNames());
+    native_data->SetDevNames(NULL);
 
 
     pd->hDC = (HDC) NULL;
@@ -772,10 +759,9 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     {
         if (native_data->GetDevMode())
         {
-            // Make sure we don't leak memory
-            GlobalFree( (HGLOBAL)(DWORD) native_data->GetDevMode() );
+            ::GlobalFree(wx_static_cast(HGLOBAL, native_data->GetDevMode()));
         }
-        native_data->SetDevMode( (void*)(long) pd->hDevMode );
+        native_data->SetDevMode(pd->hDevMode);
         pd->hDevMode = NULL;
     }
 
@@ -784,10 +770,9 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
     {
         if (native_data->GetDevNames())
         {
-            // Make sure we don't leak memory
-            GlobalFree((HGLOBAL)(DWORD) native_data->GetDevNames());
+            ::GlobalFree(wx_static_cast(HGLOBAL, native_data->GetDevNames()));
         }
-        native_data->SetDevNames((void*)(long) pd->hDevNames);
+        native_data->SetDevNames(pd->hDevNames);
         pd->hDevNames = NULL;
     }
 

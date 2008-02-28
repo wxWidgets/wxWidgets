@@ -183,7 +183,7 @@ bool wxRadioBox::Create(wxWindow *parent,
                                       styleBtn,
                                       0, 0, 0, 0,   // will be set in SetSize()
                                       GetHwndOf(parent),
-                                      (HMENU)subid.GetValue(),
+                                      (HMENU)wxUIntToPtr(subid.GetValue()),
                                       wxGetInstance(),
                                       NULL);
 
@@ -210,7 +210,8 @@ bool wxRadioBox::Create(wxWindow *parent,
                          wxEmptyString,
                          WS_GROUP | BS_AUTORADIOBUTTON | WS_CHILD,
                          0, 0, 0, 0, GetHwndOf(parent),
-                         (HMENU)m_dummyId.GetValue(), wxGetInstance(), NULL);
+                         (HMENU)wxUIntToPtr(m_dummyId.GetValue()),
+                         wxGetInstance(), NULL);
 
 
     m_radioButtons->SetFont(GetFont());

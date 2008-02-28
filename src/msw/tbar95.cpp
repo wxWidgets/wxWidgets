@@ -805,8 +805,8 @@ bool wxToolBar::Realize()
                 TBREPLACEBITMAP replaceBitmap;
                 replaceBitmap.hInstOld = NULL;
                 replaceBitmap.hInstNew = NULL;
-                replaceBitmap.nIDOld = (UINT) oldToolBarBitmap;
-                replaceBitmap.nIDNew = (UINT) hBitmap;
+                replaceBitmap.nIDOld = (UINT_PTR)oldToolBarBitmap;
+                replaceBitmap.nIDNew = (UINT_PTR)hBitmap;
                 replaceBitmap.nButtons = nButtons;
                 if ( !::SendMessage(GetHwnd(), TB_REPLACEBITMAP,
                                     0, (LPARAM) &replaceBitmap) )
@@ -835,7 +835,7 @@ bool wxToolBar::Realize()
         {
             TBADDBITMAP addBitmap;
             addBitmap.hInst = 0;
-            addBitmap.nID = (UINT) hBitmap;
+            addBitmap.nID = (UINT_PTR)hBitmap;
             if ( ::SendMessage(GetHwnd(), TB_ADDBITMAP,
                                (WPARAM) nButtons, (LPARAM)&addBitmap) == -1 )
             {
@@ -915,7 +915,7 @@ bool wxToolBar::Realize()
                 {
                     const wxString& label = tool->GetLabel();
                     if ( !label.empty() )
-                        button.iString = (int)label.wx_str();
+                        button.iString = (INT_PTR)label.wx_str();
                 }
 
                 button.idCommand = tool->GetId();
