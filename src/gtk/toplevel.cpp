@@ -939,8 +939,6 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int incW, int incH )
 {
     wxTopLevelWindowBase::DoSetSizeHints( minW, minH, maxW, maxH, incW, incH );
-    m_sizeIncHint.x = incW;
-    m_sizeIncHint.y = incH;
 
     const wxSize minSize = GetMinSize();
     const wxSize maxSize = GetMaxSize();
@@ -982,23 +980,32 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
     {
         const wxSize diff = decorSize - m_decorSize;
         m_decorSize = decorSize;
-        SetSizeHints(GetMinSize(), GetMaxSize(), m_sizeIncHint);
+        bool resized = false;
         if (m_deferShow)
         {
             // keep overall size unchanged by shrinking m_widget
             int w, h;
             GTKDoGetSize(&w, &h);
-            gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+            // but not if size would be less than minimum, it won't take effect
+            const wxSize minSize = GetMinSize();
+            if (w >= minSize.x && h >= minSize.y)
+            {
+                gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+                resized = true;
+            }
         }
-        else
+        if (!resized)
         {
             // adjust overall size to match change in frame extents
             m_width  += diff.x;
             m_height += diff.y;
             if (m_width  < 0) m_width  = 0;
             if (m_height < 0) m_height = 0;
-            m_oldClientWidth = 0;
-            gtk_widget_queue_resize(m_wxwindow);
+            if (!m_deferShow)
+            {
+                m_oldClientWidth = 0;
+                gtk_widget_queue_resize(m_wxwindow);
+            }
         }
     }
     if (m_deferShow)

@@ -145,8 +145,6 @@ private:
 
     // is the frame currently grabbed explicitly by the application?
     bool m_grabbed;
-
-    wxSize m_sizeIncHint;
 };
 
 #endif // _WX_GTK_TOPLEVEL_H_
