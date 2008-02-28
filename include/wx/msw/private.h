@@ -630,16 +630,33 @@ private:
 class GlobalPtrLock
 {
 public:
-    GlobalPtrLock(HGLOBAL hGlobal) : m_hGlobal(hGlobal)
+    // default ctor, use Init() later -- should only be used if the HGLOBAL can
+    // be NULL (in which case Init() shouldn't be called)
+    GlobalPtrLock()
     {
-        m_ptr = GlobalLock(hGlobal);
+        m_hGlobal = NULL;
+        m_ptr = NULL;
+    }
+
+    // initialize the object, may be only called if we were created using the
+    // default ctor; HGLOBAL must not be NULL
+    void Init(HGLOBAL hGlobal)
+    {
+        m_hGlobal = hGlobal;
+        m_ptr = ::GlobalLock(hGlobal);
         if ( !m_ptr )
             wxLogLastError(_T("GlobalLock"));
     }
 
+    // initialize the object, HGLOBAL must not be NULL
+    GlobalPtrLock(HGLOBAL hGlobal)
+    {
+        Init(hGlobal);
+    }
+
     ~GlobalPtrLock()
     {
-        if ( !GlobalUnlock(m_hGlobal) )
+        if ( m_hGlobal && !::GlobalUnlock(m_hGlobal) )
         {
 #ifdef __WXDEBUG__
             // this might happen simply because the block became unlocked
@@ -652,6 +669,7 @@ public:
         }
     }
 
+    void *Get() const { return m_ptr; }
     operator void *() const { return m_ptr; }
 
 private:

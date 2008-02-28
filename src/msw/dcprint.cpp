@@ -327,16 +327,20 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
     }
 
 
-    HGLOBAL hDevMode = (HGLOBAL)(DWORD) data->GetDevMode();
+    GlobalPtrLock lockDevMode;
+    const HGLOBAL devMode = data->GetDevMode();
+    if ( devMode )
+        lockDevMode.Init(devMode);
 
-    DEVMODE *lpDevMode = hDevMode ? (DEVMODE *)::GlobalLock(hDevMode) : NULL;
-
-    HDC hDC = ::CreateDC(NULL, deviceName.wx_str(), NULL, lpDevMode);
+    HDC hDC = ::CreateDC
+                (
+                    NULL,               // no driver name as we use device name
+                    deviceName.wx_str(),
+                    NULL,               // unused
+                    wx_static_cast(DEVMODE *, lockDevMode.Get())
+                );
     if ( !hDC )
         wxLogLastError(_T("CreateDC(printer)"));
-
-    if ( lpDevMode )
-        ::GlobalUnlock(hDevMode);
 
     return (WXHDC) hDC;
 #endif // PostScript/Windows printing
