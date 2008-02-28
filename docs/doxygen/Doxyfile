@@ -1,6 +1,6 @@
 #############################################################################
-## Name:        Doxyfile
-## Purpose:     Doxygen configuration file for wxWidgets manual
+## Name:        Doxyfile.inc
+## Purpose:     Main configuration file for the wxWidgets manual
 ## Author:      Francesco Montorsi
 ## RCS-ID:      $Id$
 ## Licence:     wxWindows license
@@ -241,17 +241,14 @@ IGNORE_PREFIX          = wx
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output
 #---------------------------------------------------------------------------
-GENERATE_HTML          = YES
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            = htmlheader.inc
 HTML_FOOTER            = htmlfooter.inc
 HTML_STYLESHEET        = 
 HTML_ALIGN_MEMBERS     = YES
-GENERATE_HTMLHELP      = NO
 HTML_DYNAMIC_SECTIONS  = NO
-CHM_FILE               = 
-HHC_LOCATION           = 
+CHM_FILE               = wx.chm
 GENERATE_CHI           = NO
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
@@ -263,7 +260,6 @@ TREEVIEW_WIDTH         = 250
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
 #---------------------------------------------------------------------------
-GENERATE_LATEX         = NO
 LATEX_OUTPUT           = latex
 LATEX_CMD_NAME         = latex
 MAKEINDEX_CMD_NAME     = makeindex
@@ -279,7 +275,6 @@ LATEX_HIDE_INDICES     = NO
 #---------------------------------------------------------------------------
 # configuration options related to the RTF output
 #---------------------------------------------------------------------------
-GENERATE_RTF           = NO
 RTF_OUTPUT             = rtf
 COMPACT_RTF            = NO
 RTF_HYPERLINKS         = NO
@@ -289,7 +284,6 @@ RTF_EXTENSIONS_FILE    =
 #---------------------------------------------------------------------------
 # configuration options related to the man page output
 #---------------------------------------------------------------------------
-GENERATE_MAN           = NO
 MAN_OUTPUT             = man
 MAN_EXTENSION          = .3
 MAN_LINKS              = NO
@@ -297,7 +291,6 @@ MAN_LINKS              = NO
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
-GENERATE_XML           = NO
 XML_OUTPUT             = xml
 XML_SCHEMA             = 
 XML_DTD                = 
@@ -306,7 +299,7 @@ XML_PROGRAMLISTING     = YES
 #---------------------------------------------------------------------------
 # configuration options for the AutoGen Definitions output
 #---------------------------------------------------------------------------
-GENERATE_AUTOGEN_DEF   = NO
+
 
 #---------------------------------------------------------------------------
 # configuration options related to the Perl module output
@@ -314,10 +307,10 @@ GENERATE_AUTOGEN_DEF   = NO
 GENERATE_PERLMOD       = NO
 PERLMOD_LATEX          = NO
 PERLMOD_PRETTY         = YES
-PERLMOD_MAKEVAR_PREFIX = 
+PERLMOD_MAKEVAR_PREFIX =
 
 #---------------------------------------------------------------------------
-# Configuration options related to the preprocessor   
+# Configuration options related to the preprocessor
 #---------------------------------------------------------------------------
 ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = NO
@@ -333,13 +326,12 @@ SKIP_FUNCTION_MACROS   = YES
 # Configuration::additions related to external references   
 #---------------------------------------------------------------------------
 TAGFILES               = 
-GENERATE_TAGFILE       = 
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
 
 #---------------------------------------------------------------------------
-# Configuration options related to the dot tool   
+# Configuration options related to the dot tool
 #---------------------------------------------------------------------------
 CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            =
@@ -367,6 +359,6 @@ GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES
 
 #---------------------------------------------------------------------------
-# Configuration::additions related to the search engine   
+# Configuration::additions related to the search engine
 #---------------------------------------------------------------------------
-SEARCHENGINE           = YES
+SEARCHENGINE           = NO
