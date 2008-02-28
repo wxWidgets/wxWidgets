@@ -30,7 +30,6 @@
  @li @subpage overview_referencenotes
  @li @subpage overview_roughguide
  @li @subpage overview_helloworld
- @li @subpage overview_samples
  @li @subpage overview_python
 
  @section page_topics_programming Programming with wxWidgets
