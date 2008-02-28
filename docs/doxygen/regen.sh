@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # $Id$
 
@@ -6,7 +6,7 @@
 # wxWidgets manual and adjusts the doxygen log to make it more
 # readable.
 
-doxygen
+mkdir -p out/html       # we need to copy files in this folder below
 
 # this image is not automatically copied by Doxygen because it's not
 # used in doxygen documentation but only in our html footer...
@@ -15,6 +15,21 @@ cp images/powered-by-wxwidgets.png out/html
 # this CSS is automatically copied by Doxygen because it's 
 # included by our custom html header...
 cp wxwidgets.css out/html
+
+#
+# NOW RUN DOXYGEN
+#
+# NB: we do this _after_ copying the required files to the output folders
+#     otherwise when generating the CHM file with Doxygen, those files are
+#     not included!
+#
+if [[ -z "$1" ]]; then
+    cfgfile="Doxyfile.all"
+else
+    cfgfile="Doxyfile.$1"
+fi
+
+doxygen $cfgfile
 
 # Doxygen has the annoying habit to put the full path of the
 # affected files in the log file; remove it to make the log
@@ -25,6 +40,6 @@ cat doxygen.log | sed -e "s|$currpath||g" -e "s|$interfacepath||g" >temp
 mv temp doxygen.log
 
 # filter out the following warning which we don't care about
-cat doxygen.log | grep -v ".*supplied.*as.*the.*argument.*is.*not.*an.*input.*file.*" >temp
-mv temp doxygen.log
+#cat doxygen.log | grep -v ".*supplied.*as.*the.*argument.*is.*not.*an.*input.*file.*" >temp
+#mv temp doxygen.log
 

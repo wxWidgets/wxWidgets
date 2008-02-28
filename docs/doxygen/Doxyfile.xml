@@ -1,0 +1,26 @@
+#############################################################################
+## Name:        Doxyfile.xml
+## Purpose:     Doxygen configuration file for generating XML only
+## Author:      Francesco Montorsi
+## RCS-ID:      $Id: Doxyfile 52098 2008-02-26 00:05:33Z BP $
+## Licence:     wxWindows license
+#############################################################################
+
+@INCLUDE = Doxyfile.inc
+
+#---------------------------------------------------------------------------
+# Generation switches
+#---------------------------------------------------------------------------
+
+GENERATE_HTMLHELP      = NO
+GENERATE_HTML          = NO
+GENERATE_XML           = YES
+
+GENERATE_LATEX         = NO
+GENERATE_RTF           = NO
+GENERATE_MAN           = NO
+GENERATE_PERLMOD       = NO
+GENERATE_AUTOGEN_DEF   = NO
+GENERATE_TAGFILE       = NO
+
+HHC_LOCATION           =
