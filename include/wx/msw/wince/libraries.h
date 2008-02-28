@@ -32,7 +32,7 @@
 
 // this library is only available for PocketPC targets using recent SDK and is
 // needed for RTTI support
-#if (_WIN32_WCE >= 400) && !defined(__WINCE_NET__) !defined(wxNO_RTTI)
+#if (_WIN32_WCE >= 400) && !defined(__WINCE_NET__) && !defined(wxNO_RTTI)
     #pragma comment(lib,"ccrtrtti.lib")
 #endif
 

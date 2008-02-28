@@ -477,11 +477,9 @@ typedef short int WXTYPE;
     // assume the compiler can use type or const expressions as template
     // arguments if it supports partial specialization -- except if it's a
     // Borland one which can't
-    #ifdef HAVE_PARTIAL_SPECIALIZATION && !defined(__BORLANDC__)
+    #if defined(HAVE_PARTIAL_SPECIALIZATION) && !defined(__BORLANDC__)
         #define HAVE_TEMPLATE_OVERLOAD_RESOLUTION
-    #endif
-#endif // __BORLANDC__
-
+    #endif // __BORLANDC__
 #endif // !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION)
 
 /*  ---------------------------------------------------------------------------- */
