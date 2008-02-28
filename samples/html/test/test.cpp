@@ -355,7 +355,7 @@ void MyHtmlWindow::OnClipboardEvent(wxClipboardTextEvent& WXUNUSED(event))
     if ( CopySelection() )
     {
         wxTextDataObject data;
-        if ( wxTheClipboard && wxTheClipboard->GetData(data) )
+        if ( wxTheClipboard && wxTheClipboard->Open() && wxTheClipboard->GetData(data) )
         {
             const wxString text = data.GetText();
             const size_t maxTextLength = 100;
@@ -364,6 +364,9 @@ void MyHtmlWindow::OnClipboardEvent(wxClipboardTextEvent& WXUNUSED(event))
                         wxString(text, maxTextLength).c_str(),
                         (text.length() > maxTextLength) ? _T("...")
                                                         : _T("")));
+
+            wxTheClipboard->Close();
+
             return;
         }
     }
