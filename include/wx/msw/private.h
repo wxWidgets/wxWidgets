@@ -597,7 +597,7 @@ private:
         HDCMapModeChanger wxMAKE_UNIQUE_NAME(wxHDCMapModeChanger)(hdc, mm)
 #endif // __WXWINCE__/!__WXWINCE__
 
-// smart buffeer using GlobalAlloc/GlobalFree()
+// smart pointer using GlobalAlloc/GlobalFree()
 class GlobalPtr
 {
 public:
@@ -643,7 +643,10 @@ public:
     void Init(HGLOBAL hGlobal)
     {
         m_hGlobal = hGlobal;
-        m_ptr = ::GlobalLock(hGlobal);
+
+        // NB: GlobalLock() is a macro, not a function, hence don't use the
+        //     global scope operator with it (and neither with GlobalUnlock())
+        m_ptr = GlobalLock(hGlobal);
         if ( !m_ptr )
             wxLogLastError(_T("GlobalLock"));
     }
@@ -656,7 +659,7 @@ public:
 
     ~GlobalPtrLock()
     {
-        if ( m_hGlobal && !::GlobalUnlock(m_hGlobal) )
+        if ( m_hGlobal && !GlobalUnlock(m_hGlobal) )
         {
 #ifdef __WXDEBUG__
             // this might happen simply because the block became unlocked
