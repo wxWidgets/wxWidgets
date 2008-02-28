@@ -52,7 +52,7 @@ it's not implemented at all. That's why not all reference counted classes
 provide comparison operators.
 
 Also note that if you only need to do a @c shallow comparison between two
-#wxObject derived classes, you should not use the == and != operators but
+wxObject derived classes, you should not use the == and != operators but
 rather the wxObject::IsSameAs function.
 
 
@@ -71,21 +71,21 @@ it.
 The following classes in wxWidgets have efficient (i.e. fast) assignment
 operators and copy constructors since they are reference-counted:
 
-@li #wxAcceleratorTable
-@li #wxAnimation
-@li #wxBitmap
-@li #wxBrush
-@li #wxCursor
-@li #wxFont
-@li #wxIcon
-@li #wxImage
-@li #wxMetafile
-@li #wxPalette
-@li #wxPen
-@li #wxRegion
-@li #wxString
-@li #wxVariant
-@li #wxVariantData
+@li wxAcceleratorTable
+@li wxAnimation
+@li wxBitmap
+@li wxBrush
+@li wxCursor
+@li wxFont
+@li wxIcon
+@li wxImage
+@li wxMetafile
+@li wxPalette
+@li wxPen
+@li wxRegion
+@li wxString
+@li wxVariant
+@li wxVariantData
 
 Note that the list above reports the objects which are reference counted in all
 ports of wxWidgets; some ports may use this technique also for other classes.
@@ -93,16 +93,15 @@ ports of wxWidgets; some ports may use this technique also for other classes.
 
 @section overview_refcount_object Making Your Own Reference Counted Class
 
-Reference counting can be implemented easily using #wxObject and
-#wxObjectRefData classes. Alternatively, you can also use the
-#wxObjectDataPtr<T> template.
+Reference counting can be implemented easily using wxObject and wxObjectRefData
+classes. Alternatively, you can also use the wxObjectDataPtr<T> template.
 
-First, derive a new class from #wxObjectRefData and put there the
+First, derive a new class from wxObjectRefData and put there the
 memory-consuming data.
 
-Then derive a new class from #wxObject and implement there the public interface
+Then derive a new class from wxObject and implement there the public interface
 which will be seen by the user of your class. You'll probably want to add a
-function to your class which does the cast from #wxObjectRefData to your
+function to your class which does the cast from wxObjectRefData to your
 class-specific shared data. For example:
 
 @code

@@ -25,7 +25,7 @@ that matches certain strings and doesn't match others.
 
 @seealso
 
-@li #wxRegEx
+@li wxRegEx
 
 
 <hr>
