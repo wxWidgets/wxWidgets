@@ -32,48 +32,52 @@ Virtual destructor for any base class.
 
 \membersection{wxHelpProvider::AddHelp}\label{wxhelpprovideraddhelp}
 
-\func{void}{AddHelp}{\param{wxWindowBase* }{window}, \param{const wxString\& }{text}}
+\func{virtual void}{AddHelp}{\param{wxWindowBase* }{window}, \param{const wxString\& }{text}}
 
 Associates the text with the given window or id. Although all help
 providers have these functions to allow making \helpref{wxWindow::SetHelpText}{wxwindowsethelptext} 
 work, not all of them implement the functions.
 
-
-\membersection{wxHelpProvider::Get}\label{wxhelpproviderget}
-
-\func{wxHelpProvider*}{Get}{\void}
-
-Unlike some other classes, the help provider is not created on demand.
-This must be explicitly done by the application.
-
-
-\membersection{wxHelpProvider::GetHelp}\label{wxhelpprovidergethelp}
-
-\func{wxString}{GetHelp}{\param{const wxWindowBase* }{window}}
-
-Gets the help string for this window. Its interpretation is dependent on the help provider
-except that empty string always means that no help is associated with
-the window.
-
-\func{void}{AddHelp}{\param{wxWindowID }{id}, \param{const wxString\& }{text}}
+\func{virtual void}{AddHelp}{\param{wxWindowID }{id}, \param{const wxString\& }{text}}
 
 This version associates the given text with all windows with this id.
 May be used to set the same help string for all Cancel buttons in
 the application, for example.
 
 
+\membersection{wxHelpProvider::Get}\label{wxhelpproviderget}
+
+\func{static wxHelpProvider*}{Get}{\void}
+
+Returns pointer to help provider instance.
+
+Unlike some other classes, the help provider is not created on demand.
+This must be explicitly done by the application using
+\helpref{Set}{wxhelpproviderset}.
+
+
+\membersection{wxHelpProvider::GetHelp}\label{wxhelpprovidergethelp}
+
+\func{virtual wxString}{GetHelp}{\param{const wxWindowBase* }{window}}
+
+Gets the help string for this window. Its interpretation is dependent on the help provider
+except that empty string always means that no help is associated with
+the window.
+
+
 \membersection{wxHelpProvider::RemoveHelp}\label{wxhelpproviderremovehelp}
 
-\func{void}{RemoveHelp}{\param{wxWindowBase* }{window}}
+\func{virtual void}{RemoveHelp}{\param{wxWindowBase* }{window}}
 
 Removes the association between the window pointer and the help text. This is
-called by the wxWindow destructor. Without this, the table of help strings will fill up
-and when window pointers are reused, the wrong help string will be found.
+called by the wxWindow destructor. Without this, the table of help strings will
+fill up and when window pointers are reused, the wrong help string will be
+found.
 
 
 \membersection{wxHelpProvider::Set}\label{wxhelpproviderset}
 
-\func{wxHelpProvider*}{Set}{\param{wxHelpProvider* }{helpProvider}}
+\func{static wxHelpProvider*}{Set}{\param{wxHelpProvider* }{helpProvider}}
 
 Get/set the current, application-wide help provider. Returns
 the previous one.
@@ -81,7 +85,7 @@ the previous one.
 
 \membersection{wxHelpProvider::ShowHelpAtPoint}\label{wxhelpprovidershowhelpatpoint}
 
-\func{bool}{ShowHelpAtPoint}{\param{wxWindowBase* }{window}, \param{const wxPoint & }{point}, \param{wxHelpEvent::Origin }{origin}}
+\func{virtual bool}{ShowHelpAtPoint}{\param{wxWindowBase* }{window}, \param{const wxPoint & }{point}, \param{wxHelpEvent::Origin }{origin}}
 
 This function may be overridden to show help for the window when it should
 depend on the position inside the window, By default this method forwards to 
@@ -104,7 +108,7 @@ window.
 
 \membersection{wxHelpProvider::ShowHelp}\label{wxhelpprovidershowhelp}
 
-\func{bool}{ShowHelp}{\param{wxWindowBase* }{window}}
+\func{virtual bool}{ShowHelp}{\param{wxWindowBase* }{window}}
 
 Shows help for the given window. Override this function if the help doesn't
 depend on the exact position inside the window, otherwise you need to override 
