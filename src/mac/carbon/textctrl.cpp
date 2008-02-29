@@ -1812,11 +1812,12 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
     TXNTab* tabs = NULL;
 
     bool relayout = false;
+    wxFont font ;
 
     if ( style.HasFont() )
     {
         wxASSERT( typeAttrCount < WXSIZEOF(typeAttr) );
-        const wxFont &font = style.GetFont() ;
+        font = style.GetFont() ;
         typeAttr[typeAttrCount].tag = kTXNATSUIStyle ;
         typeAttr[typeAttrCount].size = kTXNATSUIStyleSize ;
         typeAttr[typeAttrCount].data.dataPtr = font.MacGetATSUStyle() ;
