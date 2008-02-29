@@ -299,7 +299,6 @@ enum wxLanguage
     wxLANGUAGE_UZBEK,
     wxLANGUAGE_UZBEK_CYRILLIC,
     wxLANGUAGE_UZBEK_LATIN,
-    wxLANGUAGE_VALENCIAN,
     wxLANGUAGE_VIETNAMESE,
     wxLANGUAGE_VOLAPUK,
     wxLANGUAGE_WELSH,
@@ -312,6 +311,15 @@ enum wxLanguage
 
     // for custom, user-defined languages:
     wxLANGUAGE_USER_DEFINED
+
+
+#if wxABI_VERSION >= 20808
+    // for binary compatibility, we can't put wxLANGUAGE_VALENCIAN in its
+    // normal position in the enum, because it would change other values.
+    // We have to put it somewhere well outside normal range -- the particular
+    // value used is arbitrary:
+    , wxLANGUAGE_VALENCIAN = 0x1fffffff
+#endif
 };
 
 // --- --- --- generated code ends here --- --- ---
