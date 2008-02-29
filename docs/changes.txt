@@ -117,6 +117,7 @@ All (GUI):
   and hiding cell cursor when it doesn't have focus.
 - Added alpha support to wxImage::Paste() (Steven Van Ingelgem)
 - Use current date when opening popup in generic wxDatePickerCtrl.
+- Remove associated help text from wxHelpProvider when a window is destroyed.
 
 All (Unix):
 

@@ -69,10 +69,15 @@ the window.
 
 \func{virtual void}{RemoveHelp}{\param{wxWindowBase* }{window}}
 
-Removes the association between the window pointer and the help text. This is
+Removes the association between the window pointer and the help text, if it
+was previously set using \helpref{AddHelp}{wxhelpprovideraddhelp}. This is
 called by the wxWindow destructor. Without this, the table of help strings will
 fill up and when window pointers are reused, the wrong help string will be
 found.
+
+Note that this method may be called even for windows that don't have any
+associated help text. If that happens, its implementation should simply do
+nothing.
 
 
 \membersection{wxHelpProvider::Set}\label{wxhelpproviderset}
