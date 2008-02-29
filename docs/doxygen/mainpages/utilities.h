@@ -347,7 +347,7 @@
  changing the other aspects of the programs behaviour.
  
  More information about this sample can be found in the @c readme.txt file in
- its directory. Please see also i18n overview.
+ its directory. Please also see the @ref overview_i18n.
  
  
  @subsection page_utils_samples_layout Layout sample
