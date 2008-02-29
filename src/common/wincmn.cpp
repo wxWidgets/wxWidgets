@@ -369,6 +369,14 @@ wxWindowBase::~wxWindowBase()
 #if wxUSE_ACCESSIBILITY
     delete m_accessible;
 #endif
+
+#if wxUSE_HELP
+    // NB: this has to be called unconditionally, because we don't know
+    //     whether this window has associated help text or not
+    wxHelpProvider *helpProvider = wxHelpProvider::Get();
+    if ( helpProvider )
+        helpProvider->RemoveHelp(this);
+#endif
 }
 
 void wxWindowBase::SendDestroyEvent()
