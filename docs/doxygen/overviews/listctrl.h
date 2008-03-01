@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        listctrl
+// Name:        listctrl.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -8,11 +8,11 @@
 
 /*!
 
- @page listctrl_overview wxListCtrl overview
+@page overview_listctrl wxListCtrl Overview
 
- Classes: #wxListCtrl, #wxImageList
- Sorry, this topic has yet to be written.
+Classes: wxListCtrl, wxImageList
 
- */
+Sorry, this topic hasn't been written yet.
 
+*/
 
