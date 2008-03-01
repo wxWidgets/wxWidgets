@@ -38,7 +38,7 @@ The following is a basic categorization of them:
 @li @subpage overview_refcount
 @li @subpage overview_app
 @li @subpage overview_unicode
-@li @subpage overview_mbconvclasses
+@li @subpage overview_mbconv
 @li @subpage overview_i18n
 @li @subpage overview_nonenglish
 @li @subpage overview_debugging
