@@ -958,6 +958,8 @@ bool wxWizard::ResizeBitmap(wxBitmap& bmp)
     if (bmp.Ok())
     {
         wxSize pageSize = m_sizerPage->GetSize();
+        if (pageSize == wxSize(0,0))
+            pageSize = GetPageSize();
         int bitmapWidth = wxMax(bmp.GetWidth(), GetMinimumBitmapWidth());
         int bitmapHeight = pageSize.y;
 
