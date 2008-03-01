@@ -2,7 +2,7 @@
 // Name:        src/msw/helpchm.cpp
 // Purpose:     Help system: MS HTML Help implementation
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vadim Zeitlin at 2008-03-01: refactoring, simplification
 // Created:     16/04/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -79,18 +79,6 @@ static HWND GetSuitableHWND(wxWindow *win)
     return win ? GetHwndOf(win) : ::GetDesktopWindow();
 }
 
-// wrap the real HtmlHelp() but just return false (and not crash) if it
-// couldn't be loaded
-//
-// it also takes a wxWindow instead of HWND
-static bool
-CallHtmlHelpFunction(wxWindow *win, const wxChar *str, UINT uint, DWORD dword)
-{
-    HTMLHELP htmlHelp = GetHtmlHelpFunction();
-
-    return htmlHelp &&
-           htmlHelp(GetSuitableHWND(win), str, uint, dword);
-}
 
 IMPLEMENT_DYNAMIC_CLASS(wxCHMHelpController, wxHelpControllerBase)
 
@@ -110,15 +98,23 @@ bool wxCHMHelpController::LoadFile(const wxString& file)
     return true;
 }
 
+/* static */ bool
+wxCHMHelpController::CallHtmlHelp(wxWindow *win,
+                                  const wxChar *str,
+                                  unsigned cmd,
+                                  WXWPARAM param)
+{
+    HTMLHELP htmlHelp = GetHtmlHelpFunction();
+
+    return htmlHelp && htmlHelp(GetSuitableHWND(win), str, cmd, param);
+}
+
 bool wxCHMHelpController::DisplayContents()
 {
     if (m_helpFile.IsEmpty())
         return false;
 
-    wxString str = GetValidFilename(m_helpFile);
-
-    return CallHtmlHelpFunction(GetParentWindow(),
-                                str.wx_str(), HH_DISPLAY_TOPIC, 0L);
+    return CallHtmlHelp(HH_DISPLAY_TOPIC);
 }
 
 // Use topic or HTML filename
@@ -127,15 +123,11 @@ bool wxCHMHelpController::DisplaySection(const wxString& section)
     if (m_helpFile.IsEmpty())
         return false;
 
-    wxString str = GetValidFilename(m_helpFile);
-
     // Is this an HTML file or a keyword?
     if ( section.Find(wxT(".htm")) != wxNOT_FOUND )
     {
         // interpret as a file name
-        return CallHtmlHelpFunction(GetParentWindow(),
-                                    str.wx_str(), HH_DISPLAY_TOPIC,
-                                    wxPtrToUInt(section.c_str()));
+        return CallHtmlHelp(HH_DISPLAY_TOPIC, section.wx_str());
     }
 
     return KeywordSearch(section);
@@ -147,36 +139,38 @@ bool wxCHMHelpController::DisplaySection(int section)
     if (m_helpFile.IsEmpty())
         return false;
 
-    wxString str = GetValidFilename(m_helpFile);
+    return CallHtmlHelp(HH_HELP_CONTEXT, section);
+}
 
-    return CallHtmlHelpFunction(GetParentWindow(),
-                                str.wx_str(), HH_HELP_CONTEXT, (DWORD)section);
+/* static */
+bool
+wxCHMHelpController::DoDisplayTextPopup(const wxChar *text,
+                                        const wxPoint& pos,
+                                        int contextId,
+                                        wxWindow *window)
+{
+    HH_POPUP popup;
+    popup.cbStruct = sizeof(popup);
+    popup.hinst = (HINSTANCE) wxGetInstance();
+    popup.idString = contextId;
+    popup.pszText = text;
+    popup.pt.x = pos.x;
+    popup.pt.y = pos.y;
+    popup.clrForeground =
+    popup.clrBackground = (COLORREF)-1;
+    popup.rcMargins.top =
+    popup.rcMargins.left =
+    popup.rcMargins.right =
+    popup.rcMargins.bottom = -1;
+    popup.pszFont = NULL;
+
+    return CallHtmlHelp(window, NULL, HH_DISPLAY_TEXT_POPUP, &popup);
 }
 
 bool wxCHMHelpController::DisplayContextPopup(int contextId)
 {
-    if (m_helpFile.IsEmpty()) return false;
-
-    wxString str = GetValidFilename(m_helpFile);
-
-    // We also have to specify the popups file (default is cshelp.txt).
-    // str += wxT("::/cshelp.txt");
-
-    HH_POPUP popup;
-    popup.cbStruct = sizeof(popup);
-    popup.hinst = (HINSTANCE) wxGetInstance();
-    popup.idString = contextId ;
-
-    GetCursorPos(& popup.pt);
-    popup.clrForeground = (COLORREF)-1;
-    popup.clrBackground = (COLORREF)-1;
-    popup.rcMargins.top = popup.rcMargins.left = popup.rcMargins.right = popup.rcMargins.bottom = -1;
-    popup.pszFont = NULL;
-    popup.pszText = NULL;
-
-    return CallHtmlHelpFunction(GetParentWindow(),
-                                str.wx_str(), HH_DISPLAY_TEXT_POPUP,
-                                wxPtrToUInt(&popup));
+    return DoDisplayTextPopup(NULL, wxGetMousePosition(), contextId,
+                              GetParentWindow());
 }
 
 bool
@@ -190,19 +184,7 @@ bool wxCHMHelpController::ShowContextHelpPopup(const wxString& text,
                                                const wxPoint& pos,
                                                wxWindow *window)
 {
-    HH_POPUP popup;
-    popup.cbStruct = sizeof(popup);
-    popup.hinst = (HINSTANCE) wxGetInstance();
-    popup.idString = 0 ;
-    popup.pt.x = pos.x; popup.pt.y = pos.y;
-    popup.clrForeground = (COLORREF)-1;
-    popup.clrBackground = (COLORREF)-1;
-    popup.rcMargins.top = popup.rcMargins.left = popup.rcMargins.right = popup.rcMargins.bottom = -1;
-    popup.pszFont = NULL;
-    popup.pszText = text.wx_str();
-
-    return CallHtmlHelpFunction(window, NULL, HH_DISPLAY_TEXT_POPUP,
-                                wxPtrToUInt(&popup));
+    return DoDisplayTextPopup(text.wx_str(), pos, 0, window);
 }
 
 bool wxCHMHelpController::DisplayBlock(long block)
@@ -216,33 +198,28 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
     if (m_helpFile.IsEmpty())
         return false;
 
-    wxString str = GetValidFilename(m_helpFile);
-
     HH_AKLINK link;
-    link.cbStruct =     sizeof(HH_AKLINK) ;
-    link.fReserved =    FALSE ;
-    link.pszKeywords =  k.c_str() ;
-    link.pszUrl =       NULL ;
-    link.pszMsgText =   NULL ;
-    link.pszMsgTitle =  NULL ;
-    link.pszWindow =    NULL ;
-    link.fIndexOnFail = TRUE ;
+    link.cbStruct =     sizeof(HH_AKLINK);
+    link.fReserved =    FALSE;
+    link.pszKeywords =  k.wx_str();
+    link.pszUrl =       NULL;
+    link.pszMsgText =   NULL;
+    link.pszMsgTitle =  NULL;
+    link.pszWindow =    NULL;
+    link.fIndexOnFail = TRUE;
 
-    return CallHtmlHelpFunction(GetParentWindow(),
-                                str.wx_str(), HH_KEYWORD_LOOKUP,
-                                wxPtrToUInt(&link));
+    return CallHtmlHelp(HH_KEYWORD_LOOKUP, &link);
 }
 
 bool wxCHMHelpController::Quit()
 {
-    return CallHtmlHelpFunction(GetParentWindow(), NULL, HH_CLOSE_ALL, 0L);
+    return CallHtmlHelp(NULL, HH_CLOSE_ALL);
 }
 
-// Append extension if necessary.
-wxString wxCHMHelpController::GetValidFilename(const wxString& file) const
+wxString wxCHMHelpController::GetValidFilename() const
 {
     wxString path, name, ext;
-    wxSplitPath(file, & path, & name, & ext);
+    wxSplitPath(m_helpFile, &path, &name, &ext);
 
     wxString fullName;
     if (path.IsEmpty())
