@@ -1148,7 +1148,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     SetFlags(flags);
 
     m_autosize = width < 0;  // TODO
-    
+
     Init(width < 0 ? wxDVC_DEFAULT_WIDTH : width);
 }
 
@@ -3703,10 +3703,22 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         }
 
         // notify cell about right click
-        // cell->...
+        wxVariant value;
+        model->GetValue( value, item, col->GetModelColumn() );
+        cell->SetValue( value );
+        wxRect cell_rect( xpos, current * m_lineHeight,
+                          col->GetWidth(), m_lineHeight );
+        if (!cell->RightClick( event.GetPosition(), cell_rect, model, item, col->GetModelColumn()))
+        {
+            wxWindow *parent = GetParent();
+            wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
+            le.SetItem( item );
+            le.SetEventObject(parent);
+            le.SetModel(GetOwner()->GetModel());
+            le.SetValue(value);
 
-        // Allow generation of context menu event
-        event.Skip();
+            parent->GetEventHandler()->ProcessEvent(le);
+        }
     }
     else if (event.MiddleDown())
     {
