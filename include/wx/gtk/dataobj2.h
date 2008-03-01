@@ -89,5 +89,26 @@ public:
     }
 };
 
+// ----------------------------------------------------------------------------
+// wxURLDataObject is a specialization of wxDataObject for URLs
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxURLDataObject : public wxDataObjectSimple
+{
+public:
+    wxURLDataObject(const wxString& url = wxEmptyString);
+
+    wxString GetURL() const { return m_url; }
+    void SetURL(const wxString& url) { m_url = url; }
+    
+private:
+    wxString m_url;
+
+    virtual size_t GetDataSize() const;
+    virtual bool GetDataHere(void *buf) const;
+    virtual bool SetData(size_t len, const void *buf);
+};
+
+
 #endif // _WX_GTK_DATAOBJ2_H_
 

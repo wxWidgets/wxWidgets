@@ -196,6 +196,16 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
        return FALSE, otherwise call gtk_drag_status() and
        return TRUE" */
 
+#if 0
+    wxPrintf( "motion\n" );
+    GList *tmp_list;
+    for (tmp_list = context->targets; tmp_list; tmp_list = tmp_list->next)
+    {
+        wxString atom = wxString::FromAscii( gdk_atom_name (GDK_POINTER_TO_ATOM (tmp_list->data)) );
+        wxPrintf( "Atom: %s\n", atom );
+    }
+#endif
+
     /* inform the wxDropTarget about the current GdkDragContext.
        this is only valid for the duration of this call */
     drop_target->SetDragContext( context );
@@ -208,27 +218,28 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     if (drop_target->GetDefaultAction() == wxDragNone)
     {
         // use default action set by wxDropSource::DoDragDrop()
-    if ( (gs_flagsForDrag & wxDrag_DefaultMove) == wxDrag_DefaultMove &&
+        if ( (gs_flagsForDrag & wxDrag_DefaultMove) == wxDrag_DefaultMove &&
             (context->actions & GDK_ACTION_MOVE ) )
-    {
-        // move is requested by the program and allowed by GTK+ - do it, even
-        // though suggested_action may be currently wxDragCopy
-        result = wxDragMove;
-    }
-    else // use whatever GTK+ says we should
-    {
-        result = ConvertFromGTK(context->suggested_action);
-
-        if ( (result == wxDragMove) && !(gs_flagsForDrag & wxDrag_AllowMove) )
         {
-            // we're requested to move but we can't
-            result = wxDragCopy;
+             // move is requested by the program and allowed by GTK+ - do it, even
+            // though suggested_action may be currently wxDragCopy
+            result = wxDragMove;
         }
-    }
+        else // use whatever GTK+ says we should
+        {
+            result = ConvertFromGTK(context->suggested_action);
+
+            if ( (result == wxDragMove) && !(gs_flagsForDrag & wxDrag_AllowMove) )
+            {
+                // we're requested to move but we can't
+                result = wxDragCopy;
+            }
+        }
     }
     else if (drop_target->GetDefaultAction() == wxDragMove &&
                 (context->actions & GDK_ACTION_MOVE))
     {
+        
        result = wxDragMove;
     }
     else
@@ -292,8 +303,6 @@ static gboolean target_drag_drop( GtkWidget *widget,
        return FALSE, otherwise, if you aren't accepting
        the drop, call gtk_drag_finish() with success == FALSE
        otherwise call gtk_drag_data_get()" */
-
-//    printf( "drop.\n" );
 
     /* this seems to make a difference between not accepting
        due to wrong target area and due to wrong format. let

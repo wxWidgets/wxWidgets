@@ -502,12 +502,13 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/ole/dataobj2.h"
-
     // wxURLDataObject defined in msw/ole/dataobj2.h
-#else // !__WXMSW__
-    #if defined(__WXGTK20__)
-        #include "wx/gtk/dataobj2.h"
-    #elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
+    #include "wx/gtk/dataobj2.h"
+    // wxURLDataObject defined in msw/ole/dataobj2.h
+
+#else 
+    #if defined(__WXGTK__)
         #include "wx/gtk1/dataobj2.h"
     #elif defined(__WXX11__)
         #include "wx/x11/dataobj2.h"
@@ -533,7 +534,7 @@ private:
         wxString GetURL() const { return GetText(); }
         void SetURL(const wxString& url) { SetText(url); }
     };
-#endif // __WXMSW__/!__WXMSW__
+#endif
 
 #endif // wxUSE_DATAOBJ
 
