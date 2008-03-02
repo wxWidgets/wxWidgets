@@ -422,7 +422,7 @@ wxString wxComboBox::GetValue() const
 #if USE_HICOMBOBOX
     CFStringRef myString;
     HIComboBoxCopyTextItemAtIndex( m_peer->GetControlRef(), (CFIndex)GetSelection(), &myString );
-    return wxMacCFStringHolder( myString, m_font.GetEncoding() ).AsString();
+    return wxMacCFStringHolder( myString, GetFont().GetEncoding() ).AsString();
 #else
     wxString        result;
 
@@ -547,7 +547,7 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
         HIComboBoxInsertTextItemAtIndex(m_peer->GetControlRef(),
                                         (CFIndex)pos,
                                         wxMacCFStringHolder(items[i],
-                                                            m_font.GetEncoding()));
+                                                            GetFont().GetEncoding()));
         AssignNewItemClientData(pos, clientData, i, type);
     }
 
@@ -670,7 +670,7 @@ void wxComboBox::SetString(unsigned int n, const wxString& s)
 {
 #if USE_HICOMBOBOX
     verify_noerr ( HIComboBoxInsertTextItemAtIndex( m_peer->GetControlRef(), (CFIndex) n,
-        wxMacCFStringHolder(s, m_font.GetEncoding()) ) );
+        wxMacCFStringHolder(s, GetFont().GetEncoding()) ) );
     verify_noerr ( HIComboBoxRemoveItemAtIndex( m_peer->GetControlRef(), (CFIndex) n + 1 ) );
 #else
     m_choice->SetString( n , s );

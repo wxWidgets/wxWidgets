@@ -399,7 +399,7 @@ void wxNotebook::MacSetupTabs()
         page = m_pages[ii];
         info.version = kControlTabInfoVersionOne;
         info.iconSuiteID = 0;
-        wxCFStringRef cflabel( page->GetLabel(), m_font.GetEncoding() ) ;
+        wxCFStringRef cflabel( page->GetLabel(), GetFont().GetEncoding() ) ;
         info.name = cflabel ;
         m_peer->SetData<ControlTabInfoRecV1>( ii + 1, kControlTabInfoTag, &info ) ;
 

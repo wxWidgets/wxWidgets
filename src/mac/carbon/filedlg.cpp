@@ -301,10 +301,10 @@ int wxFileDialog::ShowModal()
     // this was always unset in the old code
     dialogCreateOptions.optionFlags &= ~kNavSelectDefaultLocation;
 
-    wxCFStringRef message(m_message, m_font.GetEncoding());
+    wxCFStringRef message(m_message, GetFont().GetEncoding());
     dialogCreateOptions.windowTitle = message;
 
-    wxCFStringRef defaultFileName(m_fileName, m_font.GetEncoding());
+    wxCFStringRef defaultFileName(m_fileName, GetFont().GetEncoding());
     dialogCreateOptions.saveFileName = defaultFileName;
 
 
@@ -324,7 +324,7 @@ int wxFileDialog::ShowModal()
         myData.menuitems = dialogCreateOptions.popupExtension ;
         for ( size_t i = 0 ; i < numFilters ; ++i )
         {
-            CFArrayAppendValue( popup , (CFStringRef) wxCFStringRef( myData.name[i] , m_font.GetEncoding() ) ) ;
+            CFArrayAppendValue( popup , (CFStringRef) wxCFStringRef( myData.name[i] , GetFont().GetEncoding() ) ) ;
         }
     }
 

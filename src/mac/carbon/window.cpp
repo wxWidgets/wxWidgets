@@ -885,9 +885,6 @@ void wxWindowMac::Init()
     m_macIsUserPane = true;
     m_clipChildren = false ;
     m_cachedClippedRectValid = false ;
-
-    // we need a valid font for the encodings
-    wxWindowBase::SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 }
 
 wxWindowMac::~wxWindowMac()

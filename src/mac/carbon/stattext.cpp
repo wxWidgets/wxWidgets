@@ -92,7 +92,7 @@ wxSize wxStaticText::DoGetBestSize() const
         OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
         verify_noerr( err );
 
-        wxCFStringRef str( m_label,  m_font.GetEncoding() );
+        wxCFStringRef str( m_label,  GetFont().GetEncoding() );
 
 #if wxMAC_USE_ATSU_TEXT
         SInt16 baseline;
@@ -179,7 +179,7 @@ void wxStaticText::DoSetLabel(const wxString& label)
     m_labelOrig = label;
     m_label = RemoveMnemonics(label);
 
-    wxCFStringRef str( m_label, m_font.GetEncoding() );
+    wxCFStringRef str( m_label, GetFont().GetEncoding() );
     OSStatus err = m_peer->SetData<CFStringRef>(kControlEntireControl, kControlStaticTextCFStringTag, str);
     verify_noerr( err );
 }

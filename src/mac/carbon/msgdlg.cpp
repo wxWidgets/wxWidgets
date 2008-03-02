@@ -110,13 +110,13 @@ int wxMessageDialog::ShowModal()
         CFStringRef alternateButtonTitle = NULL;
         CFStringRef otherButtonTitle = NULL;
 
-        wxCFStringRef cfTitle( msgtitle, m_font.GetEncoding() );
-        wxCFStringRef cfText( msgtext, m_font.GetEncoding() );
+        wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
+        wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
 
-        wxCFStringRef cfNoString( m_no.c_str(), m_font.GetEncoding() );
-        wxCFStringRef cfYesString( m_yes.c_str(), m_font.GetEncoding() );
-        wxCFStringRef cfOKString( m_ok.c_str() , m_font.GetEncoding()) ;
-        wxCFStringRef cfCancelString( m_cancel.c_str(), m_font.GetEncoding() );
+        wxCFStringRef cfNoString( m_no.c_str(), GetFont().GetEncoding() );
+        wxCFStringRef cfYesString( m_yes.c_str(), GetFont().GetEncoding() );
+        wxCFStringRef cfOKString( m_ok.c_str() , GetFont().GetEncoding()) ;
+        wxCFStringRef cfCancelString( m_cancel.c_str(), GetFont().GetEncoding() );
 
         int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
 
@@ -167,13 +167,13 @@ int wxMessageDialog::ShowModal()
         short result;
 
         AlertStdCFStringAlertParamRec param;
-        wxCFStringRef cfNoString( m_no.c_str(), m_font.GetEncoding() );
-        wxCFStringRef cfYesString( m_yes.c_str(), m_font.GetEncoding() );
-        wxCFStringRef cfOKString( m_ok.c_str(), m_font.GetEncoding() );
-        wxCFStringRef cfCancelString( m_cancel.c_str(), m_font.GetEncoding() );
+        wxCFStringRef cfNoString( m_no.c_str(), GetFont().GetEncoding() );
+        wxCFStringRef cfYesString( m_yes.c_str(), GetFont().GetEncoding() );
+        wxCFStringRef cfOKString( m_ok.c_str(), GetFont().GetEncoding() );
+        wxCFStringRef cfCancelString( m_cancel.c_str(), GetFont().GetEncoding() );
 
-        wxCFStringRef cfTitle( msgtitle, m_font.GetEncoding() );
-        wxCFStringRef cfText( msgtext, m_font.GetEncoding() );
+        wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
+        wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
 
         param.movable = true;
         param.flags = 0;

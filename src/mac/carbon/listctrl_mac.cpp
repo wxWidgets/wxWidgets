@@ -979,7 +979,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
         {
             wxFontEncoding enc;
             if ( m_font.Ok() )
-                enc = m_font.GetEncoding();
+                enc = GetFont().GetEncoding();
             else
                 enc = wxLocale::GetSystemEncoding();
             wxCFStringRef cfTitle;

@@ -1526,7 +1526,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                         InstallEventHandler(
                             HIObjectGetEventTarget(item), GetwxMacToolBarEventHandlerUPP(),
                             GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
-                        HIToolbarItemSetLabel( item, wxCFStringRef(label, m_font.GetEncoding()) );
+                        HIToolbarItemSetLabel( item, wxCFStringRef(label, GetFont().GetEncoding()) );
                         HIToolbarItemSetImage( item, info2.u.imageRef );
                         HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
                         tool->SetToolbarItemRef( item );

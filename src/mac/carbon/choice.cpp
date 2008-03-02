@@ -139,7 +139,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 
         UMAInsertMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ),
                           items[i],
-                          m_font.GetEncoding(),
+                          GetFont().GetEncoding(),
                           idx);
         m_datas.Insert( NULL, idx );
         AssignNewItemClientData(idx, clientData, i, type);

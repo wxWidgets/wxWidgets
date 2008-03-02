@@ -1028,9 +1028,9 @@ bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* columnPtr)
   wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
 
 #if wxCHECK_VERSION(2,9,0)
-  wxCFStringRef title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
+  wxCFStringRef title(columnPtr->GetTitle(),this->m_font.Ok() ? this->GetFont().GetEncoding() : wxLocale::GetSystemEncoding());
 #else
-  wxMacCFStringHolder title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
+  wxMacCFStringHolder title(columnPtr->GetTitle(),this->m_font.Ok() ? this->GetFont().GetEncoding() : wxLocale::GetSystemEncoding());
 #endif
 
 
@@ -1148,9 +1148,9 @@ bool wxDataViewCtrl::PrependColumn(wxDataViewColumn* columnPtr)
   wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(this->m_peer));
 
 #if wxCHECK_VERSION(2,9,0)
-  wxCFStringRef title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
+  wxCFStringRef title(columnPtr->GetTitle(),this->m_font.Ok() ? this->GetFont().GetEncoding() : wxLocale::GetSystemEncoding());
 #else
-  wxMacCFStringHolder title(columnPtr->GetTitle(),this->m_font.Ok() ? this->m_font.GetEncoding() : wxLocale::GetSystemEncoding());
+  wxMacCFStringHolder title(columnPtr->GetTitle(),this->m_font.Ok() ? this->GetFont().GetEncoding() : wxLocale::GetSystemEncoding());
 #endif
 
 
