@@ -87,8 +87,8 @@ public:
 
     void HighlightSpecial(bool on);
 
-    void SetDate();
-    void Today();
+    wxDateTime GetDate() const { return m_calendar->GetDate(); }
+    void SetDate(const wxDateTime& dt) { m_calendar->SetDate(dt); }
 
 private:
     wxCalendarCtrl *m_calendar;
@@ -127,6 +127,7 @@ public:
 
     void OnSetDate(wxCommandEvent& event);
     void OnToday(wxCommandEvent& event);
+    void OnBeginDST(wxCommandEvent& event);
 
     void OnCalToggleResizable(wxCommandEvent& event);
 
@@ -181,6 +182,7 @@ enum
     Calendar_Cal_SurroundWeeks,
     Calendar_Cal_SetDate,
     Calendar_Cal_Today,
+    Calendar_Cal_BeginDST,
     Calendar_Cal_Resizable,
 #if wxUSE_DATEPICKCTRL
     Calendar_DatePicker_AskDate = 300,
@@ -225,6 +227,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Calendar_Cal_SetDate, MyFrame::OnSetDate)
     EVT_MENU(Calendar_Cal_Today, MyFrame::OnToday)
+    EVT_MENU(Calendar_Cal_BeginDST, MyFrame::OnBeginDST)
 
     EVT_MENU(Calendar_Cal_Resizable, MyFrame::OnCalToggleResizable)
 
@@ -329,7 +332,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                     true);
     menuCal->AppendSeparator();
     menuCal->Append(Calendar_Cal_SetDate, _T("Call &SetDate(2005-12-24)"), _T("Set date to 2005-12-24."));
-    menuCal->Append(Calendar_Cal_Today, _T("Call &Today()"), _T("Set the current date."));
+    menuCal->Append(Calendar_Cal_Today, _T("Call &Today()"), _T("Set to the current date."));
+    menuCal->Append(Calendar_Cal_BeginDST, "Call SetDate(GetBeginDST())");
     menuCal->AppendSeparator();
     menuCal->AppendCheckItem(Calendar_Cal_Resizable, _T("Make &resizable\tCtrl-R"));
 
@@ -446,12 +450,17 @@ void MyFrame::OnAllowYearUpdate(wxUpdateUIEvent& event)
 
 void MyFrame::OnSetDate(wxCommandEvent &WXUNUSED(event))
 {
-    m_panel->SetDate();
+    m_panel->SetDate(wxDateTime(5, wxDateTime::Apr, 2008, 22, 00, 00));
 }
 
 void MyFrame::OnToday(wxCommandEvent &WXUNUSED(event))
 {
-    m_panel->Today();
+    m_panel->SetDate(wxDateTime::Today());
+}
+
+void MyFrame::OnBeginDST(wxCommandEvent &WXUNUSED(event))
+{
+    m_panel->SetDate(wxDateTime::GetBeginDST(m_panel->GetDate().GetYear()));
 }
 
 void MyFrame::OnCalToggleResizable(wxCommandEvent& event)
@@ -511,7 +520,7 @@ void MyFrame::OnAskDate(wxCommandEvent& WXUNUSED(event))
                 wxMessageBox(_T("Happy birthday!"), _T("Calendar Sample"));
             }
 
-            m_panel->GetCal()->SetDate(dt);
+            m_panel->SetDate(dt);
 
             wxLogStatus(_T("Changed the date to your input"));
         }
@@ -635,17 +644,6 @@ void MyPanel::HighlightSpecial(bool on)
     }
 
     m_calendar->Refresh();
-}
-
-void MyPanel::SetDate()
-{
-    wxDateTime date(24, wxDateTime::Dec, 2005, 23, 59, 59);
-    m_calendar->SetDate(date);
-}
-
-void MyPanel::Today()
-{
-    m_calendar->SetDate(wxDateTime::Today());
 }
 
 // ----------------------------------------------------------------------------
