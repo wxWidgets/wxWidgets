@@ -15,7 +15,7 @@
 
  @image html wx.png
 
- @section Contents
+ @section manual_contents Contents
  @li @subpage page_copyright
  @li @subpage page_introduction
  @li @subpage page_multiplatform
