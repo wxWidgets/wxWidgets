@@ -269,7 +269,7 @@ wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
     attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
-    attr.font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    attr.font.MacCreateFromThemeFont(kThemeViewsFont);
 
     return attr;
 }

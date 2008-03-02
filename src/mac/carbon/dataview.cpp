@@ -997,6 +997,18 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
   return true;
 } /* wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator) */
 
+/*static*/
+wxVisualAttributes wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attr;
+
+    attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
+    attr.font.MacCreateFromThemeFont(kThemeViewsFont);
+
+    return attr;
+}
+
 bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
 {
   if (!wxDataViewCtrlBase::AssociateModel(model))

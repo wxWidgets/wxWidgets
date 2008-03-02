@@ -772,6 +772,18 @@ wxListCtrl::~wxListCtrl()
     delete m_renameTimer;
 }
 
+/*static*/
+wxVisualAttributes wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attr;
+
+    attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
+    attr.font.MacCreateFromThemeFont(kThemeViewsFont);
+
+    return attr;
+}
+
 // ----------------------------------------------------------------------------
 // set/get/change style
 // ----------------------------------------------------------------------------

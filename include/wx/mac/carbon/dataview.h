@@ -577,6 +577,14 @@ public:
     this->m_Deleting = deleting;
   }
 
+  virtual wxVisualAttributes GetDefaultAttributes() const
+  {
+      return GetClassDefaultAttributes(GetWindowVariant());
+  }
+
+  static wxVisualAttributes
+  GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
 protected:
  // inherited methods from wxDataViewCtrlBase:
   virtual void DoSetExpanderColumn(void);
