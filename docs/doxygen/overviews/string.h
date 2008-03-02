@@ -158,7 +158,7 @@ the resulting string with a @NULL) and are in general not very safe (passing
 functions are not standard at all. This is why in addition to all wxString
 functions, there are also a few global string functions which try to correct
 these problems: wxIsEmpty() verifies whether the string is empty (returning
-@true for @NULL pointers), wxStrlen() also handles @NULLs correctly and returns
+@true for @NULL pointers), wxStrlen() also handles @NULL correctly and returns
 0 for them and wxStricmp() is just a platform-independent version of
 case-insensitive string comparison function known either as @c stricmp() or
 @c strcasecmp() on different platforms.

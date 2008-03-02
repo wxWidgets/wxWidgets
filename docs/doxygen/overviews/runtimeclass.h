@@ -93,7 +93,7 @@ You can get the wxClassInfo for a class by using the CLASSINFO macro, e.g.
 CLASSINFO(wxFrame). You can get the wxClassInfo for an object using
 wxObject::GetClassInfo.
 
-@seeaslso
+@seealso
 
 @li wxObject
 @li wxCreateDynamicObject
