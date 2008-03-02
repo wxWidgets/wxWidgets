@@ -66,7 +66,10 @@ static const wxChar* const wxOperatingSystemIdNames[] =
     _T("Other Unix"),
 
     _T("DOS"),
-    _T("OS/2")
+    _T("OS/2"),
+
+    _T("PalmOS"),
+    _T("PalmOS(Over Linux)"),
 };
 
 static const wxChar* const wxPortIdNames[] =

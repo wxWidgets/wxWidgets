@@ -58,7 +58,11 @@ enum wxOperatingSystemId
     // 1<<13 and 1<<14 available for other Unix flavours
 
     wxOS_DOS            = 1 << 15,      // Microsoft DOS
-    wxOS_OS2            = 1 << 16       // OS/2
+    wxOS_OS2            = 1 << 16,       // OS/2
+
+    wxOS_PALM_OS        = 1 << 17,       // Pure Palm OS
+    wxOS_PALM_LINUX     = 1 << 18,       // Palm over linux
+    wxOS_PALM = wxOS_PALM_OS | wxOS_PALM_LINUX,
 };
 
 // list of wxWidgets ports - some of them can be used with more than

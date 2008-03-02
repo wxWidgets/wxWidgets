@@ -317,6 +317,10 @@ bool WidgetsApp::OnInit()
     title += _T("wxMAC");
 #elif defined(__WXMOTIF__)
     title += _T("wxMOTIF");
+#elif __WXPALMOS5__
+    title += _T("wxPALMOS5");
+#elif __WXPALMOS6__
+    title += _T("wxPALMOS6");
 #else
     title += _T("wxWidgets");
 #endif
