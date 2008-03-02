@@ -632,10 +632,11 @@ void wxVListBoxComboPopup::SetStringValue( const wxString& value )
 {
     int index = m_strings.Index(value);
 
-    m_value = index;
-
-    if ( index >= -1 && index < (int)wxVListBox::GetItemCount() )
+    if ( index >= 0 && index < (int)wxVListBox::GetItemCount() )
+    {
+        m_value = index;
         wxVListBox::SetSelection(index);
+    }
 }
 
 void wxVListBoxComboPopup::CalcWidths()
