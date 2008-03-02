@@ -8,7 +8,7 @@
 
 /*!
 
- @page imagelist_overview wxImageList overview
+ @page overview_imagelist wxImageList overview
 
  Classes: wxImageList
 
