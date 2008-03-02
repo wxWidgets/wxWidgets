@@ -12,6 +12,14 @@
 
  Class: wxFont, wxFontDialog
 
+ @li @ref overview_font_intro
+ @li @ref overview_font_nativeinfo
+
+ <hr>
+
+
+ @section overview_font_intro Introduction
+
  A font is an object which determines the appearance of text, primarily
  when drawing text to a window or device context. A font is determined by
  the following parameters (not all of them have to be specified, of course):
@@ -53,10 +61,6 @@
        current mapping mode. However, user scaling on a device context will also
        scale fonts under both environments.
 
- @li @ref overview_font_nativeinfo
-
-
- <hr>
 
 
  @section overview_font_nativeinfo Native font information

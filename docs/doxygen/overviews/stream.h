@@ -18,6 +18,15 @@ Classes:
 @li wxFilterInputStream
 @li wxFilterOutputStream
 
+@li @ref overview_stream_intro
+@li @ref overview_stream_example
+
+<hr>
+
+
+
+@section overview_stream_intro Introduction
+
 Standard C++ streams can cause problems on several platforms: they work quite
 well in most cases, but in the multi-threaded case, for example, they have many
 problems. Some Borland compilers refuse to work at all with them and using
@@ -57,6 +66,7 @@ The "IO" classes implements the specific parts of the stream. This could be
 nothing in the case of wxMemoryIn/OutputStream which bases itself on
 wxStreamBuffer. This could also be a simple link to the a true syscall (for
 example read(...), write(...)).
+
 
 @section overview_stream_example Example
 

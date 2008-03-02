@@ -1,12 +1,14 @@
 <!-- ******************************************************* -->
 <!--             Standard wxWidgets footer                   -->
 
-<br><hr>
+<!-- NOTE: <br/> must go inside <p> but <hr/> must go outside -->
+<p><br/></p><hr/>
+
 <table width="100%" border="0">
 <tr>
     <td align="left">
         <a href="http://www.wxwidgets.org" style="margin-left: 0px">
-            <img src="powered-by-wxwidgets.png" alt="wxWidgets logo">
+            <img src="powered-by-wxwidgets.png" alt="wxWidgets logo"/>
         </a>
     </td>
     <td valign="middle" align="center"><p class="footer">Page generated <tt>$datetime</tt> by <a href="http://www.doxygen.org">Doxygen</a> $doxygenversion</p></td>

@@ -10,6 +10,17 @@
 
 @page overview_nonenglish Writing Non-English Applications
 
+
+@li @ref overview_nonenglish_locales
+@li @ref overview_nonenglish_strings
+@li @ref overview_nonenglish_fontmapping
+@li @ref overview_nonenglish_converting
+@li @ref overview_nonenglish_help
+
+
+<hr>
+
+
 This article describes how to write applications that communicate with the user
 in a language other than English. Unfortunately many languages use different
 charsets under Unix and Windows (and other platforms, to make the situation

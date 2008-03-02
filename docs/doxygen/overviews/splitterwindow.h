@@ -12,6 +12,14 @@
 
 Classes: wxSplitterWindow
 
+@li @ref overview_splitterwindow_appearance
+@li @ref overview_splitterwindow_example
+
+<hr>
+
+
+@section overview_splitterwindow_appearance Appearance
+
 The following screenshot shows the appearance of a splitter window with a
 horizontal split.
 

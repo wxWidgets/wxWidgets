@@ -24,6 +24,14 @@ data transfer, validation and filtering) and wxGenericValidator (which does
 data transfer for a range of controls); or you can write your own.
 
 
+@li @ref overview_validator_example
+@li @ref overview_validator_anatomy
+@li @ref overview_validator_dialogs
+
+
+<hr>
+
+
 @section overview_validator_example Example
 
 Here is an example of wxTextValidator usage.

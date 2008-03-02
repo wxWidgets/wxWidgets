@@ -10,6 +10,14 @@
 
 @page overview_i18n Internationalization
 
+@li @ref overview_i18n_intro
+@li @ref overview_i18n_menuaccel
+
+<hr>
+
+
+@section overview_i18n_intro Introduction
+
 Although internationalization of an application (i18n for short) involves far
 more than just translating its text messages to another message - date, time
 and currency formats need changing too, some languages are written left to

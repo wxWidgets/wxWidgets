@@ -305,7 +305,7 @@ XML_PROGRAMLISTING     = YES
 # configuration options related to the Perl module output
 #---------------------------------------------------------------------------
 GENERATE_PERLMOD       = NO
-PERLMOD_LATEX          = NO
+PERLMOD_LATEX          = YES
 PERLMOD_PRETTY         = YES
 PERLMOD_MAKEVAR_PREFIX =
 

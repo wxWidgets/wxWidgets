@@ -28,6 +28,12 @@
  member functions. Validation of data in controls is covered in @ref overview_validator.
 
 
+ @li @ref overview_dialog_autoscrolling
+
+
+ <hr>
+
+
 
  @section overview_dialog_autoscrolling Automatic scrolling dialogs
 

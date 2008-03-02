@@ -12,12 +12,14 @@
 
  Classes: wxApp
 
-
+ @li @ref overview_app_intro
  @li @ref overview_app_shutdown
 
 
  <hr>
 
+
+ @section overview_app_intro Introduction
 
  A wxWidgets application does not have a @e main procedure; the equivalent is the
  wxApp::OnInit member defined for a class derived from wxApp.

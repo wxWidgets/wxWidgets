@@ -12,6 +12,15 @@
 
 Classes: wxToolBar
 
+@li @ref overview_toolbar_intro
+@li @ref overview_toolbar_library
+
+
+<hr>
+
+
+@section overview_toolbar_intro Introduction
+
 The toolbar family of classes allows an application to use toolbars in a
 variety of configurations and styles.
 

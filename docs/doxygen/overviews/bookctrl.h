@@ -12,6 +12,12 @@
 
  Classes: wxNotebook, wxListbook, wxChoicebook, wxTreebook, wxToolbook
 
+ @li @ref overview_bookctrl_intro
+ @li @ref overview_bookctrl_bestbookctrl
+
+
+ <hr>
+
 
  @section overview_bookctrl_intro Introduction
 

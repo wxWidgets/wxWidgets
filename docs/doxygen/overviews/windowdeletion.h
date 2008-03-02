@@ -16,6 +16,17 @@ Window deletion can be a confusing subject, so this overview is provided to
 help make it clear when and how you delete windows, or respond to user requests
 to close windows.
 
+@li @ref overview_windowdeletion_sequence
+@li @ref overview_windowdeletion_close
+@li @ref overview_windowdeletion_default
+@li @ref overview_windowdeletion_menuexit
+@li @ref overview_windowdeletion_exitapp
+@li @ref overview_windowdeletion_deletion
+@li @ref overview_windowdeletion_windowkinds
+
+
+<hr>
+
 
 @section overview_windowdeletion_sequence Sequence of Events During Window Deletion
 

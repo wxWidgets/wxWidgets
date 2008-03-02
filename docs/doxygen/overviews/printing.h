@@ -22,6 +22,22 @@ Classes:
 @li wxPageSetupDialog
 @li wxPageSetupDialogData
 
+
+@li @ref overview_printing_printout
+@li @ref overview_printing_printer
+@li @ref overview_printing_printpreview
+@li @ref overview_printing_printerdc
+@li @ref overview_printing_postscriptdc
+@li @ref overview_printing_printdialog
+@li @ref overview_printing_printdata
+@li @ref overview_printing_printdialogdata
+@li @ref overview_printing_pagesetupdialog
+@li @ref overview_printing_pagesetupdialogdata
+
+
+<hr>
+
+
 The printing framework relies on the application to provide classes whose
 member functions can respond to particular requests, such as 'print this page'
 or 'does this page exist in the document?'. This method allows wxWidgets to

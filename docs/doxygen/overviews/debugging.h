@@ -19,6 +19,13 @@
  defined. You can also test the __WXDEBUG__ symbol in your own applications to execute
  code that should be active only in debug mode.
 
+ @li @ref overview_debugging_dbgctx
+ @li @ref overview_debugging_dbgmacros
+ @li @ref overview_debugging_logging
+ @li @ref overview_debugging_dbgctx2 
+
+
+ <hr>
 
 
  @section overview_debugging_dbgctx wxDebugContext

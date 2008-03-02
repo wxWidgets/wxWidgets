@@ -15,6 +15,12 @@ Classes:
 @li wxScrolledWindow
 @li wxScrollBar
 
+@li @ref overview_scrolling_model
+@li @ref overview_scrolling_example
+
+<hr>
+
+
 Scrollbars come in various guises in wxWidgets. All windows have the potential
 to show a vertical scrollbar and/or a horizontal scrollbar: it is a basic
 capability of a window. However, in practice, not all windows do make use of
