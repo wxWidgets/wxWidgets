@@ -594,8 +594,10 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
    ------------------------------------------------------------------------- */
 
 #define wxCRT_StrftimeA  strftime
+#ifndef __WXPALMOS__
 /* FIXME-UTF8: when is this available? */
 #define wxCRT_StrftimeW  wcsftime
+#endif /* ! __WXPALMOS__ */
 
 #ifndef wxCRT_StrftimeW
 WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,

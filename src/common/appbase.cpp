@@ -51,11 +51,13 @@
     #include <typeinfo>
 #endif
 
+#ifndef __WXPALMOS5__
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
 
 #include <locale.h>
+#endif // ! __WXPALMOS5__
 
 #if wxUSE_FONTMAP
     #include "wx/fontmap.h"

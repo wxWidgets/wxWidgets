@@ -55,9 +55,11 @@ typedef unsigned long wxLogLevel;
 
 #include "wx/arrstr.h"
 
+#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
     #include <time.h>   // for time_t
 #endif
+#endif // ! __WXPALMOS5__
 
 #include "wx/dynarray.h"
 

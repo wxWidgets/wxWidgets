@@ -14,9 +14,11 @@
 #ifndef   _WX_DEBUG_H_
 #define   _WX_DEBUG_H_
 
+#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
 #include  <assert.h>
 #endif
+#endif // ! __WXPALMOS5__
 #include  <limits.h>            /*  for CHAR_BIT used below */
 
 #include  "wx/chartype.h"     /*  for __TFILE__ and wxChar */

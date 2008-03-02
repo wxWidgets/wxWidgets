@@ -17,11 +17,11 @@
 
 #if wxUSE_DATETIME
 
-#ifndef __WXWINCE__
-#include <time.h>
-#else
-#include "wx/msw/wince/time.h"
-#endif
+#ifdef __WXWINCE__
+    #include "wx/msw/wince/time.h"
+#elif !defined(__WXPALMOS5__)
+    #include <time.h>
+#endif // OS
 
 #include <limits.h>             // for INT_MIN
 

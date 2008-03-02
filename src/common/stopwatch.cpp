@@ -58,12 +58,15 @@
 #   undef HAVE_GETTIMEOFDAY
 #endif
 
+#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
 #include <time.h>
 #else
 #include "wx/msw/private.h"
 #include "wx/msw/wince/time.h"
 #endif
+#endif // __WXPALMOS5__
+
 
 #if !defined(__WXMAC__) && !defined(__WXWINCE__)
     #include <sys/types.h>      // for time_t

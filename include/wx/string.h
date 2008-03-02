@@ -24,6 +24,7 @@
 
 #include "wx/defs.h"        // everybody should include this
 
+#ifndef __WXPALMOS5__
 #if defined(__WXMAC__) || defined(__VISAGECPP__)
     #include <ctype.h>
 #endif
@@ -46,10 +47,7 @@
 #ifdef HAVE_STRCASECMP_IN_STRINGS_H
     #include <strings.h>    // for strcasecmp()
 #endif // HAVE_STRCASECMP_IN_STRINGS_H
-
-#ifdef __WXPALMOS__
-    #include <StringMgr.h>
-#endif
+#endif // ! __WXPALMOS5__
 
 #include "wx/wxcrtbase.h"   // for wxChar, wxStrlen() etc.
 #include "wx/strvararg.h"

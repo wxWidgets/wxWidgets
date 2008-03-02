@@ -385,6 +385,43 @@ enum wxFileKind
 
     // it's a private define, undefine it so that nobody gets tempted to use it
     #undef wxHAS_HUGE_FILES
+#elif defined (__WXPALMOS__)
+    typedef off_t wxFileOffset;
+#ifdef _LARGE_FILES
+    #define wxFileOffsetFmtSpec wxLongLongFmtSpec
+    wxCOMPILE_TIME_ASSERT( sizeof(off_t) == sizeof(wxLongLong_t), BadFileSizeType );
+    // wxFile is present and supports large files
+    #ifdef wxUSE_FILE
+        #define wxHAS_LARGE_FILES
+    #endif
+    // wxFFile is present and supports large files
+    #if SIZEOF_LONG == 8 || defined HAVE_FSEEKO
+        #define wxHAS_LARGE_FFILES
+    #endif
+#else
+    #define wxFileOffsetFmtSpec _T("")
+#endif
+    #define   wxClose      close
+    #define   wxRead       ::read
+    #define   wxWrite      ::write
+    #define   wxLseek      lseek
+    #define   wxSeek       lseek
+    #define   wxFsync      fsync
+    #define   wxEof        eof
+
+    #define   wxCRT_MkDir      mkdir
+    #define   wxCRT_RmDir      rmdir
+
+    #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
+
+    #define   wxStructStat struct stat
+
+    #define   wxCRT_Open       open
+    #define   wxCRT_Stat       svfs_stat
+    #define   wxCRT_Lstat      lstat
+    #define   wxCRT_Access     access
+
+    #define wxHAS_NATIVE_LSTAT
 #else // Unix or Windows using unknown compiler, assume POSIX supported
     typedef off_t wxFileOffset;
     #ifdef _LARGE_FILES

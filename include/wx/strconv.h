@@ -25,7 +25,9 @@
 #  undef __BSEXCPT__
 #endif
 
+#ifndef __WXPALMOS5__
 #include <stdlib.h>
+#endif // ! __WXPALMOS5__
 
 #if wxUSE_WCHAR_T
 

@@ -51,11 +51,13 @@
 
 #include <stdlib.h>
 
+#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
 #include <time.h>
 #else
 #include "wx/msw/wince/time.h"
 #endif
+#endif /* ! __WXPALMOS5__ */
 
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h" // includes windows.h
