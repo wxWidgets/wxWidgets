@@ -3004,9 +3004,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxLocaleModule, wxModule)
 #ifndef LANG_UZBEK
 #define LANG_UZBEK (0)
 #endif
-#ifndef LANG_VALENCIAN
-#define LANG_VALENCIAN (0)
-#endif
 #ifndef LANG_VIETNAMESE
 #define LANG_VIETNAMESE (0)
 #endif
@@ -3515,7 +3512,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_UZBEK,                      "uz"   , LANG_UZBEK     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Uzbek")
    LNG(wxLANGUAGE_UZBEK_CYRILLIC,             "uz"   , LANG_UZBEK     , SUBLANG_UZBEK_CYRILLIC            , wxLayout_LeftToRight, "Uzbek (Cyrillic)")
    LNG(wxLANGUAGE_UZBEK_LATIN,                "uz"   , LANG_UZBEK     , SUBLANG_UZBEK_LATIN               , wxLayout_LeftToRight, "Uzbek (Latin)")
-   LNG(wxLANGUAGE_VALENCIAN,                  "ca_ES@valencia", LANG_VALENCIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Valencian")
+   LNG(wxLANGUAGE_VALENCIAN,                  "ca_ES@valencia", 0     , 0                                 , wxLayout_LeftToRight, "Valencian")
    LNG(wxLANGUAGE_VIETNAMESE,                 "vi_VN", LANG_VIETNAMESE, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Vietnamese")
    LNG(wxLANGUAGE_VOLAPUK,                    "vo"   , 0              , 0                                 , wxLayout_LeftToRight, "Volapuk")
    LNG(wxLANGUAGE_WELSH,                      "cy"   , 0              , 0                                 , wxLayout_LeftToRight, "Welsh")
