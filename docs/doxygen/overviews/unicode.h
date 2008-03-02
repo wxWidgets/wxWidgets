@@ -110,7 +110,7 @@ in both ANSI and Unicode modes could look like:
 @endcode
 
 Of course, it would be nearly impossibly to write such programs if it had to
-be done this way (try to imagine the number of @ifdef UNICODE an average
+be done this way (try to imagine the number of UNICODE checkes an average
 program would have had!). Luckily, there is another way - see the next section.
 
 
