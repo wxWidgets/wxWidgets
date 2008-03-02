@@ -209,16 +209,15 @@ void wxVListBoxComboPopup::DismissWithEvent()
 
     Dismiss();
 
-    wxString valStr;
     if ( selection != wxNOT_FOUND )
-        valStr = m_strings[selection];
+        m_stringValue = m_strings[selection];
     else
-        valStr = wxEmptyString;
+        m_stringValue = wxEmptyString;
+
+    if ( m_stringValue != m_combo->GetValue() )
+        m_combo->SetValueWithEvent(m_stringValue);
 
     m_value = selection;
-
-    if ( valStr != m_combo->GetValue() )
-        m_combo->SetValueWithEvent(valStr);
 
     SendComboBoxEvent(selection);
 }
@@ -609,9 +608,7 @@ void wxVListBoxComboPopup::SetString( int item, const wxString& str )
 
 wxString wxVListBoxComboPopup::GetStringValue() const
 {
-    if ( m_value >= 0 )
-        return m_strings[m_value];
-    return wxEmptyString;
+    return m_stringValue;
 }
 
 void wxVListBoxComboPopup::SetSelection( int item )
@@ -620,6 +617,11 @@ void wxVListBoxComboPopup::SetSelection( int item )
                  wxT("invalid index in wxVListBoxComboPopup::SetSelection") );
 
     m_value = item;
+
+    if ( item >= 0 )
+        m_stringValue = m_strings[item];
+    else
+        m_stringValue = wxEmptyString;
 
     if ( IsCreated() )
         wxVListBox::SetSelection(item);
@@ -634,10 +636,13 @@ void wxVListBoxComboPopup::SetStringValue( const wxString& value )
 {
     int index = m_strings.Index(value);
 
-    m_value = index;
+    m_stringValue = value;
 
-    if ( index >= -1 && index < (int)wxVListBox::GetItemCount() )
+    if ( index >= 0 && index < (int)wxVListBox::GetItemCount() )
+    {
         wxVListBox::SetSelection(index);
+        m_value = index;
+    }
 }
 
 void wxVListBoxComboPopup::CalcWidths()

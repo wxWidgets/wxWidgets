@@ -212,6 +212,8 @@ private:
     // Partial completion string
     wxString                m_partialCompletionString;
 
+    wxString                m_stringValue;
+
 #if wxUSE_TIMER
     // Partial completion timer
     wxTimer                 m_partialCompletionTimer;
