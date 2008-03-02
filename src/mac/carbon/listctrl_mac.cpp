@@ -2712,9 +2712,8 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     if (bgColor == wxNullColour)
         bgColor = listBgColor;
 
-    wxFont listFont = list->GetFont();
-    if (font == wxNullFont)
-        font = listFont;
+    if (!font.Ok())
+        font = list->GetFont();
 
     wxCFStringRef cfString( text, wxLocale::GetSystemEncoding() );
 
@@ -2840,8 +2839,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
 
         if (font.Ok())
         {
-            if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
-                info.fontID = font.MacGetThemeFontID();
+            info.fontID = font.MacGetThemeFontID();
 
             ::TextSize( (short)(font.MacGetFontSize()) ) ;
             ::TextFace( font.MacGetFontStyle() ) ;
