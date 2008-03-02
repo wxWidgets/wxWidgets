@@ -566,13 +566,28 @@ void wxApp::WakeUpIdle()
     // start up again.  Doing it this way ensures that the idle handler
     // wakes up in the right thread (see also wxWakeUpMainThread() which does
     // the same for the main app thread only)
-    wxWindow *topWindow = wxTheApp->GetTopWindow();
+    wxWindow * const topWindow = wxTheApp->GetTopWindow();
     if ( topWindow )
     {
-        if ( !::PostMessage(GetHwndOf(topWindow), WM_NULL, 0, 0) )
+        HWND hwndTop = GetHwndOf(topWindow);
+
+        // Do not post WM_NULL if there's already a pending WM_NULL to avoid
+        // overflowing the message queue.
+        //
+        // Notice that due to a limitation of PeekMessage() API (which handles
+        // 0,0 range specially), we have to check the range from 0-1 instead.
+        // This still makes it possible to overflow the queue with WM_NULLs by
+        // interspersing the calles to WakeUpIdle() with windows creation but
+        // it should be rather hard to do it accidentally.
+        MSG msg;
+        if ( !::PeekMessage(&msg, hwndTop, 0, 1, PM_NOREMOVE) ||
+              ::PeekMessage(&msg, hwndTop, 1, 1, PM_NOREMOVE) )
         {
-            // should never happen
-            wxLogLastError(wxT("PostMessage(WM_NULL)"));
+            if ( !::PostMessage(hwndTop, WM_NULL, 0, 0) )
+            {
+                // should never happen
+                wxLogLastError(wxT("PostMessage(WM_NULL)"));
+            }
         }
     }
 }
