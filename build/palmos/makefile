@@ -13,7 +13,8 @@
 INSTALL=install
 INSTALL_DATA=${INSTALL} -m 644
 INSTALL_DIR=${INSTALL} -d
-
+TOPDIR=../..
+INCDIR_WXPALM=$(TOPDIR)/lib/gcc_lib/palmos
 SHELL = /bin/sh
 ## conditionally include an auto-generated.mk for dynamic definitions
 -include auto-generated.mk
@@ -45,314 +46,321 @@ PRC_NAME = wxWidgets.prc
 # TODO: Update all sources and resources
 
 BASE_CMN_SRC = \
-../../src/common/arrstr.cpp \
-../../src/common/appbase.cpp \
-../../src/common/archive.cpp \
-../../src/common/btncmn.cpp \
-../../src/common/clntdata.cpp \
-../../src/common/cmdline.cpp \
-../../src/common/config.cpp \
-../../src/common/convauto.cpp \
-../../src/common/datetime.cpp \
-../../src/common/datstrm.cpp \
-../../src/common/dcbufcmn.cpp \
-../../src/common/dircmn.cpp \
-../../src/common/dynarray.cpp \
-../../src/common/dynlib.cpp \
-../../src/common/dynload.cpp \
-../../src/common/encconv.cpp \
-../../src/common/extended.c \
-../../src/common/ffile.cpp \
-../../src/common/file.cpp \
-../../src/common/fileconf.cpp \
-../../src/common/filefn.cpp \
-../../src/common/filename.cpp \
-../../src/common/filesys.cpp \
-../../src/common/fmapbase.cpp \
-../../src/common/hash.cpp \
-../../src/common/hashmap.cpp \
-../../src/common/init.cpp \
-../../src/common/intl.cpp \
-../../src/common/ipcbase.cpp \
-../../src/common/list.cpp \
-../../src/common/log.cpp \
-../../src/common/longlong.cpp \
-../../src/common/memory.cpp \
-../../src/common/mimecmn.cpp \
-../../src/common/module.cpp \
-../../src/common/mstream.cpp \
-../../src/common/object.cpp \
-../../src/common/platinfo.cpp \
-../../src/common/process.cpp \
-../../src/common/regex.cpp \
-../../src/common/stdpbase.cpp \
-../../src/common/sstream.cpp \
-../../src/common/stopwatch.cpp \
-../../src/common/strconv.cpp \
-../../src/common/stream.cpp \
-../../src/common/string.cpp \
-../../src/common/stringimpl.cpp \
-../../src/common/stringops.cpp \
-../../src/common/strvararg.cpp \
-../../src/common/sysopt.cpp \
-../../src/common/textbuf.cpp \
-../../src/common/textfile.cpp \
-../../src/common/tokenzr.cpp \
-../../src/common/txtstrm.cpp \
-../../src/common/unichar.cpp \
-../../src/common/uri.cpp \
-../../src/common/variant.cpp \
-../../src/common/wfstream.cpp \
-../../src/common/wxcrt.cpp \
-../../src/common/wxprintf.cpp \
-../../src/common/xti.cpp \
-../../src/common/xtistrm.cpp \
-../../src/common/zipstrm.cpp \
-../../src/common/zstream.cpp
+$(TOPDIR)/src/common/arrstr.cpp \
+$(TOPDIR)/src/common/appbase.cpp \
+$(TOPDIR)/src/common/archive.cpp \
+$(TOPDIR)/src/common/btncmn.cpp \
+$(TOPDIR)/src/common/clntdata.cpp \
+$(TOPDIR)/src/common/cmdline.cpp \
+$(TOPDIR)/src/common/config.cpp \
+$(TOPDIR)/src/common/convauto.cpp \
+$(TOPDIR)/src/common/datetime.cpp \
+$(TOPDIR)/src/common/datstrm.cpp \
+$(TOPDIR)/src/common/dcbufcmn.cpp \
+$(TOPDIR)/src/common/dircmn.cpp \
+$(TOPDIR)/src/common/dynarray.cpp \
+$(TOPDIR)/src/common/dynlib.cpp \
+$(TOPDIR)/src/common/dynload.cpp \
+$(TOPDIR)/src/common/encconv.cpp \
+$(TOPDIR)/src/common/extended.c \
+$(TOPDIR)/src/common/ffile.cpp \
+$(TOPDIR)/src/common/file.cpp \
+$(TOPDIR)/src/common/fileconf.cpp \
+$(TOPDIR)/src/common/filefn.cpp \
+$(TOPDIR)/src/common/filename.cpp \
+$(TOPDIR)/src/common/filesys.cpp \
+$(TOPDIR)/src/common/fmapbase.cpp \
+$(TOPDIR)/src/common/hash.cpp \
+$(TOPDIR)/src/common/hashmap.cpp \
+$(TOPDIR)/src/common/init.cpp \
+$(TOPDIR)/src/common/intl.cpp \
+$(TOPDIR)/src/common/ipcbase.cpp \
+$(TOPDIR)/src/common/list.cpp \
+$(TOPDIR)/src/common/log.cpp \
+$(TOPDIR)/src/common/longlong.cpp \
+$(TOPDIR)/src/common/memory.cpp \
+$(TOPDIR)/src/common/mimecmn.cpp \
+$(TOPDIR)/src/common/module.cpp \
+$(TOPDIR)/src/common/mstream.cpp \
+$(TOPDIR)/src/common/object.cpp \
+$(TOPDIR)/src/common/platinfo.cpp \
+$(TOPDIR)/src/common/process.cpp \
+$(TOPDIR)/src/common/regex.cpp \
+$(TOPDIR)/src/common/stdpbase.cpp \
+$(TOPDIR)/src/common/sstream.cpp \
+$(TOPDIR)/src/common/stopwatch.cpp \
+$(TOPDIR)/src/common/strconv.cpp \
+$(TOPDIR)/src/common/stream.cpp \
+$(TOPDIR)/src/common/string.cpp \
+$(TOPDIR)/src/common/stringimpl.cpp \
+$(TOPDIR)/src/common/stringops.cpp \
+$(TOPDIR)/src/common/strvararg.cpp \
+$(TOPDIR)/src/common/sysopt.cpp \
+$(TOPDIR)/src/common/textbuf.cpp \
+$(TOPDIR)/src/common/textfile.cpp \
+$(TOPDIR)/src/common/tokenzr.cpp \
+$(TOPDIR)/src/common/txtstrm.cpp \
+$(TOPDIR)/src/common/unichar.cpp \
+$(TOPDIR)/src/common/uri.cpp \
+$(TOPDIR)/src/common/variant.cpp \
+$(TOPDIR)/src/common/wfstream.cpp \
+$(TOPDIR)/src/common/wxcrt.cpp \
+$(TOPDIR)/src/common/wxprintf.cpp \
+$(TOPDIR)/src/common/xti.cpp \
+$(TOPDIR)/src/common/xtistrm.cpp \
+$(TOPDIR)/src/common/zipstrm.cpp \
+$(TOPDIR)/src/common/zstream.cpp
 
 BASE_PALMOS_SRC = \
-../../src/palmos/base.cpp \
-../../src/palmos/dir.cpp \
-../../src/palmos/prefconf.cpp \
-../../src/palmos/snglinst.cpp \
-../../src/palmos/thread.cpp \
-../../src/palmos/utils.cpp \
-../../src/palmos/utilsexc.cpp
+$(TOPDIR)/src/palmos/base.cpp \
+$(TOPDIR)/src/palmos/dir.cpp \
+$(TOPDIR)/src/palmos/prefconf.cpp \
+$(TOPDIR)/src/palmos/snglinst.cpp \
+$(TOPDIR)/src/palmos/thread.cpp \
+$(TOPDIR)/src/palmos/utils.cpp \
+$(TOPDIR)/src/palmos/utilsexc.cpp
 
 BASE_AND_GUI_CMN_SRC = \
-../../src/common/event.cpp \
-../../src/common/fs_mem.cpp \
-../../src/common/msgout.cpp \
-../../src/common/utilscmn.cpp
+$(TOPDIR)/src/common/event.cpp \
+$(TOPDIR)/src/common/fs_mem.cpp \
+$(TOPDIR)/src/common/msgout.cpp \
+$(TOPDIR)/src/common/utilscmn.cpp \
+$(TOPDIR)/src/common/windowid.cpp
 
 BASE_AND_GUI_PALMOS_SRC = \
-../../src/palmos/main.cpp \
-../../src/palmos/volume.cpp
+$(TOPDIR)/src/palmos/main.cpp \
+$(TOPDIR)/src/palmos/volume.cpp
 
 NET_CMN_SRC = \
-../../src/common/fs_inet.cpp \
-../../src/common/ftp.cpp \
-../../src/common/http.cpp \
-../../src/common/protocol.cpp \
-../../src/common/sckaddr.cpp \
-../../src/common/sckfile.cpp \
-../../src/common/sckipc.cpp \
-../../src/common/sckstrm.cpp \
-../../src/common/socket.cpp \
-../../src/common/url.cpp
+$(TOPDIR)/src/common/fs_inet.cpp \
+$(TOPDIR)/src/common/ftp.cpp \
+$(TOPDIR)/src/common/http.cpp \
+$(TOPDIR)/src/common/protocol.cpp \
+$(TOPDIR)/src/common/sckaddr.cpp \
+$(TOPDIR)/src/common/sckfile.cpp \
+$(TOPDIR)/src/common/sckipc.cpp \
+$(TOPDIR)/src/common/sckstrm.cpp \
+$(TOPDIR)/src/common/socket.cpp \
+$(TOPDIR)/src/common/url.cpp
 
 PALMOS_LOWLEVEL_SRC = \
-../../src/palmos/stdall.c \
-../../src/palmos/app.cpp \
-../../src/palmos/bitmap.cpp \
-../../src/palmos/brush.cpp \
-../../src/palmos/caret.cpp \
-../../src/palmos/clipbrd.cpp \
-../../src/generic/colour.cpp \
-../../src/palmos/cursor.cpp \
-../../src/palmos/data.cpp \
-../../src/palmos/dc.cpp \
-../../src/palmos/dcclient.cpp \
-../../src/palmos/dcmemory.cpp \
-../../src/palmos/dcprint.cpp \
-../../src/palmos/dcscreen.cpp \
-../../src/palmos/dib.cpp \
-../../src/palmos/enhmeta.cpp \
-../../src/palmos/evtloop.cpp \
-../../src/palmos/font.cpp \
-../../src/palmos/fontenum.cpp \
-../../src/palmos/fontutil.cpp \
-../../src/palmos/gdiimage.cpp \
-../../src/generic/icon.cpp \
-../../src/palmos/minifram.cpp \
-../../src/palmos/palette.cpp \
-../../src/palmos/pen.cpp \
-../../src/palmos/popupwin.cpp \
-../../src/palmos/printdlg.cpp \
-../../src/palmos/printpalm.cpp \
-../../src/palmos/region.cpp \
-../../src/palmos/settings.cpp \
-../../src/palmos/timer.cpp \
-../../src/palmos/tooltip.cpp \
-../../src/palmos/toplevel.cpp \
-../../src/palmos/utilsgui.cpp \
-../../src/palmos/window.cpp 
+$(TOPDIR)/src/palmos/stdall.c \
+$(TOPDIR)/src/palmos/pflib/pfpvfs.c \
+$(TOPDIR)/src/palmos/app.cpp \
+$(TOPDIR)/src/palmos/bitmap.cpp \
+$(TOPDIR)/src/palmos/brush.cpp \
+$(TOPDIR)/src/palmos/caret.cpp \
+$(TOPDIR)/src/palmos/clipbrd.cpp \
+$(TOPDIR)/src/palmos/cursor.cpp \
+$(TOPDIR)/src/palmos/data.cpp \
+$(TOPDIR)/src/palmos/dc.cpp \
+$(TOPDIR)/src/palmos/dcclient.cpp \
+$(TOPDIR)/src/palmos/dcmemory.cpp \
+$(TOPDIR)/src/palmos/dcprint.cpp \
+$(TOPDIR)/src/palmos/dcscreen.cpp \
+$(TOPDIR)/src/palmos/dib.cpp \
+$(TOPDIR)/src/palmos/enhmeta.cpp \
+$(TOPDIR)/src/palmos/evtloop.cpp \
+$(TOPDIR)/src/palmos/font.cpp \
+$(TOPDIR)/src/palmos/fontenum.cpp \
+$(TOPDIR)/src/palmos/fontutil.cpp \
+$(TOPDIR)/src/palmos/gdiimage.cpp \
+$(TOPDIR)/src/palmos/minifram.cpp \
+$(TOPDIR)/src/palmos/palette.cpp \
+$(TOPDIR)/src/palmos/pen.cpp \
+$(TOPDIR)/src/palmos/popupwin.cpp \
+$(TOPDIR)/src/palmos/printdlg.cpp \
+$(TOPDIR)/src/palmos/printpalm.cpp \
+$(TOPDIR)/src/palmos/region.cpp \
+$(TOPDIR)/src/palmos/settings.cpp \
+$(TOPDIR)/src/palmos/timer.cpp \
+$(TOPDIR)/src/palmos/tooltip.cpp \
+$(TOPDIR)/src/palmos/toplevel.cpp \
+$(TOPDIR)/src/palmos/utilsgui.cpp \
+$(TOPDIR)/src/palmos/window.cpp 
 
 PALMOS_DESKTOP_LOWLEVEL_SRC = \
-../../src/palmos/help.cpp
+$(TOPDIR)/src/palmos/help.cpp
 
 PALMOS_SRC = \
-../../src/palmos/accel.cpp \
-../../src/palmos/bmpbuttn.cpp \
-../../src/palmos/button.cpp \
-../../src/palmos/checkbox.cpp \
-../../src/palmos/checklst.cpp \
-../../src/palmos/choice.cpp \
-../../src/palmos/colordlg.cpp \
-../../src/palmos/combobox.cpp \
-../../src/palmos/control.cpp \
-../../src/palmos/dialog.cpp \
-../../src/palmos/dirdlg.cpp \
-../../src/palmos/dragimag.cpp \
-../../src/palmos/fdrepdlg.cpp \
-../../src/palmos/filedlg.cpp \
-../../src/palmos/fontdlg.cpp \
-../../src/palmos/frame.cpp \
-../../src/palmos/gauge.cpp \
-../../src/palmos/imaglist.cpp \
-../../src/palmos/listbox.cpp \
-../../src/palmos/listctrl.cpp \
-../../src/palmos/mdi.cpp \
-../../src/palmos/menu.cpp \
-../../src/palmos/menuitem.cpp \
-../../src/palmos/metafile.cpp \
-../../src/palmos/msgdlg.cpp \
-../../src/palmos/nativdlg.cpp \
-../../src/palmos/notebook.cpp \
-../../src/palmos/ownerdrw.cpp \
-../../src/palmos/radiobox.cpp \
-../../src/palmos/radiobut.cpp \
-../../src/palmos/scrolbar.cpp \
-../../src/palmos/slider.cpp \
-../../src/palmos/spinbutt.cpp \
-../../src/palmos/spinctrl.cpp \
-../../src/palmos/statbmp.cpp \
-../../src/palmos/statbox.cpp \
-../../src/palmos/statbrpalm.cpp \
-../../src/palmos/statline.cpp \
-../../src/palmos/stattext.cpp \
-../../src/palmos/toolbar.cpp \
-../../src/palmos/textctrl.cpp \
-../../src/palmos/tglbtn.cpp \
-../../src/palmos/treectrl.cpp
+$(TOPDIR)/src/palmos/accel.cpp \
+$(TOPDIR)/src/palmos/bmpbuttn.cpp \
+$(TOPDIR)/src/palmos/button.cpp \
+$(TOPDIR)/src/palmos/checkbox.cpp \
+$(TOPDIR)/src/palmos/checklst.cpp \
+$(TOPDIR)/src/palmos/choice.cpp \
+$(TOPDIR)/src/palmos/colordlg.cpp \
+$(TOPDIR)/src/palmos/combobox.cpp \
+$(TOPDIR)/src/palmos/control.cpp \
+$(TOPDIR)/src/palmos/dialog.cpp \
+$(TOPDIR)/src/generic/dirdlgg.cpp \
+$(TOPDIR)/src/palmos/dragimag.cpp \
+$(TOPDIR)/src/palmos/fdrepdlg.cpp \
+$(TOPDIR)/src/generic/filedlgg.cpp \
+$(TOPDIR)/src/palmos/fontdlg.cpp \
+$(TOPDIR)/src/palmos/frame.cpp \
+$(TOPDIR)/src/palmos/gauge.cpp \
+$(TOPDIR)/src/palmos/imaglist.cpp \
+$(TOPDIR)/src/palmos/listbox.cpp \
+$(TOPDIR)/src/generic/listctrl.cpp \
+$(TOPDIR)/src/palmos/mdi.cpp \
+$(TOPDIR)/src/palmos/menu.cpp \
+$(TOPDIR)/src/palmos/menuitem.cpp \
+$(TOPDIR)/src/palmos/metafile.cpp \
+$(TOPDIR)/src/palmos/msgdlg.cpp \
+$(TOPDIR)/src/palmos/nativdlg.cpp \
+$(TOPDIR)/src/palmos/notebook.cpp \
+$(TOPDIR)/src/palmos/ownerdrw.cpp \
+$(TOPDIR)/src/palmos/progdlg.cpp \
+$(TOPDIR)/src/palmos/radiobox.cpp \
+$(TOPDIR)/src/palmos/radiobut.cpp \
+$(TOPDIR)/src/palmos/scrolbar.cpp \
+$(TOPDIR)/src/palmos/slider.cpp \
+$(TOPDIR)/src/palmos/spinbutt.cpp \
+$(TOPDIR)/src/palmos/spinctrl.cpp \
+$(TOPDIR)/src/palmos/statbmp.cpp \
+$(TOPDIR)/src/palmos/statbox.cpp \
+$(TOPDIR)/src/palmos/statbrpalm.cpp \
+$(TOPDIR)/src/palmos/statline.cpp \
+$(TOPDIR)/src/palmos/stattext.cpp \
+$(TOPDIR)/src/palmos/toolbar.cpp \
+$(TOPDIR)/src/palmos/textctrl.cpp \
+$(TOPDIR)/src/palmos/tglbtn.cpp \
+$(TOPDIR)/src/generic/treectlg.cpp \
 
 GUI_CMN_SRC = \
-../../src/common/accesscmn.cpp \
-../../src/common/appcmn.cpp \
-../../src/common/artprov.cpp \
-../../src/common/artstd.cpp \
-../../src/common/bmpbase.cpp \
-../../src/common/bookctrl.cpp \
-../../src/common/choiccmn.cpp \
-../../src/common/clipcmn.cpp \
-../../src/common/colourcmn.cpp \
-../../src/common/cmdproc.cpp \
-../../src/common/cmndata.cpp \
-../../src/common/containr.cpp \
-../../src/common/cshelp.cpp \
-../../src/common/ctrlcmn.cpp \
-../../src/common/ctrlsub.cpp \
-../../src/common/datacmn.cpp \
-../../src/common/dcbase.cpp \
-../../src/common/dlgcmn.cpp \
-../../src/common/dndcmn.cpp \
-../../src/common/dobjcmn.cpp \
-../../src/common/docmdi.cpp \
-../../src/common/docview.cpp \
-../../src/common/dpycmn.cpp \
-../../src/common/dseldlg.cpp \
-../../src/common/effects.cpp \
-../../src/common/evtloopcmn.cpp \
-../../src/common/fddlgcmn.cpp \
-../../src/common/fldlgcmn.cpp \
-../../src/common/fontcmn.cpp \
-../../src/common/fontenumcmn.cpp \
-../../src/common/fontmap.cpp \
-../../src/common/framecmn.cpp \
-../../src/common/gaugecmn.cpp \
-../../src/common/gbsizer.cpp \
-../../src/common/gdicmn.cpp \
-../../src/common/geometry.cpp \
-../../src/common/gifdecod.cpp \
-../../src/common/helpbase.cpp \
-../../src/common/iconbndl.cpp \
-../../src/common/imagall.cpp \
-../../src/common/imagbmp.cpp \
-../../src/common/image.cpp \
-../../src/common/imagfill.cpp \
-../../src/common/imaggif.cpp \
-../../src/common/imagiff.cpp \
-../../src/common/imagjpeg.cpp \
-../../src/common/imagpcx.cpp \
-../../src/common/imagpng.cpp \
-../../src/common/imagpnm.cpp \
-../../src/common/imagtiff.cpp \
-../../src/common/imagxpm.cpp \
-../../src/common/layout.cpp \
-../../src/common/lboxcmn.cpp \
-../../src/common/matrix.cpp \
-../../src/common/menucmn.cpp \
-../../src/common/nbkbase.cpp \
-../../src/common/paper.cpp \
-../../src/common/popupcmn.cpp \
-../../src/common/prntbase.cpp \
-../../src/common/quantize.cpp \
-../../src/common/radiocmn.cpp \
-../../src/common/rendcmn.cpp \
-../../src/common/rgncmn.cpp \
-../../src/common/settcmn.cpp \
-../../src/common/sizer.cpp \
-../../src/common/statbar.cpp \
-../../src/common/stattextcmn.cpp \
-../../src/common/stockitem.cpp \
-../../src/common/tbarbase.cpp \
-../../src/common/textcmn.cpp \
-../../src/common/timercmn.cpp \
-../../src/common/toplvcmn.cpp \
-../../src/common/treebase.cpp \
-../../src/common/valgen.cpp \
-../../src/common/validate.cpp \
-../../src/common/valtext.cpp \
-../../src/common/wincmn.cpp \
-../../src/common/xpmdecod.cpp \
-../../src/generic/busyinfo.cpp \
-../../src/generic/choicdgg.cpp \
-../../src/generic/choicbkg.cpp \
-../../src/generic/dcpsg.cpp \
-../../src/generic/dirctrlg.cpp \
-../../src/generic/dragimgg.cpp \
-../../src/generic/listbkg.cpp \
-../../src/generic/logg.cpp \
-../../src/generic/numdlgg.cpp \
-../../src/generic/panelg.cpp \
-../../src/generic/printps.cpp \
-../../src/generic/renderg.cpp \
-../../src/generic/scrlwing.cpp \
-../../src/generic/selstore.cpp \
-../../src/generic/spinctlg.cpp \
-../../src/generic/splitter.cpp \
-../../src/generic/textdlgg.cpp \
-../../src/generic/tipwin.cpp \
-../../src/generic/treectlg.cpp \
-../../src/generic/vlbox.cpp \
-../../src/generic/vscroll.cpp
+$(TOPDIR)/src/common/accesscmn.cpp \
+$(TOPDIR)/src/common/appcmn.cpp \
+$(TOPDIR)/src/common/artprov.cpp \
+$(TOPDIR)/src/common/artstd.cpp \
+$(TOPDIR)/src/common/bmpbase.cpp \
+$(TOPDIR)/src/common/bookctrl.cpp \
+$(TOPDIR)/src/common/choiccmn.cpp \
+$(TOPDIR)/src/common/clipcmn.cpp \
+$(TOPDIR)/src/common/colourcmn.cpp \
+$(TOPDIR)/src/common/cmdproc.cpp \
+$(TOPDIR)/src/common/cmndata.cpp \
+$(TOPDIR)/src/common/containr.cpp \
+$(TOPDIR)/src/common/cshelp.cpp \
+$(TOPDIR)/src/common/ctrlcmn.cpp \
+$(TOPDIR)/src/common/ctrlsub.cpp \
+$(TOPDIR)/src/common/datacmn.cpp \
+$(TOPDIR)/src/common/dcbase.cpp \
+$(TOPDIR)/src/common/dlgcmn.cpp \
+$(TOPDIR)/src/common/dndcmn.cpp \
+$(TOPDIR)/src/common/dobjcmn.cpp \
+$(TOPDIR)/src/common/docmdi.cpp \
+$(TOPDIR)/src/common/docview.cpp \
+$(TOPDIR)/src/common/dpycmn.cpp \
+$(TOPDIR)/src/common/dseldlg.cpp \
+$(TOPDIR)/src/common/effects.cpp \
+$(TOPDIR)/src/common/evtloopcmn.cpp \
+$(TOPDIR)/src/common/fddlgcmn.cpp \
+$(TOPDIR)/src/common/filectrlcmn.cpp \
+$(TOPDIR)/src/common/fldlgcmn.cpp \
+$(TOPDIR)/src/common/fontcmn.cpp \
+$(TOPDIR)/src/common/fontenumcmn.cpp \
+$(TOPDIR)/src/common/fontmap.cpp \
+$(TOPDIR)/src/common/framecmn.cpp \
+$(TOPDIR)/src/common/gaugecmn.cpp \
+$(TOPDIR)/src/common/gbsizer.cpp \
+$(TOPDIR)/src/common/gdicmn.cpp \
+$(TOPDIR)/src/common/geometry.cpp \
+$(TOPDIR)/src/common/gifdecod.cpp \
+$(TOPDIR)/src/common/helpbase.cpp \
+$(TOPDIR)/src/common/iconbndl.cpp \
+$(TOPDIR)/src/common/imagall.cpp \
+$(TOPDIR)/src/common/imagbmp.cpp \
+$(TOPDIR)/src/common/image.cpp \
+$(TOPDIR)/src/common/imagfill.cpp \
+$(TOPDIR)/src/common/imaggif.cpp \
+$(TOPDIR)/src/common/imagiff.cpp \
+$(TOPDIR)/src/common/imagjpeg.cpp \
+$(TOPDIR)/src/common/imagpcx.cpp \
+$(TOPDIR)/src/common/imagpng.cpp \
+$(TOPDIR)/src/common/imagpnm.cpp \
+$(TOPDIR)/src/common/imagtiff.cpp \
+$(TOPDIR)/src/common/imagxpm.cpp \
+$(TOPDIR)/src/common/layout.cpp \
+$(TOPDIR)/src/common/lboxcmn.cpp \
+$(TOPDIR)/src/common/listctrlcmn.cpp \
+$(TOPDIR)/src/common/matrix.cpp \
+$(TOPDIR)/src/common/menucmn.cpp \
+$(TOPDIR)/src/common/nbkbase.cpp \
+$(TOPDIR)/src/common/paper.cpp \
+$(TOPDIR)/src/common/popupcmn.cpp \
+$(TOPDIR)/src/common/prntbase.cpp \
+$(TOPDIR)/src/common/quantize.cpp \
+$(TOPDIR)/src/common/radiocmn.cpp \
+$(TOPDIR)/src/common/rendcmn.cpp \
+$(TOPDIR)/src/common/rgncmn.cpp \
+$(TOPDIR)/src/common/settcmn.cpp \
+$(TOPDIR)/src/common/sizer.cpp \
+$(TOPDIR)/src/common/statbar.cpp \
+$(TOPDIR)/src/common/stattextcmn.cpp \
+$(TOPDIR)/src/common/stockitem.cpp \
+$(TOPDIR)/src/common/taskbarcmn.cpp \
+$(TOPDIR)/src/common/tbarbase.cpp \
+$(TOPDIR)/src/common/textcmn.cpp \
+$(TOPDIR)/src/common/textentrycmn.cpp \
+$(TOPDIR)/src/common/timercmn.cpp \
+$(TOPDIR)/src/common/timerimpl.cpp \
+$(TOPDIR)/src/common/toplvcmn.cpp \
+$(TOPDIR)/src/common/treebase.cpp \
+$(TOPDIR)/src/common/valgen.cpp \
+$(TOPDIR)/src/common/validate.cpp \
+$(TOPDIR)/src/common/valtext.cpp \
+$(TOPDIR)/src/common/wincmn.cpp \
+$(TOPDIR)/src/common/xpmdecod.cpp \
+$(TOPDIR)/src/generic/busyinfo.cpp \
+$(TOPDIR)/src/generic/choicdgg.cpp \
+$(TOPDIR)/src/generic/choicbkg.cpp \
+$(TOPDIR)/src/generic/colour.cpp \
+$(TOPDIR)/src/generic/dcpsg.cpp \
+$(TOPDIR)/src/generic/dirctrlg.cpp \
+$(TOPDIR)/src/generic/dragimgg.cpp \
+$(TOPDIR)/src/generic/filectrlg.cpp \
+$(TOPDIR)/src/generic/icon.cpp \
+$(TOPDIR)/src/generic/listbkg.cpp \
+$(TOPDIR)/src/generic/logg.cpp \
+$(TOPDIR)/src/generic/numdlgg.cpp \
+$(TOPDIR)/src/generic/panelg.cpp \
+$(TOPDIR)/src/generic/printps.cpp \
+$(TOPDIR)/src/generic/renderg.cpp \
+$(TOPDIR)/src/generic/scrlwing.cpp \
+$(TOPDIR)/src/generic/selstore.cpp \
+$(TOPDIR)/src/generic/spinctlg.cpp \
+$(TOPDIR)/src/generic/splitter.cpp \
+$(TOPDIR)/src/generic/textdlgg.cpp \
+$(TOPDIR)/src/generic/tipwin.cpp \
+$(TOPDIR)/src/generic/vlbox.cpp \
+$(TOPDIR)/src/generic/vscroll.cpp
 
 ADVANCED_CMN_SRC = \
-../../src/generic/calctrl.cpp \
-../../src/generic/datectlg.cpp \
-../../src/generic/grid.cpp \
-../../src/generic/gridctrl.cpp \
-../../src/generic/gridsel.cpp \
-../../src/generic/helpext.cpp \
-../../src/generic/laywin.cpp \
-../../src/generic/sashwin.cpp \
-../../src/generic/splash.cpp \
-../../src/generic/tipdlg.cpp \
-../../src/generic/wizard.cpp
+$(TOPDIR)/src/generic/calctrl.cpp \
+$(TOPDIR)/src/generic/datectlg.cpp \
+$(TOPDIR)/src/generic/grid.cpp \
+$(TOPDIR)/src/generic/gridctrl.cpp \
+$(TOPDIR)/src/generic/gridsel.cpp \
+$(TOPDIR)/src/generic/helpext.cpp \
+$(TOPDIR)/src/generic/laywin.cpp \
+$(TOPDIR)/src/generic/sashwin.cpp \
+$(TOPDIR)/src/generic/splash.cpp \
+$(TOPDIR)/src/generic/tipdlg.cpp \
+$(TOPDIR)/src/generic/wizard.cpp
 
 ADVANCED_PALMOS_SRC = \
-../../src/common/taskbarcmn.cpp \
-../../src/palmos/sound.cpp \
-../../src/palmos/taskbar.cpp
+$(TOPDIR)/src/palmos/sound.cpp \
+$(TOPDIR)/src/palmos/taskbar.cpp
 
 ADVANCED_PALMOS_DESKTOP_SRC = \
-../../src/palmos/joystick.cpp
+$(TOPDIR)/src/palmos/joystick.cpp
 
 ADVANCED_PALMOS_NATIVE_SRC = \
-../../src/palmos/datectrl.cpp
+$(TOPDIR)/src/palmos/datectrl.cpp
 
 MEDIA_CMN_SRC = \
-../../src/common/mediactrlcmn.cpp
+$(TOPDIR)/src/common/mediactrlcmn.cpp
 
 ADVANCED_PLATFORM_SRC = $(ADVANCED_PALMOS_SRC) $(ADVANCED_PALMOS_DESKTOP_SRC)
 
@@ -379,80 +387,86 @@ ADVANCED_SRC = $(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC) $(ADVANCED_PLATFORM_
 MEDIA_SRC = $(MEDIA_CMN_SRC)
 
 HTML_SRC = \
-../../src/html/helpctrl.cpp \
-../../src/html/helpdata.cpp \
-../../src/html/helpfrm.cpp \
-../../src/html/htmlcell.cpp \
-../../src/html/htmlfilt.cpp \
-../../src/html/htmlpars.cpp \
-../../src/html/htmltag.cpp \
-../../src/html/htmlwin.cpp \
-../../src/html/htmprint.cpp \
-../../src/html/m_dflist.cpp \
-../../src/html/m_fonts.cpp \
-../../src/html/m_hline.cpp \
-../../src/html/m_image.cpp \
-../../src/html/m_layout.cpp \
-../../src/html/m_links.cpp \
-../../src/html/m_list.cpp \
-../../src/html/m_pre.cpp \
-../../src/html/m_style.cpp \
-../../src/html/m_tables.cpp \
-../../src/html/winpars.cpp \
-../../src/generic/htmllbox.cpp
+$(TOPDIR)/src/html/helpctrl.cpp \
+$(TOPDIR)/src/html/helpdata.cpp \
+$(TOPDIR)/src/html/helpfrm.cpp \
+$(TOPDIR)/src/html/htmlcell.cpp \
+$(TOPDIR)/src/html/htmlfilt.cpp \
+$(TOPDIR)/src/html/htmlpars.cpp \
+$(TOPDIR)/src/html/htmltag.cpp \
+$(TOPDIR)/src/html/htmlwin.cpp \
+$(TOPDIR)/src/html/htmprint.cpp \
+$(TOPDIR)/src/html/m_dflist.cpp \
+$(TOPDIR)/src/html/m_fonts.cpp \
+$(TOPDIR)/src/html/m_hline.cpp \
+$(TOPDIR)/src/html/m_image.cpp \
+$(TOPDIR)/src/html/m_layout.cpp \
+$(TOPDIR)/src/html/m_links.cpp \
+$(TOPDIR)/src/html/m_list.cpp \
+$(TOPDIR)/src/html/m_pre.cpp \
+$(TOPDIR)/src/html/m_style.cpp \
+$(TOPDIR)/src/html/m_tables.cpp \
+$(TOPDIR)/src/html/winpars.cpp \
+$(TOPDIR)/src/generic/htmllbox.cpp
 
 XRC_SRC = \
-../../src/xrc/xh_bmpbt.cpp \
-../../src/xrc/xh_bmp.cpp \
-../../src/xrc/xh_bttn.cpp \
-../../src/xrc/xh_cald.cpp \
-../../src/xrc/xh_chckb.cpp \
-../../src/xrc/xh_chckl.cpp \
-../../src/xrc/xh_choic.cpp \
-../../src/xrc/xh_choicbk.cpp \
-../../src/xrc/xh_combo.cpp \
-../../src/xrc/xh_datectrl.cpp \
-../../src/xrc/xh_dlg.cpp \
-../../src/xrc/xh_frame.cpp \
-../../src/xrc/xh_gauge.cpp \
-../../src/xrc/xh_gdctl.cpp \
-../../src/xrc/xh_html.cpp \
-../../src/xrc/xh_listb.cpp \
-../../src/xrc/xh_listbk.cpp \
-../../src/xrc/xh_listc.cpp \
-../../src/xrc/xh_menu.cpp \
-../../src/xrc/xh_notbk.cpp \
-../../src/xrc/xh_panel.cpp \
-../../src/xrc/xh_radbt.cpp \
-../../src/xrc/xh_radbx.cpp \
-../../src/xrc/xh_scrol.cpp \
-../../src/xrc/xh_scwin.cpp \
-../../src/xrc/xh_sizer.cpp \
-../../src/xrc/xh_slidr.cpp \
-../../src/xrc/xh_spin.cpp \
-../../src/xrc/xh_split.cpp \
-../../src/xrc/xh_statbar.cpp \
-../../src/xrc/xh_stbmp.cpp \
-../../src/xrc/xh_stbox.cpp \
-../../src/xrc/xh_stlin.cpp \
-../../src/xrc/xh_sttxt.cpp \
-../../src/xrc/xh_text.cpp \
-../../src/xrc/xh_tglbtn.cpp \
-../../src/xrc/xh_toolb.cpp \
-../../src/xrc/xh_tree.cpp \
-../../src/xrc/xh_unkwn.cpp \
-../../src/xrc/xh_wizrd.cpp \
-../../src/xrc/xmlres.cpp \
-../../src/xrc/xmlrsall.cpp
+$(TOPDIR)/src/xrc/xh_bmpbt.cpp \
+$(TOPDIR)/src/xrc/xh_bmp.cpp \
+$(TOPDIR)/src/xrc/xh_bttn.cpp \
+$(TOPDIR)/src/xrc/xh_cald.cpp \
+$(TOPDIR)/src/xrc/xh_chckb.cpp \
+$(TOPDIR)/src/xrc/xh_chckl.cpp \
+$(TOPDIR)/src/xrc/xh_choic.cpp \
+$(TOPDIR)/src/xrc/xh_choicbk.cpp \
+$(TOPDIR)/src/xrc/xh_combo.cpp \
+$(TOPDIR)/src/xrc/xh_datectrl.cpp \
+$(TOPDIR)/src/xrc/xh_dlg.cpp \
+$(TOPDIR)/src/xrc/xh_frame.cpp \
+$(TOPDIR)/src/xrc/xh_gauge.cpp \
+$(TOPDIR)/src/xrc/xh_gdctl.cpp \
+$(TOPDIR)/src/xrc/xh_html.cpp \
+$(TOPDIR)/src/xrc/xh_listb.cpp \
+$(TOPDIR)/src/xrc/xh_listbk.cpp \
+$(TOPDIR)/src/xrc/xh_listc.cpp \
+$(TOPDIR)/src/xrc/xh_menu.cpp \
+$(TOPDIR)/src/xrc/xh_notbk.cpp \
+$(TOPDIR)/src/xrc/xh_panel.cpp \
+$(TOPDIR)/src/xrc/xh_radbt.cpp \
+$(TOPDIR)/src/xrc/xh_radbx.cpp \
+$(TOPDIR)/src/xrc/xh_scrol.cpp \
+$(TOPDIR)/src/xrc/xh_scwin.cpp \
+$(TOPDIR)/src/xrc/xh_sizer.cpp \
+$(TOPDIR)/src/xrc/xh_slidr.cpp \
+$(TOPDIR)/src/xrc/xh_spin.cpp \
+$(TOPDIR)/src/xrc/xh_split.cpp \
+$(TOPDIR)/src/xrc/xh_statbar.cpp \
+$(TOPDIR)/src/xrc/xh_stbmp.cpp \
+$(TOPDIR)/src/xrc/xh_stbox.cpp \
+$(TOPDIR)/src/xrc/xh_stlin.cpp \
+$(TOPDIR)/src/xrc/xh_sttxt.cpp \
+$(TOPDIR)/src/xrc/xh_text.cpp \
+$(TOPDIR)/src/xrc/xh_tglbtn.cpp \
+$(TOPDIR)/src/xrc/xh_toolb.cpp \
+$(TOPDIR)/src/xrc/xh_tree.cpp \
+$(TOPDIR)/src/xrc/xh_unkwn.cpp \
+$(TOPDIR)/src/xrc/xh_wizrd.cpp \
+$(TOPDIR)/src/xrc/xmlres.cpp \
+$(TOPDIR)/src/xrc/xmlrsall.cpp
 
 XML_SRC = \
-../../src/xml/xml.cpp \
-../../src/common/xtixml.cpp
+$(TOPDIR)/src/xml/xml.cpp \
+$(TOPDIR)/src/common/xtixml.cpp
 
 OPENGL_SRC = \
-../../src/palmos/glcanvas.cpp
+$(TOPDIR)/src/palmos/glcanvas.cpp
 
-SOURCES =  ../../samples/minimal/minimal.cpp \
+-include tstinc
+
+#TST_SRC += ../../samples/palmtst/palmtst.cpp
+#TST_SRC += ../../samples/minimal/minimal.cpp
+
+SOURCES = \
+$(TST_SRC) \
 $(BASE_SRC) \
 $(BASE_AND_GUI_SRC) \
 $(NET_SRC) \
@@ -463,7 +477,6 @@ $(HTML_SRC) \
 $(XRC_SRC) \
 $(XML_SRC) \
 $(OPENGL_SRC) \
-../../src/palmos/progdlg.cpp
 
 #include othersrc.mak
 #SOURCES += $(OTHER_SRC)
@@ -498,7 +511,7 @@ DATABASE_NAME = $(APP_NAME)
 SDK_VERSION = sdk-6
 
 ifeq ($(SDK_LOCATION),)
-SDK_LOCATION=../../
+SDK_LOCATION=$(TOPDIR)
 endif
 ## --------------------------------------------------------------------------
 # Build Settings
@@ -555,8 +568,8 @@ ADDITIONAL_SIM_LINK_LIBRARIES =
 # Additionally, you must explicly specify the "-I" prior to each
 # path included in this variable.  Spaces are used to separate
 # each path from each other.
-incdir=../../lib/gcc_lib/palmos
-LOCAL_INCLUDE_PATHS = -Irsc -I$(incdir) -I../../include
+INCDIR_PALMOS=-I$(INCDIR_WXPALM) -I$(TOPDIR)/src/palmos/pflib
+LOCAL_INCLUDE_PATHS = -Irsc $(INCDIR_PALMOS) -I$(TOPDIR)/include
 LOCAL_SIM_INCLUDE_PATHS = $(LOCAL_INCLUDE_PATHS)
 
 # Additional paths to look for #include <header>
@@ -593,7 +606,7 @@ ADDITIONAL_SIM_AR_FLAGS =
 # If overridden, end with a trailing '/'
 
 ifeq ($(TOOLS_DIR), )
-TOOLS_DIR = ../../../PalmOSTools/
+TOOLS_DIR = $(TOPDIR)/PalmOSTools/
 endif
 
 ## --------------------------------------------------------------------------
@@ -634,7 +647,6 @@ RSC_OBJ_DIR := ResourceObjs
 # Makefiles
 ## --------------------------------------------------------------------------
 
-
 ## include the makefile engine
 include makefile-engine.mk
 
@@ -642,3 +654,12 @@ include makefile-engine.mk
 ## this is useful if you don't want to use the auto-generated.mk values
 ## for some reason
 -include custom.mk
+
+makefile: $(INCDIR_WXPALM)/wx/setup.h
+
+$(INCDIR_WXPALM)/wx/setup.h: $(INCDIR_WXPALM)/wx/ $(TOPDIR)/include/wx/palmos/setup0.h
+	$(INSTALL_DATA) $(TOPDIR)/include/wx/palmos/setup0.h $(INCDIR_WXPALM)/wx/setup.h
+
+$(INCDIR_WXPALM)/wx/:
+	$(INSTALL_DIR) $(INCDIR_WXPALM)/wx/
+
