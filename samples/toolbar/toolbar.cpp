@@ -32,6 +32,7 @@
 #include "wx/log.h"
 #include "wx/image.h"
 #include "wx/filedlg.h"
+#include "wx/colordlg.h"
 #include "wx/spinctrl.h"
 #include "wx/srchctrl.h"
 
@@ -128,6 +129,7 @@ public:
     void OnToggleRadioBtn(wxCommandEvent& event);
 
     void OnToolbarStyle(wxCommandEvent& event);
+    void OnToolbarBgCol(wxCommandEvent& event);
     void OnToolbarCustomBitmap(wxCommandEvent& event);
 
     void OnToolLeftClick(wxCommandEvent& event);
@@ -201,6 +203,7 @@ enum
     IDM_TOOLBAR_SHOW_TEXT,
     IDM_TOOLBAR_SHOW_ICONS,
     IDM_TOOLBAR_SHOW_BOTH,
+    IDM_TOOLBAR_BG_COL,
     IDM_TOOLBAR_CUSTOM_PATH,
     IDM_TOOLBAR_TOP_ORIENTATION,
     IDM_TOOLBAR_LEFT_ORIENTATION,
@@ -247,6 +250,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU_RANGE(IDM_TOOLBAR_SHOW_TEXT, IDM_TOOLBAR_SHOW_BOTH,
                    MyFrame::OnToolbarStyle)
+    EVT_MENU(IDM_TOOLBAR_BG_COL, MyFrame::OnToolbarBgCol)
 
     EVT_MENU(IDM_TOOLBAR_CUSTOM_PATH, MyFrame::OnToolbarCustomBitmap)
 
@@ -584,6 +588,7 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_ICONS, _T("Show &icons\tCtrl-Alt-I"));
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_BOTH, _T("Show &both\tCtrl-Alt-B"));
     tbarMenu->AppendSeparator();
+    tbarMenu->Append(IDM_TOOLBAR_BG_COL, _T("Choose bac&kground colour..."));
     tbarMenu->Append(IDM_TOOLBAR_CUSTOM_PATH, _T("Custom &bitmap...\tCtrl-B"));
 
     wxMenu *fileMenu = new wxMenu;
@@ -877,6 +882,21 @@ void MyFrame::OnToolbarStyle(wxCommandEvent& event)
     }
 
     GetToolBar()->SetWindowStyle(style);
+}
+
+void MyFrame::OnToolbarBgCol(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = wxGetColourFromUser
+                   (
+                    this,
+                    GetToolBar()->GetBackgroundColour(),
+                    "Toolbar background colour"
+                   );
+    if ( col.IsOk() )
+    {
+        GetToolBar()->SetBackgroundColour(col);
+        GetToolBar()->Refresh();
+    }
 }
 
 void MyFrame::OnToolbarCustomBitmap(wxCommandEvent& WXUNUSED(event))
