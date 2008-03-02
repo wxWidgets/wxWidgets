@@ -56,7 +56,7 @@ protected:
     static bool CallHtmlHelp(wxWindow *win, const wxChar *str,
                              unsigned cmd, const void *param = NULL)
     {
-        return CallHtmlHelp(win, str, cmd, wx_reinterpret_cast(WPARAM, param));
+        return CallHtmlHelp(win, str, cmd, wx_reinterpret_cast(WXWPARAM, param));
     }
 
     // even simpler wrappers using GetParentWindow() and GetValidFilename() as
