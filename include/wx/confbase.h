@@ -428,18 +428,6 @@ private:
 };
 
 
-// ----------------------------------------------------------------------------
-// the native wxConfigBase implementation
-// ----------------------------------------------------------------------------
-
-// under Windows we prefer to use the native implementation
-// wxIniConfig isn't native anywhere after droping win16 in wxWidgets 2.6
-#if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
-    #define wxConfig  wxRegConfig
-#else // either we're under Unix or wish to use files even under Windows
-  #define wxConfig  wxFileConfig
-#endif
-
 #endif // wxUSE_CONFIG
 
 /*

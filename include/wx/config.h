@@ -15,17 +15,24 @@
 #include "wx/defs.h"
 #include "wx/confbase.h"
 
+// ----------------------------------------------------------------------------
+// define the native wxConfigBase implementation
+// ----------------------------------------------------------------------------
+
+// under Windows we prefer to use the native implementation but can be forced
+// to use the file-based one
 #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
-#    ifdef __WIN32__
-#        include "wx/msw/regconf.h"
-#    else
-#        include "wx/msw/iniconf.h"
-#    endif
+    #include "wx/msw/regconf.h"
+    #define wxConfig  wxRegConfig
+#elif defined(__WXOS2__) && wxUSE_CONFIG_NATIVE
+    #include "wx/os2/iniconf.h"
+    #define wxConfig wxIniConfig
 #elif defined(__WXPALMOS__) && wxUSE_CONFIG_NATIVE
-#    include "wx/palmos/prefconf.h"
-#else
-#    include "wx/fileconf.h"
+    #include "wx/palmos/prefconf.h"
+    #define wxConfig wxPrefConfig
+#else // either we're under Unix or wish to always use config files
+    #include "wx/fileconf.h"
+    #define wxConfig wxFileConfig
 #endif
 
-#endif
-    // _WX_CONFIG_H_BASE_
+#endif // _WX_CONFIG_H_BASE_
