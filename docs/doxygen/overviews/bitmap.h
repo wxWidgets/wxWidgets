@@ -76,7 +76,7 @@
 
  You should always use wxICON and wxBITMAP macros because they work for any
  platform (unlike the code above which doesn't deal with wxMac, wxX11, ...) and
- are more short and clear than versions with @c #ifdefs. Even better,
+ are shorter and more clear than versions with many @ifdef_ blocks. Even better,
  use the same XPMs on all platforms.
 
  @li @ref overview_bitmap_supportedformats

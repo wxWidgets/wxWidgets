@@ -708,7 +708,7 @@
      // Give it some contents
      event.SetText( wxT("Hallo") );
      // Send it
-     GetEventHandler()-ProcessEvent( event );
+     GetEventHandler()->ProcessEvent( event );
  }
  @endcode
 
@@ -771,7 +771,7 @@
  #define EVT_PLOT(id, fn) \
      DECLARE_EVENT_TABLE_ENTRY( wxEVT_PLOT_ACTION, id, -1, \
      (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNotifyEventFunction) \
-     wxStaticCastEvent( wxPlotEventFunction, & fn ), (wxObject *) NULL ),
+     wxStaticCastEvent( wxPlotEventFunction, &fn ), (wxObject *) NULL ),
 
 
  // code implementing the event type and the event class
@@ -787,7 +787,7 @@
    EVT_PLOT  (ID_MY_WINDOW, MyFrame::OnPlot)
  END_EVENT_TABLE()
 
- void MyFrame::OnPlot( wxPlotEvent  )
+ void MyFrame::OnPlot( wxPlotEvent &event )
  {
      wxPlotCurve *curve = event.GetCurve();
  }

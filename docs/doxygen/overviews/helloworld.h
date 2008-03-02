@@ -123,7 +123,7 @@
  bool MyApp::OnInit()
  {
      MyFrame *frame = new MyFrame( "Hello World", wxPoint(50,50), wxSize(450,340) );
-     frame-Show( true );
+     frame->Show( true );
      SetTopWindow( frame );
      return true;
  }
@@ -139,12 +139,12 @@
  {
      wxMenu *menuFile = new wxMenu;
 
-     menuFile-Append( ID_About, "" );
-     menuFile-AppendSeparator();
-     menuFile-Append( ID_Quit, "E" );
+     menuFile->Append( ID_About, "" );
+     menuFile->AppendSeparator();
+     menuFile->Append( ID_Quit, "E" );
 
      wxMenuBar *menuBar = new wxMenuBar;
-     menuBar-Append( menuFile, "" );
+     menuBar->Append( menuFile, "" );
 
      SetMenuBar( menuBar );
 

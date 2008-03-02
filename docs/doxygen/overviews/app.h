@@ -54,12 +54,12 @@
 
  bool DerivedApp::OnInit()
  {
-   wxFrame *the_frame = new wxFrame(@NULL, ID_MYFRAME, argv[0]);
+   wxFrame *the_frame = new wxFrame(NULL, ID_MYFRAME, argv[0]);
    ...
-   the_frame-Show(@true);
+   the_frame->Show(true);
    SetTopWindow(the_frame);
 
-   return @true;
+   return true;
  }
  @endcode
 

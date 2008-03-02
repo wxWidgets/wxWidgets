@@ -96,9 +96,9 @@
      wxColourData retData = dialog.GetColourData();
      wxColour col = retData.GetColour();
      wxBrush brush(col, wxSOLID);
-     myWindow-SetBackground(brush);
-     myWindow-Clear();
-     myWindow-Refresh();
+     myWindow->SetBackground(brush);
+     myWindow->Clear();
+     myWindow->Refresh();
    }
  @endcode
 
@@ -147,7 +147,7 @@
      wxFontData retData = dialog.GetFontData();
      canvasFont = retData.GetChosenFont();
      canvasTextColour = retData.GetColour();
-     myWindow-Refresh();
+     myWindow->Refresh();
    }
  @endcode
 

@@ -106,7 +106,7 @@
  @section overview_html_printing HTML Printing
 
  The wxHTML library provides printing facilities with several levels of complexity.
- The easiest way to print an HTML document is to use @ref overview_htmleasyprinting. 
+ The easiest way to print an HTML document is to use the wxHtmlEasyPrinting class.
 
  It lets you print HTML documents with only one command and you don't have to worry
  about deriving from the wxPrintout class at all. It is only a simple wrapper around the
