@@ -23,11 +23,10 @@
  @li @subpage page_strategies
  @li @subpage page_libs
  @li @subpage page_constants
- @li @subpage page_categories
+ @li @subpage page_class_cat
+ @li @subpage page_func_cat
+ @li @subpage page_macro_cat
  @li @subpage page_topics
  @li @subpage page_platdetails
-
- <!-- @li Alphabetical class reference
-     @li Functions and macros  -->
 
 */

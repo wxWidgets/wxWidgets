@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        categories.h
+// Name:        cat_classes.h
 // Purpose:     Classes-by-category page of the Doxygen manual
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -9,50 +9,50 @@
 
 /*!
 
- @page page_categories Classes by category
+ @page page_class_cat Classes by category
 
  A classification of wxWidgets classes by category.
 
  @beginInvisibleTable
  <tr><td>
- @li @ref page_categories_manwnd
- @li @ref page_categories_miscwnd
- @li @ref page_categories_cmndlg
- @li @ref page_categories_ctrl
- @li @ref page_categories_miscpickers
- @li @ref page_categories_menus
- @li @ref page_categories_wxaui
- @li @ref page_categories_winlayout
- @li @ref page_categories_dc
- @li @ref page_categories_gdi
- @li @ref page_categories_events
- @li @ref page_categories_val
- @li @ref page_categories_data
- @li @ref page_categories_containers
- @li @ref page_categories_smartpointers
- @li @ref page_categories_rtti
- @li @ref page_categories_logging
- @li @ref page_categories_debugging
- @li @ref page_categories_net
+ @li @ref page_class_cat_manwnd
+ @li @ref page_class_cat_miscwnd
+ @li @ref page_class_cat_cmndlg
+ @li @ref page_class_cat_ctrl
+ @li @ref page_class_cat_miscpickers
+ @li @ref page_class_cat_menus
+ @li @ref page_class_cat_wxaui
+ @li @ref page_class_cat_winlayout
+ @li @ref page_class_cat_dc
+ @li @ref page_class_cat_gdi
+ @li @ref page_class_cat_events
+ @li @ref page_class_cat_val
+ @li @ref page_class_cat_data
+ @li @ref page_class_cat_containers
+ @li @ref page_class_cat_smartpointers
+ @li @ref page_class_cat_rtti
+ @li @ref page_class_cat_logging
+ @li @ref page_class_cat_debugging
+ @li @ref page_class_cat_net
  </td><td>
- @li @ref page_categories_ipc
- @li @ref page_categories_dvf
- @li @ref page_categories_printing
- @li @ref page_categories_dd
- @li @ref page_categories_file
- @li @ref page_categories_streams
- @li @ref page_categories_threading
- @li @ref page_categories_html
- @li @ref page_categories_rich
- @li @ref page_categories_stc
- @li @ref page_categories_vfs
- @li @ref page_categories_xml
- @li @ref page_categories_xrc
- @li @ref page_categories_help
- @li @ref page_categories_media
- @li @ref page_categories_gl
- @li @ref page_categories_appmanagement
- @li @ref page_categories_misc
+ @li @ref page_class_cat_ipc
+ @li @ref page_class_cat_dvf
+ @li @ref page_class_cat_printing
+ @li @ref page_class_cat_dd
+ @li @ref page_class_cat_file
+ @li @ref page_class_cat_streams
+ @li @ref page_class_cat_threading
+ @li @ref page_class_cat_html
+ @li @ref page_class_cat_rich
+ @li @ref page_class_cat_stc
+ @li @ref page_class_cat_vfs
+ @li @ref page_class_cat_xml
+ @li @ref page_class_cat_xrc
+ @li @ref page_class_cat_help
+ @li @ref page_class_cat_media
+ @li @ref page_class_cat_gl
+ @li @ref page_class_cat_appmanagement
+ @li @ref page_class_cat_misc
  </td></tr>
  @endTable
 
@@ -60,7 +60,7 @@
 
 
 
- @section page_categories_manwnd Managed windows
+ @section page_class_cat_manwnd Managed windows
 
  There are several types of window that are directly controlled by the
  window manager (such as MS Windows, or the Motif Window Manager).
@@ -80,7 +80,7 @@
  See also the @ref overview_cmndlg.
 
 
- @section page_categories_miscwnd Miscellaneous windows
+ @section page_class_cat_miscwnd Miscellaneous windows
 
  The following are a variety of classes that are derived from wxWindow.
 
@@ -101,7 +101,7 @@
  @li wxWizardPageSimple: A page in wizard dialog.
 
 
- @section page_categories_cmndlg Common dialogs
+ @section page_class_cat_cmndlg Common dialogs
 
  @ref overview_cmndlg
 
@@ -127,7 +127,7 @@
  @li wxWizard: A wizard dialog.
 
 
- @section page_categories_ctrl Controls
+ @section page_class_cat_ctrl Controls
 
  Typically, these are small windows which provide interaction with the user. Controls
  that are not static can have wxValidator associated with them.
@@ -173,7 +173,7 @@
 
 
 
- @section page_categories_miscpickers Miscellaneous pickers
+ @section page_class_cat_miscpickers Miscellaneous pickers
 
  A picker control is a control whose appearance and behaviour is highly platform-dependent.
 
@@ -185,7 +185,7 @@
 
 
 
- @section page_categories_menus Menus
+ @section page_class_cat_menus Menus
 
  @li wxMenu: Displays a series of menu items for selection
  @li wxMenuBar: Contains a series of menus for use with a frame
@@ -193,7 +193,7 @@
 
 
 
- @section page_categories_wxaui wxAUI - advanced user interface
+ @section page_class_cat_wxaui wxAUI - advanced user interface
 
  This is a new set of classes for writing a customizable application
  interface with built-in docking, floatable panes and a flexible
@@ -208,7 +208,7 @@
 
 
 
- @section page_categories_winlayout Window layout
+ @section page_class_cat_winlayout Window layout
 
  There are two different systems for laying out windows (and dialogs in particular).
  One is based upon so-called sizers and it requires less typing, thinking and calculating
@@ -239,7 +239,7 @@
  @li wxLayoutAlgorithm: An alternative window layout facility
 
 
- @section page_categories_dc Device contexts
+ @section page_class_cat_dc Device contexts
 
  @ref overview_dc
 
@@ -262,7 +262,7 @@
  @li wxPrinterDC: A device context for drawing to printers
 
 
- @section page_categories_gdi Graphics device interface
+ @section page_class_cat_gdi Graphics device interface
 
  @ref overview_bitmap
 
@@ -287,7 +287,7 @@
  @li wxRendererNative: Abstracts high-level drawing primitives
 
 
- @section page_categories_events Events
+ @section page_class_cat_events Events
 
  @ref overview_eventhandling
 
@@ -344,7 +344,7 @@
  @li wxWizardEvent: A wizard event
 
 
- @section page_categories_val Validators
+ @section page_class_cat_val Validators
 
  @ref overview_validator
 
@@ -356,7 +356,7 @@
  @li wxGenericValidator: Generic control validator class
 
 
- @section page_categories_data Data structures
+ @section page_class_cat_data Data structures
 
  These are the data structure classes supported by wxWidgets.
 
@@ -379,7 +379,7 @@
  @li wxVariant: A class for storing arbitrary types that may change at run-time
 
 
- @section page_categories_containers Container classes
+ @section page_class_cat_containers Container classes
 
  @ref overview_container
 
@@ -395,7 +395,7 @@
  @li wxVector<T>: Template base vector implementation identical to std::vector
 
 
- @section page_categories_smartpointers Smart pointers
+ @section page_class_cat_smartpointers Smart pointers
 
  wxWidgets provides a few smart pointer class templates.
 
@@ -405,7 +405,7 @@
  @li wxWeakRef<T>: A weak reference
 
 
- @section page_categories_rtti Run-time class information system
+ @section page_class_cat_rtti Run-time class information system
 
  @ref overview_runtimeclass
 
@@ -417,7 +417,7 @@
  @li RTTI macros: Macros for manipulating run-time information
 
 
- @section page_categories_logging Logging features
+ @section page_class_cat_logging Logging features
 
  @ref overview_log
 
@@ -438,7 +438,7 @@
  @li Log functions: Error and warning logging functions
 
 
- @section page_categories_debugging Debugging features
+ @section page_class_cat_debugging Debugging features
 
  @ref overview_debugging
 
@@ -455,7 +455,7 @@
  @li wxDebugReportPreviewStd: Standard implementation of wxDebugReportPreview.
 
 
- @section page_categories_net Networking classes
+ @section page_class_cat_net Networking classes
 
  wxWidgets provides its own classes for socket based networking.
 
@@ -472,7 +472,7 @@
 
 
 
- @section page_categories_ipc Interprocess communication
+ @section page_class_cat_ipc Interprocess communication
 
  @ref overview_ipc
 
@@ -485,7 +485,7 @@
 
 
 
- @section page_categories_dvf Document-view framework
+ @section page_class_cat_dvf Document-view framework
 
  @ref overview_docview
 
@@ -502,7 +502,7 @@
  %@li wxMDIDocParentFrame: An MDI parent frame to contain views  -->
 
 
- @section page_categories_printing Printing framework
+ @section page_class_cat_printing Printing framework
 
  @ref overview_printing
 
@@ -525,7 +525,7 @@
 
 
 
- @section page_categories_dd Drag and drop and clipboard classes
+ @section page_class_cat_dd Drag and drop and clipboard classes
 
  @ref overview_dnd
 
@@ -543,7 +543,7 @@
  @li wxDropSource: Drop source class
 
 
- @section page_categories_file File related classes
+ @section page_class_cat_file File related classes
 
  wxWidgets has several small classes to work with disk files, see 
  @ref overview_file for more details.
@@ -559,7 +559,7 @@
  @li wxPathList: A class to help search multiple paths
 
 
- @section page_categories_streams Stream classes
+ @section page_class_cat_streams Stream classes
 
  wxWidgets has its own set of stream classes, as an alternative to often buggy standard stream
  libraries, and to provide enhanced functionality.
@@ -596,7 +596,7 @@
  @li wxSocketOutputStream: Socket output stream class
 
 
- @section page_categories_threading Threading classes
+ @section page_class_cat_threading Threading classes
 
  @ref overview_thread
 
@@ -613,7 +613,7 @@
  @li wxSemaphore: Semaphore class
 
 
- @section page_categories_html HTML classes
+ @section page_class_cat_html HTML classes
 
  wxWidgets provides a set of classes to display text in HTML format. These
  class include a help system based on the HTML widget.
@@ -628,7 +628,7 @@
  @li wxHtmlWinTagHandler: HTML tag handler, pluginable into wxHtmlWinParser
 
 
- @section page_categories_rich Rich text classes
+ @section page_class_cat_rich Rich text classes
 
  wxWidgets provides a set of generic classes to edit and print simple rich text with character
  and paragraph formatting.
@@ -654,7 +654,7 @@
  @li wxRichTextHeaderFooterData: Header and footer data specification.
 
 
- @section page_categories_stc Scintilla text editor classes
+ @section page_class_cat_stc Scintilla text editor classes
 
  wxWidgets also provides a wrapper around the Scintilla text editor control, which is
  a control for plain-text editing with support for highlighting, smart indentation, etc.
@@ -662,7 +662,7 @@
  @li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code editing component.
 
 
- @section page_categories_vfs Virtual file system classes
+ @section page_class_cat_vfs Virtual file system classes
 
  wxWidgets provides a set of classes that implement an extensible virtual file system,
  used internally by the HTML classes.
@@ -672,14 +672,14 @@
  @li wxFileSystemHandler: Class used to announce file system type
 
 
- @section page_categories_xml XML classes
+ @section page_class_cat_xml XML classes
 
  @li wxXmlDocument: A class to parse XML files
  @li wxXmlNode: A class which represents XML nodes
  @li wxXmlAttribute: A class which represent an XML attribute
 
 
- @section page_categories_xrc XML-based resource system classes
+ @section page_class_cat_xrc XML-based resource system classes
 
  @ref overview_xrc
 
@@ -690,7 +690,7 @@
  @li wxXmlResourceHandler: The base class for XML resource handlers
 
 
- @section page_categories_help Online help
+ @section page_class_cat_help Online help
 
  @li wxHelpController: Family of classes for controlling help windows
  @li wxHtmlHelpController: HTML help controller class
@@ -702,18 +702,18 @@
  @li wxToolTip: Class implementing tooltips
 
 
- @section page_categories_media Multimedia classes
+ @section page_class_cat_media Multimedia classes
 
  @li wxMediaCtrl: Display multimedia contents.
 
 
- @section page_categories_gl OpenGL classes
+ @section page_class_cat_gl OpenGL classes
 
  @li wxGLCanvas: Canvas that you can render OpenGL calls to.
  @li wxGLContext: Class to ease sharing of OpenGL data resources.
 
 
- @section page_categories_appmanagement Application and process-management classes
+ @section page_class_cat_appmanagement Application and process-management classes
 
  @li wxApp: Application class
  @li wxCmdLineParser: Command line parser class
@@ -721,7 +721,7 @@
  @li wxProcess: Process class
 
 
- @section page_categories_misc Miscellaneous
+ @section page_class_cat_misc Miscellaneous
 
  @li wxCaret: A caret (cursor) object
  @li wxConfigBase: Classes for reading/writing the configuration settings
