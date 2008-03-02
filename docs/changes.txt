@@ -163,6 +163,7 @@ wxGTK:
 wxMac:
 
 - Fixed cursor for wxBusyCursor and wxContextHelp.
+- Fixed wxListCtrl to respect items' non-default fonts.
 
 
 2.8.7

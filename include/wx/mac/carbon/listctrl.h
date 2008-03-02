@@ -365,6 +365,17 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   void MacSetDrawingContext(void* context) { m_cgContext = context; }
   void* MacGetDrawingContext() { return m_cgContext; }
 
+
+#if wxABI_VERSION >= 20808
+  virtual wxVisualAttributes GetDefaultAttributes() const
+  {
+      return GetClassDefaultAttributes(GetWindowVariant());
+  }
+
+  static wxVisualAttributes
+  GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+#endif // wxABI_VERSION >= 20808
+
 protected:
 
   // protected overrides needed for pimpl approach

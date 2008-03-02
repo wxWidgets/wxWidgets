@@ -752,6 +752,12 @@ bool wxListCtrl::Create(wxWindow *parent,
             (EventHandlerRef *)&m_macListCtrlEventHandler);
     }
 
+    // set the default font to slightly smaller font that the native
+    // DataBrowser control uses:
+    wxFont font;
+    font.MacCreateThemeFont(kThemeViewsFont);
+    m_font = font;
+
     return true;
 }
 
@@ -770,6 +776,18 @@ wxListCtrl::~wxListCtrl()
         delete m_imageListState;
 
     delete m_renameTimer;
+}
+
+/*static*/
+wxVisualAttributes wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attr;
+
+    attr.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attr.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+    attr.font.MacCreateThemeFont(kThemeViewsFont);
+
+    return attr;
 }
 
 // ----------------------------------------------------------------------------
@@ -2707,9 +2725,8 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     if (bgColor == wxNullColour)
         bgColor = listBgColor;
 
-    wxFont listFont = list->GetFont();
-    if (font == wxNullFont)
-        font = listFont;
+    if (!font.Ok())
+        font = list->GetFont();
 
     wxMacCFStringHolder cfString;
     cfString.Assign( text, wxLocale::GetSystemEncoding() );
@@ -2832,8 +2849,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
 
     if (font.Ok())
     {
-        if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
-            info.fontID = font.MacGetThemeFontID();
+        info.fontID = font.MacGetThemeFontID();
 
         ::TextSize( (short)(font.MacGetFontSize()) ) ;
         ::TextFace( font.MacGetFontStyle() ) ;
