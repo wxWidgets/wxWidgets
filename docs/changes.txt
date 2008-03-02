@@ -148,6 +148,8 @@ wxMSW:
   for increased reliability and conformance to user expectations.
 - Fixed double Init() call in wxTopLevelWindow causing a memory leak on
   SmartPhone.
+- Fixed rendering of borders for wxTextCtrl with wxTE_RICH(2) style when
+  using Windows XP's Classic UI theme.
 
 wxGTK:
 

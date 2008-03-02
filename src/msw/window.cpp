@@ -276,6 +276,22 @@ bool GetCursorPosWinCE(POINT* pt)
 }
 #endif
 
+static wxBorder TranslateBorder(wxBorder border)
+{
+    if ( border == wxBORDER_THEME )
+    {
+#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
+        return wxBORDER_SIMPLE;
+#elif wxUSE_UXTHEME
+        if (wxUxThemeEngine::GetIfActive())
+            return wxBORDER_THEME;
+#endif
+        return wxBORDER_SUNKEN;
+    }
+
+    return border;
+}
+
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -1365,7 +1381,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     if ( flags & wxHSCROLL )
         style |= WS_HSCROLL;
 
-    const wxBorder border = GetBorder(flags);
+    const wxBorder border = TranslateBorder(GetBorder(flags));
 
     // WS_BORDER is only required for wxBORDER_SIMPLE
     if ( border == wxBORDER_SIMPLE )
@@ -1429,13 +1445,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
 // 2.9 and above.
 wxBorder wxWindowMSW::GetThemedBorderStyle() const
 {
-#if defined(__POCKETPC__) || defined(__SMARTPHONE__)
-    return wxBORDER_SIMPLE;
-#elif wxUSE_UXTHEME
-    if (wxUxThemeEngine::GetIfActive())
-        return wxBORDER_THEME;
-#endif
-    return wxBORDER_SUNKEN;
+    return TranslateBorder(wxBORDER_THEME);
 }
 
 // Setup background and foreground colours correctly
@@ -3311,7 +3321,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_NCCALCSIZE:
             {
                 wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-                if (theme && GetBorder() == wxBORDER_THEME)
+                if (theme && TranslateBorder(GetBorder()) == wxBORDER_THEME)
                 {
                     // first ask the widget to calculate the border size
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
@@ -3351,7 +3361,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_NCPAINT:
             {
                 wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
-                if (theme && GetBorder() == wxBORDER_THEME)
+                if (theme && TranslateBorder(GetBorder()) == wxBORDER_THEME)
                 {
                     // first ask the widget to paint its non-client area, such as scrollbars, etc.
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
