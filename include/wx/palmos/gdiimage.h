@@ -3,7 +3,7 @@
 // Purpose:     wxGDIImage class: base class for wxBitmap, wxIcon, wxCursor
 //              under Palm OS
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Yunhui Fu
 // Created:     10/13/04
 // RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
@@ -170,6 +170,14 @@ protected:
     // create the data for the derived class here
     virtual wxGDIImageRefData *CreateData() const = 0;
     virtual wxGDIRefData *CreateGDIRefData() const { return CreateData(); }
+    // we can't [efficiently] clone objects of this class
+    virtual wxGDIRefData *
+    CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
+    {
+        wxFAIL_MSG( _T("must be implemented if used") );
+
+        return NULL;
+    }
 
     static wxGDIImageHandlerList ms_handlers;
 };

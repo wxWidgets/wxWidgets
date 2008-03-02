@@ -28,7 +28,11 @@
     #include "wx/log.h"
 #endif
 
-#include <StatusBar.h>
+#ifdef __WXPALMOS6__
+    #include <StatusBar.h>
+#else
+    #include <PenInputMgr.h>
+#endif // __WXPALMOS6__
 
 // ----------------------------------------------------------------------------
 // macros

@@ -108,6 +108,7 @@ bool wxCheckBox::Create(wxWindow *parent,
     if(!wxControl::Create(parent, id, pos, size, style, validator, name))
         return false;
 
+    m_state = wxCHK_UNCHECKED;
     return wxControl::PalmCreateControl(checkboxCtl, label, pos, size);
 }
 
@@ -136,15 +137,41 @@ bool wxCheckBox::SendClickEvent()
 
 void wxCheckBox::Command(wxCommandEvent& event)
 {
+    int state = event.GetInt();
+    wxCHECK_RET( (state == wxCHK_UNCHECKED) || (state == wxCHK_CHECKED)
+        || (state == wxCHK_UNDETERMINED),
+        wxT("event.GetInt() returned an invalid checkbox state") );
+
+    Set3StateValue((wxCheckBoxState) state);
+    ProcessCommand(event);
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
 {
+    Int16 newValue;
+    ControlType *control = (ControlType *)GetObjectPtr();
+    if(NULL == control) {
+        return;
+    }
+    m_state = state;
+    switch (state) {
+    case wxCHK_UNCHECKED:
+        newValue = 0;
+        break;
+    case wxCHK_CHECKED:
+        newValue = 1;
+        break;
+    case wxCHK_UNDETERMINED:
+    default:
+        return;
+        break;
+    }
+    CtlSetValue (control, newValue);
 }
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 {
-    return (wxCheckBoxState) 0;
+    return m_state;
 }
 
 #endif // wxUSE_CHECKBOX

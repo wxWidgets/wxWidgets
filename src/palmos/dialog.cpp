@@ -181,8 +181,7 @@ void wxDialog::Raise()
 // show dialog modally
 int wxDialog::ShowModal()
 {
-    if (show && CanDoLayoutAdaptation())
-        DoLayoutAdaptation();
+    Show (true);
 
     if (errNone == FrmDoDialog ((FormType *)wxTopLevelWindow::GetForm())) {
         return 0;

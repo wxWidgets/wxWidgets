@@ -2,7 +2,7 @@
 // Name:        wx/palmos/listctrl.h
 // Purpose:     wxListCtrl class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Yunhui Fu
 // Created:     10/13/04
 // RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
@@ -372,9 +372,6 @@ protected:
 
     // these functions are only used for virtual list view controls, i.e. the
     // ones with wxLC_VIRTUAL style
-
-    // return the text for the given column of the given item
-    virtual wxString OnGetItemText(long item, long column) const;
 
     // return the text for the given column of the given item
     virtual wxString OnGetItemText(long item, long column) const;

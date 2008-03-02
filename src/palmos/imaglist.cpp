@@ -34,9 +34,7 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/palmos/imaglist.h"
-#include "wx/palmos/private.h"
-
+#include "wx/imaglist.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -91,7 +89,7 @@ bool wxImageList::GetSize(int WXUNUSED(index), int &width, int &height) const
 // ----------------------------------------------------------------------------
 
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
-
+{
     return 0;
 }
 

@@ -37,10 +37,17 @@
 #include "wx/confbase.h"
 #include "wx/power.h"
 
+#include <PalmTypes.h>
 #include <MemoryMgr.h>
 #include <DLServer.h>
 #include <SoundMgr.h>
+#include <SystemMgr.h> // SysDoze()...
 #include <SysUtils.h>
+
+#ifdef defined (__WXPALMOS6__)
+extern void SysReset (void);
+extern UInt32 SysTaskID (void);
+#endif
 
 // ============================================================================
 // implementation
@@ -100,12 +107,15 @@ bool wxGetUserName(wxChar *buf, int maxSize)
 
 const wxChar* wxGetHomeDir(wxString *pstr)
 {
-    return NULL;
+    if (NULL != pstr) {
+        *pstr = "/palmos";
+    }
+    return wxT("/palmos");
 }
 
 wxString wxGetUserHome(const wxString& WXUNUSED(user))
 {
-    return wxString();
+    return wxString("/palmos");
 }
 
 bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspaceSize_t *pFree)
@@ -152,6 +162,24 @@ bool wxShell(const wxString& command)
 // Shutdown or reboot the PC
 bool wxShutdown(wxShutdownFlags wFlags)
 {
+    switch (wFlags) {
+    case wxSHUTDOWN_POWEROFF:
+        // TODO: turn off lamps
+#ifdef defined (__WXPALMOS6__)
+        //extern void SysReset (void);
+        //extern UInt32 SysTaskID (void);
+        #define SysReset()
+        #define SysTaskID() (0)
+        SysSleep ();
+#else
+        //SysSleep (false, false);// undocument API
+        SysDoze (true);
+#endif
+        break;
+    case wxSHUTDOWN_REBOOT:
+        SysReset ();
+        break;
+    }
     return false;
 }
 
@@ -161,13 +189,25 @@ bool wxShutdown(wxShutdownFlags wFlags)
 
 wxPowerType wxGetPowerType()
 {
+    //SysBatteryKind kind;
+    //POS_SysBatteryInfo (false, NULL, NULL, NULL, NULL, NULL, &kind, NULL);
+     //return wxPOWER_SOCKET;
     return wxPOWER_BATTERY;
 }
 
 wxBatteryState wxGetBatteryState()
 {
-    // TODO
-    return wxBATTERY_UNKNOWN_STATE;
+    //#include "SystemMgr.h"
+    UInt8 percent;
+    POS_SysBatteryInfo (false, NULL, NULL, NULL, NULL, NULL, NULL, &percent);
+    if (percent < 3)
+        return wxBATTERY_SHUTDOWN_STATE;
+    else if (percent < 5)
+        return wxBATTERY_CRITICAL_STATE;
+    else if (percent < 15)
+        return wxBATTERY_LOW_STATE;
+    //return wxBATTERY_UNKNOWN_STATE;
+    return wxBATTERY_NORMAL_STATE;
 }
 
 // ----------------------------------------------------------------------------
@@ -182,7 +222,7 @@ wxMemorySize wxGetFreeMemory()
     uint32_t freeChunk;
 
     // executed twice: for the dynamic heap, and for the non-secure RAM storage heap
-    for ( uint16_t i=0; i<MemNumRAMHeaps(); i++)
+    for ( uint16_t i = 0; i < POS_MemNumRAMHeaps(); i ++)
     {
         status_t err = MemHeapFreeBytes(i, &freeHeap, &freeChunk);
         if( err != errNone )
@@ -195,7 +235,7 @@ wxMemorySize wxGetFreeMemory()
 
 unsigned long wxGetProcessId()
 {
-    return 0;
+    return SysTaskID ();
 }
 
 // Emit a beeeeeep
@@ -213,6 +253,8 @@ wxString wxGetOsDescription()
 {
     wxString strOS = _T("PalmOS");
 
+    //err = FtrGet(sysFtrCreator, sysFtrNumROMVersion, &romVersion);
+    //if (romVersion >= 0x02000000) v20 = true;
     char *version = SysGetOSVersionString();
     if(version)
     {
@@ -230,8 +272,7 @@ wxString wxGetOsDescription()
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
     // TODO
-
-    return wxOS_UNKNOWN;
+    return wxOS_PALM_OS;
 }
 
 // ----------------------------------------------------------------------------
@@ -240,14 +281,35 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
 void wxMilliSleep(unsigned long milliseconds)
 {
+    UInt16 ticks_sec;
+    Int32 delay;
+    ticks_sec = SysTicksPerSecond ();
+    delay = milliseconds * ticks_sec / 1000;
+    if (delay > 0) {
+        SysTaskDelay (delay);
+    }
 }
 
 void wxMicroSleep(unsigned long microseconds)
 {
+    UInt16 ticks_sec;
+    Int32 delay;
+    ticks_sec = SysTicksPerSecond ();
+    delay = microseconds * ticks_sec / 1000000;
+    if (delay > 0) {
+        SysTaskDelay (delay);
+    }
 }
 
 void wxSleep(int nSecs)
 {
+    UInt16 ticks_sec;
+    Int32 delay;
+    ticks_sec = SysTicksPerSecond ();
+    delay = nSecs * ticks_sec;
+    if (delay > 0) {
+        SysTaskDelay (delay);
+    }
 }
 
 // ----------------------------------------------------------------------------

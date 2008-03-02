@@ -2,7 +2,7 @@
  * Name:        wx/palmos/chkconf.h
  * Purpose:     Compiler-specific configuration checking
  * Author:      William Osborne - minimal working wxPalmOS port
- * Modified by:
+ * Modified by: Yunhui Fu
  * Created:     10/13/04
  * RCS-ID:      $Id$
  * Copyright:   (c) William Osborne
@@ -55,7 +55,7 @@
 #define wxUSE_DATAOBJ 0
 
 #undef wxUSE_DIRDLG
-#define wxUSE_DIRDLG 0
+#define wxUSE_DIRDLG 1
 
 #undef wxUSE_DISPLAY
 #define wxUSE_DISPLAY 0
@@ -82,13 +82,13 @@
 #define wxUSE_FFILE 0
 
 #undef wxUSE_FILE
-#define wxUSE_FILE 0
+#define wxUSE_FILE 1
 
 #undef wxUSE_FILECONFIG
 #define wxUSE_FILECONFIG 0
 
 #undef wxUSE_FILEDLG
-#define wxUSE_FILEDLG 0
+#define wxUSE_FILEDLG 1
 
 #undef wxUSE_FILESYSTEM
 #define wxUSE_FILESYSTEM 0
@@ -332,6 +332,9 @@
 
 #undef wxUSE_TOOLBOOK
 #define wxUSE_TOOLBOOK 0
+
+#undef wxUSE_SELECT_DISPATCHER
+#define wxUSE_SELECT_DISPATCHER 1
 
 #endif
     /* _WX_PALMOS_CHKCONF_H_ */

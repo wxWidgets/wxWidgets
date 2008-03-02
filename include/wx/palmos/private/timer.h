@@ -12,7 +12,7 @@
 #ifndef _WX_TIMER_H_
 #define _WX_TIMER_H_
 
-#include "wx/private/timerimpl.h"
+#include "wx/private/timer.h"
 
 class WXDLLEXPORT wxPalmOSTimerImpl : public wxTimerImpl
 {

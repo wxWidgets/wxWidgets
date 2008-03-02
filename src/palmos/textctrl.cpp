@@ -45,9 +45,6 @@
 
 #include "wx/textfile.h"
 
-#include "wx/palmos/private.h"
-#include "wx/palmos/winundef.h"
-
 #include <string.h>
 
 #if wxUSE_RICHEDIT
@@ -213,11 +210,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     return false;
 }
 
-WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    return 0;
-}
-
 // ----------------------------------------------------------------------------
 // set/get the controls text
 // ----------------------------------------------------------------------------
@@ -225,7 +217,12 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 wxString wxTextCtrl::GetValue() const
 {
     wxString res;
+    return res;
+}
 
+wxString wxTextCtrl::GetRange(long from, long to) const
+{
+    wxString res;
     return res;
 }
 
@@ -237,7 +234,7 @@ void wxTextCtrl::WriteText(const wxString& value)
 {
 }
 
-void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
+void wxTextCtrl::DoWriteText(const wxString& text, int flags)
 {
 }
 
@@ -263,11 +260,6 @@ void wxTextCtrl::Cut()
 
 void wxTextCtrl::Paste()
 {
-}
-
-bool wxTextCtrl::HasSelection() const
-{
-    return false;
 }
 
 bool wxTextCtrl::CanCopy() const
@@ -330,7 +322,7 @@ void wxTextCtrl::SetSelection(long from, long to)
 {
 }
 
-void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
+void wxTextCtrl::DoSetSelection(long from, long to, int flags)
 {
 }
 
@@ -388,7 +380,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 }
 
 wxTextCtrlHitTestResult
-wxTextCtrl::HitTest(const wxPoint& pt, wxTextCoord *col, wxTextCoord *row) const
+wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
 {
     return wxTE_HT_UNKNOWN;
 }
@@ -436,10 +428,12 @@ void wxTextCtrl::Redo()
 
 bool wxTextCtrl::CanUndo() const
 {
+    return false;
 }
 
 bool wxTextCtrl::CanRedo() const
 {
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -467,18 +461,8 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 // kbd input processing
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* pMsg)
-{
-    return false;
-}
-
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
-}
-
-WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -490,17 +474,7 @@ bool wxTextCtrl::SendUpdateEvent()
     return false;
 }
 
-bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
-{
-    return false;
-}
-
 bool wxTextCtrl::AdjustSpaceLimit()
-{
-    return false;
-}
-
-bool wxTextCtrl::AcceptsFocus() const
 {
     return false;
 }
@@ -570,11 +544,39 @@ void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 {
 }
 
-void wxTextCtrl::OnRightClick(wxMouseEvent& event)
+void wxTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
 {
 }
 
-void wxTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
+wxVisualAttributes wxTextCtrl::GetDefaultAttributes() const
+{
+    wxVisualAttributes attrs;
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW); //white
+    return attrs;
+}
+
+bool wxTextCtrl::EmulateKeyPress(const wxKeyEvent& rEvent)
+{
+    return false;
+}
+bool wxTextCtrl::CanApplyThemeBorder() const
+{
+    return false;
+}
+bool wxTextCtrl::IsEmpty() const
+{
+    return false;
+}
+bool wxTextCtrl::AcceptsFocusFromKeyboard() const
+{
+    return false;
+}
+void wxTextCtrl::AdoptAttributesFromHWND()
+{
+}
+void wxTextCtrl::SetWindowStyleFlag(long lStyle)
 {
 }
 
@@ -605,6 +607,27 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
 }
 
 // ----------------------------------------------------------------------------
+// wxRichEditModule
+// ----------------------------------------------------------------------------
+
+bool wxRichEditModule::OnInit()
+{
+    return false;
+}
+
+void wxRichEditModule::OnExit()
+{
+}
+
+/* static */
+bool wxRichEditModule::Load(int version)
+{
+    return false;
+}
+
+#endif // wxUSE_RICHEDIT
+
+// ----------------------------------------------------------------------------
 // styling support for rich edit controls
 // ----------------------------------------------------------------------------
 
@@ -621,27 +644,6 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
 }
 
 bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
-{
-    return false;
-}
-
-#endif
-
-// ----------------------------------------------------------------------------
-// wxRichEditModule
-// ----------------------------------------------------------------------------
-
-bool wxRichEditModule::OnInit()
-{
-    return false;
-}
-
-void wxRichEditModule::OnExit()
-{
-}
-
-/* static */
-bool wxRichEditModule::Load(int version)
 {
     return false;
 }

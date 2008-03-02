@@ -30,12 +30,6 @@
     #include "wx/hashmap.h"
 #endif
 
-#include "wx/palmos/private.h"
-
-// from utils.cpp
-extern "C" WXDLLIMPEXP_BASE HWND
-wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
-
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
@@ -50,8 +44,6 @@ static wxTimerMap g_timerMap;
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
-
-void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
 // ============================================================================
 // implementation
@@ -83,10 +75,6 @@ void wxPalmOSTimerImpl::Stop()
 // ----------------------------------------------------------------------------
 
 void wxProcessTimer(wxPalmOSTimerImpl& timer)
-{
-}
-
-void WINAPI wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 {
 }
 

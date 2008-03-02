@@ -135,6 +135,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     AdjustForParentClientOrigin(x, y);
 
+#ifdef __WXPALMOS6__
     SliderControlType *slider = CtlNewSliderControl (
                                    (void **)&form,
                                    GetId(),
@@ -151,6 +152,17 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
                                    1,
                                    value
                               );
+#else // __WXPALMOS5__
+    //SliderControlType *CtlNewSliderControl (void **formPP, UInt16 ID, ControlStyleType style, DmResID thumbID,
+    //    DmResID backgroundID, Coord x, Coord y, Coord width, Coord height, UInt16 minValue, UInt16 maxValue,
+    //    UInt16 pageSize, UInt16 value);
+    SliderControlType *slider =  CtlNewSliderControl ((void **)&form,
+             GetId(),
+             feedbackSliderCtl,//style
+             0,//thumbID
+             0,//backgroundid
+             x, y, w, h, minValue, maxValue, 1, value);
+#endif // __WXPALMOS6__/__WXPALMOS5__
 
     if(slider==NULL)
         return false;

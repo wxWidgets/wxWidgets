@@ -43,18 +43,11 @@
 
 int wxEntry()
 {
-    /* There is no command line in PalmOS.  For now generate a fake arument
+    /* There is no command line in PalmOS.  For now generate a fake argument
      * list.  Later this may be changed to reflect the application launch code
      */
-    wxArrayString args;
-    int argc = args.GetCount();
-    // +1 here for the terminating NULL
+    static const int argc = 0;
     wxChar **argv = new wxChar *[argc + 1];
-    for ( int i = 0; i < argc; i++ )
-    {
-        //argv[i] = wxStrdup(args[i]);
-        argv[i] = wxStrdup(wxConvLibc.cMB2WX(args[i]));
-    }
 
     // argv[] must be NULL-terminated
     argv[argc] = NULL;

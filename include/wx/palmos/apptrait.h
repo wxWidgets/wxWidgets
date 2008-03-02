@@ -2,7 +2,7 @@
 // Name:        wx/palmos/apptrait.h
 // Purpose:     class implementing wxAppTraits for Palm OS
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Yunhui Fu
 // Created:     10/13/04
 // RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
@@ -11,6 +11,10 @@
 
 #ifndef _WX_PALM_APPTRAIT_H_
 #define _WX_PALM_APPTRAIT_H_
+
+#if wxUSE_TIMER
+#include "wx/palmos/private/timer.h" // wxPalmOSTimerImpl
+#endif // wxUSE_TIMER
 
 // ----------------------------------------------------------------------------
 // wxGUI/ConsoleAppTraits: must derive from wxAppTraits, not wxAppTraitsBase

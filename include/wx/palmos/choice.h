@@ -2,7 +2,7 @@
 // Name:        wx/palmos/choice.h
 // Purpose:     wxChoice class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Yunhui Fu
 // Created:     10/13/04
 // RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
@@ -77,10 +77,6 @@ public:
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
 
-    // MSW only
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
-    WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
@@ -93,9 +89,6 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
-    virtual bool MSWShouldPreProcessMessage(WXMSG *pMsg);
-
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     // update the height of the drop down list to fit the number of items we
     // have (without changing the visible height)

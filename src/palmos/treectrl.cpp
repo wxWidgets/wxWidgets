@@ -35,8 +35,6 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/palmos/private.h"
-
 #include "wx/imaglist.h"
 
 // macros to hide the cast ugliness
@@ -286,7 +284,7 @@ bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
 
 wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
 {
-    return wxString;
+    return wxString(wxT(""));
 }
 
 void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
@@ -421,11 +419,7 @@ bool wxTreeCtrl::IsBold(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetRootItem() const
 {
-    // Root may be real (visible) or virtual (hidden).
-    if ( GET_VIRTUAL_ROOT() )
-        return TVI_ROOT;
-
-    return wxTreeItemId(TreeView_GetRoot(GetHwnd()));
+    return wxTreeItemId();
 }
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
@@ -554,7 +548,6 @@ wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parent,
 
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
 {
-    return 0;
 }
 
 // delete all children (but don't delete the item itself)
@@ -650,6 +643,7 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
 // sorting stuff
 // ----------------------------------------------------------------------------
 
+/*
 // this is just a tiny namespace which is friend to wxTreeCtrl and so can use
 // functions such as IsDataIndirect()
 class wxTreeSortHelper
@@ -658,15 +652,9 @@ public:
     static int CALLBACK Compare(LPARAM data1, LPARAM data2, LPARAM tree);
 
 private:
-    static wxTreeItemId GetIdFromData(wxTreeCtrl *tree, LPARAM item)
+    static wxTreeItemId GetIdFromData(LPARAM lParam)
     {
-        wxTreeItemData *data = (wxTreeItemData *)item;
-        if ( tree->IsDataIndirect(data) )
-        {
-            data = ((wxTreeItemIndirectData *)data)->GetData();
-        }
-
-        return data->GetId();
+        return ((wxTreeItemParam*)lParam)->GetItem();
     }
 };
 
@@ -682,7 +670,7 @@ int CALLBACK wxTreeSortHelper::Compare(LPARAM pItem1,
     return tree->OnCompareItems(GetIdFromData(tree, pItem1),
                                 GetIdFromData(tree, pItem2));
 }
-
+*/
 int wxTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
                                const wxTreeItemId& item2)
 {
@@ -693,21 +681,6 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
 {
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
-    // rely on the fact that TreeView_SortChildren does the same thing as our
-    // default behaviour, i.e. sorts items alphabetically and so call it
-    // directly if we're not in derived class (much more efficient!)
-    if ( GetClassInfo() == CLASSINFO(wxTreeCtrl) )
-    {
-        TreeView_SortChildren(GetHwnd(), HITEM(item), 0);
-    }
-    else
-    {
-        TV_SORTCB tvSort;
-        tvSort.hParent = HITEM(item);
-        tvSort.lpfnCompare = wxTreeSortHelper::Compare;
-        tvSort.lParam = (LPARAM)this;
-        TreeView_SortChildrenCB(GetHwnd(), &tvSort, 0 /* reserved */);
-    }
 }
 
 // ----------------------------------------------------------------------------

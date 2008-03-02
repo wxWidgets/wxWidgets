@@ -45,7 +45,11 @@
 
 #include <Control.h>
 #include <Form.h>
-#include <StatusBar.h>
+#ifdef __WXPALMOS6__
+    #include <StatusBar.h>
+#else
+    #include <PenInputMgr.h>
+#endif // __WXPALMOS6__
 
 // ----------------------------------------------------------------------------
 // wxWin macros

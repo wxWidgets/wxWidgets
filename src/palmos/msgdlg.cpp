@@ -23,7 +23,12 @@
     #include "wx/msgdlg.h"
 #endif
 
+#ifdef __WXPALMOS6__
 #include <Loader.h>
+#else // __WXPALMOS5__
+#include <UIResources.h> // alertRscType
+#endif
+
 #include <Form.h>
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
@@ -35,9 +40,11 @@ int wxMessageDialog::ShowModal()
     int wxResult=wxID_OK;
     const long style = GetMessageDialogStyle();
 
+#ifdef __WXPALMOS6__
     // Handle to the currently running application database
     DmOpenRef    AppDB;
     SysGetModuleDatabase(SysGetRefNum(), NULL, &AppDB);
+#endif // __WXPALMOS6__
 
     // Translate wx styles into Palm OS styles
     if (style & wxYES_NO)
@@ -71,7 +78,7 @@ int wxMessageDialog::ShowModal()
     // Get the alert resource
     char *AlertPtr;
     MemHandle AlertHandle;
-    AlertHandle=DmGetResource(AppDB,'Talt',AlertID);
+    AlertHandle = POS_DmGetResource (AppDB, alertRscType, AlertID);
 
     AlertPtr=(char *)MemHandleLock(AlertHandle);
     AlertPtr+=8;
@@ -99,7 +106,7 @@ int wxMessageDialog::ShowModal()
     DmReleaseResource(AlertHandle);
 
     // Display the dialog
-    Result=FrmCustomAlert(AppDB,AlertID,GetFullMessage().c_str(),"","");
+    Result = POS_FrmCustomAlert (AppDB, AlertID, m_message.c_str(), "", "");
 
     // Convert the Palm OS result to wxResult
     if(AlertID<1100)

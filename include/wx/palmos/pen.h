@@ -2,7 +2,7 @@
 // Name:        wx/palmos/pen.h
 // Purpose:     wxPen class
 // Author:      William Osborne - minimal working wxPalmOS port
-// Modified by:
+// Modified by: Yunhui Fu
 // Created:     10/13/04
 // RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
@@ -120,7 +120,12 @@ public:
     bool FreeResource(bool force = false);
     WXHANDLE GetResourceHandle() const;
     bool IsFree() const;
-    void Unshare();
+
+protected:
+    virtual wxGDIRefData* CreateGDIRefData() const;
+    virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const;
+    // same as FreeResource() + RealizeResource()
+    bool Recreate();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPen)

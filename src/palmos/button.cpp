@@ -201,7 +201,9 @@ wxWindow *wxButton::SetDefault()
     FormType* form = (FormType* )GetParentForm();
     if(form==NULL)
         return NULL;
+#ifdef __WXPALMOS6__
     FrmSetDefaultButtonID(form,GetId());
+#endif // __WXPALMOS6__
 
     return wxButtonBase::SetDefault();
 }

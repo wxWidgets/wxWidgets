@@ -23,12 +23,6 @@
 
 #include "wx/filefn.h"
 
-#include <time.h>
-
-#include "wx/palmos/private.h"
-
-#include <string.h>
-
 
 IMPLEMENT_DYNAMIC_CLASS(wxWinHelpController, wxHelpControllerBase)
 

@@ -92,18 +92,21 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
                                   const wxString& name)
 {
     // this is a check for limitation mentioned before FrameFormHandleEvent() code
-    if(wxTopLevelWindows.GetCount()>0)
+    if(wxTopLevelWindows.GetCount() > 0) {
         return false;
+    }
 
     ActiveParentFrame=NULL;
 
     wxTopLevelWindows.Append(this);
 
-    if ( parent )
+    if ( parent ) {
         parent->AddChild(this);
+    }
 
     SetId( id == wxID_ANY ? NewControlId() : id );
 
+#ifdef __WXPALMOS6__
     WinConstraintsType constraints;
     memset(&constraints, 0, sizeof(WinConstraintsType));
     // position
@@ -116,7 +119,6 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
     constraints.y_min = winUndefConstraint;
     constraints.y_max = winMaxConstraint;
     constraints.y_pref = ( size.y == wxDefaultCoord ) ? winUndefConstraint : size.y;
-
     FrameForm = FrmNewFormWithConstraints(
                     GetId(),
                     title.c_str(),
@@ -128,11 +130,22 @@ bool wxTopLevelWindowPalm::Create(wxWindow *parent,
                     NULL,
                     0
                 );
-
-    if(FrameForm==NULL)
+#else // __WXPALMOS5__
+#define winUndefConstraint 0xFFFF
+#define winMaxConstraint   288
+    // FormType *FrmNewForm (UInt16 formID, const Char *titleStrP, Coord x, Coord y, Coord width, Coord height,
+    //     Boolean modal, UInt16 defaultButton, UInt16 helpRscID, UInt16 menuRscID);
+    FrameForm = FrmNewForm (GetId(), title.c_str(),
+                    (( pos.x == wxDefaultCoord ) ? winUndefConstraint : pos.x),
+                    (( pos.y == wxDefaultCoord ) ? winUndefConstraint : pos.y),
+                    winMaxConstraint, winMaxConstraint,
+                    false, 0, 0, 0);
+#endif
+    if(NULL == FrameForm) {
         return false;
+    }
 
-    FrmSetEventHandler((FormType *)FrameForm,FrameFormHandleEvent);
+    FrmSetEventHandler((FormType *)FrameForm, FrameFormHandleEvent);
 
     FrmSetActiveForm((FormType *)FrameForm);
 
@@ -168,7 +181,7 @@ void wxTopLevelWindowPalm::DoShowWindow(int nShowCmd)
 bool wxTopLevelWindowPalm::Show(bool show)
 {
     if (true != show) {
-	    return true;
+        return true;
     }
     FrmDrawForm((FormType *)FrameForm);
 
@@ -328,12 +341,17 @@ bool wxTopLevelWindowPalm::HandleControlRepeat(WXEVENTPTR event)
 
 bool wxTopLevelWindowPalm::HandleSize(WXEVENTPTR event)
 {
+#ifdef __WXPALMOS6__
     const EventType *palmEvent = (EventType *)event;
     wxSize newSize(palmEvent->data.winResized.newBounds.extent.x,
                    palmEvent->data.winResized.newBounds.extent.y);
     wxSizeEvent eventWx(newSize,GetId());
     eventWx.SetEventObject(this);
     return HandleWindowEvent(eventWx);
+#else // __WXPALMOS5__
+    return false;
+#endif
+
 }
 
 void wxTopLevelWindowPalm::OnActivate(wxActivateEvent& event)
@@ -369,9 +387,11 @@ static Boolean FrameFormHandleEvent(EventType *event)
         case ctlRepeatEvent:
             handled = tlw->HandleControlRepeat(event);
             break;
+#ifdef __WXPALMOS6__
         case winResizedEvent:
             handled = tlw->HandleSize(event);
             break;
+#endif // __WXPALMOS6__
 #if wxUSE_MENUS_NATIVE
         case menuOpenEvent:
             handled = frame->HandleMenuOpen();

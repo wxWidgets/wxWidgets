@@ -34,8 +34,6 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/palmos/private.h"
-
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxChoiceStyle )
 
@@ -130,16 +128,6 @@ bool wxChoice::Create(wxWindow *parent,
                       const wxString& name)
 {
     return false;
-}
-
-bool wxChoice::MSWShouldPreProcessMessage(WXMSG *pMsg)
-{
-    return false;
-}
-
-WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    return 0;
 }
 
 wxChoice::~wxChoice()
@@ -239,16 +227,6 @@ void wxChoice::DoSetSize(int x, int y,
 wxSize wxChoice::DoGetBestSize() const
 {
     return wxSize(0,0);
-}
-
-WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return 0;
-}
-
-bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
-{
-    return false;
 }
 
 #endif // wxUSE_CHOICE

@@ -437,6 +437,7 @@ void wxWindowPalm::Refresh(bool eraseBack, const wxRect *rect)
     WinHandle handle = (WinHandle)GetHWND();
     if(handle)
     {
+#ifdef __WXPALMOS6__
         if(rect)
         {
             RectangleType dirtyRect;
@@ -450,6 +451,10 @@ void wxWindowPalm::Refresh(bool eraseBack, const wxRect *rect)
         {
             WinInvalidateWindow(handle);
         }
+#else // __WXPALMOS5__
+        WinSetActiveWindow (handle);
+#endif
+
     }
 }
 
