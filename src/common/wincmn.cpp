@@ -2618,6 +2618,27 @@ bool wxWindowBase::TryParent(wxEvent& event)
 }
 
 // ----------------------------------------------------------------------------
+// window relationships
+// ----------------------------------------------------------------------------
+
+wxWindow *wxWindowBase::DoGetSibling(MoveKind order) const
+{
+    wxCHECK_MSG( GetParent(), NULL,
+                    _T("GetPrev/NextSibling() don't work for TLWs!") );
+
+    wxWindowList& siblings = GetParent()->GetChildren();
+    wxWindowList::compatibility_iterator i = siblings.Find(this);
+    wxCHECK_MSG( i, NULL, _T("window not a child of its parent?") );
+
+    if ( order == MoveBefore )
+        i = i->GetPrevious();
+    else // MoveAfter
+        i = i->GetNext();
+
+    return i ? i->GetData() : NULL;
+}
+
+// ----------------------------------------------------------------------------
 // keyboard navigation
 // ----------------------------------------------------------------------------
 

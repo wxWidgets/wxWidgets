@@ -129,16 +129,21 @@ wxMac:
 - Fixed 'Reopen' application behaviour (a window was not always shown when reopening the app).
 
 
-2.8.6
+2.8.8
 -----
 
-All:
-
-- Fixed another bug in wxFileConfig when deleting entries (Axel Gembe)
-- Added Portuguese translation (Antonio Cardoso Martins)
-
-
 All (GUI):
+
+- Added wxWindow::GetNextSibling() and GetPrevSibling()
+
+All (Unix):
+
+- Fixed shared libraries to not depend on GStreamer when built with
+  --enable-media; only wxMedia library depends on it now.
+
+
+2.8.7
+-----
 
 - Added an optimization to UI updates on idle, by only updating when the window
   is shown.
@@ -163,6 +168,16 @@ wxGTK:
 wxMac:
 
 - Fixed a crash in wxToolBar when adding tools with non-standard sizes.
+
+
+2.8.6
+-----
+
+All:
+
+- Fixed another bug in wxFileConfig when deleting entries (Axel Gembe)
+- Added Portuguese translation (Antonio Cardoso Martins)
+
 
 2.8.5
 -----

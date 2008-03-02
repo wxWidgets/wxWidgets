@@ -573,6 +573,13 @@ public:
     // needed just for extended runtime
     const wxWindowList& GetWindowChildren() const { return GetChildren() ; }
 
+#if wxABI_VERSION >= 20808
+        // get the window before/after this one in the parents children list,
+        // returns NULL if this is the first/last window
+    wxWindow *GetPrevSibling() const { return DoGetSibling(MoveBefore); }
+    wxWindow *GetNextSibling() const { return DoGetSibling(MoveAfter); }
+#endif // wx 2.8.8+
+
         // get the parent or the parent of the parent
     wxWindow *GetParent() const { return m_parent; }
     inline wxWindow *GetGrandParent() const;
@@ -1141,12 +1148,18 @@ protected:
     virtual bool TryValidator(wxEvent& event);
     virtual bool TryParent(wxEvent& event);
 
-    // common part of MoveBefore/AfterInTabOrder()
     enum MoveKind
     {
         MoveBefore,     // insert before the given window
         MoveAfter       // insert after the given window
     };
+
+#if wxABI_VERSION >= 20808
+    // common part of GetPrev/NextSibling()
+    wxWindow *DoGetSibling(MoveKind order) const;
+#endif // wx 2.8.8+
+
+    // common part of MoveBefore/AfterInTabOrder()
     virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
 
 #if wxUSE_CONSTRAINTS

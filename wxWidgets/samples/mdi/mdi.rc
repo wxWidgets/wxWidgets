@@ -1,4 +1,0 @@
-#include "../sample.rc"
-
-chart ICON "chart.ico"
-
