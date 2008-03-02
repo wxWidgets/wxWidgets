@@ -116,6 +116,15 @@ Destructor.
 
 Returns the default directory.
 
+\membersection{wxFileDialog::GetExtraControl}\label{wxfiledialoggetextracontrol}
+
+\constfunc{wxWindow* }{GetExtraControl}{\void}
+
+If functions 
+\helpref{SetExtraControlCreator}{wxfiledialogsetextracontrolcreator}
+and \helpref{ShowModal}{wxfiledialogshowmodal} were called,
+returns the extra window. Otherwise returns \NULL.
+
 \membersection{wxFileDialog::GetFilename}\label{wxfiledialoggetfilename}
 
 \constfunc{wxString}{GetFilename}{\void}
@@ -174,6 +183,26 @@ Returns the file dialog wildcard.
 \func{void}{SetDirectory}{\param{const wxString\& }{directory}}
 
 Sets the default directory.
+
+\membersection{wxFileDialog::SetExtraControlCreator}\label{wxfiledialogsetextracontrolcreator}
+
+\begin{verbatim}
+typedef wxWindow* (*ExtraControlCreatorFunction)(wxWindow*);
+\end{verbatim}
+\func{bool}{SetExtraControlCreator}{\param{t\_extraControlCreator }{creator}}
+
+Customize file dialog by adding extra window, which is typically placed
+below the list of files and above the buttons.
+
+SetExtraControlCreator can be called only once, before calling
+\helpref{ShowModal}{wxfiledialogshowmodal}.
+The {\tt creator} function should take pointer to parent window (file dialog)
+and should return a window allocated with operator new.
+
+Supported platforms: wxGTK, wxUniv.
+
+\wxheading{Return value}
+{\tt true} if adding extra controls is supported, {\tt false} otherwise.
 
 \membersection{wxFileDialog::SetFilename}\label{wxfiledialogsetfilename}
 

@@ -35,8 +35,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileDialogBase, wxDialog)
 
 void wxFileDialogBase::Init()
 {
-    m_filterIndex =
+    m_filterIndex = 0;
     m_windowStyle = 0;
+    m_extraControl = NULL;
+    m_extraControlCreator = NULL;
 }
 
 bool wxFileDialogBase::Create(wxWindow *parent,
@@ -147,6 +149,23 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
         ext = wxT(".") + ext;
 
     return filePath + ext;
+}
+
+bool wxFileDialogBase::SetExtraControlCreator(ExtraControlCreatorFunction c)
+{
+    wxCHECK_MSG( !m_extraControlCreator, false,
+                 "wxFileDialog::SetExtraControl() called second time" );
+
+    m_extraControlCreator = c;
+    return SupportsExtraControl();
+}
+
+bool wxFileDialogBase::CreateExtraControl()
+{
+    if (!m_extraControlCreator || m_extraControl)
+        return false;
+    m_extraControl = (*m_extraControlCreator)(this);
+    return true;
 }
 
 //----------------------------------------------------------------------------

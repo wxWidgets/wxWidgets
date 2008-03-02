@@ -912,6 +912,7 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     this->m_style = style;
     m_inSelected = false;
     m_noSelChgEvent = false;
+    m_check = NULL;
 
     // check that the styles are not contradictory
     wxASSERT_MSG( !( ( m_style & wxFC_SAVE ) && ( m_style & wxFC_OPEN ) ),
@@ -947,10 +948,11 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
 
     wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
     if ( is_pda )
-        staticsizer->Add( new wxStaticText( this, wxID_ANY, _( "Current directory:" ) ), 0, wxRIGHT, 10 );
+        staticsizer->Add( new wxStaticText( this, wxID_ANY, _( "Current directory:" ) ),
+                          wxSizerFlags().DoubleBorder(wxRIGHT) );
     m_static = new wxStaticText( this, wxID_ANY, m_dir );
     staticsizer->Add( m_static, 1 );
-    mainsizer->Add( staticsizer, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10 );
+    mainsizer->Add( staticsizer, wxSizerFlags().Expand().Border());
 
     long style2 = wxLC_LIST;
     if ( !( m_style & wxFC_MULTIPLE ) )
@@ -979,33 +981,25 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
 
         wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
         textsizer->Add( m_text, wxSizerFlags( 1 ).Centre().Border() );
+        textsizer->Add( m_choice, wxSizerFlags( 1 ).Centre().Border() );
         mainsizer->Add( textsizer, wxSizerFlags().Expand() );
 
-        m_check = NULL;
-        textsizer->Add( m_choice, wxSizerFlags( 1 ).Centre().Border() );
     }
     else // !is_pda
     {
-        mainsizer->Add( m_list, wxSizerFlags( 1 ).Expand().DoubleHorzBorder() );
-
-        wxBoxSizer *textsizer = new wxBoxSizer( wxHORIZONTAL );
-        textsizer->Add( m_text, wxSizerFlags( 1 ).Centre().
-                        DoubleBorder( wxLEFT | wxRIGHT | wxTOP ) );
-        mainsizer->Add( textsizer, wxSizerFlags().Expand() );
-
-        wxSizerFlags flagsCentre;
-        flagsCentre.Centre().DoubleBorder();
+        mainsizer->Add( m_list, wxSizerFlags( 1 ).Expand().Border() );
+        mainsizer->Add( m_text, wxSizerFlags().Expand().Border() );
 
         wxBoxSizer *choicesizer = new wxBoxSizer( wxHORIZONTAL );
-        choicesizer->Add( m_choice, wxSizerFlags( flagsCentre ).Proportion( 1 ) );
+        choicesizer->Add( m_choice, wxSizerFlags( 1 ).Centre() );
 
         if ( !( m_style & wxFC_NOSHOWHIDDEN ) )
-            {
+        {
             m_check = new wxCheckBox( this, ID_CHECK, _( "Show &hidden files" ) );
-            choicesizer->Add( m_check, flagsCentre );
-            }
+            choicesizer->Add( m_check, wxSizerFlags().Centre().DoubleBorder(wxLEFT) );
+        }
 
-        mainsizer->Add( choicesizer, wxSizerFlags().Expand() );
+        mainsizer->Add( choicesizer, wxSizerFlags().Expand().Border() );
     }
 
     SetWildcard( wildCard );

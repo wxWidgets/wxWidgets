@@ -82,6 +82,7 @@ public:
         { return m_filectrl->GetWildcard(); }
     virtual int GetFilterIndex() const
         { return m_filectrl->GetFilterIndex(); }
+    virtual bool SupportsExtraControl() const { return true; }
 
     // implementation only from now on
     // -------------------------------
@@ -113,6 +114,8 @@ protected:
 
 private:
     void Init();
+    wxBitmapButton* AddBitmapButton( wxWindowID winId, const wxArtID& artId,
+                                     const wxString& tip, wxSizer *sizer );
 
     DECLARE_DYNAMIC_CLASS(wxGenericFileDialog)
     DECLARE_EVENT_TABLE()

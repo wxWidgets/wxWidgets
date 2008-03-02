@@ -30,8 +30,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxFileDialogNameStr);
-
-    virtual ~wxFileDialog() {}
+    virtual ~wxFileDialog() { delete m_extraControl; }
 
     virtual wxString GetPath() const;
     virtual void GetPaths(wxArrayString& paths) const;
@@ -48,8 +47,8 @@ public:
     virtual void SetFilterIndex(int filterIndex);
 
     virtual int ShowModal();
-    virtual bool Show( bool show = true );
 
+    virtual bool SupportsExtraControl() const { return true; }
 
 
 protected:

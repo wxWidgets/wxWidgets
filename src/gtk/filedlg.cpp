@@ -131,6 +131,11 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
 
 } // extern "C"
 
+static void wxInsertChildInFileDialog(wxWindow* WXUNUSED(parent),
+                                      wxWindow* WXUNUSED(child))
+{
+}
+
 
 //-----------------------------------------------------------------------------
 // wxFileDialog
@@ -151,6 +156,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& name)
     : wxFileDialogBase()
 {
+    m_insertCallback = wxInsertChildInFileDialog;
     parent = GetParentForModalDialog(parent);
     
     if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName,
@@ -276,6 +282,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     }
 }
 
+
 void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
 {
     EndDialog(wxID_OK);
@@ -283,12 +290,19 @@ void wxFileDialog::OnFakeOk(wxCommandEvent& WXUNUSED(event))
 
 int wxFileDialog::ShowModal()
 {
-    return wxDialog::ShowModal();
-}
+    if (CreateExtraControl())
+    {
+        GtkWidget *control = m_extraControl->m_widget;
 
-bool wxFileDialog::Show( bool show )
-{
-    return wxDialog::Show( show );
+        // see wxNotebook::InsertPage() for explaination
+        // why gtk_widget_unparent() is not used here
+        control->parent = NULL;
+
+        gtk_widget_show(control);
+        gtk_file_chooser_set_extra_widget(GTK_FILE_CHOOSER(m_widget), control);
+    }
+
+    return wxDialog::ShowModal();
 }
 
 void wxFileDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y), 

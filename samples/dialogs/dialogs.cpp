@@ -337,12 +337,12 @@ bool MyApp::OnInit()
     filedlg_menu->Append(DIALOGS_FILES_OPEN,  _T("Open &files\tCtrl-Q"));
     filedlg_menu->Append(DIALOGS_FILE_SAVE,  _T("Sa&ve file\tCtrl-S"));
 
-    #if USE_FILEDLG_GENERIC
-        filedlg_menu->AppendSeparator();
-        filedlg_menu->Append(DIALOGS_FILE_OPEN_GENERIC,  _T("&Open file (generic)"));
-        filedlg_menu->Append(DIALOGS_FILES_OPEN_GENERIC,  _T("Open &files (generic)"));
-        filedlg_menu->Append(DIALOGS_FILE_SAVE_GENERIC,  _T("Sa&ve file (generic)"));
-    #endif // USE_FILEDLG_GENERIC
+#if USE_FILEDLG_GENERIC
+    filedlg_menu->AppendSeparator();
+    filedlg_menu->Append(DIALOGS_FILE_OPEN_GENERIC, _T("&Open file (generic)"));
+    filedlg_menu->Append(DIALOGS_FILES_OPEN_GENERIC, _T("Open &files (generic)"));
+    filedlg_menu->Append(DIALOGS_FILE_SAVE_GENERIC, _T("Sa&ve file (generic)"));
+#endif // USE_FILEDLG_GENERIC
 
     menuDlg->Append(wxID_ANY,_T("&File operations"),filedlg_menu);
 
@@ -799,6 +799,43 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
 #endif // wxUSE_CHOICEDLG
 
 #if wxUSE_FILEDLG
+
+// panel with custom controls for file dialog
+class MyExtraPanel : public wxPanel
+{
+public:
+    MyExtraPanel(wxWindow *parent);
+    void OnCheckBox(wxCommandEvent& event) { m_btn->Enable(event.IsChecked()); }
+    wxString GetInfo() const
+    {
+        return wxString::Format("checkbox value = %d", (int) m_cb->GetValue());
+    }
+private:
+    wxButton *m_btn;
+    wxCheckBox *m_cb;
+};
+
+MyExtraPanel::MyExtraPanel(wxWindow *parent)
+            : wxPanel(parent)
+{
+    m_btn = new wxButton(this, -1, _T("Custom Button"));
+    m_btn->Enable(false);
+    m_cb = new wxCheckBox(this, -1, _T("Enable Custom Button"));
+    m_cb->Connect(wxID_ANY, wxEVT_COMMAND_CHECKBOX_CLICKED,
+                  wxCommandEventHandler(MyExtraPanel::OnCheckBox), NULL, this);
+    wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
+    sizerTop->Add(m_cb, wxSizerFlags().Centre().Border());
+    sizerTop->AddStretchSpacer();
+    sizerTop->Add(m_btn, wxSizerFlags().Right().Border());
+    SetSizerAndFit(sizerTop);
+}
+
+// a static method can be used instead of a function with most of compilers
+static wxWindow* createMyExtraPanel(wxWindow *parent)
+{
+    return new MyExtraPanel(parent);
+}
+
 void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 {
     wxFileDialog dialog
@@ -814,18 +851,23 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 #endif
                  );
 
+    dialog.SetExtraControlCreator(&createMyExtraPanel);
     dialog.CentreOnParent();
     dialog.SetDirectory(wxGetHomeDir());
 
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString info;
+        MyExtraPanel *extra_panel
+            = static_cast<MyExtraPanel*>(dialog.GetExtraControl());
         info.Printf(_T("Full file name: %s\n")
                     _T("Path: %s\n")
-                    _T("Name: %s"),
+                    _T("Name: %s\n")
+                    _T("Custom window: %s"),
                     dialog.GetPath().c_str(),
                     dialog.GetDirectory().c_str(),
-                    dialog.GetFilename().c_str());
+                    dialog.GetFilename().c_str(),
+                    extra_panel->GetInfo().c_str());
         wxMessageDialog dialog2(this, info, _T("Selected file"));
         dialog2.ShowModal();
     }
@@ -933,6 +975,7 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
                     _T("C++ files (*.cpp;*.h)|*.cpp;*.h")
                  );
 
+    dialog.SetExtraControlCreator(&createMyExtraPanel);
     dialog.SetDirectory(wxGetHomeDir());
 
     if (dialog.ShowModal() == wxID_OK)
@@ -1264,8 +1307,7 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
     if (button_sizer)
         main_sizer->Add( button_sizer, 0, wxALL|wxGROW, 5 );
         
-    SetSizer( main_sizer );
-    main_sizer->Fit( this );
+    SetSizerAndFit( main_sizer );
 }
     
 void TestDefaultActionDialog::OnListBoxDClick(wxCommandEvent& event)
@@ -1651,10 +1693,7 @@ MyModelessDialog::MyModelessDialog(wxWindow *parent)
     sizerTop->Add(btn, 1, wxEXPAND | wxALL, 5);
     sizerTop->Add(check, 1, wxEXPAND | wxALL, 5);
 
-    SetSizer(sizerTop);
-
-    sizerTop->SetSizeHints(this);
-    sizerTop->Fit(this);
+    SetSizerAndFit(sizerTop);
 }
 
 void MyModelessDialog::OnButton(wxCommandEvent& WXUNUSED(event))
@@ -1694,10 +1733,7 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     sizerTop->Add(m_btnDelete, 0, wxALIGN_CENTER | wxALL, 5);
     sizerTop->Add(btnOk, 0, wxALIGN_CENTER | wxALL, 5);
 
-    SetSizer(sizerTop);
-
-    sizerTop->SetSizeHints(this);
-    sizerTop->Fit(this);
+    SetSizerAndFit(sizerTop);
 
     m_btnModal->SetFocus();
     m_btnModal->SetDefault();
@@ -1800,9 +1836,8 @@ StdButtonSizerDialog::StdButtonSizerDialog(wxWindow *parent)
 
     EnableDisableControls();
 
-    SetSizer(sizerTop);
+    SetSizerAndFit(sizerTop);
 
-    sizerTop->SetSizeHints(this);
     wxCommandEvent ev;
     OnEvent(ev);
 }
@@ -2015,8 +2050,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
     topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
 
-    panel->SetSizer(topSizer);
-    topSizer->Fit(panel);
+    panel->SetSizerAndFit(topSizer);
 
     return panel;
 }
@@ -2074,8 +2108,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
     topSizer->AddSpacer(5);
 
-    panel->SetSizer(topSizer);
-    topSizer->Fit(panel);
+    panel->SetSizerAndFit(topSizer);
 
     return panel;
 }

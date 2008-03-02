@@ -112,6 +112,8 @@ COND_PLATFORM_OS2_1___dialogs___os2_emxbindcmd = $(NM) dialogs$(EXEEXT) | if \
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	= dialogs_colrdlgg.o dialogs_dirdlgg.o \
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	dialogs_filedlgg.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= dialogs_filedlgg.o
 @COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
 @COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	= dialogs_fontdlgg.o dialogs_filedlgg.o
 COND_MONOLITHIC_0___WXLIB_ADV_p = \
@@ -236,6 +238,9 @@ dialogs_dialogs.o: $(srcdir)/dialogs.cpp
 
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
 
 @COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
 @COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp

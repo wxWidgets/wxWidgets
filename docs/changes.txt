@@ -229,6 +229,7 @@ All (GUI):
 - Added wxNotificationMessage class for non-intrusive notifications
 - Added wxWindow::Show/HideWithEffect()
 - Added wxWrapSizer
+- Added custom controls support to wxFileDialog (Diaa Sami and Marcin Wojdyr)
 - Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron).
 - Added support for drop down toolbar buttons (Tim Kosse).
 - Added support for labels for toolbar controls (Vince Harron).

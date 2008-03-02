@@ -103,7 +103,7 @@
 #define  ID_LIST_MODE     (wxID_FILEDLGG    )
 #define  ID_REPORT_MODE   (wxID_FILEDLGG + 1)
 #define  ID_UP_DIR        (wxID_FILEDLGG + 2)
-#define  ID_PARENT_DIR    (wxID_FILEDLGG + 3)
+#define  ID_HOME_DIR      (wxID_FILEDLGG + 3)
 #define  ID_NEW_DIR       (wxID_FILEDLGG + 4)
 #define  ID_FILE_CTRL     (wxID_FILEDLGG + 5)
 
@@ -113,7 +113,7 @@ BEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
     EVT_BUTTON(ID_LIST_MODE, wxGenericFileDialog::OnList)
     EVT_BUTTON(ID_REPORT_MODE, wxGenericFileDialog::OnReport)
     EVT_BUTTON(ID_UP_DIR, wxGenericFileDialog::OnUp)
-    EVT_BUTTON(ID_PARENT_DIR, wxGenericFileDialog::OnHome)
+    EVT_BUTTON(ID_HOME_DIR, wxGenericFileDialog::OnHome)
     EVT_BUTTON(ID_NEW_DIR, wxGenericFileDialog::OnNew)
     EVT_BUTTON(wxID_OK, wxGenericFileDialog::OnOk)
     EVT_FILECTRL_FILEACTIVATED(ID_FILE_CTRL, wxGenericFileDialog::OnFileActivated)
@@ -212,54 +212,28 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
     wxBoxSizer *buttonsizer = new wxBoxSizer( wxHORIZONTAL );
-
-    wxBitmapButton *but;
-
-    but = new wxBitmapButton(this, ID_LIST_MODE,
-                             wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_BUTTON));
-#if wxUSE_TOOLTIPS
-    but->SetToolTip( _("View files as a list view") );
-#endif
-    buttonsizer->Add( but, 0, wxALL, 5 );
-
-    but = new wxBitmapButton(this, ID_REPORT_MODE,
-                             wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_BUTTON));
-#if wxUSE_TOOLTIPS
-    but->SetToolTip( _("View files as a detailed view") );
-#endif
-    buttonsizer->Add( but, 0, wxALL, 5 );
-
+    AddBitmapButton( ID_LIST_MODE, wxART_LIST_VIEW,
+                     _("View files as a list view"), buttonsizer );
+    AddBitmapButton( ID_REPORT_MODE, wxART_REPORT_VIEW,
+                     _("View files as a detailed view"), buttonsizer );
     buttonsizer->Add( 30, 5, 1 );
-
-    m_upDirButton = new wxBitmapButton(this, ID_UP_DIR,
-                           wxArtProvider::GetBitmap(wxART_GO_DIR_UP, wxART_BUTTON));
-#if wxUSE_TOOLTIPS
-    m_upDirButton->SetToolTip( _("Go to parent directory") );
-#endif
-    buttonsizer->Add( m_upDirButton, 0, wxALL, 5 );
+    m_upDirButton = AddBitmapButton( ID_UP_DIR, wxART_GO_DIR_UP,
+                                     _("Go to parent directory"), buttonsizer );
 
 #ifndef __DOS__ // VS: Home directory is meaningless in MS-DOS...
-    but = new wxBitmapButton(this, ID_PARENT_DIR,
-                             wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_BUTTON));
-#if wxUSE_TOOLTIPS
-    but->SetToolTip( _("Go to home directory") );
-#endif
-    buttonsizer->Add( but, 0, wxALL, 5);
-
+    AddBitmapButton( ID_HOME_DIR, wxART_GO_HOME,
+                     _("Go to home directory"), buttonsizer );
     buttonsizer->Add( 20, 20 );
 #endif //!__DOS__
 
-    m_newDirButton = new wxBitmapButton(this, ID_NEW_DIR,
-                           wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_BUTTON));
-#if wxUSE_TOOLTIPS
-    m_newDirButton->SetToolTip( _("Create new directory") );
-#endif
-    buttonsizer->Add( m_newDirButton, 0, wxALL, 5 );
+    m_newDirButton = AddBitmapButton( ID_NEW_DIR, wxART_NEW_DIR,
+                                      _("Create new directory"), buttonsizer );
 
     if (is_pda)
-        mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 0 );
+        mainsizer->Add( buttonsizer, wxSizerFlags().Expand() );
     else
-        mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
+        mainsizer->Add( buttonsizer, wxSizerFlags().Expand()
+                                                   .Border( wxLEFT | wxRIGHT | wxTOP ) );
 
     long style2 = 0;
     if ( HasFdFlag(wxFD_MULTIPLE) )
@@ -283,31 +257,21 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         m_filectrl->ChangeToReportMode();
     }
 
-    if (is_pda)
-    {
-        // PDAs have a different screen layout
-        mainsizer->Add(m_filectrl, wxSizerFlags(1).Expand().HorzBorder());
+    mainsizer->Add(m_filectrl, wxSizerFlags(1).Expand().HorzBorder());
 
-        wxSizer *bsizer = CreateButtonSizer(wxOK | wxCANCEL);
-        if ( bsizer )
+    wxSizer *bsizer = CreateButtonSizer(wxOK | wxCANCEL);
+    if ( bsizer )
+    {
+        if (is_pda)
             mainsizer->Add(bsizer, wxSizerFlags().Expand().Border());
+        else
+            mainsizer->Add(bsizer, wxSizerFlags().Expand().DoubleBorder());
     }
-    else // !is_pda
-    {
-        mainsizer->Add(m_filectrl, wxSizerFlags(1).Expand().DoubleHorzBorder());
 
-        wxBoxSizer *okcancelsizer = new wxBoxSizer( wxHORIZONTAL );
-        okcancelsizer->Add(new wxButton(this, wxID_OK), wxSizerFlags().DoubleBorder().Centre());
-        okcancelsizer->Add(new wxButton(this, wxID_CANCEL), wxSizerFlags().DoubleBorder().Centre());
-        mainsizer->Add(okcancelsizer, wxSizerFlags().Center());
-        }
-
-    SetAutoLayout( true );
     SetSizer( mainsizer );
 
     if (!is_pda)
     {
-        mainsizer->Fit( this );
         mainsizer->SetSizeHints( this );
 
         Centre( wxBOTH );
@@ -332,8 +296,28 @@ wxGenericFileDialog::~wxGenericFileDialog()
     }
 }
 
+wxBitmapButton* wxGenericFileDialog::AddBitmapButton( wxWindowID winId,
+                                                      const wxArtID& artId,
+                                                      const wxString& tip,
+                                                      wxSizer *sizer)
+{
+    wxBitmapButton *but = new wxBitmapButton(this, winId,
+                                         wxArtProvider::GetBitmap(artId, wxART_BUTTON));
+    but->SetToolTip(tip);
+    sizer->Add(but, wxSizerFlags().Border());
+    return but;
+}
+
 int wxGenericFileDialog::ShowModal()
 {
+    if (CreateExtraControl())
+    {
+        wxSizer *sizer = GetSizer();
+        sizer->Insert(2 /* after m_filectrl */, m_extraControl,
+                      wxSizerFlags().Expand().HorzBorder());
+        sizer->Fit(this);
+    }
+
     m_filectrl->SetDirectory(m_dir);
 
     return wxDialog::ShowModal();

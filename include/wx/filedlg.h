@@ -85,6 +85,9 @@ public:
         Create(parent, message, defaultDir, defaultFile, wildCard, style, pos, sz, name);
     }
 
+    virtual ~wxFileDialogBase() {}
+
+
     bool Create(wxWindow *parent,
                 const wxString& message = wxFileSelectorPromptStr,
                 const wxString& defaultDir = wxEmptyString,
@@ -113,6 +116,17 @@ public:
     virtual wxString GetWildcard() const { return m_wildCard; }
     virtual int GetFilterIndex() const { return m_filterIndex; }
 
+    // this function is called with wxFileDialog as parameter and should
+    // create the window containing the extra controls we want to show in it
+    typedef wxWindow *(*ExtraControlCreatorFunction)(wxWindow*);
+
+    // extra controls are currently supported in GTK and generic versions
+    // only currently
+    virtual bool SupportsExtraControl() const { return false; }
+
+    bool SetExtraControlCreator(ExtraControlCreatorFunction WXUNUSED(c));
+    wxWindow *GetExtraControl() const { return m_extraControl; }
+
     // Utility functions
 
 #if WXWIN_COMPATIBILITY_2_6
@@ -137,12 +151,19 @@ protected:
     wxString      m_fileName;
     wxString      m_wildCard;
     int           m_filterIndex;
+    wxWindow*     m_extraControl;
+
+    // returns true if control is created (if it already exists returns false)
+    bool CreateExtraControl();
 
 private:
+    ExtraControlCreatorFunction m_extraControlCreator;
+
     void Init();
     DECLARE_DYNAMIC_CLASS(wxFileDialogBase)
     DECLARE_NO_COPY_CLASS(wxFileDialogBase)
 };
+
 
 //----------------------------------------------------------------------------
 // wxFileDialog convenience functions
