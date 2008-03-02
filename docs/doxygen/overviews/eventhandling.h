@@ -18,8 +18,7 @@
  @li @ref overview_eventhandling_pluggable
  @li @ref overview_eventhandling_winid
  @li @ref overview_eventhandling_custom
-
- <!-- @li @ref overview_eventhandling_macros -->
+ @li @ref overview_eventhandling_macros
 
 
  <hr>
@@ -375,267 +374,6 @@
 
 
 
- <!-- 
-
- NOTE: this list is incomplete and it's a trouble to maintain it!
-       we must find an automatic way to generate it
-
- 
- @section overview_eventhandling_macros Event macros summary
-
- @b Macros listed by event class
- The documentation for specific event macros is organised by event class. Please refer
- to these sections for details.
-
-
-
-
-
-
- #wxActivateEvent
-
-
-
-
- The EVT_ACTIVATE and EVT_ACTIVATE_APP macros intercept
- activation and deactivation events.
-
-
-
-
-
- #wxCommandEvent
-
-
-
-
- A range of commonly-used control events.
-
-
-
-
-
- #wxCloseEvent
-
-
-
-
- The EVT_CLOSE macro handles window closure
- called via wxWindow::Close.
-
-
-
-
-
- #wxDropFilesEvent
-
-
-
-
- The EVT_DROP_FILES macros handles
- file drop events.
-
-
-
-
-
- #wxEraseEvent
-
-
-
-
- The EVT_ERASE_BACKGROUND macro is used to handle window erase requests.
-
-
-
-
-
- #wxFocusEvent
-
-
-
-
- The EVT_SET_FOCUS and EVT_KILL_FOCUS macros are used to handle keyboard focus events.
-
-
-
-
-
- #wxKeyEvent
-
-
-
-
- EVT_CHAR, EVT_KEY_DOWN and
- EVT_KEY_UP macros handle keyboard input for any window.
-
-
-
-
-
- #wxIdleEvent
-
-
-
-
- The EVT_IDLE macro handle application idle events
- (to process background tasks, for example).
-
-
-
-
-
- #wxInitDialogEvent
-
-
-
-
- The EVT_INIT_DIALOG macro is used
- to handle dialog initialisation.
-
-
-
-
-
- #wxListEvent
-
-
-
-
- These macros handle #wxListCtrl events.
-
-
-
-
-
- #wxMenuEvent
-
-
-
-
- These macros handle special menu events (not menu commands).
-
-
-
-
-
- #wxMouseEvent
-
-
-
-
- Mouse event macros can handle either individual
- mouse events or all mouse events.
-
-
-
-
-
- #wxMoveEvent
-
-
-
-
- The EVT_MOVE macro is used to handle a window move.
-
-
-
-
-
- #wxPaintEvent
-
-
-
-
- The EVT_PAINT macro is used to handle window paint requests.
-
-
-
-
-
- #wxScrollEvent
-
-
-
-
- These macros are used to handle scroll events from
- #wxScrollBar, #wxSlider,and #wxSpinButton.
-
-
-
-
-
- #wxSetCursorEvent
-
-
-
-
- The EVT_SET_CURSOR macro is used for special cursor processing.
-
-
-
-
-
- #wxSizeEvent
-
-
-
-
- The EVT_SIZE macro is used to handle a window resize.
-
-
-
-
-
- #wxSplitterEvent
-
-
-
-
- The EVT_SPLITTER_SASH_POS_CHANGED, EVT_SPLITTER_UNSPLIT
- and EVT_SPLITTER_DCLICK macros are used to handle the various splitter window events.
-
-
-
-
-
- #wxSysColourChangedEvent
-
-
-
-
- The EVT_SYS_COLOUR_CHANGED macro is used to handle
- events informing the application that the user has changed the system colours (Windows only).
-
-
-
-
-
- #wxTreeEvent
-
-
-
-
- These macros handle #wxTreeCtrl events.
-
-
-
-
-
- #wxUpdateUIEvent
-
-
-
-
- The EVT_UPDATE_UI macro is used to handle user interface
- update pseudo-events, which are generated to give the application the chance to update the visual state of menus,
- toolbars and controls.
-
-
- -->
-
-
-
  @section overview_eventhandling_custom Custom event summary
 
  @subsection overview_eventhandling_custom_general General approach
@@ -803,6 +541,14 @@
      GetEventHandler()->ProcessEvent( event );
  }
  @endcode
+
+
+
+
+ @section overview_eventhandling_macros Event macros summary
+
+ For the full list of event classes, please see the
+ @ref page_class_cat_events page.
 
 */
 

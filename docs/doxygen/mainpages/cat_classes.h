@@ -220,9 +220,11 @@
  These are the classes relevant to sizer-based layout.
 
  @li wxSizer: Abstract base class
- @li wxGridSizer: A sizer for laying out windows in a grid with all fields having the same size
+ @li wxGridSizer: A sizer for laying out windows in a grid with all fields
+     having the same size
  @li wxFlexGridSizer: A sizer for laying out windows in a flexible grid
- @li wxGridBagSizer: Another grid sizer that lets you specify the cell an item is in, and items can span rows and/or columns.
+ @li wxGridBagSizer: Another grid sizer that lets you specify the cell an item
+     is in, and items can span rows and/or columns.
  @li wxBoxSizer: A sizer for laying out windows in a row or column
  @li wxStaticBoxSizer: Same as wxBoxSizer, but with a surrounding static box
  @li wxWrapSizer: A sizer which wraps its child controls as size permits
