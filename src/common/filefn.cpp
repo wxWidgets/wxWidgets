@@ -1373,7 +1373,12 @@ wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
         return NULL;
 
     if ( buf )
+#ifdef _PACC_VER
+        // work around the PalmOS pacc compiler bug
+        wxStrcpy(buf, filename.data());
+#else
         wxStrcpy(buf, filename);
+#endif
     else
         buf = MYcopystring(filename);
 
