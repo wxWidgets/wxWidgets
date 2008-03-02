@@ -1,3 +1,14 @@
+/******************************************************************************
+ * Name:        include/wx/palmos/missing.h
+ * Purpose:     the missing declarations for wxPalm
+ * Author:      Yunhui Fu
+ * Created:     2007-10-18
+ * Modified by: 
+ * RCS-ID:      $Id$
+ * Copyright:   (c) 2007 Yunhui Fu
+ * Licence:     wxWindows licence
+ ******************************************************************************/
+
 #ifndef _PALMOS_STDIO_FAKE_H
 #define _PALMOS_STDIO_FAKE_H
 
@@ -9,6 +20,8 @@
 #include <MemoryMgr.h> // Core/System/
 #include <StringMgr.h> // Core/System/
 #include <UIResources.h> // alertRscType,MenuRscType
+#include <ErrorMgr.h>
+#include <DataMgr.h>
 
 #ifdef __cplusplus
 #define _PSF_BEGIN_EXTERN_C extern "C" {
@@ -24,6 +37,7 @@
     #include <time.h>
     #include <StatusBar.h>
     #include <Loader.h>
+    #include <PalmTypesCompatibility.h> // UInt8,UInt16,...
 #else
     #if !defined(__MWERKS__)
         #include <PenInputMgr.h>
@@ -34,15 +48,31 @@
     #define uint8_t  UInt8
 #endif // __WXPALMOS6__
 #if __WXPALMOS6__
+    #define POS_VFSImportDatabaseFromFile(a,b,cardno,d) VFSImportDatabaseFromFile(a,b,d)
+    #define POS_VFSImportDatabaseFromFileCustom(a,b,cardno,d,e,f) VFSImportDatabaseFromFileCustom(a,b,d,e,f)
+    #define POS_VFSExportDatabaseToFile(a,b,cardno,d) VFSExportDatabaseToFile(a,b,d)
+    #define POS_VFSExportDatabaseToFileCustom(a,b,cardno,d,e,f) VFSExportDatabaseToFileCustom(a,b,d,e,f)
     #define POS_DmGetResource(a,b,c) DmGetResource(a,b,c)
     #define POS_FrmSetMenu(a,b,c)    FrmSetMenu(a,b,c)
     #define POS_FrmCustomAlert(a,b,c,d,e) FrmCustomAlert(a,b,c,d,e)
-    #define POS_MemNumRAMHeaps(a)    MemNumRAMHeaps()
-#else // __WXPALMOS6__
+    #define POS_MemNumRAMHeaps()    MemNumRAMHeaps()
+    #define POS_SysBatteryInfo(a,b,c,d,e,f,g,h) SysBatteryInfo(a,b,c,d,e,f,g,h)
+#else // __WXPALMOS5__
+    #define POS_VFSImportDatabaseFromFile(a,b,cardno,d) VFSImportDatabaseFromFile(a,b,cardno,d)
+    #define POS_VFSImportDatabaseFromFileCustom(a,b,cardno,d,e,f) VFSImportDatabaseFromFileCustom(a,b,cardno,d,e,f)
+    #define POS_VFSExportDatabaseToFile(a,b,cardno,d) VFSExportDatabaseToFile(a,b,d)
+    #define POS_VFSExportDatabaseToFileCustom(a,b,cardno,d,e,f) VFSExportDatabaseToFileCustom(a,b,cardno,d,e,f)
     #define POS_DmGetResource(a,b,c) DmGetResource(b,c)
     #define POS_FrmSetMenu(a,b,c)    FrmSetMenu(a,c)
     #define POS_FrmCustomAlert(a,b,c,d,e) FrmCustomAlert(b,c,d,e)
-    #define POS_MemNumRAMHeaps(a)    MemNumRAMHeaps(a)
+    #define POS_MemNumRAMHeaps()    MemNumRAMHeaps(0)
+    #define POS_SysBatteryInfo(a,b,c,d,e,f,g,h) SysBatteryInfo(a,b,c,e,f,g,h)
+#define MemCardInfoV40 MemCardInfo
+#define FileOpenV50 FileOpen
+#define ExgDBWriteV40 ExgDBWrite
+#define DmSortRecordInfoPtr SortRecordInfoPtr
+
+#define ErrFatalErrorInContext(fileName, lineNum, errMsg) ErrDisplayFileLineMsg(fileName, lineNum, errMsg)
 #endif // __WXPALMOS6__
 
 _PSF_BEGIN_EXTERN_C
@@ -53,7 +83,7 @@ _PSF_BEGIN_EXTERN_C
 //#include <unix_stdarg.h>
 #endif
 
-#if 0
+#if 1
 #define strcpy(x,y)    StrCopy((char*)(x),(char*)(y))
 #define strncpy(x,y,z) StrNCopy((x),(y),(z))
 #define strcmp(x,y)    StrCompare((x),(y))
@@ -61,6 +91,7 @@ _PSF_BEGIN_EXTERN_C
 #define strlen(x)      StrLen((char*)(x))
 #define strchr(x,y)    StrChr((x),(y))
 #define strstr(x,y)    StrStr((x),(y))
+#define strcasecmp(x,y) StrCaselessCompare((x),(y))
 
 #define memcpy(x,y,z)  ((0 == MemMove((x),(void *)(y),(z))) ? (x) : (0))
 #define memset(x,y,z)  (MemSet((x),(z),(y)))
@@ -74,30 +105,29 @@ _PSF_BEGIN_EXTERN_C
 #define int64_t long long
 #define uint64_t unsigned int64_t
 
-#define wchar_t uint16_t
 #endif
 #define wint_t int
 
 #define ssize_t long
 #define size_t  uint32_t
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define off_t ssize_t
 
 #if 0
+#undef malloc
+#undef realloc
+#undef free
 #define malloc(x) MemPtrNew(x)
-#define free(x)   MemPtrFree(x)
+#define free(x) MemPtrFree(x)
 void * realloc (void *p, size_t newsize);
 #endif
 char * strdup (const char *old);
 
 // copy from Core/System/Unix/unix_stdio.h
 #ifndef _STDLIB
-	#define sprintf StrPrintF
-	#define vsprintf(x,y,z) StrVPrintF(x,(const Char *)y,z)
+    #define sprintf StrPrintF
+    #define vsprintf(x,y,z) StrVPrintF(x,(const Char *)y,z)
 #else
-	int vsprintf(char *, const char *, _Va_list);
+    int vsprintf(char *, const char *, _Va_list);
 #endif
 int sscanf(const char *, const char *, ...);
 
@@ -105,29 +135,17 @@ int sscanf(const char *, const char *, ...);
 #define time_t uint64_t
 time_t time(time_t *T);
 
-#define JAN  0
-#define FEB  1
-#define MAR  2
-#define APR  3
-#define MAY  4
-#define JUN  5
-#define JUL  6
-#define AUG  7
-#define SEP  8
-#define OCT  9
-#define NOV 10
-#define DEC 11
 struct tm {
-	int8_t tm_gmtoff;
-	int8_t tm_isdst;
-	uint8_t tm_sec;
-	uint8_t tm_min;
-	uint8_t tm_hour;
-	uint8_t tm_wday;
-	uint8_t tm_mday;
-	uint8_t tm_mon;
-	uint16_t tm_yday;
-	uint64_t tm_year;
+    int8_t tm_gmtoff;
+    int8_t tm_isdst;
+    uint8_t tm_sec;
+    uint8_t tm_min;
+    uint8_t tm_hour;
+    uint8_t tm_wday;
+    uint8_t tm_mday;
+    uint8_t tm_mon;
+    uint16_t tm_yday;
+    uint64_t tm_year;
 };
 
 #define HAVE_LOCALTIME_R 1
@@ -177,7 +195,12 @@ struct lconv *_localeconv_r(void *REENT);
 ///////////////////// stdlib.h ////////////////////
 
 #if !defined(__MWERKS__)
-#define wchar_t int
+    #if !defined(__WCHAR_TYPE__) || \
+        (!defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 96))
+        #define wchar_t int
+    #else /* __WCHAR_TYPE__ and gcc < 2.96 */
+        #define wchar_t __WCHAR_TYPE__
+    #endif /* __WCHAR_TYPE__ */
 #endif
 int _watoi(wchar_t * nptr);
 long _watol(wchar_t * nptr);
@@ -189,13 +212,13 @@ int mbstowcs(wchar_t *PWC, const char *S, size_t N);
 int wcstombs(const char *S, wchar_t *PWC, size_t N);
 
 ///////////////////// fcntl.h ////////////////////
-#define	O_RDONLY	0x01
-#define	O_WRONLY	0x02
-#define	O_RDWR    0x04
-#define	O_APPEND	0x08
-#define	O_CREAT   0x10
-#define	O_TRUNC   0x20
-#define	O_EXCL    0x40
+#define    O_RDONLY    0x01
+#define    O_WRONLY    0x02
+#define    O_RDWR    0x04
+#define    O_APPEND    0x08
+#define    O_CREAT   0x10
+#define    O_TRUNC   0x20
+#define    O_EXCL    0x40
 #define O_SYNC    0x80
 
 // io.h
@@ -226,18 +249,18 @@ int rmdir (const char *path);
 #define stdout NULL
 #define stderr NULL
 
-#define	SEEK_SET	0	/* set file offset to offset */
-#define	SEEK_CUR	1	/* set file offset to current plus offset */
-#define	SEEK_END	2	/* set file offset to EOF plus offset */
+#define    SEEK_SET    0    /* set file offset to offset */
+#define    SEEK_CUR    1    /* set file offset to current plus offset */
+#define    SEEK_END    2    /* set file offset to EOF plus offset */
 
-FILE *	fopen (const char *_name, const char *_type);
-int	fclose (FILE *);
+FILE *    fopen (const char *_name, const char *_type);
+int    fclose (FILE *);
 size_t fread (void *buf, size_t _size, size_t _n, FILE *);
-size_t	fwrite (const void *buf , size_t _size, size_t _n, FILE *);
-int	fseek (FILE *, long, int);
+size_t    fwrite (const void *buf , size_t _size, size_t _n, FILE *);
+int    fseek (FILE *, long, int);
 long ftell ( FILE *);
-int	feof (FILE *);
-int	ferror (FILE *);
+int    feof (FILE *);
+int    ferror (FILE *);
 void clearerr (FILE *);
 FILE *freopen(const char *fn, const char *mode, FILE *fp);
 //FILE *_freopen_r(struct _reent *PTR, const char *fn, const char *mode, FILE *fp);
@@ -345,9 +368,6 @@ time_t SysTimeToMilliSecs(time_t systime);
 time_t SysTimeInSecs(time_t secs);
 
 ///////////////////// END ////////////////////
-#ifdef __cplusplus
-}
-#endif
 
 #endif // __WXPALMOS5__
 
@@ -390,6 +410,18 @@ unsigned long wcstoul (const wchar_t * a, wchar_t ** b, int c);
 double wcstod (const wchar_t * a, wchar_t ** b);
 
 char * setlocale (int category, const char *locale);
+
+#define O_BINARY 0x00 /* for DOS compability */
+extern int eof(int fd);
+//extern int remove(const char *fn);
+extern int access(const char *path, int amode);
+extern off_t lseek(int fildes, off_t offset, int whence);
+
+//TxtCharIsAlNum 
+//#define isalpha(a) TxtCharIsAlpha(a)
+//TxtCharIsCntrl TxtCharIsDelim TxtCharIsDigit TxtCharIsGraph TxtCharIsHardKey TxtCharIsHex TxtCharIsLower TxtCharIsPrint TxtCharIsPunct TxtCharIsSpace TxtCharIsUpper 
+
+#include "pfall.h"
 
 _PSF_END_EXTERN_C
 
