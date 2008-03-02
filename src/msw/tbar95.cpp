@@ -1593,7 +1593,10 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 
 #endif // wxUSE_UXTHEME
 
-    if ( UseBgCol() || (GetMSWToolbarStyle() & TBSTYLE_TRANSPARENT) )
+    // we need to always draw our background under XP, as otherwise it doesn't
+    // appear correctly with some themes (e.g. Zune one)
+    if ( majorVersion == 5 ||
+            UseBgCol() || (GetMSWToolbarStyle() & TBSTYLE_TRANSPARENT) )
     {
         // do draw our background
         //
