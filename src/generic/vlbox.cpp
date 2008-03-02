@@ -355,29 +355,40 @@ void wxVListBox::OnDrawSeparator(wxDC& WXUNUSED(dc),
 {
 }
 
+bool
+wxVListBox::DoDrawSolidBackground(const wxColour& col,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  size_t n) const
+{
+    if ( !col.IsOk() )
+        return false;
+
+    // we need to render selected and current items differently
+    const bool isSelected = IsSelected(n),
+               isCurrent = IsCurrent(n);
+    if ( isSelected || isCurrent )
+    {
+        if ( isSelected )
+        {
+            dc.SetBrush(wxBrush(col, wxSOLID));
+        }
+        else // !selected
+        {
+            dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        }
+        dc.SetPen(*(isCurrent ? wxBLACK_PEN : wxTRANSPARENT_PEN));
+        dc.DrawRectangle(rect);
+    }
+    //else: do nothing for the normal items
+
+    return true;
+}
+
 void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 {
-    if ( m_colBgSel.IsOk() )
-    {
-        // we need to render selected and current items differently
-        const bool isSelected = IsSelected(n),
-                   isCurrent = IsCurrent(n);
-        if ( isSelected || isCurrent )
-        {
-            if ( isSelected )
-            {
-                dc.SetBrush(wxBrush(m_colBgSel, wxSOLID));
-            }
-            else // !selected
-            {
-                dc.SetBrush(*wxTRANSPARENT_BRUSH);
-            }
-            dc.SetPen(*(isCurrent ? wxBLACK_PEN : wxTRANSPARENT_PEN));
-            dc.DrawRectangle(rect);
-        }
-        //else: do nothing for the normal items
-    }
-    else // use wxRendererNative for a more native look&feel:
+    // use wxRendererNative for more native look unless we use custom bg colour
+    if ( !DoDrawSolidBackground(m_colBgSel, dc, rect, n) )
     {
         int flags = 0;
         if ( IsSelected(n) )

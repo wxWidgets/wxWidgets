@@ -165,12 +165,27 @@ public:
 
     virtual wxColour GetSelectedTextColour(const wxColour& colFg)
     {
-        return m_hlbox.GetSelectedTextColour(colFg);
+        // by default wxHtmlListBox doesn't implement GetSelectedTextColour()
+        // and returns wxNullColour from it, so use the default HTML colour for
+        // selection
+        wxColour col = m_hlbox.GetSelectedTextColour(colFg);
+        if ( !col.IsOk() )
+        {
+            col = wxDefaultHtmlRenderingStyle::GetSelectedTextColour(colFg);
+        }
+
+        return col;
     }
 
     virtual wxColour GetSelectedTextBgColour(const wxColour& colBg)
     {
-        return m_hlbox.GetSelectedTextBgColour(colBg);
+        wxColour col = m_hlbox.GetSelectedTextBgColour(colBg);
+        if ( !col.IsOk() )
+        {
+            col = wxDefaultHtmlRenderingStyle::GetSelectedTextBgColour(colBg);
+        }
+
+        return col;
     }
 
 private:
@@ -254,16 +269,16 @@ wxHtmlListBox::~wxHtmlListBox()
 // wxHtmlListBox appearance
 // ----------------------------------------------------------------------------
 
-wxColour wxHtmlListBox::GetSelectedTextColour(const wxColour& colFg) const
+wxColour
+wxHtmlListBox::GetSelectedTextColour(const wxColour& WXUNUSED(colFg)) const
 {
-    return m_htmlRendStyle->
-                wxDefaultHtmlRenderingStyle::GetSelectedTextColour(colFg);
+    return wxNullColour;
 }
 
 wxColour
 wxHtmlListBox::GetSelectedTextBgColour(const wxColour& WXUNUSED(colBg)) const
 {
-    return GetSelectionBackground();
+    return wxNullColour;
 }
 
 // ----------------------------------------------------------------------------
@@ -356,6 +371,27 @@ void wxHtmlListBox::SetItemCount(size_t count)
 // wxHtmlListBox implementation of wxVListBox pure virtuals
 // ----------------------------------------------------------------------------
 
+void
+wxHtmlListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
+{
+    if ( IsSelected(n) )
+    {
+        if ( DoDrawSolidBackground
+             (
+                GetSelectedTextBgColour(GetBackgroundColour()),
+                dc,
+                rect,
+                n
+             ) )
+        {
+            return;
+        }
+        //else: no custom selection background colour, use base class version
+    }
+
+    wxVListBox::OnDrawBackground(dc, rect, n);
+}
+
 void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
 {
     CacheItem(n);
@@ -364,6 +400,22 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     wxCHECK_RET( cell, _T("this cell should be cached!") );
 
     wxHtmlRenderingInfo htmlRendInfo;
+
+    // draw the selected cell in selected state ourselves if we're using custom
+    // colours (to test for this, check the callbacks by passing them any dummy
+    // (but valid, to avoid asserts) colour):
+    if ( IsSelected(n) &&
+            (GetSelectedTextColour(*wxBLACK).IsOk() ||
+             GetSelectedTextBgColour(*wxWHITE).IsOk()) )
+    {
+        wxHtmlSelection htmlSel;
+        htmlSel.Set(wxPoint(0,0), cell, wxPoint(INT_MAX, INT_MAX), cell);
+        htmlRendInfo.SetSelection(&htmlSel);
+        htmlRendInfo.SetStyle(m_htmlRendStyle);
+        htmlRendInfo.GetState().SetSelectionState(wxHTML_SEL_IN);
+    }
+    //else: normal item or selected item with default colours, its background
+    //      was already taken care of in the base class
 
     // note that we can't stop drawing exactly at the window boundary as then
     // even the visible cells part could be not drawn, so always draw the

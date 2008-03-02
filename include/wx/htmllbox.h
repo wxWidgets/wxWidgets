@@ -111,8 +111,11 @@ protected:
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
     virtual wxCoord OnMeasureItem(size_t n) const;
 
-    // This method may be overriden to handle clicking on a link in
-    // the listbox. By default, clicking links is ignored.
+    // override this one to draw custom background for selected items correctly
+    virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
+
+    // this method may be overridden to handle clicking on a link in the
+    // listbox (by default, clicks on links are simply ignored)
     virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
 
     // event handlers
