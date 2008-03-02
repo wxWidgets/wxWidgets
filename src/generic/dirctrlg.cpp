@@ -251,7 +251,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         }
     }
 
-#elif defined(__UNIX__)
+#elif defined(__UNIX__) || defined(__WXPALMOS__)
     paths.Add(wxT("/"));
     names.Add(wxT("/"));
     icon_ids.Add(wxFileIconsTable::computer);

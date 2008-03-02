@@ -1178,9 +1178,11 @@ bool wxGenericFileCtrl::SetFilename( const wxString& name )
 
 void wxGenericFileCtrl::DoSetFilterIndex( int filterindex )
 {
-    const wxString& str = (wx_static_cast(wxStringClientData *,
-                            m_choice->GetClientObject( filterindex )))
-                            ->GetData();
+    wxClientData *pcd = m_choice->GetClientObject( filterindex );
+    if ( !pcd )
+        return;
+
+    const wxString& str = ((wx_static_cast(wxStringClientData *, pcd))->GetData());
     m_list->SetWild( str );
     m_filterIndex = filterindex;
     if ( str.Left( 2 ) == wxT( "*." ) )

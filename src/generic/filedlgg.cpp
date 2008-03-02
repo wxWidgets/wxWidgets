@@ -19,7 +19,7 @@
 #if wxUSE_FILEDLG
 
 // NOTE : it probably also supports MAC, untested
-#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__) && !defined(__OS2__)
+#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__) && !defined(__OS2__) && !defined(__PALMOS__)
 #error wxGenericFileDialog currently only supports Unix, win32 and DOS
 #endif
 
@@ -53,7 +53,11 @@
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif
+#if wxUSE_CONFIG
+    #include "wx/config.h"
+#endif
 
+#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
     #include <sys/types.h>
     #include <sys/stat.h>
@@ -82,6 +86,7 @@
 #if defined(__UNIX__) || defined(__DOS__)
 #include <unistd.h>
 #endif
+#endif // ! __WXPALMOS5__
 
 #if defined(__WXWINCE__)
 #define IsTopMostDir(dir) (dir == wxT("\\") || dir == wxT("/"))
