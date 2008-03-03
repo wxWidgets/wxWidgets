@@ -25,7 +25,7 @@ digraph Dependancies
     wxBase     [URL = "\ref page_libs_wxbase"];
 
     wxCore     [fillcolor = deepskyblue, URL = "\ref page_libs_wxcore"];
-    wxNet      [fillcolor = deepskyblue, URL = "\ref page_libs_wxNet"];
+    wxNet      [fillcolor = deepskyblue, URL = "\ref page_libs_wxnet"];
     wxXML      [fillcolor = deepskyblue, URL = "\ref page_libs_wxxml"];
 
     wxAdvanced [fillcolor = green, URL = "\ref page_libs_wxadv"];
