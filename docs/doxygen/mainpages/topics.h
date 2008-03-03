@@ -97,7 +97,6 @@ The following is a basic categorization of them:
 @li @subpage overview_treectrl
 @li @subpage overview_listctrl
 @li @subpage overview_splitterwindow
-@li @subpage overview_imagelist
 @li @subpage overview_bookctrl
 @li @subpage overview_tips
 @li @subpage overview_docview

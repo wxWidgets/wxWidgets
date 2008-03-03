@@ -8,7 +8,7 @@
 
 /*!
 
-@page overview_xrc XML Based Resource System
+@page overview_xrc XML Based Resource System (XRC)
 
 Classes: wxXmlResource, wxXmlResourceHandler
 
