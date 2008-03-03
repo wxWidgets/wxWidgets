@@ -1175,49 +1175,14 @@ bool wxTopLevelWindowMSW::CanSetTransparent()
 
 void wxTopLevelWindowMSW::DoFreeze()
 {
-    if ( IsShown() )
-    {
-        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxWindow *child = node->GetData();
-            if ( child->IsTopLevel() )
-                continue;
-
-            child->Freeze();
-        }
-    }
+    // do nothing: freezing toplevel window causes paint and mouse events
+    // to go through it any TLWs under it, so the best we can do is to freeze
+    // all children -- and wxWindowBase::Freeze() does that
 }
 
 void wxTopLevelWindowMSW::DoThaw()
 {
-    if ( IsShown() )
-    {
-        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-              node;
-              node = node->GetNext() )
-        {
-            wxWindow *child = node->GetData();
-            if ( child->IsTopLevel() )
-                continue;
-
-            child->Thaw();
-        }
-    }
-}
-
-
-void wxTopLevelWindowMSW::AddChild(wxWindowBase *child)
-{
-    // adding a child while frozen will assert when thawn, so freeze it as if
-    // it had been already present when we were frozen
-    if ( child && !child->IsTopLevel() && IsFrozen() )
-    {
-        child->Freeze();
-    }
-
-    wxTopLevelWindowBase::AddChild(child);
+    // intentionally empty -- see DoFreeze()
 }
 
 

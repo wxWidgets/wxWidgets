@@ -888,16 +888,10 @@ public:
     virtual void ClearBackground();
 
         // freeze the window: don't redraw it until it is thawed
-    void Freeze() { if ( !m_freezeCount++ ) DoFreeze(); }
+    void Freeze();
 
         // thaw the window: redraw it after it had been frozen
-    void Thaw()
-    {
-        wxASSERT_MSG( m_freezeCount, "Thaw() without matching Freeze()" );
-
-        if ( !--m_freezeCount )
-            DoThaw();
-    }
+    void Thaw();
 
         // return true if window had been frozen and not unthawed yet
     bool IsFrozen() const { return m_freezeCount != 0; }

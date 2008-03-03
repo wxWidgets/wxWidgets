@@ -929,6 +929,52 @@ bool wxWindowBase::IsTopLevel() const
 }
 
 // ----------------------------------------------------------------------------
+// Freeze/Thaw
+// ----------------------------------------------------------------------------
+
+void wxWindowBase::Freeze()
+{
+    if ( !m_freezeCount++ )
+    {
+        // physically freeze this window:
+        DoFreeze();
+
+        // and recursively freeze all children:
+        for ( wxWindowList::iterator i = GetChildren().begin();
+              i != GetChildren().end(); ++i )
+        {
+            wxWindow *child = *i;
+            if ( child->IsTopLevel() )
+                continue;
+
+            child->Freeze();
+        }
+    }
+}
+
+void wxWindowBase::Thaw()
+{
+    wxASSERT_MSG( m_freezeCount, "Thaw() without matching Freeze()" );
+
+    if ( !--m_freezeCount )
+    {
+        // recursively thaw all children:
+        for ( wxWindowList::iterator i = GetChildren().begin();
+              i != GetChildren().end(); ++i )
+        {
+            wxWindow *child = *i;
+            if ( child->IsTopLevel() )
+                continue;
+
+            child->Thaw();
+        }
+
+        // physically thaw this window:
+        DoThaw();
+    }
+}
+
+// ----------------------------------------------------------------------------
 // reparenting the window
 // ----------------------------------------------------------------------------
 
@@ -943,11 +989,21 @@ void wxWindowBase::AddChild(wxWindowBase *child)
 
     GetChildren().Append((wxWindow*)child);
     child->SetParent(this);
+
+    // adding a child while frozen will assert when thawn, so freeze it as if
+    // it had been already present when we were frozen
+    if ( IsFrozen() && !child->IsTopLevel() )
+        child->Freeze();
 }
 
 void wxWindowBase::RemoveChild(wxWindowBase *child)
 {
     wxCHECK_RET( child, wxT("can't remove a NULL child") );
+
+    // removing a child while frozen may result in permanently frozen window
+    // if used e.g. from Reparent(), so thaw it
+    if ( IsFrozen() && !child->IsTopLevel() )
+        child->Thaw();
 
     GetChildren().DeleteObject((wxWindow *)child);
     child->SetParent(NULL);

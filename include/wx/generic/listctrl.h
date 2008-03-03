@@ -215,9 +215,6 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
-    virtual void DoFreeze();
-    virtual void DoThaw();
-
     // return the text for the given column of the given item
     virtual wxString OnGetItemText(long item, long column) const;
 

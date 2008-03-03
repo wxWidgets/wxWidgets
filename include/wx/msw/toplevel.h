@@ -75,8 +75,6 @@ public:
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
 
-    virtual void AddChild( wxWindowBase *child );
-
 
     // implementation from now on
     // --------------------------

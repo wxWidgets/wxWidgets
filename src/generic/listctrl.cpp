@@ -5901,14 +5901,4 @@ void wxGenericListCtrl::Refresh(bool eraseBackground, const wxRect *rect)
     }
 }
 
-void wxGenericListCtrl::DoFreeze()
-{
-    m_mainWin->Freeze();
-}
-
-void wxGenericListCtrl::DoThaw()
-{
-    m_mainWin->Thaw();
-}
-
 #endif // wxUSE_LISTCTRL
