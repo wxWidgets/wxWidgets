@@ -8,11 +8,11 @@
 
 /*!
 
-@page overview_runtimeclass Runtime Class Information (RTTI)
+@page overview_rtti Runtime Class Information (RTTI)
 
-@li @ref overview_runtimeclass_intro
-@li @ref overview_runtimeclass_classinfo
-@li @ref overview_runtimeclass_example
+@li @ref overview_rtti_intro
+@li @ref overview_rtti_classinfo
+@li @ref overview_rtti_example
 
 @seealso
 
@@ -23,7 +23,7 @@
 <hr>
 
 
-@section overview_runtimeclass_intro Introduction
+@section overview_rtti_intro Introduction
 
 One of the failings of C++ used to be that no run-time information was provided
 about a class and its position in the inheritance hierarchy. Another, which
@@ -73,7 +73,7 @@ given type, by supplying a string name. If you have a pointer to the
 wxClassInfo object instead, then you can simply call wxClassInfo::CreateObject.
 
 
-@section overview_runtimeclass_classinfo wxClassInfo
+@section overview_rtti_classinfo wxClassInfo
 
 This class stores meta-information about classes. An application may use macros
 such as DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to record run-time
@@ -99,7 +99,7 @@ wxObject::GetClassInfo.
 @li wxCreateDynamicObject
 
 
-@section overview_runtimeclass_example Example
+@section overview_rtti_example Example
 
 In a header file frame.h:
 

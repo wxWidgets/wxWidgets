@@ -34,7 +34,7 @@ The following is a basic categorization of them:
 @section page_topics_programming Programming with wxWidgets
 
 @li @subpage overview_backwardcompat
-@li @subpage overview_runtimeclass
+@li @subpage overview_rtti
 @li @subpage overview_refcount
 @li @subpage overview_app
 @li @subpage overview_unicode
