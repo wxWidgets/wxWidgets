@@ -62,23 +62,23 @@ ALIASES += beginExtraStyleTable="\section class_extrastyles Extra Styles\n"
 ALIASES += endExtraStyleTable="\n"
 
 # aliases for additional wx-specific infos 
-ALIASES += library{1}="\section class_lib Library\n \ref page_libs_\1"
+ALIASES += library{1}="\section class_lib Library\n Belongs to library \ref page_libs_\1"
 ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
 ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
-ALIASES += category{1}="\section class_category Category\n"
+ALIASES += category{1}="\section class_category Category\n \1"
 
 # aliases with references to wxWidgets ports
-ALIASES += nativeimpl{1}="\section class_impl Native implementations\n \ref page_port_\1"
-ALIASES += nativeimpl{2}="\section class_impl Native implementations\n \ref page_port_\1, \ref page_port_\2"
-ALIASES += nativeimpl{3}="\section class_impl Native implementations\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3"
-ALIASES += nativeimpl{4}="\section class_impl Native implementations\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4"
-ALIASES += onlyfor{1}="\section class_onlyfor Only available for\n \ref page_port_\1"
-ALIASES += onlyfor{2}="\section class_onlyfor Only available for\n \ref page_port_\1, \ref page_port_\2"
-ALIASES += onlyfor{3}="\section class_onlyfor Only available for\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3"
-ALIASES += onlyfor{4}="\section class_onlyfor Only available for\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4"
+ALIASES += nativeimpl{1}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1 port; generic implementation is used elsewhere."
+ALIASES += nativeimpl{2}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1, \ref page_port_\2 ports; generic implementation is used elsewhere."
+ALIASES += nativeimpl{3}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports; generic implementation is used elsewhere."
+ALIASES += nativeimpl{4}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports; generic implementation is used elsewhere."
+ALIASES += onlyfor{1}="\section class_onlyfor Availability\n Only available for the \ref page_port_\1 port."
+ALIASES += onlyfor{2}="\section class_onlyfor Availability\n Only available for the \ref page_port_\1, \ref page_port_\2 ports."
+ALIASES += onlyfor{3}="\section class_onlyfor Availability\n Only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports."
+ALIASES += onlyfor{4}="\section class_onlyfor Availability\n Only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports."
 
 # creates appearance section: this should be used for all main GUI controls
-ALIASES += appearance{1}="\section class_appearance Appearance\n @htmlonly <table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table> @endhtmlonly"
+ALIASES += appearance{1}="\section class_appearance Appearance\n @htmlonly Screenshots for this widget: <table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table> @endhtmlonly"
 
 # IMPORTANT: the default \sa command does not generate a \section!
 ALIASES += seealso="\section class_sa See also\n"
