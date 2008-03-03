@@ -278,7 +278,7 @@ wxHtmlListBox::GetSelectedTextColour(const wxColour& WXUNUSED(colFg)) const
 wxColour
 wxHtmlListBox::GetSelectedTextBgColour(const wxColour& WXUNUSED(colBg)) const
 {
-    return wxNullColour;
+    return GetSelectionBackground();
 }
 
 // ----------------------------------------------------------------------------
