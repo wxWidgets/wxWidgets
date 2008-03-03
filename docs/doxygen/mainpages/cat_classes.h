@@ -409,7 +409,7 @@
 
  @section page_class_cat_rtti Run-time class information system
 
- @ref overview_runtimeclass
+ @ref overview_rtti
 
  wxWidgets supports run-time manipulation of class information, and dynamic
  creation of objects given class names.
