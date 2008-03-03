@@ -1672,7 +1672,29 @@ void wxWindowBase::OnHelp(wxHelpEvent& event)
     wxHelpProvider *helpProvider = wxHelpProvider::Get();
     if ( helpProvider )
     {
-        if ( helpProvider->ShowHelpAtPoint(this, event.GetPosition(), event.GetOrigin()) )
+        wxPoint pos = event.GetPosition();
+        const wxHelpEvent::Origin origin = event.GetOrigin();
+        if ( origin == wxHelpEvent::Origin_Keyboard )
+        {
+            // if the help event was generated from keyboard it shouldn't
+            // appear at the mouse position (which is still the only position
+            // associated with help event) if the mouse is far away, although
+            // we still do use the mouse position if it's over the window
+            // because we suppose the user looks approximately at the mouse
+            // already and so it would be more convenient than showing tooltip
+            // at some arbitrary position which can be quite far from it
+            const wxRect rectClient = GetClientRect();
+            if ( !rectClient.Contains(ScreenToClient(pos)) )
+            {
+                // position help slightly under and to the right of this window
+                pos = ClientToScreen(wxPoint(
+                        2*GetCharWidth(),
+                        rectClient.height + GetCharHeight()
+                      ));
+            }
+        }
+
+        if ( helpProvider->ShowHelpAtPoint(this, pos, origin) )
         {
             // skip the event.Skip() below
             return;
