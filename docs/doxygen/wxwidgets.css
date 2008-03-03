@@ -438,7 +438,8 @@ HR {
  wxWidgets docs specific styles
 */
 
-table.doctable {
-
+IMG.logo {
+    float: right;
+    margin: 20px;
 }
 

@@ -11,6 +11,7 @@ mkdir -p out/html       # we need to copy files in this folder below
 # this image is not automatically copied by Doxygen because it's not
 # used in doxygen documentation but only in our html footer...
 cp images/powered-by-wxwidgets.png out/html
+cp images/*logo.png out/html
 
 # this CSS is automatically copied by Doxygen because it's 
 # included by our custom html header...
