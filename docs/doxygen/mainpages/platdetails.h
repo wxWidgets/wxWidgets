@@ -9,7 +9,7 @@
 
 /*!
 
- @page page_platdetails Platform details
+ @page page_port Platform details
 
  wxWidgets defines a common API across platforms, but uses the native graphical
  user interface (GUI) on each platform, so your program will take on the native
@@ -18,20 +18,24 @@
  requires. This chapter collects notes about differences among supported platforms
  and ports.
 
- @li @ref page_platdetails_wxgtkport
- @li @ref page_platdetails_wxmacport
- @li @ref page_platdetails_wxos2port
- @li @ref page_platdetails_wxmglport
- @li @ref page_platdetails_wxx11port
- @li @ref page_platdetails_wxmswport
- @li @ref page_platdetails_nativedocs
+ @li @ref page_port_wxgtk
+ @li @ref page_port_wxmac
+ @li @ref page_port_wxos2
+ @li @ref page_port_wxmgl
+ @li @ref page_port_wxx11
+ @li @ref page_port_wxmsw
+ @li @ref page_port_nativedocs
 
 
  <hr>
 
 
 
- @section page_platdetails_wxgtkport wxGTK port
+ @section page_port_wxgtk wxGTK 
+
+ @htmlonly
+ <img src="gtk_logo.png" alt="GTK logo" title="GTK logo" class="logo">
+ @endhtmlonly
  
  wxGTK is a port of wxWidgets using the GTK+ library.
  It makes use of GTK+'s native widgets wherever possible and uses
@@ -67,8 +71,13 @@
  
  
  
- @section page_platdetails_wxmacport wxMac port
+ @section page_port_wxmac wxMac 
  
+ @htmlonly
+ <img src="osxleopard_logo.png" alt="Mac OS X (Leopard) logo"
+      title="Mac OS X (Leopard) logo" class="logo">
+ @endhtmlonly
+
  wxMac is a port of wxWidgets for the Macintosh OS platform.
  Currently MacOS 8.6 or higher, MacOS 9.0 or higher and
  MacOS X 10.0 or higher are supported, although most development
@@ -86,7 +95,7 @@
  
  
  
- @section page_platdetails_wxmglport wxMGL port
+ @section page_port_wxmgl wxMGL 
  
  wxMGL is a port of wxWidgets using the MGL library available
  from SciTech as the underlying graphics backend. wxMGL draws
@@ -113,15 +122,22 @@
  
  
  
- @section page_platdetails_wxos2port wxOS2 port
+ @section page_port_wxos2 wxOS2 
+
+ wxOS2 is a port of wxWidgets for the IBM OS/2 Warp3 and Warp4 platforms.
+ This port is currently under construction and in beta phase.
+
+ For more info about OS2 see:
+
  
- wxOS2 is a port of wxWidgets for the IBM OS/2 platform.
- It is currently under construction.
  
  
- 
- @section page_platdetails_wxx11port wxX11 port
- 
+ @section page_port_wxx11 wxX11 
+
+ @htmlonly
+ <img src="x11_logo.png" alt="X.org logo" title="X.org logo" class="logo">
+ @endhtmlonly
+
  wxX11 is a port of wxWidgets using X11 (The X Window System)
  as the underlying graphics backend. wxX11 draws its widgets
  using the wxUniversal widget set which is now part of wxWidgets.
@@ -143,8 +159,12 @@
  
  
  
- @section page_platdetails_wxmswport wxMSW port
- 
+ @section page_port_wxmsw wxMSW 
+
+ @htmlonly
+ <img src="win_logo.png" alt="Windows logo" title="Windows logo" class="logo">
+ @endhtmlonly
+
  wxMSW is a port of wxWidgets for the Windows platforms
  including Windows 95, 98, ME, 2000, NT, XP in ANSI and
  Unicode mode (for Windows 95 through the MSLU extension
@@ -158,7 +178,7 @@
  For further information, please see the files in docs/msw
  in the distribution.
  
- @subsection page_platdetails_wxmswport_themedborders Themed borders on Windows
+ @subsection page_port_wxmsw_themedborders Themed borders on Windows
  
  Starting with wxWidgets 2.8.5, you can specify the wxBORDER_THEME style to have wxWidgets
  use a themed border. Using the default XP theme, this is a thin 1-pixel blue border,
@@ -176,7 +196,7 @@
  This is not to be confused with specifying wxBORDER_NONE, which says that there should
  definitely be @e no border.
  
- @subsubsection page_platdetails_wxmswport_themedborders_details More detail on border implementation
+ @subsubsection page_port_wxmsw_themedborders_details More detail on border implementation
  
  The way that wxMSW decides whether to apply a themed border is as follows.
  The theming code calls wxWindow::GetBorder() to obtain a border. If no border style has been
@@ -191,7 +211,7 @@
  overrides GetDefaultBorder() in order to call the generic wxWindowBase::GetDefaultBorder(),
  returning wxBORDER_NONE.
  
- @subsection page_platdetails_wxmswport_wince wxWinCE
+ @subsection page_port_wxmsw_wince wxWinCE
  
  wxWinCE is the name given to wxMSW when compiled on Windows CE devices;
  most of wxMSW is common to Win32 and Windows CE but there are
@@ -203,7 +223,7 @@
  files below. The rest of this section documents issues you
  need to be aware of when programming for Windows CE devices.
  
- @subsubsection page_platdetails_wxmswport_wince_port General issues for wxWinCE programming
+ @subsubsection page_port_wxmsw_wince_ General issues for wxWinCE programming
  
  Mobile applications generally have fewer features and
  simpler user interfaces. Simply omit whole sizers, static
@@ -248,7 +268,7 @@
  
  @verbatim #include "wx/msw/wx.rc" @endverbatim
  
- @subsubsection page_platdetails_wxmswport_wince_sdk Testing for WinCE SDKs
+ @subsubsection page_port_wxmsw_wince_sdk Testing for WinCE SDKs
  
  Use these preprocessor symbols to test for the different types of device or SDK:
  
@@ -268,7 +288,7 @@
  @li @b wxWINDOWS_CE The application is running under Windows CE (built with the Standard SDK).
  
  
- @subsubsection page_platdetails_wxmswport_wince_sizing Window sizing in wxWinCE
+ @subsubsection page_port_wxmsw_wince_sizing Window sizing in wxWinCE
  
  Top level windows (dialogs, frames) are created always full-screen. Fit() of sizers will not rescale top
  level windows but instead will scale window content.
@@ -279,13 +299,13 @@
  When input panel (SIP) is shown, top level windows (frames and dialogs) resize
  accordingly (see wxTopLevelWindow::HandleSettingChange).
  
- @subsubsection page_platdetails_wxmswport_wince_toplevel Closing top-level windows in wxWinCE
+ @subsubsection page_port_wxmsw_wince_toplevel Closing top-level windows in wxWinCE
  
  You won't get a wxCloseEvent when the user clicks on the X in the titlebar
  on Smartphone and PocketPC; the window is simply hidden instead. However the system may send the
  event to force the application to close down.
  
- @subsubsection page_platdetails_wxmswport_wince_hibernation Hibernation in wxWinCE
+ @subsubsection page_port_wxmsw_wince_hibernation Hibernation in wxWinCE
  
  Smartphone and PocketPC will send a wxEVT_HIBERNATE to the application object in low
  memory conditions. Your application should release memory and close dialogs,
@@ -293,7 +313,7 @@
  (wxEVT_ACTIVATE_APP is generated whenever a wxEVT_ACTIVATE event is received
  in Smartphone and PocketPC, since these platforms do not support WM_ACTIVATEAPP.)
  
- @subsubsection page_platdetails_wxmswport_wince_hwbutt Hardware buttons in wxWinCE
+ @subsubsection page_port_wxmsw_wince_hwbutt Hardware buttons in wxWinCE
  
  Special hardware buttons are sent to a window via the wxEVT_HOTKEY event
  under Smartphone and PocketPC. You should first register each required button with 
@@ -310,7 +330,7 @@
  There is currently no method of finding out the names of the special
  buttons or how many there are.
  
- @subsubsection page_platdetails_wxmswport_wince_dialogs Dialogs in wxWinCE
+ @subsubsection page_port_wxmsw_wince_dialogs Dialogs in wxWinCE
  
  PocketPC dialogs have an OK button on the caption, and so you should generally
  not repeat an OK button on the dialog. You can add a Cancel button if necessary, but some dialogs
@@ -348,7 +368,7 @@
  frames and dialogs are normally full-screen, and a modeless dialog is normally
  intended to co-exist with the main application frame.
  
- @subsubsection page_platdetails_wxmswport_wince_ppc Menubars and toolbars in PocketPC
+ @subsubsection page_port_wxmsw_wince_ppc Menubars and toolbars in PocketPC
  
  On PocketPC, a frame must always have a menubar, even if it's empty.
  An empty menubar/toolbar is automatically provided for dialogs, to hide
@@ -377,13 +397,13 @@
  and add buttons, then calling wxToolBar::Realize. You cannot set or recreate
  the toolbar.
  
- @subsubsection page_platdetails_wxmswport_wince_smart Menubars and toolbars in Smartphone
+ @subsubsection page_port_wxmsw_wince_smart Menubars and toolbars in Smartphone
  
  On Smartphone, there are only two menu buttons, so a menubar is simulated
  using a nested menu on the right menu button. Any toolbars are simply ignored on
  Smartphone.
  
- @subsubsection page_platdetails_wxmswport_wince_closing Closing windows in wxWinCE
+ @subsubsection page_port_wxmsw_wince_closing Closing windows in wxWinCE
  
  The guidelines state that applications should not have a Quit menu item,
  since the user should not have to know whether an application is in memory
@@ -393,7 +413,7 @@
  defines this accelerator by default and if your application handles
  wxID_EXIT, it will do the right thing.
  
- @subsubsection page_platdetails_wxmswport_wince_ctx Context menus in wxWinCE
+ @subsubsection page_port_wxmsw_wince_ctx Context menus in wxWinCE
  
  To enable context menus in PocketPC, you currently need to call wxWindow::EnableContextMenu,
  a wxWinCE-only function. Otherwise the context menu event (wxContextMenuEvent) will
@@ -401,7 +421,7 @@
  
  Context menus are not supported in Smartphone.
  
- @subsubsection page_platdetails_wxmswport_wince_ctrl Control differences on wxWinCE
+ @subsubsection page_port_wxmsw_wince_ctrl Control differences on wxWinCE
  
  These controls and styles are specific to wxWinCE:
  
@@ -424,13 +444,13 @@
  which will give a simple border on PocketPC and Smartphone, and the sunken border on
  other platforms.
  
- @subsubsection page_platdetails_wxmswport_wince_help Online help in wxWinCE
+ @subsubsection page_port_wxmsw_wince_help Online help in wxWinCE
  
  You can use the help controller wxWinceHelpController which controls
  simple @c .htm files, usually installed in the Windows directory.
  See the Windows CE reference for how to format the HTML files.
  
- @subsubsection page_platdetails_wxmswport_wince_install Installing your PocketPC and Smartphone applications
+ @subsubsection page_port_wxmsw_wince_install Installing your PocketPC and Smartphone applications
  
  To install your application, you need to build a CAB file using
  the parameters defined in a special .inf file. The CabWiz program
@@ -465,7 +485,7 @@
  devices. In particular, @c build.bat builds the distribution and
  copies it to a directory called @c Deliver.
  
- @subsubsection page_platdetails_wxmswport_wince_filedlg wxFileDialog in PocketPC
+ @subsubsection page_port_wxmsw_wince_filedlg wxFileDialog in PocketPC
  
  Allowing the user to access files on memory cards, or on arbitrary
  parts of the filesystem, is a pain; the standard file dialog only
@@ -477,7 +497,7 @@
  you can use wxGenericFileDialog instead. You will need to include 
  @c wx/generic/filedlgg.h.
  
- @subsubsection page_platdetails_wxmswport_wince_evc Embedded Visual C++ Issues
+ @subsubsection page_port_wxmsw_wince_evc Embedded Visual C++ Issues
  
  <b>Run-time type information</b>
  
@@ -522,7 +542,7 @@
  Alternately, you could could edit all the names to be identical to the original eVC++
  names, but this will probably be more fiddly.
  
- @subsubsection page_platdetails_wxmswport_wince_issues Remaining issues
+ @subsubsection page_port_wxmsw_wince_issues Remaining issues
  
  These are some of the remaining problems to be sorted out, and features
  to be supported.
@@ -580,7 +600,7 @@
  or by providing a standard component and sizer.
 
 
- @section page_platdetails_nativedocs Documentation for the native toolkits
+ @section page_port_nativedocs Documentation for the native toolkits
 
  It's sometimes useful to interface directly with the underlying toolkit
  used by wxWidgets to e.g. use toolkit-specific features.

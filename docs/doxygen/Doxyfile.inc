@@ -61,19 +61,27 @@ ALIASES += endStyleTable="\n"
 ALIASES += beginExtraStyleTable="\section class_extrastyles Extra Styles\n"
 ALIASES += endExtraStyleTable="\n"
 
-# misc aliases
+# aliases for additional wx-specific infos 
 ALIASES += library{1}="\section class_lib Library\n \ref page_libs_\1"
 ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
 ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
+ALIASES += category{1}="\section class_category Category\n"
 
-# FIXME: we could also introduce additional tags for adding wx-specific infos
-#        to the documented classes/functions; some ideas are:
-#          @category{GUI classes}
-#          @nativeimpl{wxgtk,wxmsw}
-#          @genericimpl{wxuniv,wxmac}
-#          @onlyfor{wxmsw}
-#          @appeareance{button.png}
+# aliases with references to wxWidgets ports
+ALIASES += nativeimpl{1}="\section class_impl Native implementations\n \ref page_port_\1"
+ALIASES += nativeimpl{2}="\section class_impl Native implementations\n \ref page_port_\1, \ref page_port_\2"
+ALIASES += nativeimpl{3}="\section class_impl Native implementations\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3"
+ALIASES += nativeimpl{4}="\section class_impl Native implementations\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4"
+ALIASES += onlyfor{1}="\section class_onlyfor Only available for\n \ref page_port_\1"
+ALIASES += onlyfor{2}="\section class_onlyfor Only available for\n \ref page_port_\1, \ref page_port_\2"
+ALIASES += onlyfor{3}="\section class_onlyfor Only available for\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3"
+ALIASES += onlyfor{4}="\section class_onlyfor Only available for\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4"
 
+# creates appearance section: this should be used for all main GUI controls
+ALIASES += appearance{1}="\section class_appearance Appearance\n"
+                         "<img src='wxmsw/\1' class='appearance'>"
+                         "<img src='wxgtk/\1' class='appearance'>"
+                         "<img src='wxmac/\1' class='appearance'>"
 
 # IMPORTANT: the default \sa command does not generate a \section!
 ALIASES += seealso="\section class_sa See also\n"
@@ -90,9 +98,6 @@ ALIASES += header{1}="Include file:\n \verbatim #include <\1> @endverbatim"
 ALIASES += true="<b><tt>true</tt></b>"
 ALIASES += false="<b><tt>false</tt></b>"
 ALIASES += NULL="<b><tt>NULL</tt></b>"
-
-# FIXME: we could put aliases also for e.g. @wxDefaultSize, @wxDefaultPosition, @wxID_ANY, 
-#       @wxEmptyString, @wxNullIcon, etc etc
 
 # table aliases for 2 and 3 column tables
 ALIASES += beginTable="<center><table class='doctable' border='1' cellspacing='0' cellpadding='3'>"
@@ -137,7 +142,8 @@ ALIASES += endDefList="</table>"
 # NOTE: these are important as you can't write in the docs
 #       just #ifdef since the # character is used by Doxygen
 #       for explicit linking; use the following aliases instead!
-#       However to avoid overwriting e.g. \if Doxygen command the _ character is postfixed
+#       However to avoid overwriting e.g. \if Doxygen command the _
+#       character is postfixed
 ALIASES += ifdef_="<b><tt>\#ifdef</tt></b>"
 ALIASES += ifndef_="<b><tt>\#ifndef</tt></b>"
 ALIASES += if_="<b><tt>\#if</tt></b>"
@@ -203,7 +209,7 @@ WARN_LOGFILE           = doxygen.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ./mainpages ./overviews # ../../interface
+INPUT                  = ./mainpages ./overviews ../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.txt
 RECURSIVE              = YES

@@ -27,6 +27,6 @@
  @li @subpage page_func_cat
  @li @subpage page_macro_cat
  @li @subpage page_topics
- @li @subpage page_platdetails
+ @li @subpage page_port
 
 */
