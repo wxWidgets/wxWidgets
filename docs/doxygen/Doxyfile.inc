@@ -78,10 +78,7 @@ ALIASES += onlyfor{3}="\section class_onlyfor Only available for\n \ref page_por
 ALIASES += onlyfor{4}="\section class_onlyfor Only available for\n \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4"
 
 # creates appearance section: this should be used for all main GUI controls
-ALIASES += appearance{1}="\section class_appearance Appearance\n"
-                         "<img src='wxmsw/\1' class='appearance'>"
-                         "<img src='wxgtk/\1' class='appearance'>"
-                         "<img src='wxmac/\1' class='appearance'>"
+ALIASES += appearance{1}="\section class_appearance Appearance\n @htmlonly <table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table> @endhtmlonly"
 
 # IMPORTANT: the default \sa command does not generate a \section!
 ALIASES += seealso="\section class_sa See also\n"

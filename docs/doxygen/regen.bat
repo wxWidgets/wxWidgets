@@ -6,11 +6,17 @@ REM readable.
 
 mkdir out
 mkdir out\html
+mkdir out\html\wxgtk
+mkdir out\html\wxmsw
+mkdir out\html\wxmac
 
 REM this image is not automatically copied by Doxygen because it's not
 REM used in doxygen documentation but only in our html footer...
 copy images\powered-by-wxwidgets.png out\html
 copy images\*logo.png out\html
+copy images\wxgtk\*png out\html\wxgtk
+copy images\wxmsw\*png out\html\wxmsw
+copy images\wxmac\*png out\html\wxmac
 
 REM this CSS is automatically copied by Doxygen because it's
 REM included by our custom html header...

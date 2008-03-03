@@ -443,3 +443,14 @@ IMG.logo {
     margin: 20px;
 }
 
+IMG.appearance {
+    margin: 20px;
+}
+
+TABLE.appearance {
+    width: 100%;
+    text-align: center;
+    font-style: italic; 
+    font-size: 90%;
+    /*font-weight: bold;*/
+}
