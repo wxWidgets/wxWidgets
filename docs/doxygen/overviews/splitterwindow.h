@@ -25,7 +25,7 @@ horizontal split.
 
 The style wxSP_3D has been used to show a 3D border and 3D sash.
 
-@image html splitter.bmp
+@image html overview_splitter_3d.png
 
 
 @section overview_splitterwindow_example Example

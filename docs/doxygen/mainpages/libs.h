@@ -15,7 +15,7 @@ wxWidgets can be built either as a single large library (this is called a
 (<em>multilib build</em>). Multilib build is the default.
 
 wxWidgets library is divided into libraries briefly described below. This
-diagram show dependencies between them:
+diagram shows the dependencies between them:
 
 @dot
 digraph Dependancies

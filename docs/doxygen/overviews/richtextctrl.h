@@ -89,10 +89,7 @@ You might mitigate this by providing the choice between wxTextCtrl and
 wxRichTextCtrl, with fewer features in the former case.
 
 A good way to understand wxRichTextCtrl's capabilities is to compile and run
-the sample, @c samples/richtext, and browse the code. The following screenshot
-shows the sample in action:
-
-@image html richtextctrl.bmp
+the sample, @c samples/richtext, and browse the code.
 
 
 @section overview_richtextctrl_example Code Example

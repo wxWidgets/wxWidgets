@@ -84,11 +84,11 @@ don't have any natural width or height and thus require an explicit size. Some
 controls can calculate their height, but not their width (e.g. a single line
 text control):
 
-@image html sizer03.bmp
+@image html overview_sizer_03.png
 
-@image html sizer04.bmp
+@image html overview_sizer_04.png
 
-@image html sizer05.bmp
+@image html overview_sizer_05.png
 
 <b>A border</b>: The border is just empty space and is used to separate dialog
 items in a dialog. This border can either be all around, or at any combination
@@ -97,11 +97,11 @@ must be set explicitly, typically 5 points. The following samples show dialogs
 with only one dialog item (a button) and a border of 0, 5, and 10 pixels around
 the button:
 
-@image html sizer00.bmp
+@image html overview_sizer_00.png
 
-@image html sizer01.bmp
+@image html overview_sizer_01.png
 
-@image html sizer02.bmp
+@image html overview_sizer_02.png
 
 <b>An alignment</b>: Often, a dialog item is given more space than its minimal
 size plus its border. Depending on what flags are used for the respective
@@ -112,7 +112,7 @@ space. The following sample shows a listbox and three buttons in a horizontal
 box sizer; one button is centred, one is aligned at the top, one is aligned at
 the bottom:
 
-@image html sizer06.bmp
+@image html overview_sizer_06.png
 
 <b>A stretch factor</b>: If a sizer contains more than one child and it is
 offered more space than its children and their borders need, the question
@@ -127,7 +127,7 @@ other or not</em>. The following sample shows a dialog with three buttons, the
 first one has a stretch factor of 1 and thus gets stretched, whereas the other
 two buttons have a stretch factor of zero and keep their initial width:
 
-@image html sizer07.bmp
+@image html overview_sizer_07.png
 
 Within wxDesigner, this stretch factor gets set from the @e Option menu.
 
@@ -157,14 +157,14 @@ horizontal box sizer, the stretch factor determines how much the child can be
 stretched horizontally. The following sample shows the same dialog as in the
 last sample, only the box sizer is a vertical box sizer now:
 
-@image html sizer08.bmp
+@image html overview_sizer_08.png
 
 @subsection overview_sizer_hiding_static wxStaticBoxSizer
 
 wxStaticBoxSixer is the same as a wxBoxSizer, but surrounded by a static box.
 Here is a sample:
 
-@image html sizer09.bmp
+@image html overview_sizer_09.png
 
 @subsection overview_sizer_hiding_grid wxGridSizer
 
@@ -174,7 +174,7 @@ control in the left bottom border. Either the number of columns or the number
 or rows is fixed and the grid sizer will grow in the respectively other
 orientation if new children are added:
 
-@image html sizer10.bmp
+@image html overview_sizer_10.png
 
 For programming information, see wxGridSizer.
 
@@ -187,7 +187,7 @@ and rows can be declared to be stretchable if the sizer is assigned a size
 different from the one it requested. The following sample shows the same dialog
 as the one above, but using a flex grid sizer:
 
-@image html sizer11.bmp
+@image html overview_sizer_11.png
 
 
 @section overview_sizer_box Programming with wxBoxSizer

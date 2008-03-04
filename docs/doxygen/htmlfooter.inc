@@ -8,7 +8,7 @@
 <tr>
     <td align="left">
         <a href="http://www.wxwidgets.org" style="margin-left: 0px">
-            <img src="powered-by-wxwidgets.png" alt="wxWidgets logo"/>
+            <img src="powered-by-wxwidgets.png" alt="wxWidgets logo" border="0"/>
         </a>
     </td>
     <td valign="middle" align="center"><p class="footer">Page generated <tt>$datetime</tt> by <a href="http://www.doxygen.org">Doxygen</a> $doxygenversion</p></td>

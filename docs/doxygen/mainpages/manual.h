@@ -13,7 +13,7 @@
  @author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn, et al
  @date February, 2008
 
- @image html wx.png
+ @image html main_wxlogo.png
 
  @section manual_contents Contents
  @li @subpage page_copyright
