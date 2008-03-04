@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/mac/uma.h"
