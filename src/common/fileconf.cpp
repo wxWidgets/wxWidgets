@@ -278,9 +278,9 @@ static void AddConfFileExtIfNeeded(wxFileName& fn)
 #if defined( __WXMAC__ )
         fn.SetName(fn.GetName() + wxT(" Preferences"));
 #elif defined( __UNIX__ )
-        fn.SetExt(wxT(".conf"));
+        fn.SetExt(wxT("conf"));
 #else   // Windows
-        fn.SetExt(wxT(".ini"));
+        fn.SetExt(wxT("ini"));
 #endif  // UNIX/Win
     }
 }
