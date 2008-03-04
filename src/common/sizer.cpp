@@ -522,6 +522,9 @@ void wxSizerItem::Show( bool show )
 
 bool wxSizerItem::IsShown() const
 {
+    if ( m_flag & wxRESERVE_SPACE_EVEN_IF_HIDDEN )
+        return true;
+
     switch ( m_kind )
     {
         case Item_None:

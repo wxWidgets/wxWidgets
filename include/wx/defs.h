@@ -1409,7 +1409,10 @@ enum wxOrientation
     wxHORIZONTAL              = 0x0004,
     wxVERTICAL                = 0x0008,
 
-    wxBOTH                    = wxVERTICAL | wxHORIZONTAL
+    wxBOTH                    = wxVERTICAL | wxHORIZONTAL,
+
+    /*  a mask to extract orientation from the combination of flags */
+    wxORIENTATION_MASK        = wxBOTH
 };
 
 enum wxDirection
@@ -1427,7 +1430,10 @@ enum wxDirection
     wxWEST                    = wxLEFT,
     wxEAST                    = wxRIGHT,
 
-    wxALL                     = (wxUP | wxDOWN | wxRIGHT | wxLEFT)
+    wxALL                     = (wxUP | wxDOWN | wxRIGHT | wxLEFT),
+
+    /*  a mask to extract direction from the combination of flags */
+    wxDIRECTION_MASK           = wxALL
 };
 
 enum wxAlignment
@@ -1449,20 +1455,31 @@ enum wxAlignment
     wxALIGN_MASK              = 0x0f00
 };
 
-enum wxStretch
+/* misc. flags for wxSizer items */
+enum wxSizerFlagBits
 {
     /* for compatibility only, default now, don't use explicitly any more */
 #if WXWIN_COMPATIBILITY_2_6
-    wxADJUST_MINSIZE          = 0,
+    wxADJUST_MINSIZE               = 0,
 #endif
+    wxFIXED_MINSIZE                = 0x8000,
+    wxRESERVE_SPACE_EVEN_IF_HIDDEN = 0x0002,
 
+    /*  a mask to extract wxSizerFlagBits from combination of flags */
+    wxSIZER_FLAG_BITS_MASK         = 0x8002
+};
+
+enum wxStretch
+{
     wxSTRETCH_NOT             = 0x0000,
     wxSHRINK                  = 0x1000,
     wxGROW                    = 0x2000,
     wxEXPAND                  = wxGROW,
     wxSHAPED                  = 0x4000,
-    wxFIXED_MINSIZE           = 0x8000,
-    wxTILE                    = 0xc000
+    wxTILE                    = wxSHAPED | wxFIXED_MINSIZE,
+
+    /*  a mask to extract stretch from the combination of flags */
+    wxSTRETCH_MASK            = 0x7000 /* sans wxTILE */
 };
 
 /*  border flags: the values are chosen for backwards compatibility */

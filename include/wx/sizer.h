@@ -170,6 +170,13 @@ public:
         return *this;
     }
 
+    // makes the item ignore window's visibility status
+    wxSizerFlags& ReserveSpaceEvenIfHidden()
+    {
+        m_flags |= wxRESERVE_SPACE_EVEN_IF_HIDDEN;
+        return *this;
+    }
+
     // accessors for wxSizer only
     int GetProportion() const { return m_proportion; }
     int GetFlags() const { return m_flags; }
@@ -332,10 +339,12 @@ public:
         { return m_kind == Item_Sizer ? m_sizer : NULL; }
     wxSize GetSpacer() const;
 
-    // this function behaves obviously for the windows and spacers but for the
+    // This function behaves obviously for the windows and spacers but for the
     // sizers it returns true if any sizer element is shown and only returns
-    // false if all of them are hidden
+    // false if all of them are hidden. Also, it always returns true if
+    // wxRESERVE_SPACE_EVEN_IF_HIDDEN flag was used.
     bool IsShown() const;
+
     void Show(bool show);
 
     void SetUserData(wxObject* userData)
