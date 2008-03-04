@@ -124,7 +124,6 @@ bool wxTopLevelWindowBase::Destroy()
     // any more as no events will be sent to the hidden window and without idle
     // events we won't prune wxPendingDelete list and the application won't
     // terminate
-    const wxWindowList::const_iterator end = wxTopLevelWindows.end();
     for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
                                      end = wxTopLevelWindows.end();
           i != end;
