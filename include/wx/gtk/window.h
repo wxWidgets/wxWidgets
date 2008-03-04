@@ -326,6 +326,12 @@ protected:
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
 
+    virtual void DoFreeze();
+    virtual void DoThaw();
+
+    static void GTKFreezeWidget(GtkWidget *w);
+    static void GTKThawWidget(GtkWidget *w);
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS

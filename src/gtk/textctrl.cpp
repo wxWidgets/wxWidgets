@@ -558,21 +558,6 @@ gtk_paste_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
 }
 
 //-----------------------------------------------------------------------------
-// "expose_event" from scrolled window and textview
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gboolean
-gtk_text_exposed_callback( GtkWidget * WXUNUSED(widget),
-                           GdkEventExpose * WXUNUSED(event),
-                           wxTextCtrl * WXUNUSED(win) )
-{
-    return TRUE;
-}
-}
-
-
-//-----------------------------------------------------------------------------
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
@@ -1722,14 +1707,13 @@ void wxTextCtrl::DoFreeze()
 {
     wxCHECK_RET(m_text != NULL, wxT("invalid text ctrl"));
 
+    wxWindow::DoFreeze();
+
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        // freeze textview updates and remove buffer
-        g_signal_connect (m_text, "expose_event",
-                          G_CALLBACK (gtk_text_exposed_callback), this);
-        g_signal_connect (m_widget, "expose_event",
-                          G_CALLBACK (gtk_text_exposed_callback), this);
-        gtk_widget_set_sensitive(m_widget, false);
+        GTKFreezeWidget(m_text);
+
+        // removing buffer dramatically speeds up insertion:
         g_object_ref(m_buffer);
         GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
         GtkTextMark* mark = GTK_TEXT_VIEW(m_text)->first_para_mark;
@@ -1749,21 +1733,22 @@ void wxTextCtrl::DoThaw()
 {
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        // Reattach buffer and thaw textview updates
+        // reattach buffer:
         gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
         g_object_unref(m_buffer);
-        gtk_widget_set_sensitive(m_widget, true);
-        g_signal_handlers_disconnect_by_func (m_widget,
-                (gpointer) gtk_text_exposed_callback, this);
-        g_signal_handlers_disconnect_by_func (m_text,
-                (gpointer) gtk_text_exposed_callback, this);
+
         if (m_showPositionOnThaw != NULL)
         {
             gtk_text_view_scroll_mark_onscreen(
                 GTK_TEXT_VIEW(m_text), m_showPositionOnThaw);
             m_showPositionOnThaw = NULL;
         }
+
+        // and thaw the window
+        GTKThawWidget(m_text);
     }
+
+    wxWindow::DoThaw();
 }
 
 // ----------------------------------------------------------------------------

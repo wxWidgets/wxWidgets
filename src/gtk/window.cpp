@@ -4205,3 +4205,33 @@ GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
         window = m_wxwindow->window;
     return window;
 }
+
+// ----------------------------------------------------------------------------
+// freeze/thaw
+// ----------------------------------------------------------------------------
+
+void wxWindowGTK::GTKFreezeWidget(GtkWidget *w)
+{
+    if ( w && !GTK_WIDGET_NO_WINDOW(w) )
+        gdk_window_freeze_updates(w->window);
+}
+
+void wxWindowGTK::GTKThawWidget(GtkWidget *w)
+{
+    if ( w && !GTK_WIDGET_NO_WINDOW(w) )
+        gdk_window_thaw_updates(w->window);
+}
+
+void wxWindowGTK::DoFreeze()
+{
+    GTKFreezeWidget(m_widget);
+    if ( m_wxwindow && m_widget != m_wxwindow )
+        GTKFreezeWidget(m_wxwindow);
+}
+
+void wxWindowGTK::DoThaw()
+{
+    GTKThawWidget(m_widget);
+    if ( m_wxwindow && m_widget != m_wxwindow )
+        GTKThawWidget(m_wxwindow);
+}
