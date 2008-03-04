@@ -1196,14 +1196,15 @@
 #define REMOVE_UNUSED_ARG   1
 
 // VC++ 4.2 and above allows <iostream> and <iostream.h> but you can't mix
-// them. Set to 1 for <iostream.h>, 0 for <iostream>. Note that VC++ 7.1
-// and later doesn't support wxUSE_IOSTREAMH == 1 and so <iostream> will be
-// used anyhow.
+// them. Set this option to 1 to use <iostream.h>, 0 to use <iostream>.
 //
-// Default is 1.
+// Note that newer compilers (including VC++ 7.1 and later) don't support
+// wxUSE_IOSTREAMH == 1 and so <iostream> will be used anyhow.
 //
-// Recommended setting: whatever your compiler likes more
-#define wxUSE_IOSTREAMH     1
+// Default is 0.
+//
+// Recommended setting: 0, only set to 1 if you use a really old compiler
+#define wxUSE_IOSTREAMH     0
 
 // ----------------------------------------------------------------------------
 // image format support
