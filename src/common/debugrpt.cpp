@@ -572,7 +572,7 @@ bool wxDebugReport::DoProcess()
     for ( size_t n = 0; n < count; n++ )
     {
         GetFile(n, &name, &desc);
-        msg += wxString::Format(_("\t%s: %s\n"), name.c_str(), desc.c_str());
+        msg += wxString::Format("\t%s: %s\n", name, desc);
     }
 
     msg += _("\nPlease send this report to the program maintainer, thank you!\n");
