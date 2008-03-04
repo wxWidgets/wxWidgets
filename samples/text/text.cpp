@@ -311,20 +311,21 @@ private:
     void DoAddText(bool freeze)
     {
         wxTextCtrl * const text = m_panel->m_textrich;
-        text->Clear();
 
         if ( freeze )
             text->Freeze();
+
+        text->Clear();
 
         for ( int i = 0; i < 100; i++ )
         {
             text->AppendText(wxString::Format(wxT("Line %i\n"), i));
         }
 
+        text->SetInsertionPoint(0);
+
         if ( freeze )
             text->Thaw();
-
-        text->SetInsertionPoint(0);
     }
 
     MyPanel *m_panel;
