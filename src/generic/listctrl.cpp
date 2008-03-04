@@ -598,10 +598,6 @@ public:
         m_textctrlWrapper = NULL;
     }
 
-    // we don't draw anything while we're frozen so we must refresh ourselves
-    // when we're thawed to make sure the changes are displayed correctly
-    virtual void DoThaw() { Refresh(); }
-
     void OnRenameTimer();
     bool OnRenameAccept(size_t itemEdit, const wxString& value);
     void OnRenameCancelled(size_t itemEdit);
@@ -2707,7 +2703,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // done (a Windows requirement).
     wxPaintDC dc( this );
 
-    if ( IsEmpty() || IsFrozen() )
+    if ( IsEmpty() )
     {
         // nothing to draw or not the moment to draw it
         return;
