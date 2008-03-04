@@ -3560,6 +3560,8 @@ void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
 
 void wxGenericTreeCtrl::DoThaw()
 {
+    wxTreeCtrlBase::DoThaw();
+
     if ( m_dirty )
         DoDirtyProcessing();
     else
