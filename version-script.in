@@ -37,6 +37,8 @@
         *wxRichTextCtrl*SetTextCursor*;
         *wxRichTextCtrl*SetURLCursor*;
         *wxScrollHelper*HandleOnChildFocus*;
+        *wxSizerFlags*ReserveSpaceEvenIfHidden*;
+        *wxSizerItem*ShouldAccountFor*;
         *wxWindowBase*Get*Sibling*;
 };
 

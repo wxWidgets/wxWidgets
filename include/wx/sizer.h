@@ -24,6 +24,8 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxBoxSizer;
 class WXDLLIMPEXP_FWD_CORE wxSizerItem;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
+class WXDLLIMPEXP_FWD_CORE wxFlexGridSizer;
+class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 
 #ifndef wxUSE_BORDER_BY_DEFAULT
     #ifdef __SMARTPHONE__
@@ -174,6 +176,11 @@ public:
         return *this;
     }
 #endif // wx 2.8.2+
+
+#if wxABI_VERSION >= 20808
+    // makes the item ignore window's visibility status
+    wxSizerFlags& ReserveSpaceEvenIfHidden();
+#endif
 
     // accessors for wxSizer only
     int GetProportion() const { return m_proportion; }
@@ -393,8 +400,15 @@ protected:
     wxObject    *m_userData;
 
 private:
+    // 2.8-only implementation detail for wxRESERVE_SPACE_EVEN_IF_HIDDEN
+    bool ShouldAccountFor() const;
+
     DECLARE_CLASS(wxSizerItem)
     DECLARE_NO_COPY_CLASS(wxSizerItem)
+
+    friend class wxBoxSizer;
+    friend class wxFlexGridSizer;
+    friend class wxGridBagSizer;
 };
 
 WX_DECLARE_EXPORTED_LIST( wxSizerItem, wxSizerItemList );

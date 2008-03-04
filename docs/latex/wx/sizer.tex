@@ -139,6 +139,11 @@ use that size to calculate the layout. This allows layouts to
 adjust when an item changes and its \arg{best size} becomes
 different. If you would rather have a window item stay the size it
 started with then use wxFIXED\_MINSIZE.}
+\twocolitem{\windowstyle{wxRESERVE\_SPACE\_EVEN\_IF\_HIDDEN}}{Normally wxSizers
+don't allocate space for hidden windows or other items. This flag overrides
+this behavior so that sufficient space is allocated for the window even if it
+isn't visible. This makes it possible to dynamically show and hide controls
+without resizing parent dialog, for example. \newsince{2.8.8}}
 \twocolitem{\windowstyle{wxALIGN\_CENTER wxALIGN\_CENTRE}\\
 \windowstyle{wxALIGN\_LEFT}\\
 \windowstyle{wxALIGN\_RIGHT}\\
@@ -683,6 +688,17 @@ the window should be also set as its minimal size.
 \func{wxSizerFlags\& }{Proportion}{\param{int }{proportion = 0}}
 
 Sets the proportion of this wxSizerFlags to \arg{proportion}
+
+
+\membersection{wxSizerFlags::ReserveSpaceEvenIfHidden}\label{wxsizerflagsreservespaceevenifhidden}
+
+\func{wxSizerFlags\& }{ReserveSpaceEvenIfHidden}{\void}
+
+Set the \texttt{wxRESERVE\_SPACE\_EVEN\_IF\_HIDDEN} flag. Normally wxSizers
+don't allocate space for hidden windows or other items. This flag overrides
+this behavior so that sufficient space is allocated for the window even if it
+isn't visible. This makes it possible to dynamically show and hide controls
+without resizing parent dialog, for example. \newsince{2.8.8}
 
 
 \membersection{wxSizerFlags::Right}\label{wxsizerflagsright}

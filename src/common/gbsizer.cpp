@@ -453,7 +453,7 @@ wxSize wxGridBagSizer::CalcMin()
     while (node)
     {
         wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
-        if ( item->IsShown() )
+        if ( item->ShouldAccountFor() )
         {
             int row, col, endrow, endcol;
 
@@ -538,7 +538,7 @@ void wxGridBagSizer::RecalcSizes()
         int row, col, endrow, endcol;
         wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
 
-        if ( item->IsShown() )
+        if ( item->ShouldAccountFor() )
         {
             item->GetPos(row, col);
             item->GetEndPos(endrow, endcol);

@@ -118,6 +118,8 @@ All (GUI):
 - Added alpha support to wxImage::Paste() (Steven Van Ingelgem)
 - Use current date when opening popup in generic wxDatePickerCtrl.
 - Remove associated help text from wxHelpProvider when a window is destroyed.
+- Added wxSizerFlags::ReserveSpaceEvenIfHidden() and
+  wxRESERVE_SPACE_EVEN_IF_HIDDEN sizer flag.
 
 All (Unix):
 
