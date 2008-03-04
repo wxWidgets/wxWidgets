@@ -19,6 +19,7 @@
 
 #include "wx/display.h"
 #include "wx/sizer.h"
+#include "wx/private/flagscheck.h"
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -87,6 +88,31 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
 // wxSizerItem
 // ----------------------------------------------------------------------------
 
+// check for flags conflicts
+static const int SIZER_FLAGS_MASK =
+    wxADD_FLAG(wxCENTRE,
+    wxADD_FLAG(wxHORIZONTAL,
+    wxADD_FLAG(wxVERTICAL,
+    wxADD_FLAG(wxLEFT,
+    wxADD_FLAG(wxRIGHT,
+    wxADD_FLAG(wxUP,
+    wxADD_FLAG(wxDOWN,
+    wxADD_FLAG(wxALIGN_NOT,
+    wxADD_FLAG(wxALIGN_CENTER_HORIZONTAL,
+    wxADD_FLAG(wxALIGN_RIGHT,
+    wxADD_FLAG(wxALIGN_BOTTOM,
+    wxADD_FLAG(wxALIGN_CENTER_VERTICAL,
+    wxADD_FLAG(wxFIXED_MINSIZE,
+    wxADD_FLAG(wxRESERVE_SPACE_EVEN_IF_HIDDEN,
+    wxADD_FLAG(wxSTRETCH_NOT,
+    wxADD_FLAG(wxSHRINK,
+    wxADD_FLAG(wxGROW,
+    wxADD_FLAG(wxSHAPED,
+    0))))))))))))))))));
+
+#define ASSERT_VALID_SIZER_FLAGS(f)  wxASSERT_VALID_FLAGS(f, SIZER_FLAGS_MASK)
+
+
 void wxSizerItem::Init(const wxSizerFlags& flags)
 {
     Init();
@@ -94,6 +120,8 @@ void wxSizerItem::Init(const wxSizerFlags& flags)
     m_proportion = flags.GetProportion();
     m_flag = flags.GetFlags();
     m_border = flags.GetBorderInPixels();
+
+    ASSERT_VALID_SIZER_FLAGS( m_flag );
 }
 
 wxSizerItem::wxSizerItem()
@@ -136,6 +164,8 @@ wxSizerItem::wxSizerItem(wxWindow *window,
              m_id(wxID_NONE),
              m_userData(userData)
 {
+    ASSERT_VALID_SIZER_FLAGS( m_flag );
+
     DoSetWindow(window);
 }
 
@@ -160,6 +190,8 @@ wxSizerItem::wxSizerItem(wxSizer *sizer,
              m_ratio(0.0),
              m_userData(userData)
 {
+    ASSERT_VALID_SIZER_FLAGS( m_flag );
+
     DoSetSizer(sizer);
 
     // m_minSize is set later
@@ -189,6 +221,8 @@ wxSizerItem::wxSizerItem(int width,
              m_id(wxID_NONE),
              m_userData(userData)
 {
+    ASSERT_VALID_SIZER_FLAGS( m_flag );
+
     DoSetSpacer(wxSize(width, height));
 }
 
