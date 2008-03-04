@@ -452,9 +452,20 @@ typedef short int WXTYPE;
 
 #ifndef HAVE_WOSTREAM
     // Mingw <=3.4 doesn't have std::wostream
-    #if !defined(__MINGW32__) || wxCHECK_GCC_VERSION(4,0)
+    #if defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4,0)
+        #define wxNO_WOSTREAM
+    #endif
+
+    // VC++ doesn't have it in the old iostream library
+    #if defined(__VISUALC__) && wxUSE_IOSTREAMH
+        #define wxNO_WOSTREAM
+    #endif
+
+    #ifndef wxNO_WOSTREAM
         #define HAVE_WOSTREAM
     #endif
+
+    #undef wxNO_WOSTREAM
 #endif /* HAVE_WOSTREAM */
 
 // ----------------------------------------------------------------------------
