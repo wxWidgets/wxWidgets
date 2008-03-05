@@ -128,8 +128,7 @@
  independent way, i.e. it uses text based files to store a given configuration under
  Unix and uses the Registry under Windows.
  
- See wxConfig overview for the descriptions of all
- features of this class.
+ See @ref overview_config for the descriptions of all features of this class.
  
  
  @subsection page_utils_samples_controls Controls sample
@@ -180,7 +179,7 @@
  @subsection page_utils_samples_dialogs Dialogs sample
  
  This sample shows how to use the common dialogs available from wxWidgets. These
- dialogs are described in detail in the Common dialogs overview.
+ dialogs are described in detail in the @ref overview_cmndlg.
  
  
  @subsection page_utils_samples_dialup Dialup sample
