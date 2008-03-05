@@ -13,7 +13,11 @@
 
 #include <Cocoa/Cocoa.h>
 
+#ifdef __WXMAC__
 #include "wx/mac/private.h"
+#endif
+
+#ifdef __WXMAC__
 
 bool wxMacInitCocoa()
 {
@@ -31,6 +35,19 @@ wxMacAutoreleasePool::~wxMacAutoreleasePool()
 {
     [(NSAutoreleasePool*)m_pool release];
 }
+
+#endif
+
+#ifdef __WXCOCOCA__
+
+CGContextRef wxMacGetContextFromCurrentNSContext()
+{
+    CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext]
+                                          graphicsPort];
+    return context;
+}
+
+#endif
 
 // ----------------------------------------------------------------------------
 // NSObject Utils
