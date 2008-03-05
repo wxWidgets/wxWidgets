@@ -120,6 +120,7 @@ All (GUI):
 - Remove associated help text from wxHelpProvider when a window is destroyed.
 - Added wxSizerFlags::ReserveSpaceEvenIfHidden() and
   wxRESERVE_SPACE_EVEN_IF_HIDDEN sizer flag.
+- Added wxWindow::ClientToWindowSize() and WindowToClientSize() helpers.
 
 All (Unix):
 

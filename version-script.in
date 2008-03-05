@@ -39,7 +39,9 @@
         *wxScrollHelper*HandleOnChildFocus*;
         *wxSizerFlags*ReserveSpaceEvenIfHidden*;
         *wxSizerItem*ShouldAccountFor*;
+        *wxWindowBase*ClientToWindowSize*;
         *wxWindowBase*Get*Sibling*;
+        *wxWindowBase*WindowToClientSize*;
 };
 
 # public symbols added in 2.8.7 (please keep in alphabetical order):
