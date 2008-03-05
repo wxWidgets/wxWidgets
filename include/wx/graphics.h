@@ -29,6 +29,7 @@ class WXDLLIMPEXP_FWD_CORE wxGraphicsRenderer;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsPen;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsBrush;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsFont;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsBitmap;
 
 /*
  * notes about the graphics context apis
@@ -102,6 +103,17 @@ private :
 } ;
 
 extern WXDLLEXPORT_DATA(wxGraphicsFont) wxNullGraphicsFont;
+
+class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
+{
+public :
+    wxGraphicsBitmap() {}
+    virtual ~wxGraphicsBitmap() {}
+private :
+    DECLARE_DYNAMIC_CLASS(wxGraphicsBitmap)
+} ;
+ 
+extern WXDLLEXPORT_DATA(wxGraphicsBitmap) wxNullGraphicsBitmap;
 
 class WXDLLIMPEXP_CORE wxGraphicsMatrix : public wxGraphicsObject
 {
@@ -309,6 +321,12 @@ public:
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
 
+    // create a native bitmap representation
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) const;
+    
+    // create a native bitmap representation
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) const;
+
     // create a 'native' matrix corresponding to these values
     virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
         wxDouble tx=0.0, wxDouble ty=0.0) const;
@@ -420,6 +438,8 @@ public:
     //
     // image support
     //
+
+    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
 
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) = 0;
 
@@ -558,6 +578,11 @@ public :
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
     
+    // create a native bitmap representation
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+    
+    // create a subimage from a native image representation
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) = 0;
 private :
     DECLARE_NO_COPY_CLASS(wxGraphicsRenderer)
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)
