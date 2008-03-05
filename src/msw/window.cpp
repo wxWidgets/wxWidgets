@@ -1193,6 +1193,8 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
     HWND hwnd = (HWND)hWnd;
     wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in SubclassWin") );
 
+    SetHWND(hWnd);
+
     wxAssociateWinWithHandle(hwnd, this);
 
     m_oldWndProc = (WXFARPROC)wxGetWindowProc((HWND)hWnd);
@@ -1251,7 +1253,7 @@ void wxWindowMSW::AssociateHandle(WXWidget handle)
 
     WXHWND wxhwnd = (WXHWND)handle;
 
-    SetHWND(wxhwnd);
+    // this also calls SetHWND(wxhwnd)
     SubclassWin(wxhwnd);
 }
 
