@@ -230,9 +230,7 @@ gdk_window_warp_pointer (GdkWindow      *window,
 //-----------------------------------------------------------------------------
 
 // returns the child of win which currently has focus or NULL if not found
-//
-// Note: can't be static, needed by textctrl.cpp.
-wxWindow *wxFindFocusedChild(wxWindowGTK *win)
+static wxWindow *wxFindFocusedChild(wxWindowGTK *win)
 {
     wxWindow *winFocus = wxWindowGTK::FindFocus();
     if ( !winFocus )
