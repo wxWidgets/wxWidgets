@@ -1830,7 +1830,7 @@ static SInt32 wxShapedMacWindowGetFeatures(WindowRef WXUNUSED(window), SInt32 pa
     *(OptionBits*)param =
         //kWindowCanGrow |
         //kWindowCanZoom |
-        //kWindowCanCollapse |
+        kWindowCanCollapse |
         //kWindowCanGetWindowRegion |
         //kWindowHasTitleBar |
         //kWindowSupportsDragHilite |
