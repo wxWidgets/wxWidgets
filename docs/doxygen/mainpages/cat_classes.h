@@ -15,18 +15,18 @@
 
  @beginInvisibleTable
  <tr><td>
- @li @ref page_class_cat_manwnd
+ @li @ref page_class_cat_managedwnd
  @li @ref page_class_cat_miscwnd
  @li @ref page_class_cat_cmndlg
  @li @ref page_class_cat_ctrl
  @li @ref page_class_cat_miscpickers
  @li @ref page_class_cat_menus
- @li @ref page_class_cat_wxaui
+ @li @ref page_class_cat_aui
  @li @ref page_class_cat_winlayout
  @li @ref page_class_cat_dc
  @li @ref page_class_cat_gdi
  @li @ref page_class_cat_events
- @li @ref page_class_cat_val
+ @li @ref page_class_cat_validator
  @li @ref page_class_cat_data
  @li @ref page_class_cat_containers
  @li @ref page_class_cat_smartpointers
@@ -38,12 +38,12 @@
  @li @ref page_class_cat_ipc
  @li @ref page_class_cat_dvf
  @li @ref page_class_cat_printing
- @li @ref page_class_cat_dd
+ @li @ref page_class_cat_dnd
  @li @ref page_class_cat_file
  @li @ref page_class_cat_streams
  @li @ref page_class_cat_threading
  @li @ref page_class_cat_html
- @li @ref page_class_cat_rich
+ @li @ref page_class_cat_richtext
  @li @ref page_class_cat_stc
  @li @ref page_class_cat_vfs
  @li @ref page_class_cat_xml
@@ -60,7 +60,7 @@
 
 
 
- @section page_class_cat_manwnd Managed windows
+ @section page_class_cat_managedwnd Managed windows
 
  There are several types of window that are directly controlled by the
  window manager (such as MS Windows, or the Motif Window Manager).
@@ -193,7 +193,7 @@
 
 
 
- @section page_class_cat_wxaui wxAUI - advanced user interface
+ @section page_class_cat_aui wxAUI - advanced user interface
 
  This is a new set of classes for writing a customizable application
  interface with built-in docking, floatable panes and a flexible
@@ -346,7 +346,7 @@
  @li wxWizardEvent: A wizard event
 
 
- @section page_class_cat_val Validators
+ @section page_class_cat_validator Validators
 
  @ref overview_validator
 
@@ -527,7 +527,7 @@
 
 
 
- @section page_class_cat_dd Drag and drop and clipboard classes
+ @section page_class_cat_dnd Drag and drop and clipboard classes
 
  @ref overview_dnd
 
@@ -630,7 +630,7 @@
  @li wxHtmlWinTagHandler: HTML tag handler, pluginable into wxHtmlWinParser
 
 
- @section page_class_cat_rich Rich text classes
+ @section page_class_cat_richtext Rich text classes
 
  wxWidgets provides a set of generic classes to edit and print simple rich text with character
  and paragraph formatting.

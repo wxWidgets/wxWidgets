@@ -54,7 +54,7 @@
  @subsection page_strategies_portability_usesizers Use sizers
 
  Don't use absolute panel item positioning if you can avoid it. Different GUIs have
- very differently sized panel items. Consider using the @ref overview_sizers instead.
+ very differently sized panel items. Consider using the @ref overview_sizer instead.
 
  @subsection page_strategies_portability_useresources Use wxWidgets resource files
 
@@ -102,7 +102,7 @@
  @subsection page_strategies_debug_uselogging Use logging functions
 
  There is a variety of logging functions that you can use in your program:
- see @ref logfunctions.
+ see @ref page_func_cat_log.
 
  Using tracing statements may be more convenient than using the debugger
  in some circumstances (such as when your debugger doesn't support a lot
@@ -116,7 +116,7 @@
  configured. Depending on the operating system and compiler, more or less
  specific information about the problem will be logged.
 
- You should also use @ref debugmacros as part of a `defensive programming' strategy,
+ You should also use @ref page_macro_cat_debugging as part of a `defensive programming' strategy,
  scattering wxASSERTs liberally to test for problems in your code as early as possible. 
  Forward thinking will save a surprising amount of time in the long run.
 

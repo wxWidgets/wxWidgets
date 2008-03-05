@@ -73,7 +73,14 @@
  @li wxSTRINGIZE_T
  @li wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING
  @li __WXFUNCTION__
-
+ @li wxS
+ @li wxT
+ @li wxTRANSLATE
+ @li _
+ @li wxPLURAL
+ @li _T
+ @li WXTRACE
+ @li WXTRACELEVEL
 
 
  @section page_macro_cat_byteorder Byte order macros
@@ -106,7 +113,7 @@
  general you shouldn't need to use the functions and the macros in this section 
  unless you are thinking of modifying or adding any wxWidgets classes.
  
- @seealso 
+ @sa
  @ref overview_rtti
  
  @li CLASSINFO
@@ -133,7 +140,7 @@
  @li wx_truncate_cast
 
 
- @section page_macro_cat_debugging Debugging macros and functions
+ @section page_macro_cat_debugging Debugging macros
 
  Useful macros and functions for error checking and defensive programming. 
  wxWidgets defines three families of the assert-like macros: the wxASSERT 

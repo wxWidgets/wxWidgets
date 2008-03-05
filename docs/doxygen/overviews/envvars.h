@@ -17,7 +17,7 @@
  @itemdef{WXTRACE,
          (Debug build only.)
          This variable can be set to a comma-separated list of trace masks used in
-         #wxLogTrace calls; wxLog::AddTraceMask is called for every mask
+         wxLogTrace calls; wxLog::AddTraceMask is called for every mask
          in the list during wxWidgets initialization.}
  @itemdef{WXPREFIX,
          (Unix only.)

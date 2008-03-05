@@ -62,7 +62,7 @@ ALIASES += beginExtraStyleTable="\section class_extrastyles Extra Styles\n"
 ALIASES += endExtraStyleTable="\n"
 
 # aliases for additional wx-specific infos 
-ALIASES += library{1}="\section class_lib Library\n Belongs to library \ref page_libs_\1"
+ALIASES += library{1}="\section class_lib Library\n Belongs to library \ref page_libs_\1."
 ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
 ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
 ALIASES += category{1}="\section class_category Category\n \1"
@@ -86,7 +86,10 @@ ALIASES += seealso="\section class_sa See also\n"
 # IMPORTANT: the \headerfile command does not work everywhere we'd need it,
 #            e.g. in the constants page we need to specify an header file
 #            even if they're not inside a \class, \function or \struct command....
+#            and also inside a \class, we want to specify the header file only once
+#            and not twice as the \headerfile command requires (and thus we use @wxheader)
 ALIASES += header{1}="Include file:\n \verbatim #include <\1> @endverbatim"
+ALIASES += wxheader{1}="\headerfile \1 wx/\1"
 
 # some formatting aliases
 # NOTE: using <b> and <tt> tags is different from using \c \b because in the last case
@@ -206,7 +209,7 @@ WARN_LOGFILE           = doxygen.log
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ./mainpages ./overviews ../../interface
+INPUT                  = ./mainpages ./overviews #../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.txt
 RECURSIVE              = YES

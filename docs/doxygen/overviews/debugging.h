@@ -11,7 +11,7 @@
  @page overview_debugging Debugging overview
 
  Classes, functions and macros: wxDebugContext, wxObject, wxLog,
-                                @ref overview_logfunctions, @ref overview_debugmacros
+                                @ref page_func_cat_log, @ref page_macro_cat_debugging
 
  Various classes, functions and macros are provided in wxWidgets to help you debug
  your application. Most of these are only available if you compile both wxWidgets,
@@ -73,8 +73,9 @@
 
  @section overview_debugging_dbgmacros Debug macros
 
- You should also use @ref debugmacros_overview as part of a 'defensive programming' strategy,
- scattering wxASSERTs liberally to test for problems in your code as early as possible.
+ You should also use @ref page_macro_cat_debugging as part of a 'defensive programming'
+ strategy, scattering wxASSERTs liberally to test for problems in your code as early as
+ possible.
  Forward thinking will save a surprising amount of time in the long run.
 
  #wxASSERT is used to pop up an error message box when a condition
@@ -97,7 +98,7 @@
 
  @section overview_debugging_logging Logging functions
 
- You can use the #wxLogDebug and #wxLogTrace functions to output debugging information in 
+ You can use the wxLogDebug and wxLogTrace functions to output debugging information in 
  debug mode; it will do nothing for non-debugging code.
 
 
