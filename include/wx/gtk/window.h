@@ -386,6 +386,4 @@ private:
     DECLARE_NO_COPY_CLASS(wxWindowGTK)
 };
 
-extern WXDLLIMPEXP_CORE wxWindow *wxFindFocusedChild(wxWindowGTK *win);
-
 #endif // _WX_GTK_WINDOW_H_
