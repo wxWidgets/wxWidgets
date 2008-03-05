@@ -15,6 +15,7 @@
 #include "wx/listctrl.h"
 #include "wx/datetime.h"
 #include "wx/filefn.h"
+#include "wx/artprov.h"
 #include "wx/filedlg.h"
 #include "wx/generic/filectrlg.h"
 
