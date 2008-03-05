@@ -162,6 +162,8 @@ wxWindow* wxWindow::GetWindowChild(wxWindowID id)
 
 wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 {
+    wxCHECK_MSG( parent, NULL, _T("must have valid parent for a control") );
+
     wxString str(wxGetWindowClass(hWnd));
     str.UpperCase();
 
@@ -306,9 +308,6 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
     if (win)
     {
         parent->AddChild(win);
-        win->SetEventHandler(win);
-        win->SetHWND(hWnd);
-        win->SetId(id);
         win->SubclassWin(hWnd);
         win->AdoptAttributesFromHWND();
         win->SetupColours();
@@ -318,10 +317,11 @@ wxWindow* wxWindow::CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd)
 }
 
 // Make sure the window style (etc.) reflects the HWND style (roughly)
-void wxWindow::AdoptAttributesFromHWND(void)
+void wxWindow::AdoptAttributesFromHWND()
 {
-    HWND hWnd = (HWND) GetHWND();
-    long style = GetWindowLong((HWND) hWnd, GWL_STYLE);
+    SetId(wxGetWindowId(m_hWnd));
+
+    long style = GetWindowLong(GetHwnd(), GWL_STYLE);
 
     if (style & WS_VSCROLL)
         m_windowStyle |= wxVSCROLL;
