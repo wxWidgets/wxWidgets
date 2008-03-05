@@ -197,6 +197,48 @@ Here, the sizer will do the actual calculation of its children minimal sizes.
 Detaches all children from the sizer. If \arg{delete\_windows} is \true then child windows will also be deleted.
 
 
+\membersection{wxSizer::ComputeFittingClientSize}\label{wxsizercomputefittingclientsize}
+
+\func{wxSize}{ComputeFittingClientSize}{\param{wxWindow* }{window}}
+
+Computes client area size for \arg{window} so that it matches the 
+sizer's minimal size. Unlike \helpref{GetMinSize}{wxsizergetminsize}, this
+method accounts for other constraints imposed on \arg{window}, namely display's
+size (returned size will never be too large for the display) and maximum
+window size if previously set by
+\helpref{wxWindow::SetMaxSize}{wxwindowsetmaxsize}.
+
+The returned value is suitable for passing to
+\helpref{wxWindow::SetClientSize}{wxwindowsetclientsize} or
+\helpref{wxWindow::SetMinClientSize}{wxwindowsetminclientsize}.
+
+\since{2.8.8}
+
+\wxheading{See also}
+
+\helpref{ComputeFittingWindowSize}{wxsizercomputefittingwindowsize},
+\helpref{Fit}{wxsizerfit}
+
+
+\membersection{wxSizer::ComputeFittingWindowSize}\label{wxsizercomputefittingwindowsize}
+
+\func{wxSize}{ComputeFittingWindowSize}{\param{wxWindow* }{window}}
+
+Like \helpref{ComputeFittingClientSize}{wxsizercomputefittingclientsize},
+but converts the result into \emph{window} size.
+
+The returned value is suitable for passing to
+\helpref{wxWindow::SetSize}{wxwindowsetsize} or
+\helpref{wxWindow::SetMinSize}{wxwindowsetminsize}.
+
+\since{2.8.8}
+
+\wxheading{See also}
+
+\helpref{ComputeFittingClientSize}{wxsizercomputefittingclientsize},
+\helpref{Fit}{wxsizerfit}
+
+
 \membersection{wxSizer::Detach}\label{wxsizerdetach}
 
 \func{bool}{Detach}{\param{wxWindow* }{window}}
@@ -227,6 +269,11 @@ is commonly done in the constructor of the window itself, see sample in the desc
 of \helpref{wxBoxSizer}{wxboxsizer}. Returns the new size.
 
 For a top level window this is the total window size, not client size.
+
+\wxheading{See also}
+
+\helpref{ComputeFittingClientSize}{wxsizercomputefittingclientsize},
+\helpref{ComputeFittingWindowSize}{wxsizercomputefittingwindowsize}
 
 
 \membersection{wxSizer::FitInside}\label{wxsizerfitinside}
@@ -296,6 +343,13 @@ Returns the current position of the sizer.
 Returns the minimal size of the sizer. This is either the combined minimal
 size of all the children and their borders or the minimal size set by 
 \helpref{SetMinSize}{wxsizersetminsize}, depending on which is bigger.
+
+Note that the returned value is \emph{client} size, not window size.
+In particular, if you use the value to set toplevel window's minimal or
+actual size, use \helpref{wxWindow::SetMinClientSize}{wxwindowsetminclientsize}
+or \helpref{wxWindow::SetClientSize}{wxwindowsetclientsize}, \emph{not}
+\helpref{wxWindow::SetMinSize}{wxwindowsetminsize}
+or \helpref{wxWindow::SetSize}{wxwindowsetsize}.
 
 
 \membersection{wxSizer::Hide}\label{wxsizerhide}

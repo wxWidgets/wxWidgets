@@ -809,7 +809,7 @@ void wxSizer::DeleteWindows()
     }
 }
 
-wxSize wxSizer::Fit( wxWindow *window )
+wxSize wxSizer::ComputeFittingWindowSize(wxWindow *window)
 {
     // take the min size by default and limit it by max size
     wxSize size = GetMinWindowSize(window);
@@ -842,9 +842,20 @@ wxSize wxSizer::Fit( wxWindow *window )
     if ( sizeMax.y != wxDefaultCoord && size.y > sizeMax.y )
         size.y = sizeMax.y;
 
+    return size;
+}
 
-    window->SetSize( size );
+wxSize wxSizer::ComputeFittingClientSize(wxWindow *window)
+{
+    wxCHECK_MSG( window, wxDefaultSize, "window can't be NULL" );
 
+    return window->WindowToClientSize(ComputeFittingWindowSize(window));
+}
+
+wxSize wxSizer::Fit( wxWindow *window )
+{
+    wxSize size = ComputeFittingWindowSize(window);
+    window->SetSize(size);
     return size;
 }
 

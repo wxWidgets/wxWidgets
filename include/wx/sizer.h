@@ -562,6 +562,11 @@ public:
 
     virtual void Layout();
 
+#if wxABI_VERSION >= 20808
+    wxSize ComputeFittingClientSize(wxWindow *window);
+    wxSize ComputeFittingWindowSize(wxWindow *window);
+#endif
+
     wxSize Fit( wxWindow *window );
     void FitInside( wxWindow *window );
     void SetSizeHints( wxWindow *window );
