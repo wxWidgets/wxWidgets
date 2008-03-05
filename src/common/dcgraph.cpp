@@ -952,8 +952,13 @@ void wxGCDCImpl::Clear(void)
 
 void wxGCDCImpl::DoGetSize(int *width, int *height) const
 {
-    *width = 10000;
-    *height = 10000;
+    wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoGetSize - invalid DC") );
+    wxDouble w,h;
+    m_graphicContext->GetSize( &w, &h );
+    if ( height )
+        *height = (int) (h+0.5);
+    if ( width )
+        *width = (int) (w+0.5);
 }
 
 void wxGCDCImpl::DoGradientFillLinear(const wxRect& rect,
