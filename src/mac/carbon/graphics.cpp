@@ -23,8 +23,6 @@
     #include "wx/icon.h"
 #endif
 
-#include "wx/mac/uma.h"
-
 #ifdef __MSL__
     #if __MSL__ >= 0x6000
         #include "math.h"
@@ -34,7 +32,38 @@
     #endif
 #endif
 
-#include "wx/mac/private.h"
+#ifdef __WXMAC__
+    #include "wx/mac/uma.h"
+#else
+    #include "CoreServices/CoreServices.h"
+    #include "ApplicationServices/ApplicationServices.h"
+    #include "wx/mac/corefoundation/cfstring.h"
+    #include "wx/cocoa/dcclient.h"
+#endif
+
+#ifdef __WXCOCOA__
+
+CGColorSpaceRef wxMacGetGenericRGBColorSpace()
+{
+    static wxCFRef<CGColorSpaceRef> genericRGBColorSpace;
+
+    if (genericRGBColorSpace == NULL)
+    {
+        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
+    }
+
+    return genericRGBColorSpace;
+}
+
+int UMAGetSystemVersion()
+{
+    return 0x1050;
+}
+
+
+#define wxMAC_USE_CORE_TEXT 1
+
+#endif
 
 //-----------------------------------------------------------------------------
 // constants
@@ -57,10 +86,10 @@ static const double RAD2DEG = 180.0 / M_PI;
 
 OSStatus wxMacDrawCGImage(
                   CGContextRef    inContext,
-                  const HIRect *  inBounds,
+                  const CGRect *  inBounds,
                   CGImageRef      inImage) 
 {
-#ifdef __LP64__
+#if defined( __LP64__ ) || defined(__WXCOCOA__) 
     // todo flip
     CGContextDrawImage(inContext, *inBounds, inImage );
     return noErr;
@@ -68,6 +97,40 @@ OSStatus wxMacDrawCGImage(
     return HIViewDrawCGImage( inContext, inBounds, inImage );
 #endif
 }
+
+CGColorRef wxMacCreateCGColor( const wxColour& col )
+{
+    CGColorRef retval = 0;
+#ifdef __WXMAC__
+    retval = col.CreateCGColor();
+#else
+// TODO add conversion NSColor - CGColorRef (obj-c)
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+    if ( CGColorCreateGenericRGB )
+        retval = CGColorCreateGenericRGB( col.Red() / 255.0 , col.Green() / 255.0, col.Blue() / 255.0, col.Alpha() / 255.0 );
+    else
+#endif
+    {
+        CGFloat components[4] = { col.Red() / 255.0, col.Green() / 255.0, col.Blue()  / 255.0, col.Alpha() / 255.0 } ;    
+        retval = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
+    }
+
+#endif
+    return retval;
+}
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && defined(wxMAC_USE_CORE_TEXT)
+
+CTFontRef wxMacCreateCTFont( const wxFont& font )
+{
+#ifdef __WXMAC__
+    return wxCFRetain((CTFontRef) font.MacGetCTFont());
+#else
+    return CTFontCreateWithName( wxCFStringRef( font.GetFaceName(), wxLocale::GetSystemEncoding() ) , font.GetPointSize() , NULL );
+#endif
+}
+
+#endif
 
 // CGPattern wrapper class: always allocate on heap, never call destructor
 
@@ -114,8 +177,9 @@ public :
     ImagePattern( const wxBitmap* bmp , const CGAffineTransform& transform )
     {
         wxASSERT( bmp && bmp->Ok() );
-
+#ifdef __WXMAC__
         Init( (CGImageRef) bmp->CreateCGImage() , transform );
+#endif
     }
 
     // ImagePattern takes ownership of CGImageRef passed in
@@ -286,7 +350,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
 {
     Init();
 
-    m_color.reset( pen.GetColour().CreateCGColor() ) ;
+    m_color.reset( wxMacCreateCGColor( pen.GetColour() ) ) ;
 
     // TODO: * m_dc->m_scaleX
     m_width = pen.GetWidth();
@@ -535,7 +599,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
     Init();
     if ( brush.GetStyle() == wxSOLID )
     {
-        m_color.reset( brush.GetColour().CreateCGColor() );
+        m_color.reset( wxMacCreateCGColor( brush.GetColour() ));
     }
     else if ( brush.IsHatch() )
     {
@@ -721,7 +785,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_underlined = font.GetUnderlined();
 
 #if wxMAC_USE_CORE_TEXT
-    m_ctFont.reset( wxCFRetain((CTFontRef) font.MacGetCTFont()) );
+    m_ctFont.reset( wxMacCreateCTFont( font ) );
 #endif
 #if wxMAC_USE_ATSU_TEXT
     OSStatus status = noErr;
@@ -775,6 +839,27 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 #endif
 #if wxMAC_USE_CG_TEXT
 #endif
+}
+
+class wxMacCoreGraphicsBitmapData : public wxGraphicsObjectRefData
+{
+public:
+    wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap );
+    ~wxMacCoreGraphicsBitmapData();
+
+    virtual CGImageRef GetBitmap() { return m_bitmap; }
+private :
+    CGImageRef m_bitmap;
+};
+
+wxMacCoreGraphicsBitmapData::wxMacCoreGraphicsBitmapData( wxGraphicsRenderer* renderer, CGImageRef bitmap ) : wxGraphicsObjectRefData( renderer )
+{
+    m_bitmap = bitmap;
+}
+
+wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
+{
+    CGImageRelease( m_bitmap );
 }
 
 //
@@ -1255,6 +1340,8 @@ public:
 
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
+    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
+
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     void SetNativeContext( CGContextRef cg );
@@ -1320,8 +1407,7 @@ void wxMacCoreGraphicsContext::Init()
     m_windowRef = NULL;
     m_width = 0;
     m_height = 0;
-
-    HIRect r = CGRectMake(0,0,0,0);
+    CGRect r = CGRectMake(0,0,0,0);
     m_clipRgn.reset(HIShapeCreateWithRect(&r));
 }
 
@@ -1342,14 +1428,15 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window ): wxGraphicsContext(renderer)
 {
     Init();
-    m_windowRef = (WindowRef) window->MacGetTopLevelWindowRef();
+
     int originX , originY;
     originX = originY = 0;
-    window->MacWindowToRootWindow( &originX , &originY );
 
     Rect bounds = { 0,0,0,0 };
-#ifdef __LP64__
+#if defined( __LP64__ ) || defined(__WXCOCOA__)
 #else
+    m_windowRef = (WindowRef) window->MacGetTopLevelWindowRef();
+    window->MacWindowToRootWindow( &originX , &originY );
     GetWindowBounds( m_windowRef, kWindowContentRgn, &bounds );
 #endif
     m_windowTransform = CGAffineTransformMakeTranslation( 0 , bounds.bottom - bounds.top );
@@ -1408,7 +1495,7 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
     if ( !m_cgContext )
     {
         OSStatus status = 
-#ifndef __LP64__
+#if ! ( defined( __LP64__ ) || defined(__WXCOCOA__) )
             QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
 #else
             paramErr;
@@ -1444,7 +1531,7 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
     bool shouldAntiAlias = true;
     CGBlendMode mode = kCGBlendModeNormal;
     
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+#if defined(__WXMAC__) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 )
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         retval = true;
@@ -1493,6 +1580,7 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
 
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
+#ifdef __WXMAC__
     if( m_cgContext )
     {
         HIShapeReplacePathInCGContext( region.GetWXHRGN() , m_cgContext );
@@ -1508,12 +1596,13 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
         HIShapeOffset( mutableShape, transformedOrigin.x, transformedOrigin.y );
         m_clipRgn.reset(mutableShape);
     }
+#endif
 }
 
 // clips drawings to the rect
 void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    HIRect r = CGRectMake( x , y , w , h );
+    CGRect r = CGRectMake( x , y , w , h );
     if ( m_cgContext )
     {
         CGContextClipToRect( m_cgContext, r );
@@ -1544,7 +1633,7 @@ void wxMacCoreGraphicsContext::ResetClip()
     }
     else
     {
-        HIRect r = CGRectMake(0,0,0,0);
+        CGRect r = CGRectMake(0,0,0,0);
         m_clipRgn.reset(HIShapeCreateWithRect(&r));
     }
 }
@@ -1650,7 +1739,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
         CGContextRestoreGState( m_cgContext );
         if ( m_releaseContext )
         {
-#ifndef __LP64__
+#if ! ( defined( __LP64__ ) || defined(__WXCOCOA__) )
             QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
 #endif
         }
@@ -1672,6 +1761,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
     {
         CGContextRetain(m_cgContext);
         CGContextSaveGState( m_cgContext );
+        CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
         CGContextSaveGState( m_cgContext );
         m_releaseContext = false;
     }
@@ -1703,11 +1793,17 @@ void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    EnsureIsValid();
+    wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
+    DrawBitmap(bitmap, x, y, w, h);
+}
 
-    CGImageRef image = (CGImageRef)( bmp.CreateCGImage() );
-    HIRect r = CGRectMake( x , y , w , h );
-    if ( bmp.GetDepth() == 1 )
+void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    EnsureIsValid();
+#ifdef __WXMAC__
+    CGImageRef image = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData())->GetBitmap();
+    CGRect r = CGRectMake( x , y , w , h );
+    // if ( bmp.GetDepth() == 1 )
     {
         // is is a mask, the '1' in the mask tell where to draw the current brush
         if (  !m_brush.IsNull() )
@@ -1730,11 +1826,14 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
             }
         }
     }
+    /*
     else
     {
         wxMacDrawCGImage( m_cgContext , &r , image );
     }
     CGImageRelease( image );
+    */
+#endif
 }
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -1745,8 +1844,10 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext, x , y + h );
     CGContextScaleCTM( m_cgContext, 1, -1 );
+#ifdef __WXMAC__
     PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
         NULL , kPlotIconRefNormalFlags , MAC_WXHICON( icon.GetHICON() ) );
+#endif
     CGContextRestoreGState( m_cgContext );
 }
 
@@ -1776,7 +1877,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
         wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
         CTFontRef font = fref->GetCTFont();
-        CGColorRef col = fref->GetColour().GetPixel();
+        CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
         CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
         wxCFRef<CFNumberRef> underlined( CFNumberCreate(NULL, kCFNumberSInt32Type, &ustyle) ); 
          CFStringRef keys[] = { kCTFontAttributeName , kCTForegroundColorAttributeName, kCTUnderlineStyleAttributeName };
@@ -1794,6 +1895,7 @@ void wxMacCoreGraphicsContext::DrawText( const wxString &str, wxDouble x, wxDoub
         CGContextSetTextPosition(m_cgContext, 0, 0);
         CTLineDraw( line, m_cgContext );
         CGContextRestoreGState(m_cgContext);
+        CFRelease( col );
         return;
     }
 #endif
@@ -2154,6 +2256,11 @@ public :
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
 
+    // create a native bitmap representation
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
+    
+    // create a native bitmap representation
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) ;
 private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer)
 } ;
@@ -2171,25 +2278,42 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
     return &gs_MacCoreGraphicsRenderer;
 }
 
+#ifdef __WXCOCOA__
+extern CGContextRef wxMacGetContextFromCurrentNSContext() ;
+#endif
+
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc )
 {
     const wxDCImpl* impl = dc.GetImpl();
     wxWindowDCImpl *win_impl = wxDynamicCast( impl, wxWindowDCImpl );
     if (win_impl)
-        return new wxMacCoreGraphicsContext( this,
-           (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef()) );
-           
+    {
+        int w, h;
+        win_impl->GetSize( &w, &h );
+        CGContextRef cgctx = 0;
+#ifdef __WXMAC__
+        cgctx =  (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef());
+#else
+        cgctx = wxMacGetContextFromCurrentNSContext() ;
+#endif
+        return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
+    }
     return NULL;
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& dc )
 {
+#ifdef __WXMAC__
     const wxDCImpl* impl = dc.GetImpl();
     wxMemoryDCImpl *mem_impl = wxDynamicCast( impl, wxMemoryDCImpl );
     if (mem_impl)
+    {
+        int w, h;
+        mem_impl->GetSize( &w, &h );
         return new wxMacCoreGraphicsContext( this, 
-            (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()) );
-            
+            (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
+    }
+#endif
     return NULL;
 }
 
@@ -2258,6 +2382,34 @@ wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
         p.SetRefData(new wxMacCoreGraphicsBrushData( this, brush ));
         return p;
     }
+}
+
+wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
+{
+    if ( bmp.Ok() )
+    {
+        wxGraphicsBitmap p;
+#ifdef __WXMAC__
+        p.SetRefData(new wxMacCoreGraphicsBitmapData( this , bmp.CreateCGImage() ) );
+#endif
+        return p;
+    }
+    else
+        return wxNullGraphicsBitmap;
+}
+
+wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateSubBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) 
+{
+    CGImageRef img = static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData())->GetBitmap();
+    if ( img )
+    {
+        wxGraphicsBitmap p;
+        CGImageRef subimg = CGImageCreateWithImageInRect(img,CGRectMake( x , y , w , h ));
+        p.SetRefData(new wxMacCoreGraphicsBitmapData( this , subimg ) );
+        return p;
+    }
+    else
+        return wxNullGraphicsBitmap;
 }
 
 // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
