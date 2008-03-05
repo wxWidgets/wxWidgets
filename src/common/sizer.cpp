@@ -885,12 +885,19 @@ void wxSizer::SetSizeHints( wxWindow *window )
     // Preserve the window's max size hints, but set the
     // lower bound according to the sizer calculations.
 
-    wxSize size = Fit( window );
+    // This is equivalent to calling Fit(), except that we need to set
+    // the size hints _in between_ the two steps performed by Fit
+    // (1. ComputeFittingWindowSize, 2. SetSize). That's because
+    // otherwise SetSize() could have no effect if there already are
+    // size hints in effect that forbid requested size.
+    const wxSize size = ComputeFittingWindowSize(window);
 
     window->SetSizeHints( size.x,
                           size.y,
                           window->GetMaxWidth(),
                           window->GetMaxHeight() );
+
+    window->SetSize(size);
 }
 
 void wxSizer::SetVirtualSizeHints( wxWindow *window )

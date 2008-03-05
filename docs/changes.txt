@@ -122,6 +122,7 @@ All (GUI):
   wxRESERVE_SPACE_EVEN_IF_HIDDEN sizer flag.
 - Added wxWindow::ClientToWindowSize() and WindowToClientSize() helpers.
 - Added wxSizer::ComputeFittingClientSize() and ComputeFittingWindowSize().
+- Fixed wxSizer::SetSizeHints() to work when the best size decreases.
 
 All (Unix):
 
