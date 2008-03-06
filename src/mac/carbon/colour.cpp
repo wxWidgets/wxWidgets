@@ -70,11 +70,11 @@ void wxColour::InitRGBA (ChannelType r, ChannelType g, ChannelType b, ChannelTyp
     CGColorRef col = 0 ;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     if ( CGColorCreateGenericRGB )
-        col = CGColorCreateGenericRGB( r / 255.0, g / 255.0, b / 255.0, a / 255.0 );
+        col = CGColorCreateGenericRGB( (CGFloat)(r / 255.0), (CGFloat) (g / 255.0), (CGFloat) (b / 255.0), (CGFloat) (a / 255.0) );
     else
 #endif
     {
-        CGFloat components[4] = { r / 255.0, g / 255.0, b / 255.0, a / 255.0 } ;    
+        CGFloat components[4] = { (CGFloat)(r / 255.0), (CGFloat) (g / 255.0), (CGFloat) (b / 255.0), (CGFloat) (a / 255.0) } ;    
         col = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
     }
     m_cgColour.reset( col );
@@ -89,11 +89,13 @@ void wxColour::InitRGBColor( const RGBColor& col )
     CGColorRef cfcol;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     if ( CGColorCreateGenericRGB )
-        cfcol = CGColorCreateGenericRGB( col.red / 65535.0, col.green / 65535.0, col.blue / 65535.0, 1.0 );
+        cfcol = CGColorCreateGenericRGB((CGFloat)(col.red / 65535.0), (CGFloat)(col.green / 65535.0),  
+                                        (CGFloat)(col.blue / 65535.0), (CGFloat) 1.0 );
     else
 #endif
     {
-        CGFloat components[4] = { col.red / 65535.0, col.green / 65535.0, col.blue / 65535.0, 1.0 } ;    
+        CGFloat components[4] = {   (CGFloat)(col.red / 65535.0), (CGFloat)(col.green / 65535.0),  
+                                    (CGFloat)(col.blue / 65535.0), (CGFloat) 1.0 } ;    
         cfcol = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
     }
     m_cgColour.reset( cfcol );
