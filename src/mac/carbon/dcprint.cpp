@@ -217,7 +217,7 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
             PMGetAdjustedPaperRect( native->m_macPageFormat , &paperRect ) ;
             // make sure (0,0) is at the upper left of the printable area (wx conventions)
             // Core Graphics initially has the lower left of the paper as 0,0
-            CGContextTranslateCTM( pageContext , -paperRect.left , paperRect.bottom ) ;
+            CGContextTranslateCTM( pageContext , (CGFloat) -paperRect.left , (CGFloat) paperRect.bottom ) ;
             CGContextScaleCTM( pageContext , 1 , -1 ) ;
         }
         // since this is a non-critical error, we set the flag back
