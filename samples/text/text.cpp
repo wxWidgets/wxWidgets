@@ -1500,13 +1500,13 @@ void MyFrame::OnIdle( wxIdleEvent& event )
         wxString msg;
         msg.Printf(
 #ifdef __WXMSW__
-                _T("Focus: wxWindow = %p, HWND = %08x"),
+                _T("Focus: wxWindow = %p, HWND = %p"),
 #else
                 _T("Focus: wxWindow = %p"),
 #endif
                 s_windowFocus
 #ifdef __WXMSW__
-                , (unsigned int) s_windowFocus->GetHWND()
+                , s_windowFocus->GetHWND()
 #endif
                   );
 
