@@ -117,17 +117,18 @@ gtk_collapsiblepane_expanded_callback(GObject * WXUNUSED(object),
 
         if (top->m_mainWidget)
         {
-            // 3) MAGIC HACK: if you ever used GtkExpander in a GTK+ program you know
-            //    that this magic call is required to make it possible to shrink the
-            //    top level window in the expanded->collapsed transition.
-            //    This may be sometimes undesired but *is* necessary and if you look
-            //    carefully, all GTK+ programs using GtkExpander perform this trick
-            //    (e.g. the standard "open file" dialog of GTK+>=2.4 is not resizeable
-            //     when the expander is collapsed!)
+            // 3) MAGIC HACK: if you ever used GtkExpander in a GTK+ program
+            //    you know that this magic call is required to make it possible
+            //    to shrink the top level window in the expanded->collapsed
+            //    transition.  This may be sometimes undesired but *is*
+            //    necessary and if you look carefully, all GTK+ programs using
+            //    GtkExpander perform this trick (e.g. the standard "open file"
+            //    dialog of GTK+>=2.4 is not resizeable when the expander is
+            //    collapsed!)
             gtk_window_set_resizable (GTK_WINDOW (top->m_widget), p->IsExpanded());
 
             // 4) set size hints
-            top->SetSizeHints(sz.x, sz.y);
+            top->SetMinClientSize(sz);
 
             // 5) set size
             top->SetClientSize(sz);
