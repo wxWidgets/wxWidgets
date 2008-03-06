@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/mac/uma.h"
@@ -2766,9 +2767,9 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         }
         CGContextSaveGState(context);
 
-        CGContextSetRGBFillColor(context, (float)backgroundColor.red / (float)USHRT_MAX,
-                      (float)backgroundColor.green / (float)USHRT_MAX,
-                      (float)backgroundColor.blue / (float)USHRT_MAX, 1.0);
+        CGContextSetRGBFillColor(context, (CGFloat)backgroundColor.red / (CGFloat)USHRT_MAX,
+                      (CGFloat)backgroundColor.green / (CGFloat)USHRT_MAX,
+                      (CGFloat)backgroundColor.blue / (CGFloat)USHRT_MAX, (CGFloat) 1.0);
         CGContextFillRect(context, enclosingCGRect);
 
         CGContextRestoreGState(context);
@@ -2786,9 +2787,9 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
             bgColor.GetRGBColor(&backgroundColor);
             CGContextSaveGState(context);
 
-            CGContextSetRGBFillColor(context, (float)backgroundColor.red / (float)USHRT_MAX,
-                          (float)backgroundColor.green / (float)USHRT_MAX,
-                          (float)backgroundColor.blue / (float)USHRT_MAX, 1.0);
+            CGContextSetRGBFillColor(context, (CGFloat)backgroundColor.red / (CGFloat)USHRT_MAX,
+                          (CGFloat)backgroundColor.green / (CGFloat)USHRT_MAX,
+                          (CGFloat)backgroundColor.blue / (CGFloat)USHRT_MAX, (CGFloat) 1.0);
             CGContextFillRect(context, enclosingCGRect);
 
             CGContextRestoreGState(context);
@@ -2870,9 +2871,9 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     info.truncationMaxLines = 1;
 
     CGContextSaveGState(context);
-    CGContextSetRGBFillColor (context, (float)labelColor.red / (float)USHRT_MAX,
-                      (float)labelColor.green / (float)USHRT_MAX,
-                      (float)labelColor.blue / (float)USHRT_MAX, 1.0);
+    CGContextSetRGBFillColor (context, (CGFloat)labelColor.red / (CGFloat)USHRT_MAX,
+                      (CGFloat)labelColor.green / (CGFloat)USHRT_MAX,
+                      (CGFloat)labelColor.blue / (CGFloat)USHRT_MAX, (CGFloat) 1.0);
 
     HIThemeDrawTextBox(cfString, &textCGRect, &info, context, kHIThemeOrientationNormal);
 
@@ -2895,7 +2896,7 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
 
     OSStatus err = errDataBrowserPropertyNotSupported;
     wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
-    wxMacListCtrlItem* lcItem;
+    wxMacListCtrlItem* lcItem = NULL;
 
     if (listColumn >= 0)
     {
