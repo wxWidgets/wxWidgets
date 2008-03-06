@@ -1695,6 +1695,7 @@ void wxWindowBase::SetHelpText(const wxString& text)
     }
 }
 
+#if WXWIN_COMPATIBILITY_2_8
 // associate this help text with all windows with the same id as this
 // one
 void wxWindowBase::SetHelpTextForId(const wxString& text)
@@ -1705,6 +1706,7 @@ void wxWindowBase::SetHelpTextForId(const wxString& text)
         helpProvider->AddHelp(GetId(), text);
     }
 }
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // get the help string associated with this window (may be empty)
 // default implementation forwards calls to the help provider

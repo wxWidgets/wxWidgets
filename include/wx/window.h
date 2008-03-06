@@ -1150,9 +1150,13 @@ public:
 #if wxUSE_HELP
         // associate this help text with this window
     void SetHelpText(const wxString& text);
-        // associate this help text with all windows with the same id as this
-        // one
-    void SetHelpTextForId(const wxString& text);
+
+#if WXWIN_COMPATIBILITY_2_8
+    // Associate this help text with all windows with the same id as this one.
+    // Don't use this, do wxHelpProvider::Get()->AddHelp(id, text);
+    wxDEPRECATED( void SetHelpTextForId(const wxString& text) );
+#endif // WXWIN_COMPATIBILITY_2_8
+
         // get the help string associated with the given position in this window
         //
         // notice that pt may be invalid if event origin is keyboard or unknown
