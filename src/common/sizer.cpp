@@ -847,7 +847,7 @@ wxSize wxSizer::ComputeFittingWindowSize(wxWindow *window)
 
 wxSize wxSizer::ComputeFittingClientSize(wxWindow *window)
 {
-    wxCHECK_MSG( window, wxDefaultSize, "window can't be NULL" );
+    wxCHECK_MSG( window, wxDefaultSize, _T("window can't be NULL") );
 
     return window->WindowToClientSize(ComputeFittingWindowSize(window));
 }
