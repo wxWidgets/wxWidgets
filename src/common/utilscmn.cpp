@@ -1055,29 +1055,17 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     // because the code must use Objective-C features.
     return wxCocoaLaunchDefaultBrowser(url, flags);
 #elif defined(__WXMAC__)
-    OSStatus err;
-    ICInstance inst;
-    long int startSel;
-    long int endSel;
+    wxCFRef< CFURLRef > curl( CFURLCreateWithString( kCFAllocatorDefault,
+            wxCFStringRef( url ), NULL ) );
+    OSStatus err = LSOpenCFURLRef( curl , NULL );
 
-    err = ICStart(&inst, 'STKA'); // put your app creator code here
     if (err == noErr)
     {
-        if (err == noErr)
-        {
-            ConstStr255Param hint = 0;
-            startSel = 0;
-            endSel = url.length();
-            err = ICLaunchURL(inst, hint, url.fn_str(), endSel, &startSel, &endSel);
-            if (err != noErr)
-                wxLogDebug(wxT("ICLaunchURL error %d"), (int) err);
-        }
-        ICStop(inst);
         return true;
     }
     else
     {
-        wxLogDebug(wxT("ICStart error %d"), (int) err);
+        wxLogDebug(wxT("Browser Launch error %d"), (int) err);
         return false;
     }
 #else
