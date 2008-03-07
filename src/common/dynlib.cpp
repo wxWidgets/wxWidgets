@@ -44,10 +44,6 @@
 
 #include "wx/arrimpl.cpp"
 
-#if defined(__WXMAC__)
-    #include "wx/mac/private.h"
-#endif
-
 WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray)
 
 // ============================================================================
