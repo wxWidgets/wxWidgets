@@ -542,10 +542,14 @@ wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
                                const wxTextAttr& attrDef,
                                const wxTextCtrlBase *text)
 {
-    wxFont font = attr.GetFont();
+    wxFont font;
+    if (attr.HasFont())
+        font = attr.GetFont();
+
     if ( !font.Ok() )
     {
-        font = attrDef.GetFont();
+        if (attrDef.HasFont())
+            font = attrDef.GetFont();
 
         if ( text && !font.Ok() )
             font = text->GetFont();
