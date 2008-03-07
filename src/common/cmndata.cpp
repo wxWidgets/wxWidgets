@@ -49,9 +49,6 @@
 
 #include "wx/paper.h"
 
-#if defined(__WXMAC__)
-    #include "wx/mac/private/print.h"
-#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
