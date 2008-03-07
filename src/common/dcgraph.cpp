@@ -30,8 +30,8 @@
 
 #include "wx/dcclient.h"
 
-#ifdef __WXMAC__
-#include "wx/mac/private.h"
+#ifdef __WXOSX__
+    #include "ApplicationServices/ApplicationServices.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -197,7 +197,7 @@ void wxGCDCImpl::EndPage()
 
 void wxGCDCImpl::Flush()
 {
-#ifdef __WXMAC__
+#ifdef __WXOSX__
     CGContextFlush( (CGContextRef) m_graphicContext->GetNativeContext() );
 #endif
 }
