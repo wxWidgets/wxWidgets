@@ -38,6 +38,7 @@
 #define wxTYPE_SA_HANDLER int
 #define WX_GMTOFF_IN_TM 1
 #define HAVE_PW_GECOS 1
+#define HAVE_DLOPEN 1
 #define HAVE_GETTIMEOFDAY 1
 #define HAVE_FSYNC 1
 #define HAVE_SCHED_YIELD 1
