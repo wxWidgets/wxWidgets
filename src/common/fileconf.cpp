@@ -46,10 +46,6 @@
 
 #include  "wx/stdpaths.h"
 
-#if defined(__WXMAC__)
-    #include  "wx/mac/private.h"  // includes mac headers
-#endif
-
 #if defined(__WXMSW__)
     #include "wx/msw/private.h"
 #endif  //windows.h
