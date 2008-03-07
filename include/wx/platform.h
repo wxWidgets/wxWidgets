@@ -75,7 +75,7 @@
 #ifdef __WXOSX__
 #    ifdef __WXMAC_XCODE__
 #        include <unistd.h>
-#        include "wx/mac/carbon/config_xcode.h"
+#        include "wx/mac/config_xcode.h"
 #    endif
 #endif
 /*
