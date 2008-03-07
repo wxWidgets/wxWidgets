@@ -43,9 +43,6 @@
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
 #endif
-#ifdef __WXMAC__
-    #include "wx/mac/private.h"
-#endif
 
 // ===========================================================================
 // implementation
