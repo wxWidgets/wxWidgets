@@ -72,10 +72,6 @@
 #include "wx/hashset.h"
 #include "wx/filesys.h"
 
-#if defined(__WXMAC__)
-    #include "wx/mac/private.h"  // includes mac headers
-#endif
-
 #if defined(__DARWIN__)
     #include "wx/mac/corefoundation/cfref.h"
     #include <CoreFoundation/CFLocale.h>
@@ -2237,7 +2233,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         return wxFONTENCODING_CP950;
     }
 #elif defined(__WXMAC__)
-    TextEncoding encoding = 0 ;
+    CFStringEncoding encoding = 0 ;
     encoding = CFStringGetSystemEncoding() ;
     return wxMacGetFontEncFromSystemEnc( encoding ) ;
 #elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
@@ -2677,23 +2673,24 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 
     wxCFRef<CFLocaleRef> userLocaleRef(userLocaleRefRaw);
 
-    CFTypeRef cfstr;
+    CFStringRef cfstr = 0;
     switch ( index )
     {
         case wxLOCALE_THOUSANDS_SEP:
-            cfstr = CFLocaleGetValue(userLocaleRef, kCFLocaleGroupingSeparator);
+            cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleGroupingSeparator);
             break;
 
         case wxLOCALE_DECIMAL_POINT:
-            cfstr = CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
+            cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
             break;
 
         default:
             wxFAIL_MSG( "Unknown locale info" );
+            cfstr = CFSTR("");
+            break;
     }
 
-    wxCFStringRef
-        str(CFStringCreateCopy(NULL, static_cast<CFStringRef>(cfstr)));
+    wxCFStringRef str(wxCFRetain(cfstr));
     return str.AsString();
 }
 
