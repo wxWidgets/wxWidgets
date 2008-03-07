@@ -68,7 +68,7 @@
     using OS X libraries like Carbon or CoreServices.
 
  */
-#if defined(__WXMAC_OSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
+#if defined(__WXMAC_OSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE)) || defined(__WXASPEN__)
 #   define __WXOSX__
 #endif
 
