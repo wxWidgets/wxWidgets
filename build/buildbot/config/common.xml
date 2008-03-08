@@ -28,14 +28,14 @@
     <name>trunk_quick</name>
     <branch>trunk</branch>
     <treeStableTimer>900</treeStableTimer>
-    <fileNotImportant>doc/*</fileNotImportant>
+    <fileNotImportant>docs/*</fileNotImportant>
 </scheduler>
 
 <scheduler>
     <name>stable_quick</name>
     <branch><STABLE_BRANCH/></branch>
     <treeStableTimer>900</treeStableTimer>
-    <fileNotImportant>doc/*</fileNotImportant>
+    <fileNotImportant>docs/*</fileNotImportant>
 </scheduler>
 
 <!--
