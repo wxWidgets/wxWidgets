@@ -21,7 +21,8 @@ You may also want to write a separate topic file,
 e.g. docs/doxygen/overviews/myclass.h, and add the entry to
 docs/doxygen/mainpages/topics.h.
 
-If applicable, also add an entry to docs/doxygen/mainpages/categories.h.
+If applicable, also add an entry to one of the docs/doxygen/mainpages/cat_*.h
+files.
 
 You can generate a first raw version of myclass.h simply taking its
 "real" header and removing all the private and protected sections and
@@ -49,6 +50,7 @@ DO:
 
 - Doxygen supports both commands in the form \command and @command;
   all wxWidgets documentation uses the @command form.
+  Follow strictly this rule.
 
 - strive to use dedicated Doxygen commands for e.g. notes, lists,
   sections, etc. The "Special commands" page:
@@ -75,7 +77,8 @@ DO:
 
          @  $  \  &  <  >  #  %
 
-  unless they appear inside a @code or @verbatim section.
+  unless they appear inside a @code or @verbatim section
+  (you can also use HTML-style escaping, e.g. &amp; rather than @ escaping)
 
 - when using a Doxygen alias like @itemdef{}, you need to escape the
   comma characters which appear on the first argument, otherwise Doxygen
@@ -107,6 +110,13 @@ DON'T:
   @beginDefList, @itemdef, @endDefList, etc.
   See the Doxyfile for more info.
 
+- use # character for linking; use either the @ref command (to refer to topic
+  overviews, for example) or the () suffix (to refer to function members of the
+  same class you're documenting), or the :: operator (to refer to functions
+  of classes different from the one you're documenting).
+  Other entitites like global functions, global instances or class names are
+  auto-linked by Doxygen without the need of any explicit command.
+
 
 Documentation comment for a class
 =================================
@@ -115,7 +125,7 @@ Start off with:
 
 /**
  * @class wxMyClass
- * @headerfile wx/myclass.h
+ * @wxheader{myclass.h}
  *
  * ...here goes the description... 
  *
