@@ -3545,7 +3545,7 @@ void wxAssociateWinWithHandle(HWND hwnd, wxWindowMSW *win)
     }
 #endif // __WXDEBUG__
 
-    gs_windowHandles[hwnd] = win;
+    gs_windowHandles[hwnd] = (wxWindow *)win;
 }
 
 void wxRemoveHandleAssociation(wxWindowMSW *win)
