@@ -9,35 +9,35 @@
 /**
     @class wxScrolledWindow
     @wxheader{scrolwin.h}
-    
+
     The wxScrolledWindow class manages scrolling for its client area, transforming
     the coordinates according to the scrollbar positions, and setting the
     scroll positions, thumb sizes and ranges according to the area in view.
-    
+
     Starting from version 2.4 of wxWidgets, there are several ways to use a
     wxScrolledWindow. In particular, there are now three ways to set the
     size of the scrolling area:
-    
+
     One way is to set the scrollbars directly using a call to
     wxScrolledWindow::SetScrollbars.
     This is the way it used to be in any previous version of wxWidgets
     and it will be kept for backwards compatibility.
-    
+
     An additional method of manual control, which requires a little less
     computation of your own, is to set the total size of the scrolling area by
     calling either wxWindow::SetVirtualSize,
     or wxWindow::FitInside, and setting the
-    scrolling increments for it by calling 
+    scrolling increments for it by calling
     wxScrolledWindow::SetScrollRate.
     Scrolling in some orientation is enabled by setting a non-zero increment
     for it.
-    
+
     The most automatic and newest way is to simply let sizers determine the
     scrolling area. This is now the default when you set an interior sizer
     into a wxScrolledWindow with wxWindow::SetSizer.
     The scrolling area will be set to the size requested by the sizer and
     the scrollbars will be assigned for each orientation according to the need
-    for them and the scrolling increment set by 
+    for them and the scrolling increment set by
     wxScrolledWindow::SetScrollRate.
     As above, scrolling is only enabled in orientations with a non-zero
     increment.  You can influence the minimum size of the scrolled area
@@ -46,27 +46,27 @@
     (calling wxScrolledWindow::SetScrollbars
      has analogous effects in wxWidgets 2.4 -- in later versions it may not continue
      to override the sizer)
-    
+
     Note:  if Maximum size hints are still supported by SetVirtualSizeHints, use
     them at your own dire risk.  They may or may not have been removed for 2.4,
     but it really only makes sense to set minimum size hints here.  We should
     probably replace SetVirtualSizeHints with SetMinVirtualSize or similar
     and remove it entirely in future.
-    
+
     As with all windows, an application can draw onto a wxScrolledWindow using
     a @ref overview_dcoverview "device context".
-    
+
     You have the option of handling the OnPaint handler
     or overriding the wxScrolledWindow::OnDraw function, which is
-    passed a pre-scrolled device context (prepared by 
+    passed a pre-scrolled device context (prepared by
     wxScrolledWindow::DoPrepareDC).
-    
+
     If you don't wish to calculate your own scrolling, you must call DoPrepareDC
     when not drawing from
     within OnDraw, to set the device origin for the device context according to the
     current
     scroll position.
-    
+
     A wxScrolledWindow will normally scroll itself and therefore its child windows
     as well. It
     might however be desired to scroll a different window than itself: e.g. when
@@ -77,7 +77,7 @@
     purpose, you can
     call wxScrolledWindow::SetTargetWindow which means that pressing
     the scrollbars will scroll a different window.
-    
+
     Note that the underlying system knows nothing about scrolling coordinates, so
     that all system
     functions (mouse events, expose events, refresh calls etc) as well as the
@@ -87,15 +87,15 @@
     position (10,10) and scrolls the window down 100 pixels (moving the child
     window out of the visible
     area), the child window will report a position of (10,-90).
-    
+
     @beginStyleTable
     @style{wxRETAINED}:
            Uses a backing pixmap to speed refreshes. Motif only.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{miscwnd}
-    
+
     @seealso
     wxScrollBar, wxClientDC, wxPaintDC, wxVScrolledWindow
 */
@@ -106,24 +106,24 @@ public:
     /**
         Constructor.
         
-        @param parent 
+        @param parent
         Parent window.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param pos 
+        @param pos
         Window position. If a position of (-1, -1) is specified then a default position
         is chosen.
         
-        @param size 
+        @param size
         Window size. If a size of (-1, -1) is specified then the window is sized
         appropriately.
         
-        @param style 
+        @param style
         Window style. See wxScrolledWindow.
         
-        @param name 
+        @param name
         Window name.
         
         @remarks The window is initially created without visible scrollbars. Call
@@ -131,11 +131,11 @@ public:
                    the virtual window size should be.
     */
     wxScrolledWindow();
-        wxScrolledWindow(wxWindow* parent, wxWindowID id = -1,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         long style = wxHSCROLL |  wxVSCROLL,
-                         const wxString& name = "scrolledWindow");
+    wxScrolledWindow(wxWindow* parent, wxWindowID id = -1,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxHSCROLL |  wxVSCROLL,
+                     const wxString& name = "scrolledWindow");
     //@}
 
     /**
@@ -202,10 +202,10 @@ public:
         will have to reposition child windows yourself, if physical scrolling
         is disabled.
         
-        @param xScrolling 
+        @param xScrolling
         If @true, enables physical scrolling in the x direction.
         
-        @param yScrolling 
+        @param yScrolling
         If @true, enables physical scrolling in the y direction.
         
         @remarks Physical scrolling may not be available on all platforms. Where
@@ -218,10 +218,10 @@ public:
         by SetScrollbars(). A value of zero indicates no
         scrolling in that direction.
         
-        @param xUnit 
+        @param xUnit
         Receives the number of pixels per horizontal unit.
         
-        @param yUnit 
+        @param yUnit
         Receives the number of pixels per vertical unit.
         
         @sa SetScrollbars(), GetVirtualSize()
@@ -231,10 +231,10 @@ public:
     /**
         Get the position at which the visible portion of the window starts.
         
-        @param x 
+        @param x
         Receives the first visible x position in scroll units.
         
-        @param y 
+        @param y
         Receives the first visible y position in scroll units.
         
         @remarks If either of the scrollbars is not at the home position, x
@@ -255,10 +255,10 @@ public:
         opposed to the client size, which is the area of the window currently
         visible).
         
-        @param x 
+        @param x
         Receives the length of the scrollable window, in pixels.
         
-        @param y 
+        @param y
         Receives the height of the scrollable window, in pixels.
         
         @remarks Use wxDC::DeviceToLogicalX and wxDC::DeviceToLogicalY to
@@ -275,7 +275,7 @@ public:
 
     /**
         Called by the default paint event handler to allow the application to define
-        painting behaviour without having to worry about calling 
+        painting behaviour without having to worry about calling
         DoPrepareDC().
         
         Instead of overriding this function you may also just process the paint event
@@ -285,8 +285,8 @@ public:
     virtual void OnDraw(wxDC& dc);
 
     /**
-        This function is for backwards compatibility only and simply calls 
-        DoPrepareDC() now. Notice that it is 
+        This function is for backwards compatibility only and simply calls
+        DoPrepareDC() now. Notice that it is
         not called by the default paint event handle (DoPrepareDC() is), so
         overriding this method in your derived class is useless.
     */
@@ -295,10 +295,10 @@ public:
     /**
         Scrolls a window so the view start is at the given point.
         
-        @param x 
+        @param x
         The x position to scroll to, in scroll units.
         
-        @param y 
+        @param y
         The y position to scroll to, in scroll units.
         
         @remarks The positions are in scroll units, not pixels, so to convert to
@@ -320,27 +320,27 @@ public:
     /**
         Sets up vertical and/or horizontal scrollbars.
         
-        @param pixelsPerUnitX 
+        @param pixelsPerUnitX
         Pixels per scroll unit in the horizontal direction.
         
-        @param pixelsPerUnitY 
+        @param pixelsPerUnitY
         Pixels per scroll unit in the vertical direction.
         
-        @param noUnitsX 
+        @param noUnitsX
         Number of units in the horizontal direction.
         
-        @param noUnitsY 
+        @param noUnitsY
         Number of units in the vertical direction.
         
-        @param xPos 
+        @param xPos
         Position to initialize the scrollbars in the horizontal direction, in scroll
         units.
         
-        @param yPos 
+        @param yPos
         Position to initialize the scrollbars in the vertical direction, in scroll
         units.
         
-        @param noRefresh 
+        @param noRefresh
         Will not refresh window if @true.
         
         @remarks The first pair of parameters give the number of pixels per

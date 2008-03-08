@@ -9,13 +9,13 @@
 /**
     @class wxRichTextXMLHandler
     @headerfile richtextxml.h wx/richtext/richtextxml.h
-    
+
     A handler for loading and saving content in an XML format specific
     to wxRichTextBuffer. You can either add the handler to the buffer
     and load and save through the buffer or control API, or you can
     create an instance of the handler on the stack and call its
     functions directly.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */

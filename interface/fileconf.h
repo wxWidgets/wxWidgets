@@ -9,20 +9,20 @@
 /**
     @class wxFileConfig
     @wxheader{fileconf.h}
-    
+
     wxFileConfig implements wxConfigBase interface for
     storing and retrieving configuration information using plain text files. The
     files have a simple format reminiscent of Windows INI files with lines of the
     form @c key = value defining the keys and lines of special form
     @c [group] indicating the start of each group.
-    
+
     This class is used by default for wxConfig on Unix platforms but may also be
     used explicitly if you want to use files and not the registry even under
     Windows.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxFileConfig::Save
 */
@@ -52,7 +52,7 @@ public:
         user-specific, file if it were constructed with @e basename as "local
         filename'' parameter in the constructor.
         
-        @e style has the same meaning as in @ref wxConfigBase::ctor constructor 
+        @e style has the same meaning as in @ref wxConfigBase::ctor constructor
         and can contain any combination of styles but only wxCONFIG_USE_SUBDIR bit is
         examined by this function.
         
@@ -81,7 +81,7 @@ public:
     /**
         Allows to set the mode to be used for the config file creation. For example, to
         create a config file which is not readable by other users (useful if it stores
-        some sensitive information, such as passwords), you could use 
+        some sensitive information, such as passwords), you could use
         @c SetUmask(0077).
         
         This function doesn't do anything on non-Unix platforms.

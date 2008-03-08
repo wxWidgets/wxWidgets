@@ -9,7 +9,7 @@
 /**
     @class wxProcess
     @wxheader{process.h}
-    
+
     The objects of this class are used in conjunction with the
     wxExecute function. When a wxProcess object is passed to
     wxExecute(), its wxProcess::OnTerminate virtual method
@@ -17,13 +17,13 @@
     (asynchronously) notified about the process termination and also retrieve its
     exit status which is unavailable from wxExecute() in the case of
     asynchronous execution.
-    
+
     Please note that if the process termination notification is processed by the
     parent, it is responsible for deleting the wxProcess object which sent it.
     However, if it is not processed, the object will delete itself and so the
     library users should only delete those objects whose notifications have been
     processed (and call wxProcess::Detach for others).
-    
+
     wxProcess also supports IO redirection of the child process. For this, you have
     to call its wxProcess::Redirect method before passing it to
     wxExecute. If the child process was launched successfully,
@@ -32,13 +32,13 @@
     wxProcess::GetErrorStream can then be used to retrieve
     the streams corresponding to the child process standard output, input and
     error output respectively.
-    
+
     @b wxPerl note: In wxPerl this class has an additional @c Destroy method,
     for explicit destruction.
-    
+
     @library{wxbase}
     @category{appmanagement}
-    
+
     @seealso
     wxExecute, @ref overview_sampleexec "exec sample"
 */
@@ -61,17 +61,17 @@ public:
         former value has no particular effect while using the latter one is equivalent
         to calling Redirect().
         
-        @param parent 
+        @param parent
         The event handler parent.
         
-        @param id 
+        @param id
         id of an event.
         
-        @param flags 
+        @param flags
         either wxPROCESS_DEFAULT or wxPROCESS_REDIRECT
     */
     wxProcess(wxEvtHandler * parent = @NULL, int id = -1);
-        wxProcess(int flags);
+    wxProcess(int flags);
     //@}
 
     /**
@@ -176,15 +176,15 @@ public:
                             int flags = wxKILL_NOCHILDREN);
 
     /**
-        It is called when the process with the pid 
+        It is called when the process with the pid
         
         @param pid finishes.
         It raises a wxWidgets event when it isn't overridden.
         
-        pid 
+        pid
         The pid of the process which has just terminated.
         
-        @param status 
+        @param status
         The exit code of the process.
     */
     void OnTerminate(int pid, int status);
@@ -201,10 +201,10 @@ public:
         does mean that the child process should be told to quit before the main program
         exits to avoid memory leaks.
         
-        @param cmd 
+        @param cmd
         The command to execute, including optional arguments.
         
-        @param flags 
+        @param flags
         The flags to pass to wxExecute.
           NOTE: wxEXEC_SYNC should not be used.
         
@@ -228,12 +228,12 @@ public:
 /**
     @class wxProcessEvent
     @wxheader{process.h}
-    
+
     A process event is sent when a process is terminated.
-    
+
     @library{wxbase}
     @category{events}
-    
+
     @seealso
     wxProcess, @ref overview_eventhandlingoverview "Event handling overview"
 */

@@ -9,15 +9,15 @@
 /**
     @class wxMiniFrame
     @wxheader{minifram.h}
-    
+
     A miniframe is a frame with a small title bar. It is suitable for floating
     toolbars that must not
     take up too much screen area.
-    
+
     An example of mini frame can be seen in the @ref overview_sampledialogs
-    "dialogs sample" 
+    "dialogs sample"
     using the "Mini frame'' command of the "Generic dialogs'' submenu.
-    
+
     @beginStyleTable
     @style{wxICONIZE}:
            Display the frame iconized (minimized) (Windows only).
@@ -44,10 +44,10 @@
     @style{wxRESIZE_BORDER}:
            Displays a resizeable border around the window.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{managedwnd}
-    
+
     @seealso
     wxMDIParentFrame, wxMDIChildFrame, wxFrame, wxDialog
 */
@@ -58,28 +58,28 @@ public:
     /**
         Constructor, creating the window.
         
-        @param parent 
+        @param parent
         The window parent. This may be @NULL. If it is non-@NULL, the frame will
         always be displayed on top of the parent window on Windows.
         
-        @param id 
+        @param id
         The window identifier. It may take a value of -1 to indicate a default value.
         
-        @param title 
+        @param title
         The caption to be displayed on the frame's title bar.
         
-        @param pos 
+        @param pos
         The window position. The value wxDefaultPosition indicates a default position, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param size 
+        @param size
         The window size. The value wxDefaultSize indicates a default size, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param style 
+        @param style
         The window style. See wxMiniFrame.
         
-        @param name 
+        @param name
         The name of the window. This parameter is used to associate a name with the
         item,
         allowing the application user to set Motif resource values for
@@ -90,12 +90,12 @@ public:
         @sa Create()
     */
     wxMiniFrame();
-        wxMiniFrame(wxWindow* parent, wxWindowID id,
-                    const wxString& title,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxCAPTION | wxRESIZE_BORDER,
-                    const wxString& name = "frame");
+    wxMiniFrame(wxWindow* parent, wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxCAPTION | wxRESIZE_BORDER,
+                const wxString& name = "frame");
     //@}
 
     /**

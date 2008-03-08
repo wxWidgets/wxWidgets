@@ -9,16 +9,16 @@
 /**
     @class wxToolTip
     @wxheader{tooltip.h}
-    
+
     This class holds information about a tooltip associated with a window
     (see wxWindow::SetToolTip).
-    
+
     The four static methods, wxToolTip::Enable,
-    wxToolTip::SetDelay 
-    wxToolTip::SetAutoPop and 
+    wxToolTip::SetDelay
+    wxToolTip::SetAutoPop and
     wxToolTip::SetReshow can be used to globally
     alter tooltips behaviour.
-    
+
     @library{wxcore}
     @category{help}
 */

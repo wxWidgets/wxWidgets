@@ -9,39 +9,39 @@
 /**
     @class wxMimeTypesManager
     @wxheader{mimetype.h}
-    
+
     This class allows the application to retrieve the information about all known
     MIME types from a system-specific location and the filename extensions to the
     MIME types and vice versa. After initialization the functions
-    wxMimeTypesManager::GetFileTypeFromMimeType 
-    and wxMimeTypesManager::GetFileTypeFromExtension 
+    wxMimeTypesManager::GetFileTypeFromMimeType
+    and wxMimeTypesManager::GetFileTypeFromExtension
     may be called: they will return a wxFileType object which
     may be further queried for file description, icon and other attributes.
-    
+
     @b Windows: MIME type information is stored in the registry and no additional
     initialization is needed.
-    
+
     @b Unix: MIME type information is stored in the files mailcap and mime.types
     (system-wide) and .mailcap and .mime.types in the current user's home directory:
     all of these files are searched for and loaded if found by default. However,
-    additional functions 
-    wxMimeTypesManager::ReadMailcap and 
+    additional functions
+    wxMimeTypesManager::ReadMailcap and
     wxMimeTypesManager::ReadMimeTypes are
     provided to load additional files.
-    
-    If GNOME or KDE desktop environment is installed, then wxMimeTypesManager 
+
+    If GNOME or KDE desktop environment is installed, then wxMimeTypesManager
     gathers MIME information from respective files (e.g. .kdelnk files under KDE).
-    
+
     NB: Currently, wxMimeTypesManager is limited to reading MIME type information
     but it will support modifying it as well in future versions.
-    
+
     @library{wxbase}
     @category{misc}
-    
+
     @seealso
     wxFileType
 */
-class wxMimeTypesManager 
+class wxMimeTypesManager
 {
 public:
     /**
@@ -169,7 +169,7 @@ public:
 /**
     @class wxFileType
     @wxheader{mimetype.h}
-    
+
     This class holds information about a given @e file type. File type is the same
     as
     MIME type under Unix, but under Windows it corresponds more to an extension than
@@ -180,13 +180,13 @@ public:
     contents of given MIME type. Depending on how it was created some fields may be
     unknown so the return value of all the accessors @b must be checked: @false
     will be returned if the corresponding information couldn't be found.
-    
+
     The objects of this class are never created by the application code but are
-    returned by wxMimeTypesManager::GetFileTypeFromMimeType and 
+    returned by wxMimeTypesManager::GetFileTypeFromMimeType and
     wxMimeTypesManager::GetFileTypeFromExtension methods.
     But it is your responsibility to delete the returned pointer when you're done
     with it!
-    
+
     A brief reminder about what the MIME types are (see the RFC 1341 for more
     information): basically, it is just a pair category/type (for example,
     "text/plain") where the category is a basic indication of what a file is.
@@ -194,18 +194,18 @@ public:
     type is a precise definition of the document format: "plain" in the example
     above means just ASCII text without any formatting, while "text/html" is the
     HTML document source.
-    
+
     A MIME type may have one or more associated extensions: "text/plain" will
     typically correspond to the extension ".txt", but may as well be associated with
     ".ini" or ".conf".
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxMimeTypesManager
 */
-class wxFileType 
+class wxFileType
 {
 public:
     /**
@@ -276,7 +276,7 @@ public:
         (efficient) way to retrieve associated extensions from the given MIME type on
         this platform, so it will only return @true if the wxFileType object was
         created
-        by wxMimeTypesManager::GetFileTypeFromExtension 
+        by wxMimeTypesManager::GetFileTypeFromExtension
         function in the first place.
     */
     bool GetExtensions(wxArrayString& extensions);
@@ -318,7 +318,7 @@ public:
         string pointed to by @e command is filled with the command which must be
         executed (see wxExecute) in order to open the file of the
         given type. In this case, the name of the file as well as any other parameters
-        is retrieved from MessageParameters() 
+        is retrieved from MessageParameters()
         class.
         
         In the second case, only the filename is specified and the command to be used
@@ -328,7 +328,7 @@ public:
     */
     bool GetOpenCommand(wxString* command,
                         MessageParameters& params);
-        wxString GetOpenCommand(const wxString& filename);
+    wxString GetOpenCommand(const wxString& filename);
     //@}
 
     /**

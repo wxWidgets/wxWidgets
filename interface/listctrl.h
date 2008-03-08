@@ -9,12 +9,12 @@
 /**
     @class wxListCtrl
     @wxheader{listctrl.h}
-    
+
     A list control presents lists in a number of formats: list view, report view,
     icon view and small icon view. In any case, elements are numbered from zero.
     For all these modes, the items are stored in the control and must be added to
     it using wxListCtrl::InsertItem method.
-    
+
     A special case of report view quite different from the other modes of the list
     control is a virtual control in which the items data (including text, images
     and attributes) is managed by the main program and is requested by the control
@@ -30,19 +30,19 @@
     practically infinite number of items. For example, in a multiple selection
     virtual list control, the selections won't be sent when many items are selected
     at once because this could mean iterating over all the items.
-    
+
     Using many of wxListCtrl features is shown in the
     @ref overview_samplelistctrl "corresponding sample".
-    
+
     To intercept events from a list control, use the event table macros described
     in wxListEvent.
-    
-    @b Mac Note: Starting with 2.8, wxListCtrl uses a native implementation for 
+
+    @b Mac Note: Starting with 2.8, wxListCtrl uses a native implementation for
     report mode, and uses a generic implementation for other modes. You can use the
     generic implementation for report mode as well by setting the
     mac.listctrl.always_use_generic wxSystemOption to
     1.
-    
+
     @beginStyleTable
     @style{wxLC_LIST}:
            Multicolumn list view, with optional small icons. Columns are
@@ -81,11 +81,11 @@
     @style{wxLC_VRULES}:
            Draws light vertical rules between columns in report mode.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{listctrl.png}
-    
+
     @seealso
     @ref overview_wxlistctrloverview "wxListCtrl overview", wxListView, wxListBox,
     wxTreeCtrl, wxImageList, wxListEvent, wxListItem
@@ -97,37 +97,37 @@ public:
     /**
         Constructor, creating and showing a list control.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then the window is sized
         appropriately.
         
-        @param style 
+        @param style
         Window style. See wxListCtrl.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxListCtrl();
-        wxListCtrl(wxWindow* parent, wxWindowID id,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxLC_ICON,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxListCtrlNameStr);
+    wxListCtrl(wxWindow* parent, wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxLC_ICON,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxListCtrlNameStr);
     //@}
 
     /**
@@ -245,8 +245,8 @@ public:
     */
     long FindItem(long start, const wxString& str,
                   bool partial = @false);
-        long FindItem(long start, long data);
-        long FindItem(long start, const wxPoint& pt, int direction);
+    long FindItem(long start, long data);
+    long FindItem(long start, const wxPoint& pt, int direction);
     //@}
 
     /**
@@ -476,11 +476,11 @@ public:
         column @e subItem.
         
         This method is only meaningfull when the wxListCtrl is in the report mode. If
-        @e subItem parameter is equal to the special value 
+        @e subItem parameter is equal to the special value
         @c wxLIST_GETSUBITEMRECT_WHOLEITEM the return value is the same as
         for GetItemRect().
         
-        @e code can be one of @c wxLIST_RECT_BOUNDS, 
+        @e code can be one of @c wxLIST_RECT_BOUNDS,
         @c wxLIST_RECT_ICON or @c wxLIST_RECT_LABEL.
         
         This function is new since wxWidgets version 2.7.0
@@ -568,7 +568,7 @@ public:
         wxLIST_HITTEST_ONITEMSTATEICON.
         
         If @e ptrSubItem is not @NULL and the wxListCtrl is in the report
-        mode the subitem (or column) number will also be provided. 
+        mode the subitem (or column) number will also be provided.
         This feature is only available in version 2.7.0 or higher and is currently only
         implemented under wxMSW and requires at least comctl32.dll of verion 4.70 on
         the host system or the value stored in @e ptrSubItem will be always -1. To
@@ -583,32 +583,32 @@ public:
         For report view mode (only), inserts a column. For more details, see SetItem().
     */
     long InsertColumn(long col, wxListItem& info);
-        long InsertColumn(long col, const wxString& heading,
-                          int format = wxLIST_FORMAT_LEFT,
-                          int width = -1);
+    long InsertColumn(long col, const wxString& heading,
+                      int format = wxLIST_FORMAT_LEFT,
+                      int width = -1);
     //@}
 
     //@{
     /**
         Insert an image/string item.
         
-        @param info 
+        @param info
         wxListItem object
         
-        @param index 
+        @param index
         Index of the new item, supplied by the application
         
-        @param label 
+        @param label
         String label
         
-        @param imageIndex 
+        @param imageIndex
         index into the image list associated with this control and view style
     */
     long InsertItem(wxListItem& info);
-        long InsertItem(long index, const wxString& label);
-        long InsertItem(long index, int imageIndex);
-        long InsertItem(long index, const wxString& label,
-                        int imageIndex);
+    long InsertItem(long index, const wxString& label);
+    long InsertItem(long index, int imageIndex);
+    long InsertItem(long index, const wxString& label,
+                    int imageIndex);
     //@}
 
     /**
@@ -617,7 +617,7 @@ public:
         for the specified @c item or @NULL to use the default appearance
         parameters.
         
-        wxListCtrl will not delete the pointer or keep a reference of it. You can 
+        wxListCtrl will not delete the pointer or keep a reference of it. You can
         return the same wxListItemAttr pointer for every OnGetItemAttr call.
         
         The base class version always returns @NULL.
@@ -747,64 +747,64 @@ public:
         Sets a string field at a particular column.
     */
     bool SetItem(wxListItem& info);
-        long SetItem(long index, int col, const wxStringamp; label,
-                     int imageId = -1);
-        m_mask m_state field is valid.
+    long SetItem(long index, int col, const wxStringamp; label,
+                 int imageId = -1);
+    m_mask m_state field is valid.
 
 
 
 
 
-wxLIST_MASK_TEXT
+    wxLIST_MASK_TEXT
 
 
 
 
-The m_text field is valid.
-
-
-
-
-
-wxLIST_MASK_IMAGE
-
-
-
-
-The m_image field is valid.
+    The m_text field is valid.
 
 
 
 
 
-wxLIST_MASK_DATA
+    wxLIST_MASK_IMAGE
 
 
 
 
-The m_data field is valid.
-
-
-
-
-
-wxLIST_MASK_WIDTH
-
-
-
-
-The m_width field is valid.
+    The m_image field is valid.
 
 
 
 
 
-wxLIST_MASK_FORMAT
+    wxLIST_MASK_DATA
 
 
 
 
-The m_format field is valid.
+    The m_data field is valid.
+
+
+
+
+
+    wxLIST_MASK_WIDTH
+
+
+
+
+    The m_width field is valid.
+
+
+
+
+
+    wxLIST_MASK_FORMAT
+
+
+
+
+    The m_format field is valid.
 
 
 
@@ -818,105 +818,105 @@ The m_stateMask and m_state members take flags from the following:
 
 
 
-wxLIST_STATE_DONTCARE
+    wxLIST_STATE_DONTCARE
 
 
 
 
-Don't care what the state is. Win32 only. 
-
-
-
-
-
-wxLIST_STATE_DROPHILITED
-
-
-
-
-The item is highlighted to receive a drop event. Win32 only. 
+    Don't care what the state is. Win32 only.
 
 
 
 
 
-wxLIST_STATE_FOCUSED
+    wxLIST_STATE_DROPHILITED
 
 
 
 
-The item has the focus.
-
-
-
-
-
-wxLIST_STATE_SELECTED
-
-
-
-
-The item is selected.
+    The item is highlighted to receive a drop event. Win32 only.
 
 
 
 
 
-wxLIST_STATE_CUT
+    wxLIST_STATE_FOCUSED
 
 
 
 
-The item is in the cut state. Win32 only. 
+    The item has the focus.
 
 
 
 
 
-The wxListItem object can also contain item-specific colour and font
-information: for this you need to call one of SetTextColour(),
-SetBackgroundColour() or SetFont() functions on it passing it the colour/font
-to use. If the colour/font is not specified, the default list control
-colour/font is used.
-long SetItem(long index, int col, const wxString& label,
-             int imageId = -1);
+    wxLIST_STATE_SELECTED
+
+
+
+
+    The item is selected.
+
+
+
+
+
+    wxLIST_STATE_CUT
+
+
+
+
+    The item is in the cut state. Win32 only.
+
+
+
+
+
+    The wxListItem object can also contain item-specific colour and font
+    information: for this you need to call one of SetTextColour(),
+    SetBackgroundColour() or SetFont() functions on it passing it the colour/font
+    to use. If the colour/font is not specified, the default list control
+    colour/font is used.
+    long SetItem(long index, int col, const wxString& label,
+    int imageId = -1);
     //@}
 
     /**
-        Sets the background colour for this item. This function only works in report
-        view.
-        
-        The colour can be retrieved using
-        GetItemBackgroundColour().
+    Sets the background colour for this item. This function only works in report
+    view.
+
+    The colour can be retrieved using
+    GetItemBackgroundColour().
     */
     void SetItemBackgroundColour(long item, const wxColour& col);
 
     /**
-        Sets the image associated with the item. In report view, you can specify the
-        column.
-        The image is an index into the image list associated with the list control.
+    Sets the image associated with the item. In report view, you can specify the
+    column.
+    The image is an index into the image list associated with the list control.
     */
     bool SetItemColumnImage(long item, long column, int image);
 
     /**
-        This method can only be used with virtual list controls. It is used to indicate
-        to the control the number of items it contains. After calling it, the main
-        program should be ready to handle calls to various item callbacks (such as
-        wxListCtrl::OnGetItemText) for all items in the range
-        from 0 to @e count.
+    This method can only be used with virtual list controls. It is used to indicate
+    to the control the number of items it contains. After calling it, the main
+    program should be ready to handle calls to various item callbacks (such as
+    wxListCtrl::OnGetItemText) for all items in the range
+    from 0 to @e count.
     */
     void SetItemCount(long count);
 
     /**
-        Associates application-defined data with this item.
-        
-        Notice that this function cannot be used to associate pointers with the control
-        items, use SetItemPtrData() instead.
+    Associates application-defined data with this item.
+
+    Notice that this function cannot be used to associate pointers with the control
+    items, use SetItemPtrData() instead.
     */
     bool SetItemData(long item, long data);
 
     /**
-        Sets the item's font.
+    Sets the item's font.
     */
     void SetItemFont(long item, const wxFont& font);
 
@@ -929,7 +929,7 @@ long SetItem(long index, int col, const wxString& label,
         used.
     */
     bool SetItemImage(long item, int image);
-        bool SetItemImage(long item, int image, int selImage);
+    bool SetItemImage(long item, int image, int selImage);
     //@}
 
     /**
@@ -991,13 +991,13 @@ long SetItem(long index, int col, const wxString& label,
         second one and positive value if the first one is greater than the second one
         (the same convention as used by @c qsort(3)).
         
-        @param item1 
+        @param item1
         client data associated with the first item (NOT the index).
         
-        @param item2 
+        @param item2
         client data associated with the second item (NOT the index).
         
-        @param data 
+        @param data
         the value passed to SortItems() itself.
     */
     bool SortItems(wxListCtrlCompare fnSortCallBack, long data);
@@ -1007,12 +1007,12 @@ long SetItem(long index, int col, const wxString& label,
 /**
     @class wxListEvent
     @wxheader{listctrl.h}
-    
+
     A list event holds information about events associated with wxListCtrl objects.
-    
+
     @library{wxbase}
     @category{events}
-    
+
     @seealso
     wxListCtrl
 */
@@ -1104,17 +1104,17 @@ public:
 /**
     @class wxListItemAttr
     @wxheader{listctrl.h}
-    
+
     Represents the attributes (color, font, ...) of a
     wxListCtrl wxListItem.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxlistctrloverview "wxListCtrl overview", wxListCtrl, wxListItem
 */
-class wxListItemAttr 
+class wxListItemAttr
 {
 public:
     //@{
@@ -1123,9 +1123,9 @@ public:
         background colors and font.
     */
     wxListItemAttr();
-        wxListItemAttr(const wxColour colText,
-                       const wxColour colBack,
-                       const wxFont font);
+    wxListItemAttr(const wxColour colText,
+                   const wxColour colBack,
+                   const wxFont font);
     //@}
 
     /**
@@ -1178,21 +1178,21 @@ public:
 /**
     @class wxListView
     @wxheader{listctrl.h}
-    
-    This class currently simply presents a simpler to use interface for the 
+
+    This class currently simply presents a simpler to use interface for the
     wxListCtrl -- it can be thought of as a @e faade
-    for that complicated class. Using it is preferable to using 
+    for that complicated class. Using it is preferable to using
     wxListCtrl directly whenever possible because in the
     future some ports might implement wxListView but not the full set of wxListCtrl
     features.
-    
+
     Other than different interface, this class is identical to wxListCtrl. In
     particular, it uses the same events, same window styles and so on.
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{listview.png}
-    
+
     @seealso
     wxListView::SetColumnImage
 */
@@ -1202,7 +1202,7 @@ public:
     /**
         Resets the column image -- after calling this function, no image will be shown.
         
-        @param col 
+        @param col
         the column to clear image for
         
         @sa SetColumnImage()
@@ -1240,7 +1240,7 @@ public:
     long GetNextSelected(long item);
 
     /**
-        Returns @true if the item with the given @e index is selected, 
+        Returns @true if the item with the given @e index is selected,
         @false otherwise.
         
         @sa GetFirstSelected(), GetNextSelected()
@@ -1250,10 +1250,10 @@ public:
     /**
         Selects or unselects the given item.
         
-        @param n 
+        @param n
         the item to select or unselect
         
-        @param on 
+        @param on
         if @true (default), selects the item, otherwise unselects it
         
         @sa wxListCtrl::SetItemState
@@ -1264,10 +1264,10 @@ public:
         Sets the column image for the specified column. To use the column images, the
         control must have a valid image list with at least one image.
         
-        @param col 
+        @param col
         the column to set image for
         
-        @param image 
+        @param image
         the index of the column image in the controls image list
     */
     void SetColumnImage(int col, int image);
@@ -1277,9 +1277,9 @@ public:
 /**
     @class wxListItem
     @wxheader{listctrl.h}
-    
+
     This class stores information about a wxListCtrl item or column.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
@@ -1379,12 +1379,12 @@ public:
         wxLIST_STATE_DONTCARE
         
         
-        Don't care what the state is. Win32 only. 
+        Don't care what the state is. Win32 only.
         
         wxLIST_STATE_DROPHILITED
         
         
-        The item is highlighted to receive a drop event. Win32 only. 
+        The item is highlighted to receive a drop event. Win32 only.
         
         wxLIST_STATE_FOCUSED
         
@@ -1440,7 +1440,7 @@ public:
         client data is associated with the item and not with subitems.
     */
     void SetData(long data);
-        void SetData(void* data);
+    void SetData(void* data);
     //@}
 
     /**

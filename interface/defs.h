@@ -1,47 +1,47 @@
 /////////////////////////////////////////////////////////////////////////////
-    // Name:        defs.h
-    // Purpose:     documentation for global functions
-    // Author:      wxWidgets team
-    // RCS-ID:      $Id$
-    // Licence:     wxWindows license
-    /////////////////////////////////////////////////////////////////////////////
-    
-    //@{
+// Name:        defs.h
+// Purpose:     documentation for global functions
+// Author:      wxWidgets team
+// RCS-ID:      $Id$
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
+
+//@{
 /**
     These macros will swap the bytes of the @e value variable from little
     endian to big endian or vice versa unconditionally, i.e. independently of the
     current platform.
 */
 wxInt32 wxINT32_SWAP_ALWAYS(wxInt32 value);
-    wxUint32 wxUINT32_SWAP_ALWAYS(wxUint32 value);
-    wxInt16 wxINT16_SWAP_ALWAYS(wxInt16 value);
-    wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value);
+wxUint32 wxUINT32_SWAP_ALWAYS(wxUint32 value);
+wxInt16 wxINT16_SWAP_ALWAYS(wxInt16 value);
+wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value);
 //@}
 
 
-    //@{
+//@{
 /**
     This macro will swap the bytes of the @e value variable from little
     endian to big endian or vice versa if the program is compiled on a
     little-endian architecture (such as Intel PCs). If the program has
     been compiled on a big-endian architecture, the value will be unchanged.
-    
+
     Use these macros to read data from and write data to a file that stores
     data in big-endian format.
 */
 wxInt32 wxINT32_SWAP_ON_LE(wxInt32 value);
-    wxUint32 wxUINT32_SWAP_ON_LE(wxUint32 value);
-    wxInt16 wxINT16_SWAP_ON_LE(wxInt16 value);
-    wxUint16 wxUINT16_SWAP_ON_LE(wxUint16 value);
+wxUint32 wxUINT32_SWAP_ON_LE(wxUint32 value);
+wxInt16 wxINT16_SWAP_ON_LE(wxInt16 value);
+wxUint16 wxUINT16_SWAP_ON_LE(wxUint16 value);
 //@}
 
 /**
     This macro is similar to wxDEPRECATED but can be used
     to not only declare the function @e func as deprecated but to also provide
     its (inline) implementation @e body.
-    
+
     It can be used as following:
-    
+
     @code
     class wxFoo
         {
@@ -77,14 +77,14 @@ wxInt32 wxINT32_SWAP_ON_LE(wxInt32 value);
             RefCounted() { m_nRef = 1; }
             void IncRef() { m_nRef++ ; }
             void DecRef() { if ( !--m_nRef ) delete this; }
-    
+
         private:
             ~RefCounted() { }
-    
+
             wxSUPPRESS_GCC_PRIVATE_DTOR(RefCounted)
         };
     @endcode
-    
+
     Notice that there should be no semicolon after this macro.
 */
 #define wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(name)     /* implementation is private */
@@ -95,14 +95,14 @@ wxInt32 wxINT32_SWAP_ON_LE(wxInt32 value);
     endian to big endian or vice versa if the program is compiled on a
     big-endian architecture (such as Sun work stations). If the program has
     been compiled on a little-endian architecture, the value will be unchanged.
-    
+
     Use these macros to read data from and write data to a file that stores
     data in little-endian (for example Intel i386) format.
 */
 wxInt32 wxINT32_SWAP_ON_BE(wxInt32 value);
-    wxUint32 wxUINT32_SWAP_ON_BE(wxUint32 value);
-    wxInt16 wxINT16_SWAP_ON_BE(wxInt16 value);
-    wxUint16 wxUINT16_SWAP_ON_BE(wxUint16 value);
+wxUint32 wxUINT32_SWAP_ON_BE(wxUint32 value);
+wxInt16 wxINT16_SWAP_ON_BE(wxInt16 value);
+wxUint16 wxUINT16_SWAP_ON_BE(wxUint16 value);
 //@}
 
 /**
@@ -110,13 +110,13 @@ wxInt32 wxINT32_SWAP_ON_BE(wxInt32 value);
     indicating that this function is deprecated (i.e. obsolete and planned to be
     removed in the future) when it is used. Only Visual C++ 7 and higher and g++
     compilers currently support this functionality.
-    
+
     Example of use:
-    
+
     @code
     // old function, use wxString version instead
         wxDEPRECATED( void wxGetSomething(char *buf, size_t len) );
-    
+
         // ...
         wxString wxGetSomething();
     @endcode
@@ -128,7 +128,7 @@ wxInt32 wxINT32_SWAP_ON_BE(wxInt32 value);
     which support it or its replacement for those that don't. It must be used to
     preserve the value of a @c va_list object if you need to use it after
     passing it to another function because it can be modified by the latter.
-    
+
     As with @c va_start, each call to @c wxVaCopy must have a matching
     @c va_end.
 */

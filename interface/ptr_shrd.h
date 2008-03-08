@@ -9,19 +9,19 @@
 /**
     @class wxSharedPtrT
     @wxheader{ptr_shrd.h}
-    
+
     A smart pointer with non-intrusive reference counting. It is modeled
-    after @b boost::shared_ptr and can be used with STL containers 
+    after @b boost::shared_ptr and can be used with STL containers
     and wxVector - unlike @b std::auto_ptr
     and wxScopedPtr.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxScopedPtr, wxWeakRef, wxObjectDataPtr
 */
-class wxSharedPtr<T> 
+class wxSharedPtr<T>
 {
 public:
     //@{
@@ -29,7 +29,7 @@ public:
         Constructors.
     */
     wxSharedPtrT(T* ptr = @NULL);
-        wxSharedPtrT(const wxSharedPtr<T>& tocopy);
+    wxSharedPtrT(const wxSharedPtr<T>& tocopy);
     //@}
 
     /**
@@ -43,12 +43,12 @@ public:
     T* get();
 
     /**
-        Conversion to a boolean expression (in a variant which is not 
+        Conversion to a boolean expression (in a variant which is not
         convertable to anything but a boolean expression). If this class
         contains a valid pointer it will return @e @true, if it contains
         a @NULL pointer it will return @e @false.
     */
-     operator unspecified_bool_type();
+    operator unspecified_bool_type();
 
     /**
         Returns a reference to the object. If the internal pointer is @NULL this

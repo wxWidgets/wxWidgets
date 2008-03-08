@@ -9,27 +9,27 @@
 /**
     @class wxZipNotifier
     @wxheader{zipstrm.h}
-    
+
     If you need to know when a wxZipInputStream
     updates a wxZipEntry,
     you can create a notifier by deriving from this abstract base class,
     overriding wxZipNotifier::OnEntryUpdated.
     An instance of your notifier class can then be assigned to wxZipEntry
     objects, using wxZipEntry::SetNotifier.
-    
+
     Setting a notifier is not usually necessary. It is used to handle
     certain cases when modifying an zip in a pipeline (i.e. between
     non-seekable streams).
     See '@ref overview_wxarcnoseek "Archives on non-seekable streams"'.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipEntry,
     wxZipInputStream, wxZipOutputStream
 */
-class wxZipNotifier 
+class wxZipNotifier
 {
 public:
     /**
@@ -43,12 +43,12 @@ public:
 /**
     @class wxZipEntry
     @wxheader{zipstrm.h}
-    
+
     Holds the meta-data for an entry in a zip.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxarc "Archive formats such as zip", wxZipInputStream,
     wxZipOutputStream, wxZipNotifier
@@ -61,7 +61,7 @@ public:
         Copy constructor.
     */
     wxZipEntry(const wxString& name = wxEmptyString);
-        wxZipEntry(const wxZipEntry& entry);
+    wxZipEntry(const wxZipEntry& entry);
     //@}
 
     /**
@@ -74,7 +74,7 @@ public:
         A short comment for this entry.
     */
     wxString GetComment();
-        void SetComment(const wxString& comment);
+    void SetComment(const wxString& comment);
     //@}
 
     //@{
@@ -98,7 +98,7 @@ public:
         @ref mode() Get/SetMode
     */
     wxUint32 GetExternalAttributes();
-        void SetExternalAttributes(wxUint32 attr);
+    void SetExternalAttributes(wxUint32 attr);
     //@}
 
     //@{
@@ -109,8 +109,8 @@ public:
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
     const char* GetExtra();
-        size_t GetExtraLen();
-        void SetExtra(const char* extra, size_t len);
+    size_t GetExtraLen();
+    void SetExtra(const char* extra, size_t len);
     //@}
 
     //@{
@@ -121,8 +121,8 @@ public:
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
     const char* GetLocalExtra();
-        size_t GetLocalExtraLen();
-        void SetLocalExtra(const char* extra, size_t len);
+    size_t GetLocalExtraLen();
+    void SetLocalExtra(const char* extra, size_t len);
     //@}
 
     //@{
@@ -135,7 +135,7 @@ public:
         choose the method when writing the entry.
     */
     int GetMethod();
-        void SetMethod(int method);
+    void SetMethod(int method);
     //@}
 
     //@{
@@ -148,12 +148,12 @@ public:
         stores @c mode in GetExternalAttributes().
         
         Note that the default constructor
-        sets @ref systemmadeby() GetSystemMadeBy to 
+        sets @ref systemmadeby() GetSystemMadeBy to
         wxZIP_SYSTEM_MSDOS by default. So to be able to store unix
         permissions when creating zips, call SetSystemMadeBy(wxZIP_SYSTEM_UNIX).
     */
     int GetMode();
-        void SetMode(int mode);
+    void SetMode(int mode);
     //@}
 
     //@{
@@ -163,7 +163,7 @@ public:
         able to store unix permissions using @ref mode() SetMode.
     */
     int GetSystemMadeBy();
-        void SetSystemMadeBy(int system);
+    void SetSystemMadeBy(int system);
     //@}
 
     /**
@@ -191,9 +191,9 @@ public:
         @sa @ref overview_wxarcbyname "Looking up an archive entry by name"
     */
     wxString GetInternalName();
-        wxString GetInternalName(const wxString& name,
-                                 wxPathFormat format = wxPATH_NATIVE,
-                                 bool* pIsDir = @NULL);
+    wxString GetInternalName(const wxString& name,
+                             wxPathFormat format = wxPATH_NATIVE,
+                             bool* pIsDir = @NULL);
     //@}
 
     /**
@@ -207,7 +207,7 @@ public:
         Indicates that this entry's data is text in an 8-bit encoding.
     */
     bool IsText();
-        void SetIsText(bool isText = @true);
+    void SetIsText(bool isText = @true);
     //@}
 
     //@{
@@ -225,7 +225,7 @@ public:
         @sa @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipNotifier
     */
     void SetNotifier(wxZipNotifier& notifier);
-        void UnsetNotifier();
+    void UnsetNotifier();
     //@}
 
     /**
@@ -238,22 +238,22 @@ public:
 /**
     @class wxZipInputStream
     @wxheader{zipstrm.h}
-    
+
     Input stream for reading zip files.
-    
+
     wxZipInputStream::GetNextEntry returns an
      wxZipEntry object containing the meta-data
     for the next entry in the zip (and gives away ownership). Reading from
     the wxZipInputStream then returns the entry's data. Eof() becomes @true
     after an attempt has been made to read past the end of the entry's data.
     When there are no more entries, GetNextEntry() returns @NULL and sets Eof().
-    
+
     Note that in general zip entries are not seekable, and
     wxZipInputStream::SeekI() always returns wxInvalidOffset.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     @ref overview_wxarc "Archive formats such as zip", wxZipEntry, wxZipOutputStream
 */
@@ -270,10 +270,10 @@ public:
     */
     wxZipInputStream(wxInputStream& stream,
                      wxMBConv& conv = wxConvLocal);
-        wxZipInputStream(wxInputStream* stream,
-                         wxMBConv& conv = wxConvLocal);
-        wxZipInputStream(const wxString& archive,
-                         const wxString& file);
+    wxZipInputStream(wxInputStream* stream,
+                     wxMBConv& conv = wxConvLocal);
+    wxZipInputStream(const wxString& archive,
+                     const wxString& file);
     //@}
 
     /**
@@ -320,13 +320,13 @@ public:
 /**
     @class wxZipClassFactory
     @wxheader{zipstrm.h}
-    
+
     Class factory for the zip archive format. See the base class
     for details.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxarc "Archive formats such as zip", @ref overview_wxarcgeneric
     "Generic archive programming", wxZipEntry, wxZipInputStream, wxZipOutputStream
@@ -334,24 +334,24 @@ public:
 class wxZipClassFactory : public wxArchiveClassFactory
 {
 public:
-    
+
 };
 
 
 /**
     @class wxZipOutputStream
     @wxheader{zipstrm.h}
-    
+
     Output stream for writing zip files.
-    
+
     wxZipOutputStream::PutNextEntry is used to create
     a new entry in the output zip, then the entry's data is written to the
     wxZipOutputStream.  Another call to PutNextEntry() closes the current
     entry and begins the next.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     @ref overview_wxarc "Archive formats such as zip", wxZipEntry, wxZipInputStream
 */
@@ -373,8 +373,8 @@ public:
     */
     wxZipOutputStream(wxOutputStream& stream, int level = -1,
                       wxMBConv& conv = wxConvLocal);
-        wxZipOutputStream(wxOutputStream* stream, int level = -1,
-                          wxMBConv& conv = wxConvLocal);
+    wxZipOutputStream(wxOutputStream* stream, int level = -1,
+                      wxMBConv& conv = wxConvLocal);
     //@}
 
     /**
@@ -425,7 +425,7 @@ public:
         which currently is equivalent to 6.
     */
     int GetLevel();
-        void SetLevel(int level);
+    void SetLevel(int level);
     //@}
 
     /**
@@ -448,7 +448,7 @@ public:
         Create a new entry with the given name, timestamp and size.
     */
     bool PutNextEntry(wxZipEntry* entry);
-        bool PutNextEntry(const wxString& name);
+    bool PutNextEntry(const wxString& name);
     //@}
 
     /**

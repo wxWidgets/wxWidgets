@@ -9,20 +9,20 @@
 /**
     @class wxRichTextHTMLHandler
     @headerfile richtexthtml.h wx/richtext/richtexthtml.h
-    
+
     Handles HTML output (only) for wxRichTextCtrl content.
-    
+
     The most flexible way to use this class is to create a temporary object and call
     its functions directly, rather than use wxRichTextBuffer::SaveFile or
     wxRichTextCtrl::SaveFile.
-    
+
     Image handling requires a little extra work from the application, to choose an
     appropriate image format for the target HTML viewer and to clean up the
     temporary images
     later. If you are planning to load the HTML into a standard web browser, you can
     specify the handler flag wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_BASE64 (the default)
     and no extra work is required: the images will be written with the HTML.
-    
+
     However, if you want wxHTML compatibility, you will need to use
     wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY
     or wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_FILES. In this case, you must either call
@@ -31,7 +31,7 @@
     locations and delete them yourself when appropriate. You can call
     wxRichTextHTMLHandler::GetTemporaryImageLocations to
     get the array of temporary image names.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -59,8 +59,8 @@ public:
         for example after the user has viewed the HTML file.
     */
     bool DeleteTemporaryImages();
-        bool DeleteTemporaryImages(int flags,
-                                   const wxArrayString& imageLocations);
+    bool DeleteTemporaryImages(int flags,
+                               const wxArrayString& imageLocations);
     //@}
 
     /**

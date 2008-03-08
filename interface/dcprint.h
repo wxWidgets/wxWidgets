@@ -9,15 +9,15 @@
 /**
     @class wxPrinterDC
     @wxheader{dcprint.h}
-    
+
     A printer device context is specific to MSW and Mac, and allows access to any
     printer with a Windows or Macintosh driver. See wxDC for further
     information on device contexts, and wxDC::GetSize for
     advice on achieving the correct scaling for the page.
-    
+
     @library{wxcore}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", wxDC
 */
@@ -36,10 +36,10 @@ public:
         This constructor is deprecated and retained only for backward compatibility.
     */
     wxPrinterDC(const wxPrintData& printData);
-        wxPrinterDC(const wxString& driver, const wxString& device,
-                    const wxString& output,
-                    const bool interactive = @true,
-                    int orientation = wxPORTRAIT);
+    wxPrinterDC(const wxString& driver, const wxString& device,
+                const wxString& output,
+                const bool interactive = @true,
+                int orientation = wxPORTRAIT);
     //@}
 
     /**

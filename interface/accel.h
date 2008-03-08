@@ -9,35 +9,35 @@
 /**
     @class wxAcceleratorEntry
     @wxheader{accel.h}
-    
+
     An object used by an application wishing to create an @ref
     overview_wxacceleratortable "accelerator table".
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxAcceleratorTable, wxWindow::SetAcceleratorTable
 */
-class wxAcceleratorEntry 
+class wxAcceleratorEntry
 {
 public:
     //@{
     /**
         Constructor.
         
-        @param flags 
+        @param flags
         One of wxACCEL_ALT, wxACCEL_SHIFT, wxACCEL_CTRL and wxACCEL_NORMAL. Indicates
         which modifier key is held down.
         
-        @param keyCode 
+        @param keyCode
         The keycode to be detected. See Keycodes for a full list of keycodes.
         
-        @param cmd 
+        @param cmd
         The menu or control command identifier.
     */
     wxAcceleratorEntry();
-        wxAcceleratorEntry(int flags, int keyCode, int cmd);
+    wxAcceleratorEntry(int flags, int keyCode, int cmd);
     //@}
 
     /**
@@ -58,14 +58,14 @@ public:
     /**
         Sets the accelerator entry parameters.
         
-        @param flags 
+        @param flags
         One of wxACCEL_ALT, wxACCEL_SHIFT, wxACCEL_CTRL and wxACCEL_NORMAL. Indicates
         which modifier key is held down.
         
-        @param keyCode 
+        @param keyCode
         The keycode to be detected. See Keycodes for a full list of keycodes.
         
-        @param cmd 
+        @param cmd
         The menu or control command identifier.
     */
 #define void Set(int flags, int keyCode, int cmd)     /* implementation is private */
@@ -75,24 +75,24 @@ public:
 /**
     @class wxAcceleratorTable
     @wxheader{accel.h}
-    
+
     An accelerator table allows the application to specify a table of keyboard
     shortcuts for
     menus or other commands. On Windows and Mac OS X, menu or button commands are
     supported; on GTK,
     only menu commands are supported.
-    
+
     The object @b wxNullAcceleratorTable is defined to be a table with no data, and
     is the
     initial accelerator table for a window.
-    
+
     @library{wxcore}
     @category{misc}
-    
+
     @stdobjects
     Objects:
     wxNullAcceleratorTable
-    
+
     @seealso
     wxAcceleratorEntry, wxWindow::SetAcceleratorTable
 */
@@ -103,19 +103,19 @@ public:
     /**
         Loads the accelerator table from a Windows resource (Windows only).
         
-        @param n 
+        @param n
         Number of accelerator entries.
         
-        @param entries 
+        @param entries
         The array of entries.
         
-        @param resource 
+        @param resource
         Name of a Windows accelerator.
     */
     wxAcceleratorTable();
-        wxAcceleratorTable(const wxAcceleratorTable& bitmap);
-        wxAcceleratorTable(int n, wxAcceleratorEntry entries[]);
-        wxAcceleratorTable(const wxString& resource);
+    wxAcceleratorTable(const wxAcceleratorTable& bitmap);
+    wxAcceleratorTable(int n, wxAcceleratorEntry entries[]);
+    wxAcceleratorTable(const wxString& resource);
     //@}
 
     /**
@@ -133,7 +133,7 @@ public:
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".
         
-        @param accel 
+        @param accel
         Accelerator table to assign.
     */
     wxAcceleratorTable operator =(const wxAcceleratorTable& accel);

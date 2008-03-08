@@ -9,14 +9,14 @@
 /**
     @class wxAuiDockArt
     @headerfile dockart.h wx/aui/dockart.h
-    
+
     wxAuiDockArt is part of the wxAUI class framework.
     See also @ref overview_wxauioverview "wxAUI overview".
-    
+
     Dock art provider code - a dock provider provides all drawing
     functionality to the wxAui dock manager. This allows the dock
     manager to have a plugable look-and-feel.
-    
+
     By default, a wxAuiManager uses an
     instance of this class called @b wxAuiDefaultDockArt which
     provides bitmap art and a colour scheme that is adapted to
@@ -24,14 +24,14 @@
     class to alter its behaviour or write a completely new dock
     art class. Call wxAuiManager::SetArtProvider
     to make use this new dock art.
-    
+
     @library{wxaui}
     @category{aui}
-    
+
     @seealso
     wxAuiManager, wxAuiPaneInfo
 */
-class wxAuiDockArt 
+class wxAuiDockArt
 {
 public:
     /**

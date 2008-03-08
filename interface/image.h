@@ -9,19 +9,19 @@
 /**
     @class wxImageHandler
     @wxheader{image.h}
-    
+
     This is the base class for implementing image file loading/saving, and image
     creation from data.
     It is used within wxImage and is not normally seen by the application.
-    
+
     If you wish to extend the capabilities of wxImage, derive a class from
     wxImageHandler
     and add the handler using wxImage::AddHandler in your
     application initialisation.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxImage, wxInitAllImageHandlers
 */
@@ -49,7 +49,7 @@ public:
         of retrieving these individually, this function will return the number of
         available images.
         
-        @param stream 
+        @param stream
         Opened input stream for reading image data. Currently, the stream must support
         seeking.
         
@@ -80,16 +80,16 @@ public:
         individually, @e index
         indicates which image to read from the stream.
         
-        @param image 
+        @param image
         The image object which is to be affected by this operation.
         
-        @param stream 
+        @param stream
         Opened input stream for reading image data.
         
-        @param verbose 
+        @param verbose
         If set to @true, errors reported by the image handler will produce wxLogMessages.
         
-        @param index 
+        @param index
         The index of the image in the file (starting from zero).
         
         @returns @true if the operation succeeded, @false otherwise.
@@ -102,10 +102,10 @@ public:
     /**
         Saves a image in the output stream.
         
-        @param image 
+        @param image
         The image object which is to be affected by this operation.
         
-        @param stream 
+        @param stream
         Opened output stream for writing the data.
         
         @returns @true if the operation succeeded, @false otherwise.
@@ -117,7 +117,7 @@ public:
     /**
         Sets the handler extension.
         
-        @param extension 
+        @param extension
         Handler extension.
     */
     void SetExtension(const wxString& extension);
@@ -125,7 +125,7 @@ public:
     /**
         Sets the handler MIME type.
         
-        @param mimename 
+        @param mimename
         Handler MIME type.
     */
     void SetMimeType(const wxString& mimetype);
@@ -133,7 +133,7 @@ public:
     /**
         Sets the handler name.
         
-        @param name 
+        @param name
         Handler name.
     */
     void SetName(const wxString& name);
@@ -143,27 +143,27 @@ public:
 /**
     @class wxImage
     @wxheader{image.h}
-    
+
     This class encapsulates a platform-independent image. An image can be created
     from data, or using wxBitmap::ConvertToImage. An image
     can be loaded from a file in a variety of formats, and is extensible to new
     formats
     via image format handlers. Functions are available to set and get image bits, so
     it can be used for basic image manipulation.
-    
+
     A wxImage cannot (currently) be drawn directly to a wxDC. Instead,
     a platform-specific wxBitmap object must be created from it using
     the wxBitmap::wxBitmap(wxImage,int depth) constructor.
     This bitmap can then
     be drawn in a device context, using wxDC::DrawBitmap.
-    
+
     One colour value of the image may be used as a mask colour which will lead to
     the automatic
     creation of a wxMask object associated to the bitmap object.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @seealso
     wxBitmap, wxInitAllImageHandlers
 */
@@ -174,20 +174,20 @@ public:
     /**
         Creates an image from XPM data.
         
-        @param width 
+        @param width
         Specifies the width of the image.
         
-        @param height 
+        @param height
         Specifies the height of the image.
         
-        @param name 
+        @param name
         Name of the file from which to load the image.
         
-        @param stream 
+        @param stream
         Opened input stream from which to load the image. Currently, the stream must
         support seeking.
         
-        @param type 
+        @param type
         May be one of the following:
         
         wxBITMAP_TYPE_BMP
@@ -255,10 +255,10 @@ public:
         
         Will try to autodetect the format.
         
-        @param mimetype 
+        @param mimetype
         MIME type string (for example 'image/jpeg')
         
-        @param index 
+        @param index
         Index of the image to load in the case that the image file contains multiple
         images.
         This is only used by GIF, ICO and TIFF handlers. The default value (-1) means
@@ -266,7 +266,7 @@ public:
         the GIF and TIFF handler and as the largest and most colourful one by the ICO
         handler.
         
-        @param xpmData 
+        @param xpmData
         A pointer to XPM image data.
         
         @remarks Depending on how wxWidgets has been configured, not all formats
@@ -275,20 +275,20 @@ public:
         @sa LoadFile()
     */
     wxImage();
-        wxImage(const wxImage& image);
-        wxImage(const wxBitmap& bitmap);
-        wxImage(int width, int height, bool clear=@true);
-        wxImage(int width, int height, unsigned char* data,
-                bool static_data = @false);
-        wxImage(const wxString& name, long type = wxBITMAP_TYPE_ANY,
-                int index = -1);
-        wxImage(const wxString& name, const wxString& mimetype,
-                int index = -1);
-        wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY,
-                int index = -1);
-        wxImage(wxInputStream& stream, const wxString& mimetype,
-                int index = -1);
-        wxImage(const char* const* xpmData);
+    wxImage(const wxImage& image);
+    wxImage(const wxBitmap& bitmap);
+    wxImage(int width, int height, bool clear=@true);
+    wxImage(int width, int height, unsigned char* data,
+            bool static_data = @false);
+    wxImage(const wxString& name, long type = wxBITMAP_TYPE_ANY,
+            int index = -1);
+    wxImage(const wxString& name, const wxString& mimetype,
+            int index = -1);
+    wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY,
+            int index = -1);
+    wxImage(wxInputStream& stream, const wxString& mimetype,
+            int index = -1);
+    wxImage(const char* const* xpmData);
     //@}
 
     /**
@@ -303,7 +303,7 @@ public:
         returns @true if the current image handlers can read this file
     */
     static void AddHandler(wxImageHandler* handler);
-        See also bool CanRead(const wxString& filename);
+    See also bool CanRead(const wxString& filename);
     //@}
 
     /**
@@ -394,10 +394,10 @@ public:
         to black.
         Otherwise, the image data will be uninitialized.
         
-        @param width 
+        @param width
         The width of the image in pixels.
         
-        @param height 
+        @param height
         The height of the image in pixels.
         
         @returns @true if the call succeeded, @false otherwise.
@@ -410,10 +410,10 @@ public:
     void Destroy();
 
     /**
-        @param r,g,b 
+        @param r,g,b
         Pointers to variables to save the colour.
         
-        @param startR,startG,startB 
+        @param startR,startG,startB
         Initial values of the colour. Returned colour
         will have RGB values equal to or greater than these.
         
@@ -429,16 +429,16 @@ public:
     /**
         Finds the handler associated with the given MIME type.
         
-        @param name 
+        @param name
         The handler name.
         
-        @param extension 
+        @param extension
         The file extension, such as "bmp".
         
-        @param imageType 
+        @param imageType
         The image type, such as wxBITMAP_TYPE_BMP.
         
-        @param mimetype 
+        @param mimetype
         MIME type.
         
         @returns A pointer to the handler if found, @NULL otherwise.
@@ -446,10 +446,10 @@ public:
         @sa wxImageHandler
     */
     static wxImageHandler* FindHandler(const wxString& name);
-        static wxImageHandler* FindHandler(const wxString& extension,
-                                           long imageType);
-        static wxImageHandler* FindHandler(long imageType);
-        static wxImageHandler* FindHandlerMime(const wxString& mimetype);
+    static wxImageHandler* FindHandler(const wxString& extension,
+                                       long imageType);
+    static wxImageHandler* FindHandler(long imageType);
+    static wxImageHandler* FindHandlerMime(const wxString& mimetype);
     //@}
 
     //@{
@@ -460,7 +460,7 @@ public:
         which are stored as the @ref getdata() RGB ones.
     */
     unsigned char GetAlpha(int x, int y);
-        unsigned char * GetAlpha();
+    unsigned char * GetAlpha();
     //@}
 
     /**
@@ -505,13 +505,13 @@ public:
         of retrieving these individually, this function will return the number of
         available images.
         
-        @param name 
+        @param name
         Name of the file to query.
         
-        @param stream 
+        @param stream
         Opened input stream with image data. Currently, the stream must support seeking.
         
-        @param type 
+        @param type
         May be one of the following:
         
         wxBITMAP_TYPE_BMP
@@ -579,8 +579,8 @@ public:
     */
     static int GetImageCount(const wxString& filename,
                              long type = wxBITMAP_TYPE_ANY);
-        static int GetImageCount(wxInputStream& stream,
-                                 long type = wxBITMAP_TYPE_ANY);
+    static int GetImageCount(wxInputStream& stream,
+                             long type = wxBITMAP_TYPE_ANY);
     //@}
 
     /**
@@ -704,7 +704,7 @@ public:
         and RGBtoHSV(), which
         converts between HSV color space and RGB color space.
     */
-     HSVValue(double h = 0.0, double s = 0.0, double v = 0.0);
+    HSVValue(double h = 0.0, double s = 0.0, double v = 0.0);
 
     /**
         Converts a color in HSV color space to RGB color space.
@@ -753,7 +753,7 @@ public:
     /**
         Adds a handler at the start of the static list of format handlers.
         
-        @param handler 
+        @param handler
         A new image format handler object. There is usually only one instance
         of a given handler class in an application session.
         
@@ -777,14 +777,14 @@ public:
     /**
         Loads an image from an input stream.
         
-        @param name 
+        @param name
         Name of the file from which to load the image.
         
-        @param stream 
+        @param stream
         Opened input stream from which to load the image. Currently, the stream must
         support seeking.
         
-        @param type 
+        @param type
         One of the following values:
         
         wxBITMAP_TYPE_BMP
@@ -847,10 +847,10 @@ public:
         
         Will try to autodetect the format.
         
-        @param mimetype 
+        @param mimetype
         MIME type string (for example 'image/jpeg')
         
-        @param index 
+        @param index
         Index of the image to load in the case that the image file contains multiple
         images.
         This is only used by GIF, ICO and TIFF handlers. The default value (-1) means
@@ -870,13 +870,13 @@ public:
     bool LoadFile(const wxString& name,
                   long type = wxBITMAP_TYPE_ANY,
                   int index = -1);
-        bool LoadFile(const wxString& name, const wxString& mimetype,
-                      int index = -1);
-        bool LoadFile(wxInputStream& stream, long type,
-                      int index = -1);
-        bool LoadFile(wxInputStream& stream,
-                      const wxString& mimetype,
-                      int index = -1);
+    bool LoadFile(const wxString& name, const wxString& mimetype,
+                  int index = -1);
+    bool LoadFile(wxInputStream& stream, long type,
+                  int index = -1);
+    bool LoadFile(wxInputStream& stream,
+                  const wxString& mimetype,
+                  int index = -1);
     //@}
 
     /**
@@ -897,8 +897,8 @@ public:
         and RGBtoHSV(), which
         converts between HSV color space and RGB color space.
     */
-     RGBValue(unsigned char r = 0, unsigned char g = 0,
-              unsigned char b = 0);
+    RGBValue(unsigned char r = 0, unsigned char g = 0,
+             unsigned char b = 0);
 
     /**
         Converts a color in RGB color space to HSV color space.
@@ -909,7 +909,7 @@ public:
         Finds the handler with the given name, and removes it. The handler
         is not deleted.
         
-        @param name 
+        @param name
         The handler name.
         
         @returns @true if the handler was found and removed, @false otherwise.
@@ -986,13 +986,13 @@ public:
     /**
         Saves an image in the given stream.
         
-        @param name 
+        @param name
         Name of the file to save the image to.
         
-        @param stream 
+        @param stream
         Opened output stream to save the image to.
         
-        @param type 
+        @param type
         Currently these types can be used:
         
         wxBITMAP_TYPE_BMP
@@ -1042,7 +1042,7 @@ public:
         
         Save a Windows cursor file (CUR).
         
-        @param mimetype 
+        @param mimetype
         MIME type.
         
         @returns @true if the operation succeeded, @false otherwise.
@@ -1053,11 +1053,11 @@ public:
         @sa LoadFile()
     */
     bool SaveFile(const wxString& name, int type);
-        bool SaveFile(const wxString& name, const wxString& mimetype);
-        bool SaveFile(const wxString& name);
-        bool SaveFile(wxOutputStream& stream, int type);
-        bool SaveFile(wxOutputStream& stream,
-                      const wxString& mimetype);
+    bool SaveFile(const wxString& name, const wxString& mimetype);
+    bool SaveFile(const wxString& name);
+    bool SaveFile(wxOutputStream& stream, int type);
+    bool SaveFile(wxOutputStream& stream,
+                  const wxString& mimetype);
     //@}
 
     /**
@@ -1082,7 +1082,7 @@ public:
         
         Example:
         
-        @param quality 
+        @param quality
         Determines what method to use for resampling the image.  Can be one of the
         following:
         
@@ -1110,7 +1110,7 @@ public:
     */
     void SetAlpha(unsigned char * alpha = @NULL,
                   bool static_data = @false);
-        void SetAlpha(int x, int y, unsigned char alpha);
+    void SetAlpha(int x, int y, unsigned char alpha);
     //@}
 
     /**
@@ -1141,11 +1141,11 @@ public:
                        unsigned char blue);
 
     /**
-        @param mask 
+        @param mask
         The mask image to extract mask shape from. Must have same dimensions as the
         image.
         
-        @param mr,mg,mb 
+        @param mr,mg,mb
         RGB value of pixels in mask that will be used to create the mask.
         
         @returns Returns @false if mask does not have same dimensions as the image
@@ -1166,7 +1166,7 @@ public:
         @sa GetOption(), GetOptionInt(), HasOption()
     */
     void SetOption(const wxString& name, const wxString& value);
-        void SetOption(const wxString& name, int value);
+    void SetOption(const wxString& name, int value);
     //@}
 
     /**
@@ -1183,8 +1183,8 @@ public:
         data.
     */
 #define void SetRGB(wxRect & rect, unsigned char red,
-                unsigned char green,
-                unsigned char blue)     /* implementation is private */
+    unsigned char green,
+    unsigned char blue)     /* implementation is private */
 
     /**
         Returns a resized version of this image without scaling it by adding either a
@@ -1205,7 +1205,7 @@ public:
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".
         
-        @param image 
+        @param image
         Image to assign.
         
         @returns Returns 'this' object.
@@ -1221,7 +1221,7 @@ public:
 /**
     Initializes all available image handlers. For a list of available handlers,
     see wxImage.
-    
+
     @sa wxImage, wxImageHandler
 */
 void wxInitAllImageHandlers();

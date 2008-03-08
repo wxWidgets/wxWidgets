@@ -9,56 +9,56 @@
 /**
     @class wxLocale
     @wxheader{intl.h}
-    
+
     wxLocale class encapsulates all language-dependent settings and is a
     generalization of the C locale concept.
-    
+
     In wxWidgets this class manages message catalogs which contain the translations
     of the strings used to the current language.
-    
+
     @b wxPerl note: In wxPerl you can't use the '_' function name, so
-    the @c Wx::Locale module can export the @c gettext and 
-    @c gettext_noop under any given name. 
-    
+    the @c Wx::Locale module can export the @c gettext and
+    @c gettext_noop under any given name.
+
     @code
     # this imports gettext ( equivalent to Wx::GetTranslation
       # and gettext_noop ( a noop )
       # into your module
       use Wx::Locale qw(:default);
-    
+
       # ....
-    
+
       # use the functions
-      print gettext( ``Panic!'' ); 
-    
+      print gettext( ``Panic!'' );
+
       button = Wx::Button-new( window, -1, gettext( ``Label'' ) );
     @endcode
-    
+
     If you need to translate a lot of strings, then adding gettext( ) around
     each one is a long task ( that is why _( ) was introduced ), so just choose
     a shorter name for gettext:
-    
+
     @code
     #
       use Wx::Locale 'gettext' = 't',
                      'gettext_noop' = 'gettext_noop';
-    
+
       # ...
-    
+
       # use the functions
       print t( ``Panic!!'' );
-    
+
       # ...
     @endcode
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_internationalization "Internationalization overview", @ref
     overview_sampleinternat "Internat sample", wxXLocale
 */
-class wxLocale 
+class wxLocale
 {
 public:
     //@{
@@ -73,20 +73,20 @@ public:
         translate the messages using the message catalogs for this locale.
     */
     wxLocale();
-        wxLocale(int language,
-                 int flags =
-                          wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
-        wxLocale(const wxString& name,
-                 const wxString& short = wxEmptyString,
-                 const wxString& locale = wxEmptyString,
-                 bool bLoadDefault = @true,
-                 bool bConvertEncoding = @false);
+    wxLocale(int language,
+             int flags =
+                 wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+    wxLocale(const wxString& name,
+             const wxString& short = wxEmptyString,
+             const wxString& locale = wxEmptyString,
+             bool bLoadDefault = @true,
+             bool bConvertEncoding = @false);
     //@}
 
     /**
         The destructor, like the constructor, also has global side effects: the
         previously
-        set locale is restored and so the changes described in 
+        set locale is restored and so the changes described in
         Init() documentation are rolled back.
     */
     ~wxLocale();
@@ -95,7 +95,7 @@ public:
     /**
         Add a catalog for use with the current locale: it is searched for in standard
         places (current directory first, then the system one), but you may also prepend
-        additional directories to the search path with 
+        additional directories to the search path with
         AddCatalogLookupPathPrefix().
         
         All loaded catalogs will be used for message lookup by
@@ -109,10 +109,10 @@ public:
         
         @e msgIdLanguage specifies the language of "msgid" strings in source code
         (i.e. arguments to GetString(),
-        wxGetTranslation and the 
+        wxGetTranslation and the
         _ macro). It is used if AddCatalog cannot find any
         catalog for current language: if the language is same as source code language,
-        then strings from source code are used instead. 
+        then strings from source code are used instead.
         
         @e msgIdCharset lets you specify the charset used for msgids in sources
         in case they use 8-bit characters (e.g. German or French strings).  This
@@ -124,13 +124,13 @@ public:
         to be in English and written only using 7-bit ASCII characters.
         
         If you have to deal with non-English strings or 8-bit characters in the source
-        code, see the instructions in 
+        code, see the instructions in
         @ref overview_nonenglishoverview "Writing non-English applications".
     */
     bool AddCatalog(const wxString& domain);
-        bool AddCatalog(const wxString& domain,
-                        wxLanguage msgIdLanguage,
-                        const wxString& msgIdCharset);
+    bool AddCatalog(const wxString& domain,
+                    wxLanguage msgIdLanguage,
+                    const wxString& msgIdCharset);
     //@}
 
     /**
@@ -144,8 +144,8 @@ public:
 
     /**
         Adds custom, user-defined language to the database of known languages. This
-        database is used in conjunction with the first form of 
-        Init(). 
+        database is used in conjunction with the first form of
+        Init().
         
         wxLanguageInfo is defined as follows:
         
@@ -223,7 +223,7 @@ public:
     static wxString GetLanguageName(int lang);
 
     /**
-        Returns the locale name as passed to the constructor or 
+        Returns the locale name as passed to the constructor or
         Init(). This is full, human-readable name,
         e.g. "English" or "French".
     */
@@ -263,10 +263,10 @@ public:
     */
     const wxString GetString(const wxString& origString,
                              const wxString& domain = wxEmptyString);
-        const wxString GetString(const wxString& origString,
-                                 const wxString& origString2,
-                                 size_t n,
-                                 const wxString& domain = @NULL);
+    const wxString GetString(const wxString& origString,
+                             const wxString& origString2,
+                             size_t n,
+                             const wxString& domain = @NULL);
     //@}
 
     /**
@@ -278,7 +278,7 @@ public:
 
     /**
         Tries to detect the user's default font encoding.
-        Returns wxFontEncoding value or 
+        Returns wxFontEncoding value or
         @b wxFONTENCODING_SYSTEM if it couldn't be determined.
     */
     static wxFontEncoding GetSystemEncoding();
@@ -286,7 +286,7 @@ public:
     /**
         Tries to detect the name of the user's default font encoding. This string isn't
         particularly useful for the application as its form is platform-dependent and
-        so you should probably use 
+        so you should probably use
         GetSystemEncoding() instead.
         
         Returns a user-readable string value or an empty string if it couldn't be
@@ -296,7 +296,7 @@ public:
 
     /**
         Tries to detect the user's default language setting.
-        Returns wxLanguage value or 
+        Returns wxLanguage value or
          @b wxLANGUAGE_UNKNOWN if the language-guessing algorithm failed.
     */
     static int GetSystemLanguage();
@@ -304,14 +304,14 @@ public:
     //@{
     /**
         The second form is deprecated, use the first one unless you know what you are
-        doing. 
+        doing.
         
-        @param language 
-        wxLanguage identifier of the locale. 
-        wxLANGUAGE_DEFAULT has special meaning -- wxLocale will use system's default 
+        @param language
+        wxLanguage identifier of the locale.
+        wxLANGUAGE_DEFAULT has special meaning -- wxLocale will use system's default
         language (see GetSystemLanguage).
         
-        @param flags 
+        @param flags
         Combination of the following:
         
         
@@ -326,44 +326,44 @@ public:
         
         
         Automatically convert message
-        catalogs to platform's default encoding. Note that it will do only basic 
+        catalogs to platform's default encoding. Note that it will do only basic
         conversion between well-known pair like iso8859-1 and windows-1252 or
         iso8859-2 and windows-1250. See Writing non-English applications for detailed
         description of this behaviour. Note that this flag is meaningless in Unicode
         build.
         
-        @param name 
+        @param name
         The name of the locale. Only used in diagnostic messages.
         
-        @param short 
+        @param short
         The standard 2 letter locale abbreviation; it is used as the
         directory prefix when looking for the message catalog files.
         
-        @param locale 
+        @param locale
         The parameter for the call to setlocale(). Note that it is
         platform-specific.
         
-        @param bLoadDefault 
+        @param bLoadDefault
         May be set to @false to prevent loading of the message catalog
         for the given locale containing the translations of standard wxWidgets messages.
         This parameter would be rarely used in normal circumstances.
         
-        @param bConvertEncoding 
+        @param bConvertEncoding
         May be set to @true to do automatic conversion of message
-        catalogs to platform's native encoding. Note that it will do only basic 
+        catalogs to platform's native encoding. Note that it will do only basic
         conversion between well-known pair like iso8859-1 and windows-1252 or
-        iso8859-2 and windows-1250. 
+        iso8859-2 and windows-1250.
         See Writing non-English applications for detailed
         description of this behaviour.
     */
     bool Init(int language = wxLANGUAGE_DEFAULT,
               int flags =
-                          wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
-        bool Init(const wxString& name,
-                  const wxString& short = wxEmptyString,
-                  const wxString& locale = wxEmptyString,
-                  bool bLoadDefault = @true,
-                  bool bConvertEncoding = @false);
+                  wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+    bool Init(const wxString& name,
+              const wxString& short = wxEmptyString,
+              const wxString& locale = wxEmptyString,
+              bool bLoadDefault = @true,
+              bool bConvertEncoding = @false);
     //@}
 
     /**
@@ -373,7 +373,7 @@ public:
         supported.
         
         The argument @e lang is the wxLanguage identifier. To obtain this for a
-        given a two letter ISO language code, use 
+        given a two letter ISO language code, use
         FindLanguageInfo() to obtain its
         wxLanguageInfo structure. See AddLanguage() for
         the wxLanguageInfo description.
@@ -400,7 +400,7 @@ public:
     /**
         See @ref overview_languagecodes "list of recognized language constants".
         These constants may be used to specify the language
-        in Init() and are returned by 
+        in Init() and are returned by
         GetSystemLanguage():
     */
 };
@@ -409,16 +409,16 @@ public:
 /**
     @class wxXLocale
     @wxheader{intl.h}
-    
-    
+
+
     wxXLocale::wxXLocale
     wxXLocale::GetCLocale
     wxXLocale::IsOk
-    
-    
+
+
     Introduction
-    
-    This class represents a locale object used by so-called xlocale API. Unlike 
+
+    This class represents a locale object used by so-called xlocale API. Unlike
     wxLocale it doesn't provide any non-trivial operations but
     simply provides a portable wrapper for POSIX @c locale_t type. It exists
     solely to be provided as an argument to various @c wxFoo_l() functions
@@ -432,46 +432,46 @@ public:
     use @c wxPrintf_l(wxXLocale::GetCLocale(), "%g", number) to do it.
     Conversely, if a program wanted to output the number in French locale, even if
     the current locale is different, it could use wxXLocale(wxLANGUAGE_FRENCH).
-    
-    
+
+
     Availability
-    
+
     This class is fully implemented only under the platforms where xlocale POSIX
     API or equivalent is available. Currently the xlocale API is available under
     most of the recent Unix systems (including Linux, various BSD and Mac OS X) and
     Microsoft Visual C++ standard library provides a similar API starting from
     version 8 (Visual Studio 2005).
-    
+
     If neither POSIX API nor Microsoft proprietary equivalent are available, this
     class is still available but works in degraded mode: the only supported locale
     is the C one and attempts to create wxXLocale object for any other locale will
     fail. You can use the preprocessor macro @c wxHAS_XLOCALE_SUPPORT to
     test if full xlocale API is available or only skeleton C locale support is
     present.
-    
-    Notice that wxXLocale is new in wxWidgets 2.9.0 and is not compiled in if 
+
+    Notice that wxXLocale is new in wxWidgets 2.9.0 and is not compiled in if
     @c wxUSE_XLOCALE was set to 0 during the library compilation.
-    
-    
+
+
     Locale-dependent functions
-    
+
     Currently the following @c _l-functions are available:
-    
+
          Character classification functions: @c wxIsxxx_l(), e.g.
               @c wxIsalpha_l(), @c wxIslower_l() and all the others.
          Character transformation functions: @c wxTolower_l() and
               @c wxToupper_l()
-    
+
     We hope to provide many more functions (covering numbers, time and formatted
     IO) in the near future.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxLocale
 */
-class wxXLocale 
+class wxXLocale
 {
 public:
     //@{
@@ -481,8 +481,8 @@ public:
         portability.
     */
     wxLocale();
-        wxLocale(wxLanguage lang);
-        wxLocale(const char * loc);
+    wxLocale(wxLanguage lang);
+    wxLocale(const char * loc);
     //@}
 
     /**
@@ -499,7 +499,7 @@ public:
         test if full xlocale API is available or only skeleton C locale support is
         present.
         
-        Notice that wxXLocale is new in wxWidgets 2.9.0 and is not compiled in if 
+        Notice that wxXLocale is new in wxWidgets 2.9.0 and is not compiled in if
         @c wxUSE_XLOCALE was set to 0 during the library compilation.
     */
 
@@ -512,7 +512,7 @@ public:
     static wxXLocale GetCLocale();
 
     /**
-        This class represents a locale object used by so-called xlocale API. Unlike 
+        This class represents a locale object used by so-called xlocale API. Unlike
         wxLocale it doesn't provide any non-trivial operations but
         simply provides a portable wrapper for POSIX @c locale_t type. It exists
         solely to be provided as an argument to various @c wxFoo_l() functions
@@ -531,7 +531,7 @@ public:
 
     /**
         Returns @true if this object is initialized, i.e. represents a valid locale
-        or 
+        or
         @false otherwise.
     */
 #define bool IsOk()     /* implementation is private */
@@ -561,13 +561,13 @@ public:
     of wxGetTranslation.
 */
 #define const wxString wxPLURAL(const wxString& sing,
-                        const wxString& plur,
-                        size_t n)     /* implementation is private */
+const wxString& plur,
+size_t n)     /* implementation is private */
 
 /**
     This macro doesn't do anything in the program code -- it simply expands to the
     value of its argument.
-    
+
     However it does have a purpose which is to mark the literal strings for the
     extraction into the message catalog created by @c xgettext program. Usually
     this is achieved using _ but that macro not only marks
@@ -575,7 +575,7 @@ public:
     wxGetTranslation function call which means that it
     cannot be used in some situations, notably for static array
     initialization.
-    
+
     Here is an example which should make it more clear: suppose that you have a
     static array of strings containing the weekday names and which have to be
     translated (note that it is a bad example, really, as
@@ -586,7 +586,7 @@ public:
     ...
     // use weekdays[n] as usual
     @endcode
-    
+
     the code wouldn't compile because the function calls are forbidden in the array
     initializer. So instead you should do
     @code
@@ -595,9 +595,9 @@ public:
     ...
     // use wxGetTranslation(weekdays[n])
     @endcode
-    
+
     here.
-    
+
     Note that although the code @b would compile if you simply omit
     wxTRANSLATE() in the above, it wouldn't work as expected because there would be
     no translations for the weekday names in the program message catalog and
@@ -610,7 +610,7 @@ public:
     function, so it marks the message for the extraction by @c xgettext just as
     wxTRANSLATE does, but also returns the translation of
     the string for the current locale during execution.
-    
+
     Don't confuse this macro with _T!
 */
 #define const wxString _(const wxString& s)     /* implementation is private */
@@ -628,7 +628,7 @@ public:
     is used very often, an alternative (and also common in Unix world) syntax is
     provided: the _ macro is defined to do the same thing
     as wxGetTranslation.
-    
+
     The second form is used when retrieving translation of string that has
     different singular and plural form in English or different plural forms in some
     other language. It takes two extra arguments: as above, @e str
@@ -637,13 +637,13 @@ public:
     is the plural form (in English). The parameter @e n is used to determine the
     plural form.  If no message catalog is found @e str is returned if 'n == 1',
     otherwise @e strPlural.
-    
+
     See GNU gettext manual
     for additional information on plural forms handling. For a shorter alternative
     see the wxPLURAL macro.
-    
+
     Both versions call wxLocale::GetString.
-    
+
     Note that this function is not suitable for literal strings in Unicode
     builds, since the literal strings must be enclosed into
     _T or wxT macro which makes them
@@ -653,9 +653,9 @@ public:
 */
 const wxString wxGetTranslation(const wxString& str,
                                 const wxString& domain = wxEmptyString);
-    const wxString wxGetTranslation(const wxString& str,
-                                    const wxString& strPlural,
-                                    size_t n,
-                                    const wxString& domain = wxEmptyString);
+const wxString wxGetTranslation(const wxString& str,
+                                const wxString& strPlural,
+                                size_t n,
+                                const wxString& domain = wxEmptyString);
 //@}
 

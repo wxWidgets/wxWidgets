@@ -9,33 +9,33 @@
 /**
     @class wxWindowUpdateLocker
     @wxheader{wupdlock.h}
-    
+
     This tiny class prevents redrawing of a wxWindow during its
-    lifetime by using wxWindow::Freeze and 
+    lifetime by using wxWindow::Freeze and
     wxWindow::Thaw methods. It is typically used for creating
     automatic objects to temporarily suppress window updates before a batch of
     operations is performed:
-    
+
     @code
     void MyFrame::Foo()
         {
             m_text = new wxTextCtrl(this, ...);
-    
+
             wxWindowUpdateLocker noUpdates(m_text);
             m_text-AppendText();
             ... many other operations with m_text...
             m_text-WriteText();
         }
     @endcode
-    
-    Using this class is easier and safer than calling 
+
+    Using this class is easier and safer than calling
     wxWindow::Freeze and wxWindow::Thaw because you
     don't risk to forget calling the latter.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxWindowUpdateLocker 
+class wxWindowUpdateLocker
 {
 public:
     /**

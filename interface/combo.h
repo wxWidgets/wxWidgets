@@ -9,19 +9,19 @@
 /**
     @class wxComboPopup
     @wxheader{combo.h}
-    
+
     In order to use a custom popup with wxComboCtrl,
     an interface class must be derived from wxComboPopup. For more information
     how to use it, see @ref overview_wxcomboctrl "Setting Custom Popup for
     wxComboCtrl".
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxComboCtrl
 */
-class wxComboPopup 
+class wxComboPopup
 {
 public:
     /**
@@ -47,14 +47,14 @@ public:
         The derived class may implement this to return adjusted size
         for the popup control, according to the variables given.
         
-        @param minWidth 
+        @param minWidth
         Preferred minimum width.
         
-        @param prefHeight 
+        @param prefHeight
         Preferred height. May be -1 to indicate
         no preference.
         
-        @param maxWidth 
+        @param maxWidth
         Max height for window, as limited by
         screen size.
         
@@ -153,12 +153,12 @@ public:
 /**
     @class wxComboCtrl
     @wxheader{combo.h}
-    
+
     A combo control is a generic combobox that allows totally
     custom popup. In addition it has other customization features.
     For instance, position and size of the dropdown button
     can be changed.
-    
+
     @beginStyleTable
     @style{wxCB_READONLY}:
            Text will not be editable.
@@ -177,7 +177,7 @@ public:
     @style{wxCC_STD_BUTTON}:
            Drop button will behave more like a standard push button.
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_TEXT(id\, func)}:
            Process a wxEVT_COMMAND_TEXT_UPDATED event, when the text changes.
@@ -185,11 +185,11 @@ public:
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combo control.
     @endEventTable
-    
+
     @library{wxbase}
     @category{ctrl}
     @appearance{comboctrl.png}
-    
+
     @seealso
     wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxComboPopup, wxCommandEvent
 */
@@ -200,41 +200,41 @@ public:
     /**
         Constructor, creating and showing a combo control.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param value 
+        @param value
         Initial selection string. An empty string indicates no selection.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then the window is sized
         appropriately.
         
-        @param style 
+        @param style
         Window style. See wxComboCtrl.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxComboCtrl();
-        wxComboCtrl(wxWindow* parent, wxWindowID id,
-                    const wxString& value = "",
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = "comboCtrl");
+    wxComboCtrl(wxWindow* parent, wxWindowID id,
+                const wxString& value = "",
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = "comboCtrl");
     //@}
 
     /**
@@ -294,10 +294,10 @@ public:
         if AnimateShow() did not finish
         the animation within it's function scope).
         
-        @param rect 
+        @param rect
         Position to show the popup window at, in screen coordinates.
         
-        @param flags 
+        @param flags
         Combination of any of the following:
     */
     virtual void DoShowPopup(const wxRect& rect, int flags);
@@ -460,10 +460,10 @@ public:
     /**
         Removes the text between the two positions in the combo control text field.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The last position.
     */
     void Remove(long from, long to);
@@ -472,13 +472,13 @@ public:
         Replaces the text between two positions with the given text, in the combo
         control text field.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The second position.
         
-        @param text 
+        @param text
         The text to insert.
     */
     void Replace(long from, long to, const wxString& value);
@@ -486,22 +486,22 @@ public:
     /**
         Sets custom dropdown button graphics.
         
-        @param bmpNormal 
+        @param bmpNormal
         Default button image.
         
-        @param pushButtonBg 
+        @param pushButtonBg
         If @true, blank push button background is painted
         below the image.
         
-        @param bmpPressed 
+        @param bmpPressed
         Depressed button image.
         
-        @param bmpHover 
+        @param bmpHover
         Button image when mouse hovers above it. This
         should be ignored on platforms and themes that do not generally draw
         different kind of button on mouse hover.
         
-        @param bmpDisabled 
+        @param bmpDisabled
         Disabled button image.
     */
     void SetButtonBitmaps(const wxBitmap& bmpNormal,
@@ -513,17 +513,17 @@ public:
     /**
         Sets size and position of dropdown button.
         
-        @param width 
+        @param width
         Button width. Value = 0 specifies default.
         
-        @param height 
+        @param height
         Button height. Value = 0 specifies default.
         
-        @param side 
+        @param side
         Indicates which side the button will be placed.
         Value can be wxLEFT or wxRIGHT.
         
-        @param spacingX 
+        @param spacingX
         Horizontal spacing around the button. Default is 0.
     */
     void SetButtonPosition(int width = -1, int height = -1,
@@ -540,7 +540,7 @@ public:
     /**
         Sets the insertion point in the text field.
         
-        @param pos 
+        @param pos
         The new insertion point.
     */
     void SetInsertionPoint(long pos);
@@ -568,11 +568,11 @@ public:
     /**
         Extends popup size horizontally, relative to the edges of the combo control.
         
-        @param extLeft 
+        @param extLeft
         How many pixel to extend beyond the left edge of the
         control. Default is 0.
         
-        @param extRight 
+        @param extRight
         How many pixel to extend beyond the right edge of the
         control. Default is 0.
         
@@ -598,10 +598,10 @@ public:
     /**
         Selects the text between the two positions, in the combo control text field.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The second position.
     */
     void SetSelection(long from, long to);

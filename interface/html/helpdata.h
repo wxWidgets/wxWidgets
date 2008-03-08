@@ -9,12 +9,12 @@
 /**
     @class wxHtmlHelpData
     @headerfile helpdata.h wx/html/helpdata.h
-    
-    This class is used by wxHtmlHelpController 
+
+    This class is used by wxHtmlHelpController
     and wxHtmlHelpFrame to access HTML help items.
-    It is internal class and should not be used directly - except for the case 
+    It is internal class and should not be used directly - except for the case
     you're writing your own HTML help controller.
-    
+
     @library{wxhtml}
     @category{FIXME}
 */

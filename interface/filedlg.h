@@ -9,9 +9,9 @@
 /**
     @class wxFileDialog
     @wxheader{filedlg.h}
-    
+
     This class represents the file chooser dialog.
-    
+
     @beginStyleTable
     @style{wxFD_DEFAULT_STYLE}:
            Equivalent to wxFD_OPEN.
@@ -37,10 +37,10 @@
            Show the preview of the selected files (currently only supported by
            wxGTK using GTK+ 2.4 or later).
     @endStyleTable
-    
+
     @library{wxcore}
     @category{cmndlg}
-    
+
     @seealso
     @ref overview_wxfiledialogoverview "wxFileDialog overview", wxFileSelector
 */
@@ -50,34 +50,34 @@ public:
     /**
         Constructor. Use ShowModal() to show the dialog.
         
-        @param parent 
+        @param parent
         Parent window.
         
-        @param message 
+        @param message
         Message to show on the dialog.
         
-        @param defaultDir 
+        @param defaultDir
         The default directory, or the empty string.
         
-        @param defaultFile 
+        @param defaultFile
         The default filename, or the empty string.
         
-        @param wildcard 
+        @param wildcard
         A wildcard, such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
         
         Note that the native Motif dialog has some limitations with respect to
         wildcards; see the Remarks section above.
         
-        @param style 
+        @param style
         A dialog style. See wxFD_* styles for more info.
         
-        @param pos 
+        @param pos
         Dialog position. Not implemented.
         
-        @param size 
+        @param size
         Dialog size. Not implemented.
         
-        @param name 
+        @param name
         Dialog name. Not implemented.
     */
     wxFileDialog(wxWindow* parent,
@@ -101,7 +101,7 @@ public:
     wxString GetDirectory();
 
     /**
-        If functions 
+        If functions
         SetExtraControlCreator()
         and ShowModal() were called,
         returns the extra window. Otherwise returns @NULL.
@@ -229,18 +229,18 @@ public:
     wxFD_MULTIPLE
     can only be used with wxFileDialog and not here as this
     function only returns a single file name.
-    
+
     Both the Unix and Windows versions implement a wildcard filter. Typing a
     filename containing wildcards (*, ?) in the filename text item, and
     clicking on Ok, will result in only those files matching the pattern being
     displayed.
-    
+
     The wildcard may be a specification for multiple types of file
     with a description for each, such as:
     @code
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
     @endcode
-    
+
     The application must check for an empty return value (the user pressed
     Cancel). For example:
     @code

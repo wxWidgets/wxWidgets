@@ -9,46 +9,46 @@
 /**
     @class wxDebugStreamBuf
     @wxheader{memory.h}
-    
+
     This class allows you to treat debugging output in a similar
     (stream-based) fashion on different platforms. Under
     Windows, an ostream constructed with this buffer outputs
     to the debugger, or other program that intercepts debugging
     output. On other platforms, the output goes to standard error (cerr).
-    
+
     This is soon to be obsolete, replaced by wxLog functionality.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     Overview
 */
-class wxDebugStreamBuf 
+class wxDebugStreamBuf
 {
 public:
-    
+
 };
 
 
 /**
     @class wxDebugContext
     @wxheader{memory.h}
-    
+
     A class for performing various debugging and memory tracing
     operations. Full functionality (such as printing out objects
     currently allocated) is only present in a debugging build of wxWidgets,
     i.e. if the __WXDEBUG__ symbol is defined. wxDebugContext
     and related functions and macros can be compiled out by setting
     wxUSE_DEBUG_CONTEXT to 0 is setup.h
-    
+
     @library{wxbase}
     @category{debugging}
-    
+
     @seealso
     Overview
 */
-class wxDebugContext 
+class wxDebugContext
 {
 public:
     /**
@@ -144,7 +144,7 @@ public:
         to the current debug stream. The number of object and non-object
         allocations is printed, together with the total size.
         
-        @param detailed 
+        @param detailed
         If @true, the function will also print how many
         objects of each class have been allocated, and the space taken by
         these class instances.
@@ -166,7 +166,7 @@ public:
         be performed from this point on. This allows you to ignore allocations
         that have been performed up to this point.
         
-        @param all 
+        @param all
         If @true, the checkpoint is reset to include all
         memory allocations since the program started.
     */
@@ -234,10 +234,10 @@ public:
         
         This is obsolete, replaced by wxLog functionality.
         
-        @param stream 
+        @param stream
         Stream to associate with the debug context. Do not set this to @NULL.
         
-        @param streamBuf 
+        @param streamBuf
         Stream buffer to associate with the debug context.
     */
     void SetStream(ostream* stream, streambuf* streamBuf = @NULL);
@@ -251,7 +251,7 @@ public:
 /**
     @b NB: This function is now obsolete, replaced by @ref overview_logfunctions
     "Log functions".
-    
+
     Calls wxTraceLevel with printf-style variable argument syntax. Output
     is directed to the current output stream (see wxDebugContext).
     The first argument should be the level at which this information is appropriate.
@@ -264,7 +264,7 @@ public:
 /**
     @b NB: This function is now obsolete, replaced by @ref overview_logfunctions
     "Log functions".
-    
+
     Takes printf-style variable argument syntax. Output
     is directed to the current output stream (see wxDebugContext).
 */
@@ -273,7 +273,7 @@ void wxTrace(const wxString& fmt, ... );
 /**
     @b NB: This macro is now obsolete, replaced by @ref overview_logfunctions "Log
     functions".
-    
+
     Calls wxTrace with printf-style variable argument syntax. Output
     is directed to the current output stream (see wxDebugContext).
 */

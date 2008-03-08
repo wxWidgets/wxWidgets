@@ -9,51 +9,51 @@
 /**
     @class wxTextInputStream
     @wxheader{txtstrm.h}
-    
+
     This class provides functions that read text datas using an input stream.
     So, you can read @e text floats, integers.
-    
+
     The wxTextInputStream correctly reads text files (or streams) in DOS, Macintosh
     and Unix formats and reports a single newline char as a line ending.
-    
+
     Operator  is overloaded and you can use this class like a standard C++ iostream.
     Note, however, that the arguments are the fixed size types wxUint32, wxInt32 etc
     and on a typical 32-bit computer, none of these match to the "long" type
     (wxInt32
     is defined as int on 32-bit architectures) so that you cannot use long. To avoid
     problems (here and elsewhere), make use of wxInt32, wxUint32 and similar types.
-    
+
     If you're scanning through a file using wxTextInputStream, you should check for
     EOF @b before
     reading the next item (word / number), because otherwise the last item may get
-    lost. 
+    lost.
     You should however be prepared to receive an empty item (empty string / zero
     number) at the
     end of file, especially on Windows systems. This is unavoidable because most
     (but not all) files end
     with whitespace (i.e. usually a newline).
-    
+
     For example:
-    
+
     @code
     wxFileInputStream input( "mytext.txt" );
       wxTextInputStream text( input );
       wxUint8 i1;
       float f2;
       wxString line;
-    
+
       text  i1;       // read a 8 bit integer.
       text  i1  f2; // read a 8 bit integer followed by float.
       text  line;     // read a text line
     @endcode
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxTextInputStream::SetStringSeparators
 */
-class wxTextInputStream 
+class wxTextInputStream
 {
 public:
     /**
@@ -61,13 +61,13 @@ public:
         
         Constructs a text stream associated to the given input stream.
         
-        @param stream 
+        @param stream
         The underlying input stream.
         
-        @param sep 
+        @param sep
         The initial string separator characters.
         
-        @param conv 
+        @param conv
         In Unicode build only: The encoding converter used to convert the bytes in the
           underlying input stream to characters.
     */
@@ -149,7 +149,7 @@ public:
     wxString ReadLine();
 
     /**
-        @b NB: This method is deprecated, use ReadLine() 
+        @b NB: This method is deprecated, use ReadLine()
         or ReadWord() instead.
         
         Same as ReadLine().
@@ -165,7 +165,7 @@ public:
     wxString ReadWord();
 
     /**
-        Sets the characters which are used to define the word boundaries in 
+        Sets the characters which are used to define the word boundaries in
         ReadWord().
         
         The default separators are the space and @c TAB characters.
@@ -177,28 +177,28 @@ public:
 /**
     @class wxTextOutputStream
     @wxheader{txtstrm.h}
-    
+
     This class provides functions that write text datas using an output stream.
     So, you can write @e text floats, integers.
-    
+
     You can also simulate the C++ cout class:
-    
+
     @code
     wxFFileOutputStream output( stderr );
       wxTextOutputStream cout( output );
-    
+
       cout  "This is a text line"  endl;
       cout  1234;
       cout  1.23456;
     @endcode
-    
+
     The wxTextOutputStream writes text files (or streams) on DOS, Macintosh
     and Unix in their native formats (concerning the line ending).
-    
+
     @library{wxbase}
     @category{streams}
 */
-class wxTextOutputStream 
+class wxTextOutputStream
 {
 public:
     /**
@@ -206,13 +206,13 @@ public:
         
         Constructs a text stream object associated to the given output stream.
         
-        @param stream 
+        @param stream
         The output stream.
         
-        @param mode 
+        @param mode
         The end-of-line mode. One of wxEOL_NATIVE, wxEOL_DOS, wxEOL_MAC and wxEOL_UNIX.
         
-        @param conv 
+        @param conv
         In Unicode build only: The object used to convert
         Unicode text into ASCII characters written to the output stream.
     */

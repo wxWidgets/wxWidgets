@@ -9,23 +9,23 @@
 /**
     @class wxVectorT
     @wxheader{vector.h}
-    
+
     wxVectorT is a template class which implements most of the std::vector
     class and can be used like it. If wxWidgets is compiled in STL mode,
     wxVector will just be a typedef to std::vector. Just like for std::vector,
     objects stored in wxVectorT need to be @e assignable but don't have to
     be @e default constructible.
-    
+
     You can refer to the STL documentation for further information.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxcontaineroverview "Container classes overview", wxListT,
     wxArrayT
 */
-class wxVector<T> 
+class wxVector<T>
 {
 public:
     //@{
@@ -33,7 +33,7 @@ public:
         Constructor.
     */
     wxVectorT();
-        wxVectorT(const wxVector<T>& c);
+    wxVectorT(const wxVector<T>& c);
     //@}
 
     /**
@@ -46,7 +46,7 @@ public:
         Returns item at position @e idx.
     */
     const value_type at(size_type idx);
-        value_type at(size_type idx);
+    value_type at(size_type idx);
     //@}
 
     //@{
@@ -54,7 +54,7 @@ public:
         Return last item.
     */
     const value_type back();
-        value_type back();
+    value_type back();
     //@}
 
     //@{
@@ -62,7 +62,7 @@ public:
         Return iterator to beginning of the vector.
     */
     const_iterator begin();
-        iterator begin();
+    iterator begin();
     //@}
 
     /**
@@ -85,17 +85,17 @@ public:
         Returns iterator to the end of the vector.
     */
     const_iterator end();
-        iterator end();
+    iterator end();
     //@}
 
     //@{
     /**
-        Erase items. When using values other than built-in integrals 
+        Erase items. When using values other than built-in integrals
         or classes with reference counting this can be an inefficient
         operation.
     */
     iterator erase(iterator it);
-        iterator erase(iterator first, iterator last);
+    iterator erase(iterator first, iterator last);
     //@}
 
     //@{
@@ -103,13 +103,13 @@ public:
         Returns first item.
     */
     const value_type front();
-        value_type front();
+    value_type front();
     //@}
 
     /**
         )
         
-        Insert an item. When using values other than built-in integrals 
+        Insert an item. When using values other than built-in integrals
         or classes with reference counting this can be an inefficient
         operation.
     */
@@ -125,7 +125,7 @@ public:
         Returns item at position @e idx.
     */
     const value_type operator[](size_type idx);
-        value_type operator[](size_type idx);
+    value_type operator[](size_type idx);
     //@}
 
     /**
@@ -139,7 +139,7 @@ public:
     void push_back(const value_type& v);
 
     /**
-        Reserves more memory of @e n is greater then 
+        Reserves more memory of @e n is greater then
         wxVector::size. Other this call has
         no effect.
     */

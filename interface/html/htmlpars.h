@@ -9,11 +9,11 @@
 /**
     @class wxHtmlTagHandler
     @headerfile htmlpars.h wx/html/htmlpars.h
-    
-    
+
+
     @library{wxhtml}
     @category{html}
-    
+
     @seealso
     Overview, wxHtmlTag
 */
@@ -49,7 +49,7 @@ public:
     void ParseInner(const wxHtmlTag& tag);
 
     /**
-        Assigns @e parser to this handler. Each @b instance of handler 
+        Assigns @e parser to this handler. Each @b instance of handler
         is guaranteed to be called only from the parser.
     */
     virtual void SetParser(wxHtmlParser parser);
@@ -66,33 +66,33 @@ public:
 /**
     @class wxHtmlParser
     @headerfile htmlpars.h wx/html/htmlpars.h
-    
+
     Classes derived from this handle the @b generic parsing of HTML documents: it
     scans
     the document and divide it into blocks of tags (where one block
     consists of beginning and ending tag and of text between these
     two tags).
-    
+
     It is independent from wxHtmlWindow and can be used as stand-alone parser
     (Julian Smart's idea of speech-only HTML viewer or wget-like utility -
     see InetGet sample for example).
-    
+
     It uses system of tag handlers to parse the HTML document. Tag handlers
     are not statically shared by all instances but are created for each
     wxHtmlParser instance. The reason is that the handler may contain
     document-specific temporary data used during parsing (e.g. complicated
     structures like tables).
-    
+
     Typically the user calls only the wxHtmlParser::Parse method.
-    
+
     @library{wxhtml}
     @category{html}
-    
+
     @seealso
     @ref overview_cells "Cells Overview", @ref overview_handlers "Tag Handlers
     Overview", wxHtmlTag
 */
-class wxHtmlParser 
+class wxHtmlParser
 {
 public:
     /**
@@ -103,7 +103,7 @@ public:
     /**
         This may (and may not) be overwritten in derived class.
         
-        This method is called each time new tag is about to be added. 
+        This method is called each time new tag is about to be added.
         @e tag contains information about the tag. (See wxHtmlTag
         for details.)
         
@@ -142,7 +142,7 @@ public:
         (in noparams version it parses whole m_Source)
     */
     void DoParsing(int begin_pos, int end_pos);
-        void DoParsing();
+    void DoParsing();
     //@}
 
     /**
@@ -183,7 +183,7 @@ public:
         point to any valid resource or the URL is blocked by overridden implementation
         of @e OpenURL in derived class.
         
-        @param type 
+        @param type
         Indicates type of the resource. Is one of:
         
         wxHTML_URL_PAGE
@@ -202,7 +202,7 @@ public:
         Opening a resource that doesn't fall into
         any other category.
         
-        @param url 
+        @param url
         URL being opened.
     */
     virtual wxFSFile* OpenURL(wxHtmlURLType type,
@@ -225,20 +225,20 @@ public:
     wxObject* Parse(const wxString& source);
 
     /**
-        Restores parser's state before last call to 
+        Restores parser's state before last call to
         PushTagHandler().
     */
     void PopTagHandler();
 
     /**
-        Forces the handler to handle additional tags 
-        (not returned by wxHtmlTagHandler::GetSupportedTags). 
+        Forces the handler to handle additional tags
+        (not returned by wxHtmlTagHandler::GetSupportedTags).
         The handler should already be added to this parser.
         
-        @param handler 
+        @param handler
         the handler
         
-        @param tags 
+        @param tags
         List of tags (in same format as GetSupportedTags's return value). The parser
         will redirect these tags to handler (until call to PopTagHandler).
     */

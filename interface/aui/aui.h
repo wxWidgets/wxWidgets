@@ -9,11 +9,11 @@
 /**
     @class wxAuiManager
     @headerfile aui.h wx/aui/aui.h
-    
+
     wxAuiManager is the central class of the wxAUI class framework.
-    
+
     See also @ref overview_wxauioverview "wxAUI overview".
-    
+
     wxAuiManager manages the panes associated with it
     for a particular wxFrame, using a pane's wxAuiPaneInfo information to
     determine each pane's docking and floating behavior. wxAuiManager
@@ -21,16 +21,16 @@
     uses a replaceable dock art class to do all drawing, so all drawing is
     localized in one area, and may be customized depending on an
     application's specific needs.
-    
+
     wxAuiManager works as follows: the programmer adds panes to the class,
     or makes changes to existing pane properties (dock position, floating
     state, show state, etc.). To apply these changes, wxAuiManager's
     Update() function is called. This batch processing can be used to avoid
     flicker, by modifying more than one pane at a time, and then "committing"
     all of the changes at once by calling Update().
-    
+
     Panes can be added quite easily:
-    
+
     @code
     wxTextCtrl* text1 = new wxTextCtrl(this, -1);
     wxTextCtrl* text2 = new wxTextCtrl(this, -1);
@@ -38,17 +38,17 @@
     m_mgr.AddPane(text2, wxBOTTOM, wxT("Pane Caption"));
     m_mgr.Update();
     @endcode
-    
+
     Later on, the positions can be modified easily. The following will float
     an existing pane in a tool window:
-    
+
     @code
     m_mgr.GetPane(text1).Float();
     @endcode
-    
+
     @library{wxbase}
     @category{aui}
-    
+
     @seealso
     wxAuiPaneInfo, wxAuiDockArt
 */
@@ -74,11 +74,11 @@ public:
         several versions of this function. The first version allows the full spectrum of pane parameter possibilities. The second version is used for simpler user interfaces which do not require as much configuration.  The last version allows a drop position to be specified, which will determine where the pane will be added.
     */
     bool AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info);
-        bool AddPane(wxWindow* window, int direction = wxLEFT,
-                     const wxString& caption = wxEmptyString);
-        bool AddPane(wxWindow* window,
-                     const wxAuiPaneInfo& pane_info,
-                     const wxPoint& drop_pos);
+    bool AddPane(wxWindow* window, int direction = wxLEFT,
+                 const wxString& caption = wxEmptyString);
+    bool AddPane(wxWindow* window,
+                 const wxAuiPaneInfo& pane_info,
+                 const wxPoint& drop_pos);
     //@}
 
     /**
@@ -141,7 +141,7 @@ public:
         returned wxAuiPaneInfo's IsOk() method will return @false.
     */
     wxAuiPaneInfo GetPane(wxWindow* window);
-        wxAuiPaneInfo GetPane(const wxString& name);
+    wxAuiPaneInfo GetPane(const wxString& name);
     //@}
 
     /**
@@ -151,13 +151,13 @@ public:
 
     /**
         This method is used to insert either a previously unmanaged pane window
-        into the frame manager, or to insert a currently managed pane somewhere 
+        into the frame manager, or to insert a currently managed pane somewhere
         else. @e InsertPane will push all panes, rows, or docks aside and
-        insert the window into the position specified by @e insert_location. 
+        insert the window into the position specified by @e insert_location.
         Because @e insert_location can specify either a pane, dock row, or dock
         layer, the @e insert_level parameter is used to disambiguate this. The
         parameter @e insert_level can take a value of wxAUI_INSERT_PANE,
-        wxAUI_INSERT_ROW 
+        wxAUI_INSERT_ROW
         or wxAUI_INSERT_DOCK.
     */
     bool InsertPane(wxWindow* window,
@@ -230,7 +230,7 @@ public:
     void SetFlags(unsigned int flags);
 
     /**
-        Called to specify the frame or window which is to be managed by wxAuiManager. 
+        Called to specify the frame or window which is to be managed by wxAuiManager.
         Frame management is not restricted to just frames.  Child windows or custom controls are also allowed.
     */
     void SetManagedWindow(wxWindow* managed_wnd);
@@ -263,24 +263,24 @@ public:
 /**
     @class wxAuiPaneInfo
     @headerfile aui.h wx/aui/aui.h
-    
+
     wxAuiPaneInfo is part of the wxAUI class framework.
     See also @ref overview_wxauioverview "wxAUI overview".
-    
+
     wxAuiPaneInfo specifies all the parameters for a pane.
     These parameters specify where the pane is on the
     screen, whether it is docked or floating, or hidden.
     In addition, these parameters specify the pane's
     docked position, floating position, preferred size,
     minimum size, caption text among many other parameters.
-    
+
     @library{wxbase}
     @category{aui}
-    
+
     @seealso
     wxAuiManager, wxAuiDockArt
 */
-class wxAuiPaneInfo 
+class wxAuiPaneInfo
 {
 public:
     //@{
@@ -288,7 +288,7 @@ public:
         Copy constructor.
     */
     wxAuiPaneInfo();
-        wxAuiPaneInfo(const wxAuiPaneInfo& c);
+    wxAuiPaneInfo(const wxAuiPaneInfo& c);
     //@}
 
     //@{
@@ -297,7 +297,7 @@ public:
         to use this size as much as possible when docking or floating the pane.
     */
     wxAuiPaneInfo BestSize(const wxSize& size);
-        wxAuiPaneInfo BestSize(int x, int y);
+    wxAuiPaneInfo BestSize(int x, int y);
     //@}
 
     /**
@@ -332,7 +332,7 @@ public:
         This is the same thing as calling Direction(wxAUI_DOCK_CENTRE).
     */
     wxAuiPaneInfo Centre();
-        wxAuiPaneInfo Center();
+    wxAuiPaneInfo Center();
     //@}
 
     //@{
@@ -341,7 +341,7 @@ public:
         settings. Centre panes usually do not have caption bars. This function provides an easy way of preparing a pane to be displayed in the center dock position.
     */
     wxAuiPaneInfo CentrePane();
-        wxAuiPaneInfo CenterPane();
+    wxAuiPaneInfo CenterPane();
     //@}
 
     /**
@@ -405,7 +405,7 @@ public:
         FloatingPosition() sets the position of the floating pane.
     */
     wxAuiPaneInfo FloatingPosition(const wxPoint& pos);
-        wxAuiPaneInfo FloatingPosition(int x, int y);
+    wxAuiPaneInfo FloatingPosition(int x, int y);
     //@}
 
     //@{
@@ -413,7 +413,7 @@ public:
         FloatingSize() sets the size of the floating pane.
     */
     wxAuiPaneInfo FloatingSize(const wxSize& size);
-        wxAuiPaneInfo FloatingSize(int x, int y);
+    wxAuiPaneInfo FloatingSize(int x, int y);
     //@}
 
     /**
@@ -573,7 +573,7 @@ public:
         MaxSize() sets the maximum size of the pane.
     */
     wxAuiPaneInfo MaxSize(const wxSize& size);
-        wxAuiPaneInfo MaxSize(int x, int y);
+    wxAuiPaneInfo MaxSize(int x, int y);
     //@}
 
     /**
@@ -587,7 +587,7 @@ public:
         partially supported as of this writing.
     */
     wxAuiPaneInfo MinSize(const wxSize& size);
-        wxAuiPaneInfo MinSize(int x, int y);
+    wxAuiPaneInfo MinSize(int x, int y);
     //@}
 
     /**

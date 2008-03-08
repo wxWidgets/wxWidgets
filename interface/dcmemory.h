@@ -9,16 +9,16 @@
 /**
     @class wxMemoryDC
     @wxheader{dcmemory.h}
-    
+
     A memory device context provides a means to draw graphics onto a bitmap. When
     drawing in to a mono-bitmap, using @c wxWHITE, @c wxWHITE_PEN and
     @c wxWHITE_BRUSH
     will draw the background colour (i.e. 0) whereas all other colours will draw the
     foreground colour (i.e. 1).
-    
+
     @library{wxcore}
     @category{dc}
-    
+
     @seealso
     wxBitmap, wxDC
 */
@@ -33,7 +33,7 @@ public:
         in creating a usable device context.
     */
     wxMemoryDC();
-        wxMemoryDC(wxBitmap& bitmap);
+    wxMemoryDC(wxBitmap& bitmap);
     //@}
 
     /**

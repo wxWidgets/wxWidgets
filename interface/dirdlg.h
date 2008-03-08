@@ -9,9 +9,9 @@
 /**
     @class wxDirDialog
     @wxheader{dirdlg.h}
-    
+
     This class represents the directory chooser dialog.
-    
+
     @beginStyleTable
     @style{wxDD_DEFAULT_STYLE}:
            Equivalent to a combination of wxDEFAULT_DIALOG_STYLE and
@@ -25,10 +25,10 @@
            Change the current working directory to the directory chosen by the
            user.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{cmndlg}
-    
+
     @seealso
     @ref overview_wxdirdialogoverview "wxDirDialog overview", wxFileDialog
 */
@@ -39,25 +39,25 @@ public:
         Constructor. Use ShowModal() to show
         the dialog.
         
-        @param parent 
+        @param parent
         Parent window.
         
-        @param message 
+        @param message
         Message to show on the dialog.
         
-        @param defaultPath 
+        @param defaultPath
         The default path, or the empty string.
         
-        @param style 
+        @param style
         The dialog style. See wxDirDialog
         
-        @param pos 
+        @param pos
         Dialog position. Ignored under Windows.
         
-        @param size 
+        @param size
         Dialog size. Ignored under Windows.
         
-        @param name 
+        @param name
         The dialog name, not used.
     */
     wxDirDialog(wxWindow* parent,
@@ -109,7 +109,7 @@ public:
     Pops up a directory selector dialog. The arguments have the same meaning as
     those of wxDirDialog::wxDirDialog(). The message is displayed at the top,
     and the default_path, if specified, is set as the initial selection.
-    
+
     The application must check for an empty return value (if the user pressed
     Cancel). For example:
     @code

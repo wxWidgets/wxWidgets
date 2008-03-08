@@ -9,11 +9,11 @@
 /**
     @class wxStyledTextEvent
     @headerfile stc.h wx/stc/stc.h
-    
+
     The type of events sent from wxStyledTextCtrl.
-    
+
     TODO
-    
+
     @library{wxbase}
     @category{FIXME}
 */
@@ -25,7 +25,7 @@ public:
         
     */
     wxStyledTextEvent(wxEventType commandType = 0, int id = 0);
-        wxStyledTextEvent(const wxStyledTextEvent& event);
+    wxStyledTextEvent(const wxStyledTextEvent& event);
     //@}
 
     /**
@@ -253,27 +253,27 @@ public:
 /**
     @class wxStyledTextCtrl
     @headerfile stc.h wx/stc/stc.h
-    
+
     A wxWidgets implementation of the Scintilla source code editing component.
-    
+
     As well as features found in standard text editing components, Scintilla
-    includes 
+    includes
     features especially useful when editing and debugging source code. These
-    include 
+    include
     support for syntax styling, error indicators, code completion and call tips.
-    The 
-    selection margin can contain markers like those used in debuggers to indicate 
-    breakpoints and the current line. Styling choices are more open than with many 
-    editors, allowing the use of proportional fonts, bold and italics, multiple 
+    The
+    selection margin can contain markers like those used in debuggers to indicate
+    breakpoints and the current line. Styling choices are more open than with many
+    editors, allowing the use of proportional fonts, bold and italics, multiple
     foreground and background colours and multiple fonts.
-    
+
     wxStyledTextCtrl is a 1 to 1 mapping of "raw" scintilla interface, whose
     documentation
     can be found in the Scintilla website.
-    
+
     @library{wxbase}
     @category{stc}
-    
+
     @seealso
     wxStyledTextEvent
 */
@@ -1793,16 +1793,16 @@ public:
     int ReplaceTarget(const wxString& text);
 
     /**
-        Replace the target text with the argument text after 
+        Replace the target text with the argument text after
         d processing.
         Text is counted so it can contain NULs.
-        Looks for 
+        Looks for
         d where d is between 1 and 9 and replaces these with the strings
-        matched in the last search operation which were surrounded by 
-        ( and 
+        matched in the last search operation which were surrounded by
+        ( and
         ).
         Returns the length of the replacement text including any change
-        caused by processing the 
+        caused by processing the
         d patterns.
     */
     int ReplaceTargetRE(const wxString& text);

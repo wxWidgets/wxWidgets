@@ -9,10 +9,10 @@
 /**
     @class wxEditableListBox
     @wxheader{editlbox.h}
-    
+
     An editable listbox is composite control that lets the
     user easily enter, delete and reorder a list of strings.
-    
+
     @beginStyleTable
     @style{wxEL_ALLOW_NEW}:
            Allows the user to enter new strings.
@@ -25,10 +25,10 @@
     @style{wxEL_DEFAULT_STYLE}:
            wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE
     @endStyleTable
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxListBox
 */
@@ -39,37 +39,37 @@ public:
     /**
         Constructor, creating and showing a list box.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param label 
+        @param label
         The text shown just before the list control.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then the window is sized
         appropriately.
         
-        @param style 
+        @param style
         Window style. See wxEditableListBox.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create()
     */
     wxEditableListBox();
-        wxEditableListBox(wxWindow* parent, wxWindowID id,
-                          const wxString& label,
-                          const wxPoint& pos = wxDefaultPosition,
-                          const wxSize& size = wxDefaultSize,
-                          long style = wxEL_DEFAULT_STYLE,
-                          const wxString& name = "editableListBox");
+    wxEditableListBox(wxWindow* parent, wxWindowID id,
+                      const wxString& label,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = wxEL_DEFAULT_STYLE,
+                      const wxString& name = "editableListBox");
     //@}
 
     /**

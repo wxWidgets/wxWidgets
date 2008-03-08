@@ -9,26 +9,26 @@
 /**
     @class wxChoice
     @wxheader{choice.h}
-    
+
     A choice item is used to select one of a list of strings. Unlike a
     listbox, only the selection is visible until the user pulls down the
     menu of choices.
-    
+
     @beginStyleTable
     @style{wxCB_SORT}:
            Sorts the entries alphabetically.
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_CHOICE(id\, func)}:
            Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the
            list is selected.
     @endEventTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{choice.png}
-    
+
     @seealso
     wxListBox, wxComboBox, wxCommandEvent
 */
@@ -39,51 +39,51 @@ public:
     /**
         Constructor, creating and showing a choice.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then the choice is sized
         appropriately.
         
-        @param n 
+        @param n
         Number of strings with which to initialise the choice control.
         
-        @param choices 
+        @param choices
         An array of strings with which to initialise the choice control.
         
-        @param style 
+        @param style
         Window style. See wxChoice.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxChoice();
-        wxChoice(wxWindow * parent, wxWindowID id,
-                 const wxPoint& pos,
-                 const wxSize& size, int n,
-                 const wxString choices[],
-                 long style = 0,
-                 const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = "choice");
-        wxChoice(wxWindow * parent, wxWindowID id,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 const wxArrayString& choices,
-                 long style = 0,
-                 const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = "choice");
+    wxChoice(wxWindow * parent, wxWindowID id,
+             const wxPoint& pos,
+             const wxSize& size, int n,
+             const wxString choices[],
+             long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = "choice");
+    wxChoice(wxWindow * parent, wxWindowID id,
+             const wxPoint& pos,
+             const wxSize& size,
+             const wxArrayString& choices,
+             long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = "choice");
     //@}
 
     /**
@@ -101,13 +101,13 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "choice");
-        bool Create(wxWindow * parent, wxWindowID id,
-                    const wxPoint& pos,
-                    const wxSize& size,
-                    const wxArrayString& choices,
-                    long style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = "choice");
+    bool Create(wxWindow * parent, wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = "choice");
     //@}
 
     /**
@@ -135,7 +135,7 @@ public:
     /**
         Sets the number of columns in this choice item.
         
-        @param n 
+        @param n
         Number of columns.
     */
     void SetColumns(int n = 1);

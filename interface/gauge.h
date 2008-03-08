@@ -9,11 +9,11 @@
 /**
     @class wxGauge
     @wxheader{gauge.h}
-    
+
     A gauge is a horizontal or vertical bar which shows a quantity (often time).
-    
+
     wxGauge supports two working modes: determinate and indeterminate progress.
-    
+
     The first is the usual working mode (see wxGauge::SetValue
     and wxGauge::SetRange) while the second can be used when
     the program is doing some processing but you don't know how much progress is
@@ -21,11 +21,11 @@
     In this case, you can periodically call the wxGauge::Pulse
     function to make the progress bar switch to indeterminate mode (graphically
     it's usually a set of blocks which move or bounce in the bar control).
-    
+
     wxGauge supports dynamic switch between these two work modes.
-    
+
     There are no user commands for the gauge.
-    
+
     @beginStyleTable
     @style{wxGA_HORIZONTAL}:
            Creates a horizontal gauge.
@@ -35,11 +35,11 @@
            Creates smooth progress bar with one pixel wide update step (not
            supported by all platforms).
     @endStyleTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{gauge.png}
-    
+
     @seealso
     wxSlider, wxScrollBar
 */
@@ -50,37 +50,37 @@ public:
     /**
         Constructor, creating and showing a gauge.
         
-        @param parent 
+        @param parent
         Window parent.
         
-        @param id 
+        @param id
         Window identifier.
         
-        @param range 
+        @param range
         Integer range (maximum value) of the gauge. It is ignored when the gauge is
         used in indeterminate mode.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size.
         
-        @param style 
+        @param style
         Gauge style. See wxGauge.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create()
     */
     wxGauge();
-        wxGauge(wxWindow* parent, wxWindowID id, int range,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxGA_HORIZONTAL,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "gauge");
+    wxGauge(wxWindow* parent, wxWindowID id, int range,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxGA_HORIZONTAL,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = "gauge");
     //@}
 
     /**
@@ -132,7 +132,7 @@ public:
     int GetValue();
 
     /**
-        Returns @true if the gauge is vertical (has @c wxGA_VERTICAL style) and 
+        Returns @true if the gauge is vertical (has @c wxGA_VERTICAL style) and
         @false otherwise.
     */
     bool IsVertical();
@@ -180,7 +180,7 @@ public:
         This function makes the gauge switch to determinate mode, if it was in
         indeterminate mode before.
         
-        @param pos 
+        @param pos
         Position for the gauge level.
         
         @sa GetValue()

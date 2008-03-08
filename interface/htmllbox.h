@@ -9,17 +9,17 @@
 /**
     @class wxHtmlListBox
     @wxheader{htmllbox.h}
-    
+
     wxHtmlListBox is an implementation of wxVListBox which
     shows HTML content in the listbox rows. This is still an abstract base class
     and you will need to derive your own class from it (see htlbox sample for the
     example) but you will only need to override a single
     wxHtmlListBox::OnGetItem function.
-    
+
     @library{wxhtml}
     @category{ctrl}
     @appearance{htmllistbox.png}
-    
+
     @seealso
     wxSimpleHtmlListBox
 */
@@ -36,7 +36,7 @@ public:
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxString& name = wxHtmlListBoxNameStr);
-        wxHtmlListBox();
+    wxHtmlListBox();
     //@}
 
     /**
@@ -69,7 +69,7 @@ public:
         relative paths for the images or other resources embedded in your HTML.
     */
     wxFileSystem GetFileSystem();
-        const wxFileSystem GetFileSystem();
+    const wxFileSystem GetFileSystem();
     //@}
 
     /**
@@ -123,10 +123,10 @@ public:
         Called when the user clicks on hypertext link. Does nothing by default.
         Overloading this method is deprecated; intercept the event instead.
         
-        @param n 
+        @param n
         Index of the item containing the link.
         
-        @param link 
+        @param link
         Description of the link.
         
         @sa See also wxHtmlLinkInfo.
@@ -138,10 +138,10 @@ public:
 /**
     @class wxSimpleHtmlListBox
     @wxheader{htmllbox.h}
-    
+
     wxSimpleHtmlListBox is an implementation of wxHtmlListBox which
     shows HTML content in the listbox rows.
-    
+
     Unlike wxHtmlListBox, this is not an abstract class and thus it
     has the advantage that you can use it without deriving your own class from it.
     However, it also has the disadvantage that this is not a virtual control and
@@ -149,7 +149,7 @@ public:
     well-suited for those cases where you need to show a huge number of items:
     every time you
     add/insert a string, it will be stored internally and thus will take memory.
-    
+
     The interface exposed by wxSimpleHtmlListBox fully implements the
     wxControlWithItems interface, thus you should refer to
     wxControlWithItems's documentation for the API reference
@@ -158,20 +158,20 @@ public:
     @c protected in wxSimpleHtmlListBox's context so that you cannot call it
     directly,
     wxSimpleHtmlListBox will do it for you.
-    
+
     Note: in case you need to append a lot of items to the control at once, make
     sure to use the
     @ref wxControlWithItems::append "Append(const wxArrayString )" function.
-    
+
     Thus the only difference between a wxListBox and a wxSimpleHtmlListBox
     is that the latter stores strings which can contain HTML fragments (see the
     list of
     @ref overview_htmltagssupported "tags supported by wxHTML").
-    
+
     Note that the HTML strings you fetch to wxSimpleHtmlListBox should not contain
-    the @c html 
+    the @c html
     or @c body tags.
-    
+
     @beginStyleTable
     @style{wxHLB_DEFAULT_STYLE}:
            The default style: wxBORDER_SUNKEN
@@ -179,11 +179,11 @@ public:
            Multiple-selection list: the user can toggle multiple items on and
            off.
     @endStyleTable
-    
+
     @library{wxhtml}
     @category{ctrl}
     @appearance{simplehtmllistbox.png}
-    
+
     @seealso
     wxSimpleHtmlListBox::Create
 */
@@ -203,17 +203,17 @@ public:
                   long style = wxHLB_DEFAULT_STYLE,
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = "simpleHtmlListBox");
-        wxHtmlListBox(wxWindow* parent, wxWindowID id,
-                      const wxPoint& pos,
-                      const wxSize& size,
-                      const wxArrayString& choices,
-                      long style = wxHLB_DEFAULT_STYLE,
-                      const wxValidator& validator = wxDefaultValidator,
-                      const wxString& name = "simpleHtmlListBox");
-        See also
-wxSimpleHtmlListBox::Create
+    wxHtmlListBox(wxWindow* parent, wxWindowID id,
+                  const wxPoint& pos,
+                  const wxSize& size,
+                  const wxArrayString& choices,
+                  long style = wxHLB_DEFAULT_STYLE,
+                  const wxValidator& validator = wxDefaultValidator,
+                  const wxString& name = "simpleHtmlListBox");
+    See also
+    wxSimpleHtmlListBox::Create
 
- wxSimpleHtmlListBox();
+    wxSimpleHtmlListBox();
     //@}
 
     /**
@@ -223,7 +223,7 @@ wxSimpleHtmlListBox::Create
 
     //@{
     /**
-        Creates the HTML listbox for two-step construction. 
+        Creates the HTML listbox for two-step construction.
         See wxSimpleHtmlListBox() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id,
@@ -234,12 +234,12 @@ wxSimpleHtmlListBox::Create
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "simpleHtmlListBox");
-        bool Create(wxWindow* parent, wxWindowID id,
-                    const wxPoint& pos,
-                    const wxSize& size,
-                    const wxArrayString& choices,
-                    long style = wxHLB_DEFAULT_STYLE,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = "simpleHtmlListBox");
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
+                long style = wxHLB_DEFAULT_STYLE,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = "simpleHtmlListBox");
     //@}
 };

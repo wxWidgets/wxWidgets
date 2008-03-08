@@ -9,11 +9,11 @@
 /**
     @class wxTempFile
     @wxheader{file.h}
-    
+
     wxTempFile provides a relatively safe way to replace the contents of the
     existing file. The name is explained by the fact that it may be also used as
     just a temporary file if you don't replace the old file contents.
-    
+
     Usually, when a program replaces the contents of some file it first opens it for
     writing, thus losing all of the old data and then starts recreating it. This
     approach is not very safe because during the regeneration of the file bad things
@@ -22,35 +22,35 @@
     generation takes long time) and, finally, any other external interrupts (power
     supply failure or a disk error) will leave you without either the original file
     or the new one.
-    
+
     wxTempFile addresses this problem by creating a temporary file which is meant to
     replace the original file - but only after it is fully written. So, if the user
     interrupts the program during the file generation, the old file won't be lost.
     Also, if the program discovers itself that it doesn't want to replace the old
     file there is no problem - in fact, wxTempFile will @b not replace the old
-    file by default, you should explicitly call wxTempFile::Commit 
+    file by default, you should explicitly call wxTempFile::Commit
     to do it. Calling wxTempFile::Discard explicitly discards any
     modifications: it closes and deletes the temporary file and leaves the original
     file unchanged. If you don't call neither of Commit() and Discard(), the
     destructor will call Discard() automatically.
-    
+
     To summarize: if you want to replace another file, create an instance of
     wxTempFile passing the name of the file to be replaced to the constructor (you
-    may also use default constructor and pass the file name to 
-    wxTempFile::Open). Then you can wxTempFile::write 
+    may also use default constructor and pass the file name to
+    wxTempFile::Open). Then you can wxTempFile::write
     to wxTempFile using wxFile-like functions and later call
     Commit() to replace the old file (and close this one) or call Discard() to
     cancel
     the modifications.
-    
+
     @library{wxbase}
     @category{file}
 */
-class wxTempFile 
+class wxTempFile
 {
 public:
     /**
-        Associates wxTempFile with the file to be replaced and opens it. You should use 
+        Associates wxTempFile with the file to be replaced and opens it. You should use
         IsOpened() to verify if the constructor succeeded.
     */
     wxTempFile(const wxString& strName);
@@ -91,7 +91,7 @@ public:
         occurred.
         
         @e strName is the name of file to be replaced. The temporary file is always
-        created in the directory where @e strName is. In particular, if 
+        created in the directory where @e strName is. In particular, if
         @e strName doesn't include the path, it is created in the current directory
         and the program should have write access to it for the function to succeed.
     */
@@ -124,24 +124,24 @@ public:
 /**
     @class wxFile
     @wxheader{file.h}
-    
+
     A wxFile performs raw file I/O. This is a very small class designed to
     minimize the overhead of using it - in fact, there is hardly any overhead at
     all, but using it brings you automatic error checking and hides differences
     between platforms and compilers. wxFile also automatically closes the file in
     its destructor making it unnecessary to worry about forgetting to do it.
-    wxFile is a wrapper around @c file descriptor. - see also 
+    wxFile is a wrapper around @c file descriptor. - see also
     wxFFile for a wrapper around @c FILE structure.
-    
-    @c wxFileOffset is used by the wxFile functions which require offsets as 
+
+    @c wxFileOffset is used by the wxFile functions which require offsets as
     parameter or return them. If the platform supports it, wxFileOffset is a typedef
     for a native 64 bit integer, otherwise a 32 bit integer is used for
     wxFileOffset.
-    
+
     @library{wxbase}
     @category{file}
 */
-class wxFile 
+class wxFile
 {
 public:
     //@{
@@ -149,21 +149,21 @@ public:
         Associates the file with the given file descriptor, which has already been
         opened.
         
-        @param filename 
+        @param filename
         The filename.
         
-        @param mode 
+        @param mode
         The mode in which to open the file. May be one of read(), write() and
         wxFile::read_write.
         
-        @param fd 
+        @param fd
         An existing file descriptor (see Attach() for the list of predefined
         descriptors)
     */
     wxFile();
-        wxFile(const wxString& filename,
-               wxFile::OpenMode mode = wxFile::read);
-        wxFile(int fd);
+    wxFile(const wxString& filename,
+           wxFile::OpenMode mode = wxFile::read);
+    wxFile(int fd);
     //@}
 
     /**
@@ -214,9 +214,9 @@ public:
     /**
         Returns @true if the end of the file has been reached.
         
-        Note that the behaviour of the file pointer based class 
-        wxFFile is different as wxFFile::Eof 
-        will return @true here only if an attempt has been made to read 
+        Note that the behaviour of the file pointer based class
+        wxFFile is different as wxFFile::Eof
+        will return @true here only if an attempt has been made to read
         @e past the last byte of the file, while wxFile::Eof() will return @true
         even before such attempt is made if the file pointer is at the last position
         in the file.
@@ -224,7 +224,7 @@ public:
         Note also that this function doesn't work on unseekable file descriptors
         (examples include pipes, terminals and sockets under Unix) and an attempt to
         use it will result in an error message in such case. So, to read the entire
-        file into memory, you should write a loop which uses 
+        file into memory, you should write a loop which uses
         Read() repeatedly and tests its return condition instead
         of using Eof() as this will not work for special files under Unix.
     */
@@ -263,10 +263,10 @@ public:
     /**
         Opens the file, returning @true if successful.
         
-        @param filename 
+        @param filename
         The filename.
         
-        @param mode 
+        @param mode
         The mode in which to open the file. May be one of read(), write() and
         wxFile::read_write.
     */
@@ -278,17 +278,17 @@ public:
         if there was an error.
     */
     size_t Read(void* buffer, size_t count);
-        Parameters Return value
-The number of bytes read, or the symbol wxInvalidOffset();
+    Parameters Return value
+    The number of bytes read, or the symbol wxInvalidOffset();
     //@}
 
     /**
         Seeks to the specified position.
         
-        @param ofs 
+        @param ofs
         Offset to seek to.
         
-        @param mode 
+        @param mode
         One of wxFromStart, wxFromEnd, wxFromCurrent.
         
         @returns The actual offset position achieved, or wxInvalidOffset on
@@ -302,7 +302,7 @@ The number of bytes read, or the symbol wxInvalidOffset();
         the file. For example, @c SeekEnd(-5) would position the pointer 5
         bytes before the end.
         
-        @param ofs 
+        @param ofs
         Number of bytes before the end of the file.
         
         @returns The actual offset position achieved, or wxInvalidOffset on
@@ -324,7 +324,7 @@ The number of bytes read, or the symbol wxInvalidOffset();
         @e conv is used to convert @e s to multibyte representation.
         
         Note that this method only works with @c NUL-terminated strings, if you want
-        to write data with embedded @c NULs to the file you should use the other 
+        to write data with embedded @c NULs to the file you should use the other
         @ref write() "Write() overload".
     */
     bool Write(const wxString& s, const wxMBConv& conv = wxConvUTF8);

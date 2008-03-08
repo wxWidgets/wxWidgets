@@ -9,12 +9,12 @@
 /**
     @class wxQuantize
     @wxheader{quantize.h}
-    
+
     Performs quantization, or colour reduction, on a wxImage.
-    
+
     Functions in this class are static and so a wxQuantize object need not be
     created.
-    
+
     @library{wxcore}
     @category{misc}
 */
@@ -51,9 +51,9 @@ public:
                   int desiredNoColours = 236,
                   unsigned char** eightBitData = 0,
                   int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|wxQUANTIZE_FILL_DESTINATION_IMAGE|wxQUANTIZE_RETURN_8BIT_DATA);
-        bool Quantize(const wxImage& src, wxImage& dest,
-                      int desiredNoColours = 236,
-                      unsigned char** eightBitData = 0,
-                      int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|wxQUANTIZE_FILL_DESTINATION_IMAGE|wxQUANTIZE_RETURN_8BIT_DATA);
+    bool Quantize(const wxImage& src, wxImage& dest,
+                  int desiredNoColours = 236,
+                  unsigned char** eightBitData = 0,
+                  int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|wxQUANTIZE_FILL_DESTINATION_IMAGE|wxQUANTIZE_RETURN_8BIT_DATA);
     //@}
 };

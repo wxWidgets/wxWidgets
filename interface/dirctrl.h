@@ -9,13 +9,13 @@
 /**
     @class wxGenericDirCtrl
     @wxheader{dirctrl.h}
-    
+
     This control can  be used to place a directory listing (with optional files) on
     an arbitrary window.
-    
+
     The control contains a wxTreeCtrl window representing the directory
     hierarchy, and optionally, a wxChoice window containing a list of filters.
-    
+
     @library{wxbase}
     @category{ctrl}
     @appearance{genericdirctrl.png}
@@ -27,46 +27,46 @@ public:
     /**
         Main constructor.
         
-        @param parent 
+        @param parent
         Parent window.
         
-        @param id 
+        @param id
         Window identifier.
         
-        @param dir 
+        @param dir
         Initial folder.
         
-        @param pos 
+        @param pos
         Position.
         
-        @param size 
+        @param size
         Size.
         
-        @param style 
+        @param style
         Window style. Please see wxGenericDirCtrl for a list of possible styles.
         
-        @param filter 
+        @param filter
         A filter string, using the same syntax as that for wxFileDialog. This may be
         empty if filters
         are not being used.
         
         Example: "All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg"
         
-        @param defaultFilter 
+        @param defaultFilter
         The zero-indexed default filter setting.
         
-        @param name 
+        @param name
         The window name.
     */
     wxGenericDirCtrl();
-        wxGenericDirCtrl(wxWindow* parent, const wxWindowID id = -1,
-                         const wxString& dir = wxDirDialogDefaultFolderStr,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         long style = wxDIRCTRL_3D_INTERNAL|wxBORDER_SUNKEN,
-                         const wxString& filter = wxEmptyString,
-                         int defaultFilter = 0,
-                         const wxString& name = wxTreeCtrlNameStr);
+    wxGenericDirCtrl(wxWindow* parent, const wxWindowID id = -1,
+                     const wxString& dir = wxDirDialogDefaultFolderStr,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxDIRCTRL_3D_INTERNAL|wxBORDER_SUNKEN,
+                     const wxString& filter = wxEmptyString,
+                     int defaultFilter = 0,
+                     const wxString& name = wxTreeCtrlNameStr);
     //@}
 
     /**
@@ -176,7 +176,7 @@ public:
     void SetPath(const wxString& path);
 
     /**
-        @param show 
+        @param show
         If @true, hidden folders and files will be displayed by the
         control. If @false, they will not be displayed.
     */

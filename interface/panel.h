@@ -9,25 +9,25 @@
 /**
     @class wxPanel
     @wxheader{panel.h}
-    
+
     A panel is a window on which controls are placed. It is usually placed within
     a frame. Its main feature over its parent class wxWindow is code for handling
     child windows and TAB traversal. Since wxWidgets 2.9, there is support both
     for TAB traversal implemented by wxWidgets itself as well as native TAB
     traversal (such as for GTK 2.0).
-    
+
     @e Note: Tab traversal is implemented through an otherwise undocumented
     intermediate wxControlContainer class from which any class can derive
     in addition to the normal wxWindow base class. Please see wx/containr.h
     and wx/panel.h to find out how this is achieved.
-    
+
     @e Note: if not all characters are being intercepted by your OnKeyDown or
-    OnChar handler, it may be because you are using the wxTAB_TRAVERSAL style, 
+    OnChar handler, it may be because you are using the wxTAB_TRAVERSAL style,
     which grabs some keypresses for use by child controls.
-    
+
     @library{wxbase}
     @category{miscwnd}
-    
+
     @seealso
     wxDialog
 */
@@ -38,24 +38,24 @@ public:
     /**
         Constructor.
         
-        @param parent 
+        @param parent
         The parent window.
         
-        @param id 
+        @param id
         An identifier for the panel. A value of -1 is taken to mean a default.
         
-        @param pos 
+        @param pos
         The panel position. The value wxDefaultPosition indicates a default position, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param size 
+        @param size
         The panel size. The value wxDefaultSize indicates a default size, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param style 
+        @param style
         The window style. See wxPanel.
         
-        @param name 
+        @param name
         Used to associate a name with the window,
         allowing the application user to set Motif resource values for
         individual dialog boxes.
@@ -63,11 +63,11 @@ public:
         @sa Create()
     */
     wxPanel();
-        wxPanel(wxWindow* parent, wxWindowID id = wxID_ANY,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxTAB_TRAVERSAL,
-                const wxString& name = "panel");
+    wxPanel(wxWindow* parent, wxWindowID id = wxID_ANY,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxTAB_TRAVERSAL,
+            const wxString& name = "panel");
     //@}
 
     /**
@@ -104,7 +104,7 @@ public:
     /**
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
         
-        @param event 
+        @param event
         The colour change event.
         
         @remarks Changes the panel's colour to conform to the current settings

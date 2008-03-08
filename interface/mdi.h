@@ -9,13 +9,13 @@
 /**
     @class wxMDIClientWindow
     @wxheader{mdi.h}
-    
+
     An MDI client window is a child of wxMDIParentFrame, and manages zero or
     more wxMDIChildFrame objects.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxMDIChildFrame, wxMDIParentFrame, wxFrame
 */
@@ -26,10 +26,10 @@ public:
     /**
         Constructor, creating the window.
         
-        @param parent 
+        @param parent
         The window parent.
         
-        @param style 
+        @param style
         The window style. Currently unused.
         
         @remarks The second style of constructor is called within
@@ -38,7 +38,7 @@ public:
         @sa wxMDIParentFrame::wxMDIParentFrame, wxMDIParentFrame::OnCreateClient
     */
     wxMDIClientWindow();
-        wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
+    wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
     //@}
 
     /**
@@ -57,17 +57,17 @@ public:
 /**
     @class wxMDIParentFrame
     @wxheader{mdi.h}
-    
+
     An MDI (Multiple Document Interface) parent frame is a window which can contain
     MDI child frames in its own 'desktop'. It is a convenient way to avoid window
     clutter,
     and is used in many popular Windows applications, such as Microsoft Word(TM).
-    
+
     @beginStyleTable
     @style{wxCAPTION}:
            Puts a caption on the frame.
     @style{wxDEFAULT_FRAME_STYLE}:
-           Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxTHICK_FRAME | 
+           Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxTHICK_FRAME |
            wxSYSTEM_MENU |  wxCAPTION.
     @style{wxHSCROLL}:
            Displays a horizontal scrollbar in the client window, allowing the
@@ -98,10 +98,10 @@ public:
            Under Windows, removes the Window menu that is normally added
            automatically.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{managedwnd}
-    
+
     @seealso
     wxMDIChildFrame, wxMDIClientWindow, wxFrame, wxDialog
 */
@@ -112,27 +112,27 @@ public:
     /**
         Constructor, creating the window.
         
-        @param parent 
+        @param parent
         The window parent. This should be @NULL.
         
-        @param id 
+        @param id
         The window identifier. It may take a value of -1 to indicate a default value.
         
-        @param title 
+        @param title
         The caption to be displayed on the frame's title bar.
         
-        @param pos 
+        @param pos
         The window position. The value wxDefaultPosition indicates a default position, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param size 
+        @param size
         The window size. The value wxDefaultSize indicates a default size, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param style 
+        @param style
         The window style. See wxMDIParentFrame.
         
-        @param name 
+        @param name
         The name of the window. This parameter is used to associate a name with the
         item,
         allowing the application user to set Motif resource values for
@@ -146,12 +146,12 @@ public:
         @sa Create(), OnCreateClient()
     */
     wxMDIParentFrame();
-        wxMDIParentFrame(wxWindow* parent, wxWindowID id,
-                         const wxString& title,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         long style = wxDEFAULT_FRAME_STYLE |  wxVSCROLL |  wxHSCROLL,
-                         const wxString& name = "frame");
+    wxMDIParentFrame(wxWindow* parent, wxWindowID id,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE |  wxVSCROLL |  wxHSCROLL,
+                     const wxString& name = "frame");
     //@}
 
     /**
@@ -206,10 +206,10 @@ public:
     /**
         This gets the size of the frame 'client area' in pixels.
         
-        @param width 
+        @param width
         Receives the client width in pixels.
         
-        @param height 
+        @param height
         Receives the client height in pixels.
         
         @remarks The client area is the area which may be drawn on by the
@@ -263,7 +263,7 @@ public:
         MDI parent window. It saves the application having to manage the positioning
         of the toolbar MDI client window.
         
-        @param toolbar 
+        @param toolbar
         Toolbar to manage.
         
         @remarks When the frame is resized, the toolbar is resized to be the
@@ -298,15 +298,15 @@ public:
 /**
     @class wxMDIChildFrame
     @wxheader{mdi.h}
-    
+
     An MDI child frame is a frame that can only exist on a wxMDIClientWindow,
     which is itself a child of wxMDIParentFrame.
-    
+
     @beginStyleTable
     @style{wxCAPTION}:
            Puts a caption on the frame.
     @style{wxDEFAULT_FRAME_STYLE}:
-           Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxTHICK_FRAME | 
+           Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxTHICK_FRAME |
            wxSYSTEM_MENU |  wxCAPTION.
     @style{wxICONIZE}:
            Display the frame iconized (minimized) (Windows only).
@@ -328,10 +328,10 @@ public:
     @style{wxTHICK_FRAME}:
            Displays a thick frame around the window (Windows and Motif only).
     @endStyleTable
-    
+
     @library{wxcore}
     @category{managedwnd}
-    
+
     @seealso
     wxMDIClientWindow, wxMDIParentFrame, wxFrame
 */
@@ -342,27 +342,27 @@ public:
     /**
         Constructor, creating the window.
         
-        @param parent 
+        @param parent
         The window parent. This should not be @NULL.
         
-        @param id 
+        @param id
         The window identifier. It may take a value of -1 to indicate a default value.
         
-        @param title 
+        @param title
         The caption to be displayed on the frame's title bar.
         
-        @param pos 
+        @param pos
         The window position. The value wxDefaultPosition indicates a default position, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param size 
+        @param size
         The window size. The value wxDefaultSize indicates a default size, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param style 
+        @param style
         The window style. See wxMDIChildFrame.
         
-        @param name 
+        @param name
         The name of the window. This parameter is used to associate a name with the
         item,
         allowing the application user to set Motif resource values for
@@ -373,12 +373,12 @@ public:
         @sa Create()
     */
     wxMDIChildFrame();
-        wxMDIChildFrame(wxMDIParentFrame* parent, wxWindowID id,
-                        const wxString& title,
-                        const wxPoint& pos = wxDefaultPosition,
-                        const wxSize& size = wxDefaultSize,
-                        long style = wxDEFAULT_FRAME_STYLE,
-                        const wxString& name = "frame");
+    wxMDIChildFrame(wxMDIParentFrame* parent, wxWindowID id,
+                    const wxString& title,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxDEFAULT_FRAME_STYLE,
+                    const wxString& name = "frame");
     //@}
 
     /**

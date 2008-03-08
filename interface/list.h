@@ -9,38 +9,38 @@
 /**
     @class wxListT
     @wxheader{list.h}
-    
+
     The wxListT class provides linked list functionality. It has been rewritten
     to be type safe and to provide the full API of the STL std::list container and
     should be used like it. The exception is that wxListT actually stores
     pointers and therefore its iterators return pointers and not references
-    to the actual objets in the list (see example below) and @e value_type 
+    to the actual objets in the list (see example below) and @e value_type
     is defined as @e T*. wxListT destroys an object after removing it only
     if wxList::DeleteContents has been called.
-    
-    wxListT is not a real template and it requires that you declare and define 
+
+    wxListT is not a real template and it requires that you declare and define
     each wxListT class in your program. This is done with @e WX_DECLARE_LIST
     and @e WX_DEFINE_LIST macros (see example). We hope that we'll be able
     to provide a proper template class providing both the STL std::list
     and the old wxList API in the future.
-    
+
     Please refer to the STL std::list documentation for further
     information on how to use the class. Below we documented both
-    the supported STL and the legacy API that originated from the 
+    the supported STL and the legacy API that originated from the
     old wxList class and which can still be used alternatively for
     the the same class.
-    
-    Note that if you compile wxWidgets in STL mode (wxUSE_STL defined as 1) 
-    then wxListT will actually derive from std::list and just add a legacy 
+
+    Note that if you compile wxWidgets in STL mode (wxUSE_STL defined as 1)
+    then wxListT will actually derive from std::list and just add a legacy
     compatibility layer for the old wxList class.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxArrayT, wxVectorT
 */
-class wxList<T> 
+class wxList<T>
 {
 public:
     //@{
@@ -48,7 +48,7 @@ public:
         Constructors.
     */
     wxListT();
-        wxListT(size_t count, T * elements[]);
+    wxListT(size_t count, T * elements[]);
     //@}
 
     /**
@@ -76,7 +76,7 @@ public:
     void DeleteContents(bool destroy);
 
     /**
-        Deletes the given element refered to by @c iter from the list, 
+        Deletes the given element refered to by @c iter from the list,
         returning @true if successful.
     */
     bool DeleteNode(const compatibility_iterator& iter);
@@ -124,10 +124,10 @@ public:
         Inserts the object before the object refered to be @e iter.
     */
     wxListT::compatibility_iterator Insert(T * object);
-        wxListT::compatibility_iterator Insert(size_t position,
-                                               T * object);
-        wxListT::compatibility_iterator Insert(compatibility_iterator iter,
-                                               T * object);
+    wxListT::compatibility_iterator Insert(size_t position,
+                                           T * object);
+    wxListT::compatibility_iterator Insert(compatibility_iterator iter,
+                                           T * object);
     //@}
 
     /**
@@ -174,7 +174,7 @@ public:
         )
     */
     void assign(const_iterator first, const const_iterator& last);
-        void assign(size_type n);
+    void assign(size_type n);
     //@}
 
     //@{
@@ -182,7 +182,7 @@ public:
         Returns the last item of the list.
     */
     reference back();
-        const_reference back();
+    const_reference back();
     //@}
 
     //@{
@@ -190,7 +190,7 @@ public:
         Returns a (const) iterator pointing to the beginning of the list.
     */
     iterator begin();
-        const_iterator begin();
+    const_iterator begin();
     //@}
 
     /**
@@ -208,7 +208,7 @@ public:
         Returns a (const) iterator pointing at the end of the list.
     */
     iterator end();
-        const_iterator end();
+    const_iterator end();
     //@}
 
     //@{
@@ -216,8 +216,8 @@ public:
         Erases the items from @e first to @e last.
     */
     iterator erase(const iterator& it);
-        iterator erase(const iterator& first,
-                       const iterator& last);
+    iterator erase(const iterator& first,
+                   const iterator& last);
     //@}
 
     //@{
@@ -225,7 +225,7 @@ public:
         Returns the first item in the list.
     */
     reference front();
-        const_reference front();
+    const_reference front();
     //@}
 
     //@{
@@ -233,9 +233,9 @@ public:
         Inserts an item (or several) at the given position.
     */
     iterator insert(const iterator& it);
-        void insert(const iterator& it, size_type n);
-        void insert(const iterator& it, const_iterator first,
-                    const const_iterator& last);
+    void insert(const iterator& it, size_type n);
+    void insert(const iterator& it, const_iterator first,
+                const const_iterator& last);
     //@}
 
     /**
@@ -273,7 +273,7 @@ public:
         reversed list.
     */
     reverse_iterator rbegin();
-        const_reverse_iterator rbegin();
+    const_reverse_iterator rbegin();
     //@}
 
     /**
@@ -287,7 +287,7 @@ public:
         reversed list.
     */
     reverse_iterator rend();
-        const_reverse_iterator rend();
+    const_reverse_iterator rend();
     //@}
 
     /**
@@ -313,8 +313,8 @@ public:
 /**
     @class wxNode
     @wxheader{list.h}
-    
-    wxNodeBase is the node structure used in linked lists (see 
+
+    wxNodeBase is the node structure used in linked lists (see
     wxList) and derived classes. You should never use wxNodeBase
     class directly, however, because it works with untyped (@c void *) data and
     this is unsafe. Use wxNodeBase-derived classes which are automatically defined
@@ -322,20 +322,20 @@ public:
     wxList documentation (see example there). Also note that
     although there is a class called wxNode, it is defined for backwards
     compatibility only and usage of this class is strongly deprecated.
-    
+
     In the documentation below, the type @c T should be thought of as a
     "template'' parameter: this is the type of data stored in the linked list or,
     in other words, the first argument of WX_DECLARE_LIST macro. Also, wxNode is
     written as wxNodeT even though it isn't really a template class -- but it
     helps to think of it as if it were.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxList, wxHashTable
 */
-class wxNode 
+class wxNode
 {
 public:
     /**

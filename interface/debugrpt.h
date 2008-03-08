@@ -9,22 +9,22 @@
 /**
     @class wxDebugReportPreview
     @wxheader{debugrpt.h}
-    
+
     This class presents the debug report to the user and allows him to veto report
     entirely or remove some parts of it. Although not mandatory, using this class
     is strongly recommended as data included in the debug report might contain
     sensitive private information and the user should be notified about it as well
     as having a possibility to examine the data which had been gathered to check
     whether this is effectively the case and discard the debug report if it is.
-    
+
     wxDebugReportPreview is an abstract base class, currently the only concrete
-    class deriving from it is 
+    class deriving from it is
     wxDebugReportPreviewStd.
-    
+
     @library{wxqa}
     @category{debugging}
 */
-class wxDebugReportPreview 
+class wxDebugReportPreview
 {
 public:
     /**
@@ -50,11 +50,11 @@ public:
 /**
     @class wxDebugReportCompress
     @wxheader{debugrpt.h}
-    
+
     wxDebugReportCompress is a wxDebugReport which
     compresses all the files in this debug report into a single .ZIP file in its
     @c @e Process() function.
-    
+
     @library{wxqa}
     @category{debugging}
 */
@@ -76,37 +76,37 @@ public:
 /**
     @class wxDebugReport
     @wxheader{debugrpt.h}
-    
+
     wxDebugReport is used to generate a debug report, containing information about
-    the program current state. It is usually used from 
-    wxApp::OnFatalException as shown in the 
+    the program current state. It is usually used from
+    wxApp::OnFatalException as shown in the
     sample.
-    
+
     A wxDebugReport object contains one or more files. A few of them can be created
     by the
     class itself but more can be created from the outside and then added to the
     report. Also note that several virtual functions may be overridden to further
     customize the class behaviour.
-    
+
     Once a report is fully assembled, it can simply be left in the temporary
     directory so that the user can email it to the developers (in which case you
     should still use wxDebugReportCompress to
-    compress it in a single file) or uploaded to a Web server using 
+    compress it in a single file) or uploaded to a Web server using
     wxDebugReportUpload (setting up the Web server
     to accept uploads is your responsibility, of course). Other handlers, for
     example for
     automatically emailing the report, can be defined as well but are not currently
     included in wxWidgets.
-    
+
     @library{wxqa}
     @category{debugging}
 */
-class wxDebugReport 
+class wxDebugReport
 {
 public:
     /**
         The constructor creates a temporary directory where the files that will
-        be included in the report are created. Use 
+        be included in the report are created. Use
         IsOk() to check for errors.
     */
     wxDebugReport();
@@ -145,7 +145,7 @@ public:
     /**
         Adds the minidump file to the debug report.
         
-        Minidumps are only available under recent Win32 versions (@c dbghlp32.dll 
+        Minidumps are only available under recent Win32 versions (@c dbghlp32.dll
         can be installed under older systems to make minidumps available).
     */
     bool AddDump(Context ctx);
@@ -216,7 +216,7 @@ public:
     const wxString GetDirectory();
 
     /**
-        Retrieves the name (relative to 
+        Retrieves the name (relative to
         wxDebugReport::GetDirectory) and the description of the
         file with the given index. If @e n is greater than or equal to the number of
         filse, @false is returned.
@@ -229,14 +229,14 @@ public:
     size_t GetFilesCount();
 
     /**
-        Gets the name used as a base name for various files, by default 
+        Gets the name used as a base name for various files, by default
         wxApp::GetAppName is used.
     */
     wxString GetReportName();
 
     /**
         Returns @true if the object was successfully initialized. If this method
-        returns 
+        returns
         @false the report can't be used.
     */
 #define bool IsOk()     /* implementation is private */
@@ -249,7 +249,7 @@ public:
     bool Process();
 
     /**
-        Removes the file from report: this is used by 
+        Removes the file from report: this is used by
         wxDebugReportPreview to allow the user to
         remove files potentially containing private information from the report.
     */
@@ -266,11 +266,11 @@ public:
 /**
     @class wxDebugReportPreviewStd
     @wxheader{debugrpt.h}
-    
+
     wxDebugReportPreviewStd is a standard debug report preview window. It displays
     a GUIdialog allowing the user to examine the contents of a debug report, remove
     files from and add notes to it.
-    
+
     @library{wxqa}
     @category{debugging}
 */
@@ -283,7 +283,7 @@ public:
     wxDebugReportPreviewStd();
 
     /**
-        Show the dialog, see 
+        Show the dialog, see
         wxDebugReportPreview::Show for more
         information.
     */
@@ -294,11 +294,11 @@ public:
 /**
     @class wxDebugReportUpload
     @wxheader{debugrpt.h}
-    
+
     This class is used to upload a compressed file using HTTP POST request. As this
     class derives from wxDebugReportCompress, before upload the report is
     compressed in a single .ZIP file.
-    
+
     @library{wxqa}
     @category{debugging}
 */
@@ -324,7 +324,7 @@ public:
         
         This function may be overridden in a derived class to show the output from
         curl: this may be an HTML page or anything else that the server returned.
-        Value returned by this function becomes the return value of 
+        Value returned by this function becomes the return value of
         wxDebugReport::Process.
     */
     bool OnServerReply();

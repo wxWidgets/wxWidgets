@@ -9,18 +9,18 @@
 /**
     @class wxZlibOutputStream
     @wxheader{zstream.h}
-    
+
     This stream compresses all data written to it. The compressed output can be
     in zlib or gzip format.
     Note that writing the gzip format requires zlib version 1.2.1 or greater
     (the builtin version does support gzip format).
-    
+
     The stream is not seekable, wxOutputStream::SeekO returns
      @e wxInvalidOffset.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxOutputStream, wxZlibInputStream
 */
@@ -29,7 +29,7 @@ class wxZlibOutputStream : public wxFilterOutputStream
 public:
     //@{
     /**
-        Creates a new write-only compressed stream. @e level means level of 
+        Creates a new write-only compressed stream. @e level means level of
         compression. It is number between 0 and 9 (including these values) where
         0 means no compression and 9 best but slowest compression. -1 is default
         value (currently equivalent to 6).
@@ -49,8 +49,8 @@ public:
     */
     wxZlibOutputStream(wxOutputStream& stream, int level = -1,
                        int flags = wxZLIB_ZLIB);
-        wxZlibOutputStream(wxOutputStream* stream, int level = -1,
-                           int flags = wxZLIB_ZLIB);
+    wxZlibOutputStream(wxOutputStream* stream, int level = -1,
+                       int flags = wxZLIB_ZLIB);
     //@}
 
     /**
@@ -63,18 +63,18 @@ public:
 /**
     @class wxZlibInputStream
     @wxheader{zstream.h}
-    
+
     This filter stream decompresses a stream that is in zlib or gzip format.
     Note that reading the gzip format requires zlib version 1.2.1 or greater,
     (the builtin version does support gzip format).
-    
+
     The stream is not seekable, wxInputStream::SeekI returns
      @e wxInvalidOffset. Also wxStreamBase::GetSize is
     not supported, it always returns 0.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxInputStream, wxZlibOutputStream.
 */
@@ -103,8 +103,8 @@ public:
         The following symbols can be use for the flags:
     */
     wxZlibInputStream(wxInputStream& stream, int flags = wxZLIB_AUTO);
-        wxZlibInputStream(wxInputStream* stream,
-                          int flags = wxZLIB_AUTO);
+    wxZlibInputStream(wxInputStream* stream,
+                      int flags = wxZLIB_AUTO);
     //@}
 
     /**

@@ -9,16 +9,16 @@
 /**
     @class wxControlWithItems
     @wxheader{ctrlsub.h}
-    
+
     This class is an abstract base class for some wxWidgets controls which contain
     several items, such as wxListBox and
     wxCheckListBox derived from it,
     wxChoice and wxComboBox.
-    
+
     It defines the methods for accessing the controls items and although each of
     the derived classes implements them differently, they still all conform to the
     same interface.
-    
+
     The items in a wxControlWithItems have (non-empty) string labels and,
     optionally, client data associated with them. Client data may be of two
     different kinds: either simple untyped (@c void *) pointers which are simply
@@ -31,10 +31,10 @@
     data of the same type (typed or untyped), if any. This type is determined by
     the first call to wxControlWithItems::Append (the version with
     client data pointer) or wxControlWithItems::SetClientData.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxControlWithItems::Clear
 */
@@ -47,19 +47,19 @@ public:
         is usually much faster than appending them one by one if you need to add a lot
         of items.
         
-        @param item 
+        @param item
         String to add.
         
-        @param stringsArray 
+        @param stringsArray
         Contains items to append to the control.
         
-        @param strings 
+        @param strings
         Array of strings of size n.
         
-        @param n 
+        @param n
         Number of items in the strings array.
         
-        @param clientData 
+        @param clientData
         Array of client data pointers of size n to associate with the new items.
         
         @returns When appending a single item, the return value is the index of
@@ -68,14 +68,14 @@ public:
                    or wxCB_SORT style).
     */
     int Append(const wxString& item);
-        int Append(const wxString& item, void * clientData);
-        int Append(const wxString& item, wxClientData * clientData);
-        void Append(const wxArrayString& strings);
-        void Append(unsigned int n, const wxString* strings);
-        void Append(unsigned int n, const wxString* strings,
-                    void ** clientData);
-        void Append(unsigned int n, const wxString* strings,
-                    wxClientData ** clientData);
+    int Append(const wxString& item, void * clientData);
+    int Append(const wxString& item, wxClientData * clientData);
+    void Append(const wxArrayString& strings);
+    void Append(unsigned int n, const wxString* strings);
+    void Append(unsigned int n, const wxString* strings,
+                void ** clientData);
+    void Append(unsigned int n, const wxString* strings,
+                wxClientData ** clientData);
     //@}
 
     /**
@@ -94,7 +94,7 @@ public:
         remove an item with the index negative or greater or equal than the number of
         items in the control.
         
-        @param n 
+        @param n
         The zero-based item index.
         
         @sa Clear()
@@ -104,10 +104,10 @@ public:
     /**
         Finds an item whose label matches the given string.
         
-        @param string 
+        @param string
         String to find.
         
-        @param caseSensitive 
+        @param caseSensitive
         Whether search is case sensitive (default is not).
         
         @returns The zero-based position of the item, or wxNOT_FOUND if the
@@ -122,7 +122,7 @@ public:
         client data at all although it is ok to call it even if the given item doesn't
         have any client data associated with it (but other items do).
         
-        @param n 
+        @param n
         The zero-based position of the item.
         
         @returns A pointer to the client data, or @NULL if not present.
@@ -135,7 +135,7 @@ public:
         client data at all although it is ok to call it even if the given item doesn't
         have any client data associated with it (but other items do).
         
-        @param n 
+        @param n
         The zero-based position of the item.
         
         @returns A pointer to the client data, or @NULL if not present.
@@ -166,7 +166,7 @@ public:
     /**
         Returns the label of the item with the given index.
         
-        @param n 
+        @param n
         The zero-based index.
         
         @returns The label of the item or an empty string if the position was
@@ -194,42 +194,42 @@ public:
         lot
         of items.
         
-        @param item 
+        @param item
         String to add.
         
-        @param pos 
+        @param pos
         Position to insert item before, zero based.
         
-        @param stringsArray 
+        @param stringsArray
         Contains items to insert into the control content
         
-        @param strings 
+        @param strings
         Array of strings of size n.
         
-        @param n 
+        @param n
         Number of items in the strings array.
         
-        @param clientData 
+        @param clientData
         Array of client data pointers of size n to associate with the new items.
         
         @returns The return value is the index of the newly inserted item. If the
                    insertion failed for some reason, -1 is returned.
     */
     int Insert(const wxString& item, unsigned int pos);
-        int Insert(const wxString& item, unsigned int pos,
-                   void * clientData);
-        int Insert(const wxString& item, unsigned int pos,
-                   wxClientData * clientData);
-        void Insert(const wxArrayString& strings, unsigned int pos);
-        void Insert(const wxArrayString& strings, unsigned int pos);
-        void Insert(unsigned int n, const wxString* strings,
-                    unsigned int pos);
-        void Insert(unsigned int n, const wxString* strings,
-                    unsigned int pos,
-                    void ** clientData);
-        void Insert(unsigned int n, const wxString* strings,
-                    unsigned int pos,
-                    wxClientData ** clientData);
+    int Insert(const wxString& item, unsigned int pos,
+               void * clientData);
+    int Insert(const wxString& item, unsigned int pos,
+               wxClientData * clientData);
+    void Insert(const wxArrayString& strings, unsigned int pos);
+    void Insert(const wxArrayString& strings, unsigned int pos);
+    void Insert(unsigned int n, const wxString* strings,
+                unsigned int pos);
+    void Insert(unsigned int n, const wxString* strings,
+                unsigned int pos,
+                void ** clientData);
+    void Insert(unsigned int n, const wxString* strings,
+                unsigned int pos,
+                wxClientData ** clientData);
     //@}
 
     /**
@@ -252,19 +252,19 @@ public:
         this method is much faster than appending the items one by one if you need to
         append a lot of them.
         
-        @param item 
+        @param item
         The single item to insert into the control.
         
-        @param stringsArray 
+        @param stringsArray
         Contains items to set as control content.
         
-        @param strings 
+        @param strings
         Raw C++ array of strings. Only used in conjunction with 'n'.
         
-        @param n 
+        @param n
         Number of items passed in 'strings'. Only used in conjunction with 'strings'.
         
-        @param clientData 
+        @param clientData
         Client data to associate with the item(s).
         
         @returns When the control is sorted (e.g. has wxLB_SORT or wxCB_SORT
@@ -276,14 +276,14 @@ public:
                    wxCB_SORT style).
     */
     int Set(const wxString& item);
-        int Set(const wxString& item, void * clientData);
-        int Set(const wxString& item, wxClientData * clientData);
-        void Set(const wxArrayString& stringsArray);
-        void Set(unsigned int n, const wxString* strings);
-        void Set(unsigned int n, const wxString* strings,
-                 void ** clientData);
-        void Set(unsigned int n, const wxString* strings,
-                 wxClientData ** clientData);
+    int Set(const wxString& item, void * clientData);
+    int Set(const wxString& item, wxClientData * clientData);
+    void Set(const wxArrayString& stringsArray);
+    void Set(unsigned int n, const wxString* strings);
+    void Set(unsigned int n, const wxString* strings,
+             void ** clientData);
+    void Set(unsigned int n, const wxString* strings,
+             wxClientData ** clientData);
     //@}
 
     /**
@@ -291,10 +291,10 @@ public:
         it is an error to call this function if any typed client data pointers had been
         associated with the control items before.
         
-        @param n 
+        @param n
         The zero-based item index.
         
-        @param data 
+        @param data
         The client data to associate with the item.
     */
     void SetClientData(unsigned int n, void * data);
@@ -308,10 +308,10 @@ public:
         Note that it is an error to call this function if any untyped client data
         pointers had been associated with the control items before.
         
-        @param n 
+        @param n
         The zero-based item index.
         
-        @param data 
+        @param data
         The client data to associate with the item.
     */
     void SetClientObject(unsigned int n, wxClientData * data);
@@ -323,7 +323,7 @@ public:
         Note that this does not cause any command events to be emitted nor does it
         deselect any other items in the controls which support multiple selections.
         
-        @param n 
+        @param n
         The string position to select, starting from zero.
         
         @sa SetString(), SetStringSelection()
@@ -333,10 +333,10 @@ public:
     /**
         Sets the label for the given item.
         
-        @param n 
+        @param n
         The zero-based item index.
         
-        @param string 
+        @param string
         The label to set.
     */
     void SetString(unsigned int n, const wxString& string);
@@ -345,7 +345,7 @@ public:
         Selects the item with the specified string in the control. This doesn't cause
         any command events to be emitted.
         
-        @param string 
+        @param string
         The string to select.
         
         @returns @true if the specified string has been selected, @false if it

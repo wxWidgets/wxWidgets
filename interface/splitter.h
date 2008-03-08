@@ -9,13 +9,13 @@
 /**
     @class wxSplitterWindow
     @wxheader{splitter.h}
-    
+
     @ref overview_wxsplitterwindowoverview "wxSplitterWindow overview"
-    
+
     This class manages up to two subwindows. The current view can be
     split into two programmatically (perhaps from a menu command), and unsplit
     either programmatically or via the wxSplitterWindow user interface.
-    
+
     @beginStyleTable
     @style{wxSP_3D}:
            Draws a 3D effect border and sash.
@@ -37,10 +37,10 @@
     @style{wxSP_LIVE_UPDATE}:
            Don't draw XOR line but resize the child windows immediately.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{miscwnd}
-    
+
     @seealso
     wxSplitterEvent
 */
@@ -51,22 +51,22 @@ public:
     /**
         Constructor for creating the window.
         
-        @param parent 
+        @param parent
         The parent of the splitter window.
         
-        @param id 
+        @param id
         The window identifier.
         
-        @param pos 
+        @param pos
         The window position.
         
-        @param size 
+        @param size
         The window size.
         
-        @param style 
+        @param style
         The window style. See wxSplitterWindow.
         
-        @param name 
+        @param name
         The window name.
         
         @remarks After using this constructor, you must create either one or two
@@ -80,11 +80,11 @@ public:
               SplitHorizontally(), Create()
     */
     wxSplitterWindow();
-        wxSplitterWindow(wxWindow* parent, wxWindowID id,
-                         const wxPoint& point = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         long style=wxSP_3D,
-                         const wxString& name = "splitterWindow");
+    wxSplitterWindow(wxWindow* parent, wxWindowID id,
+                     const wxPoint& point = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style=wxSP_3D,
+                     const wxString& name = "splitterWindow");
     //@}
 
     /**
@@ -145,7 +145,7 @@ public:
         Initializes the splitter window to have one pane.  The child window is
         shown if it is currently hidden.
         
-        @param window 
+        @param window
         The pane for the unsplit window.
         
         @remarks This should be called if you wish to initially view only a
@@ -164,10 +164,10 @@ public:
         Application-overridable function called when the sash is double-clicked with
         the left mouse button.
         
-        @param x 
+        @param x
         The x position of the mouse cursor.
         
-        @param y 
+        @param y
         The y position of the mouse cursor.
         
         @remarks The default implementation of this function calls Unsplit if the
@@ -178,10 +178,10 @@ public:
     virtual void OnDoubleClickSash(int x, int y);
 
     /**
-        Application-overridable function called when the sash position is changed by 
+        Application-overridable function called when the sash position is changed by
         user. It may return @false to prevent the change or @true to allow it.
         
-        @param newSashPosition 
+        @param newSashPosition
         The new sash position (always positive or zero)
         
         @remarks The default implementation of this function verifies that the
@@ -194,7 +194,7 @@ public:
         Application-overridable function called when the window is unsplit, either
         programmatically or using the wxSplitterWindow user interface.
         
-        @param removed 
+        @param removed
         The window being removed.
         
         @remarks The default implementation of this function simply hides
@@ -222,7 +222,7 @@ public:
     /**
         Sets the minimum pane size.
         
-        @param paneSize 
+        @param paneSize
         Minimum pane size in pixels.
         
         @remarks The default minimum pane size is zero, which means that either
@@ -239,9 +239,9 @@ public:
     void SetMinimumPaneSize(int paneSize);
 
     /**
-        Sets the sash gravity. 
+        Sets the sash gravity.
         
-        @param gravity 
+        @param gravity
         The sash gravity. Value between 0.0 and 1.0.
         
         @sa GetSashGravity()
@@ -251,10 +251,10 @@ public:
     /**
         Sets the sash position.
         
-        @param position 
+        @param position
         The sash position in pixels.
         
-        @param redraw 
+        @param redraw
         If @true, resizes the panes and redraws the sash and border.
         
         @remarks Does not currently check for an out-of-range value.
@@ -275,7 +275,7 @@ public:
     /**
         Sets the split mode.
         
-        @param mode 
+        @param mode
         Can be wxSPLIT_VERTICAL or wxSPLIT_HORIZONTAL.
         
         @remarks Only sets the internal variable; does not update the display.
@@ -289,13 +289,13 @@ public:
         Initializes the top and bottom panes of the splitter window.  The
         child windows are shown if they are currently hidden.
         
-        @param window1 
+        @param window1
         The top pane.
         
-        @param window2 
+        @param window2
         The bottom pane.
         
-        @param sashPosition 
+        @param sashPosition
         The initial position of the sash. If this value is
         positive, it specifies the size of the upper pane. If it is negative, its
         absolute value gives the size of the lower pane. Finally, specify 0 (default)
@@ -319,13 +319,13 @@ public:
         Initializes the left and right panes of the splitter window.  The
         child windows are shown if they are currently hidden.
         
-        @param window1 
+        @param window1
         The left pane.
         
-        @param window2 
+        @param window2
         The right pane.
         
-        @param sashPosition 
+        @param sashPosition
         The initial position of the sash. If this value is
         positive, it specifies the size of the left pane. If it is negative, it is
         absolute value gives the size of the right pane. Finally, specify 0 (default)
@@ -348,7 +348,7 @@ public:
     /**
         Unsplits the window.
         
-        @param toRemove 
+        @param toRemove
         The pane to remove, or @NULL to remove the right or bottom pane.
         
         @returns @true if successful, @false otherwise (the window was not split).
@@ -381,17 +381,17 @@ public:
 /**
     @class wxSplitterEvent
     @wxheader{splitter.h}
-    
+
     This class represents the events generated by a splitter control. Also there is
     only one event class, the data associated to the different events is not the
     same and so not all accessor functions may be called for each event. The
     documentation mentions the kind of event(s) for which the given accessor
     function makes sense: calling it for other types of events will result
     in assert failure (in debug mode) and will return meaningless results.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxSplitterWindow, @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -450,7 +450,7 @@ public:
         wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING and
         wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events.
         
-        @param pos 
+        @param pos
         New sash position.
     */
     void SetSashPosition(int pos);

@@ -9,13 +9,13 @@
 /**
     @class wxSound
     @wxheader{sound.h}
-    
+
     This class represents a short sound (loaded from Windows WAV file), that
     can be stored in memory and played. Currently this class is implemented
-    on Windows and Unix (and uses either 
-    Open Sound System or 
+    on Windows and Unix (and uses either
+    Open Sound System or
     Simple DirectMedia Layer).
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -28,14 +28,14 @@ public:
         resource. Call IsOk() to determine whether this
         succeeded.
         
-        @param fileName 
+        @param fileName
         The filename or Windows resource.
         
-        @param isResource 
+        @param isResource
         @true if fileName is a resource, @false if it is a filename.
     */
     wxSound();
-        wxSound(const wxString& fileName, bool isResource = @false);
+    wxSound(const wxString& fileName, bool isResource = @false);
     //@}
 
     /**
@@ -46,10 +46,10 @@ public:
     /**
         Constructs a wave object from a file or resource.
         
-        @param fileName 
+        @param fileName
         The filename or Windows resource.
         
-        @param isResource 
+        @param isResource
         @true if fileName is a resource, @false if it is a filename.
         
         @returns @true if the call was successful, @false otherwise.
@@ -89,21 +89,21 @@ public:
         wxSOUND_ASYNC
         
         
-        Sound is played asynchronously, 
+        Sound is played asynchronously,
         @c Play returns immediately
         
         wxSOUND_ASYNC | wxSOUND_LOOP
         
         
         Sound is played asynchronously
-        and loops until another sound is played, 
+        and loops until another sound is played,
         Stop() is called or the program terminates.
         
         The static form is shorthand for this code:
     */
     bool Play(unsigned flags = wxSOUND_ASYNC);
-        static bool Play(const wxString& filename,
-                         unsigned flags = wxSOUND_ASYNC);
+    static bool Play(const wxString& filename,
+                     unsigned flags = wxSOUND_ASYNC);
     //@}
 
     /**

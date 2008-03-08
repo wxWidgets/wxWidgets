@@ -9,19 +9,19 @@
 /**
     @class wxVarHScrollHelper
     @wxheader{vscroll.h}
-    
-    This class provides functions wrapping the 
+
+    This class provides functions wrapping the
     wxVarScrollHelperBase class, targeted for
     horizontal-specific scrolling using wxHScrolledWindow.
-    
+
     Like wxVarScrollHelperBase, this class is mostly only useful to those classes
     built into wxWidgets deriving from here, and this documentation is mostly
     only provided for referencing those functions provided. You will likely want
     to derive your window from wxHScrolledWindow rather than from here directly.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
 */
@@ -143,19 +143,19 @@ public:
 /**
     @class wxVarVScrollHelper
     @wxheader{vscroll.h}
-    
-    This class provides functions wrapping the 
+
+    This class provides functions wrapping the
     wxVarScrollHelperBase class, targeted for
     vertical-specific scrolling using wxVScrolledWindow.
-    
+
     Like wxVarScrollHelperBase, this class is mostly only useful to those classes
     built into wxWidgets deriving from here, and this documentation is mostly
     only provided for referencing those functions provided. You will likely want
     to derive your window from wxVScrolledWindow rather than from here directly.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
 */
@@ -273,26 +273,26 @@ public:
 /**
     @class wxVarScrollHelperBase
     @wxheader{vscroll.h}
-    
+
     This class provides all common base functionality for scroll calculations
     shared among all variable scrolled window implementations as well as
     automatic scrollbar functionality, saved scroll positions, controlling
     target windows to be scrolled, as well as defining all required virtual
     functions that need to be implemented for any orientation specific work.
-    
+
     Documentation of this class is provided specifically for referencing use
     of the functions provided by this class for use with the variable scrolled
     windows that derive from here. You will likely want to derive your window
     from one of the already implemented variable scrolled windows rather than
     from wxVarScrollHelperBase directly.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
 */
-class wxVarScrollHelperBase 
+class wxVarScrollHelperBase
 {
 public:
     /**
@@ -457,19 +457,19 @@ public:
 /**
     @class wxVScrolledWindow
     @wxheader{vscroll.h}
-    
+
     In the name of this class, "V" may stand for "variable" because it can be
     used for scrolling rows of variable heights; "virtual", because it is not
     necessary to know the heights of all rows in advance -- only those which
     are shown on the screen need to be measured; or even "vertical", because
     this class only supports scrolling vertically.
-    
+
     In any case, this is a generalization of the
     wxScrolledWindow class which can be only used when
     all rows have the same heights. It lacks some other wxScrolledWindow features
     however, notably it can't scroll only a rectangle of the window and not its
     entire client area.
-    
+
     To use this class, you need to derive from it and implement the
     wxVarVScrollHelper::OnGetRowHeight pure virtual
     method. You also must call wxVarVScrollHelper::SetRowCount
@@ -481,10 +481,10 @@ public:
     select the lines to display. Note that the device context origin is not shifted
     so the first visible row always appears at the point (0, 0) in physical as
     well as logical coordinates.
-    
+
     @library{wxcore}
     @category{miscwnd}
-    
+
     @seealso
     wxHScrolledWindow, wxHVScrolledWindow
 */
@@ -499,31 +499,31 @@ public:
         Note that @c wxVSCROLL is always automatically added to our style, there is
         no need to specify it explicitly.
         
-        @param parent 
+        @param parent
         The parent window, must not be @NULL
         
-        @param id 
+        @param id
         The identifier of this window, wxID_ANY by default
         
-        @param pos 
+        @param pos
         The initial window position
         
-        @param size 
+        @param size
         The initial window size
         
-        @param style 
+        @param style
         The window style. There are no special style bits defined for
         this class.
         
-        @param name 
+        @param name
         The name for this window; usually not used
     */
     wxVScrolledWindow();
-        wxVScrolledWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
-                          const wxPoint& pos = wxDefaultPosition,
-                          const wxSize& size = wxDefaultSize,
-                          long style = 0,
-                          const wxString& name = wxPanelNameStr);
+    wxVScrolledWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = 0,
+                      const wxString& name = wxPanelNameStr);
     //@}
 
     /**
@@ -559,18 +559,18 @@ public:
         Deprecated for wxVarVScrollHelper::SetRowCount.
     */
     size_t GetFirstVisibleLine();
-        size_t GetLastVisibleLine();
-        size_t GetLineCount();
-        int HitTest(wxCoord x, wxCoord y);
-        int HitTest(const wxPoint& pt);
-        virtual wxCoord OnGetLineHeight(size_t line);
-        virtual void OnGetLinesHint(size_t lineMin, size_t lineMax);
-        virtual void RefreshLine(size_t line);
-        virtual void RefreshLines(size_t from, size_t to);
-        virtual bool ScrollLines(int lines);
-        virtual bool ScrollPages(int pages);
-        bool ScrollToLine(size_t line);
-        void SetLineCount(size_t count);
+    size_t GetLastVisibleLine();
+    size_t GetLineCount();
+    int HitTest(wxCoord x, wxCoord y);
+    int HitTest(const wxPoint& pt);
+    virtual wxCoord OnGetLineHeight(size_t line);
+    virtual void OnGetLinesHint(size_t lineMin, size_t lineMax);
+    virtual void RefreshLine(size_t line);
+    virtual void RefreshLines(size_t from, size_t to);
+    virtual bool ScrollLines(int lines);
+    virtual bool ScrollPages(int pages);
+    bool ScrollToLine(size_t line);
+    void SetLineCount(size_t count);
     //@}
 };
 
@@ -578,17 +578,17 @@ public:
 /**
     @class wxHVScrolledWindow
     @wxheader{vscroll.h}
-    
+
     This window inherits all functionality of both vertical and horizontal,
     variable scrolled windows. It automatically handles everything needed to
     scroll both axis simultaneously with both variable row heights and variable
     column widths.
-    
+
     This is a generalization of the wxScrolledWindow
     class which can be only used when all rows and columns are the same size. It
     lacks some other wxScrolledWindow features however, notably it can't scroll
     only a rectangle of the window and not its entire client area.
-    
+
     To use this class, you must derive from it and implement both the
     wxVarVScrollHelper::OnGetRowHeight and
     wxVarHScrollHelper::OnGetColumnWidth pure virtual
@@ -602,10 +602,10 @@ public:
     lines to display. Note that the device context origin is not shifted so the
     first visible row and column always appear at the point (0, 0) in physical
     as well as logical coordinates.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxHScrolledWindow, wxVScrolledWindow
 */
@@ -620,32 +620,32 @@ public:
         Note that @c wxHSCROLL and @c wxVSCROLL are always automatically added
         to our styles, there is no need to specify it explicitly.
         
-        @param parent 
+        @param parent
         The parent window, must not be @NULL
         
-        @param id 
+        @param id
         The identifier of this window, wxID_ANY by default
         
-        @param pos 
+        @param pos
         The initial window position
         
-        @param size 
+        @param size
         The initial window size
         
-        @param style 
+        @param style
         The window style. There are no special style bits defined for
         this class.
         
-        @param name 
+        @param name
         The name for this window; usually not used
     */
     wxHVScrolledWindow();
-        wxHVScrolledWindow(wxWindow* parent,
-                           wxWindowID id = wxID_ANY,
-                           const wxPoint& pos = wxDefaultPosition,
-                           const wxSize& size = wxDefaultSize,
-                           long style = 0,
-                           const wxString& name = wxPanelNameStr);
+    wxHVScrolledWindow(wxWindow* parent,
+                       wxWindowID id = wxID_ANY,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = 0,
+                       const wxString& name = wxPanelNameStr);
     //@}
 
     /**
@@ -667,8 +667,8 @@ public:
 /**
     @class wxVarHVScrollHelper
     @wxheader{vscroll.h}
-    
-    This class provides functions wrapping the 
+
+    This class provides functions wrapping the
     wxVarHScrollHelper and
     wxVarVScrollHelper classes, targeted for
     scrolling a window in both axis using
@@ -677,16 +677,16 @@ public:
     also addresses some wrappers that help avoid the need to specify class scope
     in your wxHVScrolledWindow-derived class when using wxVarScrollHelperBase
     functionality.
-    
+
     Like all three of it's scroll helper base classes, this class is mostly only
     useful to those classes built into wxWidgets deriving from here, and this
     documentation is mostly only provided for referencing those functions
     provided. You will likely want to derive your window from wxHVScrolledWindow
     rather than from here directly.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
 */
@@ -708,10 +708,10 @@ public:
         responsible for repainting any invalidated areas of the window yourself to
         account for the new scroll position.
         
-        @param vscrolling 
+        @param vscrolling
         Specifies if physical scrolling should be turned on when scrolling vertically.
         
-        @param hscrolling 
+        @param hscrolling
         Specifies if physical scrolling should be turned on when scrolling horizontally.
     */
     void EnablePhysicalScrolling(bool vscrolling = @true,
@@ -742,7 +742,7 @@ public:
         (even if only partially visible) or @false otherwise.
     */
     bool IsVisible(size_t row, size_t column);
-        bool IsVisible(const wxPosition& pos);
+    bool IsVisible(const wxPosition& pos);
     //@}
 
     //@{
@@ -751,7 +751,7 @@ public:
         of the window if it is visible.
     */
     virtual void RefreshRowColumn(size_t row, size_t column);
-        virtual void RefreshRowColumn(const wxPosition& pos);
+    virtual void RefreshRowColumn(const wxPosition& pos);
     //@}
 
     //@{
@@ -765,8 +765,8 @@ public:
     virtual void RefreshRowsColumns(size_t fromRow, size_t toRow,
                                     size_t fromColumn,
                                     size_t toColumn);
-        virtual void RefreshRowsColumns(const wxPosition& from,
-                                        const wxPosition& to);
+    virtual void RefreshRowsColumns(const wxPosition& from,
+                                    const wxPosition& to);
     //@}
 
     //@{
@@ -776,7 +776,7 @@ public:
         @false if nothing was done.
     */
     bool ScrollToRowColumn(size_t row, size_t column);
-        bool ScrollToRowColumn(const wxPosition& pos);
+    bool ScrollToRowColumn(const wxPosition& pos);
     //@}
 
     /**
@@ -795,7 +795,7 @@ public:
         values) if none.
     */
     wxPosition VirtualHitTest(wxCoord x, wxCoord y);
-        wxPosition VirtualHitTest(const wxPoint& pos);
+    wxPosition VirtualHitTest(const wxPoint& pos);
     //@}
 };
 
@@ -803,18 +803,18 @@ public:
 /**
     @class wxHScrolledWindow
     @wxheader{vscroll.h}
-    
+
     In the name of this class, "H" stands for "horizontal" because it can be
     used for scrolling columns of variable widths. It is not necessary to know
     the widths of all columns in advance -- only those which are shown on the
     screen need to be measured.
-    
+
     In any case, this is a generalization of the
     wxScrolledWindow class which can be only used when
     all columns have the same widths. It lacks some other wxScrolledWindow features
     however, notably it can't scroll only a rectangle of the window and not its
     entire client area.
-    
+
     To use this class, you need to derive from it and implement the
     wxVarHScrollHelper::OnGetColumnWidth pure virtual
     method. You also must call wxVarHScrollHelper::SetColumnCount
@@ -826,10 +826,10 @@ public:
     select the lines to display. Note that the device context origin is not shifted
     so the first visible column always appears at the point (0, 0) in physical as
     well as logical coordinates.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxHVScrolledWindow, wxVScrolledWindow
 */
@@ -844,31 +844,31 @@ public:
         Note that @c wxHSCROLL is always automatically added to our style, there is
         no need to specify it explicitly.
         
-        @param parent 
+        @param parent
         The parent window, must not be @NULL
         
-        @param id 
+        @param id
         The identifier of this window, wxID_ANY by default
         
-        @param pos 
+        @param pos
         The initial window position
         
-        @param size 
+        @param size
         The initial window size
         
-        @param style 
+        @param style
         The window style. There are no special style bits defined for
         this class.
         
-        @param name 
+        @param name
         The name for this window; usually not used
     */
     wxHScrolledWindow();
-        wxHScrolledWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
-                          const wxPoint& pos = wxDefaultPosition,
-                          const wxSize& size = wxDefaultSize,
-                          long style = 0,
-                          const wxString& name = wxPanelNameStr);
+    wxHScrolledWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = 0,
+                      const wxString& name = wxPanelNameStr);
     //@}
 
     /**

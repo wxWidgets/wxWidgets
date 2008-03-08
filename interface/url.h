@@ -9,18 +9,18 @@
 /**
     @class wxURL
     @wxheader{url.h}
-    
+
     wxURL is a specialization of wxURI for parsing URLs.
     Please look at wxURI documentation for more info about the functions
     you can use to retrieve the various parts of the URL (scheme, server, port,
     etc).
-    
+
     Supports standard assignment operators, copy constructors,
     and comparison operators.
-    
+
     @library{wxnet}
     @category{net}
-    
+
     @seealso
     wxSocketBase, wxProtocol
 */
@@ -33,11 +33,11 @@ public:
         @c file://hostname/path/to/file otherwise GetError()
         will return a value different from @c wxURL_NOERR.
         
-        It is valid to leave out the hostname but slashes must remain in place - 
-        i.e. a file URL without a hostname must contain three consecutive slashes 
+        It is valid to leave out the hostname but slashes must remain in place -
+        i.e. a file URL without a hostname must contain three consecutive slashes
         (e.g. @c file:///somepath/myfile).
         
-        @param url 
+        @param url
         Url string to parse.
     */
 #define wxURL(const wxString& url = wxEmptyString)     /* implementation is private */
@@ -112,7 +112,7 @@ public:
     wxProtocol GetProtocol();
 
     /**
-        Returns @true if this object is correctly initialized, i.e. if 
+        Returns @true if this object is correctly initialized, i.e. if
         GetError() returns @c wxURL_NOERR.
     */
 #define bool IsOk()     /* implementation is private */
@@ -121,7 +121,7 @@ public:
         Sets the default proxy server to use to get the URL. The string specifies
         the proxy like this: hostname:port number.
         
-        @param url_proxy 
+        @param url_proxy
         Specifies the proxy to use
         
         @sa SetProxy()

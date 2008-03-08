@@ -9,10 +9,10 @@
 /**
     @class wxTaskBarIcon
     @wxheader{taskbar.h}
-    
+
     This class represents a taskbar icon. A taskbar icon is an icon that appears in
     the 'system tray' and responds to mouse clicks, optionally with a tooltip above it to help provide information.
-    
+
     @library{wxadv}
     @category{FIXME}
 */

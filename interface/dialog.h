@@ -9,14 +9,14 @@
 /**
     @class wxDialog
     @wxheader{dialog.h}
-    
+
     A dialog box is a window with a title bar and sometimes a system menu, which
     can be moved around the screen. It can contain controls and other windows and
     is often used to allow the user to make some choice or to answer a question.
-    
+
     Dialogs can be made scrollable, automatically: please see @ref
     overview_autoscrollingdialogs "Automatic scrolling dialogs" for further details.
-    
+
     @beginStyleTable
     @style{wxCAPTION}:
            Puts a caption on the dialog box.
@@ -56,10 +56,10 @@
            On Mac OS X, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{cmndlg}
-    
+
     @seealso
     @ref overview_wxdialogoverview "wxDialog overview", wxFrame, @ref
     overview_validatoroverview "Validator overview"
@@ -71,27 +71,27 @@ public:
     /**
         Constructor.
         
-        @param parent 
+        @param parent
         Can be @NULL, a frame or another dialog box.
         
-        @param id 
+        @param id
         An identifier for the dialog. A value of -1 is taken to mean a default.
         
-        @param title 
+        @param title
         The title of the dialog.
         
-        @param pos 
+        @param pos
         The dialog position. The value wxDefaultPosition indicates a default position, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param size 
+        @param size
         The dialog size. The value wxDefaultSize indicates a default size, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param style 
+        @param style
         The window style. See wxDialog.
         
-        @param name 
+        @param name
         Used to associate a name with the window,
         allowing the application user to set Motif resource values for
         individual dialog boxes.
@@ -99,12 +99,12 @@ public:
         @sa Create()
     */
     wxDialog();
-        wxDialog(wxWindow* parent, wxWindowID id,
-                 const wxString& title,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxDEFAULT_DIALOG_STYLE,
-                 const wxString& name = "dialogBox");
+    wxDialog(wxWindow* parent, wxWindowID id,
+             const wxString& title,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = wxDEFAULT_DIALOG_STYLE,
+             const wxString& name = "dialogBox");
     //@}
 
     /**
@@ -134,7 +134,7 @@ public:
     /**
         Centres the dialog box on the display.
         
-        @param direction 
+        @param direction
         May be wxHORIZONTAL, wxVERTICAL or wxBOTH.
     */
     void Centre(int direction = wxBOTH);
@@ -152,12 +152,12 @@ public:
 
     /**
         Creates a sizer with standard buttons. @e flags is a bit list
-        of the following flags: wxOK, wxCANCEL, wxYES, wxNO, wxAPPLY, wxCLOSE, 
+        of the following flags: wxOK, wxCANCEL, wxYES, wxNO, wxAPPLY, wxCLOSE,
         wxHELP, wxNO_DEFAULT.
         
         The sizer lays out the buttons in a manner appropriate to the platform.
         
-        This function uses CreateStdDialogButtonSizer() 
+        This function uses CreateStdDialogButtonSizer()
         internally for most platforms but doesn't create the sizer at all for the
         platforms with hardware buttons (such as smartphones) for which it sets up the
         hardware buttons appropriately and returns @NULL, so don't forget to test that
@@ -166,12 +166,12 @@ public:
     wxSizer* CreateButtonSizer(long flags);
 
     /**
-        Creates a sizer with standard buttons using 
+        Creates a sizer with standard buttons using
         CreateButtonSizer() separated from the rest
         of the dialog contents by a horizontal wxStaticLine.
         
         Please notice that just like CreateButtonSizer() this function may return @c
-        @NULL 
+        @NULL
         if no buttons were created.
     */
     wxSizer* CreateSeparatedButtonSizer(long flags);
@@ -215,7 +215,7 @@ public:
         Ends a modal dialog, passing a value to be returned from the ShowModal()
         invocation.
         
-        @param retCode 
+        @param retCode
         The value that should be returned by ShowModal.
         
         @sa ShowModal(), GetReturnCode(), SetReturnCode()
@@ -316,7 +316,7 @@ public:
     /**
         Iconizes or restores the dialog. Windows only.
         
-        @param iconize 
+        @param iconize
         If @true, iconizes the dialog box; if @false, shows and restores it.
         
         @remarks Note that in Windows, iconization has no effect since dialog
@@ -362,7 +362,7 @@ public:
     /**
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
         
-        @param event 
+        @param event
         The colour change event.
         
         @remarks Changes the dialog's colour to conform to the current settings
@@ -379,8 +379,8 @@ public:
 
     /**
         Sets the identifier to be used as OK button. When the button with this
-        identifier is pressed, the dialog calls wxWindow::Validate 
-        and wxWindow::TransferDataFromWindow 
+        identifier is pressed, the dialog calls wxWindow::Validate
+        and wxWindow::TransferDataFromWindow
         and, if they both return @true, closes the dialog with @c wxID_OK return
         code.
         
@@ -395,15 +395,15 @@ public:
     void SetAffirmativeId(int id);
 
     /**
-        Sets the identifier of the button which should work like the standard 
+        Sets the identifier of the button which should work like the standard
         @c CANCEL button in this dialog. When the button with this id is
-        clicked, the dialog is closed. Also, when the user presses @c ESC 
+        clicked, the dialog is closed. Also, when the user presses @c ESC
         key in the dialog or closes the dialog using the close button in the title bar,
         this is mapped to the click of the button with the specified id.
         
-        By default, the escape id is the special value @c wxID_ANY meaning that 
+        By default, the escape id is the special value @c wxID_ANY meaning that
         @c wxID_CANCEL button is used if it's present in the dialog and
-        otherwise the button with GetAffirmativeId() 
+        otherwise the button with GetAffirmativeId()
         is used. Another special value for @e id is @c wxID_NONE meaning that
         @c ESC presses should be ignored. If any other value is given, it
         is interpreted as the id of the button to map the escape key to.
@@ -413,7 +413,7 @@ public:
     /**
         Sets the icon for this dialog.
         
-        @param icon 
+        @param icon
         The icon to associate with this dialog.
     */
     void SetIcon(const wxIcon& icon);
@@ -421,7 +421,7 @@ public:
     /**
         Sets the icons for this dialog.
         
-        @param icons 
+        @param icons
         The icons to associate with this dialog.
     */
     void SetIcons(const wxIconBundle& icons);
@@ -472,7 +472,7 @@ public:
         control
         until the dialog is hidden) or modeless (control returns immediately).
         
-        @param flag 
+        @param flag
         If @true, the dialog will be modal, otherwise it will be modeless.
     */
     void SetModal(bool flag);
@@ -480,7 +480,7 @@ public:
     /**
         Sets the return code for this window.
         
-        @param retCode 
+        @param retCode
         The integer return code, usually a control identifier.
         
         @remarks A return code is normally associated with a modal dialog, where
@@ -495,7 +495,7 @@ public:
     /**
         Hides or shows the dialog.
         
-        @param show 
+        @param show
         If @true, the dialog box is shown and brought to the front;
         otherwise the box is hidden. If @false and the dialog is
         modal, control is returned to the calling program.
@@ -519,25 +519,25 @@ public:
 /**
     @class wxDialogLayoutAdapter
     @wxheader{dialog.h}
-    
+
     This abstract class is the base for classes that help wxWidgets peform run-time
     layout adaptation of dialogs. Principally,
     this is to cater for small displays by making part of the dialog scroll, but
     the application developer may find other
     uses for layout adaption.
-    
+
     By default, there is one instance of wxStandardDialogLayoutAdapter
     which can perform adaptation for most custom dialogs and dialogs with book
     controls
     such as wxPropertySheetDialog.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_autoscrollingdialogs "Automatic scrolling dialogs"
 */
-class wxDialogLayoutAdapter 
+class wxDialogLayoutAdapter
 {
 public:
     /**

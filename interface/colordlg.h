@@ -9,12 +9,12 @@
 /**
     @class wxColourDialog
     @wxheader{colordlg.h}
-    
+
     This class represents the colour chooser dialog.
-    
+
     @library{wxcore}
     @category{cmndlg}
-    
+
     @seealso
     @ref overview_wxcolourdialogoverview "wxColourDialog Overview", wxColour,
     wxColourData, wxGetColourFromUser
@@ -66,17 +66,17 @@ public:
     Shows the colour selection dialog and returns the colour selected by user or
     invalid colour (use @ref wxColour::isok wxColour:IsOk to test whether a colour
     is valid) if the dialog was cancelled.
-    
-    @param parent 
+
+    @param parent
     The parent window for the colour selection dialog
-    
-    @param colInit 
+
+    @param colInit
     If given, this will be the colour initially selected in the dialog.
-    
-    @param caption 
+
+    @param caption
     If given, this will be used for the dialog caption.
-    
-    @param data 
+
+    @param data
     Optional object storing additional colour dialog settings, such
     as custom colours. If none is provided the same settings as the last time are
     used.

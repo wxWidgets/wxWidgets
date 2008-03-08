@@ -9,35 +9,35 @@
 /**
     @class wxPasswordEntryDialog
     @wxheader{textdlg.h}
-    
+
     This class represents a dialog that requests a one-line password string from
     the user.
     It is implemented as a generic wxWidgets dialog.
-    
+
     @library{wxbase}
     @category{cmndlg}
-    
+
     @seealso
     @ref overview_wxpasswordentrydialogoverview "wxPassowrdEntryDialog overview"
 */
 class wxPasswordEntryDialog : public wxTextEntryDialog
 {
 public:
-    
+
 };
 
 
 /**
     @class wxTextEntryDialog
     @wxheader{textdlg.h}
-    
+
     This class represents a dialog that requests a one-line text string from the
     user.
     It is implemented as a generic wxWidgets dialog.
-    
+
     @library{wxbase}
     @category{cmndlg}
-    
+
     @seealso
     @ref overview_wxtextentrydialogoverview "wxTextEntryDialog overview"
 */
@@ -47,21 +47,21 @@ public:
     /**
         Constructor. Use ShowModal() to show the dialog.
         
-        @param parent 
+        @param parent
         Parent window.
         
-        @param message 
+        @param message
         Message to show on the dialog.
         
-        @param defaultValue 
+        @param defaultValue
         The default value, which may be the empty string.
         
-        @param style 
+        @param style
         A dialog style, specifying the buttons (wxOK, wxCANCEL)
         and an optional wxCENTRE style. Additionally, wxTextCtrl styles (such as
         wxTE_PASSWORD) may be specified here.
         
-        @param pos 
+        @param pos
         Dialog position.
     */
     wxTextEntryDialog(wxWindow* parent, const wxString& message,
@@ -103,7 +103,7 @@ public:
     Pop up a dialog box with title set to @e caption, @e message, and a
     @e default_value.  The user may type in text and press OK to return this text,
     or press Cancel to return the empty string.
-    
+
     If @e centre is @true, the message text (which may include new line characters)
     is centred; if @false, the message is left-justified.
 */

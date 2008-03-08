@@ -9,10 +9,10 @@
 /**
     @class wxStringInputStream
     @wxheader{sstream.h}
-    
+
     This class implements an input stream which reads data from a string. It
     supports seeking.
-    
+
     @library{wxbase}
     @category{streams}
 */
@@ -31,11 +31,11 @@ public:
 /**
     @class wxStringOutputStream
     @wxheader{sstream.h}
-    
+
     This class implements an output stream which writes data either to a
     user-provided or internally allocated string. Note that currently this stream
     does not support seeking but can tell its current position.
-    
+
     @library{wxbase}
     @category{streams}
 */
@@ -44,7 +44,7 @@ class wxStringOutputStream : public wxOutputStream
 public:
     /**
         If the provided pointer is non-@NULL, data will be written to it.
-        Otherwise, an internal string is used for the data written to this stream, use 
+        Otherwise, an internal string is used for the data written to this stream, use
         GetString() to get access to it.
         
         If @e str is used, data written to the stream is appended to the current

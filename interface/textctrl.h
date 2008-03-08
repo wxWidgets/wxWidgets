@@ -9,23 +9,23 @@
 /**
     @class wxTextAttr
     @wxheader{textctrl.h}
-    
+
     wxTextAttr represents the character and paragraph attributes, or style,
     for a range of text in a wxTextCtrl or wxRichTextCtrl.
-    
+
     When setting up a wxTextAttr object, pass a bitlist mask to
     wxTextAttr::SetFlags to
     indicate which style elements should be changed. As a convenience, when you
     call a setter such
     as SetFont, the relevant bit will be set.
-    
+
     @library{wxcore}
     @category{richtext}
-    
+
     @seealso
     wxTextCtrl, wxRichTextCtrl
 */
-class wxTextAttr 
+class wxTextAttr
 {
 public:
     //@{
@@ -33,11 +33,11 @@ public:
         Constructors.
     */
     wxTextAttr();
-        wxTextAttr(const wxColour& colText,
-                   const wxColour& colBack = wxNullColour,
-                   const wxFont& font = wxNullFont,
-                   wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
-        wxTextAttr(const wxTextAttr& attr);
+    wxTextAttr(const wxColour& colText,
+               const wxColour& colBack = wxNullColour,
+               const wxFont& font = wxNullFont,
+               wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
+    wxTextAttr(const wxTextAttr& attr);
     //@}
 
     /**
@@ -406,14 +406,14 @@ public:
 
     //@{
     /**
-        Creates a new @c wxTextAttr which is a merge of @e base and 
+        Creates a new @c wxTextAttr which is a merge of @e base and
         @e overlay. Properties defined in @e overlay take precedence over those
         in @e base. Properties undefined/invalid in both are undefined in the
         result.
     */
     void Merge(const wxTextAttr& overlay);
-        static wxTextAttr Merge(const wxTextAttr& base,
-                                const wxTextAttr& overlay);
+    static wxTextAttr Merge(const wxTextAttr& base,
+                            const wxTextAttr& overlay);
     //@}
 
     /**
@@ -634,10 +634,10 @@ public:
 /**
     @class wxTextCtrl
     @wxheader{textctrl.h}
-    
+
     A text control allows text to be displayed and edited. It may be
     single line or multi-line.
-    
+
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}:
            The control will generate the event wxEVT_COMMAND_TEXT_ENTER
@@ -701,11 +701,11 @@ public:
            On PocketPC and Smartphone, causes the first letter to be
            capitalized.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{textctrl.png}
-    
+
     @seealso
     wxTextCtrl::Create, wxValidator
 */
@@ -716,28 +716,28 @@ public:
     /**
         Constructor, creating and showing a text control.
         
-        @param parent 
+        @param parent
         Parent window. Should not be @NULL.
         
-        @param id 
+        @param id
         Control identifier. A value of -1 denotes a default value.
         
-        @param value 
+        @param value
         Default text value.
         
-        @param pos 
+        @param pos
         Text control position.
         
-        @param size 
+        @param size
         Text control size.
         
-        @param style 
+        @param style
         Window style. See wxTextCtrl.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @remarks The horizontal scrollbar (wxHSCROLL style flag) will only be
@@ -752,13 +752,13 @@ public:
         @sa Create(), wxValidator
     */
     wxTextCtrl();
-        wxTextCtrl(wxWindow* parent, wxWindowID id,
-                   const wxString& value = "",
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = 0,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = wxTextCtrlNameStr);
+    wxTextCtrl(wxWindow* parent, wxWindowID id,
+               const wxString& value = "",
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxTextCtrlNameStr);
     //@}
 
     /**
@@ -769,7 +769,7 @@ public:
     /**
         Appends the text to the end of the text control.
         
-        @param text 
+        @param text
         Text to write to the text control.
         
         @remarks After the text is appended, the insertion point will be at the
@@ -849,14 +849,14 @@ public:
         IsModified() would return @false immediately
         after the call to SetValue).
         
-        Note that this function will not generate the @c wxEVT_COMMAND_TEXT_UPDATED 
+        Note that this function will not generate the @c wxEVT_COMMAND_TEXT_UPDATED
         event.
         This is the only difference with SetValue().
         See @ref overview_progevent "this topic" for more information.
         
         This function is new since wxWidgets version 2.7.1
         
-        @param value 
+        @param value
         The new value to set. It may contain newline characters if the text control is
         multi-line.
     */
@@ -941,7 +941,7 @@ public:
         Gets the length of the specified line, not including any trailing newline
         character(s).
         
-        @param lineNo 
+        @param lineNo
         Line number (starting from zero).
         
         @returns The length of the line, or -1 if lineNo was invalid.
@@ -952,7 +952,7 @@ public:
         Returns the contents of a given line in the text control, not including
         any trailing newline character(s).
         
-        @param lineNo 
+        @param lineNo
         The line number, starting from zero.
         
         @returns The contents of the line.
@@ -993,10 +993,10 @@ public:
         GetStringSelection() to get the selected
         text.
         
-        @param from 
+        @param from
         The returned first position.
         
-        @param to 
+        @param to
         The returned last position.
     */
     virtual void GetSelection(long* from, long* to);
@@ -1050,7 +1050,7 @@ public:
     bool IsEditable();
 
     /**
-        Returns @true if the control is currently empty. This is the same as 
+        Returns @true if the control is currently empty. This is the same as
         @c GetValue().empty() but can be much more efficient for the multiline
         controls containing big amounts of text.
         
@@ -1085,10 +1085,10 @@ public:
     /**
         Loads and displays the named file, if it exists.
         
-        @param filename 
+        @param filename
         The filename of the file to load.
         
-        @param fileType 
+        @param fileType
         The type of file to load. This is currently ignored in wxTextCtrl.
         
         @returns @true if successful, @false otherwise.
@@ -1107,7 +1107,7 @@ public:
         This event handler function implements default drag and drop behaviour, which
         is to load the first dropped file into the control.
         
-        @param event 
+        @param event
         The drop files event.
         
         @remarks This is not implemented on non-Windows platforms.
@@ -1124,13 +1124,13 @@ public:
     /**
         Converts given position to a zero-based column, line number pair.
         
-        @param pos 
+        @param pos
         Position.
         
-        @param x 
+        @param x
         Receives zero based column number.
         
-        @param y 
+        @param y
         Receives zero based line number.
         
         @returns @true on success, @false on failure (most likely due to a too
@@ -1151,10 +1151,10 @@ public:
         Removes the text starting at the first given position up to (but not including)
         the character at the last position.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The last position.
     */
     virtual void Remove(long from, long to);
@@ -1163,13 +1163,13 @@ public:
         Replaces the text starting at the first position up to (but not including)
         the character at the last position with the given text.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The last position.
         
-        @param value 
+        @param value
         The value to replace the existing text with.
     */
     virtual void Replace(long from, long to, const wxString& value);
@@ -1177,10 +1177,10 @@ public:
     /**
         Saves the contents of the control in a text file.
         
-        @param filename 
+        @param filename
         The name of the file in which to save the text.
         
-        @param fileType 
+        @param fileType
         The type of file to save. This is currently ignored in wxTextCtrl.
         
         @returns @true if the operation was successful, @false otherwise.
@@ -1202,7 +1202,7 @@ public:
         default style is just reset (instead of being combined with the new style which
         wouldn't change it at all).
         
-        @param style 
+        @param style
         The style for the new text.
         
         @returns @true on success, @false if an error occurred - may also mean that
@@ -1215,7 +1215,7 @@ public:
     /**
         Makes the text item editable or read-only, overriding the @b wxTE_READONLY flag.
         
-        @param editable 
+        @param editable
         If @true, the control is editable. If @false, the control is read-only.
         
         @sa IsEditable()
@@ -1225,7 +1225,7 @@ public:
     /**
         Sets the insertion point at the given position.
         
-        @param pos 
+        @param pos
         Position to set.
     */
     virtual void SetInsertionPoint(long pos);
@@ -1268,10 +1268,10 @@ public:
         character at the last position. If both parameters are equal to -1 all text
         in the control is selected.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The last position.
     */
     virtual void SetSelection(long from, long to);
@@ -1280,13 +1280,13 @@ public:
         Changes the style of the given range. If any attribute within @e style is
         not set, the corresponding attribute from GetDefaultStyle() is used.
         
-        @param start 
+        @param start
         The start of the range to change.
         
-        @param end 
+        @param end
         The end of the range to change.
         
-        @param style 
+        @param style
         The new style for the range.
         
         @returns @true on success, @false if an error occurred - it may also mean
@@ -1307,7 +1307,7 @@ public:
         This function is deprecated and should not be used in new code. Please use the
         ChangeValue() function instead.
         
-        @param value 
+        @param value
         The new value to set. It may contain newline characters if the text control is
         multi-line.
     */
@@ -1316,7 +1316,7 @@ public:
     /**
         Makes the line containing the given position visible.
         
-        @param pos 
+        @param pos
         The position that should be visible.
     */
     void ShowPosition(long pos);
@@ -1331,7 +1331,7 @@ public:
     /**
         Writes the text into the text control at the current insertion position.
         
-        @param text 
+        @param text
         Text to write to the text control.
         
         @remarks Newlines in the text string are the only control characters
@@ -1344,10 +1344,10 @@ public:
     /**
         Converts the given zero based column and line number to a position.
         
-        @param x 
+        @param x
         The column number.
         
-        @param y 
+        @param y
         The line number.
         
         @returns The position value, or -1 if x or y was invalid.
@@ -1359,11 +1359,11 @@ public:
         Operator definitions for appending to a text control, for example:
     */
     wxTextCtrl operator(const wxString& s);
-        wxTextCtrl operator(int i);
-        wxTextCtrl operator(long i);
-        wxTextCtrl operator(float f);
-        wxTextCtrl operator(double d);
-        wxTextCtrl operator(char c);
+    wxTextCtrl operator(int i);
+    wxTextCtrl operator(long i);
+    wxTextCtrl operator(float f);
+    wxTextCtrl operator(double d);
+    wxTextCtrl operator(char c);
     //@}
 };
 
@@ -1371,52 +1371,52 @@ public:
 /**
     @class wxStreamToTextRedirector
     @wxheader{textctrl.h}
-    
+
     This class can be used to (temporarily) redirect all output sent to a C++
     ostream object to a wxTextCtrl instead.
-    
+
     @b NB: Some compilers and/or build configurations don't support multiply
     inheriting wxTextCtrl from @c std::streambuf in which
-    case this class is not compiled in. You also must have @c wxUSE_STD_IOSTREAM 
+    case this class is not compiled in. You also must have @c wxUSE_STD_IOSTREAM
     option on (i.e. set to 1) in your setup.h to be able to use it. Under Unix,
     specify @c --enable-std_iostreams switch when running configure for this.
-    
+
     Example of usage:
-    
+
     @code
     using namespace std;
-    
+
       wxTextCtrl *text = new wxTextCtrl(...);
-    
+
       {
         wxStreamToTextRedirector redirect(text);
-    
+
         // this goes to the text control
         cout  "Hello, text!"  endl;
       }
-    
+
       // this goes somewhere else, presumably to stdout
       cout  "Hello, console!"  endl;
     @endcode
-    
-    
+
+
     @library{wxcore}
     @category{logging}
-    
+
     @seealso
     wxTextCtrl
 */
-class wxStreamToTextRedirector 
+class wxStreamToTextRedirector
 {
 public:
     /**
         The constructor starts redirecting output sent to @e ostr or @e cout for
         the default parameter value to the text control @e text.
         
-        @param text 
+        @param text
         The text control to append output too, must be non-@NULL
         
-        @param ostr 
+        @param ostr
         The C++ stream to redirect, cout is used if it is @NULL
     */
     wxStreamToTextRedirector(wxTextCtrl text, ostream * ostr = @NULL);

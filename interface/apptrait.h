@@ -9,34 +9,34 @@
 /**
     @class wxAppTraits
     @wxheader{apptrait.h}
-    
+
     The @b wxAppTraits class defines various configurable aspects of a wxApp.
     You can access it using wxApp::GetTraits function and you can
     create your own wxAppTraits overriding the
     wxApp::CreateTraits function.
-    
+
     By default, wxWidgets creates a @c wxConsoleAppTraits object for console
     applications
     (i.e. those applications linked against wxBase library only - see the
     @ref overview_librarieslist "Libraries list" page) and a @c wxGUIAppTraits
     object for GUI
     applications.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxappoverview "wxApp overview", wxApp
 */
-class wxAppTraits 
+class wxAppTraits
 {
 public:
     /**
         Called by wxWidgets to create the default configuration object for the
-        application. The default version creates a registry-based 
-        wxRegConfig class under MSW and 
-        wxFileConfig under all other platforms. The 
-        wxApp wxApp::GetAppName and 
+        application. The default version creates a registry-based
+        wxRegConfig class under MSW and
+        wxFileConfig under all other platforms. The
+        wxApp wxApp::GetAppName and
         wxApp::GetVendorName methods are used to determine the
         registry key or file name.
     */

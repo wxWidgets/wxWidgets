@@ -9,14 +9,14 @@
 /**
     @class wxPrintDialog
     @wxheader{printdlg.h}
-    
+
     This class represents the print and print setup common dialogs.
     You may obtain a wxPrinterDC device context from
     a successfully dismissed print dialog.
-    
+
     @library{wxcore}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", @ref
     overview_wxprintdialogoverview "wxPrintDialog Overview"
@@ -64,32 +64,32 @@ public:
 /**
     @class wxPageSetupDialog
     @wxheader{printdlg.h}
-    
+
     This class represents the page setup common dialog. In MSW, the page setup
     dialog is standard from Windows 95 on, replacing the print setup dialog (which
     is retained in Windows and wxWidgets for backward compatibility). On Windows 95
     and NT 4.0 and above, the page setup dialog is native to the windowing system,
     otherwise it is emulated.
-    
+
     The page setup dialog contains controls for paper size (A4, A5 etc.),
     orientation (landscape or portrait), and controls for setting left, top, right
     and bottom margin sizes in millimetres.
-    
+
     On Macintosh, the native page setup dialog is used, which lets you select paper
     size and orientation but it does not let you change the page margins.
-    
+
     On other platforms, a generic dialog is used.
-    
+
     When the dialog has been closed, you need to query the
     wxPageSetupDialogData object associated with
     the dialog.
-    
+
     Note that the OK and Cancel buttons do not destroy the dialog; this must be done
     by the application.
-    
+
     @library{wxcore}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", wxPrintDialog,
     wxPageSetupDialogData

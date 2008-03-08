@@ -9,9 +9,9 @@
 /**
     @class wxFindDialogEvent
     @wxheader{fdrepdlg.h}
-    
+
     wxFindReplaceDialog events
-    
+
     @library{wxcore}
     @category{events}
 */
@@ -51,17 +51,17 @@ public:
 /**
     @class wxFindReplaceData
     @wxheader{fdrepdlg.h}
-    
-    wxFindReplaceData holds the data for 
+
+    wxFindReplaceData holds the data for
     wxFindReplaceDialog. It is used to initialize
     the dialog with the default values and will keep the last values from the
-    dialog when it is closed. It is also updated each time a 
+    dialog when it is closed. It is also updated each time a
     wxFindDialogEvent is generated so instead of
     using the wxFindDialogEvent methods you can also directly query this object.
-    
+
     Note that all @c SetXXX() methods may only be called before showing the
     dialog and calling them has no effect later.
-    
+
     @library{wxcore}
     @category{FIXME}
 */
@@ -108,7 +108,7 @@ public:
 /**
     @class wxFindReplaceDialog
     @wxheader{fdrepdlg.h}
-    
+
     wxFindReplaceDialog is a standard modeless dialog which is used to allow the
     user to search for some text (and possibly replace it with something else).
     The actual searching is supposed to be done in the owner window which is the
@@ -116,9 +116,9 @@ public:
     dialogs this one @b must have a parent window. Also note that there is no
     way to use this dialog in a modal way; it is always, by design and
     implementation, modeless.
-    
+
     Please see the dialogs sample for an example of using it.
-    
+
     @library{wxcore}
     @category{cmndlg}
 */
@@ -127,16 +127,16 @@ class wxFindReplaceDialog : public wxDialog
 public:
     //@{
     /**
-        After using default constructor Create() 
+        After using default constructor Create()
         must be called.
         
         The @e parent and @e data parameters must be non-@NULL.
     */
     wxFindReplaceDialog();
-        wxFindReplaceDialog(wxWindow * parent,
-                            wxFindReplaceData* data,
-                            const wxString& title,
-                            int style = 0);
+    wxFindReplaceDialog(wxWindow * parent,
+                        wxFindReplaceData* data,
+                        const wxString& title,
+                        int style = 0);
     //@}
 
     /**

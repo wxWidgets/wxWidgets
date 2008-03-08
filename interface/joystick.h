@@ -9,12 +9,12 @@
 /**
     @class wxJoystick
     @wxheader{joystick.h}
-    
+
     wxJoystick allows an application to control one or more joysticks.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxJoystickEvent
 */
@@ -37,11 +37,11 @@ public:
     /**
         Returns the state of the specified joystick button.
         
-        @param id 
+        @param id
         The button id to report, from 0 to GetNumberButtons() - 1
     */
     int GetButtonState();
-        bool GetButtonState(unsigned id);
+    bool GetButtonState(unsigned id);
     //@}
 
     /**
@@ -100,11 +100,11 @@ public:
     /**
         Returns the position of the specified joystick axis.
         
-        @param axis 
+        @param axis
         The joystick axis to report, from 0 to GetNumberAxes() - 1.
     */
     wxPoint GetPosition();
-        int GetPosition(unsigned axis);
+    int GetPosition(unsigned axis);
     //@}
 
     /**
@@ -250,10 +250,10 @@ public:
     /**
         Sets the capture to direct joystick events to @e win.
         
-        @param win 
+        @param win
         The window that will receive joystick events.
         
-        @param pollingFreq 
+        @param pollingFreq
         If zero, movement events are sent when above the
         threshold. If greater than zero, events are received every pollingFreq
         milliseconds.

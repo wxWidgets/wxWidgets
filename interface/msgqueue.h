@@ -9,29 +9,29 @@
 /**
     @class wxMessageQueueT
     @wxheader{msgqueue.h}
-    
+
     wxMessageQueue allows passing messages between threads.
-    
+
     This class should be typically used to communicate between the main and worker
     threads. The main thread calls wxMessageQueue::Post and
     the worker thread calls wxMessageQueue::Receive.
-    
+
     For this class a message is an object of arbitrary type T. Notice that
     often there is a some special message indicating that the thread
     should terminate as there is no other way to gracefully shutdown a thread
     waiting on the message queue.
-    
+
     @nolibrary
     @category{FIXME}
-    
+
     @seealso
     wxThread
 */
-class wxMessageQueue<T> 
+class wxMessageQueue<T>
 {
 public:
     /**
-        Returns @true if the object had been initialized successfully, @false 
+        Returns @true if the object had been initialized successfully, @false
         if an error occurred.
     */
 #define bool IsOk()     /* implementation is private */
@@ -71,5 +71,5 @@ public:
         Default and only constructor. Use wxMessageQueue::IsOk to check
         if the object was successfully initialized.
     */
-     wxMessageQueue();
+    wxMessageQueue();
 };

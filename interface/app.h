@@ -9,27 +9,27 @@
 /**
     @class wxApp
     @wxheader{app.h}
-    
+
     The @b wxApp class represents the application itself. It is used
     to:
-    
+
      set and get application-wide properties;
      implement the windowing system message or event loop;
      initiate application processing via wxApp::OnInit;
      allow default processing of events not handled by other
     objects in the application.
-    
+
     You should use the macro IMPLEMENT_APP(appClass) in your application
     implementation
     file to tell wxWidgets how to create an instance of your application class.
-    
+
     Use DECLARE_APP(appClass) in a header file if you want the wxGetApp function
     (which returns
     a reference to your application object) to be visible to other files.
-    
+
     @library{wxbase}
     @category{appmanagement}
-    
+
     @seealso
     @ref overview_wxappoverview "wxApp overview"
 */
@@ -198,8 +198,8 @@ public:
     /**
         Returns @true if the application is active, i.e. if one of its windows is
         currently in the foreground. If this function returns @false and you need to
-        attract users attention to the application, you may use 
-        wxTopLevelWindow::RequestUserAttention 
+        attract users attention to the application, you may use
+        wxTopLevelWindow::RequestUserAttention
         to do it.
     */
     bool IsActive();
@@ -221,7 +221,7 @@ public:
     void MacNewFile();
 
     /**
-        Mac specific. Called in response of an "open-document" Apple event. You need to 
+        Mac specific. Called in response of an "open-document" Apple event. You need to
         override this method in order to open a document file after the
         user double clicked on it or if the document file was dropped
         on either the running application or the application icon in
@@ -262,23 +262,23 @@ public:
         The base class version shows the default assert failure dialog box proposing to
         the user to stop the program, continue or ignore all subsequent asserts.
         
-        @param file 
+        @param file
         the name of the source file where the assert occurred
         
-        @param line 
+        @param line
         the line number in this file where the assert occurred
         
-        @param func 
+        @param func
         the name of the function where the assert occurred, may be
         empty if the compiler doesn't support C99 __FUNCTION__
         
-        @param cond 
+        @param cond
         the condition of the failed assert in text form
         
-        @param msg 
-        the message specified as argument to 
+        @param msg
+        the message specified as argument to
         wxASSERT_MSG or wxFAIL_MSG, will
-        be @NULL if just wxASSERT or wxFAIL 
+        be @NULL if just wxASSERT or wxFAIL
         was used
     */
     void OnAssertFailure(const wxChar file, int line,
@@ -291,7 +291,7 @@ public:
         was specified by the user). The default behaviour is to show the program usage
         text and abort the program.
         
-        Return @true to continue normal execution or @false to return 
+        Return @true to continue normal execution or @false to return
         @false from OnInit() thus terminating the program.
         
         @sa OnInitCmdLine()
@@ -302,7 +302,7 @@ public:
         Called when the help option (@c --help) was specified on the command line.
         The default behaviour is to show the program usage text and abort the program.
         
-        Return @true to continue normal execution or @false to return 
+        Return @true to continue normal execution or @false to return
         @false from OnInit() thus terminating the program.
         
         @sa OnInitCmdLine()
@@ -317,7 +317,7 @@ public:
         Don't forget to call the base class version unless you want to suppress
         processing of the standard command line options.
         
-        Return @true to continue normal execution or @false to return 
+        Return @true to continue normal execution or @false to return
         @false from OnInit() thus terminating the program.
         
         @sa OnInitCmdLine()
@@ -336,7 +336,7 @@ public:
         the different options. You may override this function in your class to do
         something more appropriate.
         
-        Finally note that if the exception is rethrown from here, it can be caught in 
+        Finally note that if the exception is rethrown from here, it can be caught in
         OnUnhandledException().
     */
     virtual bool OnExceptionInMainLoop();
@@ -345,7 +345,7 @@ public:
         Override this member function for any processing which needs to be
         done as the application is about to exit. OnExit is called after
         destroying all application windows and controls, but before
-        wxWidgets cleanup. Note that it is not called at all if 
+        wxWidgets cleanup. Note that it is not called at all if
         OnInit() failed.
         
         The return value of this function is currently ignored, return the same value
@@ -356,7 +356,7 @@ public:
     /**
         This function may be called if something fatal happens: an unhandled
         exception under Win32 or a a fatal signal under Unix, for example. However,
-        this will not happen by default: you have to explicitly call 
+        this will not happen by default: you have to explicitly call
         wxHandleFatalExceptions to enable this.
         
         Generally speaking, this function should only show a message to the user and
@@ -369,8 +369,8 @@ public:
 
     /**
         This must be provided by the application, and will usually create the
-        application's main window, optionally calling 
-        SetTopWindow(). You may use 
+        application's main window, optionally calling
+        SetTopWindow(). You may use
         OnExit() to clean up anything initialized here, provided
         that the function returns @true.
         
@@ -393,9 +393,9 @@ public:
     /**
         This virtual function is where the execution of a program written in wxWidgets
         starts. The default implementation just enters the main loop and starts
-        handling the events until it terminates, either because 
+        handling the events until it terminates, either because
         ExitMainLoop() has been explicitly called or because
-        the last frame has been deleted and 
+        the last frame has been deleted and
         GetExitOnFrameDelete() flag is @true (this
         is the default).
         
@@ -405,7 +405,7 @@ public:
     virtual int OnRun();
 
     /**
-        This function is called when an unhandled C++ exception occurs inside 
+        This function is called when an unhandled C++ exception occurs inside
         OnRun() (the exceptions which occur during the program
         startup and shutdown might not be caught at all). Notice that by now the main
         event loop has been terminated and the program will exit, if you want to
@@ -460,7 +460,7 @@ public:
     /**
         Sets the name of the application. This name should be used for file names,
         configuration file entries and other internal strings. For the user-visible
-        strings, such as the window titles, the application display name set by 
+        strings, such as the window titles, the application display name set by
         SetAppDisplayName() is used instead.
         
         By default the application name is set to the name of its executable file.
@@ -481,7 +481,7 @@ public:
         Allows the programmer to specify whether the application will exit when the
         top-level frame is deleted.
         
-        @param flag 
+        @param flag
         If @true (the default), the application will exit when the top-level frame is
         deleted. If @false, the application will continue to run.
         
@@ -494,7 +494,7 @@ public:
         Allows external code to modify global @c wxTheApp, but you should really
         know what you're doing if you call it.
         
-        @param app 
+        @param app
         Replacement for the global application object.
         
         @sa GetInstance()
@@ -507,7 +507,7 @@ public:
         
         Return @true if theme was successfully changed.
         
-        @param theme 
+        @param theme
         The name of the new theme or an absolute path to a gtkrc-theme-file
     */
     bool SetNativeTheme();
@@ -524,7 +524,7 @@ public:
         when it
         needs to use the top window.
         
-        @param window 
+        @param window
         The new top window.
         
         @sa GetTopWindow(), OnInit()
@@ -543,12 +543,12 @@ public:
         If @e forceTrueColour is @true then the application will try to force
         using a TrueColour visual and abort the app if none is found.
         
-        Note that this function has to be called in the constructor of the @c wxApp 
+        Note that this function has to be called in the constructor of the @c wxApp
         instance and won't have any effect when called later on.
         
         This function currently only has effect under GTK.
         
-        @param flag 
+        @param flag
         If @true, the app will use the best visual.
     */
     void SetUseBestVisual(bool flag, bool forceTrueColour = @false);
@@ -589,7 +589,7 @@ public:
         iteration), call wxLog::FlushActive.
         
         Calling Yield() recursively is normally an error and an assert failure is
-        raised in debug build if such situation is detected. However if the 
+        raised in debug build if such situation is detected. However if the
         @e onlyIfNeeded parameter is @true, the method will just silently
         return @false instead.
     */
@@ -627,7 +627,7 @@ public:
     default (but it can be changed).
 */
 void wxLogMessage(const char * formatString, ... );
-    void wxVLogMessage(const char * formatString, va_list argPtr);
+void wxVLogMessage(const char * formatString, va_list argPtr);
 //@}
 
 //@{
@@ -638,7 +638,7 @@ void wxLogMessage(const char * formatString, ... );
     wxLogInfo).
 */
 void wxLogVerbose(const char * formatString, ... );
-    void wxVLogVerbose(const char * formatString, va_list argPtr);
+void wxVLogVerbose(const char * formatString, va_list argPtr);
 //@}
 
 /**
@@ -646,7 +646,7 @@ void wxLogVerbose(const char * formatString, ... );
     wxGetApp function implemented by
     wxIMPLEMENT_APP. It creates the declaration
     @c className wxGetApp(void).
-    
+
     Example:
     @code
     wxDECLARE_APP(MyApp)
@@ -668,7 +668,7 @@ void wxExit();
     the program work.
 */
 void wxLogWarning(const char * formatString, ... );
-    void wxVLogWarning(const char * formatString, va_list argPtr);
+void wxVLogWarning(const char * formatString, va_list argPtr);
 //@}
 
 //@{
@@ -678,8 +678,8 @@ void wxLogWarning(const char * formatString, ... );
     function also terminates the program with this exit code.
 */
 void wxLogFatalError(const char * formatString, ... );
-    void wxVLogFatalError(const char * formatString,
-                          va_list argPtr);
+void wxVLogFatalError(const char * formatString,
+                      va_list argPtr);
 //@}
 
 /**
@@ -690,8 +690,8 @@ void wxLogFatalError(const char * formatString, ... );
     normal way which usually just means that the application will be terminated.
     Calling wxHandleFatalExceptions() with @e doIt equal to @false will restore
     this default behaviour.
-    
-    Notice that this function is only available if 
+
+    Notice that this function is only available if
     @c wxUSE_ON_FATAL_EXCEPTION is 1 and under Windows platform this
     requires a compiler with support for SEH (structured exception handling) which
     currently means only Microsoft Visual C++ or a recent Borland C++ version.
@@ -702,17 +702,17 @@ bool wxHandleFatalExceptions(bool doIt = @true);
     This is used in the application class implementation file to make the
     application class known to
     wxWidgets for dynamic construction. You use this instead of
-    
+
     Old form:
     @code
     MyApp myApp;
     @endcode
-    
+
     New form:
     @code
     IMPLEMENT_APP(MyApp)
     @endcode
-    
+
     See also DECLARE_APP.
 */
 #define IMPLEMENT_APP()     /* implementation is private */
@@ -720,7 +720,7 @@ bool wxHandleFatalExceptions(bool doIt = @true);
 /**
     Returns the error code from the last system call. This function uses
     @c errno on Unix platforms and @c GetLastError under Win32.
-    
+
     @sa wxSysErrorMsg, wxLogSysError
 */
 unsigned long wxSysErrorCode();
@@ -741,7 +741,7 @@ void wxPostEvent(wxEvtHandler * dest, wxEvent& event);
     user about it.
 */
 void wxLogError(const char * formatString, ... );
-    void wxVLogError(const char * formatString, va_list argPtr);
+void wxVLogError(const char * formatString, va_list argPtr);
 //@}
 
 //@{
@@ -750,26 +750,26 @@ void wxLogError(const char * formatString, ... );
     expand to nothing in the release one. The reason for making
     it a separate function from it is that usually there are a lot of trace
     messages, so it might make sense to separate them from other debug messages.
-    
+
     The trace messages also usually can be separated into different categories and
     the second and third versions of this function only log the message if the
     @e mask which it has is currently enabled in wxLog. This
     allows to selectively trace only some operations and not others by changing
     the value of the trace mask (possible during the run-time).
-    
+
     For the second function (taking a string mask), the message is logged only if
     the mask has been previously enabled by the call to
     wxLog::AddTraceMask or by setting
     @ref overview_envvars "@c WXTRACE environment variable".
     The predefined string trace masks
     used by wxWidgets are:
-    
+
      wxTRACE_MemAlloc: trace memory allocation (new/delete)
      wxTRACE_Messages: trace window messages/X callbacks
      wxTRACE_ResAlloc: trace GDI resource allocation
      wxTRACE_RefCount: trace various ref counting operations
      wxTRACE_OleCalls: trace OLE method calls (Win32 only)
-    
+
     @b Caveats: since both the mask and the format string are strings,
     this might lead to function signature confusion in some cases:
     if you intend to call the format string only version of wxLogTrace,
@@ -777,14 +777,14 @@ void wxLogError(const char * formatString, ... );
     for that %s, the string mask version of wxLogTrace will erroneously get called instead, since you are supplying two string parameters to the function.
     In this case you'll unfortunately have to avoid having two leading
     string parameters, e.g. by adding a bogus integer (with its %d format string).
-    
+
     The third version of the function only logs the message if all the bits
     corresponding to the @e mask are set in the wxLog trace mask which can be
     set by wxLog::SetTraceMask. This version is less
     flexible than the previous one because it doesn't allow defining the user
     trace masks easily - this is why it is deprecated in favour of using string
     trace masks.
-    
+
      wxTraceMemAlloc: trace memory allocation (new/delete)
      wxTraceMessages: trace window messages/X callbacks
      wxTraceResAlloc: trace GDI resource allocation
@@ -792,23 +792,23 @@ void wxLogError(const char * formatString, ... );
      wxTraceOleCalls: trace OLE method calls (Win32 only)
 */
 void wxLogTrace(const char * formatString, ... );
-    void wxVLogTrace(const char * formatString, va_list argPtr);
-    void wxLogTrace(const char * mask, const char * formatString,
-                    ... );
-    void wxVLogTrace(const char * mask,
-                     const char * formatString,
-                     va_list argPtr);
-    void wxLogTrace(wxTraceMask mask, const char * formatString,
-                    ... );
-    void wxVLogTrace(wxTraceMask mask, const char * formatString,
-                     va_list argPtr);
+void wxVLogTrace(const char * formatString, va_list argPtr);
+void wxLogTrace(const char * mask, const char * formatString,
+                ... );
+void wxVLogTrace(const char * mask,
+                 const char * formatString,
+                 va_list argPtr);
+void wxLogTrace(wxTraceMask mask, const char * formatString,
+                ... );
+void wxVLogTrace(wxTraceMask mask, const char * formatString,
+                 va_list argPtr);
 //@}
 
 /**
     Returns the error message corresponding to the given system error code. If
     @e errCode is 0 (default), the last error code (as returned by
     wxSysErrorCode) is used.
-    
+
     @sa wxSysErrorCode, wxLogSysError
 */
 const wxChar * wxSysErrorMsg(unsigned long errCode = 0);
@@ -826,7 +826,7 @@ void wxUninitialize();
     nothing in release mode (otherwise).
 */
 void wxLogDebug(const char * formatString, ... );
-    void wxVLogDebug(const char * formatString, va_list argPtr);
+void wxVLogDebug(const char * formatString, va_list argPtr);
 //@}
 
 /**
@@ -834,7 +834,7 @@ void wxLogDebug(const char * formatString, ... );
     the IMPLEMENT_APP macro. Thus, before using it
     anywhere but in the same module where this macro is used, you must make it
     available using DECLARE_APP.
-    
+
     The advantage of using this function compared to directly using the global
     wxTheApp pointer is that the latter is of type @c wxApp * and so wouldn't
     allow you to access the functions specific to your application class but not
@@ -847,26 +847,26 @@ wxAppDerivedClass wxGetApp();
     Messages logged by these functions will appear in the statusbar of the @e frame
     or of the top level application window by default (i.e. when using
     the second version of the functions).
-    
+
     If the target frame doesn't have a statusbar, the message will be lost.
 */
 void wxLogStatus(wxFrame * frame, const char * formatString,
                  ... );
-    void wxVLogStatus(wxFrame * frame, const char * formatString,
-                      va_list argPtr);
-    void wxLogStatus(const char * formatString, ... );
-    void wxVLogStatus(const char * formatString, va_list argPtr);
+void wxVLogStatus(wxFrame * frame, const char * formatString,
+                  va_list argPtr);
+void wxLogStatus(const char * formatString, ... );
+void wxVLogStatus(const char * formatString, va_list argPtr);
 //@}
 
 /**
     This function is used in wxBase only and only if you don't create
     wxApp object at all. In this case you must call it from your
     @c main() function before calling any other wxWidgets functions.
-    
+
     If the function returns @false the initialization could not be performed,
     in this case the library cannot be used and
     wxUninitialize shouldn't be called neither.
-    
+
     This function may be called several times but
     wxUninitialize must be called for each successful
     call to this function.
@@ -878,7 +878,7 @@ bool wxInitialize();
     wxGetApp function implemented by
     IMPLEMENT_APP. It creates the declaration
     @c className wxGetApp(void).
-    
+
     Example:
     @code
     DECLARE_APP(MyApp)
@@ -888,7 +888,7 @@ bool wxInitialize();
 
 /**
     Calls wxApp::Yield.
-    
+
     This function is kept only for backwards compatibility. Please use
     the wxApp::Yield method instead in any new code.
 */
@@ -901,12 +901,12 @@ bool wxYield();
     as the last system error code (@e errno or @e ::GetLastError() depending
     on the platform) and the corresponding error message. The second form
     of this function takes the error code explicitly as the first argument.
-    
+
     @sa wxSysErrorCode, wxSysErrorMsg
 */
 void wxLogSysError(const char * formatString, ... );
-    void wxVLogSysError(const char * formatString,
-                        va_list argPtr);
+void wxVLogSysError(const char * formatString,
+                    va_list argPtr);
 //@}
 
 //@{
@@ -915,23 +915,23 @@ void wxLogSysError(const char * formatString, ... );
     using the default wxWidgets entry code (e.g. main or WinMain). For example, you
     can initialize wxWidgets from an Microsoft Foundation Classes application using
     this function.
-    
+
     The following overload of wxEntry is available under all platforms:
-    
-    (notice that under Windows CE platform, and only there, the type of 
+
+    (notice that under Windows CE platform, and only there, the type of
     @e pCmdLine is @c wchar_t *, otherwise it is @c char *, even in
     Unicode build).
-    
+
     @remarks To clean up wxWidgets, call wxApp::OnExit followed by the static
                function wxApp::CleanUp. For example, if exiting from
                an MFC application that also uses wxWidgets:
-    
+
     @sa wxEntryStart
 */
 int wxEntry(int& argc, wxChar ** argv);
-    int wxEntry(HINSTANCE hInstance,
-                HINSTANCE hPrevInstance = @NULL,
-                char * pCmdLine = @NULL,
-                int nCmdShow = SW_SHOWNORMAL);
+int wxEntry(HINSTANCE hInstance,
+            HINSTANCE hPrevInstance = @NULL,
+            char * pCmdLine = @NULL,
+            int nCmdShow = SW_SHOWNORMAL);
 //@}
 

@@ -9,20 +9,20 @@
 /**
     @class wxStaticLine
     @wxheader{statline.h}
-    
+
     A static line is just a line which may be used in a dialog to separate the
     groups of controls. The line may be only vertical or horizontal.
-    
+
     @beginStyleTable
     @style{wxLI_HORIZONTAL}:
            Creates a horizontal line.
     @style{wxLI_VERTICAL}:
            Creates a vertical line.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxStaticBox
 */
@@ -33,34 +33,34 @@ public:
     /**
         Constructor, creating and showing a static line.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param pos 
+        @param pos
         Window position. If wxDefaultPosition is specified then a default position
         is chosen.
         
-        @param size 
+        @param size
         Size. Note that either the height or the width (depending on
         whether the line if horizontal or vertical) is ignored.
         
-        @param style 
+        @param style
         Window style (either wxLI_HORIZONTAL or wxLI_VERTICAL).
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create()
     */
     wxStaticLine();
-        wxStaticLine(wxWindow* parent, wxWindowID id = wxID_ANY,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxLI_HORIZONTAL,
-                     const wxString& name = "staticLine");
+    wxStaticLine(wxWindow* parent, wxWindowID id = wxID_ANY,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxLI_HORIZONTAL,
+                 const wxString& name = "staticLine");
     //@}
 
     /**

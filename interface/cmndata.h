@@ -9,14 +9,14 @@
 /**
     @class wxFontData
     @wxheader{cmndata.h}
-    
+
     @ref overview_wxfontdialogoverview "wxFontDialog overview"
-    
+
     This class holds a variety of information related to font dialogs.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     Overview, wxFont, wxFontDialog
 */
@@ -132,16 +132,16 @@ public:
 /**
     @class wxPageSetupDialogData
     @wxheader{cmndata.h}
-    
+
     This class holds a variety of information related to wxPageSetupDialog.
-    
+
     It contains a wxPrintData member which is used to hold basic printer
     configuration data (as opposed to the
     user-interface configuration settings stored by wxPageSetupDialogData).
-    
+
     @library{wxcore}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", wxPageSetupDialog
 */
@@ -153,8 +153,8 @@ public:
         Construct an object from a print data object.
     */
     wxPageSetupDialogData();
-        wxPageSetupDialogData(wxPageSetupDialogData& data);
-        wxPageSetupDialogData(wxPrintData& printData);
+    wxPageSetupDialogData(wxPageSetupDialogData& data);
+    wxPageSetupDialogData(wxPrintData& printData);
     //@}
 
     /**
@@ -338,7 +338,7 @@ public:
         Assigns page setup data to this object.
     */
     void operator =(const wxPrintData& data);
-        void operator =(const wxPageSetupDialogData& data);
+    void operator =(const wxPageSetupDialogData& data);
     //@}
 };
 
@@ -346,12 +346,12 @@ public:
 /**
     @class wxColourData
     @wxheader{cmndata.h}
-    
+
     This class holds a variety of information related to colour dialogs.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxColour, wxColourDialog, @ref overview_wxcolourdialogoverview "wxColourDialog
     overview"
@@ -431,16 +431,16 @@ public:
 /**
     @class wxPrintData
     @wxheader{cmndata.h}
-    
+
     This class holds a variety of information related to printers and
     printer device contexts. This class is used to create a wxPrinterDC
     and a wxPostScriptDC. It is also used as a data member of wxPrintDialogData
     and wxPageSetupDialogData, as part of the mechanism for transferring data
     between the print dialogs and the application.
-    
+
     @library{wxcore}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", wxPrintDialog,
     wxPageSetupDialog, wxPrintDialogData, wxPageSetupDialogData, @ref overview_wxprintdialogoverview "wxPrintDialog Overview", wxPrinterDC, wxPostScriptDC
@@ -453,7 +453,7 @@ public:
         Copy constructor.
     */
     wxPrintData();
-        wxPrintData(const wxPrintData& data);
+    wxPrintData(const wxPrintData& data);
     //@}
 
     /**
@@ -587,7 +587,7 @@ public:
         but retained for backward compatibility.
     */
     void operator =(const wxPrintData& data);
-        void operator =(const wxPrintSetupData& data);
+    void operator =(const wxPrintSetupData& data);
     //@}
 };
 
@@ -595,14 +595,14 @@ public:
 /**
     @class wxPrintDialogData
     @wxheader{cmndata.h}
-    
+
     This class holds information related to the visual characteristics of
     wxPrintDialog.
     It contains a wxPrintData object with underlying printing settings.
-    
+
     @library{wxcore}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", wxPrintDialog,
     @ref overview_wxprintdialogoverview "wxPrintDialog Overview"
@@ -615,8 +615,8 @@ public:
         Construct an object from a print dialog data object.
     */
     wxPrintDialogData();
-        wxPrintDialogData(wxPrintDialogData& dialogData);
-        wxPrintDialogData(wxPrintData& printData);
+    wxPrintDialogData(wxPrintDialogData& dialogData);
+    wxPrintDialogData(wxPrintData& printData);
     //@}
 
     /**
@@ -763,6 +763,6 @@ public:
         Assigns another print dialog data object to this object.
     */
     void operator =(const wxPrintData& data);
-        void operator =(const wxPrintDialogData& data);
+    void operator =(const wxPrintDialogData& data);
     //@}
 };

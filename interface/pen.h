@@ -9,38 +9,38 @@
 /**
     @class wxPen
     @wxheader{pen.h}
-    
+
     A pen is a drawing tool for drawing outlines. It is used for drawing
     lines and painting the outline of rectangles, ellipses, etc. It has a
     colour, a width and a style.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @stdobjects
     Objects:
     wxNullPen
     Pointers:
     wxRED_PEN
-    
+
     wxCYAN_PEN
-    
+
     wxGREEN_PEN
-    
+
     wxBLACK_PEN
-    
+
     wxWHITE_PEN
-    
+
     wxTRANSPARENT_PEN
-    
+
     wxBLACK_DASHED_PEN
-    
+
     wxGREY_PEN
-    
+
     wxMEDIUM_GREY_PEN
-    
+
     wxLIGHT_GREY_PEN
-    
+
     @seealso
     wxPenList, wxDC, wxDC::SetPen
 */
@@ -51,23 +51,23 @@ public:
     /**
         Copy constructor, uses @ref overview_trefcount "reference counting".
         
-        @param colour 
+        @param colour
         A colour object.
         
-        @param colourName 
+        @param colourName
         A colour name.
         
-        @param width 
+        @param width
         Pen width. Under Windows, the pen width cannot be greater than 1 if
         the style is wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, or wxUSER_DASH.
         
-        @param stipple 
+        @param stipple
         A stipple bitmap.
         
-        @param pen 
+        @param pen
         A pointer or reference to a pen to copy.
         
-        @param style 
+        @param style
         The style may be one of the following:
         
         wxSOLID
@@ -148,11 +148,11 @@ public:
         @sa SetStyle(), SetColour(), SetWidth(), SetStipple()
     */
     wxPen();
-        wxPen(const wxColour& colour, int width = 1,
-              int style = wxSOLID);
-        wxPen(const wxString& colourName, int width, int style);
-        wxPen(const wxBitmap& stipple, int width);
-        wxPen(const wxPen& pen);
+    wxPen(const wxColour& colour, int width = 1,
+          int style = wxSOLID);
+    wxPen(const wxString& colourName, int width, int style);
+    wxPen(const wxBitmap& stipple, int width);
+    wxPen(const wxPen& pen);
     //@}
 
     /**
@@ -246,9 +246,9 @@ public:
         @sa GetColour()
     */
     void SetColour(wxColour& colour);
-        void SetColour(const wxString& colourName);
-        void SetColour(unsigned char red, unsigned char green,
-                       unsigned char blue);
+    void SetColour(const wxString& colourName);
+    void SetColour(unsigned char red, unsigned char green,
+                   unsigned char blue);
     //@}
 
     /**

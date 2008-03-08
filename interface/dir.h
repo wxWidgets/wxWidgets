@@ -9,49 +9,49 @@
 /**
     @class wxDirTraverser
     @wxheader{dir.h}
-    
+
     wxDirTraverser is an abstract interface which must be implemented by objects
     passed to wxDir::Traverse function.
-    
+
     Example of use (this works almost like wxDir::GetAllFiles):
-    
+
     @code
     class wxDirTraverserSimple : public wxDirTraverser
         {
         public:
             wxDirTraverserSimple(wxArrayString& files) : m_files(files) { }
-    
+
             virtual wxDirTraverseResult OnFile(const wxString& filename)
             {
                 m_files.Add(filename);
                 return wxDIR_CONTINUE;
             }
-    
+
             virtual wxDirTraverseResult OnDir(const wxString& WXUNUSED(dirname))
             {
                 return wxDIR_CONTINUE;
             }
-    
+
         private:
             wxArrayString& m_files;
         };
-    
+
         // get the names of all files in the array
         wxArrayString files;
         wxDirTraverserSimple traverser(files);
-    
+
         wxDir dir(dirname);
         dir.Traverse(traverser);
     @endcode
-    
+
     @library{wxbase}
     @category{file}
 */
-class wxDirTraverser 
+class wxDirTraverser
 {
 public:
     /**
-        This function is called for each directory. It may return @c wxSIR_STOP 
+        This function is called for each directory. It may return @c wxSIR_STOP
         to abort traversing completely, @c wxDIR_IGNORE to skip this directory but
         continue with others or @c wxDIR_CONTINUE to enumerate all files and
         subdirectories in this directory.
@@ -62,7 +62,7 @@ public:
 
     /**
         This function is called for each file. It may return @c wxDIR_STOP to abort
-        traversing (for example, if the file being searched is found) or 
+        traversing (for example, if the file being searched is found) or
         @c wxDIR_CONTINUE to proceed.
         
         This is a pure virtual function and must be implemented in the derived class.
@@ -72,7 +72,7 @@ public:
     /**
         This function is called for each directory which we failed to open for
         enumerating. It may return @c wxSIR_STOP to abort traversing completely,
-        @c wxDIR_IGNORE to skip this directory but continue with others or 
+        @c wxDIR_IGNORE to skip this directory but continue with others or
         @c wxDIR_CONTINUE to retry opening this directory once again.
         
         The base class version always returns @c wxDIR_IGNORE.
@@ -84,53 +84,53 @@ public:
 /**
     @class wxDir
     @wxheader{dir.h}
-    
+
     wxDir is a portable equivalent of Unix open/read/closedir functions which
     allow enumerating of the files in a directory. wxDir allows to enumerate files
     as well as directories.
-    
-    wxDir also provides a flexible way to enumerate files recursively using 
-    wxDir::Traverse or a simpler 
+
+    wxDir also provides a flexible way to enumerate files recursively using
+    wxDir::Traverse or a simpler
     wxDir::GetAllFiles function.
-    
+
     Example of use:
-    
+
     @code
     wxDir dir(wxGetCwd());
-    
+
         if ( !dir.IsOpened() )
         {
             // deal with the error here - wxDir would already log an error message
             // explaining the exact reason of the failure
             return;
         }
-    
+
         puts("Enumerating object files in current directory:");
-    
+
         wxString filename;
-    
+
         bool cont = dir.GetFirst(, filespec, flags);
         while ( cont )
         {
             printf("%s\n", filename.c_str());
-    
+
             cont = dir.GetNext();
         }
     @endcode
-    
+
     @library{wxbase}
     @category{file}
 */
-class wxDir 
+class wxDir
 {
 public:
     //@{
     /**
-        Opens the directory for enumeration, use IsOpened() 
+        Opens the directory for enumeration, use IsOpened()
         to test for errors.
     */
     wxDir();
-        wxDir(const wxString& dir);
+    wxDir(const wxString& dir);
     //@}
 
     /**
@@ -149,7 +149,7 @@ public:
         or an empty string if there are no files matching it.
         
         The @e flags parameter may or may not include @c wxDIR_FILES, the
-        function always behaves as if it were specified. By default, @e flags 
+        function always behaves as if it were specified. By default, @e flags
         includes @c wxDIR_DIRS and so the function recurses into the subdirectories
         but if this flag is not specified, the function restricts the search only to
         the directory @e dirname itself.
@@ -161,7 +161,7 @@ public:
                               int flags = wxDIR_DEFAULT);
 
     /**
-        The function appends the names of all the files under directory @e dirname 
+        The function appends the names of all the files under directory @e dirname
         to the array @e files (note that its old content is preserved). Only files
         matching the @e filespec are taken, with empty spec matching all the files.
         
@@ -218,7 +218,7 @@ public:
                                     wxArrayString* filesSkipped = @NULL);
 
     /**
-        Returns @true if the directory contains any files matching the given 
+        Returns @true if the directory contains any files matching the given
         @e filespec. If @e filespec is empty, look for any files at all. In any
         case, even hidden files are taken into account.
     */
@@ -232,7 +232,7 @@ public:
     bool HasSubDirs(const wxString& dirspec = wxEmptyString);
 
     /**
-        Returns @true if the directory was successfully opened by a previous call to 
+        Returns @true if the directory was successfully opened by a previous call to
         Open().
     */
     bool IsOpened();
@@ -245,10 +245,10 @@ public:
 
     /**
         Enumerate all files and directories under the given directory recursively
-        calling the element of the provided wxDirTraverser 
+        calling the element of the provided wxDirTraverser
         object for each of them.
         
-        More precisely, the function will really recurse into subdirectories if 
+        More precisely, the function will really recurse into subdirectories if
         @e flags contains @c wxDIR_DIRS flag. It will ignore the files (but
         still possibly recurse into subdirectories) if @c wxDIR_FILES flag is
         given.

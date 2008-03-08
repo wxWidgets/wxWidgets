@@ -9,18 +9,18 @@
 /**
     @class wxDragImage
     @wxheader{dragimag.h}
-    
+
     This class is used when you wish to drag an object on the screen,
     and a simple cursor is not enough.
-    
+
     On Windows, the Win32 API is used to achieve smooth dragging. On other
     platforms,
     wxGenericDragImage is used. Applications may also prefer to use
     wxGenericDragImage on Windows, too.
-    
+
     @b wxPython note: wxPython uses wxGenericDragImage on all platforms, but
     uses the wxDragImage name.
-    
+
     To use this class, when you wish to start dragging an image, create a
     wxDragImage
     object and store it somewhere you can access it as the drag progresses.
@@ -29,18 +29,18 @@
     during the drag (for example, highlight an item as in the dragimag sample),
     first call Hide,
     update the screen, call Move, and then call Show.
-    
+
     You can drag within one window, or you can use full-screen dragging
     either across the whole screen, or just restricted to one area
     of the screen to save resources. If you want the user to drag between
     two windows, then you will need to use full-screen dragging.
-    
+
     If you wish to draw the image yourself, use wxGenericDragImage and
-    override wxDragImage::DoDrawImage and 
+    override wxDragImage::DoDrawImage and
     wxDragImage::GetImageRect.
-    
+
     Please see @c samples/dragimag for an example.
-    
+
     @library{wxcore}
     @category{FIXME}
 */
@@ -56,38 +56,38 @@ public:
         wxGenericDragImage, and can be used when the application
         supplies DoDrawImage() and GetImageRect().
         
-        @param image 
+        @param image
         Icon or bitmap to be used as the drag image. The bitmap can
         have a mask.
         
-        @param text 
+        @param text
         Text used to construct a drag image.
         
-        @param cursor 
+        @param cursor
         Optional cursor to combine with the image.
         
-        @param hotspot 
+        @param hotspot
         This parameter is deprecated.
         
-        @param treeCtrl 
+        @param treeCtrl
         Tree control for constructing a tree drag image.
         
-        @param listCtrl 
+        @param listCtrl
         List control for constructing a list drag image.
         
-        @param id 
+        @param id
         Tree or list control item id.
     */
     wxDragImage();
-        wxDragImage(const wxBitmap& image,
-                    const wxCursor& cursor = wxNullCursor);
-        wxDragImage(const wxIcon& image,
-                    const wxCursor& cursor = wxNullCursor);
-        wxDragImage(const wxString& text,
-                    const wxCursor& cursor = wxNullCursor);
-        wxDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
-        wxDragImage(const wxListCtrl& treeCtrl, long id);
-        wxDragImage(const wxCursor& cursor = wxNullCursor);
+    wxDragImage(const wxBitmap& image,
+                const wxCursor& cursor = wxNullCursor);
+    wxDragImage(const wxIcon& image,
+                const wxCursor& cursor = wxNullCursor);
+    wxDragImage(const wxString& text,
+                const wxCursor& cursor = wxNullCursor);
+    wxDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
+    wxDragImage(const wxListCtrl& treeCtrl, long id);
+    wxDragImage(const wxCursor& cursor = wxNullCursor);
     //@}
 
     //@{
@@ -97,32 +97,32 @@ public:
         to specify the bounding area. This form is equivalent to using the first form,
         but more convenient than working out the bounding rectangle explicitly.
         
-        You need to then call Show() 
+        You need to then call Show()
         and Move() to show the image on the screen.
         
         Call EndDrag() when the drag has finished.
         
         Note that this call automatically calls CaptureMouse.
         
-        @param hotspot 
+        @param hotspot
         The location of the drag position relative to the upper-left corner
         of the image.
         
-        @param window 
+        @param window
         The window that captures the mouse, and within which the dragging
         is limited unless fullScreen is @true.
         
-        @param boundingWindow 
+        @param boundingWindow
         In the second form of the function, specifies the
         area within which the drag occurs.
         
-        @param fullScreen 
+        @param fullScreen
         If @true, specifies that the drag will be visible over the full
         screen, or over as much of the screen as is specified by rect. Note that the
         mouse will
         still be captured in window.
         
-        @param rect 
+        @param rect
         If non-@NULL, specifies the rectangle (in screen coordinates) that
         bounds the dragging operation. Specifying this can make the operation more
         efficient
@@ -133,8 +133,8 @@ public:
     bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
                    bool fullScreen = @false,
                    wxRect* rect = @NULL);
-        bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
-                       wxWindow* boundingWindow);
+    bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
+                   wxWindow* boundingWindow);
     //@}
 
     /**
@@ -162,20 +162,20 @@ public:
         top-left corner at the given point.
         
         This function is available in wxGenericDragImage only, and may be overridden
-        (together with 
+        (together with
         wxDragImage::DoDrawImage) to provide a virtual drawing capability.
     */
     virtual wxRect GetImageRect(const wxPoint& pos);
 
     /**
         Hides the image. You may wish to call this before updating the window
-        contents (perhaps highlighting an item). Then call Move() 
+        contents (perhaps highlighting an item). Then call Move()
         and Show().
     */
     bool Hide();
 
     /**
-        Call this to move the image to a new position. The image will only be shown if 
+        Call this to move the image to a new position. The image will only be shown if
         Show() has been called previously (for example
         at the start of the drag).
         

@@ -9,12 +9,12 @@
 /**
     @class wxGridCellFloatRenderer
     @wxheader{grid.h}
-    
+
     This class may be used to format floating point data in a cell.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellStringRenderer,
     wxGridCellBoolRenderer
@@ -23,10 +23,10 @@ class wxGridCellFloatRenderer : public wxGridCellStringRenderer
 {
 public:
     /**
-        @param width 
+        @param width
         Minimum number of characters to be shown.
         
-        @param precision 
+        @param precision
         Number of digits after the decimal dot.
     */
     wxGridCellFloatRenderer(int width = -1, int precision = -1);
@@ -61,9 +61,9 @@ public:
 /**
     @class wxGridTableBase
     @wxheader{grid.h}
-    
+
     Grid table classes.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -280,21 +280,21 @@ public:
 /**
     @class wxGridCellEditor
     @wxheader{grid.h}
-    
+
     This class is responsible for providing and manipulating
     the in-place edit controls for the grid.  Instances of wxGridCellEditor
     (actually, instances of derived classes since it is an abstract class) can be
     associated with the cell attributes for individual cells, rows, columns, or
     even for the entire grid.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellTextEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellNumberEditor, wxGridCellChoiceEditor
 */
-class wxGridCellEditor 
+class wxGridCellEditor
 {
 public:
     /**
@@ -387,12 +387,12 @@ public:
 /**
     @class wxGridCellTextEditor
     @wxheader{grid.h}
-    
+
     The editor for string/text data.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellNumberEditor, wxGridCellChoiceEditor
@@ -416,13 +416,13 @@ public:
 /**
     @class wxGridCellStringRenderer
     @wxheader{grid.h}
-    
+
     This class may be used to format string data in a cell; it is the default
     for string cells.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellFloatRenderer,
     wxGridCellBoolRenderer
@@ -440,12 +440,12 @@ public:
 /**
     @class wxGridCellChoiceEditor
     @wxheader{grid.h}
-    
+
     The editor for string data allowing to choose from a list of strings.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellNumberEditor
@@ -455,20 +455,20 @@ class wxGridCellChoiceEditor : public wxGridCellEditor
 public:
     //@{
     /**
-        @param count 
+        @param count
         Number of strings from which the user can choose.
         
-        @param choices 
+        @param choices
         An array of strings from which the user can choose.
         
-        @param allowOthers 
+        @param allowOthers
         If allowOthers is @true, the user can type a string not in choices array.
     */
     wxGridCellChoiceEditor(size_t count = 0,
                            const wxString choices[] = @NULL,
                            bool allowOthers = @false);
-        wxGridCellChoiceEditor(const wxArrayString& choices,
-                               bool allowOthers = @false);
+    wxGridCellChoiceEditor(const wxArrayString& choices,
+                           bool allowOthers = @false);
     //@}
 
     /**
@@ -481,8 +481,8 @@ public:
 /**
     @class wxGridEditorCreatedEvent
     @wxheader{grid.h}
-    
-    
+
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -494,11 +494,11 @@ public:
         
     */
     wxGridEditorCreatedEvent();
-        wxGridEditorCreatedEvent(int id, wxEventType type,
-                                 wxObject* obj,
-                                 int row,
-                                 int col,
-                                 wxControl* ctrl);
+    wxGridEditorCreatedEvent(int id, wxEventType type,
+                             wxObject* obj,
+                             int row,
+                             int col,
+                             wxControl* ctrl);
     //@}
 
     /**
@@ -536,8 +536,8 @@ public:
 /**
     @class wxGridRangeSelectEvent
     @wxheader{grid.h}
-    
-    
+
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -549,15 +549,15 @@ public:
         
     */
     wxGridRangeSelectEvent();
-        wxGridRangeSelectEvent(int id, wxEventType type,
-                               wxObject* obj,
-                               const wxGridCellCoords& topLeft,
-                               const wxGridCellCoords& bottomRight,
-                               bool sel = @true,
-                               bool control = @false,
-                               bool shift = @false,
-                               bool alt = @false,
-                               bool meta = @false);
+    wxGridRangeSelectEvent(int id, wxEventType type,
+                           wxObject* obj,
+                           const wxGridCellCoords& topLeft,
+                           const wxGridCellCoords& bottomRight,
+                           bool sel = @true,
+                           bool control = @false,
+                           bool shift = @false,
+                           bool alt = @false,
+                           bool meta = @false);
     //@}
 
     /**
@@ -620,22 +620,22 @@ public:
 /**
     @class wxGridCellRenderer
     @wxheader{grid.h}
-    
+
     This class is responsible for actually drawing the cell
     in the grid. You may pass it to the wxGridCellAttr (below) to change the
     format of one given cell or to wxGrid::SetDefaultRenderer() to change the
     view of all cells. This is an abstract class, and you will normally use one of
     the
     predefined derived classes or derive your own class from it.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellStringRenderer, wxGridCellNumberRenderer, wxGridCellFloatRenderer,
     wxGridCellBoolRenderer
 */
-class wxGridCellRenderer 
+class wxGridCellRenderer
 {
 public:
     /**
@@ -667,12 +667,12 @@ public:
 /**
     @class wxGridCellNumberEditor
     @wxheader{grid.h}
-    
+
     The editor for numeric integer data.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
@@ -707,9 +707,9 @@ public:
 /**
     @class wxGridSizeEvent
     @wxheader{grid.h}
-    
+
     This event class contains information about a row/column resize event.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -721,14 +721,14 @@ public:
         
     */
     wxGridSizeEvent();
-        wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
-                        int rowOrCol = -1,
-                        int x = -1,
-                        int y = -1,
-                        bool control = @false,
-                        bool shift = @false,
-                        bool alt = @false,
-                        bool meta = @false);
+    wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
+                    int rowOrCol = -1,
+                    int x = -1,
+                    int y = -1,
+                    bool control = @false,
+                    bool shift = @false,
+                    bool alt = @false,
+                    bool meta = @false);
     //@}
 
     /**
@@ -766,12 +766,12 @@ public:
 /**
     @class wxGridCellNumberRenderer
     @wxheader{grid.h}
-    
+
     This class may be used to format integer data in a cell.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
     wxGridCellBoolRenderer
@@ -789,15 +789,15 @@ public:
 /**
     @class wxGridCellAttr
     @wxheader{grid.h}
-    
+
     This class can be used to alter the cells' appearance in
     the grid by changing their colour/font/... from default. An object of this
     class may be returned by wxGridTableBase::GetAttr.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
-class wxGridCellAttr 
+class wxGridCellAttr
 {
 public:
     //@{
@@ -805,10 +805,10 @@ public:
         Constructor specifying some of the often used attributes.
     */
     wxGridCellAttr();
-        wxGridCellAttr(const wxColour& colText,
-                       const wxColour& colBack,
-                       const wxFont& font,
-                       int hAlign, int vAlign);
+    wxGridCellAttr(const wxColour& colText,
+                   const wxColour& colBack,
+                   const wxFont& font,
+                   int hAlign, int vAlign);
     //@}
 
     /**
@@ -894,7 +894,7 @@ public:
     bool IsReadOnly();
 
     /**
-        Sets the alignment. @e hAlign can be one of @c wxALIGN_LEFT, 
+        Sets the alignment. @e hAlign can be one of @c wxALIGN_LEFT,
         @c wxALIGN_CENTRE or @c wxALIGN_RIGHT and @e vAlign can be one
         of @c wxALIGN_TOP, @c wxALIGN_CENTRE or @c wxALIGN_BOTTOM.
     */
@@ -940,13 +940,13 @@ public:
 /**
     @class wxGridCellBoolRenderer
     @wxheader{grid.h}
-    
+
     This class may be used to format boolean data in a cell.
     for string cells.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
     wxGridCellNumberRenderer
@@ -964,9 +964,9 @@ public:
 /**
     @class wxGridEvent
     @wxheader{grid.h}
-    
+
     This event class contains information about various grid events.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -978,14 +978,14 @@ public:
         
     */
     wxGridEvent();
-        wxGridEvent(int id, wxEventType type, wxObject* obj,
-                    int row = -1, int col = -1,
-                    int x = -1, int y = -1,
-                    bool sel = @true,
-                    bool control = @false,
-                    bool shift = @false,
-                    bool alt = @false,
-                    bool meta = @false);
+    wxGridEvent(int id, wxEventType type, wxObject* obj,
+                int row = -1, int col = -1,
+                int x = -1, int y = -1,
+                bool sel = @true,
+                bool control = @false,
+                bool shift = @false,
+                bool alt = @false,
+                bool meta = @false);
     //@}
 
     /**
@@ -1034,12 +1034,12 @@ public:
 /**
     @class wxGridCellFloatEditor
     @wxheader{grid.h}
-    
+
     The editor for floating point numbers data.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellEditor, wxGridCellNumberEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
@@ -1048,10 +1048,10 @@ class wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
     /**
-        @param width 
+        @param width
         Minimum number of characters to be shown.
         
-        @param precision 
+        @param precision
         Number of digits after the decimal dot.
     */
     wxGridCellFloatEditor(int width = -1, int precision = -1);
@@ -1066,7 +1066,7 @@ public:
 /**
     @class wxGrid
     @wxheader{grid.h}
-    
+
     wxGrid and its related classes are used for displaying and editing tabular
     data. They provide a rich set of features for display, editing, and
     interacting with a variety of data sources. For simple applications, and to
@@ -1078,20 +1078,20 @@ public:
     examples of simple and more complex applications, explains the
     relationship between the various grid classes and has a summary of the
     keyboard shortcuts and mouse functions provided by wxGrid.
-    
+
     wxGrid has been greatly expanded and redesigned for wxWidgets 2.2
     onwards. The new grid classes are reasonably backward-compatible
     but there are some exceptions. There are also easier ways of doing many things
     compared to
     the previous implementation.
-    
+
     A wxGridTableBase class holds the actual
     data to be displayed by a wxGrid class. One or more wxGrid classes
-    may act as a view for one table class. 
+    may act as a view for one table class.
     The default table class is called wxGridStringTable and
     holds an array of strings. An instance of such a class is created
     by wxGrid::CreateGrid.
-    
+
     wxGridCellRenderer is the abstract base
     class for rendereing contents in a cell. The following renderers are
     predefined:
@@ -1101,7 +1101,7 @@ public:
     wxGridCellNumberRenderer. The
     look of a cell can be further defined using wxGridCellAttr.
     An object of this type may be returned by wxGridTableBase::GetAttr.
-    
+
     wxGridCellEditor is the abstract base
     class for editing the value of a cell. The following editors are
     predefined:
@@ -1109,10 +1109,10 @@ public:
     wxGridCellBoolEditor
     wxGridCellChoiceEditor
     wxGridCellNumberEditor.
-    
+
     @library{wxadv}
     @category{miscwnd}
-    
+
     @seealso
     @ref overview_gridoverview "wxGrid overview"
 */
@@ -1126,11 +1126,11 @@ public:
         it.
     */
     wxGrid();
-        wxGrid(wxWindow* parent, wxWindowID id,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxWANTS_CHARS,
-               const wxString& name = wxPanelNameStr);
+    wxGrid(wxWindow* parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = wxWANTS_CHARS,
+           const wxString& name = wxPanelNameStr);
     //@}
 
     /**
@@ -1332,7 +1332,7 @@ public:
         coordinates.
     */
     wxRect CellToRect(int row, int col);
-        wxRect CellToRect(const wxGridCellCoords& coords);
+    wxRect CellToRect(const wxGridCellCoords& coords);
     //@}
 
     /**
@@ -1539,7 +1539,7 @@ public:
         grid cell at the specified location.
         
         Horizontal alignment will be one of wxALIGN_LEFT, wxALIGN_CENTRE or
-        wxALIGN_RIGHT. 
+        wxALIGN_RIGHT.
         
         Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
@@ -1596,7 +1596,7 @@ public:
         and the @ref overview_gridoverview "wxGrid overview" for more information.
     */
     wxString GetCellValue(int row, int col);
-        wxString GetCellValue(const wxGridCellCoords& coords);
+    wxString GetCellValue(const wxGridCellCoords& coords);
     //@}
 
     /**
@@ -1675,7 +1675,7 @@ public:
         values.
         
         Horizontal alignment will be one of wxALIGN_LEFT, wxALIGN_CENTRE or
-        wxALIGN_RIGHT. 
+        wxALIGN_RIGHT.
         
         Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
@@ -1720,7 +1720,7 @@ public:
         
     */
     wxGridCellEditor* GetDefaultEditorForCell(int row, int col);
-        wxGridCellEditor* GetDefaultEditorForCell(const wxGridCellCoords& c);
+    wxGridCellEditor* GetDefaultEditorForCell(const wxGridCellCoords& c);
     //@}
 
     /**
@@ -1828,7 +1828,7 @@ public:
     /**
         Sets the arguments to the current row label alignment values.
         
-        Horizontal alignment will be one of wxLEFT, wxCENTRE or wxRIGHT. 
+        Horizontal alignment will be one of wxLEFT, wxCENTRE or wxRIGHT.
         
         Vertical alignment will be one of wxTOP, wxCENTRE or wxBOTTOM.
     */
@@ -2048,7 +2048,7 @@ public:
         Is this cell currently selected.
     */
     bool IsInSelection(int row, int col);
-        bool IsInSelection(const wxGridCellCoords& coords);
+    bool IsInSelection(const wxGridCellCoords& coords);
     //@}
 
     /**
@@ -2069,8 +2069,8 @@ public:
         visible in the grid window.
     */
     bool IsVisible(int row, int col, bool wholeCellVisible = @true);
-        bool IsVisible(const wxGridCellCoords& coords,
-                       bool wholeCellVisible = @true);
+    bool IsVisible(const wxGridCellCoords& coords,
+                   bool wholeCellVisible = @true);
     //@}
 
     //@{
@@ -2080,7 +2080,7 @@ public:
         nothing if the cell is already visible.
     */
     void MakeCellVisible(int row, int col);
-        void MakeCellVisible(const wxGridCellCoords& coords);
+    void MakeCellVisible(const wxGridCellCoords& coords);
     //@}
 
     /**
@@ -2249,9 +2249,9 @@ public:
     void SelectBlock(int topRow, int leftCol, int bottomRow,
                      int rightCol,
                      bool addToSelected = @false);
-        void SelectBlock(const wxGridCellCoords& topLeft,
-                         const wxGridCellCoords& bottomRight,
-                         bool addToSelected = @false);
+    void SelectBlock(const wxGridCellCoords& topLeft,
+                     const wxGridCellCoords& bottomRight,
+                     bool addToSelected = @false);
     //@}
 
     /**
@@ -2295,13 +2295,13 @@ public:
         location.
         
         Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or
-        wxALIGN_RIGHT. 
+        wxALIGN_RIGHT.
         
         Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or
         wxALIGN_BOTTOM.
     */
     void SetCellAlignment(int row, int col, int horiz, int vert);
-        void SetCellAlignment(int align, int row, int col);
+    void SetCellAlignment(int align, int row, int col);
     //@}
 
     /**
@@ -2341,8 +2341,8 @@ public:
         Sets the text colour for the grid cell at the specified location.
     */
     void SetCellTextColour(int row, int col, const wxColour& colour);
-        void SetCellTextColour(const wxColour& val, int row, int col);
-        void SetCellTextColour(const wxColour& colour);
+    void SetCellTextColour(const wxColour& val, int row, int col);
+    void SetCellTextColour(const wxColour& colour);
     //@}
 
     //@{
@@ -2365,9 +2365,9 @@ public:
         and the @ref overview_gridoverview "wxGrid overview" for more information.
     */
     void SetCellValue(int row, int col, const wxString& s);
-        void SetCellValue(const wxGridCellCoords& coords,
-                          const wxString& s);
-        void SetCellValue(const wxString& val, int row, int col);
+    void SetCellValue(const wxGridCellCoords& coords,
+                      const wxString& s);
+    void SetCellValue(const wxString& val, int row, int col);
     //@}
 
     /**
@@ -2688,13 +2688,13 @@ public:
     /**
         Set the selection behaviour of the grid.
         
-        @param wxGridSelectCells() 
+        @param wxGridSelectCells()
         The default mode where individual cells are selected.
         
-        @param wxGridSelectRows() 
+        @param wxGridSelectRows()
         Selections will consist of whole rows.
         
-        @param wxGridSelectColumns() 
+        @param wxGridSelectColumns()
         Selections will consist of whole columns.
     */
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
@@ -2729,10 +2729,10 @@ public:
     void ShowCellEditControl();
 
     /**
-        @param x 
+        @param x
         The x position to evaluate.
         
-        @param clipToMinMax 
+        @param clipToMinMax
         If @true, rather than returning wxNOT_FOUND, it returns either the first or last
         column depending on whether x is too far to the left or right respectively.
     */
@@ -2762,12 +2762,12 @@ public:
 /**
     @class wxGridCellBoolEditor
     @wxheader{grid.h}
-    
+
     The editor for boolean data.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxGridCellEditor, wxGridCellFloatEditor, wxGridCellNumberEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
@@ -2782,7 +2782,7 @@ public:
 
     /**
         Returns @true if the given @e value is equal to the string representation of
-        the truth value we currently use (see 
+        the truth value we currently use (see
         wxGridCellBoolEditor::UseStringValues).
     */
     static bool IsTrueValue(const wxString& value);
@@ -2802,35 +2802,35 @@ public:
 /**
     @class wxGridUpdateLocker
     @wxheader{grid.h}
-    
+
     This small class can be used to prevent wxGrid from redrawing
     during its lifetime by calling wxGrid::BeginBatch
     in its constructor and wxGrid::EndBatch in its
     destructor. It is typically used in a function performing several operations
     with a grid which would otherwise result in flicker. For example:
-    
+
     @code
     void MyFrame::Foo()
         {
             m_grid = new wxGrid(this, ...);
-    
+
             wxGridUpdateLocker noUpdates(m_grid);
             m_grid-AppendColumn();
             ... many other operations with m_grid...
             m_grid-AppendRow();
-    
+
             // destructor called, grid refreshed
         }
     @endcode
-    
-    Using this class is easier and safer than calling 
+
+    Using this class is easier and safer than calling
     wxGrid::BeginBatch and wxGrid::EndBatch
     because you don't risk not to call the latter (due to an exception for example).
-    
+
     @library{wxadv}
     @category{FIXME}
 */
-class wxGridUpdateLocker 
+class wxGridUpdateLocker
 {
 public:
     /**
@@ -2839,7 +2839,7 @@ public:
         non-@NULL then the grid must exist for longer than wxGridUpdateLocker object
         itself.
         
-        The default constructor could be followed by a call to 
+        The default constructor could be followed by a call to
         Create() to set the
         grid object later.
     */

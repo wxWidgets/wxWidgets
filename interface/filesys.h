@@ -9,15 +9,15 @@
 /**
     @class wxFileSystem
     @wxheader{filesys.h}
-    
+
     This class provides an interface for opening files on different
     file systems. It can handle absolute and/or local filenames.
     It uses a system of handlers to
     provide access to user-defined virtual file systems.
-    
+
     @library{wxbase}
     @category{vfs}
-    
+
     @seealso
     wxFileSystemHandler, wxFSFile, Overview
 */
@@ -30,7 +30,7 @@ public:
     wxFileSystem();
 
     /**
-        This static function adds new handler into the list of 
+        This static function adds new handler into the list of
         handlers which provide access to virtual FS.
         Note that if two handlers for the same protocol are added, the last one added
         takes precedence.
@@ -38,18 +38,18 @@ public:
     static void AddHandler(wxFileSystemHandler handler);
 
     /**
-        Sets the current location. @e location parameter passed to 
+        Sets the current location. @e location parameter passed to
         OpenFile() is relative to this path.
         
         @b Caution! Unless @e is_dir is @true the @e location parameter
         is not the directory name but the name of the file in this directory. All these
         commands change the path to "dir/subdir/":
         
-        @param location 
+        @param location
         the new location. Its meaning depends on the value of is_dir
         
-        @param is_dir 
-        if @true location is new directory. If @false (default) 
+        @param is_dir
+        if @true location is new directory. If @false (default)
         location is file in the new directory.
     */
     void ChangePathTo(const wxString& location, bool is_dir = @false);
@@ -65,16 +65,16 @@ public:
         Looks for the file with the given name @e file in a colon or semi-colon
         (depending on the current platform) separated list of directories in
         @e path. If the file is found in any directory, returns @true and the full
-        path of the file in @e str, otherwise returns @false and doesn't modify 
+        path of the file in @e str, otherwise returns @false and doesn't modify
         @e str.
         
-        @param str 
+        @param str
         Receives the full path of the file, must not be @NULL
         
-        @param path 
+        @param path
         wxPATH_SEP-separated list of directories
         
-        @param file 
+        @param file
         the name of the file to look for
     */
     bool FindFileInPath(wxString str, const wxString& path,
@@ -110,7 +110,7 @@ public:
         or @NULL if failed. It first tries to open the file in relative scope
         (based on value passed to ChangePathTo() method) and then as an
         absolute path.  Note that the user is responsible for deleting the returned
-        wxFSFile.  
+        wxFSFile.
         
         @e flags can be one or more of the following bit values ored together:
         A stream opened with just the default @e wxFS_READ flag may
@@ -123,7 +123,7 @@ public:
                        int flags = wxFS_READ);
 
     /**
-        Converts URL into a well-formed filename. The URL must use the @c file 
+        Converts URL into a well-formed filename. The URL must use the @c file
         protocol.
     */
     static wxFileName URLToFileName(const wxString& url);
@@ -133,20 +133,20 @@ public:
 /**
     @class wxFSFile
     @wxheader{filesys.h}
-    
+
     This class represents a single file opened by wxFileSystem.
-    It provides more information than wxWindow's input stream 
+    It provides more information than wxWindow's input stream
     (stream, filename, mime type, anchor).
-    
+
     @b Note: Any pointer returned by a method of wxFSFile is valid
     only as long as the wxFSFile object exists. For example a call to GetStream()
     doesn't @e create the stream but only returns the pointer to it. In
     other words after 10 calls to GetStream() you will have obtained ten identical
     pointers.
-    
+
     @library{wxbase}
     @category{vfs}
-    
+
     @seealso
     wxFileSystemHandler, wxFileSystem, Overview
 */
@@ -156,18 +156,18 @@ public:
     /**
         Constructor. You probably won't use it. See Notes for details.
         
-        @param stream 
+        @param stream
         The input stream that will be used to access data
         
-        @param location 
+        @param location
         The full location (aka filename) of the file
         
-        @param mimetype 
+        @param mimetype
         MIME type of this file. It may be left empty, in which
         case the type will be determined from file's extension (location must
         not be empty in this case).
         
-        @param anchor 
+        @param anchor
         Anchor. See GetAnchor() for details.
     */
     wxFSFile(wxInputStream stream, const wxString& loc,
@@ -193,7 +193,7 @@ public:
     const wxString GetAnchor();
 
     /**
-        Returns full location of the file, including path and protocol. 
+        Returns full location of the file, including path and protocol.
         Examples :
     */
     const wxString GetLocation();
@@ -225,26 +225,26 @@ public:
 /**
     @class wxFileSystemHandler
     @wxheader{filesys.h}
-    
+
     Classes derived from wxFileSystemHandler are used
     to access virtual file systems. Its public interface consists
-    of two methods: wxFileSystemHandler::CanOpen 
-    and wxFileSystemHandler::OpenFile. 
+    of two methods: wxFileSystemHandler::CanOpen
+    and wxFileSystemHandler::OpenFile.
     It provides additional protected methods to simplify the process
     of opening the file: GetProtocol, GetLeftLocation, GetRightLocation,
     GetAnchor, GetMimeTypeFromExt.
-    
+
     Please have a look at overview if you don't know how locations
     are constructed.
-    
+
     Also consult @ref overview_fs "list of available handlers".
-    
+
     @b wxPerl note: In wxPerl, you need to derive your file system handler class
     from Wx::PlFileSystemHandler.
-    
+
     @library{wxbase}
     @category{vfs}
-    
+
     @seealso
     wxFileSystem, wxFSFile, Overview
 */
@@ -294,7 +294,7 @@ public:
     wxString GetAnchor(const wxString& location);
 
     /**
-        Returns the left location string extracted from @e location. 
+        Returns the left location string extracted from @e location.
         
         Example: GetLeftLocation("file:myzipfile.zip#zip:index.htm") ==
         "file:myzipfile.zip"
@@ -311,14 +311,14 @@ public:
     wxString GetMimeTypeFromExt(const wxString& location);
 
     /**
-        Returns the protocol string extracted from @e location. 
+        Returns the protocol string extracted from @e location.
         
         Example: GetProtocol("file:myzipfile.zip#zip:index.htm") == "zip"
     */
     wxString GetProtocol(const wxString& location);
 
     /**
-        Returns the right location string extracted from @e location. 
+        Returns the right location string extracted from @e location.
         
         Example : GetRightLocation("file:myzipfile.zip#zip:index.htm") == "index.htm"
     */
@@ -329,11 +329,11 @@ public:
         
         Must be overridden in derived handlers.
         
-        @param fs 
+        @param fs
         Parent FS (the FS from that OpenFile was called). See ZIP handler
         for details of how to use it.
         
-        @param location 
+        @param location
         The absolute location of file.
     */
     virtual wxFSFile* OpenFile(wxFileSystem& fs,

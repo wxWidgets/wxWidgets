@@ -9,14 +9,14 @@
 /**
     @class wxHtmlTag
     @headerfile htmltag.h wx/html/htmltag.h
-    
-    This class represents a single HTML tag. 
+
+    This class represents a single HTML tag.
     It is used by @ref overview_handlers "tag handlers".
-    
+
     @library{wxhtml}
     @category{FIXME}
 */
-class wxHtmlTag 
+class wxHtmlTag
 {
 public:
     /**
@@ -38,7 +38,7 @@ public:
 
     /**
         Returns beginning position of the text @e between this tag and paired
-        ending tag. 
+        ending tag.
         See explanation (returned position is marked with '|'):
     */
     int GetBeginPos();
@@ -68,10 +68,10 @@ public:
         Returns the value of the parameter. You should check whether the
         parameter exists or not (use wxHtmlTag::HasParam) first.
         
-        @param par 
+        @param par
         The parameter's name.
         
-        @param with_quotes 
+        @param with_quotes
         @true if you want to get quotes as well. See example.
     */
     wxString GetParam(const wxString& par, bool with_quotes = @false);
@@ -98,36 +98,36 @@ public:
         Returns @true if this tag is paired with ending tag, @false otherwise.
         
         See the example of HTML document:
-        In this example tags HTML and BODY have ending tags, first P and BR 
+        In this example tags HTML and BODY have ending tags, first P and BR
         doesn't have ending tag while the second P has. The third P tag (which
         is ending itself) of course doesn't have ending tag.
     */
     bool HasEnding();
 
     /**
-        Returns @true if the tag has a parameter of the given name. 
+        Returns @true if the tag has a parameter of the given name.
         Example : @c FONT SIZE=+2 COLOR="#FF00FF" has two parameters named
         "SIZE" and "COLOR".
         
-        @param par 
+        @param par
         the parameter you're looking for.
     */
     bool HasParam(const wxString& par);
 
     /**
-        This method scans the given parameter. Usage is exactly the same as sscanf's 
+        This method scans the given parameter. Usage is exactly the same as sscanf's
         usage except that you don't pass a string but a parameter name as the first
         argument
         and you can only retrieve one value (i.e. you can use only one "%" element
         in @e format).
         
-        @param par 
+        @param par
         The name of the tag you want to query
         
-        @param format 
+        @param format
         scanf()-like format string.
         
-        @param value 
+        @param value
         pointer to a variable to store the value in
     */
     wxString ScanParam(const wxString& par, const wxChar * format,

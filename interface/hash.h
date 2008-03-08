@@ -9,17 +9,17 @@
 /**
     @class wxHashTable
     @wxheader{hash.h}
-    
+
     @b Please note that this class is retained for backward compatibility
     reasons; you should use wxHashMap.
-    
+
     This class provides hash table functionality for wxWidgets, and for an
     application if it wishes.  Data can be hashed on an integer or string
     key.
-    
+
     @library{wxbase}
     @category{containers}
-    
+
     @seealso
     wxList
 */
@@ -54,7 +54,7 @@ public:
         Deletes entry in hash table and returns the user's data (if found).
     */
     wxObject * Delete(long key);
-        wxObject * Delete(const wxString& key);
+    wxObject * Delete(const wxString& key);
     //@}
 
     /**
@@ -70,7 +70,7 @@ public:
         has table constructor was used).
     */
     wxObject * Get(long key);
-        wxObject * Get(const char* key);
+    wxObject * Get(const char* key);
     //@}
 
     /**
@@ -102,6 +102,6 @@ public:
         table implementation.
     */
     void Put(long key, wxObject * object);
-        void Put(const char* key, wxObject * object);
+    void Put(const char* key, wxObject * object);
     //@}
 };

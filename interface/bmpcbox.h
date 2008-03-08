@@ -9,11 +9,11 @@
 /**
     @class wxBitmapComboBox
     @wxheader{bmpcbox.h}
-    
+
     A combobox that displays bitmap in front of the list items.
     It currently only allows using bitmaps of one size, and resizes itself
     so that a bitmap can be shown next to the text field.
-    
+
     @beginStyleTable
     @style{wxCB_READONLY}:
            Creates a combobox without a text editor. On some platforms the
@@ -26,7 +26,7 @@
            control or used for navigation between dialog controls). Windows
            only.
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_COMBOBOX(id\, func)}:
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
@@ -38,11 +38,11 @@
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combobox.
     @endEventTable
-    
+
     @library{wxadv}
     @category{ctrl}
     @appearance{bitmapcombobox.png}
-    
+
     @seealso
     wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxCommandEvent
 */
@@ -53,57 +53,57 @@ public:
     /**
         Constructor, creating and showing a combobox.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param value 
+        @param value
         Initial selection string. An empty string indicates no selection.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then the window is sized
         appropriately.
         
-        @param n 
+        @param n
         Number of strings with which to initialise the control.
         
-        @param choices 
+        @param choices
         An array of strings with which to initialise the control.
         
-        @param style 
+        @param style
         Window style. See wxBitmapComboBox.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxBitmapComboBox();
-        wxBitmapComboBox(wxWindow* parent, wxWindowID id,
-                         const wxString& value = "",
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         int n = 0,
-                         const wxString choices[] = @NULL,
-                         long style = 0,
-                         const wxValidator& validator = wxDefaultValidator,
-                         const wxString& name = "comboBox");
-        wxBitmapComboBox(wxWindow* parent, wxWindowID id,
-                         const wxString& value,
-                         const wxPoint& pos,
-                         const wxSize& size,
-                         const wxArrayString& choices,
-                         long style = 0,
-                         const wxValidator& validator = wxDefaultValidator,
-                         const wxString& name = "comboBox");
+    wxBitmapComboBox(wxWindow* parent, wxWindowID id,
+                     const wxString& value = "",
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     int n = 0,
+                     const wxString choices[] = @NULL,
+                     long style = 0,
+                     const wxValidator& validator = wxDefaultValidator,
+                     const wxString& name = "comboBox");
+    wxBitmapComboBox(wxWindow* parent, wxWindowID id,
+                     const wxString& value,
+                     const wxPoint& pos,
+                     const wxSize& size,
+                     const wxArrayString& choices,
+                     long style = 0,
+                     const wxValidator& validator = wxDefaultValidator,
+                     const wxString& name = "comboBox");
     //@}
 
     /**
@@ -118,10 +118,10 @@ public:
     */
     int Append(const wxString& item,
                const wxBitmap& bitmap = wxNullBitmap);
-        int Append(const wxString& item, const wxBitmap& bitmap,
-                   void * clientData);
-        int Append(const wxString& item, const wxBitmap& bitmap,
-                   wxClientData * clientData);
+    int Append(const wxString& item, const wxBitmap& bitmap,
+               void * clientData);
+    int Append(const wxString& item, const wxBitmap& bitmap,
+               wxClientData * clientData);
     //@}
 
     //@{
@@ -138,14 +138,14 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "comboBox");
-        bool Create(wxWindow* parent, wxWindowID id,
-                    const wxString& value,
-                    const wxPoint& pos,
-                    const wxSize& size,
-                    const wxArrayString& choices,
-                    long style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = "comboBox");
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxString& value,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = "comboBox");
     //@}
 
     /**
@@ -166,12 +166,12 @@ public:
     */
     int Insert(const wxString& item, const wxBitmap& bitmap,
                unsigned int pos);
-        int Insert(const wxString& item, const wxBitmap& bitmap,
-                   unsigned int pos,
-                   void * clientData);
-        int Insert(const wxString& item, const wxBitmap& bitmap,
-                   unsigned int pos,
-                   wxClientData * clientData);
+    int Insert(const wxString& item, const wxBitmap& bitmap,
+               unsigned int pos,
+               void * clientData);
+    int Insert(const wxString& item, const wxBitmap& bitmap,
+               unsigned int pos,
+               wxClientData * clientData);
     //@}
 
     /**

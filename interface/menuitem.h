@@ -9,17 +9,17 @@
 /**
     @class wxMenuItem
     @wxheader{menuitem.h}
-    
+
     A menu item represents an item in a menu. Note that you usually don't have to
     deal with it directly as wxMenu methods usually construct an
     object of this class for you.
-    
+
     Also please note that the methods related to fonts and bitmaps are currently
     only implemented for Windows and GTK+.
-    
+
     @library{wxcore}
     @category{menus}
-    
+
     @seealso
     wxMenuBar, wxMenu
 */
@@ -38,7 +38,7 @@ public:
         recommended as they will have appearance and keyboard interface (including
         standard accelerators) familiar to the user.
         
-        For the custom (non-stock) menu items, @e text must be specified and while 
+        For the custom (non-stock) menu items, @e text must be specified and while
         @e helpString may be left empty, it's recommended to pass the item
         description (which is automatically shown by the library in the status bar when
         the menu item is selected) in this parameter.
@@ -47,25 +47,25 @@ public:
         help string:
         that is, stock properties are set independently one from the other.
         
-        @param parentMenu 
+        @param parentMenu
         Menu that the menu item belongs to.
         
-        @param id 
+        @param id
         Identifier for this menu item, or wxID_SEPARATOR to indicate a separator.
         
-        @param text 
+        @param text
         Text for the menu item, as shown on the menu. An accelerator
         key can be specified using the ampersand '' character. In order to embed an
         ampersand character in the menu item text, the ampersand must be doubled.
         
-        @param helpString 
+        @param helpString
         Optional help string that will be shown on the status bar.
         
-        @param kind 
-        May be wxITEM_SEPARATOR, wxITEM_NORMAL, 
+        @param kind
+        May be wxITEM_SEPARATOR, wxITEM_NORMAL,
         wxITEM_CHECK or wxITEM_RADIO
         
-        @param subMenu 
+        @param subMenu
         If non-@NULL, indicates that the menu item is a submenu.
     */
     wxMenuItem(wxMenu* parentMenu = @NULL, int id = wxID_SEPARATOR,
@@ -133,7 +133,7 @@ public:
     wxString GetItemLabelText();
 
     /**
-        Returns the item kind, one of @c wxITEM_SEPARATOR, @c wxITEM_NORMAL, 
+        Returns the item kind, one of @c wxITEM_SEPARATOR, @c wxITEM_NORMAL,
         @c wxITEM_CHECK or @c wxITEM_RADIO.
     */
     wxItemKind GetKind();
@@ -182,8 +182,8 @@ public:
     /**
         Returns the text associated with the menu item.
         
-        @b NB: this function is deprecated, please use 
-        GetItemLabel() or GetItemLabelText() 
+        @b NB: this function is deprecated, please use
+        GetItemLabel() or GetItemLabelText()
         instead.
     */
     wxString GetName();

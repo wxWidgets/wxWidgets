@@ -9,7 +9,7 @@
 /**
     @class wxRichTextFormattingDialogFactory
     @headerfile richtextformatdlg.h wx/richtext/richtextformatdlg.h
-    
+
     This class provides pages for wxRichTextFormattingDialog, and allows other
     customization of the dialog.
     A default instance of this class is provided automatically. If you wish to
@@ -18,7 +18,7 @@
     class,
     override one or more functions, and call the static function
     wxRichTextFormattingDialog::SetFormattingDialogFactory.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -84,32 +84,32 @@ public:
 /**
     @class wxRichTextFormattingDialog
     @headerfile richtextformatdlg.h wx/richtext/richtextformatdlg.h
-    
+
     This dialog allows the user to edit a character and/or paragraph style.
-    
+
     In the constructor, specify the pages that will be created. Use GetStyle
     to retrieve the common style for a given range, and then use ApplyStyle
     to apply the user-selected formatting to a control. For example:
-    
+
     @code
     wxRichTextRange range;
         if (m_richTextCtrl-HasSelection())
             range = m_richTextCtrl-GetSelectionRange();
         else
             range = wxRichTextRange(0, m_richTextCtrl-GetLastPosition()+1);
-    
+
         int pages =
     wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING|wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;
-    
+
         wxRichTextFormattingDialog formatDlg(pages, this);
         formatDlg.GetStyle(m_richTextCtrl, range);
-    
+
         if (formatDlg.ShowModal() == wxID_OK)
         {
             formatDlg.ApplyStyle(m_richTextCtrl, range);
         }
     @endcode
-    
+
     @library{wxrichtext}
     @category{cmndlg}
 */
@@ -120,30 +120,30 @@ public:
     /**
         Constructors.
         
-        @param flags 
+        @param flags
         The pages to show.
         
-        @param parent 
+        @param parent
         The dialog's parent.
         
-        @param id 
+        @param id
         The dialog's identifier.
         
-        @param title 
+        @param title
         The dialog's caption.
         
-        @param pos 
+        @param pos
         The dialog's position.
         
-        @param size 
+        @param size
         The dialog's size.
         
-        @param style 
+        @param style
         The dialog's window style.
     */
     wxRichTextFormattingDialog(long flags, wxWindow* parent);
-        const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE)
- wxRichTextFormattingDialog();
+    const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE)
+    wxRichTextFormattingDialog();
     //@}
 
     /**
@@ -166,15 +166,15 @@ public:
     bool Create(long flags, wxWindow* parent, const wxString& title,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& sz = wxDefaultSize,
-                long style = wxDEFAULT_DIALOG_STYLE);
+                                     const wxSize& sz = wxDefaultSize,
+                                                        long style = wxDEFAULT_DIALOG_STYLE);
 
     //@{
     /**
         Gets the attributes being edited.
     */
     const wxTextAttr GetAttributes();
-        wxTextAttr GetAttributes();
+    wxTextAttr GetAttributes();
     //@}
 
     /**

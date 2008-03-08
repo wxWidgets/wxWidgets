@@ -9,33 +9,33 @@
 /**
     @class wxRegKey
     @headerfile registry.h wx/msw/registry.h
-    
+
     wxRegKey is a class representing the Windows registry (it is only available
     under Windows). One can create, query and delete registry keys using this
     class.
-    
+
     The Windows registry is easy to understand. There are five registry keys,
     namely:
-    
+
      HKEY_CLASSES_ROOT (HKCR)
      HKEY_CURRENT_USER (HKCU)
      HKEY_LOCAL_MACHINE (HKLM)
      HKEY_CURRENT_CONFIG (HKCC)
      HKEY_USERS (HKU)
-    
+
     After creating a key, it can hold a value. The values can be:
-    
+
      String Value
      Binary Value
      DWORD Value
      Multi String Value
      Expandable String Value
-    
-    
+
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxRegKey 
+class wxRegKey
 {
 public:
     //@{
@@ -44,8 +44,8 @@ public:
         parent.
     */
     wxRegKey();
-        wxRegKey(const wxString& strKey);
-        wxRegKey(const wxRegKey& keyParent, const wxString& strKey);
+    wxRegKey(const wxString& strKey);
+    wxRegKey(const wxRegKey& keyParent, const wxString& strKey);
     //@}
 
     /**
@@ -92,16 +92,16 @@ public:
     /**
         Gets information about the key.
         
-        @param pnSubKeys 
+        @param pnSubKeys
         The number of subkeys.
         
-        @param pnMaxKeyLen 
+        @param pnMaxKeyLen
         The maximum length of the subkey name.
         
-        @param pnValues 
+        @param pnValues
         The number of values.
         
-        @param pnMaxValueLen 
+        @param pnMaxValueLen
         The maximum length of a value.
     */
     bool GetKeyInfo(size_t * pnSubKeys, size_t * pnValues,
@@ -154,7 +154,7 @@ public:
 
     /**
         Explicitly opens the key. This method also allows the key to be opened in
-        read-only mode by passing @c Read() instead of default 
+        read-only mode by passing @c Read() instead of default
         @c Write() parameter.
     */
     bool Open(AccessMode mode = Write);
@@ -164,7 +164,7 @@ public:
         Retrieves the numeric value.
     */
     bool QueryValue(const wxChar * szValue, wxString& strValue);
-        bool QueryValue(const wxChar * szValue, long * plValue);
+    bool QueryValue(const wxChar * szValue, long * plValue);
     //@}
 
     /**
@@ -184,9 +184,9 @@ public:
         on the overload used. If the value doesn't exist, it is created.
     */
     bool SetValue(const wxChar * szValue, long lValue);
-        bool SetValue(const wxChar * szValue,
-                      const wxString& strValue);
-        bool SetValue(const wxChar * szValue,
-                      const wxMemoryBuffer& buf);
+    bool SetValue(const wxChar * szValue,
+                  const wxString& strValue);
+    bool SetValue(const wxChar * szValue,
+                  const wxMemoryBuffer& buf);
     //@}
 };

@@ -9,7 +9,7 @@
 /**
     @class wxIcon
     @wxheader{icon.h}
-    
+
     An icon is a small rectangular bitmap usually used for denoting a
     minimized application. It differs from a wxBitmap in always
     having a mask associated with it for transparent drawing. On some platforms,
@@ -20,14 +20,14 @@
     bitmaps
     and icons). However, some platforms (such as Windows) make the distinction, so
     a separate class is provided.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @stdobjects
     Objects:
     wxNullIcon
-    
+
     @seealso
     @ref overview_wxbitmapoverview "Bitmap and icon overview", @ref
     overview_supportedbitmapformats "supported bitmap file formats", wxDC::DrawIcon, wxCursor
@@ -39,41 +39,41 @@ public:
     /**
         Loads an icon from the specified location.
         
-        @param bits 
+        @param bits
         Specifies an array of pixel values.
         
-        @param width 
+        @param width
         Specifies the width of the icon.
         
-        @param height 
+        @param height
         Specifies the height of the icon.
         
-        @param desiredWidth 
+        @param desiredWidth
         Specifies the desired width of the icon. This
         parameter only has an effect in Windows (32-bit) where icon resources can
         contain
         several icons of different sizes.
         
-        @param desiredWidth 
+        @param desiredWidth
         Specifies the desired height of the icon. This
         parameter only has an effect in Windows (32-bit) where icon resources can
         contain
         several icons of different sizes.
         
-        @param depth 
+        @param depth
         Specifies the depth of the icon. If this is omitted, the display depth of the
         screen is used.
         
-        @param name 
+        @param name
         This can refer to a resource name under MS Windows, or a filename under MS
         Windows and X.
         Its meaning is determined by the flags parameter.
         
-        @param loc 
-        The object describing the location of the native icon, see 
+        @param loc
+        The object describing the location of the native icon, see
         wxIconLocation.
         
-        @param type 
+        @param type
         May be one of the following:
         
         
@@ -114,17 +114,17 @@ public:
                    or LoadFile must be called subsequently.
     */
     wxIcon();
-        wxIcon(const wxIcon& icon);
-        wxIcon(void* data, int type, int width, int height,
-               int depth = -1);
-        wxIcon(const char bits[], int width, int height,
-               int depth = 1);
-        wxIcon(int width, int height, int depth = -1);
-        wxIcon(const char* const* bits);
-        wxIcon(const wxString& name, wxBitmapType type,
-               int desiredWidth = -1,
-               int desiredHeight = -1);
-        wxIcon(const wxIconLocation& loc);
+    wxIcon(const wxIcon& icon);
+    wxIcon(void* data, int type, int width, int height,
+           int depth = -1);
+    wxIcon(const char bits[], int width, int height,
+           int depth = 1);
+    wxIcon(int width, int height, int depth = -1);
+    wxIcon(const char* const* bits);
+    wxIcon(const wxString& name, wxBitmapType type,
+           int desiredWidth = -1,
+           int desiredHeight = -1);
+    wxIcon(const wxIconLocation& loc);
     //@}
 
     /**
@@ -177,11 +177,11 @@ public:
     /**
         Loads an icon from a file or resource.
         
-        @param name 
+        @param name
         Either a filename or a Windows resource name.
         The meaning of name is determined by the type parameter.
         
-        @param type 
+        @param type
         One of the following values:
         
         
@@ -221,7 +221,7 @@ public:
     /**
         Sets the depth member (does not affect the icon data).
         
-        @param depth 
+        @param depth
         Icon depth.
     */
     void SetDepth(int depth);
@@ -229,7 +229,7 @@ public:
     /**
         Sets the height member (does not affect the icon data).
         
-        @param height 
+        @param height
         Icon height in pixels.
     */
     void SetHeight(int height);
@@ -237,7 +237,7 @@ public:
     /**
         Sets the width member (does not affect the icon data).
         
-        @param width 
+        @param width
         Icon width in pixels.
     */
     void SetWidth(int width);
@@ -245,7 +245,7 @@ public:
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".
         
-        @param icon 
+        @param icon
         Icon to assign.
     */
     wxIcon operator =(const wxIcon& icon);

@@ -9,7 +9,7 @@
 /**
     @class wxConvAuto
     @wxheader{convauto.h}
-    
+
     This class implements a Unicode to/from multibyte converter capable of
     automatically recognizing the encoding of the multibyte text on input. The
     logic used is very simple: the class uses the BOM (byte order mark) if it's
@@ -18,7 +18,7 @@
     specified in the constructor of a wxConvAuto instance and, in turn, defaults to
     the value of @ref wxConvAuto::getdefaultmbencoding GetFallbackEncoding if
     not explicitly given.
-    
+
     For the conversion from Unicode to multibyte, the same encoding as was
     previously used for multibyte to Unicode conversion is reused. If there had
     been no previous multibyte to Unicode conversion, UTF-8 is used by default.
@@ -29,19 +29,19 @@
     operator, or using wxMBConv::Clone method, resets the
     automatically detected encoding so that the new copy will try to detect the
     encoding of the input on first use.
-    
+
     This class is used by default in wxWidgets classes and functions reading text
-    from files such as wxFile, wxFFile, 
+    from files such as wxFile, wxFFile,
     wxTextFile, wxFileConfig and
-    various stream classes so the encoding set with its 
+    various stream classes so the encoding set with its
     @ref wxConvAuto::setdefaultmbencoding SetFallbackEncoding method will
     affect how these classes treat input files. In particular, use this method
     to change the fall-back multibyte encoding used to interpret the contents of
     the files whose contents isn't valid UTF-8 or to disallow it completely.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_mbconvclasses "wxMBConv classes overview"
 */
@@ -63,7 +63,7 @@ public:
         @c wxFONTENCODING_SYSTEM which means to use the encoding currently used
         on the user system, i.e. the encoding returned by
         wxLocale::GetSystemEncoding. Any other
-        encoding will be used as is, e.g. passing @c wxFONTENCODING_ISO8859_1 
+        encoding will be used as is, e.g. passing @c wxFONTENCODING_ISO8859_1
         ensures that non-UTF-8 input will be treated as latin1.
     */
     wxConvAuto(wxFontEncoding enc = wxFONTENCODING_DEFAULT);
@@ -76,8 +76,8 @@ public:
 
     /**
         Returns the encoding used by default by wxConvAuto if no other encoding is
-        explicitly specified in constructor. By default, returns 
-        @c wxFONTENCODING_ISO8859_1 but can be changed using 
+        explicitly specified in constructor. By default, returns
+        @c wxFONTENCODING_ISO8859_1 but can be changed using
         @ref setdefaultmbencoding() SetFallbackEncoding method.
     */
     static wxFontEncoding GetFallbackEncoding();
@@ -85,10 +85,10 @@ public:
     /**
         Changes the encoding used by default by wxConvAuto if no other encoding is
         explicitly specified in constructor. The default value, which can be retrieved
-        using @ref getdefaultmbencoding() GetFallbackEncoding, is 
+        using @ref getdefaultmbencoding() GetFallbackEncoding, is
         @c wxFONTENCODING_ISO8859_1.
         
-        Special values of @c wxFONTENCODING_SYSTEM or 
+        Special values of @c wxFONTENCODING_SYSTEM or
         @c wxFONTENCODING_MAX can be used for @e enc parameter to use the
         encoding of the current user locale as fall back or not use any encoding for
         fall back at all, respectively (just as with the similar constructor

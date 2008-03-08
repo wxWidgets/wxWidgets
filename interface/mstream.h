@@ -9,11 +9,11 @@
 /**
     @class wxMemoryOutputStream
     @wxheader{mstream.h}
-    
-    
+
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxStreamBuffer
 */
@@ -49,11 +49,11 @@ public:
 /**
     @class wxMemoryInputStream
     @wxheader{mstream.h}
-    
-    
+
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxStreamBuffer, wxMemoryOutputStream
 */
@@ -70,9 +70,9 @@ public:
         the @e stream is to be read entirely (i.e. till the EOF is reached).
     */
     wxMemoryInputStream(const char * data, size_t len);
-        wxMemoryInputStream(const wxMemoryOutputStream& stream);
-        wxMemoryInputStream(wxInputStream& stream,
-                            wxFileOffset len = wxInvalidOffset);
+    wxMemoryInputStream(const wxMemoryOutputStream& stream);
+    wxMemoryInputStream(wxInputStream& stream,
+                        wxFileOffset len = wxInvalidOffset);
     //@}
 
     /**

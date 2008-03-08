@@ -9,13 +9,13 @@
 /**
     @class wxCalendarEvent
     @wxheader{calctrl.h}
-    
-    The wxCalendarEvent class is used together with 
+
+    The wxCalendarEvent class is used together with
     wxCalendarCtrl.
-    
+
     @library{wxadv}
     @category{events}
-    
+
     @seealso
     wxCalendarCtrl
 */
@@ -23,7 +23,7 @@ class wxCalendarEvent : public wxDateEvent
 {
 public:
     /**
-        Returns the week day on which the user clicked in 
+        Returns the week day on which the user clicked in
         @c EVT_CALENDAR_WEEKDAY_CLICKED handler. It doesn't make sense to call
         this function in other handlers.
     */
@@ -40,17 +40,17 @@ public:
 /**
     @class wxCalendarDateAttr
     @wxheader{calctrl.h}
-    
+
     wxCalendarDateAttr is a custom attributes for a calendar date. The objects of
     this class are used with wxCalendarCtrl.
-    
+
     @library{wxadv}
     @category{misc}
-    
+
     @seealso
     wxCalendarCtrl
 */
-class wxCalendarDateAttr 
+class wxCalendarDateAttr
 {
 public:
     //@{
@@ -58,13 +58,13 @@ public:
         The constructors.
     */
     wxCalendarDateAttr();
-        wxCalendarDateAttr(const wxColour& colText,
-                           const wxColour& colBack = wxNullColour,
-                           const wxColour& colBorder = wxNullColour,
-                           const wxFont& font = wxNullFont,
-                           wxCalendarDateBorder border = wxCAL_BORDER_NONE);
-        wxCalendarDateAttr(wxCalendarDateBorder border,
-                           const wxColour& colBorder = wxNullColour);
+    wxCalendarDateAttr(const wxColour& colText,
+                       const wxColour& colBack = wxNullColour,
+                       const wxColour& colBorder = wxNullColour,
+                       const wxFont& font = wxNullFont,
+                       wxCalendarDateBorder border = wxCAL_BORDER_NONE);
+    wxCalendarDateAttr(wxCalendarDateBorder border,
+                       const wxColour& colBorder = wxNullColour);
     //@}
 
     /**
@@ -159,33 +159,33 @@ public:
 /**
     @class wxCalendarCtrl
     @wxheader{calctrl.h}
-    
+
     The calendar control allows the user to pick a date. For this,
     it displays a window containing several parts: a control at the top to pick the
     month
     and the year (either or both of them may be disabled), and a month
     area below them which shows all the days in the month. The user can move the
-    current selection using the keyboard and select the date (generating 
+    current selection using the keyboard and select the date (generating
     @c EVT_CALENDAR event) by pressing @c Return or double clicking it.
-    
+
     It has advanced possibilities for the customization of its display. All global
     settings (such as colours and fonts used) can, of course, be changed. But
     also, the display style for each day in the month can be set independently
     using wxCalendarDateAttr class.
-    
+
     An item without custom attributes is drawn with the default colours and
-    font and without border, but setting custom attributes with 
+    font and without border, but setting custom attributes with
     wxCalendarCtrl::SetAttr allows to modify its appearance. Just
     create a custom attribute object and set it for the day you want to be
     displayed specially (note that the control will take ownership of the pointer,
     i.e. it will delete it itself). A day may be marked as being a holiday, even
-    if it is not recognized as one by wxDateTime using 
+    if it is not recognized as one by wxDateTime using
     wxCalendarDateAttr::SetHoliday method.
-    
+
     As the attributes are specified for each day, they may change when the month
-    is changed, so you will often want to update them in 
+    is changed, so you will often want to update them in
     @c EVT_CALENDAR_MONTH event handler.
-    
+
     @beginStyleTable
     @style{wxCAL_SUNDAY_FIRST}:
            Show Sunday as the first day in the week
@@ -203,11 +203,11 @@ public:
            Use alternative, more compact, style for the month and year
            selection controls.
     @endStyleTable
-    
+
     @library{wxadv}
     @category{ctrl}
     @appearance{calendarctrl.png}
-    
+
     @seealso
     @ref overview_samplecalendar "Calendar sample", wxCalendarDateAttr,
     wxCalendarEvent
@@ -220,12 +220,12 @@ public:
         Does the same as Create() method.
     */
     wxCalendarCtrl();
-        wxCalendarCtrl(wxWindow* parent, wxWindowID id,
-                       const wxDateTime& date = wxDefaultDateTime,
-                       const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& size = wxDefaultSize,
-                       long style = wxCAL_SHOW_HOLIDAYS,
-                       const wxString& name = wxCalendarNameStr);
+    wxCalendarCtrl(wxWindow* parent, wxWindowID id,
+                   const wxDateTime& date = wxDefaultDateTime,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxCAL_SHOW_HOLIDAYS,
+                   const wxString& name = wxCalendarNameStr);
     //@}
 
     /**
@@ -252,7 +252,7 @@ public:
     void EnableHolidayDisplay(bool display = @true);
 
     /**
-        This function should be used instead of changing 
+        This function should be used instead of changing
         @c wxCAL_NO_MONTH_CHANGE style bit. It allows or disallows the user to
         change the month interactively. Note that if the month can not be changed, the
         year can not be changed neither.
@@ -321,8 +321,8 @@ public:
     const wxColour GetHolidayColourFg();
 
     /**
-        Returns one of @c wxCAL_HITTEST_XXX 
-        constants and fills either @e date or 
+        Returns one of @c wxCAL_HITTEST_XXX
+        constants and fills either @e date or
         @e wd pointer with the corresponding value depending on the hit test code.
     */
     wxCalendarHitTestResult HitTest(const wxPoint& pos,

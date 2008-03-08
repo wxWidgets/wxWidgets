@@ -9,12 +9,12 @@
 /**
     @class wxDataViewIconText
     @wxheader{dataview.h}
-    
-    wxDataViewIconText is used by 
+
+    wxDataViewIconText is used by
     wxDataViewIconTextRenderer
     for data transfer. This class can be converted to a from
     a wxVariant.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
@@ -27,7 +27,7 @@ public:
     */
     wxDataViewIconText(const wxString& text = wxEmptyString,
                        const wxIcon& icon = wxNullIcon);
-        wxDataViewIconText(const wxDataViewIconText& other);
+    wxDataViewIconText(const wxDataViewIconText& other);
     //@}
 
     /**
@@ -55,9 +55,9 @@ public:
 /**
     @class wxDataViewEvent
     @wxheader{dataview.h}
-    
+
     wxDataViewEvent - the event class for the wxDataViewCtrl notifications
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -70,7 +70,7 @@ public:
     */
     wxDataViewEvent(wxEventType commandType = wxEVT_@NULL,
                     int winid = 0);
-        wxDataViewEvent(const wxDataViewEvent& event);
+    wxDataViewEvent(const wxDataViewEvent& event);
     //@}
 
     /**
@@ -130,14 +130,14 @@ public:
 /**
     @class wxDataViewIconTextRenderer
     @wxheader{dataview.h}
-    
+
     The wxDataViewIconTextRenderer class is used to display text with
     a small icon next to it as it is typically done in a file manager.
     This classes uses the wxDataViewIconText
     helper class to store its data. wxDataViewIonText can be converted
     to a from a wxVariant using the left shift
     operator.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -155,22 +155,22 @@ public:
 /**
     @class wxDataViewIndexListModel
     @wxheader{dataview.h}
-    
+
     wxDataViewIndexListModel is a specialized data model which lets
-    you address an item by its position (row) rather than its 
-    wxDataViewItem (which you can obtain from this class). 
-    This model also provides its own 
+    you address an item by its position (row) rather than its
+    wxDataViewItem (which you can obtain from this class).
+    This model also provides its own
     wxDataViewIndexListModel::Compare method
     which sorts the model's data by the index.
-    
+
     This model is special in the it is implemented differently under OS X
     and other platforms. Under OS X a wxDataViewItem is always persistent
     and this is also the case for this class. Under other platforms, the
     meaning of a wxDataViewItem is changed to reflect a row number for
-    wxDataViewIndexListModel. The consequence of this is that 
+    wxDataViewIndexListModel. The consequence of this is that
     wxDataViewIndexListModel can be used as a virtual model with an
     almost infinate number of items on platforms other than OS X.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
@@ -196,7 +196,7 @@ public:
 
     /**
         Oberride this to indicate that the row has special font attributes.
-        This only affects the 
+        This only affects the
         wxDataViewTextRendererText renderer.
         
         See also wxDataViewItemAttr.
@@ -276,46 +276,46 @@ public:
 /**
     @class wxDataViewModel
     @wxheader{dataview.h}
-    
+
     wxDataViewModel is the base class for all data model to be
-    displayed by a wxDataViewCtrl. 
+    displayed by a wxDataViewCtrl.
     All other models derive from it and must implement its
     pure virtual functions in order to define a complete
-    data model. In detail, you need to override 
+    data model. In detail, you need to override
     wxDataViewModel::IsContainer,
     wxDataViewModel::GetParent,
     wxDataViewModel::GetChildren,
     wxDataViewModel::GetColumnCount,
     wxDataViewModel::GetColumnType and
     wxDataViewModel::GetValue in order to
-    define the data model which acts as an interface between 
+    define the data model which acts as an interface between
     your actual data and the wxDataViewCtrl. Since you will
     usually also allow the wxDataViewCtrl to change your data
     through its graphical interface, you will also have to override
     wxDataViewModel::SetValue which the
     wxDataViewCtrl will call when a change to some data has been
     commited.
-    
+
     wxDataViewModel (as indeed the entire wxDataViewCtrl
     code) is using wxVariant to store data and
     its type in a generic way. wxVariant can be extended to contain
     almost any data without changes to the original class.
-    
+
     The data that is presented through this data model is expected
     to change at run-time. You need to inform the data model when
     a change happened. Depending on what happened you need to call
-    one of the following methods: 
+    one of the following methods:
     wxDataViewModel::ValueChanged,
     wxDataViewModel::ItemAdded,
     wxDataViewModel::ItemDeleted,
     wxDataViewModel::ItemChanged,
     wxDataViewModel::Cleared. There are
     plural forms for notification of addition, change
-    or removal of several item at once. See 
+    or removal of several item at once. See
     wxDataViewModel::ItemsAdded,
     wxDataViewModel::ItemsDeleted,
     wxDataViewModel::ItemsChanged.
-    
+
     Note that wxDataViewModel does not define the position or
     index of any item in the control because different controls
     might display the same data differently. wxDataViewModel does
@@ -323,29 +323,29 @@ public:
     which the wxDataViewCtrl may use to sort the data either
     in conjunction with a column header or without (see
     wxDataViewModel::HasDefaultCompare).
-    
-    This class maintains a list of 
+
+    This class maintains a list of
     wxDataViewModelNotifier
     which link this class to the specific implementations on the
-    supported platforms so that e.g. calling 
+    supported platforms so that e.g. calling
     wxDataViewModel::ValueChanged
-    on this model will just call 
+    on this model will just call
     wxDataViewModelNotifier::ValueChanged
-    for each notifier that has been added. You can also add 
-    your own notifier in order to get informed about any changes 
+    for each notifier that has been added. You can also add
+    your own notifier in order to get informed about any changes
     to the data in the list model.
-    
+
     Currently wxWidgets provides the following models apart
-    from the base model: 
+    from the base model:
     wxDataViewIndexListModel,
     wxDataViewTreeStore.
-    
-    Note that wxDataViewModel is reference counted, derives from 
+
+    Note that wxDataViewModel is reference counted, derives from
     wxObjectRefData and cannot be deleted
     directly as it can be shared by several wxDataViewCtrls. This
     implies that you need to decrease the reference count after
     associating the model with a control like this:
-    
+
     @code
     wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL );
         wxDataViewModel *musicModel = new MyMusicModel;
@@ -353,8 +353,8 @@ public:
         musicModel-DecRef();  // avoid memory leak !!
         // add columns now
     @endcode
-    
-    
+
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -397,7 +397,7 @@ public:
 
     /**
         Oberride this to indicate that the item has special font attributes.
-        This only affects the 
+        This only affects the
         wxDataViewTextRendererText renderer.
         
         See also wxDataViewItemAttr.
@@ -442,7 +442,7 @@ public:
     /**
         Override this method to indicate if a container item merely
         acts as a headline (or for categorisation) or if it also
-        acts a normal item with entries for futher columns. By 
+        acts a normal item with entries for futher columns. By
         default returns @e @false.
     */
     virtual bool HasContainerColumns(const wxDataViewItem& item);
@@ -531,7 +531,7 @@ public:
     /**
         Call this to inform this model that a value in the model has
         been changed. This is also called from wxDataViewCtrl's
-        internal editing code, e.g. when editing a text field 
+        internal editing code, e.g. when editing a text field
         in the control.
         
         This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
@@ -545,23 +545,23 @@ public:
 /**
     @class wxDataViewCustomRenderer
     @wxheader{dataview.h}
-    
+
     You need to derive a new class from wxDataViewCustomRenderer in
-    order to write a new renderer. You need to override at least 
+    order to write a new renderer. You need to override at least
     wxDataViewRenderer::SetValue,
-    wxDataViewRenderer::GetValue, 
+    wxDataViewRenderer::GetValue,
     wxDataViewCustomRenderer::GetSize
     and wxDataViewCustomRenderer::Render.
-    
+
     If you want your renderer to support in-place editing then you
-    also need to override 
+    also need to override
     wxDataViewCustomRenderer::HasEditorCtrl,
     wxDataViewCustomRenderer::CreateEditorCtrl
     and wxDataViewCustomRenderer::GetValueFromEditorCtrl.
     Note that a special event handler will be pushed onto that
     editor control which handles ENTER and focus out events
     in order to end the editing.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -608,7 +608,7 @@ public:
     virtual wxSize GetSize();
 
     /**
-        Overrride this so that the renderer can get the value 
+        Overrride this so that the renderer can get the value
         from the editor control (pointed to by @e editor):
     */
     virtual bool GetValueFromEditorCtrl(wxControl* editor,
@@ -665,9 +665,9 @@ public:
 /**
     @class wxDataViewBitmapRenderer
     @wxheader{dataview.h}
-    
+
     wxDataViewBitmapRenderer
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -685,19 +685,19 @@ public:
 /**
     @class wxDataViewItemAttr
     @wxheader{dataview.h}
-    
+
     This class is used to indicate to a wxDataViewCtrl
     that a certain Item has extra font attributes
-    for its renderer. For this, it is required to override 
+    for its renderer. For this, it is required to override
     wxDataViewModel::GetAttr.
-    
-    Attributes are currently only supported by 
+
+    Attributes are currently only supported by
     wxDataViewTextRendererText.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
-class wxDataViewItemAttr 
+class wxDataViewItemAttr
 {
 public:
     /**
@@ -726,15 +726,15 @@ public:
 /**
     @class wxDataViewItem
     @wxheader{dataview.h}
-    
+
     wxDataViewItem is a small opaque class that represents an
     item in a wxDataViewCtrl in a
     persistent way, i.e. indepent of the position of the
     item in the control or changes to its contents. It must
     hold a unique ID of type @e void* in its only field
-    and can be converted to a from it. 
-    
-    If the ID is @e @NULL the wxDataViewItem is invalid and 
+    and can be converted to a from it.
+
+    If the ID is @e @NULL the wxDataViewItem is invalid and
     wxDataViewItem::IsOk will return @e @false
     which used in many places in the API of wxDataViewCtrl
     to indicate that e.g. no item was found. An ID of @NULL
@@ -742,11 +742,11 @@ public:
     for this are
     wxDataViewModel::GetParent and
     wxDataViewModel::GetChildren.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
-class wxDataViewItem 
+class wxDataViewItem
 {
 public:
     //@{
@@ -754,7 +754,7 @@ public:
         
     */
     wxDataViewItem(void* id = @NULL);
-        wxDataViewItem(const wxDataViewItem& item);
+    wxDataViewItem(const wxDataViewItem& item);
     //@}
 
     /**
@@ -772,38 +772,38 @@ public:
 /**
     @class wxDataViewCtrl
     @wxheader{dataview.h}
-    
+
     wxDataViewCtrl is a control to display data either
     in a tree like fashion or in a tabular form or both.
     If you only need to display a simple tree structure
     with an API more like the older wxTreeCtrl class,
     then the specialized wxDataViewTreeCtrl
     can be used.
-    
+
     A wxDataViewItem is used
     to represent a (visible) item in the control.
-    
-    Unlike wxListCtrl wxDataViewCtrl doesn't 
+
+    Unlike wxListCtrl wxDataViewCtrl doesn't
     get its data from the user through virtual functions or by
-    setting it directly. Instead you need to write your own 
+    setting it directly. Instead you need to write your own
     wxDataViewModel and associate
     it with this control. Then you need to add a number of
     wxDataViewColumn to this control to
     define what each column shall display. Each wxDataViewColumn
-    in turn owns 1 instance of a 
+    in turn owns 1 instance of a
     wxDataViewRenderer to render its
     cells. A number of standard renderers for rendering text, dates,
     images, toggle, a progress bar etc. are provided. Additionally,
-    the user can write custom renderes deriving from 
+    the user can write custom renderes deriving from
     wxDataViewCustomRenderer
     for displaying anything.
-    
+
     All data transfer from the control to the model and the user
     code is done through wxVariant which can
-    be extended to support more data formats as necessary. 
+    be extended to support more data formats as necessary.
     Accordingly, all type information uses the strings returned
     from wxVariant::GetType.
-    
+
     @beginStyleTable
     @style{wxDV_SINGLE}:
            Single selection mode. This is the default.
@@ -816,7 +816,7 @@ public:
     @style{wxDV_VERT_RULES}:
            Display fine rules between columns is supported.
     @endStyleTable
-    
+
     @library{wxadv}
     @category{ctrl}
     @appearance{dataviewctrl.png}
@@ -829,11 +829,11 @@ public:
         Constructor. Calls Create().
     */
     wxDataViewCtrl();
-        wxDataViewCtrl(wxWindow* parent, wxWindowID id,
-                       const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& size = wxDefaultSize,
-                       long style = 0,
-                       const wxValidator& validator = wxDefaultValidator);
+    wxDataViewCtrl(wxWindow* parent, wxWindowID id,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   const wxValidator& validator = wxDefaultValidator);
     //@}
 
     /**
@@ -852,12 +852,12 @@ public:
                                          int width = -1,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-        wxDataViewColumn* AppendBitmapColumn(const wxBitmap& label,
-                                             unsigned int model_column,
-                                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                             int width = -1,
-                                             wxAlignment align = wxALIGN_CENTER,
-                                             int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* AppendBitmapColumn(const wxBitmap& label,
+                                         unsigned int model_column,
+                                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                         int width = -1,
+                                         wxAlignment align = wxALIGN_CENTER,
+                                         int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
     /**
@@ -865,7 +865,7 @@ public:
         @e @true on success.
         
         Note that there is a number of short cut methods which implicitly create
-        a wxDataViewColumn and a 
+        a wxDataViewColumn and a
         wxDataViewRenderer for it (see below).
     */
     virtual bool AppendColumn(wxDataViewColumn* col);
@@ -881,18 +881,18 @@ public:
                                        int width = -1,
                                        wxAlignment align = wxALIGN_CENTER,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-        wxDataViewColumn* AppendDateColumn(const wxBitmap& label,
-                                           unsigned int model_column,
-                                           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-                                           int width = -1,
-                                           wxAlignment align = wxALIGN_CENTER,
-                                           int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* AppendDateColumn(const wxBitmap& label,
+                                       unsigned int model_column,
+                                       wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+                                       int width = -1,
+                                       wxAlignment align = wxALIGN_CENTER,
+                                       int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
     //@{
     /**
         Appends a column for rendering text with an icon. Returns the wxDataViewColumn
-        created in the function or @NULL on failure. This uses the 
+        created in the function or @NULL on failure. This uses the
         wxDataViewIconTextRenderer.
     */
     wxDataViewColumn* AppendIconTextColumn(const wxString& label,
@@ -901,12 +901,12 @@ public:
                                            int width = -1,
                                            wxAlignment align = wxALIGN_LEFT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-        wxDataViewColumn* AppendIconTextColumn(const wxBitmap& label,
-                                               unsigned int model_column,
-                                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                               int width = -1,
-                                               wxAlignment align = wxALIGN_LEFT,
-                                               int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* AppendIconTextColumn(const wxBitmap& label,
+                                           unsigned int model_column,
+                                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                           int width = -1,
+                                           wxAlignment align = wxALIGN_LEFT,
+                                           int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
     //@{
@@ -921,12 +921,12 @@ public:
                                            int width = 80,
                                            wxAlignment align = wxALIGN_CENTER,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
-        wxDataViewColumn* AppendProgressColumn(const wxBitmap& label,
-                                               unsigned int model_column,
-                                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                               int width = 80,
-                                               wxAlignment align = wxALIGN_CENTER,
-                                               int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* AppendProgressColumn(const wxBitmap& label,
+                                           unsigned int model_column,
+                                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                           int width = 80,
+                                           wxAlignment align = wxALIGN_CENTER,
+                                           int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
     //@{
@@ -940,12 +940,12 @@ public:
                                        int width = -1,
                                        wxAlignment align = wxALIGN_LEFT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
-        wxDataViewColumn* AppendTextColumn(const wxBitmap& label,
-                                           unsigned int model_column,
-                                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                           int width = -1,
-                                           wxAlignment align = wxALIGN_LEFT,
-                                           int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* AppendTextColumn(const wxBitmap& label,
+                                       unsigned int model_column,
+                                       wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                       int width = -1,
+                                       wxAlignment align = wxALIGN_LEFT,
+                                       int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
     //@{
@@ -959,12 +959,12 @@ public:
                                          int width = 30,
                                          wxAlignment align = wxALIGN_CENTER,
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
-        wxDataViewColumn* AppendToggleColumn(const wxBitmap& label,
-                                             unsigned int model_column,
-                                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                                             int width = 30,
-                                             wxAlignment align = wxALIGN_CENTER,
-                                             int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn* AppendToggleColumn(const wxBitmap& label,
+                                         unsigned int model_column,
+                                         wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                                         int width = 30,
+                                         wxAlignment align = wxALIGN_CENTER,
+                                         int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
     /**
@@ -1014,7 +1014,7 @@ public:
     void Expand(const wxDataViewItem & item);
 
     /**
-        Returns pointer to the column. @e pos refers to the 
+        Returns pointer to the column. @e pos refers to the
         position in the control which may change after reordering
         columns by the user.
     */
@@ -1121,17 +1121,17 @@ public:
 /**
     @class wxDataViewModelNotifier
     @wxheader{dataview.h}
-    
+
     A wxDataViewModelNotifier instance is owned by a
     wxDataViewModel
-    and mirrors its notification interface. See 
+    and mirrors its notification interface. See
     the documentation of that class for further
     information.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxDataViewModelNotifier 
+class wxDataViewModelNotifier
 {
 public:
     /**
@@ -1208,7 +1208,7 @@ public:
 /**
     @class wxDataViewRenderer
     @wxheader{dataview.h}
-    
+
     This class is used by wxDataViewCtrl to
     render the individual cells. One instance of a renderer class is
     owned by wxDataViewColumn. There is
@@ -1221,10 +1221,10 @@ public:
     wxDataViewBitmapRenderer,
     wxDataViewDateRenderer.
     wxDataViewSpinRenderer.
-    
+
     Additionally, the user can write own renderers by deriving from
     wxDataViewCustomRenderer.
-    
+
     The @e wxDataViewCellMode flag controls, what actions
     the cell data allows. @e wxDATAVIEW_CELL_ACTIVATABLE
     indicates that the user can double click the cell and
@@ -1232,10 +1232,10 @@ public:
     will pop up). @e wxDATAVIEW_CELL_EDITABLE indicates
     that the user can edit the data in-place, i.e. an control
     will show up after a slow click on the cell. This behaviour
-    is best known from changing the filename in most file 
+    is best known from changing the filename in most file
     managers etc.
-    
-    
+
+
     @code
     enum wxDataViewCellMode
     {
@@ -1244,10 +1244,10 @@ public:
         wxDATAVIEW_CELL_EDITABLE
     };
     @endcode
-    
+
     The @e wxDataViewCellRenderState flag controls how the
     the renderer should display its contents in a cell:
-    
+
     @code
     enum wxDataViewCellRenderState
     {
@@ -1257,8 +1257,8 @@ public:
         wxDATAVIEW_CELL_FOCUSED     = 8
     };
     @endcode
-    
-    
+
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -1326,10 +1326,10 @@ public:
 /**
     @class wxDataViewTextRenderer
     @wxheader{dataview.h}
-    
+
     wxDataViewTextRenderer is used for rendering text. It supports
     in-place editing if desired.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -1347,9 +1347,9 @@ public:
 /**
     @class wxDataViewProgressRenderer
     @wxheader{dataview.h}
-    
+
     wxDataViewProgressRenderer
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -1368,11 +1368,11 @@ public:
 /**
     @class wxDataViewSpinRenderer
     @wxheader{dataview.h}
-    
+
     This is a specialized renderer for rendering integer values. It
     supports modifying the values in-place by using a wxSpinCtrl.
     The renderer only support variants of type @e long.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
@@ -1392,9 +1392,9 @@ public:
 /**
     @class wxDataViewToggleRenderer
     @wxheader{dataview.h}
-    
+
     wxDataViewToggleRenderer
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -1412,14 +1412,14 @@ public:
 /**
     @class wxDataViewTreeCtrl
     @wxheader{dataview.h}
-    
+
     This class is a wxDataViewCtrl which internally
     uses a wxDataViewTreeStore and forwards
     most of its API to that class. Additionally, it uses a wxImageList
-    to store a list of icons. The main purpose of this class is to look 
+    to store a list of icons. The main purpose of this class is to look
     like a wxTreeCtrl to make a transition from it
     to the wxDataViewCtrl class simpler.
-    
+
     @library{wxbase}
     @category{ctrl}
     @appearance{dataviewtreectrl.png}
@@ -1432,11 +1432,11 @@ public:
         Constructor. Calls Create().
     */
     wxDataViewTreeCtrl();
-        wxDataViewTreeCtrl(wxWindow* parent, wxWindowID id,
-                           const wxPoint& pos = wxDefaultPosition,
-                           const wxSize& size = wxDefaultSize,
-                           long style = wxDV_NO_HEADER,
-                           const wxValidator& validator = wxDefaultValidator);
+    wxDataViewTreeCtrl(wxWindow* parent, wxWindowID id,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxDV_NO_HEADER,
+                       const wxValidator& validator = wxDefaultValidator);
     //@}
 
     /**
@@ -1527,7 +1527,7 @@ public:
         Returns the store.
     */
     wxDataViewTreeStore* GetStore();
-        const wxDataViewTreeStore* GetStore();
+    const wxDataViewTreeStore* GetStore();
     //@}
 
     /**
@@ -1602,14 +1602,14 @@ public:
 /**
     @class wxDataViewTreeStore
     @wxheader{dataview.h}
-    
+
     wxDataViewTreeStore is a specialised wxDataViewModel
     for displaying simple trees very much like wxTreeCtrl
     does and it offers a similar API. This class actually stores the entire
     tree (therefore its name) and implements all virtual methods from the base
     class so it can be used directly without having to derive any class from it.
     This comes at the price of much reduced flexibility.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -1746,9 +1746,9 @@ public:
 /**
     @class wxDataViewDateRenderer
     @wxheader{dataview.h}
-    
+
     wxDataViewDateRenderer
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -1766,14 +1766,14 @@ public:
 /**
     @class wxDataViewTextRendererAttr
     @wxheader{dataview.h}
-    
+
     The same as wxDataViewTextRenderer but with
     support for font attributes. Font attributes are currently only supported
     under GTK+ and MSW.
-    
+
     See also wxDataViewModel::GetAttr and
     wxDataViewItemAttr.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -1792,14 +1792,14 @@ public:
 /**
     @class wxDataViewColumn
     @wxheader{dataview.h}
-    
+
     This class represents a column in a wxDataViewCtrl.
     One wxDataViewColumn is bound to one column in the data model,
-    to which the wxDataViewCtrl has been associated. 
-    
+    to which the wxDataViewCtrl has been associated.
+
     An instance of wxDataViewRenderer is used by
     this class to render its data.
-    
+
     @library{wxadv}
     @category{FIXME}
 */
@@ -1816,12 +1816,12 @@ public:
                      int width = wxDVC_DEFAULT_WIDTH,
                      wxAlignment align = wxALIGN_CENTRE,
                      int flags = wxDATAVIEW_COL_RESIZABLE);
-        wxDataViewColumn(const wxBitmap& bitmap,
-                         wxDataViewRenderer* renderer,
-                         unsigned int model_column,
-                         int width = wxDVC_DEFAULT_WIDTH,
-                         wxAlignment align = wxALIGN_CENTRE,
-                         int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn(const wxBitmap& bitmap,
+                     wxDataViewRenderer* renderer,
+                     unsigned int model_column,
+                     int width = wxDVC_DEFAULT_WIDTH,
+                     wxAlignment align = wxALIGN_CENTRE,
+                     int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
     /**
@@ -1888,7 +1888,7 @@ public:
 
     /**
         Indicate wether the column can be reordered by the
-        user using the mouse. This is typically implemented 
+        user using the mouse. This is typically implemented
         visually by dragging the header button around.
     */
     void SetReorderable(bool reorderable);
@@ -1903,7 +1903,7 @@ public:
     /**
         Indicate that the column is sortable. This does
         not show any sorting indicate yet, but it does
-        make the column header clickable. Call 
+        make the column header clickable. Call
         SetSortOrder()
         afterwards to actually make the sort indicator appear.
         If @e sortable is @false, the column header is

@@ -9,13 +9,13 @@
 /**
     @class wxDocTemplate
     @wxheader{docview.h}
-    
+
     The wxDocTemplate class is used to model the relationship between a
     document class and a view class.
-    
+
     @library{wxcore}
     @category{dvf}
-    
+
     @seealso
     @ref overview_wxdoctemplateoverview "wxDocTemplate overview", wxDocument, wxView
 */
@@ -287,15 +287,15 @@ public:
 /**
     @class wxDocManager
     @wxheader{docview.h}
-    
+
     The wxDocManager class is part of the document/view framework supported by
     wxWidgets,
     and cooperates with the wxView, wxDocument
     and wxDocTemplate classes.
-    
+
     @library{wxcore}
     @category{dvf}
-    
+
     @seealso
     @ref overview_wxdocmanageroverview "wxDocManager overview", wxDocument, wxView,
     wxDocTemplate, wxFileHistory
@@ -393,7 +393,7 @@ public:
         Appends the files in the history list, to the given menu only.
     */
     void FileHistoryAddFilesToMenu();
-        void FileHistoryAddFilesToMenu(wxMenu* menu);
+    void FileHistoryAddFilesToMenu(wxMenu* menu);
     //@}
 
     /**
@@ -570,16 +570,16 @@ public:
         template).
         This function is used in CreateDocument().
         
-        @param templates 
+        @param templates
         Pointer to an array of templates from which to choose a desired template.
         
-        @param noTemplates 
+        @param noTemplates
         Number of templates being pointed to by the templates pointer.
         
-        @param sort 
-        If more than one template is passed in in templates, 
-        then this parameter indicates whether the list of templates that the user 
-        will have to choose from is sorted or not when shown the choice box dialog.  
+        @param sort
+        If more than one template is passed in in templates,
+        then this parameter indicates whether the list of templates that the user
+        will have to choose from is sorted or not when shown the choice box dialog.
         Default is @false.
     */
     wxDocTemplate * SelectDocumentType(wxDocTemplate ** templates,
@@ -594,16 +594,16 @@ public:
         those relevant to the document in question, and often there will only be one
         such.
         
-        @param templates 
+        @param templates
         Pointer to an array of templates from which to choose a desired template.
         
-        @param noTemplates 
+        @param noTemplates
         Number of templates being pointed to by the templates pointer.
         
-        @param sort 
-        If more than one template is passed in in templates, 
-        then this parameter indicates whether the list of templates that the user 
-        will have to choose from is sorted or not when shown the choice box dialog.  
+        @param sort
+        If more than one template is passed in in templates,
+        then this parameter indicates whether the list of templates that the user
+        will have to choose from is sorted or not when shown the choice box dialog.
         Default is @false.
     */
     wxDocTemplate * SelectViewType(wxDocTemplate ** templates,
@@ -681,16 +681,16 @@ public:
 /**
     @class wxView
     @wxheader{docview.h}
-    
+
     The view class can be used to model the viewing and editing component of
     an application's file-based data. It is part of the document/view framework
     supported by wxWidgets,
     and cooperates with the wxDocument, wxDocTemplate
     and wxDocManager classes.
-    
+
     @library{wxcore}
     @category{dvf}
-    
+
     @seealso
     @ref overview_wxviewoverview "wxView overview", wxDocument, wxDocTemplate,
     wxDocManager
@@ -874,19 +874,19 @@ public:
 /**
     @class wxDocChildFrame
     @wxheader{docview.h}
-    
+
     The wxDocChildFrame class provides a default frame for displaying documents
     on separate windows. This class can only be used for SDI (not MDI) child frames.
-    
+
     The class is part of the document/view framework supported by wxWidgets,
     and cooperates with the wxView, wxDocument,
     wxDocManager and wxDocTemplate classes.
-    
+
     See the example application in @c samples/docview.
-    
+
     @library{wxcore}
     @category{dvf}
-    
+
     @seealso
     @ref overview_docviewoverview "Document/view overview", wxFrame
 */
@@ -959,19 +959,19 @@ public:
 /**
     @class wxDocParentFrame
     @wxheader{docview.h}
-    
+
     The wxDocParentFrame class provides a default top-level frame for
     applications using the document/view framework. This class can only be used for
     SDI (not MDI) parent frames.
-    
+
     It cooperates with the wxView, wxDocument,
     wxDocManager and wxDocTemplates classes.
-    
+
     See the example application in @c samples/docview.
-    
+
     @library{wxcore}
     @category{dvf}
-    
+
     @seealso
     @ref overview_docviewoverview "Document/view overview", wxFrame
 */
@@ -983,13 +983,13 @@ public:
         Constructor.
     */
     wxDocParentFrame();
-        wxDocParentFrame(wxDocManager* manager, wxFrame * parent,
-                         wxWindowID id,
-                         const wxString& title,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         long style = wxDEFAULT_FRAME_STYLE,
-                         const wxString& name = "frame");
+    wxDocParentFrame(wxDocManager* manager, wxFrame * parent,
+                     wxWindowID id,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE,
+                     const wxString& name = "frame");
     //@}
 
     /**
@@ -1026,15 +1026,15 @@ public:
 /**
     @class wxDocument
     @wxheader{docview.h}
-    
+
     The document class can be used to model an application's file-based
     data. It is part of the document/view framework supported by wxWidgets,
     and cooperates with the wxView, wxDocTemplate
     and wxDocManager classes.
-    
+
     @library{wxcore}
     @category{dvf}
-    
+
     @seealso
     @ref overview_wxdocumentoverview "wxDocument overview", wxView, wxDocTemplate,
     wxDocManager
@@ -1162,7 +1162,7 @@ public:
         was configured.
     */
     virtual istream LoadObject(istream& stream);
-        virtual wxInputStream LoadObject(wxInputStream& stream);
+    virtual wxInputStream LoadObject(wxInputStream& stream);
     //@}
 
     /**
@@ -1267,7 +1267,7 @@ public:
         was configured.
     */
     virtual ostream SaveObject(ostream& stream);
-        virtual wxOutputStream SaveObject(wxOutputStream& stream);
+    virtual wxOutputStream SaveObject(wxOutputStream& stream);
     //@}
 
     /**
@@ -1376,19 +1376,19 @@ public:
 /**
     @class wxFileHistory
     @wxheader{docview.h}
-    
+
     The wxFileHistory encapsulates a user interface convenience, the
     list of most recently visited files as shown on a menu (usually the File menu).
-    
+
     wxFileHistory can manage one or more file menus. More than one menu may be
     required
     in an MDI application, where the file history should appear on each MDI child
     menu
     as well as the MDI parent frame.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxfilehistoryoverview "wxFileHistory overview", wxDocManager
 */
@@ -1423,7 +1423,7 @@ public:
         Appends the files in the history list, to the given menu only.
     */
     void AddFilesToMenu();
-        void AddFilesToMenu(wxMenu* menu);
+    void AddFilesToMenu(wxMenu* menu);
     //@}
 
     /**

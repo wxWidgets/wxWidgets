@@ -9,27 +9,27 @@
 /**
     @class wxMetafileDC
     @wxheader{metafile.h}
-    
+
     This is a type of device context that allows a metafile object to be
     created (Windows only), and has most of the characteristics of a normal
     @b wxDC. The wxMetafileDC::Close member must be called after drawing into the
     device context, to return a metafile. The only purpose for this at
     present is to allow the metafile to be copied to the clipboard (see wxMetafile).
-    
+
     Adding metafile capability to an application should be easy if you
     already write to a wxDC; simply pass the wxMetafileDC to your drawing
     function instead. You may wish to conditionally compile this code so it
     is not compiled under X (although no harm will result if you leave it
     in).
-    
+
     Note that a metafile saved to disk is in standard Windows metafile format,
     and cannot be imported into most applications. To make it importable,
     call the function ::wxMakeMetafilePlaceable after
     closing your disk-based metafile device context.
-    
+
     @library{wxcore}
     @category{dc}
-    
+
     @seealso
     wxMetafile, wxDC
 */
@@ -59,16 +59,16 @@ public:
 /**
     @class wxMetafile
     @wxheader{metafile.h}
-    
+
     A @b wxMetafile represents the MS Windows metafile object, so metafile
     operations have no effect in X. In wxWidgets, only sufficient functionality
     has been provided for copying a graphic to the clipboard; this may be extended
     in a future version. Presently, the only way of creating a metafile
     is to use a wxMetafileDC.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxMetafileDC
 */
@@ -125,7 +125,7 @@ public:
     bounding box. The bounding box may be obtained from a device context after
     drawing
     into it, using the functions wxDC::MinX, wxDC::MinY, wxDC::MaxX and wxDC::MaxY.
-    
+
     In addition to adding the placeable metafile header, this function adds
     the equivalent of the following code to the start of the metafile data:
     @code
@@ -133,14 +133,14 @@ public:
      SetWindowOrg(dc, minX, minY);
      SetWindowExt(dc, maxX - minX, maxY - minY);
     @endcode
-    
+
     This simulates the wxMM_TEXT mapping mode, which wxWidgets assumes.
-    
+
     Placeable metafiles may be imported by many Windows applications, and can be
     used in RTF (Rich Text Format) files.
-    
+
     @e scale allows the specification of scale for the metafile.
-    
+
     This function is only available under Windows.
 */
 bool wxMakeMetafilePlaceable(const wxString& filename, int minX,

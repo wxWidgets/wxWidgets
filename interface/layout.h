@@ -9,17 +9,17 @@
 /**
     @class wxIndividualLayoutConstraint
     @wxheader{layout.h}
-    
+
     Objects of this class are stored in the wxLayoutConstraint class
     as one of eight possible constraints that a window can be involved in.
-    
+
     Constraints are initially set to have the relationship wxUnconstrained,
     which means that their values should be calculated by looking at known
     constraints.
-    
+
     @library{wxcore}
     @category{winlayout}
-    
+
     @seealso
     @ref overview_constraintsoverview "Overview and examples", wxLayoutConstraints,
     wxWindow::SetConstraints.
@@ -184,8 +184,8 @@ public:
         functions such as Above, RightOf, SameAs.
     */
 #define void Set(wxRelationship rel, wxWindow * otherWin,
-             wxEdge otherEdge, int value = 0,
-             int margin = 0)     /* implementation is private */
+    wxEdge otherEdge, int value = 0,
+                                  int margin = 0)     /* implementation is private */
 
     /**
         Sets this edge or dimension to be unconstrained, that is, dependent on
@@ -198,17 +198,17 @@ public:
 /**
     @class wxLayoutConstraints
     @wxheader{layout.h}
-    
+
     @b Note: constraints are now deprecated and you should use sizers instead.
-    
+
     Objects of this class can be associated with a window to define its
     layout constraints, with respect to siblings or its parent.
-    
+
     The class consists of the following eight constraints of class
     wxIndividualLayoutConstraint,
     some or all of which should be accessed directly to set the appropriate
     constraints.
-    
+
      @b left: represents the left hand edge of the window
      @b right: represents the right hand edge of the window
      @b top: represents the top edge of the window
@@ -217,7 +217,7 @@ public:
      @b height: represents the height of the window
      @b centreX: represents the horizontal centre point of the window
      @b centreY: represents the vertical centre point of the window
-    
+
     Most constraints are initially set to have the relationship wxUnconstrained,
     which means that their values should be calculated by looking at known
     constraints.
@@ -226,19 +226,19 @@ public:
     width and height will be used, to be compatible with panel items which often
     have take a default size. If the constraint is wxAsIs, the dimension will
     not be changed.
-    
+
     @b wxPerl note: In wxPerl the constraints are accessed as
-    
+
     @code
     constraint = Wx::LayoutConstraints-new();
       constraint-centreX-AsIs();
       constraint-centreY-Unconstrained();
     @endcode
-    
-    
+
+
     @library{wxcore}
     @category{winlayout}
-    
+
     @seealso
     @ref overview_constraintsoverview "Overview and examples",
     wxIndividualLayoutConstraint, wxWindow::SetConstraints

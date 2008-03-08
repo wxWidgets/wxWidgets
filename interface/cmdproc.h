@@ -9,15 +9,15 @@
 /**
     @class wxCommand
     @wxheader{cmdproc.h}
-    
+
     wxCommand is a base class for modelling an application command,
     which is an action usually performed by selecting a menu item, pressing
     a toolbar button or any other means provided by the application to
     change the data or view.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     Overview
 */
@@ -89,14 +89,14 @@ public:
 /**
     @class wxCommandProcessor
     @wxheader{cmdproc.h}
-    
+
     wxCommandProcessor is a class that maintains a history of wxCommands,
     with undo/redo functionality built-in. Derive a new class from this
     if you want different behaviour.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxcommandprocessoroverview "wxCommandProcessor overview",
     wxCommand
@@ -173,14 +173,14 @@ public:
 
     /**
         Returns a boolean value that indicates if changes have been made since
-        the last save operation. This only works if 
+        the last save operation. This only works if
         MarkAsSaved()
         is called whenever the project is saved.
     */
     virtual bool IsDirty();
 
     /**
-        You must call this method whenever the project is saved if you plan to use 
+        You must call this method whenever the project is saved if you plan to use
         IsDirty().
     */
     virtual void MarkAsSaved();

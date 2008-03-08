@@ -9,19 +9,19 @@
 /**
     @class wxRegionIterator
     @wxheader{region.h}
-    
+
     This class is used to iterate through the rectangles in a region,
     typically when examining the damaged regions of a window within an OnPaint call.
-    
+
     To use it, construct an iterator object on the stack and loop through the
     regions, testing the object and incrementing the iterator at the end of the
     loop.
-    
+
     See wxPaintEvent for an example of use.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxPaintEvent
 */
@@ -33,7 +33,7 @@ public:
         Creates an iterator object given a region.
     */
     wxRegionIterator();
-        wxRegionIterator(const wxRegion& region);
+    wxRegionIterator(const wxRegion& region);
     //@}
 
     /**
@@ -81,7 +81,7 @@ public:
         Resets the iterator to the given region.
     */
     void Reset();
-        void Reset(const wxRegion& region);
+    void Reset(const wxRegion& region);
     //@}
 
     /**
@@ -94,26 +94,26 @@ public:
         
         You can use this to test the iterator object as if it were of type bool.
     */
-     operator bool();
+    operator bool();
 };
 
 
 /**
     @class wxRegion
     @wxheader{region.h}
-    
+
     A wxRegion represents a simple or complex region on a device context or window.
-    
+
     This class uses @ref overview_trefcount "reference counting and copy-on-write"
     internally so that assignments between two instances of this class are very
     cheap. You can therefore use actual objects instead of pointers without
     efficiency problems. If an instance of this class is changed it will create
     its own data internally so that other instances, which previously shared the
     data using the reference counting, are not affected.
-    
+
     @library{wxcore}
     @category{data}
-    
+
     @seealso
     wxRegionIterator
 */
@@ -126,15 +126,15 @@ public:
         Union() for more details.
     */
     wxRegion();
-        wxRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-        wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
-        wxRegion(const wxRect& rect);
-        wxRegion(const wxRegion& region);
-        wxRegion(size_t n, const wxPoint points,
-                 int fillStyle = wxWINDING_RULE);
-        wxRegion(const wxBitmap& bmp);
-        wxRegion(const wxBitmap& bmp, const wxColour& transColour,
-                 int tolerance = 0);
+    wxRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+    wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
+    wxRegion(const wxRect& rect);
+    wxRegion(const wxRegion& region);
+    wxRegion(size_t n, const wxPoint points,
+             int fillStyle = wxWINDING_RULE);
+    wxRegion(const wxBitmap& bmp);
+    wxRegion(const wxBitmap& bmp, const wxColour& transColour,
+             int tolerance = 0);
     //@}
 
     /**
@@ -158,11 +158,11 @@ public:
                    wxInRegion.
     */
     wxRegionContain Contains(long& x, long& y);
-        wxRegionContain Contains(const wxPoint& pt);
-        wxRegionContain Contains(long& x, long& y,
-                                 long& width,
-                                 long& height);
-        wxRegionContain Contains(const wxRect& rect);
+    wxRegionContain Contains(const wxPoint& pt);
+    wxRegionContain Contains(long& x, long& y,
+                             long& width,
+                             long& height);
+    wxRegionContain Contains(const wxRect& rect);
     //@}
 
     /**
@@ -177,7 +177,7 @@ public:
     */
     void GetBox(wxCoord& x, wxCoord& y, wxCoord& width,
                 wxCoord& height);
-        wxRect GetBox();
+    wxRect GetBox();
     //@}
 
     //@{
@@ -192,8 +192,8 @@ public:
     */
     bool Intersect(wxCoord x, wxCoord y, wxCoord width,
                    wxCoord height);
-        bool Intersect(const wxRect& rect);
-        bool Intersect(const wxRegion& region);
+    bool Intersect(const wxRect& rect);
+    bool Intersect(const wxRegion& region);
     //@}
 
     /**
@@ -217,7 +217,7 @@ public:
                    then).
     */
     bool Offset(wxCoord x, wxCoord y);
-        bool Offset(const wxPoint& pt);
+    bool Offset(const wxPoint& pt);
     //@}
 
     //@{
@@ -231,7 +231,7 @@ public:
                    this region.
     */
     bool Subtract(const wxRect& rect);
-        bool Subtract(const wxRegion& region);
+    bool Subtract(const wxRegion& region);
     //@}
 
     //@{
@@ -248,11 +248,11 @@ public:
                    region.
     */
     bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-        bool Union(const wxRect& rect);
-        bool Union(const wxRegion& region);
-        bool Union(const wxBitmap& bmp);
-        bool Union(const wxBitmap& bmp, const wxColour& transColour,
-                   int tolerance = 0);
+    bool Union(const wxRect& rect);
+    bool Union(const wxRegion& region);
+    bool Union(const wxBitmap& bmp);
+    bool Union(const wxBitmap& bmp, const wxColour& transColour,
+               int tolerance = 0);
     //@}
 
     //@{
@@ -266,8 +266,8 @@ public:
                    areas. The result is stored in this region.
     */
     bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-        bool Xor(const wxRect& rect);
-        bool Xor(const wxRegion& region);
+    bool Xor(const wxRect& rect);
+    bool Xor(const wxRegion& region);
     //@}
 
     /**

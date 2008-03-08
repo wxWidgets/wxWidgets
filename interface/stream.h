@@ -9,7 +9,7 @@
 /**
     @class wxCountingOutputStream
     @wxheader{stream.h}
-    
+
     wxCountingOutputStream is a specialized output stream which does not write any
     data anywhere,
     instead it counts how many bytes would get written if this were a normal
@@ -23,9 +23,9 @@
     known is if the data has to be written to a piece of memory and the memory has
     to be
     allocated before writing to it (which is probably always the case when writing
-    to a 
+    to a
     memory stream).
-    
+
     @library{wxbase}
     @category{streams}
 */
@@ -52,38 +52,38 @@ public:
 /**
     @class wxBufferedInputStream
     @wxheader{stream.h}
-    
+
     This stream acts as a cache. It caches the bytes read from the specified
     input stream (See wxFilterInputStream).
     It uses wxStreamBuffer and sets the default in-buffer size to 1024 bytes.
     This class may not be used without some other stream to read the data
     from (such as a file stream or a memory stream).
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxStreamBuffer, wxInputStream, wxBufferedOutputStream
 */
 class wxBufferedInputStream : public wxFilterInputStream
 {
 public:
-    
+
 };
 
 
 /**
     @class wxStreamBuffer
     @wxheader{stream.h}
-    
-    
+
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxStreamBase
 */
-class wxStreamBuffer 
+class wxStreamBuffer
 {
 public:
     //@{
@@ -99,8 +99,8 @@ public:
         @sa @ref setbufferio() wxStreamBuffer:SetBufferIO
     */
     wxStreamBuffer(wxStreamBase& stream, BufMode mode);
-        wxStreamBuffer(BufMode mode);
-        wxStreamBuffer(const wxStreamBuffer& buffer);
+    wxStreamBuffer(BufMode mode);
+    wxStreamBuffer(const wxStreamBuffer& buffer);
     //@}
 
     /**
@@ -115,7 +115,7 @@ public:
     bool FillBuffer();
 
     /**
-        Toggles the fixed flag. Usually this flag is toggled at the same time as 
+        Toggles the fixed flag. Usually this flag is toggled at the same time as
         @e flushable. This flag allows (when it has the @false value) or forbids
         (when it has the @true value) the stream buffer to resize dynamically the IO
         buffer.
@@ -193,7 +193,7 @@ public:
         @sa Write()
     */
     size_t Read(void * buffer, size_t size);
-        Return value size_t Read(wxStreamBuffer * buffer);
+    Return value size_t Read(wxStreamBuffer * buffer);
     //@}
 
     /**
@@ -237,13 +237,13 @@ public:
         @sa Fixed(), Flushable()
     */
     void SetBufferIO(char* buffer_start, char* buffer_end);
-        Remarks See also
-wxStreamBuffer constructor
+    Remarks See also
+    wxStreamBuffer constructor
 
-wxStreamBuffer::Fixed
+    wxStreamBuffer::Fixed
 
-wxStreamBuffer::Flushable
-void SetBufferIO(size_t bufsize);
+    wxStreamBuffer::Flushable
+    void SetBufferIO(size_t bufsize);
     //@}
 
     /**
@@ -280,7 +280,7 @@ void SetBufferIO(size_t bufsize);
         See Read().
     */
     size_t Write(const void * buffer, size_t size);
-        size_t Write(wxStreamBuffer * buffer);
+    size_t Write(wxStreamBuffer * buffer);
     //@}
 };
 
@@ -288,9 +288,9 @@ void SetBufferIO(size_t bufsize);
 /**
     @class wxOutputStream
     @wxheader{stream.h}
-    
+
     wxOutputStream is an abstract base class which may not be used directly.
-    
+
     @library{wxbase}
     @category{streams}
 */
@@ -319,7 +319,7 @@ public:
     bool Close();
 
     /**
-        Returns the number of bytes written during the last 
+        Returns the number of bytes written during the last
         Write(). It may return 0 even if there is no
         error on the stream if it is only temporarily impossible to write to it.
     */
@@ -334,10 +334,10 @@ public:
     /**
         Changes the stream current position.
         
-        @param pos 
+        @param pos
         Offset to seek to.
         
-        @param mode 
+        @param mode
         One of wxFromStart, wxFromEnd, wxFromCurrent.
         
         @returns The new stream position or wxInvalidOffset on error.
@@ -351,12 +351,12 @@ public:
 
     //@{
     /**
-        Reads data from the specified input stream and stores them 
+        Reads data from the specified input stream and stores them
         in the current stream. The data is read until an error is raised
         by one of the two streams.
     */
     wxOutputStream Write(const void * buffer, size_t size);
-        wxOutputStream Write(wxInputStream& stream_in);
+    wxOutputStream Write(wxInputStream& stream_in);
     //@}
 };
 
@@ -364,27 +364,27 @@ public:
 /**
     @class wxFilterClassFactory
     @wxheader{stream.h}
-    
+
     Allows the creation of filter streams to handle compression formats such
     as gzip and bzip2.
-    
+
     For example, given a filename you can search for a factory that will
     handle it and create a stream to decompress it:
-    
+
     @code
     factory = wxFilterClassFactory::Find(filename, wxSTREAM_FILEEXT);
         if (factory)
             stream = factory-NewStream(new wxFFileInputStream(filename));
     @endcode
-    
+
     wxFilterClassFactory::Find can also search
     for a factory by MIME type, HTTP encoding or by wxFileSystem protocol.
     The available factories can be enumerated
     using @ref wxFilterClassFactory::getfirst "GetFirst() and GetNext".
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxFilterInputStream, wxFilterOutputStream, wxArchiveClassFactory, @ref
     overview_wxarc "Archive formats such as zip"
@@ -423,7 +423,7 @@ public:
         are available. They do not give away ownership of the factory.
     */
     static const wxFilterClassFactory* GetFirst();
-        const wxFilterClassFactory* GetNext();
+    const wxFilterClassFactory* GetNext();
     //@}
 
     /**
@@ -449,9 +449,9 @@ public:
         takes ownership of it. If it is passed by reference then it does not.
     */
     wxFilterInputStream* NewStream(wxInputStream& stream);
-        wxFilterOutputStream* NewStream(wxOutputStream& stream);
-        wxFilterInputStream* NewStream(wxInputStream* stream);
-        wxFilterOutputStream* NewStream(wxOutputStream* stream);
+    wxFilterOutputStream* NewStream(wxOutputStream& stream);
+    wxFilterInputStream* NewStream(wxInputStream* stream);
+    wxFilterOutputStream* NewStream(wxOutputStream* stream);
     //@}
 
     /**
@@ -465,7 +465,7 @@ public:
         by @ref getfirst() GetFirst()/GetNext.
         
         It is not necessary to do this to use the filter streams. It is usually
-        used when implementing streams, typically the implementation will 
+        used when implementing streams, typically the implementation will
         add a static instance of its factory class.
         
         It can also be used to change the order of a factory already in the list,
@@ -492,15 +492,15 @@ public:
 /**
     @class wxFilterOutputStream
     @wxheader{stream.h}
-    
+
     A filter stream has the capability of a normal
     stream but it can be placed on top of another stream. So, for example, it
     can compress, encrypt the data which are passed to it and write them to another
     stream.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxFilterClassFactory, wxFilterInputStream
 */
@@ -515,7 +515,7 @@ public:
         takes ownership of it. If it is passed by reference then it does not.
     */
     wxFilterOutputStream(wxOutputStream& stream);
-        wxFilterOutputStream(wxOutputStream* stream);
+    wxFilterOutputStream(wxOutputStream* stream);
     //@}
 };
 
@@ -523,16 +523,16 @@ public:
 /**
     @class wxFilterInputStream
     @wxheader{stream.h}
-    
+
     A filter stream has the capability of a normal stream but it can be placed on
     top
     of another stream. So, for example, it can uncompress or decrypt the data which
     are read
     from another stream and pass it to the requester.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxFilterClassFactory, wxFilterOutputStream
 */
@@ -547,7 +547,7 @@ public:
         takes ownership of it. If it is passed by reference then it does not.
     */
     wxFilterInputStream(wxInputStream& stream);
-        wxFilterInputStream(wxInputStream* stream);
+    wxFilterInputStream(wxInputStream* stream);
     //@}
 };
 
@@ -555,18 +555,18 @@ public:
 /**
     @class wxBufferedOutputStream
     @wxheader{stream.h}
-    
+
     This stream acts as a cache. It caches the bytes to be written to the specified
     output stream (See wxFilterOutputStream). The
     data is only written when the cache is full, when the buffered stream is
     destroyed or when calling SeekO().
-    
+
     This class may not be used without some other stream to write the data
     to (such as a file stream or a memory stream).
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxStreamBuffer, wxOutputStream
 */
@@ -600,9 +600,9 @@ public:
 /**
     @class wxInputStream
     @wxheader{stream.h}
-    
+
     wxInputStream is an abstract base class which may not be used directly.
-    
+
     @library{wxbase}
     @category{streams}
 */
@@ -632,7 +632,7 @@ public:
 #define bool Eof()     /* implementation is private */
 
     /**
-        Returns the first character in the input queue and removes it, 
+        Returns the first character in the input queue and removes it,
         blocking until it appears if necessary.
     */
 #define char GetC()     /* implementation is private */
@@ -656,19 +656,19 @@ public:
                    user can test any states of the stream right away.
     */
     wxInputStream Read(void * buffer, size_t size);
-        Warning Return value
-This function returns a reference on the current object, so the user can test
-any states of the stream right away.
-wxInputStream&  Read(wxOutputStream& stream_out);
+    Warning Return value
+    This function returns a reference on the current object, so the user can test
+    any states of the stream right away.
+    wxInputStream&  Read(wxOutputStream& stream_out);
     //@}
 
     /**
         Changes the stream current position.
         
-        @param pos 
+        @param pos
         Offset to seek to.
         
-        @param mode 
+        @param mode
         One of wxFromStart, wxFromEnd, wxFromCurrent.
         
         @returns The new stream position or wxInvalidOffset on error.
@@ -686,7 +686,7 @@ wxInputStream&  Read(wxOutputStream& stream_out);
         character: it is sometimes shorter to use than the generic function.
     */
     size_t Ungetch(const char* buffer, size_t size);
-        Return value bool Ungetch(char c);
+    Return value bool Ungetch(char c);
     //@}
 };
 
@@ -694,18 +694,18 @@ wxInputStream&  Read(wxOutputStream& stream_out);
 /**
     @class wxStreamBase
     @wxheader{stream.h}
-    
+
     This class is the base class of most stream related classes in wxWidgets. It
     must
     not be used directly.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     wxStreamBuffer
 */
-class wxStreamBase 
+class wxStreamBase
 {
 public:
     /**
@@ -746,7 +746,7 @@ public:
 
     /**
         Returns the length of the stream in bytes. If the length cannot be determined
-        (this is always the case for socket streams for example), returns 
+        (this is always the case for socket streams for example), returns
         @c wxInvalidOffset.
         
         This function is new since wxWidgets version 2.5.4

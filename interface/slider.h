@@ -9,14 +9,14 @@
 /**
     @class wxSlider
     @wxheader{slider.h}
-    
+
     A slider is a control with a handle which can be pulled
     back and forth to change the value.
-    
+
     On Windows, the track bar control is used.
-    
+
     Slider events are handled in the same way as a scrollbar.
-    
+
     @beginStyleTable
     @style{wxSL_HORIZONTAL}:
            Displays the slider horizontally (this is the default).
@@ -40,11 +40,11 @@
            Inverses the mininum and maximum endpoints on the slider. Not
            compatible with wxSL_SELRANGE.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{slider.png}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview", wxScrollBar
 */
@@ -55,44 +55,44 @@ public:
     /**
         Constructor, creating and showing a slider.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param value 
+        @param value
         Initial position for the slider.
         
-        @param minValue 
+        @param minValue
         Minimum slider position.
         
-        @param maxValue 
+        @param maxValue
         Maximum slider position.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then a default size is
         chosen.
         
-        @param style 
+        @param style
         Window style. See wxSlider.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxSlider();
-        wxSlider(wxWindow* parent, wxWindowID id, int value,
-                 int minValue, int maxValue,
-                 const wxPoint& point = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxSL_HORIZONTAL,
-                 const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = "slider");
+    wxSlider(wxWindow* parent, wxWindowID id, int value,
+             int minValue, int maxValue,
+             const wxPoint& point = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = wxSL_HORIZONTAL,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = "slider");
     //@}
 
     /**
@@ -200,7 +200,7 @@ public:
     /**
         Sets the line size for the slider.
         
-        @param lineSize 
+        @param lineSize
         The number of steps the slider moves when the user moves it up or down a line.
         
         @sa GetLineSize()
@@ -210,7 +210,7 @@ public:
     /**
         Sets the page size for the slider.
         
-        @param pageSize 
+        @param pageSize
         The number of steps the slider moves when the user pages up or down.
         
         @sa GetPageSize()
@@ -227,10 +227,10 @@ public:
     /**
         Sets the selection.
         
-        @param startPos 
+        @param startPos
         The selection start position.
         
-        @param endPos 
+        @param endPos
         The selection end position.
         
         @remarks Windows 95 only.
@@ -242,7 +242,7 @@ public:
     /**
         Sets the slider thumb length.
         
-        @param len 
+        @param len
         The thumb length.
         
         @remarks Windows 95 only.
@@ -254,7 +254,7 @@ public:
     /**
         Sets a tick position.
         
-        @param tickPos 
+        @param tickPos
         The tick position.
         
         @remarks Windows 95 only.
@@ -266,12 +266,12 @@ public:
     /**
         Sets the tick mark frequency and position.
         
-        @param n 
+        @param n
         Frequency. For example, if the frequency is set to two, a tick mark is
         displayed for
         every other increment in the slider's range.
         
-        @param pos 
+        @param pos
         Position. Must be greater than zero. TODO: what is this for?
         
         @remarks Windows 95 only.
@@ -283,7 +283,7 @@ public:
     /**
         Sets the slider position.
         
-        @param value 
+        @param value
         The slider position.
     */
     void SetValue(int value);

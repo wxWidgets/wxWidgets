@@ -9,7 +9,7 @@
 /**
     @class wxConnection
     @wxheader{ipc.h}
-    
+
     A wxConnection object represents the connection between a client
     and a server. It is created by making a connection using a
     wxClient object, or by the acceptance of a
@@ -20,14 +20,14 @@
     using wxDDEConnection is available on Windows only, but a
     platform-independent, socket-based version of this API is
     available using wxTCPConnection, which has the same API.
-    
+
     An application should normally derive a new connection class from
     wxConnection, in order to override the communication event
     handlers to do something interesting.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxClient, wxServer, @ref overview_ipcoverview "Interprocess communications
     overview"
@@ -43,7 +43,7 @@ public:
         object will be provided on requesting (or accepting) a
         connection. However, if the user defines his or her own derived
         connection object, the wxServer::OnAcceptConnection
-        and/or wxClient::OnMakeConnection 
+        and/or wxClient::OnMakeConnection
         members should be replaced by functions which construct the new
         connection object.
         
@@ -55,7 +55,7 @@ public:
         mainly for backwards compatibility.
     */
     wxConnection();
-        wxConnection(void* buffer, size_t size);
+    wxConnection(void* buffer, size_t size);
     //@}
 
     //@{
@@ -67,14 +67,14 @@ public:
     */
     bool Advise(const wxString& item, const void* data, size_t size,
                 wxIPCFormat format = wxIPC_PRIVATE);
-        bool Advise(const wxString& item, const char* data);
-        bool Advise(const wxString& item, const wchar_t* data);
-        bool Advise(const wxString& item, const wxString data);
+    bool Advise(const wxString& item, const char* data);
+    bool Advise(const wxString& item, const wchar_t* data);
+    bool Advise(const wxString& item, const wxString data);
     //@}
 
     /**
         Called by the client or server application to disconnect from the
-        other program; it causes the OnDisconnect() 
+        other program; it causes the OnDisconnect()
         message to be sent to the corresponding connection object in the
         other program. Returns @true if successful or already disconnected.
         The application that calls @b Disconnect must explicitly delete
@@ -87,14 +87,14 @@ public:
         Called by the client application to execute a command on the
         server. Can also be used to transfer arbitrary data to the server
         (similar to Poke() in
-        that respect). Causes the server connection's OnExec() 
+        that respect). Causes the server connection's OnExec()
         member to be called. Returns @true if successful.
     */
     bool Execute(const void* data, size_t size,
                  wxIPCFormat format = wxIPC_PRIVATE);
-        bool Execute(const char* data);
-        bool Execute(const wchar_t* data);
-        bool Execute(const wxString data);
+    bool Execute(const char* data);
+    bool Execute(const wchar_t* data);
+    bool Execute(const wxString data);
     //@}
 
     /**
@@ -135,7 +135,7 @@ public:
                         wxIPCFormat format);
 
     /**
-        Message sent to the server application when the client calls 
+        Message sent to the server application when the client calls
         Request(). The
         server's OnRequest() method
         should respond by returning a character string, or @NULL to
@@ -176,14 +176,14 @@ public:
     */
     bool Poke(const wxString& item, const void* data, size_t size,
               wxIPCFormat format = wxIPC_PRIVATE);
-        bool Poke(const wxString& item, const char* data);
-        bool Poke(const wxString& item, const wchar_t* data);
-        bool Poke(const wxString& item, const wxString data);
+    bool Poke(const wxString& item, const char* data);
+    bool Poke(const wxString& item, const wchar_t* data);
+    bool Poke(const wxString& item, const wxString data);
     //@}
 
     /**
         Called by the client application to request data from the server.
-        Causes the server connection's OnRequest() 
+        Causes the server connection's OnRequest()
         member to be called. Size may be @NULL or a pointer to a variable
         to receive the size of the requested item.
         
@@ -196,7 +196,7 @@ public:
 
     /**
         Called by the client application to ask if an advise loop can be
-        started with the server. Causes the server connection's 
+        started with the server. Causes the server connection's
         OnStartAdvise()
         member to be called. Returns @true if the server okays it, @false
         otherwise.
@@ -205,7 +205,7 @@ public:
 
     /**
         Called by the client application to ask if an advise loop can be
-        stopped. Causes the server connection's OnStopAdvise() 
+        stopped. Causes the server connection's OnStopAdvise()
         member to be called. Returns @true if the server okays it, @false
         otherwise.
     */
@@ -216,27 +216,27 @@ public:
 /**
     @class wxClient
     @wxheader{ipc.h}
-    
+
     A wxClient object represents the client part of a client-server
     DDE-like (Dynamic Data Exchange) conversation. The actual
     DDE-based implementation using wxDDEClient is available on Windows
     only, but a platform-independent, socket-based version of this
     API is available using wxTCPClient, which has the same API.
-    
+
     To create a client which can communicate with a suitable server,
     you need to derive a class from wxConnection and another from
     wxClient. The custom wxConnection class will intercept
     communications in a 'conversation' with a server, and the custom
     wxClient is required so that a user-overridden
-    wxClient::OnMakeConnection 
+    wxClient::OnMakeConnection
     member can return a wxConnection of the required class, when a
-    connection is made. Look at the IPC sample and the 
+    connection is made. Look at the IPC sample and the
     @ref overview_ipcoverview "Interprocess communications overview" for
     an example of how to do this.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxServer, wxConnection, @ref overview_ipcoverview "Interprocess communications
     overview"
@@ -255,8 +255,8 @@ public:
         native DDE in Windows), service name and topic string. If the
         server allows a connection, a wxConnection object will be
         returned. The type of wxConnection returned can be altered by
-        overriding the 
-        OnMakeConnection() 
+        overriding the
+        OnMakeConnection()
         member to return your own derived connection object.
         
         Under Unix, the service name may be either an integer port
@@ -298,30 +298,30 @@ public:
 /**
     @class wxServer
     @wxheader{ipc.h}
-    
+
     A wxServer object represents the server part of a client-server
     DDE-like (Dynamic Data Exchange) conversation. The actual
     DDE-based implementation using wxDDEServer is available on Windows
     only, but a platform-independent, socket-based version of this
     API is available using wxTCPServer, which has the same API.
-    
+
     To create a server which can communicate with a suitable client,
     you need to derive a class from wxConnection and another from
     wxServer. The custom wxConnection class will intercept
     communications in a 'conversation' with a client, and the custom
-    wxServer is required so that a user-overridden wxServer::OnAcceptConnection 
+    wxServer is required so that a user-overridden wxServer::OnAcceptConnection
     member can return a wxConnection of the required class, when a
     connection is made. Look at the IPC sample and the @ref overview_ipcoverview
     "Interprocess communications overview" for
     an example of how to do this.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxClient, wxConnection, IPC, overview
 */
-class wxServer 
+class wxServer
 {
 public:
     /**

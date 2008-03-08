@@ -9,20 +9,20 @@
 /**
     @class wxFrame
     @wxheader{frame.h}
-    
+
     A frame is a window whose size and position can (usually) be changed by the
     user. It usually has thick borders and a title bar, and can optionally contain
     a menu bar, toolbar and status bar. A frame can contain any window that is not
     a frame or dialog.
-    
+
     A frame that has a status bar and toolbar created via the
     CreateStatusBar/CreateToolBar functions manages these windows, and adjusts the
     value returned by GetClientSize to reflect the remaining size available to
     application windows.
-    
+
     @beginStyleTable
     @style{wxDEFAULT_FRAME_STYLE}:
-           Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxRESIZE_BORDER | 
+           Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxRESIZE_BORDER |
            wxSYSTEM_MENU |  wxCAPTION |  wxCLOSE_BOX |  wxCLIP_CHILDREN.
     @style{wxICONIZE}:
            Display the frame iconized (minimized). Windows only.
@@ -53,7 +53,7 @@
            desktop window under Windows which may seem strange to the users
            and thus it might be better to use this style only without
            wxMINIMIZE_BOX style). In wxGTK, the flag is respected only if GTK+
-           is at least version 2.2 and the window manager supports 
+           is at least version 2.2 and the window manager supports
            _NET_WM_STATE_SKIP_TASKBAR hint. Has no effect under other
            platforms.
     @style{wxFRAME_FLOAT_ON_PARENT}:
@@ -78,10 +78,10 @@
            On Mac OS X, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{managedwnd}
-    
+
     @seealso
     wxMDIParentFrame, wxMDIChildFrame, wxMiniFrame, wxDialog
 */
@@ -92,28 +92,28 @@ public:
     /**
         Constructor, creating the window.
         
-        @param parent 
+        @param parent
         The window parent. This may be @NULL. If it is non-@NULL, the frame will
         always be displayed on top of the parent window on Windows.
         
-        @param id 
+        @param id
         The window identifier. It may take a value of -1 to indicate a default value.
         
-        @param title 
+        @param title
         The caption to be displayed on the frame's title bar.
         
-        @param pos 
+        @param pos
         The window position. The value wxDefaultPosition indicates a default position, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param size 
+        @param size
         The window size. The value wxDefaultSize indicates a default size, chosen by
         either the windowing system or wxWidgets, depending on platform.
         
-        @param style 
+        @param style
         The window style. See wxFrame.
         
-        @param name 
+        @param name
         The name of the window. This parameter is used to associate a name with the
         item,
         allowing the application user to set Motif resource values for
@@ -126,12 +126,12 @@ public:
         @sa Create()
     */
     wxFrame();
-        wxFrame(wxWindow* parent, wxWindowID id,
-                const wxString& title,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = "frame");
+    wxFrame(wxWindow* parent, wxWindowID id,
+            const wxString& title,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxDEFAULT_FRAME_STYLE,
+            const wxString& name = "frame");
     //@}
 
     /**
@@ -142,7 +142,7 @@ public:
     /**
         Centres the frame on the display.
         
-        @param direction 
+        @param direction
         The parameter may be wxHORIZONTAL, wxVERTICAL or wxBOTH.
     */
     void Centre(int direction = wxBOTH);
@@ -161,19 +161,19 @@ public:
     /**
         Creates a status bar at the bottom of the frame.
         
-        @param number 
+        @param number
         The number of fields to create. Specify a
         value greater than 1 to create a multi-field status bar.
         
-        @param style 
+        @param style
         The status bar style. See wxStatusBar for a list
         of valid styles.
         
-        @param id 
+        @param id
         The status bar window identifier. If -1, an identifier will be chosen by
         wxWidgets.
         
-        @param name 
+        @param name
         The status bar window name.
         
         @returns A pointer to the status bar if it was created successfully, @NULL
@@ -194,15 +194,15 @@ public:
     /**
         Creates a toolbar at the top or left of the frame.
         
-        @param style 
+        @param style
         The toolbar style. See wxToolBar for a list
         of valid styles.
         
-        @param id 
+        @param id
         The toolbar window identifier. If -1, an identifier will be chosen by
         wxWidgets.
         
-        @param name 
+        @param name
         The toolbar window name.
         
         @returns A pointer to the toolbar if it was created successfully, @NULL
@@ -258,18 +258,18 @@ public:
     /**
         Virtual function called when a status bar is requested by CreateStatusBar().
         
-        @param number 
+        @param number
         The number of fields to create.
         
-        @param style 
+        @param style
         The window style. See wxStatusBar for a list
         of valid styles.
         
-        @param id 
+        @param id
         The window identifier. If -1, an identifier will be chosen by
         wxWidgets.
         
-        @param name 
+        @param name
         The window name.
         
         @returns A status bar object.
@@ -287,15 +287,15 @@ public:
     /**
         Virtual function called when a toolbar is requested by CreateToolBar().
         
-        @param style 
+        @param style
         The toolbar style. See wxToolBar for a list
         of valid styles.
         
-        @param id 
+        @param id
         The toolbar window identifier. If -1, an identifier will be chosen by
         wxWidgets.
         
-        @param name 
+        @param name
         The toolbar window name.
         
         @returns A toolbar object.
@@ -312,7 +312,7 @@ public:
     /**
         Simulate a menu command.
         
-        @param id 
+        @param id
         The identifier for a menu item.
     */
     void ProcessCommand(int id);
@@ -332,7 +332,7 @@ public:
     /**
         Tells the frame to show the given menu bar.
         
-        @param menuBar 
+        @param menuBar
         The menu bar to associate with the frame.
         
         @remarks If the frame is destroyed, the menu bar and its menus will be
@@ -360,10 +360,10 @@ public:
     /**
         Sets the status bar text and redraws the status bar.
         
-        @param text 
+        @param text
         The text for the status field.
         
-        @param number 
+        @param number
         The status field (starting from zero).
         
         @remarks Use an empty string to clear the status bar.
@@ -375,11 +375,11 @@ public:
     /**
         Sets the widths of the fields in the status bar.
         
-        @param n 
+        @param n
         The number of fields in the status bar. It must be the
         same used in CreateStatusBar.
         
-        @param widths 
+        @param widths
         Must contain an array of n integers, each of which is a status field width
         in pixels. A value of -1 indicates that the field is variable width; at least
         one

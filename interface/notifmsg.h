@@ -9,15 +9,15 @@
 /**
     @class wxNotificationMessage
     @wxheader{notifmsg.h}
-    
+
     This class allows to show the user a message non intrusively. Currently it is
     implemented natively only for the Maemo platform and uses (non-modal) dialogs
     for the display of the notifications under the other platforms but it will be
     extended to use the platform-specific notifications in the other ports in the
     future.
-    
+
     Notice that this class is not a window and so doesn't derive from wxWindow.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
@@ -30,14 +30,14 @@ public:
         
         Create a notification object with the given attributes.
         
-        See SetTitle(), 
-        SetMessage(), 
+        See SetTitle(),
+        SetMessage(),
         SetParent() and
         SetFlags() for the description of the
         corresponding parameters.
     */
     wxNotificationMessage();
-        wxNotificationMessage(const wxString& title);
+    wxNotificationMessage(const wxString& title);
     //@}
 
     /**
@@ -51,8 +51,8 @@ public:
 
     /**
         This parameter can be currently used to specify the icon to show in the
-        notification. Valid values are @c wxICON_INFORMATION, 
-        @c wxICON_WARNING and @c wxICON_ERROR (notice that 
+        notification. Valid values are @c wxICON_INFORMATION,
+        @c wxICON_WARNING and @c wxICON_ERROR (notice that
         @c wxICON_QUESTION is not allowed here).
         
         Some implementations of this class may not support the icons.
@@ -74,7 +74,7 @@ public:
     void SetParent(wxWindow* parent);
 
     /**
-        Set the title, it must be a concise string (not more than 64 characters), use 
+        Set the title, it must be a concise string (not more than 64 characters), use
         SetMessage() to give the user more
         details.
     */

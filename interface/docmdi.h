@@ -9,19 +9,19 @@
 /**
     @class wxDocMDIParentFrame
     @wxheader{docmdi.h}
-    
+
     The wxDocMDIParentFrame class provides a default top-level frame for
     applications using the document/view framework. This class can only be used for
     MDI parent frames.
-    
+
     It cooperates with the wxView, wxDocument,
     wxDocManager and wxDocTemplates classes.
-    
+
     See the example application in @c samples/docview.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_docviewoverview "Document/view overview", wxMDIParentFrame
 */
@@ -33,13 +33,13 @@ public:
         Constructor.
     */
     wxDocMDIParentFrame();
-        wxDocMDIParentFrame(wxDocManager* manager, wxFrame * parent,
-                            wxWindowID id,
-                            const wxString& title,
-                            const wxPoint& pos = wxDefaultPosition,
-                            const wxSize& size = wxDefaultSize,
-                            long style = wxDEFAULT_FRAME_STYLE,
-                            const wxString& name = "frame");
+    wxDocMDIParentFrame(wxDocManager* manager, wxFrame * parent,
+                        wxWindowID id,
+                        const wxString& title,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxDEFAULT_FRAME_STYLE,
+                        const wxString& name = "frame");
     //@}
 
     /**
@@ -71,19 +71,19 @@ public:
 /**
     @class wxDocMDIChildFrame
     @wxheader{docmdi.h}
-    
+
     The wxDocMDIChildFrame class provides a default frame for displaying documents
     on separate windows. This class can only be used for MDI child frames.
-    
+
     The class is part of the document/view framework supported by wxWidgets,
     and cooperates with the wxView, wxDocument,
     wxDocManager and wxDocTemplate classes.
-    
+
     See the example application in @c samples/docview.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_docviewoverview "Document/view overview", wxMDIChildFrame
 */

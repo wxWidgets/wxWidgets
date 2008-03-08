@@ -9,15 +9,15 @@
 /**
     @class wxTopLevelWindow
     @wxheader{toplevel.h}
-    
+
     wxTopLevelWindow is a common base class for wxDialog and
     wxFrame. It is an abstract base class meaning that you never
     work with objects of this class directly, but all of its methods are also
     applicable for the two classes above.
-    
+
     @library{wxcore}
     @category{managedwnd}
-    
+
     @seealso
     wxTopLevelWindow::SetTransparent
 */
@@ -39,7 +39,7 @@ public:
     /**
         Centres the window on screen.
         
-        @param direction 
+        @param direction
         Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
         or wxBOTH.
         
@@ -104,7 +104,7 @@ public:
     /**
         Iconizes or restores the window.
         
-        @param iconize 
+        @param iconize
         If @true, iconizes the window; if @false, shows and restores it.
         
         @sa IsIconized(), Maximize().
@@ -156,7 +156,7 @@ public:
     /**
         Maximizes or restores the window.
         
-        @param maximize 
+        @param maximize
         If @true, maximizes the window, otherwise it restores it.
         
         @sa Iconize()
@@ -189,7 +189,7 @@ public:
     /**
         Sets the icon for this window.
         
-        @param icon 
+        @param icon
         The icon to associate with this window.
         
         @remarks The window takes a 'copy' of icon, but since it uses reference
@@ -204,7 +204,7 @@ public:
         window title bar) instead of scaling, with possibly bad looking results, the
         only icon set by SetIcon().
         
-        @param icons 
+        @param icons
         The icons to associate with this window.
         
         @sa wxIconBundle.
@@ -216,13 +216,13 @@ public:
         phones.
         Unavailable on full keyboard machines.
         
-        @param id 
+        @param id
         Identifier for this button.
         
-        @param label 
+        @param label
         Text to be displayed on the screen area dedicated to this hardware button.
         
-        @param subMenu 
+        @param subMenu
         The menu to be opened after pressing this hardware button.
         
         @sa SetRightMenu().
@@ -248,13 +248,13 @@ public:
         phones.
         Unavailable on full keyboard machines.
         
-        @param id 
+        @param id
         Identifier for this button.
         
-        @param label 
+        @param label
         Text to be displayed on the screen area dedicated to this hardware button.
         
-        @param subMenu 
+        @param subMenu
         The menu to be opened after pressing this hardware button.
         
         @sa SetLeftMenu().
@@ -279,13 +279,13 @@ public:
         increments.
         If a pair of values is not set (or set to -1), no constraints will be used.
         
-        @param incW 
+        @param incW
         Specifies the increment for sizing the width (GTK/Motif/Xt only).
         
-        @param incH 
+        @param incH
         Specifies the increment for sizing the height (GTK/Motif/Xt only).
         
-        @param incSize 
+        @param incSize
         Increment size (only taken into account under X11-based
         ports such as wxGTK/wxMotif/wxX11).
         
@@ -298,15 +298,15 @@ public:
                               int maxH=-1,
                               int incW=-1,
                               int incH=-1);
-        void SetSizeHints(const wxSize& minSize,
-                          const wxSize& maxSize=wxDefaultSize,
-                          const wxSize& incSize=wxDefaultSize);
+    void SetSizeHints(const wxSize& minSize,
+                      const wxSize& maxSize=wxDefaultSize,
+                      const wxSize& incSize=wxDefaultSize);
     //@}
 
     /**
         Sets the window title.
         
-        @param title 
+        @param title
         The window title.
         
         @sa GetTitle()
@@ -316,7 +316,7 @@ public:
     /**
         If the platform supports it will set the window to be translucent
         
-        @param alpha 
+        @param alpha
         Determines how opaque or transparent the window will
           be, if the platform supports the opreration.  A value of 0 sets the
           window to be fully transparent, and a value of 255 sets the window

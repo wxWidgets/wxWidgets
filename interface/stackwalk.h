@@ -9,7 +9,7 @@
 /**
     @class wxStackWalker
     @wxheader{stackwalk.h}
-    
+
     wxStackWalker allows an application to enumerate, or walk, the stack frames
     (the function callstack).
     It is mostly useful in only two situations:
@@ -17,12 +17,12 @@
     programmatically get the location of the crash and, in debug builds, in
     wxApp::OnAssertFailure to report the caller of the failed
     assert.
-    
+
     wxStackWalker works by repeatedly calling
     the wxStackWalker::OnStackFrame method for each frame in the
     stack, so to use it you must derive your own class from it and override this
     method.
-    
+
     This class will not return anything except raw stack frame addresses if the
     debug information is not available. Under Win32 this means that the PDB file
     matching the program being executed should be present. Note that if you use
@@ -36,17 +36,17 @@
     even without it. Of course, all this is only @true if you build using a recent
     enough version of GNU libc which provides the @c backtrace() function
     needed to walk the stack.
-    
+
     @ref overview_debuggingoverview "debugging overview" for how to make it
     available.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxStackFrame
 */
-class wxStackWalker 
+class wxStackWalker
 {
 public:
     /**
@@ -90,19 +90,19 @@ public:
 /**
     @class wxStackFrame
     @wxheader{stackwalk.h}
-    
+
     wxStackFrame represents a single stack frame, or a single function in the call
-    stack, and is used exclusively together with 
+    stack, and is used exclusively together with
     wxStackWalker, see there for a more detailed
     discussion.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxStackWalker
 */
-class wxStackFrame 
+class wxStackFrame
 {
 public:
     /**

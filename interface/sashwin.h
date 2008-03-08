@@ -9,14 +9,14 @@
 /**
     @class wxSashWindow
     @wxheader{sashwin.h}
-    
+
     wxSashWindow allows any of its edges to have a sash which can be dragged
     to resize the window. The actual content window will be created by the
     application
     as a child of wxSashWindow. The window (or an ancestor) will be notified of a
     drag
     via a wxSashEvent notification.
-    
+
     @beginStyleTable
     @style{wxSW_3D}:
            Draws a 3D effect sash and border.
@@ -27,7 +27,7 @@
     @style{wxSW_BORDER}:
            Draws a thin black border.
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_SASH_DRAGGED(id\, func)}:
            Process a wxEVT_SASH_DRAGGED event, when the user has finished
@@ -37,10 +37,10 @@
            finished dragging a sash. The event handler is called when windows
            with ids in the given range have their sashes dragged.
     @endEventTable
-    
+
     @library{wxadv}
     @category{miscwnd}
-    
+
     @seealso
     wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview "Event
     handling overview"
@@ -53,35 +53,35 @@ public:
         Constructs a sash window, which can be a child of a frame, dialog or any other
         non-control window.
         
-        @param parent 
+        @param parent
         Pointer to a parent window.
         
-        @param id 
+        @param id
         Window identifier. If -1, will automatically create an identifier.
         
-        @param pos 
+        @param pos
         Window position. wxDefaultPosition is (-1, -1) which indicates that
         wxSashWindows
         should generate a default position for the window. If using the wxSashWindow
         class directly, supply
         an actual position.
         
-        @param size 
+        @param size
         Window size. wxDefaultSize is (-1, -1) which indicates that wxSashWindows
         should generate a default size for the window.
         
-        @param style 
+        @param style
         Window style. For window styles, please see wxSashWindow.
         
-        @param name 
+        @param name
         Window name.
     */
     wxSashWindow();
-        wxSashWindow(wxWindow* parent, wxWindowID id,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxCLIP_CHILDREN |  wxSW_3D,
-                     const wxString& name = "sashWindow");
+    wxSashWindow(wxWindow* parent, wxWindowID id,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxCLIP_CHILDREN |  wxSW_3D,
+                 const wxString& name = "sashWindow");
     //@}
 
     /**
@@ -112,7 +112,7 @@ public:
     /**
         Returns @true if a sash is visible on the given edge, @false otherwise.
         
-        @param edge 
+        @param edge
         Edge. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
         
         @sa SetSashVisible()
@@ -123,7 +123,7 @@ public:
         Returns @true if the sash has a border, @false otherwise.
         This function is obsolete since the sash border property is unused.
         
-        @param edge 
+        @param edge
         Edge. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
         
         @sa SetSashBorder()
@@ -154,10 +154,10 @@ public:
         Call this function to give the sash a border, or remove the border.
         This function is obsolete since the sash border property is unused.
         
-        @param edge 
+        @param edge
         Edge to change. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
         
-        @param hasBorder 
+        @param hasBorder
         @true to give the sash a border visible, @false to remove it.
     */
     void SetSashBorder(wxSashEdgePosition edge, bool hasBorder);
@@ -165,10 +165,10 @@ public:
     /**
         Call this function to make a sash visible or invisible on a particular edge.
         
-        @param edge 
+        @param edge
         Edge to change. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
         
-        @param visible 
+        @param visible
         @true to make the sash visible, @false to make it invisible.
         
         @sa GetSashVisible()
@@ -180,13 +180,13 @@ public:
 /**
     @class wxSashEvent
     @wxheader{sashwin.h}
-    
+
     A sash event is sent when the sash of a wxSashWindow has been
     dragged by the user.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @seealso
     wxSashWindow, @ref overview_eventhandlingoverview "Event handling overview"
 */

@@ -9,55 +9,55 @@
 /**
     @class wxPropertySheetDialog
     @wxheader{propdlg.h}
-    
+
     This class represents a property sheet dialog: a tabbed dialog
     for showing settings. It is optimized to show flat tabs
     on PocketPC devices, and can be customized to use different
     controllers instead of the default notebook style.
-    
+
     To use this class, call wxPropertySheetDialog::Create from your own
     Create function. Then call wxPropertySheetDialog::CreateButtons, and create
     pages, adding them to the book control.
     Finally call wxPropertySheetDialog::LayoutDialog.
-    
+
     For example:
-    
+
     @code
     bool MyPropertySheetDialog::Create(...)
     {
         if (!wxPropertySheetDialog::Create(...))
             return @false;
-    
+
         CreateButtons(wxOK|wxCANCEL|wxHELP);
-    
+
         // Add page
         wxPanel* panel = new wxPanel(GetBookCtrl(), ...);
         GetBookCtrl()-AddPage(panel, wxT("General"));
-    
+
         LayoutDialog();
         return @true;
     }
     @endcode
-    
+
     If necessary, override CreateBookCtrl and AddBookCtrl to create and add a
     different
     kind of book control. You would then need to use two-step construction for the
     dialog.
     Or, change the style of book control by calling
-    wxPropertySheetDialog::SetSheetStyle 
+    wxPropertySheetDialog::SetSheetStyle
     before calling Create.
-    
+
     The dialogs sample shows this class being used with notebook and toolbook
     controllers (for
     Windows-style and Mac-style settings dialogs).
-    
+
     To make pages of the dialog scroll when the display is too small to fit the
     whole dialog, you can switch
     layout adaptation on globally with wxDialog::EnableLayoutAdaptation or
     per dialog with wxDialog::SetLayoutAdaptationMode. For more
     about layout adaptation, see @ref overview_autoscrollingdialogs "Automatic
     scrolling dialogs".
-    
+
     @library{wxadv}
     @category{managedwnd}
 */

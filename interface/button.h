@@ -9,12 +9,12 @@
 /**
     @class wxButton
     @wxheader{button.h}
-    
+
     A button is a control that contains a text string,
     and is one of the most common elements of a GUI. It may be placed on a
     @ref overview_wxdialog "dialog box" or panel, or indeed
     almost any other window.
-    
+
     @beginStyleTable
     @style{wxBU_LEFT}:
            Left-justifies the label. Windows and GTK+ only.
@@ -30,17 +30,17 @@
     @style{wxBORDER_NONE}:
            Creates a flat button. Windows and GTK+ only.
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_BUTTON(id\, func)}:
            Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is
            clicked.
     @endEventTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{button.png}
-    
+
     @seealso
     wxBitmapButton
 */
@@ -57,41 +57,41 @@ public:
         to
         that, the button will be decorated with stock icons under GTK+ 2.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Button identifier. A value of wxID_ANY indicates a default value.
         
-        @param label 
+        @param label
         Text to be displayed on the button.
         
-        @param pos 
+        @param pos
         Button position.
         
-        @param size 
+        @param size
         Button size. If the default size is specified then the button is sized
         appropriately for the text.
         
-        @param style 
+        @param style
         Window style. See wxButton.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxButton();
-        wxButton(wxWindow* parent, wxWindowID id,
-                 const wxString& label = wxEmptyString,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = 0,
-                 const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = "button");
+    wxButton(wxWindow* parent, wxWindowID id,
+             const wxString& label = wxEmptyString,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = "button");
     //@}
 
     /**
@@ -143,7 +143,7 @@ public:
     /**
         Sets the string label for the button.
         
-        @param label 
+        @param label
         The label to set.
     */
     void SetLabel(const wxString& label);

@@ -9,9 +9,9 @@
 /**
     @class wxRichTextEvent
     @headerfile richtextctrl.h wx/richtext/richtextctrl.h
-    
+
     This is the event class for wxRichTextCtrl notifications.
-    
+
     @library{wxrichtext}
     @category{events}
 */
@@ -23,8 +23,8 @@ public:
         Constructors.
     */
     wxRichTextEvent(const wxRichTextEvent& event);
-        wxRichTextEvent(wxEventType commandType = wxEVT_@NULL,
-                        int winid = 0);
+    wxRichTextEvent(wxEventType commandType = wxEVT_@NULL,
+                    int winid = 0);
     //@}
 
     /**
@@ -105,23 +105,23 @@ public:
 /**
     @class wxRichTextCtrl
     @headerfile richtextctrl.h wx/richtext/richtextctrl.h
-    
+
     wxRichTextCtrl provides a generic, ground-up implementation of a text control
     capable of showing multiple styles and images.
-    
+
     wxRichTextCtrl sends notification events: see wxRichTextEvent.
     It also sends the standard wxTextCtrl events wxEVT_COMMAND_TEXT_ENTER and
     wxEVT_COMMAND_TEXT_UPDATED,
     and wxTextUrlEvent when URL content is clicked.
-    
+
     For more information, see the @ref overview_wxrichtextctrloverview
     "wxRichTextCtrl overview".
-    
+
     @library{wxrichtext}
     @category{ctrl}
     @appearance{richtextctrl.png}
 */
-class wxRichTextCtrl 
+class wxRichTextCtrl
 {
 public:
     //@{
@@ -129,13 +129,13 @@ public:
         Constructors.
     */
     wxRichTextCtrl();
-        wxRichTextCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
-                       const wxString& value = wxEmptyString,
-                       const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& size = wxDefaultSize,
-                       long style = wxRE_MULTILINE,
-                       const wxValidator& validator = wxDefaultValidator,
-                       const wxString& name = wxTextCtrlNameStr);
+    wxRichTextCtrl(wxWindow* parent, wxWindowID id = wxID_ANY,
+                   const wxString& value = wxEmptyString,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxRE_MULTILINE,
+                   const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxTextCtrlNameStr);
     //@}
 
     /**
@@ -401,8 +401,8 @@ public:
     */
     bool ClearListStyle(const wxRichTextRange& range,
                         int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-        bool ClearListStyle(const wxRichTextRange& range,
-                            int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    bool ClearListStyle(const wxRichTextRange& range,
+                        int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
     //@}
 
     /**
@@ -598,7 +598,7 @@ public:
         Returns the buffer associated with the control.
     */
     const wxRichTextBuffer GetBuffer();
-        wxRichTextBuffer GetBuffer();
+    wxRichTextBuffer GetBuffer();
     //@}
 
     /**
@@ -796,9 +796,9 @@ public:
         scrolling).
     */
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long* pos);
-        wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
-                                        wxTextCoord* col,
-                                        wxTextCoord* row);
+    wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                    wxTextCoord* col,
+                                    wxTextCoord* row);
     //@}
 
     /**
@@ -1007,11 +1007,11 @@ public:
                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
                     int startFrom = -1,
                     int listLevel = -1);
-        bool Number(const wxRichTextRange& range,
-                    const wxString& styleName,
-                    int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
-                    int startFrom = -1,
-                    int listLevel = -1);
+    bool Number(const wxRichTextRange& range,
+                const wxString& styleName,
+                int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
+                int startFrom = -1,
+                int listLevel = -1);
     //@}
 
     /**
@@ -1148,10 +1148,10 @@ public:
                      const wxRichTextListStyleDefinition* style,
                      int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
                      int listLevel = -1);
-        bool PromoteList(int promoteBy, const wxRichTextRange& range,
-                         const wxString& styleName,
-                         int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
-                         int listLevel = -1);
+    bool PromoteList(int promoteBy, const wxRichTextRange& range,
+                     const wxString& styleName,
+                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
+                     int listLevel = -1);
     //@}
 
     /**
@@ -1291,11 +1291,11 @@ public:
                       int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
                       int startFrom = -1,
                       int listLevel = -1);
-        bool SetListStyle(const wxRichTextRange& range,
-                          const wxString& styleName,
-                          int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
-                          int startFrom = -1,
-                          int listLevel = -1);
+    bool SetListStyle(const wxRichTextRange& range,
+                      const wxString& styleName,
+                      int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
+                      int startFrom = -1,
+                      int listLevel = -1);
     //@}
 
     /**
@@ -1329,7 +1329,7 @@ public:
     */
     bool SetStyle(const wxRichTextRange& range,
                   const wxTextAttr& style);
-        bool SetStyle(long start, long end, const wxTextAttr& style);
+    bool SetStyle(long start, long end, const wxTextAttr& style);
     //@}
 
     //@{
@@ -1366,9 +1366,9 @@ public:
     bool SetStyleEx(const wxRichTextRange& range,
                     const wxTextAttr& style,
                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-        bool SetStyleEx(long start, long end,
-                        const wxTextAttr& style,
-                        int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    bool SetStyleEx(long start, long end,
+                    const wxTextAttr& style,
+                    int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
     //@}
 
     /**
@@ -1424,11 +1424,11 @@ public:
         for internal and file storage of the raw data.
     */
     bool WriteImage(const wxString& filename, int bitmapType);
-        bool WriteImage(const wxRichTextImageBlock& imageBlock);
-        bool WriteImage(const wxBitmap& bitmap,
-                        int bitmapType = wxBITMAP_TYPE_PNG);
-        bool WriteImage(const wxImage& image,
-                        int bitmapType = wxBITMAP_TYPE_PNG);
+    bool WriteImage(const wxRichTextImageBlock& imageBlock);
+    bool WriteImage(const wxBitmap& bitmap,
+                    int bitmapType = wxBITMAP_TYPE_PNG);
+    bool WriteImage(const wxImage& image,
+                    int bitmapType = wxBITMAP_TYPE_PNG);
     //@}
 
     /**

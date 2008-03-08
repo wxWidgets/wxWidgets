@@ -9,21 +9,21 @@
 /**
     @class wxSpinCtrl
     @wxheader{spinctrl.h}
-    
-    wxSpinCtrl combines wxTextCtrl and 
+
+    wxSpinCtrl combines wxTextCtrl and
     wxSpinButton in one control.
-    
+
     @beginStyleTable
     @style{wxSP_ARROW_KEYS}:
            The user can use arrow keys to change the value.
     @style{wxSP_WRAP}:
            The value wraps at the minimum and maximum.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{spinctrl.png}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview", wxSpinButton,
     wxControl
@@ -37,48 +37,48 @@ public:
         
         Constructor, creating and showing a spin control.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param value 
+        @param value
         Default value.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param pos 
+        @param pos
         Window position. If wxDefaultPosition is specified then a default position
         is chosen.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then a default size is
         chosen.
         
-        @param style 
+        @param style
         Window style. See wxSpinButton.
         
-        @param min 
+        @param min
         Minimal value.
         
-        @param max 
+        @param max
         Maximal value.
         
-        @param initial 
+        @param initial
         Initial value.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create()
     */
     wxSpinCtrl();
-        wxSpinCtrl(wxWindow* parent, wxWindowID id = -1,
-                   const wxString& value = wxEmptyString,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxSP_ARROW_KEYS,
-                   int min = 0, int max = 100,
-                   int initial = 0);
+    wxSpinCtrl(wxWindow* parent, wxWindowID id = -1,
+               const wxString& value = wxEmptyString,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxSP_ARROW_KEYS,
+               int min = 0, int max = 100,
+               int initial = 0);
     //@}
 
     /**
@@ -117,8 +117,8 @@ public:
     void SetRange(int minVal, int maxVal);
 
     /**
-        Select the text in the text part of the control between  positions 
-        @e from (inclusive) and @e to (exclusive). This is similar to 
+        Select the text in the text part of the control between  positions
+        @e from (inclusive) and @e to (exclusive). This is similar to
         wxTextCtrl::SetSelection.
         
         @b NB: this is currently only implemented for Windows and generic versions
@@ -131,6 +131,6 @@ public:
         Sets the value of the spin control.
     */
     void SetValue(const wxString& text);
-        void SetValue(int value);
+    void SetValue(int value);
     //@}
 };

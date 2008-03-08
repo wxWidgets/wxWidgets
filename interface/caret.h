@@ -9,25 +9,25 @@
 /**
     @class wxCaret
     @wxheader{caret.h}
-    
+
     A caret is a blinking cursor showing the position where the typed text will
     appear. The text controls usually have a caret but wxCaret class also allows
     to use a caret in other windows.
-    
+
     Currently, the caret appears as a rectangle of the given size. In the future,
     it will be possible to specify a bitmap to be used for the caret shape.
-    
+
     A caret is always associated with a window and the current caret can be
     retrieved using wxWindow::GetCaret. The same caret
     can't be reused in two different windows.
-    
+
     @library{wxcore}
     @category{misc}
-    
+
     @seealso
     wxCaret::GetBlinkTime
 */
-class wxCaret 
+class wxCaret
 {
 public:
     //@{
@@ -36,8 +36,8 @@ public:
         with the given window.
     */
     wxCaret();
-        wxCaret(wxWindow* window, int width, int height);
-        wxCaret(wxWindowBase* window, const wxSize& size);
+    wxCaret(wxWindow* window, int width, int height);
+    wxCaret(wxWindowBase* window, const wxSize& size);
     //@}
 
     //@{
@@ -46,7 +46,7 @@ public:
         with the given window (same as constructor).
     */
     bool Create(wxWindowBase* window, int width, int height);
-        bool Create(wxWindowBase* window, const wxSize& size);
+    bool Create(wxWindowBase* window, const wxSize& size);
     //@}
 
     /**
@@ -74,7 +74,7 @@ public:
          @c ( x, y )
     */
     void GetPosition(int* x, int* y);
-        wxPoint GetPosition();
+    wxPoint GetPosition();
     //@}
 
     //@{
@@ -95,7 +95,7 @@ public:
          @c ( width, height )
     */
     void GetSize(int* width, int* height);
-        wxSize GetSize();
+    wxSize GetSize();
     //@}
 
     /**
@@ -125,7 +125,7 @@ public:
         Move the caret to given position (in logical coordinates).
     */
     void Move(int x, int y);
-        void Move(const wxPoint& pt);
+    void Move(const wxPoint& pt);
     //@}
 
     /**
@@ -144,7 +144,7 @@ public:
         Changes the size of the caret.
     */
     void SetSize(int width, int height);
-        void SetSize(const wxSize& size);
+    void SetSize(const wxSize& size);
     //@}
 
     /**

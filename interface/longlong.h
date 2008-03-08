@@ -9,36 +9,36 @@
 /**
     @class wxLongLong
     @wxheader{longlong.h}
-    
+
     This class represents a signed 64 bit long number. It is implemented using the
     native 64 bit type where available (machines with 64 bit longs or compilers
     which have (an analog of) @e long long type) and uses the emulation code in
     the other cases which ensures that it is the most efficient solution for
     working with 64 bit integers independently of the architecture.
-    
+
     wxLongLong defines all usual arithmetic operations such as addition,
     subtraction, bitwise shifts and logical operations as well as multiplication
     and division (not yet for the machines without native @e long long). It
-    also has operators for implicit construction from and conversion to the native 
+    also has operators for implicit construction from and conversion to the native
     @e long long type if it exists and @e long.
-    
+
     You would usually use this type in exactly the same manner as any other
     (built-in) arithmetic type. Note that wxLongLong is a signed type, if you
     want unsigned values use wxULongLong which has exactly the same API as
     wxLongLong except when explicitly mentioned otherwise.
-    
+
     If a native (i.e. supported directly by the compiler) 64 bit integer type was
     found to exist, @e wxLongLong_t macro will be defined to correspond to it.
-    Also, in this case only, two additional macros will be defined: 
+    Also, in this case only, two additional macros will be defined:
     wxLongLongFmtSpec for printing 64 bit integers
-    using the standard @c printf() function (but see also 
+    using the standard @c printf() function (but see also
     wxLongLong::ToString for a more portable solution) and
     wxLL for defining 64 bit integer compile-time constants.
-    
+
     @library{wxbase}
     @category{data}
 */
-class wxLongLong 
+class wxLongLong
 {
 public:
     /**
@@ -53,7 +53,7 @@ public:
         or modifying it in place (the second one).  Not in wxULongLong.
     */
     wxLongLong Abs();
-        wxLongLong Abs();
+    wxLongLong Abs();
     //@}
 
     /**
@@ -105,7 +105,7 @@ public:
         Pre/post increment operator.
     */
     wxLongLong operator++();
-        wxLongLong operator++(int );
+    wxLongLong operator++(int );
     //@}
 
     /**
@@ -123,7 +123,7 @@ public:
         Pre/post decrement operator.
     */
     wxLongLong operator--();
-        wxLongLong operator--(int );
+    wxLongLong operator--(int );
     //@}
 
     /**
@@ -154,7 +154,7 @@ public:
             printf("Long long = %" wxLongLongFmtSpec "x\n", ll);
         #endif
     @endcode
-    
+
     @sa wxLL
 */
 
@@ -167,7 +167,7 @@ public:
             unsigned wxLongLong_t ll = wxULL(0x1234567890abcdef);
         #endif
     @endcode
-    
+
     @sa wxLL, wxLongLong
 */
 #define wxLongLong_t wxULL(number)     /* implementation is private */
@@ -180,7 +180,7 @@ public:
             wxLongLong_t ll = wxLL(0x1234567890abcdef);
         #endif
     @endcode
-    
+
     @sa wxULL, wxLongLong
 */
 #define wxLongLong_t wxLL(number)     /* implementation is private */

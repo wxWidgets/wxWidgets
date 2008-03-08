@@ -9,15 +9,15 @@
 /**
     @class wxPreviewControlBar
     @wxheader{print.h}
-    
+
     This is the default implementation of the preview control bar, a panel
     with buttons and a zoom control. You can derive a new class from this and
     override some or all member functions to change the behaviour and appearance;
     or you can leave it as it is.
-    
+
     @library{wxbase}
     @category{printing}
-    
+
     @seealso
     wxPreviewFrame, wxPreviewCanvas, wxPrintPreview
 */
@@ -81,25 +81,25 @@ public:
         Equivalent to a combination of wxPREVIEW_PREVIOUS, wxPREVIEW_NEXT and
         wxPREVIEW_ZOOM.
     */
-     wxPreviewControlBar(wxPrintPreview* preview, long buttons,
-                         wxWindow* parent,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         long style = 0,
-                         const wxString& name = "panel");
+    wxPreviewControlBar(wxPrintPreview* preview, long buttons,
+                        wxWindow* parent,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = "panel");
 };
 
 
 /**
     @class wxPreviewCanvas
     @wxheader{print.h}
-    
+
     A preview canvas is the default canvas used by the print preview
     system to display the preview.
-    
+
     @library{wxbase}
     @category{printing}
-    
+
     @seealso
     wxPreviewFrame, wxPreviewControlBar, wxPrintPreview
 */
@@ -130,14 +130,14 @@ public:
 /**
     @class wxPreviewFrame
     @wxheader{print.h}
-    
+
     This class provides the default method of managing the print preview interface.
     Member functions may be overridden to replace functionality, or the
     class may be used without derivation.
-    
+
     @library{wxbase}
     @category{printing}
-    
+
     @seealso
     wxPreviewCanvas, wxPreviewControlBar, wxPrintPreview
 */
@@ -194,17 +194,17 @@ public:
 /**
     @class wxPrintPreview
     @wxheader{print.h}
-    
+
     Objects of this class manage the print preview process. The object is passed
     a wxPrintout object, and the wxPrintPreview object itself is passed to
     a wxPreviewFrame object. Previewing is started by initializing and showing
     the preview frame. Unlike wxPrinter::Print, flow of control returns to the
     application
     immediately after the frame is shown.
-    
+
     @library{wxbase}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
     wxPrintDialog, wxPrintout, wxPrinter, wxPreviewCanvas, wxPreviewControlBar, wxPreviewFrame.
@@ -346,17 +346,17 @@ public:
 /**
     @class wxPrinter
     @wxheader{print.h}
-    
+
     This class represents the Windows or PostScript printer, and is the vehicle
     through
     which printing may be launched by an application. Printing can also
     be achieved through using of lower functions and classes, but
     this and associated classes provide a more convenient and general
     method of printing.
-    
+
     @library{wxbase}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
     wxPrintDialog, wxPrintout, wxPrintPreview.
@@ -384,8 +384,8 @@ public:
 
     /**
         Return last error. Valid after calling Print(),
-        PrintDialog() or 
-        wxPrintPreview::Print. These functions 
+        PrintDialog() or
+        wxPrintPreview::Print. These functions
         set last error to @b wxPRINTER_NO_ERROR if no error happened.
         
         Returned value is one of the following:
@@ -457,13 +457,13 @@ public:
 /**
     @class wxPrintout
     @wxheader{print.h}
-    
+
     This class encapsulates the functionality of printing out an application
     document. A new class must be derived and members overridden to respond to calls
     such as OnPrintPage and HasPage and to render the print image onto an associated
     wxDC. Instances of this class are passed to wxPrinter::Print or
     to a wxPrintPreview object to initiate printing or previewing.
-    
+
     Your derived wxPrintout is responsible for drawing both the preview image and
     the printed page. If your windows' drawing routines accept an arbitrary DC as an
     argument, you can re-use those routines within your wxPrintout subclass to draw
@@ -479,10 +479,10 @@ public:
     can easily use a single drawing routine to draw on your application's windows,
     to create the print preview image, and to create the printed paper image, and
     achieve a common appearance to the preview image and the printed page.
-    
+
     @library{wxbase}
     @category{printing}
-    
+
     @seealso
     @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
     wxPrintDialog, wxPageSetupDialog, wxPrinter, wxPrintPreview
@@ -508,7 +508,7 @@ public:
         origin is at the top left corner of the page rectangle. On MSW and Mac, the page
         rectangle is the printable area of the page. On other platforms and PostScript
         printing, the page rectangle is the entire paper. Use this if you want your
-        printed image as large as possible, but with the caveat that on some platforms, 
+        printed image as large as possible, but with the caveat that on some platforms,
         portions of the image might be cut off at the edges.
     */
     void FitThisSizeToPage(const wxSize& imageSize);
@@ -555,7 +555,7 @@ public:
 
     /**
         Return the rectangle corresponding to the page in the associated wxDC's
-        logical coordinates for the current user scale and device origin. 
+        logical coordinates for the current user scale and device origin.
         On MSW and Mac, this will be the printable area of the paper. On other platforms
         and PostScript printing, this will be the full paper rectangle.
     */

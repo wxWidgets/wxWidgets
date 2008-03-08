@@ -9,33 +9,33 @@
 /**
     @class wxMediaEvent
     @wxheader{mediactrl.h}
-    
+
     Event wxMediaCtrl uses.
-    
+
     @library{wxmedia}
     @category{FIXME}
 */
 class wxMediaEvent : public wxNotifyEvent
 {
 public:
-    
+
 };
 
 
 /**
     @class wxMediaCtrl
     @wxheader{mediactrl.h}
-    
-    wxMediaCtrl is a class for displaying types of 
+
+    wxMediaCtrl is a class for displaying types of
     media, such as videos, audio files, natively through native codecs.
-    
+
     wxMediaCtrl uses native backends to render media, for example on Windows
-    there is a ActiveMovie/DirectShow backend, and on Macintosh there is a 
+    there is a ActiveMovie/DirectShow backend, and on Macintosh there is a
     QuickTime backend.
-    
+
     @library{wxmedia}
     @category{media}
-    
+
     @seealso
     wxMediaEvent
 */
@@ -47,9 +47,9 @@ public:
         ,
                 @b const wxPoint&
         
-        @param pos = wxDefaultPosition, 
-                const wxSize& size = wxDefaultSize, 
-                long style = 0, 
+        @param pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
                 const wxString& szBackend = wxT(""),
                 const wxValidatorvalidator = wxDefaultValidator,
                 const wxString& name = wxPanelNameStr
@@ -58,44 +58,44 @@ public:
         Constructor that calls Create.  You may prefer to call Create directly to check
         to see if wxMediaCtrl is available on the system.
         
-        parent 
+        parent
         parent of this control.  Must not be @NULL.
         
-        @param id 
+        @param id
         id to use for events
         
-        @param fileName 
+        @param fileName
         If not empty, the path of a file to open.
         
-        @param pos 
+        @param pos
         Position to put control at.
         
-        @param size 
+        @param size
         Size to put the control at and to stretch movie to.
         
-        @param style 
+        @param style
         Optional styles.
         
-        @param szBackend 
+        @param szBackend
         Name of backend you want to use, leave blank to make
         wxMediaCtrl figure it out.
         
-        @param validator 
+        @param validator
         validator to use.
         
-        @param name 
+        @param name
         Window name.
     */
     wxMediaCtrl();
-        wxMediaCtrl(wxWindow* parent, wxWindowID id);
+    wxMediaCtrl(wxWindow* parent, wxWindowID id);
     //@}
 
     /**
         Generally, you should almost certainly leave this part up to
         wxMediaCtrl - but if you need a certain backend for a particular
-        reason, such as QuickTime for playing .mov files, all you need 
+        reason, such as QuickTime for playing .mov files, all you need
         to do to choose a specific backend is to pass the
-        name of the backend class to 
+        name of the backend class to
         Create().
         
         The following are valid backend identifiers -
@@ -103,12 +103,12 @@ public:
         @b wxMEDIABACKEND_DIRECTSHOW
         
         
-         
+        
         Use ActiveMovie/DirectShow.  Uses the native ActiveMovie
         (I.E. DirectShow) control. Default backend on Windows and
         supported by nearly all Windows versions, even some
         Windows CE versions. May display a windows media player
-        logo while inactive. 
+        logo while inactive.
         
         @b wxMEDIABACKEND_QUICKTIME
         
@@ -142,9 +142,9 @@ public:
         ,
                 @b const wxPoint&
         
-        @param pos = wxDefaultPosition, 
-                const wxSize& size = wxDefaultSize, 
-                long style = 0, 
+        @param pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
                 const wxString& szBackend = wxT(""),
                 const wxValidatorvalidator = wxDefaultValidator,
                 const wxString& name = wxPanelNameStr
@@ -156,32 +156,32 @@ public:
         If you specify a file to open via fileName and you don't specify a backend to
         use, wxMediaCtrl tries each of its backends until one that can render the path referred to by fileName can be found.
         
-        parent 
+        parent
         parent of this control.  Must not be @NULL.
         
-        @param id 
+        @param id
         id to use for events
         
-        @param fileName 
+        @param fileName
         If not empty, the path of a file to open.
         
-        @param pos 
+        @param pos
         Position to put control at.
         
-        @param size 
+        @param size
         Size to put the control at and to stretch movie to.
         
-        @param style 
+        @param style
         Optional styles.
         
-        @param szBackend 
+        @param szBackend
         Name of backend you want to use, leave blank to make
         wxMediaCtrl figure it out.
         
-        @param validator 
+        @param validator
         validator to use.
         
-        @param name 
+        @param name
         Window name.
     */
     bool Create(wxWindow* parent, wxWindowID id);
@@ -278,11 +278,11 @@ public:
         Example:
         
         When wxMediaCtrl stops, either by the EVT_MEDIA_STOP not being
-        vetoed, or by manually calling 
+        vetoed, or by manually calling
         Stop(), where it actually
         stops is not at the beginning, rather, but at the beginning of
         the stream.  That is, when it stops and play is called, playback
-        is gauranteed to start at the beginning of the media.  This is 
+        is gauranteed to start at the beginning of the media.  This is
         because some streams are not seekable, and when stop is called
         on them they return to the beginning, thus wxMediaCtrl tries
         to keep consistant for all types of media.
@@ -324,21 +324,21 @@ public:
 
     /**
         Depending upon the backend, wxMediaCtrl can render
-        and display pretty much any kind of media that the native system can - 
+        and display pretty much any kind of media that the native system can -
         such as an image, mpeg video, or mp3 (without license restrictions -
         since it relies on native system calls that may not technically
         have mp3 decoding available, for example, it falls outside the
         realm of licensing restrictions).
         
-        For general operation, all you need to do is call 
+        For general operation, all you need to do is call
         Load() to load the file
         you want to render, catch the EVT_MEDIA_LOADED event,
-        and then call Play() 
+        and then call Play()
         to show the video/audio of the media in that event.
         
         More complex operations are generally more heavily dependant on the
         capabilities of the backend.  For example, QuickTime cannot set
-        the playback rate of certain streaming media - while DirectShow is 
+        the playback rate of certain streaming media - while DirectShow is
         slightly more flexible in that regard.
     */
 

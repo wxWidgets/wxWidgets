@@ -9,11 +9,11 @@
 /**
     @class wxRichTextStyleListCtrl
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
-    
+
     This class incorporates a wxRichTextStyleListBox and
     a choice control that allows the user to select the category of style to view.
     It is demonstrated in the wxRichTextCtrl sample in @c samples/richtext.
-    
+
     To use wxRichTextStyleListCtrl, add the control to your window hierarchy and
     call wxRichTextStyleListCtrl::SetStyleType with
     one of wxRichTextStyleListBox::wxRICHTEXT_STYLE_ALL,
@@ -23,12 +23,12 @@
     Associate the control with a style sheet and rich text control with
     SetStyleSheet and SetRichTextCtrl,
     so that when a style is double-clicked, it is applied to the selection.
-    
+
     @beginStyleTable
     @style{wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR}:
            This style hides the category selection control.
     @endStyleTable
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -44,7 +44,7 @@ public:
                             const wxPoint& pos = wxDefaultPosition,
                             const wxSize& size = wxDefaultSize,
                             long style = 0);
-        wxRichTextStyleListCtrl();
+    wxRichTextStyleListCtrl();
     //@}
 
     /**
@@ -108,9 +108,9 @@ public:
 /**
     @class wxRichTextStyleDefinition
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
-    
+
     This is a base class for paragraph and character styles.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -147,7 +147,7 @@ public:
         Returns the attributes associated with this style.
     */
     wxTextAttr GetStyle();
-        const wxTextAttr GetStyle();
+    const wxTextAttr GetStyle();
     //@}
 
     /**
@@ -181,10 +181,10 @@ public:
 /**
     @class wxRichTextParagraphStyleDefinition
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
-    
+
     This class represents a paragraph style definition, usually added to a
     wxRichTextStyleSheet.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -216,15 +216,15 @@ public:
 /**
     @class wxRichTextStyleListBox
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
-    
+
     This is a listbox that can display the styles in a wxRichTextStyleSheet,
     and apply the selection to an associated wxRichTextCtrl.
-    
+
     See @c samples/richtext for an example of how to use it.
-    
+
     @library{wxrichtext}
     @category{FIXME}
-    
+
     @seealso
     wxRichTextStyleComboCtrl, @ref overview_wxrichtextctrloverview "wxRichTextCtrl
     overview"
@@ -339,15 +339,15 @@ public:
 /**
     @class wxRichTextStyleComboCtrl
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
-    
+
     This is a combo control that can display the styles in a wxRichTextStyleSheet,
     and apply the selection to an associated wxRichTextCtrl.
-    
+
     See @c samples/richtext for an example of how to use it.
-    
+
     @library{wxrichtext}
     @category{FIXME}
-    
+
     @seealso
     wxRichTextStyleListBox, @ref overview_wxrichtextctrloverview "wxRichTextCtrl
     overview"
@@ -399,10 +399,10 @@ public:
 /**
     @class wxRichTextCharacterStyleDefinition
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
-    
+
     This class represents a character style definition, usually added to a
     wxRichTextStyleSheet.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -424,24 +424,24 @@ public:
 /**
     @class wxRichTextListStyleDefinition
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
-    
+
     This class represents a list style definition, usually added to a
     wxRichTextStyleSheet.
-    
+
     The class inherits paragraph attributes from
     wxRichTextStyleParagraphDefinition, and adds 10 further attribute objects, one for each level of a list.
     When applying a list style to a paragraph, the list style's base and
     appropriate level attributes are merged with the
     paragraph's existing attributes.
-    
+
     You can apply a list style to one or more paragraphs using
     wxRichTextCtrl::SetListStyle. You
     can also use the functions wxRichTextCtrl::NumberList,
-    wxRichTextCtrl::PromoteList and 
+    wxRichTextCtrl::PromoteList and
     wxRichTextCtrl::ClearListStyle. As usual, there are wxRichTextBuffer versions
     of these functions
     so that you can apply them directly to a buffer without requiring a control.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -517,10 +517,10 @@ public:
         form is for convenient setting of the most commonly-used attributes.
     */
     void SetLevelAttributes(int level, const wxTextAttr& attr);
-        void SetLevelAttributes(int level, int leftIndent,
-                                int leftSubIndent,
-                                int bulletStyle,
-                                const wxString& bulletSymbol = wxEmptyString);
+    void SetLevelAttributes(int level, int leftIndent,
+                            int leftSubIndent,
+                            int bulletStyle,
+                            const wxString& bulletSymbol = wxEmptyString);
     //@}
 };
 
@@ -528,14 +528,14 @@ public:
 /**
     @class wxRichTextStyleSheet
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
-    
+
     A style sheet contains named paragraph and character styles that make it
     easy for a user to apply combinations of attributes to a wxRichTextCtrl.
-    
+
     You can use a wxRichTextStyleListBox in your
     user interface to show available styles to the user, and allow application
     of styles to the control.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */

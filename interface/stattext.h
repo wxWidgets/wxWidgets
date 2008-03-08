@@ -9,9 +9,9 @@
 /**
     @class wxStaticText
     @wxheader{stattext.h}
-    
+
     A static text control displays one or more lines of read-only text.
-    
+
     @beginStyleTable
     @style{wxALIGN_LEFT}:
            Align the text to the left
@@ -37,11 +37,11 @@
     @style{wxST_MARKUP}:
            Support markup in the label; see SetLabel for more information
     @endStyleTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{statictext.png}
-    
+
     @seealso
     wxStaticBitmap, wxStaticBox
 */
@@ -52,36 +52,36 @@ public:
     /**
         Constructor, creating and showing a text control.
         
-        @param parent 
+        @param parent
         Parent window. Should not be @NULL.
         
-        @param id 
+        @param id
         Control identifier. A value of -1 denotes a default value.
         
-        @param label 
+        @param label
         Text label.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size.
         
-        @param style 
+        @param style
         Window style. See wxStaticText.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create()
     */
     wxStaticText();
-        wxStaticText(wxWindow* parent, wxWindowID id,
-                     const wxString& label,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = 0,
-                     const wxString& name = "staticText");
+    wxStaticText(wxWindow* parent, wxWindowID id,
+                 const wxString& label,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxString& name = "staticText");
     //@}
 
     /**
@@ -108,15 +108,15 @@ public:
     //@{
     /**
         The first form returns the control's label without the mnemonics characters (if
-        any) 
+        any)
         and without the markup (if the control has @c wxST_MARKUP style).
         
         The second (static) version returns the given @e label string without the
-        mnemonics 
+        mnemonics
         characters (if any) and without the markup.
     */
     wxString GetLabelText();
-        static wxString GetLabelText(const wxString& label);
+    static wxString GetLabelText(const wxString& label);
     //@}
 
     /**
@@ -192,10 +192,10 @@ public:
         
         @b Escape as
         
-        @c 
+        @c
         
         
-        @c amp; or as @c 
+        @c amp; or as @c
         
         @c '
         
@@ -207,12 +207,12 @@ public:
         
         @c quot;
         
-        @c 
+        @c
         
         
         @c lt;
         
-        @c 
+        @c
         
         
         @c gt;
@@ -221,7 +221,7 @@ public:
         mnemonics; see wxControl::SetLabel.
         Example:
         
-        @param label 
+        @param label
         The new label to set. It may contain newline characters and the markup tags
         described above.
     */

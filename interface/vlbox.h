@@ -9,7 +9,7 @@
 /**
     @class wxVListBox
     @wxheader{vlbox.h}
-    
+
     wxVListBox is a listbox-like control with the following two main differences
     from a regular listbox: it can have an arbitrarily huge number of items because
     it doesn't store them itself but uses wxVListBox::OnDrawItem
@@ -17,23 +17,23 @@
     have variable height as determined by
     wxVListBox::OnMeasureItem (so it is also a listbox
     with the lines of Variable height).
-    
+
     Also, as a consequence of its virtual nature, it doesn't have any methods to
     append or insert items in it as it isn't necessary to do it: you just have to
     call wxVListBox::SetItemCount to tell the control how
     many items it should display. Of course, this also means that you will never
     use this class directly because it has pure virtual functions, but will need to
     derive your own class, such as wxHtmlListBox, from it.
-    
+
     However it emits the same events as wxListBox and the same
     event macros may be used with it. Since wxVListBox does not store its items
     itself, the events will only contain the index, not any contents such as the
     string of an item.
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{vlistbox.png}
-    
+
     @seealso
     wxSimpleHtmlListBox, wxHtmlListBox
 */
@@ -49,7 +49,7 @@ public:
                const wxSize& size = wxDefaultSize,
                size_t countItems = 0, long style = 0,
                const wxString& name = wxVListBoxNameStr);
-        wxVListBox();
+    wxVListBox();
     //@}
 
     /**
@@ -186,14 +186,14 @@ public:
         The derived class must implement this function to actually draw the item
         with the given index on the provided DC.
         
-        @param dc 
+        @param dc
         The device context to use for drawing
         
-        @param rect 
+        @param rect
         The bounding rectangle for the item being drawn (DC clipping
         region is set to this rectangle before calling this function)
         
-        @param n 
+        @param n
         The index of the item to be drawn
     */
     void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n);
@@ -205,13 +205,13 @@ public:
         
         The base class version of this method doesn't do anything.
         
-        @param dc 
+        @param dc
         The device context to use for drawing
         
-        @param rect 
+        @param rect
         The bounding rectangle for the item
         
-        @param n 
+        @param n
         The index of the item
     */
     void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n);
@@ -275,7 +275,7 @@ public:
         By default both margins are 0.
     */
     void SetMargins(const wxPoint& pt);
-        void SetMargins(wxCoord x, wxCoord y);
+    void SetMargins(wxCoord x, wxCoord y);
     //@}
 
     /**

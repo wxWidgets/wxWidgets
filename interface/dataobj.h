@@ -9,27 +9,27 @@
 /**
     @class wxCustomDataObject
     @wxheader{dataobj.h}
-    
-    wxCustomDataObject is a specialization of 
+
+    wxCustomDataObject is a specialization of
     wxDataObjectSimple for some
     application-specific data in arbitrary (either custom or one of the standard
     ones). The only restriction is that it is supposed that this data can be
     copied bitwise (i.e. with @c memcpy()), so it would be a bad idea to make
     it contain a C++ object (though C struct is fine).
-    
+
     By default, wxCustomDataObject stores the data inside in a buffer. To put the
-    data into the buffer you may use either 
-    wxCustomDataObject::SetData or 
+    data into the buffer you may use either
+    wxCustomDataObject::SetData or
     wxCustomDataObject::TakeData depending on whether you want
     the object to make a copy of data or not.
-    
+
     If you already store the data in another place, it may be more convenient and
     efficient to provide the data on-demand which is possible too if you override
     the virtual functions mentioned below.
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     wxDataObject
 */
@@ -38,7 +38,7 @@ class wxCustomDataObject : public wxDataObjectSimple
 public:
     /**
         The constructor accepts a @e format argument which specifies the (single)
-        format supported by this object. If it isn't set here, 
+        format supported by this object. If it isn't set here,
         wxDataObjectSimple::SetFormat should be used.
     */
     wxCustomDataObject(const wxDataFormat& format = wxFormatInvalid);
@@ -95,23 +95,23 @@ public:
 /**
     @class wxDataObjectComposite
     @wxheader{dataobj.h}
-    
-    wxDataObjectComposite is the simplest 
+
+    wxDataObjectComposite is the simplest
     wxDataObject derivation which may be used to support
-    multiple formats. It contains several 
+    multiple formats. It contains several
     wxDataObjectSimple objects and supports any
     format supported by at least one of them. Only one of these data objects is
     @e preferred (the first one if not explicitly changed by using the second
     parameter of wxDataObjectComposite::Add) and its format determines
     the preferred format of the composite data object as well.
-    
+
     See wxDataObject documentation for the reasons why you
     might prefer to use wxDataObject directly instead of wxDataObjectComposite for
     efficiency reasons.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxdndoverview "Clipboard and drag and drop overview",
     wxDataObject, wxDataObjectSimple, wxFileDataObject, wxTextDataObject, wxBitmapDataObject
@@ -143,26 +143,26 @@ public:
 /**
     @class wxDataObjectSimple
     @wxheader{dataobj.h}
-    
-    This is the simplest possible implementation of the 
+
+    This is the simplest possible implementation of the
     wxDataObject class. The data object of (a class derived
     from) this class only supports one format, so the number of virtual functions
     to be implemented is reduced.
-    
+
     Notice that this is still an abstract base class and cannot be used but should
     be derived from.
-    
+
     @b wxPython note: If you wish to create a derived wxDataObjectSimple class in
     wxPython you should derive the class from wxPyDataObjectSimple
     in order to get Python-aware capabilities for the various virtual
     methods.
-    
+
     @b wxPerl note: In wxPerl, you need to derive your data object class
     from Wx::PlDataObjectSimple.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
     overview_samplednd "DnD sample", wxFileDataObject, wxTextDataObject, wxBitmapDataObject
@@ -213,22 +213,22 @@ public:
 /**
     @class wxBitmapDataObject
     @wxheader{dataobj.h}
-    
+
     wxBitmapDataObject is a specialization of wxDataObject for bitmap data. It can
-    be used without change to paste data into the 
+    be used without change to paste data into the
     wxClipboard or a wxDropSource. A
     user may wish to derive a new class from this class for providing a bitmap
     on-demand in order to minimize memory consumption when offering data in several
     formats, such as a bitmap and GIF.
-    
+
     @b wxPython note: If you wish to create a derived wxBitmapDataObject class in
     wxPython you should derive the class from wxPyBitmapDataObject
     in order to get Python-aware capabilities for the various virtual
     methods.
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     @ref overview_wxdndoverview "Clipboard and drag and drop overview",
     wxDataObject, wxDataObjectSimple, wxFileDataObject, wxTextDataObject, wxDataObject
@@ -237,7 +237,7 @@ class wxBitmapDataObject : public wxDataObjectSimple
 {
 public:
     /**
-        Constructor, optionally passing a bitmap (otherwise use 
+        Constructor, optionally passing a bitmap (otherwise use
         SetBitmap() later).
     */
     wxBitmapDataObject(const wxBitmap& bitmap = wxNullBitmap);
@@ -262,64 +262,64 @@ public:
 /**
     @class wxDataFormat
     @wxheader{dataobj.h}
-    
+
     A wxDataFormat is an encapsulation of a platform-specific format handle which
     is used by the system for the clipboard and drag and drop operations. The
     applications are usually only interested in, for example, pasting data from the
     clipboard only if the data is in a format the program understands and a data
     format is something which uniquely identifies this format.
-    
+
     On the system level, a data format is usually just a number (@c CLIPFORMAT
     under Windows or @c Atom under X11, for example) and the standard formats
     are, indeed, just numbers which can be implicitly converted to wxDataFormat.
     The standard formats are:
-    
-    
-    
+
+
+
     wxDF_INVALID
-    
-    
+
+
     An invalid format - used as default argument for
     functions taking a wxDataFormat argument sometimes
-    
-    
+
+
     wxDF_TEXT
-    
-    
+
+
     Text format (wxString)
-    
-    
+
+
     wxDF_BITMAP
-    
-    
+
+
     A bitmap (wxBitmap)
-    
-    
+
+
     wxDF_METAFILE
-    
-    
+
+
     A metafile (wxMetafile, Windows only)
-    
-    
+
+
     wxDF_FILENAME
-    
-    
+
+
     A list of filenames
-    
-    
+
+
     wxDF_HTML
-    
-    
+
+
     An HTML string. This is only valid when passed to wxSetClipboardData
     when compiled with Visual C++ in non-Unicode mode
-    
-    
-    
+
+
+
     As mentioned above, these standard formats may be passed to any function taking
     wxDataFormat argument because wxDataFormat has an implicit conversion from
     them (or, to be precise from the type @c wxDataFormat::NativeFormat which is
     the type used by the underlying platform for data formats).
-    
+
     Aside the standard formats, the application may also use custom formats which
     are identified by their names (strings) and not numeric identifiers. Although
     internally custom format must be created (or @e registered) first, you
@@ -329,19 +329,19 @@ public:
     with non-default constructor because their constructors are executed before the
     program has time to perform all necessary initialisations and so an attempt to
     do clipboard format registration at this time will usually lead to a crash!
-    
+
     @library{wxbase}
     @category{dnd}
-    
+
     @seealso
     @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
     overview_samplednd "DnD sample", wxDataObject
 */
-class wxDataFormat 
+class wxDataFormat
 {
 public:
     /**
-        Constructs a data format object for a custom format identified by its name 
+        Constructs a data format object for a custom format identified by its name
         @e format.
     */
     wxDataFormat(const wxChar format);
@@ -382,26 +382,26 @@ public:
 /**
     @class wxURLDataObject
     @wxheader{dataobj.h}
-    
+
     wxURLDataObject is a wxDataObject containing an URL
     and can be used e.g. when you need to put an URL on or retrieve it from the
     clipboard:
-    
+
     @code
     wxTheClipboard-SetData(new wxURLDataObject(url));
     @endcode
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     @ref overview_wxdndoverview "Clipboard and drag and drop overview", wxDataObject
 */
-class wxURLDataObject 
+class wxURLDataObject
 {
 public:
     /**
-        Constructor, may be used to initialize the URL. If @e url is empty, 
+        Constructor, may be used to initialize the URL. If @e url is empty,
         SetURL() can be used later.
     */
     wxURLDataObject(const wxString& url = wxEmptyString);
@@ -421,21 +421,21 @@ public:
 /**
     @class wxDataObject
     @wxheader{dataobj.h}
-    
+
     A wxDataObject represents data that can be copied to or from the clipboard, or
     dragged and dropped. The important thing about wxDataObject is that this is a
     'smart' piece of data unlike 'dumb' data containers such as memory
     buffers or files. Being 'smart' here means that the data object itself should
     know what data formats it supports and how to render itself in each of
     its supported formats.
-    
+
     A supported format, incidentally, is exactly the format in which the data can
     be requested from a data object or from which the data object may be set. In
     the general case, an object may support different formats on 'input' and
     'output', i.e. it may be able to render itself in a given format but not be
     created from data on this format or vice versa. wxDataObject defines an
     enumeration type
-    
+
     @code
     enum Direction
     {
@@ -443,63 +443,63 @@ public:
         Set  = 0x02     // format is supported by SetData()
     };
     @endcode
-    
-    which distinguishes between them. See 
+
+    which distinguishes between them. See
     wxDataFormat documentation for more about formats.
-    
+
     Not surprisingly, being 'smart' comes at a price of added complexity. This is
     reasonable for the situations when you really need to support multiple formats,
     but may be annoying if you only want to do something simple like cut and paste
     text.
-    
+
     To provide a solution for both cases, wxWidgets has two predefined classes
-    which derive from wxDataObject: wxDataObjectSimple and 
-    wxDataObjectComposite. 
+    which derive from wxDataObject: wxDataObjectSimple and
+    wxDataObjectComposite.
     wxDataObjectSimple is
     the simplest wxDataObject possible and only holds data in a single format (such
     as HTML or text) and wxDataObjectComposite is
     the simplest way to implement a wxDataObject that does support multiple formats
     because it achieves this by simply holding several wxDataObjectSimple objects.
-    
+
     So, you have several solutions when you need a wxDataObject class (and you need
     one as soon as you want to transfer data via the clipboard or drag and drop):
-    
-    
-    
+
+
+
     @b 1. Use one of the built-in classes
-    
-    
+
+
     You may use wxTextDataObject,
     wxBitmapDataObject or wxFileDataObject in the simplest cases when you only need
     to support one format and your data is either text, bitmap or list of files.
-    
-    
+
+
     @b 2. Use wxDataObjectSimple
-    
-    
+
+
     Deriving from wxDataObjectSimple is the simplest
     solution for custom data - you will only support one format and so probably
     won't be able to communicate with other programs, but data transfer will work
     in your program (or between different copies of it).
-    
-    
+
+
     @b 3. Use wxDataObjectComposite
-    
-    
+
+
     This is a simple but powerful
     solution which allows you to support any number of formats (either
     standard or custom if you combine it with the previous solution).
-    
-    
+
+
     @b 4. Use wxDataObject directly
-    
-    
+
+
     This is the solution for
     maximal flexibility and efficiency, but it is also the most difficult to
     implement.
-    
-    
-    
+
+
+
     Please note that the easiest way to use drag and drop and the clipboard with
     multiple formats is by using wxDataObjectComposite, but it is not the most
     efficient one as each wxDataObjectSimple would contain the whole data in its
@@ -508,22 +508,22 @@ public:
     the clipboard and even today's computers are in trouble. For this case, you
     will have to derive from wxDataObject directly and make it enumerate its
     formats and provide the data in the requested format on demand.
-    
+
     Note that neither the GTK+ data transfer mechanisms for clipboard and
     drag and drop, nor OLE data transfer, copy any data until another application
     actually requests the data. This is in contrast to the 'feel' offered to the
     user of a program who would normally think that the data resides in the
     clipboard after having pressed 'Copy' - in reality it is only declared to be
     available.
-    
+
     There are several predefined data object classes derived from
-    wxDataObjectSimple: wxFileDataObject, 
+    wxDataObjectSimple: wxFileDataObject,
     wxTextDataObject,
     wxBitmapDataObject and
     wxURLDataObject
     which can be used without change.
-    
-    You may also derive your own data object classes from 
+
+    You may also derive your own data object classes from
     wxCustomDataObject for user-defined types. The
     format of user-defined data is given as a mime-type string literal, such as
     "application/word" or "image/png". These strings are used as they are under
@@ -531,22 +531,22 @@ public:
     Windows equivalent under Win32 (using the OLE IDataObject for data exchange to
     and from the clipboard and for drag and drop). Note that the format string
     translation under Windows is not yet finished.
-    
+
     @b wxPython note: At this time this class is not directly usable from wxPython.
-    Derive a class from wxPyDataObjectSimple 
+    Derive a class from wxPyDataObjectSimple
     instead.
-    
+
     @b wxPerl note: This class is not currently usable from wxPerl; you may
     use Wx::PlDataObjectSimple instead.
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
     overview_samplednd "DnD sample", wxFileDataObject, wxTextDataObject, wxBitmapDataObject, wxCustomDataObject, wxDropTarget, wxDropSource, wxTextDropTarget, wxFileDropTarget
 */
-class wxDataObject 
+class wxDataObject
 {
 public:
     /**
@@ -560,7 +560,7 @@ public:
     ~wxDataObject();
 
     /**
-        Copy all supported formats in the given direction to the array pointed to by 
+        Copy all supported formats in the given direction to the array pointed to by
         @e formats. There is enough space for GetFormatCount(dir) formats in it.
     */
     virtual void GetAllFormats(wxDataFormat * formats,
@@ -603,30 +603,30 @@ public:
 /**
     @class wxTextDataObject
     @wxheader{dataobj.h}
-    
+
     wxTextDataObject is a specialization of wxDataObject for text data. It can be
-    used without change to paste data into the wxClipboard 
+    used without change to paste data into the wxClipboard
     or a wxDropSource. A user may wish to derive a new
     class from this class for providing text on-demand in order to minimize memory
     consumption when offering data in several formats, such as plain text and RTF
     because by default the text is stored in a string in this class, but it might
-    as well be generated when requested. For this, 
-    wxTextDataObject::GetTextLength and 
+    as well be generated when requested. For this,
+    wxTextDataObject::GetTextLength and
     wxTextDataObject::GetText will have to be overridden.
-    
+
     Note that if you already have the text inside a string, you will not achieve
     any efficiency gain by overriding these functions because copying wxStrings is
     already a very efficient operation (data is not actually copied because
     wxStrings are reference counted).
-    
+
     @b wxPython note: If you wish to create a derived wxTextDataObject class in
     wxPython you should derive the class from wxPyTextDataObject
     in order to get Python-aware capabilities for the various virtual
     methods.
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     @ref overview_wxdndoverview "Clipboard and drag and drop overview",
     wxDataObject, wxDataObjectSimple, wxFileDataObject, wxBitmapDataObject
@@ -635,7 +635,7 @@ class wxTextDataObject : public wxDataObjectSimple
 {
 public:
     /**
-        Constructor, may be used to initialise the text (otherwise 
+        Constructor, may be used to initialise the text (otherwise
         SetText() should be used later).
     */
     wxTextDataObject(const wxString& text = wxEmptyString);
@@ -670,23 +670,23 @@ public:
 /**
     @class wxFileDataObject
     @wxheader{dataobj.h}
-    
-    wxFileDataObject is a specialization of wxDataObject 
+
+    wxFileDataObject is a specialization of wxDataObject
     for file names. The program works with it just as if it were a list of absolute
     file
     names, but internally it uses the same format as
     Explorer and other compatible programs under Windows or GNOME/KDE filemanager
     under Unix which makes it possible to receive files from them using this
     class.
-    
+
     @b Warning: Under all non-Windows platforms this class is currently
     "input-only", i.e. you can receive the files from another application, but
     copying (or dragging) file(s) from a wxWidgets application is not currently
     supported. PS: GTK2 should work as well.
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     wxDataObject, wxDataObjectSimple, wxTextDataObject, wxBitmapDataObject,
     wxDataObject

@@ -9,22 +9,22 @@
 /**
     @class wxDisplay
     @wxheader{display.h}
-    
+
     Determines the sizes and locations of displays connected to the system.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxClientDisplayRect, wxDisplaySize, wxDisplaySizeMM
 */
-class wxDisplay 
+class wxDisplay
 {
 public:
     /**
         Constructor, setting up a wxDisplay instance with the specified display.
         
-        @param index 
+        @param index
         The index of the display to use.  This must be non-negative
         and lower than the value returned by GetCount().
     */
@@ -41,13 +41,13 @@ public:
         
         If wxDefaultVideoMode is passed in as the mode parameter,
         the defined behaviour is that wxDisplay will reset the video
-        mode to the default mode used by the display.  On Windows, 
+        mode to the default mode used by the display.  On Windows,
         the behavior is normal.  However, there are differences on other
         platforms. On Unix variations using X11 extensions it should
-        behave as defined, but some irregularities may occur.  
+        behave as defined, but some irregularities may occur.
         
         On wxMac passing in wxDefaultVideoMode as the mode
-        parameter does nothing.  This happens because carbon 
+        parameter does nothing.  This happens because carbon
         no longer has access to DMUseScreenPrefs, an undocumented
         function that changed the video mode to the system
         default by using the system's 'scrn' resource.
@@ -78,10 +78,10 @@ public:
     int GetDepth();
 
     /**
-        Returns the index of the display on which the given point lies.  Returns 
+        Returns the index of the display on which the given point lies.  Returns
         @c wxNOT_FOUND if the point is not on any connected display.
         
-        @param pt 
+        @param pt
         The point to locate.
     */
     static int GetFromPoint(const wxPoint& pt);
@@ -94,7 +94,7 @@ public:
         
         Returns @c wxNOT_FOUND if the window is not on any connected display.
         
-        @param win 
+        @param win
         The window to locate.
     */
     static int GetFromWindow(const wxWindow* win);
@@ -107,7 +107,7 @@ public:
 
     /**
         Fills and returns an array with all the video modes that
-        are supported by this display, or video modes that are 
+        are supported by this display, or video modes that are
         supported by this display and match the mode parameter
         (if mode is not wxDefaultVideoMode).
     */

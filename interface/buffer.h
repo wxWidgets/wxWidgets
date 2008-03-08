@@ -9,45 +9,45 @@
 /**
     @class wxMemoryBuffer
     @wxheader{buffer.h}
-    
+
     A @b wxMemoryBuffer is a useful data structure for storing arbitrary sized
     blocks
     of memory. wxMemoryBuffer guarantees deletion of the memory block when the
     object
-    is destroyed. 
-    
+    is destroyed.
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxMemoryBuffer 
+class wxMemoryBuffer
 {
 public:
     //@{
     /**
         Create a new buffer.
         
-        @param size 
+        @param size
         size of new buffer.
     */
     wxMemoryBuffer(const wxMemoryBuffer& src);
-        wxMemoryBuffer(size_t size);
+    wxMemoryBuffer(size_t size);
     //@}
 
     /**
         Append a single byte to the buffer.
         
-        @param data 
+        @param data
         New byte to append to the buffer.
     */
     void AppendByte(char data);
 
     /**
         Ensure that the buffer is big enough and return a pointer to the start
-        of the empty space in the buffer. This pointer can be used to directly 
+        of the empty space in the buffer. This pointer can be used to directly
         write data into the buffer, this new data will be appended to
         the existing data.
         
-        @param sizeNeeded 
+        @param sizeNeeded
         Amount of extra space required in the buffer for
         the append operation
     */
@@ -84,7 +84,7 @@ public:
         Sets the length of the data stored in the buffer.  Mainly useful for truncating
         existing data.
         
-        @param size 
+        @param size
         New length of the valid data in the buffer. This is
         distinct from the allocated size
     */
@@ -94,8 +94,8 @@ public:
         Update the length after completing a direct append, which
         you must have used GetAppendBuf() to initialise.
         
-        @param sizeUsed 
-        This is the amount of new data that has been 
+        @param sizeUsed
+        This is the amount of new data that has been
         appended.
     */
     void UngetAppendBuf(size_t sizeUsed);
@@ -104,7 +104,7 @@ public:
         Update the buffer after completing a direct write, which
         you must have used GetWriteBuf() to initialise.
         
-        @param sizeUsed 
+        @param sizeUsed
         The amount of data written in to buffer
         by the direct write
     */

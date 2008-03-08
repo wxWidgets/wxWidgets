@@ -9,17 +9,17 @@
 /**
     @class wxDatePickerCtrl
     @wxheader{datectrl.h}
-    
-    This control allows the user to select a date. Unlike 
+
+    This control allows the user to select a date. Unlike
     wxCalendarCtrl, which is a relatively big control,
     wxDatePickerCtrl is implemented as a small window showing the currently
     selected date.
     The control can be edited using the keyboard, and can also display a popup
     window for more user-friendly date selection, depending on the styles used and
     the platform, except PalmOS where date is selected using native dialog.
-    
+
     It is only available if @c wxUSE_DATEPICKCTRL is set to 1.
-    
+
     @beginStyleTable
     @style{wxDP_SPIN}:
            Creates a control without a month calendar drop down but with
@@ -41,17 +41,17 @@
            this style the century could be displayed, or not, depending on the
            default date representation in the system.
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_DATE_CHANGED(id\, func)}:
            This event fires when the user changes the current selection in the
            control.
     @endEventTable
-    
+
     @library{wxadv}
     @category{miscpickers}
     @appearance{datepickerctrl.png}
-    
+
     @seealso
     wxCalendarCtrl, wxDateEvent
 */
@@ -71,32 +71,32 @@ public:
                      const wxString& name = "datectrl");
 
     /**
-        @param parent 
+        @param parent
         Parent window, must not be non-@NULL.
         
-        @param id 
+        @param id
         The identifier for the control.
         
-        @param dt 
+        @param dt
         The initial value of the control, if an invalid date (such as the
         default value) is used, the control is set to today.
         
-        @param pos 
+        @param pos
         Initial position.
         
-        @param size 
+        @param size
         Initial size. If left at default value, the control chooses its
         own best size by using the height approximately equal to a text control and
         width large enough to show the date string fully.
         
-        @param style 
+        @param style
         The window style, should be left at 0 as there are no
         special styles for this control in this version.
         
-        @param validator 
+        @param validator
         Validator which can be used for additional date checks.
         
-        @param name 
+        @param name
         Control name.
         
         @returns @true if the control was successfully created or @false if
@@ -111,17 +111,17 @@ public:
                 const wxString& name = "datectrl");
 
     /**
-        If the control had been previously limited to a range of dates using 
+        If the control had been previously limited to a range of dates using
         SetRange(), returns the lower and upper
         bounds of this range. If no range is set (or only one of the bounds is set),
          @e dt1 and/or @e dt2 are set to be invalid.
         
-        @param dt1 
+        @param dt1
         Pointer to the object which receives the lower range limit or
         becomes invalid if it is not set. May be @NULL if the caller is not
         interested in lower limit
         
-        @param dt2 
+        @param dt2
         Same as above but for the upper limit
         
         @returns @false if no range limits are currently set, @true if at least one

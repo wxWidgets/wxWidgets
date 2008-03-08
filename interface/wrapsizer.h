@@ -9,18 +9,18 @@
 /**
     @class wxWrapSizer
     @wxheader{wrapsizer.h}
-    
-    A wrap sizer lays out its items in a single line, like a box sizer -- as long 
-    as there is space available in that direction. Once all available space in 
+
+    A wrap sizer lays out its items in a single line, like a box sizer -- as long
+    as there is space available in that direction. Once all available space in
     the primary direction has been used, a new line is added and items are added
     there.
-    
+
     So a wrap sizer has a primary orientation for adding items, and adds lines
-    as needed in the secondary direction. 
-    
+    as needed in the secondary direction.
+
     @library{wxcore}
     @category{winlayout}
-    
+
     @seealso
     wxBoxSizer, wxSizer, @ref overview_sizeroverview "Sizer overview"
 */
@@ -36,9 +36,9 @@ public:
     wxWrapSizer(int orient, int flags);
 
     /**
-        Not used by an application. This is the mechanism by which sizers can inform 
+        Not used by an application. This is the mechanism by which sizers can inform
         sub-items of the first determined size component. The sub-item can then better
-        determine its size requirements. 
+        determine its size requirements.
         
         Returns @true if the information was used (and the sub-item min size was
         updated).

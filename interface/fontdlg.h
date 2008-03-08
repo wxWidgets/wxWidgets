@@ -9,12 +9,12 @@
 /**
     @class wxFontDialog
     @wxheader{fontdlg.h}
-    
+
     This class represents the font chooser dialog.
-    
+
     @library{wxcore}
     @category{cmndlg}
-    
+
     @seealso
     Overview, wxFontData, wxGetFontFromUser
 */
@@ -23,15 +23,15 @@ class wxFontDialog : public wxDialog
 public:
     //@{
     /**
-        Constructor. Pass a parent window, and optionally the 
+        Constructor. Pass a parent window, and optionally the
         @ref overview_wxfontdata "font data" object to be used to initialize the dialog
-        controls. If the default constructor is used, 
+        controls. If the default constructor is used,
         Create() must be called before the dialog can be
         shown.
     */
     wxFontDialog();
-        wxFontDialog(wxWindow* parent);
-        wxFontDialog(wxWindow* parent, const wxFontData& data);
+    wxFontDialog(wxWindow* parent);
+    wxFontDialog(wxWindow* parent, const wxFontData& data);
     //@}
 
     //@{
@@ -41,7 +41,7 @@ public:
         occurred.
     */
     bool Create(wxWindow* parent);
-        bool Create(wxWindow* parent, const wxFontData& data);
+    bool Create(wxWindow* parent, const wxFontData& data);
     //@}
 
     //@{
@@ -50,11 +50,11 @@ public:
         dialog.
     */
     const wxFontData GetFontData();
-        wxFontData GetFontData();
+    wxFontData GetFontData();
     //@}
 
     /**
-        Shows the dialog, returning @c wxID_OK if the user pressed Ok, and 
+        Shows the dialog, returning @c wxID_OK if the user pressed Ok, and
         @c wxID_CANCEL otherwise.
         
         If the user cancels the dialog (ShowModal returns @c wxID_CANCEL), no font
@@ -73,14 +73,14 @@ public:
     Shows the font selection dialog and returns the font selected by user or
     invalid font (use @ref wxFont::isok wxFont:IsOk to test whether a font
     is valid) if the dialog was cancelled.
-    
-    @param parent 
+
+    @param parent
     The parent window for the font selection dialog
-    
-    @param fontInit 
+
+    @param fontInit
     If given, this will be the font initially selected in the dialog.
-    
-    @param caption 
+
+    @param caption
     If given, this will be used for the dialog caption.
 */
 wxFont wxGetFontFromUser(wxWindow * parent,

@@ -9,18 +9,18 @@
 /**
     @class wxPosition
     @wxheader{position.h}
-    
+
     This class represents the position of an item in any kind of grid of rows and
     columns such as wxGridBagSizer, or
     wxHVScrolledWindow.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxPoint, wxSize
 */
-class wxPosition 
+class wxPosition
 {
 public:
     //@{
@@ -29,7 +29,7 @@ public:
         default value is (0, 0).
     */
     wxPosition();
-        wxPosition(int row, int col);
+    wxPosition(int row, int col);
     //@}
 
     /**
@@ -52,15 +52,15 @@ public:
         
     */
     bool operator ==(const wxPosition& p);
-        bool operator !=(const wxPosition& p);
-        wxPosition operator +=(const wxPosition& p);
-        wxPosition operator -=(const wxPosition& p);
-        wxPosition operator +=(const wxSize& s);
-        wxPosition operator -=(const wxSize& s);
-        wxPosition operator +(const wxPosition& p);
-        wxPosition operator -(const wxPosition& p);
-        wxPosition operator +(const wxSize& s);
-        wxPosition operator -(const wxSize& s);
+    bool operator !=(const wxPosition& p);
+    wxPosition operator +=(const wxPosition& p);
+    wxPosition operator -=(const wxPosition& p);
+    wxPosition operator +=(const wxSize& s);
+    wxPosition operator -=(const wxSize& s);
+    wxPosition operator +(const wxPosition& p);
+    wxPosition operator -(const wxPosition& p);
+    wxPosition operator +(const wxSize& s);
+    wxPosition operator -(const wxSize& s);
     //@}
 
     /**

@@ -9,16 +9,16 @@
 /**
     @class wxTextValidator
     @wxheader{valtext.h}
-    
+
     wxTextValidator validates text controls, providing a variety of filtering
     behaviours.
-    
+
     For more information, please see @ref overview_validatoroverview "Validator
     overview".
-    
+
     @library{wxcore}
     @category{validator}
-    
+
     @seealso
     @ref overview_validatoroverview "Validator overview", wxValidator,
     wxGenericValidator
@@ -30,7 +30,7 @@ public:
     /**
         Constructor, taking a style and optional pointer to a wxString variable.
         
-        @param style 
+        @param style
         A bitlist of flags, which can be:
         
         
@@ -63,14 +63,14 @@ public:
         
         
         Use an include list. The validator
-        checks if the user input is on the list, complaining if not. See 
+        checks if the user input is on the list, complaining if not. See
         SetIncludes().
         
         wxFILTER_EXCLUDE_LIST
         
         
         Use an exclude list. The validator
-        checks if the user input is on the list, complaining if it is. See 
+        checks if the user input is on the list, complaining if it is. See
         SetExcludes().
         
         wxFILTER_INCLUDE_CHAR_LIST
@@ -89,15 +89,15 @@ public:
         complaining if it is.
         See SetExcludes().
         
-        @param valPtr 
+        @param valPtr
         A pointer to a wxString variable that contains the value. This variable
         should have a lifetime equal to or longer than the validator lifetime (which is
         usually
         determined by the lifetime of the window).
     */
     wxTextValidator(const wxTextValidator& validator);
-        wxTextValidator(long style = wxFILTER_NONE,
-                        wxString* valPtr = @NULL);
+    wxTextValidator(long style = wxFILTER_NONE,
+                    wxString* valPtr = @NULL);
     //@}
 
     /**

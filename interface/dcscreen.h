@@ -9,14 +9,14 @@
 /**
     @class wxScreenDC
     @wxheader{dcscreen.h}
-    
+
     A wxScreenDC can be used to paint on the screen.
     This should normally be constructed as a temporary stack object; don't store
     a wxScreenDC object.
-    
+
     @library{wxcore}
     @category{dc}
-    
+
     @seealso
     wxDC, wxMemoryDC, wxPaintDC, wxClientDC, wxWindowDC
 */
@@ -67,6 +67,6 @@ public:
                    applications.
     */
     bool StartDrawingOnTop(wxWindow* window);
-        bool StartDrawingOnTop(wxRect* rect = @NULL);
+    bool StartDrawingOnTop(wxRect* rect = @NULL);
     //@}
 };

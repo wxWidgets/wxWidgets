@@ -9,23 +9,23 @@
 /**
     @class wxModule
     @wxheader{module.h}
-    
+
     The module system is a very simple mechanism to allow applications (and parts
     of wxWidgets itself) to define initialization and cleanup functions that are
     automatically called on wxWidgets startup and exit.
-    
+
     To define a new kind of module, derive a class from wxModule, override the
-    wxModule::OnInit and wxModule::OnExit 
+    wxModule::OnInit and wxModule::OnExit
     functions, and add the DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to
     header and implementation files (which can be the same file). On
     initialization, wxWidgets will find all classes derived from wxModule, create
     an instance of each, and call each OnInit function. On exit, wxWidgets will
     call the OnExit function for each module instance.
-    
+
     Note that your module class does not have to be in a header file.
-    
+
     For example:
-    
+
     @code
     // A module to allow DDE initialization/cleanup
       // without calling these functions from app.cpp or from
@@ -36,13 +36,13 @@
           wxDDEModule() { }
           virtual bool OnInit() { wxDDEInitialize(); return @true; };
           virtual void OnExit() { wxDDECleanUp(); };
-    
+
       private:
           DECLARE_DYNAMIC_CLASS(wxDDEModule)
       };
-    
+
       IMPLEMENT_DYNAMIC_CLASS(wxDDEModule, wxModule)
-    
+
       // Another module which uses DDE in its OnInit()
       class MyModule: public wxModule
       {
@@ -50,13 +50,13 @@
           MyModule() { AddDependency(CLASSINFO(wxDDEModule)); }
           virtual bool OnInit() { ... code using DDE ... }
           virtual void OnExit() { ... }
-    
+
       private:
           DECLARE_DYNAMIC_CLASS(MyModule)
       };
-    
+
       IMPLEMENT_DYNAMIC_CLASS(MyModule, wxModule)
-    
+
       // Another module which uses DDE in its OnInit()
       // but uses a named dependency
       class MyModule2: public wxModule
@@ -65,14 +65,14 @@
           MyModule2() { AddDependency("wxDDEModule"); }
           virtual bool OnInit() { ... code using DDE ... }
           virtual void OnExit() { ... }
-    
+
       private:
           DECLARE_DYNAMIC_CLASS(MyModule2)
       };
-    
+
       IMPLEMENT_DYNAMIC_CLASS(MyModule2, wxModule)
     @endcode
-    
+
     @library{wxbase}
     @category{FIXME}
 */
@@ -104,14 +104,14 @@ public:
         
         Note that circular dependencies are detected and result in a fatal error.
         
-        @param dep 
+        @param dep
         The class information object for the dependent module.
         
-        @param classname 
+        @param classname
         The class name of the dependent module.
     */
     void AddDependency(wxClassInfo * dep);
-        void AddDependency(const char * classname);
+    void AddDependency(const char * classname);
     //@}
 
     /**

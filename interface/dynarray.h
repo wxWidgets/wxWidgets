@@ -9,7 +9,7 @@
 /**
     @class wxArrayT
     @wxheader{dynarray.h}
-    
+
     This section describes the so called @e dynamic arrays. This is a C
     array-like type safe data structure i.e. the member access time is constant
     (and not
@@ -25,7 +25,7 @@
     automatically expand the array but provokes an assertion failure instead in
     debug build and does nothing (except possibly crashing your program) in the
     release build.
-    
+
     The array classes were designed to be reasonably efficient, both in terms of
     run-time speed and memory consumption and the executable size. The speed of
     array item access is, of course, constant (independent of the number of
@@ -37,7 +37,7 @@
     you may find some useful hints about optimizing wxArray memory usage. As for
     executable size, all
     wxArray functions are inline, so they do not take @e any space at all.
-    
+
     wxWidgets has three different kinds of array. All of them derive from
     wxBaseArray class which works with untyped data and can not be used directly.
     The standard macros WX_DEFINE_ARRAY(), WX_DEFINE_SORTED_ARRAY() and
@@ -48,7 +48,7 @@
     with a new name. In fact, these names are "template" names and each usage of one
     of the macros mentioned above creates a template specialization for the given
     element type.
-    
+
     wxArray is suitable for storing integer types and pointers which it does not
     treat as objects in any way, i.e. the element pointed to by the pointer is not
     deleted when the element is removed from the array. It should be noted that
@@ -62,7 +62,7 @@
     runtime assertion failure, however declaring a wxArray of floats will not (on
     the machines where sizeof(float) = sizeof(long)), yet it will @b not work,
     please use wxObjArray for storing floats and doubles.
-    
+
     wxSortedArray is a wxArray variant which should be used when searching in the
     array is a frequently used operation. It requires you to define an additional
     function for comparing two elements of the array element type and always stores
@@ -75,7 +75,7 @@
     huge performance improvements compared to wxArray. Finally, it should be
     noticed that, as wxArray, wxSortedArray can be only used for storing integral
     types or pointers.
-    
+
     wxObjArray class treats its elements like "objects". It may delete them when
     they are removed from the array (invoking the correct destructor) and copies
     them using the objects copy constructor. In order to implement this behaviour
@@ -86,74 +86,74 @@
     from a point where the full (as opposed to 'forward') declaration of the array
     elements class is in scope. As it probably sounds very complicated here is an
     example:
-    
+
     @code
     #include wx/dynarray.h
-    
+
     // we must forward declare the array because it is used inside the class
     // declaration
     class MyDirectory;
     class MyFile;
-    
+
     // this defines two new types: ArrayOfDirectories and ArrayOfFiles which can be
     // now used as shown below
     WX_DECLARE_OBJARRAY(MyDirectory, ArrayOfDirectories);
     WX_DECLARE_OBJARRAY(MyFile,      ArrayOfFiles);
-    
+
     class MyDirectory
     {
     ...
         ArrayOfDirectories m_subdirectories; // all subdirectories
         ArrayOfFiles       m_files;          // all files in this directory
     };
-    
+
     ...
-    
+
     // now that we have MyDirectory declaration in scope we may finish the
     // definition of ArrayOfDirectories -- note that this expands into some C++
     // code and so should only be compiled once (i.e., don't put this in the
     // header, but into a source file or you will get linking errors)
     #include wx/arrimpl.cpp // this is a magic incantation which must be done!
     WX_DEFINE_OBJARRAY(ArrayOfDirectories);
-    
+
     // that's all!
     @endcode
-    
+
     It is not as elegant as writing
-    
+
     @code
     typedef std::vectorMyDirectory ArrayOfDirectories;
     @endcode
-    
+
     but is not that complicated and allows the code to be compiled with any, however
     dumb, C++ compiler in the world.
-    
-    Remember to include wx/arrimpl.cpp just before each WX_DEFINE_OBJARRAY 
+
+    Remember to include wx/arrimpl.cpp just before each WX_DEFINE_OBJARRAY
     ocurrence in your code, even if you have several in the same file.
-    
+
     Things are much simpler for wxArray and wxSortedArray however: it is enough
     just to write
-    
+
     @code
     WX_DEFINE_ARRAY_INT(int, ArrayOfInts);
     WX_DEFINE_SORTED_ARRAY_INT(int, ArrayOfSortedInts);
     @endcode
-    
+
     i.e. there is only one @c DEFINE macro and no need for separate
-    @c DECLARE one. For the arrays of the primitive types, the macros 
+    @c DECLARE one. For the arrays of the primitive types, the macros
     @c WX_DEFINE_ARRAY_CHAR/SHORT/INT/SIZE_T/LONG/DOUBLE should be used
     depending on the sizeof of the values (notice that storing values of smaller
     type, e.g. shorts, in an array of larger one, e.g. @c ARRAY_INT, does
     not work on all architectures!).
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxcontaineroverview "Container classes overview", wxListT,
     wxVectorT
 */
-class wxArray<T> 
+class wxArray<T>
 {
 public:
     //@{
@@ -178,9 +178,9 @@ public:
         append a lot of items.
     */
     void Add(T item, size_t copies = 1);
-        size_t Add(T item);
-        void Add(T * item);
-        void Add(T & item, size_t copies = 1);
+    size_t Add(T item);
+    void Add(T * item);
+    void Add(T & item, size_t copies = 1);
     //@}
 
     /**
@@ -190,7 +190,7 @@ public:
         Be aware that you will set out the order of the array if you give a wrong
          position.
         
-        This function is useful in conjunction with 
+        This function is useful in conjunction with
         wxArray::IndexForInsert for a common operation
         of "insert only if not found".
     */
@@ -255,9 +255,9 @@ public:
         should return a negative, zero or positive value according to whether the first
         element passed to it is less than, equal to or greater than the second one.
     */
-     wxArray();
-         wxObjArray();
-         wxSortedArray();
+    wxArray();
+    wxObjArray();
+    wxSortedArray();
     //@}
 
     /**
@@ -301,7 +301,7 @@ public:
         in the array.
     */
     int Index(T& item, bool searchFromEnd = @false);
-        int Index(T& item);
+    int Index(T& item);
     //@}
 
     /**
@@ -312,7 +312,7 @@ public:
         
         You have to do extra work to know if the @e item already exists in array.
         
-        This function is useful in conjunction with 
+        This function is useful in conjunction with
         wxArray::AddAt for a common operation
         of "insert only if not found".
     */
@@ -331,8 +331,8 @@ public:
         between the overloaded versions of this function.
     */
     void Insert(T item, size_t n, size_t copies = 1);
-        void Insert(T * item, size_t n);
-        void Insert(T & item, size_t n, size_t copies = 1);
+    void Insert(T * item, size_t n);
+    void Insert(T & item, size_t n, size_t copies = 1);
     //@}
 
     /**
@@ -475,7 +475,7 @@ public:
         See also WX_CLEAR_ARRAY macro which deletes all
         elements of a wxArray (supposed to contain pointers).
     */
-     Remove(T item);
+    Remove(T item);
 
     /**
         Removes @e count elements starting at @e index from the array. When an
@@ -486,7 +486,7 @@ public:
         See also WX_CLEAR_ARRAY macro which deletes all
         elements of a wxArray (supposed to contain pointers).
     */
-     RemoveAt(size_t index, size_t count = 1);
+    RemoveAt(size_t index, size_t count = 1);
 
     /**
         WX_CLEAR_ARRAY
@@ -567,9 +567,9 @@ public:
         You must use WX_DEFINE_OBJARRAY macro to define
         the array class - otherwise you would get link errors.
     */
-     WX_DECLARE_OBJARRAY(T,  name);
-         WX_DECLARE_EXPORTED_OBJARRAY(T,  name);
-         WX_DECLARE_USER_EXPORTED_OBJARRAY(T,  name);
+    WX_DECLARE_OBJARRAY(T,  name);
+    WX_DECLARE_EXPORTED_OBJARRAY(T,  name);
+    WX_DECLARE_USER_EXPORTED_OBJARRAY(T,  name);
     //@}
 
     //@{
@@ -584,9 +584,9 @@ public:
         wxArrayInt,
         @b wxArrayLong, @b wxArrayShort, @b wxArrayDouble,  @b wxArrayPtrVoid.
     */
-     WX_DEFINE_ARRAY(T,  name);
-         WX_DEFINE_EXPORTED_ARRAY(T,  name);
-         WX_DEFINE_USER_EXPORTED_ARRAY(T,  name,  exportspec);
+    WX_DEFINE_ARRAY(T,  name);
+    WX_DEFINE_EXPORTED_ARRAY(T,  name);
+    WX_DEFINE_USER_EXPORTED_ARRAY(T,  name,  exportspec);
     //@}
 
     //@{
@@ -603,9 +603,9 @@ public:
         
         Example of usage:
     */
-     WX_DEFINE_OBJARRAY(name);
-         WX_DEFINE_EXPORTED_OBJARRAY(name);
-         WX_DEFINE_USER_EXPORTED_OBJARRAY(name);
+    WX_DEFINE_OBJARRAY(name);
+    WX_DEFINE_EXPORTED_OBJARRAY(name);
+    WX_DEFINE_USER_EXPORTED_OBJARRAY(name);
     //@}
 
     //@{
@@ -619,9 +619,9 @@ public:
         You will have to initialize the objects of this class by passing a comparison
         function to the array object constructor like this:
     */
-     WX_DEFINE_SORTED_ARRAY(T,  name);
-         WX_DEFINE_SORTED_EXPORTED_ARRAY(T,  name);
-         WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T,  name);
+    WX_DEFINE_SORTED_ARRAY(T,  name);
+    WX_DEFINE_SORTED_EXPORTED_ARRAY(T,  name);
+    WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T,  name);
     //@}
 
     /**
@@ -637,12 +637,12 @@ public:
         the items of pointer type) for wxArray and wxSortedArray and a deep copy (i.e.
         the array element are copied too) for wxObjArray.
     */
-     wxArray(const wxArray& array);
-         wxSortedArray(const wxSortedArray& array);
-         wxObjArray(const wxObjArray& array);
-        wxArray operator=(const wxArray& array);
-        wxSortedArray operator=(const wxSortedArray& array);
-        wxObjArray operator=(const wxObjArray& array);
+    wxArray(const wxArray& array);
+    wxSortedArray(const wxSortedArray& array);
+    wxObjArray(const wxObjArray& array);
+    wxArray operator=(const wxArray& array);
+    wxSortedArray operator=(const wxSortedArray& array);
+    wxObjArray operator=(const wxObjArray& array);
     //@}
 
     //@{
@@ -651,8 +651,8 @@ public:
         done by wxArray and wxSortedArray versions - you may use
         WX_CLEAR_ARRAY macro for this.
     */
-     ~wxArray();
-         ~wxSortedArray();
-         ~wxObjArray();
+    ~wxArray();
+    ~wxSortedArray();
+    ~wxObjArray();
     //@}
 };

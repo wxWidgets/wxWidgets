@@ -9,16 +9,16 @@
 /**
     @class wxAnimationCtrl
     @wxheader{animate.h}
-    
+
     This is a static control which displays an animation.
     wxAnimationCtrl API is simple as possible and won't give you full control on the
     animation; if you need it then use wxMediaCtrl.
-    
+
     This control is useful to display a (small) animation while doing a long task
     (e.g. a "throbber").
-    
+
     It is only available if @c wxUSE_ANIMATIONCTRL is set to 1 (the default).
-    
+
     @beginStyleTable
     @style{wxAC_DEFAULT_STYLE}:
            The default style: wxBORDER_NONE.
@@ -27,11 +27,11 @@
            size of the animation when SetAnimation is called. If this style
            flag is given, the control will not change its size
     @endStyleTable
-    
+
     @library{wxadv}
     @category{ctrl}
     @appearance{animationctrl.png}
-    
+
     @seealso
     wxAnimation
 */
@@ -55,25 +55,25 @@ public:
         frame
         of the animation is displayed.
         
-        @param parent 
+        @param parent
         Parent window, must be non-@NULL.
         
-        @param id 
+        @param id
         The identifier for the control.
         
-        @param anim 
+        @param anim
         The initial animation shown in the control.
         
-        @param pos 
+        @param pos
         Initial position.
         
-        @param size 
+        @param size
         Initial size.
         
-        @param style 
+        @param style
         The window style, see wxAC_* flags.
         
-        @param name 
+        @param name
         Control name.
         
         @returns @true if the control was successfully created or @false if
@@ -162,18 +162,18 @@ public:
 /**
     @class wxAnimation
     @wxheader{animate.h}
-    
+
     This class encapsulates the concept of a platform-dependent animation.
     An animation is a sequence of frames of the same size.
     Sound is not supported by wxAnimation.
-    
+
     @library{wxadv}
     @category{FIXME}
-    
+
     @stdobjects
     Objects:
     wxNullAnimation
-    
+
     @seealso
     wxAnimationCtrl
 */
@@ -184,16 +184,16 @@ public:
     /**
         Loads an animation from a file.
         
-        @param name 
+        @param name
         The name of the file to load.
         
-        @param type 
+        @param type
         See LoadFile for more info.
     */
     wxAnimation();
-        wxAnimation(const wxAnimation& anim);
-        wxAnimation(const wxString& name,
-                    wxAnimationType type = wxANIMATION_TYPE_ANY);
+    wxAnimation(const wxAnimation& anim);
+    wxAnimation(const wxString& name,
+                wxAnimationType type = wxANIMATION_TYPE_ANY);
     //@}
 
     /**
@@ -232,10 +232,10 @@ public:
     /**
         Loads an animation from the given stream.
         
-        @param stream 
+        @param stream
         The stream to use to load the animation.
         
-        @param type 
+        @param type
         One of the following values:
         
         
@@ -262,10 +262,10 @@ public:
     /**
         Loads an animation from a file.
         
-        @param name 
+        @param name
         A filename.
         
-        @param type 
+        @param type
         One of the following values:
         
         

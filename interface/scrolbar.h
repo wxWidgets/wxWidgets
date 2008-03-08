@@ -9,23 +9,23 @@
 /**
     @class wxScrollBar
     @wxheader{scrolbar.h}
-    
+
     A wxScrollBar is a control that represents a horizontal or
     vertical scrollbar. It is distinct from the two scrollbars that some windows
     provide automatically, but the two types of scrollbar share the way
     events are received.
-    
+
     @beginStyleTable
     @style{wxSB_HORIZONTAL}:
            Specifies a horizontal scrollbar.
     @style{wxSB_VERTICAL}:
            Specifies a vertical scrollbar.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{scrollbar.png}
-    
+
     @seealso
     @ref overview_scrollingoverview "Scrolling overview", @ref
     overview_eventhandlingoverview "Event handling overview", wxScrolledWindow
@@ -37,38 +37,38 @@ public:
     /**
         Constructor, creating and showing a scrollbar.
         
-        @param parent 
+        @param parent
         Parent window. Must be non-@NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param pos 
+        @param pos
         Window position. If wxDefaultPosition is specified then a default position
         is chosen.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then a default size is
         chosen.
         
-        @param style 
+        @param style
         Window style. See wxScrollBar.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxScrollBar();
-        wxScrollBar(wxWindow* parent, wxWindowID id,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxSB_HORIZONTAL,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = "scrollBar");
+    wxScrollBar(wxWindow* parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSB_HORIZONTAL,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = "scrollBar");
     //@}
 
     /**
@@ -120,21 +120,21 @@ public:
     /**
         Sets the scrollbar properties.
         
-        @param position 
+        @param position
         The position of the scrollbar in scroll units.
         
-        @param thumbSize 
+        @param thumbSize
         The size of the thumb, or visible portion of the scrollbar, in scroll units.
         
-        @param range 
+        @param range
         The maximum position of the scrollbar.
         
-        @param pageSize 
+        @param pageSize
         The size of the page size in scroll units. This is the number of units
         the scrollbar will scroll when it is paged up or down. Often it is the same as
         the thumb size.
         
-        @param refresh 
+        @param refresh
         @true to redraw the scrollbar, @false otherwise.
         
         @remarks Let's say you wish to display 50 lines of text, using the same
@@ -148,7 +148,7 @@ public:
     /**
         Sets the position of the scrollbar.
         
-        @param viewStart 
+        @param viewStart
         The position of the scrollbar thumb.
         
         @sa GetThumbPosition()

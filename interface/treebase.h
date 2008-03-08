@@ -9,17 +9,17 @@
 /**
     @class wxTreeItemId
     @wxheader{treebase.h}
-    
+
     An opaque reference to a tree item.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxTreeCtrl, wxTreeItemData, @ref overview_wxtreectrloverview "wxTreeCtrl
     overview"
 */
-class wxTreeItemId 
+class wxTreeItemId
 {
 public:
     /**
@@ -39,7 +39,7 @@ public:
         Operators for comparison between wxTreeItemId objects.
     */
     void operator !();
-        bool operator ==(const wxTreeItemId& item);
-        bool operator !=(const wxTreeItemId& item);
+    bool operator ==(const wxTreeItemId& item);
+    bool operator !=(const wxTreeItemId& item);
     //@}
 };

@@ -9,7 +9,7 @@
 /**
     @class wxCursor
     @wxheader{cursor.h}
-    
+
     A cursor is a small bitmap usually used for denoting where the mouse
     pointer is, with a picture that might indicate the interpretation of a
     mouse click. As with icons, cursors in X and MS Windows are created
@@ -18,25 +18,25 @@
     object are catered for, and this is an occasion where
     conditional compilation will probably be required (see wxIcon for
     an example).
-    
+
     A single cursor object may be used in many windows (any subwindow type).
     The wxWidgets convention is to set the cursor for a window, as in X,
     rather than to set it globally as in MS Windows, although a
     global ::wxSetCursor is also available for MS Windows use.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @stdobjects
     Objects:
     wxNullCursor
     Pointers:
     wxSTANDARD_CURSOR
-    
+
     wxHOURGLASS_CURSOR
-    
+
     wxCROSS_CURSOR
-    
+
     @seealso
     wxBitmap, wxIcon, wxWindow::SetCursor, ::wxSetCursor
 */
@@ -47,25 +47,25 @@ public:
     /**
         Copy constructor, uses @ref overview_trefcount "reference counting".
         
-        @param bits 
+        @param bits
         An array of bits.
         
-        @param maskBits 
+        @param maskBits
         Bits for a mask bitmap.
         
-        @param width 
+        @param width
         Cursor width.
         
-        @param height 
+        @param height
         Cursor height.
         
-        @param hotSpotX 
+        @param hotSpotX
         Hotspot x coordinate.
         
-        @param hotSpotY 
+        @param hotSpotY
         Hotspot y coordinate.
         
-        @param type 
+        @param type
         Icon type to load. Under Motif, type defaults to wxBITMAP_TYPE_XBM. Under
         Windows,
         it defaults to wxBITMAP_TYPE_CUR_RESOURCE. Under MacOS, it defaults to
@@ -99,7 +99,7 @@ public:
         Load a cursor from a .ico icon file (only if USE_RESOURCE_LOADING_IN_MSW
         is enabled in setup.h). Specify hotSpotX and hotSpotY.
         
-        @param cursorId 
+        @param cursorId
         A stock cursor identifier. May be one of:
         
         
@@ -242,20 +242,20 @@ public:
         
         Note that not all cursors are available on all platforms.
         
-        @param cursor 
+        @param cursor
         Pointer or reference to a cursor to copy.
     */
     wxCursor();
-        wxCursor(const char bits[], int width, int height,
-                 int hotSpotX=-1, int hotSpotY=-1,
-                 const char maskBits[]=@NULL,
-                 wxColour* fg=@NULL,
-                 wxColour* bg=@NULL);
-        wxCursor(const wxString& cursorName, long type,
-                 int hotSpotX=0, int hotSpotY=0);
-        wxCursor(int cursorId);
-        wxCursor(const wxImage& image);
-        wxCursor(const wxCursor& cursor);
+    wxCursor(const char bits[], int width, int height,
+             int hotSpotX=-1, int hotSpotY=-1,
+             const char maskBits[]=@NULL,
+             wxColour* fg=@NULL,
+             wxColour* bg=@NULL);
+    wxCursor(const wxString& cursorName, long type,
+             int hotSpotX=0, int hotSpotY=0);
+    wxCursor(int cursorId);
+    wxCursor(const wxImage& image);
+    wxCursor(const wxCursor& cursor);
     //@}
 
     /**

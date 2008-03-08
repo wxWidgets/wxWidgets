@@ -9,14 +9,14 @@
 /**
     @class wxGBPosition
     @wxheader{gbsizer.h}
-    
+
     This class represents the position of an item in a virtual grid of
     rows and columns managed by a wxGridBagSizer.
-    
+
     @library{wxcore}
     @category{FIXME}
 */
-class wxGBPosition 
+class wxGBPosition
 {
 public:
     //@{
@@ -25,7 +25,7 @@ public:
         The default is (0,0).
     */
     wxGBPosition();
-        wxGBPosition(int row, int col);
+    wxGBPosition(int row, int col);
     //@}
 
     /**
@@ -63,13 +63,13 @@ public:
 /**
     @class wxGridBagSizer
     @wxheader{gbsizer.h}
-    
+
     A wxSizer that can lay out items in a virtual grid
     like a wxFlexGridSizer but in this case
-    explicit positioning of the items is allowed using 
+    explicit positioning of the items is allowed using
     wxGBPosition, and items can optionally span
     more than one row and/or column using wxGBSpan.
-    
+
     @library{wxcore}
     @category{winlayout}
 */
@@ -93,18 +93,18 @@ public:
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = @NULL);
-        wxSizerItem* Add(wxSizer* sizer, const wxGBPosition& pos,
-                         const wxGBSpan& span = wxDefaultSpan,
-                         int flag = 0,
-                         int border = 0,
-                         wxObject* userData = @NULL);
-        wxSizerItem* Add(int width, int height,
-                         const wxGBPosition& pos,
-                         const wxGBSpan& span = wxDefaultSpan,
-                         int flag = 0,
-                         int border = 0,
-                         wxObject* userData = @NULL);
-        wxSizerItem* Add(wxGBSizerItem* item);
+    wxSizerItem* Add(wxSizer* sizer, const wxGBPosition& pos,
+                     const wxGBSpan& span = wxDefaultSpan,
+                     int flag = 0,
+                     int border = 0,
+                     wxObject* userData = @NULL);
+    wxSizerItem* Add(int width, int height,
+                     const wxGBPosition& pos,
+                     const wxGBSpan& span = wxDefaultSpan,
+                     int flag = 0,
+                     int border = 0,
+                     wxObject* userData = @NULL);
+    wxSizerItem* Add(wxGBSizerItem* item);
     //@}
 
     /**
@@ -122,9 +122,9 @@ public:
     */
     bool CheckForIntersection(wxGBSizerItem* item,
                               wxGBSizerItem* excludeItem = @NULL);
-        bool CheckForIntersection(const wxGBPosition& pos,
-                                  const wxGBSpan& span,
-                                  wxGBSizerItem* excludeItem = @NULL);
+    bool CheckForIntersection(const wxGBPosition& pos,
+                              const wxGBSpan& span,
+                              wxGBSizerItem* excludeItem = @NULL);
     //@}
 
     //@{
@@ -133,7 +133,7 @@ public:
         not found. (non-recursive)
     */
     wxGBSizerItem* FindItem(wxWindow* window);
-        wxGBSizerItem* FindItem(wxSizer* sizer);
+    wxGBSizerItem* FindItem(wxSizer* sizer);
     //@}
 
     /**
@@ -172,8 +172,8 @@ public:
         Get the grid position of the specified item.
     */
     wxGBPosition GetItemPosition(wxWindow* window);
-        wxGBPosition GetItemPosition(wxSizer* sizer);
-        wxGBPosition GetItemPosition(size_t index);
+    wxGBPosition GetItemPosition(wxSizer* sizer);
+    wxGBPosition GetItemPosition(size_t index);
     //@}
 
     //@{
@@ -181,8 +181,8 @@ public:
         Get the row/col spanning of the specified item
     */
     wxGBSpan GetItemSpan(wxWindow* window);
-        wxGBSpan GetItemSpan(wxSizer* sizer);
-        wxGBSpan GetItemSpan(size_t index);
+    wxGBSpan GetItemSpan(wxSizer* sizer);
+    wxGBSpan GetItemSpan(size_t index);
     //@}
 
     /**
@@ -203,8 +203,8 @@ public:
         @false is returned.
     */
     bool SetItemPosition(wxWindow* window, const wxGBPosition& pos);
-        bool SetItemPosition(wxSizer* sizer, const wxGBPosition& pos);
-        bool SetItemPosition(size_t index, const wxGBPosition& pos);
+    bool SetItemPosition(wxSizer* sizer, const wxGBPosition& pos);
+    bool SetItemPosition(size_t index, const wxGBPosition& pos);
     //@}
 
     //@{
@@ -214,8 +214,8 @@ public:
         then @false is returned.
     */
     bool SetItemSpan(wxWindow* window, const wxGBSpan& span);
-        bool SetItemSpan(wxSizer* sizer, const wxGBSpan& span);
-        bool SetItemSpan(size_t index, const wxGBSpan& span);
+    bool SetItemSpan(wxSizer* sizer, const wxGBSpan& span);
+    bool SetItemSpan(size_t index, const wxGBSpan& span);
     //@}
 };
 
@@ -223,16 +223,16 @@ public:
 /**
     @class wxGBSizerItem
     @wxheader{gbsizer.h}
-    
-    The wxGBSizerItem class is used by the 
+
+    The wxGBSizerItem class is used by the
     wxGridBagSizer for tracking the items in the
-    sizer. It adds grid position and spanning information to the normal 
+    sizer. It adds grid position and spanning information to the normal
     wxSizerItem by adding
     wxGBPosition and wxGBSpan
     attrbibutes. Most of the time you will not need to use a
     wxGBSizerItem directly in your code, but there are a couple of cases
     where it is handy.
-    
+
     @library{wxcore}
     @category{FIXME}
 */
@@ -246,14 +246,14 @@ public:
     wxGBSizerItem(int width, int height, const wxGBPosition& pos,
                   const wxGBSpan& span, int flag,
                   int border, wxObject* userData);
-        wxGBSizerItem(wxWindow* window, const wxGBPosition& pos,
-                      const wxGBSpan& span,
-                      int flag, int border,
-                      wxObject* userData);
-        wxGBSizerItem(wxSizer* sizer, const wxGBPosition& pos,
-                      const wxGBSpan& span,
-                      int flag, int border,
-                      wxObject* userData);
+    wxGBSizerItem(wxWindow* window, const wxGBPosition& pos,
+                  const wxGBSpan& span,
+                  int flag, int border,
+                  wxObject* userData);
+    wxGBSizerItem(wxSizer* sizer, const wxGBPosition& pos,
+                  const wxGBSpan& span,
+                  int flag, int border,
+                  wxObject* userData);
     //@}
 
     /**
@@ -266,7 +266,7 @@ public:
         Get the grid position of the item.
     */
     wxGBPosition GetPos();
-        void GetPos(int& row, int& col);
+    void GetPos(int& row, int& col);
     //@}
 
     //@{
@@ -274,7 +274,7 @@ public:
         Get the row and column spanning of the item.
     */
     wxGBSpan GetSpan();
-        void GetSpan(int& rowspan, int& colspan);
+    void GetSpan(int& rowspan, int& colspan);
     //@}
 
     //@{
@@ -282,8 +282,8 @@ public:
         Returns @true if the given pos/span would intersect with this item.
     */
     bool Intersects(const wxGBSizerItem& other);
-        bool Intersects(const wxGBPosition& pos,
-                        const wxGBSpan& span);
+    bool Intersects(const wxGBPosition& pos,
+                    const wxGBSpan& span);
     //@}
 
     /**
@@ -307,14 +307,14 @@ public:
 /**
     @class wxGBSpan
     @wxheader{gbsizer.h}
-    
+
     This class is used to hold the row and column spanning attributes of
     items in a wxGridBagSizer.
-    
+
     @library{wxcore}
     @category{FIXME}
 */
-class wxGBSpan 
+class wxGBSpan
 {
 public:
     //@{
@@ -324,7 +324,7 @@ public:
         each direction.
     */
     wxGBSpan();
-        wxGBSpan(int rowspan, int colspan);
+    wxGBSpan(int rowspan, int colspan);
     //@}
 
     /**

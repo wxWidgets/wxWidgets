@@ -9,12 +9,12 @@
 /**
     @class wxTextDropTarget
     @wxheader{dnd.h}
-    
+
     A predefined drop target for dealing with text data.
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     @ref overview_wxdndoverview "Drag and drop overview", wxDropSource,
     wxDropTarget, wxFileDropTarget
@@ -36,13 +36,13 @@ public:
     /**
         Override this function to receive dropped text.
         
-        @param x 
+        @param x
         The x coordinate of the mouse.
         
-        @param y 
+        @param y
         The y coordinate of the mouse.
         
-        @param data 
+        @param data
         The data being dropped: a wxString.
     */
     virtual bool OnDropText(wxCoord x, wxCoord y,
@@ -53,14 +53,14 @@ public:
 /**
     @class wxDropTarget
     @wxheader{dnd.h}
-    
+
     This class represents a target for a drag and drop operation. A wxDataObject
     can be associated with it and by default, this object will be filled with the
     data from the
     drag source, if the data formats supported by the data object match the drag
-    source data 
+    source data
     format.
-    
+
     There are various virtual handler functions defined in this class which may be
     overridden
     to give visual feedback or react in a more fine-tuned way, e.g. by not
@@ -69,18 +69,18 @@ public:
     calls is
     wxDropTarget::OnEnter, possibly many times wxDropTarget::OnDragOver,
     wxDropTarget::OnDrop and finally wxDropTarget::OnData.
-    
+
     See @ref overview_wxdndoverview "Drag and drop overview" and @ref
     overview_wxdataobjectoverview "wxDataObject overview"
     for more information.
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     wxDropSource, wxTextDropTarget, wxFileDropTarget, wxDataFormat, wxDataObject
 */
-class wxDropTarget 
+class wxDropTarget
 {
 public:
     /**
@@ -95,7 +95,7 @@ public:
 
     /**
         This method may only be called from within OnData().
-        By default, this method copies the data from the drop source to the 
+        By default, this method copies the data from the drop source to the
         wxDataObject associated with this drop target,
         calling its wxDataObject::SetData method.
     */
@@ -110,16 +110,16 @@ public:
                                 wxDragResult def);
 
     /**
-        Called when the mouse is being dragged over the drop target. By default, 
+        Called when the mouse is being dragged over the drop target. By default,
         this calls functions return the suggested return value @e def.
         
-        @param x 
+        @param x
         The x coordinate of the mouse.
         
-        @param y 
+        @param y
         The y coordinate of the mouse.
         
-        @param def 
+        @param def
         Suggested value for return value. Determined by SHIFT or CONTROL key states.
         
         @returns Returns the desired operation or wxDragNone. This is used for
@@ -133,10 +133,10 @@ public:
         Called when the user drops a data object on the target. Return @false to veto
         the operation.
         
-        @param x 
+        @param x
         The x coordinate of the mouse.
         
-        @param y 
+        @param y
         The y coordinate of the mouse.
         
         @returns Return @true to accept the data, @false to veto the operation.
@@ -147,13 +147,13 @@ public:
         Called when the mouse enters the drop target. By default, this calls
         OnDragOver().
         
-        @param x 
+        @param x
         The x coordinate of the mouse.
         
-        @param y 
+        @param y
         The y coordinate of the mouse.
         
-        @param def 
+        @param def
         Suggested default for return value. Determined by SHIFT or CONTROL key states.
         
         @returns Returns the desired operation or wxDragNone. This is used for
@@ -169,7 +169,7 @@ public:
     virtual void OnLeave();
 
     /**
-        Sets the data wxDataObject associated with the 
+        Sets the data wxDataObject associated with the
         drop target and deletes any previously associated data object.
     */
     void SetDataObject(wxDataObject* data);
@@ -179,27 +179,27 @@ public:
 /**
     @class wxDropSource
     @wxheader{dnd.h}
-    
+
     This class represents a source for a drag and drop operation.
-    
+
     See @ref overview_wxdndoverview "Drag and drop overview" and @ref
-    overview_wxdataobjectoverview "wxDataObject overview" 
+    overview_wxdataobjectoverview "wxDataObject overview"
     for more information.
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     wxDropTarget, wxTextDropTarget, wxFileDropTarget
 */
-class wxDropSource 
+class wxDropSource
 {
 public:
     //@{
     /**
         The constructors for wxDataObject.
         
-        If you use the constructor without @e data parameter you must call 
+        If you use the constructor without @e data parameter you must call
         SetData() later.
         
         Note that the exact type of @e iconCopy and subsequent parameters differs
@@ -207,26 +207,26 @@ public:
         You should use the macro wxDROP_ICON in portable
         programs instead of directly using either of these types.
         
-        @param win 
+        @param win
         The window which initiates the drag and drop operation.
         
-        @param iconCopy 
+        @param iconCopy
         The icon or cursor used for feedback for copy operation.
         
-        @param iconMove 
+        @param iconMove
         The icon or cursor used for feedback for move operation.
         
-        @param iconNone 
+        @param iconNone
         The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = @NULL,
                  const wxIconOrCursor& iconCopy = wxNullIconOrCursor,
                  const wxIconOrCursor& iconMove = wxNullIconOrCursor,
                  const wxIconOrCursor& iconNone = wxNullIconOrCursor);
-        wxDropSource(wxDataObject& data, wxWindow* win = @NULL,
-                     const wxIconOrCursor& iconCopy = wxNullIconOrCursor,
-                     const wxIconOrCursor& iconMove = wxNullIconOrCursor,
-                     const wxIconOrCursor& iconNone = wxNullIconOrCursor);
+    wxDropSource(wxDataObject& data, wxWindow* win = @NULL,
+                 const wxIconOrCursor& iconCopy = wxNullIconOrCursor,
+                 const wxIconOrCursor& iconMove = wxNullIconOrCursor,
+                 const wxIconOrCursor& iconNone = wxNullIconOrCursor);
     //@}
 
     /**
@@ -239,13 +239,13 @@ public:
         the drag-and-drop operation which will terminate when the user releases the
         mouse.
         
-        @param flags 
+        @param flags
         If wxDrag_AllowMove is included in the flags, data may
         be moved and not only copied (default). If wxDrag_DefaultMove is
         specified (which includes the previous flag), this is even the default
         operation
         
-        @returns Returns the operation requested by the user, may be wxDragCopy, 
+        @returns Returns the operation requested by the user, may be wxDragCopy,
                    wxDragMove, wxDragLink, wxDragCancel or wxDragNone if
                    an error occurred.
     */
@@ -263,11 +263,11 @@ public:
         not be too
         slow.
         
-        @param effect 
+        @param effect
         The effect to implement. One of wxDragCopy, wxDragMove, wxDragLink and
         wxDragNone.
         
-        @param scrolling 
+        @param scrolling
         @true if the window is scrolling. MSW only.
         
         @returns Return @false if you want default feedback, or @true if you
@@ -279,16 +279,16 @@ public:
     /**
         Set the icon to use for a certain drag result.
         
-        @param res 
+        @param res
         The drag result to set the icon for.
         
-        @param cursor 
+        @param cursor
         The ion to show when this drag result occurs.
     */
     void SetCursor(wxDragResult res, const wxCursor& cursor);
 
     /**
-        Sets the data wxDataObject associated with the 
+        Sets the data wxDataObject associated with the
         drop source. This will not delete any previously associated data.
     */
     void SetData(wxDataObject& data);
@@ -298,13 +298,13 @@ public:
 /**
     @class wxFileDropTarget
     @wxheader{dnd.h}
-    
+
     This is a @ref overview_wxdroptarget "drop target" which accepts files (dragged
     from File Manager or Explorer).
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     @ref overview_wxdndoverview "Drag and drop overview", wxDropSource,
     wxDropTarget, wxTextDropTarget
@@ -326,13 +326,13 @@ public:
     /**
         Override this function to receive dropped files.
         
-        @param x 
+        @param x
         The x coordinate of the mouse.
         
-        @param y 
+        @param y
         The y coordinate of the mouse.
         
-        @param filenames 
+        @param filenames
         An array of filenames.
     */
     virtual bool OnDropFiles(wxCoord x, wxCoord y,
@@ -348,7 +348,7 @@ public:
     This macro creates either a cursor (MSW) or an icon (elsewhere) with the given
     name. Under MSW, the cursor is loaded from the resource file and the icon is
     loaded from XPM file under other platforms.
-    
+
     This macro should be used with
     @ref wxDropSource::wxdropsource "wxDropSource constructor".
 */

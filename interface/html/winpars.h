@@ -9,14 +9,14 @@
 /**
     @class wxHtmlTagsModule
     @headerfile winpars.h wx/html/winpars.h
-    
+
     This class provides easy way of filling wxHtmlWinParser's table of
     tag handlers. It is used almost exclusively together with the set of
     @ref overview_handlers "TAGS_MODULE_* macros"
-    
+
     @library{wxhtml}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_handlers "Tag Handlers", wxHtmlTagHandler, wxHtmlWinTagHandler,
 */
@@ -28,7 +28,7 @@ public:
         only of lines of the following type:
         I recommend using the @b TAGS_MODULE_* macros.
         
-        @param parser 
+        @param parser
         Pointer to the parser that requested tables filling.
     */
     virtual void FillHandlersTable(wxHtmlWinParser parser);
@@ -38,12 +38,12 @@ public:
 /**
     @class wxHtmlWinTagHandler
     @headerfile winpars.h wx/html/winpars.h
-    
+
     This is basically wxHtmlTagHandler except that
     it is extended with protected member m_WParser pointing to
     the wxHtmlWinParser object (value of this member is identical
     to wxHtmlParser's m_Parser).
-    
+
     @library{wxhtml}
     @category{html}
 */
@@ -63,15 +63,15 @@ public:
 /**
     @class wxHtmlWinParser
     @headerfile winpars.h wx/html/winpars.h
-    
+
     This class is derived from wxHtmlParser and
     its main goal is to parse HTML input so that it can be displayed in
-    wxHtmlWindow. It uses a special 
+    wxHtmlWindow. It uses a special
     wxHtmlWinTagHandler.
-    
+
     @library{wxhtml}
     @category{html}
-    
+
     @seealso
     @ref overview_handlers "Handlers overview"
 */
@@ -86,7 +86,7 @@ public:
         window such as wxHtmlListBox).
     */
     wxHtmlWinParser();
-        wxHtmlWinParser(wxHtmlWindowInterface wndIface);
+    wxHtmlWinParser(wxHtmlWindowInterface wndIface);
     //@}
 
     /**
@@ -101,11 +101,11 @@ public:
     wxHtmlContainerCell* CloseContainer();
 
     /**
-        Creates font based on current setting (see 
-        SetFontSize(), 
-        SetFontBold(), 
-        SetFontItalic(), 
-        SetFontFixed(), 
+        Creates font based on current setting (see
+        SetFontSize(),
+        SetFontBold(),
+        SetFontItalic(),
+        SetFontFixed(),
         wxHtmlWinParser::SetFontUnderlined)
         and returns pointer to it.
         If the font was already created only a pointer is returned.
@@ -153,7 +153,7 @@ public:
 
     /**
         Returns wxEncodingConverter class used
-        to do conversion between @ref getinputencoding() "input encoding" 
+        to do conversion between @ref getinputencoding() "input encoding"
         and @ref getoutputencoding() "output encoding".
     */
     wxEncodingConverter * GetEncodingConverter();
@@ -194,7 +194,7 @@ public:
     wxFontEncoding GetInputEncoding();
 
     /**
-        Returns actual hypertext link. (This value has a non-empty 
+        Returns actual hypertext link. (This value has a non-empty
         @ref wxHtmlLinkInfo::gethref Href string
         if the parser is between @c A and @c /A tags,
         wxEmptyString otherwise.)
@@ -231,7 +231,7 @@ public:
     void SetActualColor(const wxColour& clr);
 
     /**
-        Sets default horizontal alignment (see 
+        Sets default horizontal alignment (see
         wxHtmlContainerCell::SetAlignHor.)
         Alignment of newly opened container is set to this value.
     */
@@ -246,8 +246,8 @@ public:
 
     /**
         Sets the DC. This must be called before wxHtmlParser::Parse!
-        @e pixel_scale  can be used when rendering to high-resolution 
-        DCs (e.g. printer) to adjust size of pixel metrics. (Many dimensions in 
+        @e pixel_scale  can be used when rendering to high-resolution
+        DCs (e.g. printer) to adjust size of pixel metrics. (Many dimensions in
         HTML are given in pixels -- e.g. image sizes. 300x300 image would be only one
         inch wide on typical printer. With pixel_scale = 3.0 it would be 3 inches.)
     */
@@ -260,7 +260,7 @@ public:
 
     /**
         Sets current font face to @e face. This affects either fixed size
-        font or proportional, depending on context (whether the parser is 
+        font or proportional, depending on context (whether the parser is
         inside @c TT tag or not).
     */
     void SetFontFace(const wxString& face);

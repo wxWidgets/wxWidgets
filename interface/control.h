@@ -9,16 +9,16 @@
 /**
     @class wxControl
     @wxheader{control.h}
-    
+
     This is the base class for a control or "widget''.
-    
+
     A control is generally a small window which processes user input and/or
     displays one or more item of data.
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{control.png}
-    
+
     @seealso
     wxValidator
 */
@@ -46,7 +46,7 @@ public:
         version, without the mnemonics characters.
     */
     const wxString GetLabelText();
-        static wxString GetLabelText(const wxString& label);
+    static wxString GetLabelText(const wxString& label);
     //@}
 
     /**
@@ -55,7 +55,7 @@ public:
         The @c  characters in the @e label are special and indicate that the
         following character is a mnemonic for this control and can be used to activate
         it from the keyboard (typically by using @e Alt key in combination with
-        it). To insert a literal ampersand character, you need to double it, i.e. use 
+        it). To insert a literal ampersand character, you need to double it, i.e. use
         @c "".
     */
     void SetLabel(const wxString& label);

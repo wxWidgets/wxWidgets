@@ -9,23 +9,23 @@
 /**
     @class wxTarInputStream
     @wxheader{tarstrm.h}
-    
+
     Input stream for reading tar files.
-    
+
     wxTarInputStream::GetNextEntry returns an
      wxTarEntry object containing the meta-data
     for the next entry in the tar (and gives away ownership). Reading from
     the wxTarInputStream then returns the entry's data. Eof() becomes @true
     after an attempt has been made to read past the end of the entry's data.
     When there are no more entries, GetNextEntry() returns @NULL and sets Eof().
-    
+
     Tar entries are seekable if the parent stream is seekable. In practice this
     usually means they are only seekable if the tar is stored as a local file and
     is not compressed.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     @ref overview_wxarcbyname "Looking up an archive entry by name"
 */
@@ -44,8 +44,8 @@ public:
     */
     wxTarInputStream(wxInputStream& stream,
                      wxMBConv& conv = wxConvLocal);
-        wxTarInputStream(wxInputStream* stream,
-                         wxMBConv& conv = wxConvLocal);
+    wxTarInputStream(wxInputStream* stream,
+                     wxMBConv& conv = wxConvLocal);
     //@}
 
     /**
@@ -75,13 +75,13 @@ public:
 /**
     @class wxTarClassFactory
     @wxheader{tarstrm.h}
-    
+
     Class factory for the tar archive format. See the base class
     for details.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxarc "Archive formats such as zip", @ref overview_wxarcgeneric
     "Generic archive programming", wxTarEntry, wxTarInputStream, wxTarOutputStream
@@ -89,24 +89,24 @@ public:
 class wxTarClassFactory : public wxArchiveClassFactory
 {
 public:
-    
+
 };
 
 
 /**
     @class wxTarOutputStream
     @wxheader{tarstrm.h}
-    
+
     Output stream for writing tar files.
-    
+
     wxTarOutputStream::PutNextEntry is used to create
     a new entry in the output tar, then the entry's data is written to the
     wxTarOutputStream. Another call to PutNextEntry() closes the current
     entry and begins the next.
-    
+
     @library{wxbase}
     @category{streams}
-    
+
     @seealso
     @ref overview_wxarc "Archive formats such as zip", wxTarEntry, wxTarInputStream
 */
@@ -137,9 +137,9 @@ public:
     wxTarOutputStream(wxOutputStream& stream,
                       wxTarFormat format = wxTAR_PAX,
                       wxMBConv& conv = wxConvLocal);
-        wxTarOutputStream(wxOutputStream* stream,
-                          wxTarFormat format = wxTAR_PAX,
-                          wxMBConv& conv = wxConvLocal);
+    wxTarOutputStream(wxOutputStream* stream,
+                      wxTarFormat format = wxTAR_PAX,
+                      wxMBConv& conv = wxConvLocal);
     //@}
 
     /**
@@ -193,7 +193,7 @@ public:
         specified in the POSIX standards.
     */
     int GetBlockingFactor();
-        void SetBlockingFactor(int factor);
+    void SetBlockingFactor(int factor);
     //@}
 
     /**
@@ -216,7 +216,7 @@ public:
         Create a new entry with the given name, timestamp and size.
     */
     bool PutNextEntry(wxTarEntry* entry);
-        bool PutNextEntry(const wxString& name);
+    bool PutNextEntry(const wxString& name);
     //@}
 };
 
@@ -224,12 +224,12 @@ public:
 /**
     @class wxTarEntry
     @wxheader{tarstrm.h}
-    
+
     Holds the meta-data for an entry in a tar.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxarc "Archive formats such as zip", wxTarInputStream,
     wxTarOutputStream
@@ -242,7 +242,7 @@ public:
         Copy constructor.
     */
     wxTarEntry(const wxString& name = wxEmptyString);
-        wxTarEntry(const wxTarEntry& entry);
+    wxTarEntry(const wxTarEntry& entry);
     //@}
 
     //@{
@@ -251,7 +251,7 @@ public:
          wxArchiveEntry::Get/SetDateTime.
     */
     wxDateTime GetAccessTime();
-        void SetAccessTime(const wxDateTime& dt);
+    void SetAccessTime(const wxDateTime& dt);
     //@}
 
     //@{
@@ -260,7 +260,7 @@ public:
          wxArchiveEntry::Get/SetDateTime.
     */
     wxDateTime GetCreateTime();
-        void SetCreateTime(const wxDateTime& dt);
+    void SetCreateTime(const wxDateTime& dt);
     //@}
 
     //@{
@@ -270,9 +270,9 @@ public:
          or @e wxTAR_BLKTYPE.
     */
     int GetDevMajor();
-        int GetDevMinor();
-        void SetDevMajor(int dev);
-        void SetDevMinor(int dev);
+    int GetDevMinor();
+    void SetDevMajor(int dev);
+    void SetDevMinor(int dev);
     //@}
 
     //@{
@@ -284,9 +284,9 @@ public:
         Get/SetUserName" can be used instead.
     */
     int GetGroupId();
-        int GetUserId();
-        void SetGroupId(int id);
-        void SetUserId(int id);
+    int GetUserId();
+    void SetGroupId(int id);
+    void SetUserId(int id);
     //@}
 
     //@{
@@ -295,9 +295,9 @@ public:
         over this entry. These are not present in very old tars.
     */
     wxString GetGroupName();
-        wxString GetUserName();
-        void SetGroupName(const wxString& group);
-        void SetUserName(const wxString& user);
+    wxString GetUserName();
+    void SetGroupName(const wxString& group);
+    void SetUserName(const wxString& user);
     //@}
 
     //@{
@@ -307,7 +307,7 @@ public:
         to @e wxTAR_LNKTYPE or @e wxTAR_SYMTYPE.
     */
     wxString GetLinkName();
-        void SetLinkName(const wxString& link);
+    void SetLinkName(const wxString& link);
     //@}
 
     //@{
@@ -317,7 +317,7 @@ public:
         Symbols are defined for them in wx/file.h.
     */
     int GetMode();
-        void SetMode(int mode);
+    void SetMode(int mode);
     //@}
 
     //@{
@@ -332,7 +332,7 @@ public:
         still more efficient if the size is given beforehand.
     */
     void SetSize(wxFileOffset size);
-        wxFileOffset GetSize();
+    wxFileOffset GetSize();
     //@}
 
     //@{
@@ -342,7 +342,7 @@ public:
         any other values should be treated as @e wxTAR_REGTYPE.
     */
     int GetTypeFlag();
-        void SetTypeFlag(int type);
+    void SetTypeFlag(int type);
     //@}
 
     //@{
@@ -353,9 +353,9 @@ public:
         (i.e. has a trailing path separator).
     */
     wxString GetInternalName();
-        wxString GetInternalName(const wxString& name,
-                                 wxPathFormat format = wxPATH_NATIVE,
-                                 bool* pIsDir = @NULL);
+    wxString GetInternalName(const wxString& name,
+                             wxPathFormat format = wxPATH_NATIVE,
+                             bool* pIsDir = @NULL);
     //@}
 
     /**

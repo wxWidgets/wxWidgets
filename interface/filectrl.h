@@ -9,11 +9,11 @@
 /**
     @class wxFileCtrl
     @wxheader{filectrl.h}
-    
+
     This control allows the user to select a file. two implemetations exist, one
     for Gtk and another generic one for anything other than Gtk.
     It is only available if @c wxUSE_FILECTRL is set to 1.
-    
+
     @beginStyleTable
     @style{wxFC_DEFAULT_STYLE}:
            The default style: wxFC_OPEN
@@ -29,10 +29,10 @@
     @style{wxFC_NOSHOWHIDDEN}:
            Hides the "Show Hidden Files" checkbox (Generic only)
     @endStyleTable
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxGenericDirCtrl
 */
@@ -41,48 +41,48 @@ class wxFileCtrl : public wxWindow
 public:
     //@{
     /**
-        @param parent 
+        @param parent
         Parent window, must not be non-@NULL.
         
-        @param id 
+        @param id
         The identifier for the control.
         
-        @param defaultDirectory 
+        @param defaultDirectory
         The initial directory shown in the control. Must be
         a valid path to a directory or the empty string.
         In case it is the empty string, the current working directory is used.
         
-        @param defaultFilename 
+        @param defaultFilename
         The default filename, or the empty string.
         
-        @param wildcard 
+        @param wildcard
         A wildcard specifying which files can be selected,
         such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
         
-        @param style 
+        @param style
         The window style, see wxFC_* flags.
         
-        @param pos 
+        @param pos
         Initial position.
         
-        @param size 
+        @param size
         Initial size.
         
-        @param name 
+        @param name
         Control name.
         
         @returns @true if the control was successfully created or @false if
                    creation failed.
     */
     wxFileCtrl();
-        wxFileCtrl(wxWindow * parent, wxWindowID id,
-                   const wxString& defaultDirectory = wxEmptyString,
-                   const wxString& defaultFilename = wxEmptyString,
-                   const wxPoint& wildCard = wxFileSelectorDefaultWildcardStr,
-                   long style = wxFC_DEFAULT_STYLE,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   const wxString& name = "filectrl");
+    wxFileCtrl(wxWindow * parent, wxWindowID id,
+               const wxString& defaultDirectory = wxEmptyString,
+               const wxString& defaultFilename = wxEmptyString,
+               const wxPoint& wildCard = wxFileSelectorDefaultWildcardStr,
+               long style = wxFC_DEFAULT_STYLE,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               const wxString& name = "filectrl");
     //@}
 
     /**
@@ -182,10 +182,10 @@ public:
 /**
     @class wxFileCtrlEvent
     @wxheader{filectrl.h}
-    
+
     A file control event holds information about events associated with
     wxFileCtrl objects.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
@@ -219,5 +219,5 @@ public:
     /**
         Sets the files changed by this event.
     */
-     wxFileCtrlEvent::SetFiles(const wxArrayString files);
+    wxFileCtrlEvent::SetFiles(const wxArrayString files);
 };

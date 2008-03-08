@@ -9,15 +9,15 @@
 /**
     @class wxRadioButton
     @wxheader{radiobut.h}
-    
+
     A radio button item is a button which usually denotes one of several mutually
     exclusive options. It has a text label next to a (usually) round button.
-    
+
     You can create a group of mutually-exclusive radio buttons by specifying @c
     wxRB_GROUP for
     the first in the group. The group ends when another radio button group is
     created, or there are no more radio buttons.
-    
+
     @beginStyleTable
     @style{wxRB_GROUP}:
            Marks the beginning of a new group of radio buttons.
@@ -30,17 +30,17 @@
            Use a checkbox button instead of radio button (currently supported
            only on PalmOS).
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_RADIOBUTTON(id\, func)}:
            Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the
            radiobutton is clicked.
     @endEventTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{radiobutton.png}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview", wxRadioBox,
     wxCheckBox
@@ -52,42 +52,42 @@ public:
     /**
         Constructor, creating and showing a radio button.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param label 
+        @param label
         Label for the radio button.
         
-        @param pos 
+        @param pos
         Window position. If wxDefaultPosition is specified then a default position
         is chosen.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then a default size is
         chosen.
         
-        @param style 
+        @param style
         Window style. See wxRadioButton.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxRadioButton();
-        wxRadioButton(wxWindow* parent, wxWindowID id,
-                      const wxString& label,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long style = 0,
-                      const wxValidator& validator = wxDefaultValidator,
-                      const wxString& name = "radioButton");
+    wxRadioButton(wxWindow* parent, wxWindowID id,
+                  const wxString& label,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = 0,
+                  const wxValidator& validator = wxDefaultValidator,
+                  const wxString& name = "radioButton");
     //@}
 
     /**
@@ -116,7 +116,7 @@ public:
         Sets the radio button to selected or deselected status. This does not cause a
         wxEVT_COMMAND_RADIOBUTTON_SELECTED event to get emitted.
         
-        @param value 
+        @param value
         @true to select, @false to deselect.
     */
     void SetValue(const bool value);

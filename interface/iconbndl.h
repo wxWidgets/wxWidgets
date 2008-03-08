@@ -9,14 +9,14 @@
 /**
     @class wxIconBundle
     @wxheader{iconbndl.h}
-    
+
     This class contains multiple copies of an icon in different sizes,
     see also wxDialog::SetIcons and
     wxTopLevelWindow::SetIcons.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @stdobjects
     wxNullIconBundle
 */
@@ -28,9 +28,9 @@ public:
         Copy constructor.
     */
     wxIconBundle();
-        wxIconBundle(const wxString& file, long type);
-        wxIconBundle(const wxIcon& icon);
-        wxIconBundle(const wxIconBundle& ic);
+    wxIconBundle(const wxString& file, long type);
+    wxIconBundle(const wxIcon& icon);
+    wxIconBundle(const wxIconBundle& ic);
     //@}
 
     /**
@@ -45,7 +45,7 @@ public:
         replaced by the new one.
     */
     void AddIcon(const wxString& file, long type);
-        void AddIcon(const wxIcon& icon);
+    void AddIcon(const wxIcon& icon);
     //@}
 
     //@{
@@ -53,7 +53,7 @@ public:
         Same as GetIcon( wxSize( size, size ) ).
     */
     wxIcon GetIcon(const wxSize& size);
-        wxIcon GetIcon(wxCoord size = -1);
+    wxIcon GetIcon(wxCoord size = -1);
     //@}
 
     /**

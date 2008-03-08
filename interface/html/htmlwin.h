@@ -9,20 +9,20 @@
 /**
     @class wxHtmlWindow
     @headerfile htmlwin.h wx/html/htmlwin.h
-    
+
     wxHtmlWindow is probably the only class you will directly use
     unless you want to do something special (like adding new tag
     handlers or MIME filters).
-    
+
     The purpose of this class is to display HTML pages (either local
     file or downloaded via HTTP protocol) in a window. The width
     of the window is constant - given in the constructor - and virtual height
     is changed dynamically depending on page size.
-    Once the window is created you can set its content by calling 
+    Once the window is created you can set its content by calling
     @ref wxHtmlWindow::setpage SetPage(text),
     @ref wxHtmlWindow::loadpage LoadPage(filename) or
     wxHtmlWindow::LoadFile.
-    
+
     @beginStyleTable
     @style{wxHW_SCROLLBAR_NEVER}:
            Never display scrollbars, not even when the page is larger than the
@@ -32,10 +32,10 @@
     @style{wxHW_NO_SELECTION}:
            Don't allow the user to select text.
     @endStyleTable
-    
+
     @library{wxhtml}
     @category{html}
-    
+
     @seealso
     wxHtmlLinkEvent, wxHtmlCellEvent
 */
@@ -47,15 +47,15 @@ public:
         Constructor. The parameters are the same as for the wxScrolledWindow
         constructor.
         
-        @param style 
+        @param style
         Window style. See wxHtmlWindow.
     */
     wxHtmlWindow();
-        wxHtmlWindow(wxWindow parent, wxWindowID id = -1,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxHW_DEFAULT_STYLE,
-                     const wxString& name = "htmlWindow");
+    wxHtmlWindow(wxWindow parent, wxWindowID id = -1,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxHW_DEFAULT_STYLE,
+                 const wxString& name = "htmlWindow");
     //@}
 
     /**
@@ -69,9 +69,9 @@ public:
     static void AddFilter(wxHtmlFilter filter);
 
     /**
-        Appends HTML fragment to currently displayed text and refreshes the window. 
+        Appends HTML fragment to currently displayed text and refreshes the window.
         
-        @param source 
+        @param source
         HTML code fragment
         
         @returns @false if an error occurred, @true otherwise.
@@ -81,14 +81,14 @@ public:
     /**
         Returns pointer to the top-level container.
         
-        See also: @ref overview_cells "Cells Overview", 
+        See also: @ref overview_cells "Cells Overview",
         @ref overview_printing "Printing Overview"
     */
     wxHtmlContainerCell* GetInternalRepresentation();
 
     /**
         Returns anchor within currently opened page
-        (see wxHtmlWindow::GetOpenedPage). 
+        (see wxHtmlWindow::GetOpenedPage).
         If no page is opened or if the displayed page wasn't
         produced by call to LoadPage, empty string is returned.
     */
@@ -113,7 +113,7 @@ public:
     wxFrame* GetRelatedFrame();
 
     /**
-        Moves back to the previous page. (each page displayed using 
+        Moves back to the previous page. (each page displayed using
         LoadPage() is stored in history list.)
     */
     bool HistoryBack();
@@ -150,10 +150,10 @@ public:
     virtual bool LoadFile(const wxFileName& filename);
 
     /**
-        Unlike SetPage this function first loads HTML page from @e location 
+        Unlike SetPage this function first loads HTML page from @e location
         and then displays it. See example:
         
-        @param location 
+        @param location
         The address of document. See wxFileSystem for details on address format and
         behaviour of "opener".
         
@@ -173,14 +173,14 @@ public:
         
         Overloading this method is deprecated; intercept the event instead.
         
-        @param cell 
+        @param cell
         The cell inside which the mouse was clicked, always a simple
         (i.e. non-container) cell
         
-        @param x, y 
+        @param x, y
         The logical coordinates of the click point
         
-        @param event 
+        @param event
         The mouse event containing other information about the click
         
         @returns @true if a link was clicked, @false otherwise.
@@ -193,11 +193,11 @@ public:
         Default behaviour is to emit a wxHtmlCellEvent.
         Overloading this method is deprecated; intercept the event instead.
         
-        @param cell 
+        @param cell
         The cell inside which the mouse is currently, always a simple
         (i.e. non-container) cell
         
-        @param x, y 
+        @param x, y
         The logical coordinates of the click point
     */
     virtual void OnCellMouseHover(wxHtmlCell cell, wxCoord x,
@@ -215,14 +215,14 @@ public:
 
     /**
         Called when an URL is being opened (either when the user clicks on a link or
-        an image is loaded). The URL will be opened only if OnOpeningURL returns 
+        an image is loaded). The URL will be opened only if OnOpeningURL returns
         @c wxHTML_OPEN. This method is called by
         wxHtmlParser::OpenURL.
         You can override OnOpeningURL to selectively block some
         URLs (e.g. for security reasons) or to redirect them elsewhere. Default
         behaviour is to always return @c wxHTML_OPEN.
         
-        @param type 
+        @param type
         Indicates type of the resource. Is one of
         
         
@@ -242,16 +242,16 @@ public:
         Opening a resource that doesn't fall into
         any other category.
         
-        @param url 
+        @param url
         URL being opened.
         
-        @param redirect 
+        @param redirect
         Pointer to wxString variable that must be filled with an
         URL if OnOpeningURL returns wxHTML_REDIRECT.
     */
     virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
-                                             const wxString& url,
-                                             wxString * redirect);
+            const wxString& url,
+            wxString * redirect);
 
     /**
         Called on parsing @c TITLE tag.
@@ -265,10 +265,10 @@ public:
         
         Read values: all things set by SetFonts, SetBorders.
         
-        @param cfg 
+        @param cfg
         wxConfig from which you want to read the configuration.
         
-        @param path 
+        @param path
         Optional path in config tree. If not given current path is used.
     */
     virtual void ReadCustomization(wxConfigBase cfg,
@@ -311,7 +311,7 @@ public:
         This function sets the space between border of window and HTML contents. See
         image:
         
-        @param b 
+        @param b
         indentation from borders in pixels
     */
     void SetBorders(int b);
@@ -319,16 +319,16 @@ public:
     /**
         This function sets font sizes and faces.
         
-        @param normal_face 
-        This is face name for normal (i.e. non-fixed) font. 
+        @param normal_face
+        This is face name for normal (i.e. non-fixed) font.
         It can be either empty string (then the default face is chosen) or
         platform-specific face name. Examples are "helvetica" under Unix or
         "Times New Roman" under Windows.
         
-        @param fixed_face 
+        @param fixed_face
         The same thing for fixed face ( TT../TT )
         
-        @param sizes 
+        @param sizes
         This is an array of 7 items of int type.
         The values represent size of font with HTML size from -2 to +4
         ( FONT SIZE=-2 to FONT SIZE=+4 ). Default sizes are used if sizes
@@ -341,10 +341,10 @@ public:
     /**
         Sets HTML page and display it. This won't @b load the page!!
         It will display the @e source. See example:
-        If you want to load a document from some location use 
+        If you want to load a document from some location use
         LoadPage() instead.
         
-        @param source 
+        @param source
         The HTML document source to be displayed.
         
         @returns @false if an error occurred, @true otherwise.
@@ -363,7 +363,7 @@ public:
         this sets statusbar slot where messages will be displayed.
         (Default is -1 = no messages.)
         
-        @param bar 
+        @param bar
         statusbar slot number (0..n)
     */
     void SetRelatedStatusBar(int bar);
@@ -376,15 +376,15 @@ public:
     /**
         Saves custom settings into wxConfig. It uses the path 'path'
         if given, otherwise it saves info into currently selected path.
-        Regardless of whether the path is given or not, the function creates sub-path 
+        Regardless of whether the path is given or not, the function creates sub-path
         @c wxHtmlWindow.
         
         Saved values: all things set by SetFonts, SetBorders.
         
-        @param cfg 
+        @param cfg
         wxConfig to which you want to save the configuration.
         
-        @param path 
+        @param path
         Optional path in config tree. If not given, the current path is used.
     */
     virtual void WriteCustomization(wxConfigBase cfg,
@@ -395,9 +395,9 @@ public:
 /**
     @class wxHtmlLinkEvent
     @headerfile htmlwin.h wx/html/htmlwin.h
-    
+
     This event class is used for the events generated by wxHtmlWindow.
-    
+
     @library{wxhtml}
     @category{FIXME}
 */
@@ -420,9 +420,9 @@ public:
 /**
     @class wxHtmlCellEvent
     @headerfile htmlwin.h wx/html/htmlwin.h
-    
+
     This event class is used for the events generated by wxHtmlWindow.
-    
+
     @library{wxhtml}
     @category{FIXME}
 */

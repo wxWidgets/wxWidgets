@@ -9,28 +9,28 @@
 /**
     @class wxFontEnumerator
     @wxheader{fontenum.h}
-    
+
     wxFontEnumerator enumerates either all available fonts on the system or only
     the ones with given attributes - either only fixed-width (suited for use in
     programs such as terminal emulators and the like) or the fonts available in
     the given encoding.
-    
-    To do this, you just have to call one of EnumerateXXX() functions - either 
-    wxFontEnumerator::EnumerateFacenames or 
+
+    To do this, you just have to call one of EnumerateXXX() functions - either
+    wxFontEnumerator::EnumerateFacenames or
     wxFontEnumerator::EnumerateEncodings and the
-    corresponding callback (wxFontEnumerator::OnFacename or 
+    corresponding callback (wxFontEnumerator::OnFacename or
     wxFontEnumerator::OnFontEncoding) will be called
     repeatedly until either all fonts satisfying the specified criteria are
     exhausted or the callback returns @false.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_wxfontencodingoverview "Font encoding overview", @ref
     overview_samplefont "Font sample", wxFont, wxFontMapper
 */
-class wxFontEnumerator 
+class wxFontEnumerator
 {
 public:
     /**
@@ -52,13 +52,13 @@ public:
                                     bool fixedWidthOnly = @false);
 
     /**
-        Return array of strings containing all encodings found by 
+        Return array of strings containing all encodings found by
         EnumerateEncodings().
     */
     static wxArrayString GetEncodings(const wxString& facename = "");
 
     /**
-        Return array of strings containing all facenames found by 
+        Return array of strings containing all facenames found by
         EnumerateFacenames().
     */
     static wxArrayString GetFacenames(wxFontEncoding encoding = wxFONTENCODING_SYSTEM,

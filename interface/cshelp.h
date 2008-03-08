@@ -9,22 +9,22 @@
 /**
     @class wxHelpProvider
     @wxheader{cshelp.h}
-    
+
     wxHelpProvider is an abstract class used by a program implementing
     context-sensitive help to
     show the help text for the given window.
-    
+
     The current help provider must be explicitly set by the application using
     wxHelpProvider::Set().
-    
+
     @library{wxcore}
     @category{help}
-    
+
     @seealso
     wxContextHelp, wxContextHelpButton, wxSimpleHelpProvider,
     wxHelpControllerHelpProvider, wxWindow::SetHelpText, wxWindow::GetHelpTextAtPoint
 */
-class wxHelpProvider 
+class wxHelpProvider
 {
 public:
     /**
@@ -34,7 +34,7 @@ public:
 
     /**
         Associates the text with the given window or id. Although all help
-        providers have these functions to allow making wxWindow::SetHelpText 
+        providers have these functions to allow making wxWindow::SetHelpText
         work, not all of them implement the functions.
     */
     void AddHelp(wxWindowBase* window, const wxString& text);
@@ -52,7 +52,7 @@ public:
         the application, for example.
     */
     wxString GetHelp(const wxWindowBase* window);
-        void AddHelp(wxWindowID id, const wxString& text);
+    void AddHelp(wxWindowID id, const wxString& text);
     //@}
 
     /**
@@ -71,7 +71,7 @@ public:
 
     /**
         Shows help for the given window. Override this function if the help doesn't
-        depend on the exact position inside the window, otherwise you need to override 
+        depend on the exact position inside the window, otherwise you need to override
         ShowHelpAtPoint().
         
         Returns @true if help was shown, or @false if no help was available for this
@@ -81,20 +81,20 @@ public:
 
     /**
         This function may be overridden to show help for the window when it should
-        depend on the position inside the window, By default this method forwards to 
+        depend on the position inside the window, By default this method forwards to
         ShowHelp(), so it is enough to only implement
         the latter if the help doesn't depend on the position.
         
         Returns @true if help was shown, or @false if no help was available for this
         window.
         
-        @param window 
+        @param window
         Window to show help text for.
         
-        @param point 
+        @param point
         Coordinates of the mouse at the moment of help event emission.
         
-        @param origin 
+        @param origin
         Help event origin, see wxHelpEvent::GetOrigin.
     */
     bool ShowHelpAtPoint(wxWindowBase* window, const wxPoint point,
@@ -105,7 +105,7 @@ public:
 /**
     @class wxHelpControllerHelpProvider
     @wxheader{cshelp.h}
-    
+
     wxHelpControllerHelpProvider is an implementation of wxHelpProvider which
     supports
     both context identifiers and plain text help strings. If the help text is an
@@ -115,14 +115,14 @@ public:
     in a tooltip as per wxSimpleHelpProvider. If you use this with a
     wxCHMHelpController instance
     on windows, it will use the native style of tip window instead of wxTipWindow.
-    
+
     You can use the convenience function @b wxContextId to convert an integer
     context
     id to a string for passing to wxWindow::SetHelpText.
-    
+
     @library{wxcore}
     @category{help}
-    
+
     @seealso
     wxHelpProvider, wxSimpleHelpProvider, wxContextHelp, wxWindow::SetHelpText,
     wxWindow::GetHelpTextAtPoint
@@ -151,22 +151,22 @@ public:
 /**
     @class wxContextHelp
     @wxheader{cshelp.h}
-    
+
     This class changes the cursor to a query and puts the application into a
     'context-sensitive help mode'.
     When the user left-clicks on a window within the specified window, a wxEVT_HELP
     event is
     sent to that control, and the application may respond to it by popping up some
     help.
-    
+
     For example:
-    
+
     @code
     wxContextHelp contextHelp(myWindow);
     @endcode
-    
+
     There are a couple of ways to invoke this behaviour implicitly:
-    
+
      Use the wxDIALOG_EX_CONTEXTHELP style for a dialog (Windows only). This will
     put a question mark
     in the titlebar, and Windows will put the application into context-sensitive
@@ -177,13 +177,13 @@ public:
     Normally you will write your application so that this button is only added to a
     dialog for non-Windows platforms
     (use wxDIALOG_EX_CONTEXTHELP on Windows).
-    
+
     Note that on Mac OS X, the cursor does not change when in context-sensitive
     help mode.
-    
+
     @library{wxcore}
     @category{help}
-    
+
     @seealso
     wxHelpEvent, wxHelpController, wxContextHelpButton
 */
@@ -223,21 +223,21 @@ public:
 /**
     @class wxContextHelpButton
     @wxheader{cshelp.h}
-    
+
     Instances of this class may be used to add a question mark button that when
     pressed, puts the
     application into context-help mode. It does this by creating a wxContextHelp
     object which itself
     generates a wxEVT_HELP event when the user clicks on a window.
-    
+
     On Windows, you may add a question-mark icon to a dialog by use of the
     wxDIALOG_EX_CONTEXTHELP extra style, but
     on other platforms you will have to add a button explicitly, usually next to
     OK, Cancel or similar buttons.
-    
+
     @library{wxcore}
     @category{help}
-    
+
     @seealso
     wxBitmapButton, wxContextHelp
 */
@@ -248,28 +248,28 @@ public:
     /**
         Constructor, creating and showing a context help button.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Button identifier. Defaults to wxID_CONTEXT_HELP.
         
-        @param pos 
+        @param pos
         Button position.
         
-        @param size 
+        @param size
         Button size. If wxDefaultSize is specified then the button is sized
         appropriately for the question mark bitmap.
         
-        @param style 
+        @param style
         Window style.
     */
     wxContextHelpButton();
-        wxContextHelpButton(wxWindow* parent,
-                            wxWindowID id = wxID_CONTEXT_HELP,
-                            const wxPoint& pos = wxDefaultPosition,
-                            const wxSize& size = wxDefaultSize,
-                            long style = wxBU_AUTODRAW);
+    wxContextHelpButton(wxWindow* parent,
+                        wxWindowID id = wxID_CONTEXT_HELP,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxBU_AUTODRAW);
     //@}
 };
 
@@ -277,14 +277,14 @@ public:
 /**
     @class wxSimpleHelpProvider
     @wxheader{cshelp.h}
-    
+
     wxSimpleHelpProvider is an implementation of wxHelpProvider which supports
     only plain text help strings, and shows the string associated with the
     control (if any) in a tooltip.
-    
+
     @library{wxcore}
     @category{help}
-    
+
     @seealso
     wxHelpProvider, wxHelpControllerHelpProvider, wxContextHelp,
     wxWindow::SetHelpText, wxWindow::GetHelpTextAtPoint
@@ -292,5 +292,5 @@ public:
 class wxSimpleHelpProvider : public wxHelpProvider
 {
 public:
-    
+
 };

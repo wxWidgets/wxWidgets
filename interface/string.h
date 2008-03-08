@@ -9,15 +9,15 @@
 /**
     @class wxStringBuffer
     @wxheader{string.h}
-    
-    This tiny class allows to conveniently access the wxString 
+
+    This tiny class allows to conveniently access the wxString
     internal buffer as a writable pointer without any risk of forgetting to restore
     the string to the usable state later.
-    
-    For example, assuming you have a low-level OS function called 
+
+    For example, assuming you have a low-level OS function called
     @c GetMeaningOfLifeAsString(char *) returning the value in the provided
     buffer (which must be writable, of course) you might call it like this:
-    
+
     @code
     wxString theAnswer;
         GetMeaningOfLifeAsString(wxStringBuffer(theAnswer, 1024));
@@ -26,7 +26,7 @@
             wxLogError("Something is very wrong!");
         }
     @endcode
-    
+
     Note that the exact usage of this depends on whether on not wxUSE_STL is
     enabled.  If
     wxUSE_STL is enabled, wxStringBuffer creates a separate empty character buffer,
@@ -34,15 +34,15 @@
     if wxUSE_STL is disabled, it uses GetWriteBuf() from wxString, keeping the same
     buffer
     wxString uses intact.  In other words, relying on wxStringBuffer containing the
-    old 
+    old
     wxString data is probably not a good idea if you want to build your program in
     both
     with and without wxUSE_STL.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxStringBuffer 
+class wxStringBuffer
 {
 public:
     /**
@@ -54,7 +54,7 @@ public:
     wxStringBuffer(const wxString& str, size_t len);
 
     /**
-        Restores the string passed to the constructor to the usable state by calling 
+        Restores the string passed to the constructor to the usable state by calling
         wxString::UngetWriteBuf on it.
     */
     ~wxStringBuffer();
@@ -70,45 +70,45 @@ public:
 /**
     @class wxString
     @wxheader{string.h}
-    
-    wxString is a class representing a character string. Please see the 
+
+    wxString is a class representing a character string. Please see the
     @ref overview_wxstringoverview "wxString overview" for more information about
     it.
-    
+
     As explained there, wxString implements most of the methods of the std::string
     class.
     These standard functions are not documented in this manual, please see the
     STL documentation).
     The behaviour of all these functions is identical to the behaviour described
     there.
-    
+
     You may notice that wxString sometimes has many functions which do the same
-    thing like, for example, wxString::Length, 
+    thing like, for example, wxString::Length,
     wxString::Len and @c length() which all return the string
     length. In all cases of such duplication the @c std::string-compatible
     method (@c length() in this case, always the lowercase version) should be
     used as it will ensure smoother transition to @c std::string when wxWidgets
     starts using it instead of wxString.
-    
+
     @library{wxbase}
     @category{data}
-    
+
     @stdobjects
     Objects:
     wxEmptyString
-    
+
     @seealso
     @ref overview_wxstringoverview "wxString overview", @ref overview_unicode
     "Unicode overview"
 */
-class wxString 
+class wxString
 {
 public:
     //@{
     /**
         Initializes the string from first @e nLength characters of C string.
         The default value of @c wxSTRING_MAXLEN means take all the string.
-        In Unicode build, @e conv's 
+        In Unicode build, @e conv's
         wxMBConv::MB2WC method is called to
         convert @e psz to wide string (the default converter uses current locale's
         charset). It is ignored in ANSI build.
@@ -117,15 +117,15 @@ public:
               mb_str, @ref wcstr() wc_str
     */
     wxString();
-        wxString(const wxString& x);
-        wxString(wxChar ch, size_t n = 1);
-        wxString(const wxChar* psz, size_t nLength = wxSTRING_MAXLEN);
-        wxString(const unsigned char* psz,
-                 size_t nLength = wxSTRING_MAXLEN);
-        wxString(const wchar_t* psz, const wxMBConv& conv,
-                 size_t nLength = wxSTRING_MAXLEN);
-        wxString(const char* psz, const wxMBConv& conv = wxConvLibc,
-                 size_t nLength = wxSTRING_MAXLEN);
+    wxString(const wxString& x);
+    wxString(wxChar ch, size_t n = 1);
+    wxString(const wxChar* psz, size_t nLength = wxSTRING_MAXLEN);
+    wxString(const unsigned char* psz,
+             size_t nLength = wxSTRING_MAXLEN);
+    wxString(const wchar_t* psz, const wxMBConv& conv,
+             size_t nLength = wxSTRING_MAXLEN);
+    wxString(const char* psz, const wxMBConv& conv = wxConvLibc,
+             size_t nLength = wxSTRING_MAXLEN);
     //@}
 
     /**
@@ -153,7 +153,7 @@ public:
         because it will avoid the need to reallocate string memory many times (in case
         of long strings). Note that it does not set the maximal length of a string - it
         will still expand if more than @e nLen characters are stored in it. Also, it
-        does not truncate the existing string (use 
+        does not truncate the existing string (use
         Truncate() for this) even if its current length is
         greater than @e nLen
     */
@@ -166,7 +166,7 @@ public:
         to it.
     */
     wxString Append(const wxChar* psz);
-        wxString Append(wxChar ch, int count = 1);
+    wxString Append(wxChar ch, int count = 1);
     //@}
 
     /**
@@ -252,7 +252,7 @@ public:
         See also CmpNoCase(), IsSameAs().
     */
     int Cmp(const wxString& s);
-        int Cmp(const wxChar* psz);
+    int Cmp(const wxChar* psz);
     //@}
 
     //@{
@@ -267,7 +267,7 @@ public:
         See also Cmp(), IsSameAs().
     */
     int CmpNoCase(const wxString& s);
-        int CmpNoCase(const wxChar* psz);
+    int CmpNoCase(const wxChar* psz);
     //@}
 
     /**
@@ -315,17 +315,17 @@ public:
         
     */
     bool operator ==(const wxString& x, const wxString& y);
-        bool operator ==(const wxString& x, const wxChar* t);
-        bool operator !=(const wxString& x, const wxString& y);
-        bool operator !=(const wxString& x, const wxChar* t);
-        bool operator(const wxString& x, const wxString& y);
-        bool operator(const wxString& x, const wxChar* t);
-        bool operator =(const wxString& x, const wxString& y);
-        bool operator =(const wxString& x, const wxChar* t);
-        bool operator(const wxString& x, const wxString& y);
-        bool operator(const wxString& x, const wxChar* t);
-        bool operator =(const wxString& x, const wxString& y);
-        bool operator =(const wxString& x, const wxChar* t);
+    bool operator ==(const wxString& x, const wxChar* t);
+    bool operator !=(const wxString& x, const wxString& y);
+    bool operator !=(const wxString& x, const wxChar* t);
+    bool operator(const wxString& x, const wxString& y);
+    bool operator(const wxString& x, const wxChar* t);
+    bool operator =(const wxString& x, const wxString& y);
+    bool operator =(const wxString& x, const wxChar* t);
+    bool operator(const wxString& x, const wxString& y);
+    bool operator(const wxString& x, const wxChar* t);
+    bool operator =(const wxString& x, const wxString& y);
+    bool operator =(const wxString& x, const wxChar* t);
     //@}
 
     /**
@@ -393,9 +393,9 @@ public:
     void Empty();
 
     /**
-        This function can be used to test if the string ends with the specified 
+        This function can be used to test if the string ends with the specified
         @e suffix. If it does, the function will return @true and put the
-        beginning of the string before the suffix into @e rest string if it is not 
+        beginning of the string before the suffix into @e rest string if it is not
         @NULL. Otherwise, the function returns @false and doesn't
         modify the @e rest.
     */
@@ -407,7 +407,7 @@ public:
         not found.
     */
     int Find(wxUniChar ch, bool fromEnd = @false);
-        int Find(const wxString& sub);
+    int Find(const wxString& sub);
     //@}
 
     //@{
@@ -418,12 +418,12 @@ public:
         code.
     */
     int First(wxChar c);
-        int First(const wxChar* psz);
-        int First(const wxString& str);
+    int First(const wxChar* psz);
+    int First(const wxString& str);
     //@}
 
     /**
-        This static function returns the string containing the result of calling 
+        This static function returns the string containing the result of calling
         Printf() with the passed parameters on it.
         
         @sa FormatV(), Printf()
@@ -431,7 +431,7 @@ public:
     static wxString Format(const wxChar format,  ...);
 
     /**
-        This static function returns the string containing the result of calling 
+        This static function returns the string containing the result of calling
         PrintfV() with the passed parameters on it.
         
         @sa Format(), PrintfV()
@@ -459,7 +459,7 @@ public:
         @sa wxString::To8BitData
     */
     static wxString From8BitData(const char* buf, size_t len);
-        static wxString From8BitData(const char* buf);
+    static wxString From8BitData(const char* buf);
     //@}
 
     //@{
@@ -471,10 +471,10 @@ public:
         need to convert from another charset.
     */
     static wxString FromAscii(const char* s);
-        static wxString FromAscii(const unsigned char* s);
-        static wxString FromAscii(const char* s, size_t len);
-        static wxString FromAscii(const unsigned char* s, size_t len);
-        static wxString FromAscii(char c);
+    static wxString FromAscii(const unsigned char* s);
+    static wxString FromAscii(const char* s, size_t len);
+    static wxString FromAscii(const unsigned char* s, size_t len);
+    static wxString FromAscii(char c);
     //@}
 
     //@{
@@ -486,7 +486,7 @@ public:
         debug builds.
     */
     static wxString FromUTF8(const char* s);
-        static wxString FromUTF8(const char* s, size_t len);
+    static wxString FromUTF8(const char* s, size_t len);
     //@}
 
     /**
@@ -527,7 +527,7 @@ public:
         code.
     */
     size_t Index(wxChar ch);
-        size_t Index(const wxChar* sz);
+    size_t Index(const wxChar* sz);
     //@}
 
     /**
@@ -570,7 +570,7 @@ public:
         See also Cmp(), CmpNoCase()
     */
     bool IsSameAs(const wxChar* psz, bool caseSensitive = @true);
-        bool IsSameAs(wxChar c, bool caseSensitive = @true);
+    bool IsSameAs(wxChar c, bool caseSensitive = @true);
     //@}
 
     /**
@@ -589,7 +589,7 @@ public:
         code.
     */
     wxChar Last();
-        wxChar Last();
+    wxChar Last();
     //@}
 
     /**
@@ -639,9 +639,9 @@ public:
     bool Matches(const wxString& mask);
 
     /**
-        These are "advanced" functions and they will be needed quite rarely. 
+        These are "advanced" functions and they will be needed quite rarely.
         Alloc() and Shrink() are only
-        interesting for optimization purposes. 
+        interesting for optimization purposes.
         wxStringBuffer
         and wxStringBufferLength classes may be very
         useful when working with some external API which requires the caller to provide
@@ -681,7 +681,7 @@ public:
         Removes spaces from the left or from the right (default).
     */
 #define wxString Pad(size_t count, wxChar pad = ' ',
-                 bool fromRight = @true)     /* implementation is private */
+    bool fromRight = @true)     /* implementation is private */
 
     /**
         Prepends @e str to this string, returning a reference to this string.
@@ -694,7 +694,7 @@ public:
         
         Note that if @c wxUSE_PRINTF_POS_PARAMS is set to 1, then this function supports
         Unix98-style positional parameters:
-        @b NB: This function will use a safe version of @e vsprintf() (usually called 
+        @b NB: This function will use a safe version of @e vsprintf() (usually called
         @e vsnprintf()) whenever available to always allocate the buffer of correct
         size. Unfortunately, this function is not available on all platforms and the
         dangerous @e vsprintf() will be used then which may lead to buffer overflows.
@@ -716,7 +716,7 @@ public:
         code.
     */
     wxString Remove(size_t pos);
-        wxString Remove(size_t pos, size_t len);
+    wxString Remove(size_t pos, size_t len);
     //@}
 
     /**
@@ -740,7 +740,7 @@ public:
     wxString Right(size_t count);
 
     /**
-        These functions replace the standard @e strchr() and @e strstr() 
+        These functions replace the standard @e strchr() and @e strstr()
         functions.
         
         Find()
@@ -755,15 +755,15 @@ public:
     void SetChar(size_t n, wxChar ch);
 
     /**
-        Minimizes the string's memory. This can be useful after a call to 
+        Minimizes the string's memory. This can be useful after a call to
         Alloc() if too much memory were preallocated.
     */
     void Shrink();
 
     /**
-        This function can be used to test if the string starts with the specified 
+        This function can be used to test if the string starts with the specified
         @e prefix. If it does, the function will return @true and put the rest
-        of the string (i.e. after the prefix) into @e rest string if it is not 
+        of the string (i.e. after the prefix) into @e rest string if it is not
         @NULL. Otherwise, the function returns @false and doesn't modify the
         @e rest.
     */
@@ -842,7 +842,7 @@ public:
         @sa wxString::From8BitData
     */
     const char* To8BitData();
-        const wxCharBuffer To8BitData();
+    const wxCharBuffer To8BitData();
     //@}
 
     //@{
@@ -855,7 +855,7 @@ public:
         powerful means of converting wxString to C string.
     */
     const char* ToAscii();
-        const wxCharBuffer ToAscii();
+    const wxCharBuffer ToAscii();
     //@}
 
     /**
@@ -929,7 +929,7 @@ public:
         Same as @ref wxString::utf8str utf8_str.
     */
     const char* ToUTF8();
-        const wxCharBuffer ToUF8();
+    const wxCharBuffer ToUF8();
     //@}
 
     /**
@@ -953,7 +953,7 @@ public:
         new string length itself assuming that the string is terminated by the first
         @c NUL character in it while the second one will use the specified length
         and thus is the only version which should be used with the strings with
-        embedded @c NULs (it is also slightly more efficient as @c strlen() 
+        embedded @c NULs (it is also slightly more efficient as @c strlen()
         doesn't have to be called).
         
         This method is deprecated, please use
@@ -961,7 +961,7 @@ public:
         wxStringBufferLength instead.
     */
     void UngetWriteBuf();
-        void UngetWriteBuf(size_t len);
+    void UngetWriteBuf(size_t len);
     //@}
 
     /**
@@ -979,7 +979,7 @@ public:
 
     /**
         Both formatted versions (wxString::Printf) and stream-like
-        insertion operators exist (for basic types only). Additionally, the 
+        insertion operators exist (for basic types only). Additionally, the
         Format() function allows to use simply append
         formatted value to a string:
         Format()
@@ -1033,8 +1033,8 @@ public:
         @sa wxMBConv, @ref wcstr() wc_str, @ref wcstr() mb_str
     */
     const wchar_t* fn_str();
-        const char* fn_str();
-        const wxCharBuffer fn_str();
+    const char* fn_str();
+    const wxCharBuffer fn_str();
     //@}
 
     //@{
@@ -1049,7 +1049,7 @@ public:
               fnstr() fn_str, @ref charstr() char_str
     */
     const char* mb_str(const wxMBConv& conv = wxConvLibc);
-        const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc);
+    const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc);
     //@}
 
     /**
@@ -1061,15 +1061,15 @@ public:
     /**
         These functions work as C++ stream insertion operators: they insert the given
         value into the string. Precision or format cannot be set using them, you can
-        use 
+        use
         Printf() for this.
     */
     wxString operator(const wxString& str);
-        wxString operator(const wxChar* psz);
-        wxString operator(wxChar ch);
-        wxString operator(int i);
-        wxString operator(float f);
-        wxString operator(double d);
+    wxString operator(const wxChar* psz);
+    wxString operator(wxChar ch);
+    wxString operator(int i);
+    wxString operator(float f);
+    wxString operator(double d);
     //@}
 
     /**
@@ -1083,9 +1083,9 @@ public:
         concatenation of the operands.
     */
     wxString operator +(const wxString& x, const wxString& y);
-        wxString operator +(const wxString& x, const wxChar* y);
-        wxString operator +(const wxString& x, wxChar y);
-        wxString operator +(const wxChar* x, const wxString& y);
+    wxString operator +(const wxString& x, const wxChar* y);
+    wxString operator +(const wxString& x, wxChar y);
+    wxString operator +(const wxChar* x, const wxString& y);
     //@}
 
     //@{
@@ -1093,8 +1093,8 @@ public:
         Concatenation in place: the argument is appended to the string.
     */
     void operator +=(const wxString& str);
-        void operator +=(const wxChar* psz);
-        void operator +=(wxChar c);
+    void operator +=(const wxChar* psz);
+    void operator +=(wxChar c);
     //@}
 
     //@{
@@ -1103,8 +1103,8 @@ public:
         constructor (see @ref construct() "wxString constructors").
     */
     wxString operator =(const wxString& str);
-        wxString operator =(const wxChar* psz);
-        wxString operator =(wxChar c);
+    wxString operator =(const wxChar* psz);
+    wxString operator =(wxChar c);
     //@}
 
     //@{
@@ -1112,15 +1112,15 @@ public:
         Element extraction.
     */
     wxChar operator [](size_t i);
-        wxChar operator [](size_t i);
-        wxChar operator [](int i);
-        wxChar operator [](int i);
+    wxChar operator [](size_t i);
+    wxChar operator [](int i);
+    wxChar operator [](int i);
     //@}
 
     /**
         Implicit conversion to a C string.
     */
-     operator const wxChar*();
+    operator const wxChar*();
 
     /**
         Empty string is @false, so !string will only return @true if the string is
@@ -1146,7 +1146,7 @@ public:
         UTF-8 build.
     */
     const char* utf8_str();
-        const wxCharBuffer utf8_str();
+    const wxCharBuffer utf8_str();
     //@}
 
     //@{
@@ -1161,7 +1161,7 @@ public:
               fnstr() fn_str, @ref wcharstr() wchar_str
     */
     const wchar_t* wc_str(const wxMBConv& conv);
-        const wxWCharBuffer wc_str(const wxMBConv& conv);
+    const wxWCharBuffer wc_str(const wxMBConv& conv);
     //@}
 
     /**
@@ -1219,17 +1219,17 @@ public:
 /**
     @class wxStringBufferLength
     @wxheader{string.h}
-    
-    This tiny class allows to conveniently access the wxString 
+
+    This tiny class allows to conveniently access the wxString
     internal buffer as a writable pointer without any risk of forgetting to restore
     the string to the usable state later, and allows the user to set the internal
     length of the string.
-    
-    For example, assuming you have a low-level OS function called 
+
+    For example, assuming you have a low-level OS function called
     @c int GetMeaningOfLifeAsString(char *) copying the value in the provided
     buffer (which must be writable, of course), and returning the actual length
     of the string, you might call it like this:
-    
+
     @code
     wxString theAnswer;
         wxStringBuffer theAnswerBuffer(theAnswer, 1024);
@@ -1240,7 +1240,7 @@ public:
             wxLogError("Something is very wrong!");
         }
     @endcode
-    
+
     Note that the exact usage of this depends on whether on not wxUSE_STL is
     enabled.  If
     wxUSE_STL is enabled, wxStringBuffer creates a separate empty character buffer,
@@ -1248,17 +1248,17 @@ public:
     if wxUSE_STL is disabled, it uses GetWriteBuf() from wxString, keeping the same
     buffer
     wxString uses intact.  In other words, relying on wxStringBuffer containing the
-    old 
+    old
     wxString data is probably not a good idea if you want to build your program in
     both
     with and without wxUSE_STL.
-    
+
     Note that SetLength @c must be called before wxStringBufferLength destructs.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxStringBufferLength 
+class wxStringBufferLength
 {
 public:
     /**
@@ -1270,13 +1270,13 @@ public:
     wxStringBufferLength(const wxString& str, size_t len);
 
     /**
-        Restores the string passed to the constructor to the usable state by calling 
+        Restores the string passed to the constructor to the usable state by calling
         wxString::UngetWriteBuf on it.
     */
     ~wxStringBufferLength();
 
     /**
-        Sets the internal length of the string referred to by wxStringBufferLength to 
+        Sets the internal length of the string referred to by wxStringBufferLength to
         @e nLength characters.
         
         Must be called before wxStringBufferLength destructs.
@@ -1301,7 +1301,7 @@ public:
     See also: wxFromString.
 */
 wxString wxToString(const wxColour& col);
-    wxString wxToString(const wxFont& col);
+wxString wxToString(const wxFont& col);
 //@}
 
 //@{
@@ -1310,6 +1310,6 @@ wxString wxToString(const wxColour& col);
     See also: wxToString.
 */
 bool wxFromString(const wxString& str, wxColour* col);
-    bool wxFromString(const wxString& str, wxFont* col);
+bool wxFromString(const wxString& str, wxFont* col);
 //@}
 

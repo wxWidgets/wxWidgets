@@ -9,18 +9,18 @@
 /**
     @class wxPathList
     @wxheader{filefn.h}
-    
+
     The path list is a convenient way of storing a number of directories, and
     when presented with a filename without a directory, searching for an existing
     file
     in those directories.
-    
+
     Be sure to look also at wxStandardPaths if you only
     want to search files in some standard paths.
-    
+
     @library{wxbase}
     @category{file}
-    
+
     @seealso
     wxArrayString, wxStandardPaths, wxFileName
 */
@@ -32,7 +32,7 @@ public:
         Constructs the object calling the Add() function.
     */
     wxPathList();
-        wxPathList(const wxArrayString& arr);
+    wxPathList(const wxArrayString& arr);
     //@}
 
     //@{
@@ -54,7 +54,7 @@ public:
         (this is why FindValidPath() may return relative paths).
     */
     bool Add(const wxString& path);
-        void Add(const wxArrayString& arr);
+    void Add(const wxArrayString& arr);
     //@}
 
     /**
@@ -129,7 +129,7 @@ wxString wxGetOSDirectory();
     On platforms where native dialogs handle only one filter per entry,
     entries in arrays are automatically adjusted.
     @e wildCard is in the form:
-    
+
     @code
     "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
     @endcode
@@ -140,7 +140,7 @@ int wxParseCommonDialogsFilter(const wxString& wildCard,
 
 /**
     This function is deprecated, use wxFileName instead.
-    
+
     Converts a Unix to a DOS filename by replacing forward
     slashes with backslashes.
 */
@@ -154,7 +154,7 @@ bool wxDirExists(const wxString& dirname);
 /**
     @b NB: This function is obsolete, please use
     wxFileName::SplitPath instead.
-    
+
     This function splits a full file name into components: the path (including
     possible disk/drive
     specification under Windows), the base name and the extension. Any of the
@@ -162,15 +162,15 @@ bool wxDirExists(const wxString& dirname);
     (@e path, @e name or @e ext) may be @NULL if you are not interested in the value
     of
     a particular component.
-    
+
     wxSplitPath() will correctly handle filenames with both DOS and Unix path
     separators under
     Windows, however it will not consider backslashes as path separators under Unix
     (where backslash
     is a valid character in a filename).
-    
+
     On entry, @e fullname should be non-@NULL (it may be empty though).
-    
+
     On return, @e path contains the file path (without the trailing separator), @e
     name
     contains the file name and @e ext contains the file extension without leading
@@ -190,14 +190,14 @@ void wxSplitPath(const wxString& fullname, wxString * path,
     unless it is equal to -1 in which case nothing is done, and restores it to
     the original value on scope exit. It works by declaring a variable which sets
     umask to @e mask in its constructor and restores it in its destructor.
-    
+
     Under other platforms this macro expands to nothing.
 */
 #define wxCHANGE_UMASK(int mask)     /* implementation is private */
 
 /**
     Returns time of last modification of given file.
-    
+
     The function returns @c (time_t)-1 if an error occurred (e.g. file not
     found).
 */
@@ -207,17 +207,17 @@ time_t wxFileModificationTime(const wxString& filename);
 /**
     @b NB: This function is obsolete, please use
     wxFileName::SplitPath instead.
-    
+
     Returns the filename for a full path. The second form returns a pointer to
     temporary storage that should not be deallocated.
 */
 wxString wxFileNameFromPath(const wxString& path);
-    char * wxFileNameFromPath(char * path);
+char * wxFileNameFromPath(char * path);
 //@}
 
 /**
     Renames @e file1 to @e file2, returning @true if successful.
-    
+
     If @e overwrite parameter is @true (default), the destination file is
     overwritten if it exists, but if @e overwrite is @false, the functions fails
     in this case.
@@ -230,7 +230,7 @@ bool wxRenameFile(const wxString& file1, const wxString& file2,
     @e overwrite parameter is @true (default), the destination file is overwritten
     if it exists, but if @e overwrite is @false, the functions fails in this
     case.
-    
+
     This function supports resources forks under Mac OS.
 */
 bool wxCopyFile(const wxString& file1, const wxString& file2,
@@ -251,11 +251,11 @@ bool wxMatchWild(const wxString& pattern, const wxString& text,
 
 /**
     @b NB: This function is deprecated: use wxGetCwd instead.
-    
+
     Copies the current working directory into the buffer if supplied, or
     copies the working directory into new storage (which you must delete
     yourself) if the buffer is @NULL.
-    
+
     @e sz is the size of the buffer if supplied.
 */
 wxString wxGetWorkingDirectory(char * buf=@NULL, int sz=1000);
@@ -302,7 +302,7 @@ bool wxSetWorkingDirectory(const wxString& dir);
 
 /**
     Makes the directory @e dir, returning @true if successful.
-    
+
     @e perm is the access mask for the directory for the systems on which it is
     supported (Unix) and doesn't have any effect on the other ones.
 */
@@ -316,7 +316,7 @@ bool wxIsAbsolutePath(const wxString& filename);
 
 /**
     Returns the next file that matches the path passed to wxFindFirstFile.
-    
+
     See wxFindFirstFile for an example.
 */
 wxString wxFindNextFile();
@@ -343,7 +343,7 @@ wxString wxFindFirstFile(const wxString& spec, int flags = 0);
     @endcode
 */
 wxFileKind wxGetFileKind(int fd);
-    wxFileKind wxGetFileKind(FILE * fp);
+wxFileKind wxGetFileKind(FILE * fp);
 //@}
 
 //@{
@@ -353,15 +353,15 @@ wxFileKind wxGetFileKind(int fd);
     instead.
 */
 char * wxGetTempFileName(const wxString& prefix, char * buf=@NULL);
-    bool wxGetTempFileName(const wxString& prefix, wxString& buf);
+bool wxGetTempFileName(const wxString& prefix, wxString& buf);
 //@}
 
 /**
     Removes the directory @e dir, returning @true if successful. Does not work under
     VMS.
-    
+
     The @e flags parameter is reserved for future use.
-    
+
     Please notice that there is also a wxRmDir() function which simply wraps the
     standard POSIX rmdir() function and so return an integer error code instead of
     a boolean value (but otherwise is currently identical to wxRmdir), don't

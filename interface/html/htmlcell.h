@@ -9,9 +9,9 @@
 /**
     @class wxHtmlColourCell
     @headerfile htmlcell.h wx/html/htmlcell.h
-    
-    This cell changes the colour of either the background or the foreground. 
-    
+
+    This cell changes the colour of either the background or the foreground.
+
     @library{wxhtml}
     @category{FIXME}
 */
@@ -21,10 +21,10 @@ public:
     /**
         Constructor.
         
-        @param clr 
+        @param clr
         The color
         
-        @param flags 
+        @param flags
         Can be one of following:
         
         wxHTML_CLR_FOREGROUND
@@ -44,14 +44,14 @@ public:
 /**
     @class wxHtmlWidgetCell
     @headerfile htmlcell.h wx/html/htmlcell.h
-    
+
     wxHtmlWidgetCell is a class that provides a connection between HTML cells and
     widgets (an object derived
     from wxWindow). You can use it to display things like forms, input boxes etc.
     in an HTML window.
-    
+
     wxHtmlWidgetCell takes care of resizing and moving window.
-    
+
     @library{wxhtml}
     @category{FIXME}
 */
@@ -61,11 +61,11 @@ public:
     /**
         Constructor.
         
-        @param wnd 
+        @param wnd
         Connected window. It is parent window must be the wxHtmlWindow object within
         which it is displayed!
         
-        @param w 
+        @param w
         Floating width. If non-zero width of wnd window is adjusted so that it is
         always w percents of parent container's width. (For example w = 100 means that
         the window
@@ -78,19 +78,19 @@ public:
 /**
     @class wxHtmlCell
     @headerfile htmlcell.h wx/html/htmlcell.h
-    
+
     Internal data structure. It represents fragments of parsed HTML
     page, the so-called @b cell - a word, picture, table, horizontal line and so on.
-    It is used by wxHtmlWindow and 
+    It is used by wxHtmlWindow and
     wxHtmlWinParser to represent HTML page in memory.
-    
+
     You can divide cells into two groups : @e visible cells with non-zero width and
     height and @e helper cells (usually with zero width and height) that
     perform special actions such as color or font change.
-    
+
     @library{wxhtml}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_cells "Cells Overview", wxHtmlContainerCell
 */
@@ -118,19 +118,19 @@ public:
     /**
         Renders the cell.
         
-        @param dc 
+        @param dc
         Device context to which the cell is to be drawn
         
-        @param x,y 
+        @param x,y
         Coordinates of parent's upper left corner (origin). You must
         add this to m_PosX,m_PosY when passing coordinates to dc's methods
         Example : dc - DrawText("hello", x + m_PosX, y + m_PosY)
         
-        @param view_y1 
+        @param view_y1
         y-coord of the first line visible in window. This is
         used to optimize rendering speed
         
-        @param view_y2 
+        @param view_y2
         y-coord of the last line visible in window. This is
         used to optimize rendering speed
     */
@@ -143,10 +143,10 @@ public:
         nonsense - some tags (like wxHtmlColourCell
         or font setter) must be drawn even if they are invisible!
         
-        @param dc 
+        @param dc
         Device context to which the cell is to be drawn
         
-        @param x,y 
+        @param x,y
         Coordinates of parent's upper left corner. You must
         add this to m_PosX,m_PosY when passing coordinates to dc's methods
         Example : dc - DrawText("hello", x + m_PosX, y + m_PosY)
@@ -163,16 +163,16 @@ public:
         to cell of some type (e.g. wxHtmlAnchorCell reacts on
         wxHTML_COND_ISANCHOR condition)
         
-        @param condition 
+        @param condition
         Unique integer identifier of condition
         
-        @param param 
+        @param param
         Optional parameters
     */
     virtual const wxHtmlCell* Find(int condition, const void* param);
 
     /**
-        Returns descent value of the cell (m_Descent member). 
+        Returns descent value of the cell (m_Descent member).
         See explanation:
     */
     int GetDescent();
@@ -203,7 +203,7 @@ public:
         See wxHtmlLinkInfo.
         (Note: this makes sense only for visible tags).
         
-        @param x,y 
+        @param x,y
         Coordinates of position where the user pressed mouse button.
         These coordinates are used e.g. by COLORMAP. Values are relative to the
         upper left corner of THIS cell (i.e. from 0 to m_Width or m_Height)
@@ -213,7 +213,7 @@ public:
     /**
         Returns cursor to show when mouse pointer is over the cell.
         
-        @param window 
+        @param window
         interface to the parent HTML window
     */
     virtual wxCursor GetMouseCursor(wxHtmlWindowInterface* window);
@@ -269,13 +269,13 @@ public:
         cell is called. Default behavior is to call
         wxHtmlWindow::LoadPage.
         
-        @param window 
+        @param window
         interface to the parent HTML window
         
-        @param pos 
+        @param pos
         coordinates of mouse click (this is relative to cell's origin
         
-        @param event 
+        @param event
         mouse event that triggered the call
         
         @returns @true if a link was clicked, @false otherwise.
@@ -317,13 +317,13 @@ public:
 /**
     @class wxHtmlContainerCell
     @headerfile htmlcell.h wx/html/htmlcell.h
-    
+
     The wxHtmlContainerCell class is an implementation of a cell that may
     contain more cells in it. It is heavily used in the wxHTML layout algorithm.
-    
+
     @library{wxhtml}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_cells "Cells Overview"
 */
@@ -355,7 +355,7 @@ public:
     /**
         Returns the indentation. @e ind is one of the @b wxHTML_INDENT_* constants.
         
-        @b Note: You must call GetIndentUnits() 
+        @b Note: You must call GetIndentUnits()
         with same @e ind parameter in order to correctly interpret the returned integer
         value.
         It is NOT always in pixels!
@@ -376,16 +376,16 @@ public:
     /**
         Sets the container's alignment (both horizontal and vertical) according to
         the values stored in @e tag. (Tags @c ALIGN parameter is extracted.) In fact
-        it is only a front-end to SetAlignHor() 
+        it is only a front-end to SetAlignHor()
         and SetAlignVer().
     */
     void SetAlign(const wxHtmlTag& tag);
 
     /**
-        Sets the container's @e horizontal alignment. During wxHtmlCell::Layout 
+        Sets the container's @e horizontal alignment. During wxHtmlCell::Layout
         each line is aligned according to @e al value.
         
-        @param al 
+        @param al
         new horizontal alignment. May be one of these values:
         
         wxHTML_ALIGN_LEFT
@@ -413,7 +413,7 @@ public:
     /**
         Sets the container's @e vertical alignment. This is per-line alignment!
         
-        @param al 
+        @param al
         new vertical alignment. May be one of these values:
         
         wxHTML_ALIGN_BOTTOM
@@ -441,10 +441,10 @@ public:
     /**
         Sets the border (frame) colours. A border is a rectangle around the container.
         
-        @param clr1 
+        @param clr1
         Colour of top and left lines
         
-        @param clr2 
+        @param clr2
         Colour of bottom and right lines
     */
     void SetBorder(const wxColour& clr1, const wxColour& clr2);
@@ -452,10 +452,10 @@ public:
     /**
         Sets the indentation (free space between borders of container and subcells).
         
-        @param i 
+        @param i
         Indentation value.
         
-        @param what 
+        @param what
         Determines which of the four borders we're setting. It is OR
         combination of following constants:
         
@@ -495,7 +495,7 @@ public:
         all 4 borders
         
         
-        @param units 
+        @param units
         Units of i. This parameter affects interpretation of  value.
         
         wxHTML_UNITS_PIXELS
@@ -520,10 +520,10 @@ public:
         of container is never smaller than @e h - even if the subcells cover
         much smaller area.
         
-        @param h 
+        @param h
         The minimal height.
         
-        @param align 
+        @param align
         If height of the container is lower than the minimum height, empty space must
         be inserted
         somewhere in order to ensure minimal height. This parameter is one of
@@ -543,14 +543,14 @@ public:
         
         @e pixel_scale is number of real pixels that equals to 1 HTML pixel.
         
-        @param w 
+        @param w
         Width of the container. If the value is negative it means
         complement to full width of parent container (e.g.
         SetWidthFloat(-50, wxHTML_UNITS_PIXELS) sets the width
         of container to parent's width minus 50 pixels. This is useful when
         creating tables - you can call SetWidthFloat(50) and SetWidthFloat(-50))
         
-        @param units 
+        @param units
         Units of w This parameter affects the interpretation of  value.
         
         wxHTML_UNITS_PIXELS
@@ -564,13 +564,13 @@ public:
         w is interpreted as percents of width
         of parent container
         
-        @param tag 
+        @param tag
         In the second version of method, w and units
         info is extracted from tag's WIDTH parameter.
     */
     void SetWidthFloat(int w, int units);
-        void SetWidthFloat(const wxHtmlTag& tag,
-                           double pixel_scale = 1.0);
+    void SetWidthFloat(const wxHtmlTag& tag,
+                       double pixel_scale = 1.0);
     //@}
 };
 
@@ -578,12 +578,12 @@ public:
 /**
     @class wxHtmlLinkInfo
     @headerfile htmlcell.h wx/html/htmlcell.h
-    
+
     This class stores all necessary information about hypertext
-    links (as represented by @c A tag in HTML documents). In 
-    current implementation it stores URL and target frame name. 
+    links (as represented by @c A tag in HTML documents). In
+    current implementation it stores URL and target frame name.
     @e Note that frames are not currently supported by wxHTML!
-    
+
     @library{wxhtml}
     @category{FIXME}
 */
@@ -596,8 +596,8 @@ public:
         frame).
     */
     wxHtmlLinkInfo();
-        wxHtmlLinkInfo(const wxString& href,
-                       const wxString& target = wxEmptyString);
+    wxHtmlLinkInfo(const wxString& href,
+                   const wxString& target = wxEmptyString);
     //@}
 
     /**

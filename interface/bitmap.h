@@ -9,21 +9,21 @@
 /**
     @class wxBitmapHandler
     @wxheader{bitmap.h}
-    
+
     Overview
-    
+
     This is the base class for implementing bitmap file loading/saving, and bitmap
     creation from data.
     It is used within wxBitmap and is not normally seen by the application.
-    
+
     If you wish to extend the capabilities of wxBitmap, derive a class from
     wxBitmapHandler
     and add the handler using wxBitmap::AddHandler in your
     application initialisation.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxBitmap, wxIcon, wxCursor
 */
@@ -46,22 +46,22 @@ public:
         wxBitmap object @e bitmap is
         manipulated by this function.
         
-        @param bitmap 
+        @param bitmap
         The wxBitmap object.
         
-        @param width 
+        @param width
         The width of the bitmap in pixels.
         
-        @param height 
+        @param height
         The height of the bitmap in pixels.
         
-        @param depth 
+        @param depth
         The depth of the bitmap in pixels. If this is -1, the screen depth is used.
         
-        @param data 
+        @param data
         Data whose type depends on the value of type.
         
-        @param type 
+        @param type
         A bitmap type identifier - see wxBitmapHandler() for a list
         of possible values.
         
@@ -91,14 +91,14 @@ public:
         Loads a bitmap from a file or resource, putting the resulting data into @e
         bitmap.
         
-        @param bitmap 
+        @param bitmap
         The bitmap object which is to be affected by this operation.
         
-        @param name 
+        @param name
         Either a filename or a Windows resource name.
         The meaning of name is determined by the type parameter.
         
-        @param type 
+        @param type
         See wxBitmap::wxBitmap for values this can take.
         
         @returns @true if the operation succeeded, @false otherwise.
@@ -110,16 +110,16 @@ public:
     /**
         Saves a bitmap in the named file.
         
-        @param bitmap 
+        @param bitmap
         The bitmap object which is to be affected by this operation.
         
-        @param name 
+        @param name
         A filename. The meaning of name is determined by the type parameter.
         
-        @param type 
+        @param type
         See wxBitmap::wxBitmap for values this can take.
         
-        @param palette 
+        @param palette
         An optional palette used for saving the bitmap.
         
         @returns @true if the operation succeeded, @false otherwise.
@@ -132,7 +132,7 @@ public:
     /**
         Sets the handler extension.
         
-        @param extension 
+        @param extension
         Handler extension.
     */
     void SetExtension(const wxString& extension);
@@ -140,7 +140,7 @@ public:
     /**
         Sets the handler name.
         
-        @param name 
+        @param name
         Handler name.
     */
     void SetName(const wxString& name);
@@ -148,7 +148,7 @@ public:
     /**
         Sets the handler type.
         
-        @param name 
+        @param name
         Handler type.
     */
     void SetType(long type);
@@ -158,17 +158,17 @@ public:
 /**
     @class wxBitmap
     @wxheader{bitmap.h}
-    
+
     This class encapsulates the concept of a platform-dependent bitmap,
     either monochrome or colour or colour with alpha channel support.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @stdobjects
     Objects:
     wxNullBitmap
-    
+
     @seealso
     @ref overview_wxbitmapoverview "wxBitmap overview", @ref
     overview_supportedbitmapformats "supported bitmap file formats", wxDC::Blit, wxIcon, wxCursor, wxBitmap, wxMemoryDC
@@ -196,25 +196,25 @@ public:
         creating the wxBitmap (most useful in 8-bit display mode). On other platforms,
         the palette is currently ignored.
         
-        @param bits 
+        @param bits
         Specifies an array of pixel values.
         
-        @param width 
+        @param width
         Specifies the width of the bitmap.
         
-        @param height 
+        @param height
         Specifies the height of the bitmap.
         
-        @param depth 
+        @param depth
         Specifies the depth of the bitmap. If this is omitted, the display depth of the
         screen is used.
         
-        @param name 
+        @param name
         This can refer to a resource name under MS Windows, or a filename under MS
         Windows and X.
         Its meaning is determined by the type parameter.
         
-        @param type 
+        @param type
         May be one of the following:
         
         
@@ -261,7 +261,7 @@ public:
         wxBITMAP_TYPE_PCX,
         and wxBITMAP_TYPE_PNM. Of course, you must have wxImage handlers loaded.
         
-        @param img 
+        @param img
         Platform-independent wxImage object.
         
         @remarks The first form constructs a bitmap object with no data; an
@@ -271,15 +271,15 @@ public:
         @sa LoadFile()
     */
     wxBitmap();
-        wxBitmap(const wxBitmap& bitmap);
-        wxBitmap(const void* data, int type, int width, int height,
-                 int depth = -1);
-        wxBitmap(const char bits[], int width, int height,
-                 int depth = 1);
-        wxBitmap(int width, int height, int depth = -1);
-        wxBitmap(const char* const* bits);
-        wxBitmap(const wxString& name, long type);
-        wxBitmap(const wxImage& img, int depth = -1);
+    wxBitmap(const wxBitmap& bitmap);
+    wxBitmap(const void* data, int type, int width, int height,
+             int depth = -1);
+    wxBitmap(const char bits[], int width, int height,
+             int depth = 1);
+    wxBitmap(int width, int height, int depth = -1);
+    wxBitmap(const char* const* bits);
+    wxBitmap(const wxString& name, long type);
+    wxBitmap(const wxImage& img, int depth = -1);
     //@}
 
     /**
@@ -297,7 +297,7 @@ public:
     /**
         Adds a handler to the end of the static list of format handlers.
         
-        @param handler 
+        @param handler
         A new bitmap format handler object. There is usually only one instance
         of a given handler class in an application session.
         
@@ -328,19 +328,19 @@ public:
     /**
         Creates a bitmap from the given data, which can be of arbitrary type.
         
-        @param width 
+        @param width
         The width of the bitmap in pixels.
         
-        @param height 
+        @param height
         The height of the bitmap in pixels.
         
-        @param depth 
+        @param depth
         The depth of the bitmap in pixels. If this is -1, the screen depth is used.
         
-        @param data 
+        @param data
         Data whose type depends on the value of type.
         
-        @param type 
+        @param type
         A bitmap type identifier - see wxBitmap() for a list
         of possible values.
         
@@ -352,22 +352,22 @@ public:
         @sa wxBitmap()
     */
     virtual bool Create(int width, int height, int depth = -1);
-        virtual bool Create(const void* data, int type, int width,
-                            int height,
-                            int depth = -1);
+    virtual bool Create(const void* data, int type, int width,
+                        int height,
+                        int depth = -1);
     //@}
 
     //@{
     /**
         Finds the handler associated with the given bitmap type.
         
-        @param name 
+        @param name
         The handler name.
         
-        @param extension 
+        @param extension
         The file extension, such as "bmp".
         
-        @param bitmapType 
+        @param bitmapType
         The bitmap type, such as wxBITMAP_TYPE_BMP.
         
         @returns A pointer to the handler if found, @NULL otherwise.
@@ -375,9 +375,9 @@ public:
         @sa wxBitmapHandler
     */
     static wxBitmapHandler* FindHandler(const wxString& name);
-        static wxBitmapHandler* FindHandler(const wxString& extension,
-                                            wxBitmapType bitmapType);
-        static wxBitmapHandler* FindHandler(wxBitmapType bitmapType);
+    static wxBitmapHandler* FindHandler(const wxString& extension,
+                                        wxBitmapType bitmapType);
+    static wxBitmapHandler* FindHandler(wxBitmapType bitmapType);
     //@}
 
     /**
@@ -441,7 +441,7 @@ public:
     /**
         Adds a handler at the start of the static list of format handlers.
         
-        @param handler 
+        @param handler
         A new bitmap format handler object. There is usually only one instance
         of a given handler class in an application session.
         
@@ -457,11 +457,11 @@ public:
     /**
         Loads a bitmap from a file or resource.
         
-        @param name 
+        @param name
         Either a filename or a Windows resource name.
         The meaning of name is determined by the type parameter.
         
-        @param type 
+        @param type
         One of the following values:
         
         
@@ -517,7 +517,7 @@ public:
         Finds the handler with the given name, and removes it. The handler
         is not deleted.
         
-        @param name 
+        @param name
         The handler name.
         
         @returns @true if the handler was found and removed, @false otherwise.
@@ -529,10 +529,10 @@ public:
     /**
         Saves a bitmap in the named file.
         
-        @param name 
+        @param name
         A filename. The meaning of name is determined by the type parameter.
         
-        @param type 
+        @param type
         One of the following values:
         
         
@@ -562,7 +562,7 @@ public:
         (wxBITMAP_TYPE_JPEG, wxBITMAP_TYPE_PNG).
         (Of course you must have wxImage handlers loaded.)
         
-        @param palette 
+        @param palette
         An optional palette used for saving the bitmap.
         
         @returns @true if the operation succeeded, @false otherwise.
@@ -578,7 +578,7 @@ public:
     /**
         Sets the depth member (does not affect the bitmap data).
         
-        @param depth 
+        @param depth
         Bitmap depth.
     */
     void SetDepth(int depth);
@@ -586,7 +586,7 @@ public:
     /**
         Sets the height member (does not affect the bitmap data).
         
-        @param height 
+        @param height
         Bitmap height in pixels.
     */
     void SetHeight(int height);
@@ -603,7 +603,7 @@ public:
     /**
         Sets the associated palette. (Not implemented under GTK+).
         
-        @param palette 
+        @param palette
         The palette to set.
         
         @sa wxPalette
@@ -613,7 +613,7 @@ public:
     /**
         Sets the width member (does not affect the bitmap data).
         
-        @param width 
+        @param width
         Bitmap width in pixels.
     */
     void SetWidth(int width);
@@ -621,7 +621,7 @@ public:
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".
         
-        @param bitmap 
+        @param bitmap
         Bitmap to assign.
     */
     wxBitmap operator =(const wxBitmap& bitmap);
@@ -631,17 +631,17 @@ public:
 /**
     @class wxMask
     @wxheader{bitmap.h}
-    
+
     This class encapsulates a monochrome mask bitmap, where the masked area is
     black and
     the unmasked area is white. When associated with a bitmap and drawn in a device
     context,
     the unmasked area of the bitmap will be drawn, and the masked area will not be
     drawn.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @seealso
     wxBitmap, wxDC::Blit, wxMemoryDC
 */
@@ -654,20 +654,20 @@ public:
         background. Not
         yet implemented for GTK.
         
-        @param bitmap 
+        @param bitmap
         A valid bitmap.
         
-        @param colour 
+        @param colour
         A colour specifying the transparency RGB values.
         
-        @param index 
+        @param index
         Index into a palette, specifying the transparency colour.
     */
     wxMask();
-        wxMask(const wxBitmap& bitmap);
-        wxMask(const wxBitmap& bitmap,
-               const wxColour& colour);
-        wxMask(const wxBitmap& bitmap, int index);
+    wxMask(const wxBitmap& bitmap);
+    wxMask(const wxBitmap& bitmap,
+           const wxColour& colour);
+    wxMask(const wxBitmap& bitmap, int index);
     //@}
 
     /**
@@ -681,17 +681,17 @@ public:
         background. Not
         yet implemented for GTK.
         
-        @param bitmap 
+        @param bitmap
         A valid bitmap.
         
-        @param colour 
+        @param colour
         A colour specifying the transparency RGB values.
         
-        @param index 
+        @param index
         Index into a palette, specifying the transparency colour.
     */
     bool Create(const wxBitmap& bitmap);
-        bool Create(const wxBitmap& bitmap, const wxColour& colour);
-        bool Create(const wxBitmap& bitmap, int index);
+    bool Create(const wxBitmap& bitmap, const wxColour& colour);
+    bool Create(const wxBitmap& bitmap, int index);
     //@}
 };

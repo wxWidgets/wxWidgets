@@ -9,17 +9,17 @@
 /**
     @class wxSystemOptions
     @wxheader{sysopt.h}
-    
+
     wxSystemOptions stores option/value pairs that wxWidgets itself or
     applications can use to alter behaviour at run-time. It can be
     used to optimize behaviour that doesn't deserve a distinct API,
     but is still important to be able to configure.
-    
+
     These options are currently recognised by wxWidgets.
-    
+
     @library{wxbase}
     @category{misc}
-    
+
     @seealso
     wxSystemOptions::SetOption, wxSystemOptions::GetOptionInt,
     wxSystemOptions::HasOption
@@ -75,6 +75,6 @@ public:
         Sets an option. The function is case-insensitive to @e name.
     */
     void SetOption(const wxString& name, const wxString& value);
-        void SetOption(const wxString& name, int value);
+    void SetOption(const wxString& name, int value);
     //@}
 };

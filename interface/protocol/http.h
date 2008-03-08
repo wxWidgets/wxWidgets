@@ -9,11 +9,11 @@
 /**
     @class wxHTTP
     @headerfile http.h wx/protocol/http.h
-    
-    
+
+
     @library{wxnet}
     @category{net}
-    
+
     @seealso
     wxSocketBase, wxURL
 */
@@ -31,11 +31,11 @@ public:
         Creates a new input stream on the specified path. Notice that this stream is
         unseekable, i.e. SeekI() and TellI() methods shouldn't be used.
         
-        Note that you can still know the size of the file you are getting using 
+        Note that you can still know the size of the file you are getting using
         wxStreamBase::GetSize. However there is a
         limitation: in HTTP protocol, the size is not always specified so sometimes
         @c (size_t)-1 can returned ot indicate that the size is unknown. In such
-        case, you may want to use wxInputStream::LastRead 
+        case, you may want to use wxInputStream::LastRead
         method in a loop to get the total size.
         
         @returns Returns the initialized stream. You must delete it yourself once

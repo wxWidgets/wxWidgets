@@ -9,32 +9,32 @@
 /**
     @class wxFTP
     @headerfile ftp.h wx/protocol/ftp.h
-    
+
     wxFTP can be used to establish a connection to an FTP server and perform all the
     usual operations. Please consult the RFC 959 for more details about the FTP
     protocol.
-    
+
     To use a commands which doesn't involve file transfer (i.e. directory oriented
     commands) you just need to call a corresponding member function or use the
     generic wxFTP::SendCommand method. However to actually
     transfer files you just get or give a stream to or from this class and the
     actual data are read or written using the usual stream methods.
-    
+
     Example of using wxFTP for file downloading:
-    
+
     @code
     wxFTP ftp;
-    
+
         // if you don't use these lines anonymous login will be used
         ftp.SetUser("user");
         ftp.SetPassword("password");
-    
+
         if ( !ftp.Connect("ftp.wxwindows.org") )
         {
             wxLogError("Couldn't connect");
             return;
         }
-    
+
         ftp.ChDir("/pub");
         wxInputStream *in = ftp.GetInputStream("wxWidgets-4.2.0.tar.gz");
         if ( !in )
@@ -54,15 +54,15 @@
                 // file data is in the buffer
                 ...
             }
-    
+
             delete [] data;
             delete in;
         }
     @endcode
-    
+
     To upload a file you would do (assuming the connection to the server was opened
     successfully):
-    
+
     @code
     wxOutputStream *out = ftp.GetOutputStream("filename");
             if ( out )
@@ -71,10 +71,10 @@
                 delete out;
             }
     @endcode
-    
+
     @library{wxnet}
     @category{net}
-    
+
     @seealso
     wxSocketBase
 */
@@ -92,7 +92,7 @@ public:
 #define ~wxFTP()     /* implementation is private */
 
     /**
-        Aborts the download currently in process, returns @true if ok, @false 
+        Aborts the download currently in process, returns @true if ok, @false
         if an error occurred.
     */
     bool Abort();

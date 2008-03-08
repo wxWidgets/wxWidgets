@@ -9,10 +9,10 @@
 /**
     @class wxSearchCtrl
     @wxheader{srchctrl.h}
-    
-    A search control is a composite control with a search button, a text 
+
+    A search control is a composite control with a search button, a text
     control, and a cancel button.
-    
+
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}:
            The control will generate the event wxEVT_COMMAND_TEXT_ENTER
@@ -39,10 +39,10 @@
            On PocketPC and Smartphone, causes the first letter to be
            capitalized.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxTextCtrl::Create, wxValidator
 */
@@ -53,40 +53,40 @@ public:
     /**
         Constructor, creating and showing a text control.
         
-        @param parent 
+        @param parent
         Parent window. Should not be @NULL.
         
-        @param id 
+        @param id
         Control identifier. A value of -1 denotes a default value.
         
-        @param value 
+        @param value
         Default text value.
         
-        @param pos 
+        @param pos
         Text control position.
         
-        @param size 
+        @param size
         Text control size.
         
-        @param style 
+        @param style
         Window style. See wxSearchCtrl.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa wxTextCtrl::Create, wxValidator
     */
     wxSearchCtrl();
-        wxSearchCtrl(wxWindow* parent, wxWindowID id,
-                     const wxString& value = "",
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = 0,
-                     const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = wxSearchCtrlNameStr);
+    wxSearchCtrl(wxWindow* parent, wxWindowID id,
+                 const wxString& value = "",
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxSearchCtrlNameStr);
     //@}
 
     /**
@@ -95,16 +95,16 @@ public:
     ~wxSearchCtrl();
 
     /**
-        Returns a pointer to the search control's menu object or @NULL if there is no 
+        Returns a pointer to the search control's menu object or @NULL if there is no
         menu attached.
     */
     virtual wxMenu* GetMenu();
 
     /**
-        Returns the search button visibility value.  
+        Returns the search button visibility value.
         If there is a menu attached, the search button will be visible regardless of
         the search
-        button visibility value. 
+        button visibility value.
         
         This always returns @false in Mac OS X v10.3
     */
@@ -115,7 +115,7 @@ public:
         with
         the search control it is deleted.
         
-        @param menu 
+        @param menu
         Menu to attach to the search control.
     */
     virtual void SetMenu(wxMenu* menu);
@@ -126,10 +126,10 @@ public:
     virtual void ShowCancelButton(bool show);
 
     /**
-        Sets the search button visibility value on the search control.  
+        Sets the search button visibility value on the search control.
         If there is a menu attached, the search button will be visible regardless of
         the search
-        button visibility value. 
+        button visibility value.
         
         This has no effect in Mac OS X v10.3
     */

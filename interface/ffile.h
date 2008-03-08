@@ -9,41 +9,41 @@
 /**
     @class wxFFile
     @wxheader{ffile.h}
-    
+
     wxFFile implements buffered file I/O. This is a very small class designed to
     minimize the overhead of using it - in fact, there is hardly any overhead at
     all, but using it brings you automatic error checking and hides differences
     between platforms and compilers. It wraps inside it a @c FILE * handle used
     by standard C IO library (also known as @c stdio).
-    
+
     @library{wxbase}
     @category{file}
-    
+
     @seealso
     wxFFile::IsOpened
 */
-class wxFFile 
+class wxFFile
 {
 public:
     //@{
     /**
         Opens a file with the given file pointer, which has already been opened.
         
-        @param filename 
+        @param filename
         The filename.
         
-        @param mode 
+        @param mode
         The mode in which to open the file using standard C strings.
         Note that you should use "b" flag if you use binary files under Windows
         or the results might be unexpected due to automatic newline conversion done
         for the text files.
         
-        @param fp 
+        @param fp
         An existing file descriptor, such as stderr.
     */
     wxFFile();
-        wxFFile(const wxString& filename, const wxString& mode = "r");
-        wxFFile(FILE* fp);
+    wxFFile(const wxString& filename, const wxString& mode = "r");
+    wxFFile(FILE* fp);
     //@}
 
     /**
@@ -75,7 +75,7 @@ public:
 
     /**
         Returns @true if the an attempt has been made to read @e past
-        the end of the file. 
+        the end of the file.
         
         Note that the behaviour of the file descriptor based class
         wxFile is different as wxFile::Eof
@@ -125,10 +125,10 @@ public:
     /**
         Opens the file, returning @true if successful.
         
-        @param filename 
+        @param filename
         The filename.
         
-        @param mode 
+        @param mode
         The mode in which to open the file.
     */
     bool Open(const wxString& filename, const wxString& mode = "r");
@@ -137,10 +137,10 @@ public:
         Reads the specified number of bytes into a buffer, returning the actual number
         read.
         
-        @param buffer 
+        @param buffer
         A buffer to receive the data.
         
-        @param count 
+        @param count
         The number of bytes to read.
         
         @returns The number of bytes read.
@@ -152,10 +152,10 @@ public:
         
         Reads the entire contents of the file into a string.
         
-        @param str 
+        @param str
         String to read data into.
         
-        @param conv 
+        @param conv
         Conversion object to use in Unicode build; by default supposes
         that file contents is encoded in UTF-8.
         
@@ -166,10 +166,10 @@ public:
     /**
         Seeks to the specified position and returns @true on success.
         
-        @param ofs 
+        @param ofs
         Offset to seek to.
         
-        @param mode 
+        @param mode
         One of wxFromStart, wxFromEnd, wxFromCurrent.
     */
     bool Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
@@ -179,7 +179,7 @@ public:
         file
         and returns @true on success.
         
-        @param ofs 
+        @param ofs
         Number of bytes before the end of the file.
     */
     bool SeekEnd(wxFileOffset ofs = 0);

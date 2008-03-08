@@ -9,38 +9,38 @@
 /**
     @class wxBrush
     @wxheader{brush.h}
-    
+
     A brush is a drawing tool for filling in areas. It is used for painting
     the background of rectangles, ellipses, etc. It has a colour and a
     style.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @stdobjects
     Objects:
     wxNullBrush
     Pointers:
     wxBLUE_BRUSH
-    
+
     wxGREEN_BRUSH
-    
+
     wxWHITE_BRUSH
-    
+
     wxBLACK_BRUSH
-    
+
     wxGREY_BRUSH
-    
+
     wxMEDIUM_GREY_BRUSH
-    
+
     wxLIGHT_GREY_BRUSH
-    
+
     wxTRANSPARENT_BRUSH
-    
+
     wxCYAN_BRUSH
-    
+
     wxRED_BRUSH
-    
+
     @seealso
     wxBrushList, wxDC, wxDC::SetBrush
 */
@@ -51,13 +51,13 @@ public:
     /**
         Copy constructor, uses @ref overview_trefcount "reference counting".
         
-        @param colour 
+        @param colour
         Colour object.
         
-        @param colourName 
+        @param colourName
         Colour name. The name will be looked up in the colour database.
         
-        @param style 
+        @param style
         One of:
         
         wxTRANSPARENT
@@ -105,10 +105,10 @@ public:
         
         Vertical hatch.
         
-        @param brush 
+        @param brush
         Pointer or reference to a brush to copy.
         
-        @param stippleBitmap 
+        @param stippleBitmap
         A bitmap to use for stippling.
         
         @remarks If a stipple brush is created, the brush style will be set to
@@ -117,10 +117,10 @@ public:
         @sa wxBrushList, wxColour, wxColourDatabase
     */
     wxBrush();
-        wxBrush(const wxColour& colour, int style = wxSOLID);
-        wxBrush(const wxString& colourName, int style);
-        wxBrush(const wxBitmap& stippleBitmap);
-        wxBrush(const wxBrush& brush);
+    wxBrush(const wxColour& colour, int style = wxSOLID);
+    wxBrush(const wxString& colourName, int style);
+    wxBrush(const wxBitmap& stippleBitmap);
+    wxBrush(const wxBrush& brush);
     //@}
 
     /**
@@ -233,15 +233,15 @@ public:
         @sa GetColour()
     */
     void SetColour(wxColour& colour);
-        void SetColour(const wxString& colourName);
-        void SetColour(unsigned char red, unsigned char green,
-                       unsigned char blue);
+    void SetColour(const wxString& colourName);
+    void SetColour(unsigned char red, unsigned char green,
+                   unsigned char blue);
     //@}
 
     /**
         Sets the stipple bitmap.
         
-        @param bitmap 
+        @param bitmap
         The bitmap to use for stippling.
         
         @remarks The style will be set to wxSTIPPLE, unless the bitmap has a mask
@@ -255,7 +255,7 @@ public:
     /**
         Sets the brush style.
         
-        @param style 
+        @param style
         One of:
         
         wxTRANSPARENT

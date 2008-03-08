@@ -9,14 +9,14 @@
 /**
     @class wxXmlResource
     @headerfile xmlres.h wx/xrc/xmlres.h
-    
+
     This is the main class for interacting with the XML-based resource system.
-    
+
     The class holds XML resources from one or more .xml files, binary files or zip
     archive files.
-    
+
     See @ref overview_xrcoverview "XML-based resource system overview" for details.
-    
+
     @library{wxxrc}
     @category{xrc}
 */
@@ -27,14 +27,14 @@ public:
     /**
         Constructor.
         
-        @param flags 
+        @param flags
         wxXRC_USE_LOCALE: translatable strings will be translated via _().
         wxXRC_NO_SUBCLASSING: subclass property of object nodes will be ignored
         (useful for previews in XRC editors). wxXRC_NO_RELOADING will prevent the
         XRC files from being reloaded from disk in case they have been modified there
         since being last loaded (may slightly speed up loading them).
         
-        @param domain 
+        @param domain
         The name of the gettext catalog to search for
           translatable strings.  By default all loaded catalogs will be
           searched.  This provides a way to allow the strings to only come
@@ -43,8 +43,8 @@ public:
     wxXmlResource(const wxString& filemask,
                   int flags = wxXRC_USE_LOCALE,
                   const wxString domain = wxEmptyString);
-        wxXmlResource(int flags = wxXRC_USE_LOCALE,
-                      const wxString domain = wxEmptyString);
+    wxXmlResource(int flags = wxXRC_USE_LOCALE,
+                  const wxString domain = wxEmptyString);
     //@}
 
     /**
@@ -59,7 +59,7 @@ public:
         wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. The XML resource compiler
         (wxxrc) can create include file that contains initialization code for
         all controls used within the resource. Note that this handler should be
-        allocated on the heap, since it will be delete by 
+        allocated on the heap, since it will be delete by
         ClearHandlers() later.
     */
     void AddHandler(wxXmlResourceHandler* handler);
@@ -73,7 +73,7 @@ public:
                               wxWindow* parent = @NULL);
 
     /**
-        Removes all handlers and deletes them (this means that any handlers added using 
+        Removes all handlers and deletes them (this means that any handlers added using
         AddHandler() must be allocated on the heap).
     */
     void ClearHandlers();
@@ -146,8 +146,8 @@ public:
         Example:
     */
     wxDialog* LoadDialog(wxWindow* parent, const wxString& name);
-        bool LoadDialog(wxDialog* dlg, wxWindow* parent,
-                        const wxString& name);
+    bool LoadDialog(wxDialog* dlg, wxWindow* parent,
+                    const wxString& name);
     //@}
 
     /**
@@ -171,7 +171,7 @@ public:
         Loads a menubar from resource. Returns @NULL on failure.
     */
     wxMenuBar* LoadMenuBar(wxWindow* parent, const wxString& name);
-        wxMenuBar* LoadMenuBar(const wxString& name);
+    wxMenuBar* LoadMenuBar(const wxString& name);
     //@}
 
     //@{
@@ -186,9 +186,9 @@ public:
     */
     wxObject* LoadObject(wxWindow* parent, const wxString& name,
                          const wxString& classname);
-        bool LoadObject(wxObject* instance, wxWindow* parent,
-                        const wxString& name,
-                        const wxString& classname);
+    bool LoadObject(wxObject* instance, wxWindow* parent,
+                    const wxString& name,
+                    const wxString& classname);
     //@}
 
     //@{
@@ -197,8 +197,8 @@ public:
         is used to finish creation of an already existing instance.
     */
     wxPanel* LoadPanel(wxWindow* parent, const wxString& name);
-        bool LoadPanel(wxPanel* panel, wxWindow* parent,
-                       const wxString& name);
+    bool LoadPanel(wxPanel* panel, wxWindow* parent,
+                   const wxString& name);
     //@}
 
     /**
@@ -224,7 +224,7 @@ public:
     void SetFlags(int flags);
 
     /**
-        This function unloads a resource previously loaded by 
+        This function unloads a resource previously loaded by
         Load().
         
         Returns @true if the resource was successfully unloaded and @false if it
@@ -238,12 +238,12 @@ public:
 /**
     @class wxXmlResourceHandler
     @headerfile xmlres.h wx/xrc/xmlres.h
-    
+
     wxXmlResourceHandler is an abstract base class for resource handlers
     capable of creating a control from an XML node.
-    
+
     See @ref overview_xrcoverview "XML-based resource system overview" for details.
-    
+
     @library{wxxrc}
     @category{xrc}
 */
@@ -334,7 +334,7 @@ public:
         Gets colour in HTML syntax (#RRGGBB).
     */
     wxColour GetColour(const wxString& param,
-                       const wxColour& default = wxNullColour);
+                   const wxColour& default = wxNullColour);
 
     /**
         Returns the current file system.

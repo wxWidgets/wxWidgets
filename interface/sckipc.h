@@ -9,16 +9,16 @@
 /**
     @class wxTCPServer
     @wxheader{sckipc.h}
-    
+
     A wxTCPServer object represents the server part of a client-server conversation.
     It emulates a DDE-style protocol, but uses TCP/IP which is available on most
     platforms.
-    
+
     A DDE-based implementation for Windows is available using wxDDEServer.
-    
+
     @library{wxnet}
     @category{FIXME}
-    
+
     @seealso
     wxTCPClient, wxTCPConnection, @ref overview_ipcoverview "IPC overview"
 */
@@ -54,23 +54,23 @@ public:
 /**
     @class wxTCPClient
     @wxheader{sckipc.h}
-    
+
     A wxTCPClient object represents the client part of a client-server conversation.
     It emulates a DDE-style protocol, but uses TCP/IP which is available on most
     platforms.
-    
+
     A DDE-based implementation for Windows is available using wxDDEClient.
-    
+
     To create a client which can communicate with a suitable server,
     you need to derive a class from wxTCPConnection and another from wxTCPClient.
     The custom wxTCPConnection class will intercept communications in
     a 'conversation' with a server, and the custom wxTCPServer is required
     so that a user-overridden wxTCPClient::OnMakeConnection member can return
     a wxTCPConnection of the required class, when a connection is made.
-    
+
     @library{wxnet}
     @category{FIXME}
-    
+
     @seealso
     wxTCPServer, wxTCPConnection, @ref overview_ipcoverview "Interprocess
     communications overview"
@@ -119,26 +119,26 @@ public:
 /**
     @class wxTCPConnection
     @wxheader{sckipc.h}
-    
+
     A wxTCPClient object represents the connection between a client and a server.
     It emulates a DDE-style protocol, but uses TCP/IP which is available on most
     platforms.
-    
+
     A DDE-based implementation for Windows is available using wxDDEConnection.
-    
+
     A wxTCPConnection object can be created by making a connection using a
     wxTCPClient object, or by the acceptance of a connection by a
     wxTCPServer object. The bulk of a conversation is controlled by
     calling members in a @b wxTCPConnection object or by overriding its
     members.
-    
+
     An application should normally derive a new connection class from
     wxTCPConnection, in order to override the communication event handlers
     to do something interesting.
-    
+
     @library{wxnet}
     @category{FIXME}
-    
+
     @seealso
     wxTCPClient, wxTCPServer, @ref overview_ipcoverview "Interprocess
     communications overview"
@@ -161,21 +161,21 @@ public:
         transactions.
     */
     wxTCPConnection();
-        wxTCPConnection(void* buffer, size_t size);
+    wxTCPConnection(void* buffer, size_t size);
     //@}
 
     //@{
     /**
         Called by the server application to advise the client of a change in
         the data associated with the given item. Causes the client
-        connection's OnAdvise() 
+        connection's OnAdvise()
         member to be called. Returns @true if successful.
     */
     bool Advise(const wxString& item, const void* data, size_t size,
                 wxIPCFormat format = wxIPC_PRIVATE);
-        bool Advise(const wxString& item, const char* data);
-        bool Advise(const wxString& item, const wchar_t* data);
-        bool Advise(const wxString& item, const wxString data);
+    bool Advise(const wxString& item, const char* data);
+    bool Advise(const wxString& item, const wchar_t* data);
+    bool Advise(const wxString& item, const wxString data);
     //@}
 
     /**
@@ -199,9 +199,9 @@ public:
     */
     bool Execute(const void* data, size_t size,
                  wxIPCFormat format = wxIPC_PRIVATE);
-        bool Execute(const char* data);
-        bool Execute(const wchar_t* data);
-        bool Execute(const wxString data);
+    bool Execute(const char* data);
+    bool Execute(const wchar_t* data);
+    bool Execute(const wxString data);
     //@}
 
     /**
@@ -276,9 +276,9 @@ public:
     */
     bool Poke(const wxString& item, const void* data, size_t size,
               wxIPCFormat format = wxIPC_PRIVATE);
-        bool Poke(const wxString& item, const char* data);
-        bool Poke(const wxString& item, const wchar_t* data);
-        bool Poke(const wxString& item, const wxString data);
+    bool Poke(const wxString& item, const char* data);
+    bool Poke(const wxString& item, const wchar_t* data);
+    bool Poke(const wxString& item, const wxString data);
     //@}
 
     /**

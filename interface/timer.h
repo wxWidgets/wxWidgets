@@ -9,34 +9,34 @@
 /**
     @class wxTimer
     @wxheader{timer.h}
-    
+
     The wxTimer class allows you to execute code at specified intervals. Its
     precision is platform-dependent, but in general will not be better than 1ms nor
     worse than 1s.
-    
+
     There are three different ways to use this class:
-    
-     You may derive a new class from wxTimer and override the 
+
+     You may derive a new class from wxTimer and override the
     wxTimer::Notify member to perform the required action.
-     Or you may redirect the notifications to any 
+     Or you may redirect the notifications to any
     wxEvtHandler derived object by using the non-default
-    constructor or wxTimer::SetOwner. Then use the @c EVT_TIMER 
-    macro to connect it to the event handler which will receive 
+    constructor or wxTimer::SetOwner. Then use the @c EVT_TIMER
+    macro to connect it to the event handler which will receive
     wxTimerEvent notifications.
-     Or you may use a derived class and the @c EVT_TIMER 
+     Or you may use a derived class and the @c EVT_TIMER
     macro to connect it to an event handler defined in the derived class.
     If the default constructor is used, the timer object will be its
     own owner object, since it is derived from wxEvtHandler.
-    
-    In any case, you must start the timer with wxTimer::Start 
+
+    In any case, you must start the timer with wxTimer::Start
     after constructing it before it actually starts sending notifications. It can
     be stopped later with wxTimer::Stop.
-    
+
     @b Note: A timer can only be used from the main thread.
-    
+
     @library{wxbase}
     @category{misc}
-    
+
     @seealso
     wxStopWatch
 */
@@ -45,11 +45,11 @@ class wxTimer : public wxEvtHandler
 public:
     //@{
     /**
-        Creates a timer and associates it with @e owner. Please see 
+        Creates a timer and associates it with @e owner. Please see
         SetOwner() for the description of parameters.
     */
     wxTimer();
-        wxTimer(wxEvtHandler * owner, int id = -1);
+    wxTimer(wxEvtHandler * owner, int id = -1);
     //@}
 
     /**
@@ -69,7 +69,7 @@ public:
 
     /**
         Returns the current @e owner of the timer.
-        If non-@NULL this is the event handler which will receive the 
+        If non-@NULL this is the event handler which will receive the
         @ref overview_wxtimerevent "timer events" when the timer is running.
     */
     wxEvtHandler GetOwner();
@@ -105,7 +105,7 @@ public:
         the previous value is used. Returns @false if the timer could not be started,
         @true otherwise (in MS Windows timers are a limited resource).
         
-        If @e oneShot is @false (the default), the Notify() 
+        If @e oneShot is @false (the default), the Notify()
         function will be called repeatedly until the timer is stopped. If @true,
         it will be called only once and the timer will stop automatically. To make your
         code more readable you may also use the following symbolic constants:
@@ -136,41 +136,41 @@ public:
 /**
     @class wxTimerEvent
     @wxheader{timer.h}
-    
+
     wxTimerEvent object is passed to the event handler of timer events.
-    
+
     For example:
-    
+
     @code
     class MyFrame : public wxFrame
     {
     public:
         ...
         void OnTimer(wxTimerEvent& event);
-    
+
     private:
         wxTimer m_timer;
     };
-    
+
     BEGIN_EVENT_TABLE(MyFrame, wxFrame)
         EVT_TIMER(TIMER_ID, MyFrame::OnTimer)
     END_EVENT_TABLE()
-    
+
     MyFrame::MyFrame()
            : m_timer(this, TIMER_ID)
     {
         m_timer.Start(1000);    // 1 second interval
     }
-    
+
     void MyFrame::OnTimer(wxTimerEvent& event)
     {
         // do whatever you want to do every second here
     }
     @endcode
-    
+
     @library{wxbase}
     @category{events}
-    
+
     @seealso
     wxTimer
 */

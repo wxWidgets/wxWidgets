@@ -9,28 +9,28 @@
 /**
     @class wxStatusBar
     @wxheader{statusbr.h}
-    
+
     A status bar is a narrow window that can be placed along the bottom of a frame
     to give
     small amounts of status information. It can contain one or more fields, one or
     more of which can
     be variable length according to the size of the window.
-    
+
     wxWindow
-    
+
     wxEvtHandler
-    
+
     wxObject
-    
+
     @beginStyleTable
     @style{wxST_SIZEGRIP}:
            On Windows 95, displays a gripper at right-hand side of the status
            bar.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{miscwnd}
-    
+
     @seealso
     wxFrame, @ref overview_samplestatbar "Status bar sample"
 */
@@ -41,16 +41,16 @@ public:
     /**
         Constructor, creating the window.
         
-        @param parent 
+        @param parent
         The window parent, usually a frame.
         
-        @param id 
+        @param id
         The window identifier. It may take a value of -1 to indicate a default value.
         
-        @param style 
+        @param style
         The window style. See wxStatusBar.
         
-        @param name 
+        @param name
         The name of the window. This parameter is used to associate a name with the
         item,
         allowing the application user to set Motif resource values for
@@ -59,9 +59,9 @@ public:
         @sa Create()
     */
     wxStatusBar();
-        wxStatusBar(wxWindow* parent, wxWindowID id = wxID_ANY,
-                    long style = wxST_SIZEGRIP,
-                    const wxString& name = "statusBar");
+    wxStatusBar(wxWindow* parent, wxWindowID id = wxID_ANY,
+                long style = wxST_SIZEGRIP,
+                const wxString& name = "statusBar");
     //@}
 
     /**
@@ -81,10 +81,10 @@ public:
     /**
         Returns the size and position of a field's internal bounding rectangle.
         
-        @param i 
+        @param i
         The field in question.
         
-        @param rect 
+        @param rect
         The rectangle values are placed in this variable.
         
         @returns @true if the field index is valid, @false otherwise.
@@ -101,7 +101,7 @@ public:
     /**
         Returns the string associated with a status bar field.
         
-        @param i 
+        @param i
         The number of the status field to retrieve, starting from zero.
         
         @returns The status field string if the field is valid, otherwise the
@@ -128,10 +128,10 @@ public:
     /**
         Sets the number of fields, and optionally the field widths.
         
-        @param number 
+        @param number
         The number of fields.
         
-        @param widths 
+        @param widths
         An array of n integers interpreted in the same way as
         in SetStatusWidths
     */
@@ -149,13 +149,13 @@ public:
         flat
         or raised instead of the standard sunken 3D border.
         
-        @param n 
+        @param n
         The number of fields in the status bar. Must be equal to the
         number passed to SetFieldsCount the last
         time it was called.
         
-        @param styles 
-        Contains an array of n integers with the styles for each field. There 
+        @param styles
+        Contains an array of n integers with the styles for each field. There
         are three possible styles:
         
         
@@ -179,10 +179,10 @@ public:
     /**
         Sets the text for one field.
         
-        @param text 
+        @param text
         The text to be set. Use an empty string ("") to clear the field.
         
-        @param i 
+        @param i
         The field to set, starting from zero.
         
         @sa GetStatusText(), wxFrame::SetStatusText
@@ -202,12 +202,12 @@ public:
         the status bar and two more fields which get 66% and 33% of the remaining
         space correspondingly, you should use an array containing -2, -1 and 100.
         
-        @param n 
+        @param n
         The number of fields in the status bar. Must be equal to the
         number passed to SetFieldsCount the last
         time it was called.
         
-        @param widths 
+        @param widths
         Contains an array of n integers, each of which is
         either an absolute status field width in pixels if positive or indicates a
         variable width field if negative.

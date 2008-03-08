@@ -9,12 +9,12 @@
 /**
     @class wxHtmlHelpDialog
     @headerfile helpdlg.h wx/html/helpdlg.h
-    
-    This class is used by wxHtmlHelpController 
+
+    This class is used by wxHtmlHelpController
     to display help.
     It is an internal class and should not be used directly - except for the case
     when you're writing your own HTML help controller.
-    
+
     @library{wxhtml}
     @category{FIXME}
 */
@@ -27,10 +27,10 @@ public:
         wxHtmlHelpController.
     */
     wxHtmlHelpDialog(wxHtmlHelpData* data = @NULL);
-        wxHtmlHelpDialog(wxWindow* parent, int wxWindowID,
-                         const wxString& title = wxEmptyString,
-                         int style = wxHF_DEFAULT_STYLE,
-                         wxHtmlHelpData* data = @NULL);
+    wxHtmlHelpDialog(wxWindow* parent, int wxWindowID,
+                     const wxString& title = wxEmptyString,
+                     int style = wxHF_DEFAULT_STYLE,
+                     wxHtmlHelpData* data = @NULL);
     //@}
 
     /**

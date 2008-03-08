@@ -9,11 +9,11 @@
 /**
     @class wxProtocol
     @headerfile protocol.h wx/protocol/protocol.h
-    
-    
+
+
     @library{wxnet}
     @category{FIXME}
-    
+
     @seealso
     wxSocketBase, wxURL
 */

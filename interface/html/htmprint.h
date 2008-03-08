@@ -9,12 +9,12 @@
 /**
     @class wxHtmlDCRenderer
     @headerfile htmprint.h wx/html/htmprint.h
-    
+
     This class can render HTML document into a specified area of a DC. You can use
     it
-    in your own printing code, although use of wxHtmlEasyPrinting 
+    in your own printing code, although use of wxHtmlEasyPrinting
     or wxHtmlPrintout is strongly recommended.
-    
+
     @library{wxhtml}
     @category{FIXME}
 */
@@ -38,13 +38,13 @@ public:
     /**
         Renders HTML text to the DC.
         
-        @param x,y 
+        @param x,y
         position of upper-left corner of printing rectangle (see SetSize)
         
-        @param from 
+        @param from
         y-coordinate of the very first visible cell
         
-        @param dont_render 
+        @param dont_render
         if @true then this method only returns y coordinate of the next page
         and does not output anything
     */
@@ -72,17 +72,17 @@ public:
                   const int sizes = @NULL);
 
     /**
-        Assign text to the renderer. Render() then draws 
+        Assign text to the renderer. Render() then draws
         the text onto DC.
         
-        @param html 
+        @param html
         HTML text. This is not a filename.
         
-        @param basepath 
+        @param basepath
         base directory (html string would be stored there if it was in
         file). It is used to determine path for loading images, for example.
         
-        @param isdir 
+        @param isdir
         @false if basepath is filename, @true if it is directory name
         (see wxFileSystem for detailed explanation)
     */
@@ -102,11 +102,11 @@ public:
 /**
     @class wxHtmlEasyPrinting
     @headerfile htmprint.h wx/html/htmprint.h
-    
-    This class provides very simple interface to printing 
+
+    This class provides very simple interface to printing
     architecture. It allows you to print HTML documents using
-    only a few commands. 
-    
+    only a few commands.
+
     @library{wxhtml}
     @category{html}
 */
@@ -116,10 +116,10 @@ public:
     /**
         Constructor.
         
-        @param name 
+        @param name
         Name of the printing object. Used by preview frames and setup dialogs.
         
-        @param parentWindow 
+        @param parentWindow
         pointer to the window that will own the preview frame and setup dialogs. May be
         @NULL.
     */
@@ -127,7 +127,7 @@ public:
                        wxWindow* parentWindow = @NULL);
 
     /**
-        Returns a pointer to wxPageSetupDialogData instance used by 
+        Returns a pointer to wxPageSetupDialogData instance used by
         this class. You can set its parameters (via SetXXXX methods).
     */
     wxPageSetupDialogData* GetPageSetupData();
@@ -149,7 +149,7 @@ public:
     void PageSetup();
 
     /**
-        Preview HTML file. 
+        Preview HTML file.
         
         Returns @false in case of error -- call
         wxPrinter::GetLastError to get detailed
@@ -158,16 +158,16 @@ public:
     bool PreviewFile(const wxString& htmlfile);
 
     /**
-        Preview HTML text (not file!). 
+        Preview HTML text (not file!).
         
         Returns @false in case of error -- call
         wxPrinter::GetLastError to get detailed
         information about the kind of the error.
         
-        @param htmltext 
+        @param htmltext
         HTML text.
         
-        @param basepath 
+        @param basepath
         base directory (html string would be stored there if it was in
         file). It is used to determine path for loading images, for example.
     */
@@ -184,16 +184,16 @@ public:
     bool PrintFile(const wxString& htmlfile);
 
     /**
-        Print HTML text (not file!). 
+        Print HTML text (not file!).
         
         Returns @false in case of error -- call
         wxPrinter::GetLastError to get detailed
         information about the kind of the error.
         
-        @param htmltext 
+        @param htmltext
         HTML text.
         
-        @param basepath 
+        @param basepath
         base directory (html string would be stored there if it was in
         file). It is used to determine path for loading images, for example.
     */
@@ -217,10 +217,10 @@ public:
          @TIME@ is replaced by the current time in default format
          @TITLE@ is replaced with the title of the document
         
-        @param footer 
+        @param footer
         HTML text to be used as footer.
         
-        @param pg 
+        @param pg
         one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
     */
     void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
@@ -234,10 +234,10 @@ public:
          @TIME@ is replaced by the current time in default format
          @TITLE@ is replaced with the title of the document
         
-        @param header 
+        @param header
         HTML text to be used as header.
         
-        @param pg 
+        @param pg
         one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
     */
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
@@ -252,9 +252,9 @@ public:
 /**
     @class wxHtmlPrintout
     @headerfile htmprint.h wx/html/htmprint.h
-    
+
     This class serves as printout class for HTML documents.
-    
+
     @library{wxhtml}
     @category{html}
 */
@@ -290,10 +290,10 @@ public:
          @TIME@ is replaced by the current time in default format
          @TITLE@ is replaced with the title of the document
         
-        @param footer 
+        @param footer
         HTML text to be used as footer.
         
-        @param pg 
+        @param pg
         one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
     */
     void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
@@ -307,16 +307,16 @@ public:
          @TIME@ is replaced by the current time in default format
          @TITLE@ is replaced with the title of the document
         
-        @param header 
+        @param header
         HTML text to be used as header.
         
-        @param pg 
+        @param pg
         one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
     */
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
 
     /**
-        Prepare the class for printing this HTML @b file. The file may be located on 
+        Prepare the class for printing this HTML @b file. The file may be located on
         any virtual file system or it may be normal file.
     */
     void SetHtmlFile(const wxString& htmlfile);
@@ -324,14 +324,14 @@ public:
     /**
         Prepare the class for printing this HTML text.
         
-        @param html 
+        @param html
         HTML text. (NOT file!)
         
-        @param basepath 
+        @param basepath
         base directory (html string would be stored there if it was in
         file). It is used to determine path for loading images, for example.
         
-        @param isdir 
+        @param isdir
         @false if basepath is filename, @true if it is directory name
         (see wxFileSystem for detailed explanation)
     */

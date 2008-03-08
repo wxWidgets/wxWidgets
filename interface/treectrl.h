@@ -9,7 +9,7 @@
 /**
     @class wxTreeItemData
     @wxheader{treectrl.h}
-    
+
     wxTreeItemData is some (arbitrary) user class associated with some item. The
     main advantage of having this class is that wxTreeItemData objects are
     destroyed automatically by the tree and, as this class has virtual destructor,
@@ -18,14 +18,14 @@
     as the base class for wxTreeItemData because the size of this class is
     critical: in many applications, each tree leaf will have wxTreeItemData
     associated with it and the number of leaves may be quite big.
-    
+
     Also please note that because the objects of this class are deleted by the tree
     using the operator @c delete, they must always be allocated on the heap
     using @c new.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxTreeCtrl
 */
@@ -72,16 +72,16 @@ public:
 /**
     @class wxTreeCtrl
     @wxheader{treectrl.h}
-    
+
     A tree control presents information as a hierarchy, with items that may be
     expanded
     to show further items. Items in a tree control are referenced by wxTreeItemId
     handles,
     which may be tested for validity by calling wxTreeItemId::IsOk.
-    
+
     To intercept events from a tree control, use the event table macros described
     in wxTreeEvent.
-    
+
     @beginStyleTable
     @style{wxTR_EDIT_LABELS}:
            Use this style if you wish the user to be able to edit labels in
@@ -121,11 +121,11 @@ public:
            The set of flags that are closest to the defaults for the native
            control for a particular toolkit.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{treectrl.png}
-    
+
     @seealso
     wxTreeItemData, @ref overview_wxtreectrloverview "wxTreeCtrl overview",
     wxListBox, wxListCtrl, wxImageList, wxTreeEvent
@@ -137,37 +137,37 @@ public:
     /**
         Constructor, creating and showing a tree control.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then the window is sized
         appropriately.
         
-        @param style 
+        @param style
         Window style. See wxTreeCtrl.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxTreeCtrl();
-        wxTreeCtrl(wxWindow* parent, wxWindowID id,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxTR_HAS_BUTTONS,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = "treeCtrl");
+    wxTreeCtrl(wxWindow* parent, wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxTR_HAS_BUTTONS,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = "treeCtrl");
     //@}
 
     /**
@@ -427,7 +427,8 @@ public:
         Returns the font of the item label.
     */
     wxTreeItemData* GetItemData(const wxTreeItemId& item);
-        See also wxPython note: wxPython provides the following shortcut method:
+See also wxPython note:
+wxPython provides the following shortcut method:
 
 
 
@@ -435,13 +436,13 @@ public:
 
 
 
-GetPyData(item)
+    GetPyData(item)
 
 
 
 
-Returns the Python Object
-associated with the wxTreeItemData for the given item Id.
+    Returns the Python Object
+    associated with the wxTreeItemData for the given item Id.
 
 
 
@@ -449,7 +450,7 @@ associated with the wxTreeItemData for the given item Id.
 
 
 
-wxFont  GetItemFont(const wxTreeItemId& item);
+    wxFont  GetItemFont(const wxTreeItemId& item);
     //@}
 
     /**
@@ -473,7 +474,7 @@ wxFont  GetItemFont(const wxTreeItemId& item);
     wxTreeItemId GetItemParent(const wxTreeItemId& item);
 
     /**
-        Gets the selected item image (this function is obsolete, use 
+        Gets the selected item image (this function is obsolete, use
         @c GetItemImage(item, wxTreeItemIcon_Selected) instead).
     */
     int GetItemSelectedImage(const wxTreeItemId& item);
@@ -665,12 +666,12 @@ wxFont  GetItemFont(const wxTreeItemId& item);
                             int image = -1,
                             int selImage = -1,
                             wxTreeItemData* data = @NULL);
-        wxTreeItemId InsertItem(const wxTreeItemId& parent,
-                                size_t before,
-                                const wxString& text,
-                                int image = -1,
-                                int selImage = -1,
-                                wxTreeItemData* data = @NULL);
+    wxTreeItemId InsertItem(const wxTreeItemId& parent,
+                            size_t before,
+                            const wxString& text,
+                            int image = -1,
+                            int selImage = -1,
+                            wxTreeItemData* data = @NULL);
     //@}
 
     /**
@@ -711,8 +712,8 @@ wxFont  GetItemFont(const wxTreeItemId& item);
         positive value if the first item is less than, equal to or greater than the
         second one.
         
-        Please note that you @b must use wxRTTI macros 
-        DECLARE_DYNAMIC_CLASS and 
+        Please note that you @b must use wxRTTI macros
+        DECLARE_DYNAMIC_CLASS and
         IMPLEMENT_DYNAMIC_CLASS if you override this
         function because otherwise the base class considers that it is not overridden
         and uses the default comparison, i.e. sorts the items alphabetically, which
@@ -800,13 +801,14 @@ wxFont  GetItemFont(const wxTreeItemId& item);
         is implemented internally).
     */
     void SetItemData(const wxTreeItemId& item, wxTreeItemData* data);
-        wxPython note: SetPyData(item, obj)
+wxPython note:
+    SetPyData(item, obj)
 
 
 
 
-Associate the given Python
-Object with the wxTreeItemData for the given item Id.
+    Associate the given Python
+    Object with the wxTreeItemData for the given item Id.
 
 
 
@@ -814,8 +816,8 @@ Object with the wxTreeItemData for the given item Id.
 
 
 
-void SetItemDropHighlight(const wxTreeItemId& item,
-                          bool highlight = @true);
+    void SetItemDropHighlight(const wxTreeItemId& item,
+                              bool highlight = @true);
     //@}
 
     /**
@@ -844,7 +846,7 @@ void SetItemDropHighlight(const wxTreeItemId& item,
                       wxTreeItemIcon which = wxTreeItemIcon_Normal);
 
     /**
-        Sets the selected item image (this function is obsolete, use 
+        Sets the selected item image (this function is obsolete, use
         @c SetItemImage(item, wxTreeItemIcon_Selected) instead).
     */
     void SetItemSelectedImage(const wxTreeItemId& item, int selImage);
@@ -930,12 +932,12 @@ void SetItemDropHighlight(const wxTreeItemId& item,
 /**
     @class wxTreeEvent
     @wxheader{treectrl.h}
-    
+
     A tree event holds information about events associated with wxTreeCtrl objects.
-    
+
     @library{wxbase}
     @category{events}
-    
+
     @seealso
     wxTreeCtrl
 */
@@ -955,7 +957,7 @@ public:
     wxTreeItemId GetItem();
 
     /**
-        Returns the key code if the event is a key event. Use 
+        Returns the key code if the event is a key event. Use
         GetKeyEvent() to get the values of the
         modifier keys for this event (i.e. Shift or Ctrl).
     */

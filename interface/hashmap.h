@@ -9,16 +9,16 @@
 /**
     @class wxHashMap
     @wxheader{hashmap.h}
-    
+
     This is a simple, type-safe, and reasonably efficient hash map class,
     whose interface is a subset of the interface of STL containers. In
     particular, the interface is modeled after std::map, and the various,
     non-standard, std::hash_map.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxHashMap 
+class wxHashMap
 {
 public:
     //@{
@@ -26,7 +26,7 @@ public:
         Copy constructor.
     */
     wxHashMap(size_type size = 10);
-        wxHashMap(const wxHashMap& map);
+    wxHashMap(const wxHashMap& map);
     //@}
 
     //@{
@@ -35,7 +35,7 @@ public:
         Please remember that hash maps do not guarantee ordering.
     */
     const_iterator begin();
-        iterator begin();
+    iterator begin();
     //@}
 
     /**
@@ -60,7 +60,7 @@ public:
         Please remember that hash maps do not guarantee ordering.
     */
     const_iterator end();
-        iterator end();
+    iterator end();
     //@}
 
     //@{
@@ -69,8 +69,8 @@ public:
         the iterator is no longer valid and must not be used.
     */
     size_type erase(const key_type& key);
-        void erase(iterator it);
-        void erase(const_iterator it);
+    void erase(iterator it);
+    void erase(const_iterator it);
     //@}
 
     //@{
@@ -80,7 +80,7 @@ public:
         is returned (i.e. hashmap.find( non_existent_key ) == hashmap.end()).
     */
     iterator find(const key_type& key);
-        const_iterator find(const key_type& key);
+    const_iterator find(const key_type& key);
     //@}
 
     /**

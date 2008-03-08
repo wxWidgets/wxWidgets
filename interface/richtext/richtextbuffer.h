@@ -9,16 +9,16 @@
 /**
     @class wxRichTextBuffer
     @headerfile richtextbuffer.h wx/richtext/richtextbuffer.h
-    
+
     This class represents the whole buffer associated with a wxRichTextCtrl.
-    
+
     @library{wxrichtext}
     @category{FIXME}
-    
+
     @seealso
     wxTextAttr, wxRichTextCtrl
 */
-class wxRichTextBuffer 
+class wxRichTextBuffer
 {
 public:
     //@{
@@ -26,7 +26,7 @@ public:
         Default constructors.
     */
     wxRichTextBuffer(const wxRichTextBuffer& obj);
-        wxRichTextBuffer();
+    wxRichTextBuffer();
     //@}
 
     /**
@@ -40,7 +40,7 @@ public:
         to add more if further notification is required. All handlers are notified
         of an event originating from the buffer, such as the replacement of a style
         sheet
-        during loading. The buffer never deletes any of the event handlers, unless 
+        during loading. The buffer never deletes any of the event handlers, unless
         RemoveEventHandler() is
         called with @true as the second argument.
     */
@@ -255,8 +255,8 @@ public:
     */
     bool ClearListStyle(const wxRichTextRange& range,
                         int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-        bool ClearListStyle(const wxRichTextRange& range,
-                            int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+    bool ClearListStyle(const wxRichTextRange& range,
+                        int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
     //@}
 
     /**
@@ -290,7 +290,7 @@ public:
         Dumps the contents of the buffer for debugging purposes.
     */
     void Dump();
-        void Dump(wxTextOutputStream& stream);
+    void Dump(wxTextOutputStream& stream);
     //@}
 
     /**
@@ -408,16 +408,16 @@ public:
         Finds a handler by name.
     */
     wxRichTextFileHandler* FindHandler(int imageType);
-        wxRichTextFileHandler* FindHandler(const wxString& extension,
-                                           int imageType);
-        wxRichTextFileHandler* FindHandler(const wxString& name);
+    wxRichTextFileHandler* FindHandler(const wxString& extension,
+                                       int imageType);
+    wxRichTextFileHandler* FindHandler(const wxString& name);
     //@}
 
     /**
         Finds a handler by filename or, if supplied, type.
     */
     wxRichTextFileHandler* FindHandlerFilenameOrType(const wxString& filename,
-                                                     int imageType);
+            int imageType);
 
     /**
         Gets the basic (overall) style. This is the style of the whole
@@ -591,8 +591,8 @@ public:
     */
     bool LoadFile(wxInputStream& stream,
                   int type = wxRICHTEXT_TYPE_ANY);
-        bool LoadFile(const wxString& filename,
-                      int type = wxRICHTEXT_TYPE_ANY);
+    bool LoadFile(const wxString& filename,
+                  int type = wxRICHTEXT_TYPE_ANY);
     //@}
 
     /**
@@ -622,11 +622,11 @@ public:
                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
                     int startFrom = -1,
                     int listLevel = -1);
-        bool Number(const wxRichTextRange& range,
-                    const wxString& styleName,
-                    int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
-                    int startFrom = -1,
-                    int listLevel = -1);
+    bool Number(const wxRichTextRange& range,
+                const wxString& styleName,
+                int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
+                int startFrom = -1,
+                int listLevel = -1);
     //@}
 
     /**
@@ -656,10 +656,10 @@ public:
                      const wxRichTextListStyleDefinition* style,
                      int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
                      int listLevel = -1);
-        bool PromoteList(int promoteBy, const wxRichTextRange& range,
-                         const wxString& styleName,
-                         int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
-                         int listLevel = -1);
+    bool PromoteList(int promoteBy, const wxRichTextRange& range,
+                     const wxString& styleName,
+                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
+                     int listLevel = -1);
     //@}
 
     /**
@@ -685,8 +685,8 @@ public:
     */
     bool SaveFile(wxOutputStream& stream,
                   int type = wxRICHTEXT_TYPE_ANY);
-        bool SaveFile(const wxString& filename,
-                      int type = wxRICHTEXT_TYPE_ANY);
+    bool SaveFile(const wxString& filename,
+                  int type = wxRICHTEXT_TYPE_ANY);
     //@}
 
     /**
@@ -729,11 +729,11 @@ public:
                       int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
                       int startFrom = -1,
                       int listLevel = -1);
-        bool SetListStyle(const wxRichTextRange& range,
-                          const wxString& styleName,
-                          int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
-                          int startFrom = -1,
-                          int listLevel = -1);
+    bool SetListStyle(const wxRichTextRange& range,
+                      const wxString& styleName,
+                      int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO,
+                      int startFrom = -1,
+                      int listLevel = -1);
     //@}
 
     /**
@@ -802,10 +802,10 @@ public:
 /**
     @class wxRichTextFileHandler
     @headerfile richtextbuffer.h wx/richtext/richtextbuffer.h
-    
+
     This is the base class for file handlers, for loading and/or saving content
     associated with a wxRichTextBuffer.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -884,8 +884,8 @@ public:
         loading.
     */
     bool LoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
-        bool LoadFile(wxRichTextBuffer* buffer,
-                      const wxString& filename);
+    bool LoadFile(wxRichTextBuffer* buffer,
+                  const wxString& filename);
     //@}
 
     //@{
@@ -893,8 +893,8 @@ public:
         Saves content to a stream or file. Not all handlers will implement file saving.
     */
     bool SaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
-        bool SaveFile(wxRichTextBuffer* buffer,
-                      const wxString& filename);
+    bool SaveFile(wxRichTextBuffer* buffer,
+                  const wxString& filename);
     //@}
 
     /**
@@ -943,13 +943,13 @@ public:
 /**
     @class wxRichTextRange
     @headerfile richtextbuffer.h wx/richtext/richtextbuffer.h
-    
+
     This class stores beginning and end positions for a range of data.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
-class wxRichTextRange 
+class wxRichTextRange
 {
 public:
     //@{
@@ -957,8 +957,8 @@ public:
         Constructors.
     */
     wxRichTextRange(long start, long end);
-        wxRichTextRange(const wxRichTextRange& range);
-        wxRichTextRange();
+    wxRichTextRange(const wxRichTextRange& range);
+    wxRichTextRange();
     //@}
 
     /**

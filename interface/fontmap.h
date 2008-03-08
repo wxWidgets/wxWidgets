@@ -9,33 +9,33 @@
 /**
     @class wxFontMapper
     @wxheader{fontmap.h}
-    
+
     wxFontMapper manages user-definable correspondence between logical font
     names and the fonts present on the machine.
-    
+
     The default implementations of all functions will ask the user if they are
     not capable of finding the answer themselves and store the answer in a
     config file (configurable via SetConfigXXX functions). This behaviour may
     be disabled by giving the value of @false to "interactive" parameter.
-    
+
     However, the functions will always consult the config file to allow the
     user-defined values override the default logic and there is no way to
     disable this - which shouldn't be ever needed because if "interactive" was
     never @true, the config file is never created anyhow.
-    
+
     In case everything else fails (i.e. there is no record in config file
-    and "interactive" is @false or user denied to choose any replacement), 
-    the class queries wxEncodingConverter 
+    and "interactive" is @false or user denied to choose any replacement),
+    the class queries wxEncodingConverter
     for "equivalent" encodings (e.g. iso8859-2 and cp1250) and tries them.
-    
+
     @library{wxcore}
     @category{misc}
-    
+
     @seealso
     wxEncodingConverter, @ref overview_nonenglishoverview "Writing non-English
     applications"
 */
-class wxFontMapper 
+class wxFontMapper
 {
 public:
     /**
@@ -73,7 +73,7 @@ public:
     /**
         Returns the array of all possible names for the given encoding. The array is
         @NULL-terminated. IF it isn't empty, the first name in it is the canonical
-        encoding name, i.e. the same string as returned by 
+        encoding name, i.e. the same string as returned by
         GetEncodingName().
     */
     static const wxChar** GetAllEncodingNames(wxFontEncoding encoding);
@@ -93,15 +93,15 @@ public:
                            wxNativeEncodingInfo* info,
                            const wxString& facename = wxEmptyString,
                            bool interactive = @true);
-        bool GetAltForEncoding(wxFontEncoding encoding,
-                               wxFontEncoding* alt_encoding,
-                               const wxString& facename = wxEmptyString,
-                               bool interactive = @true);
+    bool GetAltForEncoding(wxFontEncoding encoding,
+                           wxFontEncoding* alt_encoding,
+                           const wxString& facename = wxEmptyString,
+                           bool interactive = @true);
     //@}
 
     /**
-        Returns the @e n-th supported encoding. Together with 
-        GetSupportedEncodingsCount() 
+        Returns the @e n-th supported encoding. Together with
+        GetSupportedEncodingsCount()
         this method may be used to get all supported encodings.
     */
     static wxFontEncoding GetEncoding(size_t n);
@@ -114,16 +114,16 @@ public:
     /**
         Return the encoding corresponding to the given internal name. This function is
         the inverse of GetEncodingName() and is
-        intentionally less general than 
+        intentionally less general than
         CharsetToEncoding(), i.e. it doesn't
         try to make any guesses nor ever asks the user. It is meant just as a way of
-        restoring objects previously serialized using 
+        restoring objects previously serialized using
         GetEncodingName().
     */
     static wxFontEncoding GetEncodingFromName(const wxString& encoding);
 
     /**
-        Return internal string identifier for the encoding (see also 
+        Return internal string identifier for the encoding (see also
         wxFontMapper::GetEncodingDescription)
         
         @sa GetEncodingFromName()
@@ -131,7 +131,7 @@ public:
     static wxString GetEncodingName(wxFontEncoding encoding);
 
     /**
-        Returns the number of the font encodings supported by this class. Together with 
+        Returns the number of the font encodings supported by this class. Together with
         GetEncoding() this method may be used to get
         all supported encodings.
     */
@@ -156,7 +156,7 @@ public:
     /**
         Set the config object to use (may be @NULL to use default).
         
-        By default, the global one (from wxConfigBase::Get() will be used) 
+        By default, the global one (from wxConfigBase::Get() will be used)
         and the default root path for the config settings is the string returned by
         GetDefaultConfigPath().
     */

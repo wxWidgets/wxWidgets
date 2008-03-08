@@ -9,10 +9,10 @@
 /**
     @class wxAuiNotebook
     @headerfile auibook.h wx/aui/auibook.h
-    
+
     wxAuiNotebook is part of the wxAUI class framework.
     See also @ref overview_wxauioverview "wxAUI overview".
-    
+
     wxAuiNotebook is a notebook control which implements many features common in
     applications with dockable panes.
     Specifically, wxAuiNotebook implements functionality which allows the user to
@@ -20,14 +20,14 @@
     split the tab window into many different splitter configurations, and toggle
     through different themes to customize
     the control's look and feel.
-    
+
     An effort has been made to try to maintain an API as similar to that of
     wxNotebook.
-    
+
     The default theme that is used is wxAuiDefaultTabArt, which provides a modern,
     glossy look and feel.
     The theme can be changed by calling wxAuiNotebook::SetArtProvider.
-    
+
     @beginStyleTable
     @style{wxAUI_NB_DEFAULT_STYLE}:
            Defined as wxAUI_NB_TOP | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
@@ -55,7 +55,7 @@
     @style{wxAUI_NB_BOTTOM}:
            With this style, tabs are drawn along the bottom of the notebook.
     @endStyleTable
-    
+
     @library{wxaui}
     @category{aui}
 */
@@ -67,10 +67,10 @@ public:
         Constructor. Creates a wxAuiNotebok control.
     */
     wxAuiNotebook();
-        wxAuiNotebook(wxWindow* parent, wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long style = wxAUI_NB_DEFAULT_STYLE);
+    wxAuiNotebook(wxWindow* parent, wxWindowID id = wxID_ANY,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = wxAUI_NB_DEFAULT_STYLE);
     //@}
 
     /**
@@ -228,7 +228,7 @@ public:
         of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
     */
     void SetUniformBitmapSize(const wxSize& size);
-        void Split(size_t page, int direction);
+    void Split(size_t page, int direction);
     //@}
 
     /**
@@ -242,13 +242,13 @@ public:
 /**
     @class wxAuiTabArt
     @headerfile auibook.h wx/aui/auibook.h
-    
+
     Tab art class.
-    
+
     @library{wxaui}
     @category{aui}
 */
-class wxAuiTabArt 
+class wxAuiTabArt
 {
 public:
     /**

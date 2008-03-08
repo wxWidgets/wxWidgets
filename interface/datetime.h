@@ -9,17 +9,17 @@
 /**
     @class wxDateTime
     @wxheader{datetime.h}
-    
+
     wxDateTime class represents an absolute moment in the time.
-    
+
     @library{wxbase}
     @category{data}
-    
+
     @seealso
     @ref overview_wxdatetimeoverview "Date classes overview", wxTimeSpan,
     wxDateSpan, wxCalendarCtrl
 */
-class wxDateTime 
+class wxDateTime
 {
 public:
     /**
@@ -79,8 +79,8 @@ public:
         Adds the given date span to this object.
     */
     wxDateTime Add(const wxDateSpan& diff);
-        wxDateTime Add(const wxDateSpan& diff);
-        wxDateTime operator+=(const wxDateSpan& diff);
+    wxDateTime Add(const wxDateSpan& diff);
+    wxDateTime operator+=(const wxDateSpan& diff);
     //@}
 
     /**
@@ -314,7 +314,7 @@ public:
     wxString FormatTime();
 
     /**
-        Transform the date from the given time zone to the local one. If @e noDST is 
+        Transform the date from the given time zone to the local one. If @e noDST is
         @true, no DST adjustments will be made.
         
         Returns the date in the local time zone.
@@ -484,9 +484,9 @@ public:
     */
     static wxDateTime_t GetNumberOfDays(int year,
                                         Calendar cal = Gregorian);
-        static wxDateTime_t GetNumberOfDays(Month month,
-                                            int year = Inv_Year,
-                                            Calendar cal = Gregorian);
+    static wxDateTime_t GetNumberOfDays(Month month,
+                                        int year = Inv_Year,
+                                        Calendar cal = Gregorian);
     //@}
 
     /**
@@ -733,8 +733,8 @@ public:
     */
     const char * ParseDate(const wxString& date,
                            wxString::const_iterator * end = @NULL);
-        const char * ParseDate(const char * date);
-        const wchar_t * ParseDate(const wchar_t * date);
+    const char * ParseDate(const char * date);
+    const wchar_t * ParseDate(const wchar_t * date);
     //@}
 
     //@{
@@ -750,8 +750,8 @@ public:
     */
     const char * ParseDateTime(const wxString& datetime,
                                wxString::const_iterator * end = @NULL);
-        const char * ParseDateTime(const char * datetime);
-        const wchar_t * ParseDateTime(const wchar_t * datetime);
+    const char * ParseDateTime(const char * datetime);
+    const wchar_t * ParseDateTime(const wchar_t * datetime);
     //@}
 
     //@{
@@ -780,12 +780,12 @@ public:
                              const wxString& format = wxDefaultDateTimeFormat,
                              const wxDateTime& dateDef = wxDefaultDateTime,
                              wxString::const_iterator * end = @NULL);
-        const char * ParseFormat(const char * date,
-                                 const wxString& format = wxDefaultDateTimeFormat,
-                                 const wxDateTime& dateDef = wxDefaultDateTime);
-        const wchar_t * ParseFormat(const wchar_t * date,
-                                    const wxString& format = wxDefaultDateTimeFormat,
-                                    const wxDateTime& dateDef = wxDefaultDateTime);
+    const char * ParseFormat(const char * date,
+                             const wxString& format = wxDefaultDateTimeFormat,
+                             const wxDateTime& dateDef = wxDefaultDateTime);
+    const wchar_t * ParseFormat(const wchar_t * date,
+                                const wxString& format = wxDefaultDateTimeFormat,
+                                const wxDateTime& dateDef = wxDefaultDateTime);
     //@}
 
     /**
@@ -834,8 +834,8 @@ public:
     */
     const char * ParseRfc822Date(const wxString& date,
                                  wxString::const_iterator * end = @NULL);
-        const char * ParseRfc822Date(const char* date);
-        const wchar_t * ParseRfc822Date(const wchar_t* date);
+    const char * ParseRfc822Date(const char* date);
+    const wchar_t * ParseRfc822Date(const wchar_t* date);
     //@}
 
     //@{
@@ -848,8 +848,8 @@ public:
     */
     const char * ParseTime(const wxString& time,
                            wxString::const_iterator * end = @NULL);
-        const char * ParseTime(const char * time);
-        const wchar_t * ParseTime(const wchar_t * time);
+    const char * ParseTime(const char * time);
+    const wchar_t * ParseTime(const wchar_t * time);
     //@}
 
     /**
@@ -931,11 +931,11 @@ public:
         Sets the date and time from the parameters.
     */
 #define wxDateTime Set(wxDateTime_t day, Month month = Inv_Month,
-                   int year = Inv_Year,
-                   wxDateTime_t hour = 0,
-                   wxDateTime_t minute = 0,
-                   wxDateTime_t second = 0,
-                   wxDateTime_t millisec = 0)     /* implementation is private */
+    int year = Inv_Year,
+               wxDateTime_t hour = 0,
+                                   wxDateTime_t minute = 0,
+                                                         wxDateTime_t second = 0,
+                                                                               wxDateTime_t millisec = 0)     /* implementation is private */
 
     /**
         Sets the country to use by default. This setting influences the DST
@@ -1041,7 +1041,7 @@ public:
     */
     bool SetToWeekDay(WeekDay weekday, int n = 1,
                       Month month = Inv_Month,
-                      int year = Inv_Year);
+                                    int year = Inv_Year);
 
     /**
         Adjusts the date so that it will still lie in the same week as before, but its
@@ -1194,70 +1194,70 @@ public:
         Same as @ref settm() Set.
     */
     wxDateTime operator(const struct tm& tm);
-};
+            };
 
 
 /**
     @class wxDateTimeWorkDays
     @wxheader{datetime.h}
-    
-    
+
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxDateTimeWorkDays 
+class wxDateTimeWorkDays
 {
 public:
-    
+
 };
 
 
 /**
     @class wxDateSpan
     @wxheader{datetime.h}
-    
+
     This class is a "logical time span" and is useful for implementing program
     logic for such things as "add one month to the date" which, in general,
     doesn't mean to add 60*60*24*31 seconds to it, but to take the same date
     the next month (to understand that this is indeed different consider adding
     one month to Feb, 15 -- we want to get Mar, 15, of course).
-    
+
     When adding a month to the date, all lesser components (days, hours, ...)
     won't be changed unless the resulting date would be invalid: for example,
     Jan 31 + 1 month will be Feb 28, not (non-existing) Feb 31.
-    
+
     Because of this feature, adding and subtracting back again the same
     wxDateSpan will @b not, in general give back the original date: Feb 28 - 1
     month will be Jan 28, not Jan 31!
-    
+
     wxDateSpan objects can be either positive or negative. They may be
     multiplied by scalars which multiply all deltas by the scalar: i.e.
     2*(1  month and  1  day) is 2 months and 2 days. They can
-    be added together and with wxDateTime or 
+    be added together and with wxDateTime or
     wxTimeSpan, but the type of result is different for each
     case.
-    
+
     Beware about weeks: if you specify both weeks and days, the total number of
     days added will be 7*weeks + days! See also GetTotalDays()
     function.
-    
+
     Equality operators are defined for wxDateSpans. Two datespans are equal if
     and only if they both give the same target date when added to @b every
     source date. Thus wxDateSpan::Months(1) is not equal to wxDateSpan::Days(30),
     because they don't give the same date when added to 1 Feb. But
     wxDateSpan::Days(14) is equal to wxDateSpan::Weeks(2)
-    
+
     Finally, notice that for adding hours, minutes and so on you don't need this
     class at all: wxTimeSpan will do the job because there
     are no subtleties associated with those (we don't support leap seconds).
-    
+
     @library{wxbase}
     @category{data}
-    
+
     @seealso
     @ref overview_wxdatetimeoverview "Date classes overview", wxDateTime
 */
-class wxDateSpan 
+class wxDateSpan
 {
 public:
     /**
@@ -1273,8 +1273,8 @@ public:
         second and third ones modify this object in place.
     */
     wxDateSpan Add(const wxDateSpan& other);
-        wxDateSpan Add(const wxDateSpan& other);
-        wxDateSpan operator+=(const wxDateSpan& other);
+    wxDateSpan Add(const wxDateSpan& other);
+    wxDateSpan operator+=(const wxDateSpan& other);
     //@}
 
     /**
@@ -1347,8 +1347,8 @@ public:
         object in place.
     */
     wxDateSpan Multiply(int factor);
-        wxDateSpan Multiply(int factor);
-        wxDateSpan operator*=(int factor);
+    wxDateSpan Multiply(int factor);
+    wxDateSpan operator*=(int factor);
     //@}
 
     //@{
@@ -1358,7 +1358,7 @@ public:
         @sa Negate()
     */
     wxDateSpan Neg();
-        wxDateSpan operator-();
+    wxDateSpan operator-();
     //@}
 
     /**
@@ -1398,8 +1398,8 @@ public:
         object, the second and third ones modify this object in place.
     */
     wxDateSpan Subtract(const wxDateSpan& other);
-        wxDateSpan Subtract(const wxDateSpan& other);
-        wxDateSpan operator+=(const wxDateSpan& other);
+    wxDateSpan Subtract(const wxDateSpan& other);
+    wxDateSpan operator+=(const wxDateSpan& other);
     //@}
 
     /**
@@ -1447,16 +1447,16 @@ public:
 /**
     @class wxTimeSpan
     @wxheader{datetime.h}
-    
+
     wxTimeSpan class represents a time interval.
-    
+
     @library{wxbase}
     @category{data}
-    
+
     @seealso
     @ref overview_wxdatetimeoverview "Date classes overview", wxDateTime
 */
-class wxTimeSpan 
+class wxTimeSpan
 {
 public:
     //@{
@@ -1466,7 +1466,7 @@ public:
         minutes, seconds or milliseconds.
     */
     wxTimeSpan();
-        wxTimeSpan(long hours, long min, long sec, long msec);
+    wxTimeSpan(long hours, long min, long sec, long msec);
     //@}
 
     /**
@@ -1495,8 +1495,8 @@ public:
         Returns the sum of two timespans.
     */
     wxTimeSpan Add(const wxTimeSpan& diff);
-        wxTimeSpan Add(const wxTimeSpan& diff);
-        wxTimeSpan operator+=(const wxTimeSpan& diff);
+    wxTimeSpan Add(const wxTimeSpan& diff);
+    wxTimeSpan operator+=(const wxTimeSpan& diff);
     //@}
 
     /**
@@ -1677,8 +1677,8 @@ public:
         Multiplies timespan by a scalar.
     */
     wxTimeSpan Multiply(int n);
-        wxTimeSpan Multiply(int n);
-        wxTimeSpan operator*=(int n);
+    wxTimeSpan Multiply(int n);
+    wxTimeSpan operator*=(int n);
     //@}
 
     //@{
@@ -1686,7 +1686,7 @@ public:
         Negate the value of the timespan.
     */
     wxTimeSpan Neg();
-        wxTimeSpan operator-();
+    wxTimeSpan operator-();
     //@}
 
     /**
@@ -1751,8 +1751,8 @@ public:
         Returns the difference of two timespans.
     */
     wxTimeSpan Subtract(const wxTimeSpan& diff);
-        wxTimeSpan Subtract(const wxTimeSpan& diff);
-        wxTimeSpan operator-=(const wxTimeSpan& diff);
+    wxTimeSpan Subtract(const wxTimeSpan& diff);
+    wxTimeSpan operator-=(const wxTimeSpan& diff);
     //@}
 
     /**
@@ -1785,13 +1785,13 @@ public:
 /**
     @class wxDateTimeHolidayAuthority
     @wxheader{datetime.h}
-    
-    
+
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxDateTimeHolidayAuthority 
+class wxDateTimeHolidayAuthority
 {
 public:
-    
+
 };

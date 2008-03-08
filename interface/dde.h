@@ -9,7 +9,7 @@
 /**
     @class wxDDEConnection
     @wxheader{dde.h}
-    
+
     A wxDDEConnection object represents the connection between a client and a
     server. It can be created by making a connection using a
     wxDDEClient object, or by the acceptance of a connection by a
@@ -17,18 +17,18 @@
     conversation is controlled by
     calling members in a @b wxDDEConnection object or by overriding its
     members.
-    
+
     An application should normally derive a new connection class from
     wxDDEConnection, in order to override the communication event handlers
     to do something interesting.
-    
+
     This DDE-based implementation is available on Windows only,
     but a platform-independent, socket-based version
     of this API is available using wxTCPConnection.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxDDEClient, wxDDEServer, @ref overview_ipcoverview "Interprocess
     communications overview"
@@ -51,7 +51,7 @@ public:
         transactions.
     */
     wxDDEConnection();
-        wxDDEConnection(void* buffer, size_t size);
+    wxDDEConnection(void* buffer, size_t size);
     //@}
 
     //@{
@@ -63,9 +63,9 @@ public:
     */
     bool Advise(const wxString& item, const void* data, size_t size,
                 wxIPCFormat format = wxIPC_PRIVATE);
-        bool Advise(const wxString& item, const char* data);
-        bool Advise(const wxString& item, const wchar_t* data);
-        bool Advise(const wxString& item, const wxString data);
+    bool Advise(const wxString& item, const char* data);
+    bool Advise(const wxString& item, const wchar_t* data);
+    bool Advise(const wxString& item, const wxString data);
     //@}
 
     /**
@@ -89,9 +89,9 @@ public:
     */
     bool Execute(const void* data, size_t size,
                  wxIPCFormat format = wxIPC_PRIVATE);
-        bool Execute(const char* data);
-        bool Execute(const wchar_t* data);
-        bool Execute(const wxString data);
+    bool Execute(const char* data);
+    bool Execute(const wchar_t* data);
+    bool Execute(const wxString data);
     //@}
 
     /**
@@ -166,9 +166,9 @@ public:
     */
     bool Poke(const wxString& item, const void* data, size_t size,
               wxIPCFormat format = wxIPC_PRIVATE);
-        bool Poke(const wxString& item, const char* data);
-        bool Poke(const wxString& item, const wchar_t* data);
-        bool Poke(const wxString& item, const wxString data);
+    bool Poke(const wxString& item, const char* data);
+    bool Poke(const wxString& item, const wchar_t* data);
+    bool Poke(const wxString& item, const wxString data);
     //@}
 
     /**
@@ -200,24 +200,24 @@ public:
 /**
     @class wxDDEClient
     @wxheader{dde.h}
-    
+
     A wxDDEClient object represents the client part of a client-server DDE
     (Dynamic Data Exchange) conversation.
-    
+
     To create a client which can communicate with a suitable server,
     you need to derive a class from wxDDEConnection and another from wxDDEClient.
     The custom wxDDEConnection class will intercept communications in
     a 'conversation' with a server, and the custom wxDDEServer is required
     so that a user-overridden wxDDEClient::OnMakeConnection member can return
     a wxDDEConnection of the required class, when a connection is made.
-    
+
     This DDE-based implementation is
     available on Windows only, but a platform-independent, socket-based version
     of this API is available using wxTCPClient.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxDDEServer, wxDDEConnection, @ref overview_ipcoverview "Interprocess
     communications overview"
@@ -267,21 +267,21 @@ public:
 /**
     @class wxDDEServer
     @wxheader{dde.h}
-    
+
     A wxDDEServer object represents the server part of a client-server DDE
     (Dynamic Data Exchange) conversation.
-    
+
     This DDE-based implementation is
     available on Windows only, but a platform-independent, socket-based version
     of this API is available using wxTCPServer.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxDDEClient, wxDDEConnection, @ref overview_ipcoverview "IPC overview"
 */
-class wxDDEServer 
+class wxDDEServer
 {
 public:
     /**
@@ -319,17 +319,17 @@ public:
     Called when wxWidgets exits, to clean up the DDE system. This no longer needs
     to be
     called by the application.
-    
+
     See also wxDDEInitialize.
 */
 void wxDDECleanUp();
 
 /**
     Initializes the DDE system. May be called multiple times without harm.
-    
+
     This no longer needs to be called by the application: it will be called
     by wxWidgets if necessary.
-    
+
     See also wxDDEServer, wxDDEClient, wxDDEConnection,
     wxDDECleanUp.
 */

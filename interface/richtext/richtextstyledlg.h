@@ -9,13 +9,13 @@
 /**
     @class wxRichTextStyleOrganiserDialog
     @headerfile richtextstyledlg.h wx/richtext/richtextstyledlg.h
-    
+
     This class shows a style sheet and allows the user to edit, add and remove
     styles.
     It can also be used as a style browser, for example if the application is not
     using a permanent wxRichTextStyleComboCtrl or wxRichTextStyleListCtrl to
     present styles.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -117,8 +117,8 @@ public:
                                    wxRichTextCtrl* ctrl,
                                    wxWindow* parent,
                                    wxWindowID id = wxID_ANY);
-        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX)
- wxRichTextStyleOrganiserDialog();
+    const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX)
+    wxRichTextStyleOrganiserDialog();
     //@}
 
     /**

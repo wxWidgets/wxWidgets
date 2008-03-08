@@ -9,25 +9,25 @@
 /**
     @class wxXmlNode
     @headerfile xml.h wx/xml/xml.h
-    
+
     Represents a node in an XML document. See wxXmlDocument.
-    
-    Node has a name and may have content and attributes. Most common node types are 
-    @c wxXML_TEXT_NODE (name and attributes are irrelevant) and 
+
+    Node has a name and may have content and attributes. Most common node types are
+    @c wxXML_TEXT_NODE (name and attributes are irrelevant) and
     @c wxXML_ELEMENT_NODE (e.g. in @c titlehi/title there is an element
     with name="title", irrelevant content and one child (@c wxXML_TEXT_NODE
     with content="hi").
-    
+
     If @c wxUSE_UNICODE is 0, all strings are encoded in the encoding given to
     wxXmlDocument::Load (default is UTF-8).
-    
+
     @library{wxxml}
     @category{xml}
-    
+
     @seealso
     wxXmlDocument, wxXmlAttribute
 */
-class wxXmlNode 
+class wxXmlNode
 {
 public:
     //@{
@@ -39,10 +39,10 @@ public:
               const wxString& content = wxEmptyString,
               wxXmlAttribute* attrs = @NULL,
               wxXmlNode* next = @NULL, int lineNo = -1);
-        wxXmlNode(const wxXmlNode& node);
-        wxXmlNode(wxXmlNodeType type, const wxString& name,
-                  const wxString& content = wxEmptyString,
-                  int lineNo = -1);
+    wxXmlNode(const wxXmlNode& node);
+    wxXmlNode(wxXmlNodeType type, const wxString& name,
+              const wxString& content = wxEmptyString,
+              int lineNo = -1);
     //@}
 
     /**
@@ -55,7 +55,7 @@ public:
         Appends given attribute to the list of attributes for this node.
     */
     void AddAttribute(const wxString& name, const wxString& value);
-        void AddAttribute(wxXmlAttribute* attr);
+    void AddAttribute(wxXmlAttribute* attr);
     //@}
 
     /**
@@ -77,8 +77,8 @@ public:
         If it does not exist, the @e defaultVal is returned.
     */
     bool GetAttribute(const wxString& attrName, wxString* value);
-        wxString GetAttribute(const wxString& attrName,
-                              const wxString& defaultVal);
+    wxString GetAttribute(const wxString& attrName,
+                          const wxString& defaultVal);
     //@}
 
     /**
@@ -239,19 +239,19 @@ public:
 /**
     @class wxXmlAttribute
     @headerfile xml.h wx/xml/xml.h
-    
+
     Represents a node attribute.
-    
+
     Example: in @c img src="hello.gif" id="3"/, @c "src" is attribute with value
     @c "hello.gif" and @c "id" is a attribute with value @c "3".
-    
+
     @library{wxxml}
     @category{xml}
-    
+
     @seealso
     wxXmlDocument, wxXmlNode
 */
-class wxXmlAttribute 
+class wxXmlAttribute
 {
 public:
     //@{
@@ -260,8 +260,8 @@ public:
         If @e next is not @NULL, then sets it as sibling of this attribute.
     */
     wxXmlAttribute();
-        wxXmlAttribute(const wxString& name, const wxString& value,
-                       wxXmlAttribute* next = @NULL);
+    wxXmlAttribute(const wxString& name, const wxString& value,
+                   wxXmlAttribute* next = @NULL);
     //@}
 
     /**
@@ -304,78 +304,78 @@ public:
 /**
     @class wxXmlDocument
     @headerfile xml.h wx/xml/xml.h
-    
+
     This class holds XML data/document as parsed by XML parser in the root node.
-    
+
     wxXmlDocument internally uses the expat library which comes with wxWidgets to
     parse the given stream.
-    
+
     A simple example of using XML classes is:
-    
+
     @code
     wxXmlDocument doc;
     if (!doc.Load(wxT("myfile.xml")))
         return @false;
-    
+
     // start processing the XML file
     if (doc.GetRoot()-GetName() != wxT("myroot-node"))
         return @false;
-    
+
     wxXmlNode *child = doc.GetRoot()-GetChildren();
     while (child) {
-    
+
         if (child-GetName() == wxT("tag1")) {
-    
+
             // process text enclosed by tag1/tag1
             wxString content = child-GetNodeContent();
-    
+
             ...
-    
+
             // process attributes of tag1
-            wxString attrvalue1 = 
-                child-GetAttribute(wxT("attr1"), 
+            wxString attrvalue1 =
+                child-GetAttribute(wxT("attr1"),
                                   wxT("default-value"));
-            wxString attrvalue2 = 
-                child-GetAttribute(wxT("attr2"), 
+            wxString attrvalue2 =
+                child-GetAttribute(wxT("attr2"),
                                   wxT("default-value"));
-    
+
             ...
-    
+
         } else if (child-GetName() == wxT("tag2")) {
-    
+
             // process tag2 ...
         }
-    
+
         child = child-GetNext();
     }
     @endcode
-    
+
     @b Note: if you want to preserve the original formatting of the loaded file
     including whitespaces
     and indentation, you need to turn off whitespace-only textnode removal and
     automatic indentation:
-    
+
     @code
     wxXmlDocument doc;
     doc.Load(wxT("myfile.xml"), wxT("UTF-8"), wxXMLDOC_KEEP_WHITESPACE_NODES);
-    
+
     // myfile2.xml will be indentic to myfile.xml saving it this way:
     doc.Save(wxT("myfile2.xml"), wxXML_NO_INDENTATION);
     @endcode
-    
+
     Using default parameters, you will get a reformatted document which in general
     is different from
     the original loaded content:
-    
+
     @code
     wxXmlDocument doc;
     doc.Load(wxT("myfile.xml"));
     doc.Save(wxT("myfile2.xml"));  // myfile2.xml != myfile.xml
     @endcode
-    
+
     @library{wxxml}
     @category{xml}
-    
+
     @seealso
     wxXmlNode, wxXmlAttribute
 */
@@ -387,9 +387,9 @@ public:
         Copy constructor. Deep copies all the XML tree of the given document.
     */
     wxXmlDocument();
-        wxXmlDocument(const wxString& filename);
-        wxXmlDocument(wxInputStream& stream);
-        wxXmlDocument(const wxXmlDocument& doc);
+    wxXmlDocument(const wxString& filename);
+    wxXmlDocument(wxInputStream& stream);
+    wxXmlDocument(const wxXmlDocument& doc);
     //@}
 
     /**
@@ -448,7 +448,7 @@ public:
         Like above but takes the data from given input stream.
     */
     bool Load(const wxString& filename);
-        int bool Load(wxInputStream& stream);
+    int bool Load(wxInputStream& stream);
     //@}
 
     //@{
@@ -457,7 +457,7 @@ public:
         of @c indentstep.
     */
     bool Save(const wxString& filename, int indentstep = 1);
-        bool Save(wxOutputStream& stream, int indentstep = 1);
+    bool Save(wxOutputStream& stream, int indentstep = 1);
     //@}
 
     /**
@@ -472,7 +472,7 @@ public:
 
     /**
         Sets the root node of this document. Deletes previous root node.
-        Use DetachRoot() and then 
+        Use DetachRoot() and then
         SetRoot() if you want
         to replace the root node without deleting the old document tree.
     */

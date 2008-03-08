@@ -9,37 +9,37 @@
 /**
     @class wxAccessible
     @wxheader{access.h}
-    
+
     The wxAccessible class allows wxWidgets applications, and
     wxWidgets itself, to return extended information about user interface elements
     to client applications such as screen readers. This is the
     main way in which wxWidgets implements accessibility features.
-    
+
     At present, only Microsoft Active Accessibility is supported
     by this class.
-    
+
     To use this class, derive from wxAccessible, implement appropriate
     functions, and associate an object of the class with a
     window using wxWindow::SetAccessible.
-    
+
     All functions return an indication of success, failure, or not implemented
     using values of the wxAccStatus enum type.
-    
+
     If you return wxACC_NOT_IMPLEMENTED from any function, the system will try to
     implement the appropriate functionality. However this will not work with
     all functions.
-    
+
     Most functions work with an @e object id, which can be zero to refer to
     'this' UI element, or greater than zero to refer to the nth child element.
     This allows you to specify elements that don't have a corresponding wxWindow or
     wxAccessible; for example, the sash of a splitter window.
-    
+
     For details on the semantics of functions and types, please refer to the
     Microsoft Active Accessibility 1.2 documentation.
-    
+
     This class is compiled into wxWidgets only if the wxUSE_ACCESSIBILITY setup
     symbol is set to 1.
-    
+
     @library{wxcore}
     @category{FIXME}
 */

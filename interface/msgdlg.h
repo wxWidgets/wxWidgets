@@ -9,13 +9,13 @@
 /**
     @class wxMessageDialog
     @wxheader{msgdlg.h}
-    
+
     This class represents a dialog that shows a single or multi-line message,
     with a choice of OK, Yes, No and Cancel buttons.
-    
+
     @library{wxcore}
     @category{cmndlg}
-    
+
     @seealso
     @ref overview_wxmessagedialogoverview "wxMessageDialog overview"
 */
@@ -25,16 +25,16 @@ public:
     /**
         Constructor. Use ShowModal() to show the dialog.
         
-        @param parent 
+        @param parent
         Parent window.
         
-        @param message 
+        @param message
         Message to show on the dialog.
         
-        @param caption 
+        @param caption
         The dialog caption.
         
-        @param style 
+        @param style
         A dialog style (bitlist) containing flags chosen from the following:
         
         
@@ -95,7 +95,7 @@ public:
         The message box stays on top of all other window, even those of the other
         applications (Windows only).
         
-        @param pos 
+        @param pos
         Dialog position. Not Windows.
     */
     wxMessageDialog(wxWindow* parent, const wxString& message,
@@ -110,7 +110,7 @@ public:
 
     /**
         Sets the extended message for the dialog: this message is usually an extension
-        of the short message specified in the constructor or set with 
+        of the short message specified in the constructor or set with
         SetMessage(). If it is set, the main message
         appears highlighted -- if supported -- and this message appears beneath it in
         normal font. On the platforms which don't support extended messages, it is
@@ -126,7 +126,7 @@ public:
     /**
         Overrides the default labels of the OK and Cancel buttons.
         
-        Please see the remarks in 
+        Please see the remarks in
         SetYesNoLabels() documentation.
     */
     bool SetOKCancelLabels(const wxString ok, const wxString cancel);
@@ -134,7 +134,7 @@ public:
     /**
         Overrides the default label of the OK button.
         
-        Please see the remarks in 
+        Please see the remarks in
         SetYesNoLabels() documentation.
     */
     bool SetOKLabel(const wxString ok);
@@ -142,7 +142,7 @@ public:
     /**
         Overrides the default labels of the Yes, No and Cancel buttons.
         
-        Please see the remarks in 
+        Please see the remarks in
         SetYesNoLabels() documentation.
     */
     bool SetYesNoCancelLabels(const wxString yes, const wxString no,
@@ -173,51 +173,51 @@ public:
 /**
     General purpose message dialog.  @e style may be a bit list of the
     following identifiers:
-    
+
     wxYES_NO
-    
-    
+
+
     Puts Yes and No buttons on the message box. May be combined with
     wxCANCEL.
-    
+
     wxCANCEL
-    
-    
+
+
     Puts a Cancel button on the message box. May only be combined with
     wxYES_NO or wxOK.
-    
+
     wxOK
-    
-    
+
+
     Puts an Ok button on the message box. May be combined with wxCANCEL.
-    
+
     wxICON_EXCLAMATION
-    
-    
+
+
     Displays an exclamation mark symbol.
-    
+
     wxICON_HAND
-    
-    
+
+
     Displays an error symbol.
-    
+
     wxICON_ERROR
-    
-    
+
+
     Displays an error symbol - the same as wxICON_HAND.
-    
+
     wxICON_QUESTION
-    
-    
+
+
     Displays a question mark symbol.
-    
+
     wxICON_INFORMATION
-    
-    
+
+
     Displays an information symbol.
-    
+
     The return value is one of: wxYES, wxNO, wxCANCEL, wxOK.
-    
+
     For example:
     @code
     ...
@@ -227,7 +227,7 @@ public:
         main_frame-Close();
       ...
     @endcode
-    
+
     @e message may contain newline characters, in which case the
     message will be split into separate lines, to cater for large messages.
 */

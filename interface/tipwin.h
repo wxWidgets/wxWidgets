@@ -9,15 +9,15 @@
 /**
     @class wxTipWindow
     @wxheader{tipwin.h}
-    
-    Shows simple text in a popup tip window on creation. This is used by 
+
+    Shows simple text in a popup tip window on creation. This is used by
     wxSimpleHelpProvider to show popup help. The
     window automatically destroys itself when the user clicks on it or it loses the
     focus.
-    
+
     You may also use this class to emulate the tooltips when you need finer
     control over them than what the standard tooltips provide.
-    
+
     @library{wxcore}
     @category{managedwnd}
 */
@@ -27,23 +27,23 @@ public:
     /**
         Constructor. The tip is shown immediately after the window is constructed.
         
-        @param parent 
+        @param parent
         The parent window, must be non-@NULL
         
-        @param text 
+        @param text
         The text to show, may contain the new line characters
         
-        @param maxLength 
+        @param maxLength
         The length of each line, in pixels. Set to a very large
         value to avoid wrapping lines
         
-        @param windowPtr 
-        Simply passed to 
+        @param windowPtr
+        Simply passed to
         SetTipWindowPtr below, please see its
         documentation for the description of this parameter
         
-        @param rectBounds 
-        If non-@NULL, passed to 
+        @param rectBounds
+        If non-@NULL, passed to
         SetBoundingRect below, please see its
         documentation for the description of this parameter
     */
@@ -61,14 +61,14 @@ public:
         also automatically close if the mouse leaves this area. This is useful to
         dismiss the tip mouse when the mouse leaves the object it is associated with.
         
-        @param rectBound 
+        @param rectBound
         The bounding rectangle for the mouse in the screen coordinates
     */
     void SetBoundingRect(const wxRect& rectBound);
 
     /**
         When the tip window closes itself (which may happen at any moment and
-        unexpectedly to the caller) it may @NULL out the pointer pointed to by 
+        unexpectedly to the caller) it may @NULL out the pointer pointed to by
         @e it windowPtr. This is helpful to avoid dereferencing the tip window which
         had been already closed and deleted.
     */

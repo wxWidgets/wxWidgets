@@ -9,7 +9,7 @@
 /**
     @class wxLayoutAlgorithm
     @wxheader{laywin.h}
-    
+
     wxLayoutAlgorithm implements layout of subwindows in MDI or SDI frames.
     It sends a wxCalculateLayoutEvent event
     to children of the frame, asking them for information about
@@ -18,7 +18,7 @@
     frames).
     For SDI (normal) frames, a 'main' window is specified as taking up the
     remaining space.
-    
+
     Because the event system is used, this technique can be applied to any windows,
     which are not necessarily 'aware' of the layout classes (no virtual functions
     in wxWindow refer to wxLayoutAlgorithm or its events). However, you
@@ -26,7 +26,7 @@
     since this class provides handlers for the required events, and accessors
     to specify the desired size of the window. The sash behaviour in the base class
     can be used, optionally, to make the windows user-resizable.
-    
+
     wxLayoutAlgorithm is typically used in IDE (integrated development environment)
     applications,
     where there are several resizable windows in addition to the MDI client window,
@@ -34,7 +34,7 @@
     other primary editing window. Resizable windows might include toolbars, a
     project
     window, and a window for displaying error and warning messages.
-    
+
     When a window receives an OnCalculateLayout event, it should call SetRect in
     the given event object, to be the old supplied rectangle minus whatever space
     the
@@ -43,7 +43,7 @@
     which it sends to itself to determine the orientation, alignment and size of
     the window,
     which it gets from internal member variables set by the application.
-    
+
     The algorithm works by starting off with a rectangle equal to the whole frame
     client area.
     It iterates through the frame children, generating OnCalculateLayout events
@@ -70,7 +70,7 @@
     output window take up space at the top and bottom, and then the remaining
     height in-between is used for
     the project window.
-    
+
     wxLayoutAlgorithm is quite independent of the way in which
     OnCalculateLayout chooses to interpret a window's size and alignment. Therefore
     you
@@ -82,14 +82,14 @@
     rather than always assuming stretching. (This could, and probably should, be
     added to the existing
     implementation).
-    
+
     @e Note: wxLayoutAlgorithm has nothing to do with wxLayoutConstraints. It is an
     alternative
     way of specifying layouts for which the normal constraint system is unsuitable.
-    
+
     @library{wxadv}
     @category{winlayout}
-    
+
     @seealso
     wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview "Event
     handling overview"
@@ -142,20 +142,20 @@ public:
 /**
     @class wxSashLayoutWindow
     @wxheader{laywin.h}
-    
+
     wxSashLayoutWindow responds to OnCalculateLayout events generated
     by wxLayoutAlgorithm. It allows the
     application to use simple accessors to specify how the window should be
     laid out, rather than having to respond to events. The fact that
     the class derives from wxSashWindow allows sashes to be used if required,
     to allow the windows to be user-resizable.
-    
+
     The documentation for wxLayoutAlgorithm explains
     the purpose of this class in more detail.
-    
+
     @library{wxadv}
     @category{miscwnd}
-    
+
     @seealso
     wxLayoutAlgorithm, wxSashWindow, @ref overview_eventhandlingoverview "Event
     handling overview"
@@ -168,62 +168,62 @@ public:
         Constructs a sash layout window, which can be a child of a frame, dialog or any
         other non-control window.
         
-        @param parent 
+        @param parent
         Pointer to a parent window.
         
-        @param id 
+        @param id
         Window identifier. If -1, will automatically create an identifier.
         
-        @param pos 
+        @param pos
         Window position. wxDefaultPosition is (-1, -1) which indicates that
         wxSashLayoutWindows
         should generate a default position for the window. If using the
         wxSashLayoutWindow class directly, supply
         an actual position.
         
-        @param size 
+        @param size
         Window size. wxDefaultSize is (-1, -1) which indicates that wxSashLayoutWindows
         should generate a default size for the window.
         
-        @param style 
+        @param style
         Window style. For window styles, please see wxSashLayoutWindow.
         
-        @param name 
+        @param name
         Window name.
     */
     wxSashLayoutWindow();
-        wxSashLayoutWindow(wxSashLayoutWindow* parent, wxWindowID id,
-                           const wxPoint& pos = wxDefaultPosition,
-                           const wxSize& size = wxDefaultSize,
-                           long style = wxCLIP_CHILDREN |  wxSW_3D,
-                           const wxString& name = "layoutWindow");
+    wxSashLayoutWindow(wxSashLayoutWindow* parent, wxWindowID id,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxCLIP_CHILDREN |  wxSW_3D,
+                       const wxString& name = "layoutWindow");
     //@}
 
     /**
         Initializes a sash layout window, which can be a child of a frame, dialog or
         any other non-control window.
         
-        @param parent 
+        @param parent
         Pointer to a parent window.
         
-        @param id 
+        @param id
         Window identifier. If -1, will automatically create an identifier.
         
-        @param pos 
+        @param pos
         Window position. wxDefaultPosition is (-1, -1) which indicates that
         wxSashLayoutWindows
         should generate a default position for the window. If using the
         wxSashLayoutWindow class directly, supply
         an actual position.
         
-        @param size 
+        @param size
         Window size. wxDefaultSize is (-1, -1) which indicates that wxSashLayoutWindows
         should generate a default size for the window.
         
-        @param style 
+        @param style
         Window style. For window styles, please see wxSashLayoutWindow.
         
-        @param name 
+        @param name
         Window name.
     */
     bool Create(wxSashLayoutWindow* parent, wxWindowID id,
@@ -292,15 +292,15 @@ public:
 /**
     @class wxQueryLayoutInfoEvent
     @wxheader{laywin.h}
-    
+
     This event is sent when wxLayoutAlgorithm wishes to get
     the size, orientation and alignment of a window. More precisely, the event is
     sent
     by the OnCalculateLayout handler which is itself invoked by wxLayoutAlgorithm.
-    
+
     @library{wxadv}
     @category{events}
-    
+
     @seealso
     wxCalculateLayoutEvent, wxSashLayoutWindow, wxLayoutAlgorithm.
 */
@@ -382,14 +382,14 @@ public:
 /**
     @class wxCalculateLayoutEvent
     @wxheader{laywin.h}
-    
+
     This event is sent by wxLayoutAlgorithm to
     calculate the amount of the remaining client area that the window should
     occupy.
-    
+
     @library{wxadv}
     @category{events}
-    
+
     @seealso
     wxQueryLayoutInfoEvent, wxSashLayoutWindow, wxLayoutAlgorithm.
 */

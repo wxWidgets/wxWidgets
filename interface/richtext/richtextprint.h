@@ -9,12 +9,12 @@
 /**
     @class wxRichTextHeaderFooterData
     @headerfile richtextprint.h wx/richtext/richtextprint.h
-    
-    
+
+
     This class represents header and footer data to be passed to the
     wxRichTextPrinting and
     wxRichTextPrintout classes.
-    
+
     Headers and footers can be specified independently for odd, even or both page
     sides. Different text can be specified
     for left, centre and right locations on the page, and the font and text colour
@@ -22,14 +22,14 @@
     be specified. You can specify the following keywords in header and footer text,
     which will
     be substituted for the actual values during printing and preview.
-    
+
      @DATE@: the current date.
      @PAGESCNT@: the total number of pages.
      @PAGENUM@: the current page number.
      @TIME@: the current time.
      @TITLE@: the title of the document, as passed to the wxRichTextPrinting or
     wxRichTextLayout constructor.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -41,7 +41,7 @@ public:
         Constructors.
     */
     wxRichTextHeaderFooterData();
-        wxRichTextHeaderFooterData(const wxRichTextHeaderFooterData& data);
+    wxRichTextHeaderFooterData(const wxRichTextHeaderFooterData& data);
     //@}
 
     /**
@@ -159,11 +159,11 @@ public:
 /**
     @class wxRichTextPrintout
     @headerfile richtextprint.h wx/richtext/richtextprint.h
-    
+
     This class implements print layout for wxRichTextBuffer. Instead of using it
     directly, you
     should normally use the wxRichTextPrinting class.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */
@@ -238,10 +238,10 @@ public:
 /**
     @class wxRichTextPrinting
     @headerfile richtextprint.h wx/richtext/richtextprint.h
-    
+
     This class provides a simple interface for performing wxRichTextBuffer printing
     and previewing. It uses wxRichTextPrintout for layout and rendering.
-    
+
     @library{wxrichtext}
     @category{FIXME}
 */

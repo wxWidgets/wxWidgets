@@ -9,7 +9,7 @@
 /**
     @class wxFileName
     @wxheader{filename.h}
-    
+
     wxFileName encapsulates a file name. This class serves two purposes: first, it
     provides the functions to split the file names into components and to recombine
     these components in the full file name which can then be passed to the OS file
@@ -17,29 +17,29 @@
     Second, it includes the functions for working with the files itself. Note that
     to change the file data you should use wxFile class instead.
     wxFileName provides functions for working with the file attributes.
-    
+
     When working with directory names (i.e. without filename and extension)
     make sure not to misuse the file name part of this class with the last
     directory. Instead initialize the wxFileName instance like this:
-    
+
     @code
     wxFileName dirname( "C:\mydir", "" );
     MyMethod( dirname.GetPath() );
     @endcode
-    
+
     The same can be done using the static method wxFileName::DirName:
-    
+
     @code
     wxFileName dirname = wxFileName::DirName( "C:\mydir" );
     MyMethod( dirname.GetPath() );
     @endcode
-    
+
     Accordingly, methods dealing with directories or directory names
     like wxFileName::IsDirReadable use
-    wxFileName::GetPath whereas methods dealing 
+    wxFileName::GetPath whereas methods dealing
     with file names like wxFileName::IsFileReadable
     use wxFileName::GetFullPath.
-    
+
     If it is not known wether a string contains a directory name or
     a complete file name (such as when interpreting user input) you need to use
     the static function wxFileName::DirExists
@@ -47,25 +47,25 @@
     wxDirExists) and construct the wxFileName
     instance accordingly. This will only work if the directory actually exists,
     of course:
-    
+
     @code
     wxString user_input;
     // get input from user
-    
+
     wxFileName fname;
     if (wxDirExists(user_input))
         fname.AssignDir( user_input );
     else
         fname.Assign( user_input );
     @endcode
-    
+
     @library{wxbase}
     @category{file}
-    
+
     @seealso
     wxFileName::GetCwd
 */
-class wxFileName 
+class wxFileName
 {
 public:
     //@{
@@ -73,18 +73,18 @@ public:
         Constructor from a volume name, a directory name, base file name and extension.
     */
     wxFileName();
-        wxFileName(const wxFileName& filename);
-        wxFileName(const wxString& fullpath,
-                   wxPathFormat format = wxPATH_NATIVE);
-        wxFileName(const wxString& path, const wxString& name,
-                   wxPathFormat format = wxPATH_NATIVE);
-        wxFileName(const wxString& path, const wxString& name,
-                   const wxString& ext,
-                   wxPathFormat format = wxPATH_NATIVE);
-        wxFileName(const wxString& volume, const wxString& path,
-                   const wxString& name,
-                   const wxString& ext,
-                   wxPathFormat format = wxPATH_NATIVE);
+    wxFileName(const wxFileName& filename);
+    wxFileName(const wxString& fullpath,
+               wxPathFormat format = wxPATH_NATIVE);
+    wxFileName(const wxString& path, const wxString& name,
+               wxPathFormat format = wxPATH_NATIVE);
+    wxFileName(const wxString& path, const wxString& name,
+               const wxString& ext,
+               wxPathFormat format = wxPATH_NATIVE);
+    wxFileName(const wxString& volume, const wxString& path,
+               const wxString& name,
+               const wxString& ext,
+               wxPathFormat format = wxPATH_NATIVE);
     //@}
 
     /**
@@ -100,22 +100,22 @@ public:
         Creates the file name from various combinations of data.
     */
     void Assign(const wxFileName& filepath);
-        void Assign(const wxString& fullpath,
-                    wxPathFormat format = wxPATH_NATIVE);
-        void Assign(const wxString& volume, const wxString& path,
-                    const wxString& name,
-                    const wxString& ext,
-                    bool hasExt,
-                    wxPathFormat format = wxPATH_NATIVE);
-        void Assign(const wxString& volume, const wxString& path,
-                    const wxString& name,
-                    const wxString& ext,
-                    wxPathFormat format = wxPATH_NATIVE);
-        void Assign(const wxString& path, const wxString& name,
-                    wxPathFormat format = wxPATH_NATIVE);
-        void Assign(const wxString& path, const wxString& name,
-                    const wxString& ext,
-                    wxPathFormat format = wxPATH_NATIVE);
+    void Assign(const wxString& fullpath,
+                wxPathFormat format = wxPATH_NATIVE);
+    void Assign(const wxString& volume, const wxString& path,
+                const wxString& name,
+                const wxString& ext,
+                bool hasExt,
+                wxPathFormat format = wxPATH_NATIVE);
+    void Assign(const wxString& volume, const wxString& path,
+                const wxString& name,
+                const wxString& ext,
+                wxPathFormat format = wxPATH_NATIVE);
+    void Assign(const wxString& path, const wxString& name,
+                wxPathFormat format = wxPATH_NATIVE);
+    void Assign(const wxString& path, const wxString& name,
+                const wxString& ext,
+                wxPathFormat format = wxPATH_NATIVE);
     //@}
 
     /**
@@ -153,7 +153,7 @@ public:
     void Clear();
 
     /**
-        Removes the extension from the file name resulting in a 
+        Removes the extension from the file name resulting in a
         file name with no trailing dot.
         
         @sa SetExt(), SetEmptyExt()
@@ -176,10 +176,10 @@ public:
         Under Unix, the temporary file will have read and write permissions for the
         owner only to minimize the security problems.
         
-        @param prefix 
+        @param prefix
         Prefix to use for the temporary file name construction
         
-        @param fileTemp 
+        @param fileTemp
         The file to open or @NULL to just get the name
         
         @returns The full temporary file name or an empty string on error.
@@ -192,7 +192,7 @@ public:
         Returns @true if the directory with this name exists.
     */
     bool DirExists();
-        static bool DirExists(const wxString& dir);
+    static bool DirExists(const wxString& dir);
     //@}
 
     /**
@@ -288,7 +288,7 @@ public:
         question is to use IsAbsolute() or
         IsRelative() method. Note that on Windows, "X:"
         refers to the current working directory on drive X. Therefore, a wxFileName
-        instance constructed from for example "X:dir/file.ext" treats the portion 
+        instance constructed from for example "X:dir/file.ext" treats the portion
         beyond drive separator as being relative to that directory.
         
         To ensure that the filename is absolute, you may use
@@ -333,7 +333,7 @@ public:
         @sa DirExists()
     */
     bool FileExists();
-        static bool FileExists(const wxString& file);
+    static bool FileExists(const wxString& file);
     //@}
 
     /**
@@ -414,9 +414,9 @@ public:
     */
     wxString GetHumanReadableSize(const wxString& failmsg = "Not available",
                                   int precision = 1);
-        static wxString GetHumanReadableSize(const wxULongLong& bytes,
-                                             const wxString& nullsize = "Not available",
-                                             int precision = 1);
+    static wxString GetHumanReadableSize(const wxULongLong& bytes,
+                                         const wxString& nullsize = "Not available",
+                                         int precision = 1);
     //@}
 
     /**
@@ -459,7 +459,7 @@ public:
                      wxPathFormat format = wxPATH_NATIVE);
 
     /**
-        Returns the usually used path separator for this format. For all formats but 
+        Returns the usually used path separator for this format. For all formats but
         @c wxPATH_DOS there is only one path separator anyhow, but for DOS there
         are two of them and the native one, i.e. the backslash is returned by this
         method.
@@ -508,7 +508,7 @@ public:
         by another process) the returned value is @c wxInvalidSize.
     */
     wxULongLong GetSize();
-        static wxULongLong GetSize(const wxString& filename);
+    static wxULongLong GetSize(const wxString& filename);
     //@}
 
     /**
@@ -585,8 +585,8 @@ public:
     /**
         Returns @true if this object represents a directory, @false otherwise
         (i.e. if it is a file). Note that this method doesn't test whether the
-        directory or file really exists, you should use 
-        DirExists() or 
+        directory or file really exists, you should use
+        DirExists() or
         FileExists() for this.
     */
     bool IsDir();
@@ -600,7 +600,7 @@ public:
         doesn't imply that you have read permissions on the files contained.
     */
     bool IsDirReadable();
-        static bool IsDirReadable(const wxString& dir);
+    static bool IsDirReadable(const wxString& dir);
     //@}
 
     //@{
@@ -611,7 +611,7 @@ public:
         directory.
     */
     bool IsDirWritable();
-        static bool IsDirWritable(const wxString& dir);
+    static bool IsDirWritable(const wxString& dir);
     //@}
 
     //@{
@@ -620,7 +620,7 @@ public:
         permissions on it.
     */
     bool IsFileExecutable();
-        static bool IsFileExecutable(const wxString& file);
+    static bool IsFileExecutable(const wxString& file);
     //@}
 
     //@{
@@ -629,7 +629,7 @@ public:
         permissions on it.
     */
     bool IsFileReadable();
-        static bool IsFileReadable(const wxString& file);
+    static bool IsFileReadable(const wxString& file);
     //@}
 
     //@{
@@ -638,7 +638,7 @@ public:
         permissions on it.
     */
     bool IsFileWritable();
-        static bool IsFileWritable(const wxString& file);
+    static bool IsFileWritable(const wxString& file);
     //@}
 
     /**
@@ -664,16 +664,16 @@ public:
         On Mac OS, gets the common type and creator for the given extension.
     */
     static bool MacFindDefaultTypeAndCreator(const wxString& ext,
-                                             wxUint32* type,
-                                             wxUint32* creator);
+            wxUint32* type,
+            wxUint32* creator);
 
     /**
         On Mac OS, registers application defined extensions and their default type and
         creator.
     */
     static void MacRegisterDefaultTypeAndCreator(const wxString& ext,
-                                                 wxUint32 type,
-                                                 wxUint32 creator);
+            wxUint32 type,
+            wxUint32 creator);
 
     /**
         On Mac OS, looks up the appropriate type and creator from the registration and
@@ -692,17 +692,17 @@ public:
                       wxPathFormat format = wxPATH_NATIVE);
 
     /**
-        This function tries to put this file name in a form relative to 
+        This function tries to put this file name in a form relative to
         
         @param pathBase.
         In other words, it returns the file name which should be used to access this
         file if the current directory were pathBase.
         
-        pathBase 
+        pathBase
         the directory to use as root, current directory is used by
         default
         
-        @param format 
+        @param format
         the file name format, native by default
         
         @returns @true if the file name has been changed, @false if we failed to do
@@ -717,13 +717,13 @@ public:
 
     //@{
     /**
-        @param dir 
+        @param dir
         the directory to create
         
-        @param parm 
+        @param parm
         the permissions for the newly created directory
         
-        @param flags 
+        @param flags
         if the flags contain wxPATH_MKDIR_FULL flag,
         try to create each directory in the path and also don't return an error
         if the target directory already exists.
@@ -732,8 +732,8 @@ public:
                    otherwise.
     */
     bool Mkdir(int perm = 0777, int flags = 0);
-        static bool Mkdir(const wxString& dir, int perm = 0777,
-                          int flags = 0);
+    static bool Mkdir(const wxString& dir, int perm = 0777,
+                      int flags = 0);
     //@}
 
     /**
@@ -741,7 +741,7 @@ public:
         made absolute, without any ".." and "." and all environment
         variables will be expanded in it.
         
-        @param flags 
+        @param flags
         The kind of normalization to do with the file name. It can be
         any or-combination of the following constants:
         
@@ -786,11 +786,11 @@ public:
         
         all of previous flags except wxPATH_NORM_CASE
         
-        @param cwd 
+        @param cwd
         If not empty, this directory will be used instead of current
         working directory in normalization (see wxPATH_NORM_ABSOLUTE).
         
-        @param format 
+        @param format
         The file name format to use when processing the paths, native by default.
         
         @returns @true if normalization was successfully or @false otherwise.
@@ -823,7 +823,7 @@ public:
 
 
     /**
-        Prepends a directory to the file path. Please see 
+        Prepends a directory to the file path. Please see
         AppendDir() for important notes.
     */
     void PrependDir(const wxString& dir);
@@ -845,7 +845,7 @@ public:
         Deletes the specified directory from the file system.
     */
     bool Rmdir();
-        static bool Rmdir(const wxString& dir);
+    static bool Rmdir(const wxString& dir);
     //@}
 
     /**
@@ -859,12 +859,12 @@ public:
         Changes the current working directory.
     */
     bool SetCwd();
-        static bool SetCwd(const wxString& cwd);
+    static bool SetCwd(const wxString& cwd);
     //@}
 
     /**
-        Sets the extension of the file name to be an empty extension. 
-        This is different from having no extension at all as the file 
+        Sets the extension of the file name to be an empty extension.
+        This is different from having no extension at all as the file
         name will have a trailing dot after a call to this method.
         
         @sa SetExt(), ClearExt()
@@ -873,8 +873,8 @@ public:
 
     /**
         Sets the extension of the file name. Setting an empty string
-        as the extension will remove the extension resulting in a file 
-        name without a trailing dot, unlike a call to 
+        as the extension will remove the extension resulting in a file
+        name without a trailing dot, unlike a call to
         SetEmptyExt().
         
         @sa SetEmptyExt(), ClearExt()
@@ -910,18 +910,18 @@ public:
     /**
         This function splits a full file name into components: the volume (with the
         first version) path (including the volume in the second version), the base name
-        and the extension. Any of the output parameters (@e volume, @e path, 
+        and the extension. Any of the output parameters (@e volume, @e path,
         @e name or @e ext) may be @NULL if you are not interested in the
         value of a particular component. Also, @e fullpath may be empty on entry.
         
-        On return, @e path contains the file path (without the trailing separator), 
+        On return, @e path contains the file path (without the trailing separator),
         @e name contains the file name and @e ext contains the file extension
         without leading dot. All three of them may be empty if the corresponding
         component is. The old contents of the strings pointed to by these parameters
         will be overwritten in any case (if the pointers are not @NULL).
         
         Note that for a filename "foo.'' the extension is present, as indicated by the
-        trailing dot, but empty. If you need to cope with such cases, you should use 
+        trailing dot, but empty. If you need to cope with such cases, you should use
         @e hasExt instead of relying on testing whether @e ext is empty or not.
     */
     static void SplitPath(const wxString& fullpath, wxString* volume,
@@ -930,17 +930,17 @@ public:
                           wxString* ext,
                           bool hasExt = @NULL,
                           wxPathFormat format = wxPATH_NATIVE);
-        static void SplitPath(const wxString& fullpath,
-                              wxString* volume,
-                              wxString* path,
-                              wxString* name,
-                              wxString* ext,
-                              wxPathFormat format = wxPATH_NATIVE);
-        static void SplitPath(const wxString& fullpath,
-                              wxString* path,
-                              wxString* name,
-                              wxString* ext,
-                              wxPathFormat format = wxPATH_NATIVE);
+    static void SplitPath(const wxString& fullpath,
+                          wxString* volume,
+                          wxString* path,
+                          wxString* name,
+                          wxString* ext,
+                          wxPathFormat format = wxPATH_NATIVE);
+    static void SplitPath(const wxString& fullpath,
+                          wxString* path,
+                          wxString* name,
+                          wxString* ext,
+                          wxPathFormat format = wxPATH_NATIVE);
     //@}
 
     /**
@@ -965,7 +965,7 @@ public:
         is interpreted as a path in the native filename format.
     */
     bool operator operator!=(const wxFileName& filename);
-        bool operator operator!=(const wxString& filename);
+    bool operator operator!=(const wxString& filename);
     //@}
 
     //@{
@@ -973,7 +973,7 @@ public:
         Assigns the new value to this filename object.
     */
     wxFileName& operator operator=(const wxFileName& filename);
-        wxFileName& operator operator=(const wxString& filename);
+    wxFileName& operator operator=(const wxString& filename);
     //@}
 
     //@{
@@ -982,6 +982,6 @@ public:
         interpreted as a path in the native filename format.
     */
     bool operator operator==(const wxFileName& filename);
-        bool operator operator==(const wxString& filename);
+    bool operator operator==(const wxString& filename);
     //@}
 };

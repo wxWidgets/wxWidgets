@@ -9,30 +9,30 @@
 /**
     @class wxDialUpManager
     @wxheader{dialup.h}
-    
+
     This class encapsulates functions dealing with verifying the connection status
     of the workstation (connected to the Internet via a direct connection,
     connected through a modem or not connected at all) and to establish this
     connection if possible/required (i.e. in the case of the modem).
-    
+
     The program may also wish to be notified about the change in the connection
     status (for example, to perform some action when the user connects to the
     network the next time or, on the contrary, to stop receiving data from the net
     when the user hangs up the modem). For this, you need to use one of the event
     macros described below.
-    
+
     This class is different from other wxWidgets classes in that there is at most
-    one instance of this class in the program accessed via 
+    one instance of this class in the program accessed via
     wxDialUpManager::Create and you can't
     create the objects of this class directly.
-    
+
     @library{wxcore}
     @category{net}
-    
+
     @seealso
     @ref overview_sampledialup "dialup sample", wxDialUpEvent
 */
-class wxDialUpManager 
+class wxDialUpManager
 {
 public:
     /**
@@ -41,7 +41,7 @@ public:
     ~wxDialUpManager();
 
     /**
-        Cancel dialing the number initiated with Dial() 
+        Cancel dialing the number initiated with Dial()
         with async parameter equal to @true.
         
         Note that this won't result in DISCONNECTED event being sent.
@@ -60,7 +60,7 @@ public:
     /**
         Dial the given ISP, use @e username and @e password to authenticate.
         
-        The parameters are only used under Windows currently, for Unix you should use 
+        The parameters are only used under Windows currently, for Unix you should use
         SetConnectCommand() to customize this
         functions behaviour.
         
@@ -88,7 +88,7 @@ public:
     void DisableAutoCheckOnlineStatus();
 
     /**
-        Enable automatic checks for the connection status and sending of 
+        Enable automatic checks for the connection status and sending of
         @c wxEVT_DIALUP_CONNECTED/wxEVT_DIALUP_DISCONNECTED events. The interval
         parameter is only for Unix where we do the check manually and specifies how
         often should we repeat the check (each minute by default). Under Windows, the
@@ -141,7 +141,7 @@ public:
     /**
         Returns @true if the computer is connected to the network: under Windows,
         this just means that a RAS connection exists, under Unix we check that
-        the "well-known host" (as specified by 
+        the "well-known host" (as specified by
         wxDialUpManager::SetWellKnownHost) is reachable.
     */
     bool IsOnline();
@@ -179,10 +179,10 @@ public:
 /**
     @class wxDialUpEvent
     @wxheader{dialup.h}
-    
-    This is the event class for the dialup events sent by 
+
+    This is the event class for the dialup events sent by
     wxDialUpManager.
-    
+
     @library{wxcore}
     @category{events}
 */

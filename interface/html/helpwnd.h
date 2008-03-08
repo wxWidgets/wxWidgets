@@ -9,32 +9,32 @@
 /**
     @class wxHtmlHelpWindow
     @headerfile helpwnd.h wx/html/helpwnd.h
-    
-    This class is used by wxHtmlHelpController 
+
+    This class is used by wxHtmlHelpController
     to display help within a frame or dialog, but you can use it yourself to create
     an embedded HTML help window.
-    
+
     For example:
-    
+
     @code
     // m_embeddedHelpWindow is a wxHtmlHelpWindow
         // m_embeddedHtmlHelp is a wxHtmlHelpController
-    
+
         // Create embedded HTML Help window
         m_embeddedHelpWindow = new wxHtmlHelpWindow;
         m_embeddedHtmlHelp.UseConfig(config, rootPath); // Set your own config
     object here
-        m_embeddedHtmlHelp.SetHelpWindow(m_embeddedHelpWindow);    
+        m_embeddedHtmlHelp.SetHelpWindow(m_embeddedHelpWindow);
         m_embeddedHelpWindow-Create(this,
             wxID_ANY, wxDefaultPosition, GetClientSize(),
-    wxTAB_TRAVERSAL|wxBORDER_NONE, wxHF_DEFAULT_STYLE);        
+    wxTAB_TRAVERSAL|wxBORDER_NONE, wxHF_DEFAULT_STYLE);
         m_embeddedHtmlHelp.AddBook(wxFileName(_T("doc.zip")));
     @endcode
-    
+
     You should pass the style wxHF_EMBEDDED to the style parameter of
     wxHtmlHelpController to allow
     the embedded window to be destroyed independently of the help controller.
-    
+
     @library{wxhtml}
     @category{FIXME}
 */
@@ -49,12 +49,12 @@ public:
         wxHtmlHelpController.
     */
     wxHtmlHelpWindow(wxHtmlHelpData* data = @NULL);
-        wxHtmlHelpWindow(wxWindow* parent, int wxWindowID,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& pos = wxDefaultSize,
-                         int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
-                         int helpStyle = wxHF_DEFAULT_STYLE,
-                         wxHtmlHelpData* data = @NULL);
+    wxHtmlHelpWindow(wxWindow* parent, int wxWindowID,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& pos = wxDefaultSize,
+                     int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
+                     int helpStyle = wxHF_DEFAULT_STYLE,
+                     wxHtmlHelpData* data = @NULL);
     //@}
 
     /**
@@ -113,7 +113,7 @@ public:
         (uses extension to MS format, param name="ID" value=id)
     */
     bool Display(const wxString& x);
-        bool Display(const int id);
+    bool Display(const int id);
     //@}
 
     /**

@@ -9,47 +9,47 @@
 /**
     @class wxRegEx
     @wxheader{regex.h}
-    
+
     wxRegEx represents a regular expression.  This class provides support
     for regular expressions matching and also replacement.
-    
+
     It is built on top of either the system library (if it has support
     for POSIX regular expressions - which is the case of the most modern
     Unices) or uses the built in Henry Spencer's library.  Henry Spencer
     would appreciate being given credit in the documentation of software
     which uses his library, but that is not a requirement.
-    
+
     Regular expressions, as defined by POSIX, come in two flavours: @e extended
     and @e basic.  The builtin library also adds a third flavour
     of expression advanced, which is not available
     when using the system library.
-    
+
     Unicode is fully supported only when using the builtin library.
     When using the system library in Unicode mode, the expressions and data
     are translated to the default 8-bit encoding before being passed to
     the library.
-    
+
     On platforms where a system library is available, the default is to use
     the builtin library for Unicode builds, and the system library otherwise.
     It is possible to use the other if preferred by selecting it when building
     the wxWidgets.
-    
+
     @library{wxbase}
     @category{data}
-    
+
     @seealso
     wxRegEx::ReplaceFirst
 */
-class wxRegEx 
+class wxRegEx
 {
 public:
     //@{
     /**
-        Create and compile the regular expression, use 
+        Create and compile the regular expression, use
         IsValid() to test for compilation errors.
     */
     wxRegEx();
-        wxRegEx(const wxString& expr, int flags = wxRE_DEFAULT);
+    wxRegEx(const wxString& expr, int flags = wxRE_DEFAULT);
     //@}
 
     /**
@@ -58,7 +58,7 @@ public:
     ~wxRegEx();
 
     /**
-        Compile the string into regular expression, return @true if ok or @false 
+        Compile the string into regular expression, return @true if ok or @false
         if string has a syntax error.
     */
     bool Compile(const wxString& pattern, int flags = wxRE_DEFAULT);
@@ -68,13 +68,13 @@ public:
         Returns the part of string corresponding to the match where @e index is
         interpreted as above. Empty string is returned if match failed
         
-        May only be called after successful call to Matches() 
-        and only if @c wxRE_NOSUB was @b not used in 
+        May only be called after successful call to Matches()
+        and only if @c wxRE_NOSUB was @b not used in
         Compile().
     */
     bool GetMatch(size_t* start, size_t* len, size_t index = 0);
-        not wxString  GetMatch(const wxString& text,
-                               size_t index = 0);
+    not wxString  GetMatch(const wxString& text,
+                           size_t index = 0);
     //@}
 
     /**
@@ -87,7 +87,7 @@ public:
     size_t GetMatchCount();
 
     /**
-        Return @true if this is a valid compiled regular expression, @false 
+        Return @true if this is a valid compiled regular expression, @false
         otherwise.
     */
     bool IsValid();
@@ -112,8 +112,8 @@ public:
         May only be called after successful call to Compile().
     */
     bool Matches(const wxChar* text, int flags = 0);
-        bool Matches(const wxChar* text, int flags, size_t len);
-        bool Matches(const wxString& text, int flags = 0);
+    bool Matches(const wxChar* text, int flags, size_t len);
+    bool Matches(const wxString& text, int flags = 0);
     //@}
 
     /**
@@ -134,7 +134,7 @@ public:
                 size_t maxMatches = 0);
 
     /**
-        Replace all occurrences: this is actually a synonym for 
+        Replace all occurrences: this is actually a synonym for
         Replace().
         
         @sa ReplaceFirst()

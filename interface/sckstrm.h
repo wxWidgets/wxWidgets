@@ -9,14 +9,14 @@
 /**
     @class wxSocketOutputStream
     @wxheader{sckstrm.h}
-    
+
     This class implements an output stream which writes data from
     a connected socket. Note that this stream is purely sequential
     and it does not support seeking.
-    
+
     @library{wxnet}
     @category{streams}
-    
+
     @seealso
     wxSocketBase
 */
@@ -34,14 +34,14 @@ public:
 /**
     @class wxSocketInputStream
     @wxheader{sckstrm.h}
-    
+
     This class implements an input stream which reads data from
     a connected socket. Note that this stream is purely sequential
     and it does not support seeking.
-    
+
     @library{wxnet}
     @category{streams}
-    
+
     @seealso
     wxSocketBase
 */

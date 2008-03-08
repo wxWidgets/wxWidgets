@@ -9,37 +9,37 @@
 /**
     @class wxHelpController
     @wxheader{help.h}
-    
+
     This is a family of classes by which
     applications may invoke a help viewer to provide on-line help.
-    
+
     A help controller allows an application to display help, at the contents
     or at a particular topic, and shut the help program down on termination.
     This avoids proliferation of many instances of the help viewer whenever the
     user requests a different topic via the application's menus or buttons.
-    
+
     Typically, an application will create a help controller instance
     when it starts, and immediately call @b Initialize
     to associate a filename with it. The help viewer will only get run, however,
     just before the first call to display something.
-    
+
     Most help controller classes actually derive from wxHelpControllerBase and have
     names of the form wxXXXHelpController or wxHelpControllerXXX. An
     appropriate class is aliased to the name wxHelpController for each platform, as
     follows:
-    
+
      On desktop Windows, wxCHMHelpController is used (MS HTML Help).
      On Windows CE, wxWinceHelpController is used.
      On all other platforms, wxHtmlHelpController is used if wxHTML is
     compiled into wxWidgets; otherwise wxExtHelpController is used (for invoking an
     external
     browser).
-    
+
     The remaining help controller classes need to be named
     explicitly by an application that wishes to make use of them.
-    
+
     There are currently the following help controller classes defined:
-    
+
      wxWinHelpController, for controlling Windows Help.
      wxCHMHelpController, for controlling MS HTML Help. To use this, you need to
     set wxUSE_MS_HTML_HELP
@@ -67,11 +67,11 @@
     must add this line to your application initialization: @c
     wxFileSystem::AddHandler(new wxArchiveFSHandler);
     or nothing will be shown in your help window.
-    
-    
+
+
     @library{wxbase}
     @category{help}
-    
+
     @seealso
     wxHtmlHelpController, wxHTML
 */
@@ -85,7 +85,7 @@ public:
         as
         wxCHMHelpController, wxWinHelpController and wxHtmlHelpController, as the
         parent for the help window instead of the value of wxApp::GetTopWindow. You can
-        also change the parent window later with 
+        also change the parent window later with
         SetParentWindow().
     */
     wxHelpController(wxWindow* parentWindow = @NULL);
@@ -141,7 +141,7 @@ public:
         various help file formats.
     */
     virtual bool DisplaySection(const wxString& section);
-        virtual bool DisplaySection(int sectionNo);
+    virtual bool DisplaySection(int sectionNo);
     //@}
 
     /**
@@ -158,10 +158,10 @@ public:
         For all other help controllers, this function does nothing
         and just returns @NULL.
         
-        @param viewer 
+        @param viewer
         This defaults to "netscape" for wxExtHelpController.
         
-        @param flags 
+        @param flags
         This defaults to wxHELP_NETSCAPE for wxExtHelpController, indicating
         that the viewer is a variant of Netscape Navigator.
     */
@@ -191,7 +191,7 @@ public:
         a suitable file. For WinHelp, the hlp extension is appended.
     */
     virtual bool Initialize(const wxString& file);
-        virtual bool Initialize(const wxString& file, int server);
+    virtual bool Initialize(const wxString& file, int server);
     //@}
 
     /**
@@ -201,10 +201,10 @@ public:
         (wxHELP_SEARCH_INDEX) but this currently only supported by the
         wxHtmlHelpController.
         
-        @e WinHelp, MS HTML Help: If more than one match is found, 
+        @e WinHelp, MS HTML Help: If more than one match is found,
         the first topic is displayed.
         
-        @e External HTML help, simple wxHTML help: If more than one match is found, 
+        @e External HTML help, simple wxHTML help: If more than one match is found,
         a choice of topics is displayed.
         
         @e wxHtmlHelpController: see wxHtmlHelpController::KeywordSearch.

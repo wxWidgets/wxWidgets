@@ -9,37 +9,37 @@
 /**
     @class wxFont
     @wxheader{font.h}
-    
+
     A font is an object which determines the appearance of text. Fonts are
     used for drawing text to a device context, and setting the appearance of
     a window's text.
-    
+
     This class uses @ref overview_trefcount "reference counting and copy-on-write"
     internally so that assignments between two instances of this class are very
     cheap. You can therefore use actual objects instead of pointers without
     efficiency problems. If an instance of this class is changed it will create
     its own data internally so that other instances, which previously shared the
     data using the reference counting, are not affected.
-    
+
     You can retrieve the current system font settings with wxSystemSettings.
-    
+
     wxSystemSettings
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @stdobjects
     Objects:
     wxNullFont
     Pointers:
     wxNORMAL_FONT
-    
+
     wxSMALL_FONT
-    
+
     wxITALIC_FONT
-    
+
     wxSWISS_FONT
-    
+
     @seealso
     @ref overview_wxfontoverview "wxFont overview", wxDC::SetFont, wxDC::DrawText,
     wxDC::GetTextExtent, wxFontDialog, wxSystemSettings
@@ -51,16 +51,16 @@ public:
     /**
         Creates a font object with the specified attributes.
         
-        @param pointSize 
+        @param pointSize
         Size in points.
         
-        @param pixelSize 
+        @param pixelSize
         Size in pixels: this is directly supported only under MSW
         currently where this constructor can be used directly, under other platforms a
         font with the closest size to the given one is found using binary search and
         the static New method must be used.
         
-        @param family 
+        @param family
         Font family, a generic way of referring to fonts without specifying actual
         facename. One of:
         
@@ -100,10 +100,10 @@ public:
         
         A teletype font.
         
-        @param style 
+        @param style
         One of wxFONTSTYLE_NORMAL, wxFONTSTYLE_SLANT and wxFONTSTYLE_ITALIC.
         
-        @param weight 
+        @param weight
         Font weight, sometimes also referred to as font boldness. One of:
         
         
@@ -122,16 +122,16 @@ public:
         
         Bold font.
         
-        @param underline 
+        @param underline
         The value can be @true or @false. At present this has an effect on Windows and
         Motif 2.x only.
         
-        @param faceName 
+        @param faceName
         An optional string specifying the actual typeface to be used. If it is an empty
         string,
         a default typeface will be chosen based on the family.
         
-        @param encoding 
+        @param encoding
         An encoding which may be one of
         
         wxFONTENCODING_SYSTEM
@@ -171,17 +171,17 @@ public:
                    are used.
     */
     wxFont();
-        wxFont(const wxFont& font);
-        wxFont(int pointSize, wxFontFamily family, int style,
-               wxFontWeight weight,
-               const bool underline = @false,
-               const wxString& faceName = "",
-               wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-        wxFont(const wxSize& pixelSize, wxFontFamily family,
-               int style, wxFontWeight weight,
-               const bool underline = @false,
-               const wxString& faceName = "",
-               wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    wxFont(const wxFont& font);
+    wxFont(int pointSize, wxFontFamily family, int style,
+           wxFontWeight weight,
+           const bool underline = @false,
+           const wxString& faceName = "",
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    wxFont(const wxSize& pixelSize, wxFontFamily family,
+           int style, wxFontWeight weight,
+           const bool underline = @false,
+           const wxString& faceName = "",
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     //@}
 
     /**
@@ -299,22 +299,22 @@ public:
                         const bool underline = @false,
                         const wxString& faceName = "",
                         wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-        static wxFont * New(int pointSize, wxFontFamily family,
-                            int flags = wxFONTFLAG_DEFAULT,
-                            const wxString& faceName = "",
-                            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-        static wxFont * New(const wxSize& pixelSize,
-                            wxFontFamily family,
-                            int style,
-                            wxFontWeight weight,
-                            const bool underline = @false,
-                            const wxString& faceName = "",
-                            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-        static wxFont * New(const wxSize& pixelSize,
-                            wxFontFamily family,
-                            int flags = wxFONTFLAG_DEFAULT,
-                            const wxString& faceName = "",
-                            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    static wxFont * New(int pointSize, wxFontFamily family,
+                        int flags = wxFONTFLAG_DEFAULT,
+                        const wxString& faceName = "",
+                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    static wxFont * New(const wxSize& pixelSize,
+                        wxFontFamily family,
+                        int style,
+                        wxFontWeight weight,
+                        const bool underline = @false,
+                        const wxString& faceName = "",
+                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    static wxFont * New(const wxSize& pixelSize,
+                        wxFontFamily family,
+                        int flags = wxFONTFLAG_DEFAULT,
+                        const wxString& faceName = "",
+                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     //@}
 
     /**
@@ -329,7 +329,7 @@ public:
         Sets the facename for the font.
         Returns @true if the given face name exists; @false otherwise.
         
-        @param faceName 
+        @param faceName
         A valid facename, which should be on the end-user's system.
         
         @remarks To avoid portability problems, don't rely on a specific face,
@@ -346,7 +346,7 @@ public:
     /**
         Sets the font family.
         
-        @param family 
+        @param family
         One of:
         
         
@@ -442,7 +442,7 @@ public:
     /**
         Sets the point size.
         
-        @param pointSize 
+        @param pointSize
         Size in points.
         
         @sa GetPointSize()
@@ -452,7 +452,7 @@ public:
     /**
         Sets the font style.
         
-        @param style 
+        @param style
         One of wxFONTSTYLE_NORMAL, wxFONTSTYLE_SLANT and wxFONTSTYLE_ITALIC.
         
         @sa GetStyle()
@@ -462,7 +462,7 @@ public:
     /**
         Sets underlining.
         
-        @param underlining 
+        @param underlining
         @true to underline, @false otherwise.
         
         @sa GetUnderlined()
@@ -472,7 +472,7 @@ public:
     /**
         Sets the font weight.
         
-        @param weight 
+        @param weight
         One of:
         
         

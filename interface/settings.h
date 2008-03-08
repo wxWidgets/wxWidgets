@@ -9,14 +9,14 @@
 /**
     @class wxSystemSettings
     @wxheader{settings.h}
-    
+
     wxSystemSettings allows the application to ask for details about
     the system. This can include settings such as standard colours, fonts,
     and user interface element sizes.
-    
+
     @library{wxcore}
     @category{misc}
-    
+
     @seealso
     wxFont, wxColour
 */
@@ -306,12 +306,12 @@ public:
         @b wxSYS_EDGE_X
         
         
-        Width of a 3D border, in pixels. 
+        Width of a 3D border, in pixels.
         
         @b wxSYS_EDGE_Y
         
         
-        Height of a 3D border, in pixels. 
+        Height of a 3D border, in pixels.
         
         @b wxSYS_HSCROLL_ARROW_X
         

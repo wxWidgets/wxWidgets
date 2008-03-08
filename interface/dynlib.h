@@ -9,27 +9,27 @@
 /**
     @class wxDynamicLibraryDetails
     @wxheader{dynlib.h}
-    
-    This class is used for the objects returned by 
+
+    This class is used for the objects returned by
     wxDynamicLibrary::ListLoaded method and
     contains the information about a single module loaded into the address space of
     the current process. A module in this context may be either a dynamic library
     or the main program itself.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxDynamicLibraryDetails 
+class wxDynamicLibraryDetails
 {
 public:
     /**
         Retrieves the load address and the size of this module.
         
-        @param addr 
+        @param addr
         the pointer to the location to return load address in, may be
         @NULL
         
-        @param len 
+        @param len
         pointer to the location to return the size of this module in
         memory in, may be @NULL
         
@@ -39,20 +39,20 @@ public:
     bool GetAddress(void ** addr, size_t len);
 
     /**
-        Returns the base name of this module, e.g. @c kernel32.dll or 
+        Returns the base name of this module, e.g. @c kernel32.dll or
         @c libc-2.3.2.so.
     */
     wxString GetName();
 
     /**
-        Returns the full path of this module if available, e.g. 
-        @c c:\windows\system32\kernel32.dll or 
+        Returns the full path of this module if available, e.g.
+        @c c:\windows\system32\kernel32.dll or
         @c /lib/libc-2.3.2.so.
     */
     wxString GetPath();
 
     /**
-        Returns the version of this module, e.g. @c 5.2.3790.0 or 
+        Returns the version of this module, e.g. @c 5.2.3790.0 or
         @c 2.3.2. The returned string is empty if the version information is not
         available.
     */
@@ -63,26 +63,26 @@ public:
 /**
     @class wxDllLoader
     @wxheader{dynlib.h}
-    
+
     @b Deprecation note: This class is deprecated since version 2.4 and is
     not compiled in by default in version 2.6 and will be removed in 2.8. Please
     use wxDynamicLibrary instead.
-    
+
     wxDllLoader is a class providing an interface similar to Unix's @c dlopen(). It
     is used by the wxLibrary framework and manages the actual
     loading of shared libraries and the resolving of symbols in them. There are no
     instances of this class, it simply serves as a namespace for its static member
     functions.
-    
-    Please note that class wxDynamicLibrary provides 
+
+    Please note that class wxDynamicLibrary provides
     alternative, friendlier interface to wxDllLoader.
-    
+
     The terms @e DLL and @e shared library/object will both be used in the
-    documentation to refer to the same thing: a @c .dll file under Windows or 
+    documentation to refer to the same thing: a @c .dll file under Windows or
     @c .so or @c .sl one under Unix.
-    
+
     Example of using this class to dynamically load the @c strlen() function:
-    
+
     @code
     #if defined(__WXMSW__)
         static const wxChar *LIB_NAME = _T("kernel32");
@@ -91,7 +91,7 @@ public:
         static const wxChar *LIB_NAME = _T("/lib/libc-2.0.7.so");
         static const wxChar *FUNC_NAME = _T("strlen");
     #endif
-    
+
         wxDllType dllHandle = wxDllLoader::LoadLibrary(LIB_NAME);
         if ( !dllHandle )
         {
@@ -117,22 +117,22 @@ public:
                     ... ok! ...
                 }
             }
-    
+
             wxDllLoader::UnloadLibrary(dllHandle);
         }
     @endcode
-    
+
     @library{wxbase}
     @category{appmanagement}
 */
-class wxDllLoader 
+class wxDllLoader
 {
 public:
     /**
         Returns the string containing the usual extension for shared libraries for the
         given systems (including the leading dot if not empty).
         
-        For example, this function will return @c ".dll" under Windows or (usually) 
+        For example, this function will return @c ".dll" under Windows or (usually)
         @c ".so" under Unix.
     */
     static wxString GetDllExt();
@@ -154,11 +154,11 @@ public:
         Returned value will be @NULL if the symbol was not found in the DLL or if
         an error occurred.
         
-        @param dllHandle 
-        Valid handle previously returned by 
+        @param dllHandle
+        Valid handle previously returned by
         LoadLibrary
         
-        @param name 
+        @param name
         Name of the symbol.
     */
     void * GetSymbol(wxDllType dllHandle, const wxString& name);
@@ -171,13 +171,13 @@ public:
         searched in all standard locations.
         
         Returns a handle to the loaded DLL. Use @e success parameter to test if it
-        is valid. If the handle is valid, the library must be unloaded later with 
+        is valid. If the handle is valid, the library must be unloaded later with
         UnloadLibrary().
         
-        @param libname 
+        @param libname
         Name of the shared object to load.
         
-        @param success 
+        @param success
         May point to a bool variable which will be set to @true or
         @false; may also be @NULL.
     */
@@ -195,19 +195,19 @@ public:
 /**
     @class wxDynamicLibrary
     @wxheader{dynlib.h}
-    
+
     wxDynamicLibrary is a class representing dynamically loadable library
     (Windows DLL, shared library under Unix etc.). Just create an object of
     this class to load a library and don't worry about unloading it -- it will be
     done in the objects destructor automatically.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxDynamicLibrary::CanonicalizePluginName
 */
-class wxDynamicLibrary 
+class wxDynamicLibrary
 {
 public:
     //@{
@@ -215,25 +215,25 @@ public:
         Constructor. Second form calls Load().
     */
     wxDynamicLibrary();
-        wxDynamicLibrary(const wxString& name,
-                         int flags = wxDL_DEFAULT);
+    wxDynamicLibrary(const wxString& name,
+                     int flags = wxDL_DEFAULT);
     //@}
 
     /**
         Returns the platform-specific full name for the library called @e name. E.g.
-        it adds a @c ".dll" extension under Windows and @c "lib" prefix and 
+        it adds a @c ".dll" extension under Windows and @c "lib" prefix and
         @c ".so", @c ".sl" or maybe @c ".dylib" extension under Unix.
         
         The possible values for @e cat are:
         
-            
+        
         
         wxDL_LIBRARY
         
         
         normal library
         
-            
+        
         
         wxDL_MODULE
         
@@ -247,7 +247,7 @@ public:
                                      wxDynamicLibraryCategory cat = wxDL_LIBRARY);
 
     /**
-        This function does the same thing as 
+        This function does the same thing as
         CanonicalizeName() but for wxWidgets
         plugins. The only difference is that compiler and version information are added
         to the name to ensure that the plugin which is going to be loaded will be
@@ -255,14 +255,14 @@ public:
         
         The possible values for @e cat are:
         
-            
+        
         
         wxDL_PLUGIN_GUI
         
         
         plugin which uses GUI classes (default)
         
-            
+        
         
         wxDL_PLUGIN_BASE
         
@@ -380,7 +380,7 @@ public:
         the handle somewhere and call this static method later to unload it.
     */
     void Unload();
-        static void Unload(wxDllType handle);
+    static void Unload(wxDllType handle);
     //@}
 };
 
@@ -394,21 +394,21 @@ public:
     @c void * pointer to the correct type and, even more annoyingly, you have to
     repeat this type twice if you want to declare and define a function pointer all
     in one line
-    
+
     This macro makes this slightly less painful by allowing you to specify the
     type only once, as the first parameter, and creating a variable of this type
     named after the function but with @c pfn prefix and initialized with the
     function @e name from the wxDynamicLibrary
     @e dynlib.
-    
-    @param type 
+
+    @param type
     the type of the function
-    
-    @param name 
+
+    @param name
     the name of the function to load, not a string (without quotes,
     it is quoted automatically by the macro)
-    
-    @param dynlib 
+
+    @param dynlib
     the library to load the function from
 */
 #define wxDYNLIB_FUNCTION(type,  name,  dynlib)     /* implementation is private */

@@ -9,15 +9,15 @@
 /**
     @class wxPlatformInfo
     @wxheader{platinfo.h}
-    
+
     This class holds informations about the operating system and the toolkit that
     the application
     is running under and some basic architecture info of the machine where it's
     running.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxGetOSVersion, wxIsPlatformLittleEndian, wxIsPlatform64Bit, wxAppTraits
 */
@@ -29,14 +29,14 @@ public:
         Initializes the object using given values.
     */
     wxPlatformInfo();
-        wxPlatformInfo(wxPortId pid = wxPORT_UNKNOWN,
-                       int tkMajor = -1,
-                       int tkMinor = -1,
-                       wxOperatingSystemId id = wxOS_UNKNOWN,
-                       int osMajor = -1,
-                       int osMinor = -1,
-                       wxArchitecture arch = wxARCH_INVALID,
-                       wxEndianness endian = wxENDIAN_INVALID);
+    wxPlatformInfo(wxPortId pid = wxPORT_UNKNOWN,
+                   int tkMajor = -1,
+                   int tkMinor = -1,
+                   wxOperatingSystemId id = wxOS_UNKNOWN,
+                   int osMajor = -1,
+                   int osMinor = -1,
+                   wxArchitecture arch = wxARCH_INVALID,
+                   wxEndianness endian = wxENDIAN_INVALID);
     //@}
 
     /**
@@ -74,7 +74,7 @@ public:
         Returns the name for the architecture of this wxPlatformInfo instance.
     */
     static wxString GetArchName(wxArchitecture arch);
-        wxString GetArchName();
+    wxString GetArchName();
     //@}
 
     /**
@@ -87,7 +87,7 @@ public:
         Returns the endianness ID of this wxPlatformInfo instance.
     */
     static wxEndianness GetEndianness(const wxString& end);
-        wxEndianness GetEndianness();
+    wxEndianness GetEndianness();
     //@}
 
     //@{
@@ -95,7 +95,7 @@ public:
         Returns the name for the endianness of this wxPlatformInfo instance.
     */
     static wxString GetEndiannessName(wxEndianness end);
-        wxString GetEndiannessName();
+    wxString GetEndiannessName();
     //@}
 
     /**
@@ -122,7 +122,7 @@ public:
         wxPlatformInfo instance.
     */
     static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
-        wxString GetOperatingSystemFamilyName();
+    wxString GetOperatingSystemFamilyName();
     //@}
 
     //@{
@@ -130,7 +130,7 @@ public:
         Returns the operating system ID of this wxPlatformInfo instance.
     */
     static wxOperatingSystemId GetOperatingSystemId(const wxString& name);
-        wxOperatingSystemId GetOperatingSystemId();
+    wxOperatingSystemId GetOperatingSystemId();
     //@}
 
     //@{
@@ -139,7 +139,7 @@ public:
         instance.
     */
     static wxString GetOperatingSystemIdName(wxOperatingSystemId os);
-        wxString GetOperatingSystemIdName();
+    wxString GetOperatingSystemIdName();
     //@}
 
     //@{
@@ -147,7 +147,7 @@ public:
         Returns the wxWidgets port ID associated with this wxPlatformInfo instance.
     */
     static wxPortId GetPortId(const wxString& portname);
-        wxPortId GetPortId();
+    wxPortId GetPortId();
     //@}
 
     //@{
@@ -156,7 +156,7 @@ public:
         instance.
     */
     static wxString GetPortIdName(wxPortId port, bool usingUniversal);
-        wxString GetPortIdName();
+    wxString GetPortIdName();
     //@}
 
     //@{
@@ -166,7 +166,7 @@ public:
     */
     static wxString GetPortIdShortName(wxPortId port,
                                        bool usingUniversal);
-        wxString GetPortIdShortName();
+    wxString GetPortIdShortName();
     //@}
 
     /**

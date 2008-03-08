@@ -9,14 +9,14 @@
 /**
     @class wxVariant
     @wxheader{variant.h}
-    
+
     The @b wxVariant class represents a container for any type.
     A variant's value can be changed at run time, possibly to a different type of
     value.
-    
+
     As standard, wxVariant can store values of type bool, wxChar, double, long,
     string,
-    string list, time, date, void pointer, list of strings, and list of variants. 
+    string list, time, date, void pointer, list of strings, and list of variants.
     However, an application can extend wxVariant's capabilities by deriving from the
     class wxVariantData and using the wxVariantData form of
     the wxVariant constructor or assignment operator to assign this data to a
@@ -25,48 +25,48 @@
     wxVariantData
     object, unlike the case for basic data types where convenience functions such as
     wxVariant::GetLong can be used.
-    
+
     Pointers to any wxObject derived class can also easily be stored
     in a wxVariant. wxVariant will then use wxWidgets' built-in RTTI system to set
     the
-    type name (returned by wxVariant::GetType) and to perform 
+    type name (returned by wxVariant::GetType) and to perform
     type-safety checks at runtime.
-    
+
     This class is useful for reducing the programming for certain tasks, such as an
     editor
     for different data types, or a remote procedure call protocol.
-    
+
     An optional name member is associated with a wxVariant. This might be used, for
     example,
     in CORBA or OLE automation classes, where named parameters are required.
-    
+
     Note that as of wxWidgets 2.7.1, wxVariant is @ref overview_trefcount
-    "reference counted". 
-    Additionally, the convenience macros @b DECLARE_VARIANT_OBJECT and 
-    @b IMPLEMENT_VARIANT_OBJECT were added so that adding (limited) support 
+    "reference counted".
+    Additionally, the convenience macros @b DECLARE_VARIANT_OBJECT and
+    @b IMPLEMENT_VARIANT_OBJECT were added so that adding (limited) support
     for conversion to and from wxVariant can be very easily implemented without
-    modifying 
+    modifying
     either wxVariant or the class to be stored by wxVariant. Since assignment
-    operators 
+    operators
     cannot be declared outside the class, the shift left operators are used like
     this:
-    
+
     @code
     // in the header file
         DECLARE_VARIANT_OBJECT(MyClass)
-    
+
         // in the implementation file
         IMPLEMENT_VARIANT_OBJECT(MyClass)
-    
+
         // in the user code
         wxVariant variant;
         MyClass value;
         variant  value;
-    
+
         // or
         value  variant;
     @endcode
-    
+
     For this to work, MyClass must derive from wxObject, implement
     the @ref overview_runtimeclassoverview "wxWidgets RTTI system"
     and support the assignment operator and equality operator for itself. Ideally,
@@ -75,30 +75,30 @@
     can be most easily implemented using the reference counting support offered by
     wxObject itself. By default, wxWidgets already implements
     the shift operator conversion for a few of its drawing related classes:
-    
+
     @code
     IMPLEMENT_VARIANT_OBJECT(wxColour)
     IMPLEMENT_VARIANT_OBJECT(wxImage)
     IMPLEMENT_VARIANT_OBJECT(wxIcon)
     IMPLEMENT_VARIANT_OBJECT(wxBitmap)
     @endcode
-    
+
     Note that as of wxWidgets 2.9.0, wxVariantData no longer inherits from wxObject
     and wxVariant no longer uses the type-unsafe wxList class for list
     operations but the type-safe wxVariantList class. Also, wxVariantData now
     supports the Clone function for implementing the wxVariant::Unshare function.
     Clone is implemented automatically by IMPLEMENT_VARIANT_OBJECT.
-    
+
     Since wxVariantData no longer derives from wxObject, any code that tests the
     type
     of the data using wxDynamicCast will require adjustment. You can use the macro
     wxDynamicCastVariantData with the same arguments as wxDynamicCast, to use C++
     RTTI
     type information instead of wxWidgets RTTI.
-    
+
     @library{wxbase}
     @category{data}
-    
+
     @seealso
     wxVariantData
 */
@@ -111,23 +111,23 @@ public:
         wxDateTime value.
     */
     wxVariant();
-        wxVariant(const wxVariant& variant);
-        wxVariant(const wxChar* value, const wxString& name = "");
-        wxVariant(const wxString& value, const wxString& name = "");
-        wxVariant(wxChar value, const wxString& name = "");
-        wxVariant(long value, const wxString& name = "");
-        wxVariant(bool value, const wxString& name = "");
-        wxVariant(double value, const wxString& name = "");
-        wxVariant(const wxVariantList& value,
-                  const wxString& name = "");
-        wxVariant(void* value, const wxString& name = "");
-        wxVariant(wxObject* value, const wxString& name = "");
-        wxVariant(wxVariantData* data, const wxString& name = "");
-        wxVariant(wxDateTime& val, const wxString& name = "");
-        wxVariant(wxArrayString& val, const wxString& name = "");
-        wxVariant(DATE_STRUCT* val, const wxString& name = "");
-        wxVariant(TIME_STRUCT* val, const wxString& name = "");
-        wxVariant(TIMESTAMP_STRUCT* val, const wxString& name = "");
+    wxVariant(const wxVariant& variant);
+    wxVariant(const wxChar* value, const wxString& name = "");
+    wxVariant(const wxString& value, const wxString& name = "");
+    wxVariant(wxChar value, const wxString& name = "");
+    wxVariant(long value, const wxString& name = "");
+    wxVariant(bool value, const wxString& name = "");
+    wxVariant(double value, const wxString& name = "");
+    wxVariant(const wxVariantList& value,
+              const wxString& name = "");
+    wxVariant(void* value, const wxString& name = "");
+    wxVariant(wxObject* value, const wxString& name = "");
+    wxVariant(wxVariantData* data, const wxString& name = "");
+    wxVariant(wxDateTime& val, const wxString& name = "");
+    wxVariant(wxArrayString& val, const wxString& name = "");
+    wxVariant(DATE_STRUCT* val, const wxString& name = "");
+    wxVariant(TIME_STRUCT* val, const wxString& name = "");
+    wxVariant(TIMESTAMP_STRUCT* val, const wxString& name = "");
     //@}
 
     /**
@@ -161,11 +161,11 @@ public:
         Retrieves and converts the value of this variant to the type that @e value is.
     */
     bool Convert(long* value);
-        bool Convert(bool* value);
-        bool Convert(double* value);
-        bool Convert(wxString* value);
-        bool Convert(wxChar* value);
-        bool Convert(wxDateTime* value);
+    bool Convert(bool* value);
+    bool Convert(double* value);
+    bool Convert(wxString* value);
+    bool Convert(wxChar* value);
+    bool Convert(wxDateTime* value);
     //@}
 
     /**
@@ -313,17 +313,17 @@ public:
         Inequality test operators.
     */
     bool operator !=(const wxVariant& value);
-        bool operator !=(const wxString& value);
-        bool operator !=(const wxChar* value);
-        bool operator !=(wxChar value);
-        bool operator !=(const long value);
-        bool operator !=(const bool value);
-        bool operator !=(const double value);
-        bool operator !=(void* value);
-        bool operator !=(wxObject* value);
-        bool operator !=(const wxVariantList& value);
-        bool operator !=(const wxArrayString& value);
-        bool operator !=(const wxDateTime& value);
+    bool operator !=(const wxString& value);
+    bool operator !=(const wxChar* value);
+    bool operator !=(wxChar value);
+    bool operator !=(const long value);
+    bool operator !=(const bool value);
+    bool operator !=(const double value);
+    bool operator !=(void* value);
+    bool operator !=(wxObject* value);
+    bool operator !=(const wxVariantList& value);
+    bool operator !=(const wxArrayString& value);
+    bool operator !=(const wxDateTime& value);
     //@}
 
     //@{
@@ -332,21 +332,21 @@ public:
         possible.
     */
     void operator =(const wxVariant& value);
-        void operator =(wxVariantData* value);
-        void operator =(const wxString& value);
-        void operator =(const wxChar* value);
-        void operator =(wxChar value);
-        void operator =(const long value);
-        void operator =(const bool value);
-        void operator =(const double value);
-        void operator =(void* value);
-        void operator =(wxObject* value);
-        void operator =(const wxVariantList& value);
-        void operator =(const wxDateTime& value);
-        void operator =(const wxArrayString& value);
-        void operator =(const DATE_STRUCT* value);
-        void operator =(const TIME_STRUCT* value);
-        void operator =(const TIMESTAMP_STRUCT* value);
+    void operator =(wxVariantData* value);
+    void operator =(const wxString& value);
+    void operator =(const wxChar* value);
+    void operator =(wxChar value);
+    void operator =(const long value);
+    void operator =(const bool value);
+    void operator =(const double value);
+    void operator =(void* value);
+    void operator =(wxObject* value);
+    void operator =(const wxVariantList& value);
+    void operator =(const wxDateTime& value);
+    void operator =(const wxArrayString& value);
+    void operator =(const DATE_STRUCT* value);
+    void operator =(const TIME_STRUCT* value);
+    void operator =(const TIMESTAMP_STRUCT* value);
     //@}
 
     //@{
@@ -354,17 +354,17 @@ public:
         Equality test operators.
     */
     bool operator ==(const wxVariant& value);
-        bool operator ==(const wxString& value);
-        bool operator ==(const wxChar* value);
-        bool operator ==(wxChar value);
-        bool operator ==(const long value);
-        bool operator ==(const bool value);
-        bool operator ==(const double value);
-        bool operator ==(void* value);
-        bool operator ==(wxObject* value);
-        bool operator ==(const wxVariantList& value);
-        bool operator ==(const wxArrayString& value);
-        bool operator ==(const wxDateTime& value);
+    bool operator ==(const wxString& value);
+    bool operator ==(const wxChar* value);
+    bool operator ==(wxChar value);
+    bool operator ==(const long value);
+    bool operator ==(const bool value);
+    bool operator ==(const double value);
+    bool operator ==(void* value);
+    bool operator ==(wxObject* value);
+    bool operator ==(const wxVariantList& value);
+    bool operator ==(const wxArrayString& value);
+    bool operator ==(const wxDateTime& value);
     //@}
 
     //@{
@@ -373,7 +373,7 @@ public:
         to change the value at this index.
     */
     wxVariant operator [](size_t idx);
-        wxVariant operator [](size_t idx);
+    wxVariant operator [](size_t idx);
     //@}
 
     //@{
@@ -381,7 +381,7 @@ public:
         Operator for implicit conversion to a long, using GetLong().
     */
     double operator double();
-        long operator long();
+    long operator long();
     //@}
 
     /**
@@ -410,12 +410,12 @@ public:
 /**
     @class wxVariantData
     @wxheader{variant.h}
-    
-    The @b wxVariantData class is used to implement a new type for wxVariant. 
+
+    The @b wxVariantData class is used to implement a new type for wxVariant.
     Derive from wxVariantData, and override the pure virtual functions.
-    
+
     wxVariantData is @ref overview_refcount "reference counted", but you don't
-    normally have to care about this, 
+    normally have to care about this,
     as wxVariant manages the count automatically. However, in case your application
     needs to take
     ownership of wxVariantData, be aware that the object is created with reference
@@ -428,14 +428,14 @@ public:
     a wxVariantData
     instance. Instead, wxVariantData::DecRef will delete the object automatically
     when the reference count reaches zero.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     wxVariant
 */
-class wxVariantData 
+class wxVariantData
 {
 public:
     /**
@@ -487,7 +487,7 @@ public:
         Reads the data from @e stream or @e string.
     */
     bool Read(ostream& stream);
-        bool Read(wxString& string);
+    bool Read(wxString& string);
     //@}
 
     //@{
@@ -495,7 +495,7 @@ public:
         Writes the data to @e stream or @e string.
     */
     bool Write(ostream& stream);
-        bool Write(wxString& string);
+    bool Write(wxString& string);
     //@}
 
     /**

@@ -9,33 +9,33 @@
 /**
     @class wxSVGFileDC
     @wxheader{dcsvg.h}
-    
+
     A wxSVGFileDC is a @e device context onto which graphics and text can be drawn,
     and the output
-    produced as a vector file, in the SVG format 
+    produced as a vector file, in the SVG format
     (see W3C specifications).
     This format can be read by a range of programs, including a Netscape plugin
-    (Adobe), full details 
+    (Adobe), full details
     in the SVG Implementation and Resource Directory.
     Vector formats may often be smaller than raster formats.
-    
+
     The intention behind wxSVGFileDC is that it can be used to produce a file
-    corresponding 
+    corresponding
     to the screen display context, wxSVGFileDC, by passing the wxSVGFileDC as a
     parameter instead of a wxSVGFileDC. Thus the wxSVGFileDC is a write-only class.
-    
+
     As the wxSVGFileDC is a vector format, raster operations like GetPixel are
     unlikely to be supported.
     However, the SVG specification allows for PNG format raster files to be
-    embedded in the SVG, and so 
+    embedded in the SVG, and so
     bitmaps, icons and blit operations into the wxSVGFileDC are supported.
-    
+
     A more substantial SVG library (for reading and writing) is available at the
     wxArt2D website.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @b Members
 */
@@ -44,15 +44,15 @@ class wxSVGFileDC : public wxDC
 public:
     //@{
     /**
-        Constructors: 
+        Constructors:
         a filename @e f with default size 340x240 at 72.0 dots per inch (a frequent
         screen resolution).
-        a filename @e f with size @e Width by @e Height at 72.0 dots per inch 
+        a filename @e f with size @e Width by @e Height at 72.0 dots per inch
         a filename @e f with size @e Width by @e Height at @e dpi resolution.
     */
     wxSVGFileDC(wxString f);
-        wxSVGFileDC(wxString f, int Width, int Height);
-        wxSVGFileDC(wxString f, int Width, int Height, float dpi);
+    wxSVGFileDC(wxString f, int Width, int Height);
+    wxSVGFileDC(wxString f, int Width, int Height, float dpi);
     //@}
 
     /**
@@ -79,8 +79,8 @@ public:
               wxCoord ysrcMask = -1);
 
     /**
-        Adds the specified point to the bounding box which can be retrieved with 
-        wxDC::MinX, wxDC::MaxX and 
+        Adds the specified point to the bounding box which can be retrieved with
+        wxDC::MinX, wxDC::MaxX and
         wxDC::MinY, wxDC::MaxY functions.
     */
     void CalcBoundingBox(wxCoord x, wxCoord y);
@@ -147,7 +147,7 @@ public:
         draw the foreground
         of the bitmap (all bits set to 1), and the current text background colour to
         draw the background
-        (all bits set to 0). See also wxDC::SetTextForeground, 
+        (all bits set to 0). See also wxDC::SetTextForeground,
         wxDC::SetTextBackground and wxMemoryDC.
     */
     void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y,
@@ -159,7 +159,7 @@ public:
     */
     void DrawCheckMark(wxCoord x, wxCoord y, wxCoord width,
                        wxCoord height);
-        void DrawCheckMark(const wxRect & rect);
+    void DrawCheckMark(const wxRect & rect);
     //@}
 
     //@{
@@ -169,7 +169,7 @@ public:
         @sa wxDC::DrawEllipse
     */
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
-        void DrawCircle(const wxPoint& pt, wxCoord radius);
+    void DrawCircle(const wxPoint& pt, wxCoord radius);
     //@}
 
     //@{
@@ -182,8 +182,8 @@ public:
     */
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width,
                      wxCoord height);
-        void DrawEllipse(const wxPoint& pt, const wxSize& size);
-        void DrawEllipse(const wxRect& rect);
+    void DrawEllipse(const wxPoint& pt, const wxSize& size);
+    void DrawEllipse(const wxRect& rect);
     //@}
 
     /**
@@ -231,8 +231,8 @@ public:
     */
     void DrawLines(int n, wxPoint points[], wxCoord xoffset = 0,
                    wxCoord yoffset = 0);
-        void DrawLines(wxList * points, wxCoord xoffset = 0,
-                       wxCoord yoffset = 0);
+    void DrawLines(wxList * points, wxCoord xoffset = 0,
+                   wxCoord yoffset = 0);
     //@}
 
     /**
@@ -257,9 +257,9 @@ public:
     void DrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0,
                      wxCoord yoffset = 0,
                      int fill_style = wxODDEVEN_RULE);
-        void DrawPolygon(wxList * points, wxCoord xoffset = 0,
-                         wxCoord yoffset = 0,
-                         int fill_style = wxODDEVEN_RULE);
+    void DrawPolygon(wxList * points, wxCoord xoffset = 0,
+                     wxCoord yoffset = 0,
+                     int fill_style = wxODDEVEN_RULE);
     //@}
 
     /**
@@ -302,10 +302,10 @@ public:
         Draws a three-point spline using the current pen.
     */
     void DrawSpline(wxList * points);
-        void DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2,
-                        wxCoord y2,
-                        wxCoord x3,
-                        wxCoord y3);
+    void DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2,
+                    wxCoord y2,
+                    wxCoord x3,
+                    wxCoord y3);
     //@}
 
     /**
@@ -346,7 +346,7 @@ public:
         wxSVGFileDC::SetBackground).
     */
     wxBrush GetBackground();
-        const wxBrush GetBackground();
+    const wxBrush GetBackground();
     //@}
 
     /**
@@ -361,7 +361,7 @@ public:
         Gets the current brush (see wxSVGFileDC::SetBrush).
     */
     wxBrush GetBrush();
-        const wxBrush GetBrush();
+    const wxBrush GetBrush();
     //@}
 
     /**
@@ -385,7 +385,7 @@ public:
         Gets the current font (see wxSVGFileDC::SetFont).
     */
     wxFont GetFont();
-        const wxFont GetFont();
+    const wxFont GetFont();
     //@}
 
     /**
@@ -403,7 +403,7 @@ public:
         Gets the current pen (see wxSVGFileDC::SetPen).
     */
     wxPen GetPen();
-        const wxPen GetPen();
+    const wxPen GetPen();
     //@}
 
     /**
@@ -422,7 +422,7 @@ public:
         Gets the current text background colour (see wxSVGFileDC::SetTextBackground).
     */
     wxColour GetTextBackground();
-        const wxColour GetTextBackground();
+    const wxColour GetTextBackground();
     //@}
 
     /**
@@ -451,7 +451,7 @@ public:
         Gets the current text foreground colour (see wxSVGFileDC::SetTextForeground).
     */
     wxColour GetTextForeground();
-        const wxColour GetTextForeground();
+    const wxColour GetTextForeground();
     //@}
 
     /**
@@ -506,7 +506,7 @@ public:
 #define wxCoord MinY()     /* implementation is private */
 
     /**
-        Returns @true if the DC is ok to use; False values arise from being unable to 
+        Returns @true if the DC is ok to use; False values arise from being unable to
         write the file
     */
 #define bool Ok()     /* implementation is private */
@@ -524,11 +524,11 @@ public:
         highest values on the axis). The default orientation is the natural
         orientation, e.g. x axis from left to right and y axis from bottom up.
         
-        @param xLeftRight 
+        @param xLeftRight
         True to set the x axis orientation to the natural
         left to right orientation, @false to invert it.
         
-        @param yBottomUp 
+        @param yBottomUp
         True to set the y axis orientation to the natural
         bottom up orientation, @false to invert it.
     */
@@ -565,9 +565,9 @@ public:
     */
     void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width,
                            wxCoord height);
-        void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
-        void SetClippingRegion(const wxRect& rect);
-        void SetClippingRegion(const wxRegion& region);
+    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
+    void SetClippingRegion(const wxRect& rect);
+    void SetClippingRegion(const wxRegion& region);
     //@}
 
     /**

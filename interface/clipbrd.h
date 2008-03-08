@@ -9,18 +9,18 @@
 /**
     @class wxClipboard
     @wxheader{clipbrd.h}
-    
+
     A class for manipulating the clipboard. Note that this is not compatible with
     the
     clipboard class from wxWidgets 1.xx, which has the same name but a different
     implementation.
-    
+
     To use the clipboard, you call member functions of the global @b wxTheClipboard
     object.
-    
+
     See also the @ref overview_wxdataobjectoverview "wxDataObject overview" for
     further information.
-    
+
     Call wxClipboard::Open to get ownership of the clipboard. If this operation
     returns @true, you
     now own the clipboard. Call wxClipboard::SetData to put data
@@ -28,19 +28,19 @@
     retrieve data from the clipboard. Call wxClipboard::Close to close
     the clipboard and relinquish ownership. You should keep the clipboard open only
     momentarily.
-    
+
     For example:
-    
+
     @code
     // Write some text to the clipboard
       if (wxTheClipboard-Open())
       {
-        // This data objects are held by the clipboard, 
+        // This data objects are held by the clipboard,
         // so do not delete them in the app.
         wxTheClipboard-SetData( new wxTextDataObject("Some text") );
         wxTheClipboard-Close();
       }
-    
+
       // Read some text
       if (wxTheClipboard-Open())
       {
@@ -49,14 +49,14 @@
           wxTextDataObject data;
           wxTheClipboard-GetData( data );
           wxMessageBox( data.GetText() );
-        }  
+        }
         wxTheClipboard-Close();
       }
     @endcode
-    
+
     @library{wxcore}
     @category{dnd}
-    
+
     @seealso
     @ref overview_wxdndoverview "Drag and drop overview", wxDataObject
 */
@@ -129,7 +129,7 @@ public:
     bool IsUsingPrimarySelection();
 
     /**
-        Call this function to open the clipboard before calling SetData() 
+        Call this function to open the clipboard before calling SetData()
         and GetData().
         
         Call Close() when you have finished with the clipboard. You

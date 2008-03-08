@@ -9,7 +9,7 @@
 /**
     @class wxPickerBase
     @wxheader{pickerbase.h}
-    
+
     Base abstract class for all pickers which support an auxiliary text control.
     This class handles all positioning and sizing of the text control like a
     an horizontal wxBoxSizer would do, with the text control on
@@ -18,16 +18,16 @@
     proportion values) of the picker control defaults to 1 when there isn't a text
     control
     associated (see @c wxPB_USE_TEXTCTRL style) and to 0 otherwise.
-    
+
     @beginStyleTable
     @style{wxPB_USE_TEXTCTRL}:
            Creates a text control to the left of the picker which is
            completely managed by this wxPickerBase class.
     @endStyleTable
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxColourPickerCtrl
 */

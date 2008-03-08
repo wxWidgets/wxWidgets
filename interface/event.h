@@ -9,9 +9,9 @@
 /**
     @class wxKeyEvent
     @wxheader{event.h}
-    
+
     This event class contains information about keypress (character) events.
-    
+
     Notice that there are three different kinds of keyboard events in wxWidgets:
     key down and up events and char events. The difference between the first two
     is clear - the first corresponds to a key press and the second to a key
@@ -19,14 +19,14 @@
     maintained in a pressed state you will typically get a lot of (automatically
     generated) down events but only one up so it is wrong to assume that there is
     one up event corresponding to each down one.
-    
+
     Both key events provide untranslated key codes while the char event carries
     the translated one. The untranslated code for alphanumeric keys is always
     an upper case value. For the other keys it is one of @c WXK_XXX values
     from the @ref overview_keycodes "keycodes table". The translated key is, in
     general, the character the user expects to appear as the result of the key
     combination when typing the text into a text entry zone, for example.
-    
+
     A few examples to clarify this (all assume that CAPS LOCK is unpressed
     and the standard US keyboard): when the @c 'A' key is pressed, the key down
     event key code is equal to @c ASCII A == 65. But the char event key code
@@ -34,36 +34,36 @@
     @c 'A' keys simultaneously , the key code in key down event will still be
     just @c 'A' while the char event key code parameter will now be @c 'A'
     as well.
-    
+
     Although in this simple case it is clear that the correct key code could be
     found in the key down event handler by checking the value returned by
     wxKeyEvent::ShiftDown, in general you should use
     @c EVT_CHAR for this as for non-alphanumeric keys the translation is
     keyboard-layout dependent and can only be done properly by the system itself.
-    
+
     Another kind of translation is done when the control key is pressed: for
     example, for CTRL-A key press the key down event still carries the
     same key code @c 'a' as usual but the char event will have key code of
     1, the ASCII value of this key combination.
-    
+
     You may discover how the other keys on your system behave interactively by
     running the text wxWidgets sample and pressing some keys
     in any of the text controls shown in it.
-    
+
     @b Note: If a key down (@c EVT_KEY_DOWN) event is caught and
     the event handler does not call @c event.Skip() then the corresponding
     char event (@c EVT_CHAR) will not happen.  This is by design and
     enables the programs that handle both types of events to be a bit
     simpler.
-    
+
     @b Note for Windows programmers: The key and char events in wxWidgets are
     similar to but slightly different from Windows @c WM_KEYDOWN and
     @c WM_CHAR events. In particular, Alt-x combination will generate a char
     event in wxWidgets (unless it is used as an accelerator).
-    
+
     @b Tip: be sure to call @c event.Skip() for events that you don't process in
     key event function, otherwise menu shortcuts may cease to work under Windows.
-    
+
     @library{wxcore}
     @category{events}
 */
@@ -122,7 +122,7 @@ public:
         list
         of modifiers.
         
-        Notice that this function is easier to use correctly than, for example, 
+        Notice that this function is easier to use correctly than, for example,
         ControlDown() because when using the latter you
         also have to remember to test that none of the other modifiers is pressed:
         and forgetting to do it can result in serious program bugs (e.g. program not
@@ -138,7 +138,7 @@ public:
         Obtains the position (in client coordinates) at which the key was pressed.
     */
     wxPoint GetPosition();
-        void GetPosition(long * x, long * y);
+    void GetPosition(long * x, long * y);
     //@}
 
     /**
@@ -275,13 +275,13 @@ public:
 /**
     @class wxJoystickEvent
     @wxheader{event.h}
-    
+
     This event class contains information about mouse events, particularly
     events received by windows.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxJoystick
 */
@@ -299,7 +299,7 @@ public:
         Returns @true if the event was a down event from the specified button (or any
         button).
         
-        @param button 
+        @param button
         Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
         indicate any button down event.
     */
@@ -308,7 +308,7 @@ public:
     /**
         Returns @true if the specified button (or any button) was in a down state.
         
-        @param button 
+        @param button
         Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
         indicate any button down event.
     */
@@ -318,7 +318,7 @@ public:
         Returns @true if the event was an up event from the specified button (or any
         button).
         
-        @param button 
+        @param button
         Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
         indicate any button down event.
     */
@@ -375,12 +375,12 @@ public:
 /**
     @class wxScrollWinEvent
     @wxheader{event.h}
-    
+
     A scroll event holds information about events sent from scrolling windows.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxScrollEvent, @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -411,14 +411,14 @@ public:
 /**
     @class wxSysColourChangedEvent
     @wxheader{event.h}
-    
+
     This class is used for system colour change events, which are generated
     when the user changes the colour settings using the control panel.
     This is only appropriate under Windows.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -435,16 +435,16 @@ public:
 /**
     @class wxWindowCreateEvent
     @wxheader{event.h}
-    
+
     This event is sent just after the actual window associated with a wxWindow
     object
     has been created. Since it is derived from wxCommandEvent, the event propagates
     up
     the window hierarchy.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview",
     wxWindowDestroyEvent
@@ -462,17 +462,17 @@ public:
 /**
     @class wxPaintEvent
     @wxheader{event.h}
-    
+
     A paint event is sent when a window's contents needs to be repainted.
-    
+
     Please notice that in general it is impossible to change the drawing of a
     standard control (such as wxButton) and so you shouldn't
     attempt to handle paint events for them as even if it might work on some
     platforms, this is inherently not portable and won't work everywhere.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -489,15 +489,15 @@ public:
 /**
     @class wxMaximizeEvent
     @wxheader{event.h}
-    
+
     An event being sent when a top level window is maximized. Notice that it is
     not sent when the window is restored to its original size after it had been
     maximized, only a normal wxSizeEvent is generated in
     this case.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview",
     wxTopLevelWindow::Maximize, wxTopLevelWindow::IsMaximized
@@ -515,13 +515,13 @@ public:
 /**
     @class wxUpdateUIEvent
     @wxheader{event.h}
-    
+
     This class is used for pseudo-events which are called by wxWidgets
     to give an application the chance to update various user interface elements.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -657,7 +657,7 @@ public:
         
         Use this to reduce the overhead of UI update events if your application
         has a lot of windows. If you set the value to -1 or greater than 0,
-        you may also need to call wxWindow::UpdateWindowUI 
+        you may also need to call wxWindow::UpdateWindowUI
         at appropriate points in your application, such as when a dialog
         is about to be shown.
     */
@@ -673,27 +673,27 @@ public:
 /**
     @class wxClipboardTextEvent
     @wxheader{event.h}
-    
-    This class represents the events generated by a control (typically a 
+
+    This class represents the events generated by a control (typically a
     wxTextCtrl but other windows can generate these events as
     well) when its content gets copied or cut to, or pasted from the clipboard.
     There are three types of corresponding events wxEVT_COMMAND_TEXT_COPY,
     wxEVT_COMMAND_TEXT_CUT and wxEVT_COMMAND_TEXT_PASTE.
-    
+
     If any of these events is processed (without being skipped) by an event
     handler, the corresponding operation doesn't take place which allows to prevent
     the text from being copied from or pasted to a control. It is also possible to
     examine the clipboard contents in the PASTE event handler and transform it in
     some way before inserting in a control -- for example, changing its case or
     removing invalid characters.
-    
+
     Finally notice that a CUT event is always preceded by the COPY event which
     makes it possible to only process the latter if it doesn't matter if the text
     was copied or cut.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxClipboard
 */
@@ -711,10 +711,10 @@ public:
 /**
     @class wxMouseEvent
     @wxheader{event.h}
-    
+
     This event class contains information about the events generated by the mouse:
     they include mouse buttons press and release events and mouse move events.
-    
+
     All mouse events involving the buttons use @c wxMOUSE_BTN_LEFT for the
     left mouse button, @c wxMOUSE_BTN_MIDDLE for the middle one and
     @c wxMOUSE_BTN_RIGHT for the right one. And if the system supports more
@@ -723,20 +723,20 @@ public:
     portable application should avoid relying on the events from it (but the right
     button click can be emulated using the left mouse button with the control key
     under Mac platforms with a single button mouse).
-    
+
     For the @c wxEVT_ENTER_WINDOW and @c wxEVT_LEAVE_WINDOW events
     purposes, the mouse is considered to be inside the window if it is in the
     window client area and not inside one of its children. In other words, the
     parent window receives @c wxEVT_LEAVE_WINDOW event not only when the
     mouse leaves the window entirely but also when it enters one of its children.
-    
+
     @b NB: Note that under Windows CE mouse enter and leave events are not natively
     supported
     by the system but are generated by wxWidgets itself. This has several
     drawbacks: the LEAVE_WINDOW event might be received some time after the mouse
     left the window and the state variables for it may have changed during this
     time.
-    
+
     @b NB: Note the difference between methods like
     wxMouseEvent::LeftDown and
     wxMouseEvent::LeftIsDown: the former returns @true
@@ -750,10 +750,10 @@ public:
     wxWidgets whatever the underlying GUI behaviour is (which is
     platform-dependent). The same applies, of course, to other mouse buttons as
     well.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxKeyEvent::CmdDown
 */
@@ -895,7 +895,7 @@ public:
     bool ButtonUp(int but = -1);
 
     /**
-        Same as MetaDown() under Mac, same as 
+        Same as MetaDown() under Mac, same as
         ControlDown() elsewhere.
         
         @sa wxKeyEvent::CmdDown
@@ -922,10 +922,10 @@ public:
     bool Entering();
 
     /**
-        Returns the mouse button which generated this event or @c wxMOUSE_BTN_NONE 
+        Returns the mouse button which generated this event or @c wxMOUSE_BTN_NONE
         if no button is involved (for mouse move, enter or leave event, for example).
         Otherwise @c wxMOUSE_BTN_LEFT is returned for the left button down, up and
-        double click events, @c wxMOUSE_BTN_MIDDLE and @c wxMOUSE_BTN_RIGHT 
+        double click events, @c wxMOUSE_BTN_MIDDLE and @c wxMOUSE_BTN_RIGHT
         for the same events for the middle and the right buttons respectively.
     */
     int GetButton();
@@ -966,8 +966,8 @@ public:
         returned position is @c wxDefaultPosition.
     */
     wxPoint GetPosition();
-        void GetPosition(wxCoord* x, wxCoord* y);
-        void GetPosition(long* x, long* y);
+    void GetPosition(wxCoord* x, wxCoord* y);
+    void GetPosition(long* x, long* y);
     //@}
 
     /**
@@ -1031,7 +1031,7 @@ public:
         Returns @true if the left mouse button is currently down, independent
         of the current event type.
         
-        Please notice that it is not the same as 
+        Please notice that it is not the same as
         LeftDown() which returns @true if the event was
         generated by the left mouse button being pressed. Rather, it simply describes
         the state of the left mouse button at the time when the event was generated
@@ -1075,8 +1075,8 @@ public:
     bool MiddleUp();
 
     /**
-        Returns @true if this was a motion event and no mouse buttons were pressed. 
-        If any mouse button is held pressed, then this method returns @false and 
+        Returns @true if this was a motion event and no mouse buttons were pressed.
+        If any mouse button is held pressed, then this method returns @false and
         Dragging() returns @true.
     */
     bool Moving();
@@ -1196,19 +1196,19 @@ public:
 /**
     @class wxDropFilesEvent
     @wxheader{event.h}
-    
+
     This class is used for drop files events, that is, when files have been dropped
     onto the window. This functionality is currently only available under Windows.
-    The window must have previously been enabled for dropping by calling 
+    The window must have previously been enabled for dropping by calling
     wxWindow::DragAcceptFiles.
-    
+
     Important note: this is a separate implementation to the more general
     drag and drop implementation documented here. It uses the
     older, Windows message-based approach of dropping files.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -1263,12 +1263,12 @@ public:
 /**
     @class wxCommandEvent
     @wxheader{event.h}
-    
+
     This event class contains information about command events, which originate
     from a variety of
     simple controls. More complex controls, such as wxTreeCtrl, have separate
     command event classes.
-    
+
     @library{wxcore}
     @category{events}
 */
@@ -1333,7 +1333,7 @@ public:
         just has become checked or unchecked (and thus only makes sense for checkable
         menu items).
         
-        Notice that this method can not be used with 
+        Notice that this method can not be used with
         wxCheckListBox currently.
     */
     bool IsChecked();
@@ -1378,13 +1378,13 @@ public:
 /**
     @class wxActivateEvent
     @wxheader{event.h}
-    
+
     An activate event is sent when a window or application is being activated
     or deactivated.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview", wxApp::IsActive
 */
@@ -1407,25 +1407,25 @@ public:
 /**
     @class wxContextMenuEvent
     @wxheader{event.h}
-    
+
     This class is used for context menu events, sent to give
     the application a chance to show a context (popup) menu.
-    
+
     Note that if wxContextMenuEvent::GetPosition returns wxDefaultPosition, this
     means that the event originated
     from a keyboard context button event, and you should compute a suitable
     position yourself,
     for example by calling wxGetMousePosition.
-    
+
     When a keyboard context menu button is pressed on Windows, a right-click event
     with default position is sent first,
     and if this event is not processed, the context menu event is sent. So if you
     process mouse events and you find your context menu event handler
     is not being called, you could call wxEvent::Skip for mouse right-down events.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_wxcommandevent "Command events", @ref
     overview_eventhandlingoverview "Event handling overview"
@@ -1461,25 +1461,25 @@ public:
 /**
     @class wxEraseEvent
     @wxheader{event.h}
-    
+
     An erase event is sent when a window's background needs to be repainted.
-    
+
     On some platforms, such as GTK+, this event is simulated (simply generated just
     before the
     paint event) and may cause flicker. It is therefore recommended that
     you set the text background colour explicitly in order to prevent flicker.
     The default background colour under GTK+ is grey.
-    
+
     To intercept this event, use the EVT_ERASE_BACKGROUND macro in an event table
     definition.
-    
+
     You must call wxEraseEvent::GetDC and use the returned device context if it is
     non-@NULL.
-    If it is @NULL, create your own temporary wxClientDC object. 
-    
+    If it is @NULL, create your own temporary wxClientDC object.
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -1501,18 +1501,18 @@ public:
 /**
     @class wxFocusEvent
     @wxheader{event.h}
-    
+
     A focus event is sent when a window's focus changes. The window losing focus
     receives a "kill focus'' event while the window gaining it gets a "set
     focus'' one.
-    
+
     Notice that the set focus event happens both when the user gives focus to the
     window (whether using the mouse or keyboard) and when it is done from the
     program itself using wxWindow::SetFocus.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -1537,18 +1537,18 @@ public:
 /**
     @class wxChildFocusEvent
     @wxheader{event.h}
-    
+
     A child focus event is sent to a (parent-)window when one of its child windows
     gains focus,
     so that the window could restore the focus back to its corresponding child
     if it loses it now and regains later.
-    
+
     Notice that child window is the direct child of the window receiving event.
-    Use wxWindow::FindFocus to retreive the window which is actually getting focus. 
-    
+    Use wxWindow::FindFocus to retreive the window which is actually getting focus.
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -1558,7 +1558,7 @@ public:
     /**
         Constructor.
         
-        @param win 
+        @param win
         The direct child which is (or which contains the window which is) receiving the
         focus.
     */
@@ -1576,21 +1576,21 @@ public:
 /**
     @class wxMouseCaptureLostEvent
     @wxheader{event.h}
-    
+
     An mouse capture lost event is sent to a window that obtained mouse capture,
     which was subsequently loss due to "external" event, for example when a dialog
     box is shown or if another application captures the mouse.
-    
+
     If this happens, this event is sent to all windows that are on capture stack
     (i.e. called CaptureMouse, but didn't call ReleaseMouse yet). The event is
     not sent if the capture changes because of a call to CaptureMouse or
     ReleaseMouse.
-    
+
     This event is currently emitted under Windows only.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxMouseCaptureChangedEvent, @ref overview_eventhandlingoverview "Event handling
     overview", wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
@@ -1608,17 +1608,17 @@ public:
 /**
     @class wxNotifyEvent
     @wxheader{event.h}
-    
+
     This class is not used by the event handlers by itself, but is a base class
     for other event classes (such as wxNotebookEvent).
-    
+
     It (or an object of a derived class) is sent when the controls state is being
     changed and allows the program to wxNotifyEvent::Veto this
     change if it wants to prevent it from happening.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxNotebookEvent
 */
@@ -1639,7 +1639,7 @@ public:
     void Allow();
 
     /**
-        Returns @true if the change is allowed (Veto() 
+        Returns @true if the change is allowed (Veto()
         hasn't been called) or @false otherwise (if it was).
     */
     bool IsAllowed();
@@ -1658,14 +1658,14 @@ public:
 /**
     @class wxHelpEvent
     @wxheader{event.h}
-    
+
     A help event is sent when the user has requested context-sensitive help.
     This can either be caused by the application requesting
     context-sensitive help mode via wxContextHelp, or
     (on MS Windows) by the system generating a WM_HELP message when the user
     pressed F1 or clicked
     on the query button in a dialog caption.
-    
+
     A help event is sent to the window that the user clicked on, and is propagated
     up the
     window hierarchy until the event is processed or there are no more event
@@ -1679,10 +1679,10 @@ public:
     of the clicked-on window. Otherwise it would be impossible to show help for
     container windows,
     since processing would stop after the first window found.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxContextHelp, wxDialog, @ref overview_eventhandlingoverview "Event handling
     overview"
@@ -1713,12 +1713,12 @@ public:
         @b Origin_HelpButton
         
         
-        Event generated by 
+        Event generated by
         wxContextHelp or using the "?" title bur button under
         MS Windows.
         
         The application may handle events generated using the keyboard or mouse
-        differently, e.g. by using wxGetMousePosition 
+        differently, e.g. by using wxGetMousePosition
         for the mouse events.
         
         @sa SetOrigin()
@@ -1748,18 +1748,18 @@ public:
 /**
     @class wxScrollEvent
     @wxheader{event.h}
-    
+
     A scroll event holds information about events sent from stand-alone
     scrollbars and sliders. Note that
-    starting from wxWidgets 2.1, scrolled windows send the 
+    starting from wxWidgets 2.1, scrolled windows send the
     wxScrollWinEvent which does not derive from
     wxCommandEvent, but from wxEvent directly - don't confuse these two kinds of
     events and use the event table macros mentioned below only for the
     scrollbar-like controls.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxScrollBar, wxSlider, wxSpinButton, , wxScrollWinEvent, @ref
     overview_eventhandlingoverview "Event handling overview"
@@ -1789,27 +1789,27 @@ public:
 /**
     @class wxIdleEvent
     @wxheader{event.h}
-    
+
     This class is used for idle events, which are generated when the system becomes
     idle. Note that, unless you do something specifically, the idle events are not
     sent if the system remains idle once it has become it, e.g. only a single idle
     event will be generated until something else resulting in more normal events
     happens and only then is the next idle event sent again. If you need to ensure
-    a continuous stream of idle events, you can either use 
-    wxIdleEvent::RequestMore method in your handler or call 
+    a continuous stream of idle events, you can either use
+    wxIdleEvent::RequestMore method in your handler or call
     wxWakeUpIdle periodically (for example from timer
     event), but note that both of these approaches (and especially the first one)
     increase the system load and so should be avoided if possible.
-    
-    By default, idle events are sent to all windows (and also 
+
+    By default, idle events are sent to all windows (and also
     wxApp, as usual). If this is causing a significant
     overhead in your application, you can call wxIdleEvent::SetMode with
     the value wxIDLE_PROCESS_SPECIFIED, and set the wxWS_EX_PROCESS_IDLE extra
     window style for every window which should receive idle events.
-    
+
     @library{wxbase}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview", wxUpdateUIEvent,
     wxWindow::OnInternalIdle
@@ -1885,14 +1885,14 @@ public:
 /**
     @class wxInitDialogEvent
     @wxheader{event.h}
-    
+
     A wxInitDialogEvent is sent as a dialog or panel is being initialised.
     Handlers for this event can transfer data to the window.
     The default handler calls wxWindow::TransferDataToWindow.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -1909,23 +1909,23 @@ public:
 /**
     @class wxWindowDestroyEvent
     @wxheader{event.h}
-    
+
     This event is sent from the wxWindow destructor wxWindow::~wxWindow() when a
     window is destroyed.
-    
+
     When a class derived from wxWindow is destroyed its destructor will have
     already run by the time this event is sent. Therefore this event will not
     usually be received at all.
-    
+
     To receive this event wxEvtHandler::Connect
     must be used (using an event table macro will not work). Since it is
     received after the destructor has run, an object should not handle its
     own wxWindowDestroyEvent, but it can be used to get notification of the
     destruction of another window.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview",
     wxWindowCreateEvent
@@ -1943,22 +1943,22 @@ public:
 /**
     @class wxNavigationKeyEvent
     @wxheader{event.h}
-    
+
     This event class contains information about navigation events,
     generated by navigation keys such as tab and page down.
-    
+
     This event is mainly used by wxWidgets implementations. A
     wxNavigationKeyEvent handler is automatically provided by wxWidgets
     when you make a class into a control container with the macro
     WX_DECLARE_CONTROL_CONTAINER.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxWindow::Navigate, wxWindow::NavigateIn
 */
-class wxNavigationKeyEvent 
+class wxNavigationKeyEvent
 {
 public:
     //@{
@@ -1966,7 +1966,7 @@ public:
         Constructor.
     */
     wxNavigationKeyEvent();
-        wxNavigationKeyEvent(const wxNavigationKeyEvent& event);
+    wxNavigationKeyEvent(const wxNavigationKeyEvent& event);
     //@}
 
     /**
@@ -2023,18 +2023,18 @@ public:
 /**
     @class wxMouseCaptureChangedEvent
     @wxheader{event.h}
-    
+
     An mouse capture changed event is sent to a window that loses its
     mouse capture. This is called even if wxWindow::ReleaseCapture
     was called by the application code. Handling this event allows
     an application to cater for unexpected capture releases which
     might otherwise confuse mouse handling code.
-    
+
     This event is implemented under Windows only.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxMouseCaptureLostEvent, @ref overview_eventhandlingoverview "Event handling
     overview", wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
@@ -2059,30 +2059,30 @@ public:
 /**
     @class wxCloseEvent
     @wxheader{event.h}
-    
+
     This event class contains information about window and session close events.
-    
+
     The handler function for EVT_CLOSE is called when the user has tried to close a
     a frame
     or dialog box using the window manager (X) or system menu (Windows). It can
     also be invoked by the application itself programmatically, for example by
     calling the wxWindow::Close function.
-    
+
     You should check whether the application is forcing the deletion of the window
     using wxCloseEvent::CanVeto. If this is @false,
     you @e must destroy the window using wxWindow::Destroy.
     If the return value is @true, it is up to you whether you respond by destroying
     the window.
-    
+
     If you don't destroy the window, you should call wxCloseEvent::Veto to
     let the calling code know that you did not destroy the window. This allows the
     wxWindow::Close function
     to return @true or @false depending on whether the close instruction was
     honoured or not.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxWindow::Close, @ref overview_windowdeletionoverview "Window deletion overview"
 */
@@ -2138,17 +2138,17 @@ public:
 /**
     @class wxMenuEvent
     @wxheader{event.h}
-    
+
     This class is used for a variety of menu-related events. Note that
     these do not include menu command events, which are
     handled using wxCommandEvent objects.
-    
+
     The default handler for wxEVT_MENU_HIGHLIGHT displays help
     text in the first field of the status bar.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_wxcommandevent "Command events", @ref
     overview_eventhandlingoverview "Event handling overview"
@@ -2175,7 +2175,7 @@ public:
     int GetMenuId();
 
     /**
-        Returns @true if the menu which is being opened or closed is a popup menu, 
+        Returns @true if the menu which is being opened or closed is a popup menu,
         @false if it is a normal one.
         
         This method should only be used with the @c OPEN and @c CLOSE events.
@@ -2187,30 +2187,30 @@ public:
 /**
     @class wxEventBlocker
     @wxheader{event.h}
-    
+
     This class is a special event handler which allows to discard
     any event (or a set of event types) directed to a specific window.
-    
+
     Example:
-    
+
     @code
     {
         // block all events directed to this window while
         // we do the 1000 FuncWhichSendsEvents() calls
         wxEventBlocker blocker(this);
-    
+
         for ( int i = 0; i  1000; i++ )
            FuncWhichSendsEvents(i);
-    
+
       } // ~wxEventBlocker called, old event handler is restored
-    
+
       // the event generated by this call will be processed
       FuncWhichSendsEvents(0)
     @endcode
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview", wxEvtHandler
 */
@@ -2245,20 +2245,20 @@ public:
 /**
     @class wxEvtHandler
     @wxheader{event.h}
-    
+
     A class that can handle events from the windowing system.
     wxWindow (and therefore all window classes) are derived from
     this class.
-    
+
     When events are received, wxEvtHandler invokes the method listed in the
     event table using itself as the object.  When using multiple inheritance
     it is imperative that the wxEvtHandler(-derived) class be the first
     class inherited such that the "this" pointer for the overall object
     will be identical to the "this" pointer for the wxEvtHandler portion.
-    
+
     @library{wxbase}
     @category{FIXME}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -2280,7 +2280,7 @@ public:
     /**
         This function posts an event to be processed later.
         
-        @param event 
+        @param event
         Event to add to process queue.
         
         @remarks The difference between sending an event (using the ProcessEvent
@@ -2299,27 +2299,27 @@ public:
         is an alternative to the use of static event tables. See the 'event' or the old
         'dynamic' sample for usage.
         
-        @param id 
+        @param id
         The identifier (or first of the identifier range) to be
         associated with the event handler function. For the version not taking this
         argument, it defaults to wxID_ANY.
         
-        @param lastId 
+        @param lastId
         The second part of the identifier range to be associated with the event handler
         function.
         
-        @param eventType 
+        @param eventType
         The event type to be associated with this event handler.
         
-        @param function 
+        @param function
         The event handler function. Note that this function should
         be explicitly converted to the correct type which can be done using a macro
         called wxFooEventHandler for the handler for any wxFooEvent.
         
-        @param userData 
+        @param userData
         Data to be associated with the event table entry.
         
-        @param eventSink 
+        @param eventSink
         Object whose member function should be called. If this is @NULL,
         this will be used.
     */
@@ -2327,14 +2327,14 @@ public:
                  wxObjectEventFunction function,
                  wxObject* userData = @NULL,
                  wxEvtHandler* eventSink = @NULL);
-        void Connect(int id, wxEventType eventType,
-                     wxObjectEventFunction function,
-                     wxObject* userData = @NULL,
-                     wxEvtHandler* eventSink = @NULL);
-        void Connect(wxEventType eventType,
-                     wxObjectEventFunction function,
-                     wxObject* userData = @NULL,
-                     wxEvtHandler* eventSink = @NULL);
+    void Connect(int id, wxEventType eventType,
+                 wxObjectEventFunction function,
+                 wxObject* userData = @NULL,
+                 wxEvtHandler* eventSink = @NULL);
+    void Connect(wxEventType eventType,
+                 wxObjectEventFunction function,
+                 wxObject* userData = @NULL,
+                 wxEvtHandler* eventSink = @NULL);
     //@}
 
     //@{
@@ -2347,40 +2347,40 @@ public:
         using the Connect() method. There is no way
         to disconnect functions connected using the (static) event tables.
         
-        @param id 
+        @param id
         The identifier (or first of the identifier range) associated with the event
         handler function.
         
-        @param lastId 
+        @param lastId
         The second part of the identifier range associated with the event handler
         function.
         
-        @param eventType 
+        @param eventType
         The event type associated with this event handler.
         
-        @param function 
+        @param function
         The event handler function.
         
-        @param userData 
+        @param userData
         Data associated with the event table entry.
         
-        @param eventSink 
+        @param eventSink
         Object whose member function should be called.
     */
     bool Disconnect(wxEventType eventType = wxEVT_@NULL,
                     wxObjectEventFunction function = @NULL,
                     wxObject* userData = @NULL,
                     wxEvtHandler* eventSink = @NULL);
-        bool Disconnect(int id = wxID_ANY,
-                        wxEventType eventType = wxEVT_@NULL,
-                        wxObjectEventFunction function = @NULL,
-                        wxObject* userData = @NULL,
-                        wxEvtHandler* eventSink = @NULL);
-        bool Disconnect(int id, int lastId = wxID_ANY,
-                        wxEventType eventType = wxEVT_@NULL,
-                        wxObjectEventFunction function = @NULL,
-                        wxObject* userData = @NULL,
-                        wxEvtHandler* eventSink = @NULL);
+    bool Disconnect(int id = wxID_ANY,
+                    wxEventType eventType = wxEVT_@NULL,
+                    wxObjectEventFunction function = @NULL,
+                    wxObject* userData = @NULL,
+                    wxEvtHandler* eventSink = @NULL);
+    bool Disconnect(int id, int lastId = wxID_ANY,
+                    wxEventType eventType = wxEVT_@NULL,
+                    wxObjectEventFunction function = @NULL,
+                    wxObject* userData = @NULL,
+                    wxEvtHandler* eventSink = @NULL);
     //@}
 
     /**
@@ -2430,7 +2430,7 @@ public:
         Processes an event, searching event tables and calling zero or more suitable
         event handler function(s).
         
-        @param event 
+        @param event
         Event to process.
         
         @returns @true if a suitable event handler function was found and
@@ -2451,7 +2451,7 @@ public:
         thrown in event handler, wxApp::OnExceptionInMainLoop
         is called.
         
-        @param event 
+        @param event
         Event to process.
         
         @returns @true if the event was processed, @false if no handler was found
@@ -2466,10 +2466,10 @@ public:
         one
         is found.
         
-        @param table 
+        @param table
         Event table to be searched.
         
-        @param event 
+        @param event
         Event to be matched against an event table entry.
         
         @returns @true if a suitable event handler function was found and
@@ -2486,7 +2486,7 @@ public:
     /**
         Sets user-supplied client data.
         
-        @param data 
+        @param data
         Data to be associated with the event handler.
         
         @remarks Normally, any extra data the programmer wishes to associate with
@@ -2509,7 +2509,7 @@ public:
     /**
         Enables or disables the event handler.
         
-        @param enabled 
+        @param enabled
         @true if the event handler is to be enabled, @false if it is to be disabled.
         
         @remarks You can use this function to avoid having to remove the event
@@ -2523,7 +2523,7 @@ public:
     /**
         Sets the pointer to the next handler.
         
-        @param handler 
+        @param handler
         Event handler to be set as the next handler.
         
         @sa GetNextHandler(), SetPreviousHandler(),
@@ -2535,7 +2535,7 @@ public:
     /**
         Sets the pointer to the previous handler.
         
-        @param handler 
+        @param handler
         Event handler to be set as the previous handler.
     */
     void SetPreviousHandler(wxEvtHandler* handler);
@@ -2545,14 +2545,14 @@ public:
 /**
     @class wxIconizeEvent
     @wxheader{event.h}
-    
+
     An event being sent when the frame is iconized (minimized) or restored.
-    
+
     Currently only wxMSW and wxGTK generate such events.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     @ref overview_eventhandlingoverview "Event handling overview",
     wxTopLevelWindow::Iconize, wxTopLevelWindow::IsIconized
@@ -2576,12 +2576,12 @@ public:
 /**
     @class wxMoveEvent
     @wxheader{event.h}
-    
+
     A move event holds information about move change events.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxPoint, @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -2603,20 +2603,20 @@ public:
 /**
     @class wxEvent
     @wxheader{event.h}
-    
+
     An event is a structure holding information about an event passed to a
     callback or member function. @b wxEvent used to be a multipurpose
     event object, and is an abstract base class for other event classes (see below).
-    
+
     For more information about events, see the @ref overview_eventhandlingoverview
     "Event handling overview".
-    
+
     @b wxPerl note: In wxPerl custom event classes should be derived from
     @c Wx::PlEvent and @c Wx::PlCommandEvent.
-    
+
     @library{wxbase}
     @category{events}
-    
+
     @seealso
     wxCommandEvent, wxMouseEvent
 */
@@ -2731,7 +2731,7 @@ public:
     /**
         Stop the event from propagating to its parent window.
         
-        Returns the old propagation level value which may be later passed to 
+        Returns the old propagation level value which may be later passed to
         ResumePropagation() to allow propagating the
         event again.
     */
@@ -2742,12 +2742,12 @@ public:
         
         Indicates how many levels the event can propagate. This member is protected and
         should typically only be set in the constructors of the derived classes. It
-        may be temporarily changed by StopPropagation() 
-        and ResumePropagation() and tested with 
+        may be temporarily changed by StopPropagation()
+        and ResumePropagation() and tested with
         ShouldPropagate().
         
         The initial value is set to either @c wxEVENT_PROPAGATE_NONE (by
-        default) meaning that the event shouldn't be propagated at all or to 
+        default) meaning that the event shouldn't be propagated at all or to
         @c wxEVENT_PROPAGATE_MAX (for command events) meaning that it should be
         propagated as much as necessary.
         
@@ -2761,18 +2761,18 @@ public:
 /**
     @class wxSizeEvent
     @wxheader{event.h}
-    
+
     A size event holds information about size change events.
-    
+
     The EVT_SIZE handler function will be called when the window has been resized.
-    
+
     You may wish to use this for frames to resize their child windows as
     appropriate.
-    
+
     Note that the size passed is of
     the whole window: call wxWindow::GetClientSize for the area which may be
     used by the application.
-    
+
     When a window is resized, usually only a small part of the window is damaged
     and you
     may only need to repaint that area. However, if your drawing depends on the
@@ -2780,10 +2780,10 @@ public:
     you may need to clear the DC explicitly and repaint the whole window. In which
     case, you
     may need to call wxWindow::Refresh to invalidate the entire window.
-    
+
     @library{wxcore}
     @category{events}
-    
+
     @seealso
     wxSize, @ref overview_eventhandlingoverview "Event handling overview"
 */
@@ -2805,16 +2805,16 @@ public:
 /**
     @class wxSetCursorEvent
     @wxheader{event.h}
-    
+
     A SetCursorEvent is generated when the mouse cursor is about to be set as a
     result of mouse motion. This event gives the application the chance to perform
     specific mouse cursor processing based on the current position of the mouse
     within the window. Use wxSetCursorEvent::SetCursor to
     specify the cursor you want to be displayed.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     ::wxSetCursor, wxWindow::wxSetCursor
 */

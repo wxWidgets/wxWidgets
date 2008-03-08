@@ -9,11 +9,11 @@
 /**
     @class wxPostScriptDC
     @wxheader{dcps.h}
-    
+
     This defines the wxWidgets Encapsulated PostScript device context,
     which can write PostScript files on any platform. See wxDC for
     descriptions of the member functions.
-    
+
     @library{wxbase}
     @category{dc}
 */
@@ -36,13 +36,13 @@ public:
         use the wxPrintData constructor instead.
     */
     wxPostScriptDC(const wxPrintData& printData);
-        wxPostScriptDC(const wxString& output,
-                       bool interactive = @true,
-                       wxWindow * parent);
+    wxPostScriptDC(const wxString& output,
+                   bool interactive = @true,
+                   wxWindow * parent);
     //@}
 
     /**
-        Return resolution used in PostScript output. See 
+        Return resolution used in PostScript output. See
         SetResolution().
     */
     static int GetResolution();

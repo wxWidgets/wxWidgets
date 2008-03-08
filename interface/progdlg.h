@@ -9,11 +9,11 @@
 /**
     @class wxProgressDialog
     @wxheader{progdlg.h}
-    
+
     This class represents a dialog that shows a short message and a
     progress bar. Optionally, it can display ABORT and SKIP buttons,
     the elapsed, remaining and estimated time for the end of the progress.
-    
+
     @beginStyleTable
     @style{wxPD_APP_MODAL}:
            Make the progress dialog modal. If this flag is not given, it is
@@ -40,7 +40,7 @@
     @style{wxPD_REMAINING_TIME}:
            This flag tells the dialog that it should show remaining time.
     @endStyleTable
-    
+
     @library{wxbase}
     @category{cmndlg}
 */
@@ -52,19 +52,19 @@ public:
         for other windows, or, if wxPD_APP_MODAL flag is not given, for its parent
         window only.
         
-        @param title 
+        @param title
         Dialog title to show in titlebar.
         
-        @param message 
+        @param message
         Message displayed above the progress bar.
         
-        @param maximum 
+        @param maximum
         Maximum value for the progress bar.
         
-        @param parent 
+        @param parent
         Parent window.
         
-        @param style 
+        @param style
         The dialog style. See wxProgressDialog.
     */
     wxProgressDialog(const wxString& title, const wxString& message,
@@ -103,16 +103,16 @@ public:
         or ask the user for the confirmation and if the abort is not confirmed the
         dialog may be resumed with Resume() function.
         
-        @param value 
+        @param value
         The new value of the progress meter. It should be less than or
         equal to the maximum value given to the constructor and the dialog is closed if
         it is equal to the maximum.
         
-        @param newmsg 
+        @param newmsg
         The new messages for the progress dialog text, if it is
         empty (which is the default) the message is not changed.
         
-        @param skip 
+        @param skip
         If "Skip" button was pressed since last
         Update call, this is set to @true.
     */

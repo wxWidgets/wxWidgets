@@ -9,19 +9,19 @@
 /**
     @class wxComboBox
     @wxheader{combobox.h}
-    
+
     A combobox is like a combination of an edit control and a listbox. It can be
     displayed as static list with editable or read-only text field; or a drop-down
     list with
     text field; or a drop-down list without a text field.
-    
+
     A combobox permits a single selection only. Combobox items are numbered from
     zero.
-    
+
     If you need a customized combobox, have a look at wxComboCtrl,
     wxOwnerDrawnComboBox, wxComboPopup
     and the ready-to-use wxBitmapComboBox.
-    
+
     @beginStyleTable
     @style{wxCB_SIMPLE}:
            Creates a combobox with a permanently displayed list. Windows only.
@@ -39,7 +39,7 @@
            control or used for navigation between dialog controls). Windows
            only.
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_COMBOBOX(id\, func)}:
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
@@ -53,11 +53,11 @@
            the combobox (notice that the combobox must have been created with
            wxTE_PROCESS_ENTER style to receive this event).
     @endEventTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{combobox.png}
-    
+
     @seealso
     wxListBox, wxTextCtrl, wxChoice, wxCommandEvent
 */
@@ -68,57 +68,57 @@ public:
     /**
         Constructor, creating and showing a combobox.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param value 
+        @param value
         Initial selection string. An empty string indicates no selection.
         
-        @param pos 
+        @param pos
         Window position.
         
-        @param size 
+        @param size
         Window size. If wxDefaultSize is specified then the window is sized
         appropriately.
         
-        @param n 
+        @param n
         Number of strings with which to initialise the control.
         
-        @param choices 
+        @param choices
         An array of strings with which to initialise the control.
         
-        @param style 
+        @param style
         Window style. See wxComboBox.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxComboBox();
-        wxComboBox(wxWindow* parent, wxWindowID id,
-                   const wxString& value = "",
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   int n = 0,
-                   const wxString choices[] = @NULL,
-                   long style = 0,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = "comboBox");
-        wxComboBox(wxWindow* parent, wxWindowID id,
-                   const wxString& value,
-                   const wxPoint& pos,
-                   const wxSize& size,
-                   const wxArrayString& choices,
-                   long style = 0,
-                   const wxValidator& validator = wxDefaultValidator,
-                   const wxString& name = "comboBox");
+    wxComboBox(wxWindow* parent, wxWindowID id,
+               const wxString& value = "",
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int n = 0,
+               const wxString choices[] = @NULL,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = "comboBox");
+    wxComboBox(wxWindow* parent, wxWindowID id,
+               const wxString& value,
+               const wxPoint& pos,
+               const wxSize& size,
+               const wxArrayString& choices,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = "comboBox");
     //@}
 
     /**
@@ -178,14 +178,14 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "comboBox");
-        bool Create(wxWindow* parent, wxWindowID id,
-                    const wxString& value,
-                    const wxPoint& pos,
-                    const wxSize& size,
-                    const wxArrayString& choices,
-                    long style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = "comboBox");
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxString& value,
+                const wxPoint& pos,
+                const wxSize& size,
+                const wxArrayString& choices,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = "comboBox");
     //@}
 
     /**
@@ -194,7 +194,7 @@ public:
 #define void Cut()     /* implementation is private */
 
     /**
-        This function does the same things as 
+        This function does the same things as
         wxChoice::GetCurrentSelection and
         returns the item currently selected in the dropdown list if it's open or the
         same thing as wxControlWithItems::GetSelection otherwise.
@@ -215,7 +215,7 @@ public:
     virtual wxTextPos GetLastPosition();
 
     /**
-        This is the same as wxTextCtrl::GetSelection 
+        This is the same as wxTextCtrl::GetSelection
         for the text control which is part of the combobox. Notice that this is a
         different method from wxControlWithItems::GetSelection.
         
@@ -241,10 +241,10 @@ public:
     /**
         Removes the text between the two positions in the combobox text field.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The last position.
     */
     void Remove(long from, long to);
@@ -253,13 +253,13 @@ public:
         Replaces the text between two positions with the given text, in the combobox
         text field.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The second position.
         
-        @param text 
+        @param text
         The text to insert.
     */
     void Replace(long from, long to, const wxString& text);
@@ -267,7 +267,7 @@ public:
     /**
         Sets the insertion point in the combobox text field.
         
-        @param pos 
+        @param pos
         The new insertion point.
     */
     void SetInsertionPoint(long pos);
@@ -280,10 +280,10 @@ public:
     /**
         Selects the text between the two positions, in the combobox text field.
         
-        @param from 
+        @param from
         The first position.
         
-        @param to 
+        @param to
         The second position.
     */
     void SetSelection(long from, long to);
@@ -294,7 +294,7 @@ public:
         @b NB: For a combobox with @c wxCB_READONLY style the string must be in
         the combobox choices list, otherwise the call to SetValue() is ignored.
         
-        @param text 
+        @param text
         The text to set.
     */
     void SetValue(const wxString& text);

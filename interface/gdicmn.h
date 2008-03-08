@@ -9,18 +9,18 @@
 /**
     @class wxRealPoint
     @wxheader{gdicmn.h}
-    
+
     A @b wxRealPoint is a useful data structure for graphics operations.
     It contains floating point @e x and @e y members.
     See also wxPoint for an integer version.
-    
+
     @library{wxcore}
     @category{data}
-    
+
     @seealso
     wxPoint
 */
-class wxRealPoint 
+class wxRealPoint
 {
 public:
     //@{
@@ -34,7 +34,7 @@ public:
         Members of the @b wxRealPoint object.
     */
     wxRealPoint();
-        wxRealPoint(double x, double y);
+    wxRealPoint(double x, double y);
     //@}
 };
 
@@ -42,16 +42,16 @@ public:
 /**
     @class wxRect
     @wxheader{gdicmn.h}
-    
+
     A class for manipulating rectangles.
-    
+
     @library{wxcore}
     @category{data}
-    
+
     @seealso
     wxPoint, wxSize
 */
-class wxRect 
+class wxRect
 {
 public:
     //@{
@@ -59,22 +59,22 @@ public:
         Creates a wxRect object from size values at the origin.
     */
     wxRect();
-        wxRect(int x, int y, int width, int height);
-        wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
-        wxRect(const wxPoint& pos, const wxSize& size);
-        wxRect(const wxSize& size);
+    wxRect(int x, int y, int width, int height);
+    wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
+    wxRect(const wxPoint& pos, const wxSize& size);
+    wxRect(const wxSize& size);
     //@}
 
     //@{
     /**
         Returns the rectangle having the same size as this one but centered relatively
         to the given rectangle @e r. By default, rectangle is centred in both
-        directions but if @e dir includes only @c wxVERTICAL or only 
+        directions but if @e dir includes only @c wxVERTICAL or only
         @c wxHORIZONTAL flag, then it is only centered in this direction while
         the other component of its position remains unchanged.
     */
     wxRect CentreIn(const wxRect& r, int dir = wxBOTH);
-        wxRect CenterIn(const wxRect& r, int dir = wxBOTH);
+    wxRect CenterIn(const wxRect& r, int dir = wxBOTH);
     //@}
 
     //@{
@@ -83,8 +83,8 @@ public:
         (or touches its boundary) and @false otherwise.
     */
     bool Contains(int x, int y);
-        bool Contains(const wxPoint& pt);
-        bool Contains(const wxRect& rect);
+    bool Contains(const wxPoint& pt);
+    bool Contains(const wxRect& rect);
     //@}
 
     //@{
@@ -98,9 +98,9 @@ public:
         @sa Inflate()
     */
     void Deflate(wxCoord dx, wxCoord dy);
-        void Deflate(const wxSize& diff);
-        void Deflate(wxCoord diff);
-        wxRect Deflate(wxCoord dx, wxCoord dy);
+    void Deflate(const wxSize& diff);
+    void Deflate(wxCoord diff);
+    wxRect Deflate(wxCoord dx, wxCoord dy);
     //@}
 
     /**
@@ -151,7 +151,7 @@ public:
     int GetTop();
 
     /**
-        Gets the position of the top left corner of the rectangle, same as 
+        Gets the position of the top left corner of the rectangle, same as
         GetPosition().
     */
     wxPoint GetTopLeft();
@@ -213,9 +213,9 @@ public:
         @sa Deflate()
     */
     void Inflate(wxCoord dx, wxCoord dy);
-        void Inflate(const wxSize& diff);
-        void Inflate(wxCoord diff);
-        wxRect Inflate(wxCoord dx, wxCoord dy);
+    void Inflate(const wxSize& diff);
+    void Inflate(wxCoord diff);
+    wxRect Inflate(wxCoord dx, wxCoord dy);
     //@}
 
     //@{
@@ -225,7 +225,7 @@ public:
         other one modifies this rectangle in place.
     */
     wxRect Intersect(const wxRect& rect);
-        wxRect Intersect(const wxRect& rect);
+    wxRect Intersect(const wxRect& rect);
     //@}
 
     /**
@@ -235,7 +235,7 @@ public:
     bool Intersects(const wxRect& rect);
 
     /**
-        Returns @true if this rectangle has a width or height less than or equal to 
+        Returns @true if this rectangle has a width or height less than or equal to
         0 and @false otherwise.
     */
     bool IsEmpty();
@@ -247,7 +247,7 @@ public:
         bottom, otherwise it is moved to the left or top respectively.
     */
     void Offset(wxCoord dx, wxCoord dy);
-        void Offset(const wxPoint& pt);
+    void Offset(const wxPoint& pt);
     //@}
 
     /**
@@ -284,7 +284,7 @@ public:
         other one modifies this rectangle in place.
     */
     wxRect Union(const wxRect& rect);
-        wxRect Union(const wxRect& rect);
+    wxRect Union(const wxRect& rect);
     //@}
 
     /**
@@ -299,11 +299,11 @@ public:
         Returns the intersection of two rectangles (which may be empty).
     */
     bool operator !=(const wxRect& r1, const wxRect& r2);
-        wxRect operator +(const wxRect& r1, const wxRect& r2);
-        wxRect operator +=(const wxRect& r);
-        See also wxRect  operator *(const wxRect& r1,
-                                    const wxRect& r2);
-        wxRect operator *=(const wxRect& r);
+    wxRect operator +(const wxRect& r1, const wxRect& r2);
+    wxRect operator +=(const wxRect& r);
+    See also wxRect  operator *(const wxRect& r1,
+                                const wxRect& r2);
+    wxRect operator *=(const wxRect& r);
     //@}
 
     /**
@@ -341,12 +341,12 @@ public:
 /**
     @class wxBrushList
     @wxheader{gdicmn.h}
-    
+
     A brush list is a list containing all brushes which have been created.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @seealso
     wxBrush
 */
@@ -364,10 +364,10 @@ public:
         brush, adds it
         to the brush list, and returns it.
         
-        @param colour 
+        @param colour
         Colour object.
         
-        @param style 
+        @param style
         Brush style. See wxBrush::SetStyle for a list of styles.
     */
     wxBrush * FindOrCreateBrush(const wxColour& colour,
@@ -378,19 +378,19 @@ public:
 /**
     @class wxPoint
     @wxheader{gdicmn.h}
-    
+
     A @b wxPoint is a useful data structure for graphics operations.
     It simply contains integer @e x and @e y members.
-    
+
     See also wxRealPoint for a floating point version.
-    
+
     @library{wxcore}
     @category{data}
-    
+
     @seealso
     wxRealPoint
 */
-class wxPoint 
+class wxPoint
 {
 public:
     //@{
@@ -398,7 +398,7 @@ public:
         Create a point.
     */
     wxPoint();
-        wxPoint(int x, int y);
+    wxPoint(int x, int y);
     //@}
 
     //@{
@@ -407,18 +407,18 @@ public:
         wxSize object.
     */
     void operator =(const wxPoint& pt);
-        bool operator ==(const wxPoint& p1, const wxPoint& p2);
-        bool operator !=(const wxPoint& p1, const wxPoint& p2);
-        wxPoint operator +(const wxPoint& p1, const wxPoint& p2);
-        wxPoint operator -(const wxPoint& p1, const wxPoint& p2);
-        wxPoint operator +=(const wxPoint& pt);
-        wxPoint operator -=(const wxPoint& pt);
-        wxPoint operator +(const wxPoint& pt, const wxSize& sz);
-        wxPoint operator -(const wxPoint& pt, const wxSize& sz);
-        wxPoint operator +(const wxSize& sz, const wxPoint& pt);
-        wxPoint operator -(const wxSize& sz, const wxPoint& pt);
-        wxPoint operator +=(const wxSize& sz);
-        wxPoint operator -=(const wxSize& sz);
+    bool operator ==(const wxPoint& p1, const wxPoint& p2);
+    bool operator !=(const wxPoint& p1, const wxPoint& p2);
+    wxPoint operator +(const wxPoint& p1, const wxPoint& p2);
+    wxPoint operator -(const wxPoint& p1, const wxPoint& p2);
+    wxPoint operator +=(const wxPoint& pt);
+    wxPoint operator -=(const wxPoint& pt);
+    wxPoint operator +(const wxPoint& pt, const wxSize& sz);
+    wxPoint operator -(const wxPoint& pt, const wxSize& sz);
+    wxPoint operator +(const wxSize& sz, const wxPoint& pt);
+    wxPoint operator -(const wxSize& sz, const wxPoint& pt);
+    wxPoint operator +=(const wxSize& sz);
+    wxPoint operator -=(const wxSize& sz);
     //@}
 
     /**
@@ -439,24 +439,24 @@ public:
 /**
     @class wxColourDatabase
     @wxheader{gdicmn.h}
-    
+
     wxWidgets maintains a database of standard RGB colours for a predefined
     set of named colours (such as "BLACK'', "LIGHT GREY''). The
     application may add to this set if desired by using
     wxColourDatabase::AddColour and may use it to look up
     colours by names using wxColourDatabase::Find or find the names
     for the standard colour suing wxColourDatabase::FindName.
-    
+
     There is one predefined instance of this class called
     @b wxTheColourDatabase.
-    
+
     @library{wxcore}
     @category{FIXME}
-    
+
     @seealso
     wxColour
 */
-class wxColourDatabase 
+class wxColourDatabase
 {
 public:
     /**
@@ -474,7 +474,7 @@ public:
     */
     void AddColour(const wxString& colourName,
                    const wxColour& colour);
-        void AddColour(const wxString& colourName, wxColour* colour);
+    void AddColour(const wxString& colourName, wxColour* colour);
     //@}
 
     /**
@@ -495,7 +495,7 @@ public:
 /**
     @class wxFontList
     @wxheader{gdicmn.h}
-    
+
     A font list is a list containing all fonts which have been created. There
     is only one instance of this class: @b wxTheFontList.  Use this object to search
     for a previously created font of the desired type and create it if not already
@@ -505,10 +505,10 @@ public:
     be
     deleted and their resources freed, eliminating the possibility of 'memory
     leaks'.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @seealso
     wxFont
 */
@@ -537,26 +537,26 @@ public:
 /**
     @class wxSize
     @wxheader{gdicmn.h}
-    
+
     A @b wxSize is a useful data structure for graphics operations.
     It simply contains integer @e width and @e height members.
-    
+
     wxSize is used throughout wxWidgets as well as wxPoint which, although almost
     equivalent to wxSize, has a different meaning: wxPoint represents a position
     while wxSize - the size.
-    
+
     @b wxPython note: wxPython defines aliases for the @c x and @c y members
     named @c width and @c height since it makes much more sense for
     sizes.
-    
-    
+
+
     @library{wxcore}
     @category{data}
-    
+
     @seealso
     wxPoint, wxRealPoint
 */
-class wxSize 
+class wxSize
 {
 public:
     //@{
@@ -564,7 +564,7 @@ public:
         Creates a size object.
     */
     wxSize();
-        wxSize(int width, int height);
+    wxSize(int width, int height);
     //@}
 
     //@{
@@ -578,8 +578,8 @@ public:
         @sa IncBy()
     */
     void DecBy(const wxSize& size);
-        void DecBy(int dx, int dy);
-        void DecBy(int d);
+    void DecBy(int dx, int dy);
+    void DecBy(int d);
     //@}
 
     /**
@@ -611,8 +611,8 @@ public:
         @sa DecBy()
     */
     void IncBy(const wxSize& size);
-        void IncBy(int dx, int dy);
-        void IncBy(int d);
+    void IncBy(int dx, int dy);
+    void IncBy(int d);
     //@}
 
     /**
@@ -639,17 +639,17 @@ public:
         integer.
     */
     void operator =(const wxSize& sz);
-        bool operator ==(const wxSize& s1, const wxSize& s2);
-        bool operator !=(const wxSize& s1, const wxSize& s2);
-        wxSize operator +(const wxSize& s1, const wxSize& s2);
-        wxSize operator -(const wxSize& s1, const wxSize& s2);
-        wxSize operator +=(const wxSize& sz);
-        wxSize operator -=(const wxSize& sz);
-        wxSize operator /(const wxSize& sz, int factor);
-        wxSize operator *(const wxSize& sz, int factor);
-        wxSize operator *(int factor, const wxSize& sz);
-        wxSize operator /=(int factor);
-        wxSize operator *=(int factor);
+    bool operator ==(const wxSize& s1, const wxSize& s2);
+    bool operator !=(const wxSize& s1, const wxSize& s2);
+    wxSize operator +(const wxSize& s1, const wxSize& s2);
+    wxSize operator -(const wxSize& s1, const wxSize& s2);
+    wxSize operator +=(const wxSize& sz);
+    wxSize operator -=(const wxSize& sz);
+    wxSize operator /(const wxSize& sz, int factor);
+    wxSize operator *(const wxSize& sz, int factor);
+    wxSize operator *(int factor, const wxSize& sz);
+    wxSize operator /=(int factor);
+    wxSize operator *=(int factor);
     //@}
 
     /**
@@ -691,7 +691,7 @@ public:
 /**
     @class wxPenList
     @wxheader{gdicmn.h}
-    
+
     There is only one instance of this class: @b wxThePenList.  Use
     this object to search for a previously created pen of the desired
     type and create it if not already found. In some windowing systems,
@@ -700,7 +700,7 @@ public:
     be deleted and their resources freed, eliminating the possibility of
     'memory leaks'. However, it is best not to rely on this automatic
     cleanup because it can lead to double deletion in some circumstances.
-    
+
     There are two mechanisms in recent versions of wxWidgets which make the
     pen list less useful than it once was. Under Windows, scarce resources
     are cleaned up internally if they are not being used. Also, a referencing
@@ -709,23 +709,23 @@ public:
     working out when it is safe delete a pen, because the referencing counting does
     it for you. For example, you can set a pen in a device context, and then
     immediately delete the pen you passed, because the pen is 'copied'.
-    
+
     So you may find it easier to ignore the pen list, and instead create
     and copy pens as you see fit. If your Windows resource meter suggests
     your application is using too many resources, you can resort to using
     GDI lists to share objects explicitly.
-    
+
     The only compelling use for the pen list is for wxWidgets to keep
     track of pens in order to clean them up on exit. It is also kept for
     backward compatibility with earlier versions of wxWidgets.
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @seealso
     wxPen
 */
-class wxPenList 
+class wxPenList
 {
 public:
     /**
@@ -740,22 +740,22 @@ public:
         pen, adds it
         to the pen list, and returns it.
         
-        @param colour 
+        @param colour
         Colour object.
         
-        @param colourName 
+        @param colourName
         Colour name, which should be in the colour database.
         
-        @param width 
+        @param width
         Width of pen.
         
-        @param style 
+        @param style
         Pen style. See wxPen::wxPen for a list of styles.
     */
     wxPen* FindOrCreatePen(const wxColour& colour, int width,
                            int style);
-        wxPen* FindOrCreatePen(const wxString& colourName, int width,
-                               int style);
+    wxPen* FindOrCreatePen(const wxString& colourName, int width,
+                           int style);
     //@}
 };
 
@@ -773,7 +773,7 @@ public:
 */
 void wxClientDisplayRect(int * x, int * y, int * width,
                          int * height);
-    wxRect wxGetClientDisplayRect();
+wxRect wxGetClientDisplayRect();
 //@}
 
 //@{
@@ -781,7 +781,7 @@ void wxClientDisplayRect(int * x, int * y, int * width,
     Returns the display size in pixels.
 */
 void wxDisplaySize(int * width, int * height);
-    wxSize wxGetDisplaySize();
+wxSize wxGetDisplaySize();
 //@}
 
 //@{
@@ -789,14 +789,14 @@ void wxDisplaySize(int * width, int * height);
     Returns the display size in millimeters.
 */
 void wxDisplaySizeMM(int * width, int * height);
-    wxSize wxGetDisplaySizeMM();
+wxSize wxGetDisplaySizeMM();
 //@}
 
 /**
     This macro loads an icon from either application resources (on the platforms
     for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
     avoid using @c #ifdefs when creating icons.
-    
+
     @sa @ref overview_wxbitmapoverview "Bitmaps and icons overview", wxBITMAP
 */
 #define wxICON()     /* implementation is private */
@@ -810,7 +810,7 @@ bool wxColourDisplay();
     This macro loads a bitmap from either application resources (on the platforms
     for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
     avoid using @c #ifdefs when creating bitmaps.
-    
+
     @sa @ref overview_wxbitmapoverview "Bitmaps and icons overview", wxICON
 */
 #define wxBITMAP()     /* implementation is private */

@@ -9,24 +9,24 @@
 /**
     @class wxStaticBox
     @wxheader{statbox.h}
-    
+
     A static box is a rectangle drawn around other panel items to denote
     a logical grouping of items.
-    
+
     Please note that a static box should @b not be used as the parent for the
     controls it contains, instead they should be siblings of each other. Although
     using a static box as a parent might work in some versions of wxWidgets, it
-    results in a crash under, for example, wxGTK. 
-    
-    Also, please note that because of this, the order in which you create new 
-    controls is important. Create your wxStaticBox control @b before any 
-    siblings that are to appear inside the wxStaticBox in order to preserve the 
+    results in a crash under, for example, wxGTK.
+
+    Also, please note that because of this, the order in which you create new
+    controls is important. Create your wxStaticBox control @b before any
+    siblings that are to appear inside the wxStaticBox in order to preserve the
     correct Z-Order of controls.
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{staticbox.png}
-    
+
     @seealso
     wxStaticText
 */
@@ -37,37 +37,37 @@ public:
     /**
         Constructor, creating and showing a static box.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Window identifier. The value wxID_ANY indicates a default value.
         
-        @param label 
+        @param label
         Text to be displayed in the static box, the empty string for no label.
         
-        @param pos 
+        @param pos
         Window position. If wxDefaultPosition is specified then a default position
         is chosen.
         
-        @param size 
+        @param size
         Checkbox size. If the size (-1, -1) is specified then a default size is chosen.
         
-        @param style 
+        @param style
         Window style. See wxStaticBox.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create()
     */
     wxStaticBox();
-        wxStaticBox(wxWindow* parent, wxWindowID id,
-                    const wxString& label,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = 0,
-                    const wxString& name = "staticBox");
+    wxStaticBox(wxWindow* parent, wxWindowID id,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = "staticBox");
     //@}
 
     /**

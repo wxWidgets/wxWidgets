@@ -9,12 +9,12 @@
 /**
     @class wxConfigBase
     @wxheader{config.h}
-    
+
     wxConfigBase class defines the basic interface of all config classes. It can
     not be used by itself (it is an abstract base class) and you will always use one
     of its derivations: wxFileConfig,
     wxRegConfig or any other.
-    
+
     However, usually you don't even need to know the precise nature of the class
     you're working with but you would just use the wxConfigBase methods. This
     allows you to write the same code regardless of whether you're working with
@@ -24,13 +24,13 @@
     which is mapped onto the native wxConfigBase implementation on the given
     platform: i.e. wxRegConfig under Win32 and
     wxFileConfig otherwise.
-    
+
     See @ref overview_wxconfigoverview "config overview" for the descriptions of all
     features of this class.
-    
-    It is highly recommended to use static functions @e Get() and/or @e Set(), 
+
+    It is highly recommended to use static functions @e Get() and/or @e Set(),
     so please have a @ref overview_wxconfigstaticfunctions "look at them."
-    
+
     @library{wxbase}
     @category{misc}
 */
@@ -43,26 +43,26 @@ public:
         This is the default and only constructor of the wxConfigBase class, and
         derived classes.
         
-        @param appName 
+        @param appName
         The application name. If this is empty, the class will
         normally use wxApp::GetAppName to set it. The
         application name is used in the registry key on Windows, and can be used to
         deduce the local filename parameter if that is missing.
         
-        @param vendorName 
+        @param vendorName
         The vendor name. If this is empty, it is assumed that
         no vendor name is wanted, if this is optional for the current config class.
         The vendor name is appended to the application name for wxRegConfig.
         
-        @param localFilename 
+        @param localFilename
         Some config classes require a local filename. If this
         is not present, but required, the application name will be used instead.
         
-        @param globalFilename 
+        @param globalFilename
         Some config classes require a global filename. If
         this is not present, but required, the application name will be used instead.
         
-        @param style 
+        @param style
         Can be one of wxCONFIG_USE_LOCAL_FILE and
         wxCONFIG_USE_GLOBAL_FILE. The style interpretation depends on the config
         class and is ignored by some implementations. For wxFileConfig, these styles
@@ -91,17 +91,17 @@ public:
         For wxFileConfig, you can also add wxCONFIG_USE_NO_ESCAPE_CHARACTERS which
         will turn off character escaping for the values of entries stored in the config
         file: for example a foo key with some backslash characters will be stored
-        as foo=C:\mydir instead of the usual storage of 
+        as foo=C:\mydir instead of the usual storage of
         foo=C:\\mydir.
         
-        The wxCONFIG_USE_NO_ESCAPE_CHARACTERS style can be helpful if your config 
-        file must be read or written to by a non-wxWidgets program (which might not 
-        understand the escape characters). Note, however, that if 
-        wxCONFIG_USE_NO_ESCAPE_CHARACTERS style is used, it is is now 
-        your application's responsibility to ensure that there is no newline or 
+        The wxCONFIG_USE_NO_ESCAPE_CHARACTERS style can be helpful if your config
+        file must be read or written to by a non-wxWidgets program (which might not
+        understand the escape characters). Note, however, that if
+        wxCONFIG_USE_NO_ESCAPE_CHARACTERS style is used, it is is now
+        your application's responsibility to ensure that there is no newline or
         other illegal characters in a value, before writing that value to the file.
         
-        @param conv 
+        @param conv
         This parameter is only used by wxFileConfig when compiled
         in Unicode mode. It specifies the encoding in which the configuration file
         is written.
@@ -419,21 +419,21 @@ public:
         Returns a boolean
     */
     bool Read(const wxString& key, wxString* str);
-        bool Read(const wxString& key, wxString* str,
-                  const wxString& defaultVal);
-        wxString Read(const wxString& key,
-                      const
-wxString& defaultVal);
-        bool Read(const wxString& key, long* l);
-        bool Read(const wxString& key, long* l, long defaultVal);
-        bool Read(const wxString& key, double* d);
-        bool Read(const wxString& key, double* d, double defaultVal);
-        bool Read(const wxString& key, bool* b);
-        bool Read(const wxString& key, bool* d, bool defaultVal);
-        bool Read(const wxString& key, wxMemoryBuffer* buf);
-        bool Read(const wxString& key, T* value);
-        bool Read(const wxString& key, T* value,
-                  T const& defaultVal);
+    bool Read(const wxString& key, wxString* str,
+              const wxString& defaultVal);
+    wxString Read(const wxString& key,
+                  const
+                  wxString& defaultVal);
+    bool Read(const wxString& key, long* l);
+    bool Read(const wxString& key, long* l, long defaultVal);
+    bool Read(const wxString& key, double* d);
+    bool Read(const wxString& key, double* d, double defaultVal);
+    bool Read(const wxString& key, bool* b);
+    bool Read(const wxString& key, bool* d, bool defaultVal);
+    bool Read(const wxString& key, wxMemoryBuffer* buf);
+    bool Read(const wxString& key, T* value);
+    bool Read(const wxString& key, T* value,
+              T const& defaultVal);
     //@}
 
     /**
@@ -456,7 +456,7 @@ wxString& defaultVal);
 
     /**
         Reads a value of type T, for which function
-        wxFromString is defined, from the key and returns it. 
+        wxFromString is defined, from the key and returns it.
         @e defaultVal is returned if the key is not found.
     */
     T ReadObject(const wxString& key, T const& defaultVal);
@@ -597,10 +597,10 @@ wxString& defaultVal);
         Writes a boolean
     */
     bool Write(const wxString& key, const wxString& value);
-        bool Write(const wxString& key, long value);
-        bool Write(const wxString& key, double value);
-        bool Write(const wxString& key, bool value);
-        bool Write(const wxString& key, const wxMemoryBuffer& buf);
-        bool Write(const wxString& key, const T& buf);
+    bool Write(const wxString& key, long value);
+    bool Write(const wxString& key, double value);
+    bool Write(const wxString& key, bool value);
+    bool Write(const wxString& key, const wxMemoryBuffer& buf);
+    bool Write(const wxString& key, const T& buf);
     //@}
 };

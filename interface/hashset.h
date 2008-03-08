@@ -9,16 +9,16 @@
 /**
     @class wxHashSet
     @wxheader{hashset.h}
-    
+
     This is a simple, type-safe, and reasonably efficient hash set class,
     whose interface is a subset of the interface of STL containers. In
     particular, the interface is modeled after std::set, and the various,
     non-standard, std::hash_map.
-    
+
     @library{wxbase}
     @category{FIXME}
 */
-class wxHashSet 
+class wxHashSet
 {
 public:
     //@{
@@ -26,7 +26,7 @@ public:
         Copy constructor.
     */
     wxHashSet(size_type size = 10);
-        wxHashSet(const wxHashSet& set);
+    wxHashSet(const wxHashSet& set);
     //@}
 
     //@{
@@ -35,7 +35,7 @@ public:
         Please remember that hash sets do not guarantee ordering.
     */
     const_iterator begin();
-        iterator begin();
+    iterator begin();
     //@}
 
     /**
@@ -60,7 +60,7 @@ public:
         Please remember that hash sets do not guarantee ordering.
     */
     const_iterator end();
-        iterator end();
+    iterator end();
     //@}
 
     //@{
@@ -69,8 +69,8 @@ public:
         the iterator is no longer valid and must not be used.
     */
     size_type erase(const key_type& key);
-        void erase(iterator it);
-        void erase(const_iterator it);
+    void erase(iterator it);
+    void erase(const_iterator it);
     //@}
 
     //@{
@@ -80,7 +80,7 @@ public:
         is returned (i.e. hashset.find( non_existent_key ) == hashset.end()).
     */
     iterator find(const key_type& key);
-        const_iterator find(const key_type& key);
+    const_iterator find(const key_type& key);
     //@}
 
     /**

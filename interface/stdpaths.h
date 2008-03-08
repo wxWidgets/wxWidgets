@@ -9,42 +9,42 @@
 /**
     @class wxStandardPaths
     @wxheader{stdpaths.h}
-    
+
     wxStandardPaths returns the standard locations in the file system and should be
     used by applications to find their data files in a portable way.
-    
+
     In the description of the methods below, the example return values are given
     for the Unix, Windows and Mac OS X systems, however please note that these are
     just the examples and the actual values may differ. For example, under Windows:
     the system administrator may change the standard directories locations, i.e.
     the Windows directory may be named @c W:\Win2003 instead of
     the default @c C:\Windows.
-    
+
     The strings @c @e appname and @c @e username should be
     replaced with the value returned by wxApp::GetAppName
     and the name of the currently logged in user, respectively. The string
     @c @e prefix is only used under Unix and is @c /usr/local by
     default but may be changed using wxStandardPaths::SetInstallPrefix.
-    
+
     The directories returned by the methods of this class may or may not exist. If
     they don't exist, it's up to the caller to create them, wxStandardPaths doesn't
     do it.
-    
+
     Finally note that these functions only work with standardly packaged
     applications. I.e. under Unix you should follow the standard installation
     conventions and under Mac you should create your application bundle according
     to the Apple guidelines. Again, this class doesn't help you to do it.
-    
+
     This class is MT-safe: its methods may be called concurrently from different
     threads without additional locking.
-    
+
     @library{wxbase}
     @category{file}
-    
+
     @seealso
     wxFileConfig
 */
-class wxStandardPaths 
+class wxStandardPaths
 {
 public:
     /**

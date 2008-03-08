@@ -9,11 +9,11 @@
 /**
     @class wxDateEvent
     @wxheader{dateevt.h}
-    
+
     This event class holds information about a date change and is used together
     with wxDatePickerCtrl. It also serves as a base class
     for wxCalendarEvent.
-    
+
     @library{wxadv}
     @category{events}
 */

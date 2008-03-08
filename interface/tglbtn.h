@@ -9,17 +9,17 @@
 /**
     @class wxBitmapToggleButton
     @wxheader{tglbtn.h}
-    
+
     wxBitmapToggleButton is a wxToggleButton
     that contains a bitmap instead of text.
-    
+
     This control emits an update UI event.
-    
+
     @beginEventTable
     @event{EVT_TOGGLEBUTTON(id\, func)}:
            Handles a toggle button click event.
     @endEventTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{bitmaptogglebutton.png}
@@ -33,13 +33,13 @@ public:
         Internally calls Create().
     */
     wxBitmapToggleButton();
-        wxBitmapToggleButton(wxWindow* parent, wxWindowID id,
-                             const wxBitmap& label,
-                             const wxPoint& pos = wxDefaultPosition,
-                             const wxSize& size = wxDefaultSize,
-                             long style = 0,
-                             const wxValidator& val,
-                             const wxString& name = "checkBox");
+    wxBitmapToggleButton(wxWindow* parent, wxWindowID id,
+                         const wxBitmap& label,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = 0,
+                         const wxValidator& val,
+                         const wxString& name = "checkBox");
     //@}
 
     /**
@@ -64,7 +64,7 @@ public:
         Sets the toggle button to the given state. This does not cause a
         @c EVT_TOGGLEBUTTON event to be emitted.
         
-        @param state 
+        @param state
         If @true, the button is pressed.
     */
     void SetValue(bool state);
@@ -74,25 +74,25 @@ public:
 /**
     @class wxToggleButton
     @wxheader{tglbtn.h}
-    
+
     wxToggleButton is a button that stays pressed when clicked by the user. In
     other words, it is similar to wxCheckBox in
     functionality but looks like a wxButton.
-    
+
     Since wxWidgets version 2.9.0 this control emits an update UI event.
-    
+
     You can see wxToggleButton in action in the sixth page of the
     controls sample.
-    
+
     @beginEventTable
     @event{EVT_TOGGLEBUTTON(id\, func)}:
            Handles a toggle button click event.
     @endEventTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{togglebutton.png}
-    
+
     @seealso
     wxCheckBox, wxButton, wxBitmapToggleButton
 */
@@ -103,42 +103,42 @@ public:
     /**
         Constructor, creating and showing a toggle button.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Toggle button identifier. The value wxID_ANY indicates a default value.
         
-        @param label 
+        @param label
         Text to be displayed next to the toggle button.
         
-        @param pos 
+        @param pos
         Toggle button position. If wxDefaultPosition is specified then a default
         position is chosen.
         
-        @param size 
+        @param size
         Toggle button size. If wxDefaultSize is specified then a default
         size is chosen.
         
-        @param style 
+        @param style
         Window style. See wxToggleButton.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxToggleButton();
-        wxToggleButton(wxWindow* parent, wxWindowID id,
-                       const wxString& label,
-                       const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& size = wxDefaultSize,
-                       long style = 0,
-                       const wxValidator& val,
-                       const wxString& name = "checkBox");
+    wxToggleButton(wxWindow* parent, wxWindowID id,
+                   const wxString& label,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   const wxValidator& val,
+                   const wxString& name = "checkBox");
     //@}
 
     /**
@@ -169,7 +169,7 @@ public:
         Sets the toggle button to the given state. This does not cause a
         @c EVT_TOGGLEBUTTON event to be emitted.
         
-        @param state 
+        @param state
         If @true, the button is pressed.
     */
     void SetValue(bool state);

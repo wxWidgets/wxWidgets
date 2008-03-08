@@ -9,12 +9,12 @@
 /**
     @class wxCheckBox
     @wxheader{checkbox.h}
-    
+
     A checkbox is a labelled box which by default is either on (checkmark is
     visible) or off (no checkmark). Optionally (when the wxCHK_3STATE style flag
     is set) it can have a third state, called the mixed or undetermined state.
     Often this is used as a "Does Not Apply" state.
-    
+
     @beginStyleTable
     @style{wxCHK_2STATE}:
            Create a 2-state checkbox. This is the default.
@@ -28,17 +28,17 @@
     @style{wxALIGN_RIGHT}:
            Makes the text appear on the left of the checkbox.
     @endStyleTable
-    
+
     @beginEventTable
     @event{EVT_CHECKBOX(id\, func)}:
            Process a wxEVT_COMMAND_CHECKBOX_CLICKED event, when the checkbox
            is clicked.
     @endEventTable
-    
+
     @library{wxcore}
     @category{ctrl}
     @appearance{checkbox.png}
-    
+
     @seealso
     wxRadioButton, wxCommandEvent
 */
@@ -49,42 +49,42 @@ public:
     /**
         Constructor, creating and showing a checkbox.
         
-        @param parent 
+        @param parent
         Parent window. Must not be @NULL.
         
-        @param id 
+        @param id
         Checkbox identifier. The value wxID_ANY indicates a default value.
         
-        @param label 
+        @param label
         Text to be displayed next to the checkbox.
         
-        @param pos 
+        @param pos
         Checkbox position. If wxDefaultPosition is specified then a default
         position is chosen.
         
-        @param size 
+        @param size
         Checkbox size. If wxDefaultSize is specified then a default size is
         chosen.
         
-        @param style 
+        @param style
         Window style. See wxCheckBox.
         
-        @param validator 
+        @param validator
         Window validator.
         
-        @param name 
+        @param name
         Window name.
         
         @sa Create(), wxValidator
     */
     wxCheckBox();
-        wxCheckBox(wxWindow* parent, wxWindowID id,
-                   const wxString& label,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = 0,
-                   const wxValidator& val,
-                   const wxString& name = "checkBox");
+    wxCheckBox(wxWindow* parent, wxWindowID id,
+               const wxString& label,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxValidator& val,
+               const wxString& name = "checkBox");
     //@}
 
     /**
@@ -140,8 +140,8 @@ public:
     bool Is3rdStateAllowedForUser();
 
     /**
-        This is just a maybe more readable synonym for 
-        GetValue(): just as the latter, it returns 
+        This is just a maybe more readable synonym for
+        GetValue(): just as the latter, it returns
         @true if the checkbox is checked and @false otherwise.
     */
     bool IsChecked();
@@ -150,7 +150,7 @@ public:
         Sets the checkbox to the given state. This does not cause a
         wxEVT_COMMAND_CHECKBOX_CLICKED event to get emitted.
         
-        @param state 
+        @param state
         If @true, the check is on, otherwise it is off.
     */
     void SetValue(bool state);

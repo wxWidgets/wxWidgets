@@ -9,27 +9,27 @@
 /**
     @class wxDC
     @wxheader{dc.h}
-    
+
     A wxDC is a @e device context onto which graphics and text can be drawn.
     It is intended to represent a number of output devices in a generic way,
     so a window can have a device context associated with it, and a printer also
     has a device context.
     In this way, the same piece of code may write to a number of different devices,
     if the device context is used as a parameter.
-    
+
     Notice that wxDC is an abstract base class and can't be created directly,
-    please use wxPaintDC, wxClientDC, 
-    wxWindowDC, wxScreenDC, 
+    please use wxPaintDC, wxClientDC,
+    wxWindowDC, wxScreenDC,
     wxMemoryDC or wxPrinterDC.
-    
+
     Please note that in addition to the versions of the methods documented here,
     there are also versions which accept single @c wxPoint parameter instead of
     two @c wxCoord ones or @c wxPoint and @c wxSize instead of four of
     them.
-    
+
     @library{wxcore}
     @category{dc}
-    
+
     @seealso
     Overview
 */
@@ -41,31 +41,31 @@ public:
         coordinates, size of area to copy, source DC, source coordinates,
         logical function, whether to use a bitmap mask, and mask source position.
         
-        @param xdest 
+        @param xdest
         Destination device context x position.
         
-        @param ydest 
+        @param ydest
         Destination device context y position.
         
-        @param width 
+        @param width
         Width of source area to be copied.
         
-        @param height 
+        @param height
         Height of source area to be copied.
         
-        @param source 
+        @param source
         Source device context.
         
-        @param xsrc 
+        @param xsrc
         Source device context x position.
         
-        @param ysrc 
+        @param ysrc
         Source device context y position.
         
-        @param logicalFunc 
+        @param logicalFunc
         Logical function to use: see SetLogicalFunction().
         
-        @param useMask 
+        @param useMask
         If @true, Blit does a transparent blit using the mask that is associated with
         the bitmap
         selected into the source device context. The Windows implementation does the
@@ -93,13 +93,13 @@ public:
         whether MaskBlt
         or the explicit mask blitting code above is used, by using wxSystemOptions and
         setting the no-maskblt option to 1.
-        @param xsrcMask 
+        @param xsrcMask
         Source x position on the mask. If both xsrcMask and ysrcMask are -1, xsrc and
         ysrc
         will be assumed for the mask source position. Currently only implemented on
         Windows.
         
-        @param ysrcMask 
+        @param ysrcMask
         Source y position on the mask. If both xsrcMask and ysrcMask are -1, xsrc and
         ysrc
         will be assumed for the mask source position. Currently only implemented on
@@ -118,8 +118,8 @@ public:
               wxCoord ysrcMask = -1);
 
     /**
-        Adds the specified point to the bounding box which can be retrieved with 
-        MinX(), MaxX() and 
+        Adds the specified point to the bounding box which can be retrieved with
+        MinX(), MaxX() and
         MinY(), MaxY() functions.
         
         @sa ResetBoundingBox()
@@ -133,7 +133,7 @@ public:
 
     /**
         Performs all necessary computations for given platform and context type
-        after each change of scale and origin parameters. Usually called automatically 
+        after each change of scale and origin parameters. Usually called automatically
         internally after such changes.
     */
     virtual void ComputeScaleAndOrigin();
@@ -198,7 +198,7 @@ public:
         draw the foreground
         of the bitmap (all bits set to 1), and the current text background colour to
         draw the background
-        (all bits set to 0). See also SetTextForeground(), 
+        (all bits set to 0). See also SetTextForeground(),
         SetTextBackground() and wxMemoryDC.
     */
     void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y,
@@ -210,7 +210,7 @@ public:
     */
     void DrawCheckMark(wxCoord x, wxCoord y, wxCoord width,
                        wxCoord height);
-        void DrawCheckMark(const wxRect & rect);
+    void DrawCheckMark(const wxRect & rect);
     //@}
 
     //@{
@@ -220,7 +220,7 @@ public:
         @sa DrawEllipse()
     */
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
-        void DrawCircle(const wxPoint& pt, wxCoord radius);
+    void DrawCircle(const wxPoint& pt, wxCoord radius);
     //@}
 
     //@{
@@ -233,8 +233,8 @@ public:
     */
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width,
                      wxCoord height);
-        void DrawEllipse(const wxPoint& pt, const wxSize& size);
-        void DrawEllipse(const wxRect& rect);
+    void DrawEllipse(const wxPoint& pt, const wxSize& size);
+    void DrawEllipse(const wxRect& rect);
     //@}
 
     /**
@@ -281,9 +281,9 @@ public:
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
                            wxRect * rectBounding = @NULL);
-        void DrawLabel(const wxString& text, const wxRect& rect,
-                       int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                       int indexAccel = -1);
+    void DrawLabel(const wxString& text, const wxRect& rect,
+                   int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                   int indexAccel = -1);
     //@}
 
     /**
@@ -302,9 +302,9 @@ public:
     */
     void DrawLines(int n, wxPoint points[], wxCoord xoffset = 0,
                    wxCoord yoffset = 0);
-        void DrawLines(const wxPointList * points,
-                       wxCoord xoffset = 0,
-                       wxCoord yoffset = 0);
+    void DrawLines(const wxPointList * points,
+                   wxCoord xoffset = 0,
+                   wxCoord yoffset = 0);
     //@}
 
     /**
@@ -321,8 +321,8 @@ public:
         of this function (Windows and PostScript-based wxDC currently), this is more
         efficient than using DrawPolygon() in a loop.
         
-        @e n specifies the number of polygons to draw, the array @e count of size 
-        @e n specifies the number of points in each of the polygons in the 
+        @e n specifies the number of polygons to draw, the array @e count of size
+        @e n specifies the number of points in each of the polygons in the
         @e points array.
         
         The last argument specifies the fill rule: @b wxODDEVEN_RULE (the default)
@@ -358,10 +358,10 @@ public:
     void DrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0,
                      wxCoord yoffset = 0,
                      int fill_style = wxODDEVEN_RULE);
-        void DrawPolygon(const wxPointList * points,
-                         wxCoord xoffset = 0,
-                         wxCoord yoffset = 0,
-                         int fill_style = wxODDEVEN_RULE);
+    void DrawPolygon(const wxPointList * points,
+                     wxCoord xoffset = 0,
+                     wxCoord yoffset = 0,
+                     int fill_style = wxODDEVEN_RULE);
     //@}
 
     /**
@@ -408,11 +408,11 @@ public:
         Draws a three-point spline using the current pen.
     */
     void DrawSpline(int n, wxPoint points[]);
-        void DrawSpline(const wxPointList * points);
-        void DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2,
-                        wxCoord y2,
-                        wxCoord x3,
-                        wxCoord y3);
+    void DrawSpline(const wxPointList * points);
+    void DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2,
+                    wxCoord y2,
+                    wxCoord x3,
+                    wxCoord y3);
     //@}
 
     /**
@@ -424,7 +424,7 @@ public:
         to get the dimensions of a text string, which can be used to position the
         text more precisely.
         
-        @b NB: under wxGTK the current 
+        @b NB: under wxGTK the current
         @ref getlogicalfunction() "logical function" is used by this function
         but it is ignored by wxMSW. Thus, you should avoid using logical functions
         with this function in portable programs.
@@ -500,7 +500,7 @@ public:
 
     /**
         Gets the current font. Notice that even although each device context object has
-        some default font after creation, this method would return a @c wxNullFont 
+        some default font after creation, this method would return a @c wxNullFont
         initially and only after calling SetFont() a valid
         font is returned.
     */
@@ -509,8 +509,8 @@ public:
     /**
         Gets the current layout direction of the device context. On platforms where RTL
         layout
-        is supported, the return value will either be @c wxLayout_LeftToRight or 
-        @c wxLayout_RightToLeft. If RTL layout is not supported, the return value will 
+        is supported, the return value will either be @c wxLayout_LeftToRight or
+        @c wxLayout_RightToLeft. If RTL layout is not supported, the return value will
         be @c wxLayout_Default.
         
         @sa SetLayoutDirection()
@@ -547,7 +547,7 @@ public:
                                 wxCoord * h,
                                 wxCoord * heightLine = @NULL,
                                 wxFont * font = @NULL);
-        wxSize GetMultiLineTextExtent(const wxString& string);
+    wxSize GetMultiLineTextExtent(const wxString& string);
     //@}
 
     /**
@@ -556,13 +556,13 @@ public:
 #define wxSize GetPPI()     /* implementation is private */
 
     /**
-        Fills the @e widths array with the widths from the beginning of 
+        Fills the @e widths array with the widths from the beginning of
         @e text to the corresponding character of @e text.  The generic
         version simply builds a running total of the widths of each character
         using GetTextExtent(), however if the
         various platforms have a native API function that is faster or more
         accurate than the generic implementation then it should be used
-        instead. 
+        instead.
         
         @sa GetMultiLineTextExtent(), GetTextExtent()
     */
@@ -605,7 +605,7 @@ public:
           @c ( width, height )
     */
     void GetSize(wxCoord * width, wxCoord * height);
-        wxSize GetSize();
+    wxSize GetSize();
     //@}
 
     //@{
@@ -613,7 +613,7 @@ public:
         Returns the horizontal and vertical resolution in millimetres.
     */
     void GetSizeMM(wxCoord * width, wxCoord * height);
-        wxSize GetSizeMM();
+    wxSize GetSizeMM();
     //@}
 
     /**
@@ -645,7 +645,7 @@ public:
                        wxCoord * descent = @NULL,
                        wxCoord * externalLeading = @NULL,
                        const wxFont * font = @NULL);
-        wxSize GetTextExtent(const wxString& string);
+    wxSize GetTextExtent(const wxString& string);
     //@}
 
     /**
@@ -660,8 +660,8 @@ public:
 
     //@{
     /**
-        Fill the area specified by rect with a radial gradient, starting from 
-        @e initialColour at the centre of the circle and fading to @e destColour 
+        Fill the area specified by rect with a radial gradient, starting from
+        @e initialColour at the centre of the circle and fading to @e destColour
         on the circle outside.
         
         @e circleCenter are the relative coordinates of centre of the circle in
@@ -674,17 +674,17 @@ public:
     void GradientFillConcentric(const wxRect& rect,
                                 const wxColour& initialColour,
                                 const wxColour& destColour);
-        void GradientFillConcentric(const wxRect& rect,
-                                    const wxColour& initialColour,
-                                    const wxColour& destColour,
-                                    const wxPoint& circleCenter);
+    void GradientFillConcentric(const wxRect& rect,
+                                const wxColour& initialColour,
+                                const wxColour& destColour,
+                                const wxPoint& circleCenter);
     //@}
 
     /**
-        Fill the area specified by @e rect with a linear gradient, starting from 
-        @e initialColour and eventually fading to @e destColour. The 
+        Fill the area specified by @e rect with a linear gradient, starting from
+        @e initialColour and eventually fading to @e destColour. The
         @e nDirection specifies the direction of the colour change, default is to
-        use @e initialColour on the left part of the rectangle and 
+        use @e initialColour on the left part of the rectangle and
         @e destColour on the right one.
     */
     void GradientFillLinear(const wxRect& rect,
@@ -753,14 +753,14 @@ public:
 
     /**
         Sets the x and y axis orientation (i.e., the direction from lowest to
-        highest values on the axis). The default orientation is 
+        highest values on the axis). The default orientation is
         x axis from left to right and y axis from top down.
         
-        @param xLeftRight 
+        @param xLeftRight
         True to set the x axis orientation to the natural
         left to right orientation, @false to invert it.
         
-        @param yBottomUp 
+        @param yBottomUp
         True to set the y axis orientation to the natural
         bottom up orientation, @false to invert it.
     */
@@ -795,7 +795,7 @@ public:
     /**
         Sets the clipping region for this device context to the intersection of the
         given region described by the parameters of this method and the previously set
-        clipping region. You should call 
+        clipping region. You should call
         DestroyClippingRegion() if you want to set
         the clipping region exactly to the region specified.
         
@@ -807,9 +807,9 @@ public:
     */
     void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width,
                            wxCoord height);
-        void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
-        void SetClippingRegion(const wxRect& rect);
-        void SetClippingRegion(const wxRegion& region);
+    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
+    void SetClippingRegion(const wxRect& rect);
+    void SetClippingRegion(const wxRegion& region);
     //@}
 
     /**
@@ -952,40 +952,40 @@ public:
     /**
         Copy from a source DC to this DC, specifying the destination
         coordinates, destination size, source DC, source coordinates,
-        size of source area to copy, logical function, whether to use a bitmap mask, 
+        size of source area to copy, logical function, whether to use a bitmap mask,
         and mask source position.
         
-        @param xdest 
+        @param xdest
         Destination device context x position.
         
-        @param ydest 
+        @param ydest
         Destination device context y position.
         
-        @param dstWidth 
+        @param dstWidth
         Width of destination area.
         
-        @param dstHeight 
+        @param dstHeight
         Height of destination area.
         
-        @param source 
+        @param source
         Source device context.
         
-        @param xsrc 
+        @param xsrc
         Source device context x position.
         
-        @param ysrc 
+        @param ysrc
         Source device context y position.
         
-        @param srcWidth 
+        @param srcWidth
         Width of source area to be copied.
         
-        @param srcHeight 
+        @param srcHeight
         Height of source area to be copied.
         
-        @param logicalFunc 
+        @param logicalFunc
         Logical function to use: see SetLogicalFunction().
         
-        @param useMask 
+        @param useMask
         If @true, Blit does a transparent blit using the mask that is associated with
         the bitmap
         selected into the source device context. The Windows implementation does the
@@ -1013,13 +1013,13 @@ public:
         whether MaskBlt
         or the explicit mask blitting code above is used, by using wxSystemOptions and
         setting the no-maskblt option to 1.
-        @param xsrcMask 
+        @param xsrcMask
         Source x position on the mask. If both xsrcMask and ysrcMask are -1, xsrc and
         ysrc
         will be assumed for the mask source position. Currently only implemented on
         Windows.
         
-        @param ysrcMask 
+        @param ysrcMask
         Source y position on the mask. If both xsrcMask and ysrcMask are -1, xsrc and
         ysrc
         will be assumed for the mask source position. Currently only implemented on
@@ -1043,19 +1043,19 @@ public:
 /**
     @class wxDCClipper
     @wxheader{dc.h}
-    
-    wxDCClipper is a small helper class for setting a clipping region on a 
+
+    wxDCClipper is a small helper class for setting a clipping region on a
     wxDC and unsetting it automatically. An object of wxDCClipper
     class is typically created on the stack so that it is automatically destroyed
     when the object goes out of scope. A typical usage example:
-    
+
     @code
     void MyFunction(wxDC& dc)
         {
             wxDCClipper clip(rect);
             ... drawing functions here are affected by clipping rect ...
         }
-    
+
         void OtherFunction()
         {
             wxDC dc;
@@ -1063,14 +1063,14 @@ public:
             ... drawing functions here are not affected by clipping rect ...
         }
     @endcode
-    
+
     @library{wxcore}
     @category{gdi}
-    
+
     @seealso
     wxDC::SetClippingRegion
 */
-class wxDCClipper 
+class wxDCClipper
 {
 public:
     //@{
@@ -1082,7 +1082,7 @@ public:
         The clipping region is automatically unset when this object is destroyed.
     */
     wxDCClipper(wxDC& dc, const wxRegion& r);
-        wxDCClipper(wxDC& dc, const wxRect& rect);
-        wxDCClipper(wxDC& dc, int x, int y, int w, int h);
+    wxDCClipper(wxDC& dc, const wxRect& rect);
+    wxDCClipper(wxDC& dc, int x, int y, int w, int h);
     //@}
 };

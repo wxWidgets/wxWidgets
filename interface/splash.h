@@ -9,15 +9,15 @@
 /**
     @class wxSplashScreen
     @wxheader{splash.h}
-    
+
     wxSplashScreen shows a window with a thin border, displaying a bitmap
     describing your
     application. Show it in application initialisation, and then either explicitly
     destroy
     it or let it time-out.
-    
+
     Example usage:
-    
+
     @code
     wxBitmap bitmap;
       if (bitmap.LoadFile("splash16.png", wxBITMAP_TYPE_PNG))
@@ -29,7 +29,7 @@
       }
       wxYield();
     @endcode
-    
+
     @library{wxadv}
     @category{managedwnd}
 */

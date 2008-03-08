@@ -9,31 +9,31 @@
 /**
     @class wxValidator
     @wxheader{validate.h}
-    
+
     wxValidator is the base class for a family of validator classes that mediate
     between a class of control, and application data.
-    
+
     A validator has three major roles:
-    
+
      to transfer data from a C++ variable or own storage to and from a control;
      to validate data in a control, and show an appropriate error message;
      to filter events (such as keystrokes), thereby changing the behaviour of the
     associated control.
-    
+
     Validators can be plugged into controls dynamically.
-    
+
     To specify a default, 'null' validator, use the symbol @b wxDefaultValidator.
-    
+
     For more information, please see @ref overview_validatoroverview "Validator
     overview".
-    
+
     @b wxPython note: If you wish to create a validator class in wxPython you should
     derive the class from @c wxPyValidator in order to get Python-aware
     capabilities for the various virtual methods.
-    
+
     @library{wxcore}
     @category{validator}
-    
+
     @seealso
     @ref overview_validatoroverview "Validator overview", wxTextValidator,
     wxGenericValidator,
