@@ -36,7 +36,7 @@ OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 BUILTIN_STL_SUPPORT    = NO
 CPP_CLI_SUPPORT        = NO
-DISTRIBUTE_GROUP_DOC   = NO
+DISTRIBUTE_GROUP_DOC   = YES
 SUBGROUPING            = YES
 
 #---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ ALIASES += endExtraStyleTable="\n"
 ALIASES += library{1}="\section class_lib Library\n Belongs to library \ref page_libs_\1."
 ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
 ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
-ALIASES += category{1}="\section class_category Category\n \1"
+ALIASES += category{1}="\section class_category Category\n \ref page_class_cat_\1"
 
 # aliases with references to wxWidgets ports
 ALIASES += nativeimpl{1}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1 port; generic implementation is used elsewhere."
@@ -170,8 +170,8 @@ EXTRACT_STATIC         = YES
 EXTRACT_LOCAL_CLASSES  = YES
 EXTRACT_LOCAL_METHODS  = NO
 EXTRACT_ANON_NSPACES   = YES
-HIDE_UNDOC_MEMBERS     = YES
-HIDE_UNDOC_CLASSES     = YES
+HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_CLASSES     = NO
 HIDE_FRIEND_COMPOUNDS  = NO
 HIDE_IN_BODY_DOCS      = NO
 INTERNAL_DOCS          = NO
@@ -180,7 +180,7 @@ HIDE_SCOPE_NAMES       = NO
 SHOW_INCLUDE_FILES     = YES
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
-SORT_BRIEF_DOCS        = YES
+SORT_BRIEF_DOCS        = NO     # don't set it to YES! see http://bugzilla.gnome.org/show_bug.cgi?id=312655
 SORT_BY_SCOPE_NAME     = NO
 GENERATE_TODOLIST      = YES
 GENERATE_TESTLIST      = YES
@@ -192,7 +192,7 @@ ENABLED_SECTIONS       =
 
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
-SHOW_DIRECTORIES       = NO
+SHOW_DIRECTORIES       = YES
 FILE_VERSION_FILTER    = 
 
 #---------------------------------------------------------------------------
@@ -200,16 +200,16 @@ FILE_VERSION_FILTER    =
 #---------------------------------------------------------------------------
 QUIET                  = NO
 WARNINGS               = YES
-WARN_IF_UNDOCUMENTED   = NO
+WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
-WARN_NO_PARAMDOC       = NO
+WARN_NO_PARAMDOC       = YES
 WARN_FORMAT            = "$file:$line: $text   "
 WARN_LOGFILE           = doxygen.log
 
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ./mainpages ./overviews #../../interface
+INPUT                  = ./mainpages ./overviews ../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.txt
 RECURSIVE              = YES
