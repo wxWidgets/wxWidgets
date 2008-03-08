@@ -1305,6 +1305,13 @@ void wxTextCtrl::DoSetSelection(long from, long to, int flags)
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
+        // if from and to are both -1, it means (in wxWidgets) that all text
+        // should be selected, translate this into Windows convention
+        if ( (from == -1) && (to == -1) )
+        {
+            from = 0;
+        }
+
         CHARRANGE range;
         range.cpMin = from;
         range.cpMax = to;
