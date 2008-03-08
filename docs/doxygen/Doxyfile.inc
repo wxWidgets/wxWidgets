@@ -95,9 +95,19 @@ ALIASES += wxheader{1}="\headerfile \1 wx/\1"
 # NOTE: using <b> and <tt> tags is different from using \c \b because in the last case
 #       \c gets applied to the first word following and \b to the second word following;
 #       we want both bold and typetext attributes to be applied to the same word!
-ALIASES += true="<b><tt>true</tt></b>"
-ALIASES += false="<b><tt>false</tt></b>"
-ALIASES += NULL="<b><tt>NULL</tt></b>"
+ALIASES += true="<span class='literal'>true</span>"
+ALIASES += false="<span class='literal'>false</span>"
+ALIASES += NULL="<span class='literal'>NULL</span>"
+
+# NOTE: these are important as you can't write in the docs
+#       just #ifdef since the # character is used by Doxygen
+#       for explicit linking; use the following aliases instead!
+#       However to avoid overwriting e.g. \if Doxygen command the _
+#       character is postfixed
+ALIASES += ifdef_="<span class='literal'>\#ifdef</span>"
+ALIASES += ifndef_="<span class='literal'>\#ifndef</span>"
+ALIASES += if_="<span class='literal'>\#if</span>"
+ALIASES += endif_="<span class='literal'>\#endif</span>"
 
 # table aliases for 2 and 3 column tables
 ALIASES += beginTable="<center><table class='doctable' border='1' cellspacing='0' cellpadding='3'>"
@@ -138,16 +148,6 @@ ALIASES += itemdef{8}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8</td></tr>"
 ALIASES += itemdef{9}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
 ALIASES += itemdef{10}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
 ALIASES += endDefList="</table>"
-
-# NOTE: these are important as you can't write in the docs
-#       just #ifdef since the # character is used by Doxygen
-#       for explicit linking; use the following aliases instead!
-#       However to avoid overwriting e.g. \if Doxygen command the _
-#       character is postfixed
-ALIASES += ifdef_="<b><tt>\#ifdef</tt></b>"
-ALIASES += ifndef_="<b><tt>\#ifndef</tt></b>"
-ALIASES += if_="<b><tt>\#if</tt></b>"
-ALIASES += endif_="<b><tt>\#endif</tt></b>"
 
 # See ENABLED_SECTIONS configuration key for more info about these:
 ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL \n <b>wxPerl note</b>\n\n"

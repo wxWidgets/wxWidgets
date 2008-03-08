@@ -454,3 +454,10 @@ TABLE.appearance {
     font-size: 90%;
     /*font-weight: bold;*/
 }
+
+SPAN.literal {
+    text-decoration: none;
+    font-weight: bold;
+    font-family: monospace, fixed;
+    color: #008800;
+}
