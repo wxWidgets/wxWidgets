@@ -1,0 +1,26 @@
+#############################################################################
+## Name:        Doxyfile.chm
+## Purpose:     Doxygen configuration file for generating CHM only
+## Author:      Francesco Montorsi
+## RCS-ID:      $Id: Doxyfile 52098 2008-02-26 00:05:33Z BP $
+## Licence:     wxWindows license
+#############################################################################
+
+@INCLUDE = Doxyfile.inc
+
+#---------------------------------------------------------------------------
+# Generation switches
+#---------------------------------------------------------------------------
+
+GENERATE_HTMLHELP      = NO
+GENERATE_HTML          = NO
+GENERATE_XML           = NO
+
+GENERATE_LATEX         = YES
+GENERATE_RTF           = NO
+GENERATE_MAN           = NO
+GENERATE_PERLMOD       = NO
+GENERATE_AUTOGEN_DEF   = NO
+GENERATE_TAGFILE       =
+
+HHC_LOCATION           = ~/.wine/drive_c/Programmi/HTMLHelpWorkshop/hhc.exe
