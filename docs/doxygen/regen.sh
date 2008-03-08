@@ -6,6 +6,11 @@
 # wxWidgets manual and adjusts the doxygen log to make it more
 # readable.
 
+me=$(basename $0)
+path=${0%%/$me}        # path from which the script has been launched
+current=$(pwd)
+cd $path
+
 mkdir -p out/html       # we need to copy files in this folder below
 mkdir -p out/html/wxmsw out/html/wxgtk out/html/wxmac
 
@@ -48,3 +53,4 @@ mv temp doxygen.log
 #cat doxygen.log | grep -v ".*supplied.*as.*the.*argument.*is.*not.*an.*input.*file.*" >temp
 #mv temp doxygen.log
 
+cd $current
