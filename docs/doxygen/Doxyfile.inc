@@ -66,7 +66,7 @@ ALIASES += endExtraStyleTable="\n"
 # aliases for additional wx-specific infos 
 ALIASES += library{1}="\section class_lib Library\n Belongs to library \ref page_libs_\1."
 ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
-ALIASES += stdobjects="\section class_stdobj Predefined objects\n \b"
+ALIASES += stdobjects="\section class_stdobj Predefined objects\n"
 ALIASES += category{1}="\section class_category Category\n \ref page_class_cat_\1"
 
 # aliases with references to wxWidgets ports
