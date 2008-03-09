@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 // ----------------------------------------------------------------------------
 
 // wxAcceleratorEntry flags
-enum
+enum wxAcceleratorEntryFlags
 {
     wxACCEL_NORMAL  = 0x0000,   // no modifiers
     wxACCEL_ALT     = 0x0001,   // hold Alt key down
