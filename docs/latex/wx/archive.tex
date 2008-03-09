@@ -488,10 +488,9 @@ class wxArchiveIterator
 
     // template parameter 'Arc' should be the type of an archive input stream
     wxArchiveIterator(Arc& arc) {
-
-    /* ... */
+        // ...
+    }
 };
-
 \end{verbatim}
 
 The first template parameter should be the type of archive input stream
@@ -507,7 +506,6 @@ The {\tt <wx/archive.h>} header defines the following typedefs:
 
     typedef wxArchiveIterator<wxArchiveInputStream,
              std::pair<wxString, wxArchiveEntry*> > wxArchivePairIter;
-
 \end{verbatim}
 
 The header for any implementation of this interface should define similar
