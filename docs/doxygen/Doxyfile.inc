@@ -48,13 +48,15 @@ SUBGROUPING            = YES
 
 # event aliases
 ALIASES = beginEventTable="\section class_events Events\n"
-ALIASES += event{1}="\li \b <tt>\1</tt>"
-ALIASES += event{2}="\li \b <tt>\1, \2</tt>"
+ALIASES += event{1}="\li <span class='event'>\1</span>"
+ALIASES += event{2}="\li <span class='event'>\1, \2</span>"
+ALIASES += event{3}="\li <span class='event'>\1, \2, \3</span>"
+ALIASES += event{4}="\li <span class='event'>\1, \2, \3, \4</span>"
 ALIASES += endEventTable="\n"
 
 # style aliases
 ALIASES += beginStyleTable="\section class_styles Styles\n"
-ALIASES += style{1}="\li \b \c \1"
+ALIASES += style{1}="\li <span class='style'>\1</span>"
 ALIASES += endStyleTable="\n"
 
 # extra style aliases
@@ -92,9 +94,6 @@ ALIASES += header{1}="Include file:\n \verbatim #include <\1> @endverbatim"
 ALIASES += wxheader{1}="\headerfile \1 wx/\1"
 
 # some formatting aliases
-# NOTE: using <b> and <tt> tags is different from using \c \b because in the last case
-#       \c gets applied to the first word following and \b to the second word following;
-#       we want both bold and typetext attributes to be applied to the same word!
 ALIASES += true="<span class='literal'>true</span>"
 ALIASES += false="<span class='literal'>false</span>"
 ALIASES += NULL="<span class='literal'>NULL</span>"
@@ -138,15 +137,15 @@ ALIASES += endTable="</table></center>"
 # nature and because it is always the association of a "title" with a "description"
 # (in contrast a table may have more than 2 columns of data)...
 ALIASES += beginDefList="<table class='doclist'>"
-ALIASES += itemdef{2}="<tr><td>\b \1</td> <td>\2</td></tr>"
-ALIASES += itemdef{3}="<tr><td>\b \1</td> <td>\2,\3</td></tr>"
-ALIASES += itemdef{4}="<tr><td>\b \1</td> <td>\2,\3,\4</td></tr>"
-ALIASES += itemdef{5}="<tr><td>\b \1</td> <td>\2,\3,\4,\5</td></tr>"
-ALIASES += itemdef{6}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6</td></tr>"
-ALIASES += itemdef{7}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7</td></tr>"
-ALIASES += itemdef{8}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8</td></tr>"
-ALIASES += itemdef{9}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
-ALIASES += itemdef{10}="<tr><td>\b \1</td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
+ALIASES += itemdef{2}="<tr><td><span class='itemdef'>\1</span></td> <td>\2</td></tr>"
+ALIASES += itemdef{3}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3</td></tr>"
+ALIASES += itemdef{4}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4</td></tr>"
+ALIASES += itemdef{5}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5</td></tr>"
+ALIASES += itemdef{6}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6</td></tr>"
+ALIASES += itemdef{7}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7</td></tr>"
+ALIASES += itemdef{8}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8</td></tr>"
+ALIASES += itemdef{9}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8,\9</td></tr>"
+ALIASES += itemdef{10}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4,\5,\6,\7,\8,\9,\10</td></tr>"
 ALIASES += endDefList="</table>"
 
 # See ENABLED_SECTIONS configuration key for more info about these:

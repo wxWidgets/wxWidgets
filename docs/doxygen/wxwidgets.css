@@ -461,3 +461,19 @@ SPAN.literal {
     font-family: monospace, fixed;
     color: #008800;
 }
+
+SPAN.itemdef {
+    font-weight: bold;
+    color: #880000;
+}
+
+SPAN.style {
+    font-weight: bold;
+    color: #880000;
+}
+
+SPAN.event {
+    font-weight: bold;
+    color: #880000;
+}
+
