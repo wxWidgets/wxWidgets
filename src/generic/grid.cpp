@@ -10660,8 +10660,9 @@ wxCoord wxGrid::CalcColOrRowLabelAreaMinSize(bool column)
     for ( int rowOrCol = 0; rowOrCol < numRowsOrCols; rowOrCol++ )
     {
         lines.Clear();
-        StringToLines(calcRows ? GetRowLabelValue(rowOrCol)
-                               : GetColLabelValue(rowOrCol),
+        // NB: extra parentheses needed to avoid bcc 5.82 compilation errors
+        StringToLines((calcRows ? GetRowLabelValue(rowOrCol)
+                                : GetColLabelValue(rowOrCol)),
                       lines);
 
         long w, h;
