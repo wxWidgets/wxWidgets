@@ -28,7 +28,7 @@
     <name>trunk_quick</name>
     <branch>trunk</branch>
     <treeStableTimer>900</treeStableTimer>
-    <fileNotImportant>docs/*</fileNotImportant>
+    <fileNotImportant>docs/* interface/*</fileNotImportant>
 </scheduler>
 
 <scheduler>
