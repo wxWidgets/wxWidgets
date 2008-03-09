@@ -48,6 +48,10 @@ wxObject *wxStaticTextXmlHandler::DoCreateResource()
 
     SetupWindow(text);
 
+    long wrap = GetLong(wxT("wrap"), -1);
+    if (wrap != -1)
+        text->Wrap(wrap);
+
     return text;
 }
 
