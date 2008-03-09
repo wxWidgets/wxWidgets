@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        aboutdlg.h
-// Purpose:     documentation for wxAboutDialogInfo class
+// Purpose:     interface of wxAboutDialogInfo
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,10 +18,9 @@
     documentation writers, artists and translators. The simple properties from the
     former group are represented as a string with the exception of the program icon
     and the program web site, while the lists from the latter group are stored as
-    wxArrayString and can be either set entirely at once
-    using wxAboutDialogInfo::SetDevelopers and similar
-    functions or built one by one using wxAboutDialogInfo::AddDeveloper
-    etc.
+    wxArrayString and can be either set entirely at once using
+    wxAboutDialogInfo::SetDevelopers and similar functions or built one by one using
+    wxAboutDialogInfo::AddDeveloper etc.
 
     Please also notice that while all the main platforms have the native
     implementation of the about dialog, they are often more limited than the
@@ -44,9 +43,7 @@ class wxAboutDialogInfo
 public:
     /**
         Default constructor leaves all fields are initially uninitialized, in general
-        you should call at least SetVersion(),
-        SetCopyright() and
-        SetDescription().
+        you should call at least SetVersion(), SetCopyright() and SetDescription().
     */
     wxAboutDialogInfo();
 
@@ -73,10 +70,10 @@ public:
 
     /**
         Adds a translator name to be shown in the program credits. Notice that if no
-        translator names are specified explicitely, wxAboutBox
-        will try to use the translation of the string @c translator-credits from
-        the currently used message catalog -- this can be used to show just the name of
-        the translator of the program in the current language.
+        translator names are specified explicitely, wxAboutBox will try to use the
+        translation of the string @c translator-credits from the currently used message
+        catalog -- this can be used to show just the name of the translator of the
+        program in the current language.
         
         @see SetTranslators()
     */
@@ -127,6 +124,7 @@ public:
 
     /**
         Set the long, multiline string containing the text of the program licence.
+
         Only GTK+ version supports showing the licence text in the native about dialog
         currently so the generic version will be used under all the other platforms if
         this method is called. To preserve the native look and feel it is advised that
@@ -147,22 +145,21 @@ public:
     void SetName(const wxString& name);
 
     /**
-        Set the list of translators. Please see
-        AddTranslator() for additional
+        Set the list of translators. Please see AddTranslator() for additional
         discussion.
     */
     void SetTranslators(const wxArrayString& translators);
 
     /**
         Set the version of the program. The version is in free format, i.e. not
-        necessarily in the @c x.y.z form but it shouldn't contain the "version"
-        word.
+        necessarily in the @c x.y.z form but it shouldn't contain the "version" word.
     */
     void SetVersion(const wxString& version);
 
     /**
-        Set the web site for the program and its description (which defaults to URL
+        Set the web site for the program and its description (which defaults to @a url
         itself if empty).
+
         Please notice that only GTK+ version currently supports showing the link in the
         native about dialog so if this method is called, the generic version will be
         used under all the other platforms.
@@ -178,10 +175,11 @@ public:
 
 /**
     This function shows the standard about dialog containing the information
-    specified in @e info. If the current platform has a native about dialog
-    which is capable of showing all the fields in @e info, the native dialog is
-    used, otherwise the function falls back to the generic wxWidgets version of the
-    dialog, i.e. does the same thing as wxGenericAboutBox.
+    specified in @a info. If the current platform has a native about dialog
+    which is capable of showing all the fields in @a info, the native dialog is
+    used, otherwise the function falls back to the generic wxWidgets version of
+    the dialog, i.e. does the same thing as wxGenericAboutBox.
+
     Here is an example of how this function may be used:
 
     @code
@@ -197,20 +195,21 @@ public:
     }
     @endcode
 
-    Please see the @ref overview_sampledialogs "dialogs sample" for more examples of
-    using this function and wxAboutDialogInfo for the
-    description of the information which can be shown in the about dialog.
+    Please see the @ref page_utils_samples_dialogs for more examples of
+    using this function and wxAboutDialogInfo for the description of the
+    information which can be shown in the about dialog.
 */
 void wxAboutBox(const wxAboutDialogInfo& info);
 
 /**
-    This function does the same thing as wxAboutBox except
-    that it always uses the generic wxWidgets version of the dialog instead of the
-    native one. This is mainly useful if you need to customize the dialog by e.g.
-    adding custom controls to it (customizing the native dialog is not currently
+    This function does the same thing as wxAboutBox except that it always uses
+    the generic wxWidgets version of the dialog instead of the native one.
+
+    This is mainly useful if you need to customize the dialog by e.g. adding
+    custom controls to it (customizing the native dialog is not currently
     supported).
-    See the @ref overview_sampledialogs "dialogs sample" for an example of about
-    dialog
+
+    See the @ref page_utils_samples_dialogs for an example of about dialog
     customization.
 
     @see wxAboutDialogInfo
