@@ -464,7 +464,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 {
     wxCoord normal_textx, normal_texty;
     wxCoord selected_textx, selected_texty;
-    wxCoord textx, texty;
+    wxCoord texty;
 
     // if the caption is empty, measure some temporary text
     wxString caption = page.caption;
@@ -500,13 +500,11 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     if (page.active)
     {
         dc.SetFont(m_selected_font);
-        textx = selected_textx;
         texty = selected_texty;
     }
      else
     {
         dc.SetFont(m_normal_font);
-        textx = normal_textx;
         texty = normal_texty;
     }
 
@@ -1963,11 +1961,9 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         wxAuiTabContainerButton& tab_button = m_tab_close_buttons.Item(i);
 
         // determine if a close button is on this tab
-        bool close_button = false;
         if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
             ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
         {
-            close_button = true;
             if (tab_button.cur_state == wxAUI_BUTTON_STATE_HIDDEN)
             {
                 tab_button.id = wxAUI_BUTTON_CLOSE;
@@ -2021,14 +2017,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         wxAuiNotebookPage& page = m_pages.Item(active);
 
         wxAuiTabContainerButton& tab_button = m_tab_close_buttons.Item(active);
-
-        // determine if a close button is on this tab
-        bool close_button = false;
-        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
-            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.active))
-        {
-            close_button = true;
-        }
 
         rect.x = active_offset;
         m_art->DrawTab(dc,
