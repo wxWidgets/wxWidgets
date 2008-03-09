@@ -32,9 +32,7 @@
 #include "wx/imaglist.h"
 #include "wx/tokenzr.h"
 
-#ifdef wxHAVE_RAW_BITMAP
 #include "wx/rawbmp.h"
-#endif
 
 #include "Platform.h"
 #include "PlatWX.h"
@@ -368,7 +366,6 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
                                  ColourAllocated fill, int alphaFill,
                                  ColourAllocated outline, int alphaOutline,
                                  int /*flags*/) {
-#ifdef wxHAVE_RAW_BITMAP
 
     // TODO:  do something with cornerSize
     wxUnusedVar(cornerSize);
@@ -429,13 +426,6 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
 
     // Draw the bitmap
     hdc->DrawBitmap(bmp, r.x, r.y, true);
-
-#else
-    wxUnusedVar(cornerSize);
-    wxUnusedVar(alphaFill);
-    wxUnusedVar(alphaOutline);
-    RectangleDraw(rc, outline, fill);
-#endif
 }
 
 void SurfaceImpl::Ellipse(PRectangle rc, ColourAllocated fore, ColourAllocated back) {
