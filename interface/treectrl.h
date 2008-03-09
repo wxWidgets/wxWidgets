@@ -333,14 +333,14 @@ public:
         scrollbar and its position is not 0.
     */
     bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect,
-                         bool textOnly = false);
+                         bool textOnly = false) const;
 
     /**
         Returns the buttons image list (from which application-defined button images
         are taken).
         This function is only available in the generic version.
     */
-    wxImageList* GetButtonsImageList();
+    wxImageList* GetButtonsImageList() const;
 
     /**
         Returns the number of items in the branch. If @a recursively is @true,
@@ -348,19 +348,19 @@ public:
         of descendants, otherwise only one level of children is counted.
     */
     unsigned int GetChildrenCount(const wxTreeItemId& item,
-                                  bool recursively = true);
+                                  bool recursively = true) const;
 
     /**
         Returns the number of items in the control.
     */
-    unsigned int GetCount();
+    unsigned int GetCount() const;
 
     /**
         Returns the edit control being currently used to edit a label. Returns @NULL
         if no label is being edited.
         @b NB: It is currently only implemented for wxMSW.
     */
-    wxTextCtrl* GetEditControl();
+    wxTextCtrl* GetEditControl() const;
 
     /**
         Returns the first child; call GetNextChild() for the next child.
@@ -375,34 +375,36 @@ public:
         @see GetNextChild(), GetNextSibling()
     */
     wxTreeItemId GetFirstChild(const wxTreeItemId& item,
-                               wxTreeItemIdValue& cookie);
+                               wxTreeItemIdValue& cookie) const;
 
     /**
         Returns the first visible item.
     */
-    wxTreeItemId GetFirstVisibleItem();
+    wxTreeItemId GetFirstVisibleItem() const;
 
     /**
         Returns the normal image list.
     */
-    wxImageList* GetImageList();
+    wxImageList* GetImageList() const;
 
     /**
         Returns the current tree control indentation.
     */
-    int GetIndent();
+    int GetIndent() const;
 
     /**
         Returns the background colour of the item.
     */
-    wxColour GetItemBackgroundColour(const wxTreeItemId& item);
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
 
     //@{
     /**
         Returns the font of the item label.
     */
-    wxTreeItemData* GetItemData(const wxTreeItemId& item);
-See also wxPython note:
+    wxTreeItemData* GetItemData(const wxTreeItemId& item) const;
+    const See also
+    wxTreeItemData
+wxPython note:
 wxPython provides the following shortcut method:
 
 
@@ -425,7 +427,7 @@ wxPython provides the following shortcut method:
 
 
 
-    wxFont  GetItemFont(const wxTreeItemId& item);
+    wxFont  GetItemFont(const wxTreeItemId& item) const;
     //@}
 
     /**
@@ -440,28 +442,28 @@ wxPython provides the following shortcut method:
         (which is shown when an expanded item is currently selected)
     */
     int GetItemImage(const wxTreeItemId& item,
-                     wxTreeItemIcon which = wxTreeItemIcon_Normal);
+                     wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
 
     /**
         Returns the item's parent.
     */
-    wxTreeItemId GetItemParent(const wxTreeItemId& item);
+    wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
 
     /**
         Gets the selected item image (this function is obsolete, use
         @c GetItemImage(item, wxTreeItemIcon_Selected) instead).
     */
-    int GetItemSelectedImage(const wxTreeItemId& item);
+    int GetItemSelectedImage(const wxTreeItemId& item) const;
 
     /**
         Returns the item label.
     */
-    wxString GetItemText(const wxTreeItemId& item);
+    wxString GetItemText(const wxTreeItemId& item) const;
 
     /**
         Returns the colour of the item label.
     */
-    wxColour GetItemTextColour(const wxTreeItemId& item);
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
 
     /**
         Returns the last child of the item (or an invalid tree item if this item has no
@@ -470,7 +472,7 @@ wxPython provides the following shortcut method:
         @see GetFirstChild(), GetNextSibling(),
              GetLastChild()
     */
-    wxTreeItemId GetLastChild(const wxTreeItemId& item);
+    wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
 
     /**
         Returns the next child; call GetFirstChild() for the first child.
@@ -484,7 +486,7 @@ wxPython provides the following shortcut method:
         @see GetFirstChild()
     */
     wxTreeItemId GetNextChild(const wxTreeItemId& item,
-                              wxTreeItemIdValue& cookie);
+                              wxTreeItemIdValue& cookie) const;
 
     /**
         Returns the next sibling of the specified item; call GetPrevSibling() for the
@@ -493,14 +495,14 @@ wxPython provides the following shortcut method:
         
         @see GetPrevSibling()
     */
-    wxTreeItemId GetNextSibling(const wxTreeItemId& item);
+    wxTreeItemId GetNextSibling(const wxTreeItemId& item) const;
 
     /**
         Returns the next visible item or an invalid item if this item is the last
         visible one.
         Notice that the @a item itself must be visible.
     */
-    wxTreeItemId GetNextVisible(const wxTreeItemId& item);
+    wxTreeItemId GetNextVisible(const wxTreeItemId& item) const;
 
     /**
         Returns the previous sibling of the specified item; call GetNextSibling() for
@@ -509,14 +511,14 @@ wxPython provides the following shortcut method:
         
         @see GetNextSibling()
     */
-    wxTreeItemId GetPrevSibling(const wxTreeItemId& item);
+    wxTreeItemId GetPrevSibling(const wxTreeItemId& item) const;
 
     /**
         Returns the previous visible item or an invalid item if this item is the first
         visible one.
         Notice that the @a item itself must be visible.
     */
-    wxTreeItemId GetPrevVisible(const wxTreeItemId& item);
+    wxTreeItemId GetPrevVisible(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the control will use a quick calculation for the best size,
@@ -524,12 +526,12 @@ wxPython provides the following shortcut method:
         
         @see SetQuickBestSize()
     */
-    bool GetQuickBestSize();
+    bool GetQuickBestSize() const;
 
     /**
         Returns the root item for the tree control.
     */
-    wxTreeItemId GetRootItem();
+    wxTreeItemId GetRootItem() const;
 
     /**
         Returns the selection, or an invalid item if there is no selection.
@@ -537,20 +539,20 @@ wxPython provides the following shortcut method:
         GetSelections() for the controls which do have
         this style.
     */
-    wxTreeItemId GetSelection();
+    wxTreeItemId GetSelection() const;
 
     /**
         Fills the array of tree items passed in with the currently selected items. This
         function can be called only if the control has the wxTR_MULTIPLE style.
         Returns the number of selected items.
     */
-    unsigned int GetSelections(wxArrayTreeItemIds& selection);
+    unsigned int GetSelections(wxArrayTreeItemIds& selection) const;
 
     /**
         Returns the state image list (from which application-defined state images are
         taken).
     */
-    wxImageList* GetStateImageList();
+    wxImageList* GetStateImageList() const;
 
     /**
         Calculates which (if any) item is under the given point, returning the tree item
@@ -601,7 +603,7 @@ wxPython provides the following shortcut method:
         
         To the left of the client area.
     */
-    wxTreeItemId HitTest(const wxPoint& point, int& flags);
+    wxTreeItemId HitTest(const wxPoint& point, int& flags) const;
 
     //@{
     /**
@@ -632,32 +634,32 @@ wxPython provides the following shortcut method:
         Returns @true if the given item is in bold state.
         See also: SetItemBold()
     */
-    bool IsBold(const wxTreeItemId& item);
+    bool IsBold(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the control is empty (i.e. has no items, even no root one).
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         Returns @true if the item is expanded (only makes sense if it has children).
     */
-    bool IsExpanded(const wxTreeItemId& item);
+    bool IsExpanded(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the item is selected.
     */
-    bool IsSelected(const wxTreeItemId& item);
+    bool IsSelected(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the item is visible on the screen.
     */
-    bool IsVisible(const wxTreeItemId& item);
+    bool IsVisible(const wxTreeItemId& item) const;
 
     /**
         Returns @true if the item has children.
     */
-    bool ItemHasChildren(const wxTreeItemId& item);
+    bool ItemHasChildren(const wxTreeItemId& item) const;
 
     /**
         Override this function in the derived class to change the sort order of the
@@ -897,29 +899,29 @@ public:
     /**
         Returns the item (valid for all events).
     */
-    wxTreeItemId GetItem();
+    wxTreeItemId GetItem() const;
 
     /**
         Returns the key code if the event is a key event. Use
         GetKeyEvent() to get the values of the
         modifier keys for this event (i.e. Shift or Ctrl).
     */
-    int GetKeyCode();
+    int GetKeyCode() const;
 
     /**
         Returns the key event for @c EVT_TREE_KEY_DOWN events.
     */
-    const wxKeyEvent GetKeyEvent();
+    const wxKeyEvent GetKeyEvent() const;
 
     /**
         Returns the label if the event is a begin or end edit label event.
     */
-    const wxString GetLabel();
+    const wxString GetLabel() const;
 
     /**
         Returns the old item index (valid for EVT_TREE_ITEM_CHANGING and CHANGED events)
     */
-    wxTreeItemId GetOldItem();
+    wxTreeItemId GetOldItem() const;
 
     /**
         Returns the position of the mouse pointer if the event is a drag or
@@ -928,13 +930,13 @@ public:
         wxTreeCtrl
         window (so that you can pass it directly to e.g. wxWindow::PopupMenu).
     */
-    wxPoint GetPoint();
+    wxPoint GetPoint() const;
 
     /**
         Returns @true if the label edit was cancelled. This should be
         called from within an EVT_TREE_END_LABEL_EDIT handler.
     */
-    bool IsEditCancelled();
+    bool IsEditCancelled() const;
 
     /**
         Set the tooltip for the item (valid for EVT_TREE_ITEM_GETTOOLTIP events).

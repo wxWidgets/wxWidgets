@@ -189,7 +189,7 @@ public:
         Returns @true if the directory with this name exists.
     */
     bool DirExists();
-    static bool DirExists(const wxString& dir);
+    const static bool DirExists(const wxString& dir);
     //@}
 
     /**
@@ -319,7 +319,7 @@ public:
         @see DirExists()
     */
     bool FileExists();
-    static bool FileExists(const wxString& file);
+    const static bool FileExists(const wxString& file);
     //@}
 
     /**
@@ -344,17 +344,17 @@ public:
     /**
         Returns the number of directories in the file name.
     */
-    size_t GetDirCount();
+    size_t GetDirCount() const;
 
     /**
         Returns the directories in string array form.
     */
-    const wxArrayString GetDirs();
+    const wxArrayString GetDirs() const;
 
     /**
         Returns the file name extension.
     */
-    wxString GetExt();
+    wxString GetExt() const;
 
     /**
         Returns the characters that can't be used in filenames and directory names for
@@ -370,12 +370,12 @@ public:
     /**
         Returns the full name (including extension but excluding directories).
     */
-    wxString GetFullName();
+    wxString GetFullName() const;
 
     /**
         Returns the full path with name and extension.
     */
-    wxString GetFullPath(wxPathFormat format = wxPATH_NATIVE);
+    wxString GetFullPath(wxPathFormat format = wxPATH_NATIVE) const;
 
     /**
         Returns the home directory.
@@ -398,27 +398,27 @@ public:
     */
     wxString GetHumanReadableSize(const wxString& failmsg = "Not available",
                                   int precision = 1);
-    static wxString GetHumanReadableSize(const wxULongLong& bytes,
-                                         const wxString& nullsize = "Not available",
-                                         int precision = 1);
+    const static wxString  GetHumanReadableSize(const wxULongLong& bytes,
+            const wxString& nullsize = "Not available",
+            int precision = 1);
     //@}
 
     /**
         Return the long form of the path (returns identity on non-Windows platforms)
     */
-    wxString GetLongPath();
+    wxString GetLongPath() const;
 
     /**
         Returns the last time the file was last modified.
     */
-    wxDateTime GetModificationTime();
+    wxDateTime GetModificationTime() const;
 
     /**
         Returns the name part of the filename (without extension).
         
         @see GetFullName()
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Returns the path part of the filename (without the name or extension). The
@@ -437,7 +437,7 @@ public:
         the path.
     */
     wxString GetPath(int flags = wxPATH_GET_VOLUME,
-                     wxPathFormat format = wxPATH_NATIVE);
+                     wxPathFormat format = wxPATH_NATIVE) const;
 
     /**
         Returns the usually used path separator for this format. For all formats but
@@ -472,12 +472,12 @@ public:
         This is the same as calling GetPath()
         @c (wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR, format).
     */
-    wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE);
+    wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE) const;
 
     /**
         Return the short form of the path (returns identity on non-Windows platforms).
     */
-    wxString GetShortPath();
+    wxString GetShortPath() const;
 
     //@{
     /**
@@ -488,7 +488,7 @@ public:
         by another process) the returned value is @c wxInvalidSize.
     */
     wxULongLong GetSize();
-    static wxULongLong GetSize(const wxString& filename);
+    const static wxULongLong GetSize(const wxString& filename);
     //@}
 
     /**
@@ -515,14 +515,14 @@ public:
         @returns @true on success, @false if we failed to retrieve the times.
     */
     bool GetTimes(wxDateTime* dtAccess, wxDateTime* dtMod,
-                  wxDateTime* dtCreate);
+                  wxDateTime* dtCreate) const;
 
     /**
         Returns the string containing the volume for this file name, empty if it
         doesn't have one or if the file system doesn't support volumes at all (for
         example, Unix).
     */
-    wxString GetVolume();
+    wxString GetVolume() const;
 
     /**
         Returns the string separating the volume from the path for this format.
@@ -532,17 +532,17 @@ public:
     /**
         Returns @true if an extension is present.
     */
-    bool HasExt();
+    bool HasExt() const;
 
     /**
         Returns @true if a name is present.
     */
-    bool HasName();
+    bool HasName() const;
 
     /**
         Returns @true if a volume specifier is present.
     */
-    bool HasVolume();
+    bool HasVolume() const;
 
     /**
         Inserts a directory component before the zero-based position in the directory
@@ -567,7 +567,7 @@ public:
         DirExists() or
         FileExists() for this.
     */
-    bool IsDir();
+    bool IsDir() const;
 
     //@{
     /**
@@ -578,7 +578,7 @@ public:
         doesn't imply that you have read permissions on the files contained.
     */
     bool IsDirReadable();
-    static bool IsDirReadable(const wxString& dir);
+    const static bool IsDirReadable(const wxString& dir);
     //@}
 
     //@{
@@ -589,7 +589,7 @@ public:
         directory.
     */
     bool IsDirWritable();
-    static bool IsDirWritable(const wxString& dir);
+    const static bool IsDirWritable(const wxString& dir);
     //@}
 
     //@{
@@ -598,7 +598,7 @@ public:
         permissions on it.
     */
     bool IsFileExecutable();
-    static bool IsFileExecutable(const wxString& file);
+    const static bool IsFileExecutable(const wxString& file);
     //@}
 
     //@{
@@ -607,7 +607,7 @@ public:
         permissions on it.
     */
     bool IsFileReadable();
-    static bool IsFileReadable(const wxString& file);
+    const static bool IsFileReadable(const wxString& file);
     //@}
 
     //@{
@@ -616,7 +616,7 @@ public:
         permissions on it.
     */
     bool IsFileWritable();
-    static bool IsFileWritable(const wxString& file);
+    const static bool IsFileWritable(const wxString& file);
     //@}
 
     /**
@@ -625,7 +625,7 @@ public:
         Clear() may reset the object to the uninitialized,
         invalid state (the former only do it on failure).
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Returns @true if the char is a path separator for this format.
@@ -871,7 +871,7 @@ public:
         Compares the filename using the rules of this platform.
     */
     bool SameAs(const wxFileName& filepath,
-                wxPathFormat format = wxPATH_NATIVE);
+                wxPathFormat format = wxPATH_NATIVE) const;
 
     //@{
     /**
@@ -981,8 +981,8 @@ public:
         Returns @true if the filenames are different. The string @e filenames
         is interpreted as a path in the native filename format.
     */
-    bool operator operator!=(const wxFileName& filename);
-    bool operator operator!=(const wxString& filename);
+    bool operator operator!=(const wxFileName& filename) const;
+    const bool operator operator!=(const wxString& filename) const;
     //@}
 
     //@{
@@ -998,7 +998,7 @@ public:
         Returns @true if the filenames are equal. The string @e filenames is
         interpreted as a path in the native filename format.
     */
-    bool operator operator==(const wxFileName& filename);
-    bool operator operator==(const wxString& filename);
+    bool operator operator==(const wxFileName& filename) const;
+    const bool operator operator==(const wxString& filename) const;
     //@}
 };

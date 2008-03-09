@@ -91,14 +91,14 @@ public:
         
         This method is only valid for multi selection listboxes.
     */
-    int GetFirstSelected(unsigned long& cookie);
+    int GetFirstSelected(unsigned long& cookie) const;
 
     /**
         Get the number of items in the control.
         
         @see SetItemCount()
     */
-    size_t GetItemCount();
+    size_t GetItemCount() const;
 
     /**
         Returns the margins used by the control. The @c x field of the returned
@@ -106,7 +106,7 @@ public:
         
         @see SetMargins()
     */
-    wxPoint GetMargins();
+    wxPoint GetMargins() const;
 
     /**
         Returns the index of the next selected item or @c wxNOT_FOUND if there are
@@ -115,7 +115,7 @@ public:
         
         @see GetFirstSelected()
     */
-    int GetNextSelected(unsigned long& cookie);
+    int GetNextSelected(unsigned long& cookie) const;
 
     /**
         Returns the number of the items currently selected.
@@ -125,12 +125,12 @@ public:
         @see IsSelected(), GetFirstSelected(),
              GetNextSelected()
     */
-    size_t GetSelectedCount();
+    size_t GetSelectedCount() const;
 
     /**
         Get the currently selected item or @c wxNOT_FOUND if there is no selection.
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         Returns the background colour used for the selected cells. By default the
@@ -138,14 +138,14 @@ public:
         
         @see wxSystemSettings::GetColour, SetSelectionBackground()
     */
-    const wxColour GetSelectionBackground();
+    const wxColour GetSelectionBackground() const;
 
     /**
         Returns @true if the listbox was created with @c wxLB_MULTIPLE style
         and so supports multiple selection or @false if it is a single selection
         listbox.
     */
-    bool HasMultipleSelection();
+    bool HasMultipleSelection() const;
 
     /**
         Returns @true if this item is the current one, @false otherwise.
@@ -155,12 +155,12 @@ public:
         selection listboxes where many items may be selected but only one (at most) is
         current.
     */
-    bool IsCurrent(size_t item);
+    bool IsCurrent(size_t item) const;
 
     /**
         Returns @true if this item is selected, @false otherwise.
     */
-    bool IsSelected(size_t item);
+    bool IsSelected(size_t item) const;
 
     /**
         This method is used to draw the items background and, maybe, a border
@@ -170,7 +170,7 @@ public:
         colour and drawing a border around the item if it is either selected or
         current.
     */
-    void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n);
+    void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 
     /**
         The derived class must implement this function to actually draw the item
@@ -184,7 +184,7 @@ public:
         @param n
             The index of the item to be drawn
     */
-    void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n);
+    void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
 
     /**
         This method may be used to draw separators between the lines. The rectangle
@@ -199,13 +199,13 @@ public:
         @param n
             The index of the item
     */
-    void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n);
+    void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
 
     /**
         The derived class must implement this method to return the height of the
         specified item (in pixels).
     */
-    wxCoord OnMeasureItem(size_t n);
+    wxCoord OnMeasureItem(size_t n) const;
 
     /**
         Selects or deselects the specified item which must be valid (i.e. not

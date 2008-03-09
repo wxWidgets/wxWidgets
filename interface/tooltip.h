@@ -39,12 +39,12 @@ public:
     /**
         Get the tooltip text.
     */
-    wxString GetTip();
+    wxString GetTip() const;
 
     /**
         Get the associated window.
     */
-    wxWindow* GetWindow();
+    wxWindow* GetWindow() const;
 
     /**
         Set the delay after which the tooltip disappears or how long a

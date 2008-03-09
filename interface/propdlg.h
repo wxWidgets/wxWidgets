@@ -109,18 +109,18 @@ public:
     /**
         Returns the book control that will contain your settings pages.
     */
-    wxBookCtrlBase* GetBookCtrl();
+    wxBookCtrlBase* GetBookCtrl() const;
 
     /**
         Returns the inner sizer that contains the book control and button sizer.
     */
-    wxSizer* GetInnerSizer();
+    wxSizer* GetInnerSizer() const;
 
     /**
         Returns the sheet style. See SetSheetStyle() for
         permissable values.
     */
-    long GetSheetStyle();
+    long GetSheetStyle() const;
 
     /**
         Call this to lay out the dialog. On PocketPC, this does nothing, since the

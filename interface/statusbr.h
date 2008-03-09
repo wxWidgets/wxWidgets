@@ -87,12 +87,12 @@ public:
         
         @see wxRect
     */
-    virtual bool GetFieldRect(int i, wxRect& rect);
+    virtual bool GetFieldRect(int i, wxRect& rect) const;
 
     /**
         Returns the number of fields in the status bar.
     */
-    int GetFieldsCount();
+    int GetFieldsCount() const;
 
     /**
         Returns the string associated with a status bar field.
@@ -105,7 +105,7 @@ public:
         
         @see SetStatusText()
     */
-    virtual wxString GetStatusText(int i = 0);
+    virtual wxString GetStatusText(int i = 0) const;
 
     /**
         Sets the field text to the top of the stack, and pops the stack of saved

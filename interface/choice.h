@@ -109,7 +109,7 @@ public:
         @remarks This is implemented for Motif only and always returns 1 for the
                  other platforms.
     */
-    int GetColumns();
+    int GetColumns() const;
 
     /**
         Unlike wxControlWithItems::GetSelection which only
@@ -122,7 +122,7 @@ public:
         wxControlWithItems::GetSelection itself behaved like
         this).
     */
-    int GetCurrentSelection();
+    int GetCurrentSelection() const;
 
     /**
         Sets the number of columns in this choice item.

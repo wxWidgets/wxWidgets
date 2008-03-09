@@ -157,22 +157,22 @@ public:
     /**
         Clones the text validator using the copy constructor.
     */
-    virtual wxValidator* Clone();
+    virtual wxValidator* Clone() const;
 
     /**
         Returns a reference to the exclude list (the list of invalid values).
     */
-    wxArrayString GetExcludes();
+    wxArrayString GetExcludes() const;
 
     /**
         Returns a reference to the include list (the list of valid values).
     */
-    wxArrayString GetIncludes();
+    wxArrayString GetIncludes() const;
 
     /**
         Returns the validator style.
     */
-    long GetStyle();
+    long GetStyle() const;
 
     /**
         Receives character input from the window and filters it according to the

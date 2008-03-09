@@ -82,7 +82,7 @@ public:
         See also: @ref overview_cells "Cells Overview",
         @ref overview_printing
     */
-    wxHtmlContainerCell* GetInternalRepresentation();
+    wxHtmlContainerCell* GetInternalRepresentation() const;
 
     /**
         Returns anchor within currently opened page
@@ -108,7 +108,7 @@ public:
     /**
         Returns the related frame.
     */
-    wxFrame* GetRelatedFrame();
+    wxFrame* GetRelatedFrame() const;
 
     /**
         Moves back to the previous page. (each page displayed using
@@ -416,7 +416,7 @@ public:
         Returns the wxHtmlLinkInfo which contains info about the cell clicked and the
         hyperlink it contains.
     */
-    const wxHtmlLinkInfo GetLinkInfo();
+    const wxHtmlLinkInfo GetLinkInfo() const;
 };
 
 
@@ -442,19 +442,19 @@ public:
     /**
         Returns the wxHtmlCellEvent associated with the event.
     */
-    wxHtmlCell* GetCell();
+    wxHtmlCell* GetCell() const;
 
     /**
         Returns @true if @ref setlinkclicked() SetLinkClicked(@true) has previously
         been called;
         @false otherwise.
     */
-    bool GetLinkClicked();
+    bool GetLinkClicked() const;
 
     /**
         Returns the wxPoint associated with the event.
     */
-    wxPoint GetPoint();
+    wxPoint GetPoint() const;
 
     /**
         Call this function with @c linkclicked set to @true if the cell which has

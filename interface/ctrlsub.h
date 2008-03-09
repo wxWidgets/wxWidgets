@@ -120,7 +120,7 @@ public:
         
         @returns A pointer to the client data, or @NULL if not present.
     */
-    void* GetClientData(unsigned int n);
+    void* GetClientData(unsigned int n) const;
 
     /**
         Returns a pointer to the client data associated with the given item (if any).
@@ -133,14 +133,14 @@ public:
         
         @returns A pointer to the client data, or @NULL if not present.
     */
-    wxClientData* GetClientObject(unsigned int n);
+    wxClientData* GetClientObject(unsigned int n) const;
 
     /**
         Returns the number of items in the control.
         
         @see IsEmpty()
     */
-    unsigned int GetCount();
+    unsigned int GetCount() const;
 
     /**
         Returns the index of the selected item or @c wxNOT_FOUND if no item is
@@ -154,7 +154,7 @@ public:
         
         @see SetSelection(), GetStringSelection()
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         Returns the label of the item with the given index.
@@ -165,7 +165,7 @@ public:
         @returns The label of the item or an empty string if the position was
                  invalid.
     */
-    wxString GetString(unsigned int n);
+    wxString GetString(unsigned int n) const;
 
     /**
         Returns the label of the selected item or an empty string if no item is
@@ -173,12 +173,12 @@ public:
         
         @see GetSelection()
     */
-    wxString GetStringSelection();
+    wxString GetStringSelection() const;
 
     /**
         Returns the array of the labels of all items in the control.
     */
-    wxArrayString GetStrings();
+    wxArrayString GetStrings() const;
 
     //@{
     /**
@@ -225,7 +225,7 @@ public:
         
         @see GetCount()
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         This is the same as SetSelection() and

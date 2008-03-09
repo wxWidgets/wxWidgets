@@ -27,24 +27,24 @@ public:
     /**
         Return the pointer to the dialog which generated this event.
     */
-    wxFindReplaceDialog* GetDialog();
+    wxFindReplaceDialog* GetDialog() const;
 
     /**
         Return the string to find (never empty).
     */
-    wxString GetFindString();
+    wxString GetFindString() const;
 
     /**
         Get the currently selected flags: this is the combination of @c wxFR_DOWN,
         @c wxFR_WHOLEWORD and @c wxFR_MATCHCASE flags.
     */
-    int GetFlags();
+    int GetFlags() const;
 
     /**
         Return the string to replace the search string with (only for replace and
         replace all events).
     */
-    const wxString GetReplaceString();
+    const wxString GetReplaceString() const;
 };
 
 
@@ -81,7 +81,7 @@ public:
     /**
         Get the combination of @c wxFindReplaceFlags values.
     */
-    int GetFlags();
+    int GetFlags() const;
 
     /**
         Get the replacement string.
@@ -154,5 +154,5 @@ public:
         Get the wxFindReplaceData object used by this
         dialog.
     */
-    const wxFindReplaceData* GetData();
+    const wxFindReplaceData* GetData() const;
 };

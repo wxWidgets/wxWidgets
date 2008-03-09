@@ -123,28 +123,28 @@ public:
         
         @see SetLineSize()
     */
-    int GetLineSize();
+    int GetLineSize() const;
 
     /**
         Gets the maximum slider value.
         
         @see GetMin(), SetRange()
     */
-    int GetMax();
+    int GetMax() const;
 
     /**
         Gets the minimum slider value.
         
         @see GetMin(), SetRange()
     */
-    int GetMin();
+    int GetMin() const;
 
     /**
         Returns the page size.
         
         @see SetPageSize()
     */
-    int GetPageSize();
+    int GetPageSize() const;
 
     /**
         Returns the selection end point.
@@ -153,7 +153,7 @@ public:
         
         @see GetSelStart(), SetSelection()
     */
-    int GetSelEnd();
+    int GetSelEnd() const;
 
     /**
         Returns the selection start point.
@@ -162,7 +162,7 @@ public:
         
         @see GetSelEnd(), SetSelection()
     */
-    int GetSelStart();
+    int GetSelStart() const;
 
     /**
         Returns the thumb length.
@@ -171,7 +171,7 @@ public:
         
         @see SetThumbLength()
     */
-    int GetThumbLength();
+    int GetThumbLength() const;
 
     /**
         Returns the tick frequency.
@@ -180,14 +180,14 @@ public:
         
         @see SetTickFreq()
     */
-    int GetTickFreq();
+    int GetTickFreq() const;
 
     /**
         Gets the current slider value.
         
         @see GetMin(), GetMax(), SetValue()
     */
-    int GetValue();
+    int GetValue() const;
 
     /**
         Sets the line size for the slider.

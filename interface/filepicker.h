@@ -106,12 +106,12 @@ public:
         Similar to GetPath() but returns the path of
         the currently selected file as a wxFileName object.
     */
-    wxFileName GetFileName();
+    wxFileName GetFileName() const;
 
     /**
         Returns the absolute path of the currently selected file.
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         This method does the same thing as SetPath() but
@@ -220,12 +220,12 @@ public:
         object.
         This function is equivalent to GetPath()
     */
-    wxFileName GetDirName();
+    wxFileName GetDirName() const;
 
     /**
         Returns the absolute path of the currently selected directory.
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         Just like SetPath() but this function takes a
@@ -268,7 +268,7 @@ public:
     /**
         Retrieve the absolute path of the file/directory the user has just selected.
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         Set the absolute path of the file/directory associated with the event.

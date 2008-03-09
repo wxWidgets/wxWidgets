@@ -35,7 +35,7 @@ public:
         Please remember that hash maps do not guarantee ordering.
     */
     const_iterator begin();
-    iterator begin();
+    const iterator begin();
     //@}
 
     /**
@@ -47,12 +47,12 @@ public:
         Counts the number of elements with the given key present in the map.
         This function returns only 0 or 1.
     */
-    size_type count(const key_type& key);
+    size_type count(const key_type& key) const;
 
     /**
         Returns @true if the hash map does not contain any elements, @false otherwise.
     */
-    bool empty();
+    bool empty() const;
 
     //@{
     /**
@@ -60,7 +60,7 @@ public:
         Please remember that hash maps do not guarantee ordering.
     */
     const_iterator end();
-    iterator end();
+    const iterator end();
     //@}
 
     //@{
@@ -79,8 +79,8 @@ public:
         an iterator pointing at that element, otherwise an invalid iterator
         is returned (i.e. hashmap.find( non_existent_key ) == hashmap.end()).
     */
-    iterator find(const key_type& key);
-    const_iterator find(const key_type& key);
+    iterator find(const key_type& key) const;
+    const_iterator find(const key_type& key) const;
     //@}
 
     /**
@@ -101,5 +101,5 @@ public:
     /**
         Returns the number of elements in the map.
     */
-    size_type size();
+    size_type size() const;
 };

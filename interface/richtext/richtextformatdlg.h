@@ -55,17 +55,17 @@ public:
     /**
         Enumerate all available page identifiers.
     */
-    virtual int GetPageId(int i);
+    virtual int GetPageId(int i) const;
 
     /**
         Gets the number of available page identifiers.
     */
-    virtual int GetPageIdCount();
+    virtual int GetPageIdCount() const;
 
     /**
         Gets the image index for the given page identifier.
     */
-    virtual int GetPageImage(int id);
+    virtual int GetPageImage(int id) const;
 
     /**
         Set the property sheet style, called at the start of
@@ -168,7 +168,7 @@ public:
         Gets the attributes being edited.
     */
     const wxTextAttr GetAttributes();
-    wxTextAttr GetAttributes();
+    const wxTextAttr&  GetAttributes();
     //@}
 
     /**
@@ -195,7 +195,7 @@ public:
         Returns the image list associated with the dialog, used for example if showing
         the dialog as a toolbook.
     */
-    wxImageList* GetImageList();
+    wxImageList* GetImageList() const;
 
     /**
         Gets common attributes from the given range and calls SetAttributes. Attributes
@@ -207,12 +207,12 @@ public:
     /**
         Gets the associated style definition, if any.
     */
-    wxRichTextStyleDefinition* GetStyleDefinition();
+    wxRichTextStyleDefinition* GetStyleDefinition() const;
 
     /**
         Gets the associated style sheet, if any.
     */
-    wxRichTextStyleSheet* GetStyleSheet();
+    wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Sets the attributes to be edited.

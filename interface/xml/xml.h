@@ -76,22 +76,22 @@ public:
         Returns the value of the attribute named @a attrName if it does exist.
         If it does not exist, the @a defaultVal is returned.
     */
-    bool GetAttribute(const wxString& attrName, wxString* value);
-    wxString GetAttribute(const wxString& attrName,
-                          const wxString& defaultVal);
+    bool GetAttribute(const wxString& attrName, wxString* value) const;
+    const wxString  GetAttribute(const wxString& attrName,
+                                 const wxString& defaultVal) const;
     //@}
 
     /**
         Return a pointer to the first attribute of this node.
     */
-    wxXmlAttribute* GetAttributes();
+    wxXmlAttribute* GetAttributes() const;
 
     /**
         Returns the first child of this node.
         To get a pointer to the second child of this node (if it does exist), use the
         GetNext() function on the returned value.
     */
-    wxXmlNode* GetChildren();
+    wxXmlNode* GetChildren() const;
 
     /**
         Returns the content of this node. Can be an empty string.
@@ -99,7 +99,7 @@ public:
         the
         content is an empty string. See GetNodeContent() for more details.
     */
-    wxString GetContent();
+    wxString GetContent() const;
 
     /**
         Returns the number of nodes which separe this node from @c grandparent.
@@ -108,24 +108,24 @@ public:
         or the @NULL node (which is the parent of non-linked nodes or the parent of a
         wxXmlDocument's root node).
     */
-    int GetDepth(wxXmlNode* grandparent = NULL);
+    int GetDepth(wxXmlNode* grandparent = NULL) const;
 
     /**
         Returns line number of the node in the input XML file or -1 if it is unknown.
     */
-    int GetLineNumber();
+    int GetLineNumber() const;
 
     /**
         Returns the name of this node. Can be an empty string (e.g. for nodes of type
         @c wxXML_TEXT_NODE or @c wxXML_CDATA_SECTION_NODE).
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Returns a pointer to the sibling of this node or @NULL if there are no
         siblings.
     */
-    wxXmlNode* GetNext();
+    wxXmlNode* GetNext() const;
 
     /**
         Returns the content of the first child node of type @c wxXML_TEXT_NODE or @c
@@ -139,23 +139,23 @@ public:
         An empty string is returned if the node has no children of type @c
         wxXML_TEXT_NODE or @c wxXML_CDATA_SECTION_NODE, or if the content of the first child of such types is empty.
     */
-    wxString GetNodeContent();
+    wxString GetNodeContent() const;
 
     /**
         Returns a pointer to the parent of this node or @NULL if this node has no
         parent.
     */
-    wxXmlNode* GetParent();
+    wxXmlNode* GetParent() const;
 
     /**
         Returns the type of this node.
     */
-    wxXmlNodeType GetType();
+    wxXmlNodeType GetType() const;
 
     /**
         Returns @true if this node has a attribute named @e attrName.
     */
-    bool HasAttribute(const wxString& attrName);
+    bool HasAttribute(const wxString& attrName) const;
 
     /**
         Inserts the @a child node after @a before_node in the children list.
@@ -175,7 +175,7 @@ public:
         documents must always produce the exact same tree regardless of the locale it
         runs under.
     */
-    bool IsWhitespaceOnly();
+    bool IsWhitespaceOnly() const;
 
     /**
         Removes the given node from the children list. Returns @true if the node was
@@ -272,17 +272,17 @@ public:
     /**
         Returns the name of this attribute.
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Returns the sibling of this attribute or @NULL if there are no siblings.
     */
-    wxXmlAttribute* GetNext();
+    wxXmlAttribute* GetNext() const;
 
     /**
         Returns the value of this attribute.
     */
-    wxString GetValue();
+    wxString GetValue() const;
 
     /**
         Sets the name of this attribute.
@@ -411,19 +411,19 @@ public:
         (same as passed to Load() or constructor, defaults to UTF-8).
         NB: this is meaningless in Unicode build where data are stored as @c wchar_t*.
     */
-    wxString GetEncoding();
+    wxString GetEncoding() const;
 
     /**
         Returns encoding of document (may be empty).
         Note: this is the encoding original file was saved in, @b not the
         encoding of in-memory representation!
     */
-    wxString GetFileEncoding();
+    wxString GetFileEncoding() const;
 
     /**
         Returns the root node of the document.
     */
-    wxXmlNode* GetRoot();
+    wxXmlNode* GetRoot() const;
 
     /**
         Returns the version of document.
@@ -431,12 +431,12 @@ public:
         If the version attribute was not explicitely given in the header, this function
         returns an empty string.
     */
-    wxString GetVersion();
+    wxString GetVersion() const;
 
     /**
         Returns @true if the document has been loaded successfully.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     //@{
     /**
@@ -452,8 +452,8 @@ public:
         Saves XML tree in the given output stream. See other overload for a description
         of @c indentstep.
     */
-    bool Save(const wxString& filename, int indentstep = 1);
-    bool Save(wxOutputStream& stream, int indentstep = 1);
+    bool Save(const wxString& filename, int indentstep = 1) const;
+    const bool Save(wxOutputStream& stream, int indentstep = 1) const;
     //@}
 
     /**

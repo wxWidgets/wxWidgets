@@ -58,27 +58,27 @@ public:
     /**
         Returns the associated rich text control, if any.
     */
-    wxRichTextCtrl* GetRichTextCtrl();
+    wxRichTextCtrl* GetRichTextCtrl() const;
 
     /**
         Returns the wxChoice control used for selecting the style category.
     */
-    wxChoice* GetStyleChoice();
+    wxChoice* GetStyleChoice() const;
 
     /**
         Returns the wxListBox control used to view the style list.
     */
-    wxRichTextStyleListBox* GetStyleListBox();
+    wxRichTextStyleListBox* GetStyleListBox() const;
 
     /**
         Returns the associated style sheet, if any.
     */
-    wxRichTextStyleSheet* GetStyleSheet();
+    wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Returns the type of style to show in the list box.
     */
-    wxRichTextStyleListBox::wxRichTextStyleType GetStyleType();
+    wxRichTextStyleListBox::wxRichTextStyleType GetStyleType() const;
 
     /**
         Associates the control with a wxRichTextCtrl.
@@ -130,31 +130,31 @@ public:
     /**
         Returns the style on which this style is based.
     */
-    const wxString GetBaseStyle();
+    const wxString GetBaseStyle() const;
 
     /**
         Returns the style's description.
     */
-    const wxString GetDescription();
+    const wxString GetDescription() const;
 
     /**
         Returns the style name.
     */
-    const wxString GetName();
+    const wxString GetName() const;
 
     //@{
     /**
         Returns the attributes associated with this style.
     */
-    wxTextAttr GetStyle();
-    const wxTextAttr GetStyle();
+    wxTextAttr GetStyle() const;
+    const wxTextAttr GetStyle() const;
     //@}
 
     /**
         Returns the style attributes combined with the attributes of the specified base
         style, if any. This function works recursively.
     */
-    wxTextAttr GetStyleMergedWithBase(wxRichTextStyleSheet* sheet);
+    wxTextAttr GetStyleMergedWithBase(wxRichTextStyleSheet* sheet) const;
 
     /**
         Sets the name of the style that this style is based on.
@@ -204,7 +204,7 @@ public:
     /**
         Returns the style that should normally follow this style.
     */
-    const wxString GetNextStyle();
+    const wxString GetNextStyle() const;
 
     /**
         Sets the style that should normally follow this style.
@@ -254,44 +254,44 @@ public:
     /**
         Converts units in tenths of a millimetre to device units.
     */
-    int ConvertTenthsMMToPixels(wxDC& dc, int units);
+    int ConvertTenthsMMToPixels(wxDC& dc, int units) const;
 
     /**
         Creates a suitable HTML fragment for a definition.
     */
-    wxString CreateHTML(wxRichTextStyleDefinition* def);
+    wxString CreateHTML(wxRichTextStyleDefinition* def) const;
 
     /**
         If the return value is @true, clicking on a style name in the list will
         immediately
         apply the style to the associated rich text control.
     */
-    bool GetApplyOnSelection();
+    bool GetApplyOnSelection() const;
 
     /**
         Returns the wxRichTextCtrl associated with this listbox.
     */
-    wxRichTextCtrl* GetRichTextCtrl();
+    wxRichTextCtrl* GetRichTextCtrl() const;
 
     /**
         Gets a style for a listbox index.
     */
-    wxRichTextStyleDefinition* GetStyle(size_t i);
+    wxRichTextStyleDefinition* GetStyle(size_t i) const;
 
     /**
         Returns the style sheet associated with this listbox.
     */
-    wxRichTextStyleSheet* GetStyleSheet();
+    wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Returns the type of style to show in the list box.
     */
-    wxRichTextStyleListBox::wxRichTextStyleType GetStyleType();
+    wxRichTextStyleListBox::wxRichTextStyleType GetStyleType() const;
 
     /**
         Returns the HTML for this item.
     */
-    wxString OnGetItem(size_t n);
+    wxString OnGetItem(size_t n) const;
 
     /**
         Implements left click behaviour, applying the clicked style to the
@@ -372,12 +372,12 @@ public:
     /**
         Returns the wxRichTextCtrl associated with this control.
     */
-    wxRichTextCtrl* GetRichTextCtrl();
+    wxRichTextCtrl* GetRichTextCtrl() const;
 
     /**
         Returns the style sheet associated with this control.
     */
-    wxRichTextStyleSheet* GetStyleSheet();
+    wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Associates the control with a wxRichTextCtrl.
@@ -472,7 +472,7 @@ public:
         This function finds the level (from 0 to 9) whose indentation attribute mostly
         closely matches @a indent (expressed in tenths of a millimetre).
     */
-    int FindLevelForIndent(int indent);
+    int FindLevelForIndent(int indent) const;
 
     /**
         This function combines the list style's base attributes and the level style
@@ -481,7 +481,7 @@ public:
         included in the result.
     */
     wxTextAttr GetCombinedStyle(int indent,
-                                wxRichTextStyleSheet* styleSheet = NULL);
+                                wxRichTextStyleSheet* styleSheet = NULL) const;
 
     /**
         This function combines the list style's base attributes and the style for the
@@ -490,23 +490,23 @@ public:
         included in the result.
     */
     wxTextAttr GetCombinedStyleLevel(int level,
-                                     wxRichTextStyleSheet* styleSheet = NULL);
+                                     wxRichTextStyleSheet* styleSheet = NULL) const;
 
     /**
         Returns the style for the given level. @a level is a number between 0 and 9.
     */
-    const wxTextAttr* GetLevelAttributes(int level);
+    const wxTextAttr* GetLevelAttributes(int level) const;
 
     /**
         Returns the number of levels. This is hard-wired to 10.
         Returns the style for the given level. @e level is a number between 0 and 9.
     */
-    int GetLevelCount();
+    int GetLevelCount() const;
 
     /**
         Returns @true if the given level has numbered list attributes.
     */
-    int IsNumbered(int level);
+    int IsNumbered(int level) const;
 
     //@{
     /**
@@ -578,62 +578,62 @@ public:
     /**
         Finds a character definition by name.
     */
-    wxRichTextCharacterStyleDefinition* FindCharacterStyle(const wxString& name);
+    wxRichTextCharacterStyleDefinition* FindCharacterStyle(const wxString& name) const;
 
     /**
         Finds a list definition by name.
     */
-    wxRichTextListStyleDefinition* FindListStyle(const wxString& name);
+    wxRichTextListStyleDefinition* FindListStyle(const wxString& name) const;
 
     /**
         Finds a paragraph definition by name.
     */
-    wxRichTextParagraphStyleDefinition* FindParagraphStyle(const wxString& name);
+    wxRichTextParagraphStyleDefinition* FindParagraphStyle(const wxString& name) const;
 
     /**
         Finds a style definition by name.
     */
-    wxRichTextStyleDefinition* FindStyle(const wxString& name);
+    wxRichTextStyleDefinition* FindStyle(const wxString& name) const;
 
     /**
         Returns the @e nth character style.
     */
-    wxRichTextCharacterStyleDefinition* GetCharacterStyle(size_t n);
+    wxRichTextCharacterStyleDefinition* GetCharacterStyle(size_t n) const;
 
     /**
         Returns the number of character styles.
     */
-    size_t GetCharacterStyleCount();
+    size_t GetCharacterStyleCount() const;
 
     /**
         Returns the style sheet's description.
     */
-    const wxString GetDescription();
+    const wxString GetDescription() const;
 
     /**
         Returns the @e nth list style.
     */
-    wxRichTextListStyleDefinition* GetListStyle(size_t n);
+    wxRichTextListStyleDefinition* GetListStyle(size_t n) const;
 
     /**
         Returns the number of list styles.
     */
-    size_t GetListStyleCount();
+    size_t GetListStyleCount() const;
 
     /**
         Returns the style sheet's name.
     */
-    const wxString GetName();
+    const wxString GetName() const;
 
     /**
         Returns the @e nth paragraph style.
     */
-    wxRichTextParagraphStyleDefinition* GetParagraphStyle(size_t n);
+    wxRichTextParagraphStyleDefinition* GetParagraphStyle(size_t n) const;
 
     /**
         Returns the number of paragraph styles.
     */
-    size_t GetParagraphStyleCount();
+    size_t GetParagraphStyleCount() const;
 
     /**
         Removes a character style.

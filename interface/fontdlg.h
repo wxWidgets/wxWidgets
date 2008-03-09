@@ -50,7 +50,7 @@ public:
         dialog.
     */
     const wxFontData GetFontData();
-    wxFontData GetFontData();
+    const wxFontData&  GetFontData();
     //@}
 
     /**

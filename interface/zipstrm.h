@@ -67,14 +67,14 @@ public:
     /**
         Make a copy of this entry.
     */
-    wxZipEntry* Clone();
+    wxZipEntry* Clone() const;
 
     //@{
     /**
         A short comment for this entry.
     */
     wxString GetComment();
-    void SetComment(const wxString& comment);
+    const void SetComment(const wxString& comment);
     //@}
 
     //@{
@@ -95,7 +95,7 @@ public:
         @ref mode() Get/SetMode
     */
     wxUint32 GetExternalAttributes();
-    void SetExternalAttributes(wxUint32 attr);
+    const void SetExternalAttributes(wxUint32 attr);
     //@}
 
     //@{
@@ -105,8 +105,8 @@ public:
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
     const char* GetExtra();
-    size_t GetExtraLen();
-    void SetExtra(const char* extra, size_t len);
+    const size_t GetExtraLen();
+    const void SetExtra(const char* extra, size_t len);
     //@}
 
     //@{
@@ -116,8 +116,8 @@ public:
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
     const char* GetLocalExtra();
-    size_t GetLocalExtraLen();
-    void SetLocalExtra(const char* extra, size_t len);
+    const size_t GetLocalExtraLen();
+    const void SetLocalExtra(const char* extra, size_t len);
     //@}
 
     //@{
@@ -129,7 +129,7 @@ public:
         choose the method when writing the entry.
     */
     int GetMethod();
-    void SetMethod(int method);
+    const void SetMethod(int method);
     //@}
 
     //@{
@@ -145,7 +145,7 @@ public:
         permissions when creating zips, call SetSystemMadeBy(wxZIP_SYSTEM_UNIX).
     */
     int GetMode();
-    void SetMode(int mode);
+    const void SetMode(int mode);
     //@}
 
     //@{
@@ -155,23 +155,23 @@ public:
         able to store unix permissions using @ref mode() SetMode.
     */
     int GetSystemMadeBy();
-    void SetSystemMadeBy(int system);
+    const void SetSystemMadeBy(int system);
     //@}
 
     /**
         The compressed size of this entry in bytes.
     */
-    off_t GetCompressedSize();
+    off_t GetCompressedSize() const;
 
     /**
         CRC32 for this entry's data.
     */
-    wxUint32 GetCrc();
+    wxUint32 GetCrc() const;
 
     /**
         Returns a combination of the bits flags in the enumeration @c wxZipFlags.
     */
-    int GetFlags();
+    int GetFlags() const;
 
     //@{
     /**
@@ -183,23 +183,23 @@ public:
         @see @ref overview_wxarcbyname "Looking up an archive entry by name"
     */
     wxString GetInternalName();
-    wxString GetInternalName(const wxString& name,
-                             wxPathFormat format = wxPATH_NATIVE,
-                             bool* pIsDir = NULL);
+    const wxString  GetInternalName(const wxString& name,
+                                    wxPathFormat format = wxPATH_NATIVE,
+                                    bool* pIsDir = NULL);
     //@}
 
     /**
         Returns @true if @ref systemmadeby() GetSystemMadeBy
         is a flavour of unix.
     */
-    bool IsMadeByUnix();
+    bool IsMadeByUnix() const;
 
     //@{
     /**
         Indicates that this entry's data is text in an 8-bit encoding.
     */
     bool IsText();
-    void SetIsText(bool isText = true);
+    const void SetIsText(bool isText = true);
     //@}
 
     //@{
@@ -409,7 +409,7 @@ public:
         which currently is equivalent to 6.
     */
     int GetLevel();
-    void SetLevel(int level);
+    const void SetLevel(int level);
     //@}
 
     /**

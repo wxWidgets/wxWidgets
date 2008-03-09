@@ -95,7 +95,7 @@ public:
         Use GetLabelText() if only the
         label text is needed.
     */
-    wxString GetLabel();
+    wxString GetLabel() const;
 
     //@{
     /**
@@ -107,7 +107,7 @@ public:
         characters (if any) and without the markup.
     */
     wxString GetLabelText();
-    static wxString GetLabelText(const wxString& label);
+    const static wxString  GetLabelText(const wxString& label);
     //@}
 
     /**

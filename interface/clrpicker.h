@@ -85,7 +85,7 @@ public:
     /**
         Returns the currently selected colour.
     */
-    wxColour GetColour();
+    wxColour GetColour() const;
 
     //@{
     /**
@@ -122,7 +122,7 @@ public:
     /**
         Retrieve the colour the user has just selected.
     */
-    wxColour GetColour();
+    wxColour GetColour() const;
 
     /**
         Set the colour associated with the event.

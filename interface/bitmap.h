@@ -70,17 +70,17 @@ public:
     /**
         Gets the file extension associated with this handler.
     */
-    const wxString GetExtension();
+    const wxString GetExtension() const;
 
     /**
         Gets the name of this handler.
     */
-    const wxString GetName();
+    const wxString GetName() const;
 
     /**
         Gets the bitmap type associated with this handler.
     */
-    long GetType();
+    long GetType() const;
 
     /**
         Loads a bitmap from a file or resource, putting the resulting data into @e
@@ -400,7 +400,7 @@ public:
         Gets the colour depth of the bitmap. A value of 1 indicates a
         monochrome bitmap.
     */
-    int GetDepth();
+    int GetDepth() const;
 
     /**
         Returns the static list of bitmap format handlers.
@@ -412,7 +412,7 @@ public:
     /**
         Gets the height of the bitmap in pixels.
     */
-    int GetHeight();
+    int GetHeight() const;
 
     /**
         Gets the associated mask (if any) which may have been loaded from a file
@@ -420,7 +420,7 @@ public:
         
         @see SetMask(), wxMask
     */
-    wxMask* GetMask();
+    wxMask* GetMask() const;
 
     /**
         Gets the associated palette (if any) which may have been loaded from a file
@@ -428,20 +428,20 @@ public:
         
         @see wxPalette
     */
-    wxPalette* GetPalette();
+    wxPalette* GetPalette() const;
 
     /**
         Returns a sub bitmap of the current one as long as the rect belongs entirely to
         the bitmap. This function preserves bit depth and mask information.
     */
-    wxBitmap GetSubBitmap(const wxRect& rect);
+    wxBitmap GetSubBitmap(const wxRect& rect) const;
 
     /**
         Gets the width of the bitmap in pixels.
         
         @see GetHeight()
     */
-    int GetWidth();
+    int GetWidth() const;
 
     /**
         Adds the standard bitmap format handlers, which, depending on wxWidgets
@@ -467,7 +467,7 @@ public:
     /**
         Returns @true if bitmap data is present.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Loads a bitmap from a file or resource.

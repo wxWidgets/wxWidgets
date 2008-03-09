@@ -92,7 +92,7 @@ public:
     /**
         Returns number of entries in palette.
     */
-    int GetColoursCount();
+    int GetColoursCount() const;
 
     /**
         Returns a pixel value (index into the palette) for the given RGB values.
@@ -109,7 +109,7 @@ public:
         @see GetRGB()
     */
     int GetPixel(unsigned char red, unsigned char green,
-                 unsigned char blue);
+                 unsigned char blue) const;
 
     /**
         Returns RGB values for a given palette index.
@@ -129,12 +129,12 @@ public:
     */
     bool GetRGB(int pixel, const unsigned char* red,
                 const unsigned char* green,
-                const unsigned char* blue);
+                const unsigned char* blue) const;
 
     /**
         Returns @true if palette data is present.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".

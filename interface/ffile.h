@@ -81,7 +81,7 @@ public:
         
         @see IsOpened()
     */
-    bool Eof();
+    bool Eof() const;
 
     /**
         Returns @true if an error has occurred on this file, similar to the standard
@@ -101,19 +101,19 @@ public:
     /**
         Returns the type of the file. Possible return values are:
     */
-    wxFileKind GetKind();
+    wxFileKind GetKind() const;
 
     /**
         Returns @true if the file is opened. Most of the methods of this class may
         only
         be used for an opened file.
     */
-    bool IsOpened();
+    bool IsOpened() const;
 
     /**
         Returns the length of the file.
     */
-    wxFileOffset Length();
+    wxFileOffset Length() const;
 
     /**
         Opens the file, returning @true if successful.
@@ -175,7 +175,7 @@ public:
     /**
         Returns the current position.
     */
-    wxFileOffset Tell();
+    wxFileOffset Tell() const;
 
     /**
         )
@@ -188,5 +188,5 @@ public:
     /**
         Returns the file pointer associated with the file.
     */
-    FILE* fp();
+    FILE* fp() const;
 };

@@ -33,12 +33,12 @@ public:
     /**
         Returns the precision ( see @ref constr() wxGridCellFloatRenderer ).
     */
-    int GetPrecision();
+    int GetPrecision() const;
 
     /**
         Returns the width ( see @ref constr() wxGridCellFloatRenderer ).
     */
-    int GetWidth();
+    int GetWidth() const;
 
     /**
         Parameters string format is "width[,precision]".
@@ -129,7 +129,7 @@ public:
     /**
         get the currently used attr provider (may be @NULL)
     */
-    wxGridCellAttrProvider* GetAttrProvider();
+    wxGridCellAttrProvider* GetAttrProvider() const;
 
     /**
         
@@ -185,7 +185,7 @@ public:
     /**
         
     */
-    wxGrid* GetView();
+    wxGrid* GetView() const;
 
     /**
         
@@ -219,9 +219,9 @@ public:
     void SetColAttr(wxGridCellAttr* attr, int col);
 
     /**
-        , @b const@e wxString)
+        , @e wxString)
     */
-    void SetColLabelValue();
+    void SetColLabelValue() const;
 
     /**
         
@@ -229,9 +229,9 @@ public:
     void SetRowAttr(wxGridCellAttr* attr, int row);
 
     /**
-        , @b const@e wxString)
+        , @e wxString)
     */
-    void SetRowLabelValue();
+    void SetRowLabelValue() const;
 
     /**
         
@@ -315,7 +315,7 @@ public:
     /**
         Create a new object which is the copy of this one.
     */
-    wxGridCellEditor* Clone();
+    wxGridCellEditor* Clone() const;
 
     /**
         Creates the actual edit control.
@@ -638,7 +638,7 @@ public:
     /**
         
     */
-    wxGridCellRenderer* Clone();
+    wxGridCellRenderer* Clone() const;
 
     /**
         Draw the given cell on the provided DC inside the given rectangle
@@ -685,13 +685,13 @@ public:
     /**
         String representation of the value.
     */
-    wxString GetString();
+    wxString GetString() const;
 
     /**
         If the return value is @true, the editor uses a wxSpinCtrl to get user input,
         otherwise it uses a wxTextCtrl.
     */
-    bool HasRange();
+    bool HasRange() const;
 
     /**
         Parameters string format is "min,max".
@@ -810,7 +810,7 @@ public:
     /**
         Creates a new copy of this object.
     */
-    wxGridCellAttr* Clone();
+    wxGridCellAttr* Clone() const;
 
     /**
         
@@ -820,62 +820,62 @@ public:
     /**
         See SetAlignment() for the returned values.
     */
-    void GetAlignment(int* hAlign, int* vAlign);
+    void GetAlignment(int* hAlign, int* vAlign) const;
 
     /**
         
     */
-    const wxColour GetBackgroundColour();
+    const wxColour GetBackgroundColour() const;
 
     /**
         
     */
-    wxGridCellEditor* GetEditor(wxGrid* grid, int row, int col);
+    wxGridCellEditor* GetEditor(wxGrid* grid, int row, int col) const;
 
     /**
         
     */
-    const wxFont GetFont();
+    const wxFont GetFont() const;
 
     /**
         
     */
-    wxGridCellRenderer* GetRenderer(wxGrid* grid, int row, int col);
+    wxGridCellRenderer* GetRenderer(wxGrid* grid, int row, int col) const;
 
     /**
         
     */
-    const wxColour GetTextColour();
+    const wxColour GetTextColour() const;
 
     /**
         
     */
-    bool HasAlignment();
+    bool HasAlignment() const;
 
     /**
         
     */
-    bool HasBackgroundColour();
+    bool HasBackgroundColour() const;
 
     /**
         
     */
-    bool HasEditor();
+    bool HasEditor() const;
 
     /**
         
     */
-    bool HasFont();
+    bool HasFont() const;
 
     /**
         
     */
-    bool HasRenderer();
+    bool HasRenderer() const;
 
     /**
         accessors
     */
-    bool HasTextColour();
+    bool HasTextColour() const;
 
     /**
         This class is ref counted: it is created with ref count of 1, so
@@ -887,7 +887,7 @@ public:
     /**
         
     */
-    bool IsReadOnly();
+    bool IsReadOnly() const;
 
     /**
         Sets the alignment. @a hAlign can be one of @c wxALIGN_LEFT,
@@ -1242,14 +1242,14 @@ public:
         to the client size of the grid window.
     */
     wxRect BlockToDeviceRect(const wxGridCellCoords& topLeft,
-                             const wxGridCellCoords& bottomRight);
+                             const wxGridCellCoords& bottomRight) const;
 
     /**
         Returns @true if columns can be moved by dragging with the mouse. Columns can be
         moved
         by dragging on their labels.
     */
-    bool CanDragColMove();
+    bool CanDragColMove() const;
 
     /**
         Returns @true if columns can be resized by dragging with the mouse. Columns can
@@ -1259,13 +1259,13 @@ public:
         resized by dragging the right edge of the column in the grid cell area
         (see wxGrid::EnableDragGridSize).
     */
-    bool CanDragColSize();
+    bool CanDragColSize() const;
 
     /**
         Return @true if the dragging of grid lines to resize rows and columns is enabled
         or @false otherwise.
     */
-    bool CanDragGridSize();
+    bool CanDragGridSize() const;
 
     /**
         Returns @true if rows can be resized by dragging with the mouse. Rows can be
@@ -1275,19 +1275,19 @@ public:
         resized by dragging the lower edge of the row in the grid cell area
         (see wxGrid::EnableDragGridSize).
     */
-    bool CanDragRowSize();
+    bool CanDragRowSize() const;
 
     /**
         Returns @true if the in-place edit control for the current grid cell can be used
         and
         @false otherwise (e.g. if the current cell is read-only).
     */
-    bool CanEnableCellControl();
+    bool CanEnableCellControl() const;
 
     /**
         Do we have some place to store attributes in?
     */
-    bool CanHaveAttributes();
+    bool CanHaveAttributes() const;
 
     /**
         EnableDragRowSize()
@@ -1324,8 +1324,8 @@ public:
         logical
         coordinates.
     */
-    wxRect CellToRect(int row, int col);
-    wxRect CellToRect(const wxGridCellCoords& coords);
+    wxRect CellToRect(int row, int col) const;
+    const wxRect  CellToRect(const wxGridCellCoords& coords) const;
     //@}
 
     /**
@@ -1521,7 +1521,7 @@ public:
         without (yet) matching calls to EndBatch(). While
         the grid's batch count is greater than zero the display will not be updated.
     */
-    int GetBatchCount();
+    int GetBatchCount() const;
 
     /**
         Sets the arguments to the horizontal and vertical text alignment values for the
@@ -1531,12 +1531,12 @@ public:
         
         Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
-    void GetCellAlignment(int row, int col, int* horiz, int* vert);
+    void GetCellAlignment(int row, int col, int* horiz, int* vert) const;
 
     /**
         Returns the background colour of the cell at the specified location.
     */
-    wxColour GetCellBackgroundColour(int row, int col);
+    wxColour GetCellBackgroundColour(int row, int col) const;
 
     /**
         Returns a pointer to the editor for the cell at the specified location.
@@ -1544,12 +1544,12 @@ public:
         the @ref overview_gridoverview "wxGrid overview" for more information about
         cell editors and renderers.
     */
-    wxGridCellEditor* GetCellEditor(int row, int col);
+    wxGridCellEditor* GetCellEditor(int row, int col) const;
 
     /**
         Returns the font for text in the grid cell at the specified location.
     */
-    wxFont GetCellFont(int row, int col);
+    wxFont GetCellFont(int row, int col) const;
 
     /**
         Returns a pointer to the renderer for the grid cell at the specified location.
@@ -1557,12 +1557,12 @@ public:
         the @ref overview_gridoverview "wxGrid overview" for more information about
         cell editors and renderers.
     */
-    wxGridCellRenderer* GetCellRenderer(int row, int col);
+    wxGridCellRenderer* GetCellRenderer(int row, int col) const;
 
     /**
         Returns the text colour for the grid cell at the specified location.
     */
-    wxColour GetCellTextColour(int row, int col);
+    wxColour GetCellTextColour(int row, int col) const;
 
     //@{
     /**
@@ -1579,14 +1579,14 @@ public:
         See wxGridTableBase::CanGetValueAs
         and the @ref overview_gridoverview "wxGrid overview" for more information.
     */
-    wxString GetCellValue(int row, int col);
-    wxString GetCellValue(const wxGridCellCoords& coords);
+    wxString GetCellValue(int row, int col) const;
+    const wxString  GetCellValue(const wxGridCellCoords& coords) const;
     //@}
 
     /**
         Returns the column ID of the specified column position.
     */
-    int GetColAt(int colPos);
+    int GetColAt(int colPos) const;
 
     /**
         Returns the pen used for vertical grid lines. This virtual function may be
@@ -1603,12 +1603,12 @@ public:
         
         Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
-    void GetColLabelAlignment(int* horiz, int* vert);
+    void GetColLabelAlignment(int* horiz, int* vert) const;
 
     /**
         Returns the current height of the column labels.
     */
-    int GetColLabelSize();
+    int GetColLabelSize() const;
 
     /**
         Returns the specified column label. The default grid table class provides
@@ -1618,39 +1618,39 @@ public:
         wxGridTableBase::GetColLabelValue to provide
         your own labels.
     */
-    wxString GetColLabelValue(int col);
+    wxString GetColLabelValue(int col) const;
 
     /**
         
     */
-    int GetColLeft(int col);
+    int GetColLeft(int col) const;
 
     /**
         This returns the value of the lowest column width that can be handled
         correctly. See
         member SetColMinimalAcceptableWidth() for details.
     */
-    int GetColMinimalAcceptableWidth();
+    int GetColMinimalAcceptableWidth() const;
 
     /**
         Get the minimal width of the given column/row.
     */
-    int GetColMinimalWidth(int col);
+    int GetColMinimalWidth(int col) const;
 
     /**
         Returns the position of the specified column.
     */
-    int GetColPos(int colID);
+    int GetColPos(int colID) const;
 
     /**
         
     */
-    int GetColRight(int col);
+    int GetColRight(int col) const;
 
     /**
         Returns the width of the specified column.
     */
-    int GetColSize(int col);
+    int GetColSize(int col) const;
 
     /**
         Sets the arguments to the current default horizontal and vertical text alignment
@@ -1660,32 +1660,32 @@ public:
         
         Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
-    void GetDefaultCellAlignment(int* horiz, int* vert);
+    void GetDefaultCellAlignment(int* horiz, int* vert) const;
 
     /**
         Returns the current default background colour for grid cells.
     */
-    wxColour GetDefaultCellBackgroundColour();
+    wxColour GetDefaultCellBackgroundColour() const;
 
     /**
         Returns the current default font for grid cell text.
     */
-    wxFont GetDefaultCellFont();
+    wxFont GetDefaultCellFont() const;
 
     /**
         Returns the current default colour for grid cell text.
     */
-    wxColour GetDefaultCellTextColour();
+    wxColour GetDefaultCellTextColour() const;
 
     /**
         Returns the default height for column labels.
     */
-    int GetDefaultColLabelSize();
+    int GetDefaultColLabelSize() const;
 
     /**
         Returns the current default width for grid columns.
     */
-    int GetDefaultColSize();
+    int GetDefaultColSize() const;
 
     /**
         Returns a pointer to the current default grid cell editor.
@@ -1693,20 +1693,20 @@ public:
         the @ref overview_gridoverview "wxGrid overview" for more information about
         cell editors and renderers.
     */
-    wxGridCellEditor* GetDefaultEditor();
+    wxGridCellEditor* GetDefaultEditor() const;
 
     //@{
     /**
         
     */
-    wxGridCellEditor* GetDefaultEditorForCell(int row, int col);
-    wxGridCellEditor* GetDefaultEditorForCell(const wxGridCellCoords& c);
+    wxGridCellEditor* GetDefaultEditorForCell(int row, int col) const;
+    const wxGridCellEditor*  GetDefaultEditorForCell(const wxGridCellCoords& c) const;
     //@}
 
     /**
         
     */
-    wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName);
+    wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName) const;
 
     /**
         Returns the pen used for grid lines. This virtual function may be overridden in
@@ -1723,77 +1723,77 @@ public:
         the @ref overview_gridoverview "wxGrid overview" for more information about
         cell editors and renderers.
     */
-    wxGridCellRenderer* GetDefaultRenderer();
+    wxGridCellRenderer* GetDefaultRenderer() const;
 
     /**
         
     */
-    wxGridCellRenderer* GetDefaultRendererForCell(int row, int col);
+    wxGridCellRenderer* GetDefaultRendererForCell(int row, int col) const;
 
     /**
         
     */
-    wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName);
+    wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName) const;
 
     /**
         Returns the default width for the row labels.
     */
-    int GetDefaultRowLabelSize();
+    int GetDefaultRowLabelSize() const;
 
     /**
         Returns the current default height for grid rows.
     */
-    int GetDefaultRowSize();
+    int GetDefaultRowSize() const;
 
     /**
         Returns the current grid cell column position.
     */
-    int GetGridCursorCol();
+    int GetGridCursorCol() const;
 
     /**
         Returns the current grid cell row position.
     */
-    int GetGridCursorRow();
+    int GetGridCursorRow() const;
 
     /**
         Returns the colour used for grid lines.
         
         @see GetDefaultGridLinePen()
     */
-    wxColour GetGridLineColour();
+    wxColour GetGridLineColour() const;
 
     /**
         Returns the colour used for the background of row and column labels.
     */
-    wxColour GetLabelBackgroundColour();
+    wxColour GetLabelBackgroundColour() const;
 
     /**
         Returns the font used for row and column labels.
     */
-    wxFont GetLabelFont();
+    wxFont GetLabelFont() const;
 
     /**
         Returns the colour used for row and column label text.
     */
-    wxColour GetLabelTextColour();
+    wxColour GetLabelTextColour() const;
 
     /**
         Returns the total number of grid columns (actually the number of columns in the
         underlying grid
         table).
     */
-    int GetNumberCols();
+    int GetNumberCols() const;
 
     /**
         Returns the total number of grid rows (actually the number of rows in the
         underlying grid table).
     */
-    int GetNumberRows();
+    int GetNumberRows() const;
 
     /**
         
     */
-    wxGridCellAttr* GetOrCreateCellAttr(int row, int col);
+    wxGridCellAttr* GetOrCreateCellAttr(int row, int col) const;
 
     /**
         Returns the pen used for horizontal grid lines. This virtual function may be
@@ -1809,12 +1809,12 @@ public:
         
         Vertical alignment will be one of wxTOP, wxCENTRE or wxBOTTOM.
     */
-    void GetRowLabelAlignment(int* horiz, int* vert);
+    void GetRowLabelAlignment(int* horiz, int* vert) const;
 
     /**
         Returns the current width of the row labels.
     */
-    int GetRowLabelSize();
+    int GetRowLabelSize() const;
 
     /**
         Returns the specified row label. The default grid table class provides numeric
@@ -1823,90 +1823,90 @@ public:
         wxGridTableBase::GetRowLabelValue to provide
         your own labels.
     */
-    wxString GetRowLabelValue(int row);
+    wxString GetRowLabelValue(int row) const;
 
     /**
         This returns the value of the lowest row width that can be handled correctly.
         See
         member SetRowMinimalAcceptableHeight() for details.
     */
-    int GetRowMinimalAcceptableHeight();
+    int GetRowMinimalAcceptableHeight() const;
 
     /**
         
     */
-    int GetRowMinimalHeight(int col);
+    int GetRowMinimalHeight(int col) const;
 
     /**
         Returns the height of the specified row.
     */
-    int GetRowSize(int row);
+    int GetRowSize(int row) const;
 
     /**
         Returns the number of pixels per horizontal scroll increment. The default is 15.
         
         @see GetScrollLineY(), SetScrollLineX(), SetScrollLineY()
     */
-    int GetScrollLineX();
+    int GetScrollLineX() const;
 
     /**
         Returns the number of pixels per vertical scroll increment. The default is 15.
         
         @see GetScrollLineX(), SetScrollLineX(), SetScrollLineY()
     */
-    int GetScrollLineY();
+    int GetScrollLineY() const;
 
     /**
         Returns an array of singly selected cells.
     */
-    wxGridCellCoordsArray GetSelectedCells();
+    wxGridCellCoordsArray GetSelectedCells() const;
 
     /**
         Returns an array of selected cols.
     */
-    wxArrayInt GetSelectedCols();
+    wxArrayInt GetSelectedCols() const;
 
     /**
         Returns an array of selected rows.
     */
-    wxArrayInt GetSelectedRows();
+    wxArrayInt GetSelectedRows() const;
 
     /**
         Access or update the selection fore/back colours
     */
-    wxColour GetSelectionBackground();
+    wxColour GetSelectionBackground() const;
 
     /**
         Returns an array of the bottom right corners of blocks of selected cells,
         see GetSelectionBlockTopLeft().
     */
-    wxGridCellCoordsArray GetSelectionBlockBottomRight();
+    wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
 
     /**
         Returns an array of the top left corners of blocks of selected cells,
         see GetSelectionBlockBottomRight().
     */
-    wxGridCellCoordsArray GetSelectionBlockTopLeft();
+    wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
 
     /**
         
     */
-    wxColour GetSelectionForeground();
+    wxColour GetSelectionForeground() const;
 
     /**
         Returns the current selection mode, see SetSelectionMode().
     */
-    wxGrid::wxGridSelectionModes GetSelectionMode();
+    wxGrid::wxGridSelectionModes GetSelectionMode() const;
 
     /**
         Returns a base pointer to the current table object.
     */
-    wxGridTableBase* GetTable();
+    wxGridTableBase* GetTable() const;
 
     /**
         Returned number of whole cols visible.
     */
-    int GetViewWidth();
+    int GetViewWidth() const;
 
     /**
         EnableGridLines()
@@ -1928,7 +1928,7 @@ public:
     /**
         Returns @true if drawing of grid lines is turned on, @false otherwise.
     */
-    bool GridLinesEnabled();
+    bool GridLinesEnabled() const;
 
     /**
         Hides the in-place cell edit control.
@@ -2002,39 +2002,39 @@ public:
     /**
         Returns @true if the in-place edit control is currently enabled.
     */
-    bool IsCellEditControlEnabled();
+    bool IsCellEditControlEnabled() const;
 
     /**
         Returns @true if the current cell has been set to read-only
         (see wxGrid::SetReadOnly).
     */
-    bool IsCurrentCellReadOnly();
+    bool IsCurrentCellReadOnly() const;
 
     /**
         Returns @false if the whole grid has been set as read-only or @true otherwise.
         See EnableEditing() for more information about
         controlling the editing status of grid cells.
     */
-    bool IsEditable();
+    bool IsEditable() const;
 
     //@{
     /**
         Is this cell currently selected.
     */
-    bool IsInSelection(int row, int col);
-    bool IsInSelection(const wxGridCellCoords& coords);
+    bool IsInSelection(int row, int col) const;
+    const bool IsInSelection(const wxGridCellCoords& coords) const;
     //@}
 
     /**
         Returns @true if the cell at the specified location can't be edited.
         See also IsReadOnly().
     */
-    bool IsReadOnly(int row, int col);
+    bool IsReadOnly(int row, int col) const;
 
     /**
         Returns @true if there are currently rows, columns or blocks of cells selected.
     */
-    bool IsSelection();
+    bool IsSelection() const;
 
     //@{
     /**
@@ -2042,9 +2042,9 @@ public:
         partially
         visible in the grid window.
     */
-    bool IsVisible(int row, int col, bool wholeCellVisible = true);
-    bool IsVisible(const wxGridCellCoords& coords,
-                   bool wholeCellVisible = true);
+    bool IsVisible(int row, int col, bool wholeCellVisible = true) const;
+    const bool IsVisible(const wxGridCellCoords& coords,
+                         bool wholeCellVisible = true) const;
     //@}
 
     //@{
@@ -2261,7 +2261,7 @@ public:
         This function returns the rectangle that encloses the selected cells
         in device coords and clipped to the client size of the grid window.
     */
-    wxRect SelectionToDeviceRect();
+    wxRect SelectionToDeviceRect() const;
 
     //@{
     /**
@@ -2685,26 +2685,26 @@ public:
             If @true, rather than returning wxNOT_FOUND, it returns either the first or
         last column depending on whether x is too far to the left or right respectively.
     */
-    int XToCol(int x, bool clipToMinMax = false);
+    int XToCol(int x, bool clipToMinMax = false) const;
 
     /**
         Returns the column whose right hand edge is close to the given logical x
         position.
         If no column edge is near to this position @c wxNOT_FOUND is returned.
     */
-    int XToEdgeOfCol(int x);
+    int XToEdgeOfCol(int x) const;
 
     /**
         Returns the row whose bottom edge is close to the given logical y position.
         If no row edge is near to this position @c wxNOT_FOUND is returned.
     */
-    int YToEdgeOfRow(int y);
+    int YToEdgeOfRow(int y) const;
 
     /**
         Returns the grid row that corresponds to the logical y coordinate. Returns
         @c wxNOT_FOUND if there is no row at the y position.
     */
-    int YToRow(int y);
+    int YToRow(int y) const;
 };
 
 
@@ -2737,13 +2737,13 @@ public:
     static bool IsTrueValue(const wxString& value);
 
     /**
-        , @b const wxString&@e valueFalse = _T(""))
+        ,  wxString&@e valueFalse = _T(""))
         This method allows to customize the values returned by GetValue() method for
         the cell using this editor. By default, the default values of the arguments are
         used, i.e. @c "1" is returned if the cell is checked and an empty string
         otherwise, using this method allows to change this.
     */
-    static void UseStringValues();
+    static void UseStringValues() const;
 };
 
 

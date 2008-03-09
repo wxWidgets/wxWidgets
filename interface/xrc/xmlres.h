@@ -83,7 +83,7 @@ public:
         is less than the argument, +1 if greater, and 0 if they equal.
     */
     int CompareVersion(int major, int minor, int release,
-                       int revision);
+                       int revision) const;
 
     /**
         Gets the global resources object or creates one if none exists.
@@ -105,7 +105,7 @@ public:
     /**
         Returns version information (a.b.c.d = d+ 256*c + 256@c 2*b + 256@c 3*a).
     */
-    long GetVersion();
+    long GetVersion() const;
 
     /**
         Returns a numeric ID that is equivalent to the string ID used in an XML

@@ -70,8 +70,8 @@ public:
         example:
     */
     wxVariant CallMethod(const wxString& method, int noArgs,
-                         wxVariant args[]);
-    wxVariant CallMethod(const wxString& method, ... );
+                         wxVariant args[]) const;
+    const wxVariant  CallMethod(const wxString& method, ... ) const;
     //@}
 
     /**
@@ -79,12 +79,12 @@ public:
         successfully created,
         or @false if not.
     */
-    bool CreateInstance(const wxString& classId);
+    bool CreateInstance(const wxString& classId) const;
 
     /**
         Gets the IDispatch pointer.
     */
-    IDispatch* GetDispatchPtr();
+    IDispatch* GetDispatchPtr() const;
 
     /**
         Retrieves the current object associated with a class id, and attaches the
@@ -96,7 +96,7 @@ public:
         such as two copies of Excel running. Which object is referenced cannot
         currently be specified.
     */
-    bool GetInstance(const wxString& classId);
+    bool GetInstance(const wxString& classId) const;
 
     /**
         Retrieves a property from this object, assumed to be a dispatch pointer, and
@@ -112,7 +112,7 @@ public:
     */
     bool GetObject(wxAutomationObject& obj, const wxString& property,
                    int noArgs = 0,
-                   wxVariant args[] = NULL);
+                   wxVariant args[] = NULL) const;
 
     //@{
     /**
@@ -131,8 +131,8 @@ public:
         needing to call GetProperty several times using several temporary objects.
     */
     wxVariant GetProperty(const wxString& property, int noArgs,
-                          wxVariant args[]);
-    wxVariant GetProperty(const wxString& property, ... );
+                          wxVariant args[]) const;
+    const wxVariant  GetProperty(const wxString& property, ... ) const;
     //@}
 
     /**
@@ -163,7 +163,7 @@ public:
     bool Invoke(const wxString& member, int action,
                 wxVariant& retValue, int noArgs,
                 wxVariant args[],
-                const wxVariant* ptrArgs[] = 0);
+                const wxVariant* ptrArgs[] = 0) const;
 
     //@{
     /**
@@ -183,7 +183,7 @@ public:
     */
     bool PutProperty(const wxString& property, int noArgs,
                      wxVariant args[]);
-    bool PutProperty(const wxString& property, ... );
+    const bool PutProperty(const wxString& property, ... );
     //@}
 
     /**

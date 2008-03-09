@@ -178,7 +178,7 @@ public:
         Returns descent value of the cell (m_Descent member).
         See explanation:
     */
-    int GetDescent();
+    int GetDescent() const;
 
     /**
         Returns pointer to the first cell in the list.
@@ -193,12 +193,12 @@ public:
     /**
         Returns height of the cell (m_Height member).
     */
-    int GetHeight();
+    int GetHeight() const;
 
     /**
         Returns unique cell identifier if there is any, empty string otherwise.
     */
-    virtual wxString GetId();
+    virtual wxString GetId() const;
 
     /**
         Returns hypertext link if associated with this cell or @NULL otherwise.
@@ -210,7 +210,7 @@ public:
             These coordinates are used e.g. by COLORMAP. Values are relative to the
             upper left corner of THIS cell (i.e. from 0 to m_Width or m_Height)
     */
-    virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0);
+    virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
 
     /**
         Returns cursor to show when mouse pointer is over the cell.
@@ -224,31 +224,31 @@ public:
         Returns pointer to the next cell in list (see htmlcell.h if you're
         interested in details).
     */
-    wxHtmlCell* GetNext();
+    wxHtmlCell* GetNext() const;
 
     /**
         Returns pointer to parent container.
     */
-    wxHtmlContainerCell* GetParent();
+    wxHtmlContainerCell* GetParent() const;
 
     /**
         Returns X position within parent (the value is relative to parent's
         upper left corner). The returned value is meaningful only if
         parent's Layout() was called before!
     */
-    int GetPosX();
+    int GetPosX() const;
 
     /**
         Returns Y position within parent (the value is relative to parent's
         upper left corner). The returned value is meaningful only if
         parent's Layout() was called before!
     */
-    int GetPosY();
+    int GetPosY() const;
 
     /**
         Returns width of the cell (m_Width member).
     */
-    int GetWidth();
+    int GetWidth() const;
 
     /**
         This method performs two actions:
@@ -336,12 +336,12 @@ public:
     /**
         Returns container's horizontal alignment.
     */
-    int GetAlignHor();
+    int GetAlignHor() const;
 
     /**
         Returns container's vertical alignment.
     */
-    int GetAlignVer();
+    int GetAlignVer() const;
 
     /**
         Returns the background colour of the container or @c wxNullColour if no
@@ -357,13 +357,13 @@ public:
         value.
         It is NOT always in pixels!
     */
-    int GetIndent(int ind);
+    int GetIndent(int ind) const;
 
     /**
         Returns the units of indentation for @a ind where @a ind is one
         of the @b wxHTML_INDENT_* constants.
     */
-    int GetIndentUnits(int ind);
+    int GetIndentUnits(int ind) const;
 
     /**
         Inserts new cell into the container.

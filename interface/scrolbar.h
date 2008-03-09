@@ -88,28 +88,28 @@ public:
         
         @see SetScrollbar()
     */
-    int GetPageSize();
+    int GetPageSize() const;
 
     /**
         Returns the length of the scrollbar.
         
         @see SetScrollbar()
     */
-    int GetRange();
+    int GetRange() const;
 
     /**
         Returns the current position of the scrollbar thumb.
         
         @see SetThumbPosition()
     */
-    int GetThumbPosition();
+    int GetThumbPosition() const;
 
     /**
         Returns the thumb or 'view' size.
         
         @see SetScrollbar()
     */
-    int GetThumbSize();
+    int GetThumbSize() const;
 
     /**
         Sets the scrollbar properties.

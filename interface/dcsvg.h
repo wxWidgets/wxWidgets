@@ -334,8 +334,8 @@ public:
         Gets the brush used for painting the background (see
         wxSVGFileDC::SetBackground).
     */
-    wxBrush GetBackground();
-    const wxBrush GetBackground();
+    wxBrush GetBackground() const;
+    const wxBrush GetBackground() const;
     //@}
 
     /**
@@ -343,14 +343,14 @@ public:
         
         @see wxDC::SetBackgroundMode
     */
-    int GetBackgroundMode();
+    int GetBackgroundMode() const;
 
     //@{
     /**
         Gets the current brush (see wxSVGFileDC::SetBrush).
     */
-    wxBrush GetBrush();
-    const wxBrush GetBrush();
+    wxBrush GetBrush() const;
+    const wxBrush GetBrush() const;
     //@}
 
     /**
@@ -373,8 +373,8 @@ public:
     /**
         Gets the current font (see wxSVGFileDC::SetFont).
     */
-    wxFont GetFont();
-    const wxFont GetFont();
+    wxFont GetFont() const;
+    const wxFont GetFont() const;
     //@}
 
     /**
@@ -391,8 +391,8 @@ public:
     /**
         Gets the current pen (see wxSVGFileDC::SetPen).
     */
-    wxPen GetPen();
-    const wxPen GetPen();
+    wxPen GetPen() const;
+    const wxPen GetPen() const;
     //@}
 
     /**
@@ -410,8 +410,8 @@ public:
     /**
         Gets the current text background colour (see wxSVGFileDC::SetTextBackground).
     */
-    wxColour GetTextBackground();
-    const wxColour GetTextBackground();
+    wxColour GetTextBackground() const;
+    const wxColour GetTextBackground() const;
     //@}
 
     /**
@@ -437,8 +437,8 @@ public:
     /**
         Gets the current text foreground colour (see wxSVGFileDC::SetTextForeground).
     */
-    wxColour GetTextForeground();
-    const wxColour GetTextForeground();
+    wxColour GetTextForeground() const;
+    const wxColour GetTextForeground() const;
     //@}
 
     /**

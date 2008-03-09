@@ -57,5 +57,5 @@ public:
     /**
         Returns the string containing all the data written to the stream so far.
     */
-    const wxString GetString();
+    const wxString GetString() const;
 };

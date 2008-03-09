@@ -50,25 +50,25 @@ public:
     /**
         Creates a font from the font attributes.
     */
-    wxFont CreateFont();
+    wxFont CreateFont() const;
 
     /**
         Returns the alignment flags.
         See SetAlignment() for a list of available styles.
     */
-    wxTextAttrAlignment GetAlignment();
+    wxTextAttrAlignment GetAlignment() const;
 
     /**
         Returns the background colour.
     */
-    const wxColour GetBackgroundColour();
+    const wxColour GetBackgroundColour() const;
 
     /**
         Returns a string containing the name of the font associated with the bullet
         symbol.
         Only valid for attributes with wxTEXT_ATTR_BULLET_SYMBOL.
     */
-    const wxString GetBulletFont();
+    const wxString GetBulletFont() const;
 
     /**
         Returns the standard bullet name, applicable if the bullet style is
@@ -84,35 +84,35 @@ public:
         DrawStandardBullet and @c EnumerateStandardBulletNames, and
         set an instance of the class using wxRichTextBuffer::SetRenderer.
     */
-    const wxString GetBulletName();
+    const wxString GetBulletName() const;
 
     /**
         Returns the bullet number.
     */
-    int GetBulletNumber();
+    int GetBulletNumber() const;
 
     /**
         Returns the bullet style.
         See SetBulletStyle() for a list of available styles.
     */
-    int GetBulletStyle();
+    int GetBulletStyle() const;
 
     /**
         Returns the bullet text, which could be a symbol, or (for example) cached
         outline text.
     */
-    const wxString GetBulletText();
+    const wxString GetBulletText() const;
 
     /**
         Returns the name of the character style.
     */
-    const wxString GetCharacterStyleName();
+    const wxString GetCharacterStyleName() const;
 
     /**
         Returns flags indicating which attributes are applicable.
         See SetFlags() for a list of available flags.
     */
-    long GetFlags();
+    long GetFlags() const;
 
     /**
         Creates and returns a font specified by the font attributes in the wxTextAttr
@@ -121,7 +121,7 @@ public:
         For greater
         efficiency, access the font attributes directly.
     */
-    wxFont GetFont();
+    wxFont GetFont() const;
 
     /**
         Gets the font attributes from the given font, using only the attributes
@@ -133,78 +133,78 @@ public:
     /**
         Returns the font encoding.
     */
-    wxFontEncoding GetFontEncoding();
+    wxFontEncoding GetFontEncoding() const;
 
     /**
         Returns the font face name.
     */
-    const wxString GetFontFaceName();
+    const wxString GetFontFaceName() const;
 
     /**
         Returns the font size in points.
     */
-    int GetFontSize();
+    int GetFontSize() const;
 
     /**
         Returns the font style.
     */
-    int GetFontStyle();
+    int GetFontStyle() const;
 
     /**
         Returns @true if the font is underlined.
     */
-    bool GetFontUnderlined();
+    bool GetFontUnderlined() const;
 
     /**
         Returns the font weight.
     */
-    int GetFontWeight();
+    int GetFontWeight() const;
 
     /**
         Returns the left indent in tenths of a millimetre.
     */
-    long GetLeftIndent();
+    long GetLeftIndent() const;
 
     /**
         Returns the left sub-indent in tenths of a millimetre.
     */
-    long GetLeftSubIndent();
+    long GetLeftSubIndent() const;
 
     /**
         Returns the line spacing value, one of wxTEXT_ATTR_LINE_SPACING_NORMAL,
         wxTEXT_ATTR_LINE_SPACING_HALF, and wxTEXT_ATTR_LINE_SPACING_TWICE.
     */
-    int GetLineSpacing();
+    int GetLineSpacing() const;
 
     /**
         Returns the name of the list style.
     */
-    const wxString GetListStyleName();
+    const wxString GetListStyleName() const;
 
     /**
         Returns the outline level.
     */
-    bool GetOutlineLevel();
+    bool GetOutlineLevel() const;
 
     /**
         Returns the space in tenths of a millimeter after the paragraph.
     */
-    int GetParagraphSpacingAfter();
+    int GetParagraphSpacingAfter() const;
 
     /**
         Returns the space in tenths of a millimeter before the paragraph.
     */
-    int GetParagraphSpacingBefore();
+    int GetParagraphSpacingBefore() const;
 
     /**
         Returns the name of the paragraph style.
     */
-    const wxString GetParagraphStyleName();
+    const wxString GetParagraphStyleName() const;
 
     /**
         Returns the right indent in tenths of a millimeter.
     */
-    long GetRightIndent();
+    long GetRightIndent() const;
 
     /**
         Returns an array of tab stops, each expressed in tenths of a millimeter. Each
@@ -212,24 +212,24 @@ public:
         is measured from the left margin and therefore each value must be larger than
         the last.
     */
-    const wxArrayInt GetTabs();
+    const wxArrayInt GetTabs() const;
 
     /**
         Returns the text foreground colour.
     */
-    const wxColour GetTextColour();
+    const wxColour GetTextColour() const;
 
     /**
         Returns the text effect bits of interest. See SetFlags() for further
         information.
     */
-    int GetTextEffectFlags();
+    int GetTextEffectFlags() const;
 
     /**
         Returns the text effects, a bit list of styles. See SetTextEffects() for
         details.
     */
-    int GetTextEffects();
+    int GetTextEffects() const;
 
     /**
         Returns the URL for the content. Content with wxTEXT_ATTR_URL style
@@ -237,170 +237,170 @@ public:
         generates
         a wxTextUrlEvent when the content is clicked.
     */
-    const wxString GetURL();
+    const wxString GetURL() const;
 
     /**
         Returns @true if the attribute object specifies alignment.
     */
-    bool HasAlignment();
+    bool HasAlignment() const;
 
     /**
         Returns @true if the attribute object specifies a background colour.
     */
-    bool HasBackgroundColour();
+    bool HasBackgroundColour() const;
 
     /**
         Returns @true if the attribute object specifies a standard bullet name.
     */
-    bool HasBulletName();
+    bool HasBulletName() const;
 
     /**
         Returns @true if the attribute object specifies a bullet number.
     */
-    bool HasBulletNumber();
+    bool HasBulletNumber() const;
 
     /**
         Returns @true if the attribute object specifies a bullet style.
     */
-    bool HasBulletStyle();
+    bool HasBulletStyle() const;
 
     /**
         Returns @true if the attribute object specifies bullet text (usually
         specifying a symbol).
     */
-    bool HasBulletText();
+    bool HasBulletText() const;
 
     /**
         Returns @true if the attribute object specifies a character style name.
     */
-    bool HasCharacterStyleName();
+    bool HasCharacterStyleName() const;
 
     /**
         Returns @true if the @a flag is present in the attribute object's flag
         bitlist.
     */
-    bool HasFlag(long flag);
+    bool HasFlag(long flag) const;
 
     /**
         Returns @true if the attribute object specifies any font attributes.
     */
-    bool HasFont();
+    bool HasFont() const;
 
     /**
         Returns @true if the attribute object specifies an encoding.
     */
-    bool HasFontEncoding();
+    bool HasFontEncoding() const;
 
     /**
         Returns @true if the attribute object specifies a font face name.
     */
-    bool HasFontFaceName();
+    bool HasFontFaceName() const;
 
     /**
         Returns @true if the attribute object specifies italic style.
     */
-    bool HasFontItalic();
+    bool HasFontItalic() const;
 
     /**
         Returns @true if the attribute object specifies a font point size.
     */
-    bool HasFontSize();
+    bool HasFontSize() const;
 
     /**
         Returns @true if the attribute object specifies either underlining or no
         underlining.
     */
-    bool HasFontUnderlined();
+    bool HasFontUnderlined() const;
 
     /**
         Returns @true if the attribute object specifies font weight (bold, light or
         normal).
     */
-    bool HasFontWeight();
+    bool HasFontWeight() const;
 
     /**
         Returns @true if the attribute object specifies a left indent.
     */
-    bool HasLeftIndent();
+    bool HasLeftIndent() const;
 
     /**
         Returns @true if the attribute object specifies line spacing.
     */
-    bool HasLineSpacing();
+    bool HasLineSpacing() const;
 
     /**
         Returns @true if the attribute object specifies a list style name.
     */
-    bool HasListStyleName();
+    bool HasListStyleName() const;
 
     /**
         Returns @true if the attribute object specifies an outline level.
     */
-    bool HasOutlineLevel();
+    bool HasOutlineLevel() const;
 
     /**
         Returns @true if the attribute object specifies a page break before this
         paragraph.
     */
-    bool HasPageBreak();
+    bool HasPageBreak() const;
 
     /**
         Returns @true if the attribute object specifies spacing after a paragraph.
     */
-    bool HasParagraphSpacingAfter();
+    bool HasParagraphSpacingAfter() const;
 
     /**
         Returns @true if the attribute object specifies spacing before a paragraph.
     */
-    bool HasParagraphSpacingBefore();
+    bool HasParagraphSpacingBefore() const;
 
     /**
         Returns @true if the attribute object specifies a paragraph style name.
     */
-    bool HasParagraphStyleName();
+    bool HasParagraphStyleName() const;
 
     /**
         Returns @true if the attribute object specifies a right indent.
     */
-    bool HasRightIndent();
+    bool HasRightIndent() const;
 
     /**
         Returns @true if the attribute object specifies tab stops.
     */
-    bool HasTabs();
+    bool HasTabs() const;
 
     /**
         Returns @true if the attribute object specifies a text foreground colour.
     */
-    bool HasTextColour();
+    bool HasTextColour() const;
 
     /**
         Returns @true if the attribute object specifies text effects.
     */
-    bool HasTextEffects();
+    bool HasTextEffects() const;
 
     /**
         Returns @true if the attribute object specifies a URL.
     */
-    bool HasURL();
+    bool HasURL() const;
 
     /**
         Returns @true if the object represents a character style, that is,
         the flags specify a font or a text background or foreground colour.
     */
-    bool IsCharacterStyle();
+    bool IsCharacterStyle() const;
 
     /**
         Returns @false if we have any attributes set, @true otherwise.
     */
-    bool IsDefault();
+    bool IsDefault() const;
 
     /**
         Returns @true if the object represents a paragraph style, that is,
         the flags specify alignment, indentation, tabs, paragraph spacing, or
         bullet style.
     */
-    bool IsParagraphStyle();
+    bool IsParagraphStyle() const;
 
     //@{
     /**
@@ -892,7 +892,7 @@ public:
         
         @see SetDefaultStyle()
     */
-    const wxTextAttr GetDefaultStyle();
+    const wxTextAttr GetDefaultStyle() const;
 
     /**
         Returns the insertion point. This is defined as the zero based index of the
@@ -903,13 +903,13 @@ public:
         The following code snippet safely returns the character at the insertion
         point or the zero character if the point is at the end of the control.
     */
-    virtual long GetInsertionPoint();
+    virtual long GetInsertionPoint() const;
 
     /**
         Returns the zero based index of the last position in the text control,
         which is equal to the number of characters in the control.
     */
-    virtual wxTextPos GetLastPosition();
+    virtual wxTextPos GetLastPosition() const;
 
     /**
         Gets the length of the specified line, not including any trailing newline
@@ -920,7 +920,7 @@ public:
         
         @returns The length of the line, or -1 if lineNo was invalid.
     */
-    int GetLineLength(long lineNo);
+    int GetLineLength(long lineNo) const;
 
     /**
         Returns the contents of a given line in the text control, not including
@@ -931,7 +931,7 @@ public:
         
         @returns The contents of the line.
     */
-    wxString GetLineText(long lineNo);
+    wxString GetLineText(long lineNo) const;
 
     /**
         Returns the number of lines in the text control buffer.
@@ -940,7 +940,7 @@ public:
                  insertion point is), so GetNumberOfLines() never
                  returns 0.
     */
-    int GetNumberOfLines();
+    int GetNumberOfLines() const;
 
     /**
         Returns the string containing the text starting in the positions @a from and
@@ -953,7 +953,7 @@ public:
         obtain the correct results instead of extracting parts of the entire value. It
         may also be more efficient, especially if the control contains a lot of data.
     */
-    virtual wxString GetRange(long from, long to);
+    virtual wxString GetRange(long from, long to) const;
 
     /**
         Gets the current selection span. If the returned values are equal, there was
@@ -970,7 +970,7 @@ public:
         @param to
             The returned last position.
     */
-    virtual void GetSelection(long* from, long* to);
+    virtual void GetSelection(long* from, long* to) const;
 
     /**
         Gets the text currently selected in the control. If there is no selection, the
@@ -995,7 +995,7 @@ public:
         under Windows where they are separated by a \r\n
         sequence in the native control.
     */
-    wxString GetValue();
+    wxString GetValue() const;
 
     /**
         This function finds the character at the specified position expressed in
@@ -1009,7 +1009,7 @@ public:
     */
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                     wxTextCoord col,
-                                    wxTextCoord row);
+                                    wxTextCoord row) const;
 
     /**
         Returns @true if the controls contents may be edited by user (note that it
@@ -1017,7 +1017,7 @@ public:
         read-only mode by a previous call to
         SetEditable().
     */
-    bool IsEditable();
+    bool IsEditable() const;
 
     /**
         Returns @true if the control is currently empty. This is the same as
@@ -1025,7 +1025,7 @@ public:
         controls containing big amounts of text.
         This function is new since wxWidgets version 2.7.1
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         Returns @true if the text has been modified by user. Note that calling
@@ -1033,7 +1033,7 @@ public:
         
         @see MarkDirty()
     */
-    bool IsModified();
+    bool IsModified() const;
 
     /**
         Returns @true if this is a multi line edit control and @false
@@ -1041,7 +1041,7 @@ public:
         
         @see IsSingleLine()
     */
-    bool IsMultiLine();
+    bool IsMultiLine() const;
 
     /**
         Returns @true if this is a single line edit control and @false
@@ -1049,7 +1049,7 @@ public:
         
         @see @ref issingleline() IsMultiLine
     */
-    bool IsSingleLine();
+    bool IsSingleLine() const;
 
     /**
         Loads and displays the named file, if it exists.
@@ -1104,7 +1104,7 @@ public:
         
         @see XYToPosition()
     */
-    bool PositionToXY(long pos, long* x, long* y);
+    bool PositionToXY(long pos, long* x, long* y) const;
 
     /**
         If there is a redo facility and the last operation can be redone, redoes the

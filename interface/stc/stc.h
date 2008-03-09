@@ -31,17 +31,17 @@ public:
     /**
         
     */
-    wxEvent* Clone();
+    wxEvent* Clone() const;
 
     /**
         
     */
-    bool GetAlt();
+    bool GetAlt() const;
 
     /**
         
     */
-    bool GetControl();
+    bool GetControl() const;
 
     /**
         
@@ -61,92 +61,92 @@ public:
     /**
         
     */
-    int GetFoldLevelNow();
+    int GetFoldLevelNow() const;
 
     /**
         
     */
-    int GetFoldLevelPrev();
+    int GetFoldLevelPrev() const;
 
     /**
         
     */
-    int GetKey();
+    int GetKey() const;
 
     /**
         
     */
-    int GetLParam();
+    int GetLParam() const;
 
     /**
         
     */
-    int GetLength();
+    int GetLength() const;
 
     /**
         
     */
-    int GetLine();
+    int GetLine() const;
 
     /**
         
     */
-    int GetLinesAdded();
+    int GetLinesAdded() const;
 
     /**
         
     */
-    int GetListType();
+    int GetListType() const;
 
     /**
         
     */
-    int GetMargin();
+    int GetMargin() const;
 
     /**
         
     */
-    int GetMessage();
+    int GetMessage() const;
 
     /**
         
     */
-    int GetModificationType();
+    int GetModificationType() const;
 
     /**
         
     */
-    int GetModifiers();
+    int GetModifiers() const;
 
     /**
         
     */
-    int GetPosition();
+    int GetPosition() const;
 
     /**
         
     */
-    bool GetShift();
+    bool GetShift() const;
 
     /**
         
     */
-    wxString GetText();
+    wxString GetText() const;
 
     /**
         
     */
-    int GetWParam();
+    int GetWParam() const;
 
     /**
         
     */
-    int GetX();
+    int GetX() const;
 
     /**
         
     */
-    int GetY();
+    int GetY() const;
 
     /**
         

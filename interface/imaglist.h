@@ -147,17 +147,17 @@ public:
     /**
         Returns the bitmap corresponding to the given index.
     */
-    wxBitmap GetBitmap(int index);
+    wxBitmap GetBitmap(int index) const;
 
     /**
         Returns the icon corresponding to the given index.
     */
-    wxIcon GetIcon(int index);
+    wxIcon GetIcon(int index) const;
 
     /**
         Returns the number of images in the list.
     */
-    int GetImageCount();
+    int GetImageCount() const;
 
     /**
         Retrieves the size of the images in the list. Currently, the @a index
@@ -173,7 +173,7 @@ public:
         @returns @true if the function succeeded, @false if it failed (for example,
                  if the image list was not yet initialized).
     */
-    bool GetSize(int index, int& width, int& height);
+    bool GetSize(int index, int& width, int& height) const;
 
     /**
         Removes the image at the given position.

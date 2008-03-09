@@ -36,13 +36,13 @@ public:
         wxMemoryOutputStream to an external buffer. @a len specifies the size of
         the buffer.
     */
-    size_t CopyTo(char* buffer, size_t len);
+    size_t CopyTo(char* buffer, size_t len) const;
 
     /**
         Returns the pointer to the stream object used as an internal buffer
         for that stream.
     */
-    wxStreamBuffer* GetOutputStreamBuffer();
+    wxStreamBuffer* GetOutputStreamBuffer() const;
 };
 
 
@@ -83,5 +83,5 @@ public:
         Returns the pointer to the stream object used as an internal buffer
         for that stream.
     */
-    wxStreamBuffer* GetInputStreamBuffer();
+    wxStreamBuffer* GetInputStreamBuffer() const;
 };

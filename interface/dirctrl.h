@@ -96,33 +96,33 @@ public:
     /**
         Gets the default path.
     */
-    wxString GetDefaultPath();
+    wxString GetDefaultPath() const;
 
     /**
         Gets selected filename path only (else empty string).
         This function doesn't count a directory as a selection.
     */
-    wxString GetFilePath();
+    wxString GetFilePath() const;
 
     /**
         Returns the filter string.
     */
-    wxString GetFilter();
+    wxString GetFilter() const;
 
     /**
         Returns the current filter index (zero-based).
     */
-    int GetFilterIndex();
+    int GetFilterIndex() const;
 
     /**
         Returns a pointer to the filter list control (if present).
     */
-    wxDirFilterListCtrl* GetFilterListCtrl();
+    wxDirFilterListCtrl* GetFilterListCtrl() const;
 
     /**
         Gets the currently-selected directory or filename.
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         Returns the root id for the tree control.
@@ -132,7 +132,7 @@ public:
     /**
         Returns a pointer to the tree control.
     */
-    wxTreeCtrl* GetTreeCtrl();
+    wxTreeCtrl* GetTreeCtrl() const;
 
     /**
         Initializes variables.

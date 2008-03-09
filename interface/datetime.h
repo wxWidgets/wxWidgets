@@ -78,7 +78,7 @@ public:
         Adds the given date span to this object.
     */
     wxDateTime Add(const wxDateSpan& diff);
-    wxDateTime Add(const wxDateSpan& diff);
+    const wxDateTime&  Add(const wxDateSpan& diff);
     wxDateTime operator+=(const wxDateSpan& diff);
     //@}
 
@@ -265,13 +265,13 @@ public:
         @see ParseFormat()
     */
     wxString Format(const wxChar* format = wxDefaultDateTimeFormat,
-                    const TimeZone& tz = Local);
+                    const TimeZone& tz = Local) const;
 
     /**
         Identical to calling Format() with @c "%x"
         argument (which means 'preferred date representation for the current locale').
     */
-    wxString FormatDate();
+    wxString FormatDate() const;
 
     /**
         Returns the combined date-time representation in the ISO 8601 format
@@ -283,25 +283,25 @@ public:
         @see FormatISODate(), FormatISOTime(),
              ParseISOCombined()
     */
-    wxString FormatISOCombined(char sep = 'T');
+    wxString FormatISOCombined(char sep = 'T') const;
 
     /**
         This function returns the date representation in the ISO 8601 format
         (YYYY-MM-DD).
     */
-    wxString FormatISODate();
+    wxString FormatISODate() const;
 
     /**
         This function returns the time representation in the ISO 8601 format
         (HH:MM:SS).
     */
-    wxString FormatISOTime();
+    wxString FormatISOTime() const;
 
     /**
         Identical to calling Format() with @c "%X"
         argument (which means 'preferred time representation for the current locale').
     */
-    wxString FormatTime();
+    wxString FormatTime() const;
 
     /**
         Transform the date from the given time zone to the local one. If @a noDST is
@@ -309,7 +309,7 @@ public:
         Returns the date in the local time zone.
     */
     wxDateTime FromTimezone(const TimeZone& tz,
-                            bool noDST = false);
+                            bool noDST = false) const;
 
     /**
         Returns the translations of the strings @c AM and @c PM used for time
@@ -323,7 +323,7 @@ public:
         DOS
         format.
     */
-    unsigned long GetAsDOS();
+    unsigned long GetAsDOS() const;
 
     /**
         Get the beginning of DST for the given country in the given year (current one
@@ -338,7 +338,7 @@ public:
     /**
         Returns the century of this date.
     */
-    int GetCentury(const TimeZone& tz = Local);
+    int GetCentury(const TimeZone& tz = Local) const;
 
     /**
         Returns the current default country. The default country is used for DST
@@ -365,18 +365,18 @@ public:
         
         @see ResetTime()
     */
-    wxDateTime GetDateOnly();
+    wxDateTime GetDateOnly() const;
 
     /**
         Returns the day in the given timezone (local one by default).
     */
-    wxDateTime_t GetDay(const TimeZone& tz = Local);
+    wxDateTime_t GetDay(const TimeZone& tz = Local) const;
 
     /**
         Returns the day of the year (in 1...366 range) in the given timezone
         (local one by default).
     */
-    wxDateTime_t GetDayOfYear(const TimeZone& tz = Local);
+    wxDateTime_t GetDayOfYear(const TimeZone& tz = Local) const;
 
     /**
         Returns the end of DST for the given country in the given year (current one by
@@ -390,12 +390,12 @@ public:
     /**
         Returns the hour in the given timezone (local one by default).
     */
-    wxDateTime_t GetHour(const TimeZone& tz = Local);
+    wxDateTime_t GetHour(const TimeZone& tz = Local) const;
 
     /**
         Synonym for GetJulianDayNumber().
     */
-    double GetJDN();
+    double GetJDN() const;
 
     /**
         Returns the @ref setjdn() JDN corresponding to this date. Beware
@@ -403,14 +403,14 @@ public:
         
         @see GetModifiedJulianDayNumber()
     */
-    double GetJulianDayNumber();
+    double GetJulianDayNumber() const;
 
     /**
         Returns the copy of this object to which
         SetToLastMonthDay() was applied.
     */
     wxDateTime GetLastMonthDay(Month month = Inv_Month,
-                               int year = Inv_Year);
+                               int year = Inv_Year) const;
 
     /**
         Returns the copy of this object to which
@@ -423,17 +423,17 @@ public:
     /**
         Synonym for GetModifiedJulianDayNumber().
     */
-    double GetMJD();
+    double GetMJD() const;
 
     /**
         Returns the milliseconds in the given timezone (local one by default).
     */
-    wxDateTime_t GetMillisecond(const TimeZone& tz = Local);
+    wxDateTime_t GetMillisecond(const TimeZone& tz = Local) const;
 
     /**
         Returns the minute in the given timezone (local one by default).
     */
-    wxDateTime_t GetMinute(const TimeZone& tz = Local);
+    wxDateTime_t GetMinute(const TimeZone& tz = Local) const;
 
     /**
         Returns the @e Modified Julian Day Number (MJD) which is, by definition,
@@ -441,12 +441,12 @@ public:
         MJDs correspond to midnights of the dates in the Gregorian calendar and not th
         noons like JDN. The MJD 0 is Nov 17, 1858.
     */
-    double GetModifiedJulianDayNumber();
+    double GetModifiedJulianDayNumber() const;
 
     /**
         Returns the month in the given timezone (local one by default).
     */
-    Month GetMonth(const TimeZone& tz = Local);
+    Month GetMonth(const TimeZone& tz = Local) const;
 
     /**
         Gets the full (default) or abbreviated (specify @c Name_Abbr name of the
@@ -461,7 +461,7 @@ public:
         Returns the copy of this object to which
         SetToNextWeekDay() was applied.
     */
-    wxDateTime GetNextWeekDay(WeekDay weekday);
+    wxDateTime GetNextWeekDay(WeekDay weekday) const;
 
     //@{
     /**
@@ -480,7 +480,7 @@ public:
         Returns the copy of this object to which
         SetToPrevWeekDay() was applied.
     */
-    wxDateTime GetPrevWeekDay(WeekDay weekday);
+    wxDateTime GetPrevWeekDay(WeekDay weekday) const;
 
     /**
         Return the @e Rata Die number of this date.
@@ -488,18 +488,18 @@ public:
         relative to a base date of December 31 of the year 0. Thus January 1 of the
         year 1 is Rata Die day 1.
     */
-    double GetRataDie();
+    double GetRataDie() const;
 
     /**
         Returns the seconds in the given timezone (local one by default).
     */
-    wxDateTime_t GetSecond(const TimeZone& tz = Local);
+    wxDateTime_t GetSecond(const TimeZone& tz = Local) const;
 
     /**
         Returns the number of seconds since Jan 1, 1970. An assert failure will occur
         if the date is not in the range covered by @c time_t type.
     */
-    time_t GetTicks();
+    time_t GetTicks() const;
 
     /**
         Returns the current time.
@@ -509,7 +509,7 @@ public:
     /**
         Returns broken down representation of the date and time.
     */
-    Tm GetTm(const TimeZone& tz = Local);
+    Tm GetTm(const TimeZone& tz = Local) const;
 
     /**
         Returns the current time broken down. Note that this function returns a
@@ -527,7 +527,7 @@ public:
     */
     wxDateTime GetWeekDay(WeekDay weekday, int n = 1,
                           Month month = Inv_Month,
-                          int year = Inv_Year);
+                          int year = Inv_Year) const;
 
     /**
         Returns the copy of this object to which
@@ -535,7 +535,7 @@ public:
         applied.
     */
     wxDateTime GetWeekDayInSameWeek(WeekDay weekday,
-                                    WeekFlags flags = Monday_First);
+                                    WeekFlags flags = Monday_First) const;
 
     /**
         Gets the full (default) or abbreviated (specify @c Name_Abbr name of the
@@ -553,7 +553,7 @@ public:
         @ref overview_wxdatetime "week start" conventions.
     */
     wxDateTime_t GetWeekOfMonth(WeekFlags flags = Monday_First,
-                                const TimeZone& tz = Local);
+                                const TimeZone& tz = Local) const;
 
     /**
         Returns the number of the week of the year this date is in. The first week of
@@ -568,18 +568,18 @@ public:
         applies to the weeks starting on Monday only.
     */
     wxDateTime_t GetWeekOfYear(WeekFlags flags = Monday_First,
-                               const TimeZone& tz = Local);
+                               const TimeZone& tz = Local) const;
 
     /**
         Returns the year in the given timezone (local one by default).
     */
-    int GetYear(const TimeZone& tz = Local);
+    int GetYear(const TimeZone& tz = Local) const;
 
     /**
         Returns the copy of this object to which
         SetToYearDay() was applied.
     */
-    wxDateTime GetYearDay(wxDateTime_t yday);
+    wxDateTime GetYearDay(wxDateTime_t yday) const;
 
     /**
         Returns @true if IsStrictlyBetween()
@@ -587,12 +587,12 @@ public:
         
         @see IsStrictlyBetween()
     */
-    bool IsBetween(const wxDateTime& t1, const wxDateTime& t2);
+    bool IsBetween(const wxDateTime& t1, const wxDateTime& t2) const;
 
     /**
         Returns @true if the DST is applied for this date in the given country.
     */
-    int IsDST(Country country = Country_Default);
+    int IsDST(Country country = Country_Default) const;
 
     /**
         Returns @true if DST was used n the given year (the current one by
@@ -604,31 +604,31 @@ public:
     /**
         Returns @true if this date precedes the given one.
     */
-    bool IsEarlierThan(const wxDateTime& datetime);
+    bool IsEarlierThan(const wxDateTime& datetime) const;
 
     /**
         Returns @true if the two dates are strictly identical.
     */
-    bool IsEqualTo(const wxDateTime& datetime);
+    bool IsEqualTo(const wxDateTime& datetime) const;
 
     /**
         Returns @true if the date is equal to another one up to the given time
         interval, i.e. if the absolute difference between the two dates is less than
         this interval.
     */
-    bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts);
+    bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const;
 
     /**
         Returns @true if the given date is later than the date of adoption of the
         Gregorian calendar in the given country (and hence the Gregorian calendar
         calculations make sense for it).
     */
-    bool IsGregorianDate(GregorianAdoption country = Gr_Standard);
+    bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
 
     /**
         Returns @true if this date is later than the given one.
     */
-    bool IsLaterThan(const wxDateTime& datetime);
+    bool IsLaterThan(const wxDateTime& datetime) const;
 
     /**
         Returns @true if the @a year is a leap one in the specified calendar.
@@ -640,12 +640,12 @@ public:
     /**
         Returns @true if the date is the same without comparing the time parts.
     */
-    bool IsSameDate(const wxDateTime& dt);
+    bool IsSameDate(const wxDateTime& dt) const;
 
     /**
         Returns @true if the time is the same (although dates may differ).
     */
-    bool IsSameTime(const wxDateTime& dt);
+    bool IsSameTime(const wxDateTime& dt) const;
 
     /**
         Returns @true if this date lies strictly between the two others,
@@ -653,12 +653,12 @@ public:
         @see IsBetween()
     */
     bool IsStrictlyBetween(const wxDateTime& t1,
-                           const wxDateTime& t2);
+                           const wxDateTime& t2) const;
 
     /**
         Returns @true if the object represents a valid time moment.
     */
-    bool IsValid();
+    bool IsValid() const;
 
     /**
         This function returns @true if the specified (or default) country is one
@@ -670,7 +670,7 @@ public:
     /**
         Returns @true is this day is not a holiday in the given country.
     */
-    bool IsWorkDay(Country country = Country_Default);
+    bool IsWorkDay(Country country = Country_Default) const;
 
     /**
         Same as FromTimezone() but modifies the object
@@ -1091,7 +1091,7 @@ public:
         Subtracts another date from this one and returns the difference between them
         as wxTimeSpan.
     */
-    wxTimeSpan Subtract(const wxDateTime& dt);
+    wxTimeSpan Subtract(const wxDateTime& dt) const;
 
     /**
         Please see the @ref overview_tdatetimezones "time zone overview" for more
@@ -1121,13 +1121,13 @@ public:
         DST adjustments will be made.
         Returns the date in the new time zone.
     */
-    wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false);
+    wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
 
     /**
         This is the same as calling ToTimezone() with
         the argument @c GMT0.
     */
-    wxDateTime ToUTC(bool noDST = false);
+    wxDateTime ToUTC(bool noDST = false) const;
 
     /**
         Returns the object corresponding to the midnight of the current day (i.e. the
@@ -1229,7 +1229,7 @@ public:
         second and third ones modify this object in place.
     */
     wxDateSpan Add(const wxDateSpan& other);
-    wxDateSpan Add(const wxDateSpan& other);
+    const wxDateSpan&  Add(const wxDateSpan& other);
     wxDateSpan operator+=(const wxDateSpan& other);
     //@}
 
@@ -1253,12 +1253,12 @@ public:
         
         @see GetTotalDays()
     */
-    int GetDays();
+    int GetDays() const;
 
     /**
         Returns the number of the months (not counting the years) in this date span.
     */
-    int GetMonths();
+    int GetMonths() const;
 
     /**
         Returns the combined number of days in this date span, counting both weeks and
@@ -1266,19 +1266,19 @@ public:
         
         @see GetWeeks(), GetDays()
     */
-    int GetTotalDays();
+    int GetTotalDays() const;
 
     /**
         Returns the number of weeks in this date span.
         
         @see GetTotalDays()
     */
-    int GetWeeks();
+    int GetWeeks() const;
 
     /**
         Returns the number of years in this date span.
     */
-    int GetYears();
+    int GetYears() const;
 
     /**
         Returns a date span object corresponding to one month.
@@ -1302,7 +1302,7 @@ public:
         object in place.
     */
     wxDateSpan Multiply(int factor);
-    wxDateSpan Multiply(int factor);
+    const wxDateSpan&  Multiply(int factor);
     wxDateSpan operator*=(int factor);
     //@}
 
@@ -1321,7 +1321,7 @@ public:
         
         @see Neg()
     */
-    wxDateSpan Negate();
+    wxDateSpan Negate() const;
 
     /**
         Sets the number of days (without modifying any other components) in this date
@@ -1353,7 +1353,7 @@ public:
         object, the second and third ones modify this object in place.
     */
     wxDateSpan Subtract(const wxDateSpan& other);
-    wxDateSpan Subtract(const wxDateSpan& other);
+    const wxDateSpan&  Subtract(const wxDateSpan& other);
     wxDateSpan operator+=(const wxDateSpan& other);
     //@}
 
@@ -1388,14 +1388,14 @@ public:
     /**
         Returns @true if this date span is different from the other one.
     */
-    bool operator!=(wxDateSpan& other);
+    bool operator!=(wxDateSpan& other) const;
 
     /**
         Returns @true if this date span is equal to the other one. Two date spans
         are considered equal if and only if they have the same number of years and
         months and the same total number of days (counting both days and weeks).
     */
-    bool operator==(wxDateSpan& other);
+    bool operator==(wxDateSpan& other) const;
 };
 
 
@@ -1428,7 +1428,7 @@ public:
         Returns the absolute value of the timespan: does not modify the
         object.
     */
-    wxTimeSpan Abs();
+    wxTimeSpan Abs() const;
 
     /**
         GetSeconds()
@@ -1450,7 +1450,7 @@ public:
         Returns the sum of two timespans.
     */
     wxTimeSpan Add(const wxTimeSpan& diff);
-    wxTimeSpan Add(const wxTimeSpan& diff);
+    const wxTimeSpan&  Add(const wxTimeSpan& diff);
     wxTimeSpan operator+=(const wxTimeSpan& diff);
     //@}
 
@@ -1522,37 +1522,37 @@ public:
     /**
         Returns the difference in number of days.
     */
-    int GetDays();
+    int GetDays() const;
 
     /**
         Returns the difference in number of hours.
     */
-    int GetHours();
+    int GetHours() const;
 
     /**
         Returns the difference in number of milliseconds.
     */
-    wxLongLong GetMilliseconds();
+    wxLongLong GetMilliseconds() const;
 
     /**
         Returns the difference in number of minutes.
     */
-    int GetMinutes();
+    int GetMinutes() const;
 
     /**
         Returns the difference in number of seconds.
     */
-    wxLongLong GetSeconds();
+    wxLongLong GetSeconds() const;
 
     /**
         Returns the internal representation of timespan.
     */
-    wxLongLong GetValue();
+    wxLongLong GetValue() const;
 
     /**
         Returns the difference in number of weeks.
     */
-    int GetWeeks();
+    int GetWeeks() const;
 
     /**
         Returns the timespan for one hour.
@@ -1567,36 +1567,36 @@ public:
     /**
         Returns @true if two timespans are equal.
     */
-    bool IsEqualTo(const wxTimeSpan& ts);
+    bool IsEqualTo(const wxTimeSpan& ts) const;
 
     /**
         Compares two timespans: works with the absolute values, i.e. -2
         hours is longer than 1 hour. Also, it will return @false if
         the timespans are equal in absolute value.
     */
-    bool IsLongerThan(const wxTimeSpan& ts);
+    bool IsLongerThan(const wxTimeSpan& ts) const;
 
     /**
         Returns @true if the timespan is negative.
     */
-    bool IsNegative();
+    bool IsNegative() const;
 
     /**
         Returns @true if the timespan is empty.
     */
-    bool IsNull();
+    bool IsNull() const;
 
     /**
         Returns @true if the timespan is positive.
     */
-    bool IsPositive();
+    bool IsPositive() const;
 
     /**
         Compares two timespans: works with the absolute values, i.e. 1
         hour is shorter than -2 hours. Also, it will return @false if
         the timespans are equal in absolute value.
     */
-    bool IsShorterThan(const wxTimeSpan& ts);
+    bool IsShorterThan(const wxTimeSpan& ts) const;
 
     /**
         Returns the timespan for one millisecond.
@@ -1623,7 +1623,7 @@ public:
         Multiplies timespan by a scalar.
     */
     wxTimeSpan Multiply(int n);
-    wxTimeSpan Multiply(int n);
+    const wxTimeSpan&  Multiply(int n);
     wxTimeSpan operator*=(int n);
     //@}
 
@@ -1638,7 +1638,7 @@ public:
     /**
         Returns timespan with inverted sign.
     */
-    wxTimeSpan Negate();
+    wxTimeSpan Negate() const;
 
     /**
         Add()
@@ -1697,7 +1697,7 @@ public:
         Returns the difference of two timespans.
     */
     wxTimeSpan Subtract(const wxTimeSpan& diff);
-    wxTimeSpan Subtract(const wxTimeSpan& diff);
+    const wxTimeSpan&  Subtract(const wxTimeSpan& diff);
     wxTimeSpan operator-=(const wxTimeSpan& diff);
     //@}
 

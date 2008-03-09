@@ -41,12 +41,12 @@ public:
         Returns the page that was selected before the change, wxNOT_FOUND if none was
         selected.
     */
-    int GetOldSelection();
+    int GetOldSelection() const;
 
     /**
         Returns the currently selected page, or wxNOT_FOUND if none was selected.
     */
-    int GetSelection();
+    int GetSelection() const;
 };
 
 
@@ -180,18 +180,18 @@ public:
     /**
         Returns the image index for the given page.
     */
-    int GetPageImage(size_t n);
+    int GetPageImage(size_t n) const;
 
     /**
         Returns the parent page of the given one or @c wxNOT_FOUND if this is a
         top-level page.
     */
-    int GetPageParent(size_t page);
+    int GetPageParent(size_t page) const;
 
     /**
         Returns the string for the given page.
     */
-    wxString GetPageText(size_t n);
+    wxString GetPageText(size_t n) const;
 
     /**
         Returns the currently selected page, or wxNOT_FOUND if none was selected.
@@ -200,7 +200,7 @@ public:
         depending on the platform and so wxTreebookEvent::GetSelection should be used
         instead in this case.
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         Inserts a new page just before the page indicated by pagePos.
@@ -224,7 +224,7 @@ public:
     /**
         Gets the pagePos page state -- whether it is expanded or collapsed
     */
-    bool IsNodeExpanded(size_t pageId);
+    bool IsNodeExpanded(size_t pageId) const;
 
     /**
         Sets the image list for the page control. It does not take ownership of the

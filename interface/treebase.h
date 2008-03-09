@@ -32,14 +32,14 @@ public:
     /**
         Returns @true if this instance is referencing a valid tree item.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     //@{
     /**
         Operators for comparison between wxTreeItemId objects.
     */
-    void operator !();
-    bool operator ==(const wxTreeItemId& item);
-    bool operator !=(const wxTreeItemId& item);
+    void operator !() const;
+    const bool operator ==(const wxTreeItemId& item) const;
+    const bool operator !=(const wxTreeItemId& item) const;
     //@}
 };

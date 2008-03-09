@@ -78,5 +78,5 @@ public:
     /**
         Returns @true if the line is vertical, @false if horizontal.
     */
-    bool IsVertical();
+    bool IsVertical() const;
 };

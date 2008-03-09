@@ -45,7 +45,7 @@ public:
         @see GetOSMajorVersion(), GetOSMinorVersion(),
              CheckToolkitVersion()
     */
-    bool CheckOSVersion(int major, int minor);
+    bool CheckOSVersion(int major, int minor) const;
 
     /**
         Returns @true if the toolkit version is at least @c major.minor.
@@ -53,7 +53,7 @@ public:
         @see GetToolkitMajorVersion(),
              GetToolkitMinorVersion(), CheckOSVersion()
     */
-    bool CheckToolkitVersion(int major, int minor);
+    bool CheckToolkitVersion(int major, int minor) const;
 
     /**
         Returns the global wxPlatformInfo object, initialized with the values for the
@@ -72,29 +72,29 @@ public:
     /**
         Returns the name for the architecture of this wxPlatformInfo instance.
     */
-    static wxString GetArchName(wxArchitecture arch);
-    wxString GetArchName();
+    static wxString GetArchName(wxArchitecture arch) const;
+    wxString GetArchName() const;
     //@}
 
     /**
         Returns the architecture ID of this wxPlatformInfo instance.
     */
-    wxArchitecture GetArchitecture();
+    wxArchitecture GetArchitecture() const;
 
     //@{
     /**
         Returns the endianness ID of this wxPlatformInfo instance.
     */
-    static wxEndianness GetEndianness(const wxString& end);
-    wxEndianness GetEndianness();
+    static wxEndianness GetEndianness(const wxString& end) const;
+    wxEndianness GetEndianness() const;
     //@}
 
     //@{
     /**
         Returns the name for the endianness of this wxPlatformInfo instance.
     */
-    static wxString GetEndiannessName(wxEndianness end);
-    wxString GetEndiannessName();
+    static wxString GetEndiannessName(wxEndianness end) const;
+    wxString GetEndiannessName() const;
     //@}
 
     /**
@@ -104,7 +104,7 @@ public:
         
         @see CheckOSVersion()
     */
-    int GetOSMajorVersion();
+    int GetOSMajorVersion() const;
 
     /**
         Returns the run-time minor version of the OS associated with this
@@ -113,23 +113,23 @@ public:
         
         @see CheckOSVersion()
     */
-    int GetOSMinorVersion();
+    int GetOSMinorVersion() const;
 
     //@{
     /**
         Returns the operating system family name of the OS associated with this
         wxPlatformInfo instance.
     */
-    static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
-    wxString GetOperatingSystemFamilyName();
+    static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os) const;
+    wxString GetOperatingSystemFamilyName() const;
     //@}
 
     //@{
     /**
         Returns the operating system ID of this wxPlatformInfo instance.
     */
-    static wxOperatingSystemId GetOperatingSystemId(const wxString& name);
-    wxOperatingSystemId GetOperatingSystemId();
+    static wxOperatingSystemId GetOperatingSystemId(const wxString& name) const;
+    wxOperatingSystemId GetOperatingSystemId() const;
     //@}
 
     //@{
@@ -137,16 +137,16 @@ public:
         Returns the operating system name of the OS associated with this wxPlatformInfo
         instance.
     */
-    static wxString GetOperatingSystemIdName(wxOperatingSystemId os);
-    wxString GetOperatingSystemIdName();
+    static wxString GetOperatingSystemIdName(wxOperatingSystemId os) const;
+    wxString GetOperatingSystemIdName() const;
     //@}
 
     //@{
     /**
         Returns the wxWidgets port ID associated with this wxPlatformInfo instance.
     */
-    static wxPortId GetPortId(const wxString& portname);
-    wxPortId GetPortId();
+    static wxPortId GetPortId(const wxString& portname) const;
+    wxPortId GetPortId() const;
     //@}
 
     //@{
@@ -154,8 +154,8 @@ public:
         Returns the name of the wxWidgets port ID associated with this wxPlatformInfo
         instance.
     */
-    static wxString GetPortIdName(wxPortId port, bool usingUniversal);
-    wxString GetPortIdName();
+    static wxString GetPortIdName(wxPortId port, bool usingUniversal) const;
+    wxString GetPortIdName() const;
     //@}
 
     //@{
@@ -164,8 +164,8 @@ public:
         wxPlatformInfo instance.
     */
     static wxString GetPortIdShortName(wxPortId port,
-                                       bool usingUniversal);
-    wxString GetPortIdShortName();
+                                       bool usingUniversal) const;
+    wxString GetPortIdShortName() const;
     //@}
 
     /**
@@ -177,7 +177,7 @@ public:
         
         @see CheckToolkitVersion()
     */
-    int GetToolkitMajorVersion();
+    int GetToolkitMajorVersion() const;
 
     /**
         Returns the run-time minor version of the toolkit associated with this
@@ -188,17 +188,17 @@ public:
         
         @see CheckToolkitVersion()
     */
-    int GetToolkitMinorVersion();
+    int GetToolkitMinorVersion() const;
 
     /**
         Returns @true if this instance is fully initialized with valid values.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Returns @true if this wxPlatformInfo describes wxUniversal build.
     */
-    bool IsUsingUniversalWidgets();
+    bool IsUsingUniversalWidgets() const;
 
     /**
         Sets the architecture enum value associated with this wxPlatformInfo instance.
@@ -234,10 +234,10 @@ public:
     /**
         Inequality operator. Tests all class' internal variables.
     */
-    bool operator!=(const wxPlatformInfo& t);
+    bool operator!=(const wxPlatformInfo& t) const;
 
     /**
         Equality operator. Tests all class' internal variables.
     */
-    bool operator==(const wxPlatformInfo& t);
+    bool operator==(const wxPlatformInfo& t) const;
 };

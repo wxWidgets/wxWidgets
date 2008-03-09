@@ -255,14 +255,14 @@ public:
         
         @see SetCap()
     */
-    int GetCap();
+    int GetCap() const;
 
     /**
         Returns a reference to the pen colour.
         
         @see SetColour()
     */
-    wxColour GetColour();
+    wxColour GetColour() const;
 
     /**
         Gets an array of dashes (defined as char in X, DWORD under Windows).
@@ -272,7 +272,7 @@ public:
         
         @see SetDashes()
     */
-    int GetDashes(wxDash** dashes);
+    int GetDashes(wxDash** dashes) const;
 
     /**
         Returns the pen join style, which may be one of @b wxJOIN_BEVEL, @b
@@ -281,33 +281,33 @@ public:
         
         @see SetJoin()
     */
-    int GetJoin();
+    int GetJoin() const;
 
     /**
         Gets a pointer to the stipple bitmap.
         
         @see SetStipple()
     */
-    wxBitmap* GetStipple();
+    wxBitmap* GetStipple() const;
 
     /**
         Returns the pen style.
         
         @see wxPen(), SetStyle()
     */
-    int GetStyle();
+    int GetStyle() const;
 
     /**
         Returns the pen width.
         
         @see SetWidth()
     */
-    int GetWidth();
+    int GetWidth() const;
 
     /**
         Returns @true if the pen is initialised.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Sets the pen cap style, which may be one of @b wxCAP_ROUND, @b wxCAP_PROJECTING

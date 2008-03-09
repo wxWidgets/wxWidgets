@@ -126,37 +126,37 @@ public:
     /**
         Returns the list of commands.
     */
-    wxList GetCommands();
+    wxList GetCommands() const;
 
     /**
         Returns the edit menu associated with the command processor.
     */
-    wxMenu* GetEditMenu();
+    wxMenu* GetEditMenu() const;
 
     /**
         Returns the maximum number of commands that the command processor stores.
     */
-    int GetMaxCommands();
+    int GetMaxCommands() const;
 
     /**
         Returns the string that will be appended to the Redo menu item.
     */
-    const wxString GetRedoAccelerator();
+    const wxString GetRedoAccelerator() const;
 
     /**
         Returns the string that will be shown for the redo menu item.
     */
-    wxString GetRedoMenuLabel();
+    wxString GetRedoMenuLabel() const;
 
     /**
         Returns the string that will be appended to the Undo menu item.
     */
-    const wxString GetUndoAccelerator();
+    const wxString GetUndoAccelerator() const;
 
     /**
         Returns the string that will be shown for the undo menu item.
     */
-    wxString GetUndoMenuLabel();
+    wxString GetUndoMenuLabel() const;
 
     /**
         Initializes the command processor, setting the current command to the

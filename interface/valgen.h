@@ -65,7 +65,7 @@ public:
     /**
         Clones the generic validator using the copy constructor.
     */
-    virtual wxValidator* Clone();
+    virtual wxValidator* Clone() const;
 
     /**
         Transfers the value from the window to the appropriate data type.

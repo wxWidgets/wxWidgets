@@ -113,7 +113,7 @@ public:
     /**
         Returns the number of items in the array.
     */
-    size_t GetCount();
+    size_t GetCount() const;
 
     /**
         Search the element in the array, starting from the beginning if
@@ -154,7 +154,7 @@ public:
         See also @ref operatorindex() operator[] for the operator
         version.
     */
-    wxString Item(size_t nIndex);
+    wxString Item(size_t nIndex) const;
 
     /**
         Returns the last element of the array. Attempt to access the last element of
@@ -200,7 +200,7 @@ Warning:
         Compares 2 arrays respecting the case. Returns @true if the arrays have
         different number of elements or if the elements don't match pairwise.
     */
-    bool operator !=(const wxArrayString& array);
+    bool operator !=(const wxArrayString& array) const;
 
     /**
         Assignment operator.
@@ -211,7 +211,7 @@ Warning:
         Compares 2 arrays respecting the case. Returns @true only if the arrays have
         the same number of elements and the same strings in the same order.
     */
-    bool operator ==(const wxArrayString& array);
+    bool operator ==(const wxArrayString& array) const;
 
     /**
         Return the array element at position @e nIndex. An assert failure will

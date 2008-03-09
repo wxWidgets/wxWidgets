@@ -43,7 +43,7 @@ public:
         report should be processed or @false if the user chose to cancel report
         generation or removed all files from it.
     */
-    bool Show(wxDebugReport& dbgrpt);
+    bool Show(wxDebugReport& dbgrpt) const;
 };
 
 
@@ -69,7 +69,7 @@ public:
     /**
         Returns the full path of the compressed file (empty if creation failed).
     */
-    const wxString GetCompressedFileName();
+    const wxString GetCompressedFileName() const;
 };
 
 
@@ -209,7 +209,7 @@ public:
         This method should be used to construct the full name of the files which you
         wish to add to the report using AddFile().
     */
-    const wxString GetDirectory();
+    const wxString GetDirectory() const;
 
     /**
         Retrieves the name (relative to
@@ -217,25 +217,25 @@ public:
         file with the given index. If @a n is greater than or equal to the number of
         filse, @false is returned.
     */
-    bool GetFile(size_t n, wxString* name, wxString* desc);
+    bool GetFile(size_t n, wxString* name, wxString* desc) const;
 
     /**
         Gets the current number files in this report.
     */
-    size_t GetFilesCount();
+    size_t GetFilesCount() const;
 
     /**
         Gets the name used as a base name for various files, by default
         wxApp::GetAppName is used.
     */
-    wxString GetReportName();
+    wxString GetReportName() const;
 
     /**
         Returns @true if the object was successfully initialized. If this method
         returns
         @false the report can't be used.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Processes this report: the base class simply notifies the user that the
@@ -283,7 +283,7 @@ public:
         wxDebugReportPreview::Show for more
         information.
     */
-    bool Show(wxDebugReport& dbgrpt);
+    bool Show(wxDebugReport& dbgrpt) const;
 };
 
 

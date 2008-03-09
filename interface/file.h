@@ -79,12 +79,12 @@ public:
     /**
         Returns @true if the file was successfully opened.
     */
-    bool IsOpened();
+    bool IsOpened() const;
 
     /**
         Returns the length of the file.
     */
-    wxFileOffset Length();
+    wxFileOffset Length() const;
 
     /**
         Open the temporary file, returns @true on success, @false if an error
@@ -107,7 +107,7 @@ public:
         another
         error occurred.
     */
-    wxFileOffset Tell();
+    wxFileOffset Tell() const;
 
     /**
         Write to the file, return @true on success, @false on failure.
@@ -220,7 +220,7 @@ public:
         Read() repeatedly and tests its return condition instead
         of using Eof() as this will not work for special files under Unix.
     */
-    bool Eof();
+    bool Eof() const;
 
     /**
         Returns @true if the given name specifies an existing regular file (not a
@@ -239,17 +239,17 @@ public:
     /**
         Returns the type of the file. Possible return values are:
     */
-    wxFileKind GetKind();
+    wxFileKind GetKind() const;
 
     /**
         Returns @true if the file has been opened.
     */
-    bool IsOpened();
+    bool IsOpened() const;
 
     /**
         Returns the length of the file.
     */
-    wxFileOffset Length();
+    wxFileOffset Length() const;
 
     /**
         Opens the file, returning @true if successful.
@@ -304,7 +304,7 @@ public:
         another
         error occurred.
     */
-    wxFileOffset Tell();
+    wxFileOffset Tell() const;
 
     /**
         Writes the contents of the string to the file, returns @true on success.
@@ -319,5 +319,5 @@ public:
     /**
         Returns the file descriptor associated with the file.
     */
-    int fd();
+    int fd() const;
 };

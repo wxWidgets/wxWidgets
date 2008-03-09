@@ -65,29 +65,29 @@ public:
     /**
         Constructor does not load the file into memory, use Open() to do it.
     */
-    wxTextFile(const wxString& strFile);
+    wxTextFile(const wxString& strFile) const;
 
     /**
         Destructor does nothing.
     */
-    ~wxTextFile();
+    ~wxTextFile() const;
 
     /**
         Adds a line to the end of file.
     */
     void AddLine(const wxString& str,
-                 wxTextFileType type = typeDefault);
+                 wxTextFileType type = typeDefault) const;
 
     /**
         Delete all lines from the file, set current line number to 0.
     */
-    void Clear();
+    void Clear() const;
 
     /**
         Closes the file and frees memory, @b losing all changes. Use Write()
         if you want to save them.
     */
-    bool Close();
+    bool Close() const;
 
     //@{
     /**
@@ -97,20 +97,20 @@ public:
         It will fail if the file already exists, Open() should
         be used in this case.
     */
-    bool Create();
-    bool Create(const wxString& strFile);
+    bool Create() const;
+    const bool Create(const wxString& strFile) const;
     //@}
 
     /**
         Returns @true if the current line is the last one.
     */
-    bool Eof();
+    bool Eof() const;
 
     /**
         Return @true if file exists - the name of the file should have been specified
         in the constructor before calling Exists().
     */
-    bool Exists();
+    bool Exists() const;
 
     /**
         Returns the current line: it has meaning only when you're using
@@ -119,7 +119,7 @@ public:
         GetLastLine() also change the value of the current line, as well as
         GoToLine().
     */
-    size_t GetCurrentLine();
+    size_t GetCurrentLine() const;
 
     /**
         Get the line termination string corresponding to given constant. @e typeDefault
@@ -130,14 +130,14 @@ public:
         Apple Developer Tools) and wxTextFileType_Mac under Mac OS (including
         Mac OS X when compiling with CodeWarrior).
     */
-    static const char* GetEOL(wxTextFileType type = typeDefault);
+    static const char* GetEOL(wxTextFileType type = typeDefault) const;
 
     /**
         This method together with GetNextLine()
         allows more "iterator-like" traversal of the list of lines, i.e. you may
         write something like:
     */
-    wxString GetFirstLine();
+    wxString GetFirstLine() const;
 
     /**
         Gets the last line of the file. Together with
@@ -151,22 +151,22 @@ public:
         modified but you shouldn't add line terminator at the end - this will be done
         by wxTextFile.
     */
-    wxString GetLine(size_t n);
+    wxString GetLine(size_t n) const;
 
     /**
         Get the number of lines in the file.
     */
-    size_t GetLineCount();
+    size_t GetLineCount() const;
 
     /**
         Get the type of the line (see also wxTextFile::GetEOL)
     */
-    wxTextFileType GetLineType(size_t n);
+    wxTextFileType GetLineType(size_t n) const;
 
     /**
         Get the name of the file.
     */
-    const char* GetName();
+    const char* GetName() const;
 
     /**
         Gets the next line (see GetFirstLine() for
@@ -183,25 +183,25 @@ public:
         Changes the value returned by GetCurrentLine()
         and used by wxTextFile::GetFirstLine/GetNextLine().
     */
-    void GoToLine(size_t n);
+    void GoToLine(size_t n) const;
 
     /**
         Guess the type of file (which is supposed to be opened). If sufficiently
         many lines of the file are in DOS/Unix/Mac format, the corresponding value will
         be returned. If the detection mechanism fails wxTextFileType_None is returned.
     */
-    wxTextFileType GuessType();
+    wxTextFileType GuessType() const;
 
     /**
         Insert a line before the line number @e n.
     */
     void InsertLine(const wxString& str, size_t n,
-                    wxTextFileType type = typeDefault);
+                    wxTextFileType type = typeDefault) const;
 
     /**
         Returns @true if the file is currently opened.
     */
-    bool IsOpened();
+    bool IsOpened() const;
 
     //@{
     /**
@@ -213,14 +213,14 @@ public:
         The @e conv argument is only meaningful in Unicode build of wxWidgets when
         it is used to convert the file to wide character representation.
     */
-    bool Open();
-    bool Open(const wxString& strFile);
+    bool Open() const;
+    const bool Open(const wxString& strFile) const;
     //@}
 
     /**
         Delete line number @a n from the file.
     */
-    void RemoveLine(size_t n);
+    void RemoveLine(size_t n) const;
 
     /**
         )
@@ -232,10 +232,10 @@ public:
         them to physical file.
         Returns @true if operation succeeded, @false if it failed.
     */
-    bool Write(wxTextFileType typeNew = wxTextFileType_None);
+    bool Write(wxTextFileType typeNew = wxTextFileType_None) const;
 
     /**
         The same as GetLine().
     */
-    wxString operator[](size_t n);
+    wxString operator[](size_t n) const;
 };

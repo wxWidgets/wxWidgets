@@ -45,7 +45,7 @@ public:
     /**
         Returns the page that was selected before the change, -1 if none was selected.
     */
-    int GetOldSelection();
+    int GetOldSelection() const;
 
     /**
         Returns the currently selected page, or -1 if none was selected.
@@ -59,7 +59,7 @@ public:
         you presumably don't need them anyhow as you already have the corresponding
         information).
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         Sets the id of the page selected before the change.
@@ -218,14 +218,14 @@ public:
     /**
         Returns the currently selected notebook page or @NULL.
     */
-    wxWindow* GetCurrentPage();
+    wxWindow* GetCurrentPage() const;
 
     /**
         Returns the associated image list.
         
         @see wxImageList, SetImageList()
     */
-    wxImageList* GetImageList();
+    wxImageList* GetImageList() const;
 
     /**
         Returns the window at the given page position.
@@ -235,22 +235,22 @@ public:
     /**
         Returns the number of pages in the notebook control.
     */
-    size_t GetPageCount();
+    size_t GetPageCount() const;
 
     /**
         Returns the image index for the given page.
     */
-    int GetPageImage(size_t nPage);
+    int GetPageImage(size_t nPage) const;
 
     /**
         Returns the string for the given page.
     */
-    wxString GetPageText(size_t nPage);
+    wxString GetPageText(size_t nPage) const;
 
     /**
         Returns the number of rows in the notebook control.
     */
-    int GetRowCount();
+    int GetRowCount() const;
 
     /**
         Returns the currently selected page, or -1 if none was selected.
@@ -260,7 +260,7 @@ public:
         wxNotebookEvent::GetSelection should be
         used instead in this case.
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         If running under Windows and themes are enabled for the application, this
@@ -269,7 +269,7 @@ public:
         can be passed
         to @c SetBackgroundColour. Otherwise, an uninitialised colour will be returned.
     */
-    wxColour GetThemeBackgroundColour();
+    wxColour GetThemeBackgroundColour() const;
 
     /**
         Returns the index of the tab at the specified position or @c wxNOT_FOUND

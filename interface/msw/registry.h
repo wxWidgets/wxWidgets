@@ -77,7 +77,7 @@ public:
     /**
         Returns @true if the key exists.
     */
-    static bool Exists();
+    static bool Exists() const;
 
     /**
         Gets the first key.
@@ -102,52 +102,52 @@ public:
             The maximum length of a value.
     */
     bool GetKeyInfo(size_t* pnSubKeys, size_t* pnValues,
-                    size_t* pnMaxValueLen);
+                    size_t* pnMaxValueLen) const;
 
     /**
         Gets the name of the registry key.
     */
-    wxString GetName(bool bShortPrefix = true);
+    wxString GetName(bool bShortPrefix = true) const;
 
     /**
         Gets the next key.
     */
-    bool GetNextKey(wxString& strKeyName, long& lIndex);
+    bool GetNextKey(wxString& strKeyName, long& lIndex) const;
 
     /**
         Gets the next key value for this key.
     */
-    bool GetNextValue(wxString& strValueName, long& lIndex);
+    bool GetNextValue(wxString& strValueName, long& lIndex) const;
 
     /**
         Returns @true if given subkey exists.
     */
-    bool HasSubKey(const wxChar* szKey);
+    bool HasSubKey(const wxChar* szKey) const;
 
     /**
         Returns @true if any subkeys exist.
     */
-    bool HasSubKeys();
+    bool HasSubKeys() const;
 
     /**
         Returns @true if the value exists.
     */
-    bool HasValue(const wxChar* szValue);
+    bool HasValue(const wxChar* szValue) const;
 
     /**
         Returns @true if any values exist.
     */
-    bool HasValues();
+    bool HasValues() const;
 
     /**
         Returns @true if this key is empty, nothing under this key.
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         Returns @true if the key is opened.
     */
-    bool IsOpened();
+    bool IsOpened() const;
 
     /**
         Explicitly opens the key. This method also allows the key to be opened in
@@ -160,8 +160,8 @@ public:
     /**
         Retrieves the numeric value.
     */
-    bool QueryValue(const wxChar* szValue, wxString& strValue);
-    bool QueryValue(const wxChar* szValue, long* plValue);
+    bool QueryValue(const wxChar* szValue, wxString& strValue) const;
+    const bool QueryValue(const wxChar* szValue, long* plValue) const;
     //@}
 
     /**

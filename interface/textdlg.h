@@ -76,7 +76,7 @@ public:
         original value
         if the user has pressed Cancel.
     */
-    wxString GetValue();
+    wxString GetValue() const;
 
     /**
         Sets the default text value.

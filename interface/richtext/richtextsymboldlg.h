@@ -114,46 +114,46 @@ public:
     //@}
 
     /**
-        , @b const wxPoint&@e pos = wxDefaultPosition, @b const wxSize&@e size =
-        wxDefaultSize, @b long@e style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX)
+        ,  wxPoint&@e pos = wxDefaultPosition,  wxSize&@e size = wxDefaultSize, @b
+        long@e style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX)
         Creation: see @ref wxsymbolpickerdialog() "the constructor" for details about
         the parameters.
     */
     bool Create(const wxString& symbol, const wxString& initialFont,
                 const wxString& normalTextFont,
                 wxWindow* parent,
-                wxWindowID id = wxID_ANY);
+                wxWindowID id = wxID_ANY) const;
 
     /**
         Returns the font name (the font reflected in the font list).
     */
-    wxString GetFontName();
+    wxString GetFontName() const;
 
     /**
         Returns @true if the dialog is showing the full range of Unicode characters.
     */
-    bool GetFromUnicode();
+    bool GetFromUnicode() const;
 
     /**
         Gets the font name used for displaying symbols in the absence of a selected
         font.
     */
-    wxString GetNormalTextFontName();
+    wxString GetNormalTextFontName() const;
 
     /**
         Gets the current or initial symbol as a string.
     */
-    wxString GetSymbol();
+    wxString GetSymbol() const;
 
     /**
         Gets the selected symbol character as an integer.
     */
-    int GetSymbolChar();
+    int GetSymbolChar() const;
 
     /**
         Returns @true if a symbol is selected.
     */
-    bool HasSelection();
+    bool HasSelection() const;
 
     /**
         Sets the initial/selected font name.
@@ -185,5 +185,5 @@ public:
         Returns @true if the has specified normal text - that is, there is no selected
         font.
     */
-    bool UseNormalFont();
+    bool UseNormalFont() const;
 };

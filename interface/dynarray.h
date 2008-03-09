@@ -271,7 +271,7 @@ public:
     /**
         Return the number of items in the array.
     */
-    size_t GetCount();
+    size_t GetCount() const;
 
     //@{
     /**
@@ -290,8 +290,8 @@ public:
         previously added to the array, but fail even if another, identical, element is
         in the array.
     */
-    int Index(T& item, bool searchFromEnd = false);
-    int Index(T& item);
+    int Index(T& item, bool searchFromEnd = false) const;
+    const int Index(T& item) const;
     //@}
 
     /**
@@ -304,7 +304,7 @@ public:
         wxArray::AddAt for a common operation
         of "insert only if not found".
     */
-    size_t IndexForInsert(T item);
+    size_t IndexForInsert(T item) const;
 
     //@{
     /**
@@ -324,7 +324,7 @@ public:
     /**
         Returns @true if the array is empty, @false otherwise.
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         Returns the item at the given position in the array. If @a index is out of
@@ -333,7 +333,7 @@ public:
         The returned value is of type "reference to the array element type" for all of
         the array classes.
     */
-    T Item(size_t index);
+    T Item(size_t index) const;
 
     /**
         Returns the last element in the array, i.e. is the same as Item(GetCount() - 1).
@@ -341,7 +341,7 @@ public:
         The returned value is of type "reference to the array element type" for all of
         the array classes.
     */
-    T Last();
+    T Last() const;
 
     /**
         To use an array you must first define the array class. This is done with the

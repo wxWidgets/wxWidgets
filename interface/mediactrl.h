@@ -45,7 +45,7 @@ public:
     //@{
     /**
         ,
-                @b const wxPoint&
+                 wxPoint&
         
         @param pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -78,8 +78,8 @@ public:
         @param name
             Window name.
     */
-    wxMediaCtrl();
-    wxMediaCtrl(wxWindow* parent, wxWindowID id);
+    wxMediaCtrl() const;
+    wxMediaCtrl(wxWindow* parent, wxWindowID id) const;
     //@}
 
     /**
@@ -126,7 +126,7 @@ public:
 
     /**
         ,
-                @b const wxPoint&
+                 wxPoint&
         
         @param pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -162,7 +162,7 @@ public:
         @param name
             Window name.
     */
-    bool Create(wxWindow* parent, wxWindowID id);
+    bool Create(wxWindow* parent, wxWindowID id) const;
 
     /**
         Creating a backend for wxMediaCtrl is a rather simple process. Simply derive

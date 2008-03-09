@@ -158,7 +158,7 @@ public:
         @see wxControlWithItems::GetSelection, wxControlWithItems::GetStringSelection,
              wxControlWithItems::SetSelection
     */
-    int GetSelections(wxArrayInt& selections);
+    int GetSelections(wxArrayInt& selections) const;
 
     /**
         Returns the item located at @e point, or @c wxNOT_FOUND if there
@@ -173,7 +173,7 @@ public:
         @returns Item located at point, or wxNOT_FOUND if unimplemented or the
                  item does not exist.
     */
-    int HitTest(const wxPoint point);
+    int HitTest(const wxPoint point) const;
 
     //@{
     /**
@@ -202,7 +202,7 @@ public:
         
         @returns @true if the given item is selected, @false otherwise.
     */
-    bool IsSelected(int n);
+    bool IsSelected(int n) const;
 
     //@{
     /**

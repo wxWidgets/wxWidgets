@@ -201,7 +201,7 @@ public:
     /**
         returns @true if either a group or an entry with a given name exists
     */
-    bool Exists(wxString& strName);
+    bool Exists(wxString& strName) const;
 
     /**
         permanently writes all changes (otherwise, they're only written from object's
@@ -219,7 +219,7 @@ public:
     /**
         Returns the application name.
     */
-    wxString GetAppName();
+    wxString GetAppName() const;
 
     /**
         Returns the type of the given entry or @e Unknown if the entry doesn't
@@ -229,68 +229,68 @@ public:
         key with wxRegConfig will fail.
         The result is an element of enum EntryType:
     */
-    enum wxConfigBase::EntryType GetEntryType(const wxString& name);
+    enum wxConfigBase::EntryType GetEntryType(const wxString& name) const;
 
     /**
         Gets the first entry.
     */
-    bool GetFirstEntry(wxString& str, long& index);
+    bool GetFirstEntry(wxString& str, long& index) const;
 
     /**
         Gets the first group.
     */
-    bool GetFirstGroup(wxString& str, long& index);
+    bool GetFirstGroup(wxString& str, long& index) const;
 
     /**
         Gets the next entry.
     */
-    bool GetNextEntry(wxString& str, long& index);
+    bool GetNextEntry(wxString& str, long& index) const;
 
     /**
         Gets the next group.
     */
-    bool GetNextGroup(wxString& str, long& index);
+    bool GetNextGroup(wxString& str, long& index) const;
 
     /**
         
     */
-    uint GetNumberOfEntries(bool bRecursive = false);
+    uint GetNumberOfEntries(bool bRecursive = false) const;
 
     /**
         Get number of entries/subgroups in the current group, with or without its
         subgroups.
     */
-    uint GetNumberOfGroups(bool bRecursive = false);
+    uint GetNumberOfGroups(bool bRecursive = false) const;
 
     /**
         Retrieve the current path (always as absolute path).
     */
-    const wxString GetPath();
+    const wxString GetPath() const;
 
     /**
         Returns the vendor name.
     */
-    wxString GetVendorName();
+    wxString GetVendorName() const;
 
     /**
         returns @true if the entry by this name exists
     */
-    bool HasEntry(wxString& strName);
+    bool HasEntry(wxString& strName) const;
 
     /**
         returns @true if the group by this name exists
     */
-    bool HasGroup(const wxString& strName);
+    bool HasGroup(const wxString& strName) const;
 
     /**
         Returns @true if we are expanding environment variables in key values.
     */
-    bool IsExpandingEnvVars();
+    bool IsExpandingEnvVars() const;
 
     /**
         Returns @true if we are writing defaults back to the config file.
     */
-    bool IsRecordingDefaults();
+    bool IsRecordingDefaults() const;
 
     /**
         These function are the core of wxConfigBase class: they allow you to read and
@@ -399,48 +399,51 @@ public:
         
         Returns a boolean
     */
-    bool Read(const wxString& key, wxString* str);
-    bool Read(const wxString& key, wxString* str,
-              const wxString& defaultVal);
-    wxString Read(const wxString& key,
-                  const
-                  wxString& defaultVal);
-    bool Read(const wxString& key, long* l);
-    bool Read(const wxString& key, long* l, long defaultVal);
-    bool Read(const wxString& key, double* d);
-    bool Read(const wxString& key, double* d, double defaultVal);
-    bool Read(const wxString& key, bool* b);
-    bool Read(const wxString& key, bool* d, bool defaultVal);
-    bool Read(const wxString& key, wxMemoryBuffer* buf);
-    bool Read(const wxString& key, T* value);
-    bool Read(const wxString& key, T* value,
-              T const& defaultVal);
+    bool Read(const wxString& key, wxString* str) const;
+    const bool Read(const wxString& key, wxString* str,
+                    const wxString& defaultVal) const;
+    const wxString  Read(const wxString& key,
+                         const
+                         wxString& defaultVal) const;
+    const bool Read(const wxString& key, long* l) const;
+    const bool Read(const wxString& key, long* l,
+                    long defaultVal) const;
+    const bool Read(const wxString& key, double* d) const;
+    const bool Read(const wxString& key, double* d,
+                    double defaultVal) const;
+    const bool Read(const wxString& key, bool* b) const;
+    const bool Read(const wxString& key, bool* d,
+                    bool defaultVal) const;
+    const bool Read(const wxString& key, wxMemoryBuffer* buf) const;
+    const bool Read(const wxString& key, T* value) const;
+    const bool Read(const wxString& key, T* value,
+                    T const& defaultVal) const;
     //@}
 
     /**
         Reads a bool value from the key and returns it. @a defaultVal is returned
         if the key is not found.
     */
-    long ReadBool(const wxString& key, bool defaultVal);
+    long ReadBool(const wxString& key, bool defaultVal) const;
 
     /**
         Reads a double value from the key and returns it. @a defaultVal is returned
         if the key is not found.
     */
-    long ReadDouble(const wxString& key, double defaultVal);
+    long ReadDouble(const wxString& key, double defaultVal) const;
 
     /**
         Reads a long value from the key and returns it. @a defaultVal is returned
         if the key is not found.
     */
-    long ReadLong(const wxString& key, long defaultVal);
+    long ReadLong(const wxString& key, long defaultVal) const;
 
     /**
         Reads a value of type T, for which function
         wxFromString is defined, from the key and returns it.
         @a defaultVal is returned if the key is not found.
     */
-    T ReadObject(const wxString& key, T const& defaultVal);
+    T ReadObject(const wxString& key, T const& defaultVal) const;
 
     /**
         The functions in this section allow to rename entries or subgroups of the

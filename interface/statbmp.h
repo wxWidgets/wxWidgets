@@ -72,7 +72,7 @@ public:
         
         @see SetBitmap()
     */
-    wxBitmap GetBitmap();
+    wxBitmap GetBitmap() const;
 
     /**
         Returns the icon currently used in the control. Notice that this method can
@@ -82,7 +82,7 @@ public:
         
         @see SetIcon()
     */
-    wxIcon GetIcon();
+    wxIcon GetIcon() const;
 
     /**
         Sets the bitmap label.

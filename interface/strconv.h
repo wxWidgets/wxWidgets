@@ -28,13 +28,13 @@ public:
         Converts from UTF-7 encoding to Unicode. Returns the size of the destination
         buffer.
     */
-    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n) const;
 
     /**
         Converts from Unicode to UTF-7 encoding. Returns the size of the destination
         buffer.
     */
-    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };
 
 
@@ -58,13 +58,13 @@ public:
         Converts from UTF-8 encoding to Unicode. Returns the size of the destination
         buffer.
     */
-    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n) const;
 
     /**
         Converts from Unicode to UTF-8 encoding. Returns the size of the destination
         buffer.
     */
-    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };
 
 
@@ -94,13 +94,13 @@ public:
         Converts from UTF-16 encoding to Unicode. Returns the size of the destination
         buffer.
     */
-    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n) const;
 
     /**
         Converts from Unicode to UTF-16 encoding. Returns the size of the destination
         buffer.
     */
-    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };
 
 
@@ -144,19 +144,19 @@ public:
         A malformed string may still make conversion functions return @c wxCONV_FAILED.
         This function is new since wxWidgets version 2.8.2
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Converts from the selected character set to Unicode. Returns length of string
         written to destination buffer.
     */
-    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n) const;
 
     /**
         Converts from Unicode to the selected character set. Returns length of string
         written to destination buffer.
     */
-    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };
 
 
@@ -202,13 +202,13 @@ public:
         Converts from multibyte filename encoding to Unicode. Returns the size of the
         destination buffer.
     */
-    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n) const;
 
     /**
         Converts from Unicode to multibyte filename encoding. Returns the size of the
         destination buffer.
     */
-    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };
 
 
@@ -238,13 +238,13 @@ public:
         Converts from UTF-32 encoding to Unicode. Returns the size of the destination
         buffer.
     */
-    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n) const;
 
     /**
         Converts from Unicode to UTF-32 encoding. Returns the size of the destination
         buffer.
     */
-    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };
 
 
@@ -283,7 +283,7 @@ public:
         return a new copy of the object it is called on. It is used for copying the
         conversion objects while preserving their dynamic type.
     */
-    virtual wxMBConv* Clone();
+    virtual wxMBConv* Clone() const;
 
     /**
         This function has the same semantics as ToWChar()
@@ -291,7 +291,7 @@ public:
     */
     virtual size_t FromWChar(char* dst, size_t dstLen,
                              const wchar_t* src,
-                             size_t srcLen = wxNO_LEN);
+                             size_t srcLen = wxNO_LEN) const;
 
     /**
         This function returns 1 for most of the multibyte encodings in which the
@@ -300,7 +300,7 @@ public:
         The other cases are not currently supported and @c wxCONV_FAILED
         (defined as -1) is returned for them.
     */
-    size_t GetMBNulLen();
+    size_t GetMBNulLen() const;
 
     /**
         Returns the maximal value which can be returned by
@@ -333,7 +333,7 @@ public:
         @returns The length of the converted string excluding the trailing NUL.
     */
     virtual size_t MB2WC(wchar_t* out, const char* in,
-                         size_t outLen);
+                         size_t outLen) const;
 
     /**
         The most general function for converting a multibyte string to a wide string.
@@ -353,7 +353,7 @@ public:
     */
     virtual size_t ToWChar(wchar_t* dst, size_t dstLen,
                            const char* src,
-                           size_t srcLen = wxNO_LEN);
+                           size_t srcLen = wxNO_LEN) const;
 
     /**
         This function is deprecated, please use FromWChar() instead
@@ -365,7 +365,7 @@ public:
         into account the trailing @c NUL, which might take two or four bytes for some
         encodings (UTF-16 and UTF-32) and not one.
     */
-    virtual size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
+    virtual size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 
     //@{
     /**
@@ -385,9 +385,10 @@ public:
         If @a outLen is not-@NULL, it receives the length of the converted
         string.
     */
-    const wxWCharBuffer cMB2WC(const char* in);
-    const wxWCharBuffer cMB2WC(const char* in, size_t inLen,
-                               size_t outLen);
+    const wxWCharBuffer cMB2WC(const char* in) const;
+    const const wxWCharBuffer cMB2WC(const char* in,
+                                     size_t inLen,
+                                     size_t outLen) const;
     //@}
 
     //@{
@@ -398,8 +399,8 @@ public:
         result in a wxWCharBuffer. The macro wxMB2WXbuf is defined as the correct
         return type (without const).
     */
-    const char* cMB2WX(const char* psz);
-    const wxWCharBuffer cMB2WX(const char* psz);
+    const char* cMB2WX(const char* psz) const;
+    const const wxWCharBuffer cMB2WX(const char* psz) const;
     //@}
 
     //@{
@@ -415,9 +416,10 @@ public:
         If @a outLen is not-@NULL, it receives the length of the converted
         string.
     */
-    const wxCharBuffer cWC2MB(const wchar_t* in);
-    const wxCharBuffer cWC2MB(const wchar_t* in, size_t inLen,
-                              size_t outLen);
+    const wxCharBuffer cWC2MB(const wchar_t* in) const;
+    const const wxCharBuffer cWC2MB(const wchar_t* in,
+                                    size_t inLen,
+                                    size_t outLen) const;
     //@}
 
     //@{
@@ -427,8 +429,8 @@ public:
         result in a wxCharBuffer. The macro wxWC2WXbuf is defined as the correct
         return type (without const).
     */
-    const wchar_t* cWC2WX(const wchar_t* psz);
-    const wxCharBuffer cWC2WX(const wchar_t* psz);
+    const wchar_t* cWC2WX(const wchar_t* psz) const;
+    const const wxCharBuffer cWC2WX(const wchar_t* psz) const;
     //@}
 
     //@{
@@ -438,8 +440,8 @@ public:
         result in a wxCharBuffer. The macro wxWX2MBbuf is defined as the correct
         return type (without const).
     */
-    const char* cWX2MB(const wxChar* psz);
-    const wxCharBuffer cWX2MB(const wxChar* psz);
+    const char* cWX2MB(const wxChar* psz) const;
+    const const wxCharBuffer cWX2MB(const wxChar* psz) const;
     //@}
 
     //@{
@@ -449,7 +451,7 @@ public:
         result in a wxWCharBuffer. The macro wxWX2WCbuf is defined as the correct
         return type (without const).
     */
-    const wchar_t* cWX2WC(const wxChar* psz);
-    const wxWCharBuffer cWX2WC(const wxChar* psz);
+    const wchar_t* cWX2WC(const wxChar* psz) const;
+    const const wxWCharBuffer cWX2WC(const wxChar* psz) const;
     //@}
 };

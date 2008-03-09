@@ -102,5 +102,5 @@ public:
         Returns @true if another copy of this program is already running, @false
         otherwise.
     */
-    bool IsAnotherRunning();
+    bool IsAnotherRunning() const;
 };

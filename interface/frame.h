@@ -214,14 +214,14 @@ public:
         Returns the origin of the frame client area (in client coordinates). It may be
         different from (0, 0) if the frame has a toolbar.
     */
-    wxPoint GetClientAreaOrigin();
+    wxPoint GetClientAreaOrigin() const;
 
     /**
         Returns a pointer to the menubar currently associated with the frame (if any).
         
         @see SetMenuBar(), wxMenuBar, wxMenu
     */
-    wxMenuBar* GetMenuBar();
+    wxMenuBar* GetMenuBar() const;
 
     /**
         Returns a pointer to the status bar currently associated with the frame (if
@@ -229,7 +229,7 @@ public:
         
         @see CreateStatusBar(), wxStatusBar
     */
-    wxStatusBar* GetStatusBar();
+    wxStatusBar* GetStatusBar() const;
 
     /**
         Returns the status bar pane used to display menu and toolbar help.
@@ -243,7 +243,7 @@ public:
         
         @see CreateToolBar(), wxToolBar, SetToolBar()
     */
-    wxToolBar* GetToolBar();
+    wxToolBar* GetToolBar() const;
 
     /**
         Virtual function called when a status bar is requested by CreateStatusBar().

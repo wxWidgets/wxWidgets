@@ -66,7 +66,7 @@ public:
         Returns @true if the object had been initialized successfully, @false
         if an error occurred.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Signals the object waking up at most one thread. If several threads are waiting
@@ -459,7 +459,7 @@ public:
         thread throughout the system during its existence (i.e. the thread identifiers
         may be reused).
     */
-    unsigned long GetId();
+    unsigned long GetId() const;
 
     /**
         Gets the priority of the thread, between zero and 100.
@@ -477,7 +477,7 @@ public:
         
         100
     */
-    int GetPriority();
+    int GetPriority() const;
 
     /**
         Returns @true if the thread is alive (i.e. started and not terminating).
@@ -486,14 +486,14 @@ public:
         no longer alive, it is not possible to call this function because
         the wxThread object no longer exists.
     */
-    bool IsAlive();
+    bool IsAlive() const;
 
     /**
         Returns @true if the thread is of the detached kind, @false if it is a
         joinable
         one.
     */
-    bool IsDetached();
+    bool IsDetached() const;
 
     /**
         Returns @true if the calling thread is the main application thread.
@@ -503,14 +503,14 @@ public:
     /**
         Returns @true if the thread is paused.
     */
-    bool IsPaused();
+    bool IsPaused() const;
 
     /**
         Returns @true if the thread is running.
         This method may only be safely used for joinable threads, see the remark in
         IsAlive().
     */
-    bool IsRunning();
+    bool IsRunning() const;
 
     /**
         Immediately terminates the target thread. @b This function is dangerous and
@@ -658,7 +658,7 @@ public:
         See @ref overview_deletionwxthread "wxThread deletion" for a broader
         explanation of this routine.
     */
-    ExitCode Wait();
+    ExitCode Wait() const;
 
     /**
         Give the rest of the thread time slice to the system allowing the other threads
@@ -844,7 +844,7 @@ public:
     /**
         Returns @true if mutex was acquired in the constructor, @false otherwise.
     */
-    bool IsOk();
+    bool IsOk() const;
 };
 
 

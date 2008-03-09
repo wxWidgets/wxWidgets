@@ -107,26 +107,26 @@ public:
         Returns an input stream which corresponds to the standard error output (stderr)
         of the child process.
     */
-    wxInputStream* GetErrorStream();
+    wxInputStream* GetErrorStream() const;
 
     /**
         It returns an input stream corresponding to the standard output stream of the
         subprocess. If it is @NULL, you have not turned on the redirection.
         See Redirect().
     */
-    wxInputStream* GetInputStream();
+    wxInputStream* GetInputStream() const;
 
     /**
         It returns an output stream correspoding to the input stream of the subprocess.
         If it is @NULL, you have not turned on the redirection.
         See Redirect().
     */
-    wxOutputStream* GetOutputStream();
+    wxOutputStream* GetOutputStream() const;
 
     /**
         Returns the process ID of the process launched by Open().
     */
-    long GetPid();
+    long GetPid() const;
 
     /**
         Returns @true if there is data to be read on the child process standard
@@ -134,7 +134,7 @@ public:
         
         @see IsInputAvailable()
     */
-    bool IsErrorAvailable();
+    bool IsErrorAvailable() const;
 
     /**
         Returns @true if there is data to be read on the child process standard
@@ -145,12 +145,12 @@ public:
         
         @see IsInputOpened()
     */
-    bool IsInputAvailable();
+    bool IsInputAvailable() const;
 
     /**
         Returns @true if the child process standard output stream is opened.
     */
-    bool IsInputOpened();
+    bool IsInputOpened() const;
 
     /**
         Send the specified signal to the given process. Possible signal values are:
@@ -245,5 +245,5 @@ public:
     /**
         Returns the process id.
     */
-    int GetPid();
+    int GetPid() const;
 };

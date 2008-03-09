@@ -64,7 +64,7 @@ public:
         of
         Pause().
     */
-    long Time();
+    long Time() const;
 };
 
 

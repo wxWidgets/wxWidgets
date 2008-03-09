@@ -200,7 +200,7 @@ public:
     /**
         Returns pointer to object or @NULL.
     */
-    T* get();
+    T* get() const;
 
     /**
         Conversion to a boolean expression (in a variant which is not
@@ -208,19 +208,19 @@ public:
         contains a valid pointer it will return @e @true, if it contains
         a @NULL pointer it will return @e @false.
     */
-    operator unspecified_bool_type();
+    operator unspecified_bool_type() const;
 
     /**
         Returns a reference to the object. If the internal pointer is @NULL
         this method will cause an assert in debug mode.
     */
-    T operator*();
+    T operator*() const;
 
     /**
         Returns pointer to object. If the pointer is @NULL this method will
         cause an assert in debug mode.
     */
-    T* operator-();
+    T* operator-() const;
 
     /**
         Releases the current pointer and returns it.

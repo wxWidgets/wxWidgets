@@ -58,7 +58,7 @@ public:
         
         @returns Returns @true if it is pressed, @false otherwise.
     */
-    bool GetValue();
+    bool GetValue() const;
 
     /**
         Sets the toggle button to the given state. This does not cause a
@@ -156,7 +156,7 @@ public:
         
         @returns Returns @true if it is pressed, @false otherwise.
     */
-    bool GetValue();
+    bool GetValue() const;
 
     /**
         Sets the toggle button to the given state. This does not cause a

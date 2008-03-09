@@ -42,17 +42,17 @@ public:
     /**
         Returns the command identifier for the accelerator table entry.
     */
-    int GetCommand();
+    int GetCommand() const;
 
     /**
         Returns the flags for the accelerator table entry.
     */
-    int GetFlags();
+    int GetFlags() const;
 
     /**
         Returns the keycode for the accelerator table entry.
     */
-    int GetKeyCode();
+    int GetKeyCode() const;
 
     /**
         Sets the accelerator entry parameters.
@@ -124,7 +124,7 @@ public:
     /**
         Returns @true if the accelerator table is valid.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".

@@ -128,7 +128,7 @@ public:
     /**
         Gets the parent window for dialogs.
     */
-    wxWindow* GetParentWindow();
+    wxWindow* GetParentWindow() const;
 
     /**
         Returns pointer to wxPrintData instance used by this class. You can

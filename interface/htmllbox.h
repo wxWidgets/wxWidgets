@@ -66,8 +66,8 @@ public:
         wxFileSystem::ChangePathTo if you use
         relative paths for the images or other resources embedded in your HTML.
     */
-    wxFileSystem GetFileSystem();
-    const wxFileSystem GetFileSystem();
+    wxFileSystem GetFileSystem() const;
+    const wxFileSystem GetFileSystem() const;
     //@}
 
     /**
@@ -81,7 +81,7 @@ public:
         
         @see GetSelectedTextColour()
     */
-    wxColour GetSelectedTextBgColour(const wxColour& colBg);
+    wxColour GetSelectedTextBgColour(const wxColour& colBg) const;
 
     /**
         This virtual function may be overridden to customize the appearance of the
@@ -93,7 +93,7 @@ public:
         @see GetSelectedTextBgColour(),
              wxVListBox::SetSelectionBackground, wxSystemSettings::GetColour
     */
-    wxColour GetSelectedTextColour(const wxColour& colFg);
+    wxColour GetSelectedTextColour(const wxColour& colFg) const;
 
     /**
         This method must be implemented in the derived class and should return
@@ -107,13 +107,13 @@ public:
         that the returned HTML fragment will render with the same height or else you'll
         see some artifacts when the user selects an item.
     */
-    wxString OnGetItem(size_t n);
+    wxString OnGetItem(size_t n) const;
 
     /**
         This function may be overridden to decorate HTML returned by
         OnGetItem().
     */
-    wxString OnGetItemMarkup(size_t n);
+    wxString OnGetItemMarkup(size_t n) const;
 
     /**
         Called when the user clicks on hypertext link. Does nothing by default.

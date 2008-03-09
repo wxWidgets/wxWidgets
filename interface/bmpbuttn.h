@@ -114,7 +114,7 @@ public:
         @see SetBitmapDisabled()
     */
     const wxBitmap GetBitmapDisabled();
-    wxBitmap GetBitmapDisabled();
+    const wxBitmap&  GetBitmapDisabled();
     //@}
 
     //@{
@@ -126,7 +126,7 @@ public:
         @see SetBitmapFocus()
     */
     const wxBitmap GetBitmapFocus();
-    wxBitmap GetBitmapFocus();
+    const wxBitmap&  GetBitmapFocus();
     //@}
 
     //@{
@@ -136,7 +136,7 @@ public:
         @see SetBitmapHover()
     */
     const wxBitmap GetBitmapHover();
-    wxBitmap GetBitmapHover();
+    const wxBitmap&  GetBitmapHover();
     //@}
 
     //@{
@@ -148,7 +148,7 @@ public:
         @see SetBitmapLabel()
     */
     const wxBitmap GetBitmapLabel();
-    wxBitmap GetBitmapLabel();
+    const wxBitmap&  GetBitmapLabel();
     //@}
 
     /**
@@ -158,7 +158,7 @@ public:
         
         @see SetBitmapSelected()
     */
-    wxBitmap GetBitmapSelected();
+    wxBitmap GetBitmapSelected() const;
 
     /**
         Sets the bitmap for the disabled button appearance.

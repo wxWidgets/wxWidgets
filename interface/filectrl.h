@@ -93,14 +93,14 @@ public:
         Returns the current directory of the file control (i.e. the directory shown by
         it).
     */
-    wxString GetDirectory();
+    wxString GetDirectory() const;
 
     /**
         Returns the currently selected filename.
         For the controls having the @c wxFC_MULTIPLE style, use GetFilenames()
         instead
     */
-    wxString GetFilename();
+    wxString GetFilename() const;
 
     /**
         Fills the array @a filenames with the filenames only of selected items. This
@@ -110,19 +110,19 @@ public:
         
         @remarks filenames is emptied first.
     */
-    void GetFilenames(wxArrayString& filenames);
+    void GetFilenames(wxArrayString& filenames) const;
 
     /**
         Returns the zero-based index of the currently selected filter.
     */
-    int GetFilterIndex();
+    int GetFilterIndex() const;
 
     /**
         Returns the full path (directory and filename) of the currently selected file.
         For the controls having the @c wxFC_MULTIPLE style, use GetPaths()
         instead
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         Fills the array @a paths with the full paths of the files chosen. This
@@ -131,12 +131,12 @@ public:
         
         @remarks paths is emptied first.
     */
-    void GetPaths(wxArrayString& paths);
+    void GetPaths(wxArrayString& paths) const;
 
     /**
         Returns the current wildcard.
     */
-    wxString GetWildcard();
+    wxString GetWildcard() const;
 
     /**
         Sets(changes) the current directory displayed in the control.
@@ -193,19 +193,19 @@ public:
         In case of a @b EVT_FILECTRL_FOLDERCHANGED, this method returns the new
         directory.
     */
-    wxString GetDirectory();
+    wxString GetDirectory() const;
 
     /**
         Returns the file selected(assuming it is only one file).
     */
-    wxString GetFile();
+    wxString GetFile() const;
 
     /**
         Returns the files selected.
         In case of a @b EVT_FILECTRL_SELECTIONCHANGED, this method returns the
         files selected after the event.
     */
-    wxArrayString GetFiles();
+    wxArrayString GetFiles() const;
 
     /**
         Sets the files changed by this event.

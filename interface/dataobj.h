@@ -69,12 +69,12 @@ public:
     /**
         Returns a pointer to the data.
     */
-    virtual void* GetData();
+    virtual void* GetData() const;
 
     /**
         Returns the data size in bytes.
     */
-    virtual size_t GetSize();
+    virtual size_t GetSize() const;
 
     /**
         Set the data. The data object will make an internal copy.
@@ -135,7 +135,7 @@ public:
         the clipboard or the DnD operation.  You can use this method to find
         out what kind of data object was recieved.
     */
-    wxDataFormat GetReceivedFormat();
+    wxDataFormat GetReceivedFormat() const;
 };
 
 
@@ -179,19 +179,19 @@ public:
         Copy the data to the buffer, return @true on success. Must be implemented in the
         derived class if the object supports rendering its data.
     */
-    virtual bool GetDataHere(void buf);
+    virtual bool GetDataHere(void buf) const;
 
     /**
         Gets the size of our data. Must be implemented in the derived class if the
         object supports rendering its data.
     */
-    virtual size_t GetDataSize();
+    virtual size_t GetDataSize() const;
 
     /**
         Returns the (one and only one) format supported by this object. It is supposed
         that the format is supported in both directions.
     */
-    const wxDataFormat GetFormat();
+    const wxDataFormat GetFormat() const;
 
     /**
         Copy the data from the buffer, return @true on success. Must be implemented in
@@ -246,7 +246,7 @@ public:
         wxWidgets' internals. Use this method to get data in bitmap form from
         the wxClipboard.
     */
-    virtual wxBitmap GetBitmap();
+    virtual wxBitmap GetBitmap() const;
 
     /**
         Sets the bitmap associated with the data object. This method is called when the
@@ -348,12 +348,12 @@ public:
         Returns the name of a custom format (this function will fail for a standard
         format).
     */
-    wxString GetId();
+    wxString GetId() const;
 
     /**
         Returns the platform-specific number identifying the format.
     */
-    NativeFormat GetType();
+    NativeFormat GetType() const;
 
     /**
         Sets the format to be the custom format identified by the given name.
@@ -368,12 +368,12 @@ public:
     /**
         Returns @true if the formats are different.
     */
-    bool operator !=(const wxDataFormat& format);
+    bool operator !=(const wxDataFormat& format) const;
 
     /**
         Returns @true if the formats are equal.
     */
-    bool operator ==(const wxDataFormat& format);
+    bool operator ==(const wxDataFormat& format) const;
 };
 
 
@@ -407,7 +407,7 @@ public:
     /**
         Returns the URL stored by this object, as a string.
     */
-    wxString GetURL();
+    wxString GetURL() const;
 
     /**
         Sets the URL stored by this object.
@@ -562,30 +562,30 @@ public:
         @e formats. There is enough space for GetFormatCount(dir) formats in it.
     */
     virtual void GetAllFormats(wxDataFormat* formats,
-                               Direction dir = Get);
+                               Direction dir = Get) const;
 
     /**
         The method will write the data of the format @a format in the buffer @a buf and
         return @true on success, @false on failure.
     */
-    virtual bool GetDataHere(const wxDataFormat& format, void buf);
+    virtual bool GetDataHere(const wxDataFormat& format, void buf) const;
 
     /**
         Returns the data size of the given format @e format.
     */
-    virtual size_t GetDataSize(const wxDataFormat& format);
+    virtual size_t GetDataSize(const wxDataFormat& format) const;
 
     /**
         Returns the number of available formats for rendering or setting the data.
     */
-    virtual size_t GetFormatCount(Direction dir = Get);
+    virtual size_t GetFormatCount(Direction dir = Get) const;
 
     /**
         Returns the preferred format for either rendering the data (if @a dir is @c Get,
         its default value) or for setting it. Usually this will be the
         native format of the wxDataObject.
     */
-    virtual wxDataFormat GetPreferredFormat(Direction dir = Get);
+    virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const;
 
     /**
         Set the data in the format @a format of the length @a len provided in the
@@ -643,7 +643,7 @@ public:
         wxWidgets' internals. Use this method to get data in text form from
         the wxClipboard.
     */
-    virtual wxString GetText();
+    virtual wxString GetText() const;
 
     /**
         Returns the data size. By default, returns the size of the text data
@@ -652,7 +652,7 @@ public:
         to return the text length plus 1 for a trailing zero, but this is not
         strictly required.
     */
-    virtual size_t GetTextLength();
+    virtual size_t GetTextLength() const;
 
     /**
         Sets the text associated with the data object. This method is called
@@ -704,5 +704,5 @@ public:
     /**
         Returns the array of file names.
     */
-    const wxArrayString GetFilenames();
+    const wxArrayString GetFilenames() const;
 };

@@ -58,7 +58,7 @@ public:
         same as GetGeometry() but it could be less if
         there is a taskbar (or equivalent) on this display.
     */
-    wxRect GetClientArea();
+    wxRect GetClientArea() const;
 
     /**
         Returns the number of connected displays.
@@ -68,12 +68,12 @@ public:
     /**
         Returns the current video mode that this display is in.
     */
-    wxVideoMode GetCurrentMode();
+    wxVideoMode GetCurrentMode() const;
 
     /**
         Returns the bit depth of the display whose index was passed to the constructor.
     */
-    int GetDepth();
+    int GetDepth() const;
 
     /**
         Returns the index of the display on which the given point lies.  Returns
@@ -99,7 +99,7 @@ public:
         Returns the bounding rectangle of the display whose index was passed to the
         constructor.
     */
-    wxRect GetGeometry();
+    wxRect GetGeometry() const;
 
     /**
         Fills and returns an array with all the video modes that
@@ -107,12 +107,12 @@ public:
         supported by this display and match the mode parameter
         (if mode is not wxDefaultVideoMode).
     */
-    wxArrayVideoModes GetModes(const wxVideoMode& mode = wxDefaultVideoMode);
+    wxArrayVideoModes GetModes(const wxVideoMode& mode = wxDefaultVideoMode) const;
 
     /**
         Returns the display's name.  A name is not available on all platforms.
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Returns @true if the display is the primary display.  The primary display is the

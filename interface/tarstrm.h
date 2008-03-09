@@ -184,7 +184,7 @@ public:
         specified in the POSIX standards.
     */
     int GetBlockingFactor();
-    void SetBlockingFactor(int factor);
+    const void SetBlockingFactor(int factor);
     //@}
 
     /**
@@ -239,7 +239,7 @@ public:
          wxArchiveEntry::Get/SetDateTime.
     */
     wxDateTime GetAccessTime();
-    void SetAccessTime(const wxDateTime& dt);
+    const void SetAccessTime(const wxDateTime& dt);
     //@}
 
     //@{
@@ -248,7 +248,7 @@ public:
          wxArchiveEntry::Get/SetDateTime.
     */
     wxDateTime GetCreateTime();
-    void SetCreateTime(const wxDateTime& dt);
+    const void SetCreateTime(const wxDateTime& dt);
     //@}
 
     //@{
@@ -258,8 +258,8 @@ public:
          or @e wxTAR_BLKTYPE.
     */
     int GetDevMajor();
-    int GetDevMinor();
-    void SetDevMajor(int dev);
+    const int GetDevMinor();
+    const void SetDevMajor(int dev);
     void SetDevMinor(int dev);
     //@}
 
@@ -272,8 +272,8 @@ public:
         Get/SetUserName" can be used instead.
     */
     int GetGroupId();
-    int GetUserId();
-    void SetGroupId(int id);
+    const int GetUserId();
+    const void SetGroupId(int id);
     void SetUserId(int id);
     //@}
 
@@ -283,8 +283,8 @@ public:
         over this entry. These are not present in very old tars.
     */
     wxString GetGroupName();
-    wxString GetUserName();
-    void SetGroupName(const wxString& group);
+    const wxString  GetUserName();
+    const void SetGroupName(const wxString& group);
     void SetUserName(const wxString& user);
     //@}
 
@@ -295,7 +295,7 @@ public:
         to @e wxTAR_LNKTYPE or @e wxTAR_SYMTYPE.
     */
     wxString GetLinkName();
-    void SetLinkName(const wxString& link);
+    const void SetLinkName(const wxString& link);
     //@}
 
     //@{
@@ -305,7 +305,7 @@ public:
         Symbols are defined for them in wx/file.h.
     */
     int GetMode();
-    void SetMode(int mode);
+    const void SetMode(int mode);
     //@}
 
     //@{
@@ -318,8 +318,8 @@ public:
         to seek back and fix the entry's header when the entry is closed, though it is
         still more efficient if the size is given beforehand.
     */
-    void SetSize(wxFileOffset size);
-    wxFileOffset GetSize();
+    void SetSize(wxFileOffset size) const;
+    wxFileOffset GetSize() const;
     //@}
 
     //@{
@@ -330,7 +330,7 @@ public:
         any other values should be treated as @e wxTAR_REGTYPE.
     */
     int GetTypeFlag();
-    void SetTypeFlag(int type);
+    const void SetTypeFlag(int type);
     //@}
 
     //@{
@@ -341,9 +341,9 @@ public:
         (i.e. has a trailing path separator).
     */
     wxString GetInternalName();
-    wxString GetInternalName(const wxString& name,
-                             wxPathFormat format = wxPATH_NATIVE,
-                             bool* pIsDir = NULL);
+    const wxString  GetInternalName(const wxString& name,
+                                    wxPathFormat format = wxPATH_NATIVE,
+                                    bool* pIsDir = NULL);
     //@}
 
     /**

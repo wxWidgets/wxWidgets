@@ -69,8 +69,8 @@ public:
         Returns a 2-element list
          @c ( x, y )
     */
-    void GetPosition(int* x, int* y);
-    wxPoint GetPosition();
+    void GetPosition(int* x, int* y) const;
+    const wxPoint  GetPosition() const;
     //@}
 
     //@{
@@ -86,14 +86,14 @@ public:
         Returns a 2-element list
          @c ( width, height )
     */
-    void GetSize(int* width, int* height);
-    wxSize GetSize();
+    void GetSize(int* width, int* height) const;
+    const wxSize  GetSize() const;
     //@}
 
     /**
         Get the window the caret is associated with.
     */
-    wxWindow* GetWindow();
+    wxWindow* GetWindow() const;
 
     /**
         Same as wxCaret::Show(@false).
@@ -103,14 +103,14 @@ public:
     /**
         Returns @true if the caret was created successfully.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Returns @true if the caret is visible and @false if it is permanently
         hidden (if it is is blinking and not shown currently but will be after the
         next blink, this method still returns @true).
     */
-    bool IsVisible();
+    bool IsVisible() const;
 
     //@{
     /**

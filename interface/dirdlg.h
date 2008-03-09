@@ -70,12 +70,12 @@ public:
     /**
         Returns the message that will be displayed on the dialog.
     */
-    wxString GetMessage();
+    wxString GetMessage() const;
 
     /**
         Returns the default or user-selected path.
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         Sets the message that will be displayed on the dialog.

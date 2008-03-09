@@ -109,12 +109,12 @@ public:
     /**
         Returns the document associated with this frame.
     */
-    wxDocument* GetDocument();
+    wxDocument* GetDocument() const;
 
     /**
         Returns the view associated with this frame.
     */
-    wxView* GetView();
+    wxView* GetView() const;
 
     /**
         Sets the currently active view to be the frame's view. You may need

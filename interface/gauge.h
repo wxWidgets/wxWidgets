@@ -100,14 +100,14 @@ public:
         
         @see SetBezelFace()
     */
-    int GetBezelFace();
+    int GetBezelFace() const;
 
     /**
         Returns the maximum position of the gauge.
         
         @see SetRange()
     */
-    int GetRange();
+    int GetRange() const;
 
     /**
         Returns the 3D shadow margin width.
@@ -116,20 +116,20 @@ public:
         
         @see SetShadowWidth()
     */
-    int GetShadowWidth();
+    int GetShadowWidth() const;
 
     /**
         Returns the current position of the gauge.
         
         @see SetValue()
     */
-    int GetValue();
+    int GetValue() const;
 
     /**
         Returns @true if the gauge is vertical (has @c wxGA_VERTICAL style) and
         @false otherwise.
     */
-    bool IsVertical();
+    bool IsVertical() const;
 
     /**
         Switch the gauge to indeterminate mode (if required) and makes the gauge move

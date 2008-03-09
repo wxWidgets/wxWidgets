@@ -44,37 +44,37 @@ public:
         Please note that this function will not be called if @c EstimateTotalSize()
         is overridden in your derived class.
     */
-    virtual wxCoord EstimateTotalWidth();
+    virtual wxCoord EstimateTotalWidth() const;
 
     /**
         Returns the number of columns the target window contains.
         
         @see SetColumnCount()
     */
-    size_t GetColumnCount();
+    size_t GetColumnCount() const;
 
     /**
         Returns the index of the first visible column based on the scroll position.
     */
-    size_t GetVisibleColumnsBegin();
+    size_t GetVisibleColumnsBegin() const;
 
     /**
         Returns the index of the last visible column based on the scroll position. This
         includes the last column even if it is only partially visible.
     */
-    size_t GetVisibleColumnsEnd();
+    size_t GetVisibleColumnsEnd() const;
 
     /**
         Returns @true if the given column is currently visible (even if only
         partially visible) or @false otherwise.
     */
-    bool IsColumnVisible(size_t column);
+    bool IsColumnVisible(size_t column) const;
 
     /**
         This function must be overridden in the derived class, and should return the
         width of the given column in pixels.
     */
-    virtual wxCoord OnGetColumnWidth(size_t column);
+    virtual wxCoord OnGetColumnWidth(size_t column) const;
 
     /**
         This function doesn't have to be overridden but it may be useful to do so if
@@ -89,7 +89,7 @@ public:
         Finally, note that columnMin is inclusive, while columnMax is exclusive.
     */
     virtual void OnGetColumnsWidthHint(size_t columnMin,
-                                       size_t columnMax);
+                                       size_t columnMax) const;
 
     /**
         Triggers a refresh for just the given column's area of the window if it's
@@ -173,37 +173,37 @@ public:
         Please note that this function will not be called if @c EstimateTotalSize()
         is overridden in your derived class.
     */
-    virtual wxCoord EstimateTotalHeight();
+    virtual wxCoord EstimateTotalHeight() const;
 
     /**
         Returns the number of rows the target window contains.
         
         @see SetRowCount()
     */
-    size_t GetRowCount();
+    size_t GetRowCount() const;
 
     /**
         Returns the index of the first visible row based on the scroll position.
     */
-    size_t GetVisibleRowsBegin();
+    size_t GetVisibleRowsBegin() const;
 
     /**
         Returns the index of the last visible row based on the scroll position. This
         includes the last row even if it is only partially visible.
     */
-    size_t GetVisibleRowsEnd();
+    size_t GetVisibleRowsEnd() const;
 
     /**
         Returns @true if the given row is currently visible (even if only
         partially visible) or @false otherwise.
     */
-    bool IsRowVisible(size_t row);
+    bool IsRowVisible(size_t row) const;
 
     /**
         This function must be overridden in the derived class, and should return the
         height of the given row in pixels.
     */
-    virtual wxCoord OnGetRowHeight(size_t row);
+    virtual wxCoord OnGetRowHeight(size_t row) const;
 
     /**
         This function doesn't have to be overridden but it may be useful to do so if
@@ -217,7 +217,7 @@ public:
         units outside of this interval, so this is really just a hint, not a promise.
         Finally, note that rowMin is inclusive, while rowMax is exclusive.
     */
-    virtual void OnGetRowsHeightHint(size_t rowMin, size_t rowMax);
+    virtual void OnGetRowsHeightHint(size_t rowMin, size_t rowMax) const;
 
     /**
         Triggers a refresh for just the given row's area of the window if it's visible.
@@ -307,7 +307,7 @@ public:
         
         @see CalcUnscrolledPosition()
     */
-    int CalcScrolledPosition(int coord);
+    int CalcScrolledPosition(int coord) const;
 
     /**
         Translates the device coordinate given to the corresponding logical
@@ -318,7 +318,7 @@ public:
         
         @see CalcScrolledPosition()
     */
-    int CalcUnscrolledPosition(int coord);
+    int CalcUnscrolledPosition(int coord) const;
 
     /**
         With physical scrolling on (when this is @true), the device origin is
@@ -341,7 +341,7 @@ public:
         resulting in very strange scrollbar behaviour so this function should really
         try to make the best guess possible.
     */
-    virtual wxCoord EstimateTotalSize();
+    virtual wxCoord EstimateTotalSize() const;
 
     /**
         This function needs to be overridden in the in the derived class to return the
@@ -350,13 +350,13 @@ public:
         
         @see GetOrientationTargetSize()
     */
-    virtual int GetNonOrientationTargetSize();
+    virtual int GetNonOrientationTargetSize() const;
 
     /**
         This function need to be overridden to return the orientation that this helper
         is working with, either @c wxHORIZONTAL or @c wxVERTICAL.
     */
-    virtual wxOrientation GetOrientation();
+    virtual wxOrientation GetOrientation() const;
 
     /**
         This function needs to be overridden in the in the derived class to return the
@@ -365,7 +365,7 @@ public:
         
         @see GetNonOrientationTargetSize()
     */
-    virtual int GetOrientationTargetSize();
+    virtual int GetOrientationTargetSize() const;
 
     /**
         This function will return the target window this helper class is currently
@@ -373,30 +373,30 @@ public:
         
         @see SetTargetWindow()
     */
-    wxWindow* GetTargetWindow();
+    wxWindow* GetTargetWindow() const;
 
     /**
         Returns the index of the first visible unit based on the scroll position.
     */
-    size_t GetVisibleBegin();
+    size_t GetVisibleBegin() const;
 
     /**
         Returns the index of the last visible unit based on the scroll position. This
         includes the last unit even if it is only partially visible.
     */
-    size_t GetVisibleEnd();
+    size_t GetVisibleEnd() const;
 
     /**
         Returns @true if the given scroll unit is currently visible (even if only
         partially visible) or @false otherwise.
     */
-    bool IsVisible(size_t unit);
+    bool IsVisible(size_t unit) const;
 
     /**
         This function must be overridden in the derived class, and should return the
         size of the given unit in pixels.
     */
-    virtual wxCoord OnGetUnitSize(size_t unit);
+    virtual wxCoord OnGetUnitSize(size_t unit) const;
 
     /**
         This function doesn't have to be overridden but it may be useful to do so if
@@ -410,7 +410,7 @@ public:
         units outside of this interval, so this is really just a hint, not a promise.
         Finally, note that unitMin is inclusive, while unitMax is exclusive.
     */
-    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax);
+    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const;
 
     /**
         Recalculate all parameters and repaint all units.
@@ -437,7 +437,7 @@ public:
         scroll position or @c wxNOT_FOUND if none (i.e. if it is below the last
         item).
     */
-    int VirtualHitTest(wxCoord coord);
+    int VirtualHitTest(wxCoord coord) const;
 };
 
 
@@ -538,13 +538,14 @@ public:
         Deprecated for wxVarVScrollHelper::SetRowCount.
     */
     size_t GetFirstVisibleLine();
-    size_t GetLastVisibleLine();
-    size_t GetLineCount();
-    int HitTest(wxCoord x, wxCoord y);
-    int HitTest(const wxPoint& pt);
-    virtual wxCoord OnGetLineHeight(size_t line);
-    virtual void OnGetLinesHint(size_t lineMin, size_t lineMax);
-    virtual void RefreshLine(size_t line);
+    const size_t GetLastVisibleLine();
+    const size_t GetLineCount();
+    const int HitTest(wxCoord x, wxCoord y);
+    const int HitTest(const wxPoint& pt);
+    const virtual wxCoord OnGetLineHeight(size_t line);
+    const virtual void OnGetLinesHint(size_t lineMin,
+                                      size_t lineMax);
+    const virtual void RefreshLine(size_t line);
     virtual void RefreshLines(size_t from, size_t to);
     virtual bool ScrollLines(int lines);
     virtual bool ScrollPages(int pages);
@@ -695,27 +696,27 @@ public:
         
         @see SetRowColumnCount()
     */
-    wxSize GetRowColumnCount();
+    wxSize GetRowColumnCount() const;
 
     /**
         Returns the index of the first visible column and row based on the current
         scroll position.
     */
-    wxPosition GetVisibleBegin();
+    wxPosition GetVisibleBegin() const;
 
     /**
         Returns the index of the last visible column and row based on the scroll
         position. This includes any partially visible columns or rows.
     */
-    wxPosition GetVisibleEnd();
+    wxPosition GetVisibleEnd() const;
 
     //@{
     /**
         Returns @true if both the given row and column are currently visible
         (even if only partially visible) or @false otherwise.
     */
-    bool IsVisible(size_t row, size_t column);
-    bool IsVisible(const wxPosition& pos);
+    bool IsVisible(size_t row, size_t column) const;
+    const bool IsVisible(const wxPosition& pos) const;
     //@}
 
     //@{
@@ -767,8 +768,8 @@ public:
         scroll position or @c wxNOT_FOUND (for the row, column, or possibly both
         values) if none.
     */
-    wxPosition VirtualHitTest(wxCoord x, wxCoord y);
-    wxPosition VirtualHitTest(const wxPoint& pos);
+    wxPosition VirtualHitTest(wxCoord x, wxCoord y) const;
+    const wxPosition  VirtualHitTest(const wxPoint& pos) const;
     //@}
 };
 

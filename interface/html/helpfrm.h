@@ -52,7 +52,7 @@ public:
     /**
         Returns the help controller associated with the frame.
     */
-    wxHtmlHelpController* GetController();
+    wxHtmlHelpController* GetController() const;
 
     /**
         Reads the user's settings for this frame see

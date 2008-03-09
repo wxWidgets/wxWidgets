@@ -188,7 +188,7 @@ public:
         
         @see AcceptsFocusFromKeyboard()
     */
-    bool AcceptsFocus();
+    bool AcceptsFocus() const;
 
     /**
         This method may be overridden in the derived classes to return @false to
@@ -196,7 +196,7 @@ public:
         clicks it with the mouse, it shouldn't be included in the TAB traversal chain
         when using the keyboard.
     */
-    bool AcceptsFocusFromKeyboard();
+    bool AcceptsFocusFromKeyboard() const;
 
     /**
         Adds a child window.  This is called automatically by window creation
@@ -226,7 +226,7 @@ public:
     /**
         Sets the cached best size value.
     */
-    void CacheBestSize(const wxSize& size);
+    void CacheBestSize(const wxSize& size) const;
 
     /**
         Returns @true if the system supports transparent windows and calling
@@ -319,8 +319,8 @@ public:
         @param pt
             The client position for the second form of the function.
     */
-    virtual void ClientToScreen(int* x, int* y);
-    virtual wxPoint ClientToScreen(const wxPoint& pt);
+    virtual void ClientToScreen(int* x, int* y) const;
+    const virtual wxPoint  ClientToScreen(const wxPoint& pt) const;
     //@}
 
     /**
@@ -428,7 +428,7 @@ public:
         the minimal size which doesn't truncate the control, for a panel - the
         same size as it would have after a call to Fit().
     */
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const;
 
     /**
         Does the window-specific updating after processing the update event.
@@ -481,8 +481,8 @@ public:
     /**
         Find a child of this window, by name.
     */
-    wxWindow* FindWindow(long id);
-    wxWindow* FindWindow(const wxString& name);
+    wxWindow* FindWindow(long id) const;
+    const wxWindow*  FindWindow(const wxString& name) const;
     //@}
 
     /**
@@ -564,7 +564,7 @@ public:
     /**
         Gets the accelerator table for this window. See wxAcceleratorTable.
     */
-    wxAcceleratorTable* GetAcceleratorTable();
+    wxAcceleratorTable* GetAcceleratorTable() const;
 
     /**
         Returns the accessible object for this window, if any.
@@ -576,7 +576,7 @@ public:
         This method is deprecated, use GetEffectiveMinSize()
         instead.
     */
-    wxSize GetAdjustedBestSize();
+    wxSize GetAdjustedBestSize() const;
 
     /**
         Returns the background colour of the window.
@@ -584,7 +584,7 @@ public:
         @see SetBackgroundColour(), SetForegroundColour(),
              GetForegroundColour()
     */
-    virtual wxColour GetBackgroundColour();
+    virtual wxColour GetBackgroundColour() const;
 
     /**
         Returns the background style of the window. The background style can be one of:
@@ -619,7 +619,7 @@ public:
         @see SetBackgroundColour(), GetForegroundColour(),
              SetBackgroundStyle(), SetTransparent()
     */
-    virtual wxBackgroundStyle GetBackgroundStyle();
+    virtual wxBackgroundStyle GetBackgroundStyle() const;
 
     /**
         This functions returns the best acceptable minimal size for the window. For
@@ -629,7 +629,7 @@ public:
         same as the size the window would have had after calling
         Fit().
     */
-    wxSize GetBestSize();
+    wxSize GetBestSize() const;
 
     /**
         Returns the currently captured window.
@@ -642,17 +642,17 @@ public:
     /**
         Returns the caret associated with the window.
     */
-    wxCaret* GetCaret();
+    wxCaret* GetCaret() const;
 
     /**
         Returns the character height for this window.
     */
-    virtual int GetCharHeight();
+    virtual int GetCharHeight() const;
 
     /**
         Returns the average character width for this window.
     */
-    virtual int GetCharWidth();
+    virtual int GetCharWidth() const;
 
     //@{
     /**
@@ -660,8 +660,8 @@ public:
         is a type-safe wxList-like class whose elements are of type
         @c wxWindow *.
     */
-    wxWindowList GetChildren();
-    const wxWindowList GetChildren();
+    wxWindowList GetChildren() const;
+    const wxWindowList GetChildren() const;
     //@}
 
     /**
@@ -703,27 +703,27 @@ public:
         
         @see GetSize(), GetVirtualSize()
     */
-    void GetClientSize(int* width, int* height);
-    wxSize GetClientSize();
+    void GetClientSize(int* width, int* height) const;
+    const wxSize  GetClientSize() const;
     //@}
 
     /**
         Returns a pointer to the window's layout constraints, or @NULL if there are none.
     */
-    wxLayoutConstraints* GetConstraints();
+    wxLayoutConstraints* GetConstraints() const;
 
     /**
         Return the sizer that this window is a member of, if any, otherwise
         @NULL.
     */
-    const wxSizer* GetContainingSizer();
+    const wxSizer* GetContainingSizer() const;
 
     /**
         Return the cursor associated with this window.
         
         @see SetCursor()
     */
-    const wxCursor GetCursor();
+    const wxCursor GetCursor() const;
 
     /**
         Currently this is the same as calling
@@ -738,14 +738,14 @@ public:
         function without actually having an object to apply it to whereas the static
         version can be used without having to create an object first.
     */
-    virtual wxVisualAttributes GetDefaultAttributes();
+    virtual wxVisualAttributes GetDefaultAttributes() const;
 
     /**
         Returns the associated drop target, which may be @NULL.
         
         @see SetDropTarget(), @ref overview_wxdndoverview
     */
-    wxDropTarget* GetDropTarget();
+    wxDropTarget* GetDropTarget() const;
 
     /**
         Merges the window's best size into the min size and returns the
@@ -754,7 +754,7 @@ public:
         
         @see GetBestSize(), SetInitialSize()
     */
-    wxSize GetEffectiveMinSize();
+    wxSize GetEffectiveMinSize() const;
 
     /**
         Returns the event handler for this window. By default, the window is its
@@ -763,19 +763,19 @@ public:
         @see SetEventHandler(), PushEventHandler(),
              PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
     */
-    wxEvtHandler* GetEventHandler();
+    wxEvtHandler* GetEventHandler() const;
 
     /**
         Returns the extra style bits for the window.
     */
-    long GetExtraStyle();
+    long GetExtraStyle() const;
 
     /**
         Returns the font for this window.
         
         @see SetFont()
     */
-    wxFont GetFont();
+    wxFont GetFont() const;
 
     /**
         Returns the foreground colour of the window.
@@ -793,7 +793,7 @@ public:
     /**
         Returns the grandparent of a window, or @NULL if there isn't one.
     */
-    wxWindow* GetGrandParent();
+    wxWindow* GetGrandParent() const;
 
     /**
         Returns the platform-specific handle of the physical window. Cast it to an
@@ -801,7 +801,7 @@ public:
         handle, such as @b HWND for Windows, @b Widget for Motif, @b GtkWidget for GTK
         or @b WinHandle for PalmOS.
     */
-    void* GetHandle();
+    void* GetHandle() const;
 
     /**
         Gets the help text to be used as context-sensitive help for this window.
@@ -811,7 +811,7 @@ public:
         
         @see SetHelpText(), GetHelpTextAtPoint(), wxHelpProvider
     */
-    virtual wxString GetHelpText();
+    virtual wxString GetHelpText() const;
 
     /**
         Gets the help text to be used as context-sensitive help for this window. This
@@ -824,7 +824,7 @@ public:
             Help event origin, see also wxHelpEvent::GetOrigin.
     */
     virtual wxString GetHelpTextAtPoint(const wxPoint point,
-                                        wxHelpEvent::Origin origin);
+                                        wxHelpEvent::Origin origin) const;
 
     /**
         Returns the identifier of the window.
@@ -835,7 +835,7 @@ public:
         
         @see SetId(), @ref overview_windowids "Window identifiers"
     */
-    int GetId();
+    int GetId() const;
 
     /**
         Generic way of getting a label from any window, for
@@ -848,7 +848,7 @@ public:
                  meta-programs (such as testing tools or special-needs
                  access programs) which need to identify windows by name.
     */
-    virtual wxString GetLabel();
+    virtual wxString GetLabel() const;
 
     /**
         Returns the maximum size of window's client area.
@@ -858,7 +858,7 @@ public:
         
         @see GetMaxSize()
     */
-    wxSize GetMaxClientSize();
+    wxSize GetMaxClientSize() const;
 
     /**
         Returns the maximum size of the window. This is an indication to the sizer
@@ -867,7 +867,7 @@ public:
         
         @see GetMaxClientSize()
     */
-    wxSize GetMaxSize();
+    wxSize GetMaxSize() const;
 
     /**
         Returns the minimum size of window's client area, an indication to the sizer
@@ -878,7 +878,7 @@ public:
         
         @see GetMinSize()
     */
-    virtual wxSize GetMinClientSize();
+    virtual wxSize GetMinClientSize() const;
 
     /**
         Returns the minimum size of the window, an indication to the sizer layout
@@ -889,7 +889,7 @@ public:
         
         @see GetMinClientSize()
     */
-    virtual wxSize GetMinSize();
+    virtual wxSize GetMinSize() const;
 
     /**
         Returns the window's name.
@@ -900,7 +900,7 @@ public:
         
         @see SetName()
     */
-    virtual wxString GetName();
+    virtual wxString GetName() const;
 
     /**
         Returns the next window after this one among the parent children or @NULL if
@@ -909,12 +909,12 @@ public:
         
         @see GetPrevSibling()
     */
-    wxWindow* GetNextSibling();
+    wxWindow* GetNextSibling() const;
 
     /**
         Returns the parent of the window, or @NULL if there is no parent.
     */
-    virtual wxWindow* GetParent();
+    virtual wxWindow* GetParent() const;
 
     //@{
     /**
@@ -953,8 +953,8 @@ public:
         
         @see GetScreenPosition()
     */
-    virtual void GetPosition(int* x, int* y);
-    wxPoint GetPosition();
+    virtual void GetPosition(int* x, int* y) const;
+    const wxPoint  GetPosition() const;
     //@}
 
     /**
@@ -965,14 +965,14 @@ public:
         
         @see GetNextSibling()
     */
-    wxWindow* GetPrevSibling();
+    wxWindow* GetPrevSibling() const;
 
     /**
         Returns the position and size of the window as a wxRect object.
         
         @see GetScreenRect()
     */
-    virtual wxRect GetRect();
+    virtual wxRect GetRect() const;
 
     //@{
     /**
@@ -986,8 +986,8 @@ public:
         
         @see GetPosition()
     */
-    virtual void GetScreenPosition(int* x, int* y);
-    wxPoint GetScreenPosition();
+    virtual void GetScreenPosition(int* x, int* y) const;
+    const wxPoint  GetScreenPosition() const;
     //@}
 
     /**
@@ -996,7 +996,7 @@ public:
         
         @see GetRect()
     */
-    virtual wxRect GetScreenRect();
+    virtual wxRect GetScreenRect() const;
 
     /**
         Returns the built-in scrollbar position.
@@ -1033,15 +1033,15 @@ public:
         
         @see GetClientSize(), GetVirtualSize()
     */
-    void GetSize(int* width, int* height);
-    wxSize GetSize();
+    void GetSize(int* width, int* height) const;
+    const wxSize  GetSize() const;
     //@}
 
     /**
         Return the sizer associated with the window by a previous call to
         SetSizer() or @NULL.
     */
-    wxSizer* GetSizer();
+    wxSizer* GetSizer() const;
 
     //@{
     /**
@@ -1070,14 +1070,14 @@ public:
                                int* descent = NULL,
                                int* externalLeading = NULL,
                                const wxFont* font = NULL,
-                               bool use16 = false);
-    wxSize GetTextExtent(const wxString& string);
+                               bool use16 = false) const;
+    const wxSize  GetTextExtent(const wxString& string) const;
     //@}
 
     /**
         Get the associated tooltip or @NULL if none.
     */
-    wxToolTip* GetToolTip();
+    wxToolTip* GetToolTip() const;
 
     /**
         Returns the region specifying which parts of the window have been damaged.
@@ -1086,13 +1086,13 @@ public:
         
         @see wxRegion, wxRegionIterator
     */
-    virtual wxRegion GetUpdateRegion();
+    virtual wxRegion GetUpdateRegion() const;
 
     /**
         Returns a pointer to the current validator for the window, or @NULL if there is
         none.
     */
-    wxValidator* GetValidator();
+    wxValidator* GetValidator() const;
 
     //@{
     /**
@@ -1106,27 +1106,27 @@ public:
         @param height
             Receives the window virtual height.
     */
-    void GetVirtualSize(int* width, int* height);
-    wxSize GetVirtualSize();
+    void GetVirtualSize(int* width, int* height) const;
+    const wxSize  GetVirtualSize() const;
     //@}
 
     /**
         Returns the size of the left/right and top/bottom borders of this window in x
         and y components of the result respectively.
     */
-    wxSize GetWindowBorderSize();
+    wxSize GetWindowBorderSize() const;
 
     /**
         Gets the window style that was passed to the constructor or @b Create
         method. @b GetWindowStyle() is another name for the same function.
     */
-    long GetWindowStyleFlag();
+    long GetWindowStyleFlag() const;
 
     /**
         Returns the value previously passed to
         SetWindowVariant().
     */
-    wxWindowVariant GetWindowVariant();
+    wxWindowVariant GetWindowVariant() const;
 
     /**
         This function will generate the appropriate call to
@@ -1152,7 +1152,7 @@ public:
         @see CaptureMouse(), ReleaseMouse(), wxMouseCaptureLostEvent,
              wxMouseCaptureChangedEvent
     */
-    virtual bool HasCapture();
+    virtual bool HasCapture() const;
 
     /**
         Returns @true if the window has the given @a exFlag bit set in its
@@ -1160,12 +1160,12 @@ public:
         
         @see SetExtraStyle()
     */
-    bool HasExtraStyle(int exFlag);
+    bool HasExtraStyle(int exFlag) const;
 
     /**
         Returns @true if the window has the given @a flag bit set.
     */
-    bool HasFlag(int flag);
+    bool HasFlag(int flag) const;
 
     /**
         Returns @true if the window (or in case of composite controls, its main
@@ -1173,7 +1173,7 @@ public:
         
         @see FindFocus()
     */
-    virtual bool HasFocus();
+    virtual bool HasFocus() const;
 
     /**
         This method should be overridden to return @true if this window has
@@ -1183,7 +1183,7 @@ public:
         and user-defined classes with similar behaviour should do it as well to allow
         the library to handle such windows appropriately.
     */
-    virtual bool HasMultiplePages();
+    virtual bool HasMultiplePages() const;
 
     /**
         Returns @true if this window has a scroll bar for this orientation.
@@ -1191,7 +1191,7 @@ public:
         @param orient
             Orientation to check, either wxHORIZONTAL or wxVERTICAL.
     */
-    virtual bool HasScrollbar(int orient);
+    virtual bool HasScrollbar(int orient) const;
 
     /**
         Returns @true if this window background is transparent (as, for example, for
@@ -1200,7 +1200,7 @@ public:
         shouldn't have to call it. You may, however, have to override it in your
         wxWindow-derived class to ensure that background is painted correctly.
     */
-    virtual bool HasTransparentBackground();
+    virtual bool HasTransparentBackground() const;
 
     /**
         Equivalent to calling wxWindow::Show(@false).
@@ -1263,7 +1263,7 @@ public:
         
         @see wxBufferedDC
     */
-    virtual bool IsDoubleBuffered();
+    virtual bool IsDoubleBuffered() const;
 
     /**
         Returns @true if the window is enabled, i.e. if it accepts user input, @c
@@ -1276,7 +1276,7 @@ public:
         
         @see Enable()
     */
-    virtual bool IsEnabled();
+    virtual bool IsEnabled() const;
 
     //@{
     /**
@@ -1284,10 +1284,10 @@ public:
         last repaint. Call this in an paint event handler to optimize redrawing by
         only redrawing those areas, which have been exposed.
     */
-    bool IsExposed(int x, int y);
-    bool IsExposed(wxPoint amp;pt);
-    bool IsExposed(int x, int y, int w, int h);
-    bool IsExposed(wxRect amp;rect);
+    bool IsExposed(int x, int y) const;
+    const bool IsExposed(wxPoint amp;pt) const;
+    const bool IsExposed(int x, int y, int w, int h) const;
+    const bool IsExposed(wxRect amp;rect) const;
     //@}
 
     /**
@@ -1296,14 +1296,14 @@ public:
         
         @see Thaw()
     */
-    virtual bool IsFrozen();
+    virtual bool IsFrozen() const;
 
     /**
         Returns @true if the window is retained, @false otherwise.
         
         @remarks Retained windows are only available on X platforms.
     */
-    virtual bool IsRetained();
+    virtual bool IsRetained() const;
 
     /**
         Return whether a scrollbar is always shown.
@@ -1320,7 +1320,7 @@ public:
         
         @see IsShownOnScreen()
     */
-    virtual bool IsShown();
+    virtual bool IsShown() const;
 
     /**
         Returns @true if the window is physically visible on the screen, i.e. it
@@ -1328,7 +1328,7 @@ public:
         
         @see IsShown()
     */
-    virtual bool IsShownOnScreen();
+    virtual bool IsShownOnScreen() const;
 
     /**
         Returns @true if this window is intrinsically enabled, @false otherwise,
@@ -1337,14 +1337,14 @@ public:
         mostly used for wxWidgets itself, user code should normally use
         IsEnabled() instead.
     */
-    bool IsThisEnabled();
+    bool IsThisEnabled() const;
 
     /**
         Returns @true if the given window is a top-level one. Currently all frames and
         dialogs are considered to be top-level windows (even if they have a parent
         window).
     */
-    bool IsTopLevel();
+    bool IsTopLevel() const;
 
     /**
         Invokes the constraint-based layout algorithm or the sizer-based algorithm
@@ -1501,7 +1501,7 @@ public:
         @see SetEventHandler(), GetEventHandler(),
              PushEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
     */
-    wxEvtHandler* PopEventHandler(bool deleteHandler = false);
+    wxEvtHandler* PopEventHandler(bool deleteHandler = false) const;
 
     //@{
     /**
@@ -1677,8 +1677,8 @@ public:
         @param pt
             The screen position for the second form of the function.
     */
-    virtual void ScreenToClient(int* x, int* y);
-    virtual wxPoint ScreenToClient(const wxPoint& pt);
+    virtual void ScreenToClient(int* x, int* y) const;
+    const virtual wxPoint  ScreenToClient(const wxPoint& pt) const;
     //@}
 
     /**
@@ -1804,7 +1804,7 @@ public:
     /**
         Sets the caret associated with the window.
     */
-    void SetCaret(wxCaret* caret);
+    void SetCaret(wxCaret* caret) const;
 
     //@{
     /**

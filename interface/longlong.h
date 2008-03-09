@@ -53,7 +53,7 @@ public:
         or modifying it in place (the second one).  Not in wxULongLong.
     */
     wxLongLong Abs();
-    wxLongLong Abs();
+    const wxLongLong&  Abs();
     //@}
 
     /**
@@ -66,39 +66,39 @@ public:
     /**
         Returns the high 32 bits of 64 bit integer.
     */
-    long GetHi();
+    long GetHi() const;
 
     /**
         Returns the low 32 bits of 64 bit integer.
     */
-    unsigned long GetLo();
+    unsigned long GetLo() const;
 
     /**
         Convert to native long long (only for compilers supporting it)
     */
-    wxLongLong_t GetValue();
+    wxLongLong_t GetValue() const;
 
     /**
         Returns the value as @c double.
     */
-    double ToDouble();
+    double ToDouble() const;
 
     /**
         Truncate wxLongLong to long. If the conversion loses data (i.e. the wxLongLong
         value is outside the range of built-in long type), an assert will be triggered
         in debug mode.
     */
-    long ToLong();
+    long ToLong() const;
 
     /**
         Returns the string representation of a wxLongLong.
     */
-    wxString ToString();
+    wxString ToString() const;
 
     /**
         Adds 2 wxLongLongs together and returns the result.
     */
-    wxLongLong operator+(const wxLongLong& ll);
+    wxLongLong operator+(const wxLongLong& ll) const;
 
     //@{
     /**
@@ -116,7 +116,7 @@ public:
     /**
         Subtracts 2 wxLongLongs and returns the result.
     */
-    wxLongLong operator-(const wxLongLong& ll);
+    wxLongLong operator-(const wxLongLong& ll) const;
 
     //@{
     /**

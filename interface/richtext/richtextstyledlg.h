@@ -109,39 +109,39 @@ public:
     bool ApplyStyle(wxRichTextCtrl* ctrl = NULL);
 
     /**
-        , @b const wxPoint&@e pos = wxDefaultPosition, @b const wxSize&@e size =
-        wxDefaultSize, @b long@e style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX)
+        ,  wxPoint&@e pos = wxDefaultPosition,  wxSize&@e size = wxDefaultSize, @b
+        long@e style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX)
         Creates the dialog. See
     */
     bool Create(int flags, wxRichTextStyleSheet* sheet,
                 wxRichTextCtrl* ctrl,
                 wxWindow* parent,
-                wxWindowID id = wxID_ANY);
+                wxWindowID id = wxID_ANY) const;
 
     /**
         Returns @true if the user has opted to restart numbering.
     */
-    bool GetRestartNumbering();
+    bool GetRestartNumbering() const;
 
     /**
         Returns the associated rich text control (if any).
     */
-    wxRichTextCtrl* GetRichTextCtrl();
+    wxRichTextCtrl* GetRichTextCtrl() const;
 
     /**
         Returns selected style name.
     */
-    wxString GetSelectedStyle();
+    wxString GetSelectedStyle() const;
 
     /**
         Returns selected style definition.
     */
-    wxRichTextStyleDefinition* GetSelectedStyleDefinition();
+    wxRichTextStyleDefinition* GetSelectedStyleDefinition() const;
 
     /**
         Returns the associated style sheet.
     */
-    wxRichTextStyleSheet* GetStyleSheet();
+    wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Sets the flags used to control the interface presented to the user.
@@ -172,5 +172,5 @@ public:
     /**
         Returns the flags used to control the interface presented to the user.
     */
-    int GetFlags();
+    int GetFlags() const;
 };

@@ -109,7 +109,7 @@ public:
         
         @returns The found menu item object, or @NULL if one was not found.
     */
-    wxMenuItem* FindItem(int id, wxMenu menu = NULL);
+    wxMenuItem* FindItem(int id, wxMenu menu = NULL) const;
 
     /**
         Returns the index of the menu with the given @a title or @c wxNOT_FOUND if no
@@ -117,7 +117,7 @@ public:
         the menu title (with accelerator characters, i.e. @c "File") or just the
         menu label (@c "File") indifferently.
     */
-    int FindMenu(const wxString& title);
+    int FindMenu(const wxString& title) const;
 
     /**
         Finds the menu item id for a menu name/menu item string pair.
@@ -133,7 +133,7 @@ public:
                  strings before matching.
     */
     int FindMenuItem(const wxString& menuString,
-                     const wxString& itemString);
+                     const wxString& itemString) const;
 
     /**
         Gets the help string associated with the menu item identifier.
@@ -146,7 +146,7 @@ public:
         
         @see SetHelpString()
     */
-    wxString GetHelpString(int id);
+    wxString GetHelpString(int id) const;
 
     /**
         Gets the label associated with a menu item.
@@ -159,7 +159,7 @@ public:
         
         @remarks Use only after the menubar has been associated with a frame.
     */
-    wxString GetLabel(int id);
+    wxString GetLabel(int id) const;
 
     /**
         Returns the label of a top-level menu. Note that the returned string does not
@@ -175,17 +175,17 @@ public:
         
         @see SetLabelTop()
     */
-    wxString GetLabelTop(int pos);
+    wxString GetLabelTop(int pos) const;
 
     /**
         Returns the menu at @a menuIndex (zero-based).
     */
-    wxMenu* GetMenu(int menuIndex);
+    wxMenu* GetMenu(int menuIndex) const;
 
     /**
         Returns the number of menus in this menubar.
     */
-    size_t GetMenuCount();
+    size_t GetMenuCount() const;
 
     /**
         Returns the label of a top-level menu. Note that the returned string
@@ -201,7 +201,7 @@ public:
         
         @see GetMenuLabelText(), SetMenuLabel()
     */
-    wxString GetMenuLabel(int pos);
+    wxString GetMenuLabel(int pos) const;
 
     /**
         Returns the label of a top-level menu. Note that the returned string does not
@@ -217,7 +217,7 @@ public:
         
         @see GetMenuLabel(), SetMenuLabel()
     */
-    wxString GetMenuLabelText(int pos);
+    wxString GetMenuLabelText(int pos) const;
 
     /**
         Inserts the menu at the given position into the menu bar. Inserting menu at
@@ -246,7 +246,7 @@ public:
         
         @returns @true if the item was found and is checked, @false otherwise.
     */
-    bool IsChecked(int id);
+    bool IsChecked(int id) const;
 
     /**
         Determines whether an item is enabled.
@@ -256,7 +256,7 @@ public:
         
         @returns @true if the item was found and is enabled, @false otherwise.
     */
-    bool IsEnabled(int id);
+    bool IsEnabled(int id) const;
 
     /**
         Redraw the menu bar
@@ -570,14 +570,14 @@ public:
         @remarks Any special menu codes are stripped out of source and target
                  strings before matching.
     */
-    int FindItem(const wxString& itemString);
-    wxMenuItem* FindItem(int id, wxMenu** menu = NULL);
+    int FindItem(const wxString& itemString) const;
+    const wxMenuItem *  FindItem(int id, wxMenu** menu = NULL) const;
     //@}
 
     /**
         Returns the wxMenuItem given a position in the menu.
     */
-    wxMenuItem* FindItemByPosition(size_t position);
+    wxMenuItem* FindItemByPosition(size_t position) const;
 
     /**
         Returns the help string associated with a menu item.
@@ -590,7 +590,7 @@ public:
         
         @see SetHelpString(), Append()
     */
-    wxString GetHelpString(int id);
+    wxString GetHelpString(int id) const;
 
     /**
         Returns a menu item label.
@@ -602,7 +602,7 @@ public:
         
         @see GetLabelText(), SetLabel()
     */
-    wxString GetLabel(int id);
+    wxString GetLabel(int id) const;
 
     /**
         Returns a menu item label, without any of the original mnemonics and
@@ -615,18 +615,18 @@ public:
         
         @see GetLabel(), SetLabel()
     */
-    wxString GetLabelText(int id);
+    wxString GetLabelText(int id) const;
 
     /**
         Returns the number of items in the menu.
     */
-    size_t GetMenuItemCount();
+    size_t GetMenuItemCount() const;
 
     /**
         Returns the list of items in the menu. wxMenuItemList is a pseudo-template
         list class containing wxMenuItem pointers, see wxList.
     */
-    wxMenuItemList GetMenuItems();
+    wxMenuItemList GetMenuItems() const;
 
     /**
         Returns the title of the menu.
@@ -636,7 +636,7 @@ public:
         
         @see SetTitle()
     */
-    wxString GetTitle();
+    wxString GetTitle() const;
 
     //@{
     /**
@@ -688,7 +688,7 @@ public:
         
         @see Check()
     */
-    bool IsChecked(int id);
+    bool IsChecked(int id) const;
 
     /**
         Determines whether a menu item is enabled.
@@ -700,7 +700,7 @@ public:
         
         @see Enable()
     */
-    bool IsEnabled(int id);
+    bool IsEnabled(int id) const;
 
     //@{
     /**
@@ -798,5 +798,5 @@ public:
         wxWindow::PopupMenu, but
         the application may call it at other times if required.
     */
-    void UpdateUI(wxEvtHandler* source = NULL);
+    void UpdateUI(wxEvtHandler* source = NULL) const;
 };

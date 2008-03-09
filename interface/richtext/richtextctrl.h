@@ -30,43 +30,43 @@ public:
     /**
         Clones the event.
     */
-    wxEvent* Clone();
+    wxEvent* Clone() const;
 
     /**
         Returns the character pressed, within a wxEVT_COMMAND_RICHTEXT_CHARACTER event.
     */
-    wxChar GetCharacter();
+    wxChar GetCharacter() const;
 
     /**
         Returns flags indicating modifier keys pressed. Possible values are
         wxRICHTEXT_CTRL_DOWN,
         wxRICHTEXT_SHIFT_DOWN, and wxRICHTEXT_ALT_DOWN.
     */
-    int GetFlags();
+    int GetFlags() const;
 
     /**
         Returns the new style sheet. Can be used in a
         wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
         wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED event handler.
     */
-    wxRichTextStyleSheet* GetNewStyleSheet();
+    wxRichTextStyleSheet* GetNewStyleSheet() const;
 
     /**
         Returns the old style sheet. Can be used in a
         wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING or
         wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED event handler.
     */
-    wxRichTextStyleSheet* GetOldStyleSheet();
+    wxRichTextStyleSheet* GetOldStyleSheet() const;
 
     /**
         Returns the buffer position at which the event occured.
     */
-    long GetPosition();
+    long GetPosition() const;
 
     /**
         Gets the range for the current operation.
     */
-    wxRichTextRange GetRange();
+    wxRichTextRange GetRange() const;
 
     /**
         Sets the character variable.
@@ -197,7 +197,7 @@ public:
     /**
         Returns @true if undo commands are being batched.
     */
-    bool BatchingUndo();
+    bool BatchingUndo() const;
 
     /**
         Begins using alignment
@@ -347,32 +347,32 @@ public:
     /**
         Returns @true if selected content can be copied to the clipboard.
     */
-    bool CanCopy();
+    bool CanCopy() const;
 
     /**
         Returns @true if selected content can be copied to the clipboard and deleted.
     */
-    bool CanCut();
+    bool CanCut() const;
 
     /**
         Returns @true if selected content can be deleted.
     */
-    bool CanDeleteSelection();
+    bool CanDeleteSelection() const;
 
     /**
         Returns @true if the clipboard content can be pasted to the buffer.
     */
-    bool CanPaste();
+    bool CanPaste() const;
 
     /**
         Returns @true if there is a command in the command history that can be redone.
     */
-    bool CanRedo();
+    bool CanRedo() const;
 
     /**
         Returns @true if there is a command in the command history that can be undone.
     */
-    bool CanUndo();
+    bool CanUndo() const;
 
     /**
         Clears the buffer content, leaving a single empty paragraph. Cannot be undone.
@@ -446,7 +446,7 @@ public:
     /**
         Currently this simply returns @c wxSize(10, 10).
     */
-    wxSize DoGetBestSize();
+    wxSize DoGetBestSize() const;
 
     /**
         Ends alignment.
@@ -565,7 +565,7 @@ public:
         Helper function for finding the caret position for the next word. Direction
         is 1 (forward) or -1 (backwards).
     */
-    long FindNextWordPosition(int direction = 1);
+    long FindNextWordPosition(int direction = 1) const;
 
     /**
         Call this function to prevent refresh and allow fast updates, and then Thaw() to
@@ -579,20 +579,20 @@ public:
         only affects the style currently being applied (for example, setting the default
         style to bold will cause subsequently inserted text to be bold).
     */
-    const wxTextAttr GetBasicStyle();
+    const wxTextAttr GetBasicStyle() const;
 
     //@{
     /**
         Returns the buffer associated with the control.
     */
     const wxRichTextBuffer GetBuffer();
-    wxRichTextBuffer GetBuffer();
+    const wxRichTextBuffer&  GetBuffer();
     //@}
 
     /**
         Returns the current caret position.
     */
-    long GetCaretPosition();
+    long GetCaretPosition() const;
 
     /**
         Returns the caret height and position for the given character position
@@ -602,79 +602,79 @@ public:
     /**
         Gets the command processor associated with the control's buffer.
     */
-    wxCommandProcessor* GetCommandProcessor();
+    wxCommandProcessor* GetCommandProcessor() const;
 
     /**
         Returns the current default style, which can be used to change how subsequently
         inserted
         text is displayed.
     */
-    const wxTextAttr GetDefaultStyle();
+    const wxTextAttr GetDefaultStyle() const;
 
     /**
         Gets the size of the buffer beyond which layout is delayed during resizing.
         This optimizes sizing for large buffers. The default is 20000.
     */
-    long GetDelayedLayoutThreshold();
+    long GetDelayedLayoutThreshold() const;
 
     /**
         Gets the current filename associated with the control.
     */
-    wxString GetFilename();
+    wxString GetFilename() const;
 
     /**
         Returns the first visible position in the current view.
     */
-    long GetFirstVisiblePosition();
+    long GetFirstVisiblePosition() const;
 
     /**
         Returns flags that change the behaviour of loading or saving. See the
         documentation for each
         handler class to see what flags are relevant for each handler.
     */
-    int GetHandlerFlags();
+    int GetHandlerFlags() const;
 
     /**
         Returns the current insertion point.
     */
-    long GetInsertionPoint();
+    long GetInsertionPoint() const;
 
     /**
         Returns the last position in the buffer.
     */
-    wxTextPos GetLastPosition();
+    wxTextPos GetLastPosition() const;
 
     /**
         Returns the length of the specified line in characters.
     */
-    int GetLineLength(long lineNo);
+    int GetLineLength(long lineNo) const;
 
     /**
         Returns the text for the given line.
     */
-    wxString GetLineText(long lineNo);
+    wxString GetLineText(long lineNo) const;
 
     /**
         Transforms physical window position to logical (unscrolled) position.
     */
-    wxPoint GetLogicalPoint(const wxPoint& ptPhysical);
+    wxPoint GetLogicalPoint(const wxPoint& ptPhysical) const;
 
     /**
         Returns the number of lines in the buffer.
     */
-    int GetNumberOfLines();
+    int GetNumberOfLines() const;
 
     /**
         Transforms logical (unscrolled) position to physical window position.
     */
-    wxPoint GetPhysicalPoint(const wxPoint& ptLogical);
+    wxPoint GetPhysicalPoint(const wxPoint& ptLogical) const;
 
     /**
         Gets the text for the given range.
         The end point of range is specified as the last character position of the span
         of text, plus one.
     */
-    wxString GetRange(long from, long to);
+    wxString GetRange(long from, long to) const;
 
     /**
         Returns the range of the current selection.
@@ -682,17 +682,17 @@ public:
         of text, plus one.
         If the return values @a from and @a to are the same, there is no selection.
     */
-    void GetSelection(long* from, long* to);
+    void GetSelection(long* from, long* to) const;
 
     /**
         Returns the selection range in character positions. -1, -1 means no selection.
     */
-    const wxRichTextRange GetSelectionRange();
+    const wxRichTextRange GetSelectionRange() const;
 
     /**
         Returns the text within the current selection range, if any.
     */
-    wxString GetStringSelection();
+    wxString GetStringSelection() const;
 
     /**
         Gets the attributes at the given position.
@@ -717,7 +717,7 @@ public:
         allows named
         character and paragraph styles to be applied.
     */
-    wxRichTextStyleSheet* GetStyleSheet();
+    wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Gets the attributes at the given position.
@@ -735,7 +735,7 @@ public:
     /**
         Returns the content of the entire control as a string.
     */
-    wxString GetValue();
+    wxString GetValue() const;
 
     /**
         Internal helper function returning the line for the visible caret position. If
@@ -744,7 +744,7 @@ public:
         on the following line. So this function gets the line we're expecting to find
         if this is the case.
     */
-    wxRichTextLine* GetVisibleLineForCaretPosition(long caretPosition);
+    wxRichTextLine* GetVisibleLineForCaretPosition(long caretPosition) const;
 
     /**
         Test if this whole range has character attributes of the specified kind. If any
@@ -753,7 +753,7 @@ public:
         flags indicating which attributes are of interest.
     */
     bool HasCharacterAttributes(const wxRichTextRange& range,
-                                const wxTextAttr& style);
+                                const wxTextAttr& style) const;
 
     /**
         Test if this whole range has paragraph attributes of the specified kind. If any
@@ -763,12 +763,12 @@ public:
         flags indicating which attributes are of interest.
     */
     bool HasParagraphAttributes(const wxRichTextRange& range,
-                                const wxTextAttr& style);
+                                const wxTextAttr& style) const;
 
     /**
         Returns @true if there is a selection.
     */
-    bool HasSelection();
+    bool HasSelection() const;
 
     //@{
     /**
@@ -776,10 +776,10 @@ public:
         @a pt is in device coords (not adjusted for the client area origin nor for
         scrolling).
     */
-    wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long* pos);
-    wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
-                                    wxTextCoord* col,
-                                    wxTextCoord* row);
+    wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long* pos) const;
+    const wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                          wxTextCoord* col,
+                                          wxTextCoord* row) const;
     //@}
 
     /**
@@ -790,7 +790,7 @@ public:
     /**
         Initialises the command event.
     */
-    void InitCommandEvent(wxCommandEvent& event);
+    void InitCommandEvent(wxCommandEvent& event) const;
 
     /**
         Returns @true if the user has recently set the default style without moving
@@ -802,59 +802,59 @@ public:
         
         See also SetAndShowDefaultStyle().
     */
-    bool IsDefaultStyleShowing();
+    bool IsDefaultStyleShowing() const;
 
     /**
         Returns @true if the control is editable.
     */
-    bool IsEditable();
+    bool IsEditable() const;
 
     /**
         Returns @true if Freeze has been called without a Thaw.
     */
-    bool IsFrozen();
+    bool IsFrozen() const;
 
     /**
         Returns @true if the buffer has been modified.
     */
-    bool IsModified();
+    bool IsModified() const;
 
     /**
         Returns @true if the control is multiline.
     */
-    bool IsMultiLine();
+    bool IsMultiLine() const;
 
     /**
         Returns @true if the given position is visible on the screen.
     */
-    bool IsPositionVisible(long pos);
+    bool IsPositionVisible(long pos) const;
 
     /**
         Returns @true if all of the selection is aligned according to the specified
         flag.
     */
-    bool IsSelectionAligned(wxTextAttrAlignment alignment);
+    bool IsSelectionAligned(wxTextAttrAlignment alignment) const;
 
     /**
         Returns @true if all of the selection is bold.
     */
-    bool IsSelectionBold();
+    bool IsSelectionBold() const;
 
     /**
         Returns @true if all of the selection is italic.
     */
-    bool IsSelectionItalics();
+    bool IsSelectionItalics() const;
 
     /**
         Returns @true if all of the selection is underlined.
     */
-    bool IsSelectionUnderlined();
+    bool IsSelectionUnderlined() const;
 
     /**
         Returns @true if the control is single-line. Currently wxRichTextCtrl does not
         support single-line editing.
     */
-    bool IsSingleLine();
+    bool IsSingleLine() const;
 
     /**
         Helper function implementing keyboard navigation.
@@ -1101,7 +1101,7 @@ public:
     /**
         Converts a text position to zero-based column and line numbers.
     */
-    bool PositionToXY(long pos, long* x, long* y);
+    bool PositionToXY(long pos, long* x, long* y) const;
 
     //@{
     /**
@@ -1358,7 +1358,7 @@ public:
     /**
         Returns @true if undo history suppression is on.
     */
-    bool SuppressingUndo();
+    bool SuppressingUndo() const;
 
     /**
         Call this function to end a Freeze and refresh the display.
@@ -1402,5 +1402,5 @@ public:
     /**
         Translates from column and line number to position.
     */
-    long XYToPosition(long x, long y);
+    long XYToPosition(long x, long y) const;
 };

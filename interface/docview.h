@@ -430,7 +430,7 @@ public:
         Returns the directory last selected by the user when opening a file. Initially
         empty.
     */
-    wxString GetLastDirectory();
+    wxString GetLastDirectory() const;
 
     /**
         Returns the number of documents that can be open simultaneously.
@@ -688,12 +688,12 @@ public:
     /**
         Gets a pointer to the document associated with the view.
     */
-    wxDocument* GetDocument();
+    wxDocument* GetDocument() const;
 
     /**
         Returns a pointer to the document manager instance associated with this view.
     */
-    wxDocManager* GetDocumentManager();
+    wxDocManager* GetDocumentManager() const;
 
     /**
         Gets the frame associated with the view (if any). Note that this "frame'' is
@@ -708,7 +708,7 @@ public:
         constructor).
         Not currently used by the framework.
     */
-    wxString GetViewName();
+    wxString GetViewName() const;
 
     /**
         Called when a view is activated by means of Activate(). The default
@@ -858,12 +858,12 @@ public:
     /**
         Returns the document associated with this frame.
     */
-    wxDocument* GetDocument();
+    wxDocument* GetDocument() const;
 
     /**
         Returns the view associated with this frame.
     */
-    wxView* GetView();
+    wxView* GetView() const;
 
     /**
         Sets the currently active view to be the frame's view. You may need
@@ -954,7 +954,7 @@ public:
     /**
         Returns the associated @ref overview_wxdocmanager "document manager object".
     */
-    wxDocManager* GetDocumentManager();
+    wxDocManager* GetDocumentManager() const;
 
     /**
         Deletes all views and documents. If no user input cancelled the
@@ -1024,62 +1024,62 @@ public:
         Returns a pointer to the command processor associated with this document.
         See wxCommandProcessor.
     */
-    wxCommandProcessor* GetCommandProcessor();
+    wxCommandProcessor* GetCommandProcessor() const;
 
     /**
         Gets a pointer to the associated document manager.
     */
-    wxDocManager* GetDocumentManager();
+    wxDocManager* GetDocumentManager() const;
 
     /**
         Gets the document type name for this document. See the comment for
         documentTypeName.
     */
-    wxString GetDocumentName();
+    wxString GetDocumentName() const;
 
     /**
         Gets a pointer to the template that created the document.
     */
-    wxDocTemplate* GetDocumentTemplate();
+    wxDocTemplate* GetDocumentTemplate() const;
 
     /**
         Intended to return a suitable window for using as a parent for document-related
         dialog boxes. By default, uses the frame associated with the first view.
     */
-    wxWindow* GetDocumentWindow();
+    wxWindow* GetDocumentWindow() const;
 
     /**
         Gets the filename associated with this document, or "" if none is
         associated.
     */
-    wxString GetFilename();
+    wxString GetFilename() const;
 
     /**
         A convenience function to get the first view for a document, because
         in many cases a document will only have a single view.
         See also: GetViews()
     */
-    wxView* GetFirstView();
+    wxView* GetFirstView() const;
 
     /**
         Gets the title for this document. The document title is used for an associated
         frame (if any), and is usually constructed by the framework from
         the filename.
     */
-    wxString GetTitle();
+    wxString GetTitle() const;
 
     /**
         Return the document name suitable to be shown to the user. The default
         implementation uses the document title, if any, of the name part of the
         document filename if it was set or, otherwise, the string @b unnamed.
     */
-    virtual wxString GetUserReadableName();
+    virtual wxString GetUserReadableName() const;
 
     /**
         Returns the list whose elements are the views on the document.
         See also: GetFirstView()
     */
-    wxList GetViews();
+    wxList GetViews() const;
 
     /**
         Returns @true if the document has been modified since the last save, @false
@@ -1089,7 +1089,7 @@ public:
         the document).
         See also Modify().
     */
-    virtual bool IsModified();
+    virtual bool IsModified() const;
 
     //@{
     /**
@@ -1353,29 +1353,29 @@ public:
     /**
         Returns the base identifier for the range used for appending items.
     */
-    wxWindowID GetBaseId();
+    wxWindowID GetBaseId() const;
 
     /**
         Returns the number of files currently stored in the file history.
     */
-    size_t GetCount();
+    size_t GetCount() const;
 
     /**
         Returns the file at this index (zero-based).
     */
-    wxString GetHistoryFile(size_t index);
+    wxString GetHistoryFile(size_t index) const;
 
     /**
         Returns the maximum number of files that can be stored.
     */
-    int GetMaxFiles();
+    int GetMaxFiles() const;
 
     /**
         Returns the list of menus that are managed by this file history object.
         
         @see UseMenu()
     */
-    const wxList GetMenus();
+    const wxList GetMenus() const;
 
     /**
         Loads the file history from the given config object. This function should be

@@ -460,7 +460,7 @@ public:
     /**
         Returns @true if cursor data is present.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".

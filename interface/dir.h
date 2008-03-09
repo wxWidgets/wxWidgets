@@ -175,19 +175,19 @@ public:
     */
     bool GetFirst(wxString* filename,
                   const wxString& filespec = wxEmptyString,
-                  int flags = wxDIR_DEFAULT);
+                  int flags = wxDIR_DEFAULT) const;
 
     /**
         Returns the name of the directory itself. The returned string does not have the
         trailing path separator (slash or backslash).
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Continue enumerating files which satisfy the criteria specified by the last
         call to GetFirst().
     */
-    bool GetNext(wxString* filename);
+    bool GetNext(wxString* filename) const;
 
     /**
         Returns the size (in bytes) of all files recursively found in @c dir or
@@ -226,7 +226,7 @@ public:
         Returns @true if the directory was successfully opened by a previous call to
         Open().
     */
-    bool IsOpened();
+    bool IsOpened() const;
 
     /**
         Open the directory for enumerating, returns @true on success

@@ -138,13 +138,13 @@ public:
         Gets all the characters after the first occurrence of @e ch.
         Returns the empty string if @a ch is not found.
     */
-    wxString AfterFirst(wxChar ch);
+    wxString AfterFirst(wxChar ch) const;
 
     /**
         Gets all the characters after the last occurrence of @e ch.
         Returns the whole string if @a ch is not found.
     */
-    wxString AfterLast(wxChar ch);
+    wxString AfterLast(wxChar ch) const;
 
     /**
         Preallocate enough space for wxString to store @a nLen characters. This function
@@ -174,13 +174,13 @@ public:
         Gets all characters before the first occurrence of @e ch.
         Returns the whole string if @a ch is not found.
     */
-    wxString BeforeFirst(wxChar ch);
+    wxString BeforeFirst(wxChar ch) const;
 
     /**
         Gets all characters before the last occurrence of @e ch.
         Returns the empty string if @a ch is not found.
     */
-    wxString BeforeLast(wxChar ch);
+    wxString BeforeLast(wxChar ch) const;
 
     /**
         The MakeXXX() variants modify the string in place, while the other functions
@@ -246,8 +246,8 @@ public:
         as the standard @e strcmp() function).
         See also CmpNoCase(), IsSameAs().
     */
-    int Cmp(const wxString& s);
-    int Cmp(const wxChar* psz);
+    int Cmp(const wxString& s) const;
+    const int Cmp(const wxChar* psz) const;
     //@}
 
     //@{
@@ -259,15 +259,15 @@ public:
         as the standard @e strcmp() function).
         See also Cmp(), IsSameAs().
     */
-    int CmpNoCase(const wxString& s);
-    int CmpNoCase(const wxChar* psz);
+    int CmpNoCase(const wxString& s) const;
+    const int CmpNoCase(const wxChar* psz) const;
     //@}
 
     /**
         Case-sensitive comparison. Returns 0 if equal, 1 if greater or -1 if less.
         This is a wxWidgets 1.xx compatibility function; use Cmp() instead.
     */
-    int CompareTo(const wxChar* psz, caseCompare cmp = exact);
+    int CompareTo(const wxChar* psz, caseCompare cmp = exact) const;
 
     /**
         The default comparison function Cmp() is case-sensitive and
@@ -351,7 +351,7 @@ public:
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    bool Contains(const wxString& str);
+    bool Contains(const wxString& str) const;
 
     /**
         The string provides functions for conversion to signed and unsigned integer and
@@ -383,15 +383,15 @@ public:
         @NULL. Otherwise, the function returns @false and doesn't
         modify the @e rest.
     */
-    bool EndsWith(const wxString& suffix, wxString rest = NULL);
+    bool EndsWith(const wxString& suffix, wxString rest = NULL) const;
 
     //@{
     /**
         Searches for the given string. Returns the starting index, or @c wxNOT_FOUND if
         not found.
     */
-    int Find(wxUniChar ch, bool fromEnd = false);
-    int Find(const wxString& sub);
+    int Find(wxUniChar ch, bool fromEnd = false) const;
+    const int Find(const wxString& sub) const;
     //@}
 
     //@{
@@ -400,9 +400,9 @@ public:
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    int First(wxChar c);
-    int First(const wxChar* psz);
-    int First(const wxString& str);
+    int First(wxChar c) const;
+    int First(const wxChar* psz) const;
+    const int First(const wxString& str) const;
     //@}
 
     /**
@@ -426,7 +426,7 @@ public:
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    int Freq(wxChar ch);
+    int Freq(wxChar ch) const;
 
     //@{
     /**
@@ -471,13 +471,13 @@ public:
     /**
         Returns the character at position @a n (read-only).
     */
-    wxChar GetChar(size_t n);
+    wxChar GetChar(size_t n) const;
 
     /**
         wxWidgets compatibility conversion. Returns a constant pointer to the data in
         the string.
     */
-    const wxChar* GetData();
+    const wxChar* GetData() const;
 
     /**
         Returns a reference to the character at position @e n.
@@ -502,8 +502,8 @@ public:
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    size_t Index(wxChar ch);
-    size_t Index(const wxChar* sz);
+    size_t Index(wxChar ch) const;
+    const size_t Index(const wxChar* sz) const;
     //@}
 
     /**
@@ -511,26 +511,26 @@ public:
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    bool IsAscii();
+    bool IsAscii() const;
 
     /**
         Returns @true if the string is empty.
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         Returns @true if the string is empty (same as wxString::IsEmpty).
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    bool IsNull();
+    bool IsNull() const;
 
     /**
         Returns @true if the string is an integer (with possible sign).
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    bool IsNumber();
+    bool IsNumber() const;
 
     //@{
     /**
@@ -540,8 +540,8 @@ public:
         Returns @true if the string is equal to the character, @false otherwise.
         See also Cmp(), CmpNoCase()
     */
-    bool IsSameAs(const wxChar* psz, bool caseSensitive = true);
-    bool IsSameAs(wxChar c, bool caseSensitive = true);
+    bool IsSameAs(const wxChar* psz, bool caseSensitive = true) const;
+    const bool IsSameAs(wxChar c, bool caseSensitive = true) const;
     //@}
 
     /**
@@ -549,7 +549,7 @@ public:
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    bool IsWord();
+    bool IsWord() const;
 
     //@{
     /**
@@ -558,30 +558,30 @@ public:
         code.
     */
     wxChar Last();
-    wxChar Last();
+    const wxChar Last();
     //@}
 
     /**
         Returns the first @a count characters of the string.
     */
-    wxString Left(size_t count);
+    wxString Left(size_t count) const;
 
     /**
         Returns the length of the string.
     */
-    size_t Len();
+    size_t Len() const;
 
     /**
         Returns the length of the string (same as Len).
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    size_t Length();
+    size_t Length() const;
 
     /**
         Returns this string converted to the lower case.
     */
-    wxString Lower();
+    wxString Lower() const;
 
     /**
         Same as MakeLower.
@@ -603,7 +603,7 @@ public:
     /**
         Returns @true if the string contents matches a mask containing '*' and '?'.
     */
-    bool Matches(const wxString& mask);
+    bool Matches(const wxString& mask) const;
 
     /**
         These are "advanced" functions and they will be needed quite rarely.
@@ -627,7 +627,7 @@ public:
         Returns a substring starting at @e first, with length @e count, or the rest of
         the string if @a count is the default value.
     */
-    wxString Mid(size_t first, size_t count = wxSTRING_MAXLEN);
+    wxString Mid(size_t first, size_t count = wxSTRING_MAXLEN) const;
 
     /**
         Other string functions.
@@ -698,7 +698,7 @@ public:
     /**
         Returns the last @a count characters.
     */
-    wxString Right(size_t count);
+    wxString Right(size_t count) const;
 
     /**
         These functions replace the standard @e strchr() and @e strstr()
@@ -727,7 +727,7 @@ public:
         @NULL. Otherwise, the function returns @false and doesn't modify the
         @e rest.
     */
-    bool StartsWith(const wxString& prefix, wxString rest = NULL);
+    bool StartsWith(const wxString& prefix, wxString rest = NULL) const;
 
     /**
         These functions return the string length and check whether the string is empty
@@ -750,7 +750,7 @@ public:
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    wxString Strip(stripType s = trailing);
+    wxString Strip(stripType s = trailing) const;
 
     /**
         Returns the part of the string between the indices @a from and @e to
@@ -758,7 +758,7 @@ public:
         This is a wxWidgets 1.xx compatibility function, use Mid()
         instead (but note that parameters have different meaning).
     */
-    wxString SubString(size_t from, size_t to);
+    wxString SubString(size_t from, size_t to) const;
 
     /**
         These functions allow to extract substring from this string. All of them don't
@@ -795,8 +795,8 @@ public:
         
         @see wxString::From8BitData
     */
-    const char* To8BitData();
-    const wxCharBuffer To8BitData();
+    const char* To8BitData() const;
+    const const wxCharBuffer To8BitData() const;
     //@}
 
     //@{
@@ -807,8 +807,8 @@ public:
         characters. The @ref mbstr() mb_str method provides more
         powerful means of converting wxString to C string.
     */
-    const char* ToAscii();
-    const wxCharBuffer ToAscii();
+    const char* ToAscii() const;
+    const const wxCharBuffer ToAscii() const;
     //@}
 
     /**
@@ -819,7 +819,7 @@ public:
         
         @see ToLong(), ToULong()
     */
-    bool ToDouble(double val);
+    bool ToDouble(double val) const;
 
     /**
         Attempts to convert the string to a signed integer in base @e base. Returns
@@ -837,7 +837,7 @@ public:
         
         @see ToDouble(), ToULong()
     */
-    bool ToLong(long val, int base = 10);
+    bool ToLong(long val, int base = 10) const;
 
     /**
         This is exactly the same as ToLong() but works with 64
@@ -848,7 +848,7 @@ public:
         
         @see ToLong(), ToULongLong()
     */
-    bool ToLongLong(wxLongLong_t val, int base = 10);
+    bool ToLongLong(wxLongLong_t val, int base = 10) const;
 
     /**
         Attempts to convert the string to an unsigned integer in base @e base.
@@ -864,21 +864,21 @@ public:
         
         @see ToDouble(), ToLong()
     */
-    bool ToULong(unsigned long val, int base = 10);
+    bool ToULong(unsigned long val, int base = 10) const;
 
     /**
         This is exactly the same as ToULong() but works with 64
         bit integer numbers.
         Please see ToLongLong() for additional remarks.
     */
-    bool ToULongLong(wxULongLong_t val, int base = 10);
+    bool ToULongLong(wxULongLong_t val, int base = 10) const;
 
     //@{
     /**
         Same as @ref wxString::utf8str utf8_str.
     */
-    const char* ToUTF8();
-    const wxCharBuffer ToUF8();
+    const char* ToUTF8() const;
+    const const wxCharBuffer ToUF8() const;
     //@}
 
     /**
@@ -914,7 +914,7 @@ public:
     /**
         Returns this string converted to upper case.
     */
-    wxString Upper();
+    wxString Upper() const;
 
     /**
         The same as MakeUpper.
@@ -953,7 +953,7 @@ public:
              fnstr() fn_str, @ref charstr() char_str, @ref
              wcharstr() wchar_string
     */
-    const wxChar* c_str();
+    const wxChar* c_str() const;
 
     /**
         Returns an object with string data that is implicitly convertible to
@@ -966,7 +966,7 @@ public:
              fnstr() fn_str, @ref cstr() c_str, @ref
              wcharstr() wchar_str
     */
-    wxWritableCharBuffer char_str(const wxMBConv& conv = wxConvLibc);
+    wxWritableCharBuffer char_str(const wxMBConv& conv = wxConvLibc) const;
 
     //@{
     /**
@@ -978,9 +978,9 @@ public:
         
         @see wxMBConv, @ref wcstr() wc_str, @ref wcstr() mb_str
     */
-    const wchar_t* fn_str();
-    const char* fn_str();
-    const wxCharBuffer fn_str();
+    const wchar_t* fn_str() const;
+    const const char* fn_str() const;
+    const const wxCharBuffer fn_str() const;
     //@}
 
     //@{
@@ -994,8 +994,8 @@ public:
         @see wxMBConv, @ref cstr() c_str, @ref wcstr() wc_str, @ref
              fnstr() fn_str, @ref charstr() char_str
     */
-    const char* mb_str(const wxMBConv& conv = wxConvLibc);
-    const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc);
+    const char* mb_str(const wxMBConv& conv = wxConvLibc) const;
+    const const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
     //@}
 
     /**
@@ -1057,16 +1057,16 @@ public:
     /**
         Element extraction.
     */
-    wxChar operator [](size_t i);
-    wxChar operator [](size_t i);
-    wxChar operator [](int i);
-    wxChar operator [](int i);
+    wxChar operator [](size_t i) const;
+    wxChar operator [](size_t i) const;
+    const wxChar operator [](int i) const;
+    wxChar operator [](int i) const;
     //@}
 
     /**
         Implicit conversion to a C string.
     */
-    operator const wxChar*();
+    operator const wxChar*() const;
 
     /**
         Empty string is @false, so !string will only return @true if the string is
@@ -1076,7 +1076,7 @@ public:
         to wxString.
         See also IsEmpty().
     */
-    bool operator!();
+    bool operator!() const;
 
     /**
         The supported functions are only listed here, please see any STL reference for
@@ -1090,8 +1090,8 @@ public:
         wxCharBuffer object or as a pointer to the internal string contents in
         UTF-8 build.
     */
-    const char* utf8_str();
-    const wxCharBuffer utf8_str();
+    const char* utf8_str() const;
+    const const wxCharBuffer utf8_str() const;
     //@}
 
     //@{
@@ -1105,8 +1105,8 @@ public:
         @see wxMBConv, @ref cstr() c_str, @ref wcstr() mb_str, @ref
              fnstr() fn_str, @ref wcharstr() wchar_str
     */
-    const wchar_t* wc_str(const wxMBConv& conv);
-    const wxWCharBuffer wc_str(const wxMBConv& conv);
+    const wchar_t* wc_str(const wxMBConv& conv) const;
+    const const wxWCharBuffer wc_str(const wxMBConv& conv) const;
     //@}
 
     /**
@@ -1120,7 +1120,7 @@ public:
              fnstr() fn_str, @ref cstr() c_str, @ref
              charstr() char_str
     */
-    wxWritableWCharBuffer wchar_str();
+    wxWritableWCharBuffer wchar_str() const;
 
     /**
         These functions are deprecated, please consider using new wxWidgets 2.0

@@ -237,33 +237,33 @@ public:
         Gets information about this column. See SetItem() for more
         information.
     */
-    bool GetColumn(int col, wxListItem& item);
+    bool GetColumn(int col, wxListItem& item) const;
 
     /**
         Returns the number of columns.
     */
-    int GetColumnCount();
+    int GetColumnCount() const;
 
     /**
         Gets the column number by visual order index (report view only).
     */
-    int GetColumnIndexFromOrder(int order);
+    int GetColumnIndexFromOrder(int order) const;
 
     /**
         Gets the column visual order index (valid in report view only).
     */
-    int GetColumnOrder(int col);
+    int GetColumnOrder(int col) const;
 
     /**
         Gets the column width (report view only).
     */
-    int GetColumnWidth(int col);
+    int GetColumnWidth(int col) const;
 
     /**
         Returns the array containing the orders of all columns. On error, an empty
         array is returned.
     */
-    wxArrayInt GetColumnsOrder();
+    wxArrayInt GetColumnsOrder() const;
 
     /**
         Gets the number of items that can fit vertically in the
@@ -271,7 +271,7 @@ public:
         or the total number of items in the list control (icon
         or small icon view).
     */
-    int GetCountPerPage();
+    int GetCountPerPage() const;
 
     /**
         Returns the edit control being currently used to edit a label. Returns @NULL
@@ -279,7 +279,7 @@ public:
         @b NB: It is currently only implemented for wxMSW and the generic version,
         not for the native Mac OS X version.
     */
-    wxTextCtrl* GetEditControl();
+    wxTextCtrl* GetEditControl() const;
 
     /**
         Returns the specified image list. @a which may be one of:
@@ -296,7 +296,7 @@ public:
         
         The user-defined state image list (unimplemented).
     */
-    wxImageList* GetImageList(int which);
+    wxImageList* GetImageList(int which) const;
 
     /**
         Gets information about the item. See SetItem() for more
@@ -304,7 +304,7 @@ public:
         You must call @e info.SetId() to the ID of item you're interested in
         before calling this method.
     */
-    bool GetItem(wxListItem& info);
+    bool GetItem(wxListItem& info) const;
 
     /**
         Returns the colour for this item. If the item has no specific colour, returns
@@ -313,27 +313,27 @@ public:
         
         @see GetItemTextColour()
     */
-    wxColour GetItemBackgroundColour(long item);
+    wxColour GetItemBackgroundColour(long item) const;
 
     /**
         Returns the number of items in the list control.
     */
-    int GetItemCount();
+    int GetItemCount() const;
 
     /**
         Gets the application-defined data associated with this item.
     */
-    long GetItemData(long item);
+    long GetItemData(long item) const;
 
     /**
         Returns the item's font.
     */
-    wxFont GetItemFont(long item);
+    wxFont GetItemFont(long item) const;
 
     /**
         Returns the position of the item, in icon or small icon view.
     */
-    bool GetItemPosition(long item, wxPoint& pos);
+    bool GetItemPosition(long item, wxPoint& pos) const;
 
     /**
         Returns the rectangle representing the item's size and position, in physical
@@ -341,25 +341,25 @@ public:
         @a code is one of wxLIST_RECT_BOUNDS, wxLIST_RECT_ICON, wxLIST_RECT_LABEL.
     */
     bool GetItemRect(long item, wxRect& rect,
-                     int code = wxLIST_RECT_BOUNDS);
+                     int code = wxLIST_RECT_BOUNDS) const;
 
     /**
         Retrieves the spacing between icons in pixels: horizontal spacing is returned
         as @c x component of the wxSize object and the vertical
         spacing as its @c y component.
     */
-    wxSize GetItemSpacing();
+    wxSize GetItemSpacing() const;
 
     /**
         Gets the item state. For a list of state flags, see SetItem().
         The @b stateMask indicates which state flags are of interest.
     */
-    int GetItemState(long item, long stateMask);
+    int GetItemState(long item, long stateMask) const;
 
     /**
         Gets the item text for this item.
     */
-    wxString GetItemText(long item);
+    wxString GetItemText(long item) const;
 
     /**
         Returns the colour for this item. If the item has no specific colour, returns
@@ -368,7 +368,7 @@ public:
         the current control foreground and items with default colour which, hence, have
         always the same colour as the control).
     */
-    wxColour GetItemTextColour(long item);
+    wxColour GetItemTextColour(long item) const;
 
     /**
         Searches for an item with the given geometry or state, starting from
@@ -425,12 +425,12 @@ public:
         The item is selected as part of a cut and paste operation.
     */
     long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL,
-                     int state = wxLIST_STATE_DONTCARE);
+                     int state = wxLIST_STATE_DONTCARE) const;
 
     /**
         Returns the number of selected items in the list control.
     */
-    int GetSelectedItemCount();
+    int GetSelectedItemCount() const;
 
     /**
         Returns the rectangle representing the size and position, in physical
@@ -445,18 +445,18 @@ public:
         This function is new since wxWidgets version 2.7.0
     */
     bool GetSubItemRect(long item, long subItem, wxRect& rect,
-                        int code = wxLIST_RECT_BOUNDS);
+                        int code = wxLIST_RECT_BOUNDS) const;
 
     /**
         Gets the text colour of the list control.
     */
-    wxColour GetTextColour();
+    wxColour GetTextColour() const;
 
     /**
         Gets the index of the topmost visible item when in
         list or report view.
     */
-    long GetTopItem();
+    long GetTopItem() const;
 
     /**
         Returns the rectangle taken by all items in the control. In other words, if the
@@ -465,7 +465,7 @@ public:
         Note that this function only works in the icon and small icon views, not in
         list or report views (this is a limitation of the native Win32 control).
     */
-    wxRect GetViewRect();
+    wxRect GetViewRect() const;
 
     /**
         Determines which item (if any) is at the specified point,
@@ -523,7 +523,7 @@ public:
         commctrl.h of version 4.70 that is provided by Microsoft.
     */
     long HitTest(const wxPoint& point, int& flags,
-                 long* ptrSubItem);
+                 long* ptrSubItem) const;
 
     //@{
     /**
@@ -567,7 +567,7 @@ public:
         @see OnGetItemImage(), OnGetItemColumnImage(),
              OnGetItemText()
     */
-    virtual wxListItemAttr* OnGetItemAttr(long item);
+    virtual wxListItemAttr* OnGetItemAttr(long item) const;
 
     /**
         Overload this function in the derived class for a control with
@@ -579,7 +579,7 @@ public:
         @see OnGetItemText(), OnGetItemImage(),
              OnGetItemAttr()
     */
-    virtual int OnGetItemColumnImage(long item, long column);
+    virtual int OnGetItemColumnImage(long item, long column) const;
 
     /**
         This function must be overloaded in the derived class for a control with
@@ -594,7 +594,7 @@ public:
         @see OnGetItemText(), OnGetItemColumnImage(),
              OnGetItemAttr()
     */
-    virtual int OnGetItemImage(long item);
+    virtual int OnGetItemImage(long item) const;
 
     /**
         This function @b must be overloaded in the derived class for a control with
@@ -604,7 +604,7 @@ public:
         @see SetItemCount(), OnGetItemImage(),
              OnGetItemColumnImage(), OnGetItemAttr()
     */
-    virtual wxString OnGetItemText(long item, long column);
+    virtual wxString OnGetItemText(long item, long column) const;
 
     /**
         Redraws the given @e item. This is only useful for the virtual list controls
@@ -663,7 +663,7 @@ public:
         once.
         This function is valid in report view only.
     */
-    bool SetColumnOrder(const wxArrayInt& orders);
+    bool SetColumnOrder(const wxArrayInt& orders) const;
 
     /**
         Sets the image list associated with the control. @a which is one of
@@ -956,13 +956,13 @@ public:
         For @c EVT_LIST_CACHE_HINT event only: return the first item which the
         list control advises us to cache.
     */
-    long GetCacheFrom();
+    long GetCacheFrom() const;
 
     /**
         For @c EVT_LIST_CACHE_HINT event only: return the last item (inclusive)
         which the list control advises us to cache.
     */
-    long GetCacheTo();
+    long GetCacheTo() const;
 
     /**
         The column position: it is only used with @c COL events. For the column
@@ -970,52 +970,52 @@ public:
         the column click events it may be -1 if the user clicked in the list control
         header outside any column.
     */
-    int GetColumn();
+    int GetColumn() const;
 
     /**
         The data.
     */
-    long GetData();
+    long GetData() const;
 
     /**
         The image.
     */
-    int GetImage();
+    int GetImage() const;
 
     /**
         The item index.
     */
-    long GetIndex();
+    long GetIndex() const;
 
     /**
         An item object, used by some events. See also wxListCtrl::SetItem.
     */
-    const wxListItem GetItem();
+    const wxListItem GetItem() const;
 
     /**
         Key code if the event is a keypress event.
     */
-    int GetKeyCode();
+    int GetKeyCode() const;
 
     /**
         The (new) item label for @c EVT_LIST_END_LABEL_EDIT event.
     */
-    const wxString GetLabel();
+    const wxString GetLabel() const;
 
     /**
         The mask.
     */
-    long GetMask();
+    long GetMask() const;
 
     /**
         The position of the mouse pointer if the event is a drag event.
     */
-    wxPoint GetPoint();
+    wxPoint GetPoint() const;
 
     /**
         The text.
     */
-    const wxString GetText();
+    const wxString GetText() const;
 
     /**
         This method only makes sense for @c EVT_LIST_END_LABEL_EDIT message
@@ -1025,7 +1025,7 @@ public:
         the edit and
         the admittedly rare case when the user wants to rename it to an empty string).
     */
-    bool IsEditCancelled();
+    bool IsEditCancelled() const;
 };
 
 
@@ -1059,32 +1059,32 @@ public:
     /**
         Returns the currently set background color.
     */
-    const wxColour GetBackgroundColour();
+    const wxColour GetBackgroundColour() const;
 
     /**
         Returns the currently set font.
     */
-    const wxFont GetFont();
+    const wxFont GetFont() const;
 
     /**
         Returns the currently set text color.
     */
-    const wxColour GetTextColour();
+    const wxColour GetTextColour() const;
 
     /**
         Returns @true if the currently set background color is valid.
     */
-    bool HasBackgroundColour();
+    bool HasBackgroundColour() const;
 
     /**
         Returns @true if the currently set font is valid.
     */
-    bool HasFont();
+    bool HasFont() const;
 
     /**
         Returns @true if the currently set text color is valid.
     */
-    bool HasTextColour();
+    bool HasTextColour() const;
 
     /**
         Sets a new background color.
@@ -1149,14 +1149,14 @@ public:
         
         @returns The first selected item, if any, -1 otherwise.
     */
-    long GetFirstSelected();
+    long GetFirstSelected() const;
 
     /**
         Returns the currently focused item or -1 if none.
         
         @see IsSelected(), Focus()
     */
-    long GetFocusedItem();
+    long GetFocusedItem() const;
 
     /**
         Used together with GetFirstSelected() to
@@ -1165,7 +1165,7 @@ public:
         @returns Returns the next selected item or -1 if there are no more of
                  them.
     */
-    long GetNextSelected(long item);
+    long GetNextSelected(long item) const;
 
     /**
         Returns @true if the item with the given @a index is selected,
@@ -1173,7 +1173,7 @@ public:
         
         @see GetFirstSelected(), GetNextSelected()
     */
-    bool IsSelected(long index);
+    bool IsSelected(long index) const;
 
     /**
         Selects or unselects the given item.
@@ -1226,39 +1226,39 @@ public:
         Returns the alignment for this item. Can be one of
         wxLIST_FORMAT_LEFT, wxLIST_FORMAT_RIGHT or wxLIST_FORMAT_CENTRE.
     */
-    wxListColumnFormat GetAlign();
+    wxListColumnFormat GetAlign() const;
 
     /**
         Returns the background colour for this item.
     */
-    wxColour GetBackgroundColour();
+    wxColour GetBackgroundColour() const;
 
     /**
         Returns the zero-based column; meaningful only in report mode.
     */
-    int GetColumn();
+    int GetColumn() const;
 
     /**
         Returns client data associated with the control. Please note that
         client data is associated with the item and not with subitems.
     */
-    long GetData();
+    long GetData() const;
 
     /**
         Returns the font used to display the item.
     */
-    wxFont GetFont();
+    wxFont GetFont() const;
 
     /**
         Returns the zero-based item position.
     */
-    long GetId();
+    long GetId() const;
 
     /**
         Returns the zero-based index of the image
         associated with the item into the image list.
     */
-    int GetImage();
+    int GetImage() const;
 
     /**
         Returns a bit mask indicating which fields of the structure are valid;
@@ -1288,7 +1288,7 @@ public:
         
         @b GetFormat is valid.
     */
-    long GetMask();
+    long GetMask() const;
 
     /**
         Returns a bit field representing the state of the item. Can be any
@@ -1314,22 +1314,22 @@ public:
         
         The item is in the cut state. Win32 only.
     */
-    long GetState();
+    long GetState() const;
 
     /**
         Returns the label/header text.
     */
-    const wxString GetText();
+    const wxString GetText() const;
 
     /**
         Returns the text colour.
     */
-    wxColour GetTextColour();
+    wxColour GetTextColour() const;
 
     /**
         Meaningful only for column headers in report mode. Returns the column width.
     */
-    int GetWidth();
+    int GetWidth() const;
 
     /**
         Sets the alignment for the item. See also

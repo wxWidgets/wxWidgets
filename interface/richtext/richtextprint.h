@@ -57,48 +57,48 @@ public:
     /**
         Returns the font specified for printing the header and footer.
     */
-    const wxFont GetFont();
+    const wxFont GetFont() const;
 
     /**
         Returns the margin between the text and the footer.
     */
-    int GetFooterMargin();
+    int GetFooterMargin() const;
 
     /**
         Returns the footer text on odd or even pages, and at a given position on the
         page (left, centre or right).
     */
     wxString GetFooterText(wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_EVEN,
-                           wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE);
+                           wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE) const;
 
     /**
         Returns the margin between the text and the header.
     */
-    int GetHeaderMargin();
+    int GetHeaderMargin() const;
 
     /**
         Returns the header text on odd or even pages, and at a given position on the
         page (left, centre or right).
     */
     wxString GetHeaderText(wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_EVEN,
-                           wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE);
+                           wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE) const;
 
     /**
         Returns @true if the header and footer will be shown on the first page.
     */
-    bool GetShowOnFirstPage();
+    bool GetShowOnFirstPage() const;
 
     /**
         Helper function for getting the header or footer text, odd or even pages, and
         at a given position on the page (left, centre or right).
     */
     wxString GetText(int headerFooter, wxRichTextOddEvenPage page,
-                     wxRichTextPageLocation location);
+                     wxRichTextPageLocation location) const;
 
     /**
         Returns the text colour for drawing the header and footer.
     */
-    const wxColour GetTextColour();
+    const wxColour GetTextColour() const;
 
     /**
         Initialises the object.
@@ -186,7 +186,7 @@ public:
     /**
         Returns the header and footer data associated with the printout.
     */
-    const wxRichTextHeaderFooterData GetHeaderFooterData();
+    const wxRichTextHeaderFooterData GetHeaderFooterData() const;
 
     /**
         Gets the page information.
@@ -197,7 +197,7 @@ public:
     /**
         Returns a pointer to the buffer being rendered.
     */
-    wxRichTextBuffer* GetRichTextBuffer();
+    wxRichTextBuffer* GetRichTextBuffer() const;
 
     /**
         Returns @true if the given page exists in the printout.
@@ -260,19 +260,19 @@ public:
         for details.
     */
     wxString GetFooterText(wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_EVEN,
-                           wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE);
+                           wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE) const;
 
     /**
         Returns the internal wxRichTextHeaderFooterData object.
     */
-    const wxRichTextHeaderFooterData GetHeaderFooterData();
+    const wxRichTextHeaderFooterData GetHeaderFooterData() const;
 
     /**
         A convenience function to get the header text. See wxRichTextHeaderFooterData
         for details.
     */
     wxString GetHeaderText(wxRichTextOddEvenPage page = wxRICHTEXT_PAGE_EVEN,
-                           wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE);
+                           wxRichTextPageLocation location = wxRICHTEXT_PAGE_CENTRE) const;
 
     /**
         Returns a pointer to the internal page setup data.
@@ -283,12 +283,12 @@ public:
         Returns the parent window to be used for the preview window and printing wait
         dialog.
     */
-    wxWindow* GetParentWindow();
+    wxWindow* GetParentWindow() const;
 
     /**
         Returns the dimensions to be used for the preview window.
     */
-    const wxRect GetPreviewRect();
+    const wxRect GetPreviewRect() const;
 
     /**
         Returns a pointer to the internal print data.
@@ -298,7 +298,7 @@ public:
     /**
         Returns the title of the preview window or printing wait caption.
     */
-    const wxString GetTitle();
+    const wxString GetTitle() const;
 
     /**
         Shows the page setup dialog.

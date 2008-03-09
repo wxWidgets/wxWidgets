@@ -43,12 +43,12 @@ public:
     /**
         Get the untyped client data.
     */
-    void* GetClientData();
+    void* GetClientData() const;
 
     /**
         Get a pointer to the client data object.
     */
-    wxClientData* GetClientObject();
+    wxClientData* GetClientObject() const;
 
     /**
         Set the untyped client data.
@@ -133,7 +133,7 @@ public:
     /**
         Get string client data.
     */
-    const wxString GetData();
+    const wxString GetData() const;
 
     /**
         Set string client data.

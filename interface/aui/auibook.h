@@ -103,7 +103,7 @@ public:
     /**
         Returns the associated art provider.
     */
-    wxAuiTabArt* GetArtProvider();
+    wxAuiTabArt* GetArtProvider() const;
 
     /**
         Returns the desired height of the notebook for the given page height. Use this
@@ -115,38 +115,38 @@ public:
     /**
         Returns the page specified by the given index.
     */
-    wxWindow* GetPage(size_t page_idx);
+    wxWindow* GetPage(size_t page_idx) const;
 
     /**
         Returns the tab bitmap for the page.
     */
-    wxBitmap GetPageBitmap(size_t page);
+    wxBitmap GetPageBitmap(size_t page) const;
 
     /**
         Returns the number of pages in the notebook.
     */
-    size_t GetPageCount();
+    size_t GetPageCount() const;
 
     /**
         Returns the page index for the specified window.  If the window is not found in
         the notebook, wxNOT_FOUND is returned.
     */
-    int GetPageIndex(wxWindow* page_wnd);
+    int GetPageIndex(wxWindow* page_wnd) const;
 
     /**
         Returns the tab label for the page.
     */
-    wxString GetPageText(size_t page);
+    wxString GetPageText(size_t page) const;
 
     /**
         Returns the currently selected page.
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         Returns the height of the tab control.
     */
-    int GetTabCtrlHeight();
+    int GetTabCtrlHeight() const;
 
     /**
         InsertPage() is similar to AddPage, but allows the ability to specify the

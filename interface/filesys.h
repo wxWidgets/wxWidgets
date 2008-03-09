@@ -184,25 +184,25 @@ public:
         for example myanim.avi#200 may refer to position in animation
         or reality.wrl#MyView may refer to a predefined view in VRML.
     */
-    const wxString GetAnchor();
+    const wxString GetAnchor() const;
 
     /**
         Returns full location of the file, including path and protocol.
         Examples :
     */
-    const wxString GetLocation();
+    const wxString GetLocation() const;
 
     /**
         Returns the MIME type of the content of this file. It is either
         extension-based (see wxMimeTypesManager) or extracted from
         HTTP protocol Content-Type header.
     */
-    const wxString GetMimeType();
+    const wxString GetMimeType() const;
 
     /**
         Returns time when this file was modified.
     */
-    wxDateTime GetModificationTime();
+    wxDateTime GetModificationTime() const;
 
     /**
         Returns pointer to the stream. You can use the returned
@@ -212,7 +212,7 @@ public:
         this by default. wxHtml uses local cache to work around
         this and to speed up the connection).
     */
-    wxInputStream* GetStream();
+    wxInputStream* GetStream() const;
 };
 
 
@@ -282,14 +282,14 @@ public:
         Example: GetAnchor("index.htm#chapter2") == "chapter2"
         @b Note: the anchor is NOT part of the left location.
     */
-    wxString GetAnchor(const wxString& location);
+    wxString GetAnchor(const wxString& location) const;
 
     /**
         Returns the left location string extracted from @e location.
         Example: GetLeftLocation("file:myzipfile.zip#zip:index.htm") ==
         "file:myzipfile.zip"
     */
-    wxString GetLeftLocation(const wxString& location);
+    wxString GetLeftLocation(const wxString& location) const;
 
     /**
         Returns the MIME type based on @b extension of @e location. (While
@@ -303,13 +303,13 @@ public:
         Returns the protocol string extracted from @e location.
         Example: GetProtocol("file:myzipfile.zip#zip:index.htm") == "zip"
     */
-    wxString GetProtocol(const wxString& location);
+    wxString GetProtocol(const wxString& location) const;
 
     /**
         Returns the right location string extracted from @e location.
         Example : GetRightLocation("file:myzipfile.zip#zip:index.htm") == "index.htm"
     */
-    wxString GetRightLocation(const wxString& location);
+    wxString GetRightLocation(const wxString& location) const;
 
     /**
         Opens the file and returns wxFSFile pointer or @NULL if failed.

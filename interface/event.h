@@ -81,7 +81,7 @@ public:
         Notice that GetModifiers() is easier to use
         correctly than this function so you should consider using it in new code.
     */
-    bool AltDown();
+    bool AltDown() const;
 
     /**
         CMD is a pseudo key which is the same as Control for PC and Unix
@@ -92,14 +92,14 @@ public:
         this is the same as ControlDown() and under
         Mac this is the same as MetaDown().
     */
-    bool CmdDown();
+    bool CmdDown() const;
 
     /**
         Returns @true if the control key was down at the time of the key event.
         Notice that GetModifiers() is easier to use
         correctly than this function so you should consider using it in new code.
     */
-    bool ControlDown();
+    bool ControlDown() const;
 
     /**
         Returns the virtual key code. ASCII events return normal ASCII values,
@@ -111,7 +111,7 @@ public:
         charset. You can obtain the corresponding Unicode character using
         GetUnicodeKey().
     */
-    int GetKeyCode();
+    int GetKeyCode() const;
 
     /**
         Return the bitmask of modifier keys which were pressed when this event
@@ -129,14 +129,14 @@ public:
         
         with this function.
     */
-    int GetModifiers();
+    int GetModifiers() const;
 
     //@{
     /**
         Obtains the position (in client coordinates) at which the key was pressed.
     */
-    wxPoint GetPosition();
-    void GetPosition(long* x, long* y);
+    wxPoint GetPosition() const;
+    const void GetPosition(long* x, long* y) const;
     //@}
 
     /**
@@ -145,7 +145,7 @@ public:
         @b NB: Currently the raw key codes are not supported by all ports, use
         @c #ifdef wxHAS_RAW_KEY_CODES to determine if this feature is available.
     */
-    wxUint32 GetRawKeyCode();
+    wxUint32 GetRawKeyCode() const;
 
     /**
         Returns the low level key flags for this event. The flags are
@@ -153,24 +153,24 @@ public:
         @b NB: Currently the raw key flags are not supported by all ports, use
         @c #ifdef wxHAS_RAW_KEY_CODES to determine if this feature is available.
     */
-    wxUint32 GetRawKeyFlags();
+    wxUint32 GetRawKeyFlags() const;
 
     /**
         Returns the Unicode character corresponding to this key event.
         This function is only available in Unicode build, i.e. when
         @c wxUSE_UNICODE is 1.
     */
-    wxChar GetUnicodeKey();
+    wxChar GetUnicodeKey() const;
 
     /**
         Returns the X position (in client coordinates) of the event.
     */
-    long GetX();
+    long GetX() const;
 
     /**
         Returns the Y (in client coordinates) position of the event.
     */
-    long GetY();
+    long GetY() const;
 
     /**
         Returns @true if either CTRL or ALT keys was down
@@ -180,21 +180,21 @@ public:
         META under X but the key presses even while NUMLOCK is on should
         be still processed normally).
     */
-    bool HasModifiers();
+    bool HasModifiers() const;
 
     /**
         Returns @true if the Meta key was down at the time of the key event.
         Notice that GetModifiers() is easier to use
         correctly than this function so you should consider using it in new code.
     */
-    bool MetaDown();
+    bool MetaDown() const;
 
     /**
         Returns @true if the shift key was down at the time of the key event.
         Notice that GetModifiers() is easier to use
         correctly than this function so you should consider using it in new code.
     */
-    bool ShiftDown();
+    bool ShiftDown() const;
 
     /**
         bool m_altDown
@@ -282,7 +282,7 @@ public:
             Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
             indicate any button down event.
     */
-    bool ButtonDown(int button = wxJOY_BUTTON_ANY);
+    bool ButtonDown(int button = wxJOY_BUTTON_ANY) const;
 
     /**
         Returns @true if the specified button (or any button) was in a down state.
@@ -291,7 +291,7 @@ public:
             Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
             indicate any button down event.
     */
-    bool ButtonIsDown(int button = wxJOY_BUTTON_ANY);
+    bool ButtonIsDown(int button = wxJOY_BUTTON_ANY) const;
 
     /**
         Returns @true if the event was an up event from the specified button (or any
@@ -301,53 +301,53 @@ public:
             Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
             indicate any button down event.
     */
-    bool ButtonUp(int button = wxJOY_BUTTON_ANY);
+    bool ButtonUp(int button = wxJOY_BUTTON_ANY) const;
 
     /**
         Returns the identifier of the button changing state. This is a wxJOY_BUTTONn
         identifier, where
         n is one of 1, 2, 3, 4.
     */
-    int GetButtonChange();
+    int GetButtonChange() const;
 
     /**
         Returns the down state of the buttons. This is a bitlist of wxJOY_BUTTONn
         identifiers, where
         n is one of 1, 2, 3, 4.
     */
-    int GetButtonState();
+    int GetButtonState() const;
 
     /**
         Returns the identifier of the joystick generating the event - one of
         wxJOYSTICK1 and wxJOYSTICK2.
     */
-    int GetJoystick();
+    int GetJoystick() const;
 
     /**
         Returns the x, y position of the joystick event.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         Returns the z position of the joystick event.
     */
-    int GetZPosition();
+    int GetZPosition() const;
 
     /**
         Returns @true if this was a button up or down event (@e not 'is any button
         down?').
     */
-    bool IsButton();
+    bool IsButton() const;
 
     /**
         Returns @true if this was an x, y move event.
     */
-    bool IsMove();
+    bool IsMove() const;
 
     /**
         Returns @true if this was a z move event.
     */
-    bool IsZMove();
+    bool IsZMove() const;
 };
 
 
@@ -376,14 +376,14 @@ public:
         Returns wxHORIZONTAL or wxVERTICAL, depending on the orientation of the
         scrollbar.
     */
-    int GetOrientation();
+    int GetOrientation() const;
 
     /**
         Returns the position of the scrollbar for the thumb track and release events.
         Note that this field can't be used for the other events, you need to query
         the window itself for the current position in that case.
     */
-    int GetPosition();
+    int GetPosition() const;
 };
 
 
@@ -542,12 +542,12 @@ public:
     /**
         Returns @true if the UI element should be checked.
     */
-    bool GetChecked();
+    bool GetChecked() const;
 
     /**
         Returns @true if the UI element should be enabled.
     */
-    bool GetEnabled();
+    bool GetEnabled() const;
 
     /**
         Static function returning a value specifying how wxWidgets
@@ -562,35 +562,35 @@ public:
         Returns @true if the application has called Check(). For wxWidgets internal use
         only.
     */
-    bool GetSetChecked();
+    bool GetSetChecked() const;
 
     /**
         Returns @true if the application has called Enable(). For wxWidgets internal use
         only.
     */
-    bool GetSetEnabled();
+    bool GetSetEnabled() const;
 
     /**
         Returns @true if the application has called Show(). For wxWidgets internal use
         only.
     */
-    bool GetSetShown();
+    bool GetSetShown() const;
 
     /**
         Returns @true if the application has called SetText(). For wxWidgets internal
         use only.
     */
-    bool GetSetText();
+    bool GetSetText() const;
 
     /**
         Returns @true if the UI element should be shown.
     */
-    bool GetShown();
+    bool GetShown() const;
 
     /**
         Returns the text that should be set for the UI element.
     */
-    wxString GetText();
+    wxString GetText() const;
 
     /**
         Returns the current interval between updates in milliseconds.
@@ -766,46 +766,46 @@ public:
     /**
         Returns @true if the event was a first extra button double click.
     */
-    bool Aux1DClick();
+    bool Aux1DClick() const;
 
     /**
         Returns @true if the first extra button mouse button changed to down.
     */
-    bool Aux1Down();
+    bool Aux1Down() const;
 
     /**
         Returns @true if the first extra button mouse button is currently down,
         independent
         of the current event type.
     */
-    bool Aux1IsDown();
+    bool Aux1IsDown() const;
 
     /**
         Returns @true if the first extra button mouse button changed to up.
     */
-    bool Aux1Up();
+    bool Aux1Up() const;
 
     /**
         Returns @true if the event was a second extra button double click.
     */
-    bool Aux2DClick();
+    bool Aux2DClick() const;
 
     /**
         Returns @true if the second extra button mouse button changed to down.
     */
-    bool Aux2Down();
+    bool Aux2Down() const;
 
     /**
         Returns @true if the second extra button mouse button is currently down,
         independent
         of the current event type.
     */
-    bool Aux2IsDown();
+    bool Aux2IsDown() const;
 
     /**
         Returns @true if the second extra button mouse button changed to up.
     */
-    bool Aux2Up();
+    bool Aux2Up() const;
 
     /**
         Returns @true if the identified mouse button is changing state. Valid
@@ -867,7 +867,7 @@ public:
         
         @see wxKeyEvent::CmdDown
     */
-    bool CmdDown();
+    bool CmdDown() const;
 
     /**
         Returns @true if the control key was down at the time of the event.
@@ -894,7 +894,7 @@ public:
         double click events, @c wxMOUSE_BTN_MIDDLE and @c wxMOUSE_BTN_RIGHT
         for the same events for the middle and the right buttons respectively.
     */
-    int GetButton();
+    int GetButton() const;
 
     /**
         Returns the number of mouse clicks for this event: 1 for a simple click, 2
@@ -904,20 +904,20 @@ public:
         they generate different kinds of events however).
         This function is new since wxWidgets version 2.9.0
     */
-    int GetClickCount();
+    int GetClickCount() const;
 
     /**
         Returns the configured number of lines (or whatever) to be scrolled per
         wheel action.  Defaults to three.
     */
-    int GetLinesPerAction();
+    int GetLinesPerAction() const;
 
     /**
         Returns the logical mouse position in pixels (i.e. translated according to the
         translation set for the DC, which usually indicates that the window has been
         scrolled).
     */
-    wxPoint GetLogicalPosition(const wxDC& dc);
+    wxPoint GetLogicalPosition(const wxDC& dc) const;
 
     //@{
     /**
@@ -927,9 +927,9 @@ public:
         keyboard combination (e.g. under Windows when the "menu'' key is pressed), the
         returned position is @c wxDefaultPosition.
     */
-    wxPoint GetPosition();
-    void GetPosition(wxCoord* x, wxCoord* y);
-    void GetPosition(long* x, long* y);
+    wxPoint GetPosition() const;
+    const void GetPosition(wxCoord* x, wxCoord* y) const;
+    const void GetPosition(long* x, long* y) const;
     //@}
 
     /**
@@ -937,7 +937,7 @@ public:
         taken, and one such action (for example, scrolling one increment)
         should occur for each delta.
     */
-    int GetWheelDelta();
+    int GetWheelDelta() const;
 
     /**
         Get wheel rotation, positive or negative indicates direction of
@@ -947,12 +947,12 @@ public:
         should be able to either do partial line scrolling or wait until several
         events accumulate before scrolling.
     */
-    int GetWheelRotation();
+    int GetWheelRotation() const;
 
     /**
         Returns X coordinate of the physical mouse event position.
     */
-    long GetX();
+    long GetX() const;
 
     /**
         Returns Y coordinate of the physical mouse event position.
@@ -964,29 +964,29 @@ public:
         down event -
         that may be tested using @e ButtonDown).
     */
-    bool IsButton();
+    bool IsButton() const;
 
     /**
         Returns @true if the system has been setup to do page scrolling with
         the mouse wheel instead of line scrolling.
     */
-    bool IsPageScroll();
+    bool IsPageScroll() const;
 
     /**
         Returns @true if the mouse was leaving the window.
         See also Entering().
     */
-    bool Leaving();
+    bool Leaving() const;
 
     /**
         Returns @true if the event was a left double click.
     */
-    bool LeftDClick();
+    bool LeftDClick() const;
 
     /**
         Returns @true if the left mouse button changed to down.
     */
-    bool LeftDown();
+    bool LeftDown() const;
 
     /**
         Returns @true if the left mouse button is currently down, independent
@@ -1000,71 +1000,71 @@ public:
         This event is usually used in the mouse event handlers which process "move
         mouse" messages to determine whether the user is (still) dragging the mouse.
     */
-    bool LeftIsDown();
+    bool LeftIsDown() const;
 
     /**
         Returns @true if the left mouse button changed to up.
     */
-    bool LeftUp();
+    bool LeftUp() const;
 
     /**
         Returns @true if the Meta key was down at the time of the event.
     */
-    bool MetaDown();
+    bool MetaDown() const;
 
     /**
         Returns @true if the event was a middle double click.
     */
-    bool MiddleDClick();
+    bool MiddleDClick() const;
 
     /**
         Returns @true if the middle mouse button changed to down.
     */
-    bool MiddleDown();
+    bool MiddleDown() const;
 
     /**
         Returns @true if the middle mouse button is currently down, independent
         of the current event type.
     */
-    bool MiddleIsDown();
+    bool MiddleIsDown() const;
 
     /**
         Returns @true if the middle mouse button changed to up.
     */
-    bool MiddleUp();
+    bool MiddleUp() const;
 
     /**
         Returns @true if this was a motion event and no mouse buttons were pressed.
         If any mouse button is held pressed, then this method returns @false and
         Dragging() returns @true.
     */
-    bool Moving();
+    bool Moving() const;
 
     /**
         Returns @true if the event was a right double click.
     */
-    bool RightDClick();
+    bool RightDClick() const;
 
     /**
         Returns @true if the right mouse button changed to down.
     */
-    bool RightDown();
+    bool RightDown() const;
 
     /**
         Returns @true if the right mouse button is currently down, independent
         of the current event type.
     */
-    bool RightIsDown();
+    bool RightIsDown() const;
 
     /**
         Returns @true if the right mouse button changed to up.
     */
-    bool RightUp();
+    bool RightUp() const;
 
     /**
         Returns @true if the shift key was down at the time of the event.
     */
-    bool ShiftDown();
+    bool ShiftDown() const;
 
     /**
         bool m_altDown
@@ -1171,18 +1171,18 @@ public:
     /**
         Returns an array of filenames.
     */
-    wxString* GetFiles();
+    wxString* GetFiles() const;
 
     /**
         Returns the number of files dropped.
     */
-    int GetNumberOfFiles();
+    int GetNumberOfFiles() const;
 
     /**
         Returns the position at which the files were dropped.
         Returns an array of filenames.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         wxString* m_files
@@ -1226,7 +1226,7 @@ public:
     /**
         Deprecated, use IsChecked() instead.
     */
-    bool Checked();
+    bool Checked() const;
 
     /**
         Returns client data pointer for a listbox or choice selection event
@@ -1278,7 +1278,7 @@ public:
         Notice that this method can not be used with
         wxCheckListBox currently.
     */
-    bool IsChecked();
+    bool IsChecked() const;
 
     /**
         For a listbox or similar event, returns @true if it is a selection, @false if it
@@ -1342,7 +1342,7 @@ public:
     /**
         Returns @true if the application or window is being activated, @false otherwise.
     */
-    bool GetActive();
+    bool GetActive() const;
 };
 
 
@@ -1390,7 +1390,7 @@ public:
         If the event originated from a keyboard event, the value returned from this
         function will be wxDefaultPosition.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         Sets the position at which the menu should be shown.
@@ -1435,7 +1435,7 @@ public:
     /**
         Returns the device context associated with the erase event to draw on.
     */
-    wxDC* GetDC();
+    wxDC* GetDC() const;
 };
 
 
@@ -1581,7 +1581,7 @@ public:
         Returns @true if the change is allowed (Veto()
         hasn't been called) or @false otherwise (if it was).
     */
-    bool IsAllowed();
+    bool IsAllowed() const;
 
     /**
         Prevents the change announced by this event from happening.
@@ -1656,13 +1656,13 @@ public:
         
         @see SetOrigin()
     */
-    wxHelpEvent::Origin GetOrigin();
+    wxHelpEvent::Origin GetOrigin() const;
 
     /**
         Returns the left-click position of the mouse, in screen coordinates. This allows
         the application to position the help appropriately.
     */
-    const wxPoint GetPosition();
+    const wxPoint GetPosition() const;
 
     /**
         Set the help event origin, only used internally by wxWidgets normally.
@@ -1710,12 +1710,12 @@ public:
         Returns wxHORIZONTAL or wxVERTICAL, depending on the orientation of the
         scrollbar.
     */
-    int GetOrientation();
+    int GetOrientation() const;
 
     /**
         Returns the position of the scrollbar.
     */
-    int GetPosition();
+    int GetPosition() const;
 };
 
 
@@ -1783,7 +1783,7 @@ public:
         
         @see RequestMore()
     */
-    bool MoreRequested();
+    bool MoreRequested() const;
 
     /**
         Tells wxWidgets that more processing is required. This function can be called
@@ -1900,25 +1900,25 @@ public:
     /**
         Returns the child that has the focus, or @NULL.
     */
-    wxWindow* GetCurrentFocus();
+    wxWindow* GetCurrentFocus() const;
 
     /**
         Returns @true if the navigation was in the forward direction.
     */
-    bool GetDirection();
+    bool GetDirection() const;
 
     /**
         Returns @true if the navigation event was from a tab key. This is required
         for proper navigation over radio buttons.
     */
-    bool IsFromTab();
+    bool IsFromTab() const;
 
     /**
         Returns @true if the navigation event represents a window change (for
         example, from Ctrl-Page Down
         in a notebook).
     */
-    bool IsWindowChange();
+    bool IsWindowChange() const;
 
     /**
         Sets the current focus window member.
@@ -1980,7 +1980,7 @@ public:
         Returns the window that gained the capture, or @NULL if it was a non-wxWidgets
         window.
     */
-    wxWindow* GetCapturedWindow();
+    wxWindow* GetCapturedWindow() const;
 };
 
 
@@ -2035,7 +2035,7 @@ public:
         shutting down. This method can only be called for end session and query end
         session events, it doesn't make sense for close window event.
     */
-    bool GetLoggingOff();
+    bool GetLoggingOff() const;
 
     /**
         Sets the 'can veto' flag.
@@ -2045,12 +2045,12 @@ public:
     /**
         Sets the 'force' flag.
     */
-    void SetForce(bool force);
+    void SetForce(bool force) const;
 
     /**
         Sets the 'logging off' flag.
     */
-    void SetLoggingOff(bool loggingOff);
+    void SetLoggingOff(bool loggingOff) const;
 
     /**
         Call this from your event handler to veto a system shutdown or to signal
@@ -2093,20 +2093,20 @@ public:
         used with the @c OPEN and @c CLOSE events and even for them the
         returned pointer may be @NULL in some ports.
     */
-    wxMenu* GetMenu();
+    wxMenu* GetMenu() const;
 
     /**
         Returns the menu identifier associated with the event. This method should be
         only used with the @c HIGHLIGHT events.
     */
-    int GetMenuId();
+    int GetMenuId() const;
 
     /**
         Returns @true if the menu which is being opened or closed is a popup menu,
         @false if it is a normal one.
         This method should only be used with the @c OPEN and @c CLOSE events.
     */
-    bool IsPopup();
+    bool IsPopup() const;
 };
 
 
@@ -2314,7 +2314,7 @@ public:
         
         @see SetClientObject(), wxClientData
     */
-    wxClientData* GetClientObject();
+    wxClientData* GetClientObject() const;
 
     /**
         Returns @true if the event handler is enabled, @false otherwise.
@@ -2483,7 +2483,7 @@ public:
         Returns @true if the frame has been iconized, @false if it has been
         restored.
     */
-    bool Iconized();
+    bool Iconized() const;
 };
 
 
@@ -2510,7 +2510,7 @@ public:
     /**
         Returns the position of the window generating the move change event.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 };
 
 
@@ -2553,7 +2553,7 @@ public:
         implementing the Clone function is to implement a copy constructor for
         a new event (call it MyEvent) and then define the Clone function like this:
     */
-    virtual wxEvent* Clone();
+    virtual wxEvent* Clone() const;
 
     /**
         Returns the object (usually a window) associated with the
@@ -2570,12 +2570,12 @@ public:
     /**
         Returns the identifier associated with this event, such as a button command id.
     */
-    int GetId();
+    int GetId() const;
 
     /**
         Returns @true if the event handler should be skipped, @false otherwise.
     */
-    bool GetSkipped();
+    bool GetSkipped() const;
 
     /**
         Gets the timestamp for the event. The timestamp is the time in milliseconds
@@ -2590,7 +2590,7 @@ public:
         wxCommandEvent else it returns @false.
         Note: Exists only for optimization purposes.
     */
-    bool IsCommandEvent();
+    bool IsCommandEvent() const;
 
     /**
         Sets the propagation level to the given value (for example returned from an
@@ -2622,7 +2622,7 @@ public:
         Test if this event should be propagated or not, i.e. if the propagation level
         is currently greater than 0.
     */
-    bool ShouldPropagate();
+    bool ShouldPropagate() const;
 
     /**
         This method can be used inside an event handler to control whether further
@@ -2704,7 +2704,7 @@ public:
     /**
         Returns the entire size of the window generating the size change event.
     */
-    wxSize GetSize();
+    wxSize GetSize() const;
 };
 
 
@@ -2736,17 +2736,17 @@ public:
     /**
         Returns a reference to the cursor specified by this event.
     */
-    wxCursor GetCursor();
+    wxCursor GetCursor() const;
 
     /**
         Returns the X coordinate of the mouse in client coordinates.
     */
-    wxCoord GetX();
+    wxCoord GetX() const;
 
     /**
         Returns the Y coordinate of the mouse in client coordinates.
     */
-    wxCoord GetY();
+    wxCoord GetY() const;
 
     /**
         Returns @true if the cursor specified by this event is a valid cursor.
@@ -2754,7 +2754,7 @@ public:
         @remarks You cannot specify wxNullCursor with this event, as it is not
                  considered a valid cursor.
     */
-    bool HasCursor();
+    bool HasCursor() const;
 
     /**
         Sets the cursor associated with this event.

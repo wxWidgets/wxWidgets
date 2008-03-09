@@ -106,7 +106,7 @@ public:
     /**
         Return the address of this frame.
     */
-    void* GetAddress();
+    void* GetAddress() const;
 
     /**
         Return the name of the file containing this frame, empty if
@@ -114,35 +114,35 @@ public:
         Use HasSourceLocation() to check whether
         the file name is available.
     */
-    wxString GetFileName();
+    wxString GetFileName() const;
 
     /**
         Get the level of this frame (deepest/innermost one is 0).
     */
-    size_t GetLevel();
+    size_t GetLevel() const;
 
     /**
         Return the line number of this frame, 0 if unavailable.
         
         @see GetFileName()
     */
-    size_t GetLine();
+    size_t GetLine() const;
 
     /**
         Get the module this function belongs to (empty if not available).
     */
-    wxString GetModule();
+    wxString GetModule() const;
 
     /**
         Return the unmangled (if possible) name of the function containing this
         frame.
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Return the return address of this frame.
     */
-    size_t GetOffset();
+    size_t GetOffset() const;
 
     /**
         Get the name, type and value (in text form) of the given parameter.
@@ -153,17 +153,17 @@ public:
         file.
     */
     bool GetParam(size_t n, wxString* type, wxString* name,
-                  wxString* value);
+                  wxString* value) const;
 
     /**
         Return the number of parameters of this function (may return 0 if we
         can't retrieve the parameters info even although the function does have
         parameters).
     */
-    size_t GetParamCount();
+    size_t GetParamCount() const;
 
     /**
         Return @true if we have the file name and line number for this frame.
     */
-    bool HasSourceLocation();
+    bool HasSourceLocation() const;
 };

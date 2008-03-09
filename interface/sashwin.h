@@ -86,12 +86,12 @@ public:
     /**
         Gets the maximum window size in the x direction.
     */
-    int GetMaximumSizeX();
+    int GetMaximumSizeX() const;
 
     /**
         Gets the maximum window size in the y direction.
     */
-    int GetMaximumSizeY();
+    int GetMaximumSizeY() const;
 
     /**
         Gets the minimum window size in the x direction.
@@ -101,7 +101,7 @@ public:
     /**
         Gets the minimum window size in the y direction.
     */
-    int GetMinimumSizeY();
+    int GetMinimumSizeY() const;
 
     /**
         Returns @true if a sash is visible on the given edge, @false otherwise.
@@ -111,7 +111,7 @@ public:
         
         @see SetSashVisible()
     */
-    bool GetSashVisible(wxSashEdgePosition edge);
+    bool GetSashVisible(wxSashEdgePosition edge) const;
 
     /**
         Returns @true if the sash has a border, @false otherwise.
@@ -122,7 +122,7 @@ public:
         
         @see SetSashBorder()
     */
-    bool HasBorder(wxSashEdgePosition edge);
+    bool HasBorder(wxSashEdgePosition edge) const;
 
     /**
         Sets the maximum window size in the x direction.
@@ -195,7 +195,7 @@ public:
         resize was applied. It is
         up to the application to set the window size if required.
     */
-    wxRect GetDragRect();
+    wxRect GetDragRect() const;
 
     /**
         Returns the status of the sash: one of wxSASH_STATUS_OK,
@@ -203,11 +203,11 @@ public:
         If the drag caused the notional bounding box of the window to flip over, for
         example, the drag will be out of rage.
     */
-    wxSashDragStatus GetDragStatus();
+    wxSashDragStatus GetDragStatus() const;
 
     /**
         Returns the dragged edge. The return value is one of wxSASH_TOP, wxSASH_RIGHT,
         wxSASH_BOTTOM, wxSASH_LEFT.
     */
-    wxSashEdgePosition GetEdge();
+    wxSashEdgePosition GetEdge() const;
 };

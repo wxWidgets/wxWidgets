@@ -33,12 +33,12 @@ public:
     /**
         Gets the icon.
     */
-    const wxIcon GetIcon();
+    const wxIcon GetIcon() const;
 
     /**
         Gets the text.
     */
-    wxString GetText();
+    wxString GetText() const;
 
     /**
         Set the icon.
@@ -76,13 +76,13 @@ public:
     /**
         Used to clone the event.
     */
-    wxEvent* Clone();
+    wxEvent* Clone() const;
 
     /**
         Returns the position of the column in the control or -1
         if no column field was set by the event emitter.
     */
-    int GetColumn();
+    int GetColumn() const;
 
     /**
         Returns a pointer to the wxDataViewColumn from which
@@ -93,17 +93,17 @@ public:
     /**
         Returns the wxDataViewModel associated with the event.
     */
-    wxDataViewModel* GetModel();
+    wxDataViewModel* GetModel() const;
 
     /**
         Returns a the position of a context menu event in screen coordinates.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         Returns a reference to a value.
     */
-    const wxVariant GetValue();
+    const wxVariant GetValue() const;
 
     /**
         
@@ -206,18 +206,18 @@ public:
     /**
         Returns the wxDataViewItem at the given @e row.
     */
-    wxDataViewItem GetItem(unsigned int row);
+    wxDataViewItem GetItem(unsigned int row) const;
 
     /**
         Returns the position of given @e item.
     */
-    unsigned int GetRow(const wxDataViewItem& item);
+    unsigned int GetRow(const wxDataViewItem& item) const;
 
     /**
         Override this to allow getting values from the model.
     */
     void GetValue(wxVariant& variant, unsigned int row,
-                  unsigned int col);
+                  unsigned int col) const;
 
     /**
         Call this after if the data has to be read again from
@@ -407,26 +407,26 @@ public:
         an item. Returns the number of items.
     */
     virtual unsigned int GetChildren(const wxDataViewItem& item,
-                                     wxDataViewItemArray& children);
+                                     wxDataViewItemArray& children) const;
 
     /**
         Override this to indicate the number of columns in the model.
     */
-    virtual unsigned int GetColumnCount();
+    virtual unsigned int GetColumnCount() const;
 
     /**
         Override this to indicate what type of data is stored in the
         column specified by @e col. This should return a string
         indicating the type of data as reported by wxVariant.
     */
-    virtual wxString GetColumnType(unsigned int col);
+    virtual wxString GetColumnType(unsigned int col) const;
 
     /**
         Override this to indicate which wxDataViewItem representing the parent
         of @a item or an invalid wxDataViewItem if the the root item is
         the parent item.
     */
-    virtual wxDataViewItem GetParent(const wxDataViewItem& item);
+    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const;
 
     /**
         Override this to indicate the value of @e item
@@ -434,7 +434,7 @@ public:
     */
     virtual void GetValue(wxVariant& variant,
                           const wxDataViewItem& item,
-                          unsigned int col);
+                          unsigned int col) const;
 
     /**
         Override this method to indicate if a container item merely
@@ -442,7 +442,7 @@ public:
         acts a normal item with entries for futher columns. By
         default returns @e @false.
     */
-    virtual bool HasContainerColumns(const wxDataViewItem& item);
+    virtual bool HasContainerColumns(const wxDataViewItem& item) const;
 
     /**
         Override this to indicate that the model provides a default compare
@@ -453,13 +453,13 @@ public:
         should be used. See also wxDataViewIndexListModel
         for a model which makes use of this.
     */
-    virtual bool HasDefaultCompare();
+    virtual bool HasDefaultCompare() const;
 
     /**
         Override this to indicate of @a item is a container, i.e. if
         it can have child items.
     */
-    virtual bool IsContainer(const wxDataViewItem& item);
+    virtual bool IsContainer(const wxDataViewItem& item) const;
 
     /**
         Call this to inform the model that an item has been added
@@ -754,12 +754,12 @@ public:
     /**
         Returns the ID.
     */
-    void* GetID();
+    void* GetID() const;
 
     /**
         Returns @true if the ID is not @e @NULL.
     */
-    bool IsOk();
+    bool IsOk() const;
 };
 
 
@@ -1011,67 +1011,67 @@ public:
         position in the control which may change after reordering
         columns by the user.
     */
-    virtual wxDataViewColumn* GetColumn(unsigned int pos);
+    virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
 
     /**
         Returns the number of columns.
     */
-    virtual unsigned int GetColumnCount();
+    virtual unsigned int GetColumnCount() const;
 
     /**
         Returns the position of the column or -1 if not found in the control.
     */
-    virtual int GetColumnPosition(const wxDataViewColumn* column);
+    virtual int GetColumnPosition(const wxDataViewColumn* column) const;
 
     /**
         Returns column containing the expanders.
     */
-    wxDataViewColumn* GetExpanderColumn();
+    wxDataViewColumn* GetExpanderColumn() const;
 
     /**
         Returns indentation.
     */
-    int GetIndent();
+    int GetIndent() const;
 
     /**
         Returns item rect.
     */
     wxRect GetItemRect(const wxDataViewItem& item,
-                       const wxDataViewColumn* col = NULL);
+                       const wxDataViewColumn* col = NULL) const;
 
     /**
         Returns pointer to the data model associated with the
         control (if any).
     */
-    virtual wxDataViewModel* GetModel();
+    virtual wxDataViewModel* GetModel() const;
 
     /**
         Returns first selected item or an invalid item if none is selected.
     */
-    wxDataViewItem GetSelection();
+    wxDataViewItem GetSelection() const;
 
     /**
         Fills @a sel with currently selected items and returns
         their number.
     */
-    int GetSelections(wxDataViewItemArray& sel);
+    int GetSelections(wxDataViewItemArray& sel) const;
 
     /**
         Returns the wxDataViewColumn currently responsible for sorting
         or @NULL if none has been selected.
     */
-    virtual wxDataViewColumn* GetSortingColumn();
+    virtual wxDataViewColumn* GetSortingColumn() const;
 
     /**
         Hittest.
     */
     void HitTest(const wxPoint& point, wxDataViewItem& item,
-                 wxDataViewColumn*& col);
+                 wxDataViewColumn*& col) const;
 
     /**
         Return @true if the item is selected.
     */
-    bool IsSelected(const wxDataViewItem& item);
+    bool IsSelected(const wxDataViewItem& item) const;
 
     /**
         Select the given item.
@@ -1481,7 +1481,7 @@ public:
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    int GetChildCount(const wxDataViewItem& parent);
+    int GetChildCount(const wxDataViewItem& parent) const;
 
     /**
         Returns the image list.
@@ -1491,35 +1491,35 @@ public:
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    wxClientData* GetItemData(const wxDataViewItem& item);
+    wxClientData* GetItemData(const wxDataViewItem& item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    const wxIcon GetItemExpandedIcon(const wxDataViewItem& item);
+    const wxIcon GetItemExpandedIcon(const wxDataViewItem& item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    const wxIcon GetItemIcon(const wxDataViewItem& item);
+    const wxIcon GetItemIcon(const wxDataViewItem& item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
-    wxString GetItemText(const wxDataViewItem& item);
+    wxString GetItemText(const wxDataViewItem& item) const;
 
     /**
         Calls the identical method from wxDataViewTreeStore.
     */
     wxDataViewItem GetNthChild(const wxDataViewItem& parent,
-                               unsigned int pos);
+                               unsigned int pos) const;
 
     //@{
     /**
         Returns the store.
     */
-    wxDataViewTreeStore* GetStore();
-    const wxDataViewTreeStore* GetStore();
+    wxDataViewTreeStore* GetStore() const;
+    const wxDataViewTreeStore* GetStore() const;
     //@}
 
     /**
@@ -1653,33 +1653,33 @@ public:
     /**
         Return the number of children of item.
     */
-    int GetChildCount(const wxDataViewItem& parent);
+    int GetChildCount(const wxDataViewItem& parent) const;
 
     /**
         Returns the client data asoociated with the item.
     */
-    wxClientData* GetItemData(const wxDataViewItem& item);
+    wxClientData* GetItemData(const wxDataViewItem& item) const;
 
     /**
         Returns the icon to display in expanded containers.
     */
-    const wxIcon GetItemExpandedIcon(const wxDataViewItem& item);
+    const wxIcon GetItemExpandedIcon(const wxDataViewItem& item) const;
 
     /**
         Returns the icon of the item.
     */
-    const wxIcon GetItemIcon(const wxDataViewItem& item);
+    const wxIcon GetItemIcon(const wxDataViewItem& item) const;
 
     /**
         Returns the text of the item.
     */
-    wxString GetItemText(const wxDataViewItem& item);
+    wxString GetItemText(const wxDataViewItem& item) const;
 
     /**
         Returns the nth child item of item.
     */
     wxDataViewItem GetNthChild(const wxDataViewItem& parent,
-                               unsigned int pos);
+                               unsigned int pos) const;
 
     /**
         Inserts a container after @e previous.

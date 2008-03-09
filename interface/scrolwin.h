@@ -149,7 +149,7 @@ public:
         
         @see CalcUnscrolledPosition()
     */
-    void CalcScrolledPosition(int x, int y, int* xx, int* yy);
+    void CalcScrolledPosition(int x, int y, int* xx, int* yy) const;
 
     /**
         Translates the device coordinates to the logical ones. For example, if a window
@@ -161,7 +161,7 @@ public:
         
         @see CalcScrolledPosition()
     */
-    void CalcUnscrolledPosition(int x, int y, int* xx, int* yy);
+    void CalcUnscrolledPosition(int x, int y, int* xx, int* yy) const;
 
     /**
         Creates the window for two-step construction. Derived classes
@@ -219,7 +219,7 @@ public:
         
         @see SetScrollbars(), GetVirtualSize()
     */
-    void GetScrollPixelsPerUnit(int* xUnit, int* yUnit);
+    void GetScrollPixelsPerUnit(int* xUnit, int* yUnit) const;
 
     /**
         Get the position at which the visible portion of the window starts.
@@ -240,7 +240,7 @@ public:
         
         @see SetScrollbars()
     */
-    void GetViewStart(int* x, int* y);
+    void GetViewStart(int* x, int* y) const;
 
     /**
         Gets the size in device units of the scrollable window area (as
@@ -257,12 +257,12 @@ public:
         
         @see SetScrollbars(), GetScrollPixelsPerUnit()
     */
-    void GetVirtualSize(int* x, int* y);
+    void GetVirtualSize(int* x, int* y) const;
 
     /**
         Motif only: @true if the window has a backing bitmap.
     */
-    bool IsRetained();
+    bool IsRetained() const;
 
     /**
         Called by the default paint event handler to allow the application to define

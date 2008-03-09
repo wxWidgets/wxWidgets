@@ -270,7 +270,7 @@ public:
         
         @remarks Currently not implemented in wxGTK (always returns @NULL there).
     */
-    wxToolBarToolBase* FindToolForPosition(wxCoord x, wxCoord y);
+    wxToolBarToolBase* FindToolForPosition(wxCoord x, wxCoord y) const;
 
     /**
         Returns the left/right and top/bottom margins, which are also used for
@@ -278,7 +278,7 @@ public:
         
         @see SetMargins()
     */
-    wxSize GetMargins();
+    wxSize GetMargins() const;
 
     /**
         Returns the size of bitmap that the toolbar expects to have. The default bitmap
@@ -300,7 +300,7 @@ public:
         
         @returns Client data, or @NULL if there is none.
     */
-    wxObject* GetToolClientData(int toolId);
+    wxObject* GetToolClientData(int toolId) const;
 
     /**
         Called to determine whether a tool is enabled (responds to user input).
@@ -312,7 +312,7 @@ public:
         
         @see EnableTool()
     */
-    bool GetToolEnabled(int toolId);
+    bool GetToolEnabled(int toolId) const;
 
     /**
         Returns the long help for the given tool.
@@ -322,27 +322,27 @@ public:
         
         @see SetToolLongHelp(), SetToolShortHelp()
     */
-    wxString GetToolLongHelp(int toolId);
+    wxString GetToolLongHelp(int toolId) const;
 
     /**
         Returns the value used for packing tools.
         
         @see SetToolPacking()
     */
-    int GetToolPacking();
+    int GetToolPacking() const;
 
     /**
         Returns the tool position in the toolbar, or @c wxNOT_FOUND if the tool is not
         found.
     */
-    int GetToolPos(int toolId);
+    int GetToolPos(int toolId) const;
 
     /**
         Returns the default separator size.
         
         @see SetToolSeparation()
     */
-    int GetToolSeparation();
+    int GetToolSeparation() const;
 
     /**
         Returns the short help for the given tool.
@@ -352,7 +352,7 @@ public:
         
         @see GetToolLongHelp(), SetToolShortHelp()
     */
-    wxString GetToolShortHelp(int toolId);
+    wxString GetToolShortHelp(int toolId) const;
 
     /**
         Returns the size of a whole button, which is usually larger than a tool bitmap
@@ -373,12 +373,12 @@ public:
         
         @see ToggleTool()
     */
-    bool GetToolState(int toolId);
+    bool GetToolState(int toolId) const;
 
     /**
         Returns the number of tools in the toolbar.
     */
-    int GetToolsCount();
+    int GetToolsCount() const;
 
     /**
         Inserts the control into the toolbar at the given position.

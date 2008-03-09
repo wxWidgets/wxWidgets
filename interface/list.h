@@ -96,28 +96,28 @@ public:
     /**
         Returns the iterator refering to @a object or @NULL if none found.
     */
-    wxListT::compatibility_iterator Find(T* object);
+    wxListT::compatibility_iterator Find(T* object) const;
 
     /**
         Returns the number of elements in the list.
     */
-    size_t GetCount();
+    size_t GetCount() const;
 
     /**
         Returns the first iterator in the list (@NULL if the list is empty).
     */
-    wxListT::compatibility_iterator GetFirst();
+    wxListT::compatibility_iterator GetFirst() const;
 
     /**
         Returns the last iterator in the list (@NULL if the list is empty).
     */
-    wxListT::compatibility_iterator GetLast();
+    wxListT::compatibility_iterator GetLast() const;
 
     /**
         Returns the index of @a obj within the list or @c wxNOT_FOUND if
         @a obj is not found in the list.
     */
-    int IndexOf(T* obj);
+    int IndexOf(T* obj) const;
 
     //@{
     /**
@@ -133,18 +133,18 @@ public:
     /**
         Returns @true if the list is empty, @false otherwise.
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         Returns the iterator refering to the object at the given
         @c index in the list.
     */
-    wxListT::compatibility_iterator Item(size_t index);
+    wxListT::compatibility_iterator Item(size_t index) const;
 
     /**
         @b NB: This function is deprecated, use wxList::Find instead.
     */
-    wxListT::compatibility_iterator Member(T* object);
+    wxListT::compatibility_iterator Member(T* object) const;
 
     /**
         @b NB: This function is deprecated, use @ref wxList::itemfunc Item instead.
@@ -152,13 +152,13 @@ public:
         empty
         or the nth node could not be found).
     */
-    wxListT::compatibility_iterator Nth(int n);
+    wxListT::compatibility_iterator Nth(int n) const;
 
     /**
         @b NB: This function is deprecated, use wxList::GetCount instead.
         Returns the number of elements in the list.
     */
-    int Number();
+    int Number() const;
 
     /**
         Allows the sorting of arbitrary lists by giving a function to compare
@@ -179,16 +179,16 @@ public:
     /**
         Returns the last item of the list.
     */
-    reference back();
-    const_reference back();
+    reference back() const;
+    const_reference back() const;
     //@}
 
     //@{
     /**
         Returns a (const) iterator pointing to the beginning of the list.
     */
-    iterator begin();
-    const_iterator begin();
+    iterator begin() const;
+    const_iterator begin() const;
     //@}
 
     /**
@@ -199,14 +199,14 @@ public:
     /**
         Returns @e @true if the list is empty.
     */
-    bool empty();
+    bool empty() const;
 
     //@{
     /**
         Returns a (const) iterator pointing at the end of the list.
     */
-    iterator end();
-    const_iterator end();
+    iterator end() const;
+    const_iterator end() const;
     //@}
 
     //@{
@@ -222,8 +222,8 @@ public:
     /**
         Returns the first item in the list.
     */
-    reference front();
-    const_reference front();
+    reference front() const;
+    const_reference front() const;
     //@}
 
     //@{
@@ -239,7 +239,7 @@ public:
     /**
         Returns the largest possible size of the list.
     */
-    size_type max_size();
+    size_type max_size() const;
 
     /**
         Removes the last item from the list.
@@ -268,8 +268,8 @@ public:
         Returns a (const) reverse iterator pointing to the beginning of the
         reversed list.
     */
-    reverse_iterator rbegin();
-    const_reverse_iterator rbegin();
+    reverse_iterator rbegin() const;
+    const_reverse_iterator rbegin() const;
     //@}
 
     /**
@@ -282,8 +282,8 @@ public:
         Returns a (const) reverse iterator pointing to the end of the
         reversed list.
     */
-    reverse_iterator rend();
-    const_reverse_iterator rend();
+    reverse_iterator rend() const;
+    const_reverse_iterator rend() const;
     //@}
 
     /**
@@ -301,7 +301,7 @@ public:
     /**
         Returns the size of the list.
     */
-    size_type size();
+    size_type size() const;
 };
 
 
@@ -336,12 +336,12 @@ public:
     /**
         Retrieves the client data pointer associated with the node.
     */
-    T* GetData();
+    T* GetData() const;
 
     /**
         Retrieves the next node or @NULL if this node is the last one.
     */
-    wxNodeT* GetNext();
+    wxNodeT* GetNext() const;
 
     /**
         Retrieves the previous node or @NULL if this node is the first one in the list.

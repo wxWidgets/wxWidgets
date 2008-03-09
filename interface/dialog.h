@@ -215,7 +215,7 @@ public:
         
         @see SetAffirmativeId()
     */
-    int GetAffirmativeId();
+    int GetAffirmativeId() const;
 
     /**
         Override this to return a window containing the main content of the dialog.
@@ -225,7 +225,7 @@ public:
         and allows the @ref overview_wxdialogoverview "layout adaptation code" to know
         that only the pages need to be made scrollable.
     */
-    wxWindow* GetContentWindow();
+    wxWindow* GetContentWindow() const;
 
     /**
         Gets the identifier of the button to map presses of @c ESC
@@ -233,7 +233,7 @@ public:
         
         @see SetEscapeId()
     */
-    int GetEscapeId();
+    int GetEscapeId() const;
 
     /**
         Returns @true if the dialog has been adapted, usually by making it scrollable
@@ -241,7 +241,7 @@ public:
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
-    bool GetLayoutAdaptationDone();
+    bool GetLayoutAdaptationDone() const;
 
     /**
         Gets a value representing the aggressiveness of search for buttons and sizers
@@ -258,7 +258,7 @@ public:
         See also SetLayoutAdaptationMode() and @ref overview_autoscrollingdialogs
         "Automatic scrolling dialogs".
     */
-    wxDialogLayoutAdaptationMode GetLayoutAdaptationMode();
+    wxDialogLayoutAdaptationMode GetLayoutAdaptationMode() const;
 
     /**
         A static function getting the current layout adapter object.
@@ -292,7 +292,7 @@ public:
         arbitrary controls are not currently supported.
         This function is not available on any other platform.
     */
-    wxToolBar* GetToolBar();
+    wxToolBar* GetToolBar() const;
 
     /**
         Iconizes or restores the dialog. Windows only.
@@ -315,7 +315,7 @@ public:
         @remarks Always returns @false under Windows since dialogs cannot be
                  iconized.
     */
-    bool IsIconized();
+    bool IsIconized() const;
 
     /**
         A static function returning @true if layout adaptation is enabled for all
@@ -331,12 +331,12 @@ public:
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
-    bool IsMainButton(wxWindowID& id);
+    bool IsMainButton(wxWindowID& id) const;
 
     /**
         Returns @true if the dialog box is modal, @false otherwise.
     */
-    bool IsModal();
+    bool IsModal() const;
 
     /**
         The default handler for wxEVT_SYS_COLOUR_CHANGED.

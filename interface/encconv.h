@@ -46,13 +46,13 @@ public:
     /**
         Convert wxString and return new wxString object.
     */
-    bool Convert(const char* input, char* output);
-    bool Convert(const wchar_t* input, wchar_t* output);
-    bool Convert(const char* input, wchar_t* output);
-    bool Convert(const wchar_t* input, char* output);
-    bool Convert(char* str);
-    bool Convert(wchar_t* str);
-    wxString Convert(const wxString& input);
+    bool Convert(const char* input, char* output) const;
+    const bool Convert(const wchar_t* input, wchar_t* output) const;
+    const bool Convert(const char* input, wchar_t* output) const;
+    const bool Convert(const wchar_t* input, char* output) const;
+    const bool Convert(char* str) const;
+    const bool Convert(wchar_t* str) const;
+    const wxString  Convert(const wxString& input) const;
     //@}
 
     /**

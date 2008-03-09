@@ -99,7 +99,7 @@ public:
         parameter to Dial() on this machine and returns
         their number (may be 0).
     */
-    size_t GetISPNames(wxArrayString& names);
+    size_t GetISPNames(wxArrayString& names) const;
 
     /**
         Hang up the currently active dial up connection.
@@ -113,14 +113,14 @@ public:
         guaranteed to be correct, so it is better to ask user for
         confirmation or give him a possibility to override it.
     */
-    bool IsAlwaysOnline();
+    bool IsAlwaysOnline() const;
 
     /**
         Returns @true if (async) dialing is in progress.
         
         @see Dial()
     */
-    bool IsDialing();
+    bool IsDialing() const;
 
     /**
         Returns @true if the dialup manager was initialized correctly. If this
@@ -128,7 +128,7 @@ public:
         good idea to call this function and check its result before calling any other
         wxDialUpManager methods
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Returns @true if the computer is connected to the network: under Windows,
@@ -136,14 +136,14 @@ public:
         the "well-known host" (as specified by
         wxDialUpManager::SetWellKnownHost) is reachable.
     */
-    bool IsOnline();
+    bool IsOnline() const;
 
     /**
-        , @b const wxString&@e commandHangup = wxT("/usr/bin/poff"))
+        ,  wxString&@e commandHangup = wxT("/usr/bin/poff"))
         This method is for Unix only.
         Sets the commands to start up the network and to hang up again.
     */
-    void SetConnectCommand();
+    void SetConnectCommand() const;
 
     /**
         Sometimes the built-in logic for determining the online status may fail,
@@ -187,12 +187,12 @@ public:
         Is this a @c CONNECTED or @c DISCONNECTED event? In other words, does it
         notify about transition from offline to online state or vice versa?
     */
-    bool IsConnectedEvent();
+    bool IsConnectedEvent() const;
 
     /**
         Does this event come from wxDialUpManager::Dial() or from some extrenal
         process (i.e. does it result from our own attempt to establish the
         connection)?
     */
-    bool IsOwnEvent();
+    bool IsOwnEvent() const;
 };

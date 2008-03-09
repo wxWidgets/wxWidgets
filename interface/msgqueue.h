@@ -34,7 +34,7 @@ public:
         Returns @true if the object had been initialized successfully, @false
         if an error occurred.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Add a message to this queue and signal the threads waiting for messages

@@ -196,7 +196,7 @@ public:
     /**
         Returns a pointer to the active MDI child, if there is one.
     */
-    wxMDIChildFrame* GetActiveChild();
+    wxMDIChildFrame* GetActiveChild() const;
 
     /**
         This gets the size of the frame 'client area' in pixels.
@@ -213,28 +213,28 @@ public:
         @see GetToolBar(), SetToolBar(),
              wxMDIClientWindow
     */
-    virtual void GetClientSize(int* width, int* height);
+    virtual void GetClientSize(int* width, int* height) const;
 
     /**
         Returns a pointer to the client window.
         
         @see OnCreateClient()
     */
-    wxMDIClientWindow* GetClientWindow();
+    wxMDIClientWindow* GetClientWindow() const;
 
     /**
         Returns the window being used as the toolbar for this frame.
         
         @see SetToolBar()
     */
-    virtual wxWindow* GetToolBar();
+    virtual wxWindow* GetToolBar() const;
 
     /**
         Returns the current Window menu (added by wxWidgets to the menubar). This
         function
         is available under Windows only.
     */
-    wxMenu* GetWindowMenu();
+    wxMenu* GetWindowMenu() const;
 
     /**
         Override this to return a different kind of client window. If you override this

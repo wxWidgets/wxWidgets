@@ -38,12 +38,12 @@ public:
         Returns the margin (in pixel) between the picker and the text control.
         This function can be used only when HasTextCtrl() returns @true.
     */
-    int GetInternalMargin();
+    int GetInternalMargin() const;
 
     /**
         Returns the proportion value of the picker.
     */
-    int GetPickerCtrlProportion();
+    int GetPickerCtrlProportion() const;
 
     /**
         Returns a pointer to the text control handled by this window or @NULL if the
@@ -57,25 +57,25 @@ public:
         Returns the proportion value of the text control.
         This function can be used only when HasTextCtrl() returns @true.
     */
-    int GetTextCtrlProportion();
+    int GetTextCtrlProportion() const;
 
     /**
         Returns @true if this window has a valid text control (i.e. if the @b
         wxPB_USE_TEXTCTRL style was
         given when creating this control).
     */
-    bool HasTextCtrl();
+    bool HasTextCtrl() const;
 
     /**
         Returns @true if the picker control is growable.
     */
-    bool IsPickerCtrlGrowable();
+    bool IsPickerCtrlGrowable() const;
 
     /**
         Returns @true if the text control is growable.
         This function can be used only when HasTextCtrl() returns @true.
     */
-    bool IsTextCtrlGrowable();
+    bool IsTextCtrlGrowable() const;
 
     /**
         Sets the margin (in pixel) between the picker and the text control.

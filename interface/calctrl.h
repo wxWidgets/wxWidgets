@@ -27,7 +27,7 @@ public:
         @c EVT_CALENDAR_WEEKDAY_CLICKED handler. It doesn't make sense to call
         this function in other handlers.
     */
-    wxDateTime::WeekDay GetWeekDay();
+    wxDateTime::WeekDay GetWeekDay() const;
 
     /**
         Sets the week day carried by the event, normally only used by the library
@@ -70,59 +70,59 @@ public:
     /**
         Returns the background colour to use for the item with this attribute.
     */
-    const wxColour GetBackgroundColour();
+    const wxColour GetBackgroundColour() const;
 
     /**
         Returns the border to use for the item with this attribute.
     */
-    wxCalendarDateBorder GetBorder();
+    wxCalendarDateBorder GetBorder() const;
 
     /**
         Returns the border colour to use for the item with this attribute.
     */
-    const wxColour GetBorderColour();
+    const wxColour GetBorderColour() const;
 
     /**
         Returns the font to use for the item with this attribute.
     */
-    const wxFont GetFont();
+    const wxFont GetFont() const;
 
     /**
         Returns the text colour to use for the item with this attribute.
     */
-    const wxColour GetTextColour();
+    const wxColour GetTextColour() const;
 
     /**
         Returns @true if this attribute specifies a non-default text background
         colour.
     */
-    bool HasBackgroundColour();
+    bool HasBackgroundColour() const;
 
     /**
         Returns @true if this attribute specifies a non-default (i.e. any) border.
     */
-    bool HasBorder();
+    bool HasBorder() const;
 
     /**
         Returns @true if this attribute specifies a non-default border colour.
     */
-    bool HasBorderColour();
+    bool HasBorderColour() const;
 
     /**
         Returns @true if this attribute specifies a non-default font.
     */
-    bool HasFont();
+    bool HasFont() const;
 
     /**
         Returns @true if this item has a non-default text foreground colour.
     */
-    bool HasTextColour();
+    bool HasTextColour() const;
 
     /**
         Returns @true if this attribute specifies that this item should be
         displayed as a holiday.
     */
-    bool IsHoliday();
+    bool IsHoliday() const;
 
     /**
         Sets the text background colour to use.
@@ -270,54 +270,54 @@ public:
         Returns the attribute for the given date (should be in the range 1...31).
         The returned pointer may be @NULL.
     */
-    wxCalendarDateAttr* GetAttr(size_t day);
+    wxCalendarDateAttr* GetAttr(size_t day) const;
 
     /**
         Gets the currently selected date.
     */
-    const wxDateTime GetDate();
+    const wxDateTime GetDate() const;
 
     /**
         Gets the background colour of the header part of the calendar window.
         
         @see SetHeaderColours()
     */
-    const wxColour GetHeaderColourBg();
+    const wxColour GetHeaderColourBg() const;
 
     /**
         Gets the foreground colour of the header part of the calendar window.
         
         @see SetHeaderColours()
     */
-    const wxColour GetHeaderColourFg();
+    const wxColour GetHeaderColourFg() const;
 
     /**
         Gets the background highlight colour.
         
         @see SetHighlightColours()
     */
-    const wxColour GetHighlightColourBg();
+    const wxColour GetHighlightColourBg() const;
 
     /**
         Gets the foreground highlight colour.
         
         @see SetHighlightColours()
     */
-    const wxColour GetHighlightColourFg();
+    const wxColour GetHighlightColourFg() const;
 
     /**
         Return the background colour currently used for holiday highlighting.
         
         @see SetHolidayColours()
     */
-    const wxColour GetHolidayColourBg();
+    const wxColour GetHolidayColourBg() const;
 
     /**
         Return the foreground colour currently used for holiday highlighting.
         
         @see SetHolidayColours()
     */
-    const wxColour GetHolidayColourFg();
+    const wxColour GetHolidayColourFg() const;
 
     /**
         Returns one of @c wxCAL_HITTEST_XXX

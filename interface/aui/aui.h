@@ -97,7 +97,7 @@ public:
         Returns the current art provider being used.
         See also: wxAuiDockArt.
     */
-    wxAuiDockArt* GetArtProvider();
+    wxAuiDockArt* GetArtProvider() const;
 
     /**
         Returns the current dock constraint values.  See SetDockSizeConstraint() for
@@ -108,12 +108,12 @@ public:
     /**
         Returns the current manager's flags.
     */
-    unsigned int GetFlags();
+    unsigned int GetFlags() const;
 
     /**
         Returns the frame currently being managed by wxAuiManager.
     */
-    wxWindow* GetManagedWindow();
+    wxWindow* GetManagedWindow() const;
 
     /**
         Calling this method will return the wxAuiManager for a given window.  The @a
@@ -426,50 +426,50 @@ public:
     /**
         HasBorder() returns @true if the pane displays a border.
     */
-    bool HasBorder();
+    bool HasBorder() const;
 
     /**
         HasCaption() returns @true if the pane displays a caption.
     */
-    bool HasCaption();
+    bool HasCaption() const;
 
     /**
         HasCloseButton() returns @true if the pane displays a button to close the pane.
     */
-    bool HasCloseButton();
+    bool HasCloseButton() const;
 
     /**
         HasFlag() returns @true if the the property specified by flag is active for the
         pane.
     */
-    bool HasFlag(unsigned int flag);
+    bool HasFlag(unsigned int flag) const;
 
     /**
         HasGripper() returns @true if the pane displays a gripper.
     */
-    bool HasGripper();
+    bool HasGripper() const;
 
     /**
         HasGripper() returns @true if the pane displays a gripper at the top.
     */
-    bool HasGripperTop();
+    bool HasGripperTop() const;
 
     /**
         HasMaximizeButton() returns @true if the pane displays a button to maximize the
         pane.
     */
-    bool HasMaximizeButton();
+    bool HasMaximizeButton() const;
 
     /**
         HasMinimizeButton() returns @true if the pane displays a button to minimize the
         pane.
     */
-    bool HasMinimizeButton();
+    bool HasMinimizeButton() const;
 
     /**
         HasPinButton() returns @true if the pane displays a button to float the pane.
     */
-    bool HasPinButton();
+    bool HasPinButton() const;
 
     /**
         Hide() indicates that a pane should be hidden.
@@ -480,73 +480,73 @@ public:
         IsBottomDockable() returns @true if the pane can be docked at the bottom of the
         managed frame.
     */
-    bool IsBottomDockable();
+    bool IsBottomDockable() const;
 
     /**
         IsDocked() returns @true if the pane is docked.
     */
-    bool IsDocked();
+    bool IsDocked() const;
 
     /**
         IsFixed() returns @true if the pane cannot be resized.
     */
-    bool IsFixed();
+    bool IsFixed() const;
 
     /**
         IsFloatable() returns @true if the pane can be undocked and displayed as a
         floating window.
     */
-    bool IsFloatable();
+    bool IsFloatable() const;
 
     /**
         IsFloating() returns @true if the pane is floating.
     */
-    bool IsFloating();
+    bool IsFloating() const;
 
     /**
         IsLeftDockable() returns @true if the pane can be docked on the left of the
         managed frame.
     */
-    bool IsLeftDockable();
+    bool IsLeftDockable() const;
 
     /**
         IsMoveable() returns @true if the docked frame can be undocked or moved to
         another dock position.
     */
-    bool IsMovable();
+    bool IsMovable() const;
 
     /**
         IsOk() returns @true if the wxAuiPaneInfo structure is valid. A pane structure
         is valid if it has an associated window.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         IsResizable() returns @true if the pane can be resized.
     */
-    bool IsResizable();
+    bool IsResizable() const;
 
     /**
         IsRightDockable() returns @true if the pane can be docked on the right of the
         managed frame.
     */
-    bool IsRightDockable();
+    bool IsRightDockable() const;
 
     /**
         IsShown() returns @true if the pane is currently shown.
     */
-    bool IsShown();
+    bool IsShown() const;
 
     /**
         IsToolbar() returns @true if the pane contains a toolbar.
     */
-    bool IsToolbar();
+    bool IsToolbar() const;
 
     /**
         IsTopDockable() returns @true if the pane can be docked at the top of the
         managed frame.
     */
-    bool IsTopDockable();
+    bool IsTopDockable() const;
 
     /**
         Layer() determines the layer of the docked pane. The dock layer is similar to

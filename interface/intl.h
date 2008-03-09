@@ -165,7 +165,7 @@ public:
         This form is internally used when looking up message catalogs.
         Compare GetSysName().
     */
-    wxString GetCanonicalName();
+    wxString GetCanonicalName() const;
 
     /**
         Returns the header value for header @e header. The search for @a header is case
@@ -175,14 +175,14 @@ public:
         The return value is the value of the header if found. Else this will be empty.
     */
     wxString GetHeaderValue(const wxString& header,
-                            const wxString& domain = wxEmptyString);
+                            const wxString& domain = wxEmptyString) const;
 
     /**
         Returns wxLanguage constant of current language.
         Note that you can call this function only if you used the form of
         Init() that takes wxLanguage argument.
     */
-    int GetLanguage();
+    int GetLanguage() const;
 
     /**
         Returns a pointer to wxLanguageInfo structure containing information about the
@@ -194,7 +194,7 @@ public:
         special meaning if passed as an argument to this function and in this case the
         result of GetSystemLanguage() is used.
     */
-    static wxLanguageInfo* GetLanguageInfo(int lang);
+    static wxLanguageInfo* GetLanguageInfo(int lang) const;
 
     /**
         Returns English name of the given language or empty string if this
@@ -202,20 +202,20 @@ public:
         See GetLanguageInfo() for a remark about
         special meaning of @c wxLANGUAGE_DEFAULT.
     */
-    static wxString GetLanguageName(int lang);
+    static wxString GetLanguageName(int lang) const;
 
     /**
         Returns the locale name as passed to the constructor or
         Init(). This is full, human-readable name,
         e.g. "English" or "French".
     */
-    const wxString GetLocale();
+    const wxString GetLocale() const;
 
     /**
         Returns the current short name for the locale (as given to the constructor or
         the Init() function).
     */
-    const wxString GetName();
+    const wxString GetName() const;
 
     //@{
     /**
@@ -241,25 +241,25 @@ public:
                  added later override those added before.
     */
     const wxString GetString(const wxString& origString,
-                             const wxString& domain = wxEmptyString);
-    const wxString GetString(const wxString& origString,
-                             const wxString& origString2,
-                             size_t n,
-                             const wxString& domain = NULL);
+                             const wxString& domain = wxEmptyString) const;
+    const const wxString&   GetString(const wxString& origString,
+                                      const wxString& origString2,
+                                      size_t n,
+                                      const wxString& domain = NULL) const;
     //@}
 
     /**
         Returns current platform-specific locale name as passed to setlocale().
         Compare GetCanonicalName().
     */
-    wxString GetSysName();
+    wxString GetSysName() const;
 
     /**
         Tries to detect the user's default font encoding.
         Returns wxFontEncoding value or
         @b wxFONTENCODING_SYSTEM if it couldn't be determined.
     */
-    static wxFontEncoding GetSystemEncoding();
+    static wxFontEncoding GetSystemEncoding() const;
 
     /**
         Tries to detect the name of the user's default font encoding. This string isn't
@@ -269,14 +269,14 @@ public:
         Returns a user-readable string value or an empty string if it couldn't be
         determined.
     */
-    static wxString GetSystemEncodingName();
+    static wxString GetSystemEncodingName() const;
 
     /**
         Tries to detect the user's default language setting.
         Returns wxLanguage value or
          @b wxLANGUAGE_UNKNOWN if the language-guessing algorithm failed.
     */
-    static int GetSystemLanguage();
+    static int GetSystemLanguage() const;
 
     //@{
     /**
@@ -374,12 +374,12 @@ public:
         normally corresponds to 'domain' which is more or less the application name.
         See also: AddCatalog()
     */
-    bool IsLoaded(const char* domain);
+    bool IsLoaded(const char* domain) const;
 
     /**
         Returns @true if the locale could be set successfully.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         See @ref overview_languagecodes "list of recognized language constants".
@@ -516,7 +516,7 @@ public:
         or
         @false otherwise.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Currently the following @c _l-functions are available:

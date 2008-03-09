@@ -150,7 +150,7 @@ public:
         reference to it is parent parser it can easily request the file by
         calling
     */
-    wxFileSystem* GetFS();
+    wxFileSystem* GetFS() const;
 
     /**
         Returns product of parsing. Returned value is result of parsing

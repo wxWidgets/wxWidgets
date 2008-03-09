@@ -196,22 +196,22 @@ public:
         Returns @true if an option taking a date value was found and stores the
         value in the provided pointer (which should not be @NULL).
     */
-    bool Found(const wxString& name);
-    bool Found(const wxString& name, wxString* value);
-    bool Found(const wxString& name, long* value);
-    bool Found(const wxString& name, wxDateTime* value);
+    bool Found(const wxString& name) const;
+    const bool Found(const wxString& name, wxString* value) const;
+    const bool Found(const wxString& name, long* value) const;
+    const bool Found(const wxString& name, wxDateTime* value) const;
     //@}
 
     /**
         Returns the value of Nth parameter (as string only).
     */
-    wxString GetParam(size_t n = 0u);
+    wxString GetParam(size_t n = 0u) const;
 
     /**
         Returns the number of parameters found. This function makes sense mostly if you
         had used @c wxCMD_LINE_PARAM_MULTIPLE flag.
     */
-    size_t GetParamCount();
+    size_t GetParamCount() const;
 
     /**
         After calling Parse() (and if it returned 0),

@@ -149,12 +149,12 @@ public:
         @param string
             The string to find.
     */
-    int FindString(const wxString& string);
+    int FindString(const wxString& string) const;
 
     /**
         Returns the number of columns in the radiobox.
     */
-    unsigned int GetColumnCount();
+    unsigned int GetColumnCount() const;
 
     /**
         Returns a radio box item under the point, a zero-based item index, or @c
@@ -163,7 +163,7 @@ public:
         @param pt
             Point in client coordinates.
     */
-    int GetItemFromPoint(const wxPoint pt);
+    int GetItemFromPoint(const wxPoint pt) const;
 
     /**
         Returns the helptext associated with the specified @a item if any or @c
@@ -174,14 +174,14 @@ public:
         
         @see SetItemHelpText()
     */
-    wxString GetItemHelpText(unsigned int item);
+    wxString GetItemHelpText(unsigned int item) const;
 
     /**
         Returns the tooltip associated with the specified @a item if any or @NULL.
         
         @see SetItemToolTip(), wxWindow::GetToolTip
     */
-    wxToolTip* GetItemToolTip(unsigned int item);
+    wxToolTip* GetItemToolTip(unsigned int item) const;
 
     /**
         Returns the radiobox label.
@@ -191,17 +191,17 @@ public:
         
         @see SetLabel()
     */
-    wxString GetLabel();
+    wxString GetLabel() const;
 
     /**
         Returns the number of rows in the radiobox.
     */
-    unsigned int GetRowCount();
+    unsigned int GetRowCount() const;
 
     /**
         Returns the zero-based position of the selected button.
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         Returns the label for the button at the given position.
@@ -209,12 +209,12 @@ public:
         @param n
             The zero-based button position.
     */
-    wxString GetString(unsigned int n);
+    wxString GetString(unsigned int n) const;
 
     /**
         Returns the selected string.
     */
-    wxString GetStringSelection();
+    wxString GetStringSelection() const;
 
     /**
         Returns @true if the item is enabled or @false if it was disabled using
@@ -225,7 +225,7 @@ public:
         @param n
             The zero-based button position.
     */
-    bool IsItemEnabled(unsigned int n);
+    bool IsItemEnabled(unsigned int n) const;
 
     /**
         Returns @true if the item is currently shown or @false if it was hidden
@@ -240,7 +240,7 @@ public:
         @param n
             The zero-based button position.
     */
-    bool IsItemShown(unsigned int n);
+    bool IsItemShown(unsigned int n) const;
 
     /**
         Sets the helptext for an item. Empty string erases any existing helptext.

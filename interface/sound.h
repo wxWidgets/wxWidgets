@@ -58,13 +58,13 @@ public:
         Returns @true if the object contains a successfully loaded file or resource,
         @false otherwise.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Returns @true if a sound is played at the moment.
         This method is currently not implemented under Windows.
     */
-    static bool IsPlaying();
+    static bool IsPlaying() const;
 
     //@{
     /**
@@ -95,8 +95,8 @@ public:
         The static form is shorthand for this code:
     */
     bool Play(unsigned flags = wxSOUND_ASYNC);
-    static bool Play(const wxString& filename,
-                     unsigned flags = wxSOUND_ASYNC);
+    const static bool Play(const wxString& filename,
+                           unsigned flags = wxSOUND_ASYNC);
     //@}
 
     /**

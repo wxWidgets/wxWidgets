@@ -148,7 +148,7 @@ public:
         (together with
         wxDragImage::DoDrawImage) to provide a virtual drawing capability.
     */
-    virtual wxRect GetImageRect(const wxPoint& pos);
+    virtual wxRect GetImageRect(const wxPoint& pos) const;
 
     /**
         Hides the image. You may wish to call this before updating the window
@@ -193,5 +193,5 @@ public:
     */
     bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,
                                  const wxRect& sourceRect,
-                                 const wxRect& destRect);
+                                 const wxRect& destRect) const;
 };

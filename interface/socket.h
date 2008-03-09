@@ -368,12 +368,12 @@ public:
         Returns the socket object to which this event refers to. This makes
         it possible to use the same event handler for different sockets.
     */
-    wxSocketBase* GetSocket();
+    wxSocketBase* GetSocket() const;
 
     /**
         Returns the socket event type.
     */
-    wxSocketNotify GetSocketEvent();
+    wxSocketNotify GetSocketEvent() const;
 };
 
 
@@ -505,18 +505,18 @@ public:
         Use this function to check for an error condition after one of the
         following calls: Discard, Peek, Read, ReadMsg, Unread, Write, WriteMsg.
     */
-    bool Error();
+    bool Error() const;
 
     /**
         Returns a pointer of the client data for this socket, as set with
         SetClientData()
     */
-    void* GetClientData();
+    void* GetClientData() const;
 
     /**
         Returns current IO flags, as set with SetFlags()
     */
-    wxSocketFlags GetFlags();
+    wxSocketFlags GetFlags() const;
 
     /**
         This function returns the local address field of the socket. The local
@@ -525,7 +525,7 @@ public:
         
         @returns @true if no error happened, @false otherwise.
     */
-    bool GetLocal(wxSockAddress& addr);
+    bool GetLocal(wxSockAddress& addr) const;
 
     /**
         This function returns the peer address field of the socket. The peer
@@ -534,7 +534,7 @@ public:
         
         @returns @true if no error happened, @false otherwise.
     */
-    bool GetPeer(wxSockAddress& addr);
+    bool GetPeer(wxSockAddress& addr) const;
 
     /**
         Functions that allow applications to receive socket events.
@@ -570,7 +570,7 @@ public:
     /**
         Returns @true if the socket is connected.
     */
-    bool IsConnected();
+    bool IsConnected() const;
 
     /**
         This function waits until the socket is readable. This might mean that
@@ -579,18 +579,18 @@ public:
         immediately without blocking (unless the @b wxSOCKET_WAITALL flag
         is set, in which case the operation might still block).
     */
-    bool IsData();
+    bool IsData() const;
 
     /**
         Returns @true if the socket is not connected.
     */
-    bool IsDisconnected();
+    bool IsDisconnected() const;
 
     /**
         Returns @true if the socket is initialized and ready and @false in other
         cases.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Returns the number of bytes read or written by the last IO call.
@@ -598,7 +598,7 @@ public:
         after using one of the following IO calls: Discard, Peek, Read,
         ReadMsg, Unread, Write, WriteMsg.
     */
-    wxUint32 LastCount();
+    wxUint32 LastCount() const;
 
     /**
         Returns the last wxSocket error. See @ref overview_wxsocketbase "wxSocket
@@ -610,7 +610,7 @@ public:
         if the last IO call failed. If this returns @true, use LastError
         to discover the cause of the error.
     */
-    wxSocketError LastError();
+    wxSocketError LastError() const;
 
     /**
         According to the @a notify value, this function enables

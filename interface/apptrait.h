@@ -73,7 +73,7 @@ public:
         to figure out, which desktop environment is running. The method
         returns an empty string otherwise and on all other platforms.
     */
-    virtual wxString GetDesktopEnvironment();
+    virtual wxString GetDesktopEnvironment() const;
 
     /**
         Returns the wxStandardPaths object for the application.
@@ -105,7 +105,7 @@ public:
         Returns @true if the library was built as wxUniversal. Always returns
         @false for wxBase-only apps.
     */
-    bool IsUsingUniversalWidgets();
+    bool IsUsingUniversalWidgets() const;
 
     /**
         Shows the assert dialog with the specified message in GUI mode or just prints

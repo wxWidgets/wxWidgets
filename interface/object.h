@@ -51,7 +51,7 @@ public:
         When this goes to zero during a DecRef() call, the object
         will auto-free itself.
     */
-    int GetRefCount();
+    int GetRefCount() const;
 
     /**
         Increments the reference count associated with this shared data.
@@ -132,7 +132,7 @@ public:
         @see Ref(), UnRef(), wxObject::m_refData, SetRefData(),
              wxObjectRefData
     */
-    wxObjectRefData* GetRefData();
+    wxObjectRefData* GetRefData() const;
 
     /**
         Determines whether this class is a subclass of (or the same class as)
@@ -256,7 +256,7 @@ public:
         been declared
         dynamically creatable (typically, it is an abstract class).
     */
-    wxObject* CreateObject();
+    wxObject* CreateObject() const;
 
     /**
         Finds the wxClassInfo object for a class of the given string name.
@@ -266,22 +266,22 @@ public:
     /**
         Returns the name of the first base class (@NULL if none).
     */
-    wxChar* GetBaseClassName1();
+    wxChar* GetBaseClassName1() const;
 
     /**
         Returns the name of the second base class (@NULL if none).
     */
-    wxChar* GetBaseClassName2();
+    wxChar* GetBaseClassName2() const;
 
     /**
         Returns the string form of the class name.
     */
-    wxChar* GetClassName();
+    wxChar* GetClassName() const;
 
     /**
         Returns the size of the class.
     */
-    int GetSize();
+    int GetSize() const;
 
     /**
         Initializes pointers in the wxClassInfo objects for fast execution
@@ -292,7 +292,7 @@ public:
     /**
         Returns @true if this class info can create objects of the associated class.
     */
-    bool IsDynamic();
+    bool IsDynamic() const;
 
     /**
         Returns @true if this class is a kind of (inherits from) the given class.
@@ -347,7 +347,7 @@ public:
         Gets a pointer to the reference counted object to which
         this class points.
     */
-    T* get();
+    T* get() const;
 
     /**
         Conversion to a boolean expression (in a variant which is not
@@ -355,20 +355,20 @@ public:
         contains a valid pointer it will return @e @true, if it contains
         a @NULL pointer it will return @e @false.
     */
-    operator unspecified_bool_type();
+    operator unspecified_bool_type() const;
 
     /**
         Returns a reference to the object. If the internal pointer is @NULL
         this method will cause an assert in debug mode.
     */
-    T operator*();
+    T operator*() const;
 
     /**
         Returns a pointer to the reference counted object to which
         this class points. If this the internal pointer is @NULL,
         this method will assert in debug mode.
     */
-    T* operator-();
+    T* operator-() const;
 
     //@{
     /**

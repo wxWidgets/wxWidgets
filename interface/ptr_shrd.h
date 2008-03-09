@@ -40,7 +40,7 @@ public:
     /**
         Returns pointer to its object or @NULL.
     */
-    T* get();
+    T* get() const;
 
     /**
         Conversion to a boolean expression (in a variant which is not
@@ -48,18 +48,18 @@ public:
         contains a valid pointer it will return @e @true, if it contains
         a @NULL pointer it will return @e @false.
     */
-    operator unspecified_bool_type();
+    operator unspecified_bool_type() const;
 
     /**
         Returns a reference to the object. If the internal pointer is @NULL this
         method will cause an assert in debug mode.
     */
-    T operator*();
+    T operator*() const;
 
     /**
         Returns pointer to its object or @NULL.
     */
-    T* operator-();
+    T* operator-() const;
 
     /**
         Assignment operator. Releases any previously held pointer
@@ -76,10 +76,10 @@ public:
     /**
         Returns @true if this is the only pointer pointing to its object.
     */
-    bool unique();
+    bool unique() const;
 
     /**
         Returns the number of pointers pointing to its object.
     */
-    long use_count();
+    long use_count() const;
 };

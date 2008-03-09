@@ -90,7 +90,7 @@ public:
     /**
         Returns @true if the stream is initialized and ready.
     */
-    bool IsOk();
+    bool IsOk() const;
 };
 
 
@@ -133,7 +133,7 @@ public:
     /**
         Returns @true if the stream is initialized and ready.
     */
-    bool IsOk();
+    bool IsOk() const;
 };
 
 
@@ -176,7 +176,7 @@ public:
     /**
         Returns @true if the stream is initialized and ready.
     */
-    bool IsOk();
+    bool IsOk() const;
 };
 
 
@@ -221,7 +221,7 @@ public:
     /**
         Returns @true if the stream is initialized and ready.
     */
-    bool IsOk();
+    bool IsOk() const;
 };
 
 

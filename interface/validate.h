@@ -60,12 +60,12 @@ public:
         data.
         This base function returns @NULL.
     */
-    virtual wxObject* Clone();
+    virtual wxObject* Clone() const;
 
     /**
         Returns the window associated with the validator.
     */
-    wxWindow* GetWindow();
+    wxWindow* GetWindow() const;
 
     /**
         This functions switches on or turns off the error sound produced by the

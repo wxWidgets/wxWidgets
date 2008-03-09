@@ -135,7 +135,7 @@ public:
     /**
         Returns the help controller associated with this help provider.
     */
-    wxHelpControllerBase* GetHelpController();
+    wxHelpControllerBase* GetHelpController() const;
 
     /**
         Sets the help controller associated with this help provider.

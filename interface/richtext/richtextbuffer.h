@@ -60,7 +60,7 @@ public:
         Returns @true if the buffer is currently collapsing commands into a single
         notional command.
     */
-    bool BatchingUndo();
+    bool BatchingUndo() const;
 
     /**
         Begins using alignment.
@@ -224,7 +224,7 @@ public:
     /**
         Returns @true if content can be pasted from the clipboard.
     */
-    bool CanPasteFromClipboard();
+    bool CanPasteFromClipboard() const;
 
     /**
         Cleans up the file handlers.
@@ -258,7 +258,7 @@ public:
     /**
         Clones the object.
     */
-    wxRichTextObject* Clone();
+    wxRichTextObject* Clone() const;
 
     /**
         Copies the given buffer.
@@ -416,26 +416,26 @@ public:
         only affects the style currently being applied (for example, setting the default
         style to bold will cause subsequently inserted text to be bold).
     */
-    const wxTextAttr GetBasicStyle();
+    const wxTextAttr GetBasicStyle() const;
 
     /**
         Gets the collapsed command.
     */
-    wxRichTextCommand* GetBatchedCommand();
+    wxRichTextCommand* GetBatchedCommand() const;
 
     /**
         Gets the command processor. A text buffer always creates its own command
         processor when it is
         initialized.
     */
-    wxCommandProcessor* GetCommandProcessor();
+    wxCommandProcessor* GetCommandProcessor() const;
 
     /**
         Returns the current default style, affecting the style currently being applied
         (for example, setting the default
         style to bold will cause subsequently inserted text to be bold).
     */
-    const wxTextAttr GetDefaultStyle();
+    const wxTextAttr GetDefaultStyle() const;
 
     /**
         Gets a wildcard incorporating all visible handlers. If @a types is present,
@@ -501,12 +501,12 @@ public:
     /**
         Returns the current style sheet associated with the buffer, if any.
     */
-    wxRichTextStyleSheet* GetStyleSheet();
+    wxRichTextStyleSheet* GetStyleSheet() const;
 
     /**
         Get the size of the style stack, for example to check correct nesting.
     */
-    size_t GetStyleStackSize();
+    size_t GetStyleStackSize() const;
 
     /**
         Gets the attributes at the given position.
@@ -568,7 +568,7 @@ public:
     /**
         Returns @true if the buffer has been modified.
     */
-    bool IsModified();
+    bool IsModified() const;
 
     //@{
     /**
@@ -767,7 +767,7 @@ public:
     /**
         Returns @true if undo suppression is currently on.
     */
-    bool SuppressingUndo();
+    bool SuppressingUndo() const;
 };
 
 
@@ -796,17 +796,17 @@ public:
         filename. By default,
         this function checks the extension.
     */
-    bool CanHandle(const wxString& filename);
+    bool CanHandle(const wxString& filename) const;
 
     /**
         Override and return @true if this handler can load content.
     */
-    bool CanLoad();
+    bool CanLoad() const;
 
     /**
         Override and return @true if this handler can save content.
     */
-    bool CanSave();
+    bool CanSave() const;
 
     /**
         Override to load content from @a stream into @e buffer.
@@ -821,34 +821,34 @@ public:
     /**
         Returns the encoding associated with the handler (if any).
     */
-    const wxString GetEncoding();
+    const wxString GetEncoding() const;
 
     /**
         Returns the extension associated with the handler.
     */
-    wxString GetExtension();
+    wxString GetExtension() const;
 
     /**
         Returns flags that change the behaviour of loading or saving. See the
         documentation for each
         handler class to see what flags are relevant for each handler.
     */
-    int GetFlags();
+    int GetFlags() const;
 
     /**
         Returns the name of the handler.
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Returns the type of the handler.
     */
-    int GetType();
+    int GetType() const;
 
     /**
         Returns @true if this handler should be visible to the user.
     */
-    bool IsVisible();
+    bool IsVisible() const;
 
     //@{
     /**
@@ -941,7 +941,7 @@ public:
         Returns @true if the given position is within this range. Does not
         match if the range is empty.
     */
-    bool Contains(long pos);
+    bool Contains(long pos) const;
 
     /**
         Converts the internal range, which uses the first and last character positions
@@ -950,32 +950,32 @@ public:
         range.
         In other words, one is added to the end position.
     */
-    wxRichTextRange FromInternal();
+    wxRichTextRange FromInternal() const;
 
     /**
         Returns the end position.
     */
-    long GetEnd();
+    long GetEnd() const;
 
     /**
         Returns the length of the range.
     */
-    long GetLength();
+    long GetLength() const;
 
     /**
         Returns the start of the range.
     */
-    long GetStart();
+    long GetStart() const;
 
     /**
         Returns @true if this range is completely outside @e range.
     */
-    bool IsOutside(const wxRichTextRange& range);
+    bool IsOutside(const wxRichTextRange& range) const;
 
     /**
         Returns @true if this range is completely within @e range.
     */
-    bool IsWithin(const wxRichTextRange& range);
+    bool IsWithin(const wxRichTextRange& range) const;
 
     /**
         Limits this range to be within @e range.
@@ -1009,17 +1009,17 @@ public:
         range.
         In other words, one is subtracted from the end position.
     */
-    wxRichTextRange ToInternal();
+    wxRichTextRange ToInternal() const;
 
     /**
         Adds @a range to this range.
     */
-    wxRichTextRange operator+(const wxRichTextRange& range);
+    wxRichTextRange operator+(const wxRichTextRange& range) const;
 
     /**
         Subtracts @a range from this range.
     */
-    wxRichTextRange operator-(const wxRichTextRange& range);
+    wxRichTextRange operator-(const wxRichTextRange& range) const;
 
     /**
         Assigns @a range to this range.
@@ -1029,5 +1029,5 @@ public:
     /**
         Returns @true if @a range is the same as this range.
     */
-    bool operator==(const wxRichTextRange& range);
+    bool operator==(const wxRichTextRange& range) const;
 };

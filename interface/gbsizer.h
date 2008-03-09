@@ -31,12 +31,12 @@ public:
     /**
         Get the current column value.
     */
-    int GetCol();
+    int GetCol() const;
 
     /**
         Get the current row value.
     */
-    int GetRow();
+    int GetRow() const;
 
     /**
         Set a new column value.
@@ -51,12 +51,12 @@ public:
     /**
         Is the wxGBPosition valid?  (An invalid wxGBPosition is (-1,-1). )
     */
-    bool operator!(const wxGBPosition& p);
+    bool operator!(const wxGBPosition& p) const;
 
     /**
         Compare equality of two wxGBPositions.
     */
-    bool operator operator==(const wxGBPosition& p);
+    bool operator operator==(const wxGBPosition& p) const;
 };
 
 
@@ -160,12 +160,12 @@ public:
         Get the size of the specified cell, including hgap and vgap. Only
         valid after a Layout.
     */
-    wxSize GetCellSize(int row, int col);
+    wxSize GetCellSize(int row, int col) const;
 
     /**
         Get the size used for cells in the grid with no item.
     */
-    wxSize GetEmptyCellSize();
+    wxSize GetEmptyCellSize() const;
 
     //@{
     /**
@@ -265,16 +265,16 @@ public:
     /**
         Get the grid position of the item.
     */
-    wxGBPosition GetPos();
-    void GetPos(int& row, int& col);
+    wxGBPosition GetPos() const;
+    const void GetPos(int& row, int& col) const;
     //@}
 
     //@{
     /**
         Get the row and column spanning of the item.
     */
-    wxGBSpan GetSpan();
-    void GetSpan(int& rowspan, int& colspan);
+    wxGBSpan GetSpan() const;
+    const void GetSpan(int& rowspan, int& colspan) const;
     //@}
 
     //@{
@@ -330,12 +330,12 @@ public:
     /**
         Get the current colspan value.
     */
-    int GetColspan();
+    int GetColspan() const;
 
     /**
         Get the current rowspan value.
     */
-    int GetRowspan();
+    int GetRowspan() const;
 
     /**
         Set a new colspan value.
@@ -350,10 +350,10 @@ public:
     /**
         Is the wxGBSpan valid?  (An invalid wxGBSpan is (-1,-1). )
     */
-    bool operator!(const wxGBSpan& o);
+    bool operator!(const wxGBSpan& o) const;
 
     /**
         Compare equality of two wxGBSpans.
     */
-    bool operator operator==(const wxGBSpan& o);
+    bool operator operator==(const wxGBSpan& o) const;
 };

@@ -117,7 +117,7 @@ public:
         
         @see SetLabel()
     */
-    wxString GetLabel();
+    wxString GetLabel() const;
 
     /**
         This sets the button to be the default item for the panel or dialog

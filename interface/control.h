@@ -37,7 +37,7 @@ public:
         any, use GetLabelText() if they are
         undesired.
     */
-    wxString GetLabel();
+    wxString GetLabel() const;
 
     //@{
     /**
@@ -45,7 +45,7 @@ public:
         version, without the mnemonics characters.
     */
     const wxString GetLabelText();
-    static wxString GetLabelText(const wxString& label);
+    const static wxString  GetLabelText(const wxString& label);
     //@}
 
     /**

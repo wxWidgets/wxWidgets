@@ -61,7 +61,7 @@ public:
         
         @see wxFileConfig
     */
-    wxString GetConfigDir();
+    wxString GetConfigDir() const;
 
     /**
         Return the location of the applications global, i.e. not user-specific,
@@ -73,7 +73,7 @@ public:
         
         @see GetLocalDataDir()
     */
-    wxString GetDataDir();
+    wxString GetDataDir() const;
 
     /**
         Return the directory containing the current user's documents.
@@ -83,7 +83,7 @@ public:
              Mac: @c ~/Documents
         This function is new since wxWidgets version 2.7.0
     */
-    wxString GetDocumentsDir();
+    wxString GetDocumentsDir() const;
 
     /**
         Return the directory and the filename for the current executable.
@@ -92,7 +92,7 @@ public:
              Windows: @c C:\Programs\AppFolder\exename.exe
              Mac: @c /Programs/exename
     */
-    wxString GetExecutablePath();
+    wxString GetExecutablePath() const;
 
     /**
         @b Note: This function is only available under Unix.
@@ -103,7 +103,7 @@ public:
         value, otherwise tries to determine it automatically (Linux only right
         now) and finally returns the default @c /usr/local value if it failed.
     */
-    wxString GetInstallPrefix();
+    wxString GetInstallPrefix() const;
 
     /**
         Return the location for application data files which are host-specific and
@@ -111,7 +111,7 @@ public:
         This is the same as GetDataDir() except
         under Unix where it returns @c /etc/@e appname.
     */
-    wxString GetLocalDataDir();
+    wxString GetLocalDataDir() const;
 
     /**
         Return the localized resources directory containing the resource files of the
@@ -124,7 +124,7 @@ public:
         This function is new since wxWidgets version 2.7.0
     */
     wxString GetLocalizedResourcesDir(const wxString& lang,
-                                      ResourceCat category = ResourceCat_None);
+                                      ResourceCat category = ResourceCat_None) const;
 
     /**
         Return the directory where the loadable modules (plugins) live.
@@ -135,7 +135,7 @@ public:
         
         @see wxDynamicLibrary
     */
-    wxString GetPluginsDir();
+    wxString GetPluginsDir() const;
 
     /**
         Return the directory where the application resource files are located. The
@@ -151,7 +151,7 @@ public:
         
         @see GetLocalizedResourcesDir()
     */
-    wxString GetResourcesDir();
+    wxString GetResourcesDir() const;
 
     /**
         Return the directory for storing temporary files. To create unique temporary
@@ -160,7 +160,7 @@ public:
         multiple processes are attempting to create temporary files.
         This function is new since wxWidgets version 2.7.2
     */
-    wxString GetTempDir();
+    wxString GetTempDir() const;
 
     /**
         Return the directory for the user config files:
@@ -171,7 +171,7 @@ public:
         directory, otherwise GetUserDataDir() is
         more appropriate.
     */
-    wxString GetUserConfigDir();
+    wxString GetUserConfigDir() const;
 
     /**
         Return the directory for the user-dependent application data files:
@@ -180,7 +180,7 @@ public:
         appname
              Mac: @c ~/Library/Application Support/@e appname
     */
-    wxString GetUserDataDir();
+    wxString GetUserDataDir() const;
 
     /**
         Return the directory for user data files which shouldn't be shared with
@@ -190,7 +190,7 @@ public:
         @c C:\Documents and Settings\@e username\Local Settings\Application Data\@e
         appname
     */
-    wxString GetUserLocalDataDir();
+    wxString GetUserLocalDataDir() const;
 
     /**
         @b Note: This function is only available under Unix.

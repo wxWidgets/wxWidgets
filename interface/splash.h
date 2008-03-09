@@ -65,17 +65,17 @@ public:
         Returns the splash style (see wxSplashScreen() for
         details).
     */
-    long GetSplashStyle();
+    long GetSplashStyle() const;
 
     /**
         Returns the window used to display the bitmap.
     */
-    wxSplashScreenWindow* GetSplashWindow();
+    wxSplashScreenWindow* GetSplashWindow() const;
 
     /**
         Returns the timeout in milliseconds.
     */
-    int GetTimeout();
+    int GetTimeout() const;
 
     /**
         Reimplement this event handler if you want to set an application variable on

@@ -119,13 +119,13 @@ public:
         @returns @false if no range limits are currently set, @true if at least one
                  bound is set.
     */
-    bool GetRange(wxDateTime* dt1, wxDateTime dt2);
+    bool GetRange(wxDateTime* dt1, wxDateTime dt2) const;
 
     /**
         Returns the currently selected. If there is no selection or the selection is
         outside of the current range, an invalid object is returned.
     */
-    wxDateTime GetValue();
+    wxDateTime GetValue() const;
 
     /**
         Please note that this function is only available in the generic version of this

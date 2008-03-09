@@ -115,12 +115,12 @@ public:
     /**
         Returns actual text colour.
     */
-    const wxColour GetActualColor();
+    const wxColour GetActualColor() const;
 
     /**
         Returns default horizontal alignment.
     */
-    int GetAlign();
+    int GetAlign() const;
 
     /**
         Returns (average) char height in standard font. It is used as DC-independent
@@ -128,7 +128,7 @@ public:
         @b Note: This function doesn't return the @e actual height. If you want to
         know the height of the current font, call @c GetDC - GetCharHeight().
     */
-    int GetCharHeight();
+    int GetCharHeight() const;
 
     /**
         Returns average char width in standard font. It is used as DC-independent
@@ -136,13 +136,13 @@ public:
         @b Note: This function doesn't return the @e actual width. If you want to
         know the height of the current font, call @c GetDC - GetCharWidth()
     */
-    int GetCharWidth();
+    int GetCharWidth() const;
 
     /**
         Returns pointer to the currently opened container (see Overview).
         Common use:
     */
-    wxHtmlContainerCell* GetContainer();
+    wxHtmlContainerCell* GetContainer() const;
 
     /**
         Returns pointer to the DC used during parsing.
@@ -154,42 +154,42 @@ public:
         to do conversion between @ref getinputencoding() "input encoding"
         and @ref getoutputencoding() "output encoding".
     */
-    wxEncodingConverter* GetEncodingConverter();
+    wxEncodingConverter* GetEncodingConverter() const;
 
     /**
         Returns @true if actual font is bold, @false otherwise.
     */
-    int GetFontBold();
+    int GetFontBold() const;
 
     /**
         Returns actual font face name.
     */
-    wxString GetFontFace();
+    wxString GetFontFace() const;
 
     /**
         Returns @true if actual font is fixed face, @false otherwise.
     */
-    int GetFontFixed();
+    int GetFontFixed() const;
 
     /**
         Returns @true if actual font is italic, @false otherwise.
     */
-    int GetFontItalic();
+    int GetFontItalic() const;
 
     /**
         Returns actual font size (HTML size varies from -2 to +4)
     */
-    int GetFontSize();
+    int GetFontSize() const;
 
     /**
         Returns @true if actual font is underlined, @false otherwise.
     */
-    int GetFontUnderlined();
+    int GetFontUnderlined() const;
 
     /**
         Returns input encoding.
     */
-    wxFontEncoding GetInputEncoding();
+    wxFontEncoding GetInputEncoding() const;
 
     /**
         Returns actual hypertext link. (This value has a non-empty
@@ -197,18 +197,18 @@ public:
         if the parser is between @c A and @c /A tags,
         wxEmptyString otherwise.)
     */
-    const wxHtmlLinkInfo GetLink();
+    const wxHtmlLinkInfo GetLink() const;
 
     /**
         Returns the colour of hypertext link text.
     */
-    const wxColour GetLinkColor();
+    const wxColour GetLinkColor() const;
 
     /**
         Returns output encoding, i.e. closest match to document's input encoding
         that is supported by operating system.
     */
-    wxFontEncoding GetOutputEncoding();
+    wxFontEncoding GetOutputEncoding() const;
 
     /**
         Returns associated window (wxHtmlWindow). This may be @NULL! (You should always

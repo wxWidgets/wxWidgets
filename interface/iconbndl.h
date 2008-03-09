@@ -52,22 +52,22 @@ public:
     /**
         Same as GetIcon( wxSize( size, size ) ).
     */
-    wxIcon GetIcon(const wxSize& size);
-    wxIcon GetIcon(wxCoord size = -1);
+    wxIcon GetIcon(const wxSize& size) const;
+    const wxIcon  GetIcon(wxCoord size = -1) const;
     //@}
 
     /**
         Returns the icon with exactly the given size or @c wxNullIcon if this
         size is not available.
     */
-    wxIcon GetIconOfExactSize(const wxSize& size);
+    wxIcon GetIconOfExactSize(const wxSize& size) const;
 
     /**
         Returns @true if the bundle doesn't contain any icons, @false otherwise (in
         which case a call to GetIcon() with default
         parameter should return a valid icon).
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".

@@ -28,7 +28,7 @@ public:
     /**
         Returns the URL of the hyperlink where the user has just clicked.
     */
-    wxString GetURL();
+    wxString GetURL() const;
 
     /**
         Sets the URL associated with the event.
@@ -114,25 +114,25 @@ public:
         Returns the colour used to print the label of the hyperlink when the mouse is
         over the control.
     */
-    wxColour GetHoverColour();
+    wxColour GetHoverColour() const;
 
     /**
         Returns the colour used to print the label when the link has never been clicked
         before
         (i.e. the link has not been @e visited) and the mouse is not over the control.
     */
-    wxColour GetNormalColour();
+    wxColour GetNormalColour() const;
 
     /**
         Returns the URL associated with the hyperlink.
     */
-    wxString GetURL();
+    wxString GetURL() const;
 
     /**
         Returns @true if the hyperlink has already been clicked by the user at least
         one time.
     */
-    bool GetVisited();
+    bool GetVisited() const;
 
     /**
         Returns the colour used to print the label when the mouse is not over the
@@ -140,7 +140,7 @@ public:
         and the link has already been clicked before (i.e. the link has been @e
         visited).
     */
-    wxColour GetVisitedColour();
+    wxColour GetVisitedColour() const;
 
     /**
         Sets the colour used to print the label of the hyperlink when the mouse is over

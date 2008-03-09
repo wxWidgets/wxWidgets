@@ -300,7 +300,7 @@ public:
         not base, class, to detect mismatches between the renderers versions and so you
         have to implement it anew in all renderers.
     */
-    wxRendererVersion GetVersion();
+    wxRendererVersion GetVersion() const;
 
     /**
         Load the renderer from the specified DLL, the returned pointer must be

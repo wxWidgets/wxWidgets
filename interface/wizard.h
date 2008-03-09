@@ -53,7 +53,7 @@ public:
         The only cases when you would want to override this function is if the page
         bitmap depends dynamically on the user choices, i.e. almost never.
     */
-    wxBitmap GetBitmap();
+    wxBitmap GetBitmap() const;
 
     /**
         Get the page which should be shown when the user chooses the @c "Next"
@@ -63,7 +63,7 @@ public:
         
         @see GetPrev()
     */
-    wxWizardPage* GetNext();
+    wxWizardPage* GetNext() const;
 
     /**
         Get the page which should be shown when the user chooses the @c "Back"
@@ -73,7 +73,7 @@ public:
         
         @see GetNext()
     */
-    wxWizardPage* GetPrev();
+    wxWizardPage* GetPrev() const;
 };
 
 
@@ -108,13 +108,13 @@ public:
         we came from the previous page and @false if we returned from the next
         one.
     */
-    bool GetDirection();
+    bool GetDirection() const;
 
     /**
         Returns the wxWizardPage which was active when this
         event was generated.
     */
-    wxWizardPage* GetPage();
+    wxWizardPage* GetPage() const;
 };
 
 
@@ -290,7 +290,7 @@ public:
     /**
         Returns the bitmap used for the wizard.
     */
-    const wxBitmap GetBitmap();
+    const wxBitmap GetBitmap() const;
 
     /**
         Returns the colour that should be used to fill the area not taken up by the
@@ -298,7 +298,7 @@ public:
         if a non-zero bitmap placement flag has been set.
         See also SetBitmapPlacement().
     */
-    const wxColour GetBitmapBackgroundColour();
+    const wxColour GetBitmapBackgroundColour() const;
 
     /**
         Returns the flags indicating how the wizard or page bitmap should be expanded
@@ -312,7 +312,7 @@ public:
         Get the current page while the wizard is running. @NULL is returned if
         RunWizard() is not being executed now.
     */
-    wxWizardPage* GetCurrentPage();
+    wxWizardPage* GetCurrentPage() const;
 
     /**
         Returns the minimum width for the bitmap that will be constructed to contain
@@ -320,7 +320,7 @@ public:
         if a non-zero bitmap placement flag has been set.
         See also SetBitmapPlacement().
     */
-    int GetMinimumBitmapWidth();
+    int GetMinimumBitmapWidth() const;
 
     /**
         Returns pointer to page area sizer. The wizard is laid out using sizers and
@@ -350,12 +350,12 @@ public:
         Adding pages to the page area sizer affects the default border width around page
         area that can be altered with SetBorder().
     */
-    virtual wxSizer* GetPageAreaSizer();
+    virtual wxSizer* GetPageAreaSizer() const;
 
     /**
         Returns the size available for the pages.
     */
-    wxSize GetPageSize();
+    wxSize GetPageSize() const;
 
     /**
         Return @true if this page is not the last one in the wizard. The base

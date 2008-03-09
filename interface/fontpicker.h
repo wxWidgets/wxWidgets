@@ -91,13 +91,13 @@ public:
     /**
         Returns the maximum point size value allowed for the user-chosen font.
     */
-    unsigned int GetMaxPointSize();
+    unsigned int GetMaxPointSize() const;
 
     /**
         Returns the currently selected font.
         Note that this function is completely different from wxWindow::GetFont.
     */
-    wxFont GetSelectedFont();
+    wxFont GetSelectedFont() const;
 
     /**
         Sets the maximum point size value allowed for the user-chosen font.
@@ -144,7 +144,7 @@ public:
     /**
         Retrieve the font the user has just selected.
     */
-    wxFont GetFont();
+    wxFont GetFont() const;
 
     /**
         Set the font associated with the event.

@@ -35,27 +35,27 @@ public:
         @returns @true if the load address and module size were retrieved, @false
                  if this information is not available.
     */
-    bool GetAddress(void** addr, size_t len);
+    bool GetAddress(void** addr, size_t len) const;
 
     /**
         Returns the base name of this module, e.g. @c kernel32.dll or
         @c libc-2.3.2.so.
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Returns the full path of this module if available, e.g.
         @c c:\windows\system32\kernel32.dll or
         @c /lib/libc-2.3.2.so.
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         Returns the version of this module, e.g. @c 5.2.3790.0 or
         @c 2.3.2. The returned string is empty if the version information is not
         available.
     */
-    wxString GetVersion();
+    wxString GetVersion() const;
 };
 
 
@@ -271,7 +271,7 @@ public:
         
         @see wxDYNLIB_FUNCTION
     */
-    void* GetSymbol(const wxString& name);
+    void* GetSymbol(const wxString& name) const;
 
     /**
         This function is available only under Windows as it is only useful when
@@ -282,7 +282,7 @@ public:
         automatically depending on the current build. Otherwise, this method is
         identical to GetSymbol().
     */
-    void* GetSymbolAorW(const wxString& name);
+    void* GetSymbolAorW(const wxString& name) const;
 
     /**
         Returns @true if the symbol with the given @a name is present in the dynamic
@@ -290,12 +290,12 @@ public:
         this function doesn't log an error message if the symbol is not found.
         This function is new since wxWidgets version 2.5.4
     */
-    bool HasSymbol(const wxString& name);
+    bool HasSymbol(const wxString& name) const;
 
     /**
         Returns @true if the library was successfully loaded, @false otherwise.
     */
-    bool IsLoaded();
+    bool IsLoaded() const;
 
     /**
         This static method returns an array containing the details

@@ -86,17 +86,17 @@ public:
     /**
         Gets maximal allowable value.
     */
-    int GetMax();
+    int GetMax() const;
 
     /**
         Gets minimal allowable value.
     */
-    int GetMin();
+    int GetMin() const;
 
     /**
         Gets the value of the spin control.
     */
-    int GetValue();
+    int GetValue() const;
 
     /**
         Sets range of allowable values.

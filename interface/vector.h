@@ -45,7 +45,7 @@ public:
         Returns item at position @e idx.
     */
     const value_type at(size_type idx);
-    value_type at(size_type idx);
+    const value_type at(size_type idx);
     //@}
 
     //@{
@@ -53,7 +53,7 @@ public:
         Return last item.
     */
     const value_type back();
-    value_type back();
+    const value_type back();
     //@}
 
     //@{
@@ -61,13 +61,13 @@ public:
         Return iterator to beginning of the vector.
     */
     const_iterator begin();
-    iterator begin();
+    const iterator begin();
     //@}
 
     /**
         
     */
-    size_type capacity();
+    size_type capacity() const;
 
     /**
         Clears the vector.
@@ -77,14 +77,14 @@ public:
     /**
         Returns @true if the vector is empty.
     */
-    bool empty();
+    bool empty() const;
 
     //@{
     /**
         Returns iterator to the end of the vector.
     */
     const_iterator end();
-    iterator end();
+    const iterator end();
     //@}
 
     //@{
@@ -102,7 +102,7 @@ public:
         Returns first item.
     */
     const value_type front();
-    value_type front();
+    const value_type front();
     //@}
 
     /**
@@ -123,7 +123,7 @@ public:
         Returns item at position @e idx.
     */
     const value_type operator[](size_type idx);
-    value_type operator[](size_type idx);
+    const value_type operator[](size_type idx);
     //@}
 
     /**

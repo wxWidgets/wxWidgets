@@ -104,12 +104,12 @@ public:
     /**
         Returns array with indexes of selected items.
     */
-    wxArrayInt GetSelection();
+    wxArrayInt GetSelection() const;
 
     /**
         Sets selected items from the array of selected items' indexes.
     */
-    void SetSelections(const wxArrayInt& selections);
+    void SetSelections(const wxArrayInt& selections) const;
 
     /**
         Shows the dialog, returning either wxID_OK or wxID_CANCEL.
@@ -222,22 +222,22 @@ public:
     /**
         Returns the index of selected item.
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         Returns the client data associated with the selection.
     */
-    char* GetSelectionClientData();
+    char* GetSelectionClientData() const;
 
     /**
         Returns the selected string.
     */
-    wxString GetStringSelection();
+    wxString GetStringSelection() const;
 
     /**
         Sets the index of the initially selected item.
     */
-    void SetSelection(int selection);
+    void SetSelection(int selection) const;
 
     /**
         Shows the dialog, returning either wxID_OK or wxID_CANCEL.

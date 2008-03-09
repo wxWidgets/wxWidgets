@@ -123,33 +123,33 @@ public:
         to the clipboard.
         Only available on Windows.
     */
-    bool CanCopy();
+    bool CanCopy() const;
 
     /**
         Returns @true if the combobox is editable and there is a text selection to copy
         to the clipboard.
         Only available on Windows.
     */
-    bool CanCut();
+    bool CanCut() const;
 
     /**
         Returns @true if the combobox is editable and there is text on the clipboard
         that can be pasted into the
         text field. Only available on Windows.
     */
-    bool CanPaste();
+    bool CanPaste() const;
 
     /**
         Returns @true if the combobox is editable and the last undo can be redone.
         Only available on Windows.
     */
-    bool CanRedo();
+    bool CanRedo() const;
 
     /**
         Returns @true if the combobox is editable and the last edit can be undone.
         Only available on Windows.
     */
-    bool CanUndo();
+    bool CanUndo() const;
 
     /**
         Copies the selected text to the clipboard.
@@ -191,19 +191,19 @@ public:
         returns the item currently selected in the dropdown list if it's open or the
         same thing as wxControlWithItems::GetSelection otherwise.
     */
-    int GetCurrentSelection();
+    int GetCurrentSelection() const;
 
     /**
         Returns the insertion point for the combobox's text field.
         @b Note: Under wxMSW, this function always returns 0 if the combobox
         doesn't have the focus.
     */
-    long GetInsertionPoint();
+    long GetInsertionPoint() const;
 
     /**
         Returns the last position in the combobox text field.
     */
-    virtual wxTextPos GetLastPosition();
+    virtual wxTextPos GetLastPosition() const;
 
     /**
         This is the same as wxTextCtrl::GetSelection
@@ -211,12 +211,12 @@ public:
         different method from wxControlWithItems::GetSelection.
         Currently this method is only implemented in wxMSW and wxGTK.
     */
-    void GetSelection(long* from, long* to);
+    void GetSelection(long* from, long* to) const;
 
     /**
         Returns the current value in the combobox text field.
     */
-    wxString GetValue();
+    wxString GetValue() const;
 
     /**
         Pastes text from the clipboard to the text field.

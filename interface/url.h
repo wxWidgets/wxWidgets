@@ -78,7 +78,7 @@ public:
         
         An error occurred during negotiation.
     */
-    wxURLError GetError();
+    wxURLError GetError() const;
 
     /**
         Creates a new input stream on the specified URL. You can use all but seek
@@ -104,7 +104,7 @@ public:
         Returns @true if this object is correctly initialized, i.e. if
         GetError() returns @c wxURL_NOERR.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Sets the default proxy server to use to get the URL. The string specifies

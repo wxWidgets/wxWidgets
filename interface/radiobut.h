@@ -102,7 +102,7 @@ public:
     /**
         Returns @true if the radio button is depressed, @false otherwise.
     */
-    bool GetValue();
+    bool GetValue() const;
 
     /**
         Sets the radio button to selected or deselected status. This does not cause a

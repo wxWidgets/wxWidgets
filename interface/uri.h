@@ -54,7 +54,7 @@ public:
         the URI that is returned from Get is the same one
         passed to Create.
     */
-    wxString BuildURI();
+    wxString BuildURI() const;
 
     /**
         Builds the URI from its individual components, adds proper separators, and
@@ -62,7 +62,7 @@ public:
         Note that it is preferred to call this over Unescape(BuildURI()) since
         BuildUnescapedURI() performs some optimizations over the plain method.
     */
-    wxString BuildUnescapedURI();
+    wxString BuildUnescapedURI() const;
 
     /**
         Creates this URI from the string
@@ -91,7 +91,7 @@ public:
         of the URI.
         @c http://mysite.com/mypath#fragment
     */
-    const wxString GetFragment();
+    const wxString GetFragment() const;
 
     /**
         Obtains the host type of this URI, which is of type
@@ -113,7 +113,7 @@ public:
         
         Server is an IP address, but not versions 4 or 6
     */
-    const HostType GetHostType();
+    const HostType GetHostType() const;
 
     /**
         Returns the password part of the userinfo component of
@@ -121,7 +121,7 @@ public:
         RFC 1396 and should generally be avoided if possible.
         @c http://user:password@mysite.com/mypath
     */
-    const wxString GetPassword();
+    const wxString GetPassword() const;
 
     /**
         Returns the (normalized) path of the URI.
@@ -133,7 +133,7 @@ public:
         character.
         @c http://mysite.compath
     */
-    const wxString GetPath();
+    const wxString GetPath() const;
 
     /**
         Returns a string representation of the URI's port.
@@ -143,7 +143,7 @@ public:
         Note that you can easily get the numeric value of the port
         by using wxAtoi or wxString::Format.
     */
-    const wxString GetPort();
+    const wxString GetPort() const;
 
     /**
         Returns the Query component of the URI.
@@ -152,14 +152,14 @@ public:
         and after a '?' character.
         @c http://mysite.com/mypath?query
     */
-    const wxString GetQuery();
+    const wxString GetQuery() const;
 
     /**
         Returns the Scheme component of the URI.
         The first part of the uri.
         @c scheme://mysite.com
     */
-    const wxString GetScheme();
+    const wxString GetScheme() const;
 
     /**
         Returns the Server component of the URI.
@@ -170,7 +170,7 @@ public:
         server component.
         @c http://server/mypath
     */
-    const wxString GetServer();
+    const wxString GetServer() const;
 
     /**
         Returns the username part of the userinfo component of
@@ -178,7 +178,7 @@ public:
         RFC 1396 and should generally be avoided if possible.
         @c http://user:password@mysite.com/mypath
     */
-    const wxString GetUser();
+    const wxString GetUser() const;
 
     /**
         Returns the UserInfo component of the URI.
@@ -186,49 +186,49 @@ public:
         that is postfixed by a '@' character.
         @c http://userinfo@mysite.com/mypath
     */
-    const wxString GetUserInfo();
+    const wxString GetUserInfo() const;
 
     /**
         Returns @true if the Fragment component of the URI exists.
     */
-    bool HasFragment();
+    bool HasFragment() const;
 
     /**
         Returns @true if the Path component of the URI exists.
     */
-    bool HasPath();
+    bool HasPath() const;
 
     /**
         Returns @true if the Port component of the URI exists.
     */
-    bool HasPort();
+    bool HasPort() const;
 
     /**
         Returns @true if the Query component of the URI exists.
     */
-    bool HasQuery();
+    bool HasQuery() const;
 
     /**
         Returns @true if the Scheme component of the URI exists.
     */
-    bool HasScheme();
+    bool HasScheme() const;
 
     /**
         Returns @true if the Server component of the URI exists.
     */
-    bool HasServer();
+    bool HasServer() const;
 
     /**
         Returns @true if the User component of the URI exists.
     */
-    bool HasUser();
+    bool HasUser() const;
 
     /**
         Returns @true if a valid [absolute] URI, otherwise this URI
         is a URI reference and not a full URI, and IsReference
         returns @false.
     */
-    bool IsReference();
+    bool IsReference() const;
 
     /**
         To obtain individual components you can use

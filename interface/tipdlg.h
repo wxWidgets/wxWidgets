@@ -44,7 +44,7 @@ public:
         was passed to wxShowTip + 1 because the user might have pressed the "Next"
         button in the tip dialog.
     */
-    size_t GetCurrentTip();
+    size_t GetCurrentTip() const;
 
     /**
         Return the text of the current tip and pass to the next one. This function is

@@ -35,5 +35,5 @@ public:
         Returns @true if the object is valid, i.e. was properly initialized, and
         @false otherwise.
     */
-    bool IsOk();
+    bool IsOk() const;
 };

@@ -79,12 +79,12 @@ public:
         Returns the alpha value, on platforms where alpha is not yet supported, this
         always returns wxALPHA_OPAQUE.
     */
-    unsigned char Alpha();
+    unsigned char Alpha() const;
 
     /**
         Returns the blue intensity.
     */
-    unsigned char Blue();
+    unsigned char Blue() const;
 
     //@{
     /**
@@ -93,7 +93,8 @@ public:
         This function is new since wxWidgets version 2.7.0
     */
     wxString GetAsString(long flags);
-    wxC2S_NAME wxC2S_CSS_SYNTAX, to obtain
+    const wxC2S_NAME, to obtain the colour name (e.g.
+            wxColour(255,0,0) - "red"), wxC2S_CSS_SYNTAX, to obtain
     the colour in the "rgb(r,g,b)" or "rgba(r,g,b,a)" syntax
     (e.g. wxColour(255,0,0,85) - "rgba(255,0,0,0.333)"), and
     wxC2S_HTML_SYNTAX, to obtain the colour as  "#" followed
@@ -109,23 +110,23 @@ public:
         On X, an allocated pixel value is returned.
         -1 is returned if the pixel is invalid (on X, unallocated).
     */
-    long GetPixel();
+    long GetPixel() const;
 
     /**
         Returns the green intensity.
     */
-    unsigned char Green();
+    unsigned char Green() const;
 
     /**
         Returns @true if the colour object is valid (the colour has been initialised
         with RGB values).
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Returns the red intensity.
     */
-    unsigned char Red();
+    unsigned char Red() const;
 
     //@{
     /**

@@ -173,14 +173,14 @@ public:
     /**
         Returns a copy of this entry object.
     */
-    wxArchiveEntry* Clone();
+    wxArchiveEntry* Clone() const;
 
     //@{
     /**
         The entry's timestamp.
     */
     wxDateTime GetDateTime();
-    void SetDateTime(const wxDateTime& dt);
+    const void SetDateTime(const wxDateTime& dt);
     //@}
 
     //@{
@@ -192,8 +192,8 @@ public:
         Similarly, setting a name with a trailing path separator sets IsDir().
     */
     wxString GetName(wxPathFormat format = wxPATH_NATIVE);
-    void SetName(const wxString& name,
-                 wxPathFormat format = wxPATH_NATIVE);
+    const void SetName(const wxString& name,
+                       wxPathFormat format = wxPATH_NATIVE);
     //@}
 
     //@{
@@ -201,14 +201,14 @@ public:
         The size of the entry's data in bytes.
     */
     off_t GetSize();
-    void SetSize(off_t size);
+    const void SetSize(off_t size);
     //@}
 
     /**
         Returns the path format used internally within the archive to store
         filenames.
     */
-    wxPathFormat GetInternalFormat();
+    wxPathFormat GetInternalFormat() const;
 
     /**
         Returns the entry's filename in the internal format used within the
@@ -219,12 +219,12 @@ public:
         
         @see @ref overview_wxarcbyname "Looking up an archive entry by name"
     */
-    wxString GetInternalName();
+    wxString GetInternalName() const;
 
     /**
         Returns a numeric value unique to the entry within the archive.
     */
-    off_t GetOffset();
+    off_t GetOffset() const;
 
     //@{
     /**
@@ -237,7 +237,7 @@ public:
         restore files, even if the archive contains no explicit directory entries.
     */
     bool IsDir();
-    void SetIsDir(bool isDir = true);
+    const void SetIsDir(bool isDir = true);
     //@}
 
     //@{
@@ -245,7 +245,7 @@ public:
         True if the entry is a read-only file.
     */
     bool IsReadOnly();
-    void SetIsReadOnly(bool isReadOnly = true);
+    const void SetIsReadOnly(bool isReadOnly = true);
     //@}
 
     //@{
@@ -303,7 +303,7 @@ public:
         can be a complete filename rather than just an extension.
     */
     bool CanHandle(const wxChar* protocol,
-                   wxStreamProtocolType type = wxSTREAM_PROTOCOL);
+                   wxStreamProtocolType type = wxSTREAM_PROTOCOL) const;
 
     /**
         A static member that finds a factory that can handle a given protocol, MIME
@@ -322,7 +322,7 @@ public:
         constructor, is wxConvLocal.
     */
     wxMBConv GetConv();
-    void SetConv(wxMBConv& conv);
+    const void SetConv(wxMBConv& conv);
     //@}
 
     //@{
@@ -333,8 +333,8 @@ public:
         GetFirst()/GetNext() return a pointer to a factory or @NULL if no more
         are available. They do not give away ownership of the factory.
     */
-    static const wxArchiveClassFactory* GetFirst();
-    const wxArchiveClassFactory* GetNext();
+    static const wxArchiveClassFactory* GetFirst() const;
+    const wxArchiveClassFactory* GetNext() const;
     //@}
 
     /**
@@ -343,13 +343,13 @@ public:
          wxZipEntry::GetInternalName.
     */
     wxString GetInternalName(const wxString& name,
-                             wxPathFormat format = wxPATH_NATIVE);
+                             wxPathFormat format = wxPATH_NATIVE) const;
 
     /**
         Returns the wxFileSystem protocol supported by this factory. Equivalent
         to wxString(*GetProtcols()).
     */
-    wxString GetProtocol();
+    wxString GetProtocol() const;
 
     /**
         Returns the protocols, MIME types or file extensions supported by this
@@ -357,13 +357,13 @@ public:
         ownership of the array or strings.
         For example, to list the file extensions a factory supports:
     */
-    const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL);
+    const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const;
 
     /**
         Create a new wxArchiveEntry object of the
         appropriate type.
     */
-    wxArchiveEntry* NewEntry();
+    wxArchiveEntry* NewEntry() const;
 
     //@{
     /**
@@ -371,10 +371,10 @@ public:
         If the parent stream is passed as a pointer then the new archive stream
         takes ownership of it. If it is passed by reference then it does not.
     */
-    wxArchiveInputStream* NewStream(wxInputStream& stream);
-    wxArchiveOutputStream* NewStream(wxOutputStream& stream);
-    wxArchiveInputStream* NewStream(wxInputStream* stream);
-    wxArchiveOutputStream* NewStream(wxOutputStream* stream);
+    wxArchiveInputStream* NewStream(wxInputStream& stream) const;
+    const wxArchiveOutputStream*  NewStream(wxOutputStream& stream) const;
+    const wxArchiveInputStream*  NewStream(wxInputStream* stream) const;
+    const wxArchiveOutputStream*  NewStream(wxOutputStream* stream) const;
     //@}
 
     /**
@@ -554,7 +554,7 @@ public:
         Returns an entry object from the archive input stream, giving away
         ownership.
     */
-    const T operator*();
+    const T operator*() const;
 
     //@{
     /**

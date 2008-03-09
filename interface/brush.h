@@ -193,7 +193,7 @@ public:
         
         @see SetColour()
     */
-    wxColour GetColour();
+    wxColour GetColour() const;
 
     /**
         Gets a pointer to the stipple bitmap. If the brush does not have a wxSTIPPLE
@@ -203,7 +203,7 @@ public:
         
         @see SetStipple()
     */
-    wxBitmap* GetStipple();
+    wxBitmap* GetStipple() const;
 
     /**
         Returns the brush style, one of:
@@ -250,21 +250,21 @@ public:
         
         @see SetStyle(), SetColour(), SetStipple()
     */
-    int GetStyle();
+    int GetStyle() const;
 
     /**
         Returns @true if the style of the brush is any of hatched fills.
         
         @see GetStyle()
     */
-    bool IsHatch();
+    bool IsHatch() const;
 
     /**
         Returns @true if the brush is initialised. It will return @false if the default
         constructor has been used (for example, the brush is a member of a class, or
         @NULL has been assigned to it).
     */
-    bool IsOk();
+    bool IsOk() const;
 
     //@{
     /**

@@ -162,7 +162,7 @@ public:
         used
         by wxCHMHelpController, wxWinHelpController and wxHtmlHelpController.
     */
-    virtual wxWindow* GetParentWindow();
+    virtual wxWindow* GetParentWindow() const;
 
     //@{
     /**

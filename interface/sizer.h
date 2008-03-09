@@ -146,38 +146,38 @@ public:
     /**
         Return the border attribute.
     */
-    int GetBorder();
+    int GetBorder() const;
 
     /**
         Return the flags attribute.
     */
-    int GetFlag();
+    int GetFlag() const;
 
     /**
         Return the numeric id of wxSizerItem, or @c wxID_NONE if the id has
         not been set.
     */
-    int GetId();
+    int GetId() const;
 
     /**
         Get the minimum size needed for the item.
     */
-    wxSize GetMinSize();
+    wxSize GetMinSize() const;
 
     /**
         What is the current position of the item, as set in the last Layout.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         Get the proportion item attribute.
     */
-    int GetProportion();
+    int GetProportion() const;
 
     /**
         Get the ration item attribute.
     */
-    float GetRatio();
+    float GetRatio() const;
 
     /**
         Get the rectangle of the item on the parent window, excluding borders.
@@ -187,27 +187,27 @@ public:
     /**
         Get the current size of the item, as set in the last Layout.
     */
-    wxSize GetSize();
+    wxSize GetSize() const;
 
     /**
         If this item is tracking a sizer, return it.  @NULL otherwise.
     */
-    wxSizer* GetSizer();
+    wxSizer* GetSizer() const;
 
     /**
         If this item is tracking a spacer, return its size.
     */
-    const wxSize GetSpacer();
+    const wxSize GetSpacer() const;
 
     /**
         Get the userData item attribute.
     */
-    wxObject* GetUserData();
+    wxObject* GetUserData() const;
 
     /**
         If this item is tracking a window then return it.  @NULL otherwise.
     */
-    wxWindow* GetWindow();
+    wxWindow* GetWindow() const;
 
     /**
         Returns @true if this item is a window or a spacer and it is shown or if this
@@ -215,22 +215,22 @@ public:
         items, all of the child elements must be hidden for the sizer itself to be
         considered hidden.
     */
-    bool IsShown();
+    bool IsShown() const;
 
     /**
         Is this item a sizer?
     */
-    bool IsSizer();
+    bool IsSizer() const;
 
     /**
         Is this item a spacer?
     */
-    bool IsSpacer();
+    bool IsSpacer() const;
 
     /**
         Is this item a window?
     */
-    bool IsWindow();
+    bool IsWindow() const;
 
     /**
         Set the border item attribute.
@@ -556,7 +556,7 @@ public:
         
         @see SetFlexibleDirection()
     */
-    int GetFlexibleDirection();
+    int GetFlexibleDirection() const;
 
     /**
         Returns the value that specifies how the sizer grows in the "non-flexible"
@@ -567,7 +567,7 @@ public:
         @see SetFlexibleDirection(),
              SetNonFlexibleGrowMode()
     */
-    int GetNonFlexibleGrowMode();
+    int GetNonFlexibleGrowMode() const;
 
     /**
         Specifies that column idx is no longer growable.
@@ -949,13 +949,13 @@ public:
         @ref overview_wxsizeritem "wxSizerItem *".
     */
     const wxSizerItemList GetChildren();
-    wxSizerItemList GetChildren();
+    const wxSizerItemList GetChildren();
     //@}
 
     /**
         Returns the window this sizer is used in or @NULL if none.
     */
-    wxWindow* GetContainingWindow();
+    wxWindow* GetContainingWindow() const;
 
     //@{
     /**
@@ -1065,9 +1065,9 @@ public:
         
         @see Hide(), Show()
     */
-    bool IsShown(wxWindow* window);
-    bool IsShown(wxSizer* sizer);
-    bool IsShown(size_t index);
+    bool IsShown(wxWindow* window) const;
+    const bool IsShown(wxSizer* sizer) const;
+    const bool IsShown(size_t index) const;
     //@}
 
     /**

@@ -123,7 +123,7 @@ public:
         reaches 0 HasMoreTokens() returns
         @false.
     */
-    int CountTokens();
+    int CountTokens() const;
 
     /**
         Returns the delimiter which ended scan for the last token returned by
@@ -137,24 +137,24 @@ public:
     /**
         Returns the next token or empty string if the end of string was reached.
     */
-    wxString GetNextToken();
+    wxString GetNextToken() const;
 
     /**
         Returns the current position (i.e. one index after the last returned
         token or 0 if GetNextToken() has never been called) in the original
         string.
     */
-    size_t GetPosition();
+    size_t GetPosition() const;
 
     /**
         Returns the part of the starting string without all token already extracted.
     */
-    wxString GetString();
+    wxString GetString() const;
 
     /**
         Returns @true if the tokenizer has further tokens, @false if none are left.
     */
-    bool HasMoreTokens();
+    bool HasMoreTokens() const;
 
     /**
         Initializes the tokenizer.

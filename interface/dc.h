@@ -435,19 +435,19 @@ public:
     /**
         Gets the brush used for painting the background (see wxDC::SetBackground).
     */
-    const wxBrush GetBackground();
+    const wxBrush GetBackground() const;
 
     /**
         Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
         
         @see SetBackgroundMode()
     */
-    int GetBackgroundMode();
+    int GetBackgroundMode() const;
 
     /**
         Gets the current brush (see wxDC::SetBrush).
     */
-    const wxBrush GetBrush();
+    const wxBrush GetBrush() const;
 
     /**
         Gets the character height of the currently set font.
@@ -470,7 +470,7 @@ public:
         
         @see wxDisplayDepth
     */
-    int GetDepth();
+    int GetDepth() const;
 
     /**
         Gets the current font. Notice that even although each device context object has
@@ -478,7 +478,7 @@ public:
         initially and only after calling SetFont() a valid
         font is returned.
     */
-    const wxFont GetFont();
+    const wxFont GetFont() const;
 
     /**
         Gets the current layout direction of the device context. On platforms where RTL
@@ -489,7 +489,7 @@ public:
         
         @see SetLayoutDirection()
     */
-    wxLayoutDirection GetLayoutDirection();
+    wxLayoutDirection GetLayoutDirection() const;
 
     /**
         Gets the current logical function (see wxDC::SetLogicalFunction).
@@ -517,14 +517,14 @@ public:
     void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
                                 wxCoord* h,
                                 wxCoord* heightLine = NULL,
-                                wxFont* font = NULL);
-    wxSize GetMultiLineTextExtent(const wxString& string);
+                                wxFont* font = NULL) const;
+    const wxSize  GetMultiLineTextExtent(const wxString& string) const;
     //@}
 
     /**
         Returns the resolution of the device in pixels per inch.
     */
-    wxSize GetPPI();
+    wxSize GetPPI() const;
 
     /**
         Fills the @a widths array with the widths from the beginning of
@@ -538,12 +538,12 @@ public:
         @see GetMultiLineTextExtent(), GetTextExtent()
     */
     bool GetPartialTextExtents(const wxString& text,
-                               wxArrayInt& widths);
+                               wxArrayInt& widths) const;
 
     /**
         Gets the current pen (see wxDC::SetPen).
     */
-    const wxPen GetPen();
+    const wxPen GetPen() const;
 
     /**
         Gets in @a colour the colour at the specified location.
@@ -571,22 +571,22 @@ public:
         Returns a 2-element list
           @c ( width, height )
     */
-    void GetSize(wxCoord* width, wxCoord* height);
-    wxSize GetSize();
+    void GetSize(wxCoord* width, wxCoord* height) const;
+    const wxSize  GetSize() const;
     //@}
 
     //@{
     /**
         Returns the horizontal and vertical resolution in millimetres.
     */
-    void GetSizeMM(wxCoord* width, wxCoord* height);
-    wxSize GetSizeMM();
+    void GetSizeMM(wxCoord* width, wxCoord* height) const;
+    const wxSize  GetSizeMM() const;
     //@}
 
     /**
         Gets the current text background colour (see wxDC::SetTextBackground).
     */
-    const wxColour GetTextBackground();
+    const wxColour GetTextBackground() const;
 
     //@{
     /**
@@ -608,14 +608,14 @@ public:
                        wxCoord* h,
                        wxCoord* descent = NULL,
                        wxCoord* externalLeading = NULL,
-                       const wxFont* font = NULL);
-    wxSize GetTextExtent(const wxString& string);
+                       const wxFont* font = NULL) const;
+    const wxSize  GetTextExtent(const wxString& string) const;
     //@}
 
     /**
         Gets the current text foreground colour (see wxDC::SetTextForeground).
     */
-    const wxColour GetTextForeground();
+    const wxColour GetTextForeground() const;
 
     /**
         Gets the current user scale factor (set by wxDC::SetUserScale).

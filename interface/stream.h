@@ -45,7 +45,7 @@ public:
     /**
         Returns the current size of the stream.
     */
-    size_t GetSize();
+    size_t GetSize() const;
 };
 
 
@@ -138,22 +138,22 @@ public:
     /**
         Returns a pointer on the end of the stream buffer.
     */
-    void* GetBufferEnd();
+    void* GetBufferEnd() const;
 
     /**
         Returns a pointer on the current position of the stream buffer.
     */
-    void* GetBufferPos();
+    void* GetBufferPos() const;
 
     /**
         Returns the size of the buffer.
     */
-    size_t GetBufferSize();
+    size_t GetBufferSize() const;
 
     /**
         Returns a pointer on the start of the stream buffer.
     */
-    void* GetBufferStart();
+    void* GetBufferStart() const;
 
     /**
         Gets a single char from the stream buffer. It acts like the Read call.
@@ -170,12 +170,12 @@ public:
     /**
         Returns the current position (counted in bytes) in the stream buffer.
     */
-    off_t GetIntPosition();
+    off_t GetIntPosition() const;
 
     /**
         Returns the amount of bytes read during the last IO call to the parent stream.
     */
-    size_t GetLastAccess();
+    size_t GetLastAccess() const;
 
     /**
         Puts a single char to the stream buffer.
@@ -259,7 +259,7 @@ public:
         @returns Returns the current position in the stream if possible,
                  wxInvalidOffset in the other case.
     */
-    off_t Tell();
+    off_t Tell() const;
 
     /**
         Truncates the buffer to the current position.
@@ -315,7 +315,7 @@ public:
         Write(). It may return 0 even if there is no
         error on the stream if it is only temporarily impossible to write to it.
     */
-    size_t LastWrite();
+    size_t LastWrite() const;
 
     /**
         Puts the specified character in the output queue and increments the
@@ -338,7 +338,7 @@ public:
     /**
         Returns the current stream position.
     */
-    off_t TellO();
+    off_t TellO() const;
 
     //@{
     /**
@@ -390,7 +390,7 @@ public:
         can be a complete filename rather than just an extension.
     */
     bool CanHandle(const wxString& protocol,
-                   wxStreamProtocolType type = wxSTREAM_PROTOCOL);
+                   wxStreamProtocolType type = wxSTREAM_PROTOCOL) const;
 
     /**
         A static member that finds a factory that can handle a given protocol, MIME
@@ -411,15 +411,15 @@ public:
         GetFirst()/GetNext() return a pointer to a factory or @NULL if no more
         are available. They do not give away ownership of the factory.
     */
-    static const wxFilterClassFactory* GetFirst();
-    const wxFilterClassFactory* GetNext();
+    static const wxFilterClassFactory* GetFirst() const;
+    const wxFilterClassFactory* GetNext() const;
     //@}
 
     /**
         Returns the wxFileSystem protocol supported by this factory. Equivalent
         to wxString(*GetProtcols()).
     */
-    wxString GetProtocol();
+    wxString GetProtocol() const;
 
     /**
         Returns the protocols, MIME types, HTTP encodings or file extensions
@@ -427,7 +427,7 @@ public:
         not give away ownership of the array or strings.
         For example, to list the file extensions a factory supports:
     */
-    const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL);
+    const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const;
 
     //@{
     /**
@@ -435,17 +435,17 @@ public:
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
     */
-    wxFilterInputStream* NewStream(wxInputStream& stream);
-    wxFilterOutputStream* NewStream(wxOutputStream& stream);
-    wxFilterInputStream* NewStream(wxInputStream* stream);
-    wxFilterOutputStream* NewStream(wxOutputStream* stream);
+    wxFilterInputStream* NewStream(wxInputStream& stream) const;
+    const wxFilterOutputStream*  NewStream(wxOutputStream& stream) const;
+    const wxFilterInputStream*  NewStream(wxInputStream* stream) const;
+    const wxFilterOutputStream*  NewStream(wxOutputStream* stream) const;
     //@}
 
     /**
         Remove the file extension of @a location if it is one of the file
         extensions handled by this factory.
     */
-    wxString PopExtension(const wxString& location);
+    wxString PopExtension(const wxString& location) const;
 
     /**
         Adds this class factory to the list returned
@@ -603,13 +603,13 @@ public:
         Returns @true if some data is available in the stream right now, so that
         calling Read() wouldn't block.
     */
-    bool CanRead();
+    bool CanRead() const;
 
     /**
         Returns @true after an attempt has been made to read past the end of the
         stream.
     */
-    bool Eof();
+    bool Eof() const;
 
     /**
         Returns the first character in the input queue and removes it,
@@ -620,7 +620,7 @@ public:
     /**
         Returns the last number of bytes read.
     */
-    size_t LastRead();
+    size_t LastRead() const;
 
     /**
         Returns the first character in the input queue without removing it.
@@ -657,7 +657,7 @@ public:
     /**
         Returns the current stream position.
     */
-    off_t TellI();
+    off_t TellI() const;
 
     //@{
     /**
@@ -716,7 +716,7 @@ public:
         
         A generic error occurred on the last read call.
     */
-    wxStreamError GetLastError();
+    wxStreamError GetLastError() const;
 
     /**
         Returns the length of the stream in bytes. If the length cannot be determined
@@ -724,26 +724,26 @@ public:
         @c wxInvalidOffset.
         This function is new since wxWidgets version 2.5.4
     */
-    wxFileOffset GetLength();
+    wxFileOffset GetLength() const;
 
     /**
         GetLength()
         This function returns the size of the stream. For example, for a file it is the
         size of the file.
     */
-    size_t GetSize();
+    size_t GetSize() const;
 
     /**
         Returns @true if no error occurred on the stream.
         
         @see GetLastError()
     */
-    virtual bool IsOk();
+    virtual bool IsOk() const;
 
     /**
         Returns @true if the streams supports seeking to arbitrary offsets.
     */
-    bool IsSeekable();
+    bool IsSeekable() const;
 
     /**
         Internal function. It is called when the stream wants to read data of the
@@ -761,7 +761,7 @@ public:
         Internal function. Is is called when the stream needs to know the
         real position.
     */
-    off_t OnSysTell();
+    off_t OnSysTell() const;
 
     /**
         See OnSysRead().

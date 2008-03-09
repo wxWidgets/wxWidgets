@@ -77,7 +77,7 @@ public:
         can accept the focus. This is reevaluated each time a child
         window is added or removed from the panel.
     */
-    bool AcceptsFocus();
+    bool AcceptsFocus() const;
 
     /**
         Used for two-step panel construction. See wxPanel()

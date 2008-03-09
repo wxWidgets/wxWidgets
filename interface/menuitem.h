@@ -86,27 +86,27 @@ public:
     /**
         Returns the background colour associated with the menu item (Windows only).
     */
-    wxColour GetBackgroundColour();
+    wxColour GetBackgroundColour() const;
 
     /**
         Returns the checked or unchecked bitmap (Windows only).
     */
-    wxBitmap GetBitmap(bool checked = true);
+    wxBitmap GetBitmap(bool checked = true) const;
 
     /**
         Returns the font associated with the menu item (Windows only).
     */
-    wxFont GetFont();
+    wxFont GetFont() const;
 
     /**
         Returns the help string associated with the menu item.
     */
-    wxString GetHelp();
+    wxString GetHelp() const;
 
     /**
         Returns the menu item identifier.
     */
-    int GetId();
+    int GetId() const;
 
     /**
         Returns the text associated with the menu item including any accelerator
@@ -114,7 +114,7 @@ public:
         
         @see GetItemLabelText(), GetLabelText()
     */
-    wxString GetItemLabel();
+    wxString GetItemLabel() const;
 
     /**
         Returns the text associated with the menu item, without any accelerator
@@ -122,13 +122,13 @@ public:
         
         @see GetItemLabel(), GetLabelText()
     */
-    wxString GetItemLabelText();
+    wxString GetItemLabelText() const;
 
     /**
         Returns the item kind, one of @c wxITEM_SEPARATOR, @c wxITEM_NORMAL,
         @c wxITEM_CHECK or @c wxITEM_RADIO.
     */
-    wxItemKind GetKind();
+    wxItemKind GetKind() const;
 
     /**
         Returns the text associated with the menu item without any accelerator
@@ -137,7 +137,7 @@ public:
         
         @see GetText(), GetLabelFromText()
     */
-    wxString GetLabel();
+    wxString GetLabel() const;
 
     /**
         Strips all accelerator characters and mnemonics from the given @e text.
@@ -163,13 +163,13 @@ public:
     /**
         Gets the width of the menu item checkmark bitmap (Windows only).
     */
-    int GetMarginWidth();
+    int GetMarginWidth() const;
 
     /**
         Returns the menu this menu item is in, or @NULL if this menu item is not
         attached.
     */
-    wxMenu* GetMenu();
+    wxMenu* GetMenu() const;
 
     /**
         Returns the text associated with the menu item.
@@ -177,12 +177,12 @@ public:
         GetItemLabel() or GetItemLabelText()
         instead.
     */
-    wxString GetName();
+    wxString GetName() const;
 
     /**
         Returns the submenu associated with the menu item, or @NULL if there isn't one.
     */
-    wxMenu* GetSubMenu();
+    wxMenu* GetSubMenu() const;
 
     /**
         Returns the text associated with the menu item, such as it was passed to the
@@ -191,42 +191,42 @@ public:
         
         @see GetLabel(), GetLabelFromText()
     */
-    wxString GetText();
+    wxString GetText() const;
 
     /**
         Returns the text colour associated with the menu item (Windows only).
     */
-    wxColour GetTextColour();
+    wxColour GetTextColour() const;
 
     /**
         Returns @true if the item is checkable.
     */
-    bool IsCheckable();
+    bool IsCheckable() const;
 
     /**
         Returns @true if the item is checked.
     */
-    bool IsChecked();
+    bool IsChecked() const;
 
     /**
         Returns @true if the item is enabled.
     */
-    bool IsEnabled();
+    bool IsEnabled() const;
 
     /**
         Returns @true if the item is a separator.
     */
-    bool IsSeparator();
+    bool IsSeparator() const;
 
     /**
         Returns @true if the item is a submenu.
     */
-    bool IsSubMenu();
+    bool IsSubMenu() const;
 
     /**
         Sets the background colour associated with the menu item (Windows only).
     */
-    void SetBackgroundColour(const wxColour& colour);
+    void SetBackgroundColour(const wxColour& colour) const;
 
     /**
         Sets the bitmap for the menu item (Windows and GTK+ only). It is
@@ -260,7 +260,7 @@ public:
     /**
         Sets the width of the menu item checkmark bitmap (Windows only).
     */
-    void SetMarginWidth(int width);
+    void SetMarginWidth(int width) const;
 
     /**
         Sets the parent menu which will contain this menu item.

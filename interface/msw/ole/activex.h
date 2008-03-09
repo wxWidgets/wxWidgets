@@ -28,22 +28,22 @@ public:
         Returns the dispatch id of this activex event. This is the numeric value from
         the .idl file specified by the id().
     */
-    DISPID GetDispatchId(int idx);
+    DISPID GetDispatchId(int idx) const;
 
     /**
         Obtains the number of parameters passed through the activex event.
     */
-    size_t ParamCount();
+    size_t ParamCount() const;
 
     /**
         Obtains the param name of the param number idx specifies as a string.
     */
-    wxString ParamName(size_t idx);
+    wxString ParamName(size_t idx) const;
 
     /**
         Obtains the param type of the param number idx specifies as a string.
     */
-    wxString ParamType(size_t idx);
+    wxString ParamType(size_t idx) const;
 
     /**
         Obtains the actual parameter value specified by idx.

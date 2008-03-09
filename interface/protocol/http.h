@@ -53,7 +53,7 @@ public:
         Returns the HTTP response code returned by the server. Please refer to
         RFC 2616 for the list of responses.
     */
-    int GetResponse();
+    int GetResponse() const;
 
     /**
         It sets data of a field to be sent during the next request to the HTTP server.

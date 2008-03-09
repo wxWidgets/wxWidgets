@@ -30,7 +30,7 @@ public:
     /**
         Retrieve the current spin button or control value.
     */
-    int GetPosition();
+    int GetPosition() const;
 
     /**
         Set the value associated with the event.
@@ -125,21 +125,21 @@ public:
         
         @see SetRange()
     */
-    int GetMax();
+    int GetMax() const;
 
     /**
         Returns the minimum permissible value.
         
         @see SetRange()
     */
-    int GetMin();
+    int GetMin() const;
 
     /**
         Returns the current spin button value.
         
         @see SetValue()
     */
-    int GetValue();
+    int GetValue() const;
 
     /**
         Sets the range of the spin button.

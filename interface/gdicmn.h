@@ -70,8 +70,8 @@ public:
         @c wxHORIZONTAL flag, then it is only centered in this direction while
         the other component of its position remains unchanged.
     */
-    wxRect CentreIn(const wxRect& r, int dir = wxBOTH);
-    wxRect CenterIn(const wxRect& r, int dir = wxBOTH);
+    wxRect CentreIn(const wxRect& r, int dir = wxBOTH) const;
+    const wxRect  CenterIn(const wxRect& r, int dir = wxBOTH) const;
     //@}
 
     //@{
@@ -79,9 +79,9 @@ public:
         Returns @true if the given rectangle is completely inside this rectangle
         (or touches its boundary) and @false otherwise.
     */
-    bool Contains(int x, int y);
-    bool Contains(const wxPoint& pt);
-    bool Contains(const wxRect& rect);
+    bool Contains(int x, int y) const;
+    const bool Contains(const wxPoint& pt) const;
+    const bool Contains(const wxRect& rect) const;
     //@}
 
     //@{
@@ -93,84 +93,84 @@ public:
         
         @see Inflate()
     */
-    void Deflate(wxCoord dx, wxCoord dy);
-    void Deflate(const wxSize& diff);
-    void Deflate(wxCoord diff);
-    wxRect Deflate(wxCoord dx, wxCoord dy);
+    void Deflate(wxCoord dx, wxCoord dy) const;
+    void Deflate(const wxSize& diff) const;
+    void Deflate(wxCoord diff) const;
+    wxRect Deflate(wxCoord dx, wxCoord dy) const;
     //@}
 
     /**
         Gets the bottom point of the rectangle.
     */
-    int GetBottom();
+    int GetBottom() const;
 
     /**
         Gets the position of the bottom left corner.
     */
-    wxPoint GetBottomLeft();
+    wxPoint GetBottomLeft() const;
 
     /**
         Gets the position of the bottom right corner.
     */
-    wxPoint GetBottomRight();
+    wxPoint GetBottomRight() const;
 
     /**
         Gets the height member.
     */
-    int GetHeight();
+    int GetHeight() const;
 
     /**
         Gets the left point of the rectangle (the same as wxRect::GetX).
     */
-    int GetLeft();
+    int GetLeft() const;
 
     /**
         Gets the position.
     */
-    wxPoint GetPosition();
+    wxPoint GetPosition() const;
 
     /**
         Gets the right point of the rectangle.
     */
-    int GetRight();
+    int GetRight() const;
 
     /**
         Gets the size.
         
         @see SetSize()
     */
-    wxSize GetSize();
+    wxSize GetSize() const;
 
     /**
         Gets the top point of the rectangle (the same as wxRect::GetY).
     */
-    int GetTop();
+    int GetTop() const;
 
     /**
         Gets the position of the top left corner of the rectangle, same as
         GetPosition().
     */
-    wxPoint GetTopLeft();
+    wxPoint GetTopLeft() const;
 
     /**
         Gets the position of the top right corner.
     */
-    wxPoint GetTopRight();
+    wxPoint GetTopRight() const;
 
     /**
         Gets the width member.
     */
-    int GetWidth();
+    int GetWidth() const;
 
     /**
         Gets the x member.
     */
-    int GetX();
+    int GetX() const;
 
     /**
         Gets the y member.
     */
-    int GetY();
+    int GetY() const;
 
     //@{
     /**
@@ -202,10 +202,10 @@ public:
         
         @see Deflate()
     */
-    void Inflate(wxCoord dx, wxCoord dy);
-    void Inflate(const wxSize& diff);
-    void Inflate(wxCoord diff);
-    wxRect Inflate(wxCoord dx, wxCoord dy);
+    void Inflate(wxCoord dx, wxCoord dy) const;
+    void Inflate(const wxSize& diff) const;
+    void Inflate(wxCoord diff) const;
+    wxRect Inflate(wxCoord dx, wxCoord dy) const;
     //@}
 
     //@{
@@ -215,20 +215,20 @@ public:
         other one modifies this rectangle in place.
     */
     wxRect Intersect(const wxRect& rect);
-    wxRect Intersect(const wxRect& rect);
+    const wxRect&  Intersect(const wxRect& rect);
     //@}
 
     /**
         Returns @true if this rectangle has a non-empty intersection with the
         rectangle @a rect and @false otherwise.
     */
-    bool Intersects(const wxRect& rect);
+    bool Intersects(const wxRect& rect) const;
 
     /**
         Returns @true if this rectangle has a width or height less than or equal to
         0 and @false otherwise.
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     //@{
     /**
@@ -274,7 +274,7 @@ public:
         other one modifies this rectangle in place.
     */
     wxRect Union(const wxRect& rect);
-    wxRect Union(const wxRect& rect);
+    const wxRect&  Union(const wxRect& rect);
     //@}
 
     /**
@@ -470,7 +470,7 @@ public:
         Finds a colour name given the colour. Returns an empty string if the colour is
         not found in the database.
     */
-    wxString FindName(const wxColour& colour);
+    wxString FindName(const wxColour& colour) const;
 };
 
 
@@ -574,12 +574,12 @@ public:
     /**
         Gets the height member.
     */
-    int GetHeight();
+    int GetHeight() const;
 
     /**
         Gets the width member.
     */
-    int GetWidth();
+    int GetWidth() const;
 
     //@{
     /**
@@ -610,7 +610,7 @@ public:
         This method is typically used before calling
         SetDefaults().
     */
-    bool IsFullySpecified();
+    bool IsFullySpecified() const;
 
     //@{
     /**

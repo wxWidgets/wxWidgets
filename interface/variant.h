@@ -159,12 +159,12 @@ public:
     /**
         Retrieves and converts the value of this variant to the type that @a value is.
     */
-    bool Convert(long* value);
-    bool Convert(bool* value);
-    bool Convert(double* value);
-    bool Convert(wxString* value);
-    bool Convert(wxChar* value);
-    bool Convert(wxDateTime* value);
+    bool Convert(long* value) const;
+    const bool Convert(bool* value) const;
+    const bool Convert(double* value) const;
+    const bool Convert(wxString* value) const;
+    const bool Convert(wxChar* value) const;
+    const bool Convert(wxDateTime* value) const;
     //@}
 
     /**
@@ -175,22 +175,22 @@ public:
     /**
         Returns the string array value.
     */
-    wxArrayString GetArrayString();
+    wxArrayString GetArrayString() const;
 
     /**
         Returns the boolean value.
     */
-    bool GetBool();
+    bool GetBool() const;
 
     /**
         Returns the character value.
     */
-    wxChar GetChar();
+    wxChar GetChar() const;
 
     /**
         Returns the number of elements in the list.
     */
-    size_t GetCount();
+    size_t GetCount() const;
 
     /**
         Returns a pointer to the internal variant data. To take ownership
@@ -198,38 +198,38 @@ public:
         method. When you stop using it, wxVariantData::DecRef
         must be likewise called.
     */
-    wxVariantData* GetData();
+    wxVariantData* GetData() const;
 
     /**
         Returns the date value.
     */
-    wxDateTime GetDateTime();
+    wxDateTime GetDateTime() const;
 
     /**
         Returns the floating point value.
     */
-    double GetDouble();
+    double GetDouble() const;
 
     /**
         Returns a reference to the wxVariantList class used by
         wxVariant if this wxVariant is currently a list of variants.
     */
-    wxVariantList GetList();
+    wxVariantList GetList() const;
 
     /**
         Returns the integer value.
     */
-    long GetLong();
+    long GetLong() const;
 
     /**
         Returns a constant reference to the variant name.
     */
-    const wxString GetName();
+    const wxString GetName() const;
 
     /**
         Gets the string value.
     */
-    wxString GetString();
+    wxString GetString() const;
 
     /**
         Returns the value type as a string. The built-in types are: bool, char,
@@ -237,17 +237,17 @@ public:
         If the variant is null, the value type returned is the string "null" (not the
         empty string).
     */
-    wxString GetType();
+    wxString GetType() const;
 
     /**
         Gets the void pointer value.
     */
-    void* GetVoidPtr();
+    void* GetVoidPtr() const;
 
     /**
         Gets the wxObject pointer value.
     */
-    wxObject* GetWxObjectPtr();
+    wxObject* GetWxObjectPtr() const;
 
     /**
         Inserts a value at the front of the list.
@@ -258,18 +258,18 @@ public:
         Returns @true if there is no data associated with this variant, @false if there
         is data.
     */
-    bool IsNull();
+    bool IsNull() const;
 
     /**
         Returns @true if @a type matches the type of the variant, @false otherwise.
     */
-    bool IsType(const wxString& type);
+    bool IsType(const wxString& type) const;
 
     /**
         Returns @true if the data is derived from the class described by @e type, @false
         otherwise.
     */
-    bool IsValueKindOf(const wxClassInfo* type type);
+    bool IsValueKindOf(const wxClassInfo* type type) const;
 
     /**
         Makes the variant null by deleting the internal data.
@@ -279,12 +279,12 @@ public:
     /**
         Makes a string representation of the variant value (for any type).
     */
-    wxString MakeString();
+    wxString MakeString() const;
 
     /**
         Returns @true if @a value matches an element in the list.
     */
-    bool Member(const wxVariant& value);
+    bool Member(const wxVariant& value) const;
 
     /**
         Makes an empty list. This differs from a null variant which has no data; a null
@@ -310,18 +310,18 @@ public:
     /**
         Inequality test operators.
     */
-    bool operator !=(const wxVariant& value);
-    bool operator !=(const wxString& value);
-    bool operator !=(const wxChar* value);
-    bool operator !=(wxChar value);
-    bool operator !=(const long value);
-    bool operator !=(const bool value);
-    bool operator !=(const double value);
-    bool operator !=(void* value);
-    bool operator !=(wxObject* value);
-    bool operator !=(const wxVariantList& value);
-    bool operator !=(const wxArrayString& value);
-    bool operator !=(const wxDateTime& value);
+    bool operator !=(const wxVariant& value) const;
+    const bool operator !=(const wxString& value) const;
+    const bool operator !=(const wxChar* value) const;
+    const bool operator !=(wxChar value) const;
+    const bool operator !=(const long value) const;
+    const bool operator !=(const bool value) const;
+    const bool operator !=(const double value) const;
+    const bool operator !=(void* value) const;
+    const bool operator !=(wxObject* value) const;
+    const bool operator !=(const wxVariantList& value) const;
+    const bool operator !=(const wxArrayString& value) const;
+    const bool operator !=(const wxDateTime& value) const;
     //@}
 
     //@{
@@ -351,18 +351,18 @@ public:
     /**
         Equality test operators.
     */
-    bool operator ==(const wxVariant& value);
-    bool operator ==(const wxString& value);
-    bool operator ==(const wxChar* value);
-    bool operator ==(wxChar value);
-    bool operator ==(const long value);
-    bool operator ==(const bool value);
-    bool operator ==(const double value);
-    bool operator ==(void* value);
-    bool operator ==(wxObject* value);
-    bool operator ==(const wxVariantList& value);
-    bool operator ==(const wxArrayString& value);
-    bool operator ==(const wxDateTime& value);
+    bool operator ==(const wxVariant& value) const;
+    const bool operator ==(const wxString& value) const;
+    const bool operator ==(const wxChar* value) const;
+    const bool operator ==(wxChar value) const;
+    const bool operator ==(const long value) const;
+    const bool operator ==(const bool value) const;
+    const bool operator ==(const double value) const;
+    const bool operator ==(void* value) const;
+    const bool operator ==(wxObject* value) const;
+    const bool operator ==(const wxVariantList& value) const;
+    const bool operator ==(const wxArrayString& value) const;
+    const bool operator ==(const wxDateTime& value) const;
     //@}
 
     //@{
@@ -371,37 +371,37 @@ public:
         to change the value at this index.
     */
     wxVariant operator [](size_t idx);
-    wxVariant operator [](size_t idx);
+    const wxVariant&  operator [](size_t idx);
     //@}
 
     //@{
     /**
         Operator for implicit conversion to a long, using GetLong().
     */
-    double operator double();
-    long operator long();
+    double operator double() const;
+    const long operator long() const;
     //@}
 
     /**
         Operator for implicit conversion to a pointer to a void, using GetVoidPtr().
     */
-    void* operator void*();
+    void* operator void*() const;
 
     /**
         Operator for implicit conversion to a wxChar, using GetChar().
     */
-    char operator wxChar();
+    char operator wxChar() const;
 
     /**
         Operator for implicit conversion to a pointer to a wxDateTime, using
         GetDateTime().
     */
-    void* operator wxDateTime();
+    void* operator wxDateTime() const;
 
     /**
         Operator for implicit conversion to a string, using MakeString().
     */
-    wxString operator wxString();
+    wxString operator wxString() const;
 };
 
 
@@ -446,7 +446,7 @@ public:
         Implement Clone if you wish wxVariant::Unshare to work
         for your data. This function is implemented for all built-in data types.
     */
-    wxVariantData* Clone();
+    wxVariantData* Clone() const;
 
     /**
         Decreases reference count. If the count reaches zero, the object is
@@ -459,19 +459,19 @@ public:
     /**
         Returns @true if this object is equal to @e data.
     */
-    bool Eq(wxVariantData& data);
+    bool Eq(wxVariantData& data) const;
 
     /**
         Returns the string type of the data.
     */
-    wxString GetType();
+    wxString GetType() const;
 
     /**
         If the data is a wxObject returns a pointer to the objects wxClassInfo
         structure, if
         the data isn't a wxObject the method returns @NULL.
     */
-    wxClassInfo* GetValueClassInfo();
+    wxClassInfo* GetValueClassInfo() const;
 
     /**
         Increases reference count. Note that initially wxVariantData has reference
@@ -491,8 +491,8 @@ public:
     /**
         Writes the data to @a stream or @e string.
     */
-    bool Write(ostream& stream);
-    bool Write(wxString& string);
+    bool Write(ostream& stream) const;
+    const bool Write(wxString& string) const;
     //@}
 
     /**

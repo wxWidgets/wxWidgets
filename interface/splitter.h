@@ -102,7 +102,7 @@ public:
         
         @see SetMinimumPaneSize()
     */
-    int GetMinimumPaneSize();
+    int GetMinimumPaneSize() const;
 
     /**
         Returns the current sash gravity.
@@ -124,17 +124,17 @@ public:
         @see SetSplitMode(), SplitVertically(),
              SplitHorizontally().
     */
-    int GetSplitMode();
+    int GetSplitMode() const;
 
     /**
         Returns the left/top or only pane.
     */
-    wxWindow* GetWindow1();
+    wxWindow* GetWindow1() const;
 
     /**
         Returns the right/bottom pane.
     */
-    wxWindow* GetWindow2();
+    wxWindow* GetWindow2() const;
 
     /**
         Initializes the splitter window to have one pane.  The child window is
@@ -153,7 +153,7 @@ public:
     /**
         Returns @true if the window is split, @false otherwise.
     */
-    bool IsSplit();
+    bool IsSplit() const;
 
     /**
         Application-overridable function called when the sash is double-clicked with
@@ -397,7 +397,7 @@ public:
         wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING and
         wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events.
     */
-    int GetSashPosition();
+    int GetSashPosition() const;
 
     /**
         Returns a pointer to the window being removed when a splitter window
@@ -405,21 +405,21 @@ public:
         May only be called while processing
         wxEVT_COMMAND_SPLITTER_UNSPLIT events.
     */
-    wxWindow* GetWindowBeingRemoved();
+    wxWindow* GetWindowBeingRemoved() const;
 
     /**
         Returns the x coordinate of the double-click point.
         May only be called while processing
         wxEVT_COMMAND_SPLITTER_DOUBLECLICKED events.
     */
-    int GetX();
+    int GetX() const;
 
     /**
         Returns the y coordinate of the double-click point.
         May only be called while processing
         wxEVT_COMMAND_SPLITTER_DOUBLECLICKED events.
     */
-    int GetY();
+    int GetY() const;
 
     /**
         In the case of wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events,

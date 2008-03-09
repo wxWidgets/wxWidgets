@@ -40,31 +40,31 @@ public:
         @param id
             The button id to report, from 0 to GetNumberButtons() - 1
     */
-    int GetButtonState();
-    bool GetButtonState(unsigned id);
+    int GetButtonState() const;
+    const bool GetButtonState(unsigned id) const;
     //@}
 
     /**
         Returns the manufacturer id.
     */
-    int GetManufacturerId();
+    int GetManufacturerId() const;
 
     /**
         Returns the movement threshold, the number of steps outside which the joystick
         is deemed to have
         moved.
     */
-    int GetMovementThreshold();
+    int GetMovementThreshold() const;
 
     /**
         Returns the number of axes for this joystick.
     */
-    int GetNumberAxes();
+    int GetNumberAxes() const;
 
     /**
         Returns the number of buttons for this joystick.
     */
-    int GetNumberButtons();
+    int GetNumberButtons() const;
 
     /**
         Returns the number of joysticks currently attached to the computer.
@@ -76,7 +76,7 @@ public:
         degree units.
         Returns -1 on error.
     */
-    int GetPOVCTSPosition();
+    int GetPOVCTSPosition() const;
 
     /**
         Returns the point-of-view position, expressed in continuous, one-hundredth of a
@@ -84,17 +84,17 @@ public:
         but limited to return 0, 9000, 18000 or 27000.
         Returns -1 on error.
     */
-    int GetPOVPosition();
+    int GetPOVPosition() const;
 
     /**
         Returns the maximum polling frequency.
     */
-    int GetPollingMax();
+    int GetPollingMax() const;
 
     /**
         Returns the minimum polling frequency.
     */
-    int GetPollingMin();
+    int GetPollingMin() const;
 
     //@{
     /**
@@ -103,140 +103,140 @@ public:
         @param axis
             The joystick axis to report, from 0 to GetNumberAxes() - 1.
     */
-    wxPoint GetPosition();
-    int GetPosition(unsigned axis);
+    wxPoint GetPosition() const;
+    const int GetPosition(unsigned axis) const;
     //@}
 
     /**
         Returns the product id for the joystick.
     */
-    int GetProductId();
+    int GetProductId() const;
 
     /**
         Returns the product name for the joystick.
     */
-    wxString GetProductName();
+    wxString GetProductName() const;
 
     /**
         Returns the maximum rudder position.
     */
-    int GetRudderMax();
+    int GetRudderMax() const;
 
     /**
         Returns the minimum rudder position.
     */
-    int GetRudderMin();
+    int GetRudderMin() const;
 
     /**
         Returns the rudder position.
     */
-    int GetRudderPosition();
+    int GetRudderPosition() const;
 
     /**
         Returns the maximum U position.
     */
-    int GetUMax();
+    int GetUMax() const;
 
     /**
         Returns the minimum U position.
     */
-    int GetUMin();
+    int GetUMin() const;
 
     /**
         Gets the position of the fifth axis of the joystick, if it exists.
     */
-    int GetUPosition();
+    int GetUPosition() const;
 
     /**
         Returns the maximum V position.
     */
-    int GetVMax();
+    int GetVMax() const;
 
     /**
         Returns the minimum V position.
     */
-    int GetVMin();
+    int GetVMin() const;
 
     /**
         Gets the position of the sixth axis of the joystick, if it exists.
     */
-    int GetVPosition();
+    int GetVPosition() const;
 
     /**
         Returns the maximum x position.
     */
-    int GetXMax();
+    int GetXMax() const;
 
     /**
         Returns the minimum x position.
     */
-    int GetXMin();
+    int GetXMin() const;
 
     /**
         Returns the maximum y position.
     */
-    int GetYMax();
+    int GetYMax() const;
 
     /**
         Returns the minimum y position.
     */
-    int GetYMin();
+    int GetYMin() const;
 
     /**
         Returns the maximum z position.
     */
-    int GetZMax();
+    int GetZMax() const;
 
     /**
         Returns the minimum z position.
     */
-    int GetZMin();
+    int GetZMin() const;
 
     /**
         Returns the z position of the joystick.
     */
-    int GetZPosition();
+    int GetZPosition() const;
 
     /**
         Returns @true if the joystick has a point of view control.
     */
-    bool HasPOV();
+    bool HasPOV() const;
 
     /**
         Returns @true if the joystick point-of-view supports discrete values (centered,
         forward, backward, left, and right).
     */
-    bool HasPOV4Dir();
+    bool HasPOV4Dir() const;
 
     /**
         Returns @true if the joystick point-of-view supports continuous degree bearings.
     */
-#define bool HasPOVCTS()     /* implementation is private */
+#define bool HasPOVCTS() const     /* implementation is private */
 
     /**
         Returns @true if there is a rudder attached to the computer.
     */
-    bool HasRudder();
+    bool HasRudder() const;
 
     /**
         Returns @true if the joystick has a U axis.
     */
-    bool HasU();
+    bool HasU() const;
 
     /**
         Returns @true if the joystick has a V axis.
     */
-    bool HasV();
+    bool HasV() const;
 
     /**
         Returns @true if the joystick has a Z axis.
     */
-    bool HasZ();
+    bool HasZ() const;
 
     /**
         Returns @true if the joystick is functioning.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Releases the capture set by @b SetCapture.

@@ -88,7 +88,7 @@ public:
     /**
         Returns pointer to the tracked object or @NULL.
     */
-    T* get();
+    T* get() const;
 
     /**
         Release currently tracked object and start tracking the same object as
@@ -100,13 +100,13 @@ public:
         Implicit conversion to T*. Returns pointer to the tracked
         object or @NULL.
     */
-    T* operator*();
+    T* operator*() const;
 
     /**
         Returns a reference to the tracked object. If the internal pointer is @NULL
         this method will cause an assert in debug mode.
     */
-    T operator*();
+    T operator*() const;
 
     /**
         Smart pointer member access. Returns a pointer to the

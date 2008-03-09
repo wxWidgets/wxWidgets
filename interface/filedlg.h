@@ -90,7 +90,7 @@ public:
     /**
         Returns the default directory.
     */
-    wxString GetDirectory();
+    wxString GetDirectory() const;
 
     /**
         If functions
@@ -98,12 +98,12 @@ public:
         and ShowModal() were called,
         returns the extra window. Otherwise returns @NULL.
     */
-    wxWindow* GetExtraControl();
+    wxWindow* GetExtraControl() const;
 
     /**
         Returns the default filename.
     */
-    wxString GetFilename();
+    wxString GetFilename() const;
 
     /**
         Fills the array @a filenames with the names of the files chosen. This
@@ -114,7 +114,7 @@ public:
         of each referenced file by appending the directory containing the shortcuts
         to the filename.
     */
-    void GetFilenames(wxArrayString& filenames);
+    void GetFilenames(wxArrayString& filenames) const;
 
     /**
         Returns the index into the list of filters supplied, optionally, in the
@@ -123,29 +123,29 @@ public:
         dialog is first displayed.
         After the dialog is shown, this is the index selected by the user.
     */
-    int GetFilterIndex();
+    int GetFilterIndex() const;
 
     /**
         Returns the message that will be displayed on the dialog.
     */
-    wxString GetMessage();
+    wxString GetMessage() const;
 
     /**
         Returns the full path (directory and filename) of the selected file.
     */
-    wxString GetPath();
+    wxString GetPath() const;
 
     /**
         Fills the array @a paths with the full paths of the files chosen. This
         function should only be used with the dialogs which have @c wxFD_MULTIPLE style,
         use GetPath() for the others.
     */
-    void GetPaths(wxArrayString& paths);
+    void GetPaths(wxArrayString& paths) const;
 
     /**
         Returns the file dialog wildcard.
     */
-    wxString GetWildcard();
+    wxString GetWildcard() const;
 
     /**
         Sets the default directory.

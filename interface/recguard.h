@@ -91,5 +91,5 @@ public:
         (may be simply returning) to prevent reentrant calls to itself.
         If this method returns @false, it is safe to continue.
     */
-    bool IsInside();
+    bool IsInside() const;
 };

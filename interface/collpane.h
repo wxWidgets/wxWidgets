@@ -31,7 +31,7 @@ public:
     /**
         Returns @true if the pane has been collapsed.
     */
-    bool GetCollapsed();
+    bool GetCollapsed() const;
 
     /**
         Sets this as a collapsed pane event (if @a collapsed is @true) or as an
@@ -158,15 +158,15 @@ public:
         Returns a pointer to the pane window. Add controls to the returned wxWindow
         to make them collapsible.
     */
-    wxWindow* GetPane();
+    wxWindow* GetPane() const;
 
     /**
         Returns @true if the pane window is currently hidden.
     */
-    bool IsCollapsed();
+    bool IsCollapsed() const;
 
     /**
         Returns @true if the pane window is currently shown.
     */
-    bool IsExpanded();
+    bool IsExpanded() const;
 };

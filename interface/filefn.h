@@ -73,7 +73,7 @@ public:
         to the value returned wxPathList::FindValidPath) or an
         empty string.
     */
-    wxString FindAbsoluteValidPath(const wxString& file);
+    wxString FindAbsoluteValidPath(const wxString& file) const;
 
     /**
         Searches the given file in all paths stored in this class.
@@ -92,7 +92,7 @@ public:
         (see wxGetCwd and wxSetWorkingDirectory)
         may affect the value returned by this function!
     */
-    wxString FindValidPath(const wxString& file);
+    wxString FindValidPath(const wxString& file) const;
 };
 
 

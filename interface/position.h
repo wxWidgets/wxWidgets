@@ -35,32 +35,32 @@ public:
     /**
         A synonym for GetColumn().
     */
-    int GetCol();
+    int GetCol() const;
 
     /**
         Get the current row value.
     */
-    int GetColumn();
+    int GetColumn() const;
 
     /**
         Get the current row value.
     */
-    int GetRow();
+    int GetRow() const;
 
     //@{
     /**
         
     */
-    bool operator ==(const wxPosition& p);
-    bool operator !=(const wxPosition& p);
-    wxPosition operator +=(const wxPosition& p);
-    wxPosition operator -=(const wxPosition& p);
-    wxPosition operator +=(const wxSize& s);
-    wxPosition operator -=(const wxSize& s);
-    wxPosition operator +(const wxPosition& p);
-    wxPosition operator -(const wxPosition& p);
-    wxPosition operator +(const wxSize& s);
-    wxPosition operator -(const wxSize& s);
+    bool operator ==(const wxPosition& p) const;
+    const bool operator !=(const wxPosition& p) const;
+    const wxPosition&  operator +=(const wxPosition& p) const;
+    wxPosition operator -=(const wxPosition& p) const;
+    wxPosition operator +=(const wxSize& s) const;
+    wxPosition operator -=(const wxSize& s) const;
+    wxPosition operator +(const wxPosition& p) const;
+    const wxPosition  operator -(const wxPosition& p) const;
+    const wxPosition  operator +(const wxSize& s) const;
+    const wxPosition  operator -(const wxSize& s) const;
     //@}
 
     /**

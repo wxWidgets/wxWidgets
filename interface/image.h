@@ -42,7 +42,7 @@ public:
     /**
         Gets the file extension associated with this handler.
     */
-    const wxString GetExtension();
+    const wxString GetExtension() const;
 
     /**
         If the image file contains more than one image and the image handler is capable
@@ -61,17 +61,17 @@ public:
     /**
         Gets the MIME type associated with this handler.
     */
-    const wxString GetMimeType();
+    const wxString GetMimeType() const;
 
     /**
         Gets the name of this handler.
     */
-    const wxString GetName();
+    const wxString GetName() const;
 
     /**
         Gets the image type associated with this handler.
     */
-    long GetType();
+    long GetType() const;
 
     /**
         Loads a image from a stream, putting the resulting data into @e image. If the
@@ -416,7 +416,7 @@ public:
         
         @returns Returns number of colours in the histogram.
     */
-    unsigned long ComputeHistogram(wxImageHistogram& histogram);
+    unsigned long ComputeHistogram(wxImageHistogram& histogram) const;
 
     /**
         If the image has alpha channel, this method converts it to mask. All pixels
@@ -434,7 +434,7 @@ public:
         Deprecated, use equivalent @ref wxBitmap::ctor "wxBitmap constructor"
         (which takes wxImage and depth as its arguments) instead.
     */
-    wxBitmap ConvertToBitmap();
+    wxBitmap ConvertToBitmap() const;
 
     /**
         Returns a greyscale version of the image. The returned image uses the luminance
@@ -443,7 +443,7 @@ public:
         (R * @e lr) + (G * @e lg) + (B * @e lb).
     */
     wxImage ConvertToGreyscale(double lr = 0.299, double lg = 0.587,
-                               double lb = 0.114);
+                               double lb = 0.114) const;
 
     /**
         Returns monochromatic version of the image. The returned image has white
@@ -451,12 +451,12 @@ public:
         everywhere else.
     */
     wxImage ConvertToMono(unsigned char r, unsigned char g,
-                          unsigned char b);
+                          unsigned char b) const;
 
     /**
         Returns an identical copy of the image.
     */
-    wxImage Copy();
+    wxImage Copy() const;
 
     /**
         Creates a fresh image.  If @a clear is @true, the new image will be initialized
@@ -523,14 +523,14 @@ public:
         does have it, this pointer may be used to directly manipulate the alpha values
         which are stored as the @ref getdata() RGB ones.
     */
-    unsigned char GetAlpha(int x, int y);
-    unsigned char* GetAlpha();
+    unsigned char GetAlpha(int x, int y) const;
+    const unsigned char * GetAlpha() const;
     //@}
 
     /**
         Returns the blue intensity at the given coordinate.
     */
-    unsigned char GetBlue(int x, int y);
+    unsigned char GetBlue(int x, int y) const;
 
     /**
         Returns the image data as an array. This is most often used when doing
@@ -543,12 +543,12 @@ public:
         You should not delete the returned pointer nor pass it to
         SetData().
     */
-    unsigned char* GetData();
+    unsigned char* GetData() const;
 
     /**
         Returns the green intensity at the given coordinate.
     */
-    unsigned char GetGreen(int x, int y);
+    unsigned char GetGreen(int x, int y) const;
 
     /**
         Returns the static list of image format handlers.
@@ -560,7 +560,7 @@ public:
     /**
         Gets the height of the image in pixels.
     */
-    int GetHeight();
+    int GetHeight() const;
 
     //@{
     /**
@@ -733,17 +733,17 @@ public:
     /**
         Gets the blue value of the mask colour.
     */
-    unsigned char GetMaskBlue();
+    unsigned char GetMaskBlue() const;
 
     /**
         Gets the green value of the mask colour.
     */
-    unsigned char GetMaskGreen();
+    unsigned char GetMaskGreen() const;
 
     /**
         Gets the red value of the mask colour.
     */
-    unsigned char GetMaskRed();
+    unsigned char GetMaskRed() const;
 
     /**
         Gets a user-defined option. The function is case-insensitive to @e name.
@@ -752,7 +752,7 @@ public:
         
         @see SetOption(), GetOptionInt(), HasOption()
     */
-    wxString GetOption(const wxString& name);
+    wxString GetOption(const wxString& name) const;
 
     /**
         Gets a user-defined option as an integer. The function is case-insensitive to
@@ -786,14 +786,14 @@ public:
         
         @see SetOption(), GetOption()
     */
-    int GetOptionInt(const wxString& name);
+    int GetOptionInt(const wxString& name) const;
 
     /**
         Get the current mask colour or find a suitable unused colour that could be
         used as a mask colour. Returns @true if the image currently has a mask.
     */
     bool GetOrFindMaskColour(unsigned char r, unsigned char g,
-                             unsigned char b);
+                             unsigned char b) const;
 
     /**
         Returns the palette associated with the image. Currently the palette is only
@@ -801,25 +801,25 @@ public:
         have been modified to set the palette if one exists in the image file (usually
         256 or less colour images in GIF or PNG format).
     */
-    const wxPalette GetPalette();
+    const wxPalette GetPalette() const;
 
     /**
         Returns the red intensity at the given coordinate.
     */
-    unsigned char GetRed(int x, int y);
+    unsigned char GetRed(int x, int y) const;
 
     /**
         Returns a sub image of the current one as long as the rect belongs entirely to
         the image.
     */
-    wxImage GetSubImage(const wxRect& rect);
+    wxImage GetSubImage(const wxRect& rect) const;
 
     /**
         Gets the width of the image in pixels.
         
         @see GetHeight()
     */
-    int GetWidth();
+    int GetWidth() const;
 
     /**
         Constructor for HSVValue, an object that contains values for hue, saturation
@@ -840,12 +840,12 @@ public:
         
         @see GetAlpha(), SetAlpha()
     */
-    bool HasAlpha();
+    bool HasAlpha() const;
 
     /**
         Returns @true if there is a mask active, @false otherwise.
     */
-    bool HasMask();
+    bool HasMask() const;
 
     /**
         Returns @true if the given option is present. The function is case-insensitive
@@ -853,7 +853,7 @@ public:
         
         @see SetOption(), GetOption(), GetOptionInt()
     */
-    bool HasOption(const wxString& name);
+    bool HasOption(const wxString& name) const;
 
     /**
         Initializes the image alpha channel data. It is an error to call it
@@ -887,14 +887,14 @@ public:
     /**
         Returns @true if image data is present.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Returns @true if the given pixel is transparent, i.e. either has the mask
         colour if this image has a mask or if this image has alpha channel and alpha
         value of this pixel is strictly less than @e threshold.
     */
-    bool IsTransparent(int x, int y, unsigned char threshold = 128);
+    bool IsTransparent(int x, int y, unsigned char threshold = 128) const;
 
     //@{
     /**
@@ -1077,7 +1077,7 @@ public:
         Returns a mirrored copy of the image. The parameter @e horizontally
         indicates the orientation.
     */
-    wxImage Mirror(bool horizontally = true);
+    wxImage Mirror(bool horizontally = true) const;
 
     /**
         Copy the data of the given @a image to the specified position in this image.
@@ -1162,7 +1162,7 @@ public:
         Returns a copy of the image rotated 90 degrees in the direction
         indicated by @e clockwise.
     */
-    wxImage Rotate90(bool clockwise = true);
+    wxImage Rotate90(bool clockwise = true) const;
 
     /**
         Rotates the hue of each pixel in the image by @e angle, which is a double in
@@ -1294,12 +1294,13 @@ public:
         
         @see LoadFile()
     */
-    bool SaveFile(const wxString& name, int type);
-    bool SaveFile(const wxString& name, const wxString& mimetype);
-    bool SaveFile(const wxString& name);
-    bool SaveFile(wxOutputStream& stream, int type);
-    bool SaveFile(wxOutputStream& stream,
-                  const wxString& mimetype);
+    bool SaveFile(const wxString& name, int type) const;
+    const bool SaveFile(const wxString& name,
+                        const wxString& mimetype) const;
+    const bool SaveFile(const wxString& name) const;
+    const bool SaveFile(wxOutputStream& stream, int type) const;
+    const bool SaveFile(wxOutputStream& stream,
+                        const wxString& mimetype) const;
     //@}
 
     /**
@@ -1352,7 +1353,7 @@ public:
         @see Rescale()
     */
     wxImage Scale(int width, int height,
-                  int quality = wxIMAGE_QUALITY_NORMAL);
+                  int quality = wxIMAGE_QUALITY_NORMAL) const;
 
     //@{
     /**
@@ -1448,7 +1449,7 @@ public:
         @see Resize()
     */
     wxImage Size(const wxSize& size, const wxPoint pos, int red = -1,
-                 int green = -1, int blue = -1);
+                 int green = -1, int blue = -1) const;
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".

@@ -184,24 +184,24 @@ public:
         Gets the colour depth of the icon. A value of 1 indicates a
         monochrome icon.
     */
-    int GetDepth();
+    int GetDepth() const;
 
     /**
         Gets the height of the icon in pixels.
     */
-    int GetHeight();
+    int GetHeight() const;
 
     /**
         Gets the width of the icon in pixels.
         
         @see GetHeight()
     */
-    int GetWidth();
+    int GetWidth() const;
 
     /**
         Returns @true if icon data is present.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Loads an icon from a file or resource.

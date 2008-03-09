@@ -71,7 +71,7 @@ public:
         The derived class must implement this to return
         string representation of the value.
     */
-    wxString GetStringValue();
+    wxString GetStringValue() const;
 
     /**
         The derived class must implement this to initialize
@@ -85,7 +85,7 @@ public:
         Utility method that returns @true if Create has been called.
         Useful in conjunction with LazyCreate().
     */
-    bool IsCreated();
+    bool IsCreated() const;
 
     /**
         The derived class may implement this to return
@@ -300,7 +300,7 @@ public:
         
         @returns A reference to the disabled state bitmap.
     */
-    const wxBitmap GetBitmapDisabled();
+    const wxBitmap GetBitmapDisabled() const;
 
     /**
         Returns button mouse hover bitmap that has been set with
@@ -308,7 +308,7 @@ public:
         
         @returns A reference to the mouse hover state bitmap.
     */
-    const wxBitmap GetBitmapHover();
+    const wxBitmap GetBitmapHover() const;
 
     /**
         Returns default button bitmap that has been set with
@@ -316,7 +316,7 @@ public:
         
         @returns A reference to the normal state bitmap.
     */
-    const wxBitmap GetBitmapNormal();
+    const wxBitmap GetBitmapNormal() const;
 
     /**
         Returns depressed button bitmap that has been set with
@@ -324,7 +324,7 @@ public:
         
         @returns A reference to the depressed state bitmap.
     */
-    const wxBitmap GetBitmapPressed();
+    const wxBitmap GetBitmapPressed() const;
 
     /**
         Returns current size of the dropdown button.
@@ -336,7 +336,7 @@ public:
         
         @see SetCustomPaintWidth().
     */
-    int GetCustomPaintWidth();
+    int GetCustomPaintWidth() const;
 
     /**
         Returns features supported by wxComboCtrl. If needed feature is missing,
@@ -352,12 +352,12 @@ public:
         @b Note: Under wxMSW, this function always returns 0 if the combo control
         doesn't have the focus.
     */
-    long GetInsertionPoint();
+    long GetInsertionPoint() const;
 
     /**
         Returns the last position in the combo control text field.
     */
-    long GetLastPosition();
+    long GetLastPosition() const;
 
     /**
         Returns current popup interface that has been set with SetPopupControl.
@@ -367,29 +367,29 @@ public:
     /**
         Returns popup window containing the popup control.
     */
-    wxWindow* GetPopupWindow();
+    wxWindow* GetPopupWindow() const;
 
     /**
         Get the text control which is part of the combo control.
     */
-    wxTextCtrl* GetTextCtrl();
+    wxTextCtrl* GetTextCtrl() const;
 
     /**
         Returns actual indentation in pixels.
     */
-    wxCoord GetTextIndent();
+    wxCoord GetTextIndent() const;
 
     /**
         Returns area covered by the text field (includes everything except
         borders and the dropdown button).
     */
-    const wxRect GetTextRect();
+    const wxRect GetTextRect() const;
 
     /**
         Returns text representation of the current value. For writable
         combo control it always returns the value in the text field.
     */
-    wxString GetValue();
+    wxString GetValue() const;
 
     /**
         Dismisses the popup window.
@@ -399,7 +399,7 @@ public:
     /**
         Returns @true if the popup is currently shown
     */
-    bool IsPopupShown();
+    bool IsPopupShown() const;
 
     /**
         Returns @true if the popup window is in the given state.
@@ -418,7 +418,7 @@ public:
         
         Popup window is fully visible.
     */
-    bool IsPopupWindowState(int state);
+    bool IsPopupWindowState(int state) const;
 
     /**
         Implement in a derived class to define what happens on

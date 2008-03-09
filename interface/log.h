@@ -47,7 +47,7 @@ public:
         Returns the associated log frame window. This may be used to position or resize
         it but use Show() to show or hide it.
     */
-    wxFrame* GetFrame();
+    wxFrame* GetFrame() const;
 
     /**
         Called if the user closes the window interactively, will not be
@@ -157,14 +157,14 @@ public:
     /**
         Returns the pointer to the previously active log target (which may be @NULL).
     */
-    wxLog* GetOldLog();
+    wxLog* GetOldLog() const;
 
     /**
         Returns @true if the messages are passed to the previously active log
         target (default) or @false if PassMessages()
         had been called.
     */
-    bool IsPassingMessages();
+    bool IsPassingMessages() const;
 
     /**
         By default, the log messages are passed to the previously active log target.

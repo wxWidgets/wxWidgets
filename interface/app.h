@@ -97,7 +97,7 @@ public:
         By default, returns the same string as GetAppName().
         This function is new since wxWidgets version 2.9.0
     */
-    wxString GetAppDisplayName();
+    wxString GetAppDisplayName() const;
 
     /**
         Returns the application name.
@@ -107,7 +107,7 @@ public:
         
         @see GetAppDisplayName()
     */
-    wxString GetAppName();
+    wxString GetAppName() const;
 
     /**
         Gets the class name of the application. The class name may be used in a
@@ -116,7 +116,7 @@ public:
         
         @see SetClassName()
     */
-    wxString GetClassName();
+    wxString GetClassName() const;
 
     /**
         Returns @true if the application will exit when the top-level window is deleted,
@@ -126,7 +126,7 @@ public:
         @see SetExitOnFrameDelete(), @ref overview_wxappshutdownoverview "wxApp
              shutdown overview"
     */
-    bool GetExitOnFrameDelete();
+    bool GetExitOnFrameDelete() const;
 
     /**
         Returns the one and only global application object.
@@ -145,7 +145,7 @@ public:
         
         @see SetTopWindow()
     */
-    virtual wxWindow* GetTopWindow();
+    virtual wxWindow* GetTopWindow() const;
 
     /**
         Returns a pointer to the wxAppTraits object for the application.
@@ -160,7 +160,7 @@ public:
         
         @see SetUseBestVisual()
     */
-    bool GetUseBestVisual();
+    bool GetUseBestVisual() const;
 
     /**
         Returns the user-readable vendor name. The difference between this string
@@ -171,12 +171,12 @@ public:
         By default, returns the same string as GetVendorName().
         This function is new since wxWidgets version 2.9.0
     */
-    wxString GetVendorDisplayName();
+    wxString GetVendorDisplayName() const;
 
     /**
         Returns the application's vendor name.
     */
-    wxString GetVendorName();
+    wxString GetVendorName() const;
 
     /**
         This function simply invokes the given method @a func of the specified
@@ -187,7 +187,7 @@ public:
     */
     virtual void HandleEvent(wxEvtHandler handler,
                              wxEventFunction func,
-                             wxEvent& event);
+                             wxEvent& event) const;
 
     /**
         Returns @true if the application is active, i.e. if one of its windows is
@@ -196,7 +196,7 @@ public:
         wxTopLevelWindow::RequestUserAttention
         to do it.
     */
-    bool IsActive();
+    bool IsActive() const;
 
     /**
         Returns @true if the main event loop is currently running, i.e. if the
@@ -483,7 +483,7 @@ public:
         @param theme
             The name of the new theme or an absolute path to a gtkrc-theme-file
     */
-    bool SetNativeTheme();
+    bool SetNativeTheme(const wxStringamp;);
 
     /**
         Sets the 'top' window. You can call this from within OnInit() to

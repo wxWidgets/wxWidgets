@@ -107,33 +107,33 @@ public:
         Returns @true if the point is within the path.
     */
     bool Contains(const wxPoint2DDouble& c,
-                  int fillStyle = wxODDEVEN_RULE);
-    bool Contains(wxDouble x, wxDouble y,
-                  int fillStyle = wxODDEVEN_RULE);
+                  int fillStyle = wxODDEVEN_RULE) const;
+    const bool Contains(wxDouble x, wxDouble y,
+                        int fillStyle = wxODDEVEN_RULE) const;
     //@}
 
     //@{
     /**
         Gets the bounding box enclosing all points (possibly including control points).
     */
-    wxRect2DDouble GetBox();
-    void GetBox(wxDouble* x, wxDouble* y, wxDouble* w,
-                wxDouble* h);
+    wxRect2DDouble GetBox() const;
+    const void GetBox(wxDouble* x, wxDouble* y, wxDouble* w,
+                      wxDouble* h) const;
     //@}
 
     //@{
     /**
         Gets the last point of the current path, (0,0) if not yet set.
     */
-    void GetCurrentPoint(wxDouble* x, wxDouble* y);
-    wxPoint2DDouble GetCurrentPoint();
+    void GetCurrentPoint(wxDouble* x, wxDouble* y) const;
+    const wxPoint2DDouble GetCurrentPoint() const;
     //@}
 
     /**
         Returns the native path (CGPathRef for Core Graphics, Path pointer for GDIPlus
         and a cairo_path_t pointer for cairo).
     */
-    void* GetNativePath();
+    void* GetNativePath() const;
 
     //@{
     /**
@@ -153,7 +153,7 @@ public:
         some deallocations necessary (eg on cairo the native path returned by
         GetNativePath is newly allocated each time).
     */
-    void UnGetNativePath(void* p);
+    void UnGetNativePath(void* p) const;
 };
 
 
@@ -177,12 +177,12 @@ public:
         Returns the renderer that was used to create this instance, or @NULL if it has
         not been initialized yet
     */
-    wxGraphicsRenderer* GetRenderer();
+    wxGraphicsRenderer* GetRenderer() const;
 
     /**
         Is this object valid (@false) or still empty (@true)?
     */
-    bool IsNull();
+    bool IsNull() const;
 };
 
 
@@ -230,13 +230,13 @@ public:
     /**
         Creates a native brush from a wxBrush.
     */
-    wxGraphicsBrush CreateBrush(const wxBrush& brush);
+    wxGraphicsBrush CreateBrush(const wxBrush& brush) const;
 
     /**
         Creates a native graphics font from a wxFont and a text colour.
     */
     wxGraphicsFont CreateFont(const wxFont& font,
-                              const wxColour& col = wxBLACK);
+                              const wxColour& col = wxBLACK) const;
 
     /**
         Creates a wxGraphicsContext from a native context. This native context must be
@@ -263,7 +263,7 @@ public:
             wxDouble x2,
             wxDouble y2,
             const wxColouramp;c1,
-            const wxColouramp;c2);
+            const wxColouramp;c2) const;
 
     /**
         Creates a native affine transformation matrix from the passed in values. The
@@ -273,17 +273,17 @@ public:
                                   wxDouble c = 0.0,
                                   wxDouble d = 1.0,
                                   wxDouble tx = 0.0,
-                                  wxDouble ty = 0.0);
+                                  wxDouble ty = 0.0) const;
 
     /**
         Creates a native graphics path which is initially empty.
     */
-    wxGraphicsPath CreatePath();
+    wxGraphicsPath CreatePath() const;
 
     /**
         Creates a native pen from a wxPen.
     */
-    wxGraphicsPen CreatePen(const wxPen& pen);
+    wxGraphicsPen CreatePen(const wxPen& pen) const;
 
     /**
         Creates a native brush, having a radial gradient originating at (xo,yc) with
@@ -295,7 +295,7 @@ public:
             wxDouble yc,
             wxDouble radius,
             const wxColour& oColor,
-            const wxColour& cColor);
+            const wxColour& cColor) const;
 
     /**
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask and the
@@ -366,7 +366,7 @@ public:
         @a text to the corresponding character of @e text.
     */
     void GetPartialTextExtents(const wxString& text,
-                               wxArrayDouble& widths);
+                               wxArrayDouble& widths) const;
 
     /**
         Gets the dimensions of the string using the currently selected font.
@@ -379,12 +379,12 @@ public:
     void GetTextExtent(const wxString& text, wxDouble* width,
                        wxDouble* height,
                        wxDouble* descent,
-                       wxDouble* externalLeading);
+                       wxDouble* externalLeading) const;
 
     /**
         Gets the current transformation matrix of this context.
     */
-    wxGraphicsMatrix GetTransform();
+    wxGraphicsMatrix GetTransform() const;
 
     /**
         Resets the clipping to original shape.
@@ -623,13 +623,13 @@ public:
     */
     void Get(wxDouble* a = NULL, wxDouble* b = NULL, wxDouble* c = NULL,
              wxDouble* d = NULL, wxDouble* tx = NULL,
-             wxDouble* ty = NULL);
+             wxDouble* ty = NULL) const;
 
     /**
         Returns the native representation of the matrix. For CoreGraphics this is a
         CFAffineMatrix pointer. For GDIPlus a Matrix Pointer and for Cairo a cairo_matrix_t pointer.
     */
-    void* GetNativeMatrix();
+    void* GetNativeMatrix() const;
 
     /**
         Inverts the matrix.
@@ -639,12 +639,12 @@ public:
     /**
         Returns @true if the elements of the transformation matrix are equal.
     */
-    bool IsEqual(const wxGraphicsMatrix& t);
+    bool IsEqual(const wxGraphicsMatrix& t) const;
 
     /**
         Return @true if this is the identity matrix.
     */
-    bool IsIdentity();
+    bool IsIdentity() const;
 
     /**
         Rotates this matrix (radians).
@@ -668,12 +668,12 @@ public:
         Applies this matrix to a distance (ie. performs all transforms except
         translations)
     */
-    void TransformDistance(wxDouble* dx, wxDouble* dy);
+    void TransformDistance(wxDouble* dx, wxDouble* dy) const;
 
     /**
         Applies this matrix to a point.
     */
-    void TransformPoint(wxDouble* x, wxDouble* y);
+    void TransformPoint(wxDouble* x, wxDouble* y) const;
 
     /**
         Translates this matrix.

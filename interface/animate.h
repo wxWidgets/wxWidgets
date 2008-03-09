@@ -83,18 +83,18 @@ public:
     /**
         Returns the animation associated with this control.
     */
-    wxAnimation GetAnimation();
+    wxAnimation GetAnimation() const;
 
     /**
         Returns the inactive bitmap shown in this control when the;
         see SetInactiveBitmap() for more info.
     */
-    wxBitmap GetInactiveBitmap();
+    wxBitmap GetInactiveBitmap() const;
 
     /**
         Returns @true if the animation is being played.
     */
-    bool IsPlaying();
+    bool IsPlaying() const;
 
     /**
         Loads the animation from the given file and calls SetAnimation().
@@ -197,27 +197,27 @@ public:
         Returns the delay for the i-th frame in milliseconds.
         If @c -1 is returned the frame is to be displayed forever.
     */
-    int GetDelay(unsigned int i);
+    int GetDelay(unsigned int i) const;
 
     /**
         Returns the i-th frame as a wxImage.
     */
-    wxImage GetFrame(unsigned int i);
+    wxImage GetFrame(unsigned int i) const;
 
     /**
         Returns the number of frames for this animation.
     */
-    unsigned int GetFrameCount();
+    unsigned int GetFrameCount() const;
 
     /**
         Returns the size of the animation.
     */
-    wxSize GetSize();
+    wxSize GetSize() const;
 
     /**
         Returns @true if animation data is present.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Loads an animation from the given stream.

@@ -39,42 +39,42 @@ public:
     /**
         An alias for GetHeight.
     */
-    wxCoord GetH();
+    wxCoord GetH() const;
 
     /**
         Returns the height value for the current region.
     */
-    wxCoord GetHeight();
+    wxCoord GetHeight() const;
 
     /**
         Returns the current rectangle.
     */
-    wxRect GetRect();
+    wxRect GetRect() const;
 
     /**
         An alias for GetWidth.
     */
-    wxCoord GetW();
+    wxCoord GetW() const;
 
     /**
         Returns the width value for the current region.
     */
-    wxCoord GetWidth();
+    wxCoord GetWidth() const;
 
     /**
         Returns the x value for the current region.
     */
-    wxCoord GetX();
+    wxCoord GetX() const;
 
     /**
         Returns the y value for the current region.
     */
-    wxCoord GetY();
+    wxCoord GetY() const;
 
     /**
         Returns @true if there are still some rectangles; otherwise returns @false.
     */
-    bool HaveRects();
+    bool HaveRects() const;
 
     //@{
     /**
@@ -93,7 +93,7 @@ public:
         Returns @true if there are still some rectangles; otherwise returns @false.
         You can use this to test the iterator object as if it were of type bool.
     */
-    operator bool();
+    operator bool() const;
 };
 
 
@@ -156,27 +156,27 @@ public:
         @returns The return value is one of wxOutRegion, wxPartRegion and
                  wxInRegion.
     */
-    wxRegionContain Contains(long& x, long& y);
-    wxRegionContain Contains(const wxPoint& pt);
-    wxRegionContain Contains(long& x, long& y,
-                             long& width,
-                             long& height);
-    wxRegionContain Contains(const wxRect& rect);
+    wxRegionContain Contains(long& x, long& y) const;
+    const wxRegionContain Contains(const wxPoint& pt) const;
+    const wxRegionContain Contains(long& x, long& y,
+                                   long& width,
+                                   long& height) const;
+    const wxRegionContain Contains(const wxRect& rect) const;
     //@}
 
     /**
         Convert the region to a black and white bitmap with the white pixels
         being inside the region.
     */
-    wxBitmap ConvertToBitmap();
+    wxBitmap ConvertToBitmap() const;
 
     //@{
     /**
         Returns the outer bounds of the region.
     */
     void GetBox(wxCoord& x, wxCoord& y, wxCoord& width,
-                wxCoord& height);
-    wxRect GetBox();
+                wxCoord& height) const;
+    const wxRect  GetBox() const;
     //@}
 
     //@{
@@ -198,14 +198,14 @@ public:
     /**
         Returns @true if the region is empty, @false otherwise.
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
         Returns @true if the region is equal to, i.e. covers the same area as,
         another one. Note that if both this region and @a region are invalid, they
         are considered to be equal.
     */
-    bool IsEqual(const wxRegion& region);
+    bool IsEqual(const wxRegion& region) const;
 
     //@{
     /**

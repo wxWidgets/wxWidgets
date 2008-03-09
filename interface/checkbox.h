@@ -106,14 +106,14 @@ public:
                  Asserts when the function is used with a 2-state
                  checkbox.
     */
-    wxCheckBoxState Get3StateValue();
+    wxCheckBoxState Get3StateValue() const;
 
     /**
         Gets the state of a 2-state checkbox.
         
         @returns Returns @true if it is checked, @false otherwise.
     */
-    bool GetValue();
+    bool GetValue() const;
 
     /**
         Returns whether or not the checkbox is a 3-state checkbox.
@@ -121,7 +121,7 @@ public:
         @returns Returns @true if this checkbox is a 3-state checkbox, @false if
                  it's a 2-state checkbox.
     */
-    bool Is3State();
+    bool Is3State() const;
 
     /**
         Returns whether or not the user can set the checkbox to the third state.
@@ -130,14 +130,14 @@ public:
                  checkbox, @false if it can only be set programmatically
                  or if it's a 2-state checkbox.
     */
-    bool Is3rdStateAllowedForUser();
+    bool Is3rdStateAllowedForUser() const;
 
     /**
         This is just a maybe more readable synonym for
         GetValue(): just as the latter, it returns
         @true if the checkbox is checked and @false otherwise.
     */
-    bool IsChecked();
+    bool IsChecked() const;
 
     /**
         Sets the checkbox to the given state. This does not cause a

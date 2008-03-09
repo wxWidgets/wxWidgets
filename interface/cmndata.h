@@ -183,74 +183,74 @@ public:
         as orientation)
         instead of showing a dialog. Windows only.
     */
-    bool GetDefaultInfo();
+    bool GetDefaultInfo() const;
 
     /**
         Returns @true if the page setup dialog will take its minimum margin values from
         the currently
         selected printer properties. Windows only.
     */
-    bool GetDefaultMinMargins();
+    bool GetDefaultMinMargins() const;
 
     /**
         Returns @true if the printer setup button is enabled.
     */
-    bool GetEnableHelp();
+    bool GetEnableHelp() const;
 
     /**
         Returns @true if the margin controls are enabled (Windows only).
     */
-    bool GetEnableMargins();
+    bool GetEnableMargins() const;
 
     /**
         Returns @true if the orientation control is enabled (Windows only).
     */
-    bool GetEnableOrientation();
+    bool GetEnableOrientation() const;
 
     /**
         Returns @true if the paper size control is enabled (Windows only).
     */
-    bool GetEnablePaper();
+    bool GetEnablePaper() const;
 
     /**
         Returns @true if the printer setup button is enabled.
     */
-    bool GetEnablePrinter();
+    bool GetEnablePrinter() const;
 
     /**
         Returns the right (x) and bottom (y) margins in millimetres.
     */
-    wxPoint GetMarginBottomRight();
+    wxPoint GetMarginBottomRight() const;
 
     /**
         Returns the left (x) and top (y) margins in millimetres.
     */
-    wxPoint GetMarginTopLeft();
+    wxPoint GetMarginTopLeft() const;
 
     /**
         Returns the right (x) and bottom (y) minimum margins the user can enter
         (Windows only). Units
         are in millimetres
     */
-    wxPoint GetMinMarginBottomRight();
+    wxPoint GetMinMarginBottomRight() const;
 
     /**
         Returns the left (x) and top (y) minimum margins the user can enter (Windows
         only). Units
         are in millimetres
     */
-    wxPoint GetMinMarginTopLeft();
+    wxPoint GetMinMarginTopLeft() const;
 
     /**
         Returns the paper id (stored in the internal wxPrintData object).
         For further information, see wxPrintData::SetPaperId.
     */
-    wxPaperSize GetPaperId();
+    wxPaperSize GetPaperId() const;
 
     /**
         Returns the paper size in millimetres.
     */
-    wxSize GetPaperSize();
+    wxSize GetPaperSize() const;
 
     /**
         Returns a reference to the @ref overview_wxprintdata "print data" associated
@@ -263,7 +263,7 @@ public:
         This can return @false on Windows if the current printer is not set, for example.
         On all other platforms, it returns @true.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Pass @true if the dialog will simply return default printer information (such as
@@ -369,20 +369,20 @@ public:
         Has no meaning under other platforms.
         The default value is @true.
     */
-    bool GetChooseFull();
+    bool GetChooseFull() const;
 
     /**
         Gets the current colour associated with the colour dialog.
         The default colour is black.
     */
-    wxColour GetColour();
+    wxColour GetColour() const;
 
     /**
         Gets the @e ith custom colour associated with the colour dialog. @a i should
         be an integer between 0 and 15.
         The default custom colours are invalid colours.
     */
-    wxColour GetCustomColour(int i);
+    wxColour GetCustomColour(int i) const;
 
     /**
         Under Windows, tells the Windows colour dialog to display the full dialog
@@ -449,45 +449,45 @@ public:
         the bin (@c wxPRINTBIN_DEFAULT is returned).
         See SetBin() for the full list of bin values.
     */
-    wxPrintBin GetBin();
+    wxPrintBin GetBin() const;
 
     /**
         Returns @true if collation is on.
     */
-    bool GetCollate();
+    bool GetCollate() const;
 
     /**
         Returns @true if colour printing is on.
     */
-    bool GetColour();
+    bool GetColour() const;
 
     /**
         Returns the duplex mode. One of wxDUPLEX_SIMPLEX, wxDUPLEX_HORIZONTAL,
         wxDUPLEX_VERTICAL.
     */
-    wxDuplexMode GetDuplex();
+    wxDuplexMode GetDuplex() const;
 
     /**
         Returns the number of copies requested by the user.
     */
-    int GetNoCopies();
+    int GetNoCopies() const;
 
     /**
         Gets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
     */
-    int GetOrientation();
+    int GetOrientation() const;
 
     /**
         Returns the paper size id. For more information, see SetPaperId().
     */
-    wxPaperSize GetPaperId();
+    wxPaperSize GetPaperId() const;
 
     /**
         Returns the printer name. If the printer name is the empty string, it indicates
         that the default
         printer should be used.
     */
-    const wxString GetPrinterName();
+    const wxString GetPrinterName() const;
 
     /**
         Returns the current print quality. This can be a positive integer, denoting the
@@ -498,14 +498,14 @@ public:
         back a positive integer
         indicating the current resolution setting.
     */
-    wxPrintQuality GetQuality();
+    wxPrintQuality GetQuality() const;
 
     /**
         Returns @true if the print data is valid for using in print dialogs.
         This can return @false on Windows if the current printer is not set, for example.
         On all other platforms, it returns @true.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Sets the current bin. Possible values are:
@@ -630,32 +630,32 @@ public:
     /**
         Returns @true if the user requested that all pages be printed.
     */
-    bool GetAllPages();
+    bool GetAllPages() const;
 
     /**
         Returns @true if the user requested that the document(s) be collated.
     */
-    bool GetCollate();
+    bool GetCollate() const;
 
     /**
         Returns the @e from page number, as entered by the user.
     */
-    int GetFromPage();
+    int GetFromPage() const;
 
     /**
         Returns the @e maximum page number.
     */
-    int GetMaxPage();
+    int GetMaxPage() const;
 
     /**
         Returns the @e minimum page number.
     */
-    int GetMinPage();
+    int GetMinPage() const;
 
     /**
         Returns the number of copies requested by the user.
     */
-    int GetNoCopies();
+    int GetNoCopies() const;
 
     /**
         Returns a reference to the internal wxPrintData object.
@@ -665,26 +665,26 @@ public:
     /**
         Returns @true if the user has selected printing to a file.
     */
-    bool GetPrintToFile();
+    bool GetPrintToFile() const;
 
     /**
         Returns @true if the user requested that the selection be printed (where
         'selection' is
         a concept specific to the application).
     */
-    bool GetSelection();
+    bool GetSelection() const;
 
     /**
         Returns the @e to page number, as entered by the user.
     */
-    int GetToPage();
+    int GetToPage() const;
 
     /**
         Returns @true if the print data is valid for using in print dialogs.
         This can return @false on Windows if the current printer is not set, for example.
         On all other platforms, it returns @true.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Sets the 'Collate' checkbox to @true or @false.

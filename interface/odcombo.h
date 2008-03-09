@@ -129,12 +129,12 @@ public:
     /**
         Returns index to the widest item in the list.
     */
-    int GetWidestItem();
+    int GetWidestItem() const;
 
     /**
         Returns width of the widest item in the list.
     */
-    int GetWidestItemWidth();
+    int GetWidestItemWidth() const;
 
     /**
         This method is used to draw the items background and, maybe, a border around it.
@@ -145,7 +145,7 @@ public:
         @remarks flags has the same meaning as with OnDrawItem.
     */
     void OnDrawBackground(wxDC& dc, const wxRect& rect, int item,
-                          int flags);
+                          int flags) const;
 
     /**
         The derived class may implement this function to actually draw the item
@@ -163,7 +163,7 @@ public:
             Combines any of the following flag values:
     */
     void OnDrawItem(wxDC& dc, const wxRect& rect, int item,
-                    int flags);
+                    int flags) const;
 
     /**
         The derived class may implement this method to return the height of the
@@ -171,7 +171,7 @@ public:
         The default implementation returns text height, as if this control was
         a normal combobox.
     */
-    wxCoord OnMeasureItem(size_t item);
+    wxCoord OnMeasureItem(size_t item) const;
 
     /**
         The derived class may implement this method to return the width of the
@@ -179,5 +179,5 @@ public:
         is used.
         The default implementation returns -1.
     */
-    wxCoord OnMeasureItemWidth(size_t item);
+    wxCoord OnMeasureItemWidth(size_t item) const;
 };

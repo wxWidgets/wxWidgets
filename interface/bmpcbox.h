@@ -143,12 +143,12 @@ public:
     /**
         Returns size of bitmaps used in the list.
     */
-    wxSize GetBitmapSize();
+    wxSize GetBitmapSize() const;
 
     /**
         Returns the bitmap of the item with the given index.
     */
-    wxBitmap GetItemBitmap(unsigned int n);
+    wxBitmap GetItemBitmap(unsigned int n) const;
 
     //@{
     /**

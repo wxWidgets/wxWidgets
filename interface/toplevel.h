@@ -63,7 +63,7 @@ public:
         @NULL.
         The default button is the one activated by pressing the Enter key.
     */
-    wxWindow* GetDefaultItem();
+    wxWindow* GetDefaultItem() const;
 
     /**
         Returns the standard icon of the window. The icon will be invalid if it hadn't
@@ -71,7 +71,7 @@ public:
         
         @see GetIcons()
     */
-    const wxIcon GetIcon();
+    const wxIcon GetIcon() const;
 
     /**
         Returns all icons associated with the window, there will be none of them if
@@ -82,14 +82,14 @@ public:
         
         @see wxIconBundle
     */
-    const wxIconBundle GetIcons();
+    const wxIconBundle GetIcons() const;
 
     /**
         Gets a string containing the window title.
         
         @see SetTitle()
     */
-    wxString GetTitle();
+    wxString GetTitle() const;
 
     /**
         Unique to the wxWinCE port. Responds to showing/hiding SIP (soft input panel)
@@ -115,14 +115,14 @@ public:
         currently
         working with it.
     */
-    bool IsActive();
+    bool IsActive() const;
 
     /**
         Returns @true if this window is expected to be always maximized, either due
         to platform policy
         or due to local policy regarding particular class.
     */
-    virtual bool IsAlwaysMaximized();
+    virtual bool IsAlwaysMaximized() const;
 
     /**
         Returns @true if the window is in fullscreen mode.
@@ -134,12 +134,12 @@ public:
     /**
         Returns @true if the window is iconized.
     */
-    bool IsIconized();
+    bool IsIconized() const;
 
     /**
         Returns @true if the window is maximized.
     */
-    bool IsMaximized();
+    bool IsMaximized() const;
 
     /**
         @b @c This method is specific to wxUniversal port
@@ -149,7 +149,7 @@ public:
         @see UseNativeDecorations(),
              UseNativeDecorationsByDefault()
     */
-    bool IsUsingNativeDecorations();
+    bool IsUsingNativeDecorations() const;
 
     /**
         Maximizes or restores the window.
@@ -320,7 +320,7 @@ public:
         By default, the application stays alive as long as there are any open top level
         windows.
     */
-    virtual bool ShouldPreventAppExit();
+    virtual bool ShouldPreventAppExit() const;
 
     /**
         Depending on the value of @a show parameter the window is either shown full

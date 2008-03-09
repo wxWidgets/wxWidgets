@@ -76,7 +76,7 @@ public:
     /**
         Returns the number of elements in the hash table.
     */
-    size_t GetCount();
+    size_t GetCount() const;
 
     /**
         Makes an integer key out of a string. An application may wish to make a key

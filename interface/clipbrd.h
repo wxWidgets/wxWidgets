@@ -111,7 +111,7 @@ public:
     /**
         Returns @true if the clipboard has been opened.
     */
-    bool IsOpened();
+    bool IsOpened() const;
 
     /**
         Returns @true if there is data which matches the data format of the given data
@@ -124,7 +124,7 @@ public:
         one.
         See @ref useprimary() UsePrimarySelection for more information.
     */
-    bool IsUsingPrimarySelection();
+    bool IsUsingPrimarySelection() const;
 
     /**
         Call this function to open the clipboard before calling SetData()

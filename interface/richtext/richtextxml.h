@@ -23,20 +23,20 @@ class wxRichTextXMLHandler : public wxRichTextFileHandler
 {
 public:
     /**
-        , @b const wxString&@e ext = wxT("xml"), @b int@e type = wxRICHTEXT_TYPE_XML)
+        ,  wxString&@e ext = wxT("xml"), @b int@e type = wxRICHTEXT_TYPE_XML)
         Constructor.
     */
-    wxRichTextXMLHandler();
+    wxRichTextXMLHandler() const;
 
     /**
         Returns @true.
     */
-    bool CanLoad();
+    bool CanLoad() const;
 
     /**
         Returns @true.
     */
-    bool CanSave();
+    bool CanSave() const;
 
     /**
         Creates XML code for a given character or paragraph style.

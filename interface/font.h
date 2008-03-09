@@ -303,7 +303,7 @@ public:
         
         @see SetFaceName()
     */
-    wxString GetFaceName();
+    wxString GetFaceName() const;
 
     /**
         Gets the font family. See SetFamily() for a list of valid
@@ -311,7 +311,7 @@ public:
         
         @see SetFamily()
     */
-    wxFontFamily GetFamily();
+    wxFontFamily GetFamily() const;
 
     /**
         Returns the platform-dependent string completely describing this font.
@@ -322,7 +322,7 @@ public:
         
         @see SetNativeFontInfo(),GetNativeFontInfoUserDesc()
     */
-    wxString GetNativeFontInfoDesc();
+    wxString GetNativeFontInfoDesc() const;
 
     /**
         Returns a user-friendly string for this font object. Returned string is always
@@ -339,7 +339,7 @@ public:
         
         @see SetPointSize()
     */
-    int GetPointSize();
+    int GetPointSize() const;
 
     /**
         Gets the font style. See wxFont() for a list of valid
@@ -347,14 +347,14 @@ public:
         
         @see SetStyle()
     */
-    int GetStyle();
+    int GetStyle() const;
 
     /**
         Returns @true if the font is underlined, @false otherwise.
         
         @see SetUnderlined()
     */
-    bool GetUnderlined();
+    bool GetUnderlined() const;
 
     /**
         Gets the font weight. See wxFont() for a list of valid
@@ -362,18 +362,18 @@ public:
         
         @see SetWeight()
     */
-    wxFontWeight GetWeight();
+    wxFontWeight GetWeight() const;
 
     /**
         Returns @true if the font is a fixed width (or monospaced) font,
         @false if it is a proportional one or font is invalid.
     */
-    bool IsFixedWidth();
+    bool IsFixedWidth() const;
 
     /**
         Returns @true if this object is a valid font, @false otherwise.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     //@{
     /**

@@ -71,9 +71,11 @@ public:
         and only if @c wxRE_NOSUB was @b not used in
         Compile().
     */
-    bool GetMatch(size_t* start, size_t* len, size_t index = 0);
-    not wxString  GetMatch(const wxString& text,
-                           size_t index = 0);
+    bool GetMatch(size_t* start, size_t* len, size_t index = 0) const;
+    const not used in
+    Compile().
+    Returns false if no match or if an error occurred.
+        wxString  GetMatch(const wxString& text, size_t index = 0) const;
     //@}
 
     /**
@@ -82,13 +84,13 @@ public:
         May only be called after successful call to Compile().
         and only if @c wxRE_NOSUB was @b not used.
     */
-    size_t GetMatchCount();
+    size_t GetMatchCount() const;
 
     /**
         Return @true if this is a valid compiled regular expression, @false
         otherwise.
     */
-    bool IsValid();
+    bool IsValid() const;
 
     //@{
     /**
@@ -105,9 +107,9 @@ public:
         possible to avoid a @e wxStrlen() inside the loop.
         May only be called after successful call to Compile().
     */
-    bool Matches(const wxChar* text, int flags = 0);
-    bool Matches(const wxChar* text, int flags, size_t len);
-    bool Matches(const wxString& text, int flags = 0);
+    bool Matches(const wxChar* text, int flags = 0) const;
+    const bool Matches(const wxChar* text, int flags, size_t len) const;
+    const bool Matches(const wxString& text, int flags = 0) const;
     //@}
 
     /**
@@ -123,7 +125,7 @@ public:
         pattern in the text while default value of 0 means replace all.
     */
     int Replace(wxString* text, const wxString& replacement,
-                size_t maxMatches = 0);
+                size_t maxMatches = 0) const;
 
     /**
         Replace all occurrences: this is actually a synonym for
@@ -131,10 +133,10 @@ public:
         
         @see ReplaceFirst()
     */
-    int ReplaceAll(wxString* text, const wxString& replacement);
+    int ReplaceAll(wxString* text, const wxString& replacement) const;
 
     /**
         Replace the first occurrence.
     */
-    int ReplaceFirst(wxString* text, const wxString& replacement);
+    int ReplaceFirst(wxString* text, const wxString& replacement) const;
 };
