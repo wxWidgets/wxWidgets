@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextsymboldlg.h
-// Purpose:     documentation for wxSymbolPickerDialog class
+// Purpose:     interface of wxSymbolPickerDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextprint.h
-// Purpose:     documentation for wxRichTextHeaderFooterData class
+// Purpose:     interface of wxRichTextHeaderFooterData
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -31,7 +31,7 @@
     wxRichTextLayout constructor.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextHeaderFooterData : public wxObject
 {
@@ -165,7 +165,7 @@ public:
     should normally use the wxRichTextPrinting class.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextPrintout : public wxPrintout
 {
@@ -242,7 +242,7 @@ public:
     and previewing. It uses wxRichTextPrintout for layout and rendering.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextPrinting : public wxObject
 {

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextstyles.h
-// Purpose:     documentation for wxRichTextStyleListCtrl class
+// Purpose:     interface of wxRichTextStyleListCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -186,7 +186,7 @@ public:
     wxRichTextStyleSheet.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextParagraphStyleDefinition : public wxRichTextStyleDefinition
 {
@@ -223,7 +223,7 @@ public:
     See @c samples/richtext for an example of how to use it.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 
     @seealso
     wxRichTextStyleComboCtrl, @ref overview_wxrichtextctrloverview "wxRichTextCtrl
@@ -346,7 +346,7 @@ public:
     See @c samples/richtext for an example of how to use it.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 
     @seealso
     wxRichTextStyleListBox, @ref overview_wxrichtextctrloverview "wxRichTextCtrl
@@ -404,7 +404,7 @@ public:
     wxRichTextStyleSheet.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextCharacterStyleDefinition : public wxRichTextStyleDefinition
 {
@@ -443,7 +443,7 @@ public:
     so that you can apply them directly to a buffer without requiring a control.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextListStyleDefinition : public wxRichTextParagraphStyleDefinition
 {
@@ -535,7 +535,7 @@ public:
     of styles to the control.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextStyleSheet : public wxObject
 {

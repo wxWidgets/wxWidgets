@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextbuffer.h
-// Purpose:     documentation for wxRichTextBuffer class
+// Purpose:     interface of wxRichTextBuffer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -13,7 +13,7 @@
     This class represents the whole buffer associated with a wxRichTextCtrl.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 
     @seealso
     wxTextAttr, wxRichTextCtrl
@@ -779,7 +779,7 @@ public:
     associated with a wxRichTextBuffer.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextFileHandler : public wxObject
 {
@@ -918,7 +918,7 @@ public:
     This class stores beginning and end positions for a range of data.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextRange
 {

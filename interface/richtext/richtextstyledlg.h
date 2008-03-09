@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextstyledlg.h
-// Purpose:     documentation for wxRichTextStyleOrganiserDialog class
+// Purpose:     interface of wxRichTextStyleOrganiserDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,7 +17,7 @@
     present styles.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextStyleOrganiserDialog : public wxDialog
 {

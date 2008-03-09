@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtexthtml.h
-// Purpose:     documentation for wxRichTextHTMLHandler class
+// Purpose:     interface of wxRichTextHTMLHandler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -33,7 +33,7 @@
     get the array of temporary image names.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextHTMLHandler : public wxRichTextFileHandler
 {

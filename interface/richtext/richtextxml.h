@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextxml.h
-// Purpose:     documentation for wxRichTextXMLHandler class
+// Purpose:     interface of wxRichTextXMLHandler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,7 +17,7 @@
     functions directly.
 
     @library{wxrichtext}
-    @category{FIXME}
+    @category{richtext}
 */
 class wxRichTextXMLHandler : public wxRichTextFileHandler
 {

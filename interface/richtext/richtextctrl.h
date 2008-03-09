@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextctrl.h
-// Purpose:     documentation for wxRichTextEvent class
+// Purpose:     interface of wxRichTextEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -13,7 +13,7 @@
     This is the event class for wxRichTextCtrl notifications.
 
     @library{wxrichtext}
-    @category{events}
+    @category{richtext}
 */
 class wxRichTextEvent : public wxNotifyEvent
 {
@@ -118,8 +118,7 @@ public:
     "wxRichTextCtrl overview".
 
     @library{wxrichtext}
-    @category{ctrl}
-    @appearance{richtextctrl.png}
+    @category{richtext}
 */
 class wxRichTextCtrl
 {

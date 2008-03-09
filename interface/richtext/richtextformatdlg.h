@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        richtext/richtextformatdlg.h
-// Purpose:     documentation for wxRichTextFormattingDialogFactory class
+// Purpose:     interface of wxRichTextFormattingDialogFactory
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -111,7 +111,7 @@ public:
     @endcode
 
     @library{wxrichtext}
-    @category{cmndlg}
+    @category{richtext}
 */
 class wxRichTextFormattingDialog : public wxPropertySheetDialog
 {
