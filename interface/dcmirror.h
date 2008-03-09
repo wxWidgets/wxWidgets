@@ -27,8 +27,7 @@ public:
     /**
         Creates a (maybe) mirrored DC associated with the real @e dc. Everything
         drawn on wxMirrorDC will appear (and maybe mirrored) on @e dc.
-        
-        @e mirror specifies if we do mirror (if it is @true) or not (if it is
+        @a mirror specifies if we do mirror (if it is @true) or not (if it is
         @false).
     */
     wxMirrorDC(wxDC& dc, bool mirror);

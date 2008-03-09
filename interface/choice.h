@@ -20,7 +20,7 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_CHOICE(id\, func)}:
+    @event{EVT_CHOICE(id, func)}:
            Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the
            list is selected.
     @endEventTable
@@ -40,44 +40,37 @@ public:
         Constructor, creating and showing a choice.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size. If wxDefaultSize is specified then the choice is sized
-        appropriately.
-        
+            Window size. If wxDefaultSize is specified then the choice is
+        sized
+            appropriately.
         @param n
-        Number of strings with which to initialise the choice control.
-        
+            Number of strings with which to initialise the choice control.
         @param choices
-        An array of strings with which to initialise the choice control.
-        
+            An array of strings with which to initialise the choice control.
         @param style
-        Window style. See wxChoice.
-        
+            Window style. See wxChoice.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxChoice();
-    wxChoice(wxWindow * parent, wxWindowID id,
+    wxChoice(wxWindow* parent, wxWindowID id,
              const wxPoint& pos,
              const wxSize& size, int n,
              const wxString choices[],
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = "choice");
-    wxChoice(wxWindow * parent, wxWindowID id,
+    wxChoice(wxWindow* parent, wxWindowID id,
              const wxPoint& pos,
              const wxSize& size,
              const wxArrayString& choices,
@@ -95,13 +88,13 @@ public:
     /**
         Creates the choice for two-step construction. See wxChoice().
     */
-    bool Create(wxWindow * parent, wxWindowID id, const wxPoint& pos,
+    bool Create(wxWindow* parent, wxWindowID id, const wxPoint& pos,
                 const wxSize& size, int n,
                 const wxString choices[],
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "choice");
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos,
                 const wxSize& size,
                 const wxArrayString& choices,
@@ -114,7 +107,7 @@ public:
         Gets the number of columns in this choice item.
         
         @remarks This is implemented for Motif only and always returns 1 for the
-                   other platforms.
+                 other platforms.
     */
     int GetColumns();
 
@@ -125,7 +118,6 @@ public:
         That is, while the dropdown list is shown, it returns the currently selected
         item in it. When it is not shown, its result is the same as for the other
         function.
-        
         This function is new since wxWidgets version 2.6.2 (before this version
         wxControlWithItems::GetSelection itself behaved like
         this).
@@ -136,7 +128,7 @@ public:
         Sets the number of columns in this choice item.
         
         @param n
-        Number of columns.
+            Number of columns.
     */
     void SetColumns(int n = 1);
 };

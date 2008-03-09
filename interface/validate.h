@@ -58,7 +58,6 @@ public:
         and brushes, it does not make sense to have a reference counting scheme
         to do this cloning, because all validators should have separate
         data.
-        
         This base function returns @NULL.
     */
     virtual wxObject* Clone();
@@ -72,7 +71,7 @@ public:
         This functions switches on or turns off the error sound produced by the
         validators if an invalid key is pressed.
     */
-    void SetBellOnError(bool doIt = @true);
+    void SetBellOnError(bool doIt = true);
 
     /**
         Associates a window with the validator.

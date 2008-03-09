@@ -61,10 +61,8 @@ public:
         Creates the control. To finish creating it you also should call
         SetItemCount() to let it know about the
         number of items it contains.
-        
         The only special style which may be used with wxVListBox is @c wxLB_MULTIPLE
         which indicates that the listbox should support multiple selection.
-        
         Returns @true on success or @false if the control couldn't be created
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -75,24 +73,20 @@ public:
 
     /**
         Deselects all the items in the listbox.
-        
         Returns @true if any items were changed, i.e. if there had been any
         selected items before, or @false if all the items were already deselected.
-        
         This method is only valid for multi selection listboxes.
         
-        @sa SelectAll(), Select()
+        @see SelectAll(), Select()
     */
     bool DeselectAll();
 
     /**
         Returns the index of the first selected item in the listbox or
         @c wxNOT_FOUND if no items are currently selected.
-        
-        @e cookie is an opaque parameter which should be passed to the subsequent
+        @a cookie is an opaque parameter which should be passed to the subsequent
         calls to GetNextSelected(). It is needed in
         order to allow parallel iterations over the selected items.
-        
         Here is a typical example of using these functions:
         
         This method is only valid for multi selection listboxes.
@@ -102,7 +96,7 @@ public:
     /**
         Get the number of items in the control.
         
-        @sa SetItemCount()
+        @see SetItemCount()
     */
     size_t GetItemCount();
 
@@ -110,28 +104,26 @@ public:
         Returns the margins used by the control. The @c x field of the returned
         point is the horizontal margin and the @c y field is the vertical one.
         
-        @sa SetMargins()
+        @see SetMargins()
     */
     wxPoint GetMargins();
 
     /**
         Returns the index of the next selected item or @c wxNOT_FOUND if there are
         no more.
-        
         This method is only valid for multi selection listboxes.
         
-        @sa GetFirstSelected()
+        @see GetFirstSelected()
     */
     int GetNextSelected(unsigned long& cookie);
 
     /**
         Returns the number of the items currently selected.
-        
         It is valid for both single and multi selection controls. In the former case it
         may only return 0 or 1 however.
         
-        @sa IsSelected(), GetFirstSelected(),
-              GetNextSelected()
+        @see IsSelected(), GetFirstSelected(),
+             GetNextSelected()
     */
     size_t GetSelectedCount();
 
@@ -144,7 +136,7 @@ public:
         Returns the background colour used for the selected cells. By default the
         standard system colour is used.
         
-        @sa wxSystemSettings::GetColour, SetSelectionBackground()
+        @see wxSystemSettings::GetColour, SetSelectionBackground()
     */
     const wxColour GetSelectionBackground();
 
@@ -157,7 +149,6 @@ public:
 
     /**
         Returns @true if this item is the current one, @false otherwise.
-        
         Current item is always the same as selected one for the single selection
         listbox and in this case this method is equivalent to
         IsSelected() but they are different for multi
@@ -174,7 +165,6 @@ public:
     /**
         This method is used to draw the items background and, maybe, a border
         around it.
-        
         The base class version implements a reasonable default behaviour which
         consists in drawing the selected item with the standard background
         colour and drawing a border around the item if it is either selected or
@@ -187,14 +177,12 @@ public:
         with the given index on the provided DC.
         
         @param dc
-        The device context to use for drawing
-        
+            The device context to use for drawing
         @param rect
-        The bounding rectangle for the item being drawn (DC clipping
-        region is set to this rectangle before calling this function)
-        
+            The bounding rectangle for the item being drawn (DC clipping
+            region is set to this rectangle before calling this function)
         @param n
-        The index of the item to be drawn
+            The index of the item to be drawn
     */
     void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n);
 
@@ -202,17 +190,14 @@ public:
         This method may be used to draw separators between the lines. The rectangle
         passed to it may be modified, typically to deflate it a bit before passing to
         OnDrawItem().
-        
         The base class version of this method doesn't do anything.
         
         @param dc
-        The device context to use for drawing
-        
+            The device context to use for drawing
         @param rect
-        The bounding rectangle for the item
-        
+            The bounding rectangle for the item
         @param n
-        The index of the item
+            The index of the item
     */
     void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n);
 
@@ -225,42 +210,35 @@ public:
     /**
         Selects or deselects the specified item which must be valid (i.e. not
         equal to @c wxNOT_FOUND).
-        
         Return @true if the items selection status has changed or @false
         otherwise.
-        
         This function is only valid for the multiple selection listboxes, use
         SetSelection() for the single selection ones.
     */
-    bool Select(size_t item, bool select = @true);
+    bool Select(size_t item, bool select = true);
 
     /**
         Selects all the items in the listbox.
-        
         Returns @true if any items were changed, i.e. if there had been any
         unselected items before, or @false if all the items were already selected.
-        
         This method is only valid for multi selection listboxes.
         
-        @sa DeselectAll(), Select()
+        @see DeselectAll(), Select()
     */
     bool SelectAll();
 
     /**
         Selects all items in the specified range which may be given in any order.
-        
         Return @true if the items selection status has changed or @false
         otherwise.
-        
         This method is only valid for multi selection listboxes.
         
-        @sa SelectAll(), Select()
+        @see SelectAll(), Select()
     */
     bool SelectRange(size_t from, size_t to);
 
     /**
         Set the number of items to be shown in the control.
-        
         This is just a synonym for
         wxVScrolledWindow::SetRowCount.
     */
@@ -271,7 +249,6 @@ public:
         Set the margins: horizontal margin is the distance between the window
         border and the item contents while vertical margin is half of the
         distance between items.
-        
         By default both margins are 0.
     */
     void SetMargins(const wxPoint& pt);
@@ -282,7 +259,6 @@ public:
         Set the selection to the specified item, if it is -1 the selection is
         unset. The selected item will be automatically scrolled into view if it isn't
         currently visible.
-        
         This method may be used both with single and multiple selection listboxes.
     */
     void SetSelection(int selection);
@@ -291,19 +267,17 @@ public:
         Sets the colour to be used for the selected cells background. The background of
         the standard cells may be changed by simply calling
         wxWindow::SetBackgroundColour.
-        
         Notice that using non-default background colour may result in control having
         appearance different from the similar native controls and so should in general
         be avoided.
         
-        @sa GetSelectionBackground()
+        @see GetSelectionBackground()
     */
     void SetSelectionBackground(const wxColour& col);
 
     /**
         Toggles the state of the specified @e item, i.e. selects it if it was
         unselected and deselects it if it was selected.
-        
         This method is only valid for multi selection listboxes.
     */
     void Toggle(size_t item);

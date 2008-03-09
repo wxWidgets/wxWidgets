@@ -47,8 +47,7 @@ public:
     /**
         Closes the current entry if one is open, then opens the entry specified
         by the wxArchiveEntry object.
-        
-        @e entry must be from the same archive file that this
+        @a entry must be from the same archive file that this
         wxArchiveInputStream is reading, and it must be reading it from a
         seekable stream.
     */
@@ -103,13 +102,11 @@ public:
         as a whole.  For example in the case of zip there is a comment, which
         is stored at the end of the zip file.  CopyArchiveMetaData() can be used
         to transfer such information when writing a modified copy of an archive.
-        
         Since the position of the meta-data can vary between the various archive
         formats, it is best to call CopyArchiveMetaData() before transferring
         the entries.  The wxArchiveOutputStream
         will then hold on to the meta-data and write it at the correct point in
         the output file.
-        
         When the input archive is being read from a non-seekable stream, the
         meta-data may not be available when CopyArchiveMetaData() is called,
         in which case the two streams set up a link and transfer the data
@@ -118,16 +115,14 @@ public:
     bool CopyArchiveMetaData(wxArchiveInputStream& stream);
 
     /**
-        Takes ownership of @e entry and uses it to create a new entry in the
-        archive. @e entry is then opened in the input stream @e stream
+        Takes ownership of @a entry and uses it to create a new entry in the
+        archive. @a entry is then opened in the input stream @e stream
         and its contents copied to this stream.
-        
         For archive types which compress entry data, CopyEntry() is likely to be
         much more efficient than transferring the data using Read() and Write()
         since it will copy them without decompressing and recompressing them.
-        
-        @e entry must be from the same archive file that @e stream is
-        accessing. For non-seekable streams, @e entry must also be the last
+        @a entry must be from the same archive file that @a stream is
+        accessing. For non-seekable streams, @a entry must also be the last
         thing read from @e stream.
     */
     bool CopyEntry(wxArchiveEntry* entry,
@@ -135,11 +130,9 @@ public:
 
     /**
         )
-        
         Create a new directory entry
         (see wxArchiveEntry::IsDir)
         with the given name and timestamp.
-        
         PutNextEntry() can
         also be used to create directory entries, by supplying a name with
         a trailing path separator.
@@ -149,7 +142,6 @@ public:
     //@{
     /**
         , @b off_t@e size = wxInvalidOffset)
-        
         Create a new entry with the given name, timestamp and size. The entry's
         data can then be written by writing to this wxArchiveOutputStream.
     */
@@ -195,10 +187,8 @@ public:
     /**
         The entry's name, by default in the native format. The name can include
         directory components, i.e. it can be a full path.
-        
         If this is a directory entry, (i.e. if IsDir()
         is @true) then GetName() returns the name with a trailing path separator.
-        
         Similarly, setting a name with a trailing path separator sets IsDir().
     */
     wxString GetName(wxPathFormat format = wxPATH_NATIVE);
@@ -224,11 +214,10 @@ public:
         Returns the entry's filename in the internal format used within the
         archive. The name can include directory components, i.e. it can be a
         full path.
-        
         The names of directory entries are returned without any trailing path
         separator. This gives a canonical name that can be used in comparisons.
         
-        @sa @ref overview_wxarcbyname "Looking up an archive entry by name"
+        @see @ref overview_wxarcbyname "Looking up an archive entry by name"
     */
     wxString GetInternalName();
 
@@ -240,17 +229,15 @@ public:
     //@{
     /**
         True if this is a directory entry.
-        
         Directory entries are entries with no data, which are used to store
         the meta-data of directories. They also make it possible for completely
         empty directories to be stored.
-        
         The names of entries within an archive can be complete paths, and
         unarchivers typically create whatever directories are necessary as they
         restore files, even if the archive contains no explicit directory entries.
     */
     bool IsDir();
-    void SetIsDir(bool isDir = @true);
+    void SetIsDir(bool isDir = true);
     //@}
 
     //@{
@@ -258,7 +245,7 @@ public:
         True if the entry is a read-only file.
     */
     bool IsReadOnly();
-    void SetIsReadOnly(bool isReadOnly = @true);
+    void SetIsReadOnly(bool isReadOnly = true);
     //@}
 
     //@{
@@ -268,7 +255,6 @@ public:
         this entry, it will then invoke the associated
         notifier's wxArchiveNotifier::OnEntryUpdated
         method.
-        
         Setting a notifier is not usually necessary. It is used to handle
         certain cases when modifying an archive in a pipeline (i.e. between
         non-seekable streams).
@@ -313,7 +299,6 @@ public:
     /**
         Returns @true if this factory can handle the given protocol, MIME type
         or file extension.
-        
         When using wxSTREAM_FILEEXT for the second parameter, the first parameter
         can be a complete filename rather than just an extension.
     */
@@ -324,7 +309,6 @@ public:
         A static member that finds a factory that can handle a given protocol, MIME
         type or file extension.  Returns a pointer to the class factory if found, or
         @NULL otherwise. It does not give away ownership of the factory.
-        
         When using wxSTREAM_FILEEXT for the second parameter, the first parameter
         can be a complete filename rather than just an extension.
     */
@@ -344,8 +328,8 @@ public:
     //@{
     /**
         GetFirst and GetNext can be used to enumerate the available factories.
-        
         For example, to list them:
+        
         GetFirst()/GetNext() return a pointer to a factory or @NULL if no more
         are available. They do not give away ownership of the factory.
     */
@@ -371,10 +355,9 @@ public:
         Returns the protocols, MIME types or file extensions supported by this
         factory, as an array of null terminated strings. It does not give away
         ownership of the array or strings.
-        
         For example, to list the file extensions a factory supports:
     */
-    const wxChar * const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL);
+    const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL);
 
     /**
         Create a new wxArchiveEntry object of the
@@ -385,7 +368,6 @@ public:
     //@{
     /**
         Create a new input or output stream to read or write an archive.
-        
         If the parent stream is passed as a pointer then the new archive stream
         takes ownership of it. If it is passed by reference then it does not.
     */
@@ -398,15 +380,12 @@ public:
     /**
         Adds this class factory to the list returned
         by @ref getfirst() GetFirst()/GetNext.
-        
         It is not necessary to do this to use the archive streams. It is usually
         used when implementing streams, typically the implementation will
         add a static instance of its factory class.
-        
         It can also be used to change the order of a factory already in the list,
         bringing it to the front. This isn't a thread safe operation
         so can't be done when other threads are running that will be using the list.
-        
         The list does not take ownership of the factory.
     */
     void PushFront();
@@ -414,10 +393,8 @@ public:
     /**
         Removes this class factory from the list returned
         by @ref getfirst() GetFirst()/GetNext.
-        
         Removing from the list isn't a thread safe operation
         so can't be done when other threads are running that will be using the list.
-        
         The list does not own the factories, so removing a factory does not delete it.
     */
     void Remove();
@@ -478,112 +455,112 @@ public:
 
         // template parameter 'Arc' should be the type of an archive input stream
         wxArchiveIterator(Arc& arc) {
+            // ...
+        }
+    };
+    @endcode
 
-        /* ... */
-};
-@endcode
+    The first template parameter should be the type of archive input stream
+    (e.g. wxArchiveInputStream) and the
+    second can either be a pointer to an entry
+    (e.g. wxArchiveEntry*), or a string/pointer pair
+    (e.g. std::pairwxString, wxArchiveEntry*).
 
-The first template parameter should be the type of archive input stream
-(e.g. wxArchiveInputStream) and the
-second can either be a pointer to an entry
-(e.g. wxArchiveEntry*), or a string/pointer pair
-(e.g. std::pairwxString, wxArchiveEntry*).
+    The @c wx/archive.h header defines the following typedefs:
 
-The @c wx/archive.h header defines the following typedefs:
+    @code
+    typedef wxArchiveIteratorwxArchiveInputStream wxArchiveIter;
 
-@code
-typedef wxArchiveIteratorwxArchiveInputStream wxArchiveIter;
+        typedef wxArchiveIteratorwxArchiveInputStream,
+                 std::pairwxString, wxArchiveEntry*  wxArchivePairIter;
+    @endcode
 
-typedef wxArchiveIteratorwxArchiveInputStream,
-std::pairwxString, wxArchiveEntry*  wxArchivePairIter;
-@endcode
+    The header for any implementation of this interface should define similar
+    typedefs for its types, for example in @c wx/zipstrm.h there is:
 
-The header for any implementation of this interface should define similar
-typedefs for its types, for example in @c wx/zipstrm.h there is:
+    @code
+    typedef wxArchiveIteratorwxZipInputStream wxZipIter;
 
-        @code
-        typedef wxArchiveIteratorwxZipInputStream wxZipIter;
+        typedef wxArchiveIteratorwxZipInputStream,
+                 std::pairwxString, wxZipEntry*  wxZipPairIter;
+    @endcode
 
-typedef wxArchiveIteratorwxZipInputStream,
-std::pairwxString, wxZipEntry*  wxZipPairIter;
-@endcode
+    Transferring the catalogue of an archive @e arc to a vector @e cat,
+    can then be done something like this:
 
-Transferring the catalogue of an archive @e arc to a vector @e cat,
-can then be done something like this:
+    @code
+    std::vectorwxArchiveEntry* cat((wxArchiveIter)arc, wxArchiveIter());
+    @endcode
 
-@code
-std::vectorwxArchiveEntry* cat((wxArchiveIter)arc, wxArchiveIter());
-@endcode
+    When the iterator is dereferenced, it gives away ownership of an entry
+    object. So in the above example, when you have finished with @e cat
+    you must delete the pointers it contains.
 
-When the iterator is dereferenced, it gives away ownership of an entry
-object. So in the above example, when you have finished with @e cat
-you must delete the pointers it contains.
+    If you have smart pointers with normal copy semantics (i.e. not auto_ptr
+    or wxScopedPtr), then you can create an iterator
+    which uses them instead.  For example, with a smart pointer class for
+    zip entries @e ZipEntryPtr:
 
-If you have smart pointers with normal copy semantics (i.e. not auto_ptr
-        or wxScopedPtr), then you can create an iterator
-which uses them instead.  For example, with a smart pointer class for
-zip entries @e ZipEntryPtr:
+    @code
+    typedef std::vectorZipEntryPtr ZipCatalog;
+        typedef wxArchiveIteratorwxZipInputStream, ZipEntryPtr ZipIter;
+        ZipCatalog cat((ZipIter)zip, ZipIter());
+    @endcode
 
-@code
-typedef std::vectorZipEntryPtr ZipCatalog;
-typedef wxArchiveIteratorwxZipInputStream, ZipEntryPtr ZipIter;
-ZipCatalog cat((ZipIter)zip, ZipIter());
-@endcode
+    Iterators that return std::pair objects can be used to
+    populate a std::multimap, to allow entries to be looked
+    up by name. The string is initialised using the wxArchiveEntry object's
+     wxArchiveEntry::GetInternalName function.
 
-Iterators that return std::pair objects can be used to
-populate a std::multimap, to allow entries to be looked
-up by name. The string is initialised using the wxArchiveEntry object's
-wxArchiveEntry::GetInternalName function.
-
-@code
-typedef std::multimapwxString, wxZipEntry* ZipCatalog;
-ZipCatalog cat((wxZipPairIter)zip, wxZipPairIter());
-@endcode
+    @code
+    typedef std::multimapwxString, wxZipEntry* ZipCatalog;
+        ZipCatalog cat((wxZipPairIter)zip, wxZipPairIter());
+    @endcode
 
 
-Note that this iterator also gives away ownership of an entry
-object each time it is dereferenced. So in the above example, when
-you have finished with @e cat you must delete the pointers it contains.
+    Note that this iterator also gives away ownership of an entry
+    object each time it is dereferenced. So in the above example, when
+    you have finished with @e cat you must delete the pointers it contains.
 
-Or if you have them, a pair containing a smart pointer can be used
-(again @e ZipEntryPtr), no worries about ownership:
+    Or if you have them, a pair containing a smart pointer can be used
+    (again @e ZipEntryPtr), no worries about ownership:
 
-@code
-typedef std::multimapwxString, ZipEntryPtr ZipCatalog;
-typedef wxArchiveIteratorwxZipInputStream,
-std::pairwxString, ZipEntryPtr  ZipPairIter;
-ZipCatalog cat((ZipPairIter)zip, ZipPairIter());
-@endcode
+    @code
+    typedef std::multimapwxString, ZipEntryPtr ZipCatalog;
+        typedef wxArchiveIteratorwxZipInputStream,
+                    std::pairwxString, ZipEntryPtr  ZipPairIter;
+        ZipCatalog cat((ZipPairIter)zip, ZipPairIter());
+    @endcode
 
-@library{wxbase}
-@category{FIXME}
+    @library{wxbase}
+    @category{FIXME}
 
-@seealso
-wxArchiveEntry, wxArchiveInputStream, wxArchiveOutputStream
+    @seealso
+    wxArchiveEntry, wxArchiveInputStream, wxArchiveOutputStream
 */
 class wxArchiveIterator
 {
 public:
-//@{
-/**
-Construct iterator that returns all the entries in the archive input
-stream @e arc.
-*/
-wxArchiveIterator();
-wxArchiveIterator(Arc& arc);
-//@}
+    //@{
+    /**
+        Construct iterator that returns all the entries in the archive input
+        stream @e arc.
+    */
+    wxArchiveIterator();
+    wxArchiveIterator(Arc& arc);
+    //@}
 
-/**
-Returns an entry object from the archive input stream, giving away
-ownership.
-*/
-const T operator*();
+    /**
+        Returns an entry object from the archive input stream, giving away
+        ownership.
+    */
+    const T operator*();
 
-//@{
-/**
-Position the input iterator at the next entry in the archive input stream.
-*/
-wxArchiveIterator operator++();
-wxArchiveIterator operator++(int );
-//@}
+    //@{
+    /**
+        Position the input iterator at the next entry in the archive input stream.
+    */
+    wxArchiveIterator operator++();
+    wxArchiveIterator operator++(int );
+    //@}
 };

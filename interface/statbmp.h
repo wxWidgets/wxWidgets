@@ -31,27 +31,21 @@ public:
         Constructor, creating and showing a static bitmap control.
         
         @param parent
-        Parent window. Should not be @NULL.
-        
+            Parent window. Should not be @NULL.
         @param id
-        Control identifier. A value of -1 denotes a default value.
-        
+            Control identifier. A value of -1 denotes a default value.
         @param label
-        Bitmap label.
-        
+            Bitmap label.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size.
-        
+            Window size.
         @param style
-        Window style. See wxStaticBitmap.
-        
+            Window style. See wxStaticBitmap.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create()
+        @see Create()
     */
     wxStaticBitmap();
     wxStaticBitmap(wxWindow* parent, wxWindowID id,
@@ -76,7 +70,7 @@ public:
         Returns the bitmap currently used in the control. Notice that this method can
         be called even if SetIcon() had been used.
         
-        @sa SetBitmap()
+        @see SetBitmap()
     */
     wxBitmap GetBitmap();
 
@@ -86,7 +80,7 @@ public:
         can't be retrieved from the control if a bitmap had been set (using
         wxStaticBitmap::SetBitmap).
         
-        @sa SetIcon()
+        @see SetIcon()
     */
     wxIcon GetIcon();
 
@@ -94,9 +88,9 @@ public:
         Sets the bitmap label.
         
         @param label
-        The new bitmap.
+            The new bitmap.
         
-        @sa GetBitmap()
+        @see GetBitmap()
     */
     virtual void SetBitmap(const wxBitmap& label);
 
@@ -104,7 +98,7 @@ public:
         Sets the label to the given icon.
         
         @param label
-        The new icon.
+            The new icon.
     */
     virtual void SetIcon(const wxIcon& label);
 };

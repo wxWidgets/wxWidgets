@@ -27,14 +27,13 @@ public:
         Constructor.
         
         @param flags
-        One of wxACCEL_ALT, wxACCEL_SHIFT, wxACCEL_CTRL and wxACCEL_NORMAL. Indicates
-        which modifier key is held down.
-        
+            One of wxACCEL_ALT, wxACCEL_SHIFT, wxACCEL_CTRL and wxACCEL_NORMAL.
+        Indicates
+            which modifier key is held down.
         @param keyCode
-        The keycode to be detected. See Keycodes for a full list of keycodes.
-        
+            The keycode to be detected. See Keycodes for a full list of keycodes.
         @param cmd
-        The menu or control command identifier.
+            The menu or control command identifier.
     */
     wxAcceleratorEntry();
     wxAcceleratorEntry(int flags, int keyCode, int cmd);
@@ -59,16 +58,15 @@ public:
         Sets the accelerator entry parameters.
         
         @param flags
-        One of wxACCEL_ALT, wxACCEL_SHIFT, wxACCEL_CTRL and wxACCEL_NORMAL. Indicates
-        which modifier key is held down.
-        
+            One of wxACCEL_ALT, wxACCEL_SHIFT, wxACCEL_CTRL and wxACCEL_NORMAL.
+        Indicates
+            which modifier key is held down.
         @param keyCode
-        The keycode to be detected. See Keycodes for a full list of keycodes.
-        
+            The keycode to be detected. See Keycodes for a full list of keycodes.
         @param cmd
-        The menu or control command identifier.
+            The menu or control command identifier.
     */
-#define void Set(int flags, int keyCode, int cmd)     /* implementation is private */
+    void Set(int flags, int keyCode, int cmd);
 };
 
 
@@ -104,13 +102,11 @@ public:
         Loads the accelerator table from a Windows resource (Windows only).
         
         @param n
-        Number of accelerator entries.
-        
+            Number of accelerator entries.
         @param entries
-        The array of entries.
-        
+            The array of entries.
         @param resource
-        Name of a Windows accelerator.
+            Name of a Windows accelerator.
     */
     wxAcceleratorTable();
     wxAcceleratorTable(const wxAcceleratorTable& bitmap);
@@ -128,13 +124,13 @@ public:
     /**
         Returns @true if the accelerator table is valid.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".
         
         @param accel
-        Accelerator table to assign.
+            Accelerator table to assign.
     */
     wxAcceleratorTable operator =(const wxAcceleratorTable& accel);
 };

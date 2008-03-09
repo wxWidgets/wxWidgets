@@ -25,7 +25,7 @@ public:
     /**
         The constructor is not normally used by the user code.
     */
-    wxSpinEvent(wxEventType commandType = wxEVT_@NULL, int id = 0);
+    wxSpinEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
     /**
         Retrieve the current spin button or control value.
@@ -81,26 +81,21 @@ public:
         Constructor, creating and showing a spin button.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position. If wxDefaultPosition is specified then a default position
-        is chosen.
-        
+            Window position. If wxDefaultPosition is specified then a default
+        position is chosen.
         @param size
-        Window size. If wxDefaultSize is specified then a default size is
-        chosen.
-        
+            Window size. If wxDefaultSize is specified then a default size
+        is chosen.
         @param style
-        Window style. See wxSpinButton.
-        
+            Window style. See wxSpinButton.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create()
+        @see Create()
     */
     wxSpinButton();
     wxSpinButton(wxWindow* parent, wxWindowID id,
@@ -128,21 +123,21 @@ public:
     /**
         Returns the maximum permissible value.
         
-        @sa SetRange()
+        @see SetRange()
     */
     int GetMax();
 
     /**
         Returns the minimum permissible value.
         
-        @sa SetRange()
+        @see SetRange()
     */
     int GetMin();
 
     /**
         Returns the current spin button value.
         
-        @sa SetValue()
+        @see SetValue()
     */
     int GetValue();
 
@@ -150,12 +145,11 @@ public:
         Sets the range of the spin button.
         
         @param min
-        The minimum value for the spin button.
-        
+            The minimum value for the spin button.
         @param max
-        The maximum value for the spin button.
+            The maximum value for the spin button.
         
-        @sa GetMin(), GetMax()
+        @see GetMin(), GetMax()
     */
     void SetRange(int min, int max);
 
@@ -163,7 +157,7 @@ public:
         Sets the value of the spin button.
         
         @param value
-        The value for the spin button.
+            The value for the spin button.
     */
     void SetValue(int value);
 };

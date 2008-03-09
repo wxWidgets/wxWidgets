@@ -172,7 +172,6 @@ class wxRichTextPrintout : public wxPrintout
 public:
     /**
         )
-        
         Constructor.
     */
     wxRichTextPrintout();
@@ -250,7 +249,6 @@ class wxRichTextPrinting : public wxObject
 public:
     /**
         , @b wxWindow*@e parentWindow = @NULL)
-        
         Constructor. Optionally pass a title to be used in the preview frame and
         printing wait dialog, and
         also a parent window for these windows.
@@ -314,7 +312,7 @@ public:
     bool PreviewBuffer(const wxRichTextBuffer& buffer);
 
     /**
-        Shows a preview window for the given file. @e richTextFile can be a text file
+        Shows a preview window for the given file. @a richTextFile can be a text file
         or XML file, or other file
         depending on the available file handlers.
     */
@@ -326,7 +324,7 @@ public:
     bool PrintBuffer(const wxRichTextBuffer& buffer);
 
     /**
-        Prints the given file. @e richTextFile can be a text file or XML file, or other
+        Prints the given file. @a richTextFile can be a text file or XML file, or other
         file
         depending on the available file handlers.
     */

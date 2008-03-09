@@ -46,15 +46,14 @@ public:
         Constructor.
     */
     wxHtmlHelpController(int style = wxHF_DEFAULT_STYLE,
-                         wxWindow* parentWindow = @NULL);
+                         wxWindow* parentWindow = NULL);
 
     //@{
     /**
         Adds book (@ref overview_helpformat ".hhp file" - HTML Help Workshop project
         file) into the list of loaded books.
         This must be called at least once before displaying  any help.
-        
-        @e bookFile or @e bookUrl  may be either .hhp file or ZIP archive
+        @a bookFile or @a bookUrl  may be either .hhp file or ZIP archive
         that contains arbitrary number of .hhp files in
         top-level directory. This ZIP archive must have .zip or .htb extension
         (the latter stands for "HTML book"). In other words, @c
@@ -62,15 +61,13 @@ public:
         is possible and is the recommended way.
         
         @param showWaitMsg
-        If @true then a decoration-less window with progress message is displayed.
-        
+            If @true then a decoration-less window with progress message is displayed.
         @param bookFile
-        Help book filename. It is recommended to use this prototype
-        instead of the one taking URL, because it is less error-prone.
-        
+            Help book filename. It is recommended to use this prototype
+            instead of the one taking URL, because it is less error-prone.
         @param bookUrl
-        Help book URL (note that syntax of filename and URL is
-        different on most platforms)
+            Help book URL (note that syntax of filename and URL is
+            different on most platforms)
     */
     bool AddBook(const wxFileName& bookFile, bool showWaitMsg);
     bool AddBook(const wxString& bookUrl, bool showWaitMsg);
@@ -81,13 +78,13 @@ public:
         wxHF_DIALOG style, the controller
         uses a different dialog.
     */
-    virtual wxHtmlHelpDialog* CreateHelpDialog(wxHtmlHelpData * data);
+    virtual wxHtmlHelpDialog* CreateHelpDialog(wxHtmlHelpData* data);
 
     /**
         This protected virtual method may be overridden so that the controller
         uses a different frame.
     */
-    virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData * data);
+    virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData* data);
 
     //@{
     /**
@@ -111,7 +108,6 @@ public:
         Displays help window, focuses search panel and starts searching.  Returns @true
         if the keyword was found. Optionally it searches through the index (mode =
         wxHELP_SEARCH_INDEX), default the content (mode = wxHELP_SEARCH_ALL).
-        
         @b Important: KeywordSearch searches only pages listed in .hhc file(s).
         You should list all pages in the contents file.
     */
@@ -130,7 +126,6 @@ public:
         forms are much faster to read. Default value is empty string (empty string means
         that no cached data are stored). Note that these files are @e not
         deleted when program exits.
-        
         Once created these cached files will be used in all subsequent executions
         of your application. If cached files become older than corresponding .hhp
         file (e.g. if you regenerate documentation) it will be refreshed.
@@ -144,13 +139,10 @@ public:
     void SetTitleFormat(const wxString& format);
 
     /**
-        Associates @e config object with the controller.
-        
+        Associates @a config object with the controller.
         If there is associated config object, wxHtmlHelpController automatically
         reads and writes settings (including wxHtmlWindow's settings) when needed.
-        
         The only thing you must do is create wxConfig object and call UseConfig.
-        
         If you do not use @e UseConfig, wxHtmlHelpController will use
         default wxConfig object if available (for details see
         wxConfigBase::Get and
@@ -194,16 +186,13 @@ class wxHtmlModalHelp
 public:
     /**
         @param parent
-        is the parent of the dialog.
-        
+            is the parent of the dialog.
         @param helpFile
-        is the HTML help file to show.
-        
+            is the HTML help file to show.
         @param topic
-        is an optional topic. If this is empty, the help contents will be shown.
-        
+            is an optional topic. If this is empty, the help contents will be shown.
         @param style
-        is a combination of the flags described in the wxHtmlHelpController
+            is a combination of the flags described in the wxHtmlHelpController
         documentation.
     */
     wxHtmlModalHelp(wxWindow* parent, const wxString& helpFile,

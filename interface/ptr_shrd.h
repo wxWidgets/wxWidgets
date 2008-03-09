@@ -28,7 +28,7 @@ public:
     /**
         Constructors.
     */
-    wxSharedPtrT(T* ptr = @NULL);
+    wxSharedPtrT(T* ptr = NULL);
     wxSharedPtrT(const wxSharedPtr<T>& tocopy);
     //@}
 
@@ -65,13 +65,13 @@ public:
         Assignment operator. Releases any previously held pointer
         and creates a reference to @e ptr.
     */
-    wxSharedPtrT& operator operator=(T * ptr);
+    wxSharedPtrT& operator operator=(T* ptr);
 
     /**
         Reset pointer to @e ptr. If the reference count of the
         previously owned pointer was 1 it will be deleted.
     */
-    void reset(T * ptr = @NULL);
+    void reset(T* ptr = NULL);
 
     /**
         Returns @true if this is the only pointer pointing to its object.

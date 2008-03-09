@@ -71,8 +71,7 @@ public:
         Begins collapsing undo/redo commands. Note that this may not work properly
         if combining commands that delete or insert content, changing ranges for
         subsequent actions.
-        
-        @e cmdName should be the name of the combined command that will appear
+        @a cmdName should be the name of the combined command that will appear
         next to Undo and Redo in the edit menu.
     */
     bool BeginBatchUndo(const wxString& cmdName);
@@ -103,10 +102,9 @@ public:
     bool BeginItalic();
 
     /**
-        Begin using @e leftIndent for the left indent, and optionally @e leftSubIndent
+        Begin using @a leftIndent for the left indent, and optionally @a leftSubIndent
         for
         the sub-indent. Both are expressed in tenths of a millimetre.
-        
         The sub-indent is an offset from the left of the paragraph, and is used for all
         but the
         first line in a paragraph. A positive value will cause the first line to appear
@@ -129,20 +127,16 @@ public:
         Begins using a specified list style. Optionally, you can also pass a level and
         a number.
     */
-    bool BeginListStyle(const wxString& listStyle, int level=1,
-                        int number=1);
+    bool BeginListStyle(const wxString& listStyle, int level = 1,
+                        int number = 1);
 
     /**
         Begins a numbered bullet. This call will be needed for each item in the list,
         and the
         application should take care of incrementing the numbering.
-        
-        @e bulletNumber is a number, usually starting with 1.
-        
-        @e leftIndent and @e leftSubIndent are values in tenths of a millimetre.
-        
-        @e bulletStyle is a bitlist of the following values:
-        
+        @a bulletNumber is a number, usually starting with 1.
+        @a leftIndent and @a leftSubIndent are values in tenths of a millimetre.
+        @a bulletStyle is a bitlist of the following values:
         
         wxRichTextBuffer uses indentation to render a bulleted item. The left indent is
         the distance between
@@ -246,11 +240,8 @@ public:
     /**
         Clears the list style from the given range, clearing list-related attributes
         and applying any named paragraph style associated with each paragraph.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
-        
         See also SetListStyle(), PromoteList(), NumberList().
     */
     bool ClearListStyle(const wxRichTextRange& range,
@@ -396,7 +387,7 @@ public:
     /**
         Ends applying a URL.
     */
-#define bool EndURL()     /* implementation is private */
+    bool EndURL();
 
     /**
         Ends using underline.
@@ -447,13 +438,13 @@ public:
     const wxTextAttr GetDefaultStyle();
 
     /**
-        Gets a wildcard incorporating all visible handlers. If @e types is present,
+        Gets a wildcard incorporating all visible handlers. If @a types is present,
         it will be filled with the file type corresponding to each filter. This can be
         used to determine the type to pass to @ref getextwildcard() LoadFile given a
         selected filter.
     */
-    wxString GetExtWildcard(bool combine = @false, bool save = @false,
-                            wxArrayInt* types = @NULL);
+    wxString GetExtWildcard(bool combine = false, bool save = false,
+                            wxArrayInt* types = NULL);
 
     /**
         Returns the list of file handlers.
@@ -468,7 +459,6 @@ public:
 
     /**
         Gets the attributes at the given position.
-        
         This function gets the combined style - that is, the style you see on the
         screen as a result
         of combining base style, paragraph style and character style attributes. To get
@@ -483,13 +473,11 @@ public:
         Attributes which have different values within the specified range will not be
         included the style
         flags.
-        
         The function is used to get the attributes to display in the formatting dialog:
         the user
         can edit the attributes common to the selection, and optionally specify the
         values of further
         attributes to be applied uniformly.
-        
         To apply the edited attributes, you can use SetStyle() specifying
         the wxRICHTEXT_SETSTYLE_OPTIMIZE flag, which will only apply attributes that
         are different
@@ -522,13 +510,11 @@ public:
 
     /**
         Gets the attributes at the given position.
-        
         This function gets the @e uncombined style - that is, the attributes associated
         with the
         paragraph or character content, and not necessarily the combined attributes you
         see on the
         screen. To get the combined attributes, use GetStyle().
-        
         If you specify (any) paragraph attribute in @e style's flags, this function
         will fetch
         the paragraph attributes. Otherwise, it will return the character attributes.
@@ -536,11 +522,10 @@ public:
     bool GetUncombinedStyle(long position, wxTextAttr& style);
 
     /**
-        Finds the text position for the given position, putting the position in @e
+        Finds the text position for the given position, putting the position in @a
         textPosition if
-        one is found. @e pt is in logical units (a zero y position is
+        one is found. @a pt is in logical units (a zero y position is
         at the beginning of the buffer).
-        
         The function returns one of the following values:
     */
     int HitTest(wxDC& dc, const wxPoint& pt, long& textPosition);
@@ -598,7 +583,7 @@ public:
     /**
         Marks the buffer as modified or unmodified.
     */
-    void Modify(bool modify = @true);
+    void Modify(bool modify = true);
 
     //@{
     /**
@@ -606,15 +591,12 @@ public:
         attributes are set.
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
          wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
         startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @e listLevel should be used
+         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
         as the level for all paragraphs, otherwise the current indentation will be used.
-        
         See also SetListStyle(), PromoteList(), ClearListStyle().
     */
     bool NumberList(const wxRichTextRange& range,
@@ -636,20 +618,17 @@ public:
 
     //@{
     /**
-        Promotes or demotes the paragraphs in the given range. A positive @e promoteBy
+        Promotes or demotes the paragraphs in the given range. A positive @a promoteBy
         produces a smaller indent, and a negative number
         produces a larger indent. Pass flags to determine how the attributes are set.
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
          wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
         startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @e listLevel should be used
+         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
         as the level for all paragraphs, otherwise the current indentation will be used.
-        
         See also SetListStyle(), See also SetListStyle(), ClearListStyle().
     */
     bool PromoteList(int promoteBy, const wxRichTextRange& range,
@@ -664,10 +643,10 @@ public:
 
     /**
         Removes an event handler from the buffer's list of handlers, deleting the
-        object if @e deleteHandler is @true.
+        object if @a deleteHandler is @true.
     */
     bool RemoveEventHandler(wxEvtHandler* handler,
-                            bool deleteHandler = @false);
+                            bool deleteHandler = false);
 
     /**
         Removes a handler.
@@ -701,7 +680,6 @@ public:
         Sets the default style, affecting the style currently being applied (for
         example, setting the default
         style to bold will cause subsequently inserted text to be bold).
-        
         This is not cumulative - setting the default style will replace the previous
         default style.
     */
@@ -713,15 +691,12 @@ public:
         the attributes are set.
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
          wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
         startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @e listLevel should be used
+         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
         as the level for all paragraphs, otherwise the current indentation will be used.
-        
         See also NumberList(), PromoteList(), ClearListStyle().
     */
     bool SetListStyle(const wxRichTextRange& range,
@@ -737,7 +712,7 @@ public:
     //@}
 
     /**
-        Sets @e renderer as the object to be used to render certain aspects of the
+        Sets @a renderer as the object to be used to render certain aspects of the
         content, such as bullets.
         You can override default rendering by deriving a new class from
         wxRichTextRenderer or wxRichTextStdRenderer,
@@ -749,15 +724,12 @@ public:
     /**
         Sets the attributes for the given range. Pass flags to determine how the
         attributes are set.
-        
         The end point of range is specified as the last character position of the span
         of text.
         So, for example, to set the style for a character at position 5, use the range
         (5,5).
         This differs from the wxRichTextCtrl API, where you would specify (5,6).
-        
-        @e flags may contain a bit list of the following values:
-        
+        @a flags may contain a bit list of the following values:
          wxRICHTEXT_SETSTYLE_NONE: no style flag.
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this operation should be
         undoable.
@@ -837,12 +809,12 @@ public:
     bool CanSave();
 
     /**
-        Override to load content from @e stream into @e buffer.
+        Override to load content from @a stream into @e buffer.
     */
     bool DoLoadFile(wxRichTextBuffer* buffer, wxInputStream& stream);
 
     /**
-        Override to save content to @e stream from @e buffer.
+        Override to save content to @a stream from @e buffer.
     */
     bool DoSaveFile(wxRichTextBuffer* buffer, wxOutputStream& stream);
 
@@ -912,7 +884,6 @@ public:
         Sets flags that change the behaviour of loading or saving. See the
         documentation for each
         handler class to see what flags are relevant for each handler.
-        
         You call this function directly if you are using a file handler explicitly
         (without
         going through the text control or buffer LoadFile/SaveFile API). Or, you can
@@ -1041,22 +1012,22 @@ public:
     wxRichTextRange ToInternal();
 
     /**
-        Adds @e range to this range.
+        Adds @a range to this range.
     */
     wxRichTextRange operator+(const wxRichTextRange& range);
 
     /**
-        Subtracts @e range from this range.
+        Subtracts @a range from this range.
     */
     wxRichTextRange operator-(const wxRichTextRange& range);
 
     /**
-        Assigns @e range to this range.
+        Assigns @a range to this range.
     */
     void operator=(const wxRichTextRange& range);
 
     /**
-        Returns @true if @e range is the same as this range.
+        Returns @true if @a range is the same as this range.
     */
     bool operator==(const wxRichTextRange& range);
 };

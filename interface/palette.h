@@ -42,21 +42,17 @@ public:
         red, blue or green component.
         
         @param palette
-        A pointer or reference to the palette to copy.
-        
+            A pointer or reference to the palette to copy.
         @param n
-        The number of indices in the palette.
-        
+            The number of indices in the palette.
         @param red
-        An array of red values.
-        
+            An array of red values.
         @param green
-        An array of green values.
-        
+            An array of green values.
         @param blue
-        An array of blue values.
+            An array of blue values.
         
-        @sa Create()
+        @see Create()
     */
     wxPalette();
     wxPalette(const wxPalette& palette);
@@ -77,20 +73,17 @@ public:
         red, blue or green component.
         
         @param n
-        The number of indices in the palette.
-        
+            The number of indices in the palette.
         @param red
-        An array of red values.
-        
+            An array of red values.
         @param green
-        An array of green values.
-        
+            An array of green values.
         @param blue
-        An array of blue values.
+            An array of blue values.
         
         @returns @true if the creation was successful, @false otherwise.
         
-        @sa wxPalette()
+        @see wxPalette()
     */
     bool Create(int n, const unsigned char* red,
                 const unsigned char* green,
@@ -105,17 +98,15 @@ public:
         Returns a pixel value (index into the palette) for the given RGB values.
         
         @param red
-        Red value.
-        
+            Red value.
         @param green
-        Green value.
-        
+            Green value.
         @param blue
-        Blue value.
+            Blue value.
         
         @returns The nearest palette index or wxNOT_FOUND for unexpected errors.
         
-        @sa GetRGB()
+        @see GetRGB()
     */
     int GetPixel(unsigned char red, unsigned char green,
                  unsigned char blue);
@@ -124,29 +115,26 @@ public:
         Returns RGB values for a given palette index.
         
         @param pixel
-        The palette index.
-        
+            The palette index.
         @param red
-        Receives the red value.
-        
+            Receives the red value.
         @param green
-        Receives the green value.
-        
+            Receives the green value.
         @param blue
-        Receives the blue value.
+            Receives the blue value.
         
         @returns @true if the operation was successful.
         
-        @sa GetPixel()
+        @see GetPixel()
     */
-#define bool GetRGB(int pixel, const unsigned char* red,
-    const unsigned char* green,
-    const unsigned char* blue)     /* implementation is private */
+    bool GetRGB(int pixel, const unsigned char* red,
+                const unsigned char* green,
+                const unsigned char* blue);
 
     /**
         Returns @true if palette data is present.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".

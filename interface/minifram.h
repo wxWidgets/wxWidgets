@@ -59,35 +59,31 @@ public:
         Constructor, creating the window.
         
         @param parent
-        The window parent. This may be @NULL. If it is non-@NULL, the frame will
-        always be displayed on top of the parent window on Windows.
-        
+            The window parent. This may be @NULL. If it is non-@NULL, the frame will
+            always be displayed on top of the parent window on Windows.
         @param id
-        The window identifier. It may take a value of -1 to indicate a default value.
-        
+            The window identifier. It may take a value of -1 to indicate a default
+        value.
         @param title
-        The caption to be displayed on the frame's title bar.
-        
+            The caption to be displayed on the frame's title bar.
         @param pos
-        The window position. The value wxDefaultPosition indicates a default position, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The window position. The value wxDefaultPosition indicates a default position,
+        chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param size
-        The window size. The value wxDefaultSize indicates a default size, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The window size. The value wxDefaultSize indicates a default size, chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param style
-        The window style. See wxMiniFrame.
-        
+            The window style. See wxMiniFrame.
         @param name
-        The name of the window. This parameter is used to associate a name with the
+            The name of the window. This parameter is used to associate a name with the
         item,
-        allowing the application user to set Motif resource values for
-        individual windows.
+            allowing the application user to set Motif resource values for
+            individual windows.
         
         @remarks The frame behaves like a normal frame on non-Windows platforms.
         
-        @sa Create()
+        @see Create()
     */
     wxMiniFrame();
     wxMiniFrame(wxWindow* parent, wxWindowID id,

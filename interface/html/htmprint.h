@@ -39,56 +39,50 @@ public:
         Renders HTML text to the DC.
         
         @param x,y
-        position of upper-left corner of printing rectangle (see SetSize)
-        
+            position of upper-left corner of printing rectangle (see SetSize)
         @param from
-        y-coordinate of the very first visible cell
-        
+            y-coordinate of the very first visible cell
         @param dont_render
-        if @true then this method only returns y coordinate of the next page
-        and does not output anything
+            if @true then this method only returns y coordinate of the next page
+            and does not output anything
     */
-    int Render(int x, int y, int from = 0, int dont_render = @false);
+    int Render(int x, int y, int from = 0, int dont_render = false);
 
     /**
         Assign DC instance to the renderer.
-        
-        @e pixel_scale can be used when rendering to high-resolution DCs (e.g. printer)
+        @a pixel_scale can be used when rendering to high-resolution DCs (e.g. printer)
         to adjust size of pixel metrics.
         (Many dimensions in HTML are given in pixels -- e.g. image sizes. 300x300 image
         would be only one
         inch wide on typical printer. With pixel_scale = 3.0 it would be 3 inches.)
     */
-#define void SetDC(wxDC* dc, double pixel_scale = 1.0)     /* implementation is private */
+    void SetDC(wxDC* dc, double pixel_scale = 1.0);
 
     /**
         Sets fonts. See wxHtmlWindow::SetFonts for
         detailed description.
-        
         See also SetSize().
     */
     void SetFonts(const wxString& normal_face,
                   const wxString& fixed_face,
-                  const int sizes = @NULL);
+                  const int sizes = NULL);
 
     /**
         Assign text to the renderer. Render() then draws
         the text onto DC.
         
         @param html
-        HTML text. This is not a filename.
-        
+            HTML text. This is not a filename.
         @param basepath
-        base directory (html string would be stored there if it was in
-        file). It is used to determine path for loading images, for example.
-        
+            base directory (html string would be stored there if it was in
+            file). It is used to determine path for loading images, for example.
         @param isdir
-        @false if basepath is filename, @true if it is directory name
-        (see wxFileSystem for detailed explanation)
+            @false if basepath is filename, @true if it is directory name
+            (see wxFileSystem for detailed explanation)
     */
     void SetHtmlText(const wxString& html,
                      const wxString& basepath = wxEmptyString,
-                     bool isdir = @true);
+                     bool isdir = true);
 
     /**
         Set size of output rectangle, in pixels. Note that you @b can't change
@@ -117,14 +111,13 @@ public:
         Constructor.
         
         @param name
-        Name of the printing object. Used by preview frames and setup dialogs.
-        
+            Name of the printing object. Used by preview frames and setup dialogs.
         @param parentWindow
-        pointer to the window that will own the preview frame and setup dialogs. May be
-        @NULL.
+            pointer to the window that will own the preview frame and setup dialogs.
+        May be @NULL.
     */
     wxHtmlEasyPrinting(const wxString& name = "Printing",
-                       wxWindow* parentWindow = @NULL);
+                       wxWindow* parentWindow = NULL);
 
     /**
         Returns a pointer to wxPageSetupDialogData instance used by
@@ -150,7 +143,6 @@ public:
 
     /**
         Preview HTML file.
-        
         Returns @false in case of error -- call
         wxPrinter::GetLastError to get detailed
         information about the kind of the error.
@@ -159,24 +151,21 @@ public:
 
     /**
         Preview HTML text (not file!).
-        
         Returns @false in case of error -- call
         wxPrinter::GetLastError to get detailed
         information about the kind of the error.
         
         @param htmltext
-        HTML text.
-        
+            HTML text.
         @param basepath
-        base directory (html string would be stored there if it was in
-        file). It is used to determine path for loading images, for example.
+            base directory (html string would be stored there if it was in
+            file). It is used to determine path for loading images, for example.
     */
     bool PreviewText(const wxString& htmltext,
                      const wxString& basepath = wxEmptyString);
 
     /**
         Print HTML file.
-        
         Returns @false in case of error -- call
         wxPrinter::GetLastError to get detailed
         information about the kind of the error.
@@ -185,17 +174,15 @@ public:
 
     /**
         Print HTML text (not file!).
-        
         Returns @false in case of error -- call
         wxPrinter::GetLastError to get detailed
         information about the kind of the error.
         
         @param htmltext
-        HTML text.
-        
+            HTML text.
         @param basepath
-        base directory (html string would be stored there if it was in
-        file). It is used to determine path for loading images, for example.
+            base directory (html string would be stored there if it was in
+            file). It is used to determine path for loading images, for example.
     */
     bool PrintText(const wxString& htmltext,
                    const wxString& basepath = wxEmptyString);
@@ -206,11 +193,10 @@ public:
     */
     void SetFonts(const wxString& normal_face,
                   const wxString& fixed_face,
-                  const int sizes = @NULL);
+                  const int sizes = NULL);
 
     /**
         Set page footer. The following macros can be used inside it:
-        
          @DATE@ is replaced by the current date in default format
          @PAGENUM@ is replaced by page number
          @PAGESCNT@ is replaced by total number of pages
@@ -218,16 +204,14 @@ public:
          @TITLE@ is replaced with the title of the document
         
         @param footer
-        HTML text to be used as footer.
-        
+            HTML text to be used as footer.
         @param pg
-        one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
+            one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
     */
     void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
 
     /**
         Set page header. The following macros can be used inside it:
-        
          @DATE@ is replaced by the current date in default format
          @PAGENUM@ is replaced by page number
          @PAGESCNT@ is replaced by total number of pages
@@ -235,10 +219,9 @@ public:
          @TITLE@ is replaced with the title of the document
         
         @param header
-        HTML text to be used as header.
-        
+            HTML text to be used as header.
         @param pg
-        one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
+            one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
     */
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
 
@@ -279,11 +262,10 @@ public:
     */
     void SetFonts(const wxString& normal_face,
                   const wxString& fixed_face,
-                  const int sizes = @NULL);
+                  const int sizes = NULL);
 
     /**
         Set page footer. The following macros can be used inside it:
-        
          @DATE@ is replaced by the current date in default format
          @PAGENUM@ is replaced by page number
          @PAGESCNT@ is replaced by total number of pages
@@ -291,16 +273,14 @@ public:
          @TITLE@ is replaced with the title of the document
         
         @param footer
-        HTML text to be used as footer.
-        
+            HTML text to be used as footer.
         @param pg
-        one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
+            one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
     */
     void SetFooter(const wxString& footer, int pg = wxPAGE_ALL);
 
     /**
         Set page header. The following macros can be used inside it:
-        
          @DATE@ is replaced by the current date in default format
          @PAGENUM@ is replaced by page number
          @PAGESCNT@ is replaced by total number of pages
@@ -308,10 +288,9 @@ public:
          @TITLE@ is replaced with the title of the document
         
         @param header
-        HTML text to be used as header.
-        
+            HTML text to be used as header.
         @param pg
-        one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
+            one of wxPAGE_ODD, wxPAGE_EVEN and wxPAGE_ALL constants.
     */
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
 
@@ -325,19 +304,17 @@ public:
         Prepare the class for printing this HTML text.
         
         @param html
-        HTML text. (NOT file!)
-        
+            HTML text. (NOT file!)
         @param basepath
-        base directory (html string would be stored there if it was in
-        file). It is used to determine path for loading images, for example.
-        
+            base directory (html string would be stored there if it was in
+            file). It is used to determine path for loading images, for example.
         @param isdir
-        @false if basepath is filename, @true if it is directory name
-        (see wxFileSystem for detailed explanation)
+            @false if basepath is filename, @true if it is directory name
+            (see wxFileSystem for detailed explanation)
     */
     void SetHtmlText(const wxString& html,
                      const wxString& basepath = wxEmptyString,
-                     bool isdir = @true);
+                     bool isdir = true);
 
     /**
         Sets margins in millimeters. Defaults to 1 inch for margins and 0.5cm for space

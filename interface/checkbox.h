@@ -30,7 +30,7 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_CHECKBOX(id\, func)}:
+    @event{EVT_CHECKBOX(id, func)}:
            Process a wxEVT_COMMAND_CHECKBOX_CLICKED event, when the checkbox
            is clicked.
     @endEventTable
@@ -50,32 +50,25 @@ public:
         Constructor, creating and showing a checkbox.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Checkbox identifier. The value wxID_ANY indicates a default value.
-        
+            Checkbox identifier. The value wxID_ANY indicates a default value.
         @param label
-        Text to be displayed next to the checkbox.
-        
+            Text to be displayed next to the checkbox.
         @param pos
-        Checkbox position. If wxDefaultPosition is specified then a default
+            Checkbox position. If wxDefaultPosition is specified then a default
         position is chosen.
-        
         @param size
-        Checkbox size. If wxDefaultSize is specified then a default size is
-        chosen.
-        
+            Checkbox size. If wxDefaultSize is specified then a default
+        size is chosen.
         @param style
-        Window style. See wxCheckBox.
-        
+            Window style. See wxCheckBox.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxCheckBox();
     wxCheckBox(wxWindow* parent, wxWindowID id,
@@ -108,10 +101,10 @@ public:
         Gets the state of a 3-state checkbox.
         
         @returns Returns wxCHK_UNCHECKED when the checkbox is unchecked,
-                   wxCHK_CHECKED  when it is checked and
-                   wxCHK_UNDETERMINED when it's in the undetermined
-                   state. Asserts when the function is used with a
-                   2-state checkbox.
+                 wxCHK_CHECKED  when it is checked and
+                 wxCHK_UNDETERMINED when it's in the undetermined state.
+                 Asserts when the function is used with a 2-state
+                 checkbox.
     */
     wxCheckBoxState Get3StateValue();
 
@@ -126,7 +119,7 @@ public:
         Returns whether or not the checkbox is a 3-state checkbox.
         
         @returns Returns @true if this checkbox is a 3-state checkbox, @false if
-                   it's a 2-state checkbox.
+                 it's a 2-state checkbox.
     */
     bool Is3State();
 
@@ -134,8 +127,8 @@ public:
         Returns whether or not the user can set the checkbox to the third state.
         
         @returns Returns @true if the user can set the third state of this
-                   checkbox, @false if it can only be set
-                   programmatically or if it's a 2-state checkbox.
+                 checkbox, @false if it can only be set programmatically
+                 or if it's a 2-state checkbox.
     */
     bool Is3rdStateAllowedForUser();
 
@@ -151,7 +144,7 @@ public:
         wxEVT_COMMAND_CHECKBOX_CLICKED event to get emitted.
         
         @param state
-        If @true, the check is on, otherwise it is off.
+            If @true, the check is on, otherwise it is off.
     */
     void SetValue(bool state);
 };

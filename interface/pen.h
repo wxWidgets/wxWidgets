@@ -52,100 +52,180 @@ public:
         Copy constructor, uses @ref overview_trefcount "reference counting".
         
         @param colour
-        A colour object.
-        
+            A colour object.
         @param colourName
-        A colour name.
-        
+            A colour name.
         @param width
-        Pen width. Under Windows, the pen width cannot be greater than 1 if
-        the style is wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, or wxUSER_DASH.
-        
+            Pen width. Under Windows, the pen width cannot be greater than 1 if
+            the style is wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, or wxUSER_DASH.
         @param stipple
-        A stipple bitmap.
-        
+            A stipple bitmap.
         @param pen
-        A pointer or reference to a pen to copy.
-        
+            A pointer or reference to a pen to copy.
         @param style
-        The style may be one of the following:
-        
-        wxSOLID
+            The style may be one of the following:
         
         
-        Solid style.
-        
-        wxTRANSPARENT
         
         
-        No pen is used.
-        
-        wxDOT
         
         
-        Dotted style.
-        
-        wxLONG_DASH
+            wxSOLID
         
         
-        Long dashed style.
-        
-        wxSHORT_DASH
         
         
-        Short dashed style.
-        
-        wxDOT_DASH
+            Solid style.
         
         
-        Dot and dash style.
-        
-        wxSTIPPLE
         
         
-        Use the stipple bitmap.
         
-        wxUSER_DASH
-        
-        
-        Use the user dashes: see SetDashes().
-        
-        wxBDIAGONAL_HATCH
+            wxTRANSPARENT
         
         
-        Backward diagonal hatch.
-        
-        wxCROSSDIAG_HATCH
         
         
-        Cross-diagonal hatch.
-        
-        wxFDIAGONAL_HATCH
+            No pen is used.
         
         
-        Forward diagonal hatch.
-        
-        wxCROSS_HATCH
         
         
-        Cross hatch.
         
-        wxHORIZONTAL_HATCH
-        
-        
-        Horizontal hatch.
-        
-        wxVERTICAL_HATCH
+            wxDOT
         
         
-        Vertical hatch.
+        
+        
+            Dotted style.
+        
+        
+        
+        
+        
+            wxLONG_DASH
+        
+        
+        
+        
+            Long dashed style.
+        
+        
+        
+        
+        
+            wxSHORT_DASH
+        
+        
+        
+        
+            Short dashed style.
+        
+        
+        
+        
+        
+            wxDOT_DASH
+        
+        
+        
+        
+            Dot and dash style.
+        
+        
+        
+        
+        
+            wxSTIPPLE
+        
+        
+        
+        
+            Use the stipple bitmap.
+        
+        
+        
+        
+        
+            wxUSER_DASH
+        
+        
+        
+        
+            Use the user dashes: see SetDashes().
+        
+        
+        
+        
+        
+            wxBDIAGONAL_HATCH
+        
+        
+        
+        
+            Backward diagonal hatch.
+        
+        
+        
+        
+        
+            wxCROSSDIAG_HATCH
+        
+        
+        
+        
+            Cross-diagonal hatch.
+        
+        
+        
+        
+        
+            wxFDIAGONAL_HATCH
+        
+        
+        
+        
+            Forward diagonal hatch.
+        
+        
+        
+        
+        
+            wxCROSS_HATCH
+        
+        
+        
+        
+            Cross hatch.
+        
+        
+        
+        
+        
+            wxHORIZONTAL_HATCH
+        
+        
+        
+        
+            Horizontal hatch.
+        
+        
+        
+        
+        
+            wxVERTICAL_HATCH
+        
+        
+        
+        
+            Vertical hatch.
         
         @remarks Different versions of Windows and different versions of other
-                   platforms support very different subsets of the
-                   styles above - there is no similarity even between
-                   Windows95 and Windows98 - so handle with care.
+                 platforms support very different subsets of the styles
+                 above - there is no similarity even between Windows95
+                 and Windows98 - so handle with care.
         
-        @sa SetStyle(), SetColour(), SetWidth(), SetStipple()
+        @see SetStyle(), SetColour(), SetWidth(), SetStipple()
     */
     wxPen();
     wxPen(const wxColour& colour, int width = 1,
@@ -161,11 +241,10 @@ public:
         more info.
         
         @remarks Although all remaining pens are deleted when the application
-                   exits, the application should try to clean up all
-                   pens itself. This is because wxWidgets cannot know if
-                   a pointer to the pen object is stored in an
-                   application data structure, and there is a risk of
-                   double deletion.
+                 exits, the application should try to clean up all pens
+                 itself. This is because wxWidgets cannot know if a
+                 pointer to the pen object is stored in an application
+                 data structure, and there is a risk of double deletion.
     */
     ~wxPen();
 
@@ -174,24 +253,24 @@ public:
         wxCAP_PROJECTING and
         @b wxCAP_BUTT. The default is @b wxCAP_ROUND.
         
-        @sa SetCap()
+        @see SetCap()
     */
     int GetCap();
 
     /**
         Returns a reference to the pen colour.
         
-        @sa SetColour()
+        @see SetColour()
     */
     wxColour GetColour();
 
     /**
         Gets an array of dashes (defined as char in X, DWORD under Windows).
-        @e dashes is a pointer to the internal array. Do not deallocate or store this
+        @a dashes is a pointer to the internal array. Do not deallocate or store this
         pointer.
         The function returns the number of dashes associated with this pen.
         
-        @sa SetDashes()
+        @see SetDashes()
     */
     int GetDashes(wxDash** dashes);
 
@@ -200,42 +279,42 @@ public:
         wxJOIN_ROUND and
         @b wxJOIN_MITER. The default is @b wxJOIN_ROUND.
         
-        @sa SetJoin()
+        @see SetJoin()
     */
     int GetJoin();
 
     /**
         Gets a pointer to the stipple bitmap.
         
-        @sa SetStipple()
+        @see SetStipple()
     */
     wxBitmap* GetStipple();
 
     /**
         Returns the pen style.
         
-        @sa wxPen(), SetStyle()
+        @see wxPen(), SetStyle()
     */
     int GetStyle();
 
     /**
         Returns the pen width.
         
-        @sa SetWidth()
+        @see SetWidth()
     */
     int GetWidth();
 
     /**
         Returns @true if the pen is initialised.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Sets the pen cap style, which may be one of @b wxCAP_ROUND, @b wxCAP_PROJECTING
         and
         @b wxCAP_BUTT. The default is @b wxCAP_ROUND.
         
-        @sa GetCap()
+        @see GetCap()
     */
     void SetCap(int capStyle);
 
@@ -243,7 +322,7 @@ public:
     /**
         The pen's colour is changed to the given colour.
         
-        @sa GetColour()
+        @see GetColour()
     */
     void SetColour(wxColour& colour);
     void SetColour(const wxString& colourName);
@@ -258,7 +337,7 @@ public:
         deallocated by the calling application until the pen is deleted or this
         function is called with a @NULL array.
         
-        @sa GetDashes()
+        @see GetDashes()
     */
     void SetDashes(int n, wxDash* dashes);
 
@@ -267,28 +346,28 @@ public:
         and
         @b wxJOIN_MITER. The default is @b wxJOIN_ROUND.
         
-        @sa GetJoin()
+        @see GetJoin()
     */
     void SetJoin(int join_style);
 
     /**
         Sets the bitmap for stippling.
         
-        @sa GetStipple()
+        @see GetStipple()
     */
     void SetStipple(wxBitmap* stipple);
 
     /**
         Set the pen style.
         
-        @sa wxPen()
+        @see wxPen()
     */
     void SetStyle(int style);
 
     /**
         Sets the pen width.
         
-        @sa GetWidth()
+        @see GetWidth()
     */
     void SetWidth(int width);
 

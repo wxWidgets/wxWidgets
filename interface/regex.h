@@ -65,9 +65,8 @@ public:
 
     //@{
     /**
-        Returns the part of string corresponding to the match where @e index is
+        Returns the part of string corresponding to the match where @a index is
         interpreted as above. Empty string is returned if match failed
-        
         May only be called after successful call to Matches()
         and only if @c wxRE_NOSUB was @b not used in
         Compile().
@@ -80,7 +79,6 @@ public:
     /**
         Returns the size of the array of matches, i.e. the number of bracketed
         subexpressions plus one for the expression itself, or 0 on error.
-        
         May only be called after successful call to Compile().
         and only if @c wxRE_NOSUB was @b not used.
     */
@@ -96,19 +94,15 @@ public:
     /**
         Matches the precompiled regular expression against the string @e text,
         returns @true if matches and @false otherwise.
-        
         @e Flags may be combination of @c wxRE_NOTBOL and @c wxRE_NOTEOL.
-        
         Some regex libraries assume that the text given is null terminated, while
         others require the length be given as a separate parameter. Therefore for
-        maximum portability assume that @e text cannot contain embedded nulls.
-        
+        maximum portability assume that @a text cannot contain embedded nulls.
         When the @e Matches(const wxChar *text, int flags = 0) form is used,
         a @e wxStrlen() will be done internally if the regex library requires the
         length. When using @e Matches() in a loop
         the @e Matches(text, flags, len) form can be used instead, making it
         possible to avoid a @e wxStrlen() inside the loop.
-        
         May only be called after successful call to Compile().
     */
     bool Matches(const wxChar* text, int flags = 0);
@@ -118,15 +112,13 @@ public:
 
     /**
         Replaces the current regular expression in the string pointed to by
-        @e text, with the text in @e replacement and return number of matches
+        @e text, with the text in @a replacement and return number of matches
         replaced (maybe 0 if none found) or -1 on error.
-        
         The replacement text may contain back references @c \number which will be
         replaced with the value of the corresponding subexpression in the
         pattern match. @c \0 corresponds to the entire match and @c  is a
         synonym for it. Backslash may be used to quote itself or @c  character.
-        
-        @e maxMatches may be used to limit the number of replacements made, setting
+        @a maxMatches may be used to limit the number of replacements made, setting
         it to 1, for example, will only replace first occurrence (if any) of the
         pattern in the text while default value of 0 means replace all.
     */
@@ -137,7 +129,7 @@ public:
         Replace all occurrences: this is actually a synonym for
         Replace().
         
-        @sa ReplaceFirst()
+        @see ReplaceFirst()
     */
     int ReplaceAll(wxString* text, const wxString& replacement);
 

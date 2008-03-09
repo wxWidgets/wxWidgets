@@ -305,7 +305,7 @@ public:
     void OnSelect(wxCommandEvent& event);
 
     /**
-        If @e applyOnSelection is @true, clicking on a style name in the list will
+        If @a applyOnSelection is @true, clicking on a style name in the list will
         immediately
         apply the style to the associated rich text control.
     */
@@ -461,45 +461,44 @@ public:
     /**
         This function combines the given paragraph style with the list style's base
         attributes and level style matching the given indent, returning the combined attributes.
-        If @e styleSheet is specified, the base style for this definition will also be
+        If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
     wxTextAttr CombineWithParagraphStyle(int indent,
                                          const wxTextAttr& paraStyle,
-                                         wxRichTextStyleSheet* styleSheet = @NULL);
+                                         wxRichTextStyleSheet* styleSheet = NULL);
 
     /**
         This function finds the level (from 0 to 9) whose indentation attribute mostly
-        closely matches @e indent (expressed in tenths of a millimetre).
+        closely matches @a indent (expressed in tenths of a millimetre).
     */
     int FindLevelForIndent(int indent);
 
     /**
         This function combines the list style's base attributes and the level style
         matching the given indent, returning the combined attributes.
-        If @e styleSheet is specified, the base style for this definition will also be
+        If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
     wxTextAttr GetCombinedStyle(int indent,
-                                wxRichTextStyleSheet* styleSheet = @NULL);
+                                wxRichTextStyleSheet* styleSheet = NULL);
 
     /**
         This function combines the list style's base attributes and the style for the
         specified level, returning the combined attributes.
-        If @e styleSheet is specified, the base style for this definition will also be
+        If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
     wxTextAttr GetCombinedStyleLevel(int level,
-                                     wxRichTextStyleSheet* styleSheet = @NULL);
+                                     wxRichTextStyleSheet* styleSheet = NULL);
 
     /**
-        Returns the style for the given level. @e level is a number between 0 and 9.
+        Returns the style for the given level. @a level is a number between 0 and 9.
     */
     const wxTextAttr* GetLevelAttributes(int level);
 
     /**
         Returns the number of levels. This is hard-wired to 10.
-        
         Returns the style for the given level. @e level is a number between 0 and 9.
     */
     int GetLevelCount();
@@ -511,8 +510,7 @@ public:
 
     //@{
     /**
-        Sets the style for the given level. @e level is a number between 0 and 9.
-        
+        Sets the style for the given level. @a level is a number between 0 and 9.
         The first and most flexible form uses a wxTextAttr object, while the second
         form is for convenient setting of the most commonly-used attributes.
     */
@@ -641,25 +639,25 @@ public:
         Removes a character style.
     */
     bool RemoveCharacterStyle(wxRichTextStyleDefinition* def,
-                              bool deleteStyle = @false);
+                              bool deleteStyle = false);
 
     /**
         Removes a list style.
     */
     bool RemoveListStyle(wxRichTextStyleDefinition* def,
-                         bool deleteStyle = @false);
+                         bool deleteStyle = false);
 
     /**
         Removes a paragraph style.
     */
     bool RemoveParagraphStyle(wxRichTextStyleDefinition* def,
-                              bool deleteStyle = @false);
+                              bool deleteStyle = false);
 
     /**
         Removes a style.
     */
     bool RemoveStyle(wxRichTextStyleDefinition* def,
-                     bool deleteStyle = @false);
+                     bool deleteStyle = false);
 
     /**
         Sets the style sheet's description.

@@ -32,7 +32,7 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_RADIOBUTTON(id\, func)}:
+    @event{EVT_RADIOBUTTON(id, func)}:
            Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the
            radiobutton is clicked.
     @endEventTable
@@ -42,8 +42,7 @@
     @appearance{radiobutton.png}
 
     @seealso
-    @ref overview_eventhandlingoverview "Event handling overview", wxRadioBox,
-    wxCheckBox
+    @ref overview_eventhandlingoverview, wxRadioBox, wxCheckBox
 */
 class wxRadioButton : public wxControl
 {
@@ -53,32 +52,25 @@ public:
         Constructor, creating and showing a radio button.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param label
-        Label for the radio button.
-        
+            Label for the radio button.
         @param pos
-        Window position. If wxDefaultPosition is specified then a default position
-        is chosen.
-        
+            Window position. If wxDefaultPosition is specified then a default
+        position is chosen.
         @param size
-        Window size. If wxDefaultSize is specified then a default size is
-        chosen.
-        
+            Window size. If wxDefaultSize is specified then a default size
+        is chosen.
         @param style
-        Window style. See wxRadioButton.
-        
+            Window style. See wxRadioButton.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxRadioButton();
     wxRadioButton(wxWindow* parent, wxWindowID id,
@@ -117,7 +109,7 @@ public:
         wxEVT_COMMAND_RADIOBUTTON_SELECTED event to get emitted.
         
         @param value
-        @true to select, @false to deselect.
+            @true to select, @false to deselect.
     */
     void SetValue(const bool value);
 };

@@ -41,7 +41,6 @@ public:
         to this function so derived classes can override either just the height or
         the width estimation, or just estimate both differently if desired in any
         wxHVScrolledWindow derived class.
-        
         Please note that this function will not be called if @c EstimateTotalSize()
         is overridden in your derived class.
     */
@@ -50,7 +49,7 @@ public:
     /**
         Returns the number of columns the target window contains.
         
-        @sa SetColumnCount()
+        @see SetColumnCount()
     */
     size_t GetColumnCount();
 
@@ -82,13 +81,11 @@ public:
         calculating the columns' sizes is a relatively expensive operation as it gives
         your code a chance to calculate several of them at once and cache the result
         if necessary.
-        
         @c OnGetColumnsWidthHint() is normally called just before
         OnGetColumnWidth() but you
         shouldn't rely on the latter being called for all columns in the interval
         specified here. It is also possible that OnGetColumnWidth() will be called for
         units outside of this interval, so this is really just a hint, not a promise.
-        
         Finally, note that columnMin is inclusive, while columnMax is exclusive.
     */
     virtual void OnGetColumnsWidthHint(size_t columnMin,
@@ -116,7 +113,6 @@ public:
         Scroll by the specified number of columns which may be positive (to scroll
         right)
         or negative (to scroll left).
-        
         Returns @true if the window was scrolled, @false otherwise (for
         example, if we're trying to scroll right but we are already showing the last
         column).
@@ -126,7 +122,6 @@ public:
     /**
         Scroll to the specified column. It will become the first visible column in the
         window.
-        
         Returns @true if we scrolled the window, @false if nothing was done.
     */
     bool ScrollToColumn(size_t column);
@@ -175,7 +170,6 @@ public:
         to this function so derived classes can override either just the height or
         the width estimation, or just estimate both differently if desired in any
         wxHVScrolledWindow derived class.
-        
         Please note that this function will not be called if @c EstimateTotalSize()
         is overridden in your derived class.
     */
@@ -184,7 +178,7 @@ public:
     /**
         Returns the number of rows the target window contains.
         
-        @sa SetRowCount()
+        @see SetRowCount()
     */
     size_t GetRowCount();
 
@@ -216,13 +210,11 @@ public:
         calculating the rows' sizes is a relatively expensive operation as it gives
         your code a chance to calculate several of them at once and cache the result
         if necessary.
-        
         @c OnGetRowsHeightHint() is normally called just before
         OnGetRowHeight() but you
         shouldn't rely on the latter being called for all rows in the interval
         specified here. It is also possible that OnGetRowHeight() will be called for
         units outside of this interval, so this is really just a hint, not a promise.
-        
         Finally, note that rowMin is inclusive, while rowMax is exclusive.
     */
     virtual void OnGetRowsHeightHint(size_t rowMin, size_t rowMax);
@@ -247,7 +239,6 @@ public:
     /**
         Scroll by the specified number of rows which may be positive (to scroll down)
         or negative (to scroll up).
-        
         Returns @true if the window was scrolled, @false otherwise (for
         example, if we're trying to scroll down but we are already showing the last
         row).
@@ -256,7 +247,6 @@ public:
 
     /**
         Scroll to the specified row. It will become the first visible row in the window.
-        
         Returns @true if we scrolled the window, @false if nothing was done.
     */
     bool ScrollToRow(size_t row);
@@ -315,7 +305,7 @@ public:
         for variable scroll unit sizes), a call to this function with a coordinate of
         15 will return -85.
         
-        @sa CalcUnscrolledPosition()
+        @see CalcUnscrolledPosition()
     */
     int CalcScrolledPosition(int coord);
 
@@ -326,7 +316,7 @@ public:
         allows for variable scroll unit sizes), a call to this function with a
         coordinate of 15 will return 115.
         
-        @sa CalcScrolledPosition()
+        @see CalcScrolledPosition()
     */
     int CalcUnscrolledPosition(int coord);
 
@@ -338,7 +328,7 @@ public:
         responsible for repainting any invalidated areas of the window yourself to
         account for the new scroll position.
     */
-    void EnablePhysicalScrolling(bool scrolling = @true);
+    void EnablePhysicalScrolling(bool scrolling = true);
 
     /**
         When the number of scroll units change, we try to estimate the total size of
@@ -347,7 +337,6 @@ public:
         if the user code may estimate the average size better or faster than we do, it
         should override this function to implement its own logic. This function should
         return the best guess for the total virtual window size.
-        
         Note that although returning a totally wrong value would still work, it risks
         resulting in very strange scrollbar behaviour so this function should really
         try to make the best guess possible.
@@ -359,7 +348,7 @@ public:
         window size with respect to the opposing orientation. If this is a vertical
         scrolled window, it should return the height.
         
-        @sa GetOrientationTargetSize()
+        @see GetOrientationTargetSize()
     */
     virtual int GetNonOrientationTargetSize();
 
@@ -374,7 +363,7 @@ public:
         window size with respect to the orientation this helper is working with. If
         this is a vertical scrolled window, it should return the width.
         
-        @sa GetNonOrientationTargetSize()
+        @see GetNonOrientationTargetSize()
     */
     virtual int GetOrientationTargetSize();
 
@@ -382,7 +371,7 @@ public:
         This function will return the target window this helper class is currently
         scrolling.
         
-        @sa SetTargetWindow()
+        @see SetTargetWindow()
     */
     wxWindow* GetTargetWindow();
 
@@ -414,13 +403,11 @@ public:
         calculating the units' sizes is a relatively expensive operation as it gives
         your code a chance to calculate several of them at once and cache the result
         if necessary.
-        
         @c OnGetUnitsSizeHint() is normally called just before
         OnGetUnitSize() but you
         shouldn't rely on the latter being called for all units in the interval
         specified here. It is also possible that OnGetUnitSize() will be called for
         units outside of this interval, so this is really just a hint, not a promise.
-        
         Finally, note that unitMin is inclusive, while unitMax is exclusive.
     */
     virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax);
@@ -436,7 +423,7 @@ public:
         scroll only a portion the area between the scrollbars like a spreadsheet where
         only the cell area will move).
         
-        @sa GetTargetWindow()
+        @see GetTargetWindow()
     */
     void SetTargetWindow(wxWindow* target);
 
@@ -495,28 +482,22 @@ public:
     /**
         This is the normal constructor, no need to call @c Create() after using this
         one.
-        
         Note that @c wxVSCROLL is always automatically added to our style, there is
         no need to specify it explicitly.
         
         @param parent
-        The parent window, must not be @NULL
-        
+            The parent window, must not be @NULL
         @param id
-        The identifier of this window, wxID_ANY by default
-        
+            The identifier of this window, wxID_ANY by default
         @param pos
-        The initial window position
-        
+            The initial window position
         @param size
-        The initial window size
-        
+            The initial window size
         @param style
-        The window style. There are no special style bits defined for
-        this class.
-        
+            The window style. There are no special style bits defined for
+            this class.
         @param name
-        The name for this window; usually not used
+            The name for this window; usually not used
     */
     wxVScrolledWindow();
     wxVScrolledWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -530,7 +511,6 @@ public:
         Same as the @ref wxvscrolledwindow() "non-default constuctor"
         but returns status code: @true if ok, @false if the window couldn't
         be created.
-        
         Just as with the constructor above, the @c wxVSCROLL style is always used,
         there is no need to specify it explicitly.
     */
@@ -551,7 +531,6 @@ public:
         as "rows" and "columns", respectively. This is to help clear some confusion
         in not only those classes, but also in wxHVScrolledWindow where functions
         are inherited from both.
-        
         You are encouraged to update any existing code using these function to use
         the new replacements mentioned below, and avoid using these functions for
         any new code as they are deprecated.
@@ -616,28 +595,22 @@ public:
     /**
         This is the normal constructor, no need to call @c Create() after using this
         one.
-        
         Note that @c wxHSCROLL and @c wxVSCROLL are always automatically added
         to our styles, there is no need to specify it explicitly.
         
         @param parent
-        The parent window, must not be @NULL
-        
+            The parent window, must not be @NULL
         @param id
-        The identifier of this window, wxID_ANY by default
-        
+            The identifier of this window, wxID_ANY by default
         @param pos
-        The initial window position
-        
+            The initial window position
         @param size
-        The initial window size
-        
+            The initial window size
         @param style
-        The window style. There are no special style bits defined for
-        this class.
-        
+            The window style. There are no special style bits defined for
+            this class.
         @param name
-        The name for this window; usually not used
+            The name for this window; usually not used
     */
     wxHVScrolledWindow();
     wxHVScrolledWindow(wxWindow* parent,
@@ -652,7 +625,6 @@ public:
         Same as the @ref wxhvscrolledwindow() "non-default constuctor"
         but returns status code: @true if ok, @false if the window couldn't
         be created.
-        
         Just as with the constructor above, the @c wxHSCROLL and @c wxVSCROLL
         styles are always used, there is no need to specify it explicitly.
     */
@@ -709,18 +681,19 @@ public:
         account for the new scroll position.
         
         @param vscrolling
-        Specifies if physical scrolling should be turned on when scrolling vertically.
-        
+            Specifies if physical scrolling should be turned on when scrolling
+        vertically.
         @param hscrolling
-        Specifies if physical scrolling should be turned on when scrolling horizontally.
+            Specifies if physical scrolling should be turned on when scrolling
+        horizontally.
     */
-    void EnablePhysicalScrolling(bool vscrolling = @true,
-                                 bool hscrolling = @true);
+    void EnablePhysicalScrolling(bool vscrolling = true,
+                                 bool hscrolling = true);
 
     /**
         Returns the number of columns and rows the target window contains.
         
-        @sa SetRowColumnCount()
+        @see SetRowColumnCount()
     */
     wxSize GetRowColumnCount();
 
@@ -840,28 +813,22 @@ public:
     /**
         This is the normal constructor, no need to call @c Create() after using this
         one.
-        
         Note that @c wxHSCROLL is always automatically added to our style, there is
         no need to specify it explicitly.
         
         @param parent
-        The parent window, must not be @NULL
-        
+            The parent window, must not be @NULL
         @param id
-        The identifier of this window, wxID_ANY by default
-        
+            The identifier of this window, wxID_ANY by default
         @param pos
-        The initial window position
-        
+            The initial window position
         @param size
-        The initial window size
-        
+            The initial window size
         @param style
-        The window style. There are no special style bits defined for
-        this class.
-        
+            The window style. There are no special style bits defined for
+            this class.
         @param name
-        The name for this window; usually not used
+            The name for this window; usually not used
     */
     wxHScrolledWindow();
     wxHScrolledWindow(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -875,7 +842,6 @@ public:
         Same as the @ref wxhscrolledwindow() "non-default constuctor"
         but returns status code: @true if ok, @false if the window couldn't
         be created.
-        
         Just as with the constructor above, the @c wxHSCROLL style is always used,
         there is no need to specify it explicitly.
     */

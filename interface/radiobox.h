@@ -26,7 +26,7 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_RADIOBOX(id\, func)}:
+    @event{EVT_RADIOBOX(id, func)}:
            Process a wxEVT_COMMAND_RADIOBOX_SELECTED event, when a radiobutton
            is clicked.
     @endEventTable
@@ -36,8 +36,7 @@
     @appearance{radiobox.png}
 
     @seealso
-    @ref overview_eventhandlingoverview "Event handling overview", wxRadioButton,
-    wxCheckBox
+    @ref overview_eventhandlingoverview, wxRadioButton, wxCheckBox
 */
 class wxRadioBox : public wxControlWithItems
 {
@@ -47,43 +46,33 @@ public:
         Constructor, creating and showing a radiobox.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param label
-        Label for the static box surrounding the radio buttons.
-        
+            Label for the static box surrounding the radio buttons.
         @param pos
-        Window position. If wxDefaultPosition is specified then a default position
-        is chosen.
-        
+            Window position. If wxDefaultPosition is specified then a default
+        position is chosen.
         @param size
-        Window size. If wxDefaultSize is specified then a default size is
-        chosen.
-        
+            Window size. If wxDefaultSize is specified then a default size
+        is chosen.
         @param n
-        Number of choices with which to initialize the radiobox.
-        
+            Number of choices with which to initialize the radiobox.
         @param choices
-        An array of choices with which to initialize the radiobox.
-        
+            An array of choices with which to initialize the radiobox.
         @param majorDimension
-        Specifies the maximum number of rows (if style contains wxRA_SPECIFY_ROWS) or
-        columns (if style contains wxRA_SPECIFY_COLS) for a two-dimensional
-        radiobox.
-        
+            Specifies the maximum number of rows (if style contains wxRA_SPECIFY_ROWS)
+        or columns (if style contains wxRA_SPECIFY_COLS) for a two-dimensional
+            radiobox.
         @param style
-        Window style. See wxRadioBox.
-        
+            Window style. See wxRadioBox.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxRadioBox();
     wxRadioBox(wxWindow* parent, wxWindowID id,
@@ -91,7 +80,7 @@ public:
                const wxPoint& point = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int n = 0,
-               const wxString choices[] = @NULL,
+               const wxString choices[] = NULL,
                int majorDimension = 0,
                long style = wxRA_SPECIFY_COLS,
                const wxValidator& validator = wxDefaultValidator,
@@ -122,7 +111,7 @@ public:
                 const wxPoint& point = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int n = 0,
-                const wxString choices[] = @NULL,
+                const wxString choices[] = NULL,
                 int majorDimension = 0,
                 long style = wxRA_SPECIFY_COLS,
                 const wxValidator& validator = wxDefaultValidator,
@@ -143,15 +132,14 @@ public:
         Enables or disables an individual button in the radiobox.
         
         @param enable
-        @true to enable, @false to disable.
-        
+            @true to enable, @false to disable.
         @param n
-        The zero-based button to enable or disable.
+            The zero-based button to enable or disable.
         
-        @sa wxWindow::Enable
+        @see wxWindow::Enable
     */
-    virtual bool Enable(bool enable = @true);
-    virtual bool Enable(unsigned int n, bool enable = @true);
+    virtual bool Enable(bool enable = true);
+    virtual bool Enable(unsigned int n, bool enable = true);
     //@}
 
     /**
@@ -159,7 +147,7 @@ public:
         -1 if not found.
         
         @param string
-        The string to find.
+            The string to find.
     */
     int FindString(const wxString& string);
 
@@ -173,35 +161,35 @@ public:
         wxNOT_FOUND if no item is under the point.
         
         @param pt
-        Point in client coordinates.
+            Point in client coordinates.
     */
     int GetItemFromPoint(const wxPoint pt);
 
     /**
-        Returns the helptext associated with the specified @e item if any or @c
+        Returns the helptext associated with the specified @a item if any or @c
         wxEmptyString.
         
         @param item
-        The zero-based item index.
+            The zero-based item index.
         
-        @sa SetItemHelpText()
+        @see SetItemHelpText()
     */
     wxString GetItemHelpText(unsigned int item);
 
     /**
-        Returns the tooltip associated with the specified @e item if any or @NULL.
+        Returns the tooltip associated with the specified @a item if any or @NULL.
         
-        @sa SetItemToolTip(), wxWindow::GetToolTip
+        @see SetItemToolTip(), wxWindow::GetToolTip
     */
-    wxToolTip * GetItemToolTip(unsigned int item);
+    wxToolTip* GetItemToolTip(unsigned int item);
 
     /**
         Returns the radiobox label.
         
         @param n
-        The zero-based button index.
+            The zero-based button index.
         
-        @sa SetLabel()
+        @see SetLabel()
     */
     wxString GetLabel();
 
@@ -219,7 +207,7 @@ public:
         Returns the label for the button at the given position.
         
         @param n
-        The zero-based button position.
+            The zero-based button position.
     */
     wxString GetString(unsigned int n);
 
@@ -231,12 +219,11 @@ public:
     /**
         Returns @true if the item is enabled or @false if it was disabled using
         @ref enable() "Enable(n, @false)".
-        
         @b Platform note: Currently only implemented in wxMSW, wxGTK and wxUniversal
         and always returns @true in the other ports.
         
         @param n
-        The zero-based button position.
+            The zero-based button position.
     */
     bool IsItemEnabled(unsigned int n);
 
@@ -244,16 +231,14 @@ public:
         Returns @true if the item is currently shown or @false if it was hidden
         using
         @ref show() "Show(n, @false)".
-        
         Note that this function returns @true for an item which hadn't been hidden
         even
         if the entire radiobox is not currently shown.
-        
         @b Platform note: Currently only implemented in wxMSW, wxGTK and wxUniversal
         and always returns @true in the other ports.
         
         @param n
-        The zero-based button position.
+            The zero-based button position.
     */
     bool IsItemShown(unsigned int n);
 
@@ -261,28 +246,25 @@ public:
         Sets the helptext for an item. Empty string erases any existing helptext.
         
         @param item
-        The zero-based item index.
-        
+            The zero-based item index.
         @param helptext
-        The help text to set for the item.
+            The help text to set for the item.
         
-        @sa GetItemHelpText()
+        @see GetItemHelpText()
     */
     void SetItemHelpText(unsigned int item, const wxString& helptext);
 
     /**
         Sets the tooltip text for the specified item in the radio group.
-        
         @b Platform note: Currently only implemented in wxMSW and wxGTK2 and does
         nothing in the other ports.
         
         @param item
-        Index of the item the tooltip will be shown for.
-        
+            Index of the item the tooltip will be shown for.
         @param text
-        Tooltip text for the item, the tooltip is removed if empty.
+            Tooltip text for the item, the tooltip is removed if empty.
         
-        @sa GetItemToolTip(), wxWindow::SetToolTip
+        @see GetItemToolTip(), wxWindow::SetToolTip
     */
     void SetItemToolTip(unsigned int item, const wxString& text);
 
@@ -290,10 +272,9 @@ public:
         Sets the radiobox label.
         
         @param label
-        The label to set.
-        
+            The label to set.
         @param n
-        The zero-based button index.
+            The zero-based button index.
     */
     void SetLabel(const wxString& label);
 
@@ -302,7 +283,7 @@ public:
         a wxEVT_COMMAND_RADIOBOX_SELECTED event to get emitted.
         
         @param n
-        The zero-based button position.
+            The zero-based button position.
     */
     void SetSelection(int n);
 
@@ -312,7 +293,7 @@ public:
         a wxEVT_COMMAND_RADIOBOX_SELECTED event to get emitted.
         
         @param string
-        The label of the button to select.
+            The label of the button to select.
     */
     void SetStringSelection(const wxString& string);
 };

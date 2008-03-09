@@ -35,54 +35,43 @@ public:
     /**
         Returns the last occurred error.
         
-        
         @b wxPROTO_NOERR
-        
         
         No error.
         
         @b wxPROTO_NETERR
         
-        
         A generic network error occurred.
         
         @b wxPROTO_PROTERR
-        
         
         An error occurred during negotiation.
         
         @b wxPROTO_CONNERR
         
-        
         The client failed to connect the server.
         
         @b wxPROTO_INVVAL
-        
         
         Invalid value.
         
         @b wxPROTO_NOHNDLR
         
-        
         .
         
         @b wxPROTO_NOFILE
-        
         
         The remote file doesn't exist.
         
         @b wxPROTO_ABRT
         
-        
         Last action aborted.
         
         @b wxPROTO_RCNCT
         
-        
         An error occurred during reconnection.
         
         @b wxPROTO_STREAM
-        
         
         Someone tried to send a command during a transfer.
     */
@@ -96,12 +85,12 @@ public:
         You will be notified when the EOF is reached by an error.
         
         @returns Returns the initialized stream. You will have to delete it
-                   yourself once you don't use it anymore. The
-                   destructor closes the network connection.
+                 yourself once you don't use it anymore. The destructor
+                 closes the network connection.
         
-        @sa wxInputStream
+        @see wxInputStream
     */
-    wxInputStream * GetInputStream(const wxString& path);
+    wxInputStream* GetInputStream(const wxString& path);
 
     /**
         Tries to reestablish a previous opened connection (close and renegotiate

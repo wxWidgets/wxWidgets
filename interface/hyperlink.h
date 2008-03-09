@@ -22,18 +22,18 @@ public:
     /**
         The constructor is not normally used by the user code.
     */
-    wxHyperlinkEvent(wxObject * generator, int id,
-                     const wxString & url);
+    wxHyperlinkEvent(wxObject* generator, int id,
+                     const wxString& url);
 
     /**
         Returns the URL of the hyperlink where the user has just clicked.
     */
-#define wxString GetURL()     /* implementation is private */
+    wxString GetURL();
 
     /**
         Sets the URL associated with the event.
     */
-#define void SetURL(const wxString & url)     /* implementation is private */
+    void SetURL(const wxString& url);
 };
 
 
@@ -83,36 +83,28 @@ public:
         Creates the hyperlink control.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. A value of wxID_ANY indicates a default value.
-        
+            Window identifier. A value of wxID_ANY indicates a default value.
         @param label
-        The label of the hyperlink.
-        
+            The label of the hyperlink.
         @param url
-        The URL associated with the given label.
-        
+            The URL associated with the given label.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size. If the wxDefaultSize is specified then the window is sized
-        appropriately.
-        
+            Window size. If the wxDefaultSize is specified then the window is sized
+            appropriately.
         @param style
-        Window style. See wxHyperlinkCtrl.
-        
+            Window style. See wxHyperlinkCtrl.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxString & label,
-                const wxString & url,
+                const wxString& label,
+                const wxString& url,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style,
@@ -134,7 +126,7 @@ public:
     /**
         Returns the URL associated with the hyperlink.
     */
-#define wxString GetURL()     /* implementation is private */
+    wxString GetURL();
 
     /**
         Returns @true if the hyperlink has already been clicked by the user at least
@@ -154,38 +146,38 @@ public:
         Sets the colour used to print the label of the hyperlink when the mouse is over
         the control.
     */
-    void SetHoverColour(const wxColour & colour);
+    void SetHoverColour(const wxColour& colour);
 
     /**
         Sets the colour used to print the label when the link has never been clicked
         before
         (i.e. the link has not been @e visited) and the mouse is not over the control.
     */
-    void SetNormalColour(const wxColour & colour);
+    void SetNormalColour(const wxColour& colour);
 
     /**
         Sets the URL associated with the hyperlink.
     */
-#define void SetURL(const wxString & url)     /* implementation is private */
+    void SetURL(const wxString& url);
 
     /**
         Marks the hyperlink as visited (see wxHyperlinkCtrl::SetVisitedColour).
     */
-    void SetVisited(bool visited = @true);
+    void SetVisited(bool visited = true);
 
     /**
         Sets the colour used to print the label when the mouse is not over the control
         and the link has already been clicked before (i.e. the link has been @e
         visited).
     */
-    void SetVisitedColour(const wxColour & colour);
+    void SetVisitedColour(const wxColour& colour);
 
     /**
         Constructor. See Create() for more info.
     */
     wxHyperLink(wxWindow* parent, wxWindowID id,
-                const wxString & label,
-                const wxString & url,
+                const wxString& label,
+                const wxString& url,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style,

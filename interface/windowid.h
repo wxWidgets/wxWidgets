@@ -34,7 +34,7 @@ public:
         need to be unreserved.
         
         @param count
-        The number of sequential IDs to reserve.
+            The number of sequential IDs to reserve.
         
         @returns The value of the first ID in the sequence, or wxID_NONE.
     */

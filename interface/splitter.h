@@ -52,38 +52,33 @@ public:
         Constructor for creating the window.
         
         @param parent
-        The parent of the splitter window.
-        
+            The parent of the splitter window.
         @param id
-        The window identifier.
-        
+            The window identifier.
         @param pos
-        The window position.
-        
+            The window position.
         @param size
-        The window size.
-        
+            The window size.
         @param style
-        The window style. See wxSplitterWindow.
-        
+            The window style. See wxSplitterWindow.
         @param name
-        The window name.
+            The window name.
         
         @remarks After using this constructor, you must create either one or two
-                   subwindows with the splitter window as parent, and
-                   then call one of Initialize(),
-                   SplitVertically() and
-                   SplitHorizontally() in order to set
-                   the pane(s).
+                 subwindows with the splitter window as parent, and then
+                 call one of Initialize(),
+                 SplitVertically() and
+                 SplitHorizontally() in order to set the
+                 pane(s).
         
-        @sa Initialize(), SplitVertically(),
-              SplitHorizontally(), Create()
+        @see Initialize(), SplitVertically(),
+             SplitHorizontally(), Create()
     */
     wxSplitterWindow();
     wxSplitterWindow(wxWindow* parent, wxWindowID id,
                      const wxPoint& point = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style=wxSP_3D,
+                     long style = wxSP_3D,
                      const wxString& name = "splitterWindow");
     //@}
 
@@ -99,35 +94,35 @@ public:
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& point = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style=wxSP_3D,
+                long style = wxSP_3D,
                 const wxString& name = "splitterWindow");
 
     /**
         Returns the current minimum pane size (defaults to zero).
         
-        @sa SetMinimumPaneSize()
+        @see SetMinimumPaneSize()
     */
     int GetMinimumPaneSize();
 
     /**
         Returns the current sash gravity.
         
-        @sa SetSashGravity()
+        @see SetSashGravity()
     */
     double GetSashGravity();
 
     /**
         Returns the current sash position.
         
-        @sa SetSashPosition()
+        @see SetSashPosition()
     */
     int GetSashPosition();
 
     /**
         Gets the split mode.
         
-        @sa SetSplitMode(), SplitVertically(),
-              SplitHorizontally().
+        @see SetSplitMode(), SplitVertically(),
+             SplitHorizontally().
     */
     int GetSplitMode();
 
@@ -146,12 +141,12 @@ public:
         shown if it is currently hidden.
         
         @param window
-        The pane for the unsplit window.
+            The pane for the unsplit window.
         
         @remarks This should be called if you wish to initially view only a
-                   single pane in the splitter window.
+                 single pane in the splitter window.
         
-        @sa SplitVertically(), SplitHorizontally()
+        @see SplitVertically(), SplitHorizontally()
     */
     void Initialize(wxWindow* window);
 
@@ -165,15 +160,14 @@ public:
         the left mouse button.
         
         @param x
-        The x position of the mouse cursor.
-        
+            The x position of the mouse cursor.
         @param y
-        The y position of the mouse cursor.
+            The y position of the mouse cursor.
         
         @remarks The default implementation of this function calls Unsplit if the
-                   minimum pane size is zero.
+                 minimum pane size is zero.
         
-        @sa Unsplit()
+        @see Unsplit()
     */
     virtual void OnDoubleClickSash(int x, int y);
 
@@ -182,11 +176,11 @@ public:
         user. It may return @false to prevent the change or @true to allow it.
         
         @param newSashPosition
-        The new sash position (always positive or zero)
+            The new sash position (always positive or zero)
         
         @remarks The default implementation of this function verifies that the
-                   sizes of both  panes of the splitter are greater than
-                   minimum pane size.
+                 sizes of both  panes of the splitter are greater than
+                 minimum pane size.
     */
     virtual bool OnSashPositionChange(int newSashPosition);
 
@@ -195,10 +189,10 @@ public:
         programmatically or using the wxSplitterWindow user interface.
         
         @param removed
-        The window being removed.
+            The window being removed.
         
         @remarks The default implementation of this function simply hides
-                   removed. You may wish to delete the window.
+                 removed. You may wish to delete the window.
     */
     virtual void OnUnsplit(wxWindow* removed);
 
@@ -208,33 +202,31 @@ public:
         and then resplitting the window back because it will provoke much less flicker
         (if any). It is valid to call this function whether the splitter has two
         windows or only one.
-        
-        Both parameters should be non-@NULL and @e winOld must specify one of the
+        Both parameters should be non-@NULL and @a winOld must specify one of the
         windows managed by the splitter. If the parameters are incorrect or the window
         couldn't be replaced, @false is returned. Otherwise the function will return
         @true, but please notice that it will not delete the replaced window and you
         may wish to do it yourself.
         
-        @sa GetMinimumPaneSize()
+        @see GetMinimumPaneSize()
     */
-    bool ReplaceWindow(wxWindow * winOld, wxWindow * winNew);
+    bool ReplaceWindow(wxWindow* winOld, wxWindow* winNew);
 
     /**
         Sets the minimum pane size.
         
         @param paneSize
-        Minimum pane size in pixels.
+            Minimum pane size in pixels.
         
         @remarks The default minimum pane size is zero, which means that either
-                   pane can be reduced to zero by dragging the sash,
-                   thus removing one of the panes. To prevent this
-                   behaviour (and veto out-of-range sash dragging), set
-                   a minimum size, for example 20 pixels. If the
-                   wxSP_PERMIT_UNSPLIT style is used when a splitter
-                   window is created, the window may be unsplit even if
-                   minimum size is non-zero.
+                 pane can be reduced to zero by dragging the sash, thus
+                 removing one of the panes. To prevent this behaviour
+                 (and veto out-of-range sash dragging), set a minimum
+                 size, for example 20 pixels. If the wxSP_PERMIT_UNSPLIT
+                 style is used when a splitter window is created, the
+                 window may be unsplit even if minimum size is non-zero.
         
-        @sa GetMinimumPaneSize()
+        @see GetMinimumPaneSize()
     */
     void SetMinimumPaneSize(int paneSize);
 
@@ -242,9 +234,9 @@ public:
         Sets the sash gravity.
         
         @param gravity
-        The sash gravity. Value between 0.0 and 1.0.
+            The sash gravity. Value between 0.0 and 1.0.
         
-        @sa GetSashGravity()
+        @see GetSashGravity()
     */
     void SetSashGravity(double gravity);
 
@@ -252,22 +244,21 @@ public:
         Sets the sash position.
         
         @param position
-        The sash position in pixels.
-        
+            The sash position in pixels.
         @param redraw
-        If @true, resizes the panes and redraws the sash and border.
+            If @true, resizes the panes and redraws the sash and border.
         
         @remarks Does not currently check for an out-of-range value.
         
-        @sa GetSashPosition()
+        @see GetSashPosition()
     */
-    void SetSashPosition(int position, const bool redraw = @true);
+    void SetSashPosition(int position, const bool redraw = true);
 
     /**
         Sets the sash size. Normally, the sash size is determined according to the
         metrics
         of each platform, but the application can override this, for example to show
-        a thin sash that the user is not expected to drag. If @e size is more -1,
+        a thin sash that the user is not expected to drag. If @a size is more -1,
         the custom sash size will be used.
     */
     void SetSashSize(int size);
@@ -276,12 +267,12 @@ public:
         Sets the split mode.
         
         @param mode
-        Can be wxSPLIT_VERTICAL or wxSPLIT_HORIZONTAL.
+            Can be wxSPLIT_VERTICAL or wxSPLIT_HORIZONTAL.
         
         @remarks Only sets the internal variable; does not update the display.
         
-        @sa GetSplitMode(), SplitVertically(),
-              SplitHorizontally().
+        @see GetSplitMode(), SplitVertically(),
+             SplitHorizontally().
     */
     void SetSplitMode(int mode);
 
@@ -290,27 +281,26 @@ public:
         child windows are shown if they are currently hidden.
         
         @param window1
-        The top pane.
-        
+            The top pane.
         @param window2
-        The bottom pane.
-        
+            The bottom pane.
         @param sashPosition
-        The initial position of the sash. If this value is
-        positive, it specifies the size of the upper pane. If it is negative, its
-        absolute value gives the size of the lower pane. Finally, specify 0 (default)
-        to choose the default position (half of the total window height).
+            The initial position of the sash. If this value is
+            positive, it specifies the size of the upper pane. If it is negative, its
+            absolute value gives the size of the lower pane. Finally, specify 0
+        (default)
+            to choose the default position (half of the total window height).
         
         @returns @true if successful, @false otherwise (the window was already
-                   split).
+                 split).
         
         @remarks This should be called if you wish to initially view two panes.
-                   It can also be called at any subsequent time, but the
-                   application should check that the window is not
-                   currently split using IsSplit.
+                 It can also be called at any subsequent time, but the
+                 application should check that the window is not
+                 currently split using IsSplit.
         
-        @sa SplitVertically(), IsSplit(),
-              Unsplit()
+        @see SplitVertically(), IsSplit(),
+             Unsplit()
     */
     bool SplitHorizontally(wxWindow* window1, wxWindow* window2,
                            int sashPosition = 0);
@@ -320,27 +310,26 @@ public:
         child windows are shown if they are currently hidden.
         
         @param window1
-        The left pane.
-        
+            The left pane.
         @param window2
-        The right pane.
-        
+            The right pane.
         @param sashPosition
-        The initial position of the sash. If this value is
-        positive, it specifies the size of the left pane. If it is negative, it is
-        absolute value gives the size of the right pane. Finally, specify 0 (default)
-        to choose the default position (half of the total window width).
+            The initial position of the sash. If this value is
+            positive, it specifies the size of the left pane. If it is negative, it is
+            absolute value gives the size of the right pane. Finally, specify 0
+        (default)
+            to choose the default position (half of the total window width).
         
         @returns @true if successful, @false otherwise (the window was already
-                   split).
+                 split).
         
         @remarks This should be called if you wish to initially view two panes.
-                   It can also be called at any subsequent time, but the
-                   application should check that the window is not
-                   currently split using IsSplit.
+                 It can also be called at any subsequent time, but the
+                 application should check that the window is not
+                 currently split using IsSplit.
         
-        @sa SplitHorizontally(), IsSplit(),
-              Unsplit().
+        @see SplitHorizontally(), IsSplit(),
+             Unsplit().
     */
     bool SplitVertically(wxWindow* window1, wxWindow* window2,
                          int sashPosition = 0);
@@ -349,24 +338,22 @@ public:
         Unsplits the window.
         
         @param toRemove
-        The pane to remove, or @NULL to remove the right or bottom pane.
+            The pane to remove, or @NULL to remove the right or bottom pane.
         
         @returns @true if successful, @false otherwise (the window was not split).
         
         @remarks This call will not actually delete the pane being removed; it
-                   calls OnUnsplit which can be overridden for the
-                   desired behaviour. By default, the pane being removed
-                   is hidden.
+                 calls OnUnsplit which can be overridden for the desired
+                 behaviour. By default, the pane being removed is hidden.
         
-        @sa SplitHorizontally(), SplitVertically(),
-              IsSplit(), OnUnsplit()
+        @see SplitHorizontally(), SplitVertically(),
+             IsSplit(), OnUnsplit()
     */
-    bool Unsplit(wxWindow* toRemove = @NULL);
+    bool Unsplit(wxWindow* toRemove = NULL);
 
     /**
         Causes any pending sizing of the sash and child panes to take place
         immediately.
-        
         Such resizing normally takes place in idle time, in order
         to wait for layout to be completed. However, this can cause
         unacceptable flicker as the panes are resized after the window has been
@@ -393,7 +380,7 @@ public:
     @category{events}
 
     @seealso
-    wxSplitterWindow, @ref overview_eventhandlingoverview "Event handling overview"
+    wxSplitterWindow, @ref overview_eventhandlingoverview
 */
 class wxSplitterEvent : public wxNotifyEvent
 {
@@ -401,12 +388,11 @@ public:
     /**
         Constructor. Used internally by wxWidgets only.
     */
-    wxSplitterEvent(wxEventType eventType = wxEVT_@NULL,
-                    wxSplitterWindow * splitter = @NULL);
+    wxSplitterEvent(wxEventType eventType = wxEVT_NULL,
+                    wxSplitterWindow* splitter = NULL);
 
     /**
         Returns the new sash position.
-        
         May only be called while processing
         wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING and
         wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events.
@@ -416,7 +402,6 @@ public:
     /**
         Returns a pointer to the window being removed when a splitter window
         is unsplit.
-        
         May only be called while processing
         wxEVT_COMMAND_SPLITTER_UNSPLIT events.
     */
@@ -424,19 +409,17 @@ public:
 
     /**
         Returns the x coordinate of the double-click point.
-        
         May only be called while processing
         wxEVT_COMMAND_SPLITTER_DOUBLECLICKED events.
     */
-#define int GetX()     /* implementation is private */
+    int GetX();
 
     /**
         Returns the y coordinate of the double-click point.
-        
         May only be called while processing
         wxEVT_COMMAND_SPLITTER_DOUBLECLICKED events.
     */
-#define int GetY()     /* implementation is private */
+    int GetY();
 
     /**
         In the case of wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events,
@@ -445,13 +428,12 @@ public:
         tracking bar position so visual feedback during dragging will
         represent that change that will actually take place. Set to -1 from
         the event handler code to prevent repositioning.
-        
         May only be called while processing
         wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING and
         wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events.
         
         @param pos
-        New sash position.
+            New sash position.
     */
     void SetSashPosition(int pos);
 };

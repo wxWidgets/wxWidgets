@@ -42,7 +42,6 @@ public:
     /**
         Pauses the stop watch. Call Resume() to resume
         time measuring again.
-        
         If this method is called several times, @c Resume() must be called the same
         number of times to really resume the stop watch. You may, however, call
         Start() to resume it unconditionally.
@@ -76,21 +75,21 @@ public:
 /**
     Returns the number of seconds since local time 00:00:00 Jan 1st 1970.
 
-    @sa wxDateTime::Now
+    @see wxDateTime::Now
 */
 long wxGetLocalTime();
 
 /**
     Returns the number of seconds since GMT 00:00:00 Jan 1st 1970.
 
-    @sa wxDateTime::Now
+    @see wxDateTime::Now
 */
 long wxGetUTCTime();
 
 /**
     Returns the number of milliseconds since local time 00:00:00 Jan 1st 1970.
 
-    @sa wxDateTime::Now, wxLongLong
+    @see wxDateTime::Now, wxLongLong
 */
 wxLongLong wxGetLocalTimeMillis();
 

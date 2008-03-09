@@ -51,34 +51,26 @@ public:
         Constructor. Use ShowModal() to show the dialog.
         
         @param parent
-        Parent window.
-        
+            Parent window.
         @param message
-        Message to show on the dialog.
-        
+            Message to show on the dialog.
         @param defaultDir
-        The default directory, or the empty string.
-        
+            The default directory, or the empty string.
         @param defaultFile
-        The default filename, or the empty string.
-        
+            The default filename, or the empty string.
         @param wildcard
-        A wildcard, such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
-        
-        Note that the native Motif dialog has some limitations with respect to
-        wildcards; see the Remarks section above.
-        
+            A wildcard, such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files
+        (*.gif)|*.gif".
+            Note that the native Motif dialog has some limitations with respect to
+            wildcards; see the Remarks section above.
         @param style
-        A dialog style. See wxFD_* styles for more info.
-        
+            A dialog style. See wxFD_* styles for more info.
         @param pos
-        Dialog position. Not implemented.
-        
+            Dialog position. Not implemented.
         @param size
-        Dialog size. Not implemented.
-        
+            Dialog size. Not implemented.
         @param name
-        Dialog name. Not implemented.
+            Dialog name. Not implemented.
     */
     wxFileDialog(wxWindow* parent,
                  const wxString& message = "Choose a file",
@@ -114,10 +106,9 @@ public:
     wxString GetFilename();
 
     /**
-        Fills the array @e filenames with the names of the files chosen. This
+        Fills the array @a filenames with the names of the files chosen. This
         function should only be used with the dialogs which have @c wxFD_MULTIPLE style,
         use GetFilename() for the others.
-        
         Note that under Windows, if the user selects shortcuts, the filenames
         include paths, since the application cannot determine the full path
         of each referenced file by appending the directory containing the shortcuts
@@ -145,7 +136,7 @@ public:
     wxString GetPath();
 
     /**
-        Fills the array @e paths with the full paths of the files chosen. This
+        Fills the array @a paths with the full paths of the files chosen. This
         function should only be used with the dialogs which have @c wxFD_MULTIPLE style,
         use GetPath() for the others.
     */
@@ -164,12 +155,10 @@ public:
     /**
         Customize file dialog by adding extra window, which is typically placed
         below the list of files and above the buttons.
-        
         SetExtraControlCreator can be called only once, before calling
         ShowModal().
         The @c creator function should take pointer to parent window (file dialog)
         and should return a window allocated with operator new.
-        
         Supported platforms: wxGTK, wxUniv.
     */
     bool SetExtraControlCreator(t_extraControlCreator creator);
@@ -197,9 +186,7 @@ public:
 
     /**
         Sets the wildcard, which can contain multiple file types, for example:
-        
         "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
-        
         Note that the native Motif dialog has some limitations with respect to
         wildcards; see the Remarks section above.
     */
@@ -229,20 +216,20 @@ public:
     wxFD_MULTIPLE
     can only be used with wxFileDialog and not here as this
     function only returns a single file name.
-
     Both the Unix and Windows versions implement a wildcard filter. Typing a
     filename containing wildcards (*, ?) in the filename text item, and
     clicking on Ok, will result in only those files matching the pattern being
     displayed.
-
     The wildcard may be a specification for multiple types of file
     with a description for each, such as:
+
     @code
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
     @endcode
 
     The application must check for an empty return value (the user pressed
     Cancel). For example:
+
     @code
     wxString filename = wxFileSelector("Choose a file to open");
     if ( !filename.empty() )
@@ -259,7 +246,7 @@ wxString wxFileSelector(const wxString& message,
                         const wxString& default_extension = "",
                         const wxString& wildcard = ".",
                         int flags = 0,
-                        wxWindow * parent = @NULL,
+                        wxWindow* parent = NULL,
                         int x = -1,
                         int y = -1);
 

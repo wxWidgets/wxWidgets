@@ -249,7 +249,7 @@ public:
         style bit directly. It enables or disables the special highlighting of the
         holidays.
     */
-    void EnableHolidayDisplay(bool display = @true);
+    void EnableHolidayDisplay(bool display = true);
 
     /**
         This function should be used instead of changing
@@ -257,21 +257,20 @@ public:
         change the month interactively. Note that if the month can not be changed, the
         year can not be changed neither.
     */
-    void EnableMonthChange(bool enable = @true);
+    void EnableMonthChange(bool enable = true);
 
     /**
         This function should be used instead of changing @c wxCAL_NO_YEAR_CHANGE
         style bit directly. It allows or disallows the user to change the year
         interactively.
     */
-    void EnableYearChange(bool enable = @true);
+    void EnableYearChange(bool enable = true);
 
     /**
         Returns the attribute for the given date (should be in the range 1...31).
-        
         The returned pointer may be @NULL.
     */
-    wxCalendarDateAttr * GetAttr(size_t day);
+    wxCalendarDateAttr* GetAttr(size_t day);
 
     /**
         Gets the currently selected date.
@@ -281,53 +280,53 @@ public:
     /**
         Gets the background colour of the header part of the calendar window.
         
-        @sa SetHeaderColours()
+        @see SetHeaderColours()
     */
     const wxColour GetHeaderColourBg();
 
     /**
         Gets the foreground colour of the header part of the calendar window.
         
-        @sa SetHeaderColours()
+        @see SetHeaderColours()
     */
     const wxColour GetHeaderColourFg();
 
     /**
         Gets the background highlight colour.
         
-        @sa SetHighlightColours()
+        @see SetHighlightColours()
     */
     const wxColour GetHighlightColourBg();
 
     /**
         Gets the foreground highlight colour.
         
-        @sa SetHighlightColours()
+        @see SetHighlightColours()
     */
     const wxColour GetHighlightColourFg();
 
     /**
         Return the background colour currently used for holiday highlighting.
         
-        @sa SetHolidayColours()
+        @see SetHolidayColours()
     */
     const wxColour GetHolidayColourBg();
 
     /**
         Return the foreground colour currently used for holiday highlighting.
         
-        @sa SetHolidayColours()
+        @see SetHolidayColours()
     */
     const wxColour GetHolidayColourFg();
 
     /**
         Returns one of @c wxCAL_HITTEST_XXX
-        constants and fills either @e date or
-        @e wd pointer with the corresponding value depending on the hit test code.
+        constants and fills either @a date or
+        @a wd pointer with the corresponding value depending on the hit test code.
     */
     wxCalendarHitTestResult HitTest(const wxPoint& pos,
-                                    wxDateTime* date = @NULL,
-                                    wxDateTime::WeekDay* wd = @NULL);
+                                    wxDateTime* date = NULL,
+                                    wxDateTime::WeekDay* wd = NULL);
 
     /**
         Clears any attributes associated with the given day (in the range
@@ -337,7 +336,6 @@ public:
 
     /**
         Associates the attribute with the specified date (in the range 1...31).
-        
         If the pointer is @NULL, the items attribute is cleared.
     */
     void SetAttr(size_t day, wxCalendarDateAttr* attr);

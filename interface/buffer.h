@@ -27,7 +27,7 @@ public:
         Create a new buffer.
         
         @param size
-        size of new buffer.
+            size of new buffer.
     */
     wxMemoryBuffer(const wxMemoryBuffer& src);
     wxMemoryBuffer(size_t size);
@@ -37,7 +37,7 @@ public:
         Append a single byte to the buffer.
         
         @param data
-        New byte to append to the buffer.
+            New byte to append to the buffer.
     */
     void AppendByte(char data);
 
@@ -48,10 +48,10 @@ public:
         the existing data.
         
         @param sizeNeeded
-        Amount of extra space required in the buffer for
-        the append operation
+            Amount of extra space required in the buffer for
+            the append operation
     */
-    void * GetAppendBuf(size_t sizeNeeded);
+    void* GetAppendBuf(size_t sizeNeeded);
 
     /**
         Returns the size of the buffer.
@@ -71,12 +71,12 @@ public:
     /**
         Ensure the buffer is big enough and return a pointer to the
         buffer which can be used to directly write into the buffer
-        up to @e sizeNeeded bytes.
+        up to @a sizeNeeded bytes.
     */
-    void * GetWriteBuf(size_t sizeNeeded);
+    void* GetWriteBuf(size_t sizeNeeded);
 
     /**
-        Ensures the buffer has at least @e size bytes available.
+        Ensures the buffer has at least @a size bytes available.
     */
     void SetBufSize(size_t size);
 
@@ -85,8 +85,8 @@ public:
         existing data.
         
         @param size
-        New length of the valid data in the buffer. This is
-        distinct from the allocated size
+            New length of the valid data in the buffer. This is
+            distinct from the allocated size
     */
     void SetDataLen(size_t size);
 
@@ -95,8 +95,8 @@ public:
         you must have used GetAppendBuf() to initialise.
         
         @param sizeUsed
-        This is the amount of new data that has been
-        appended.
+            This is the amount of new data that has been
+            appended.
     */
     void UngetAppendBuf(size_t sizeUsed);
 
@@ -105,8 +105,8 @@ public:
         you must have used GetWriteBuf() to initialise.
         
         @param sizeUsed
-        The amount of data written in to buffer
-        by the direct write
+            The amount of data written in to buffer
+            by the direct write
     */
     void UngetWriteBuf(size_t sizeUsed);
 };

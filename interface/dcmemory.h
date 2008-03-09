@@ -41,17 +41,15 @@ public:
         this is the function you should use when you select a bitmap because you want
         to modify
         it, e.g. drawing on this DC.
-        
         Using SelectObjectAsSource() when modifying
         the bitmap may incurr some problems related to wxBitmap being a reference
         counted object
         (see @ref overview_trefcount "reference counting overview").
-        
         Also, before using the updated bitmap data, make sure to select it out of
         context first
         (for example by selecting wxNullBitmap into the device context).
         
-        @sa wxDC::DrawBitmap
+        @see wxDC::DrawBitmap
     */
     void SelectObject(wxBitmap& bitmap);
 
@@ -61,7 +59,6 @@ public:
         the DC (and therefore the bitmap) and also to use wxDC::Blit to copy
         the bitmap to a window. For this purpose, you may find wxDC::DrawIcon
         easier to use instead.
-        
         If the argument is wxNullBitmap (or some other uninitialised wxBitmap) the
         current bitmap is
         selected out of the device context, and the original bitmap restored, allowing

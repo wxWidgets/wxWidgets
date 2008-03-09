@@ -89,10 +89,9 @@ public:
     /**
         Open the temporary file, returns @true on success, @false if an error
         occurred.
-        
-        @e strName is the name of file to be replaced. The temporary file is always
-        created in the directory where @e strName is. In particular, if
-        @e strName doesn't include the path, it is created in the current directory
+        @a strName is the name of file to be replaced. The temporary file is always
+        created in the directory where @a strName is. In particular, if
+        @a strName doesn't include the path, it is created in the current directory
         and the program should have write access to it for the function to succeed.
     */
     bool Open(const wxString& strName);
@@ -112,9 +111,8 @@ public:
 
     /**
         Write to the file, return @true on success, @false on failure.
-        
         The second argument is only meaningful in Unicode build of wxWidgets when
-        @e conv is used to convert @e str to multibyte representation.
+        @a conv is used to convert @a str to multibyte representation.
     */
     bool Write(const wxString& str,
                const wxMBConv& conv = wxConvUTF8);
@@ -150,14 +148,12 @@ public:
         opened.
         
         @param filename
-        The filename.
-        
+            The filename.
         @param mode
-        The mode in which to open the file. May be one of read(), write() and
+            The mode in which to open the file. May be one of read(), write() and
         wxFile::read_write.
-        
         @param fd
-        An existing file descriptor (see Attach() for the list of predefined
+            An existing file descriptor (see Attach() for the list of predefined
         descriptors)
     */
     wxFile();
@@ -168,7 +164,6 @@ public:
 
     /**
         Destructor will close the file.
-        
         @b NB: it is not virtual so you should not use wxFile polymorphically.
     */
     ~wxFile();
@@ -185,7 +180,6 @@ public:
         (and
         have symbolic names of @b wxFile::fd_stdin, @b wxFile::fd_stdout and @b
         wxFile::fd_stderr).
-        
         The descriptor should be already opened and it will be closed by wxFile
         object.
     */
@@ -201,7 +195,7 @@ public:
         @true
         will ensure it is overwritten.
     */
-    bool Create(const wxString& filename, bool overwrite = @false,
+    bool Create(const wxString& filename, bool overwrite = false,
                 int access = wxS_DEFAULT);
 
     /**
@@ -213,14 +207,12 @@ public:
 
     /**
         Returns @true if the end of the file has been reached.
-        
         Note that the behaviour of the file pointer based class
         wxFFile is different as wxFFile::Eof
         will return @true here only if an attempt has been made to read
         @e past the last byte of the file, while wxFile::Eof() will return @true
         even before such attempt is made if the file pointer is at the last position
         in the file.
-        
         Note also that this function doesn't work on unseekable file descriptors
         (examples include pipes, terminals and sockets under Unix) and an attempt to
         use it will result in an error message in such case. So, to read the entire
@@ -228,7 +220,7 @@ public:
         Read() repeatedly and tests its return condition instead
         of using Eof() as this will not work for special files under Unix.
     */
-#define bool Eof()     /* implementation is private */
+    bool Eof();
 
     /**
         Returns @true if the given name specifies an existing regular file (not a
@@ -238,7 +230,6 @@ public:
 
     /**
         Flushes the file descriptor.
-        
         Note that Flush() is not implemented on some Windows compilers
         due to a missing fsync function, which reduces the usefulness of this function
         (it can still be called but it will do nothing on unsupported compilers).
@@ -264,10 +255,9 @@ public:
         Opens the file, returning @true if successful.
         
         @param filename
-        The filename.
-        
+            The filename.
         @param mode
-        The mode in which to open the file. May be one of read(), write() and
+            The mode in which to open the file. May be one of read(), write() and
         wxFile::read_write.
     */
     bool Open(const wxString& filename,
@@ -286,13 +276,12 @@ public:
         Seeks to the specified position.
         
         @param ofs
-        Offset to seek to.
-        
+            Offset to seek to.
         @param mode
-        One of wxFromStart, wxFromEnd, wxFromCurrent.
+            One of wxFromStart, wxFromEnd, wxFromCurrent.
         
         @returns The actual offset position achieved, or wxInvalidOffset on
-                   failure.
+                 failure.
     */
     wxFileOffset Seek(wxFileOffset ofs,
                       wxSeekMode mode = wxFromStart);
@@ -303,10 +292,10 @@ public:
         bytes before the end.
         
         @param ofs
-        Number of bytes before the end of the file.
+            Number of bytes before the end of the file.
         
         @returns The actual offset position achieved, or wxInvalidOffset on
-                   failure.
+                 failure.
     */
     wxFileOffset SeekEnd(wxFileOffset ofs = 0);
 
@@ -319,10 +308,8 @@ public:
 
     /**
         Writes the contents of the string to the file, returns @true on success.
-        
         The second argument is only meaningful in Unicode build of wxWidgets when
-        @e conv is used to convert @e s to multibyte representation.
-        
+        @a conv is used to convert @a s to multibyte representation.
         Note that this method only works with @c NUL-terminated strings, if you want
         to write data with embedded @c NULs to the file you should use the other
         @ref write() "Write() overload".
@@ -332,5 +319,5 @@ public:
     /**
         Returns the file descriptor associated with the file.
     */
-#define int fd()     /* implementation is private */
+    int fd();
 };

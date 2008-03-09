@@ -52,7 +52,7 @@ public:
         Constructs a new wxConvAuto instance. The object will try to detect the input
         of the multibyte text given to its wxMBConv::ToWChar method
         automatically but if the automatic detection of Unicode encodings fails, the
-        fall-back encoding @e enc will be used to interpret it as multibyte text.
+        fall-back encoding @a enc will be used to interpret it as multibyte text.
         The default value of this parameter, @c wxFONTENCODING_DEFAULT means
         that the global default value which can be set using
         @ref setdefaultmbencoding() SetFallbackEncoding method should be
@@ -87,9 +87,8 @@ public:
         explicitly specified in constructor. The default value, which can be retrieved
         using @ref getdefaultmbencoding() GetFallbackEncoding, is
         @c wxFONTENCODING_ISO8859_1.
-        
         Special values of @c wxFONTENCODING_SYSTEM or
-        @c wxFONTENCODING_MAX can be used for @e enc parameter to use the
+        @c wxFONTENCODING_MAX can be used for @a enc parameter to use the
         encoding of the current user locale as fall back or not use any encoding for
         fall back at all, respectively (just as with the similar constructor
         parameter). However @c wxFONTENCODING_DEFAULT value cannot be used here.

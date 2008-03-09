@@ -26,50 +26,37 @@ public:
         Constructor. Create instances dynamically near the start of your application
         after creating
         a wxDocManager instance, and before doing any document or view operations.
-        
-        @e manager is the document manager object which manages this template.
-        
-        @e descr is a short description of what the template is for. This string will
+        @a manager is the document manager object which manages this template.
+        @a descr is a short description of what the template is for. This string will
         be displayed in the
         file filter list of Windows file selectors.
-        
-        @e filter is an appropriate file filter such as @c *.txt.
-        
-        @e dir is the default directory to use for file selectors.
-        
-        @e ext is the default file extension (such as txt).
-        
-        @e docTypeName is a name that should be unique for a given type of document,
+        @a filter is an appropriate file filter such as @c *.txt.
+        @a dir is the default directory to use for file selectors.
+        @a ext is the default file extension (such as txt).
+        @a docTypeName is a name that should be unique for a given type of document,
         used for
         gathering a list of views relevant to a particular document.
-        
-        @e viewTypeName is a name that should be unique for a given view.
-        
-        @e docClassInfo is a pointer to the run-time document class information as
+        @a viewTypeName is a name that should be unique for a given view.
+        @a docClassInfo is a pointer to the run-time document class information as
         returned
         by the CLASSINFO macro, e.g. CLASSINFO(MyDocumentClass). If this is not
         supplied,
         you will need to derive a new wxDocTemplate class and override the
         CreateDocument
         member to return a new document instance on demand.
-        
-        @e viewClassInfo is a pointer to the run-time view class information as returned
+        @a viewClassInfo is a pointer to the run-time view class information as returned
         by the CLASSINFO macro, e.g. CLASSINFO(MyViewClass). If this is not supplied,
         you will need to derive a new wxDocTemplate class and override the CreateView
         member to return a new view instance on demand.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxTEMPLATE_VISIBLE The template may be displayed to the user in dialogs.
          wxTEMPLATE_INVISIBLE The template may not be displayed to the user in dialogs.
          wxDEFAULT_TEMPLATE_FLAGS Defined as wxTEMPLATE_VISIBLE.
         
         
-        
         @b Wx::DocTemplate-new( docmgr, descr, filter, dir,
         ext, docTypeName, viewTypeName, docClassInfo, viewClassInfo, flags
         )
-        
         
          will construct document and view objects from the class information
         
@@ -77,12 +64,10 @@ public:
         ext, docTypeName, viewTypeName, docClassName, viewClassName, flags
         )
         
-        
          will construct document and view objects from perl packages
         
         @b Wx::DocTemplate-new( docmgr, descr, filter, dir,
         ext, docTypeName, viewTypeName )
-        
         
         @c Wx::DocTemplate::CreateDocument() and
         @c Wx::DocTemplate::CreateView() must be overridden
@@ -93,8 +78,8 @@ public:
                   const wxString& ext,
                   const wxString& docTypeName,
                   const wxString& viewTypeName,
-                  wxClassInfo* docClassInfo = @NULL,
-                  wxClassInfo* viewClassInfo = @NULL,
+                  wxClassInfo* docClassInfo = NULL,
+                  wxClassInfo* viewClassInfo = NULL,
                   long flags = wxDEFAULT_TEMPLATE_FLAGS);
 
     /**
@@ -108,11 +93,10 @@ public:
         a wxClassInfo parameter to the template constructor, you will need to override
         this
         function to return an appropriate document instance.
-        
         This function calls InitDocument() which in turns
         calls wxDocument::OnCreate.
     */
-    wxDocument * CreateDocument(const wxString& path, long flags = 0);
+    wxDocument* CreateDocument(const wxString& path, long flags = 0);
 
     /**
         Creates a new instance of the associated view class. If you have not supplied
@@ -120,7 +104,7 @@ public:
         this
         function to return an appropriate view instance.
     */
-    wxView * CreateView(wxDocument * doc, long flags = 0);
+    wxView* CreateView(wxDocument* doc, long flags = 0);
 
     /**
         Returns the default file extension for the document data, as passed to the
@@ -143,7 +127,7 @@ public:
         Returns a pointer to the document manager instance for which this template was
         created.
     */
-    wxDocManager * GetDocumentManager();
+    wxDocManager* GetDocumentManager();
 
     /**
         Returns the document type name, as passed to the document template constructor.
@@ -198,7 +182,7 @@ public:
         created.
         Should not be called by the application.
     */
-    void SetDocumentManager(wxDocManager * manager);
+    void SetDocumentManager(wxDocManager* manager);
 
     /**
         Sets the file filter.
@@ -213,28 +197,24 @@ public:
 
     /**
         wxString m_defaultExt
-        
         The default extension for files of this type.
     */
 
 
     /**
         wxString m_description
-        
         A short description of this template.
     */
 
 
     /**
         wxString m_directory
-        
         The default directory for files of this type.
     */
 
 
     /**
         wxClassInfo*  m_docClassInfo
-        
         Run-time class information that allows document instances to be constructed
         dynamically.
     */
@@ -242,35 +222,30 @@ public:
 
     /**
         wxString m_docTypeName
-        
         The named type of the document associated with this template.
     */
 
 
     /**
         wxDocTemplate* m_documentManager
-        
         A pointer to the document manager for which this template was created.
     */
 
 
     /**
         wxString m_fileFilter
-        
         The file filter (such as @c *.txt) to be used in file selector dialogs.
     */
 
 
     /**
         long m_flags
-        
         The flags passed to the constructor.
     */
 
 
     /**
         wxClassInfo* m_viewClassInfo
-        
         Run-time class information that allows view instances to be constructed
         dynamically.
     */
@@ -278,7 +253,6 @@ public:
 
     /**
         wxString m_viewTypeName
-        
         The named type of the view associated with this template.
     */
 };
@@ -307,10 +281,8 @@ public:
         Constructor. Create a document manager instance dynamically near the start of
         your application
         before doing any document or view operations.
-        
-        @e flags is currently unused.
-        
-        If @e initialize is @true, the Initialize() function will be called
+        @a flags is currently unused.
+        If @a initialize is @true, the Initialize() function will be called
         to create a default history list object. If you derive from wxDocManager, you
         may wish to call the
         base constructor with @false, and then call Initialize in your own constructor,
@@ -318,7 +290,7 @@ public:
         your own Initialize or OnCreateFileHistory functions to be called.
     */
     wxDocManager(long flags = wxDEFAULT_DOCMAN_FLAGS,
-                 bool initialize = @true);
+                 bool initialize = true);
 
     /**
         Destructor.
@@ -328,12 +300,12 @@ public:
     /**
         Sets the current view.
     */
-    void ActivateView(wxView* doc, bool activate = @true);
+    void ActivateView(wxView* doc, bool activate = true);
 
     /**
         Adds the document to the list of documents.
     */
-    void AddDocument(wxDocument * doc);
+    void AddDocument(wxDocument* doc);
 
     /**
         Adds a file to the file history list, if we have a pointer to an appropriate
@@ -344,20 +316,18 @@ public:
     /**
         Adds the template to the document manager's template list.
     */
-    void AssociateTemplate(wxDocTemplate * temp);
+    void AssociateTemplate(wxDocTemplate* temp);
 
     /**
         Closes all currently opened documents.
     */
-    bool CloseDocuments(bool force = @true);
+    bool CloseDocuments(bool force = true);
 
     /**
-        Creates a new document in a manner determined by the @e flags parameter, which
+        Creates a new document in a manner determined by the @a flags parameter, which
         can be:
-        
          wxDOC_NEW Creates a fresh document.
          wxDOC_SILENT Silently loads the given document file.
-        
         If wxDOC_NEW is present, a new document will be created and returned, possibly
         after
         asking the user for a template to use if there is more than one document
@@ -368,7 +338,6 @@ public:
         a file selector for the file to load, and the template to use will be
         determined by the
         extension (Windows) or by popping up a template choice list (other platforms).
-        
         If the maximum number of documents has been reached, this function
         will delete the oldest currently loaded document before creating a new one.
     */
@@ -386,7 +355,7 @@ public:
     /**
         Removes the template from the list of templates.
     */
-    void DisassociateTemplate(wxDocTemplate * temp);
+    void DisassociateTemplate(wxDocTemplate* temp);
 
     //@{
     /**
@@ -399,7 +368,7 @@ public:
     /**
         Loads the file history from a config object.
         
-        @sa wxConfig
+        @see wxConfig
     */
     void FileHistoryLoad(wxConfigBase& config);
 
@@ -413,7 +382,7 @@ public:
         Saves the file history into a config object. This must be called
         explicitly by the application.
         
-        @sa wxConfig
+        @see wxConfig
     */
     void FileHistorySave(wxConfigBase& resourceFile);
 
@@ -421,7 +390,6 @@ public:
         Use this menu for appending recently-visited document filenames, for convenient
         access. Calling this function with a valid menu pointer enables the history
         list functionality.
-        
         Note that you can add multiple menus using this function, to be managed by the
         file history object.
     */
@@ -431,17 +399,17 @@ public:
         Given a path, try to find template that matches the extension. This is only
         an approximate method of finding a template for creating a document.
     */
-    wxDocTemplate * FindTemplateForPath(const wxString& path);
+    wxDocTemplate* FindTemplateForPath(const wxString& path);
 
     /**
         Returns the document associated with the currently active view (if any).
     */
-    wxDocument * GetCurrentDocument();
+    wxDocument* GetCurrentDocument();
 
     /**
         Returns the currently active view
     */
-    wxView * GetCurrentView();
+    wxView* GetCurrentView();
 
     /**
         Returns a reference to the list of documents.
@@ -451,7 +419,7 @@ public:
     /**
         Returns a pointer to file history.
     */
-    wxFileHistory * GetFileHistory();
+    wxFileHistory* GetFileHistory();
 
     /**
         Returns the number of files currently stored in the file history.
@@ -484,7 +452,6 @@ public:
         vetoed by passing @false to the second argument, allowing the derived class's
         constructor to call Initialize, possibly calling a different OnCreateFileHistory
         from the default.
-        
         The bottom line: if you're not deriving from Initialize, forget it and
         construct wxDocManager with no arguments.
     */
@@ -503,7 +470,7 @@ public:
         Called
         from Initialize().
     */
-    wxFileHistory * OnCreateFileHistory();
+    wxFileHistory* OnCreateFileHistory();
 
     /**
         Closes and deletes the currently active document.
@@ -544,26 +511,23 @@ public:
     /**
         Removes the document from the list of documents.
     */
-    void RemoveDocument(wxDocument * doc);
+    void RemoveDocument(wxDocument* doc);
 
     /**
         Under Windows, pops up a file selector with a list of filters corresponding to
         document templates.
         The wxDocTemplate corresponding to the selected file's extension is returned.
-        
         On other platforms, if there is more than one document template a choice list
         is popped up,
         followed by a file selector.
-        
         This function is used in CreateDocument().
-        
           (doctemplate, path) = My::DocManager-SelectDocumentPath( ... );
     */
-    wxDocTemplate * SelectDocumentPath(wxDocTemplate ** templates,
-                                       int noTemplates,
-                                       wxString& path,
-                                       long flags,
-                                       bool save);
+    wxDocTemplate* SelectDocumentPath(wxDocTemplate** templates,
+                                      int noTemplates,
+                                      wxString& path,
+                                      long flags,
+                                      bool save);
 
     /**
         Returns a document template by asking the user (if there is more than one
@@ -571,20 +535,19 @@ public:
         This function is used in CreateDocument().
         
         @param templates
-        Pointer to an array of templates from which to choose a desired template.
-        
+            Pointer to an array of templates from which to choose a desired template.
         @param noTemplates
-        Number of templates being pointed to by the templates pointer.
-        
+            Number of templates being pointed to by the templates pointer.
         @param sort
-        If more than one template is passed in in templates,
-        then this parameter indicates whether the list of templates that the user
-        will have to choose from is sorted or not when shown the choice box dialog.
-        Default is @false.
+            If more than one template is passed in in templates,
+            then this parameter indicates whether the list of templates that the user
+            will have to choose from is sorted or not when shown the choice box dialog.
+        
+            Default is @false.
     */
-    wxDocTemplate * SelectDocumentType(wxDocTemplate ** templates,
-                                       int noTemplates,
-                                       bool sort=@false);
+    wxDocTemplate* SelectDocumentType(wxDocTemplate** templates,
+                                      int noTemplates,
+                                      bool sort = false);
 
     /**
         Returns a document template by asking the user (if there is more than one
@@ -595,20 +558,19 @@ public:
         such.
         
         @param templates
-        Pointer to an array of templates from which to choose a desired template.
-        
+            Pointer to an array of templates from which to choose a desired template.
         @param noTemplates
-        Number of templates being pointed to by the templates pointer.
-        
+            Number of templates being pointed to by the templates pointer.
         @param sort
-        If more than one template is passed in in templates,
-        then this parameter indicates whether the list of templates that the user
-        will have to choose from is sorted or not when shown the choice box dialog.
-        Default is @false.
+            If more than one template is passed in in templates,
+            then this parameter indicates whether the list of templates that the user
+            will have to choose from is sorted or not when shown the choice box dialog.
+        
+            Default is @false.
     */
-    wxDocTemplate * SelectViewType(wxDocTemplate ** templates,
-                                   int noTemplates,
-                                   bool sort=@false);
+    wxDocTemplate* SelectViewType(wxDocTemplate** templates,
+                                  int noTemplates,
+                                  bool sort = false);
 
     /**
         Sets the directory to be displayed to the user when opening a file. Initially
@@ -628,28 +590,24 @@ public:
 
     /**
         wxView* m_currentView
-        
         The currently active view.
     */
 
 
     /**
         int m_defaultDocumentNameCounter
-        
         Stores the integer to be used for the next default document name.
     */
 
 
     /**
         wxList m_docs
-        
         A list of all documents.
     */
 
 
     /**
         wxFileHistory* m_fileHistory
-        
         A pointer to an instance of wxFileHistory,
         which manages the history of recently-visited files on the File menu.
     */
@@ -657,21 +615,18 @@ public:
 
     /**
         long m_flags
-        
         Stores the flags passed to the constructor.
     */
 
 
     /**
         The directory last selected by the user when opening a file.
-        
         wxFileHistory* m_fileHistory
     */
 
 
     /**
         int m_maxDocsOpen
-        
         Stores the maximum number of documents that can be opened before
         existing documents are closed. By default, this is 10,000.
     */
@@ -717,20 +672,18 @@ public:
         need to
         call this function from any place where you know the view must
         be active, and the framework will need to get the current view.
-        
         The prepackaged view frame wxDocChildFrame calls Activate() from its OnActivate
         member.
-        
         This function calls OnActivateView().
     */
     virtual void Activate(bool activate);
 
     /**
-        Closes the view by calling OnClose. If @e deleteWindow is @true, this function
+        Closes the view by calling OnClose. If @a deleteWindow is @true, this function
         should
         delete the window associated with the view.
     */
-    virtual bool Close(bool deleteWindow = @true);
+    virtual bool Close(bool deleteWindow = true);
 
     /**
         Gets a pointer to the document associated with the view.
@@ -748,7 +701,7 @@ public:
         pages instead of the frames and this is why this method returns a wxWindow and
         not a wxFrame.
     */
-    wxWindow * GetFrame();
+    wxWindow* GetFrame();
 
     /**
         Gets the name associated with the view (passed to the wxDocTemplate
@@ -762,8 +715,8 @@ public:
         implementation does
         nothing.
     */
-    virtual void OnActivateView(bool activate, wxView * activeView,
-                                wxView * deactiveView);
+    virtual void OnActivateView(bool activate, wxView* activeView,
+                                wxView* deactiveView);
 
     /**
         Called when the filename has changed. The default implementation constructs a
@@ -777,7 +730,7 @@ public:
         may wish to do some cleaning up operations in this function, @e if a
         call to wxDocument::Close succeeded. For example, if your views
         all share the same window, you need to disassociate the window from the view
-        and perhaps clear the window. If @e deleteWindow is @true, delete the
+        and perhaps clear the window. If @a deleteWindow is @true, delete the
         frame associated with the view.
     */
     virtual bool OnClose(bool deleteWindow);
@@ -795,7 +748,6 @@ public:
         wxDocChildFrame
         or a derived class. This wxDocChildFrame provides user interface
         elements to view and/or edit the contents of the wxDocument.
-        
         By default, simply returns @true. If the function returns @false, the
         view will be deleted.
     */
@@ -805,10 +757,8 @@ public:
         If the printing framework is enabled in the library, this function returns a
         wxPrintout object for the purposes of printing. It should create a new object
         every time it is called; the framework will delete objects it creates.
-        
         By default, this function returns an instance of wxDocPrintout, which prints
         and previews one page by calling OnDraw().
-        
         Override to return an instance of a class other than wxDocPrintout.
     */
     virtual wxPrintout* OnCreatePrintout();
@@ -819,10 +769,10 @@ public:
     virtual void OnDraw(wxDC* dc);
 
     /**
-        Called when the view should be updated. @e sender is a pointer to the view
+        Called when the view should be updated. @a sender is a pointer to the view
         that sent the update request, or @NULL if no single view requested the update
         (for instance,
-        when the document is opened). @e hint is as yet unused but may in future contain
+        when the document is opened). @a hint is as yet unused but may in future contain
         application-specific information for making updating more efficient.
     */
     virtual void OnUpdate(wxView* sender, wxObject* hint);
@@ -836,7 +786,6 @@ public:
     /**
         Sets the frame associated with this view. The application should call this
         if possible, to tell the view about the frame.
-        
         See GetFrame() for the explanation about the mismatch
         between the "Frame'' in the method name and the type of its parameter.
     */
@@ -849,7 +798,6 @@ public:
 
     /**
         wxDocument* m_viewDocument
-        
         The document associated with this view. There may be more than one view per
         document, but there can never be more than one document for one view.
     */
@@ -857,14 +805,12 @@ public:
 
     /**
         wxFrame* m_viewFrame
-        
         Frame associated with the view, if any.
     */
 
 
     /**
         wxString m_viewTypeName
-        
         The view type name given to the wxDocTemplate constructor, copied to this
         variable when the view is created. Not currently used by the framework.
     */
@@ -888,7 +834,7 @@ public:
     @category{dvf}
 
     @seealso
-    @ref overview_docviewoverview "Document/view overview", wxFrame
+    @ref overview_docviewoverview, wxFrame
 */
 class wxDocChildFrame : public wxFrame
 {
@@ -934,23 +880,21 @@ public:
     /**
         Sets the document for this frame.
     */
-    void SetDocument(wxDocument * doc);
+    void SetDocument(wxDocument* doc);
 
     /**
         Sets the view for this frame.
     */
-    void SetView(wxView * view);
+    void SetView(wxView* view);
 
     /**
         wxDocument* m_childDocument
-        
         The document associated with the frame.
     */
 
 
     /**
         wxView* m_childView
-        
         The view associated with the frame.
     */
 };
@@ -973,7 +917,7 @@ public:
     @category{dvf}
 
     @seealso
-    @ref overview_docviewoverview "Document/view overview", wxFrame
+    @ref overview_docviewoverview, wxFrame
 */
 class wxDocParentFrame : public wxFrame
 {
@@ -983,7 +927,7 @@ public:
         Constructor.
     */
     wxDocParentFrame();
-    wxDocParentFrame(wxDocManager* manager, wxFrame * parent,
+    wxDocParentFrame(wxDocManager* manager, wxFrame* parent,
                      wxWindowID id,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
@@ -1000,7 +944,7 @@ public:
     /**
         Used in two-step construction.
     */
-    bool Create(wxDocManager* manager, wxFrame * parent,
+    bool Create(wxDocManager* manager, wxFrame* parent,
                 wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -1010,12 +954,11 @@ public:
     /**
         Returns the associated @ref overview_wxdocmanager "document manager object".
     */
-    wxDocManager * GetDocumentManager();
+    wxDocManager* GetDocumentManager();
 
     /**
         Deletes all views and documents. If no user input cancelled the
         operation, the frame will be destroyed and the application will exit.
-        
         Since understanding how document/view clean-up takes place can be difficult,
         the implementation of this function is shown below.
     */
@@ -1058,7 +1001,7 @@ public:
         If the view is not already in the list of views, adds the view and calls
         OnChangedViewList.
     */
-    virtual bool AddView(wxView * view);
+    virtual bool AddView(wxView* view);
 
     /**
         Closes the document, by calling OnSaveModified and then (if this returned @true)
@@ -1079,7 +1022,6 @@ public:
 
     /**
         Returns a pointer to the command processor associated with this document.
-        
         See wxCommandProcessor.
     */
     wxCommandProcessor* GetCommandProcessor();
@@ -1115,10 +1057,9 @@ public:
     /**
         A convenience function to get the first view for a document, because
         in many cases a document will only have a single view.
-        
         See also: GetViews()
     */
-    wxView * GetFirstView();
+    wxView* GetFirstView();
 
     /**
         Gets the title for this document. The document title is used for an associated
@@ -1136,7 +1077,6 @@ public:
 
     /**
         Returns the list whose elements are the views on the document.
-        
         See also: GetFirstView()
     */
     wxList GetViews();
@@ -1147,7 +1087,6 @@ public:
         You may need to override this if your document view maintains its own
         record of being modified (for example if using wxTextWindow to view and edit
         the document).
-        
         See also Modify().
     */
     virtual bool IsModified();
@@ -1157,7 +1096,6 @@ public:
         Override this function and call it from your own LoadObject before
         streaming your own data. LoadObject is called by the framework
         automatically when the document contents need to be loaded.
-        
         Note that only one of these forms exists, depending on how wxWidgets
         was configured.
     */
@@ -1171,7 +1109,6 @@ public:
         You may need to override this if your document view maintains its own
         record of being modified (for example if using wxTextWindow to view and edit
         the document).
-        
         See also IsModified().
     */
     virtual void Modify(bool modify);
@@ -1202,7 +1139,6 @@ public:
         Override this function if you want a different (or no) command processor
         to be created when the document is created. By default, it returns
         an instance of wxCommandProcessor.
-        
         See wxCommandProcessor.
     */
     virtual wxCommandProcessor* OnCreateCommandProcessor();
@@ -1262,7 +1198,6 @@ public:
         Override this function and call it from your own SaveObject before
         streaming your own data. SaveObject is called by the framework
         automatically when the document contents need to be saved.
-        
         Note that only one of these forms exists, depending on how wxWidgets
         was configured.
     */
@@ -1276,10 +1211,9 @@ public:
         for its deletion. Normally you should not call this; override
         OnCreateCommandProcessor
         instead.
-        
         See wxCommandProcessor.
     */
-    virtual void SetCommandProcessor(wxCommandProcessor * processor);
+    virtual void SetCommandProcessor(wxCommandProcessor* processor);
 
     /**
         Sets the document type name for this document. See the comment for
@@ -1296,11 +1230,10 @@ public:
 
     /**
         Sets the filename for this document. Usually called by the framework.
-        
-        If @e notifyViews is @true, wxView::OnChangeFilename is called for all views.
+        If @a notifyViews is @true, wxView::OnChangeFilename is called for all views.
     */
     void SetFilename(const wxString& filename,
-                     bool notifyViews = @false);
+                     bool notifyViews = false);
 
     /**
         Sets the title for this document. The document title is used for an associated
@@ -1310,43 +1243,37 @@ public:
     void SetTitle(const wxString& title);
 
     /**
-        Updates all views. If @e sender is non-@NULL, does not update this view.
-        
-        @e hint represents optional information to allow a view to optimize its update.
+        Updates all views. If @a sender is non-@NULL, does not update this view.
+        @a hint represents optional information to allow a view to optimize its update.
     */
-    void UpdateAllViews(wxView* sender = @NULL, wxObject* hint = @NULL);
+    void UpdateAllViews(wxView* sender = NULL, wxObject* hint = NULL);
 
     /**
         wxCommandProcessor* m_commandProcessor
-        
         A pointer to the command processor associated with this document.
     */
 
 
     /**
         wxString m_documentFile
-        
         Filename associated with this document ("" if none).
     */
 
 
     /**
         bool m_documentModified
-        
         @true if the document has been modified, @false otherwise.
     */
 
 
     /**
         wxDocTemplate * m_documentTemplate
-        
         A pointer to the template from which this document was created.
     */
 
 
     /**
         wxString m_documentTitle
-        
         Document title. The document title is used for an associated
         frame (if any), and is usually constructed by the framework from
         the filename.
@@ -1355,7 +1282,6 @@ public:
 
     /**
         wxString m_documentTypeName
-        
         The document type name given to the wxDocTemplate constructor, copied to this
         variable when the document is created. If several document templates are
         created that use the same document type, this variable is used in
@@ -1367,7 +1293,6 @@ public:
 
     /**
         wxList m_documentViews
-        
         List of wxView instances associated with this document.
     */
 };
@@ -1398,8 +1323,7 @@ public:
     /**
         Constructor. Pass the maximum number of files that should be stored and
         displayed.
-        
-        @e idBase defaults to wxID_FILE1 and represents the id given to the first
+        @a idBase defaults to wxID_FILE1 and represents the id given to the first
         history menu item.  Since menu items can't share the same ID you should change
         idBase (To one of your own defined IDs) when using more than one wxFileHistory
         in your application.
@@ -1449,7 +1373,7 @@ public:
     /**
         Returns the list of menus that are managed by this file history object.
         
-        @sa UseMenu()
+        @see UseMenu()
     */
     const wxList GetMenus();
 
@@ -1457,7 +1381,7 @@ public:
         Loads the file history from the given config object. This function should be
         called explicitly by the application.
         
-        @sa wxConfig
+        @see wxConfig
     */
     void Load(wxConfigBase& config);
 
@@ -1475,7 +1399,7 @@ public:
         Saves the file history into the given config object. This must be called
         explicitly by the application.
         
-        @sa wxConfig
+        @see wxConfig
     */
     void Save(wxConfigBase& config);
 
@@ -1495,7 +1419,6 @@ public:
 
     /**
         char** m_fileHistory
-        
         A character array of strings corresponding to the most recently opened
         files.
     */
@@ -1503,21 +1426,18 @@ public:
 
     /**
         size_t m_fileHistoryN
-        
         The number of files stored in the history array.
     */
 
 
     /**
         size_t m_fileMaxFiles
-        
         The maximum number of files to be stored and displayed on the menu.
     */
 
 
     /**
         wxMenu* m_fileMenu
-        
         The file menu used to display the file history list (if enabled).
     */
 };

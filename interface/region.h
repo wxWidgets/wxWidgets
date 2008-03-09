@@ -39,7 +39,7 @@ public:
     /**
         An alias for GetHeight.
     */
-#define wxCoord GetH()     /* implementation is private */
+    wxCoord GetH();
 
     /**
         Returns the height value for the current region.
@@ -54,7 +54,7 @@ public:
     /**
         An alias for GetWidth.
     */
-#define wxCoord GetW()     /* implementation is private */
+    wxCoord GetW();
 
     /**
         Returns the width value for the current region.
@@ -64,12 +64,12 @@ public:
     /**
         Returns the x value for the current region.
     */
-#define wxCoord GetX()     /* implementation is private */
+    wxCoord GetX();
 
     /**
         Returns the y value for the current region.
     */
-#define wxCoord GetY()     /* implementation is private */
+    wxCoord GetY();
 
     /**
         Returns @true if there are still some rectangles; otherwise returns @false.
@@ -91,7 +91,6 @@ public:
 
     /**
         Returns @true if there are still some rectangles; otherwise returns @false.
-        
         You can use this to test the iterator object as if it were of type bool.
     */
     operator bool();
@@ -155,7 +154,7 @@ public:
         region.
         
         @returns The return value is one of wxOutRegion, wxPartRegion and
-                   wxInRegion.
+                 wxInRegion.
     */
     wxRegionContain Contains(long& x, long& y);
     wxRegionContain Contains(const wxPoint& pt);
@@ -187,8 +186,8 @@ public:
         @returns @true if successful, @false otherwise.
         
         @remarks Creates the intersection of the two regions, that is, the parts
-                   which are in both regions. The result is stored in
-                   this region.
+                 which are in both regions. The result is stored in this
+                 region.
     */
     bool Intersect(wxCoord x, wxCoord y, wxCoord width,
                    wxCoord height);
@@ -203,7 +202,7 @@ public:
 
     /**
         Returns @true if the region is equal to, i.e. covers the same area as,
-        another one. Note that if both this region and @e region are invalid, they
+        another one. Note that if both this region and @a region are invalid, they
         are considered to be equal.
     */
     bool IsEqual(const wxRegion& region);
@@ -214,7 +213,7 @@ public:
         directions.
         
         @returns @true if successful, @false otherwise (the region is unchanged
-                   then).
+                 then).
     */
     bool Offset(wxCoord x, wxCoord y);
     bool Offset(const wxPoint& pt);
@@ -227,8 +226,8 @@ public:
         @returns @true if successful, @false otherwise.
         
         @remarks This operation combines the parts of 'this' region that are not
-                   part of the second region. The result is stored in
-                   this region.
+                 part of the second region. The result is stored in this
+                 region.
     */
     bool Subtract(const wxRect& rect);
     bool Subtract(const wxRegion& region);
@@ -238,14 +237,14 @@ public:
     /**
         Finds the union of this region and the non-transparent pixels of a
         bitmap. Colour to be treated as transparent is specified in the
-        @e transColour argument, along with an
+        @a transColour argument, along with an
         optional colour tolerance value.
         
         @returns @true if successful, @false otherwise.
         
         @remarks This operation creates a region that combines all of this region
-                   and the second region. The result is stored in this
-                   region.
+                 and the second region. The result is stored in this
+                 region.
     */
     bool Union(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     bool Union(const wxRect& rect);
@@ -262,8 +261,8 @@ public:
         @returns @true if successful, @false otherwise.
         
         @remarks This operation creates a region that combines all of this region
-                   and the second region, except for any overlapping
-                   areas. The result is stored in this region.
+                 and the second region, except for any overlapping
+                 areas. The result is stored in this region.
     */
     bool Xor(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     bool Xor(const wxRect& rect);

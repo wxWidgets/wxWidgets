@@ -130,7 +130,6 @@ public:
         GetNextToken() or @c NUL if
         there had been no calls to this function yet or if it returned the trailing
         empty token in @c wxTOKEN_RET_EMPTY_ALL mode.
-        
         This function is new since wxWidgets version 2.7.0
     */
     wxChar GetLastDelimiter();
@@ -159,7 +158,6 @@ public:
 
     /**
         Initializes the tokenizer.
-        
         Pass the string to tokenize, a string containing delimiters,
         and the mode specifying how the string should be tokenized.
     */

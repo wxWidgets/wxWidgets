@@ -16,8 +16,7 @@
     @category{dnd}
 
     @seealso
-    @ref overview_wxdndoverview "Drag and drop overview", wxDropSource,
-    wxDropTarget, wxFileDropTarget
+    @ref overview_wxdndoverview, wxDropSource, wxDropTarget, wxFileDropTarget
 */
 class wxTextDropTarget : public wxDropTarget
 {
@@ -37,13 +36,11 @@ public:
         Override this function to receive dropped text.
         
         @param x
-        The x coordinate of the mouse.
-        
+            The x coordinate of the mouse.
         @param y
-        The y coordinate of the mouse.
-        
+            The y coordinate of the mouse.
         @param data
-        The data being dropped: a wxString.
+            The data being dropped: a wxString.
     */
     virtual bool OnDropText(wxCoord x, wxCoord y,
                             const wxString& data);
@@ -70,8 +67,7 @@ public:
     wxDropTarget::OnEnter, possibly many times wxDropTarget::OnDragOver,
     wxDropTarget::OnDrop and finally wxDropTarget::OnData.
 
-    See @ref overview_wxdndoverview "Drag and drop overview" and @ref
-    overview_wxdataobjectoverview "wxDataObject overview"
+    See @ref overview_wxdndoverview and @ref overview_wxdataobjectoverview
     for more information.
 
     @library{wxcore}
@@ -84,9 +80,9 @@ class wxDropTarget
 {
 public:
     /**
-        Constructor. @e data is the data to be associated with the drop target.
+        Constructor. @a data is the data to be associated with the drop target.
     */
-    wxDropTarget(wxDataObject* data = @NULL);
+    wxDropTarget(wxDataObject* data = NULL);
 
     /**
         Destructor. Deletes the associated data object, if any.
@@ -114,17 +110,15 @@ public:
         this calls functions return the suggested return value @e def.
         
         @param x
-        The x coordinate of the mouse.
-        
+            The x coordinate of the mouse.
         @param y
-        The y coordinate of the mouse.
-        
+            The y coordinate of the mouse.
         @param def
-        Suggested value for return value. Determined by SHIFT or CONTROL key states.
+            Suggested value for return value. Determined by SHIFT or CONTROL key states.
         
         @returns Returns the desired operation or wxDragNone. This is used for
-                   optical feedback from the side of the drop source,
-                   typically in form of changing the icon.
+                 optical feedback from the side of the drop source,
+                 typically in form of changing the icon.
     */
     virtual wxDragResult OnDragOver(wxCoord x, wxCoord y,
                                     wxDragResult def);
@@ -134,10 +128,9 @@ public:
         the operation.
         
         @param x
-        The x coordinate of the mouse.
-        
+            The x coordinate of the mouse.
         @param y
-        The y coordinate of the mouse.
+            The y coordinate of the mouse.
         
         @returns Return @true to accept the data, @false to veto the operation.
     */
@@ -148,17 +141,16 @@ public:
         OnDragOver().
         
         @param x
-        The x coordinate of the mouse.
-        
+            The x coordinate of the mouse.
         @param y
-        The y coordinate of the mouse.
-        
+            The y coordinate of the mouse.
         @param def
-        Suggested default for return value. Determined by SHIFT or CONTROL key states.
+            Suggested default for return value. Determined by SHIFT or CONTROL key
+        states.
         
         @returns Returns the desired operation or wxDragNone. This is used for
-                   optical feedback from the side of the drop source,
-                   typically in form of changing the icon.
+                 optical feedback from the side of the drop source,
+                 typically in form of changing the icon.
     */
     virtual wxDragResult OnEnter(wxCoord x, wxCoord y,
                                  wxDragResult def);
@@ -182,8 +174,7 @@ public:
 
     This class represents a source for a drag and drop operation.
 
-    See @ref overview_wxdndoverview "Drag and drop overview" and @ref
-    overview_wxdataobjectoverview "wxDataObject overview"
+    See @ref overview_wxdndoverview and @ref overview_wxdataobjectoverview
     for more information.
 
     @library{wxcore}
@@ -198,32 +189,27 @@ public:
     //@{
     /**
         The constructors for wxDataObject.
-        
-        If you use the constructor without @e data parameter you must call
+        If you use the constructor without @a data parameter you must call
         SetData() later.
-        
-        Note that the exact type of @e iconCopy and subsequent parameters differs
+        Note that the exact type of @a iconCopy and subsequent parameters differs
         between wxMSW and wxGTK: these are cursors under Windows but icons for GTK.
         You should use the macro wxDROP_ICON in portable
         programs instead of directly using either of these types.
         
         @param win
-        The window which initiates the drag and drop operation.
-        
+            The window which initiates the drag and drop operation.
         @param iconCopy
-        The icon or cursor used for feedback for copy operation.
-        
+            The icon or cursor used for feedback for copy operation.
         @param iconMove
-        The icon or cursor used for feedback for move operation.
-        
+            The icon or cursor used for feedback for move operation.
         @param iconNone
-        The icon or cursor used for feedback when operation can't be done.
+            The icon or cursor used for feedback when operation can't be done.
     */
-    wxDropSource(wxWindow* win = @NULL,
+    wxDropSource(wxWindow* win = NULL,
                  const wxIconOrCursor& iconCopy = wxNullIconOrCursor,
                  const wxIconOrCursor& iconMove = wxNullIconOrCursor,
                  const wxIconOrCursor& iconNone = wxNullIconOrCursor);
-    wxDropSource(wxDataObject& data, wxWindow* win = @NULL,
+    wxDropSource(wxDataObject& data, wxWindow* win = NULL,
                  const wxIconOrCursor& iconCopy = wxNullIconOrCursor,
                  const wxIconOrCursor& iconMove = wxNullIconOrCursor,
                  const wxIconOrCursor& iconNone = wxNullIconOrCursor);
@@ -240,21 +226,21 @@ public:
         mouse.
         
         @param flags
-        If wxDrag_AllowMove is included in the flags, data may
-        be moved and not only copied (default). If wxDrag_DefaultMove is
-        specified (which includes the previous flag), this is even the default
-        operation
+            If wxDrag_AllowMove is included in the flags, data may
+            be moved and not only copied (default). If wxDrag_DefaultMove is
+            specified (which includes the previous flag), this is even the default
+            operation
         
         @returns Returns the operation requested by the user, may be wxDragCopy,
-                   wxDragMove, wxDragLink, wxDragCancel or wxDragNone if
-                   an error occurred.
+                 wxDragMove, wxDragLink, wxDragCancel or wxDragNone if
+                 an error occurred.
     */
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
     /**
         Returns the wxDataObject object that has been assigned previously.
     */
-    wxDataObject * GetDataObject();
+    wxDataObject* GetDataObject();
 
     /**
         Overridable: you may give some custom UI feedback during the drag and drop
@@ -264,15 +250,14 @@ public:
         slow.
         
         @param effect
-        The effect to implement. One of wxDragCopy, wxDragMove, wxDragLink and
+            The effect to implement. One of wxDragCopy, wxDragMove, wxDragLink and
         wxDragNone.
-        
         @param scrolling
-        @true if the window is scrolling. MSW only.
+            @true if the window is scrolling. MSW only.
         
         @returns Return @false if you want default feedback, or @true if you
-                   implement your own feedback. The return values is
-                   ignored under GTK.
+                 implement your own feedback. The return values is
+                 ignored under GTK.
     */
     virtual bool GiveFeedback(wxDragResult effect);
 
@@ -280,10 +265,9 @@ public:
         Set the icon to use for a certain drag result.
         
         @param res
-        The drag result to set the icon for.
-        
+            The drag result to set the icon for.
         @param cursor
-        The ion to show when this drag result occurs.
+            The ion to show when this drag result occurs.
     */
     void SetCursor(wxDragResult res, const wxCursor& cursor);
 
@@ -306,8 +290,7 @@ public:
     @category{dnd}
 
     @seealso
-    @ref overview_wxdndoverview "Drag and drop overview", wxDropSource,
-    wxDropTarget, wxTextDropTarget
+    @ref overview_wxdndoverview, wxDropSource, wxDropTarget, wxTextDropTarget
 */
 class wxFileDropTarget : public wxDropTarget
 {
@@ -327,13 +310,11 @@ public:
         Override this function to receive dropped files.
         
         @param x
-        The x coordinate of the mouse.
-        
+            The x coordinate of the mouse.
         @param y
-        The y coordinate of the mouse.
-        
+            The y coordinate of the mouse.
         @param filenames
-        An array of filenames.
+            An array of filenames.
     */
     virtual bool OnDropFiles(wxCoord x, wxCoord y,
                              const wxArrayString& filenames);
@@ -348,9 +329,8 @@ public:
     This macro creates either a cursor (MSW) or an icon (elsewhere) with the given
     name. Under MSW, the cursor is loaded from the resource file and the icon is
     loaded from XPM file under other platforms.
-
     This macro should be used with
     @ref wxDropSource::wxdropsource "wxDropSource constructor".
 */
-#define wxIconOrCursor wxDROP_ICON(const char * name)     /* implementation is private */
+#define wxIconOrCursor wxDROP_ICON(const char* name)     /* implementation is private */
 

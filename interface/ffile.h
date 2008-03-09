@@ -30,16 +30,14 @@ public:
         Opens a file with the given file pointer, which has already been opened.
         
         @param filename
-        The filename.
-        
+            The filename.
         @param mode
-        The mode in which to open the file using standard C strings.
-        Note that you should use "b" flag if you use binary files under Windows
-        or the results might be unexpected due to automatic newline conversion done
-        for the text files.
-        
+            The mode in which to open the file using standard C strings.
+            Note that you should use "b" flag if you use binary files under Windows
+            or the results might be unexpected due to automatic newline conversion done
+            for the text files.
         @param fp
-        An existing file descriptor, such as stderr.
+            An existing file descriptor, such as stderr.
     */
     wxFFile();
     wxFFile(const wxString& filename, const wxString& mode = "r");
@@ -48,14 +46,12 @@ public:
 
     /**
         Destructor will close the file.
-        
         NB: it is not virtual so you should @e not derive from wxFFile!
     */
     ~wxFFile();
 
     /**
         Attaches an existing file pointer to the wxFFile object.
-        
         The descriptor should be already opened and it will be closed by wxFFile
         object.
     */
@@ -76,27 +72,24 @@ public:
     /**
         Returns @true if the an attempt has been made to read @e past
         the end of the file.
-        
         Note that the behaviour of the file descriptor based class
         wxFile is different as wxFile::Eof
         will return @true here as soon as the last byte of the file has been
         read.
-        
         Also note that this method may only be called for opened files and may crash if
         the file is not opened.
         
-        @sa IsOpened()
+        @see IsOpened()
     */
-#define bool Eof()     /* implementation is private */
+    bool Eof();
 
     /**
         Returns @true if an error has occurred on this file, similar to the standard
         @c ferror() function.
-        
         Please note that this method may only be called for opened files and may crash
         if the file is not opened.
         
-        @sa IsOpened()
+        @see IsOpened()
     */
 
 
@@ -126,10 +119,9 @@ public:
         Opens the file, returning @true if successful.
         
         @param filename
-        The filename.
-        
+            The filename.
         @param mode
-        The mode in which to open the file.
+            The mode in which to open the file.
     */
     bool Open(const wxString& filename, const wxString& mode = "r");
 
@@ -138,10 +130,9 @@ public:
         read.
         
         @param buffer
-        A buffer to receive the data.
-        
+            A buffer to receive the data.
         @param count
-        The number of bytes to read.
+            The number of bytes to read.
         
         @returns The number of bytes read.
     */
@@ -149,28 +140,25 @@ public:
 
     /**
         )
-        
         Reads the entire contents of the file into a string.
         
         @param str
-        String to read data into.
-        
+            String to read data into.
         @param conv
-        Conversion object to use in Unicode build; by default supposes
-        that file contents is encoded in UTF-8.
+            Conversion object to use in Unicode build; by default supposes
+            that file contents is encoded in UTF-8.
         
         @returns @true if file was read successfully, @false otherwise.
     */
-    bool ReadAll(wxString * str);
+    bool ReadAll(wxString* str);
 
     /**
         Seeks to the specified position and returns @true on success.
         
         @param ofs
-        Offset to seek to.
-        
+            Offset to seek to.
         @param mode
-        One of wxFromStart, wxFromEnd, wxFromCurrent.
+            One of wxFromStart, wxFromEnd, wxFromCurrent.
     */
     bool Seek(wxFileOffset ofs, wxSeekMode mode = wxFromStart);
 
@@ -180,7 +168,7 @@ public:
         and returns @true on success.
         
         @param ofs
-        Number of bytes before the end of the file.
+            Number of bytes before the end of the file.
     */
     bool SeekEnd(wxFileOffset ofs = 0);
 
@@ -191,16 +179,14 @@ public:
 
     /**
         )
-        
         Writes the contents of the string to the file, returns @true on success.
-        
         The second argument is only meaningful in Unicode build of wxWidgets when
-        @e conv is used to convert @e s to multibyte representation.
+        @e conv is used to convert @a s to multibyte representation.
     */
     bool Write(const wxString& s);
 
     /**
         Returns the file pointer associated with the file.
     */
-#define FILE * fp()     /* implementation is private */
+    FILE* fp();
 };

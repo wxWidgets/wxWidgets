@@ -21,7 +21,7 @@ public:
     /**
         Constuctor used by wxWidgets only.
     */
-    wxFindDialogEvent(wxEventType commandType = wxEVT_@NULL,
+    wxFindDialogEvent(wxEventType commandType = wxEVT_NULL,
                       int id = 0);
 
     /**
@@ -129,11 +129,10 @@ public:
     /**
         After using default constructor Create()
         must be called.
-        
-        The @e parent and @e data parameters must be non-@NULL.
+        The @a parent and @a data parameters must be non-@NULL.
     */
     wxFindReplaceDialog();
-    wxFindReplaceDialog(wxWindow * parent,
+    wxFindReplaceDialog(wxWindow* parent,
                         wxFindReplaceData* data,
                         const wxString& title,
                         int style = 0);
@@ -146,10 +145,9 @@ public:
 
     /**
         Creates the dialog; use wxWindow::Show to show it on screen.
-        
-        The @e parent and @e data parameters must be non-@NULL.
+        The @a parent and @a data parameters must be non-@NULL.
     */
-    bool Create(wxWindow * parent, wxFindReplaceData* data,
+    bool Create(wxWindow* parent, wxFindReplaceData* data,
                 const wxString& title, int style = 0);
 
     /**

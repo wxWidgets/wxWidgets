@@ -40,32 +40,31 @@ public:
         wxApp::GetVendorName methods are used to determine the
         registry key or file name.
     */
-    virtual wxConfigBase * CreateConfig();
+    virtual wxConfigBase* CreateConfig();
 
     /**
         Creates the global font mapper object used for encodings/charset mapping.
     */
-    virtual wxFontMapper * CreateFontMapper();
+    virtual wxFontMapper* CreateFontMapper();
 
     /**
         Creates the default log target for the application.
     */
-    virtual wxLog * CreateLogTarget();
+    virtual wxLog* CreateLogTarget();
 
     /**
         Creates the global object used for printing out messages.
     */
-    virtual wxMessageOutput * CreateMessageOutput();
+    virtual wxMessageOutput* CreateMessageOutput();
 
     /**
         Returns the renderer to use for drawing the generic controls (return value may
         be @NULL
         in which case the default renderer for the current platform is used);
         this is used in GUI mode only and always returns @NULL in console.
-        
         NOTE: returned pointer will be deleted by the caller.
     */
-    virtual wxRendererNative * CreateRenderer();
+    virtual wxRendererNative* CreateRenderer();
 
     /**
         This method returns the name of the desktop environment currently
@@ -89,15 +88,13 @@ public:
         of the native toolkit currently used.
         The version numbers returned are thus detected at run-time and not compile-time
         (except when this is not possible e.g. wxMotif).
-        
         E.g. if your program is using wxGTK port this function will return wxPORT_GTK
         and
         put in given pointers the versions of the GTK library in use.
-        
         See wxPlatformInfo for more details.
     */
-    virtual wxPortId GetToolkitVersion(int * major = @NULL,
-                                       int * minor = @NULL);
+    virtual wxPortId GetToolkitVersion(int* major = NULL,
+                                       int* minor = NULL);
 
     /**
         Returns @true if @c fprintf(stderr) goes somewhere, @false otherwise.
@@ -113,8 +110,7 @@ public:
     /**
         Shows the assert dialog with the specified message in GUI mode or just prints
         the string to stderr in console mode.
-        
         Returns @true to suppress subsequent asserts, @false to continue as before.
     */
-    virtual bool ShowAssertDialog(const wxString & msg);
+    virtual bool ShowAssertDialog(const wxString& msg);
 };

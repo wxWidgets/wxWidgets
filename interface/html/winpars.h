@@ -26,10 +26,11 @@ public:
     /**
         You must override this method. In most common case its body consists
         only of lines of the following type:
+        
         I recommend using the @b TAGS_MODULE_* macros.
         
         @param parser
-        Pointer to the parser that requested tables filling.
+            Pointer to the parser that requested tables filling.
     */
     virtual void FillHandlersTable(wxHtmlWinParser parser);
 };
@@ -52,7 +53,6 @@ class wxHtmlWinTagHandler : public wxHtmlTagHandler
 public:
     /**
         @b wxHtmlWinParser* m_WParser
-        
         Value of this attribute is identical to value of m_Parser. The only different
         is that m_WParser points to wxHtmlWinParser object while m_Parser
         points to wxHtmlParser object. (The same object, but overcast.)
@@ -81,7 +81,7 @@ public:
     //@{
     /**
         Constructor. Don't use the default one, use constructor with
-        @e wndIface parameter (@e wndIface is a pointer to interface object for
+        @a wndIface parameter (@a wndIface is a pointer to interface object for
         the associated wxHtmlWindow or other HTML rendering
         window such as wxHtmlListBox).
     */
@@ -125,7 +125,6 @@ public:
     /**
         Returns (average) char height in standard font. It is used as DC-independent
         metrics.
-        
         @b Note: This function doesn't return the @e actual height. If you want to
         know the height of the current font, call @c GetDC - GetCharHeight().
     */
@@ -134,7 +133,6 @@ public:
     /**
         Returns average char width in standard font. It is used as DC-independent
         metrics.
-        
         @b Note: This function doesn't return the @e actual width. If you want to
         know the height of the current font, call @c GetDC - GetCharWidth()
     */
@@ -149,14 +147,14 @@ public:
     /**
         Returns pointer to the DC used during parsing.
     */
-#define wxDC* GetDC()     /* implementation is private */
+    wxDC* GetDC();
 
     /**
         Returns wxEncodingConverter class used
         to do conversion between @ref getinputencoding() "input encoding"
         and @ref getoutputencoding() "output encoding".
     */
-    wxEncodingConverter * GetEncodingConverter();
+    wxEncodingConverter* GetEncodingConverter();
 
     /**
         Returns @true if actual font is bold, @false otherwise.
@@ -242,19 +240,19 @@ public:
         should use OpenContainer
         wherever possible.
     */
-    wxHtmlContainerCell* SetContainer(wxHtmlContainerCell * c);
+    wxHtmlContainerCell* SetContainer(wxHtmlContainerCell* c);
 
     /**
         Sets the DC. This must be called before wxHtmlParser::Parse!
-        @e pixel_scale  can be used when rendering to high-resolution
+        @a pixel_scale  can be used when rendering to high-resolution
         DCs (e.g. printer) to adjust size of pixel metrics. (Many dimensions in
         HTML are given in pixels -- e.g. image sizes. 300x300 image would be only one
         inch wide on typical printer. With pixel_scale = 3.0 it would be 3 inches.)
     */
-#define virtual void SetDC(wxDC dc, double pixel_scale = 1.0)     /* implementation is private */
+    virtual void SetDC(wxDC dc, double pixel_scale = 1.0);
 
     /**
-        Sets bold flag of actualfont. @e x is either @true of @false.
+        Sets bold flag of actualfont. @a x is either @true of @false.
     */
     void SetFontBold(int x);
 
@@ -266,12 +264,12 @@ public:
     void SetFontFace(const wxString& face);
 
     /**
-        Sets fixed face flag of actualfont. @e x is either @true of @false.
+        Sets fixed face flag of actualfont. @a x is either @true of @false.
     */
     void SetFontFixed(int x);
 
     /**
-        Sets italic flag of actualfont. @e x is either @true of @false.
+        Sets italic flag of actualfont. @a x is either @true of @false.
     */
     void SetFontItalic(int x);
 
@@ -281,7 +279,7 @@ public:
     void SetFontSize(int s);
 
     /**
-        Sets underlined flag of actualfont. @e x is either @true of @false.
+        Sets underlined flag of actualfont. @a x is either @true of @false.
     */
     void SetFontUnderlined(int x);
 
@@ -291,7 +289,7 @@ public:
     */
     void SetFonts(const wxString& normal_face,
                   const wxString& fixed_face,
-                  const int sizes = @NULL);
+                  const int sizes = NULL);
 
     /**
         Sets input encoding. The parser uses this information to build conversion

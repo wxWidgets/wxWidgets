@@ -22,8 +22,7 @@
     @category{FIXME}
 
     @seealso
-    @ref overview_wxcontaineroverview "Container classes overview", wxListT,
-    wxArrayT
+    @ref overview_wxcontaineroverview, wxListT, wxArrayT
 */
 class wxVector<T>
 {
@@ -108,7 +107,6 @@ public:
 
     /**
         )
-        
         Insert an item. When using values other than built-in integrals
         or classes with reference counting this can be an inefficient
         operation.
@@ -139,7 +137,7 @@ public:
     void push_back(const value_type& v);
 
     /**
-        Reserves more memory of @e n is greater then
+        Reserves more memory of @a n is greater then
         wxVector::size. Other this call has
         no effect.
     */

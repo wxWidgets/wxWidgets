@@ -43,7 +43,7 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_DATE_CHANGED(id\, func)}:
+    @event{EVT_DATE_CHANGED(id, func)}:
            This event fires when the user changes the current selection in the
            control.
     @endEventTable
@@ -62,7 +62,7 @@ public:
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxDatePickerCtrl(wxWindow * parent, wxWindowID id,
+    wxDatePickerCtrl(wxWindow* parent, wxWindowID id,
                      const wxDateTime& dt = wxDefaultDateTime,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
@@ -72,37 +72,30 @@ public:
 
     /**
         @param parent
-        Parent window, must not be non-@NULL.
-        
+            Parent window, must not be non-@NULL.
         @param id
-        The identifier for the control.
-        
+            The identifier for the control.
         @param dt
-        The initial value of the control, if an invalid date (such as the
-        default value) is used, the control is set to today.
-        
+            The initial value of the control, if an invalid date (such as the
+            default value) is used, the control is set to today.
         @param pos
-        Initial position.
-        
+            Initial position.
         @param size
-        Initial size. If left at default value, the control chooses its
-        own best size by using the height approximately equal to a text control and
-        width large enough to show the date string fully.
-        
+            Initial size. If left at default value, the control chooses its
+            own best size by using the height approximately equal to a text control and
+            width large enough to show the date string fully.
         @param style
-        The window style, should be left at 0 as there are no
-        special styles for this control in this version.
-        
+            The window style, should be left at 0 as there are no
+            special styles for this control in this version.
         @param validator
-        Validator which can be used for additional date checks.
-        
+            Validator which can be used for additional date checks.
         @param name
-        Control name.
+            Control name.
         
         @returns @true if the control was successfully created or @false if
-                   creation failed.
+                 creation failed.
     */
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxDateTime& dt = wxDefaultDateTime,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -114,20 +107,19 @@ public:
         If the control had been previously limited to a range of dates using
         SetRange(), returns the lower and upper
         bounds of this range. If no range is set (or only one of the bounds is set),
-         @e dt1 and/or @e dt2 are set to be invalid.
+         @a dt1 and/or @a dt2 are set to be invalid.
         
         @param dt1
-        Pointer to the object which receives the lower range limit or
-        becomes invalid if it is not set. May be @NULL if the caller is not
-        interested in lower limit
-        
+            Pointer to the object which receives the lower range limit or
+            becomes invalid if it is not set. May be @NULL if the caller is not
+            interested in lower limit
         @param dt2
-        Same as above but for the upper limit
+            Same as above but for the upper limit
         
         @returns @false if no range limits are currently set, @true if at least one
-                   bound is set.
+                 bound is set.
     */
-    bool GetRange(wxDateTime * dt1, wxDateTime dt2);
+    bool GetRange(wxDateTime* dt1, wxDateTime dt2);
 
     /**
         Returns the currently selected. If there is no selection or the selection is
@@ -138,7 +130,6 @@ public:
     /**
         Please note that this function is only available in the generic version of this
         control. The native version always uses the current system locale.
-        
         Sets the display format for the date in the control. See wxDateTime for the
         meaning of format strings.
         
@@ -147,19 +138,18 @@ public:
     void SetFormat(const wxChar* format);
 
     /**
-        Sets the valid range for the date selection. If @e dt1 is valid, it becomes
-        the earliest date (inclusive) accepted by the control. If @e dt2 is valid,
+        Sets the valid range for the date selection. If @a dt1 is valid, it becomes
+        the earliest date (inclusive) accepted by the control. If @a dt2 is valid,
         it becomes the latest possible date.
         
         @remarks If the current value of the control is outside of the newly set
-                   range bounds, the behaviour is undefined.
+                 range bounds, the behaviour is undefined.
     */
     void SetRange(const wxDateTime& dt1, const wxDateTime& dt2);
 
     /**
         Changes the current value of the control. The date should be valid and included
         in the currently selected range, if any.
-        
         Calling this method does not result in a date change event.
     */
     void SetValue(const wxDateTime& dt);

@@ -150,19 +150,17 @@
     @category{FIXME}
 
     @seealso
-    @ref overview_wxcontaineroverview "Container classes overview", wxListT,
-    wxVectorT
+    @ref overview_wxcontaineroverview, wxListT, wxVectorT
 */
 class wxArray<T>
 {
 public:
     //@{
     /**
-        Appends the given number of @e copies of the @e item to the array
+        Appends the given number of @a copies of the @a item to the array
         consisting of the elements of type @e T.
-        
         The first version is used with wxArray. The second is used with wxSortedArray,
-        returning the index where @e item is stored. The third and the
+        returning the index where @a item is stored. The third and the
         fourth ones are used with wxObjArray. There is an important difference between
         them: if you give a pointer to the array, it will take ownership of it, i.e.
         will delete it when the item is deleted from the array. If you give a reference
@@ -171,25 +169,22 @@ public:
         because the other array types never take ownership of their elements. Also note
         that you cannot append more than one pointer as reusing it would lead to
         deleting it twice (or more) and hence to a crash.
-        
         You may also use WX_APPEND_ARRAY macro to append all
         elements of one array to another one but it is more efficient to use
-        @e copies parameter and modify the elements in place later if you plan to
+        @a copies parameter and modify the elements in place later if you plan to
         append a lot of items.
     */
     void Add(T item, size_t copies = 1);
     size_t Add(T item);
-    void Add(T * item);
-    void Add(T & item, size_t copies = 1);
+    void Add(T* item);
+    void Add(T& item, size_t copies = 1);
     //@}
 
     /**
-        Inserts the given @e item into the array in the specified @e index
+        Inserts the given @a item into the array in the specified @e index
          position.
-        
         Be aware that you will set out the order of the array if you give a wrong
          position.
-        
         This function is useful in conjunction with
         wxArray::IndexForInsert for a common operation
         of "insert only if not found".
@@ -235,7 +230,6 @@ public:
         should avoid deleting wxObjArray through a wxBaseArray pointer (as you would
         never use wxBaseArray anyhow it shouldn't be a problem) and that you should not
         derive your own classes from the array classes.
-        
         @ref wxArray::ctordef "wxArray default constructor"
         
         @ref wxArray::ctorcopy "wxArray copy constructors and assignment operators"
@@ -247,7 +241,6 @@ public:
     //@{
     /**
         (T first, T second)@e compareFunction)
-        
         There is no default constructor for wxSortedArray classes - you must initialize
         it
         with a function to use for item comparison. It is a function which is passed
@@ -265,7 +258,7 @@ public:
         wxArray::Remove doesn't delete it. The function returns the
         pointer to the removed element.
     */
-    T * Detach(size_t index);
+    T* Detach(size_t index);
 
     /**
         Empties the array. For wxObjArray classes, this destroys all of the array
@@ -284,34 +277,29 @@ public:
     /**
         The first version of the function is for wxArray and wxObjArray, the second is
         for wxSortedArray only.
-        
         Searches the element in the array, starting from either beginning or the end
-        depending on the value of @e searchFromEnd parameter. @c wxNOT_FOUND is
+        depending on the value of @a searchFromEnd parameter. @c wxNOT_FOUND is
         returned if the element is not found, otherwise the index of the element is
         returned.
-        
         Linear search is used for the wxArray and wxObjArray classes but binary search
         in the sorted array is used for wxSortedArray (this is why searchFromEnd
         parameter doesn't make sense for it).
-        
         @b NB: even for wxObjArray classes, the operator==() of the elements in the
         array is @b not used by this function. It searches exactly the given
         element in the array and so will only succeed if this element had been
         previously added to the array, but fail even if another, identical, element is
         in the array.
     */
-    int Index(T& item, bool searchFromEnd = @false);
+    int Index(T& item, bool searchFromEnd = false);
     int Index(T& item);
     //@}
 
     /**
-        Search for a place to insert @e item into the sorted array (binary search).
+        Search for a place to insert @a item into the sorted array (binary search).
         The index returned is just before the first existing item that is greater or
         equal
         (according to the compare function) to the given @e item.
-        
-        You have to do extra work to know if the @e item already exists in array.
-        
+        You have to do extra work to know if the @a item already exists in array.
         This function is useful in conjunction with
         wxArray::AddAt for a common operation
         of "insert only if not found".
@@ -320,19 +308,17 @@ public:
 
     //@{
     /**
-        Insert the given number of @e copies of the @e item into the array before
-        the existing item @e n - thus, @e Insert(something, 0u) will insert an
+        Insert the given number of @a copies of the @a item into the array before
+        the existing item @a n - thus, @e Insert(something, 0u) will insert an
         item in such way that it will become the first array element.
-        
         wxSortedArray doesn't have this function because inserting in wrong place
         would break its sorted condition.
-        
         Please see wxArray::Add for explanation of the differences
         between the overloaded versions of this function.
     */
     void Insert(T item, size_t n, size_t copies = 1);
-    void Insert(T * item, size_t n);
-    void Insert(T & item, size_t n, size_t copies = 1);
+    void Insert(T* item, size_t n);
+    void Insert(T& item, size_t n, size_t copies = 1);
     //@}
 
     /**
@@ -341,10 +327,9 @@ public:
     bool IsEmpty();
 
     /**
-        Returns the item at the given position in the array. If @e index is out of
+        Returns the item at the given position in the array. If @a index is out of
         bounds, an assert failure is raised in the debug builds but nothing special is
         done in the release build.
-        
         The returned value is of type "reference to the array element type" for all of
         the array classes.
     */
@@ -353,7 +338,6 @@ public:
     /**
         Returns the last element in the array, i.e. is the same as Item(GetCount() - 1).
         An assert failure is raised in the debug mode if the array is empty.
-        
         The returned value is of type "reference to the array element type" for all of
         the array classes.
     */
@@ -365,7 +349,6 @@ public:
         least) forward declared for WX_DEFINE_ARRAY, WX_DEFINE_SORTED_ARRAY and
         WX_DECLARE_OBJARRAY macros and must be fully declared before you use
         WX_DEFINE_OBJARRAY macro.
-        
         WX_DEFINE_ARRAY
         
         WX_DEFINE_EXPORTED_ARRAY
@@ -387,18 +370,17 @@ public:
         WX_DEFINE_EXPORTED_OBJARRAY
         
         WX_DEFINE_USER_EXPORTED_OBJARRAY
-        
         To slightly complicate the matters even further, the operator - defined by
         default for the array iterators by these macros only makes sense if the array
         element type is not a pointer itself and, although it still works, this
         provokes warnings from some compilers and to avoid them you should use the
         @c _PTR versions of the macros above. For example, to define an array of
         pointers to @c double you should use:
+        
         Note that the above macros are generally only useful for
         wxObject types.  There are separate macros for declaring an array of a simple
         type,
         such as an int.
-        
         The following simple types are supported:
         
         int
@@ -408,12 +390,9 @@ public:
         size_t
         
         double
-        
         To create an array of a simple type, simply append the type you want in CAPS to
         the array definition.
-        
         For example, for an integer array, you'd use one of the following variants:
-        
         WX_DEFINE_ARRAY_INT
         
         WX_DEFINE_EXPORTED_ARRAY_INT
@@ -441,7 +420,6 @@ public:
         function can also be quite useful if you know in advance how many items you are
         going to put in the array and will prevent the array code from reallocating the
         memory more times than needed.
-        
         wxArray::Alloc
         
         wxArray::Shrink
@@ -452,7 +430,6 @@ public:
         Functions in this section return the total number of array elements and allow to
         retrieve them - possibly using just the C array indexing [] operator which
         does exactly the same as wxArray::Item method.
-        
         wxArray::GetCount
         
         wxArray::IsEmpty
@@ -465,24 +442,25 @@ public:
 
     /**
         Removes an element from the array by value: the first item of the
-        array equal to @e item is removed, an assert failure will result from an
+        array equal to @a item is removed, an assert failure will result from an
         attempt to remove an item which doesn't exist in the array.
-        
         When an element is removed from wxObjArray it is deleted by the array - use
         Detach if you don't want this to happen. On the
         other hand, when an object is removed from a wxArray nothing happens - you
         should delete it manually if required:
+        
         See also WX_CLEAR_ARRAY macro which deletes all
         elements of a wxArray (supposed to contain pointers).
     */
     Remove(T item);
 
     /**
-        Removes @e count elements starting at @e index from the array. When an
+        Removes @a count elements starting at @a index from the array. When an
         element is removed from wxObjArray it is deleted by the array - use
         Detach if you don't want this to happen. On
         the other hand, when an object is removed from a wxArray nothing happens -
         you should delete it manually if required:
+        
         See also WX_CLEAR_ARRAY macro which deletes all
         elements of a wxArray (supposed to contain pointers).
     */
@@ -512,13 +490,12 @@ public:
 
     /**
         )
-        
         This function ensures that the number of array elements is at least
-        @e count. If the array has already @e count or more items, nothing is
+        @e count. If the array has already @a count or more items, nothing is
         done. Otherwise, @c count - GetCount() elements are added and initialized to
         the value @e defval.
         
-        @sa wxArray::GetCount
+        @see wxArray::GetCount
     */
     void SetCount(size_t count);
 
@@ -532,19 +509,18 @@ public:
 
     /**
         The notation CMPFUNCT should be read as if we had the following declaration:
+        
         where @e T is the type of the array elements. I.e. it is a function returning
         @e int which is passed two arguments of type @e T *.
-        
         Sorts the array using the specified compare function: this function should
         return a negative, zero or positive value according to whether the first element
         passed to it is less than, equal to or greater than the second one.
-        
         wxSortedArray doesn't have this function because it is always sorted.
     */
     void Sort(CMPFUNC<T> compareFunction);
 
     /**
-        This macro may be used to append all elements of the @e other array to the
+        This macro may be used to append all elements of the @a other array to the
         @e array. The two arrays must be of the same type.
     */
 #define void WX_APPEND_ARRAY(wxArray& array, wxArray& other)     /* implementation is private */
@@ -558,40 +534,40 @@ public:
 
     //@{
     /**
-        This macro declares a new object array class named @e name and containing
+        This macro declares a new object array class named @a name and containing
         the elements of type @e T. The second form is used when compiling wxWidgets as
         a DLL under Windows and array needs to be visible outside the DLL.  The third is
         needed for exporting an array from a user DLL.
-        
         Example:
+        
         You must use WX_DEFINE_OBJARRAY macro to define
         the array class - otherwise you would get link errors.
     */
-    WX_DECLARE_OBJARRAY(T,  name);
-    WX_DECLARE_EXPORTED_OBJARRAY(T,  name);
-    WX_DECLARE_USER_EXPORTED_OBJARRAY(T,  name);
+    WX_DECLARE_OBJARRAY(T, name);
+    WX_DECLARE_EXPORTED_OBJARRAY(T, name);
+    WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name);
     //@}
 
     //@{
     /**
-        This macro defines a new array class named @e name and containing the
+        This macro defines a new array class named @a name and containing the
         elements of type @e T. The second form is used when compiling wxWidgets as
         a DLL under Windows and array needs to be visible outside the DLL.  The third is
         needed for exporting an array from a user DLL.
-        
         Example:
+        
         Note that wxWidgets predefines the following standard array classes: @b
         wxArrayInt,
         @b wxArrayLong, @b wxArrayShort, @b wxArrayDouble,  @b wxArrayPtrVoid.
     */
-    WX_DEFINE_ARRAY(T,  name);
-    WX_DEFINE_EXPORTED_ARRAY(T,  name);
-    WX_DEFINE_USER_EXPORTED_ARRAY(T,  name,  exportspec);
+    WX_DEFINE_ARRAY(T, name);
+    WX_DEFINE_EXPORTED_ARRAY(T, name);
+    WX_DEFINE_USER_EXPORTED_ARRAY(T, name, exportspec);
     //@}
 
     //@{
     /**
-        This macro defines the methods of the array class @e name not defined by the
+        This macro defines the methods of the array class @a name not defined by the
         WX_DECLARE_OBJARRAY macro. You must include the
         file wx/arrimpl.cpp before using this macro and you must have the full
         declaration of the class of array elements in scope! If you forget to do the
@@ -600,7 +576,6 @@ public:
         objects of the class will not be copied correctly and their real destructor will
         not be called.  The latter two forms are merely aliases of the first to satisfy
         some people's sense of symmetry when using the exported declarations.
-        
         Example of usage:
     */
     WX_DEFINE_OBJARRAY(name);
@@ -610,22 +585,22 @@ public:
 
     //@{
     /**
-        This macro defines a new sorted array class named @e name and containing
+        This macro defines a new sorted array class named @a name and containing
         the elements of type @e T. The second form is used when compiling wxWidgets as
         a DLL under Windows and array needs to be visible outside the DLL.  The third is
         needed for exporting an array from a user DLL.
-        
         Example:
+        
         You will have to initialize the objects of this class by passing a comparison
         function to the array object constructor like this:
     */
-    WX_DEFINE_SORTED_ARRAY(T,  name);
-    WX_DEFINE_SORTED_EXPORTED_ARRAY(T,  name);
-    WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T,  name);
+    WX_DEFINE_SORTED_ARRAY(T, name);
+    WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name);
+    WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name);
     //@}
 
     /**
-        This macro may be used to prepend all elements of the @e other array to the
+        This macro may be used to prepend all elements of the @a other array to the
         @e array. The two arrays must be of the same type.
     */
 #define void WX_PREPEND_ARRAY(wxArray& array, wxArray& other)     /* implementation is private */

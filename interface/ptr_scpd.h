@@ -36,7 +36,7 @@ public:
         Creates the smart pointer with the given pointer or none if @NULL.  On
         compilers that support it, this uses the explicit keyword.
     */
-    explicit wxScopedPtr(type T = @NULL);
+    explicit wxScopedPtr(type T = NULL);
 
     /**
         Destructor frees the pointer help by this object if it is not @NULL.
@@ -67,14 +67,14 @@ public:
         @NULL. After a call to this function the caller is responsible for
         deleting the pointer.
     */
-    T * release();
+    T* release();
 
     /**
-        Deletes the currently held pointer and sets it to @e p or to @NULL if no
+        Deletes the currently held pointer and sets it to @a p or to @NULL if no
         arguments are specified. This function does check to make sure that the
         pointer you are assigning is not the same pointer that is already stored.
     */
-    reset(T p  = @NULL);
+    reset(T p  = NULL);
 
     /**
         Swap the pointer inside the smart pointer with @e other. The pointer being
@@ -105,7 +105,7 @@ public:
         Creates the smart pointer with the given pointer or none if @NULL.  On
         compilers that support it, this uses the explicit keyword.
     */
-    wxScopedArray(type T = @NULL);
+    wxScopedArray(type T = NULL);
 
     /**
         This operator gets the pointer stored in the smart pointer or returns @NULL if
@@ -124,7 +124,7 @@ public:
         arguments are specified. This function does check to make sure that the
         pointer you are assigning is not the same pointer that is already stored.
     */
-    reset(T p  = @NULL);
+    reset(T p  = NULL);
 
     /**
         Swap the pointer inside the smart pointer with 'ot'. The pointer being swapped
@@ -153,17 +153,16 @@ class wxScopedTiedPtr
 {
 public:
     /**
-        Constructor creates a smart pointer initialized with @e ptr and stores
-        @e ptr in the location specified by @e ppTie which must not be
+        Constructor creates a smart pointer initialized with @a ptr and stores
+        @a ptr in the location specified by @a ppTie which must not be
         @NULL.
     */
-    wxScopedTiedPtr(T ** ppTie, T * ptr);
+    wxScopedTiedPtr(T** ppTie, T* ptr);
 
     /**
         Destructor frees the pointer help by this object and restores the value stored
         at the tied location (as specified in the @ref ctor() constructor)
         to the old value.
-        
         Warning: this location may now contain an uninitialized value if it hadn't been
         initialized previously, in particular don't count on it magically being
         @NULL!
@@ -191,7 +190,7 @@ public:
     /**
         Constructor.
     */
-    wxScopedPtrT(T * ptr = @NULL);
+    wxScopedPtrT(T* ptr = NULL);
 
     /**
         Destructor.
@@ -201,7 +200,7 @@ public:
     /**
         Returns pointer to object or @NULL.
     */
-    T * get();
+    T* get();
 
     /**
         Conversion to a boolean expression (in a variant which is not
@@ -221,7 +220,7 @@ public:
         Returns pointer to object. If the pointer is @NULL this method will
         cause an assert in debug mode.
     */
-    T * operator-();
+    T* operator-();
 
     /**
         Releases the current pointer and returns it.
@@ -234,10 +233,10 @@ public:
         Reset pointer to the value of @e ptr. The
         previous pointer will be deleted.
     */
-    void reset(T * ptr = @NULL);
+    void reset(T* ptr = NULL);
 
     /**
         Swaps pointers.
     */
-    void swap(wxScopedPtr<T> & ot);
+    void swap(wxScopedPtr<T>& ot);
 };

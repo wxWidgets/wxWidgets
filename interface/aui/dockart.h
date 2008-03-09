@@ -11,7 +11,7 @@
     @headerfile dockart.h wx/aui/dockart.h
 
     wxAuiDockArt is part of the wxAUI class framework.
-    See also @ref overview_wxauioverview "wxAUI overview".
+    See also @ref overview_wxauioverview.
 
     Dock art provider code - a dock provider provides all drawing
     functionality to the wxAui dock manager. This allows the dock
@@ -75,10 +75,8 @@ public:
 
     /**
         Draws a button in the pane's title bar.
-        
-        @e button can be one of the values of @b wxAuiButtonId.
-        
-        @e button_state can be one of the values of @b wxAuiPaneButtonState.
+        @a button can be one of the values of @b wxAuiButtonId.
+        @a button_state can be one of the values of @b wxAuiPaneButtonState.
     */
     virtual void DrawPaneButton(wxDC& dc, wxWindow* window,
                                 int button,
@@ -100,8 +98,7 @@ public:
 
     /**
         Get the colour of a certain setting.
-        
-        @e id can be one of the colour values of @b wxAuiPaneDockArtSetting.
+        @a id can be one of the colour values of @b wxAuiPaneDockArtSetting.
     */
     virtual wxColour GetColour(int id);
 
@@ -112,8 +109,7 @@ public:
 
     /**
         Get the value of a certain setting.
-        
-        @e id can be one of the size values of @b wxAuiPaneDockArtSetting.
+        @a id can be one of the size values of @b wxAuiPaneDockArtSetting.
     */
     virtual int GetMetric(int id);
 
@@ -124,8 +120,7 @@ public:
 
     /**
         Set a certain setting with the value @e colour.
-        
-        @e id can be one of the colour values of @b wxAuiPaneDockArtSetting.
+        @a id can be one of the colour values of @b wxAuiPaneDockArtSetting.
     */
     virtual void SetColour(int id, const wxColor& colour);
 
@@ -136,8 +131,7 @@ public:
 
     /**
         Set a certain setting with the value @e new_val.
-        
-        @e id can be one of the size values of @b wxAuiPaneDockArtSetting.
+        @a id can be one of the size values of @b wxAuiPaneDockArtSetting.
     */
     virtual void SetMetric(int id, int new_val);
 };

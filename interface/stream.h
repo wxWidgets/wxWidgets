@@ -96,7 +96,7 @@ public:
         stream. It is advised to use this feature only in very local area of the
         program.
         
-        @sa @ref setbufferio() wxStreamBuffer:SetBufferIO
+        @see @ref setbufferio() wxStreamBuffer:SetBufferIO
     */
     wxStreamBuffer(wxStreamBase& stream, BufMode mode);
     wxStreamBuffer(BufMode mode);
@@ -120,7 +120,7 @@ public:
         (when it has the @true value) the stream buffer to resize dynamically the IO
         buffer.
         
-        @sa SetBufferIO()
+        @see SetBufferIO()
     */
     void Fixed(bool fixed);
 
@@ -130,7 +130,7 @@ public:
     bool FlushBuffer();
 
     /**
-        Toggles the flushable flag. If @e flushable is disabled, no data are sent
+        Toggles the flushable flag. If @a flushable is disabled, no data are sent
         to the parent stream.
     */
     void Flushable(bool flushable);
@@ -138,12 +138,12 @@ public:
     /**
         Returns a pointer on the end of the stream buffer.
     */
-    void * GetBufferEnd();
+    void* GetBufferEnd();
 
     /**
         Returns a pointer on the current position of the stream buffer.
     */
-    void * GetBufferPos();
+    void* GetBufferPos();
 
     /**
         Returns the size of the buffer.
@@ -153,12 +153,12 @@ public:
     /**
         Returns a pointer on the start of the stream buffer.
     */
-    void * GetBufferStart();
+    void* GetBufferStart();
 
     /**
         Gets a single char from the stream buffer. It acts like the Read call.
         
-        @sa Read()
+        @see Read()
     */
     char GetChar();
 
@@ -180,20 +180,20 @@ public:
     /**
         Puts a single char to the stream buffer.
         
-        @sa Read()
+        @see Read()
     */
     void PutChar(char c);
 
     //@{
     /**
-        Copies data to @e buffer. The function returns when @e buffer is full or when
+        Copies data to @e buffer. The function returns when @a buffer is full or when
         there isn't
         any more data in the current buffer.
         
-        @sa Write()
+        @see Write()
     */
-    size_t Read(void * buffer, size_t size);
-    Return value size_t Read(wxStreamBuffer * buffer);
+    size_t Read(void* buffer, size_t size);
+    Return value size_t Read(wxStreamBuffer* buffer);
     //@}
 
     /**
@@ -203,29 +203,23 @@ public:
 
     /**
         Changes the current position.
-        
-        @e mode may be one of the following:
-        
+        @a mode may be one of the following:
         
         @b wxFromStart
-        
         
         The position is counted from the start of the stream.
         
         @b wxFromCurrent
         
-        
         The position is counted from the current position of the stream.
         
         @b wxFromEnd
         
-        
         The position is counted from the end of the stream.
         
-        
         @returns Upon successful completion, it returns the new offset as
-                   measured in bytes from the beginning of the stream.
-                   Otherwise, it returns wxInvalidOffset.
+                 measured in bytes from the beginning of the stream.
+                 Otherwise, it returns wxInvalidOffset.
     */
     off_t Seek(off_t pos, wxSeekMode mode);
 
@@ -234,7 +228,7 @@ public:
         Destroys or invalidates the previous IO buffer and allocates a new one of the
         specified size.
         
-        @sa Fixed(), Flushable()
+        @see Fixed(), Flushable()
     */
     void SetBufferIO(char* buffer_start, char* buffer_end);
     Remarks See also
@@ -263,13 +257,12 @@ public:
         the stream.
         
         @returns Returns the current position in the stream if possible,
-                   wxInvalidOffset in the other case.
+                 wxInvalidOffset in the other case.
     */
     off_t Tell();
 
     /**
         Truncates the buffer to the current position.
-        
         Note: Truncate() cannot be used to enlarge the buffer. This is
         usually not needed since the buffer expands automatically.
     */
@@ -279,8 +272,8 @@ public:
     /**
         See Read().
     */
-    size_t Write(const void * buffer, size_t size);
-    size_t Write(wxStreamBuffer * buffer);
+    size_t Write(const void* buffer, size_t size);
+    size_t Write(wxStreamBuffer* buffer);
     //@}
 };
 
@@ -311,7 +304,6 @@ public:
         Closes the stream, returning @false if an error occurs. The
         stream is closed implicitly in the destructor if Close() is not
         called explicitly.
-        
         If this stream wraps another stream or some other resource such
         as a file, then the underlying resource is closed too if it is owned
         by this stream, or left open otherwise.
@@ -329,16 +321,15 @@ public:
         Puts the specified character in the output queue and increments the
         stream position.
     */
-#define void PutC(char c)     /* implementation is private */
+    void PutC(char c);
 
     /**
         Changes the stream current position.
         
         @param pos
-        Offset to seek to.
-        
+            Offset to seek to.
         @param mode
-        One of wxFromStart, wxFromEnd, wxFromCurrent.
+            One of wxFromStart, wxFromEnd, wxFromCurrent.
         
         @returns The new stream position or wxInvalidOffset on error.
     */
@@ -355,7 +346,7 @@ public:
         in the current stream. The data is read until an error is raised
         by one of the two streams.
     */
-    wxOutputStream Write(const void * buffer, size_t size);
+    wxOutputStream Write(const void* buffer, size_t size);
     wxOutputStream Write(wxInputStream& stream_in);
     //@}
 };
@@ -395,7 +386,6 @@ public:
     /**
         Returns @true if this factory can handle the given protocol, MIME type, HTTP
         encoding or file extension.
-        
         When using wxSTREAM_FILEEXT for the second parameter, the first parameter
         can be a complete filename rather than just an extension.
     */
@@ -407,7 +397,6 @@ public:
         type, HTTP encoding or file extension.  Returns a pointer to the class
         factory if found, or @NULL otherwise. It does not give away ownership of the
         factory.
-        
         When using wxSTREAM_FILEEXT for the second parameter, the first parameter
         can be a complete filename rather than just an extension.
     */
@@ -417,8 +406,8 @@ public:
     //@{
     /**
         GetFirst and GetNext can be used to enumerate the available factories.
-        
         For example, to list them:
+        
         GetFirst()/GetNext() return a pointer to a factory or @NULL if no more
         are available. They do not give away ownership of the factory.
     */
@@ -436,15 +425,13 @@ public:
         Returns the protocols, MIME types, HTTP encodings or file extensions
         supported by this factory, as an array of null terminated strings. It does
         not give away ownership of the array or strings.
-        
         For example, to list the file extensions a factory supports:
     */
-    const wxChar * const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL);
+    const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL);
 
     //@{
     /**
         Create a new input or output stream to decompress or compress a given stream.
-        
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
     */
@@ -455,7 +442,7 @@ public:
     //@}
 
     /**
-        Remove the file extension of @e location if it is one of the file
+        Remove the file extension of @a location if it is one of the file
         extensions handled by this factory.
     */
     wxString PopExtension(const wxString& location);
@@ -463,15 +450,12 @@ public:
     /**
         Adds this class factory to the list returned
         by @ref getfirst() GetFirst()/GetNext.
-        
         It is not necessary to do this to use the filter streams. It is usually
         used when implementing streams, typically the implementation will
         add a static instance of its factory class.
-        
         It can also be used to change the order of a factory already in the list,
         bringing it to the front. This isn't a thread safe operation
         so can't be done when other threads are running that will be using the list.
-        
         The list does not take ownership of the factory.
     */
     void PushFront();
@@ -479,10 +463,8 @@ public:
     /**
         Removes this class factory from the list returned
         by @ref getfirst() GetFirst()/GetNext.
-        
         Removing from the list isn't a thread safe operation
         so can't be done when other threads are running that will be using the list.
-        
         The list does not own the factories, so removing a factory does not delete it.
     */
     void Remove();
@@ -510,7 +492,6 @@ public:
     //@{
     /**
         Initializes a "filter" stream.
-        
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
     */
@@ -542,7 +523,6 @@ public:
     //@{
     /**
         Initializes a "filter" stream.
-        
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
     */
@@ -629,13 +609,13 @@ public:
         Returns @true after an attempt has been made to read past the end of the
         stream.
     */
-#define bool Eof()     /* implementation is private */
+    bool Eof();
 
     /**
         Returns the first character in the input queue and removes it,
         blocking until it appears if necessary.
     */
-#define char GetC()     /* implementation is private */
+    char GetC();
 
     /**
         Returns the last number of bytes read.
@@ -653,9 +633,9 @@ public:
         The data is read until an error is raised by one of the two streams.
         
         @returns This function returns a reference on the current object, so the
-                   user can test any states of the stream right away.
+                 user can test any states of the stream right away.
     */
-    wxInputStream Read(void * buffer, size_t size);
+    wxInputStream Read(void* buffer, size_t size);
     Warning Return value
     This function returns a reference on the current object, so the user can test
     any states of the stream right away.
@@ -666,10 +646,9 @@ public:
         Changes the stream current position.
         
         @param pos
-        Offset to seek to.
-        
+            Offset to seek to.
         @param mode
-        One of wxFromStart, wxFromEnd, wxFromCurrent.
+            One of wxFromStart, wxFromEnd, wxFromCurrent.
         
         @returns The new stream position or wxInvalidOffset on error.
     */
@@ -721,24 +700,19 @@ public:
     /**
         This function returns the last error.
         
-        
         @b wxSTREAM_NO_ERROR
-        
         
         No error occurred.
         
         @b wxSTREAM_EOF
         
-        
         An End-Of-File occurred.
         
         @b wxSTREAM_WRITE_ERROR
         
-        
         A generic error occurred on the last write call.
         
         @b wxSTREAM_READ_ERROR
-        
         
         A generic error occurred on the last read call.
     */
@@ -748,14 +722,12 @@ public:
         Returns the length of the stream in bytes. If the length cannot be determined
         (this is always the case for socket streams for example), returns
         @c wxInvalidOffset.
-        
         This function is new since wxWidgets version 2.5.4
     */
     wxFileOffset GetLength();
 
     /**
         GetLength()
-        
         This function returns the size of the stream. For example, for a file it is the
         size of the file.
     */
@@ -764,9 +736,9 @@ public:
     /**
         Returns @true if no error occurred on the stream.
         
-        @sa GetLastError()
+        @see GetLastError()
     */
-#define virtual bool IsOk()     /* implementation is private */
+    virtual bool IsOk();
 
     /**
         Returns @true if the streams supports seeking to arbitrary offsets.
@@ -794,5 +766,5 @@ public:
     /**
         See OnSysRead().
     */
-    size_t OnSysWrite(const void * buffer, size_t bufsize);
+    size_t OnSysWrite(const void* buffer, size_t bufsize);
 };

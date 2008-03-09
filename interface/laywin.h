@@ -91,8 +91,7 @@
     @category{winlayout}
 
     @seealso
-    wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview "Event
-    handling overview"
+    wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview
 */
 class wxLayoutAlgorithm : public wxObject
 {
@@ -108,26 +107,23 @@ public:
     ~wxLayoutAlgorithm();
 
     /**
-        Lays out the children of a normal frame. @e mainWindow is set to occupy the
+        Lays out the children of a normal frame. @a mainWindow is set to occupy the
         remaining space.
-        
         This function simply calls LayoutWindow().
     */
-    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = @NULL);
+    bool LayoutFrame(wxFrame* frame, wxWindow* mainWindow = NULL);
 
     /**
-        Lays out the children of an MDI parent frame. If @e rect is non-@NULL, the
+        Lays out the children of an MDI parent frame. If @a rect is non-@NULL, the
         given rectangle will be used as a starting point instead of the frame's client
         area.
-        
         The MDI client window is set to occupy the remaining space.
     */
-    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = @NULL);
+    bool LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* rect = NULL);
 
     /**
         Lays out the children of a normal frame or other window.
-        
-        @e mainWindow is set to occupy the remaining space. If this is not specified,
+        @a mainWindow is set to occupy the remaining space. If this is not specified,
         then
         the last window that responds to a calculate layout event in query mode will
         get the remaining space
@@ -135,7 +131,7 @@ public:
         and the window will be set
         to the remaining size).
     */
-    bool LayoutWindow(wxWindow* parent, wxWindow* mainWindow = @NULL);
+    bool LayoutWindow(wxWindow* parent, wxWindow* mainWindow = NULL);
 };
 
 
@@ -157,8 +153,7 @@ public:
     @category{miscwnd}
 
     @seealso
-    wxLayoutAlgorithm, wxSashWindow, @ref overview_eventhandlingoverview "Event
-    handling overview"
+    wxLayoutAlgorithm, wxSashWindow, @ref overview_eventhandlingoverview
 */
 class wxSashLayoutWindow : public wxSashWindow
 {
@@ -169,33 +164,29 @@ public:
         other non-control window.
         
         @param parent
-        Pointer to a parent window.
-        
+            Pointer to a parent window.
         @param id
-        Window identifier. If -1, will automatically create an identifier.
-        
+            Window identifier. If -1, will automatically create an identifier.
         @param pos
-        Window position. wxDefaultPosition is (-1, -1) which indicates that
+            Window position. wxDefaultPosition is (-1, -1) which indicates that
         wxSashLayoutWindows
-        should generate a default position for the window. If using the
+            should generate a default position for the window. If using the
         wxSashLayoutWindow class directly, supply
-        an actual position.
-        
+            an actual position.
         @param size
-        Window size. wxDefaultSize is (-1, -1) which indicates that wxSashLayoutWindows
-        should generate a default size for the window.
-        
+            Window size. wxDefaultSize is (-1, -1) which indicates that
+        wxSashLayoutWindows
+            should generate a default size for the window.
         @param style
-        Window style. For window styles, please see wxSashLayoutWindow.
-        
+            Window style. For window styles, please see wxSashLayoutWindow.
         @param name
-        Window name.
+            Window name.
     */
     wxSashLayoutWindow();
     wxSashLayoutWindow(wxSashLayoutWindow* parent, wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
-                       long style = wxCLIP_CHILDREN |  wxSW_3D,
+                       long style = wxCLIP_CHILDREN | wxSW_3D,
                        const wxString& name = "layoutWindow");
     //@}
 
@@ -204,32 +195,28 @@ public:
         any other non-control window.
         
         @param parent
-        Pointer to a parent window.
-        
+            Pointer to a parent window.
         @param id
-        Window identifier. If -1, will automatically create an identifier.
-        
+            Window identifier. If -1, will automatically create an identifier.
         @param pos
-        Window position. wxDefaultPosition is (-1, -1) which indicates that
+            Window position. wxDefaultPosition is (-1, -1) which indicates that
         wxSashLayoutWindows
-        should generate a default position for the window. If using the
+            should generate a default position for the window. If using the
         wxSashLayoutWindow class directly, supply
-        an actual position.
-        
+            an actual position.
         @param size
-        Window size. wxDefaultSize is (-1, -1) which indicates that wxSashLayoutWindows
-        should generate a default size for the window.
-        
+            Window size. wxDefaultSize is (-1, -1) which indicates that
+        wxSashLayoutWindows
+            should generate a default size for the window.
         @param style
-        Window style. For window styles, please see wxSashLayoutWindow.
-        
+            Window style. For window styles, please see wxSashLayoutWindow.
         @param name
-        Window name.
+            Window name.
     */
     bool Create(wxSashLayoutWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxCLIP_CHILDREN |  wxSW_3D,
+                long style = wxCLIP_CHILDREN | wxSW_3D,
                 const wxString& name = "layoutWindow");
 
     /**
@@ -266,7 +253,7 @@ public:
     /**
         Sets the alignment of the window (which edge of the available parent client
         area the window
-        is attached to). @e alignment is one of wxLAYOUT_TOP, wxLAYOUT_LEFT,
+        is attached to). @a alignment is one of wxLAYOUT_TOP, wxLAYOUT_LEFT,
         wxLAYOUT_RIGHT, wxLAYOUT_BOTTOM.
     */
     void SetAlignment(wxLayoutAlignment alignment);
@@ -282,7 +269,7 @@ public:
     /**
         Sets the orientation of the window (the direction the window will stretch in,
         to fill the available
-        parent client area). @e orientation is one of wxLAYOUT_HORIZONTAL,
+        parent client area). @a orientation is one of wxLAYOUT_HORIZONTAL,
         wxLAYOUT_VERTICAL.
     */
     void SetOrientation(wxLayoutOrientation orientation);

@@ -46,7 +46,6 @@ public:
         and/or wxClient::OnMakeConnection
         members should be replaced by functions which construct the new
         connection object.
-        
         If the arguments of the wxConnection constructor are void then
         the wxConnection object manages its own connection buffer,
         allocating memory as needed. A programmer-supplied buffer cannot
@@ -144,7 +143,7 @@ public:
     */
     virtual const void* OnRequest(const wxString& topic,
                                   const wxString& item,
-                                  size_t * size,
+                                  size_t* size,
                                   wxIPCFormat format);
 
     /**
@@ -171,7 +170,6 @@ public:
         server connection's OnPoke() member to
         be called. If size is -1 the size is computed from the string
         length of data.
-        
         Returns @true if successful.
     */
     bool Poke(const wxString& item, const void* data, size_t size,
@@ -186,12 +184,11 @@ public:
         Causes the server connection's OnRequest()
         member to be called. Size may be @NULL or a pointer to a variable
         to receive the size of the requested item.
-        
         Returns a character string (actually a pointer to the
         connection's buffer) if successful, @NULL otherwise. This buffer
         does not need to be deleted.
     */
-    const void* Request(const wxString& item, size_t * size,
+    const void* Request(const wxString& item, size_t* size,
                         wxIPCFormat format = wxIPC_TEXT);
 
     /**
@@ -258,34 +255,31 @@ public:
         overriding the
         OnMakeConnection()
         member to return your own derived connection object.
-        
         Under Unix, the service name may be either an integer port
         identifier in which case an Internet domain socket will be used
         for the communications, or a valid file name (which shouldn't
         exist and will be deleted afterwards) in which case a Unix domain
         socket is created.
-        
         @b SECURITY NOTE: Using Internet domain sockets if extremely
         insecure for IPC as there is absolutely no access control for
         them, use Unix domain sockets whenever possible!
     */
-    wxConnectionBase * MakeConnection(const wxString& host,
-                                      const wxString& service,
-                                      const wxString& topic);
+    wxConnectionBase* MakeConnection(const wxString& host,
+                                     const wxString& service,
+                                     const wxString& topic);
 
     /**
         Called by MakeConnection(), by
         default this simply returns a new wxConnection object. Override
         this method to return a wxConnection descendant customised for the
         application.
-        
         The advantage of deriving your own connection class is that it
         will enable you to intercept messages initiated by the server,
         such as wxConnection::OnAdvise. You
         may also want to store application-specific data in instances of
         the new class.
     */
-    wxConnectionBase * OnMakeConnection();
+    wxConnectionBase* OnMakeConnection();
 
     /**
         Returns @true if this is a valid host name, @false otherwise. This always
@@ -346,12 +340,11 @@ public:
         member to intercept this message and return a connection object of
         either the standard wxConnection type, or (more likely) of a
         user-derived type.
-        
         If the topic is @b STDIO, the application may wish to refuse the
         connection. Under UNIX, when a server is created the
         OnAcceptConnection message is always sent for standard input and
         output, but in the context of DDE messages it doesn't make a lot
         of sense.
     */
-    virtual wxConnectionBase * OnAcceptConnection(const wxString& topic);
+    virtual wxConnectionBase* OnAcceptConnection(const wxString& topic);
 };

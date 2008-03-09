@@ -11,7 +11,7 @@
     @headerfile auibook.h wx/aui/auibook.h
 
     wxAuiNotebook is part of the wxAUI class framework.
-    See also @ref overview_wxauioverview "wxAUI overview".
+    See also @ref overview_wxauioverview.
 
     wxAuiNotebook is a notebook control which implements many features common in
     applications with dockable panes.
@@ -74,17 +74,17 @@ public:
     //@}
 
     /**
-        Adds a page.  If the @e select parameter is @true, calling this will generate a
+        Adds a page.  If the @a select parameter is @true, calling this will generate a
         page change event.
     */
     bool AddPage(wxWindow* page, const wxString& caption,
-                 bool select = @false,
+                 bool select = false,
                  const wxBitmap& bitmap = wxNullBitmap);
 
     /**
         Sets the selection to the next or previous page.
     */
-    void AdvanceSelection(bool forward = @true);
+    void AdvanceSelection(bool forward = true);
 
     /**
         Creates the notebook window.
@@ -151,12 +151,12 @@ public:
     /**
         InsertPage() is similar to AddPage, but allows the ability to specify the
         insert location.
-        If the @e select parameter is @true, calling this will generate a page change
+        If the @a select parameter is @true, calling this will generate a page change
         event.
     */
     bool InsertPage(size_t page_idx, wxWindow* page,
                     const wxString& caption,
-                    bool select = @false,
+                    bool select = false,
                     const wxBitmap& bitmap = wxNullBitmap);
 
     /**
@@ -219,11 +219,11 @@ public:
 
     //@{
     /**
-        Split performs a split operation programmatically. The argument @e page
+        Split performs a split operation programmatically. The argument @a page
         indicates
         the page that will be split off.  This page will also become the active page
         after the
-        split.  The @e direction argument specifies where the pane should go, it should
+        split.  The @a direction argument specifies where the pane should go, it should
         be one
         of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
     */

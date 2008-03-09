@@ -33,7 +33,6 @@ public:
 
     /**
         Returns the control's text.
-        
         Note that the returned string contains the mnemonics (@c  characters) if
         any, use GetLabelText() if they are
         undesired.
@@ -42,7 +41,7 @@ public:
 
     //@{
     /**
-        Returns the control's label, or the given @e label string for the static
+        Returns the control's label, or the given @a label string for the static
         version, without the mnemonics characters.
     */
     const wxString GetLabelText();
@@ -51,8 +50,7 @@ public:
 
     /**
         Sets the item's text.
-        
-        The @c  characters in the @e label are special and indicate that the
+        The @c  characters in the @a label are special and indicate that the
         following character is a mnemonic for this control and can be used to activate
         it from the keyboard (typically by using @e Alt key in combination with
         it). To insert a literal ampersand character, you need to double it, i.e. use

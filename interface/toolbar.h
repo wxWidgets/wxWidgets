@@ -66,37 +66,33 @@ public:
         Constructs a toolbar.
         
         @param parent
-        Pointer to a parent window.
-        
+            Pointer to a parent window.
         @param id
-        Window identifier. If -1, will automatically create an identifier.
-        
+            Window identifier. If -1, will automatically create an identifier.
         @param pos
-        Window position. wxDefaultPosition is (-1, -1) which indicates that wxWidgets
-        should generate a default position for the window. If using the wxWindow class
-        directly, supply
-        an actual position.
-        
+            Window position. wxDefaultPosition is (-1, -1) which indicates that
+        wxWidgets
+            should generate a default position for the window. If using the wxWindow
+        class directly, supply
+            an actual position.
         @param size
-        Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets
-        should generate a default size for the window.
-        
+            Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets
+            should generate a default size for the window.
         @param style
-        Window style. See wxToolBar for details.
-        
+            Window style. See wxToolBar for details.
         @param name
-        Window name.
+            Window name.
         
         @remarks After a toolbar is created, you use AddTool() and
-                   perhaps AddSeparator(), and then you must
-                   call Realize() to construct and display the
-                   toolbar tools.
+                 perhaps AddSeparator(), and then you must call
+                 Realize() to construct and display the toolbar
+                 tools.
     */
     wxToolBar();
     wxToolBar(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
-              long style = wxTB_HORIZONTAL |  wxBORDER_NONE,
+              long style = wxTB_HORIZONTAL | wxBORDER_NONE,
               const wxString& name = wxPanelNameStr);
     //@}
 
@@ -109,7 +105,7 @@ public:
         Adds a new check (or toggle) tool to the toolbar. The parameters are the same
         as in AddTool().
         
-        @sa AddTool()
+        @see AddTool()
     */
     wxToolBarToolBase* AddCheckTool(int toolId,
                                     const wxString& label,
@@ -117,19 +113,18 @@ public:
                                     const wxBitmap& bitmap2,
                                     const wxString& shortHelpString = "",
                                     const wxString& longHelpString = "",
-                                    wxObject* clientData = @NULL);
+                                    wxObject* clientData = NULL);
 
     /**
         Adds any control to the toolbar, typically e.g. a combobox.
         
         @param control
-        The control to be added.
-        
+            The control to be added.
         @param label
-        Text to be displayed near the control.
+            Text to be displayed near the control.
         
         @remarks wxMSW: the label is only displayed if there is enough space
-                   available below the embedded control.
+                 available below the embedded control.
     */
     bool AddControl(wxControl* control, const wxString label = "");
 
@@ -139,11 +134,10 @@ public:
         other words whenever a button in the group is pressed the previously pressed
         button is automatically released. You should avoid having the radio groups of
         only one element as it would be impossible for the user to use such button.
-        
         By default, the first button in the radio group is initially pressed, the
         others are not.
         
-        @sa AddTool()
+        @see AddTool()
     */
     wxToolBarToolBase* AddRadioTool(int toolId,
                                     const wxString& label,
@@ -151,12 +145,12 @@ public:
                                     const wxBitmap& bitmap2,
                                     const wxString& shortHelpString = "",
                                     const wxString& longHelpString = "",
-                                    wxObject* clientData = @NULL);
+                                    wxObject* clientData = NULL);
 
     /**
         Adds a separator for spacing groups of tools.
         
-        @sa AddTool(), SetToolSeparation()
+        @see AddTool(), SetToolSeparation()
     */
     void AddSeparator();
 
@@ -168,43 +162,37 @@ public:
         you to add an existing tool.
         
         @param toolId
-        An integer by which
-        the tool may be identified in subsequent operations.
-        
+            An integer by which
+            the tool may be identified in subsequent operations.
         @param kind
-        May be wxITEM_NORMAL for a normal button (default),
-        wxITEM_CHECK for a checkable tool (such tool stays pressed after it had been
-        toggled) or wxITEM_RADIO for a checkable tool which makes part of a radio
-        group of tools each of which is automatically unchecked whenever another button
-        in the group is checked
-        
+            May be wxITEM_NORMAL for a normal button (default),
+            wxITEM_CHECK for a checkable tool (such tool stays pressed after it had been
+            toggled) or wxITEM_RADIO for a checkable tool which makes part of a radio
+            group of tools each of which is automatically unchecked whenever another
+        button
+            in the group is checked
         @param bitmap1
-        The primary tool bitmap.
-        
+            The primary tool bitmap.
         @param bitmap2
-        The bitmap used when the tool is disabled. If it is equal to
-        wxNullBitmap, the disabled bitmap is automatically generated by greing the
-        normal one.
-        
+            The bitmap used when the tool is disabled. If it is equal to
+            wxNullBitmap, the disabled bitmap is automatically generated by greing the
+            normal one.
         @param shortHelpString
-        This string is used for the tools tooltip
-        
+            This string is used for the tools tooltip
         @param longHelpString
-        This string is shown in the statusbar (if any) of the
-        parent frame when the mouse pointer is inside the tool
-        
+            This string is shown in the statusbar (if any) of the
+            parent frame when the mouse pointer is inside the tool
         @param clientData
-        An optional pointer to client data which can be
-        retrieved later using GetToolClientData().
-        
+            An optional pointer to client data which can be
+            retrieved later using GetToolClientData().
         @param tool
-        The tool to be added.
+            The tool to be added.
         
         @remarks After you have added tools to a toolbar, you must call
-                   Realize() in order to have the tools appear.
+                 Realize() in order to have the tools appear.
         
-        @sa AddSeparator(), AddCheckTool(), AddRadioTool(),
-              InsertTool(), DeleteTool(), Realize()
+        @see AddSeparator(), AddCheckTool(), AddRadioTool(),
+             InsertTool(), DeleteTool(), Realize()
     */
     wxToolBarToolBase* AddTool(int toolId, const wxString& label,
                                const wxBitmap& bitmap1,
@@ -216,7 +204,7 @@ public:
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelpString = "",
                                const wxString& longHelpString = "",
-                               wxObject* clientData = @NULL);
+                               wxObject* clientData = NULL);
     wxToolBarToolBase* AddTool(wxToolBarToolBase* tool);
     //@}
 
@@ -229,13 +217,11 @@ public:
         Removes the specified tool from the toolbar and deletes it. If you don't want
         to delete the tool, but just to remove it from the toolbar (to possibly add it
         back later), you may use RemoveTool() instead.
-        
         Note that it is unnecessary to call Realize() for the
         change to take place, it will happen immediately.
-        
         Returns @true if the tool was deleted, @false otherwise.
         
-        @sa DeleteToolByPos()
+        @see DeleteToolByPos()
     */
     bool DeleteTool(int toolId);
 
@@ -249,26 +235,25 @@ public:
         Enables or disables the tool.
         
         @param toolId
-        Tool to enable or disable.
-        
+            Tool to enable or disable.
         @param enable
-        If @true, enables the tool, otherwise disables it.
+            If @true, enables the tool, otherwise disables it.
         
         @remarks Some implementations will change the visible state of the tool
-                   to indicate that it is disabled.
+                 to indicate that it is disabled.
         
-        @sa GetToolEnabled(), ToggleTool()
+        @see GetToolEnabled(), ToggleTool()
     */
     void EnableTool(int toolId, bool enable);
 
     /**
-        Returns a pointer to the tool identified by @e id or
+        Returns a pointer to the tool identified by @a id or
         @NULL if no corresponding tool is found.
     */
     wxToolBarToolBase* FindById(int id);
 
     /**
-        Returns a pointer to the control identified by @e id or
+        Returns a pointer to the control identified by @a id or
         @NULL if no corresponding control is found.
     */
     wxControl* FindControl(int id);
@@ -277,10 +262,9 @@ public:
         Finds a tool for the given mouse position.
         
         @param x
-        X position.
-        
+            X position.
         @param y
-        Y position.
+            Y position.
         
         @returns A pointer to a tool if a tool is found, or @NULL otherwise.
         
@@ -292,7 +276,7 @@ public:
         Returns the left/right and top/bottom margins, which are also used for
         inter-toolspacing.
         
-        @sa SetMargins()
+        @see SetMargins()
     */
     wxSize GetMargins();
 
@@ -301,10 +285,10 @@ public:
         size is 16 by 15 pixels.
         
         @remarks Note that this is the size of the bitmap you pass to
-                   AddTool(), and not the eventual size of the
-                   tool button.
+                 AddTool(), and not the eventual size of the
+                 tool button.
         
-        @sa SetToolBitmapSize(), GetToolSize()
+        @see SetToolBitmapSize(), GetToolSize()
     */
     wxSize GetToolBitmapSize();
 
@@ -312,7 +296,7 @@ public:
         Get any client data associated with the tool.
         
         @param toolId
-        Id of the tool, as passed to AddTool().
+            Id of the tool, as passed to AddTool().
         
         @returns Client data, or @NULL if there is none.
     */
@@ -322,11 +306,11 @@ public:
         Called to determine whether a tool is enabled (responds to user input).
         
         @param toolId
-        Id of the tool in question.
+            Id of the tool in question.
         
         @returns @true if the tool is enabled, @false otherwise.
         
-        @sa EnableTool()
+        @see EnableTool()
     */
     bool GetToolEnabled(int toolId);
 
@@ -334,16 +318,16 @@ public:
         Returns the long help for the given tool.
         
         @param toolId
-        The tool in question.
+            The tool in question.
         
-        @sa SetToolLongHelp(), SetToolShortHelp()
+        @see SetToolLongHelp(), SetToolShortHelp()
     */
     wxString GetToolLongHelp(int toolId);
 
     /**
         Returns the value used for packing tools.
         
-        @sa SetToolPacking()
+        @see SetToolPacking()
     */
     int GetToolPacking();
 
@@ -356,7 +340,7 @@ public:
     /**
         Returns the default separator size.
         
-        @sa SetToolSeparation()
+        @see SetToolSeparation()
     */
     int GetToolSeparation();
 
@@ -364,9 +348,9 @@ public:
         Returns the short help for the given tool.
         
         @param toolId
-        The tool in question.
+            The tool in question.
         
-        @sa GetToolLongHelp(), SetToolShortHelp()
+        @see GetToolLongHelp(), SetToolShortHelp()
     */
     wxString GetToolShortHelp(int toolId);
 
@@ -375,7 +359,7 @@ public:
         because
         of added 3D effects.
         
-        @sa SetToolBitmapSize(), GetToolBitmapSize()
+        @see SetToolBitmapSize(), GetToolBitmapSize()
     */
     wxSize GetToolSize();
 
@@ -383,11 +367,11 @@ public:
         Gets the on/off state of a toggle tool.
         
         @param toolId
-        The tool in question.
+            The tool in question.
         
         @returns @true if the tool is toggled on, @false otherwise.
         
-        @sa ToggleTool()
+        @see ToggleTool()
     */
     bool GetToolState(int toolId);
 
@@ -398,105 +382,94 @@ public:
 
     /**
         Inserts the control into the toolbar at the given position.
-        
         You must call Realize() for the change to take place.
         
-        @sa AddControl(), InsertTool()
+        @see AddControl(), InsertTool()
     */
-    wxToolBarToolBase * InsertControl(size_t pos,
-                                      wxControl * control);
+    wxToolBarToolBase* InsertControl(size_t pos, wxControl* control);
 
     /**
         Inserts the separator into the toolbar at the given position.
-        
         You must call Realize() for the change to take place.
         
-        @sa AddSeparator(), InsertTool()
+        @see AddSeparator(), InsertTool()
     */
-    wxToolBarToolBase * InsertSeparator(size_t pos);
+    wxToolBarToolBase* InsertSeparator(size_t pos);
 
     //@{
     /**
         Inserts the tool with the specified attributes into the toolbar at the given
         position.
-        
         You must call Realize() for the change to take place.
         
-        @sa AddTool(), InsertControl(), InsertSeparator()
+        @see AddTool(), InsertControl(), InsertSeparator()
     */
-    wxToolBarToolBase * InsertTool(size_t pos, int toolId,
-                                   const wxBitmap& bitmap1,
-                                   const wxBitmap& bitmap2 = wxNullBitmap,
-                                   bool isToggle = @false,
-                                   wxObject* clientData = @NULL,
-                                   const wxString& shortHelpString = "",
-                                   const wxString& longHelpString = "");
-    wxToolBarToolBase * InsertTool(size_t pos,
-                                   wxToolBarToolBase* tool);
+    wxToolBarToolBase* InsertTool(size_t pos, int toolId,
+                                  const wxBitmap& bitmap1,
+                                  const wxBitmap& bitmap2 = wxNullBitmap,
+                                  bool isToggle = false,
+                                  wxObject* clientData = NULL,
+                                  const wxString& shortHelpString = "",
+                                  const wxString& longHelpString = "");
+    wxToolBarToolBase* InsertTool(size_t pos,
+                                  wxToolBarToolBase* tool);
     //@}
 
     /**
         Called when the user clicks on a tool with the left mouse button.
-        
         This is the old way of detecting tool clicks; although it will still work,
         you should use the EVT_MENU or EVT_TOOL macro instead.
         
         @param toolId
-        The identifier passed to AddTool().
-        
+            The identifier passed to AddTool().
         @param toggleDown
-        @true if the tool is a toggle and the toggle is down, otherwise is @false.
+            @true if the tool is a toggle and the toggle is down, otherwise is @false.
         
         @returns If the tool is a toggle and this function returns @false, the
-                   toggle toggle state (internal and visual) will not be
-                   changed. This provides a way of specifying that
-                   toggle operations are not permitted in some
-                   circumstances.
+                 toggle toggle state (internal and visual) will not be
+                 changed. This provides a way of specifying that toggle
+                 operations are not permitted in some circumstances.
         
-        @sa OnMouseEnter(), OnRightClick()
+        @see OnMouseEnter(), OnRightClick()
     */
     bool OnLeftClick(int toolId, bool toggleDown);
 
     /**
         This is called when the mouse cursor moves into a tool or out of
         the toolbar.
-        
         This is the old way of detecting mouse enter events; although it will still
         work,
         you should use the EVT_TOOL_ENTER macro instead.
         
         @param toolId
-        Greater than -1 if the mouse cursor has moved into the tool,
-        or -1 if the mouse cursor has moved. The
-        programmer can override this to provide extra information about the tool,
-        such as a short description on the status line.
+            Greater than -1 if the mouse cursor has moved into the tool,
+            or -1 if the mouse cursor has moved. The
+            programmer can override this to provide extra information about the tool,
+            such as a short description on the status line.
         
         @remarks With some derived toolbar classes, if the mouse moves quickly
-                   out of the toolbar, wxWidgets may not be able to
-                   detect it. Therefore this function may not always be
-                   called when expected.
+                 out of the toolbar, wxWidgets may not be able to detect
+                 it. Therefore this function may not always be called
+                 when expected.
     */
     void OnMouseEnter(int toolId);
 
     /**
         Called when the user clicks on a tool with the right mouse button. The
         programmer should override this function to detect right tool clicks.
-        
         This is the old way of detecting tool right clicks; although it will still work,
         you should use the EVT_TOOL_RCLICKED macro instead.
         
         @param toolId
-        The identifier passed to AddTool().
-        
+            The identifier passed to AddTool().
         @param x
-        The x position of the mouse cursor.
-        
+            The x position of the mouse cursor.
         @param y
-        The y position of the mouse cursor.
+            The y position of the mouse cursor.
         
         @remarks A typical use of this member might be to pop up a menu.
         
-        @sa OnMouseEnter(), OnLeftClick()
+        @see OnMouseEnter(), OnLeftClick()
     */
     void OnRightClick(int toolId, float x, float y);
 
@@ -508,13 +481,12 @@ public:
     /**
         Removes the given tool from the toolbar but doesn't delete it. This allows to
         insert/add this tool back to this (or another) toolbar later.
-        
         Note that it is unnecessary to call Realize() for the
         change to take place, it will happen immediately.
         
-        @sa DeleteTool()
+        @see DeleteTool()
     */
-    wxToolBarToolBase * RemoveTool(int id);
+    wxToolBarToolBase* RemoveTool(int id);
 
     /**
         Sets the bitmap resource identifier for specifying tool bitmaps as indices
@@ -525,7 +497,6 @@ public:
     /**
         Sets the dropdown menu for the tool given by its @e id. The tool itself will
         delete the menu when it's no longer needed.
-        
         If you define a EVT_TOOL_DROPDOWN handler in your program, you must call
         wxEvent::Skip from it or the menu won't be displayed.
     */
@@ -536,19 +507,17 @@ public:
         Set the values to be used as margins for the toolbar.
         
         @param size
-        Margin size.
-        
+            Margin size.
         @param x
-        Left margin, right margin and inter-tool separation value.
-        
+            Left margin, right margin and inter-tool separation value.
         @param y
-        Top margin, bottom margin and inter-tool separation value.
+            Top margin, bottom margin and inter-tool separation value.
         
         @remarks This must be called before the tools are added if absolute
-                   positioning is to be used, and the default
-                   (zero-size) margins are to be overridden.
+                 positioning is to be used, and the default (zero-size)
+                 margins are to be overridden.
         
-        @sa GetMargins(), wxSize
+        @see GetMargins(), wxSize
     */
     void SetMargins(const wxSize& size);
     void SetMargins(int x, int y);
@@ -559,12 +528,12 @@ public:
         pixels.
         
         @param size
-        The size of the bitmaps in the toolbar.
+            The size of the bitmaps in the toolbar.
         
         @remarks This should be called to tell the toolbar what the tool bitmap
-                   size is. Call it before you add tools.
+                 size is. Call it before you add tools.
         
-        @sa GetToolBitmapSize(), GetToolSize()
+        @see GetToolBitmapSize(), GetToolSize()
     */
     void SetToolBitmapSize(const wxSize& size);
 
@@ -586,15 +555,14 @@ public:
         Sets the long help for the given tool.
         
         @param toolId
-        The tool in question.
-        
+            The tool in question.
         @param helpString
-        A string for the long help.
+            A string for the long help.
         
         @remarks You might use the long help for displaying the tool purpose on
-                   the status line.
+                 the status line.
         
-        @sa GetToolLongHelp(), SetToolShortHelp(),
+        @see GetToolLongHelp(), SetToolShortHelp(),
     */
     void SetToolLongHelp(int toolId, const wxString& helpString);
 
@@ -608,13 +576,13 @@ public:
         Sets the value used for spacing tools. The default value is 1.
         
         @param packing
-        The value for packing.
+            The value for packing.
         
         @remarks The packing is used for spacing in the vertical direction if the
-                   toolbar is horizontal, and for spacing in the
-                   horizontal direction if the toolbar is vertical.
+                 toolbar is horizontal, and for spacing in the
+                 horizontal direction if the toolbar is vertical.
         
-        @sa GetToolPacking()
+        @see GetToolPacking()
     */
     void SetToolPacking(int packing);
 
@@ -622,9 +590,9 @@ public:
         Sets the default separator size. The default value is 5.
         
         @param separation
-        The separator size.
+            The separator size.
         
-        @sa AddSeparator()
+        @see AddSeparator()
     */
     void SetToolSeparation(int separation);
 
@@ -632,15 +600,14 @@ public:
         Sets the short help for the given tool.
         
         @param toolId
-        The tool in question.
-        
+            The tool in question.
         @param helpString
-        The string for the short help.
+            The string for the short help.
         
         @remarks An application might use short help for identifying the tool
-                   purpose in a tooltip.
+                 purpose in a tooltip.
         
-        @sa GetToolShortHelp(), SetToolLongHelp()
+        @see GetToolShortHelp(), SetToolLongHelp()
     */
     void SetToolShortHelp(int toolId, const wxString& helpString);
 
@@ -648,10 +615,9 @@ public:
         Toggles a tool on or off. This does not cause any event to get emitted.
         
         @param toolId
-        Tool in question.
-        
+            Tool in question.
         @param toggle
-        If @true, toggles the tool on, otherwise toggles it off.
+            If @true, toggles the tool on, otherwise toggles it off.
         
         @remarks Only applies to a tool that has been specified as a toggle tool.
     */

@@ -51,7 +51,7 @@ public:
         Very important: the contents of the text control could be containing an invalid
         representation of the entity which can be chosen through the picker (e.g. the user entered an invalid colour syntax because of a typo). Thus you should never parse the content of the textctrl to get the user's input; rather use the derived-class getter (e.g. wxColourPickerCtrl::GetColour, wxFilePickerCtrl::GetPath, etc).
     */
-    wxTextCtrl * GetTextCtrl();
+    wxTextCtrl* GetTextCtrl();
 
     /**
         Returns the proportion value of the text control.
@@ -86,7 +86,7 @@ public:
     /**
         Sets the picker control as growable when @c grow is @true.
     */
-    void SetPickerCtrlGrowable(bool grow = @true);
+    void SetPickerCtrlGrowable(bool grow = true);
 
     /**
         Sets the proportion value of the picker.
@@ -98,7 +98,7 @@ public:
         Sets the text control as growable when @c grow is @true.
         This function can be used only when HasTextCtrl() returns @true.
     */
-    void SetTextCtrlGrowable(bool grow = @true);
+    void SetTextCtrlGrowable(bool grow = true);
 
     /**
         Sets the proportion value of the text control.

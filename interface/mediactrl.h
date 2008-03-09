@@ -59,32 +59,24 @@ public:
         to see if wxMediaCtrl is available on the system.
         
         parent
-        parent of this control.  Must not be @NULL.
-        
+            parent of this control.  Must not be @NULL.
         @param id
-        id to use for events
-        
+            id to use for events
         @param fileName
-        If not empty, the path of a file to open.
-        
+            If not empty, the path of a file to open.
         @param pos
-        Position to put control at.
-        
+            Position to put control at.
         @param size
-        Size to put the control at and to stretch movie to.
-        
+            Size to put the control at and to stretch movie to.
         @param style
-        Optional styles.
-        
+            Optional styles.
         @param szBackend
-        Name of backend you want to use, leave blank to make
-        wxMediaCtrl figure it out.
-        
+            Name of backend you want to use, leave blank to make
+            wxMediaCtrl figure it out.
         @param validator
-        validator to use.
-        
+            validator to use.
         @param name
-        Window name.
+            Window name.
     */
     wxMediaCtrl();
     wxMediaCtrl(wxWindow* parent, wxWindowID id);
@@ -97,11 +89,9 @@ public:
         to do to choose a specific backend is to pass the
         name of the backend class to
         Create().
-        
         The following are valid backend identifiers -
         
         @b wxMEDIABACKEND_DIRECTSHOW
-        
         
         
         Use ActiveMovie/DirectShow.  Uses the native ActiveMovie
@@ -112,13 +102,10 @@ public:
         
         @b wxMEDIABACKEND_QUICKTIME
         
-        
         Use QuickTime.  Mac Only.
         WARNING: May not working correctly embedded in a wxNotebook.
         
-        
         @b wxMEDIABACKEND_GSTREAMER
-        
         
         Use GStreamer.  Unix Only. Requires GStreamer 0.8 along
         with at the very least the xvimagesink, xoverlay, and
@@ -127,7 +114,6 @@ public:
         to play mp3s, etc.
         
         @b wxMEDIABACKEND_WMP10
-        
         
         Uses Windows Media Player 10 (Windows only) - works on mobile
         machines with Windows Media Player 10 and desktop machines with
@@ -157,32 +143,24 @@ public:
         use, wxMediaCtrl tries each of its backends until one that can render the path referred to by fileName can be found.
         
         parent
-        parent of this control.  Must not be @NULL.
-        
+            parent of this control.  Must not be @NULL.
         @param id
-        id to use for events
-        
+            id to use for events
         @param fileName
-        If not empty, the path of a file to open.
-        
+            If not empty, the path of a file to open.
         @param pos
-        Position to put control at.
-        
+            Position to put control at.
         @param size
-        Size to put the control at and to stretch movie to.
-        
+            Size to put the control at and to stretch movie to.
         @param style
-        Optional styles.
-        
+            Optional styles.
         @param szBackend
-        Name of backend you want to use, leave blank to make
-        wxMediaCtrl figure it out.
-        
+            Name of backend you want to use, leave blank to make
+            wxMediaCtrl figure it out.
         @param validator
-        validator to use.
-        
+            validator to use.
         @param name
-        Window name.
+            Window name.
     */
     bool Create(wxWindow* parent, wxWindowID id);
 
@@ -192,13 +170,10 @@ public:
         in wxMediaBackend correspond to those in wxMediaCtrl except for CreateControl
         which does the actual creation of the control, in cases where a custom control
         is not needed you may simply call wxControl::Create.
-        
         You need to make sure to use the DECLARE_CLASS and IMPLEMENT_CLASS macros.
-        
         The only real tricky part is that you need to make sure the file in compiled
         in, which if there are just backends in there will not happen and you may need
         to use a force link hack (see http://www.wxwidgets.org/wiki/index.php/RTTI).
-        
         This is a rather simple example of how to create a backend in the
         wxActiveXContainer documentation.
     */
@@ -222,19 +197,15 @@ public:
     /**
         Obtains the state the playback of the media is in -
         
-        
         @b wxMEDIASTATE_STOPPED
-        
         
         The movie has stopped.
         
         @b wxMEDIASTATE_PAUSED
         
-        
         The movie is paused.
         
         @b wxMEDIASTATE_PLAYING
-        
         
         The movie is currently playing.
     */
@@ -274,7 +245,6 @@ public:
         event to its parent window, at which point the event handler
         can choose to veto the event, preventing the stream from actually
         stopping.
-        
         Example:
         
         When wxMediaCtrl stops, either by the EVT_MEDIA_STOP not being
@@ -286,7 +256,6 @@ public:
         because some streams are not seekable, and when stop is called
         on them they return to the beginning, thus wxMediaCtrl tries
         to keep consistant for all types of media.
-        
         Note that when changing the state of the media through Play()
         and other methods, the media may not actually be in the
         wxMEDIASTATE_PLAYING, for example. If you are relying on the
@@ -329,13 +298,11 @@ public:
         since it relies on native system calls that may not technically
         have mp3 decoding available, for example, it falls outside the
         realm of licensing restrictions).
-        
         For general operation, all you need to do is call
         Load() to load the file
         you want to render, catch the EVT_MEDIA_LOADED event,
         and then call Play()
         to show the video/audio of the media in that event.
-        
         More complex operations are generally more heavily dependant on the
         capabilities of the backend.  For example, QuickTime cannot set
         the playback rate of certain streaming media - while DirectShow is
@@ -375,24 +342,19 @@ public:
         default controls provided by the toolkit. The function takes a
         @c wxMediaCtrlPlayerControls enumeration as follows:
         
-        
         @b wxMEDIACTRLPLAYERCONTROLS_NONE
-        
         
         No controls. return wxMediaCtrl to it's default state.
         
         @b wxMEDIACTRLPLAYERCONTROLS_STEP
         
-        
         Step controls like fastfoward, step one frame etc.
         
         @b wxMEDIACTRLPLAYERCONTROLS_VOLUME
         
-        
         Volume controls like the speaker icon, volume slider, etc.
         
         @b wxMEDIACTRLPLAYERCONTROLS_DEFAULT
-        
         
         Default controls for the toolkit. Currently a typedef for
         wxMEDIACTRLPLAYERCONTROLS_STEP and wxMEDIACTRLPLAYERCONTROLS_VOLUME.
@@ -406,7 +368,6 @@ public:
 
     /**
         Stops the media.
-        
         See Operation for an overview of how
         stopping works.
     */
@@ -429,7 +390,6 @@ public:
         In addition, the backend may modify GetBestSize() to include the
         size of the extra controls - so if you want the real size of the
         video just disable ShowPlayerControls().
-        
         The idea with setting GetBestSize to the size of the video is
         that GetBestSize is a wxWindow-derived function that is called
         when sizers on a window recalculate. What this means is that

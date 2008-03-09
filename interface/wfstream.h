@@ -27,7 +27,6 @@ public:
         Associates wxTempFileOutputStream with the file to be replaced and opens it.
         You should use
         wxStreamBase::IsOk to verify if the constructor succeeded.
-        
         Call Commit() or wxOutputStream::Close to
         replace the old file and close this one. Calling Discard()
         (or allowing the destructor to do it) will discard the changes.
@@ -78,9 +77,9 @@ public:
         Initializes a file stream in write-only mode using the file descriptor @e fp.
     */
     wxFFileOutputStream(const wxString& filename,
-                        const wxString& mode="w+b");
+                        const wxString& mode = "w+b");
     wxFFileOutputStream(wxFFile& file);
-    wxFFileOutputStream(FILE * fp);
+    wxFFileOutputStream(FILE* fp);
     //@}
 
     /**
@@ -91,7 +90,7 @@ public:
     /**
         Returns @true if the stream is initialized and ready.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 };
 
 
@@ -134,7 +133,7 @@ public:
     /**
         Returns @true if the stream is initialized and ready.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 };
 
 
@@ -177,7 +176,7 @@ public:
     /**
         Returns @true if the stream is initialized and ready.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 };
 
 
@@ -211,7 +210,7 @@ public:
     wxFFileInputStream(const wxString& filename,
                        const wxString& mode = "rb");
     wxFFileInputStream(wxFFile& file);
-    wxFFileInputStream(FILE * fp);
+    wxFFileInputStream(FILE* fp);
     //@}
 
     /**
@@ -222,7 +221,7 @@ public:
     /**
         Returns @true if the stream is initialized and ready.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 };
 
 

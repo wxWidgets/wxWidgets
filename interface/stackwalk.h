@@ -71,8 +71,7 @@ public:
         number of them (this can be useful when Walk() is called from some known
         location and you don't want to see the first few frames anyhow; also
         notice that Walk() frame itself is not included if skip = 1).
-        
-        Up to @e maxDepth frames are walked from the innermost to the outermost one.
+        Up to @a maxDepth frames are walked from the innermost to the outermost one.
     */
     void Walk(size_t skip = 1, size_t maxDepth = 200);
 
@@ -80,8 +79,7 @@ public:
         Enumerate stack frames from the location of uncaught exception.
         This method can only be called from
         wxApp::OnFatalException.
-        
-        Up to @e maxDepth frames are walked from the innermost to the outermost one.
+        Up to @a maxDepth frames are walked from the innermost to the outermost one.
     */
     void WalkFromException(size_t maxDepth = 200);
 };
@@ -113,7 +111,6 @@ public:
     /**
         Return the name of the file containing this frame, empty if
         unavailable (typically because debug info is missing).
-        
         Use HasSourceLocation() to check whether
         the file name is available.
     */
@@ -127,7 +124,7 @@ public:
     /**
         Return the line number of this frame, 0 if unavailable.
         
-        @sa GetFileName()
+        @see GetFileName()
     */
     size_t GetLine();
 
@@ -151,14 +148,12 @@ public:
         Get the name, type and value (in text form) of the given parameter.
         Any pointer may be @NULL if you're not interested in the corresponding
         value.
-        
         Return @true if at least some values could be retrieved.
-        
         This function currently is only implemented under Win32 and requires a PDB
         file.
     */
-    bool GetParam(size_t n, wxString * type, wxString * name,
-                  wxString * value);
+    bool GetParam(size_t n, wxString* type, wxString* name,
+                  wxString* value);
 
     /**
         Return the number of parameters of this function (may return 0 if we

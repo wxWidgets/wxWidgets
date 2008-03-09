@@ -37,7 +37,7 @@ public:
         optional margin. Implicitly, this is relative to the top edge of the other
         window.
     */
-    void Above(wxWindow * otherWin, int margin = 0);
+    void Above(wxWindow* otherWin, int margin = 0);
 
     /**
         Constrains this edge or dimension to be the given absolute value.
@@ -52,14 +52,14 @@ public:
         to have a default size, such as a button, which may take its size
         from the size of the button label.
     */
-#define void AsIs()     /* implementation is private */
+    void AsIs();
 
     /**
         Constrains this edge to be below the given window, with an
         optional margin. Implicitly, this is relative to the bottom edge of the other
         window.
     */
-    void Below(wxWindow * otherWin, int margin = 0);
+    void Below(wxWindow* otherWin, int margin = 0);
 
     /**
         The @e wxEdge enumerated type specifies the type of edge or dimension of a
@@ -67,31 +67,25 @@ public:
         
         wxLeft
         
-        
         The left edge.
         
         wxTop
-        
         
         The top edge.
         
         wxRight
         
-        
         The right edge.
         
         wxBottom
-        
         
         The bottom edge.
         
         wxCentreX
         
-        
         The x-coordinate of the centre of the window.
         
         wxCentreY
-        
         
         The y-coordinate of the centre of the window.
         
@@ -104,11 +98,9 @@ public:
         
         wxUnconstrained
         
-        
         The edge or dimension is unconstrained (the default for edges.
         
         wxAsIs
-        
         
         The edge or dimension is to be taken from the current window position or size
         (the
@@ -116,36 +108,29 @@ public:
         
         wxAbove
         
-        
         The edge should be above another edge.
         
         wxBelow
-        
         
         The edge should be below another edge.
         
         wxLeftOf
         
-        
         The edge should be to the left of another edge.
         
         wxRightOf
-        
         
         The edge should be to the right of another edge.
         
         wxSameAs
         
-        
         The edge or dimension should be the same as another edge or dimension.
         
         wxPercentOf
         
-        
         The edge or dimension should be a percentage of another edge or dimension.
         
         wxAbsolute
-        
         
         The edge or dimension should be a given absolute value.
     */
@@ -156,36 +141,36 @@ public:
         optional margin. Implicitly, this is relative to the left edge of the other
         window.
     */
-    void LeftOf(wxWindow * otherWin, int margin = 0);
+    void LeftOf(wxWindow* otherWin, int margin = 0);
 
     /**
         Constrains this edge or dimension to be to a percentage of the given window,
         with an
         optional margin.
     */
-    void PercentOf(wxWindow * otherWin, wxEdge edge, int per);
+    void PercentOf(wxWindow* otherWin, wxEdge edge, int per);
 
     /**
         Constrains this edge to be to the right of the given window, with an
         optional margin. Implicitly, this is relative to the right edge of the other
         window.
     */
-    void RightOf(wxWindow * otherWin, int margin = 0);
+    void RightOf(wxWindow* otherWin, int margin = 0);
 
     /**
         Constrains this edge or dimension to be to the same as the edge of the given
         window, with an
         optional margin.
     */
-    void SameAs(wxWindow * otherWin, wxEdge edge, int margin = 0);
+    void SameAs(wxWindow* otherWin, wxEdge edge, int margin = 0);
 
     /**
         Sets the properties of the constraint. Normally called by one of the convenience
         functions such as Above, RightOf, SameAs.
     */
-#define void Set(wxRelationship rel, wxWindow * otherWin,
-    wxEdge otherEdge, int value = 0,
-                                  int margin = 0)     /* implementation is private */
+    void Set(wxRelationship rel, wxWindow* otherWin,
+             wxEdge otherEdge, int value = 0,
+             int margin = 0);
 
     /**
         Sets this edge or dimension to be unconstrained, that is, dependent on
@@ -253,56 +238,48 @@ public:
 
     /**
         wxIndividualLayoutConstraint bottom
-        
         Constraint for the bottom edge.
     */
 
 
     /**
         wxIndividualLayoutConstraint centreX
-        
         Constraint for the horizontal centre point.
     */
 
 
     /**
         wxIndividualLayoutConstraint centreY
-        
         Constraint for the vertical centre point.
     */
 
 
     /**
         wxIndividualLayoutConstraint height
-        
         Constraint for the height.
     */
 
 
     /**
         wxIndividualLayoutConstraint left
-        
         Constraint for the left-hand edge.
     */
 
 
     /**
         wxIndividualLayoutConstraint right
-        
         Constraint for the right-hand edge.
     */
 
 
     /**
         wxIndividualLayoutConstraint top
-        
         Constraint for the top edge.
     */
 
 
     /**
         wxIndividualLayoutConstraint width
-        
         Constraint for the width.
     */
 };

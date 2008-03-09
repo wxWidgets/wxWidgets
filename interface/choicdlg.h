@@ -28,45 +28,62 @@ public:
         Constructor taking an array of wxString choices.
         
         @param parent
-        Parent window.
-        
+            Parent window.
         @param message
-        Message to show on the dialog.
-        
+            Message to show on the dialog.
         @param caption
-        The dialog caption.
-        
+            The dialog caption.
         @param n
-        The number of choices.
-        
+            The number of choices.
         @param choices
-        An array of strings, or a string list, containing the choices.
-        
+            An array of strings, or a string list, containing the choices.
         @param style
-        A dialog style (bitlist) containing flags chosen from standard
-        dialog styles and the following:
+            A dialog style (bitlist) containing flags chosen from standard
+            dialog styles and the following:
         
         
-        wxOK
         
         
-        Show an OK button.
-        
-        wxCANCEL
         
         
-        Show a Cancel button.
         
-        wxCENTRE
+            wxOK
         
         
-        Centre the message. Not Windows.
         
-        The default value is equivalent to wxDEFAULT_DIALOG_STYLE |  wxRESIZE_BORDER |
-        wxOK |  wxCANCEL |  wxCENTRE.
         
+            Show an OK button.
+        
+        
+        
+        
+        
+            wxCANCEL
+        
+        
+        
+        
+            Show a Cancel button.
+        
+        
+        
+        
+        
+            wxCENTRE
+        
+        
+        
+        
+            Centre the message. Not Windows.
+        
+        
+        
+        
+        
+            The default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+        wxRESIZE_BORDER |  wxOK |  wxCANCEL |  wxCENTRE.
         @param pos
-        Dialog position. Not Windows.
+            Dialog position. Not Windows.
         
         @remarks Use ShowModal() to show the dialog.
     */
@@ -124,49 +141,65 @@ public:
         Constructor, taking an array of wxString choices and optional client data.
         
         @param parent
-        Parent window.
-        
+            Parent window.
         @param message
-        Message to show on the dialog.
-        
+            Message to show on the dialog.
         @param caption
-        The dialog caption.
-        
+            The dialog caption.
         @param n
-        The number of choices.
-        
+            The number of choices.
         @param choices
-        An array of strings, or a string list, containing the choices.
-        
+            An array of strings, or a string list, containing the choices.
         @param clientData
-        An array of client data to be associated with the items.
-        See GetSelectionClientData.
-        
+            An array of client data to be associated with the items.
+            See GetSelectionClientData.
         @param style
-        A dialog style (bitlist) containing flags chosen from standard
-        dialog styles and the following:
+            A dialog style (bitlist) containing flags chosen from standard
+            dialog styles and the following:
         
         
-        wxOK
         
         
-        Show an OK button.
-        
-        wxCANCEL
         
         
-        Show a Cancel button.
         
-        wxCENTRE
+            wxOK
         
         
-        Centre the message. Not Windows.
         
-        The default value is equivalent to wxDEFAULT_DIALOG_STYLE |  wxRESIZE_BORDER |
-        wxOK |  wxCANCEL |  wxCENTRE.
         
+            Show an OK button.
+        
+        
+        
+        
+        
+            wxCANCEL
+        
+        
+        
+        
+            Show a Cancel button.
+        
+        
+        
+        
+        
+            wxCENTRE
+        
+        
+        
+        
+            Centre the message. Not Windows.
+        
+        
+        
+        
+        
+            The default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+        wxRESIZE_BORDER |  wxOK |  wxCANCEL |  wxCENTRE.
         @param pos
-        Dialog position. Not Windows.
+            Dialog position. Not Windows.
         
         @remarks Use ShowModal() to show the dialog.
     */
@@ -174,14 +207,14 @@ public:
                          const wxString& caption,
                          int n,
                          const wxString* choices,
-                         void** clientData = @NULL,
+                         void** clientData = NULL,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
     wxSingleChoiceDialog(wxWindow* parent,
                          const wxString& message,
                          const wxString& caption,
                          const wxArrayString& choices,
-                         void** clientData = @NULL,
+                         void** clientData = NULL,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
     //@}
@@ -225,22 +258,22 @@ public:
 int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& aChoices,
-                           wxWindow * parent = @NULL,
+                           wxWindow* parent = NULL,
                            int x = -1,
                            int y = -1,
-                           bool centre = @true,
-                           int width=150,
-                           int height=200);
+                           bool centre = true,
+                           int width = 150,
+                           int height = 200);
 int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
                            int n,
                            const wxString& choices[],
-                           wxWindow * parent = @NULL,
+                           wxWindow* parent = NULL,
                            int x = -1,
                            int y = -1,
-                           bool centre = @true,
-                           int width=150,
-                           int height=200);
+                           bool centre = true,
+                           int width = 150,
+                           int height = 200);
 //@}
 
 //@{
@@ -250,33 +283,31 @@ int wxGetSingleChoiceIndex(const wxString& message,
     string or Cancel to return the empty string. Use
     wxGetSingleChoiceIndex if empty string is a
     valid choice and if you want to be able to detect pressing Cancel reliably.
-
     You may pass the list of strings to choose from either using @e choices
-    which is an array of @e n strings for the listbox or by using a single
-    @e aChoices parameter of type wxArrayString.
-
-    If @e centre is @true, the message text (which may include new line
+    which is an array of @a n strings for the listbox or by using a single
+    @a aChoices parameter of type wxArrayString.
+    If @a centre is @true, the message text (which may include new line
     characters) is centred; if @false, the message is left-justified.
 */
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& aChoices,
-                           wxWindow * parent = @NULL,
+                           wxWindow* parent = NULL,
                            int x = -1,
                            int y = -1,
-                           bool centre = @true,
-                           int width=150,
-                           int height=200);
+                           bool centre = true,
+                           int width = 150,
+                           int height = 200);
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            int n,
                            const wxString& choices[],
-                           wxWindow * parent = @NULL,
+                           wxWindow* parent = NULL,
                            int x = -1,
                            int y = -1,
-                           bool centre = @true,
-                           int width=150,
-                           int height=200);
+                           bool centre = true,
+                           int width = 150,
+                           int height = 200);
 //@}
 
 //@{
@@ -290,23 +321,23 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                const wxString& caption,
                                const wxArrayString& aChoices,
                                const wxString& client_data[],
-                               wxWindow * parent = @NULL,
+                               wxWindow* parent = NULL,
                                int x = -1,
                                int y = -1,
-                               bool centre = @true,
-                               int width=150,
-                               int height=200);
+                               bool centre = true,
+                               int width = 150,
+                               int height = 200);
 wxString wxGetSingleChoiceData(const wxString& message,
                                const wxString& caption,
                                int n,
                                const wxString& choices[],
                                const wxString& client_data[],
-                               wxWindow * parent = @NULL,
+                               wxWindow* parent = NULL,
                                int x = -1,
                                int y = -1,
-                               bool centre = @true,
-                               int width=150,
-                               int height=200);
+                               bool centre = true,
+                               int width = 150,
+                               int height = 200);
 //@}
 
 //@{
@@ -316,34 +347,32 @@ wxString wxGetSingleChoiceData(const wxString& message,
     number of items in the listbox whose indices will be returned in
     @e selection array. The initial contents of this array will be used to
     select the items when the dialog is shown.
-
     You may pass the list of strings to choose from either using @e choices
-    which is an array of @e n strings for the listbox or by using a single
-    @e aChoices parameter of type wxArrayString.
-
-    If @e centre is @true, the message text (which may include new line
+    which is an array of @a n strings for the listbox or by using a single
+    @a aChoices parameter of type wxArrayString.
+    If @a centre is @true, the message text (which may include new line
     characters) is centred; if @false, the message is left-justified.
 */
 size_t wxGetMultipleChoices(wxArrayInt& selections,
                             const wxString& message,
                             const wxString& caption,
                             const wxArrayString& aChoices,
-                            wxWindow * parent = @NULL,
+                            wxWindow* parent = NULL,
                             int x = -1,
                             int y = -1,
-                            bool centre = @true,
-                            int width=150,
-                            int height=200);
+                            bool centre = true,
+                            int width = 150,
+                            int height = 200);
 size_t wxGetMultipleChoices(wxArrayInt& selections,
                             const wxString& message,
                             const wxString& caption,
                             int n,
                             const wxString& choices[],
-                            wxWindow * parent = @NULL,
+                            wxWindow* parent = NULL,
                             int x = -1,
                             int y = -1,
-                            bool centre = @true,
-                            int width=150,
-                            int height=200);
+                            bool centre = true,
+                            int width = 150,
+                            int height = 200);
 //@}
 

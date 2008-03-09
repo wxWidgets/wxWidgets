@@ -26,11 +26,8 @@ public:
     //@{
     /**
         Create a point.
-        
         double  x
-        
         double  y
-        
         Members of the @b wxRealPoint object.
     */
     wxRealPoint();
@@ -69,7 +66,7 @@ public:
     /**
         Returns the rectangle having the same size as this one but centered relatively
         to the given rectangle @e r. By default, rectangle is centred in both
-        directions but if @e dir includes only @c wxVERTICAL or only
+        directions but if @a dir includes only @c wxVERTICAL or only
         @c wxHORIZONTAL flag, then it is only centered in this direction while
         the other component of its position remains unchanged.
     */
@@ -90,12 +87,11 @@ public:
     //@{
     /**
         Decrease the rectangle size.
-        
         This method is the opposite from Inflate():
         Deflate(a, b) is equivalent to Inflate(-a, -b).
         Please refer to Inflate() for full description.
         
-        @sa Inflate()
+        @see Inflate()
     */
     void Deflate(wxCoord dx, wxCoord dy);
     void Deflate(const wxSize& diff);
@@ -141,7 +137,7 @@ public:
     /**
         Gets the size.
         
-        @sa SetSize()
+        @see SetSize()
     */
     wxSize GetSize();
 
@@ -169,38 +165,32 @@ public:
     /**
         Gets the x member.
     */
-#define int GetX()     /* implementation is private */
+    int GetX();
 
     /**
         Gets the y member.
     */
-#define int GetY()     /* implementation is private */
+    int GetY();
 
     //@{
     /**
         Increases the size of the rectangle.
-        
-        The second form uses the same @e diff for both @e dx and @e dy.
-        
+        The second form uses the same @a diff for both @a dx and @e dy.
         The first two versions modify the rectangle in place, the last one returns a
         new rectangle leaving this one unchanged.
-        
         The left border is moved farther left and the right border is moved farther
         right by @e dx. The upper border is moved farther up and the bottom border
         is moved farther down by @e dy. (Note the the width and height of the
-        rectangle thus change by 2*@e dx and 2*@e dy, respectively.) If one or
-        both of @e dx and @e dy are negative, the opposite happens: the rectangle
+        rectangle thus change by 2*@a dx and 2*@e dy, respectively.) If one or
+        both of @a dx and @a dy are negative, the opposite happens: the rectangle
         size decreases in the respective direction.
-        
         Inflating and deflating behaves "naturally''. Defined more precisely, that
         means:
-        
-             "Real'' inflates (that is, @e dx and/or @e dy = 0) are not
+             "Real'' inflates (that is, @a dx and/or @a dy = 0) are not
                 constrained. Thus inflating a rectangle can cause its upper left corner
                 to move into the negative numbers. (the versions prior to 2.5.4 forced
                 the top left coordinate to not fall below (0, 0), which implied a
                 forced move of the rectangle.)
-        
              Deflates are clamped to not reduce the width or height of the
                 rectangle below zero. In such cases, the top-left corner is nonetheless
                 handled properly. For example, a rectangle at (10, 10) with size (20,
@@ -210,7 +200,7 @@ public:
                 whereas the height is reduced by the full 30 (rather than also stopping
                 at 20, when the width reached zero).
         
-        @sa Deflate()
+        @see Deflate()
     */
     void Inflate(wxCoord dx, wxCoord dy);
     void Inflate(const wxSize& diff);
@@ -230,7 +220,7 @@ public:
 
     /**
         Returns @true if this rectangle has a non-empty intersection with the
-        rectangle @e rect and @false otherwise.
+        rectangle @a rect and @false otherwise.
     */
     bool Intersects(const wxRect& rect);
 
@@ -242,8 +232,8 @@ public:
 
     //@{
     /**
-        Moves the rectangle by the specified offset. If @e dx is positive, the
-        rectangle is moved to the right, if @e dy is positive, it is moved to the
+        Moves the rectangle by the specified offset. If @a dx is positive, the
+        rectangle is moved to the right, if @a dy is positive, it is moved to the
         bottom, otherwise it is moved to the left or top respectively.
     */
     void Offset(wxCoord dx, wxCoord dy);
@@ -258,7 +248,7 @@ public:
     /**
         Sets the size.
         
-        @sa GetSize()
+        @see GetSize()
     */
     void SetSize(const wxSize& s);
 
@@ -270,12 +260,12 @@ public:
     /**
         Sets the x position.
     */
-#define void SetX(int x)     /* implementation is private */
+    void SetX(int x);
 
     /**
         Sets the y position.
     */
-#define void SetY(int y)     /* implementation is private */
+    void SetY(int y);
 
     //@{
     /**
@@ -289,7 +279,6 @@ public:
 
     /**
         int height
-        
         Height member.
     */
 
@@ -318,21 +307,18 @@ public:
 
     /**
         int width
-        
         Width member.
     */
 
 
     /**
         int x
-        
         x coordinate of the top-level corner of the rectangle.
     */
 
 
     /**
         int y
-        
         y coordinate of the top-level corner of the rectangle.
     */
 };
@@ -365,13 +351,12 @@ public:
         to the brush list, and returns it.
         
         @param colour
-        Colour object.
-        
+            Colour object.
         @param style
-        Brush style. See wxBrush::SetStyle for a list of styles.
+            Brush style. See wxBrush::SetStyle for a list of styles.
     */
-    wxBrush * FindOrCreateBrush(const wxColour& colour,
-                                int style = wxSOLID);
+    wxBrush* FindOrCreateBrush(const wxColour& colour,
+                               int style = wxSOLID);
 };
 
 
@@ -423,14 +408,12 @@ public:
 
     /**
         int x
-        
         x member.
     */
 
 
     /**
         int  y
-        
         y member.
     */
 };
@@ -468,7 +451,6 @@ public:
     /**
         Adds a colour to the database. If a colour with the same name already exists,
         it is replaced.
-        
         Please note that the overload taking a pointer is deprecated and will be
         removed in the next wxWidgets version, please don't use it.
     */
@@ -526,11 +508,11 @@ public:
         list. See the @ref wxFont::ctor "wxFont constructor" for
         details of the arguments.
     */
-    wxFont * FindOrCreateFont(int point_size, int family, int style,
-                              int weight,
-                              bool underline = @false,
-                              const wxString& facename = @NULL,
-                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    wxFont* FindOrCreateFont(int point_size, int family, int style,
+                             int weight,
+                             bool underline = false,
+                             const wxString& facename = NULL,
+                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 };
 
 
@@ -570,12 +552,11 @@ public:
     //@{
     /**
         Decreases the size in x- and y- directions
-        
              By @e size.x and @e size.y for the first overload
-             By @e dx and @e dy for the second one
-             By @e d and @e d for the third one
+             By @a dx and @a dy for the second one
+             By @a d and @a d for the third one
         
-        @sa IncBy()
+        @see IncBy()
     */
     void DecBy(const wxSize& size);
     void DecBy(int dx, int dy);
@@ -586,7 +567,7 @@ public:
         Decrements this object so that both of its dimensions are not greater than the
         corresponding dimensions of the @e size.
         
-        @sa IncTo()
+        @see IncTo()
     */
     void DecTo(const wxSize& size);
 
@@ -603,12 +584,11 @@ public:
     //@{
     /**
         Increases the size in x- and y- directions
-        
              By @e size.x and @e size.y for the first overload
-             By @e dx and @e dy for the second one
-             By @e d and @e d for the third one
+             By @a dx and @a dy for the second one
+             By @a d and @a d for the third one
         
-        @sa DecBy()
+        @see DecBy()
     */
     void IncBy(const wxSize& size);
     void IncBy(int dx, int dy);
@@ -619,7 +599,7 @@ public:
         Increments this object so that both of its dimensions are not less than the
         corresponding dimensions of the @e size.
         
-        @sa DecTo()
+        @see DecTo()
     */
     void IncTo(const wxSize& size);
 
@@ -627,7 +607,6 @@ public:
         Returns @true if neither of the size object components is equal to -1, which
         is used as default for the size values in wxWidgets (hence the predefined
         @c wxDefaultSize has both of its components equal to -1).
-        
         This method is typically used before calling
         SetDefaults().
     */
@@ -656,7 +635,6 @@ public:
         Scales the dimensions of this object by the given factors.
         If you want to scale both dimensions by the same factor you can also use
         the @ref operators() "operator *="
-        
         Returns a reference to this object (so that you can concatenate other
         operations in the same line).
     */
@@ -665,14 +643,14 @@ public:
     /**
         Sets the width and height members.
     */
-#define void Set(int width, int height)     /* implementation is private */
+    void Set(int width, int height);
 
     /**
         Combine this size object with another one replacing the default (i.e. equal
         to -1) components of this object with those of the other. It is typically
         used like this:
         
-        @sa IsFullySpecified()
+        @see IsFullySpecified()
     */
     void SetDefaults(const wxSize& sizeDefault);
 
@@ -741,16 +719,13 @@ public:
         to the pen list, and returns it.
         
         @param colour
-        Colour object.
-        
+            Colour object.
         @param colourName
-        Colour name, which should be in the colour database.
-        
+            Colour name, which should be in the colour database.
         @param width
-        Width of pen.
-        
+            Width of pen.
         @param style
-        Pen style. See wxPen::wxPen for a list of styles.
+            Pen style. See wxPen::wxPen for a list of styles.
     */
     wxPen* FindOrCreatePen(const wxColour& colour, int width,
                            int style);
@@ -771,8 +746,8 @@ public:
     are currently defaulting to the whole display until a way is found to
     provide this info for all window managers, etc.
 */
-void wxClientDisplayRect(int * x, int * y, int * width,
-                         int * height);
+void wxClientDisplayRect(int* x, int* y, int* width,
+                         int* height);
 wxRect wxGetClientDisplayRect();
 //@}
 
@@ -780,7 +755,7 @@ wxRect wxGetClientDisplayRect();
 /**
     Returns the display size in pixels.
 */
-void wxDisplaySize(int * width, int * height);
+void wxDisplaySize(int* width, int* height);
 wxSize wxGetDisplaySize();
 //@}
 
@@ -788,7 +763,7 @@ wxSize wxGetDisplaySize();
 /**
     Returns the display size in millimeters.
 */
-void wxDisplaySizeMM(int * width, int * height);
+void wxDisplaySizeMM(int* width, int* height);
 wxSize wxGetDisplaySizeMM();
 //@}
 
@@ -797,9 +772,9 @@ wxSize wxGetDisplaySizeMM();
     for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
     avoid using @c #ifdefs when creating icons.
 
-    @sa @ref overview_wxbitmapoverview "Bitmaps and icons overview", wxBITMAP
+    @see @ref overview_wxbitmapoverview, wxBITMAP
 */
-#define wxICON()     /* implementation is private */
+wxICON();
 
 /**
     Returns @true if the display is colour, @false otherwise.
@@ -811,7 +786,7 @@ bool wxColourDisplay();
     for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
     avoid using @c #ifdefs when creating bitmaps.
 
-    @sa @ref overview_wxbitmapoverview "Bitmaps and icons overview", wxICON
+    @see @ref overview_wxbitmapoverview, wxICON
 */
 #define wxBITMAP()     /* implementation is private */
 

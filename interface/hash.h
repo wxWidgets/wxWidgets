@@ -27,8 +27,8 @@ class wxHashTable : public wxObject
 {
 public:
     /**
-        Constructor. @e key_type is one of wxKEY_INTEGER, or wxKEY_STRING,
-        and indicates what sort of keying is required. @e size is optional.
+        Constructor. @a key_type is one of wxKEY_INTEGER, or wxKEY_STRING,
+        and indicates what sort of keying is required. @a size is optional.
     */
     wxHashTable(unsigned int key_type, int size = 1000);
 
@@ -53,8 +53,8 @@ public:
     /**
         Deletes entry in hash table and returns the user's data (if found).
     */
-    wxObject * Delete(long key);
-    wxObject * Delete(const wxString& key);
+    wxObject* Delete(long key);
+    wxObject* Delete(const wxString& key);
     //@}
 
     /**
@@ -69,8 +69,8 @@ public:
         which
         has table constructor was used).
     */
-    wxObject * Get(long key);
-    wxObject * Get(const char* key);
+    wxObject* Get(long key);
+    wxObject* Get(const char* key);
     //@}
 
     /**
@@ -92,7 +92,7 @@ public:
         implemented as a @b wxNode. The user will probably only wish to use the
         @b GetData method to retrieve the data; the node may also be deleted.
     */
-    wxHashTable::Node * Next();
+    wxHashTable::Node* Next();
 
     //@{
     /**
@@ -101,7 +101,7 @@ public:
         has table constructor was used). The key string is copied and stored by the hash
         table implementation.
     */
-    void Put(long key, wxObject * object);
-    void Put(const char* key, wxObject * object);
+    void Put(long key, wxObject* object);
+    void Put(const char* key, wxObject* object);
     //@}
 };

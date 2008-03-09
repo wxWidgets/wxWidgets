@@ -137,7 +137,7 @@ public:
     */
     virtual const void* OnRequest(const wxString& topic,
                                   const wxString& item,
-                                  size_t * size,
+                                  size_t* size,
                                   wxIPCFormat format);
 
     /**
@@ -177,7 +177,7 @@ public:
         character string (actually a pointer to the connection's buffer) if
         successful, @NULL otherwise.
     */
-    const void* Request(const wxString& item, size_t * size,
+    const void* Request(const wxString& item, size_t* size,
                         wxIPCFormat format = wxIPC_TEXT);
 
     /**
@@ -239,22 +239,21 @@ public:
         the OnMakeConnection() member to return your own
         derived connection object.
     */
-    wxConnectionBase * MakeConnection(const wxString& host,
-                                      const wxString& service,
-                                      const wxString& topic);
+    wxConnectionBase* MakeConnection(const wxString& host,
+                                     const wxString& service,
+                                     const wxString& topic);
 
     /**
         The type of wxDDEConnection returned from a MakeConnection() call can
         be altered by deriving the @b OnMakeConnection member to return your
         own derived connection object. By default, a wxDDEConnection
         object is returned.
-        
         The advantage of deriving your own connection class is that it will
         enable you to intercept messages initiated by the server, such
         as wxDDEConnection::OnAdvise. You may also want to
         store application-specific data in instances of the new class.
     */
-    wxConnectionBase * OnMakeConnection();
+    wxConnectionBase* OnMakeConnection();
 
     /**
         Returns @true if this is a valid host name, @false otherwise. This always
@@ -307,7 +306,7 @@ public:
         always sent for standard input and output, but in the context of DDE
         messages it doesn't make a lot of sense.
     */
-    virtual wxConnectionBase * OnAcceptConnection(const wxString& topic);
+    virtual wxConnectionBase* OnAcceptConnection(const wxString& topic);
 };
 
 
@@ -319,17 +318,14 @@ public:
     Called when wxWidgets exits, to clean up the DDE system. This no longer needs
     to be
     called by the application.
-
     See also wxDDEInitialize.
 */
 void wxDDECleanUp();
 
 /**
     Initializes the DDE system. May be called multiple times without harm.
-
     This no longer needs to be called by the application: it will be called
     by wxWidgets if necessary.
-
     See also wxDDEServer, wxDDEClient, wxDDEConnection,
     wxDDECleanUp.
 */

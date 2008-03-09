@@ -32,14 +32,13 @@ public:
         Constructor.
         
         @param currentTip
-        The starting tip index.
+            The starting tip index.
     */
     wxTipProvider(size_t currentTip);
 
     /**
         Returns the index of the current tip (i.e. the one which would be returned by
         GetTip).
-        
         The program usually remembers the value returned by this function after calling
         wxShowTip. Note that it is not the same as the value which
         was passed to wxShowTip + 1 because the user might have pressed the "Next"
@@ -75,14 +74,13 @@ public:
     used with wxShowTip.
 
     @param filename
-    The name of the file containing the tips, one per line
-
+        The name of the file containing the tips, one per line
     @param currentTip
-    The index of the first tip to show - normally this index
-    is remembered between the 2 program runs.
+        The index of the first tip to show - normally this index
+        is remembered between the 2 program runs.
 
-    @sa @ref overview_tipsoverview "Tips overview"
+    @see @ref overview_tipsoverview "Tips overview"
 */
-wxTipProvider * wxCreateFileTipProvider(const wxString& filename,
-                                        size_t currentTip);
+wxTipProvider* wxCreateFileTipProvider(const wxString& filename,
+                                       size_t currentTip);
 

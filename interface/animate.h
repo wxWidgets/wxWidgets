@@ -42,7 +42,7 @@ public:
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxAnimationCtrl(wxWindow * parent, wxWindowID id,
+    wxAnimationCtrl(wxWindow* parent, wxWindowID id,
                     const wxAnimation& anim,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
@@ -56,30 +56,24 @@ public:
         of the animation is displayed.
         
         @param parent
-        Parent window, must be non-@NULL.
-        
+            Parent window, must be non-@NULL.
         @param id
-        The identifier for the control.
-        
+            The identifier for the control.
         @param anim
-        The initial animation shown in the control.
-        
+            The initial animation shown in the control.
         @param pos
-        Initial position.
-        
+            Initial position.
         @param size
-        Initial size.
-        
+            Initial size.
         @param style
-        The window style, see wxAC_* flags.
-        
+            The window style, see wxAC_* flags.
         @param name
-        Control name.
+            Control name.
         
         @returns @true if the control was successfully created or @false if
-                   creation failed.
+                 creation failed.
     */
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxAnimation& anim,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -106,7 +100,7 @@ public:
         Loads the animation from the given file and calls SetAnimation().
         See wxAnimation::LoadFile for more info.
     */
-    bool LoadFile(const wxString & file,
+    bool LoadFile(const wxString& file,
                   wxAnimationType animType = wxANIMATION_TYPE_ANY);
 
     /**
@@ -122,12 +116,11 @@ public:
     /**
         Sets the animation to play in this control.
         If the previous animation is being played, it's @ref stop() Stopped.
-        
         Until Play() isn't called, a static image, the first
         frame of the given animation or the background colour will be shown
         (see SetInactiveBitmap() for more info).
     */
-    void SetAnimation(const wxAnimation & anim);
+    void SetAnimation(const wxAnimation& anim);
 
     /**
         Sets the bitmap to show on the control when it's not playing an animation.
@@ -137,12 +130,10 @@ public:
         if there's no valid animation associated with the control (see
         wxAnimationCtrl::SetAnimation),
         then the background colour of the window is shown.
-        
         If the control is not playing the animation, the given bitmap will be
         immediately
         shown, otherwise it will be shown as soon as Stop()
         is called.
-        
         Note that the inactive bitmap, if smaller than the control's size, will be
         centered in
         the control; if bigger, it will be stretched to fit it.
@@ -185,10 +176,9 @@ public:
         Loads an animation from a file.
         
         @param name
-        The name of the file to load.
-        
+            The name of the file to load.
         @param type
-        See LoadFile for more info.
+            See LoadFile for more info.
     */
     wxAnimation();
     wxAnimation(const wxAnimation& anim);
@@ -227,32 +217,50 @@ public:
     /**
         Returns @true if animation data is present.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Loads an animation from the given stream.
         
         @param stream
-        The stream to use to load the animation.
-        
+            The stream to use to load the animation.
         @param type
-        One of the following values:
+            One of the following values:
         
         
-        wxANIMATION_TYPE_GIF
         
         
-        Load an animated GIF file.
-        
-        wxANIMATION_TYPE_ANI
         
         
-        Load an ANI file.
         
-        wxANIMATION_TYPE_ANY
+            wxANIMATION_TYPE_GIF
         
         
-        Try to autodetect the filetype.
+        
+        
+            Load an animated GIF file.
+        
+        
+        
+        
+        
+            wxANIMATION_TYPE_ANI
+        
+        
+        
+        
+            Load an ANI file.
+        
+        
+        
+        
+        
+            wxANIMATION_TYPE_ANY
+        
+        
+        
+        
+            Try to autodetect the filetype.
         
         @returns @true if the operation succeeded, @false otherwise.
     */
@@ -263,26 +271,44 @@ public:
         Loads an animation from a file.
         
         @param name
-        A filename.
-        
+            A filename.
         @param type
-        One of the following values:
+            One of the following values:
         
         
-        wxANIMATION_TYPE_GIF
         
         
-        Load an animated GIF file.
-        
-        wxANIMATION_TYPE_ANI
         
         
-        Load an ANI file.
         
-        wxANIMATION_TYPE_ANY
+            wxANIMATION_TYPE_GIF
         
         
-        Try to autodetect the filetype.
+        
+        
+            Load an animated GIF file.
+        
+        
+        
+        
+        
+            wxANIMATION_TYPE_ANI
+        
+        
+        
+        
+            Load an ANI file.
+        
+        
+        
+        
+        
+            wxANIMATION_TYPE_ANY
+        
+        
+        
+        
+            Try to autodetect the filetype.
         
         @returns @true if the operation succeeded, @false otherwise.
     */

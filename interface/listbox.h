@@ -44,10 +44,10 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_LISTBOX(id\, func)}:
+    @event{EVT_LISTBOX(id, func)}:
            Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
            list is selected or the selection changes.
-    @event{EVT_LISTBOX_DCLICK(id\, func)}:
+    @event{EVT_LISTBOX_DCLICK(id, func)}:
            Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the
            listbox is double-clicked.
     @endEventTable
@@ -67,41 +67,34 @@ public:
         Constructor, creating and showing a list box.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size. If wxDefaultSize is specified then the window is sized
-        appropriately.
-        
+            Window size. If wxDefaultSize is specified then the window is
+        sized
+            appropriately.
         @param n
-        Number of strings with which to initialise the control.
-        
+            Number of strings with which to initialise the control.
         @param choices
-        An array of strings with which to initialise the control.
-        
+            An array of strings with which to initialise the control.
         @param style
-        Window style. See wxListBox.
-        
+            Window style. See wxListBox.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxListBox();
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               int n = 0,
-              const wxString choices[] = @NULL,
+              const wxString choices[] = NULL,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
               const wxString& name = "listBox");
@@ -128,7 +121,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int n,
-                const wxString choices[] = @NULL,
+                const wxString choices[] = NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "listBox");
@@ -145,7 +138,7 @@ public:
         Deselects an item in the list box.
         
         @param n
-        The zero-based item to deselect.
+            The zero-based item to deselect.
         
         @remarks This applies to multiple selection listboxes only.
     */
@@ -155,31 +148,30 @@ public:
         Fill an array of ints with the positions of the currently selected items.
         
         @param selections
-        A reference to an wxArrayInt instance that is used to store the result of the
-        query.
+            A reference to an wxArrayInt instance that is used to store the result of
+        the query.
         
         @returns The number of selections.
         
         @remarks Use this with a multiple selection listbox.
         
-        @sa wxControlWithItems::GetSelection, wxControlWithItems::GetStringSelection,
-              wxControlWithItems::SetSelection
+        @see wxControlWithItems::GetSelection, wxControlWithItems::GetStringSelection,
+             wxControlWithItems::SetSelection
     */
     int GetSelections(wxArrayInt& selections);
 
     /**
         Returns the item located at @e point, or @c wxNOT_FOUND if there
         is no item located at @e point.
-        
         This function is new since wxWidgets version 2.7.0. It is currently implemented
         for wxMSW, wxMac and wxGTK2
         ports.
         
         @param point
-        Point of item (in client coordinates) to obtain
+            Point of item (in client coordinates) to obtain
         
         @returns Item located at point, or wxNOT_FOUND if unimplemented or the
-                   item does not exist.
+                 item does not exist.
     */
     int HitTest(const wxPoint point);
 
@@ -188,14 +180,13 @@ public:
         Insert the given number of strings before the specified position.
         
         @param nItems
-        Number of items in the array items
-        
+            Number of items in the array items
         @param items
-        Labels of items to be inserted
-        
+            Labels of items to be inserted
         @param pos
-        Position before which to insert the items: for example, if pos is 0 the items
-        will be inserted in the beginning of the listbox
+            Position before which to insert the items: for example, if pos is 0 the
+        items
+            will be inserted in the beginning of the listbox
     */
     void InsertItems(int nItems, const wxString items,
                      unsigned int pos);
@@ -207,7 +198,7 @@ public:
         Determines whether an item is selected.
         
         @param n
-        The zero-based item index.
+            The zero-based item index.
         
         @returns @true if the given item is selected, @false otherwise.
     */
@@ -218,20 +209,18 @@ public:
         Clears the list box and adds the given strings to it.
         
         @param n
-        The number of strings to set.
-        
+            The number of strings to set.
         @param choices
-        An array of strings to set.
-        
+            An array of strings to set.
         @param clientData
-        Options array of client data pointers
+            Options array of client data pointers
         
         @remarks You may free the array from the calling program after this
-                   function has been called.
+                 function has been called.
     */
-    void Set(int n, const wxString* choices, void clientData = @NULL);
+    void Set(int n, const wxString* choices, void clientData = NULL);
     void Set(const wxArrayString& choices,
-             void clientData = @NULL);
+             void clientData = NULL);
     //@}
 
     //@{
@@ -239,10 +228,9 @@ public:
         Set the specified item to be the first visible item.
         
         @param n
-        The zero-based item index.
-        
+            The zero-based item index.
         @param string
-        The string that should be visible.
+            The string that should be visible.
     */
     void SetFirstItem(int n);
     void SetFirstItem(const wxString& string);

@@ -67,7 +67,7 @@ public:
     /**
         Constructor. The weak reference is initialized to @e pobj.
     */
-    wxWeakRefT(T* pobj = @NULL);
+    wxWeakRefT(T* pobj = NULL);
 
     /**
         Destructor.
@@ -88,7 +88,7 @@ public:
     /**
         Returns pointer to the tracked object or @NULL.
     */
-    T * get();
+    T* get();
 
     /**
         Release currently tracked object and start tracking the same object as

@@ -29,13 +29,12 @@ public:
         succeeded.
         
         @param fileName
-        The filename or Windows resource.
-        
+            The filename or Windows resource.
         @param isResource
-        @true if fileName is a resource, @false if it is a filename.
+            @true if fileName is a resource, @false if it is a filename.
     */
     wxSound();
-    wxSound(const wxString& fileName, bool isResource = @false);
+    wxSound(const wxString& fileName, bool isResource = false);
     //@}
 
     /**
@@ -47,24 +46,22 @@ public:
         Constructs a wave object from a file or resource.
         
         @param fileName
-        The filename or Windows resource.
-        
+            The filename or Windows resource.
         @param isResource
-        @true if fileName is a resource, @false if it is a filename.
+            @true if fileName is a resource, @false if it is a filename.
         
         @returns @true if the call was successful, @false otherwise.
     */
-    bool Create(const wxString& fileName, bool isResource = @false);
+    bool Create(const wxString& fileName, bool isResource = false);
 
     /**
         Returns @true if the object contains a successfully loaded file or resource,
         @false otherwise.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Returns @true if a sound is played at the moment.
-        
         This method is currently not implemented under Windows.
     */
     static bool IsPlaying();
@@ -77,23 +74,19 @@ public:
         to delete the object which is being asynchronously played any time after
         calling this function and the sound would continue playing, however this
         currently doesn't work under Windows for sound objects loaded from memory data.
-        
-        The possible values for @e flags are:
+        The possible values for @a flags are:
         
         wxSOUND_SYNC
-        
         
         @c Play will block and wait until the sound is
         replayed.
         
         wxSOUND_ASYNC
         
-        
         Sound is played asynchronously,
         @c Play returns immediately
         
         wxSOUND_ASYNC | wxSOUND_LOOP
-        
         
         Sound is played asynchronously
         and loops until another sound is played,

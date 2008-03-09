@@ -31,9 +31,9 @@ class wxTreebookEvent : public wxNotifyEvent
 {
 public:
     /**
-        @sa wxNotebookEvent
+        @see wxNotebookEvent
     */
-    wxTreebookEvent(wxEventType commandType = wxEVT_@NULL, int id = 0,
+    wxTreebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                     int nSel = wxNOT_FOUND,
                     int nOldSel = wxNOT_FOUND);
 
@@ -85,22 +85,17 @@ public:
         Creates an empty TreeBook control.
         
         @param parent
-        The parent window. Must be non-@NULL.
-        
+            The parent window. Must be non-@NULL.
         @param id
-        The window identifier.
-        
+            The window identifier.
         @param pos
-        The window position.
-        
+            The window position.
         @param size
-        The window size.
-        
+            The window size.
         @param style
-        The window style. See wxNotebook.
-        
+            The window style. See wxNotebook.
         @param name
-        The name of the control (used only under Motif).
+            The name of the control (used only under Motif).
     */
     wxTreebook();
     wxTreebook(wxWindow* parent, wxWindowID id,
@@ -112,7 +107,6 @@ public:
 
     /**
         Destroys the wxTreebook object.
-        
         Also deletes all the pages owned by the control (inserted previously into it).
     */
     ~wxTreebook();
@@ -122,7 +116,7 @@ public:
         @NULL could be specified for page to create an empty page.
     */
     bool AddPage(wxWindow* page, const wxString& text,
-                 bool bSelect = @false,
+                 bool bSelect = false,
                  int imageId = wxNOT_FOUND);
 
     /**
@@ -130,19 +124,18 @@ public:
         @NULL could be specified for page to create an empty page.
     */
     bool AddSubPage(wxWindow* page, const wxString& text,
-                    bool bSelect = @false,
+                    bool bSelect = false,
                     int imageId = wxNOT_FOUND);
 
     /**
         Sets the image list for the page control and takes ownership of the list.
         
-        @sa wxImageList, SetImageList()
+        @see wxImageList, SetImageList()
     */
     void AssignImageList(wxImageList* imageList);
 
     /**
         Changes the selection for the given page, returning the previous selection.
-        
         The call to this function does not generate the page changing events.
         This is the only difference with SetSelection().
         See @ref overview_progevent "this topic" for more info.
@@ -182,7 +175,7 @@ public:
         May generate page changing events (if selected page
         is under the collapsed branch, then its parent is autoselected).
     */
-    bool ExpandNode(size_t pageId, bool expand = @true);
+    bool ExpandNode(size_t pageId, bool expand = true);
 
     /**
         Returns the image index for the given page.
@@ -202,7 +195,6 @@ public:
 
     /**
         Returns the currently selected page, or wxNOT_FOUND if none was selected.
-        
         Note that this method may return either the previously or newly selected page
         when called from the EVT_TREEBOOK_PAGE_CHANGED handler
         depending on the platform and so wxTreebookEvent::GetSelection should be used
@@ -217,17 +209,16 @@ public:
     */
     bool InsertPage(size_t pagePos, wxWindow* page,
                     const wxString& text,
-                    bool bSelect = @false,
+                    bool bSelect = false,
                     int imageId = wxNOT_FOUND);
 
     /**
         Inserts a sub page under the specified page.
-        
         @NULL could be specified for page to create an empty page.
     */
     bool InsertSubPage(size_t pagePos, wxWindow* page,
                        const wxString& text,
-                       bool bSelect = @false,
+                       bool bSelect = false,
                        int imageId = wxNOT_FOUND);
 
     /**
@@ -239,7 +230,7 @@ public:
         Sets the image list for the page control. It does not take ownership of the
         image list, you must delete it yourself.
         
-        @sa wxImageList, AssignImageList()
+        @see wxImageList, AssignImageList()
     */
     void SetImageList(wxImageList* imageList);
 
@@ -256,13 +247,11 @@ public:
 
     /**
         Sets the selection for the given page, returning the previous selection.
-        
         The call to this function generates the page changing events.
-        
         This function is deprecated and should not be used in new code. Please use the
         ChangeSelection() function instead.
         
-        @sa GetSelection()
+        @see GetSelection()
     */
     int SetSelection(size_t n);
 };

@@ -33,7 +33,6 @@ public:
         This method is called by the library when the user requests popup menu
         (on Windows and Unix platforms, this is when the user right-clicks the icon).
         Override this function in order to provide popup menu associated with the icon.
-        
         If CreatePopupMenu returns @NULL (this happens by default),
         no menu is shown, otherwise the menu is
         displayed and then deleted by the library as soon as the user dismisses it.
@@ -57,7 +56,7 @@ public:
     /**
         Returns @true if the object initialized successfully.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Pops up a menu at the current mouse position. The events can be handled by

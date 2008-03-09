@@ -33,7 +33,7 @@ public:
 
     /**
         This is the core method of each handler. It is called each time
-        one of supported tags is detected. @e tag contains all necessary
+        one of supported tags is detected. @a tag contains all necessary
         info (see wxHtmlTag for details).
         
         @returns @true if ParseInner was called, @false otherwise.
@@ -43,20 +43,20 @@ public:
     /**
         This method calls parser's wxHtmlParser::DoParsing method
         for the string between this tag and the paired ending tag:
-        In this example, a call to ParseInner (with @e tag pointing to A tag)
+        
+        In this example, a call to ParseInner (with @a tag pointing to A tag)
         will parse 'Hello, world!'.
     */
     void ParseInner(const wxHtmlTag& tag);
 
     /**
-        Assigns @e parser to this handler. Each @b instance of handler
+        Assigns @a parser to this handler. Each @b instance of handler
         is guaranteed to be called only from the parser.
     */
     virtual void SetParser(wxHtmlParser parser);
 
     /**
         @b wxHtmlParser* m_Parser
-        
         This attribute is used to access parent parser. It is protected so that
         it can't be accessed by user but can be accessed from derived classes.
     */
@@ -102,11 +102,9 @@ public:
 
     /**
         This may (and may not) be overwritten in derived class.
-        
         This method is called each time new tag is about to be added.
-        @e tag contains information about the tag. (See wxHtmlTag
+        @a tag contains information about the tag. (See wxHtmlTag
         for details.)
-        
         Default (wxHtmlParser) behaviour is this:
         First it finds a handler capable of handling this tag and then it calls
         handler's HandleTag method.
@@ -117,20 +115,17 @@ public:
         Adds handler to the internal list ( hash table) of handlers. This
         method should not be called directly by user but rather by derived class'
         constructor.
-        
         This adds the handler to this @b instance of wxHtmlParser, not to
         all objects of this class! (Static front-end to AddTagHandler is provided
         by wxHtmlWinParser).
-        
         All handlers are deleted on object deletion.
     */
     virtual void AddTagHandler(wxHtmlTagHandler handler);
 
     /**
         Must be overwritten in derived class.
-        
         This method is called by DoParsing()
-        each time a part of text is parsed. @e txt is NOT only one word, it is
+        each time a part of text is parsed. @a txt is NOT only one word, it is
         substring of input. It is not formatted or preprocessed (so white spaces are
         unmodified).
     */
@@ -155,13 +150,12 @@ public:
         reference to it is parent parser it can easily request the file by
         calling
     */
-#define wxFileSystem* GetFS()     /* implementation is private */
+    wxFileSystem* GetFS();
 
     /**
         Returns product of parsing. Returned value is result of parsing
         of the document. The type of this result depends on internal
         representation in derived parser (but it must be derived from wxObject!).
-        
         See wxHtmlWinParser for details.
     */
     virtual wxObject* GetProduct();
@@ -172,7 +166,7 @@ public:
     wxString* GetSource();
 
     /**
-        Setups the parser for parsing the @e source string. (Should be overridden
+        Setups the parser for parsing the @a source string. (Should be overridden
         in derived class)
     */
     virtual void InitParser(const wxString& source);
@@ -184,26 +178,44 @@ public:
         of @e OpenURL in derived class.
         
         @param type
-        Indicates type of the resource. Is one of:
-        
-        wxHTML_URL_PAGE
+            Indicates type of the resource. Is one of:
         
         
-        Opening a HTML page.
-        
-        wxHTML_URL_IMAGE
         
         
-        Opening an image.
-        
-        wxHTML_URL_OTHER
         
         
-        Opening a resource that doesn't fall into
-        any other category.
+            wxHTML_URL_PAGE
         
+        
+        
+        
+            Opening a HTML page.
+        
+        
+        
+        
+        
+            wxHTML_URL_IMAGE
+        
+        
+        
+        
+            Opening an image.
+        
+        
+        
+        
+        
+            wxHTML_URL_OTHER
+        
+        
+        
+        
+            Opening a resource that doesn't fall into
+            any other category.
         @param url
-        URL being opened.
+            URL being opened.
     */
     virtual wxFSFile* OpenURL(wxHtmlURLType type,
                               const wxString& url);
@@ -211,15 +223,12 @@ public:
     /**
         Proceeds parsing of the document. This is end-user method. You can simply
         call it when you need to obtain parsed output (which is parser-specific)
-        
         The method does these things:
-        
          calls @ref initparser() InitParser(source)
          calls DoParsing()
          calls GetProduct()
          calls DoneParser()
          returns value returned by GetProduct
-        
         You shouldn't use InitParser, DoParsing, GetProduct or DoneParser directly.
     */
     wxObject* Parse(const wxString& source);
@@ -236,11 +245,10 @@ public:
         The handler should already be added to this parser.
         
         @param handler
-        the handler
-        
+            the handler
         @param tags
-        List of tags (in same format as GetSupportedTags's return value). The parser
-        will redirect these tags to handler (until call to PopTagHandler).
+            List of tags (in same format as GetSupportedTags's return value). The parser
+            will redirect these tags to handler (until call to PopTagHandler).
     */
     void PushTagHandler(wxHtmlTagHandler* handler,
                         const wxString& tags);
@@ -250,7 +258,7 @@ public:
         files. (For example @c IMG tag handler requests wxFSFile with the
         image data.)
     */
-#define void SetFS(wxFileSystem fs)     /* implementation is private */
+    void SetFS(wxFileSystem fs);
 
     /**
         Call this function to interrupt parsing from a tag handler. No more tags

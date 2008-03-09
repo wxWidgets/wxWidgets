@@ -50,7 +50,7 @@ public:
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxFontPickerCtrl(wxWindow * parent, wxWindowID id,
+    wxFontPickerCtrl(wxWindow* parent, wxWindowID id,
                      const wxFont& font = wxNullFont,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
@@ -60,34 +60,27 @@ public:
 
     /**
         @param parent
-        Parent window, must not be non-@NULL.
-        
+            Parent window, must not be non-@NULL.
         @param id
-        The identifier for the control.
-        
+            The identifier for the control.
         @param font
-        The initial font shown in the control. If wxNullFont
-        is given, the default font is used.
-        
+            The initial font shown in the control. If wxNullFont
+            is given, the default font is used.
         @param pos
-        Initial position.
-        
+            Initial position.
         @param size
-        Initial size.
-        
+            Initial size.
         @param style
-        The window style, see wxFNTP_* flags.
-        
+            The window style, see wxFNTP_* flags.
         @param validator
-        Validator which can be used for additional date checks.
-        
+            Validator which can be used for additional date checks.
         @param name
-        Control name.
+            Control name.
         
         @returns @true if the control was successfully created or @false if
-                   creation failed.
+                 creation failed.
     */
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxFont& font = wxNullFont,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -122,7 +115,7 @@ public:
         Sets the currently selected font.
         Note that this function is completely different from wxWindow::SetFont.
     */
-    void SetSelectedFont(const wxFont & font);
+    void SetSelectedFont(const wxFont& font);
 };
 
 
@@ -145,7 +138,7 @@ public:
     /**
         The constructor is not normally used by the user code.
     */
-    wxFontPickerEvent(wxObject * generator, int id,
+    wxFontPickerEvent(wxObject* generator, int id,
                       const wxFont& font);
 
     /**
@@ -156,5 +149,5 @@ public:
     /**
         Set the font associated with the event.
     */
-    void SetFont(const wxFont & f);
+    void SetFont(const wxFont& f);
 };

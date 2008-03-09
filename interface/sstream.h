@@ -46,14 +46,13 @@ public:
         If the provided pointer is non-@NULL, data will be written to it.
         Otherwise, an internal string is used for the data written to this stream, use
         GetString() to get access to it.
-        
-        If @e str is used, data written to the stream is appended to the current
+        If @a str is used, data written to the stream is appended to the current
         contents of it, i.e. the string is not cleared here. However if it is not
         empty, the positions returned by wxOutputStream::TellO will be
         offset by the initial string length, i.e. initial stream position will be the
         initial length of the string and not 0.
     */
-    wxStringOutputStream(wxString str = @NULL);
+    wxStringOutputStream(wxString str = NULL);
 
     /**
         Returns the string containing all the data written to the stream so far.

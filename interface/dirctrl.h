@@ -28,35 +28,26 @@ public:
         Main constructor.
         
         @param parent
-        Parent window.
-        
+            Parent window.
         @param id
-        Window identifier.
-        
+            Window identifier.
         @param dir
-        Initial folder.
-        
+            Initial folder.
         @param pos
-        Position.
-        
+            Position.
         @param size
-        Size.
-        
+            Size.
         @param style
-        Window style. Please see wxGenericDirCtrl for a list of possible styles.
-        
+            Window style. Please see wxGenericDirCtrl for a list of possible styles.
         @param filter
-        A filter string, using the same syntax as that for wxFileDialog. This may be
-        empty if filters
-        are not being used.
-        
-        Example: "All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg"
-        
+            A filter string, using the same syntax as that for wxFileDialog. This may
+        be empty if filters
+            are not being used.
+            Example: "All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg"
         @param defaultFilter
-        The zero-indexed default filter setting.
-        
+            The zero-indexed default filter setting.
         @param name
-        The window name.
+            The window name.
     */
     wxGenericDirCtrl();
     wxGenericDirCtrl(wxWindow* parent, const wxWindowID id = -1,
@@ -109,7 +100,6 @@ public:
 
     /**
         Gets selected filename path only (else empty string).
-        
         This function doesn't count a directory as a selection.
     */
     wxString GetFilePath();
@@ -177,8 +167,8 @@ public:
 
     /**
         @param show
-        If @true, hidden folders and files will be displayed by the
-        control. If @false, they will not be displayed.
+            If @true, hidden folders and files will be displayed by the
+            control. If @false, they will not be displayed.
     */
     void ShowHidden(bool show);
 };

@@ -32,7 +32,7 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_BUTTON(id\, func)}:
+    @event{EVT_BUTTON(id, func)}:
            Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is
            clicked.
     @endEventTable
@@ -50,39 +50,31 @@ public:
     //@{
     /**
         Constructor, creating and showing a button.
-        
         The preferred way to create standard buttons is to use default value of
-        @e label. If no label is supplied and @e id is one of standard IDs from
+        @e label. If no label is supplied and @a id is one of standard IDs from
         @ref overview_stockitems "this list", standard label will be used. In addition
         to
         that, the button will be decorated with stock icons under GTK+ 2.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Button identifier. A value of wxID_ANY indicates a default value.
-        
+            Button identifier. A value of wxID_ANY indicates a default value.
         @param label
-        Text to be displayed on the button.
-        
+            Text to be displayed on the button.
         @param pos
-        Button position.
-        
+            Button position.
         @param size
-        Button size. If the default size is specified then the button is sized
-        appropriately for the text.
-        
+            Button size. If the default size is specified then the button is sized
+            appropriately for the text.
         @param style
-        Window style. See wxButton.
-        
+            Window style. See wxButton.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxButton();
     wxButton(wxWindow* parent, wxWindowID id,
@@ -123,7 +115,7 @@ public:
         
         @returns The button's label.
         
-        @sa SetLabel()
+        @see SetLabel()
     */
     wxString GetLabel();
 
@@ -132,11 +124,11 @@ public:
         box.
         
         @remarks Under Windows, only dialog box buttons respond to this function.
-                    As normal under Windows and Motif, pressing return
-                   causes the default button to be depressed when the
-                   return key is pressed. See also wxWindow::SetFocus
-                   which sets the keyboard focus for windows and text
-                   panel items, and wxTopLevelWindow::SetDefaultItem.
+                  As normal under Windows and Motif, pressing return
+                 causes the default button to be depressed when the
+                 return key is pressed. See also wxWindow::SetFocus
+                 which sets the keyboard focus for windows and text
+                 panel items, and wxTopLevelWindow::SetDefaultItem.
     */
     void SetDefault();
 
@@ -144,7 +136,7 @@ public:
         Sets the string label for the button.
         
         @param label
-        The label to set.
+            The label to set.
     */
     void SetLabel(const wxString& label);
 };

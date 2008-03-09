@@ -29,14 +29,12 @@ public:
 
     /**
         Returns @true if this filter is capable of reading file @e file.
-        
         Example:
     */
     bool CanRead(const wxFSFile& file);
 
     /**
         Reads the file and returns string with HTML document.
-        
         Example:
     */
     wxString ReadFile(const wxFSFile& file);

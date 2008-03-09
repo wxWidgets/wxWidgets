@@ -27,9 +27,7 @@ public:
     //@{
     /**
         , @b wxWindow*@e parent = @NULL, @b int@e flags = @c wxICON_INFORMATION)
-        
         Create a notification object with the given attributes.
-        
         See SetTitle(),
         SetMessage(),
         SetParent() and
@@ -42,7 +40,6 @@ public:
 
     /**
         Hides the notification.
-        
         Returns @true if it was hidden or @false if it couldn't be done (e.g. on
         some
         systems automatically hidden notifications can't be hidden manually)
@@ -54,7 +51,6 @@ public:
         notification. Valid values are @c wxICON_INFORMATION,
         @c wxICON_WARNING and @c wxICON_ERROR (notice that
         @c wxICON_QUESTION is not allowed here).
-        
         Some implementations of this class may not support the icons.
     */
     void SetFlags(int flags);
@@ -83,10 +79,9 @@ public:
     /**
         Show the notification to the user and hides it after timeout seconds
         pass. Special values @c Timeout_Auto and @c Timeout_Never can be
-        used here, notice that you shouldn't rely on @e timeout being exactly
+        used here, notice that you shouldn't rely on @a timeout being exactly
         respected because the current platform may only support default timeout value
         and also because the user may be able to close the notification.
-        
         Returns @false if an error occurred.
     */
     bool Show(int timeout = Timeout_Auto);

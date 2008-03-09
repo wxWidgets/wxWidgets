@@ -60,15 +60,11 @@ public:
     /**
         Get the caret position (in pixels).
         
-        
-        
         @b GetPosition()
-        
         
         Returns a Wx::Point
         
         @b GetPositionXY()
-        
         
         Returns a 2-element list
          @c ( x, y )
@@ -81,15 +77,11 @@ public:
     /**
         Get the caret size.
         
-        
-        
         @b GetSize()
-        
         
         Returns a Wx::Size
         
         @b GetSizeWH()
-        
         
         Returns a 2-element list
          @c ( width, height )
@@ -111,7 +103,7 @@ public:
     /**
         Returns @true if the caret was created successfully.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Returns @true if the caret is visible and @false if it is permanently
@@ -132,10 +124,10 @@ public:
         Sets the blink time for all the carets.
         
         @remarks Under Windows, this function will change the blink time for all
-                   carets permanently (until the next time it is
-                   called), even for the carets in other applications.
+                 carets permanently (until the next time it is called),
+                 even for the carets in other applications.
         
-        @sa GetBlinkTime()
+        @see GetBlinkTime()
     */
     static void SetBlinkTime(int milliseconds);
 
@@ -151,5 +143,5 @@ public:
         Shows or hides the caret. Notice that if the caret was hidden N times, it
         must be shown N times as well to reappear on the screen.
     */
-    void Show(bool show = @true);
+    void Show(bool show = true);
 };

@@ -48,24 +48,22 @@ public:
         Constructor.
         
         @param win
-        The canvas that is used to initialize this context. This parameter is needed
-        only temporarily,
-        and the caller may do anything with it (e.g. destroy the window) after the
+            The canvas that is used to initialize this context. This parameter is
+        needed only temporarily,
+            and the caller may do anything with it (e.g. destroy the window) after the
         constructor returned.
-        
-        It will be possible to bind (make current) this context to any other wxGLCanvas
-        that has been created
-        with equivalent attributes as win.
-        
+            It will be possible to bind (make current) this context to any other
+        wxGLCanvas that has been created
+            with equivalent attributes as win.
         @param other
-        Context to share display lists with or @NULL (the default) for no sharing.
+            Context to share display lists with or @NULL (the default) for no sharing.
     */
-    wxGLContext(wxGLCanvas* win, const wxGLContext* other=@NULL);
+    wxGLContext(wxGLCanvas* win, const wxGLContext* other = NULL);
 
     /**
         Makes the OpenGL state that is represented by this rendering context current
         with the wxGLCanvas @e win.
-        Note that @e win can be a different wxGLCanvas window than the one that was
+        Note that @a win can be a different wxGLCanvas window than the one that was
         passed to the constructor of this rendering context.
         If  @e RC  is an object of type wxGLContext, the statements @e
         RC.SetCurrent(win); and @e win.SetCurrent(RC); are equivalent,
@@ -123,63 +121,56 @@ public:
     /**
         Creates a window with the given parameters. Notice that you need to create and
         use a wxGLContext to output to this window.
-        
         If
         
         @param attribList is not specified, double buffered RGBA mode is used.
         
         parent
-        Pointer to a parent window.
-        
+            Pointer to a parent window.
         @param id
-        Window identifier. If -1, will automatically create an identifier.
-        
+            Window identifier. If -1, will automatically create an identifier.
         @param pos
-        Window position. wxDefaultPosition is (-1, -1) which indicates that wxWidgets
-        should generate a default position for the window.
-        
+            Window position. wxDefaultPosition is (-1, -1) which indicates that
+        wxWidgets
+            should generate a default position for the window.
         @param size
-        Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets should
-        generate a default size for the window. If no suitable size can be found, the
-        window will be sized to 20x20 pixels so that the window is visible but obviously not correctly sized.
-        
+            Window size. wxDefaultSize is (-1, -1) which indicates that wxWidgets should
+            generate a default size for the window. If no suitable size can be found,
+        the window will be sized to 20x20 pixels so that the window is visible but obviously not correctly sized.
         @param style
-        Window style.
-        
+            Window style.
         @param name
-        Window name.
-        
+            Window name.
         @param attribList
-        Array of integers. With this parameter you can set the device context
+            Array of integers. With this parameter you can set the device context
         attributes associated to this window.
-        This array is zero-terminated: it should be set up with constants described in
-        the table above.
-        If a constant should be followed by a value, put it in the next array position.
-        For example, the WX_GL_DEPTH_SIZE should be followed by the value that
+            This array is zero-terminated: it should be set up with constants described
+        in the table above.
+            If a constant should be followed by a value, put it in the next array
+        position.
+            For example, the WX_GL_DEPTH_SIZE should be followed by the value that
         indicates the number of
-        bits for the depth buffer, so:
-        
+            bits for the depth buffer, so:
         @param palette
-        Palette for indexed colour (i.e. non WX_GL_RGBA) mode.
-        Ignored under most platforms.
+            Palette for indexed colour (i.e. non WX_GL_RGBA) mode.
+            Ignored under most platforms.
     */
     wxGLCanvas(wxWindow* parent, wxWindowID id = wxID_ANY,
-               const int* attribList = @NULL,
+               const int* attribList = NULL,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style=0,
-               const wxString& name="GLCanvas",
+               long style = 0,
+               const wxString& name = "GLCanvas",
                const wxPalette& palette = wxNullPalette);
 
     /**
         Determines if a canvas having the specified attributes is available.
-        
         Returns @true if attributes are supported.
         
         @param attribList
-        See attribList for wxGLCanvas().
+            See attribList for wxGLCanvas().
     */
-    static bool IsDisplaySupported(const int * attribList = @NULL);
+    static bool IsDisplaySupported(const int* attribList = NULL);
 
     /**
         Sets the current colour for this window (using @c glcolor3f()), using the
@@ -189,15 +180,12 @@ public:
 
     /**
         Makes the OpenGL state that is represented by the OpenGL rendering context
-        @e context current, i.e. it will be used by all subsequent OpenGL calls.
-        
+        @a context current, i.e. it will be used by all subsequent OpenGL calls.
         This is equivalent to wxGLContext::SetCurrent
         called with this window as parameter.
-        
         Note that this function may only be called when the window is shown on screen,
         in particular it can't usually be called from the constructor as the window
         isn't yet shown at this moment.
-        
         Returns @false if an error occurred.
     */
     bool SetCurrent(const wxGLContext context);
@@ -206,7 +194,6 @@ public:
         Swaps the double-buffer of this window, making the back-buffer the front-buffer
         and vice versa,
         so that the output of the previous OpenGL commands is displayed on the window.
-        
         Returns @false if an error occurred.
     */
     bool SwapBuffers();

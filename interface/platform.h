@@ -16,9 +16,9 @@ Same as wxCHECK_VERSION but also checks that
 /**
 This is a macro which evaluates to @true if the current wxWidgets version is at
 least major.minor.release.
-
 For example, to test if the program is compiled with wxWidgets 2.2 or higher,
 the following can be done:
+
 @code
 wxString s;
 #if wxCHECK_VERSION(2, 2, 0)
@@ -35,7 +35,7 @@ wxString s;
 
 /**
     Returns 1 if the compiler being used to compile the code is Visual C++
-    compiler version @e major or greater. Otherwise, and also if
+    compiler version @a major or greater. Otherwise, and also if
     the compiler is not Visual C++ at all, returns 0.
 */
 #define bool wxCHECK_VISUALC_VERSION(major)     /* implementation is private */

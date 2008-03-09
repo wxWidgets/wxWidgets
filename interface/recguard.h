@@ -79,7 +79,6 @@ public:
     /**
         The destructor resets the flag value so that the function can be entered again
         the next time.
-        
         Note that it is not virtual and so this class is not meant to be derived from
         (besides, there is absolutely no reason to do it anyhow).
     */
@@ -90,7 +89,6 @@ public:
         wxRecursionGuard (i.e. between this line and the end of current scope). Usually
         the function using wxRecursionGuard takes some specific actions in such case
         (may be simply returning) to prevent reentrant calls to itself.
-        
         If this method returns @false, it is safe to continue.
     */
     bool IsInside();

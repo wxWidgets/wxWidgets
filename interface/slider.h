@@ -46,7 +46,7 @@
     @appearance{slider.png}
 
     @seealso
-    @ref overview_eventhandlingoverview "Event handling overview", wxScrollBar
+    @ref overview_eventhandlingoverview, wxScrollBar
 */
 class wxSlider : public wxControl
 {
@@ -56,34 +56,26 @@ public:
         Constructor, creating and showing a slider.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param value
-        Initial position for the slider.
-        
+            Initial position for the slider.
         @param minValue
-        Minimum slider position.
-        
+            Minimum slider position.
         @param maxValue
-        Maximum slider position.
-        
+            Maximum slider position.
         @param size
-        Window size. If wxDefaultSize is specified then a default size is
-        chosen.
-        
+            Window size. If wxDefaultSize is specified then a default size
+        is chosen.
         @param style
-        Window style. See wxSlider.
-        
+            Window style. See wxSlider.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxSlider();
     wxSlider(wxWindow* parent, wxWindowID id, int value,
@@ -129,28 +121,28 @@ public:
     /**
         Returns the line size.
         
-        @sa SetLineSize()
+        @see SetLineSize()
     */
     int GetLineSize();
 
     /**
         Gets the maximum slider value.
         
-        @sa GetMin(), SetRange()
+        @see GetMin(), SetRange()
     */
     int GetMax();
 
     /**
         Gets the minimum slider value.
         
-        @sa GetMin(), SetRange()
+        @see GetMin(), SetRange()
     */
     int GetMin();
 
     /**
         Returns the page size.
         
-        @sa SetPageSize()
+        @see SetPageSize()
     */
     int GetPageSize();
 
@@ -159,7 +151,7 @@ public:
         
         @remarks Windows 95 only.
         
-        @sa GetSelStart(), SetSelection()
+        @see GetSelStart(), SetSelection()
     */
     int GetSelEnd();
 
@@ -168,7 +160,7 @@ public:
         
         @remarks Windows 95 only.
         
-        @sa GetSelEnd(), SetSelection()
+        @see GetSelEnd(), SetSelection()
     */
     int GetSelStart();
 
@@ -177,7 +169,7 @@ public:
         
         @remarks Windows 95 only.
         
-        @sa SetThumbLength()
+        @see SetThumbLength()
     */
     int GetThumbLength();
 
@@ -186,14 +178,14 @@ public:
         
         @remarks Windows 95 only.
         
-        @sa SetTickFreq()
+        @see SetTickFreq()
     */
     int GetTickFreq();
 
     /**
         Gets the current slider value.
         
-        @sa GetMin(), GetMax(), SetValue()
+        @see GetMin(), GetMax(), SetValue()
     */
     int GetValue();
 
@@ -201,9 +193,10 @@ public:
         Sets the line size for the slider.
         
         @param lineSize
-        The number of steps the slider moves when the user moves it up or down a line.
+            The number of steps the slider moves when the user moves it up or down a
+        line.
         
-        @sa GetLineSize()
+        @see GetLineSize()
     */
     void SetLineSize(int lineSize);
 
@@ -211,16 +204,16 @@ public:
         Sets the page size for the slider.
         
         @param pageSize
-        The number of steps the slider moves when the user pages up or down.
+            The number of steps the slider moves when the user pages up or down.
         
-        @sa GetPageSize()
+        @see GetPageSize()
     */
     void SetPageSize(int pageSize);
 
     /**
         Sets the minimum and maximum slider values.
         
-        @sa GetMin(), GetMax()
+        @see GetMin(), GetMax()
     */
     void SetRange(int minValue, int maxValue);
 
@@ -228,14 +221,13 @@ public:
         Sets the selection.
         
         @param startPos
-        The selection start position.
-        
+            The selection start position.
         @param endPos
-        The selection end position.
+            The selection end position.
         
         @remarks Windows 95 only.
         
-        @sa GetSelStart(), GetSelEnd()
+        @see GetSelStart(), GetSelEnd()
     */
     void SetSelection(int startPos, int endPos);
 
@@ -243,11 +235,11 @@ public:
         Sets the slider thumb length.
         
         @param len
-        The thumb length.
+            The thumb length.
         
         @remarks Windows 95 only.
         
-        @sa GetThumbLength()
+        @see GetThumbLength()
     */
     void SetThumbLength(int len);
 
@@ -255,11 +247,11 @@ public:
         Sets a tick position.
         
         @param tickPos
-        The tick position.
+            The tick position.
         
         @remarks Windows 95 only.
         
-        @sa SetTickFreq()
+        @see SetTickFreq()
     */
     void SetTick(int tickPos);
 
@@ -267,16 +259,15 @@ public:
         Sets the tick mark frequency and position.
         
         @param n
-        Frequency. For example, if the frequency is set to two, a tick mark is
+            Frequency. For example, if the frequency is set to two, a tick mark is
         displayed for
-        every other increment in the slider's range.
-        
+            every other increment in the slider's range.
         @param pos
-        Position. Must be greater than zero. TODO: what is this for?
+            Position. Must be greater than zero. TODO: what is this for?
         
         @remarks Windows 95 only.
         
-        @sa GetTickFreq()
+        @see GetTickFreq()
     */
     void SetTickFreq(int n, int pos);
 
@@ -284,7 +275,7 @@ public:
         Sets the slider position.
         
         @param value
-        The slider position.
+            The slider position.
     */
     void SetValue(int value);
 };

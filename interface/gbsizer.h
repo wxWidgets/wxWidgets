@@ -92,18 +92,18 @@ public:
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = @NULL);
+                     wxObject* userData = NULL);
     wxSizerItem* Add(wxSizer* sizer, const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = @NULL);
+                     wxObject* userData = NULL);
     wxSizerItem* Add(int width, int height,
                      const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = @NULL);
+                     wxObject* userData = NULL);
     wxSizerItem* Add(wxGBSizerItem* item);
     //@}
 
@@ -121,10 +121,10 @@ public:
         example it may be the item we are checking the position of.
     */
     bool CheckForIntersection(wxGBSizerItem* item,
-                              wxGBSizerItem* excludeItem = @NULL);
+                              wxGBSizerItem* excludeItem = NULL);
     bool CheckForIntersection(const wxGBPosition& pos,
                               const wxGBSpan& span,
-                              wxGBSizerItem* excludeItem = @NULL);
+                              wxGBSizerItem* excludeItem = NULL);
     //@}
 
     //@{

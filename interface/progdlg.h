@@ -53,23 +53,19 @@ public:
         window only.
         
         @param title
-        Dialog title to show in titlebar.
-        
+            Dialog title to show in titlebar.
         @param message
-        Message displayed above the progress bar.
-        
+            Message displayed above the progress bar.
         @param maximum
-        Maximum value for the progress bar.
-        
+            Maximum value for the progress bar.
         @param parent
-        Parent window.
-        
+            Parent window.
         @param style
-        The dialog style. See wxProgressDialog.
+            The dialog style. See wxProgressDialog.
     */
     wxProgressDialog(const wxString& title, const wxString& message,
                      int maximum = 100,
-                     wxWindow * parent = @NULL,
+                     wxWindow* parent = NULL,
                      int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL);
 
     /**
@@ -85,7 +81,7 @@ public:
         the progress bar a bit to indicate that some progress was done.
     */
     virtual bool Pulse(const wxString& newmsg = "",
-                       bool * skip = @NULL);
+                       bool* skip = NULL);
 
     /**
         Can be used to continue with the dialog, after the user had chosen
@@ -97,25 +93,23 @@ public:
         Updates the dialog, setting the progress bar to the new value and, if
         given changes the message above it. Returns @true unless the Cancel button
         has been pressed.
-        
         If @false is returned, the application can either immediately destroy the
         dialog
         or ask the user for the confirmation and if the abort is not confirmed the
         dialog may be resumed with Resume() function.
         
         @param value
-        The new value of the progress meter. It should be less than or
-        equal to the maximum value given to the constructor and the dialog is closed if
-        it is equal to the maximum.
-        
+            The new value of the progress meter. It should be less than or
+            equal to the maximum value given to the constructor and the dialog is
+        closed if
+            it is equal to the maximum.
         @param newmsg
-        The new messages for the progress dialog text, if it is
-        empty (which is the default) the message is not changed.
-        
+            The new messages for the progress dialog text, if it is
+            empty (which is the default) the message is not changed.
         @param skip
-        If "Skip" button was pressed since last
-        Update call, this is set to @true.
+            If "Skip" button was pressed since last
+            Update call, this is set to @true.
     */
     virtual bool Update(int value, const wxString& newmsg = "",
-                        bool * skip = @NULL);
+                        bool* skip = NULL);
 };

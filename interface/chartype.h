@@ -12,7 +12,6 @@
     words, @c 'x' or @c "foo") to automatically convert them to Unicode in
     Unicode build configuration. Please see the
     @ref overview_unicode "Unicode overview" for more information.
-
     This macro is simply returns the value passed to it without changes in ASCII
     build. In fact, its definition is:
 
@@ -25,7 +24,7 @@
     @endcode
 */
 wxChar wxT(char ch);
-const wxChar * wxT(const char * s);
+const wxChar* wxT(const char* s);
 //@}
 
 
@@ -39,9 +38,9 @@ const wxChar * wxT(const char * s);
     current build, but using it can be beneficial in performance-sensitive code to
     do the conversion at compile-time instead.
 
-    @sa wxT
+    @see wxT
 */
 wxStringCharType wxS(char ch);
-const wxStringCharType * wxS(const char * s);
+const wxStringCharType* wxS(const char* s);
 //@}
 

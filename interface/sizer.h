@@ -51,7 +51,6 @@ public:
     /**
         Adds a button to the wxStdDialogButtonSizer. The button must have one of the
         following identifiers:
-        
          wxID_OK
          wxID_YES
          wxID_SAVE
@@ -349,21 +348,19 @@ public:
 
     /**
         Sets the alignment of this wxSizerFlags to @e align.
-        
         Note that if this method is not called, the wxSizerFlags has no specified
         alignment.
         
-        @sa Top(), Left(), Right(),
-              Bottom(), Centre()
+        @see Top(), Left(), Right(),
+             Bottom(), Centre()
     */
     wxSizerFlags Align(int align = 0);
 
     //@{
     /**
         Sets the wxSizerFlags to have a border of a number of pixels specified by
-        @e borderinpixels with the directions specified by @e direction.
-        
-        In the overloaded version without @e borderinpixels parameter, the border of
+        @a borderinpixels with the directions specified by @e direction.
+        In the overloaded version without @a borderinpixels parameter, the border of
         default size, as returned by GetDefaultBorder(),
         is used.
     */
@@ -374,7 +371,7 @@ public:
     /**
         Aligns the object to the bottom, shortcut for @c Align(wxALIGN_BOTTOM)
         
-        @sa Align()
+        @see Align()
     */
     wxSizerFlags Bottom();
 
@@ -389,7 +386,7 @@ public:
     wxSizerFlags Centre();
 
     /**
-        Sets the border in the given @e direction having twice the default border
+        Sets the border in the given @a direction having twice the default border
         size.
     */
     wxSizerFlags DoubleBorder(int direction = wxALL);
@@ -419,7 +416,7 @@ public:
     /**
         Aligns the object to the left, shortcut for @c Align(wxALIGN_LEFT)
         
-        @sa Align()
+        @see Align()
     */
     wxSizerFlags Left();
 
@@ -431,7 +428,7 @@ public:
     /**
         Aligns the object to the right, shortcut for @c Align(wxALIGN_RIGHT)
         
-        @sa Align()
+        @see Align()
     */
     wxSizerFlags Right();
 
@@ -444,12 +441,12 @@ public:
     /**
         Aligns the object to the top, shortcut for @c Align(wxALIGN_TOP)
         
-        @sa Align()
+        @see Align()
     */
-#define wxSizerFlags Top()     /* implementation is private */
+    wxSizerFlags Top();
 
     /**
-        Sets the border in the given @e direction having thrice the default border
+        Sets the border in the given @a direction having thrice the default border
         size.
     */
     wxSizerFlags TripleBorder(int direction = wxALL);
@@ -524,10 +521,10 @@ class wxFlexGridSizer : public wxGridSizer
 public:
     //@{
     /**
-        Constructor for a wxGridSizer. @e rows and @e cols determine the number of
+        Constructor for a wxGridSizer. @a rows and @a cols determine the number of
         columns and rows in the sizer - if either of the parameters is zero, it will be
         calculated to form the total number of children in the sizer, thus making the
-        sizer grow dynamically. @e vgap and @e hgap define extra space between
+        sizer grow dynamically. @a vgap and @a hgap define extra space between
         all children.
     */
     wxFlexGridSizer(int rows, int cols, int vgap, int hgap);
@@ -535,10 +532,9 @@ public:
     //@}
 
     /**
-        Specifies that column @e idx (starting from zero) should be grown if
+        Specifies that column @a idx (starting from zero) should be grown if
         there is extra space available to the sizer.
-        
-        The @e proportion parameter has the same meaning as the stretch factor for
+        The @a proportion parameter has the same meaning as the stretch factor for
         the sizers except that if all proportions are 0,
         then all columns are resized equally (instead of not being resized at all).
     */
@@ -547,9 +543,8 @@ public:
     /**
         Specifies that row idx (starting from zero) should be grown if there
         is extra space available to the sizer.
-        
         See AddGrowableCol() for the description
-        of @e proportion parameter.
+        of @a proportion parameter.
     */
     void AddGrowableRow(size_t idx, int proportion = 0);
 
@@ -559,7 +554,7 @@ public:
         
         @returns One of the following values:
         
-        @sa SetFlexibleDirection()
+        @see SetFlexibleDirection()
     */
     int GetFlexibleDirection();
 
@@ -569,8 +564,8 @@ public:
         
         @returns One of the following values:
         
-        @sa SetFlexibleDirection(),
-              SetNonFlexibleGrowMode()
+        @see SetFlexibleDirection(),
+             SetNonFlexibleGrowMode()
     */
     int GetNonFlexibleGrowMode();
 
@@ -590,7 +585,6 @@ public:
         or @c wxBOTH (which is the default value). Any other value is ignored. See
         @ref getflexibledrection() GetFlexibleDirection for the
         explanation of these values.
-        
         Note that this method does not trigger relayout.
     */
     void SetFlexibleDirection(int direction);
@@ -599,10 +593,9 @@ public:
         Specifies how the sizer should grow in the non-flexible direction if
         there is one (so
         SetFlexibleDirection() must have
-        been called previously). Argument @e mode can be one of those documented in
+        been called previously). Argument @a mode can be one of those documented in
         GetNonFlexibleGrowMode(), please
         see there for their explanation.
-        
         Note that this method does not trigger relayout.
     */
     void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
@@ -699,139 +692,162 @@ public:
         here:
         
         @param window
-        The window to be added to the sizer. Its initial size (either set explicitly by
-        the
-        user or calculated internally when using wxDefaultSize) is interpreted as the
-        minimal and in many
-        cases also the initial size.
-        
+            The window to be added to the sizer. Its initial size (either set
+        explicitly by the
+            user or calculated internally when using wxDefaultSize) is interpreted as
+        the minimal and in many
+            cases also the initial size.
         @param sizer
-        The (child-)sizer to be added to the sizer. This allows placing a child sizer
-        in a
-        sizer and thus to create hierarchies of sizers (typically a vertical box as the
-        top sizer and several
-        horizontal boxes on the level beneath).
-        
+            The (child-)sizer to be added to the sizer. This allows placing a child
+        sizer in a
+            sizer and thus to create hierarchies of sizers (typically a vertical box as
+        the top sizer and several
+            horizontal boxes on the level beneath).
         @param width and height
-        The dimension of a spacer to be added to the sizer. Adding spacers to sizers
-        gives more flexibility in the design of dialogs; imagine for example a
+            The dimension of a spacer to be added to the sizer. Adding spacers to sizers
+            gives more flexibility in the design of dialogs; imagine for example a
         horizontal box with two buttons at the
-        bottom of a dialog: you might want to insert a space between the two buttons
-        and make that space stretchable
-        using the proportion flag and the result will be that the left button will be
-        aligned with the left
-        side of the dialog and the right button with the right side - the space in
+            bottom of a dialog: you might want to insert a space between the two
+        buttons and make that space stretchable
+            using the proportion flag and the result will be that the left button will
+        be aligned with the left
+            side of the dialog and the right button with the right side - the space in
         between will shrink and grow with
-        the dialog.
-        
+            the dialog.
         @param proportion
-        Although the meaning of this parameter is undefined in wxSizer, it is used in
-        wxBoxSizer
-        to indicate if a child of a sizer can change its size in the main orientation
-        of the wxBoxSizer - where
-        0 stands for not changeable and a value of more than zero is interpreted
+            Although the meaning of this parameter is undefined in wxSizer, it is used
+        in wxBoxSizer
+            to indicate if a child of a sizer can change its size in the main
+        orientation of the wxBoxSizer - where
+            0 stands for not changeable and a value of more than zero is interpreted
         relative to the value of other
-        children of the same wxBoxSizer. For example, you might have a horizontal
+            children of the same wxBoxSizer. For example, you might have a horizontal
         wxBoxSizer with three children, two
-        of which are supposed to change their size with the sizer. Then the two
+            of which are supposed to change their size with the sizer. Then the two
         stretchable windows would get a
-        value of 1 each to make them grow and shrink equally with the sizer's
+            value of 1 each to make them grow and shrink equally with the sizer's
         horizontal dimension.
-        
         @param flag
-        This parameter can be used to set a number of flags
-        which can be combined using the binary OR operator |. Two main
-        behaviours are defined using these flags. One is the border around a
-        window: the border parameter determines the border width whereas
-        the flags given here determine which side(s) of the item that the
-        border will be added.  The other flags determine how the sizer item
-        behaves when the space allotted to the sizer changes, and is somewhat
-        dependent on the specific kind of sizer used.
-        
-        wxTOP
-        
-        wxBOTTOM
-        
-        wxLEFT
-        
-        wxRIGHT
-        
-        wxALL
+            This parameter can be used to set a number of flags
+            which can be combined using the binary OR operator |. Two main
+            behaviours are defined using these flags. One is the border around a
+            window: the border parameter determines the border width whereas
+            the flags given here determine which side(s) of the item that the
+            border will be added.  The other flags determine how the sizer item
+            behaves when the space allotted to the sizer changes, and is somewhat
+            dependent on the specific kind of sizer used.
         
         
-        These flags are used to specify which side(s) of
-          the sizer item the border width will apply to.
         
         
-        wxEXPAND
         
         
-        The item will be expanded to fill
-        the space assigned to the item.
+            wxTOP
         
-        wxSHAPED
+            wxBOTTOM
         
+            wxLEFT
         
-        The item will be expanded as much
-        as possible while also maintaining its aspect ratio
+            wxRIGHT
         
-        wxFIXED_MINSIZE
-        
-        
-        Normally wxSizers will use
-        GetAdjustedBestSize to
-        determine what the minimal size of window items should be, and will
-        use that size to calculate the layout. This allows layouts to
-        adjust when an item changes and its best size becomes
-        different. If you would rather have a window item stay the size it
-        started with then use wxFIXED_MINSIZE.
-        
-        wxALIGN_CENTER wxALIGN_CENTRE
-        
-        wxALIGN_LEFT
-        
-        wxALIGN_RIGHT
-        
-        wxALIGN_TOP
-        
-        wxALIGN_BOTTOM
-        
-        wxALIGN_CENTER_VERTICAL wxALIGN_CENTRE_VERTICAL
-        
-        wxALIGN_CENTER_HORIZONTAL wxALIGN_CENTRE_HORIZONTAL
+            wxALL
         
         
-        The wxALIGN flags allow you to
-        specify the alignment of the item within the space allotted to it by
-        the sizer, adjusted for the border if any.
         
+        
+            These flags are used to specify which side(s) of
+              the sizer item the border width will apply to.
+        
+        
+        
+        
+        
+            wxEXPAND
+        
+        
+        
+        
+            The item will be expanded to fill
+            the space assigned to the item.
+        
+        
+        
+        
+        
+            wxSHAPED
+        
+        
+        
+        
+            The item will be expanded as much
+            as possible while also maintaining its aspect ratio
+        
+        
+        
+        
+        
+            wxFIXED_MINSIZE
+        
+        
+        
+        
+            Normally wxSizers will use
+            GetAdjustedBestSize to
+            determine what the minimal size of window items should be, and will
+            use that size to calculate the layout. This allows layouts to
+            adjust when an item changes and its best size becomes
+            different. If you would rather have a window item stay the size it
+            started with then use wxFIXED_MINSIZE.
+        
+        
+        
+        
+        
+            wxALIGN_CENTER wxALIGN_CENTRE
+        
+            wxALIGN_LEFT
+        
+            wxALIGN_RIGHT
+        
+            wxALIGN_TOP
+        
+            wxALIGN_BOTTOM
+        
+            wxALIGN_CENTER_VERTICAL wxALIGN_CENTRE_VERTICAL
+        
+            wxALIGN_CENTER_HORIZONTAL wxALIGN_CENTRE_HORIZONTAL
+        
+        
+        
+        
+            The wxALIGN flags allow you to
+            specify the alignment of the item within the space allotted to it by
+            the sizer, adjusted for the border if any.
         @param border
-        Determines the border width, if the flag
-          parameter is set to include any border flag.
-        
+            Determines the border width, if the flag
+              parameter is set to include any border flag.
         @param userData
-        Allows an extra object to be attached to the sizer
-        item, for use in derived classes when sizing information is more
-        complex than the proportion and flag will allow for.
-        
+            Allows an extra object to be attached to the sizer
+            item, for use in derived classes when sizing information is more
+            complex than the proportion and flag will allow for.
         @param flags
-        A wxSizerFlags object that
-        enables you to specify most of the above parameters more conveniently.
+            A wxSizerFlags object that
+            enables you to specify most of the above parameters more conveniently.
     */
     wxSizerItem* Add(wxWindow* window, const wxSizerFlags& flags);
     wxSizerItem* Add(wxWindow* window, int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = @NULL);
+                     wxObject* userData = NULL);
     wxSizerItem* Add(wxSizer* sizer, const wxSizerFlags& flags);
     wxSizerItem* Add(wxSizer* sizer, int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = @NULL);
+                     wxObject* userData = NULL);
     wxSizerItem* Add(int width, int height, int proportion = 0,
                      int flag = 0,
                      int border = 0,
-                     wxObject* userData = @NULL);
+                     wxObject* userData = NULL);
     //@}
 
     /**
@@ -853,51 +869,48 @@ public:
     wxSize CalcMin();
 
     /**
-        Detaches all children from the sizer. If @e delete_windows is @true then
+        Detaches all children from the sizer. If @a delete_windows is @true then
         child windows will also be deleted.
     */
-    void Clear(bool delete_windows = @false);
+    void Clear(bool delete_windows = false);
 
     /**
-        Computes client area size for @e window so that it matches the
+        Computes client area size for @a window so that it matches the
         sizer's minimal size. Unlike GetMinSize(), this
         method accounts for other constraints imposed on @e window, namely display's
         size (returned size will never be too large for the display) and maximum
         window size if previously set by
         wxWindow::SetMaxSize.
-        
         The returned value is suitable for passing to
         wxWindow::SetClientSize or
         wxWindow::SetMinClientSize.
         
-        @sa ComputeFittingWindowSize(), Fit()
+        @see ComputeFittingWindowSize(), Fit()
     */
     wxSize ComputeFittingClientSize(wxWindow* window);
 
     /**
         Like ComputeFittingClientSize(),
         but converts the result into window size.
-        
         The returned value is suitable for passing to
         wxWindow::SetSize or
         wxWindow::SetMinSize.
         
-        @sa ComputeFittingClientSize(), Fit()
+        @see ComputeFittingClientSize(), Fit()
     */
     wxSize ComputeFittingWindowSize(wxWindow* window);
 
     //@{
     /**
-        Detach a child from the sizer without destroying it. @e window is the window to
+        Detach a child from the sizer without destroying it. @a window is the window to
         be
-        detached, @e sizer is the equivalent sizer and @e index is the position of
+        detached, @a sizer is the equivalent sizer and @a index is the position of
         the child in the sizer, typically 0 for the first item. This method does not
         cause any layout or resizing to take place, call Layout()
         to update the layout "on screen" after detaching a child from the sizer.
-        
         Returns @true if the child item was found and detached, @false otherwise.
         
-        @sa Remove()
+        @see Remove()
     */
     bool Detach(wxWindow* window);
     bool Detach(wxSizer* sizer);
@@ -905,7 +918,7 @@ public:
     //@}
 
     /**
-        Tell the sizer to resize the @e window so that its client area matches the
+        Tell the sizer to resize the @a window so that its client area matches the
         sizer's minimal size
         (ComputeFittingClientSize() is called
         to determine it).
@@ -913,19 +926,19 @@ public:
         itself, see sample in the description
         of wxBoxSizer. Returns the new window size.
         
-        @sa ComputeFittingClientSize(), ComputeFittingWindowSize()
+        @see ComputeFittingClientSize(), ComputeFittingWindowSize()
     */
-#define wxSize Fit(wxWindow* window)     /* implementation is private */
+    wxSize Fit(wxWindow* window);
 
     /**
-        Tell the sizer to resize the virtual size of the @e window to match the sizer's
+        Tell the sizer to resize the virtual size of the @a window to match the sizer's
         minimal size.  This will not alter the on screen size of the window, but may
         cause
         the addition/removal/alteration of scrollbars required to view the virtual area
         in
         windows which manage it.
         
-        @sa wxScrolledWindow::SetScrollbars, SetVirtualSizeHints()
+        @see wxScrolledWindow::SetScrollbars, SetVirtualSizeHints()
     */
     void FitInside(wxWindow* window);
 
@@ -942,37 +955,33 @@ public:
     /**
         Returns the window this sizer is used in or @NULL if none.
     */
-    wxWindow * GetContainingWindow();
+    wxWindow* GetContainingWindow();
 
     //@{
     /**
-        Finds item of the sizer which holds given @e window, @e sizer or is located
+        Finds item of the sizer which holds given @e window, @a sizer or is located
         in sizer at position @e index.
-        Use parameter @e recursive to search in subsizers too.
-        
+        Use parameter @a recursive to search in subsizers too.
         Returns pointer to item or @NULL.
     */
-    wxSizerItem * GetItem(wxWindow* window, bool recursive = @false);
-    wxSizerItem * GetItem(wxSizer* sizer, bool recursive = @false);
-    wxSizerItem * GetItem(size_t index);
+    wxSizerItem* GetItem(wxWindow* window, bool recursive = false);
+    wxSizerItem* GetItem(wxSizer* sizer, bool recursive = false);
+    wxSizerItem* GetItem(size_t index);
     //@}
 
     /**
-        Finds item of the sizer which has the given @e id.  This @e id is not the
+        Finds item of the sizer which has the given @e id.  This @a id is not the
         window id but the id of the wxSizerItem itself.  This is mainly useful for
         retrieving the sizers created from XRC resources.
-        
-        Use parameter @e recursive to search in subsizers too.
-        
+        Use parameter @a recursive to search in subsizers too.
         Returns pointer to item or @NULL.
     */
-    wxSizerItem * GetItemById(int id, bool recursive = @false);
+    wxSizerItem* GetItemById(int id, bool recursive = false);
 
     /**
         Returns the minimal size of the sizer. This is either the combined minimal
         size of all the children and their borders or the minimal size set by
         SetMinSize(), depending on which is bigger.
-        
         Note that the returned value is client size, not window size.
         In particular, if you use the value to set toplevel window's minimal or
         actual size, use wxWindow::SetMinClientSize
@@ -996,26 +1005,26 @@ public:
     /**
         Hides the @e window, @e sizer, or item at @e index.
         To make a sizer item disappear, use Hide() followed by Layout().
-        Use parameter @e recursive to hide elements found in subsizers.
-        
+        Use parameter @a recursive to hide elements found in subsizers.
         Returns @true if the child item was found, @false otherwise.
         
-        @sa IsShown(), Show()
+        @see IsShown(), Show()
     */
-    bool Hide(wxWindow* window, bool recursive = @false);
-    bool Hide(wxSizer* sizer, bool recursive = @false);
+    bool Hide(wxWindow* window, bool recursive = false);
+    bool Hide(wxSizer* sizer, bool recursive = false);
     bool Hide(size_t index);
     //@}
 
     //@{
     /**
         Insert a child into the sizer before any existing item at
+        
         See Add() for the meaning of the other parameters.
         
         @param index.
         
         index
-        The position this child should assume in the sizer.
+            The position this child should assume in the sizer.
     */
     wxSizerItem* Insert(size_t index, wxWindow* window,
                         const wxSizerFlags& flags);
@@ -1023,19 +1032,19 @@ public:
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = @NULL);
+                        wxObject* userData = NULL);
     wxSizerItem* Insert(size_t index, wxSizer* sizer,
                         const wxSizerFlags& flags);
     wxSizerItem* Insert(size_t index, wxSizer* sizer,
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = @NULL);
+                        wxObject* userData = NULL);
     wxSizerItem* Insert(size_t index, int width, int height,
                         int proportion = 0,
                         int flag = 0,
                         int border = 0,
-                        wxObject* userData = @NULL);
+                        wxObject* userData = NULL);
     //@}
 
     /**
@@ -1052,9 +1061,9 @@ public:
 
     //@{
     /**
-        Returns @true if the @e window, @e sizer, or item at @e index is shown.
+        Returns @true if the @e window, @e sizer, or item at @a index is shown.
         
-        @sa Hide(), Show()
+        @see Hide(), Show()
     */
     bool IsShown(wxWindow* window);
     bool IsShown(wxSizer* sizer);
@@ -1078,18 +1087,18 @@ public:
     wxSizerItem* Prepend(wxWindow* window, int proportion = 0,
                          int flag = 0,
                          int border = 0,
-                         wxObject* userData = @NULL);
+                         wxObject* userData = NULL);
     wxSizerItem* Prepend(wxSizer* sizer,
                          const wxSizerFlags& flags);
     wxSizerItem* Prepend(wxSizer* sizer, int proportion = 0,
                          int flag = 0,
                          int border = 0,
-                         wxObject* userData = @NULL);
+                         wxObject* userData = NULL);
     wxSizerItem* Prepend(int width, int height,
                          int proportion = 0,
                          int flag = 0,
-                         int border= 0,
-                         wxObject* userData = @NULL);
+                         int border = 0,
+                         wxObject* userData = NULL);
     //@}
 
     /**
@@ -1115,17 +1124,15 @@ public:
     /**
         Removes a child from the sizer and destroys it if it is a sizer or a spacer,
         but not if it is a window (because windows are owned by their parent window,
-        not the sizer).  @e sizer is the wxSizer to be removed,
-        @e index is the position of the child in the sizer, e.g. 0 for the first item.
+        not the sizer).  @a sizer is the wxSizer to be removed,
+        @a index is the position of the child in the sizer, e.g. 0 for the first item.
         This method does not cause any layout or resizing to take place, call
         Layout() to update the layout "on screen" after removing a
         child from the sizer.
-        
         @b NB: The method taking a wxWindow* parameter is deprecated as it does not
         destroy the window as would usually be expected from Remove.  You should use
         Detach() in new code instead.  There is
         currently no wxSizer method that will both detach and destroy a wxWindow item.
-        
         Returns @true if the child item was found and removed, @false otherwise.
     */
     bool Remove(wxWindow* window);
@@ -1135,23 +1142,21 @@ public:
 
     //@{
     /**
-        Detaches the given @e oldwin, @e oldsz child from the sizer and
+        Detaches the given @e oldwin, @a oldsz child from the sizer and
         replaces it with the given window, sizer, or wxSizerItem.
-        
         The detached child is removed @b only if it is a sizer or a spacer
         (because windows are owned by their parent window, not the sizer).
+        Use parameter @a recursive to search the given element recursively in subsizers.
         
-        Use parameter @e recursive to search the given element recursively in subsizers.
         This method does not cause any layout or resizing to take place, call
         Layout() to update the layout "on screen" after replacing a
         child from the sizer.
-        
         Returns @true if the child item was found and removed, @false otherwise.
     */
     bool Replace(wxWindow* oldwin, wxWindow* newwin,
-                 bool recursive = @false);
+                 bool recursive = false);
     bool Replace(wxSizer* oldsz, wxSizer* newsz,
-                 bool recursive = @false);
+                 bool recursive = false);
     bool Remove(size_t oldindex, wxSizerItem* newitem);
     //@}
 
@@ -1194,11 +1199,10 @@ public:
     /**
         This method first calls Fit() and then
         wxTopLevelWindow::SetSizeHints on the @e window
-        passed to it. This only makes sense when @e window is actually a
+        passed to it. This only makes sense when @a window is actually a
         wxTopLevelWindow such as a wxFrame or a
         wxDialog, since SetSizeHints only has any effect in these classes.
         It does nothing in normal windows or controls.
-        
         This method is implicitly used by wxWindow::SetSizerAndFit
         which is commonly invoked in the constructor of a toplevel window itself (see
         the sample in the description of wxBoxSizer) if the
@@ -1207,12 +1211,12 @@ public:
     void SetSizeHints(wxWindow* window);
 
     /**
-        Tell the sizer to set the minimal size of the @e window virtual area to match
+        Tell the sizer to set the minimal size of the @a window virtual area to match
         the sizer's
         minimal size. For windows with managed scrollbars this will set them
         appropriately.
         
-        @sa wxScrolledWindow::SetScrollbars
+        @see wxScrolledWindow::SetScrollbars
     */
     void SetVirtualSizeHints(wxWindow* window);
 
@@ -1220,17 +1224,16 @@ public:
     /**
         Shows or hides the @e window, @e sizer, or item at @e index.
         To make a sizer item disappear or reappear, use Show() followed by Layout().
-        Use parameter @e recursive to show or hide elements found in subsizers.
-        
+        Use parameter @a recursive to show or hide elements found in subsizers.
         Returns @true if the child item was found, @false otherwise.
         
-        @sa Hide(), IsShown()
+        @see Hide(), IsShown()
     */
-    bool Show(wxWindow* window, bool show = @true,
-              bool recursive = @false);
-    bool Show(wxSizer* sizer, bool show = @true,
-              bool recursive = @false);
-    bool Show(size_t index, bool show = @true);
+    bool Show(wxWindow* window, bool show = true,
+              bool recursive = false);
+    bool Show(wxSizer* sizer, bool show = true,
+              bool recursive = false);
+    bool Show(size_t index, bool show = true);
     //@}
 };
 
@@ -1255,10 +1258,10 @@ class wxGridSizer : public wxSizer
 public:
     //@{
     /**
-        Constructor for a wxGridSizer. @e rows and @e cols determine the number of
+        Constructor for a wxGridSizer. @a rows and @a cols determine the number of
         columns and rows in the sizer - if either of the parameters is zero, it will be
         calculated to form the total number of children in the sizer, thus making the
-        sizer grow dynamically. @e vgap and @e hgap define extra space between
+        sizer grow dynamically. @a vgap and @a hgap define extra space between
         all children.
     */
     wxGridSizer(int rows, int cols, int vgap, int hgap);
@@ -1331,7 +1334,6 @@ public:
         The first constructor uses an already existing static box. It takes the
         associated static box and the orientation @e orient, which can be either
         @c wxVERTICAL or @c wxHORIZONTAL as parameters.
-        
         The second one creates a new static box with the given label and parent window.
     */
     wxStaticBoxSizer(wxStaticBox* box, int orient);
@@ -1368,7 +1370,7 @@ class wxBoxSizer : public wxSizer
 {
 public:
     /**
-        Constructor for a wxBoxSizer. @e orient may be either of wxVERTICAL
+        Constructor for a wxBoxSizer. @a orient may be either of wxVERTICAL
         or wxHORIZONTAL for creating either a column sizer or a row sizer.
     */
     wxBoxSizer(int orient);

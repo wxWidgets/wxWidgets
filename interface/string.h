@@ -47,7 +47,7 @@ class wxStringBuffer
 public:
     /**
         Constructs a writable string buffer object associated with the given string
-        and containing enough space for at least @e len characters. Basically, this
+        and containing enough space for at least @a len characters. Basically, this
         is equivalent to calling wxString::GetWriteBuf and
         saving the result.
     */
@@ -63,7 +63,7 @@ public:
         Returns the writable pointer to a buffer of the size at least equal to the
         length specified in the constructor.
     */
-    wxChar * operator wxChar *();
+    wxChar* operator wxChar *();
 };
 
 
@@ -106,15 +106,15 @@ class wxString
 public:
     //@{
     /**
-        Initializes the string from first @e nLength characters of C string.
+        Initializes the string from first @a nLength characters of C string.
         The default value of @c wxSTRING_MAXLEN means take all the string.
         In Unicode build, @e conv's
         wxMBConv::MB2WC method is called to
-        convert @e psz to wide string (the default converter uses current locale's
+        convert @a psz to wide string (the default converter uses current locale's
         charset). It is ignored in ANSI build.
         
-        @sa @ref overview_mbconvclasses "wxMBConv classes", @ref mbstr()
-              mb_str, @ref wcstr() wc_str
+        @see @ref overview_mbconvclasses "wxMBConv classes", @ref mbstr()
+             mb_str, @ref wcstr() wc_str
     */
     wxString();
     wxString(const wxString& x);
@@ -136,23 +136,24 @@ public:
 
     /**
         Gets all the characters after the first occurrence of @e ch.
-        Returns the empty string if @e ch is not found.
+        Returns the empty string if @a ch is not found.
     */
     wxString AfterFirst(wxChar ch);
 
     /**
         Gets all the characters after the last occurrence of @e ch.
-        Returns the whole string if @e ch is not found.
+        Returns the whole string if @a ch is not found.
     */
     wxString AfterLast(wxChar ch);
 
     /**
-        Preallocate enough space for wxString to store @e nLen characters. This function
+        Preallocate enough space for wxString to store @a nLen characters. This function
         may be used to increase speed when the string is constructed by repeated
         concatenation as in
+        
         because it will avoid the need to reallocate string memory many times (in case
         of long strings). Note that it does not set the maximal length of a string - it
-        will still expand if more than @e nLen characters are stored in it. Also, it
+        will still expand if more than @a nLen characters are stored in it. Also, it
         does not truncate the existing string (use
         Truncate() for this) even if its current length is
         greater than @e nLen
@@ -161,7 +162,7 @@ public:
 
     //@{
     /**
-        Concatenates character @e ch to this string, @e count times, returning a
+        Concatenates character @a ch to this string, @a count times, returning a
         reference
         to it.
     */
@@ -171,13 +172,13 @@ public:
 
     /**
         Gets all characters before the first occurrence of @e ch.
-        Returns the whole string if @e ch is not found.
+        Returns the whole string if @a ch is not found.
     */
     wxString BeforeFirst(wxChar ch);
 
     /**
         Gets all characters before the last occurrence of @e ch.
-        Returns the empty string if @e ch is not found.
+        Returns the empty string if @a ch is not found.
     */
     wxString BeforeLast(wxChar ch);
 
@@ -185,7 +186,6 @@ public:
         The MakeXXX() variants modify the string in place, while the other functions
         return a new string which contains the original text converted to the upper or
         lower case and leave the original string unchanged.
-        
         MakeUpper()
         
         Upper()
@@ -204,13 +204,11 @@ public:
         failure in @ref overview_debuggingoverview "debug build", but no checks are
         done in
         release builds.
-        
         This section also contains both implicit and explicit conversions to C style
         strings. Although implicit conversion is quite convenient, it is advised to use
         explicit @ref cstr() c_str method for the sake of clarity. Also
         see overview for the cases where it is necessary to
         use it.
-        
         GetChar()
         
         GetWritableChar()
@@ -235,7 +233,6 @@ public:
 
     /**
         Empties the string and frees memory occupied by it.
-        
         See also: Empty()
     */
     void Clear();
@@ -243,12 +240,10 @@ public:
     //@{
     /**
         Case-sensitive comparison.
-        
         Returns a positive value if the string is greater than the argument, zero if
         it is equal to it or a negative value if it is less than the argument (same
         semantics
         as the standard @e strcmp() function).
-        
         See also CmpNoCase(), IsSameAs().
     */
     int Cmp(const wxString& s);
@@ -258,12 +253,10 @@ public:
     //@{
     /**
         Case-insensitive comparison.
-        
         Returns a positive value if the string is greater than the argument, zero if
         it is equal to it or a negative value if it is less than the argument (same
         semantics
         as the standard @e strcmp() function).
-        
         See also Cmp(), IsSameAs().
     */
     int CmpNoCase(const wxString& s);
@@ -272,7 +265,6 @@ public:
 
     /**
         Case-sensitive comparison. Returns 0 if equal, 1 if greater or -1 if less.
-        
         This is a wxWidgets 1.xx compatibility function; use Cmp() instead.
     */
     int CompareTo(const wxChar* psz, caseCompare cmp = exact);
@@ -286,16 +278,13 @@ public:
         @true value if the strings are the same and not 0 (which is usually @false in
         C)
         as @c Cmp() does.
-        
         Matches() is a poor man's regular expression matcher:
         it only understands '*' and '?' metacharacters in the sense of DOS command line
         interpreter.
-        
         StartsWith() is helpful when parsing a line of
         text which should start with some predefined prefix and is more efficient than
         doing direct string comparison as you would also have to precalculate the
         length of the prefix then.
-        
         Cmp()
         
         CmpNoCase()
@@ -332,7 +321,6 @@ public:
         Anything may be concatenated (appended to) with a string. However, you can't
         append something to a C string (including literal constants), so to do this it
         should be converted to a wxString first.
-        
         @ref operatorout() "operator "
         
         @ref plusequal() "operator +="
@@ -350,7 +338,6 @@ public:
         a single character or a wide (UNICODE) string. For all constructors (except the
         default which creates an empty string) there is also a corresponding assignment
         operator.
-        
         @ref construct() wxString
         
         @ref operatorassign() "operator ="
@@ -361,7 +348,6 @@ public:
 
     /**
         Returns @true if target appears anywhere in wxString; else @false.
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -372,7 +358,6 @@ public:
         floating point numbers. All three functions take a pointer to the variable to
         put the numeric value in and return @true if the @b entire string could be
         converted to a number.
-        
         ToLong()
         
         ToLongLong()
@@ -387,7 +372,6 @@ public:
 
     /**
         Makes the string empty, but doesn't free memory occupied by the string.
-        
         See also: Clear().
     */
     void Empty();
@@ -395,25 +379,24 @@ public:
     /**
         This function can be used to test if the string ends with the specified
         @e suffix. If it does, the function will return @true and put the
-        beginning of the string before the suffix into @e rest string if it is not
+        beginning of the string before the suffix into @a rest string if it is not
         @NULL. Otherwise, the function returns @false and doesn't
         modify the @e rest.
     */
-    bool EndsWith(const wxString& suffix, wxString rest = @NULL);
+    bool EndsWith(const wxString& suffix, wxString rest = NULL);
 
     //@{
     /**
         Searches for the given string. Returns the starting index, or @c wxNOT_FOUND if
         not found.
     */
-    int Find(wxUniChar ch, bool fromEnd = @false);
+    int Find(wxUniChar ch, bool fromEnd = false);
     int Find(const wxString& sub);
     //@}
 
     //@{
     /**
         Same as Find().
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -426,21 +409,20 @@ public:
         This static function returns the string containing the result of calling
         Printf() with the passed parameters on it.
         
-        @sa FormatV(), Printf()
+        @see FormatV(), Printf()
     */
-    static wxString Format(const wxChar format,  ...);
+    static wxString Format(const wxChar format, ...);
 
     /**
         This static function returns the string containing the result of calling
         PrintfV() with the passed parameters on it.
         
-        @sa Format(), PrintfV()
+        @see Format(), PrintfV()
     */
     static wxString FormatV(const wxChar format, va_list argptr);
 
     /**
-        Returns the number of occurrences of @e ch in the string.
-        
+        Returns the number of occurrences of @a ch in the string.
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -450,13 +432,11 @@ public:
     /**
         Converts given buffer of binary data from 8-bit string to wxString. In Unicode
         build, the string is interpreted as being in ISO-8859-1 encoding. The version
-        without @e len parameter takes NUL-terminated data.
-        
+        without @a len parameter takes NUL-terminated data.
         This is a convenience method useful when storing binary data in wxString.
-        
         This function is new since wxWidgets version 2.8.4
         
-        @sa wxString::To8BitData
+        @see wxString::To8BitData
     */
     static wxString From8BitData(const char* buf, size_t len);
     static wxString From8BitData(const char* buf);
@@ -480,8 +460,7 @@ public:
     //@{
     /**
         Converts C string encoded in UTF-8 to wxString.
-        
-        Note that this method assumes that @e s is a valid UTF-8 sequence and
+        Note that this method assumes that @a s is a valid UTF-8 sequence and
         doesn't do any validation in release builds, it's validity is only checked in
         debug builds.
     */
@@ -490,7 +469,7 @@ public:
     //@}
 
     /**
-        Returns the character at position @e n (read-only).
+        Returns the character at position @a n (read-only).
     */
     wxChar GetChar(size_t n);
 
@@ -506,13 +485,11 @@ public:
     wxChar GetWritableChar(size_t n);
 
     /**
-        Returns a writable buffer of at least @e len bytes.
+        Returns a writable buffer of at least @a len bytes.
         It returns a pointer to a new memory block, and the
         existing data will not be copied.
-        
         Call UngetWriteBuf() as soon as
         possible to put the string back into a reasonable state.
-        
         This method is deprecated, please use
         wxStringBuffer or
         wxStringBufferLength instead.
@@ -522,7 +499,6 @@ public:
     //@{
     /**
         Same as Find().
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -532,7 +508,6 @@ public:
 
     /**
         Returns @true if the string contains only ASCII characters.
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -545,7 +520,6 @@ public:
 
     /**
         Returns @true if the string is empty (same as wxString::IsEmpty).
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -553,7 +527,6 @@ public:
 
     /**
         Returns @true if the string is an integer (with possible sign).
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -562,20 +535,17 @@ public:
     //@{
     /**
         Test whether the string is equal to the single character @e c. The test is
-        case-sensitive if @e caseSensitive is @true (default) or not if it is @c
+        case-sensitive if @a caseSensitive is @true (default) or not if it is @c
         @false.
-        
         Returns @true if the string is equal to the character, @false otherwise.
-        
         See also Cmp(), CmpNoCase()
     */
-    bool IsSameAs(const wxChar* psz, bool caseSensitive = @true);
-    bool IsSameAs(wxChar c, bool caseSensitive = @true);
+    bool IsSameAs(const wxChar* psz, bool caseSensitive = true);
+    bool IsSameAs(wxChar c, bool caseSensitive = true);
     //@}
 
     /**
         Returns @true if the string is a word.
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -584,7 +554,6 @@ public:
     //@{
     /**
         Returns a reference to the last character (writable).
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -593,18 +562,17 @@ public:
     //@}
 
     /**
-        Returns the first @e count characters of the string.
+        Returns the first @a count characters of the string.
     */
     wxString Left(size_t count);
 
     /**
         Returns the length of the string.
     */
-#define size_t Len()     /* implementation is private */
+    size_t Len();
 
     /**
         Returns the length of the string (same as Len).
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -617,7 +585,6 @@ public:
 
     /**
         Same as MakeLower.
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -646,7 +613,6 @@ public:
         and wxStringBufferLength classes may be very
         useful when working with some external API which requires the caller to provide
         a writable buffer.
-        
         Alloc()
         
         Shrink()
@@ -659,13 +625,12 @@ public:
 
     /**
         Returns a substring starting at @e first, with length @e count, or the rest of
-        the string if @e count is the default value.
+        the string if @a count is the default value.
     */
-#define wxString Mid(size_t first, size_t count = wxSTRING_MAXLEN)     /* implementation is private */
+    wxString Mid(size_t first, size_t count = wxSTRING_MAXLEN);
 
     /**
         Other string functions.
-        
         Trim()
         
         Truncate()
@@ -675,31 +640,30 @@ public:
 
 
     /**
-        Adds @e count copies of @e pad to the beginning, or to the end of the string
+        Adds @a count copies of @a pad to the beginning, or to the end of the string
         (the default).
-        
         Removes spaces from the left or from the right (default).
     */
-#define wxString Pad(size_t count, wxChar pad = ' ',
-    bool fromRight = @true)     /* implementation is private */
+    wxString Pad(size_t count, wxChar pad = ' ',
+                 bool fromRight = true);
 
     /**
-        Prepends @e str to this string, returning a reference to this string.
+        Prepends @a str to this string, returning a reference to this string.
     */
     wxString Prepend(const wxString& str);
 
     /**
         Similar to the standard function @e sprintf(). Returns the number of
         characters written, or an integer less than zero on error.
-        
         Note that if @c wxUSE_PRINTF_POS_PARAMS is set to 1, then this function supports
         Unix98-style positional parameters:
+        
         @b NB: This function will use a safe version of @e vsprintf() (usually called
         @e vsnprintf()) whenever available to always allocate the buffer of correct
         size. Unfortunately, this function is not available on all platforms and the
         dangerous @e vsprintf() will be used then which may lead to buffer overflows.
     */
-    int Printf(const wxChar* pszFormat,  ...);
+    int Printf(const wxChar* pszFormat, ...);
 
     /**
         Similar to vprintf. Returns the number of characters written, or an integer
@@ -710,8 +674,7 @@ public:
 
     //@{
     /**
-        Removes @e len characters from the string, starting at @e pos.
-        
+        Removes @a len characters from the string, starting at @e pos.
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -726,23 +689,20 @@ public:
 
     /**
         Replace first (or all) occurrences of substring with another one.
-        
         @e replaceAll: global replace (default), or only the first occurrence.
-        
         Returns the number of replacements made.
     */
     size_t Replace(const wxString& strOld, const wxString& strNew,
-                   bool replaceAll = @true);
+                   bool replaceAll = true);
 
     /**
-        Returns the last @e count characters.
+        Returns the last @a count characters.
     */
     wxString Right(size_t count);
 
     /**
         These functions replace the standard @e strchr() and @e strstr()
         functions.
-        
         Find()
         
         Replace()
@@ -763,16 +723,15 @@ public:
     /**
         This function can be used to test if the string starts with the specified
         @e prefix. If it does, the function will return @true and put the rest
-        of the string (i.e. after the prefix) into @e rest string if it is not
+        of the string (i.e. after the prefix) into @a rest string if it is not
         @NULL. Otherwise, the function returns @false and doesn't modify the
         @e rest.
     */
-    bool StartsWith(const wxString& prefix, wxString rest = @NULL);
+    bool StartsWith(const wxString& prefix, wxString rest = NULL);
 
     /**
         These functions return the string length and check whether the string is empty
         or empty it.
-        
         Len()
         
         IsEmpty()
@@ -788,16 +747,14 @@ public:
     /**
         Strip characters at the front and/or end. The same as Trim except that it
         doesn't change this string.
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
     wxString Strip(stripType s = trailing);
 
     /**
-        Returns the part of the string between the indices @e from and @e to
+        Returns the part of the string between the indices @a from and @e to
         inclusive.
-        
         This is a wxWidgets 1.xx compatibility function, use Mid()
         instead (but note that parameters have different meaning).
     */
@@ -807,7 +764,6 @@ public:
         These functions allow to extract substring from this string. All of them don't
         modify the original string and return a new string containing the extracted
         substring.
-        
         Mid()
         
         @ref operatorparenth() operator
@@ -834,12 +790,10 @@ public:
     /**
         Converts the string to an 8-bit string in ISO-8859-1 encoding in the form of
         a wxCharBuffer (Unicode builds only).
-        
         This is a convenience method useful when storing binary data in wxString.
-        
         This function is new since wxWidgets version 2.8.4
         
-        @sa wxString::From8BitData
+        @see wxString::From8BitData
     */
     const char* To8BitData();
     const wxCharBuffer To8BitData();
@@ -849,7 +803,6 @@ public:
     /**
         Converts the string to an ASCII, 7-bit string in the form of
         a wxCharBuffer (Unicode builds only) or a C string (ANSI builds).
-        
         Note that this conversion only works if the string contains only ASCII
         characters. The @ref mbstr() mb_str method provides more
         powerful means of converting wxString to C string.
@@ -861,21 +814,20 @@ public:
     /**
         Attempts to convert the string to a floating point number. Returns @true on
         success (the number is stored in the location pointed to by @e val) or @false
-        if the string does not represent such number (the value of @e val is not
+        if the string does not represent such number (the value of @a val is not
         modified in this case).
         
-        @sa ToLong(), ToULong()
+        @see ToLong(), ToULong()
     */
     bool ToDouble(double val);
 
     /**
         Attempts to convert the string to a signed integer in base @e base. Returns
         @true on success in which case the number is stored in the location
-        pointed to by @e val or @false if the string does not represent a
-        valid number in the given base (the value of @e val is not modified
+        pointed to by @a val or @false if the string does not represent a
+        valid number in the given base (the value of @a val is not modified
         in this case).
-        
-        The value of @e base must be comprised between 2 and 36, inclusive, or
+        The value of @a base must be comprised between 2 and 36, inclusive, or
         be a special value 0 which means that the usual rules of @c C numbers are
         applied: if the number starts with @c 0x it is considered to be in base
         16, if it starts with @c 0 - in base 8 and in base 10 otherwise. Note
@@ -883,43 +835,40 @@ public:
         which may have leading zeroes as they can yield unexpected (to the user not
         familiar with C) results.
         
-        @sa ToDouble(), ToULong()
+        @see ToDouble(), ToULong()
     */
     bool ToLong(long val, int base = 10);
 
     /**
         This is exactly the same as ToLong() but works with 64
         bit integer numbers.
-        
         Notice that currently it doesn't work (always returns @false) if parsing of 64
         bit numbers is not supported by the underlying C run-time library. Compilers
         with C99 support and Microsoft Visual C++ version 7 and higher do support this.
         
-        @sa ToLong(), ToULongLong()
+        @see ToLong(), ToULongLong()
     */
     bool ToLongLong(wxLongLong_t val, int base = 10);
 
     /**
         Attempts to convert the string to an unsigned integer in base @e base.
         Returns @true on success in which case the number is stored in the
-        location pointed to by @e val or @false if the string does not
-        represent a valid number in the given base (the value of @e val is not
+        location pointed to by @a val or @false if the string does not
+        represent a valid number in the given base (the value of @a val is not
         modified in this case). Please notice that this function
         behaves in the same way as the standard @c strtoul() and so it simply
         converts negative numbers to unsigned representation instead of rejecting them
         (e.g. -1 is returned as @c ULONG_MAX).
-        
         See ToLong() for the more detailed
-        description of the @e base parameter.
+        description of the @a base parameter.
         
-        @sa ToDouble(), ToLong()
+        @see ToDouble(), ToLong()
     */
     bool ToULong(unsigned long val, int base = 10);
 
     /**
         This is exactly the same as ToULong() but works with 64
         bit integer numbers.
-        
         Please see ToLongLong() for additional remarks.
     */
     bool ToULongLong(wxULongLong_t val, int base = 10);
@@ -936,7 +885,7 @@ public:
         Removes white-space (space, tabs, form feed, newline and carriage return) from
         the left or from the right end of the string (right is default).
     */
-    wxString Trim(bool fromRight = @true);
+    wxString Trim(bool fromRight = true);
 
     /**
         Truncate the string to the given length.
@@ -948,14 +897,12 @@ public:
         Puts the string back into a reasonable state (in which it can be used
         normally), after
         GetWriteBuf() was called.
-        
-        The version of the function without the @e len parameter will calculate the
+        The version of the function without the @a len parameter will calculate the
         new string length itself assuming that the string is terminated by the first
         @c NUL character in it while the second one will use the specified length
         and thus is the only version which should be used with the strings with
         embedded @c NULs (it is also slightly more efficient as @c strlen()
         doesn't have to be called).
-        
         This method is deprecated, please use
         wxStringBuffer or
         wxStringBufferLength instead.
@@ -971,7 +918,6 @@ public:
 
     /**
         The same as MakeUpper.
-        
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
@@ -982,6 +928,7 @@ public:
         insertion operators exist (for basic types only). Additionally, the
         Format() function allows to use simply append
         formatted value to a string:
+        
         Format()
         
         FormatV()
@@ -997,17 +944,16 @@ public:
     /**
         Returns a pointer to the string data (@c const char* in ANSI build,
         @c const wchar_t* in Unicode build).
-        
         Note that the returned value is not convertible to @c char* or
         @c wchar_t*, use @ref charstr() char_str or
         @ref wcharstr() wchar_string if you need to pass string value
         to a function expecting non-const pointer.
         
-        @sa @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
-              fnstr() fn_str, @ref charstr() char_str, @ref
-              wcharstr() wchar_string
+        @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
+             fnstr() fn_str, @ref charstr() char_str, @ref
+             wcharstr() wchar_string
     */
-    const wxChar * c_str();
+    const wxChar* c_str();
 
     /**
         Returns an object with string data that is implicitly convertible to
@@ -1016,9 +962,9 @@ public:
         don't have const-correct API. Use wxStringBuffer if
         you want to modify the string.
         
-        @sa @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
-              fnstr() fn_str, @ref cstr() c_str, @ref
-              wcharstr() wchar_str
+        @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
+             fnstr() fn_str, @ref cstr() c_str, @ref
+             wcharstr() wchar_str
     */
     wxWritableCharBuffer char_str(const wxMBConv& conv = wxConvLibc);
 
@@ -1030,7 +976,7 @@ public:
         or C string in charset matching the @c wxConvFileName object, depending on
         the OS.
         
-        @sa wxMBConv, @ref wcstr() wc_str, @ref wcstr() mb_str
+        @see wxMBConv, @ref wcstr() wc_str, @ref wcstr() mb_str
     */
     const wchar_t* fn_str();
     const char* fn_str();
@@ -1045,8 +991,8 @@ public:
         as @ref cstr() c_str.
         The macro wxWX2MBbuf is defined as the correct return type (without const).
         
-        @sa wxMBConv, @ref cstr() c_str, @ref wcstr() wc_str, @ref
-              fnstr() fn_str, @ref charstr() char_str
+        @see wxMBConv, @ref cstr() c_str, @ref wcstr() wc_str, @ref
+             fnstr() fn_str, @ref charstr() char_str
     */
     const char* mb_str(const wxMBConv& conv = wxConvLibc);
     const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc);
@@ -1128,7 +1074,6 @@ public:
         This allows the tests for @NULLness of a @e const wxChar * pointer and emptiness
         of the string to look the same in the code and makes it easier to port old code
         to wxString.
-        
         See also IsEmpty().
     */
     bool operator!();
@@ -1157,8 +1102,8 @@ public:
         as @ref cstr() c_str.
         The macro wxWX2WCbuf is defined as the correct return type (without const).
         
-        @sa wxMBConv, @ref cstr() c_str, @ref wcstr() mb_str, @ref
-              fnstr() fn_str, @ref wcharstr() wchar_str
+        @see wxMBConv, @ref cstr() c_str, @ref wcstr() mb_str, @ref
+             fnstr() fn_str, @ref wcharstr() wchar_str
     */
     const wchar_t* wc_str(const wxMBConv& conv);
     const wxWCharBuffer wc_str(const wxMBConv& conv);
@@ -1171,16 +1116,15 @@ public:
         passing strings to legacy libraries that don't have const-correct API. Use
         wxStringBuffer if you want to modify the string.
         
-        @sa @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
-              fnstr() fn_str, @ref cstr() c_str, @ref
-              charstr() char_str
+        @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
+             fnstr() fn_str, @ref cstr() c_str, @ref
+             charstr() char_str
     */
     wxWritableWCharBuffer wchar_str();
 
     /**
         These functions are deprecated, please consider using new wxWidgets 2.0
         functions instead of them (or, even better, std::string compatible variants).
-        
         CompareTo()
         
         Contains()
@@ -1263,7 +1207,7 @@ class wxStringBufferLength
 public:
     /**
         Constructs a writable string buffer object associated with the given string
-        and containing enough space for at least @e len characters. Basically, this
+        and containing enough space for at least @a len characters. Basically, this
         is equivalent to calling wxString::GetWriteBuf and
         saving the result.
     */
@@ -1277,8 +1221,7 @@ public:
 
     /**
         Sets the internal length of the string referred to by wxStringBufferLength to
-        @e nLength characters.
-        
+        @a nLength characters.
         Must be called before wxStringBufferLength destructs.
     */
     void SetLength(size_t nLength);
@@ -1287,7 +1230,7 @@ public:
         Returns the writable pointer to a buffer of the size at least equal to the
         length specified in the constructor.
     */
-    wxChar * operator wxChar *();
+    wxChar* operator wxChar *();
 };
 
 

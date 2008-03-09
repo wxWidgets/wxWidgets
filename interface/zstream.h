@@ -29,22 +29,18 @@ class wxZlibOutputStream : public wxFilterOutputStream
 public:
     //@{
     /**
-        Creates a new write-only compressed stream. @e level means level of
+        Creates a new write-only compressed stream. @a level means level of
         compression. It is number between 0 and 9 (including these values) where
         0 means no compression and 9 best but slowest compression. -1 is default
         value (currently equivalent to 6).
-        
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
-        
-        The @e flags wxZLIB_ZLIB and wxZLIB_GZIP specify whether the output data
+        The @a flags wxZLIB_ZLIB and wxZLIB_GZIP specify whether the output data
         will be in zlib or gzip format. wxZLIB_ZLIB is the default.
-        
-        If @e flags is wxZLIB_NO_HEADER, then a raw deflate stream is output
+        If @a flags is wxZLIB_NO_HEADER, then a raw deflate stream is output
         without either zlib or gzip headers. This is a lower level
         mode, which is not usually used directly. It can be used to embed a raw
         deflate stream in a higher level protocol.
-        
         The following symbols can be use for the compression level and flags:
     */
     wxZlibOutputStream(wxOutputStream& stream, int level = -1,
@@ -85,16 +81,13 @@ public:
     /**
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
-        
-        The @e flags wxZLIB_ZLIB and wxZLIB_GZIP specify whether the input data
+        The @a flags wxZLIB_ZLIB and wxZLIB_GZIP specify whether the input data
         is in zlib or gzip format. If wxZLIB_AUTO is used, then zlib will
         autodetect the stream type, this is the default.
-        
-        If @e flags is wxZLIB_NO_HEADER, then the data is assumed to be a raw
+        If @a flags is wxZLIB_NO_HEADER, then the data is assumed to be a raw
         deflate stream without either zlib or gzip headers. This is a lower level
         mode, which is not usually used directly. It can be used to read a raw
         deflate stream embedded in a higher level protocol.
-        
         This version is not by default compatible with the output produced by
         the version of @e wxZlibOutputStream in wxWidgets 2.4.x. However,
         there is a compatibility mode, which is switched on by passing

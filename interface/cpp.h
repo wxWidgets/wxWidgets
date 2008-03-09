@@ -12,10 +12,10 @@
     Unlike when using the preprocessor @c  operator, the arguments undergo
     the macro expansion before being concatenated.
 */
-wxCONCAT(x1,  x2);
-wxCONCAT3(x1,  x2,  x3);
-wxCONCAT4(x1,  x2,  x3,  x4);
-wxCONCAT5(x1,  x2,  x3,  x4,  x5);
+wxCONCAT(x1, x2);
+wxCONCAT3(x1, x2, x3);
+wxCONCAT4(x1, x2, x3, x4);
+wxCONCAT5(x1, x2, x3, x4, x5);
 //@}
 
 
@@ -23,11 +23,10 @@ wxCONCAT5(x1,  x2,  x3,  x4,  x5);
 Returns the string representation of the given symbol which can be either a
 literal or a macro (hence the advantage of using this macro instead of the
 standard preprocessor @c # operator which doesn't work with macros).
-
 Notice that this macro always produces a @c char string, use
 wxSTRINGIZE_T to build a wide string Unicode build.
 
-@sa wxCONCAT
+@see wxCONCAT
 */
 #define wxSTRINGIZE(x)     /* implementation is private */
 

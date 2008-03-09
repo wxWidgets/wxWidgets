@@ -26,17 +26,16 @@ public:
         Retrieves the load address and the size of this module.
         
         @param addr
-        the pointer to the location to return load address in, may be
-        @NULL
-        
+            the pointer to the location to return load address in, may be
+            @NULL
         @param len
-        pointer to the location to return the size of this module in
-        memory in, may be @NULL
+            pointer to the location to return the size of this module in
+            memory in, may be @NULL
         
         @returns @true if the load address and module size were retrieved, @false
-                   if this information is not available.
+                 if this information is not available.
     */
-    bool GetAddress(void ** addr, size_t len);
+    bool GetAddress(void** addr, size_t len);
 
     /**
         Returns the base name of this module, e.g. @c kernel32.dll or
@@ -131,7 +130,6 @@ public:
     /**
         Returns the string containing the usual extension for shared libraries for the
         given systems (including the leading dot if not empty).
-        
         For example, this function will return @c ".dll" under Windows or (usually)
         @c ".so" under Unix.
     */
@@ -141,7 +139,6 @@ public:
         This function returns a valid handle for the main program itself. Notice that
         the @NULL return value is valid for some systems (i.e. doesn't mean that
         the function failed).
-        
         @b NB: This function is Unix specific. It will always fail under Windows
         or OS/2.
     */
@@ -150,42 +147,38 @@ public:
     /**
         This function resolves a symbol in a loaded DLL, such as a variable or
         function name.
-        
         Returned value will be @NULL if the symbol was not found in the DLL or if
         an error occurred.
         
         @param dllHandle
-        Valid handle previously returned by
-        LoadLibrary
-        
+            Valid handle previously returned by
+            LoadLibrary
         @param name
-        Name of the symbol.
+            Name of the symbol.
     */
-    void * GetSymbol(wxDllType dllHandle, const wxString& name);
+    void* GetSymbol(wxDllType dllHandle, const wxString& name);
 
     /**
-        This function loads a shared library into memory, with @e libname being the
+        This function loads a shared library into memory, with @a libname being the
         name of the library: it may be either the full name including path and
         (platform-dependent) extension, just the basename (no path and no extension)
         or a basename with extension. In the last two cases, the library will be
         searched in all standard locations.
-        
-        Returns a handle to the loaded DLL. Use @e success parameter to test if it
+        Returns a handle to the loaded DLL. Use @a success parameter to test if it
         is valid. If the handle is valid, the library must be unloaded later with
         UnloadLibrary().
         
         @param libname
-        Name of the shared object to load.
-        
+            Name of the shared object to load.
         @param success
-        May point to a bool variable which will be set to @true or
-        @false; may also be @NULL.
+            May point to a bool variable which will be set to @true or
+            @false; may also be @NULL.
     */
-    wxDllType LoadLibrary(const wxString & libname,
-                          bool* success = @NULL);
+    wxDllType LoadLibrary(const wxString& libname,
+                          bool* success = NULL);
 
     /**
-        This function unloads the shared library. The handle @e dllhandle must have
+        This function unloads the shared library. The handle @a dllhandle must have
         been returned by LoadLibrary() previously.
     */
     void UnloadLibrary(wxDllType dllhandle);
@@ -223,25 +216,18 @@ public:
         Returns the platform-specific full name for the library called @e name. E.g.
         it adds a @c ".dll" extension under Windows and @c "lib" prefix and
         @c ".so", @c ".sl" or maybe @c ".dylib" extension under Unix.
-        
-        The possible values for @e cat are:
-        
+        The possible values for @a cat are:
         
         
         wxDL_LIBRARY
         
-        
         normal library
-        
-        
         
         wxDL_MODULE
         
-        
         a loadable module or plugin
         
-        
-        @sa CanonicalizePluginName()
+        @see CanonicalizePluginName()
     */
     static wxString CanonicalizeName(const wxString& name,
                                      wxDynamicLibraryCategory cat = wxDL_LIBRARY);
@@ -252,20 +238,14 @@ public:
         plugins. The only difference is that compiler and version information are added
         to the name to ensure that the plugin which is going to be loaded will be
         compatible with the main program.
-        
-        The possible values for @e cat are:
-        
+        The possible values for @a cat are:
         
         
         wxDL_PLUGIN_GUI
         
-        
         plugin which uses GUI classes (default)
         
-        
-        
         wxDL_PLUGIN_BASE
-        
         
         plugin which only uses wxBase
     */
@@ -286,12 +266,12 @@ public:
     static wxDllType GetProgramHandle();
 
     /**
-        Returns pointer to symbol @e name in the library or @NULL if the library
+        Returns pointer to symbol @a name in the library or @NULL if the library
         contains no such symbol.
         
-        @sa wxDYNLIB_FUNCTION
+        @see wxDYNLIB_FUNCTION
     */
-    void * GetSymbol(const wxString& name);
+    void* GetSymbol(const wxString& name);
 
     /**
         This function is available only under Windows as it is only useful when
@@ -302,13 +282,12 @@ public:
         automatically depending on the current build. Otherwise, this method is
         identical to GetSymbol().
     */
-    void * GetSymbolAorW(const wxString& name);
+    void* GetSymbolAorW(const wxString& name);
 
     /**
-        Returns @true if the symbol with the given @e name is present in the dynamic
+        Returns @true if the symbol with the given @a name is present in the dynamic
         library, @false otherwise. Unlike GetSymbol(),
         this function doesn't log an error message if the symbol is not found.
-        
         This function is new since wxWidgets version 2.5.4
     */
     bool HasSymbol(const wxString& name);
@@ -323,44 +302,37 @@ public:
         of all modules loaded into the address space of the current project, the array
         elements are object of @c wxDynamicLibraryDetails class. The array will
         be empty if an error occurred.
-        
         This method is currently implemented only under Win32 and Linux and is useful
         mostly for diagnostics purposes.
     */
     static wxDynamicLibraryDetailsArray ListLoaded();
 
     /**
-        Loads DLL with the given @e name into memory. The @e flags argument can
+        Loads DLL with the given @a name into memory. The @a flags argument can
         be a combination of the following bits:
         
         wxDL_LAZY
-        
         
         equivalent of RTLD_LAZY under Unix, ignored elsewhere
         
         wxDL_NOW
         
-        
         equivalent of RTLD_NOW under Unix, ignored elsewhere
         
         wxDL_GLOBAL
         
-        
         equivalent of RTLD_GLOBAL under Unix, ignored elsewhere
         
         wxDL_VERBATIM
-        
         
         don't try to append the appropriate extension to
         the library name (this is done by default).
         
         wxDL_DEFAULT
         
-        
         default flags, same as wxDL_NOW currently
         
         wxDL_QUIET
-        
         
         don't log an error message if the library couldn't be
         loaded.
@@ -373,7 +345,6 @@ public:
     /**
         Unloads the library from memory. wxDynamicLibrary object automatically calls
         this method from its destructor if it had been successfully loaded.
-        
         The second version is only used if you need to keep the library in memory
         during a longer period of time than the scope of the wxDynamicLibrary object.
         In this case you may call Detach() and store
@@ -394,22 +365,19 @@ public:
     @c void * pointer to the correct type and, even more annoyingly, you have to
     repeat this type twice if you want to declare and define a function pointer all
     in one line
-
     This macro makes this slightly less painful by allowing you to specify the
     type only once, as the first parameter, and creating a variable of this type
     named after the function but with @c pfn prefix and initialized with the
-    function @e name from the wxDynamicLibrary
+    function @a name from the wxDynamicLibrary
     @e dynlib.
 
     @param type
-    the type of the function
-
+        the type of the function
     @param name
-    the name of the function to load, not a string (without quotes,
-    it is quoted automatically by the macro)
-
+        the name of the function to load, not a string (without quotes,
+        it is quoted automatically by the macro)
     @param dynlib
-    the library to load the function from
+        the library to load the function from
 */
-#define wxDYNLIB_FUNCTION(type,  name,  dynlib)     /* implementation is private */
+#define wxDYNLIB_FUNCTION(type, name, dynlib)     /* implementation is private */
 

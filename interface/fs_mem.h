@@ -78,13 +78,12 @@ public:
         data (bitmap, text or raw data)
         will be copied into private memory stream and available under
         name "memory:" + @e filename.
-        
-        The @e type argument is one of @c wxBITMAP_TYPE_XXX constants.
-        Note that you must use a @e type value (aka image format)
+        The @a type argument is one of @c wxBITMAP_TYPE_XXX constants.
+        Note that you must use a @a type value (aka image format)
         that wxWidgets can save (e.g. JPG, PNG, see wxImage
         documentation)!
         
-        @sa AddFileWithMimeType()
+        @see AddFileWithMimeType()
     */
     static void AddFile(const wxString& filename, wxImage& image,
                         long type);
@@ -98,10 +97,9 @@ public:
         Like AddFile(), but lets you explicitly
         specify added file's MIME type. This version should be used whenever you know
         the MIME type, because it makes accessing the files faster.
-        
         This function is new since wxWidgets version 2.8.5
         
-        @sa AddFile()
+        @see AddFile()
     */
     static void AddFileWithMimeType(const wxString& filename,
                                     const wxString& textdata,

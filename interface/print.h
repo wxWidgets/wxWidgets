@@ -37,7 +37,7 @@ public:
     /**
         Gets the print preview object associated with the control bar.
     */
-    wxPrintPreview * GetPrintPreview();
+    wxPrintPreview* GetPrintPreview();
 
     /**
         Gets the current zoom setting in percent.
@@ -51,32 +51,26 @@ public:
 
     /**
         Constructor.
-        
         The buttons parameter may be a combination of the following, using the bitwise
         'or' operator.
         
         wxPREVIEW_PRINT
         
-        
         Create a print button.
         
         wxPREVIEW_NEXT
-        
         
         Create a next page button.
         
         wxPREVIEW_PREVIOUS
         
-        
         Create a previous page button.
         
         wxPREVIEW_ZOOM
         
-        
         Create a zoom control.
         
         wxPREVIEW_DEFAULT
-        
         
         Equivalent to a combination of wxPREVIEW_PREVIOUS, wxPREVIEW_NEXT and
         wxPREVIEW_ZOOM.
@@ -176,7 +170,6 @@ public:
         Creates the preview canvas and control bar, and calls
         wxWindow::MakeModal(@true) to disable other top-level windows
         in the application.
-        
         This function should be called by the application prior to
         showing the frame.
     */
@@ -217,15 +210,12 @@ public:
         used for actual printing, and the address of an optional
         block of printer data, which will be copied to the print preview object's
         print data.
-        
-        If @e printoutForPrinting is non-@NULL, a @b Print... button will be placed on
+        If @a printoutForPrinting is non-@NULL, a @b Print... button will be placed on
         the
         preview frame so that the user can print directly from the preview interface.
-        
         Do not explicitly delete the printout objects once this destructor has been
         called, since they will be deleted in the wxPrintPreview constructor.
-        The same does not apply to the @e data argument.
-        
+        The same does not apply to the @a data argument.
         Test the Ok member to check whether the wxPrintPreview object was created
         correctly.
         Ok could return @false if there was a problem initializing the printer device
@@ -234,7 +224,7 @@ public:
     */
     wxPrintPreview(wxPrintout* printout,
                    wxPrintout* printoutForPrinting,
-                   wxPrintData* data=@NULL);
+                   wxPrintData* data = NULL);
 
     /**
         Destructor. Deletes both print preview objects, so do not destroy these objects
@@ -256,7 +246,7 @@ public:
         Gets the frame used for displaying the print preview canvas
         and control bar.
     */
-    wxFrame * GetFrame();
+    wxFrame* GetFrame();
 
     /**
         Returns the maximum page number.
@@ -271,14 +261,14 @@ public:
     /**
         Gets the preview printout object associated with the wxPrintPreview object.
     */
-    wxPrintout * GetPrintout();
+    wxPrintout* GetPrintout();
 
     /**
         Gets the printout object to be used for printing from within the preview
         interface,
         or @NULL if none exists.
     */
-    wxPrintout * GetPrintoutForPrinting();
+    wxPrintout* GetPrintoutForPrinting();
 
     /**
         Returns @true if the wxPrintPreview is valid, @false otherwise. It could return
@@ -286,23 +276,21 @@ public:
         problem initializing the printer device context (current printer not set, for
         example).
     */
-#define bool Ok()     /* implementation is private */
+    bool Ok();
 
     /**
         This refreshes the preview window with the preview image.
         It must be called from the preview window's OnPaint member.
-        
         The implementation simply blits the preview bitmap onto
         the canvas, creating a new preview bitmap if none exists.
     */
-    bool PaintPage(wxPreviewCanvas * canvas, wxDC dc);
+    bool PaintPage(wxPreviewCanvas* canvas, wxDC dc);
 
     /**
         Invokes the print process using the second wxPrintout object
         supplied in the wxPrintPreview constructor.
         Will normally be called by the @b Print... panel item on the
         preview frame's control bar.
-        
         Returns @false in case of error -- call
         wxPrinter::GetLastError to get detailed
         information about the kind of the error.
@@ -328,12 +316,12 @@ public:
         Sets the frame to be used for displaying the print preview canvas
         and control bar.
     */
-    void SetFrame(wxFrame * frame);
+    void SetFrame(wxFrame* frame);
 
     /**
         Associates a printout object with the wxPrintPreview object.
     */
-    void SetPrintout(wxPrintout * printout);
+    void SetPrintout(wxPrintout* printout);
 
     /**
         Sets the percentage preview zoom, and refreshes the preview canvas
@@ -368,9 +356,9 @@ public:
         Constructor. Pass an optional pointer to a block of print
         dialog data, which will be copied to the printer object's local data.
         
-        @sa wxPrintDialogData, wxPrintData
+        @see wxPrintDialogData, wxPrintData
     */
-    wxPrinter(wxPrintDialogData* data = @NULL);
+    wxPrinter(wxPrintDialogData* data = NULL);
 
     /**
         Creates the default printing abort window, with a cancel button.
@@ -387,22 +375,17 @@ public:
         PrintDialog() or
         wxPrintPreview::Print. These functions
         set last error to @b wxPRINTER_NO_ERROR if no error happened.
-        
         Returned value is one of the following:
         
-        
         @b wxPRINTER_NO_ERROR
-        
         
         No error happened.
         
         @b wxPRINTER_CANCELLED
         
-        
         The user cancelled printing.
         
         @b wxPRINTER_ERROR
-        
         
         There was an error during printing.
     */
@@ -419,15 +402,14 @@ public:
         object which controls
         the printing of a document, and whether the print dialog should be invoked
         first.
-        
         Print could return @false if there was a problem initializing the printer device
         context
         (current printer not set, for example) or the user cancelled printing. Call
         GetLastError() to get detailed
         information about the kind of the error.
     */
-    bool Print(wxWindow * parent, wxPrintout * printout,
-               bool prompt=@true);
+    bool Print(wxWindow* parent, wxPrintout* printout,
+               bool prompt = true);
 
     /**
         Invokes the print dialog. If successful (the user did not press Cancel
@@ -435,22 +417,21 @@ public:
         (otherwise @NULL is returned -- call
         GetLastError() to get detailed
         information about the kind of the error).
-        
         The application must delete this device context to avoid a memory leak.
     */
-    wxDC* PrintDialog(wxWindow * parent);
+    wxDC* PrintDialog(wxWindow* parent);
 
     /**
         Default error-reporting function.
     */
-    void ReportError(wxWindow * parent, wxPrintout * printout,
+    void ReportError(wxWindow* parent, wxPrintout* printout,
                      const wxString& message);
 
     /**
         Invokes the print setup dialog. Note that the setup dialog is obsolete from
         Windows 95, though retained for backward compatibility.
     */
-    bool Setup(wxWindow * parent);
+    bool Setup(wxWindow* parent);
 };
 
 
@@ -542,7 +523,7 @@ public:
         or Mac,
         a wxPostScriptDC if printing on other platforms, and a wxMemoryDC if previewing.
     */
-#define wxDC * GetDC()     /* implementation is private */
+    wxDC* GetDC();
 
     /**
         Return the rectangle corresponding to the page margins specified by the given
@@ -575,7 +556,7 @@ public:
         FitThisSizeToXXX() and MapScreenSizeToXXX routines below, which do most of the
         scaling calculations for you.
     */
-    void GetPPIPrinter(int * w, int * h);
+    void GetPPIPrinter(int* w, int* h);
 
     /**
         Returns the number of pixels per logical inch of the screen device context.
@@ -583,24 +564,23 @@ public:
         for drawing text onto the printer. If you are doing your own scaling, remember
         to multiply this by a scaling factor to take the preview DC size into account.
     */
-    void GetPPIScreen(int * w, int * h);
+    void GetPPIScreen(int* w, int* h);
 
     /**
         Called by the framework to obtain information from the application about minimum
         and maximum page values that the user can select, and the required page range to
         be printed. By default this returns 1, 32000 for the page minimum and maximum
         values, and 1, 1 for the required page range.
-        
-        If @e minPage is zero, the page number controls in the print dialog will be
+        If @a minPage is zero, the page number controls in the print dialog will be
         disabled.
     */
-    void GetPageInfo(int * minPage, int * maxPage, int * pageFrom,
-                     int * pageTo);
+    void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
+                     int* pageTo);
 
     /**
         Returns the size of the printer page in millimetres.
     */
-    void GetPageSizeMM(int * w, int * h);
+    void GetPageSizeMM(int* w, int* h);
 
     /**
         Returns the size of the printer page in pixels, called the page rectangle.
@@ -611,7 +591,7 @@ public:
         the current preview zoom. The application must take this discrepancy into
         account if previewing is to be supported.
     */
-    void GetPageSizePixels(int * w, int * h);
+    void GetPageSizePixels(int* w, int* h);
 
     /**
         Returns the rectangle that corresponds to the entire paper in pixels, called the
@@ -702,7 +682,6 @@ public:
         Called by the framework at the start of document printing. Return @false from
         this function cancels the print job. OnBeginDocument is called once for every
         copy printed.
-        
         The base OnBeginDocument() @e must be called (and the return value
         checked) from within the overridden function, since it calls wxDC::StartDoc.
     */
@@ -718,7 +697,6 @@ public:
     /**
         Called by the framework at the end of document printing. OnEndDocument
         is called once for every copy printed.
-        
         The base OnEndDocument() @e must be called
         from within the overridden function, since it calls wxDC::EndDoc.
     */

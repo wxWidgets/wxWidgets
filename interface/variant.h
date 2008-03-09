@@ -132,7 +132,6 @@ public:
 
     /**
         Destructor.
-        
         Note that destructor is protected, so wxVariantData cannot usually
         be deleted. Instead, wxVariantData::DecRef should be called.
         See @ref overview_refcountdestruct "reference-counted object destruction" for
@@ -158,7 +157,7 @@ public:
 
     //@{
     /**
-        Retrieves and converts the value of this variant to the type that @e value is.
+        Retrieves and converts the value of this variant to the type that @a value is.
     */
     bool Convert(long* value);
     bool Convert(bool* value);
@@ -169,7 +168,7 @@ public:
     //@}
 
     /**
-        Deletes the zero-based @e item from the list.
+        Deletes the zero-based @a item from the list.
     */
     bool Delete(size_t item);
 
@@ -235,7 +234,6 @@ public:
     /**
         Returns the value type as a string. The built-in types are: bool, char,
         datetime, double, list, long, string, arrstring, void*.
-        
         If the variant is null, the value type returned is the string "null" (not the
         empty string).
     */
@@ -263,7 +261,7 @@ public:
     bool IsNull();
 
     /**
-        Returns @true if @e type matches the type of the variant, @false otherwise.
+        Returns @true if @a type matches the type of the variant, @false otherwise.
     */
     bool IsType(const wxString& type);
 
@@ -284,7 +282,7 @@ public:
     wxString MakeString();
 
     /**
-        Returns @true if @e value matches an element in the list.
+        Returns @true if @a value matches an element in the list.
     */
     bool Member(const wxVariant& value);
 
@@ -369,7 +367,7 @@ public:
 
     //@{
     /**
-        Returns a reference to the value at @e idx (zero-based). This can be used
+        Returns a reference to the value at @a idx (zero-based). This can be used
         to change the value at this index.
     */
     wxVariant operator [](size_t idx);
@@ -453,7 +451,6 @@ public:
     /**
         Decreases reference count. If the count reaches zero, the object is
         automatically deleted.
-        
         Note that destructor of wxVariantData is protected, so delete
         cannot be used as normal. Instead, DecRef() should be called.
     */
@@ -462,7 +459,7 @@ public:
     /**
         Returns @true if this object is equal to @e data.
     */
-#define bool Eq(wxVariantData& data)     /* implementation is private */
+    bool Eq(wxVariantData& data);
 
     /**
         Returns the string type of the data.
@@ -484,7 +481,7 @@ public:
 
     //@{
     /**
-        Reads the data from @e stream or @e string.
+        Reads the data from @a stream or @e string.
     */
     bool Read(ostream& stream);
     bool Read(wxString& string);
@@ -492,7 +489,7 @@ public:
 
     //@{
     /**
-        Writes the data to @e stream or @e string.
+        Writes the data to @a stream or @e string.
     */
     bool Write(ostream& stream);
     bool Write(wxString& string);
@@ -504,5 +501,5 @@ public:
         the data is of this type (the check is done during the run-time) or
         @NULL otherwise.
     */
-    classname * wxGetVariantCast();
+    classname* wxGetVariantCast();
 };

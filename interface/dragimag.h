@@ -50,33 +50,26 @@ public:
     //@{
     /**
         )
-        
         Constructs a drag image an optional cursor. This constructor is only available
         for
         wxGenericDragImage, and can be used when the application
         supplies DoDrawImage() and GetImageRect().
         
         @param image
-        Icon or bitmap to be used as the drag image. The bitmap can
-        have a mask.
-        
+            Icon or bitmap to be used as the drag image. The bitmap can
+            have a mask.
         @param text
-        Text used to construct a drag image.
-        
+            Text used to construct a drag image.
         @param cursor
-        Optional cursor to combine with the image.
-        
+            Optional cursor to combine with the image.
         @param hotspot
-        This parameter is deprecated.
-        
+            This parameter is deprecated.
         @param treeCtrl
-        Tree control for constructing a tree drag image.
-        
+            Tree control for constructing a tree drag image.
         @param listCtrl
-        List control for constructing a list drag image.
-        
+            List control for constructing a list drag image.
         @param id
-        Tree or list control item id.
+            Tree or list control item id.
     */
     wxDragImage();
     wxDragImage(const wxBitmap& image,
@@ -96,43 +89,36 @@ public:
         second
         to specify the bounding area. This form is equivalent to using the first form,
         but more convenient than working out the bounding rectangle explicitly.
-        
         You need to then call Show()
         and Move() to show the image on the screen.
-        
         Call EndDrag() when the drag has finished.
-        
         Note that this call automatically calls CaptureMouse.
         
         @param hotspot
-        The location of the drag position relative to the upper-left corner
-        of the image.
-        
+            The location of the drag position relative to the upper-left corner
+            of the image.
         @param window
-        The window that captures the mouse, and within which the dragging
-        is limited unless fullScreen is @true.
-        
+            The window that captures the mouse, and within which the dragging
+            is limited unless fullScreen is @true.
         @param boundingWindow
-        In the second form of the function, specifies the
-        area within which the drag occurs.
-        
+            In the second form of the function, specifies the
+            area within which the drag occurs.
         @param fullScreen
-        If @true, specifies that the drag will be visible over the full
-        screen, or over as much of the screen as is specified by rect. Note that the
-        mouse will
-        still be captured in window.
-        
+            If @true, specifies that the drag will be visible over the full
+            screen, or over as much of the screen as is specified by rect. Note that
+        the mouse will
+            still be captured in window.
         @param rect
-        If non-@NULL, specifies the rectangle (in screen coordinates) that
-        bounds the dragging operation. Specifying this can make the operation more
+            If non-@NULL, specifies the rectangle (in screen coordinates) that
+            bounds the dragging operation. Specifying this can make the operation more
         efficient
-        by cutting down on the area under consideration, and it can also make a visual
-        difference
-        since the drag is clipped to this area.
+            by cutting down on the area under consideration, and it can also make a
+        visual difference
+            since the drag is clipped to this area.
     */
     bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
-                   bool fullScreen = @false,
-                   wxRect* rect = @NULL);
+                   bool fullScreen = false,
+                   wxRect* rect = NULL);
     bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
                    wxWindow* boundingWindow);
     //@}
@@ -140,7 +126,6 @@ public:
     /**
         Draws the image on the device context with top-left corner at the given
         position.
-        
         This function is only available with wxGenericDragImage, to allow applications
         to
         draw their own image instead of using an actual bitmap. If you override this
@@ -151,7 +136,6 @@ public:
 
     /**
         Call this when the drag has finished.
-        
         Note that this call automatically calls ReleaseMouse.
     */
     bool EndDrag();
@@ -160,7 +144,6 @@ public:
         Returns the rectangle enclosing the image, assuming that the image is drawn
         with its
         top-left corner at the given point.
-        
         This function is available in wxGenericDragImage only, and may be overridden
         (together with
         wxDragImage::DoDrawImage) to provide a virtual drawing capability.
@@ -178,10 +161,8 @@ public:
         Call this to move the image to a new position. The image will only be shown if
         Show() has been called previously (for example
         at the start of the drag).
-        
-        @e pt is the position in client coordinates (relative to the window specified
+        @a pt is the position in client coordinates (relative to the window specified
         in BeginDrag).
-        
         You can move the image either when the image is hidden or shown, but in general
         dragging
         will be smoother if you move the image when it is shown.
@@ -203,13 +184,11 @@ public:
         graphic @e minus the objects to be dragged, and leave the window itself to be
         updated
         by the drag image. This can provide eerily smooth, flicker-free drag behaviour.
-        
         The default implementation copies the window contents to the backing bitmap. A
         new
         implementation will normally copy information from another source, such as from
         its
         own backing bitmap if it has one, or directly from internal data structures.
-        
         This function is available in wxGenericDragImage only.
     */
     bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,

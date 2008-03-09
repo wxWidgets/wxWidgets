@@ -24,13 +24,12 @@ public:
         yourself. Feel free to ignore the constructor parameters.
         Have a look at src/html/htmlpars.cpp if you're interested in creating it.
     */
-    wxHtmlTag(wxHtmlTag * parent, const wxString& source, int pos,
+    wxHtmlTag(wxHtmlTag* parent, const wxString& source, int pos,
               int end_pos, wxHtmlTagsCache* cache,
-              wxHtmlEntitiesParser * entParser);
+              wxHtmlEntitiesParser* entParser);
 
     /**
         Returns a string containing all parameters.
-        
         Example : tag contains @c FONT SIZE=+2 COLOR="#000000". Call to
         tag.GetAllParams() would return @c SIZE=+2 COLOR="#000000".
     */
@@ -69,35 +68,32 @@ public:
         parameter exists or not (use wxHtmlTag::HasParam) first.
         
         @param par
-        The parameter's name.
-        
+            The parameter's name.
         @param with_quotes
-        @true if you want to get quotes as well. See example.
+            @true if you want to get quotes as well. See example.
     */
-    wxString GetParam(const wxString& par, bool with_quotes = @false);
+    wxString GetParam(const wxString& par, bool with_quotes = false);
 
     /**
-        Interprets tag parameter @e par as colour specification and saves its value
+        Interprets tag parameter @a par as colour specification and saves its value
         into wxColour variable pointed by @e clr.
-        
-        Returns @true on success and @false if @e par is not colour specification or
+        Returns @true on success and @false if @a par is not colour specification or
         if the tag has no such parameter.
     */
-    bool GetParamAsColour(const wxString& par, wxColour * clr);
+    bool GetParamAsColour(const wxString& par, wxColour* clr);
 
     /**
-        Interprets tag parameter @e par as an integer and saves its value
+        Interprets tag parameter @a par as an integer and saves its value
         into int variable pointed by @e value.
-        
-        Returns @true on success and @false if @e par is not an integer or
+        Returns @true on success and @false if @a par is not an integer or
         if the tag has no such parameter.
     */
-    bool GetParamAsInt(const wxString& par, int * value);
+    bool GetParamAsInt(const wxString& par, int* value);
 
     /**
         Returns @true if this tag is paired with ending tag, @false otherwise.
-        
         See the example of HTML document:
+        
         In this example tags HTML and BODY have ending tags, first P and BR
         doesn't have ending tag while the second P has. The third P tag (which
         is ending itself) of course doesn't have ending tag.
@@ -110,7 +106,7 @@ public:
         "SIZE" and "COLOR".
         
         @param par
-        the parameter you're looking for.
+            the parameter you're looking for.
     */
     bool HasParam(const wxString& par);
 
@@ -122,14 +118,12 @@ public:
         in @e format).
         
         @param par
-        The name of the tag you want to query
-        
+            The name of the tag you want to query
         @param format
-        scanf()-like format string.
-        
+            scanf()-like format string.
         @param value
-        pointer to a variable to store the value in
+            pointer to a variable to store the value in
     */
-    wxString ScanParam(const wxString& par, const wxChar * format,
-                       void * value);
+    wxString ScanParam(const wxString& par, const wxChar* format,
+                       void* value);
 };

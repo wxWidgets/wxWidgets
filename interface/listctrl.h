@@ -98,28 +98,23 @@ public:
         Constructor, creating and showing a list control.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size. If wxDefaultSize is specified then the window is sized
-        appropriately.
-        
+            Window size. If wxDefaultSize is specified then the window is
+        sized
+            appropriately.
         @param style
-        Window style. See wxListCtrl.
-        
+            Window style. See wxListCtrl.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxListCtrl();
     wxListCtrl(wxWindow* parent, wxWindowID id,
@@ -137,26 +132,21 @@ public:
 
     /**
         Arranges the items in icon or small icon view. This only has effect on Win32.
-        @e flag is one of:
-        
+        @a flag is one of:
         
         wxLIST_ALIGN_DEFAULT
-        
         
         Default alignment.
         
         wxLIST_ALIGN_LEFT
         
-        
         Align to the left side of the control.
         
         wxLIST_ALIGN_TOP
         
-        
         Align to the top side of the control.
         
         wxLIST_ALIGN_SNAP_TO_GRID
-        
         
         Snap to grid.
     */
@@ -165,11 +155,11 @@ public:
     /**
         Sets the image list associated with the control and
         takes ownership of it (i.e. the control will, unlike when using
-        SetImageList, delete the list when destroyed). @e which is one of
+        SetImageList, delete the list when destroyed). @a which is one of
         wxIMAGE_LIST_NORMAL, wxIMAGE_LIST_SMALL, wxIMAGE_LIST_STATE (the last is
         unimplemented).
         
-        @sa SetImageList()
+        @see SetImageList()
     */
     void AssignImageList(wxImageList* imageList, int which);
 
@@ -190,7 +180,6 @@ public:
 
     /**
         Deletes all items in the list control.
-        
         @b NB: This function does @e not send the
         @c wxEVT_COMMAND_LIST_DELETE_ITEM event because deleting many items
         from the control would be too slow then (unlike wxListCtrl::DeleteItem).
@@ -205,7 +194,6 @@ public:
     /**
         Deletes the specified item. This function sends the
         @c wxEVT_COMMAND_LIST_DELETE_ITEM event for the item being deleted.
-        
         See also: DeleteAllItems()
     */
     bool DeleteItem(long item);
@@ -214,7 +202,6 @@ public:
         Starts editing the label of the given item. This function generates a
         EVT_LIST_BEGIN_LABEL_EDIT event which can be vetoed so that no
         text control will appear for in-place editing.
-        
         If the user changed the label (i.e. s/he does not press ESC or leave
         the text control without changes, a EVT_LIST_END_LABEL_EDIT event
         will be sent which can be vetoed as well.
@@ -229,22 +216,19 @@ public:
     //@{
     /**
         Find an item nearest this position in the specified direction, starting from
-        @e start or the beginning if @e start is -1.
-        
+        @a start or the beginning if @a start is -1.
         
         
         @b FindItem( start, str, partial = @false )
         
         
-        
         @b FindItemData( start, data )
-        
         
         
         @b FindItemAtPos( start, point, direction )
     */
     long FindItem(long start, const wxString& str,
-                  bool partial = @false);
+                  bool partial = false);
     long FindItem(long start, long data);
     long FindItem(long start, const wxPoint& pt, int direction);
     //@}
@@ -292,28 +276,23 @@ public:
     /**
         Returns the edit control being currently used to edit a label. Returns @NULL
         if no label is being edited.
-        
         @b NB: It is currently only implemented for wxMSW and the generic version,
         not for the native Mac OS X version.
     */
-    wxTextCtrl * GetEditControl();
+    wxTextCtrl* GetEditControl();
 
     /**
-        Returns the specified image list. @e which may be one of:
-        
+        Returns the specified image list. @a which may be one of:
         
         @b wxIMAGE_LIST_NORMAL
-        
         
         The normal (large icon) image list.
         
         @b wxIMAGE_LIST_SMALL
         
-        
         The small icon image list.
         
         @b wxIMAGE_LIST_STATE
-        
         
         The user-defined state image list (unimplemented).
     */
@@ -322,7 +301,6 @@ public:
     /**
         Gets information about the item. See SetItem() for more
         information.
-        
         You must call @e info.SetId() to the ID of item you're interested in
         before calling this method.
     */
@@ -333,7 +311,7 @@ public:
         an invalid colour (and not the default background control of the control
         itself).
         
-        @sa GetItemTextColour()
+        @see GetItemTextColour()
     */
     wxColour GetItemBackgroundColour(long item);
 
@@ -360,8 +338,7 @@ public:
     /**
         Returns the rectangle representing the item's size and position, in physical
         coordinates.
-        
-        @e code is one of wxLIST_RECT_BOUNDS, wxLIST_RECT_ICON, wxLIST_RECT_LABEL.
+        @a code is one of wxLIST_RECT_BOUNDS, wxLIST_RECT_ICON, wxLIST_RECT_LABEL.
     */
     bool GetItemRect(long item, wxRect& rect,
                      int code = wxLIST_RECT_BOUNDS);
@@ -375,7 +352,6 @@ public:
 
     /**
         Gets the item state. For a list of state flags, see SetItem().
-        
         The @b stateMask indicates which state flags are of interest.
     */
     int GetItemState(long item, long stateMask);
@@ -396,69 +372,55 @@ public:
 
     /**
         Searches for an item with the given geometry or state, starting from
-        @e item but excluding the @e item itself. If @e item is -1,
+        @a item but excluding the @a item itself. If @a item is -1,
         the first item that matches the specified flags will be returned.
-        
-        Returns the first item with given state following @e item or -1 if
+        Returns the first item with given state following @a item or -1 if
         no such item found.
-        
         This function may be used to find all selected items in the control like this:
-        @e geometry can be one of:
         
+        @a geometry can be one of:
         
         wxLIST_NEXT_ABOVE
-        
         
         Searches for an item above the specified item.
         
         wxLIST_NEXT_ALL
         
-        
         Searches for subsequent item by index.
         
         wxLIST_NEXT_BELOW
-        
         
         Searches for an item below the specified item.
         
         wxLIST_NEXT_LEFT
         
-        
         Searches for an item to the left of the specified item.
         
         wxLIST_NEXT_RIGHT
-        
         
         Searches for an item to the right of the specified item.
         
         @b NB: this parameter is only supported by wxMSW currently and ignored on
         other platforms.
-        
-        @e state can be a bitlist of the following:
-        
+        @a state can be a bitlist of the following:
         
         wxLIST_STATE_DONTCARE
-        
         
         Don't care what the state is.
         
         wxLIST_STATE_DROPHILITED
         
-        
         The item indicates it is a drop target.
         
         wxLIST_STATE_FOCUSED
-        
         
         The item has the focus.
         
         wxLIST_STATE_SELECTED
         
-        
         The item is selected.
         
         wxLIST_STATE_CUT
-        
         
         The item is selected as part of a cut and paste operation.
     */
@@ -472,17 +434,14 @@ public:
 
     /**
         Returns the rectangle representing the size and position, in physical
-        coordinates, of the given subitem, i.e. the part of the row @e item in the
+        coordinates, of the given subitem, i.e. the part of the row @a item in the
         column @e subItem.
-        
         This method is only meaningfull when the wxListCtrl is in the report mode. If
-        @e subItem parameter is equal to the special value
+        @a subItem parameter is equal to the special value
         @c wxLIST_GETSUBITEMRECT_WHOLEITEM the return value is the same as
         for GetItemRect().
-        
-        @e code can be one of @c wxLIST_RECT_BOUNDS,
+        @a code can be one of @c wxLIST_RECT_BOUNDS,
         @c wxLIST_RECT_ICON or @c wxLIST_RECT_LABEL.
-        
         This function is new since wxWidgets version 2.7.0
     */
     bool GetSubItemRect(long item, long subItem, wxRect& rect,
@@ -503,7 +462,6 @@ public:
         Returns the rectangle taken by all items in the control. In other words, if the
         controls client size were equal to the size of this rectangle, no scrollbars
         would be needed and no free space would be left.
-        
         Note that this function only works in the icon and small icon views, not in
         list or report views (this is a limitation of the native Win32 control).
     */
@@ -513,70 +471,59 @@ public:
         Determines which item (if any) is at the specified point,
         giving details in @e flags. Returns index of the item or @c wxNOT_FOUND
         if no item is at the specified point.
-        @e flags will be a combination of the following flags:
-        
+        @a flags will be a combination of the following flags:
         
         wxLIST_HITTEST_ABOVE
-        
         
         Above the client area.
         
         wxLIST_HITTEST_BELOW
         
-        
         Below the client area.
         
         wxLIST_HITTEST_NOWHERE
-        
         
         In the client area but below the last item.
         
         wxLIST_HITTEST_ONITEMICON
         
-        
         On the bitmap associated with an item.
         
         wxLIST_HITTEST_ONITEMLABEL
-        
         
         On the label (string) associated with an item.
         
         wxLIST_HITTEST_ONITEMRIGHT
         
-        
         In the area to the right of an item.
         
         wxLIST_HITTEST_ONITEMSTATEICON
-        
         
         On the state icon for a tree view item that is in a user-defined state.
         
         wxLIST_HITTEST_TOLEFT
         
-        
         To the right of the client area.
         
         wxLIST_HITTEST_TORIGHT
-        
         
         To the left of the client area.
         
         wxLIST_HITTEST_ONITEM
         
-        
         Combination of wxLIST_HITTEST_ONITEMICON, wxLIST_HITTEST_ONITEMLABEL,
         wxLIST_HITTEST_ONITEMSTATEICON.
         
-        If @e ptrSubItem is not @NULL and the wxListCtrl is in the report
+        If @a ptrSubItem is not @NULL and the wxListCtrl is in the report
         mode the subitem (or column) number will also be provided.
         This feature is only available in version 2.7.0 or higher and is currently only
         implemented under wxMSW and requires at least comctl32.dll of verion 4.70 on
-        the host system or the value stored in @e ptrSubItem will be always -1. To
+        the host system or the value stored in @a ptrSubItem will be always -1. To
         compile this feature into wxWidgets library you need to have access to
         commctrl.h of version 4.70 that is provided by Microsoft.
     */
     long HitTest(const wxPoint& point, int& flags,
-                 long * ptrSubItem);
+                 long* ptrSubItem);
 
     //@{
     /**
@@ -593,16 +540,13 @@ public:
         Insert an image/string item.
         
         @param info
-        wxListItem object
-        
+            wxListItem object
         @param index
-        Index of the new item, supplied by the application
-        
+            Index of the new item, supplied by the application
         @param label
-        String label
-        
+            String label
         @param imageIndex
-        index into the image list associated with this control and view style
+            index into the image list associated with this control and view style
     */
     long InsertItem(wxListItem& info);
     long InsertItem(long index, const wxString& label);
@@ -616,27 +560,24 @@ public:
         @c wxLC_VIRTUAL style. It should return the attribute for the
         for the specified @c item or @NULL to use the default appearance
         parameters.
-        
         wxListCtrl will not delete the pointer or keep a reference of it. You can
         return the same wxListItemAttr pointer for every OnGetItemAttr call.
-        
         The base class version always returns @NULL.
         
-        @sa OnGetItemImage(), OnGetItemColumnImage(),
-              OnGetItemText()
+        @see OnGetItemImage(), OnGetItemColumnImage(),
+             OnGetItemText()
     */
-    virtual wxListItemAttr * OnGetItemAttr(long item);
+    virtual wxListItemAttr* OnGetItemAttr(long item);
 
     /**
         Overload this function in the derived class for a control with
         @c wxLC_VIRTUAL and @c wxLC_REPORT styles in order to specify the image
         index for the given line and column.
-        
         The base class version always calls OnGetItemImage for the first column, else
         it returns -1.
         
-        @sa OnGetItemText(), OnGetItemImage(),
-              OnGetItemAttr()
+        @see OnGetItemText(), OnGetItemImage(),
+             OnGetItemAttr()
     */
     virtual int OnGetItemColumnImage(long item, long column);
 
@@ -648,21 +589,20 @@ public:
         or -1 for no image.
         In a control with @c wxLC_REPORT style, OnGetItemImage only gets called for
         the first column of each line.
-        
         The base class version always returns -1.
         
-        @sa OnGetItemText(), OnGetItemColumnImage(),
-              OnGetItemAttr()
+        @see OnGetItemText(), OnGetItemColumnImage(),
+             OnGetItemAttr()
     */
     virtual int OnGetItemImage(long item);
 
     /**
         This function @b must be overloaded in the derived class for a control with
         @c wxLC_VIRTUAL style. It should return the string containing the text of
-        the given @e column for the specified @c item.
+        the given @a column for the specified @c item.
         
-        @sa SetItemCount(), OnGetItemImage(),
-              OnGetItemColumnImage(), OnGetItemAttr()
+        @see SetItemCount(), OnGetItemImage(),
+             OnGetItemColumnImage(), OnGetItemAttr()
     */
     virtual wxString OnGetItemText(long item, long column);
 
@@ -671,14 +611,13 @@ public:
         as without calling this function the displayed value of the item doesn't change
         even when the underlying data does change.
         
-        @sa RefreshItems()
+        @see RefreshItems()
     */
     void RefreshItem(long item);
 
     /**
-        Redraws the items between @e itemFrom and @e itemTo. The starting item
+        Redraws the items between @a itemFrom and @e itemTo. The starting item
         must be less than or equal to the ending one.
-        
         Just as RefreshItem() this is only useful for
         virtual list controls.
     */
@@ -686,10 +625,9 @@ public:
 
     /**
         Scrolls the list control. If in icon, small icon or report view mode,
-        @e dx specifies the number of pixels to scroll. If in list view mode,
-        @e dx specifies the number of columns to scroll. @e dy always specifies
+        @a dx specifies the number of pixels to scroll. If in list view mode,
+        @a dx specifies the number of columns to scroll. @a dy always specifies
         the number of pixels to scroll vertically.
-        
         @b NB: This method is currently only implemented in the Windows version.
     */
     bool ScrollList(int dx, int dy);
@@ -708,37 +646,33 @@ public:
 
     /**
         Sets the column width.
-        
-        @e width can be a width in pixels or wxLIST_AUTOSIZE (-1) or
+        @a width can be a width in pixels or wxLIST_AUTOSIZE (-1) or
         wxLIST_AUTOSIZE_USEHEADER (-2).
         wxLIST_AUTOSIZE will resize the column to the length of its longest item.
         wxLIST_AUTOSIZE_USEHEADER
         will resize the column to the length of the header (Win32) or 80 pixels (other
         platforms).
-        
-        In small or normal icon view, @e col must be -1, and the column width is set
+        In small or normal icon view, @a col must be -1, and the column width is set
         for all columns.
     */
     bool SetColumnWidth(int col, int width);
 
     /**
-        Sets the order of all columns at once. The @e orders array must have the
+        Sets the order of all columns at once. The @a orders array must have the
         same number elements as the number of columns and contain each position exactly
         once.
-        
         This function is valid in report view only.
     */
     bool SetColumnOrder(const wxArrayInt& orders);
 
     /**
-        Sets the image list associated with the control. @e which is one of
+        Sets the image list associated with the control. @a which is one of
         wxIMAGE_LIST_NORMAL, wxIMAGE_LIST_SMALL, wxIMAGE_LIST_STATE (the last is
         unimplemented).
-        
         This method does not take ownership of the image list, you have to
         delete it yourself.
         
-        @sa AssignImageList()
+        @see AssignImageList()
     */
     void SetImageList(wxImageList* imageList, int which);
 
@@ -885,7 +819,6 @@ The m_stateMask and m_state members take flags from the following:
     /**
     Sets the background colour for this item. This function only works in report
     view.
-
     The colour can be retrieved using
     GetItemBackgroundColour().
     */
@@ -909,7 +842,6 @@ The m_stateMask and m_state members take flags from the following:
 
     /**
     Associates application-defined data with this item.
-
     Notice that this function cannot be used to associate pointers with the control
     items, use SetItemPtrData() instead.
     */
@@ -924,7 +856,7 @@ The m_stateMask and m_state members take flags from the following:
     /**
         Sets the unselected and selected images associated with the item. The images
         are indices into the
-        image list associated with the list control. This form is deprecated: @e
+        image list associated with the list control. This form is deprecated: @a
         selImage is not
         used.
     */
@@ -938,18 +870,16 @@ The m_stateMask and m_state members take flags from the following:
     bool SetItemPosition(long item, const wxPoint& pos);
 
     /**
-        Associates application-defined data with this item. The @e data parameter may
+        Associates application-defined data with this item. The @a data parameter may
         be either an integer or a pointer cast to the @c wxUIntPtr type which is
         guaranteed to be large enough to be able to contain all integer types and
         pointers.
-        
         This function is new since wxWidgets version 2.8.4
     */
     bool SetItemPtrData(long item, wxUIntPtr data);
 
     /**
         Sets the item state. For a list of state flags, see SetItem().
-        
         The @b stateMask indicates which state flags are valid.
     */
     bool SetItemState(long item, long state, long stateMask);
@@ -961,7 +891,6 @@ The m_stateMask and m_state members take flags from the following:
 
     /**
         Sets the colour for this item. This function only works in report view.
-        
         The colour can be retrieved using
         GetItemTextColour().
     */
@@ -970,7 +899,7 @@ The m_stateMask and m_state members take flags from the following:
     /**
         Adds or removes a single window style.
     */
-    void SetSingleStyle(long style, bool add = @true);
+    void SetSingleStyle(long style, bool add = true);
 
     /**
         Sets the text colour of the list control.
@@ -984,21 +913,20 @@ The m_stateMask and m_state members take flags from the following:
 
     /**
         Call this function to sort the items in the list control. Sorting is done
-        using the specified @e fnSortCallBack function. This function must have the
+        using the specified @a fnSortCallBack function. This function must have the
         following prototype:
+        
         It is called each time when the two items must be compared and should return 0
         if the items are equal, negative value if the first item is less than the
         second one and positive value if the first one is greater than the second one
         (the same convention as used by @c qsort(3)).
         
         @param item1
-        client data associated with the first item (NOT the index).
-        
+            client data associated with the first item (NOT the index).
         @param item2
-        client data associated with the second item (NOT the index).
-        
+            client data associated with the second item (NOT the index).
         @param data
-        the value passed to SortItems() itself.
+            the value passed to SortItems() itself.
     */
     bool SortItems(wxListCtrlCompare fnSortCallBack, long data);
 };
@@ -1203,9 +1131,9 @@ public:
         Resets the column image -- after calling this function, no image will be shown.
         
         @param col
-        the column to clear image for
+            the column to clear image for
         
-        @sa SetColumnImage()
+        @see SetColumnImage()
     */
     void ClearColumnImage(int col);
 
@@ -1226,7 +1154,7 @@ public:
     /**
         Returns the currently focused item or -1 if none.
         
-        @sa IsSelected(), Focus()
+        @see IsSelected(), Focus()
     */
     long GetFocusedItem();
 
@@ -1235,15 +1163,15 @@ public:
         iterate over all selected items in the control.
         
         @returns Returns the next selected item or -1 if there are no more of
-                   them.
+                 them.
     */
     long GetNextSelected(long item);
 
     /**
-        Returns @true if the item with the given @e index is selected,
+        Returns @true if the item with the given @a index is selected,
         @false otherwise.
         
-        @sa GetFirstSelected(), GetNextSelected()
+        @see GetFirstSelected(), GetNextSelected()
     */
     bool IsSelected(long index);
 
@@ -1251,24 +1179,22 @@ public:
         Selects or unselects the given item.
         
         @param n
-        the item to select or unselect
-        
+            the item to select or unselect
         @param on
-        if @true (default), selects the item, otherwise unselects it
+            if @true (default), selects the item, otherwise unselects it
         
-        @sa wxListCtrl::SetItemState
+        @see wxListCtrl::SetItemState
     */
-    void Select(bool on = @true);
+    void Select(bool on = true);
 
     /**
         Sets the column image for the specified column. To use the column images, the
         control must have a valid image list with at least one image.
         
         @param col
-        the column to set image for
-        
+            the column to set image for
         @param image
-        the index of the column image in the controls image list
+            the index of the column image in the controls image list
     */
     void SetColumnImage(int col, int image);
 };
@@ -1338,34 +1264,27 @@ public:
         Returns a bit mask indicating which fields of the structure are valid;
         can be any combination of the following values:
         
-        
         wxLIST_MASK_STATE
-        
         
         @b GetState is valid.
         
         wxLIST_MASK_TEXT
         
-        
         @b GetText is valid.
         
         wxLIST_MASK_IMAGE
-        
         
         @b GetImage is valid.
         
         wxLIST_MASK_DATA
         
-        
         @b GetData is valid.
         
         wxLIST_MASK_WIDTH
         
-        
         @b GetWidth is valid.
         
         wxLIST_MASK_FORMAT
-        
         
         @b GetFormat is valid.
     */
@@ -1375,29 +1294,23 @@ public:
         Returns a bit field representing the state of the item. Can be any
         combination of:
         
-        
         wxLIST_STATE_DONTCARE
-        
         
         Don't care what the state is. Win32 only.
         
         wxLIST_STATE_DROPHILITED
         
-        
         The item is highlighted to receive a drop event. Win32 only.
         
         wxLIST_STATE_FOCUSED
-        
         
         The item has the focus.
         
         wxLIST_STATE_SELECTED
         
-        
         The item is selected.
         
         wxLIST_STATE_CUT
-        
         
         The item is in the cut state. Win32 only.
     */

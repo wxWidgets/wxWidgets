@@ -27,16 +27,14 @@ public:
     /**
         Constructor. wxCommand is an abstract class, so you will need to derive
         a new class and call this constructor from your own constructor.
-        
-        @e canUndo tells the command processor whether this command is undo-able. You
+        @a canUndo tells the command processor whether this command is undo-able. You
         can achieve the same functionality by overriding the CanUndo member function
         (if for example
         the criteria for undoability is context-dependent).
-        
-        @e name must be supplied for the command processor to display the command name
+        @a name must be supplied for the command processor to display the command name
         in the application's edit menu.
     */
-    wxCommand(bool canUndo = @false, const wxString& name = @NULL);
+    wxCommand(bool canUndo = false, const wxString& name = NULL);
 
     /**
         Destructor.
@@ -54,7 +52,7 @@ public:
         Returning @false will indicate to the command processor that the action is
         not undoable and should not be added to the command history.
     */
-#define bool Do()     /* implementation is private */
+    bool Do();
 
     /**
         Returns the command name.
@@ -66,10 +64,8 @@ public:
         Return @true to indicate that the action has taken place, @false otherwise.
         Returning @false will indicate to the command processor that the action is
         not redoable and no change should be made to the command history.
-        
         How you implement this command is totally application dependent, but typical
         strategies include:
-        
          Perform an inverse operation on the last modified piece of
         data in the document. When redone, a copy of data stored in command
         is pasted back or some operation reapplied. This relies on the fact that
@@ -78,7 +74,6 @@ public:
          Restore the entire document state (perhaps using document transactioning).
         Potentially very inefficient, but possibly easier to code if the user interface
         and data are complex, and an 'inverse execute' operation is hard to write.
-        
         The docview sample uses the first method, to remove or restore segments
         in the drawing.
     */
@@ -106,8 +101,7 @@ class wxCommandProcessor : public wxObject
 public:
     /**
         Constructor.
-        
-        @e maxCommands may be set to a positive integer to limit the number of
+        @a maxCommands may be set to a positive integer to limit the number of
         commands stored to it, otherwise (and by default) the list of commands can grow
         arbitrarily.
     */
@@ -222,11 +216,10 @@ public:
         appropriately. If it fails, the command is deleted
         immediately. Once Submit has been called, the passed command should not
         be deleted directly by the application.
-        
-        @e storeIt indicates whether the successful command should be stored
+        @a storeIt indicates whether the successful command should be stored
         in the history list.
     */
-    virtual bool Submit(wxCommand * command, bool storeIt = @true);
+    virtual bool Submit(wxCommand* command, bool storeIt = true);
 
     /**
         Undoes the command just executed.

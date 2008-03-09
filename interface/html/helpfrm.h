@@ -26,21 +26,20 @@ public:
         Constructor. For the values of @e style, please see the documentation for
         wxHtmlHelpController.
     */
-    wxHtmlHelpFrame(wxHtmlHelpData* data = @NULL);
+    wxHtmlHelpFrame(wxHtmlHelpData* data = NULL);
     wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
                     const wxString& title = wxEmptyString,
                     int style = wxHF_DEFAULT_STYLE,
-                    wxHtmlHelpData* data = @NULL);
+                    wxHtmlHelpData* data = NULL);
     //@}
 
     /**
         You may override this virtual method to add more buttons to the help window's
-        toolbar. @e toolBar is a pointer to the toolbar and @e style is the style
+        toolbar. @a toolBar is a pointer to the toolbar and @a style is the style
         flag as passed to the Create method.
-        
         wxToolBar::Realize is called immediately after returning from this function.
     */
-    virtual void AddToolbarButtons(wxToolBar * toolBar, int style);
+    virtual void AddToolbarButtons(wxToolBar* toolBar, int style);
 
     /**
         Creates the frame. See @ref wxhtmlhelpframe() "the constructor"
@@ -68,7 +67,7 @@ public:
     void SetController(wxHtmlHelpController* contoller);
 
     /**
-        Sets the frame's title format. @e format must contain exactly one "%s"
+        Sets the frame's title format. @a format must contain exactly one "%s"
         (it will be replaced by the page title).
     */
     void SetTitleFormat(const wxString& format);

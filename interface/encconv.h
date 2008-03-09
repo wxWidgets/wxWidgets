@@ -33,9 +33,8 @@ public:
     wxEncodingConverter();
 
     /**
-        Return @true if (any text in) multibyte encoding @e encIn can be converted to
+        Return @true if (any text in) multibyte encoding @a encIn can be converted to
         another one (@e encOut) losslessly.
-        
         Do not call this method with @c wxFONTENCODING_UNICODE as either
         parameter, it doesn't make sense (always works in one sense and always depends
         on the text to convert in the other).
@@ -61,8 +60,7 @@ public:
         GetPlatformEquivalents(),
         but this one will return ALL
         equivalent encodings, regardless of the platform, and including itself.
-        
-        This platform's encodings are before others in the array. And again, if @e enc
+        This platform's encodings are before others in the array. And again, if @a enc
         is in the array,
         it is the very first item in it.
     */
@@ -71,23 +69,20 @@ public:
     /**
         Return equivalents for given font that are used
         under given platform. Supported platforms:
-        
          wxPLATFORM_UNIX
          wxPLATFORM_WINDOWS
          wxPLATFORM_OS2
          wxPLATFORM_MAC
          wxPLATFORM_CURRENT
-        
         wxPLATFORM_CURRENT means the platform this binary was compiled for.
-        
         Examples:
+        
         Equivalence is defined in terms of convertibility:
         two encodings are equivalent if you can convert text between
         then without losing information (it may - and will - happen
         that you lose special chars like quotation marks or em-dashes
         but you shouldn't lose any diacritics and language-specific
         characters when converting between equivalent encodings).
-        
         Remember that this function does @b NOT check for presence of
         fonts in system. It only tells you what are most suitable
         encodings. (It usually returns only one encoding.)
@@ -100,8 +95,8 @@ public:
         be wxFONTENCODING_UNICODE, but only if wxUSE_ENCODING is set to 1.
         All subsequent calls to Convert()
         will interpret its argument
-        as a string in @e input_enc encoding and will output string in
-        @e output_enc encoding.
+        as a string in @a input_enc encoding and will output string in
+        @a output_enc encoding.
         You must call this method before calling Convert. You may call
         it more than once in order to switch to another conversion.
         @e Method affects behaviour of Convert() in case input character
@@ -109,13 +104,11 @@ public:
         
         @b wxCONVERT_STRICT
         
-        
         follow behaviour of GNU Recode -
         just copy unconvertible  characters to output and don't change them
         (its integer value will stay the same)
         
         @b wxCONVERT_SUBSTITUTE
-        
         
         try some (lossy) substitutions
         - e.g. replace unconvertible latin capitals with acute by ordinary

@@ -94,7 +94,6 @@ public:
         Creates the file with the given name or the name which was given in the
         @ref ctor() constructor. The array of file lines is initially
         empty.
-        
         It will fail if the file already exists, Open() should
         be used in this case.
     */
@@ -105,7 +104,7 @@ public:
     /**
         Returns @true if the current line is the last one.
     */
-#define bool Eof()     /* implementation is private */
+    bool Eof();
 
     /**
         Return @true if file exists - the name of the file should have been specified
@@ -131,7 +130,7 @@ public:
         Apple Developer Tools) and wxTextFileType_Mac under Mac OS (including
         Mac OS X when compiling with CodeWarrior).
     */
-#define static const char* GetEOL(wxTextFileType type = typeDefault)     /* implementation is private */
+    static const char* GetEOL(wxTextFileType type = typeDefault);
 
     /**
         This method together with GetNextLine()
@@ -148,7 +147,7 @@ public:
     wxString GetLastLine();
 
     /**
-        Retrieves the line number @e n from the file. The returned line may be
+        Retrieves the line number @a n from the file. The returned line may be
         modified but you shouldn't add line terminator at the end - this will be done
         by wxTextFile.
     */
@@ -207,12 +206,10 @@ public:
     //@{
     /**
         )
-        
         Open() opens the file with the given name or the name which was given in the
         @ref ctor() constructor and also loads file in memory on
         success. It will fail if the file does not exist,
         Create() should be used in this case.
-        
         The @e conv argument is only meaningful in Unicode build of wxWidgets when
         it is used to convert the file to wide character representation.
     */
@@ -221,21 +218,18 @@ public:
     //@}
 
     /**
-        Delete line number @e n from the file.
+        Delete line number @a n from the file.
     */
     void RemoveLine(size_t n);
 
     /**
         )
-        
-        Change the file on disk. The @e typeNew parameter allows you to change the
+        Change the file on disk. The @a typeNew parameter allows you to change the
         file format (default argument means "don't change type") and may be used to
         convert, for example, DOS files to Unix.
-        
         The @e conv argument is only meaningful in Unicode build of wxWidgets when
         it is used to convert all lines to multibyte representation before writing them
         them to physical file.
-        
         Returns @true if operation succeeded, @false if it failed.
     */
     bool Write(wxTextFileType typeNew = wxTextFileType_None);

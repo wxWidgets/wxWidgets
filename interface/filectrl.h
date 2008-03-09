@@ -42,40 +42,32 @@ public:
     //@{
     /**
         @param parent
-        Parent window, must not be non-@NULL.
-        
+            Parent window, must not be non-@NULL.
         @param id
-        The identifier for the control.
-        
+            The identifier for the control.
         @param defaultDirectory
-        The initial directory shown in the control. Must be
-        a valid path to a directory or the empty string.
-        In case it is the empty string, the current working directory is used.
-        
+            The initial directory shown in the control. Must be
+            a valid path to a directory or the empty string.
+            In case it is the empty string, the current working directory is used.
         @param defaultFilename
-        The default filename, or the empty string.
-        
+            The default filename, or the empty string.
         @param wildcard
-        A wildcard specifying which files can be selected,
-        such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
-        
+            A wildcard specifying which files can be selected,
+            such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
         @param style
-        The window style, see wxFC_* flags.
-        
+            The window style, see wxFC_* flags.
         @param pos
-        Initial position.
-        
+            Initial position.
         @param size
-        Initial size.
-        
+            Initial size.
         @param name
-        Control name.
+            Control name.
         
         @returns @true if the control was successfully created or @false if
-                   creation failed.
+                 creation failed.
     */
     wxFileCtrl();
-    wxFileCtrl(wxWindow * parent, wxWindowID id,
+    wxFileCtrl(wxWindow* parent, wxWindowID id,
                const wxString& defaultDirectory = wxEmptyString,
                const wxString& defaultFilename = wxEmptyString,
                const wxPoint& wildCard = wxFileSelectorDefaultWildcardStr,
@@ -88,7 +80,7 @@ public:
     /**
         Create function for two-step construction. See wxFileCtrl() for details.
     */
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& defaultDirectory = wxEmptyString,
                 const wxString& defaultFilename = wxEmptyString,
                 const wxPoint& wildCard = wxFileSelectorDefaultWildcardStr,
@@ -111,7 +103,7 @@ public:
     wxString GetFilename();
 
     /**
-        Fills the array @e filenames with the filenames only of selected items. This
+        Fills the array @a filenames with the filenames only of selected items. This
         function should only be used with the controls having the @c wxFC_MULTIPLE
         style,
         use GetFilename() for the others.
@@ -133,7 +125,7 @@ public:
     wxString GetPath();
 
     /**
-        Fills the array @e paths with the full paths of the files chosen. This
+        Fills the array @a paths with the full paths of the files chosen. This
         function should be used with the controls having the @c wxFC_MULTIPLE style,
         use GetPath() otherwise.
         
@@ -167,7 +159,6 @@ public:
 
     /**
         Sets the wildcard, which can contain multiple file types, for example:
-        
         "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
     */
     void SetWildcard(const wxString& wildCard);

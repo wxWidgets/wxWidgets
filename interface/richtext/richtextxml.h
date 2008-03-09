@@ -24,7 +24,6 @@ class wxRichTextXMLHandler : public wxRichTextFileHandler
 public:
     /**
         , @b const wxString&@e ext = wxT("xml"), @b int@e type = wxRICHTEXT_TYPE_XML)
-        
         Constructor.
     */
     wxRichTextXMLHandler();
@@ -42,7 +41,7 @@ public:
     /**
         Creates XML code for a given character or paragraph style.
     */
-    wxString CreateStyle(const wxTextAttr& attr, bool isPara = @false);
+    wxString CreateStyle(const wxTextAttr& attr, bool isPara = false);
 
     /**
         Loads buffer context from the given stream.
@@ -81,14 +80,14 @@ public:
         Helper function: gets style parameters from the given XML node.
     */
     bool GetStyle(wxTextAttr& attr, wxXmlNode* node,
-                  bool isPara = @false);
+                  bool isPara = false);
 
     /**
         Helper function: gets text from the node.
     */
     wxString GetText(wxXmlNode* node,
                      const wxString& param = wxEmptyString,
-                     bool translate = @false);
+                     bool translate = false);
 
     /**
         Helper function: returns @true if the node has the given parameter.

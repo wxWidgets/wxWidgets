@@ -104,7 +104,7 @@ public:
         wxDialog::CreateButtonSizer, and
         the flags are the same. On PocketPC, no buttons are created.
     */
-    void CreateButtons(int flags=wxOK|wxCANCEL);
+    void CreateButtons(int flags = wxOK|wxCANCEL);
 
     /**
         Returns the book control that will contain your settings pages.
@@ -127,7 +127,7 @@ public:
         dialog will be shown
         full-screen, and the layout will be done when the dialog receives a size event.
     */
-    void LayoutDialog(int centreFlags=wxBOTH);
+    void LayoutDialog(int centreFlags = wxBOTH);
 
     /**
         Sets the book control used for the dialog. You will normally not need to use
@@ -146,40 +146,32 @@ public:
         It is
         a bit list of the following values:
         
-        
         wxPROPSHEET_DEFAULT
-        
         
         Uses the default look and feel for the controller window,
         normally a notebook except on Smartphone where a choice control is used.
         
         wxPROPSHEET_NOTEBOOK
         
-        
         Uses a notebook for the controller window.
         
         wxPROPSHEET_TOOLBOOK
-        
         
         Uses a toolbook for the controller window.
         
         wxPROPSHEET_CHOICEBOOK
         
-        
         Uses a choicebook for the controller window.
         
         wxPROPSHEET_LISTBOOK
-        
         
         Uses a listbook for the controller window.
         
         wxPROPSHEET_TREEBOOK
         
-        
         Uses a treebook for the controller window.
         
         wxPROPSHEET_SHRINKTOFIT
-        
         
         Shrinks the dialog window to fit the currently selected page (common behaviour
         for

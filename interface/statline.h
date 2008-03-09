@@ -34,26 +34,21 @@ public:
         Constructor, creating and showing a static line.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position. If wxDefaultPosition is specified then a default position
-        is chosen.
-        
+            Window position. If wxDefaultPosition is specified then a default
+        position is chosen.
         @param size
-        Size. Note that either the height or the width (depending on
-        whether the line if horizontal or vertical) is ignored.
-        
+            Size. Note that either the height or the width (depending on
+            whether the line if horizontal or vertical) is ignored.
         @param style
-        Window style (either wxLI_HORIZONTAL or wxLI_VERTICAL).
-        
+            Window style (either wxLI_HORIZONTAL or wxLI_VERTICAL).
         @param name
-        Window name.
+            Window name.
         
-        @sa Create()
+        @see Create()
     */
     wxStaticLine();
     wxStaticLine(wxWindow* parent, wxWindowID id = wxID_ANY,

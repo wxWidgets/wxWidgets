@@ -40,7 +40,6 @@ class wxRichTextHTMLHandler : public wxRichTextFileHandler
 public:
     /**
         , @b const wxString&@e ext = wxT("html"), @b int@e type = wxRICHTEXT_TYPE_HTML)
-        
         Constructor.
     */
     wxRichTextHTMLHandler();
@@ -94,7 +93,6 @@ public:
         There should be 7 elements, one for each HTML font size, each element
         specifying the maximum point size for that
         HTML font size.
-        
         For example:
     */
     void SetFontSizeMapping(const wxArrayInt& fontSizeMapping);

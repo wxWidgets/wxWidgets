@@ -18,8 +18,7 @@
     To use the clipboard, you call member functions of the global @b wxTheClipboard
     object.
 
-    See also the @ref overview_wxdataobjectoverview "wxDataObject overview" for
-    further information.
+    See also the @ref overview_wxdataobjectoverview for further information.
 
     Call wxClipboard::Open to get ownership of the clipboard. If this operation
     returns @true, you
@@ -58,7 +57,7 @@
     @category{dnd}
 
     @seealso
-    @ref overview_wxdndoverview "Drag and drop overview", wxDataObject
+    @ref overview_wxdndoverview, wxDataObject
 */
 class wxClipboard : public wxObject
 {
@@ -76,12 +75,11 @@ public:
     /**
         Call this function to add the data object to the clipboard. You may call
         this function repeatedly after having cleared the clipboard using Clear().
-        
         After this function has been called, the clipboard owns the data, so do not
         delete
         the data explicitly.
         
-        @sa SetData()
+        @see SetData()
     */
     bool AddData(wxDataObject* data);
 
@@ -104,7 +102,7 @@ public:
     bool Flush();
 
     /**
-        Call this function to fill @e data with data on the clipboard, if available in
+        Call this function to fill @a data with data on the clipboard, if available in
         the required
         format. Returns @true on success.
     */
@@ -131,10 +129,8 @@ public:
     /**
         Call this function to open the clipboard before calling SetData()
         and GetData().
-        
         Call Close() when you have finished with the clipboard. You
         should keep the clipboard open for only a very short time.
-        
         Returns @true on success. This should be tested (as in the sample shown above).
     */
     bool Open();
@@ -143,12 +139,11 @@ public:
         Call this function to set the data object to the clipboard. This function will
         clear all previous contents in the clipboard, so calling it several times
         does not make any sense.
-        
         After this function has been called, the clipboard owns the data, so do not
         delete
         the data explicitly.
         
-        @sa AddData()
+        @see AddData()
     */
     bool SetData(wxDataObject* data);
 
@@ -157,7 +152,6 @@ public:
         CLIPBOARD X11 selection by default. When this function is called with @true
         argument, all subsequent clipboard operations will use PRIMARY selection until
         this function is called again with @false.
-        
         On the other platforms, there is no PRIMARY selection and so all clipboard
         operations will fail. This allows to implement the standard X11 handling of the
         clipboard which consists in copying data to the CLIPBOARD selection only when
@@ -166,5 +160,5 @@ public:
         automatically, without overwriting the normal clipboard contents with the
         currently selected text on the other platforms.
     */
-    void UsePrimarySelection(bool primary = @true);
+    void UsePrimarySelection(bool primary = true);
 };

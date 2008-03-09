@@ -48,10 +48,8 @@ public:
         Creates the control and optionally sets the initial number of items in it
         (it may also be set or changed later with
         wxVListBox::SetItemCount).
-        
         There are no special styles defined for wxHtmlListBox, in particular the
         wxListBox styles (with the exception of @c wxLB_MULTIPLE) can not be used here.
-        
         Returns @true on success or @false if the control couldn't be created
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -76,25 +74,24 @@ public:
         This virtual function may be overridden to change the appearance of the
         background of the selected cells in the same way as
         GetSelectedTextColour().
-        
         It should be rarely, if ever, used because
         wxVListBox::SetSelectionBackground allows to
         change the selection background for all cells at once and doing anything more
         fancy is probably going to look strangely.
         
-        @sa GetSelectedTextColour()
+        @see GetSelectedTextColour()
     */
     wxColour GetSelectedTextBgColour(const wxColour& colBg);
 
     /**
         This virtual function may be overridden to customize the appearance of the
-        selected cells. It is used to determine how the colour @e colFg is going to
+        selected cells. It is used to determine how the colour @a colFg is going to
         look inside selection. By default all original colours are completely ignored
         and the standard, system-dependent, selection colour is used but the program
         may wish to override this to achieve some custom appearance.
         
-        @sa GetSelectedTextBgColour(),
-              wxVListBox::SetSelectionBackground, wxSystemSettings::GetColour
+        @see GetSelectedTextBgColour(),
+             wxVListBox::SetSelectionBackground, wxSystemSettings::GetColour
     */
     wxColour GetSelectedTextColour(const wxColour& colFg);
 
@@ -102,8 +99,7 @@ public:
         This method must be implemented in the derived class and should return
         the body (i.e. without @c html nor @c body tags) of the HTML fragment
         for the given item.
-        
-        Note that this function should always return a text fragment for the @e n item
+        Note that this function should always return a text fragment for the @a n item
         which renders with the same height both when it is selected and when it's not:
         i.e. if you call, inside your OnGetItem() implementation, @c IsSelected(n) to
         make the items appear differently when they are selected, then you should make
@@ -124,12 +120,11 @@ public:
         Overloading this method is deprecated; intercept the event instead.
         
         @param n
-        Index of the item containing the link.
-        
+            Index of the item containing the link.
         @param link
-        Description of the link.
+            Description of the link.
         
-        @sa See also wxHtmlLinkInfo.
+        @see See also wxHtmlLinkInfo.
     */
     virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);
 };
@@ -199,7 +194,7 @@ public:
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   int n = 0,
-                  const wxString choices[] = @NULL,
+                  const wxString choices[] = NULL,
                   long style = wxHLB_DEFAULT_STYLE,
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = "simpleHtmlListBox");
@@ -230,7 +225,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int n,
-                const wxString choices[] = @NULL,
+                const wxString choices[] = NULL,
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = "simpleHtmlListBox");

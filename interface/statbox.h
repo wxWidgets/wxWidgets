@@ -38,28 +38,23 @@ public:
         Constructor, creating and showing a static box.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param label
-        Text to be displayed in the static box, the empty string for no label.
-        
+            Text to be displayed in the static box, the empty string for no label.
         @param pos
-        Window position. If wxDefaultPosition is specified then a default position
-        is chosen.
-        
+            Window position. If wxDefaultPosition is specified then a default
+        position is chosen.
         @param size
-        Checkbox size. If the size (-1, -1) is specified then a default size is chosen.
-        
+            Checkbox size. If the size (-1, -1) is specified then a default size is
+        chosen.
         @param style
-        Window style. See wxStaticBox.
-        
+            Window style. See wxStaticBox.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create()
+        @see Create()
     */
     wxStaticBox();
     wxStaticBox(wxWindow* parent, wxWindowID id,

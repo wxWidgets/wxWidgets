@@ -32,7 +32,6 @@ public:
 
     /**
         Enable or disable tooltips globally.
-        
         May not be supported on all platforms (eg. wxCocoa).
     */
     static void Enable(bool flag);
@@ -56,7 +55,6 @@ public:
 
     /**
         Set the delay after which the tooltip appears.
-        
         May not be supported on all platforms (eg. wxCocoa).
     */
     static void SetDelay(long msecs);

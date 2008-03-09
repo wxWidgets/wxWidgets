@@ -25,8 +25,7 @@
     @appearance{spinctrl.png}
 
     @seealso
-    @ref overview_eventhandlingoverview "Event handling overview", wxSpinButton,
-    wxControl
+    @ref overview_eventhandlingoverview, wxSpinButton, wxControl
 */
 class wxSpinCtrl : public wxControl
 {
@@ -34,42 +33,32 @@ public:
     //@{
     /**
         )
-        
         Constructor, creating and showing a spin control.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param value
-        Default value.
-        
+            Default value.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position. If wxDefaultPosition is specified then a default position
-        is chosen.
-        
+            Window position. If wxDefaultPosition is specified then a default
+        position is chosen.
         @param size
-        Window size. If wxDefaultSize is specified then a default size is
-        chosen.
-        
+            Window size. If wxDefaultSize is specified then a default size
+        is chosen.
         @param style
-        Window style. See wxSpinButton.
-        
+            Window style. See wxSpinButton.
         @param min
-        Minimal value.
-        
+            Minimal value.
         @param max
-        Maximal value.
-        
+            Maximal value.
         @param initial
-        Initial value.
-        
+            Initial value.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create()
+        @see Create()
     */
     wxSpinCtrl();
     wxSpinCtrl(wxWindow* parent, wxWindowID id = -1,
@@ -83,9 +72,7 @@ public:
 
     /**
         )
-        
         Creation function called by the spin control constructor.
-        
         See wxSpinCtrl() for details.
     */
     bool Create(wxWindow* parent, wxWindowID id = -1,
@@ -118,9 +105,8 @@ public:
 
     /**
         Select the text in the text part of the control between  positions
-        @e from (inclusive) and @e to (exclusive). This is similar to
+        @a from (inclusive) and @a to (exclusive). This is similar to
         wxTextCtrl::SetSelection.
-        
         @b NB: this is currently only implemented for Windows and generic versions
         of the control.
     */

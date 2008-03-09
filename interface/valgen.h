@@ -42,13 +42,12 @@ public:
         used for wxDatePickerCtrl.
         
         @param validator
-        Validator to copy.
-        
+            Validator to copy.
         @param valPtr
-        A pointer to a variable that contains the value. This variable
-        should have a lifetime equal to or longer than the validator lifetime (which is
-        usually
-        determined by the lifetime of the window).
+            A pointer to a variable that contains the value. This variable
+            should have a lifetime equal to or longer than the validator lifetime
+        (which is usually
+            determined by the lifetime of the window).
     */
     wxGenericValidator(const wxGenericValidator& validator);
     wxGenericValidator(bool* valPtr);

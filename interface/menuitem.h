@@ -28,51 +28,44 @@ class wxMenuItem : public wxObject
 public:
     /**
         Constructs a wxMenuItem object.
-        
         Menu items can be standard, or "stock menu items'', or custom. For the
         standard menu items (such as commands to open a file, exit the program and so
         on, see @ref overview_stockitems "stock items" for the full list) it is enough
         to
-        specify just the stock ID and leave @e text and @e helpString empty. In
-        fact, leaving at least @e text empty for the stock menu items is strongly
+        specify just the stock ID and leave @a text and @a helpString empty. In
+        fact, leaving at least @a text empty for the stock menu items is strongly
         recommended as they will have appearance and keyboard interface (including
         standard accelerators) familiar to the user.
-        
-        For the custom (non-stock) menu items, @e text must be specified and while
-        @e helpString may be left empty, it's recommended to pass the item
+        For the custom (non-stock) menu items, @a text must be specified and while
+        @a helpString may be left empty, it's recommended to pass the item
         description (which is automatically shown by the library in the status bar when
         the menu item is selected) in this parameter.
-        
         Finally note that you can e.g. use a stock menu label without using its stock
         help string:
+        
         that is, stock properties are set independently one from the other.
         
         @param parentMenu
-        Menu that the menu item belongs to.
-        
+            Menu that the menu item belongs to.
         @param id
-        Identifier for this menu item, or wxID_SEPARATOR to indicate a separator.
-        
+            Identifier for this menu item, or wxID_SEPARATOR to indicate a separator.
         @param text
-        Text for the menu item, as shown on the menu. An accelerator
-        key can be specified using the ampersand '' character. In order to embed an
-        ampersand character in the menu item text, the ampersand must be doubled.
-        
+            Text for the menu item, as shown on the menu. An accelerator
+            key can be specified using the ampersand '' character. In order to embed an
+            ampersand character in the menu item text, the ampersand must be doubled.
         @param helpString
-        Optional help string that will be shown on the status bar.
-        
+            Optional help string that will be shown on the status bar.
         @param kind
-        May be wxITEM_SEPARATOR, wxITEM_NORMAL,
-        wxITEM_CHECK or wxITEM_RADIO
-        
+            May be wxITEM_SEPARATOR, wxITEM_NORMAL,
+            wxITEM_CHECK or wxITEM_RADIO
         @param subMenu
-        If non-@NULL, indicates that the menu item is a submenu.
+            If non-@NULL, indicates that the menu item is a submenu.
     */
-    wxMenuItem(wxMenu* parentMenu = @NULL, int id = wxID_SEPARATOR,
+    wxMenuItem(wxMenu* parentMenu = NULL, int id = wxID_SEPARATOR,
                const wxString& text = "",
                const wxString& helpString = "",
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu* subMenu = @NULL);
+               wxMenu* subMenu = NULL);
 
     /**
         Destructor.
@@ -81,15 +74,14 @@ public:
 
     /**
         Checks or unchecks the menu item.
-        
         Note that this only works when the item is already appended to a menu.
     */
-    void Check(bool check = @true);
+    void Check(bool check = true);
 
     /**
         Enables or disables the menu item.
     */
-    void Enable(bool enable = @true);
+    void Enable(bool enable = true);
 
     /**
         Returns the background colour associated with the menu item (Windows only).
@@ -99,7 +91,7 @@ public:
     /**
         Returns the checked or unchecked bitmap (Windows only).
     */
-    wxBitmap GetBitmap(bool checked = @true);
+    wxBitmap GetBitmap(bool checked = true);
 
     /**
         Returns the font associated with the menu item (Windows only).
@@ -120,7 +112,7 @@ public:
         Returns the text associated with the menu item including any accelerator
         characters that were passed to the constructor or SetItemLabel.
         
-        @sa GetItemLabelText(), GetLabelText()
+        @see GetItemLabelText(), GetLabelText()
     */
     wxString GetItemLabel();
 
@@ -128,7 +120,7 @@ public:
         Returns the text associated with the menu item, without any accelerator
         characters.
         
-        @sa GetItemLabel(), GetLabelText()
+        @see GetItemLabel(), GetLabelText()
     */
     wxString GetItemLabelText();
 
@@ -141,30 +133,30 @@ public:
     /**
         Returns the text associated with the menu item without any accelerator
         characters it might contain.
-        
         This function is deprecated in favour of GetItemLabelText().
         
-        @sa GetText(), GetLabelFromText()
+        @see GetText(), GetLabelFromText()
     */
     wxString GetLabel();
 
     /**
         Strips all accelerator characters and mnemonics from the given @e text.
         For example,
-        will return just @c "Hello".
         
+        will return just @c "Hello".
         This function is deprecated; please use GetLabelText() instead.
         
-        @sa GetText(), GetLabel()
+        @see GetText(), GetLabel()
     */
     static wxString GetLabelFromText(const wxString& text);
 
     /**
         Strips all accelerator characters and mnemonics from the given @e text.
         For example,
+        
         will return just @c "Hello".
         
-        @sa GetItemLabelText(), GetItemLabel()
+        @see GetItemLabelText(), GetItemLabel()
     */
     static wxString GetLabelText(const wxString& text);
 
@@ -181,7 +173,6 @@ public:
 
     /**
         Returns the text associated with the menu item.
-        
         @b NB: this function is deprecated, please use
         GetItemLabel() or GetItemLabelText()
         instead.
@@ -196,10 +187,9 @@ public:
     /**
         Returns the text associated with the menu item, such as it was passed to the
         wxMenuItem constructor, i.e. with any accelerator characters it may contain.
-        
         This function is deprecated in favour of GetItemLabel().
         
-        @sa GetLabel(), GetLabelFromText()
+        @see GetLabel(), GetLabelFromText()
     */
     wxString GetText();
 
@@ -284,7 +274,6 @@ public:
 
     /**
         Sets the text associated with the menu item.
-        
         This function is deprecated in favour of SetItemLabel().
     */
     void SetText(const wxString& text);

@@ -39,28 +39,24 @@ public:
         Constructor.
         
         @param parent
-        The parent window.
-        
+            The parent window.
         @param id
-        An identifier for the panel. A value of -1 is taken to mean a default.
-        
+            An identifier for the panel. A value of -1 is taken to mean a default.
         @param pos
-        The panel position. The value wxDefaultPosition indicates a default position, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The panel position. The value wxDefaultPosition indicates a default position,
+        chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param size
-        The panel size. The value wxDefaultSize indicates a default size, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The panel size. The value wxDefaultSize indicates a default size, chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param style
-        The window style. See wxPanel.
-        
+            The window style. See wxPanel.
         @param name
-        Used to associate a name with the window,
-        allowing the application user to set Motif resource values for
-        individual dialog boxes.
+            Used to associate a name with the window,
+            allowing the application user to set Motif resource values for
+            individual dialog boxes.
         
-        @sa Create()
+        @see Create()
     */
     wxPanel();
     wxPanel(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -97,7 +93,7 @@ public:
         Sends a wxInitDialogEvent, which
         in turn transfers data to the dialog via validators.
         
-        @sa wxInitDialogEvent
+        @see wxInitDialogEvent
     */
     void InitDialog();
 
@@ -105,17 +101,16 @@ public:
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
         
         @param event
-        The colour change event.
+            The colour change event.
         
         @remarks Changes the panel's colour to conform to the current settings
-                   (Windows only). Add an event table entry for your
-                   panel class if you wish the behaviour to be different
-                   (such as keeping a user-defined background colour).
-                   If you do override this function, call wxEvent::Skip
-                   to propagate the notification to child windows and
-                   controls.
+                 (Windows only). Add an event table entry for your panel
+                 class if you wish the behaviour to be different (such
+                 as keeping a user-defined background colour). If you do
+                 override this function, call wxEvent::Skip to propagate
+                 the notification to child windows and controls.
         
-        @sa wxSysColourChangedEvent
+        @see wxSysColourChangedEvent
     */
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
@@ -126,7 +121,7 @@ public:
         In practice, if you call this method and the control has at least
         one child window, the focus will be given to the child window.
         
-        @sa wxFocusEvent, wxWindow::SetFocus
+        @see wxFocusEvent, wxWindow::SetFocus
     */
     virtual void SetFocus();
 

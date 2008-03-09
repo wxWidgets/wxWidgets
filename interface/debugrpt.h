@@ -144,7 +144,6 @@ public:
 
     /**
         Adds the minidump file to the debug report.
-        
         Minidumps are only available under recent Win32 versions (@c dbghlp32.dll
         can be installed under older systems to make minidumps available).
     */
@@ -161,11 +160,10 @@ public:
     bool AddExceptionDump();
 
     /**
-        Add another file to the report. If @e filename is an absolute path, it is
+        Add another file to the report. If @a filename is an absolute path, it is
         copied to a file in the debug report directory with the same name. Otherwise
         the file should already exist in this directory
-        
-        @e description only exists to be displayed to the user in the report summary
+        @a description only exists to be displayed to the user in the report summary
         shown by wxDebugReportPreview.
     */
     void AddFile(const wxString& filename,
@@ -173,9 +171,8 @@ public:
 
     /**
         This is a convenient wrapper around AddFile(). It
-        creates the file with the given @e name and writes @e text to it, then
-        adds the file to the report. The @e filename shouldn't contain the path.
-        
+        creates the file with the given @e name and writes @a text to it, then
+        adds the file to the report. The @a filename shouldn't contain the path.
         Returns @true if file could be added successfully, @false if an IO error
         occurred.
     */
@@ -187,7 +184,7 @@ public:
         context file created by AddContext(). By
         default, it does nothing.
     */
-    void DoAddCustomContext(wxXmlNode * nodeRoot);
+    void DoAddCustomContext(wxXmlNode* nodeRoot);
 
     /**
         This function may be overridden to modify the contents of the exception tag in
@@ -209,7 +206,6 @@ public:
 
     /**
         Returns the name of the temporary directory used for the files in this report.
-        
         This method should be used to construct the full name of the files which you
         wish to add to the report using AddFile().
     */
@@ -218,7 +214,7 @@ public:
     /**
         Retrieves the name (relative to
         wxDebugReport::GetDirectory) and the description of the
-        file with the given index. If @e n is greater than or equal to the number of
+        file with the given index. If @a n is greater than or equal to the number of
         filse, @false is returned.
     */
     bool GetFile(size_t n, wxString* name, wxString* desc);
@@ -239,7 +235,7 @@ public:
         returns
         @false the report can't be used.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Processes this report: the base class simply notifies the user that the
@@ -307,11 +303,10 @@ class wxDebugReportUpload : public wxDebugReportCompress
 public:
     /**
         )
-        
         This class will upload the compressed file created by its base class to an HTML
-        multipart/form-data form at the specified address. The @e url is the upload
-        page address, @e input is the name of the @c "type=file" control on
-        the form used for the file name and @e action is the value of the form
+        multipart/form-data form at the specified address. The @a url is the upload
+        page address, @a input is the name of the @c "type=file" control on
+        the form used for the file name and @a action is the value of the form
         action field. The report is uploaded using @c @e curl program which
         should be available, the @e curl parameter may be used to specify the full
         path to it.
@@ -321,7 +316,6 @@ public:
 
     /**
         )
-        
         This function may be overridden in a derived class to show the output from
         curl: this may be an HTML page or anything else that the server returned.
         Value returned by this function becomes the return value of

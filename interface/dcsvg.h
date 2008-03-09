@@ -45,10 +45,10 @@ public:
     //@{
     /**
         Constructors:
-        a filename @e f with default size 340x240 at 72.0 dots per inch (a frequent
+        a filename @a f with default size 340x240 at 72.0 dots per inch (a frequent
         screen resolution).
-        a filename @e f with size @e Width by @e Height at 72.0 dots per inch
-        a filename @e f with size @e Width by @e Height at @e dpi resolution.
+        a filename @a f with size @a Width by @a Height at 72.0 dots per inch
+        a filename @a f with size @a Width by @a Height at @a dpi resolution.
     */
     wxSVGFileDC(wxString f);
     wxSVGFileDC(wxString f, int Width, int Height);
@@ -131,7 +131,6 @@ public:
         y1)
         and ending at (@e x2, y2).   The current pen is used for the outline
         and the current brush for filling the shape.
-        
         The arc is drawn in an anticlockwise direction from the start point to the end
         point.
     */
@@ -139,10 +138,9 @@ public:
                  wxCoord xc, wxCoord yc);
 
     /**
-        Draw a bitmap on the device context at the specified point. If @e transparent
+        Draw a bitmap on the device context at the specified point. If @a transparent
         is @true and the bitmap has
         a transparency mask, the bitmap will be drawn transparently.
-        
         When drawing a mono-bitmap, the current text foreground colour will be used to
         draw the foreground
         of the bitmap (all bits set to 1), and the current text background colour to
@@ -159,14 +157,14 @@ public:
     */
     void DrawCheckMark(wxCoord x, wxCoord y, wxCoord width,
                        wxCoord height);
-    void DrawCheckMark(const wxRect & rect);
+    void DrawCheckMark(const wxRect& rect);
     //@}
 
     //@{
     /**
         Draws a circle with the given centre and radius.
         
-        @sa wxDC::DrawEllipse
+        @see wxDC::DrawEllipse
     */
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
     void DrawCircle(const wxPoint& pt, wxCoord radius);
@@ -178,7 +176,7 @@ public:
         left corner and the given size or directly. The current pen is used for the
         outline and the current brush for filling the shape.
         
-        @sa wxDC::DrawCircle
+        @see wxDC::DrawCircle
     */
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width,
                      wxCoord height);
@@ -189,20 +187,17 @@ public:
     /**
         Draws an arc of an ellipse. The current pen is used for drawing the arc and
         the current brush is used for drawing the pie.
-        
-        @e x and @e y specify the x and y coordinates of the upper-left corner of the
+        @a x and @a y specify the x and y coordinates of the upper-left corner of the
         rectangle that contains
         the ellipse.
-        
-        @e width and @e height specify the width and height of the rectangle that
+        @a width and @a height specify the width and height of the rectangle that
         contains
         the ellipse.
-        
-        @e start and @e end specify the start and end of the arc relative to the
+        @a start and @a end specify the start and end of the arc relative to the
         three-o'clock
         position from the center of the rectangle. Angles are specified
         in degrees (360 is a complete circle). Positive values mean
-        counter-clockwise motion. If @e start is equal to @e end, a
+        counter-clockwise motion. If @a start is equal to @e end, a
         complete ellipse will be drawn.
     */
     void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord width,
@@ -224,14 +219,14 @@ public:
 
     //@{
     /**
-        Draws lines using an array of @e points of size @e n, or list of
+        Draws lines using an array of @a points of size @e n, or list of
         pointers to points, adding the optional offset coordinate. The current
         pen is used for drawing the lines.  The programmer is responsible for
         deleting the list of points.
     */
     void DrawLines(int n, wxPoint points[], wxCoord xoffset = 0,
                    wxCoord yoffset = 0);
-    void DrawLines(wxList * points, wxCoord xoffset = 0,
+    void DrawLines(wxList* points, wxCoord xoffset = 0,
                    wxCoord yoffset = 0);
     //@}
 
@@ -242,22 +237,19 @@ public:
 
     //@{
     /**
-        Draws a filled polygon using an array of @e points of size @e n,
+        Draws a filled polygon using an array of @a points of size @e n,
         or list of pointers to points, adding the optional offset coordinate.
-        
         The last argument specifies the fill rule: @b wxODDEVEN_RULE (the
         default) or @b wxWINDING_RULE.
-        
         The current pen is used for drawing the outline, and the current brush
         for filling the shape.  Using a transparent brush suppresses filling.
         The programmer is responsible for deleting the list of points.
-        
         Note that wxWindows automatically closes the first and last points.
     */
     void DrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0,
                      wxCoord yoffset = 0,
                      int fill_style = wxODDEVEN_RULE);
-    void DrawPolygon(wxList * points, wxCoord xoffset = 0,
+    void DrawPolygon(wxList* points, wxCoord xoffset = 0,
                      wxCoord yoffset = 0,
                      int fill_style = wxODDEVEN_RULE);
     //@}
@@ -271,8 +263,7 @@ public:
                        wxCoord height);
 
     /**
-        Draws the text rotated by @e angle degrees.
-        
+        Draws the text rotated by @a angle degrees.
         The wxMSW wxDC and wxSVGFileDC rotate the text around slightly different
         points, depending on the size of the font
     */
@@ -284,9 +275,8 @@ public:
         size.  The corners are quarter-circles using the given radius. The
         current pen is used for the outline and the current brush for filling
         the shape.
-        
-        If @e radius is positive, the value is assumed to be the
-        radius of the rounded corner. If @e radius is negative,
+        If @a radius is positive, the value is assumed to be the
+        radius of the rounded corner. If @a radius is negative,
         the absolute value is assumed to be the @e proportion of the smallest
         dimension of the rectangle. This means that the corner can be
         a sensible size relative to the size of the rectangle, and also avoids
@@ -301,7 +291,7 @@ public:
     /**
         Draws a three-point spline using the current pen.
     */
-    void DrawSpline(wxList * points);
+    void DrawSpline(wxList* points);
     void DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2,
                     wxCoord y2,
                     wxCoord x3,
@@ -311,7 +301,6 @@ public:
     /**
         Draws a text string at the specified point, using the current text font,
         and the current text foreground and background colours.
-        
         The coordinates refer to the top-left corner of the rectangle bounding
         the string. See GetTextExtent() for how
         to get the dimensions of a text string, which can be used to position the
@@ -338,7 +327,7 @@ public:
         Not implemented
     */
     void FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
-                   int style=wxFLOOD_SURFACE);
+                   int style = wxFLOOD_SURFACE);
 
     //@{
     /**
@@ -352,7 +341,7 @@ public:
     /**
         Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
         
-        @sa wxDC::SetBackgroundMode
+        @see wxDC::SetBackgroundMode
     */
     int GetBackgroundMode();
 
@@ -409,13 +398,13 @@ public:
     /**
         Not implemented
     */
-    bool GetPixel(wxCoord x, wxCoord y, wxColour * colour);
+    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour);
 
     /**
         For a Windows printer device context, this gets the horizontal and vertical
         resolution.
     */
-    void GetSize(wxCoord * width, wxCoord * height);
+    void GetSize(wxCoord* width, wxCoord* height);
 
     //@{
     /**
@@ -427,24 +416,22 @@ public:
 
     /**
         Gets the dimensions of the string using the currently selected font.
-        @e string is the text string to measure, @e w and @e h are
-        the total width and height respectively, @e descent is the
+        @a string is the text string to measure, @a w and @a h are
+        the total width and height respectively, @a descent is the
         dimension from the baseline of the font to the bottom of the
-        descender, and @e externalLeading is any extra vertical space added
+        descender, and @a externalLeading is any extra vertical space added
         to the font by the font designer (usually is zero).
-        
-        The optional parameter @e font specifies an alternative
+        The optional parameter @a font specifies an alternative
         to the currently selected font: but note that this does not
         yet work under Windows, so you need to set a font for
         the device context first.
-        
         See also wxFont, SetFont().
     */
-    void GetTextExtent(const wxString& string, wxCoord * w,
-                       wxCoord * h,
-                       wxCoord * descent = @NULL,
-                       wxCoord * externalLeading = @NULL,
-                       wxFont * font = @NULL);
+    void GetTextExtent(const wxString& string, wxCoord* w,
+                       wxCoord* h,
+                       wxCoord* descent = NULL,
+                       wxCoord* externalLeading = NULL,
+                       wxFont* font = NULL);
 
     //@{
     /**
@@ -488,34 +475,34 @@ public:
     /**
         Gets the maximum horizontal extent used in drawing commands so far.
     */
-#define wxCoord MaxX()     /* implementation is private */
+    wxCoord MaxX();
 
     /**
         Gets the maximum vertical extent used in drawing commands so far.
     */
-#define wxCoord MaxY()     /* implementation is private */
+    wxCoord MaxY();
 
     /**
         Gets the minimum horizontal extent used in drawing commands so far.
     */
-#define wxCoord MinX()     /* implementation is private */
+    wxCoord MinX();
 
     /**
         Gets the minimum vertical extent used in drawing commands so far.
     */
-#define wxCoord MinY()     /* implementation is private */
+    wxCoord MinY();
 
     /**
         Returns @true if the DC is ok to use; False values arise from being unable to
         write the file
     */
-#define bool Ok()     /* implementation is private */
+    bool Ok();
 
     /**
         Resets the bounding box: after a call to this function, the bounding box
         doesn't contain anything.
         
-        @sa wxDC::CalcBoundingBox
+        @see wxDC::CalcBoundingBox
     */
     void ResetBoundingBox();
 
@@ -525,12 +512,11 @@ public:
         orientation, e.g. x axis from left to right and y axis from bottom up.
         
         @param xLeftRight
-        True to set the x axis orientation to the natural
-        left to right orientation, @false to invert it.
-        
+            True to set the x axis orientation to the natural
+            left to right orientation, @false to invert it.
         @param yBottomUp
-        True to set the y axis orientation to the natural
-        bottom up orientation, @false to invert it.
+            True to set the y axis orientation to the natural
+            bottom up orientation, @false to invert it.
     */
     void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
@@ -540,20 +526,17 @@ public:
     void SetBackground(const wxBrush& brush);
 
     /**
-        @e mode may be one of wxSOLID and wxTRANSPARENT. This setting determines
+        @a mode may be one of wxSOLID and wxTRANSPARENT. This setting determines
         whether text will be drawn with a background colour or not.
     */
     void SetBackgroundMode(int mode);
 
     /**
         Sets the current brush for the DC.
-        
         If the argument is wxNullBrush, the current brush is selected out of the device
         context, and the original brush restored, allowing the current brush to
         be destroyed safely.
-        
         See also wxBrush.
-        
         See also wxMemoryDC for the interpretation of colours
         when drawing into a monochrome bitmap.
     */
@@ -573,7 +556,6 @@ public:
     /**
         Sets the device origin (i.e., the origin in pixels after scaling has been
         applied).
-        
         This function may be useful in Windows printing
         operations for placing a graphic on a page.
     */
@@ -582,7 +564,6 @@ public:
     /**
         Sets the current font for the DC. It must be a valid font, in particular you
         should not pass @c wxNullFont to this method.
-        
         See also wxFont.
     */
     void SetFont(const wxFont& font);
@@ -600,39 +581,31 @@ public:
         wxSVGFileDC::SetUserScale) scales the text appropriately. In
         Windows, scaleable TrueType fonts are always used; in X, results depend
         on availability of fonts, but usually a reasonable match is found.
-        
         Note that the coordinate origin should ideally be selectable, but for
         now is always at the top left of the screen/printer.
-        
         Drawing to a Windows printer device context under UNIX
         uses the current mapping mode, but mapping mode is currently ignored for
         PostScript output.
-        
         The mapping mode can be one of the following:
         
         wxMM_TWIPS
-        
         
         Each logical unit is 1/20 of a point, or 1/1440 of
           an inch.
         
         wxMM_POINTS
         
-        
         Each logical unit is a point, or 1/72 of an inch.
         
         wxMM_METRIC
-        
         
         Each logical unit is 1 mm.
         
         wxMM_LOMETRIC
         
-        
         Each logical unit is 1/10 of a mm.
         
         wxMM_TEXT
-        
         
         Each logical unit is 1 pixel.
     */
@@ -645,10 +618,8 @@ public:
 
     /**
         Sets the current pen for the DC.
-        
         If the argument is wxNullPen, the current pen is selected out of the device
         context, and the original pen restored.
-        
         See also wxMemoryDC for the interpretation of colours
         when drawing into a monochrome bitmap.
     */
@@ -661,7 +632,6 @@ public:
 
     /**
         Sets the current text foreground colour for the DC.
-        
         See also wxMemoryDC for the interpretation of colours
         when drawing into a monochrome bitmap.
     */

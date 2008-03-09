@@ -59,15 +59,13 @@ public:
     /**
         This function may be used to provide hard-wired fallbacks for the MIME types
         and extensions that might not be present in the system MIME database.
-        
         Please see the typetest sample for an example of using it.
     */
-    void AddFallbacks(const wxFileTypeInfo * fallbacks);
+    void AddFallbacks(const wxFileTypeInfo* fallbacks);
 
     /**
         NB: You won't normally need to use more than one wxMimeTypesManager object in a
         program.
-        
         @ref ctor() wxMimeTypesManager
         
         @ref dtor() ~wxMimeTypesManager
@@ -78,8 +76,7 @@ public:
         Gather information about the files with given extension and return the
         corresponding wxFileType object or @NULL if the extension
         is unknown.
-        
-        The @e extension parameter may have, or not, the leading dot, if it has it,
+        The @a extension parameter may have, or not, the leading dot, if it has it,
         it is stripped automatically. It must not however be empty.
     */
     wxFileType* GetFileTypeFromExtension(const wxString& extension);
@@ -96,7 +93,6 @@ public:
         to call them) and provide some useful operations for string representations of
         MIME types. Their usage is recommended instead of directly working with MIME
         types using wxString functions.
-        
         IsOfType()
     */
 
@@ -105,7 +101,6 @@ public:
         @b Unix: These functions may be used to load additional files (except for the
         default ones which are loaded automatically) containing MIME
         information in either mailcap(5) or mime.types(5) format.
-        
         ReadMailcap()
         
         ReadMimeTypes()
@@ -115,11 +110,10 @@ public:
 
 
     /**
-        This function returns @true if either the given @e mimeType is exactly the
-        same as @e wildcard or if it has the same category and the subtype of
-        @e wildcard is '*'. Note that the '*' wildcard is not allowed in
-        @e mimeType itself.
-        
+        This function returns @true if either the given @a mimeType is exactly the
+        same as @a wildcard or if it has the same category and the subtype of
+        @a wildcard is '*'. Note that the '*' wildcard is not allowed in
+        @a mimeType itself.
         The comparison don by this function is case insensitive so it is not
         necessary to convert the strings to the same case before calling it.
     */
@@ -131,7 +125,6 @@ public:
         from either file extension or MIME type.
         If the function is successful, it returns a pointer to the wxFileType object
         which @b must be deleted by the caller, otherwise @NULL will be returned.
-        
         GetFileTypeFromMimeType()
         
         GetFileTypeFromExtension()
@@ -142,23 +135,20 @@ public:
         Load additional file containing information about MIME types and associated
         information in mailcap format. See metamail(1) and mailcap(5) for more
         information.
-        
-        @e fallback parameter may be used to load additional mailcap files without
+        @a fallback parameter may be used to load additional mailcap files without
         overriding the settings found in the standard files: normally, entries from
         files loaded with ReadMailcap will override the entries from files loaded
         previously (and the standard ones are loaded in the very beginning), but this
         will not happen if this parameter is set to @true (default is @false).
-        
         The return value is @true if there were no errors in the file or @false
         otherwise.
     */
-    bool ReadMailcap(const wxString& filename, bool fallback = @false);
+    bool ReadMailcap(const wxString& filename, bool fallback = false);
 
     /**
         Load additional file containing information about MIME types and associated
         information in mime.types file format. See metamail(1) and mailcap(5) for more
         information.
-        
         The return value is @true if there were no errors in the file or @false
         otherwise.
     */
@@ -223,36 +213,28 @@ public:
         This function is primarily intended for GetOpenCommand and GetPrintCommand
         usage but may be also used by the application directly if, for example, you want
         to use some non-default command to open the file.
-        
         The function replaces all occurrences of
         
-        
         format specification
-        
         
         with
         
         %s
         
-        
         the full file name
         
         %t
-        
         
         the MIME type
         
         %{param}
         
-        
         the value of the parameter @e param
         
         using the MessageParameters object you pass to it.
-        
         If there is no '%s' in the command string (and the string is not empty), it is
         assumed that the command reads the data on stdin and so the effect is the same
         as " %s" were appended to the string.
-        
         Unlike all other functions of this class, there is no error return for this
         function.
     */
@@ -260,18 +242,17 @@ public:
                                   MessageParameters& params);
 
     /**
-        If the function returns @true, the string pointed to by @e desc is filled
+        If the function returns @true, the string pointed to by @a desc is filled
         with a brief description for this file type: for example, "text document" for
         the "text/plain" MIME type.
     */
     bool GetDescription(wxString* desc);
 
     /**
-        If the function returns @true, the array @e extensions is filled
+        If the function returns @true, the array @a extensions is filled
         with all extensions associated with this file type: for example, it may
         contain the following two elements for the MIME type "text/html" (notice the
         absence of the leading dot): "html" and "htm".
-        
         @b Windows: This function is currently not implemented: there is no
         (efficient) way to retrieve associated extensions from the given MIME type on
         this platform, so it will only return @true if the wxFileType object was
@@ -284,21 +265,18 @@ public:
     /**
         If the function returns @true, the @c iconLoc is filled with the
         location of the icon for this MIME type. A wxIcon may be
-        created from @e iconLoc later.
-        
+        created from @a iconLoc later.
         @b Windows: The function returns the icon shown by Explorer for the files of
         the specified type.
-        
         @b Mac: This function is not implemented and always returns @false.
-        
         @b Unix: MIME manager gathers information about icons from GNOME
         and KDE settings and thus GetIcon's success depends on availability
         of these desktop environments.
     */
-    bool GetIcon(wxIconLocation * iconLoc);
+    bool GetIcon(wxIconLocation* iconLoc);
 
     /**
-        If the function returns @true, the string pointed to by @e mimeType is filled
+        If the function returns @true, the string pointed to by @a mimeType is filled
         with full MIME type specification for this file type: for example, "text/plain".
     */
     bool GetMimeType(wxString* mimeType);
@@ -315,12 +293,11 @@ public:
     //@{
     /**
         With the first version of this method, if the @true is returned, the
-        string pointed to by @e command is filled with the command which must be
+        string pointed to by @a command is filled with the command which must be
         executed (see wxExecute) in order to open the file of the
         given type. In this case, the name of the file as well as any other parameters
         is retrieved from MessageParameters()
         class.
-        
         In the second case, only the filename is specified and the command to be used
         to open this kind of file is returned directly. An empty string is returned to
         indicate that an error occurred (typically meaning that there is no standard way
@@ -332,7 +309,7 @@ public:
     //@}
 
     /**
-        If the function returns @true, the string pointed to by @e command is filled
+        If the function returns @true, the string pointed to by @a command is filled
         with the command which must be executed (see wxExecute) in
         order to print the file of the given type. The name of the file is
         retrieved from MessageParameters() class.
@@ -347,7 +324,6 @@ public:
         they must specify the MIME type and the version of MIME used, but almost always
         they provide additional information about the message such as the original file
         name or the charset (for the text documents).
-        
         These parameters may be useful to the program used to open, edit, view or print
         the message, so, for example, an e-mail client program will have to pass them to
         this program. Because wxFileType itself can not know about these parameters,
@@ -357,8 +333,10 @@ public:
         there are no other parameters. If you wish to supply additional parameters, you
         must derive your own class from MessageParameters and override GetParamValue()
         function, for example:
+        
         Now you only need to create an object of this class and pass it to, for example,
         GetOpenCommand() like this:
+        
         @b Windows: As only the file name is used by the program associated with the
         given extension anyhow (but no other message parameters), there is no need to
         ever derive from MessageParameters class for a Windows-only program.

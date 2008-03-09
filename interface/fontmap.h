@@ -51,8 +51,7 @@ public:
     /**
         Returns the encoding for the given charset (in the form of RFC 2046) or
         @c wxFONTENCODING_SYSTEM if couldn't decode it.
-        
-        Be careful when using this function with @e interactive set to @true
+        Be careful when using this function with @a interactive set to @true
         (default value) as the function then may show a dialog box to the user which
         may lead to unexpected reentrancies and may also take a significantly longer
         time than a simple function call. For these reasons, it is almost always a bad
@@ -60,15 +59,15 @@ public:
         events such as @c EVT_PAINT.
     */
     wxFontEncoding CharsetToEncoding(const wxString& charset,
-                                     bool interactive = @true);
+                                     bool interactive = true);
 
     /**
         Get the current font mapper object. If there is no current object, creates
         one.
         
-        @sa Set()
+        @see Set()
     */
-#define static wxFontMapper * Get()     /* implementation is private */
+    static wxFontMapper* Get();
 
     /**
         Returns the array of all possible names for the given encoding. The array is
@@ -84,7 +83,6 @@ public:
         available on this system). If successful, return @true and fill info
         structure with the parameters required to create the font, otherwise
         return @false.
-        
         The first form is for wxWidgets' internal use while the second one
         is better suitable for general use -- it returns wxFontEncoding which
         can consequently be passed to wxFont constructor.
@@ -92,11 +90,11 @@ public:
     bool GetAltForEncoding(wxFontEncoding encoding,
                            wxNativeEncodingInfo* info,
                            const wxString& facename = wxEmptyString,
-                           bool interactive = @true);
+                           bool interactive = true);
     bool GetAltForEncoding(wxFontEncoding encoding,
                            wxFontEncoding* alt_encoding,
                            const wxString& facename = wxEmptyString,
-                           bool interactive = @true);
+                           bool interactive = true);
     //@}
 
     /**
@@ -126,7 +124,7 @@ public:
         Return internal string identifier for the encoding (see also
         wxFontMapper::GetEncodingDescription)
         
-        @sa GetEncodingFromName()
+        @see GetEncodingFromName()
     */
     static wxString GetEncodingName(wxFontEncoding encoding);
 
@@ -149,13 +147,12 @@ public:
         This method is only useful if you want to plug-in an alternative font mapper
         into wxWidgets.
         
-        @sa Get()
+        @see Get()
     */
-#define static wxFontMapper * Set(wxFontMapper * mapper)     /* implementation is private */
+    static wxFontMapper* Set(wxFontMapper* mapper);
 
     /**
         Set the config object to use (may be @NULL to use default).
-        
         By default, the global one (from wxConfigBase::Get() will be used)
         and the default root path for the config settings is the string returned by
         GetDefaultConfigPath().

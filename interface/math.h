@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-Returns a non-zero value if @e x is neither infinite nor NaN (not a number),
+Returns a non-zero value if @a x is neither infinite nor NaN (not a number),
 returns 0 otherwise.
 */
 int wxFinite(double x);

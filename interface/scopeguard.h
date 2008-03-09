@@ -11,9 +11,9 @@
     This family of macros is similar to wxON_BLOCK_EXIT
     but calls a method of the given object instead of a free function.
 */
-wxON_BLOCK_EXIT_OBJ0(obj,  method);
-wxON_BLOCK_EXIT_OBJ1(obj,  method,  p1);
-wxON_BLOCK_EXIT_OBJ2(obj,  method,  p1,  p2);
+wxON_BLOCK_EXIT_OBJ0(obj, method);
+wxON_BLOCK_EXIT_OBJ1(obj, method, p1);
+wxON_BLOCK_EXIT_OBJ2(obj, method, p1, p2);
 //@}
 
 
@@ -33,10 +33,10 @@ wxON_BLOCK_EXIT_OBJ2(obj,  method,  p1,  p2);
     published in December 2000 issue of C/C++ Users Journal for more
     details.
 
-    @sa wxON_BLOCK_EXIT_OBJ
+    @see wxON_BLOCK_EXIT_OBJ
 */
 wxON_BLOCK_EXIT0(func);
-wxON_BLOCK_EXIT1(func,  p1);
-wxON_BLOCK_EXIT2(func,  p1,  p2);
+wxON_BLOCK_EXIT1(func, p1);
+wxON_BLOCK_EXIT2(func, p1, p2);
 //@}
 

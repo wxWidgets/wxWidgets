@@ -14,25 +14,22 @@
     functions except for the first one which returns @c wxCONV_FAILED if the
     output buffer is too small. To allocate the buffer of the correct size, use
     wxBase64EncodedSize or call this function with
-    @e dst set to @NULL -- it will then return the necessary buffer size.
+    @a dst set to @NULL -- it will then return the necessary buffer size.
 
     @param dst
-    The output buffer, may be @NULL to retrieve the needed buffer
-    size.
-
+        The output buffer, may be @NULL to retrieve the needed buffer
+        size.
     @param dstLen
-    The output buffer size, ignored if dst is @NULL.
-
+        The output buffer size, ignored if dst is @NULL.
     @param src
-    The input buffer, must not be @NULL.
-
+        The input buffer, must not be @NULL.
     @param srcLen
-    The length of the input data.
+        The length of the input data.
 */
-size_t wxBase64Encode(char * dst, size_t dstLen,
-                      const void * src,
+size_t wxBase64Encode(char* dst, size_t dstLen,
+                      const void* src,
                       size_t srcLen);
-wxString wxBase64Encode(const void * src, size_t srcLen);
+wxString wxBase64Encode(const void* src, size_t srcLen);
 wxString wxBase64Encode(const wxMemoryBuffer& buf);
 //@}
 
@@ -54,58 +51,54 @@ size_t wxBase64EncodedSize(size_t len);
 //@{
 /**
     These function decode a Base64-encoded string. The first version is a raw
-    decoding function and decodes the data into the provided buffer @e dst of
+    decoding function and decodes the data into the provided buffer @a dst of
     the given size @e dstLen. An error is returned if the buffer is not large
     enough -- that is not at least wxBase64DecodedSize(srcLen)
     bytes. The second version allocates memory internally and returns it as
     wxMemoryBuffer and is recommended for normal use.
-
     The first version returns the number of bytes written to the buffer or the
-    necessary buffer size if @e dst was @NULL or @c wxCONV_FAILED on
+    necessary buffer size if @a dst was @NULL or @c wxCONV_FAILED on
     error, e.g. if the output buffer is too small or invalid characters were
     encountered in the input string. The second version returns a buffer with the
     base64 decoded binary equivalent of the input string. In neither case is the
     buffer NUL-terminated.
 
     @param dst
-    Pointer to output buffer, may be @NULL to just compute the
-    necessary buffer size.
-
+        Pointer to output buffer, may be @NULL to just compute the
+        necessary buffer size.
     @param dstLen
-    The size of the output buffer, ignored if dst is
-    @NULL.
-
+        The size of the output buffer, ignored if dst is
+        @NULL.
     @param src
-    The input string, must not be @NULL. For the version using
-    wxString, the input string should contain only ASCII characters.
-
+        The input string, must not be @NULL. For the version using
+        wxString, the input string should contain only ASCII characters.
     @param srcLen
-    The length of the input string or special value
-    wxNO_LEN if the string is NUL-terminated and the length should be
-    computed by this function itself.
-
+        The length of the input string or special value
+        wxNO_LEN if the string is NUL-terminated and the length should be
+        computed by this function itself.
     @param mode
-    This parameter specifies the function behaviour when invalid
-    characters are encountered in input. By default, any such character stops the
-    decoding with error. If the mode is wxBase64DecodeMode_SkipWS, then the white
-    space characters are silently skipped instead. And if it is
-    wxBase64DecodeMode_Relaxed, then all invalid characters are skipped.
-
+        This parameter specifies the function behaviour when invalid
+        characters are encountered in input. By default, any such character stops
+    the
+        decoding with error. If the mode is wxBase64DecodeMode_SkipWS, then the
+    white
+        space characters are silently skipped instead. And if it is
+        wxBase64DecodeMode_Relaxed, then all invalid characters are skipped.
     @param posErr
-    If this pointer is non-@NULL and an error occurs during
-    decoding, it is filled with the index of the invalid character.
+        If this pointer is non-@NULL and an error occurs during
+        decoding, it is filled with the index of the invalid character.
 */
-size_t wxBase64Decode(void * dst, size_t dstLen,
-                      const char * src,
+size_t wxBase64Decode(void* dst, size_t dstLen,
+                      const char* src,
                       size_t srcLen = wxNO_LEN,
                       wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
-                      size_t posErr = @NULL);
-wxMemoryBuffer wxBase64Decode(const char * src,
+                      size_t posErr = NULL);
+wxMemoryBuffer wxBase64Decode(const char* src,
                               size_t srcLen = wxNO_LEN,
                               wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
-                              size_t posErr = @NULL);
+                              size_t posErr = NULL);
 wxMemoryBuffer wxBase64Decode(const wxString& src,
                               wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
-                              size_t posErr = @NULL);
+                              size_t posErr = NULL);
 //@}
 

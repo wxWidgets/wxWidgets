@@ -82,13 +82,12 @@ public:
 
     /**
         Frees resources allocated by the object.
-        
         @b NB: destructor is not virtual, don't use this class polymorphically.
     */
     ~wxCmdLineParser();
 
     /**
-        Add an option @e name with an optional long name @e lng (no long name if
+        Add an option @a name with an optional long name @a lng (no long name if
         it is empty, which is default) taking a value of the given type (string by
         default) to the command line description.
     */
@@ -99,15 +98,15 @@ public:
                    int flags = 0);
 
     /**
-        Add a parameter of the given @e type to the command line description.
+        Add a parameter of the given @a type to the command line description.
     */
     void AddParam(const wxString& desc = wxEmptyString,
                   wxCmdLineParamType type = wxCMD_LINE_VAL_STRING,
                   int flags = 0);
 
     /**
-        Add a switch @e name with an optional long name @e lng (no long name if it
-        is empty, which is default), description @e desc and flags @e flags to the
+        Add a switch @a name with an optional long name @a lng (no long name if it
+        is empty, which is default), description @a desc and flags @a flags to the
         command line description.
     */
     void AddSwitch(const wxString& name,
@@ -118,7 +117,7 @@ public:
     /**
         Returns @true if long options are enabled, otherwise @false.
         
-        @sa EnableLongOptions()
+        @see EnableLongOptions()
     */
     bool AreLongOptionsEnabled();
 
@@ -127,17 +126,14 @@ public:
         parser object must have the command line to parse and also the rules saying
         which switches, options and parameters are valid - this is called command line
         description in what follows.
-        
         You have complete freedom of choice as to when specify the required information,
         the only restriction is that it must be done before calling
         Parse().
-        
         To specify the command line to parse you may use either one of constructors
         accepting it (@c wxCmdLineParser(argc, argv) or @c wxCmdLineParser(const
         wxString) usually)
         or, if you use the default constructor, you can do it later by calling
         SetCmdLine().
-        
         The same holds for command line description: it can be specified either in
         the @ref wxcmdlineparserctor() constructor (with or without
         the command line itself) or constructed later using either
@@ -145,7 +141,6 @@ public:
         AddSwitch(),
         AddOption() and
         AddParam() methods.
-        
         Using constructors or SetDesc() uses a (usually
         @c const static) table containing the command line description. If you want
         to decide which options to accept during the run-time, using one of the
@@ -164,21 +159,18 @@ public:
         wxCmdLineParser has several global options which may be changed by the
         application. All of the functions described in this section should be called
         before Parse().
-        
         First global option is the support for long (also known as GNU-style) options.
         The long options are the ones which start with two dashes (@c "--") and look
         like this: @c --verbose, i.e. they generally are complete words and not some
         abbreviations of them. As long options are used by more and more applications,
         they are enabled by default, but may be disabled with
         DisableLongOptions().
-        
         Another global option is the set of characters which may be used to start an
         option (otherwise, the word on the command line is assumed to be a parameter).
         Under Unix, @c '-' is always used, but Windows has at least two common
         choices for this: @c '-' and @c '/'. Some programs also use @c '+'.
         The default is to use what suits most the current platform, but may be changed
         with SetSwitchChars() method.
-        
         Finally, SetLogo() can be used to show some
         application-specific text before the explanation given by
         Usage() function.
@@ -192,13 +184,12 @@ public:
 
     /**
         Enable or disable support for the long options.
-        
         As long options are not (yet) POSIX-compliant, this option allows to disable
         them.
         
-        @sa Customization() and AreLongOptionsEnabled()
+        @see Customization() and AreLongOptionsEnabled()
     */
-    void EnableLongOptions(bool enable = @true);
+    void EnableLongOptions(bool enable = true);
 
     //@{
     /**
@@ -226,7 +217,6 @@ public:
         After calling Parse() (and if it returned 0),
         you may access the results of parsing using one of overloaded @c Found()
         methods.
-        
         For a simple switch, you will simply call
         Found() to determine if the switch was given
         or not, for an option or a parameter, you will call a version of @c Found()
@@ -242,13 +232,13 @@ public:
         syntax error occurred.
         
         @param giveUsage
-        If @true (default), the usage message is given if a
-        syntax error was encountered while parsing the command line or if help was
-        requested. If @false, only error messages about possible syntax errors
-        are given, use Usage to show the usage message
-        from the caller if needed.
+            If @true (default), the usage message is given if a
+            syntax error was encountered while parsing the command line or if help was
+            requested. If @false, only error messages about possible syntax errors
+            are given, use Usage to show the usage message
+            from the caller if needed.
     */
-    int Parse(bool giveUsage = @true);
+    int Parse(bool giveUsage = true);
 
     /**
         After the command line description was constructed and the desired options were
@@ -257,7 +247,6 @@ public:
         option was specified (this is a separate case as, normally, the program will
         terminate after this) or a positive number if there was an error during the
         command line parsing.
-        
         In the latter case, the appropriate error message and usage information are
         logged by wxCmdLineParser itself using the standard wxWidgets logging functions.
     */
@@ -274,21 +263,19 @@ public:
 
     /**
         Construct the command line description
-        
         Take the command line description from the wxCMD_LINE_NONE terminated table.
-        
         Example of usage:
     */
     void SetDesc(const wxCmdLineEntryDesc* desc);
 
     /**
-        @e logo is some extra text which will be shown by
+        @a logo is some extra text which will be shown by
         Usage() method.
     */
     void SetLogo(const wxString& logo);
 
     /**
-        @e switchChars contains all characters with which an option or switch may
+        @a switchChars contains all characters with which an option or switch may
         start. Default is @c "-" for Unix, @c "-/" for Windows.
     */
     void SetSwitchChars(const wxString& switchChars);
@@ -298,7 +285,7 @@ public:
         options and parameters descriptions specified earlier, so the resulting message
         will not be helpful to the user unless the descriptions were indeed specified.
         
-        @sa SetLogo()
+        @see SetLogo()
     */
     void Usage();
 };

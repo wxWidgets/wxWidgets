@@ -54,30 +54,23 @@ public:
         Constructor, creating and showing a text control.
         
         @param parent
-        Parent window. Should not be @NULL.
-        
+            Parent window. Should not be @NULL.
         @param id
-        Control identifier. A value of -1 denotes a default value.
-        
+            Control identifier. A value of -1 denotes a default value.
         @param value
-        Default text value.
-        
+            Default text value.
         @param pos
-        Text control position.
-        
+            Text control position.
         @param size
-        Text control size.
-        
+            Text control size.
         @param style
-        Window style. See wxSearchCtrl.
-        
+            Window style. See wxSearchCtrl.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa wxTextCtrl::Create, wxValidator
+        @see wxTextCtrl::Create, wxValidator
     */
     wxSearchCtrl();
     wxSearchCtrl(wxWindow* parent, wxWindowID id,
@@ -105,7 +98,6 @@ public:
         If there is a menu attached, the search button will be visible regardless of
         the search
         button visibility value.
-        
         This always returns @false in Mac OS X v10.3
     */
     virtual bool IsSearchButtonVisible();
@@ -116,7 +108,7 @@ public:
         the search control it is deleted.
         
         @param menu
-        Menu to attach to the search control.
+            Menu to attach to the search control.
     */
     virtual void SetMenu(wxMenu* menu);
 
@@ -130,7 +122,6 @@ public:
         If there is a menu attached, the search button will be visible regardless of
         the search
         button visibility value.
-        
         This has no effect in Mac OS X v10.3
     */
     virtual void ShowSearchButton(bool show);

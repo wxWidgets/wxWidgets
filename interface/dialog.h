@@ -61,8 +61,8 @@
     @category{cmndlg}
 
     @seealso
-    @ref overview_wxdialogoverview "wxDialog overview", wxFrame, @ref
-    overview_validatoroverview "Validator overview"
+    @ref overview_wxdialogoverview, wxFrame, @ref overview_validatoroverview
+    "Validator overview"
 */
 class wxDialog : public wxTopLevelWindow
 {
@@ -72,31 +72,26 @@ public:
         Constructor.
         
         @param parent
-        Can be @NULL, a frame or another dialog box.
-        
+            Can be @NULL, a frame or another dialog box.
         @param id
-        An identifier for the dialog. A value of -1 is taken to mean a default.
-        
+            An identifier for the dialog. A value of -1 is taken to mean a default.
         @param title
-        The title of the dialog.
-        
+            The title of the dialog.
         @param pos
-        The dialog position. The value wxDefaultPosition indicates a default position, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The dialog position. The value wxDefaultPosition indicates a default position,
+        chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param size
-        The dialog size. The value wxDefaultSize indicates a default size, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The dialog size. The value wxDefaultSize indicates a default size, chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param style
-        The window style. See wxDialog.
-        
+            The window style. See wxDialog.
         @param name
-        Used to associate a name with the window,
-        allowing the application user to set Motif resource values for
-        individual dialog boxes.
+            Used to associate a name with the window,
+            allowing the application user to set Motif resource values for
+            individual dialog boxes.
         
-        @sa Create()
+        @see Create()
     */
     wxDialog();
     wxDialog(wxWindow* parent, wxWindowID id,
@@ -115,7 +110,6 @@ public:
     /**
         Adds an identifier to be regarded as a main button for the non-scrolling area
         of a dialog.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -125,7 +119,6 @@ public:
         Returns @true if this dialog can and should perform layout adaptation using
         DoLayoutAdaptation(), usually if
         the dialog is too large to fit on the display.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -135,7 +128,7 @@ public:
         Centres the dialog box on the display.
         
         @param direction
-        May be wxHORIZONTAL, wxVERTICAL or wxBOTH.
+            May be wxHORIZONTAL, wxVERTICAL or wxBOTH.
     */
     void Centre(int direction = wxBOTH);
 
@@ -151,12 +144,10 @@ public:
                 const wxString& name = "dialogBox");
 
     /**
-        Creates a sizer with standard buttons. @e flags is a bit list
+        Creates a sizer with standard buttons. @a flags is a bit list
         of the following flags: wxOK, wxCANCEL, wxYES, wxNO, wxAPPLY, wxCLOSE,
         wxHELP, wxNO_DEFAULT.
-        
         The sizer lays out the buttons in a manner appropriate to the platform.
-        
         This function uses CreateStdDialogButtonSizer()
         internally for most platforms but doesn't create the sizer at all for the
         platforms with hardware buttons (such as smartphones) for which it sets up the
@@ -169,7 +160,6 @@ public:
         Creates a sizer with standard buttons using
         CreateButtonSizer() separated from the rest
         of the dialog contents by a horizontal wxStaticLine.
-        
         Please notice that just like CreateButtonSizer() this function may return @c
         @NULL
         if no buttons were created.
@@ -177,10 +167,9 @@ public:
     wxSizer* CreateSeparatedButtonSizer(long flags);
 
     /**
-        Creates a wxStdDialogButtonSizer with standard buttons. @e flags is a bit list
+        Creates a wxStdDialogButtonSizer with standard buttons. @a flags is a bit list
         of the following flags: wxOK, wxCANCEL, wxYES, wxNO, wxAPPLY, wxCLOSE,
         wxHELP, wxNO_DEFAULT.
-        
         The sizer lays out the buttons in a manner appropriate to the platform.
     */
     wxStdDialogButtonSizer* CreateStdDialogButtonSizer(long flags);
@@ -188,7 +177,6 @@ public:
     /**
         Performs layout adaptation, usually if the dialog is too large to fit on the
         display.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -201,11 +189,10 @@ public:
         wxWidgets
         will call Close() for the dialog.
     */
-#define virtual bool DoOK()     /* implementation is private */
+    virtual bool DoOK();
 
     /**
         A static function enabling or disabling layout adaptation for all dialogs.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -216,9 +203,9 @@ public:
         invocation.
         
         @param retCode
-        The value that should be returned by ShowModal.
+            The value that should be returned by ShowModal.
         
-        @sa ShowModal(), GetReturnCode(), SetReturnCode()
+        @see ShowModal(), GetReturnCode(), SetReturnCode()
     */
     void EndModal(int retCode);
 
@@ -226,7 +213,7 @@ public:
         Gets the identifier of the button which works like standard OK button in this
         dialog.
         
-        @sa SetAffirmativeId()
+        @see SetAffirmativeId()
     */
     int GetAffirmativeId();
 
@@ -244,14 +231,13 @@ public:
         Gets the identifier of the button to map presses of @c ESC
         button to.
         
-        @sa SetEscapeId()
+        @see SetEscapeId()
     */
     int GetEscapeId();
 
     /**
         Returns @true if the dialog has been adapted, usually by making it scrollable
         to work with a small display.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -262,7 +248,6 @@ public:
         to be in the non-scrolling part of a layout-adapted dialog.
         Zero switches off adaptation, and 3 allows search for standard buttons anywhere
         in the dialog.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -270,7 +255,6 @@ public:
 
     /**
         Gets the adaptation mode, overriding the global adaptation flag.
-        
         See also SetLayoutAdaptationMode() and @ref overview_autoscrollingdialogs
         "Automatic scrolling dialogs".
     */
@@ -278,7 +262,6 @@ public:
 
     /**
         A static function getting the current layout adapter object.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -287,7 +270,6 @@ public:
     /**
         Returns an array of identifiers to be regarded as the main buttons for the
         non-scrolling area of a dialog.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -297,9 +279,9 @@ public:
         Gets the return code for this window.
         
         @remarks A return code is normally associated with a modal dialog, where
-                   ShowModal() returns a code to the application.
+                 ShowModal() returns a code to the application.
         
-        @sa SetReturnCode(), ShowModal(), EndModal()
+        @see SetReturnCode(), ShowModal(), EndModal()
     */
     int GetReturnCode();
 
@@ -308,7 +290,6 @@ public:
         GetToolBar
         allows you to access the toolbar and add tools to it. Removing tools and adding
         arbitrary controls are not currently supported.
-        
         This function is not available on any other platform.
     */
     wxToolBar* GetToolBar();
@@ -317,14 +298,14 @@ public:
         Iconizes or restores the dialog. Windows only.
         
         @param iconize
-        If @true, iconizes the dialog box; if @false, shows and restores it.
+            If @true, iconizes the dialog box; if @false, shows and restores it.
         
         @remarks Note that in Windows, iconization has no effect since dialog
-                   boxes cannot be iconized. However, applications may
-                   need to explicitly restore dialog boxes under Motif
-                   which have user-iconizable frames, and under Windows
-                   calling Iconize(@false) will bring the window to the
-                   front, as does Show(@true).
+                 boxes cannot be iconized. However, applications may
+                 need to explicitly restore dialog boxes under Motif
+                 which have user-iconizable frames, and under Windows
+                 calling Iconize(@false) will bring the window to the
+                 front, as does Show(@true).
     */
     void Iconize(bool iconize);
 
@@ -332,23 +313,21 @@ public:
         Returns @true if the dialog box is iconized. Windows only.
         
         @remarks Always returns @false under Windows since dialogs cannot be
-                   iconized.
+                 iconized.
     */
     bool IsIconized();
 
     /**
         A static function returning @true if layout adaptation is enabled for all
         dialogs.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
     static bool IsLayoutAdaptationEnabled();
 
     /**
-        Returns @true if @e id is in the array of identifiers to be regarded as the
+        Returns @true if @a id is in the array of identifiers to be regarded as the
         main buttons for the non-scrolling area of a dialog.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -363,17 +342,17 @@ public:
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
         
         @param event
-        The colour change event.
+            The colour change event.
         
         @remarks Changes the dialog's colour to conform to the current settings
-                   (Windows only). Add an event table entry for your
-                   dialog class if you wish the behaviour to be
-                   different (such as keeping a user-defined background
-                   colour). If you do override this function, call
-                   wxEvent::Skip to propagate the notification to child
-                   windows and controls.
+                 (Windows only). Add an event table entry for your
+                 dialog class if you wish the behaviour to be different
+                 (such as keeping a user-defined background colour). If
+                 you do override this function, call wxEvent::Skip to
+                 propagate the notification to child windows and
+                 controls.
         
-        @sa wxSysColourChangedEvent
+        @see wxSysColourChangedEvent
     */
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
@@ -383,14 +362,12 @@ public:
         and wxWindow::TransferDataFromWindow
         and, if they both return @true, closes the dialog with @c wxID_OK return
         code.
-        
         Also, when the user presses a hardware OK button on the devices having one or
         the special OK button in the PocketPC title bar, an event with this id is
         generated.
-        
         By default, the affirmative id is wxID_OK.
         
-        @sa GetAffirmativeId(), SetEscapeId()
+        @see GetAffirmativeId(), SetEscapeId()
     */
     void SetAffirmativeId(int id);
 
@@ -400,11 +377,10 @@ public:
         clicked, the dialog is closed. Also, when the user presses @c ESC
         key in the dialog or closes the dialog using the close button in the title bar,
         this is mapped to the click of the button with the specified id.
-        
         By default, the escape id is the special value @c wxID_ANY meaning that
         @c wxID_CANCEL button is used if it's present in the dialog and
         otherwise the button with GetAffirmativeId()
-        is used. Another special value for @e id is @c wxID_NONE meaning that
+        is used. Another special value for @a id is @c wxID_NONE meaning that
         @c ESC presses should be ignored. If any other value is given, it
         is interpreted as the id of the button to map the escape key to.
     */
@@ -414,7 +390,7 @@ public:
         Sets the icon for this dialog.
         
         @param icon
-        The icon to associate with this dialog.
+            The icon to associate with this dialog.
     */
     void SetIcon(const wxIcon& icon);
 
@@ -422,14 +398,13 @@ public:
         Sets the icons for this dialog.
         
         @param icons
-        The icons to associate with this dialog.
+            The icons to associate with this dialog.
     */
     void SetIcons(const wxIconBundle& icons);
 
     /**
         Marks the dialog as having been adapted, usually by making it scrollable to
         work with a small display.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -440,15 +415,15 @@ public:
         non-scrolling part of a layout-adapted dialog.
         Zero switches off adaptation, and 3 allows search for standard buttons anywhere
         in the dialog.
-        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
     void SetLayoutAdaptationLevel(int level);
 
     /**
-        Sets the adaptation mode, overriding the global adaptation flag. @e mode may be
+        Sets the adaptation mode, overriding the global adaptation flag. @a mode may be
         one of the following values:
+        
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -458,7 +433,6 @@ public:
         A static function for setting the current layout adapter object, returning the
         old adapter. If you call this, you should
         delete the old adapter object.
-        
         See also wxDialogLayoutAdapter and @ref overview_autoscrollingdialogs
         "Automatic scrolling dialogs".
     */
@@ -467,13 +441,12 @@ public:
     /**
         @b NB: This function is deprecated and doesn't work for all ports, just use
         ShowModal() to show a modal dialog instead.
-        
         Allows the programmer to specify whether the dialog box is modal (Show() blocks
         control
         until the dialog is hidden) or modeless (control returns immediately).
         
         @param flag
-        If @true, the dialog will be modal, otherwise it will be modeless.
+            If @true, the dialog will be modal, otherwise it will be modeless.
     */
     void SetModal(bool flag);
 
@@ -481,14 +454,13 @@ public:
         Sets the return code for this window.
         
         @param retCode
-        The integer return code, usually a control identifier.
+            The integer return code, usually a control identifier.
         
         @remarks A return code is normally associated with a modal dialog, where
-                   ShowModal() returns a code to the
-                   application. The function EndModal() calls
-                   SetReturnCode.
+                 ShowModal() returns a code to the application.
+                 The function EndModal() calls SetReturnCode.
         
-        @sa GetReturnCode(), ShowModal(), EndModal()
+        @see GetReturnCode(), ShowModal(), EndModal()
     */
     void SetReturnCode(int retCode);
 
@@ -496,12 +468,12 @@ public:
         Hides or shows the dialog.
         
         @param show
-        If @true, the dialog box is shown and brought to the front;
-        otherwise the box is hidden. If @false and the dialog is
-        modal, control is returned to the calling program.
+            If @true, the dialog box is shown and brought to the front;
+            otherwise the box is hidden. If @false and the dialog is
+            modal, control is returned to the calling program.
         
         @remarks The preferred way of dismissing a modal dialog is to use
-                   EndModal().
+                 EndModal().
     */
     bool Show(bool show);
 

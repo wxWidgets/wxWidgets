@@ -48,7 +48,7 @@ public:
         Constructors.
     */
     wxListT();
-    wxListT(size_t count, T * elements[]);
+    wxListT(size_t count, T* elements[]);
     //@}
 
     /**
@@ -58,9 +58,9 @@ public:
     ~wxListT();
 
     /**
-        Appends the pointer to @e object to the list.
+        Appends the pointer to @a object to the list.
     */
-    wxListT::compatibility_iterator Append(T * object);
+    wxListT::compatibility_iterator Append(T* object);
 
     /**
         Clears the list, but does not delete the objects stored in the list
@@ -69,7 +69,7 @@ public:
     void Clear();
 
     /**
-        If @e destroy is @true, instructs the list to call @e delete
+        If @a destroy is @true, instructs the list to call @e delete
         on objects stored in the list whenever they are removed.
         The default is @false.
     */
@@ -82,11 +82,11 @@ public:
     bool DeleteNode(const compatibility_iterator& iter);
 
     /**
-        Finds the given @e object and removes it from the list, returning
+        Finds the given @a object and removes it from the list, returning
         @true if successful. The application must delete the actual object
         separately.
     */
-    bool DeleteObject(T * object);
+    bool DeleteObject(T* object);
 
     /**
         Removes element refered to be @c iter.
@@ -94,9 +94,9 @@ public:
     void Erase(const compatibility_iterator& iter);
 
     /**
-        Returns the iterator refering to @e object or @NULL if none found.
+        Returns the iterator refering to @a object or @NULL if none found.
     */
-    wxListT::compatibility_iterator Find(T * object);
+    wxListT::compatibility_iterator Find(T* object);
 
     /**
         Returns the number of elements in the list.
@@ -114,8 +114,8 @@ public:
     wxListT::compatibility_iterator GetLast();
 
     /**
-        Returns the index of @e obj within the list or @c wxNOT_FOUND if
-        @e obj is not found in the list.
+        Returns the index of @a obj within the list or @c wxNOT_FOUND if
+        @a obj is not found in the list.
     */
     int IndexOf(T* obj);
 
@@ -123,11 +123,11 @@ public:
     /**
         Inserts the object before the object refered to be @e iter.
     */
-    wxListT::compatibility_iterator Insert(T * object);
+    wxListT::compatibility_iterator Insert(T* object);
     wxListT::compatibility_iterator Insert(size_t position,
-                                           T * object);
+                                           T* object);
     wxListT::compatibility_iterator Insert(compatibility_iterator iter,
-                                           T * object);
+                                           T* object);
     //@}
 
     /**
@@ -144,20 +144,18 @@ public:
     /**
         @b NB: This function is deprecated, use wxList::Find instead.
     */
-    wxListT::compatibility_iterator Member(T * object);
+    wxListT::compatibility_iterator Member(T* object);
 
     /**
         @b NB: This function is deprecated, use @ref wxList::itemfunc Item instead.
-        
         Returns the @e nth node in the list, indexing from zero (@NULL if the list is
         empty
         or the nth node could not be found).
     */
-#define wxListT::compatibility_iterator Nth(int n)     /* implementation is private */
+    wxListT::compatibility_iterator Nth(int n);
 
     /**
         @b NB: This function is deprecated, use wxList::GetCount instead.
-        
         Returns the number of elements in the list.
     */
     int Number();
@@ -213,7 +211,7 @@ public:
 
     //@{
     /**
-        Erases the items from @e first to @e last.
+        Erases the items from @a first to @e last.
     */
     iterator erase(const iterator& it);
     iterator erase(const iterator& first,
@@ -255,14 +253,12 @@ public:
 
     /**
         )
-        
         Adds an item to end of the list.
     */
     void push_back();
 
     /**
         )
-        
         Adds an item to the front of the list.
     */
     void push_front();
@@ -292,7 +288,6 @@ public:
 
     /**
         )
-        
         Resizes the list. If the the list is enlarges items with
         the value @e v are appended to the list.
     */
@@ -341,17 +336,17 @@ public:
     /**
         Retrieves the client data pointer associated with the node.
     */
-    T * GetData();
+    T* GetData();
 
     /**
         Retrieves the next node or @NULL if this node is the last one.
     */
-    wxNodeT * GetNext();
+    wxNodeT* GetNext();
 
     /**
         Retrieves the previous node or @NULL if this node is the first one in the list.
     */
-    wxNodeT * GetPrevious();
+    wxNodeT* GetPrevious();
 
     /**
         Returns the zero-based index of this node within the list. The return value
@@ -363,5 +358,5 @@ public:
         Sets the data associated with the node (usually the pointer will have been
         set when the node was created).
     */
-    void SetData(T * data);
+    void SetData(T* data);
 };

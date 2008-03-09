@@ -68,7 +68,7 @@ public:
     /**
         
     */
-    wxDataViewEvent(wxEventType commandType = wxEVT_@NULL,
+    wxDataViewEvent(wxEventType commandType = wxEVT_NULL,
                     int winid = 0);
     wxDataViewEvent(const wxDataViewEvent& event);
     //@}
@@ -198,7 +198,6 @@ public:
         Oberride this to indicate that the row has special font attributes.
         This only affects the
         wxDataViewTextRendererText renderer.
-        
         See also wxDataViewItemAttr.
     */
     bool GetAttr(unsigned int row, unsigned int col,
@@ -387,7 +386,6 @@ public:
         The compare function to be used by control. The default compare function
         sorts by container and other items separately and in ascending order.
         Override this for a different sorting behaviour.
-        
         See also HasDefaultCompare().
     */
     virtual int Compare(const wxDataViewItem& item1,
@@ -399,7 +397,6 @@ public:
         Oberride this to indicate that the item has special font attributes.
         This only affects the
         wxDataViewTextRendererText renderer.
-        
         See also wxDataViewItemAttr.
     */
     bool GetAttr(const wxDataViewItem& item, unsigned int col,
@@ -426,7 +423,7 @@ public:
 
     /**
         Override this to indicate which wxDataViewItem representing the parent
-        of @e item or an invalid wxDataViewItem if the the root item is
+        of @a item or an invalid wxDataViewItem if the the root item is
         the parent item.
     */
     virtual wxDataViewItem GetParent(const wxDataViewItem& item);
@@ -459,7 +456,7 @@ public:
     virtual bool HasDefaultCompare();
 
     /**
-        Override this to indicate of @e item is a container, i.e. if
+        Override this to indicate of @a item is a container, i.e. if
         it can have child items.
     */
     virtual bool IsContainer(const wxDataViewItem& item);
@@ -473,7 +470,6 @@ public:
 
     /**
         Call this to inform the model that an item has changed.
-        
         This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event (in which the column fields will not be set) to the user.
     */
@@ -494,7 +490,6 @@ public:
 
     /**
         Call this to inform the model that several items have changed.
-        
         This will eventually emit wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         events (in which the column fields will not be set) to the user.
     */
@@ -507,7 +502,7 @@ public:
                               const wxDataViewItemArray& items);
 
     /**
-        Remove the @e notifier from the list of notifiers.
+        Remove the @a notifier from the list of notifiers.
     */
     void RemoveNotifier(wxDataViewModelNotifier* notifier);
 
@@ -533,7 +528,6 @@ public:
         been changed. This is also called from wxDataViewCtrl's
         internal editing code, e.g. when editing a text field
         in the control.
-        
         This will eventually emit a wxEVT_DATAVIEW_ITEM_VALUE_CHANGED
         event to the user.
     */
@@ -573,7 +567,7 @@ public:
     */
     wxDataViewCustomRenderer(const wxString& varianttype = "string",
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                             bool no_init = @false);
+                             bool no_init = false);
 
     /**
         Destructor.
@@ -589,18 +583,18 @@ public:
 
     /**
         Override this to create the actual editor control once editing
-        is about to start. @e parent is the parent of the editor
-        control, @e labelRect indicates the position and
-        size of the editor control and @e value is its initial value:
+        is about to start. @a parent is the parent of the editor
+        control, @a labelRect indicates the position and
+        size of the editor control and @a value is its initial value:
     */
-    virtual wxControl* CreateEditorCtrl(wxWindow * parent,
+    virtual wxControl* CreateEditorCtrl(wxWindow* parent,
                                         wxRect labelRect,
-                                        const wxVariant & value);
+                                        const wxVariant& value);
 
     /**
         Create DC on request. Internal.
     */
-#define virtual wxDC* GetDC()     /* implementation is private */
+    virtual wxDC* GetDC();
 
     /**
         Return size required to show content.
@@ -612,7 +606,7 @@ public:
         from the editor control (pointed to by @e editor):
     */
     virtual bool GetValueFromEditorCtrl(wxControl* editor,
-                                        wxVariant & value);
+                                        wxVariant& value);
 
     /**
         Override this and make it return @e @true in order to
@@ -753,19 +747,19 @@ public:
     /**
         
     */
-    wxDataViewItem(void* id = @NULL);
+    wxDataViewItem(void* id = NULL);
     wxDataViewItem(const wxDataViewItem& item);
     //@}
 
     /**
         Returns the ID.
     */
-#define void* GetID()     /* implementation is private */
+    void* GetID();
 
     /**
         Returns @true if the ID is not @e @NULL.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 };
 
 
@@ -863,7 +857,6 @@ public:
     /**
         Add a wxDataViewColumn to the control. Returns
         @e @true on success.
-        
         Note that there is a number of short cut methods which implicitly create
         a wxDataViewColumn and a
         wxDataViewRenderer for it (see below).
@@ -986,7 +979,7 @@ public:
     /**
         Collapses the item.
     */
-    void Collapse(const wxDataViewItem & item);
+    void Collapse(const wxDataViewItem& item);
 
     /**
         Create the control. Useful for two step creation.
@@ -1005,16 +998,16 @@ public:
     /**
         Call this to ensure that the given item is visible.
     */
-    void EnsureVisible(const wxDataViewItem & item,
-                       const wxDataViewColumn* column = @NULL);
+    void EnsureVisible(const wxDataViewItem& item,
+                       const wxDataViewColumn* column = NULL);
 
     /**
         Expands the item.
     */
-    void Expand(const wxDataViewItem & item);
+    void Expand(const wxDataViewItem& item);
 
     /**
-        Returns pointer to the column. @e pos refers to the
+        Returns pointer to the column. @a pos refers to the
         position in the control which may change after reordering
         columns by the user.
     */
@@ -1033,7 +1026,7 @@ public:
     /**
         Returns column containing the expanders.
     */
-    wxDataViewColumn * GetExpanderColumn();
+    wxDataViewColumn* GetExpanderColumn();
 
     /**
         Returns indentation.
@@ -1044,7 +1037,7 @@ public:
         Returns item rect.
     */
     wxRect GetItemRect(const wxDataViewItem& item,
-                       const wxDataViewColumn * col = @NULL);
+                       const wxDataViewColumn* col = NULL);
 
     /**
         Returns pointer to the data model associated with the
@@ -1058,10 +1051,10 @@ public:
     wxDataViewItem GetSelection();
 
     /**
-        Fills @e sel with currently selected items and returns
+        Fills @a sel with currently selected items and returns
         their number.
     */
-    int GetSelections(wxDataViewItemArray & sel);
+    int GetSelections(wxDataViewItemArray& sel);
 
     /**
         Returns the wxDataViewColumn currently responsible for sorting
@@ -1073,17 +1066,17 @@ public:
         Hittest.
     */
     void HitTest(const wxPoint& point, wxDataViewItem& item,
-                 wxDataViewColumn *& col);
+                 wxDataViewColumn*& col);
 
     /**
         Return @true if the item is selected.
     */
-    bool IsSelected(const wxDataViewItem & item);
+    bool IsSelected(const wxDataViewItem& item);
 
     /**
         Select the given item.
     */
-    void Select(const wxDataViewItem & item);
+    void Select(const wxDataViewItem& item);
 
     /**
         Select all items.
@@ -1093,7 +1086,7 @@ public:
     /**
         Set which column shall contain the tree-like expanders.
     */
-    void SetExpanderColumn(wxDataViewColumn * col);
+    void SetExpanderColumn(wxDataViewColumn* col);
 
     /**
         Sets the indendation.
@@ -1103,12 +1096,12 @@ public:
     /**
         Sets the selection to the array of wxDataViewItems.
     */
-    void SetSelections(const wxDataViewItemArray & sel);
+    void SetSelections(const wxDataViewItemArray& sel);
 
     /**
         Unselect the given item.
     */
-    void Unselect(const wxDataViewItem & item);
+    void Unselect(const wxDataViewItem& item);
 
     /**
         Unselect all item. This method only has effect if multiple
@@ -1314,7 +1307,6 @@ public:
         a certain aspect (e.g. max number of characters or only alphanumeric
         input, ASCII only etc.). Return @e @false if the value is
         not valid.
-        
         Please note that due to implementation limitations, this validation
         is done after the editing control already is destroyed and the
         editing process finished.
@@ -1380,7 +1372,7 @@ class wxDataViewSpinRenderer : public wxDataViewCustomRenderer
 {
 public:
     /**
-        Constructor. @e min and @e max indicate the minimum und
+        Constructor. @a min and @a max indicate the minimum und
         maximum values of for the wxSpinCtrl.
     */
     wxDataViewSpinRenderer(int min, int max,
@@ -1451,7 +1443,7 @@ public:
                                    const wxString& text,
                                    int icon = -1,
                                    int expanded = -1,
-                                   wxClientData* data = @NULL);
+                                   wxClientData* data = NULL);
 
     /**
         
@@ -1459,7 +1451,7 @@ public:
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
                               int icon = -1,
-                              wxClientData* data = @NULL);
+                              wxClientData* data = NULL);
 
     /**
         Creates the control and a wxDataViewTreeStore as
@@ -1539,7 +1531,7 @@ public:
                                    const wxString& text,
                                    int icon = -1,
                                    int expanded = -1,
-                                   wxClientData* data = @NULL);
+                                   wxClientData* data = NULL);
 
     /**
         Calls the same method from wxDataViewTreeStore but uess
@@ -1549,7 +1541,7 @@ public:
                               const wxDataViewItem& previous,
                               const wxString& text,
                               int icon = -1,
-                              wxClientData* data = @NULL);
+                              wxClientData* data = NULL);
 
     /**
         Calls the same method from wxDataViewTreeStore but uess
@@ -1559,7 +1551,7 @@ public:
                                     const wxString& text,
                                     int icon = -1,
                                     int expanded = -1,
-                                    wxClientData* data = @NULL);
+                                    wxClientData* data = NULL);
 
     /**
         Calls the same method from wxDataViewTreeStore but uess
@@ -1568,7 +1560,7 @@ public:
     wxDataViewItem PrependItem(const wxDataViewItem& parent,
                                const wxString& text,
                                int icon = -1,
-                               wxClientData* data = @NULL);
+                               wxClientData* data = NULL);
 
     /**
         Sets the image list.
@@ -1633,7 +1625,7 @@ public:
                                    const wxString& text,
                                    const wxIcon& icon = wxNullIcon,
                                    const wxIcon& expanded = wxNullIcon,
-                                   wxClientData* data = @NULL);
+                                   wxClientData* data = NULL);
 
     /**
         Append an item.
@@ -1641,7 +1633,7 @@ public:
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
                               const wxIcon& icon = wxNullIcon,
-                              wxClientData* data = @NULL);
+                              wxClientData* data = NULL);
 
     /**
         Delete all item in the model.
@@ -1697,7 +1689,7 @@ public:
                                    const wxString& text,
                                    const wxIcon& icon = wxNullIcon,
                                    const wxIcon& expanded = wxNullIcon,
-                                   wxClientData* data = @NULL);
+                                   wxClientData* data = NULL);
 
     /**
         Inserts an item after @e previous.
@@ -1706,7 +1698,7 @@ public:
                               const wxDataViewItem& previous,
                               const wxString& text,
                               const wxIcon& icon = wxNullIcon,
-                              wxClientData* data = @NULL);
+                              wxClientData* data = NULL);
 
     /**
         Inserts a container before the first child item or @e parent.
@@ -1715,7 +1707,7 @@ public:
                                     const wxString& text,
                                     const wxIcon& icon = wxNullIcon,
                                     const wxIcon& expanded = wxNullIcon,
-                                    wxClientData* data = @NULL);
+                                    wxClientData* data = NULL);
 
     /**
         Inserts an item before the first child item or @e parent.
@@ -1723,7 +1715,7 @@ public:
     wxDataViewItem PrependItem(const wxDataViewItem& parent,
                                const wxString& text,
                                const wxIcon& icon = wxNullIcon,
-                               wxClientData* data = @NULL);
+                               wxClientData* data = NULL);
 
     /**
         Sets the client data associated with the item.
@@ -1847,7 +1839,6 @@ public:
 
     /**
         Returns the renderer of this wxDataViewColumn.
-        
         See also wxDataViewRenderer.
     */
     wxDataViewRenderer* GetRenderer();
@@ -1859,7 +1850,6 @@ public:
 
     /**
         Returns @true if the column is sortable.
-        
         See SetSortable()
     */
     bool GetSortable();
@@ -1871,7 +1861,6 @@ public:
 
     /**
         Returns @true, if the sort order is ascending.
-        
         See also SetSortOrder()
     */
     bool IsSortOrderAscending();
@@ -1906,7 +1895,7 @@ public:
         make the column header clickable. Call
         SetSortOrder()
         afterwards to actually make the sort indicator appear.
-        If @e sortable is @false, the column header is
+        If @a sortable is @false, the column header is
         no longer clickable and the sort indicator (little
         arrow) will disappear.
     */

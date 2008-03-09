@@ -54,15 +54,15 @@ public:
     void Close();
 
     /**
-        Creates the key. Will fail if the key already exists and @e bOkIfExists is
+        Creates the key. Will fail if the key already exists and @a bOkIfExists is
         @false.
     */
-    bool Create(bool bOkIfExists = @true);
+    bool Create(bool bOkIfExists = true);
 
     /**
         Deletes the subkey with all of its subkeys/values recursively.
     */
-    void DeleteKey(const wxChar * szKey);
+    void DeleteKey(const wxChar* szKey);
 
     /**
         Deletes this key and all of its subkeys and values recursively.
@@ -72,7 +72,7 @@ public:
     /**
         Deletes the named value.
     */
-    void DeleteValue(const wxChar * szKey);
+    void DeleteValue(const wxChar* szKey);
 
     /**
         Returns @true if the key exists.
@@ -93,24 +93,21 @@ public:
         Gets information about the key.
         
         @param pnSubKeys
-        The number of subkeys.
-        
+            The number of subkeys.
         @param pnMaxKeyLen
-        The maximum length of the subkey name.
-        
+            The maximum length of the subkey name.
         @param pnValues
-        The number of values.
-        
+            The number of values.
         @param pnMaxValueLen
-        The maximum length of a value.
+            The maximum length of a value.
     */
-    bool GetKeyInfo(size_t * pnSubKeys, size_t * pnValues,
-                    size_t * pnMaxValueLen);
+    bool GetKeyInfo(size_t* pnSubKeys, size_t* pnValues,
+                    size_t* pnMaxValueLen);
 
     /**
         Gets the name of the registry key.
     */
-    wxString GetName(bool bShortPrefix = @true);
+    wxString GetName(bool bShortPrefix = true);
 
     /**
         Gets the next key.
@@ -125,7 +122,7 @@ public:
     /**
         Returns @true if given subkey exists.
     */
-    bool HasSubKey(const wxChar * szKey);
+    bool HasSubKey(const wxChar* szKey);
 
     /**
         Returns @true if any subkeys exist.
@@ -135,7 +132,7 @@ public:
     /**
         Returns @true if the value exists.
     */
-    bool HasValue(const wxChar * szValue);
+    bool HasValue(const wxChar* szValue);
 
     /**
         Returns @true if any values exist.
@@ -163,30 +160,30 @@ public:
     /**
         Retrieves the numeric value.
     */
-    bool QueryValue(const wxChar * szValue, wxString& strValue);
-    bool QueryValue(const wxChar * szValue, long * plValue);
+    bool QueryValue(const wxChar* szValue, wxString& strValue);
+    bool QueryValue(const wxChar* szValue, long* plValue);
     //@}
 
     /**
         Renames the key.
     */
-    bool Rename(const wxChar * szNewName);
+    bool Rename(const wxChar* szNewName);
 
     /**
         Renames a value.
     */
-    bool RenameValue(const wxChar * szValueOld,
-                     const wxChar * szValueNew);
+    bool RenameValue(const wxChar* szValueOld,
+                     const wxChar* szValueNew);
 
     //@{
     /**
-        Sets the given @e szValue which must be numeric, string or binary depending
+        Sets the given @a szValue which must be numeric, string or binary depending
         on the overload used. If the value doesn't exist, it is created.
     */
-    bool SetValue(const wxChar * szValue, long lValue);
-    bool SetValue(const wxChar * szValue,
+    bool SetValue(const wxChar* szValue, long lValue);
+    bool SetValue(const wxChar* szValue,
                   const wxString& strValue);
-    bool SetValue(const wxChar * szValue,
+    bool SetValue(const wxChar* szValue,
                   const wxMemoryBuffer& buf);
     //@}
 };

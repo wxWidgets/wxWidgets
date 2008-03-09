@@ -28,13 +28,13 @@ public:
         Converts from UTF-7 encoding to Unicode. Returns the size of the destination
         buffer.
     */
-#define size_t MB2WC(wchar_t* buf, const char* psz, size_t n)     /* implementation is private */
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
 
     /**
         Converts from Unicode to UTF-7 encoding. Returns the size of the destination
         buffer.
     */
-#define size_t WC2MB(char* buf, const wchar_t* psz, size_t n)     /* implementation is private */
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
 };
 
 
@@ -58,13 +58,13 @@ public:
         Converts from UTF-8 encoding to Unicode. Returns the size of the destination
         buffer.
     */
-#define size_t MB2WC(wchar_t* buf, const char* psz, size_t n)     /* implementation is private */
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
 
     /**
         Converts from Unicode to UTF-8 encoding. Returns the size of the destination
         buffer.
     */
-#define size_t WC2MB(char* buf, const wchar_t* psz, size_t n)     /* implementation is private */
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
 };
 
 
@@ -94,13 +94,13 @@ public:
         Converts from UTF-16 encoding to Unicode. Returns the size of the destination
         buffer.
     */
-#define size_t MB2WC(wchar_t* buf, const char* psz, size_t n)     /* implementation is private */
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
 
     /**
         Converts from Unicode to UTF-16 encoding. Returns the size of the destination
         buffer.
     */
-#define size_t WC2MB(char* buf, const wchar_t* psz, size_t n)     /* implementation is private */
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
 };
 
 
@@ -140,25 +140,23 @@ public:
     /**
         Returns @true if the charset (or the encoding) given at constructor is really
         available to use. Returns @false if ISO 8859-1 will be used instead.
-        
         Note this does not mean that a given string will be correctly converted.
         A malformed string may still make conversion functions return @c wxCONV_FAILED.
-        
         This function is new since wxWidgets version 2.8.2
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Converts from the selected character set to Unicode. Returns length of string
         written to destination buffer.
     */
-#define size_t MB2WC(wchar_t* buf, const char* psz, size_t n)     /* implementation is private */
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
 
     /**
         Converts from Unicode to the selected character set. Returns length of string
         written to destination buffer.
     */
-#define size_t WC2MB(char* buf, const wchar_t* psz, size_t n)     /* implementation is private */
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
 };
 
 
@@ -204,13 +202,13 @@ public:
         Converts from multibyte filename encoding to Unicode. Returns the size of the
         destination buffer.
     */
-#define size_t MB2WC(wchar_t* buf, const char* psz, size_t n)     /* implementation is private */
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
 
     /**
         Converts from Unicode to multibyte filename encoding. Returns the size of the
         destination buffer.
     */
-#define size_t WC2MB(char* buf, const wchar_t* psz, size_t n)     /* implementation is private */
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
 };
 
 
@@ -240,13 +238,13 @@ public:
         Converts from UTF-32 encoding to Unicode. Returns the size of the destination
         buffer.
     */
-#define size_t MB2WC(wchar_t* buf, const char* psz, size_t n)     /* implementation is private */
+    size_t MB2WC(wchar_t* buf, const char* psz, size_t n);
 
     /**
         Converts from Unicode to UTF-32 encoding. Returns the size of the destination
         buffer.
     */
-#define size_t WC2MB(char* buf, const wchar_t* psz, size_t n)     /* implementation is private */
+    size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
 };
 
 
@@ -285,14 +283,14 @@ public:
         return a new copy of the object it is called on. It is used for copying the
         conversion objects while preserving their dynamic type.
     */
-    virtual wxMBConv * Clone();
+    virtual wxMBConv* Clone();
 
     /**
         This function has the same semantics as ToWChar()
         except that it converts a wide string to multibyte one.
     */
-    virtual size_t FromWChar(char * dst, size_t dstLen,
-                             const wchar_t * src,
+    virtual size_t FromWChar(char* dst, size_t dstLen,
+                             const wchar_t* src,
                              size_t srcLen = wxNO_LEN);
 
     /**
@@ -308,7 +306,6 @@ public:
         Returns the maximal value which can be returned by
         GetMBNulLen() for any conversion object. Currently
         this value is 4.
-        
         This method can be used to allocate the buffer with enough space for the
         trailing @c NUL characters for any encoding.
     */
@@ -316,74 +313,65 @@ public:
 
     /**
         This function is deprecated, please use ToWChar() instead
-        
-        Converts from a string @e in in multibyte encoding to Unicode putting up to
-        @e outLen characters into the buffer @e out.
-        
-        If @e out is @NULL, only the length of the string which would result from
+        Converts from a string @a in in multibyte encoding to Unicode putting up to
+        @a outLen characters into the buffer @e out.
+        If @a out is @NULL, only the length of the string which would result from
         the conversion is calculated and returned. Note that this is the length and not
         size, i.e. the returned value does not include the trailing @c NUL. But
-        when the function is called with a non-@NULL @e out buffer, the @e outLen
+        when the function is called with a non-@NULL @a out buffer, the @a outLen
         parameter should be one more to allow to properly @c NUL-terminate the string.
         
         @param out
-        The output buffer, may be @NULL if the caller is only
-        interested in the length of the resulting string
-        
+            The output buffer, may be @NULL if the caller is only
+            interested in the length of the resulting string
         @param in
-        The NUL-terminated input string, cannot be @NULL
-        
+            The NUL-terminated input string, cannot be @NULL
         @param outLen
-        The length of the output buffer but including
-        NUL, ignored if out is @NULL
+            The length of the output buffer but including
+            NUL, ignored if out is @NULL
         
         @returns The length of the converted string excluding the trailing NUL.
     */
-#define virtual size_t MB2WC(wchar_t * out, const char * in,
-    size_t outLen)     /* implementation is private */
+    virtual size_t MB2WC(wchar_t* out, const char* in,
+                         size_t outLen);
 
     /**
         The most general function for converting a multibyte string to a wide string.
-        The main case is when @e dst is not @NULL and @e srcLen is not
+        The main case is when @a dst is not @NULL and @a srcLen is not
         @c wxNO_LEN (which is defined as @c (size_t)-1): then
-        the function converts exactly @e srcLen bytes starting at @e src into
+        the function converts exactly @a srcLen bytes starting at @a src into
         wide string which it output to @e dst. If the length of the resulting wide
         string is greater than @e dstLen, an error is returned. Note that if
-        @e srcLen bytes don't include @c NUL characters, the resulting wide string is
+        @a srcLen bytes don't include @c NUL characters, the resulting wide string is
         not @c NUL-terminated neither.
-        
-        If @e srcLen is @c wxNO_LEN, the function supposes that the string is
+        If @a srcLen is @c wxNO_LEN, the function supposes that the string is
         properly (i.e. as necessary for the encoding handled by this conversion)
         @c NUL-terminated and converts the entire string, including any trailing @c NUL
         bytes. In this case the wide string is also @c NUL-terminated.
-        
-        Finally, if @e dst is @NULL, the function returns the length of the needed
+        Finally, if @a dst is @NULL, the function returns the length of the needed
         buffer.
     */
-    virtual size_t ToWChar(wchar_t * dst, size_t dstLen,
-                           const char * src,
+    virtual size_t ToWChar(wchar_t* dst, size_t dstLen,
+                           const char* src,
                            size_t srcLen = wxNO_LEN);
 
     /**
         This function is deprecated, please use FromWChar() instead
-        
         Converts from Unicode to multibyte encoding. The semantics of this function
         (including the return value meaning) is the same as for
         wxMBConv::MB2WC.
-        
         Notice that when the function is called with a non-@NULL buffer, the
-        @e n parameter should be the size of the buffer and so it should take
+        @a n parameter should be the size of the buffer and so it should take
         into account the trailing @c NUL, which might take two or four bytes for some
         encodings (UTF-16 and UTF-32) and not one.
     */
-#define virtual size_t WC2MB(char* buf, const wchar_t* psz, size_t n)     /* implementation is private */
+    virtual size_t WC2MB(char* buf, const wchar_t* psz, size_t n);
 
     //@{
     /**
         Converts from multibyte encoding to Unicode by calling
         wxMBConv::MB2WC, allocating a temporary wxWCharBuffer to hold
         the result.
-        
         The first overload takes a @c NUL-terminated input string. The second one takes
         a
         string of exactly the specified length and the string may include or not the
@@ -394,12 +382,11 @@ public:
         appropriate number of @c NUL bytes (which is usually 1 but may be 2 or 4
         for UTF-16 or UTF-32, see wxMBConv::GetMBNulLen),
         especially for long strings.
-        
-        If @e outLen is not-@NULL, it receives the length of the converted
+        If @a outLen is not-@NULL, it receives the length of the converted
         string.
     */
-    const wxWCharBuffer cMB2WC(const char * in);
-    const wxWCharBuffer cMB2WC(const char * in, size_t inLen,
+    const wxWCharBuffer cMB2WC(const char* in);
+    const wxWCharBuffer cMB2WC(const char* in, size_t inLen,
                                size_t outLen);
     //@}
 
@@ -419,15 +406,13 @@ public:
     /**
         Converts from Unicode to multibyte encoding by calling WC2MB,
         allocating a temporary wxCharBuffer to hold the result.
-        
         The second overload of this function allows to convert a string of the given
         length @e inLen, whether it is @c NUL-terminated or not (for wide character
         strings, unlike for the multibyte ones, a single @c NUL is always enough).
         But notice that just as with @ref wxMBConv::mb2wc cMB2WC, it is more
         efficient to pass an already terminated string to this function as otherwise a
         copy is made internally.
-        
-        If @e outLen is not-@NULL, it receives the length of the converted
+        If @a outLen is not-@NULL, it receives the length of the converted
         string.
     */
     const wxCharBuffer cWC2MB(const wchar_t* in);

@@ -29,10 +29,8 @@ public:
 
     /**
         Converts input bitmap(s) into 8bit representation with custom palette.
-        
         in_rows and out_rows are arrays [0..h-1] of pointer to rows
         (in_rows contains w * 3 bytes per row, out_rows w bytes per row).
-        
         Fills out_rows with indexes into palette (which is also stored into palette
         variable).
     */

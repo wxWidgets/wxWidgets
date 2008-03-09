@@ -47,7 +47,7 @@ public:
         Under Unix, when a server is created the OnAcceptConnection message is
         always sent for standard input and output.
     */
-    virtual wxConnectionBase * OnAcceptConnection(const wxString& topic);
+    virtual wxConnectionBase* OnAcceptConnection(const wxString& topic);
 };
 
 
@@ -92,22 +92,21 @@ public:
         the OnMakeConnection() member to return your own
         derived connection object.
     */
-    wxConnectionBase * MakeConnection(const wxString& host,
-                                      const wxString& service,
-                                      const wxString& topic);
+    wxConnectionBase* MakeConnection(const wxString& host,
+                                     const wxString& service,
+                                     const wxString& topic);
 
     /**
         The type of wxTCPConnection returned from a MakeConnection() call can
         be altered by deriving the @b OnMakeConnection member to return your
         own derived connection object. By default, a wxTCPConnection
         object is returned.
-        
         The advantage of deriving your own connection class is that it will
         enable you to intercept messages initiated by the server, such
         as wxTCPConnection::OnAdvise. You may also want to
         store application-specific data in instances of the new class.
     */
-    wxConnectionBase * OnMakeConnection();
+    wxConnectionBase* OnMakeConnection();
 
     /**
         Returns @true if this is a valid host name, @false otherwise.
@@ -247,7 +246,7 @@ public:
     */
     virtual const void* OnRequest(const wxString& topic,
                                   const wxString& item,
-                                  size_t * size,
+                                  size_t* size,
                                   wxIPCFormat format);
 
     /**
@@ -287,7 +286,7 @@ public:
         character string (actually a pointer to the connection's buffer) if
         successful, @NULL otherwise.
     */
-    const void* Request(const wxString& item, size_t * size,
+    const void* Request(const wxString& item, size_t* size,
                         wxIPCFormat format = wxIPC_TEXT);
 
     /**

@@ -28,7 +28,7 @@ class wxWrapSizer : public wxBoxSizer
 {
 public:
     /**
-        Constructor for a wxWrapSizer. @e orient determines the primary direction of
+        Constructor for a wxWrapSizer. @a orient determines the primary direction of
         the sizer (the most common case being @c wxHORIZONTAL). The flags
         parameter may have the value @c wxEXTEND_LAST_ON_EACH_LINE which will
         cause the last item on each line to use any remaining space on that line.
@@ -39,7 +39,6 @@ public:
         Not used by an application. This is the mechanism by which sizers can inform
         sub-items of the first determined size component. The sub-item can then better
         determine its size requirements.
-        
         Returns @true if the information was used (and the sub-item min size was
         updated).
     */

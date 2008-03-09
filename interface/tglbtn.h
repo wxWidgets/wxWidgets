@@ -16,7 +16,7 @@
     This control emits an update UI event.
 
     @beginEventTable
-    @event{EVT_TOGGLEBUTTON(id\, func)}:
+    @event{EVT_TOGGLEBUTTON(id, func)}:
            Handles a toggle button click event.
     @endEventTable
 
@@ -65,7 +65,7 @@ public:
         @c EVT_TOGGLEBUTTON event to be emitted.
         
         @param state
-        If @true, the button is pressed.
+            If @true, the button is pressed.
     */
     void SetValue(bool state);
 };
@@ -85,7 +85,7 @@ public:
     controls sample.
 
     @beginEventTable
-    @event{EVT_TOGGLEBUTTON(id\, func)}:
+    @event{EVT_TOGGLEBUTTON(id, func)}:
            Handles a toggle button click event.
     @endEventTable
 
@@ -104,32 +104,25 @@ public:
         Constructor, creating and showing a toggle button.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Toggle button identifier. The value wxID_ANY indicates a default value.
-        
+            Toggle button identifier. The value wxID_ANY indicates a default value.
         @param label
-        Text to be displayed next to the toggle button.
-        
+            Text to be displayed next to the toggle button.
         @param pos
-        Toggle button position. If wxDefaultPosition is specified then a default
-        position is chosen.
-        
+            Toggle button position. If wxDefaultPosition is specified then a
+        default position is chosen.
         @param size
-        Toggle button size. If wxDefaultSize is specified then a default
-        size is chosen.
-        
+            Toggle button size. If wxDefaultSize is specified then a
+        default size is chosen.
         @param style
-        Window style. See wxToggleButton.
-        
+            Window style. See wxToggleButton.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxToggleButton();
     wxToggleButton(wxWindow* parent, wxWindowID id,
@@ -170,7 +163,7 @@ public:
         @c EVT_TOGGLEBUTTON event to be emitted.
         
         @param state
-        If @true, the button is pressed.
+            If @true, the button is pressed.
     */
     void SetValue(bool state);
 };

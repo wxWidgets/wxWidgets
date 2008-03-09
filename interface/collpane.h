@@ -25,7 +25,7 @@ public:
     /**
         The constructor is not normally used by the user code.
     */
-    wxCollapsiblePaneEvent(wxObject * generator, int id,
+    wxCollapsiblePaneEvent(wxObject* generator, int id,
                            bool collapsed);
 
     /**
@@ -34,9 +34,9 @@ public:
     bool GetCollapsed();
 
     /**
-        Sets this as a collapsed pane event (if @e collapsed is @true) or as an
+        Sets this as a collapsed pane event (if @a collapsed is @true) or as an
         expanded
-        pane event (if @e collapsed is @false).
+        pane event (if @a collapsed is @false).
     */
     void SetCollapsed(bool collapsed);
 };
@@ -106,7 +106,7 @@ public:
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxCollapsiblePane(wxWindow * parent, wxWindowID id,
+    wxCollapsiblePane(wxWindow* parent, wxWindowID id,
                       const wxString& label,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
@@ -117,38 +117,31 @@ public:
     /**
         Collapses or expands the pane window.
     */
-    void Collapse(bool collapse = @true);
+    void Collapse(bool collapse = true);
 
     /**
         @param parent
-        Parent window, must not be non-@NULL.
-        
+            Parent window, must not be non-@NULL.
         @param id
-        The identifier for the control.
-        
+            The identifier for the control.
         @param label
-        The initial label shown in the button which allows the user to expand or
+            The initial label shown in the button which allows the user to expand or
         collapse the pane window.
-        
         @param pos
-        Initial position.
-        
+            Initial position.
         @param size
-        Initial size.
-        
+            Initial size.
         @param style
-        The window style, see wxCP_* flags.
-        
+            The window style, see wxCP_* flags.
         @param validator
-        Validator which can be used for additional date checks.
-        
+            Validator which can be used for additional date checks.
         @param name
-        Control name.
+            Control name.
         
         @returns @true if the control was successfully created or @false if
-                   creation failed.
+                 creation failed.
     */
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -165,7 +158,7 @@ public:
         Returns a pointer to the pane window. Add controls to the returned wxWindow
         to make them collapsible.
     */
-    wxWindow * GetPane();
+    wxWindow* GetPane();
 
     /**
         Returns @true if the pane window is currently hidden.

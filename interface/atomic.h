@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-This function increments @e value in an atomic manner.
+This function increments @a value in an atomic manner.
 */
 void wxAtomicInc(wxAtomicInt& value);
 

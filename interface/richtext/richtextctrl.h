@@ -23,7 +23,7 @@ public:
         Constructors.
     */
     wxRichTextEvent(const wxRichTextEvent& event);
-    wxRichTextEvent(wxEventType commandType = wxEVT_@NULL,
+    wxRichTextEvent(wxEventType commandType = wxEVT_NULL,
                     int winid = 0);
     //@}
 
@@ -160,7 +160,6 @@ public:
 
     /**
         Applies the given alignment to the selection (undoable).
-        
         For alignment values, see wxTextAttr.
     */
     bool ApplyAlignmentToSelection(wxTextAttrAlignment alignment);
@@ -183,13 +182,12 @@ public:
     /**
         Applies the style sheet to the buffer, matching paragraph styles in the sheet
         against named styles
-        in the buffer. This might be useful if the styles have changed. If @e sheet is
+        in the buffer. This might be useful if the styles have changed. If @a sheet is
         @NULL, the
         sheet set with SetStyleSheet is used.
-        
         Currently this applies paragraph styles only.
     */
-    bool ApplyStyleSheet(wxRichTextStyleSheet* sheet = @NULL);
+    bool ApplyStyleSheet(wxRichTextStyleSheet* sheet = NULL);
 
     /**
         Applies underline to the selection (undoable).
@@ -203,7 +201,6 @@ public:
 
     /**
         Begins using alignment
-        
         For alignment values, see wxTextAttr.
     */
     bool BeginAlignment(wxTextAttrAlignment alignment);
@@ -240,7 +237,6 @@ public:
 
     /**
         Begins applying a left indent and subindent in tenths of a millimetre.
-        
         The sub-indent is an offset from the left of the paragraph, and is used for all
         but the
         first line in a paragraph. A positive value will cause the first line to appear
@@ -248,7 +244,6 @@ public:
         of the subsequent lines, and a negative value will cause the first line to be
         indented
         relative to the subsequent lines.
-        
         wxRichTextBuffer uses indentation to render a bulleted item. The left indent is
         the distance between
         the margin and the bullet. The content of the paragraph, including the first
@@ -271,20 +266,16 @@ public:
         Begins using a specified list style. Optionally, you can also pass a level and
         a number.
     */
-    bool BeginListStyle(const wxString& listStyle, int level=1,
-                        int number=1);
+    bool BeginListStyle(const wxString& listStyle, int level = 1,
+                        int number = 1);
 
     /**
         Begins a numbered bullet. This call will be needed for each item in the list,
         and the
         application should take care of incrementing the numbering.
-        
-        @e bulletNumber is a number, usually starting with 1.
-        
-        @e leftIndent and @e leftSubIndent are values in tenths of a millimetre.
-        
-        @e bulletStyle is a bitlist of the following values:
-        
+        @a bulletNumber is a number, usually starting with 1.
+        @a leftIndent and @a leftSubIndent are values in tenths of a millimetre.
+        @a bulletStyle is a bitlist of the following values:
         
         wxRichTextBuffer uses indentation to render a bulleted item. The left indent is
         the distance between
@@ -392,11 +383,8 @@ public:
     /**
         Clears the list style from the given range, clearing list-related attributes
         and applying any named paragraph style associated with each paragraph.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
-        
         See also SetListStyle(), PromoteList(), NumberList().
     */
     bool ClearListStyle(const wxRichTextRange& range,
@@ -430,7 +418,7 @@ public:
         Copies the selected content (if any) to the clipboard and deletes the selection.
         This is undoable.
     */
-#define void Cut()     /* implementation is private */
+    void Cut();
 
     /**
         Deletes the content within the given range.
@@ -442,7 +430,7 @@ public:
         Returns the new caret position in @e newPos, or leaves it if there
         was no action. This is undoable.
     */
-    bool DeleteSelectedContent(long* newPos = @NULL);
+    bool DeleteSelectedContent(long* newPos = NULL);
 
     /**
         Deletes the content in the selection, if any. This is undoable.
@@ -558,7 +546,7 @@ public:
     /**
         Ends applying a URL.
     */
-#define bool EndURL()     /* implementation is private */
+    bool EndURL();
 
     /**
         End applying underlining.
@@ -683,7 +671,6 @@ public:
 
     /**
         Gets the text for the given range.
-        
         The end point of range is specified as the last character position of the span
         of text, plus one.
     */
@@ -691,11 +678,9 @@ public:
 
     /**
         Returns the range of the current selection.
-        
         The end point of range is specified as the last character position of the span
         of text, plus one.
-        
-        If the return values @e from and @e to are the same, there is no selection.
+        If the return values @a from and @a to are the same, there is no selection.
     */
     void GetSelection(long* from, long* to);
 
@@ -711,7 +696,6 @@ public:
 
     /**
         Gets the attributes at the given position.
-        
         This function gets the combined style - that is, the style you see on the
         screen as a result
         of combining base style, paragraph style and character style attributes. To get
@@ -737,13 +721,11 @@ public:
 
     /**
         Gets the attributes at the given position.
-        
         This function gets the @e uncombined style - that is, the attributes associated
         with the
         paragraph or character content, and not necessarily the combined attributes you
         see on the
         screen. To get the combined attributes, use GetStyle().
-        
         If you specify (any) paragraph attribute in @e style's flags, this function
         will fetch
         the paragraph attributes. Otherwise, it will return the character attributes.
@@ -767,7 +749,7 @@ public:
     /**
         Test if this whole range has character attributes of the specified kind. If any
         of the attributes are different within the range, the test fails. You
-        can use this to implement, for example, bold button updating. @e style must have
+        can use this to implement, for example, bold button updating. @a style must have
         flags indicating which attributes are of interest.
     */
     bool HasCharacterAttributes(const wxRichTextRange& range,
@@ -776,7 +758,7 @@ public:
     /**
         Test if this whole range has paragraph attributes of the specified kind. If any
         of the attributes are different within the range, the test fails. You
-        can use this to implement, for example, centering button updating. @e style
+        can use this to implement, for example, centering button updating. @a style
         must have
         flags indicating which attributes are of interest.
     */
@@ -791,8 +773,7 @@ public:
     //@{
     /**
         Finds the character at the given position in pixels.
-        
-        @e pt is in device coords (not adjusted for the client area origin nor for
+        @a pt is in device coords (not adjusted for the client area origin nor for
         scrolling).
     */
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long* pos);
@@ -816,9 +797,9 @@ public:
         the caret,
         and therefore the UI needs to reflect the default style and not the style at
         the caret.
-        
         Below is an example of code that uses this function to determine whether the UI
         should show that the current style is bold.
+        
         See also SetAndShowDefaultStyle().
     */
     bool IsDefaultStyleShowing();
@@ -885,7 +866,7 @@ public:
         setting the caret position. This function should not normally be required by the
         application.
     */
-    bool LayoutContent(bool onlyVisibleRect = @false);
+    bool LayoutContent(bool onlyVisibleRect = false);
 
     /**
         Inserts a line break at the current insertion point. A line break forces
@@ -900,7 +881,6 @@ public:
         Loads content into the control's buffer using the given type. If the specified
         type
         is wxRICHTEXT_TYPE_ANY, the type is deduced from the filename extension.
-        
         This function looks for a suitable wxRichTextFileHandler object.
     */
     bool LoadFile(const wxString& file,
@@ -914,7 +894,7 @@ public:
     /**
         Move the caret to the given character position.
     */
-    bool MoveCaret(long pos, bool showAtLineStart = @false);
+    bool MoveCaret(long pos, bool showAtLineStart = false);
 
     /**
         Move the caret one visual step forward: this may mean setting a flag
@@ -991,15 +971,12 @@ public:
         attributes are set.
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
          wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
         startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @e listLevel should be used
+         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
         as the level for all paragraphs, otherwise the current indentation will be used.
-        
         See also SetListStyle(), PromoteList(), ClearListStyle().
     */
     bool NumberList(const wxRichTextRange& range,
@@ -1128,20 +1105,17 @@ public:
 
     //@{
     /**
-        Promotes or demotes the paragraphs in the given range. A positive @e promoteBy
+        Promotes or demotes the paragraphs in the given range. A positive @a promoteBy
         produces a smaller indent, and a negative number
         produces a larger indent. Pass flags to determine how the attributes are set.
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
          wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
         startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @e listLevel should be used
+         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
         as the level for all paragraphs, otherwise the current indentation will be used.
-        
         See also SetListStyle(), See also SetListStyle(), ClearListStyle().
     */
     bool PromoteList(int promoteBy, const wxRichTextRange& range,
@@ -1173,14 +1147,13 @@ public:
     /**
         Saves the buffer content using the given type. If the specified type
         is wxRICHTEXT_TYPE_ANY, the type is deduced from the filename extension.
-        
         This function looks for a suitable wxRichTextFileHandler object.
     */
     bool SaveFile(const wxString& file = wxEmptyString,
                   int type = wxRICHTEXT_TYPE_ANY);
 
     /**
-        Scrolls @e position into view. This function takes a caret position.
+        Scrolls @a position into view. This function takes a caret position.
     */
     bool ScrollIntoView(long position, int keyCode);
 
@@ -1195,10 +1168,9 @@ public:
     void SelectNone();
 
     /**
-        Sets @e attr as the default style and tells the control that the UI should
+        Sets @a attr as the default style and tells the control that the UI should
         reflect
         this attribute until the user moves the caret.
-        
         See also IsDefaultStyleShowing().
     */
     void SetAndShowDefaultStyle(const wxTextAttr& attr);
@@ -1216,7 +1188,7 @@ public:
         A value of -1 means the caret is at the start of the buffer.
     */
     void SetCaretPosition(long position,
-                          bool showAtLineStart = @false);
+                          bool showAtLineStart = false);
 
     /**
         Sets the current default style, which can be used to change how subsequently
@@ -1275,15 +1247,12 @@ public:
         the attributes are set.
         Either the style definition or the name of the style definition (in the current
         sheet) can be passed.
-        
-        @e flags is a bit list of the following:
-        
+        @a flags is a bit list of the following:
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this command will be undoable.
          wxRICHTEXT_SETSTYLE_RENUMBER: specifies that numbering should start from @e
         startFrom, otherwise existing attributes are used.
-         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @e listLevel should be used
+         wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL: specifies that @a listLevel should be used
         as the level for all paragraphs, otherwise the current indentation will be used.
-        
         See also NumberList(), PromoteList(), ClearListStyle().
     */
     bool SetListStyle(const wxRichTextRange& range,
@@ -1300,7 +1269,6 @@ public:
 
     /**
         Sets the selection to the given range.
-        
         The end point of range is specified as the last character position of the span
         of text, plus one.
         So, for example, to set the selection for a character at position 5, use the
@@ -1310,7 +1278,6 @@ public:
 
     /**
         Sets the selection to the given range.
-        
         The end point of range is specified as the last character position of the span
         of text, plus one.
         So, for example, to set the selection for a character at position 5, use the
@@ -1321,7 +1288,6 @@ public:
     //@{
     /**
         Sets the attributes for the given range.
-        
         The end point of range is specified as the last character position of the span
         of text, plus one.
         So, for example, to set the style for a character at position 5, use the range
@@ -1336,14 +1302,11 @@ public:
     /**
         Sets the attributes for the given range, passing flags to determine how the
         attributes are set.
-        
         The end point of range is specified as the last character position of the span
         of text, plus one.
         So, for example, to set the style for a character at position 5, use the range
         (5,6).
-        
-        @e flags may contain a bit list of the following values:
-        
+        @a flags may contain a bit list of the following values:
          wxRICHTEXT_SETSTYLE_NONE: no style flag.
          wxRICHTEXT_SETSTYLE_WITH_UNDO: specifies that this operation should be
         undoable.
@@ -1385,7 +1348,7 @@ public:
     /**
         A helper function setting up scrollbars, for example after a resize.
     */
-    void SetupScrollbars(bool atTop = @false);
+    void SetupScrollbars(bool atTop = false);
 
     /**
         Scrolls the buffer so that the given position is in view.

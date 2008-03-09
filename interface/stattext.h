@@ -53,27 +53,21 @@ public:
         Constructor, creating and showing a text control.
         
         @param parent
-        Parent window. Should not be @NULL.
-        
+            Parent window. Should not be @NULL.
         @param id
-        Control identifier. A value of -1 denotes a default value.
-        
+            Control identifier. A value of -1 denotes a default value.
         @param label
-        Text label.
-        
+            Text label.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size.
-        
+            Window size.
         @param style
-        Window style. See wxStaticText.
-        
+            Window style. See wxStaticText.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create()
+        @see Create()
     */
     wxStaticText();
     wxStaticText(wxWindow* parent, wxWindowID id,
@@ -96,10 +90,8 @@ public:
 
     /**
         Returns the contents of the control.
-        
         Note that the returned string contains both the mnemonics (@c  characters),
         if any, and markup tags, if any.
-        
         Use GetLabelText() if only the
         label text is needed.
     */
@@ -110,8 +102,7 @@ public:
         The first form returns the control's label without the mnemonics characters (if
         any)
         and without the markup (if the control has @c wxST_MARKUP style).
-        
-        The second (static) version returns the given @e label string without the
+        The second (static) version returns the given @a label string without the
         mnemonics
         characters (if any) and without the markup.
     */
@@ -122,117 +113,96 @@ public:
     /**
         Sets the static text label and updates the controls size to exactly fit the
         label unless the control has wxST_NO_AUTORESIZE flag.
-        
         This function allows to set decorated static label text on platforms which
         support it (currently only GTK+ 2). For the other platforms, the markup is
         ignored.
-        
         The supported tags are:
         
-        
         b
-        
         
         bold text
         
         big
         
-        
         bigger text
         
         i
-        
         
         italic text
         
         s
         
-        
         strike-through text
         
         sub
-        
         
         subscript text
         
         sup
         
-        
         superscript text
         
         small
-        
         
         smaller text
         
         tt
         
-        
         monospaced text
         
         u
         
-        
         underlined text
         
         span
-        
         
         generic formatter tag; see Pango Markup for more information.
         
         Note that the string must be well-formed (e.g. all tags must be correctly
         closed)
         otherwise it can be not shown correctly or at all.
-        
         Also note that you need to escape the following special characters:
         
-        
         @b Special character
-        
         
         @b Escape as
         
         @c
         
-        
         @c amp; or as @c
         
         @c '
-        
         
         @c apos;
         
         @c "
         
-        
         @c quot;
         
         @c
-        
         
         @c lt;
         
         @c
         
-        
         @c gt;
         
         The non-escaped ampersand @c  characters are interpreted as
         mnemonics; see wxControl::SetLabel.
+        
         Example:
         
         @param label
-        The new label to set. It may contain newline characters and the markup tags
+            The new label to set. It may contain newline characters and the markup tags
         described above.
     */
     virtual void SetLabel(const wxString& label);
 
     /**
         This functions wraps the controls label so that each of its lines becomes at
-        most @e width pixels wide if possible (the lines are broken at words
+        most @a width pixels wide if possible (the lines are broken at words
         boundaries so it might not be the case if words are too long). If @e width
         is negative, no wrapping is done.
-        
         This function is new since wxWidgets version 2.6.2
     */
     void Wrap(int width);

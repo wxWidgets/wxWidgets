@@ -27,15 +27,14 @@ public:
         Constructor, creating the window.
         
         @param parent
-        The window parent.
-        
+            The window parent.
         @param style
-        The window style. Currently unused.
+            The window style. Currently unused.
         
         @remarks The second style of constructor is called within
-                   wxMDIParentFrame::OnCreateClient.
+                 wxMDIParentFrame::OnCreateClient.
         
-        @sa wxMDIParentFrame::wxMDIParentFrame, wxMDIParentFrame::OnCreateClient
+        @see wxMDIParentFrame::wxMDIParentFrame, wxMDIParentFrame::OnCreateClient
     */
     wxMDIClientWindow();
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
@@ -113,44 +112,40 @@ public:
         Constructor, creating the window.
         
         @param parent
-        The window parent. This should be @NULL.
-        
+            The window parent. This should be @NULL.
         @param id
-        The window identifier. It may take a value of -1 to indicate a default value.
-        
+            The window identifier. It may take a value of -1 to indicate a default
+        value.
         @param title
-        The caption to be displayed on the frame's title bar.
-        
+            The caption to be displayed on the frame's title bar.
         @param pos
-        The window position. The value wxDefaultPosition indicates a default position, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The window position. The value wxDefaultPosition indicates a default position,
+        chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param size
-        The window size. The value wxDefaultSize indicates a default size, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The window size. The value wxDefaultSize indicates a default size, chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param style
-        The window style. See wxMDIParentFrame.
-        
+            The window style. See wxMDIParentFrame.
         @param name
-        The name of the window. This parameter is used to associate a name with the
+            The name of the window. This parameter is used to associate a name with the
         item,
-        allowing the application user to set Motif resource values for
-        individual windows.
+            allowing the application user to set Motif resource values for
+            individual windows.
         
         @remarks During the construction of the frame, the client window will be
-                   created. To use a different class from
-                   wxMDIClientWindow, override
-                   OnCreateClient().
+                 created. To use a different class from
+                 wxMDIClientWindow, override
+                 OnCreateClient().
         
-        @sa Create(), OnCreateClient()
+        @see Create(), OnCreateClient()
     */
     wxMDIParentFrame();
     wxMDIParentFrame(wxWindow* parent, wxWindowID id,
                      const wxString& title,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style = wxDEFAULT_FRAME_STYLE |  wxVSCROLL |  wxHSCROLL,
+                     long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const wxString& name = "frame");
     //@}
 
@@ -162,28 +157,28 @@ public:
     /**
         Activates the MDI child following the currently active one.
         
-        @sa ActivatePrevious()
+        @see ActivatePrevious()
     */
     void ActivateNext();
 
     /**
         Activates the MDI child preceding the currently active one.
         
-        @sa ActivateNext()
+        @see ActivateNext()
     */
     void ActivatePrevious();
 
     /**
         Arranges any iconized (minimized) MDI child windows.
         
-        @sa Cascade(), Tile()
+        @see Cascade(), Tile()
     */
     void ArrangeIcons();
 
     /**
         Arranges the MDI child windows in a cascade.
         
-        @sa Tile(), ArrangeIcons()
+        @see Tile(), ArrangeIcons()
     */
     void Cascade();
 
@@ -195,7 +190,7 @@ public:
                 const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxDEFAULT_FRAME_STYLE |  wxVSCROLL |  wxHSCROLL,
+                long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                 const wxString& name = "frame");
 
     /**
@@ -207,31 +202,30 @@ public:
         This gets the size of the frame 'client area' in pixels.
         
         @param width
-        Receives the client width in pixels.
-        
+            Receives the client width in pixels.
         @param height
-        Receives the client height in pixels.
+            Receives the client height in pixels.
         
         @remarks The client area is the area which may be drawn on by the
-                   programmer, excluding title bar, border, status bar,
-                   and toolbar if present.
+                 programmer, excluding title bar, border, status bar,
+                 and toolbar if present.
         
-        @sa GetToolBar(), SetToolBar(),
-              wxMDIClientWindow
+        @see GetToolBar(), SetToolBar(),
+             wxMDIClientWindow
     */
     virtual void GetClientSize(int* width, int* height);
 
     /**
         Returns a pointer to the client window.
         
-        @sa OnCreateClient()
+        @see OnCreateClient()
     */
     wxMDIClientWindow* GetClientWindow();
 
     /**
         Returns the window being used as the toolbar for this frame.
         
-        @sa SetToolBar()
+        @see SetToolBar()
     */
     virtual wxWindow* GetToolBar();
 
@@ -251,10 +245,10 @@ public:
         example:
         
         @remarks You might wish to derive from wxMDIClientWindow in order to
-                   implement different erase behaviour, for example,
-                   such as painting a bitmap on the background.
+                 implement different erase behaviour, for example, such
+                 as painting a bitmap on the background.
         
-        @sa GetClientWindow(), wxMDIClientWindow
+        @see GetClientWindow(), wxMDIClientWindow
     */
     virtual wxMDIClientWindow* OnCreateClient();
 
@@ -264,13 +258,13 @@ public:
         of the toolbar MDI client window.
         
         @param toolbar
-        Toolbar to manage.
+            Toolbar to manage.
         
         @remarks When the frame is resized, the toolbar is resized to be the
-                   width of the frame client area, and the toolbar
-                   height is kept the same.
+                 width of the frame client area, and the toolbar height
+                 is kept the same.
         
-        @sa GetToolBar(), GetClientSize()
+        @see GetToolBar(), GetClientSize()
     */
     virtual void SetToolBar(wxWindow* toolbar);
 
@@ -278,17 +272,14 @@ public:
         Call this to change the current Window menu. Ownership of the menu object
         passes to
         the frame when you call this function.
-        
         This call is available under Windows only.
-        
         To remove the window completely, use the wxFRAME_NO_WINDOW_MENU window style.
     */
     void SetWindowMenu(wxMenu* menu);
 
     /**
         Tiles the MDI child windows either horizontally or vertically depending on
-        whether @e orient is wxHORIZONTAL or wxVERTICAL.
-        
+        whether @a orient is wxHORIZONTAL or wxVERTICAL.
         Currently only implemented for MSW, does nothing under the other platforms.
     */
     void Tile(wxOrientation orient = wxHORIZONTAL);
@@ -343,34 +334,30 @@ public:
         Constructor, creating the window.
         
         @param parent
-        The window parent. This should not be @NULL.
-        
+            The window parent. This should not be @NULL.
         @param id
-        The window identifier. It may take a value of -1 to indicate a default value.
-        
+            The window identifier. It may take a value of -1 to indicate a default
+        value.
         @param title
-        The caption to be displayed on the frame's title bar.
-        
+            The caption to be displayed on the frame's title bar.
         @param pos
-        The window position. The value wxDefaultPosition indicates a default position, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The window position. The value wxDefaultPosition indicates a default position,
+        chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param size
-        The window size. The value wxDefaultSize indicates a default size, chosen by
-        either the windowing system or wxWidgets, depending on platform.
-        
+            The window size. The value wxDefaultSize indicates a default size, chosen by
+            either the windowing system or wxWidgets, depending on platform.
         @param style
-        The window style. See wxMDIChildFrame.
-        
+            The window style. See wxMDIChildFrame.
         @param name
-        The name of the window. This parameter is used to associate a name with the
+            The name of the window. This parameter is used to associate a name with the
         item,
-        allowing the application user to set Motif resource values for
-        individual windows.
+            allowing the application user to set Motif resource values for
+            individual windows.
         
         @remarks None.
         
-        @sa Create()
+        @see Create()
     */
     wxMDIChildFrame();
     wxMDIChildFrame(wxMDIParentFrame* parent, wxWindowID id,
@@ -389,7 +376,7 @@ public:
     /**
         Activates this MDI child frame.
         
-        @sa Maximize(), Restore()
+        @see Maximize(), Restore()
     */
     void Activate();
 
@@ -407,7 +394,7 @@ public:
     /**
         Maximizes this MDI child frame.
         
-        @sa Activate(), Restore()
+        @see Activate(), Restore()
     */
     void Maximize(bool maximize);
 

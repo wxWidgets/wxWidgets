@@ -144,7 +144,6 @@ public:
         Client is the entity that calls wxArtProvider's GetBitmap or GetIcon
         function. It is represented by wxClientID type and can have one of these
         values:
-        
          wxART_TOOLBAR
          wxART_MENU
          wxART_BUTTON
@@ -154,7 +153,6 @@ public:
          wxART_MESSAGE_BOX
          wxART_OTHER (used for all requests that don't fit into any of the categories
         above)
-        
         Client ID servers as a hint to wxArtProvider that is supposed to help it to
         choose the best looking bitmap. For example it is often desirable to use
         slightly different icons in menus and toolbars even though they represent the
@@ -163,7 +161,7 @@ public:
         GetBitmap()
         returns identical bitmap for different @e client values!
         
-        @sa See the artprov sample for an example of wxArtProvider usage.
+        @see See the artprov sample for an example of wxArtProvider usage.
     */
 
 
@@ -174,17 +172,15 @@ public:
         create wxBitmap objects from XPMs here).
         
         @param id
-        wxArtID unique identifier of the bitmap.
-        
+            wxArtID unique identifier of the bitmap.
         @param client
-        wxArtClient identifier of the client (i.e. who is asking for the bitmap).
-        This only servers as a hint.
-        
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
+            This only servers as a hint.
         @param size
-        Preferred size of the bitmap. The function may return a bitmap of different
-        dimensions, it will be automatically rescaled to meet client's request.
+            Preferred size of the bitmap. The function may return a bitmap of different
+            dimensions, it will be automatically rescaled to meet client's request.
         
-        @sa CreateIconBundle()
+        @see CreateIconBundle()
     */
     wxBitmap CreateBitmap(const wxArtID& id,
                           const wxArtClient& client,
@@ -206,16 +202,14 @@ public:
         Query registered providers for bitmap with given ID.
         
         @param id
-        wxArtID unique identifier of the bitmap.
-        
+            wxArtID unique identifier of the bitmap.
         @param client
-        wxArtClient identifier of the client (i.e. who is asking for the bitmap).
-        
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
         @param size
-        Size of the returned bitmap or wxDefaultSize if size doesn't matter.
+            Size of the returned bitmap or wxDefaultSize if size doesn't matter.
         
         @returns The bitmap if one of registered providers recognizes the ID or
-                   wxNullBitmap otherwise.
+                 wxNullBitmap otherwise.
     */
     static wxBitmap GetBitmap(const wxArtID& id,
                               const wxArtClient& client = wxART_OTHER,
@@ -224,7 +218,7 @@ public:
     //@{
     /**
         Returns a suitable size hint for the given @e wxArtClient. If
-        @e platform_default is @true, return a size based on the current platform,
+        @a platform_default is @true, return a size based on the current platform,
         otherwise return the size from the topmost wxArtProvider. @e wxDefaultSize may
         be
         returned if the client doesn't have a specified size, like wxART_OTHER for
@@ -234,20 +228,20 @@ public:
                           const wxArtClient& client = wxART_OTHER,
                           const wxSize& size = wxDefaultSize);
     static wxSize GetSizeHint(const wxArtClient& client,
-                              bool platform_default = @false);
+                              bool platform_default = false);
     //@}
 
     /**
         Query registered providers for icon bundle with given ID.
         
         @param id
-        wxArtID unique identifier of the icon bundle.
-        
+            wxArtID unique identifier of the icon bundle.
         @param client
-        wxArtClient identifier of the client (i.e. who is asking for the icon bundle).
+            wxArtClient identifier of the client (i.e. who is asking for the icon
+        bundle).
         
         @returns The icon bundle if one of registered providers recognizes the ID
-                   or wxNullIconBundle otherwise.
+                 or wxNullIconBundle otherwise.
     */
     static wxIconBundle GetIconBundle(const wxArtID& id,
                                       const wxArtClient& client = wxART_OTHER);
@@ -307,7 +301,6 @@ public:
          wxART_FLOPPY
          wxART_CDROM
          wxART_REMOVABLE
-        
         Additionally, any string recognized by custom art providers registered using
         Push() may be used.
     */
@@ -317,20 +310,20 @@ public:
         Register new art provider and add it to the bottom of providers stack (i.e.
         it will be queried as the last one).
         
-        @sa Push()
+        @see Push()
     */
     static void Insert(wxArtProvider* provider);
 
     /**
         Remove latest added provider and delete it.
     */
-#define static bool Pop()     /* implementation is private */
+    static bool Pop();
 
     /**
         Register new art provider and add it to the top of providers stack (i.e. it
         will be queried as the first provider).
         
-        @sa Insert()
+        @see Insert()
     */
     static void Push(wxArtProvider* provider);
 

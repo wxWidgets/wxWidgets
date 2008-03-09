@@ -31,7 +31,7 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_BUTTON(id\, func)}:
+    @event{EVT_BUTTON(id, func)}:
            Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is
            clicked.
     @endEventTable
@@ -51,39 +51,32 @@ public:
         Constructor, creating and showing a button.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Button identifier. The value wxID_ANY indicates a default value.
-        
+            Button identifier. The value wxID_ANY indicates a default value.
         @param bitmap
-        Bitmap to be displayed.
-        
+            Bitmap to be displayed.
         @param pos
-        Button position.
-        
+            Button position.
         @param size
-        Button size. If wxDefaultSize is specified then the button is sized
-        appropriately for the bitmap.
-        
+            Button size. If wxDefaultSize is specified then the button is
+        sized
+            appropriately for the bitmap.
         @param style
-        Window style. See wxBitmapButton.
-        
+            Window style. See wxBitmapButton.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
         @remarks The bitmap parameter is normally the only bitmap you need to
-                   provide, and wxWidgets will draw the button correctly
-                   in its different states. If you want more control,
-                   call any of the functions
-                   SetBitmapSelected(),
-                   SetBitmapFocus(),
-                   SetBitmapDisabled().
+                 provide, and wxWidgets will draw the button correctly
+                 in its different states. If you want more control, call
+                 any of the functions SetBitmapSelected(),
+                 SetBitmapFocus(),
+                 SetBitmapDisabled().
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxBitmapButton();
     wxBitmapButton(wxWindow* parent, wxWindowID id,
@@ -118,7 +111,7 @@ public:
         
         @returns A reference to the disabled state bitmap.
         
-        @sa SetBitmapDisabled()
+        @see SetBitmapDisabled()
     */
     const wxBitmap GetBitmapDisabled();
     wxBitmap GetBitmapDisabled();
@@ -130,7 +123,7 @@ public:
         
         @returns A reference to the focused state bitmap.
         
-        @sa SetBitmapFocus()
+        @see SetBitmapFocus()
     */
     const wxBitmap GetBitmapFocus();
     wxBitmap GetBitmapFocus();
@@ -140,7 +133,7 @@ public:
     /**
         Returns the bitmap used when the mouse is over the button, may be invalid.
         
-        @sa SetBitmapHover()
+        @see SetBitmapHover()
     */
     const wxBitmap GetBitmapHover();
     wxBitmap GetBitmapHover();
@@ -152,7 +145,7 @@ public:
         
         @returns A reference to the button's label bitmap.
         
-        @sa SetBitmapLabel()
+        @see SetBitmapLabel()
     */
     const wxBitmap GetBitmapLabel();
     wxBitmap GetBitmapLabel();
@@ -163,7 +156,7 @@ public:
         
         @returns A reference to the selected state bitmap.
         
-        @sa SetBitmapSelected()
+        @see SetBitmapSelected()
     */
     wxBitmap GetBitmapSelected();
 
@@ -171,10 +164,10 @@ public:
         Sets the bitmap for the disabled button appearance.
         
         @param bitmap
-        The bitmap to set.
+            The bitmap to set.
         
-        @sa GetBitmapDisabled(), SetBitmapLabel(),
-              SetBitmapSelected(), SetBitmapFocus()
+        @see GetBitmapDisabled(), SetBitmapLabel(),
+             SetBitmapSelected(), SetBitmapFocus()
     */
     void SetBitmapDisabled(const wxBitmap& bitmap);
 
@@ -182,20 +175,19 @@ public:
         Sets the bitmap for the button appearance when it has the keyboard focus.
         
         @param bitmap
-        The bitmap to set.
+            The bitmap to set.
         
-        @sa GetBitmapFocus(), SetBitmapLabel(),
-              SetBitmapSelected(), SetBitmapDisabled()
+        @see GetBitmapFocus(), SetBitmapLabel(),
+             SetBitmapSelected(), SetBitmapDisabled()
     */
     void SetBitmapFocus(const wxBitmap& bitmap);
 
     /**
         Sets the bitmap to be shown when the mouse is over the button.
-        
         This function is new since wxWidgets version 2.7.0 and the hover bitmap is
         currently only supported in wxMSW.
         
-        @sa GetBitmapHover()
+        @see GetBitmapHover()
     */
     void SetBitmapHover(const wxBitmap& bitmap);
 
@@ -203,12 +195,12 @@ public:
         Sets the bitmap label for the button.
         
         @param bitmap
-        The bitmap label to set.
+            The bitmap label to set.
         
         @remarks This is the bitmap used for the unselected state, and for all
-                   other states if no other bitmaps are provided.
+                 other states if no other bitmaps are provided.
         
-        @sa GetBitmapLabel()
+        @see GetBitmapLabel()
     */
     void SetBitmapLabel(const wxBitmap& bitmap);
 
@@ -216,7 +208,7 @@ public:
         Sets the bitmap for the selected (depressed) button appearance.
         
         @param bitmap
-        The bitmap to set.
+            The bitmap to set.
     */
     void SetBitmapSelected(const wxBitmap& bitmap);
 };

@@ -25,8 +25,8 @@ public:
         Constructor, setting up a wxDisplay instance with the specified display.
         
         @param index
-        The index of the display to use.  This must be non-negative
-        and lower than the value returned by GetCount().
+            The index of the display to use.  This must be non-negative
+            and lower than the value returned by GetCount().
     */
     wxDisplay(unsigned index = 0);
 
@@ -38,14 +38,12 @@ public:
     /**
         Changes the video mode of this display to the mode specified
         in the mode parameter.
-        
         If wxDefaultVideoMode is passed in as the mode parameter,
         the defined behaviour is that wxDisplay will reset the video
         mode to the default mode used by the display.  On Windows,
         the behavior is normal.  However, there are differences on other
         platforms. On Unix variations using X11 extensions it should
         behave as defined, but some irregularities may occur.
-        
         On wxMac passing in wxDefaultVideoMode as the mode
         parameter does nothing.  This happens because carbon
         no longer has access to DMUseScreenPrefs, an undocumented
@@ -82,20 +80,18 @@ public:
         @c wxNOT_FOUND if the point is not on any connected display.
         
         @param pt
-        The point to locate.
+            The point to locate.
     */
     static int GetFromPoint(const wxPoint& pt);
 
     /**
         Returns the index of the display on which the given window lies.
-        
         If the window is on more than one display it gets the display that overlaps the
         window the most.
-        
         Returns @c wxNOT_FOUND if the window is not on any connected display.
         
         @param win
-        The window to locate.
+            The window to locate.
     */
     static int GetFromWindow(const wxWindow* win);
 

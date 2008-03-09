@@ -40,78 +40,108 @@ public:
         Loads an icon from the specified location.
         
         @param bits
-        Specifies an array of pixel values.
-        
+            Specifies an array of pixel values.
         @param width
-        Specifies the width of the icon.
-        
+            Specifies the width of the icon.
         @param height
-        Specifies the height of the icon.
-        
+            Specifies the height of the icon.
         @param desiredWidth
-        Specifies the desired width of the icon. This
-        parameter only has an effect in Windows (32-bit) where icon resources can
+            Specifies the desired width of the icon. This
+            parameter only has an effect in Windows (32-bit) where icon resources can
         contain
-        several icons of different sizes.
-        
+            several icons of different sizes.
         @param desiredWidth
-        Specifies the desired height of the icon. This
-        parameter only has an effect in Windows (32-bit) where icon resources can
+            Specifies the desired height of the icon. This
+            parameter only has an effect in Windows (32-bit) where icon resources can
         contain
-        several icons of different sizes.
-        
+            several icons of different sizes.
         @param depth
-        Specifies the depth of the icon. If this is omitted, the display depth of the
-        screen is used.
-        
+            Specifies the depth of the icon. If this is omitted, the display depth of
+        the
+            screen is used.
         @param name
-        This can refer to a resource name under MS Windows, or a filename under MS
+            This can refer to a resource name under MS Windows, or a filename under MS
         Windows and X.
-        Its meaning is determined by the flags parameter.
-        
+            Its meaning is determined by the flags parameter.
         @param loc
-        The object describing the location of the native icon, see
-        wxIconLocation.
-        
+            The object describing the location of the native icon, see
+            wxIconLocation.
         @param type
-        May be one of the following:
+            May be one of the following:
         
         
-        wxBITMAP_TYPE_ICO
         
         
-        Load a Windows icon file.
-        
-        wxBITMAP_TYPE_ICO_RESOURCE
         
         
-        Load a Windows icon from the resource database.
         
-        wxBITMAP_TYPE_GIF
-        
-        
-        Load a GIF bitmap file.
-        
-        wxBITMAP_TYPE_XBM
+            wxBITMAP_TYPE_ICO
         
         
-        Load an X bitmap file.
-        
-        wxBITMAP_TYPE_XPM
         
         
-        Load an XPM bitmap file.
+            Load a Windows icon file.
         
-        The validity of these flags depends on the platform and wxWidgets configuration.
-        If all possible wxWidgets settings are used, the Windows platform supports ICO
-        file, ICO resource,
-        XPM data, and XPM file. Under wxGTK, the available formats are BMP file, XPM
-        data, XPM file, and PNG file.
-        Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.
+        
+        
+        
+        
+            wxBITMAP_TYPE_ICO_RESOURCE
+        
+        
+        
+        
+            Load a Windows icon from the resource database.
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_GIF
+        
+        
+        
+        
+            Load a GIF bitmap file.
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_XBM
+        
+        
+        
+        
+            Load an X bitmap file.
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_XPM
+        
+        
+        
+        
+            Load an XPM bitmap file.
+        
+        
+        
+        
+        
+            The validity of these flags depends on the platform and wxWidgets
+        configuration.
+            If all possible wxWidgets settings are used, the Windows platform supports
+        ICO file, ICO resource,
+            XPM data, and XPM file. Under wxGTK, the available formats are BMP file,
+        XPM data, XPM file, and PNG file.
+            Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM
+        file.
         
         @remarks The first form constructs an icon object with no data; an
-                   assignment or another member function such as Create
-                   or LoadFile must be called subsequently.
+                 assignment or another member function such as Create or
+                 LoadFile must be called subsequently.
     */
     wxIcon();
     wxIcon(const wxIcon& icon);
@@ -131,17 +161,16 @@ public:
         Destructor.
         See @ref overview_refcountdestruct "reference-counted object destruction" for
         more info.
-        
         If the application omits to delete the icon explicitly, the icon will be
         destroyed automatically by wxWidgets when the application exits.
-        
         Do not delete an icon that is selected into a memory device context.
     */
     ~wxIcon();
 
     /**
-        Copies @e bmp bitmap to this icon. Under MS Windows the bitmap
+        Copies @a bmp bitmap to this icon. Under MS Windows the bitmap
         must have mask colour set.
+        
         LoadFile()
         
         Wx::Icon-new( width, height, depth = -1 )
@@ -165,56 +194,91 @@ public:
     /**
         Gets the width of the icon in pixels.
         
-        @sa GetHeight()
+        @see GetHeight()
     */
     int GetWidth();
 
     /**
         Returns @true if icon data is present.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Loads an icon from a file or resource.
         
         @param name
-        Either a filename or a Windows resource name.
-        The meaning of name is determined by the type parameter.
-        
+            Either a filename or a Windows resource name.
+            The meaning of name is determined by the type parameter.
         @param type
-        One of the following values:
+            One of the following values:
         
         
-        wxBITMAP_TYPE_ICO
         
         
-        Load a Windows icon file.
-        
-        wxBITMAP_TYPE_ICO_RESOURCE
         
         
-        Load a Windows icon from the resource database.
         
-        wxBITMAP_TYPE_GIF
-        
-        
-        Load a GIF bitmap file.
-        
-        wxBITMAP_TYPE_XBM
+            wxBITMAP_TYPE_ICO
         
         
-        Load an X bitmap file.
-        
-        wxBITMAP_TYPE_XPM
         
         
-        Load an XPM bitmap file.
+            Load a Windows icon file.
         
-        The validity of these flags depends on the platform and wxWidgets configuration.
+        
+        
+        
+        
+            wxBITMAP_TYPE_ICO_RESOURCE
+        
+        
+        
+        
+            Load a Windows icon from the resource database.
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_GIF
+        
+        
+        
+        
+            Load a GIF bitmap file.
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_XBM
+        
+        
+        
+        
+            Load an X bitmap file.
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_XPM
+        
+        
+        
+        
+            Load an XPM bitmap file.
+        
+        
+        
+        
+        
+            The validity of these flags depends on the platform and wxWidgets
+        configuration.
         
         @returns @true if the operation succeeded, @false otherwise.
         
-        @sa wxIcon()
+        @see wxIcon()
     */
     bool LoadFile(const wxString& name, wxBitmapType type);
 
@@ -222,7 +286,7 @@ public:
         Sets the depth member (does not affect the icon data).
         
         @param depth
-        Icon depth.
+            Icon depth.
     */
     void SetDepth(int depth);
 
@@ -230,7 +294,7 @@ public:
         Sets the height member (does not affect the icon data).
         
         @param height
-        Icon height in pixels.
+            Icon height in pixels.
     */
     void SetHeight(int height);
 
@@ -238,7 +302,7 @@ public:
         Sets the width member (does not affect the icon data).
         
         @param width
-        Icon width in pixels.
+            Icon width in pixels.
     */
     void SetWidth(int width);
 
@@ -246,7 +310,7 @@ public:
         Assignment operator, using @ref overview_trefcount "reference counting".
         
         @param icon
-        Icon to assign.
+            Icon to assign.
     */
     wxIcon operator =(const wxIcon& icon);
 };

@@ -48,37 +48,35 @@ public:
     /**
         If you use the first, default, constructor, you must call one of the
         Init() methods later in order to use the object.
-        
         The other constructors initialize the object immediately and @c Init()
         must not be called after using them.
         
         @param dc
-        The underlying DC: everything drawn to this object will be
-        flushed to this DC when this object is destroyed.  You may pass @NULL
-        in order to just initialize the buffer, and not flush it.
-        
+            The underlying DC: everything drawn to this object will be
+            flushed to this DC when this object is destroyed.  You may pass @NULL
+            in order to just initialize the buffer, and not flush it.
         @param area
-        The size of the bitmap to be used for buffering (this bitmap is
-        created internally when it is not given explicitly).
-        
+            The size of the bitmap to be used for buffering (this bitmap is
+            created internally when it is not given explicitly).
         @param buffer
-        Explicitly provided bitmap to be used for buffering: this is
-        the most efficient solution as the bitmap doesn't have to be recreated each
-        time but it also requires more memory as the bitmap is never freed. The bitmap
-        should have appropriate size, anything drawn outside of its bounds is clipped.
-        
-        @param style
-        wxBUFFER_CLIENT_AREA to indicate that just the client area of
-        the window is buffered, or wxBUFFER_VIRTUAL_AREA to indicate that the buffer
+            Explicitly provided bitmap to be used for buffering: this is
+            the most efficient solution as the bitmap doesn't have to be recreated each
+            time but it also requires more memory as the bitmap is never freed. The
         bitmap
-        covers the virtual area (in which case PrepareDC is automatically called for
-        the actual window
-        device context).
+            should have appropriate size, anything drawn outside of its bounds is
+        clipped.
+        @param style
+            wxBUFFER_CLIENT_AREA to indicate that just the client area of
+            the window is buffered, or wxBUFFER_VIRTUAL_AREA to indicate that the
+        buffer bitmap
+            covers the virtual area (in which case PrepareDC is automatically called
+        for the actual window
+            device context).
     */
     wxBufferedDC();
-    wxBufferedDC(wxDC * dc, const wxSize& area,
+    wxBufferedDC(wxDC* dc, const wxSize& area,
                  int style = wxBUFFER_CLIENT_AREA);
-    wxBufferedDC(wxDC * dc, wxBitmap& buffer,
+    wxBufferedDC(wxDC* dc, wxBitmap& buffer,
                  int style = wxBUFFER_CLIENT_AREA);
     //@}
 
@@ -93,9 +91,9 @@ public:
         These functions initialize the object created using the default constructor.
         Please see @ref ctor() "constructors documentation" for details.
     */
-    void Init(wxDC * dc, const wxSize& area,
+    void Init(wxDC* dc, const wxSize& area,
               int style = wxBUFFER_CLIENT_AREA);
-    void Init(wxDC * dc, wxBitmap& buffer,
+    void Init(wxDC* dc, wxBitmap& buffer,
               int style = wxBUFFER_CLIENT_AREA);
     //@}
 };
@@ -131,7 +129,7 @@ public:
     /**
         Constructor. Pass a pointer to the window on which you wish to paint.
     */
-    wxAutoBufferedPaintDC(wxWindow * window);
+    wxAutoBufferedPaintDC(wxWindow* window);
 };
 
 
@@ -165,8 +163,7 @@ public:
         As with @ref wxBufferedDC::ctor wxBufferedDC, you may either provide the
         bitmap to be used for buffering or let this object create one internally (in
         the latter case, the size of the client part of the window is used).
-        
-        Pass wxBUFFER_CLIENT_AREA for the @e style parameter to indicate that just the
+        Pass wxBUFFER_CLIENT_AREA for the @a style parameter to indicate that just the
         client area of
         the window is buffered, or wxBUFFER_VIRTUAL_AREA to indicate that the buffer
         bitmap
@@ -174,9 +171,9 @@ public:
         the actual window
         device context).
     */
-    wxBufferedPaintDC(wxWindow * window, wxBitmap& buffer,
+    wxBufferedPaintDC(wxWindow* window, wxBitmap& buffer,
                       int style = wxBUFFER_CLIENT_AREA);
-    wxBufferedPaintDC(wxWindow * window,
+    wxBufferedPaintDC(wxWindow* window,
                       int style = wxBUFFER_CLIENT_AREA);
     //@}
 

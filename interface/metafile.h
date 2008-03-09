@@ -52,7 +52,7 @@ public:
         metafile is returned, and ownership of it passes to the calling
         application (so it should be destroyed explicitly).
     */
-    wxMetafile * Close();
+    wxMetafile* Close();
 };
 
 
@@ -92,19 +92,18 @@ public:
     /**
         Returns @true if the metafile is valid.
     */
-#define bool Ok()     /* implementation is private */
+    bool Ok();
 
     /**
         Plays the metafile into the given device context, returning
         @true if successful.
     */
-    bool Play(wxDC * dc);
+    bool Play(wxDC* dc);
 
     /**
         Passes the metafile data to the clipboard. The metafile can no longer be
         used for anything, but the wxMetafile object must still be destroyed by
         the application.
-        
         Below is a example of metafile, metafile device context and clipboard use
         from the @c hello.cpp example. Note the way the metafile dimensions
         are passed to the clipboard, making use of the device context's ability
@@ -125,9 +124,9 @@ public:
     bounding box. The bounding box may be obtained from a device context after
     drawing
     into it, using the functions wxDC::MinX, wxDC::MinY, wxDC::MaxX and wxDC::MaxY.
-
     In addition to adding the placeable metafile header, this function adds
     the equivalent of the following code to the start of the metafile data:
+
     @code
     SetMapMode(dc, MM_ANISOTROPIC);
      SetWindowOrg(dc, minX, minY);
@@ -135,17 +134,14 @@ public:
     @endcode
 
     This simulates the wxMM_TEXT mapping mode, which wxWidgets assumes.
-
     Placeable metafiles may be imported by many Windows applications, and can be
     used in RTF (Rich Text Format) files.
-
-    @e scale allows the specification of scale for the metafile.
-
+    @a scale allows the specification of scale for the metafile.
     This function is only available under Windows.
 */
 bool wxMakeMetafilePlaceable(const wxString& filename, int minX,
                              int minY,
                              int maxX,
                              int maxY,
-                             float scale=1.0);
+                             float scale = 1.0);
 

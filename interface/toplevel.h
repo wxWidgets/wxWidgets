@@ -27,7 +27,7 @@ public:
     /**
         Returns @true if the platform supports making the window translucent.
         
-        @sa SetTransparent()
+        @see SetTransparent()
     */
     virtual bool CanSetTransparent();
 
@@ -40,10 +40,10 @@ public:
         Centres the window on screen.
         
         @param direction
-        Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
-        or wxBOTH.
+            Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
+            or wxBOTH.
         
-        @sa wxWindow::CentreOnParent
+        @see wxWindow::CentreOnParent
     */
     void CentreOnScreen(int direction = wxBOTH);
 
@@ -56,20 +56,20 @@ public:
         X11 (including GTK+) where the window manager may not support
         this operation and there is no way to find out.
     */
-    bool EnableCloseButton(bool enable = @true);
+    bool EnableCloseButton(bool enable = true);
 
     /**
         Returns a pointer to the button which is the default for this window, or @c
         @NULL.
         The default button is the one activated by pressing the Enter key.
     */
-    wxWindow * GetDefaultItem();
+    wxWindow* GetDefaultItem();
 
     /**
         Returns the standard icon of the window. The icon will be invalid if it hadn't
         been previously set by SetIcon().
         
-        @sa GetIcons()
+        @see GetIcons()
     */
     const wxIcon GetIcon();
 
@@ -77,18 +77,17 @@ public:
         Returns all icons associated with the window, there will be none of them if
         neither SetIcon() nor
         SetIcons() had been called before.
-        
         Use GetIcon() to get the main icon of the
         window.
         
-        @sa wxIconBundle
+        @see wxIconBundle
     */
     const wxIconBundle GetIcons();
 
     /**
         Gets a string containing the window title.
         
-        @sa SetTitle()
+        @see SetTitle()
     */
     wxString GetTitle();
 
@@ -105,9 +104,9 @@ public:
         Iconizes or restores the window.
         
         @param iconize
-        If @true, iconizes the window; if @false, shows and restores it.
+            If @true, iconizes the window; if @false, shows and restores it.
         
-        @sa IsIconized(), Maximize().
+        @see IsIconized(), Maximize().
     */
     void Iconize(bool iconize);
 
@@ -128,7 +127,7 @@ public:
     /**
         Returns @true if the window is in fullscreen mode.
         
-        @sa ShowFullScreen()
+        @see ShowFullScreen()
     */
     bool IsFullScreen();
 
@@ -144,12 +143,11 @@ public:
 
     /**
         @b @c This method is specific to wxUniversal port
-        
         Returns @true if this window is using native decorations, @false if we draw
         them ourselves.
         
-        @sa UseNativeDecorations(),
-              UseNativeDecorationsByDefault()
+        @see UseNativeDecorations(),
+             UseNativeDecorationsByDefault()
     */
     bool IsUsingNativeDecorations();
 
@@ -157,32 +155,29 @@ public:
         Maximizes or restores the window.
         
         @param maximize
-        If @true, maximizes the window, otherwise it restores it.
+            If @true, maximizes the window, otherwise it restores it.
         
-        @sa Iconize()
+        @see Iconize()
     */
     void Maximize(bool maximize);
 
     /**
         Use a system-dependent way to attract users attention to the window when it is
         in background.
-        
-        @e flags may have the value of either @c wxUSER_ATTENTION_INFO
+        @a flags may have the value of either @c wxUSER_ATTENTION_INFO
         (default) or @c wxUSER_ATTENTION_ERROR which results in a more drastic
         action. When in doubt, use the default value.
-        
         Note that this function should normally be only used when the application is
         not already in foreground.
-        
         This function is currently implemented for Win32 where it flashes the
         window icon in the taskbar, and for wxGTK with task bars supporting it.
     */
     void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     /**
-        Changes the default item for the panel, usually @e win is a button.
+        Changes the default item for the panel, usually @a win is a button.
         
-        @sa GetDefaultItem()
+        @see GetDefaultItem()
     */
     void SetDefaultItem(wxWindow win);
 
@@ -190,11 +185,11 @@ public:
         Sets the icon for this window.
         
         @param icon
-        The icon to associate with this window.
+            The icon to associate with this window.
         
         @remarks The window takes a 'copy' of icon, but since it uses reference
-                   counting, the copy is very quick. It is safe to
-                   delete icon after calling this function.
+                 counting, the copy is very quick. It is safe to delete
+                 icon after calling this function.
     */
     void SetIcon(const wxIcon& icon);
 
@@ -205,9 +200,9 @@ public:
         only icon set by SetIcon().
         
         @param icons
-        The icons to associate with this window.
+            The icons to associate with this window.
         
-        @sa wxIconBundle.
+        @see wxIconBundle.
     */
     void SetIcons(const wxIconBundle& icons);
 
@@ -217,19 +212,17 @@ public:
         Unavailable on full keyboard machines.
         
         @param id
-        Identifier for this button.
-        
+            Identifier for this button.
         @param label
-        Text to be displayed on the screen area dedicated to this hardware button.
-        
+            Text to be displayed on the screen area dedicated to this hardware button.
         @param subMenu
-        The menu to be opened after pressing this hardware button.
+            The menu to be opened after pressing this hardware button.
         
-        @sa SetRightMenu().
+        @see SetRightMenu().
     */
     void SetLeftMenu(int id = wxID_ANY,
                      const wxString& label = wxEmptyString,
-                     wxMenu * subMenu = @NULL);
+                     wxMenu* subMenu = NULL);
 
     /**
         A simpler interface for setting the size hints than
@@ -249,19 +242,17 @@ public:
         Unavailable on full keyboard machines.
         
         @param id
-        Identifier for this button.
-        
+            Identifier for this button.
         @param label
-        Text to be displayed on the screen area dedicated to this hardware button.
-        
+            Text to be displayed on the screen area dedicated to this hardware button.
         @param subMenu
-        The menu to be opened after pressing this hardware button.
+            The menu to be opened after pressing this hardware button.
         
-        @sa SetLeftMenu().
+        @see SetLeftMenu().
     */
     void SetRightMenu(int id = wxID_ANY,
                       const wxString& label = wxEmptyString,
-                      wxMenu * subMenu = @NULL);
+                      wxMenu* subMenu = NULL);
 
     /**
         If the platform supports it, sets the shape of the window to that
@@ -280,36 +271,34 @@ public:
         If a pair of values is not set (or set to -1), no constraints will be used.
         
         @param incW
-        Specifies the increment for sizing the width (GTK/Motif/Xt only).
-        
+            Specifies the increment for sizing the width (GTK/Motif/Xt only).
         @param incH
-        Specifies the increment for sizing the height (GTK/Motif/Xt only).
-        
+            Specifies the increment for sizing the height (GTK/Motif/Xt only).
         @param incSize
-        Increment size (only taken into account under X11-based
-        ports such as wxGTK/wxMotif/wxX11).
+            Increment size (only taken into account under X11-based
+            ports such as wxGTK/wxMotif/wxX11).
         
         @remarks Notice that this function not only prevents the user from
-                   resizing the window outside the given bounds but it
-                   also prevents the program itself from doing it using
-                   SetSize.
+                 resizing the window outside the given bounds but it
+                 also prevents the program itself from doing it using
+                 SetSize.
     */
-    virtual void SetSizeHints(int minW, int minH, int maxW=-1,
-                              int maxH=-1,
-                              int incW=-1,
-                              int incH=-1);
+    virtual void SetSizeHints(int minW, int minH, int maxW = -1,
+                              int maxH = -1,
+                              int incW = -1,
+                              int incH = -1);
     void SetSizeHints(const wxSize& minSize,
-                      const wxSize& maxSize=wxDefaultSize,
-                      const wxSize& incSize=wxDefaultSize);
+                      const wxSize& maxSize = wxDefaultSize,
+                      const wxSize& incSize = wxDefaultSize);
     //@}
 
     /**
         Sets the window title.
         
         @param title
-        The window title.
+            The window title.
         
-        @sa GetTitle()
+        @see GetTitle()
     */
     virtual void SetTitle(const wxString& title);
 
@@ -317,10 +306,10 @@ public:
         If the platform supports it will set the window to be translucent
         
         @param alpha
-        Determines how opaque or transparent the window will
-          be, if the platform supports the opreration.  A value of 0 sets the
-          window to be fully transparent, and a value of 255 sets the window
-          to be fully opaque.
+            Determines how opaque or transparent the window will
+              be, if the platform supports the opreration.  A value of 0 sets the
+              window to be fully transparent, and a value of 255 sets the window
+              to be fully opaque.
     */
     virtual bool SetTransparent(int alpha);
 
@@ -334,52 +323,46 @@ public:
     virtual bool ShouldPreventAppExit();
 
     /**
-        Depending on the value of @e show parameter the window is either shown full
-        screen or restored to its normal state. @e style is a bit list containing
+        Depending on the value of @a show parameter the window is either shown full
+        screen or restored to its normal state. @a style is a bit list containing
         some or all of the following values, which indicate what elements of the window
         to hide in full-screen mode:
-        
          wxFULLSCREEN_NOMENUBAR
          wxFULLSCREEN_NOTOOLBAR
          wxFULLSCREEN_NOSTATUSBAR
          wxFULLSCREEN_NOBORDER
          wxFULLSCREEN_NOCAPTION
          wxFULLSCREEN_ALL (all of the above)
-        
         This function has not been tested with MDI frames.
-        
         Note that showing a window full screen also actually
         @ref wxWindow::show Show()s if it hadn't been shown yet.
         
-        @sa IsFullScreen()
+        @see IsFullScreen()
     */
     bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
 
     /**
         @b @c This method is specific to wxUniversal port
-        
         Use native or custom-drawn decorations for this window only. Notice that to
         have any effect this method must be called before really creating the window,
         i.e. two step creation must be used:
         
-        @sa UseNativeDecorationsByDefault(),
-              IsUsingNativeDecorations()
+        @see UseNativeDecorationsByDefault(),
+             IsUsingNativeDecorations()
     */
-    void UseNativeDecorations(bool native = @true);
+    void UseNativeDecorations(bool native = true);
 
     /**
         @b @c This method is specific to wxUniversal port
-        
         Top level windows in wxUniversal port can use either system-provided window
         decorations (i.e. title bar and various icons, buttons and menus in it) or draw
         the decorations themselves. By default the system decorations are used if they
-        are available, but this method can be called with @e native set to @false to
+        are available, but this method can be called with @a native set to @false to
         change this for all windows created after this point.
-        
         Also note that if @c WXDECOR environment variable is set, then custom
         decorations are used by default and so it may make sense to call this method
         with default argument if the application can't use custom decorations at all
         for some reason.
     */
-    void UseNativeDecorationsByDefault(bool native = @true);
+    void UseNativeDecorationsByDefault(bool native = true);
 };

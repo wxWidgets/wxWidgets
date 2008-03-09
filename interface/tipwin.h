@@ -28,41 +28,36 @@ public:
         Constructor. The tip is shown immediately after the window is constructed.
         
         @param parent
-        The parent window, must be non-@NULL
-        
+            The parent window, must be non-@NULL
         @param text
-        The text to show, may contain the new line characters
-        
+            The text to show, may contain the new line characters
         @param maxLength
-        The length of each line, in pixels. Set to a very large
-        value to avoid wrapping lines
-        
+            The length of each line, in pixels. Set to a very large
+            value to avoid wrapping lines
         @param windowPtr
-        Simply passed to
-        SetTipWindowPtr below, please see its
-        documentation for the description of this parameter
-        
+            Simply passed to
+            SetTipWindowPtr below, please see its
+            documentation for the description of this parameter
         @param rectBounds
-        If non-@NULL, passed to
-        SetBoundingRect below, please see its
-        documentation for the description of this parameter
+            If non-@NULL, passed to
+            SetBoundingRect below, please see its
+            documentation for the description of this parameter
     */
     wxTipWindow(wxWindow* parent, const wxString& text,
                 wxCoord maxLength = 100,
                 wxTipWindow** windowPtr,
-                wxRect * rectBounds = @NULL);
+                wxRect* rectBounds = NULL);
 
     /**
         By default, the tip window disappears when the user clicks the mouse or presses
         a keyboard key or if it loses focus in any other way - for example because the
         user switched to another application window.
-        
-        Additionally, if a non-empty @e rectBound is provided, the tip window will
+        Additionally, if a non-empty @a rectBound is provided, the tip window will
         also automatically close if the mouse leaves this area. This is useful to
         dismiss the tip mouse when the mouse leaves the object it is associated with.
         
         @param rectBound
-        The bounding rectangle for the mouse in the screen coordinates
+            The bounding rectangle for the mouse in the screen coordinates
     */
     void SetBoundingRect(const wxRect& rectBound);
 

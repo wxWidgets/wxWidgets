@@ -27,8 +27,8 @@
     @category{FIXME}
 
     @seealso
-    @ref overview_wxfontencodingoverview "Font encoding overview", @ref
-    overview_samplefont "Font sample", wxFont, wxFontMapper
+    @ref overview_wxfontencodingoverview, @ref overview_samplefont "Font sample",
+    wxFont, wxFontMapper
 */
 class wxFontEnumerator
 {
@@ -36,20 +36,19 @@ public:
     /**
         Call OnFontEncoding() for each
         encoding supported by the given font - or for each encoding supported by at
-        least some font if @e font is not specified.
+        least some font if @a font is not specified.
     */
     virtual bool EnumerateEncodings(const wxString& font = "");
 
     /**
         Call OnFacename() for each font which
         supports given encoding (only if it is not wxFONTENCODING_SYSTEM) and is of
-        fixed width (if @e fixedWidthOnly is @true).
-        
+        fixed width (if @a fixedWidthOnly is @true).
         Calling this function with default arguments will result in enumerating all
         fonts available on the system.
     */
     virtual bool EnumerateFacenames(wxFontEncoding encoding = wxFONTENCODING_SYSTEM,
-                                    bool fixedWidthOnly = @false);
+                                    bool fixedWidthOnly = false);
 
     /**
         Return array of strings containing all encodings found by
@@ -62,14 +61,14 @@ public:
         EnumerateFacenames().
     */
     static wxArrayString GetFacenames(wxFontEncoding encoding = wxFONTENCODING_SYSTEM,
-                                      bool fixedWidthOnly = @false);
+                                      bool fixedWidthOnly = false);
 
     /**
         Returns @true if the given string is valid face name, i.e. it's the face name
         of an installed
         font and it can safely be used with wxFont::SetFaceName.
     */
-    static bool IsValidFacename(const wxString & facename);
+    static bool IsValidFacename(const wxString& facename);
 
     /**
         Called by EnumerateFacenames() for

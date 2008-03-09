@@ -22,23 +22,20 @@ class wxPostScriptDC : public wxDC
 public:
     //@{
     /**
-        Constructor. @e output is an optional file for printing to, and if
-        @e interactive is @true a dialog box will be displayed for adjusting
-        various parameters. @e parent is the parent of the printer dialog box.
-        
+        Constructor. @a output is an optional file for printing to, and if
+        @a interactive is @true a dialog box will be displayed for adjusting
+        various parameters. @a parent is the parent of the printer dialog box.
         Use the @e Ok member to test whether the constructor was successful
         in creating a usable device context.
-        
         See @ref overview_printersettings "Printer settings" for functions to set and
         get PostScript printing settings.
-        
         This constructor and the global printer settings are now deprecated;
         use the wxPrintData constructor instead.
     */
     wxPostScriptDC(const wxPrintData& printData);
     wxPostScriptDC(const wxString& output,
-                   bool interactive = @true,
-                   wxWindow * parent);
+                   bool interactive = true,
+                   wxWindow* parent);
     //@}
 
     /**
@@ -84,7 +81,7 @@ void wxSetPrinterOptions(const wxString& options);
     Gets the translation (from the top left corner) for PostScript output. The
     default is 0.0, 0.0.
 */
-void wxGetPrinterTranslation(float * x, float * y);
+void wxGetPrinterTranslation(float* x, float* y);
 
 /**
     Sets the scaling factor for PostScript output. The default is 1.0, 1.0.
@@ -135,7 +132,7 @@ int wxGetPrinterMode();
 /**
     Gets the scaling factor for PostScript output. The default is 1.0, 1.0.
 */
-void wxGetPrinterScaling(float * x, float * y);
+void wxGetPrinterScaling(float* x, float* y);
 
 /**
     Sets the command used to view a PostScript file. The default depends on the

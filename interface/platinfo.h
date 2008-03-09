@@ -42,17 +42,16 @@ public:
     /**
         Returns @true if the OS version is at least @c major.minor.
         
-        @sa GetOSMajorVersion(), GetOSMinorVersion(),
-              CheckToolkitVersion()
+        @see GetOSMajorVersion(), GetOSMinorVersion(),
+             CheckToolkitVersion()
     */
     bool CheckOSVersion(int major, int minor);
 
     /**
         Returns @true if the toolkit version is at least @c major.minor.
         
-        @sa GetToolkitMajorVersion(),
-              GetToolkitMinorVersion(),
-              CheckOSVersion()
+        @see GetToolkitMajorVersion(),
+             GetToolkitMinorVersion(), CheckOSVersion()
     */
     bool CheckToolkitVersion(int major, int minor);
 
@@ -60,7 +59,7 @@ public:
         Returns the global wxPlatformInfo object, initialized with the values for the
         currently running platform.
     */
-#define static const wxPlatformInfo Get()     /* implementation is private */
+    static const wxPlatformInfo Get();
 
     /**
         Converts the given string to a wxArchitecture enum value or to
@@ -103,7 +102,7 @@ public:
         wxPlatformInfo instance.
         See wxGetOsVersion for more info.
         
-        @sa CheckOSVersion()
+        @see CheckOSVersion()
     */
     int GetOSMajorVersion();
 
@@ -112,7 +111,7 @@ public:
         wxPlatformInfo instance.
         See wxGetOsVersion for more info.
         
-        @sa CheckOSVersion()
+        @see CheckOSVersion()
     */
     int GetOSMinorVersion();
 
@@ -174,10 +173,9 @@ public:
         wxPlatformInfo instance.
         Note that if GetPortId() returns wxPORT_BASE, then this value is zero (unless
         externally modified with wxPlatformInfo::SetToolkitVersion); that is, no native toolkit is in use.
-        
         See wxAppTraits::GetToolkitVersion for more info.
         
-        @sa CheckToolkitVersion()
+        @see CheckToolkitVersion()
     */
     int GetToolkitMajorVersion();
 
@@ -186,17 +184,16 @@ public:
         wxPlatformInfo instance.
         Note that if GetPortId() returns wxPORT_BASE, then this value is zero (unless
         externally modified with wxPlatformInfo::SetToolkitVersion); that is, no native toolkit is in use.
-        
         See wxAppTraits::GetToolkitVersion for more info.
         
-        @sa CheckToolkitVersion()
+        @see CheckToolkitVersion()
     */
     int GetToolkitMinorVersion();
 
     /**
         Returns @true if this instance is fully initialized with valid values.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Returns @true if this wxPlatformInfo describes wxUniversal build.

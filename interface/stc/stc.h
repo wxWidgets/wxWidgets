@@ -141,12 +141,12 @@ public:
     /**
         
     */
-#define int GetX()     /* implementation is private */
+    int GetX();
 
     /**
         
     */
-#define int GetY()     /* implementation is private */
+    int GetY();
 
     /**
         
@@ -241,12 +241,12 @@ public:
     /**
         
     */
-#define void SetX(int val)     /* implementation is private */
+    void SetX(int val);
 
     /**
         
     */
-#define void SetY(int val)     /* implementation is private */
+    void SetY(int val);
 };
 
 
@@ -283,7 +283,7 @@ public:
     /**
         Ctor.
     */
-    wxStyledTextCtrl::wxStyledTextCtrl(wxWindow * parent,
+    wxStyledTextCtrl::wxStyledTextCtrl(wxWindow* parent,
                                        wxWindowID id = wxID_ANY,
                                        const wxPoint pos = wxDefaultPosition,
                                        const wxSize size = wxDefaultSize,
@@ -692,7 +692,7 @@ public:
     /**
         Cut the selection to the clipboard.
     */
-#define void Cut()     /* implementation is private */
+    void Cut();
 
     /**
         Delete back from the current position to the start of the line.
@@ -901,7 +901,6 @@ public:
 
     /**
         END of generated section
-        
         Others...
         Returns the line number of the line with the caret.
     */
@@ -2571,7 +2570,7 @@ public:
         character.
         If more than one line selected, indent the lines.
     */
-#define void Tab()     /* implementation is private */
+    void Tab();
 
     /**
         Make the target range start and end be the same as the selection range start

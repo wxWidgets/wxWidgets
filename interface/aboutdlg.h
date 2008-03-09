@@ -44,52 +44,54 @@ class wxAboutDialogInfo
 public:
     /**
         Default constructor leaves all fields are initially uninitialized, in general
-        you should call at least SetVersion(), SetCopyright() and SetDescription().
+        you should call at least SetVersion(),
+        SetCopyright() and
+        SetDescription().
     */
     wxAboutDialogInfo();
 
     /**
         Adds an artist name to be shown in the program credits.
         
-        @sa SetArtists()
+        @see SetArtists()
     */
     void AddArtist(const wxString& artist);
 
     /**
         Adds a developer name to be shown in the program credits.
         
-        @sa SetDevelopers()
+        @see SetDevelopers()
     */
     void AddDeveloper(const wxString& developer);
 
     /**
         Adds a documentation writer name to be shown in the program credits.
         
-        @sa SetDocWriters()
+        @see SetDocWriters()
     */
     void AddDocWriter(const wxString& docwriter);
 
     /**
         Adds a translator name to be shown in the program credits. Notice that if no
-        translator names are specified explicitely, wxAboutBox will try to use the
-        translation of the string @c translator-credits from the currently used message
-        catalog -- this can be used to show just the name of the translator of the
-        program in the current language.
+        translator names are specified explicitely, wxAboutBox
+        will try to use the translation of the string @c translator-credits from
+        the currently used message catalog -- this can be used to show just the name of
+        the translator of the program in the current language.
         
-        @sa SetTranslators()
+        @see SetTranslators()
     */
     void AddTranslator(const wxString& translator);
 
     /**
         Sets the the list of artists to be shown in the program credits.
         
-        @sa AddArtist()
+        @see AddArtist()
     */
     void SetArtists(const wxArrayString& artists);
 
     /**
-        Set the short string containing the program copyright information. Notice
-        that any occurrences of @c "(C)" in @e copyright will be replaced by the
+        Set the short string containing the program copyright information. Notice that
+        any occurrences of @c "(C)" in @a copyright will be replaced by the
         copyright symbol (circled C) automatically, which means that you can avoid
         using this symbol in the program source code which can be problematic,
     */
@@ -103,14 +105,14 @@ public:
     /**
         Set the list of developers of the program.
         
-        @sa AddDeveloper()
+        @see AddDeveloper()
     */
     void SetDevelopers(const wxArrayString& developers);
 
     /**
         Set the list of documentation writers.
         
-        @sa AddDocWriter()
+        @see AddDocWriter()
     */
     void SetDocWriters(const wxArrayString& docwriters);
 
@@ -125,7 +127,6 @@ public:
 
     /**
         Set the long, multiline string containing the text of the program licence.
-        
         Only GTK+ version supports showing the licence text in the native about dialog
         currently so the generic version will be used under all the other platforms if
         this method is called. To preserve the native look and feel it is advised that
@@ -146,21 +147,22 @@ public:
     void SetName(const wxString& name);
 
     /**
-        Set the list of translators. Please see AddTranslator() for additional
+        Set the list of translators. Please see
+        AddTranslator() for additional
         discussion.
     */
     void SetTranslators(const wxArrayString& translators);
 
     /**
         Set the version of the program. The version is in free format, i.e. not
-        necessarily in the @c x.y.z form but it shouldn't contain the "version" word.
+        necessarily in the @c x.y.z form but it shouldn't contain the "version"
+        word.
     */
     void SetVersion(const wxString& version);
 
     /**
         Set the web site for the program and its description (which defaults to URL
         itself if empty).
-        
         Please notice that only GTK+ version currently supports showing the link in the
         native about dialog so if this method is called, the generic version will be
         used under all the other platforms.
@@ -180,7 +182,6 @@ public:
     which is capable of showing all the fields in @e info, the native dialog is
     used, otherwise the function falls back to the generic wxWidgets version of the
     dialog, i.e. does the same thing as wxGenericAboutBox.
-
     Here is an example of how this function may be used:
 
     @code
@@ -208,11 +209,11 @@ void wxAboutBox(const wxAboutDialogInfo& info);
     native one. This is mainly useful if you need to customize the dialog by e.g.
     adding custom controls to it (customizing the native dialog is not currently
     supported).
-
     See the @ref overview_sampledialogs "dialogs sample" for an example of about
-    dialog customization.
+    dialog
+    customization.
 
-    @sa wxAboutDialogInfo
+    @see wxAboutDialogInfo
 */
 void wxGenericAboutBox(const wxAboutDialogInfo& info);
 

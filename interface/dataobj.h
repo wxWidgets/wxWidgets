@@ -37,7 +37,7 @@ class wxCustomDataObject : public wxDataObjectSimple
 {
 public:
     /**
-        The constructor accepts a @e format argument which specifies the (single)
+        The constructor accepts a @a format argument which specifies the (single)
         format supported by this object. If it isn't set here,
         wxDataObjectSimple::SetFormat should be used.
     */
@@ -54,10 +54,10 @@ public:
     ~wxCustomDataObject();
 
     /**
-        This function is called to allocate @e size bytes of memory from SetData().
+        This function is called to allocate @a size bytes of memory from SetData().
         The default version just uses the operator new.
     */
-    virtual void * Alloc(size_t size);
+    virtual void* Alloc(size_t size);
 
     /**
         This function is called when the data is freed, you may override it to anything
@@ -69,7 +69,7 @@ public:
     /**
         Returns a pointer to the data.
     */
-    virtual void * GetData();
+    virtual void* GetData();
 
     /**
         Returns the data size in bytes.
@@ -84,7 +84,6 @@ public:
     /**
         Like SetData(), but doesn't copy the data -
         instead the object takes ownership of the pointer.
-        
         @b wxPython note: This method expects a string in wxPython.  You can pass
         nearly any object by pickling it first.
     */
@@ -125,10 +124,10 @@ public:
     wxDataObjectComposite();
 
     /**
-        Adds the @e dataObject to the list of supported objects and it becomes the
-        preferred object if @e preferred is @true.
+        Adds the @a dataObject to the list of supported objects and it becomes the
+        preferred object if @a preferred is @true.
     */
-#define void Add(wxDataObjectSimple dataObject, bool preferred = @false)     /* implementation is private */
+    void Add(wxDataObjectSimple dataObject, bool preferred = false);
 
     /**
         Report the format passed to the SetData method.  This should be the
@@ -197,7 +196,6 @@ public:
     /**
         Copy the data from the buffer, return @true on success. Must be implemented in
         the derived class if the object supports setting its data.
-        
         @b wxPython note: When implementing this method in wxPython, the data comes
         as a single string parameter rather than the two shown here.
     */
@@ -401,7 +399,7 @@ class wxURLDataObject
 {
 public:
     /**
-        Constructor, may be used to initialize the URL. If @e url is empty,
+        Constructor, may be used to initialize the URL. If @a url is empty,
         SetURL() can be used later.
     */
     wxURLDataObject(const wxString& url = wxEmptyString);
@@ -409,12 +407,12 @@ public:
     /**
         Returns the URL stored by this object, as a string.
     */
-#define wxString GetURL()     /* implementation is private */
+    wxString GetURL();
 
     /**
         Sets the URL stored by this object.
     */
-#define void SetURL(const wxString& url)     /* implementation is private */
+    void SetURL(const wxString& url);
 };
 
 
@@ -563,11 +561,11 @@ public:
         Copy all supported formats in the given direction to the array pointed to by
         @e formats. There is enough space for GetFormatCount(dir) formats in it.
     */
-    virtual void GetAllFormats(wxDataFormat * formats,
+    virtual void GetAllFormats(wxDataFormat* formats,
                                Direction dir = Get);
 
     /**
-        The method will write the data of the format @e format in the buffer @e buf and
+        The method will write the data of the format @a format in the buffer @a buf and
         return @true on success, @false on failure.
     */
     virtual bool GetDataHere(const wxDataFormat& format, void buf);
@@ -583,16 +581,15 @@ public:
     virtual size_t GetFormatCount(Direction dir = Get);
 
     /**
-        Returns the preferred format for either rendering the data (if @e dir is @c Get,
+        Returns the preferred format for either rendering the data (if @a dir is @c Get,
         its default value) or for setting it. Usually this will be the
         native format of the wxDataObject.
     */
     virtual wxDataFormat GetPreferredFormat(Direction dir = Get);
 
     /**
-        Set the data in the format @e format of the length @e len provided in the
+        Set the data in the format @a format of the length @a len provided in the
         buffer @e buf.
-        
         Returns @true on success, @false on failure.
     */
     virtual bool SetData(const wxDataFormat& format, size_t len,

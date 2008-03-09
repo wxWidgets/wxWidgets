@@ -35,7 +35,6 @@ public:
         Here are the trivial accessors. Other functions, which might have to perform
         some more complicated calculations to find the answer are under the
         @ref overview_datetimecalculations "Calendar calculations" section.
-        
         IsValid()
         
         GetTicks()
@@ -89,7 +88,6 @@ public:
         @ref setjdn() JDN and you may also get its JDN,
         @ref getmodifiedjuliandaynumber() MJD or
         @ref getratadie() "Rata Die number" from it.
-        
         @ref wxdatetimejdn() "wxDateTime(double jdn)"
         
         @ref setjdn() "Set(double jdn)"
@@ -110,10 +108,8 @@ public:
         The functions in this section perform the basic calendar calculations, mostly
         related to the week days. They allow to find the given week day in the
         week with given number (either in the month or in the year) and so on.
-        
         All (non-const) functions in this section don't modify the time part of the
         wxDateTime -- they only work with the date part of it.
-        
         SetToWeekDayInSameWeek()
         
         GetWeekDayInSameWeek()
@@ -151,7 +147,6 @@ public:
         construct a date object from separate values for day, month and year, you
         should use IsValid() method to check that the
         values were correct as constructors can not return an error code.
-        
         @ref wxdatetimedef() wxDateTime
         
         @ref wxdatetimetimet() wxDateTime(time_t)
@@ -205,7 +200,6 @@ public:
         positive or zero) to the year in BC/AD notation. For the positive years,
         nothing is done, but the year 0 is year 1 BC and so for other years there is a
         difference of 1.
-        
         This function should be used like this:
     */
     static int ConvertYearToBC(int year);
@@ -215,13 +209,11 @@ public:
         objects. As explained in the overview, either wxTimeSpan or wxDateSpan may be
         added to wxDateTime, hence all functions are overloaded to accept both
         arguments.
-        
         Also, both @c Add() and @c Subtract() have both const and non-const
         version. The first one returns a new object which represents the
         sum/difference of the original one with the argument while the second form
         modifies the object to which it is applied. The operators -= and += are
         defined to be equivalent to the second forms of these functions.
-        
         @ref addts() Add(wxTimeSpan)
         
         @ref addds() Add(wxDateSpan)
@@ -245,7 +237,6 @@ public:
     /**
         There are several function to allow date comparison. To supplement them, a few
         global operators ,  etc taking wxDateTime are defined.
-        
         IsEqualTo()
         
         IsEarlierThan()
@@ -266,15 +257,14 @@ public:
 
     /**
         This function does the same as the standard ANSI C @c strftime(3) function.
-        Please see its description for the meaning of @e format parameter.
-        
+        Please see its description for the meaning of @a format parameter.
         It also accepts a few wxWidgets-specific extensions: you can optionally specify
         the width of the field to follow using @c printf(3)-like syntax and the
         format specification @c %l can be used to get the number of milliseconds.
         
-        @sa ParseFormat()
+        @see ParseFormat()
     */
-    wxString Format(const wxChar * format = wxDefaultDateTimeFormat,
+    wxString Format(const wxChar* format = wxDefaultDateTimeFormat,
                     const TimeZone& tz = Local);
 
     /**
@@ -285,13 +275,13 @@ public:
 
     /**
         Returns the combined date-time representation in the ISO 8601 format
-        (YYYY-MM-DDTHH:MM:SS). The @e sep parameter default value produces the
+        (YYYY-MM-DDTHH:MM:SS). The @a sep parameter default value produces the
         result exactly corresponding to the ISO standard, but it can also be useful to
         use a space as seprator if a more human-readable combined date-time
         representation is needed.
         
-        @sa FormatISODate(), FormatISOTime(),
-              ParseISOCombined()
+        @see FormatISODate(), FormatISOTime(),
+             ParseISOCombined()
     */
     wxString FormatISOCombined(char sep = 'T');
 
@@ -314,20 +304,19 @@ public:
     wxString FormatTime();
 
     /**
-        Transform the date from the given time zone to the local one. If @e noDST is
+        Transform the date from the given time zone to the local one. If @a noDST is
         @true, no DST adjustments will be made.
-        
         Returns the date in the local time zone.
     */
     wxDateTime FromTimezone(const TimeZone& tz,
-                            bool noDST = @false);
+                            bool noDST = false);
 
     /**
         Returns the translations of the strings @c AM and @c PM used for time
         formatting for the current locale. Either of the pointers may be @NULL if
         the corresponding value is not needed.
     */
-    static void GetAmPmStrings(wxString * am, wxString * pm);
+    static void GetAmPmStrings(wxString* am, wxString* pm);
 
     /**
         Returns the date and time in
@@ -341,7 +330,7 @@ public:
         by default). This function suffers from limitations described in
         @ref overview_tdatedst "DST overview".
         
-        @sa GetEndDST()
+        @see GetEndDST()
     */
     static wxDateTime GetBeginDST(int year = Inv_Year,
                                   Country country = Country_Default);
@@ -355,7 +344,7 @@ public:
         Returns the current default country. The default country is used for DST
         calculations, for example.
         
-        @sa SetCountry()
+        @see SetCountry()
     */
     static Country GetCountry();
 
@@ -372,10 +361,9 @@ public:
     /**
         Returns the object having the same date component as this one but time of
         00:00:00.
-        
         This function is new since wxWidgets version 2.8.2
         
-        @sa ResetTime()
+        @see ResetTime()
     */
     wxDateTime GetDateOnly();
 
@@ -394,7 +382,7 @@ public:
         Returns the end of DST for the given country in the given year (current one by
         default).
         
-        @sa GetBeginDST()
+        @see GetBeginDST()
     */
     static wxDateTime GetEndDST(int year = Inv_Year,
                                 Country country = Country_Default);
@@ -407,13 +395,13 @@ public:
     /**
         Synonym for GetJulianDayNumber().
     */
-#define double GetJDN()     /* implementation is private */
+    double GetJDN();
 
     /**
         Returns the @ref setjdn() JDN corresponding to this date. Beware
         of rounding errors!
         
-        @sa GetModifiedJulianDayNumber()
+        @see GetModifiedJulianDayNumber()
     */
     double GetJulianDayNumber();
 
@@ -435,7 +423,7 @@ public:
     /**
         Synonym for GetModifiedJulianDayNumber().
     */
-#define double GetMJD()     /* implementation is private */
+    double GetMJD();
 
     /**
         Returns the milliseconds in the given timezone (local one by default).
@@ -464,7 +452,7 @@ public:
         Gets the full (default) or abbreviated (specify @c Name_Abbr name of the
         given month.
         
-        @sa GetWeekDayName()
+        @see GetWeekDayName()
     */
     static wxString GetMonthName(Month month,
                                  NameFlags flags = Name_Full);
@@ -479,8 +467,7 @@ public:
     /**
         Returns the number of days in the given year or in the given month of the
         year.
-        
-        The only supported value for @e cal parameter is currently @c Gregorian.
+        The only supported value for @a cal parameter is currently @c Gregorian.
     */
     static wxDateTime_t GetNumberOfDays(int year,
                                         Calendar cal = Gregorian);
@@ -497,7 +484,6 @@ public:
 
     /**
         Return the @e Rata Die number of this date.
-        
         By definition, the Rata Die number is a date specified as the number of days
         relative to a base date of December 31 of the year 0. Thus January 1 of the
         year 1 is Rata Die day 1.
@@ -533,7 +519,7 @@ public:
         the flavour of function GetTmNow()
         taking a parameter.
     */
-    static struct tm * GetTmNow();
+    static struct tm* GetTmNow();
 
     /**
         Returns the copy of this object to which
@@ -555,14 +541,13 @@ public:
         Gets the full (default) or abbreviated (specify @c Name_Abbr name of the
         given week day.
         
-        @sa GetMonthName()
+        @see GetMonthName()
     */
     static wxString GetWeekDayName(WeekDay weekday,
                                    NameFlags flags = Name_Full);
 
     /**
         Returns the ordinal number of the week in the month (in 1...5  range).
-        
         As GetWeekOfYear(), this function supports
         both conventions for the week start. See the description of these
         @ref overview_wxdatetime "week start" conventions.
@@ -577,9 +562,8 @@ public:
         definitions are the same as saying that the first week of the year must contain
         more than half of its days in this year. Accordingly, the week number will
         always be in 1...53 range (52 for non-leap years).
-        
         The function depends on the @ref overview_wxdatetime "week start" convention
-        specified by the @e flags argument but its results for
+        specified by the @a flags argument but its results for
         @c Sunday_First are not well-defined as the ISO definition quoted above
         applies to the weeks starting on Monday only.
     */
@@ -601,14 +585,14 @@ public:
         Returns @true if IsStrictlyBetween()
         is @true or if the date is equal to one of the limit values.
         
-        @sa IsStrictlyBetween()
+        @see IsStrictlyBetween()
     */
     bool IsBetween(const wxDateTime& t1, const wxDateTime& t2);
 
     /**
         Returns @true if the DST is applied for this date in the given country.
     */
-#define int IsDST(Country country = Country_Default)     /* implementation is private */
+    int IsDST(Country country = Country_Default);
 
     /**
         Returns @true if DST was used n the given year (the current one by
@@ -647,8 +631,7 @@ public:
     bool IsLaterThan(const wxDateTime& datetime);
 
     /**
-        Returns @true if the @e year is a leap one in the specified calendar.
-        
+        Returns @true if the @a year is a leap one in the specified calendar.
         This functions supports Gregorian and Julian calendars.
     */
     static bool IsLeapYear(int year = Inv_Year,
@@ -667,7 +650,7 @@ public:
     /**
         Returns @true if this date lies strictly between the two others,
         
-        @sa IsBetween()
+        @see IsBetween()
     */
     bool IsStrictlyBetween(const wxDateTime& t1,
                            const wxDateTime& t2);
@@ -694,32 +677,32 @@ public:
         in place.
     */
     wxDateTime MakeFromTimezone(const TimeZone& tz,
-                                bool noDST = @false);
+                                bool noDST = false);
 
     /**
         Modifies the object in place to represent the date in another time zone. If
-        @e noDST is @true, no DST adjustments will be made.
+        @a noDST is @true, no DST adjustments will be made.
     */
     wxDateTime MakeTimezone(const TimeZone& tz,
-                            bool noDST = @false);
+                            bool noDST = false);
 
     /**
         This is the same as calling MakeTimezone() with
         the argument @c GMT0.
     */
-    wxDateTime MakeUTC(bool noDST = @false);
+    wxDateTime MakeUTC(bool noDST = false);
 
     /**
         Returns the object corresponding to the current time.
-        
         Example:
+        
         Note that this function is accurate up to second:
         UNow() should be used for better precision
         (but it is less efficient and might not be available on all platforms).
         
-        @sa Today()
+        @see Today()
     */
-#define static wxDateTime Now()     /* implementation is private */
+    static wxDateTime Now();
 
     //@{
     /**
@@ -727,72 +710,66 @@ public:
         only allows the date to be specified. It is thus less flexible then
         ParseDateTime(), but also has less chances to
         misinterpret the user input.
-        
         Returns @NULL if the conversion failed, otherwise return the pointer to
         the character which stopped the scan.
     */
-    const char * ParseDate(const wxString& date,
-                           wxString::const_iterator * end = @NULL);
-    const char * ParseDate(const char * date);
-    const wchar_t * ParseDate(const wchar_t * date);
+    const char* ParseDate(const wxString& date,
+                          wxString::const_iterator* end = NULL);
+    const char* ParseDate(const char* date);
+    const wchar_t* ParseDate(const wchar_t* date);
     //@}
 
     //@{
     /**
-        Parses the string @e datetime containing the date and time in free format.
+        Parses the string @a datetime containing the date and time in free format.
         This function tries as hard as it can to interpret the given string as date
         and time. Unlike wxDateTime::ParseRfc822Date, it
         will accept anything that may be accepted and will only reject strings which
         can not be parsed in any way at all.
-        
         Returns @NULL if the conversion failed, otherwise return the pointer to
         the character which stopped the scan.
     */
-    const char * ParseDateTime(const wxString& datetime,
-                               wxString::const_iterator * end = @NULL);
-    const char * ParseDateTime(const char * datetime);
-    const wchar_t * ParseDateTime(const wchar_t * datetime);
+    const char* ParseDateTime(const wxString& datetime,
+                              wxString::const_iterator* end = NULL);
+    const char* ParseDateTime(const char* datetime);
+    const wchar_t* ParseDateTime(const wchar_t* datetime);
     //@}
 
     //@{
     /**
-        This function parses the string @e date according to the given
+        This function parses the string @a date according to the given
         @e format. The system @c strptime(3) function is used whenever available,
         but even if it is not, this function is still implemented, although support
         for locale-dependent format specifiers such as @c "%c", @c "%x" or @c "%X" may
         not be perfect and GNU extensions such as @c "%z" and @c "%Z" are
         not implemented. This function does handle the month and weekday
         names in the current locale on all platforms, however.
-        
         Please see the description of the ANSI C function @c strftime(3) for the syntax
         of the format string.
-        
-        The @e dateDef parameter is used to fill in the fields which could not be
+        The @a dateDef parameter is used to fill in the fields which could not be
         determined from the format string. For example, if the format is @c "%d" (the
         ay of the month), the month and the year are taken from @e dateDef. If
         it is not specified, Today() is used as the
         default date.
-        
         Returns @NULL if the conversion failed, otherwise return the pointer to
         the character which stopped the scan.
     */
-    const char * ParseFormat(const wxString& date,
-                             const wxString& format = wxDefaultDateTimeFormat,
-                             const wxDateTime& dateDef = wxDefaultDateTime,
-                             wxString::const_iterator * end = @NULL);
-    const char * ParseFormat(const char * date,
-                             const wxString& format = wxDefaultDateTimeFormat,
-                             const wxDateTime& dateDef = wxDefaultDateTime);
-    const wchar_t * ParseFormat(const wchar_t * date,
-                                const wxString& format = wxDefaultDateTimeFormat,
-                                const wxDateTime& dateDef = wxDefaultDateTime);
+    const char* ParseFormat(const wxString& date,
+                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxDateTime& dateDef = wxDefaultDateTime,
+                            wxString::const_iterator* end = NULL);
+    const char* ParseFormat(const char* date,
+                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxDateTime& dateDef = wxDefaultDateTime);
+    const wchar_t* ParseFormat(const wchar_t* date,
+                               const wxString& format = wxDefaultDateTimeFormat,
+                               const wxDateTime& dateDef = wxDefaultDateTime);
     //@}
 
     /**
         This function parses the string containing the date and time in ISO 8601
         combined format (YYYY-MM-DDTHH:MM:SS). The separator between the date and time
-        parts must be equal to @e sep for the function to succeed.
-        
+        parts must be equal to @a sep for the function to succeed.
         Returns @true if the entire string was parsed successfully, @false
         otherwise.
     */
@@ -800,7 +777,6 @@ public:
 
     /**
         This function parses the date in ISO 8601 format (YYYY-MM-DD).
-        
         Returns @true if the entire string was parsed successfully, @false
         otherwise.
     */
@@ -808,7 +784,6 @@ public:
 
     /**
         This function parses the time in ISO 8601 format (HH:MM:SS).
-        
         Returns @true if the entire string was parsed successfully, @false
         otherwise.
     */
@@ -816,40 +791,37 @@ public:
 
     //@{
     /**
-        Parses the string @e date looking for a date formatted according to the RFC
+        Parses the string @a date looking for a date formatted according to the RFC
         822 in it. The exact description of this format may, of course, be found in
         the RFC (section 5), but, briefly, this is the format used in the headers of
         Internet email messages and one of the most common strings expressing date in
         this format may be something like @c "Sat, 18 Dec 1999 00:48:30 +0100".
-        
         Returns @NULL if the conversion failed, otherwise return the pointer to
         the character immediately following the part of the string which could be
         parsed. If the entire string contains only the date in RFC 822 format,
         the returned pointer will be pointing to a @c NUL character.
-        
         This function is intentionally strict, it will return an error for any string
         which is not RFC 822 compliant. If you need to parse date formatted in more
         free ways, you should use ParseDateTime() or
         ParseDate() instead.
     */
-    const char * ParseRfc822Date(const wxString& date,
-                                 wxString::const_iterator * end = @NULL);
-    const char * ParseRfc822Date(const char* date);
-    const wchar_t * ParseRfc822Date(const wchar_t* date);
+    const char* ParseRfc822Date(const wxString& date,
+                                wxString::const_iterator* end = NULL);
+    const char* ParseRfc822Date(const char* date);
+    const wchar_t* ParseRfc822Date(const wchar_t* date);
     //@}
 
     //@{
     /**
         This functions is like ParseDateTime(), but
         only allows the time to be specified in the input string.
-        
         Returns @NULL if the conversion failed, otherwise return the pointer to
         the character which stopped the scan.
     */
-    const char * ParseTime(const wxString& time,
-                           wxString::const_iterator * end = @NULL);
-    const char * ParseTime(const char * time);
-    const wchar_t * ParseTime(const wchar_t * time);
+    const char* ParseTime(const wxString& time,
+                          wxString::const_iterator* end = NULL);
+    const char* ParseTime(const char* time);
+    const wchar_t* ParseTime(const wchar_t* time);
     //@}
 
     /**
@@ -863,7 +835,6 @@ public:
         FormatISOTime() and
         wxDateTime::FormatISOCombined) or by specifying any
         format at all and using Format() directly.
-        
         The conversions from text are more interesting, as there are much more
         possibilities to care about. The simplest cases can be taken care of with
         ParseFormat() which can parse any date in the
@@ -872,7 +843,6 @@ public:
         which (still...) defines the format of email messages on the Internet. This
         format can not be described with @c strptime(3)-like format strings used by
         Format(), hence the need for a separate function.
-        
         But the most interesting functions are
         ParseTime(),
         ParseDate() and
@@ -883,7 +853,6 @@ public:
         format. As an example, ParseDateTime() can
         parse the strings such as @c "tomorrow", @c "March first" and even
         @c "next Sunday".
-        
         Finally notice that each of the parsing functions is available in several
         overloads: if the input string is a narrow (@c char *) string, then a
         narrow pointer is returned. If the input string is a wide string, a wide char
@@ -891,7 +860,6 @@ public:
         char pointer is also returned for backwards compatibility but there is also an
         additional argument of wxString::const_iterator type in which, if it is not
         @NULL, an iterator pointing to the end of the scanned string part is returned.
-        
         ParseFormat()
         
         ParseDateTime()
@@ -930,21 +898,20 @@ public:
     /**
         Sets the date and time from the parameters.
     */
-#define wxDateTime Set(wxDateTime_t day, Month month = Inv_Month,
-    int year = Inv_Year,
-               wxDateTime_t hour = 0,
-                                   wxDateTime_t minute = 0,
-                                                         wxDateTime_t second = 0,
-                                                                               wxDateTime_t millisec = 0)     /* implementation is private */
+    wxDateTime Set(wxDateTime_t day, Month month = Inv_Month,
+                   int year = Inv_Year,
+                   wxDateTime_t hour = 0,
+                   wxDateTime_t minute = 0,
+                   wxDateTime_t second = 0,
+                   wxDateTime_t millisec = 0);
 
     /**
         Sets the country to use by default. This setting influences the DST
         calculations, date formatting and other things.
-        
-        The possible values for @e country parameter are enumerated in
+        The possible values for @a country parameter are enumerated in
         @ref overview_wxdatetime "wxDateTime constants section".
         
-        @sa GetCountry()
+        @see GetCountry()
     */
     static void SetCountry(Country country);
 
@@ -994,7 +961,6 @@ public:
     /**
         Sets the date to the last day in the specified month (the current one by
         default).
-        
         Returns the reference to the modified object itself.
     */
     wxDateTime SetToLastMonthDay(Month month = Inv_Month,
@@ -1003,59 +969,52 @@ public:
     /**
         The effect of calling this function is the same as of calling
         @c SetToWeekDay(-1, weekday, month, year). The date will be set to the last
-        @e weekday in the given month and year (the current ones by default).
-        
+        @a weekday in the given month and year (the current ones by default).
         Always returns @true.
     */
     bool SetToLastWeekDay(WeekDay weekday, Month month = Inv_Month,
                           int year = Inv_Year);
 
     /**
-        Sets the date so that it will be the first @e weekday following the current
+        Sets the date so that it will be the first @a weekday following the current
         date.
-        
         Returns the reference to the modified object itself.
     */
     wxDateTime SetToNextWeekDay(WeekDay weekday);
 
     /**
-        Sets the date so that it will be the last @e weekday before the current
+        Sets the date so that it will be the last @a weekday before the current
         date.
-        
         Returns the reference to the modified object itself.
     */
     wxDateTime SetToPrevWeekDay(WeekDay weekday);
 
     /**
-        Sets the date to the @e n-th @e weekday in the given month of the given
+        Sets the date to the @e n-th @a weekday in the given month of the given
         year (the current month and year are used by default). The parameter @e n
         may be either positive (counting from the beginning of the month) or negative
         (counting from the end of it).
-        
         For example, @c SetToWeekDay(2, wxDateTime::Wed) will set the date to the
         second Wednesday in the current month and
         @c SetToWeekDay(-1, wxDateTime::Sun) -- to the last Sunday in it.
-        
         Returns @true if the date was modified successfully, @false
         otherwise meaning that the specified date doesn't exist.
     */
     bool SetToWeekDay(WeekDay weekday, int n = 1,
                       Month month = Inv_Month,
-                                    int year = Inv_Year);
+                      int year = Inv_Year);
 
     /**
         Adjusts the date so that it will still lie in the same week as before, but its
         week day will be the given one.
-        
         Returns the reference to the modified object itself.
     */
     wxDateTime SetToWeekDayInSameWeek(WeekDay weekday,
                                       WeekFlags flags = Monday_First);
 
     /**
-        Set the date to the given @e weekday in the week number @e numWeek of the
-        given @e year . The number should be in range 1...53.
-        
+        Set the date to the given @a weekday in the week number @a numWeek of the
+        given @a year . The number should be in range 1...53.
         Note that the returned date may be in a different year than the one passed to
         this function because both the week 1 and week 52 or 53 (for leap years)
         contain days from different years. See
@@ -1066,11 +1025,10 @@ public:
                                       WeekDay weekday = Mon);
 
     /**
-        Sets the date to the day number @e yday in the same year (i.e., unlike the
+        Sets the date to the day number @a yday in the same year (i.e., unlike the
         other functions, this one does not use the current year). The day number
         should be in the range 1...366 for the leap years and 1...365 for
         the other ones.
-        
         Returns the reference to the modified object itself.
     */
     wxDateTime SetToYearDay(wxDateTime_t yday);
@@ -1085,10 +1043,10 @@ public:
         either set or return the static variables of wxDateSpan (the country), return
         the current moment, year, month or number of days in it, or do some general
         calendar-related actions.
-        
         Please note that although several function accept an extra @e Calendar
         parameter, it is currently ignored as only the Gregorian calendar is
         supported. Future versions will support other calendars.
+        
         SetCountry()
         
         GetCountry()
@@ -1138,7 +1096,6 @@ public:
     /**
         Please see the @ref overview_tdatetimezones "time zone overview" for more
         information about time zones. Normally, these functions should be rarely used.
-        
         FromTimezone()
         
         ToTimezone()
@@ -1160,24 +1117,23 @@ public:
 
 
     /**
-        Transform the date to the given time zone. If @e noDST is @true, no
+        Transform the date to the given time zone. If @a noDST is @true, no
         DST adjustments will be made.
-        
         Returns the date in the new time zone.
     */
-    wxDateTime ToTimezone(const TimeZone& tz, bool noDST = @false);
+    wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false);
 
     /**
         This is the same as calling ToTimezone() with
         the argument @c GMT0.
     */
-#define wxDateTime ToUTC(bool noDST = @false)     /* implementation is private */
+    wxDateTime ToUTC(bool noDST = false);
 
     /**
         Returns the object corresponding to the midnight of the current day (i.e. the
         same as Now(), but the time part is set to 0).
         
-        @sa Now()
+        @see Now()
     */
     static wxDateTime Today();
 
@@ -1186,15 +1142,15 @@ public:
         milliseconds if a function to get time with such precision is available on the
         current platform (supported under most Unices and Win32).
         
-        @sa Now()
+        @see Now()
     */
-#define static wxDateTime UNow()     /* implementation is private */
+    static wxDateTime UNow();
 
     /**
         Same as @ref settm() Set.
     */
     wxDateTime operator(const struct tm& tm);
-            };
+};
 
 
 /**
@@ -1280,14 +1236,14 @@ public:
     /**
         Returns a date span object corresponding to one day.
         
-        @sa Days()
+        @see Days()
     */
-#define static wxDateSpan Day()     /* implementation is private */
+    static wxDateSpan Day();
 
     /**
         Returns a date span object corresponding to the given number of days.
         
-        @sa Day()
+        @see Day()
     */
     static wxDateSpan Days(int days);
 
@@ -1295,7 +1251,7 @@ public:
         Returns the number of days (only, that it not counting the weeks component!)
         in this date span.
         
-        @sa GetTotalDays()
+        @see GetTotalDays()
     */
     int GetDays();
 
@@ -1308,14 +1264,14 @@ public:
         Returns the combined number of days in this date span, counting both weeks and
         days. It still doesn't take neither months nor years into the account.
         
-        @sa GetWeeks(), GetDays()
+        @see GetWeeks(), GetDays()
     */
     int GetTotalDays();
 
     /**
         Returns the number of weeks in this date span.
         
-        @sa GetTotalDays()
+        @see GetTotalDays()
     */
     int GetWeeks();
 
@@ -1327,14 +1283,14 @@ public:
     /**
         Returns a date span object corresponding to one month.
         
-        @sa Months()
+        @see Months()
     */
     static wxDateSpan Month();
 
     /**
         Returns a date span object corresponding to the given number of months.
         
-        @sa Month()
+        @see Month()
     */
     static wxDateSpan Months(int mon);
 
@@ -1342,7 +1298,6 @@ public:
     /**
         Returns the product of the date span by the specified @e factor. The
         product is computed by multiplying each of the components by the factor.
-        
         The first version returns a new object, the second and third ones modify this
         object in place.
     */
@@ -1355,7 +1310,7 @@ public:
     /**
         Changes the sign of this date span.
         
-        @sa Negate()
+        @see Negate()
     */
     wxDateSpan Neg();
     wxDateSpan operator-();
@@ -1364,7 +1319,7 @@ public:
     /**
         Returns the date span with the opposite sign.
         
-        @sa Neg()
+        @see Neg()
     */
     wxDateSpan Negate();
 
@@ -1405,28 +1360,28 @@ public:
     /**
         Returns a date span object corresponding to one week.
         
-        @sa Weeks()
+        @see Weeks()
     */
     static wxDateSpan Week();
 
     /**
         Returns a date span object corresponding to the given number of weeks.
         
-        @sa Week()
+        @see Week()
     */
     static wxDateSpan Weeks(int weeks);
 
     /**
         Returns a date span object corresponding to one year.
         
-        @sa Years()
+        @see Years()
     */
     static wxDateSpan Year();
 
     /**
         Returns a date span object corresponding to the given number of years.
         
-        @sa Year()
+        @see Year()
     */
     static wxDateSpan Years(int years);
 
@@ -1473,7 +1428,7 @@ public:
         Returns the absolute value of the timespan: does not modify the
         object.
     */
-#define wxTimeSpan Abs()     /* implementation is private */
+    wxTimeSpan Abs();
 
     /**
         GetSeconds()
@@ -1507,7 +1462,7 @@ public:
     /**
         Returns the timespan for one day.
     */
-#define static wxTimespan Day()     /* implementation is private */
+    static wxTimespan Day();
 
     /**
         Returns the timespan for the given number of days.
@@ -1520,36 +1475,29 @@ public:
         
         H
         
-        
         number of @b Hours
         
         M
-        
         
         number of @b Minutes
         
         S
         
-        
         number of @b Seconds
         
         l
-        
         
         number of mi@b lliseconds
         
         D
         
-        
         number of @b Days
         
         E
         
-        
         number of w@b Eeks
         
         %
-        
         
         the percent character
         
@@ -1558,15 +1506,13 @@ public:
         time span of 50 hours this would be 50) or just the hour part of the time
         span, which would be 2 in this case as 50 hours is equal to 2 days and
         2 hours.
-        
         wxTimeSpan resolves this ambiguity in the following way: if there had been,
         indeed, the @c %D format specified preceding the @c %H, then it is
         interpreted as 2. Otherwise, it is 50.
-        
         The same applies to all other format specifiers: if they follow a specifier of
         larger unit, only the rest part is taken, otherwise the full value is used.
     */
-    wxString Format(const wxChar * format = wxDefaultTimeSpanFormat);
+    wxString Format(const wxChar* format = wxDefaultTimeSpanFormat);
 
     /**
         Format()

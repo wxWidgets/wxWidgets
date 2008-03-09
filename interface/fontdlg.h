@@ -56,7 +56,6 @@ public:
     /**
         Shows the dialog, returning @c wxID_OK if the user pressed Ok, and
         @c wxID_CANCEL otherwise.
-        
         If the user cancels the dialog (ShowModal returns @c wxID_CANCEL), no font
         will be created. If the user presses OK, a new wxFont will be created and
         stored in the font dialog's wxFontData structure.
@@ -75,15 +74,13 @@ public:
     is valid) if the dialog was cancelled.
 
     @param parent
-    The parent window for the font selection dialog
-
+        The parent window for the font selection dialog
     @param fontInit
-    If given, this will be the font initially selected in the dialog.
-
+        If given, this will be the font initially selected in the dialog.
     @param caption
-    If given, this will be used for the dialog caption.
+        If given, this will be used for the dialog caption.
 */
-wxFont wxGetFontFromUser(wxWindow * parent,
+wxFont wxGetFontFromUser(wxWindow* parent,
                          const wxFont& fontInit,
                          const wxString& caption = wxEmptyString);
 

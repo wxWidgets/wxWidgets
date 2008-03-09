@@ -130,8 +130,8 @@
     @category{FIXME}
 
     @seealso
-    @ref overview_eventhandlingoverview "Event handling overview", @ref
-    overview_windowsizingoverview "Window sizing overview"
+    @ref overview_eventhandlingoverview, @ref overview_windowsizingoverview "Window
+    sizing overview"
 */
 class wxWindow : public wxEvtHandler
 {
@@ -142,30 +142,25 @@ public:
         non-control window.
         
         @param parent
-        Pointer to a parent window.
-        
+            Pointer to a parent window.
         @param id
-        Window identifier. If wxID_ANY, will automatically create an identifier.
-        
+            Window identifier. If wxID_ANY, will automatically create an identifier.
         @param pos
-        Window position. wxDefaultPosition indicates that wxWidgets
-        should generate a default position for the window. If using the wxWindow class
-        directly, supply
-        an actual position.
-        
+            Window position. wxDefaultPosition indicates that wxWidgets
+            should generate a default position for the window. If using the wxWindow
+        class directly, supply
+            an actual position.
         @param size
-        Window size. wxDefaultSize indicates that wxWidgets
-        should generate a default size for the window. If no suitable size can  be
+            Window size. wxDefaultSize indicates that wxWidgets
+            should generate a default size for the window. If no suitable size can  be
         found, the
-        window will be sized to 20x20 pixels so that the window is visible but
+            window will be sized to 20x20 pixels so that the window is visible but
         obviously not
-        correctly sized.
-        
+            correctly sized.
         @param style
-        Window style. For generic window styles, please see wxWindow.
-        
+            Window style. For generic window styles, please see wxWindow.
         @param name
-        Window name.
+            Window name.
     */
     wxWindow();
     wxWindow(wxWindow* parent, wxWindowID id,
@@ -181,8 +176,8 @@ public:
         use Destroy() so that wxWidgets
         can delete a window only when it is safe to do so, in idle time.
         
-        @sa @ref overview_windowdeletionoverview "Window deletion overview",
-              Destroy(), wxCloseEvent
+        @see @ref overview_windowdeletionoverview "Window deletion overview",
+             Destroy(), wxCloseEvent
     */
     ~wxWindow();
 
@@ -191,7 +186,7 @@ public:
         indicate that this control doesn't accept input at all (i.e. behaves like e.g.
         wxStaticText) and so doesn't need focus.
         
-        @sa AcceptsFocusFromKeyboard()
+        @see AcceptsFocusFromKeyboard()
     */
     bool AcceptsFocus();
 
@@ -206,26 +201,23 @@ public:
     /**
         Adds a child window.  This is called automatically by window creation
         functions so should not be required by the application programmer.
-        
         Notice that this function is mostly internal to wxWidgets and shouldn't be
         called by the user code.
         
         @param child
-        Child window to add.
+            Child window to add.
     */
     virtual void AddChild(wxWindow* child);
 
     /**
         Call this function to force one or both scrollbars to be always shown, even if
         the window is big enough to show its entire contents without scrolling.
-        
         This function is new since wxWidgets version 2.9.0
         
         @param hflag
-        Whether the horizontal scroll bar should always be visible.
-        
+            Whether the horizontal scroll bar should always be visible.
         @param vflag
-        Whether the vertical scroll bar should always be visible.
+            Whether the vertical scroll bar should always be visible.
         
         @remarks This function is currently only implemented under Mac/Carbon.
     */
@@ -248,20 +240,18 @@ public:
     /**
         Directs all mouse input to this window. Call ReleaseMouse() to
         release the capture.
-        
         Note that wxWidgets maintains the stack of windows having captured the mouse
         and when the mouse is released the capture returns to the window which had had
         captured it previously and it is only really released if there were no previous
         window. In particular, this means that you must release the mouse as many times
         as you capture it, unless the window receives
         the wxMouseCaptureLostEvent event.
-        
         Any application which captures the mouse in the beginning of some operation
         must handle wxMouseCaptureLostEvent
         and cancel this operation when it receives the event. The event handler must
         not recapture mouse.
         
-        @sa ReleaseMouse(), wxMouseCaptureLostEvent
+        @see ReleaseMouse(), wxMouseCaptureLostEvent
     */
     virtual void CaptureMouse();
 
@@ -279,15 +269,15 @@ public:
         Centres the window.
         
         @param direction
-        Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
-        or wxBOTH. It may also include wxCENTRE_ON_SCREEN flag
-        if you want to center the window on the entire screen and not on its
-        parent window.
+            Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
+            or wxBOTH. It may also include wxCENTRE_ON_SCREEN flag
+            if you want to center the window on the entire screen and not on its
+            parent window.
         
         @remarks If the window is a top level one (i.e. doesn't have a parent),
-                   it will be centered relative to the screen anyhow.
+                 it will be centered relative to the screen anyhow.
         
-        @sa Center()
+        @see Center()
     */
     void Centre(int direction = wxBOTH);
 
@@ -296,16 +286,15 @@ public:
         Centre().
         
         @param direction
-        Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
-        or wxBOTH.
+            Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
+            or wxBOTH.
         
         @remarks This methods provides for a way to center top level windows over
-                   their parents instead of the entire screen.  If there
-                   is no parent or if the window is not a top level
-                   window, then behaviour is the same as
-                   Centre().
+                 their parents instead of the entire screen.  If there
+                 is no parent or if the window is not a top level
+                 window, then behaviour is the same as Centre().
         
-        @sa wxTopLevelWindow::CentreOnScreen
+        @see wxTopLevelWindow::CentreOnScreen
     */
     void CentreOnParent(int direction = wxBOTH);
 
@@ -319,35 +308,31 @@ public:
     /**
         Converts to screen coordinates from coordinates relative to this window.
         
-        
         @param x
-        A pointer to a integer value for the x coordinate. Pass the client coordinate
-        in, and
-        a screen coordinate will be passed out.
-        
+            A pointer to a integer value for the x coordinate. Pass the client
+        coordinate in, and
+            a screen coordinate will be passed out.
         @param y
-        A pointer to a integer value for the y coordinate. Pass the client coordinate
-        in, and
-        a screen coordinate will be passed out.
-        
+            A pointer to a integer value for the y coordinate. Pass the client
+        coordinate in, and
+            a screen coordinate will be passed out.
         @param pt
-        The client position for the second form of the function.
+            The client position for the second form of the function.
     */
     virtual void ClientToScreen(int* x, int* y);
     virtual wxPoint ClientToScreen(const wxPoint& pt);
     //@}
 
     /**
-        Converts client area size @e size to corresponding window size. In other
+        Converts client area size @a size to corresponding window size. In other
         words, the returned value is what would GetSize()
         return if this window had client area of given size.
         Components with wxDefaultCoord value are left unchanged.
-        
         Note that the conversion is not always exact, it assumes that non-client area
         doesn't change and so doesn't take into account things like menu bar
         (un)wrapping or (dis)appearance of the scrollbars.
         
-        @sa WindowToClientSize()
+        @see WindowToClientSize()
     */
     virtual wxSize ClientToWindowSize(const wxSize& size);
 
@@ -357,37 +342,34 @@ public:
         however.
         
         @param force
-        @false if the window's close handler should be able to veto the destruction
-        of this window, @true if it cannot.
+            @false if the window's close handler should be able to veto the destruction
+            of this window, @true if it cannot.
         
         @remarks Close calls the close handler for the window, providing an
-                   opportunity for the window to choose whether to
-                   destroy the window. Usually it is only used with the
-                   top level windows (wxFrame and wxDialog classes) as
-                   the others are not supposed to have any special
-                   OnClose() logic.
+                 opportunity for the window to choose whether to destroy
+                 the window. Usually it is only used with the top level
+                 windows (wxFrame and wxDialog classes) as the others
+                 are not supposed to have any special OnClose() logic.
         
-        @sa @ref overview_windowdeletionoverview "Window deletion overview",
-              Destroy(), wxCloseEvent
+        @see @ref overview_windowdeletionoverview "Window deletion overview",
+             Destroy(), wxCloseEvent
     */
-    bool Close(bool force = @false);
+    bool Close(bool force = false);
 
     //@{
     /**
         Converts a point or size from dialog units to pixels.
-        
         For the x dimension, the dialog units are multiplied by the average character
         width
         and then divided by 4.
-        
         For the y dimension, the dialog units are multiplied by the average character
         height
         and then divided by 8.
         
         @remarks Dialog units are used for maintaining a dialog's proportions
-                   even if the font changes.
+                 even if the font changes.
         
-        @sa ConvertPixelsToDialog()
+        @see ConvertPixelsToDialog()
     */
     wxPoint ConvertDialogToPixels(const wxPoint& pt);
     wxSize ConvertDialogToPixels(const wxSize& sz);
@@ -396,19 +378,17 @@ public:
     //@{
     /**
         Converts a point or size from pixels to dialog units.
-        
         For the x dimension, the pixels are multiplied by 4 and then divided by the
         average
         character width.
-        
         For the y dimension, the pixels are multiplied by 8 and then divided by the
         average
         character height.
         
         @remarks Dialog units are used for maintaining a dialog's proportions
-                   even if the font changes.
+                 even if the font changes.
         
-        @sa ConvertDialogToPixels()
+        @see ConvertDialogToPixels()
     */
     wxPoint ConvertPixelsToDialog(const wxPoint& pt);
     wxSize ConvertPixelsToDialog(const wxSize& sz);
@@ -425,8 +405,8 @@ public:
         windows.
         
         @returns @true if the window has either been successfully deleted, or it
-                   has been added to the list of windows pending real
-                   deletion.
+                 has been added to the list of windows pending real
+                 deletion.
     */
     virtual bool Destroy();
 
@@ -439,8 +419,7 @@ public:
         Disables the window, same as @ref enable() Enable(@false).
         
         @returns Returns @true if the window has been disabled, @false if it had
-                   been already disabled before the call to this
-                   function.
+                 been already disabled before the call to this function.
     */
     bool Disable();
 
@@ -465,8 +444,8 @@ public:
         Enables or disables eligibility for drop file events (OnDropFiles).
         
         @param accept
-        If @true, the window is eligible for drop file events. If @false, the window
-        will not accept drop file events.
+            If @true, the window is eligible for drop file events. If @false, the window
+            will not accept drop file events.
         
         @remarks Windows only.
     */
@@ -478,23 +457,23 @@ public:
         when the parent is.
         
         @param enable
-        If @true, enables the window for input. If @false, disables the window.
+            If @true, enables the window for input. If @false, disables the window.
         
         @returns Returns @true if the window has been enabled or disabled, @false
-                   if nothing was done, i.e. if the window had already
-                   been in the specified state.
+                 if nothing was done, i.e. if the window had already
+                 been in the specified state.
         
-        @sa IsEnabled(), Disable(), wxRadioBox::Enable
+        @see IsEnabled(), Disable(), wxRadioBox::Enable
     */
-    virtual bool Enable(bool enable = @true);
+    virtual bool Enable(bool enable = true);
 
     /**
         Finds the window or control which currently has the keyboard focus.
         
         @remarks Note that this is a static function, so it can be called without
-                   needing a wxWindow pointer.
+                 needing a wxWindow pointer.
         
-        @sa SetFocus(), HasFocus()
+        @see SetFocus(), HasFocus()
     */
     static wxWindow* FindFocus();
 
@@ -508,45 +487,43 @@ public:
 
     /**
         Find the first window with the given @e id.
-        
-        If @e parent is @NULL, the search will start from all top-level
+        If @a parent is @NULL, the search will start from all top-level
         frames and dialog boxes; if non-@NULL, the search will be limited to the given
         window hierarchy.
         The search is recursive in both cases.
         
-        @sa FindWindow()
+        @see FindWindow()
     */
-    static wxWindow* FindWindowById(long id, wxWindow* parent = @NULL);
+    static wxWindow* FindWindowById(long id, wxWindow* parent = NULL);
 
     /**
         Find a window by its label. Depending on the type of window, the label may be a
         window title
-        or panel item label. If @e parent is @NULL, the search will start from all
+        or panel item label. If @a parent is @NULL, the search will start from all
         top-level
         frames and dialog boxes; if non-@NULL, the search will be limited to the given
         window hierarchy.
         The search is recursive in both cases.
         
-        @sa FindWindow()
+        @see FindWindow()
     */
     static wxWindow* FindWindowByLabel(const wxString& label,
-                                       wxWindow* parent = @NULL);
+                                       wxWindow* parent = NULL);
 
     /**
         Find a window by its name (as given in a window constructor or @b Create
         function call).
-        If @e parent is @NULL, the search will start from all top-level
+        If @a parent is @NULL, the search will start from all top-level
         frames and dialog boxes; if non-@NULL, the search will be limited to the given
         window hierarchy.
         The search is recursive in both cases.
-        
         If no window with such name is found,
         FindWindowByLabel() is called.
         
-        @sa FindWindow()
+        @see FindWindow()
     */
     static wxWindow* FindWindowByName(const wxString& name,
-                                      wxWindow* parent = @NULL);
+                                      wxWindow* parent = NULL);
 
     /**
         Sizes the window so that it fits around its subwindows. This function won't do
@@ -554,9 +531,10 @@ public:
         sizers are used for the subwindows layout. Also, if the window has exactly one
         subwindow it is better (faster and the result is more precise as Fit adds some
         margin to account for fuzziness of its calculations) to call
+        
         instead of calling Fit.
     */
-#define virtual void Fit()     /* implementation is private */
+    virtual void Fit();
 
     /**
         Similar to Fit(), but sizes the interior (virtual) size
@@ -573,14 +551,13 @@ public:
         be called to reenable window redrawing. Calls to these two functions may be
         nested but to ensure that the window is properly repainted again, you must thaw
         it exactly as many times as you froze it.
-        
         This method is useful for visual appearance optimization (for example, it
         is a good idea to use it before doing many large text insertions in a row into
         a wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
         controls so it is mostly just a hint to wxWidgets and not a mandatory
         directive.
         
-        @sa wxWindowUpdateLocker
+        @see wxWindowUpdateLocker
     */
     virtual void Freeze();
 
@@ -591,7 +568,6 @@ public:
 
     /**
         Returns the accessible object for this window, if any.
-        
         See also wxAccessible.
     */
     wxAccessible* GetAccessible();
@@ -605,23 +581,20 @@ public:
     /**
         Returns the background colour of the window.
         
-        @sa SetBackgroundColour(), SetForegroundColour(),
-              GetForegroundColour()
+        @see SetBackgroundColour(), SetForegroundColour(),
+             GetForegroundColour()
     */
     virtual wxColour GetBackgroundColour();
 
     /**
         Returns the background style of the window. The background style can be one of:
         
-        
         wxBG_STYLE_SYSTEM
-        
         
         Use the default background, as determined by
         the system or the current theme.
         
         wxBG_STYLE_COLOUR
-        
         
         Use a solid colour for the background, this
         style is set automatically if you call
@@ -631,7 +604,6 @@ public:
         
         wxBG_STYLE_CUSTOM
         
-        
         Don't draw the background at all, it's
         supposed that it is drawn by the user-defined erase background event handler.
         This style should be used to avoid flicker when the background is entirely
@@ -639,15 +611,13 @@ public:
         
         wxBG_STYLE_TRANSPARET
         
-        
         The background is (partially) transparent,
         this style is automatically set if you call
         SetTransparent() which is used to set the
         transparency level.
         
-        
-        @sa SetBackgroundColour(), GetForegroundColour(),
-              SetBackgroundStyle(), SetTransparent()
+        @see SetBackgroundColour(), GetForegroundColour(),
+             SetBackgroundStyle(), SetTransparent()
     */
     virtual wxBackgroundStyle GetBackgroundStyle();
 
@@ -664,15 +634,15 @@ public:
     /**
         Returns the currently captured window.
         
-        @sa HasCapture(), CaptureMouse(), ReleaseMouse(),
-              wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent
+        @see HasCapture(), CaptureMouse(), ReleaseMouse(),
+             wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent
     */
-    static wxWindow * GetCapture();
+    static wxWindow* GetCapture();
 
     /**
         Returns the caret associated with the window.
     */
-    wxCaret * GetCaret();
+    wxCaret* GetCaret();
 
     /**
         Returns the character height for this window.
@@ -700,24 +670,21 @@ public:
         standard control -- which is a much better idea than hard coding specific
         colours or fonts which might look completely out of place on the users
         system, especially if it uses themes.
-        
-        The @e variant parameter is only relevant under Mac currently and is
+        The @a variant parameter is only relevant under Mac currently and is
         ignore under other platforms. Under Mac, it will change the size of the
         returned font. See SetWindowVariant()
         for more about this.
-        
         This static method is "overridden'' in many derived classes and so calling,
         for example, wxButton::GetClassDefaultAttributes() will typically
         return the values appropriate for a button which will be normally different
         from those returned by, say, wxListCtrl::GetClassDefaultAttributes().
-        
         The @c wxVisualAttributes structure has at least the fields
         @c font, @c colFg and @c colBg. All of them may be invalid
         if it was not possible to determine the default control appearance or,
         especially for the background colour, if the field doesn't make sense as is
         the case for @c colBg for the controls with themed background.
         
-        @sa InheritAttributes()
+        @see InheritAttributes()
     */
     static wxVisualAttributes GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
@@ -726,17 +693,15 @@ public:
         Returns the size of the window 'client area' in pixels. The client area is the
         area which may be drawn on by the programmer, excluding title bar, border,
         scrollbars, etc.
-        
         Note that if this window is a top-level one and it is currently minimized, the
         return size is empty (both width and height are 0).
         
         @param width
-        Receives the client width in pixels.
-        
+            Receives the client width in pixels.
         @param height
-        Receives the client height in pixels.
+            Receives the client height in pixels.
         
-        @sa GetSize(), GetVirtualSize()
+        @see GetSize(), GetVirtualSize()
     */
     void GetClientSize(int* width, int* height);
     wxSize GetClientSize();
@@ -751,23 +716,21 @@ public:
         Return the sizer that this window is a member of, if any, otherwise
         @NULL.
     */
-    const wxSizer * GetContainingSizer();
+    const wxSizer* GetContainingSizer();
 
     /**
         Return the cursor associated with this window.
         
-        @sa SetCursor()
+        @see SetCursor()
     */
     const wxCursor GetCursor();
 
     /**
         Currently this is the same as calling
         wxWindow::GetClassDefaultAttributes(wxWindow::GetWindowVariant()).
-        
         One advantage of using this function compared to the static version is that
         the call is automatically dispatched to the correct class (as usual with
         virtual functions) and you don't have to specify the class name explicitly.
-        
         The other one is that in the future this function could return different
         results, for example it might return a different font for an "Ok'' button
         than for a generic button if the users GUI is configured to show such buttons
@@ -780,8 +743,7 @@ public:
     /**
         Returns the associated drop target, which may be @NULL.
         
-        @sa SetDropTarget(), @ref overview_wxdndoverview "Drag and drop
-              overview"
+        @see SetDropTarget(), @ref overview_wxdndoverview
     */
     wxDropTarget* GetDropTarget();
 
@@ -790,7 +752,7 @@ public:
         result.  This is the value used by sizers to determine the appropriate
         ammount of space to allocate for the widget.
         
-        @sa GetBestSize(), SetInitialSize()
+        @see GetBestSize(), SetInitialSize()
     */
     wxSize GetEffectiveMinSize();
 
@@ -798,8 +760,8 @@ public:
         Returns the event handler for this window. By default, the window is its
         own event handler.
         
-        @sa SetEventHandler(), PushEventHandler(),
-              PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
+        @see SetEventHandler(), PushEventHandler(),
+             PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
     */
     wxEvtHandler* GetEventHandler();
 
@@ -811,7 +773,7 @@ public:
     /**
         Returns the font for this window.
         
-        @sa SetFont()
+        @see SetFont()
     */
     wxFont GetFont();
 
@@ -819,12 +781,12 @@ public:
         Returns the foreground colour of the window.
         
         @remarks The interpretation of foreground colour is open to
-                   interpretation according to the window class; it may
-                   be the text colour or other colour, or it may not be
-                   used at all.
+                 interpretation according to the window class; it may be
+                 the text colour or other colour, or it may not be used
+                 at all.
         
-        @sa SetForegroundColour(), SetBackgroundColour(),
-              GetBackgroundColour()
+        @see SetForegroundColour(), SetBackgroundColour(),
+             GetBackgroundColour()
     */
     virtual wxColour GetForegroundColour();
 
@@ -843,12 +805,11 @@ public:
 
     /**
         Gets the help text to be used as context-sensitive help for this window.
-        
         Note that the text is actually stored by the current wxHelpProvider
         implementation,
         and not in the window object itself.
         
-        @sa SetHelpText(), GetHelpTextAtPoint(), wxHelpProvider
+        @see SetHelpText(), GetHelpTextAtPoint(), wxHelpProvider
     */
     virtual wxString GetHelpText();
 
@@ -858,10 +819,9 @@ public:
         the window, otherwise GetHelpText() can be used.
         
         @param point
-        Coordinates of the mouse at the moment of help event emission.
-        
+            Coordinates of the mouse at the moment of help event emission.
         @param origin
-        Help event origin, see also wxHelpEvent::GetOrigin.
+            Help event origin, see also wxHelpEvent::GetOrigin.
     */
     virtual wxString GetHelpTextAtPoint(const wxPoint point,
                                         wxHelpEvent::Origin origin);
@@ -870,10 +830,10 @@ public:
         Returns the identifier of the window.
         
         @remarks Each window has an integer identifier. If the application has
-                   not provided one (or the default wxID_ANY) an unique
-                   identifier with a negative value will be generated.
+                 not provided one (or the default wxID_ANY) an unique
+                 identifier with a negative value will be generated.
         
-        @sa SetId(), @ref overview_windowids "Window identifiers"
+        @see SetId(), @ref overview_windowids "Window identifiers"
     */
     int GetId();
 
@@ -882,12 +842,11 @@ public:
         identification purposes.
         
         @remarks The interpretation of this function differs from class to class.
-                   For frames and dialogs, the value returned is the
-                   title. For buttons or static text controls, it is the
-                   button text. This function can be useful for
-                   meta-programs (such as testing tools or special-needs
-                   access programs) which need to identify windows by
-                   name.
+                 For frames and dialogs, the value returned is the
+                 title. For buttons or static text controls, it is the
+                 button text. This function can be useful for
+                 meta-programs (such as testing tools or special-needs
+                 access programs) which need to identify windows by name.
     */
     virtual wxString GetLabel();
 
@@ -897,7 +856,7 @@ public:
         possible size as well as the upper bound on window's size settable using
         SetClientSize().
         
-        @sa GetMaxSize()
+        @see GetMaxSize()
     */
     wxSize GetMaxClientSize();
 
@@ -906,7 +865,7 @@ public:
         layout mechanism that this is the maximum possible size as well as the upper
         bound on window's size settable using SetSize().
         
-        @sa GetMaxClientSize()
+        @see GetMaxClientSize()
     */
     wxSize GetMaxSize();
 
@@ -917,7 +876,7 @@ public:
         SetMinClientSize(), but it can be overridden
         to do the calculation on demand.
         
-        @sa GetMinSize()
+        @see GetMinSize()
     */
     virtual wxSize GetMinClientSize();
 
@@ -928,7 +887,7 @@ public:
         by SetMinSize(), but it can be overridden to do the
         calculation on demand.
         
-        @sa GetMinClientSize()
+        @see GetMinClientSize()
     */
     virtual wxSize GetMinSize();
 
@@ -936,22 +895,21 @@ public:
         Returns the window's name.
         
         @remarks This name is not guaranteed to be unique; it is up to the
-                   programmer to supply an appropriate name in the
-                   window constructor or via SetName().
+                 programmer to supply an appropriate name in the window
+                 constructor or via SetName().
         
-        @sa SetName()
+        @see SetName()
     */
     virtual wxString GetName();
 
     /**
         Returns the next window after this one among the parent children or @NULL if
         this window is the last child.
-        
         This function is new since wxWidgets version 2.8.8
         
-        @sa GetPrevSibling()
+        @see GetPrevSibling()
     */
-    wxWindow * GetNextSibling();
+    wxWindow* GetNextSibling();
 
     /**
         Returns the parent of the window, or @NULL if there is no parent.
@@ -966,19 +924,16 @@ public:
         choice in a list of strings to the user.
         
         @param menu
-        The menu to show
-        
+            The menu to show
         @param pos
-        The position at which to show the menu in client coordinates
-        
+            The position at which to show the menu in client coordinates
         @param x
-        The horizontal position of the menu
-        
+            The horizontal position of the menu
         @param y
-        The vertical position of the menu
+            The vertical position of the menu
         
         @returns The selected menu item id or wxID_NONE if none selected or an
-                   error occurred.
+                 error occurred.
     */
     int GetPopupMenuSelectionFromUser(wxMenu& menu,
                                       const wxPoint& pos);
@@ -992,12 +947,11 @@ public:
         windows.
         
         @param x
-        Receives the x position of the window if non-@NULL.
-        
+            Receives the x position of the window if non-@NULL.
         @param y
-        Receives the y position of the window if non-@NULL.
+            Receives the y position of the window if non-@NULL.
         
-        @sa GetScreenPosition()
+        @see GetScreenPosition()
     */
     virtual void GetPosition(int* x, int* y);
     wxPoint GetPosition();
@@ -1007,17 +961,16 @@ public:
         Returns the previous window before this one among the parent children or @c
         @NULL if
         this window is the first child.
-        
         This function is new since wxWidgets version 2.8.8
         
-        @sa GetNextSibling()
+        @see GetNextSibling()
     */
-    wxWindow * GetPrevSibling();
+    wxWindow* GetPrevSibling();
 
     /**
         Returns the position and size of the window as a wxRect object.
         
-        @sa GetScreenRect()
+        @see GetScreenRect()
     */
     virtual wxRect GetRect();
 
@@ -1027,12 +980,11 @@ public:
         child window or a top level one.
         
         @param x
-        Receives the x position of the window on the screen if non-@NULL.
-        
+            Receives the x position of the window on the screen if non-@NULL.
         @param y
-        Receives the y position of the window on the screen if non-@NULL.
+            Receives the y position of the window on the screen if non-@NULL.
         
-        @sa GetPosition()
+        @see GetPosition()
     */
     virtual void GetScreenPosition(int* x, int* y);
     wxPoint GetScreenPosition();
@@ -1042,28 +994,28 @@ public:
         Returns the position and size of the window on the screen as a
         wxRect object.
         
-        @sa GetRect()
+        @see GetRect()
     */
     virtual wxRect GetScreenRect();
 
     /**
         Returns the built-in scrollbar position.
         
-        @sa See SetScrollbar()
+        @see See SetScrollbar()
     */
     virtual int GetScrollPos(int orientation);
 
     /**
         Returns the built-in scrollbar range.
         
-        @sa SetScrollbar()
+        @see SetScrollbar()
     */
     virtual int GetScrollRange(int orientation);
 
     /**
         Returns the built-in scrollbar thumb size.
         
-        @sa SetScrollbar()
+        @see SetScrollbar()
     */
     virtual int GetScrollThumb(int orientation);
 
@@ -1071,17 +1023,15 @@ public:
     /**
         Returns the size of the entire window in pixels, including title bar, border,
         scrollbars, etc.
-        
         Note that if this window is a top-level one and it is currently minimized, the
         returned size is the restored window size, not the size of the window icon.
         
         @param width
-        Receives the window width.
-        
+            Receives the window width.
         @param height
-        Receives the window height.
+            Receives the window height.
         
-        @sa GetClientSize(), GetVirtualSize()
+        @see GetClientSize(), GetVirtualSize()
     */
     void GetSize(int* width, int* height);
     wxSize GetSize();
@@ -1091,43 +1041,36 @@ public:
         Return the sizer associated with the window by a previous call to
         SetSizer() or @NULL.
     */
-    wxSizer * GetSizer();
+    wxSizer* GetSizer();
 
     //@{
     /**
         Gets the dimensions of the string as it would be drawn on the
         window with the currently selected font.
-        
-        The text extent is returned in @e w and @e h pointers (first form) or as a
+        The text extent is returned in @a w and @a h pointers (first form) or as a
         wxSize object (second form).
         
         @param string
-        String whose extent is to be measured.
-        
+            String whose extent is to be measured.
         @param w
-        Return value for width.
-        
+            Return value for width.
         @param h
-        Return value for height.
-        
+            Return value for height.
         @param descent
-        Return value for descent (optional).
-        
+            Return value for descent (optional).
         @param externalLeading
-        Return value for external leading (optional).
-        
+            Return value for external leading (optional).
         @param font
-        Font to use instead of the current window font (optional).
-        
+            Font to use instead of the current window font (optional).
         @param use16
-        If @true, string contains 16-bit characters. The default is @false.
+            If @true, string contains 16-bit characters. The default is @false.
     */
     virtual void GetTextExtent(const wxString& string, int* w,
                                int* h,
-                               int* descent = @NULL,
-                               int* externalLeading = @NULL,
-                               const wxFont* font = @NULL,
-                               bool use16 = @false);
+                               int* descent = NULL,
+                               int* externalLeading = NULL,
+                               const wxFont* font = NULL,
+                               bool use16 = false);
     wxSize GetTextExtent(const wxString& string);
     //@}
 
@@ -1141,7 +1084,7 @@ public:
         Should
         only be called within an wxPaintEvent handler.
         
-        @sa wxRegion, wxRegionIterator
+        @see wxRegion, wxRegionIterator
     */
     virtual wxRegion GetUpdateRegion();
 
@@ -1159,10 +1102,9 @@ public:
         that size.
         
         @param width
-        Receives the window virtual width.
-        
+            Receives the window virtual width.
         @param height
-        Receives the window virtual height.
+            Receives the window virtual height.
     */
     void GetVirtualSize(int* width, int* height);
     wxSize GetVirtualSize();
@@ -1192,9 +1134,9 @@ public:
         keyboard navigation and return @true in this case.
         
         @returns Returns @true if the key pressed was for navigation and was
-                   handled, @false otherwise.
+                 handled, @false otherwise.
         
-        @sa Navigate()
+        @see Navigate()
     */
     bool HandleAsNavigationKey(const wxKeyEvent& event);
 
@@ -1207,21 +1149,21 @@ public:
     /**
         Returns @true if this window has the current mouse capture.
         
-        @sa CaptureMouse(), ReleaseMouse(), wxMouseCaptureLostEvent,
-              wxMouseCaptureChangedEvent
+        @see CaptureMouse(), ReleaseMouse(), wxMouseCaptureLostEvent,
+             wxMouseCaptureChangedEvent
     */
     virtual bool HasCapture();
 
     /**
-        Returns @true if the window has the given @e exFlag bit set in its
+        Returns @true if the window has the given @a exFlag bit set in its
         extra styles.
         
-        @sa SetExtraStyle()
+        @see SetExtraStyle()
     */
     bool HasExtraStyle(int exFlag);
 
     /**
-        Returns @true if the window has the given @e flag bit set.
+        Returns @true if the window has the given @a flag bit set.
     */
     bool HasFlag(int flag);
 
@@ -1229,7 +1171,7 @@ public:
         Returns @true if the window (or in case of composite controls, its main
         child window) has focus.
         
-        @sa FindFocus()
+        @see FindFocus()
     */
     virtual bool HasFocus();
 
@@ -1247,14 +1189,13 @@ public:
         Returns @true if this window has a scroll bar for this orientation.
         
         @param orient
-        Orientation to check, either wxHORIZONTAL or wxVERTICAL.
+            Orientation to check, either wxHORIZONTAL or wxVERTICAL.
     */
     virtual bool HasScrollbar(int orient);
 
     /**
         Returns @true if this window background is transparent (as, for example, for
         wxStaticText) and should show the parent window background.
-        
         This method is mostly used internally by the library itself and you normally
         shouldn't have to call it. You may, however, have to override it in your
         wxWindow-derived class to ensure that background is painted correctly.
@@ -1269,11 +1210,9 @@ public:
     /**
         This function hides a window, like Hide(), but using a
         special visual effect if possible.
-        
         The parameters of this function are the same as for
         ShowWithEffect(), please see their
         description there.
-        
         This function is new since wxWidgets version 2.9.0
     */
     virtual bool HideWithEffect(wxShowEffect effect,
@@ -1284,7 +1223,6 @@ public:
         This function is (or should be, in case of custom controls) called during
         window creation to intelligently set up the window visual attributes, that is
         the font and the foreground and background colours.
-        
         By "intelligently'' the following is meant: by default, all windows use their
         own @ref getclassdefaultattributes() default attributes. However
         if some of the parents attributes are explicitly (that is, using
@@ -1295,7 +1233,6 @@ public:
         the window overrides ShouldInheritColours()
         to return @false, the colours will not be changed no matter what and only the
         font might.
-        
         This rather complicated logic is necessary in order to accommodate the
         different usage scenarios. The most common one is when all default attributes
         are used and in this case, nothing should be inherited as in modern GUIs
@@ -1324,7 +1261,7 @@ public:
         any drawing done on the window is really done on a temporary backing surface
         and transferred to the screen all at once later.
         
-        @sa wxBufferedDC
+        @see wxBufferedDC
     */
     virtual bool IsDoubleBuffered();
 
@@ -1332,13 +1269,12 @@ public:
         Returns @true if the window is enabled, i.e. if it accepts user input, @c
         @false
         otherwise.
-        
         Notice that this method can return @false even if this window itself hadn't
         been explicitly disabled when one of its parent windows is disabled. To get the
         intrinsic status of this window, use
         IsThisEnabled()
         
-        @sa Enable()
+        @see Enable()
     */
     virtual bool IsEnabled();
 
@@ -1358,7 +1294,7 @@ public:
         Returns @true if the window is currently frozen by a call to
         Freeze().
         
-        @sa Thaw()
+        @see Thaw()
     */
     virtual bool IsFrozen();
 
@@ -1373,16 +1309,16 @@ public:
         Return whether a scrollbar is always shown.
         
         @param orient
-        Orientation to check, either wxHORIZONTAL or wxVERTICAL.
+            Orientation to check, either wxHORIZONTAL or wxVERTICAL.
         
-        @sa AlwaysShowScrollbars()
+        @see AlwaysShowScrollbars()
     */
     bool IsScrollbarAlwaysShown(int orient);
 
     /**
         Returns @true if the window is shown, @false if it has been hidden.
         
-        @sa IsShownOnScreen()
+        @see IsShownOnScreen()
     */
     virtual bool IsShown();
 
@@ -1390,7 +1326,7 @@ public:
         Returns @true if the window is physically visible on the screen, i.e. it
         is shown and all its parents up to the toplevel window are shown as well.
         
-        @sa IsShown()
+        @see IsShown()
     */
     virtual bool IsShownOnScreen();
 
@@ -1413,7 +1349,6 @@ public:
     /**
         Invokes the constraint-based layout algorithm or the sizer-based algorithm
         for this window.
-        
         See SetAutoLayout(): when auto
         layout is on, this function gets called automatically when the window is
         resized.
@@ -1433,7 +1368,7 @@ public:
     /**
         Lowers the window to the bottom of the window hierarchy (Z-order).
         
-        @sa Raise()
+        @see Raise()
     */
     void Lower();
 
@@ -1442,8 +1377,9 @@ public:
         the user can only interact with this window.
         
         @param flag
-        If @true, this call disables all other windows in the application so that
-        the user can only interact with this window. If @false, the effect is reversed.
+            If @true, this call disables all other windows in the application so that
+            the user can only interact with this window. If @false, the effect is
+        reversed.
     */
     virtual void MakeModal(bool flag);
 
@@ -1452,19 +1388,17 @@ public:
         Moves the window to the given position.
         
         @param x
-        Required x position.
-        
+            Required x position.
         @param y
-        Required y position.
-        
+            Required y position.
         @param pt
-        wxPoint object representing the position.
+            wxPoint object representing the position.
         
         @remarks Implementations of SetSize can also implicitly implement the
-                   Move() function, which is defined in the base
-                   wxWindow class as the call:
+                 Move() function, which is defined in the base
+                 wxWindow class as the call:
         
-        @sa SetSize()
+        @see SetSize()
     */
     void Move(int x, int y);
     void Move(const wxPoint& pt);
@@ -1474,23 +1408,22 @@ public:
         Moves this window in the tab navigation order after the specified @e win.
         This means that when the user presses @c TAB key on that other window,
         the focus switches to this window.
-        
         Default tab order is the same as creation order, this function and
         MoveBeforeInTabOrder() allow to change
         it after creating all the windows.
         
         @param win
-        A sibling of this window which should precede it in tab order,
-        must not be @NULL
+            A sibling of this window which should precede it in tab order,
+            must not be @NULL
     */
-    void MoveAfterInTabOrder(wxWindow * win);
+    void MoveAfterInTabOrder(wxWindow* win);
 
     /**
         Same as MoveAfterInTabOrder() except that
-        it inserts this window just before @e win instead of putting it right after
+        it inserts this window just before @a win instead of putting it right after
         it.
     */
-    void MoveBeforeInTabOrder(wxWindow * win);
+    void MoveBeforeInTabOrder(wxWindow* win);
 
     /**
         Performs a keyboard navigation action starting from this window. This method is
@@ -1498,25 +1431,24 @@ public:
         parent window.
         
         @param flags
-        A combination of wxNavigationKeyEvent::IsForward and
+            A combination of wxNavigationKeyEvent::IsForward and
         wxNavigationKeyEvent::WinChange.
         
         @returns Returns @true if the focus was moved to another window or @false
-                   if nothing changed.
+                 if nothing changed.
         
         @remarks You may wish to call this from a text control custom keypress
-                   handler to do the default navigation behaviour for
-                   the tab key, since the standard default behaviour for
-                   a multiline text control with the wxTE_PROCESS_TAB
-                   style is to insert a tab and not navigate to the next
-                   control. See also wxNavigationKeyEvent and
-                   HandleAsNavigationKey.
+                 handler to do the default navigation behaviour for the
+                 tab key, since the standard default behaviour for a
+                 multiline text control with the wxTE_PROCESS_TAB style
+                 is to insert a tab and not navigate to the next
+                 control. See also wxNavigationKeyEvent and
+                 HandleAsNavigationKey.
     */
     bool Navigate(int flags = wxNavigationKeyEvent::IsForward);
 
     /**
         Performs a keyboard navigation action inside this window.
-        
         See Navigate() for more information.
     */
     bool NavigateIn(int flags = wxNavigationKeyEvent::IsForward);
@@ -1525,17 +1457,16 @@ public:
         Create a new ID or range of IDs that are not currently in use.  The
         IDs will be reserved until assigned to a wxWindowIDRef
         or unreserved with UnreserveControlId().
-        
         See @ref overview_windowidsoverview "Window IDs overview" for more information.
         
         @param count
-        The number of sequential IDs to reserve.
+            The number of sequential IDs to reserve.
         
         @returns Returns the ID or the first ID of the range, or wxID_NONE if the
-                   specified number of identifiers couldn't be allocated.
+                 specified number of identifiers couldn't be allocated.
         
-        @sa UnreserveControlId(), wxIdManager, @ref overview_windowidsoverview
-              "Window IDs overview"
+        @see UnreserveControlId(), wxIdManager, @ref overview_windowidsoverview
+             "Window IDs overview"
     */
     static wxWindowID NewControlId(int count = 1);
 
@@ -1544,7 +1475,6 @@ public:
         sometimes an application may need it to implement functionality
         that should not be disabled by an application defining an OnIdle
         handler in a derived class.
-        
         This function may be used to do delayed painting, for example,
         and most implementations call UpdateWindowUI()
         in order to send update events to the window in idle time.
@@ -1565,13 +1495,13 @@ public:
         Removes and returns the top-most event handler on the event handler stack.
         
         @param deleteHandler
-        If this is @true, the handler will be deleted after it is removed. The
-        default value is @false.
+            If this is @true, the handler will be deleted after it is removed. The
+            default value is @false.
         
-        @sa SetEventHandler(), GetEventHandler(),
-              PushEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
+        @see SetEventHandler(), GetEventHandler(),
+             PushEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
     */
-    wxEvtHandler* PopEventHandler(bool deleteHandler = @false);
+    wxEvtHandler* PopEventHandler(bool deleteHandler = false);
 
     //@{
     /**
@@ -1582,22 +1512,19 @@ public:
         cursor position is used.
         
         @param menu
-        Menu to pop up.
-        
+            Menu to pop up.
         @param pos
-        The position where the menu will appear.
-        
+            The position where the menu will appear.
         @param x
-        Required x position for the menu to appear.
-        
+            Required x position for the menu to appear.
         @param y
-        Required y position for the menu to appear.
+            Required y position for the menu to appear.
         
         @remarks Just before the menu is popped up, wxMenu::UpdateUI is called to
-                   ensure that the menu items are in the correct state.
-                   The menu does not get deleted by the window.
+                 ensure that the menu items are in the correct state.
+                 The menu does not get deleted by the window.
         
-        @sa wxMenu
+        @see wxMenu
     */
     bool PopupMenu(wxMenu* menu,
                    const wxPoint& pos = wxDefaultPosition);
@@ -1608,26 +1535,25 @@ public:
         Pushes this event handler onto the event stack for the window.
         
         @param handler
-        Specifies the handler to be pushed.
+            Specifies the handler to be pushed.
         
         @remarks An event handler is an object that is capable of processing the
-                   events sent to a window. By default, the window is
-                   its own event handler, but an application may wish to
-                   substitute another, for example to allow central
-                   implementation of event-handling for a variety of
-                   different window classes.
+                 events sent to a window. By default, the window is its
+                 own event handler, but an application may wish to
+                 substitute another, for example to allow central
+                 implementation of event-handling for a variety of
+                 different window classes.
         
-        @sa SetEventHandler(), GetEventHandler(),
-              PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
+        @see SetEventHandler(), GetEventHandler(),
+             PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
     */
     void PushEventHandler(wxEvtHandler* handler);
 
     /**
         Raises the window to the top of the window hierarchy (Z-order).
-        
         In current version of wxWidgets this works both for managed and child windows.
         
-        @sa Lower()
+        @see Lower()
     */
     void Raise();
 
@@ -1639,27 +1565,25 @@ public:
         instead.
         
         @param eraseBackground
-        If @true, the background will be
-        erased.
-        
+            If @true, the background will be
+            erased.
         @param rect
-        If non-@NULL, only the given rectangle will
-        be treated as damaged.
+            If non-@NULL, only the given rectangle will
+            be treated as damaged.
         
-        @sa RefreshRect()
+        @see RefreshRect()
     */
-    virtual void Refresh(bool eraseBackground = @true,
-                         const wxRect* rect = @NULL);
+    virtual void Refresh(bool eraseBackground = true,
+                         const wxRect* rect = NULL);
 
     /**
         Redraws the contents of the given rectangle: only the area inside it will be
         repainted.
-        
         This is the same as Refresh() but has a nicer syntax
         as it can be called with a temporary wxRect object as argument like this
         @c RefreshRect(wxRect(x, y, w, h)).
     */
-    void RefreshRect(const wxRect& rect, bool eraseBackground = @true);
+    void RefreshRect(const wxRect& rect, bool eraseBackground = true);
 
     /**
         Registers a system wide hotkey. Every time the user presses the hotkey
@@ -1670,30 +1594,28 @@ public:
         application.
         
         @param hotkeyId
-        Numeric identifier of the hotkey. For applications this must be between 0 and
-        0xBFFF. If
-        this function is called from a shared DLL, it must be a system wide unique
+            Numeric identifier of the hotkey. For applications this must be between 0
+        and 0xBFFF. If
+            this function is called from a shared DLL, it must be a system wide unique
         identifier between 0xC000 and 0xFFFF.
-        This is a MSW specific detail.
-        
+            This is a MSW specific detail.
         @param modifiers
-        A bitwise combination of wxMOD_SHIFT, wxMOD_CONTROL, wxMOD_ALT
-        or wxMOD_WIN specifying the modifier keys that have to be pressed along with
-        the key.
-        
+            A bitwise combination of wxMOD_SHIFT, wxMOD_CONTROL, wxMOD_ALT
+            or wxMOD_WIN specifying the modifier keys that have to be pressed along
+        with the key.
         @param virtualKeyCode
-        The virtual key code of the hotkey.
+            The virtual key code of the hotkey.
         
         @returns @true if the hotkey was registered successfully. @false if some
-                   other application already registered a hotkey with
-                   this modifier/virtualKeyCode combination.
+                 other application already registered a hotkey with this
+                 modifier/virtualKeyCode combination.
         
         @remarks Use EVT_HOTKEY(hotkeyId, fnc) in the event table to capture the
-                   event. This function is currently only implemented
-                   under Windows. It is used in the Windows CE port for
-                   detecting hardware button presses.
+                 event. This function is currently only implemented
+                 under Windows. It is used in the Windows CE port for
+                 detecting hardware button presses.
         
-        @sa UnregisterHotKey()
+        @see UnregisterHotKey()
     */
     bool RegisterHotKey(int hotkeyId, int modifiers,
                         int virtualKeyCode);
@@ -1701,39 +1623,38 @@ public:
     /**
         Releases mouse input captured with CaptureMouse().
         
-        @sa CaptureMouse(), HasCapture(), ReleaseMouse(),
-              wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent
+        @see CaptureMouse(), HasCapture(), ReleaseMouse(),
+             wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent
     */
     virtual void ReleaseMouse();
 
     /**
         Removes a child window.  This is called automatically by window deletion
         functions so should not be required by the application programmer.
-        
         Notice that this function is mostly internal to wxWidgets and shouldn't be
         called by the user code.
         
         @param child
-        Child window to remove.
+            Child window to remove.
     */
     virtual void RemoveChild(wxWindow* child);
 
     /**
-        Find the given @e handler in the windows event handler chain and remove (but
+        Find the given @a handler in the windows event handler chain and remove (but
         not delete) it from it.
         
         @param handler
-        The event handler to remove, must be non-@NULL and
-        must be present in this windows event handlers chain
+            The event handler to remove, must be non-@NULL and
+            must be present in this windows event handlers chain
         
         @returns Returns @true if it was found and @false otherwise (this also
-                   results in an assert failure so this function should
-                   only be called when the handler is supposed to be
-                   there).
+                 results in an assert failure so this function should
+                 only be called when the handler is supposed to be
+                 there).
         
-        @sa PushEventHandler(), PopEventHandler()
+        @see PushEventHandler(), PopEventHandler()
     */
-    bool RemoveEventHandler(wxEvtHandler * handler);
+    bool RemoveEventHandler(wxEvtHandler* handler);
 
     /**
         Reparents the window, i.e the window will be removed from its
@@ -1741,7 +1662,7 @@ public:
         and then re-inserted into another.
         
         @param newParent
-        New parent.
+            New parent.
     */
     virtual bool Reparent(wxWindow* newParent);
 
@@ -1750,43 +1671,41 @@ public:
         Converts from screen to client window coordinates.
         
         @param x
-        Stores the screen x coordinate and receives the client x coordinate.
-        
+            Stores the screen x coordinate and receives the client x coordinate.
         @param y
-        Stores the screen x coordinate and receives the client x coordinate.
-        
+            Stores the screen x coordinate and receives the client x coordinate.
         @param pt
-        The screen position for the second form of the function.
+            The screen position for the second form of the function.
     */
     virtual void ScreenToClient(int* x, int* y);
     virtual wxPoint ScreenToClient(const wxPoint& pt);
     //@}
 
     /**
-        Scrolls the window by the given number of lines down (if @e lines is
+        Scrolls the window by the given number of lines down (if @a lines is
         positive) or up.
         
         @returns Returns @true if the window was scrolled, @false if it was already
-                   on top/bottom and nothing was done.
+                 on top/bottom and nothing was done.
         
         @remarks This function is currently only implemented under MSW and
-                   wxTextCtrl under wxGTK (it also works for
-                   wxScrolledWindow derived classes under all platforms).
+                 wxTextCtrl under wxGTK (it also works for
+                 wxScrolledWindow derived classes under all platforms).
         
-        @sa ScrollPages()
+        @see ScrollPages()
     */
     virtual bool ScrollLines(int lines);
 
     /**
-        Scrolls the window by the given number of pages down (if @e pages is
+        Scrolls the window by the given number of pages down (if @a pages is
         positive) or up.
         
         @returns Returns @true if the window was scrolled, @false if it was already
-                   on top/bottom and nothing was done.
+                 on top/bottom and nothing was done.
         
         @remarks This function is currently only implemented under MSW and wxGTK.
         
-        @sa ScrollLines()
+        @see ScrollLines()
     */
     virtual bool ScrollPages(int pages);
 
@@ -1794,21 +1713,19 @@ public:
         Physically scrolls the pixels in the window and move child windows accordingly.
         
         @param dx
-        Amount to scroll horizontally.
-        
+            Amount to scroll horizontally.
         @param dy
-        Amount to scroll vertically.
-        
+            Amount to scroll vertically.
         @param rect
-        Rectangle to scroll, if it is @NULL, the whole window is
-        scrolled (this is always the case under wxGTK which doesn't support this
-        parameter)
+            Rectangle to scroll, if it is @NULL, the whole window is
+            scrolled (this is always the case under wxGTK which doesn't support this
+            parameter)
         
         @remarks Note that you can often use wxScrolledWindow instead of using
-                   this function directly.
+                 this function directly.
     */
     virtual void ScrollWindow(int dx, int dy,
-                              const wxRect* rect = @NULL);
+                              const wxRect* rect = NULL);
 
     /**
         Sets the accelerator table for this window. See wxAcceleratorTable.
@@ -1818,7 +1735,6 @@ public:
     /**
         Sets the accessible for this window. Any existing accessible for this window
         will be deleted first, if not identical to @e accessible.
-        
         See also wxAccessible.
     */
     void SetAccessible(wxAccessible* accessible);
@@ -1829,7 +1745,6 @@ public:
         happens for the windows usually used to contain children, namely
         wxPanel and wxTopLevelWindow
         (and the classes deriving from them).
-        
         This method is called implicitly by
         SetSizer() but if you use
         SetConstraints() you should call it
@@ -1837,31 +1752,30 @@ public:
         size changes.
         
         @param autoLayout
-        Set this to @true if you wish the Layout function to be
-        called automatically when the window is resized.
+            Set this to @true if you wish the Layout function to be
+            called automatically when the window is resized.
         
-        @sa SetConstraints()
+        @see SetConstraints()
     */
     void SetAutoLayout(bool autoLayout);
 
     /**
         Sets the background colour of the window.
-        
         Please see InheritAttributes() for
         explanation of the difference between this method and
         SetOwnBackgroundColour().
         
         @param colour
-        The colour to be used as the background colour, pass
-          wxNullColour to reset to the default colour.
+            The colour to be used as the background colour, pass
+              wxNullColour to reset to the default colour.
         
         @remarks The background colour is usually painted by the default
-                   wxEraseEvent event handler function under Windows and
-                   automatically under GTK.
+                 wxEraseEvent event handler function under Windows and
+                 automatically under GTK.
         
-        @sa GetBackgroundColour(), SetForegroundColour(),
-              GetForegroundColour(), ClearBackground(),
-              Refresh(), wxEraseEvent
+        @see GetBackgroundColour(), SetForegroundColour(),
+             GetForegroundColour(), ClearBackground(),
+             Refresh(), wxEraseEvent
     */
     virtual bool SetBackgroundColour(const wxColour& colour);
 
@@ -1870,8 +1784,8 @@ public:
         GetBackgroundStyle() for the description
         of the possible style values.
         
-        @sa SetBackgroundColour(), GetForegroundColour(),
-              SetTransparent()
+        @see SetBackgroundColour(), GetForegroundColour(),
+             SetTransparent()
     */
     virtual void SetBackgroundStyle(wxBackgroundStyle style);
 
@@ -1883,14 +1797,14 @@ public:
         the effect of programmatically calling
         SetFocus().
         
-        @sa wxFocusEvent, wxPanel::SetFocus, wxPanel::SetFocusIgnoringChildren
+        @see wxFocusEvent, wxPanel::SetFocus, wxPanel::SetFocusIgnoringChildren
     */
     virtual void SetCanFocus(bool canFocus);
 
     /**
         Sets the caret associated with the window.
     */
-    void SetCaret(wxCaret * caret);
+    void SetCaret(wxCaret* caret);
 
     //@{
     /**
@@ -1903,13 +1817,11 @@ public:
         around panel items, for example.
         
         @param width
-        The required client area width.
-        
+            The required client area width.
         @param height
-        The required client area height.
-        
+            The required client area height.
         @param size
-        The required client size.
+            The required client size.
     */
     virtual void SetClientSize(int width, int height);
     virtual void SetClientSize(const wxSize& size);
@@ -1922,14 +1834,14 @@ public:
         window, it will be deleted.
         
         @param constraints
-        The constraints to set. Pass @NULL to disassociate and delete the window's
-        constraints.
+            The constraints to set. Pass @NULL to disassociate and delete the window's
+            constraints.
         
         @remarks You must call SetAutoLayout() to tell a window to use
-                   the constraints automatically in OnSize; otherwise,
-                   you must override OnSize and call Layout()
-                   explicitly. When setting both a wxLayoutConstraints
-                   and a wxSizer, only the sizer will have effect.
+                 the constraints automatically in OnSize; otherwise, you
+                 must override OnSize and call Layout() explicitly. When
+                 setting both a wxLayoutConstraints and a wxSizer, only
+                 the sizer will have effect.
     */
     void SetConstraints(wxLayoutConstraints* constraints);
 
@@ -1943,24 +1855,21 @@ public:
     /**
         Sets the window's cursor. Notice that the window cursor also sets it for the
         children of the window implicitly.
-        
-        The @e cursor may be @c wxNullCursor in which case the window cursor will
+        The @a cursor may be @c wxNullCursor in which case the window cursor will
         be reset back to default.
         
         @param cursor
-        Specifies the cursor that the window should normally display.
+            Specifies the cursor that the window should normally display.
         
-        @sa ::wxSetCursor, wxCursor
+        @see ::wxSetCursor, wxCursor
     */
     virtual void SetCursor(const wxCursor& cursor);
 
     /**
         Associates a drop target with this window.
-        
         If the window already has a drop target, it is deleted.
         
-        @sa GetDropTarget(), @ref overview_wxdndoverview "Drag and drop
-              overview"
+        @see GetDropTarget(), @ref overview_wxdndoverview
     */
     void SetDropTarget(wxDropTarget* target);
 
@@ -1968,17 +1877,17 @@ public:
         Sets the event handler for this window.
         
         @param handler
-        Specifies the handler to be set.
+            Specifies the handler to be set.
         
         @remarks An event handler is an object that is capable of processing the
-                   events sent to a window. By default, the window is
-                   its own event handler, but an application may wish to
-                   substitute another, for example to allow central
-                   implementation of event-handling for a variety of
-                   different window classes.
+                 events sent to a window. By default, the window is its
+                 own event handler, but an application may wish to
+                 substitute another, for example to allow central
+                 implementation of event-handling for a variety of
+                 different window classes.
         
-        @sa GetEventHandler(), PushEventHandler(),
-              PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
+        @see GetEventHandler(), PushEventHandler(),
+             PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
     */
     void SetEventHandler(wxEvtHandler* handler);
 
@@ -1988,13 +1897,11 @@ public:
         
         @b wxWS_EX_VALIDATE_RECURSIVELY
         
-        
         TransferDataTo/FromWindow()
         and Validate() methods will recursively descend into all children of the
         window if it has this style flag set.
         
         @b wxWS_EX_BLOCK_EVENTS
-        
         
         Normally, the command
         events are propagated upwards to the window parent recursively until a handler
@@ -2005,14 +1912,12 @@ public:
         
         @b wxWS_EX_TRANSIENT
         
-        
         This can be used to prevent a
         window from being used as an implicit parent for the dialogs which were
         created without a parent. It is useful for the windows which can disappear at
         any moment as creating children of such windows results in fatal problems.
         
         @b wxWS_EX_CONTEXTHELP
-        
         
         Under Windows, puts a query
         button on the caption. When pressed, Windows will go into a context-sensitive
@@ -2023,12 +1928,10 @@ public:
         
         @b wxWS_EX_PROCESS_IDLE
         
-        
         This window should always process idle events, even
         if the mode set by wxIdleEvent::SetMode is wxIDLE_PROCESS_SPECIFIED.
         
         @b wxWS_EX_PROCESS_UI_UPDATES
-        
         
         This window should always process UI update events,
         even if the mode set by wxUpdateUIEvent::SetMode is
@@ -2039,8 +1942,8 @@ public:
     /**
         This sets the window to receive keyboard input.
         
-        @sa HasFocus(), wxFocusEvent, wxPanel::SetFocus,
-              wxPanel::SetFocusIgnoringChildren
+        @see HasFocus(), wxFocusEvent, wxPanel::SetFocus,
+             wxPanel::SetFocusIgnoringChildren
     */
     virtual void SetFocus();
 
@@ -2058,7 +1961,6 @@ public:
         use SetOwnFont() instead in this case and
         see InheritAttributes() for more
         explanations.
-        
         Please notice that the given font is not automatically used for
         wxPaintDC objects associated with this window, you need to
         call wxDC::SetFont too. However this font is used by
@@ -2066,45 +1968,43 @@ public:
         GetTextExtent().
         
         @param font
-        Font to associate with this window, pass
-        wxNullFont to reset to the default font.
+            Font to associate with this window, pass
+            wxNullFont to reset to the default font.
         
         @returns @true if the want was really changed, @false if it was already set
-                   to this  font and so nothing was done.
+                 to this  font and so nothing was done.
         
-        @sa GetFont(), InheritAttributes()
+        @see GetFont(), InheritAttributes()
     */
     bool SetFont(const wxFont& font);
 
     /**
         Sets the foreground colour of the window.
-        
         Please see InheritAttributes() for
         explanation of the difference between this method and
         SetOwnForegroundColour().
         
         @param colour
-        The colour to be used as the foreground colour, pass
-          wxNullColour to reset to the default colour.
+            The colour to be used as the foreground colour, pass
+              wxNullColour to reset to the default colour.
         
         @remarks The interpretation of foreground colour is open to
-                   interpretation according to the window class; it may
-                   be the text colour or other colour, or it may not be
-                   used at all.
+                 interpretation according to the window class; it may be
+                 the text colour or other colour, or it may not be used
+                 at all.
         
-        @sa GetForegroundColour(), SetBackgroundColour(),
-              GetBackgroundColour(), ShouldInheritColours()
+        @see GetForegroundColour(), SetBackgroundColour(),
+             GetBackgroundColour(), ShouldInheritColours()
     */
     virtual void SetForegroundColour(const wxColour& colour);
 
     /**
         Sets the help text to be used as context-sensitive help for this window.
-        
         Note that the text is actually stored by the current wxHelpProvider
         implementation,
         and not in the window object itself.
         
-        @sa GetHelpText(), wxHelpProvider
+        @see GetHelpText(), wxHelpProvider
     */
     virtual void SetHelpText(const wxString& helpText);
 
@@ -2112,11 +2012,11 @@ public:
         Sets the identifier of the window.
         
         @remarks Each window has an integer identifier. If the application has
-                   not provided one, an identifier will be generated.
-                   Normally, the identifier should be provided on
-                   creation and should not be modified subsequently.
+                 not provided one, an identifier will be generated.
+                 Normally, the identifier should be provided on creation
+                 and should not be modified subsequently.
         
-        @sa GetId(), @ref overview_windowids "Window identifiers"
+        @see GetId(), @ref overview_windowids "Window identifiers"
     */
     void SetId(int id);
 
@@ -2133,11 +2033,10 @@ public:
         partial size is passed to this function then the sizers will use that
         size instead of the results of GetBestSize to determine the minimum
         needs of the window for layout.
-        
         Most controls will use this to set their initial size, and their min
         size to the passed in value (if any.)
         
-        @sa SetSize(), GetBestSize(), GetEffectiveMinSize()
+        @see SetSize(), GetBestSize(), GetEffectiveMinSize()
     */
     void SetInitialSize(const wxSize& size = wxDefaultSize);
 
@@ -2145,9 +2044,9 @@ public:
         Sets the window's label.
         
         @param label
-        The window label.
+            The window label.
         
-        @sa GetLabel()
+        @see GetLabel()
     */
     virtual void SetLabel(const wxString& label);
 
@@ -2155,7 +2054,7 @@ public:
         Sets the maximum client size of the window, to indicate to the sizer
         layout mechanism that this is the maximum possible size of its client area.
         
-        @sa SetMaxSize()
+        @see SetMaxSize()
     */
     void SetMaxClientSize(const wxSize& size);
 
@@ -2163,7 +2062,7 @@ public:
         Sets the maximum size of the window, to indicate to the sizer layout mechanism
         that this is the maximum possible size.
         
-        @sa SetMaxClientSize()
+        @see SetMaxClientSize()
     */
     void SetMaxSize(const wxSize& size);
 
@@ -2173,7 +2072,7 @@ public:
         area. You may need to call this if you change the window size after
         construction and before adding to its parent sizer.
         
-        @sa SetMinSize()
+        @see SetMinSize()
     */
     void SetMinClientSize(const wxSize& size);
 
@@ -2183,7 +2082,7 @@ public:
         if you change the window size after construction and before adding
         to its parent sizer.
         
-        @sa SetMinClientSize()
+        @see SetMinClientSize()
     */
     void SetMinSize(const wxSize& size);
 
@@ -2191,9 +2090,9 @@ public:
         Sets the window's name.
         
         @param name
-        A name to set for the window.
+            A name to set for the window.
         
-        @sa GetName()
+        @see GetName()
     */
     virtual void SetName(const wxString& name);
 
@@ -2201,7 +2100,7 @@ public:
         Sets the background colour of the window but prevents it from being inherited
         by the children of this window.
         
-        @sa SetBackgroundColour(), InheritAttributes()
+        @see SetBackgroundColour(), InheritAttributes()
     */
     void SetOwnBackgroundColour(const wxColour& colour);
 
@@ -2209,7 +2108,7 @@ public:
         Sets the font of the window but prevents it from being inherited by the
         children of this window.
         
-        @sa SetFont(), InheritAttributes()
+        @see SetFont(), InheritAttributes()
     */
     void SetOwnFont(const wxFont& font);
 
@@ -2217,7 +2116,7 @@ public:
         Sets the foreground colour of the window but prevents it from being inherited
         by the children of this window.
         
-        @sa SetForegroundColour(), InheritAttributes()
+        @see SetForegroundColour(), InheritAttributes()
     */
     void SetOwnForegroundColour(const wxColour& colour);
 
@@ -2230,112 +2129,103 @@ public:
         Sets the position of one of the built-in scrollbars.
         
         @param orientation
-        Determines the scrollbar whose position is to be set. May be wxHORIZONTAL or
-        wxVERTICAL.
-        
+            Determines the scrollbar whose position is to be set. May be wxHORIZONTAL
+        or wxVERTICAL.
         @param pos
-        Position in scroll units.
-        
+            Position in scroll units.
         @param refresh
-        @true to redraw the scrollbar, @false otherwise.
+            @true to redraw the scrollbar, @false otherwise.
         
         @remarks This function does not directly affect the contents of the
-                   window: it is up to the application to take note of
-                   scrollbar attributes and redraw contents accordingly.
+                 window: it is up to the application to take note of
+                 scrollbar attributes and redraw contents accordingly.
         
-        @sa SetScrollbar(), GetScrollPos(), GetScrollThumb(),
-              wxScrollBar, wxScrolledWindow
+        @see SetScrollbar(), GetScrollPos(), GetScrollThumb(),
+             wxScrollBar, wxScrolledWindow
     */
     virtual void SetScrollPos(int orientation, int pos,
-                              bool refresh = @true);
+                              bool refresh = true);
 
     /**
         Sets the scrollbar properties of a built-in scrollbar.
         
         @param orientation
-        Determines the scrollbar whose page size is to be set. May be wxHORIZONTAL or
-        wxVERTICAL.
-        
+            Determines the scrollbar whose page size is to be set. May be wxHORIZONTAL
+        or wxVERTICAL.
         @param position
-        The position of the scrollbar in scroll units.
-        
+            The position of the scrollbar in scroll units.
         @param thumbSize
-        The size of the thumb, or visible portion of the scrollbar, in scroll units.
-        
+            The size of the thumb, or visible portion of the scrollbar, in scroll units.
         @param range
-        The maximum position of the scrollbar.
-        
+            The maximum position of the scrollbar.
         @param refresh
-        @true to redraw the scrollbar, @false otherwise.
+            @true to redraw the scrollbar, @false otherwise.
         
         @remarks Let's say you wish to display 50 lines of text, using the same
-                   font. The window is sized so that you can only see 16
-                   lines at a time.
+                 font. The window is sized so that you can only see 16
+                 lines at a time.
         
-        @sa @ref overview_scrollingoverview "Scrolling overview", wxScrollBar,
-              wxScrolledWindow, wxScrollWinEvent
+        @see @ref overview_scrollingoverview "Scrolling overview", wxScrollBar,
+             wxScrolledWindow, wxScrollWinEvent
     */
     virtual void SetScrollbar(int orientation, int position,
                               int thumbSize,
                               int range,
-                              bool refresh = @true);
+                              bool refresh = true);
 
     //@{
     /**
         Sets the size of the window in pixels.
         
         @param x
-        Required x position in pixels, or wxDefaultCoord to indicate that the existing
-        value should be used.
-        
-        @param y
-        Required y position in pixels, or wxDefaultCoord to indicate that the existing
-        value should be used.
-        
-        @param width
-        Required width in pixels, or wxDefaultCoord to indicate that the existing
-        value should be used.
-        
-        @param height
-        Required height position in pixels, or wxDefaultCoord to indicate that the
+            Required x position in pixels, or wxDefaultCoord to indicate that the
         existing
-        value should be used.
-        
+            value should be used.
+        @param y
+            Required y position in pixels, or wxDefaultCoord to indicate that the
+        existing
+            value should be used.
+        @param width
+            Required width in pixels, or wxDefaultCoord to indicate that the existing
+            value should be used.
+        @param height
+            Required height position in pixels, or wxDefaultCoord to indicate that the
+        existing
+            value should be used.
         @param size
-        wxSize object for setting the size.
-        
+            wxSize object for setting the size.
         @param rect
-        wxRect object for setting the position and size.
-        
+            wxRect object for setting the position and size.
         @param sizeFlags
-        Indicates the interpretation of other parameters. It is a bit list of the
+            Indicates the interpretation of other parameters. It is a bit list of the
         following:
+            wxSIZE_AUTO_WIDTH: a wxDefaultCoord width value is taken to indicate
+            a wxWidgets-supplied default width.
         
-        wxSIZE_AUTO_WIDTH: a wxDefaultCoord width value is taken to indicate
-        a wxWidgets-supplied default width.
+            wxSIZE_AUTO_HEIGHT: a wxDefaultCoord height value is taken to indicate
+            a wxWidgets-supplied default height.
         
-        wxSIZE_AUTO_HEIGHT: a wxDefaultCoord height value is taken to indicate
-        a wxWidgets-supplied default height.
+            wxSIZE_AUTO: wxDefaultCoord size values are taken to indicate
+            a wxWidgets-supplied default size.
         
-        wxSIZE_AUTO: wxDefaultCoord size values are taken to indicate
-        a wxWidgets-supplied default size.
+            wxSIZE_USE_EXISTING: existing dimensions should be used
+            if wxDefaultCoord values are supplied.
         
-        wxSIZE_USE_EXISTING: existing dimensions should be used
-        if wxDefaultCoord values are supplied.
-        
-        wxSIZE_ALLOW_MINUS_ONE: allow negative dimensions (i.e. value of
+            wxSIZE_ALLOW_MINUS_ONE: allow negative dimensions (i.e. value of
         wxDefaultCoord) to be interpreted
-        as real dimensions, not default values.
-        wxSIZE_FORCE: normally, if the position and the size of the window are
-        already the same as the parameters of this function, nothing is done. but with
-        this flag a window resize may be forced even in this case (supported in wx
-        2.6.2 and later and only implemented for MSW and ignored elsewhere currently)
+            as real dimensions, not default values.
+            wxSIZE_FORCE: normally, if the position and the size of the window are
+            already the same as the parameters of this function, nothing is done. but
+        with
+            this flag a window resize may be forced even in this case (supported in wx
+            2.6.2 and later and only implemented for MSW and ignored elsewhere
+        currently)
         
         @remarks The second form is a convenience for calling the first form with
-                   default x and y parameters, and must be used with
-                   non-default width and height values.
+                 default x and y parameters, and must be used with
+                 non-default width and height values.
         
-        @sa Move()
+        @see Move()
     */
     virtual void SetSize(int x, int y, int width, int height,
                          int sizeFlags = wxSIZE_AUTO);
@@ -2350,7 +2240,7 @@ public:
         SetMinSize() and SetMaxSize()
         instead.
         
-        @sa wxTopLevelWindow::SetSizeHints.
+        @see wxTopLevelWindow::SetSizeHints.
     */
 
 
@@ -2359,23 +2249,21 @@ public:
         will then own the object, and will take care of its deletion.
         If an existing layout constraints object is already owned by the
         window, it will be deleted if the deleteOld parameter is @true.
-        
         Note that this function will also call
         SetAutoLayout() implicitly with @true
-        parameter if the @e sizer is non-@NULL and @false otherwise.
+        parameter if the @a sizer is non-@NULL and @false otherwise.
         
         @param sizer
-        The sizer to set. Pass @NULL to disassociate and conditionally delete
-        the window's sizer.  See below.
-        
+            The sizer to set. Pass @NULL to disassociate and conditionally delete
+            the window's sizer.  See below.
         @param deleteOld
-        If @true (the default), this will delete any pre-existing sizer.
-        Pass @false if you wish to handle deleting the old sizer yourself.
+            If @true (the default), this will delete any pre-existing sizer.
+            Pass @false if you wish to handle deleting the old sizer yourself.
         
         @remarks SetSizer now enables and disables Layout automatically, but
-                   prior to wxWidgets 2.3.3 the following applied:
+                 prior to wxWidgets 2.3.3 the following applied:
     */
-    void SetSizer(wxSizer* sizer, bool deleteOld=@true);
+    void SetSizer(wxSizer* sizer, bool deleteOld = true);
 
     /**
         This method calls SetSizer() and then
@@ -2384,7 +2272,7 @@ public:
         size hints which, if this window is a top level one, prevent the user from
         resizing it to be less than this minimial size.
     */
-    void SetSizerAndFit(wxSizer* sizer, bool deleteOld=@true);
+    void SetSizerAndFit(wxSizer* sizer, bool deleteOld = true);
 
     /**
         This function tells a window if it should use the system's "theme" code
@@ -2393,7 +2281,6 @@ public:
         obviously needs to support the notion of themes in user defined windows.
         One such platform is GTK+ where windows can have (very colourful) backgrounds
         defined by a user's selected theme.
-        
         Dialogs, notebook pages and the status bar have this flag set to @true
         by default so that the default look and feel is simulated best.
     */
@@ -2402,7 +2289,6 @@ public:
     //@{
     /**
         Attach a tooltip to the window.
-        
         See also: GetToolTip(),
          wxToolTip
     */
@@ -2414,8 +2300,7 @@ public:
         Set the transparency of the window. If the system supports transparent windows,
         returns @true, otherwise returns @false and the window remains fully opaque.
         See also CanSetTransparent().
-        
-        The parameter @e alpha is in the range 0..255 where 0 corresponds to a
+        The parameter @a alpha is in the range 0..255 where 0 corresponds to a
         fully transparent window and 255 to the fully opaque one. The constants
         @c wxIMAGE_ALPHA_TRANSPARENT and @c wxIMAGE_ALPHA_OPAQUE can be
         used.
@@ -2444,31 +2329,25 @@ public:
         will be used.
         
         @param minW
-        Specifies the minimum width allowable.
-        
+            Specifies the minimum width allowable.
         @param minH
-        Specifies the minimum height allowable.
-        
+            Specifies the minimum height allowable.
         @param maxW
-        Specifies the maximum width allowable.
-        
+            Specifies the maximum width allowable.
         @param maxH
-        Specifies the maximum height allowable.
-        
+            Specifies the maximum height allowable.
         @param minSize
-        Minimum size.
-        
+            Minimum size.
         @param maxSize
-        Maximum size.
+            Maximum size.
         
         @remarks If this function is called, the user will not be able to size
-                   the virtual area of the window outside the given
-                   bounds.
+                 the virtual area of the window outside the given bounds.
     */
-    virtual void SetVirtualSizeHints(int minW, int minH, int maxW=-1,
-                                     int maxH=-1);
-    void SetVirtualSizeHints(const wxSize& minSize=wxDefaultSize,
-                             const wxSize& maxSize=wxDefaultSize);
+    virtual void SetVirtualSizeHints(int minW, int minH, int maxW = -1,
+                                     int maxH = -1);
+    void SetVirtualSizeHints(const wxSize& minSize = wxDefaultSize,
+                             const wxSize& maxSize = wxDefaultSize);
     //@}
 
     /**
@@ -2481,10 +2360,9 @@ public:
         after the window creation and that Refresh() might
         need to be be called after changing the others for the change to take place
         immediately.
-        
         See @ref overview_windowstyles "Window styles" for more information about flags.
         
-        @sa GetWindowStyleFlag()
+        @see GetWindowStyleFlag()
     */
     virtual void SetWindowStyleFlag(long style);
 
@@ -2503,7 +2381,6 @@ public:
         Return @true from here to allow the colours of this window to be changed by
         InheritAttributes(), returning @false
         forbids inheriting them from the parent window.
-        
         The base class version returns @false, but this method is overridden in
         wxControl where it returns @true.
     */
@@ -2515,57 +2392,47 @@ public:
         needed if Show() is called immediately after the frame creation.
         
         @param show
-        If @true displays the window. Otherwise, hides it.
+            If @true displays the window. Otherwise, hides it.
         
         @returns @true if the window has been shown or hidden or @false if nothing
-                   was done because it already was in the requested
-                   state.
+                 was done because it already was in the requested state.
         
-        @sa IsShown(), Hide(), wxRadioBox::Show
+        @see IsShown(), Hide(), wxRadioBox::Show
     */
-    virtual bool Show(bool show = @true);
+    virtual bool Show(bool show = true);
 
     /**
         This function shows a window, like Show(), but using a
         special visual effect if possible.
-        
-        Possible values for @e effect are:
-        
+        Possible values for @a effect are:
         
         wxSHOW_EFFECT_ROLL
-        
         
         Roll window effect
         
         wxSHOW_EFFECT_SLIDE
         
-        
         Sliding window effect
         
         wxSHOW_EFFECT_BLEND
-        
         
         Fade in or out effect
         
         wxSHOW_EFFECT_EXPAND
         
-        
         Expanding or collapsing effect
         
-        For the roll and slide effects the @e dir parameter specifies the animation
+        For the roll and slide effects the @a dir parameter specifies the animation
         direction: it can be one of @c wxTOP, @c wxBOTTOM, @c wxLEFT
         or @c wxRIGHT. For the other effects, this parameter is unused.
-        
-        The @e timeout parameter specifies the time of the animation, in
+        The @a timeout parameter specifies the time of the animation, in
         milliseconds. If the default value of 0 is used, the default animation time
         for the current platform is used.
-        
         Currently this function is only implemented in wxMSW and does the same thing as
         Show() in the other ports.
-        
         This function is new since wxWidgets version 2.9.0
         
-        @sa HideWithEffect()
+        @see HideWithEffect()
     */
     virtual bool ShowWithEffect(wxShowEffect effect,
                                 unsigned timeout = 0,
@@ -2576,22 +2443,21 @@ public:
         Freeze(). To really thaw the control, it must be called
         exactly the same number of times as Freeze().
         
-        @sa wxWindowUpdateLocker
+        @see wxWindowUpdateLocker
     */
     virtual void Thaw();
 
     /**
-        Turns the given @e flag on if it's currently turned off and vice versa.
+        Turns the given @a flag on if it's currently turned off and vice versa.
         This function cannot be used if the value of the flag is 0 (which is often
         the case for default flags).
-        
         Also, please notice that not all styles can be changed after the control
         creation.
         
         @returns Returns @true if the style was turned on by this function, @false
-                   if it was switched off.
+                 if it was switched off.
         
-        @sa SetWindowStyleFlag(), HasFlag()
+        @see SetWindowStyleFlag(), HasFlag()
     */
     bool ToggleWindowStyle(int flag);
 
@@ -2599,24 +2465,22 @@ public:
         Transfers values from child controls to data areas specified by their
         validators. Returns
         @false if a transfer failed.
-        
         If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
         the method will also call TransferDataFromWindow() of all child windows.
         
-        @sa TransferDataToWindow(), wxValidator, Validate()
+        @see TransferDataToWindow(), wxValidator, Validate()
     */
     virtual bool TransferDataFromWindow();
 
     /**
         Transfers values to child controls from data areas specified by their
         validators.
-        
         If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
         the method will also call TransferDataToWindow() of all child windows.
         
         @returns Returns @false if a transfer failed.
         
-        @sa TransferDataFromWindow(), wxValidator, Validate()
+        @see TransferDataFromWindow(), wxValidator, Validate()
     */
     virtual bool TransferDataToWindow();
 
@@ -2624,31 +2488,29 @@ public:
         Unregisters a system wide hotkey.
         
         @param hotkeyId
-        Numeric identifier of the hotkey. Must be the same id that was passed to
+            Numeric identifier of the hotkey. Must be the same id that was passed to
         RegisterHotKey.
         
         @returns @true if the hotkey was unregistered successfully, @false if the
-                   id was invalid.
+                 id was invalid.
         
         @remarks This function is currently only implemented under MSW.
         
-        @sa RegisterHotKey()
+        @see RegisterHotKey()
     */
     bool UnregisterHotKey(int hotkeyId);
 
     /**
         Unreserve an ID or range of IDs that was reserved by NewControlId().
-        
         See @ref overview_windowidsoverview "Window IDs overview" for more information.
         
         @param id
-        The starting ID of the range of IDs to unreserve.
-        
+            The starting ID of the range of IDs to unreserve.
         @param count
-        The number of sequential IDs to unreserve.
+            The number of sequential IDs to unreserve.
         
-        @sa NewControlId(), wxIdManager, @ref overview_windowidsoverview
-              "Window IDs overview"
+        @see NewControlId(), wxIdManager, @ref overview_windowidsoverview
+             "Window IDs overview"
     */
     static void UnreserveControlId(wxWindowID id, int count = 1);
 
@@ -2675,8 +2537,8 @@ public:
         wxUpdateUIEvent::SetUpdateInterval to
         limit the overhead that wxWidgets incurs by sending update UI events in idle
         time.
+        @a flags should be a bitlist of one or more of the following values.
         
-        @e flags should be a bitlist of one or more of the following values.
         If you are calling this function from an OnInternalIdle or OnIdle
         function, make sure you pass the wxUPDATE_UI_FROMIDLE flag, since
         this tells the window to only update the UI elements that need
@@ -2685,34 +2547,31 @@ public:
         The following is an example of how to call UpdateWindowUI from
         an idle function.
         
-        @sa wxUpdateUIEvent, DoUpdateWindowUI(), OnInternalIdle()
+        @see wxUpdateUIEvent, DoUpdateWindowUI(), OnInternalIdle()
     */
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
 
     /**
         Validates the current values of the child controls using their validators.
-        
         If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
         the method will also call Validate() of all child windows.
         
         @returns Returns @false if any of the validations failed.
         
-        @sa TransferDataFromWindow(), TransferDataToWindow(),
-              wxValidator
+        @see TransferDataFromWindow(), TransferDataToWindow(),
+             wxValidator
     */
     virtual bool Validate();
 
     /**
         Moves the pointer to the given position on the window.
-        
         @b NB: This function is not supported under Mac because Apple Human
         Interface Guidelines forbid moving the mouse cursor programmatically.
         
         @param x
-        The new x position for the cursor.
-        
+            The new x position for the cursor.
         @param y
-        The new y position for the cursor.
+            The new y position for the cursor.
     */
     void WarpPointer(int x, int y);
 };
@@ -2726,23 +2585,23 @@ public:
     Find the deepest window at the given mouse position in screen coordinates,
     returning the window if found, or @NULL if not.
 */
-wxWindow * wxFindWindowAtPoint(const wxPoint& pt);
+wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 
 /**
     Find the deepest window at the mouse pointer position, returning the window
     and current pointer position in screen coordinates.
 */
-wxWindow * wxFindWindowAtPointer(wxPoint& pt);
+wxWindow* wxFindWindowAtPointer(wxPoint& pt);
 
 /**
     Gets the currently active window (implemented for MSW and GTK only currently,
     always returns @NULL in the other ports).
 */
-wxWindow * wxGetActiveWindow();
+wxWindow* wxGetActiveWindow();
 
 /**
     Returns the first top level parent of the given window, or in other words, the
     frame or dialog containing it, or @NULL.
 */
-wxWindow * wxGetTopLevelParent(wxWindow win);
+wxWindow* wxGetTopLevelParent(wxWindow win);
 

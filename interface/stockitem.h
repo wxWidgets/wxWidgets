@@ -7,22 +7,20 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-Returns label that should be used for given @e id element.
+Returns label that should be used for given @a id element.
 
 @param id
-given id of the wxMenuItem, wxButton, wxToolBar tool, etc.
-
+    given id of the wxMenuItem, wxButton, wxToolBar tool, etc.
 @param withCodes
-if @false then strip accelerator code from the label;
-useful for getting labels without accelerator char code like for toolbar
+    if @false then strip accelerator code from the label;
+    useful for getting labels without accelerator char code like for toolbar
 tooltip or
-on platforms without traditional keyboard like smartphones
-
+    on platforms without traditional keyboard like smartphones
 @param accelerator
-optional accelerator string automatically added to label; useful
-for building labels for wxMenuItem
+    optional accelerator string automatically added to label; useful
+    for building labels for wxMenuItem
 */
-wxString wxGetStockLabel(wxWindowID id, bool withCodes = @true,
+wxString wxGetStockLabel(wxWindowID id, bool withCodes = true,
                          const wxString& accelerator = wxEmptyString);
 
 

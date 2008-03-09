@@ -38,51 +38,47 @@ public:
     static void AddHandler(wxFileSystemHandler handler);
 
     /**
-        Sets the current location. @e location parameter passed to
+        Sets the current location. @a location parameter passed to
         OpenFile() is relative to this path.
-        
-        @b Caution! Unless @e is_dir is @true the @e location parameter
+        @b Caution! Unless @a is_dir is @true the @a location parameter
         is not the directory name but the name of the file in this directory. All these
         commands change the path to "dir/subdir/":
         
         @param location
-        the new location. Its meaning depends on the value of is_dir
-        
+            the new location. Its meaning depends on the value of is_dir
         @param is_dir
-        if @true location is new directory. If @false (default)
-        location is file in the new directory.
+            if @true location is new directory. If @false (default)
+            location is file in the new directory.
     */
-    void ChangePathTo(const wxString& location, bool is_dir = @false);
+    void ChangePathTo(const wxString& location, bool is_dir = false);
 
     /**
         Converts filename into URL.
         
-        @sa URLToFileName(), wxFileName
+        @see URLToFileName(), wxFileName
     */
     static wxString FileNameToURL(wxFileName filename);
 
     /**
-        Looks for the file with the given name @e file in a colon or semi-colon
+        Looks for the file with the given name @a file in a colon or semi-colon
         (depending on the current platform) separated list of directories in
         @e path. If the file is found in any directory, returns @true and the full
         path of the file in @e str, otherwise returns @false and doesn't modify
         @e str.
         
         @param str
-        Receives the full path of the file, must not be @NULL
-        
+            Receives the full path of the file, must not be @NULL
         @param path
-        wxPATH_SEP-separated list of directories
-        
+            wxPATH_SEP-separated list of directories
         @param file
-        the name of the file to look for
+            the name of the file to look for
     */
     bool FindFileInPath(wxString str, const wxString& path,
                         const wxString& file);
 
     /**
         Works like wxFindFirstFile. Returns name of the first
-        filename (within filesystem's current path) that matches @e wildcard. @e flags
+        filename (within filesystem's current path) that matches @e wildcard. @a flags
         may be one of
         wxFILE (only files), wxDIR (only directories) or 0 (both).
     */
@@ -103,7 +99,7 @@ public:
         open the given
         location.
     */
-    static bool HasHandlerForPath(const wxString & location);
+    static bool HasHandlerForPath(const wxString& location);
 
     /**
         Opens the file and returns a pointer to a wxFSFile object
@@ -111,11 +107,11 @@ public:
         (based on value passed to ChangePathTo() method) and then as an
         absolute path.  Note that the user is responsible for deleting the returned
         wxFSFile.
+        @a flags can be one or more of the following bit values ored together:
         
-        @e flags can be one or more of the following bit values ored together:
         A stream opened with just the default @e wxFS_READ flag may
         or may not be seekable depending on the underlying source.
-        Passing @e wxFS_READ | wxFS_SEEKABLE for @e flags will
+        Passing @e wxFS_READ | wxFS_SEEKABLE for @a flags will
         back a stream that is not natively seekable with memory or a file
         and return a stream that is always seekable.
     */
@@ -157,18 +153,15 @@ public:
         Constructor. You probably won't use it. See Notes for details.
         
         @param stream
-        The input stream that will be used to access data
-        
+            The input stream that will be used to access data
         @param location
-        The full location (aka filename) of the file
-        
+            The full location (aka filename) of the file
         @param mimetype
-        MIME type of this file. It may be left empty, in which
-        case the type will be determined from file's extension (location must
-        not be empty in this case).
-        
+            MIME type of this file. It may be left empty, in which
+            case the type will be determined from file's extension (location must
+            not be empty in this case).
         @param anchor
-        Anchor. See GetAnchor() for details.
+            Anchor. See GetAnchor() for details.
     */
     wxFSFile(wxInputStream stream, const wxString& loc,
              const wxString& mimetype,
@@ -185,6 +178,7 @@ public:
     /**
         Returns anchor (if present). The term of @b anchor can be easily
         explained using few examples:
+        
         Usually an anchor is presented only if the MIME type is 'text/html'.
         But it may have some meaning with other files;
         for example myanim.avi#200 may refer to position in animation
@@ -260,16 +254,16 @@ public:
         Returns @true if the handler is able to open this file. This function doesn't
         check whether the file exists or not, it only checks if it knows the protocol.
         Example:
+        
         Must be overridden in derived handlers.
     */
     virtual bool CanOpen(const wxString& location);
 
     /**
         Works like wxFindFirstFile. Returns name of the first
-        filename (within filesystem's current path) that matches @e wildcard. @e flags
+        filename (within filesystem's current path) that matches @e wildcard. @a flags
         may be one of
         wxFILE (only files), wxDIR (only directories) or 0 (both).
-        
         This method is only called if CanOpen() returns @true.
     */
     virtual wxString FindFirst(const wxString& wildcard,
@@ -277,7 +271,6 @@ public:
 
     /**
         Returns next filename that matches parameters passed to wxFileSystem::FindFirst.
-        
         This method is only called if CanOpen() returns @true and FindFirst
         returned a non-empty string.
     */
@@ -286,16 +279,13 @@ public:
     /**
         Returns the anchor if present in the location.
         See @ref wxFSFile::getanchor wxFSFile for details.
-        
         Example: GetAnchor("index.htm#chapter2") == "chapter2"
-        
         @b Note: the anchor is NOT part of the left location.
     */
     wxString GetAnchor(const wxString& location);
 
     /**
         Returns the left location string extracted from @e location.
-        
         Example: GetLeftLocation("file:myzipfile.zip#zip:index.htm") ==
         "file:myzipfile.zip"
     */
@@ -305,36 +295,31 @@ public:
         Returns the MIME type based on @b extension of @e location. (While
         wxFSFile::GetMimeType
         returns real MIME type - either extension-based or queried from HTTP.)
-        
         Example : GetMimeTypeFromExt("index.htm") == "text/html"
     */
     wxString GetMimeTypeFromExt(const wxString& location);
 
     /**
         Returns the protocol string extracted from @e location.
-        
         Example: GetProtocol("file:myzipfile.zip#zip:index.htm") == "zip"
     */
     wxString GetProtocol(const wxString& location);
 
     /**
         Returns the right location string extracted from @e location.
-        
         Example : GetRightLocation("file:myzipfile.zip#zip:index.htm") == "index.htm"
     */
     wxString GetRightLocation(const wxString& location);
 
     /**
         Opens the file and returns wxFSFile pointer or @NULL if failed.
-        
         Must be overridden in derived handlers.
         
         @param fs
-        Parent FS (the FS from that OpenFile was called). See ZIP handler
-        for details of how to use it.
-        
+            Parent FS (the FS from that OpenFile was called). See ZIP handler
+            for details of how to use it.
         @param location
-        The absolute location of file.
+            The absolute location of file.
     */
     virtual wxFSFile* OpenFile(wxFileSystem& fs,
                                const wxString& location);

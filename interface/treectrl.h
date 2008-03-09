@@ -34,18 +34,15 @@ class wxTreeItemData : public wxClientData
 public:
     /**
         Default constructor.
+        
         In addition, the following methods are added in wxPython for accessing
         the object:
         
-        
-        
         @b GetData()
-        
         
         Returns a reference to the Python Object
         
         @b SetData(obj)
-        
         
         Associates a new Python Object with the
         wxTreeItemData
@@ -138,28 +135,23 @@ public:
         Constructor, creating and showing a tree control.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size. If wxDefaultSize is specified then the window is sized
-        appropriately.
-        
+            Window size. If wxDefaultSize is specified then the window is
+        sized
+            appropriately.
         @param style
-        Window style. See wxTreeCtrl.
-        
+            Window style. See wxTreeCtrl.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxTreeCtrl();
     wxTreeCtrl(wxWindow* parent, wxWindowID id,
@@ -177,44 +169,39 @@ public:
 
     /**
         Adds the root node to the tree, returning the new item.
-        
-        The @e image and @e selImage parameters are an index within
+        The @a image and @a selImage parameters are an index within
         the normal image list specifying the image to use for unselected and
         selected items, respectively.
-        If @e image  -1 and @e selImage is -1, the same image is used for
+        If @a image  -1 and @a selImage is -1, the same image is used for
         both selected and unselected items.
     */
     wxTreeItemId AddRoot(const wxString& text, int image = -1,
                          int selImage = -1,
-                         wxTreeItemData* data = @NULL);
+                         wxTreeItemData* data = NULL);
 
     /**
         Appends an item to the end of the branch identified by @e parent, return a new
         item id.
-        
-        The @e image and @e selImage parameters are an index within
+        The @a image and @a selImage parameters are an index within
         the normal image list specifying the image to use for unselected and
         selected items, respectively.
-        If @e image  -1 and @e selImage is -1, the same image is used for
+        If @a image  -1 and @a selImage is -1, the same image is used for
         both selected and unselected items.
     */
     wxTreeItemId AppendItem(const wxTreeItemId& parent,
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = @NULL);
+                            wxTreeItemData* data = NULL);
 
     /**
         Sets the buttons image list. The button images assigned with this method will
         be automatically deleted by wxTreeCtrl as appropriate
         (i.e. it takes ownership of the list).
-        
         Setting or assigning the button image list enables the display of image buttons.
         Once enabled, the only way to disable the display of button images is to set
         the button image list to @NULL.
-        
         This function is only available in the generic version.
-        
         See also SetButtonsImageList().
     */
     void AssignButtonsImageList(wxImageList* imageList);
@@ -223,7 +210,6 @@ public:
         Sets the normal image list. Image list assigned with this method will
         be automatically deleted by wxTreeCtrl as appropriate
         (i.e. it takes ownership of the list).
-        
         See also SetImageList().
     */
     void AssignImageList(wxImageList* imageList);
@@ -232,7 +218,6 @@ public:
         Sets the state image list. Image list assigned with this method will
         be automatically deleted by wxTreeCtrl as appropriate
         (i.e. it takes ownership of the list).
-        
         See also SetStateImageList().
     */
     void AssignStateImageList(wxImageList* imageList);
@@ -245,14 +230,14 @@ public:
     /**
         Collapses the root item.
         
-        @sa ExpandAll()
+        @see ExpandAll()
     */
     void CollapseAll();
 
     /**
         Collapses this item and all of its children, recursively.
         
-        @sa ExpandAllChildren()
+        @see ExpandAllChildren()
     */
     void CollapseAllChildren(const wxTreeItemId& item);
 
@@ -274,7 +259,6 @@ public:
     /**
         Deletes the specified item. A @c EVT_TREE_DELETE_ITEM event will be
         generated.
-        
         This function may cause a subsequent call to GetNextChild to fail.
     */
     void Delete(const wxTreeItemId& item);
@@ -290,7 +274,6 @@ public:
         Deletes all children of the given item (but not the item itself). Note that
         this will @b not generate any events unlike
         Delete() method.
-        
         If you have called SetItemHasChildren(), you
         may need to call it again since @e DeleteChildren does not automatically
         clear the setting.
@@ -301,21 +284,19 @@ public:
         Starts editing the label of the given item. This function generates a
         EVT_TREE_BEGIN_LABEL_EDIT event which can be vetoed so that no
         text control will appear for in-place editing.
-        
         If the user changed the label (i.e. s/he does not press ESC or leave
         the text control without changes, a EVT_TREE_END_LABEL_EDIT event
         will be sent which can be vetoed as well.
         
-        @sa EndEditLabel(), wxTreeEvent
+        @see EndEditLabel(), wxTreeEvent
     */
     void EditLabel(const wxTreeItemId& item);
 
     /**
-        Ends label editing. If @e cancelEdit is @true, the edit will be cancelled.
-        
+        Ends label editing. If @a cancelEdit is @true, the edit will be cancelled.
         This function is currently supported under Windows only.
         
-        @sa EditLabel()
+        @see EditLabel()
     */
     void EndEditLabel(bool cancelEdit);
 
@@ -340,37 +321,34 @@ public:
     void ExpandAllChildren(const wxTreeItemId& item);
 
     /**
-        Retrieves the rectangle bounding the @e item. If @e textOnly is @true,
+        Retrieves the rectangle bounding the @e item. If @a textOnly is @true,
         only the rectangle around the item's label will be returned, otherwise the
         item's image is also taken into account.
-        
         The return value is @true if the rectangle was successfully retrieved or @c
         @false
-        if it was not (in this case @e rect is not changed) -- for example, if the
+        if it was not (in this case @a rect is not changed) -- for example, if the
         item is currently invisible.
-        
         Notice that the rectangle coordinates are logical, not physical ones. So, for
         example, the x coordinate may be negative if the tree has a horizontal
         scrollbar and its position is not 0.
     */
     bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect,
-                         bool textOnly = @false);
+                         bool textOnly = false);
 
     /**
         Returns the buttons image list (from which application-defined button images
         are taken).
-        
         This function is only available in the generic version.
     */
     wxImageList* GetButtonsImageList();
 
     /**
-        Returns the number of items in the branch. If @e recursively is @true,
+        Returns the number of items in the branch. If @a recursively is @true,
         returns the total number
         of descendants, otherwise only one level of children is counted.
     */
     unsigned int GetChildrenCount(const wxTreeItemId& item,
-                                  bool recursively = @true);
+                                  bool recursively = true);
 
     /**
         Returns the number of items in the control.
@@ -380,27 +358,24 @@ public:
     /**
         Returns the edit control being currently used to edit a label. Returns @NULL
         if no label is being edited.
-        
         @b NB: It is currently only implemented for wxMSW.
     */
-    wxTextCtrl * GetEditControl();
+    wxTextCtrl* GetEditControl();
 
     /**
         Returns the first child; call GetNextChild() for the next child.
-        
         For this enumeration function you must pass in a 'cookie' parameter
         which is opaque for the application but is necessary for the library
         to make these functions reentrant (i.e. allow more than one
         enumeration on one and the same object simultaneously). The cookie passed to
         GetFirstChild and GetNextChild should be the same variable.
-        
         Returns an invalid tree item (i.e. IsOk() returns @false) if there are no
         further children.
         
-        @sa GetNextChild(), GetNextSibling()
+        @see GetNextChild(), GetNextSibling()
     */
     wxTreeItemId GetFirstChild(const wxTreeItemId& item,
-                               wxTreeItemIdValue & cookie);
+                               wxTreeItemIdValue& cookie);
 
     /**
         Returns the first visible item.
@@ -454,8 +429,7 @@ wxPython provides the following shortcut method:
     //@}
 
     /**
-        Gets the specified item image. The value of @e which may be:
-        
+        Gets the specified item image. The value of @a which may be:
         wxTreeItemIcon_Normal to get the normal item image
         wxTreeItemIcon_Selected to get the selected item image (i.e. the image
         which is shown when the item is currently selected)
@@ -493,60 +467,54 @@ wxPython provides the following shortcut method:
         Returns the last child of the item (or an invalid tree item if this item has no
         children).
         
-        @sa GetFirstChild(), GetNextSibling(),
-              GetLastChild()
+        @see GetFirstChild(), GetNextSibling(),
+             GetLastChild()
     */
     wxTreeItemId GetLastChild(const wxTreeItemId& item);
 
     /**
         Returns the next child; call GetFirstChild() for the first child.
-        
         For this enumeration function you must pass in a 'cookie' parameter
         which is opaque for the application but is necessary for the library
         to make these functions reentrant (i.e. allow more than one
         enumeration on one and the same object simultaneously). The cookie passed to
         GetFirstChild and GetNextChild should be the same.
-        
         Returns an invalid tree item if there are no further children.
         
-        @sa GetFirstChild()
+        @see GetFirstChild()
     */
     wxTreeItemId GetNextChild(const wxTreeItemId& item,
-                              wxTreeItemIdValue & cookie);
+                              wxTreeItemIdValue& cookie);
 
     /**
         Returns the next sibling of the specified item; call GetPrevSibling() for the
         previous sibling.
-        
         Returns an invalid tree item if there are no further siblings.
         
-        @sa GetPrevSibling()
+        @see GetPrevSibling()
     */
     wxTreeItemId GetNextSibling(const wxTreeItemId& item);
 
     /**
         Returns the next visible item or an invalid item if this item is the last
         visible one.
-        
-        Notice that the @e item itself must be visible.
+        Notice that the @a item itself must be visible.
     */
     wxTreeItemId GetNextVisible(const wxTreeItemId& item);
 
     /**
         Returns the previous sibling of the specified item; call GetNextSibling() for
         the next sibling.
-        
         Returns an invalid tree item if there are no further children.
         
-        @sa GetNextSibling()
+        @see GetNextSibling()
     */
     wxTreeItemId GetPrevSibling(const wxTreeItemId& item);
 
     /**
         Returns the previous visible item or an invalid item if this item is the first
         visible one.
-        
-        Notice that the @e item itself must be visible.
+        Notice that the @a item itself must be visible.
     */
     wxTreeItemId GetPrevVisible(const wxTreeItemId& item);
 
@@ -554,7 +522,7 @@ wxPython provides the following shortcut method:
         Returns @true if the control will use a quick calculation for the best size,
         looking only at the first and last items. The default is @false.
         
-        @sa SetQuickBestSize()
+        @see SetQuickBestSize()
     */
     bool GetQuickBestSize();
 
@@ -574,7 +542,6 @@ wxPython provides the following shortcut method:
     /**
         Fills the array of tree items passed in with the currently selected items. This
         function can be called only if the control has the wxTR_MULTIPLE style.
-        
         Returns the number of selected items.
     */
     unsigned int GetSelections(wxArrayTreeItemIds& selection);
@@ -587,62 +554,50 @@ wxPython provides the following shortcut method:
 
     /**
         Calculates which (if any) item is under the given point, returning the tree item
-        id at this point plus extra information @e flags. @e flags is a bitlist of the
+        id at this point plus extra information @e flags. @a flags is a bitlist of the
         following:
         
-        
         wxTREE_HITTEST_ABOVE
-        
         
         Above the client area.
         
         wxTREE_HITTEST_BELOW
         
-        
         Below the client area.
         
         wxTREE_HITTEST_NOWHERE
-        
         
         In the client area but below the last item.
         
         wxTREE_HITTEST_ONITEMBUTTON
         
-        
         On the button associated with an item.
         
         wxTREE_HITTEST_ONITEMICON
-        
         
         On the bitmap associated with an item.
         
         wxTREE_HITTEST_ONITEMINDENT
         
-        
         In the indentation associated with an item.
         
         wxTREE_HITTEST_ONITEMLABEL
-        
         
         On the label (string) associated with an item.
         
         wxTREE_HITTEST_ONITEMRIGHT
         
-        
         In the area to the right of an item.
         
         wxTREE_HITTEST_ONITEMSTATEICON
-        
         
         On the state icon for a tree view item that is in a user-defined state.
         
         wxTREE_HITTEST_TOLEFT
         
-        
         To the right of the client area.
         
         wxTREE_HITTEST_TORIGHT
-        
         
         To the left of the client area.
     */
@@ -652,12 +607,11 @@ wxPython provides the following shortcut method:
     /**
         Inserts an item after a given one (@e previous) or before one identified by its
         position (@e before).
-        @e before must be less than the number of children.
-        
-        The @e image and @e selImage parameters are an index within
+        @a before must be less than the number of children.
+        The @a image and @a selImage parameters are an index within
         the normal image list specifying the image to use for unselected and
         selected items, respectively.
-        If @e image  -1 and @e selImage is -1, the same image is used for
+        If @a image  -1 and @a selImage is -1, the same image is used for
         both selected and unselected items.
     */
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
@@ -665,18 +619,17 @@ wxPython provides the following shortcut method:
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = @NULL);
+                            wxTreeItemData* data = NULL);
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
                             size_t before,
                             const wxString& text,
                             int image = -1,
                             int selImage = -1,
-                            wxTreeItemData* data = @NULL);
+                            wxTreeItemData* data = NULL);
     //@}
 
     /**
         Returns @true if the given item is in bold state.
-        
         See also: SetItemBold()
     */
     bool IsBold(const wxTreeItemId& item);
@@ -711,14 +664,12 @@ wxPython provides the following shortcut method:
         items in the tree control. The function should return a negative, zero or
         positive value if the first item is less than, equal to or greater than the
         second one.
-        
         Please note that you @b must use wxRTTI macros
         DECLARE_DYNAMIC_CLASS and
         IMPLEMENT_DYNAMIC_CLASS if you override this
         function because otherwise the base class considers that it is not overridden
         and uses the default comparison, i.e. sorts the items alphabetically, which
         allows it optimize away the calls to the virtual function completely.
-        
         See also: SortChildren()
     */
     int OnCompareItems(const wxTreeItemId& item1,
@@ -726,18 +677,17 @@ wxPython provides the following shortcut method:
 
     /**
         Appends an item as the first child of @e parent, return a new item id.
-        
-        The @e image and @e selImage parameters are an index within
+        The @a image and @a selImage parameters are an index within
         the normal image list specifying the image to use for unselected and
         selected items, respectively.
-        If @e image  -1 and @e selImage is -1, the same image is used for
+        If @a image  -1 and @a selImage is -1, the same image is used for
         both selected and unselected items.
     */
     wxTreeItemId PrependItem(const wxTreeItemId& parent,
                              const wxString& text,
                              int image = -1,
                              int selImage = -1,
-                             wxTreeItemData* data = @NULL);
+                             wxTreeItemData* data = NULL);
 
     /**
         Scrolls the specified item into view.
@@ -746,22 +696,19 @@ wxPython provides the following shortcut method:
 
     /**
         Selects the given item. In multiple selection controls, can be also used to
-        deselect a currently selected item if the value of @e select is @false.
+        deselect a currently selected item if the value of @a select is @false.
     */
-    void SelectItem(const wxTreeItemId& item, bool select = @true);
+    void SelectItem(const wxTreeItemId& item, bool select = true);
 
     /**
         Sets the buttons image list (from which application-defined button images are
         taken).
         The button images assigned with this method will
         @b not be deleted by wxTreeCtrl's destructor, you must delete it yourself.
-        
         Setting or assigning the button image list enables the display of image buttons.
         Once enabled, the only way to disable the display of button images is to set
         the button image list to @NULL.
-        
         This function is only available in the generic version.
-        
         See also AssignButtonsImageList().
     */
     void SetButtonsImageList(wxImageList* imageList);
@@ -769,7 +716,6 @@ wxPython provides the following shortcut method:
     /**
         Sets the normal image list. Image list assigned with this method will
         @b not be deleted by wxTreeCtrl's destructor, you must delete it yourself.
-        
         See also AssignImageList().
     */
     void SetImageList(wxImageList* imageList);
@@ -786,12 +732,11 @@ wxPython provides the following shortcut method:
                                  const wxColour& col);
 
     /**
-        Makes item appear in bold font if @e bold parameter is @true or resets it to
+        Makes item appear in bold font if @a bold parameter is @true or resets it to
         the normal state.
-        
         See also: IsBold()
     */
-    void SetItemBold(const wxTreeItemId& item, bool bold = @true);
+    void SetItemBold(const wxTreeItemId& item, bool bold = true);
 
     //@{
     /**
@@ -817,7 +762,7 @@ wxPython note:
 
 
     void SetItemDropHighlight(const wxTreeItemId& item,
-                              bool highlight = @true);
+                              bool highlight = true);
     //@}
 
     /**
@@ -825,7 +770,7 @@ wxPython note:
         text clipping, so the fonts height should be the same for all of them,
         although font attributes may vary.
         
-        @sa SetItemBold()
+        @see SetItemBold()
     */
     void SetItemFont(const wxTreeItemId& item, const wxFont& font);
 
@@ -836,11 +781,11 @@ wxPython note:
         usage and loading time.
     */
     void SetItemHasChildren(const wxTreeItemId& item,
-                            bool hasChildren = @true);
+                            bool hasChildren = true);
 
     /**
         Sets the specified item image. See GetItemImage()
-        for the description of the @e which parameter.
+        for the description of the @a which parameter.
     */
     void SetItemImage(const wxTreeItemId& item, int image,
                       wxTreeItemIcon which = wxTreeItemIcon_Normal);
@@ -868,7 +813,7 @@ wxPython note:
         looking only at the first and last items. Otherwise, it will look at all items.
         The default is @false.
         
-        @sa GetQuickBestSize()
+        @see GetQuickBestSize()
     */
     void SetQuickBestSize(bool quickBestSize);
 
@@ -877,7 +822,6 @@ wxPython note:
         taken).
         Image list assigned with this method will
         @b not be deleted by wxTreeCtrl's destructor, you must delete it yourself.
-        
         See also AssignStateImageList().
     */
     void SetStateImageList(wxImageList* imageList);
@@ -895,7 +839,7 @@ wxPython note:
         should override that method to change the sort order (the default is ascending
         case-sensitive alphabetical order).
         
-        @sa wxTreeItemData, OnCompareItems()
+        @see wxTreeItemData, OnCompareItems()
     */
     void SortChildren(const wxTreeItemId& item);
 
@@ -946,10 +890,9 @@ class wxTreeEvent : public wxNotifyEvent
 public:
     /**
         )
-        
         Constructor, used by wxWidgets itself only.
     */
-    wxTreeEvent(wxEventType commandType, wxTreeCtrl * tree);
+    wxTreeEvent(wxEventType commandType, wxTreeCtrl* tree);
 
     /**
         Returns the item (valid for all events).

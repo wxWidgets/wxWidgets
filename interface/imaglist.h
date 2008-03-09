@@ -33,21 +33,18 @@ public:
         and the initial size of the list.
         
         @param width
-        Width of the images in the list.
-        
+            Width of the images in the list.
         @param height
-        Height of the images in the list.
-        
+            Height of the images in the list.
         @param mask
-        @true if masks should be created for all images.
-        
+            @true if masks should be created for all images.
         @param initialCount
-        The initial size of the list.
+            The initial size of the list.
         
-        @sa Create()
+        @see Create()
     */
     wxImageList();
-    wxImageList(int width, int height, bool mask = @true,
+    wxImageList(int width, int height, bool mask = true,
                 int initialCount = 1);
     //@}
 
@@ -56,21 +53,18 @@ public:
         Adds a new image using an icon.
         
         @param bitmap
-        Bitmap representing the opaque areas of the image.
-        
+            Bitmap representing the opaque areas of the image.
         @param mask
-        Monochrome mask bitmap, representing the transparent areas of the image.
-        
+            Monochrome mask bitmap, representing the transparent areas of the image.
         @param maskColour
-        Colour indicating which parts of the image are transparent.
-        
+            Colour indicating which parts of the image are transparent.
         @param icon
-        Icon to use as the image.
+            Icon to use as the image.
         
         @returns The new zero-based image index.
         
         @remarks The original bitmap or icon is not affected by the Add
-                   operation, and can be deleted afterwards.
+                 operation, and can be deleted afterwards.
     */
     int Add(const wxBitmap& bitmap,
             const wxBitmap& mask = wxNullBitmap);
@@ -81,54 +75,74 @@ public:
     /**
         Initializes the list. See wxImageList() for details.
     */
-    bool Create(int width, int height, bool mask = @true,
+    bool Create(int width, int height, bool mask = true,
                 int initialCount = 1);
 
     /**
         Draws a specified image onto a device context.
         
         @param index
-        Image index, starting from zero.
-        
+            Image index, starting from zero.
         @param dc
-        Device context to draw on.
-        
+            Device context to draw on.
         @param x
-        X position on the device context.
-        
+            X position on the device context.
         @param y
-        Y position on the device context.
-        
+            Y position on the device context.
         @param flags
-        How to draw the image. A bitlist of a selection of the following:
-        
-        wxIMAGELIST_DRAW_NORMAL
+            How to draw the image. A bitlist of a selection of the following:
         
         
-        Draw the image normally.
-        
-        wxIMAGELIST_DRAW_TRANSPARENT
         
         
-        Draw the image with transparency.
-        
-        wxIMAGELIST_DRAW_SELECTED
         
         
-        Draw the image in selected state.
-        
-        wxIMAGELIST_DRAW_FOCUSED
+            wxIMAGELIST_DRAW_NORMAL
         
         
-        Draw the image in a focused state.
         
+        
+            Draw the image normally.
+        
+        
+        
+        
+        
+            wxIMAGELIST_DRAW_TRANSPARENT
+        
+        
+        
+        
+            Draw the image with transparency.
+        
+        
+        
+        
+        
+            wxIMAGELIST_DRAW_SELECTED
+        
+        
+        
+        
+            Draw the image in selected state.
+        
+        
+        
+        
+        
+            wxIMAGELIST_DRAW_FOCUSED
+        
+        
+        
+        
+            Draw the image in a focused state.
         @param solidBackground
-        For optimisation - drawing can be faster if the function is told
-        that the background is solid.
+            For optimisation - drawing can be faster if the function is told
+            that the background is solid.
     */
     bool Draw(int index, wxDC& dc, int x, int y,
               int flags = wxIMAGELIST_DRAW_NORMAL,
-              bool solidBackground = @false);
+              bool solidBackground = false);
 
     /**
         Returns the bitmap corresponding to the given index.
@@ -146,22 +160,20 @@ public:
     int GetImageCount();
 
     /**
-        Retrieves the size of the images in the list. Currently, the @e index
+        Retrieves the size of the images in the list. Currently, the @a index
         parameter is ignored as all images in the list have the same size.
         
         @param index
-        currently unused, should be 0
-        
+            currently unused, should be 0
         @param width
-        receives the width of the images in the list
-        
+            receives the width of the images in the list
         @param height
-        receives the height of the images in the list
+            receives the height of the images in the list
         
         @returns @true if the function succeeded, @false if it failed (for example,
-                   if the image list was not yet initialized).
+                 if the image list was not yet initialized).
     */
-    bool GetSize(int index, int& width, int & height);
+    bool GetSize(int index, int& width, int& height);
 
     /**
         Removes the image at the given position.
@@ -178,18 +190,16 @@ public:
         Replaces the existing image with the new image.
         
         @param bitmap
-        Bitmap representing the opaque areas of the image.
-        
+            Bitmap representing the opaque areas of the image.
         @param mask
-        Monochrome mask bitmap, representing the transparent areas of the image.
-        
+            Monochrome mask bitmap, representing the transparent areas of the image.
         @param icon
-        Icon to use as the image.
+            Icon to use as the image.
         
         @returns @true if the replacement was successful, @false otherwise.
         
         @remarks The original bitmap or icon is not affected by the Replace
-                   operation, and can be deleted afterwards.
+                 operation, and can be deleted afterwards.
     */
     bool Replace(int index, const wxBitmap& bitmap,
                  const wxBitmap& mask = wxNullBitmap);

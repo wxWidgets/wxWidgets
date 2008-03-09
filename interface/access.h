@@ -50,7 +50,7 @@ public:
         Constructor, taking an optional window. The object can be associated with
         a window later.
     */
-    wxAccessible(wxWindow* win = @NULL);
+    wxAccessible(wxWindow* win = NULL);
 
     /**
         Destructor.
@@ -58,7 +58,7 @@ public:
     ~wxAccessible();
 
     /**
-        Performs the default action for the object. @e childId is 0 (the action for
+        Performs the default action for the object. @a childId is 0 (the action for
         this object)
         or greater than 0 (the action for a child). Return wxACC_NOT_SUPPORTED if there
         is no default action for this window (e.g. an edit control).
@@ -66,7 +66,7 @@ public:
     virtual wxAccStatus DoDefaultAction(int childId);
 
     /**
-        Gets the specified child (starting from 1). If @e child is @NULL and the return
+        Gets the specified child (starting from 1). If @a child is @NULL and the return
         value is wxACC_OK,
         this means that the child is a simple element and not an accessible object.
     */
@@ -79,7 +79,7 @@ public:
 
     /**
         Gets the default action for this object (0) or a child (greater than 0).
-        Return wxACC_OK even if there is no action. @e actionName is the action, or the
+        Return wxACC_OK even if there is no action. @a actionName is the action, or the
         empty
         string if there is no action. The retrieved string describes the action that is
         performed on an object,
@@ -119,7 +119,7 @@ public:
     /**
         Returns the rectangle for this object (id is 0) or a child element (id is
         greater than 0).
-        @e rect is in screen coordinates.
+        @a rect is in screen coordinates.
     */
     virtual wxAccStatus GetLocation(wxRect& rect, int elementId);
 
@@ -142,9 +142,7 @@ public:
     /**
         Gets a variant representing the selected children
         of this object.
-        
         Acceptable values are:
-        
           a null variant (IsNull() returns TRUE)
           a list variant (GetType() == wxT("list"))
           an integer representing the selected child element,
@@ -175,14 +173,13 @@ public:
         this or
         a child object. Can return either a child object, or an integer
         representing the child element, starting from 1.
-        
-        @e pt is in screen coordinates.
+        @a pt is in screen coordinates.
     */
     virtual wxAccStatus HitTest(const wxPoint& pt, int* childId,
                                 wxAccessible** childObject);
 
     /**
-        Navigates from @e fromId to @e toId/@e toObject.
+        Navigates from @a fromId to @e toId/@e toObject.
     */
     virtual wxAccStatus Navigate(wxNavDir navDir, int fromId,
                                  int* toId,

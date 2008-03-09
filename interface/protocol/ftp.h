@@ -84,12 +84,12 @@ public:
     /**
         Default constructor.
     */
-#define wxFTP()     /* implementation is private */
+    wxFTP();
 
     /**
         Destructor will close the connection if connected.
     */
-#define ~wxFTP()     /* implementation is private */
+    ~wxFTP();
 
     /**
         Aborts the download currently in process, returns @true if ok, @false
@@ -104,7 +104,7 @@ public:
     bool ChDir(const wxString& dir);
 
     /**
-        Send the specified @e command to the FTP server. @e ret specifies
+        Send the specified @a command to the FTP server. @a ret specifies
         the expected result.
         
         @returns @true if the command has been sent successfully, else @false.
@@ -118,16 +118,17 @@ public:
 
     /**
         The GetList function is quite low-level. It returns the list of the files in
-        the current directory. The list can be filtered using the @e wildcard string.
-        If @e wildcard is empty (default), it will return all files in directory.
-        
+        the current directory. The list can be filtered using the @a wildcard string.
+        If @a wildcard is empty (default), it will return all files in directory.
         The form of the list can change from one peer system to another. For example,
         for a UNIX peer system, it will look like this:
+        
         But on Windows system, it will look like this:
+        
         Return value: @true if the file list was successfully retrieved, @false
         otherwise.
         
-        @sa GetFilesList()
+        @see GetFilesList()
     */
     bool GetDirList(wxArrayString& files,
                     const wxString& wildcard = "");
@@ -145,7 +146,6 @@ public:
         directory (optionally only of the files matching the @e wildcard, all files
         by default). This list always has the same format and contains one full
         (including the directory path) file name per line.
-        
         Return value: @true if the file list was successfully retrieved, @false
         otherwise.
     */
@@ -160,9 +160,9 @@ public:
         You will be notified when the EOF is reached by an error.
         
         @returns Returns @NULL if an error occurred (it could be a network failure
-                   or the fact that the file doesn't exist).
+                 or the fact that the file doesn't exist).
     */
-    wxInputStream * GetInputStream(const wxString& path);
+    wxInputStream* GetInputStream(const wxString& path);
 
     /**
         Returns the last command result, i.e. the full server reply for the last
@@ -177,9 +177,9 @@ public:
         
         @returns An initialized write-only stream.
         
-        @sa wxOutputStream
+        @see wxOutputStream
     */
-    wxOutputStream * GetOutputStream(const wxString& file);
+    wxOutputStream* GetOutputStream(const wxString& file);
 
     /**
         Create the specified directory in the current FTP working directory.
@@ -190,10 +190,10 @@ public:
     /**
         Returns the current FTP working directory.
     */
-#define wxString Pwd()     /* implementation is private */
+    wxString Pwd();
 
     /**
-        Rename the specified @e src element to @e dst. Returns @true if successful.
+        Rename the specified @a src element to @e dst. Returns @true if successful.
     */
     bool Rename(const wxString& src, const wxString& dst);
 
@@ -209,7 +209,7 @@ public:
     bool RmFile(const wxString& path);
 
     /**
-        Send the specified @e command to the FTP server and return the first
+        Send the specified @a command to the FTP server and return the first
         character of the return code.
     */
     char SendCommand(const wxString& command);
@@ -225,7 +225,7 @@ public:
     bool SetBinary();
 
     /**
-        If @e pasv is @true, passive connection to the FTP server is used. This is
+        If @a pasv is @true, passive connection to the FTP server is used. This is
         the default as it works with practically all firewalls. If the server doesn't
         support passive move, you may call this function with @false argument to use
         active connection.
@@ -240,7 +240,6 @@ public:
     /**
         Sets the transfer mode to the specified one. It will be used for the next
         transfer.
-        
         If this function is never called, binary transfer mode is used by default.
     */
     bool SetTransferMode(TransferMode mode);

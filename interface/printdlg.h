@@ -28,9 +28,9 @@ public:
         Constructor. Pass a parent window, and optionally a pointer to a block of print
         data, which will be copied to the print dialog's print data.
         
-        @sa wxPrintDialogData
+        @see wxPrintDialogData
     */
-    wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = @NULL);
+    wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
 
     /**
         Destructor. If GetPrintDC() has @e not been called,
@@ -103,7 +103,7 @@ public:
         data, which will be copied to the print dialog's internal data.
     */
     wxPageSetupDialog(wxWindow* parent,
-                      wxPageSetupDialogData* data = @NULL);
+                      wxPageSetupDialogData* data = NULL);
 
     /**
         Destructor.

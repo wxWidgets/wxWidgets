@@ -60,7 +60,7 @@ class wxArrayString : public wxArray
 public:
     //@{
     /**
-        Constructor from a wxString array. Pass a size @e sz and array @e arr.
+        Constructor from a wxString array. Pass a size @a sz and array @e arr.
     */
     wxArrayString();
     wxArrayString(const wxArrayString& array);
@@ -76,30 +76,26 @@ public:
     ~wxArrayString();
 
     /**
-        Appends the given number of @e copies of the new item @e str to the
+        Appends the given number of @a copies of the new item @a str to the
         array and returns the index of the first new item in the array.
-        
         @b Warning: For sorted arrays, the index of the inserted item will not be,
         in general, equal to GetCount() - 1 because
         the item is inserted at the correct position to keep the array sorted and not
         appended.
-        
         See also: Insert()
     */
-#define size_t Add(const wxString& str, size_t copies = 1)     /* implementation is private */
+    size_t Add(const wxString& str, size_t copies = 1);
 
     /**
-        Preallocates enough memory to store @e nCount items. This function may be
+        Preallocates enough memory to store @a nCount items. This function may be
         used to improve array class performance before adding a known number of items
         consecutively.
-        
         See also: @ref wxArray::memorymanagement "Dynamic array memory management"
     */
     void Alloc(size_t nCount);
 
     /**
         Clears the array contents and frees memory.
-        
         See also: Empty()
     */
     void Clear();
@@ -121,25 +117,23 @@ public:
 
     /**
         Search the element in the array, starting from the beginning if
-        @e bFromEnd is @false or from end otherwise. If @e bCase, comparison is
+        @a bFromEnd is @false or from end otherwise. If @e bCase, comparison is
         case sensitive (default), otherwise the case is ignored.
-        
         This function uses linear search for wxArrayString and binary search for
-        wxSortedArrayString, but it ignores the @e bCase and @e bFromEnd
+        wxSortedArrayString, but it ignores the @a bCase and @a bFromEnd
         parameters in the latter case.
-        
         Returns index of the first item matched or @c wxNOT_FOUND if there is no match.
     */
-    int Index(const wxString& sz, bool bCase = @true,
-              bool bFromEnd = @false);
+    int Index(const wxString& sz, bool bCase = true,
+              bool bFromEnd = false);
 
     /**
-        Insert the given number of @e copies of the new element in the array before the
+        Insert the given number of @a copies of the new element in the array before the
         position @e nIndex. Thus, for
         example, to insert the string in the beginning of the array you would write
-        If @e nIndex is equal to @e GetCount() this function behaves as
-        Add().
         
+        If @a nIndex is equal to @e GetCount() this function behaves as
+        Add().
         @b Warning: this function should not be used with sorted arrays because it
         could break the order of items and, for example, subsequent calls to
         Index() would then not work!
@@ -157,7 +151,6 @@ public:
         Return the array element at position @e nIndex. An assert failure will
         result from an attempt to access an element beyond the end of array in debug
         mode, but no check is done in release mode.
-        
         See also @ref operatorindex() operator[] for the operator
         version.
     */
@@ -173,20 +166,18 @@ public:
     /**
         Removes the first item matching this value. An assert failure is provoked by
         an attempt to remove an element which does not exist in debug build.
-        
         See also: Index()
     */
     void Remove(const wxString& sz);
 
     /**
-        Removes @e count items starting at position @e nIndex from the array.
+        Removes @a count items starting at position @a nIndex from the array.
     */
     void RemoveAt(size_t nIndex, size_t count = 1);
 
     /**
         Releases the extra memory allocated by the array. This function is useful to
         minimize the array memory consumption.
-        
         See also: Alloc(), @ref wxArray::memorymanagement "Dynamic array memory
         management"
     */
@@ -194,13 +185,13 @@ public:
 
     //@{
     /**
-        Sorts the array using the specified @e compareFunction for item comparison.
+        Sorts the array using the specified @a compareFunction for item comparison.
         @e CompareFunction is defined as a function taking two @e const
         wxString parameters and returning an @e int value less than, equal to or
         greater than 0 if the first string is less than, equal to or greater than the
         second one.
     */
-    void Sort(bool reverseOrder = @false);
+    void Sort(bool reverseOrder = false);
 Warning:
     void Sort(CompareFunction compareFunction);
     //@}
@@ -226,7 +217,6 @@ Warning:
         Return the array element at position @e nIndex. An assert failure will
         result from an attempt to access an element beyond the end of array in debug
         mode, but no check is done in release mode.
-        
         This is the operator version of Item() method.
     */
     wxString operator[](size_t nIndex);
@@ -238,30 +228,27 @@ Warning:
 // ============================================================================
 
 /**
-    Splits the given wxString object using the separator @e sep and returns the
+    Splits the given wxString object using the separator @a sep and returns the
     result as a wxArrayString.
-
-    If the @e escape character is non-@NULL, then the occurrences of @e sep
+    If the @a escape character is non-@NULL, then the occurrences of @a sep
     immediately prefixed
-    with @e escape are not considered as separators.
-
+    with @a escape are not considered as separators.
     Note that empty tokens will be generated if there are two or more adjacent
     separators.
 
-    @sa wxJoin
+    @see wxJoin
 */
 wxArrayString wxSplit(const wxString& str, const wxChar sep,
                       const wxChar escape = '
                                             ');
 
 /**
-    Concatenate all lines of the given wxArrayString object using the separator @e
+    Concatenate all lines of the given wxArrayString object using the separator @a
     sep and returns
     the result as a wxString.
-
-    If the @e escape character is non-@NULL, then it's used as prefix for each
+    If the @a escape character is non-@NULL, then it's used as prefix for each
     occurrence of @e sep
-    in the strings contained in @e arr before joining them which is necessary
+    in the strings contained in @a arr before joining them which is necessary
     in order to be able to recover the original array contents from the string
     later using wxSplit.
 */

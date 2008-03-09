@@ -23,7 +23,7 @@
     @category{FIXME}
 
     @seealso
-    @ref overview_docviewoverview "Document/view overview", wxMDIParentFrame
+    @ref overview_docviewoverview, wxMDIParentFrame
 */
 class wxDocMDIParentFrame : public wxMDIParentFrame
 {
@@ -33,7 +33,7 @@ public:
         Constructor.
     */
     wxDocMDIParentFrame();
-    wxDocMDIParentFrame(wxDocManager* manager, wxFrame * parent,
+    wxDocMDIParentFrame(wxDocManager* manager, wxFrame* parent,
                         wxWindowID id,
                         const wxString& title,
                         const wxPoint& pos = wxDefaultPosition,
@@ -50,7 +50,7 @@ public:
     /**
         Creates the window.
     */
-    bool Create(wxDocManager* manager, wxFrame * parent,
+    bool Create(wxDocManager* manager, wxFrame* parent,
                 wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -60,7 +60,6 @@ public:
     /**
         Deletes all views and documents. If no user input cancelled the
         operation, the frame will be destroyed and the application will exit.
-        
         Since understanding how document/view clean-up takes place can be difficult,
         the implementation of this function is shown below.
     */
@@ -85,7 +84,7 @@ public:
     @category{FIXME}
 
     @seealso
-    @ref overview_docviewoverview "Document/view overview", wxMDIChildFrame
+    @ref overview_docviewoverview, wxMDIChildFrame
 */
 class wxDocMDIChildFrame : public wxMDIChildFrame
 {
@@ -132,23 +131,21 @@ public:
     /**
         Sets the document for this frame.
     */
-    void SetDocument(wxDocument * doc);
+    void SetDocument(wxDocument* doc);
 
     /**
         Sets the view for this frame.
     */
-    void SetView(wxView * view);
+    void SetView(wxView* view);
 
     /**
         wxDocument* m_childDocument
-        
         The document associated with the frame.
     */
 
 
     /**
         wxView* m_childView
-        
         The view associated with the frame.
     */
 };

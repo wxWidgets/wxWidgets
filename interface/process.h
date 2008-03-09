@@ -47,30 +47,26 @@ class wxProcess : public wxEvtHandler
 public:
     //@{
     /**
-        Constructs a process object. @e id is only used in the case you want to
+        Constructs a process object. @a id is only used in the case you want to
         use wxWidgets events. It identifies this object, or another window that will
         receive the event.
-        
-        If the @e parent parameter is different from @NULL, it will receive
+        If the @a parent parameter is different from @NULL, it will receive
         a wxEVT_END_PROCESS notification event (you should insert EVT_END_PROCESS
         macro in the event table of the parent to handle it) with the given @e id.
-        
         The second constructor creates an object without any associated parent (and
-        hence no id neither) but allows to specify the @e flags which can have the
+        hence no id neither) but allows to specify the @a flags which can have the
         value of @c wxPROCESS_DEFAULT or @c wxPROCESS_REDIRECT. Specifying the
         former value has no particular effect while using the latter one is equivalent
         to calling Redirect().
         
         @param parent
-        The event handler parent.
-        
+            The event handler parent.
         @param id
-        id of an event.
-        
+            id of an event.
         @param flags
-        either wxPROCESS_DEFAULT or wxPROCESS_REDIRECT
+            either wxPROCESS_DEFAULT or wxPROCESS_REDIRECT
     */
-    wxProcess(wxEvtHandler * parent = @NULL, int id = -1);
+    wxProcess(wxEvtHandler* parent = NULL, int id = -1);
     wxProcess(int flags);
     //@}
 
@@ -103,7 +99,7 @@ public:
     /**
         Returns @true if the given process exists in the system.
         
-        @sa Kill(), @ref overview_sampleexec "Exec sample"
+        @see Kill(), @ref overview_sampleexec "Exec sample"
     */
     static bool Exists(int pid);
 
@@ -136,7 +132,7 @@ public:
         Returns @true if there is data to be read on the child process standard
         error stream.
         
-        @sa IsInputAvailable()
+        @see IsInputAvailable()
     */
     bool IsErrorAvailable();
 
@@ -144,11 +140,10 @@ public:
         Returns @true if there is data to be read on the child process standard
         output stream. This allows to write simple (and extremely inefficient)
         polling-based code waiting for a better mechanism in future wxWidgets versions.
-        
         See the @ref overview_sampleexec "exec sample" for an example of using this
         function.
         
-        @sa IsInputOpened()
+        @see IsInputOpened()
     */
     bool IsInputAvailable();
 
@@ -159,18 +154,17 @@ public:
 
     /**
         Send the specified signal to the given process. Possible signal values are:
+        
         @c wxSIGNONE, @c wxSIGKILL and @c wxSIGTERM have the same meaning
         under both Unix and Windows but all the other signals are equivalent to
         @c wxSIGTERM under Windows.
-        
-        The @e flags parameter can be wxKILL_NOCHILDREN (the default),
+        The @a flags parameter can be wxKILL_NOCHILDREN (the default),
         or wxKILL_CHILDREN, in which case the child processes of this
         process will be killed too. Note that under Unix, for wxKILL_CHILDREN
         to work you should have created the process passing wxEXEC_MAKE_GROUP_LEADER.
-        
         Returns the element of @c wxKillError enum:
         
-        @sa Exists(), wxKill, @ref overview_sampleexec "Exec sample"
+        @see Exists(), wxKill, @ref overview_sampleexec "Exec sample"
     */
     static wxKillError Kill(int pid, wxSignal signal = wxSIGNONE,
                             int flags = wxKILL_NOCHILDREN);
@@ -182,19 +176,17 @@ public:
         It raises a wxWidgets event when it isn't overridden.
         
         pid
-        The pid of the process which has just terminated.
-        
+            The pid of the process which has just terminated.
         @param status
-        The exit code of the process.
+            The exit code of the process.
     */
     void OnTerminate(int pid, int status);
 
     /**
         This static method replaces the standard @c popen() function: it launches
-        the process specified by the @e cmd parameter and returns the wxProcess
+        the process specified by the @a cmd parameter and returns the wxProcess
         object which can be used to retrieve the streams connected to the standard
         input, output and error output of the child process.
-        
         If the process couldn't be launched, @NULL is returned. Note that in any
         case the returned pointer should @b not be deleted, rather the process
         object will be destroyed automatically when the child process terminates. This
@@ -202,18 +194,17 @@ public:
         exits to avoid memory leaks.
         
         @param cmd
-        The command to execute, including optional arguments.
-        
+            The command to execute, including optional arguments.
         @param flags
-        The flags to pass to wxExecute.
-          NOTE: wxEXEC_SYNC should not be used.
+            The flags to pass to wxExecute.
+              NOTE: wxEXEC_SYNC should not be used.
         
         @returns A pointer to new wxProcess object or @NULL on error.
         
-        @sa wxExecute
+        @see wxExecute
     */
-    static wxProcess * Open(const wxString& cmd,
-                            int flags = wxEXEC_ASYNC);
+    static wxProcess* Open(const wxString& cmd,
+                           int flags = wxEXEC_ASYNC);
 
     /**
         Turns on redirection. wxExecute will try to open a couple of pipes
@@ -235,7 +226,7 @@ public:
     @category{events}
 
     @seealso
-    wxProcess, @ref overview_eventhandlingoverview "Event handling overview"
+    wxProcess, @ref overview_eventhandlingoverview
 */
 class wxProcessEvent : public wxEvent
 {

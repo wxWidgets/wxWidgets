@@ -52,30 +52,25 @@ public:
         Copy constructor.
         
         @param red
-        The red value.
-        
+            The red value.
         @param green
-        The green value.
-        
+            The green value.
         @param blue
-        The blue value.
-        
+            The blue value.
         @param alpha
-        The alpha value. Alpha values range from 0 (wxALPHA_TRANSPARENT) to 255
+            The alpha value. Alpha values range from 0 (wxALPHA_TRANSPARENT) to 255
         (wxALPHA_OPAQUE).
-        
         @param colourName
-        The colour name.
-        
+            The colour name.
         @param colour
-        The colour to copy.
+            The colour to copy.
         
-        @sa wxColourDatabase
+        @see wxColourDatabase
     */
     wxColour();
     wxColour(unsigned char red, unsigned char green,
              unsigned char blue,
-             unsigned char alpha=wxALPHA_OPAQUE);
+             unsigned char alpha = wxALPHA_OPAQUE);
     wxColour(const wxString& colourNname);
     wxColour(const wxColour& colour);
     //@}
@@ -95,7 +90,6 @@ public:
     /**
         is not
         specified in flags.
-        
         This function is new since wxWidgets version 2.7.0
     */
     wxString GetAsString(long flags);
@@ -113,7 +107,6 @@ public:
         Returns a pixel value which is platform-dependent. On Windows, a COLORREF is
         returned.
         On X, an allocated pixel value is returned.
-        
         -1 is returned if the pixel is invalid (on X, unallocated).
     */
     long GetPixel();
@@ -127,33 +120,30 @@ public:
         Returns @true if the colour object is valid (the colour has been initialised
         with RGB values).
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Returns the red intensity.
     */
-#define unsigned char Red()     /* implementation is private */
+    unsigned char Red();
 
     //@{
     /**
         Sets the RGB intensity values using the given values (first overload),
         extracting them from the packed long (second overload), using the given string (third overloard).
-        
         When using third form, Set() accepts: colour names (those listed in
         wxTheColourDatabase), the CSS-like
         @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax (case insensitive)
         and the HTML-like syntax (i.e. @c "#" followed by 6 hexadecimal digits
         for red, green, blue components).
-        
         Returns @true if the conversion was successful, @false otherwise.
-        
         This function is new since wxWidgets version 2.7.0
     */
     void Set(unsigned char red, unsigned char green,
              unsigned char blue,
-             unsigned char alpha=wxALPHA_OPAQUE);
+             unsigned char alpha = wxALPHA_OPAQUE);
     void Set(unsigned long RGB);
-    bool Set(const wxString & str);
+    bool Set(const wxString& str);
     //@}
 
     /**
@@ -166,7 +156,7 @@ public:
     /**
         Assignment operator, using a colour name to be found in the colour database.
         
-        @sa wxColourDatabase
+        @see wxColourDatabase
     */
     wxColour operator =(const wxColour& colour);
     wxColour operator =(const wxString& colourName);

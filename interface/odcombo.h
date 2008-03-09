@@ -31,7 +31,7 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_COMBOBOX(id\, func)}:
+    @event{EVT_COMBOBOX(id, func)}:
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected. Note that calling GetValue returns the new
            value of selection.
@@ -52,37 +52,29 @@ public:
         Constructor, creating and showing a owner-drawn combobox.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param value
-        Initial selection string. An empty string indicates no selection.
-        
+            Initial selection string. An empty string indicates no selection.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size. If wxDefaultSize is specified then the window is sized
-        appropriately.
-        
+            Window size. If wxDefaultSize is specified then the window is
+        sized
+            appropriately.
         @param n
-        Number of strings with which to initialise the control.
-        
+            Number of strings with which to initialise the control.
         @param choices
-        An array of strings with which to initialise the control.
-        
+            An array of strings with which to initialise the control.
         @param style
-        Window style. See wxOwnerDrawnComboBox.
-        
+            Window style. See wxOwnerDrawnComboBox.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxOwnerDrawnComboBox();
     wxOwnerDrawnComboBox(wxWindow* parent, wxWindowID id,
@@ -90,7 +82,7 @@ public:
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          int n = 0,
-                         const wxString choices[] = @NULL,
+                         const wxString choices[] = NULL,
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = "comboBox");
@@ -146,7 +138,6 @@ public:
 
     /**
         This method is used to draw the items background and, maybe, a border around it.
-        
         The base class version implements a reasonable default behaviour which consists
         in drawing the selected item with the standard background colour and drawing a
         border around the item if it is either selected or current.
@@ -162,17 +153,14 @@ public:
         the item text is simply drawn, as if the control was a normal combobox.
         
         @param dc
-        The device context to use for drawing
-        
+            The device context to use for drawing
         @param rect
-        The bounding rectangle for the item being drawn (DC clipping
-        region is set to this rectangle before calling this function)
-        
+            The bounding rectangle for the item being drawn (DC clipping
+            region is set to this rectangle before calling this function)
         @param item
-        The index of the item to be drawn
-        
+            The index of the item to be drawn
         @param flags
-        Combines any of the following flag values:
+            Combines any of the following flag values:
     */
     void OnDrawItem(wxDC& dc, const wxRect& rect, int item,
                     int flags);
@@ -180,7 +168,6 @@ public:
     /**
         The derived class may implement this method to return the height of the
         specified item (in pixels).
-        
         The default implementation returns text height, as if this control was
         a normal combobox.
     */
@@ -190,7 +177,6 @@ public:
         The derived class may implement this method to return the width of the
         specified item (in pixels). If -1 is returned, then the item text width
         is used.
-        
         The default implementation returns -1.
     */
     wxCoord OnMeasureItemWidth(size_t item);

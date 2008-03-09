@@ -43,7 +43,7 @@ public:
         Unlike some other classes, the help provider is not created on demand.
         This must be explicitly done by the application.
     */
-#define wxHelpProvider* Get()     /* implementation is private */
+    wxHelpProvider* Get();
 
     //@{
     /**
@@ -67,13 +67,12 @@ public:
         Get/set the current, application-wide help provider. Returns
         the previous one.
     */
-#define wxHelpProvider* Set(wxHelpProvider* helpProvider)     /* implementation is private */
+    wxHelpProvider* Set(wxHelpProvider* helpProvider);
 
     /**
         Shows help for the given window. Override this function if the help doesn't
         depend on the exact position inside the window, otherwise you need to override
         ShowHelpAtPoint().
-        
         Returns @true if help was shown, or @false if no help was available for this
         window.
     */
@@ -84,18 +83,15 @@ public:
         depend on the position inside the window, By default this method forwards to
         ShowHelp(), so it is enough to only implement
         the latter if the help doesn't depend on the position.
-        
         Returns @true if help was shown, or @false if no help was available for this
         window.
         
         @param window
-        Window to show help text for.
-        
+            Window to show help text for.
         @param point
-        Coordinates of the mouse at the moment of help event emission.
-        
+            Coordinates of the mouse at the moment of help event emission.
         @param origin
-        Help event origin, see wxHelpEvent::GetOrigin.
+            Help event origin, see wxHelpEvent::GetOrigin.
     */
     bool ShowHelpAtPoint(wxWindowBase* window, const wxPoint point,
                          wxHelpEvent::Origin origin);
@@ -134,7 +130,7 @@ public:
         Note that the instance doesn't own the help controller. The help controller
         should be deleted separately.
     */
-    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = @NULL);
+    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = NULL);
 
     /**
         Returns the help controller associated with this help provider.
@@ -192,11 +188,10 @@ class wxContextHelp : public wxObject
 public:
     /**
         Constructs a context help object, calling BeginContextHelp() if
-        @e doNow is @true (the default).
-        
-        If @e window is @NULL, the top window is used.
+        @a doNow is @true (the default).
+        If @a window is @NULL, the top window is used.
     */
-    wxContextHelp(wxWindow* window = @NULL, bool doNow = @true);
+    wxContextHelp(wxWindow* window = NULL, bool doNow = true);
 
     /**
         Destroys the context help object.
@@ -204,14 +199,13 @@ public:
     ~wxContextHelp();
 
     /**
-        Puts the application into context-sensitive help mode. @e window is the window
+        Puts the application into context-sensitive help mode. @a window is the window
         which will be used to catch events; if @NULL, the top window will be used.
-        
         Returns @true if the application was successfully put into context-sensitive
         help mode.
         This function only returns when the event loop has finished.
     */
-    bool BeginContextHelp(wxWindow* window = @NULL);
+    bool BeginContextHelp(wxWindow* window = NULL);
 
     /**
         Ends context-sensitive help mode. Not normally called by the application.
@@ -249,20 +243,17 @@ public:
         Constructor, creating and showing a context help button.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Button identifier. Defaults to wxID_CONTEXT_HELP.
-        
+            Button identifier. Defaults to wxID_CONTEXT_HELP.
         @param pos
-        Button position.
-        
+            Button position.
         @param size
-        Button size. If wxDefaultSize is specified then the button is sized
-        appropriately for the question mark bitmap.
-        
+            Button size. If wxDefaultSize is specified then the button is
+        sized
+            appropriately for the question mark bitmap.
         @param style
-        Window style.
+            Window style.
     */
     wxContextHelpButton();
     wxContextHelpButton(wxWindow* parent,

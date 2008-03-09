@@ -40,16 +40,13 @@ public:
         Construct the splash screen passing a bitmap, a style, a timeout, a window id,
         optional position
         and size, and a window style.
-        
-        @e splashStyle is a bitlist of some of the following:
-        
+        @a splashStyle is a bitlist of some of the following:
          wxSPLASH_CENTRE_ON_PARENT
          wxSPLASH_CENTRE_ON_SCREEN
          wxSPLASH_NO_CENTRE
          wxSPLASH_TIMEOUT
          wxSPLASH_NO_TIMEOUT
-        
-        @e milliseconds is the timeout in milliseconds.
+        @a milliseconds is the timeout in milliseconds.
     */
     wxSplashScreen(const wxBitmap& bitmap, long splashStyle,
                    int milliseconds,

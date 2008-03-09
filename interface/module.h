@@ -91,27 +91,24 @@ public:
 
     //@{
     /**
-        Call this function from the constructor of the derived class. @e dep must be
+        Call this function from the constructor of the derived class. @a dep must be
         the CLASSINFO of a wxModule-derived class and the
         corresponding module will be loaded before and unloaded after
         this module.
-        
         The second version of this function allows a dependency to be added by
         name without access to the class info.  This is useful when a module is
         declared entirely in a source file and there is no header for the declaration
         of the module needed by CLASSINFO, however errors are
         not detected until run-time, instead of compile-time, then.
-        
         Note that circular dependencies are detected and result in a fatal error.
         
         @param dep
-        The class information object for the dependent module.
-        
+            The class information object for the dependent module.
         @param classname
-        The class name of the dependent module.
+            The class name of the dependent module.
     */
-    void AddDependency(wxClassInfo * dep);
-    void AddDependency(const char * classname);
+    void AddDependency(wxClassInfo* dep);
+    void AddDependency(const char* classname);
     //@}
 
     /**

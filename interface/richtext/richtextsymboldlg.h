@@ -83,34 +83,26 @@ public:
         Constructors.
         
         @param symbol
-        The initial symbol to show. Specify a single character in a string, or an empty
-        string.
-        
+            The initial symbol to show. Specify a single character in a string, or an
+        empty string.
         @param initialFont
-        The initial font to be displayed in the font list. If empty, the item normal
-        text will be selected.
-        
+            The initial font to be displayed in the font list. If empty, the item
+        normal text will be selected.
         @param normalTextFont
-        The font the dialog will use to display the symbols if the initial font is
+            The font the dialog will use to display the symbols if the initial font is
         empty.
-        
         @param parent
-        The dialog's parent.
-        
+            The dialog's parent.
         @param id
-        The dialog's identifier.
-        
+            The dialog's identifier.
         @param title
-        The dialog's caption.
-        
+            The dialog's caption.
         @param pos
-        The dialog's position.
-        
+            The dialog's position.
         @param size
-        The dialog's size.
-        
+            The dialog's size.
         @param style
-        The dialog's window style.
+            The dialog's window style.
     */
     wxSymbolPickerDialog(const wxString& symbol,
                          const wxString& initialFont,
@@ -124,7 +116,6 @@ public:
     /**
         , @b const wxPoint&@e pos = wxDefaultPosition, @b const wxSize&@e size =
         wxDefaultSize, @b long@e style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX)
-        
         Creation: see @ref wxsymbolpickerdialog() "the constructor" for details about
         the parameters.
     */

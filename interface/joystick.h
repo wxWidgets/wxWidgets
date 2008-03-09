@@ -22,7 +22,7 @@ class wxJoystick : public wxObject
 {
 public:
     /**
-        Constructor. @e joystick may be one of wxJOYSTICK1, wxJOYSTICK2, indicating the
+        Constructor. @a joystick may be one of wxJOYSTICK1, wxJOYSTICK2, indicating the
         joystick
         controller of interest.
     */
@@ -38,7 +38,7 @@ public:
         Returns the state of the specified joystick button.
         
         @param id
-        The button id to report, from 0 to GetNumberButtons() - 1
+            The button id to report, from 0 to GetNumberButtons() - 1
     */
     int GetButtonState();
     bool GetButtonState(unsigned id);
@@ -101,7 +101,7 @@ public:
         Returns the position of the specified joystick axis.
         
         @param axis
-        The joystick axis to report, from 0 to GetNumberAxes() - 1.
+            The joystick axis to report, from 0 to GetNumberAxes() - 1.
     */
     wxPoint GetPosition();
     int GetPosition(unsigned axis);
@@ -200,7 +200,7 @@ public:
     /**
         Returns @true if the joystick has a point of view control.
     */
-#define bool HasPOV()     /* implementation is private */
+    bool HasPOV();
 
     /**
         Returns @true if the joystick point-of-view supports discrete values (centered,
@@ -221,29 +221,29 @@ public:
     /**
         Returns @true if the joystick has a U axis.
     */
-#define bool HasU()     /* implementation is private */
+    bool HasU();
 
     /**
         Returns @true if the joystick has a V axis.
     */
-#define bool HasV()     /* implementation is private */
+    bool HasV();
 
     /**
         Returns @true if the joystick has a Z axis.
     */
-#define bool HasZ()     /* implementation is private */
+    bool HasZ();
 
     /**
         Returns @true if the joystick is functioning.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Releases the capture set by @b SetCapture.
         
         @returns @true if the capture release succeeded.
         
-        @sa SetCapture(), wxJoystickEvent
+        @see SetCapture(), wxJoystickEvent
     */
     bool ReleaseCapture();
 
@@ -251,16 +251,15 @@ public:
         Sets the capture to direct joystick events to @e win.
         
         @param win
-        The window that will receive joystick events.
-        
+            The window that will receive joystick events.
         @param pollingFreq
-        If zero, movement events are sent when above the
-        threshold. If greater than zero, events are received every pollingFreq
+            If zero, movement events are sent when above the
+            threshold. If greater than zero, events are received every pollingFreq
         milliseconds.
         
         @returns @true if the capture succeeded.
         
-        @sa ReleaseCapture(), wxJoystickEvent
+        @see ReleaseCapture(), wxJoystickEvent
     */
     bool SetCapture(wxWindow* win, int pollingFreq = 0);
 

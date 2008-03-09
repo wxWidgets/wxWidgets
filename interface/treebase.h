@@ -32,7 +32,7 @@ public:
     /**
         Returns @true if this instance is referencing a valid tree item.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     //@{
     /**

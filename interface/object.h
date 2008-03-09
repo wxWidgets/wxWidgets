@@ -40,7 +40,6 @@ public:
         Decrements the reference count associated with this shared data and, if it
         reaches zero,
         destroys this instance of wxObjectRefData releasing its memory.
-        
         Please note that after calling this function, the caller should absolutely
         avoid to use
         the pointer to this instance since it may not be valid anymore.
@@ -85,8 +84,7 @@ public:
     @category{rtti}
 
     @seealso
-    wxClassInfo, @ref overview_debuggingoverview "Debugging overview",
-    wxObjectRefData
+    wxClassInfo, @ref overview_debuggingoverview, wxObjectRefData
 */
 class wxObject
 {
@@ -108,18 +106,17 @@ public:
     /**
         A virtual function that may be redefined by derived classes to allow dumping of
         memory states.
-        
         This function is only defined in debug build and doesn't exist at all if
         @c __WXDEBUG__ is not defined.
         
         @param stream
-        Stream on which to output dump information.
+            Stream on which to output dump information.
         
         @remarks Currently wxWidgets does not define Dump for derived classes,
-                   but programmers may wish to use it for their own
-                   applications. Be sure to call the Dump member of the
-                   class's base class to allow all information to be
-                   dumped.
+                 but programmers may wish to use it for their own
+                 applications. Be sure to call the Dump member of the
+                 class's base class to allow all information to be
+                 dumped.
     */
     void Dump(ostream& stream);
 
@@ -127,13 +124,13 @@ public:
         This virtual function is redefined for every class that requires run-time
         type information, when using DECLARE_CLASS macros.
     */
-    wxClassInfo * GetClassInfo();
+    wxClassInfo* GetClassInfo();
 
     /**
         Returns the @b m_refData pointer.
         
-        @sa Ref(), UnRef(), wxObject::m_refData, SetRefData(),
-              wxObjectRefData
+        @see Ref(), UnRef(), wxObject::m_refData, SetRefData(),
+             wxObjectRefData
     */
     wxObjectRefData* GetRefData();
 
@@ -142,18 +139,17 @@ public:
         the given class.
         
         @param info
-        A pointer to a class information object, which may be obtained
-        by using the CLASSINFO macro.
+            A pointer to a class information object, which may be obtained
+            by using the CLASSINFO macro.
         
         @returns @true if the class represented by info is the same class as this
-                   one or is derived from it.
+                 one or is derived from it.
     */
-    bool IsKindOf(wxClassInfo * info);
+    bool IsKindOf(wxClassInfo* info);
 
     /**
         Returns @true if this object has the same data pointer as @e obj. Notice
         that @true is returned if the data pointers are @NULL in both objects.
-        
         This function only does a shallow comparison, i.e. it doesn't compare
         the objects pointed to by the data pointers of these objects.
     */
@@ -163,22 +159,22 @@ public:
         Makes this object refer to the data in @e clone.
         
         @param clone
-        The object to 'clone'.
+            The object to 'clone'.
         
         @remarks First this function calls UnRef() on itself to decrement
-                   (and perhaps free) the data it is currently referring
-                   to.
+                 (and perhaps free) the data it is currently referring
+                 to.
         
-        @sa UnRef(), wxObject::m_refData, SetRefData(),
-              GetRefData(), wxObjectRefData
+        @see UnRef(), wxObject::m_refData, SetRefData(),
+             GetRefData(), wxObjectRefData
     */
-#define void Ref(const wxObject& clone)     /* implementation is private */
+    void Ref(const wxObject& clone);
 
     /**
         Sets the @b m_refData pointer.
         
-        @sa Ref(), UnRef(), wxObject::m_refData, GetRefData(),
-              wxObjectRefData
+        @see Ref(), UnRef(), wxObject::m_refData, GetRefData(),
+             wxObjectRefData
     */
     void SetRefData(wxObjectRefData* data);
 
@@ -187,14 +183,13 @@ public:
         deletes the data.
         The @b m_refData member is set to @NULL.
         
-        @sa Ref(), wxObject::m_refData, SetRefData(),
-              GetRefData(), wxObjectRefData
+        @see Ref(), wxObject::m_refData, SetRefData(),
+             GetRefData(), wxObjectRefData
     */
     void UnRef();
 
     /**
         Ensure that this object's data is not shared with any other object.
-        
         if we have no
         data, it is created using CreateRefData() below, if we have shared data
         it is copied using CloneRefData(), otherwise nothing is done.
@@ -203,11 +198,10 @@ public:
 
     /**
         wxObjectRefData*  m_refData
-        
         Pointer to an object which is the object's reference-counted data.
         
-        @sa Ref(), UnRef(), SetRefData(),
-              GetRefData(), wxObjectRefData
+        @see Ref(), UnRef(), SetRefData(),
+             GetRefData(), wxObjectRefData
     */
 
 
@@ -225,8 +219,8 @@ public:
         the identifier __WXDEBUG__ is defined. It takes over memory allocation, allowing
         wxDebugContext operations.
     */
-    void * new(size_t size, const wxString& filename = @NULL,
-               int lineNum = 0);
+    void* new(size_t size, const wxString& filename = NULL,
+              int lineNum = 0);
 };
 
 
@@ -252,9 +246,9 @@ public:
         objects of this
         class, so there is no need to create such objects explicitly in an application.
     */
-    wxClassInfo(const wxChar * className,
-                const wxClassInfo * baseClass1,
-                const wxClassInfo * baseClass2,
+    wxClassInfo(const wxChar* className,
+                const wxClassInfo* baseClass1,
+                const wxClassInfo* baseClass2,
                 int size, wxObjectConstructorFn fn);
 
     /**
@@ -267,22 +261,22 @@ public:
     /**
         Finds the wxClassInfo object for a class of the given string name.
     */
-    static wxClassInfo * FindClass(wxChar * name);
+    static wxClassInfo* FindClass(wxChar* name);
 
     /**
         Returns the name of the first base class (@NULL if none).
     */
-    wxChar * GetBaseClassName1();
+    wxChar* GetBaseClassName1();
 
     /**
         Returns the name of the second base class (@NULL if none).
     */
-    wxChar * GetBaseClassName2();
+    wxChar* GetBaseClassName2();
 
     /**
         Returns the string form of the class name.
     */
-    wxChar * GetClassName();
+    wxChar* GetClassName();
 
     /**
         Returns the size of the class.
@@ -336,10 +330,10 @@ public:
     //@{
     /**
         This copy constructor increases the count of the reference
-        counted object to which @e tocopy points and then this
+        counted object to which @a tocopy points and then this
         class will point to, as well.
     */
-    wxObjectDataPtrT(T* ptr = @NULL);
+    wxObjectDataPtrT(T* ptr = NULL);
     wxObjectDataPtrT(const wxObjectDataPtr<T>& tocopy);
     //@}
 
@@ -401,8 +395,8 @@ public:
     Used inside a class declaration to declare that the class should be
     made known to the class hierarchy, but objects of this class cannot be created
     dynamically. The same as DECLARE_CLASS.
-
     Example:
+
     @code
     class wxCommand: public wxObject
     {
@@ -420,13 +414,13 @@ public:
 /**
     Returns a pointer to the wxClassInfo object associated with this class.
 */
-#define wxClassInfo * CLASSINFO()     /* implementation is private */
+#define wxClassInfo* CLASSINFO()     /* implementation is private */
 
 /**
     Same as @c reinterpret_castT(x) if the compiler supports reinterpret cast or
     @c (T)x for old compilers.
 
-    @sa wx_const_cast, wx_static_cast
+    @see wx_const_cast, wx_static_cast
 */
 T wx_reinterpret_cast();
 
@@ -441,15 +435,15 @@ T wx_reinterpret_cast();
     This macro expands into @c const_castclassname *(ptr) if the compiler
     supports @e const_cast or into an old, C-style cast, otherwise.
 
-    @sa wx_const_cast, wxDynamicCast, wxStaticCast
+    @see wx_const_cast, wxDynamicCast, wxStaticCast
 */
-classname * wxConstCast();
+classname* wxConstCast();
 
 /**
     Used in a C++ implementation file to complete the declaration of
     a class that has run-time type information. The same as IMPLEMENT_CLASS.
-
     Example:
+
     @code
     IMPLEMENT_ABSTRACT_CLASS(wxCommand, wxObject)
 
@@ -474,9 +468,9 @@ classname * wxConstCast();
     tests whether @c this pointer is non-@NULL which is always @true), so
     this macro should be used to avoid them.
 
-    @sa wxDynamicCast
+    @see wxDynamicCast
 */
-classname * wxDynamicCastThis();
+classname* wxDynamicCastThis();
 
 /**
     Used in a C++ implementation file to complete the declaration of
@@ -491,7 +485,7 @@ classname * wxDynamicCastThis();
     registered with the dynamic class system using DECLARE... and IMPLEMENT...
     macros.
 */
-wxObject * wxCreateDynamicObject(const wxString& className);
+wxObject* wxCreateDynamicObject(const wxString& className);
 
 /**
     Used inside a class declaration to make the class known to wxWidgets RTTI
@@ -499,8 +493,8 @@ wxObject * wxCreateDynamicObject(const wxString& className);
     creatable from run-time type information. Notice that this implies that the
     class should have a default constructor, if this is not the case consider using
     DECLARE_CLASS.
-
     Example:
+
     @code
     class wxFrame: public wxWindow
     {
@@ -521,7 +515,7 @@ wxObject * wxCreateDynamicObject(const wxString& className);
     the cast it to the type @e T and not to @c T * and also the order of
     arguments is the same as for the standard cast.
 
-    @sa wx_reinterpret_cast, wx_static_cast
+    @see wx_reinterpret_cast, wx_static_cast
 */
 T wx_const_cast();
 
@@ -537,11 +531,10 @@ T wx_const_cast();
     the pointer is of this type (the check is done during the run-time) or
     @NULL otherwise. Usage of this macro is preferred over obsoleted
     wxObject::IsKindOf() function.
-
     The @e ptr argument may be @NULL, in which case @NULL will be
     returned.
-
     Example:
+
     @code
     wxWindow *win = wxWindow::FindFocus();
         wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
@@ -555,14 +548,15 @@ T wx_const_cast();
         }
     @endcode
 
-    @sa @ref overview_runtimeclassoverview "RTTI overview", wxDynamicCastThis,
-          wxConstCast, wxStaticCast
+    @see @ref overview_runtimeclassoverview "RTTI overview", wxDynamicCastThis,
+         wxConstCast, wxStaticCast
 */
-classname * wxDynamicCast();
+classname* wxDynamicCast();
 
 /**
     This is defined in debug mode to be call the redefined new operator
     with filename and line number arguments. The definition is:
+
     @code
     #define WXDEBUG_NEW new(__FILE__,__LINE__)
     @endcode
@@ -576,9 +570,9 @@ classname * wxDynamicCast();
     result if @c wxDynamicCast(ptr, classname) == @NULL) and then returns the
     result of executing an equivalent of @c static_castclassname *(ptr).
 
-    @sa wx_static_cast, wxDynamicCast, wxConstCast
+    @see wx_static_cast, wxDynamicCast, wxConstCast
 */
-classname * wxStaticCast();
+classname* wxStaticCast();
 
 /**
     Same as @c static_castT(x) if the compiler supports static cast or
@@ -587,7 +581,7 @@ classname * wxStaticCast();
     the same as for the standard static cast, i.e. @e T is the full type name and
     star is not appended to it.
 
-    @sa wx_const_cast, wx_reinterpret_cast, wx_truncate_cast
+    @see wx_const_cast, wx_reinterpret_cast, wx_truncate_cast
 */
 T wx_static_cast();
 
@@ -595,8 +589,8 @@ T wx_static_cast();
     Used in a C++ implementation file to complete the declaration of
     a class that has run-time type information, and whose instances
     can be created dynamically.
-
     Example:
+
     @code
     IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 

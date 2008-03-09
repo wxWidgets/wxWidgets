@@ -34,11 +34,10 @@ class wxTarInputStream : public wxArchiveInputStream
 public:
     //@{
     /**
-        Constructor. In a Unicode build the second parameter @e conv is
+        Constructor. In a Unicode build the second parameter @a conv is
         used to translate fields from the standard tar header into Unicode. It has
-        no effect on the stream's data. @e conv is only used for the standard
+        no effect on the stream's data. @a conv is only used for the standard
         tar headers, any pax extended headers are always UTF-8 encoded.
-        
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
     */
@@ -63,9 +62,8 @@ public:
 
     /**
         Closes the current entry if one is open, then opens the entry specified
-        by the @e entry object.
-        
-        @e entry should be from the same tar file, and the tar should
+        by the @a entry object.
+        @a entry should be from the same tar file, and the tar should
         be on a seekable stream.
     */
     bool OpenEntry(wxTarEntry& entry);
@@ -117,20 +115,16 @@ public:
     /**
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
-        
-        In a Unicode build the third parameter @e conv is used to translate the
+        In a Unicode build the third parameter @a conv is used to translate the
         headers fields into an 8-bit encoding. It has no effect on the stream's data.
-        
-        When the @e format is @e wxTAR_PAX, pax extended headers are generated
+        When the @a format is @e wxTAR_PAX, pax extended headers are generated
         when any header field will not fit the standard tar header block or if it
         uses any non-ascii characters.
-        
         Extended headers are stored as extra 'files' within the tar, and will be
         extracted as such by any other tar program that does not understand them.
-        The @e conv parameter only affect the standard tar headers, the extended
+        The @a conv parameter only affect the standard tar headers, the extended
         headers are always UTF-8 encoded.
-        
-        When the @e format is @e wxTAR_USTAR, no extended headers are
+        When the @a format is @e wxTAR_USTAR, no extended headers are
         generated, and instead a warning message is logged if any header field
         overflows.
     */
@@ -169,17 +163,15 @@ public:
     bool CopyArchiveMetaData(wxTarInputStream& s);
 
     /**
-        Takes ownership of @e entry and uses it to create a new entry
-        in the tar. @e entry is then opened in @e inputStream and its contents
+        Takes ownership of @a entry and uses it to create a new entry
+        in the tar. @a entry is then opened in @a inputStream and its contents
         copied to this stream.
-        
         For some other archive formats CopyEntry() is much more efficient than
         transferring the data using Read() and Write() since it will copy them
         without decompressing and recompressing them. For tar however it makes
         no difference.
-        
-        For tars on seekable streams, @e entry must be from the same tar file
-        as @e stream. For non-seekable streams, @e entry must also be the
+        For tars on seekable streams, @a entry must be from the same tar file
+        as @e stream. For non-seekable streams, @a entry must also be the
         last thing read from @e inputStream.
     */
     bool CopyEntry(wxTarEntry* entry, wxTarInputStream& inputStream);
@@ -187,7 +179,6 @@ public:
     //@{
     /**
         The tar is zero padded to round its size up to @e BlockingFactor * 512 bytes.
-        
         Defaults to 10 for @e wxTAR_PAX and 20 for @e wxTAR_USTAR
         (see the @ref wxtaroutputstream() constructor), as
         specified in the POSIX standards.
@@ -198,11 +189,9 @@ public:
 
     /**
         )
-        
         Create a new directory entry
         (see wxArchiveEntry::IsDir)
         with the given name and timestamp.
-        
         PutNextEntry() can
         also be used to create directory entries, by supplying a name with
         a trailing path separator.
@@ -212,7 +201,6 @@ public:
     //@{
     /**
         , @b wxFileOffset@e size = wxInvalidOffset)
-        
         Create a new entry with the given name, timestamp and size.
     */
     bool PutNextEntry(wxTarEntry* entry);
@@ -323,7 +311,6 @@ public:
     //@{
     /**
         The size of the entry's data in bytes.
-        
         The tar archive format stores the entry's size ahead of the entry's data.
         Therefore when creating an archive on a non-seekable stream it is necessary to
         supply the correct size when each entry is created. For seekable streams this
@@ -338,6 +325,7 @@ public:
     //@{
     /**
         Returns the type of the entry. It should be one of the following:
+        
         When creating archives use just these values. When reading archives
         any other values should be treated as @e wxTAR_REGTYPE.
     */
@@ -355,7 +343,7 @@ public:
     wxString GetInternalName();
     wxString GetInternalName(const wxString& name,
                              wxPathFormat format = wxPATH_NATIVE,
-                             bool* pIsDir = @NULL);
+                             bool* pIsDir = NULL);
     //@}
 
     /**

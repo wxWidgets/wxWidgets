@@ -40,28 +40,23 @@ public:
         Constructor, creating and showing a list box.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param label
-        The text shown just before the list control.
-        
+            The text shown just before the list control.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size. If wxDefaultSize is specified then the window is sized
-        appropriately.
-        
+            Window size. If wxDefaultSize is specified then the window is
+        sized
+            appropriately.
         @param style
-        Window style. See wxEditableListBox.
-        
+            Window style. See wxEditableListBox.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create()
+        @see Create()
     */
     wxEditableListBox();
     wxEditableListBox(wxWindow* parent, wxWindowID id,

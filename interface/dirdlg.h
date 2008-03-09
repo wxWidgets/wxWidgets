@@ -40,25 +40,19 @@ public:
         the dialog.
         
         @param parent
-        Parent window.
-        
+            Parent window.
         @param message
-        Message to show on the dialog.
-        
+            Message to show on the dialog.
         @param defaultPath
-        The default path, or the empty string.
-        
+            The default path, or the empty string.
         @param style
-        The dialog style. See wxDirDialog
-        
+            The dialog style. See wxDirDialog
         @param pos
-        Dialog position. Ignored under Windows.
-        
+            Dialog position. Ignored under Windows.
         @param size
-        Dialog size. Ignored under Windows.
-        
+            Dialog size. Ignored under Windows.
         @param name
-        The dialog name, not used.
+            The dialog name, not used.
     */
     wxDirDialog(wxWindow* parent,
                 const wxString& message = "Choose a directory",
@@ -109,9 +103,9 @@ public:
     Pops up a directory selector dialog. The arguments have the same meaning as
     those of wxDirDialog::wxDirDialog(). The message is displayed at the top,
     and the default_path, if specified, is set as the initial selection.
-
     The application must check for an empty return value (if the user pressed
     Cancel). For example:
+
     @code
     const wxString& dir = wxDirSelector("Choose a folder");
     if ( !dir.empty() )
@@ -124,5 +118,5 @@ wxString wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
                        const wxString& default_path = "",
                        long style = 0,
                        const wxPoint& pos = wxDefaultPosition,
-                       wxWindow * parent = @NULL);
+                       wxWindow* parent = NULL);
 

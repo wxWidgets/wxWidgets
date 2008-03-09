@@ -30,7 +30,6 @@ public:
 
     /**
         Use this in conjunction with StartDrawingOnTop().
-        
         This function destroys the temporary window created to implement on-top drawing
         (X only).
     */
@@ -43,30 +42,26 @@ public:
         this,
         some window systems (such as X) only allow drawing to take place underneath
         other windows.
-        
         By using the first form of this function, an application is specifying that
         the area that will be drawn on coincides with the given window.
-        
         By using the second form, an application can specify an area of the screen
         which is to be drawn on. If @NULL is passed, the whole screen is available.
-        
         It is recommended that an area of the screen is specified because with large
         regions,
         flickering effects are noticeable when destroying the temporary transparent
         window used
         to implement this feature.
-        
         You might use this pair of functions when implementing a drag feature, for
         example
         as in the wxSplitterWindow implementation.
         
         @remarks This function is probably obsolete since the X implementations
-                   allow drawing directly on the screen now. However,
-                   the fact that this function allows the screen to be
-                   refreshed afterwards, may be useful to some
-                   applications.
+                 allow drawing directly on the screen now. However, the
+                 fact that this function allows the screen to be
+                 refreshed afterwards, may be useful to some
+                 applications.
     */
     bool StartDrawingOnTop(wxWindow* window);
-    bool StartDrawingOnTop(wxRect* rect = @NULL);
+    bool StartDrawingOnTop(wxRect* rect = NULL);
     //@}
 };

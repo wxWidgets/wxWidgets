@@ -107,34 +107,30 @@ public:
         Constructor.
         
         @param parent
-        Parent window.
-        
+            Parent window.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position. If a position of (-1, -1) is specified then a default position
-        is chosen.
-        
+            Window position. If a position of (-1, -1) is specified then a default
+        position
+            is chosen.
         @param size
-        Window size. If a size of (-1, -1) is specified then the window is sized
-        appropriately.
-        
+            Window size. If a size of (-1, -1) is specified then the window is sized
+            appropriately.
         @param style
-        Window style. See wxScrolledWindow.
-        
+            Window style. See wxScrolledWindow.
         @param name
-        Window name.
+            Window name.
         
         @remarks The window is initially created without visible scrollbars. Call
-                   SetScrollbars() to specify how big
-                   the virtual window size should be.
+                 SetScrollbars() to specify how big the
+                 virtual window size should be.
     */
     wxScrolledWindow();
     wxScrolledWindow(wxWindow* parent, wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style = wxHSCROLL |  wxVSCROLL,
+                     long style = wxHSCROLL | wxVSCROLL,
                      const wxString& name = "scrolledWindow");
     //@}
 
@@ -151,9 +147,9 @@ public:
         (as always), but the logical coordinates are (0, 10) and so the call to
         CalcScrolledPosition(0, 10, xx, yy) will return 0 in yy.
         
-        @sa CalcUnscrolledPosition()
+        @see CalcUnscrolledPosition()
     */
-    void CalcScrolledPosition(int x, int y, int * xx, int * yy);
+    void CalcScrolledPosition(int x, int y, int* xx, int* yy);
 
     /**
         Translates the device coordinates to the logical ones. For example, if a window
@@ -163,9 +159,9 @@ public:
         (as always), but the logical coordinates are (0, 10) and so the call to
         CalcUnscrolledPosition(0, 0, xx, yy) will return 10 in yy.
         
-        @sa CalcScrolledPosition()
+        @see CalcScrolledPosition()
     */
-    void CalcUnscrolledPosition(int x, int y, int * xx, int * yy);
+    void CalcUnscrolledPosition(int x, int y, int* xx, int* yy);
 
     /**
         Creates the window for two-step construction. Derived classes
@@ -175,14 +171,13 @@ public:
     bool Create(wxWindow* parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxHSCROLL |  wxVSCROLL,
+                long style = wxHSCROLL | wxVSCROLL,
                 const wxString& name = "scrolledWindow");
 
     /**
         Call this function to prepare the device context for drawing a scrolled image.
         It
         sets the device origin according to the current scroll position.
-        
         DoPrepareDC is called automatically within the default OnPaint() event
         handler, so your OnDraw() override
         will be passed a 'pre-scrolled' device context. However, if you wish to draw
@@ -203,13 +198,12 @@ public:
         is disabled.
         
         @param xScrolling
-        If @true, enables physical scrolling in the x direction.
-        
+            If @true, enables physical scrolling in the x direction.
         @param yScrolling
-        If @true, enables physical scrolling in the y direction.
+            If @true, enables physical scrolling in the y direction.
         
         @remarks Physical scrolling may not be available on all platforms. Where
-                   it is available, it is enabled by default.
+                 it is available, it is enabled by default.
     */
     void EnableScrolling(bool xScrolling, bool yScrolling);
 
@@ -219,12 +213,11 @@ public:
         scrolling in that direction.
         
         @param xUnit
-        Receives the number of pixels per horizontal unit.
-        
+            Receives the number of pixels per horizontal unit.
         @param yUnit
-        Receives the number of pixels per vertical unit.
+            Receives the number of pixels per vertical unit.
         
-        @sa SetScrollbars(), GetVirtualSize()
+        @see SetScrollbars(), GetVirtualSize()
     */
     void GetScrollPixelsPerUnit(int* xUnit, int* yUnit);
 
@@ -232,21 +225,20 @@ public:
         Get the position at which the visible portion of the window starts.
         
         @param x
-        Receives the first visible x position in scroll units.
-        
+            Receives the first visible x position in scroll units.
         @param y
-        Receives the first visible y position in scroll units.
+            Receives the first visible y position in scroll units.
         
         @remarks If either of the scrollbars is not at the home position, x
-                   and/or y will be greater than zero.  Combined with
-                   wxWindow::GetClientSize, the application can use this
-                   function to efficiently redraw only the visible
-                   portion of the window.  The positions are in logical
-                   scroll units, not pixels, so to convert to pixels you
-                   will have to multiply by the number of pixels per
-                   scroll increment.
+                 and/or y will be greater than zero.  Combined with
+                 wxWindow::GetClientSize, the application can use this
+                 function to efficiently redraw only the visible portion
+                 of the window.  The positions are in logical scroll
+                 units, not pixels, so to convert to pixels you will
+                 have to multiply by the number of pixels per scroll
+                 increment.
         
-        @sa SetScrollbars()
+        @see SetScrollbars()
     */
     void GetViewStart(int* x, int* y);
 
@@ -256,15 +248,14 @@ public:
         visible).
         
         @param x
-        Receives the length of the scrollable window, in pixels.
-        
+            Receives the length of the scrollable window, in pixels.
         @param y
-        Receives the height of the scrollable window, in pixels.
+            Receives the height of the scrollable window, in pixels.
         
         @remarks Use wxDC::DeviceToLogicalX and wxDC::DeviceToLogicalY to
-                   translate these units to logical units.
+                 translate these units to logical units.
         
-        @sa SetScrollbars(), GetScrollPixelsPerUnit()
+        @see SetScrollbars(), GetScrollPixelsPerUnit()
     */
     void GetVirtualSize(int* x, int* y);
 
@@ -277,7 +268,6 @@ public:
         Called by the default paint event handler to allow the application to define
         painting behaviour without having to worry about calling
         DoPrepareDC().
-        
         Instead of overriding this function you may also just process the paint event
         in the derived class as usual, but then you will have to call DoPrepareDC()
         yourself.
@@ -296,18 +286,17 @@ public:
         Scrolls a window so the view start is at the given point.
         
         @param x
-        The x position to scroll to, in scroll units.
-        
+            The x position to scroll to, in scroll units.
         @param y
-        The y position to scroll to, in scroll units.
+            The y position to scroll to, in scroll units.
         
         @remarks The positions are in scroll units, not pixels, so to convert to
-                   pixels you will have to multiply by the number of
-                   pixels per scroll increment. If either parameter is
-                   -1, that position will be ignored (no change in that
-                   direction).
+                 pixels you will have to multiply by the number of
+                 pixels per scroll increment. If either parameter is -1,
+                 that position will be ignored (no change in that
+                 direction).
         
-        @sa SetScrollbars(), GetScrollPixelsPerUnit()
+        @see SetScrollbars(), GetScrollPixelsPerUnit()
     */
     void Scroll(int x, int y);
 
@@ -321,42 +310,36 @@ public:
         Sets up vertical and/or horizontal scrollbars.
         
         @param pixelsPerUnitX
-        Pixels per scroll unit in the horizontal direction.
-        
+            Pixels per scroll unit in the horizontal direction.
         @param pixelsPerUnitY
-        Pixels per scroll unit in the vertical direction.
-        
+            Pixels per scroll unit in the vertical direction.
         @param noUnitsX
-        Number of units in the horizontal direction.
-        
+            Number of units in the horizontal direction.
         @param noUnitsY
-        Number of units in the vertical direction.
-        
+            Number of units in the vertical direction.
         @param xPos
-        Position to initialize the scrollbars in the horizontal direction, in scroll
-        units.
-        
+            Position to initialize the scrollbars in the horizontal direction, in
+        scroll units.
         @param yPos
-        Position to initialize the scrollbars in the vertical direction, in scroll
+            Position to initialize the scrollbars in the vertical direction, in scroll
         units.
-        
         @param noRefresh
-        Will not refresh window if @true.
+            Will not refresh window if @true.
         
         @remarks The first pair of parameters give the number of pixels per
-                   'scroll step', i.e. amount moved when the up or down
-                   scroll arrows are pressed. The second pair gives the
-                   length of scrollbar in scroll steps, which sets the
-                   size of the virtual window.
+                 'scroll step', i.e. amount moved when the up or down
+                 scroll arrows are pressed. The second pair gives the
+                 length of scrollbar in scroll steps, which sets the
+                 size of the virtual window.
         
-        @sa wxWindow::SetVirtualSize
+        @see wxWindow::SetVirtualSize
     */
     void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                        int noUnitsX,
                        int noUnitsY,
                        int xPos = 0,
                        int yPos = 0,
-                       bool noRefresh = @false);
+                       bool noRefresh = false);
 
     /**
         Call this function to tell wxScrolledWindow to perform the actual scrolling on

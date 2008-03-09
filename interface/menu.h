@@ -16,7 +16,7 @@
     @category{menus}
 
     @seealso
-    wxMenu, @ref overview_eventhandlingoverview "Event handling overview"
+    wxMenu, @ref overview_eventhandlingoverview
 */
 class wxMenuBar : public wxWindow
 {
@@ -26,17 +26,15 @@ public:
         Construct a menu bar from arrays of menus and titles.
         
         @param n
-        The number of menus.
-        
+            The number of menus.
         @param menus
-        An array of menus. Do not use this array again - it now belongs to the
-        menu bar.
-        
+            An array of menus. Do not use this array again - it now belongs to the
+            menu bar.
         @param titles
-        An array of title strings. Deallocate this array after creating the menu bar.
-        
+            An array of title strings. Deallocate this array after creating the menu
+        bar.
         @param style
-        If wxMB_DOCKABLE the menu bar can be detached (wxGTK only).
+            If wxMB_DOCKABLE the menu bar can be detached (wxGTK only).
     */
     wxMenuBar(long style = 0);
     wxMenuBar(size_t n, wxMenu* menus[], const wxString titles[],
@@ -53,28 +51,26 @@ public:
         Adds the item to the end of the menu bar.
         
         @param menu
-        The menu to add. Do not deallocate this menu after calling Append.
-        
+            The menu to add. Do not deallocate this menu after calling Append.
         @param title
-        The title of the menu.
+            The title of the menu.
         
         @returns @true on success, @false if an error occurred.
         
-        @sa Insert()
+        @see Insert()
     */
-    bool Append(wxMenu * menu, const wxString& title);
+    bool Append(wxMenu* menu, const wxString& title);
 
     /**
         Checks or unchecks a menu item.
         
         @param id
-        The menu item identifier.
-        
+            The menu item identifier.
         @param check
-        If @true, checks the menu item, otherwise the item is unchecked.
+            If @true, checks the menu item, otherwise the item is unchecked.
         
         @remarks Only use this when the menu bar has been associated with a
-                   frame; otherwise, use the wxMenu equivalent call.
+                 frame; otherwise, use the wxMenu equivalent call.
     */
     void Check(int id, const bool check);
 
@@ -82,13 +78,12 @@ public:
         Enables or disables (greys out) a menu item.
         
         @param id
-        The menu item identifier.
-        
+            The menu item identifier.
         @param enable
-        @true to enable the item, @false to disable it.
+            @true to enable the item, @false to disable it.
         
         @remarks Only use this when the menu bar has been associated with a
-                   frame; otherwise, use the wxMenu equivalent call.
+                 frame; otherwise, use the wxMenu equivalent call.
     */
     void Enable(int id, const bool enable);
 
@@ -96,10 +91,9 @@ public:
         Enables or disables a whole menu.
         
         @param pos
-        The position of the menu, starting from zero.
-        
+            The position of the menu, starting from zero.
         @param enable
-        @true to enable the menu, @false to disable it.
+            @true to enable the menu, @false to disable it.
         
         @remarks Only use this when the menu bar has been associated with a frame.
     */
@@ -109,18 +103,17 @@ public:
         Finds the menu item object associated with the given menu item identifier.
         
         @param id
-        Menu item identifier.
-        
+            Menu item identifier.
         @param menu
-        If not @NULL, menu will get set to the associated menu.
+            If not @NULL, menu will get set to the associated menu.
         
         @returns The found menu item object, or @NULL if one was not found.
     */
-    wxMenuItem * FindItem(int id, wxMenu menu = @NULL);
+    wxMenuItem* FindItem(int id, wxMenu menu = NULL);
 
     /**
-        Returns the index of the menu with the given @e title or @c wxNOT_FOUND if no
-        such menu exists in this menubar. The @e title parameter may specify either
+        Returns the index of the menu with the given @a title or @c wxNOT_FOUND if no
+        such menu exists in this menubar. The @a title parameter may specify either
         the menu title (with accelerator characters, i.e. @c "File") or just the
         menu label (@c "File") indifferently.
     */
@@ -130,15 +123,14 @@ public:
         Finds the menu item id for a menu name/menu item string pair.
         
         @param menuString
-        Menu title to find.
-        
+            Menu title to find.
         @param itemString
-        Item to find.
+            Item to find.
         
         @returns The menu item identifier, or wxNOT_FOUND if none was found.
         
         @remarks Any special menu codes are stripped out of source and target
-                   strings before matching.
+                 strings before matching.
     */
     int FindMenuItem(const wxString& menuString,
                      const wxString& itemString);
@@ -147,12 +139,12 @@ public:
         Gets the help string associated with the menu item identifier.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns The help string, or the empty string if there was no help string
-                   or the menu item was not found.
+                 or the menu item was not found.
         
-        @sa SetHelpString()
+        @see SetHelpString()
     */
     wxString GetHelpString(int id);
 
@@ -160,10 +152,10 @@ public:
         Gets the label associated with a menu item.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns The menu item label, or the empty string if the item was not
-                   found.
+                 found.
         
         @remarks Use only after the menubar has been associated with a frame.
     */
@@ -175,18 +167,18 @@ public:
         title string during its construction.
         
         @param pos
-        Position of the menu on the menu bar, starting from zero.
+            Position of the menu on the menu bar, starting from zero.
         
         @returns The menu label, or the empty string if the menu was not found.
         
         @remarks Use only after the menubar has been associated with a frame.
         
-        @sa SetLabelTop()
+        @see SetLabelTop()
     */
     wxString GetLabelTop(int pos);
 
     /**
-        Returns the menu at @e menuIndex (zero-based).
+        Returns the menu at @a menuIndex (zero-based).
     */
     wxMenu* GetMenu(int menuIndex);
 
@@ -201,13 +193,13 @@ public:
         title string during its construction.
         
         @param pos
-        Position of the menu on the menu bar, starting from zero.
+            Position of the menu on the menu bar, starting from zero.
         
         @returns The menu label, or the empty string if the menu was not found.
         
         @remarks Use only after the menubar has been associated with a frame.
         
-        @sa GetMenuLabelText(), SetMenuLabel()
+        @see GetMenuLabelText(), SetMenuLabel()
     */
     wxString GetMenuLabel(int pos);
 
@@ -217,13 +209,13 @@ public:
         title string during its construction.
         
         @param pos
-        Position of the menu on the menu bar, starting from zero.
+            Position of the menu on the menu bar, starting from zero.
         
         @returns The menu label, or the empty string if the menu was not found.
         
         @remarks Use only after the menubar has been associated with a frame.
         
-        @sa GetMenuLabel(), SetMenuLabel()
+        @see GetMenuLabel(), SetMenuLabel()
     */
     wxString GetMenuLabelText(int pos);
 
@@ -234,25 +226,23 @@ public:
         Append().
         
         @param pos
-        The position of the new menu in the menu bar
-        
+            The position of the new menu in the menu bar
         @param menu
-        The menu to add. wxMenuBar owns the menu and will free it.
-        
+            The menu to add. wxMenuBar owns the menu and will free it.
         @param title
-        The title of the menu.
+            The title of the menu.
         
         @returns @true on success, @false if an error occurred.
         
-        @sa Append()
+        @see Append()
     */
-    bool Insert(size_t pos, wxMenu * menu, const wxString& title);
+    bool Insert(size_t pos, wxMenu* menu, const wxString& title);
 
     /**
         Determines whether an item is checked.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns @true if the item was found and is checked, @false otherwise.
     */
@@ -262,7 +252,7 @@ public:
         Determines whether an item is enabled.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns @true if the item was found and is enabled, @false otherwise.
     */
@@ -279,40 +269,36 @@ public:
         Insert() to change the menubar
         dynamically.
         
-        @sa Replace()
+        @see Replace()
     */
-    wxMenu * Remove(size_t pos);
+    wxMenu* Remove(size_t pos);
 
     /**
         Replaces the menu at the given position with another one.
         
         @param pos
-        The position of the new menu in the menu bar
-        
+            The position of the new menu in the menu bar
         @param menu
-        The menu to add.
-        
+            The menu to add.
         @param title
-        The title of the menu.
+            The title of the menu.
         
         @returns The menu which was previously at position pos. The caller is
-                   responsible for deleting it.
+                 responsible for deleting it.
         
-        @sa Insert(), Remove()
+        @see Insert(), Remove()
     */
-    wxMenu * Replace(size_t pos, wxMenu * menu,
-                     const wxString& title);
+    wxMenu* Replace(size_t pos, wxMenu* menu, const wxString& title);
 
     /**
         Sets the help string associated with a menu item.
         
         @param id
-        Menu item identifier.
-        
+            Menu item identifier.
         @param helpString
-        Help string to associate with the menu item.
+            Help string to associate with the menu item.
         
-        @sa GetHelpString()
+        @see GetHelpString()
     */
     void SetHelpString(int id, const wxString& helpString);
 
@@ -320,14 +306,13 @@ public:
         Sets the label of a menu item.
         
         @param id
-        Menu item identifier.
-        
+            Menu item identifier.
         @param label
-        Menu item label.
+            Menu item label.
         
         @remarks Use only after the menubar has been associated with a frame.
         
-        @sa GetLabel()
+        @see GetLabel()
     */
     void SetLabel(int id, const wxString& label);
 
@@ -335,14 +320,13 @@ public:
         Sets the label of a top-level menu.
         
         @param pos
-        The position of a menu on the menu bar, starting from zero.
-        
+            The position of a menu on the menu bar, starting from zero.
         @param label
-        The menu label.
+            The menu label.
         
         @remarks Use only after the menubar has been associated with a frame.
         
-        @sa GetLabelTop()
+        @see GetLabelTop()
     */
     void SetLabelTop(int pos, const wxString& label);
 
@@ -350,10 +334,9 @@ public:
         Sets the label of a top-level menu.
         
         @param pos
-        The position of a menu on the menu bar, starting from zero.
-        
+            The position of a menu on the menu bar, starting from zero.
         @param label
-        The menu label.
+            The menu label.
         
         @remarks Use only after the menubar has been associated with a frame.
     */
@@ -403,8 +386,8 @@ public:
     @category{menus}
 
     @seealso
-    wxMenuBar, wxWindow::PopupMenu, @ref overview_eventhandlingoverview "Event
-    handling overview", @ref overview_wxfilehistory "wxFileHistory (most recently used files menu)"
+    wxMenuBar, wxWindow::PopupMenu, @ref overview_eventhandlingoverview, @ref
+    overview_wxfilehistory "wxFileHistory (most recently used files menu)"
 */
 class wxMenu : public wxEvtHandler
 {
@@ -414,7 +397,7 @@ public:
         Constructs a wxMenu object.
         
         @param style
-        If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK only).
+            If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK only).
     */
     wxMenu(const wxString& title = "", long style = 0);
     wxMenu(long style);
@@ -422,7 +405,6 @@ public:
 
     /**
         Destructor, destroying the menu.
-        
         Note: under Motif, a popup menu must have a valid parent (the window
         it was last popped up on) when being destroyed. Therefore, make sure
         you delete or re-use the popup menu @e before destroying the
@@ -440,39 +422,34 @@ public:
         such as bitmaps and fonts.
         
         @param id
-        The menu command identifier.
-        
+            The menu command identifier.
         @param item
-        The string to appear on the menu item.
-        
+            The string to appear on the menu item.
         @param menu
-        Pull-right submenu.
-        
+            Pull-right submenu.
         @param kind
-        May be wxITEM_SEPARATOR, wxITEM_NORMAL,
-        wxITEM_CHECK or wxITEM_RADIO
-        
+            May be wxITEM_SEPARATOR, wxITEM_NORMAL,
+            wxITEM_CHECK or wxITEM_RADIO
         @param helpString
-        An optional help string associated with the item.
-        By default, the handler for the wxEVT_MENU_HIGHLIGHT event displays
-        this string in the status line.
-        
+            An optional help string associated with the item.
+            By default, the handler for the wxEVT_MENU_HIGHLIGHT event displays
+            this string in the status line.
         @param menuItem
-        A menuitem object. It will be owned by the wxMenu object after this function
-        is called, so do not delete it yourself.
+            A menuitem object. It will be owned by the wxMenu object after this function
+            is called, so do not delete it yourself.
         
         @remarks This command can be used after the menu has been shown, as well
-                   as on initial creation of a menu or menubar.
+                 as on initial creation of a menu or menubar.
         
-        @sa AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
-              AppendSubMenu(), Insert(), SetLabel(),
-              GetHelpString(), SetHelpString(), wxMenuItem
+        @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
+             AppendSubMenu(), Insert(), SetLabel(),
+             GetHelpString(), SetHelpString(), wxMenuItem
     */
     wxMenuItem* Append(int id, const wxString& item = "",
                        const wxString& helpString = "",
                        wxItemKind kind = wxITEM_NORMAL);
     wxMenuItem* Append(int id, const wxString& item,
-                       wxMenu * subMenu,
+                       wxMenu* subMenu,
                        const wxString& helpString = "");
     wxMenuItem* Append(wxMenuItem* menuItem);
     //@}
@@ -480,7 +457,7 @@ public:
     /**
         Adds a checkable item to the end of the menu.
         
-        @sa Append(), InsertCheckItem()
+        @see Append(), InsertCheckItem()
     */
     wxMenuItem* AppendCheckItem(int id, const wxString& item,
                                 const wxString& helpString = "");
@@ -490,7 +467,7 @@ public:
         group and when an item in the group is checked, all the others are
         automatically unchecked.
         
-        @sa Append(), InsertRadioItem()
+        @see Append(), InsertRadioItem()
     */
     wxMenuItem* AppendRadioItem(int id, const wxString& item,
                                 const wxString& helpString = "");
@@ -498,18 +475,17 @@ public:
     /**
         Adds a separator to the end of the menu.
         
-        @sa Append(), InsertSeparator()
+        @see Append(), InsertSeparator()
     */
     wxMenuItem* AppendSeparator();
 
     /**
-        Adds the given @e submenu to this menu. @e text is the text shown in the
-        menu for it and @e help is the help string shown in the status bar when the
+        Adds the given @a submenu to this menu. @a text is the text shown in the
+        menu for it and @a help is the help string shown in the status bar when the
         submenu item is selected.
     */
-    wxMenuItem * AppendSubMenu(wxMenu * submenu,
-                               const wxString& text,
-                               const wxString& help = wxEmptyString);
+    wxMenuItem* AppendSubMenu(wxMenu* submenu, const wxString& text,
+                              const wxString& help = wxEmptyString);
 
     /**
         Inserts a break in a menu, causing the next appended item to appear in a new
@@ -521,12 +497,11 @@ public:
         Checks or unchecks the menu item.
         
         @param id
-        The menu item identifier.
-        
+            The menu item identifier.
         @param check
-        If @true, the item will be checked, otherwise it will be unchecked.
+            If @true, the item will be checked, otherwise it will be unchecked.
         
-        @sa IsChecked()
+        @see IsChecked()
     */
     void Check(int id, const bool check);
 
@@ -537,15 +512,14 @@ public:
         delete a submenu.
         
         @param id
-        Id of the menu item to be deleted.
-        
+            Id of the menu item to be deleted.
         @param item
-        Menu item to be deleted.
+            Menu item to be deleted.
         
-        @sa FindItem(), Destroy(), Remove()
+        @see FindItem(), Destroy(), Remove()
     */
     void Delete(int id);
-    void Delete(wxMenuItem * item);
+    void Delete(wxMenuItem* item);
     //@}
 
     //@{
@@ -555,27 +529,25 @@ public:
         (for example, to reuse it later).
         
         @param id
-        Id of the menu item to be deleted.
-        
+            Id of the menu item to be deleted.
         @param item
-        Menu item to be deleted.
+            Menu item to be deleted.
         
-        @sa FindItem(), Deletes(), Remove()
+        @see FindItem(), Deletes(), Remove()
     */
     void Destroy(int id);
-    void Destroy(wxMenuItem * item);
+    void Destroy(wxMenuItem* item);
     //@}
 
     /**
         Enables or disables (greys out) a menu item.
         
         @param id
-        The menu item identifier.
-        
+            The menu item identifier.
         @param enable
-        @true to enable the menu item, @false to disable it.
+            @true to enable the menu item, @false to disable it.
         
-        @sa IsEnabled()
+        @see IsEnabled()
     */
     void Enable(int id, const bool enable);
 
@@ -585,23 +557,21 @@ public:
         optionally, the (sub)menu it belongs to.
         
         @param itemString
-        Menu item string to find.
-        
+            Menu item string to find.
         @param id
-        Menu item identifier.
-        
+            Menu item identifier.
         @param menu
-        If the pointer is not @NULL, it will be filled with the item's
-        parent menu (if the item was found)
+            If the pointer is not @NULL, it will be filled with the item's
+            parent menu (if the item was found)
         
         @returns First form: menu item identifier, or wxNOT_FOUND if none is
-                   found.
+                 found.
         
         @remarks Any special menu codes are stripped out of source and target
-                   strings before matching.
+                 strings before matching.
     */
     int FindItem(const wxString& itemString);
-    wxMenuItem * FindItem(int id, wxMenu ** menu = @NULL);
+    wxMenuItem* FindItem(int id, wxMenu** menu = NULL);
     //@}
 
     /**
@@ -613,12 +583,12 @@ public:
         Returns the help string associated with a menu item.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns The help string, or the empty string if there is no help string
-                   or the item was not found.
+                 or the item was not found.
         
-        @sa SetHelpString(), Append()
+        @see SetHelpString(), Append()
     */
     wxString GetHelpString(int id);
 
@@ -626,11 +596,11 @@ public:
         Returns a menu item label.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns The item label, or the empty string if the item was not found.
         
-        @sa GetLabelText(), SetLabel()
+        @see GetLabelText(), SetLabel()
     */
     wxString GetLabel(int id);
 
@@ -639,11 +609,11 @@ public:
         accelerators.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns The item label, or the empty string if the item was not found.
         
-        @sa GetLabel(), SetLabel()
+        @see GetLabel(), SetLabel()
     */
     wxString GetLabelText(int id);
 
@@ -662,21 +632,21 @@ public:
         Returns the title of the menu.
         
         @remarks This is relevant only to popup menus, use
-                   wxMenuBar::GetMenuLabel for the menus in the menubar.
+                 wxMenuBar::GetMenuLabel for the menus in the menubar.
         
-        @sa SetTitle()
+        @see SetTitle()
     */
     wxString GetTitle();
 
     //@{
     /**
-        Inserts the given @e item before the position @e pos. Inserting the item
+        Inserts the given @a item before the position @e pos. Inserting the item
         at position GetMenuItemCount() is the same
         as appending it.
         
-        @sa Append(), Prepend()
+        @see Append(), Prepend()
     */
-    wxMenuItem* Insert(size_t pos, wxMenuItem * item);
+    wxMenuItem* Insert(size_t pos, wxMenuItem* item);
     wxMenuItem* Insert(size_t pos, int id,
                        const wxString& item = "",
                        const wxString& helpString = "",
@@ -686,7 +656,7 @@ public:
     /**
         Inserts a checkable item at the given position.
         
-        @sa Insert(), AppendCheckItem()
+        @see Insert(), AppendCheckItem()
     */
     wxMenuItem* InsertCheckItem(size_t pos, int id,
                                 const wxString& item,
@@ -695,7 +665,7 @@ public:
     /**
         Inserts a radio item at the given position.
         
-        @sa Insert(), AppendRadioItem()
+        @see Insert(), AppendRadioItem()
     */
     wxMenuItem* InsertRadioItem(size_t pos, int id,
                                 const wxString& item,
@@ -704,7 +674,7 @@ public:
     /**
         Inserts a separator at the given position.
         
-        @sa Insert(), AppendSeparator()
+        @see Insert(), AppendSeparator()
     */
     wxMenuItem* InsertSeparator(size_t pos);
 
@@ -712,11 +682,11 @@ public:
         Determines whether a menu item is checked.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns @true if the menu item is checked, @false otherwise.
         
-        @sa Check()
+        @see Check()
     */
     bool IsChecked(int id);
 
@@ -724,22 +694,22 @@ public:
         Determines whether a menu item is enabled.
         
         @param id
-        The menu item identifier.
+            The menu item identifier.
         
         @returns @true if the menu item is enabled, @false otherwise.
         
-        @sa Enable()
+        @see Enable()
     */
     bool IsEnabled(int id);
 
     //@{
     /**
-        Inserts the given @e item at position 0, i.e. before all the other
+        Inserts the given @a item at position 0, i.e. before all the other
         existing items.
         
-        @sa Append(), Insert()
+        @see Append(), Insert()
     */
-    wxMenuItem* Prepend(wxMenuItem * item);
+    wxMenuItem* Prepend(wxMenuItem* item);
     wxMenuItem* Prepend(int id, const wxString& item = "",
                         const wxString& helpString = "",
                         wxItemKind kind = wxITEM_NORMAL);
@@ -748,7 +718,7 @@ public:
     /**
         Inserts a checkable item at position 0.
         
-        @sa Prepend(), AppendCheckItem()
+        @see Prepend(), AppendCheckItem()
     */
     wxMenuItem* PrependCheckItem(int id, const wxString& item,
                                  const wxString& helpString = "");
@@ -756,7 +726,7 @@ public:
     /**
         Inserts a radio item at position 0.
         
-        @sa Prepend(), AppendRadioItem()
+        @see Prepend(), AppendRadioItem()
     */
     wxMenuItem* PrependRadioItem(int id, const wxString& item,
                                  const wxString& helpString = "");
@@ -764,7 +734,7 @@ public:
     /**
         Inserts a separator at position 0.
         
-        @sa Prepend(), AppendSeparator()
+        @see Prepend(), AppendSeparator()
     */
     wxMenuItem* PrependSeparator();
 
@@ -775,27 +745,25 @@ public:
         (especially useful with submenus).
         
         @param id
-        The identifier of the menu item to remove.
-        
+            The identifier of the menu item to remove.
         @param item
-        The menu item to remove.
+            The menu item to remove.
         
         @returns The item which was detached from the menu.
     */
-    wxMenuItem * Remove(int id);
-    wxMenuItem * Remove(wxMenuItem * item);
+    wxMenuItem* Remove(int id);
+    wxMenuItem* Remove(wxMenuItem* item);
     //@}
 
     /**
         Sets an item's help string.
         
         @param id
-        The menu item identifier.
-        
+            The menu item identifier.
         @param helpString
-        The help string to set.
+            The help string to set.
         
-        @sa GetHelpString()
+        @see GetHelpString()
     */
     void SetHelpString(int id, const wxString& helpString);
 
@@ -803,12 +771,11 @@ public:
         Sets the label of a menu item.
         
         @param id
-        The menu item identifier.
-        
+            The menu item identifier.
         @param label
-        The menu item label to set.
+            The menu item label to set.
         
-        @sa Append(), GetLabel()
+        @see Append(), GetLabel()
     */
     void SetLabel(int id, const wxString& label);
 
@@ -816,20 +783,20 @@ public:
         Sets the title of the menu.
         
         @param title
-        The title to set.
+            The title to set.
         
         @remarks This is relevant only to popup menus, use
-                   wxMenuBar::SetLabelTop for the menus in the menubar.
+                 wxMenuBar::SetLabelTop for the menus in the menubar.
         
-        @sa GetTitle()
+        @see GetTitle()
     */
     void SetTitle(const wxString& title);
 
     /**
-        Sends events to @e source (or owning window if @NULL) to update the
+        Sends events to @a source (or owning window if @NULL) to update the
         menu UI. This is called just before the menu is popped up with
         wxWindow::PopupMenu, but
         the application may call it at other times if required.
     */
-    void UpdateUI(wxEvtHandler* source = @NULL);
+    void UpdateUI(wxEvtHandler* source = NULL);
 };

@@ -133,7 +133,7 @@ public:
         Returns the native path (CGPathRef for Core Graphics, Path pointer for GDIPlus
         and a cairo_path_t pointer for cairo).
     */
-    void * GetNativePath();
+    void* GetNativePath();
 
     //@{
     /**
@@ -221,7 +221,7 @@ public:
     /**
         Creates a wxGraphicsContext from a wxWindow.
         
-        @sa wxGraphicsRenderer:: CreateContext
+        @see wxGraphicsRenderer:: CreateContext
     */
     wxGraphicsContext* Create(const wxWindowDC& dc);
     wxGraphicsContext* Create(wxWindow* window);
@@ -245,14 +245,14 @@ public:
         
         Creates a wxGraphicsContext from a native window.
         
-        @sa wxGraphicsRenderer:: CreateContextFromNativeContext
+        @see wxGraphicsRenderer:: CreateContextFromNativeContext
     */
-    wxGraphicsContext* CreateFromNative(void * context);
+    wxGraphicsContext* CreateFromNative(void* context);
 
     /**
-        @sa wxGraphicsRenderer:: CreateContextFromNativeWindow
+        @see wxGraphicsRenderer:: CreateContextFromNativeWindow
     */
-    wxGraphicsContext* CreateFromNativeWindow(void * window);
+    wxGraphicsContext* CreateFromNativeWindow(void* window);
 
     /**
         Creates a native brush, having a linear gradient, starting at (x1,y1) with
@@ -359,11 +359,11 @@ public:
         Returns the native context (CGContextRef for Core Graphics, Graphics pointer
         for GDIPlus and cairo_t pointer for cairo).
     */
-    void * GetNativeContext();
+    void* GetNativeContext();
 
     /**
-        Fills the @e widths array with the widths from the beginning of
-        @e text to the corresponding character of @e text.
+        Fills the @a widths array with the widths from the beginning of
+        @a text to the corresponding character of @e text.
     */
     void GetPartialTextExtents(const wxString& text,
                                wxArrayDouble& widths);
@@ -371,9 +371,9 @@ public:
     /**
         Gets the dimensions of the string using the currently selected font.
         @e string is the text string to measure, @e w and @e h are
-        the total width and height respectively, @e descent is the
+        the total width and height respectively, @a descent is the
         dimension from the baseline of the font to the bottom of the
-        descender, and @e externalLeading is any extra vertical space added
+        descender, and @a externalLeading is any extra vertical space added
         to the font by the font designer (usually is zero).
     */
     void GetTextExtent(const wxString& text, wxDouble* width,
@@ -480,20 +480,20 @@ public:
     /**
         Creates a wxGraphicsContext from a wxWindow.
     */
-    wxGraphicsContext * CreateContext(const wxWindowDC& dc);
-    wxGraphicsContext * CreateContext(wxWindow* window);
+    wxGraphicsContext* CreateContext(const wxWindowDC& dc);
+    wxGraphicsContext* CreateContext(wxWindow* window);
     //@}
 
     /**
         Creates a wxGraphicsContext from a native context. This native context must be
         eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a cairo_t pointer for cairo.
     */
-    wxGraphicsContext * CreateContextFromNativeContext(void * context);
+    wxGraphicsContext* CreateContextFromNativeContext(void* context);
 
     /**
         Creates a wxGraphicsContext from a native window.
     */
-    wxGraphicsContext * CreateContextFromNativeWindow(void * window);
+    wxGraphicsContext* CreateContextFromNativeWindow(void* window);
 
     /**
         Creates a native graphics font from a wxFont and a text colour.
@@ -621,15 +621,15 @@ public:
     /**
         Returns the component values of the matrix via the argument pointers.
     */
-#define void Get(wxDouble* a=@NULL, wxDouble* b=@NULL, wxDouble* c=@NULL,
-    wxDouble* d=@NULL, wxDouble* tx=@NULL,
-                                    wxDouble* ty=@NULL)     /* implementation is private */
+    void Get(wxDouble* a = NULL, wxDouble* b = NULL, wxDouble* c = NULL,
+             wxDouble* d = NULL, wxDouble* tx = NULL,
+             wxDouble* ty = NULL);
 
     /**
         Returns the native representation of the matrix. For CoreGraphics this is a
         CFAffineMatrix pointer. For GDIPlus a Matrix Pointer and for Cairo a cairo_matrix_t pointer.
     */
-    void * GetNativeMatrix();
+    void* GetNativeMatrix();
 
     /**
         Inverts the matrix.
@@ -660,9 +660,9 @@ public:
         Sets the matrix to the respective values (default values are the identity
         matrix)
     */
-#define void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0,
-    wxDouble d = 1.0, wxDouble tx = 0.0,
-                                    wxDouble ty = 0.0)     /* implementation is private */
+    void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0,
+             wxDouble d = 1.0, wxDouble tx = 0.0,
+             wxDouble ty = 0.0);
 
     /**
         Applies this matrix to a distance (ie. performs all transforms except

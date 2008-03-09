@@ -34,7 +34,6 @@ public:
         Enables or disables 'effects' under MS Windows or generic only. This refers to
         the
         controls for manipulating colour, strikeout and underline properties.
-        
         The default value is @true.
     */
     void EnableEffects(bool enable);
@@ -43,7 +42,6 @@ public:
         Under MS Windows, returns a flag determining whether symbol fonts can be
         selected. Has no
         effect on other platforms.
-        
         The default value is @true.
     */
     bool GetAllowSymbols();
@@ -56,7 +54,6 @@ public:
 
     /**
         Gets the colour associated with the font dialog.
-        
         The default value is black.
     */
     wxColour GetColour();
@@ -64,7 +61,6 @@ public:
     /**
         Determines whether 'effects' are enabled under Windows. This refers to the
         controls for manipulating colour, strikeout and underline properties.
-        
         The default value is @true.
     */
     bool GetEnableEffects();
@@ -77,7 +73,6 @@ public:
 
     /**
         Returns @true if the Help button will be shown (Windows only).
-        
         The default value is @false.
     */
     bool GetShowHelp();
@@ -85,7 +80,6 @@ public:
     /**
         Under MS Windows, determines whether symbol fonts can be selected. Has no
         effect on other platforms.
-        
         The default value is @true.
     */
     void SetAllowSymbols(bool allowSymbols);
@@ -97,7 +91,6 @@ public:
 
     /**
         Sets the colour that will be used for the font foreground colour.
-        
         The default colour is black.
     */
     void SetColour(const wxColour& colour);
@@ -109,7 +102,6 @@ public:
 
     /**
         Sets the valid range for the font point size (Windows only).
-        
         The default is 0, 0 (unrestricted range).
     */
     void SetRange(int min, int max);
@@ -117,7 +109,6 @@ public:
     /**
         Determines whether the Help button will be displayed in the font dialog
         (Windows only).
-        
         The default value is @false.
     */
     void SetShowHelp(bool showHelp);
@@ -252,7 +243,6 @@ public:
 
     /**
         Returns the paper id (stored in the internal wxPrintData object).
-        
         For further information, see wxPrintData::SetPaperId.
     */
     wxPaperSize GetPaperId();
@@ -273,7 +263,7 @@ public:
         This can return @false on Windows if the current printer is not set, for example.
         On all other platforms, it returns @true.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Pass @true if the dialog will simply return default printer information (such as
@@ -315,7 +305,6 @@ public:
 
     /**
         Sets the paper size id. For further information, see wxPrintData::SetPaperId.
-        
         Calling this function overrides the explicit paper dimensions passed in
         SetPaperSize().
     */
@@ -378,22 +367,19 @@ public:
         dialog
         will display full rgb colour picker or only available palette indexer.
         Has no meaning under other platforms.
-        
         The default value is @true.
     */
     bool GetChooseFull();
 
     /**
         Gets the current colour associated with the colour dialog.
-        
         The default colour is black.
     */
     wxColour GetColour();
 
     /**
-        Gets the @e ith custom colour associated with the colour dialog. @e i should
+        Gets the @e ith custom colour associated with the colour dialog. @a i should
         be an integer between 0 and 15.
-        
         The default custom colours are invalid colours.
     */
     wxColour GetCustomColour(int i);
@@ -401,22 +387,19 @@ public:
     /**
         Under Windows, tells the Windows colour dialog to display the full dialog
         with custom colour selection controls. Under other platforms, has no effect.
-        
         The default value is @true.
     */
     void SetChooseFull(const bool flag);
 
     /**
         Sets the default colour for the colour dialog.
-        
         The default colour is black.
     */
     void SetColour(const wxColour& colour);
 
     /**
-        Sets the @e ith custom colour for the colour dialog. @e i should
+        Sets the @e ith custom colour for the colour dialog. @a i should
         be an integer between 0 and 15.
-        
         The default custom colours are invalid colours.
     */
     void SetCustomColour(int i, const wxColour& colour);
@@ -464,7 +447,6 @@ public:
     /**
         Returns the current bin (papersource). By default, the system is left to select
         the bin (@c wxPRINTBIN_DEFAULT is returned).
-        
         See SetBin() for the full list of bin values.
     */
     wxPrintBin GetBin();
@@ -511,6 +493,7 @@ public:
         Returns the current print quality. This can be a positive integer, denoting the
         number of dots per inch, or
         one of the following identifiers:
+        
         On input you should pass one of these identifiers, but on return you may get
         back a positive integer
         indicating the current resolution setting.
@@ -522,7 +505,7 @@ public:
         This can return @false on Windows if the current printer is not set, for example.
         On all other platforms, it returns @true.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Sets the current bin. Possible values are:
@@ -560,8 +543,7 @@ public:
         between
         paper id, paper size and string name, see wxPrintPaperDatabase in @c paper.h
         (not yet documented).
-        
-        @e paperId can be one of:
+        @a paperId can be one of:
     */
     void SetPaperId(wxPaperSize paperId);
 
@@ -575,6 +557,7 @@ public:
         Sets the desired print quality. This can be a positive integer, denoting the
         number of dots per inch, or
         one of the following identifiers:
+        
         On input you should pass one of these identifiers, but on return you may get
         back a positive integer
         indicating the current resolution setting.
@@ -701,7 +684,7 @@ public:
         This can return @false on Windows if the current printer is not set, for example.
         On all other platforms, it returns @true.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Sets the 'Collate' checkbox to @true or @false.
@@ -748,7 +731,6 @@ public:
     /**
         Determines whether the dialog to be shown will be the Print dialog
         (pass @false) or Print Setup dialog (pass @true).
-        
         This function has been deprecated since version 2.5.4.
     */
     void SetSetupDialog(bool flag);

@@ -45,7 +45,7 @@ public:
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxColourPickerCtrl(wxWindow * parent, wxWindowID id,
+    wxColourPickerCtrl(wxWindow* parent, wxWindowID id,
                        const wxColour& colour = wxBLACK,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
@@ -55,33 +55,26 @@ public:
 
     /**
         @param parent
-        Parent window, must not be non-@NULL.
-        
+            Parent window, must not be non-@NULL.
         @param id
-        The identifier for the control.
-        
+            The identifier for the control.
         @param colour
-        The initial colour shown in the control.
-        
+            The initial colour shown in the control.
         @param pos
-        Initial position.
-        
+            Initial position.
         @param size
-        Initial size.
-        
+            Initial size.
         @param style
-        The window style, see wxCRLP_* flags.
-        
+            The window style, see wxCRLP_* flags.
         @param validator
-        Validator which can be used for additional date checks.
-        
+            Validator which can be used for additional date checks.
         @param name
-        Control name.
+            Control name.
         
         @returns @true if the control was successfully created or @false if
-                   creation failed.
+                 creation failed.
     */
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxColour& colour = wxBLACK,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -98,8 +91,8 @@ public:
     /**
         Sets the currently selected colour. See wxColour::Set.
     */
-    void SetColour(const wxColour & col);
-    void SetColour(const wxString & colname);
+    void SetColour(const wxColour& col);
+    void SetColour(const wxString& colname);
     //@}
 };
 
@@ -123,7 +116,7 @@ public:
     /**
         The constructor is not normally used by the user code.
     */
-    wxColourPickerEvent(wxObject * generator, int id,
+    wxColourPickerEvent(wxObject* generator, int id,
                         const wxColour& colour);
 
     /**
@@ -134,5 +127,5 @@ public:
     /**
         Set the colour associated with the event.
     */
-    void SetColour(const wxColour & pos);
+    void SetColour(const wxColour& pos);
 };

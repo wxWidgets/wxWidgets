@@ -80,7 +80,6 @@ class wxHelpController : public wxObject
 public:
     /**
         Constructs a help instance object, but does not invoke the help viewer.
-        
         If you provide a window, it will be used by some help controller classes, such
         as
         wxCHMHelpController, wxWinHelpController and wxHtmlHelpController, as the
@@ -88,7 +87,7 @@ public:
         also change the parent window later with
         SetParentWindow().
     */
-    wxHelpController(wxWindow* parentWindow = @NULL);
+    wxHelpController(wxWindow* parentWindow = NULL);
 
     /**
         Destroys the help instance, closing down the viewer if it is running.
@@ -98,16 +97,11 @@ public:
     /**
         If the help viewer is not running, runs it and displays the file at the given
         block number.
-        
         @e WinHelp: Refers to the context number.
-        
         @e MS HTML Help: Refers to the context number.
-        
         @e External HTML help: the same as for DisplaySection().
-        
         @e wxHtmlHelpController: @e sectionNo is an identifier as specified in the @c
         .hhc file. See @ref overview_helpformat "Help files format".
-        
         This function is for backward compatibility only, and applications should use
         @ref displaysection() wxHelpController instead.
     */
@@ -121,7 +115,6 @@ public:
 
     /**
         Displays the section as a popup window using a context id.
-        
         Returns @false if unsuccessful or not implemented.
     */
     virtual bool DisplayContextPopup(int contextId);
@@ -129,14 +122,12 @@ public:
     //@{
     /**
         If the help viewer is not running, runs it and displays the given section.
-        
-        @e WinHelp, MS HTML Help @e sectionNo is a context id.
-        
-        @e External HTML help: wxExtHelpController implements @e sectionNo as an id in
+        @e WinHelp, MS HTML Help @a sectionNo is a context id.
+        @e External HTML help: wxExtHelpController implements @a sectionNo as an id in
         a map file, which is of the form:
-        @e wxHtmlHelpController: @e sectionNo is an identifier as specified in the @c
-        .hhc file. See @ref overview_helpformat "Help files format".
         
+        @e wxHtmlHelpController: @a sectionNo is an identifier as specified in the @c
+        .hhc file. See @ref overview_helpformat "Help files format".
         See also the help sample for notes on how to specify section numbers for
         various help file formats.
     */
@@ -146,7 +137,6 @@ public:
 
     /**
         Displays the text in a popup window, if possible.
-        
         Returns @false if unsuccessful or not implemented.
     */
     virtual bool DisplayTextPopup(const wxString& text,
@@ -154,20 +144,18 @@ public:
 
     /**
         wxHtmlHelpController returns the frame, size and position.
-        
         For all other help controllers, this function does nothing
         and just returns @NULL.
         
         @param viewer
-        This defaults to "netscape" for wxExtHelpController.
-        
+            This defaults to "netscape" for wxExtHelpController.
         @param flags
-        This defaults to wxHELP_NETSCAPE for wxExtHelpController, indicating
-        that the viewer is a variant of Netscape Navigator.
+            This defaults to wxHELP_NETSCAPE for wxExtHelpController, indicating
+            that the viewer is a variant of Netscape Navigator.
     */
-    virtual wxFrame * GetFrameParameters(const wxSize * size = @NULL,
-                                         const wxPoint * pos = @NULL,
-                                         bool * newFrameEachTime = @NULL);
+    virtual wxFrame* GetFrameParameters(const wxSize* size = NULL,
+                                        const wxPoint* pos = NULL,
+                                        bool* newFrameEachTime = NULL);
 
     /**
         Returns the window to be used as the parent for the help window. This window is
@@ -184,7 +172,6 @@ public:
         This must be called directly after the help instance object is created and
         before
         any attempts to communicate with the viewer.
-        
         You may omit the file extension and a suitable one will be chosen. For
         wxHtmlHelpController, the extensions zip, htb and hhp will be appended while
         searching for
@@ -200,13 +187,10 @@ public:
         section. The optional parameter allows the search the index
         (wxHELP_SEARCH_INDEX) but this currently only supported by the
         wxHtmlHelpController.
-        
         @e WinHelp, MS HTML Help: If more than one match is found,
         the first topic is displayed.
-        
         @e External HTML help, simple wxHTML help: If more than one match is found,
         a choice of topics is displayed.
-        
         @e wxHtmlHelpController: see wxHtmlHelpController::KeywordSearch.
     */
     virtual bool KeywordSearch(const wxString& keyWord,
@@ -219,21 +203,18 @@ public:
         already displaying the specified file, it will not be reloaded. This
         member function may be used before each display call in case the user
         has opened another file.
-        
         wxHtmlHelpController ignores this call.
     */
     virtual bool LoadFile(const wxString& file = "");
 
     /**
         Overridable member called when this application's viewer is quit by the user.
-        
         This does not work for all help controllers.
     */
     virtual bool OnQuit();
 
     /**
         If the viewer is running, quits it by disconnecting.
-        
         For Windows Help, the viewer will only close if no other application is using
         it.
     */
@@ -242,14 +223,13 @@ public:
     /**
         For wxHtmlHelpController, the title is set (again with %s indicating the
         page title) and also the size and position of the frame if the frame is already
-        open. @e newFrameEachTime is ignored.
-        
+        open. @a newFrameEachTime is ignored.
         For all other help controllers this function has no effect.
     */
-    virtual void SetFrameParameters(const wxString & title,
-                                    const wxSize & size,
-                                    const wxPoint & pos = wxDefaultPosition,
-                                    bool newFrameEachTime = @false);
+    virtual void SetFrameParameters(const wxString& title,
+                                    const wxSize& size,
+                                    const wxPoint& pos = wxDefaultPosition,
+                                    bool newFrameEachTime = false);
 
     /**
         Sets the window to be used as the parent for the help window. This is used
@@ -260,7 +240,6 @@ public:
     /**
         Sets detailed viewer information. So far this is only relevant to
         wxExtHelpController.
-        
         Some examples of usage:
     */
     virtual void SetViewer(const wxString& viewer, long flags);

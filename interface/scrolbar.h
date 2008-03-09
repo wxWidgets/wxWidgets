@@ -28,7 +28,7 @@
 
     @seealso
     @ref overview_scrollingoverview "Scrolling overview", @ref
-    overview_eventhandlingoverview "Event handling overview", wxScrolledWindow
+    overview_eventhandlingoverview, wxScrolledWindow
 */
 class wxScrollBar : public wxControl
 {
@@ -38,29 +38,23 @@ public:
         Constructor, creating and showing a scrollbar.
         
         @param parent
-        Parent window. Must be non-@NULL.
-        
+            Parent window. Must be non-@NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param pos
-        Window position. If wxDefaultPosition is specified then a default position
-        is chosen.
-        
+            Window position. If wxDefaultPosition is specified then a default
+        position is chosen.
         @param size
-        Window size. If wxDefaultSize is specified then a default size is
-        chosen.
-        
+            Window size. If wxDefaultSize is specified then a default size
+        is chosen.
         @param style
-        Window style. See wxScrollBar.
-        
+            Window style. See wxScrollBar.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxScrollBar();
     wxScrollBar(wxWindow* parent, wxWindowID id,
@@ -92,28 +86,28 @@ public:
         that will be scrolled when the user pages up or down. Often it is the
         same as the thumb size.
         
-        @sa SetScrollbar()
+        @see SetScrollbar()
     */
     int GetPageSize();
 
     /**
         Returns the length of the scrollbar.
         
-        @sa SetScrollbar()
+        @see SetScrollbar()
     */
     int GetRange();
 
     /**
         Returns the current position of the scrollbar thumb.
         
-        @sa SetThumbPosition()
+        @see SetThumbPosition()
     */
     int GetThumbPosition();
 
     /**
         Returns the thumb or 'view' size.
         
-        @sa SetScrollbar()
+        @see SetScrollbar()
     */
     int GetThumbSize();
 
@@ -121,37 +115,34 @@ public:
         Sets the scrollbar properties.
         
         @param position
-        The position of the scrollbar in scroll units.
-        
+            The position of the scrollbar in scroll units.
         @param thumbSize
-        The size of the thumb, or visible portion of the scrollbar, in scroll units.
-        
+            The size of the thumb, or visible portion of the scrollbar, in scroll units.
         @param range
-        The maximum position of the scrollbar.
-        
+            The maximum position of the scrollbar.
         @param pageSize
-        The size of the page size in scroll units. This is the number of units
-        the scrollbar will scroll when it is paged up or down. Often it is the same as
-        the thumb size.
-        
+            The size of the page size in scroll units. This is the number of units
+            the scrollbar will scroll when it is paged up or down. Often it is the same
+        as
+            the thumb size.
         @param refresh
-        @true to redraw the scrollbar, @false otherwise.
+            @true to redraw the scrollbar, @false otherwise.
         
         @remarks Let's say you wish to display 50 lines of text, using the same
-                   font. The window is sized so that you can only see 16
-                   lines at a time.
+                 font. The window is sized so that you can only see 16
+                 lines at a time.
     */
     virtual void SetScrollbar(int position, int thumbSize, int range,
                               int pageSize,
-                              bool refresh = @true);
+                              bool refresh = true);
 
     /**
         Sets the position of the scrollbar.
         
         @param viewStart
-        The position of the scrollbar thumb.
+            The position of the scrollbar thumb.
         
-        @sa GetThumbPosition()
+        @see GetThumbPosition()
     */
     void SetThumbPosition(int viewStart);
 };

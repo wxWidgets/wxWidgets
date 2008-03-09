@@ -48,211 +48,399 @@ public:
         Copy constructor, uses @ref overview_trefcount "reference counting".
         
         @param bits
-        An array of bits.
-        
+            An array of bits.
         @param maskBits
-        Bits for a mask bitmap.
-        
+            Bits for a mask bitmap.
         @param width
-        Cursor width.
-        
+            Cursor width.
         @param height
-        Cursor height.
-        
+            Cursor height.
         @param hotSpotX
-        Hotspot x coordinate.
-        
+            Hotspot x coordinate.
         @param hotSpotY
-        Hotspot y coordinate.
-        
+            Hotspot y coordinate.
         @param type
-        Icon type to load. Under Motif, type defaults to wxBITMAP_TYPE_XBM. Under
+            Icon type to load. Under Motif, type defaults to wxBITMAP_TYPE_XBM. Under
         Windows,
-        it defaults to wxBITMAP_TYPE_CUR_RESOURCE. Under MacOS, it defaults to
+            it defaults to wxBITMAP_TYPE_CUR_RESOURCE. Under MacOS, it defaults to
         wxBITMAP_TYPE_MACCURSOR_RESOURCE.
-        
-        Under X, the permitted cursor types are:
-        
-        
-        wxBITMAP_TYPE_XBM
+            Under X, the permitted cursor types are:
         
         
-        Load an X bitmap file.
-        
-        Under Windows, the permitted types are:
         
         
-        wxBITMAP_TYPE_CUR
         
         
-        Load a cursor from a .cur cursor file (only if USE_RESOURCE_LOADING_IN_MSW
-        is enabled in setup.h).
         
-        wxBITMAP_TYPE_CUR_RESOURCE
+            wxBITMAP_TYPE_XBM
         
         
-        Load a Windows resource (as specified in the .rc file).
-        
-        wxBITMAP_TYPE_ICO
         
         
-        Load a cursor from a .ico icon file (only if USE_RESOURCE_LOADING_IN_MSW
-        is enabled in setup.h). Specify hotSpotX and hotSpotY.
+            Load an X bitmap file.
         
+        
+        
+        
+        
+            Under Windows, the permitted types are:
+        
+        
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_CUR
+        
+        
+        
+        
+            Load a cursor from a .cur cursor file (only if USE_RESOURCE_LOADING_IN_MSW
+            is enabled in setup.h).
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_CUR_RESOURCE
+        
+        
+        
+        
+            Load a Windows resource (as specified in the .rc file).
+        
+        
+        
+        
+        
+            wxBITMAP_TYPE_ICO
+        
+        
+        
+        
+            Load a cursor from a .ico icon file (only if USE_RESOURCE_LOADING_IN_MSW
+            is enabled in setup.h). Specify hotSpotX and hotSpotY.
         @param cursorId
-        A stock cursor identifier. May be one of:
+            A stock cursor identifier. May be one of:
         
         
-        wxCURSOR_ARROW
         
         
-        A standard arrow cursor.
         
-        wxCURSOR_RIGHT_ARROW
         
         
-        A standard arrow cursor
-        pointing to the right.
+            wxCURSOR_ARROW
         
-        wxCURSOR_BLANK
         
         
-        Transparent cursor.
         
-        wxCURSOR_BULLSEYE
+            A standard arrow cursor.
         
         
-        Bullseye cursor.
         
-        wxCURSOR_CHAR
         
         
-        Rectangular character cursor.
+            wxCURSOR_RIGHT_ARROW
         
-        wxCURSOR_CROSS
         
         
-        A cross cursor.
         
-        wxCURSOR_HAND
+            A standard arrow cursor
+            pointing to the right.
         
         
-        A hand cursor.
         
-        wxCURSOR_IBEAM
         
         
-        An I-beam cursor (vertical line).
+            wxCURSOR_BLANK
         
-        wxCURSOR_LEFT_BUTTON
         
         
-        Represents a mouse with the left button depressed.
         
-        wxCURSOR_MAGNIFIER
+            Transparent cursor.
         
         
-        A magnifier icon.
         
-        wxCURSOR_MIDDLE_BUTTON
         
         
-        Represents a mouse with the middle button depressed.
+            wxCURSOR_BULLSEYE
         
-        wxCURSOR_NO_ENTRY
         
         
-        A no-entry sign cursor.
         
-        wxCURSOR_PAINT_BRUSH
+            Bullseye cursor.
         
         
-        A paintbrush cursor.
         
-        wxCURSOR_PENCIL
         
         
-        A pencil cursor.
+            wxCURSOR_CHAR
         
-        wxCURSOR_POINT_LEFT
         
         
-        A cursor that points left.
         
-        wxCURSOR_POINT_RIGHT
+            Rectangular character cursor.
         
         
-        A cursor that points right.
         
-        wxCURSOR_QUESTION_ARROW
         
         
-        An arrow and question mark.
+            wxCURSOR_CROSS
         
-        wxCURSOR_RIGHT_BUTTON
         
         
-        Represents a mouse with the right button depressed.
         
-        wxCURSOR_SIZENESW
+            A cross cursor.
         
         
-        A sizing cursor pointing NE-SW.
         
-        wxCURSOR_SIZENS
         
         
-        A sizing cursor pointing N-S.
+            wxCURSOR_HAND
         
-        wxCURSOR_SIZENWSE
         
         
-        A sizing cursor pointing NW-SE.
         
-        wxCURSOR_SIZEWE
+            A hand cursor.
         
         
-        A sizing cursor pointing W-E.
         
-        wxCURSOR_SIZING
         
         
-        A general sizing cursor.
+            wxCURSOR_IBEAM
         
-        wxCURSOR_SPRAYCAN
         
         
-        A spraycan cursor.
         
-        wxCURSOR_WAIT
+            An I-beam cursor (vertical line).
         
         
-        A wait cursor.
         
-        wxCURSOR_WATCH
         
         
-        A watch cursor.
+            wxCURSOR_LEFT_BUTTON
         
-        wxCURSOR_ARROWWAIT
         
         
-        A cursor with both an arrow and
-        an hourglass, (windows.)
         
-        Note that not all cursors are available on all platforms.
+            Represents a mouse with the left button depressed.
         
+        
+        
+        
+        
+            wxCURSOR_MAGNIFIER
+        
+        
+        
+        
+            A magnifier icon.
+        
+        
+        
+        
+        
+            wxCURSOR_MIDDLE_BUTTON
+        
+        
+        
+        
+            Represents a mouse with the middle button depressed.
+        
+        
+        
+        
+        
+            wxCURSOR_NO_ENTRY
+        
+        
+        
+        
+            A no-entry sign cursor.
+        
+        
+        
+        
+        
+            wxCURSOR_PAINT_BRUSH
+        
+        
+        
+        
+            A paintbrush cursor.
+        
+        
+        
+        
+        
+            wxCURSOR_PENCIL
+        
+        
+        
+        
+            A pencil cursor.
+        
+        
+        
+        
+        
+            wxCURSOR_POINT_LEFT
+        
+        
+        
+        
+            A cursor that points left.
+        
+        
+        
+        
+        
+            wxCURSOR_POINT_RIGHT
+        
+        
+        
+        
+            A cursor that points right.
+        
+        
+        
+        
+        
+            wxCURSOR_QUESTION_ARROW
+        
+        
+        
+        
+            An arrow and question mark.
+        
+        
+        
+        
+        
+            wxCURSOR_RIGHT_BUTTON
+        
+        
+        
+        
+            Represents a mouse with the right button depressed.
+        
+        
+        
+        
+        
+            wxCURSOR_SIZENESW
+        
+        
+        
+        
+            A sizing cursor pointing NE-SW.
+        
+        
+        
+        
+        
+            wxCURSOR_SIZENS
+        
+        
+        
+        
+            A sizing cursor pointing N-S.
+        
+        
+        
+        
+        
+            wxCURSOR_SIZENWSE
+        
+        
+        
+        
+            A sizing cursor pointing NW-SE.
+        
+        
+        
+        
+        
+            wxCURSOR_SIZEWE
+        
+        
+        
+        
+            A sizing cursor pointing W-E.
+        
+        
+        
+        
+        
+            wxCURSOR_SIZING
+        
+        
+        
+        
+            A general sizing cursor.
+        
+        
+        
+        
+        
+            wxCURSOR_SPRAYCAN
+        
+        
+        
+        
+            A spraycan cursor.
+        
+        
+        
+        
+        
+            wxCURSOR_WAIT
+        
+        
+        
+        
+            A wait cursor.
+        
+        
+        
+        
+        
+            wxCURSOR_WATCH
+        
+        
+        
+        
+            A watch cursor.
+        
+        
+        
+        
+        
+            wxCURSOR_ARROWWAIT
+        
+        
+        
+        
+            A cursor with both an arrow and
+            an hourglass, (windows.)
+        
+        
+        
+        
+        
+            Note that not all cursors are available on all platforms.
         @param cursor
-        Pointer or reference to a cursor to copy.
+            Pointer or reference to a cursor to copy.
     */
     wxCursor();
     wxCursor(const char bits[], int width, int height,
-             int hotSpotX=-1, int hotSpotY=-1,
-             const char maskBits[]=@NULL,
-             wxColour* fg=@NULL,
-             wxColour* bg=@NULL);
+             int hotSpotX = -1, int hotSpotY = -1,
+             const char maskBits[] = NULL,
+             wxColour* fg = NULL,
+             wxColour* bg = NULL);
     wxCursor(const wxString& cursorName, long type,
-             int hotSpotX=0, int hotSpotY=0);
+             int hotSpotX = 0, int hotSpotY = 0);
     wxCursor(int cursorId);
     wxCursor(const wxImage& image);
     wxCursor(const wxCursor& cursor);
@@ -262,7 +450,6 @@ public:
         Destroys the cursor.
         See @ref overview_refcountdestruct "reference-counted object destruction" for
         more info.
-        
         A cursor can be reused for more
         than one window, and does not get destroyed when the window is
         destroyed. wxWidgets destroys all cursors on application exit, although
@@ -273,7 +460,7 @@ public:
     /**
         Returns @true if cursor data is present.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".

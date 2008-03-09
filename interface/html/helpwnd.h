@@ -44,29 +44,26 @@ public:
     //@{
     /**
         Constructor.
-        
         Constructor. For the values of @e helpStyle, please see the documentation for
         wxHtmlHelpController.
     */
-    wxHtmlHelpWindow(wxHtmlHelpData* data = @NULL);
+    wxHtmlHelpWindow(wxHtmlHelpData* data = NULL);
     wxHtmlHelpWindow(wxWindow* parent, int wxWindowID,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& pos = wxDefaultSize,
                      int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
                      int helpStyle = wxHF_DEFAULT_STYLE,
-                     wxHtmlHelpData* data = @NULL);
+                     wxHtmlHelpData* data = NULL);
     //@}
 
     /**
         You may override this virtual method to add more buttons to the help window's
-        toolbar. @e toolBar is a pointer to the toolbar and @e style is the style
+        toolbar. @a toolBar is a pointer to the toolbar and @a style is the style
         flag as passed to the Create method.
-        
         wxToolBar::Realize is called immediately after returning from this function.
-        
         See @e samples/html/helpview for an example.
     */
-    virtual void AddToolbarButtons(wxToolBar * toolBar, int style);
+    virtual void AddToolbarButtons(wxToolBar* toolBar, int style);
 
     /**
         Creates the help window. See @ref wxhtmlhelpwindow() "the constructor"
@@ -77,18 +74,16 @@ public:
                 const wxSize& pos = wxDefaultSize,
                 int style = wxTAB_TRAVERSAL|wxBORDER_NONE,
                 int helpStyle = wxHF_DEFAULT_STYLE,
-                wxHtmlHelpData* data = @NULL);
+                wxHtmlHelpData* data = NULL);
 
     /**
         Creates contents panel. (May take some time.)
-        
         Protected.
     */
     void CreateContents();
 
     /**
         Creates index panel. (May take some time.)
-        
         Protected.
     */
     void CreateIndex();
@@ -103,12 +98,10 @@ public:
         Displays page x. If not found it will give the user the choice of
         searching books.
         Looking for the page runs in these steps:
-        
          try to locate file named x (if x is for example "doc/howto.htm")
          try to open starting page of book x
          try to find x in contents (if x is for example "How To ...")
          try to find x in index (if x is for example "How To ...")
-        
         The second form takes numeric ID as the parameter.
         (uses extension to MS format, param name="ID" value=id)
     */
@@ -148,13 +141,12 @@ public:
 
     /**
         Refresh all panels. This is necessary if a new book was added.
-        
         Protected.
     */
     void RefreshLists();
 
     /**
-        Sets the frame's title format. @e format must contain exactly one "%s"
+        Sets the frame's title format. @a format must contain exactly one "%s"
         (it will be replaced by the page title).
     */
     void SetTitleFormat(const wxString& format);

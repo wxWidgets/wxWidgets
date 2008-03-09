@@ -26,81 +26,144 @@ public:
         Constructor. Use ShowModal() to show the dialog.
         
         @param parent
-        Parent window.
-        
+            Parent window.
         @param message
-        Message to show on the dialog.
-        
+            Message to show on the dialog.
         @param caption
-        The dialog caption.
-        
+            The dialog caption.
         @param style
-        A dialog style (bitlist) containing flags chosen from the following:
+            A dialog style (bitlist) containing flags chosen from the following:
         
         
-        wxOK
         
         
-        Show an OK button.
-        
-        wxCANCEL
         
         
-        Show a Cancel button.
         
-        wxYES_NO
-        
-        
-        Show Yes and No buttons.
-        
-        wxYES_DEFAULT
+            wxOK
         
         
-        Used with wxYES_NO, makes Yes button the default - which is the default
+        
+        
+            Show an OK button.
+        
+        
+        
+        
+        
+            wxCANCEL
+        
+        
+        
+        
+            Show a Cancel button.
+        
+        
+        
+        
+        
+            wxYES_NO
+        
+        
+        
+        
+            Show Yes and No buttons.
+        
+        
+        
+        
+        
+            wxYES_DEFAULT
+        
+        
+        
+        
+            Used with wxYES_NO, makes Yes button the default - which is the default
         behaviour.
         
-        wxNO_DEFAULT
         
         
-        Used with wxYES_NO, makes No button the default.
-        
-        wxICON_EXCLAMATION
         
         
-        Shows an exclamation mark icon.
-        
-        wxICON_HAND
+            wxNO_DEFAULT
         
         
-        Shows an error icon.
-        
-        wxICON_ERROR
         
         
-        Shows an error icon - the same as wxICON_HAND.
-        
-        wxICON_QUESTION
+            Used with wxYES_NO, makes No button the default.
         
         
-        Shows a question mark icon.
-        
-        wxICON_INFORMATION
         
         
-        Shows an information (i) icon.
         
-        wxSTAY_ON_TOP
+            wxICON_EXCLAMATION
         
         
-        The message box stays on top of all other window, even those of the other
+        
+        
+            Shows an exclamation mark icon.
+        
+        
+        
+        
+        
+            wxICON_HAND
+        
+        
+        
+        
+            Shows an error icon.
+        
+        
+        
+        
+        
+            wxICON_ERROR
+        
+        
+        
+        
+            Shows an error icon - the same as wxICON_HAND.
+        
+        
+        
+        
+        
+            wxICON_QUESTION
+        
+        
+        
+        
+            Shows a question mark icon.
+        
+        
+        
+        
+        
+            wxICON_INFORMATION
+        
+        
+        
+        
+            Shows an information (i) icon.
+        
+        
+        
+        
+        
+            wxSTAY_ON_TOP
+        
+        
+        
+        
+            The message box stays on top of all other window, even those of the other
         applications (Windows only).
-        
         @param pos
-        Dialog position. Not Windows.
+            Dialog position. Not Windows.
     */
     wxMessageDialog(wxWindow* parent, const wxString& message,
                     const wxString& caption = "Message box",
-                    long style = wxOK |  wxCANCEL,
+                    long style = wxOK | wxCANCEL,
                     const wxPoint& pos = wxDefaultPosition);
 
     /**
@@ -125,7 +188,6 @@ public:
 
     /**
         Overrides the default labels of the OK and Cancel buttons.
-        
         Please see the remarks in
         SetYesNoLabels() documentation.
     */
@@ -133,7 +195,6 @@ public:
 
     /**
         Overrides the default label of the OK button.
-        
         Please see the remarks in
         SetYesNoLabels() documentation.
     */
@@ -141,7 +202,6 @@ public:
 
     /**
         Overrides the default labels of the Yes, No and Cancel buttons.
-        
         Please see the remarks in
         SetYesNoLabels() documentation.
     */
@@ -150,7 +210,6 @@ public:
 
     /**
         Overrides the default labels of the Yes and No buttons.
-        
         Notice that this function is not currently available on all platforms, so it
         may return @false to indicate that the labels couldn't be changed. If it
         returns @true (currently only under wxMac), the labels were set successfully.
@@ -171,54 +230,46 @@ public:
 // ============================================================================
 
 /**
-    General purpose message dialog.  @e style may be a bit list of the
+    General purpose message dialog.  @a style may be a bit list of the
     following identifiers:
 
     wxYES_NO
-
 
     Puts Yes and No buttons on the message box. May be combined with
     wxCANCEL.
 
     wxCANCEL
 
-
     Puts a Cancel button on the message box. May only be combined with
     wxYES_NO or wxOK.
 
     wxOK
 
-
     Puts an Ok button on the message box. May be combined with wxCANCEL.
 
     wxICON_EXCLAMATION
-
 
     Displays an exclamation mark symbol.
 
     wxICON_HAND
 
-
     Displays an error symbol.
 
     wxICON_ERROR
-
 
     Displays an error symbol - the same as wxICON_HAND.
 
     wxICON_QUESTION
 
-
     Displays a question mark symbol.
 
     wxICON_INFORMATION
 
-
     Displays an information symbol.
 
     The return value is one of: wxYES, wxNO, wxCANCEL, wxOK.
-
     For example:
+
     @code
     ...
       int answer = wxMessageBox("Quit program?", "Confirm",
@@ -228,12 +279,12 @@ public:
       ...
     @endcode
 
-    @e message may contain newline characters, in which case the
+    @a message may contain newline characters, in which case the
     message will be split into separate lines, to cater for large messages.
 */
 int wxMessageBox(const wxString& message,
                  const wxString& caption = "Message",
                  int style = wxOK,
-                 wxWindow * parent = @NULL,
+                 wxWindow* parent = NULL,
                  int x = -1, int y = -1);
 

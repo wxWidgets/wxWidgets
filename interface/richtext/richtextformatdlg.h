@@ -121,25 +121,19 @@ public:
         Constructors.
         
         @param flags
-        The pages to show.
-        
+            The pages to show.
         @param parent
-        The dialog's parent.
-        
+            The dialog's parent.
         @param id
-        The dialog's identifier.
-        
+            The dialog's identifier.
         @param title
-        The dialog's caption.
-        
+            The dialog's caption.
         @param pos
-        The dialog's position.
-        
+            The dialog's position.
         @param size
-        The dialog's size.
-        
+            The dialog's size.
         @param style
-        The dialog's window style.
+            The dialog's window style.
     */
     wxRichTextFormattingDialog(long flags, wxWindow* parent);
     const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE)
@@ -238,17 +232,17 @@ public:
     void SetImageList(wxImageList* imageList);
 
     /**
-        Sets the attributes and optionally updates the display, if @e update is @true.
+        Sets the attributes and optionally updates the display, if @a update is @true.
     */
-    bool SetStyle(const wxTextAttr& style, bool update = @true);
+    bool SetStyle(const wxTextAttr& style, bool update = true);
 
     /**
-        Sets the style definition and optionally update the display, if @e update is @c
+        Sets the style definition and optionally update the display, if @a update is @c
         @true.
     */
     bool SetStyleDefinition(const wxRichTextStyleDefinition& styleDef,
                             wxRichTextStyleSheet* sheet,
-                            bool update = @true);
+                            bool update = true);
 
     /**
         Updates the display.

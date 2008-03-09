@@ -48,26 +48,22 @@ public:
         Constructor. Use ShowModal() to show the dialog.
         
         @param parent
-        Parent window.
-        
+            Parent window.
         @param message
-        Message to show on the dialog.
-        
+            Message to show on the dialog.
         @param defaultValue
-        The default value, which may be the empty string.
-        
+            The default value, which may be the empty string.
         @param style
-        A dialog style, specifying the buttons (wxOK, wxCANCEL)
-        and an optional wxCENTRE style. Additionally, wxTextCtrl styles (such as
-        wxTE_PASSWORD) may be specified here.
-        
+            A dialog style, specifying the buttons (wxOK, wxCANCEL)
+            and an optional wxCENTRE style. Additionally, wxTextCtrl styles (such as
+            wxTE_PASSWORD) may be specified here.
         @param pos
-        Dialog position.
+            Dialog position.
     */
     wxTextEntryDialog(wxWindow* parent, const wxString& message,
                       const wxString& caption = "Please enter text",
                       const wxString& defaultValue = "",
-                      long style = wxOK |  wxCANCEL |  wxCENTRE,
+                      long style = wxOK | wxCANCEL | wxCENTRE,
                       const wxPoint& pos = wxDefaultPosition);
 
     /**
@@ -103,17 +99,16 @@ public:
     Pop up a dialog box with title set to @e caption, @e message, and a
     @e default_value.  The user may type in text and press OK to return this text,
     or press Cancel to return the empty string.
-
-    If @e centre is @true, the message text (which may include new line characters)
+    If @a centre is @true, the message text (which may include new line characters)
     is centred; if @false, the message is left-justified.
 */
 wxString wxGetTextFromUser(const wxString& message,
                            const wxString& caption = "Input text",
                            const wxString& default_value = "",
-                           wxWindow * parent = @NULL,
+                           wxWindow* parent = NULL,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
-                           bool centre = @true);
+                           bool centre = true);
 
 /**
     Similar to wxGetTextFromUser but the text entered
@@ -123,8 +118,8 @@ wxString wxGetTextFromUser(const wxString& message,
 wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& caption = "Input text",
                                const wxString& default_value = "",
-                               wxWindow * parent = @NULL,
+                               wxWindow* parent = NULL,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
-                               bool centre = @true);
+                               bool centre = true);
 

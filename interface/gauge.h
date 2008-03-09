@@ -51,28 +51,22 @@ public:
         Constructor, creating and showing a gauge.
         
         @param parent
-        Window parent.
-        
+            Window parent.
         @param id
-        Window identifier.
-        
+            Window identifier.
         @param range
-        Integer range (maximum value) of the gauge. It is ignored when the gauge is
+            Integer range (maximum value) of the gauge. It is ignored when the gauge is
         used in indeterminate mode.
-        
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size.
-        
+            Window size.
         @param style
-        Gauge style. See wxGauge.
-        
+            Gauge style. See wxGauge.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create()
+        @see Create()
     */
     wxGauge();
     wxGauge(wxWindow* parent, wxWindowID id, int range,
@@ -104,14 +98,14 @@ public:
         
         @remarks This method is not implemented (returns 0) for most platforms.
         
-        @sa SetBezelFace()
+        @see SetBezelFace()
     */
     int GetBezelFace();
 
     /**
         Returns the maximum position of the gauge.
         
-        @sa SetRange()
+        @see SetRange()
     */
     int GetRange();
 
@@ -120,14 +114,14 @@ public:
         
         @remarks This method is not implemented (returns 0) for most platforms.
         
-        @sa SetShadowWidth()
+        @see SetShadowWidth()
     */
     int GetShadowWidth();
 
     /**
         Returns the current position of the gauge.
         
-        @sa SetValue()
+        @see SetValue()
     */
     int GetValue();
 
@@ -140,7 +134,6 @@ public:
     /**
         Switch the gauge to indeterminate mode (if required) and makes the gauge move
         a bit to indicate the user that some progress has been made.
-        
         Note that after calling this function the value returned by GetValue()
         is undefined and thus you need to explicitely call SetValue() if you
         want to restore the determinate mode.
@@ -151,9 +144,9 @@ public:
         Sets the 3D bezel face width.
         
         @remarks This method is not implemented (doesn't do anything) for most
-                   platforms.
+                 platforms.
         
-        @sa GetBezelFace()
+        @see GetBezelFace()
     */
     void SetBezelFace(int width);
 
@@ -161,7 +154,7 @@ public:
         Sets the range (maximum value) of the gauge.
         This function makes the gauge switch to determinate mode, if it's not already.
         
-        @sa GetRange()
+        @see GetRange()
     */
     void SetRange(int range);
 
@@ -169,21 +162,20 @@ public:
         Sets the 3D shadow width.
         
         @remarks This method is not implemented (doesn't do anything) for most
-                   platforms.
+                 platforms.
     */
     void SetShadowWidth(int width);
 
     /**
-        Sets the position of the gauge. The @e pos must be between 0 and the gauge
+        Sets the position of the gauge. The @a pos must be between 0 and the gauge
         range as returned by GetRange(), inclusive.
-        
         This function makes the gauge switch to determinate mode, if it was in
         indeterminate mode before.
         
         @param pos
-        Position for the gauge level.
+            Position for the gauge level.
         
-        @sa GetValue()
+        @see GetValue()
     */
     void SetValue(int pos);
 };

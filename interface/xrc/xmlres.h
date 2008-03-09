@@ -28,17 +28,17 @@ public:
         Constructor.
         
         @param flags
-        wxXRC_USE_LOCALE: translatable strings will be translated via _().
-        wxXRC_NO_SUBCLASSING: subclass property of object nodes will be ignored
-        (useful for previews in XRC editors). wxXRC_NO_RELOADING will prevent the
-        XRC files from being reloaded from disk in case they have been modified there
-        since being last loaded (may slightly speed up loading them).
-        
+            wxXRC_USE_LOCALE: translatable strings will be translated via _().
+            wxXRC_NO_SUBCLASSING: subclass property of object nodes will be ignored
+            (useful for previews in XRC editors). wxXRC_NO_RELOADING will prevent the
+            XRC files from being reloaded from disk in case they have been modified
+        there
+            since being last loaded (may slightly speed up loading them).
         @param domain
-        The name of the gettext catalog to search for
-          translatable strings.  By default all loaded catalogs will be
-          searched.  This provides a way to allow the strings to only come
-          from a specific catalog.
+            The name of the gettext catalog to search for
+              translatable strings.  By default all loaded catalogs will be
+              searched.  This provides a way to allow the strings to only come
+              from a specific catalog.
     */
     wxXmlResource(const wxString& filemask,
                   int flags = wxXRC_USE_LOCALE,
@@ -70,7 +70,7 @@ public:
     */
     bool AttachUnknownControl(const wxString& name,
                               wxWindow* control,
-                              wxWindow* parent = @NULL);
+                              wxWindow* parent = NULL);
 
     /**
         Removes all handlers and deletes them (this means that any handlers added using
@@ -88,7 +88,7 @@ public:
     /**
         Gets the global resources object or creates one if none exists.
     */
-#define wxXmlResource* Get()     /* implementation is private */
+    wxXmlResource* Get();
 
     /**
         Returns the domain (message catalog) that will be used to load
@@ -109,10 +109,10 @@ public:
 
     /**
         Returns a numeric ID that is equivalent to the string ID used in an XML
-        resource. If an unknown @e str_id is requested (i.e. other than wxID_XXX
+        resource. If an unknown @a str_id is requested (i.e. other than wxID_XXX
         or integer), a new record is created which associates the given string with
-        a number. If @e value_if_not_found is @c wxID_NONE, the number is obtained via
-        wxNewId. Otherwise @e value_if_not_found is used.
+        a number. If @a value_if_not_found is @c wxID_NONE, the number is obtained via
+        wxNewId. Otherwise @a value_if_not_found is used.
         Macro @c XRCID(name) is provided for convenient use in event tables.
     */
 #define int GetXRCID(const wxString& str_id, int value_if_not_found = -2)     /* implementation is private */
@@ -137,12 +137,10 @@ public:
 
     //@{
     /**
-        Loads a dialog. @e dlg points to parent window (if any).
-        
+        Loads a dialog. @a dlg points to parent window (if any).
         This form is used to finish creation of an already existing instance (the main
         reason
         for this is that you may want to use derived class with a new event table).
-        
         Example:
     */
     wxDialog* LoadDialog(wxWindow* parent, const wxString& name);
@@ -178,7 +176,6 @@ public:
     /**
         Load an object from the resource specifying both the resource name and the
         class name.
-        
         The first overload lets you load nonstandard container windows and returns @c
         @NULL
         on failure. The second one lets you finish the creation of an existing
@@ -193,7 +190,7 @@ public:
 
     //@{
     /**
-        Loads a panel. @e panel points to parent window (if any). This form
+        Loads a panel. @a panel points to parent window (if any). This form
         is used to finish creation of an already existing instance.
     */
     wxPanel* LoadPanel(wxWindow* parent, const wxString& name);
@@ -210,7 +207,7 @@ public:
         Sets the global resources object and returns a pointer to the previous one (may
         be @NULL).
     */
-#define wxXmlResource* Set(wxXmlResource* res)     /* implementation is private */
+    wxXmlResource* Set(wxXmlResource* res);
 
     /**
         Sets the domain (message catalog) that will be used to load
@@ -226,7 +223,6 @@ public:
     /**
         This function unloads a resource previously loaded by
         Load().
-        
         Returns @true if the resource was successfully unloaded and @false if it
         hasn't
         been found in the list of loaded resources.
@@ -280,23 +276,23 @@ public:
     /**
         Creates children.
     */
-    void CreateChildren(wxObject* parent, bool this_hnd_only = @false);
+    void CreateChildren(wxObject* parent, bool this_hnd_only = false);
 
     /**
         Helper function.
     */
     void CreateChildrenPrivately(wxObject* parent,
-                                 wxXmlNode* rootnode = @NULL);
+                                 wxXmlNode* rootnode = NULL);
 
     /**
         Creates a resource from a node.
     */
     wxObject* CreateResFromNode(wxXmlNode* node, wxObject* parent,
-                                wxObject* instance = @NULL);
+                                wxObject* instance = NULL);
 
     /**
         Creates an object (menu, dialog, control, ...) from an XML node.
-        Should check for validity. @e parent is a higher-level object (usually window,
+        Should check for validity. @a parent is a higher-level object (usually window,
         dialog or panel)
         that is often necessary to create the resource.
         If @b instance is non-@NULL it should not create a new instance via 'new' but
@@ -313,14 +309,12 @@ public:
 
     /**
         )
-        
         Creates a animation from the filename specified in @e param.
     */
     wxAnimation GetAnimation();
 
     /**
         , @b wxSize@e size = wxDefaultSize)
-        
         Gets a bitmap.
     */
     wxBitmap GetBitmap();
@@ -328,7 +322,7 @@ public:
     /**
         Gets a bool flag (1, t, yes, on, @true are @true, everything else is @false).
     */
-    bool GetBool(const wxString& param, bool defaultv = @false);
+    bool GetBool(const wxString& param, bool defaultv = false);
 
     /**
         Gets colour in HTML syntax (#RRGGBB).
@@ -348,7 +342,6 @@ public:
 
     /**
         )
-        
         Gets a font.
     */
     wxFont GetFont();
@@ -356,11 +349,10 @@ public:
     /**
         Returns the XRCID.
     */
-#define int GetID()     /* implementation is private */
+    int GetID();
 
     /**
         , @b wxSize@e size = wxDefaultSize)
-        
         Returns an icon.
     */
     wxIcon GetIcon();
@@ -392,21 +384,18 @@ public:
 
     /**
         )
-        
         Gets the position (may be in dialog units).
     */
     wxPoint GetPosition();
 
     /**
         )
-        
         Gets the size (may be in dialog units).
     */
     wxSize GetSize();
 
     /**
         , @b int@e defaults = 0)
-        
         Gets style flags from text in form "flag | flag2| flag3 |..."
         Only understands flags added with AddStyle.
     */
@@ -414,7 +403,6 @@ public:
 
     /**
         Gets text from param and does some conversions:
-        
          replaces \n, \r, \t by respective characters (according to C syntax)
          replaces @c $ by @c  and @c $$ by @c $ (needed for @c _File to @c File
         translation because of XML syntax)

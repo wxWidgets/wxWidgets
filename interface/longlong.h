@@ -133,10 +133,9 @@ public:
 
     /**
         Assignment operator from unsigned long long. The sign bit will be copied too.
-        
         This function is new since wxWidgets version 2.7.0
     */
-    wxLongLong& operator operator=(const wxULongLong & ll);
+    wxLongLong& operator operator=(const wxULongLong& ll);
 };
 
 
@@ -148,6 +147,7 @@ public:
     This macro is defined to contain the @c printf() format specifier using
     which 64 bit integer numbers (i.e. those of type @c wxLongLong_t) can be
     printed. Example of using it:
+
     @code
     #ifdef wxLongLong_t
             wxLongLong_t ll = wxLL(0x1234567890abcdef);
@@ -155,33 +155,35 @@ public:
         #endif
     @endcode
 
-    @sa wxLL
+    @see wxLL
 */
 
 
 /**
     This macro is defined for the platforms with a native 64 bit integer type and
     allows to define unsigned 64 bit compile time constants:
+
     @code
     #ifdef wxLongLong_t
             unsigned wxLongLong_t ll = wxULL(0x1234567890abcdef);
         #endif
     @endcode
 
-    @sa wxLL, wxLongLong
+    @see wxLL, wxLongLong
 */
-#define wxLongLong_t wxULL(number)     /* implementation is private */
+wxLongLong_t wxULL(number);
 
 /**
     This macro is defined for the platforms with a native 64 bit integer type and
     allows to define 64 bit compile time constants:
+
     @code
     #ifdef wxLongLong_t
             wxLongLong_t ll = wxLL(0x1234567890abcdef);
         #endif
     @endcode
 
-    @sa wxULL, wxLongLong
+    @see wxULL, wxLongLong
 */
-#define wxLongLong_t wxLL(number)     /* implementation is private */
+wxLongLong_t wxLL(number);
 

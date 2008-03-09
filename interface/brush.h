@@ -52,69 +52,120 @@ public:
         Copy constructor, uses @ref overview_trefcount "reference counting".
         
         @param colour
-        Colour object.
-        
+            Colour object.
         @param colourName
-        Colour name. The name will be looked up in the colour database.
-        
+            Colour name. The name will be looked up in the colour database.
         @param style
-        One of:
-        
-        wxTRANSPARENT
+            One of:
         
         
-        Transparent (no fill).
-        
-        wxSOLID
         
         
-        Solid.
-        
-        wxSTIPPLE
         
         
-        Uses a bitmap as a stipple.
-        
-        wxBDIAGONAL_HATCH
+            wxTRANSPARENT
         
         
-        Backward diagonal hatch.
-        
-        wxCROSSDIAG_HATCH
         
         
-        Cross-diagonal hatch.
-        
-        wxFDIAGONAL_HATCH
+            Transparent (no fill).
         
         
-        Forward diagonal hatch.
-        
-        wxCROSS_HATCH
         
         
-        Cross hatch.
         
-        wxHORIZONTAL_HATCH
-        
-        
-        Horizontal hatch.
-        
-        wxVERTICAL_HATCH
+            wxSOLID
         
         
-        Vertical hatch.
         
+        
+            Solid.
+        
+        
+        
+        
+        
+            wxSTIPPLE
+        
+        
+        
+        
+            Uses a bitmap as a stipple.
+        
+        
+        
+        
+        
+            wxBDIAGONAL_HATCH
+        
+        
+        
+        
+            Backward diagonal hatch.
+        
+        
+        
+        
+        
+            wxCROSSDIAG_HATCH
+        
+        
+        
+        
+            Cross-diagonal hatch.
+        
+        
+        
+        
+        
+            wxFDIAGONAL_HATCH
+        
+        
+        
+        
+            Forward diagonal hatch.
+        
+        
+        
+        
+        
+            wxCROSS_HATCH
+        
+        
+        
+        
+            Cross hatch.
+        
+        
+        
+        
+        
+            wxHORIZONTAL_HATCH
+        
+        
+        
+        
+            Horizontal hatch.
+        
+        
+        
+        
+        
+            wxVERTICAL_HATCH
+        
+        
+        
+        
+            Vertical hatch.
         @param brush
-        Pointer or reference to a brush to copy.
-        
+            Pointer or reference to a brush to copy.
         @param stippleBitmap
-        A bitmap to use for stippling.
+            A bitmap to use for stippling.
         
         @remarks If a stipple brush is created, the brush style will be set to
-                   wxSTIPPLE.
+                 wxSTIPPLE.
         
-        @sa wxBrushList, wxColour, wxColourDatabase
+        @see wxBrushList, wxColour, wxColourDatabase
     */
     wxBrush();
     wxBrush(const wxColour& colour, int style = wxSOLID);
@@ -129,18 +180,18 @@ public:
         more info.
         
         @remarks Although all remaining brushes are deleted when the application
-                   exits, the application should try to clean up all
-                   brushes itself. This is because wxWidgets cannot know
-                   if a pointer to the brush object is stored in an
-                   application data structure, and there is a risk of
-                   double deletion.
+                 exits, the application should try to clean up all
+                 brushes itself. This is because wxWidgets cannot know
+                 if a pointer to the brush object is stored in an
+                 application data structure, and there is a risk of
+                 double deletion.
     */
     ~wxBrush();
 
     /**
         Returns a reference to the brush colour.
         
-        @sa SetColour()
+        @see SetColour()
     */
     wxColour GetColour();
 
@@ -150,72 +201,61 @@ public:
         this bitmap may be non-@NULL but uninitialised (@ref wxBitmap::isok
         wxBitmap:IsOk returns @false).
         
-        @sa SetStipple()
+        @see SetStipple()
     */
-    wxBitmap * GetStipple();
+    wxBitmap* GetStipple();
 
     /**
         Returns the brush style, one of:
         
         @b wxTRANSPARENT
         
-        
         Transparent (no fill).
         
         @b wxSOLID
-        
         
         Solid.
         
         @b wxBDIAGONAL_HATCH
         
-        
         Backward diagonal hatch.
         
         @b wxCROSSDIAG_HATCH
-        
         
         Cross-diagonal hatch.
         
         @b wxFDIAGONAL_HATCH
         
-        
         Forward diagonal hatch.
         
         @b wxCROSS_HATCH
-        
         
         Cross hatch.
         
         @b wxHORIZONTAL_HATCH
         
-        
         Horizontal hatch.
         
         @b wxVERTICAL_HATCH
-        
         
         Vertical hatch.
         
         @b wxSTIPPLE
         
-        
         Stippled using a bitmap.
         
         @b wxSTIPPLE_MASK_OPAQUE
         
-        
         Stippled using a bitmap's mask.
         
-        
-        @sa SetStyle(), SetColour(), SetStipple()
+        @see SetStyle(), SetColour(), SetStipple()
     */
     int GetStyle();
 
     /**
         Returns @true if the style of the brush is any of hatched fills.
         
-        @sa GetStyle()
+        @see GetStyle()
     */
     bool IsHatch();
 
@@ -224,13 +264,13 @@ public:
         constructor has been used (for example, the brush is a member of a class, or
         @NULL has been assigned to it).
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     //@{
     /**
         Sets the brush colour using red, green and blue values.
         
-        @sa GetColour()
+        @see GetColour()
     */
     void SetColour(wxColour& colour);
     void SetColour(const wxString& colourName);
@@ -242,13 +282,13 @@ public:
         Sets the stipple bitmap.
         
         @param bitmap
-        The bitmap to use for stippling.
+            The bitmap to use for stippling.
         
         @remarks The style will be set to wxSTIPPLE, unless the bitmap has a mask
-                   associated to it, in which case the style will be set
-                   to wxSTIPPLE_MASK_OPAQUE.
+                 associated to it, in which case the style will be set
+                 to wxSTIPPLE_MASK_OPAQUE.
         
-        @sa wxBitmap
+        @see wxBitmap
     */
     void SetStipple(const wxBitmap& bitmap);
 
@@ -256,59 +296,120 @@ public:
         Sets the brush style.
         
         @param style
-        One of:
-        
-        wxTRANSPARENT
+            One of:
         
         
-        Transparent (no fill).
-        
-        wxSOLID
         
         
-        Solid.
-        
-        wxBDIAGONAL_HATCH
         
         
-        Backward diagonal hatch.
-        
-        wxCROSSDIAG_HATCH
+            wxTRANSPARENT
         
         
-        Cross-diagonal hatch.
-        
-        wxFDIAGONAL_HATCH
         
         
-        Forward diagonal hatch.
-        
-        wxCROSS_HATCH
+            Transparent (no fill).
         
         
-        Cross hatch.
-        
-        wxHORIZONTAL_HATCH
         
         
-        Horizontal hatch.
         
-        wxVERTICAL_HATCH
-        
-        
-        Vertical hatch.
-        
-        wxSTIPPLE
+            wxSOLID
         
         
-        Stippled using a bitmap.
-        
-        wxSTIPPLE_MASK_OPAQUE
         
         
-        Stippled using a bitmap's mask.
+            Solid.
         
-        @sa GetStyle()
+        
+        
+        
+        
+            wxBDIAGONAL_HATCH
+        
+        
+        
+        
+            Backward diagonal hatch.
+        
+        
+        
+        
+        
+            wxCROSSDIAG_HATCH
+        
+        
+        
+        
+            Cross-diagonal hatch.
+        
+        
+        
+        
+        
+            wxFDIAGONAL_HATCH
+        
+        
+        
+        
+            Forward diagonal hatch.
+        
+        
+        
+        
+        
+            wxCROSS_HATCH
+        
+        
+        
+        
+            Cross hatch.
+        
+        
+        
+        
+        
+            wxHORIZONTAL_HATCH
+        
+        
+        
+        
+            Horizontal hatch.
+        
+        
+        
+        
+        
+            wxVERTICAL_HATCH
+        
+        
+        
+        
+            Vertical hatch.
+        
+        
+        
+        
+        
+            wxSTIPPLE
+        
+        
+        
+        
+            Stippled using a bitmap.
+        
+        
+        
+        
+        
+            wxSTIPPLE_MASK_OPAQUE
+        
+        
+        
+        
+            Stippled using a bitmap's mask.
+        
+        @see GetStyle()
     */
     void SetStyle(int style);
 

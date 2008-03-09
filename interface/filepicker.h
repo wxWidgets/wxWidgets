@@ -55,7 +55,7 @@ public:
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxFilePickerCtrl(wxWindow * parent, wxWindowID id,
+    wxFilePickerCtrl(wxWindow* parent, wxWindowID id,
                      const wxString& path = wxEmptyString,
                      const wxString& message = "Select a file",
                      const wxString& wildcard = ".",
@@ -67,41 +67,32 @@ public:
 
     /**
         @param parent
-        Parent window, must not be non-@NULL.
-        
+            Parent window, must not be non-@NULL.
         @param id
-        The identifier for the control.
-        
+            The identifier for the control.
         @param path
-        The initial file shown in the control. Must be a valid path to a file or the
-        empty string.
-        
+            The initial file shown in the control. Must be a valid path to a file or
+        the empty string.
         @param message
-        The message shown to the user in the wxFileDialog shown by the control.
-        
+            The message shown to the user in the wxFileDialog shown by the control.
         @param wildcard
-        A wildcard which defines user-selectable files (use the same syntax as for
+            A wildcard which defines user-selectable files (use the same syntax as for
         wxFileDialog's wildcards).
-        
         @param pos
-        Initial position.
-        
+            Initial position.
         @param size
-        Initial size.
-        
+            Initial size.
         @param style
-        The window style, see wxFLP_* flags.
-        
+            The window style, see wxFLP_* flags.
         @param validator
-        Validator which can be used for additional date checks.
-        
+            Validator which can be used for additional date checks.
         @param name
-        Control name.
+            Control name.
         
         @returns @true if the control was successfully created or @false if
-                   creation failed.
+                 creation failed.
     */
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& path = wxEmptyString,
                 const wxString& message = "Select a file",
                 const wxString& wildcard = ".",
@@ -126,14 +117,14 @@ public:
         This method does the same thing as SetPath() but
         takes a wxFileName object instead of a string.
     */
-    void SetFileName(const wxFileName & filename);
+    void SetFileName(const wxFileName& filename);
 
     /**
         Sets the absolute path of the currently selected file. This must be a valid
         file if
         the @c wxFLP_FILE_MUST_EXIST style was given.
     */
-    void SetPath(const wxString & filename);
+    void SetPath(const wxString& filename);
 };
 
 
@@ -182,7 +173,7 @@ public:
         Initializes the object and calls Create() with
         all the parameters.
     */
-    wxDirPickerCtrl(wxWindow * parent, wxWindowID id,
+    wxDirPickerCtrl(wxWindow* parent, wxWindowID id,
                     const wxString& path = wxEmptyString,
                     const wxString& message = "Select a folder",
                     const wxPoint& pos = wxDefaultPosition,
@@ -193,37 +184,29 @@ public:
 
     /**
         @param parent
-        Parent window, must not be non-@NULL.
-        
+            Parent window, must not be non-@NULL.
         @param id
-        The identifier for the control.
-        
+            The identifier for the control.
         @param path
-        The initial directory shown in the control. Must be a valid path to a directory
-        or the empty string.
-        
+            The initial directory shown in the control. Must be a valid path to a
+        directory or the empty string.
         @param message
-        The message shown to the user in the wxDirDialog shown by the control.
-        
+            The message shown to the user in the wxDirDialog shown by the control.
         @param pos
-        Initial position.
-        
+            Initial position.
         @param size
-        Initial size.
-        
+            Initial size.
         @param style
-        The window style, see wxDIRP_* flags.
-        
+            The window style, see wxDIRP_* flags.
         @param validator
-        Validator which can be used for additional date checks.
-        
+            Validator which can be used for additional date checks.
         @param name
-        Control name.
+            Control name.
         
         @returns @true if the control was successfully created or @false if
-                   creation failed.
+                 creation failed.
     */
-    bool Create(wxWindow * parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& path = wxEmptyString,
                 const wxString& message = "Select a folder",
                 const wxPoint& pos = wxDefaultPosition,
@@ -248,14 +231,14 @@ public:
         Just like SetPath() but this function takes a
         wxFileName object.
     */
-    void SetDirName(const wxFileName & dirname);
+    void SetDirName(const wxFileName& dirname);
 
     /**
         Sets the absolute path of  (the default converter uses current locale's
         charset)the currently selected directory. This must be a valid directory if
         @c wxDIRP_DIR_MUST_EXIST style was given.
     */
-    void SetPath(const wxString & dirname);
+    void SetPath(const wxString& dirname);
 };
 
 
@@ -278,7 +261,7 @@ public:
     /**
         The constructor is not normally used by the user code.
     */
-    wxFileDirPickerEvent(wxEventType type, wxObject * generator,
+    wxFileDirPickerEvent(wxEventType type, wxObject* generator,
                          int id,
                          const wxString path);
 
@@ -290,5 +273,5 @@ public:
     /**
         Set the absolute path of the file/directory associated with the event.
     */
-    void SetPath(const wxString & path);
+    void SetPath(const wxString& path);
 };

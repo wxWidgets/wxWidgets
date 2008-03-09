@@ -58,13 +58,12 @@ class wxBusyInfo
 {
 public:
     /**
-        Constructs a busy info window as child of @e parent and displays @e msg
+        Constructs a busy info window as child of @a parent and displays @e msg
         in it.
-        
-        @b NB: If @e parent is not @NULL you must ensure that it is not
+        @b NB: If @a parent is not @NULL you must ensure that it is not
         closed while the busy info is shown.
     */
-    wxBusyInfo(const wxString& msg, wxWindow* parent = @NULL);
+    wxBusyInfo(const wxString& msg, wxWindow* parent = NULL);
 
     /**
         Hides and closes the window containing the information text.

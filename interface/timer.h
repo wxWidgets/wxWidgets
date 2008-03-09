@@ -49,7 +49,7 @@ public:
         SetOwner() for the description of parameters.
     */
     wxTimer();
-    wxTimer(wxEvtHandler * owner, int id = -1);
+    wxTimer(wxEvtHandler* owner, int id = -1);
     //@}
 
     /**
@@ -88,43 +88,38 @@ public:
     /**
         This member should be overridden by the user if the default constructor was
         used and SetOwner() wasn't called.
-        
         Perform whatever action which is to be taken periodically here.
     */
     void Notify();
 
     /**
-        Associates the timer with the given @e owner object. When the timer is
+        Associates the timer with the given @a owner object. When the timer is
         running, the owner will receive @ref overview_wxtimerevent "timer events" with
-        id equal to @e id specified here.
+        id equal to @a id specified here.
     */
-    void SetOwner(wxEvtHandler * owner, int id = -1);
+    void SetOwner(wxEvtHandler* owner, int id = -1);
 
     /**
-        (Re)starts the timer. If @e milliseconds parameter is -1 (value by default),
+        (Re)starts the timer. If @a milliseconds parameter is -1 (value by default),
         the previous value is used. Returns @false if the timer could not be started,
         @true otherwise (in MS Windows timers are a limited resource).
-        
-        If @e oneShot is @false (the default), the Notify()
+        If @a oneShot is @false (the default), the Notify()
         function will be called repeatedly until the timer is stopped. If @true,
         it will be called only once and the timer will stop automatically. To make your
         code more readable you may also use the following symbolic constants:
         
-        
         wxTIMER_CONTINUOUS
-        
         
         Start a normal, continuously running, timer
         
         wxTIMER_ONE_SHOT
-        
         
         Start a one shot timer
         
         If the timer was already running, it will be stopped by this method before
         restarting it.
     */
-    bool Start(int milliseconds = -1, bool oneShot = @false);
+    bool Start(int milliseconds = -1, bool oneShot = false);
 
     /**
         Stops the timer.

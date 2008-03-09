@@ -50,53 +50,44 @@ public:
     /**
         Returns reference to the unique global standard paths object.
     */
-#define static wxStandardPathsBase Get()     /* implementation is private */
+    static wxStandardPathsBase Get();
 
     /**
         Return the directory containing the system config files.
-        
         Example return values:
-        
              Unix: @c /etc
              Windows: @c C:\Documents and Settings\All Users\Application Data
              Mac: @c /Library/Preferences
         
-        @sa wxFileConfig
+        @see wxFileConfig
     */
     wxString GetConfigDir();
 
     /**
         Return the location of the applications global, i.e. not user-specific,
         data files.
-        
         Example return values:
-        
              Unix: @c @e prefix/share/@e appname
              Windows: the directory where the executable file is located
              Mac: @c @e appname.app/Contents/SharedSupport bundle subdirectory
         
-        @sa GetLocalDataDir()
+        @see GetLocalDataDir()
     */
     wxString GetDataDir();
 
     /**
         Return the directory containing the current user's documents.
-        
         Example return values:
-        
              Unix: @c ~ (the home directory)
              Windows: @c C:\Documents and Settings\@e username\Documents
              Mac: @c ~/Documents
-        
         This function is new since wxWidgets version 2.7.0
     */
     wxString GetDocumentsDir();
 
     /**
         Return the directory and the filename for the current executable.
-        
         Example return values:
-        
              Unix: @c /usr/local/bin/exename
              Windows: @c C:\Programs\AppFolder\exename.exe
              Mac: @c /Programs/exename
@@ -105,10 +96,8 @@ public:
 
     /**
         @b Note: This function is only available under Unix.
-        
         Return the program installation prefix, e.g. @c /usr, @c /opt or
         @c /home/zeitlin.
-        
         If the prefix had been previously by
         SetInstallPrefix(), returns that
         value, otherwise tries to determine it automatically (Linux only right
@@ -119,7 +108,6 @@ public:
     /**
         Return the location for application data files which are host-specific and
         can't, or shouldn't, be shared with the other machines.
-        
         This is the same as GetDataDir() except
         under Unix where it returns @c /etc/@e appname.
     */
@@ -128,13 +116,11 @@ public:
     /**
         Return the localized resources directory containing the resource files of the
         specified category for the given language.
-        
-        In general this is just the same as @e lang subdirectory of
+        In general this is just the same as @a lang subdirectory of
         GetResourcesDir() (or
         @c @e lang.lproj under Mac OS X) but is something quite
         different for message catalog category under Unix where it returns the standard
         @c @e prefix/share/locale/@e lang/LC_MESSAGES directory.
-        
         This function is new since wxWidgets version 2.7.0
     */
     wxString GetLocalizedResourcesDir(const wxString& lang,
@@ -142,14 +128,12 @@ public:
 
     /**
         Return the directory where the loadable modules (plugins) live.
-        
         Example return values:
-        
              Unix: @c @e prefix/lib/@e appname
              Windows: the directory of the executable file
              Mac: @c @e appname.app/Contents/PlugIns bundle subdirectory
         
-        @sa wxDynamicLibrary
+        @see wxDynamicLibrary
     */
     wxString GetPluginsDir();
 
@@ -157,19 +141,15 @@ public:
         Return the directory where the application resource files are located. The
         resources are the auxiliary data files needed for the application to run and
         include, for example, image and sound files it might use.
-        
         This function is the same as GetDataDir() for
         all platforms except Mac OS X.
-        
         Example return values:
-        
              Unix: @c @e prefix/share/@e appname
              Windows: the directory where the executable file is located
              Mac: @c @e appname.app/Contents/Resources bundle subdirectory
-        
         This function is new since wxWidgets version 2.7.0
         
-        @sa GetLocalizedResourcesDir()
+        @see GetLocalizedResourcesDir()
     */
     wxString GetResourcesDir();
 
@@ -178,18 +158,15 @@ public:
         files,
         it is best to use wxFileName::CreateTempFileName for correct behaviour when
         multiple processes are attempting to create temporary files.
-        
         This function is new since wxWidgets version 2.7.2
     */
     wxString GetTempDir();
 
     /**
         Return the directory for the user config files:
-        
              Unix: @c ~ (the home directory)
              Windows: @c C:\Documents and Settings\@e username\Application Data
              Mac: @c ~/Library/Preferences
-        
         Only use this method if you have a single configuration file to put in this
         directory, otherwise GetUserDataDir() is
         more appropriate.
@@ -198,7 +175,6 @@ public:
 
     /**
         Return the directory for the user-dependent application data files:
-        
              Unix: @c ~/.@e appname
              Windows: @c C:\Documents and Settings\@e username\Application Data\@e
         appname
@@ -209,7 +185,6 @@ public:
     /**
         Return the directory for user data files which shouldn't be shared with
         the other machines.
-        
         This is the same as GetUserDataDir() for
         all platforms except Windows where it returns
         @c C:\Documents and Settings\@e username\Local Settings\Application Data\@e
@@ -219,11 +194,9 @@ public:
 
     /**
         @b Note: This function is only available under Unix.
-        
         Lets wxStandardPaths know about the real program installation prefix on a Unix
         system. By default, the value returned by
         GetInstallPrefix() is used.
-        
         Although under Linux systems the program prefix may usually be determined
         automatically, portable programs should call this function. Usually the prefix
         is set during program configuration if using GNU autotools and so it is enough
@@ -235,12 +208,10 @@ public:
         Controls what application information is used when constructing paths that
         should be unique to this program, such as the application data directory, the
         plugins directory on Unix, etc.
-        
-        Valid values for @e info are @c AppInfo_None and either one or
+        Valid values for @a info are @c AppInfo_None and either one or
         combination of @c AppInfo_AppName and @c AppInfo_VendorName. The
         first one tells this class to not use neither application nor vendor name in
         the paths.
-        
         By default, only the application name is used under Unix systems but both
         application and vendor names are used under Windows and Mac.
     */

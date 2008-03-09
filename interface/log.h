@@ -29,38 +29,34 @@ public:
         Creates the log frame window and starts collecting the messages in it.
         
         @param parent
-        The parent window for the log frame, may be @NULL
-        
+            The parent window for the log frame, may be @NULL
         @param title
-        The title for the log frame
-        
+            The title for the log frame
         @param show
-        @true to show the frame initially (default), otherwise
-        Show() must be called later.
-        
+            @true to show the frame initially (default), otherwise
+            Show() must be called later.
         @param passToOld
-        @true to process the log messages normally in addition to
-        logging them in the log frame (default), @false to only log them in the
-        log frame.
+            @true to process the log messages normally in addition to
+            logging them in the log frame (default), @false to only log them in the
+            log frame.
     */
-    wxLogWindow(wxFrame parent, const wxChar title, bool show = @true,
-                bool passToOld = @true);
+    wxLogWindow(wxFrame parent, const wxChar title, bool show = true,
+                bool passToOld = true);
 
     /**
         Returns the associated log frame window. This may be used to position or resize
         it but use Show() to show or hide it.
     */
-    wxFrame * GetFrame();
+    wxFrame* GetFrame();
 
     /**
         Called if the user closes the window interactively, will not be
         called if it is destroyed for another reason (such as when program
         exits).
-        
         Return @true from here to allow the frame to close, @false to
         prevent this from happening.
         
-        @sa OnFrameDelete()
+        @see OnFrameDelete()
     */
     virtual bool OnFrameClose(wxFrame frame);
 
@@ -79,7 +75,7 @@ public:
     /**
         Shows or hides the frame.
     */
-    void Show(bool show = @true);
+    void Show(bool show = true);
 };
 
 
@@ -145,7 +141,7 @@ public:
         Sets the specified @c logger (which may be @NULL) as the default log
         target but the log messages are also passed to the previous log target if any.
     */
-    wxLogChain(wxLog * logger);
+    wxLogChain(wxLog* logger);
 
     /**
         Destroys the previous log target.
@@ -161,7 +157,7 @@ public:
     /**
         Returns the pointer to the previously active log target (which may be @NULL).
     */
-    wxLog * GetOldLog();
+    wxLog* GetOldLog();
 
     /**
         Returns @true if the messages are passed to the previously active log
@@ -174,7 +170,7 @@ public:
         By default, the log messages are passed to the previously active log target.
         Calling this function with @false parameter disables this behaviour
         (presumably temporarily, as you shouldn't use wxLogChain at all otherwise) and
-        it can be reenabled by calling it again with @e passMessages set to @true.
+        it can be reenabled by calling it again with @a passMessages set to @true.
     */
     void PassMessages(bool passMessages);
 
@@ -182,12 +178,11 @@ public:
         Sets another log target to use (may be @NULL). The log target specified
         in the @ref ctor() constructor or in a previous call to
         this function is deleted.
-        
         This doesn't change the old log target value (the one the messages are
         forwarded to) which still remains the same as was active when wxLogChain
         object was created.
     */
-    void SetLog(wxLog * logger);
+    void SetLog(wxLog* logger);
 };
 
 
@@ -234,7 +229,7 @@ public:
         Constructs a log target which sends all the log messages to the given
         output stream. If it is @NULL, the messages are sent to @c cerr.
     */
-    wxLogStream(std::ostream ostr = @NULL);
+    wxLogStream(std::ostream ostr = NULL);
 };
 
 
@@ -259,7 +254,7 @@ public:
         Constructs a log target which sends all the log messages to the given
         @c FILE. If it is @NULL, the messages are sent to @c stderr.
     */
-    wxLogStderr(FILE fp = @NULL);
+    wxLogStderr(FILE fp = NULL);
 };
 
 
@@ -293,7 +288,6 @@ public:
     /**
         Returns the current buffer contains. Messages from different log function calls
         are separated with the new lines in the buffer.
-        
         The buffer can be cleared by Flush() which will
         also show the current contents to the user.
     */
@@ -348,7 +342,7 @@ class wxLogTextCtrl : public wxLog
 public:
     /**
         Constructs a log target which sends all the log messages to the given text
-        control. The @e textctrl parameter cannot be @NULL.
+        control. The @a textctrl parameter cannot be @NULL.
     */
     wxLogTextCtrl(wxTextCtrl textctrl);
 };
@@ -384,10 +378,10 @@ class wxLog
 {
 public:
     /**
-        Add the @e mask to the list of allowed masks for
+        Add the @a mask to the list of allowed masks for
         wxLogTrace.
         
-        @sa RemoveTraceMask(), GetTraceMasks()
+        @see RemoveTraceMask(), GetTraceMasks()
     */
     static void AddTraceMask(const wxString& mask);
 
@@ -395,7 +389,7 @@ public:
         Removes all trace masks previously set with
         AddTraceMask().
         
-        @sa RemoveTraceMask()
+        @see RemoveTraceMask()
     */
     static void ClearTraceMasks();
 
@@ -403,37 +397,34 @@ public:
         The functions below allow some limited customization of wxLog behaviour
         without writing a new log target class (which, aside of being a matter of
         several minutes, allows you to do anything you want).
-        
         The verbose messages are the trace messages which are not disabled in the
         release mode and are generated by wxLogVerbose. They
         are not normally shown to the user because they present little interest, but
         may be activated, for example, in order to help the user find some program
         problem.
-        
         As for the (real) trace messages, their handling depends on the settings of
         the (application global) @e trace mask. There are two ways to specify it:
         either by using SetTraceMask() and
         GetTraceMask() and using
         wxLogTrace which takes an integer mask or by using
         AddTraceMask() for string trace masks.
-        
         The difference between bit-wise and string trace masks is that a message using
         integer trace mask will only be logged if all bits of the mask are set in the
         current mask while a message using string mask will be logged simply if the
         mask had been added before to the list of allowed ones.
-        
         For example,
+        
         will do something only if the current trace mask contains both
         @c wxTraceRefCount and @c wxTraceOle, but
+        
         will log the message if it was preceded by
+        
         Using string masks is simpler and allows to easily add custom ones, so this is
         the preferred way of working with trace messages. The integer trace mask is
         kept for compatibility and for additional (but very rarely needed) flexibility
         only.
-        
         The standard trace masks are given in wxLogTrace
         documentation.
-        
         Finally, the @e wxLog::DoLog() function automatically prepends a time stamp
         to all the messages. The format of the time stamp may be changed: it can be
         any string with % specifications fully described in the documentation of the
@@ -441,13 +432,11 @@ public:
         "[%d/%b/%y %H:%M:%S] " which gives something like "[17/Sep/98 22:10:16] "
         (without quotes) for the current date. Setting an empty string as the time
         format disables timestamping of the messages completely.
-        
         @b NB: Timestamping is disabled for Visual C++ users in debug builds by
         default because otherwise it would be impossible to directly go to the line
         from which the log message was generated by simply clicking in the debugger
         window on the corresponding error message. If you wish to enable it, please use
         SetTimestamp() explicitly.
-        
         AddTraceMask()
         
         RemoveTraceMask()
@@ -478,16 +467,14 @@ public:
 
     /**
         Disables time stamping of the log messages.
-        
         This function is new since wxWidgets version 2.9
     */
     void SetTimestamp(const wxString& format);
 
     /**
-        Called to process the message of the specified severity. @e msg is the text
+        Called to process the message of the specified severity. @a msg is the text
         of the message as specified in the call of @e wxLogXXX() function which
-        generated it and @e timestamp is the moment when the message was generated.
-        
+        generated it and @a timestamp is the moment when the message was generated.
         The base class version prepends the timestamp to the message, adds a prefix
         corresponding to the log level and then calls
         DoLogString() with the resulting string.
@@ -498,7 +485,6 @@ public:
     /**
         Called to log the specified string. The timestamp is already included in the
         string but still passed to this function.
-        
         A simple implementation may just send the string to @c stdout or, better,
         @c stderr.
     */
@@ -508,7 +494,6 @@ public:
         Instructs wxLog to not create new log targets on the fly if there is none
         currently. (Almost) for internal use only: it is supposed to be called by the
         application shutdown code.
-        
         Note that this function also calls
         ClearTraceMasks().
     */
@@ -523,14 +508,14 @@ public:
     /**
         Flushes the current log target if any, does nothing if there is none.
         
-        @sa Flush()
+        @see Flush()
     */
     static void FlushActive();
 
     /**
         Returns the pointer to the active log target (may be @NULL).
     */
-    static wxLog * GetActiveTarget();
+    static wxLog* GetActiveTarget();
 
     /**
         Returns the current log level limit.
@@ -556,7 +541,7 @@ public:
     /**
         Returns the currently allowed list of string trace masks.
         
-        @sa AddTraceMask().
+        @see AddTraceMask().
     */
     static const wxArrayString GetTraceMasks();
 
@@ -574,7 +559,6 @@ public:
         automatic creation of a standard log target if none actually exists. It is
         only useful when the application is terminating and shouldn't be used in other
         situations because it may easily lead to a loss of messages.
-        
         OnLog()
         
         GetActiveTarget()
@@ -590,9 +574,8 @@ public:
 
 
     /**
-        Returns @true if the @e mask is one of allowed masks for
+        Returns @true if the @a mask is one of allowed masks for
         wxLogTrace.
-        
         See also: AddTraceMask(),
         RemoveTraceMask()
     */
@@ -611,14 +594,12 @@ public:
         screen and forward the error messages to the user's (or programmer's) cell
         phone - maybe depending on whether the timestamp tells us if it is day or
         night in the current time zone).
-        
         There also functions to support message buffering. Why are they needed?
         Some of wxLog implementations, most notably the standard wxLogGui class,
         buffer the messages (for example, to avoid showing the user a zillion of modal
         message boxes one after another -- which would be really annoying).
         Flush() shows them all and clears the buffer contents.
         This function doesn't do anything if the buffer is already empty.
-        
         Flush()
         
         FlushActive()
@@ -632,9 +613,8 @@ public:
     static void OnLog(wxLogLevel level, const wxString& message);
 
     /**
-        Remove the @e mask from the list of allowed masks for
+        Remove the @a mask from the list of allowed masks for
         wxLogTrace.
-        
         See also: AddTraceMask()
     */
     static void RemoveTraceMask(const wxString& mask);
@@ -652,7 +632,7 @@ public:
         instance of wxLogNull not @NULL.  If the active log target is set to @NULL a
         new default log target will be created when logging occurs.
     */
-    static wxLog * SetActiveTarget(wxLog * logtarget);
+    static wxLog* SetActiveTarget(wxLog* logtarget);
 
     /**
         Specifies that log messages with level  logLevel should be ignored
@@ -665,7 +645,7 @@ public:
         the same message successively repeats one or more times, only the number of
         repetitions is logged.
     */
-    static void SetRepetitionCounting(bool repetCounting = @true);
+    static void SetRepetitionCounting(bool repetCounting = true);
 
     /**
         Sets the timestamp format prepended by the default log targets to all
@@ -685,20 +665,19 @@ public:
         Activates or deactivates verbose mode in which the verbose messages are
         logged as the normal ones instead of being silently dropped.
     */
-    static void SetVerbose(bool verbose = @true);
+    static void SetVerbose(bool verbose = true);
 
     /**
         Suspends the logging until Resume() is called. Note that
         the latter must be called the same number of times as the former to undo it,
         i.e. if you call Suspend() twice you must call Resume() twice as well.
-        
         Note that suspending the logging means that the log sink won't be be flushed
         periodically, it doesn't have any effect if the current log target does the
         logging immediately without waiting for Flush() to be
         called (the standard GUI log target only shows the log dialog when it is
         flushed, so Suspend() works as expected with it).
         
-        @sa Resume(), wxLogNull
+        @see Resume(), wxLogNull
     */
     static void Suspend();
 };
@@ -780,13 +759,12 @@ public:
     it simply prints the message to the standard output using the title as prefix.
 
     @param title
-    The title of the message box shown to the user or the prefix
-    of the message string
-
+        The title of the message box shown to the user or the prefix
+        of the message string
     @param text
-    The text to show to the user
+        The text to show to the user
 
-    @sa wxLogFatalError
+    @see wxLogFatalError
 */
 void wxSafeShowMessage(const wxString& title,
                        const wxString& text);

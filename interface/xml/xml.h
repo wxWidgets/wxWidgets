@@ -37,8 +37,8 @@ public:
     wxXmlNode(wxXmlNode* parent, wxXmlNodeType type,
               const wxString& name,
               const wxString& content = wxEmptyString,
-              wxXmlAttribute* attrs = @NULL,
-              wxXmlNode* next = @NULL, int lineNo = -1);
+              wxXmlAttribute* attrs = NULL,
+              wxXmlNode* next = NULL, int lineNo = -1);
     wxXmlNode(const wxXmlNode& node);
     wxXmlNode(wxXmlNodeType type, const wxString& name,
               const wxString& content = wxEmptyString,
@@ -61,20 +61,20 @@ public:
     /**
         Adds the given node as child of this node. To attach a second children to this
         node, use the
-        SetNext() function of the @e child node.
+        SetNext() function of the @a child node.
     */
     void AddChild(wxXmlNode* child);
 
     /**
-        Removes the first attributes which has the given @e name from the list of
+        Removes the first attributes which has the given @a name from the list of
         attributes for this node.
     */
     bool DeleteAttribute(const wxString& name);
 
     //@{
     /**
-        Returns the value of the attribute named @e attrName if it does exist.
-        If it does not exist, the @e defaultVal is returned.
+        Returns the value of the attribute named @a attrName if it does exist.
+        If it does not exist, the @a defaultVal is returned.
     */
     bool GetAttribute(const wxString& attrName, wxString* value);
     wxString GetAttribute(const wxString& attrName,
@@ -84,7 +84,7 @@ public:
     /**
         Return a pointer to the first attribute of this node.
     */
-    wxXmlAttribute * GetAttributes();
+    wxXmlAttribute* GetAttributes();
 
     /**
         Returns the first child of this node.
@@ -103,13 +103,12 @@ public:
 
     /**
         Returns the number of nodes which separe this node from @c grandparent.
-        
         This function searches only the parents of this node until it finds @c
         grandparent
         or the @NULL node (which is the parent of non-linked nodes or the parent of a
         wxXmlDocument's root node).
     */
-    int GetDepth(wxXmlNode* grandparent = @NULL);
+    int GetDepth(wxXmlNode* grandparent = NULL);
 
     /**
         Returns line number of the node in the input XML file or -1 if it is unknown.
@@ -134,7 +133,9 @@ public:
         This function is very useful since the XML snippet @c
         "tagnametagcontent/tagname" is represented by
         expat with the following tag tree:
+        
         or eventually:
+        
         An empty string is returned if the node has no children of type @c
         wxXML_TEXT_NODE or @c wxXML_CDATA_SECTION_NODE, or if the content of the first child of such types is empty.
     */
@@ -157,11 +158,11 @@ public:
     bool HasAttribute(const wxString& attrName);
 
     /**
-        Inserts the @e child node after @e before_node in the children list.
-        If @e before_node is @NULL, then @e child is prepended to the list of
+        Inserts the @a child node after @a before_node in the children list.
+        If @a before_node is @NULL, then @a child is prepended to the list of
         children and
         becomes the first child of this node.
-        Returns @true if @e before_node has been found and the @e child node has been
+        Returns @true if @a before_node has been found and the @a child node has been
         inserted.
     */
     bool InsertChild(wxXmlNode* child, wxXmlNode* before_node);
@@ -180,7 +181,6 @@ public:
         Removes the given node from the children list. Returns @true if the node was
         found and removed
         or @false if the node could not be found.
-        
         Note that the caller is reponsible for deleting the removed node in order to
         avoid memory leaks.
     */
@@ -256,12 +256,12 @@ class wxXmlAttribute
 public:
     //@{
     /**
-        Creates the attribute with given @e name and @e value.
-        If @e next is not @NULL, then sets it as sibling of this attribute.
+        Creates the attribute with given @a name and @e value.
+        If @a next is not @NULL, then sets it as sibling of this attribute.
     */
     wxXmlAttribute();
     wxXmlAttribute(const wxString& name, const wxString& value,
-                   wxXmlAttribute* next = @NULL);
+                   wxXmlAttribute* next = NULL);
     //@}
 
     /**
@@ -401,7 +401,6 @@ public:
         Detaches the document root node and returns it. The document root node will be
         set to @NULL
         and thus IsOk() will return @false after calling this function.
-        
         Note that the caller is reponsible for deleting the returned node in order to
         avoid memory leaks.
     */
@@ -410,14 +409,12 @@ public:
     /**
         Returns encoding of in-memory representation of the document
         (same as passed to Load() or constructor, defaults to UTF-8).
-        
         NB: this is meaningless in Unicode build where data are stored as @c wchar_t*.
     */
     wxString GetEncoding();
 
     /**
         Returns encoding of document (may be empty).
-        
         Note: this is the encoding original file was saved in, @b not the
         encoding of in-memory representation!
     */
@@ -439,12 +436,11 @@ public:
     /**
         Returns @true if the document has been loaded successfully.
     */
-#define bool IsOk()     /* implementation is private */
+    bool IsOk();
 
     //@{
     /**
         , @b int@e flags = wxXMLDOC_NONE)
-        
         Like above but takes the data from given input stream.
     */
     bool Load(const wxString& filename);

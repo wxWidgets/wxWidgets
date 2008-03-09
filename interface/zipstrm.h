@@ -82,15 +82,12 @@ public:
         The low 8 bits are always the DOS/Windows file attributes for this entry.
         The values of these attributes are given in the
         enumeration @c wxZipAttributes.
-        
         The remaining bits can store platform specific permission bits or
         attributes, and their meaning depends on the value
         of @ref systemmadeby() SetSystemMadeBy.
         If IsMadeByUnix() is @true then the
         high 16 bits are unix mode bits.
-        
         The following other accessors access these bits:
-        
         @ref wxArchiveEntry::isreadonly IsReadOnly/SetIsReadOnly
         
         @ref wxArchiveEntry::isdir IsDir/SetIsDir
@@ -104,7 +101,6 @@ public:
     //@{
     /**
         The extra field from the entry's central directory record.
-        
         The extra field is used to store platform or application specific
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
@@ -116,7 +112,6 @@ public:
     //@{
     /**
         The extra field from the entry's local record.
-        
         The extra field is used to store platform or application specific
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
@@ -129,7 +124,6 @@ public:
     /**
         The compression method. The enumeration @c wxZipMethod lists the
         possible values.
-        
         The default constructor sets this to wxZIP_METHOD_DEFAULT,
         which allows wxZipOutputStream to
         choose the method when writing the entry.
@@ -143,10 +137,8 @@ public:
         Sets the DOS attributes
         in @ref externalattributes() GetExternalAttributes
         to be consistent with the @c mode given.
-        
         If IsMadeByUnix() is @true then also
         stores @c mode in GetExternalAttributes().
-        
         Note that the default constructor
         sets @ref systemmadeby() GetSystemMadeBy to
         wxZIP_SYSTEM_MSDOS by default. So to be able to store unix
@@ -188,12 +180,12 @@ public:
         to is set to indicate whether the name looks like a directory name
         (i.e. has a trailing path separator).
         
-        @sa @ref overview_wxarcbyname "Looking up an archive entry by name"
+        @see @ref overview_wxarcbyname "Looking up an archive entry by name"
     */
     wxString GetInternalName();
     wxString GetInternalName(const wxString& name,
                              wxPathFormat format = wxPATH_NATIVE,
-                             bool* pIsDir = @NULL);
+                             bool* pIsDir = NULL);
     //@}
 
     /**
@@ -207,7 +199,7 @@ public:
         Indicates that this entry's data is text in an 8-bit encoding.
     */
     bool IsText();
-    void SetIsText(bool isText = @true);
+    void SetIsText(bool isText = true);
     //@}
 
     //@{
@@ -217,12 +209,11 @@ public:
         this entry, it will then invoke the associated
         notifier's wxZipNotifier::OnEntryUpdated
         method.
-        
         Setting a notifier is not usually necessary. It is used to handle
         certain cases when modifying an zip in a pipeline (i.e. between
         non-seekable streams).
         
-        @sa @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipNotifier
+        @see @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipNotifier
     */
     void SetNotifier(wxZipNotifier& notifier);
     void UnsetNotifier();
@@ -263,7 +254,6 @@ public:
     //@{
     /**
         Compatibility constructor (requires WXWIN_COMPATIBILITY_2_6).
-        
         When this constructor is used, an emulation of seeking is
         switched on for compatibility with previous versions. Note however,
         that it is deprecated.
@@ -284,7 +274,6 @@ public:
 
     /**
         Returns the zip comment.
-        
         This is stored at the end of the zip, therefore when reading a zip
         from a non-seekable stream, it returns the empty string until the
         end of the zip has been reached, i.e. when GetNextEntry() returns
@@ -308,9 +297,8 @@ public:
 
     /**
         Closes the current entry if one is open, then opens the entry specified
-        by the @e entry object.
-        
-        @e entry should be from the same zip file, and the zip should
+        by the @a entry object.
+        @a entry should be from the same zip file, and the zip should
         be on a seekable stream.
     */
     bool OpenEntry(wxZipEntry& entry);
@@ -363,10 +351,8 @@ public:
         Constructor. @c level is the compression level to use.
         It can be a value between 0 and 9 or -1 to use the default value
         which currently is equivalent to 6.
-        
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
-        
         In a Unicode build the third parameter @c conv is used to translate
         the filename and comment fields to an 8-bit encoding. It has no effect on the
         stream's data.
@@ -407,11 +393,9 @@ public:
         Takes ownership of @c entry and uses it to create a new entry
         in the zip. @c entry is then opened in @c inputStream and its contents
         copied to this stream.
-        
         CopyEntry() is much more efficient than transferring the data using
         Read() and Write() since it will copy them without decompressing and
         recompressing them.
-        
         For zips on seekable streams, @c entry must be from the same zip file
         as @c stream. For non-seekable streams, @c entry must also be the
         last thing read from @c inputStream.
@@ -430,11 +414,9 @@ public:
 
     /**
         )
-        
         Create a new directory entry
         (see wxArchiveEntry::IsDir)
         with the given name and timestamp.
-        
         PutNextEntry() can
         also be used to create directory entries, by supplying a name with
         a trailing path separator.
@@ -444,7 +426,6 @@ public:
     //@{
     /**
         , @b off_t@e size = wxInvalidOffset)
-        
         Create a new entry with the given name, timestamp and size.
     */
     bool PutNextEntry(wxZipEntry* entry);

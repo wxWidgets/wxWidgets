@@ -35,21 +35,19 @@ public:
 
     /**
         Gets an option. The function is case-insensitive to @e name.
-        
         Returns empty string if the option hasn't been set.
         
-        @sa SetOption(), GetOptionInt(),
-              HasOption()
+        @see SetOption(), GetOptionInt(),
+             HasOption()
     */
     wxString GetOption(const wxString& name);
 
     /**
         Gets an option as an integer. The function is case-insensitive to @e name.
-        
         If the option hasn't been set, this function returns 0.
         
-        @sa SetOption(), GetOption(),
-              HasOption()
+        @see SetOption(), GetOption(),
+             HasOption()
     */
     int GetOptionInt(const wxString& name);
 
@@ -57,13 +55,13 @@ public:
         Returns @true if the given option is present. The function is
         case-insensitive to @e name.
         
-        @sa SetOption(), GetOption(),
-              GetOptionInt()
+        @see SetOption(), GetOption(),
+             GetOptionInt()
     */
     bool HasOption(const wxString& name);
 
     /**
-        Returns @true if the option with the given @e name had been set to 0
+        Returns @true if the option with the given @a name had been set to 0
         value. This is mostly useful for boolean options for which you can't use
         @c GetOptionInt(name) == 0 as this would also be @true if the option
         hadn't been set at all.

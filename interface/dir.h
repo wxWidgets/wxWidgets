@@ -55,7 +55,6 @@ public:
         to abort traversing completely, @c wxDIR_IGNORE to skip this directory but
         continue with others or @c wxDIR_CONTINUE to enumerate all files and
         subdirectories in this directory.
-        
         This is a pure virtual function and must be implemented in the derived class.
     */
     virtual wxDirTraverseResult OnDir(const wxString& dirname);
@@ -64,7 +63,6 @@ public:
         This function is called for each file. It may return @c wxDIR_STOP to abort
         traversing (for example, if the file being searched is found) or
         @c wxDIR_CONTINUE to proceed.
-        
         This is a pure virtual function and must be implemented in the derived class.
     */
     virtual wxDirTraverseResult OnFile(const wxString& filename);
@@ -74,7 +72,6 @@ public:
         enumerating. It may return @c wxSIR_STOP to abort traversing completely,
         @c wxDIR_IGNORE to skip this directory but continue with others or
         @c wxDIR_CONTINUE to retry opening this directory once again.
-        
         The base class version always returns @c wxDIR_IGNORE.
     */
     virtual wxDirTraverseResult OnOpenError(const wxString& openerrorname);
@@ -147,13 +144,11 @@ public:
     /**
         The function returns the path of the first file matching the given @e filespec
         or an empty string if there are no files matching it.
-        
-        The @e flags parameter may or may not include @c wxDIR_FILES, the
-        function always behaves as if it were specified. By default, @e flags
+        The @a flags parameter may or may not include @c wxDIR_FILES, the
+        function always behaves as if it were specified. By default, @a flags
         includes @c wxDIR_DIRS and so the function recurses into the subdirectories
         but if this flag is not specified, the function restricts the search only to
-        the directory @e dirname itself.
-        
+        the directory @a dirname itself.
         See also: Traverse()
     */
     static wxString FindFirst(const wxString& dirname,
@@ -161,23 +156,21 @@ public:
                               int flags = wxDIR_DEFAULT);
 
     /**
-        The function appends the names of all the files under directory @e dirname
-        to the array @e files (note that its old content is preserved). Only files
-        matching the @e filespec are taken, with empty spec matching all the files.
-        
-        The @e flags parameter should always include @c wxDIR_FILES or the array
+        The function appends the names of all the files under directory @a dirname
+        to the array @a files (note that its old content is preserved). Only files
+        matching the @a filespec are taken, with empty spec matching all the files.
+        The @a flags parameter should always include @c wxDIR_FILES or the array
         would be unchanged and should include @c wxDIR_DIRS flag to recurse into
         subdirectories (both flags are included in the value by default).
-        
         See also: Traverse()
     */
     static size_t GetAllFiles(const wxString& dirname,
-                              wxArrayString * files,
+                              wxArrayString* files,
                               const wxString& filespec = wxEmptyString,
                               int flags = wxDIR_DEFAULT);
 
     /**
-        Start enumerating all files matching @e filespec (or all files if it is
+        Start enumerating all files matching @a filespec (or all files if it is
         empty) and @e flags, return @true on success.
     */
     bool GetFirst(wxString* filename,
@@ -199,7 +192,6 @@ public:
     /**
         Returns the size (in bytes) of all files recursively found in @c dir or
         @c wxInvalidSize in case of error.
-        
         In case it happens that while traversing folders a file's size can not be read,
         that file is added to the @c filesSkipped array, if not @NULL, and then
         skipped.
@@ -210,16 +202,15 @@ public:
         then the returned value is not 100% accurate and, if the skipped files were
         big, it could be
         far from real size of the directory.
-        
         See also: wxFileName::GetHumanReadableSize,
         wxGetDiskSpace
     */
     static wxULongLong GetTotalSize(const wxString& dir,
-                                    wxArrayString* filesSkipped = @NULL);
+                                    wxArrayString* filesSkipped = NULL);
 
     /**
         Returns @true if the directory contains any files matching the given
-        @e filespec. If @e filespec is empty, look for any files at all. In any
+        @e filespec. If @a filespec is empty, look for any files at all. In any
         case, even hidden files are taken into account.
     */
     bool HasFiles(const wxString& filespec = wxEmptyString);
@@ -247,19 +238,15 @@ public:
         Enumerate all files and directories under the given directory recursively
         calling the element of the provided wxDirTraverser
         object for each of them.
-        
         More precisely, the function will really recurse into subdirectories if
-        @e flags contains @c wxDIR_DIRS flag. It will ignore the files (but
+        @a flags contains @c wxDIR_DIRS flag. It will ignore the files (but
         still possibly recurse into subdirectories) if @c wxDIR_FILES flag is
         given.
-        
         For each found directory, @ref wxDirTraverser::ondir sink.OnDir is called
         and @ref wxDirTraverser::onfile sink.OnFile is called for every file.
         Depending on the return value, the enumeration may continue or stop.
-        
         The function returns the total number of files found or @c (size_t)-1 on
         error.
-        
         See also: GetAllFiles()
     */
     size_t Traverse(wxDirTraverser& sink,

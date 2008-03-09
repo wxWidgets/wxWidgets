@@ -28,13 +28,13 @@
     @endStyleTable
 
     @beginEventTable
-    @event{EVT_COMBOBOX(id\, func)}:
+    @event{EVT_COMBOBOX(id, func)}:
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected.
-    @event{EVT_TEXT(id\, func)}:
+    @event{EVT_TEXT(id, func)}:
            Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text
            changes.
-    @event{EVT_TEXT_ENTER(id\, func)}:
+    @event{EVT_TEXT_ENTER(id, func)}:
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combobox.
     @endEventTable
@@ -54,37 +54,29 @@ public:
         Constructor, creating and showing a combobox.
         
         @param parent
-        Parent window. Must not be @NULL.
-        
+            Parent window. Must not be @NULL.
         @param id
-        Window identifier. The value wxID_ANY indicates a default value.
-        
+            Window identifier. The value wxID_ANY indicates a default value.
         @param value
-        Initial selection string. An empty string indicates no selection.
-        
+            Initial selection string. An empty string indicates no selection.
         @param pos
-        Window position.
-        
+            Window position.
         @param size
-        Window size. If wxDefaultSize is specified then the window is sized
-        appropriately.
-        
+            Window size. If wxDefaultSize is specified then the window is
+        sized
+            appropriately.
         @param n
-        Number of strings with which to initialise the control.
-        
+            Number of strings with which to initialise the control.
         @param choices
-        An array of strings with which to initialise the control.
-        
+            An array of strings with which to initialise the control.
         @param style
-        Window style. See wxBitmapComboBox.
-        
+            Window style. See wxBitmapComboBox.
         @param validator
-        Window validator.
-        
+            Window validator.
         @param name
-        Window name.
+            Window name.
         
-        @sa Create(), wxValidator
+        @see Create(), wxValidator
     */
     wxBitmapComboBox();
     wxBitmapComboBox(wxWindow* parent, wxWindowID id,
@@ -92,7 +84,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      int n = 0,
-                     const wxString choices[] = @NULL,
+                     const wxString choices[] = NULL,
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = "comboBox");
@@ -119,9 +111,9 @@ public:
     int Append(const wxString& item,
                const wxBitmap& bitmap = wxNullBitmap);
     int Append(const wxString& item, const wxBitmap& bitmap,
-               void * clientData);
+               void* clientData);
     int Append(const wxString& item, const wxBitmap& bitmap,
-               wxClientData * clientData);
+               wxClientData* clientData);
     //@}
 
     //@{
@@ -168,10 +160,10 @@ public:
                unsigned int pos);
     int Insert(const wxString& item, const wxBitmap& bitmap,
                unsigned int pos,
-               void * clientData);
+               void* clientData);
     int Insert(const wxString& item, const wxBitmap& bitmap,
                unsigned int pos,
-               wxClientData * clientData);
+               wxClientData* clientData);
     //@}
 
     /**

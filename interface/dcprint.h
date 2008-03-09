@@ -28,17 +28,16 @@ public:
     /**
         Constructor. With empty strings for the first three arguments, the default
         printer dialog is
-        displayed. @e device indicates the type of printer and @e output
-        is an optional file for printing to. The @e driver parameter is
+        displayed. @a device indicates the type of printer and @e output
+        is an optional file for printing to. The @a driver parameter is
         currently unused.  Use the @e Ok member to test whether the
         constructor was successful in creating a usable device context.
-        
         This constructor is deprecated and retained only for backward compatibility.
     */
     wxPrinterDC(const wxPrintData& printData);
     wxPrinterDC(const wxString& driver, const wxString& device,
                 const wxString& output,
-                const bool interactive = @true,
+                const bool interactive = true,
                 int orientation = wxPORTRAIT);
     //@}
 

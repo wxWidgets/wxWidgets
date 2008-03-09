@@ -30,9 +30,9 @@ public:
         or replaced with white colour on platforms where custom colours palette has
         fixed size (MSW).
         
-        @sa wxColourData
+        @see wxColourData
     */
-    wxColourDialog(wxWindow* parent, wxColourData* data = @NULL);
+    wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
 
     /**
         Destructor.
@@ -42,7 +42,7 @@ public:
     /**
         Same as @ref ctor() constructor.
     */
-    bool Create(wxWindow* parent, wxColourData* data = @NULL);
+    bool Create(wxWindow* parent, wxColourData* data = NULL);
 
     /**
         Returns the @ref overview_wxcolourdata "colour data" associated with the colour
@@ -68,21 +68,19 @@ public:
     is valid) if the dialog was cancelled.
 
     @param parent
-    The parent window for the colour selection dialog
-
+        The parent window for the colour selection dialog
     @param colInit
-    If given, this will be the colour initially selected in the dialog.
-
+        If given, this will be the colour initially selected in the dialog.
     @param caption
-    If given, this will be used for the dialog caption.
-
+        If given, this will be used for the dialog caption.
     @param data
-    Optional object storing additional colour dialog settings, such
-    as custom colours. If none is provided the same settings as the last time are
-    used.
+        Optional object storing additional colour dialog settings, such
+        as custom colours. If none is provided the same settings as the last time
+    are
+        used.
 */
-wxColour wxGetColourFromUser(wxWindow * parent,
+wxColour wxGetColourFromUser(wxWindow* parent,
                              const wxColour& colInit,
                              const wxString& caption = wxEmptyString,
-                             wxColourData * data = @NULL);
+                             wxColourData* data = NULL);
 
