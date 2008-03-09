@@ -7,17 +7,15 @@
 # readable.
 #
 # Usage:
-#    ./regen.sh [html|chm|xml|all]
+#    ./regen.sh [html|chm|xml|latex|all]
 #
-# Pass "html" to regen only the HTML output format, "chm" only for
-# the CHM, "xml" only for the XML and "all" to regen them all.
-#
+# Pass "x" to regen only the X output format and "all" to regen them all.
 # If no arguments are passed all formats are regenerated
 # (just like passing "all").
 #
 
 
-# 
+# remember current folder and then cd to the docs/doxygen one
 me=$(basename $0)
 path=${0%%/$me}        # path from which the script has been launched
 current=$(pwd)
