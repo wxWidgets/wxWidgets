@@ -63,7 +63,7 @@ static const int EXPANDER_MARGIN = 4;
 // wxDataViewHeaderWindow
 //-----------------------------------------------------------------------------
 
-#define USE_NATIVE_HEADER_WINDOW    1
+#define USE_NATIVE_HEADER_WINDOW    !defined(__WXUNIVERSAL__)
 
 //Below is the compare stuff
 //For the generic implements, both the leaf nodes and the nodes are sorted for fast search when needed
