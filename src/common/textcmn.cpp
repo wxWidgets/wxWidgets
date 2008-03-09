@@ -297,8 +297,11 @@ bool wxTextAttr::EqPartial(const wxTextAttr& attr, int flags) const
 }
 
 // Create font from font attributes.
-wxFont wxTextAttr::CreateFont() const
+wxFont wxTextAttr::GetFont() const
 {
+    if ( !HasFont() )
+        return wxNullFont;
+
     int fontSize = 10;
     if (HasFontSize())
         fontSize = GetFontSize();
