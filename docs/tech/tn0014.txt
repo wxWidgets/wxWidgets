@@ -455,6 +455,14 @@ splitter is created split, either horizontally or vertically depending
 on the value of "orientation" attribute.
 
 
+wxStaticText
+------------
+
+wxStaticText supports one class-specific attribute which wraps the controls
+contents at the specified boundary:
+
+wrap                       Integer, in pixels     None
+
 wxStatusBar
 -----------
 fields                     Integer number of fields
