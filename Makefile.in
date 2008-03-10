@@ -3225,6 +3225,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/mdi.h \
 	wx/menu.h \
 	wx/msgdlg.h \
+	wx/nativewin.h \
 	wx/numdlg.h \
 	wx/overlay.h \
 	wx/palette.h \
@@ -4620,6 +4621,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_menu.o \
 	monodll_mnemonics.o \
 	monodll_msgdlg.o \
+	monodll_nativewin.o \
 	monodll_notebook.o \
 	monodll_radiobox.o \
 	monodll_radiobut.o \
@@ -4831,6 +4833,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_metafile.o \
 	monodll_msgdlg.o \
 	monodll_nativdlg.o \
+	monodll_nativewin.o \
 	monodll_notebook.o \
 	monodll_access.o \
 	monodll_ownerdrw.o \
@@ -4972,6 +4975,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_metafile.o \
 	monodll_msgdlg.o \
 	monodll_nativdlg.o \
+	monodll_nativewin.o \
 	monodll_notebook.o \
 	monodll_access.o \
 	monodll_ownerdrw.o \
@@ -6524,6 +6528,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_menu.o \
 	monolib_mnemonics.o \
 	monolib_msgdlg.o \
+	monolib_nativewin.o \
 	monolib_notebook.o \
 	monolib_radiobox.o \
 	monolib_radiobut.o \
@@ -6735,6 +6740,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_metafile.o \
 	monolib_msgdlg.o \
 	monolib_nativdlg.o \
+	monolib_nativewin.o \
 	monolib_notebook.o \
 	monolib_access.o \
 	monolib_ownerdrw.o \
@@ -6876,6 +6882,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_metafile.o \
 	monolib_msgdlg.o \
 	monolib_nativdlg.o \
+	monolib_nativewin.o \
 	monolib_notebook.o \
 	monolib_access.o \
 	monolib_ownerdrw.o \
@@ -8721,6 +8728,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_menu.o \
 	coredll_mnemonics.o \
 	coredll_msgdlg.o \
+	coredll_nativewin.o \
 	coredll_notebook.o \
 	coredll_radiobox.o \
 	coredll_radiobut.o \
@@ -8932,6 +8940,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_metafile.o \
 	coredll_msgdlg.o \
 	coredll_nativdlg.o \
+	coredll_nativewin.o \
 	coredll_notebook.o \
 	coredll_access.o \
 	coredll_ownerdrw.o \
@@ -9073,6 +9082,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_metafile.o \
 	coredll_msgdlg.o \
 	coredll_nativdlg.o \
+	coredll_nativewin.o \
 	coredll_notebook.o \
 	coredll_access.o \
 	coredll_ownerdrw.o \
@@ -10215,6 +10225,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_menu.o \
 	corelib_mnemonics.o \
 	corelib_msgdlg.o \
+	corelib_nativewin.o \
 	corelib_notebook.o \
 	corelib_radiobox.o \
 	corelib_radiobut.o \
@@ -10426,6 +10437,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_metafile.o \
 	corelib_msgdlg.o \
 	corelib_nativdlg.o \
+	corelib_nativewin.o \
 	corelib_notebook.o \
 	corelib_access.o \
 	corelib_ownerdrw.o \
@@ -10567,6 +10579,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_metafile.o \
 	corelib_msgdlg.o \
 	corelib_nativdlg.o \
+	corelib_nativewin.o \
 	corelib_notebook.o \
 	corelib_access.o \
 	corelib_ownerdrw.o \
@@ -16802,6 +16815,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_msgdlg.o: $(srcdir)/src/os2/msgdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/msgdlg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_nativewin.o: $(srcdir)/src/gtk/nativewin.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/nativewin.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_nativewin.o: $(srcdir)/src/msw/nativewin.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/nativewin.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_nativewin.o: $(srcdir)/src/msw/nativewin.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/nativewin.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
 
@@ -21307,6 +21329,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_msgdlg.o: $(srcdir)/src/os2/msgdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/msgdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_nativewin.o: $(srcdir)/src/gtk/nativewin.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/nativewin.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_nativewin.o: $(srcdir)/src/msw/nativewin.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/nativewin.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_nativewin.o: $(srcdir)/src/msw/nativewin.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/nativewin.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
@@ -26408,6 +26439,15 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_msgdlg.o: $(srcdir)/src/os2/msgdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/msgdlg.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_nativewin.o: $(srcdir)/src/gtk/nativewin.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/nativewin.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_nativewin.o: $(srcdir)/src/msw/nativewin.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/nativewin.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_nativewin.o: $(srcdir)/src/msw/nativewin.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/nativewin.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
 
@@ -29470,6 +29510,15 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_msgdlg.o: $(srcdir)/src/os2/msgdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/msgdlg.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_nativewin.o: $(srcdir)/src/gtk/nativewin.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/nativewin.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_nativewin.o: $(srcdir)/src/msw/nativewin.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/nativewin.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_nativewin.o: $(srcdir)/src/msw/nativewin.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/nativewin.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp

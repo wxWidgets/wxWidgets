@@ -1334,6 +1334,21 @@
 					ExcludedFromBuild="true"/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\nativewin.cpp">
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"/>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\notebook.cpp">
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -3363,6 +3378,8 @@
 				RelativePath="..\..\include\wx\minifram.h"/>
 			<File
 				RelativePath="..\..\include\wx\msgdlg.h"/>
+			<File
+				RelativePath="..\..\include\wx\nativewin.h"/>
 			<File
 				RelativePath="..\..\include\wx\nonownedwnd.h"/>
 			<File

@@ -288,6 +288,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_metafile.obj &
 	$(OBJS)\monodll_msgdlg.obj &
 	$(OBJS)\monodll_nativdlg.obj &
+	$(OBJS)\monodll_nativewin.obj &
 	$(OBJS)\monodll_notebook.obj &
 	$(OBJS)\monodll_access.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
@@ -942,6 +943,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_metafile.obj &
 	$(OBJS)\monolib_msgdlg.obj &
 	$(OBJS)\monolib_nativdlg.obj &
+	$(OBJS)\monolib_nativewin.obj &
 	$(OBJS)\monolib_notebook.obj &
 	$(OBJS)\monolib_access.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
@@ -1527,6 +1529,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_metafile.obj &
 	$(OBJS)\coredll_msgdlg.obj &
 	$(OBJS)\coredll_nativdlg.obj &
+	$(OBJS)\coredll_nativewin.obj &
 	$(OBJS)\coredll_notebook.obj &
 	$(OBJS)\coredll_access.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
@@ -2001,6 +2004,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_metafile.obj &
 	$(OBJS)\corelib_msgdlg.obj &
 	$(OBJS)\corelib_nativdlg.obj &
+	$(OBJS)\corelib_nativewin.obj &
 	$(OBJS)\corelib_notebook.obj &
 	$(OBJS)\corelib_access.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
@@ -5933,6 +5937,9 @@ $(OBJS)\monodll_msgdlg.obj :  .AUTODEPEND ..\..\src\msw\msgdlg.cpp
 $(OBJS)\monodll_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8139,6 +8146,9 @@ $(OBJS)\monolib_msgdlg.obj :  .AUTODEPEND ..\..\src\msw\msgdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
@@ -10733,6 +10743,9 @@ $(OBJS)\coredll_msgdlg.obj :  .AUTODEPEND ..\..\src\msw\msgdlg.cpp
 $(OBJS)\coredll_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -12142,6 +12155,9 @@ $(OBJS)\corelib_msgdlg.obj :  .AUTODEPEND ..\..\src\msw\msgdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp

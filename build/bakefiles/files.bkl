@@ -837,6 +837,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mdi.h
     wx/menu.h
     wx/msgdlg.h
+    wx/nativewin.h
     wx/numdlg.h
     wx/overlay.h
     wx/palette.h
@@ -1100,6 +1101,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/menu.cpp
     src/gtk/mnemonics.cpp
     src/gtk/msgdlg.cpp
+    src/gtk/nativewin.cpp
     src/gtk/notebook.cpp
     src/gtk/radiobox.cpp
     src/gtk/radiobut.cpp
@@ -1675,6 +1677,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/metafile.cpp
     src/msw/msgdlg.cpp
     src/msw/nativdlg.cpp
+    src/msw/nativewin.cpp
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
     src/msw/ownerdrw.cpp

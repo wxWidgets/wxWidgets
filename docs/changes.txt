@@ -228,7 +228,8 @@ All (GUI):
 - Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty).
 - Added wxNotificationMessage class for non-intrusive notifications
 - Added wxWindow::Show/HideWithEffect()
-- Added wxWrapSizer
+- Added wxWrapSizer (Arne Steinarson)
+- Added wxNativeContainerWindow to allow embedding wx into native windows
 - Added custom controls support to wxFileDialog (Diaa Sami and Marcin Wojdyr)
 - Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron).
 - Added support for drop down toolbar buttons (Tim Kosse).
