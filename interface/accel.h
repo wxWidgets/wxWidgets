@@ -35,10 +35,9 @@ enum wxAcceleratorEntryFlags
     (see wxAcceleratorTable).
 
     @library{wxcore}
-    @category{FIXME}
+    @category{misc}
 
-    @seealso
-    wxAcceleratorTable, wxWindow::SetAcceleratorTable
+    @see wxAcceleratorTable, wxWindow::SetAcceleratorTable
 */
 class wxAcceleratorEntry
 {
@@ -100,7 +99,7 @@ public:
     shortcuts for menus or other commands. On Windows and Mac OS X, menu or button
     commands are supported; on GTK, only menu commands are supported.
 
-    The object #wxNullAcceleratorTable is defined to be a table with no data, and
+    The object ::wxNullAcceleratorTable is defined to be a table with no data, and
     is the initial accelerator table for a window.
 
     Example:
@@ -126,10 +125,9 @@ public:
     @category{misc}
 
     @stdobjects
-    wxNullAcceleratorTable
+    ::wxNullAcceleratorTable
 
-    @seealso
-    wxAcceleratorEntry, wxWindow::SetAcceleratorTable
+    @see wxAcceleratorEntry, wxWindow::SetAcceleratorTable
 */
 class wxAcceleratorTable : public wxObject
 {
@@ -161,7 +159,6 @@ public:
             Name of a Windows accelerator.
     */
     wxAcceleratorTable(const wxString& resource);
-    //@}
 
     /**
         Destroys the wxAcceleratorTable object.

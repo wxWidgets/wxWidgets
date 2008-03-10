@@ -11,7 +11,7 @@
     @wxheader{aboutdlg.h}
 
     wxAboutDialogInfo contains information shown in the standard @e About
-    dialog displayed by the wxAboutBox function.
+    dialog displayed by the wxAboutBox() function.
 
     This class contains the general information about the program, such as its
     name, version, copyright and so on, as well as lists of the program developers,
@@ -28,15 +28,13 @@
     wxAboutDialogInfo has any fields not supported by the native version. Currently
     GTK+ version supports all the possible fields natively but MSW and Mac versions
     don't support URLs, licence text nor custom icons in the about dialog and if
-    either of those is used, wxAboutBox will automatically
-    use the generic version so you should avoid specifying these fields to achieve
-    more native look and feel.
+    either of those is used, wxAboutBox() will automatically use the generic version
+    so you should avoid specifying these fields to achieve more native look and feel.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{misc}
 
-    @seealso
-    wxAboutDialogInfo::SetArtists
+    @see wxAboutDialogInfo::SetArtists
 */
 class wxAboutDialogInfo
 {
@@ -70,7 +68,7 @@ public:
 
     /**
         Adds a translator name to be shown in the program credits. Notice that if no
-        translator names are specified explicitely, wxAboutBox will try to use the
+        translator names are specified explicitely, wxAboutBox() will try to use the
         translation of the string @c translator-credits from the currently used message
         catalog -- this can be used to show just the name of the translator of the
         program in the current language.
@@ -202,7 +200,7 @@ public:
 void wxAboutBox(const wxAboutDialogInfo& info);
 
 /**
-    This function does the same thing as wxAboutBox except that it always uses
+    This function does the same thing as wxAboutBox() except that it always uses
     the generic wxWidgets version of the dialog instead of the native one.
 
     This is mainly useful if you need to customize the dialog by e.g. adding
