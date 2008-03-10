@@ -63,7 +63,10 @@ static const int EXPANDER_MARGIN = 4;
 // wxDataViewHeaderWindow
 //-----------------------------------------------------------------------------
 
-#define USE_NATIVE_HEADER_WINDOW    !defined(__WXUNIVERSAL__)
+// on wxMSW the header window (only that part however) can be made native!
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    #define USE_NATIVE_HEADER_WINDOW
+#endif
 
 //Below is the compare stuff
 //For the generic implements, both the leaf nodes and the nodes are sorted for fast search when needed
@@ -109,8 +112,7 @@ protected:
     void SendEvent(wxEventType type, unsigned int n);
 };
 
-// on wxMSW the header window (only that part however) can be made native!
-#if defined(__WXMSW__) && USE_NATIVE_HEADER_WINDOW
+#ifdef USE_NATIVE_HEADER_WINDOW
 
 #define COLUMN_WIDTH_OFFSET         2
 #define wxDataViewHeaderWindowMSW   wxDataViewHeaderWindow
@@ -1265,7 +1267,7 @@ void wxDataViewHeaderWindowBase::SendEvent(wxEventType type, unsigned int n)
     parent->GetEventHandler()->ProcessEvent(le);
 }
 
-#if defined(__WXMSW__) && USE_NATIVE_HEADER_WINDOW
+#ifdef USE_NATIVE_HEADER_WINDOW
 
 #ifndef HDS_DRAGDROP
     #define HDS_DRAGDROP 0x0040
