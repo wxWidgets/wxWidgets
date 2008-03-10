@@ -1,3 +1,18 @@
+/*****************************************************************************
+ ** Name:        wxwidgets.css
+ ** Purpose:     The wxWidgets documentation CSS; a customized version of
+ **              the standard Doxygen CSS
+ ** Author:      Doxygen team
+ ** RCS-ID:      $Id$
+ ** Licence:     wxWindows license
+ *****************************************************************************/
+
+
+/*
+  Doxygen classic styles
+  ======================
+*/   
+
 BODY,H1,H2,H3,H4,H5,H6,P,CENTER,TD,TH,UL,DL,DIV {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 }
@@ -7,7 +22,7 @@ BODY,TD {
 H1 {
 	text-align: center;
 	font-size: 160%;
-    border-top: 1em;
+ border-top: 1em;
 }
 H2 {
 	font-size: 120%;
@@ -435,7 +450,8 @@ HR {
 
 
 /*
- wxWidgets docs specific styles
+  wxWidgets docs specific styles
+  ==============================
 */
 
 IMG.logo {
@@ -462,18 +478,18 @@ SPAN.literal {
     color: #008800;
 }
 
-SPAN.itemdef {
+/* we make all the following <span> tags render the text just like
+   the standard Doxygen @remarks, @see tags do, to obtain a uniform
+   look and feel */
+SPAN.itemdef, SPAN.lib, SPAN.category, SPAN.stdobj, SPAN.styles, SPAN.events, SPAN.appearance, SPAN.impl, SPAN.avail {
+    font-weight: bold;
+    line-height: 130%;
+}
+
+SPAN.style, SPAN.event {
     font-weight: bold;
     color: #880000;
 }
 
-SPAN.style {
-    font-weight: bold;
-    color: #880000;
-}
 
-SPAN.event {
-    font-weight: bold;
-    color: #880000;
-}
 

@@ -47,51 +47,54 @@ SUBGROUPING            = YES
 # us to keep the headers readable and "implement" wxWidgets-specific commands.
 
 # event aliases
-ALIASES = beginEventTable="\section class_events Events\n"
+ALIASES = beginEventTable="<div><span class='events'>Events:</span>"
 ALIASES += event{1}="\li <span class='event'>\1</span>"
 ALIASES += event{2}="\li <span class='event'>\1, \2</span>"
 ALIASES += event{3}="\li <span class='event'>\1, \2, \3</span>"
 ALIASES += event{4}="\li <span class='event'>\1, \2, \3, \4</span>"
-ALIASES += endEventTable="\n"
+ALIASES += endEventTable="</div>"
 
 # style aliases
-ALIASES += beginStyleTable="\section class_styles Styles\n"
+ALIASES += beginStyleTable="<div><span class='styles'>Styles:</span>"
 ALIASES += style{1}="\li <span class='style'>\1</span>"
-ALIASES += endStyleTable="\n"
+ALIASES += endStyleTable="</div>"
 
 # extra style aliases
-ALIASES += beginExtraStyleTable="\section class_extrastyles Extra Styles\n"
-ALIASES += endExtraStyleTable="\n"
+ALIASES += beginExtraStyleTable="<div><span class='styles'>Extra styles:</span>"
+ALIASES += endExtraStyleTable="</div>"
 
-# aliases for additional wx-specific infos 
-ALIASES += library{1}="\section class_lib Library\n Belongs to library \ref page_libs_\1."
-ALIASES += nolibrary="\section class_lib Library\n None; this class implementation is entirely header-based."
-ALIASES += stdobjects="\section class_stdobj Predefined objects\n"
-ALIASES += category{1}="\section class_category Category\n \ref page_class_cat_\1"
+# aliases for additional wx-specific infos
+ALIASES += category{1}="<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref page_class_cat_\1</span></div>"
+ALIASES += library{1}="<div><span class='lib'>Library:</span>&nbsp;&nbsp;<span class='lib_text'>\ref page_libs_\1</span></div>"
+ALIASES += nolibrary="<div><span class='lib'>Library:</span>&nbsp;&nbsp;<span class='lib_text'>None; this class implementation is entirely header-based.</span></div>"
+ALIASES += stdobjects="<span class='stdobj'>Predefined objects:</span>"
 
-# aliases with references to wxWidgets ports
-ALIASES += nativeimpl{1}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1 port; generic implementation is used elsewhere."
-ALIASES += nativeimpl{2}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1, \ref page_port_\2 ports; generic implementation is used elsewhere."
-ALIASES += nativeimpl{3}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports; generic implementation is used elsewhere."
-ALIASES += nativeimpl{4}="\section class_impl Implementations\n Native implementations are used for \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports; generic implementation is used elsewhere."
-ALIASES += onlyfor{1}="\section class_onlyfor Availability\n Only available for the \ref page_port_\1 port."
-ALIASES += onlyfor{2}="\section class_onlyfor Availability\n Only available for the \ref page_port_\1, \ref page_port_\2 ports."
-ALIASES += onlyfor{3}="\section class_onlyfor Availability\n Only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports."
-ALIASES += onlyfor{4}="\section class_onlyfor Availability\n Only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports."
+# native implementation infos:
+ALIASES += nativeimpl{1}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native implementations are used for \ref page_port_\1 port; generic implementation is used elsewhere.</div>"
+ALIASES += nativeimpl{2}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native implementations are used for \ref page_port_\1, \ref page_port_\2 ports; generic implementation is used elsewhere.</div>"
+ALIASES += nativeimpl{3}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native implementations are used for \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports; generic implementation is used elsewhere.</div>"
+ALIASES += nativeimpl{4}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native implementations are used for \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports; generic implementation is used elsewhere.</div>"
+
+# onlyfor infos:
+ALIASES += onlyfor{1}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1 port.</div>"
+ALIASES += onlyfor{2}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2 ports.</div>"
+ALIASES += onlyfor{3}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports.</div>"
+ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports.</div>"
 
 # creates appearance section: this should be used for all main GUI controls
-ALIASES += appearance{1}="\section class_appearance Appearance\n @htmlonly Screenshots for this widget: <table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table> @endhtmlonly"
-
-# IMPORTANT: the default \sa command does not generate a \section!
-ALIASES += seealso="\section class_sa See also\n"
+ALIASES += appearance{1}="@htmlonly <div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> @endhtmlonly"
 
 # IMPORTANT: the \headerfile command does not work everywhere we'd need it,
 #            e.g. in the constants page we need to specify an header file
-#            even if they're not inside a \class, \function or \struct command....
-#            and also inside a \class, we want to specify the header file only once
-#            and not twice as the \headerfile command requires (and thus we use @wxheader)
-ALIASES += header{1}="Include file:\n \verbatim #include <\1> @endverbatim"
+#            even if they're not inside a \class, \function or \struct command:
+ALIASES += header{1}="Include file:\n \verbatim #include <\1> \endverbatim"
+
+# IMPORTANT: inside a \class, we want to specify the header file only once
+#            and not twice as the \headerfile command requires:
 ALIASES += wxheader{1}="\headerfile \1 wx/\1"
+
+# the following alias avoids to repeat lots of times the same statement:
+ALIASES += wxsince{1}="\since This function is new since wxWidgets version \1."
 
 # some formatting aliases
 ALIASES += true="<span class='literal'>true</span>"
