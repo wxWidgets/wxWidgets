@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colour.h
-// Purpose:     documentation for wxColour class
+// Purpose:     interface of wxColour
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,25 +24,10 @@
     @category{gdi}
 
     @stdobjects
-    Objects:
-    wxNullColour
-    Pointers:
-    wxBLACK
+    ::Objects:, ::wxNullColour, ::Pointers:, ::wxBLACK, ::wxWHITE, ::wxRED,
+    ::wxBLUE, ::wxGREEN, ::wxCYAN, ::wxLIGHT_GREY,
 
-    wxWHITE
-
-    wxRED
-
-    wxBLUE
-
-    wxGREEN
-
-    wxCYAN
-
-    wxLIGHT_GREY
-
-    @seealso
-    wxColourDatabase, wxPen, wxBrush, wxColourDialog, wxSystemSettings
+    @see wxColourDatabase, wxPen, wxBrush, wxColourDialog, wxSystemSettings
 */
 class wxColour : public wxObject
 {
@@ -90,7 +75,8 @@ public:
     /**
         is not
         specified in flags.
-        This function is new since wxWidgets version 2.7.0
+        
+        @wxsince{2.7.0}
     */
     wxString GetAsString(long flags);
     const wxC2S_NAME, to obtain the colour name (e.g.
@@ -133,12 +119,13 @@ public:
         Sets the RGB intensity values using the given values (first overload),
         extracting them from the packed long (second overload), using the given string (third overloard).
         When using third form, Set() accepts: colour names (those listed in
-        wxTheColourDatabase), the CSS-like
+        wxTheColourDatabase()), the CSS-like
         @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax (case insensitive)
         and the HTML-like syntax (i.e. @c "#" followed by 6 hexadecimal digits
         for red, green, blue components).
         Returns @true if the conversion was successful, @false otherwise.
-        This function is new since wxWidgets version 2.7.0
+        
+        @wxsince{2.7.0}
     */
     void Set(unsigned char red, unsigned char green,
              unsigned char blue,
@@ -169,3 +156,58 @@ public:
     */
     bool operator ==(const wxColour& colour);
 };
+
+
+/**
+    FIXME
+*/
+wxColour Objects:
+;
+
+/**
+    FIXME
+*/
+wxColour wxNullColour;
+
+/**
+    FIXME
+*/
+wxColour Pointers:
+;
+
+/**
+    FIXME
+*/
+wxColour wxBLACK;
+
+/**
+    FIXME
+*/
+wxColour wxWHITE;
+
+/**
+    FIXME
+*/
+wxColour wxRED;
+
+/**
+    FIXME
+*/
+wxColour wxBLUE;
+
+/**
+    FIXME
+*/
+wxColour wxGREEN;
+
+/**
+    FIXME
+*/
+wxColour wxCYAN;
+
+/**
+    FIXME
+*/
+wxColour wxLIGHT_GREY;
+
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        brush.h
-// Purpose:     documentation for wxBrush class
+// Purpose:     interface of wxBrush
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,31 +18,10 @@
     @category{gdi}
 
     @stdobjects
-    Objects:
-    wxNullBrush
-    Pointers:
-    wxBLUE_BRUSH
+    ::Objects:, ::wxNullBrush, ::Pointers:, ::wxBLUE_BRUSH, ::wxGREEN_BRUSH,
+    ::wxWHITE_BRUSH, ::wxBLACK_BRUSH, ::wxGREY_BRUSH, ::wxMEDIUM_GREY_BRUSH, ::wxLIGHT_GREY_BRUSH, ::wxTRANSPARENT_BRUSH, ::wxCYAN_BRUSH, ::wxRED_BRUSH,
 
-    wxGREEN_BRUSH
-
-    wxWHITE_BRUSH
-
-    wxBLACK_BRUSH
-
-    wxGREY_BRUSH
-
-    wxMEDIUM_GREY_BRUSH
-
-    wxLIGHT_GREY_BRUSH
-
-    wxTRANSPARENT_BRUSH
-
-    wxCYAN_BRUSH
-
-    wxRED_BRUSH
-
-    @seealso
-    wxBrushList, wxDC, wxDC::SetBrush
+    @see wxBrushList, wxDC, wxDC::SetBrush
 */
 class wxBrush : public wxGDIObject
 {
@@ -432,3 +411,73 @@ public:
     */
     bool operator ==(const wxBrush& brush);
 };
+
+
+/**
+    FIXME
+*/
+wxBrush Objects:
+;
+
+/**
+    FIXME
+*/
+wxBrush wxNullBrush;
+
+/**
+    FIXME
+*/
+wxBrush Pointers:
+;
+
+/**
+    FIXME
+*/
+wxBrush wxBLUE_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxGREEN_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxWHITE_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxBLACK_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxGREY_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxMEDIUM_GREY_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxLIGHT_GREY_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxTRANSPARENT_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxCYAN_BRUSH;
+
+/**
+    FIXME
+*/
+wxBrush wxRED_BRUSH;
+
+

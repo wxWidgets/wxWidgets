@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/helpwnd.h
-// Purpose:     documentation for wxHtmlHelpWindow class
+// Purpose:     interface of wxHtmlHelpWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -165,3 +165,4 @@ public:
     void WriteCustomization(wxConfigBase* cfg,
                             const wxString& path = wxEmptyString);
 };
+

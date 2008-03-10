@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mediactrl.h
-// Purpose:     documentation for wxMediaEvent class
+// Purpose:     interface of wxMediaEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -22,6 +22,7 @@ public:
 };
 
 
+
 /**
     @class wxMediaCtrl
     @wxheader{mediactrl.h}
@@ -36,8 +37,7 @@ public:
     @library{wxmedia}
     @category{media}
 
-    @seealso
-    wxMediaEvent
+    @see wxMediaEvent
 */
 class wxMediaCtrl : public wxControl
 {
@@ -368,7 +368,7 @@ public:
 
     /**
         Stops the media.
-        See Operation for an overview of how
+        See Operation() for an overview of how
         stopping works.
     */
     bool Stop();
@@ -397,3 +397,4 @@ public:
         original size without any extra assistance needed from the user.
     */
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        socket.h
-// Purpose:     documentation for wxIPV4address class
+// Purpose:     interface of wxIPV4address
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -60,6 +60,7 @@ public:
 };
 
 
+
 /**
     @class wxSocketServer
     @wxheader{socket.h}
@@ -68,9 +69,8 @@ public:
     @library{wxnet}
     @category{net}
 
-    @seealso
-    wxSocketServer::WaitForAccept, wxSocketBase::SetNotify, wxSocketBase::Notify,
-    wxSocketServer::AcceptWith
+    @see wxSocketServer::WaitForAccept, wxSocketBase::SetNotify,
+    wxSocketBase::Notify, wxSocketServer::AcceptWith
 */
 class wxSocketServer : public wxSocketBase
 {
@@ -148,6 +148,7 @@ public:
 };
 
 
+
 /**
     @class wxIPaddress
     @wxheader{socket.h}
@@ -220,6 +221,7 @@ public:
 };
 
 
+
 /**
     @class wxSocketClient
     @wxheader{socket.h}
@@ -228,8 +230,8 @@ public:
     @library{wxnet}
     @category{net}
 
-    @seealso
-    wxSocketClient::WaitOnConnect, wxSocketBase::SetNotify, wxSocketBase::Notify
+    @see wxSocketClient::WaitOnConnect, wxSocketBase::SetNotify,
+    wxSocketBase::Notify
 */
 class wxSocketClient : public wxSocketBase
 {
@@ -301,6 +303,7 @@ public:
 };
 
 
+
 /**
     @class wxSockAddress
     @wxheader{socket.h}
@@ -310,8 +313,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxSocketBase, wxIPaddress, wxIPV4address
+    @see wxSocketBase, wxIPaddress, wxIPV4address
 */
 class wxSockAddress : public wxObject
 {
@@ -338,6 +340,7 @@ public:
 };
 
 
+
 /**
     @class wxSocketEvent
     @wxheader{socket.h}
@@ -347,8 +350,7 @@ public:
     @library{wxnet}
     @category{net}
 
-    @seealso
-    wxSocketBase, wxSocketClient, wxSocketServer
+    @see wxSocketBase, wxSocketClient, wxSocketServer
 */
 class wxSocketEvent : public wxEvent
 {
@@ -377,6 +379,7 @@ public:
 };
 
 
+
 /**
     @class wxSocketBase
     @wxheader{socket.h}
@@ -396,8 +399,7 @@ public:
     @library{wxnet}
     @category{net}
 
-    @seealso
-    wxSocketEvent, wxSocketClient, wxSocketServer, @ref overview_samplesockets
+    @see wxSocketEvent, wxSocketClient, wxSocketServer, @ref overview_samplesockets
     "Sockets sample"
 */
 class wxSocketBase : public wxObject
@@ -1022,6 +1024,7 @@ public:
 };
 
 
+
 /**
     @class wxDatagramSocket
     @wxheader{socket.h}
@@ -1030,8 +1033,7 @@ public:
     @library{wxnet}
     @category{FIXME}
 
-    @seealso
-    wxSocketBase::Error, wxSocketBase::LastError, wxSocketBase::LastCount,
+    @see wxSocketBase::Error, wxSocketBase::LastError, wxSocketBase::LastCount,
     wxSocketBase::SetFlags,
 */
 class wxDatagramSocket : public wxSocketBase
@@ -1091,3 +1093,4 @@ public:
                             const void* buffer,
                             wxUint32 nbytes);
 };
+

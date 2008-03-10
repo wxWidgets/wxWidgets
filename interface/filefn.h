@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        filefn.h
-// Purpose:     documentation for wxPathList class
+// Purpose:     interface of wxPathList
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -21,8 +21,7 @@
     @library{wxbase}
     @category{file}
 
-    @seealso
-    wxArrayString, wxStandardPaths, wxFileName
+    @see wxArrayString, wxStandardPaths, wxFileName
 */
 class wxPathList : public wxArrayString
 {
@@ -89,11 +88,12 @@ public:
         Note in fact that wxPathList can be used to store both relative and absolute
         paths so that
         if you Added() relative paths, then the current working directory
-        (see wxGetCwd and wxSetWorkingDirectory)
+        (see wxGetCwd() and wxSetWorkingDirectory())
         may affect the value returned by this function!
     */
     wxString FindValidPath(const wxString& file) const;
 };
+
 
 
 // ============================================================================
@@ -228,13 +228,13 @@ bool wxFileExists(const wxString& filename);
 /**
     Returns @true if the @a pattern matches the @e text; if @a dot_special is @true,
     filenames beginning with a dot are not matched
-    with wildcard characters. See wxIsWild.
+    with wildcard characters. See wxIsWild().
 */
 bool wxMatchWild(const wxString& pattern, const wxString& text,
                  bool dot_special);
 
 /**
-    @b NB: This function is deprecated: use wxGetCwd instead.
+    @b NB: This function is deprecated: use wxGetCwd() instead.
     Copies the current working directory into the buffer if supplied, or
     copies the working directory into new storage (which you must delete
     yourself) if the buffer is @NULL.
@@ -248,7 +248,7 @@ wxString wxGetWorkingDirectory(char* buf = NULL, int sz = 1000);
 wxString wxPathOnly(const wxString& path);
 
 /**
-    Returns @true if the pattern contains wildcards. See wxMatchWild.
+    Returns @true if the pattern contains wildcards. See wxMatchWild().
 */
 bool wxIsWild(const wxString& pattern);
 
@@ -296,14 +296,14 @@ bool wxMkdir(const wxString& dir, int perm = 0777);
 bool wxIsAbsolutePath(const wxString& filename);
 
 /**
-    Returns the next file that matches the path passed to wxFindFirstFile.
-    See wxFindFirstFile for an example.
+    Returns the next file that matches the path passed to wxFindFirstFile().
+    See wxFindFirstFile() for an example.
 */
 wxString wxFindNextFile();
 
 /**
     This function does directory searching; returns the first file
-    that matches the path @e spec, or the empty string. Use wxFindNextFile to
+    that matches the path @e spec, or the empty string. Use wxFindNextFile() to
     get the next matching file. Neither will report the current directory "." or the
     parent directory "..".
 */

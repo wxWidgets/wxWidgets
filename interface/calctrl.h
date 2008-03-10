@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        calctrl.h
-// Purpose:     documentation for wxCalendarEvent class
+// Purpose:     interface of wxCalendarEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -16,8 +16,7 @@
     @library{wxadv}
     @category{events}
 
-    @seealso
-    wxCalendarCtrl
+    @see wxCalendarCtrl
 */
 class wxCalendarEvent : public wxDateEvent
 {
@@ -37,6 +36,7 @@ public:
 };
 
 
+
 /**
     @class wxCalendarDateAttr
     @wxheader{calctrl.h}
@@ -47,8 +47,7 @@ public:
     @library{wxadv}
     @category{misc}
 
-    @seealso
-    wxCalendarCtrl
+    @see wxCalendarCtrl
 */
 class wxCalendarDateAttr
 {
@@ -73,7 +72,7 @@ public:
     const wxColour GetBackgroundColour() const;
 
     /**
-        Returns the border to use for the item with this attribute.
+        Returns the border() to use for the item with this attribute.
     */
     wxCalendarDateBorder GetBorder() const;
 
@@ -156,6 +155,7 @@ public:
 };
 
 
+
 /**
     @class wxCalendarCtrl
     @wxheader{calctrl.h}
@@ -208,8 +208,7 @@ public:
     @category{ctrl}
     @appearance{calendarctrl.png}
 
-    @seealso
-    @ref overview_samplecalendar "Calendar sample", wxCalendarDateAttr,
+    @see @ref overview_samplecalendar "Calendar sample", wxCalendarDateAttr,
     wxCalendarEvent
 */
 class wxCalendarCtrl : public wxControl
@@ -321,7 +320,7 @@ public:
 
     /**
         Returns one of @c wxCAL_HITTEST_XXX
-        constants and fills either @a date or
+        constants() and fills either @a date or
         @a wd pointer with the corresponding value depending on the hit test code.
     */
     wxCalendarHitTestResult HitTest(const wxPoint& pos,
@@ -369,3 +368,4 @@ public:
     void SetHolidayColours(const wxColour& colFg,
                            const wxColour& colBg);
 };
+

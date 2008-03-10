@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcbuffer.h
-// Purpose:     documentation for wxBufferedDC class
+// Purpose:     interface of wxBufferedDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -38,8 +38,7 @@
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    wxDC, wxMemoryDC, wxBufferedPaintDC, wxAutoBufferedPaintDC
+    @see wxDC, wxMemoryDC, wxBufferedPaintDC, wxAutoBufferedPaintDC
 */
 class wxBufferedDC : public wxMemoryDC
 {
@@ -99,6 +98,7 @@ public:
 };
 
 
+
 /**
     @class wxAutoBufferedPaintDC
     @wxheader{dcbuffer.h}
@@ -120,8 +120,7 @@ public:
     @library{wxbase}
     @category{dc}
 
-    @seealso
-    wxDC, wxBufferedPaintDC
+    @see wxDC, wxBufferedPaintDC
 */
 class wxAutoBufferedPaintDC : public wxBufferedPaintDC
 {
@@ -131,6 +130,7 @@ public:
     */
     wxAutoBufferedPaintDC(wxWindow* window);
 };
+
 
 
 /**
@@ -152,8 +152,7 @@ public:
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    wxDC, wxBufferedDC, wxAutoBufferedPaintDC
+    @see wxDC, wxBufferedDC, wxAutoBufferedPaintDC
 */
 class wxBufferedPaintDC : public wxBufferedDC
 {
@@ -182,3 +181,4 @@ public:
         object, using a wxPaintDC.
     */
 };
+

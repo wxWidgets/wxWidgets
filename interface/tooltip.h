@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tooltip.h
-// Purpose:     documentation for wxToolTip class
+// Purpose:     interface of wxToolTip
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -70,3 +70,4 @@ public:
     */
     void SetTip(const wxString& tip);
 };
+

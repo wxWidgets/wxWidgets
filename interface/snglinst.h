@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        snglinst.h
-// Purpose:     documentation for wxSingleInstanceChecker class
+// Purpose:     interface of wxSingleInstanceChecker
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -48,7 +48,7 @@
     }
     @endcode
 
-    Note using wxGetUserId to construct the name: this
+    Note using wxGetUserId() to construct the name: this
     allows different user to run the application concurrently which is usually the
     intended goal. If you don't use the user name in the wxSingleInstanceChecker
     name, only one user would be able to run the application at a time.
@@ -104,3 +104,4 @@ public:
     */
     bool IsAnotherRunning() const;
 };
+

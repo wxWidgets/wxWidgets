@@ -15,8 +15,7 @@
     @library{wxrichtext}
     @category{richtext}
 
-    @seealso
-    wxTextAttr, wxRichTextCtrl
+    @see wxTextAttr, wxRichTextCtrl
 */
 class wxRichTextBuffer
 {
@@ -771,6 +770,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextFileHandler
     @headerfile richtextbuffer.h wx/richtext/richtextbuffer.h
@@ -911,6 +911,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextRange
     @headerfile richtextbuffer.h wx/richtext/richtextbuffer.h
@@ -1031,3 +1032,4 @@ public:
     */
     bool operator==(const wxRichTextRange& range) const;
 };
+

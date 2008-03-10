@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        slider.h
-// Purpose:     documentation for wxSlider class
+// Purpose:     interface of wxSlider
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -45,8 +45,7 @@
     @category{ctrl}
     @appearance{slider.png}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxScrollBar
+    @see @ref overview_eventhandlingoverview, wxScrollBar
 */
 class wxSlider : public wxControl
 {
@@ -279,3 +278,4 @@ public:
     */
     void SetValue(int value);
 };
+

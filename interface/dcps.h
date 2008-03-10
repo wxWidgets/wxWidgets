@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcps.h
-// Purpose:     documentation for wxPostScriptDC class
+// Purpose:     interface of wxPostScriptDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -50,6 +50,7 @@ public:
     */
     static void SetResolution(int ppi);
 };
+
 
 
 // ============================================================================

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        bitmap.h
-// Purpose:     documentation for wxBitmapHandler class
+// Purpose:     interface of wxBitmapHandler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -10,7 +10,7 @@
     @class wxBitmapHandler
     @wxheader{bitmap.h}
 
-    Overview
+    Overview()
 
     This is the base class for implementing bitmap file loading/saving, and bitmap
     creation from data.
@@ -24,8 +24,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxBitmap, wxIcon, wxCursor
+    @see wxBitmap, wxIcon, wxCursor
 */
 class wxBitmapHandler : public wxObject
 {
@@ -145,6 +144,7 @@ public:
 };
 
 
+
 /**
     @class wxBitmap
     @wxheader{bitmap.h}
@@ -156,11 +156,9 @@ public:
     @category{gdi}
 
     @stdobjects
-    Objects:
-    wxNullBitmap
+    ::Objects:, ::wxNullBitmap,
 
-    @seealso
-    @ref overview_wxbitmapoverview "wxBitmap overview", @ref
+    @see @ref overview_wxbitmapoverview "wxBitmap overview", @ref
     overview_supportedbitmapformats "supported bitmap file formats", wxDC::Blit, wxIcon, wxCursor, wxBitmap, wxMemoryDC
 */
 class wxBitmap : public wxGDIObject
@@ -711,6 +709,20 @@ public:
 
 
 /**
+    FIXME
+*/
+wxBitmap Objects:
+;
+
+/**
+    FIXME
+*/
+wxBitmap wxNullBitmap;
+
+
+
+
+/**
     @class wxMask
     @wxheader{bitmap.h}
 
@@ -724,8 +736,7 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @seealso
-    wxBitmap, wxDC::Blit, wxMemoryDC
+    @see wxBitmap, wxDC::Blit, wxMemoryDC
 */
 class wxMask : public wxObject
 {
@@ -773,3 +784,4 @@ public:
     bool Create(const wxBitmap& bitmap, int index);
     //@}
 };
+

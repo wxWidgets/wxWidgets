@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        laywin.h
-// Purpose:     documentation for wxLayoutAlgorithm class
+// Purpose:     interface of wxLayoutAlgorithm
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -90,8 +90,7 @@
     @library{wxadv}
     @category{winlayout}
 
-    @seealso
-    wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview
+    @see wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview
 */
 class wxLayoutAlgorithm : public wxObject
 {
@@ -135,6 +134,7 @@ public:
 };
 
 
+
 /**
     @class wxSashLayoutWindow
     @wxheader{laywin.h}
@@ -152,8 +152,7 @@ public:
     @library{wxadv}
     @category{miscwnd}
 
-    @seealso
-    wxLayoutAlgorithm, wxSashWindow, @ref overview_eventhandlingoverview
+    @see wxLayoutAlgorithm, wxSashWindow, @ref overview_eventhandlingoverview
 */
 class wxSashLayoutWindow : public wxSashWindow
 {
@@ -276,6 +275,7 @@ public:
 };
 
 
+
 /**
     @class wxQueryLayoutInfoEvent
     @wxheader{laywin.h}
@@ -288,8 +288,7 @@ public:
     @library{wxadv}
     @category{events}
 
-    @seealso
-    wxCalculateLayoutEvent, wxSashLayoutWindow, wxLayoutAlgorithm.
+    @see wxCalculateLayoutEvent, wxSashLayoutWindow, wxLayoutAlgorithm.
 */
 class wxQueryLayoutInfoEvent : public wxEvent
 {
@@ -366,6 +365,7 @@ public:
 };
 
 
+
 /**
     @class wxCalculateLayoutEvent
     @wxheader{laywin.h}
@@ -377,8 +377,7 @@ public:
     @library{wxadv}
     @category{events}
 
-    @seealso
-    wxQueryLayoutInfoEvent, wxSashLayoutWindow, wxLayoutAlgorithm.
+    @see wxQueryLayoutInfoEvent, wxSashLayoutWindow, wxLayoutAlgorithm.
 */
 class wxCalculateLayoutEvent : public wxEvent
 {
@@ -414,3 +413,4 @@ public:
     */
     void SetRect(const wxRect& rect);
 };
+

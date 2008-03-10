@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        toolbar.h
-// Purpose:     documentation for wxToolBar class
+// Purpose:     interface of wxToolBar
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -55,8 +55,7 @@
     @library{wxbase}
     @category{miscwnd}
 
-    @seealso
-    @ref overview_wxtoolbaroverview "Toolbar overview", wxScrolledWindow
+    @see @ref overview_wxtoolbaroverview "Toolbar overview", wxScrolledWindow
 */
 class wxToolBar : public wxControl
 {
@@ -623,3 +622,4 @@ public:
     */
     void ToggleTool(int toolId, bool toggle);
 };
+

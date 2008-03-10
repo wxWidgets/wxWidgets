@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        aui/auibook.h
-// Purpose:     documentation for wxAuiNotebook class
+// Purpose:     interface of wxAuiNotebook
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -239,6 +239,7 @@ public:
 };
 
 
+
 /**
     @class wxAuiTabArt
     @headerfile auibook.h wx/aui/auibook.h
@@ -340,3 +341,4 @@ public:
     int ShowWindowList(wxWindow* wnd, const wxArrayString& items,
                        int active_idx);
 };
+

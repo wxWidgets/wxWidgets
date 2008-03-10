@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        longlong.h
-// Purpose:     documentation for wxLongLong class
+// Purpose:     interface of wxLongLong
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -30,10 +30,10 @@
     If a native (i.e. supported directly by the compiler) 64 bit integer type was
     found to exist, @e wxLongLong_t macro will be defined to correspond to it.
     Also, in this case only, two additional macros will be defined:
-    wxLongLongFmtSpec for printing 64 bit integers
+    wxLongLongFmtSpec() for printing 64 bit integers
     using the standard @c printf() function (but see also
     wxLongLong::ToString for a more portable solution) and
-    wxLL for defining 64 bit integer compile-time constants.
+    wxLL() for defining 64 bit integer compile-time constants.
 
     @library{wxbase}
     @category{data}
@@ -133,10 +133,12 @@ public:
 
     /**
         Assignment operator from unsigned long long. The sign bit will be copied too.
-        This function is new since wxWidgets version 2.7.0
+        
+        @wxsince{2.7.0}
     */
     wxLongLong& operator operator=(const wxULongLong& ll);
 };
+
 
 
 // ============================================================================
@@ -155,7 +157,7 @@ public:
         #endif
     @endcode
 
-    @see wxLL
+    @see wxLL()
 */
 
 
@@ -169,7 +171,7 @@ public:
         #endif
     @endcode
 
-    @see wxLL, wxLongLong
+    @see wxLL(), wxLongLong
 */
 wxLongLong_t wxULL(number);
 
@@ -183,7 +185,7 @@ wxLongLong_t wxULL(number);
         #endif
     @endcode
 
-    @see wxULL, wxLongLong
+    @see wxULL(), wxLongLong
 */
 wxLongLong_t wxLL(number);
 

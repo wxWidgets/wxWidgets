@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mstream.h
-// Purpose:     documentation for wxMemoryOutputStream class
+// Purpose:     interface of wxMemoryOutputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -14,8 +14,7 @@
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxStreamBuffer
+    @see wxStreamBuffer
 */
 class wxMemoryOutputStream : public wxOutputStream
 {
@@ -46,6 +45,7 @@ public:
 };
 
 
+
 /**
     @class wxMemoryInputStream
     @wxheader{mstream.h}
@@ -54,8 +54,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxStreamBuffer, wxMemoryOutputStream
+    @see wxStreamBuffer, wxMemoryOutputStream
 */
 class wxMemoryInputStream : public wxInputStream
 {
@@ -85,3 +84,4 @@ public:
     */
     wxStreamBuffer* GetInputStreamBuffer() const;
 };
+

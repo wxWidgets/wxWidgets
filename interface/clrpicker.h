@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        clrpicker.h
-// Purpose:     documentation for wxColourPickerCtrl class
+// Purpose:     interface of wxColourPickerCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -35,8 +35,7 @@
     @category{miscpickers}
     @appearance{colourpickerctrl.png}
 
-    @seealso
-    wxColourDialog, wxColourPickerEvent
+    @see wxColourDialog, wxColourPickerEvent
 */
 class wxColourPickerCtrl : public wxPickerBase
 {
@@ -97,6 +96,7 @@ public:
 };
 
 
+
 /**
     @class wxColourPickerEvent
     @wxheader{clrpicker.h}
@@ -107,8 +107,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxColourPickerCtrl
+    @see wxColourPickerCtrl
 */
 class wxColourPickerEvent : public wxCommandEvent
 {
@@ -129,3 +128,4 @@ public:
     */
     void SetColour(const wxColour& pos);
 };
+

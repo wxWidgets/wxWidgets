@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        archive.h
-// Purpose:     documentation for wxArchiveInputStream class
+// Purpose:     interface of wxArchiveInputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -23,8 +23,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", wxArchiveEntry,
+    @see @ref overview_wxarc "Archive formats such as zip", wxArchiveEntry,
     wxArchiveOutputStream
 */
 class wxArchiveInputStream : public wxFilterInputStream
@@ -55,6 +54,7 @@ public:
 };
 
 
+
 /**
     @class wxArchiveOutputStream
     @wxheader{archive.h}
@@ -70,8 +70,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", wxArchiveEntry,
+    @see @ref overview_wxarc "Archive formats such as zip", wxArchiveEntry,
     wxArchiveInputStream
 */
 class wxArchiveOutputStream : public wxFilterOutputStream
@@ -151,6 +150,7 @@ public:
 };
 
 
+
 /**
     @class wxArchiveEntry
     @wxheader{archive.h}
@@ -163,9 +163,8 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", @ref overview_wxarcgeneric
-    "Generic archive programming", wxArchiveInputStream, wxArchiveOutputStream, wxArchiveNotifier
+    @see @ref overview_wxarc "Archive formats such as zip", @ref
+    overview_wxarcgeneric "Generic archive programming", wxArchiveInputStream, wxArchiveOutputStream, wxArchiveNotifier
 */
 class wxArchiveEntry : public wxObject
 {
@@ -250,7 +249,7 @@ public:
 
     //@{
     /**
-        Sets the notifier for this entry.
+        Sets the notifier() for this entry.
         Whenever the wxArchiveInputStream updates
         this entry, it will then invoke the associated
         notifier's wxArchiveNotifier::OnEntryUpdated
@@ -263,6 +262,7 @@ public:
     void UnsetNotifier();
     //@}
 };
+
 
 
 /**
@@ -289,9 +289,8 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", @ref overview_wxarcgeneric
-    "Generic archive programming", wxArchiveEntry, wxArchiveInputStream, wxArchiveOutputStream, wxFilterClassFactory
+    @see @ref overview_wxarc "Archive formats such as zip", @ref
+    overview_wxarcgeneric "Generic archive programming", wxArchiveEntry, wxArchiveInputStream, wxArchiveOutputStream, wxFilterClassFactory
 */
 class wxArchiveClassFactory : public wxObject
 {
@@ -401,6 +400,7 @@ public:
 };
 
 
+
 /**
     @class wxArchiveNotifier
     @wxheader{archive.h}
@@ -423,9 +423,8 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarcnoseek "Archives on non-seekable streams", wxArchiveEntry,
-    wxArchiveInputStream, wxArchiveOutputStream
+    @see @ref overview_wxarcnoseek "Archives on non-seekable streams",
+    wxArchiveEntry, wxArchiveInputStream, wxArchiveOutputStream
 */
 class wxArchiveNotifier
 {
@@ -435,6 +434,7 @@ public:
     */
     void OnEntryUpdated(class wxArchiveEntry& entry);
 };
+
 
 
 /**
@@ -535,8 +535,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxArchiveEntry, wxArchiveInputStream, wxArchiveOutputStream
+    @see wxArchiveEntry, wxArchiveInputStream, wxArchiveOutputStream
 */
 class wxArchiveIterator
 {
@@ -564,3 +563,4 @@ public:
     wxArchiveIterator operator++(int );
     //@}
 };
+

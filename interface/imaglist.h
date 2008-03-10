@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imaglist.h
-// Purpose:     documentation for wxImageList class
+// Purpose:     interface of wxImageList
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -21,8 +21,7 @@
     @library{wxcore}
     @category{gdi}
 
-    @seealso
-    wxTreeCtrl, wxListCtrl
+    @see wxTreeCtrl, wxListCtrl
 */
 class wxImageList : public wxObject
 {
@@ -206,3 +205,4 @@ public:
     bool Replace(int index, const wxIcon& icon);
     //@}
 };
+

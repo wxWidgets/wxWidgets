@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        filectrl.h
-// Purpose:     documentation for wxFileCtrl class
+// Purpose:     interface of wxFileCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -33,8 +33,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxGenericDirCtrl
+    @see wxGenericDirCtrl
 */
 class wxFileCtrl : public wxWindow
 {
@@ -170,6 +169,7 @@ public:
 };
 
 
+
 /**
     @class wxFileCtrlEvent
     @wxheader{filectrl.h}
@@ -212,3 +212,4 @@ public:
     */
     wxFileCtrlEvent::SetFiles(const wxArrayString files);
 };
+

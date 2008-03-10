@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        url.h
-// Purpose:     documentation for wxURL class
+// Purpose:     interface of wxURL
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -21,8 +21,7 @@
     @library{wxnet}
     @category{net}
 
-    @seealso
-    wxSocketBase, wxProtocol
+    @see wxSocketBase, wxProtocol
 */
 class wxURL : public wxURI
 {
@@ -130,3 +129,4 @@ public:
     */
     wxURLError SetURL(const wxString& url);
 };
+

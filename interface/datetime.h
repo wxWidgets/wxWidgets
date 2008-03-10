@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        datetime.h
-// Purpose:     documentation for wxDateTime class
+// Purpose:     interface of wxDateTime
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,8 +15,7 @@
     @library{wxbase}
     @category{data}
 
-    @seealso
-    @ref overview_wxdatetimeoverview "Date classes overview", wxTimeSpan,
+    @see @ref overview_wxdatetimeoverview "Date classes overview", wxTimeSpan,
     wxDateSpan, wxCalendarCtrl
 */
 class wxDateTime
@@ -205,7 +204,7 @@ public:
     static int ConvertYearToBC(int year);
 
     /**
-        These functions carry out arithmetics on the wxDateTime
+        These functions carry out arithmetics() on the wxDateTime
         objects. As explained in the overview, either wxTimeSpan or wxDateSpan may be
         added to wxDateTime, hence all functions are overloaded to accept both
         arguments.
@@ -361,7 +360,8 @@ public:
     /**
         Returns the object having the same date component as this one but time of
         00:00:00.
-        This function is new since wxWidgets version 2.8.2
+        
+        @wxsince{2.8.2}
         
         @see ResetTime()
     */
@@ -1153,6 +1153,7 @@ public:
 };
 
 
+
 /**
     @class wxDateTimeWorkDays
     @wxheader{datetime.h}
@@ -1166,6 +1167,7 @@ class wxDateTimeWorkDays
 public:
 
 };
+
 
 
 /**
@@ -1210,8 +1212,7 @@ public:
     @library{wxbase}
     @category{data}
 
-    @seealso
-    @ref overview_wxdatetimeoverview "Date classes overview", wxDateTime
+    @see @ref overview_wxdatetimeoverview "Date classes overview", wxDateTime
 */
 class wxDateSpan
 {
@@ -1399,6 +1400,7 @@ public:
 };
 
 
+
 /**
     @class wxTimeSpan
     @wxheader{datetime.h}
@@ -1408,8 +1410,7 @@ public:
     @library{wxbase}
     @category{data}
 
-    @seealso
-    @ref overview_wxdatetimeoverview "Date classes overview", wxDateTime
+    @see @ref overview_wxdatetimeoverview "Date classes overview", wxDateTime
 */
 class wxTimeSpan
 {
@@ -1728,6 +1729,7 @@ public:
 };
 
 
+
 /**
     @class wxDateTimeHolidayAuthority
     @wxheader{datetime.h}
@@ -1741,3 +1743,4 @@ class wxDateTimeHolidayAuthority
 public:
 
 };
+

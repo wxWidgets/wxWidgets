@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        hashmap.h
-// Purpose:     documentation for wxHashMap class
+// Purpose:     interface of wxHashMap
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -103,3 +103,4 @@ public:
     */
     size_type size() const;
 };
+

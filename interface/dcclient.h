@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcclient.h
-// Purpose:     documentation for wxPaintDC class
+// Purpose:     interface of wxPaintDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,8 +29,7 @@
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    wxDC, wxMemoryDC, wxPaintDC, wxWindowDC, wxScreenDC
+    @see wxDC, wxMemoryDC, wxPaintDC, wxWindowDC, wxScreenDC
 */
 class wxPaintDC : public wxWindowDC
 {
@@ -40,6 +39,7 @@ public:
     */
     wxPaintDC(wxWindow* window);
 };
+
 
 
 /**
@@ -59,8 +59,7 @@ public:
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    wxDC, wxMemoryDC, wxPaintDC, wxWindowDC, wxScreenDC
+    @see wxDC, wxMemoryDC, wxPaintDC, wxWindowDC, wxScreenDC
 */
 class wxClientDC : public wxWindowDC
 {
@@ -70,6 +69,7 @@ public:
     */
     wxClientDC(wxWindow* window);
 };
+
 
 
 /**
@@ -92,8 +92,7 @@ public:
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    wxDC, wxMemoryDC, wxPaintDC, wxClientDC, wxScreenDC
+    @see wxDC, wxMemoryDC, wxPaintDC, wxClientDC, wxScreenDC
 */
 class wxWindowDC : public wxDC
 {
@@ -103,3 +102,4 @@ public:
     */
     wxWindowDC(wxWindow* window);
 };
+

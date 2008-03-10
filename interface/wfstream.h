@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wfstream.h
-// Purpose:     documentation for wxTempFileOutputStream class
+// Purpose:     interface of wxTempFileOutputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,7 @@
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxTempFile
+    @see wxTempFile
 */
 class wxTempFileOutputStream : public wxOutputStream
 {
@@ -50,6 +49,7 @@ public:
 };
 
 
+
 /**
     @class wxFFileOutputStream
     @wxheader{wfstream.h}
@@ -66,8 +66,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxBufferedOutputStream, wxFFileInputStream, wxFileInputStream
+    @see wxBufferedOutputStream, wxFFileInputStream, wxFileInputStream
 */
 class wxFFileOutputStream : public wxOutputStream
 {
@@ -94,6 +93,7 @@ public:
 };
 
 
+
 /**
     @class wxFileOutputStream
     @wxheader{wfstream.h}
@@ -110,8 +110,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxBufferedOutputStream, wxFileInputStream, wxFFileInputStream
+    @see wxBufferedOutputStream, wxFileInputStream, wxFFileInputStream
 */
 class wxFileOutputStream : public wxOutputStream
 {
@@ -137,6 +136,7 @@ public:
 };
 
 
+
 /**
     @class wxFileInputStream
     @wxheader{wfstream.h}
@@ -153,8 +153,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxBufferedInputStream, wxFileOutputStream, wxFFileOutputStream
+    @see wxBufferedInputStream, wxFileOutputStream, wxFFileOutputStream
 */
 class wxFileInputStream : public wxInputStream
 {
@@ -180,6 +179,7 @@ public:
 };
 
 
+
 /**
     @class wxFFileInputStream
     @wxheader{wfstream.h}
@@ -196,8 +196,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxBufferedInputStream, wxFFileOutputStream, wxFileOutputStream
+    @see wxBufferedInputStream, wxFFileOutputStream, wxFileOutputStream
 */
 class wxFFileInputStream : public wxInputStream
 {
@@ -225,6 +224,7 @@ public:
 };
 
 
+
 /**
     @class wxFFileStream
     @wxheader{wfstream.h}
@@ -233,8 +233,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxStreamBuffer
+    @see wxStreamBuffer
 */
 class wxFFileStream : public wxFFileOutputStream
 {
@@ -247,6 +246,7 @@ public:
 };
 
 
+
 /**
     @class wxFileStream
     @wxheader{wfstream.h}
@@ -255,8 +255,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxStreamBuffer
+    @see wxStreamBuffer
 */
 class wxFileStream : public wxFileOutputStream
 {
@@ -267,3 +266,4 @@ public:
     */
     wxFileStream(const wxString& iofileName);
 };
+

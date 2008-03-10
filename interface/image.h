@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        image.h
-// Purpose:     documentation for wxImageHandler class
+// Purpose:     interface of wxImageHandler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -22,8 +22,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxImage, wxInitAllImageHandlers
+    @see wxImage, wxInitAllImageHandlers()
 */
 class wxImageHandler : public wxObject
 {
@@ -137,6 +136,7 @@ public:
 };
 
 
+
 /**
     @class wxImage
     @wxheader{image.h}
@@ -161,8 +161,7 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @seealso
-    wxBitmap, wxInitAllImageHandlers
+    @see wxBitmap, wxInitAllImageHandlers()
 */
 class wxImage : public wxObject
 {
@@ -869,7 +868,7 @@ public:
         This function is called by wxWidgets on startup, and shouldn't be called by
         the user.
         
-        @see wxImageHandler, wxInitAllImageHandlers, wxQuantize
+        @see wxImageHandler, wxInitAllImageHandlers(), wxQuantize
     */
     static void InitStandardHandlers();
 
@@ -1461,6 +1460,7 @@ public:
     */
     wxImage operator =(const wxImage& image);
 };
+
 
 
 // ============================================================================

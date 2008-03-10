@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        graphics.h
-// Purpose:     documentation for wxGraphicsPath class
+// Purpose:     interface of wxGraphicsPath
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -157,6 +157,7 @@ public:
 };
 
 
+
 /**
     @class wxGraphicsObject
     @wxheader{graphics.h}
@@ -167,8 +168,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxGraphicsBrush, wxGraphicsPen, wxGraphicsMatrix, wxGraphicsPath
+    @see wxGraphicsBrush, wxGraphicsPen, wxGraphicsMatrix, wxGraphicsPath
 */
 class wxGraphicsObject : public wxObject
 {
@@ -186,6 +186,7 @@ public:
 };
 
 
+
 /**
     @class wxGraphicsContext
     @wxheader{graphics.h}
@@ -198,8 +199,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxGraphicsRenderer:: CreateContext
+    @see wxGraphicsRenderer:: CreateContext
 */
 class wxGraphicsContext : public wxGraphicsObject
 {
@@ -458,6 +458,7 @@ public:
 };
 
 
+
 /**
     @class wxGraphicsRenderer
     @wxheader{graphics.h}
@@ -552,6 +553,7 @@ public:
 };
 
 
+
 /**
     @class wxGraphicsBrush
     @wxheader{graphics.h}
@@ -565,6 +567,7 @@ class wxGraphicsBrush : public wxGraphicsObject
 public:
 
 };
+
 
 
 /**
@@ -582,6 +585,7 @@ public:
 };
 
 
+
 /**
     @class wxGraphicsPen
     @wxheader{graphics.h}
@@ -595,6 +599,7 @@ class wxGraphicsPen : public wxGraphicsObject
 public:
 
 };
+
 
 
 /**
@@ -680,3 +685,4 @@ public:
     */
     void Translate(wxDouble dx, wxDouble dy);
 };
+

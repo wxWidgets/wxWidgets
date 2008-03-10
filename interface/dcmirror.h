@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcmirror.h
-// Purpose:     documentation for wxMirrorDC class
+// Purpose:     interface of wxMirrorDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -32,3 +32,4 @@ public:
     */
     wxMirrorDC(wxDC& dc, bool mirror);
 };
+

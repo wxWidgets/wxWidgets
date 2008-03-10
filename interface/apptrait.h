@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        apptrait.h
-// Purpose:     documentation for wxAppTraits class
+// Purpose:     interface of wxAppTraits
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -25,8 +25,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxappoverview "wxApp overview", wxApp
+    @see @ref overview_wxappoverview "wxApp overview", wxApp
 */
 class wxAppTraits
 {
@@ -34,7 +33,7 @@ public:
     /**
         Called by wxWidgets to create the default configuration object for the
         application. The default version creates a registry-based
-        wxRegConfig class under MSW and
+        wxRegConfig() class under MSW and
         wxFileConfig under all other platforms. The
         wxApp wxApp::GetAppName and
         wxApp::GetVendorName methods are used to determine the
@@ -114,3 +113,4 @@ public:
     */
     virtual bool ShowAssertDialog(const wxString& msg);
 };
+

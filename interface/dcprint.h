@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcprint.h
-// Purpose:     documentation for wxPrinterDC class
+// Purpose:     interface of wxPrinterDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxcore}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", wxDC
+    @see @ref overview_printingoverview "Printing framework overview", wxDC
 */
 class wxPrinterDC : public wxDC
 {
@@ -52,3 +51,4 @@ public:
     */
     wxRect wxPrinterDC::GetPaperRect();
 };
+

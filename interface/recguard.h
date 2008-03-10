@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        recguard.h
-// Purpose:     documentation for wxRecursionGuardFlag class
+// Purpose:     interface of wxRecursionGuardFlag
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -25,6 +25,7 @@ class wxRecursionGuardFlag
 public:
 
 };
+
 
 
 /**
@@ -93,3 +94,4 @@ public:
     */
     bool IsInside() const;
 };
+

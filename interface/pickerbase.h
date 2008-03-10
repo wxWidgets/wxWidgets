@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        pickerbase.h
-// Purpose:     documentation for wxPickerBase class
+// Purpose:     interface of wxPickerBase
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -28,8 +28,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxColourPickerCtrl
+    @see wxColourPickerCtrl
 */
 class wxPickerBase : public wxControl
 {
@@ -107,3 +106,4 @@ public:
     */
     void SetTextCtrlProportion(int prop);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/helpdata.h
-// Purpose:     documentation for wxHtmlHelpData class
+// Purpose:     interface of wxHtmlHelpData
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -66,3 +66,4 @@ public:
     */
     void SetTempDir(const wxString& path);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        variant.h
-// Purpose:     documentation for wxVariant class
+// Purpose:     interface of wxVariant
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -99,8 +99,7 @@
     @library{wxbase}
     @category{data}
 
-    @seealso
-    wxVariantData
+    @see wxVariantData
 */
 class wxVariant : public wxObject
 {
@@ -405,6 +404,7 @@ public:
 };
 
 
+
 /**
     @class wxVariantData
     @wxheader{variant.h}
@@ -430,8 +430,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxVariant
+    @see wxVariant
 */
 class wxVariantData
 {
@@ -503,3 +502,4 @@ public:
     */
     classname* wxGetVariantCast();
 };
+

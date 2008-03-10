@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dynarray.h
-// Purpose:     documentation for wxArray<T> class
+// Purpose:     interface of wxArray<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -149,8 +149,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxcontaineroverview, wxListT, wxVectorT
+    @see @ref overview_wxcontaineroverview, wxListT(), wxVectorT()
 */
 class wxArray<T>
 {
@@ -169,7 +168,7 @@ public:
         because the other array types never take ownership of their elements. Also note
         that you cannot append more than one pointer as reusing it would lead to
         deleting it twice (or more) and hence to a crash.
-        You may also use WX_APPEND_ARRAY macro to append all
+        You may also use WX_APPEND_ARRAY() macro to append all
         elements of one array to another one but it is more efficient to use
         @a copies parameter and modify the elements in place later if you plan to
         append a lot of items.
@@ -200,9 +199,9 @@ public:
         
         wxArray::SetCount
         
-        WX_APPEND_ARRAY
+        WX_APPEND_ARRAY()
         
-        WX_PREPEND_ARRAY
+        WX_PREPEND_ARRAY()
     */
 
 
@@ -349,27 +348,27 @@ public:
         least) forward declared for WX_DEFINE_ARRAY, WX_DEFINE_SORTED_ARRAY and
         WX_DECLARE_OBJARRAY macros and must be fully declared before you use
         WX_DEFINE_OBJARRAY macro.
-        WX_DEFINE_ARRAY
+        WX_DEFINE_ARRAY()
         
-        WX_DEFINE_EXPORTED_ARRAY
+        WX_DEFINE_EXPORTED_ARRAY()
         
-        WX_DEFINE_USER_EXPORTED_ARRAY
+        WX_DEFINE_USER_EXPORTED_ARRAY()
         
-        WX_DEFINE_SORTED_ARRAY
+        WX_DEFINE_SORTED_ARRAY()
         
-        WX_DEFINE_SORTED_EXPORTED_ARRAY
+        WX_DEFINE_SORTED_EXPORTED_ARRAY()
         
-        WX_DEFINE_SORTED_USER_EXPORTED_ARRAY
+        WX_DEFINE_SORTED_USER_EXPORTED_ARRAY()
         
-        WX_DECLARE_EXPORTED_OBJARRAY
+        WX_DECLARE_EXPORTED_OBJARRAY()
         
-        WX_DECLARE_USER_EXPORTED_OBJARRAY
+        WX_DECLARE_USER_EXPORTED_OBJARRAY()
         
-        WX_DEFINE_OBJARRAY
+        WX_DEFINE_OBJARRAY()
         
-        WX_DEFINE_EXPORTED_OBJARRAY
+        WX_DEFINE_EXPORTED_OBJARRAY()
         
-        WX_DEFINE_USER_EXPORTED_OBJARRAY
+        WX_DEFINE_USER_EXPORTED_OBJARRAY()
         To slightly complicate the matters even further, the operator - defined by
         default for the array iterators by these macros only makes sense if the array
         element type is not a pointer itself and, although it still works, this
@@ -393,17 +392,17 @@ public:
         To create an array of a simple type, simply append the type you want in CAPS to
         the array definition.
         For example, for an integer array, you'd use one of the following variants:
-        WX_DEFINE_ARRAY_INT
+        WX_DEFINE_ARRAY_INT()
         
-        WX_DEFINE_EXPORTED_ARRAY_INT
+        WX_DEFINE_EXPORTED_ARRAY_INT()
         
-        WX_DEFINE_USER_EXPORTED_ARRAY_INT
+        WX_DEFINE_USER_EXPORTED_ARRAY_INT()
         
-        WX_DEFINE_SORTED_ARRAY_INT
+        WX_DEFINE_SORTED_ARRAY_INT()
         
-        WX_DEFINE_SORTED_EXPORTED_ARRAY_INT
+        WX_DEFINE_SORTED_EXPORTED_ARRAY_INT()
         
-        WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_INT
+        WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_INT()
     */
 
 
@@ -445,11 +444,11 @@ public:
         array equal to @a item is removed, an assert failure will result from an
         attempt to remove an item which doesn't exist in the array.
         When an element is removed from wxObjArray it is deleted by the array - use
-        Detach if you don't want this to happen. On the
+        Detach() if you don't want this to happen. On the
         other hand, when an object is removed from a wxArray nothing happens - you
         should delete it manually if required:
         
-        See also WX_CLEAR_ARRAY macro which deletes all
+        See also WX_CLEAR_ARRAY() macro which deletes all
         elements of a wxArray (supposed to contain pointers).
     */
     Remove(T item);
@@ -457,17 +456,17 @@ public:
     /**
         Removes @a count elements starting at @a index from the array. When an
         element is removed from wxObjArray it is deleted by the array - use
-        Detach if you don't want this to happen. On
+        Detach() if you don't want this to happen. On
         the other hand, when an object is removed from a wxArray nothing happens -
         you should delete it manually if required:
         
-        See also WX_CLEAR_ARRAY macro which deletes all
+        See also WX_CLEAR_ARRAY() macro which deletes all
         elements of a wxArray (supposed to contain pointers).
     */
     RemoveAt(size_t index, size_t count = 1);
 
     /**
-        WX_CLEAR_ARRAY
+        WX_CLEAR_ARRAY()
         
         wxArray::Empty
         
@@ -540,7 +539,7 @@ public:
         needed for exporting an array from a user DLL.
         Example:
         
-        You must use WX_DEFINE_OBJARRAY macro to define
+        You must use WX_DEFINE_OBJARRAY() macro to define
         the array class - otherwise you would get link errors.
     */
     WX_DECLARE_OBJARRAY(T, name);
@@ -568,7 +567,7 @@ public:
     //@{
     /**
         This macro defines the methods of the array class @a name not defined by the
-        WX_DECLARE_OBJARRAY macro. You must include the
+        WX_DECLARE_OBJARRAY() macro. You must include the
         file wx/arrimpl.cpp before using this macro and you must have the full
         declaration of the class of array elements in scope! If you forget to do the
         first, the error will be caught by the compiler, but, unfortunately, many
@@ -624,10 +623,11 @@ public:
     /**
         The wxObjArray destructor deletes all the items owned by the array. This is not
         done by wxArray and wxSortedArray versions - you may use
-        WX_CLEAR_ARRAY macro for this.
+        WX_CLEAR_ARRAY() macro for this.
     */
     ~wxArray();
     ~wxSortedArray();
     ~wxObjArray();
     //@}
 };
+

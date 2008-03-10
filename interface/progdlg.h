@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        progdlg.h
-// Purpose:     documentation for wxProgressDialog class
+// Purpose:     interface of wxProgressDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -113,3 +113,4 @@ public:
     virtual bool Update(int value, const wxString& newmsg = "",
                         bool* skip = NULL);
 };
+

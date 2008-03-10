@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msw/registry.h
-// Purpose:     documentation for wxRegKey class
+// Purpose:     interface of wxRegKey
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -187,3 +187,4 @@ public:
                   const wxMemoryBuffer& buf);
     //@}
 };
+

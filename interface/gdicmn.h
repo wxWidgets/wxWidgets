@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gdicmn.h
-// Purpose:     documentation for wxRealPoint class
+// Purpose:     interface of wxRealPoint
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,7 @@
     @library{wxcore}
     @category{data}
 
-    @seealso
-    wxPoint
+    @see wxPoint
 */
 class wxRealPoint
 {
@@ -36,6 +35,7 @@ public:
 };
 
 
+
 /**
     @class wxRect
     @wxheader{gdicmn.h}
@@ -45,8 +45,7 @@ public:
     @library{wxcore}
     @category{data}
 
-    @seealso
-    wxPoint, wxSize
+    @see wxPoint, wxSize
 */
 class wxRect
 {
@@ -324,6 +323,7 @@ public:
 };
 
 
+
 /**
     @class wxBrushList
     @wxheader{gdicmn.h}
@@ -333,8 +333,7 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @seealso
-    wxBrush
+    @see wxBrush
 */
 class wxBrushList : public wxList
 {
@@ -360,6 +359,7 @@ public:
 };
 
 
+
 /**
     @class wxPoint
     @wxheader{gdicmn.h}
@@ -372,8 +372,7 @@ public:
     @library{wxcore}
     @category{data}
 
-    @seealso
-    wxRealPoint
+    @see wxRealPoint
 */
 class wxPoint
 {
@@ -419,6 +418,7 @@ public:
 };
 
 
+
 /**
     @class wxColourDatabase
     @wxheader{gdicmn.h}
@@ -436,8 +436,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxColour
+    @see wxColour
 */
 class wxColourDatabase
 {
@@ -474,6 +473,7 @@ public:
 };
 
 
+
 /**
     @class wxFontList
     @wxheader{gdicmn.h}
@@ -491,8 +491,7 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @seealso
-    wxFont
+    @see wxFont
 */
 class wxFontList : public wxList
 {
@@ -516,6 +515,7 @@ public:
 };
 
 
+
 /**
     @class wxSize
     @wxheader{gdicmn.h}
@@ -535,8 +535,7 @@ public:
     @library{wxcore}
     @category{data}
 
-    @seealso
-    wxPoint, wxRealPoint
+    @see wxPoint, wxRealPoint
 */
 class wxSize
 {
@@ -666,6 +665,7 @@ public:
 };
 
 
+
 /**
     @class wxPenList
     @wxheader{gdicmn.h}
@@ -700,8 +700,7 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @seealso
-    wxPen
+    @see wxPen
 */
 class wxPenList
 {
@@ -733,6 +732,7 @@ public:
                            int style);
     //@}
 };
+
 
 
 // ============================================================================
@@ -772,7 +772,7 @@ wxSize wxGetDisplaySizeMM();
     for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
     avoid using @c #ifdefs when creating icons.
 
-    @see @ref overview_wxbitmapoverview, wxBITMAP
+    @see @ref overview_wxbitmapoverview, wxBITMAP()
 */
 wxICON();
 
@@ -786,7 +786,7 @@ bool wxColourDisplay();
     for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
     avoid using @c #ifdefs when creating bitmaps.
 
-    @see @ref overview_wxbitmapoverview, wxICON
+    @see @ref overview_wxbitmapoverview, wxICON()
 */
 #define wxBITMAP()     /* implementation is private */
 

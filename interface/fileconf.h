@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fileconf.h
-// Purpose:     documentation for wxFileConfig class
+// Purpose:     interface of wxFileConfig
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -23,8 +23,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxFileConfig::Save
+    @see wxFileConfig::Save
 */
 class wxFileConfig : public wxConfigBase
 {
@@ -80,7 +79,8 @@ public:
         @c SetUmask(0077).
         This function doesn't do anything on non-Unix platforms.
         
-        @see wxCHANGE_UMASK
+        @see wxCHANGE_UMASK()
     */
     void SetUmask(int mode);
 };
+

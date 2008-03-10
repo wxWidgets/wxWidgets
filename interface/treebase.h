@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        treebase.h
-// Purpose:     documentation for wxTreeItemId class
+// Purpose:     interface of wxTreeItemId
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,8 +15,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxTreeCtrl, wxTreeItemData, @ref overview_wxtreectrloverview "wxTreeCtrl
+    @see wxTreeCtrl, wxTreeItemData, @ref overview_wxtreectrloverview "wxTreeCtrl
     overview"
 */
 class wxTreeItemId
@@ -43,3 +42,4 @@ public:
     const bool operator !=(const wxTreeItemId& item) const;
     //@}
 };
+

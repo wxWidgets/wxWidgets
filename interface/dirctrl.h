@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dirctrl.h
-// Purpose:     documentation for wxGenericDirCtrl class
+// Purpose:     interface of wxGenericDirCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -172,3 +172,4 @@ public:
     */
     void ShowHidden(bool show);
 };
+

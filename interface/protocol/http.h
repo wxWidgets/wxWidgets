@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        protocol/http.h
-// Purpose:     documentation for wxHTTP class
+// Purpose:     interface of wxHTTP
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -14,8 +14,7 @@
     @library{wxnet}
     @category{net}
 
-    @seealso
-    wxSocketBase, wxURL
+    @see wxSocketBase, wxURL
 */
 class wxHTTP : public wxProtocol
 {
@@ -63,3 +62,4 @@ public:
     */
     void SetHeader(const wxString& header, const wxString& h_data);
 };
+

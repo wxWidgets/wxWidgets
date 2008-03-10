@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        base64.h
-// Purpose:     documentation for global functions
+// Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -13,7 +13,7 @@
     other ones return the output as wxString. There is no error return for these
     functions except for the first one which returns @c wxCONV_FAILED if the
     output buffer is too small. To allocate the buffer of the correct size, use
-    wxBase64EncodedSize or call this function with
+    wxBase64EncodedSize() or call this function with
     @a dst set to @NULL -- it will then return the necessary buffer size.
 
     @param dst
@@ -37,14 +37,14 @@ wxString wxBase64Encode(const wxMemoryBuffer& buf);
 /**
 Returns the size of the buffer necessary to contain the data encoded in a
 base64 string of length @e srcLen. This can be useful for allocating a
-buffer to be passed to wxBase64Decode.
+buffer to be passed to wxBase64Decode().
 */
 size_t wxBase64DecodedSize(size_t srcLen);
 
 /**
     Returns the length of the string with base64 representation of a buffer of
     specified size @e len. This can be useful for allocating the buffer passed
-    to wxBase64Encode.
+    to wxBase64Encode().
 */
 size_t wxBase64EncodedSize(size_t len);
 
@@ -53,7 +53,7 @@ size_t wxBase64EncodedSize(size_t len);
     These function decode a Base64-encoded string. The first version is a raw
     decoding function and decodes the data into the provided buffer @a dst of
     the given size @e dstLen. An error is returned if the buffer is not large
-    enough -- that is not at least wxBase64DecodedSize(srcLen)
+    enough -- that is not at least wxBase64DecodedSize(srcLen)()
     bytes. The second version allocates memory internally and returns it as
     wxMemoryBuffer and is recommended for normal use.
     The first version returns the number of bytes written to the buffer or the

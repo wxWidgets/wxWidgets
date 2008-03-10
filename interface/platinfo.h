@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        platinfo.h
-// Purpose:     documentation for wxPlatformInfo class
+// Purpose:     interface of wxPlatformInfo
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,8 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxGetOSVersion, wxIsPlatformLittleEndian, wxIsPlatform64Bit, wxAppTraits
+    @see wxGetOSVersion(), wxIsPlatformLittleEndian(), wxIsPlatform64Bit(),
+    wxAppTraits
 */
 class wxPlatformInfo : public wxObject
 {
@@ -100,7 +100,7 @@ public:
     /**
         Returns the run-time major version of the OS associated with this
         wxPlatformInfo instance.
-        See wxGetOsVersion for more info.
+        See wxGetOsVersion() for more info.
         
         @see CheckOSVersion()
     */
@@ -109,7 +109,7 @@ public:
     /**
         Returns the run-time minor version of the OS associated with this
         wxPlatformInfo instance.
-        See wxGetOsVersion for more info.
+        See wxGetOsVersion() for more info.
         
         @see CheckOSVersion()
     */
@@ -241,3 +241,4 @@ public:
     */
     bool operator==(const wxPlatformInfo& t) const;
 };
+

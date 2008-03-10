@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        icon.h
-// Purpose:     documentation for wxIcon class
+// Purpose:     interface of wxIcon
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -25,11 +25,9 @@
     @category{gdi}
 
     @stdobjects
-    Objects:
-    wxNullIcon
+    ::Objects:, ::wxNullIcon,
 
-    @seealso
-    @ref overview_wxbitmapoverview "Bitmap and icon overview", @ref
+    @see @ref overview_wxbitmapoverview "Bitmap and icon overview", @ref
     overview_supportedbitmapformats "supported bitmap file formats", wxDC::DrawIcon, wxCursor
 */
 class wxIcon : public wxBitmap
@@ -37,7 +35,7 @@ class wxIcon : public wxBitmap
 public:
     //@{
     /**
-        Loads an icon from the specified location.
+        Loads an icon from the specified location().
         
         @param bits
             Specifies an array of pixel values.
@@ -314,3 +312,17 @@ public:
     */
     wxIcon operator =(const wxIcon& icon);
 };
+
+
+/**
+    FIXME
+*/
+wxIcon Objects:
+;
+
+/**
+    FIXME
+*/
+wxIcon wxNullIcon;
+
+

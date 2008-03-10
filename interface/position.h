@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        position.h
-// Purpose:     documentation for wxPosition class
+// Purpose:     interface of wxPosition
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxPoint, wxSize
+    @see wxPoint, wxSize
 */
 class wxPosition
 {
@@ -78,3 +77,4 @@ public:
     */
     void SetRow(int row);
 };
+

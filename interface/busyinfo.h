@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        busyinfo.h
-// Purpose:     documentation for wxBusyInfo class
+// Purpose:     interface of wxBusyInfo
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -70,3 +70,4 @@ public:
     */
     ~wxBusyInfo();
 };
+

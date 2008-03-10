@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        valgen.h
-// Purpose:     documentation for wxGenericValidator class
+// Purpose:     interface of wxGenericValidator
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,8 +29,7 @@
     @library{wxcore}
     @category{validator}
 
-    @seealso
-    @ref overview_validatoroverview "Validator overview", wxValidator,
+    @see @ref overview_validatoroverview "Validator overview", wxValidator,
     wxTextValidator
 */
 class wxGenericValidator : public wxValidator
@@ -77,3 +76,4 @@ public:
     */
     virtual bool TransferToWindow();
 };
+

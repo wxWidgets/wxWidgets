@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        odcombo.h
-// Purpose:     documentation for wxOwnerDrawnComboBox class
+// Purpose:     interface of wxOwnerDrawnComboBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -41,8 +41,7 @@
     @category{ctrl}
     @appearance{ownerdrawncombobox.png}
 
-    @seealso
-    wxComboCtrl, wxComboBox, wxVListBox, wxCommandEvent
+    @see wxComboCtrl, wxComboBox, wxVListBox, wxCommandEvent
 */
 class wxOwnerDrawnComboBox : public wxComboCtrl
 {
@@ -181,3 +180,4 @@ public:
     */
     wxCoord OnMeasureItemWidth(size_t item) const;
 };
+

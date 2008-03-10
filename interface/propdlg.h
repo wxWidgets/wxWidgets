@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        propdlg.h
-// Purpose:     documentation for wxPropertySheetDialog class
+// Purpose:     interface of wxPropertySheetDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -179,3 +179,4 @@ public:
     */
     void SetSheetStyle(long style);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        stopwatch.h
-// Purpose:     documentation for wxStopWatch class
+// Purpose:     interface of wxStopWatch
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -28,8 +28,7 @@
     @library{wxbase}
     @category{misc}
 
-    @seealso
-    wxTimer
+    @see wxTimer
 */
 class wxStopWatch
 {
@@ -66,6 +65,7 @@ public:
     */
     long Time() const;
 };
+
 
 
 // ============================================================================

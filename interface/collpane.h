@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        collpane.h
-// Purpose:     documentation for wxCollapsiblePaneEvent class
+// Purpose:     interface of wxCollapsiblePaneEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -16,8 +16,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxCollapsiblePane
+    @see wxCollapsiblePane
 */
 class wxCollapsiblePaneEvent : public wxCommandEvent
 {
@@ -40,6 +39,7 @@ public:
     */
     void SetCollapsed(bool collapsed);
 };
+
 
 
 /**
@@ -96,8 +96,7 @@ public:
     @category{ctrl}
     @appearance{collapsiblepane.png}
 
-    @seealso
-    wxPanel, wxCollapsiblePaneEvent
+    @see wxPanel, wxCollapsiblePaneEvent
 */
 class wxCollapsiblePane : public wxControl
 {
@@ -170,3 +169,4 @@ public:
     */
     bool IsExpanded() const;
 };
+

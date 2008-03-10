@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        protocol/ftp.h
-// Purpose:     documentation for wxFTP class
+// Purpose:     interface of wxFTP
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -75,8 +75,7 @@
     @library{wxnet}
     @category{net}
 
-    @seealso
-    wxSocketBase
+    @see wxSocketBase
 */
 class wxFTP : public wxProtocol
 {
@@ -249,3 +248,4 @@ public:
     */
     void SetUser(const wxString& user);
 };
+

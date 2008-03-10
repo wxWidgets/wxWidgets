@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        radiobox.h
-// Purpose:     documentation for wxRadioBox class
+// Purpose:     interface of wxRadioBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -35,8 +35,7 @@
     @category{ctrl}
     @appearance{radiobox.png}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxRadioButton, wxCheckBox
+    @see @ref overview_eventhandlingoverview, wxRadioButton, wxCheckBox
 */
 class wxRadioBox : public wxControlWithItems
 {
@@ -297,3 +296,4 @@ public:
     */
     void SetStringSelection(const wxString& string);
 };
+

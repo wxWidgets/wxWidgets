@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tipdlg.h
-// Purpose:     documentation for wxTipProvider class
+// Purpose:     interface of wxTipProvider
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -10,20 +10,19 @@
     @class wxTipProvider
     @wxheader{tipdlg.h}
 
-    This is the class used together with wxShowTip function.
+    This is the class used together with wxShowTip() function.
     It must implement wxTipProvider::GetTip function and return the
     current tip from it (different tip each time it is called).
 
     You will never use this class yourself, but you need it to show startup tips
     with wxShowTip. Also, if you want to get the tips text from elsewhere than a
     simple text file, you will want to derive a new class from wxTipProvider and
-    use it instead of the one returned by wxCreateFileTipProvider.
+    use it instead of the one returned by wxCreateFileTipProvider().
 
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    @ref overview_tipsoverview "Startup tips overview", ::wxShowTip
+    @see @ref overview_tipsoverview "Startup tips overview", ::wxShowTip
 */
 class wxTipProvider
 {
@@ -40,7 +39,7 @@ public:
         Returns the index of the current tip (i.e. the one which would be returned by
         GetTip).
         The program usually remembers the value returned by this function after calling
-        wxShowTip. Note that it is not the same as the value which
+        wxShowTip(). Note that it is not the same as the value which
         was passed to wxShowTip + 1 because the user might have pressed the "Next"
         button in the tip dialog.
     */
@@ -65,13 +64,14 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
 
 /**
     This function creates a wxTipProvider which may be
-    used with wxShowTip.
+    used with wxShowTip().
 
     @param filename
         The name of the file containing the tips, one per line

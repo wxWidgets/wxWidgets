@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cshelp.h
-// Purpose:     documentation for wxHelpProvider class
+// Purpose:     interface of wxHelpProvider
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -20,8 +20,7 @@
     @library{wxcore}
     @category{help}
 
-    @seealso
-    wxContextHelp, wxContextHelpButton, wxSimpleHelpProvider,
+    @see wxContextHelp, wxContextHelpButton, wxSimpleHelpProvider,
     wxHelpControllerHelpProvider, wxWindow::SetHelpText, wxWindow::GetHelpTextAtPoint
 */
 class wxHelpProvider
@@ -98,6 +97,7 @@ public:
 };
 
 
+
 /**
     @class wxHelpControllerHelpProvider
     @wxheader{cshelp.h}
@@ -119,9 +119,8 @@ public:
     @library{wxcore}
     @category{help}
 
-    @seealso
-    wxHelpProvider, wxSimpleHelpProvider, wxContextHelp, wxWindow::SetHelpText,
-    wxWindow::GetHelpTextAtPoint
+    @see wxHelpProvider, wxSimpleHelpProvider, wxContextHelp,
+    wxWindow::SetHelpText, wxWindow::GetHelpTextAtPoint
 */
 class wxHelpControllerHelpProvider : public wxSimpleHelpProvider
 {
@@ -142,6 +141,7 @@ public:
     */
     void SetHelpController(wxHelpControllerBase* hc);
 };
+
 
 
 /**
@@ -180,8 +180,7 @@ public:
     @library{wxcore}
     @category{help}
 
-    @seealso
-    wxHelpEvent, wxHelpController, wxContextHelpButton
+    @see wxHelpEvent, wxHelpController, wxContextHelpButton
 */
 class wxContextHelp : public wxObject
 {
@@ -214,6 +213,7 @@ public:
 };
 
 
+
 /**
     @class wxContextHelpButton
     @wxheader{cshelp.h}
@@ -232,8 +232,7 @@ public:
     @library{wxcore}
     @category{help}
 
-    @seealso
-    wxBitmapButton, wxContextHelp
+    @see wxBitmapButton, wxContextHelp
 */
 class wxContextHelpButton : public wxBitmapButton
 {
@@ -265,6 +264,7 @@ public:
 };
 
 
+
 /**
     @class wxSimpleHelpProvider
     @wxheader{cshelp.h}
@@ -276,8 +276,7 @@ public:
     @library{wxcore}
     @category{help}
 
-    @seealso
-    wxHelpProvider, wxHelpControllerHelpProvider, wxContextHelp,
+    @see wxHelpProvider, wxHelpControllerHelpProvider, wxContextHelp,
     wxWindow::SetHelpText, wxWindow::GetHelpTextAtPoint
 */
 class wxSimpleHelpProvider : public wxHelpProvider
@@ -285,3 +284,4 @@ class wxSimpleHelpProvider : public wxHelpProvider
 public:
 
 };
+

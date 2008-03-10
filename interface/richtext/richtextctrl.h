@@ -102,6 +102,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextCtrl
     @headerfile richtextctrl.h wx/richtext/richtextctrl.h
@@ -1403,3 +1404,4 @@ public:
     */
     long XYToPosition(long x, long y) const;
 };
+

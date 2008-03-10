@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        filesys.h
-// Purpose:     documentation for wxFileSystem class
+// Purpose:     interface of wxFileSystem
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -12,14 +12,13 @@
 
     This class provides an interface for opening files on different
     file systems. It can handle absolute and/or local filenames.
-    It uses a system of handlers to
+    It uses a system of handlers() to
     provide access to user-defined virtual file systems.
 
     @library{wxbase}
     @category{vfs}
 
-    @seealso
-    wxFileSystemHandler, wxFSFile, Overview
+    @see wxFileSystemHandler, wxFSFile, Overview()
 */
 class wxFileSystem : public wxObject
 {
@@ -31,7 +30,7 @@ public:
 
     /**
         This static function adds new handler into the list of
-        handlers which provide access to virtual FS.
+        handlers() which provide access to virtual FS.
         Note that if two handlers for the same protocol are added, the last one added
         takes precedence.
     */
@@ -77,7 +76,7 @@ public:
                         const wxString& file);
 
     /**
-        Works like wxFindFirstFile. Returns name of the first
+        Works like wxFindFirstFile(). Returns name of the first
         filename (within filesystem's current path) that matches @e wildcard. @a flags
         may be one of
         wxFILE (only files), wxDIR (only directories) or 0 (both).
@@ -126,6 +125,7 @@ public:
 };
 
 
+
 /**
     @class wxFSFile
     @wxheader{filesys.h}
@@ -143,8 +143,7 @@ public:
     @library{wxbase}
     @category{vfs}
 
-    @seealso
-    wxFileSystemHandler, wxFileSystem, Overview
+    @see wxFileSystemHandler, wxFileSystem, Overview()
 */
 class wxFSFile : public wxObject
 {
@@ -216,6 +215,7 @@ public:
 };
 
 
+
 /**
     @class wxFileSystemHandler
     @wxheader{filesys.h}
@@ -228,7 +228,7 @@ public:
     of opening the file: GetProtocol, GetLeftLocation, GetRightLocation,
     GetAnchor, GetMimeTypeFromExt.
 
-    Please have a look at overview if you don't know how locations
+    Please have a look at overview() if you don't know how locations
     are constructed.
 
     Also consult @ref overview_fs "list of available handlers".
@@ -239,8 +239,7 @@ public:
     @library{wxbase}
     @category{vfs}
 
-    @seealso
-    wxFileSystem, wxFSFile, Overview
+    @see wxFileSystem, wxFSFile, Overview()
 */
 class wxFileSystemHandler : public wxObject
 {
@@ -260,7 +259,7 @@ public:
     virtual bool CanOpen(const wxString& location);
 
     /**
-        Works like wxFindFirstFile. Returns name of the first
+        Works like wxFindFirstFile(). Returns name of the first
         filename (within filesystem's current path) that matches @e wildcard. @a flags
         may be one of
         wxFILE (only files), wxDIR (only directories) or 0 (both).
@@ -324,3 +323,4 @@ public:
     virtual wxFSFile* OpenFile(wxFileSystem& fs,
                                const wxString& location);
 };
+

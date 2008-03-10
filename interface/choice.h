@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        choice.h
-// Purpose:     documentation for wxChoice class
+// Purpose:     interface of wxChoice
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,8 +29,7 @@
     @category{ctrl}
     @appearance{choice.png}
 
-    @seealso
-    wxListBox, wxComboBox, wxCommandEvent
+    @see wxListBox, wxComboBox, wxCommandEvent
 */
 class wxChoice : public wxControlWithItems
 {
@@ -118,7 +117,8 @@ public:
         That is, while the dropdown list is shown, it returns the currently selected
         item in it. When it is not shown, its result is the same as for the other
         function.
-        This function is new since wxWidgets version 2.6.2 (before this version
+        
+        @wxsince{2.6.2} (before this version
         wxControlWithItems::GetSelection itself behaved like
         this).
     */
@@ -132,3 +132,4 @@ public:
     */
     void SetColumns(int n = 1);
 };
+

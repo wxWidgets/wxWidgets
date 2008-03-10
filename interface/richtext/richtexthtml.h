@@ -108,3 +108,4 @@ public:
     */
     void SetTemporaryImageLocations(const wxArrayString& locations);
 };
+

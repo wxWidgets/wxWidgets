@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/htmlwin.h
-// Purpose:     documentation for wxHtmlWindow class
+// Purpose:     interface of wxHtmlWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -36,8 +36,7 @@
     @library{wxhtml}
     @category{html}
 
-    @seealso
-    wxHtmlLinkEvent, wxHtmlCellEvent
+    @see wxHtmlLinkEvent, wxHtmlCellEvent
 */
 class wxHtmlWindow : public wxScrolledWindow
 {
@@ -395,6 +394,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlLinkEvent
     @headerfile htmlwin.h wx/html/htmlwin.h
@@ -418,6 +418,7 @@ public:
     */
     const wxHtmlLinkInfo GetLinkInfo() const;
 };
+
 
 
 /**
@@ -465,3 +466,4 @@ public:
     */
     bool SetLinkClicked(bool linkclicked);
 };
+

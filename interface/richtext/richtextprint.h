@@ -156,6 +156,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextPrintout
     @headerfile richtextprint.h wx/richtext/richtextprint.h
@@ -232,6 +233,7 @@ public:
     */
     void SetRichTextBuffer(wxRichTextBuffer* buffer);
 };
+
 
 
 /**
@@ -392,3 +394,4 @@ public:
     */
     void SetTitle(const wxString& title);
 };
+

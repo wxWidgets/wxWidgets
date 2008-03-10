@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        statusbr.h
-// Purpose:     documentation for wxStatusBar class
+// Purpose:     interface of wxStatusBar
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -31,8 +31,7 @@
     @library{wxcore}
     @category{miscwnd}
 
-    @seealso
-    wxFrame, @ref overview_samplestatbar "Status bar sample"
+    @see wxFrame, @ref overview_samplestatbar "Status bar sample"
 */
 class wxStatusBar : public wxWindow
 {
@@ -231,3 +230,4 @@ public:
     */
     virtual void SetStatusWidths(int n, int* widths);
 };
+

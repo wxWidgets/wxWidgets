@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        treebook.h
-// Purpose:     documentation for wxTreebookEvent class
+// Purpose:     interface of wxTreebookEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,8 +24,7 @@
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxNotebookEvent, wxTreebook
+    @see wxNotebookEvent, wxTreebook
 */
 class wxTreebookEvent : public wxNotifyEvent
 {
@@ -48,6 +47,7 @@ public:
     */
     int GetSelection() const;
 };
+
 
 
 /**
@@ -73,8 +73,7 @@ public:
     @library{wxcore}
     @category{miscwnd}
 
-    @seealso
-    wxNotebook, wxTreebookEvent, wxImageList, @ref overview_samplenotebook
+    @see wxNotebook, wxTreebookEvent, wxImageList, @ref overview_samplenotebook
     "notebook sample"
 */
 class wxTreebook : public wxBookCtrl overview
@@ -255,3 +254,4 @@ public:
     */
     int SetSelection(size_t n);
 };
+

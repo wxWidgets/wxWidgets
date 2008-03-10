@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fontdlg.h
-// Purpose:     documentation for wxFontDialog class
+// Purpose:     interface of wxFontDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,8 +15,7 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @seealso
-    Overview, wxFontData, wxGetFontFromUser
+    @see Overview(), wxFontData, wxGetFontFromUser()
 */
 class wxFontDialog : public wxDialog
 {
@@ -62,6 +61,7 @@ public:
     */
     int ShowModal();
 };
+
 
 
 // ============================================================================

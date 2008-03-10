@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        notifmsg.h
-// Purpose:     documentation for wxNotificationMessage class
+// Purpose:     interface of wxNotificationMessage
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -86,3 +86,4 @@ public:
     */
     bool Show(int timeout = Timeout_Auto);
 };
+

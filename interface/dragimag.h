@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dragimag.h
-// Purpose:     documentation for wxDragImage class
+// Purpose:     interface of wxDragImage
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -195,3 +195,4 @@ public:
                                  const wxRect& sourceRect,
                                  const wxRect& destRect) const;
 };
+

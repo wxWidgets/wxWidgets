@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        toplevel.h
-// Purpose:     documentation for wxTopLevelWindow class
+// Purpose:     interface of wxTopLevelWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxcore}
     @category{managedwnd}
 
-    @seealso
-    wxTopLevelWindow::SetTransparent
+    @see wxTopLevelWindow::SetTransparent
 */
 class wxTopLevelWindow : public wxWindow
 {
@@ -366,3 +365,4 @@ public:
     */
     void UseNativeDecorationsByDefault(bool native = true);
 };
+

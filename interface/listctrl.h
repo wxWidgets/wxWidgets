@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        listctrl.h
-// Purpose:     documentation for wxListCtrl class
+// Purpose:     interface of wxListCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -40,7 +40,7 @@
     @b Mac Note: Starting with 2.8, wxListCtrl uses a native implementation for
     report mode, and uses a generic implementation for other modes. You can use the
     generic implementation for report mode as well by setting the
-    mac.listctrl.always_use_generic wxSystemOption to
+    mac.listctrl.always_use_generic wxSystemOption() to
     1.
 
     @beginStyleTable
@@ -86,9 +86,8 @@
     @category{ctrl}
     @appearance{listctrl.png}
 
-    @seealso
-    @ref overview_wxlistctrloverview "wxListCtrl overview", wxListView, wxListBox,
-    wxTreeCtrl, wxImageList, wxListEvent, wxListItem
+    @see @ref overview_wxlistctrloverview "wxListCtrl overview", wxListView,
+    wxListBox, wxTreeCtrl, wxImageList, wxListEvent, wxListItem
 */
 class wxListCtrl : public wxControl
 {
@@ -442,7 +441,8 @@ public:
         for GetItemRect().
         @a code can be one of @c wxLIST_RECT_BOUNDS,
         @c wxLIST_RECT_ICON or @c wxLIST_RECT_LABEL.
-        This function is new since wxWidgets version 2.7.0
+        
+        @wxsince{2.7.0}
     */
     bool GetSubItemRect(long item, long subItem, wxRect& rect,
                         int code = wxLIST_RECT_BOUNDS) const;
@@ -874,7 +874,8 @@ The m_stateMask and m_state members take flags from the following:
         be either an integer or a pointer cast to the @c wxUIntPtr type which is
         guaranteed to be large enough to be able to contain all integer types and
         pointers.
-        This function is new since wxWidgets version 2.8.4
+        
+        @wxsince{2.8.4}
     */
     bool SetItemPtrData(long item, wxUIntPtr data);
 
@@ -932,6 +933,7 @@ The m_stateMask and m_state members take flags from the following:
 };
 
 
+
 /**
     @class wxListEvent
     @wxheader{listctrl.h}
@@ -941,8 +943,7 @@ The m_stateMask and m_state members take flags from the following:
     @library{wxbase}
     @category{events}
 
-    @seealso
-    wxListCtrl
+    @see wxListCtrl
 */
 class wxListEvent : public wxNotifyEvent
 {
@@ -1029,6 +1030,7 @@ public:
 };
 
 
+
 /**
     @class wxListItemAttr
     @wxheader{listctrl.h}
@@ -1039,8 +1041,8 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxlistctrloverview "wxListCtrl overview", wxListCtrl, wxListItem
+    @see @ref overview_wxlistctrloverview "wxListCtrl overview", wxListCtrl,
+    wxListItem
 */
 class wxListItemAttr
 {
@@ -1103,6 +1105,7 @@ public:
 };
 
 
+
 /**
     @class wxListView
     @wxheader{listctrl.h}
@@ -1121,8 +1124,7 @@ public:
     @category{ctrl}
     @appearance{listview.png}
 
-    @seealso
-    wxListView::SetColumnImage
+    @see wxListView::SetColumnImage
 */
 class wxListView : public wxListCtrl
 {
@@ -1198,6 +1200,7 @@ public:
     */
     void SetColumnImage(int col, int image);
 };
+
 
 
 /**
@@ -1407,3 +1410,4 @@ public:
     */
     void SetWidth(int width);
 };
+

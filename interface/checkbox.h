@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        checkbox.h
-// Purpose:     documentation for wxCheckBox class
+// Purpose:     interface of wxCheckBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -39,8 +39,7 @@
     @category{ctrl}
     @appearance{checkbox.png}
 
-    @seealso
-    wxRadioButton, wxCommandEvent
+    @see wxRadioButton, wxCommandEvent
 */
 class wxCheckBox : public wxControl
 {
@@ -148,3 +147,4 @@ public:
     */
     void SetValue(bool state);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cmdproc.h
-// Purpose:     documentation for wxCommand class
+// Purpose:     interface of wxCommand
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    Overview
+    @see Overview()
 */
 class wxCommand : public wxObject
 {
@@ -81,6 +80,7 @@ public:
 };
 
 
+
 /**
     @class wxCommandProcessor
     @wxheader{cmdproc.h}
@@ -92,8 +92,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxcommandprocessoroverview "wxCommandProcessor overview",
+    @see @ref overview_wxcommandprocessoroverview "wxCommandProcessor overview",
     wxCommand
 */
 class wxCommandProcessor : public wxObject
@@ -226,3 +225,4 @@ public:
     */
     virtual bool Undo();
 };
+

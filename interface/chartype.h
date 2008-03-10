@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        chartype.h
-// Purpose:     documentation for global functions
+// Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -38,7 +38,7 @@ const wxChar* wxT(const char* s);
     current build, but using it can be beneficial in performance-sensitive code to
     do the conversion at compile-time instead.
 
-    @see wxT
+    @see wxT()
 */
 wxStringCharType wxS(char ch);
 const wxStringCharType* wxS(const char* s);

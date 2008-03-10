@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sashwin.h
-// Purpose:     documentation for wxSashWindow class
+// Purpose:     interface of wxSashWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -41,8 +41,7 @@
     @library{wxadv}
     @category{miscwnd}
 
-    @seealso
-    wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview
+    @see wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview
 */
 class wxSashWindow : public wxWindow
 {
@@ -169,6 +168,7 @@ public:
 };
 
 
+
 /**
     @class wxSashEvent
     @wxheader{sashwin.h}
@@ -179,8 +179,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxSashWindow, @ref overview_eventhandlingoverview
+    @see wxSashWindow, @ref overview_eventhandlingoverview
 */
 class wxSashEvent : public wxCommandEvent
 {
@@ -211,3 +210,4 @@ public:
     */
     wxSashEdgePosition GetEdge() const;
 };
+

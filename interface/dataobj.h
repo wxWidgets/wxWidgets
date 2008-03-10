@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dataobj.h
-// Purpose:     documentation for wxCustomDataObject class
+// Purpose:     interface of wxCustomDataObject
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -30,8 +30,7 @@
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    wxDataObject
+    @see wxDataObject
 */
 class wxCustomDataObject : public wxDataObjectSimple
 {
@@ -91,6 +90,7 @@ public:
 };
 
 
+
 /**
     @class wxDataObjectComposite
     @wxheader{dataobj.h}
@@ -111,8 +111,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxdndoverview "Clipboard and drag and drop overview",
+    @see @ref overview_wxdndoverview "Clipboard and drag and drop overview",
     wxDataObject, wxDataObjectSimple, wxFileDataObject, wxTextDataObject, wxBitmapDataObject
 */
 class wxDataObjectComposite : public wxDataObject
@@ -139,6 +138,7 @@ public:
 };
 
 
+
 /**
     @class wxDataObjectSimple
     @wxheader{dataobj.h}
@@ -162,8 +162,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
+    @see @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
     overview_samplednd "DnD sample", wxFileDataObject, wxTextDataObject, wxBitmapDataObject
 */
 class wxDataObjectSimple : public wxDataObject
@@ -208,6 +207,7 @@ public:
 };
 
 
+
 /**
     @class wxBitmapDataObject
     @wxheader{dataobj.h}
@@ -227,8 +227,7 @@ public:
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    @ref overview_wxdndoverview "Clipboard and drag and drop overview",
+    @see @ref overview_wxdndoverview "Clipboard and drag and drop overview",
     wxDataObject, wxDataObjectSimple, wxFileDataObject, wxTextDataObject, wxDataObject
 */
 class wxBitmapDataObject : public wxDataObjectSimple
@@ -255,6 +254,7 @@ public:
     */
     virtual void SetBitmap(const wxBitmap& bitmap);
 };
+
 
 
 /**
@@ -331,8 +331,7 @@ public:
     @library{wxbase}
     @category{dnd}
 
-    @seealso
-    @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
+    @see @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
     overview_samplednd "DnD sample", wxDataObject
 */
 class wxDataFormat
@@ -377,6 +376,7 @@ public:
 };
 
 
+
 /**
     @class wxURLDataObject
     @wxheader{dataobj.h}
@@ -392,8 +392,8 @@ public:
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    @ref overview_wxdndoverview "Clipboard and drag and drop overview", wxDataObject
+    @see @ref overview_wxdndoverview "Clipboard and drag and drop overview",
+    wxDataObject
 */
 class wxURLDataObject
 {
@@ -414,6 +414,7 @@ public:
     */
     void SetURL(const wxString& url);
 };
+
 
 
 /**
@@ -531,7 +532,7 @@ public:
     translation under Windows is not yet finished.
 
     @b wxPython note: At this time this class is not directly usable from wxPython.
-    Derive a class from wxPyDataObjectSimple
+    Derive a class from wxPyDataObjectSimple()
     instead.
 
     @b wxPerl note: This class is not currently usable from wxPerl; you may
@@ -540,8 +541,7 @@ public:
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
+    @see @ref overview_wxdndoverview "Clipboard and drag and drop overview", @ref
     overview_samplednd "DnD sample", wxFileDataObject, wxTextDataObject, wxBitmapDataObject, wxCustomDataObject, wxDropTarget, wxDropSource, wxTextDropTarget, wxFileDropTarget
 */
 class wxDataObject
@@ -597,6 +597,7 @@ public:
 };
 
 
+
 /**
     @class wxTextDataObject
     @wxheader{dataobj.h}
@@ -624,8 +625,7 @@ public:
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    @ref overview_wxdndoverview "Clipboard and drag and drop overview",
+    @see @ref overview_wxdndoverview "Clipboard and drag and drop overview",
     wxDataObject, wxDataObjectSimple, wxFileDataObject, wxBitmapDataObject
 */
 class wxTextDataObject : public wxDataObjectSimple
@@ -664,6 +664,7 @@ public:
 };
 
 
+
 /**
     @class wxFileDataObject
     @wxheader{dataobj.h}
@@ -684,8 +685,7 @@ public:
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    wxDataObject, wxDataObjectSimple, wxTextDataObject, wxBitmapDataObject,
+    @see wxDataObject, wxDataObjectSimple, wxTextDataObject, wxBitmapDataObject,
     wxDataObject
 */
 class wxFileDataObject : public wxDataObjectSimple
@@ -702,7 +702,8 @@ public:
     virtual void AddFile(const wxString& file);
 
     /**
-        Returns the array of file names.
+        Returns the array() of file names.
     */
     const wxArrayString GetFilenames() const;
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        vscroll.h
-// Purpose:     documentation for wxVarHScrollHelper class
+// Purpose:     interface of wxVarHScrollHelper
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -22,8 +22,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
+    @see wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
 */
 class wxVarHScrollHelper : public wxVarScrollHelperBase
 {
@@ -135,6 +134,7 @@ public:
 };
 
 
+
 /**
     @class wxVarVScrollHelper
     @wxheader{vscroll.h}
@@ -151,8 +151,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
+    @see wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
 */
 class wxVarVScrollHelper : public wxVarScrollHelperBase
 {
@@ -260,6 +259,7 @@ public:
 };
 
 
+
 /**
     @class wxVarScrollHelperBase
     @wxheader{vscroll.h}
@@ -279,8 +279,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
+    @see wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
 */
 class wxVarScrollHelperBase
 {
@@ -441,6 +440,7 @@ public:
 };
 
 
+
 /**
     @class wxVScrolledWindow
     @wxheader{vscroll.h}
@@ -472,8 +472,7 @@ public:
     @library{wxcore}
     @category{miscwnd}
 
-    @seealso
-    wxHScrolledWindow, wxHVScrolledWindow
+    @see wxHScrolledWindow, wxHVScrolledWindow
 */
 class wxVScrolledWindow : public wxPanel
 {
@@ -555,6 +554,7 @@ public:
 };
 
 
+
 /**
     @class wxHVScrolledWindow
     @wxheader{vscroll.h}
@@ -586,8 +586,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxHScrolledWindow, wxVScrolledWindow
+    @see wxHScrolledWindow, wxVScrolledWindow
 */
 class wxHVScrolledWindow : public wxPanel
 {
@@ -637,6 +636,7 @@ public:
 };
 
 
+
 /**
     @class wxVarHVScrollHelper
     @wxheader{vscroll.h}
@@ -660,8 +660,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
+    @see wxHScrolledWindow, wxHVScrolledWindow, wxVScrolledWindow
 */
 class wxVarHVScrollHelper : public wxVarVScrollHelper
 {
@@ -774,6 +773,7 @@ public:
 };
 
 
+
 /**
     @class wxHScrolledWindow
     @wxheader{vscroll.h}
@@ -804,8 +804,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxHVScrolledWindow, wxVScrolledWindow
+    @see wxHVScrolledWindow, wxVScrolledWindow
 */
 class wxHScrolledWindow : public wxPanel
 {
@@ -852,3 +851,4 @@ public:
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        bmpbuttn.h
-// Purpose:     documentation for wxBitmapButton class
+// Purpose:     interface of wxBitmapButton
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -11,7 +11,7 @@
     @wxheader{bmpbuttn.h}
 
     A bitmap button is a control that contains a bitmap.
-    It may be placed on a @ref overview_wxdialog "dialog box" or panel, or indeed
+    It may be placed on a @ref overview_wxdialog "dialog box" or panel(), or indeed
     almost any other window.
 
     @beginStyleTable
@@ -40,8 +40,7 @@
     @category{ctrl}
     @appearance{bitmapbutton.png}
 
-    @seealso
-    wxButton
+    @see wxButton
 */
 class wxBitmapButton : public wxButton
 {
@@ -184,7 +183,8 @@ public:
 
     /**
         Sets the bitmap to be shown when the mouse is over the button.
-        This function is new since wxWidgets version 2.7.0 and the hover bitmap is
+        
+        @wxsince{2.7.0} and the hover bitmap is
         currently only supported in wxMSW.
         
         @see GetBitmapHover()
@@ -212,3 +212,4 @@ public:
     */
     void SetBitmapSelected(const wxBitmap& bitmap);
 };
+

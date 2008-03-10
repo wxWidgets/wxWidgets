@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fontenum.h
-// Purpose:     documentation for wxFontEnumerator class
+// Purpose:     interface of wxFontEnumerator
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -13,7 +13,7 @@
     wxFontEnumerator enumerates either all available fonts on the system or only
     the ones with given attributes - either only fixed-width (suited for use in
     programs such as terminal emulators and the like) or the fonts available in
-    the given encoding.
+    the given encoding().
 
     To do this, you just have to call one of EnumerateXXX() functions - either
     wxFontEnumerator::EnumerateFacenames or
@@ -26,9 +26,8 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxfontencodingoverview, @ref overview_samplefont "Font sample",
-    wxFont, wxFontMapper
+    @see @ref overview_wxfontencodingoverview, @ref overview_samplefont "Font
+    sample", wxFont, wxFontMapper
 */
 class wxFontEnumerator
 {
@@ -83,3 +82,4 @@ public:
     virtual bool OnFontEncoding(const wxString& font,
                                 const wxString& encoding);
 };
+

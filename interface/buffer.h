@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        buffer.h
-// Purpose:     documentation for wxMemoryBuffer class
+// Purpose:     interface of wxMemoryBuffer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -110,3 +110,4 @@ public:
     */
     void UngetWriteBuf(size_t sizeUsed);
 };
+

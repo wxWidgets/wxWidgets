@@ -99,3 +99,4 @@ public:
     */
     bool ImportXML(wxRichTextBuffer* buffer, wxXmlNode* node);
 };
+

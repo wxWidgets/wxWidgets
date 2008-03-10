@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        textdlg.h
-// Purpose:     documentation for wxPasswordEntryDialog class
+// Purpose:     interface of wxPasswordEntryDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,14 +17,15 @@
     @library{wxbase}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxpasswordentrydialogoverview "wxPassowrdEntryDialog overview"
+    @see @ref overview_wxpasswordentrydialogoverview "wxPassowrdEntryDialog
+    overview"
 */
 class wxPasswordEntryDialog : public wxTextEntryDialog
 {
 public:
 
 };
+
 
 
 /**
@@ -38,8 +39,7 @@ public:
     @library{wxbase}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxtextentrydialogoverview "wxTextEntryDialog overview"
+    @see @ref overview_wxtextentrydialogoverview "wxTextEntryDialog overview"
 */
 class wxTextEntryDialog : public wxDialog
 {
@@ -91,6 +91,7 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -111,7 +112,7 @@ wxString wxGetTextFromUser(const wxString& message,
                            bool centre = true);
 
 /**
-    Similar to wxGetTextFromUser but the text entered
+    Similar to wxGetTextFromUser() but the text entered
     in the dialog is not shown on screen but replaced with stars. This is intended
     to be used for entering passwords as the function name implies.
 */

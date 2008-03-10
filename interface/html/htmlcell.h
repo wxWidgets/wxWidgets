@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/htmlcell.h
-// Purpose:     documentation for wxHtmlColourCell class
+// Purpose:     interface of wxHtmlColourCell
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -53,6 +53,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlWidgetCell
     @headerfile htmlcell.h wx/html/htmlcell.h
@@ -86,6 +87,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlCell
     @headerfile htmlcell.h wx/html/htmlcell.h
@@ -102,8 +104,7 @@ public:
     @library{wxhtml}
     @category{FIXME}
 
-    @seealso
-    @ref overview_cells "Cells Overview", wxHtmlContainerCell
+    @see @ref overview_cells "Cells Overview", wxHtmlContainerCell
 */
 class wxHtmlCell : public wxObject
 {
@@ -312,6 +313,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlContainerCell
     @headerfile htmlcell.h wx/html/htmlcell.h
@@ -322,8 +324,7 @@ public:
     @library{wxhtml}
     @category{FIXME}
 
-    @seealso
-    @ref overview_cells "Cells Overview"
+    @see @ref overview_cells "Cells Overview"
 */
 class wxHtmlContainerCell : public wxHtmlCell
 {
@@ -676,6 +677,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlLinkInfo
     @headerfile htmlcell.h wx/html/htmlcell.h
@@ -727,3 +729,4 @@ public:
     */
     wxString GetTarget();
 };
+

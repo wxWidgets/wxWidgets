@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mimetype.h
-// Purpose:     documentation for wxMimeTypesManager class
+// Purpose:     interface of wxMimeTypesManager
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -38,8 +38,7 @@
     @library{wxbase}
     @category{misc}
 
-    @seealso
-    wxFileType
+    @see wxFileType
 */
 class wxMimeTypesManager
 {
@@ -156,6 +155,7 @@ public:
 };
 
 
+
 /**
     @class wxFileType
     @wxheader{mimetype.h}
@@ -192,8 +192,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxMimeTypesManager
+    @see wxMimeTypesManager
 */
 class wxFileType
 {
@@ -294,7 +293,7 @@ public:
     /**
         With the first version of this method, if the @true is returned, the
         string pointed to by @a command is filled with the command which must be
-        executed (see wxExecute) in order to open the file of the
+        executed (see wxExecute()) in order to open the file of the
         given type. In this case, the name of the file as well as any other parameters
         is retrieved from MessageParameters()
         class.
@@ -310,7 +309,7 @@ public:
 
     /**
         If the function returns @true, the string pointed to by @a command is filled
-        with the command which must be executed (see wxExecute) in
+        with the command which must be executed (see wxExecute()) in
         order to print the file of the given type. The name of the file is
         retrieved from MessageParameters() class.
     */
@@ -342,3 +341,4 @@ public:
         ever derive from MessageParameters class for a Windows-only program.
     */
 };
+

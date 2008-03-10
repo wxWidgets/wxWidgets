@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mdi.h
-// Purpose:     documentation for wxMDIClientWindow class
+// Purpose:     interface of wxMDIClientWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -16,8 +16,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxMDIChildFrame, wxMDIParentFrame, wxFrame
+    @see wxMDIChildFrame, wxMDIParentFrame, wxFrame
 */
 class wxMDIClientWindow : public wxWindow
 {
@@ -51,6 +50,7 @@ public:
     */
     bool CreateClient(wxMDIParentFrame* parent, long style = 0);
 };
+
 
 
 /**
@@ -101,8 +101,7 @@ public:
     @library{wxcore}
     @category{managedwnd}
 
-    @seealso
-    wxMDIChildFrame, wxMDIClientWindow, wxFrame, wxDialog
+    @see wxMDIChildFrame, wxMDIClientWindow, wxFrame, wxDialog
 */
 class wxMDIParentFrame : public wxFrame
 {
@@ -286,6 +285,7 @@ public:
 };
 
 
+
 /**
     @class wxMDIChildFrame
     @wxheader{mdi.h}
@@ -323,8 +323,7 @@ public:
     @library{wxcore}
     @category{managedwnd}
 
-    @seealso
-    wxMDIClientWindow, wxMDIParentFrame, wxFrame
+    @see wxMDIClientWindow, wxMDIParentFrame, wxFrame
 */
 class wxMDIChildFrame : public wxFrame
 {
@@ -403,3 +402,4 @@ public:
     */
     void Restore();
 };
+

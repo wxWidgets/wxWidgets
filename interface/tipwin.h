@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tipwin.h
-// Purpose:     documentation for wxTipWindow class
+// Purpose:     interface of wxTipWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -69,3 +69,4 @@ public:
     */
     void SetTipWindowPtr(wxTipWindow** windowPtr);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/htmltag.h
-// Purpose:     documentation for wxHtmlTag class
+// Purpose:     interface of wxHtmlTag
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -127,3 +127,4 @@ public:
     wxString ScanParam(const wxString& par, const wxChar* format,
                        void* value) const;
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        splash.h
-// Purpose:     documentation for wxSplashScreen class
+// Purpose:     interface of wxSplashScreen
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -83,3 +83,4 @@ public:
     */
     void OnCloseWindow(wxCloseEvent& event);
 };
+

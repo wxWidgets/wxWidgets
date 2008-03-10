@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        ptr_shrd.h
-// Purpose:     documentation for wxSharedPtr<T> class
+// Purpose:     interface of wxSharedPtr<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -12,14 +12,13 @@
 
     A smart pointer with non-intrusive reference counting. It is modeled
     after @b boost::shared_ptr and can be used with STL containers
-    and wxVector - unlike @b std::auto_ptr
-    and wxScopedPtr.
+    and wxVector() - unlike @b std::auto_ptr
+    and wxScopedPtr().
 
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxScopedPtr, wxWeakRef, wxObjectDataPtr
+    @see wxScopedPtr, wxWeakRef, wxObjectDataPtr
 */
 class wxSharedPtr<T>
 {
@@ -83,3 +82,4 @@ public:
     */
     long use_count() const;
 };
+

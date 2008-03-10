@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        grid.h
-// Purpose:     documentation for wxGridCellFloatRenderer class
+// Purpose:     interface of wxGridCellFloatRenderer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,8 +15,7 @@
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellStringRenderer,
+    @see wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellStringRenderer,
     wxGridCellBoolRenderer
 */
 class wxGridCellFloatRenderer : public wxGridCellStringRenderer
@@ -55,6 +54,7 @@ public:
     */
     void SetWidth(int width);
 };
+
 
 
 /**
@@ -276,6 +276,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellEditor
     @wxheader{grid.h}
@@ -289,8 +290,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellTextEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
+    @see wxGridCellTextEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellNumberEditor, wxGridCellChoiceEditor
 */
 class wxGridCellEditor
@@ -383,6 +383,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellTextEditor
     @wxheader{grid.h}
@@ -392,8 +393,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
+    @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellNumberEditor, wxGridCellChoiceEditor
 */
 class wxGridCellTextEditor : public wxGridCellEditor
@@ -412,6 +412,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellStringRenderer
     @wxheader{grid.h}
@@ -422,8 +423,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellFloatRenderer,
+    @see wxGridCellRenderer, wxGridCellNumberRenderer, wxGridCellFloatRenderer,
     wxGridCellBoolRenderer
 */
 class wxGridCellStringRenderer : public wxGridCellRenderer
@@ -436,6 +436,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellChoiceEditor
     @wxheader{grid.h}
@@ -445,8 +446,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
+    @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellNumberEditor
 */
 class wxGridCellChoiceEditor : public wxGridCellEditor
@@ -473,6 +473,7 @@ public:
     */
     void SetParameters(const wxString& params);
 };
+
 
 
 /**
@@ -528,6 +529,7 @@ public:
     */
     void SetRow(int row);
 };
+
 
 
 /**
@@ -614,6 +616,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellRenderer
     @wxheader{grid.h}
@@ -628,9 +631,8 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellStringRenderer, wxGridCellNumberRenderer, wxGridCellFloatRenderer,
-    wxGridCellBoolRenderer
+    @see wxGridCellStringRenderer, wxGridCellNumberRenderer,
+    wxGridCellFloatRenderer, wxGridCellBoolRenderer
 */
 class wxGridCellRenderer
 {
@@ -660,6 +662,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellNumberEditor
     @wxheader{grid.h}
@@ -669,8 +672,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
+    @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
 */
 class wxGridCellNumberEditor : public wxGridCellTextEditor
@@ -698,6 +700,7 @@ public:
     */
     void SetParameters(const wxString& params);
 };
+
 
 
 /**
@@ -759,6 +762,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellNumberRenderer
     @wxheader{grid.h}
@@ -768,8 +772,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
+    @see wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
     wxGridCellBoolRenderer
 */
 class wxGridCellNumberRenderer : public wxGridCellStringRenderer
@@ -780,6 +783,7 @@ public:
     */
     wxGridCellNumberRenderer();
 };
+
 
 
 /**
@@ -933,6 +937,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellBoolRenderer
     @wxheader{grid.h}
@@ -943,8 +948,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
+    @see wxGridCellRenderer, wxGridCellStringRenderer, wxGridCellFloatRenderer,
     wxGridCellNumberRenderer
 */
 class wxGridCellBoolRenderer : public wxGridCellRenderer
@@ -955,6 +959,7 @@ public:
     */
     wxGridCellBoolRenderer();
 };
+
 
 
 /**
@@ -1027,6 +1032,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellFloatEditor
     @wxheader{grid.h}
@@ -1036,8 +1042,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellEditor, wxGridCellNumberEditor, wxGridCellBoolEditor,
+    @see wxGridCellEditor, wxGridCellNumberEditor, wxGridCellBoolEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
 */
 class wxGridCellFloatEditor : public wxGridCellTextEditor
@@ -1056,6 +1061,7 @@ public:
     */
     void SetParameters(const wxString& params);
 };
+
 
 
 /**
@@ -1108,8 +1114,7 @@ public:
     @library{wxadv}
     @category{miscwnd}
 
-    @seealso
-    @ref overview_gridoverview "wxGrid overview"
+    @see @ref overview_gridoverview "wxGrid overview"
 */
 class wxGrid : public wxScrolledWindow
 {
@@ -2708,6 +2713,7 @@ public:
 };
 
 
+
 /**
     @class wxGridCellBoolEditor
     @wxheader{grid.h}
@@ -2717,8 +2723,7 @@ public:
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxGridCellEditor, wxGridCellFloatEditor, wxGridCellNumberEditor,
+    @see wxGridCellEditor, wxGridCellFloatEditor, wxGridCellNumberEditor,
     wxGridCellTextEditor, wxGridCellChoiceEditor
 */
 class wxGridCellBoolEditor : public wxGridCellEditor
@@ -2745,6 +2750,7 @@ public:
     */
     static void UseStringValues() const;
 };
+
 
 
 /**
@@ -2803,3 +2809,4 @@ public:
     */
     void Create(wxGrid* grid);
 };
+

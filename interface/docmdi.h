@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        docmdi.h
-// Purpose:     documentation for wxDocMDIParentFrame class
+// Purpose:     interface of wxDocMDIParentFrame
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,15 +15,14 @@
     MDI parent frames.
 
     It cooperates with the wxView, wxDocument,
-    wxDocManager and wxDocTemplates classes.
+    wxDocManager and wxDocTemplates() classes.
 
     See the example application in @c samples/docview.
 
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_docviewoverview, wxMDIParentFrame
+    @see @ref overview_docviewoverview, wxMDIParentFrame
 */
 class wxDocMDIParentFrame : public wxMDIParentFrame
 {
@@ -67,6 +66,7 @@ public:
 };
 
 
+
 /**
     @class wxDocMDIChildFrame
     @wxheader{docmdi.h}
@@ -83,8 +83,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_docviewoverview, wxMDIChildFrame
+    @see @ref overview_docviewoverview, wxMDIChildFrame
 */
 class wxDocMDIChildFrame : public wxMDIChildFrame
 {
@@ -149,3 +148,4 @@ public:
         The view associated with the frame.
     */
 };
+

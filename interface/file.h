@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        file.h
-// Purpose:     documentation for wxTempFile class
+// Purpose:     interface of wxTempFile
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -117,6 +117,7 @@ public:
     bool Write(const wxString& str,
                const wxMBConv& conv = wxConvUTF8);
 };
+
 
 
 /**
@@ -321,3 +322,4 @@ public:
     */
     int fd() const;
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        windowid.h
-// Purpose:     documentation for wxIdManager class
+// Purpose:     interface of wxIdManager
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxWindow::NewControlId, wxWindow::UnreserveControlId, @ref
+    @see wxWindow::NewControlId, wxWindow::UnreserveControlId, @ref
     overview_windowidsoverview "Window IDs overview"
 */
 class wxIdManager
@@ -28,9 +27,9 @@ public:
     /**
         Called directly by wxWindow::NewControlId,
         this function will create a new ID or range of IDs.  The IDs will be
-        reserved until assigned to a wxWindowIDRef
+        reserved until assigned to a wxWindowIDRef()
         or unreserved with UnreserveControlId().
-        Only ID values that are not assigned to a wxWindowIDRef
+        Only ID values that are not assigned to a wxWindowIDRef()
         need to be unreserved.
         
         @param count
@@ -40,3 +39,4 @@ public:
     */
     static wxWindowID ReserveControlId(int count = 1);
 };
+

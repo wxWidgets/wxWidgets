@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        uri.h
-// Purpose:     documentation for wxURI class
+// Purpose:     interface of wxURI
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -30,8 +30,7 @@
     @library{wxbase}
     @category{data}
 
-    @seealso
-    wxURL
+    @see wxURL
 */
 class wxURI : public wxObject
 {
@@ -313,3 +312,4 @@ public:
     */
     void operator ==(const wxURI& uricomp);
 };
+

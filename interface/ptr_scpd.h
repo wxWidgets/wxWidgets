@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        ptr_scpd.h
-// Purpose:     documentation for wxScopedPtr class
+// Purpose:     interface of wxScopedPtr
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,7 +15,7 @@
     use macros instead.
 
     Since wxWidgets 2.9.0 there is also a templated version of this class
-    with the same name. See wxScopedPtrT.
+    with the same name. See wxScopedPtrT().
 
     A smart pointer holds a pointer to an object. The memory used by the object is
     deleted when the smart pointer goes out of scope. This class is different from
@@ -26,8 +26,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxScopedArray
+    @see wxScopedArray
 */
 class wxScopedPtr
 {
@@ -84,6 +83,7 @@ public:
 };
 
 
+
 /**
     @class wxScopedArray
     @wxheader{ptr_scpd.h}
@@ -95,8 +95,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxScopedPtr
+    @see wxScopedPtr
 */
 class wxScopedArray
 {
@@ -132,6 +131,7 @@ public:
     */
     swap(wxScopedPtr amp; ot);
 };
+
 
 
 /**
@@ -171,6 +171,7 @@ public:
 };
 
 
+
 /**
     @class wxScopedPtrT
     @wxheader{ptr_scpd.h}
@@ -181,8 +182,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxSharedPtr, wxWeakRef
+    @see wxSharedPtr, wxWeakRef
 */
 class wxScopedPtr<T>
 {
@@ -240,3 +240,4 @@ public:
     */
     void swap(wxScopedPtr<T>& ot);
 };
+

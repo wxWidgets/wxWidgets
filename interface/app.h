@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        app.h
-// Purpose:     documentation for wxApp class
+// Purpose:     interface of wxApp
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -30,8 +30,7 @@
     @library{wxbase}
     @category{appmanagement}
 
-    @seealso
-    @ref overview_wxappoverview "wxApp overview"
+    @see @ref overview_wxappoverview "wxApp overview"
 */
 class wxApp : public wxEvtHandler
 {
@@ -95,7 +94,8 @@ public:
         page headers and so on while the other one should be only used internally, e.g.
         for the file names or configuration file keys.
         By default, returns the same string as GetAppName().
-        This function is new since wxWidgets version 2.9.0
+        
+        @wxsince{2.9.0}
     */
     wxString GetAppDisplayName() const;
 
@@ -169,7 +169,8 @@ public:
         page headers and so on while the other one should be only used internally, e.g.
         for the file names or configuration file keys.
         By default, returns the same string as GetVendorName().
-        This function is new since wxWidgets version 2.9.0
+        
+        @wxsince{2.9.0}
     */
     wxString GetVendorDisplayName() const;
 
@@ -248,7 +249,7 @@ public:
 
     /**
         This function is called when an assert failure occurs, i.e. the condition
-        specified in wxASSERT macro evaluated to @false.
+        specified in wxASSERT() macro evaluated to @false.
         It is only called in debug mode (when @c __WXDEBUG__ is defined) as
         asserts are not left in the release code at all.
         The base class version shows the default assert failure dialog box proposing to
@@ -338,12 +339,12 @@ public:
         This function may be called if something fatal happens: an unhandled
         exception under Win32 or a a fatal signal under Unix, for example. However,
         this will not happen by default: you have to explicitly call
-        wxHandleFatalExceptions to enable this.
+        wxHandleFatalExceptions() to enable this.
         Generally speaking, this function should only show a message to the user and
         return. You may attempt to save unsaved data but this is not guaranteed to
         work and, in fact, probably won't.
         
-        @see wxHandleFatalExceptions
+        @see wxHandleFatalExceptions()
     */
     void OnFatalException();
 
@@ -581,6 +582,7 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -607,8 +609,8 @@ void wxVLogVerbose(const char* formatString, va_list argPtr);
 
 /**
     This is used in headers to create a forward declaration of the
-    wxGetApp function implemented by
-    wxIMPLEMENT_APP. It creates the declaration
+    wxGetApp() function implemented by
+    wxIMPLEMENT_APP(). It creates the declaration
     @c className wxGetApp(void).
     Example:
 
@@ -637,7 +639,7 @@ void wxVLogWarning(const char* formatString, va_list argPtr);
 
 //@{
 /**
-    Like wxLogError, but also
+    Like wxLogError(), but also
     terminates the program with the exit code 3. Using @e abort() standard
     function also terminates the program with this exit code.
 */
@@ -677,7 +679,7 @@ bool wxHandleFatalExceptions(bool doIt = true);
     IMPLEMENT_APP(MyApp)
     @endcode
 
-    See also DECLARE_APP.
+    See also DECLARE_APP().
 */
 #define IMPLEMENT_APP()     /* implementation is private */
 
@@ -685,7 +687,7 @@ bool wxHandleFatalExceptions(bool doIt = true);
     Returns the error code from the last system call. This function uses
     @c errno on Unix platforms and @c GetLastError under Win32.
 
-    @see wxSysErrorMsg, wxLogSysError
+    @see wxSysErrorMsg(), wxLogSysError()
 */
 unsigned long wxSysErrorCode();
 
@@ -765,15 +767,15 @@ void wxVLogTrace(wxTraceMask mask, const char* formatString,
 /**
     Returns the error message corresponding to the given system error code. If
     @a errCode is 0 (default), the last error code (as returned by
-    wxSysErrorCode) is used.
+    wxSysErrorCode()) is used.
 
-    @see wxSysErrorCode, wxLogSysError
+    @see wxSysErrorCode(), wxLogSysError()
 */
 const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
 
 /**
     This function is for use in console (wxBase) programs only. It must be called
-    once for each previous successful call to wxInitialize.
+    once for each previous successful call to wxInitialize().
 */
 void wxUninitialize();
 
@@ -789,9 +791,9 @@ void wxVLogDebug(const char* formatString, va_list argPtr);
 
 /**
     This function doesn't exist in wxWidgets but it is created by using
-    the IMPLEMENT_APP macro. Thus, before using it
+    the IMPLEMENT_APP() macro. Thus, before using it
     anywhere but in the same module where this macro is used, you must make it
-    available using DECLARE_APP.
+    available using DECLARE_APP().
     The advantage of using this function compared to directly using the global
     wxTheApp pointer is that the latter is of type @c wxApp * and so wouldn't
     allow you to access the functions specific to your application class but not
@@ -820,17 +822,17 @@ void wxVLogStatus(const char* formatString, va_list argPtr);
     @c main() function before calling any other wxWidgets functions.
     If the function returns @false the initialization could not be performed,
     in this case the library cannot be used and
-    wxUninitialize shouldn't be called neither.
+    wxUninitialize() shouldn't be called neither.
     This function may be called several times but
-    wxUninitialize must be called for each successful
+    wxUninitialize() must be called for each successful
     call to this function.
 */
 bool wxInitialize();
 
 /**
     This is used in headers to create a forward declaration of the
-    wxGetApp function implemented by
-    IMPLEMENT_APP. It creates the declaration
+    wxGetApp() function implemented by
+    IMPLEMENT_APP(). It creates the declaration
     @c className wxGetApp(void).
     Example:
 
@@ -855,7 +857,7 @@ bool wxYield();
     on the platform) and the corresponding error message. The second form
     of this function takes the error code explicitly as the first argument.
 
-    @see wxSysErrorCode, wxSysErrorMsg
+    @see wxSysErrorCode(), wxSysErrorMsg()
 */
 void wxLogSysError(const char* formatString, ... );
 void wxVLogSysError(const char* formatString,
@@ -878,7 +880,7 @@ void wxVLogSysError(const char* formatString,
              function wxApp::CleanUp. For example, if exiting from
              an MFC application that also uses wxWidgets:
 
-    @see wxEntryStart
+    @see wxEntryStart()
 */
 int wxEntry(int& argc, wxChar** argv);
 int wxEntry(HINSTANCE hInstance,

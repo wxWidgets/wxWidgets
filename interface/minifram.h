@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        minifram.h
-// Purpose:     documentation for wxMiniFrame class
+// Purpose:     interface of wxMiniFrame
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -48,8 +48,7 @@
     @library{wxcore}
     @category{managedwnd}
 
-    @seealso
-    wxMDIParentFrame, wxMDIChildFrame, wxFrame, wxDialog
+    @see wxMDIParentFrame, wxMDIChildFrame, wxFrame, wxDialog
 */
 class wxMiniFrame : public wxFrame
 {
@@ -110,3 +109,4 @@ public:
                 long style = wxCAPTION | wxRESIZE_BORDER,
                 const wxString& name = "frame");
 };
+

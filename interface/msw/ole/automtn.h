@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msw/ole/automtn.h
-// Purpose:     documentation for wxAutomationObject class
+// Purpose:     interface of wxAutomationObject
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -34,8 +34,7 @@
     @library{wxcore}
     @category{misc}
 
-    @seealso
-    wxVariant
+    @see wxVariant
 */
 class wxAutomationObject : public wxObject
 {
@@ -193,3 +192,4 @@ public:
     */
     void SetDispatchPtr(WXIDISPATCH* dispatchPtr);
 };
+

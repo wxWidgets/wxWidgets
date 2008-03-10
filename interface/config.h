@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        config.h
-// Purpose:     documentation for wxConfigBase class
+// Purpose:     interface of wxConfigBase
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -83,7 +83,8 @@ public:
             flag, which changes the default local configuration file to
         ~/.appname/appname
             should be used. Notice that this flag is ignored if localFilename is
-            provided. This function is new since wxWidgets version 2.8.2
+            provided.
+        @wxsince{2.8.2}
             For wxFileConfig, you can also add wxCONFIG_USE_NO_ESCAPE_CHARACTERS which
             will turn off character escaping for the values of entries stored in the
         config
@@ -299,8 +300,8 @@ public:
         Currently, supported types of data are:
         wxString, @e long, @e double, @e bool,
         wxColour and any other types,
-        for which functions wxToString
-        and wxFromString are defined.
+        for which functions wxToString()
+        and wxFromString() are defined.
         Try not to read long values into string variables and vice versa: although it
         just might work with wxFileConfig, you will get a system error with
         wxRegConfig because in the Windows registry the different types of entries are
@@ -377,7 +378,7 @@ public:
     //@{
     /**
         Reads a value of type T, for which function
-        wxFromString is defined,
+        wxFromString() is defined,
         returning @true if the value was found.
         If the value was not found, @a defaultVal is used instead.
         bool Read(const wxStringkey, T* value) const;
@@ -440,7 +441,7 @@ public:
 
     /**
         Reads a value of type T, for which function
-        wxFromString is defined, from the key and returns it.
+        wxFromString() is defined, from the key and returns it.
         @a defaultVal is returned if the key is not found.
     */
     T ReadObject(const wxString& key, T const& defaultVal) const;
@@ -548,7 +549,7 @@ public:
     //@{
     /**
         These functions write the specified value to the config file and return @true
-        on success. In the last one, function wxToString must be
+        on success. In the last one, function wxToString() must be
         defined for type @e T.
         
         
@@ -576,3 +577,4 @@ public:
     bool Write(const wxString& key, const T& buf);
     //@}
 };
+

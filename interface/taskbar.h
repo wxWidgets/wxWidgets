@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        taskbar.h
-// Purpose:     documentation for wxTaskBarIcon class
+// Purpose:     interface of wxTaskBarIcon
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -74,3 +74,4 @@ public:
     */
     bool SetIcon(const wxIcon& icon, const wxString& tooltip);
 };
+

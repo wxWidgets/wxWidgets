@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        debugrpt.h
-// Purpose:     documentation for wxDebugReportPreview class
+// Purpose:     interface of wxDebugReportPreview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -47,6 +47,7 @@ public:
 };
 
 
+
 /**
     @class wxDebugReportCompress
     @wxheader{debugrpt.h}
@@ -73,6 +74,7 @@ public:
 };
 
 
+
 /**
     @class wxDebugReport
     @wxheader{debugrpt.h}
@@ -80,7 +82,7 @@ public:
     wxDebugReport is used to generate a debug report, containing information about
     the program current state. It is usually used from
     wxApp::OnFatalException as shown in the
-    sample.
+    sample().
 
     A wxDebugReport object contains one or more files. A few of them can be created
     by the
@@ -259,6 +261,7 @@ public:
 };
 
 
+
 /**
     @class wxDebugReportPreviewStd
     @wxheader{debugrpt.h}
@@ -285,6 +288,7 @@ public:
     */
     bool Show(wxDebugReport& dbgrpt) const;
 };
+
 
 
 /**
@@ -323,3 +327,4 @@ public:
     */
     bool OnServerReply();
 };
+

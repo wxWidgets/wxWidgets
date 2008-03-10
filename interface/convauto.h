@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        convauto.h
-// Purpose:     documentation for wxConvAuto class
+// Purpose:     interface of wxConvAuto
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -42,8 +42,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_mbconvclasses "wxMBConv classes overview"
+    @see @ref overview_mbconvclasses "wxMBConv classes overview"
 */
 class wxConvAuto : public wxMBConv
 {
@@ -95,3 +94,4 @@ public:
     */
     static void SetFallbackEncoding(wxFontEncoding enc);
 };
+

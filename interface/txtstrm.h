@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        txtstrm.h
-// Purpose:     documentation for wxTextInputStream class
+// Purpose:     interface of wxTextInputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -50,8 +50,7 @@
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxTextInputStream::SetStringSeparators
+    @see wxTextInputStream::SetStringSeparators
 */
 class wxTextInputStream
 {
@@ -164,6 +163,7 @@ public:
 };
 
 
+
 /**
     @class wxTextOutputStream
     @wxheader{txtstrm.h}
@@ -256,3 +256,4 @@ public:
     */
     virtual void WriteString(const wxString& string);
 };
+

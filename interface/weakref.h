@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        weakref.h
-// Purpose:     documentation for wxWeakRefDynamic<T> class
+// Purpose:     interface of wxWeakRefDynamic<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -38,6 +38,7 @@ public:
 };
 
 
+
 /**
     @class wxWeakRefT
     @wxheader{weakref.h}
@@ -58,8 +59,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxSharedPtr, wxScopedPtr
+    @see wxSharedPtr, wxScopedPtr
 */
 class wxWeakRef<T>
 {
@@ -121,3 +121,4 @@ public:
     */
     T* operator=(T* pobj);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        textfile.h
-// Purpose:     documentation for wxTextFile class
+// Purpose:     interface of wxTextFile
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -56,8 +56,7 @@
     @library{wxbase}
     @category{file}
 
-    @seealso
-    wxFile
+    @see wxFile
 */
 class wxTextFile
 {
@@ -239,3 +238,4 @@ public:
     */
     wxString operator[](size_t n) const;
 };
+

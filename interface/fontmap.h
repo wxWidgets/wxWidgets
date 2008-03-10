@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fontmap.h
-// Purpose:     documentation for wxFontMapper class
+// Purpose:     interface of wxFontMapper
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -31,8 +31,7 @@
     @library{wxcore}
     @category{misc}
 
-    @seealso
-    wxEncodingConverter, @ref overview_nonenglishoverview "Writing non-English
+    @see wxEncodingConverter, @ref overview_nonenglishoverview "Writing non-English
     applications"
 */
 class wxFontMapper
@@ -174,3 +173,4 @@ public:
     */
     void SetDialogTitle(const wxString& title);
 };
+

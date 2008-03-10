@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        display.h
-// Purpose:     documentation for wxDisplay class
+// Purpose:     interface of wxDisplay
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,8 +15,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxClientDisplayRect, wxDisplaySize, wxDisplaySizeMM
+    @see wxClientDisplayRect(), wxDisplaySize(), wxDisplaySizeMM()
 */
 class wxDisplay
 {
@@ -120,3 +119,4 @@ public:
     */
     bool IsPrimary();
 };
+

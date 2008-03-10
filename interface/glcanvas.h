@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        glcanvas.h
-// Purpose:     documentation for wxGLContext class
+// Purpose:     interface of wxGLContext
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -38,8 +38,7 @@
     @library{wxgl}
     @category{gl}
 
-    @seealso
-    wxGLCanvas
+    @see wxGLCanvas
 */
 class wxGLContext : public wxObject
 {
@@ -71,6 +70,7 @@ public:
     */
     void SetCurrent(const wxGLCanvas& win);
 };
+
 
 
 /**
@@ -112,8 +112,7 @@ public:
     @library{wxgl}
     @category{gl}
 
-    @seealso
-    wxGLContext
+    @see wxGLContext
 */
 class wxGLCanvas : public wxWindow
 {
@@ -198,3 +197,4 @@ public:
     */
     bool SwapBuffers();
 };
+

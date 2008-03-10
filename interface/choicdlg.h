@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        choicdlg.h
-// Purpose:     documentation for wxMultiChoiceDialog class
+// Purpose:     interface of wxMultiChoiceDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -16,8 +16,7 @@
     @library{wxbase}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxmultichoicedialogoverview "wxMultiChoiceDialog overview",
+    @see @ref overview_wxmultichoicedialogoverview "wxMultiChoiceDialog overview",
     wxSingleChoiceDialog
 */
 class wxMultiChoiceDialog : public wxDialog
@@ -118,6 +117,7 @@ public:
 };
 
 
+
 /**
     @class wxSingleChoiceDialog
     @wxheader{choicdlg.h}
@@ -129,9 +129,8 @@ public:
     @library{wxbase}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxsinglechoicedialogoverview "wxSingleChoiceDialog overview",
-    wxMultiChoiceDialog
+    @see @ref overview_wxsinglechoicedialogoverview "wxSingleChoiceDialog
+    overview", wxMultiChoiceDialog
 */
 class wxSingleChoiceDialog : public wxDialog
 {
@@ -246,6 +245,7 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -281,7 +281,7 @@ int wxGetSingleChoiceIndex(const wxString& message,
     Pops up a dialog box containing a message, OK/Cancel buttons and a
     single-selection listbox. The user may choose an item and press OK to return a
     string or Cancel to return the empty string. Use
-    wxGetSingleChoiceIndex if empty string is a
+    wxGetSingleChoiceIndex() if empty string is a
     valid choice and if you want to be able to detect pressing Cancel reliably.
     You may pass the list of strings to choose from either using @e choices
     which is an array of @a n strings for the listbox or by using a single

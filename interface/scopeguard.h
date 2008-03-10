@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        scopeguard.h
-// Purpose:     documentation for global functions
+// Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -8,7 +8,7 @@
 
 //@{
 /**
-    This family of macros is similar to wxON_BLOCK_EXIT
+    This family of macros is similar to wxON_BLOCK_EXIT()
     but calls a method of the given object instead of a free function.
 */
 wxON_BLOCK_EXIT_OBJ0(obj, method);
@@ -33,7 +33,7 @@ wxON_BLOCK_EXIT_OBJ2(obj, method, p1, p2);
     published in December 2000 issue of C/C++ Users Journal for more
     details.
 
-    @see wxON_BLOCK_EXIT_OBJ
+    @see wxON_BLOCK_EXIT_OBJ()
 */
 wxON_BLOCK_EXIT0(func);
 wxON_BLOCK_EXIT1(func, p1);

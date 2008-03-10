@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        font.h
-// Purpose:     documentation for wxFont class
+// Purpose:     interface of wxFont
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,19 +29,10 @@
     @category{gdi}
 
     @stdobjects
-    Objects:
-    wxNullFont
-    Pointers:
-    wxNORMAL_FONT
+    ::Objects:, ::wxNullFont, ::Pointers:, ::wxNORMAL_FONT, ::wxSMALL_FONT,
+    ::wxITALIC_FONT, ::wxSWISS_FONT,
 
-    wxSMALL_FONT
-
-    wxITALIC_FONT
-
-    wxSWISS_FONT
-
-    @seealso
-    @ref overview_wxfontoverview, wxDC::SetFont, wxDC::DrawText,
+    @see @ref overview_wxfontoverview, wxDC::SetFont, wxDC::DrawText,
     wxDC::GetTextExtent, wxFontDialog, wxSystemSettings
 */
 class wxFont : public wxGDIObject
@@ -658,3 +649,43 @@ public:
     */
     bool operator ==(const wxFont& font);
 };
+
+
+/**
+    FIXME
+*/
+wxFont Objects:
+;
+
+/**
+    FIXME
+*/
+wxFont wxNullFont;
+
+/**
+    FIXME
+*/
+wxFont Pointers:
+;
+
+/**
+    FIXME
+*/
+wxFont wxNORMAL_FONT;
+
+/**
+    FIXME
+*/
+wxFont wxSMALL_FONT;
+
+/**
+    FIXME
+*/
+wxFont wxITALIC_FONT;
+
+/**
+    FIXME
+*/
+wxFont wxSWISS_FONT;
+
+

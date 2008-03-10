@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gdiobj.h
-// Purpose:     documentation for wxGDIObject class
+// Purpose:     interface of wxGDIObject
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -23,8 +23,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxPen, wxBrush, wxFont
+    @see wxPen, wxBrush, wxFont
 */
 class wxGDIObject : public wxObject
 {
@@ -34,3 +33,4 @@ public:
     */
     wxGDIObject();
 };
+

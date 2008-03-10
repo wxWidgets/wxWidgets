@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        strconv.h
-// Purpose:     documentation for wxMBConvUTF7 class
+// Purpose:     interface of wxMBConvUTF7
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxMBConvUTF8, @ref overview_mbconvclasses "wxMBConv classes overview"
+    @see wxMBConvUTF8, @ref overview_mbconvclasses "wxMBConv classes overview"
 */
 class wxMBConvUTF7 : public wxMBConv
 {
@@ -38,6 +37,7 @@ public:
 };
 
 
+
 /**
     @class wxMBConvUTF8
     @wxheader{strconv.h}
@@ -48,8 +48,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxMBConvUTF7, @ref overview_mbconvclasses "wxMBConv classes overview"
+    @see wxMBConvUTF7, @ref overview_mbconvclasses "wxMBConv classes overview"
 */
 class wxMBConvUTF8 : public wxMBConv
 {
@@ -68,12 +67,13 @@ public:
 };
 
 
+
 /**
     @class wxMBConvUTF16
     @wxheader{strconv.h}
 
     This class is used to convert between multibyte encodings and UTF-16 Unicode
-    encoding (also known as UCS-2). Unlike UTF-8 encoding,
+    encoding (also known as UCS-2). Unlike UTF-8() encoding,
     UTF-16 uses words and not bytes and hence depends on the byte ordering:
     big or little endian. Hence this class is provided in two versions:
     wxMBConvUTF16LE and wxMBConvUTF16BE and wxMBConvUTF16 itself is just a typedef
@@ -83,8 +83,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconvclasses "wxMBConv classes
+    @see wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconvclasses "wxMBConv classes
     overview"
 */
 class wxMBConvUTF16 : public wxMBConv
@@ -104,6 +103,7 @@ public:
 };
 
 
+
 /**
     @class wxCSConv
     @wxheader{strconv.h}
@@ -115,9 +115,8 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxMBConv, wxEncodingConverter, @ref overview_mbconvclasses "wxMBConv classes
-    overview"
+    @see wxMBConv, wxEncodingConverter, @ref overview_mbconvclasses "wxMBConv
+    classes overview"
 */
 class wxCSConv : public wxMBConv
 {
@@ -142,7 +141,8 @@ public:
         available to use. Returns @false if ISO 8859-1 will be used instead.
         Note this does not mean that a given string will be correctly converted.
         A malformed string may still make conversion functions return @c wxCONV_FAILED.
-        This function is new since wxWidgets version 2.8.2
+        
+        @wxsince{2.8.2}
     */
     bool IsOk() const;
 
@@ -158,6 +158,7 @@ public:
     */
     size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };
+
 
 
 /**
@@ -192,8 +193,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_mbconvclasses "wxMBConv classes overview"
+    @see @ref overview_mbconvclasses "wxMBConv classes overview"
 */
 class wxMBConvFile : public wxMBConv
 {
@@ -212,12 +212,13 @@ public:
 };
 
 
+
 /**
     @class wxMBConvUTF32
     @wxheader{strconv.h}
 
     This class is used to convert between multibyte encodings and UTF-32 Unicode
-    encoding (also known as UCS-4). Unlike UTF-8 encoding,
+    encoding (also known as UCS-4). Unlike UTF-8() encoding,
     UTF-32 uses (double) words and not bytes and hence depends on the byte ordering:
     big or little endian. Hence this class is provided in two versions:
     wxMBConvUTF32LE and wxMBConvUTF32BE and wxMBConvUTF32 itself is just a typedef
@@ -227,8 +228,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconvclasses "wxMBConv classes
+    @see wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconvclasses "wxMBConv classes
     overview"
 */
 class wxMBConvUTF32 : public wxMBConv
@@ -246,6 +246,7 @@ public:
     */
     size_t WC2MB(char* buf, const wchar_t* psz, size_t n) const;
 };
+
 
 
 /**
@@ -266,9 +267,8 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxCSConv, wxEncodingConverter, @ref overview_mbconvclasses "wxMBConv classes
-    overview"
+    @see wxCSConv, wxEncodingConverter, @ref overview_mbconvclasses "wxMBConv
+    classes overview"
 */
 class wxMBConv
 {
@@ -455,3 +455,4 @@ public:
     const const wxWCharBuffer cWX2WC(const wxChar* psz) const;
     //@}
 };
+

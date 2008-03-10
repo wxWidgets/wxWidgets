@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        xml/xml.h
-// Purpose:     documentation for wxXmlNode class
+// Purpose:     interface of wxXmlNode
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,8 +24,7 @@
     @library{wxxml}
     @category{xml}
 
-    @seealso
-    wxXmlDocument, wxXmlAttribute
+    @see wxXmlDocument, wxXmlAttribute
 */
 class wxXmlNode
 {
@@ -236,6 +235,7 @@ public:
 };
 
 
+
 /**
     @class wxXmlAttribute
     @headerfile xml.h wx/xml/xml.h
@@ -248,8 +248,7 @@ public:
     @library{wxxml}
     @category{xml}
 
-    @seealso
-    wxXmlDocument, wxXmlNode
+    @see wxXmlDocument, wxXmlNode
 */
 class wxXmlAttribute
 {
@@ -299,6 +298,7 @@ public:
     */
     void SetValue(const wxString& value);
 };
+
 
 
 /**
@@ -376,8 +376,7 @@ public:
     @library{wxxml}
     @category{xml}
 
-    @seealso
-    wxXmlNode, wxXmlAttribute
+    @see wxXmlNode, wxXmlAttribute
 */
 class wxXmlDocument : public wxObject
 {
@@ -484,3 +483,4 @@ public:
     */
     wxXmlDocument& operator operator=(const wxXmlDocument& doc);
 };
+

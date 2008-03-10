@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        stattext.h
-// Purpose:     documentation for wxStaticText class
+// Purpose:     interface of wxStaticText
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -42,8 +42,7 @@
     @category{ctrl}
     @appearance{statictext.png}
 
-    @seealso
-    wxStaticBitmap, wxStaticBox
+    @see wxStaticBitmap, wxStaticBox
 */
 class wxStaticText : public wxControl
 {
@@ -203,7 +202,9 @@ public:
         most @a width pixels wide if possible (the lines are broken at words
         boundaries so it might not be the case if words are too long). If @e width
         is negative, no wrapping is done.
-        This function is new since wxWidgets version 2.6.2
+        
+        @wxsince{2.6.2}
     */
     void Wrap(int width);
 };
+

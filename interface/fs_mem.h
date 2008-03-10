@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fs_mem.h
-// Purpose:     documentation for wxMemoryFSHandler class
+// Purpose:     interface of wxMemoryFSHandler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -61,8 +61,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxMemoryFSHandler::AddFileWithMimeType
+    @see wxMemoryFSHandler::AddFileWithMimeType
 */
 class wxMemoryFSHandler : public wxFileSystemHandler
 {
@@ -81,7 +80,7 @@ public:
         The @a type argument is one of @c wxBITMAP_TYPE_XXX constants.
         Note that you must use a @a type value (aka image format)
         that wxWidgets can save (e.g. JPG, PNG, see wxImage
-        documentation)!
+        documentation())!
         
         @see AddFileWithMimeType()
     */
@@ -97,7 +96,8 @@ public:
         Like AddFile(), but lets you explicitly
         specify added file's MIME type. This version should be used whenever you know
         the MIME type, because it makes accessing the files faster.
-        This function is new since wxWidgets version 2.8.5
+        
+        @wxsince{2.8.5}
         
         @see AddFile()
     */
@@ -115,3 +115,4 @@ public:
     */
     static void RemoveFile(const wxString& filename);
 };
+

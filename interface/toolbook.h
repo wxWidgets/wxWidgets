@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        toolbook.h
-// Purpose:     documentation for wxToolbook class
+// Purpose:     interface of wxToolbook
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -33,11 +33,11 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxBookCtrl, wxNotebook, @ref overview_samplenotebook "notebook sample"
+    @see wxBookCtrl(), wxNotebook, @ref overview_samplenotebook "notebook sample"
 */
 class wxToolbook : public wxBookCtrl overview
 {
 public:
 
 };
+

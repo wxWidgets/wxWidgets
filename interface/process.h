@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        process.h
-// Purpose:     documentation for wxProcess class
+// Purpose:     interface of wxProcess
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -11,7 +11,7 @@
     @wxheader{process.h}
 
     The objects of this class are used in conjunction with the
-    wxExecute function. When a wxProcess object is passed to
+    wxExecute() function. When a wxProcess object is passed to
     wxExecute(), its wxProcess::OnTerminate virtual method
     is called when the process terminates. This allows the program to be
     (asynchronously) notified about the process termination and also retrieve its
@@ -26,7 +26,7 @@
 
     wxProcess also supports IO redirection of the child process. For this, you have
     to call its wxProcess::Redirect method before passing it to
-    wxExecute. If the child process was launched successfully,
+    wxExecute(). If the child process was launched successfully,
     wxProcess::GetInputStream,
     wxProcess::GetOutputStream and
     wxProcess::GetErrorStream can then be used to retrieve
@@ -39,8 +39,7 @@
     @library{wxbase}
     @category{appmanagement}
 
-    @seealso
-    wxExecute, @ref overview_sampleexec "exec sample"
+    @see wxExecute(), @ref overview_sampleexec "exec sample"
 */
 class wxProcess : public wxEvtHandler
 {
@@ -164,7 +163,7 @@ public:
         to work you should have created the process passing wxEXEC_MAKE_GROUP_LEADER.
         Returns the element of @c wxKillError enum:
         
-        @see Exists(), wxKill, @ref overview_sampleexec "Exec sample"
+        @see Exists(), wxKill(), @ref overview_sampleexec "Exec sample"
     */
     static wxKillError Kill(int pid, wxSignal signal = wxSIGNONE,
                             int flags = wxKILL_NOCHILDREN);
@@ -201,7 +200,7 @@ public:
         
         @returns A pointer to new wxProcess object or @NULL on error.
         
-        @see wxExecute
+        @see wxExecute()
     */
     static wxProcess* Open(const wxString& cmd,
                            int flags = wxEXEC_ASYNC);
@@ -216,6 +215,7 @@ public:
 };
 
 
+
 /**
     @class wxProcessEvent
     @wxheader{process.h}
@@ -225,8 +225,7 @@ public:
     @library{wxbase}
     @category{events}
 
-    @seealso
-    wxProcess, @ref overview_eventhandlingoverview
+    @see wxProcess, @ref overview_eventhandlingoverview
 */
 class wxProcessEvent : public wxEvent
 {
@@ -247,3 +246,4 @@ public:
     */
     int GetPid() const;
 };
+

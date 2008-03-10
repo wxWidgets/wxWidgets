@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        notebook.h
-// Purpose:     documentation for wxNotebookEvent class
+// Purpose:     interface of wxNotebookEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,8 +29,7 @@
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxNotebook
+    @see wxNotebook
 */
 class wxNotebookEvent : public wxNotifyEvent
 {
@@ -73,6 +72,7 @@ public:
 };
 
 
+
 /**
     @class wxNotebook
     @wxheader{notebook.h}
@@ -111,8 +111,7 @@ public:
     @library{wxcore}
     @category{miscwnd}
 
-    @seealso
-    wxBookCtrl, wxNotebookEvent, wxImageList, @ref overview_samplenotebook
+    @see wxBookCtrl(), wxNotebookEvent, wxImageList, @ref overview_samplenotebook
     "notebook sample"
 */
 class wxNotebook : public wxBookCtrl overview
@@ -422,3 +421,4 @@ public:
     */
     int SetSelection(size_t page);
 };
+

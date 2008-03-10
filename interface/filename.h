@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        filename.h
-// Purpose:     documentation for wxFileName class
+// Purpose:     interface of wxFileName
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -44,7 +44,7 @@
     a complete file name (such as when interpreting user input) you need to use
     the static function wxFileName::DirExists
     (or its identical variants wxDir::Exists and
-    wxDirExists) and construct the wxFileName
+    wxDirExists()) and construct the wxFileName
     instance accordingly. This will only work if the directory actually exists,
     of course:
 
@@ -62,8 +62,7 @@
     @library{wxbase}
     @category{file}
 
-    @seealso
-    wxFileName::GetCwd
+    @see wxFileName::GetCwd
 */
 class wxFileName
 {
@@ -1002,3 +1001,4 @@ public:
     const bool operator operator==(const wxString& filename) const;
     //@}
 };
+

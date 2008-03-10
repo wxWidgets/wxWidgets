@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        layout.h
-// Purpose:     documentation for wxIndividualLayoutConstraint class
+// Purpose:     interface of wxIndividualLayoutConstraint
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -20,9 +20,8 @@
     @library{wxcore}
     @category{winlayout}
 
-    @seealso
-    @ref overview_constraintsoverview "Overview and examples", wxLayoutConstraints,
-    wxWindow::SetConstraints.
+    @see @ref overview_constraintsoverview "Overview and examples",
+    wxLayoutConstraints, wxWindow::SetConstraints.
 */
 class wxIndividualLayoutConstraint : public wxObject
 {
@@ -180,11 +179,12 @@ public:
 };
 
 
+
 /**
     @class wxLayoutConstraints
     @wxheader{layout.h}
 
-    @b Note: constraints are now deprecated and you should use sizers instead.
+    @b Note: constraints are now deprecated and you should use sizers() instead.
 
     Objects of this class can be associated with a window to define its
     layout constraints, with respect to siblings or its parent.
@@ -224,8 +224,7 @@ public:
     @library{wxcore}
     @category{winlayout}
 
-    @seealso
-    @ref overview_constraintsoverview "Overview and examples",
+    @see @ref overview_constraintsoverview "Overview and examples",
     wxIndividualLayoutConstraint, wxWindow::SetConstraints
 */
 class wxLayoutConstraints : public wxObject
@@ -283,3 +282,4 @@ public:
         Constraint for the width.
     */
 };
+

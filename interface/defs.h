@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        defs.h
-// Purpose:     documentation for global functions
+// Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -35,7 +35,7 @@ wxUint16 wxUINT16_SWAP_ON_LE(wxUint16 value);
 //@}
 
 /**
-    This macro is similar to wxDEPRECATED but can be used
+    This macro is similar to wxDEPRECATED() but can be used
     to not only declare the function @a func as deprecated but to also provide
     its (inline) implementation @e body.
     It can be used as following:
@@ -131,7 +131,7 @@ wxUint16 wxUINT16_SWAP_ON_BE(wxUint16 value);
 void wxVaCopy(va_list argptrDst, va_list argptrSrc);
 
 /**
-    This is a special version of wxDEPRECATED macro which
+    This is a special version of wxDEPRECATED() macro which
     only does something when the deprecated function is used from the code outside
     wxWidgets itself but doesn't generate warnings when it is used from wxWidgets.
     It is used with the virtual functions which are called by the library itself --

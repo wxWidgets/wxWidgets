@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        validate.h
-// Purpose:     documentation for wxValidator class
+// Purpose:     interface of wxValidator
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -34,8 +34,7 @@
     @library{wxcore}
     @category{validator}
 
-    @seealso
-    @ref overview_validatoroverview "Validator overview", wxTextValidator,
+    @see @ref overview_validatoroverview "Validator overview", wxTextValidator,
     wxGenericValidator,
 */
 class wxValidator : public wxEvtHandler
@@ -99,3 +98,4 @@ public:
     */
     virtual bool Validate(wxWindow* parent);
 };
+

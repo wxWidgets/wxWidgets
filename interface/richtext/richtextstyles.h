@@ -105,6 +105,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextStyleDefinition
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
@@ -178,6 +179,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextParagraphStyleDefinition
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
@@ -213,6 +215,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextStyleListBox
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
@@ -225,9 +228,8 @@ public:
     @library{wxrichtext}
     @category{richtext}
 
-    @seealso
-    wxRichTextStyleComboCtrl, @ref overview_wxrichtextctrloverview "wxRichTextCtrl
-    overview"
+    @see wxRichTextStyleComboCtrl, @ref overview_wxrichtextctrloverview
+    "wxRichTextCtrl overview"
 */
 class wxRichTextStyleListBox : public wxHtmlListBox
 {
@@ -336,6 +338,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextStyleComboCtrl
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
@@ -348,9 +351,8 @@ public:
     @library{wxrichtext}
     @category{richtext}
 
-    @seealso
-    wxRichTextStyleListBox, @ref overview_wxrichtextctrloverview "wxRichTextCtrl
-    overview"
+    @see wxRichTextStyleListBox, @ref overview_wxrichtextctrloverview
+    "wxRichTextCtrl overview"
 */
 class wxRichTextStyleComboCtrl : public wxComboCtrl
 {
@@ -396,6 +398,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextCharacterStyleDefinition
     @headerfile richtextstyles.h wx/richtext/richtextstyles.h
@@ -419,6 +422,7 @@ public:
     */
     ~wxRichTextCharacterStyleDefinition();
 };
+
 
 
 /**
@@ -521,6 +525,7 @@ public:
                             const wxString& bulletSymbol = wxEmptyString);
     //@}
 };
+
 
 
 /**
@@ -669,3 +674,4 @@ public:
     */
     void SetName(const wxString& name);
 };
+

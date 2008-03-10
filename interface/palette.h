@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        palette.h
-// Purpose:     documentation for wxPalette class
+// Purpose:     interface of wxPalette
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -27,11 +27,9 @@
     @category{gdi}
 
     @stdobjects
-    Objects:
-    wxNullPalette
+    ::Objects:, ::wxNullPalette,
 
-    @seealso
-    wxDC::SetPalette, wxBitmap
+    @see wxDC::SetPalette, wxBitmap
 */
 class wxPalette : public wxGDIObject
 {
@@ -141,3 +139,17 @@ public:
     */
     wxPalette operator =(const wxPalette& palette);
 };
+
+
+/**
+    FIXME
+*/
+wxPalette Objects:
+;
+
+/**
+    FIXME
+*/
+wxPalette wxNullPalette;
+
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sstream.h
-// Purpose:     documentation for wxStringInputStream class
+// Purpose:     interface of wxStringInputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -26,6 +26,7 @@ public:
     */
     wxStringInputStream(const wxString& s);
 };
+
 
 
 /**
@@ -59,3 +60,4 @@ public:
     */
     const wxString GetString() const;
 };
+

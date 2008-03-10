@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        valtext.h
-// Purpose:     documentation for wxTextValidator class
+// Purpose:     interface of wxTextValidator
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -19,8 +19,7 @@
     @library{wxcore}
     @category{validator}
 
-    @seealso
-    @ref overview_validatoroverview "Validator overview", wxValidator,
+    @see @ref overview_validatoroverview "Validator overview", wxValidator,
     wxGenericValidator
 */
 class wxTextValidator : public wxValidator
@@ -211,3 +210,4 @@ public:
     */
     virtual bool Validate(wxWindow* parent);
 };
+

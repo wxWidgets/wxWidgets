@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        thread.h
-// Purpose:     documentation for wxCondition class
+// Purpose:     interface of wxCondition
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -33,8 +33,7 @@
     @library{wxbase}
     @category{thread}
 
-    @seealso
-    wxThread, wxMutex
+    @see wxThread, wxMutex
 */
 class wxCondition
 {
@@ -112,6 +111,7 @@ public:
 };
 
 
+
 /**
     @class wxCriticalSectionLocker
     @wxheader{thread.h}
@@ -152,8 +152,7 @@ public:
     @library{wxbase}
     @category{thread}
 
-    @seealso
-    wxCriticalSection, wxMutexLocker
+    @see wxCriticalSection, wxMutexLocker
 */
 class wxCriticalSectionLocker
 {
@@ -169,6 +168,7 @@ public:
     */
     ~wxCriticalSectionLocker();
 };
+
 
 
 /**
@@ -204,8 +204,7 @@ public:
     @library{wxbase}
     @category{thread}
 
-    @seealso
-    wxThread
+    @see wxThread
 */
 class wxThreadHelper
 {
@@ -255,12 +254,13 @@ public:
 };
 
 
+
 /**
     @class wxCriticalSection
     @wxheader{thread.h}
 
     A critical section object is used for exactly the same purpose as
-    mutexes. The only difference is that under Windows platform
+    mutexes(). The only difference is that under Windows platform
     critical sections are only visible inside one process, while mutexes may be
     shared between processes, so using critical sections is slightly more
     efficient. The terminology is also slightly different: mutex may be locked (or
@@ -276,8 +276,7 @@ public:
     @library{wxbase}
     @category{thread}
 
-    @seealso
-    wxThread, wxCondition, wxCriticalSectionLocker
+    @see wxThread, wxCondition, wxCriticalSectionLocker
 */
 class wxCriticalSection
 {
@@ -307,6 +306,7 @@ public:
 };
 
 
+
 /**
     @class wxThread
     @wxheader{thread.h}
@@ -320,16 +320,15 @@ public:
     also
     makes it much easier to shoot oneself in the foot, so careful use of
     synchronization
-    objects such as mutexes or @ref overview_wxcriticalsection "critical sections"
-    is recommended. In addition, don't create global thread
+    objects such as mutexes() or @ref overview_wxcriticalsection "critical
+    sections" is recommended. In addition, don't create global thread
     objects because they allocate memory in their constructor, which will cause
     problems for the memory checking system.
 
     @library{wxbase}
     @category{thread}
 
-    @seealso
-    wxMutex, wxCondition, wxCriticalSection
+    @see wxMutex, wxCondition, wxCriticalSection
 */
 class wxThread
 {
@@ -410,11 +409,11 @@ public:
         in fact calling a routine on any running wxThread should be avoided if
         possible. Instead, find a way to notify yourself when the thread has ended.
         Usually you only need to notify the main thread, in which case you can post
-        an event to it via wxPostEvent or
+        an event to it via wxPostEvent() or
         wxEvtHandler::AddPendingEvent. In
         the case of secondary threads you can call a routine of another class
         when the thread is about to complete processing and/or set the value
-        of a variable, possibly using mutexes and/or other
+        of a variable, possibly using mutexes() and/or other
         synchronization means if necessary.
     */
 
@@ -594,7 +593,7 @@ public:
 
     /**
         Pauses the thread execution for the given amount of time.
-        This function should be used instead of wxSleep by all worker
+        This function should be used instead of wxSleep() by all worker
         threads (i.e. all except the main one).
     */
     static void Sleep(unsigned long milliseconds);
@@ -730,15 +729,16 @@ public:
         and could end your application prematurely. This is due to several reasons,
         including the underlying native API and the fact that wxThread does not run a
         GUI event loop similar to other APIs as MFC.
-        A workaround that works on some wxWidgets ports is calling wxMutexGUIEnter
-        before any GUI calls and then calling wxMutexGUILeave afterwords. However,
+        A workaround that works on some wxWidgets ports is calling wxMutexGUIEnter()
+        before any GUI calls and then calling wxMutexGUILeave() afterwords. However,
         the recommended way is to simply process the GUI calls in the main thread
-        through an event that is posted by either wxPostEvent or
+        through an event that is posted by either wxPostEvent() or
         wxEvtHandler::AddPendingEvent. This does
         not imply that calls to these classes are thread-safe, however, as most
         wxWidgets classes are not thread-safe, including wxString.
     */
 };
+
 
 
 /**
@@ -809,6 +809,7 @@ public:
 };
 
 
+
 /**
     @class wxMutexLocker
     @wxheader{thread.h}
@@ -823,8 +824,7 @@ public:
     @library{wxbase}
     @category{thread}
 
-    @seealso
-    wxMutex, wxCriticalSectionLocker
+    @see wxMutex, wxCriticalSectionLocker
 */
 class wxMutexLocker
 {
@@ -846,6 +846,7 @@ public:
     */
     bool IsOk() const;
 };
+
 
 
 /**
@@ -874,8 +875,7 @@ public:
     @library{wxbase}
     @category{thread}
 
-    @seealso
-    wxThread, wxCondition, wxMutexLocker, wxCriticalSection
+    @see wxThread, wxCondition, wxMutexLocker, wxCriticalSection
 */
 class wxMutex
 {
@@ -921,6 +921,7 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -932,8 +933,8 @@ public:
 bool wxIsMainThread();
 
 /**
-    This macro combines wxCRIT_SECT_DECLARE and
-    wxCRIT_SECT_LOCKER: it creates a static critical
+    This macro combines wxCRIT_SECT_DECLARE() and
+    wxCRIT_SECT_LOCKER(): it creates a static critical
     section object and also the lock object associated with it. Because of this, it
     can be only used inside a function, not at global scope. For example:
 
@@ -959,7 +960,7 @@ bool wxIsMainThread();
     This macro declares a critical section object named @a cs if
     @c wxUSE_THREADS is 1 and does nothing if it is 0. As it doesn't
     include the @c static keyword (unlike
-    wxCRIT_SECT_DECLARE), it can be used to declare
+    wxCRIT_SECT_DECLARE()), it can be used to declare
     a class or struct member which explains its name.
 */
 #define wxCRIT_SECT_DECLARE(cs)     /* implementation is private */

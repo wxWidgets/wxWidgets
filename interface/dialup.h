@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dialup.h
-// Purpose:     documentation for wxDialUpManager class
+// Purpose:     interface of wxDialUpManager
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,8 +29,7 @@
     @library{wxcore}
     @category{net}
 
-    @seealso
-    @ref overview_sampledialup "dialup sample", wxDialUpEvent
+    @see @ref overview_sampledialup "dialup sample", wxDialUpEvent
 */
 class wxDialUpManager
 {
@@ -165,6 +164,7 @@ public:
 };
 
 
+
 /**
     @class wxDialUpEvent
     @wxheader{dialup.h}
@@ -196,3 +196,4 @@ public:
     */
     bool IsOwnEvent() const;
 };
+

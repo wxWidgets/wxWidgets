@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        clntdata.h
-// Purpose:     documentation for wxClientDataContainer class
+// Purpose:     interface of wxClientDataContainer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,8 +24,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxEvtHandler, wxClientData
+    @see wxEvtHandler, wxClientData
 */
 class wxClientDataContainer
 {
@@ -62,6 +61,7 @@ public:
 };
 
 
+
 /**
     @class wxClientData
     @wxheader{clntdata.h}
@@ -92,8 +92,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxEvtHandler, wxTreeItemData, wxStringClientData, wxClientDataContainer
+    @see wxEvtHandler, wxTreeItemData, wxStringClientData, wxClientDataContainer
 */
 class wxClientData
 {
@@ -108,6 +107,7 @@ public:
     */
     ~wxClientData();
 };
+
 
 
 /**
@@ -140,3 +140,4 @@ public:
     */
     void SetData(const wxString& data);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        statbox.h
-// Purpose:     documentation for wxStaticBox class
+// Purpose:     interface of wxStaticBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -27,8 +27,7 @@
     @category{ctrl}
     @appearance{staticbox.png}
 
-    @seealso
-    wxStaticText
+    @see wxStaticText
 */
 class wxStaticBox : public wxControl
 {
@@ -81,3 +80,4 @@ public:
                 long style = 0,
                 const wxString& name = "staticBox");
 };
+

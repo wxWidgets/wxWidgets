@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        module.h
-// Purpose:     documentation for wxModule class
+// Purpose:     interface of wxModule
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -92,13 +92,13 @@ public:
     //@{
     /**
         Call this function from the constructor of the derived class. @a dep must be
-        the CLASSINFO of a wxModule-derived class and the
+        the CLASSINFO() of a wxModule-derived class and the
         corresponding module will be loaded before and unloaded after
         this module.
         The second version of this function allows a dependency to be added by
         name without access to the class info.  This is useful when a module is
         declared entirely in a source file and there is no header for the declaration
-        of the module needed by CLASSINFO, however errors are
+        of the module needed by CLASSINFO(), however errors are
         not detected until run-time, instead of compile-time, then.
         Note that circular dependencies are detected and result in a fatal error.
         
@@ -123,3 +123,4 @@ public:
     */
     virtual bool OnInit();
 };
+

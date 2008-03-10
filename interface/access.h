@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        access.h
-// Purpose:     documentation for wxAccessible class
+// Purpose:     interface of wxAccessible
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -205,3 +205,4 @@ public:
     */
     void SetWindow(wxWindow* window);
 };
+

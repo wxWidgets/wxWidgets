@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        stream.h
-// Purpose:     documentation for wxCountingOutputStream class
+// Purpose:     interface of wxCountingOutputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -49,6 +49,7 @@ public:
 };
 
 
+
 /**
     @class wxBufferedInputStream
     @wxheader{stream.h}
@@ -62,14 +63,14 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxStreamBuffer, wxInputStream, wxBufferedOutputStream
+    @see wxStreamBuffer, wxInputStream, wxBufferedOutputStream
 */
 class wxBufferedInputStream : public wxFilterInputStream
 {
 public:
 
 };
+
 
 
 /**
@@ -80,8 +81,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxStreamBase
+    @see wxStreamBase
 */
 class wxStreamBuffer
 {
@@ -278,6 +278,7 @@ public:
 };
 
 
+
 /**
     @class wxOutputStream
     @wxheader{stream.h}
@@ -352,6 +353,7 @@ public:
 };
 
 
+
 /**
     @class wxFilterClassFactory
     @wxheader{stream.h}
@@ -376,8 +378,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxFilterInputStream, wxFilterOutputStream, wxArchiveClassFactory, @ref
+    @see wxFilterInputStream, wxFilterOutputStream, wxArchiveClassFactory, @ref
     overview_wxarc "Archive formats such as zip"
 */
 class wxFilterClassFactory : public wxObject
@@ -471,6 +472,7 @@ public:
 };
 
 
+
 /**
     @class wxFilterOutputStream
     @wxheader{stream.h}
@@ -483,8 +485,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxFilterClassFactory, wxFilterInputStream
+    @see wxFilterClassFactory, wxFilterInputStream
 */
 class wxFilterOutputStream : public wxOutputStream
 {
@@ -501,6 +502,7 @@ public:
 };
 
 
+
 /**
     @class wxFilterInputStream
     @wxheader{stream.h}
@@ -514,8 +516,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxFilterClassFactory, wxFilterOutputStream
+    @see wxFilterClassFactory, wxFilterOutputStream
 */
 class wxFilterInputStream : public wxInputStream
 {
@@ -530,6 +531,7 @@ public:
     wxFilterInputStream(wxInputStream* stream);
     //@}
 };
+
 
 
 /**
@@ -547,8 +549,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxStreamBuffer, wxOutputStream
+    @see wxStreamBuffer, wxOutputStream
 */
 class wxBufferedOutputStream : public wxFilterOutputStream
 {
@@ -575,6 +576,7 @@ public:
     */
     void Sync();
 };
+
 
 
 /**
@@ -670,6 +672,7 @@ public:
 };
 
 
+
 /**
     @class wxStreamBase
     @wxheader{stream.h}
@@ -681,8 +684,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxStreamBuffer
+    @see wxStreamBuffer
 */
 class wxStreamBase
 {
@@ -722,7 +724,8 @@ public:
         Returns the length of the stream in bytes. If the length cannot be determined
         (this is always the case for socket streams for example), returns
         @c wxInvalidOffset.
-        This function is new since wxWidgets version 2.5.4
+        
+        @wxsince{2.5.4}
     */
     wxFileOffset GetLength() const;
 
@@ -768,3 +771,4 @@ public:
     */
     size_t OnSysWrite(const void* buffer, size_t bufsize);
 };
+

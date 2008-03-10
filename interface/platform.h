@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        platform.h
-// Purpose:     documentation for global functions
+// Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-Same as wxCHECK_VERSION but also checks that
+Same as wxCHECK_VERSION() but also checks that
 @c wxSUBRELEASE_NUMBER is at least @e subrel.
 */
 #define bool wxCHECK_VERSION_FULL(major, minor, release, subrel)     /* implementation is private */

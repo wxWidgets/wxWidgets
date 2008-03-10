@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        iconbndl.h
-// Purpose:     documentation for wxIconBundle class
+// Purpose:     interface of wxIconBundle
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,7 +18,7 @@
     @category{FIXME}
 
     @stdobjects
-    wxNullIconBundle
+    ::wxNullIconBundle,
 */
 class wxIconBundle : public wxGDIObject
 {
@@ -79,3 +79,11 @@ public:
     */
     bool operator ==(const wxIconBundle& ic);
 };
+
+
+/**
+    FIXME
+*/
+wxIconBundle wxNullIconBundle;
+
+

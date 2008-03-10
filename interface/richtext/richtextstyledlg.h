@@ -174,3 +174,4 @@ public:
     */
     int GetFlags() const;
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tokenzr.h
-// Purpose:     documentation for wxStringTokenizer class
+// Purpose:     interface of wxStringTokenizer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -99,8 +99,7 @@
     @library{wxbase}
     @category{data}
 
-    @seealso
-    wxStringTokenize
+    @see wxStringTokenize()
 */
 class wxStringTokenizer : public wxObject
 {
@@ -130,7 +129,8 @@ public:
         GetNextToken() or @c NUL if
         there had been no calls to this function yet or if it returned the trailing
         empty token in @c wxTOKEN_RET_EMPTY_ALL mode.
-        This function is new since wxWidgets version 2.7.0
+        
+        @wxsince{2.7.0}
     */
     wxChar GetLastDelimiter();
 
@@ -165,3 +165,4 @@ public:
                    const wxString& delims = " \t\r\n",
                    wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
 };
+

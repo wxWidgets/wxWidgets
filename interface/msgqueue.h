@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msgqueue.h
-// Purpose:     documentation for wxMessageQueue<T> class
+// Purpose:     interface of wxMessageQueue<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,8 +24,7 @@
     @nolibrary
     @category{FIXME}
 
-    @seealso
-    wxThread
+    @see wxThread
 */
 class wxMessageQueue<T>
 {
@@ -68,3 +67,4 @@ public:
     */
     wxMessageQueue();
 };
+

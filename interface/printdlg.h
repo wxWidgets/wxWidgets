@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        printdlg.h
-// Purpose:     documentation for wxPrintDialog class
+// Purpose:     interface of wxPrintDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,7 @@
     @library{wxcore}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", @ref
+    @see @ref overview_printingoverview "Printing framework overview", @ref
     overview_wxprintdialogoverview "wxPrintDialog Overview"
 */
 class wxPrintDialog : public wxDialog
@@ -61,6 +60,7 @@ public:
 };
 
 
+
 /**
     @class wxPageSetupDialog
     @wxheader{printdlg.h}
@@ -90,9 +90,8 @@ public:
     @library{wxcore}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", wxPrintDialog,
-    wxPageSetupDialogData
+    @see @ref overview_printingoverview "Printing framework overview",
+    wxPrintDialog, wxPageSetupDialogData
 */
 class wxPageSetupDialog : public wxDialog
 {
@@ -122,3 +121,4 @@ public:
     */
     int ShowModal();
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        encconv.h
-// Purpose:     documentation for wxEncodingConverter class
+// Purpose:     interface of wxEncodingConverter
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -20,9 +20,8 @@
     @library{wxbase}
     @category{misc}
 
-    @seealso
-    wxFontMapper, wxMBConv, @ref overview_nonenglishoverview "Writing non-English
-    applications"
+    @see wxFontMapper, wxMBConv, @ref overview_nonenglishoverview "Writing
+    non-English applications"
 */
 class wxEncodingConverter : public wxObject
 {
@@ -120,3 +119,4 @@ public:
     bool Init(wxFontEncoding input_enc, wxFontEncoding output_enc,
               int method = wxCONVERT_STRICT);
 };
+

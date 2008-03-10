@@ -187,3 +187,4 @@ public:
     */
     bool UseNormalFont() const;
 };
+

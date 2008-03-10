@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        editlbox.h
-// Purpose:     documentation for wxEditableListBox class
+// Purpose:     interface of wxEditableListBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,8 +29,7 @@
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxListBox
+    @see wxListBox
 */
 class wxEditableListBox : public wxPanel
 {
@@ -88,3 +87,4 @@ public:
     */
     void SetStrings(const wxArrayString& strings);
 };
+

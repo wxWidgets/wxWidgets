@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        joystick.h
-// Purpose:     documentation for wxJoystick class
+// Purpose:     interface of wxJoystick
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,8 +15,7 @@
     @library{wxadv}
     @category{FIXME}
 
-    @seealso
-    wxJoystickEvent
+    @see wxJoystickEvent
 */
 class wxJoystick : public wxObject
 {
@@ -270,3 +269,4 @@ public:
     */
     void SetMovementThreshold(int threshold);
 };
+

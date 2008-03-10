@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        button.h
-// Purpose:     documentation for wxButton class
+// Purpose:     interface of wxButton
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -12,7 +12,7 @@
 
     A button is a control that contains a text string,
     and is one of the most common elements of a GUI. It may be placed on a
-    @ref overview_wxdialog "dialog box" or panel, or indeed
+    @ref overview_wxdialog "dialog box" or panel(), or indeed
     almost any other window.
 
     @beginStyleTable
@@ -41,8 +41,7 @@
     @category{ctrl}
     @appearance{button.png}
 
-    @seealso
-    wxBitmapButton
+    @see wxBitmapButton
 */
 class wxButton : public wxControl
 {
@@ -140,3 +139,4 @@ public:
     */
     void SetLabel(const wxString& label);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        window.h
-// Purpose:     documentation for wxWindow class
+// Purpose:     interface of wxWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -129,9 +129,8 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_eventhandlingoverview, @ref overview_windowsizingoverview "Window
-    sizing overview"
+    @see @ref overview_eventhandlingoverview, @ref overview_windowsizingoverview
+    "Window sizing overview"
 */
 class wxWindow : public wxEvtHandler
 {
@@ -212,7 +211,8 @@ public:
     /**
         Call this function to force one or both scrollbars to be always shown, even if
         the window is big enough to show its entire contents without scrolling.
-        This function is new since wxWidgets version 2.9.0
+        
+        @wxsince{2.9.0}
         
         @param hflag
             Whether the horizontal scroll bar should always be visible.
@@ -640,7 +640,7 @@ public:
     static wxWindow* GetCapture();
 
     /**
-        Returns the caret associated with the window.
+        Returns the caret() associated with the window.
     */
     wxCaret* GetCaret() const;
 
@@ -905,7 +905,8 @@ public:
     /**
         Returns the next window after this one among the parent children or @NULL if
         this window is the last child.
-        This function is new since wxWidgets version 2.8.8
+        
+        @wxsince{2.8.8}
         
         @see GetPrevSibling()
     */
@@ -961,7 +962,8 @@ public:
         Returns the previous window before this one among the parent children or @c
         @NULL if
         this window is the first child.
-        This function is new since wxWidgets version 2.8.8
+        
+        @wxsince{2.8.8}
         
         @see GetNextSibling()
     */
@@ -1213,7 +1215,8 @@ public:
         The parameters of this function are the same as for
         ShowWithEffect(), please see their
         description there.
-        This function is new since wxWidgets version 2.9.0
+        
+        @wxsince{2.9.0}
     */
     virtual bool HideWithEffect(wxShowEffect effect,
                                 unsigned timeout = 0,
@@ -1455,7 +1458,7 @@ public:
 
     /**
         Create a new ID or range of IDs that are not currently in use.  The
-        IDs will be reserved until assigned to a wxWindowIDRef
+        IDs will be reserved until assigned to a wxWindowIDRef()
         or unreserved with UnreserveControlId().
         See @ref overview_windowidsoverview "Window IDs overview" for more information.
         
@@ -1802,7 +1805,7 @@ public:
     virtual void SetCanFocus(bool canFocus);
 
     /**
-        Sets the caret associated with the window.
+        Sets the caret() associated with the window.
     */
     void SetCaret(wxCaret* caret) const;
 
@@ -2430,7 +2433,8 @@ public:
         for the current platform is used.
         Currently this function is only implemented in wxMSW and does the same thing as
         Show() in the other ports.
-        This function is new since wxWidgets version 2.9.0
+        
+        @wxsince{2.9.0}
         
         @see HideWithEffect()
     */
@@ -2526,7 +2530,7 @@ public:
     virtual void Update();
 
     /**
-        This function sends wxUpdateUIEvents to
+        This function sends wxUpdateUIEvents() to
         the window. The particular implementation depends on the window; for
         example a wxToolBar will send an update UI event for each toolbar button,
         and a wxFrame will send an update UI event for each menubar menu item.
@@ -2575,6 +2579,7 @@ public:
     */
     void WarpPointer(int x, int y);
 };
+
 
 
 // ============================================================================

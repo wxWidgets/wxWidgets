@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        stackwalk.h
-// Purpose:     documentation for wxStackWalker class
+// Purpose:     interface of wxStackWalker
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -43,8 +43,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxStackFrame
+    @see wxStackFrame
 */
 class wxStackWalker
 {
@@ -85,6 +84,7 @@ public:
 };
 
 
+
 /**
     @class wxStackFrame
     @wxheader{stackwalk.h}
@@ -97,8 +97,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxStackWalker
+    @see wxStackWalker
 */
 class wxStackFrame
 {
@@ -167,3 +166,4 @@ public:
     */
     bool HasSourceLocation() const;
 };
+

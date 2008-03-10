@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        stc/stc.h
-// Purpose:     documentation for wxStyledTextEvent class
+// Purpose:     interface of wxStyledTextEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -250,6 +250,7 @@ public:
 };
 
 
+
 /**
     @class wxStyledTextCtrl
     @headerfile stc.h wx/stc/stc.h
@@ -274,8 +275,7 @@ public:
     @library{wxbase}
     @category{stc}
 
-    @seealso
-    wxStyledTextEvent
+    @see wxStyledTextEvent
 */
 class wxStyledTextCtrl : public wxControl
 {
@@ -2743,3 +2743,4 @@ public:
     */
     void ZoomOut();
 };
+

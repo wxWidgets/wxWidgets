@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        debug.h
-// Purpose:     documentation for global functions
+// Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -8,7 +8,7 @@
 
 /**
 Will always generate an assert error if this code is reached (in debug mode).
-See also: wxFAIL_MSG
+See also: wxFAIL_MSG()
 */
 wxFAIL();
 
@@ -16,7 +16,7 @@ wxFAIL();
 /**
 This function is called whenever one of debugging macros fails (i.e. condition
 is @false in an assertion). It is only defined in the debug mode, in release
-builds the wxCHECK failures don't result in anything.
+builds the wxCHECK() failures don't result in anything.
 To override the default behaviour in the debug builds which is to show the user
 a dialog asking whether he wants to abort the program, continue or continue
 ignoring any subsequent assert failures, you may override
@@ -43,7 +43,7 @@ void wxTrap();
     it may be used in the "default:" branch of a switch statement if all possible
     cases are processed above.
 
-    @see wxFAIL
+    @see wxFAIL()
 */
 #define wxFAIL_MSG(msg)     /* implementation is private */
 
@@ -74,13 +74,13 @@ void wxTrap();
     Assert macro with message. An error message will be generated if the condition
     is @false.
 
-    @see wxASSERT, wxCOMPILE_TIME_ASSERT
+    @see wxASSERT(), wxCOMPILE_TIME_ASSERT()
 */
 #define wxASSERT_MSG(condition, msg)     /* implementation is private */
 
 /**
-    This is the same as wxCHECK2, but
-    wxFAIL_MSG with the specified @a msg is called
+    This is the same as wxCHECK2(), but
+    wxFAIL_MSG() with the specified @a msg is called
     instead of wxFAIL() if the @a condition is @false.
 */
 #define wxCHECK2(condition, operation, msg)     /* implementation is private */
@@ -91,7 +91,7 @@ void wxTrap();
     Please note that the condition in wxASSERT() should have no side effects
     because it will not be executed in release mode at all.
 
-    @see wxASSERT_MSG, wxCOMPILE_TIME_ASSERT
+    @see wxASSERT_MSG(), wxCOMPILE_TIME_ASSERT()
 */
 #define wxASSERT(condition)     /* implementation is private */
 
@@ -99,24 +99,24 @@ void wxTrap();
     Checks that the condition is @true, and returns if not (FAILs with given error
     message in debug mode). This check is done even in release mode.
     This macro should be used in void functions instead of
-    wxCHECK_MSG.
+    wxCHECK_MSG().
 */
 #define wxCHECK_RET(condition, msg)     /* implementation is private */
 
 /**
-    Checks that the condition is @true and wxFAIL and execute
+    Checks that the condition is @true and wxFAIL() and execute
     @a operation if it is not. This is a generalisation of
-    wxCHECK and may be used when something else than just
+    wxCHECK() and may be used when something else than just
     returning from the function must be done when the @a condition is @false.
     This check is done even in release mode.
 */
 #define wxCHECK2(condition, operation)     /* implementation is private */
 
 /**
-    This macro is identical to wxCOMPILE_TIME_ASSERT2
+    This macro is identical to wxCOMPILE_TIME_ASSERT2()
     except that it allows you to specify a unique @a name for the struct
     internally defined by this macro to avoid getting the compilation errors
-    described above.
+    described above().
 */
 #define wxCOMPILE_TIME_ASSERT(condition, msg, name)     /* implementation is private */
 
@@ -125,7 +125,7 @@ void wxTrap();
     (FAILs in debug mode).
     This check is done even in release mode.
     This macro may be only used in non-void functions, see also
-    wxCHECK_RET.
+    wxCHECK_RET().
 */
 #define wxCHECK_MSG(condition, retValue, msg)     /* implementation is private */
 
@@ -141,13 +141,13 @@ void wxTrap();
     unique by using the @c __LINE__ in it but it may still not work if you
     use it on the same line in two different source files. In this case you may
     either change the line in which either of them appears on or use the
-    wxCOMPILE_TIME_ASSERT2 macro.
+    wxCOMPILE_TIME_ASSERT2() macro.
     Also note that Microsoft Visual C++ has a bug which results in compiler errors
     if you use this macro with 'Program Database For Edit And Continue'
     (@c /ZI) option, so you shouldn't use it ('Program Database'
     (@c /Zi) is ok though) for the code making use of this macro.
 
-    @see wxASSERT_MSG, wxASSERT_MIN_BITSIZE
+    @see wxASSERT_MSG(), wxASSERT_MIN_BITSIZE()
 */
 #define wxCOMPILE_TIME_ASSERT(condition, msg)     /* implementation is private */
 

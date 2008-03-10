@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        hash.h
-// Purpose:     documentation for wxHashTable class
+// Purpose:     interface of wxHashTable
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -20,8 +20,7 @@
     @library{wxbase}
     @category{containers}
 
-    @seealso
-    wxList
+    @see wxList
 */
 class wxHashTable : public wxObject
 {
@@ -105,3 +104,4 @@ public:
     void Put(const char* key, wxObject* object);
     //@}
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        hyperlink.h
-// Purpose:     documentation for wxHyperlinkEvent class
+// Purpose:     interface of wxHyperlinkEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -37,6 +37,7 @@ public:
 };
 
 
+
 /**
     @class wxHyperlinkCtrl
     @wxheader{hyperlink.h}
@@ -46,7 +47,7 @@ public:
     clicks on the hyperlink, a wxHyperlinkEvent is
     sent but if that event is not handled (or it's skipped; see
     wxEvent::Skip), then a call to
-    wxLaunchDefaultBrowser is done with the
+    wxLaunchDefaultBrowser() is done with the
     hyperlink's URL.
 
     Note that standard wxWindow functions like wxWindow::SetBackgroundColour,
@@ -73,8 +74,7 @@ public:
     @category{ctrl}
     @appearance{hyperlinkctrl.png}
 
-    @seealso
-    wxURL, wxHyperlinkEvent
+    @see wxURL, wxHyperlinkEvent
 */
 class wxHyperlinkCtrl : public wxControl
 {
@@ -183,3 +183,4 @@ public:
                 long style,
                 const wxString& name = "hyperlink");
 };
+

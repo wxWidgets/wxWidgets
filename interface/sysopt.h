@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sysopt.h
-// Purpose:     documentation for wxSystemOptions class
+// Purpose:     interface of wxSystemOptions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -20,8 +20,7 @@
     @library{wxbase}
     @category{misc}
 
-    @seealso
-    wxSystemOptions::SetOption, wxSystemOptions::GetOptionInt,
+    @see wxSystemOptions::SetOption, wxSystemOptions::GetOptionInt,
     wxSystemOptions::HasOption
 */
 class wxSystemOptions : public wxObject
@@ -76,3 +75,4 @@ public:
     void SetOption(const wxString& name, int value);
     //@}
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        listbox.h
-// Purpose:     documentation for wxListBox class
+// Purpose:     interface of wxListBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -56,8 +56,7 @@
     @category{ctrl}
     @appearance{listbox.png}
 
-    @seealso
-    wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
+    @see wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
 */
 class wxListBox : public wxControlWithItems
 {
@@ -163,7 +162,8 @@ public:
     /**
         Returns the item located at @e point, or @c wxNOT_FOUND if there
         is no item located at @e point.
-        This function is new since wxWidgets version 2.7.0. It is currently implemented
+        
+        @wxsince{2.7.0}. It is currently implemented
         for wxMSW, wxMac and wxGTK2
         ports.
         
@@ -236,3 +236,4 @@ public:
     void SetFirstItem(const wxString& string);
     //@}
 };
+

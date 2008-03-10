@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dde.h
-// Purpose:     documentation for wxDDEConnection class
+// Purpose:     interface of wxDDEConnection
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,8 +29,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxDDEClient, wxDDEServer, @ref overview_ipcoverview "Interprocess
+    @see wxDDEClient, wxDDEServer, @ref overview_ipcoverview "Interprocess
     communications overview"
 */
 class wxDDEConnection : public wxObject
@@ -197,6 +196,7 @@ public:
 };
 
 
+
 /**
     @class wxDDEClient
     @wxheader{dde.h}
@@ -218,8 +218,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxDDEServer, wxDDEConnection, @ref overview_ipcoverview "Interprocess
+    @see wxDDEServer, wxDDEConnection, @ref overview_ipcoverview "Interprocess
     communications overview"
 */
 class wxDDEClient : public wxObject
@@ -263,6 +262,7 @@ public:
 };
 
 
+
 /**
     @class wxDDEServer
     @wxheader{dde.h}
@@ -277,8 +277,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxDDEClient, wxDDEConnection, @ref overview_ipcoverview "IPC overview"
+    @see wxDDEClient, wxDDEConnection, @ref overview_ipcoverview "IPC overview"
 */
 class wxDDEServer
 {
@@ -310,6 +309,7 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -318,7 +318,7 @@ public:
     Called when wxWidgets exits, to clean up the DDE system. This no longer needs
     to be
     called by the application.
-    See also wxDDEInitialize.
+    See also wxDDEInitialize().
 */
 void wxDDECleanUp();
 
@@ -327,7 +327,7 @@ void wxDDECleanUp();
     This no longer needs to be called by the application: it will be called
     by wxWidgets if necessary.
     See also wxDDEServer, wxDDEClient, wxDDEConnection,
-    wxDDECleanUp.
+    wxDDECleanUp().
 */
 void wxDDEInitialize();
 

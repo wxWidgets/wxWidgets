@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        metafile.h
-// Purpose:     documentation for wxMetafileDC class
+// Purpose:     interface of wxMetafileDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -30,8 +30,7 @@
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    wxMetafile, wxDC
+    @see wxMetafile, wxDC
 */
 class wxMetafileDC : public wxDC
 {
@@ -56,6 +55,7 @@ public:
 };
 
 
+
 /**
     @class wxMetafile
     @wxheader{metafile.h}
@@ -69,8 +69,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxMetafileDC
+    @see wxMetafileDC
 */
 class wxMetafile : public wxObject
 {
@@ -111,6 +110,7 @@ public:
     */
     bool SetClipboard(int width = 0, int height = 0);
 };
+
 
 
 // ============================================================================

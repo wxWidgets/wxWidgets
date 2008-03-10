@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        filepicker.h
-// Purpose:     documentation for wxFilePickerCtrl class
+// Purpose:     interface of wxFilePickerCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -45,8 +45,7 @@
     @category{miscpickers}
     @appearance{filepickerctrl.png}
 
-    @seealso
-    wxFileDialog, wxFileDirPickerEvent
+    @see wxFileDialog, wxFileDirPickerEvent
 */
 class wxFilePickerCtrl : public wxPickerBase
 {
@@ -128,6 +127,7 @@ public:
 };
 
 
+
 /**
     @class wxDirPickerCtrl
     @wxheader{filepicker.h}
@@ -163,8 +163,7 @@ public:
     @category{miscpickers}
     @appearance{dirpickerctrl.png}
 
-    @seealso
-    wxDirDialog, wxFileDirPickerEvent
+    @see wxDirDialog, wxFileDirPickerEvent
 */
 class wxDirPickerCtrl : public wxPickerBase
 {
@@ -242,6 +241,7 @@ public:
 };
 
 
+
 /**
     @class wxFileDirPickerEvent
     @wxheader{filepicker.h}
@@ -252,8 +252,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxfilepickerctrl
+    @see wxfilepickerctrl()
 */
 class wxFileDirPickerEvent : public wxCommandEvent
 {
@@ -275,3 +274,4 @@ public:
     */
     void SetPath(const wxString& path);
 };
+

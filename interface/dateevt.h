@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dateevt.h
-// Purpose:     documentation for wxDateEvent class
+// Purpose:     interface of wxDateEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -31,3 +31,4 @@ public:
     */
     void SetDate(const wxDateTime& date);
 };
+

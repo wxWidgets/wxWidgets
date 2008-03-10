@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        power.h
-// Purpose:     documentation for wxPowerEvent class
+// Purpose:     interface of wxPowerEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,8 +24,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxGetPowerType, wxGetBatteryState
+    @see wxGetPowerType(), wxGetBatteryState()
 */
 class wxPowerEvent : public wxEvent
 {
@@ -36,3 +35,4 @@ public:
     */
     void Veto();
 };
+

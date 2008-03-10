@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcmemory.h
-// Purpose:     documentation for wxMemoryDC class
+// Purpose:     interface of wxMemoryDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -19,8 +19,7 @@
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    wxBitmap, wxDC
+    @see wxBitmap, wxDC
 */
 class wxMemoryDC : public wxDC
 {
@@ -67,3 +66,4 @@ public:
     */
     void SelectObjectAsSource(const wxBitmap& bitmap);
 };
+

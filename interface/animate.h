@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        animate.h
-// Purpose:     documentation for wxAnimationCtrl class
+// Purpose:     interface of wxAnimationCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -32,8 +32,7 @@
     @category{ctrl}
     @appearance{animationctrl.png}
 
-    @seealso
-    wxAnimation
+    @see wxAnimation
 */
 class wxAnimationCtrl : public wxControl
 {
@@ -150,6 +149,7 @@ public:
 };
 
 
+
 /**
     @class wxAnimation
     @wxheader{animate.h}
@@ -162,11 +162,9 @@ public:
     @category{FIXME}
 
     @stdobjects
-    Objects:
-    wxNullAnimation
+    ::Objects:, ::wxNullAnimation,
 
-    @seealso
-    wxAnimationCtrl
+    @see wxAnimationCtrl
 */
 class wxAnimation : public wxGDIObject
 {
@@ -320,3 +318,17 @@ public:
     */
     wxAnimation operator =(const wxAnimation& brush);
 };
+
+
+/**
+    FIXME
+*/
+wxAnimation Objects:
+;
+
+/**
+    FIXME
+*/
+wxAnimation wxNullAnimation;
+
+

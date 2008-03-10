@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        menuitem.h
-// Purpose:     documentation for wxMenuItem class
+// Purpose:     interface of wxMenuItem
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -20,8 +20,7 @@
     @library{wxcore}
     @category{menus}
 
-    @seealso
-    wxMenuBar, wxMenu
+    @see wxMenuBar, wxMenu
 */
 class wxMenuItem : public wxObject
 {
@@ -283,3 +282,4 @@ public:
     */
     void SetTextColour(const wxColour& colour);
 };
+

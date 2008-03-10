@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        timer.h
-// Purpose:     documentation for wxTimer class
+// Purpose:     interface of wxTimer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -37,8 +37,7 @@
     @library{wxbase}
     @category{misc}
 
-    @seealso
-    wxStopWatch
+    @see wxStopWatch
 */
 class wxTimer : public wxEvtHandler
 {
@@ -128,6 +127,7 @@ public:
 };
 
 
+
 /**
     @class wxTimerEvent
     @wxheader{timer.h}
@@ -166,8 +166,7 @@ public:
     @library{wxbase}
     @category{events}
 
-    @seealso
-    wxTimer
+    @see wxTimer
 */
 class wxTimerEvent : public wxEvent
 {
@@ -182,3 +181,4 @@ public:
     */
     wxTimer GetTimer() const;
 };
+

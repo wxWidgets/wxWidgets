@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        menu.h
-// Purpose:     documentation for wxMenuBar class
+// Purpose:     interface of wxMenuBar
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,8 +15,7 @@
     @library{wxcore}
     @category{menus}
 
-    @seealso
-    wxMenu, @ref overview_eventhandlingoverview
+    @see wxMenu, @ref overview_eventhandlingoverview
 */
 class wxMenuBar : public wxWindow
 {
@@ -344,6 +343,7 @@ public:
 };
 
 
+
 /**
     @class wxMenu
     @wxheader{menu.h}
@@ -385,8 +385,7 @@ public:
     @library{wxcore}
     @category{menus}
 
-    @seealso
-    wxMenuBar, wxWindow::PopupMenu, @ref overview_eventhandlingoverview, @ref
+    @see wxMenuBar, wxWindow::PopupMenu, @ref overview_eventhandlingoverview, @ref
     overview_wxfilehistory "wxFileHistory (most recently used files menu)"
 */
 class wxMenu : public wxEvtHandler
@@ -800,3 +799,4 @@ public:
     */
     void UpdateUI(wxEvtHandler* source = NULL) const;
 };
+

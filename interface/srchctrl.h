@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        srchctrl.h
-// Purpose:     documentation for wxSearchCtrl class
+// Purpose:     interface of wxSearchCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -43,8 +43,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxTextCtrl::Create, wxValidator
+    @see wxTextCtrl::Create, wxValidator
 */
 class wxSearchCtrl : public wxTextCtrl
 {
@@ -126,3 +125,4 @@ public:
     */
     virtual void ShowSearchButton(bool show);
 };
+

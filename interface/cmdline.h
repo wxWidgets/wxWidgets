@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cmdline.h
-// Purpose:     documentation for wxCmdLineParser class
+// Purpose:     interface of wxCmdLineParser
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -58,8 +58,7 @@
     @library{wxbase}
     @category{appmanagement}
 
-    @seealso
-    wxApp::argc and wxApp::argv, console sample
+    @see wxApp::argc and wxApp::argv, console sample
 */
 class wxCmdLineParser
 {
@@ -289,3 +288,4 @@ public:
     */
     void Usage();
 };
+

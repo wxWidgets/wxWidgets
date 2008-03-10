@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dc.h
-// Purpose:     documentation for wxDC class
+// Purpose:     interface of wxDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -30,8 +30,7 @@
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    Overview
+    @see Overview()
 */
 class wxDC : public wxObject
 {
@@ -468,7 +467,7 @@ public:
     /**
         Returns the depth (number of bits/pixel) of this DC.
         
-        @see wxDisplayDepth
+        @see wxDisplayDepth()
     */
     int GetDepth() const;
 
@@ -975,6 +974,7 @@ public:
 };
 
 
+
 /**
     @class wxDCClipper
     @wxheader{dc.h}
@@ -1002,8 +1002,7 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @seealso
-    wxDC::SetClippingRegion
+    @see wxDC::SetClippingRegion
 */
 class wxDCClipper
 {
@@ -1020,3 +1019,4 @@ public:
     wxDCClipper(wxDC& dc, int x, int y, int w, int h);
     //@}
 };
+

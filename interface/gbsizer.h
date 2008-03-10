@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gbsizer.h
-// Purpose:     documentation for wxGBPosition class
+// Purpose:     interface of wxGBPosition
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -58,6 +58,7 @@ public:
     */
     bool operator operator==(const wxGBPosition& p) const;
 };
+
 
 
 /**
@@ -220,6 +221,7 @@ public:
 };
 
 
+
 /**
     @class wxGBSizerItem
     @wxheader{gbsizer.h}
@@ -304,6 +306,7 @@ public:
 };
 
 
+
 /**
     @class wxGBSpan
     @wxheader{gbsizer.h}
@@ -357,3 +360,4 @@ public:
     */
     bool operator operator==(const wxGBSpan& o) const;
 };
+

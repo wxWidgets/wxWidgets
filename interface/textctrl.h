@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        textctrl.h
-// Purpose:     documentation for wxTextAttr class
+// Purpose:     interface of wxTextAttr
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -22,8 +22,7 @@
     @library{wxcore}
     @category{richtext}
 
-    @seealso
-    wxTextCtrl, wxRichTextCtrl
+    @see wxTextCtrl, wxRichTextCtrl
 */
 class wxTextAttr
 {
@@ -622,6 +621,7 @@ public:
 };
 
 
+
 /**
     @class wxTextCtrl
     @wxheader{textctrl.h}
@@ -697,8 +697,7 @@ public:
     @category{ctrl}
     @appearance{textctrl.png}
 
-    @seealso
-    wxTextCtrl::Create, wxValidator
+    @see wxTextCtrl::Create, wxValidator
 */
 class wxTextCtrl : public wxControl
 {
@@ -769,7 +768,8 @@ public:
         text control using the given @e choices.
         Notice that currently this function is only implemented in wxGTK2 and wxMSW
         ports and does nothing under the other platforms.
-        This function is new since wxWidgets version 2.9.0
+        
+        @wxsince{2.9.0}
         
         @returns @true if the auto-completion was enabled or @false if the
                  operation failed, typically because auto-completion is
@@ -784,7 +784,8 @@ public:
         text control using all valid file system paths.
         Notice that currently this function is only implemented in wxGTK2 port and does
         nothing under the other platforms.
-        This function is new since wxWidgets version 2.9.0
+        
+        @wxsince{2.9.0}
         
         @returns @true if the auto-completion was enabled or @false if the
                  operation failed, typically because auto-completion is
@@ -831,7 +832,8 @@ public:
         event.
         This is the only difference with SetValue().
         See @ref overview_progevent "this topic" for more information.
-        This function is new since wxWidgets version 2.7.1
+        
+        @wxsince{2.7.1}
         
         @param value
             The new value to set. It may contain newline characters if the text control
@@ -1023,7 +1025,8 @@ public:
         Returns @true if the control is currently empty. This is the same as
         @c GetValue().empty() but can be much more efficient for the multiline
         controls containing big amounts of text.
-        This function is new since wxWidgets version 2.7.1
+        
+        @wxsince{2.7.1}
     */
     bool IsEmpty() const;
 
@@ -1319,6 +1322,7 @@ public:
 };
 
 
+
 /**
     @class wxStreamToTextRedirector
     @wxheader{textctrl.h}
@@ -1354,8 +1358,7 @@ public:
     @library{wxcore}
     @category{logging}
 
-    @seealso
-    wxTextCtrl
+    @see wxTextCtrl
 */
 class wxStreamToTextRedirector
 {
@@ -1378,3 +1381,4 @@ public:
     */
     ~wxStreamToTextRedirector();
 };
+

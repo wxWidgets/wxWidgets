@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cursor.h
-// Purpose:     documentation for wxCursor class
+// Purpose:     interface of wxCursor
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -28,17 +28,10 @@
     @category{gdi}
 
     @stdobjects
-    Objects:
-    wxNullCursor
-    Pointers:
-    wxSTANDARD_CURSOR
+    ::Objects:, ::wxNullCursor, ::Pointers:, ::wxSTANDARD_CURSOR,
+    ::wxHOURGLASS_CURSOR, ::wxCROSS_CURSOR,
 
-    wxHOURGLASS_CURSOR
-
-    wxCROSS_CURSOR
-
-    @seealso
-    wxBitmap, wxIcon, wxWindow::SetCursor, ::wxSetCursor
+    @see wxBitmap, wxIcon, wxWindow::SetCursor, ::wxSetCursor
 */
 class wxCursor : public wxBitmap
 {
@@ -467,3 +460,38 @@ public:
     */
     wxCursor operator =(const wxCursor& cursor);
 };
+
+
+/**
+    FIXME
+*/
+wxCursor Objects:
+;
+
+/**
+    FIXME
+*/
+wxCursor wxNullCursor;
+
+/**
+    FIXME
+*/
+wxCursor Pointers:
+;
+
+/**
+    FIXME
+*/
+wxCursor wxSTANDARD_CURSOR;
+
+/**
+    FIXME
+*/
+wxCursor wxHOURGLASS_CURSOR;
+
+/**
+    FIXME
+*/
+wxCursor wxCROSS_CURSOR;
+
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        spinbutt.h
-// Purpose:     documentation for wxSpinEvent class
+// Purpose:     interface of wxSpinEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -16,8 +16,7 @@
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxSpinButton and wxSpinCtrl
+    @see wxSpinButton and wxSpinCtrl
 */
 class wxSpinEvent : public wxNotifyEvent
 {
@@ -37,6 +36,7 @@ public:
     */
     void SetPosition(int pos);
 };
+
 
 
 /**
@@ -70,8 +70,7 @@ public:
     @category{ctrl}
     @appearance{spinbutton.png}
 
-    @seealso
-    wxSpinCtrl
+    @see wxSpinCtrl
 */
 class wxSpinButton : public wxControl
 {
@@ -161,3 +160,4 @@ public:
     */
     void SetValue(int value);
 };
+

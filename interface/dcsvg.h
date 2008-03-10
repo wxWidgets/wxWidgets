@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcsvg.h
-// Purpose:     documentation for wxSVGFileDC class
+// Purpose:     interface of wxSVGFileDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -36,8 +36,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @b Members
+    @see @b Members
 */
 class wxSVGFileDC : public wxDC
 {
@@ -648,3 +647,4 @@ public:
     */
     bool StartDoc(const wxString& message);
 };
+

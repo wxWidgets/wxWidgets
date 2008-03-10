@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sckstrm.h
-// Purpose:     documentation for wxSocketOutputStream class
+// Purpose:     interface of wxSocketOutputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,7 @@
     @library{wxnet}
     @category{streams}
 
-    @seealso
-    wxSocketBase
+    @see wxSocketBase
 */
 class wxSocketOutputStream : public wxOutputStream
 {
@@ -29,6 +28,7 @@ public:
     */
     wxSocketOutputStream(wxSocketBase& s);
 };
+
 
 
 /**
@@ -42,8 +42,7 @@ public:
     @library{wxnet}
     @category{streams}
 
-    @seealso
-    wxSocketBase
+    @see wxSocketBase
 */
 class wxSocketInputStream : public wxInputStream
 {
@@ -54,3 +53,4 @@ public:
     */
     wxSocketInputStream(wxSocketBase& s);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dcscreen.h
-// Purpose:     documentation for wxScreenDC class
+// Purpose:     interface of wxScreenDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,7 @@
     @library{wxcore}
     @category{dc}
 
-    @seealso
-    wxDC, wxMemoryDC, wxPaintDC, wxClientDC, wxWindowDC
+    @see wxDC, wxMemoryDC, wxPaintDC, wxClientDC, wxWindowDC
 */
 class wxScreenDC : public wxDC
 {
@@ -65,3 +64,4 @@ public:
     bool StartDrawingOnTop(wxRect* rect = NULL);
     //@}
 };
+

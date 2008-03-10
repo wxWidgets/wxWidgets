@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/helpfrm.h
-// Purpose:     documentation for wxHtmlHelpFrame class
+// Purpose:     interface of wxHtmlHelpFrame
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -79,3 +79,4 @@ public:
     void WriteCustomization(wxConfigBase* cfg,
                             const wxString& path = wxEmptyString);
 };
+

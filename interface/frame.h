@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        frame.h
-// Purpose:     documentation for wxFrame class
+// Purpose:     interface of wxFrame
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -82,8 +82,7 @@
     @library{wxcore}
     @category{managedwnd}
 
-    @seealso
-    wxMDIParentFrame, wxMDIChildFrame, wxMiniFrame, wxDialog
+    @see wxMDIParentFrame, wxMDIChildFrame, wxMiniFrame, wxDialog
 */
 class wxFrame : public wxTopLevelWindow
 {
@@ -380,3 +379,4 @@ public:
     */
     void SetToolBar(wxToolBar* toolBar);
 };
+

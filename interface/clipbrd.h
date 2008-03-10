@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        clipbrd.h
-// Purpose:     documentation for wxClipboard class
+// Purpose:     interface of wxClipboard
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -56,8 +56,7 @@
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    @ref overview_wxdndoverview, wxDataObject
+    @see @ref overview_wxdndoverview, wxDataObject
 */
 class wxClipboard : public wxObject
 {
@@ -162,3 +161,4 @@ public:
     */
     void UsePrimarySelection(bool primary = true);
 };
+

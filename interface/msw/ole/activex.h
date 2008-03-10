@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msw/ole/activex.h
-// Purpose:     documentation for wxActiveXEvent class
+// Purpose:     interface of wxActiveXEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -52,6 +52,7 @@ public:
 };
 
 
+
 /**
     @class wxActiveXContainer
     @headerfile ole/activex.h wx/msw/ole/activex.h
@@ -73,8 +74,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxActiveXEvent
+    @see wxActiveXEvent
 */
 class wxActiveXContainer : public wxControl
 {
@@ -91,3 +91,4 @@ public:
     */
     wxActiveXContainer(wxWindow* parent, REFIID iid, IUnknown* pUnk);
 };
+

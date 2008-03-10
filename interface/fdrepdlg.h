@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fdrepdlg.h
-// Purpose:     documentation for wxFindDialogEvent class
+// Purpose:     interface of wxFindDialogEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -46,6 +46,7 @@ public:
     */
     const wxString GetReplaceString() const;
 };
+
 
 
 /**
@@ -105,6 +106,7 @@ public:
 };
 
 
+
 /**
     @class wxFindReplaceDialog
     @wxheader{fdrepdlg.h}
@@ -156,3 +158,4 @@ public:
     */
     const wxFindReplaceData* GetData() const;
 };
+

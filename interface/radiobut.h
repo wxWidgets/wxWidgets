@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        radiobut.h
-// Purpose:     documentation for wxRadioButton class
+// Purpose:     interface of wxRadioButton
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -41,8 +41,7 @@
     @category{ctrl}
     @appearance{radiobutton.png}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxRadioBox, wxCheckBox
+    @see @ref overview_eventhandlingoverview, wxRadioBox, wxCheckBox
 */
 class wxRadioButton : public wxControl
 {
@@ -113,3 +112,4 @@ public:
     */
     void SetValue(const bool value);
 };
+

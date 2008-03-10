@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wrapsizer.h
-// Purpose:     documentation for wxWrapSizer class
+// Purpose:     interface of wxWrapSizer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -21,8 +21,7 @@
     @library{wxcore}
     @category{winlayout}
 
-    @seealso
-    wxBoxSizer, wxSizer, @ref overview_sizeroverview "Sizer overview"
+    @see wxBoxSizer, wxSizer, @ref overview_sizeroverview "Sizer overview"
 */
 class wxWrapSizer : public wxBoxSizer
 {
@@ -45,3 +44,4 @@ public:
     bool InformFirstDirection(int direction, int size,
                               int availableOtherDir);
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tglbtn.h
-// Purpose:     documentation for wxBitmapToggleButton class
+// Purpose:     interface of wxBitmapToggleButton
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -71,6 +71,7 @@ public:
 };
 
 
+
 /**
     @class wxToggleButton
     @wxheader{tglbtn.h}
@@ -82,7 +83,7 @@ public:
     Since wxWidgets version 2.9.0 this control emits an update UI event.
 
     You can see wxToggleButton in action in the sixth page of the
-    controls sample.
+    controls() sample.
 
     @beginEventTable
     @event{EVT_TOGGLEBUTTON(id, func)}:
@@ -93,8 +94,7 @@ public:
     @category{ctrl}
     @appearance{togglebutton.png}
 
-    @seealso
-    wxCheckBox, wxButton, wxBitmapToggleButton
+    @see wxCheckBox, wxButton, wxBitmapToggleButton
 */
 class wxToggleButton : public wxControl
 {
@@ -167,3 +167,4 @@ public:
     */
     void SetValue(bool state);
 };
+

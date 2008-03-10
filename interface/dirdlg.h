@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dirdlg.h
-// Purpose:     documentation for wxDirDialog class
+// Purpose:     interface of wxDirDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -29,8 +29,7 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxdirdialogoverview "wxDirDialog overview", wxFileDialog
+    @see @ref overview_wxdirdialogoverview "wxDirDialog overview", wxFileDialog
 */
 class wxDirDialog : public wxDialog
 {
@@ -93,6 +92,7 @@ public:
     */
     int ShowModal();
 };
+
 
 
 // ============================================================================

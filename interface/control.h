@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        control.h
-// Purpose:     documentation for wxControl class
+// Purpose:     interface of wxControl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -19,8 +19,7 @@
     @category{ctrl}
     @appearance{control.png}
 
-    @seealso
-    wxValidator
+    @see wxValidator
 */
 class wxControl : public wxWindow
 {
@@ -58,3 +57,4 @@ public:
     */
     void SetLabel(const wxString& label);
 };
+

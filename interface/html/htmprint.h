@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/htmprint.h
-// Purpose:     documentation for wxHtmlDCRenderer class
+// Purpose:     interface of wxHtmlDCRenderer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -91,6 +91,7 @@ public:
     */
     void SetSize(int width, int height);
 };
+
 
 
 /**
@@ -232,6 +233,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlPrintout
     @headerfile htmprint.h wx/html/htmprint.h
@@ -325,3 +327,4 @@ public:
                     float right = 25.2,
                     float spaces = 5);
 };
+

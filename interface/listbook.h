@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        listbook.h
-// Purpose:     documentation for wxListbook class
+// Purpose:     interface of wxListbook
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -37,8 +37,7 @@
     @library{wxcore}
     @category{miscwnd}
 
-    @seealso
-    wxBookCtrl, wxNotebook, @ref overview_samplenotebook "notebook sample"
+    @see wxBookCtrl(), wxNotebook, @ref overview_samplenotebook "notebook sample"
 */
 class wxListbook : public wxBookCtrl overview
 {
@@ -55,3 +54,4 @@ public:
                const wxString& name = wxEmptyStr);
     //@}
 };
+

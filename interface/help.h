@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        help.h
-// Purpose:     documentation for wxHelpController class
+// Purpose:     interface of wxHelpController
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -56,7 +56,7 @@
     The default browser is Netscape Navigator. The 'help' sample shows its use.
      wxWinceHelpController, for controlling a simple @c .htm help controller for
     Windows CE applications.
-     wxHtmlHelpController, a sophisticated help controller using wxHTML, in
+     wxHtmlHelpController, a sophisticated help controller using wxHTML(), in
     a similar style to the Microsoft HTML Help viewer and using some of the same
     files.
     Although it has an API compatible with other help controllers, it has more
@@ -72,8 +72,7 @@
     @library{wxbase}
     @category{help}
 
-    @seealso
-    wxHtmlHelpController, wxHTML
+    @see wxHtmlHelpController, wxHTML()
 */
 class wxHelpController : public wxObject
 {
@@ -244,3 +243,4 @@ public:
     */
     virtual void SetViewer(const wxString& viewer, long flags);
 };
+

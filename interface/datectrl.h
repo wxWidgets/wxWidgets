@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        datectrl.h
-// Purpose:     documentation for wxDatePickerCtrl class
+// Purpose:     interface of wxDatePickerCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -52,8 +52,7 @@
     @category{miscpickers}
     @appearance{datepickerctrl.png}
 
-    @seealso
-    wxCalendarCtrl, wxDateEvent
+    @see wxCalendarCtrl, wxDateEvent
 */
 class wxDatePickerCtrl : public wxControl
 {
@@ -154,3 +153,4 @@ public:
     */
     void SetValue(const wxDateTime& dt);
 };
+

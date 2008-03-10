@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sound.h
-// Purpose:     documentation for wxSound class
+// Purpose:     interface of wxSound
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -104,3 +104,4 @@ public:
     */
     static void Stop();
 };
+

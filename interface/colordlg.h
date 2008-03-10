@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colordlg.h
-// Purpose:     documentation for wxColourDialog class
+// Purpose:     interface of wxColourDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,9 +15,8 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxcolourdialogoverview "wxColourDialog Overview", wxColour,
-    wxColourData, wxGetColourFromUser
+    @see @ref overview_wxcolourdialogoverview "wxColourDialog Overview", wxColour,
+    wxColourData, wxGetColourFromUser()
 */
 class wxColourDialog : public wxDialog
 {
@@ -56,6 +55,7 @@ public:
     */
     int ShowModal();
 };
+
 
 
 // ============================================================================

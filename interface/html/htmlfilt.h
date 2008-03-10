@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/htmlfilt.h
-// Purpose:     documentation for wxHtmlFilter class
+// Purpose:     interface of wxHtmlFilter
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -16,8 +16,7 @@
     @library{wxhtml}
     @category{FIXME}
 
-    @seealso
-    Overview
+    @see Overview()
 */
 class wxHtmlFilter : public wxObject
 {
@@ -39,3 +38,4 @@ public:
     */
     wxString ReadFile(const wxFSFile& file);
 };
+

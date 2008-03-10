@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        combo.h
-// Purpose:     documentation for wxComboPopup class
+// Purpose:     interface of wxComboPopup
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxComboCtrl
+    @see wxComboCtrl
 */
 class wxComboPopup
 {
@@ -144,6 +143,7 @@ public:
 };
 
 
+
 /**
     @class wxComboCtrl
     @wxheader{combo.h}
@@ -184,8 +184,7 @@ public:
     @category{ctrl}
     @appearance{comboctrl.png}
 
-    @seealso
-    wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxComboPopup, wxCommandEvent
+    @see wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxComboPopup, wxCommandEvent
 */
 class wxComboCtrl : public wxControl
 {
@@ -622,3 +621,4 @@ public:
     */
     void UseAltPopupWindow(bool enable = true);
 };
+

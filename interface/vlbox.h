@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        vlbox.h
-// Purpose:     documentation for wxVListBox class
+// Purpose:     interface of wxVListBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -34,8 +34,7 @@
     @category{ctrl}
     @appearance{vlistbox.png}
 
-    @seealso
-    wxSimpleHtmlListBox, wxHtmlListBox
+    @see wxSimpleHtmlListBox, wxHtmlListBox
 */
 class wxVListBox : public wxVScrolledWindow
 {
@@ -282,3 +281,4 @@ public:
     */
     void Toggle(size_t item);
 };
+

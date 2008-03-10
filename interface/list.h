@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        list.h
-// Purpose:     documentation for wxList<T> class
+// Purpose:     interface of wxList<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -37,8 +37,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxArrayT, wxVectorT
+    @see wxArrayT(), wxVectorT()
 */
 class wxList<T>
 {
@@ -305,6 +304,7 @@ public:
 };
 
 
+
 /**
     @class wxNode
     @wxheader{list.h}
@@ -327,8 +327,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxList, wxHashTable
+    @see wxList, wxHashTable
 */
 class wxNode
 {
@@ -360,3 +359,4 @@ public:
     */
     void SetData(T* data);
 };
+

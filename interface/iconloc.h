@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        iconloc.h
-// Purpose:     documentation for wxIconLocation class
+// Purpose:     interface of wxIconLocation
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -25,8 +25,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxIcon, wxFileType::GetIcon
+    @see wxIcon, wxFileType::GetIcon
 */
 class wxIconLocation
 {
@@ -37,3 +36,4 @@ public:
     */
     bool IsOk() const;
 };
+

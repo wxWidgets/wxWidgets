@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        intl.h
-// Purpose:     documentation for wxLocale class
+// Purpose:     interface of wxLocale
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -54,8 +54,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_internationalization, @ref overview_sampleinternat "Internat
+    @see @ref overview_internationalization, @ref overview_sampleinternat "Internat
     sample", wxXLocale
 */
 class wxLocale
@@ -104,8 +103,8 @@ public:
         @a msgIdLanguage and @e msgIdCharset.
         @a msgIdLanguage specifies the language of "msgid" strings in source code
         (i.e. arguments to GetString(),
-        wxGetTranslation and the
-        _ macro). It is used if AddCatalog cannot find any
+        wxGetTranslation() and the
+        _() macro). It is used if AddCatalog cannot find any
         catalog for current language: if the language is same as source code language,
         then strings from source code are used instead.
         @a msgIdCharset lets you specify the charset used for msgids in sources
@@ -178,7 +177,7 @@ public:
                             const wxString& domain = wxEmptyString) const;
 
     /**
-        Returns wxLanguage constant of current language.
+        Returns wxLanguage() constant of current language.
         Note that you can call this function only if you used the form of
         Init() that takes wxLanguage argument.
     */
@@ -234,8 +233,8 @@ public:
         message catalog is found @a origString is returned if 'n == 1',
         otherwise @e origString2.
         See GNU gettext manual for additional information on plural forms handling.
-        This method is called by the wxGetTranslation
-        function and _ macro.
+        This method is called by the wxGetTranslation()
+        function and _() macro.
         
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
@@ -256,7 +255,7 @@ public:
 
     /**
         Tries to detect the user's default font encoding.
-        Returns wxFontEncoding value or
+        Returns wxFontEncoding() value or
         @b wxFONTENCODING_SYSTEM if it couldn't be determined.
     */
     static wxFontEncoding GetSystemEncoding() const;
@@ -273,7 +272,7 @@ public:
 
     /**
         Tries to detect the user's default language setting.
-        Returns wxLanguage value or
+        Returns wxLanguage() value or
          @b wxLANGUAGE_UNKNOWN if the language-guessing algorithm failed.
     */
     static int GetSystemLanguage() const;
@@ -364,7 +363,8 @@ public:
         FindLanguageInfo() to obtain its
         wxLanguageInfo structure. See AddLanguage() for
         the wxLanguageInfo description.
-        This function is new since wxWidgets version 2.7.1.
+        
+        @wxsince{2.7.1}.
     */
     static bool IsAvailable(int lang);
 
@@ -388,6 +388,7 @@ public:
         GetSystemLanguage():
     */
 };
+
 
 
 /**
@@ -452,8 +453,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxLocale
+    @see wxLocale
 */
 class wxXLocale
 {
@@ -532,13 +532,14 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
 
 /**
-    This macro is identical to _ but for the plural variant
-    of wxGetTranslation.
+    This macro is identical to _() but for the plural variant
+    of wxGetTranslation().
 */
 #define const wxString wxPLURAL(const wxString& sing,
 const wxString& plur,
@@ -549,9 +550,9 @@ size_t n)     /* implementation is private */
     value of its argument.
     However it does have a purpose which is to mark the literal strings for the
     extraction into the message catalog created by @c xgettext program. Usually
-    this is achieved using _ but that macro not only marks
+    this is achieved using _() but that macro not only marks
     the string for extraction but also expands into a
-    wxGetTranslation function call which means that it
+    wxGetTranslation() function call which means that it
     cannot be used in some situations, notably for static array
     initialization.
     Here is an example which should make it more clear: suppose that you have a
@@ -585,18 +586,18 @@ size_t n)     /* implementation is private */
 #define const wxChar* wxTRANSLATE(const char* s)     /* implementation is private */
 
 /**
-    This macro expands into a call to wxGetTranslation
+    This macro expands into a call to wxGetTranslation()
     function, so it marks the message for the extraction by @c xgettext just as
-    wxTRANSLATE does, but also returns the translation of
+    wxTRANSLATE() does, but also returns the translation of
     the string for the current locale during execution.
-    Don't confuse this macro with _T!
+    Don't confuse this macro with _T()!
 */
 const wxString _(const wxString& s);
 
 //@{
 /**
     This function returns the translation of string @a str in the current
-    locale. If the string is not found in any of the loaded
+    locale(). If the string is not found in any of the loaded
     message catalogs (see @ref overview_internationalization "internationalization
     overview"), the
     original string is returned. In debug build, an error message is logged -- this
@@ -604,7 +605,7 @@ const wxString _(const wxString& s);
     @a domain is specified then only that domain/catalog is searched
     for a matching string.  As this function
     is used very often, an alternative (and also common in Unix world) syntax is
-    provided: the _ macro is defined to do the same thing
+    provided: the _() macro is defined to do the same thing
     as wxGetTranslation.
     The second form is used when retrieving translation of string that has
     different singular and plural form in English or different plural forms in some
@@ -616,14 +617,14 @@ const wxString _(const wxString& s);
     otherwise @e strPlural.
     See GNU gettext manual
     for additional information on plural forms handling. For a shorter alternative
-    see the wxPLURAL macro.
+    see the wxPLURAL() macro.
     Both versions call wxLocale::GetString.
     Note that this function is not suitable for literal strings in Unicode
     builds, since the literal strings must be enclosed into
-    _T or wxT macro which makes them
+    _T() or wxT() macro which makes them
     unrecognised by @c xgettext, and so they are not extracted to the message
-    catalog. Instead, use the _ and
-    wxPLURAL macro for all literal strings.
+    catalog. Instead, use the _() and
+    wxPLURAL() macro for all literal strings.
 */
 const wxString wxGetTranslation(const wxString& str,
                                 const wxString& domain = wxEmptyString);

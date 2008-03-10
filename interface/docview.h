@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        docview.h
-// Purpose:     documentation for wxDocTemplate class
+// Purpose:     interface of wxDocTemplate
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -16,8 +16,8 @@
     @library{wxcore}
     @category{dvf}
 
-    @seealso
-    @ref overview_wxdoctemplateoverview "wxDocTemplate overview", wxDocument, wxView
+    @see @ref overview_wxdoctemplateoverview "wxDocTemplate overview", wxDocument,
+    wxView
 */
 class wxDocTemplate : public wxObject
 {
@@ -258,6 +258,7 @@ public:
 };
 
 
+
 /**
     @class wxDocManager
     @wxheader{docview.h}
@@ -270,9 +271,8 @@ public:
     @library{wxcore}
     @category{dvf}
 
-    @seealso
-    @ref overview_wxdocmanageroverview "wxDocManager overview", wxDocument, wxView,
-    wxDocTemplate, wxFileHistory
+    @see @ref overview_wxdocmanageroverview "wxDocManager overview", wxDocument,
+    wxView, wxDocTemplate, wxFileHistory
 */
 class wxDocManager : public wxEvtHandler
 {
@@ -368,7 +368,7 @@ public:
     /**
         Loads the file history from a config object.
         
-        @see wxConfig
+        @see wxConfig()
     */
     void FileHistoryLoad(wxConfigBase& config);
 
@@ -382,7 +382,7 @@ public:
         Saves the file history into a config object. This must be called
         explicitly by the application.
         
-        @see wxConfig
+        @see wxConfig()
     */
     void FileHistorySave(wxConfigBase& resourceFile);
 
@@ -633,6 +633,7 @@ public:
 };
 
 
+
 /**
     @class wxView
     @wxheader{docview.h}
@@ -646,8 +647,7 @@ public:
     @library{wxcore}
     @category{dvf}
 
-    @seealso
-    @ref overview_wxviewoverview "wxView overview", wxDocument, wxDocTemplate,
+    @see @ref overview_wxviewoverview "wxView overview", wxDocument, wxDocTemplate,
     wxDocManager
 */
 class wxView : public wxEvtHandler
@@ -817,6 +817,7 @@ public:
 };
 
 
+
 /**
     @class wxDocChildFrame
     @wxheader{docview.h}
@@ -833,8 +834,7 @@ public:
     @library{wxcore}
     @category{dvf}
 
-    @seealso
-    @ref overview_docviewoverview, wxFrame
+    @see @ref overview_docviewoverview, wxFrame
 */
 class wxDocChildFrame : public wxFrame
 {
@@ -900,6 +900,7 @@ public:
 };
 
 
+
 /**
     @class wxDocParentFrame
     @wxheader{docview.h}
@@ -909,15 +910,14 @@ public:
     SDI (not MDI) parent frames.
 
     It cooperates with the wxView, wxDocument,
-    wxDocManager and wxDocTemplates classes.
+    wxDocManager and wxDocTemplates() classes.
 
     See the example application in @c samples/docview.
 
     @library{wxcore}
     @category{dvf}
 
-    @seealso
-    @ref overview_docviewoverview, wxFrame
+    @see @ref overview_docviewoverview, wxFrame
 */
 class wxDocParentFrame : public wxFrame
 {
@@ -966,6 +966,7 @@ public:
 };
 
 
+
 /**
     @class wxDocument
     @wxheader{docview.h}
@@ -978,9 +979,8 @@ public:
     @library{wxcore}
     @category{dvf}
 
-    @seealso
-    @ref overview_wxdocumentoverview "wxDocument overview", wxView, wxDocTemplate,
-    wxDocManager
+    @see @ref overview_wxdocumentoverview "wxDocument overview", wxView,
+    wxDocTemplate, wxDocManager
 */
 class wxDocument : public wxEvtHandler
 {
@@ -1033,7 +1033,7 @@ public:
 
     /**
         Gets the document type name for this document. See the comment for
-        documentTypeName.
+        documentTypeName().
     */
     wxString GetDocumentName() const;
 
@@ -1217,7 +1217,7 @@ public:
 
     /**
         Sets the document type name for this document. See the comment for
-        documentTypeName.
+        documentTypeName().
     */
     void SetDocumentName(const wxString& name);
 
@@ -1298,6 +1298,7 @@ public:
 };
 
 
+
 /**
     @class wxFileHistory
     @wxheader{docview.h}
@@ -1314,8 +1315,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxfilehistoryoverview "wxFileHistory overview", wxDocManager
+    @see @ref overview_wxfilehistoryoverview "wxFileHistory overview", wxDocManager
 */
 class wxFileHistory : public wxObject
 {
@@ -1381,7 +1381,7 @@ public:
         Loads the file history from the given config object. This function should be
         called explicitly by the application.
         
-        @see wxConfig
+        @see wxConfig()
     */
     void Load(wxConfigBase& config);
 
@@ -1399,7 +1399,7 @@ public:
         Saves the file history into the given config object. This must be called
         explicitly by the application.
         
-        @see wxConfig
+        @see wxConfig()
     */
     void Save(wxConfigBase& config);
 
@@ -1441,6 +1441,7 @@ public:
         The file menu used to display the file history list (if enabled).
     */
 };
+
 
 
 // ============================================================================

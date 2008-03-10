@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        event.h
-// Purpose:     documentation for wxKeyEvent class
+// Purpose:     interface of wxKeyEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -47,7 +47,7 @@
     1, the ASCII value of this key combination.
 
     You may discover how the other keys on your system behave interactively by
-    running the text wxWidgets sample and pressing some keys
+    running the text() wxWidgets sample and pressing some keys
     in any of the text controls shown in it.
 
     @b Note: If a key down (@c EVT_KEY_DOWN) event is caught and
@@ -104,7 +104,7 @@ public:
     /**
         Returns the virtual key code. ASCII events return normal ASCII values,
         while non-ASCII events return values such as @b WXK_LEFT for the
-        left cursor key. See Keycodes for a full list of
+        left cursor key. See Keycodes() for a full list of
         the virtual key codes.
         Note that in Unicode build, the returned value is meaningful only if the
         user entered a character that can be represented in current locale's default
@@ -216,7 +216,7 @@ public:
         long m_keyCode
         @b Deprecated: Please use GetKeyCode()
         instead!
-        Virtual keycode. See Keycodes for a list of identifiers.
+        Virtual keycode. See Keycodes() for a list of identifiers.
     */
 
 
@@ -251,6 +251,7 @@ public:
 };
 
 
+
 /**
     @class wxJoystickEvent
     @wxheader{event.h}
@@ -261,8 +262,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxJoystick
+    @see wxJoystick
 */
 class wxJoystickEvent : public wxEvent
 {
@@ -351,6 +351,7 @@ public:
 };
 
 
+
 /**
     @class wxScrollWinEvent
     @wxheader{event.h}
@@ -360,8 +361,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxScrollEvent, @ref overview_eventhandlingoverview
+    @see wxScrollEvent, @ref overview_eventhandlingoverview
 */
 class wxScrollWinEvent : public wxEvent
 {
@@ -387,6 +387,7 @@ public:
 };
 
 
+
 /**
     @class wxSysColourChangedEvent
     @wxheader{event.h}
@@ -398,8 +399,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxSysColourChangedEvent : public wxEvent
 {
@@ -409,6 +409,7 @@ public:
     */
     wxSysColourChangedEvent();
 };
+
 
 
 /**
@@ -424,8 +425,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxWindowDestroyEvent
+    @see @ref overview_eventhandlingoverview, wxWindowDestroyEvent
 */
 class wxWindowCreateEvent : public wxCommandEvent
 {
@@ -435,6 +435,7 @@ public:
     */
     wxWindowCreateEvent(wxWindow* win = NULL);
 };
+
 
 
 /**
@@ -451,8 +452,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxPaintEvent : public wxEvent
 {
@@ -462,6 +462,7 @@ public:
     */
     wxPaintEvent(int id = 0);
 };
+
 
 
 /**
@@ -476,8 +477,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxTopLevelWindow::Maximize,
+    @see @ref overview_eventhandlingoverview, wxTopLevelWindow::Maximize,
     wxTopLevelWindow::IsMaximized
 */
 class wxMaximizeEvent : public wxEvent
@@ -490,6 +490,7 @@ public:
 };
 
 
+
 /**
     @class wxUpdateUIEvent
     @wxheader{event.h}
@@ -500,8 +501,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxUpdateUIEvent : public wxCommandEvent
 {
@@ -643,6 +643,7 @@ public:
 };
 
 
+
 /**
     @class wxClipboardTextEvent
     @wxheader{event.h}
@@ -667,8 +668,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxClipboard
+    @see wxClipboard
 */
 class wxClipboardTextEvent : public wxCommandEvent
 {
@@ -679,6 +679,7 @@ public:
     wxClipboardTextEvent(wxEventType commandType = wxEVT_NULL,
                          int id = 0);
 };
+
 
 
 /**
@@ -727,8 +728,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxKeyEvent::CmdDown
+    @see wxKeyEvent::CmdDown
 */
 class wxMouseEvent : public wxEvent
 {
@@ -902,7 +902,8 @@ public:
         Currently this function is implemented only in wxMac and returns -1 for the
         other platforms (you can still distinguish simple clicks from double-clicks as
         they generate different kinds of events however).
-        This function is new since wxWidgets version 2.9.0
+        
+        @wxsince{2.9.0}
     */
     int GetClickCount() const;
 
@@ -1140,6 +1141,7 @@ public:
 };
 
 
+
 /**
     @class wxDropFilesEvent
     @wxheader{event.h}
@@ -1150,14 +1152,13 @@ public:
     wxWindow::DragAcceptFiles.
 
     Important note: this is a separate implementation to the more general
-    drag and drop implementation documented here. It uses the
+    drag and drop implementation documented here(). It uses the
     older, Windows message-based approach of dropping files.
 
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxDropFilesEvent : public wxEvent
 {
@@ -1201,6 +1202,7 @@ public:
         The point at which the drop took place.
     */
 };
+
 
 
 /**
@@ -1317,6 +1319,7 @@ public:
 };
 
 
+
 /**
     @class wxActivateEvent
     @wxheader{event.h}
@@ -1327,8 +1330,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxApp::IsActive
+    @see @ref overview_eventhandlingoverview, wxApp::IsActive
 */
 class wxActivateEvent : public wxEvent
 {
@@ -1346,6 +1348,7 @@ public:
 };
 
 
+
 /**
     @class wxContextMenuEvent
     @wxheader{event.h}
@@ -1357,7 +1360,7 @@ public:
     means that the event originated
     from a keyboard context button event, and you should compute a suitable
     position yourself,
-    for example by calling wxGetMousePosition.
+    for example by calling wxGetMousePosition().
 
     When a keyboard context menu button is pressed on Windows, a right-click event
     with default position is sent first,
@@ -1368,8 +1371,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_wxcommandevent "Command events", @ref
+    @see @ref overview_wxcommandevent "Command events", @ref
     overview_eventhandlingoverview
 */
 class wxContextMenuEvent : public wxCommandEvent
@@ -1399,6 +1401,7 @@ public:
 };
 
 
+
 /**
     @class wxEraseEvent
     @wxheader{event.h}
@@ -1421,8 +1424,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxEraseEvent : public wxEvent
 {
@@ -1437,6 +1439,7 @@ public:
     */
     wxDC* GetDC() const;
 };
+
 
 
 /**
@@ -1454,8 +1457,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxFocusEvent : public wxEvent
 {
@@ -1474,6 +1476,7 @@ public:
 };
 
 
+
 /**
     @class wxChildFocusEvent
     @wxheader{event.h}
@@ -1489,8 +1492,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxChildFocusEvent : public wxCommandEvent
 {
@@ -1512,6 +1514,7 @@ public:
 };
 
 
+
 /**
     @class wxMouseCaptureLostEvent
     @wxheader{event.h}
@@ -1530,8 +1533,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxMouseCaptureChangedEvent, @ref overview_eventhandlingoverview,
+    @see wxMouseCaptureChangedEvent, @ref overview_eventhandlingoverview,
     wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
 */
 class wxMouseCaptureLostEvent : public wxEvent
@@ -1542,6 +1544,7 @@ public:
     */
     wxMouseCaptureLostEvent(wxWindowID windowId = 0);
 };
+
 
 
 /**
@@ -1558,8 +1561,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxNotebookEvent
+    @see wxNotebookEvent
 */
 class wxNotifyEvent : public wxCommandEvent
 {
@@ -1593,6 +1595,7 @@ public:
 };
 
 
+
 /**
     @class wxHelpEvent
     @wxheader{event.h}
@@ -1621,8 +1624,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxContextHelp, wxDialog, @ref overview_eventhandlingoverview
+    @see wxContextHelp, wxDialog, @ref overview_eventhandlingoverview
 */
 class wxHelpEvent : public wxCommandEvent
 {
@@ -1651,7 +1653,7 @@ public:
         MS Windows.
         
         The application may handle events generated using the keyboard or mouse
-        differently, e.g. by using wxGetMousePosition
+        differently, e.g. by using wxGetMousePosition()
         for the mouse events.
         
         @see SetOrigin()
@@ -1678,12 +1680,13 @@ public:
 };
 
 
+
 /**
     @class wxScrollEvent
     @wxheader{event.h}
 
     A scroll event holds information about events sent from stand-alone
-    scrollbars and sliders. Note that
+    scrollbars() and sliders(). Note that
     starting from wxWidgets 2.1, scrolled windows send the
     wxScrollWinEvent which does not derive from
     wxCommandEvent, but from wxEvent directly - don't confuse these two kinds of
@@ -1693,8 +1696,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxScrollBar, wxSlider, wxSpinButton, , wxScrollWinEvent, @ref
+    @see wxScrollBar, wxSlider, wxSpinButton, , wxScrollWinEvent, @ref
     overview_eventhandlingoverview
 */
 class wxScrollEvent : public wxCommandEvent
@@ -1719,6 +1721,7 @@ public:
 };
 
 
+
 /**
     @class wxIdleEvent
     @wxheader{event.h}
@@ -1730,7 +1733,7 @@ public:
     happens and only then is the next idle event sent again. If you need to ensure
     a continuous stream of idle events, you can either use
     wxIdleEvent::RequestMore method in your handler or call
-    wxWakeUpIdle periodically (for example from timer
+    wxWakeUpIdle() periodically (for example from timer
     event), but note that both of these approaches (and especially the first one)
     increase the system load and so should be avoided if possible.
 
@@ -1743,8 +1746,8 @@ public:
     @library{wxbase}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxUpdateUIEvent, wxWindow::OnInternalIdle
+    @see @ref overview_eventhandlingoverview, wxUpdateUIEvent,
+    wxWindow::OnInternalIdle
 */
 class wxIdleEvent : public wxEvent
 {
@@ -1811,6 +1814,7 @@ public:
 };
 
 
+
 /**
     @class wxInitDialogEvent
     @wxheader{event.h}
@@ -1822,8 +1826,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxInitDialogEvent : public wxEvent
 {
@@ -1833,6 +1836,7 @@ public:
     */
     wxInitDialogEvent(int id = 0);
 };
+
 
 
 /**
@@ -1855,8 +1859,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxWindowCreateEvent
+    @see @ref overview_eventhandlingoverview, wxWindowCreateEvent
 */
 class wxWindowDestroyEvent : public wxCommandEvent
 {
@@ -1866,6 +1869,7 @@ public:
     */
     wxWindowDestroyEvent(wxWindow* win = NULL);
 };
+
 
 
 /**
@@ -1883,8 +1887,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxWindow::Navigate, wxWindow::NavigateIn
+    @see wxWindow::Navigate, wxWindow::NavigateIn
 */
 class wxNavigationKeyEvent
 {
@@ -1948,6 +1951,7 @@ public:
 };
 
 
+
 /**
     @class wxMouseCaptureChangedEvent
     @wxheader{event.h}
@@ -1963,8 +1967,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxMouseCaptureLostEvent, @ref overview_eventhandlingoverview,
+    @see wxMouseCaptureLostEvent, @ref overview_eventhandlingoverview,
     wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
 */
 class wxMouseCaptureChangedEvent : public wxEvent
@@ -1982,6 +1985,7 @@ public:
     */
     wxWindow* GetCapturedWindow() const;
 };
+
 
 
 /**
@@ -2011,8 +2015,8 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxWindow::Close, @ref overview_windowdeletionoverview "Window deletion overview"
+    @see wxWindow::Close, @ref overview_windowdeletionoverview "Window deletion
+    overview"
 */
 class wxCloseEvent : public wxEvent
 {
@@ -2062,6 +2066,7 @@ public:
 };
 
 
+
 /**
     @class wxMenuEvent
     @wxheader{event.h}
@@ -2076,8 +2081,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_wxcommandevent "Command events", @ref
+    @see @ref overview_wxcommandevent "Command events", @ref
     overview_eventhandlingoverview
 */
 class wxMenuEvent : public wxEvent
@@ -2110,6 +2114,7 @@ public:
 };
 
 
+
 /**
     @class wxEventBlocker
     @wxheader{event.h}
@@ -2137,8 +2142,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxEvtHandler
+    @see @ref overview_eventhandlingoverview, wxEvtHandler
 */
 class wxEventBlocker : public wxEvtHandler
 {
@@ -2167,6 +2171,7 @@ public:
 };
 
 
+
 /**
     @class wxEvtHandler
     @wxheader{event.h}
@@ -2184,8 +2189,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandlingoverview
 */
 class wxEvtHandler : public wxObject
 {
@@ -2456,6 +2460,7 @@ public:
 };
 
 
+
 /**
     @class wxIconizeEvent
     @wxheader{event.h}
@@ -2467,8 +2472,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxTopLevelWindow::Iconize,
+    @see @ref overview_eventhandlingoverview, wxTopLevelWindow::Iconize,
     wxTopLevelWindow::IsIconized
 */
 class wxIconizeEvent : public wxEvent
@@ -2487,6 +2491,7 @@ public:
 };
 
 
+
 /**
     @class wxMoveEvent
     @wxheader{event.h}
@@ -2496,8 +2501,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxPoint, @ref overview_eventhandlingoverview
+    @see wxPoint, @ref overview_eventhandlingoverview
 */
 class wxMoveEvent : public wxEvent
 {
@@ -2512,6 +2516,7 @@ public:
     */
     wxPoint GetPosition() const;
 };
+
 
 
 /**
@@ -2530,8 +2535,7 @@ public:
     @library{wxbase}
     @category{events}
 
-    @seealso
-    wxCommandEvent, wxMouseEvent
+    @see wxCommandEvent, wxMouseEvent
 */
 class wxEvent : public wxObject
 {
@@ -2545,7 +2549,7 @@ public:
         Returns a copy of the event.
         Any event that is posted to the wxWidgets event system for later action (via
         wxEvtHandler::AddPendingEvent or
-        wxPostEvent) must implement this method. All wxWidgets
+        wxPostEvent()) must implement this method. All wxWidgets
         events fully implement this method, but any derived events implemented by the
         user should also implement this method just in case they (or some event
         derived from them) are ever posted.
@@ -2664,6 +2668,7 @@ public:
 };
 
 
+
 /**
     @class wxSizeEvent
     @wxheader{event.h}
@@ -2690,8 +2695,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxSize, @ref overview_eventhandlingoverview
+    @see wxSize, @ref overview_eventhandlingoverview
 */
 class wxSizeEvent : public wxEvent
 {
@@ -2708,6 +2712,7 @@ public:
 };
 
 
+
 /**
     @class wxSetCursorEvent
     @wxheader{event.h}
@@ -2721,8 +2726,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    ::wxSetCursor, wxWindow::wxSetCursor
+    @see ::wxSetCursor, wxWindow::wxSetCursor
 */
 class wxSetCursorEvent : public wxEvent
 {
@@ -2761,3 +2765,4 @@ public:
     */
     void SetCursor(const wxCursor& cursor);
 };
+

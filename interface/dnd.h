@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dnd.h
-// Purpose:     documentation for wxTextDropTarget class
+// Purpose:     interface of wxTextDropTarget
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -15,8 +15,7 @@
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    @ref overview_wxdndoverview, wxDropSource, wxDropTarget, wxFileDropTarget
+    @see @ref overview_wxdndoverview, wxDropSource, wxDropTarget, wxFileDropTarget
 */
 class wxTextDropTarget : public wxDropTarget
 {
@@ -47,6 +46,7 @@ public:
 };
 
 
+
 /**
     @class wxDropTarget
     @wxheader{dnd.h}
@@ -73,8 +73,8 @@ public:
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    wxDropSource, wxTextDropTarget, wxFileDropTarget, wxDataFormat, wxDataObject
+    @see wxDropSource, wxTextDropTarget, wxFileDropTarget, wxDataFormat,
+    wxDataObject
 */
 class wxDropTarget
 {
@@ -168,6 +168,7 @@ public:
 };
 
 
+
 /**
     @class wxDropSource
     @wxheader{dnd.h}
@@ -180,8 +181,7 @@ public:
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    wxDropTarget, wxTextDropTarget, wxFileDropTarget
+    @see wxDropTarget, wxTextDropTarget, wxFileDropTarget
 */
 class wxDropSource
 {
@@ -193,7 +193,7 @@ public:
         SetData() later.
         Note that the exact type of @a iconCopy and subsequent parameters differs
         between wxMSW and wxGTK: these are cursors under Windows but icons for GTK.
-        You should use the macro wxDROP_ICON in portable
+        You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
         
         @param win
@@ -279,6 +279,7 @@ public:
 };
 
 
+
 /**
     @class wxFileDropTarget
     @wxheader{dnd.h}
@@ -289,8 +290,7 @@ public:
     @library{wxcore}
     @category{dnd}
 
-    @seealso
-    @ref overview_wxdndoverview, wxDropSource, wxDropTarget, wxTextDropTarget
+    @see @ref overview_wxdndoverview, wxDropSource, wxDropTarget, wxTextDropTarget
 */
 class wxFileDropTarget : public wxDropTarget
 {
@@ -319,6 +319,7 @@ public:
     virtual bool OnDropFiles(wxCoord x, wxCoord y,
                              const wxArrayString& filenames);
 };
+
 
 
 // ============================================================================

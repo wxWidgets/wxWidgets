@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/winpars.h
-// Purpose:     documentation for wxHtmlTagsModule class
+// Purpose:     interface of wxHtmlTagsModule
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,8 @@
     @library{wxhtml}
     @category{FIXME}
 
-    @seealso
-    @ref overview_handlers "Tag Handlers", wxHtmlTagHandler, wxHtmlWinTagHandler,
+    @see @ref overview_handlers "Tag Handlers", wxHtmlTagHandler,
+    wxHtmlWinTagHandler,
 */
 class wxHtmlTagsModule : public wxModule
 {
@@ -34,6 +34,7 @@ public:
     */
     virtual void FillHandlersTable(wxHtmlWinParser parser);
 };
+
 
 
 /**
@@ -60,6 +61,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlWinParser
     @headerfile winpars.h wx/html/winpars.h
@@ -72,8 +74,7 @@ public:
     @library{wxhtml}
     @category{html}
 
-    @seealso
-    @ref overview_handlers "Handlers overview"
+    @see @ref overview_handlers "Handlers overview"
 */
 class wxHtmlWinParser : public wxHtmlParser
 {
@@ -90,13 +91,13 @@ public:
     //@}
 
     /**
-        Adds module to the list of wxHtmlWinParser tag handler.
+        Adds module() to the list of wxHtmlWinParser tag handler.
     */
     static void AddModule(wxHtmlTagsModule module);
 
     /**
         Closes the container, sets actual container to the parent one
-        and returns pointer to it (see Overview).
+        and returns pointer to it (see Overview()).
     */
     wxHtmlContainerCell* CloseContainer();
 
@@ -139,7 +140,7 @@ public:
     int GetCharWidth() const;
 
     /**
-        Returns pointer to the currently opened container (see Overview).
+        Returns pointer to the currently opened container (see Overview()).
         Common use:
     */
     wxHtmlContainerCell* GetContainer() const;
@@ -218,7 +219,7 @@ public:
     wxHtmlWindow* GetWindow();
 
     /**
-        Opens new container and returns pointer to it (see Overview).
+        Opens new container and returns pointer to it (see Overview()).
     */
     wxHtmlContainerCell* OpenContainer();
 
@@ -310,3 +311,4 @@ public:
     */
     void SetLinkColor(const wxColour& clr);
 };
+

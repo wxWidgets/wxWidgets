@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        spinctrl.h
-// Purpose:     documentation for wxSpinCtrl class
+// Purpose:     interface of wxSpinCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,8 +24,7 @@
     @category{ctrl}
     @appearance{spinctrl.png}
 
-    @seealso
-    @ref overview_eventhandlingoverview, wxSpinButton, wxControl
+    @see @ref overview_eventhandlingoverview, wxSpinButton, wxControl
 */
 class wxSpinCtrl : public wxControl
 {
@@ -120,3 +119,4 @@ public:
     void SetValue(int value);
     //@}
 };
+

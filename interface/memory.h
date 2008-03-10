@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        memory.h
-// Purpose:     documentation for wxDebugStreamBuf class
+// Purpose:     interface of wxDebugStreamBuf
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -21,14 +21,14 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    Overview
+    @see Overview()
 */
 class wxDebugStreamBuf
 {
 public:
 
 };
+
 
 
 /**
@@ -45,8 +45,7 @@ public:
     @library{wxbase}
     @category{debugging}
 
-    @seealso
-    Overview
+    @see Overview()
 */
 class wxDebugContext
 {
@@ -232,6 +231,7 @@ public:
     */
     void SetStream(ostream* stream, streambuf* streamBuf = NULL);
 };
+
 
 
 // ============================================================================

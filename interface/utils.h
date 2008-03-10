@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        utils.h
-// Purpose:     documentation for wxWindowDisabler class
+// Purpose:     interface of wxWindowDisabler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxBusyCursor
+    @see wxBusyCursor
 */
 class wxWindowDisabler
 {
@@ -35,6 +34,7 @@ public:
     */
     ~wxWindowDisabler();
 };
+
 
 
 /**
@@ -54,28 +54,28 @@ public:
         DoACalculation();
     @endcode
 
-    It works by calling wxBeginBusyCursor in the constructor,
-    and wxEndBusyCursor in the destructor.
+    It works by calling wxBeginBusyCursor() in the constructor,
+    and wxEndBusyCursor() in the destructor.
 
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxBeginBusyCursor, wxEndBusyCursor, wxWindowDisabler
+    @see wxBeginBusyCursor(), wxEndBusyCursor(), wxWindowDisabler
 */
 class wxBusyCursor
 {
 public:
     /**
-        Constructs a busy cursor object, calling wxBeginBusyCursor.
+        Constructs a busy cursor object, calling wxBeginBusyCursor().
     */
     wxBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR);
 
     /**
-        Destroys the busy cursor object, calling wxEndBusyCursor.
+        Destroys the busy cursor object, calling wxEndBusyCursor().
     */
     ~wxBusyCursor();
 };
+
 
 
 // ============================================================================
@@ -102,7 +102,7 @@ wxPowerType wxGetPowerType();
     empty string otherwise. The second (deprecated) function returns @true
     if successful, @false otherwise.
 
-    @see wxGetUserName
+    @see wxGetUserName()
 */
 wxString wxGetUserId();
 bool wxGetUserId(char* buf, int sz);
@@ -110,10 +110,10 @@ bool wxGetUserId(char* buf, int sz);
 
 /**
     @b NB: This function is now obsolete, please use
-    wxLogFatalError instead.
+    wxLogFatalError() instead.
     Displays @a msg and exits. This writes to standard error under Unix,
     and pops up a message box under Windows. Used for fatal internal
-    wxWidgets errors. See also wxError.
+    wxWidgets errors. See also wxError().
 */
 void wxFatalError(const wxString& msg,
                   const wxString& title = "wxWidgets Fatal Error");
@@ -144,8 +144,8 @@ wxWindow* wxFindWindowByName(const wxString& name,
 /**
     Changes the cursor back to the original cursor, for all windows in the
     application.
-    Use with wxBeginBusyCursor.
-    See also wxIsBusy, wxBusyCursor.
+    Use with wxBeginBusyCursor().
+    See also wxIsBusy(), wxBusyCursor.
 */
 void wxEndBusyCursor();
 
@@ -167,7 +167,7 @@ void wxRegisterId(long id);
 
 /**
     @b NB: This function is now obsolete, replaced by Log
-    functions and wxLogDebug in particular.
+    functions() and wxLogDebug() in particular.
     Display a debugging message; under Windows, this will appear on the
     debugger command window, and under Unix, it will be written to standard
     error.
@@ -203,7 +203,7 @@ wxString wxGetOsDescription();
 /**
     Return the (current) user's home directory.
 
-    @see wxGetUserHome, wxStandardPaths
+    @see wxGetUserHome(), wxStandardPaths
 */
 wxString wxGetHomeDir();
 
@@ -218,7 +218,7 @@ void wxMilliSleep(unsigned long milliseconds);
     Sleeps for the specified number of microseconds. The microsecond resolution may
     not, in fact, be available on all platforms (currently only Unix platforms with
     nanosleep(2) may provide it) in which case this is the same as
-    wxMilliSleep(@e microseconds/1000).
+    wxMilliSleep()(@e microseconds/1000).
 */
 void wxMicroSleep(unsigned long microseconds);
 
@@ -228,7 +228,8 @@ void wxMicroSleep(unsigned long microseconds);
     underlying GUI toolkit. This is mainly used for diagnostic purposes and can be
     invoked by Ctrl-Alt-middle clicking on any wxWindow which doesn't otherwise
     handle this event.
-    This function is new since wxWidgets version 2.9.0
+
+        @wxsince{2.9.0}
 */
 void wxInfoMessageBox(wxWindow ( parent = NULL);
 
@@ -260,11 +261,11 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                                                 int flags = wxStrip_All);
 
                       /**
-                          @b NB: This function is now obsolete, please use wxLogError
+                          @b NB: This function is now obsolete, please use wxLogError()
                           instead.
                           Displays @a msg and continues. This writes to standard error under
                           Unix, and pops up a message box under Windows. Used for internal
-                          wxWidgets errors. See also wxFatalError.
+                          wxWidgets errors. See also wxFatalError().
                       */
                       void wxError(const wxString& msg,
                                    const wxString& title = "wxWidgets Internal Error");
@@ -287,7 +288,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                       /**
                           Executes a command in an interactive shell window. If no command is
                           specified, then just the shell is spawned.
-                          See also wxExecute, @ref overview_sampleexec "Exec sample".
+                          See also wxExecute(), @ref overview_sampleexec "Exec sample".
                       */
                       bool wxShell(const wxString& command = NULL);
 
@@ -304,16 +305,16 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                           Returns the FQDN (fully qualified domain host name) or an empty string on
                           error.
 
-                          @see wxGetHostName
+                          @see wxGetHostName()
                       */
                       wxString wxGetFullHostName();
 
                       /**
                           Changes the cursor to the given cursor for all windows in the application.
-                          Use wxEndBusyCursor to revert the cursor back
+                          Use wxEndBusyCursor() to revert the cursor back
                           to its previous state. These two calls can be nested, and a counter
                           ensures that only the outer calls take effect.
-                          See also wxIsBusy, wxBusyCursor.
+                          See also wxIsBusy(), wxBusyCursor.
                       */
                       void wxBeginBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR);
 
@@ -381,7 +382,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                           This is a macro defined as @c getenv() or its wide char version in Unicode
                           mode.
                           Note that under Win32 it may not return correct value for the variables set
-                          with wxSetEnv, use wxGetEnv function
+                          with wxSetEnv(), use wxGetEnv() function
                           instead.
                       */
                       wxChar* wxGetEnv(const wxString& var);
@@ -398,7 +399,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                           empty string otherwise. The second (deprecated) function returns @true
                           if successful, @false otherwise.
 
-                          @see wxGetFullHostName
+                          @see wxGetFullHostName()
                       */
                       wxString wxGetHostName();
                       bool wxGetHostName(char* buf, int sz);
@@ -413,7 +414,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                       bool wxGetEnv(const wxString& var, wxString* value);
 
                       /**
-                          Under X only, returns the current display name. See also wxSetDisplayName.
+                          Under X only, returns the current display name. See also wxSetDisplayName().
                       */
                       wxString wxGetDisplayName();
 
@@ -426,7 +427,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                       /**
                           Returns the home directory for the given user. If the @a user is empty
                           (default value), this function behaves like
-                          wxGetHomeDir i.e. returns the current user home
+                          wxGetHomeDir() i.e. returns the current user home
                           directory.
                           If the home directory couldn't be determined, an empty string is returned.
                       */
@@ -451,7 +452,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                           the process (which terminates by the moment the function returns) and will be
                           -1 if the process couldn't be started and typically 0 if the process
                           terminated successfully. Also, while waiting for the process to
-                          terminate, wxExecute will call wxYield. Because of this, by
+                          terminate, wxExecute will call wxYield(). Because of this, by
                           default this function disables all application windows to avoid unexpected
                           reentrancies which could result from the users interaction with the program
                           while the child process is running. If you are sure that it is safe to not
@@ -475,7 +476,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                           happening, i.e. with this flag the child process window will be shown normally.
                           Under Unix the flag @c wxEXEC_MAKE_GROUP_LEADER may be used to ensure
                           that the new process is a group leader (this will create a new session if
-                          needed). Calling wxKill passing wxKILL_CHILDREN will
+                          needed). Calling wxKill() passing wxKILL_CHILDREN will
                           kill this process as well as all of its children (except those which have
                           started their own session).
                           The @c wxEXEC_NOEVENTS flag prevents processing of any events from taking
@@ -506,7 +507,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                           @param callback
                               An optional pointer to wxProcess
 
-                          @see wxShell, wxProcess, @ref overview_sampleexec "Exec sample".
+                          @see wxShell(), wxProcess, @ref overview_sampleexec "Exec sample".
                       */
                       long wxExecute(const wxString& command, int sync = wxEXEC_ASYNC,
                                      wxProcess* callback = NULL);
@@ -610,8 +611,8 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                       wxMouseState wxGetMouseState();
 
                       /**
-                          Returns @true if between two wxBeginBusyCursor and
-                          wxEndBusyCursor calls.
+                          Returns @true if between two wxBeginBusyCursor() and
+                          wxEndBusyCursor() calls.
                           See also wxBusyCursor.
                       */
                       bool wxIsBusy();
@@ -619,8 +620,8 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
 //@{
                       /**
                           Copies the user's email address into the supplied buffer, by
-                          concatenating the values returned by wxGetFullHostName
-                          and wxGetUserId.
+                          concatenating the values returned by wxGetFullHostName()
+                          and wxGetUserId().
                           Returns @true if successful, @false otherwise.
                       */
                       wxString wxGetEmailAddress();
@@ -637,7 +638,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                           to @e value.
                           Returns @true on success.
 
-                          @see wxUnsetEnv
+                          @see wxUnsetEnv()
                       */
                       bool wxSetEnv(const wxString& var, const wxString& value);
 
@@ -658,7 +659,7 @@ void wxInfoMessageBox(wxWindow ( parent = NULL);
                           windows from this point on. Setting the display within an application allows
                           multiple
                           displays to be used.
-                          See also wxGetDisplayName.
+                          See also wxGetDisplayName().
                       */
                       void wxSetDisplayName(const wxString& displayName);
 

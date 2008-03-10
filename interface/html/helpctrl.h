@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/helpctrl.h
-// Purpose:     documentation for wxHtmlHelpController class
+// Purpose:     interface of wxHtmlHelpController
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,7 +24,7 @@
 
     wxHTML uses Microsoft's HTML Help Workshop project files (.hhp, .hhk, .hhc) as
     its
-    native format. The file format is described here.
+    native format. The file format is described here().
     Have a look at docs/html/ directory where sample project files are stored.
 
     You can use Tex2RTF to produce these files when generating HTML, if you set @b
@@ -35,8 +35,7 @@
     @library{wxhtml}
     @category{help}
 
-    @seealso
-    @ref overview_wxhelpcontroller "Information about wxBestHelpController",
+    @see @ref overview_wxhelpcontroller "Information about wxBestHelpController",
     wxHtmlHelpFrame, wxHtmlHelpDialog, wxHtmlHelpWindow, wxHtmlModalHelp
 */
 class wxHtmlHelpController
@@ -159,6 +158,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlModalHelp
     @headerfile helpctrl.h wx/html/helpctrl.h
@@ -199,3 +199,4 @@ public:
                     const wxString& topic = wxEmptyString,
                     int style = wxHF_DEFAULT_STYLE | wxHF_DIALOG | wxHF_MODAL);
 };
+

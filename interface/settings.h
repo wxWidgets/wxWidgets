@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        settings.h
-// Purpose:     documentation for wxSystemSettings class
+// Purpose:     interface of wxSystemSettings
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,7 @@
     @library{wxcore}
     @category{misc}
 
-    @seealso
-    wxFont, wxColour
+    @see wxFont, wxColour
 */
 class wxSystemSettings : public wxObject
 {
@@ -404,3 +403,4 @@ public:
     */
     static wxSystemScreenType GetScreenType();
 };
+

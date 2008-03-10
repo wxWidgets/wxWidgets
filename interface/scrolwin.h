@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        scrolwin.h
-// Purpose:     documentation for wxScrolledWindow class
+// Purpose:     interface of wxScrolledWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -96,8 +96,7 @@
     @library{wxcore}
     @category{miscwnd}
 
-    @seealso
-    wxScrollBar, wxClientDC, wxPaintDC, wxVScrolledWindow
+    @see wxScrollBar, wxClientDC, wxPaintDC, wxVScrolledWindow
 */
 class wxScrolledWindow : public wxPanel
 {
@@ -347,3 +346,4 @@ public:
     */
     void SetTargetWindow(wxWindow* window);
 };
+

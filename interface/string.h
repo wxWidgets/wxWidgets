@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        string.h
-// Purpose:     documentation for wxStringBuffer class
+// Purpose:     interface of wxStringBuffer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -67,6 +67,7 @@ public:
 };
 
 
+
 /**
     @class wxString
     @wxheader{string.h}
@@ -94,11 +95,9 @@ public:
     @category{data}
 
     @stdobjects
-    Objects:
-    wxEmptyString
+    ::Objects:, ::wxEmptyString,
 
-    @seealso
-    @ref overview_wxstringoverview "wxString overview", @ref overview_unicode
+    @see @ref overview_wxstringoverview "wxString overview", @ref overview_unicode
     "Unicode overview"
 */
 class wxString
@@ -207,7 +206,7 @@ public:
         This section also contains both implicit and explicit conversions to C style
         strings. Although implicit conversion is quite convenient, it is advised to use
         explicit @ref cstr() c_str method for the sake of clarity. Also
-        see overview for the cases where it is necessary to
+        see overview() for the cases where it is necessary to
         use it.
         GetChar()
         
@@ -434,7 +433,8 @@ public:
         build, the string is interpreted as being in ISO-8859-1 encoding. The version
         without @a len parameter takes NUL-terminated data.
         This is a convenience method useful when storing binary data in wxString.
-        This function is new since wxWidgets version 2.8.4
+        
+        @wxsince{2.8.4}
         
         @see wxString::To8BitData
     */
@@ -791,7 +791,8 @@ public:
         Converts the string to an 8-bit string in ISO-8859-1 encoding in the form of
         a wxCharBuffer (Unicode builds only).
         This is a convenience method useful when storing binary data in wxString.
-        This function is new since wxWidgets version 2.8.4
+        
+        @wxsince{2.8.4}
         
         @see wxString::From8BitData
     */
@@ -1161,6 +1162,20 @@ public:
 
 
 /**
+    FIXME
+*/
+wxString Objects:
+;
+
+/**
+    FIXME
+*/
+wxString wxEmptyString;
+
+
+
+
+/**
     @class wxStringBufferLength
     @wxheader{string.h}
 
@@ -1234,6 +1249,7 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -1241,7 +1257,7 @@ public:
 //@{
 /**
     Converts its argument to string.
-    See also: wxFromString.
+    See also: wxFromString().
 */
 wxString wxToString(const wxColour& col);
 wxString wxToString(const wxFont& col);
@@ -1250,7 +1266,7 @@ wxString wxToString(const wxFont& col);
 //@{
 /**
     Converts string to the type of the second argument. Returns @true on success.
-    See also: wxToString.
+    See also: wxToString().
 */
 bool wxFromString(const wxString& str, wxColour* col);
 bool wxFromString(const wxString& str, wxFont* col);

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        regex.h
-// Purpose:     documentation for wxRegEx class
+// Purpose:     interface of wxRegEx
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -21,7 +21,7 @@
 
     Regular expressions, as defined by POSIX, come in two flavours: @e extended
     and @e basic.  The builtin library also adds a third flavour
-    of expression advanced, which is not available
+    of expression advanced(), which is not available
     when using the system library.
 
     Unicode is fully supported only when using the builtin library.
@@ -37,8 +37,7 @@
     @library{wxbase}
     @category{data}
 
-    @seealso
-    wxRegEx::ReplaceFirst
+    @see wxRegEx::ReplaceFirst
 */
 class wxRegEx
 {
@@ -140,3 +139,4 @@ public:
     */
     int ReplaceFirst(wxString* text, const wxString& replacement) const;
 };
+

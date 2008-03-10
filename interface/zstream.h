@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        zstream.h
-// Purpose:     documentation for wxZlibOutputStream class
+// Purpose:     interface of wxZlibOutputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -21,8 +21,7 @@
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxOutputStream, wxZlibInputStream
+    @see wxOutputStream, wxZlibInputStream
 */
 class wxZlibOutputStream : public wxFilterOutputStream
 {
@@ -56,6 +55,7 @@ public:
 };
 
 
+
 /**
     @class wxZlibInputStream
     @wxheader{zstream.h}
@@ -71,8 +71,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    wxInputStream, wxZlibOutputStream.
+    @see wxInputStream, wxZlibOutputStream.
 */
 class wxZlibInputStream : public wxFilterInputStream
 {
@@ -105,3 +104,4 @@ public:
     */
     static bool CanHandleGZip();
 };
+

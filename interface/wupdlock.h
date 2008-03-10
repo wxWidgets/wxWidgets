@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wupdlock.h
-// Purpose:     documentation for wxWindowUpdateLocker class
+// Purpose:     interface of wxWindowUpdateLocker
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -50,3 +50,4 @@ public:
     */
     ~wxWindowUpdateLocker();
 };
+

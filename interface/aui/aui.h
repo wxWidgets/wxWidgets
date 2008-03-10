@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        aui/aui.h
-// Purpose:     documentation for wxAuiManager class
+// Purpose:     interface of wxAuiManager
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -49,8 +49,7 @@
     @library{wxbase}
     @category{aui}
 
-    @seealso
-    wxAuiPaneInfo, wxAuiDockArt
+    @see wxAuiPaneInfo, wxAuiDockArt
 */
 class wxAuiManager : public wxEvtHandler
 {
@@ -258,6 +257,7 @@ public:
 };
 
 
+
 /**
     @class wxAuiPaneInfo
     @headerfile aui.h wx/aui/aui.h
@@ -275,8 +275,7 @@ public:
     @library{wxbase}
     @category{aui}
 
-    @seealso
-    wxAuiManager, wxAuiDockArt
+    @see wxAuiManager, wxAuiDockArt
 */
 class wxAuiPaneInfo
 {
@@ -684,3 +683,4 @@ public:
     */
     wxAuiPaneInfo& operator operator=(const wxAuiPaneInfo& c);
 };
+

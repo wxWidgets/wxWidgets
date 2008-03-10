@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        htmllbox.h
-// Purpose:     documentation for wxHtmlListBox class
+// Purpose:     interface of wxHtmlListBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -20,8 +20,7 @@
     @category{ctrl}
     @appearance{htmllistbox.png}
 
-    @seealso
-    wxSimpleHtmlListBox
+    @see wxSimpleHtmlListBox
 */
 class wxHtmlListBox : public wxVListBox
 {
@@ -130,6 +129,7 @@ public:
 };
 
 
+
 /**
     @class wxSimpleHtmlListBox
     @wxheader{htmllbox.h}
@@ -179,8 +179,7 @@ public:
     @category{ctrl}
     @appearance{simplehtmllistbox.png}
 
-    @seealso
-    wxSimpleHtmlListBox::Create
+    @see wxSimpleHtmlListBox::Create
 */
 class wxSimpleHtmlListBox : public wxHtmlListBox
 {
@@ -238,3 +237,4 @@ public:
                 const wxString& name = "simpleHtmlListBox");
     //@}
 };
+

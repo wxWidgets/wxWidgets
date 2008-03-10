@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wxcrt.h
-// Purpose:     documentation for global functions
+// Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -43,7 +43,7 @@ bool wxStringMatch(const wxString& s1, const wxString& s2,
     Returns the number of characters copied to the buffer or -1 if there is not
     enough space.
 
-    @see wxVsnprintf, wxString::Printf
+    @see wxVsnprintf(), wxString::Printf
 */
 int wxSnprintf(wxChar* buf, size_t len, const wxChar* format,
                ...);
@@ -68,7 +68,7 @@ wxArrayString wxStringTokenize(const wxString& str,
 size_t wxStrlen(const char* p);
 
 /**
-    The same as wxSnprintf but takes a @c va_list
+    The same as wxSnprintf() but takes a @c va_list
     argument instead of arbitrary number of parameters.
     Note that if @c wxUSE_PRINTF_POS_PARAMS is set to 1, then this function supports
     positional arguments (see wxString::Printf for more information).
@@ -78,7 +78,7 @@ size_t wxStrlen(const char* p);
     parameters
     even when @c wxUSE_PRINTF_POS_PARAMS is 1.
 
-    @see wxSnprintf, wxString::PrintfV
+    @see wxSnprintf(), wxString::PrintfV
 */
 int wxVsnprintf(wxChar* buf, size_t len, const wxChar* format,
                 va_list argPtr);

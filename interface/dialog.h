@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dialog.h
-// Purpose:     documentation for wxDialog class
+// Purpose:     interface of wxDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -60,8 +60,7 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxdialogoverview, wxFrame, @ref overview_validatoroverview
+    @see @ref overview_wxdialogoverview, wxFrame, @ref overview_validatoroverview
     "Validator overview"
 */
 class wxDialog : public wxTopLevelWindow
@@ -488,6 +487,7 @@ public:
 };
 
 
+
 /**
     @class wxDialogLayoutAdapter
     @wxheader{dialog.h}
@@ -506,8 +506,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    @ref overview_autoscrollingdialogs "Automatic scrolling dialogs"
+    @see @ref overview_autoscrollingdialogs "Automatic scrolling dialogs"
 */
 class wxDialogLayoutAdapter
 {
@@ -529,3 +528,4 @@ public:
     */
     bool DoLayoutAdaptation(wxDialog* dialog);
 };
+

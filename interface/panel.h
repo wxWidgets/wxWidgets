@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        panel.h
-// Purpose:     documentation for wxPanel class
+// Purpose:     interface of wxPanel
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -28,8 +28,7 @@
     @library{wxbase}
     @category{miscwnd}
 
-    @seealso
-    wxDialog
+    @see wxDialog
 */
 class wxPanel : public wxWindow
 {
@@ -132,3 +131,4 @@ public:
     */
     virtual void SetFocusIgnoringChildren();
 };
+

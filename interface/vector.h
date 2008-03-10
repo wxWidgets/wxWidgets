@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        vector.h
-// Purpose:     documentation for wxVector<T> class
+// Purpose:     interface of wxVector<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -21,8 +21,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxcontaineroverview, wxListT, wxArrayT
+    @see @ref overview_wxcontaineroverview, wxListT(), wxArrayT()
 */
 class wxVector<T>
 {
@@ -143,3 +142,4 @@ public:
     */
     void reserve(size_type n);
 };
+

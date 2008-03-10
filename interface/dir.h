@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dir.h
-// Purpose:     documentation for wxDirTraverser class
+// Purpose:     interface of wxDirTraverser
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -76,6 +76,7 @@ public:
     */
     virtual wxDirTraverseResult OnOpenError(const wxString& openerrorname);
 };
+
 
 
 /**
@@ -203,7 +204,7 @@ public:
         big, it could be
         far from real size of the directory.
         See also: wxFileName::GetHumanReadableSize,
-        wxGetDiskSpace
+        wxGetDiskSpace()
     */
     static wxULongLong GetTotalSize(const wxString& dir,
                                     wxArrayString* filesSkipped = NULL);
@@ -253,3 +254,4 @@ public:
                     const wxString& filespec = wxEmptyString,
                     int flags = wxDIR_DEFAULT);
 };
+

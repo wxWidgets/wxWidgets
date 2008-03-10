@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        statbmp.h
-// Purpose:     documentation for wxStaticBitmap class
+// Purpose:     interface of wxStaticBitmap
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -20,8 +20,7 @@
     @category{ctrl}
     @appearance{staticbitmap.png}
 
-    @seealso
-    wxStaticBitmap, wxStaticBox
+    @see wxStaticBitmap, wxStaticBox
 */
 class wxStaticBitmap : public wxControl
 {
@@ -102,3 +101,4 @@ public:
     */
     virtual void SetIcon(const wxIcon& label);
 };
+

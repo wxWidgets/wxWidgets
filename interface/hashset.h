@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        hashset.h
-// Purpose:     documentation for wxHashSet class
+// Purpose:     interface of wxHashSet
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -96,3 +96,4 @@ public:
     */
     size_type size() const;
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        arrstr.h
-// Purpose:     documentation for wxArrayString class
+// Purpose:     interface of wxArrayString
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -19,7 +19,7 @@
     doesn't take more space than a C array @e wxString[] type (wxArrayString
     uses its knowledge of internals of wxString class to achieve this).
 
-    This class is used in the same way as other dynamic arrays,
+    This class is used in the same way as other dynamic arrays(),
     except that no @e WX_DEFINE_ARRAY declaration is needed for it. When a
     string is added or inserted in the array, a copy of the string is created, so
     the original string may be safely deleted (e.g. if it was a @e wxChar *
@@ -52,8 +52,7 @@
     @library{wxbase}
     @category{containers}
 
-    @seealso
-    wxArray, wxString, @ref overview_wxstringoverview "wxString overview"
+    @see wxArray, wxString, @ref overview_wxstringoverview "wxString overview"
 */
 class wxArrayString : public wxArray
 {
@@ -223,6 +222,7 @@ Warning:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -236,7 +236,7 @@ Warning:
     Note that empty tokens will be generated if there are two or more adjacent
     separators.
 
-    @see wxJoin
+    @see wxJoin()
 */
 wxArrayString wxSplit(const wxString& str, const wxChar sep,
                       const wxChar escape = '
@@ -250,7 +250,7 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
     occurrence of @e sep
     in the strings contained in @a arr before joining them which is necessary
     in order to be able to recover the original array contents from the string
-    later using wxSplit.
+    later using wxSplit().
 */
 wxString wxJoin(const wxArrayString& arr, const wxChar sep,
                 const wxChar escape = '\');

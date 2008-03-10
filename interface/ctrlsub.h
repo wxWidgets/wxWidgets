@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        ctrlsub.h
-// Purpose:     documentation for wxControlWithItems class
+// Purpose:     interface of wxControlWithItems
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -35,8 +35,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxControlWithItems::Clear
+    @see wxControlWithItems::Clear
 */
 class wxControlWithItems : public wxControl
 {
@@ -333,3 +332,4 @@ public:
     */
     bool SetStringSelection(const wxString& string);
 };
+

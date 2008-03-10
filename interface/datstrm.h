@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        datstrm.h
-// Purpose:     documentation for wxDataOutputStream class
+// Purpose:     interface of wxDataOutputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -119,6 +119,7 @@ public:
     */
     void WriteString(const wxString& string);
 };
+
 
 
 /**
@@ -254,3 +255,4 @@ public:
     */
     wxString ReadString();
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        combobox.h
-// Purpose:     documentation for wxComboBox class
+// Purpose:     interface of wxComboBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -58,8 +58,7 @@
     @category{ctrl}
     @appearance{combobox.png}
 
-    @seealso
-    wxListBox, wxTextCtrl, wxChoice, wxCommandEvent
+    @see wxListBox, wxTextCtrl, wxChoice, wxCommandEvent
 */
 class wxComboBox : public wxControlWithItems
 {
@@ -289,3 +288,4 @@ public:
     */
     void Undo();
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dynlib.h
-// Purpose:     documentation for wxDynamicLibraryDetails class
+// Purpose:     interface of wxDynamicLibraryDetails
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -57,6 +57,7 @@ public:
     */
     wxString GetVersion() const;
 };
+
 
 
 /**
@@ -185,6 +186,7 @@ public:
 };
 
 
+
 /**
     @class wxDynamicLibrary
     @wxheader{dynlib.h}
@@ -197,8 +199,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxDynamicLibrary::CanonicalizePluginName
+    @see wxDynamicLibrary::CanonicalizePluginName
 */
 class wxDynamicLibrary
 {
@@ -269,7 +270,7 @@ public:
         Returns pointer to symbol @a name in the library or @NULL if the library
         contains no such symbol.
         
-        @see wxDYNLIB_FUNCTION
+        @see wxDYNLIB_FUNCTION()
     */
     void* GetSymbol(const wxString& name) const;
 
@@ -288,7 +289,8 @@ public:
         Returns @true if the symbol with the given @a name is present in the dynamic
         library, @false otherwise. Unlike GetSymbol(),
         this function doesn't log an error message if the symbol is not found.
-        This function is new since wxWidgets version 2.5.4
+        
+        @wxsince{2.5.4}
     */
     bool HasSymbol(const wxString& name) const;
 
@@ -298,7 +300,7 @@ public:
     bool IsLoaded() const;
 
     /**
-        This static method returns an array containing the details
+        This static method returns an array() containing the details
         of all modules loaded into the address space of the current project, the array
         elements are object of @c wxDynamicLibraryDetails class. The array will
         be empty if an error occurred.
@@ -354,6 +356,7 @@ public:
     static void Unload(wxDllType handle);
     //@}
 };
+
 
 
 // ============================================================================

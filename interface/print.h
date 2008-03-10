@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        print.h
-// Purpose:     documentation for wxPreviewControlBar class
+// Purpose:     interface of wxPreviewControlBar
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxbase}
     @category{printing}
 
-    @seealso
-    wxPreviewFrame, wxPreviewCanvas, wxPrintPreview
+    @see wxPreviewFrame, wxPreviewCanvas, wxPrintPreview
 */
 class wxPreviewControlBar : public wxPanel
 {
@@ -84,6 +83,7 @@ public:
 };
 
 
+
 /**
     @class wxPreviewCanvas
     @wxheader{print.h}
@@ -94,8 +94,7 @@ public:
     @library{wxbase}
     @category{printing}
 
-    @seealso
-    wxPreviewFrame, wxPreviewControlBar, wxPrintPreview
+    @see wxPreviewFrame, wxPreviewControlBar, wxPrintPreview
 */
 class wxPreviewCanvas : public wxScrolledWindow
 {
@@ -121,6 +120,7 @@ public:
 };
 
 
+
 /**
     @class wxPreviewFrame
     @wxheader{print.h}
@@ -132,8 +132,7 @@ public:
     @library{wxbase}
     @category{printing}
 
-    @seealso
-    wxPreviewCanvas, wxPreviewControlBar, wxPrintPreview
+    @see wxPreviewCanvas, wxPreviewControlBar, wxPrintPreview
 */
 class wxPreviewFrame : public wxFrame
 {
@@ -184,6 +183,7 @@ public:
 };
 
 
+
 /**
     @class wxPrintPreview
     @wxheader{print.h}
@@ -198,8 +198,7 @@ public:
     @library{wxbase}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
+    @see @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
     wxPrintDialog, wxPrintout, wxPrinter, wxPreviewCanvas, wxPreviewControlBar, wxPreviewFrame.
 */
 class wxPrintPreview : public wxObject
@@ -331,6 +330,7 @@ public:
 };
 
 
+
 /**
     @class wxPrinter
     @wxheader{print.h}
@@ -345,8 +345,7 @@ public:
     @library{wxbase}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
+    @see @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
     wxPrintDialog, wxPrintout, wxPrintPreview.
 */
 class wxPrinter : public wxObject
@@ -435,6 +434,7 @@ public:
 };
 
 
+
 /**
     @class wxPrintout
     @wxheader{print.h}
@@ -464,8 +464,7 @@ public:
     @library{wxbase}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
+    @see @ref overview_printingoverview "Printing framework overview", wxPrinterDC,
     wxPrintDialog, wxPageSetupDialog, wxPrinter, wxPrintPreview
 */
 class wxPrintout : public wxObject
@@ -729,3 +728,4 @@ public:
     */
     void SetLogicalOrigin(wxCoord x, wxCoord y);
 };
+

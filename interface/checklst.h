@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        checklst.h
-// Purpose:     documentation for wxCheckListBox class
+// Purpose:     interface of wxCheckListBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -30,8 +30,7 @@
     @category{ctrl}
     @appearance{checklistbox.png}
 
-    @seealso
-    wxListBox, wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
+    @see wxListBox, wxChoice, wxComboBox, wxListCtrl, wxCommandEvent
 */
 class wxCheckListBox : public wxListBox
 {
@@ -95,3 +94,4 @@ public:
     */
     void Check(int item, bool check = true);
 };
+

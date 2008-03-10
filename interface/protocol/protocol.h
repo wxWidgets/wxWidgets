@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        protocol/protocol.h
-// Purpose:     documentation for wxProtocol class
+// Purpose:     interface of wxProtocol
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -14,8 +14,7 @@
     @library{wxnet}
     @category{FIXME}
 
-    @seealso
-    wxSocketBase, wxURL
+    @see wxSocketBase, wxURL
 */
 class wxProtocol : public wxSocketClient
 {
@@ -110,3 +109,4 @@ public:
     */
     void SetUser(const wxString& user);
 };
+

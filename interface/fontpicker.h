@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fontpicker.h
-// Purpose:     documentation for wxFontPickerCtrl class
+// Purpose:     interface of wxFontPickerCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -40,8 +40,7 @@
     @category{miscpickers}
     @appearance{fontpickerctrl.png}
 
-    @seealso
-    wxFontDialog, wxFontPickerEvent
+    @see wxFontDialog, wxFontPickerEvent
 */
 class wxFontPickerCtrl : public wxPickerBase
 {
@@ -119,6 +118,7 @@ public:
 };
 
 
+
 /**
     @class wxFontPickerEvent
     @wxheader{fontpicker.h}
@@ -129,8 +129,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxFontPickerCtrl
+    @see wxFontPickerCtrl
 */
 class wxFontPickerEvent : public wxCommandEvent
 {
@@ -151,3 +150,4 @@ public:
     */
     void SetFont(const wxFont& f);
 };
+

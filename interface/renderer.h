@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        renderer.h
-// Purpose:     documentation for wxSplitterRenderParams class
+// Purpose:     interface of wxSplitterRenderParams
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -40,6 +40,7 @@ public:
         The width of the splitter sash.
     */
 };
+
 
 
 /**
@@ -94,6 +95,7 @@ public:
     */
     DrawXXX(...);
 };
+
 
 
 /**
@@ -321,6 +323,7 @@ public:
 };
 
 
+
 /**
     @class wxRendererVersion
     @wxheader{renderer.h}
@@ -336,7 +339,7 @@ public:
     each time a new virtual method is added and so, at least for the compilers
     using a common C++ object model, the calling program is compatible with any
     renderer which has the age greater or equal to its age. This verification is
-    done by IsCompatible method.
+    done by IsCompatible() method.
 
     @library{wxbase}
     @category{FIXME}
@@ -364,3 +367,4 @@ public:
         The version component.
     */
 };
+

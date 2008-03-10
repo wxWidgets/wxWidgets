@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/helpdlg.h
-// Purpose:     documentation for wxHtmlHelpDialog class
+// Purpose:     interface of wxHtmlHelpDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -79,3 +79,4 @@ public:
     void WriteCustomization(wxConfigBase* cfg,
                             const wxString& path = wxEmptyString);
 };
+

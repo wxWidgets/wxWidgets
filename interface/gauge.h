@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gauge.h
-// Purpose:     documentation for wxGauge class
+// Purpose:     interface of wxGauge
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -40,8 +40,7 @@
     @category{ctrl}
     @appearance{gauge.png}
 
-    @seealso
-    wxSlider, wxScrollBar
+    @see wxSlider, wxScrollBar
 */
 class wxGauge : public wxControl
 {
@@ -179,3 +178,4 @@ public:
     */
     void SetValue(int pos);
 };
+

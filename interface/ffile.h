@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        ffile.h
-// Purpose:     documentation for wxFFile class
+// Purpose:     interface of wxFFile
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -19,8 +19,7 @@
     @library{wxbase}
     @category{file}
 
-    @seealso
-    wxFFile::IsOpened
+    @see wxFFile::IsOpened
 */
 class wxFFile
 {
@@ -190,3 +189,4 @@ public:
     */
     FILE* fp() const;
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        pen.h
-// Purpose:     documentation for wxPen class
+// Purpose:     interface of wxPen
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,31 +18,10 @@
     @category{gdi}
 
     @stdobjects
-    Objects:
-    wxNullPen
-    Pointers:
-    wxRED_PEN
+    ::Objects:, ::wxNullPen, ::Pointers:, ::wxRED_PEN, ::wxCYAN_PEN, ::wxGREEN_PEN,
+    ::wxBLACK_PEN, ::wxWHITE_PEN, ::wxTRANSPARENT_PEN, ::wxBLACK_DASHED_PEN, ::wxGREY_PEN, ::wxMEDIUM_GREY_PEN, ::wxLIGHT_GREY_PEN,
 
-    wxCYAN_PEN
-
-    wxGREEN_PEN
-
-    wxBLACK_PEN
-
-    wxWHITE_PEN
-
-    wxTRANSPARENT_PEN
-
-    wxBLACK_DASHED_PEN
-
-    wxGREY_PEN
-
-    wxMEDIUM_GREY_PEN
-
-    wxLIGHT_GREY_PEN
-
-    @seealso
-    wxPenList, wxDC, wxDC::SetPen
+    @see wxPenList, wxDC, wxDC::SetPen
 */
 class wxPen : public wxGDIObject
 {
@@ -390,3 +369,73 @@ public:
     */
     bool operator ==(const wxPen& pen);
 };
+
+
+/**
+    FIXME
+*/
+wxPen Objects:
+;
+
+/**
+    FIXME
+*/
+wxPen wxNullPen;
+
+/**
+    FIXME
+*/
+wxPen Pointers:
+;
+
+/**
+    FIXME
+*/
+wxPen wxRED_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxCYAN_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxGREEN_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxBLACK_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxWHITE_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxTRANSPARENT_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxBLACK_DASHED_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxGREY_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxMEDIUM_GREY_PEN;
+
+/**
+    FIXME
+*/
+wxPen wxLIGHT_GREY_PEN;
+
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        artprov.h
-// Purpose:     documentation for wxArtProvider class
+// Purpose:     interface of wxArtProvider
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -70,7 +70,7 @@
     is used when
     requesting a resource from it. The ID is represented by wxArtID type and can
     have one of these predefined values (you can see bitmaps represented by these
-    constants in the artprov sample):
+    constants in the artprov() sample):
 
      wxART_ERROR
      wxART_QUESTION
@@ -128,8 +128,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    See the artprov sample for an example of wxArtProvider usage.
+    @see See the artprov() sample for an example of wxArtProvider usage.
 */
 class wxArtProvider : public wxObject
 {
@@ -161,7 +160,7 @@ public:
         GetBitmap()
         returns identical bitmap for different @e client values!
         
-        @see See the artprov sample for an example of wxArtProvider usage.
+        @see See the artprov() sample for an example of wxArtProvider usage.
     */
 
 
@@ -251,7 +250,7 @@ public:
         is used when
         requesting a resource from it. The ID is represented by wxArtID type and can
         have one of these predefined values (you can see bitmaps represented by these
-        constants in the artprov sample):
+        constants in the artprov() sample):
         
          wxART_ERROR
          wxART_QUESTION
@@ -333,3 +332,4 @@ public:
     */
     static bool Remove(wxArtProvider* provider);
 };
+

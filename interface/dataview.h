@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dataview.h
-// Purpose:     documentation for wxDataViewIconText class
+// Purpose:     interface of wxDataViewIconText
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -50,6 +50,7 @@ public:
     */
     void SetText(const wxString& text);
 };
+
 
 
 /**
@@ -127,6 +128,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewIconTextRenderer
     @wxheader{dataview.h}
@@ -150,6 +152,7 @@ public:
     wxDataViewIconTextRenderer(const wxString& varianttype = "wxDataViewIconText",
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
 };
+
 
 
 /**
@@ -197,7 +200,7 @@ public:
     /**
         Oberride this to indicate that the row has special font attributes.
         This only affects the
-        wxDataViewTextRendererText renderer.
+        wxDataViewTextRendererText() renderer.
         See also wxDataViewItemAttr.
     */
     bool GetAttr(unsigned int row, unsigned int col,
@@ -270,6 +273,7 @@ public:
     bool SetValue(const wxVariant& variant, unsigned int row,
                   unsigned int col);
 };
+
 
 
 /**
@@ -396,7 +400,7 @@ public:
     /**
         Oberride this to indicate that the item has special font attributes.
         This only affects the
-        wxDataViewTextRendererText renderer.
+        wxDataViewTextRendererText() renderer.
         See also wxDataViewItemAttr.
     */
     bool GetAttr(const wxDataViewItem& item, unsigned int col,
@@ -536,6 +540,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewCustomRenderer
     @wxheader{dataview.h}
@@ -656,6 +661,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewBitmapRenderer
     @wxheader{dataview.h}
@@ -676,17 +682,18 @@ public:
 };
 
 
+
 /**
     @class wxDataViewItemAttr
     @wxheader{dataview.h}
 
     This class is used to indicate to a wxDataViewCtrl
-    that a certain Item has extra font attributes
+    that a certain Item() has extra font attributes
     for its renderer. For this, it is required to override
     wxDataViewModel::GetAttr.
 
     Attributes are currently only supported by
-    wxDataViewTextRendererText.
+    wxDataViewTextRendererText().
 
     @library{wxadv}
     @category{FIXME}
@@ -715,6 +722,7 @@ public:
     */
     void SetItalic(bool set);
 };
+
 
 
 /**
@@ -761,6 +769,7 @@ public:
     */
     bool IsOk() const;
 };
+
 
 
 /**
@@ -1111,6 +1120,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewModelNotifier
     @wxheader{dataview.h}
@@ -1196,6 +1206,7 @@ public:
     */
     bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 };
+
 
 
 /**
@@ -1315,6 +1326,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewTextRenderer
     @wxheader{dataview.h}
@@ -1336,6 +1348,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewProgressRenderer
     @wxheader{dataview.h}
@@ -1355,6 +1368,7 @@ public:
                                const wxString& varianttype = "long",
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
 };
+
 
 
 /**
@@ -1381,6 +1395,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewToggleRenderer
     @wxheader{dataview.h}
@@ -1399,6 +1414,7 @@ public:
     wxDataViewToggleRenderer(const wxString& varianttype = "bool",
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
 };
+
 
 
 /**
@@ -1591,6 +1607,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewTreeStore
     @wxheader{dataview.h}
@@ -1735,6 +1752,7 @@ public:
 };
 
 
+
 /**
     @class wxDataViewDateRenderer
     @wxheader{dataview.h}
@@ -1753,6 +1771,7 @@ public:
     wxDataViewDateRenderer(const wxString& varianttype = "datetime",
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE);
 };
+
 
 
 /**
@@ -1779,6 +1798,7 @@ public:
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                int align = wxDVR_DEFAULT_ALIGNMENT);
 };
+
 
 
 /**
@@ -1906,3 +1926,4 @@ public:
     */
     void SetTitle(const wxString& title);
 };
+

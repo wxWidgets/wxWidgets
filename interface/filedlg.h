@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        filedlg.h
-// Purpose:     documentation for wxFileDialog class
+// Purpose:     interface of wxFileDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -41,8 +41,8 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxfiledialogoverview "wxFileDialog overview", wxFileSelector
+    @see @ref overview_wxfiledialogoverview "wxFileDialog overview",
+    wxFileSelector()
 */
 class wxFileDialog : public wxDialog
 {
@@ -198,6 +198,7 @@ public:
     */
     int ShowModal();
 };
+
 
 
 // ============================================================================

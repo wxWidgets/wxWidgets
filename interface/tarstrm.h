@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tarstrm.h
-// Purpose:     documentation for wxTarInputStream class
+// Purpose:     interface of wxTarInputStream
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -26,8 +26,7 @@
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    @ref overview_wxarcbyname "Looking up an archive entry by name"
+    @see @ref overview_wxarcbyname "Looking up an archive entry by name"
 */
 class wxTarInputStream : public wxArchiveInputStream
 {
@@ -70,6 +69,7 @@ public:
 };
 
 
+
 /**
     @class wxTarClassFactory
     @wxheader{tarstrm.h}
@@ -80,15 +80,15 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", @ref overview_wxarcgeneric
-    "Generic archive programming", wxTarEntry, wxTarInputStream, wxTarOutputStream
+    @see @ref overview_wxarc "Archive formats such as zip", @ref
+    overview_wxarcgeneric "Generic archive programming", wxTarEntry, wxTarInputStream, wxTarOutputStream
 */
 class wxTarClassFactory : public wxArchiveClassFactory
 {
 public:
 
 };
+
 
 
 /**
@@ -105,8 +105,8 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", wxTarEntry, wxTarInputStream
+    @see @ref overview_wxarc "Archive formats such as zip", wxTarEntry,
+    wxTarInputStream
 */
 class wxTarOutputStream : public wxArchiveOutputStream
 {
@@ -209,6 +209,7 @@ public:
 };
 
 
+
 /**
     @class wxTarEntry
     @wxheader{tarstrm.h}
@@ -218,8 +219,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", wxTarInputStream,
+    @see @ref overview_wxarc "Archive formats such as zip", wxTarInputStream,
     wxTarOutputStream
 */
 class wxTarEntry : public wxArchiveEntry
@@ -351,3 +351,4 @@ public:
     */
     wxTarEntry& operator operator=(const wxTarEntry& entry);
 };
+

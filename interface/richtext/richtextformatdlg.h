@@ -81,6 +81,7 @@ public:
 };
 
 
+
 /**
     @class wxRichTextFormattingDialog
     @headerfile richtextformatdlg.h wx/richtext/richtextformatdlg.h
@@ -249,3 +250,4 @@ public:
     */
     bool UpdateDisplay();
 };
+

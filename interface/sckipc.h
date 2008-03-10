@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sckipc.h
-// Purpose:     documentation for wxTCPServer class
+// Purpose:     interface of wxTCPServer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -19,8 +19,7 @@
     @library{wxnet}
     @category{FIXME}
 
-    @seealso
-    wxTCPClient, wxTCPConnection, @ref overview_ipcoverview "IPC overview"
+    @see wxTCPClient, wxTCPConnection, @ref overview_ipcoverview "IPC overview"
 */
 class wxTCPServer : public wxObject
 {
@@ -51,6 +50,7 @@ public:
 };
 
 
+
 /**
     @class wxTCPClient
     @wxheader{sckipc.h}
@@ -71,8 +71,7 @@ public:
     @library{wxnet}
     @category{FIXME}
 
-    @seealso
-    wxTCPServer, wxTCPConnection, @ref overview_ipcoverview "Interprocess
+    @see wxTCPServer, wxTCPConnection, @ref overview_ipcoverview "Interprocess
     communications overview"
 */
 class wxTCPClient : public wxObject
@@ -115,6 +114,7 @@ public:
 };
 
 
+
 /**
     @class wxTCPConnection
     @wxheader{sckipc.h}
@@ -138,8 +138,7 @@ public:
     @library{wxnet}
     @category{FIXME}
 
-    @seealso
-    wxTCPClient, wxTCPServer, @ref overview_ipcoverview "Interprocess
+    @see wxTCPClient, wxTCPServer, @ref overview_ipcoverview "Interprocess
     communications overview"
 */
 class wxTCPConnection : public wxObject
@@ -304,3 +303,4 @@ public:
     */
     bool StopAdvise(const wxString& item);
 };
+

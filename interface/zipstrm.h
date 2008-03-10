@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        zipstrm.h
-// Purpose:     documentation for wxZipNotifier class
+// Purpose:     interface of wxZipNotifier
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -25,8 +25,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipEntry,
+    @see @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipEntry,
     wxZipInputStream, wxZipOutputStream
 */
 class wxZipNotifier
@@ -40,6 +39,7 @@ public:
 };
 
 
+
 /**
     @class wxZipEntry
     @wxheader{zipstrm.h}
@@ -49,8 +49,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", wxZipInputStream,
+    @see @ref overview_wxarc "Archive formats such as zip", wxZipInputStream,
     wxZipOutputStream, wxZipNotifier
 */
 class wxZipEntry : public wxArchiveEntry
@@ -204,7 +203,7 @@ public:
 
     //@{
     /**
-        Sets the notifier for this entry.
+        Sets the notifier() for this entry.
         Whenever the wxZipInputStream updates
         this entry, it will then invoke the associated
         notifier's wxZipNotifier::OnEntryUpdated
@@ -226,6 +225,7 @@ public:
 };
 
 
+
 /**
     @class wxZipInputStream
     @wxheader{zipstrm.h}
@@ -245,8 +245,8 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", wxZipEntry, wxZipOutputStream
+    @see @ref overview_wxarc "Archive formats such as zip", wxZipEntry,
+    wxZipOutputStream
 */
 class wxZipInputStream : public wxArchiveInputStream
 {
@@ -305,6 +305,7 @@ public:
 };
 
 
+
 /**
     @class wxZipClassFactory
     @wxheader{zipstrm.h}
@@ -315,15 +316,15 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", @ref overview_wxarcgeneric
-    "Generic archive programming", wxZipEntry, wxZipInputStream, wxZipOutputStream
+    @see @ref overview_wxarc "Archive formats such as zip", @ref
+    overview_wxarcgeneric "Generic archive programming", wxZipEntry, wxZipInputStream, wxZipOutputStream
 */
 class wxZipClassFactory : public wxArchiveClassFactory
 {
 public:
 
 };
+
 
 
 /**
@@ -340,8 +341,8 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @seealso
-    @ref overview_wxarc "Archive formats such as zip", wxZipEntry, wxZipInputStream
+    @see @ref overview_wxarc "Archive formats such as zip", wxZipEntry,
+    wxZipInputStream
 */
 class wxZipOutputStream : public wxArchiveOutputStream
 {
@@ -438,3 +439,4 @@ public:
     */
     void SetComment(const wxString& comment);
 };
+

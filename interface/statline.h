@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        statline.h
-// Purpose:     documentation for wxStaticLine class
+// Purpose:     interface of wxStaticLine
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -23,8 +23,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxStaticBox
+    @see wxStaticBox
 */
 class wxStaticLine : public wxControl
 {
@@ -80,3 +79,4 @@ public:
     */
     bool IsVertical() const;
 };
+

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        sizer.h
-// Purpose:     documentation for wxStdDialogButtonSizer class
+// Purpose:     interface of wxStdDialogButtonSizer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -36,8 +36,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxSizer, @ref overview_sizeroverview "Sizer overview",
+    @see wxSizer, @ref overview_sizeroverview "Sizer overview",
     wxDialog::CreateButtonSizer
 */
 class wxStdDialogButtonSizer : public wxBoxSizer
@@ -87,6 +86,7 @@ public:
     */
     void SetNegativeButton(wxButton* button);
 };
+
 
 
 /**
@@ -297,6 +297,7 @@ public:
 };
 
 
+
 /**
     @class wxSizerFlags
     @wxheader{sizer.h}
@@ -335,8 +336,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxSizer
+    @see wxSizer
 */
 class wxSizerFlags
 {
@@ -453,6 +453,7 @@ public:
 };
 
 
+
 /**
     @class wxNotebookSizer
     @wxheader{sizer.h}
@@ -473,8 +474,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxSizer, wxNotebook, @ref overview_sizeroverview "Sizer overview"
+    @see wxSizer, wxNotebook, @ref overview_sizeroverview "Sizer overview"
 */
 class wxNotebookSizer : public wxSizer
 {
@@ -489,6 +489,7 @@ public:
     */
     wxNotebook* GetNotebook();
 };
+
 
 
 /**
@@ -513,8 +514,7 @@ public:
     @library{wxcore}
     @category{winlayout}
 
-    @seealso
-    wxSizer, @ref overview_sizeroverview "Sizer overview"
+    @see wxSizer, @ref overview_sizeroverview "Sizer overview"
 */
 class wxFlexGridSizer : public wxGridSizer
 {
@@ -535,7 +535,7 @@ public:
         Specifies that column @a idx (starting from zero) should be grown if
         there is extra space available to the sizer.
         The @a proportion parameter has the same meaning as the stretch factor for
-        the sizers except that if all proportions are 0,
+        the sizers() except that if all proportions are 0,
         then all columns are resized equally (instead of not being resized at all).
     */
     void AddGrowableCol(size_t idx, int proportion = 0);
@@ -602,6 +602,7 @@ public:
 };
 
 
+
 /**
     @class wxSizer
     @wxheader{sizer.h}
@@ -666,8 +667,7 @@ public:
     @library{wxcore}
     @category{winlayout}
 
-    @seealso
-    @ref overview_sizeroverview "Sizer overview"
+    @see @ref overview_sizeroverview "Sizer overview"
 */
 class wxSizer : public wxObject
 {
@@ -1238,6 +1238,7 @@ public:
 };
 
 
+
 /**
     @class wxGridSizer
     @wxheader{sizer.h}
@@ -1250,8 +1251,7 @@ public:
     @library{wxcore}
     @category{winlayout}
 
-    @seealso
-    wxSizer, @ref overview_sizeroverview "Sizer overview"
+    @see wxSizer, @ref overview_sizeroverview "Sizer overview"
 */
 class wxGridSizer : public wxSizer
 {
@@ -1310,6 +1310,7 @@ public:
 };
 
 
+
 /**
     @class wxStaticBoxSizer
     @wxheader{sizer.h}
@@ -1323,8 +1324,8 @@ public:
     @library{wxcore}
     @category{winlayout}
 
-    @seealso
-    wxSizer, wxStaticBox, wxBoxSizer, @ref overview_sizeroverview "Sizer overview"
+    @see wxSizer, wxStaticBox, wxBoxSizer, @ref overview_sizeroverview "Sizer
+    overview"
 */
 class wxStaticBoxSizer : public wxBoxSizer
 {
@@ -1348,6 +1349,7 @@ public:
 };
 
 
+
 /**
     @class wxBoxSizer
     @wxheader{sizer.h}
@@ -1363,8 +1365,7 @@ public:
     @library{wxcore}
     @category{winlayout}
 
-    @seealso
-    wxSizer, @ref overview_sizeroverview "Sizer overview"
+    @see wxSizer, @ref overview_sizeroverview "Sizer overview"
 */
 class wxBoxSizer : public wxSizer
 {
@@ -1395,3 +1396,4 @@ public:
     */
     void RecalcSizes();
 };
+

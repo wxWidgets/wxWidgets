@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        ipc.h
-// Purpose:     documentation for wxConnection class
+// Purpose:     interface of wxConnection
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -28,8 +28,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxClient, wxServer, @ref overview_ipcoverview "Interprocess communications
+    @see wxClient, wxServer, @ref overview_ipcoverview "Interprocess communications
     overview"
 */
 class wxConnection : public wxObject
@@ -210,6 +209,7 @@ public:
 };
 
 
+
 /**
     @class wxClient
     @wxheader{ipc.h}
@@ -234,9 +234,8 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxServer, wxConnection, @ref overview_ipcoverview "Interprocess communications
-    overview"
+    @see wxServer, wxConnection, @ref overview_ipcoverview "Interprocess
+    communications overview"
 */
 class wxClient : public wxObject
 {
@@ -289,6 +288,7 @@ public:
 };
 
 
+
 /**
     @class wxServer
     @wxheader{ipc.h}
@@ -312,8 +312,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxClient, wxConnection, IPC, overview
+    @see wxClient, wxConnection, IPC, overview()
 */
 class wxServer
 {
@@ -348,3 +347,4 @@ public:
     */
     virtual wxConnectionBase* OnAcceptConnection(const wxString& topic);
 };
+

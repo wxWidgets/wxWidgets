@@ -1,13 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        init.h
-// Purpose:     documentation for global functions
+// Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-Free resources allocated by a successful call to wxEntryStart.
+Free resources allocated by a successful call to wxEntryStart().
 */
 void wxEntryCleanup();
 

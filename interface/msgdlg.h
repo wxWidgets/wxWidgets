@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        msgdlg.h
-// Purpose:     documentation for wxMessageDialog class
+// Purpose:     interface of wxMessageDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -16,8 +16,7 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @seealso
-    @ref overview_wxmessagedialogoverview "wxMessageDialog overview"
+    @see @ref overview_wxmessagedialogoverview "wxMessageDialog overview"
 */
 class wxMessageDialog : public wxDialog
 {
@@ -223,6 +222,7 @@ public:
     */
     int ShowModal();
 };
+
 
 
 // ============================================================================

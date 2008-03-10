@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        scrolbar.h
-// Purpose:     documentation for wxScrollBar class
+// Purpose:     interface of wxScrollBar
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -26,8 +26,7 @@
     @category{ctrl}
     @appearance{scrollbar.png}
 
-    @seealso
-    @ref overview_scrollingoverview "Scrolling overview", @ref
+    @see @ref overview_scrollingoverview "Scrolling overview", @ref
     overview_eventhandlingoverview, wxScrolledWindow
 */
 class wxScrollBar : public wxControl
@@ -146,3 +145,4 @@ public:
     */
     void SetThumbPosition(int viewStart);
 };
+

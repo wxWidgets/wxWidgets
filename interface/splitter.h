@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        splitter.h
-// Purpose:     documentation for wxSplitterWindow class
+// Purpose:     interface of wxSplitterWindow
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -41,8 +41,7 @@
     @library{wxcore}
     @category{miscwnd}
 
-    @seealso
-    wxSplitterEvent
+    @see wxSplitterEvent
 */
 class wxSplitterWindow : public wxWindow
 {
@@ -365,6 +364,7 @@ public:
 };
 
 
+
 /**
     @class wxSplitterEvent
     @wxheader{splitter.h}
@@ -379,8 +379,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @seealso
-    wxSplitterWindow, @ref overview_eventhandlingoverview
+    @see wxSplitterWindow, @ref overview_eventhandlingoverview
 */
 class wxSplitterEvent : public wxNotifyEvent
 {
@@ -437,3 +436,4 @@ public:
     */
     void SetSashPosition(int pos);
 };
+

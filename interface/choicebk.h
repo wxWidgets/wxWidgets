@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        choicebk.h
-// Purpose:     documentation for wxChoicebook class
+// Purpose:     interface of wxChoicebook
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -42,8 +42,7 @@
     @library{wxcore}
     @category{miscwnd}
 
-    @seealso
-    wxBookCtrl, wxNotebook, @ref overview_samplenotebook "notebook sample"
+    @see wxBookCtrl(), wxNotebook, @ref overview_samplenotebook "notebook sample"
 */
 class wxChoicebook : public wxBookCtrl overview
 {
@@ -60,3 +59,4 @@ public:
                  const wxString& name = wxEmptyStr);
     //@}
 };
+

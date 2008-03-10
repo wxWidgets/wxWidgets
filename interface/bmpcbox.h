@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        bmpcbox.h
-// Purpose:     documentation for wxBitmapComboBox class
+// Purpose:     interface of wxBitmapComboBox
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -43,8 +43,7 @@
     @category{ctrl}
     @appearance{bitmapcombobox.png}
 
-    @seealso
-    wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxCommandEvent
+    @see wxComboBox, wxChoice, wxOwnerDrawnComboBox, wxCommandEvent
 */
 class wxBitmapComboBox : public wxComboBox
 {
@@ -171,3 +170,4 @@ public:
     */
     void SetItemBitmap(unsigned int n, const wxBitmap& bitmap);
 };
+

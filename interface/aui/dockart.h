@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        aui/dockart.h
-// Purpose:     documentation for wxAuiDockArt class
+// Purpose:     interface of wxAuiDockArt
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -28,8 +28,7 @@
     @library{wxaui}
     @category{aui}
 
-    @seealso
-    wxAuiManager, wxAuiPaneInfo
+    @see wxAuiManager, wxAuiPaneInfo
 */
 class wxAuiDockArt
 {
@@ -135,3 +134,4 @@ public:
     */
     virtual void SetMetric(int id, int new_val);
 };
+

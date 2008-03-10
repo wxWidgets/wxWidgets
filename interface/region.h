@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        region.h
-// Purpose:     documentation for wxRegionIterator class
+// Purpose:     interface of wxRegionIterator
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -22,8 +22,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxPaintEvent
+    @see wxPaintEvent
 */
 class wxRegionIterator : public wxObject
 {
@@ -97,6 +96,7 @@ public:
 };
 
 
+
 /**
     @class wxRegion
     @wxheader{region.h}
@@ -113,8 +113,7 @@ public:
     @library{wxcore}
     @category{data}
 
-    @seealso
-    wxRegionIterator
+    @see wxRegionIterator
 */
 class wxRegion : public wxGDIObject
 {
@@ -274,3 +273,4 @@ public:
     */
     void operator =(const wxRegion& region);
 };
+

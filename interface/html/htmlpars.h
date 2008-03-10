@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        html/htmlpars.h
-// Purpose:     documentation for wxHtmlTagHandler class
+// Purpose:     interface of wxHtmlTagHandler
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -14,8 +14,7 @@
     @library{wxhtml}
     @category{html}
 
-    @seealso
-    Overview, wxHtmlTag
+    @see Overview(), wxHtmlTag
 */
 class wxHtmlTagHandler : public wxObject
 {
@@ -63,6 +62,7 @@ public:
 };
 
 
+
 /**
     @class wxHtmlParser
     @headerfile htmlpars.h wx/html/htmlpars.h
@@ -88,8 +88,7 @@ public:
     @library{wxhtml}
     @category{html}
 
-    @seealso
-    @ref overview_cells "Cells Overview", @ref overview_handlers "Tag Handlers
+    @see @ref overview_cells "Cells Overview", @ref overview_handlers "Tag Handlers
     Overview", wxHtmlTag
 */
 class wxHtmlParser
@@ -268,3 +267,4 @@ public:
     */
     void StopParsing();
 };
+

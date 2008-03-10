@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        caret.h
-// Purpose:     documentation for wxCaret class
+// Purpose:     interface of wxCaret
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -24,8 +24,7 @@
     @library{wxcore}
     @category{misc}
 
-    @seealso
-    wxCaret::GetBlinkTime
+    @see wxCaret::GetBlinkTime
 */
 class wxCaret
 {
@@ -145,3 +144,4 @@ public:
     */
     void Show(bool show = true);
 };
+

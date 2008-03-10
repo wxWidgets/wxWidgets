@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cmndata.h
-// Purpose:     documentation for wxFontData class
+// Purpose:     interface of wxFontData
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -17,8 +17,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    Overview, wxFont, wxFontDialog
+    @see Overview(), wxFont, wxFontDialog
 */
 class wxFontData : public wxObject
 {
@@ -120,6 +119,7 @@ public:
 };
 
 
+
 /**
     @class wxPageSetupDialogData
     @wxheader{cmndata.h}
@@ -133,8 +133,8 @@ public:
     @library{wxcore}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", wxPageSetupDialog
+    @see @ref overview_printingoverview "Printing framework overview",
+    wxPageSetupDialog
 */
 class wxPageSetupDialogData : public wxObject
 {
@@ -332,6 +332,7 @@ public:
 };
 
 
+
 /**
     @class wxColourData
     @wxheader{cmndata.h}
@@ -341,9 +342,8 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxColour, wxColourDialog, @ref overview_wxcolourdialogoverview "wxColourDialog
-    overview"
+    @see wxColour, wxColourDialog, @ref overview_wxcolourdialogoverview
+    "wxColourDialog overview"
 */
 class wxColourData : public wxObject
 {
@@ -411,6 +411,7 @@ public:
 };
 
 
+
 /**
     @class wxPrintData
     @wxheader{cmndata.h}
@@ -424,9 +425,8 @@ public:
     @library{wxcore}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", wxPrintDialog,
-    wxPageSetupDialog, wxPrintDialogData, wxPageSetupDialogData, @ref overview_wxprintdialogoverview "wxPrintDialog Overview", wxPrinterDC, wxPostScriptDC
+    @see @ref overview_printingoverview "Printing framework overview",
+    wxPrintDialog, wxPageSetupDialog, wxPrintDialogData, wxPageSetupDialogData, @ref overview_wxprintdialogoverview "wxPrintDialog Overview", wxPrinterDC, wxPostScriptDC
 */
 class wxPrintData : public wxObject
 {
@@ -575,6 +575,7 @@ public:
 };
 
 
+
 /**
     @class wxPrintDialogData
     @wxheader{cmndata.h}
@@ -586,9 +587,8 @@ public:
     @library{wxcore}
     @category{printing}
 
-    @seealso
-    @ref overview_printingoverview "Printing framework overview", wxPrintDialog,
-    @ref overview_wxprintdialogoverview "wxPrintDialog Overview"
+    @see @ref overview_printingoverview "Printing framework overview",
+    wxPrintDialog, @ref overview_wxprintdialogoverview "wxPrintDialog Overview"
 */
 class wxPrintDialogData : public wxObject
 {
@@ -748,3 +748,4 @@ public:
     void operator =(const wxPrintDialogData& data);
     //@}
 };
+

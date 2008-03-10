@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        treectrl.h
-// Purpose:     documentation for wxTreeItemData class
+// Purpose:     interface of wxTreeItemData
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -26,8 +26,7 @@
     @library{wxcore}
     @category{FIXME}
 
-    @seealso
-    wxTreeCtrl
+    @see wxTreeCtrl
 */
 class wxTreeItemData : public wxClientData
 {
@@ -64,6 +63,7 @@ public:
     */
     void SetId(const wxTreeItemId& id);
 };
+
 
 
 /**
@@ -123,8 +123,7 @@ public:
     @category{ctrl}
     @appearance{treectrl.png}
 
-    @seealso
-    wxTreeItemData, @ref overview_wxtreectrloverview "wxTreeCtrl overview",
+    @see wxTreeItemData, @ref overview_wxtreectrloverview "wxTreeCtrl overview",
     wxListBox, wxListCtrl, wxImageList, wxTreeEvent
 */
 class wxTreeCtrl : public wxControl
@@ -667,8 +666,8 @@ wxPython provides the following shortcut method:
         positive value if the first item is less than, equal to or greater than the
         second one.
         Please note that you @b must use wxRTTI macros
-        DECLARE_DYNAMIC_CLASS and
-        IMPLEMENT_DYNAMIC_CLASS if you override this
+        DECLARE_DYNAMIC_CLASS() and
+        IMPLEMENT_DYNAMIC_CLASS() if you override this
         function because otherwise the base class considers that it is not overridden
         and uses the default comparison, i.e. sorts the items alphabetically, which
         allows it optimize away the calls to the virtual function completely.
@@ -875,6 +874,7 @@ wxPython note:
 };
 
 
+
 /**
     @class wxTreeEvent
     @wxheader{treectrl.h}
@@ -884,8 +884,7 @@ wxPython note:
     @library{wxbase}
     @category{events}
 
-    @seealso
-    wxTreeCtrl
+    @see wxTreeCtrl
 */
 class wxTreeEvent : public wxNotifyEvent
 {
@@ -944,3 +943,4 @@ public:
     */
     void SetToolTip(const wxString& tooltip);
 };
+

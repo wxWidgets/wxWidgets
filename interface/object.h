@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        object.h
-// Purpose:     documentation for wxObjectRefData class
+// Purpose:     interface of wxObjectRefData
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -18,8 +18,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxObject, wxObjectDataPtrT, @ref overview_trefcount "Reference counting"
+    @see wxObject, wxObjectDataPtrT(), @ref overview_trefcount "Reference counting"
 */
 class wxObjectRefData
 {
@@ -60,6 +59,7 @@ public:
 };
 
 
+
 /**
     @class wxObject
     @wxheader{object.h}
@@ -83,8 +83,7 @@ public:
     @library{wxbase}
     @category{rtti}
 
-    @seealso
-    wxClassInfo, @ref overview_debuggingoverview, wxObjectRefData
+    @see wxClassInfo, @ref overview_debuggingoverview, wxObjectRefData
 */
 class wxObject
 {
@@ -224,6 +223,7 @@ public:
 };
 
 
+
 /**
     @class wxClassInfo
     @wxheader{object.h}
@@ -235,8 +235,7 @@ public:
     @library{wxbase}
     @category{rtti}
 
-    @seealso
-    Overview, wxObject
+    @see Overview(), wxObject
 */
 class wxClassInfo
 {
@@ -301,6 +300,7 @@ public:
 };
 
 
+
 /**
     @class wxObjectDataPtrT
     @wxheader{object.h}
@@ -321,8 +321,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @seealso
-    wxObject, wxObjectRefData, @ref overview_trefcount "Reference counting"
+    @see wxObject, wxObjectRefData, @ref overview_trefcount "Reference counting"
 */
 class wxObjectDataPtr<T>
 {
@@ -380,6 +379,7 @@ public:
 };
 
 
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================
@@ -420,7 +420,7 @@ public:
     Same as @c reinterpret_castT(x) if the compiler supports reinterpret cast or
     @c (T)x for old compilers.
 
-    @see wx_const_cast, wx_static_cast
+    @see wx_const_cast(), wx_static_cast()
 */
 T wx_reinterpret_cast();
 
@@ -435,7 +435,7 @@ T wx_reinterpret_cast();
     This macro expands into @c const_castclassname *(ptr) if the compiler
     supports @e const_cast or into an old, C-style cast, otherwise.
 
-    @see wx_const_cast, wxDynamicCast, wxStaticCast
+    @see wx_const_cast(), wxDynamicCast(), wxStaticCast()
 */
 classname* wxConstCast();
 
@@ -468,7 +468,7 @@ classname* wxConstCast();
     tests whether @c this pointer is non-@NULL which is always @true), so
     this macro should be used to avoid them.
 
-    @see wxDynamicCast
+    @see wxDynamicCast()
 */
 classname* wxDynamicCastThis();
 
@@ -492,7 +492,7 @@ wxObject* wxCreateDynamicObject(const wxString& className);
     system and also declare that the objects of this class should be dynamically
     creatable from run-time type information. Notice that this implies that the
     class should have a default constructor, if this is not the case consider using
-    DECLARE_CLASS.
+    DECLARE_CLASS().
     Example:
 
     @code
@@ -511,11 +511,11 @@ wxObject* wxCreateDynamicObject(const wxString& className);
 
 /**
     Same as @c const_castT(x) if the compiler supports const cast or
-    @c (T)x for old compilers. Unlike wxConstCast,
+    @c (T)x for old compilers. Unlike wxConstCast(),
     the cast it to the type @e T and not to @c T * and also the order of
     arguments is the same as for the standard cast.
 
-    @see wx_reinterpret_cast, wx_static_cast
+    @see wx_reinterpret_cast(), wx_static_cast()
 */
 T wx_const_cast();
 
@@ -548,8 +548,8 @@ T wx_const_cast();
         }
     @endcode
 
-    @see @ref overview_runtimeclassoverview "RTTI overview", wxDynamicCastThis,
-         wxConstCast, wxStaticCast
+    @see @ref overview_runtimeclassoverview "RTTI overview", wxDynamicCastThis(),
+         wxConstCast(), wxStaticCast()
 */
 classname* wxDynamicCast();
 
@@ -570,18 +570,18 @@ classname* wxDynamicCast();
     result if @c wxDynamicCast(ptr, classname) == @NULL) and then returns the
     result of executing an equivalent of @c static_castclassname *(ptr).
 
-    @see wx_static_cast, wxDynamicCast, wxConstCast
+    @see wx_static_cast(), wxDynamicCast(), wxConstCast()
 */
 classname* wxStaticCast();
 
 /**
     Same as @c static_castT(x) if the compiler supports static cast or
-    @c (T)x for old compilers. Unlike wxStaticCast,
+    @c (T)x for old compilers. Unlike wxStaticCast(),
     there are no checks being done and the meaning of the macro arguments is exactly
     the same as for the standard static cast, i.e. @e T is the full type name and
     star is not appended to it.
 
-    @see wx_const_cast, wx_reinterpret_cast, wx_truncate_cast
+    @see wx_const_cast(), wx_reinterpret_cast(), wx_truncate_cast()
 */
 T wx_static_cast();
 
