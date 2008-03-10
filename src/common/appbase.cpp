@@ -167,15 +167,11 @@ wxAppConsoleBase::~wxAppConsoleBase()
 // initilization/cleanup
 // ----------------------------------------------------------------------------
 
-bool wxAppConsoleBase::Initialize(int& argcOrig, wxChar **argvOrig)
+bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 {
 #if wxUSE_INTL
     GetTraits()->SetLocale();
 #endif // wxUSE_INTL
-
-    // remember the command line arguments
-    argc = argcOrig;
-    argv = argvOrig;
 
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;

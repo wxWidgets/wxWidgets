@@ -298,6 +298,12 @@ bool wxEntryStart(int& argc, wxChar **argv)
         return false;
     }
 
+    // remember, possibly modified (e.g. due to removal of toolkit-specific
+    // parameters), command line arguments in member variables
+    app->argc = argc;
+    app->argv = argv;
+
+
     wxCallAppCleanup callAppCleanup(app.get());
 
     // for compatibility call the old initialization function too

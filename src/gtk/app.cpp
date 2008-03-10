@@ -437,6 +437,7 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
         }
 
         argc_ = argcGTK;
+        argv_[argc_] = NULL;
     }
     //else: gtk_init() didn't modify our parameters
 
