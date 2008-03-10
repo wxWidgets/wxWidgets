@@ -34,7 +34,7 @@
 // implementation
 // ============================================================================
 
-bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle *win)
+bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle win)
 {
     if ( !wxTopLevelWindow::Create(NULL, wxID_ANY, "") )
         return false;
@@ -48,6 +48,8 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle *win)
     // doesn't make much sense unless we also react to visibility changes, so
     // just suppose it's always shown for now)
     Show();
+
+    return true;
 }
 
 bool wxNativeContainerWindow::Create(wxNativeContainerWindowId anid)
