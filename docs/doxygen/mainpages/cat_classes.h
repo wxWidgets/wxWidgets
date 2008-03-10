@@ -286,6 +286,7 @@
  @li wxPenList: The list of previously-created pens
  @li wxPalette: Represents a table of indices into RGB values
  @li wxRegion: Represents a simple or complex region on a window or device context
+ @li wxAnimation: Represents an animation
  @li wxRendererNative: Abstracts high-level drawing primitives
 
 

@@ -47,17 +47,17 @@ SUBGROUPING            = YES
 # us to keep the headers readable and "implement" wxWidgets-specific commands.
 
 # event aliases
-ALIASES = beginEventTable="<div><span class='events'>Events:</span>"
+ALIASES = beginEventTable="\n<span class='events'>Events:</span>"
 ALIASES += event{1}="\li <span class='event'>\1</span>"
 ALIASES += event{2}="\li <span class='event'>\1, \2</span>"
 ALIASES += event{3}="\li <span class='event'>\1, \2, \3</span>"
 ALIASES += event{4}="\li <span class='event'>\1, \2, \3, \4</span>"
-ALIASES += endEventTable="</div>"
+ALIASES += endEventTable="\n"
 
 # style aliases
-ALIASES += beginStyleTable="<div><span class='styles'>Styles:</span>"
+ALIASES += beginStyleTable="\n<span class='styles'>Styles:</span>"
 ALIASES += style{1}="\li <span class='style'>\1</span>"
-ALIASES += endStyleTable="</div>"
+ALIASES += endStyleTable="\n"
 
 # extra style aliases
 ALIASES += beginExtraStyleTable="<div><span class='styles'>Extra styles:</span>"
@@ -70,10 +70,10 @@ ALIASES += nolibrary="<div><span class='lib'>Library:</span>&nbsp;&nbsp;<span cl
 ALIASES += stdobjects="<span class='stdobj'>Predefined objects:</span>"
 
 # native implementation infos:
-ALIASES += nativeimpl{1}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native implementations are used for \ref page_port_\1 port; generic implementation is used elsewhere.</div>"
-ALIASES += nativeimpl{2}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native implementations are used for \ref page_port_\1, \ref page_port_\2 ports; generic implementation is used elsewhere.</div>"
-ALIASES += nativeimpl{3}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native implementations are used for \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports; generic implementation is used elsewhere.</div>"
-ALIASES += nativeimpl{4}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native implementations are used for \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports; generic implementation is used elsewhere.</div>"
+ALIASES += nativeimpl{1}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native under \ref page_port_\1 port; a generic implementation is used elsewhere.</div>"
+ALIASES += nativeimpl{2}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native under \ref page_port_\1, \ref page_port_\2 ports; a generic implementation is used elsewhere.</div>"
+ALIASES += nativeimpl{3}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native under \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports; a generic implementation is used elsewhere.</div>"
+ALIASES += nativeimpl{4}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native under \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports; a generic implementation is used elsewhere.</div>"
 
 # onlyfor infos:
 ALIASES += onlyfor{1}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1 port.</div>"

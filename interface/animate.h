@@ -1,18 +1,35 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        animate.h
-// Purpose:     interface of wxAnimationCtrl
+// Purpose:     interface of wxAnimation* classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Supported animation types.
+*/
+enum wxAnimationType
+{
+    wxANIMATION_TYPE_INVALID,
+
+    /** represents an animated GIF file. */
+    wxANIMATION_TYPE_GIF,
+
+    /** represents an ANI file. */
+    wxANIMATION_TYPE_ANI,
+
+    /** autodetect the filetype. */
+    wxANIMATION_TYPE_ANY
+};
+
+/**
     @class wxAnimationCtrl
     @wxheader{animate.h}
 
     This is a static control which displays an animation.
-    wxAnimationCtrl API is simple as possible and won't give you full control on the
-    animation; if you need it then use wxMediaCtrl.
+    wxAnimationCtrl API is as simple as possible and won't give you full control
+    on the animation; if you need it then use wxMediaCtrl.
 
     This control is useful to display a (small) animation while doing a long task
     (e.g. a "throbber").
@@ -30,6 +47,9 @@
 
     @library{wxadv}
     @category{ctrl}
+
+    @nativeimpl{wxgtk,wxmsw}
+
     @appearance{animationctrl.png}
 
     @see wxAnimation
@@ -49,9 +69,10 @@ public:
                     const wxString& name = "animationctrl");
 
     /**
-        After control creation you must explicitely call Play()
-        to start to play the animation. Until that function won't be called, the first
-        frame
+        Creates the control with the given @a anim animation.
+    
+        After control creation you must explicitely call Play() to start to play
+        the animation. Until that function won't be called, the first frame
         of the animation is displayed.
         
         @param parent
@@ -104,46 +125,43 @@ public:
 
     /**
         Starts playing the animation.
+
         The animation is always played in loop mode (unless the last frame of the
-        animation
-        has an infinite delay time) and always start from the first frame
-        (even if you @ref stop() stopped it while some other frame was
-        displayed).
+        animation has an infinite delay time) and always start from the first frame
+        even if you @ref Stop "stopped" it while some other frame was displayed.
     */
     bool Play();
 
     /**
         Sets the animation to play in this control.
-        If the previous animation is being played, it's @ref stop() Stopped.
-        Until Play() isn't called, a static image, the first
-        frame of the given animation or the background colour will be shown
+
+        If the previous animation is being played, it's @ref Stop() stopped.
+        Until Play() isn't called, a static image, the first frame of the given
+        animation or the background colour will be shown
         (see SetInactiveBitmap() for more info).
     */
     void SetAnimation(const wxAnimation& anim);
 
     /**
         Sets the bitmap to show on the control when it's not playing an animation.
-        If you set as inactive bitmap @c wxNullBitmap (which is the default), then the
-        first frame of the animation is instead shown when the control is inactive; in
-        this case,
-        if there's no valid animation associated with the control (see
-        wxAnimationCtrl::SetAnimation),
-        then the background colour of the window is shown.
+
+        If you set as inactive bitmap ::wxNullBitmap (which is the default), then the
+        first frame of the animation is instead shown when the control is inactive;
+        in this case, if there's no valid animation associated with the control
+        (see SetAnimation()), then the background colour of the window is shown.
+
         If the control is not playing the animation, the given bitmap will be
-        immediately
-        shown, otherwise it will be shown as soon as Stop()
-        is called.
+        immediately shown, otherwise it will be shown as soon as Stop() is called.
+
         Note that the inactive bitmap, if smaller than the control's size, will be
-        centered in
-        the control; if bigger, it will be stretched to fit it.
+        centered in the control; if bigger, it will be stretched to fit it.
     */
     void SetInactiveBitmap(const wxBitmap& bmp);
 
     /**
         Stops playing the animation.
         The control will show the first frame of the animation, a custom static image or
-        the window's background colour as specified by the
-        last SetInactiveBitmap() call.
+        the window's background colour as specified by the last SetInactiveBitmap() call.
     */
     void Stop();
 };
@@ -159,17 +177,19 @@ public:
     Sound is not supported by wxAnimation.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{gdi}
 
     @stdobjects
-    ::Objects:, ::wxNullAnimation,
+    ::wxNullAnimation
 
     @see wxAnimationCtrl
 */
 class wxAnimation : public wxGDIObject
 {
 public:
-    //@{
+    wxAnimation();
+    wxAnimation(const wxAnimation& anim);
+
     /**
         Loads an animation from a file.
         
@@ -178,16 +198,12 @@ public:
         @param type
             See LoadFile for more info.
     */
-    wxAnimation();
-    wxAnimation(const wxAnimation& anim);
     wxAnimation(const wxString& name,
                 wxAnimationType type = wxANIMATION_TYPE_ANY);
-    //@}
 
     /**
         Destructor.
-        See @ref overview_refcountdestruct "reference-counted object destruction" for
-        more info.
+        See @ref overview_refcount_destruct for more info.
     */
     ~wxAnimation();
 
@@ -224,41 +240,9 @@ public:
             The stream to use to load the animation.
         @param type
             One of the following values:
-        
-        
-        
-        
-        
-        
-        
-            wxANIMATION_TYPE_GIF
-        
-        
-        
-        
-            Load an animated GIF file.
-        
-        
-        
-        
-        
-            wxANIMATION_TYPE_ANI
-        
-        
-        
-        
-            Load an ANI file.
-        
-        
-        
-        
-        
-            wxANIMATION_TYPE_ANY
-        
-        
-        
-        
-            Try to autodetect the filetype.
+             @li wxANIMATION_TYPE_GIF: loads an animated GIF file;
+             @li wxANIMATION_TYPE_ANI: load an ANI file;
+             @li wxANIMATION_TYPE_ANY: tries to autodetect the filetype.
         
         @returns @true if the operation succeeded, @false otherwise.
     */
@@ -271,42 +255,8 @@ public:
         @param name
             A filename.
         @param type
-            One of the following values:
-        
-        
-        
-        
-        
-        
-        
-            wxANIMATION_TYPE_GIF
-        
-        
-        
-        
-            Load an animated GIF file.
-        
-        
-        
-        
-        
-            wxANIMATION_TYPE_ANI
-        
-        
-        
-        
-            Load an ANI file.
-        
-        
-        
-        
-        
-            wxANIMATION_TYPE_ANY
-        
-        
-        
-        
-            Try to autodetect the filetype.
+            One of the wxAnimationType values; wxANIMATION_TYPE_ANY
+            means that the function should try to autodetect the filetype.
         
         @returns @true if the operation succeeded, @false otherwise.
     */
@@ -314,21 +264,13 @@ public:
                   wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     /**
-        Assignment operator, using @ref overview_trefcount "reference counting".
+        Assignment operator, using @ref overview_refcount "reference counting".
     */
     wxAnimation operator =(const wxAnimation& brush);
 };
 
-
 /**
-    FIXME
-*/
-wxAnimation Objects:
-;
-
-/**
-    FIXME
+    An empty animation object.
 */
 wxAnimation wxNullAnimation;
-
 
