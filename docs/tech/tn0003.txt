@@ -93,6 +93,15 @@ DO:
   second argument can have up to 10 commas unescaped (see the Doxyfile for the
   trick used to implement this).
 
+- for linking use one of:
+     => the @ref command to refer to topic overviews;
+     => the () suffix to refer to function members of the same class you're
+        documenting or to refer to global functions or macros;
+     => the classname:: operator to refer to functions of classes different
+        from the one you're documenting;
+     => the :: prefix to refer to global variables (e.g. ::wxEmptyString).
+  Class names are auto-linked by Doxygen without the need of any explicit command.
+
 DON'T:
 
 - use jargon, such as 'gonna', or omit the definite article.
@@ -108,14 +117,7 @@ DON'T:
 - use HTML style tags for creation of tables or lists.
   Use wx aliases instead like @beginTable, @row2col, @row3col, @endTable and
   @beginDefList, @itemdef, @endDefList, etc.
-  See the Doxyfile for more info.
-
-- use # character for linking; use either the @ref command (to refer to topic
-  overviews, for example) or the () suffix (to refer to function members of the
-  same class you're documenting), or the :: operator (to refer to functions
-  of classes different from the one you're documenting).
-  Other entitites like global functions, global instances or class names are
-  auto-linked by Doxygen without the need of any explicit command.
+  See the Doxyfile.inc for more info.
 
 
 Documentation comment for a class
@@ -124,44 +126,47 @@ Documentation comment for a class
 Start off with:
 
 /**
- * @class wxMyClass
- * @wxheader{myclass.h}
- *
- * ...here goes the description... 
- *
- * @beginEventTable
- * @event{EVT_SOME_EVENT(id, func)}:
- *        Description for EVT_SOME_EVENT.
- * @endEventTable
- *
- * @beginStyleTable
- * @style{wxSOME_STYLE}:
- *        Description for wxSOME_STYLE.
- * ...
- * @endStyleTable
- *
- * @beginExtraStyleTable
- * @style{wxSOME_EXTRA_STYLE}:
- *        Description for wxSOME_EXTRA_STYLE.
- * ...
- * @endExtraStyleTable
- *
- * @library{wxbase}
- * @stdobjects
- * ...here goes the list of predefined instances...
- *
- * @seealso
- * ...here goes the see-also list...
- * you can make references to topic overviews or other
- * manual pages using the @ref command
- */
+    @class wxMyClass
+    @wxheader{myclass.h}
 
-Note that the events, styles and extra-styles tables as
-well as @stdobjects and @seealso lists are optional.
+    ...here goes the description...
 
-Also note that you shouldn't use the Doxygen builtin @sa command
-for the see-also list but rather the wxWidgets' alias @seealso
-in this case.
+    @beginEventTable
+    @event{EVT_SOME_EVENT(id, func)}:
+            Description for EVT_SOME_EVENT.
+    @endEventTable
+
+    @beginStyleTable
+    @style{wxSOME_STYLE}:
+            Description for wxSOME_STYLE.
+    ...
+    @endStyleTable
+
+    @beginExtraStyleTable
+    @style{wxSOME_EXTRA_STYLE}:
+            Description for wxSOME_EXTRA_STYLE.
+    ...
+    @endExtraStyleTable
+
+    @library{wxbase}
+    @category{cat_shortcut}
+
+    @nativeimpl{wxgtk, wxmsw, ...}
+    @onlyfor{wxgtk, wxmsw, ...}
+
+    @appearance{button.png}
+
+    @stdobjects
+    ...here goes the list of predefined instances...
+
+    @see ...here goes the see-also list...
+         you can make references to topic overviews or other
+         manual pages using the @ref command
+*/
+
+Note that everything *except* the @class, @wxheader, @library and @category
+commands are optionals.
+
 
 
 Documentation comment for a function
@@ -170,28 +175,25 @@ Documentation comment for a function
 Start off with:
 
 /**
- * ...here goes the description of the function....
- *
- * @param param1
- * ...here goes the description for the first parameter of this function
- * @param param2
- * ...here goes the description for the second parameter of this function
- * ...
- *
- * @return
- * ...here goes the description of what the function returns...
- *
- * @note ...here go any eventual notes about this function...
- *
- * @remarks ...here go any eventual remarks about this function...
- *
- * @sa ...here goes the see-also list...
+    ...here goes the description of the function....
+
+    @param param1
+        ...here goes the description for the first parameter of this function
+    @param param2
+        ...here goes the description for the second parameter of this function
+        ...
+
+    @return
+    ...here goes the description of what the function returns...
+
+    @note ...here go any eventual notes about this function...
+
+    @remarks ...here go any eventual remarks about this function...
+
+    @see ...here goes the see-also list...
  */
 
-Note that the @return, @note, @remarks, @sa commands are optional.
-
-Also note that unlike for class' description, you should use the doxygen
-builtin @sa command here for see-also lists.
+Note that the @return, @note, @remarks, @see commands are optional.
 
 The @param command has an optional attribute specifying the direction of 
 the attribute. Possible values are "in" and "out". E.g.
