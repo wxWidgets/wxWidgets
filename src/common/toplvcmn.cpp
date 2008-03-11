@@ -82,18 +82,17 @@ bool wxTopLevelWindowBase::Destroy()
         wxPendingDelete.Append(this);
 
 #ifdef __WXMAC__
-	// on mac we know that objects will always be deleted after this event
-	// has been handled, using Hide we avoid erratic redraws during window
-	// tear down
-	Hide();
-#else
+    // on mac we know that objects will always be deleted after this event
+    // has been handled, using Hide we avoid erratic redraws during window
+    // tear down
+    Hide();
+#else // !__WXMAC__
     // normally we want to hide the window immediately so that it doesn't get
     // stuck on the screen while it's being destroyed, however we shouldn't
     // hide the last visible window as then we might not get any idle events
     // any more as no events will be sent to the hidden window and without idle
     // events we won't prune wxPendingDelete list and the application won't
     // terminate
-    const wxWindowList::const_iterator end = wxTopLevelWindows.end();
     for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin(),
                                      end = wxTopLevelWindows.end();
           i != end;
@@ -109,7 +108,7 @@ bool wxTopLevelWindowBase::Destroy()
             break;
         }
     }
-#endif
+#endif // __WXMAC__/!__WXMAC__
 
     return true;
 }
