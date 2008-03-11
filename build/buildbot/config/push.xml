@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       push.xml
+    Purpose:    Configuration for push builds
+    Author:     Mike Wetherell
+    RCS-ID:     $Id$
+    Copyright:  (c) 2007 Mike Wetherell
+    Licence:    wxWidgets licence
+
+    This allows the logs from builds done elsewhere to be included in the
+    buildbot results, see:
+
+    http://www.wxwidgets.org/wiki/index.php/Development:_Buildbot#Sending_in_Logs_from_Builds_Done_Elsewhere
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/push.xml"/>
+
+<!-- e.g.:
+<build>
+    <name>wxOS2 Stable gcc</name>
+    <builddir>psh_os2_stable</builddir>
+
+    <steps>
+        <extractlogs/>
+        <show log="compiler"/>
+        <show log="update"/>
+        <show log="configure"/>
+        <show log="compile"/>
+        <show log="demos"/>
+        <show log="samples"/>
+    </steps>
+</build>
+-->
+
+</bot>
