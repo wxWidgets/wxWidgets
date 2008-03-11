@@ -24,11 +24,13 @@
 
 The following constants are defined in wxWidgets:
 
-@li wxMAJOR_VERSION is the major version of wxWidgets
-@li wxMINOR_VERSION is the minor version of wxWidgets
-@li wxRELEASE_NUMBER is the release number
-@li wxSUBRELEASE_NUMBER is the subrelease number which is @c 0 for all
-    official releases
+@beginDefList
+@itemdef{ wxMAJOR_VERSION, The major version of wxWidgets }
+@itemdef{ wxMINOR_VERSION, The minor version of wxWidgets }
+@itemdef{ wxRELEASE_NUMBER, The release number }
+@itemdef{ wxSUBRELEASE_NUMBER, The subrelease number which is 0 for all
+    official releases }
+@endDefList
 
 For example, the values or these constants for wxWidgets 2.8.7
 are 2, 8, 7 and 0.
@@ -43,39 +45,39 @@ and so normally is not useful.
 @header{wx/version.h}
 @header{wx/defs.h}
 
-@li wxCHECK_GCC_VERSION
-@li wxCHECK_SUNCC_VERSION
-@li wxCHECK_VERSION
-@li wxCHECK_VERSION_FULL
-@li wxCHECK_VISUALC_VERSION
-@li wxCHECK_W32API_VERSION
+@li wxCHECK_GCC_VERSION()
+@li wxCHECK_SUNCC_VERSION()
+@li wxCHECK_VERSION()
+@li wxCHECK_VERSION_FULL()
+@li wxCHECK_VISUALC_VERSION()
+@li wxCHECK_W32API_VERSION()
 
 
 @section page_macro_cat_misc Miscellaneous
 
 @header{FIXME}
 
-@li wxCONCAT
-@li wxDECLARE_APP
-@li wxDYNLIB_FUNCTION
-@li wxDEPRECATED
-@li wxDEPRECATED_BUT_USED_INTERNALLY
-@li wxDEPRECATED_INLINE
-@li wxEXPLICIT
-@li wxON_BLOCK_EXIT
-@li wxON_BLOCK_EXIT_OBJ
-@li wxSTRINGIZE
-@li wxSTRINGIZE_T
-@li wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING
-@li __WXFUNCTION__
-@li wxS
-@li wxT
-@li wxTRANSLATE
-@li _
-@li wxPLURAL
-@li _T
-@li WXTRACE
-@li WXTRACELEVEL
+@li wxCONCAT()
+@li wxDECLARE_APP()
+@li wxDYNLIB_FUNCTION()
+@li wxDEPRECATED()
+@li wxDEPRECATED_BUT_USED_INTERNALLY()
+@li wxDEPRECATED_INLINE()
+@li wxEXPLICIT()
+@li wxON_BLOCK_EXIT()
+@li wxON_BLOCK_EXIT_OBJ()
+@li wxSTRINGIZE()
+@li wxSTRINGIZE_T()
+@li wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING()
+@li __WXFUNCTION__()
+@li wxS()
+@li wxT()
+@li wxTRANSLATE()
+@li _()
+@li wxPLURAL()
+@li _T()
+@li WXTRACE()
+@li WXTRACELEVEL()
 
 
 @section page_macro_cat_byteorder Byte Order
@@ -89,12 +91,12 @@ network) which is usually in some fixed, platform-independent format.
 
 The macros are helpful for transforming the data to the correct format.
 
-@li wxINTXX_SWAP_ALWAYS
-@li wxINTXX_SWAP_ON_BE
-@li wxINTXX_SWAP_ON_LE
-@li wxFORCE_LINK_THIS_MODULE
-@li wxFORCE_LINK_MODULE
-@li wxIMPLEMENT_APP
+@li wxINTXX_SWAP_ALWAYS()
+@li wxINTXX_SWAP_ON_BE()
+@li wxINTXX_SWAP_ON_LE()
+@li wxFORCE_LINK_THIS_MODULE()
+@li wxFORCE_LINK_MODULE()
+@li wxIMPLEMENT_APP()
 
 
 @section page_macro_cat_rtti Runtime Type Information (RTTI)
@@ -109,28 +111,28 @@ unless you are thinking of modifying or adding any wxWidgets classes.
 
 Related Overviews: @ref overview_rtti
 
-@li #CLASSINFO
-@li #DECLARE_ABSTRACT_CLASS
-@li #DECLARE_APP
-@li #DECLARE_CLASS
-@li #DECLARE_DYNAMIC_CLASS
-@li #IMPLEMENT_ABSTRACT_CLASS
-@li #IMPLEMENT_ABSTRACT_CLASS2
-@li #IMPLEMENT_APP
-@li #IMPLEMENT_CLASS
-@li #IMPLEMENT_CLASS2
-@li #IMPLEMENT_DYNAMIC_CLASS
-@li #IMPLEMENT_DYNAMIC_CLASS2
-@li #wxConstCast
-@li ::wxCreateDynamicObject
-@li #WXDEBUG_NEW
-@li #wxDynamicCast
-@li #wxDynamicCastThis
-@li #wxStaticCast
-@li #wx_const_cast
-@li #wx_reinterpret_cast
-@li #wx_static_cast
-@li #wx_truncate_cast
+@li CLASSINFO()
+@li DECLARE_ABSTRACT_CLASS()
+@li DECLARE_APP()
+@li DECLARE_CLASS()
+@li DECLARE_DYNAMIC_CLASS()
+@li IMPLEMENT_ABSTRACT_CLASS()
+@li IMPLEMENT_ABSTRACT_CLASS2()
+@li IMPLEMENT_APP()
+@li IMPLEMENT_CLASS()
+@li IMPLEMENT_CLASS2()
+@li IMPLEMENT_DYNAMIC_CLASS()
+@li IMPLEMENT_DYNAMIC_CLASS2()
+@li wxConstCast()
+@li wxCreateDynamicObject()
+@li WXDEBUG_NEW()
+@li wxDynamicCast()
+@li wxDynamicCastThis()
+@li wxStaticCast()
+@li wx_const_cast()
+@li wx_reinterpret_cast()
+@li wx_static_cast()
+@li wx_truncate_cast()
 
 
 @section page_macro_cat_debugging Debugging
@@ -146,18 +148,18 @@ messages if the condition they check fail.
 
 @header{wx/debug.h}
 
-@li wxASSERT
-@li wxASSERT_MIN_BITSIZE
-@li wxASSERT_MSG
-@li wxCOMPILE_TIME_ASSERT
-@li wxCOMPILE_TIME_ASSERT2
-@li wxFAIL
-@li wxFAIL_MSG
-@li wxCHECK
-@li wxCHECK_MSG
-@li wxCHECK_RET
-@li wxCHECK2
-@li wxCHECK2_MSG
+@li wxASSERT()
+@li wxASSERT_MIN_BITSIZE()
+@li wxASSERT_MSG()
+@li wxCOMPILE_TIME_ASSERT()
+@li wxCOMPILE_TIME_ASSERT2()
+@li wxFAIL()
+@li wxFAIL_MSG()
+@li wxCHECK()
+@li wxCHECK_MSG()
+@li wxCHECK_RET()
+@li wxCHECK2()
+@li wxCHECK2_MSG()
 
 */
 
