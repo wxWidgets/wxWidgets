@@ -54,6 +54,11 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle hwnd)
     return true;
 }
 
+void wxNativeContainerWindow::OnNativeDestroyed()
+{
+    // currently this is not called so nothing to do here
+}
+
 wxNativeContainerWindow::~wxNativeContainerWindow()
 {
     // prevent the base class dtor from destroying the window, it doesn't

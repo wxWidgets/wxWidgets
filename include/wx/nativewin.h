@@ -145,6 +145,13 @@ public:
         return false;
     }
 
+
+    // this is an implementation detail: called when the native window is
+    // destroyed by an outside agency; deletes the C++ object too but can in
+    // principle be overridden to something else (knowing that the window
+    // handle of this object and all of its children is invalid any more)
+    virtual void OnNativeDestroyed();
+
 private:
     DECLARE_NO_COPY_CLASS(wxNativeContainerWindow)
 };
