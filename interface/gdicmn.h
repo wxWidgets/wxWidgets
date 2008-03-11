@@ -739,7 +739,9 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @addtogroup group_gdi */
 //@{
+
 /**
     Returns the dimensions of the work area on the display.  On Windows
     this means the area not covered by the taskbar, etc.  Other platforms
@@ -749,23 +751,18 @@ public:
 void wxClientDisplayRect(int* x, int* y, int* width,
                          int* height);
 wxRect wxGetClientDisplayRect();
-//@}
 
-//@{
 /**
     Returns the display size in pixels.
 */
 void wxDisplaySize(int* width, int* height);
 wxSize wxGetDisplaySize();
-//@}
 
-//@{
 /**
     Returns the display size in millimeters.
 */
 void wxDisplaySizeMM(int* width, int* height);
 wxSize wxGetDisplaySizeMM();
-//@}
 
 /**
     This macro loads an icon from either application resources (on the platforms
@@ -788,10 +785,12 @@ bool wxColourDisplay();
 
     @see @ref overview_wxbitmapoverview, wxICON()
 */
-#define wxBITMAP()     /* implementation is private */
+#define wxBITMAP() /* implementation is private */
 
 /**
     Returns the depth of the display (a value of 1 denotes a monochrome display).
 */
 int wxDisplayDepth();
+
+//@}
 

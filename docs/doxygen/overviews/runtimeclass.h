@@ -8,7 +8,7 @@
 
 /*!
 
-@page overview_rtti Runtime Class Information (RTTI)
+@page overview_rtti Runtime Type Information (RTTI)
 
 @li @ref overview_rtti_intro
 @li @ref overview_rtti_classinfo
@@ -25,7 +25,7 @@
 
 @section overview_rtti_intro Introduction
 
-One of the failings of C++ used to be that no run-time information was provided
+One of the failings of C++ used to be that no runtime information was provided
 about a class and its position in the inheritance hierarchy. Another, which
 still persists, is that instances of a class cannot be created just by knowing
 the name of a class, which makes facilities such as persistent storage hard to
@@ -76,7 +76,7 @@ wxClassInfo object instead, then you can simply call wxClassInfo::CreateObject.
 @section overview_rtti_classinfo wxClassInfo
 
 This class stores meta-information about classes. An application may use macros
-such as DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to record run-time
+such as DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS to record runtime
 information about a class, including:
 
 @li It's position in the inheritance hierarchy.
