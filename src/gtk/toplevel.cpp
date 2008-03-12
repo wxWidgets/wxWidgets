@@ -761,7 +761,12 @@ bool wxTopLevelWindowGTK::Show( bool show )
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     const bool wasRealized = GTK_WIDGET_REALIZED(m_widget);
-    bool deferShow = show && m_deferShow && !wasRealized;
+    bool deferShow =
+        show && m_deferShow && !wasRealized &&
+        g_signal_handler_find(m_widget,
+            GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+            g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
+            0, NULL, NULL, this);
     if (deferShow)
     {
         // Initial show. If WM supports _NET_REQUEST_FRAME_EXTENTS, defer
