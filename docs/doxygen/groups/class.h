@@ -1,0 +1,16 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        class.h
+// Purpose:     Main class group docs
+// Author:      wxWidgets team
+// RCS-ID:      $Id$
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+
+@defgroup group_class Classes by Category
+
+This group defines all class groups.
+
+*/
+

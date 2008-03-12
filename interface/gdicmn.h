@@ -326,6 +326,7 @@ public:
 
 /**
     @class wxBrushList
+    @ingroup group_class_gdi
     @wxheader{gdicmn.h}
 
     A brush list is a list containing all brushes which have been created.
@@ -476,6 +477,7 @@ public:
 
 /**
     @class wxFontList
+    @ingroup group_class_gdi
     @wxheader{gdicmn.h}
 
     A font list is a list containing all fonts which have been created. There
@@ -668,6 +670,7 @@ public:
 
 /**
     @class wxPenList
+    @ingroup group_class_gdi
     @wxheader{gdicmn.h}
 
     There is only one instance of this class: @b wxThePenList.  Use
@@ -739,7 +742,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @addtogroup group_gdi */
+/** @ingroup group_funcmacro_gdi */
 //@{
 
 /**

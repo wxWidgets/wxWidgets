@@ -117,7 +117,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @addtogroup group_gdi */
+/** @ingroup group_funcmacro_gdi */
 //@{
 
 /**

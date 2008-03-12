@@ -8,6 +8,7 @@
 
 /**
     @class wxDC
+    @ingroup group_class_dc group_class_gdi
     @wxheader{dc.h}
 
     A wxDC is a @e device context onto which graphics and text can be drawn.
@@ -977,6 +978,7 @@ public:
 
 /**
     @class wxDCClipper
+    @ingroup group_class_gdi
     @wxheader{dc.h}
 
     wxDCClipper is a small helper class for setting a clipping region on a

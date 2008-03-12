@@ -1,14 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gdi.h
+// Name:        funcmacro_gdi.h
 // Purpose:     Graphics Device Interface function and macro docs
 // Author:      wxWidgets team
-// RCS-ID:      $Id: gdicmn.h 52425 2008-03-10 15:24:38Z FM $
+// RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
-@defgroup group_gdi Graphics Device Interface (GDI) Functions and Macros
+@defgroup group_funcmacro_gdi Graphics Device Interface (GDI)
+@ingroup group_funcmacro
 
 The following are functions and macros related to GDI (Graphics Device
 Interface) access.

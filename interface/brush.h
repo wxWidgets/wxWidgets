@@ -8,6 +8,7 @@
 
 /**
     @class wxBrush
+    @ingroup group_class_gdi
     @wxheader{brush.h}
 
     A brush is a drawing tool for filling in areas. It is used for painting

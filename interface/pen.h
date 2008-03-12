@@ -8,6 +8,7 @@
 
 /**
     @class wxPen
+    @ingroup group_class_gdi
     @wxheader{pen.h}
 
     A pen is a drawing tool for drawing outlines. It is used for drawing

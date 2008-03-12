@@ -491,5 +491,7 @@ SPAN.style, SPAN.event {
     color: #880000;
 }
 
-
+A[HREF="modules.html"] SPAN:before {
+    content: "Categories / ";
+}
 

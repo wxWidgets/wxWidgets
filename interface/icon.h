@@ -8,6 +8,7 @@
 
 /**
     @class wxIcon
+    @ingroup group_class_gdi
     @wxheader{icon.h}
 
     An icon is a small rectangular bitmap usually used for denoting a

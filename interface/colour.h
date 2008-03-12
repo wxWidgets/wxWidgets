@@ -8,6 +8,7 @@
 
 /**
     @class wxColour
+    @ingroup group_class_gdi
     @wxheader{colour.h}
 
     A colour is an object representing a combination of Red, Green, and Blue (RGB)
