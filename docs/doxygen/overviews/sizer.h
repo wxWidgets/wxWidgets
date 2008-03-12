@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_sizer Sizer Overview
+@page overview_sizer Sizers
 
 Classes: wxSizer, wxGridSizer, wxFlexGridSizer, wxBoxSizer, wxStaticBoxSizer
 

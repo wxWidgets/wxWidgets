@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_helloworld wxWidgets Hello World sample
+ @page overview_helloworld Hello World Example
 
  Many people have requested a mini-sample to be published here
  so that some quick judgment concerning syntax

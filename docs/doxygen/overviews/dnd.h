@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_dnd Drag and drop overview
+ @page overview_dnd Drag and Drop Overview
 
  Classes: wxDataObject, wxTextDataObject, wxDropSource, wxDropTarget,
           wxTextDropTarget, wxFileDropTarget

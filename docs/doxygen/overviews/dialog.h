@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_dialog wxDialog overview
+ @page overview_dialog wxDialog Overview
 
  Classes: wxDialog, wxDialogLayoutAdapter
 

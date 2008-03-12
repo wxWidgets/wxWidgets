@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_docview Document/view overview
+ @page overview_docview Document/View Framework
 
  Classes: wxDocument, wxView, wxDocTemplate, wxDocManager, wxDocParentFrame, 
           wxDocChildFrame, wxDocMDIParentFrame, wxDocMDIChildFrame,

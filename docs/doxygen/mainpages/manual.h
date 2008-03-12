@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-/*!
+/**
 
  @mainpage wxWidgets 2.9.0: A portable C++ GUI toolkit
  @author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn, et al

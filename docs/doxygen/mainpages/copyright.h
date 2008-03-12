@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-/*!
+/**
 
  @page page_copyright Copyright notice
 
@@ -29,7 +29,7 @@
 */
 
 
-/*!
+/**
 
  @page page_copyright_wxlicense wxWindows Library License, Version 3.1
 
@@ -96,7 +96,7 @@
 */
 
 
-/*!
+/**
 
  @page page_copyright_gnulicense GNU Library General Public License, Version 2
 

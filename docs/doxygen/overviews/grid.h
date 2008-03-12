@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_grid wxGrid classes overview
+ @page overview_grid wxGrid Overview
 
  Classes: wxGrid
 

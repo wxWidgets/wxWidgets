@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_thread Multithreading Overview
+@page overview_thread Multithreading
 
 Classes: wxThread, wxMutex, wxCriticalSection, wxCondition
 

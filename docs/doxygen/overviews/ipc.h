@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_ipc Interprocess Communication Overview
+@page overview_ipc Interprocess Communication
 
 Classes: wxServer, wxConnection, wxClient
 

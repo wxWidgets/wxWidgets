@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_html wxHTML overview
+ @page overview_html wxHTML Overview
 
  The wxHTML library provides classes for parsing and displaying HTML.
  It is not intended to be a high-end HTML browser. If you are looking for

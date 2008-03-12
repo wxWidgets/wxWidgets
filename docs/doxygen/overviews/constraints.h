@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_constraints Constraints overview
+ @page overview_constraints Window Layout Constraints
 
  Classes: wxLayoutConstraints, wxIndividualLayoutConstraint.
 

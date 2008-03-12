@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_eventhandling Event handling overview
+ @page overview_eventhandling Event Handling
 
  Classes: wxEvtHandler, wxWindow, wxEvent
 

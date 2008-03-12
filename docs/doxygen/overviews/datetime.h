@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_datetime Date and time classes overview
+ @page overview_datetime Date and Time
 
  Classes: wxDateTime, wxDateSpan, wxTimeSpan, wxCalendarCtrl
 

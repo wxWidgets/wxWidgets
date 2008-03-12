@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_scrolling Scrolling Overview
+@page overview_scrolling Scrolled Windows
 
 Classes:
 @li wxWindow

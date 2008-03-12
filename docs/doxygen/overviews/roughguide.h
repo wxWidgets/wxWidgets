@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_roughguide Writing a wxWidgets Application: A Rough Guide
+@page overview_roughguide A Quick Guide to Writing Applications
 
 To set a wxWidgets application going, you will need to derive a wxApp class and
 override wxApp::OnInit.

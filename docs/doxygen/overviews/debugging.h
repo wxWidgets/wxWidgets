@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_debugging Debugging overview
+ @page overview_debugging Debugging
 
  Classes, functions and macros: wxDebugContext, wxObject, wxLog,
                                 @ref page_func_cat_log, @ref page_macro_cat_debugging

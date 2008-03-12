@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_printing Printing Overview
+@page overview_printing Printing
 
 Classes:
 @li wxPrintout

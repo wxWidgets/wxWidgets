@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_envvars Environment variables
+ @page overview_envvars Environment Variables
 
  This section describes all environment variables that affect execution of
  wxWidgets programs.

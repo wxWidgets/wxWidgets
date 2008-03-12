@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_windowsizing Window Sizing Overview
+@page overview_windowsizing Window Sizes
 
 It can sometimes be confusing to keep track of the various size-related
 attributes of a wxWindow, how they relate to each other, and how they interact

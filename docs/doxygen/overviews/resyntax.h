@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_resyntax Syntax of the Built-in Regular Expression Library
+@page overview_resyntax Regular Expressions
 
 A <em>regular expression</em> describes strings of characters. It's a  pattern
 that matches certain strings and doesn't match others.

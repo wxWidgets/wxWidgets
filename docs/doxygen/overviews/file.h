@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_file File classes and functions overview
+ @page overview_file File Classes and Functions
 
  Classes: wxFile, wxDir, wxTempFile,  wxTextFile
 

@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_fontencoding Font encoding overview
+ @page overview_fontencoding Font Encodings
 
  wxWidgets has support for multiple font encodings.
 

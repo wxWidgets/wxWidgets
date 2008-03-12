@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_mbconv wxMBConv Classes Overview
+@page overview_mbconv wxMBConv Overview
 
 Classes: wxMBConv, wxMBConvLibc, wxMBConvUTF7, wxMBConvUTF8, wxCSConv,
          wxMBConvUTF16, wxMBConvUTF32

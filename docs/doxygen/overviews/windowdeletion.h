@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_windowdeletion Window Deletion Overview
+@page overview_windowdeletion Window Deletion
 
 Classes: wxCloseEvent, wxWindow
 

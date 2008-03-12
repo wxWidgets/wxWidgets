@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_font wxFont overview
+ @page overview_font wxFont Overview
 
  Class: wxFont, wxFontDialog
 

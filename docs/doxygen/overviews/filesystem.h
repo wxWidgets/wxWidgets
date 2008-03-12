@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_fs wxFileSystem overview
+ @page overview_fs wxFileSystem Overview
 
  The wxHTML library uses a @b virtual file systems mechanism
  similar to the one used in Midnight Commander, Dos Navigator,

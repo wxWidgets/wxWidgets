@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_exceptions C++ exceptions overview
+ @page overview_exceptions C++ Exceptions
 
  @li @ref overview_exceptions_introduction
  @li @ref overview_exceptions_strategies

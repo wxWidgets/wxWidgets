@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_dc Device context overview
+ @page overview_dc Device Contexts
 
  Classes: wxBufferedDC, wxBufferedPaintDC, wxDC, wxPostScriptDC,
           wxMetafileDC, wxMemoryDC, wxPrinterDC, wxScreenDC, wxClientDC, 

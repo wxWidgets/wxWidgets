@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
-@page overview_windowids Window IDs Overview
+@page overview_windowids Window IDs
 
 @li @ref overview_windowids_intro
 @li @ref overview_windowids_type

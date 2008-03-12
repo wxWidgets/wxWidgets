@@ -6,9 +6,9 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/*!
+/**
 
- @page overview_dataobject wxDataObject overview
+ @page overview_dataobject wxDataObject Overview
 
  Classes: wxDataObject, wxClipboard, wxDataFormat, wxDropSource, wxDropTarget
 
