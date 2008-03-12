@@ -41,7 +41,6 @@ FortyCanvas::FortyCanvas(wxWindow* parent, const wxPoint& pos, const wxSize& siz
              m_leftBtnDown(false)
 {
     SetScrollbars(0, 0, 0, 0);
-    SetMinSize(wxSize(10,10));
 
 #ifdef __WXGTK__
     m_font = wxTheFontList->FindOrCreateFont(12, wxROMAN, wxNORMAL, wxNORMAL);
