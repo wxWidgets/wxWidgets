@@ -49,8 +49,12 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         wxString msg;
         msg << name;
         if ( info.HasVersion() )
-            msg << _(" Version ") << info.GetVersion();
-        msg << _T('\n');
+        {
+            msg << _T('\n');
+            msg << wxString::Format(_("Version %s"), info.GetVersion());
+        }
+
+        msg << _T("\n\n");
 
         if ( info.HasCopyright() )
             msg << info.GetCopyright() << _T('\n');
@@ -58,7 +62,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         // add everything remaining
         msg << info.GetDescriptionAndCredits();
 
-        wxMessageBox(msg, _("About ") + name);
+        wxMessageBox(msg, wxString::Format(_("About %s"), name));
     }
     else // simple "native" version is not enough
     {
