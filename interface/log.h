@@ -775,3 +775,152 @@ public:
 void wxSafeShowMessage(const wxString& title,
                        const wxString& text);
 
+
+
+//@{
+/**
+    For all normal, informational messages. They also appear in a message box by
+    default (but it can be changed).
+*/
+void wxLogMessage(const char* formatString, ... );
+void wxVLogMessage(const char* formatString, va_list argPtr);
+//@}
+
+//@{
+/**
+    For verbose output. Normally, it is suppressed, but
+    might be activated if the user wishes to know more details about the program
+    progress (another, but possibly confusing name for the same function is @b
+    wxLogInfo).
+*/
+void wxLogVerbose(const char* formatString, ... );
+void wxVLogVerbose(const char* formatString, va_list argPtr);
+//@}
+
+//@{
+/**
+    For warnings - they are also normally shown to the user, but don't interrupt
+    the program work.
+*/
+void wxLogWarning(const char* formatString, ... );
+void wxVLogWarning(const char* formatString, va_list argPtr);
+//@}
+
+//@{
+/**
+    Like wxLogError(), but also
+    terminates the program with the exit code 3. Using @e abort() standard
+    function also terminates the program with this exit code.
+*/
+void wxLogFatalError(const char* formatString, ... );
+void wxVLogFatalError(const char* formatString,
+                      va_list argPtr);
+//@}
+
+//@{
+/**
+    The functions to use for error messages, i.e. the messages that must be shown
+    to the user. The default processing is to pop up a message box to inform the
+    user about it.
+*/
+void wxLogError(const char* formatString, ... );
+void wxVLogError(const char* formatString, va_list argPtr);
+//@}
+
+
+//@{
+/**
+    As @b wxLogDebug, trace functions only do something in debug build and
+    expand to nothing in the release one. The reason for making
+    it a separate function from it is that usually there are a lot of trace
+    messages, so it might make sense to separate them from other debug messages.
+    The trace messages also usually can be separated into different categories and
+    the second and third versions of this function only log the message if the
+    @a mask which it has is currently enabled in wxLog. This
+    allows to selectively trace only some operations and not others by changing
+    the value of the trace mask (possible during the run-time).
+    For the second function (taking a string mask), the message is logged only if
+    the mask has been previously enabled by the call to
+    wxLog::AddTraceMask or by setting
+    @ref overview_envvars "@c WXTRACE environment variable".
+    The predefined string trace masks
+    used by wxWidgets are:
+     wxTRACE_MemAlloc: trace memory allocation (new/delete)
+     wxTRACE_Messages: trace window messages/X callbacks
+     wxTRACE_ResAlloc: trace GDI resource allocation
+     wxTRACE_RefCount: trace various ref counting operations
+     wxTRACE_OleCalls: trace OLE method calls (Win32 only)
+    @b Caveats: since both the mask and the format string are strings,
+    this might lead to function signature confusion in some cases:
+    if you intend to call the format string only version of wxLogTrace,
+    then add a %s format string parameter and then supply a second string parameter
+    for that %s, the string mask version of wxLogTrace will erroneously get called instead, since you are supplying two string parameters to the function.
+    In this case you'll unfortunately have to avoid having two leading
+    string parameters, e.g. by adding a bogus integer (with its %d format string).
+    The third version of the function only logs the message if all the bits
+    corresponding to the @a mask are set in the wxLog trace mask which can be
+    set by wxLog::SetTraceMask. This version is less
+    flexible than the previous one because it doesn't allow defining the user
+    trace masks easily - this is why it is deprecated in favour of using string
+    trace masks.
+     wxTraceMemAlloc: trace memory allocation (new/delete)
+     wxTraceMessages: trace window messages/X callbacks
+     wxTraceResAlloc: trace GDI resource allocation
+     wxTraceRefCount: trace various ref counting operations
+     wxTraceOleCalls: trace OLE method calls (Win32 only)
+*/
+void wxLogTrace(const char* formatString, ... );
+void wxVLogTrace(const char* formatString, va_list argPtr);
+void wxLogTrace(const char* mask, const char* formatString,
+                ... );
+void wxVLogTrace(const char* mask,
+                 const char* formatString,
+                 va_list argPtr);
+void wxLogTrace(wxTraceMask mask, const char* formatString,
+                ... );
+void wxVLogTrace(wxTraceMask mask, const char* formatString,
+                 va_list argPtr);
+//@}
+
+
+//@{
+/**
+    The right functions for debug output. They only do something in debug
+    mode (when the preprocessor symbol __WXDEBUG__ is defined) and expand to
+    nothing in release mode (otherwise).
+*/
+void wxLogDebug(const char* formatString, ... );
+void wxVLogDebug(const char* formatString, va_list argPtr);
+//@}
+
+
+//@{
+/**
+    Messages logged by these functions will appear in the statusbar of the @a frame
+    or of the top level application window by default (i.e. when using
+    the second version of the functions).
+    If the target frame doesn't have a statusbar, the message will be lost.
+*/
+void wxLogStatus(wxFrame* frame, const char* formatString,
+                 ... );
+void wxVLogStatus(wxFrame* frame, const char* formatString,
+                  va_list argPtr);
+void wxLogStatus(const char* formatString, ... );
+void wxVLogStatus(const char* formatString, va_list argPtr);
+//@}
+
+
+//@{
+/**
+    Mostly used by wxWidgets itself, but might be handy for logging errors after
+    system call (API function) failure. It logs the specified message text as well
+    as the last system error code (@e errno or @e ::GetLastError() depending
+    on the platform) and the corresponding error message. The second form
+    of this function takes the error code explicitly as the first argument.
+
+    @see wxSysErrorCode(), wxSysErrorMsg()
+*/
+void wxLogSysError(const char* formatString, ... );
+void wxVLogSysError(const char* formatString,
+                    va_list argPtr);
+//@}
