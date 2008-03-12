@@ -34,12 +34,15 @@ BEGIN_EVENT_TABLE(FortyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 FortyCanvas::FortyCanvas(wxWindow* parent, const wxPoint& pos, const wxSize& size) :
-             wxScrolledWindow(parent, wxID_ANY, pos, size),
+             wxScrolledWindow(parent, wxID_ANY, pos, size, 0),
              m_helpingHand(true),
              m_rightBtnUndo(true),
              m_playerDialog(0),
              m_leftBtnDown(false)
 {
+    SetScrollbars(0, 0, 0, 0);
+    SetMinSize(wxSize(10,10));
+
 #ifdef __WXGTK__
     m_font = wxTheFontList->FindOrCreateFont(12, wxROMAN, wxNORMAL, wxNORMAL);
 #else

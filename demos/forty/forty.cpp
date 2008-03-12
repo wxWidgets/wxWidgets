@@ -195,7 +195,6 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
     topsizer->Add( m_canvas, 1, wxEXPAND | wxALL, 0);
     SetSizer( topsizer );
-    topsizer->SetSizeHints( this );
 
 #if wxUSE_STATUSBAR
     CreateStatusBar();
