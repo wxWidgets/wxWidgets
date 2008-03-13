@@ -592,6 +592,9 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 
 wxHtmlHelpWindow::~wxHtmlHelpWindow()
 {
+    if ( m_helpController )
+        m_helpController->SetHelpWindow(NULL);
+
     delete m_mergedIndex;
 
     // PopEventHandler(); // wxhtmlhelpcontroller (not any more!)

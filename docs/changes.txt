@@ -123,6 +123,7 @@ All (GUI):
 - Added wxWindow::ClientToWindowSize() and WindowToClientSize() helpers.
 - Added wxSizer::ComputeFittingClientSize() and ComputeFittingWindowSize().
 - Fixed wxSizer::SetSizeHints() to work when the best size decreases.
+- Fixed crash in wxHtmlHelpController if the help window is still open.
 
 All (Unix):
 
