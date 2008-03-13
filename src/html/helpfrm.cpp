@@ -85,12 +85,20 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_helpController = (wxHtmlHelpController*) NULL;
 }
 
+void wxHtmlHelpFrame::SetController(wxHtmlHelpController* controller)
+{
+    m_helpController = controller;
+    if ( m_HtmlHelpWin )
+        m_HtmlHelpWin->SetController(controller);
+}
+
 // Create: builds the GUI components.
 bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
                              const wxString& WXUNUSED(title), int style,
                              wxConfigBase *config, const wxString& rootpath)
 {
     m_HtmlHelpWin = new wxHtmlHelpWindow(m_Data);
+    m_HtmlHelpWin->SetController(m_helpController);
     if ( config)
         m_HtmlHelpWin->UseConfig(config, rootpath);
     

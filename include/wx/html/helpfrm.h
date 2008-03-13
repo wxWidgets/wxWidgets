@@ -88,7 +88,7 @@ public:
     wxHtmlHelpController* GetController() const { return m_helpController; }
 
     /// Sets the help controller associated with the window.
-    void SetController(wxHtmlHelpController* controller) { m_helpController = controller; }
+    void SetController(wxHtmlHelpController* controller);
 
     /// Returns the help window.
     wxHtmlHelpWindow* GetHelpWindow() const { return m_HtmlHelpWin; }
