@@ -166,6 +166,8 @@ wxGTK:
 - Fix wxNotebook::GetPage{Text,Image}() when they were called from the page
   change event handler for the first added page (Mikkel S).
 - Fixed wxBitmapButton to use focus and hover bitmaps correctly.
+- Fixed race condition which could cause idle processing to stop without
+  processing all pending events.
 
 wxMac:
 
