@@ -467,8 +467,10 @@ wxHtmlContainerCell* wxHtmlWinParser::CloseContainer()
 
 void wxHtmlWinParser::SetFontSize(int s)
 {
-    if (s < 1) s = 1;
-    else if (s > 7) s = 7;
+    if (s < 1)
+        s = 1;
+    else if (s > 7)
+        s = 7;
     m_FontSize = s;
 }
 
@@ -529,8 +531,10 @@ void wxHtmlWinParser::SetLink(const wxHtmlLinkInfo& link)
 
 void wxHtmlWinParser::SetFontFace(const wxString& face)
 {
-    if (GetFontFixed()) m_FontFaceFixed = face;
-    else m_FontFaceNormal = face;
+    if (GetFontFixed())
+        m_FontFaceFixed = face;
+    else
+        m_FontFaceNormal = face;
 
 #if !wxUSE_UNICODE
     if (m_InputEnc != wxFONTENCODING_DEFAULT)
@@ -562,29 +566,37 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
         m_EncConv = NULL;
     }
 
-    if (enc == wxFONTENCODING_DEFAULT) return;
+    if (enc == wxFONTENCODING_DEFAULT)
+        return;
 
     wxFontEncoding altfix, altnorm;
     bool availfix, availnorm;
 
-    // exact match?
     availnorm = wxFontMapper::Get()->IsEncodingAvailable(enc, m_FontFaceNormal);
     availfix = wxFontMapper::Get()->IsEncodingAvailable(enc, m_FontFaceFixed);
-    if (availnorm && availfix)
-        m_OutputEnc = enc;
 
-    // alternatives?
+    if (availnorm && availfix)
+    {
+        // exact match?
+        m_OutputEnc = enc;
+    }
+
     else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, false) &&
              wxFontMapper::Get()->GetAltForEncoding(enc, &altfix, m_FontFaceFixed, false) &&
              altnorm == altfix)
+    {
+        // alternatives?
         m_OutputEnc = altnorm;
-
-    // at least normal face?
+    }
     else if (availnorm)
+    {
+        // at least normal face?
         m_OutputEnc = enc;
+    }
     else if (wxFontMapper::Get()->GetAltForEncoding(enc, &altnorm, m_FontFaceNormal, false))
+    {
         m_OutputEnc = altnorm;
-
+    }
     else
     {
 #ifndef __WXMAC__
@@ -597,11 +609,16 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
 
     m_InputEnc = enc;
     if (m_OutputEnc == wxFONTENCODING_DEFAULT)
+    {
         GetEntitiesParser()->SetEncoding(wxFONTENCODING_SYSTEM);
+    }
     else
+    {
         GetEntitiesParser()->SetEncoding(m_OutputEnc);
+    }
 
-    if (m_InputEnc == m_OutputEnc) return;
+    if (m_InputEnc == m_OutputEnc)
+        return;
 
     m_EncConv = new wxEncodingConverter();
     if (!m_EncConv->Init(m_InputEnc,
