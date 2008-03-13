@@ -64,7 +64,8 @@ ALIASES += beginExtraStyleTable="<div><span class='styles'>Extra styles:</span>"
 ALIASES += endExtraStyleTable="</div>"
 
 # aliases for additional wx-specific infos
-ALIASES += category{1}="<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref page_class_cat_\1</span></div>"
+ALIASES += category{1}="\ingroup group_class_\1 \n<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1</span></div>"
+ALIASES += category{2}="\ingroup group_class_\1 group_class_\2 \n<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1, \ref group_class_\2</span></div>"
 ALIASES += library{1}="<div><span class='lib'>Library:</span>&nbsp;&nbsp;<span class='lib_text'>\ref page_libs_\1</span></div>"
 ALIASES += nolibrary="<div><span class='lib'>Library:</span>&nbsp;&nbsp;<span class='lib_text'>None; this class implementation is entirely header-based.</span></div>"
 ALIASES += stdobjects="<span class='stdobj'>Predefined objects:</span>"

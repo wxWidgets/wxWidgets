@@ -8,7 +8,7 @@
 
 /**
 
-@page overview_arc Archive Formats
+@page overview_archive Archive Formats
 
 The archive classes handle archive formats such as zip, tar, rar and cab.
 Currently wxZip and wxTar classes are included.
@@ -21,29 +21,29 @@ example):
 @li wxZipEntry: Holds meta-data for an entry (e.g. filename, timestamp, etc.)
 
 There are also abstract wxArchive classes that can be used to write code that
-can handle any of the archive types, see @ref overview_arc_generic.
+can handle any of the archive types, see @ref overview_archive_generic.
 
 Also see wxFileSystem for a higher level interface that can handle archive
 files in a generic way.
 
 The classes are designed to handle archives on both seekable streams such as
 disk files, or non-seekable streams such as pipes and sockets (see
-@ref overview_arc_noseek).
+@ref overview_archive_noseek).
 
 See also wxFileSystem.
 
-@li @ref overview_arc_create
-@li @ref overview_arc_extract
-@li @ref overview_arc_modify
-@li @ref overview_arc_byname
-@li @ref overview_arc_generic
-@li @ref overview_arc_noseek
+@li @ref overview_archive_create
+@li @ref overview_archive_extract
+@li @ref overview_archive_modify
+@li @ref overview_archive_byname
+@li @ref overview_archive_generic
+@li @ref overview_archive_noseek
 
 
 <hr>
 
 
-@section overview_arc_create Creating an Archive
+@section overview_archive_create Creating an Archive
 
 Call wxArchiveOutputStream::PutNextEntry() to create each new entry in the
 archive, then write the entry's data. Another call to PutNextEntry() closes the
@@ -66,7 +66,7 @@ The name of each entry can be a full path, which makes it possible to store
 entries in subdirectories.
 
 
-@section overview_arc_extract Extracting an Archive
+@section overview_archive_extract Extracting an Archive
 
 wxArchiveInputStream::GetNextEntry() returns a pointer to entry object
 containing the meta-data for the next entry in the archive (and gives away
@@ -93,7 +93,7 @@ while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)
 
 
 
-@section overview_arc_modify Modifying an Archive
+@section overview_archive_modify Modifying an Archive
 
 To modify an existing archive, write a new copy of the archive to a new file,
 making any necessary changes along the way and transferring any unchanged
@@ -139,7 +139,7 @@ bool success = inzip.Eof() && outzip.Close() && out.Commit();
 
 
 
-@section overview_arc_byname Looking Up an Archive Entry by Name
+@section overview_archive_byname Looking Up an Archive Entry by Name
 
 Also see wxFileSystem for a higher level interface that is more convenient for
 accessing archive entries by name.
@@ -230,7 +230,7 @@ if ((it = cat.find(wxZipEntry::GetInternalName(local2))) != cat.end())
 
 
 
-@section overview_arc_generic Generic Archive Programming
+@section overview_archive_generic Generic Archive Programming
 
 Also see wxFileSystem for a higher level interface that can handle archive
 files in a generic way.
@@ -318,7 +318,7 @@ if (in->IsOk())
 
 
 
-@section overview_arc_noseek Archives on Non-Seekable Streams
+@section overview_archive_noseek Archives on Non-Seekable Streams
 
 In general, handling archives on non-seekable streams is done in the same way
 as for seekable streams, with a few caveats.
@@ -331,7 +331,7 @@ For each archive type, there will also be other limitations which will depend
 on the order the entries' meta-data is stored within the archive. These are not
 too difficult to deal with, and are outlined below.
 
-@subsection overview_arc_noseek_entrysize PutNextEntry and the Entry Size
+@subsection overview_archive_noseek_entrysize PutNextEntry and the Entry Size
 
 When writing archives, some archive formats store the entry size before the
 entry's data (tar has this limitation, zip doesn't). In this case the entry's
@@ -346,7 +346,7 @@ For generic programming, one way to handle this is to supply the size whenever
 it is known, and rely on the error message from the output stream when the
 operation is not supported.
 
-@subsection overview_arc_noseek_weak GetNextEntry and the Weak Reference Mechanism
+@subsection overview_archive_noseek_weak GetNextEntry and the Weak Reference Mechanism
 
 Some archive formats do not store all an entry's meta-data before the entry's
 data (zip is an example). In this case, when reading from a non-seekable
@@ -375,7 +375,7 @@ preserve entries' meta-data. No matter what order order the meta-data occurs
 within the archive, the input stream will always have read it before the output
 stream must write it.
 
-@subsection overview_arc_noseek_notifier wxArchiveNotifier
+@subsection overview_archive_noseek_notifier wxArchiveNotifier
 
 Notifier objects can be used to get a notification whenever an input stream
 updates a wxArchiveEntry object's data via the weak reference mechanism.

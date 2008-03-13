@@ -50,6 +50,7 @@
 @li @ref page_class_cat_help
 @li @ref page_class_cat_media
 @li @ref page_class_cat_gl
+@li @ref page_class_cat_archive
 @li @ref page_class_cat_misc
 </td></tr>
 @endTable
@@ -782,6 +783,14 @@ Related Overviews: @ref overview_xrc
 
 @li wxGLCanvas: Canvas that you can render OpenGL calls to.
 @li wxGLContext: Class to ease sharing of OpenGL data resources.
+
+
+
+@section page_class_cat_archive Archive
+
+@li wxArchiveInputStream
+@li wxArchiveOutputStream
+@li wxArchiveEntry
 
 
 

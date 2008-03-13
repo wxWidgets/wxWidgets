@@ -62,7 +62,7 @@ The following is a basic categorization of them:
 @li @subpage overview_config
 @li @subpage overview_fs
 @li @subpage overview_resyntax
-@li @subpage overview_arc
+@li @subpage overview_archive
 @li @subpage overview_ipc
 
 @section page_topics_drawing Drawing Related Classes

@@ -1,0 +1,15 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        class_archive.h
+// Purpose:     wxArchive* classes group docs
+// Author:      wxWidgets team
+// RCS-ID:      $Id$
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+
+@defgroup group_class_archive Archive support
+@ingroup group_class
+
+*/
+
