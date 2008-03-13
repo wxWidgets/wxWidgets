@@ -204,6 +204,11 @@ bool wxApp::DoIdle()
         g_source_remove(m_idleSourceId);
         m_idleSourceId = 0;
     }
+
+    // Pending events can be added asynchronously,
+    // need to keep idle source if any have appeared
+    needMore = needMore || HasPendingEvents();
+
     // if more idle processing requested
     if (needMore)
     {
