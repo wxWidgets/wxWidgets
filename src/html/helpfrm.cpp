@@ -55,7 +55,6 @@
 #include "wx/fontenum.h"
 #include "wx/artprov.h"
 #include "wx/spinctrl.h"
-#include "wx/app.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpFrame, wxFrame)
 
@@ -245,12 +244,5 @@ void wxHtmlHelpFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
         wxICON_INFORMATION|wxOK, this);
 }
 #endif
-
-// we don't want to prevent the app from closing just because a help window
-// remains opened
-bool wxHtmlHelpFrame::ShouldPreventAppExit() const
-{
-    return (wx_const_cast(wxHtmlHelpFrame*, this) == wxTheApp->GetTopWindow());
-}
 
 #endif // wxUSE_WXHTML_HELP

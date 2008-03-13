@@ -219,8 +219,6 @@ bool hvApp::OnInit()
 
     m_helpController->DisplayContents();
 
-    SetTopWindow(m_helpController->GetFrame());
-
     return true;
 }
 
