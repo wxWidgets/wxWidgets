@@ -155,46 +155,50 @@ wxMenuBar::~wxMenuBar()
 {
 }
 
-static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
+static void
+wxMenubarUnsetInvokingWindow(wxMenu* menu, wxWindow* win, GtkWindow* tlw = NULL)
 {
     menu->SetInvokingWindow( (wxWindow*) NULL );
 
-    wxWindow *top_frame = win;
-    while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
-        top_frame = top_frame->GetParent();
-
     // support for native hot keys
-    if (menu->m_accel && g_slist_find(menu->m_accel->acceleratables, top_frame->m_widget))
-        gtk_window_remove_accel_group(GTK_WINDOW(top_frame->m_widget), menu->m_accel);
+    if (menu->m_accel)
+    {
+        if (tlw == NULL)
+            tlw = GTK_WINDOW(wxGetTopLevelParent(win)->m_widget);
+        if (g_slist_find(menu->m_accel->acceleratables, tlw))
+            gtk_window_remove_accel_group(tlw, menu->m_accel);
+    }
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
     {
         wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
-            wxMenubarUnsetInvokingWindow( menuitem->GetSubMenu(), win );
+            wxMenubarUnsetInvokingWindow(menuitem->GetSubMenu(), win, tlw);
         node = node->GetNext();
     }
 }
 
-static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
+static void
+wxMenubarSetInvokingWindow(wxMenu* menu, wxWindow* win, GtkWindow* tlw = NULL)
 {
     menu->SetInvokingWindow( win );
 
-    wxWindow *top_frame = win;
-    while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
-        top_frame = top_frame->GetParent();
-
     // support for native hot keys
-    if (menu->m_accel && !g_slist_find(menu->m_accel->acceleratables, top_frame->m_widget))
-        gtk_window_add_accel_group(GTK_WINDOW(top_frame->m_widget), menu->m_accel);
+    if (menu->m_accel)
+    {
+        if (tlw == NULL)
+            tlw = GTK_WINDOW(wxGetTopLevelParent(win)->m_widget);
+        if (!g_slist_find(menu->m_accel->acceleratables, tlw))
+            gtk_window_add_accel_group(tlw, menu->m_accel);
+    }
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
     {
         wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
-            wxMenubarSetInvokingWindow( menuitem->GetSubMenu(), win );
+            wxMenubarSetInvokingWindow(menuitem->GetSubMenu(), win, tlw);
         node = node->GetNext();
     }
 }
@@ -202,9 +206,6 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 void wxMenuBar::SetInvokingWindow( wxWindow *win )
 {
     m_invokingWindow = win;
-    wxWindow *top_frame = win;
-    while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
-        top_frame = top_frame->GetParent();
 
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node)
@@ -262,9 +263,6 @@ void wxMenuBar::Attach(wxFrame *frame)
 void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 {
     m_invokingWindow = (wxWindow*) NULL;
-    wxWindow *top_frame = win;
-    while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
-        top_frame = top_frame->GetParent();
 
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node)
