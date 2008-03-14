@@ -230,7 +230,7 @@ wxUint32 wxTarHeaderBlock::SumField(int id)
 }
 
 bool wxTarHeaderBlock::Read(wxInputStream& in)
-{   
+{
     bool ok = true;
 
     for (int id = 0; id < TAR_NUMFIELDS && ok; id++)
@@ -268,7 +268,7 @@ wxTarNumber wxTarHeaderBlock::GetOctal(int id)
 bool wxTarHeaderBlock::SetOctal(int id, wxTarNumber n)
 {
     // set an octal field, return true if the number fits
-    char *field = Get(id); 
+    char *field = Get(id);
     char *p = field + Len(id);
     *--p = 0;
     while (p > field) {
@@ -314,7 +314,7 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
 
     for (;;) {
         fits = i < maxprefix && len - i <= maxname;
-        
+
         if (!fits) {
             const char *p = strchr(mbName + i, '/');
             if (p)
@@ -336,7 +336,7 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
     return fits && !badconv;
 }
 
-    
+
 /////////////////////////////////////////////////////////////////////////////
 // Some helpers
 
@@ -627,7 +627,7 @@ int wxTarEntry::GetMode() const
         return m_Mode;
     else
         return m_Mode | 0111;
-    
+
 }
 
 void wxTarEntry::SetMode(int mode)
@@ -949,7 +949,7 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
 
         // read the record size (byte count in ascii decimal)
         recSize = 0;
-        while (isdigit(*p))
+        while (isdigit((unsigned char) *p))
             recSize = recSize * 10 + *p++ - '0';
 
         // validity checks
@@ -983,7 +983,7 @@ bool wxTarInputStream::ReadExtendedHeader(wxTarHeaderRecords*& recs)
         if (value.empty())
             recs->erase(key);
         else
-            (*recs)[key] = value; 
+            (*recs)[key] = value;
     }
 
     if (!ok || recPos < len || size != lastread) {
@@ -1032,7 +1032,7 @@ size_t wxTarInputStream::OnSysRead(void *buffer, size_t size)
 
     size_t lastread = m_parent_i_stream->Read(buffer, size).LastRead();
     m_pos += lastread;
-    
+
     if (m_pos >= m_size) {
         m_lasterror = wxSTREAM_EOF;
     } else if (!m_parent_i_stream->IsOk()) {
@@ -1209,7 +1209,7 @@ bool wxTarOutputStream::Close()
 {
     if (!CloseEntry() || (m_tarsize == 0 && m_endrecWritten))
         return false;
- 
+
     memset(m_hdr, 0, sizeof(*m_hdr));
     int count = (RoundUpSize(m_tarsize + 2 * TAR_BLOCKSIZE, m_BlockingFactor)
                     - m_tarsize) / TAR_BLOCKSIZE;
@@ -1246,7 +1246,7 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
     *m_hdr->Get(TAR_TYPEFLAG) = char(entry.GetTypeFlag());
 
     strcpy(m_hdr->Get(TAR_MAGIC), USTAR_MAGIC);
-    strcpy(m_hdr->Get(TAR_VERSION), USTAR_VERSION); 
+    strcpy(m_hdr->Get(TAR_VERSION), USTAR_VERSION);
 
     SetHeaderString(TAR_LINKNAME, entry.GetLinkName());
     SetHeaderString(TAR_UNAME, entry.GetUserName());
@@ -1255,7 +1255,7 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
     if (~entry.GetDevMajor())
         SetHeaderNumber(TAR_DEVMAJOR, entry.GetDevMajor());
     if (~entry.GetDevMinor())
-        SetHeaderNumber(TAR_DEVMINOR, entry.GetDevMinor()); 
+        SetHeaderNumber(TAR_DEVMINOR, entry.GetDevMinor());
 
     m_chksum = m_hdr->Sum();
     m_hdr->SetOctal(TAR_CHKSUM, m_chksum);
@@ -1286,7 +1286,7 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
         strcpy(m_hdr2->Get(TAR_MTIME), m_hdr->Get(TAR_MTIME));
         *m_hdr2->Get(TAR_TYPEFLAG) = 'x';
         strcpy(m_hdr2->Get(TAR_MAGIC), USTAR_MAGIC);
-        strcpy(m_hdr2->Get(TAR_VERSION), USTAR_VERSION); 
+        strcpy(m_hdr2->Get(TAR_VERSION), USTAR_VERSION);
         strcpy(m_hdr2->Get(TAR_UNAME), m_hdr->Get(TAR_UNAME));
         strcpy(m_hdr2->Get(TAR_GNAME), m_hdr->Get(TAR_GNAME));
 
@@ -1310,7 +1310,7 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
                      m_badfit.c_str(), entry.GetName().c_str());
         m_badfit.clear();
     }
-                         
+
     m_hdr->Write(*m_parent_o_stream);
     m_tarsize += TAR_BLOCKSIZE;
     m_lasterror = m_parent_o_stream->GetLastError();
@@ -1324,7 +1324,7 @@ wxString wxTarOutputStream::PaxHeaderPath(const wxString& format,
     wxString d = path.BeforeLast(_T('/'));
     wxString f = path.AfterLast(_T('/'));
     wxString ret;
-    
+
     if (d.empty())
         d = _T(".");
 

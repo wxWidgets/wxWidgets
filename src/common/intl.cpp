@@ -236,7 +236,7 @@ wxPluralFormsScanner::wxPluralFormsScanner(const char* s) : m_s(s)
 bool wxPluralFormsScanner::nextToken()
 {
     wxPluralFormsToken::Type type = wxPluralFormsToken::T_ERROR;
-    while (isspace(*m_s))
+    while (isspace((unsigned char) *m_s))
     {
         ++m_s;
     }
@@ -244,20 +244,20 @@ bool wxPluralFormsScanner::nextToken()
     {
         type = wxPluralFormsToken::T_EOF;
     }
-    else if (isdigit(*m_s))
+    else if (isdigit((unsigned char) *m_s))
     {
         wxPluralFormsToken::Number number = *m_s++ - '0';
-        while (isdigit(*m_s))
+        while (isdigit((unsigned char) *m_s))
         {
             number = number * 10 + (*m_s++ - '0');
         }
         m_token.setNumber(number);
         type = wxPluralFormsToken::T_NUMBER;
     }
-    else if (isalpha(*m_s))
+    else if (isalpha((unsigned char) *m_s))
     {
         const char* begin = m_s++;
-        while (isalnum(*m_s))
+        while (isalnum((unsigned char) *m_s))
         {
             ++m_s;
         }
