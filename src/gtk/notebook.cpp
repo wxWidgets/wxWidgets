@@ -112,25 +112,6 @@ static void gtk_notebook_page_changed_callback( GtkNotebook * WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
-// "size_allocate"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
-{
-    if ((win->m_x == alloc->x) &&
-        (win->m_y == alloc->y) &&
-        (win->m_width == alloc->width) &&
-        (win->m_height == alloc->height))
-    {
-        return;
-    }
-
-    win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
-}
-}
-
-//-----------------------------------------------------------------------------
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
@@ -537,9 +518,6 @@ bool wxNotebook::InsertPage( size_t position,
 
     nb_page->m_box = gtk_hbox_new( FALSE, 1 );
     gtk_container_set_border_width((GtkContainer*)nb_page->m_box, 2);
-
-    g_signal_connect (win->m_widget, "size_allocate",
-                      G_CALLBACK (gtk_page_size_callback), win);
 
     gint idx = gtk_notebook_insert_page(notebook, win->m_widget,
                                         nb_page->m_box, position);
