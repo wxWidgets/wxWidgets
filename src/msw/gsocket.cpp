@@ -1465,7 +1465,7 @@ GSocketError GAddress_INET6_SetPortName(GAddress *address, const char *port,
   se = getservbyname(port, protocol);
   if (!se)
   {
-    if (isdigit(port[0]))
+    if (isdigit((unsigned char) port[0]))
     {
       int port_int;
 
