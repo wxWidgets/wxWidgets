@@ -2074,6 +2074,9 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         
         wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
         
+        status = ::ATSUSetTransientFontMatching( atsuLayout , true );
+        wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
+
         ATSUTextMeasurement textBefore, textAfter;
         ATSUTextMeasurement textAscent, textDescent;
         
@@ -2131,14 +2134,20 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 #endif
 #if wxMAC_USE_ATSU_TEXT
     {
+        OSStatus status = noErr;
         ATSUTextLayout atsuLayout;
         wxMacUniCharBuffer unibuf( text );
         UniCharCount chars = unibuf.GetChars();
         
         ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
-        ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
+        status = ::ATSUCreateTextLayoutWithTextPtr( unibuf.GetBuffer() , 0 , chars , chars , 1 ,
                                           &chars , &style , &atsuLayout );
+                
+        wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the text") );
         
+        status = ::ATSUSetTransientFontMatching( atsuLayout , true );
+        wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
+
         for ( int pos = 0; pos < (int)chars; pos ++ )
         {
             unsigned long actualNumberOfBounds = 0;
