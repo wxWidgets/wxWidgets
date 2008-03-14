@@ -147,7 +147,6 @@ public:
 
 /**
     @class wxBitmap
-    @ingroup group_class_gdi
     @wxheader{bitmap.h}
 
     This class encapsulates the concept of a platform-dependent bitmap,
@@ -725,7 +724,6 @@ wxBitmap wxNullBitmap;
 
 /**
     @class wxMask
-    @ingroup group_class_gdi
     @wxheader{bitmap.h}
 
     This class encapsulates a monochrome mask bitmap, where the masked area is

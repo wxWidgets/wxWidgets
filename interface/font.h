@@ -8,7 +8,6 @@
 
 /**
     @class wxFont
-    @ingroup group_class_gdi
     @wxheader{font.h}
 
     A font is an object which determines the appearance of text. Fonts are

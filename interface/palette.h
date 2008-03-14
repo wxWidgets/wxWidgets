@@ -8,7 +8,6 @@
 
 /**
     @class wxPalette
-    @ingroup group_class_gdi
     @wxheader{palette.h}
 
     A palette is a table that maps pixel values to RGB colours. It allows the

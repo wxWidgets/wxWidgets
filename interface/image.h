@@ -139,7 +139,6 @@ public:
 
 /**
     @class wxImage
-    @ingroup group_class_gdi
     @wxheader{image.h}
 
     This class encapsulates a platform-independent image. An image can be created

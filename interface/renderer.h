@@ -100,7 +100,6 @@ public:
 
 /**
     @class wxRendererNative
-    @ingroup group_class_gdi
     @wxheader{renderer.h}
 
     First, a brief introduction to wxRenderer and why it is needed.

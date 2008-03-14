@@ -8,7 +8,6 @@
 
 /**
     @class wxCursor
-    @ingroup group_class_gdi
     @wxheader{cursor.h}
 
     A cursor is a small bitmap usually used for denoting where the mouse

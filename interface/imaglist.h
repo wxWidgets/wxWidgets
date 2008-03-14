@@ -8,7 +8,6 @@
 
 /**
     @class wxImageList
-    @ingroup group_class_gdi
     @wxheader{imaglist.h}
 
     A wxImageList contains a list of images, which are stored in

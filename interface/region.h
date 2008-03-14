@@ -99,7 +99,6 @@ public:
 
 /**
     @class wxRegion
-    @ingroup group_class_gdi
     @wxheader{region.h}
 
     A wxRegion represents a simple or complex region on a device context or window.
@@ -112,7 +111,7 @@ public:
     data using the reference counting, are not affected.
 
     @library{wxcore}
-    @category{data}
+    @category{data,gdi}
 
     @see wxRegionIterator
 */
