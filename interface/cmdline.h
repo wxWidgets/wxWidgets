@@ -14,43 +14,32 @@
 
     It has the following features:
 
-     distinguishes options, switches and parameters; allows option grouping
-     allows both short and long options
-     automatically generates the usage message from the command line description
-     does type checks on the options values (number, date, ...).
+    - distinguishes options, switches and parameters
+    - allows option grouping
+    - allows both short and long options
+    - automatically generates the usage message from the command line description
+    - checks types of the options values (number, date, ...).
 
     To use it you should follow these steps:
 
-     @ref wxCmdLineParser::construction construct an object of this class
+    -# @ref wxCmdLineParser::construction construct an object of this class
     giving it the command line to parse and optionally its description or use
     @c AddXXX() functions later
-     call @c Parse()
-     use @c Found() to retrieve the results
+    -# call @c Parse()
+    -# use @c Found() to retrieve the results
 
     In the documentation below the following terminology is used:
 
-
-
-    switch
-
-
+    - @e switch
     This is a boolean option which can be given or not, but
     which doesn't have any value. We use the word switch to distinguish such boolean
     options from more generic options like those described below. For example,
     @c -v might be a switch meaning "enable verbose mode".
-
-
-    option
-
-
+    - @e option
     Option for us here is something which comes with a value 0
     unlike a switch. For example, @c -o:filename might be an option which allows
     to specify the name of the output file.
-
-
-    parameter
-
-
+    - @e parameter
     This is a required program argument.
 
 
@@ -118,7 +107,7 @@ public:
         
         @see EnableLongOptions()
     */
-    bool AreLongOptionsEnabled();
+    bool AreLongOptionsEnabled() const;
 
     /**
         Before Parse() can be called, the command line
@@ -286,6 +275,6 @@ public:
         
         @see SetLogo()
     */
-    void Usage();
+    void Usage() const;
 };
 

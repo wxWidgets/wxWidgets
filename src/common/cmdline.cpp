@@ -348,7 +348,7 @@ void wxCmdLineParser::EnableLongOptions(bool enable)
     m_data->m_enableLongOptions = enable;
 }
 
-bool wxCmdLineParser::AreLongOptionsEnabled()
+bool wxCmdLineParser::AreLongOptionsEnabled() const
 {
     return m_data->m_enableLongOptions;
 }
@@ -945,7 +945,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 // give the usage message
 // ----------------------------------------------------------------------------
 
-void wxCmdLineParser::Usage()
+void wxCmdLineParser::Usage() const
 {
     wxMessageOutput* msgOut = wxMessageOutput::Get();
     if ( msgOut )
@@ -958,7 +958,7 @@ void wxCmdLineParser::Usage()
     }
 }
 
-wxString wxCmdLineParser::GetUsageString()
+wxString wxCmdLineParser::GetUsageString() const
 {
     wxString appname;
     if ( m_data->m_arguments.empty() )

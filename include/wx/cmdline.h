@@ -150,7 +150,7 @@ public:
     void EnableLongOptions(bool enable = true);
     void DisableLongOptions() { EnableLongOptions(false); }
 
-    bool AreLongOptionsEnabled();
+    bool AreLongOptionsEnabled() const;
 
     // extra text may be shown by Usage() method if set by this function
     void SetLogo(const wxString& logo);
@@ -189,7 +189,7 @@ public:
     int Parse(bool showUsage = true);
 
     // give the usage message describing all program options
-    void Usage();
+    void Usage() const;
 
     // get the command line arguments
     // ------------------------------
@@ -225,7 +225,7 @@ public:
 
 private:
     // get usage string
-    wxString GetUsageString();
+    wxString GetUsageString() const;
 
     // common part of all ctors
     void Init();
