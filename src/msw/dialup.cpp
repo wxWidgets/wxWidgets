@@ -709,7 +709,13 @@ size_t wxDialUpManagerMSW::GetISPNames(wxArrayString& names) const
         if ( dwRet == ERROR_BUFFER_TOO_SMALL )
         {
             // reallocate the buffer
-            rasEntries = (RASENTRYNAME *)realloc(rasEntries, size);
+            void *n  = realloc(rasEntries, size);
+            if (n == NULL)
+            {
+                free(rasEntries);
+                return 0;
+            }
+            rasEntries = (RASENTRYNAME *)n;
         }
         else if ( dwRet != 0 )
         {
