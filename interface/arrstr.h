@@ -7,6 +7,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @todo
+    the following functions are not documented; do they need to be?
+    WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxStringSortAscending(wxString*, wxString*);
+    WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxStringSortDescending(wxString*, wxString*);
+*/
+
+/**
     @class wxArrayString
     @wxheader{arrstr.h}
 
@@ -35,22 +42,14 @@
     array.Last().MakeUpper();
     @endcode
 
-    There is also a variant of wxArrayString called wxSortedArrayString which has
-    exactly the same methods as wxArrayString, but which always keeps the string
-    in it in (alphabetical) order. wxSortedArrayString uses binary search in its
-    wxArrayString::Index() function (instead of linear search for wxArrayString::Index())
-    which makes it much more efficient if you add strings to the array rarely
-    (because, of course, you have to pay for Index() efficiency by having Add() be
-    slower) but search for them often. Several methods should not be used with
-    sorted array (basically, all which break the order of items) which is
-    mentioned in their description.
-
     @note none of the methods of wxArrayString is virtual including its
           destructor, so this class should not be used as a base class.
 
     Although this is not true strictly speaking, this class may be considered as
     a specialization of wxArray class for the wxString member data: it is not
     implemented like this, but it does have all of the wxArray functions.
+
+    @todo what about stl? how does it integrate?
 
     @library{wxbase}
     @category{containers}
@@ -66,8 +65,7 @@ public:
     wxArrayString();
 
     /**
-        Copy constructor. Note that when an array is assigned to a sorted array,
-        its contents is automatically sorted during construction.
+        Copy constructor.
     */
     wxArrayString(const wxArrayString& array);
 
@@ -93,11 +91,6 @@ public:
     /**
         Appends the given number of @a copies of the new item @a str to the
         array and returns the index of the first new item in the array.
-
-        @warning
-        For sorted arrays, the index of the inserted item will not be, in general,
-        equal to GetCount() - 1 because the item is inserted at the correct position
-        to keep the array sorted and not appended.
 
         @see Insert()
     */
@@ -139,9 +132,7 @@ public:
         is @false or from end otherwise. If @e bCase, comparison is case sensitive
         (default), otherwise the case is ignored.
 
-        This function uses linear search for wxArrayString and binary search for
-        wxSortedArrayString, but it ignores the @a bCase and @a bFromEnd parameters
-        in the latter case.
+        This function uses linear search for wxArrayString.
         Returns index of the first item matched or @c wxNOT_FOUND if there is no match.
     */
     int Index(const wxString& sz, bool bCase = true,
@@ -157,10 +148,6 @@ public:
         @endcode
         
         If @a nIndex is equal to @e GetCount() this function behaves as Add().
-
-        @warning this function should not be used with sorted arrays because it
-                 could break the order of items and, for example, subsequent calls
-                 to Index() would then not work!
     */
     void Insert(const wxString& str, size_t nIndex,
                 size_t copies = 1);
@@ -214,12 +201,7 @@ public:
     /**
         Sorts the array in alphabetical order or in reverse alphabetical order if
         @a reverseOrder is @true. The sort is case-sensitive.
-
-        @warning this function should not be used with sorted array because it could
-                 break the order of items and, for example, subsequent calls to Index()
-                 would then not work!
     */
-
     void Sort(bool reverseOrder = false);
 
     /**
@@ -249,10 +231,6 @@ public:
         
         array.Sort(CompareStringLen);
         @endcode
-
-        @warning this function should not be used with sorted array because
-                 it could break the order of items and, for example, subsequent
-                 calls to Index() would then not work!
     */
     void Sort(CompareFunction compareFunction);
 
@@ -283,6 +261,80 @@ public:
     wxString operator[](size_t nIndex);
 };
 
+
+/**
+    @class wxSortedArrayString
+    @wxheader{arrstr.h}
+
+    wxSortedArrayString is an efficient container for storing wxString objects
+    which always keeps the string in alphabetical order.
+
+    wxSortedArrayString uses binary search in its wxArrayString::Index() function
+    (instead of linear search for wxArrayString::Index()) which makes it much more
+    efficient if you add strings to the array rarely (because, of course, you have
+    to pay for Index() efficiency by having Add() be slower) but search for them
+    often. Several methods should not be used with sorted array (basically, all
+    those which break the order of items) which is mentioned in their description.
+
+    @todo what about STL? who does it integrates?
+
+    @library{wxbase}
+    @category{containers}
+
+    @see wxArray, wxString, @ref overview_string
+*/
+class wxSortedArrayString : public wxArrayString
+{
+public:
+
+    /**
+        Copy constructor. Note that when an array is assigned to a sorted array,
+        its contents is automatically sorted during construction.
+    */
+    wxArrayString(const wxArrayString& array);
+
+    /**
+        @copydoc wxArrayString::Add()
+
+        @warning
+        For sorted arrays, the index of the inserted item will not be, in general,
+        equal to GetCount() - 1 because the item is inserted at the correct position
+        to keep the array sorted and not appended.
+    */
+    size_t Add(const wxString& str, size_t copies = 1);
+
+
+    /**
+        @copydoc wxArrayString::Index()
+
+        This function uses binary search for wxSortedArrayString, but it ignores 
+        the @a bCase and @a bFromEnd parameters.
+    */
+    int Index(const wxString& sz, bool bCase = true,
+              bool bFromEnd = false);
+
+    /**
+        @warning this function should not be used with sorted arrays because it
+                 could break the order of items and, for example, subsequent calls
+                 to Index() would then not work!
+    */
+    void Insert(const wxString& str, size_t nIndex,
+                size_t copies = 1);
+
+    /**
+        @warning this function should not be used with sorted array because it could
+                 break the order of items and, for example, subsequent calls to Index()
+                 would then not work!
+    */
+    void Sort(bool reverseOrder = false);
+
+    /**
+        @warning this function should not be used with sorted array because
+                 it could break the order of items and, for example, subsequent
+                 calls to Index() would then not work!
+    */
+    void Sort(CompareFunction compareFunction);
+};
 
 
 // ============================================================================
