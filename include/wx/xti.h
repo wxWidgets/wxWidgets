@@ -2026,7 +2026,7 @@ private :
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) wxConstructorFor##name   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),name::ms_constructor , name::ms_constructorProperties ,     \
-    name::ms_constructorPropertiesCount , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
+    name::ms_constructorPropertiesCount , wxVariantToObjectConverter##name, wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
 
 #define IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2) \
     _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , "") \
