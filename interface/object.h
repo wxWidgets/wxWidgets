@@ -449,7 +449,7 @@ public:
     };
     @endcode
 */
-#define DECLARE_DYNAMIC_CLASS( name )
+#define DECLARE_DYNAMIC_CLASS( className )
 
 /**
     Used in a C++ implementation file to complete the declaration of a class
@@ -575,7 +575,7 @@ public:
 
     @see wx_const_cast(), wxDynamicCast(), wxStaticCast()
 */
-#define wxConstCast( object, className )
+#define wxConstCast( ptr, classname )
 
 /**
     This is defined in debug mode to be call the redefined new operator
@@ -619,7 +619,7 @@ public:
     @see @ref overview_runtimeclassoverview "RTTI Overview",
          wxDynamicCastThis(), wxConstCast(), wxStaticCast()
 */
-#define wxDynamicCast( object, className )
+#define wxDynamicCast( ptr, classname )
 
 /**
     This macro is equivalent to wxDynamicCast() but the latter provokes
@@ -631,7 +631,7 @@ public:
 
     @see wxDynamicCast()
 */
-#define wxDynamicCastThis( className )
+#define wxDynamicCastThis( classname )
 
 /**
     This macro checks that the cast is valid in debug mode (an assert failure
@@ -642,7 +642,7 @@ public:
 
     @see wx_static_cast(), wxDynamicCast(), wxConstCast()
 */
-#define wxStaticCast( object, className )
+#define wxStaticCast( ptr, classname )
 
 /**
     Creates and returns an object of the given class, if the class has been
@@ -651,7 +651,7 @@ public:
 
     @header{wx/object.h}
 */
-wxObject *wxCreateDynamicObject(const wxString& name);
+wxObject *wxCreateDynamicObject(const wxString& className);
 
 //@}
 

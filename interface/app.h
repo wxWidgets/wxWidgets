@@ -626,7 +626,7 @@ public:
     DECLARE_APP(MyApp)
     @endcode
 */
-#define DECLARE_APP( appClassName )
+#define DECLARE_APP( className )
 
 /**
     This is used in the application class implementation file to make the
@@ -642,7 +642,7 @@ public:
 
     @see DECLARE_APP().
 */
-#define IMPLEMENT_APP( appClassName )
+#define IMPLEMENT_APP( className )
 
 //@}
 
