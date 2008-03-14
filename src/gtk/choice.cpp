@@ -127,6 +127,13 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     PostCreation(size);
     SetInitialSize(size); // need this too because this is a wxControlWithItems
 
+    // workaround for bug in gtk_option_menu_set_history(), it causes
+    // gtk_widget_size_allocate() to be called with the current
+    // widget->allocation values, which will be zero if a proper
+    // size_allocate has not occured yet
+    m_widget->allocation.width = m_width;
+    m_widget->allocation.height = m_height;
+
     return true;
 }
 
