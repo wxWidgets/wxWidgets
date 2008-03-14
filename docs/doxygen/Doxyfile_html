@@ -1,22 +1,22 @@
 #############################################################################
-## Name:        Doxyfile.latex
-## Purpose:     Doxygen configuration file for generating Latex only
-## Author:      Stefan Csomor
+## Name:        Doxyfile.html
+## Purpose:     Doxygen configuration file for generating HTML only
+## Author:      Francesco Montorsi
 ## RCS-ID:      $Id$
 ## Licence:     wxWindows license
 #############################################################################
 
-@INCLUDE = Doxyfile.inc
+@INCLUDE = Doxyfile_inc
 
 #---------------------------------------------------------------------------
 # Generation switches
 #---------------------------------------------------------------------------
 
 GENERATE_HTMLHELP      = NO
-GENERATE_HTML          = NO
+GENERATE_HTML          = YES
 GENERATE_XML           = NO
 
-GENERATE_LATEX         = YES
+GENERATE_LATEX         = NO
 GENERATE_RTF           = NO
 GENERATE_MAN           = NO
 GENERATE_PERLMOD       = NO

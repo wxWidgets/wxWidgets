@@ -1,26 +1,26 @@
 #############################################################################
-## Name:        Doxyfile.html
-## Purpose:     Doxygen configuration file for generating HTML only
+## Name:        Doxyfile.all
+## Purpose:     Doxygen configuration file for generating all main formats
 ## Author:      Francesco Montorsi
 ## RCS-ID:      $Id$
 ## Licence:     wxWindows license
 #############################################################################
 
-@INCLUDE = Doxyfile.inc
+@INCLUDE = Doxyfile_inc
 
 #---------------------------------------------------------------------------
 # Generation switches
 #---------------------------------------------------------------------------
 
-GENERATE_HTMLHELP      = NO
+GENERATE_HTMLHELP      = YES
 GENERATE_HTML          = YES
-GENERATE_XML           = NO
+GENERATE_XML           = YES
 
 GENERATE_LATEX         = NO
 GENERATE_RTF           = NO
 GENERATE_MAN           = NO
-GENERATE_PERLMOD       = NO
+GENERATE_PERLMOD       = YES
 GENERATE_AUTOGEN_DEF   = NO
 GENERATE_TAGFILE       =
 
-HHC_LOCATION           =
+HHC_LOCATION           = ~/.wine/drive_c/Programmi/HTMLHelpWorkshop/hhc.exe

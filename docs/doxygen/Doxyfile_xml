@@ -6,7 +6,7 @@
 ## Licence:     wxWindows license
 #############################################################################
 
-@INCLUDE = Doxyfile.inc
+@INCLUDE = Doxyfile_inc
 
 #---------------------------------------------------------------------------
 # Generation switches
