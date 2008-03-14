@@ -3421,7 +3421,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                         rect = (RECT *)lParam;
                     }
 
-                    wxUxThemeHandle hTheme((wxWindow *)this, L"EDIT");
+                    wxUxThemeHandle hTheme((const wxWindow *)this, L"EDIT");
                     RECT rcClient = { 0, 0, 0, 0 };
                     wxClientDC dc((wxWindow *)this);
                     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
@@ -3453,7 +3453,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
                     processed = true;
 
-                    wxUxThemeHandle hTheme((wxWindow *)this, L"EDIT");
+                    wxUxThemeHandle hTheme((const wxWindow *)this, L"EDIT");
                     wxWindowDC dc((wxWindow *)this);
                     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
 
