@@ -168,6 +168,10 @@ Deprecated methods and their replacements
   "Attribute" instead of "Property" or "Prop" in their names.
 - wxConnection::OnExecute() is not formally deprecated yet but new code should
   use simpler OnExec() version which is called with wxString argument
+- wxMenuItem::GetLabel has been deprecated in favour of wxMenuItem::GetItemLabelText
+- wxMenuItem::GetText has been deprecated in favour of wxMenuItem::GetItemLabel
+- wxMenuItem::GetLabelFromText has been deprecated in favour of wxMenuItem::GetLabelText 
+- wxMenuItem::SetText has been deprecated in favour of wxMenuItem::SetItemLabel
 
 
 Major new features in this release
