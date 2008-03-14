@@ -11,14 +11,13 @@
     @headerfile auibook.h wx/aui/auibook.h
 
     wxAuiNotebook is part of the wxAUI class framework.
-    See also @ref overview_wxauioverview.
+    See also @ref overview_aui.
 
     wxAuiNotebook is a notebook control which implements many features common in
     applications with dockable panes.
     Specifically, wxAuiNotebook implements functionality which allows the user to
-    rearrange tab order via drag-and-drop,
-    split the tab window into many different splitter configurations, and toggle
-    through different themes to customize
+    rearrange tab order via drag-and-drop, split the tab window into many different
+    splitter configurations, and toggle through different themes to customize
     the control's look and feel.
 
     An effort has been made to try to maintain an API as similar to that of
@@ -62,20 +61,19 @@
 class wxAuiNotebook : public wxControl
 {
 public:
-    //@{
+    wxAuiNotebook();
+
     /**
         Constructor. Creates a wxAuiNotebok control.
     */
-    wxAuiNotebook();
     wxAuiNotebook(wxWindow* parent, wxWindowID id = wxID_ANY,
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = wxAUI_NB_DEFAULT_STYLE);
-    //@}
 
     /**
-        Adds a page.  If the @a select parameter is @true, calling this will generate a
-        page change event.
+        Adds a page.
+        If the @a select parameter is @true, calling this will generate a page change event.
     */
     bool AddPage(wxWindow* page, const wxString& caption,
                  bool select = false,
@@ -95,8 +93,8 @@ public:
                 long style = 0);
 
     /**
-        Deletes a page at the given index.  Calling this method will generate a page
-        change event.
+        Deletes a page at the given index.
+        Calling this method will generate a page change event.
     */
     bool DeletePage(size_t page);
 
@@ -106,9 +104,8 @@ public:
     wxAuiTabArt* GetArtProvider() const;
 
     /**
-        Returns the desired height of the notebook for the given page height. Use this
-        to fit the notebook to
-        a given page size.
+        Returns the desired height of the notebook for the given page height.
+        Use this to fit the notebook to a given page size.
     */
     int GetHeightForPageHeight(int pageHeight);
 
@@ -128,8 +125,8 @@ public:
     size_t GetPageCount() const;
 
     /**
-        Returns the page index for the specified window.  If the window is not found in
-        the notebook, wxNOT_FOUND is returned.
+        Returns the page index for the specified window. 
+        If the window is not found in the notebook, wxNOT_FOUND is returned.
     */
     int GetPageIndex(wxWindow* page_wnd) const;
 
@@ -207,11 +204,12 @@ public:
     size_t SetSelection(size_t new_page);
 
     /**
-        Sets the tab height.  By default, the tab control height is calculated
-        by measuring the text height and bitmap sizes on the tab captions.  Calling this
+        Sets the tab height. By default, the tab control height is calculated
+        by measuring the text height and bitmap sizes on the tab captions. Calling this
         method will override that calculation and set the tab control to the specified
-        height parameter.  A call to this method will override any call to
+        height parameter. A call to this method will override any call to
         SetUniformBitmapSize().
+
         Specifying -1 as the height will return the control to its default auto-sizing
         behaviour.
     */
@@ -220,11 +218,10 @@ public:
     //@{
     /**
         Split performs a split operation programmatically. The argument @a page
-        indicates
-        the page that will be split off.  This page will also become the active page
-        after the
-        split.  The @a direction argument specifies where the pane should go, it should
-        be one
+        indicates the page that will be split off.  This page will also become the
+        active page after the split.
+
+        The @a direction argument specifies where the pane should go, it should be one
         of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
     */
     void SetUniformBitmapSize(const wxSize& size);
@@ -245,6 +242,8 @@ public:
     @headerfile auibook.h wx/aui/auibook.h
 
     Tab art class.
+
+    @todo BETTER DESCRIPTION NEEDED
 
     @library{wxaui}
     @category{aui}

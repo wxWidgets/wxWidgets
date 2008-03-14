@@ -6,21 +6,57 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    @todo TOWRITE
+*/
+enum wxAuiManagerDock
+{
+    wxAUI_DOCK_NONE = 0,
+    wxAUI_DOCK_TOP = 1,
+    wxAUI_DOCK_RIGHT = 2,
+    wxAUI_DOCK_BOTTOM = 3,
+    wxAUI_DOCK_LEFT = 4,
+    wxAUI_DOCK_CENTER = 5,
+    wxAUI_DOCK_CENTRE = wxAUI_DOCK_CENTER
+};
+
+
+/**
+    @todo TOWRITE
+*/
+enum wxAuiManagerOption
+{
+    wxAUI_MGR_ALLOW_FLOATING           = 1 << 0,
+    wxAUI_MGR_ALLOW_ACTIVE_PANE        = 1 << 1,
+    wxAUI_MGR_TRANSPARENT_DRAG         = 1 << 2,
+    wxAUI_MGR_TRANSPARENT_HINT         = 1 << 3,
+    wxAUI_MGR_VENETIAN_BLINDS_HINT     = 1 << 4,
+    wxAUI_MGR_RECTANGLE_HINT           = 1 << 5,
+    wxAUI_MGR_HINT_FADE                = 1 << 6,
+    wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
+
+    wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
+                        wxAUI_MGR_TRANSPARENT_HINT |
+                        wxAUI_MGR_HINT_FADE |
+                        wxAUI_MGR_NO_VENETIAN_BLINDS_FADE
+};
+
 /**
     @class wxAuiManager
     @headerfile aui.h wx/aui/aui.h
 
     wxAuiManager is the central class of the wxAUI class framework.
+    See also @ref overview_aui.
 
-    See also @ref overview_wxauioverview.
+    wxAuiManager manages the panes associated with it for a particular wxFrame,
+    using a pane's wxAuiPaneInfo information to determine each pane's docking
+    and floating behavior.
 
-    wxAuiManager manages the panes associated with it
-    for a particular wxFrame, using a pane's wxAuiPaneInfo information to
-    determine each pane's docking and floating behavior. wxAuiManager
-    uses wxWidgets' sizer mechanism to plan the layout of each frame. It
-    uses a replaceable dock art class to do all drawing, so all drawing is
-    localized in one area, and may be customized depending on an
-    application's specific needs.
+    wxAuiManager uses wxWidgets' sizer mechanism to plan the layout of each frame.
+    It uses a replaceable dock art class to do all drawing, so all drawing is
+    localized in one area, and may be customized depending on an application's
+    specific needs.
 
     wxAuiManager works as follows: the programmer adds panes to the class,
     or makes changes to existing pane properties (dock position, floating
@@ -46,6 +82,33 @@
     m_mgr.GetPane(text1).Float();
     @endcode
 
+
+    @section wxauimanager_layers Layers, Rows and Directions, Positions
+
+    Inside wxAUI, the docking layout is figured out by checking several pane 
+    parameters. Four of these are important for determining where a pane will end up:
+
+    @li Direction: Each docked pane has a direction, Top, Bottom, Left, Right, or Center.
+        This is fairly self-explanatory. The pane will be placed in the location specified
+        by this variable.
+    @li Position: More than one pane can be placed inside of a dock. Imagine two panes
+        being docked on the left side of a window. One pane can be placed over another.
+        In proportionally managed docks, the pane position indicates its sequential position,
+        starting with zero. So, in our scenario with two panes docked on the left side,
+        the top pane in the dock would have position 0, and the second one would occupy 
+        position 1.
+    @li Row: A row can allow for two docks to be placed next to each other. One of the 
+        most common places for this to happen is in the toolbar. Multiple toolbar rows
+        are allowed, the first row being row 0, and the second row 1. Rows can also be
+        used on vertically docked panes.
+    @li Layer: A layer is akin to an onion. Layer 0 is the very center of the managed pane.
+        Thus, if a pane is in layer 0, it will be closest to the center window (also
+        sometimes known as the "content window"). Increasing layers "swallow up" all
+        layers of a lower value. This can look very similar to multiple rows, but is
+        different because all panes in a lower level yield to panes in higher levels.
+        The best way to understand layers is by running the wxAUI sample.
+
+
     @library{wxbase}
     @category{aui}
 
@@ -63,14 +126,18 @@ public:
                  unsigned int flags = wxAUI_MGR_DEFAULT);
 
     /**
-        
+        Dtor.
     */
     ~wxAuiManager();
 
     //@{
     /**
-        AddPane() tells the frame manager to start managing a child window. There are
-        several versions of this function. The first version allows the full spectrum of pane parameter possibilities. The second version is used for simpler user interfaces which do not require as much configuration.  The last version allows a drop position to be specified, which will determine where the pane will be added.
+        AddPane() tells the frame manager to start managing a child window.
+        There are several versions of this function. The first version allows
+        the full spectrum of pane parameter possibilities. The second version is
+        used for simpler user interfaces which do not require as much configuration.
+        The last version allows a drop position to be specified, which will determine
+        where the pane will be added.
     */
     bool AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info);
     bool AddPane(wxWindow* window, int direction = wxLEFT,
@@ -94,13 +161,13 @@ public:
 
     /**
         Returns the current art provider being used.
-        See also: wxAuiDockArt.
+        @see wxAuiDockArt.
     */
     wxAuiDockArt* GetArtProvider() const;
 
     /**
-        Returns the current dock constraint values.  See SetDockSizeConstraint() for
-        more information.
+        Returns the current dock constraint values.
+        See SetDockSizeConstraint() for more information.
     */
     void GetDockSizeConstraint(double* widthpct, double* heightpct);
 
@@ -115,28 +182,26 @@ public:
     wxWindow* GetManagedWindow() const;
 
     /**
-        Calling this method will return the wxAuiManager for a given window.  The @a
-        window parameter should
-        specify any child window or sub-child window of the frame or window managed by
-        wxAuiManager.
+        Calling this method will return the wxAuiManager for a given window.
+        The @a window parameter should specify any child window or sub-child 
+        window of the frame or window managed by wxAuiManager.
+
         The @a window parameter need not be managed by the manager itself, nor does it
-        even need to be a child
-        or sub-child of a managed window.  It must however be inside the window
-        hierarchy underneath the managed
-        window.
+        even need to be a child or sub-child of a managed window. It must however
+        be inside the window hierarchy underneath the managed window.
     */
     static wxAuiManager* GetManager(wxWindow* window);
 
     //@{
     /**
-        @e GetPane is used to lookup a wxAuiPaneInfo object
-        either by window pointer or by pane name, which acts as a unique id for
-        a window pane. The returned wxAuiPaneInfo object may then be modified to
-        change a pane's look, state or position. After one or more
-        modifications to wxAuiPaneInfo, wxAuiManager::Update() should be called
-        to commit the changes to the user interface. If the lookup failed
-        (meaning the pane could not be found in the manager), a call to the
-        returned wxAuiPaneInfo's IsOk() method will return @false.
+        GetPane() is used to lookup a wxAuiPaneInfo object either by window pointer
+        or by pane name, which acts as a unique id for a window pane.
+
+        The returned wxAuiPaneInfo object may then be modified to change a pane's
+        look, state or position. After one or more modifications to wxAuiPaneInfo, 
+        wxAuiManager::Update() should be called to commit the changes to the user 
+        interface. If the lookup failed (meaning the pane could not be found in the 
+        manager), a call to the returned wxAuiPaneInfo's IsOk() method will return @false.
     */
     wxAuiPaneInfo GetPane(wxWindow* window);
     wxAuiPaneInfo GetPane(const wxString& name);
@@ -150,13 +215,13 @@ public:
     /**
         This method is used to insert either a previously unmanaged pane window
         into the frame manager, or to insert a currently managed pane somewhere
-        else. @e InsertPane will push all panes, rows, or docks aside and
-        insert the window into the position specified by @e insert_location.
+        else. InsertPane() will push all panes, rows, or docks aside and
+        insert the window into the position specified by @a insert_location.
+
         Because @a insert_location can specify either a pane, dock row, or dock
-        layer, the @a insert_level parameter is used to disambiguate this. The
-        parameter @a insert_level can take a value of wxAUI_INSERT_PANE,
-        wxAUI_INSERT_ROW
-        or wxAUI_INSERT_DOCK.
+        layer, the @a insert_level parameter is used to disambiguate this.
+        The parameter @a insert_level can take a value of wxAUI_INSERT_PANE,
+        wxAUI_INSERT_ROW or wxAUI_INSERT_DOCK.
     */
     bool InsertPane(wxWindow* window,
                     const wxAuiPaneInfo& insert_location,
@@ -164,7 +229,8 @@ public:
 
     /**
         LoadPaneInfo() is similar to to LoadPerspective, with the exception that it
-        only loads information about a single pane.  It is used in combination with SavePaneInfo().
+        only loads information about a single pane.  It is used in combination with
+        SavePaneInfo().
     */
     void LoadPaneInfo(wxString pane_part, wxAuiPaneInfo& pane);
 
@@ -176,71 +242,79 @@ public:
                          bool update = true);
 
     /**
-        ProcessDockResult() is a protected member of the wxAUI layout manager.  It can
-        be overridden by derived classes to provide custom docking calculations.
+        ProcessDockResult() is a protected member of the wxAUI layout manager.
+        It can be overridden by derived classes to provide custom docking calculations.
     */
     bool ProcessDockResult(wxAuiPaneInfo& target,
                            const wxAuiPaneInfo& new_pos);
 
     /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
-        saves information about a single pane.  It is used in combination with LoadPaneInfo().
+        saves information about a single pane.  It is used in combination with
+        LoadPaneInfo().
     */
     wxString SavePaneInfo(wxAuiPaneInfo& pane);
 
     /**
         Saves the entire user interface layout into an encoded wxString, which
-        can then be stored by the application (probably using wxConfig). When
-        a perspective is restored using LoadPerspective(), the entire user
+        can then be stored by the application (probably using wxConfig).
+
+        When a perspective is restored using LoadPerspective(), the entire user
         interface will return to the state it was when the perspective was saved.
     */
     wxString SavePerspective();
 
     /**
         Instructs wxAuiManager to use art provider specified by parameter
-        @a art_provider for all drawing calls. This allows plugable
-        look-and-feel features. The previous art provider object, if any,
-        will be deleted by wxAuiManager.
-        See also: wxAuiDockArt.
+        @a art_provider for all drawing calls. 
+        This allows plugable look-and-feel features. The previous art provider object,
+        if any, will be deleted by wxAuiManager.
+
+        @see wxAuiDockArt.
     */
     void SetArtProvider(wxAuiDockArt* art_provider);
 
     /**
         When a user creates a new dock by dragging a window into a docked position,
-        often times the large size of the
-        window will create a dock that is unwieldly large.  wxAuiManager by default
-        limits the size of any
-        new dock to 1/3 of the window size.  For horizontal docks, this would be 1/3 of
-        the window height.  For
-        vertical docks, 1/3 of the width.  Calling this function will adjust this
-        constraint value.  The numbers
-        must be between 0.0 and 1.0.  For instance, calling SetDockSizeContraint with
-        0.5, 0.5 will cause new
-        docks to be limited to half of the size of the entire managed window.
+        often times the large size of the window will create a dock that is unwieldly
+        large. wxAuiManager by default limits the size of any new dock to 1/3 of the 
+        window size.  For horizontal docks, this would be 1/3 of the window height.
+        For vertical docks, 1/3 of the width.
+
+        Calling this function will adjust this constraint value. The numbers must be
+        between 0.0 and 1.0.  For instance, calling SetDockSizeContraint with
+        0.5, 0.5 will cause new docks to be limited to half of the size of the
+        entire managed window.
     */
     void SetDockSizeConstraint(double widthpct, double heightpct);
 
     /**
-        This method is used to specify wxAuiManager's settings flags. @e flags
+        This method is used to specify wxAuiManager's settings flags. @a flags
         specifies options which allow the frame management behavior to be modified.
     */
     void SetFlags(unsigned int flags);
 
     /**
         Called to specify the frame or window which is to be managed by wxAuiManager.
-        Frame management is not restricted to just frames.  Child windows or custom controls are also allowed.
+        Frame management is not restricted to just frames.  Child windows or custom
+        controls are also allowed.
     */
     void SetManagedWindow(wxWindow* managed_wnd);
 
     /**
         This function is used by controls to explicitly show a hint window at the
-        specified rectangle.  It is rarely called, and is mostly used by controls implementing custom pane drag/drop behaviour.  The specified rectangle should be in screen coordinates.
+        specified rectangle. It is rarely called, and is mostly used by controls
+        implementing custom pane drag/drop behaviour. 
+        The specified rectangle should be in screen coordinates.
     */
     void ShowHint(const wxRect& rect);
 
     /**
         Uninitializes the framework and should be called before a managed frame or
-        window is destroyed. UnInit() is usually called in the managed wxFrame's destructor.  It is necessary to call this function before the managed frame or window is destroyed, otherwise the manager cannot remove its custom event handlers from a window.
+        window is destroyed. UnInit() is usually called in the managed wxFrame's 
+        destructor.  It is necessary to call this function before the managed frame 
+        or window is destroyed, otherwise the manager cannot remove its custom event 
+        handlers from a window.
     */
     void UnInit();
 
@@ -263,14 +337,13 @@ public:
     @headerfile aui.h wx/aui/aui.h
 
     wxAuiPaneInfo is part of the wxAUI class framework.
-    See also @ref overview_wxauioverview.
+    See also @ref overview_aui.
 
     wxAuiPaneInfo specifies all the parameters for a pane.
-    These parameters specify where the pane is on the
-    screen, whether it is docked or floating, or hidden.
-    In addition, these parameters specify the pane's
-    docked position, floating position, preferred size,
-    minimum size, caption text among many other parameters.
+    These parameters specify where the pane is on the screen, whether it is docked
+    or floating, or hidden.
+    In addition, these parameters specify the pane's docked position, floating 
+    position, preferred size, minimum size, caption text among many other parameters.
 
     @library{wxbase}
     @category{aui}
@@ -280,13 +353,12 @@ public:
 class wxAuiPaneInfo
 {
 public:
-    //@{
+    wxAuiPaneInfo();
+
     /**
         Copy constructor.
     */
-    wxAuiPaneInfo();
     wxAuiPaneInfo(const wxAuiPaneInfo& c);
-    //@}
 
     //@{
     /**
@@ -334,7 +406,9 @@ public:
     //@{
     /**
         CentrePane() specifies that the pane should adopt the default center pane
-        settings. Centre panes usually do not have caption bars. This function provides an easy way of preparing a pane to be displayed in the center dock position.
+        settings. Centre panes usually do not have caption bars. 
+        This function provides an easy way of preparing a pane to be displayed in
+        the center dock position.
     */
     wxAuiPaneInfo CentrePane();
     wxAuiPaneInfo CenterPane();
@@ -352,13 +426,16 @@ public:
 
     /**
         DestroyOnClose() indicates whether a pane should be detroyed when it is closed.
-        Normally a pane is simply hidden when the close button is clicked. Setting DestroyOnClose to @true will cause the window to be destroyed when the user clicks the pane's close button.
+        Normally a pane is simply hidden when the close button is clicked. 
+        Setting DestroyOnClose to @true will cause the window to be destroyed when
+        the user clicks the pane's close button.
     */
     wxAuiPaneInfo DestroyOnClose(bool b = true);
 
     /**
         Direction() determines the direction of the docked pane. It is functionally the
-        same as calling Left(), Right(), Top() or Bottom(), except that docking direction may be specified programmatically via the parameter.
+        same as calling Left(), Right(), Top() or Bottom(), except that docking direction
+        may be specified programmatically via the parameter.
     */
     wxAuiPaneInfo Direction(int direction);
 
@@ -369,7 +446,8 @@ public:
 
     /**
         DockFixed() causes the containing dock to have no resize sash.  This is useful
-        for creating panes that span the entire width or height of a dock, but should not be resizable in the other direction.
+        for creating panes that span the entire width or height of a dock, but should 
+        not be resizable in the other direction.
     */
     wxAuiPaneInfo DockFixed(bool b = true);
 
@@ -549,7 +627,9 @@ public:
 
     /**
         Layer() determines the layer of the docked pane. The dock layer is similar to
-        an onion, the inner-most layer being layer 0. Each shell moving in the outward direction has a higher layer number. This allows for more complex docking layout formation.
+        an onion, the inner-most layer being layer 0. Each shell moving in the outward 
+        direction has a higher layer number. This allows for more complex docking layout 
+        formation.
     */
     wxAuiPaneInfo Layer(int layer);
 
@@ -598,7 +678,8 @@ public:
 
     /**
         Name() sets the name of the pane so it can be referenced in lookup functions.
-        If a name is not specified by the user, a random name is assigned to the pane when it is added to the manager.
+        If a name is not specified by the user, a random name is assigned to the pane 
+        when it is added to the manager.
     */
     wxAuiPaneInfo Name(const wxString& n);
 
@@ -673,8 +754,10 @@ public:
     wxAuiPaneInfo TopDockable(bool b = true);
 
     /**
-        Window() assigns the window pointer that the wxAuiPaneInfo should use. This
-        normally does not need to be specified, as the window pointer is automatically assigned to the wxAuiPaneInfo structure as soon as it is added to the manager.
+        Window() assigns the window pointer that the wxAuiPaneInfo should use. 
+        This normally does not need to be specified, as the window pointer is 
+        automatically assigned to the wxAuiPaneInfo structure as soon as it is added 
+        to the manager.
     */
     wxAuiPaneInfo Window(wxWindow* w);
 
