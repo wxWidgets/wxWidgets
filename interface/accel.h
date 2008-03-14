@@ -180,6 +180,11 @@ public:
     wxAcceleratorTable operator =(const wxAcceleratorTable& accel);
 };
 
+
+// ============================================================================
+// Global functions/macros
+// ============================================================================
+
 /**
     An empty accelerator table.
 */

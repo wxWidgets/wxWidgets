@@ -608,6 +608,14 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/**
+    The global pointer to the singleton wxApp object.
+
+    @see wxApp::GetInstance()
+*/
+wxApp *wxTheApp;
+
+
 
 /** @ingroup group_funcmacro_rtti */
 //@{
@@ -648,20 +656,15 @@ public:
 
 
 
-
-/**
-    The global pointer to the singleton wxApp object.
-
-    @see wxApp::GetInstance()
-*/
-wxApp *wxTheApp;
+/** @ingroup group_funcmacro_appinitterm */
+//@{
 
 /**
     This function doesn't exist in wxWidgets but it is created by using
     the IMPLEMENT_APP() macro.
 
-    Thus, before using it anywhere but in the same module where this macro is used,
-    you must make it available using DECLARE_APP().
+    Thus, before using it anywhere but in the same module where this macro is
+    used, you must make it available using DECLARE_APP().
 
     The advantage of using this function compared to directly using the global
     wxTheApp pointer is that the latter is of type wxApp* and so wouldn't
@@ -669,15 +672,6 @@ wxApp *wxTheApp;
     present in wxApp while wxGetApp() returns the object of the right type.
 */
 wxAppDerivedClass wxGetApp();
-
-/**
-    Exits application after calling wxApp::OnExit.
-
-    Should only be used in an emergency: normally the top-level frame
-    should be deleted (after deleting all other frames) to terminate the
-    application. See wxCloseEvent and wxApp.
-*/
-void wxExit();
 
 /**
     If @a doIt is @true, the fatal exceptions (also known as general protection
@@ -696,32 +690,6 @@ void wxExit();
 */
 bool wxHandleFatalExceptions(bool doIt = true);
 
-/**
-    Returns the error code from the last system call. This function uses
-    @c errno on Unix platforms and @c GetLastError under Win32.
-
-    @see wxSysErrorMsg(), wxLogSysError()
-*/
-unsigned long wxSysErrorCode();
-
-/**
-    In a GUI application, this function posts @a event to the specified @e dest
-    object using wxEvtHandler::AddPendingEvent.
-
-    Otherwise, it dispatches @a event immediately using wxEvtHandler::ProcessEvent.
-    See the respective documentation for details (and caveats).
-*/
-void wxPostEvent(wxEvtHandler* dest, wxEvent& event);
-
-
-/**
-    Returns the error message corresponding to the given system error code. If
-    @a errCode is 0 (default), the last error code (as returned by
-    wxSysErrorCode()) is used.
-
-    @see wxSysErrorCode(), wxLogSysError()
-*/
-const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
 
 /**
     This function is used in wxBase only and only if you don't create
@@ -752,17 +720,33 @@ void wxUninitialize();
 */
 bool wxYield();
 
-
-//@{
 /**
-    This initializes wxWidgets in a platform-dependent way. Use this if you are not
-    using the default wxWidgets entry code (e.g. main or WinMain). For example, you
-    can initialize wxWidgets from an Microsoft Foundation Classes application using
-    this function.
+    This function is similar to wxYield, except that it disables the user input to
+    all program windows before calling wxYield and re-enables it again
+    afterwards. If @a win is not @NULL, this window will remain enabled,
+    allowing the implementation of some limited user interaction.
+    Returns the result of the call to ::wxYield.
+*/
+bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
 
-    The following overload of wxEntry is available under all platforms:
-    (notice that under Windows CE platform, and only there, the type of @a pCmdLine
-    is @c wchar_t *, otherwise it is @c char *, even in Unicode build).
+/**
+    This function initializes wxWidgets in a platform-dependent way. Use this if you
+    are not using the default wxWidgets entry code (e.g. main or WinMain).
+
+    For example, you can initialize wxWidgets from an Microsoft Foundation Classes
+    (MFC) application using this function.
+
+    @note This overload of wxEntry is available under all platforms.
+
+    @see wxEntryStart()
+*/
+int wxEntry(int& argc, wxChar** argv);
+
+/**
+    See wxEntry(int&,wxChar**) for more info about this function.
+
+    Notice that under Windows CE platform, and only there, the type of @a pCmdLine
+    is @c wchar_t *, otherwise it is @c char *, even in Unicode build.
 
     @remarks To clean up wxWidgets, call wxApp::OnExit followed by the static
              function wxApp::CleanUp. For example, if exiting from an MFC application
@@ -778,12 +762,27 @@ bool wxYield();
              }
              @endcode
 
-    @see wxEntryStart()
 */
-int wxEntry(int& argc, wxChar** argv);
 int wxEntry(HINSTANCE hInstance,
             HINSTANCE hPrevInstance = NULL,
             char* pCmdLine = NULL,
             int nCmdShow = SW_SHOWNORMAL);
+
+//@}
+
+
+
+/** @ingroup group_funcmacro_procctrl */
+//@{
+
+/**
+    Exits application after calling wxApp::OnExit.
+
+    Should only be used in an emergency: normally the top-level frame
+    should be deleted (after deleting all other frames) to terminate the
+    application. See wxCloseEvent and wxApp.
+*/
+void wxExit();
+
 //@}
 

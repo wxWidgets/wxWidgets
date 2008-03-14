@@ -233,433 +233,425 @@ void wxMicroSleep(unsigned long microseconds);
 */
 void wxInfoMessageBox(wxWindow ( parent = NULL);
 
-                      /**
-                          Find a menu item identifier associated with the given frame's menu bar.
-                      */
-                      int wxFindMenuItemId(wxFrame* frame, const wxString& menuString,
-                                           const wxString& itemString);
+/**
+    Find a menu item identifier associated with the given frame's menu bar.
+*/
+int wxFindMenuItemId(wxFrame* frame, const wxString& menuString,
+                    const wxString& itemString);
 
-                      /**
-                          This function enables or disables all top level windows. It is used by
-                          ::wxSafeYield.
-                      */
-                      void wxEnableTopLevelWindows(bool enable = true);
+/**
+    This function enables or disables all top level windows. It is used by
+    ::wxSafeYield.
+*/
+void wxEnableTopLevelWindows(bool enable = true);
 
-                      /**
-                          Strips any menu codes from @a str and returns the result.
-                          By default, the functions strips both the mnemonics character (@c '')
-                          which is used to indicate a keyboard shortkey, and the accelerators, which are
-                          used only in the menu items and are separated from the main text by the
-                          @c \t (TAB) character. By using @a flags of
-                          @c wxStrip_Mnemonics or @c wxStrip_Accel to strip only the former
-                          or the latter part, respectively.
-                          Notice that in most cases
-                          wxMenuItem::GetLabelFromText or
-                          wxControl::GetLabelText can be used instead.
-                      */
-                      wxString wxStripMenuCodes(const wxString& str,
-                                                int flags = wxStrip_All);
+/**
+    Strips any menu codes from @a str and returns the result.
+    By default, the functions strips both the mnemonics character (@c '')
+    which is used to indicate a keyboard shortkey, and the accelerators, which are
+    used only in the menu items and are separated from the main text by the
+    @c \t (TAB) character. By using @a flags of
+    @c wxStrip_Mnemonics or @c wxStrip_Accel to strip only the former
+    or the latter part, respectively.
+    Notice that in most cases
+    wxMenuItem::GetLabelFromText or
+    wxControl::GetLabelText can be used instead.
+*/
+wxString wxStripMenuCodes(const wxString& str,
+                            int flags = wxStrip_All);
 
-                      /**
-                          @b NB: This function is now obsolete, please use wxLogError()
-                          instead.
-                          Displays @a msg and continues. This writes to standard error under
-                          Unix, and pops up a message box under Windows. Used for internal
-                          wxWidgets errors. See also wxFatalError().
-                      */
-                      void wxError(const wxString& msg,
-                                   const wxString& title = "wxWidgets Internal Error");
+/**
+    @b NB: This function is now obsolete, please use wxLogError()
+    instead.
+    Displays @a msg and continues. This writes to standard error under
+    Unix, and pops up a message box under Windows. Used for internal
+    wxWidgets errors. See also wxFatalError().
+*/
+void wxError(const wxString& msg,
+            const wxString& title = "wxWidgets Internal Error");
 
-                      /**
-                          Open the @a url in user's default browser. If @a flags parameter contains
-                          @c wxBROWSER_NEW_WINDOW flag, a new window is opened for the URL
-                          (currently this is only supported under Windows). The @a url may also be a
-                          local file path (with or without @c file:// prefix), if it doesn't
-                          correspond to an existing file and the URL has no scheme @c http:// is
-                          prepended to it by default.
-                          Returns @true if the application was successfully launched.
-                          Note that for some configurations of the running user, the application which
-                          is launched to open the given URL may be URL-dependent (e.g. a browser may be
-                          used for
-                          local URLs while another one may be used for remote URLs).
-                      */
-                      bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
+/**
+    Open the @a url in user's default browser. If @a flags parameter contains
+    @c wxBROWSER_NEW_WINDOW flag, a new window is opened for the URL
+    (currently this is only supported under Windows). The @a url may also be a
+    local file path (with or without @c file:// prefix), if it doesn't
+    correspond to an existing file and the URL has no scheme @c http:// is
+    prepended to it by default.
+    Returns @true if the application was successfully launched.
+    Note that for some configurations of the running user, the application which
+    is launched to open the given URL may be URL-dependent (e.g. a browser may be
+    used for
+    local URLs while another one may be used for remote URLs).
+*/
+bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
 
-                      /**
-                          Executes a command in an interactive shell window. If no command is
-                          specified, then just the shell is spawned.
-                          See also wxExecute(), @ref overview_sampleexec "Exec sample".
-                      */
-                      bool wxShell(const wxString& command = NULL);
+/**
+    Executes a command in an interactive shell window. If no command is
+    specified, then just the shell is spawned.
+    See also wxExecute(), @ref overview_sampleexec "Exec sample".
+*/
+bool wxShell(const wxString& command = NULL);
 
-                      /**
-                          Gets the version and the operating system ID for currently running OS.
-                          See wxPlatformInfo for more details about wxOperatingSystemId.
+/**
+    Gets the version and the operating system ID for currently running OS.
+    See wxPlatformInfo for more details about wxOperatingSystemId.
 
-                          @see ::wxGetOsDescription, wxPlatformInfo
-                      */
-                      wxOperatingSystemId wxGetOsVersion(int* major = NULL,
-                                                         int* minor = NULL);
+    @see ::wxGetOsDescription, wxPlatformInfo
+*/
+wxOperatingSystemId wxGetOsVersion(int* major = NULL,
+                                    int* minor = NULL);
 
-                      /**
-                          Returns the FQDN (fully qualified domain host name) or an empty string on
-                          error.
+/**
+    Returns the FQDN (fully qualified domain host name) or an empty string on
+    error.
 
-                          @see wxGetHostName()
-                      */
-                      wxString wxGetFullHostName();
+    @see wxGetHostName()
+*/
+wxString wxGetFullHostName();
 
-                      /**
-                          Changes the cursor to the given cursor for all windows in the application.
-                          Use wxEndBusyCursor() to revert the cursor back
-                          to its previous state. These two calls can be nested, and a counter
-                          ensures that only the outer calls take effect.
-                          See also wxIsBusy(), wxBusyCursor.
-                      */
-                      void wxBeginBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR);
+/**
+    Changes the cursor to the given cursor for all windows in the application.
+    Use wxEndBusyCursor() to revert the cursor back
+    to its previous state. These two calls can be nested, and a counter
+    ensures that only the outer calls take effect.
+    See also wxIsBusy(), wxBusyCursor.
+*/
+void wxBeginBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR);
 
-                      /**
-                          Tells the system to delete the specified object when
-                          all other events have been processed. In some environments, it is
-                          necessary to use this instead of deleting a frame directly with the
-                          delete operator, because some GUIs will still send events to a deleted window.
-                          Now obsolete: use wxWindow::Close instead.
-                      */
-                      void wxPostDelete(wxObject* object);
+/**
+    Tells the system to delete the specified object when
+    all other events have been processed. In some environments, it is
+    necessary to use this instead of deleting a frame directly with the
+    delete operator, because some GUIs will still send events to a deleted window.
+    Now obsolete: use wxWindow::Close instead.
+*/
+void wxPostDelete(wxObject* object);
 
-                      /**
-                          @b NB: This function is obsolete, please use
-                          wxWindow::FindWindowByLabel instead.
-                          Find a window by its label. Depending on the type of window, the label may be a
-                          window title
-                          or panel item label. If @a parent is @NULL, the search will start from all
-                          top-level
-                          frames and dialog boxes; if non-@NULL, the search will be limited to the given
-                          window hierarchy.
-                          The search is recursive in both cases.
-                      */
-                      wxWindow* wxFindWindowByLabel(const wxString& label,
-                                                    wxWindow* parent = NULL);
+/**
+    @b NB: This function is obsolete, please use
+    wxWindow::FindWindowByLabel instead.
+    Find a window by its label. Depending on the type of window, the label may be a
+    window title
+    or panel item label. If @a parent is @NULL, the search will start from all
+    top-level
+    frames and dialog boxes; if non-@NULL, the search will be limited to the given
+    window hierarchy.
+    The search is recursive in both cases.
+*/
+wxWindow* wxFindWindowByLabel(const wxString& label,
+                                wxWindow* parent = NULL);
 
-                      /**
-                          This function is similar to wxYield, except that it disables the user input to
-                          all program windows before calling wxYield and re-enables it again
-                          afterwards. If @a win is not @NULL, this window will remain enabled,
-                          allowing the implementation of some limited user interaction.
-                          Returns the result of the call to ::wxYield.
-                      */
-                      bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
 
-                      /**
-                          Returns the mouse position in screen coordinates.
-                      */
-                      wxPoint wxGetMousePosition();
+/**
+    Returns the mouse position in screen coordinates.
+*/
+wxPoint wxGetMousePosition();
 
-                      /**
-                          Loads a user-defined Windows resource as a string. If the resource is found,
-                          the function creates
-                          a new character array and copies the data into it. A pointer to this data is
-                          returned. If unsuccessful, @NULL is returned.
-                          The resource must be defined in the @c .rc file using the following syntax:
+/**
+    Loads a user-defined Windows resource as a string. If the resource is found,
+    the function creates
+    a new character array and copies the data into it. A pointer to this data is
+    returned. If unsuccessful, @NULL is returned.
+    The resource must be defined in the @c .rc file using the following syntax:
 
-                          @code
-                          myResource TEXT file.ext
-                          @endcode
+    @code
+    myResource TEXT file.ext
+    @endcode
 
-                          where @c file.ext is a file that the resource compiler can find.
-                          This function is available under Windows only.
-                      */
-                      wxString wxLoadUserResource(const wxString& resourceName,
-                                                  const wxString& resourceType = "TEXT");
+    where @c file.ext is a file that the resource compiler can find.
+    This function is available under Windows only.
+*/
+wxString wxLoadUserResource(const wxString& resourceName,
+                            const wxString& resourceType = "TEXT");
 
-                      /**
-                          Returns the amount of free memory in bytes under environments which
-                          support it, and -1 if not supported or failed to perform measurement.
-                      */
-                      wxMemorySize wxGetFreeMemory();
+/**
+    Returns the amount of free memory in bytes under environments which
+    support it, and -1 if not supported or failed to perform measurement.
+*/
+wxMemorySize wxGetFreeMemory();
 
-                      /**
-                          This is a macro defined as @c getenv() or its wide char version in Unicode
-                          mode.
-                          Note that under Win32 it may not return correct value for the variables set
-                          with wxSetEnv(), use wxGetEnv() function
-                          instead.
-                      */
-                      wxChar* wxGetEnv(const wxString& var);
+/**
+    This is a macro defined as @c getenv() or its wide char version in Unicode
+    mode.
+    Note that under Win32 it may not return correct value for the variables set
+    with wxSetEnv(), use wxGetEnv() function
+    instead.
+*/
+wxChar* wxGetEnv(const wxString& var);
 
 //@{
-                      /**
-                          Copies the current host machine's name into the supplied buffer. Please note
-                          that the returned name is @e not fully qualified, i.e. it does not include
-                          the domain name.
-                          Under Windows or NT, this function first looks in the environment
-                          variable SYSTEM_NAME; if this is not found, the entry @b HostName
-                          in the @b wxWidgets section of the WIN.INI file is tried.
-                          The first variant of this function returns the hostname if successful or an
-                          empty string otherwise. The second (deprecated) function returns @true
-                          if successful, @false otherwise.
+/**
+    Copies the current host machine's name into the supplied buffer. Please note
+    that the returned name is @e not fully qualified, i.e. it does not include
+    the domain name.
+    Under Windows or NT, this function first looks in the environment
+    variable SYSTEM_NAME; if this is not found, the entry @b HostName
+    in the @b wxWidgets section of the WIN.INI file is tried.
+    The first variant of this function returns the hostname if successful or an
+    empty string otherwise. The second (deprecated) function returns @true
+    if successful, @false otherwise.
 
-                          @see wxGetFullHostName()
-                      */
-                      wxString wxGetHostName();
-                      bool wxGetHostName(char* buf, int sz);
+    @see wxGetFullHostName()
+*/
+wxString wxGetHostName();
+bool wxGetHostName(char* buf, int sz);
 //@}
 
-                      /**
-                          Returns the current value of the environment variable @a var in @e value.
-                          @a value may be @NULL if you just want to know if the variable exists
-                          and are not interested in its value.
-                          Returns @true if the variable exists, @false otherwise.
-                      */
-                      bool wxGetEnv(const wxString& var, wxString* value);
+/**
+    Returns the current value of the environment variable @a var in @e value.
+    @a value may be @NULL if you just want to know if the variable exists
+    and are not interested in its value.
+    Returns @true if the variable exists, @false otherwise.
+*/
+bool wxGetEnv(const wxString& var, wxString* value);
 
-                      /**
-                          Under X only, returns the current display name. See also wxSetDisplayName().
-                      */
-                      wxString wxGetDisplayName();
+/**
+    Under X only, returns the current display name. See also wxSetDisplayName().
+*/
+wxString wxGetDisplayName();
 
-                      /**
-                          Ring the system bell.
-                          Note that this function is categorized as a GUI one and so is not thread-safe.
-                      */
-                      void wxBell();
+/**
+    Ring the system bell.
+    Note that this function is categorized as a GUI one and so is not thread-safe.
+*/
+void wxBell();
 
-                      /**
-                          Returns the home directory for the given user. If the @a user is empty
-                          (default value), this function behaves like
-                          wxGetHomeDir() i.e. returns the current user home
-                          directory.
-                          If the home directory couldn't be determined, an empty string is returned.
-                      */
-                      wxString wxGetUserHome(const wxString& user = "");
+/**
+    Returns the home directory for the given user. If the @a user is empty
+    (default value), this function behaves like
+    wxGetHomeDir() i.e. returns the current user home
+    directory.
+    If the home directory couldn't be determined, an empty string is returned.
+*/
+wxString wxGetUserHome(const wxString& user = "");
 
 //@{
-                      /**
-                          @b wxPerl note: In wxPerl this function is called @c Wx::ExecuteStdoutStderr
-                          and it only takes the @c command argument,
-                          and returns a 3-element list @c ( status, output, errors ), where
-                          @c output and @c errors are array references.
-                          Executes another program in Unix or Windows.
-                          The first form takes a command string, such as @c "emacs file.txt".
-                          The second form takes an array of values: a command, any number of
-                          arguments, terminated by @NULL.
-                          The semantics of the third and fourth versions is different from the first two
-                          and is described in more details below.
-                          If @a flags parameter contains @c wxEXEC_ASYNC flag (the default), flow
-                          of control immediately returns. If it contains @c wxEXEC_SYNC, the current
-                          application waits until the other program has terminated.
-                          In the case of synchronous execution, the return value is the exit code of
-                          the process (which terminates by the moment the function returns) and will be
-                          -1 if the process couldn't be started and typically 0 if the process
-                          terminated successfully. Also, while waiting for the process to
-                          terminate, wxExecute will call wxYield(). Because of this, by
-                          default this function disables all application windows to avoid unexpected
-                          reentrancies which could result from the users interaction with the program
-                          while the child process is running. If you are sure that it is safe to not
-                          disable the program windows, you may pass @c wxEXEC_NODISABLE flag to
-                          prevent this automatic disabling from happening.
-                          For asynchronous execution, however, the return value is the process id and
-                          zero value indicates that the command could not be executed. As an added
-                          complication, the return value of -1 in this case indicates that we didn't
-                          launch a new process, but connected to the running one (this can only happen in
-                          case of using DDE under Windows for command execution). In particular, in this,
-                          and only this, case the calling code will not get the notification about
-                          process termination.
-                          If callback isn't @NULL and if execution is asynchronous,
-                          wxProcess::OnTerminate will be called when
-                          the process finishes. Specifying this parameter also allows you to redirect the
-                          standard input and/or output of the process being launched by calling
-                          wxProcess::Redirect. If the child process IO is redirected,
-                          under Windows the process window is not shown by default (this avoids having to
-                          flush an unnecessary console for the processes which don't create any windows
-                          anyhow) but a @c wxEXEC_NOHIDE flag can be used to prevent this from
-                          happening, i.e. with this flag the child process window will be shown normally.
-                          Under Unix the flag @c wxEXEC_MAKE_GROUP_LEADER may be used to ensure
-                          that the new process is a group leader (this will create a new session if
-                          needed). Calling wxKill() passing wxKILL_CHILDREN will
-                          kill this process as well as all of its children (except those which have
-                          started their own session).
-                          The @c wxEXEC_NOEVENTS flag prevents processing of any events from taking
-                          place while the child process is running. It should be only used for very
-                          short-lived processes as otherwise the application windows risk becoming
-                          unresponsive from the users point of view. As this flag only makes sense with
-                          @c wxEXEC_SYNC, @c wxEXEC_BLOCK equal to the sum of both of these flags
-                          is provided as a convenience.
-                          Finally, you may use the third overloaded version of this function to execute
-                          a process (always synchronously, the contents of @a flags is or'd with
-                          @c wxEXEC_SYNC) and capture its output in the array @e output. The
-                          fourth version adds the possibility to additionally capture the messages from
-                          standard error output in the @a errors array.
-                          @b NB: Currently wxExecute() can only be used from the main thread, calling
-                          this function from another thread will result in an assert failure in debug
-                          build and won't work.
+/**
+    @b wxPerl note: In wxPerl this function is called @c Wx::ExecuteStdoutStderr
+    and it only takes the @c command argument,
+    and returns a 3-element list @c ( status, output, errors ), where
+    @c output and @c errors are array references.
+    Executes another program in Unix or Windows.
+    The first form takes a command string, such as @c "emacs file.txt".
+    The second form takes an array of values: a command, any number of
+    arguments, terminated by @NULL.
+    The semantics of the third and fourth versions is different from the first two
+    and is described in more details below.
+    If @a flags parameter contains @c wxEXEC_ASYNC flag (the default), flow
+    of control immediately returns. If it contains @c wxEXEC_SYNC, the current
+    application waits until the other program has terminated.
+    In the case of synchronous execution, the return value is the exit code of
+    the process (which terminates by the moment the function returns) and will be
+    -1 if the process couldn't be started and typically 0 if the process
+    terminated successfully. Also, while waiting for the process to
+    terminate, wxExecute will call wxYield(). Because of this, by
+    default this function disables all application windows to avoid unexpected
+    reentrancies which could result from the users interaction with the program
+    while the child process is running. If you are sure that it is safe to not
+    disable the program windows, you may pass @c wxEXEC_NODISABLE flag to
+    prevent this automatic disabling from happening.
+    For asynchronous execution, however, the return value is the process id and
+    zero value indicates that the command could not be executed. As an added
+    complication, the return value of -1 in this case indicates that we didn't
+    launch a new process, but connected to the running one (this can only happen in
+    case of using DDE under Windows for command execution). In particular, in this,
+    and only this, case the calling code will not get the notification about
+    process termination.
+    If callback isn't @NULL and if execution is asynchronous,
+    wxProcess::OnTerminate will be called when
+    the process finishes. Specifying this parameter also allows you to redirect the
+    standard input and/or output of the process being launched by calling
+    wxProcess::Redirect. If the child process IO is redirected,
+    under Windows the process window is not shown by default (this avoids having to
+    flush an unnecessary console for the processes which don't create any windows
+    anyhow) but a @c wxEXEC_NOHIDE flag can be used to prevent this from
+    happening, i.e. with this flag the child process window will be shown normally.
+    Under Unix the flag @c wxEXEC_MAKE_GROUP_LEADER may be used to ensure
+    that the new process is a group leader (this will create a new session if
+    needed). Calling wxKill() passing wxKILL_CHILDREN will
+    kill this process as well as all of its children (except those which have
+    started their own session).
+    The @c wxEXEC_NOEVENTS flag prevents processing of any events from taking
+    place while the child process is running. It should be only used for very
+    short-lived processes as otherwise the application windows risk becoming
+    unresponsive from the users point of view. As this flag only makes sense with
+    @c wxEXEC_SYNC, @c wxEXEC_BLOCK equal to the sum of both of these flags
+    is provided as a convenience.
+    Finally, you may use the third overloaded version of this function to execute
+    a process (always synchronously, the contents of @a flags is or'd with
+    @c wxEXEC_SYNC) and capture its output in the array @e output. The
+    fourth version adds the possibility to additionally capture the messages from
+    standard error output in the @a errors array.
+    @b NB: Currently wxExecute() can only be used from the main thread, calling
+    this function from another thread will result in an assert failure in debug
+    build and won't work.
 
-                          @param command
-                              The command to execute and any parameters to pass to it as a
-                              single string.
-                          @param argv
-                              The command to execute should be the first element of this
-                              array, any additional ones are the command parameters and the array must be
-                              terminated with a @NULL pointer.
-                          @param flags
-                              Combination of bit masks wxEXEC_ASYNC,
-                              wxEXEC_SYNC and wxEXEC_NOHIDE
-                          @param callback
-                              An optional pointer to wxProcess
+    @param command
+        The command to execute and any parameters to pass to it as a
+        single string.
+    @param argv
+        The command to execute should be the first element of this
+        array, any additional ones are the command parameters and the array must be
+        terminated with a @NULL pointer.
+    @param flags
+        Combination of bit masks wxEXEC_ASYNC,
+        wxEXEC_SYNC and wxEXEC_NOHIDE
+    @param callback
+        An optional pointer to wxProcess
 
-                          @see wxShell(), wxProcess, @ref overview_sampleexec "Exec sample".
-                      */
-                      long wxExecute(const wxString& command, int sync = wxEXEC_ASYNC,
-                                     wxProcess* callback = NULL);
-                      wxPerl note: long wxExecute(char** argv,
-                                                  int flags = wxEXEC_ASYNC,
-                                                  wxProcess* callback = NULL);
-                      wxPerl note: long wxExecute(const wxString& command,
-                                                  wxArrayString& output,
-                                                  int flags = 0);
-                      wxPerl note: long wxExecute(const wxString& command,
-                                                  wxArrayString& output,
-                                                  wxArrayString& errors,
-                                                  int flags = 0);
+    @see wxShell(), wxProcess, @ref overview_sampleexec "Exec sample".
+*/
+long wxExecute(const wxString& command, int sync = wxEXEC_ASYNC,
+                wxProcess* callback = NULL);
+wxPerl note: long wxExecute(char** argv,
+                            int flags = wxEXEC_ASYNC,
+                            wxProcess* callback = NULL);
+wxPerl note: long wxExecute(const wxString& command,
+                            wxArrayString& output,
+                            int flags = 0);
+wxPerl note: long wxExecute(const wxString& command,
+                            wxArrayString& output,
+                            wxArrayString& errors,
+                            int flags = 0);
 //@}
 
-                      /**
-                          Returns a string representing the current date and time.
-                      */
-                      wxString wxNow();
+/**
+    Returns a string representing the current date and time.
+*/
+wxString wxNow();
 
-                      /**
-                          Returns @true if the operating system the program is running under is 64 bit.
-                          The check is performed at run-time and may differ from the value available at
-                          compile-time (at compile-time you can just check if @c sizeof(void*)==8)
-                          since the program could be running in emulation mode or in a mixed 32/64 bit
-                          system
-                          (bi-architecture operating system).
-                          Very important: this function is not 100% reliable on some systems given the
-                          fact
-                          that there isn't always a standard way to do a reliable check on the OS
-                          architecture.
-                      */
-                      bool wxIsPlatform64Bit();
+/**
+    Returns @true if the operating system the program is running under is 64 bit.
+    The check is performed at run-time and may differ from the value available at
+    compile-time (at compile-time you can just check if @c sizeof(void*)==8)
+    since the program could be running in emulation mode or in a mixed 32/64 bit
+    system
+    (bi-architecture operating system).
+    Very important: this function is not 100% reliable on some systems given the
+    fact
+    that there isn't always a standard way to do a reliable check on the OS
+    architecture.
+*/
+bool wxIsPlatform64Bit();
 
-                      /**
-                          Returns the number uniquely identifying the current process in the system.
-                          If an error occurs, 0 is returned.
-                      */
-                      unsigned long wxGetProcessId();
+/**
+    Returns the number uniquely identifying the current process in the system.
+    If an error occurs, 0 is returned.
+*/
+unsigned long wxGetProcessId();
 
-                      /**
-                          Equivalent to the Unix kill function: send the given signal @a sig to the
-                          process with PID @e pid. The valid signal values are
+/**
+    Equivalent to the Unix kill function: send the given signal @a sig to the
+    process with PID @e pid. The valid signal values are
 
-                          @code
-                          enum wxSignal
-                          {
-                              wxSIGNONE = 0,  // verify if the process exists under Unix
-                              wxSIGHUP,
-                              wxSIGINT,
-                              wxSIGQUIT,
-                              wxSIGILL,
-                              wxSIGTRAP,
-                              wxSIGABRT,
-                              wxSIGEMT,
-                              wxSIGFPE,
-                              wxSIGKILL,      // forcefully kill, dangerous!
-                              wxSIGBUS,
-                              wxSIGSEGV,
-                              wxSIGSYS,
-                              wxSIGPIPE,
-                              wxSIGALRM,
-                              wxSIGTERM       // terminate the process gently
-                          };
-                          @endcode
+    @code
+    enum wxSignal
+    {
+        wxSIGNONE = 0,  // verify if the process exists under Unix
+        wxSIGHUP,
+        wxSIGINT,
+        wxSIGQUIT,
+        wxSIGILL,
+        wxSIGTRAP,
+        wxSIGABRT,
+        wxSIGEMT,
+        wxSIGFPE,
+        wxSIGKILL,      // forcefully kill, dangerous!
+        wxSIGBUS,
+        wxSIGSEGV,
+        wxSIGSYS,
+        wxSIGPIPE,
+        wxSIGALRM,
+        wxSIGTERM       // terminate the process gently
+    };
+    @endcode
 
-                          @c wxSIGNONE, @c wxSIGKILL and @c wxSIGTERM have the same meaning
-                          under both Unix and Windows but all the other signals are equivalent to
-                          @c wxSIGTERM under Windows.
-                          Returns 0 on success, -1 on failure. If @a rc parameter is not @NULL, it will
-                          be filled with an element of @c wxKillError enum:
+    @c wxSIGNONE, @c wxSIGKILL and @c wxSIGTERM have the same meaning
+    under both Unix and Windows but all the other signals are equivalent to
+    @c wxSIGTERM under Windows.
+    Returns 0 on success, -1 on failure. If @a rc parameter is not @NULL, it will
+    be filled with an element of @c wxKillError enum:
 
-                          @code
-                          enum wxKillError
-                          {
-                              wxKILL_OK,              // no error
-                              wxKILL_BAD_SIGNAL,      // no such signal
-                              wxKILL_ACCESS_DENIED,   // permission denied
-                              wxKILL_NO_PROCESS,      // no such process
-                              wxKILL_ERROR            // another, unspecified error
-                          };
-                          @endcode
+    @code
+    enum wxKillError
+    {
+        wxKILL_OK,              // no error
+        wxKILL_BAD_SIGNAL,      // no such signal
+        wxKILL_ACCESS_DENIED,   // permission denied
+        wxKILL_NO_PROCESS,      // no such process
+        wxKILL_ERROR            // another, unspecified error
+    };
+    @endcode
 
-                          The @a flags parameter can be wxKILL_NOCHILDREN (the default),
-                          or wxKILL_CHILDREN, in which case the child processes of this
-                          process will be killed too. Note that under Unix, for wxKILL_CHILDREN
-                          to work you should have created the process by passing wxEXEC_MAKE_GROUP_LEADER
-                          to wxExecute.
+    The @a flags parameter can be wxKILL_NOCHILDREN (the default),
+    or wxKILL_CHILDREN, in which case the child processes of this
+    process will be killed too. Note that under Unix, for wxKILL_CHILDREN
+    to work you should have created the process by passing wxEXEC_MAKE_GROUP_LEADER
+    to wxExecute.
 
-                          @see wxProcess::Kill, wxProcess::Exists, @ref overview_sampleexec "Exec sample"
-                      */
-                      int wxKill(long pid, int sig = wxSIGTERM, wxKillError rc = NULL,
-                                 int flags = 0);
+    @see wxProcess::Kill, wxProcess::Exists, @ref overview_sampleexec "Exec sample"
+*/
+int wxKill(long pid, int sig = wxSIGTERM, wxKillError rc = NULL,
+            int flags = 0);
 
-                      /**
-                          Returns the current state of the mouse.  Returns a wxMouseState
-                          instance that contains the current position of the mouse pointer in
-                          screen coordinates, as well as boolean values indicating the up/down
-                          status of the mouse buttons and the modifier keys.
-                      */
-                      wxMouseState wxGetMouseState();
+/**
+    Returns the current state of the mouse.  Returns a wxMouseState
+    instance that contains the current position of the mouse pointer in
+    screen coordinates, as well as boolean values indicating the up/down
+    status of the mouse buttons and the modifier keys.
+*/
+wxMouseState wxGetMouseState();
 
-                      /**
-                          Returns @true if between two wxBeginBusyCursor() and
-                          wxEndBusyCursor() calls.
-                          See also wxBusyCursor.
-                      */
-                      bool wxIsBusy();
+/**
+    Returns @true if between two wxBeginBusyCursor() and
+    wxEndBusyCursor() calls.
+    See also wxBusyCursor.
+*/
+bool wxIsBusy();
 
 //@{
-                      /**
-                          Copies the user's email address into the supplied buffer, by
-                          concatenating the values returned by wxGetFullHostName()
-                          and wxGetUserId().
-                          Returns @true if successful, @false otherwise.
-                      */
-                      wxString wxGetEmailAddress();
-                      bool wxGetEmailAddress(char* buf, int sz);
+/**
+    Copies the user's email address into the supplied buffer, by
+    concatenating the values returned by wxGetFullHostName()
+    and wxGetUserId().
+    Returns @true if successful, @false otherwise.
+*/
+wxString wxGetEmailAddress();
+bool wxGetEmailAddress(char* buf, int sz);
 //@}
 
-                      /**
-                          Sleeps for the specified number of seconds.
-                      */
-                      void wxSleep(int secs);
+/**
+    Sleeps for the specified number of seconds.
+*/
+void wxSleep(int secs);
 
-                      /**
-                          Sets the value of the environment variable @a var (adding it if necessary)
-                          to @e value.
-                          Returns @true on success.
+/**
+    Sets the value of the environment variable @a var (adding it if necessary)
+    to @e value.
+    Returns @true on success.
 
-                          @see wxUnsetEnv()
-                      */
-                      bool wxSetEnv(const wxString& var, const wxString& value);
+    @see wxUnsetEnv()
+*/
+bool wxSetEnv(const wxString& var, const wxString& value);
 
-                      /**
-                          Returns @true if the current platform is little endian (instead of big
-                          endian).
-                          The check is performed at run-time.
+/**
+    Returns @true if the current platform is little endian (instead of big
+    endian).
+    The check is performed at run-time.
 
-                          @see @ref overview_byteordermacros "Byte order macros"
-                      */
-                      bool wxIsPlatformLittleEndian();
+    @see @ref overview_byteordermacros "Byte order macros"
+*/
+bool wxIsPlatformLittleEndian();
 
-                      /**
-                          Under X only, sets the current display name. This is the X host and display
-                          name such
-                          as "colonsay:0.0", and the function indicates which display should be used for
-                          creating
-                          windows from this point on. Setting the display within an application allows
-                          multiple
-                          displays to be used.
-                          See also wxGetDisplayName().
-                      */
-                      void wxSetDisplayName(const wxString& displayName);
+/**
+    Under X only, sets the current display name. This is the X host and display
+    name such
+    as "colonsay:0.0", and the function indicates which display should be used for
+    creating
+    windows from this point on. Setting the display within an application allows
+    multiple
+    displays to be used.
+    See also wxGetDisplayName().
+*/
+void wxSetDisplayName(const wxString& displayName);
 

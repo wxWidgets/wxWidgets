@@ -171,6 +171,9 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_dialog */
+//@{
+
 /**
     This function shows the standard about dialog containing the information
     specified in @a info. If the current platform has a native about dialog
@@ -214,3 +217,4 @@ void wxAboutBox(const wxAboutDialogInfo& info);
 */
 void wxGenericAboutBox(const wxAboutDialogInfo& info);
 
+//@}

@@ -924,3 +924,24 @@ void wxLogSysError(const char* formatString, ... );
 void wxVLogSysError(const char* formatString,
                     va_list argPtr);
 //@}
+
+
+/**
+    Returns the error code from the last system call. This function uses
+    @c errno on Unix platforms and @c GetLastError under Win32.
+
+    @see wxSysErrorMsg(), wxLogSysError()
+*/
+unsigned long wxSysErrorCode();
+
+
+/**
+    Returns the error message corresponding to the given system error code. If
+    @a errCode is 0 (default), the last error code (as returned by
+    wxSysErrorCode()) is used.
+
+    @see wxSysErrorCode(), wxLogSysError()
+*/
+const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
+
+

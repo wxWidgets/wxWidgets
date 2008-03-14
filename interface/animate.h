@@ -170,7 +170,6 @@ public:
 
 /**
     @class wxAnimation
-    @ingroup group_class_gdi
     @wxheader{animate.h}
 
     This class encapsulates the concept of a platform-dependent animation.
@@ -269,6 +268,11 @@ public:
     */
     wxAnimation operator =(const wxAnimation& brush);
 };
+
+
+// ============================================================================
+// Global functions/macros
+// ============================================================================
 
 /**
     An empty animation object.

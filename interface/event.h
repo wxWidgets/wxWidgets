@@ -2766,3 +2766,13 @@ public:
     void SetCursor(const wxCursor& cursor);
 };
 
+
+
+/**
+    In a GUI application, this function posts @a event to the specified @e dest
+    object using wxEvtHandler::AddPendingEvent.
+
+    Otherwise, it dispatches @a event immediately using wxEvtHandler::ProcessEvent.
+    See the respective documentation for details (and caveats).
+*/
+void wxPostEvent(wxEvtHandler* dest, wxEvent& event);
