@@ -608,38 +608,53 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/**
-    The global pointer to the singleton wxApp object.
 
-    @see wxApp::GetInstance()
-*/
-wxApp *wxTheApp;
+/** @ingroup group_funcmacro_rtti */
+//@{
 
 /**
-    This is used in headers to create a forward declaration of the
-    wxGetApp() function implemented by wxIMPLEMENT_APP().
+    This is used in headers to create a forward declaration of the wxGetApp()
+    function implemented by IMPLEMENT_APP().
 
     It creates the declaration @a className wxGetApp(void).
+
+    @header{wx/app.h}
+
     Example:
 
     @code
-    wxDECLARE_APP(MyApp)
+    DECLARE_APP(MyApp)
     @endcode
 */
-#define wxDECLARE_APP(className)     /* implementation is private */
+#define DECLARE_APP( appClassName )
 
 /**
     This is used in the application class implementation file to make the
     application class known to wxWidgets for dynamic construction.
+
+    @header{wx/app.h}
+
     Example:
 
     @code
     IMPLEMENT_APP(MyApp)
     @endcode
 
-    See also DECLARE_APP().
+    @see DECLARE_APP().
 */
-#define IMPLEMENT_APP(className)     /* implementation is private */
+#define IMPLEMENT_APP( appClassName )
+
+//@}
+
+
+
+
+/**
+    The global pointer to the singleton wxApp object.
+
+    @see wxApp::GetInstance()
+*/
+wxApp *wxTheApp;
 
 /**
     This function doesn't exist in wxWidgets but it is created by using

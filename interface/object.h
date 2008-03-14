@@ -384,64 +384,96 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_rtti */
+//@{
+
 /**
-    Used inside a class declaration to declare that the class should be
-    made known to the class hierarchy, but objects of this class cannot be created
-    dynamically. The same as DECLARE_ABSTRACT_CLASS.
+    Returns a pointer to the wxClassInfo object associated with this class.
+
+    @header{wx/object.h}
 */
-#define DECLARE_CLASS()     /* implementation is private */
+#define CLASSINFO( className )
+
+/**
+    Used inside a class declaration to declare that the class should be made
+    known to the class hierarchy, but objects of this class cannot be created
+    dynamically. The same as DECLARE_ABSTRACT_CLASS().
+
+    @header{wx/object.h}
+*/
+#define DECLARE_CLASS( className )
 
 /**
     Used inside a class declaration to declare that the class should be
     made known to the class hierarchy, but objects of this class cannot be created
-    dynamically. The same as DECLARE_CLASS.
+    dynamically. The same as DECLARE_CLASS().
+
+    @header{wx/object.h}
+
     Example:
 
     @code
     class wxCommand: public wxObject
     {
-      DECLARE_ABSTRACT_CLASS(wxCommand)
+        DECLARE_ABSTRACT_CLASS(wxCommand)
 
-     private:
-      ...
-     public:
-      ...
+    private:
+        ...
+    public:
+        ...
     };
     @endcode
 */
-#define DECLARE_ABSTRACT_CLASS()     /* implementation is private */
+#define DECLARE_ABSTRACT_CLASS( className )
 
 /**
-    Returns a pointer to the wxClassInfo object associated with this class.
+    Used inside a class declaration to make the class known to wxWidgets RTTI
+    system and also declare that the objects of this class should be
+    dynamically creatable from run-time type information. Notice that this
+    implies that the class should have a default constructor, if this is not
+    the case consider using DECLARE_CLASS().
+
+    @header{wx/object.h}
+
+    Example:
+
+    @code
+    class wxFrame: public wxWindow
+    {
+    DECLARE_DYNAMIC_CLASS(wxFrame)
+
+    private:
+        const wxString& frameTitle;
+    public:
+        ...
+    };
+    @endcode
 */
-#define wxClassInfo* CLASSINFO()     /* implementation is private */
+#define DECLARE_DYNAMIC_CLASS( name )
 
 /**
-    Same as @c reinterpret_castT(x) if the compiler supports reinterpret cast or
-    @c (T)x for old compilers.
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information. The same as IMPLEMENT_ABSTRACT_CLASS().
 
-    @see wx_const_cast(), wx_static_cast()
+    @header{wx/object.h}
 */
-T wx_reinterpret_cast();
+#define IMPLEMENT_CLASS( className, baseClassName )
 
 /**
-    Used in a C++ implementation file to complete the declaration of a
-    class that has run-time type information and two base classes. The
-    same as IMPLEMENT_ABSTRACT_CLASS2.
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information and two base classes. The same as
+    IMPLEMENT_ABSTRACT_CLASS2().
+
+    @header{wx/object.h}
 */
-#define IMPLEMENT_CLASS2()     /* implementation is private */
+#define IMPLEMENT_CLASS2( className, baseClassName1, baseClassName2 )
 
 /**
-    This macro expands into @c const_castclassname *(ptr) if the compiler
-    supports @e const_cast or into an old, C-style cast, otherwise.
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information. The same as IMPLEMENT_CLASS().
 
-    @see wx_const_cast(), wxDynamicCast(), wxStaticCast()
-*/
-classname* wxConstCast();
+    @header{wx/object.h}
 
-/**
-    Used in a C++ implementation file to complete the declaration of
-    a class that has run-time type information. The same as IMPLEMENT_CLASS.
     Example:
 
     @code
@@ -449,109 +481,101 @@ classname* wxConstCast();
 
     wxCommand::wxCommand(void)
     {
-    ...
+        ...
     }
     @endcode
 */
-#define IMPLEMENT_ABSTRACT_CLASS()     /* implementation is private */
+#define IMPLEMENT_ABSTRACT_CLASS( className, baseClassName )
 
 /**
-    Used in a C++ implementation file to complete the declaration of
-    a class that has run-time type information. The same as
-    IMPLEMENT_ABSTRACT_CLASS.
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information and two base classes. The same as
+    IMPLEMENT_CLASS2().
+
+    @header{wx/object.h}
 */
-#define IMPLEMENT_CLASS()     /* implementation is private */
+#define IMPLEMENT_ABSTRACT_CLASS2( className, baseClassName1, baseClassName2 )
 
 /**
-    This macro is equivalent to @c wxDynamicCast(this, classname) but the
-    latter provokes spurious compilation warnings from some compilers (because it
-    tests whether @c this pointer is non-@NULL which is always @true), so
-    this macro should be used to avoid them.
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information, and whose instances can be created
+    dynamically.
 
-    @see wxDynamicCast()
-*/
-classname* wxDynamicCastThis();
+    @header{wx/object.h}
 
-/**
-    Used in a C++ implementation file to complete the declaration of
-    a class that has run-time type information, and whose instances
-    can be created dynamically. Use this for classes derived from two
-    base classes.
-*/
-#define IMPLEMENT_DYNAMIC_CLASS2()     /* implementation is private */
-
-/**
-    Creates and returns an object of the given class, if the class has been
-    registered with the dynamic class system using DECLARE... and IMPLEMENT...
-    macros.
-*/
-wxObject* wxCreateDynamicObject(const wxString& className);
-
-/**
-    Used inside a class declaration to make the class known to wxWidgets RTTI
-    system and also declare that the objects of this class should be dynamically
-    creatable from run-time type information. Notice that this implies that the
-    class should have a default constructor, if this is not the case consider using
-    DECLARE_CLASS().
     Example:
 
     @code
-    class wxFrame: public wxWindow
-    {
-      DECLARE_DYNAMIC_CLASS(wxFrame)
+    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 
-     private:
-      const wxString& frameTitle;
-     public:
-      ...
-    };
+    wxFrame::wxFrame(void)
+    {
+        ...
+    }
     @endcode
 */
-#define DECLARE_DYNAMIC_CLASS()     /* implementation is private */
+#define IMPLEMENT_DYNAMIC_CLASS( className, baseClassName )
 
 /**
-    Same as @c const_castT(x) if the compiler supports const cast or
-    @c (T)x for old compilers. Unlike wxConstCast(),
-    the cast it to the type @e T and not to @c T * and also the order of
-    arguments is the same as for the standard cast.
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information, and whose instances can be created
+    dynamically. Use this for classes derived from two base classes.
+
+    @header{wx/object.h}
+*/
+#define IMPLEMENT_DYNAMIC_CLASS2( className, baseClassName1, baseClassName2 )
+
+/**
+    Same as const_cast<T>(x) if the compiler supports const cast or (T)x for
+    old compilers. Unlike wxConstCast(), the cast it to the type T and not to
+    T * and also the order of arguments is the same as for the standard cast.
+
+    @header{wx/defs.h}
 
     @see wx_reinterpret_cast(), wx_static_cast()
 */
-T wx_const_cast();
+#define wx_const_cast(T, x)
 
 /**
-    Used in a C++ implementation file to complete the declaration of
-    a class that has run-time type information and two base classes. The same as
-    IMPLEMENT_CLASS2.
+    Same as reinterpret_cast<T>(x) if the compiler supports reinterpret cast or
+    (T)x for old compilers.
+
+    @header{wx/defs.h}
+
+    @see wx_const_cast(), wx_static_cast()
 */
-#define IMPLEMENT_ABSTRACT_CLASS2()     /* implementation is private */
+#define wx_reinterpret_cast(T, x)
 
 /**
-    This macro returns the pointer @e ptr cast to the type @e classname * if
-    the pointer is of this type (the check is done during the run-time) or
-    @NULL otherwise. Usage of this macro is preferred over obsoleted
-    wxObject::IsKindOf() function.
-    The @e ptr argument may be @NULL, in which case @NULL will be
-    returned.
-    Example:
+    Same as static_cast<T>(x) if the compiler supports static cast or (T)x for
+    old compilers. Unlike wxStaticCast(), there are no checks being done and
+    the meaning of the macro arguments is exactly the same as for the standard
+    static cast, i.e. T is the full type name and star is not appended to it.
 
-    @code
-    wxWindow *win = wxWindow::FindFocus();
-        wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
-        if ( text )
-        {
-            // a text control has the focus...
-        }
-        else
-        {
-            // no window has the focus or it is not a text control
-        }
-    @endcode
+    @header{wx/defs.h}
 
-    @see @ref overview_runtimeclassoverview "RTTI overview", wxDynamicCastThis(),
-         wxConstCast(), wxStaticCast()
+    @see wx_const_cast(), wx_reinterpret_cast(), wx_truncate_cast()
 */
-classname* wxDynamicCast();
+#define wx_static_cast(T, x)
+
+/**
+    This case doesn’t correspond to any standard cast but exists solely to make
+    casts which possibly result in a truncation of an integer value more
+    readable.
+
+    @header{wx/defs.h}
+*/
+#define wx_truncate_cast(T, x)
+
+/**
+    This macro expands into const_cast<classname *>(ptr) if the compiler
+    supports const_cast or into an old, C-style cast, otherwise.
+
+    @header{wx/defs.h}
+
+    @see wx_const_cast(), wxDynamicCast(), wxStaticCast()
+*/
+#define wxConstCast( object, className )
 
 /**
     This is defined in debug mode to be call the redefined new operator
@@ -562,43 +586,72 @@ classname* wxDynamicCast();
     @endcode
 
     In non-debug mode, this is defined as the normal new operator.
+
+    @header{wx/object.h}
 */
-#define WXDEBUG_NEW()     /* implementation is private */
+#define WXDEBUG_NEW( arg )
 
 /**
-    This macro checks that the cast is valid in debug mode (an assert failure will
-    result if @c wxDynamicCast(ptr, classname) == @NULL) and then returns the
-    result of executing an equivalent of @c static_castclassname *(ptr).
+    This macro returns the pointer @e ptr cast to the type @e classname * if
+    the pointer is of this type (the check is done during the run-time) or
+    @NULL otherwise. Usage of this macro is preferred over obsoleted
+    wxObject::IsKindOf() function.
 
-    @see wx_static_cast(), wxDynamicCast(), wxConstCast()
-*/
-classname* wxStaticCast();
+    The @e ptr argument may be @NULL, in which case @NULL will be returned.
 
-/**
-    Same as @c static_castT(x) if the compiler supports static cast or
-    @c (T)x for old compilers. Unlike wxStaticCast(),
-    there are no checks being done and the meaning of the macro arguments is exactly
-    the same as for the standard static cast, i.e. @e T is the full type name and
-    star is not appended to it.
+    @header{wx/object.h}
 
-    @see wx_const_cast(), wx_reinterpret_cast(), wx_truncate_cast()
-*/
-T wx_static_cast();
-
-/**
-    Used in a C++ implementation file to complete the declaration of
-    a class that has run-time type information, and whose instances
-    can be created dynamically.
     Example:
 
     @code
-    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
-
-    wxFrame::wxFrame(void)
+    wxWindow *win = wxWindow::FindFocus();
+    wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
+    if ( text )
     {
-    ...
+        // a text control has the focus...
+    }
+    else
+    {
+        // no window has the focus or it is not a text control
     }
     @endcode
+
+    @see @ref overview_runtimeclassoverview "RTTI Overview",
+         wxDynamicCastThis(), wxConstCast(), wxStaticCast()
 */
-#define IMPLEMENT_DYNAMIC_CLASS()     /* implementation is private */
+#define wxDynamicCast( object, className )
+
+/**
+    This macro is equivalent to wxDynamicCast() but the latter provokes
+    spurious compilation warnings from some compilers (because it tests whether
+    @c this pointer is non-@NULL which is always true), so this macro should be
+    used to avoid them.
+
+    @header{wx/object.h}
+
+    @see wxDynamicCast()
+*/
+#define wxDynamicCastThis( className )
+
+/**
+    This macro checks that the cast is valid in debug mode (an assert failure
+    will result if wxDynamicCast(ptr, classname) == @NULL) and then returns the
+    result of executing an equivalent of static_cast<classname *>(ptr).
+
+    @header{wx/object.h}
+
+    @see wx_static_cast(), wxDynamicCast(), wxConstCast()
+*/
+#define wxStaticCast( object, className )
+
+/**
+    Creates and returns an object of the given class, if the class has been
+    registered with the dynamic class system using DECLARE... and IMPLEMENT...
+    macros.
+
+    @header{wx/object.h}
+*/
+wxObject *wxCreateDynamicObject(const wxString& name);
+
+//@}
 
