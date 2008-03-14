@@ -138,46 +138,33 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
 }
 
 extern "C" {
-static gint gtk_radiobutton_focus_in( GtkWidget * WXUNUSED(widget),
-                                      GdkEvent *WXUNUSED(event),
-                                      wxRadioBox *win )
+static gint gtk_radiobutton_focus_out( GtkWidget * WXUNUSED(widget),
+                                       GdkEventFocus *WXUNUSED(event),
+                                       wxRadioBox *win )
 {
-    if ( win->m_lostFocus )
-    {
-        // no, we didn't really lose it
-        win->m_lostFocus = FALSE;
-    }
-    else if ( !win->m_hasFocus )
-    {
-        win->m_hasFocus = true;
+    // NB: This control is composed of several GtkRadioButton widgets and
+    //     when focus changes from one of them to another in the same
+    //     wxRadioBox, we get a focus-out event followed by focus-in for
+    //     another GtkRadioButton owned by the same control. We don't want
+    //     to generate two spurious wxEVT_SET_FOCUS events in this case,
+    //     so we defer sending wx events until idle time.
+    win->GTKHandleFocusOut();
 
-        wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
-        event.SetEventObject( win );
-
-        // never stop the signal emission, it seems to break the kbd handling
-        // inside the radiobox
-        (void)win->HandleWindowEvent( event );
-    }
-
+    // never stop the signal emission, it seems to break the kbd handling
+    // inside the radiobox
     return FALSE;
 }
 }
 
 extern "C" {
-static gint gtk_radiobutton_focus_out( GtkWidget * WXUNUSED(widget),
-                                       GdkEvent *WXUNUSED(event),
-                                       wxRadioBox *win )
+static gint gtk_radiobutton_focus_in( GtkWidget * WXUNUSED(widget),
+                                      GdkEventFocus *WXUNUSED(event),
+                                      wxRadioBox *win )
 {
-  //    wxASSERT_MSG( win->m_hasFocus, _T("got focus out without any focus in?") );
-  // Replace with a warning, else we dump core a lot!
-  //  if (!win->m_hasFocus)
-  //      wxLogWarning(_T("Radiobox got focus out without any focus in.") );
+    win->GTKHandleFocusIn();
 
-    // we might have lost the focus, but may be not - it may have just gone to
-    // another button in the same radiobox, so we'll check for it in the next
-    // idle iteration (leave m_hasFocus == true for now)
-    win->m_lostFocus = true;
-
+    // never stop the signal emission, it seems to break the kbd handling
+    // inside the radiobox
     return FALSE;
 }
 }
@@ -209,12 +196,6 @@ static void gtk_radiobutton_size_allocate( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
-
-void wxRadioBox::Init()
-{
-    m_hasFocus =
-    m_lostFocus = false;
-}
 
 bool wxRadioBox::Create( wxWindow *parent, wxWindowID id,
                          const wxString& title,
@@ -370,25 +351,6 @@ bool wxRadioBox::Show( bool show )
     }
 
     return true;
-}
-
-void wxRadioBox::SetFocus()
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid radiobox") );
-
-    if (m_buttonsInfo.GetCount() == 0) return;
-
-    wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
-    while (node)
-    {
-        GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->GetData()->button );
-        if (button->active)
-        {
-            gtk_widget_grab_focus( GTK_WIDGET(button) );
-            return;
-        }
-        node = node->GetNext();
-    }
 }
 
 void wxRadioBox::SetSelection( int n )
@@ -644,22 +606,6 @@ GdkWindow *wxRadioBox::GTKGetWindow(wxArrayGdkWindows& windows) const
     }
 
     return NULL;
-}
-
-void wxRadioBox::OnInternalIdle()
-{
-    wxControl::OnInternalIdle();
-
-    if ( m_lostFocus )
-    {
-        m_hasFocus = false;
-        m_lostFocus = false;
-
-        wxFocusEvent event( wxEVT_KILL_FOCUS, GetId() );
-        event.SetEventObject( this );
-
-        (void)HandleWindowEvent( event );
-    }
 }
 
 // static

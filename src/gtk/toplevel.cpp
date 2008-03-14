@@ -57,8 +57,6 @@
 // this is incremented while a modal dialog is shown
 int wxOpenModalDialogsCount = 0;
 
-extern wxWindowGTK     *g_delayedFocus;
-
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
 static wxTopLevelWindowGTK *g_activeFrame = (wxTopLevelWindowGTK*) NULL;
@@ -1032,22 +1030,6 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
 
 void wxTopLevelWindowGTK::OnInternalIdle()
 {
-    // set the focus if not done yet and if we can already do it
-    if ( GTK_WIDGET_REALIZED(m_wxwindow) )
-    {
-        if ( g_delayedFocus &&
-             wxGetTopLevelParent((wxWindow*)g_delayedFocus) == this )
-        {
-            wxLogTrace(_T("focus"),
-                       _T("Setting focus from wxTLW::OnIdle() to %s(%s)"),
-                       g_delayedFocus->GetClassInfo()->GetClassName(),
-                       g_delayedFocus->GetLabel().c_str());
-
-            g_delayedFocus->SetFocus();
-            g_delayedFocus = NULL;
-        }
-    }
-
     wxWindow::OnInternalIdle();
 
     // Synthetize activate events.

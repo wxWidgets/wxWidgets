@@ -185,11 +185,13 @@ extern wxCursor   g_globalCursor;
 static wxWindowGTK  *g_captureWindow = (wxWindowGTK*) NULL;
 static bool g_captureWindowHasMouse = false;
 
-wxWindowGTK  *g_focusWindow = (wxWindowGTK*) NULL;
+// The window that currently has focus or is scheduled to get it in the next
+// event loop iteration
+static wxWindowGTK *gs_focusWindow = NULL;
 
-// If a window get the focus set but has not been realized
-// yet, defer setting the focus to idle time.
-wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
+// the window that has deferred focus-out event pending, if any (see
+// GTKAddDeferredFocusOut() for details)
+static wxWindowGTK *gs_deferredFocusOut = NULL;
 
 // global variables because GTK+ DnD want to have the
 // mouse event that caused it
@@ -225,31 +227,6 @@ gdk_window_warp_pointer (GdkWindow      *window,
   }
 }
 
-//-----------------------------------------------------------------------------
-// local code (see below)
-//-----------------------------------------------------------------------------
-
-// returns the child of win which currently has focus or NULL if not found
-static wxWindow *wxFindFocusedChild(wxWindowGTK *win)
-{
-    wxWindow *winFocus = wxWindowGTK::FindFocus();
-    if ( !winFocus )
-        return (wxWindow *)NULL;
-
-    if ( winFocus == win )
-        return (wxWindow *)win;
-
-    for ( wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow *child = wxFindFocusedChild(node->GetData());
-        if ( child )
-            return child;
-    }
-
-    return (wxWindow *)NULL;
-}
 
 //-----------------------------------------------------------------------------
 // "size_request" of m_widget
@@ -1251,21 +1228,6 @@ wxDEFINE_COMMON_PROLOGUE_OVERLOAD(GdkEventCrossing)
     if ( rc != -1 )                                                           \
         return rc
 
-// send the wxChildFocusEvent and wxFocusEvent, common code of
-// gtk_window_focus_in_callback() and SetFocus()
-static bool DoSendFocusEvents(wxWindow *win)
-{
-    // Notify the parent keeping track of focus for the kbd navigation
-    // purposes that we got it.
-    wxChildFocusEvent eventChildFocus(win);
-    (void)win->HandleWindowEvent(eventChildFocus);
-
-    wxFocusEvent eventFocus(wxEVT_SET_FOCUS, win->GetId());
-    eventFocus.SetEventObject(win);
-
-    return win->HandleWindowEvent(eventFocus);
-}
-
 // all event handlers must have C linkage as they're called from GTK+ C code
 extern "C"
 {
@@ -1410,7 +1372,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
         return TRUE;
 
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() &&
-        (g_focusWindow != win) /* && win->IsFocusable() */)
+        (gs_focusWindow != win) /* && win->IsFocusable() */)
     {
         win->SetFocus();
     }
@@ -1610,44 +1572,9 @@ static gboolean wxgtk_window_popup_menu_callback(GtkWidget*, wxWindowGTK* win)
 static gboolean
 gtk_window_focus_in_callback( GtkWidget * WXUNUSED(widget),
                               GdkEventFocus *WXUNUSED(event),
-                              wxWindow *win )
+                              wxWindowGTK *win )
 {
-    if (win->m_imData)
-        gtk_im_context_focus_in(win->m_imData->context);
-
-    g_focusWindow = win;
-
-    wxLogTrace(TRACE_FOCUS,
-               _T("%s: focus in"), win->GetName().c_str());
-
-#if wxUSE_CARET
-    // caret needs to be informed about focus change
-    wxCaret *caret = win->GetCaret();
-    if ( caret )
-    {
-        caret->OnSetFocus();
-    }
-#endif // wxUSE_CARET
-
-    gboolean ret = FALSE;
-
-    // does the window itself think that it has the focus?
-    if ( !win->m_hasFocus )
-    {
-        // not yet, notify it
-        win->m_hasFocus = true;
-
-        (void)DoSendFocusEvents(win);
-
-        ret = TRUE;
-    }
-
-    // Disable default focus handling for custom windows
-    // since the default GTK+ handler issues a repaint
-    if (win->m_wxwindow)
-        return ret;
-
-    return FALSE;
+    return win->GTKHandleFocusIn();
 }
 
 //-----------------------------------------------------------------------------
@@ -1659,52 +1586,12 @@ gtk_window_focus_out_callback( GtkWidget * WXUNUSED(widget),
                                GdkEventFocus * WXUNUSED(gdk_event),
                                wxWindowGTK *win )
 {
-    if (win->m_imData)
-        gtk_im_context_focus_out(win->m_imData->context);
-
-    wxLogTrace( TRACE_FOCUS,
-                _T("%s: focus out"), win->GetName().c_str() );
-
-
-    wxWindowGTK *winFocus = wxFindFocusedChild(win);
-    if ( winFocus )
-        win = winFocus;
-
-    g_focusWindow = (wxWindowGTK *)NULL;
-
-#if wxUSE_CARET
-    // caret needs to be informed about focus change
-    wxCaret *caret = win->GetCaret();
-    if ( caret )
-    {
-        caret->OnKillFocus();
-    }
-#endif // wxUSE_CARET
-
-    // don't send the window a kill focus event if it thinks that it doesn't
-    // have focus already
-    if ( win->m_hasFocus )
-    {
-        // the event handler might delete the window when it loses focus, so
-        // check whether this is a custom window before calling it
-        const bool has_wxwindow = win->m_wxwindow != NULL;
-
-        win->m_hasFocus = false;
-
-        wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
-        event.SetEventObject( win );
-
-        (void)win->GTKProcessEvent( event );
-
-        // Disable default focus handling for custom windows
-        // since the default GTK+ handler issues a repaint
-        if ( has_wxwindow )
-            return TRUE;
-    }
-
-    // continue with normal processing
-    return FALSE;
+    return win->GTKHandleFocusOut();
 }
+
+//-----------------------------------------------------------------------------
+// "focus"
+//-----------------------------------------------------------------------------
 
 static gboolean
 wx_window_focus_callback(GtkWidget *widget,
@@ -2005,7 +1892,7 @@ public:
 wxWindow *wxWindowBase::DoFindFocus()
 {
     // the cast is necessary when we compile in wxUniversal mode
-    return (wxWindow *)g_focusWindow;
+    return wx_static_cast(wxWindow*, gs_focusWindow);
 }
 
 //-----------------------------------------------------------------------------
@@ -2116,8 +2003,6 @@ void wxWindowGTK::Init()
     m_oldClientHeight = 0;
 
     m_insertCallback = wxInsertChildInWindow;
-
-    m_hasFocus = false;
 
     m_clipPaintRegion = false;
 
@@ -2251,11 +2136,11 @@ wxWindowGTK::~wxWindowGTK()
 {
     SendDestroyEvent();
 
-    if (g_focusWindow == this)
-        g_focusWindow = NULL;
+    if (gs_focusWindow == this)
+        gs_focusWindow = NULL;
 
-    if ( g_delayedFocus == this )
-        g_delayedFocus = NULL;
+    if ( gs_deferredFocusOut == this )
+        gs_deferredFocusOut = NULL;
 
     m_isBeingDeleted = true;
     m_hasVMT = false;
@@ -2614,6 +2499,9 @@ bool wxWindowGTK::GtkShowFromOnIdle()
 
 void wxWindowGTK::OnInternalIdle()
 {
+    if ( gs_deferredFocusOut )
+        GTKHandleDeferredFocusOut();
+
     // Check if we have to show window now
     if (GtkShowFromOnIdle()) return;
 
@@ -2979,90 +2867,194 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
     g_object_unref (layout);
 }
 
-bool wxWindowGTK::GTKSetDelayedFocusIfNeeded()
-{
-    if ( g_delayedFocus == this )
-    {
-        if ( GTK_WIDGET_REALIZED(m_widget) )
-        {
-            gtk_widget_grab_focus(m_widget);
-            g_delayedFocus = NULL;
 
-            return true;
+bool wxWindowGTK::GTKHandleFocusIn()
+{
+    // Disable default focus handling for custom windows since the default GTK+
+    // handler issues a repaint
+    const bool retval = m_wxwindow ? true : false;
+
+
+    // NB: if there's still unprocessed deferred focus-out event (see
+    //     GTKHandleFocusOut() for explanation), we need to process it first so
+    //     that the order of focus events -- focus-out first, then focus-in
+    //     elsewhere -- is preserved
+    if ( gs_deferredFocusOut )
+    {
+        if ( GTKNeedsToFilterSameWindowFocus() &&
+             gs_deferredFocusOut == this )
+        {
+            // GTK+ focus changed from this wxWindow back to itself, so don't
+            // emit any events at all
+            wxLogTrace(TRACE_FOCUS,
+                       "filtered out spurious focus change within %s(%p, %s)",
+                       GetClassInfo()->GetClassName(), this, GetLabel());
+            gs_deferredFocusOut = NULL;
+            return retval;
         }
+
+        // otherwise we need to send focus-out first
+        wxASSERT_MSG ( gs_deferredFocusOut != this,
+                       "GTKHandleFocusIn(GTKFocus_Normal) called even though focus changed back to itself - derived class should handle this" );
+        GTKHandleDeferredFocusOut();
     }
 
-    return false;
+
+    wxLogTrace(TRACE_FOCUS,
+               "handling focus_in event for %s(%p, %s)",
+               GetClassInfo()->GetClassName(), this, GetLabel());
+
+    if (m_imData)
+        gtk_im_context_focus_in(m_imData->context);
+
+    // NB: SetFocus() does this assignment too, but not all focus changes
+    //     originate from SetFocus() call
+    gs_focusWindow = this;
+
+#if wxUSE_CARET
+    // caret needs to be informed about focus change
+    wxCaret *caret = GetCaret();
+    if ( caret )
+    {
+        caret->OnSetFocus();
+    }
+#endif // wxUSE_CARET
+
+    // Notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it.
+    wxChildFocusEvent eventChildFocus(this);
+    GTKProcessEvent(eventChildFocus);
+
+    wxFocusEvent eventFocus(wxEVT_SET_FOCUS, GetId());
+    eventFocus.SetEventObject(this);
+    GTKProcessEvent(eventFocus);
+
+    return retval;
+}
+
+bool wxWindowGTK::GTKHandleFocusOut()
+{
+    // Disable default focus handling for custom windows since the default GTK+
+    // handler issues a repaint
+    const bool retval = m_wxwindow ? true : false;
+
+
+    // NB: If a control is composed of several GtkWidgets and when focus
+    //     changes from one of them to another within the same wxWindow, we get
+    //     a focus-out event followed by focus-in for another GtkWidget owned
+    //     by the same wx control. We don't want to generate two spurious
+    //     wxEVT_SET_FOCUS events in this case, so we defer sending wx events
+    //     from GTKHandleFocusOut() until we know for sure it's not coming back
+    //     (i.e. in GTKHandleFocusIn() or at idle time).
+    if ( GTKNeedsToFilterSameWindowFocus() )
+    {
+        wxASSERT_MSG( gs_deferredFocusOut == NULL,
+                      "deferred focus out event already pending" );
+        wxLogTrace(TRACE_FOCUS,
+                   "deferring focus_out event for %s(%p, %s)",
+                   GetClassInfo()->GetClassName(), this, GetLabel());
+        gs_deferredFocusOut = this;
+        return retval;
+    }
+
+    GTKHandleFocusOutNoDeferring();
+
+    return retval;
+}
+
+void wxWindowGTK::GTKHandleFocusOutNoDeferring()
+{
+    wxLogTrace(TRACE_FOCUS,
+               "handling focus_out event for %s(%p, %s)",
+               GetClassInfo()->GetClassName(), this, GetLabel());
+
+    if (m_imData)
+        gtk_im_context_focus_out(m_imData->context);
+
+    if ( gs_focusWindow != this )
+    {
+        // Something is terribly wrong, gs_focusWindow is out of sync with the
+        // real focus. We will reset it to NULL anyway, because after this
+        // focus-out event is handled, one of the following with happen:
+        //
+        // * either focus will go out of the app altogether, in which case
+        //   gs_focusWindow _should_ be NULL
+        //
+        // * or it goes to another control, in which case focus-in event will
+        //   follow immediately and it will set gs_focusWindow to the right
+        //   value
+        wxLogDebug("window %s(%p, %s) lost focus even though it didn't have it",
+                   GetClassInfo()->GetClassName(), this, GetLabel());
+    }
+    gs_focusWindow = NULL;
+
+#if wxUSE_CARET
+    // caret needs to be informed about focus change
+    wxCaret *caret = GetCaret();
+    if ( caret )
+    {
+        caret->OnKillFocus();
+    }
+#endif // wxUSE_CARET
+
+    wxFocusEvent event( wxEVT_KILL_FOCUS, GetId() );
+    event.SetEventObject( this );
+    GTKProcessEvent( event );
+}
+
+/*static*/
+void wxWindowGTK::GTKHandleDeferredFocusOut()
+{
+    // NB: See GTKHandleFocusOut() for explanation. This function is called
+    //     from either GTKHandleFocusIn() or OnInternalIdle() to process
+    //     deferred event.
+    if ( gs_deferredFocusOut )
+    {
+        wxWindowGTK *win = gs_deferredFocusOut;
+        gs_deferredFocusOut = NULL;
+
+        wxLogTrace(TRACE_FOCUS,
+                   "processing deferred focus_out event for %s(%p, %s)",
+                   win->GetClassInfo()->GetClassName(), win, win->GetLabel());
+
+        win->GTKHandleFocusOutNoDeferring();
+    }
 }
 
 void wxWindowGTK::SetFocus()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-    if ( m_hasFocus )
-    {
-        // don't do anything if we already have focus
-        return;
-    }
 
-    if (m_wxwindow)
-    {
-        // wxWindow::SetFocus() should really set the focus to
-        // this control, whatever the flags are
-        if (!GTK_WIDGET_CAN_FOCUS(m_wxwindow))
-            GTK_WIDGET_SET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
+    // Setting "physical" focus is not immediate in GTK+ and while
+    // gtk_widget_is_focus ("determines if the widget is the focus widget
+    // within its toplevel", i.e. returns true for one widget per TLW, not
+    // globally) returns true immediately after grabbing focus,
+    // GTK_WIDGET_HAS_FOCUS (which returns true only for the one widget that
+    // has focus at the moment) takes affect only after the window is shown
+    // (if it was hidden at the moment of the call) or at the next event loop
+    // iteration.
+    //
+    // Because we want to FindFocus() call immediately following
+    // foo->SetFocus() to return foo, we have to keep track of "pending" focus
+    // ourselves.
+    gs_focusWindow = this;
 
-        if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))
-        {
-            gtk_widget_grab_focus (m_wxwindow);
-        }
+    GtkWidget *widget = m_wxwindow ? m_wxwindow : m_focusWidget;
+
+    if ( GTK_IS_CONTAINER(widget) &&
+         !GTK_WIDGET_CAN_FOCUS(widget) )
+    {
+        wxLogTrace(TRACE_FOCUS,
+                   _T("Setting focus to a child of %s(%p, %s)"),
+                   GetClassInfo()->GetClassName(), this, GetLabel().c_str());
+        gtk_widget_child_focus(widget, GTK_DIR_TAB_FORWARD);
     }
     else
     {
-        // wxWindow::SetFocus() should really set the focus to
-        // this control, whatever the flags are
-        if (!GTK_WIDGET_CAN_FOCUS(m_widget))
-            GTK_WIDGET_SET_FLAGS(m_widget, GTK_CAN_FOCUS);
-
-        if (GTK_IS_CONTAINER(m_widget))
-        {
-            if (GTK_IS_RADIO_BUTTON(m_widget))
-            {
-                gtk_widget_grab_focus (m_widget);
-                return;
-            }
-
-            gtk_widget_child_focus( m_widget, GTK_DIR_TAB_FORWARD );
-        }
-        else
-        if (GTK_WIDGET_CAN_FOCUS(m_widget) && !GTK_WIDGET_HAS_FOCUS (m_widget) )
-        {
-
-            if (!GTK_WIDGET_REALIZED(m_widget))
-            {
-                // we can't set the focus to the widget now so we remember that
-                // it should be focused and will do it later, during the idle
-                // time, as soon as we can
-                wxLogTrace(TRACE_FOCUS,
-                           _T("Delaying setting focus to %s(%s)"),
-                           GetClassInfo()->GetClassName(), GetLabel().c_str());
-
-                g_delayedFocus = this;
-            }
-            else
-            {
-                wxLogTrace(TRACE_FOCUS,
-                           _T("Setting focus to %s(%s)"),
-                           GetClassInfo()->GetClassName(), GetLabel().c_str());
-
-                gtk_widget_grab_focus (m_widget);
-            }
-        }
-        else
-        {
-           wxLogTrace(TRACE_FOCUS,
-                      _T("Can't set focus to %s(%s)"),
-                      GetClassInfo()->GetClassName(), GetLabel().c_str());
-        }
+        wxLogTrace(TRACE_FOCUS,
+                   _T("Setting focus to %s(%p, %s)"),
+                   GetClassInfo()->GetClassName(), this, GetLabel().c_str());
+        gtk_widget_grab_focus(widget);
     }
 }
 

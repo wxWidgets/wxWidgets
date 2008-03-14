@@ -128,17 +128,12 @@ public:
     // implementation
     // --------------
 
-    void SetFocus();
     void GtkDisableEvents();
     void GtkEnableEvents();
 #if wxUSE_TOOLTIPS
     void ApplyToolTip( GtkTooltips *tips, const gchar *tip );
 #endif // wxUSE_TOOLTIPS
 
-    virtual void OnInternalIdle();
-
-    bool                        m_hasFocus,
-                                m_lostFocus;
     wxRadioBoxButtonsInfoList   m_buttonsInfo;
 
 protected:
@@ -151,11 +146,10 @@ protected:
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
+    virtual bool GTKNeedsToFilterSameWindowFocus() const { return true; }
+
     virtual bool GTKWidgetNeedsMnemonic() const;
     virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);
-
-    // common part of all ctors
-    void Init();
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioBox)

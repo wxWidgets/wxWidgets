@@ -170,17 +170,6 @@ wxComboBox::~wxComboBox()
     delete m_strings;
 }
 
-void wxComboBox::SetFocus()
-{
-    if ( m_hasFocus )
-    {
-        // don't do anything if we already have focus
-        return;
-    }
-
-    gtk_widget_grab_focus( m_focusWidget );
-}
-
 int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
                               unsigned int pos,
                               void **clientData, wxClientDataType type)

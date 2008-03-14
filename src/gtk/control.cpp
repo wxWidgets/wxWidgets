@@ -295,8 +295,6 @@ void wxControl::OnInternalIdle()
     if ( GTK_WIDGET_REALIZED(m_widget) )
     {
         GTKUpdateCursor();
-
-        GTKSetDelayedFocusIfNeeded();
     }
 
     if ( wxUpdateUIEvent::CanUpdate(this) )

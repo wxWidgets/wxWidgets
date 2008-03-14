@@ -94,8 +94,6 @@ public:
     // From wxComboBoxBase:
     virtual int GetCurrentSelection() const;
 
-    virtual void SetFocus();
-
     void OnChar( wxKeyEvent &event );
 
     // Standard event handling

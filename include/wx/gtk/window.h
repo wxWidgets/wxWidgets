@@ -186,7 +186,17 @@ public:
 
     GdkWindow* GTKGetDrawingWindow() const;
 
+    bool GTKHandleFocusIn();
+    bool GTKHandleFocusOut();
+    void GTKHandleFocusOutNoDeferring();
+    static void GTKHandleDeferredFocusOut();
+
 protected:
+    // for controls composed of multiple GTK widgets, return true to eliminate
+    // spurious focus events if the focus changes between GTK+ children within
+    // the same wxWindow
+    virtual bool GTKNeedsToFilterSameWindowFocus() const { return false; }
+
     // Override GTKWidgetNeedsMnemonic and return true if your
     // needs to set its mnemonic widget, such as for a
     // GtkLabel for wxStaticText, then do the actual
@@ -205,12 +215,6 @@ protected:
 
     // Check if the given window makes part of this widget
     bool GTKIsOwnWindow(GdkWindow *window) const;
-
-    // Set the focus to this window if its setting was delayed because the
-    // widget hadn't been realized when SetFocus() was called
-    //
-    // Return true if focus was set to us, false if nothing was done
-    bool GTKSetDelayedFocusIfNeeded();
 
 public:
     // Returns the default context which usually is anti-aliased
@@ -287,7 +291,6 @@ public:
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
     bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
     bool                 m_hasVMT:1;
-    bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
     bool                 m_clipPaintRegion:1;   // true after ScrollWindow()
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL

@@ -258,7 +258,6 @@ IMPLEMENT_DYNAMIC_CLASS( wxGtkFileCtrl, wxControl )
 
 void wxGtkFileCtrl::Init()
 {
-    m_hasFocus = false;
     m_checkNextSelEvent = false;
 
     // ignore the first folder change event which is fired upon startup.
