@@ -3339,9 +3339,9 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     {
                         rect = *((RECT*)lParam);
                     }
-                    wxUxThemeHandle hTheme(this, L"EDIT");
+                    wxUxThemeHandle hTheme((const wxWindow*) this, L"EDIT");
                     RECT rcClient = { 0, 0, 0, 0 };
-                    wxClientDC dc(this);
+                    wxClientDC dc((wxWindow*) this);
 
                     if (theme->GetThemeBackgroundContentRect(
                             hTheme, GetHdcOf(dc), EP_EDITTEXT, ETS_NORMAL,
@@ -3367,8 +3367,8 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
                     processed = true;
 
-                    wxUxThemeHandle hTheme(this, L"EDIT");
-                    wxWindowDC dc(this);
+                    wxUxThemeHandle hTheme((const wxWindow*) this, L"EDIT");
+                    wxWindowDC dc((wxWindow*) this);
 
                     // Clip the DC so that you only draw on the non-client area
                     RECT rcBorder;
