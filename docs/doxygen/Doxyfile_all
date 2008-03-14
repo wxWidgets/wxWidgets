@@ -23,4 +23,5 @@ GENERATE_PERLMOD       = YES
 GENERATE_AUTOGEN_DEF   = NO
 GENERATE_TAGFILE       =
 
-HHC_LOCATION           = ~/.wine/drive_c/Programmi/HTMLHelpWorkshop/hhc.exe
+# see Doxyfile_chm for more info about hhc.exe and where to get it!
+HHC_LOCATION           = hhc.exe
