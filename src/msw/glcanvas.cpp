@@ -249,10 +249,6 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
 
 wxGLCanvas::~wxGLCanvas()
 {
-#if WXWIN_COMPATIBILITY_2_8
-    delete m_glContext;
-#endif
-
     ::ReleaseDC(GetHwnd(), m_hDC);
 }
 
