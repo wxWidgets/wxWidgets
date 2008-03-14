@@ -3254,6 +3254,20 @@ void wxWindowGTK::SetFocus()
         return;
     }
 
+    // Setting "physical" focus is not immediate in GTK+ and while
+    // gtk_widget_is_focus ("determines if the widget is the focus widget
+    // within its toplevel", i.e. returns true for one widget per TLW, not
+    // globally) returns true immediately after grabbing focus,
+    // GTK_WIDGET_HAS_FOCUS (which returns true only for the one widget that
+    // has focus at the moment) takes affect only after the window is shown
+    // (if it was hidden at the moment of the call) or at the next event loop
+    // iteration.
+    //
+    // Because we want to FindFocus() call immediately following
+    // foo->SetFocus() to return foo, we have to keep track of "pending" focus
+    // ourselves.
+    g_focusWindow = this;
+
     if (m_wxwindow)
     {
         if (!GTK_WIDGET_HAS_FOCUS (m_wxwindow))
