@@ -29,4 +29,4 @@ REM NB: we do this _after_ copying the required files to the output folders
 REM     otherwise when generating the CHM file with Doxygen, those files are
 REM     not included!
 REM
-doxygen Doxyfile.all
+doxygen Doxyfile_all

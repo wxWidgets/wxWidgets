@@ -40,9 +40,9 @@ cp wxwidgets.css out/html
 
 # which configuration should we use?
 if [[ -z "$1" ]]; then
-    cfgfile="Doxyfile.all"
+    cfgfile="Doxyfile_all"
 else
-    cfgfile="Doxyfile.$1"
+    cfgfile="Doxyfile_$1"
 fi
 
 #
