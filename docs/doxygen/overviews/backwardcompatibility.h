@@ -34,7 +34,7 @@ uncertainty of the future.
 wxWidgets version numbers can have up to four components, with trailing zeros
 sometimes omitted:
 
-@vertatim
+@verbatim
 major.minor.release.sub-release
 @endverbatim
 

@@ -14,7 +14,7 @@
 @li @ref overview_rtti_classinfo
 @li @ref overview_rtti_example
 
-@seealso
+@see
 
 @li wxObject
 @li wxClassInfo
@@ -93,7 +93,7 @@ You can get the wxClassInfo for a class by using the CLASSINFO macro, e.g.
 CLASSINFO(wxFrame). You can get the wxClassInfo for an object using
 wxObject::GetClassInfo.
 
-@seealso
+@see
 
 @li wxObject
 @li wxCreateDynamicObject

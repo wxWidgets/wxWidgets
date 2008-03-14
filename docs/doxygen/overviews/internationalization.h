@@ -81,8 +81,7 @@ translations for all of these currently. wxWidgets does not yet handle
 translated special key names such as Backspace, End, Insert, etc.
 
 
-@seealso
-
+@see
 @li The gettext Manual: http://www.gnu.org/software/gettext/manual/gettext.html
 @li @ref overview_nonenglish - It focuses on handling charsets related problems.
 @li @ref page_utils_samples_internat - Shows you how all this looks in practice.

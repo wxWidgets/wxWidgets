@@ -14,7 +14,7 @@
 @li @ref overview_windowids_type
 @li @ref overview_windowids_using
 
-@seealso
+@see
 
 @li wxIdManager
 @li wxWindow::NewControlId

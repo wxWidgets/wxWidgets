@@ -23,7 +23,7 @@ that matches certain strings and doesn't match others.
 @li @ref overview_resyntax_bre
 @li @ref overview_resyntax_characters
 
-@seealso
+@see
 
 @li wxRegEx
 
