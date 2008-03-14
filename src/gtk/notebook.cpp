@@ -122,9 +122,10 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if ((win->m_x == alloc->x) &&
-        (win->m_y == alloc->y) &&
-        (win->m_width == alloc->width) &&
+    // wxWindowGTK::SetSize() ignores position if parent does not have
+    // m_wxwindow, and infinite sizing loop can result if position is part
+    // of this check. See patch 1907189.
+    if ((win->m_width == alloc->width) &&
         (win->m_height == alloc->height))
     {
         return;
