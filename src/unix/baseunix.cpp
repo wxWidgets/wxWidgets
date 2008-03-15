@@ -45,41 +45,31 @@
 // wxConsoleAppTraits implementation
 // ============================================================================
 
-// ----------------------------------------------------------------------------
-// wxExecute support
-// ----------------------------------------------------------------------------
-
-bool wxConsoleAppTraits::CreateEndProcessPipe(wxExecuteData& WXUNUSED(data))
-{
-    // nothing to do, so always ok
-    return true;
-}
-
-bool
-wxConsoleAppTraits::IsWriteFDOfEndProcessPipe(wxExecuteData& WXUNUSED(data),
-                                              int WXUNUSED(fd))
-{
-    // we don't have any pipe
-    return false;
-}
-
-void
-wxConsoleAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& WXUNUSED(data))
-{
-    // nothing to do
-}
-
-
 int
 wxConsoleAppTraits::WaitForChild(wxExecuteData& execData)
 {
-    wxASSERT_MSG( execData.flags & wxEXEC_SYNC,
-                  wxT("async execution not supported yet") );
-
     int exitcode = 0;
-    if ( waitpid(execData.pid, &exitcode, 0) == -1 || !WIFEXITED(exitcode) )
+    if ( execData.flags & wxEXEC_SYNC )
     {
-        wxLogSysError(_("Waiting for subprocess termination failed"));
+        if ( waitpid(execData.pid, &exitcode, 0) == -1 || !WIFEXITED(exitcode) )
+        {
+            wxLogSysError(_("Waiting for subprocess termination failed"));
+        }
+    }
+    else // asynchronous execution
+    {
+        wxEndProcessData *endProcData = new wxEndProcessData;
+        endProcData->process  = execData.process;
+        endProcData->pid      = execData.pid;
+        endProcData->tag = wxAddProcessCallback
+                           (
+                             endProcData,
+                             execData.pipeEndProcDetect.Detach(wxPipe::Read)
+                           );
+
+        execData.pipeEndProcDetect.Close();
+        exitcode = execData.pid;
+
     }
 
     return exitcode;

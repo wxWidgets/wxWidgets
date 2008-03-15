@@ -22,9 +22,6 @@ public:
 #if wxUSE_CONSOLE_EVENTLOOP
     virtual wxEventLoopBase *CreateEventLoop();
 #endif // wxUSE_CONSOLE_EVENTLOOP
-    virtual bool CreateEndProcessPipe(wxExecuteData& execData);
-    virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
-    virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
     virtual int WaitForChild(wxExecuteData& execData);
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
@@ -37,9 +34,6 @@ class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
     virtual wxEventLoopBase *CreateEventLoop();
-    virtual bool CreateEndProcessPipe(wxExecuteData& execData);
-    virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
-    virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
     virtual int WaitForChild(wxExecuteData& execData);
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);

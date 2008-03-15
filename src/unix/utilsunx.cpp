@@ -1222,8 +1222,6 @@ bool wxHandleFatalExceptions(bool doit)
 
 #endif // wxUSE_BASE
 
-#if wxUSE_GUI
-
 #ifdef __DARWIN__
     #include <sys/errno.h>
 #endif
@@ -1246,17 +1244,17 @@ bool wxHandleFatalExceptions(bool doit)
 // need wxExecute-related helpers for them
 #if !USE_OLD_DARWIN_END_PROCESS_DETECT
 
-bool wxGUIAppTraits::CreateEndProcessPipe(wxExecuteData& execData)
+bool wxAppTraits::CreateEndProcessPipe(wxExecuteData& execData)
 {
     return execData.pipeEndProcDetect.Create();
 }
 
-bool wxGUIAppTraits::IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd)
+bool wxAppTraits::IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd)
 {
     return fd == (execData.pipeEndProcDetect)[wxPipe::Write];
 }
 
-void wxGUIAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& execData)
+void wxAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& execData)
 {
     execData.pipeEndProcDetect.Detach(wxPipe::Write);
     execData.pipeEndProcDetect.Close();
@@ -1264,25 +1262,27 @@ void wxGUIAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& execData)
 
 #else // !Darwin
 
-bool wxGUIAppTraits::CreateEndProcessPipe(wxExecuteData& WXUNUSED(execData))
+bool wxAppTraits::CreateEndProcessPipe(wxExecuteData& WXUNUSED(execData))
 {
     return true;
 }
 
 bool
-wxGUIAppTraits::IsWriteFDOfEndProcessPipe(wxExecuteData& WXUNUSED(execData),
+wxAppTraits::IsWriteFDOfEndProcessPipe(wxExecuteData& WXUNUSED(execData),
                                           int WXUNUSED(fd))
 {
     return false;
 }
 
 void
-wxGUIAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& WXUNUSED(execData))
+wxAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& WXUNUSED(execData))
 {
     // nothing to do here, we don't use the pipe
 }
 
 #endif // !Darwin/Darwin
+
+#if wxUSE_GUI
 
 int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
 {
@@ -1440,6 +1440,10 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     }
 }
 
+#endif //wxUSE_GUI
+
+#if wxUSE_BASE
+
 #ifdef wxHAS_GENERIC_PROCESS_CALLBACK
 struct wxEndProcessFDIOHandler : public wxFDIOHandler
 {
@@ -1511,9 +1515,6 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
     return fd; // unused, but return something unique for the tag
 }
 #endif // wxHAS_GENERIC_PROCESS_CALLBACK
-
-#endif // wxUSE_GUI
-#if wxUSE_BASE
 
 void wxHandleProcessTermination(wxEndProcessData *proc_data)
 {

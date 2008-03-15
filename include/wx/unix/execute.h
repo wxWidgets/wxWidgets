@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_FWD_BASE wxProcess;
 class wxStreamTempInputBuffer;
 
-#if defined(__WXDFB__) || defined(__WXX11__)
+#if defined(__UNIX__)
     #define wxHAS_GENERIC_PROCESS_CALLBACK 1
 #endif
 
