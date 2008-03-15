@@ -99,11 +99,12 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
                               long style,
                               const wxString& name )
 {
-    wxFrame::Create( parent, id, title, pos, size, style, name );
+    if ( !wxFrame::Create( parent, id, title, pos, size, style, name ) )
+        return false;
 
-    OnCreateClient();
+    m_clientWindow = OnCreateClient();
 
-    return true;
+    return m_clientWindow != NULL;
 }
 
 void wxMDIParentFrame::OnInternalIdle()
@@ -246,8 +247,7 @@ wxMDIClientWindow *wxMDIParentFrame::GetClientWindow() const
 
 wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
 {
-    m_clientWindow = new wxMDIClientWindow( this );
-    return m_clientWindow;
+    return new wxMDIClientWindow( this );
 }
 
 void wxMDIParentFrame::ActivateNext()

@@ -110,9 +110,11 @@ bool wxAuiMDIParentFrame::Create(wxWindow *parent,
     }
 #endif // wxUSE_MENUS
 
-    wxFrame::Create(parent, id, title, pos, size, style, name);
-    OnCreateClient();
-    return true;
+    if ( !wxFrame::Create(parent, id, title, pos, size, style, name) )
+        return false;
+
+    m_pClientWindow = OnCreateClient();
+    return m_pClientWindow != NULL;
 }
 
 
@@ -252,8 +254,7 @@ wxAuiMDIClientWindow *wxAuiMDIParentFrame::GetClientWindow() const
 
 wxAuiMDIClientWindow *wxAuiMDIParentFrame::OnCreateClient()
 {
-    m_pClientWindow = new wxAuiMDIClientWindow( this );
-    return m_pClientWindow;
+    return new wxAuiMDIClientWindow( this );
 }
 
 void wxAuiMDIParentFrame::ActivateNext()

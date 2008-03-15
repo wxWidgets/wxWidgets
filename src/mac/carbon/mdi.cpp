@@ -119,12 +119,14 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
         m_windowMenu->Append(IDM_WINDOWNEXT, wxT("&Next"));
     }
 
-    wxFrame::Create( parent , id , title , pos , size , style , name ) ;
+    if ( !wxFrame::Create( parent , id , title , pos , size , style , name ) )
+        return false;
+
     m_parentFrameActive = true;
 
-    OnCreateClient();
+    m_clientWindow = OnCreateClient();
 
-    return true;
+    return m_clientWindow != NULL;
 }
 
 wxMDIParentFrame::~wxMDIParentFrame()
@@ -275,9 +277,7 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 // just return a new class)
 wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
 {
-    m_clientWindow = new wxMDIClientWindow( this );
-
-    return m_clientWindow;
+    return new wxMDIClientWindow( this );
 }
 
 // Responds to colour changes, and passes event on to children.

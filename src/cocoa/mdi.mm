@@ -95,10 +95,12 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
         const wxPoint& pos, const wxSize& size,
         long style, const wxString& name)
 {
-    bool success = wxFrame::Create(parent,winid,title,pos,size,style,name);
-    if(success)
-        OnCreateClient();
-    return success;
+    if ( !wxFrame::Create(parent,winid,title,pos,size,style,name) )
+        return false;
+
+    m_clientWindow = OnCreateClient();
+
+    return m_clientWindow != NULL;
 }
 
 wxMDIParentFrame::~wxMDIParentFrame()
@@ -145,8 +147,7 @@ wxMDIClientWindow *wxMDIParentFrame::GetClientWindow() const
 
 wxMDIClientWindow *wxMDIParentFrame::OnCreateClient()
 {
-    m_clientWindow = new wxMDIClientWindow( this );
-    return m_clientWindow;
+    return new wxMDIClientWindow( this );
 }
 
 void wxMDIParentFrame::ActivateNext()
