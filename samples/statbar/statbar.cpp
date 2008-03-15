@@ -576,10 +576,7 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
     sizerTop->Add(-1, 10, 1, wxGROW);
     sizerTop->Add(statbarBottom, 0, wxGROW);
 
-    SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
-    sizerTop->SetSizeHints(this);
+    SetSizerAndFit(sizerTop);
 }
 
 // ----------------------------------------------------------------------------

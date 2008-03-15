@@ -146,8 +146,7 @@ public:
             wxALL,
             5 // Border
         );
-        SetSizer(mainSizer);
-        mainSizer->Fit(this);
+        SetSizerAndFit(mainSizer);
     }
 
     virtual bool TransferDataFromWindow()
@@ -204,8 +203,7 @@ public:
             5 // Border
         );
 
-        SetSizer(mainSizer);
-        mainSizer->Fit(this);
+        SetSizerAndFit(mainSizer);
     }
 
     // wizard event handlers
@@ -314,8 +312,7 @@ public:
         wxTextCtrl* textCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, textSize, wxTE_MULTILINE);
         mainSizer->Add(textCtrl, 0, wxALL|wxEXPAND, 5);
 
-        SetSizer(mainSizer);
-        mainSizer->Fit(this);
+        SetSizerAndFit(mainSizer);
     }
 
     // implement wxWizardPage functions

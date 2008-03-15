@@ -1015,7 +1015,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     // sizer
     panel = new wxPanel(m_book);
-    panel->SetAutoLayout( true );
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
 

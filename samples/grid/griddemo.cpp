@@ -371,10 +371,7 @@ GridFrame::GridFrame()
                    wxEXPAND );
 #endif // wxUSE_LOG
 
-    SetAutoLayout(true);
-    SetSizer( topSizer );
-
-    topSizer->Fit( this );
+    SetSizerAndFit( topSizer );
 
     Centre();
     SetDefaults();

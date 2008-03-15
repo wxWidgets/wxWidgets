@@ -1624,8 +1624,7 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     buttonSizer->Add( bt, 0, wxALL, 2 );
     topSizer->Add( buttonSizer, 0, wxALL|wxALIGN_RIGHT, 2 );
 
-    SetSizer( topSizer );
-    topSizer->Fit( this );
+    SetSizerAndFit( topSizer );
 }
 
 DnDShape *DnDShapeDialog::GetShape() const

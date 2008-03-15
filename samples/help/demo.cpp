@@ -711,10 +711,7 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     sizerTop->Add(text, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
     sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    SetSizer(sizerTop);
-
-    sizerTop->SetSizeHints(this);
-    sizerTop->Fit(this);
+    SetSizerAndFit(sizerTop);
 
     btnOK->SetFocus();
     btnOK->SetDefault();

@@ -332,7 +332,6 @@ MyFrame::MyFrame()
 
     m_panel->SetSizer(m_sizerFrame);
 
-    m_sizerFrame->Fit(this);
     m_sizerFrame->SetSizeHints(this);
 
     Centre(wxBOTH);

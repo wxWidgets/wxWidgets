@@ -475,8 +475,7 @@ MyDialog::MyDialog(wxFrame *parent)
     sizerTop->Add(new wxButton(this, wxID_CANCEL, _T("&Cancel")),
                   0, wxCENTRE | wxALL, 5);
 
-    SetSizer(sizerTop);
-    sizerTop->Fit(this);
+    SetSizerAndFit(sizerTop);
 }
 
 void MyDialog::OnThrowInt(wxCommandEvent& WXUNUSED(event))

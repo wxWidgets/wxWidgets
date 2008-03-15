@@ -448,7 +448,6 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     m_panel->SetSizer(sizerTop);
 
-    sizerTop->Fit(this);
     sizerTop->SetSizeHints(this);
 
 #if USE_LOG && !defined(__WXCOCOA__)

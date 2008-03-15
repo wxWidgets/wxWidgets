@@ -48,8 +48,7 @@ bool MyApp::OnInit()
     sizer->Add(5,5);
 
     sizer->Add(new wxButton(&dlg, wxID_OK, _("OK")), 0, wxALIGN_RIGHT | wxALL, 10);
-    dlg.SetSizer(sizer);
-    sizer->Fit(&dlg);
+    dlg.SetSizerAndFit(sizer);
     dlg.Centre();
 
     dlg.ShowModal();

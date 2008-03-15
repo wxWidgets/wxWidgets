@@ -313,7 +313,6 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add(m_book, 1, wxEXPAND);
     panel->SetSizer(sizer);
-    sizer->Fit(this);
     sizer->SetSizeHints(this);
 }
 

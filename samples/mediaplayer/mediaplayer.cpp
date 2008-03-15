@@ -1534,7 +1534,6 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     wxFlexGridSizer* sizer = new wxFlexGridSizer(2, 1, 0, 0);
     this->SetSizer(sizer);
-    this->SetAutoLayout(true);
     sizer->AddGrowableRow(0);
     sizer->AddGrowableCol(0);
 

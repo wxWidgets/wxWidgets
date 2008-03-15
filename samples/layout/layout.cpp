@@ -426,12 +426,10 @@ MySizerDialog::MySizerDialog(wxWindow *parent, const wxString &title)
     wxButton *button2 = new wxButton( panel, wxID_ANY, _T("Hallo") );
     panelsizer->Add( button2, 0, wxALIGN_RIGHT | wxLEFT|wxRIGHT|wxBOTTOM, 30 );
 
-    panel->SetAutoLayout( true );
     panel->SetSizer( panelsizer );
 
     // Tell dialog to use sizer
-    SetSizer( topsizer );
-    topsizer->SetSizeHints( this );
+    SetSizerAndFit( topsizer );
 }
 
 // ----------------------------------------------------------------------------
@@ -662,11 +660,7 @@ MyNestedSizerFrame::MyNestedSizerFrame(const wxString &title, int x, int y )
     m_target = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 80, wxDefaultCoord ) );
     main_sizer->Add( m_target, 1, wxALL|wxGROW, 5 );
 
-    SetSizer( main_sizer);
-
-    Layout();
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
+    SetSizerAndFit( main_sizer);
 }
 
 
@@ -708,8 +702,6 @@ MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
     root->Add( ps_bottom, 1, wxEXPAND | wxALL, 5 );
         
     // Set sizer for window
-    SetSizer( root );
-    root->Fit( this );
-    root->SetSizeHints( this );
+    SetSizerAndFit( root );
 }
 

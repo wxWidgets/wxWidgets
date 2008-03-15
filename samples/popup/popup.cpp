@@ -142,7 +142,6 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent )
     topSizer->Add( m_spinCtrl, 0, wxALL, 5 );
     topSizer->Add( m_mouseText, 0, wxCENTRE|wxALL, 5 );
 
-    m_panel->SetAutoLayout( true );
     m_panel->SetSizer( topSizer );
     topSizer->Fit(m_panel);
     topSizer->Fit(this);
@@ -365,7 +364,6 @@ MyFrame::MyFrame(const wxString& title)
     topSizer->Add( button2, 0, wxALL, 5 );
     topSizer->Add( m_logWin, 1, wxEXPAND|wxALL, 5 );
 
-    panel->SetAutoLayout( true );
     panel->SetSizer( topSizer );
 
 }
@@ -452,9 +450,7 @@ MyDialog::MyDialog(const wxString& title)
     topSizer->AddSpacer(40);
     topSizer->Add( okButton, 0, wxALL, 5 );
 
-    panel->SetAutoLayout( true );
-    panel->SetSizer( topSizer );
-    topSizer->Fit(this);
+    panel->SetSizerAndFit( topSizer );
 }
 
 void MyDialog::OnStartSimplePopup(wxCommandEvent& event)

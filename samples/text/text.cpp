@@ -1145,7 +1145,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     topSizer->Add( m_log, 1, wxALL | wxEXPAND, 10 );
 #endif
 
-    SetAutoLayout( true );
     SetSizer(topSizer);
 }
 

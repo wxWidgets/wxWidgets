@@ -162,8 +162,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     ok->SetDefault();
     sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, 10);
 
-    SetSizer(sizer);
-    sizer->Fit(this);
+    SetSizerAndFit(sizer);
 
     choice->SetSelection(6/*wxART_MESSAGE_BOX*/);
     SetArtClient(wxART_MESSAGE_BOX);

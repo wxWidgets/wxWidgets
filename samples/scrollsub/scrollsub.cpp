@@ -174,7 +174,6 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
 
     mainsizer->Add( middlesizer, 1, wxEXPAND );
 
-    SetAutoLayout( true );
     SetSizer( mainsizer );
 }
 
@@ -421,7 +420,6 @@ MyFrame::MyFrame()
     topsizer->Add( m_log, 0, wxEXPAND );
 #endif // wxUSE_LOG
 
-    SetAutoLayout( true );
     SetSizer( topsizer );
 }
 
