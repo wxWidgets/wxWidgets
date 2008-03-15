@@ -111,6 +111,8 @@ struct wxCmdLineOption
         wxASSERT_MSG( type == typ, _T("type mismatch in wxCmdLineOption") );
     }
 
+    double GetDoubleVal() const
+        { Check(wxCMD_LINE_VAL_DOUBLE); return m_doubleVal; }
     long GetLongVal() const
         { Check(wxCMD_LINE_VAL_NUMBER); return m_longVal; }
     const wxString& GetStrVal() const
@@ -120,6 +122,8 @@ struct wxCmdLineOption
         { Check(wxCMD_LINE_VAL_DATE);   return m_dateVal; }
 #endif // wxUSE_DATETIME
 
+    void SetDoubleVal(double val)
+        { Check(wxCMD_LINE_VAL_DOUBLE); m_doubleVal = val; m_hasVal = true; }
     void SetLongVal(long val)
         { Check(wxCMD_LINE_VAL_NUMBER); m_longVal = val; m_hasVal = true; }
     void SetStrVal(const wxString& val)
@@ -143,6 +147,7 @@ public:
 private:
     bool m_hasVal;
 
+    double m_doubleVal;
     long m_longVal;
     wxString m_strVal;
 #if wxUSE_DATETIME
@@ -510,6 +515,25 @@ bool wxCmdLineParser::Found(const wxString& name, long *value) const
     return true;
 }
 
+bool wxCmdLineParser::Found(const wxString& name, double *value) const
+{
+    int i = m_data->FindOption(name);
+    if ( i == wxNOT_FOUND )
+        i = m_data->FindOptionByLongName(name);
+
+    wxCHECK_MSG( i != wxNOT_FOUND, false, _T("unknown option") );
+
+    wxCmdLineOption& opt = m_data->m_options[(size_t)i];
+    if ( !opt.HasValue() )
+        return false;
+
+    wxCHECK_MSG( value, false, _T("NULL pointer in wxCmdLineOption::Found") );
+
+    *value = opt.GetDoubleVal();
+
+    return true;
+}
+
 #if wxUSE_DATETIME
 bool wxCmdLineParser::Found(const wxString& name, wxDateTime *value) const
 {
@@ -790,6 +814,24 @@ int wxCmdLineParser::Parse(bool showUsage)
                                 if ( value.ToLong(&val) )
                                 {
                                     opt.SetLongVal(val);
+                                }
+                                else
+                                {
+                                    errorMsg << wxString::Format(_("'%s' is not a correct numeric value for option '%s'."),
+                                                                 value.c_str(), name.c_str())
+                                             << _T('\n');
+
+                                    ok = false;
+                                }
+                            }
+                            break;
+
+                        case wxCMD_LINE_VAL_DOUBLE:
+                            {
+                                double val;
+                                if ( value.ToDouble(&val) )
+                                {
+                                    opt.SetDoubleVal(val);
                                 }
                                 else
                                 {
@@ -1130,6 +1172,10 @@ static wxString GetTypeName(wxCmdLineParamType type)
 
         case wxCMD_LINE_VAL_NUMBER:
             s = _("num");
+            break;
+
+        case wxCMD_LINE_VAL_DOUBLE:
+            s = _("double");
             break;
 
         case wxCMD_LINE_VAL_DATE:

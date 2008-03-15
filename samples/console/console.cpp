@@ -150,6 +150,7 @@ static void ShowCmdLine(const wxCmdLineParser& parser)
 
     wxString strVal;
     long lVal;
+    double dVal;
     wxDateTime dt;
     if ( parser.Found(_T("o"), &strVal) )
         s << _T("Output file:\t") << strVal << '\n';
@@ -157,6 +158,8 @@ static void ShowCmdLine(const wxCmdLineParser& parser)
         s << _T("Input dir:\t") << strVal << '\n';
     if ( parser.Found(_T("s"), &lVal) )
         s << _T("Size:\t") << lVal << '\n';
+    if ( parser.Found(_T("f"), &dVal) )
+        s << _T("Double:\t") << dVal << '\n';
     if ( parser.Found(_T("d"), &dt) )
         s << _T("Date:\t") << dt.FormatISODate() << '\n';
     if ( parser.Found(_T("project_name"), &strVal) )
@@ -4262,6 +4265,8 @@ int main(int argc, char **argv)
             wxCMD_LINE_VAL_NUMBER },
         { wxCMD_LINE_OPTION, "d", "date",    "output file date",
             wxCMD_LINE_VAL_DATE },
+        { wxCMD_LINE_OPTION, "f", "double",  "output double",
+            wxCMD_LINE_VAL_DOUBLE },
 
         { wxCMD_LINE_PARAM,  NULL, NULL, "input file",
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },

@@ -185,9 +185,10 @@ public:
         value in the provided pointer (which should not be @NULL).
     */
     bool Found(const wxString& name) const;
-    const bool Found(const wxString& name, wxString* value) const;
-    const bool Found(const wxString& name, long* value) const;
-    const bool Found(const wxString& name, wxDateTime* value) const;
+    bool Found(const wxString& name, wxString* value) const;
+    bool Found(const wxString& name, long* value) const;
+    bool Found(const wxString& name, double* value) const;
+    bool Found(const wxString& name, wxDateTime* value) const;
     //@}
 
     /**

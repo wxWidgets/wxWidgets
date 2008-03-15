@@ -45,6 +45,7 @@ enum wxCmdLineParamType
     wxCMD_LINE_VAL_STRING,  // should be 0 (default)
     wxCMD_LINE_VAL_NUMBER,
     wxCMD_LINE_VAL_DATE,
+    wxCMD_LINE_VAL_DOUBLE,
     wxCMD_LINE_VAL_NONE
 };
 
@@ -204,6 +205,10 @@ public:
     // returns true if an option taking an integer value was found and stores
     // the value in the provided pointer
     bool Found(const wxString& name, long *value) const;
+
+    // returns true if an option taking a double value was found and stores
+    // the value in the provided pointer
+    bool Found(const wxString& name, double *value) const;
 
 #if wxUSE_DATETIME
     // returns true if an option taking a date value was found and stores the
