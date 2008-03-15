@@ -45,7 +45,7 @@ public:
 
     virtual wxString GetValue() const = 0;
     virtual wxString GetRange(long from, long to) const;
-    bool IsEmpty() const { return GetValue().empty(); }
+    bool IsEmpty() const { return GetLastPosition() > 0; }
 
 
     // editing operations
