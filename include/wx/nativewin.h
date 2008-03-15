@@ -152,6 +152,12 @@ public:
     // handle of this object and all of its children is invalid any more)
     virtual void OnNativeDestroyed();
 
+protected:
+#ifdef __WXMSW__
+    virtual WXLRESULT
+    MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+#endif // __WXMSW__
+
 private:
     DECLARE_NO_COPY_CLASS(wxNativeContainerWindow)
 };
