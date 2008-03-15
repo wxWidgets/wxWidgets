@@ -493,10 +493,7 @@ void wxComboBox::OnRedo(wxCommandEvent& WXUNUSED(event))
 
 void wxComboBox::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
-    long from, to;
-    GetSelection(& from, & to);
-    if (from != -1 && to != -1)
-        Remove(from, to);
+    RemoveSelection();
 }
 
 void wxComboBox::OnSelectAll(wxCommandEvent& WXUNUSED(event))

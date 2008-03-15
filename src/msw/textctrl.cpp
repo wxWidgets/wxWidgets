@@ -2064,10 +2064,7 @@ void wxTextCtrl::OnRedo(wxCommandEvent& WXUNUSED(event))
 
 void wxTextCtrl::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
-    long from, to;
-    GetSelection(& from, & to);
-    if (from != -1 && to != -1)
-        Remove(from, to);
+    RemoveSelection();
 }
 
 void wxTextCtrl::OnSelectAll(wxCommandEvent& WXUNUSED(event))

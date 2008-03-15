@@ -54,6 +54,7 @@ public:
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to) = 0;
     virtual void Clear() { SetValue(wxString()); }
+    void RemoveSelection();
 
 
     // clipboard operations

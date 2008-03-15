@@ -80,6 +80,14 @@ bool wxTextEntryBase::HasSelection() const
     return from < to;
 }
 
+void wxTextEntryBase::RemoveSelection()
+{
+    long from, to;
+    GetSelection(& from, & to);
+    if (from != -1 && to != -1)
+        Remove(from, to);
+}
+
 wxString wxTextEntryBase::GetStringSelection() const
 {
     long from, to;
