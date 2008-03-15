@@ -1260,6 +1260,8 @@ bool wxSocketBase::SetLocal(wxIPV4address& local)
 wxSocketClient::wxSocketClient(wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_CLIENT)
 {
+    m_initialRecvBufferSize =
+    m_initialSendBufferSize = -1;
 }
 
 wxSocketClient::~wxSocketClient()
