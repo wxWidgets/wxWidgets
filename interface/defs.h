@@ -6,33 +6,67 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+/** @ingroup group_funcmacro_byteorder */
 //@{
+
 /**
-    These macros will swap the bytes of the @a value variable from little
-    endian to big endian or vice versa unconditionally, i.e. independently of the
+    This macro will swap the bytes of the @a value variable from little endian
+    to big endian or vice versa unconditionally, i.e. independently of the
     current platform.
+
+    @header{wx/defs.h}
 */
-wxInt32 wxINT32_SWAP_ALWAYS(wxInt32 value);
-wxUint32 wxUINT32_SWAP_ALWAYS(wxUint32 value);
-wxInt16 wxINT16_SWAP_ALWAYS(wxInt16 value);
-wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value);
+#define wxINT32_SWAP_ALWAYS( wxInt32 value )
+#define wxUINT32_SWAP_ALWAYS( wxUint32 value )
+#define wxINT16_SWAP_ALWAYS( wxInt16 value )
+#define wxUINT16_SWAP_ALWAYS( wxUint16 value )
+
 //@}
 
-
+/** @ingroup group_funcmacro_byteorder */
 //@{
+
 /**
-    This macro will swap the bytes of the @a value variable from little
-    endian to big endian or vice versa if the program is compiled on a
-    little-endian architecture (such as Intel PCs). If the program has
-    been compiled on a big-endian architecture, the value will be unchanged.
+    This macro will swap the bytes of the @a value variable from little endian
+    to big endian or vice versa if the program is compiled on a big-endian
+    architecture (such as Sun work stations). If the program has been compiled
+    on a little-endian architecture, the value will be unchanged.
+
+    Use these macros to read data from and write data to a file that stores
+    data in little-endian (for example Intel i386) format.
+
+    @header{wx/defs.h}
+*/
+#define wxINT32_SWAP_ON_BE( wxInt32 value )
+#define wxUINT32_SWAP_ON_BE( wxUint32 value )
+#define wxINT16_SWAP_ON_BE( wxInt16 value )
+#define wxUINT16_SWAP_ON_BE( wxUint16 value )
+
+//@}
+
+/** @ingroup group_funcmacro_byteorder */
+//@{
+
+/**
+    This macro will swap the bytes of the @a value variable from little endian
+    to big endian or vice versa if the program is compiled on a little-endian
+    architecture (such as Intel PCs). If the program has been compiled on a
+    big-endian architecture, the value will be unchanged.
+
     Use these macros to read data from and write data to a file that stores
     data in big-endian format.
+
+    @header{wx/defs.h}
 */
-wxInt32 wxINT32_SWAP_ON_LE(wxInt32 value);
-wxUint32 wxUINT32_SWAP_ON_LE(wxUint32 value);
-wxInt16 wxINT16_SWAP_ON_LE(wxInt16 value);
-wxUint16 wxUINT16_SWAP_ON_LE(wxUint16 value);
+#define wxINT32_SWAP_ON_LE( wxInt32 value )
+#define wxUINT32_SWAP_ON_LE( wxUint32 value )
+#define wxINT16_SWAP_ON_LE( wxInt16 value )
+#define wxUINT16_SWAP_ON_LE( wxUint16 value )
+
 //@}
+
+
+
 
 /**
     This macro is similar to wxDEPRECATED() but can be used
@@ -87,21 +121,6 @@ wxUint16 wxUINT16_SWAP_ON_LE(wxUint16 value);
     Notice that there should be no semicolon after this macro.
 */
 #define wxSUPPRESS_GCC_PRIVATE_DTOR_WARNING(name)     /* implementation is private */
-
-//@{
-/**
-    This macro will swap the bytes of the @a value variable from little
-    endian to big endian or vice versa if the program is compiled on a
-    big-endian architecture (such as Sun work stations). If the program has
-    been compiled on a little-endian architecture, the value will be unchanged.
-    Use these macros to read data from and write data to a file that stores
-    data in little-endian (for example Intel i386) format.
-*/
-wxInt32 wxINT32_SWAP_ON_BE(wxInt32 value);
-wxUint32 wxUINT32_SWAP_ON_BE(wxUint32 value);
-wxInt16 wxINT16_SWAP_ON_BE(wxInt16 value);
-wxUint16 wxUINT16_SWAP_ON_BE(wxUint16 value);
-//@}
 
 /**
     This macro can be used around a function declaration to generate warnings

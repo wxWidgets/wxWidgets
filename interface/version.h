@@ -27,12 +27,16 @@
             ...
         }
     @endcode
+
+    @header{wx/version.h}
 */
 #define wxCHECK_VERSION( major, minor, release )
 
 /**
     Same as wxCHECK_VERSION() but also checks that wxSUBRELEASE_NUMBER is at
     least subrel.
+
+    @header{wx/version.h}
 */
 #define wxCHECK_VERSION_FULL( major, minor, release, subrel )
 

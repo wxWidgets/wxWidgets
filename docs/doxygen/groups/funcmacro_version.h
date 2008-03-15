@@ -32,7 +32,6 @@ The subrelease number is only used for the sources in between official releases
 and so normally is not useful.
 
 @header{wx/version.h}
-@header{wx/defs.h}
 
 */
 
