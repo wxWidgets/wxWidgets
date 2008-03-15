@@ -2072,7 +2072,7 @@ void wxTextCtrl::OnDelete(wxCommandEvent& WXUNUSED(event))
 
 void wxTextCtrl::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
-    SetSelection(-1, -1);
+    SelectAll();
 }
 
 void wxTextCtrl::OnUpdateCut(wxUpdateUIEvent& event)
@@ -2102,14 +2102,12 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 void wxTextCtrl::OnUpdateDelete(wxUpdateUIEvent& event)
 {
-    long from, to;
-    GetSelection(& from, & to);
-    event.Enable(from != -1 && to != -1 && from != to && IsEditable()) ;
+    event.Enable( HasSelection() && IsEditable() );
 }
 
 void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 {
-    event.Enable(GetLastPosition() > 0);
+    event.Enable( !IsEmpty() );
 }
 
 void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
