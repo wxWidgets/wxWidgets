@@ -95,6 +95,7 @@ All:
 
 - Fixed bug with parsing some dates in wxDateTime (Bob Pesner).
 - Fixed bug with parsing negative time zones in wxDateTime::ParseRfc822Date().
+- Initialize current line in wxTextBuffer ctor (Suzuki Masahiro).
 
 All (GUI):
 
