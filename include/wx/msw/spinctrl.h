@@ -73,6 +73,8 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
 
+    virtual bool Reparent(wxWindowBase *newParent);
+
     // wxSpinButton doesn't accept focus, but we do
     virtual bool AcceptsFocus() const { return wxWindow::AcceptsFocus(); }
 

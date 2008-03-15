@@ -288,6 +288,7 @@ All (GUI):
 - Added wxWindow::HasFocus().
 - Added wxGLCanvas::IsDisplaySupported().
 - Added wxApp::SetNativeTheme() (Stefan H.).
+- Made wxSpinCtrl::Reparent() in MSW and generic versions (Angelo Mottola)
 
 wxGTK:
 

@@ -537,6 +537,46 @@ bool wxSpinCtrl::Show(bool show)
     return true;
 }
 
+bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
+{
+    // Reparenting both the updown control and its buddy does not seem to work:
+    // they continue to be connected somehow, but visually there is no feedback
+    // on the buddy edit control. To avoid this problem, we reparent the buddy
+    // window normally, but we recreate the updown control and reassign its
+    // buddy.
+
+    if ( !wxWindowBase::Reparent(newParent) )
+        return false;
+
+    newParent->GetChildren().DeleteObject(this);
+
+    // preserve the old values
+    const wxSize size = GetSize();
+    int value = GetValue();
+    const wxRect btnRect = wxRectFromRECT(wxGetWindowRect(GetHwnd()));
+
+    // destroy the old spin button
+    UnsubclassWin();
+    if ( !::DestroyWindow(GetHwnd()) )
+        wxLogLastError(wxT("DestroyWindow"));
+
+    // create and initialize the new one
+    if ( !wxSpinButton::Create(GetParent(), GetId(),
+                               btnRect.GetPosition(), btnRect.GetSize(),
+                               GetWindowStyle(), GetName()) )
+        return false;
+
+    SetValue(value);
+    SetRange(m_min, m_max);
+    SetInitialSize(size);
+
+    // associate it with the buddy control again
+    ::SetParent(GetBuddyHwnd(), GetHwndOf(GetParent()));
+    (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)GetBuddyHwnd(), 0);
+
+    return true;
+}
+
 bool wxSpinCtrl::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
