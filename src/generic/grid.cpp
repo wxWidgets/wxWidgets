@@ -1515,12 +1515,16 @@ void wxGridCellChoiceEditor::Create(wxWindow* parent,
                                     wxWindowID id,
                                     wxEvtHandler* evtHandler)
 {
-    int style = wxBORDER_NONE;
-    if (!m_allowOthers)
+    int style = wxTE_PROCESS_ENTER |
+                wxTE_PROCESS_TAB |
+                wxBORDER_NONE;
+
+    if ( !m_allowOthers )
         style |= wxCB_READONLY;
     m_control = new wxComboBox(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,
-                               m_choices, style );
+                               m_choices,
+                               style);
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
