@@ -4205,9 +4205,6 @@ bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
             break;
 
         case PBT_APMRESUMESUSPEND:
-#ifdef PBT_APMRESUMEAUTOMATIC
-        case PBT_APMRESUMEAUTOMATIC:
-#endif
             evtType = wxEVT_POWER_RESUME;
             break;
 
@@ -4224,6 +4221,9 @@ bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
         case PBT_APMPOWERSTATUSCHANGE:
         case PBT_APMOEMEVENT:
         case PBT_APMRESUMECRITICAL:
+#ifdef PBT_APMRESUMEAUTOMATIC
+        case PBT_APMRESUMEAUTOMATIC:
+#endif
             evtType = wxEVT_NULL;
             break;
     }
