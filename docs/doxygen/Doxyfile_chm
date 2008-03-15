@@ -13,7 +13,10 @@
 #---------------------------------------------------------------------------
 
 GENERATE_HTMLHELP      = YES
-GENERATE_HTML          = NO
+
+# NOTE: the following must be set to YES otherwise doxygen won't generate the 
+#       index.hhp file and the CHM compilation will fail!
+GENERATE_HTML          = YES
 GENERATE_XML           = NO
 
 GENERATE_LATEX         = NO
@@ -39,7 +42,7 @@ GENERATE_TAGFILE       =
 #      http://appdb.winehq.org/objectManager.php?sClass=application&iId=2140
 #    then you can place hhc.exe executable in your PATH; e.g. you can add to
 #    your ~/.bashrc (if you use bash): 
-#      PATH=$PATH:~/.wine/drive_c/Programmi/HTMLHelpWorkshop/hhc
+#      PATH=$PATH:~/.wine/drive_c/Programmi/HTMLHelpWorkshop
 #      export PATH
 #
 HHC_LOCATION           = hhc.exe
