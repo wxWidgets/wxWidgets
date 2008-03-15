@@ -618,8 +618,17 @@ void wxLog::DoCreateOnDemand()
     ms_bAutoCreate = true;
 }
 
+void wxLog::AddTraceMask(const wxString& str)
+{
+    wxCRIT_SECT_LOCKER(lock, ms_traceCS);
+
+    ms_aTraceMasks.push_back(str);
+}
+
 void wxLog::RemoveTraceMask(const wxString& str)
 {
+    wxCRIT_SECT_LOCKER(lock, ms_traceCS);
+
     int index = ms_aTraceMasks.Index(str);
     if ( index != wxNOT_FOUND )
         ms_aTraceMasks.RemoveAt((size_t)index);
@@ -627,6 +636,8 @@ void wxLog::RemoveTraceMask(const wxString& str)
 
 void wxLog::ClearTraceMasks()
 {
+    wxCRIT_SECT_LOCKER(lock, ms_traceCS);
+
     ms_aTraceMasks.Clear();
 }
 
@@ -722,11 +733,16 @@ void wxLog::Flush()
 
 /*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
 {
+    wxCRIT_SECT_LOCKER(lock, ms_traceCS);
+
     for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
                                   en = ms_aTraceMasks.end();
          it != en; ++it )
+    {
         if ( *it == mask)
             return true;
+    }
+
     return false;
 }
 
@@ -924,7 +940,8 @@ wxLogInterposerTemp::wxLogInterposerTemp()
 // ----------------------------------------------------------------------------
 
 #if wxUSE_THREADS
-wxCriticalSection wxLog::ms_prevCS;
+wxCriticalSection wxLog::ms_prevCS,
+                  wxLog::ms_traceCS;
 #endif // wxUSE_THREADS
 bool            wxLog::ms_bRepetCounting = false;
 wxString        wxLog::ms_prevString;

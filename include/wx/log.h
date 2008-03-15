@@ -202,8 +202,7 @@ public:
     static void SetTraceMask(wxTraceMask ulMask) { ms_ulTraceMask = ulMask; }
 
     // add string trace mask
-    static void AddTraceMask(const wxString& str)
-        { ms_aTraceMasks.push_back(str); }
+    static void AddTraceMask(const wxString& str);
 
     // add string trace mask
     static void RemoveTraceMask(const wxString& str);
@@ -211,8 +210,9 @@ public:
     // remove all string trace masks
     static void ClearTraceMasks();
 
-    // get string trace masks
-    static const wxArrayString &GetTraceMasks() { return ms_aTraceMasks; }
+    // get string trace masks: note that this is MT-unsafe if other threads can
+    // call AddTraceMask() concurrently
+    static const wxArrayString& GetTraceMasks() { return ms_aTraceMasks; }
 
     // sets the time stamp string format: this is used as strftime() format
     // string for the log targets which add time stamps to the messages; set
@@ -345,6 +345,9 @@ private:
     // disabled
     static wxString    ms_timestamp;
 
+#if wxUSE_THREADS
+    static wxCriticalSection ms_traceCS; // protects ms_aTraceMasks
+#endif
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
     static wxArrayString ms_aTraceMasks; // more powerful filter for wxLogTrace
 };
