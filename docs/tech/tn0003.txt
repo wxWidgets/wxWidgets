@@ -33,14 +33,22 @@ which are implementation details.
 Running Doxygen
 ===============
 
-First, make sure you have a recent version of Doxygen installed in your system.
+First, make sure you have a recent version of Doxygen installed in your system
+(you'll need Doxygen >= 1.5.4).
 
-For HTML:
+On Unix:
 
+  1) run wxWidgets/docs/doxygen/regen.sh [format-to-generate]
+
+On Windows:
   1) cd wxWidgets/docs/doxygen
-  2) run ./regen.sh [Unix]    or   regen.bat [Windows]
+  2) run regen.bat [format-to-generate]
 
-[TODO: instructions for generation of other formats]
+If you don't specify which format to [re]generate, all output formats will
+be enabled. Possible values for [format-to-generate] are: "html", "chm", "latex",
+"xml" and "all".
+
+The output of Doxygen is all placed in the wxWidgets/docs/doxygen/out folder.
 
 
 Important Dos and Don'ts
