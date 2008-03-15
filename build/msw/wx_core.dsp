@@ -1388,7 +1388,7 @@ SOURCE=..\..\src\msw\frame.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\gauge95.cpp
+SOURCE=..\..\src\msw\gauge.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
@@ -2028,7 +2028,7 @@ SOURCE=..\..\src\msw\settings.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\slider95.cpp
+SOURCE=..\..\src\msw\slider.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
@@ -2203,41 +2203,6 @@ SOURCE=..\..\src\msw\statbox.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\statbr95.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\msw\statline.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -2308,7 +2273,7 @@ SOURCE=..\..\src\msw\stattext.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\tabctrl.cpp
+SOURCE=..\..\src\msw\statusbar.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
@@ -2343,7 +2308,7 @@ SOURCE=..\..\src\msw\tabctrl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\tbar95.cpp
+SOURCE=..\..\src\msw\tabctrl.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
@@ -2449,6 +2414,41 @@ SOURCE=..\..\src\msw\textentry.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\tglbtn.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\toolbar.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
@@ -4828,7 +4828,7 @@ SOURCE=..\..\include\wx\msw\frame.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\gauge95.h
+SOURCE=..\..\include\wx\msw\gauge.h
 # End Source File
 # Begin Source File
 
@@ -5055,7 +5055,7 @@ SOURCE=..\..\include\wx\msw\setup0.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\slider95.h
+SOURCE=..\..\include\wx\msw\slider.h
 # End Source File
 # Begin Source File
 
@@ -5079,10 +5079,6 @@ SOURCE=..\..\include\wx\msw\statbox.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\statbr95.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\statline.h
 # End Source File
 # Begin Source File
@@ -5091,15 +5087,15 @@ SOURCE=..\..\include\wx\msw\stattext.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\statusbar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\tabctrl.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\taskbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\tbar95.h
 # End Source File
 # Begin Source File
 
@@ -5112,6 +5108,10 @@ SOURCE=..\..\include\wx\msw\textentry.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\tglbtn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\toolbar.h
 # End Source File
 # Begin Source File
 

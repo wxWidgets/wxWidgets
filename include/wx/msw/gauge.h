@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge95.h
-// Purpose:     wxGauge95 class
+// Name:        wx/msw/gauge.h
+// Purpose:     wxGauge implementation for MSW
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -9,27 +9,27 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _GAUGE95_H_
-#define _GAUGE95_H_
+#ifndef _WX_MSW_GAUGE_H_
+#define _WX_MSW_GAUGE_H_
 
 #if wxUSE_GAUGE
 
 extern WXDLLEXPORT_DATA(const char) wxGaugeNameStr[];
 
 // Group box
-class WXDLLEXPORT wxGauge95 : public wxGaugeBase
+class WXDLLEXPORT wxGauge : public wxGaugeBase
 {
 public:
-    wxGauge95() { }
+    wxGauge() { }
 
-    wxGauge95(wxWindow *parent,
-              wxWindowID id,
-              int range,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = wxGA_HORIZONTAL,
-              const wxValidator& validator = wxDefaultValidator,
-              const wxString& name = wxGaugeNameStr)
+    wxGauge(wxWindow *parent,
+            wxWindowID id,
+            int range,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxGA_HORIZONTAL,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxGaugeNameStr)
     {
         (void)Create(parent, id, range, pos, size, style, validator, name);
     }
@@ -64,10 +64,9 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge95)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge)
 };
 
 #endif // wxUSE_GAUGE
 
-#endif
-    // _GAUGEMSW_H_
+#endif // _WX_MSW_GAUGE_H_

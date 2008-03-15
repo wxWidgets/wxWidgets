@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/gauge95.cpp
-// Purpose:     wxGauge95 class
+// Purpose:     wxGauge class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -111,7 +111,7 @@ wxEND_FLAGS( wxGaugeStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl,"wx/gauge.h")
 
-wxBEGIN_PROPERTIES_TABLE(wxGauge95)
+wxBEGIN_PROPERTIES_TABLE(wxGauge)
     wxPROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY( Range , int , SetRange, GetRange, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY( ShadowWidth , int , SetShadowWidth, GetShadowWidth, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
@@ -119,30 +119,30 @@ wxBEGIN_PROPERTIES_TABLE(wxGauge95)
     wxPROPERTY_FLAGS( WindowStyle , wxGaugeStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxGauge95)
+wxBEGIN_HANDLERS_TABLE(wxGauge)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_6( wxGauge95 , wxWindow* , Parent , wxWindowID , Id , int , Range , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_6( wxGauge , wxWindow* , Parent , wxWindowID , Id , int , Range , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
-IMPLEMENT_DYNAMIC_CLASS(wxGauge95, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)
 #endif
 
 // ============================================================================
-// wxGauge95 implementation
+// wxGauge implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxGauge95 creation
+// wxGauge creation
 // ----------------------------------------------------------------------------
 
-bool wxGauge95::Create(wxWindow *parent,
-                       wxWindowID id,
-                       int range,
-                       const wxPoint& pos,
-                       const wxSize& size,
-                       long style,
-                       const wxValidator& validator,
-                       const wxString& name)
+bool wxGauge::Create(wxWindow *parent,
+                     wxWindowID id,
+                     int range,
+                     const wxPoint& pos,
+                     const wxSize& size,
+                     long style,
+                     const wxValidator& validator,
+                     const wxString& name)
 {
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
@@ -158,7 +158,7 @@ bool wxGauge95::Create(wxWindow *parent,
     return true;
 }
 
-WXDWORD wxGauge95::MSWGetStyle(long style, WXDWORD *exstyle) const
+WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
@@ -172,10 +172,10 @@ WXDWORD wxGauge95::MSWGetStyle(long style, WXDWORD *exstyle) const
 }
 
 // ----------------------------------------------------------------------------
-// wxGauge95 geometry
+// wxGauge geometry
 // ----------------------------------------------------------------------------
 
-wxSize wxGauge95::DoGetBestSize() const
+wxSize wxGauge::DoGetBestSize() const
 {
     // VZ: no idea where does 28 come from, it was there before my changes and
     //     as nobody ever complained I guess we can leave it...
@@ -186,10 +186,10 @@ wxSize wxGauge95::DoGetBestSize() const
 }
 
 // ----------------------------------------------------------------------------
-// wxGauge95 setters
+// wxGauge setters
 // ----------------------------------------------------------------------------
 
-void wxGauge95::SetRange(int r)
+void wxGauge::SetRange(int r)
 {
     // switch to determinate mode if required
     SetDeterminateMode();
@@ -204,7 +204,7 @@ void wxGauge95::SetRange(int r)
 #endif // PBM_SETRANGE32/!PBM_SETRANGE32
 }
 
-void wxGauge95::SetValue(int pos)
+void wxGauge::SetValue(int pos)
 {
     // switch to determinate mode if required
     SetDeterminateMode();
@@ -214,7 +214,7 @@ void wxGauge95::SetValue(int pos)
     ::SendMessage(GetHwnd(), PBM_SETPOS, pos, 0);
 }
 
-bool wxGauge95::SetForegroundColour(const wxColour& col)
+bool wxGauge::SetForegroundColour(const wxColour& col)
 {
     if ( !wxControl::SetForegroundColour(col) )
         return false;
@@ -224,7 +224,7 @@ bool wxGauge95::SetForegroundColour(const wxColour& col)
     return true;
 }
 
-bool wxGauge95::SetBackgroundColour(const wxColour& col)
+bool wxGauge::SetBackgroundColour(const wxColour& col)
 {
     if ( !wxControl::SetBackgroundColour(col) )
         return false;
@@ -234,7 +234,7 @@ bool wxGauge95::SetBackgroundColour(const wxColour& col)
     return true;
 }
 
-void wxGauge95::SetIndeterminateMode()
+void wxGauge::SetIndeterminateMode()
 {
     // add the PBS_MARQUEE style to the progress bar
     LONG style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
@@ -244,7 +244,7 @@ void wxGauge95::SetIndeterminateMode()
     // now the control can only run in indeterminate mode
 }
 
-void wxGauge95::SetDeterminateMode()
+void wxGauge::SetDeterminateMode()
 {
     // remove the PBS_MARQUEE style to the progress bar
     LONG style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
@@ -254,7 +254,7 @@ void wxGauge95::SetDeterminateMode()
     // now the control can only run in determinate mode
 }
 
-void wxGauge95::Pulse()
+void wxGauge::Pulse()
 {
     if (wxApp::GetComCtl32Version() >= 600)
     {

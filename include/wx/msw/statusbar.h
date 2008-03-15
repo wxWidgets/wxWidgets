@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/statbr95.h
+// Name:        wx/msw/statbr.h
 // Purpose:     native implementation of wxStatusBar
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -9,20 +9,20 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _STATBR95_H
-#define   _STATBR95_H
+#ifndef _WX_MSW_STATUSBAR_H_
+#define _WX_MSW_STATUSBAR_H_
 
 #if wxUSE_NATIVE_STATUSBAR
 
-class WXDLLEXPORT wxStatusBar95 : public wxStatusBarBase
+class WXDLLEXPORT wxStatusBar : public wxStatusBarBase
 {
 public:
     // ctors and such
-    wxStatusBar95();
-    wxStatusBar95(wxWindow *parent,
-                  wxWindowID id = wxID_ANY,
-                  long style = wxST_SIZEGRIP,
-                  const wxString& name = wxStatusBarNameStr)
+    wxStatusBar();
+    wxStatusBar(wxWindow *parent,
+                wxWindowID id = wxID_ANY,
+                long style = wxST_SIZEGRIP,
+                const wxString& name = wxStatusBarNameStr)
     {
         (void)Create(parent, id, style, name);
     }
@@ -32,7 +32,7 @@ public:
                 long style = wxST_SIZEGRIP,
                 const wxString& name = wxStatusBarNameStr);
 
-    virtual ~wxStatusBar95();
+    virtual ~wxStatusBar();
 
     // a status line can have several (<256) fields numbered from 0
     virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
@@ -69,9 +69,9 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar95)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar)
 };
 
 #endif  // wxUSE_NATIVE_STATUSBAR
 
-#endif
+#endif // _WX_MSW_STATUSBAR_H_

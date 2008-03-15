@@ -1716,7 +1716,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dragimag.obj \
 	$(OBJS)\monodll_filedlg.obj \
 	$(OBJS)\monodll_frame.obj \
-	$(OBJS)\monodll_gauge95.obj \
+	$(OBJS)\monodll_gauge.obj \
 	$(OBJS)\monodll_iniconf.obj \
 	$(OBJS)\monodll_listbox.obj \
 	$(OBJS)\monodll_listctrl.obj \
@@ -1733,16 +1733,16 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_radiobox.obj \
 	$(OBJS)\monodll_radiobut.obj \
 	$(OBJS)\monodll_scrolbar.obj \
-	$(OBJS)\monodll_slider95.obj \
+	$(OBJS)\monodll_slider.obj \
 	$(OBJS)\monodll_spinbutt.obj \
 	$(OBJS)\monodll_spinctrl.obj \
 	$(OBJS)\monodll_statbmp.obj \
 	$(OBJS)\monodll_statbox.obj \
-	$(OBJS)\monodll_statbr95.obj \
+	$(OBJS)\monodll_statusbar.obj \
 	$(OBJS)\monodll_statline.obj \
 	$(OBJS)\monodll_stattext.obj \
 	$(OBJS)\monodll_tabctrl.obj \
-	$(OBJS)\monodll_tbar95.obj \
+	$(OBJS)\monodll_toolbar.obj \
 	$(OBJS)\monodll_textctrl.obj \
 	$(OBJS)\monodll_textentry.obj \
 	$(OBJS)\monodll_tglbtn.obj \
@@ -2366,7 +2366,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dragimag.obj \
 	$(OBJS)\monolib_filedlg.obj \
 	$(OBJS)\monolib_frame.obj \
-	$(OBJS)\monolib_gauge95.obj \
+	$(OBJS)\monolib_gauge.obj \
 	$(OBJS)\monolib_iniconf.obj \
 	$(OBJS)\monolib_listbox.obj \
 	$(OBJS)\monolib_listctrl.obj \
@@ -2383,16 +2383,16 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_radiobox.obj \
 	$(OBJS)\monolib_radiobut.obj \
 	$(OBJS)\monolib_scrolbar.obj \
-	$(OBJS)\monolib_slider95.obj \
+	$(OBJS)\monolib_slider.obj \
 	$(OBJS)\monolib_spinbutt.obj \
 	$(OBJS)\monolib_spinctrl.obj \
 	$(OBJS)\monolib_statbmp.obj \
 	$(OBJS)\monolib_statbox.obj \
-	$(OBJS)\monolib_statbr95.obj \
+	$(OBJS)\monolib_statusbar.obj \
 	$(OBJS)\monolib_statline.obj \
 	$(OBJS)\monolib_stattext.obj \
 	$(OBJS)\monolib_tabctrl.obj \
-	$(OBJS)\monolib_tbar95.obj \
+	$(OBJS)\monolib_toolbar.obj \
 	$(OBJS)\monolib_textctrl.obj \
 	$(OBJS)\monolib_textentry.obj \
 	$(OBJS)\monolib_tglbtn.obj \
@@ -2955,7 +2955,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dragimag.obj \
 	$(OBJS)\coredll_filedlg.obj \
 	$(OBJS)\coredll_frame.obj \
-	$(OBJS)\coredll_gauge95.obj \
+	$(OBJS)\coredll_gauge.obj \
 	$(OBJS)\coredll_iniconf.obj \
 	$(OBJS)\coredll_listbox.obj \
 	$(OBJS)\coredll_listctrl.obj \
@@ -2972,16 +2972,16 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_radiobox.obj \
 	$(OBJS)\coredll_radiobut.obj \
 	$(OBJS)\coredll_scrolbar.obj \
-	$(OBJS)\coredll_slider95.obj \
+	$(OBJS)\coredll_slider.obj \
 	$(OBJS)\coredll_spinbutt.obj \
 	$(OBJS)\coredll_spinctrl.obj \
 	$(OBJS)\coredll_statbmp.obj \
 	$(OBJS)\coredll_statbox.obj \
-	$(OBJS)\coredll_statbr95.obj \
+	$(OBJS)\coredll_statusbar.obj \
 	$(OBJS)\coredll_statline.obj \
 	$(OBJS)\coredll_stattext.obj \
 	$(OBJS)\coredll_tabctrl.obj \
-	$(OBJS)\coredll_tbar95.obj \
+	$(OBJS)\coredll_toolbar.obj \
 	$(OBJS)\coredll_textctrl.obj \
 	$(OBJS)\coredll_textentry.obj \
 	$(OBJS)\coredll_tglbtn.obj \
@@ -3426,7 +3426,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dragimag.obj \
 	$(OBJS)\corelib_filedlg.obj \
 	$(OBJS)\corelib_frame.obj \
-	$(OBJS)\corelib_gauge95.obj \
+	$(OBJS)\corelib_gauge.obj \
 	$(OBJS)\corelib_iniconf.obj \
 	$(OBJS)\corelib_listbox.obj \
 	$(OBJS)\corelib_listctrl.obj \
@@ -3443,16 +3443,16 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_radiobox.obj \
 	$(OBJS)\corelib_radiobut.obj \
 	$(OBJS)\corelib_scrolbar.obj \
-	$(OBJS)\corelib_slider95.obj \
+	$(OBJS)\corelib_slider.obj \
 	$(OBJS)\corelib_spinbutt.obj \
 	$(OBJS)\corelib_spinctrl.obj \
 	$(OBJS)\corelib_statbmp.obj \
 	$(OBJS)\corelib_statbox.obj \
-	$(OBJS)\corelib_statbr95.obj \
+	$(OBJS)\corelib_statusbar.obj \
 	$(OBJS)\corelib_statline.obj \
 	$(OBJS)\corelib_stattext.obj \
 	$(OBJS)\corelib_tabctrl.obj \
-	$(OBJS)\corelib_tbar95.obj \
+	$(OBJS)\corelib_toolbar.obj \
 	$(OBJS)\corelib_textctrl.obj \
 	$(OBJS)\corelib_textentry.obj \
 	$(OBJS)\corelib_tglbtn.obj \
@@ -5874,9 +5874,6 @@ $(OBJS)\monodll_filedlg.obj: ..\..\src\msw\filedlg.cpp
 $(OBJS)\monodll_frame.obj: ..\..\src\msw\frame.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\frame.cpp
 
-$(OBJS)\monodll_gauge95.obj: ..\..\src\msw\gauge95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\gauge95.cpp
-
 $(OBJS)\monodll_iniconf.obj: ..\..\src\msw\iniconf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\iniconf.cpp
 
@@ -5904,20 +5901,14 @@ $(OBJS)\monodll_access.obj: ..\..\src\msw\ole\access.cpp
 $(OBJS)\monodll_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
-$(OBJS)\monodll_slider95.obj: ..\..\src\msw\slider95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\slider95.cpp
-
 $(OBJS)\monodll_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\spinctrl.cpp
 
-$(OBJS)\monodll_statbr95.obj: ..\..\src\msw\statbr95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statbr95.cpp
+$(OBJS)\monodll_statusbar.obj: ..\..\src\msw\statusbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
 $(OBJS)\monodll_tabctrl.obj: ..\..\src\msw\tabctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\tabctrl.cpp
-
-$(OBJS)\monodll_tbar95.obj: ..\..\src\msw\tbar95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\tbar95.cpp
 
 $(OBJS)\monodll_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\textentry.cpp
@@ -5958,9 +5949,6 @@ $(OBJS)\monodll_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 $(OBJS)\monodll_framuniv.obj: ..\..\src\univ\framuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\framuniv.cpp
 
-$(OBJS)\monodll_gauge.obj: ..\..\src\univ\gauge.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\gauge.cpp
-
 $(OBJS)\monodll_inpcons.obj: ..\..\src\univ\inpcons.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\inpcons.cpp
 
@@ -5973,17 +5961,11 @@ $(OBJS)\monodll_scrarrow.obj: ..\..\src\univ\scrarrow.cpp
 $(OBJS)\monodll_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\scrthumb.cpp
 
-$(OBJS)\monodll_slider.obj: ..\..\src\univ\slider.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\slider.cpp
-
 $(OBJS)\monodll_stdrend.obj: ..\..\src\univ\stdrend.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\stdrend.cpp
 
 $(OBJS)\monodll_theme.obj: ..\..\src\univ\theme.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\theme.cpp
-
-$(OBJS)\monodll_toolbar.obj: ..\..\src\univ\toolbar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 
 $(OBJS)\monodll_topluniv.obj: ..\..\src\univ\topluniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\topluniv.cpp
@@ -6683,6 +6665,16 @@ $(OBJS)\monodll_dialog.obj: ..\..\src\univ\dialog.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\monodll_gauge.obj: ..\..\src\msw\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\gauge.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monodll_gauge.obj: ..\..\src\univ\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\gauge.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 $(OBJS)\monodll_listbox.obj: ..\..\src\msw\listbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\listbox.cpp
 !endif
@@ -6753,6 +6745,16 @@ $(OBJS)\monodll_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\monodll_slider.obj: ..\..\src\msw\slider.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\slider.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monodll_slider.obj: ..\..\src\univ\slider.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\slider.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 $(OBJS)\monodll_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
 !endif
@@ -6800,6 +6802,16 @@ $(OBJS)\monodll_stattext.obj: ..\..\src\msw\stattext.cpp
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\monodll_stattext.obj: ..\..\src\univ\stattext.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\stattext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\monodll_toolbar.obj: ..\..\src\msw\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\toolbar.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monodll_toolbar.obj: ..\..\src\univ\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
@@ -7983,9 +7995,6 @@ $(OBJS)\monolib_filedlg.obj: ..\..\src\msw\filedlg.cpp
 $(OBJS)\monolib_frame.obj: ..\..\src\msw\frame.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\frame.cpp
 
-$(OBJS)\monolib_gauge95.obj: ..\..\src\msw\gauge95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\gauge95.cpp
-
 $(OBJS)\monolib_iniconf.obj: ..\..\src\msw\iniconf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\iniconf.cpp
 
@@ -8013,20 +8022,14 @@ $(OBJS)\monolib_access.obj: ..\..\src\msw\ole\access.cpp
 $(OBJS)\monolib_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
-$(OBJS)\monolib_slider95.obj: ..\..\src\msw\slider95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\slider95.cpp
-
 $(OBJS)\monolib_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\spinctrl.cpp
 
-$(OBJS)\monolib_statbr95.obj: ..\..\src\msw\statbr95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statbr95.cpp
+$(OBJS)\monolib_statusbar.obj: ..\..\src\msw\statusbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
 $(OBJS)\monolib_tabctrl.obj: ..\..\src\msw\tabctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\tabctrl.cpp
-
-$(OBJS)\monolib_tbar95.obj: ..\..\src\msw\tbar95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\tbar95.cpp
 
 $(OBJS)\monolib_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\textentry.cpp
@@ -8067,9 +8070,6 @@ $(OBJS)\monolib_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 $(OBJS)\monolib_framuniv.obj: ..\..\src\univ\framuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\framuniv.cpp
 
-$(OBJS)\monolib_gauge.obj: ..\..\src\univ\gauge.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\gauge.cpp
-
 $(OBJS)\monolib_inpcons.obj: ..\..\src\univ\inpcons.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\inpcons.cpp
 
@@ -8082,17 +8082,11 @@ $(OBJS)\monolib_scrarrow.obj: ..\..\src\univ\scrarrow.cpp
 $(OBJS)\monolib_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\scrthumb.cpp
 
-$(OBJS)\monolib_slider.obj: ..\..\src\univ\slider.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\slider.cpp
-
 $(OBJS)\monolib_stdrend.obj: ..\..\src\univ\stdrend.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\stdrend.cpp
 
 $(OBJS)\monolib_theme.obj: ..\..\src\univ\theme.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\theme.cpp
-
-$(OBJS)\monolib_toolbar.obj: ..\..\src\univ\toolbar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 
 $(OBJS)\monolib_topluniv.obj: ..\..\src\univ\topluniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\topluniv.cpp
@@ -8792,6 +8786,16 @@ $(OBJS)\monolib_dialog.obj: ..\..\src\univ\dialog.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\monolib_gauge.obj: ..\..\src\msw\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\gauge.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monolib_gauge.obj: ..\..\src\univ\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\gauge.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 $(OBJS)\monolib_listbox.obj: ..\..\src\msw\listbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\listbox.cpp
 !endif
@@ -8862,6 +8866,16 @@ $(OBJS)\monolib_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\monolib_slider.obj: ..\..\src\msw\slider.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\slider.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monolib_slider.obj: ..\..\src\univ\slider.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\slider.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 $(OBJS)\monolib_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
 !endif
@@ -8909,6 +8923,16 @@ $(OBJS)\monolib_stattext.obj: ..\..\src\msw\stattext.cpp
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\monolib_stattext.obj: ..\..\src\univ\stattext.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\stattext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\monolib_toolbar.obj: ..\..\src\msw\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\toolbar.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monolib_toolbar.obj: ..\..\src\univ\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
@@ -10476,9 +10500,6 @@ $(OBJS)\coredll_filedlg.obj: ..\..\src\msw\filedlg.cpp
 $(OBJS)\coredll_frame.obj: ..\..\src\msw\frame.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\frame.cpp
 
-$(OBJS)\coredll_gauge95.obj: ..\..\src\msw\gauge95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\gauge95.cpp
-
 $(OBJS)\coredll_iniconf.obj: ..\..\src\msw\iniconf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\iniconf.cpp
 
@@ -10506,20 +10527,14 @@ $(OBJS)\coredll_access.obj: ..\..\src\msw\ole\access.cpp
 $(OBJS)\coredll_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
-$(OBJS)\coredll_slider95.obj: ..\..\src\msw\slider95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\slider95.cpp
-
 $(OBJS)\coredll_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\spinctrl.cpp
 
-$(OBJS)\coredll_statbr95.obj: ..\..\src\msw\statbr95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statbr95.cpp
+$(OBJS)\coredll_statusbar.obj: ..\..\src\msw\statusbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
 $(OBJS)\coredll_tabctrl.obj: ..\..\src\msw\tabctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\tabctrl.cpp
-
-$(OBJS)\coredll_tbar95.obj: ..\..\src\msw\tbar95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\tbar95.cpp
 
 $(OBJS)\coredll_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\textentry.cpp
@@ -10560,9 +10575,6 @@ $(OBJS)\coredll_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 $(OBJS)\coredll_framuniv.obj: ..\..\src\univ\framuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\framuniv.cpp
 
-$(OBJS)\coredll_gauge.obj: ..\..\src\univ\gauge.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\gauge.cpp
-
 $(OBJS)\coredll_inpcons.obj: ..\..\src\univ\inpcons.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\inpcons.cpp
 
@@ -10575,17 +10587,11 @@ $(OBJS)\coredll_scrarrow.obj: ..\..\src\univ\scrarrow.cpp
 $(OBJS)\coredll_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\scrthumb.cpp
 
-$(OBJS)\coredll_slider.obj: ..\..\src\univ\slider.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\slider.cpp
-
 $(OBJS)\coredll_stdrend.obj: ..\..\src\univ\stdrend.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\stdrend.cpp
 
 $(OBJS)\coredll_theme.obj: ..\..\src\univ\theme.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\theme.cpp
-
-$(OBJS)\coredll_toolbar.obj: ..\..\src\univ\toolbar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 
 $(OBJS)\coredll_topluniv.obj: ..\..\src\univ\topluniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\topluniv.cpp
@@ -10961,6 +10967,16 @@ $(OBJS)\coredll_dialog.obj: ..\..\src\univ\dialog.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\coredll_gauge.obj: ..\..\src\msw\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\gauge.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\coredll_gauge.obj: ..\..\src\univ\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\gauge.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 $(OBJS)\coredll_listbox.obj: ..\..\src\msw\listbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\listbox.cpp
 !endif
@@ -11031,6 +11047,16 @@ $(OBJS)\coredll_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\coredll_slider.obj: ..\..\src\msw\slider.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\slider.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\coredll_slider.obj: ..\..\src\univ\slider.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\slider.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 $(OBJS)\coredll_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
 !endif
@@ -11078,6 +11104,16 @@ $(OBJS)\coredll_stattext.obj: ..\..\src\msw\stattext.cpp
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\coredll_stattext.obj: ..\..\src\univ\stattext.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\stattext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\coredll_toolbar.obj: ..\..\src\msw\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\toolbar.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\coredll_toolbar.obj: ..\..\src\univ\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
@@ -11790,9 +11826,6 @@ $(OBJS)\corelib_filedlg.obj: ..\..\src\msw\filedlg.cpp
 $(OBJS)\corelib_frame.obj: ..\..\src\msw\frame.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\frame.cpp
 
-$(OBJS)\corelib_gauge95.obj: ..\..\src\msw\gauge95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\gauge95.cpp
-
 $(OBJS)\corelib_iniconf.obj: ..\..\src\msw\iniconf.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\iniconf.cpp
 
@@ -11820,20 +11853,14 @@ $(OBJS)\corelib_access.obj: ..\..\src\msw\ole\access.cpp
 $(OBJS)\corelib_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
-$(OBJS)\corelib_slider95.obj: ..\..\src\msw\slider95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\slider95.cpp
-
 $(OBJS)\corelib_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\spinctrl.cpp
 
-$(OBJS)\corelib_statbr95.obj: ..\..\src\msw\statbr95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statbr95.cpp
+$(OBJS)\corelib_statusbar.obj: ..\..\src\msw\statusbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
 $(OBJS)\corelib_tabctrl.obj: ..\..\src\msw\tabctrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\tabctrl.cpp
-
-$(OBJS)\corelib_tbar95.obj: ..\..\src\msw\tbar95.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\tbar95.cpp
 
 $(OBJS)\corelib_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\textentry.cpp
@@ -11874,9 +11901,6 @@ $(OBJS)\corelib_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 $(OBJS)\corelib_framuniv.obj: ..\..\src\univ\framuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\framuniv.cpp
 
-$(OBJS)\corelib_gauge.obj: ..\..\src\univ\gauge.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\gauge.cpp
-
 $(OBJS)\corelib_inpcons.obj: ..\..\src\univ\inpcons.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\inpcons.cpp
 
@@ -11889,17 +11913,11 @@ $(OBJS)\corelib_scrarrow.obj: ..\..\src\univ\scrarrow.cpp
 $(OBJS)\corelib_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\scrthumb.cpp
 
-$(OBJS)\corelib_slider.obj: ..\..\src\univ\slider.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\slider.cpp
-
 $(OBJS)\corelib_stdrend.obj: ..\..\src\univ\stdrend.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\stdrend.cpp
 
 $(OBJS)\corelib_theme.obj: ..\..\src\univ\theme.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\theme.cpp
-
-$(OBJS)\corelib_toolbar.obj: ..\..\src\univ\toolbar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 
 $(OBJS)\corelib_topluniv.obj: ..\..\src\univ\topluniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\topluniv.cpp
@@ -12275,6 +12293,16 @@ $(OBJS)\corelib_dialog.obj: ..\..\src\univ\dialog.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\corelib_gauge.obj: ..\..\src\msw\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\gauge.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\corelib_gauge.obj: ..\..\src\univ\gauge.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\gauge.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 $(OBJS)\corelib_listbox.obj: ..\..\src\msw\listbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\listbox.cpp
 !endif
@@ -12345,6 +12373,16 @@ $(OBJS)\corelib_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\corelib_slider.obj: ..\..\src\msw\slider.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\slider.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\corelib_slider.obj: ..\..\src\univ\slider.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\slider.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
 $(OBJS)\corelib_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
 !endif
@@ -12392,6 +12430,16 @@ $(OBJS)\corelib_stattext.obj: ..\..\src\msw\stattext.cpp
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 $(OBJS)\corelib_stattext.obj: ..\..\src\univ\stattext.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\stattext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
+$(OBJS)\corelib_toolbar.obj: ..\..\src\msw\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\toolbar.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\corelib_toolbar.obj: ..\..\src\univ\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"

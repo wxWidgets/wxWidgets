@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/msw/statbr95.cpp
+// Name:        src/msw/statusbar.cpp
 // Purpose:     native implementation of wxStatusBar
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -51,20 +51,20 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxStatusBar95 class
+// wxStatusBar class
 // ----------------------------------------------------------------------------
 
-wxStatusBar95::wxStatusBar95()
+wxStatusBar::wxStatusBar()
 {
     SetParent(NULL);
     m_hWnd = 0;
     m_windowId = 0;
 }
 
-bool wxStatusBar95::Create(wxWindow *parent,
-                           wxWindowID id,
-                           long style,
-                           const wxString& name)
+bool wxStatusBar::Create(wxWindow *parent,
+                         wxWindowID id,
+                         long style,
+                         const wxString& name)
 {
     wxCHECK_MSG( parent, false, wxT("status bar must have a parent") );
 
@@ -134,7 +134,7 @@ bool wxStatusBar95::Create(wxWindow *parent,
     return true;
 }
 
-wxStatusBar95::~wxStatusBar95()
+wxStatusBar::~wxStatusBar()
 {
     // we must refresh the frame size when the statusbar is deleted but the
     // frame is not - otherwise statusbar leaves a hole in the place it used to
@@ -146,7 +146,7 @@ wxStatusBar95::~wxStatusBar95()
     }
 }
 
-void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
+void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
 {
     // this is a Windows limitation
     wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );
@@ -156,14 +156,14 @@ void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
     SetFieldsWidth();
 }
 
-void wxStatusBar95::SetStatusWidths(int n, const int widths[])
+void wxStatusBar::SetStatusWidths(int n, const int widths[])
 {
     wxStatusBarBase::SetStatusWidths(n, widths);
 
     SetFieldsWidth();
 }
 
-void wxStatusBar95::SetFieldsWidth()
+void wxStatusBar::SetFieldsWidth()
 {
     if ( !m_nFields )
         return;
@@ -191,7 +191,7 @@ void wxStatusBar95::SetFieldsWidth()
     delete [] pWidths;
 }
 
-void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
+void wxStatusBar::SetStatusText(const wxString& strText, int nField)
 {
     wxCHECK_RET( (nField >= 0) && (nField < m_nFields),
                  _T("invalid statusbar field index") );
@@ -231,7 +231,7 @@ void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
     }
 }
 
-wxString wxStatusBar95::GetStatusText(int nField) const
+wxString wxStatusBar::GetStatusText(int nField) const
 {
     wxCHECK_MSG( (nField >= 0) && (nField < m_nFields), wxEmptyString,
                  _T("invalid statusbar field index") );
@@ -246,7 +246,7 @@ wxString wxStatusBar95::GetStatusText(int nField) const
     return str;
 }
 
-int wxStatusBar95::GetBorderX() const
+int wxStatusBar::GetBorderX() const
 {
     int aBorders[3];
     SendMessage(GetHwnd(), SB_GETBORDERS, 0, (LPARAM)aBorders);
@@ -254,7 +254,7 @@ int wxStatusBar95::GetBorderX() const
     return aBorders[0];
 }
 
-int wxStatusBar95::GetBorderY() const
+int wxStatusBar::GetBorderY() const
 {
     int aBorders[3];
     SendMessage(GetHwnd(), SB_GETBORDERS, 0, (LPARAM)aBorders);
@@ -262,7 +262,7 @@ int wxStatusBar95::GetBorderY() const
     return aBorders[1];
 }
 
-void wxStatusBar95::SetMinHeight(int height)
+void wxStatusBar::SetMinHeight(int height)
 {
     SendMessage(GetHwnd(), SB_SETMINHEIGHT, height + 2*GetBorderY(), 0);
 
@@ -270,7 +270,7 @@ void wxStatusBar95::SetMinHeight(int height)
     SendMessage(GetHwnd(), WM_SIZE, 0, 0);
 }
 
-bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
+bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
 {
     wxCHECK_MSG( (i >= 0) && (i < m_nFields), false,
                  _T("invalid statusbar field index") );
@@ -282,7 +282,7 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
     }
 
 #if wxUSE_UXTHEME
-    wxUxThemeHandle theme((wxStatusBar95 *)this, L"Status"); // const_cast
+    wxUxThemeHandle theme((wxStatusBar *)this, L"Status"); // const_cast
     if ( theme )
     {
         // by default Windows has a 2 pixel border to the right of the left
@@ -306,7 +306,7 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
 // no idea for a default width, just choose something
 #define DEFAULT_FIELD_WIDTH 25
 
-wxSize wxStatusBar95::DoGetBestSize() const
+wxSize wxStatusBar::DoGetBestSize() const
 {
     int borders[3];
     SendMessage(GetHwnd(), SB_GETBORDERS, 0, (LPARAM)borders);
@@ -350,7 +350,7 @@ wxSize wxStatusBar95::DoGetBestSize() const
     return best;
 }
 
-void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
+void wxStatusBar::DoMoveWindow(int x, int y, int width, int height)
 {
     if ( GetParent()->IsSizeDeferred() )
     {
@@ -384,7 +384,7 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
     }
 }
 
-void wxStatusBar95::SetStatusStyles(int n, const int styles[])
+void wxStatusBar::SetStatusStyles(int n, const int styles[])
 {
     wxStatusBarBase::SetStatusStyles(n, styles);
 
@@ -419,7 +419,7 @@ void wxStatusBar95::SetStatusStyles(int n, const int styles[])
 }
 
 WXLRESULT
-wxStatusBar95::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
 #ifndef __WXWINCE__
     if ( nMsg == WM_WINDOWPOSCHANGING )

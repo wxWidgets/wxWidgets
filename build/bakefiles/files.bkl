@@ -1667,7 +1667,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dragimag.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
-    src/msw/gauge95.cpp
+    src/msw/gauge.cpp
     src/msw/iniconf.cpp
     src/msw/listbox.cpp
     src/msw/listctrl.cpp
@@ -1684,16 +1684,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
     src/msw/scrolbar.cpp
-    src/msw/slider95.cpp
+    src/msw/slider.cpp
     src/msw/spinbutt.cpp
     src/msw/spinctrl.cpp
     src/msw/statbmp.cpp
     src/msw/statbox.cpp
-    src/msw/statbr95.cpp
+    src/msw/statusbar.cpp
     src/msw/statline.cpp
     src/msw/stattext.cpp
     src/msw/tabctrl.cpp
-    src/msw/tbar95.cpp
+    src/msw/toolbar.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
     src/msw/tglbtn.cpp
@@ -1735,7 +1735,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/filedlg.h
     wx/msw/font.h
     wx/msw/frame.h
-    wx/msw/gauge95.h
+    wx/msw/gauge.h
     wx/msw/gdiimage.h
     wx/msw/icon.h
     wx/msw/imaglist.h
@@ -1768,16 +1768,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/rcdefs.h
     wx/msw/scrolbar.h
     wx/msw/setup0.h
-    wx/msw/slider95.h
+    wx/msw/slider.h
     wx/msw/spinbutt.h
     wx/msw/spinctrl.h
     wx/msw/statbmp.h
     wx/msw/statbox.h
-    wx/msw/statbr95.h
+    wx/msw/statusbar.h
     wx/msw/statline.h
     wx/msw/stattext.h
     wx/msw/tabctrl.h
-    wx/msw/tbar95.h
+    wx/msw/toolbar.h
     wx/msw/textctrl.h
     wx/msw/textentry.h
     wx/msw/tglbtn.h

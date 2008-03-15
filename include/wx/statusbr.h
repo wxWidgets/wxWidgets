@@ -158,9 +158,7 @@ protected:
 
     #include "wx/palmos/statusbr.h"
 #elif defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
-    #define wxStatusBar95 wxStatusBar
-
-    #include "wx/msw/statbr95.h"
+    #include "wx/msw/statusbar.h"
 #elif defined(__WXMAC__)
     #define wxStatusBarMac wxStatusBar
 

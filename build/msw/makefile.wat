@@ -278,7 +278,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dragimag.obj &
 	$(OBJS)\monodll_filedlg.obj &
 	$(OBJS)\monodll_frame.obj &
-	$(OBJS)\monodll_gauge95.obj &
+	$(OBJS)\monodll_gauge.obj &
 	$(OBJS)\monodll_iniconf.obj &
 	$(OBJS)\monodll_listbox.obj &
 	$(OBJS)\monodll_listctrl.obj &
@@ -295,16 +295,16 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_radiobox.obj &
 	$(OBJS)\monodll_radiobut.obj &
 	$(OBJS)\monodll_scrolbar.obj &
-	$(OBJS)\monodll_slider95.obj &
+	$(OBJS)\monodll_slider.obj &
 	$(OBJS)\monodll_spinbutt.obj &
 	$(OBJS)\monodll_spinctrl.obj &
 	$(OBJS)\monodll_statbmp.obj &
 	$(OBJS)\monodll_statbox.obj &
-	$(OBJS)\monodll_statbr95.obj &
+	$(OBJS)\monodll_statusbar.obj &
 	$(OBJS)\monodll_statline.obj &
 	$(OBJS)\monodll_stattext.obj &
 	$(OBJS)\monodll_tabctrl.obj &
-	$(OBJS)\monodll_tbar95.obj &
+	$(OBJS)\monodll_toolbar.obj &
 	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_textentry.obj &
 	$(OBJS)\monodll_tglbtn.obj &
@@ -933,7 +933,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dragimag.obj &
 	$(OBJS)\monolib_filedlg.obj &
 	$(OBJS)\monolib_frame.obj &
-	$(OBJS)\monolib_gauge95.obj &
+	$(OBJS)\monolib_gauge.obj &
 	$(OBJS)\monolib_iniconf.obj &
 	$(OBJS)\monolib_listbox.obj &
 	$(OBJS)\monolib_listctrl.obj &
@@ -950,16 +950,16 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_radiobox.obj &
 	$(OBJS)\monolib_radiobut.obj &
 	$(OBJS)\monolib_scrolbar.obj &
-	$(OBJS)\monolib_slider95.obj &
+	$(OBJS)\monolib_slider.obj &
 	$(OBJS)\monolib_spinbutt.obj &
 	$(OBJS)\monolib_spinctrl.obj &
 	$(OBJS)\monolib_statbmp.obj &
 	$(OBJS)\monolib_statbox.obj &
-	$(OBJS)\monolib_statbr95.obj &
+	$(OBJS)\monolib_statusbar.obj &
 	$(OBJS)\monolib_statline.obj &
 	$(OBJS)\monolib_stattext.obj &
 	$(OBJS)\monolib_tabctrl.obj &
-	$(OBJS)\monolib_tbar95.obj &
+	$(OBJS)\monolib_toolbar.obj &
 	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_textentry.obj &
 	$(OBJS)\monolib_tglbtn.obj &
@@ -1519,7 +1519,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dragimag.obj &
 	$(OBJS)\coredll_filedlg.obj &
 	$(OBJS)\coredll_frame.obj &
-	$(OBJS)\coredll_gauge95.obj &
+	$(OBJS)\coredll_gauge.obj &
 	$(OBJS)\coredll_iniconf.obj &
 	$(OBJS)\coredll_listbox.obj &
 	$(OBJS)\coredll_listctrl.obj &
@@ -1536,16 +1536,16 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_radiobox.obj &
 	$(OBJS)\coredll_radiobut.obj &
 	$(OBJS)\coredll_scrolbar.obj &
-	$(OBJS)\coredll_slider95.obj &
+	$(OBJS)\coredll_slider.obj &
 	$(OBJS)\coredll_spinbutt.obj &
 	$(OBJS)\coredll_spinctrl.obj &
 	$(OBJS)\coredll_statbmp.obj &
 	$(OBJS)\coredll_statbox.obj &
-	$(OBJS)\coredll_statbr95.obj &
+	$(OBJS)\coredll_statusbar.obj &
 	$(OBJS)\coredll_statline.obj &
 	$(OBJS)\coredll_stattext.obj &
 	$(OBJS)\coredll_tabctrl.obj &
-	$(OBJS)\coredll_tbar95.obj &
+	$(OBJS)\coredll_toolbar.obj &
 	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_textentry.obj &
 	$(OBJS)\coredll_tglbtn.obj &
@@ -1994,7 +1994,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dragimag.obj &
 	$(OBJS)\corelib_filedlg.obj &
 	$(OBJS)\corelib_frame.obj &
-	$(OBJS)\corelib_gauge95.obj &
+	$(OBJS)\corelib_gauge.obj &
 	$(OBJS)\corelib_iniconf.obj &
 	$(OBJS)\corelib_listbox.obj &
 	$(OBJS)\corelib_listctrl.obj &
@@ -2011,16 +2011,16 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_radiobox.obj &
 	$(OBJS)\corelib_radiobut.obj &
 	$(OBJS)\corelib_scrolbar.obj &
-	$(OBJS)\corelib_slider95.obj &
+	$(OBJS)\corelib_slider.obj &
 	$(OBJS)\corelib_spinbutt.obj &
 	$(OBJS)\corelib_spinctrl.obj &
 	$(OBJS)\corelib_statbmp.obj &
 	$(OBJS)\corelib_statbox.obj &
-	$(OBJS)\corelib_statbr95.obj &
+	$(OBJS)\corelib_statusbar.obj &
 	$(OBJS)\corelib_statline.obj &
 	$(OBJS)\corelib_stattext.obj &
 	$(OBJS)\corelib_tabctrl.obj &
-	$(OBJS)\corelib_tbar95.obj &
+	$(OBJS)\corelib_toolbar.obj &
 	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_textentry.obj &
 	$(OBJS)\corelib_tglbtn.obj &
@@ -5916,9 +5916,6 @@ $(OBJS)\monodll_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\monodll_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -5946,19 +5943,13 @@ $(OBJS)\monodll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\monodll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_slider95.obj :  .AUTODEPEND ..\..\src\msw\slider95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_statbr95.obj :  .AUTODEPEND ..\..\src\msw\statbr95.cpp
+$(OBJS)\monodll_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
@@ -6000,9 +5991,6 @@ $(OBJS)\monodll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 $(OBJS)\monodll_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6015,16 +6003,10 @@ $(OBJS)\monodll_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
 $(OBJS)\monodll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
@@ -6762,6 +6744,20 @@ $(OBJS)\monodll_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
+$(OBJS)\monodll_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monodll_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
 $(OBJS)\monodll_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -6860,6 +6856,20 @@ $(OBJS)\monodll_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
+$(OBJS)\monodll_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monodll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
 $(OBJS)\monodll_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -6924,6 +6934,20 @@ $(OBJS)\monodll_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monodll_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
+$(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 !endif
@@ -8127,9 +8151,6 @@ $(OBJS)\monolib_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\monolib_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8157,19 +8178,13 @@ $(OBJS)\monolib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\monolib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_slider95.obj :  .AUTODEPEND ..\..\src\msw\slider95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_statbr95.obj :  .AUTODEPEND ..\..\src\msw\statbr95.cpp
+$(OBJS)\monolib_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
@@ -8211,9 +8226,6 @@ $(OBJS)\monolib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 $(OBJS)\monolib_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8226,16 +8238,10 @@ $(OBJS)\monolib_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
 $(OBJS)\monolib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
@@ -8973,6 +8979,20 @@ $(OBJS)\monolib_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
+$(OBJS)\monolib_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monolib_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
 $(OBJS)\monolib_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -9071,6 +9091,20 @@ $(OBJS)\monolib_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
+$(OBJS)\monolib_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monolib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
 $(OBJS)\monolib_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -9135,6 +9169,20 @@ $(OBJS)\monolib_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\monolib_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
+$(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 !endif
@@ -10722,9 +10770,6 @@ $(OBJS)\coredll_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\coredll_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -10752,19 +10797,13 @@ $(OBJS)\coredll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\coredll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_slider95.obj :  .AUTODEPEND ..\..\src\msw\slider95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_statbr95.obj :  .AUTODEPEND ..\..\src\msw\statbr95.cpp
+$(OBJS)\coredll_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
@@ -10806,9 +10845,6 @@ $(OBJS)\coredll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 $(OBJS)\coredll_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -10821,16 +10857,10 @@ $(OBJS)\coredll_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
 $(OBJS)\coredll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
@@ -11244,6 +11274,20 @@ $(OBJS)\coredll_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
+$(OBJS)\coredll_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\coredll_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
 $(OBJS)\coredll_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -11342,6 +11386,20 @@ $(OBJS)\coredll_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
+$(OBJS)\coredll_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\coredll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
 $(OBJS)\coredll_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -11406,6 +11464,20 @@ $(OBJS)\coredll_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\coredll_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
+$(OBJS)\coredll_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\coredll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 !endif
@@ -12136,9 +12208,6 @@ $(OBJS)\corelib_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\corelib_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_gauge95.obj :  .AUTODEPEND ..\..\src\msw\gauge95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -12166,19 +12235,13 @@ $(OBJS)\corelib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 $(OBJS)\corelib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_slider95.obj :  .AUTODEPEND ..\..\src\msw\slider95.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_statbr95.obj :  .AUTODEPEND ..\..\src\msw\statbr95.cpp
+$(OBJS)\corelib_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_tbar95.obj :  .AUTODEPEND ..\..\src\msw\tbar95.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
@@ -12220,9 +12283,6 @@ $(OBJS)\corelib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 $(OBJS)\corelib_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -12235,16 +12295,10 @@ $(OBJS)\corelib_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
 $(OBJS)\corelib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
@@ -12658,6 +12712,20 @@ $(OBJS)\corelib_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
+$(OBJS)\corelib_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\corelib_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
 $(OBJS)\corelib_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -12756,6 +12824,20 @@ $(OBJS)\corelib_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
+$(OBJS)\corelib_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\corelib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
 $(OBJS)\corelib_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -12820,6 +12902,20 @@ $(OBJS)\corelib_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 $(OBJS)\corelib_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 0
+$(OBJS)\corelib_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq WXUNIV 1
+$(OBJS)\corelib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 !endif

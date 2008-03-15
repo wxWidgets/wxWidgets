@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/slider95.h
-// Purpose:     wxSlider class, using the Win95 (and later) trackbar control
+// Name:        wx/msw/slider.h
+// Purpose:     wxSlider class implementation using trackbar control
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SLIDER95_H_
-#define _WX_SLIDER95_H_
+#ifndef _WX_SLIDER_H_
+#define _WX_SLIDER_H_
 
 class WXDLLIMPEXP_FWD_CORE wxSubwindows;
 
@@ -132,5 +132,5 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider)
 };
 
-#endif // _WX_SLIDER95_H_
+#endif // _WX_SLIDER_H_
 

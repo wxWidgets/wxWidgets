@@ -106,8 +106,7 @@ protected:
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/gauge.h"
 #elif defined(__WXMSW__)
-    #include "wx/msw/gauge95.h"
-    #define wxGauge wxGauge95
+    #include "wx/msw/gauge.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/gauge.h"
 #elif defined(__WXGTK20__)
