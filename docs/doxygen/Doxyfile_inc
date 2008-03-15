@@ -201,7 +201,7 @@ FILE_VERSION_FILTER    =
 #---------------------------------------------------------------------------
 # configuration options related to warning and progress messages
 #---------------------------------------------------------------------------
-QUIET                  = NO
+QUIET                  = YES
 WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
@@ -256,8 +256,8 @@ HTML_HEADER            = htmlheader.inc
 HTML_FOOTER            = htmlfooter.inc
 HTML_STYLESHEET        = 
 HTML_ALIGN_MEMBERS     = YES
-HTML_DYNAMIC_SECTIONS  = NO
-CHM_FILE               = wx.chm
+HTML_DYNAMIC_SECTIONS  = YES
+CHM_FILE               = ..\wx.chm      # NOTE: we need to use Win-style separator here
 GENERATE_CHI           = NO
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
