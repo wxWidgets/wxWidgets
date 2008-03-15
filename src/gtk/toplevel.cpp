@@ -774,22 +774,16 @@ bool wxTopLevelWindowGTK::Show( bool show )
         // what wxWidgets expects it to be without an obvious change in the
         // window size immediately after it becomes visible.
 
-        // Realize m_widget, so m_widget->window can be used. Realizing causes
-        // the widget tree to be size_allocated, which generates size events in
-        // the wrong order. So temporarily remove child from m_widget while
-        // realizing.
-        GtkWidget* child = GTK_BIN(m_widget)->child;
-        if (child)
-        {
-            g_object_ref(child);
-            gtk_container_remove(GTK_CONTAINER(m_widget), child);
-        }
+        // Realize m_widget, so m_widget->window can be used. Realizing normally
+        // causes the widget tree to be size_allocated, which generates size
+        // events in the wrong order. However, the size_allocates will not be
+        // done if the allocation is not the default (1,1).
+        const int alloc_width = m_widget->allocation.width;
+        if (alloc_width == 1)
+            m_widget->allocation.width = 2;
         gtk_widget_realize(m_widget);
-        if (child)
-        {
-            gtk_container_add(GTK_CONTAINER(m_widget), child);
-            g_object_unref(child);
-        }
+        if (alloc_width == 1)
+            m_widget->allocation.width = 1;
 
         m_deferShow =
         deferShow = gdk_x11_screen_supports_net_wm_hint(
@@ -1004,11 +998,8 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
             m_height += diff.y;
             if (m_width  < 0) m_width  = 0;
             if (m_height < 0) m_height = 0;
-            if (!m_deferShow)
-            {
-                m_oldClientWidth = 0;
-                gtk_widget_queue_resize(m_wxwindow);
-            }
+            m_oldClientWidth = 0;
+            gtk_widget_queue_resize(m_wxwindow);
         }
     }
     if (m_deferShow)
