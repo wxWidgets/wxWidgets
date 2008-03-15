@@ -589,7 +589,7 @@ void wxComboBox::OnDelete(wxCommandEvent& WXUNUSED(event))
 
 void wxComboBox::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
-    SetSelection(-1, -1);
+    SelectAll();
 }
 
 void wxComboBox::OnUpdateCut(wxUpdateUIEvent& event)
@@ -624,7 +624,7 @@ void wxComboBox::OnUpdateDelete(wxUpdateUIEvent& event)
 
 void wxComboBox::OnUpdateSelectAll(wxUpdateUIEvent& event)
 {
-    event.Enable(IsEditable() && GetLastPosition() > 0);
+    event.Enable(IsEditable() && !wxTextEntry::IsEmpty());
 }
 
 #if wxUSE_TOOLTIPS
