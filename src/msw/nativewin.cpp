@@ -56,7 +56,23 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle hwnd)
 
 void wxNativeContainerWindow::OnNativeDestroyed()
 {
-    // currently this is not called so nothing to do here
+    // don't use Close() or even Destroy() here, we really don't want to keep
+    // an object using a no more existing HWND around for longer than necessary
+    delete this;
+}
+
+WXLRESULT wxNativeContainerWindow::MSWWindowProc(WXUINT nMsg,
+                                                 WXWPARAM wParam,
+                                                 WXLPARAM lParam)
+{
+    if ( nMsg == WM_DESTROY )
+    {
+        OnNativeDestroyed();
+
+        return 0;
+    }
+
+    return wxTopLevelWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 wxNativeContainerWindow::~wxNativeContainerWindow()
