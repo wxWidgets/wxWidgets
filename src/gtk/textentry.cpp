@@ -187,6 +187,12 @@ long wxTextEntry::GetLastPosition() const
 
 void wxTextEntry::SetSelection(long from, long to)
 {
+    // in wx convention, (-1, -1) means the entire range but GTK+ translates -1
+    // (or any negative number for that matter) into last position so we need
+    // to translate manually
+    if ( from == -1 && to == -1 )
+        from = 0;
+
     gtk_editable_select_region(GetEditable(), from, to);
 }
 

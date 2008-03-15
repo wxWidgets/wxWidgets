@@ -92,7 +92,7 @@ public:
     // ---------
 
     virtual void SetSelection(long from, long to) = 0;
-    virtual void SelectAll() { SetSelection(0, GetLastPosition()); }
+    virtual void SelectAll() { SetSelection(-1, -1); }
     virtual void GetSelection(long *from, long *to) const = 0;
     bool HasSelection() const;
     virtual wxString GetStringSelection() const;
