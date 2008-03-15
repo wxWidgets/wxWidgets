@@ -248,6 +248,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
+    EVT_KEY_DOWN(wxTextCtrl::OnKeyDown)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
 
 #if wxUSE_RICHEDIT
@@ -1840,6 +1841,35 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 return;
             }
             break;
+    }
+
+    // no, we didn't process it
+    event.Skip();
+}
+
+void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
+{
+    // richedit control doesn't send WM_PASTE, WM_CUT and WM_COPY messages
+    // when Ctrl-V, X or C is pressed and this prevents wxClipboardTextEvent
+    // from working. So we work around it by intercepting these shortcuts
+    // ourselves and emitting clipboard events (which richedit will handle,
+    // so everything works as before, including pasting of rich text):
+    if ( event.GetModifiers() == wxMOD_CONTROL && IsRich() )
+    {
+        switch ( event.GetKeyCode() )
+        {
+            case 'C':
+                Copy();
+                return;
+            case 'X':
+                Cut();
+                return;
+            case 'V':
+                Paste();
+                return;
+            default:
+                break;
+        }
     }
 
     // no, we didn't process it
