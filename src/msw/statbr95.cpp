@@ -319,7 +319,7 @@ wxSize wxStatusBar95::DoGetBestSize() const
                                         : DEFAULT_FIELD_WIDTH;
         if ( widthField >= 0 )
         {
-            width += m_statusWidths[i];
+            width += widthField;
         }
         else
         {
