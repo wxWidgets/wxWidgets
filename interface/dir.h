@@ -51,7 +51,7 @@ class wxDirTraverser
 {
 public:
     /**
-        This function is called for each directory. It may return @c wxSIR_STOP
+        This function is called for each directory. It may return @c wxDIR_STOP
         to abort traversing completely, @c wxDIR_IGNORE to skip this directory but
         continue with others or @c wxDIR_CONTINUE to enumerate all files and
         subdirectories in this directory.
@@ -69,7 +69,7 @@ public:
 
     /**
         This function is called for each directory which we failed to open for
-        enumerating. It may return @c wxSIR_STOP to abort traversing completely,
+        enumerating. It may return @c wxDIR_STOP to abort traversing completely,
         @c wxDIR_IGNORE to skip this directory but continue with others or
         @c wxDIR_CONTINUE to retry opening this directory once again.
         The base class version always returns @c wxDIR_IGNORE.
