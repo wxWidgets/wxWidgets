@@ -4131,7 +4131,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${SYMROOT}\"";
+			shellScript = "\"${SRCROOT}/../distrib/mac/pbsetup-sh\" \"${SRCROOT}\" \"${SYMROOT}\"";
 		};
 		4091C82C0BC9584900699A3E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -4144,7 +4144,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${SYMROOT}\"";
+			shellScript = "\"${SRCROOT}/../distrib/mac/pbsetup-sh\" \"${SRCROOT}\" \"${SYMROOT}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
