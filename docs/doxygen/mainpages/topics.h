@@ -84,7 +84,6 @@ The following is a basic categorization of them:
 @li @subpage overview_validator
 @li @subpage overview_dataobject
 @li @subpage overview_dnd
-@li @subpage overview_constraints
 
 @section page_topics_indivctrl Individual Controls
 

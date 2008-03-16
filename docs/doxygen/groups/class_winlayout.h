@@ -11,13 +11,12 @@
 @defgroup group_class_winlayout Window Layout
 @ingroup group_class
 
-There are two different systems for laying out windows (and dialogs in
-particular). One is based upon so-called sizers and it requires less typing,
-thinking and calculating and will in almost all cases produce dialogs looking
-equally well on all platforms, the other is based on so-called constraints and
-is deprecated, though still available.
+wxWidgets makes window layout and sizing easy and painless using a set of
+classes known as "sizers". Sizers allow for flexible window positioning and
+sizes that can help with automatically handling localization differences, as
+well as making it easy to write user resizable windows.
 
-Related Overviews: @ref overview_sizer, @ref overview_constraints
+Related Overviews: @ref overview_sizer
 
 */
 
