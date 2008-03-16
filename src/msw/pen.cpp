@@ -90,7 +90,7 @@ public:
     {
         Free();
 
-        m_style = wxSTIPPLE;
+        m_style = wxPENSTYLE_STIPPLE;
         m_stipple = stipple;
     }
 
@@ -159,7 +159,7 @@ wxPenRefData::wxPenRefData()
 {
     Init();
 
-    m_style = wxSOLID;
+    m_style = wxPENSTYLE_SOLID;
     m_width = 1;
 }
 
@@ -190,7 +190,7 @@ wxPenRefData::wxPenRefData(const wxBitmap& stipple, int width)
 {
     Init();
 
-    m_style = wxSTIPPLE;
+    m_style = wxPENSTYLE_STIPPLE;
     m_width = width;
 
     m_stipple = stipple;
@@ -210,11 +210,11 @@ static int ConvertPenStyle(wxPenStyle style)
 {
     switch ( style )
     {
-        case wxSHORT_DASH:
-        case wxLONG_DASH:
+        case wxPENSTYLE_SHORT_DASH:
+        case wxPENSTYLE_LONG_DASH:
             return PS_DASH;
 
-        case wxTRANSPARENT:
+        case wxPENSTYLE_TRANSPARENT:
             return PS_NULL;
 
         default:
@@ -222,23 +222,23 @@ static int ConvertPenStyle(wxPenStyle style)
             // fall through
 
 #ifdef wxHAVE_EXT_CREATE_PEN
-        case wxDOT:
+        case wxPENSTYLE_DOT:
             return PS_DOT;
 
-        case wxDOT_DASH:
+        case wxPENSTYLE_DOT_DASH:
             return PS_DASHDOT;
 
-        case wxUSER_DASH:
+        case wxPENSTYLE_USER_DASH:
             return PS_USERSTYLE;
 
-        case wxSTIPPLE:
-        case wxBDIAGONAL_HATCH:
-        case wxCROSSDIAG_HATCH:
-        case wxFDIAGONAL_HATCH:
-        case wxCROSS_HATCH:
-        case wxHORIZONTAL_HATCH:
-        case wxVERTICAL_HATCH:
-        case wxSOLID:
+        case wxPENSTYLE_STIPPLE:
+        case wxPENSTYLE_BDIAGONAL_HATCH:
+        case wxPENSTYLE_CROSSDIAG_HATCH:
+        case wxPENSTYLE_FDIAGONAL_HATCH:
+        case wxPENSTYLE_CROSS_HATCH:
+        case wxPENSTYLE_HORIZONTAL_HATCH:
+        case wxPENSTYLE_VERTICAL_HATCH:
+        case wxPENSTYLE_SOLID:
 #endif // wxHAVE_EXT_CREATE_PEN
 
             return PS_SOLID;
@@ -292,7 +292,7 @@ bool wxPenRefData::Alloc()
    if ( m_hPen )
        return false;
 
-   if ( m_style == wxTRANSPARENT )
+   if ( m_style == wxPENSTYLE_TRANSPARENT )
    {
        m_hPen = (HPEN)::GetStockObject(NULL_PEN);
        return true;
@@ -336,37 +336,37 @@ bool wxPenRefData::Alloc()
        LOGBRUSH lb;
        switch( m_style )
        {
-           case wxSTIPPLE:
+           case wxPENSTYLE_STIPPLE:
                lb.lbStyle = BS_PATTERN;
                lb.lbHatch = wxPtrToUInt(m_stipple.GetHBITMAP());
                break;
 
-           case wxBDIAGONAL_HATCH:
+           case wxPENSTYLE_BDIAGONAL_HATCH:
                lb.lbStyle = BS_HATCHED;
                lb.lbHatch = HS_BDIAGONAL;
                break;
 
-           case wxCROSSDIAG_HATCH:
+           case wxPENSTYLE_CROSSDIAG_HATCH:
                lb.lbStyle = BS_HATCHED;
                lb.lbHatch = HS_DIAGCROSS;
                break;
 
-           case wxFDIAGONAL_HATCH:
+           case wxPENSTYLE_FDIAGONAL_HATCH:
                lb.lbStyle = BS_HATCHED;
                lb.lbHatch = HS_FDIAGONAL;
                break;
 
-           case wxCROSS_HATCH:
+           case wxPENSTYLE_CROSS_HATCH:
                lb.lbStyle = BS_HATCHED;
                lb.lbHatch = HS_CROSS;
                break;
 
-           case wxHORIZONTAL_HATCH:
+           case wxPENSTYLE_HORIZONTAL_HATCH:
                lb.lbStyle = BS_HATCHED;
                lb.lbHatch = HS_HORIZONTAL;
                break;
 
-           case wxVERTICAL_HATCH:
+           case wxPENSTYLE_VERTICAL_HATCH:
                lb.lbStyle = BS_HATCHED;
                lb.lbHatch = HS_VERTICAL;
                break;
@@ -384,7 +384,7 @@ bool wxPenRefData::Alloc()
        lb.lbColor = col;
 
        DWORD *dash;
-       if ( m_style == wxUSER_DASH && m_nbDash && m_dash )
+       if ( m_style == wxPENSTYLE_USER_DASH && m_nbDash && m_dash )
        {
            dash = new DWORD[m_nbDash];
            int rw = m_width > 1 ? m_width : 1;
@@ -430,14 +430,14 @@ WXHPEN wxPenRefData::GetHPEN() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 
-wxPen::wxPen(const wxColour& col, int width, int style)
+wxPen::wxPen(const wxColour& col, int width, wxPenStyle style)
 {
     m_refData = new wxPenRefData(col, width, style);
 }
 
 wxPen::wxPen(const wxColour& colour, int width, wxBrushStyle style)
 {
-    m_refData = new wxPenRefData(col, width, (wxPenStyle)style);
+    m_refData = new wxPenRefData(colour, width, (wxPenStyle)style);
 }
 
 wxPen::wxPen(const wxBitmap& stipple, int width)
@@ -550,17 +550,17 @@ int wxPen::GetWidth() const
 
 wxPenStyle wxPen::GetStyle() const
 {
-    return m_refData ? M_PENDATA->GetStyle() : 0;
+    return m_refData ? M_PENDATA->GetStyle() : wxPENSTYLE_MAX;
 }
 
 wxPenJoin wxPen::GetJoin() const
 {
-    return m_refData ? M_PENDATA->GetJoin() : 0;
+    return m_refData ? M_PENDATA->GetJoin() : wxJOIN_INVALID;
 }
 
 wxPenCap wxPen::GetCap() const
 {
-    return m_refData ? M_PENDATA->GetCap() : 0;
+    return m_refData ? M_PENDATA->GetCap() : wxCAP_INVALID;
 }
 
 int wxPen::GetDashes(wxDash** ptr) const

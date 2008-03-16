@@ -799,7 +799,7 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
              font->GetWeight () == weight &&
              font->GetUnderlined () == underline )
         {
-            wxFontFamily fontFamily = font->GetFamily();
+            wxFontFamily fontFamily = (wxFontFamily)font->GetFamily();
 
 #if defined(__WXGTK__)
             // under GTK the default family is wxSWISS, so looking for a font
