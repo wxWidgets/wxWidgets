@@ -15,6 +15,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/gdiobj.h"
+#include "wx/gdicmn.h"      // for wxGDIObjListBase
 
 // NOTE: these values cannot be combined together!
 enum wxBrushStyle
