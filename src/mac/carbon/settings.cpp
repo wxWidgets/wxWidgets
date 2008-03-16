@@ -109,7 +109,9 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
 
         case wxSYS_COLOUR_INFOBK :
-            resultColor = *wxWHITE ;
+            // we don't have a way to detect tooltip color, so use the
+            // standard value used at least on 10.4:
+            resultColor = wxColour( 0xFF, 0xFF, 0xD3 ) ;
             break ;
         case wxSYS_COLOUR_APPWORKSPACE:
             resultColor =  wxColor( 0x80, 0x80, 0x80 ); ;
