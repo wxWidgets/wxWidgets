@@ -275,7 +275,7 @@ wxColour wxBrush::GetColour() const
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_MAX, _T("invalid brush") );
 
     return M_BRUSHDATA->GetStyle();
 }

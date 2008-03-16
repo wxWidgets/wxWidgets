@@ -12,11 +12,9 @@
 #ifndef _WX_BRUSH_H_
 #define _WX_BRUSH_H_
 
-#include "wx/gdicmn.h"
-#include "wx/gdiobj.h"
-#include "wx/bitmap.h"
-
 class WXDLLIMPEXP_FWD_CORE wxBrush;
+class WXDLLIMPEXP_FWD_CORE wxColour;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 // ----------------------------------------------------------------------------
 // wxBrush
