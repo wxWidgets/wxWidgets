@@ -725,6 +725,9 @@ wxWindowMSW::MSWShowWithEffect(bool show,
                                unsigned timeout,
                                wxDirection dir)
 {
+    if ( !wxWindowBase::Show(show) )
+        return false;
+
     typedef BOOL (WINAPI *AnimateWindow_t)(HWND, DWORD, DWORD);
 
     static AnimateWindow_t s_pfnAnimateWindow = NULL;
