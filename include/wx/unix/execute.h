@@ -15,7 +15,10 @@
 class WXDLLIMPEXP_FWD_BASE wxProcess;
 class wxStreamTempInputBuffer;
 
-#if defined(__UNIX__)
+// some ports have toolkit-specific implementations of wxAddProcessCallback()
+// but by default we use a generic wxFDIOHandler-based mechanism under Unix
+#if defined(__UNIX__) && \
+    !(defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMGL__))
     #define wxHAS_GENERIC_PROCESS_CALLBACK 1
 #endif
 
