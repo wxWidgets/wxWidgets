@@ -75,6 +75,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_VIRTUAL_VIEW, MyFrame::OnVirtualView)
     EVT_MENU(LIST_SMALL_VIRTUAL_VIEW, MyFrame::OnSmallVirtualView)
 
+    EVT_MENU(LIST_GOTO, MyFrame::OnGoTo)
     EVT_MENU(LIST_FOCUS_LAST, MyFrame::OnFocusLast)
     EVT_MENU(LIST_TOGGLE_FIRST, MyFrame::OnToggleFirstSel)
     EVT_MENU(LIST_DESELECT_ALL, MyFrame::OnDeselectAll)
@@ -225,6 +226,7 @@ MyFrame::MyFrame(const wxChar *title)
 #endif
 
     wxMenu *menuList = new wxMenu;
+    menuList->Append(LIST_GOTO, _T("&Go to item #3\tCtrl-3"));
     menuList->Append(LIST_FOCUS_LAST, _T("&Make last item current\tCtrl-L"));
     menuList->Append(LIST_TOGGLE_FIRST, _T("To&ggle first item\tCtrl-G"));
     menuList->Append(LIST_DESELECT_ALL, _T("&Deselect All\tCtrl-D"));
@@ -344,6 +346,18 @@ void MyFrame::OnToggleLines(wxCommandEvent& event)
 void MyFrame::OnToggleMacUseGeneric(wxCommandEvent& event)
 {
     wxSystemOptions::SetOption(wxT("mac.listctrl.always_use_generic"), event.IsChecked());
+}
+
+void MyFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))
+{
+    long index = 3;
+    m_listCtrl->SetItemState(index, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+
+    long sel = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL,
+                                        wxLIST_STATE_SELECTED);
+    if ( sel != -1 )
+        m_listCtrl->SetItemState(sel, 0, wxLIST_STATE_SELECTED);
+    m_listCtrl->SetItemState(index, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
 void MyFrame::OnFocusLast(wxCommandEvent& WXUNUSED(event))

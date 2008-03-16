@@ -120,6 +120,7 @@ protected:
     void OnVirtualView(wxCommandEvent& event);
     void OnSmallVirtualView(wxCommandEvent& event);
 
+    void OnGoTo(wxCommandEvent& event);
     void OnFocusLast(wxCommandEvent& event);
     void OnToggleFirstSel(wxCommandEvent& event);
     void OnDeselectAll(wxCommandEvent& event);
@@ -201,6 +202,7 @@ enum
     LIST_TOGGLE_FIRST,
     LIST_SHOW_COL_INFO,
     LIST_SHOW_SEL_INFO,
+    LIST_GOTO,
     LIST_FOCUS_LAST,
     LIST_FREEZE,
     LIST_THAW,
