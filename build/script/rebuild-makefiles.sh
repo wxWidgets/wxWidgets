@@ -41,7 +41,8 @@ do_package()
     if test $archtype = tar ; then
         tar czf ../archives/wx-mk-${format}-${CURDATE}.tar.gz $files
     elif test $archtype = zip ; then
-        zip -l -q -9 ../archives/wx-mk-${format}-${CURDATE}.zip $files
+###        zip -l -q -9 ../archives/wx-mk-${format}-${CURDATE}.zip $files
+        zip -q -9 ../archives/wx-mk-${format}-${CURDATE}.zip $files
     fi
     
     cd ..
@@ -97,82 +98,6 @@ sleep 10
 echo CVS HEAD  last updated at `date -u` > ${FTPDIR}/Daily_HEAD/updated_at.txt
 
 
-## Docs...
-find ${FTPDIR}/Daily_Docs/files -type f -name wx\* -mtime +3 | xargs rm -rf
-cp  ${WORKDIR}/archives/wx-doc* ${FTPDIR}/Daily_Docs/files
-cp  ${WORKDIR}/archives/win/wxW* ${FTPDIR}/Daily_Docs/files
-
-rm -f ${FTPDIR}/Daily_Docs/wx* ${FTPDIR}/Daily_Docs/MD5SUM
-##there must be an easier way of doing these links...
-for f in `find ${FTPDIR}/Daily_Docs/files -type f -name wx\* -mmin -601` ; do
-       ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
-done
-md5sum ${FTPDIR}/Daily_Docs/wx* > ${FTPDIR}/Daily_Docs/MD5SUM
-sleep 10
-echo CVS Documentation generated from bakefiles last updated at `date -u` > ${FTPDIR}/Daily_Docs/updated_at.txt
-}
-
-do_texrtf ()
-{
-
-##parameters : subdir_of_tex index.tex  dir_under_wxWidgets
-# need this first time only
-if [ ! -e ${WORKDIR}/archives/html/$1 ] ; then
-  mkdir ${WORKDIR}/archives/html/$1
-fi  
-
-rm -f ${WORKDIR}/archives/html/$1/*
-/usr/local/bin/tex2rtf ${WORKDIR}/wxWidgets/$3/docs/latex/$1/$2  ${WORKDIR}/archives/html/$1/$1 -twice -html -macros ${WORKDIR}/wxWidgets/docs/latex/wx/tex2rtf_css.ini
-cp ${WORKDIR}/wxWidgets/$3/docs/latex/$1/*.gif ${WORKDIR}/archives/html/$1
-cp ${WORKDIR}/wxWidgets/$3/docs/latex/$1/*.css ${WORKDIR}/archives/html/$1
-cd ${WORKDIR}/archives/html/$1
-zip -l -q -9 ${WORKDIR}/archives/htb/$1.htb *.html  *.css wx.hhc wx.hhp wx.hhk
-zip -q -9 ${WORKDIR}/archives/htb/$1.htb  *.gif 
-}
-
-##this one for tex2rtf as its latex docs aren't in latex...
-do_util_texrtf ()
-{
-##parameters : subdir_of_tex index.tex 
-# need this first time only
-if [ ! -e ${WORKDIR}/archives/html/$1 ] ; then
-  mkdir ${WORKDIR}/archives/html/$1
-fi
-  
-rm -f ${WORKDIR}/archives/html/$1/*
-/usr/local/bin/tex2rtf ${WORKDIR}/wxWidgets/utils/$1/docs/$2  ${WORKDIR}/archives/html/$1/$1 -twice -html -macros ${WORKDIR}/wxWidgets/docs/latex/wx/tex2rtf_css.ini
-cp ${WORKDIR}/wxWidgets/utils/$1/docs/*.gif ${WORKDIR}/archives/html/$1
-cp ${WORKDIR}/wxWidgets/utils/$1/docs/*.css ${WORKDIR}/archives/html/$1
-cd ${WORKDIR}/archives/html/$1
-zip -l -q -9 ${WORKDIR}/archives/htb/$1.htb *.html  *.css wx.hhc wx.hhp wx.hhk
-zip -q -9 ${WORKDIR}/archives/htb/$1.htb  *.gif 
-}
-
-do_docs ()
-{
-##remove files, then regenerate
-rm ${WORKDIR}/archives/wx-do*
-rm ${WORKDIR}/archives/win/wx*
-rm ${WORKDIR}/archives/htb/*.*
-
-######### dir index.tex rootdir
-do_texrtf wx manual.tex
-#do_texrtf book book.tex
-#do_texrtf svg dcsvg.tex contrib
-#do_texrtf ogl ogl.tex contrib
-#do_texrtf mmedia mmedia.tex contrib
-#do_texrtf gizmos manual.tex contrib
-#do_texrtf fl fl.tex contrib
-do_util_texrtf tex2rtf tex2rtf.tex 
-
-cd ${WORKDIR}/archives/
-tar zcvf ${WORKDIR}/archives/wx-docs-html-${CURDATE}.tar.gz `find . -name '*.gif' -print -o -name '*.html' -print` html/wx/*.css
-
-tar zcvf ${WORKDIR}/archives/wx-docs-htb-${CURDATE}.tar.gz  htb/*
-zip -q -9 ${WORKDIR}/archives/wx-docs-htb-${CURDATE}.zip htb/*
-
-##remove .con files
-rm ${WORKDIR}/*.con
 
 }
 
@@ -195,7 +120,7 @@ update_from_svn
 regenerate_makefiles
 package_makefiles
 
-do_docs
+
 add_win_files
 
 copy_files
