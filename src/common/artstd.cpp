@@ -232,13 +232,25 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
             {
                 int bmp_w = bmp.GetWidth();
                 int bmp_h = bmp.GetHeight();
-                // want default size but it's smaller, paste into transparent image
+
                 if ((bmp_h < bestSize.x) && (bmp_w < bestSize.y))
                 {
+                    // the caller wants default size, which is larger than 
+                    // the image we have; to avoid degrading it visually by
+                    // scaling it up, paste it into transparent image instead:
                     wxPoint offset((bestSize.x - bmp_w)/2, (bestSize.y - bmp_h)/2);
                     wxImage img = bmp.ConvertToImage();
                     img.Resize(bestSize, offset);
                     bmp = wxBitmap(img);
+                }
+                else // scale (down or mixed, but not up)
+                {
+                    wxImage img = bmp.ConvertToImage();
+                    bmp = wxBitmap
+                          (
+                              img.Scale(bestSize.x, bestSize.y,
+                                        wxIMAGE_QUALITY_HIGH)
+                          );
                 }
             }
         }
