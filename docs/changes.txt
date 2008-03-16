@@ -125,6 +125,8 @@ All (GUI):
 - Added wxSizer::ComputeFittingClientSize() and ComputeFittingWindowSize().
 - Fixed wxSizer::SetSizeHints() to work when the best size decreases.
 - Fixed crash in wxHtmlHelpController if the help window is still open.
+- Fixed generic art provider to scale bitmaps down to client-specific
+  best size if needed.
 
 All (Unix):
 
