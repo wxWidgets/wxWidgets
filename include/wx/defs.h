@@ -1993,7 +1993,7 @@ enum
 
     /*  IDs used by generic file dialog (13 consecutive starting from this value) */
     wxID_FILEDLGG = 5900,
-    
+
     /*  IDs used by generic file ctrl (4 consecutive starting from this value) */
     wxID_FILECTRL = 5950,
 
@@ -2099,32 +2099,6 @@ enum
     /*  Also wxNORMAL for normal (non-italic text) */
     wxITALIC,
     wxSLANT,
-
-    /*  Pen styles */
-    wxSOLID      =   100,
-    wxDOT,
-    wxLONG_DASH,
-    wxSHORT_DASH,
-    wxDOT_DASH,
-    wxUSER_DASH,
-
-    wxTRANSPARENT,
-
-    /*  Brush & Pen Stippling. Note that a stippled pen cannot be dashed!! */
-    /*  Note also that stippling a Pen IS meaningfull, because a Line is */
-    wxSTIPPLE_MASK_OPAQUE, /* mask is used for blitting monochrome using text fore and back ground colors */
-    wxSTIPPLE_MASK,        /* mask is used for masking areas in the stipple bitmap (TO DO) */
-    /*  drawn with a Pen, and without any Brush -- and it can be stippled. */
-    wxSTIPPLE =          110,
-
-    wxBDIAGONAL_HATCH,     /* In wxWidgets < 2.6 use WX_HATCH macro  */
-    wxCROSSDIAG_HATCH,     /* to verify these wx*_HATCH are in style */
-    wxFDIAGONAL_HATCH,     /* of wxBrush. In wxWidgets >= 2.6 use    */
-    wxCROSS_HATCH,         /* wxBrush::IsHatch() instead.            */
-    wxHORIZONTAL_HATCH,
-    wxVERTICAL_HATCH,
-    wxFIRST_HATCH = wxBDIAGONAL_HATCH,
-    wxLAST_HATCH = wxVERTICAL_HATCH,
 
     wxJOIN_BEVEL =     120,
     wxJOIN_MITER,
@@ -2659,7 +2633,7 @@ typedef HIShapeRef WXHRGN;
 
 #endif
 
-#if defined( __WXCOCOA__ ) || defined(__WXMAC__) 
+#if defined( __WXCOCOA__ ) || defined(__WXMAC__)
 
 /* Definitions of 32-bit/64-bit types
  * These are typedef'd exactly the same way in newer OS X headers so

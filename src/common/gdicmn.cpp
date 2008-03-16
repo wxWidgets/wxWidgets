@@ -758,14 +758,14 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
     return pen;
 }
 
-wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
+wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, wxBrushStyle style)
 {
     for ( wxList::compatibility_iterator node = list.GetFirst();
           node;
           node = node->GetNext() )
     {
         wxBrush * const brush = (wxBrush *) node->GetData ();
-        if ( brush->GetStyle () == style && brush->GetColour() == colour )
+        if ( brush->GetStyle() == style && brush->GetColour() == colour )
             return brush;
     }
 

@@ -34,11 +34,11 @@ public:
     }
 
 protected:
-    int         m_nStyle;
-    wxBitmap    m_vStipple ;
-    wxColour    m_vColour;
-    WXHBRUSH    m_hBrush; // in OS/2 GPI this will be the PS the pen is associated with
-    AREABUNDLE  m_vBundle;
+    wxBrushStyle m_nStyle;
+    wxBitmap     m_vStipple;
+    wxColour     m_vColour;
+    WXHBRUSH     m_hBrush; // in OS/2 GPI this will be the PS the pen is associated with
+    AREABUNDLE   m_vBundle;
 };
 
 #define M_BRUSHDATA ((wxBrushRefData *)m_refData)
@@ -48,7 +48,7 @@ class WXDLLEXPORT wxBrush: public wxBrushBase
 {
 public:
     wxBrush();
-    wxBrush(const wxColour& rCol, int nStyle = wxSOLID);
+    wxBrush(const wxColour& rCol, wxBrushStyle nStyle = wxBRUSHSTYLE_SOLID);
     wxBrush(const wxBitmap& rStipple);
     virtual ~wxBrush();
 
@@ -58,11 +58,11 @@ public:
     virtual void SetColour(const wxColour& rColour);
     virtual void SetColour(unsigned char cRed, unsigned char cGreen, unsigned char cBrush);
     virtual void SetPS(HPS hPS);
-    virtual void SetStyle(int nStyle)  ;
+    virtual void SetStyle(wxBrushStyle nStyle);
     virtual void SetStipple(const wxBitmap& rStipple);
 
     inline wxColour& GetColour(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_vColour : wxNullColour); };
-    virtual int      GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : 0); };
+    virtual wxBrushStyle GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : 0); };
     inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : 0); };
     inline int       GetPS(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_hBrush : 0); };
 

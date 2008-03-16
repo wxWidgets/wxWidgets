@@ -22,6 +22,7 @@
 #include "wx/fontenc.h"
 #include "wx/hashmap.h"
 #include "wx/math.h"
+#include "wx/brush.h"
 
 // ---------------------------------------------------------------------------
 // forward declarations
@@ -631,7 +632,7 @@ public:
 class WXDLLIMPEXP_CORE wxBrushList: public wxGDIObjListBase
 {
 public:
-    wxBrush *FindOrCreateBrush(const wxColour& colour, int style = wxSOLID);
+    wxBrush *FindOrCreateBrush(const wxColour& colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
 #if WXWIN_COMPATIBILITY_2_6
     wxDEPRECATED( void AddBrush(wxBrush*) );
     wxDEPRECATED( void RemoveBrush(wxBrush*) );

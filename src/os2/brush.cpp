@@ -60,7 +60,7 @@ wxBrush::~wxBrush()
 
 wxBrush::wxBrush(
   const wxColour&                   rColour
-, int                               nStyle
+, wxBrushStyle                      nStyle
 )
 {
     m_refData = new wxBrushRefData;
@@ -248,7 +248,7 @@ void wxBrush::SetColour(unsigned char cRed, unsigned char cGreen, unsigned char 
     RealizeResource();
 } // end of wxBrush::SetColour
 
-void wxBrush::SetStyle(int nStyle)
+void wxBrush::SetStyle(wxBrushStyle nStyle)
 {
     AllocExclusive();
     M_BRUSHDATA->m_nStyle = nStyle;

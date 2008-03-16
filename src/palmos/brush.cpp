@@ -50,7 +50,7 @@ wxBrush::wxBrush()
 {
 }
 
-wxBrush::wxBrush(const wxColour& col, int style)
+wxBrush::wxBrush(const wxColour& col, wxBrushStyle style)
 {
 }
 
@@ -90,7 +90,7 @@ wxColour wxBrush::GetColour() const
     return wxNullColour;
 }
 
-int wxBrush::GetStyle() const
+wxBrushStyle wxBrush::GetStyle() const
 {
     return -1;
 }
@@ -117,7 +117,7 @@ void wxBrush::SetColour(unsigned char WXUNUSED(r), unsigned char WXUNUSED(g), un
 {
 }
 
-void wxBrush::SetStyle(int WXUNUSED(style))
+void wxBrush::SetStyle(wxBrushStyle WXUNUSED(style))
 {
 }
 

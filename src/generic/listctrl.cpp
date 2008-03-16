@@ -2135,11 +2135,11 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
 void wxListTextCtrlWrapper::EndEdit(bool discardChanges)
 {
     m_aboutToFinish = true;
-    
+
     if ( discardChanges )
     {
         m_owner->OnRenameCancelled(m_itemEdited);
-           
+
         Finish( true );
     }
     else
@@ -2158,7 +2158,7 @@ void wxListTextCtrlWrapper::Finish( bool setfocus )
     m_owner->ResetTextControl( m_text );
 
     wxPendingDelete.Append( this );
-    
+
     if (setfocus)
         m_owner->SetFocusIgnoringChildren();
 }
@@ -2215,7 +2215,7 @@ void wxListTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
             sx = mySize.x;
        m_text->SetSize(sx, wxDefaultCoord);
     }
-    
+
     event.Skip();
 }
 

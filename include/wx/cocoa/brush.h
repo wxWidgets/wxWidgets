@@ -29,7 +29,7 @@ class WXDLLEXPORT wxBrush: public wxBrushBase
 // ------------------------------------------------------------------------
 public:
     wxBrush();
-    wxBrush(const wxColour& col, int style = wxSOLID);
+    wxBrush(const wxColour& col, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
     wxBrush(const wxBitmap& stipple);
     virtual ~wxBrush();
 
@@ -38,7 +38,7 @@ public:
 // ------------------------------------------------------------------------
     virtual void SetColour(const wxColour& col) ;
     virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) ;
-    virtual void SetStyle(int style) ;
+    virtual void SetStyle(wxBrushStyle style) ;
     virtual void SetStipple(const wxBitmap& stipple) ;
 
     // comparison
@@ -49,7 +49,7 @@ public:
 
     // accessors
     wxColour GetColour() const;
-    virtual int GetStyle() const;
+    virtual wxBrushStyle GetStyle() const;
     wxBitmap *GetStipple() const;
 
     // wxCocoa

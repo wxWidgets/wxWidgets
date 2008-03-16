@@ -85,7 +85,7 @@ public:
                 m_colour == data.m_colour);
     }
 
-    int            m_style;
+    wxBrushStyle   m_style;
     wxColour       m_colour;
     wxBitmap       m_stipple;
     pixpattern24_t m_pixPattern;
@@ -126,7 +126,7 @@ wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject)
 
-wxBrush::wxBrush(const wxColour &colour, int style)
+wxBrush::wxBrush(const wxColour &colour, wxBrushStyle style)
 {
     m_refData = new wxBrushRefData();
     M_BRUSHDATA->m_style = style;
@@ -166,7 +166,7 @@ bool wxBrush::operator != (const wxBrush& brush) const
     return m_refData != brush.m_refData;
 }
 
-int wxBrush::GetStyle() const
+wxBrushStyle wxBrush::GetStyle() const
 {
     if (m_refData == NULL)
     {
@@ -225,7 +225,7 @@ void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
     M_BRUSHDATA->m_colour.Set(r, g, b);
 }
 
-void wxBrush::SetStyle( int style )
+void wxBrush::SetStyle( wxBrushStyle style )
 {
     AllocExclusive();
     M_BRUSHDATA->m_style = style;
