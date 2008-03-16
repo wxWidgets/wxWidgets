@@ -44,7 +44,7 @@ public:
 
 protected:
     int           m_width;
-    int           m_style;
+    wxPenStyle    m_style;
     int           m_join;
     int           m_cap;
     wxBitmap      m_stipple;
@@ -71,11 +71,15 @@ private:
 // Pen
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPen : public wxGDIObject
+class WXDLLEXPORT wxPen : public wxPenBase
 {
 public:
     wxPen();
-    wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
+    wxPen(const wxColour& col, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( wxPen(const wxColour& col, int width, wxBrushStyle style) );
+#endif
+
     wxPen(const wxBitmap& stipple, int width);
     virtual ~wxPen();
 
@@ -94,17 +98,17 @@ public:
     void SetColour(unsigned char r, unsigned char g, unsigned char b);
 
     void SetWidth(int width);
-    void SetStyle(int style);
+    void SetStyle(wxPenStyle style);
     void SetStipple(const wxBitmap& stipple);
     void SetDashes(int nb_dashes, const wxDash *dash);
-    void SetJoin(int join);
-    void SetCap(int cap);
+    void SetJoin(wxPenJoin join);
+    void SetCap(wxPenCap cap);
 
     wxColour& GetColour() const { return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour); };
     int GetWidth() const { return (M_PENDATA ? M_PENDATA->m_width : 0); };
-    int GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
-    int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
-    int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
+    wxPenStyle GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
+    wxPenJoin GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
+    wxPenCap GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
     int GetDashes(wxDash **ptr) const
     {
         *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);

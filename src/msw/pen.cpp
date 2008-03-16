@@ -52,7 +52,7 @@ public:
 
     wxPenRefData();
     wxPenRefData(const wxPenRefData& data);
-    wxPenRefData(const wxColour& col, int width, int style);
+    wxPenRefData(const wxColour& col, int width, wxPenStyle style);
     wxPenRefData(const wxBitmap& stipple, int width);
     virtual ~wxPenRefData();
 
@@ -76,16 +76,16 @@ public:
 
     wxColour& GetColour() const { return wx_const_cast(wxColour&, m_colour); }
     int GetWidth() const { return m_width; }
-    int GetStyle() const { return m_style; }
-    int GetJoin() const { return m_join; }
-    int GetCap() const { return m_cap; }
+    wxPenStyle GetStyle() const { return m_style; }
+    wxPenJoin GetJoin() const { return m_join; }
+    wxPenCap GetCap() const { return m_cap; }
     wxDash* GetDash() const { return m_dash; }
     int GetDashCount() const { return m_nbDash; }
     wxBitmap* GetStipple() const { return wx_const_cast(wxBitmap *, &m_stipple); }
 
     void SetColour(const wxColour& col) { Free(); m_colour = col; }
     void SetWidth(int width) { Free(); m_width = width; }
-    void SetStyle(int style) { Free(); m_style = style; }
+    void SetStyle(wxPenStyle style) { Free(); m_style = style; }
     void SetStipple(const wxBitmap& stipple)
     {
         Free();
@@ -102,8 +102,8 @@ public:
         m_dash = wx_const_cast(wxDash *, dash);
     }
 
-    void SetJoin(int join) { Free(); m_join = join; }
-    void SetCap(int cap) { Free(); m_cap = cap; }
+    void SetJoin(wxPenJoin join) { Free(); m_join = join; }
+    void SetCap(wxPenCap cap) { Free(); m_cap = cap; }
 
 
     // HPEN management
@@ -135,9 +135,9 @@ private:
     }
 
     int           m_width;
-    int           m_style;
-    int           m_join;
-    int           m_cap;
+    wxPenStyle    m_style;
+    wxPenJoin     m_join;
+    wxPenCap      m_cap;
     wxBitmap      m_stipple;
     int           m_nbDash;
     wxDash *      m_dash;
@@ -176,7 +176,7 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_hPen = 0;
 }
 
-wxPenRefData::wxPenRefData(const wxColour& col, int width, int style)
+wxPenRefData::wxPenRefData(const wxColour& col, int width, wxPenStyle style)
 {
     Init();
 
@@ -206,7 +206,7 @@ wxPenRefData::~wxPenRefData()
 // wxPenRefData HPEN management
 // ----------------------------------------------------------------------------
 
-static int ConvertPenStyle(int style)
+static int ConvertPenStyle(wxPenStyle style)
 {
     switch ( style )
     {
@@ -247,7 +247,7 @@ static int ConvertPenStyle(int style)
 
 #ifdef wxHAVE_EXT_CREATE_PEN
 
-static int ConvertJoinStyle(int join)
+static int ConvertJoinStyle(wxPenJoin join)
 {
     switch( join )
     {
@@ -266,7 +266,7 @@ static int ConvertJoinStyle(int join)
     }
 }
 
-static int ConvertCapStyle(int cap)
+static int ConvertCapStyle(wxPenCap cap)
 {
     switch ( cap )
     {
@@ -435,6 +435,11 @@ wxPen::wxPen(const wxColour& col, int width, int style)
     m_refData = new wxPenRefData(col, width, style);
 }
 
+wxPen::wxPen(const wxColour& colour, int width, wxBrushStyle style)
+{
+    m_refData = new wxPenRefData(col, width, (wxPenStyle)style);
+}
+
 wxPen::wxPen(const wxBitmap& stipple, int width)
 {
     m_refData = new wxPenRefData(stipple, width);
@@ -498,7 +503,7 @@ void wxPen::SetWidth(int width)
     M_PENDATA->SetWidth(width);
 }
 
-void wxPen::SetStyle(int style)
+void wxPen::SetStyle(wxPenStyle style)
 {
     AllocExclusive();
 
@@ -519,14 +524,14 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *dash)
     M_PENDATA->SetDashes(nb_dashes, dash);
 }
 
-void wxPen::SetJoin(int join)
+void wxPen::SetJoin(wxPenJoin join)
 {
     AllocExclusive();
 
     M_PENDATA->SetJoin(join);
 }
 
-void wxPen::SetCap(int cap)
+void wxPen::SetCap(wxPenCap cap)
 {
     AllocExclusive();
 
@@ -543,17 +548,17 @@ int wxPen::GetWidth() const
     return m_refData ? M_PENDATA->GetWidth() : 0;
 }
 
-int wxPen::GetStyle() const
+wxPenStyle wxPen::GetStyle() const
 {
     return m_refData ? M_PENDATA->GetStyle() : 0;
 }
 
-int wxPen::GetJoin() const
+wxPenJoin wxPen::GetJoin() const
 {
     return m_refData ? M_PENDATA->GetJoin() : 0;
 }
 
-int wxPen::GetCap() const
+wxPenCap wxPen::GetCap() const
 {
     return m_refData ? M_PENDATA->GetCap() : 0;
 }

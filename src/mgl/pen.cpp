@@ -50,14 +50,14 @@ public:
     }
 
     int            m_width;
-    int            m_style;
+    wxPenStyle     m_style;
     wxColour       m_colour;
     wxBitmap       m_stipple;
     pixpattern24_t m_pixPattern;
 
     // not used by wxMGL, but we want to preserve values
-    int            m_joinStyle;
-    int            m_capStyle;
+    wxPenJoin      m_joinStyle;
+    wxPenCap       m_capStyle;
     int            m_countDashes;
     wxDash        *m_dash;
 };
@@ -102,11 +102,19 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
 
 IMPLEMENT_DYNAMIC_CLASS(wxPen,wxGDIObject)
 
-wxPen::wxPen(const wxColour &colour, int width, int style)
+wxPen::wxPen(const wxColour &colour, int width, wxPenStyle style)
 {
     m_refData = new wxPenRefData();
     M_PENDATA->m_width = width;
     M_PENDATA->m_style = style;
+    M_PENDATA->m_colour = colour;
+}
+
+wxPen::wxPen(const wxColour& colour, int width, wxBrushStyle style)
+{
+    m_refData = new wxPenRefData();
+    M_PENDATA->m_width = width;
+    M_PENDATA->m_style = (wxPenStyle)style;
     M_PENDATA->m_colour = colour;
 }
 
@@ -156,19 +164,19 @@ void wxPen::SetColour(unsigned char red, unsigned char green, unsigned char blue
     M_PENDATA->m_colour.Set(red, green, blue);
 }
 
-void wxPen::SetCap(int capStyle)
+void wxPen::SetCap(wxPenCap capStyle)
 {
     AllocExclusive();
     M_PENDATA->m_capStyle = capStyle;
 }
 
-void wxPen::SetJoin(int joinStyle)
+void wxPen::SetJoin(wxPenJoin joinStyle)
 {
     AllocExclusive();
     M_PENDATA->m_joinStyle = joinStyle;
 }
 
-void wxPen::SetStyle(int style)
+void wxPen::SetStyle(wxPenStyle style)
 {
     AllocExclusive();
     M_PENDATA->m_style = style;
@@ -207,21 +215,21 @@ wxDash* wxPen::GetDash() const
     return (wxDash*)M_PENDATA->m_dash;
 }
 
-int wxPen::GetCap() const
+wxPenCap wxPen::GetCap() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_capStyle;
 }
 
-int wxPen::GetJoin() const
+wxPenJoin wxPen::GetJoin() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 
     return M_PENDATA->m_joinStyle;
 }
 
-int wxPen::GetStyle() const
+wxPenStyle wxPen::GetStyle() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 

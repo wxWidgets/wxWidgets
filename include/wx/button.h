@@ -34,9 +34,11 @@
 // wxButton specific flags
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_8
 // These two flags are obsolete
 #define wxBU_NOAUTODRAW      0x0000
 #define wxBU_AUTODRAW        0x0004
+#endif
 
 // by default, the buttons will be created with some (system dependent)
 // minimal size to make them look nicer, giving this style will make them as

@@ -665,34 +665,34 @@ const wxPen* wxStockGDI::GetPen(Item item)
         switch (item)
         {
         case PEN_BLACK:
-            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxSOLID);
+            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_BLACKDASHED:
-            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxSHORT_DASH);
+            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxPENSTYLE_SHORT_DASH);
             break;
         case PEN_CYAN:
-            pen = new wxPen(*GetColour(COLOUR_CYAN), 1, wxSOLID);
+            pen = new wxPen(*GetColour(COLOUR_CYAN), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_GREEN:
-            pen = new wxPen(*GetColour(COLOUR_GREEN), 1, wxSOLID);
+            pen = new wxPen(*GetColour(COLOUR_GREEN), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_GREY:
-            pen = new wxPen(wxColour(wxT("GREY")), 1, wxSOLID);
+            pen = new wxPen(wxColour(wxT("GREY")), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_LIGHTGREY:
-            pen = new wxPen(*GetColour(COLOUR_LIGHTGREY), 1, wxSOLID);
+            pen = new wxPen(*GetColour(COLOUR_LIGHTGREY), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_MEDIUMGREY:
-            pen = new wxPen(wxColour(wxT("MEDIUM GREY")), 1, wxSOLID);
+            pen = new wxPen(wxColour(wxT("MEDIUM GREY")), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_RED:
-            pen = new wxPen(*GetColour(COLOUR_RED), 1, wxSOLID);
+            pen = new wxPen(*GetColour(COLOUR_RED), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_TRANSPARENT:
-            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxTRANSPARENT);
+            pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxPENSTYLE_TRANSPARENT);
             break;
         case PEN_WHITE:
-            pen = new wxPen(*GetColour(COLOUR_WHITE), 1, wxSOLID);
+            pen = new wxPen(*GetColour(COLOUR_WHITE), 1, wxPENSTYLE_SOLID);
             break;
         default:
             wxFAIL;
@@ -734,7 +734,7 @@ wxGDIObjListBase::~wxGDIObjListBase()
     }
 }
 
-wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
+wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, wxPenStyle style)
 {
     for ( wxList::compatibility_iterator node = list.GetFirst();
           node;
@@ -781,9 +781,9 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, wxBrushStyle st
 }
 
 wxFont *wxFontList::FindOrCreateFont(int pointSize,
-                                     int family,
-                                     int style,
-                                     int weight,
+                                     wxFontFamily family,
+                                     wxFontStyle style,
+                                     wxFontWeight weight,
                                      bool underline,
                                      const wxString& facename,
                                      wxFontEncoding encoding)
@@ -799,7 +799,7 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
              font->GetWeight () == weight &&
              font->GetUnderlined () == underline )
         {
-            int fontFamily = font->GetFamily();
+            wxFontFamily fontFamily = font->GetFamily();
 
 #if defined(__WXGTK__)
             // under GTK the default family is wxSWISS, so looking for a font

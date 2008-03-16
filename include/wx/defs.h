@@ -2099,14 +2099,6 @@ enum
     /*  Also wxNORMAL for normal (non-italic text) */
     wxITALIC,
     wxSLANT,
-
-    wxJOIN_BEVEL =     120,
-    wxJOIN_MITER,
-    wxJOIN_ROUND,
-
-    wxCAP_ROUND =      130,
-    wxCAP_PROJECTING,
-    wxCAP_BUTT
 };
 
 /*  Logical ops */

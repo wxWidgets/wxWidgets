@@ -29,12 +29,16 @@ typedef char wxX11Dash;
 // wxPen
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxPen: public wxGDIObject
+class WXDLLIMPEXP_CORE wxPen: public wxPenBase
 {
 public:
     wxPen() { }
 
-    wxPen( const wxColour &colour, int width = 1, int style = wxSOLID );
+    wxPen( const wxColour &colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID );
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( wxPen(const wxColour& col, int width, wxBrushStyle style) );
+#endif
+
     wxPen( const wxBitmap &stipple, int width );
     virtual ~wxPen();
 
@@ -43,17 +47,17 @@ public:
 
     void SetColour( const wxColour &colour );
     void SetColour( unsigned char red, unsigned char green, unsigned char blue );
-    void SetCap( int capStyle );
-    void SetJoin( int joinStyle );
-    void SetStyle( int style );
+    void SetCap( wxPenCap capStyle );
+    void SetJoin( wxPenJoin joinStyle );
+    void SetStyle( wxPenStyle style );
     void SetWidth( int width );
     void SetDashes( int number_of_dashes, const wxDash *dash );
     void SetStipple( wxBitmap *stipple );
 
     wxColour &GetColour() const;
-    int GetCap() const;
-    int GetJoin() const;
-    int GetStyle() const;
+    wxPenCap GetCap() const;
+    wxPenJoin GetJoin() const;
+    wxPenStyle GetStyle() const;
     int GetWidth() const;
     int GetDashes(wxDash **ptr) const;
     int GetDashCount() const;

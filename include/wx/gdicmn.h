@@ -22,7 +22,6 @@
 #include "wx/fontenc.h"
 #include "wx/hashmap.h"
 #include "wx/math.h"
-#include "wx/brush.h"
 
 // ---------------------------------------------------------------------------
 // forward declarations
@@ -619,39 +618,6 @@ protected:
     wxList list;
 };
 
-class WXDLLIMPEXP_CORE wxPenList: public wxGDIObjListBase
-{
-public:
-    wxPen *FindOrCreatePen(const wxColour& colour, int width, int style);
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( void AddPen(wxPen*) );
-    wxDEPRECATED( void RemovePen(wxPen*) );
-#endif
-};
-
-class WXDLLIMPEXP_CORE wxBrushList: public wxGDIObjListBase
-{
-public:
-    wxBrush *FindOrCreateBrush(const wxColour& colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( void AddBrush(wxBrush*) );
-    wxDEPRECATED( void RemoveBrush(wxBrush*) );
-#endif
-};
-
-class WXDLLIMPEXP_CORE wxFontList: public wxGDIObjListBase
-{
-public:
-    wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
-                             bool underline = false,
-                             const wxString& face = wxEmptyString,
-                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( void AddFont(wxFont*) );
-    wxDEPRECATED( void RemoveFont(wxFont*) );
-#endif
-};
-
 WX_DECLARE_STRING_HASH_MAP(wxColour*, wxStringToColourHashMap);
 
 class WXDLLEXPORT wxColourDatabase
@@ -701,10 +667,6 @@ public:
 // global variables
 // ---------------------------------------------------------------------------
 
-// Lists of GDI objects
-extern WXDLLEXPORT_DATA(wxPenList*)   wxThePenList;
-extern WXDLLEXPORT_DATA(wxBrushList*)   wxTheBrushList;
-extern WXDLLEXPORT_DATA(wxFontList*)    wxTheFontList;
 
 /* Stock objects
 

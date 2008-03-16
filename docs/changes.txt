@@ -173,10 +173,10 @@ Deprecated methods and their replacements
 - wxMenuItem::GetText has been deprecated in favour of wxMenuItem::GetItemLabel
 - wxMenuItem::GetLabelFromText has been deprecated in favour of wxMenuItem::GetLabelText
 - wxMenuItem::SetText has been deprecated in favour of wxMenuItem::SetItemLabel
-- wxBrush::SetStyle and wxBrush:GetStyle as well as the wxBrush ctor now take
-  a wxBrushStyle value instead of a plain "int style".
-  Use the new wxBrush style names (wxBRUSHSTYLE_XXX) instead of the old deprecated
-  wxXXX styles (which are still available however).
+- wxBrush's, wxPen's SetStyle() and GetStyle() as well as the wxBrush/wxPen ctor now take
+  respectively a wxBrushStyle and a wxPenStyle value instead of a plain "int style";
+  use the new wxBrush/wxPen style names (wxBRUSHSTYLE_XXX and wxPENSTYLE_XXX) instead
+  of the old deprecated wxXXX styles (which however are still available).
 
 Major new features in this release
 ----------------------------------

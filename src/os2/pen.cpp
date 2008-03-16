@@ -71,7 +71,7 @@ wxPen::~wxPen()
 wxPen::wxPen(
   const wxColour&                   rColour
 , int                               nWidth
-, int                               nStyle
+, wxPenStyle                        nStyle
 )
 {
     m_refData = new wxPenRefData;
@@ -85,6 +85,20 @@ wxPen::wxPen(
 
     RealizeResource();
 } // end of wxPen::wxPen
+
+wxPen::wxPen(const wxColour& colour, int width, wxBrushStyle style)
+{
+    m_refData = new wxPenRefData;
+
+    M_PENDATA->m_vColour = colour;
+    M_PENDATA->m_nWidth  = width;
+    M_PENDATA->m_nStyle  = (wxPenStyle)nStyle;
+    M_PENDATA->m_nJoin   = wxJOIN_ROUND ;
+    M_PENDATA->m_nCap    = wxCAP_ROUND ;
+    M_PENDATA->m_hPen    = 0L;
+
+    RealizeResource();
+}
 
 wxPen::wxPen(
   const wxBitmap&                   rStipple
@@ -104,7 +118,7 @@ wxPen::wxPen(
 } // end of wxPen::wxPen
 
 int wx2os2PenStyle(
-  int                               nWxStyle
+  wxPenStyle                               nWxStyle
 );
 
 bool wxPen::RealizeResource()
@@ -370,7 +384,7 @@ void wxPen::SetWidth(
 } // end of wxPen::SetWidth
 
 void wxPen::SetStyle(
-  int                               nStyle
+  wxPenStyle                               nStyle
 )
 {
     AllocExclusive();
@@ -397,7 +411,7 @@ void wxPen::SetDashes( int WXUNUSED(nNbDashes),
 } // end of wxPen::SetDashes
 
 void wxPen::SetJoin(
-  int                               nJoin
+  wxPenJoin                               nJoin
 )
 {
     AllocExclusive();
@@ -406,7 +420,7 @@ void wxPen::SetJoin(
 } // end of wxPen::SetJoin
 
 void wxPen::SetCap(
-  int                               nCap
+  wxPenCap                               nCap
 )
 {
     AllocExclusive();
@@ -415,7 +429,7 @@ void wxPen::SetCap(
 } // end of wxPen::SetCap
 
 int wx2os2PenStyle(
-  int                               nWxStyle
+  wxPenStyle                               nWxStyle
 )
 {
     int                             nPMStyle = 0;

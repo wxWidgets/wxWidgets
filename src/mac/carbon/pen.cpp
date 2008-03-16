@@ -44,9 +44,9 @@ public:
 
 protected:
     int           m_width;
-    int           m_style;
-    int           m_join ;
-    int           m_cap ;
+    wxPenStyle    m_style;
+    wxPenJoin     m_join ;
+    wxPenCap      m_cap ;
     wxBitmap      m_stipple ;
     int           m_nbDash ;
     wxDash *      m_dash ;
@@ -97,13 +97,28 @@ wxPen::~wxPen()
 }
 
 // Should implement Create
-wxPen::wxPen(const wxColour& col, int Width, int Style)
+wxPen::wxPen(const wxColour& col, int Width, wxPenStyle Style)
 {
     m_refData = new wxPenRefData;
 
     M_PENDATA->m_colour = col;
     M_PENDATA->m_width = Width;
     M_PENDATA->m_style = Style;
+    M_PENDATA->m_join = wxJOIN_ROUND ;
+    M_PENDATA->m_cap = wxCAP_ROUND ;
+    M_PENDATA->m_nbDash = 0 ;
+    M_PENDATA->m_dash = 0 ;
+
+    RealizeResource();
+}
+
+wxPen::wxPen(const wxColour& col, int Width, wxBrushStyle Style)
+{
+    m_refData = new wxPenRefData;
+
+    M_PENDATA->m_colour = col;
+    M_PENDATA->m_width = Width;
+    M_PENDATA->m_style = (wxPenStyle)Style;
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
@@ -155,17 +170,17 @@ int wxPen::GetWidth() const
     return (M_PENDATA ? M_PENDATA->m_width : 0);
 }
 
-int wxPen::GetStyle() const
+wxPenStyle wxPen::GetStyle() const
 {
     return (M_PENDATA ? M_PENDATA->m_style : 0);
 }
 
-int wxPen::GetJoin() const
+wxPenJoin wxPen::GetJoin() const
 {
     return (M_PENDATA ? M_PENDATA->m_join : 0);
 }
 
-int wxPen::GetCap() const
+wxPenCap wxPen::GetCap() const
 {
     return (M_PENDATA ? M_PENDATA->m_cap : 0);
 }
@@ -222,7 +237,7 @@ void wxPen::SetWidth(int Width)
     RealizeResource();
 }
 
-void wxPen::SetStyle(int Style)
+void wxPen::SetStyle(wxPenStyle Style)
 {
     Unshare();
 
@@ -251,7 +266,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     RealizeResource();
 }
 
-void wxPen::SetJoin(int Join)
+void wxPen::SetJoin(wxPenJoin Join)
 {
     Unshare();
 
@@ -260,7 +275,7 @@ void wxPen::SetJoin(int Join)
     RealizeResource();
 }
 
-void wxPen::SetCap(int Cap)
+void wxPen::SetCap(wxPenCap Cap)
 {
     Unshare();
 

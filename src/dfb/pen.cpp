@@ -29,7 +29,7 @@
 class wxPenRefData : public wxGDIRefData
 {
 public:
-    wxPenRefData(const wxColour& clr = wxNullColour, int style = wxSOLID)
+    wxPenRefData(const wxColour& clr = wxNullColour, wxPenStyle style = wxPENSTYLE_SOLID)
     {
         m_colour = clr;
         SetStyle(style);
@@ -51,7 +51,7 @@ public:
         m_style = style;
     }
 
-    int            m_style;
+    wxPenStyle     m_style;
     wxColour       m_colour;
 };
 
@@ -61,11 +61,16 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 
-wxPen::wxPen(const wxColour &colour, int width, int style)
+wxPen::wxPen(const wxColour &colour, int width, wxPenStyle style)
 {
     wxASSERT_MSG( width <= 1, "only width=0,1 are supported" );
 
     m_refData = new wxPenRefData(colour, style);
+}
+
+wxPen::wxPen(const wxColour& col, int width, wxBrushStyle style)
+{
+    m_refData = new wxPenRefData(col, (wxPenStyle)style);
 }
 
 wxPen::wxPen(const wxBitmap& WXUNUSED(stipple), int WXUNUSED(width))
@@ -98,17 +103,17 @@ void wxPen::SetColour(unsigned char red, unsigned char green, unsigned char blue
     M_PENDATA->m_colour.Set(red, green, blue);
 }
 
-void wxPen::SetCap(int WXUNUSED(capStyle))
+void wxPen::SetCap(wxPenCap WXUNUSED(capStyle))
 {
     wxFAIL_MSG( "SetCap not implemented" );
 }
 
-void wxPen::SetJoin(int WXUNUSED(joinStyle))
+void wxPen::SetJoin(wxPenJoin WXUNUSED(joinStyle))
 {
     wxFAIL_MSG( "SetJoin not implemented" );
 }
 
-void wxPen::SetStyle(int style)
+void wxPen::SetStyle(wxPenStyle style)
 {
     AllocExclusive();
     M_PENDATA->SetStyle(style);
@@ -146,23 +151,23 @@ wxDash* wxPen::GetDash() const
     return NULL;
 }
 
-int wxPen::GetCap() const
+wxPenCap wxPen::GetCap() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxCAP_INVALID, wxT("invalid pen") );
 
     wxFAIL_MSG( "GetCap not implemented" );
-    return -1;
+    return wxCAP_INVALID;
 }
 
-int wxPen::GetJoin() const
+wxPenJoin wxPen::GetJoin() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxJOIN_INVALID, wxT("invalid pen") );
 
     wxFAIL_MSG( "GetJoin not implemented" );
-    return -1;
+    return wxJOIN_INVALID;
 }
 
-int wxPen::GetStyle() const
+wxPenStyle wxPen::GetStyle() const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
 

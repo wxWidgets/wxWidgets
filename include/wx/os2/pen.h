@@ -43,9 +43,9 @@ public:
 
 protected:
     int                             m_nWidth;
-    int                             m_nStyle;
-    int                             m_nJoin;
-    int                             m_nCap;
+    wxPenStyle                      m_nStyle;
+    wxPenJoin                       m_nJoin;
+    wxPenCap                        m_nCap;
     wxBitmap                        m_vStipple;
     int                             m_nbDash;
     wxDash *                        m_dash;
@@ -56,14 +56,18 @@ protected:
 #define M_PENDATA ((wxPenRefData *)m_refData)
 
 // Pen
-class WXDLLEXPORT wxPen : public wxGDIObject
+class WXDLLEXPORT wxPen : public wxPenBase
 {
 public:
     wxPen();
     wxPen( const wxColour& rColour
           ,int             nWidth = 1
-          ,int             nStyle = wxSOLID
+          ,wxPenStyle      nStyle = wxPENSTYLE_SOLID
          );
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( wxPen(const wxColour& col, int width, wxBrushStyle style) );
+#endif
+
     wxPen( const wxBitmap& rStipple
           ,int             nWidth
          );
@@ -87,20 +91,20 @@ public:
     void SetColour(unsigned char cRed, unsigned char cGreen, unsigned char cBlue);
 
     void SetWidth(int nWidth);
-    void SetStyle(int nStyle);
+    void SetStyle(wxPenStyle nStyle);
     void SetStipple(const wxBitmap& rStipple);
     void SetDashes( int           nNbDashes
                    ,const wxDash* pDash
                   );
-    void SetJoin(int nJoin);
-    void SetCap(int nCap);
+    void SetJoin(wxPenJoin nJoin);
+    void SetCap(wxPenCap nCap);
     void SetPS(HPS hPS);
 
     inline wxColour& GetColour(void) const { return (M_PENDATA ? M_PENDATA->m_vColour : wxNullColour); };
     inline int       GetWidth(void) const { return (M_PENDATA ? M_PENDATA->m_nWidth : 0); };
-    inline int       GetStyle(void) const { return (M_PENDATA ? M_PENDATA->m_nStyle : 0); };
-    inline int       GetJoin(void) const { return (M_PENDATA ? M_PENDATA->m_nJoin : 0); };
-    inline int       GetCap(void) const { return (M_PENDATA ? M_PENDATA->m_nCap : 0); };
+    inline wxPenStyle GetStyle(void) const { return (M_PENDATA ? M_PENDATA->m_nStyle : 0); };
+    inline wxPenJoin  GetJoin(void) const { return (M_PENDATA ? M_PENDATA->m_nJoin : 0); };
+    inline wxPenCap   GetCap(void) const { return (M_PENDATA ? M_PENDATA->m_nCap : 0); };
     inline int       GetPS(void) const { return (M_PENDATA ? M_PENDATA->m_hPen : 0); };
     inline int       GetDashes(wxDash **ptr) const
     {
@@ -138,7 +142,7 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxPen)
 }; // end of CLASS wxPen
 
-extern int wx2os2PenStyle(int nWxStyle);
+extern int wx2os2PenStyle(wxPenStyle nWxStyle);
 
 #endif
     // _WX_PEN_H_

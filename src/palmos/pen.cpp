@@ -52,7 +52,7 @@ wxPen::~wxPen()
 }
 
 // Should implement Create
-wxPen::wxPen(const wxColour& col, int Width, int Style)
+wxPen::wxPen(const wxColour& col, int Width, wxPenStyle Style)
 {
 }
 
@@ -92,7 +92,7 @@ void wxPen::SetWidth(int Width)
 {
 }
 
-void wxPen::SetStyle(int Style)
+void wxPen::SetStyle(wxPenStyle Style)
 {
 }
 
@@ -104,11 +104,11 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
 {
 }
 
-void wxPen::SetJoin(int Join)
+void wxPen::SetJoin(wxPenJoin Join)
 {
 }
 
-void wxPen::SetCap(int Cap)
+void wxPen::SetCap(wxPenCap Cap)
 {
 }
 
