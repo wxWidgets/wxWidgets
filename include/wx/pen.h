@@ -14,6 +14,10 @@
 
 #include "wx/defs.h"
 
+#if WXWIN_COMPATIBILITY_2_8
+#include "wx/brush.h"       // needed for some deprecated declarations
+#endif
+
 enum wxPenStyle
 {
 #if WXWIN_COMPATIBILITY_2_8
