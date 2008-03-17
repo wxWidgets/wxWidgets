@@ -875,27 +875,27 @@ public:
     void Clear(bool delete_windows = false);
 
     /**
-        Computes client area size for @a window so that it matches the
-        sizer's minimal size. Unlike GetMinSize(), this
-        method accounts for other constraints imposed on @e window, namely display's
-        size (returned size will never be too large for the display) and maximum
-        window size if previously set by
-        wxWindow::SetMaxSize.
-        The returned value is suitable for passing to
-        wxWindow::SetClientSize or
-        wxWindow::SetMinClientSize.
-        
+        Computes client area size for @a window so that it matches the sizer's
+        minimal size. Unlike GetMinSize(), this method accounts for other
+        constraints imposed on @e window, namely display's size (returned size
+        will never be too large for the display) and maximum window size if
+        previously set by wxWindow::SetMaxSize(). The returned value is
+        suitable for passing to wxWindow::SetClientSize() or
+        wxWindow::SetMinClientSize().
+
+        @since 2.8.8
+
         @see ComputeFittingWindowSize(), Fit()
     */
     wxSize ComputeFittingClientSize(wxWindow* window);
 
     /**
-        Like ComputeFittingClientSize(),
-        but converts the result into window size.
-        The returned value is suitable for passing to
-        wxWindow::SetSize or
-        wxWindow::SetMinSize.
-        
+        Like ComputeFittingClientSize(), but converts the result into window
+        size. The returned value is suitable for passing to wxWindow::SetSize()
+        or wxWindow::SetMinSize().
+
+        @since 2.8.8
+
         @see ComputeFittingClientSize(), Fit()
     */
     wxSize ComputeFittingWindowSize(wxWindow* window);

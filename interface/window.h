@@ -324,23 +324,41 @@ public:
     //@}
 
     /**
-        Converts client area size @a size to corresponding window size. In other
-        words, the returned value is what would GetSize()
-        return if this window had client area of given size.
-        Components with wxDefaultCoord value are left unchanged.
-        Note that the conversion is not always exact, it assumes that non-client area
-        doesn't change and so doesn't take into account things like menu bar
-        (un)wrapping or (dis)appearance of the scrollbars.
-        
+        Converts client area size @a size to corresponding window size. In
+        other words, the returned value is what would GetSize() return if this
+        window had client area of given size.  Components with wxDefaultCoord
+        value are left unchanged.  Note that the conversion is not always
+        exact, it assumes that non-client area doesn't change and so doesn't
+        take into account things like menu bar (un)wrapping or (dis)appearance
+        of the scrollbars.
+
+        @since 2.8.8
+
         @see WindowToClientSize()
     */
     virtual wxSize ClientToWindowSize(const wxSize& size);
 
     /**
+        Converts window size @a size to corresponding client area size. In
+        other words, the returned value is what would GetClientSize() return if
+        this window had given window size. Components with wxDefaultCoord value
+        are left unchanged. 
+
+        Note that the conversion is not always exact, it assumes that
+        non-client area doesn't change and so doesn't take into account things
+        like menu bar (un)wrapping or (dis)appearance of the scrollbars.
+
+        @since 2.8.8
+
+        @see ClientToWindowSize()
+    */
+    virtual wxSize WindowToClientSize(const wxSize& size);
+
+    /**
         This function simply generates a wxCloseEvent whose
-        handler usually tries to close the window. It doesn't close the window itself,
-        however.
-        
+        handler usually tries to close the window. It doesn't close the window
+        itself, however.
+
         @param force
             @false if the window's close handler should be able to veto the destruction
             of this window, @true if it cannot.
