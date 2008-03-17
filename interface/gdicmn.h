@@ -176,7 +176,7 @@ public:
         This method is the opposite from Inflate():
         Deflate(a, b) is equivalent to Inflate(-a, -b).
         Please refer to Inflate() for full description.
-        
+
         @see Inflate()
     */
     void Deflate(wxCoord dx, wxCoord dy) const;
@@ -222,7 +222,7 @@ public:
 
     /**
         Gets the size.
-        
+
         @see SetSize()
     */
     wxSize GetSize() const;
@@ -285,7 +285,7 @@ public:
                 independently. In the above example, the width is reduced by 20,
                 whereas the height is reduced by the full 30 (rather than also stopping
                 at 20, when the width reached zero).
-        
+
         @see Deflate()
     */
     void Inflate(wxCoord dx, wxCoord dy) const;
@@ -333,7 +333,7 @@ public:
 
     /**
         Sets the size.
-        
+
         @see GetSize()
     */
     void SetSize(const wxSize& s);
@@ -407,42 +407,6 @@ public:
         int y
         y coordinate of the top-level corner of the rectangle.
     */
-};
-
-
-
-/**
-    @class wxBrushList
-    @wxheader{gdicmn.h}
-
-    A brush list is a list containing all brushes which have been created.
-
-    @library{wxcore}
-    @category{gdi}
-
-    @see wxBrush
-*/
-class wxBrushList : public wxList
-{
-public:
-    /**
-        Constructor. The application should not construct its own brush list:
-        use the object pointer @b wxTheBrushList.
-    */
-    wxBrushList();
-
-    /**
-        Finds a brush with the specified attributes and returns it, else creates a new
-        brush, adds it
-        to the brush list, and returns it.
-        
-        @param colour
-            Colour object.
-        @param style
-            Brush style. See wxBrush::SetStyle for a list of styles.
-    */
-    wxBrush* FindOrCreateBrush(const wxColour& colour,
-                               int style = wxSOLID);
 };
 
 
@@ -641,7 +605,7 @@ public:
              By @e size.x and @e size.y for the first overload
              By @a dx and @a dy for the second one
              By @a d and @a d for the third one
-        
+
         @see IncBy()
     */
     void DecBy(const wxSize& size);
@@ -652,7 +616,7 @@ public:
     /**
         Decrements this object so that both of its dimensions are not greater than the
         corresponding dimensions of the @e size.
-        
+
         @see IncTo()
     */
     void DecTo(const wxSize& size);
@@ -673,7 +637,7 @@ public:
              By @e size.x and @e size.y for the first overload
              By @a dx and @a dy for the second one
              By @a d and @a d for the third one
-        
+
         @see DecBy()
     */
     void IncBy(const wxSize& size);
@@ -684,7 +648,7 @@ public:
     /**
         Increments this object so that both of its dimensions are not less than the
         corresponding dimensions of the @e size.
-        
+
         @see DecTo()
     */
     void IncTo(const wxSize& size);
@@ -735,7 +699,7 @@ public:
         Combine this size object with another one replacing the default (i.e. equal
         to -1) components of this object with those of the other. It is typically
         used like this:
-        
+
         @see IsFullySpecified()
     */
     void SetDefaults(const wxSize& sizeDefault);
@@ -752,73 +716,6 @@ public:
 };
 
 
-
-/**
-    @class wxPenList
-    @wxheader{gdicmn.h}
-
-    There is only one instance of this class: @b wxThePenList.  Use
-    this object to search for a previously created pen of the desired
-    type and create it if not already found. In some windowing systems,
-    the pen may be a scarce resource, so it can pay to reuse old
-    resources if possible. When an application finishes, all pens will
-    be deleted and their resources freed, eliminating the possibility of
-    'memory leaks'. However, it is best not to rely on this automatic
-    cleanup because it can lead to double deletion in some circumstances.
-
-    There are two mechanisms in recent versions of wxWidgets which make the
-    pen list less useful than it once was. Under Windows, scarce resources
-    are cleaned up internally if they are not being used. Also, a referencing
-    counting mechanism applied to all GDI objects means that some sharing
-    of underlying resources is possible. You don't have to keep track of pointers,
-    working out when it is safe delete a pen, because the referencing counting does
-    it for you. For example, you can set a pen in a device context, and then
-    immediately delete the pen you passed, because the pen is 'copied'.
-
-    So you may find it easier to ignore the pen list, and instead create
-    and copy pens as you see fit. If your Windows resource meter suggests
-    your application is using too many resources, you can resort to using
-    GDI lists to share objects explicitly.
-
-    The only compelling use for the pen list is for wxWidgets to keep
-    track of pens in order to clean them up on exit. It is also kept for
-    backward compatibility with earlier versions of wxWidgets.
-
-    @library{wxcore}
-    @category{gdi}
-
-    @see wxPen
-*/
-class wxPenList
-{
-public:
-    /**
-        Constructor. The application should not construct its own pen list:
-        use the object pointer @b wxThePenList.
-    */
-    wxPenList();
-
-    //@{
-    /**
-        Finds a pen with the specified attributes and returns it, else creates a new
-        pen, adds it
-        to the pen list, and returns it.
-        
-        @param colour
-            Colour object.
-        @param colourName
-            Colour name, which should be in the colour database.
-        @param width
-            Width of pen.
-        @param style
-            Pen style. See wxPen::wxPen for a list of styles.
-    */
-    wxPen* FindOrCreatePen(const wxColour& colour, int width,
-                           int style);
-    wxPen* FindOrCreatePen(const wxString& colourName, int width,
-                           int style);
-    //@}
-};
 
 
 

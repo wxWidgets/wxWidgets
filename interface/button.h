@@ -10,10 +10,11 @@
     @class wxButton
     @wxheader{button.h}
 
-    A button is a control that contains a text string,
-    and is one of the most common elements of a GUI. It may be placed on a
-    @ref overview_wxdialog "dialog box" or panel(), or indeed
-    almost any other window.
+    A button is a control that contains a text string, and is one of the most
+    common elements of a GUI.
+
+    It may be placed on a @ref wxDialog "dialog box" or on a @ref wxPanel panel,
+    or indeed on almost any other window.
 
     @beginStyleTable
     @style{wxBU_LEFT}:
@@ -33,8 +34,7 @@
 
     @beginEventTable
     @event{EVT_BUTTON(id, func)}:
-           Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is
-           clicked.
+           Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.
     @endEventTable
 
     @library{wxcore}
@@ -46,15 +46,20 @@
 class wxButton : public wxControl
 {
 public:
-    //@{
+    /**
+        Default ctor.
+    */
+    wxButton();
+
     /**
         Constructor, creating and showing a button.
+
         The preferred way to create standard buttons is to use default value of
-        @e label. If no label is supplied and @a id is one of standard IDs from
-        @ref overview_stockitems "this list", standard label will be used. In addition
-        to
-        that, the button will be decorated with stock icons under GTK+ 2.
-        
+        @a label. If no label is supplied and @a id is one of standard IDs from
+        @ref page_stockitems "this list", a standard label will be used.
+
+        In addition to that, the button will be decorated with stock icons under GTK+ 2.
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -67,15 +72,14 @@ public:
             Button size. If the default size is specified then the button is sized
             appropriately for the text.
         @param style
-            Window style. See wxButton.
+            Window style. See wxButton class description.
         @param validator
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
-    wxButton();
     wxButton(wxWindow* parent, wxWindowID id,
              const wxString& label = wxEmptyString,
              const wxPoint& pos = wxDefaultPosition,
@@ -83,7 +87,6 @@ public:
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = "button");
-    //@}
 
     /**
         Destructor, destroying the button.
@@ -91,8 +94,8 @@ public:
     ~wxButton();
 
     /**
-        Button creation function for two-step creation. For more details, see
-        wxButton().
+        Button creation function for two-step creation.
+        For more details, see wxButton().
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& label = wxEmptyString,
@@ -111,29 +114,27 @@ public:
 
     /**
         Returns the string label for the button.
-        
-        @returns The button's label.
-        
+
         @see SetLabel()
     */
     wxString GetLabel() const;
 
     /**
-        This sets the button to be the default item for the panel or dialog
-        box.
-        
+        This sets the button to be the default item for the panel or dialog box.
+
+        As normal, pressing return causes the default button to be depressed when
+        the return key is pressed.
+
+        See also wxWindow::SetFocus() which sets the keyboard focus for windows
+        and text panel items, and wxTopLevelWindow::SetDefaultItem().
+
         @remarks Under Windows, only dialog box buttons respond to this function.
-                  As normal under Windows and Motif, pressing return
-                 causes the default button to be depressed when the
-                 return key is pressed. See also wxWindow::SetFocus
-                 which sets the keyboard focus for windows and text
-                 panel items, and wxTopLevelWindow::SetDefaultItem.
     */
     void SetDefault();
 
     /**
         Sets the string label for the button.
-        
+
         @param label
             The label to set.
     */

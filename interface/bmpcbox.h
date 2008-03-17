@@ -14,6 +14,13 @@
     It currently only allows using bitmaps of one size, and resizes itself
     so that a bitmap can be shown next to the text field.
 
+    @remarks
+    While wxBitmapComboBox contains the wxComboBox API, but it might not actually
+    be derived from that class. In fact, if the platform does not have a native
+    implementation, wxBitmapComboBox will inherit from wxOwnerDrawnComboBox.
+    You can determine if the implementation is generic by checking whether
+    @c wxGENERIC_BITMAPCOMBOBOX is defined.
+
     @beginStyleTable
     @style{wxCB_READONLY}:
            Creates a combobox without a text editor. On some platforms the
@@ -23,17 +30,18 @@
     @style{wxTE_PROCESS_ENTER}:
            The control will generate the event wxEVT_COMMAND_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
-           control or used for navigation between dialog controls). Windows
-           only.
+           control or used for navigation between dialog controls).
+           Windows only.
     @endStyleTable
+
+    @todo create wxCB_PROCESS_ENTER rather than reusing wxTE_PROCESS_ENTER!
 
     @beginEventTable
     @event{EVT_COMBOBOX(id, func)}:
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected.
     @event{EVT_TEXT(id, func)}:
-           Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text
-           changes.
+           Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text changes.
     @event{EVT_TEXT_ENTER(id, func)}:
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combobox.
@@ -48,10 +56,15 @@
 class wxBitmapComboBox : public wxComboBox
 {
 public:
+    /**
+        Default ctor.
+    */
+    wxBitmapComboBox();
+
     //@{
     /**
         Constructor, creating and showing a combobox.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -61,8 +74,7 @@ public:
         @param pos
             Window position.
         @param size
-            Window size. If wxDefaultSize is specified then the window is
-        sized
+            Window size. If wxDefaultSize is specified then the window is sized
             appropriately.
         @param n
             Number of strings with which to initialise the control.
@@ -74,10 +86,9 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
-    wxBitmapComboBox();
     wxBitmapComboBox(wxWindow* parent, wxWindowID id,
                      const wxString& value = "",
                      const wxPoint& pos = wxDefaultPosition,
@@ -102,13 +113,17 @@ public:
     */
     ~wxBitmapComboBox();
 
-    //@{
     /**
-        Adds the item to the end of the combo box, associating the given, typed or
-        untyped, client data pointer with the item.
+        Adds the item to the end of the combo box.
     */
     int Append(const wxString& item,
                const wxBitmap& bitmap = wxNullBitmap);
+
+    //@{
+    /**
+        Adds the item to the end of the combo box, associating the given, typed or
+        untyped, client data pointer @a clientData with the item.
+    */
     int Append(const wxString& item, const wxBitmap& bitmap,
                void* clientData);
     int Append(const wxString& item, const wxBitmap& bitmap,
@@ -149,14 +164,20 @@ public:
     */
     wxBitmap GetItemBitmap(unsigned int n) const;
 
+    /**
+        Inserts the item into the list before @a pos.
+        Not valid for @c wxCB_SORT style, use Append() instead.
+    */
+    int Insert(const wxString& item, const wxBitmap& bitmap,
+               unsigned int pos);
+
     //@{
     /**
         Inserts the item into the list before pos, associating the given, typed or
         untyped, client data pointer with the item.
-        Not valid for @c wxCB_SORT style, use Append instead.
+        Not valid for @c wxCB_SORT style, use Append() instead.
     */
-    int Insert(const wxString& item, const wxBitmap& bitmap,
-               unsigned int pos);
+
     int Insert(const wxString& item, const wxBitmap& bitmap,
                unsigned int pos,
                void* clientData);

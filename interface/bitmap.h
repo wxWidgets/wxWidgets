@@ -6,6 +6,12 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    In wxBitmap and wxBitmapHandler context this value means: "use the screen depth".
+*/
+#define wxBITMAP_SCREEN_DEPTH       (-1)
+
 /**
     @class wxBitmapHandler
     @wxheader{bitmap.h}
@@ -50,35 +56,33 @@ public:
         @param height
             The height of the bitmap in pixels.
         @param depth
-            The depth of the bitmap in pixels. If this is -1, the screen depth is used.
+            The depth of the bitmap in pixels.
+            If this is ::wxBITMAP_SCREEN_DEPTH, the screen depth is used.
         @param data
             Data whose type depends on the value of type.
         @param type
             A bitmap type identifier - see ::wxBitmapType for a list
             of possible values.
 
-@todo why type is an int and not a wxBitmapType?
-
         @returns @true if the call succeeded, @false otherwise (the default).
     */
-    virtual bool Create(wxBitmap* bitmap, const void* data, int type,
-                        int width, int height, int depth = -1);
+    virtual bool Create(wxBitmap* bitmap, const void* data, wxBitmapType type,
+                        int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Gets the file extension associated with this handler.
     */
-    const wxString GetExtension() const;
+    const wxString& GetExtension() const;
 
     /**
         Gets the name of this handler.
     */
-    const wxString GetName() const;
+    const wxString& GetName() const;
 
     /**
         Gets the bitmap type associated with this handler.
-@todo why type is an int and not a wxBitmapType?
     */
-    long GetType() const;
+    wxBitmapType GetType() const;
 
     /**
         Loads a bitmap from a file or resource, putting the resulting data into
@@ -90,15 +94,13 @@ public:
             Either a filename or a Windows resource name.
             The meaning of name is determined by the type parameter.
         @param type
-            See wxBitmap::wxBitmap for values this can take.
+            See ::wxBitmapType for values this can take.
 
         @returns @true if the operation succeeded, @false otherwise.
 
-@todo why type is an int and not a wxBitmapType?
-
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, SaveFile()
     */
-    bool LoadFile(wxBitmap* bitmap, const wxString& name, long type);
+    bool LoadFile(wxBitmap* bitmap, const wxString& name, wxBitmapType type);
 
     /**
         Saves a bitmap in the named file.
@@ -108,17 +110,15 @@ public:
         @param name
             A filename. The meaning of name is determined by the type parameter.
         @param type
-            See wxBitmap::wxBitmap for values this can take.
+            See ::wxBitmapType for values this can take.
         @param palette
             An optional palette used for saving the bitmap.
 
         @returns @true if the operation succeeded, @false otherwise.
 
-@todo why type is an int and not a wxBitmapType?
-
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, LoadFile()
     */
-    bool SaveFile(wxBitmap* bitmap, const wxString& name, int type,
+    bool SaveFile(wxBitmap* bitmap, const wxString& name, wxBitmapType type,
                   wxPalette* palette = NULL);
 
     /**
@@ -140,12 +140,10 @@ public:
     /**
         Sets the handler type.
 
-@todo why type is an int and not a wxBitmapType?
-
         @param type
             Handler type.
     */
-    void SetType(long type);
+    void SetType(wxBitmapType type);
 };
 
 
@@ -157,8 +155,8 @@ public:
     either monochrome or colour or colour with alpha channel support.
 
     @note
-    Many wxBitmap functions take a @e type parameter, which is a value of
-    the ::wxBitmapType enumeration.
+    Many wxBitmap functions take a @e type parameter, which is a value of the
+    ::wxBitmapType enumeration.
     The validity of those values depends however on the platform where your program
     is running and from the wxWidgets configuration.
     If all possible wxWidgets settings are used, the Windows platform supports BMP file,
@@ -199,7 +197,8 @@ public:
     */
     wxBitmap(const wxBitmap& bitmap);
 
-    /**
+
+    /*
         Creates a bitmap from the given @a data which is interpreted in
         platform-dependent manner.
 
@@ -216,11 +215,13 @@ public:
         @param depth
             Specifies the depth of the bitmap.
             If this is omitted, the display depth of the screen is used.
-
-@todo why type is an int and not a wxBitmapType?
-
-    */
     wxBitmap(const void* data, int type, int width, int height, int depth = -1);
+
+
+        NOTE: this ctor is not implemented by all port, is somewhat useless
+              without further description of the "data" supported formats and
+              uses 'int type' instead of wxBitmapType, so don't document it.
+    */
 
     /**
         Creates a bitmap from the given array @a bits.
@@ -229,8 +230,9 @@ public:
 
         For other bit depths, the behaviour is platform dependent: under Windows,
         the data is passed without any changes to the underlying CreateBitmap() API.
-        Under other platforms, only monochrome bitmaps may be created using this constructor
-        and wxImage should be used for creating colour bitmaps from static data.
+        Under other platforms, only monochrome bitmaps may be created using this
+        constructor and wxImage should be used for creating colour bitmaps from
+        static data.
 
         @param bits
             Specifies an array of pixel values.
@@ -240,18 +242,19 @@ public:
             Specifies the height of the bitmap.
         @param depth
             Specifies the depth of the bitmap.
-            If this is omitted, the display depth of the screen is used.
+            If this is omitted, then a value of 1 (monochrome bitmap) is used.
     */
     wxBitmap(const char bits[], int width, int height, int depth = 1);
 
     /**
-        Creates a new bitmap. A depth of -1 indicates the depth of the current
-        screen or visual. Some platforms only support 1 for monochrome and -1 for
+        Creates a new bitmap. A depth of ::wxBITMAP_SCREEN_DEPTH indicates the
+        depth of the current screen or visual.
+        Some platforms only support 1 for monochrome and ::wxBITMAP_SCREEN_DEPTH for
         the current colour setting.
 
         A depth of 32 including an alpha channel is supported under MSW, Mac and GTK+.
     */
-    wxBitmap(int width, int height, int depth = -1);
+    wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Creates a bitmap from XPM data.
@@ -270,15 +273,16 @@ public:
 
         @see LoadFile()
     */
-    wxBitmap(const wxString& name, long type);
+    wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_XPM);
 
     /**
-        Creates bitmap object from the image. This has to be done to actually
-        display an image as you cannot draw an image directly on a window.
+        Creates this bitmap object from the given image.
+        This has to be done to actually display an image as you cannot draw an
+        image directly on a window.
 
         The resulting bitmap will use the provided colour depth (or that of the
-        current system if depth is -1) which entails that a colour reduction has
-        to take place.
+        current system if depth is ::wxBITMAP_SCREEN_DEPTH) which entails that a
+        colour reduction may take place.
 
         When in 8-bit mode (PseudoColour mode), the GTK port will use a color cube
         created on program start-up to look up colors. This ensures a very fast conversion,
@@ -295,8 +299,7 @@ public:
             Specifies the depth of the bitmap.
             If this is omitted, the display depth of the screen is used.
     */
-    wxBitmap(const wxImage& img, int depth = -1);
-
+    wxBitmap(const wxImage& img, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Destructor.
@@ -339,16 +342,15 @@ public:
     */
     bool CopyFromIcon(const wxIcon& icon);
 
-
     /**
         Creates a fresh bitmap.
         If the final argument is omitted, the display depth of the screen is used.
 
         This overload works on all platforms.
     */
-    virtual bool Create(int width, int height, int depth = -1);
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
-    /**
+    /*
         Creates a bitmap from the given data, which can be of arbitrary type.
 
         @param data
@@ -366,10 +368,12 @@ public:
         @returns @true if the call succeeded, @false otherwise.
 
         This overload depends on the @a type of data.
-    */
 
     virtual bool Create(const void* data, int type, int width,
                         int height, int depth = -1);
+
+        NOTE: leave this undoc for the same reason of the relative ctor.
+    */
 
     /**
         Finds the handler with the given @a name.
@@ -405,8 +409,8 @@ public:
     static wxBitmapHandler* FindHandler(wxBitmapType bitmapType);
 
     /**
-        Gets the colour depth of the bitmap. A value of 1 indicates a
-        monochrome bitmap.
+        Gets the colour depth of the bitmap.
+        A value of 1 indicates a monochrome bitmap.
     */
     int GetDepth() const;
 
@@ -531,7 +535,7 @@ public:
         @see LoadFile()
     */
     bool SaveFile(const wxString& name, wxBitmapType type,
-                  wxPalette* palette = NULL);
+                  const wxPalette* palette = NULL);
 
     /**
         Sets the depth member (does not affect the bitmap data).

@@ -11,31 +11,35 @@
     @wxheader{buffer.h}
 
     A @b wxMemoryBuffer is a useful data structure for storing arbitrary sized
-    blocks
-    of memory. wxMemoryBuffer guarantees deletion of the memory block when the
-    object
-    is destroyed.
+    blocks of memory. wxMemoryBuffer guarantees deletion of the memory block when
+    the object is destroyed.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{data}
 */
 class wxMemoryBuffer
 {
 public:
-    //@{
     /**
-        Create a new buffer.
-        
-        @param size
-            size of new buffer.
+        Copy constructor, refcounting is used for performance, but wxMemoryBuffer
+        is not a copy-on-write structure so changes made to one buffer effect all
+        copies made from it.
+
+        @see @ref overview_refcount
     */
     wxMemoryBuffer(const wxMemoryBuffer& src);
+
+    /**
+        Create a new buffer.
+
+        @param size
+            size of the new buffer.
+    */
     wxMemoryBuffer(size_t size);
-    //@}
 
     /**
         Append a single byte to the buffer.
-        
+
         @param data
             New byte to append to the buffer.
     */
@@ -44,9 +48,9 @@ public:
     /**
         Ensure that the buffer is big enough and return a pointer to the start
         of the empty space in the buffer. This pointer can be used to directly
-        write data into the buffer, this new data will be appended to
-        the existing data.
-        
+        write data into the buffer, this new data will be appended to the
+        existing data.
+
         @param sizeNeeded
             Amount of extra space required in the buffer for
             the append operation
@@ -81,9 +85,9 @@ public:
     void SetBufSize(size_t size);
 
     /**
-        Sets the length of the data stored in the buffer.  Mainly useful for truncating
-        existing data.
-        
+        Sets the length of the data stored in the buffer.
+        Mainly useful for truncating existing data.
+
         @param size
             New length of the valid data in the buffer. This is
             distinct from the allocated size
@@ -93,7 +97,7 @@ public:
     /**
         Update the length after completing a direct append, which
         you must have used GetAppendBuf() to initialise.
-        
+
         @param sizeUsed
             This is the amount of new data that has been
             appended.
@@ -103,7 +107,7 @@ public:
     /**
         Update the buffer after completing a direct write, which
         you must have used GetWriteBuf() to initialise.
-        
+
         @param sizeUsed
             The amount of data written in to buffer
             by the direct write
