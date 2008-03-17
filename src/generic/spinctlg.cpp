@@ -265,6 +265,17 @@ bool wxSpinCtrl::Show(bool show)
     return true;
 }
 
+bool wxSpinCtrl::Reparent(wxWindow *newParent)
+{
+    if ( m_btn )
+    {
+        m_btn->Reparent(newParent);
+        m_text->Reparent(newParent);
+    }
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // value and range access
 // ----------------------------------------------------------------------------
