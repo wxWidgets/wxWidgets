@@ -55,10 +55,10 @@ wxString wxBrushString ( wxColour c, int style )
     wxString s = wxT("fill:#") + wxColStr (c)  + semicolon + space ;
     switch ( style )
     {
-        case wxSOLID :
+        case wxBRUSHSTYLE_SOLID :
             s = s + wxT("fill-opacity:1.0; ");
             break ;
-        case wxTRANSPARENT:
+        case wxBRUSHSTYLE_TRANSPARENT:
             s = s + wxT("fill-opacity:0.0; ");
             break ;
 
@@ -228,7 +228,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     CalcBoundingBox(x, y);
     CalcBoundingBox((wxCoord)(x + h*sin(rad)), (wxCoord)(y + h*cos(rad)));
 
-    if (m_backgroundMode == wxSOLID)
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
     {
         // draw background first
         // just like DoDrawRectangle except we pass the text color to it and set the border to a 1 pixel wide text background
@@ -564,10 +564,10 @@ void wxSVGFileDCImpl::NewGraphics ()
 
     switch ( m_pen.GetStyle () )
     {
-        case  wxSOLID :
+        case  wxPENSTYLE_SOLID :
             sPenStyle = wxT("stroke-opacity:1.0; stroke-opacity:1.0; ") ;
             break ;
-        case  wxTRANSPARENT :
+        case  wxPENSTYLE_TRANSPARENT :
             sPenStyle = wxT("stroke-opacity:0.0; stroke-opacity:0.0; ") ;
             break ;
         default :

@@ -44,7 +44,7 @@ class wxHtmlListmarkCell : public wxHtmlCell
     DECLARE_NO_COPY_CLASS(wxHtmlListmarkCell)
 };
 
-wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCell(), m_Brush(clr, wxSOLID)
+wxHtmlListmarkCell::wxHtmlListmarkCell(wxDC* dc, const wxColour& clr) : wxHtmlCell(), m_Brush(clr, wxBRUSHSTYLE_SOLID)
 {
     m_Width =  dc->GetCharHeight();
     m_Height = dc->GetCharHeight();

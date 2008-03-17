@@ -984,7 +984,7 @@ void wxHtmlWindow::OnEraseBackground(wxEraseEvent& event)
     // completely covered anyhow
     if ( m_bmpBg.GetMask() )
     {
-        dc.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
+        dc.SetBackground(wxBrush(GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
         dc.Clear();
     }
 
@@ -1018,7 +1018,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( m_eraseBgInOnPaint )
     {
-        dcm.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
+        dcm.SetBackground(wxBrush(GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
         dcm.Clear();
 
         m_eraseBgInOnPaint = false;
@@ -1036,7 +1036,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     PrepareDC(dcm);
     dcm.SetMapMode(wxMM_TEXT);
-    dcm.SetBackgroundMode(wxTRANSPARENT);
+    dcm.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     wxHtmlRenderingInfo rinfo;
     wxDefaultHtmlRenderingStyle rstyle;

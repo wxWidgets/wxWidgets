@@ -239,7 +239,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     if (GetFont().Ok())
         dc.SetFont(GetFont());
 
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     for (int i = 0; i < m_nFields; i ++)
         DrawField(dc, i);

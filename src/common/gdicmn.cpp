@@ -533,34 +533,34 @@ const wxBrush* wxStockGDI::GetBrush(Item item)
         switch (item)
         {
         case BRUSH_BLACK:
-            brush = new wxBrush(*GetColour(COLOUR_BLACK), wxSOLID);
+            brush = new wxBrush(*GetColour(COLOUR_BLACK), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_BLUE:
-            brush = new wxBrush(*GetColour(COLOUR_BLUE), wxSOLID);
+            brush = new wxBrush(*GetColour(COLOUR_BLUE), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_CYAN:
-            brush = new wxBrush(*GetColour(COLOUR_CYAN), wxSOLID);
+            brush = new wxBrush(*GetColour(COLOUR_CYAN), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_GREEN:
-            brush = new wxBrush(*GetColour(COLOUR_GREEN), wxSOLID);
+            brush = new wxBrush(*GetColour(COLOUR_GREEN), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_GREY:
-            brush = new wxBrush(wxColour(wxT("GREY")), wxSOLID);
+            brush = new wxBrush(wxColour(wxT("GREY")), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_LIGHTGREY:
-            brush = new wxBrush(*GetColour(COLOUR_LIGHTGREY), wxSOLID);
+            brush = new wxBrush(*GetColour(COLOUR_LIGHTGREY), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_MEDIUMGREY:
-            brush = new wxBrush(wxColour(wxT("MEDIUM GREY")), wxSOLID);
+            brush = new wxBrush(wxColour(wxT("MEDIUM GREY")), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_RED:
-            brush = new wxBrush(*GetColour(COLOUR_RED), wxSOLID);
+            brush = new wxBrush(*GetColour(COLOUR_RED), wxBRUSHSTYLE_SOLID);
             break;
         case BRUSH_TRANSPARENT:
-            brush = new wxBrush(*GetColour(COLOUR_BLACK), wxTRANSPARENT);
+            brush = new wxBrush(*GetColour(COLOUR_BLACK), wxBRUSHSTYLE_TRANSPARENT);
             break;
         case BRUSH_WHITE:
-            brush = new wxBrush(*GetColour(COLOUR_WHITE), wxSOLID);
+            brush = new wxBrush(*GetColour(COLOUR_WHITE), wxBRUSHSTYLE_SOLID);
             break;
         default:
             wxFAIL;
@@ -806,7 +806,7 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
             // with wxDEFAULT family should return a wxSWISS one instead of
             // creating a new one
             bool same = (fontFamily == family) ||
-                        (fontFamily == wxSWISS && family == wxDEFAULT);
+                        (fontFamily == wxFONTFAMILY_SWISS && family == wxFONTFAMILY_DEFAULT);
 #else // !GTK
             // VZ: but why elsewhere do we require an exact match? mystery...
             bool same = fontFamily == family;

@@ -189,7 +189,7 @@ void wxRichTextPrintout::RenderPage(wxDC *dc, int page)
             dc->SetTextForeground(m_headerFooterData.GetTextColour());
         else
             dc->SetTextForeground(*wxBLACK);
-        dc->SetBackgroundMode(wxTRANSPARENT);
+        dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
         // Draw header, if any    
         wxRichTextOddEvenPage oddEven = ((page % 2) == 1) ? wxRICHTEXT_PAGE_ODD : wxRICHTEXT_PAGE_EVEN;

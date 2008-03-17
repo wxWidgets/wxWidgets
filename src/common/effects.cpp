@@ -55,11 +55,11 @@ wxEffectsImpl::wxEffectsImpl(const wxColour& highlightColour, const wxColour& li
 // Draw a sunken edge
 void wxEffectsImpl::DrawSunkenEdge(wxDC& dc, const wxRect& rect, int WXUNUSED(borderSize))
 {
-    wxPen highlightPen(m_highlightColour, 1, wxSOLID);
-    wxPen lightShadowPen(m_lightShadow, 1, wxSOLID);
-    wxPen facePen(m_faceColour, 1, wxSOLID);
-    wxPen mediumShadowPen(m_mediumShadow, 1, wxSOLID);
-    wxPen darkShadowPen(m_darkShadow, 1, wxSOLID);
+    wxPen highlightPen(m_highlightColour, 1, wxPENSTYLE_SOLID);
+    wxPen lightShadowPen(m_lightShadow, 1, wxPENSTYLE_SOLID);
+    wxPen facePen(m_faceColour, 1, wxPENSTYLE_SOLID);
+    wxPen mediumShadowPen(m_mediumShadow, 1, wxPENSTYLE_SOLID);
+    wxPen darkShadowPen(m_darkShadow, 1, wxPENSTYLE_SOLID);
 
     //// LEFT AND TOP
     // Draw a medium shadow pen on left and top, followed by dark shadow line to

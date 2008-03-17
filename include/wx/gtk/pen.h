@@ -10,9 +10,6 @@
 #ifndef _WX_GTK_PEN_H_
 #define _WX_GTK_PEN_H_
 
-#include "wx/gdiobj.h"
-#include "wx/gdicmn.h"
-
 typedef    gint8 wxGTKDash;
 
 //-----------------------------------------------------------------------------

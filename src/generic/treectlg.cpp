@@ -750,7 +750,7 @@ void wxGenericTreeCtrl::Init()
                             (
                                 wxSYS_COLOUR_HIGHLIGHT
                             ),
-                            wxSOLID
+                            wxBRUSHSTYLE_SOLID
                          );
 
     m_hilightUnfocusedBrush = new wxBrush
@@ -759,7 +759,7 @@ void wxGenericTreeCtrl::Init()
                                  (
                                      wxSYS_COLOUR_BTNSHADOW
                                  ),
-                                 wxSOLID
+                                 wxBRUSHSTYLE_SOLID
                               );
 
     m_imageListButtons = NULL;
@@ -834,7 +834,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     // style because we apparently get performance problems when using dotted
     // pen for drawing in some ports -- but under MSW it seems to work fine
 #ifdef __WXMSW__
-    m_dottedPen = wxPen(*wxLIGHT_GREY, 0, wxDOT);
+    m_dottedPen = wxPen(*wxLIGHT_GREY, 0, wxPENSTYLE_DOT);
 #else
     m_dottedPen = *wxGREY_PEN;
 #endif
@@ -2208,7 +2208,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         {
             colBg = GetBackgroundColour();
         }
-        dc.SetBrush(wxBrush(colBg, wxSOLID));
+        dc.SetBrush(wxBrush(colBg, wxBRUSHSTYLE_SOLID));
     }
 
     int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
@@ -2304,7 +2304,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         dc.DestroyClippingRegion();
     }
 
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     int extraH = (total_h > text_h) ? (total_h - text_h)/2 : 0;
     dc.DrawText( item->GetText(),
                  (wxCoord)(image_w + item->GetX()),

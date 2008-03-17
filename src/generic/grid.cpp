@@ -485,7 +485,7 @@ void wxGridCellEditor::PaintBackground(const wxRect& rectCell,
         gridWindow->GetOwner()->PrepareDC(dc);
 
     dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
+    dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
     dc.DrawRectangle(rectCell);
 
     // redraw the control we just painted over
@@ -1803,7 +1803,7 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
                               int WXUNUSED(row), int WXUNUSED(col),
                               bool isSelected)
 {
-    dc.SetBackgroundMode( wxSOLID );
+    dc.SetBackgroundMode( wxBRUSHSTYLE_SOLID );
 
     // grey out fields if the grid is disabled
     if ( grid.IsEnabled() )
@@ -1815,16 +1815,16 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
                 clr = grid.GetSelectionBackground();
             else
                 clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
-            dc.SetBrush( wxBrush(clr, wxSOLID) );
+            dc.SetBrush( wxBrush(clr, wxBRUSHSTYLE_SOLID) );
         }
         else
         {
-            dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxSOLID) );
+            dc.SetBrush( wxBrush(attr.GetBackgroundColour(), wxBRUSHSTYLE_SOLID) );
         }
     }
     else
     {
-        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE), wxSOLID));
+        dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE), wxBRUSHSTYLE_SOLID));
     }
 
     dc.SetPen( *wxTRANSPARENT_PEN );
@@ -1840,7 +1840,7 @@ void wxGridCellStringRenderer::SetTextColoursAndFont(const wxGrid& grid,
                                                      wxDC& dc,
                                                      bool isSelected)
 {
-    dc.SetBackgroundMode( wxTRANSPARENT );
+    dc.SetBackgroundMode( wxBRUSHSTYLE_TRANSPARENT );
 
     // TODO some special colours for attr.IsReadOnly() case?
 
@@ -3909,7 +3909,7 @@ def __WXGTK__
 
     wxRendererNative::Get().DrawHeaderButton( this, dc, rect, 0 );
 #else // !__WXGTK__
-    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID) );
+    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxPENSTYLE_SOLID) );
     dc.DrawLine( client_width - 1, client_height - 1, client_width - 1, 0 );
     dc.DrawLine( client_width - 1, client_height - 1, 0, client_height - 1 );
     dc.DrawLine( 0, 0, client_width, 0 );
@@ -7549,7 +7549,7 @@ void wxGrid::DrawGridSpace( wxDC& dc )
       int left, top;
       CalcUnscrolledPosition( 0, 0, &left, &top );
 
-      dc.SetBrush( wxBrush(GetDefaultCellBackgroundColour(), wxSOLID) );
+      dc.SetBrush( wxBrush(GetDefaultCellBackgroundColour(), wxBRUSHSTYLE_SOLID) );
       dc.SetPen( *wxTRANSPARENT_PEN );
 
       if ( right > rightCol )
@@ -7644,7 +7644,7 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         // Now draw the rectangle
         // use the cellHighlightColour if the cell is inside a selection, this
         // will ensure the cell is always visible.
-        dc.SetPen(wxPen(IsInSelection(row,col) ? m_selectionForeground : m_cellHighlightColour, penWidth, wxSOLID));
+        dc.SetPen(wxPen(IsInSelection(row,col) ? m_selectionForeground : m_cellHighlightColour, penWidth, wxPENSTYLE_SOLID));
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
         dc.DrawRectangle(rect);
     }
@@ -7673,7 +7673,7 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
 
 wxPen wxGrid::GetDefaultGridLinePen()
 {
-    return wxPen(GetGridLineColour(), 1, wxSOLID);
+    return wxPen(GetGridLineColour(), 1, wxPENSTYLE_SOLID);
 }
 
 wxPen wxGrid::GetRowGridLinePen(int WXUNUSED(row))
@@ -7893,7 +7893,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     int rowTop = GetRowTop(row),
         rowBottom = GetRowBottom(row) - 1;
 
-    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID) );
+    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxPENSTYLE_SOLID) );
     dc.DrawLine( m_rowLabelWidth - 1, rowTop, m_rowLabelWidth - 1, rowBottom );
     dc.DrawLine( 0, rowTop, 0, rowBottom );
     dc.DrawLine( 0, rowBottom, m_rowLabelWidth, rowBottom );
@@ -7902,7 +7902,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     dc.DrawLine( 1, rowTop, 1, rowBottom );
     dc.DrawLine( 1, rowTop, m_rowLabelWidth - 1, rowTop );
 
-    dc.SetBackgroundMode( wxTRANSPARENT );
+    dc.SetBackgroundMode( wxBRUSHSTYLE_TRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
     dc.SetFont( GetLabelFont() );
 
@@ -7965,7 +7965,7 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     {
         int colRight = GetColRight(col) - 1;
 
-        dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxSOLID) );
+        dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW), 1, wxPENSTYLE_SOLID) );
         dc.DrawLine( colRight, 0, colRight, m_colLabelHeight - 1 );
         dc.DrawLine( colLeft, 0, colRight, 0 );
         dc.DrawLine( colLeft, m_colLabelHeight - 1,
@@ -7976,7 +7976,7 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
         dc.DrawLine( colLeft, 1, colRight, 1 );
     }
 
-    dc.SetBackgroundMode( wxTRANSPARENT );
+    dc.SetBackgroundMode( wxBRUSHSTYLE_TRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
     dc.SetFont( GetLabelFont() );
 
@@ -8340,7 +8340,7 @@ void wxGrid::ShowCellEditControl()
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
             wxGridCellAttr* attr = GetCellAttr(row, col);
-            dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
+            dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
             dc.SetPen(*wxTRANSPARENT_PEN);
             dc.DrawRectangle(rect);
 

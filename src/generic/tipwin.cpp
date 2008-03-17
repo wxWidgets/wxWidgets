@@ -326,8 +326,8 @@ void wxTipWindowView::OnPaint(wxPaintEvent& WXUNUSED(event))
     rect.height = size.y;
 
     // first filll the background
-    dc.SetBrush(wxBrush(GetBackgroundColour(), wxSOLID));
-    dc.SetPen( wxPen(GetForegroundColour(), 1, wxSOLID) );
+    dc.SetBrush(wxBrush(GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
+    dc.SetPen(wxPen(GetForegroundColour(), 1, wxPENSTYLE_SOLID));
     dc.DrawRectangle(rect);
 
     // and then draw the text line by line

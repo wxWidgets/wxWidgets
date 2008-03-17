@@ -237,7 +237,7 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         // Set border colour
         wxPen pen1( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT),
                     customBorder,
-                    wxSOLID );
+                    wxPENSTYLE_SOLID);
         dc.SetPen( pen1 );
 
         // area around both controls

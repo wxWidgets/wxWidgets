@@ -371,7 +371,7 @@ wxVListBox::DoDrawSolidBackground(const wxColour& col,
     {
         if ( isSelected )
         {
-            dc.SetBrush(wxBrush(col, wxSOLID));
+            dc.SetBrush(wxBrush(col, wxBRUSHSTYLE_SOLID));
         }
         else // !selected
         {

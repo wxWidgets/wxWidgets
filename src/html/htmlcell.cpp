@@ -497,18 +497,18 @@ static void SwitchSelState(wxDC& dc, wxHtmlRenderingInfo& info,
 
     if ( toSelection )
     {
-        dc.SetBackgroundMode(wxSOLID);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
         dc.SetTextForeground(info.GetStyle().GetSelectedTextColour(fg));
         dc.SetTextBackground(info.GetStyle().GetSelectedTextBgColour(bg));
         dc.SetBackground(wxBrush(info.GetStyle().GetSelectedTextBgColour(bg),
-                                 wxSOLID));
+                                 wxBRUSHSTYLE_SOLID));
     }
     else
     {
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
         dc.SetTextForeground(fg);
         dc.SetTextBackground(bg);
-        dc.SetBackground(wxBrush(bg, wxSOLID));
+        dc.SetBackground(wxBrush(bg, wxBRUSHSTYLE_SOLID));
     }
 }
 
@@ -579,12 +579,12 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         wxHtmlSelectionState selstate = info.GetState().GetSelectionState();
         // Not changing selection state, draw the word in single mode:
         if ( selstate != wxHTML_SEL_OUT &&
-             dc.GetBackgroundMode() != wxSOLID )
+             dc.GetBackgroundMode() != wxBRUSHSTYLE_SOLID )
         {
             SwitchSelState(dc, info, true);
         }
         else if ( selstate == wxHTML_SEL_OUT &&
-                  dc.GetBackgroundMode() == wxSOLID )
+                  dc.GetBackgroundMode() == wxBRUSHSTYLE_SOLID )
         {
             SwitchSelState(dc, info, false);
         }
@@ -1053,7 +1053,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
 
     if (m_UseBkColour)
     {
-        wxBrush myb = wxBrush(m_BkColour, wxSOLID);
+        wxBrush myb = wxBrush(m_BkColour, wxBRUSHSTYLE_SOLID);
 
         int real_y1 = mMax(ylocal, view_y1);
         int real_y2 = mMin(ylocal + m_Height - 1, view_y2);
@@ -1065,8 +1065,8 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
 
     if (m_UseBorder)
     {
-        wxPen mypen1(m_BorderColour1, 1, wxSOLID);
-        wxPen mypen2(m_BorderColour2, 1, wxSOLID);
+        wxPen mypen1(m_BorderColour1, 1, wxPENSTYLE_SOLID);
+        wxPen mypen2(m_BorderColour2, 1, wxPENSTYLE_SOLID);
 
         dc.SetPen(mypen1);
         dc.DrawLine(xlocal, ylocal, xlocal, ylocal + m_Height - 1);
@@ -1453,13 +1453,13 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc,
         if (state.GetSelectionState() != wxHTML_SEL_IN)
         {
             dc.SetTextBackground(m_Colour);
-            dc.SetBackground(wxBrush(m_Colour, wxSOLID));
+            dc.SetBackground(wxBrush(m_Colour, wxBRUSHSTYLE_SOLID));
         }
         else
         {
             wxColour c = info.GetStyle().GetSelectedTextBgColour(m_Colour);
             dc.SetTextBackground(c);
-            dc.SetBackground(wxBrush(c, wxSOLID));
+            dc.SetBackground(wxBrush(c, wxBRUSHSTYLE_SOLID));
         }
     }
 }

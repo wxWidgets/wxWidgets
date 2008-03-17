@@ -4344,7 +4344,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
         // (c) Part selected, part not
         // Let's draw unselected chunk, selected chunk, then unselected chunk.
 
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
         // 1. Initial unselected chunk, if any, up until start of selection.
         if (selectionRange.GetStart() > range.GetStart() && selectionRange.GetStart() <= range.GetEnd())
@@ -4461,7 +4461,7 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttr& attr, con
         wxCheckSetBrush(dc, wxBrush(highlightColour));
         wxCheckSetPen(dc, wxPen(highlightColour));
         dc.SetTextForeground(highlightTextColour);
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     }
     else
     {
@@ -4469,11 +4469,11 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttr& attr, con
 
         if (attr.HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) && attr.GetBackgroundColour().IsOk())
         {
-            dc.SetBackgroundMode(wxSOLID);
+            dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
             dc.SetTextBackground(attr.GetBackgroundColour());
         }
         else
-            dc.SetBackgroundMode(wxTRANSPARENT);
+            dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     }
 
     while (hasTabs)
@@ -6019,7 +6019,7 @@ bool wxRichTextStdRenderer::DrawTextBullet(wxRichTextParagraph* paragraph, wxDC&
         if (attr.GetTextColour().Ok())
             dc.SetTextForeground(attr.GetTextColour());
 
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
         int charHeight = dc.GetCharHeight();
         wxCoord tw, th;

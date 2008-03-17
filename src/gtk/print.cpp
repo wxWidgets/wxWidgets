@@ -1272,7 +1272,7 @@ bool wxGtkPrinterDCImpl::DoGetPixel(wxCoord WXUNUSED(x1),
 
 void wxGtkPrinterDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    if  (m_pen.GetStyle() == wxTRANSPARENT) return;
+    if  (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
 
     SetPen( m_pen );
     gs_cairo->cairo_move_to ( m_cairo, XLOG2DEV(x1), YLOG2DEV(y1) );
@@ -1380,7 +1380,7 @@ void wxGtkPrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord
 
 void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
-    if  (m_pen.GetStyle() == wxTRANSPARENT) return;
+    if  (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
 
     SetPen( m_pen );
 
@@ -1393,7 +1393,7 @@ void wxGtkPrinterDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxGtkPrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
-    if (m_pen.GetStyle() == wxTRANSPARENT) return;
+    if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
 
     if (n <= 0) return;
 
@@ -1810,7 +1810,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     pango_layout_get_pixel_size( m_layout, &w, &h );
 
-        if ( m_backgroundMode == wxSOLID )
+        if ( m_backgroundMode == wxBRUSHSTYLE_SOLID )
         {
             unsigned char red = m_textBackgroundColour.Red();
             unsigned char blue = m_textBackgroundColour.Blue();
@@ -1916,11 +1916,11 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
 
     switch (m_pen.GetStyle())
     {
-        case wxDOT:           gs_cairo->cairo_set_dash( m_cairo, dotted, 2, 0 ); break;
-        case wxSHORT_DASH:    gs_cairo->cairo_set_dash( m_cairo, short_dashed, 2, 0 ); break;
-        case wxLONG_DASH:     gs_cairo->cairo_set_dash( m_cairo, long_dashed, 2, 0 ); break;
-        case wxDOT_DASH:      gs_cairo->cairo_set_dash( m_cairo, dotted_dashed, 4, 0 );  break;
-        case wxUSER_DASH:
+        case wxPENSTYLE_DOT:        gs_cairo->cairo_set_dash( m_cairo, dotted, 2, 0 ); break;
+        case wxPENSTYLE_SHORT_DASH: gs_cairo->cairo_set_dash( m_cairo, short_dashed, 2, 0 ); break;
+        case wxPENSTYLE_LONG_DASH:  gs_cairo->cairo_set_dash( m_cairo, long_dashed, 2, 0 ); break;
+        case wxPENSTYLE_DOT_DASH:   gs_cairo->cairo_set_dash( m_cairo, dotted_dashed, 4, 0 );  break;
+        case wxPENSTYLE_USER_DASH:
         {
             wxDash *wx_dashes;
             int num = m_pen.GetDashes (&wx_dashes);
@@ -1932,8 +1932,8 @@ void wxGtkPrinterDCImpl::SetPen( const wxPen& pen )
             g_free( g_dashes );
         }
         break;
-        case wxSOLID:
-        case wxTRANSPARENT:
+        case wxPENSTYLE_SOLID:
+        case wxPENSTYLE_TRANSPARENT:
         default:              gs_cairo->cairo_set_dash( m_cairo, NULL, 0, 0 );   break;
     }
 
@@ -1980,7 +1980,7 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
 
     m_brush = brush;
 
-    if (m_brush.GetStyle() == wxTRANSPARENT)
+    if (m_brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT)
     {
         gs_cairo->cairo_set_source_rgba( m_cairo, 0, 0, 0, 0 );
         m_currentRed = 0;
@@ -2023,31 +2023,31 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
 
         switch (m_brush.GetStyle())
         {
-            case wxCROSS_HATCH:
+            case wxBRUSHSTYLE_CROSS_HATCH:
                 gs_cairo->cairo_move_to(cr, 5, 0);
                 gs_cairo->cairo_line_to(cr, 5, 10);
                 gs_cairo->cairo_move_to(cr, 0, 5);
                 gs_cairo->cairo_line_to(cr, 10, 5);
                 break;
-            case wxBDIAGONAL_HATCH:
+            case wxBRUSHSTYLE_BDIAGONAL_HATCH:
                 gs_cairo->cairo_move_to(cr, 0, 10);
                 gs_cairo->cairo_line_to(cr, 10, 0);
                 break;
-            case wxFDIAGONAL_HATCH:
+            case wxBRUSHSTYLE_FDIAGONAL_HATCH:
                 gs_cairo->cairo_move_to(cr, 0, 0);
                 gs_cairo->cairo_line_to(cr, 10, 10);
                 break;
-            case wxCROSSDIAG_HATCH:
+            case wxBRUSHSTYLE_CROSSDIAG_HATCH:
                 gs_cairo->cairo_move_to(cr, 0, 0);
                 gs_cairo->cairo_line_to(cr, 10, 10);
                 gs_cairo->cairo_move_to(cr, 10, 0);
                 gs_cairo->cairo_line_to(cr, 0, 10);
                 break;
-            case wxHORIZONTAL_HATCH:
+            case wxBRUSHSTYLE_HORIZONTAL_HATCH:
                 gs_cairo->cairo_move_to(cr, 0, 5);
                 gs_cairo->cairo_line_to(cr, 10, 5);
                 break;
-            case wxVERTICAL_HATCH:
+            case wxBRUSHSTYLE_VERTICAL_HATCH:
                 gs_cairo->cairo_move_to(cr, 5, 0);
                 gs_cairo->cairo_line_to(cr, 5, 10);
                 break;
@@ -2098,10 +2098,10 @@ void wxGtkPrinterDCImpl::SetBackground( const wxBrush& brush )
 
 void wxGtkPrinterDCImpl::SetBackgroundMode(int mode)
 {
-    if (mode == wxSOLID)
-        m_backgroundMode = wxSOLID;
+    if (mode == wxBRUSHSTYLE_SOLID)
+        m_backgroundMode = wxBRUSHSTYLE_SOLID;
     else
-        m_backgroundMode = wxTRANSPARENT;
+        m_backgroundMode = wxBRUSHSTYLE_TRANSPARENT;
 }
 
 void wxGtkPrinterDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)

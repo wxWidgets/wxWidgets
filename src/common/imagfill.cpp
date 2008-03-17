@@ -276,7 +276,7 @@ wxImageFloodFill(wxImage *image,
 bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
                    const wxColour& col, int style)
 {
-    if (dc->GetBrush().GetStyle() == wxTRANSPARENT)
+    if (dc->GetBrush().GetStyle() == wxBRUSHSTYLE_TRANSPARENT)
         return true;
 
     int height = 0;

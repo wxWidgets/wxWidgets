@@ -12,7 +12,8 @@
 #ifndef _WX_PEN_H_BASE_
 #define _WX_PEN_H_BASE_
 
-#include "wx/defs.h"
+#include "wx/gdiobj.h"
+#include "wx/gdicmn.h"
 
 #if WXWIN_COMPATIBILITY_2_8
 #include "wx/brush.h"       // needed for some deprecated declarations

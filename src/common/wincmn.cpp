@@ -2411,7 +2411,7 @@ static void DrawBorder(wxWindowBase *win, const wxRect& rect, bool fill = false)
 {
     wxClientDC dc((wxWindow *)win);
     dc.SetPen(*wxRED_PEN);
-    dc.SetBrush(fill ? wxBrush(*wxRED, wxCROSSDIAG_HATCH): *wxTRANSPARENT_BRUSH);
+    dc.SetBrush(fill ? wxBrush(*wxRED, wxBRUSHSTYLE_CROSSDIAG_HATCH) : *wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(rect.Deflate(1, 1));
 }
 

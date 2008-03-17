@@ -334,7 +334,7 @@ wxDCImpl::wxDCImpl( wxDC *owner )
         , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
         , m_clipX1(0), m_clipY1(0), m_clipX2(0), m_clipY2(0)
         , m_logicalFunction(wxCOPY)
-        , m_backgroundMode(wxTRANSPARENT)
+        , m_backgroundMode(wxBRUSHSTYLE_TRANSPARENT)
         , m_mappingMode(wxMM_TEXT)
         , m_pen()
         , m_brush()
@@ -745,7 +745,7 @@ wxDCImpl::DoDrawPolyPolygon(int n,
     }
 
     pen = GetPen();
-    SetPen(wxPen(*wxBLACK, 0, wxTRANSPARENT));
+    SetPen(wxPen(*wxBLACK, 0, wxPENSTYLE_TRANSPARENT));
     DoDrawPolygon(j, pts, xoffset, yoffset, fillStyle);
     SetPen(pen);
     for (i = j = 0; i < n; i++)
@@ -1013,7 +1013,7 @@ void wxDCImpl::DoGradientFillLinear(const wxRect& rect,
                 nB = nB1 + (nB2-nB1)*(w-x)/w;
 
             wxColour colour(nR,nG,nB);
-            SetPen(wxPen(colour, 1, wxSOLID));
+            SetPen(wxPen(colour, 1, wxPENSTYLE_SOLID));
             SetBrush(wxBrush(colour));
             if(nDirection == wxEAST)
                 DoDrawRectangle(rect.GetRight()-x-xDelta+1, rect.GetTop(),
@@ -1050,7 +1050,7 @@ void wxDCImpl::DoGradientFillLinear(const wxRect& rect,
                 nB = nB1 + (nB2-nB1)*(w-y)/w;
 
             wxColour colour(nR,nG,nB);
-            SetPen(wxPen(colour, 1, wxSOLID));
+            SetPen(wxPen(colour, 1, wxPENSTYLE_SOLID));
             SetBrush(wxBrush(colour));
             if(nDirection == wxNORTH)
                 DoDrawRectangle(rect.GetLeft(), rect.GetTop()+y,
@@ -1269,7 +1269,7 @@ void wxDC::DrawLabel(const wxString& text,
     if ( startUnderscore != endUnderscore )
     {
         // it should be of the same colour as text
-        SetPen(wxPen(GetTextForeground(), 0, wxSOLID));
+        SetPen(wxPen(GetTextForeground(), 0, wxPENSTYLE_SOLID));
 
         yUnderscore--;
 

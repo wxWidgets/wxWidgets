@@ -1069,7 +1069,7 @@ wxGnomePrinterDCImpl::DoGetPixel(wxCoord WXUNUSED(x1),
 
 void wxGnomePrinterDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
-    if  (m_pen.GetStyle() == wxTRANSPARENT) return;
+    if  (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
 
     SetPen( m_pen );
 
@@ -1116,7 +1116,7 @@ void wxGnomePrinterDCImpl::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2
         while (alpha2 > 360)  alpha2 -= 360;
     }
 
-    if (m_brush.GetStyle() != wxTRANSPARENT)
+    if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush( m_brush );
         gs_libGnomePrint->gnome_print_moveto ( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc) );
@@ -1125,7 +1125,7 @@ void wxGnomePrinterDCImpl::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2
         gs_libGnomePrint->gnome_print_fill( m_gpc );
     }
 
-    if (m_pen.GetStyle() != wxTRANSPARENT)
+    if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
         SetPen (m_pen);
         gs_libGnomePrint->gnome_print_newpath( m_gpc );
@@ -1158,7 +1158,7 @@ void wxGnomePrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoo
     xx = 0.0;
     yy = 0.0;
 
-    if (m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush( m_brush );
 
@@ -1170,7 +1170,7 @@ void wxGnomePrinterDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoo
         gs_libGnomePrint->gnome_print_fill( m_gpc );
     }
 
-    if (m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         SetPen (m_pen);
 
@@ -1192,7 +1192,7 @@ void wxGnomePrinterDCImpl::DoDrawPoint(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 
 void wxGnomePrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset)
 {
-    if (m_pen.GetStyle() == wxTRANSPARENT) return;
+    if (m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) return;
 
     if (n <= 0) return;
 
@@ -1216,7 +1216,7 @@ void wxGnomePrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
 {
     if (n==0) return;
 
-    if (m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush( m_brush );
 
@@ -1237,7 +1237,7 @@ void wxGnomePrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
         gs_libGnomePrint->gnome_print_fill( m_gpc );
     }
 
-    if (m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         SetPen (m_pen);
 
@@ -1272,7 +1272,7 @@ void wxGnomePrinterDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, 
     width--;
     height--;
 
-    if (m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush( m_brush );
 
@@ -1288,7 +1288,7 @@ void wxGnomePrinterDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, 
         CalcBoundingBox( x + width, y + height );
     }
 
-    if (m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         SetPen (m_pen);
 
@@ -1312,7 +1312,7 @@ void wxGnomePrinterDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord 
 
     wxCoord rad = wxRound( radius );
 
-    if (m_brush.GetStyle() != wxTRANSPARENT)
+    if (m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush(m_brush);
         gs_libGnomePrint->gnome_print_newpath(m_gpc);
@@ -1344,7 +1344,7 @@ void wxGnomePrinterDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord 
         CalcBoundingBox(x+width,y+height);
     }
 
-    if (m_pen.GetStyle() != wxTRANSPARENT)
+    if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
         SetPen(m_pen);
         gs_libGnomePrint->gnome_print_newpath(m_gpc);
@@ -1428,7 +1428,7 @@ void wxGnomePrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wx
     width--;
     height--;
 
-    if (m_brush.GetStyle () != wxTRANSPARENT)
+    if (m_brush.GetStyle () != wxBRUSHSTYLE_TRANSPARENT)
     {
         SetBrush( m_brush );
         makeEllipticalPath( x, y, width, height );
@@ -1437,7 +1437,7 @@ void wxGnomePrinterDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wx
         CalcBoundingBox( x + width, y + height );
     }
 
-    if (m_pen.GetStyle () != wxTRANSPARENT)
+    if (m_pen.GetStyle () != wxPENSTYLE_TRANSPARENT)
     {
         SetPen (m_pen);
         makeEllipticalPath( x, y, width, height );
@@ -1717,11 +1717,11 @@ void wxGnomePrinterDCImpl::SetPen( const wxPen& pen )
 
     switch (m_pen.GetStyle())
     {
-        case wxDOT:           gs_libGnomePrint->gnome_print_setdash( m_gpc, 2, dotted, 0 ); break;
-        case wxSHORT_DASH:    gs_libGnomePrint->gnome_print_setdash( m_gpc, 2, short_dashed, 0 ); break;
-        case wxLONG_DASH:     gs_libGnomePrint->gnome_print_setdash( m_gpc, 2, wxCoord_dashed, 0 ); break;
-        case wxDOT_DASH:      gs_libGnomePrint->gnome_print_setdash( m_gpc, 4, dotted_dashed, 0 );  break;
-        case wxUSER_DASH:
+        case wxPENSTYLE_DOT:        gs_libGnomePrint->gnome_print_setdash( m_gpc, 2, dotted, 0 ); break;
+        case wxPENSTYLE_SHORT_DASH: gs_libGnomePrint->gnome_print_setdash( m_gpc, 2, short_dashed, 0 ); break;
+        case wxPENSTYLE_LONG_DASH:  gs_libGnomePrint->gnome_print_setdash( m_gpc, 2, wxCoord_dashed, 0 ); break;
+        case wxPENSTYLE_DOT_DASH:   gs_libGnomePrint->gnome_print_setdash( m_gpc, 4, dotted_dashed, 0 );  break;
+        case wxPENSTYLE_USER_DASH:
         {
             // It may be noted that libgnomeprint between at least
             // versions 2.8.0 and 2.12.1 makes a copy of the dashes
@@ -1737,8 +1737,8 @@ void wxGnomePrinterDCImpl::SetPen( const wxPen& pen )
             g_free( g_dashes );
         }
         break;
-        case wxSOLID:
-        case wxTRANSPARENT:
+        case wxPENSTYLE_SOLID:
+        case wxPENSTYLE_TRANSPARENT:
         default:              gs_libGnomePrint->gnome_print_setdash( m_gpc, 0, NULL, 0 );   break;
     }
 

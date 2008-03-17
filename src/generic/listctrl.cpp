@@ -1442,7 +1442,7 @@ bool wxListLineData::SetAttributes(wxDC *dc,
         if ( highlighted )
             dc->SetBrush( *m_owner->GetHighlightBrush() );
         else
-            dc->SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
+            dc->SetBrush(wxBrush(attr->GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
 
         dc->SetPen( *wxTRANSPARENT_PEN );
 
@@ -1790,7 +1790,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     GetClientSize( &w, &h );
     m_owner->CalcUnscrolledPosition(w, 0, &w, NULL);
 
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc.SetTextForeground(GetForegroundColour());
 
     int x = HEADER_OFFSET_X;
@@ -2306,7 +2306,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
                             (
                                 wxSYS_COLOUR_HIGHLIGHT
                             ),
-                            wxSOLID
+                            wxBRUSHSTYLE_SOLID
                          );
 
     m_highlightUnfocusedBrush = new wxBrush
@@ -2315,7 +2315,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
                                  (
                                      wxSYS_COLOUR_BTNSHADOW
                                  ),
-                                 wxSOLID
+                                 wxBRUSHSTYLE_SOLID
                               );
 
     SetScrollbars( 0, 0, 0, 0, 0, 0 );
@@ -2764,7 +2764,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         if ( HasFlag(wxLC_HRULES) )
         {
-            wxPen pen(GetRuleColour(), 1, wxSOLID);
+            wxPen pen(GetRuleColour(), 1, wxPENSTYLE_SOLID);
             wxSize clientSize = GetClientSize();
 
             size_t i = visibleFrom;
@@ -2790,7 +2790,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // Draw vertical rules if required
         if ( HasFlag(wxLC_VRULES) && !IsEmpty() )
         {
-            wxPen pen(GetRuleColour(), 1, wxSOLID);
+            wxPen pen(GetRuleColour(), 1, wxPENSTYLE_SOLID);
             wxRect firstItemRect, lastItemRect;
 
             GetItemRect(visibleFrom, firstItemRect);
