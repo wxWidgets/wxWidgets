@@ -250,14 +250,17 @@ IGNORE_PREFIX          = wx
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output
 #---------------------------------------------------------------------------
+GENERATE_HTML          = NO # Only change in format output configs
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            = htmlheader.inc
 HTML_FOOTER            = htmlfooter.inc
 HTML_STYLESHEET        =
 HTML_ALIGN_MEMBERS     = YES
+GENERATE_HTMLHELP      = NO # Only change in format output configs
 HTML_DYNAMIC_SECTIONS  = YES
-CHM_FILE               = ..\wx.chm      # NOTE: we need to use Win-style separator here
+CHM_FILE               = ..\wx.chm # NOTE: Windows style separator needed
+HHC_LOCATION           = hhc.exe # Don't modify, see Doxyfile_chm for info
 GENERATE_CHI           = NO
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
@@ -269,6 +272,7 @@ TREEVIEW_WIDTH         = 250
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
 #---------------------------------------------------------------------------
+GENERATE_LATEX         = NO # Only change in format output configs
 LATEX_OUTPUT           = latex
 LATEX_CMD_NAME         = latex
 MAKEINDEX_CMD_NAME     = makeindex
@@ -284,6 +288,7 @@ LATEX_HIDE_INDICES     = NO
 #---------------------------------------------------------------------------
 # configuration options related to the RTF output
 #---------------------------------------------------------------------------
+GENERATE_RTF           = NO # Only change in format output configs
 RTF_OUTPUT             = rtf
 COMPACT_RTF            = NO
 RTF_HYPERLINKS         = NO
@@ -293,6 +298,7 @@ RTF_EXTENSIONS_FILE    =
 #---------------------------------------------------------------------------
 # configuration options related to the man page output
 #---------------------------------------------------------------------------
+GENERATE_MAN           = NO # Only change in format output configs
 MAN_OUTPUT             = man
 MAN_EXTENSION          = .3
 MAN_LINKS              = NO
@@ -300,6 +306,7 @@ MAN_LINKS              = NO
 #---------------------------------------------------------------------------
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
+GENERATE_XML           = NO # Only change in format output configs
 XML_OUTPUT             = xml
 XML_SCHEMA             =
 XML_DTD                =
@@ -308,12 +315,12 @@ XML_PROGRAMLISTING     = YES
 #---------------------------------------------------------------------------
 # configuration options for the AutoGen Definitions output
 #---------------------------------------------------------------------------
-
+GENERATE_AUTOGEN_DEF   = NO # Only change in format output configs
 
 #---------------------------------------------------------------------------
 # configuration options related to the Perl module output
 #---------------------------------------------------------------------------
-GENERATE_PERLMOD       = NO
+GENERATE_PERLMOD       = NO # Only change in format output configs
 PERLMOD_LATEX          = YES
 PERLMOD_PRETTY         = YES
 PERLMOD_MAKEVAR_PREFIX =
@@ -335,6 +342,7 @@ SKIP_FUNCTION_MACROS   = YES
 # Configuration::additions related to external references
 #---------------------------------------------------------------------------
 TAGFILES               =
+GENERATE_TAGFILE       =
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 PERL_PATH              = /usr/bin/perl
@@ -370,4 +378,5 @@ DOT_CLEANUP            = YES
 #---------------------------------------------------------------------------
 # Configuration::additions related to the search engine
 #---------------------------------------------------------------------------
-SEARCHENGINE           = YES
+SEARCHENGINE           = NO
+

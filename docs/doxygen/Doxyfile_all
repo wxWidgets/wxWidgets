@@ -12,16 +12,15 @@
 # Generation switches
 #---------------------------------------------------------------------------
 
-GENERATE_HTMLHELP      = YES
-GENERATE_HTML          = YES
-GENERATE_XML           = YES
+# This file generates all the official formats we distribute.
 
+GENERATE_HTML          = YES
+GENERATE_HTMLHELP      = YES
 GENERATE_LATEX         = NO
 GENERATE_RTF           = NO
 GENERATE_MAN           = NO
-GENERATE_PERLMOD       = YES
+GENERATE_XML           = YES
 GENERATE_AUTOGEN_DEF   = NO
-GENERATE_TAGFILE       =
+GENERATE_PERLMOD       = YES
+GENERATE_TAGFILE       = NO
 
-# see Doxyfile_chm for more info about hhc.exe and where to get it!
-HHC_LOCATION           = hhc.exe

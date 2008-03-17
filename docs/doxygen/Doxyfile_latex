@@ -12,15 +12,5 @@
 # Generation switches
 #---------------------------------------------------------------------------
 
-GENERATE_HTMLHELP      = NO
-GENERATE_HTML          = NO
-GENERATE_XML           = NO
-
 GENERATE_LATEX         = YES
-GENERATE_RTF           = NO
-GENERATE_MAN           = NO
-GENERATE_PERLMOD       = NO
-GENERATE_AUTOGEN_DEF   = NO
-GENERATE_TAGFILE       =
 
-HHC_LOCATION           =

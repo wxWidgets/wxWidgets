@@ -495,7 +495,10 @@ A[HREF="modules.html"] SPAN:before {
 	content: "Categories / ";
 }
 
+/* Doxygen defaults the top navigation tabs to a small, bold font,
+   so we reset it here to a larger, normal font. */
 DIV.navigation A SPAN {
-	font-size: 110%;
+	font-size: 120%;
+	font-weight: normal;
 }
 
