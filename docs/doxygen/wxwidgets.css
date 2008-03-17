@@ -22,7 +22,7 @@ BODY,TD {
 H1 {
 	text-align: center;
 	font-size: 160%;
- border-top: 1em;
+	border-top: 1em;
 }
 H2 {
 	font-size: 120%;
@@ -52,25 +52,25 @@ DIV.navpath {
 	line-height: 140%;
 }
 DIV.navtab {
-       background-color: #e8eef2;
-       border: 1px solid #84b0c7;
-       text-align: center;
-       margin: 2px;
-       margin-right: 15px;
-       padding: 2px;
+	background-color: #e8eef2;
+	border: 1px solid #84b0c7;
+	text-align: center;
+	margin: 2px;
+	margin-right: 15px;
+	padding: 2px;
 }
 TD.navtab {
-       font-size: 70%;
+	font-size: 70%;
 }
 A.qindex {
-       text-decoration: none;
-       font-weight: bold;
-       color: #1A419D;
+	text-decoration: none;
+	font-weight: bold;
+	color: #1A419D;
 }
 A.qindex:visited {
-       text-decoration: none;
-       font-weight: bold;
-       color: #1A419D
+	text-decoration: none;
+	font-weight: bold;
+	color: #1A419D
 }
 A.qindex:hover {
 	text-decoration: none;
@@ -126,8 +126,8 @@ DL.el {
 	margin-left: -1cm 
 }
 .fragment {
-       font-family: monospace, fixed;
-       font-size: 95%;
+	font-family: monospace, fixed;
+	font-size: 95%;
 }
 PRE.fragment {
 	border: 1px solid #CCCCCC;
@@ -150,10 +150,10 @@ DIV.ah {
 }
 
 DIV.groupHeader {
-       margin-left: 16px;
-       margin-top: 12px;
-       margin-bottom: 6px;
-       font-weight: bold;
+	margin-left: 16px;
+	margin-top: 12px;
+	margin-bottom: 6px;
+	font-weight: bold;
 }
 DIV.groupText { 
 	margin-left: 16px; 
@@ -217,7 +217,7 @@ SPAN.vhdllogic     { color: #ff0000 }
 
 .mdescLeft {
 	padding: 0px 8px 4px 8px;
-	font-size: 80%;
+	font-size: 90%;
 	font-style: italic;
 	background-color: #FAFAFA;
 	border-top: 1px none #E0E0E0;
@@ -227,8 +227,8 @@ SPAN.vhdllogic     { color: #ff0000 }
 	margin: 0px;
 }
 .mdescRight {
-        padding: 0px 8px 4px 8px;
-	font-size: 80%;
+	padding: 0px 8px 4px 8px;
+	font-size: 90%;
 	font-style: italic;
 	background-color: #FAFAFA;
 	border-top: 1px none #E0E0E0;
@@ -253,7 +253,7 @@ SPAN.vhdllogic     { color: #ff0000 }
 	border-bottom-style: none;
 	border-left-style: none;
 	background-color: #FAFAFA;
-	font-size: 80%;
+	font-size: 90%;
 }
 .memItemRight {
 	padding: 1px 8px 0px 8px;
@@ -271,7 +271,7 @@ SPAN.vhdllogic     { color: #ff0000 }
 	border-bottom-style: none;
 	border-left-style: none;
 	background-color: #FAFAFA;
-	font-size: 80%;
+	font-size: 90%;
 }
 .memTemplItemLeft {
 	padding: 1px 0px 0px 8px;
@@ -289,7 +289,7 @@ SPAN.vhdllogic     { color: #ff0000 }
 	border-bottom-style: none;
 	border-left-style: none;
 	background-color: #FAFAFA;
-	font-size: 80%;
+	font-size: 90%;
 }
 .memTemplItemRight {
 	padding: 1px 8px 0px 8px;
@@ -307,7 +307,7 @@ SPAN.vhdllogic     { color: #ff0000 }
 	border-bottom-style: none;
 	border-left-style: none;
 	background-color: #FAFAFA;
-	font-size: 80%;
+	font-size: 90%;
 }
 .memTemplParams {
 	padding: 1px 0px 0px 8px;
@@ -326,7 +326,7 @@ SPAN.vhdllogic     { color: #ff0000 }
 	border-left-style: none;
 	color: #606060;
 	background-color: #FAFAFA;
-	font-size: 80%;
+	font-size: 90%;
 }
 .search { 
 	color: #003399;
@@ -455,43 +455,47 @@ HR {
 */
 
 IMG.logo {
-    float: right;
-    margin: 20px;
+	float: right;
+	margin: 20px;
 }
 
 IMG.appearance {
-    margin: 20px;
+	margin: 20px;
 }
 
 TABLE.appearance {
-    width: 100%;
-    text-align: center;
-    font-style: italic; 
-    font-size: 90%;
-    /*font-weight: bold;*/
+	width: 100%;
+	text-align: center;
+	font-style: italic; 
+	font-size: 90%;
+	/*font-weight: bold;*/
 }
 
 SPAN.literal {
-    text-decoration: none;
-    font-weight: bold;
-    font-family: monospace, fixed;
-    color: #008800;
+	text-decoration: none;
+	font-weight: bold;
+	font-family: monospace, fixed;
+	color: #008800;
 }
 
 /* we make all the following <span> tags render the text just like
    the standard Doxygen @remarks, @see tags do, to obtain a uniform
    look and feel */
 SPAN.itemdef, SPAN.lib, SPAN.category, SPAN.stdobj, SPAN.styles, SPAN.events, SPAN.appearance, SPAN.impl, SPAN.avail {
-    font-weight: bold;
-    line-height: 130%;
+	font-weight: bold;
+	line-height: 130%;
 }
 
 SPAN.style, SPAN.event {
-    font-weight: bold;
-    color: #880000;
+	font-weight: bold;
+	color: #880000;
 }
 
 A[HREF="modules.html"] SPAN:before {
-    content: "Categories / ";
+	content: "Categories / ";
+}
+
+DIV.navigation A SPAN {
+	font-size: 110%;
 }
 
