@@ -14,10 +14,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_THREADS
-    class WXDLLIMPEXP_FWD_BASE wxCriticalSection;
-#endif
-
 // ----------------------------------------------------------------------------
 // common constants for use in wxUSE_LOG/!wxUSE_LOG
 // ----------------------------------------------------------------------------
@@ -324,9 +320,6 @@ private:
     // with the number of times it was repeated
     static bool        ms_bRepetCounting;
 
-#if wxUSE_THREADS
-    static wxCriticalSection ms_prevCS; // protects the ms_prev values below
-#endif
     static wxString    ms_prevString;   // previous message that was logged
     static unsigned    ms_prevCounter;  // how many times it was repeated
     static time_t      ms_prevTimeStamp;// timestamp of the previous message
@@ -345,9 +338,6 @@ private:
     // disabled
     static wxString    ms_timestamp;
 
-#if wxUSE_THREADS
-    static wxCriticalSection ms_traceCS; // protects ms_aTraceMasks
-#endif
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
     static wxArrayString ms_aTraceMasks; // more powerful filter for wxLogTrace
 };

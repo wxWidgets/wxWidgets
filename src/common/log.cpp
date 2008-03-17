@@ -63,6 +63,30 @@
     #include "wx/msw/private.h" // includes windows.h
 #endif
 
+#if wxUSE_THREADS
+
+// define static functions providing access to the critical sections we use
+// instead of just using static critical section variables as log functions may
+// be used during static initialization and while this is certainly not
+// advisable it's still better to not crash (as we'd do if we used a yet
+// uninitialized critical section) if it happens
+
+static inline wxCriticalSection& GetTraceMaskCS()
+{
+    static wxCriticalSection s_csTrace;
+
+    return s_csTrace;
+}
+
+static inline wxCriticalSection& GetPreviousLogCS()
+{
+    static wxCriticalSection s_csPrev;
+
+    return s_csPrev;
+}
+
+#endif // wxUSE_THREADS
+
 // ----------------------------------------------------------------------------
 // non member functions
 // ----------------------------------------------------------------------------
@@ -461,7 +485,7 @@ void WXDLLIMPEXP_BASE wxVLogSysError(unsigned long err, const wxString& format, 
 
 unsigned wxLog::LogLastRepeatIfNeeded()
 {
-    wxCRIT_SECT_LOCKER(lock, ms_prevCS);
+    wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
 
     return LogLastRepeatIfNeededUnlocked();
 }
@@ -515,7 +539,7 @@ void wxLog::OnLog(wxLogLevel level, const wxString& szString, time_t t)
         {
             if ( GetRepetitionCounting() )
             {
-                wxCRIT_SECT_LOCKER(lock, ms_prevCS);
+                wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
 
                 if ( szString == ms_prevString )
                 {
@@ -620,14 +644,14 @@ void wxLog::DoCreateOnDemand()
 
 void wxLog::AddTraceMask(const wxString& str)
 {
-    wxCRIT_SECT_LOCKER(lock, ms_traceCS);
+    wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
     ms_aTraceMasks.push_back(str);
 }
 
 void wxLog::RemoveTraceMask(const wxString& str)
 {
-    wxCRIT_SECT_LOCKER(lock, ms_traceCS);
+    wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
     int index = ms_aTraceMasks.Index(str);
     if ( index != wxNOT_FOUND )
@@ -636,7 +660,7 @@ void wxLog::RemoveTraceMask(const wxString& str)
 
 void wxLog::ClearTraceMasks()
 {
-    wxCRIT_SECT_LOCKER(lock, ms_traceCS);
+    wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
     ms_aTraceMasks.Clear();
 }
@@ -733,7 +757,7 @@ void wxLog::Flush()
 
 /*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
 {
-    wxCRIT_SECT_LOCKER(lock, ms_traceCS);
+    wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
     for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
                                   en = ms_aTraceMasks.end();
@@ -924,7 +948,7 @@ wxLogInterposer::wxLogInterposer()
 wxLogInterposerTemp::wxLogInterposerTemp()
                 : wxLogChain(this)
 {
-	DetachOldLog();
+    DetachOldLog();
 }
 
 #ifdef __VISUALC__
@@ -939,10 +963,6 @@ wxLogInterposerTemp::wxLogInterposerTemp()
 // static variables
 // ----------------------------------------------------------------------------
 
-#if wxUSE_THREADS
-wxCriticalSection wxLog::ms_prevCS,
-                  wxLog::ms_traceCS;
-#endif // wxUSE_THREADS
 bool            wxLog::ms_bRepetCounting = false;
 wxString        wxLog::ms_prevString;
 unsigned int    wxLog::ms_prevCounter = 0;
