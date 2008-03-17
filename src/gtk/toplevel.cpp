@@ -758,13 +758,19 @@ bool wxTopLevelWindowGTK::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    const bool wasRealized = GTK_WIDGET_REALIZED(m_widget);
-    bool deferShow =
-        show && m_deferShow && !wasRealized &&
-        g_signal_handler_find(m_widget,
-            GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-            g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
-            0, NULL, NULL, this);
+    bool deferShow = show && m_deferShow;
+    if (deferShow)
+    {
+        m_deferShow =
+        deferShow = !GTK_WIDGET_REALIZED(m_widget) &&
+            gdk_x11_screen_supports_net_wm_hint(
+                gtk_widget_get_screen(m_widget),
+                gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false)) &&
+            g_signal_handler_find(m_widget,
+                GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
+                g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
+                0, NULL, NULL, this);
+    }
     if (deferShow)
     {
         // Initial show. If WM supports _NET_REQUEST_FRAME_EXTENTS, defer
@@ -785,13 +791,6 @@ bool wxTopLevelWindowGTK::Show( bool show )
         if (alloc_width == 1)
             m_widget->allocation.width = 1;
 
-        m_deferShow =
-        deferShow = gdk_x11_screen_supports_net_wm_hint(
-            gdk_drawable_get_screen(m_widget->window),
-            gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false)) != 0;
-    }
-    if (deferShow)
-    {
         // send _NET_REQUEST_FRAME_EXTENTS
         XClientMessageEvent xevent;
         memset(&xevent, 0, sizeof(xevent));
@@ -811,7 +810,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         return true;
     }
 
-    if (show && !wasRealized)
+    if (show && !GTK_WIDGET_REALIZED(m_widget))
     {
         // size_allocate signals occur in reverse order (bottom to top).
         // Things work better if the initial wxSizeEvents are sent (from the
