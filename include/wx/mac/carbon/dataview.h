@@ -123,26 +123,33 @@ public:
 // 
   virtual bool Render(wxRect cell, wxDC* dc, int state) = 0;
 
-  virtual bool Activate(wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
-  {
-    return false;
-  }
+  virtual bool Activate( wxRect WXUNUSED(cell),
+                         wxDataViewModel *WXUNUSED(model),
+                         const wxDataViewItem & WXUNUSED(item), 
+                         unsigned int WXUNUSED(col) )
+                         { return false; }
 
-  virtual bool LeftClick(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
-  {
-    return false;
-  }
-
-  virtual bool RightClick(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
-  {
-    return false;
-  }
-
-  virtual bool StartDrag(wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), wxDataViewModel *WXUNUSED(model), unsigned int WXUNUSED(col), unsigned int WXUNUSED(row))
-  {
-    return false;
-  }
-
+  virtual bool LeftClick( wxPoint WXUNUSED(cursor),
+                          wxRect WXUNUSED(cell),
+                          wxDataViewModel *WXUNUSED(model),
+                          const wxDataViewItem & WXUNUSED(item), 
+                          unsigned int WXUNUSED(col) )
+                          { return false; }
+  
+  virtual bool RightClick( wxPoint WXUNUSED(cursor),
+                           wxRect WXUNUSED(cell),
+                           wxDataViewModel *WXUNUSED(model),
+                           const wxDataViewItem & WXUNUSED(item), 
+                           unsigned int WXUNUSED(col) )
+                           { return false; }
+  
+  virtual bool StartDrag( wxPoint WXUNUSED(cursor),
+                          wxRect WXUNUSED(cell),
+                          wxDataViewModel *WXUNUSED(model),
+                          const wxDataViewItem & WXUNUSED(item), 
+                          unsigned int WXUNUSED(col) )
+                          { return false; }
+    
 //
 // device context handling
 //

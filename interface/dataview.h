@@ -582,9 +582,10 @@ public:
     /**
         Override this to react to double clicks or ENTER.
     */
-    virtual bool Activate(wxRect cell, wxDataViewModel* model,
-                          unsigned int col,
-                          unsigned int row);
+    virtual bool Activate( wxRect cell,
+                           wxDataViewModel* model,
+                           const wxDataViewItem & item, 
+                           unsigned int col );
 
     /**
         Override this to create the actual editor control once editing
@@ -622,10 +623,11 @@ public:
     /**
         Overrride this to react to a left click.
     */
-    virtual bool LeftClick(wxPoint cursor, wxRect cell,
-                           wxDataViewModel* model,
-                           unsigned int col,
-                           unsigned int row);
+    virtual bool LeftClick( wxPoint cursor,
+                            wxRect cell,
+                            wxDataViewModel * model,
+                            const wxDataViewItem & item, 
+                            unsigned int col );
 
     /**
         Override this to render the cell. Before this is called,
@@ -646,18 +648,19 @@ public:
     /**
         Overrride this to react to a right click.
     */
-    virtual bool RightClick(wxPoint cursor, wxRect cell,
+    virtual bool RightClick(wxPoint cursor,
+                            wxRect cell,
                             wxDataViewModel* model,
-                            unsigned int col,
-                            unsigned int row);
+                            const wxDataViewItem & item, 
+                            unsigned int col);
 
     /**
         Overrride this to start a drag operation.
     */
     virtual bool StartDrag(wxPoint cursor, wxRect cell,
                            wxDataViewModel* model,
-                           unsigned int col,
-                           unsigned int row);
+                           const wxDataViewItem & item, 
+                           unsigned int col);
 };
 
 

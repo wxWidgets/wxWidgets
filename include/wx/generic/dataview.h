@@ -243,7 +243,7 @@ protected:
 // wxDataViewIconTextRenderer
 // --------------------------------------------------------- 
 
-class wxDataViewIconTextRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_ADV wxDataViewIconTextRenderer: public wxDataViewCustomRenderer
 {
 public:
     wxDataViewIconTextRenderer( const wxString &varianttype = wxT("wxDataViewIconText"), 
