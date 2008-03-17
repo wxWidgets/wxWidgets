@@ -172,17 +172,17 @@ int wxPen::GetWidth() const
 
 wxPenStyle wxPen::GetStyle() const
 {
-    return (M_PENDATA ? M_PENDATA->m_style : 0);
+    return (M_PENDATA ? M_PENDATA->m_style : wxPENSTYLE_SOLID);
 }
 
 wxPenJoin wxPen::GetJoin() const
 {
-    return (M_PENDATA ? M_PENDATA->m_join : 0);
+    return (M_PENDATA ? M_PENDATA->m_join : wxJOIN_INVALID);
 }
 
 wxPenCap wxPen::GetCap() const
 {
-    return (M_PENDATA ? M_PENDATA->m_cap : 0);
+    return (M_PENDATA ? M_PENDATA->m_cap : wxCAP_INVALID);
 }
 
 int wxPen::GetDashes(wxDash **ptr) const
