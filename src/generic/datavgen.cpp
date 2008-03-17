@@ -1970,10 +1970,10 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
-    m_penRule = wxPen(GetRuleColour(), 1, wxSOLID);
+    m_penRule = wxPen(GetRuleColour());
 
     //Here I compose a pen can draw black lines, maybe there are something system colour to use
-    m_penExpander = wxPen( wxColour(0,0,0), 1, wxSOLID );
+    m_penExpander = wxPen(wxColour(0,0,0));
     //Some new added code to deal with the tree structure
     m_root = new wxDataViewTreeNode( NULL );
     m_root->SetHasChildren(true);
