@@ -168,6 +168,9 @@ if { ccache -V; } >/dev/null 2>&amp;1; then
     ccache -M 90M
 fi
 cd $BUILDDIR
+if [ -f wx-config ]; then
+    `./wx-config --cxx` --version
+fi
 <if-del-on-fail>trap 'cd; rm -rf $BUILDDIR' EXIT</if-del-on-fail>
 </command>
 </xsl:template>
