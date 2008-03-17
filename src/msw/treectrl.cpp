@@ -72,19 +72,38 @@ typedef struct tagNMTVITEMCHANGE
 #endif
 
 
-// this global variable is used on vista systems for preventing unwanted
-// item state changes in the vista tree control.  It is only used in
+// this helper class is used on vista systems for preventing unwanted
+// item state changes in the vista tree control.  It is only effective in
 // multi-select mode on vista systems.
 
-static HTREEITEM gs_unlockItem = NULL;
+// The vista tree control includes some new code that originally broke the
+// multi-selection tree, causing seemingly spurious item selection state changes
+// during Shift or Ctrl-click item selection. (To witness the original broken
+// behavior, simply make IsLocked() below always return false). This problem was
+// solved by using the following class to 'unlock' an item's selection state.
 
 class TreeItemUnlocker
 {
 public:
-    TreeItemUnlocker(HTREEITEM item) { gs_unlockItem = item; }
-    ~TreeItemUnlocker() { gs_unlockItem = NULL; }
+    // unlock a single item
+    TreeItemUnlocker(HTREEITEM item) { ms_unlockedItem = item; }
+
+    // unlock all items, don't use unless absolutely necessary
+    TreeItemUnlocker() { ms_unlockedItem = (HTREEITEM)-1; }
+
+    // lock everything back
+    ~TreeItemUnlocker() { ms_unlockedItem = NULL; }
+
+
+    // check if the item state is currently locked
+    static bool IsLocked(HTREEITEM item)
+        { return ms_unlockedItem != (HTREEITEM)-1 && item != ms_unlockedItem; }
+
+private:
+    static HTREEITEM ms_unlockedItem;
 };
 
+HTREEITEM TreeItemUnlocker::ms_unlockedItem = NULL;
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -1586,6 +1605,10 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
 {
+    // unlock tree selections on vista, without this the
+    // tree ctrl will eventually crash after item deletion
+    TreeItemUnlocker unlock_all;
+
     if ( !TreeView_DeleteItem(GetHwnd(), HITEM(item)) )
     {
         wxLogLastError(wxT("TreeView_DeleteItem"));
@@ -1595,6 +1618,9 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
 // delete all children (but don't delete the item itself)
 void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 {
+    // unlock tree selections on vista for the duration of this call
+    TreeItemUnlocker unlock_all;
+
     wxTreeItemIdValue cookie;
 
     wxArrayTreeItemIds children;
@@ -1618,6 +1644,9 @@ void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 
 void wxTreeCtrl::DeleteAllItems()
 {
+    // unlock tree selections on vista for the duration of this call
+    TreeItemUnlocker unlock_all;
+
     // delete the "virtual" root item.
     if ( GET_VIRTUAL_ROOT() )
     {
@@ -2646,6 +2675,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // that can be used to regulate this incorrect behavior.  The
         // following messages will allow only the unlocked item's selection
         // state to change
+
         case TVN_ITEMCHANGINGA:
         case TVN_ITEMCHANGINGW:
             {
@@ -2654,7 +2684,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 {
                     // get info about the item about to be changed
                     NMTVITEMCHANGE* info = (NMTVITEMCHANGE*)lParam;
-                    if (info->hItem != gs_unlockItem)
+                    if (TreeItemUnlocker::IsLocked(info->hItem))
                     {
                         // item's state is locked, don't allow the change
                         // returning 1 will disallow the change
