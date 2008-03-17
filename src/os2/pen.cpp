@@ -29,7 +29,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 
 wxPenRefData::wxPenRefData()
 {
-    m_nStyle  = wxSOLID;
+    m_nStyle  = wxPENSTYLE_SOLID;
     m_nWidth  = 1;
     m_nJoin   = wxJOIN_ROUND ;
     m_nCap    = wxCAP_ROUND ;
@@ -162,7 +162,7 @@ bool wxPen::RealizeResource()
             wxLogError(_T("Unable to set current color table to RGB mode. Error: %s\n"), sError.c_str());
             return false;
         }
-        if (M_PENDATA->m_nStyle == wxTRANSPARENT)
+        if (M_PENDATA->m_nStyle == wxPENSTYLE_TRANSPARENT)
         {
             return true;
         }
@@ -233,7 +233,7 @@ bool wxPen::RealizeResource()
         ULONG                           flDefMask = 0L;
         switch(M_PENDATA->m_nStyle)
         {
-            case wxSTIPPLE:
+            case wxPENSTYLE_STIPPLE:
                 ::GpiSetBitmapId( M_PENDATA->m_hPen
                                  ,(USHORT)M_PENDATA->m_vStipple.GetHBITMAP()
                                  ,(USHORT)M_PENDATA->m_vStipple.GetId()
@@ -245,42 +245,42 @@ bool wxPen::RealizeResource()
                 flDefMask = ABB_REF_POINT;
                 break;
 
-            case wxBDIAGONAL_HATCH:
+            case wxPENSTYLE_BDIAGONAL_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_DIAG3;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
                 flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
                 flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
-            case wxCROSSDIAG_HATCH:
+            case wxPENSTYLE_CROSSDIAG_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_DIAGHATCH;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
                 flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
                 flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
-            case wxFDIAGONAL_HATCH:
+            case wxPENSTYLE_FDIAGONAL_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_DIAG1;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
                 flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
                 flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
-            case wxCROSS_HATCH:
+            case wxPENSTYLE_CROSS_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_HATCH;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
                 flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
                 flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
-            case wxHORIZONTAL_HATCH:
+            case wxPENSTYLE_HORIZONTAL_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_HORIZ;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
                 flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
                 flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
-            case wxVERTICAL_HATCH:
+            case wxPENSTYLE_VERTICAL_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_VERT;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
                 flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
@@ -436,31 +436,31 @@ int wx2os2PenStyle(
 
     switch (nWxStyle)
     {
-        case wxDOT:
+        case wxPENSTYLE_DOT:
             nPMStyle = LINETYPE_DOT;
             break;
 
-        case wxDOT_DASH:
+        case wxPENSTYLE_DOT_DASH:
             nPMStyle = LINETYPE_DASHDOT;
             break;
 
-        case wxSHORT_DASH:
+        case wxPENSTYLE_SHORT_DASH:
             nPMStyle = LINETYPE_SHORTDASH;
             break;
 
-        case wxLONG_DASH:
+        case wxPENSTYLE_LONG_DASH:
             nPMStyle = LINETYPE_LONGDASH;
             break;
 
-        case wxTRANSPARENT:
+        case wxPENSTYLE_TRANSPARENT:
             nPMStyle = LINETYPE_INVISIBLE;
             break;
 
-        case wxUSER_DASH:
+        case wxPENSTYLE_USER_DASH:
             nPMStyle = LINETYPE_DASHDOUBLEDOT; // We must make a choice... This is mine!
             break;
 
-        case wxSOLID:
+        case wxPENSTYLE_SOLID:
         default:
             nPMStyle = LINETYPE_SOLID;
             break;

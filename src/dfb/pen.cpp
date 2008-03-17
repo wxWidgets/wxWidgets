@@ -42,10 +42,10 @@ public:
 
     void SetStyle(int style)
     {
-        if ( style != wxSOLID && style != wxTRANSPARENT )
+        if ( style != wxPENSTYLE_SOLID && style != wxPENSTYLE_TRANSPARENT )
         {
             wxFAIL_MSG( "only wxSOLID and wxTRANSPARENT styles are supported" );
-            style = wxSOLID;
+            style = wxPENSTYLE_SOLID;
         }
 
         m_style = style;
@@ -169,7 +169,7 @@ wxPenJoin wxPen::GetJoin() const
 
 wxPenStyle wxPen::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxPENSTYLE_MAX, wxT("invalid pen") );
 
     return M_PENDATA->m_style;
 }

@@ -64,8 +64,8 @@ public:
                m_join == data.m_join &&
                m_cap == data.m_cap &&
                m_colour == data.m_colour &&
-               (m_style != wxSTIPPLE || m_stipple.IsSameAs(data.m_stipple)) &&
-               (m_style != wxUSER_DASH ||
+               (m_style != wxPENSTYLE_STIPPLE || m_stipple.IsSameAs(data.m_stipple)) &&
+               (m_style != wxPENSTYLE_USER_DASH ||
                 (m_nbDash == data.m_nbDash &&
                     memcmp(m_dash, data.m_dash, m_nbDash*sizeof(wxDash)) == 0));
     }
@@ -304,11 +304,11 @@ bool wxPenRefData::Alloc()
    // Only NT can display dashed or dotted lines with width > 1
    static const int os = wxGetOsVersion();
    if ( os != wxOS_WINDOWS_NT &&
-           (m_style == wxDOT ||
-            m_style == wxLONG_DASH ||
-            m_style == wxSHORT_DASH ||
-            m_style == wxDOT_DASH ||
-            m_style == wxUSER_DASH) &&
+           (m_style == wxPENSTYLE_DOT ||
+            m_style == wxPENSTYLE_LONG_DASH ||
+            m_style == wxPENSTYLE_SHORT_DASH ||
+            m_style == wxPENSTYLE_DOT_DASH ||
+            m_style == wxPENSTYLE_USER_DASH) &&
             m_width > 1 )
    {
        m_width = 1;
@@ -318,9 +318,9 @@ bool wxPenRefData::Alloc()
    // CreatePen()
    if ( m_join == wxJOIN_ROUND &&
             m_cap == wxCAP_ROUND &&
-                m_style != wxUSER_DASH &&
-                    m_style != wxSTIPPLE &&
-                        (m_width <= 1 || m_style == wxSOLID) )
+                m_style != wxPENSTYLE_USER_DASH &&
+                    m_style != wxPENSTYLE_STIPPLE &&
+                        (m_width <= 1 || m_style == wxPENSTYLE_SOLID) )
 #endif // !wxHAVE_EXT_CREATE_PEN
    {
        m_hPen = ::CreatePen(ConvertPenStyle(m_style), m_width, col);

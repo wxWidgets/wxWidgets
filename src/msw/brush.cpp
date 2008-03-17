@@ -30,6 +30,7 @@
     #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
+    #include "wx/bitmap.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"

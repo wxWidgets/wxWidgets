@@ -30,7 +30,7 @@ public:
     wxPenRefData()
     {
         m_width = 1;
-        m_style = wxSOLID;
+        m_style = wxPENSTYLE_SOLID;
         m_joinStyle = wxJOIN_ROUND;
         m_capStyle = wxCAP_ROUND;
         m_dash = (wxX11Dash*) NULL;
