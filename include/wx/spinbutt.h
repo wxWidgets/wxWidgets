@@ -102,12 +102,19 @@ public:
     {
     }
 
+    wxSpinEvent(const wxSpinEvent& event) : wxNotifyEvent(event) {}
+
     // get the current value of the control
+    int GetValue() const { return m_commandInt; }
+    void SetValue(int value) { m_commandInt = value; }
+
     int GetPosition() const { return m_commandInt; }
     void SetPosition(int pos) { m_commandInt = pos; }
 
+    virtual wxEvent *Clone() const { return new wxSpinEvent(*this); }
+
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSpinEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinEvent)
 };
 
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);

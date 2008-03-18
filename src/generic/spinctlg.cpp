@@ -24,19 +24,23 @@
     #pragma hdrstop
 #endif
 
-// There are port-specific versions for MSW, GTK, OS/2 and Mac, so exclude the
-// contents of this file in those cases
-#if !(defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__) || \
-    defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
-
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
 #endif //WX_PRECOMP
 
+#include "wx/spinctrl.h"
+
 #if wxUSE_SPINCTRL
 
+IMPLEMENT_DYNAMIC_CLASS(wxSpinDoubleEvent, wxNotifyEvent)
+
+// There are port-specific versions for the wxSpinCtrl, so exclude the
+// contents of this file in those cases
+#if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
+
 #include "wx/spinbutt.h"
-#include "wx/spinctrl.h"
+
+#if wxUSE_SPINBTN
 
 // ----------------------------------------------------------------------------
 // constants
@@ -45,6 +49,8 @@
 // the margin between the text control and the spin
 static const wxCoord MARGIN = 2;
 
+#define SPINCTRLBUT_MAX 32000 // large to avoid wrap around trouble
+
 // ----------------------------------------------------------------------------
 // wxSpinCtrlText: text control used by spin control
 // ----------------------------------------------------------------------------
@@ -52,44 +58,60 @@ static const wxCoord MARGIN = 2;
 class wxSpinCtrlText : public wxTextCtrl
 {
 public:
-    wxSpinCtrlText(wxSpinCtrl *spin, const wxString& value)
-        : wxTextCtrl(spin->GetParent(), wxID_ANY, value)
+    wxSpinCtrlText(wxSpinCtrlGenericBase *spin, const wxString& value)
+        : wxTextCtrl(spin->GetParent(), wxID_ANY, value, wxDefaultPosition,
+                     wxDefaultSize, wxTE_NOHIDESEL|wxTE_PROCESS_ENTER)
     {
         m_spin = spin;
 
         // remove the default minsize, the spinctrl will have one instead
-        SetSizeHints(wxDefaultCoord,wxDefaultCoord);
+        SetSizeHints(wxDefaultCoord, wxDefaultCoord);
     }
 
-protected:
-    void OnTextChange(wxCommandEvent& event)
+    virtual ~wxSpinCtrlText()
     {
-        int val;
-        if ( m_spin->GetTextValue(&val) )
+        // MSW sends extra kill focus event on destroy
+        if (m_spin)
+            m_spin->m_textCtrl = NULL;
+
+        m_spin = NULL;
+    }
+
+    void OnTextEnter(wxCommandEvent& event)
+    {
+        if (m_spin)
+            m_spin->OnTextEnter(event);
+    }
+
+    void OnChar( wxKeyEvent &event )
+    {
+        if (m_spin)
+            m_spin->OnTextChar(event);
+    }
+
+    void OnKillFocus(wxFocusEvent& event)
+    {
+        if (m_spin)
         {
-            m_spin->GetSpinButton()->SetValue(val);
+            m_spin->SyncSpinToText();
+            m_spin->DoSendEvent();
         }
 
         event.Skip();
     }
 
-    bool ProcessEvent(wxEvent &event)
-    {
-        // Hand button down events to wxSpinCtrl. Doesn't work.
-        if (event.GetEventType() == wxEVT_LEFT_DOWN && m_spin->ProcessEvent( event ))
-            return true;
-
-        return wxTextCtrl::ProcessEvent( event );
-    }
+    wxSpinCtrlGenericBase *m_spin;
 
 private:
-    wxSpinCtrl *m_spin;
-
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxSpinCtrlText, wxTextCtrl)
-    EVT_TEXT(wxID_ANY, wxSpinCtrlText::OnTextChange)
+    EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlText::OnTextEnter)
+
+    EVT_CHAR(wxSpinCtrlText::OnChar)
+
+    EVT_KILL_FOCUS(wxSpinCtrlText::OnKillFocus)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -99,73 +121,85 @@ END_EVENT_TABLE()
 class wxSpinCtrlButton : public wxSpinButton
 {
 public:
-    wxSpinCtrlButton(wxSpinCtrl *spin, int style)
-        : wxSpinButton(spin->GetParent())
+    wxSpinCtrlButton(wxSpinCtrlGenericBase *spin, int style)
+        : wxSpinButton(spin->GetParent(), wxID_ANY, wxDefaultPosition,
+                       wxDefaultSize, style | wxSP_VERTICAL)
     {
         m_spin = spin;
 
-        SetWindowStyle(style | wxSP_VERTICAL);
+        SetRange(-SPINCTRLBUT_MAX, SPINCTRLBUT_MAX);
 
         // remove the default minsize, the spinctrl will have one instead
-        SetSizeHints(wxDefaultCoord,wxDefaultCoord);
+        SetSizeHints(wxDefaultCoord, wxDefaultCoord);
     }
 
-protected:
-    void OnSpinButton(wxSpinEvent& eventSpin)
+    void OnSpinButton(wxSpinEvent& event)
     {
-        m_spin->SetTextValue(eventSpin.GetPosition());
-
-        wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
-        event.SetEventObject(m_spin);
-        event.SetInt(eventSpin.GetPosition());
-
-        m_spin->GetEventHandler()->ProcessEvent(event);
-
-        eventSpin.Skip();
+        if (m_spin)
+            m_spin->OnSpinButton(event);
     }
+
+    wxSpinCtrlGenericBase *m_spin;
 
 private:
-    wxSpinCtrl *m_spin;
-
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(wxSpinCtrlButton, wxSpinButton)
-    EVT_SPIN(wxID_ANY, wxSpinCtrlButton::OnSpinButton)
+    EVT_SPIN_UP(  wxID_ANY, wxSpinCtrlButton::OnSpinButton)
+    EVT_SPIN_DOWN(wxID_ANY, wxSpinCtrlButton::OnSpinButton)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
-
 // ============================================================================
-// implementation
+// wxSpinCtrlGenericBase
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxSpinCtrl creation
+// wxSpinCtrlGenericBase creation
 // ----------------------------------------------------------------------------
 
-void wxSpinCtrl::Init()
+void wxSpinCtrlGenericBase::Init()
 {
-    m_text = NULL;
-    m_btn = NULL;
+    m_value         = 0;
+    m_min           = 0;
+    m_max           = 100;
+    m_increment     = 1;
+    m_snap_to_ticks = false;
+    m_format        = wxS("%g");
+
+    m_spin_value    = 0;
+
+    m_textCtrl = NULL;
+    m_spinButton  = NULL;
 }
 
-bool wxSpinCtrl::Create(wxWindow *parent,
-                        wxWindowID id,
-                        const wxString& value,
-                        const wxPoint& pos,
-                        const wxSize& size,
-                        long style,
-                        int min,
-                        int max,
-                        int initial,
-                        const wxString& name)
+bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
+                                   wxWindowID id,
+                                   const wxString& value,
+                                   const wxPoint& pos, const wxSize& size,
+                                   long style,
+                                   double min, double max, double initial,
+                                   double increment,
+                                   const wxString& name)
 {
-    if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style,
-                            wxDefaultValidator, name) )
+    // don't use borders for this control itself, it wouldn't look good with
+    // the text control borders (but we might want to use style border bits to
+    // select the text control style)
+    if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize,
+                            wxBORDER_NONE, wxDefaultValidator, name) )
     {
         return false;
     }
+
+    m_value = initial;
+    m_min   = min;
+    m_max   = max;
+    m_increment = increment;
+
+    m_textCtrl   = new wxSpinCtrlText(this, value);
+    m_spinButton = new wxSpinCtrlButton(this, style);
+
+    m_spin_value = m_spinButton->GetValue();
 
     // the string value overrides the numeric one (for backwards compatibility
     // reasons and also because it is simpler to satisfy the string value which
@@ -173,16 +207,14 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // parameter unspecified)
     if ( !value.empty() )
     {
-        long l;
-        if ( value.ToLong(&l) )
-            initial = l;
+        double d;
+        if ( value.ToDouble(&d) )
+        {
+            m_value = d;
+            m_textCtrl->SetValue(wxString::Format(m_format, m_value));
+        }
     }
 
-    m_text = new wxSpinCtrlText(this, value);
-    m_btn = new wxSpinCtrlButton(this, style);
-
-    m_btn->SetRange(min, max);
-    m_btn->SetValue(initial);
     SetInitialSize(size);
     Move(pos);
 
@@ -199,177 +231,324 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     return true;
 }
 
-wxSpinCtrl::~wxSpinCtrl()
+wxSpinCtrlGenericBase::~wxSpinCtrlGenericBase()
 {
     // delete the controls now, don't leave them alive even though they would
     // still be eventually deleted by our parent - but it will be too late, the
     // user code expects them to be gone now
-    delete m_text;
-    m_text = NULL ;
-    delete m_btn;
-    m_btn = NULL ;
+
+    if (m_textCtrl)
+    {
+        // null this since MSW sends KILL_FOCUS on deletion, see ~wxSpinCtrlText
+        wxDynamicCast(m_textCtrl, wxSpinCtrlText)->m_spin = NULL;
+
+        wxSpinCtrlText *text = (wxSpinCtrlText*)m_textCtrl;
+        m_textCtrl = NULL;
+        delete text;
+    }
+
+    delete m_spinButton;
+    m_spinButton = NULL;
 }
 
 // ----------------------------------------------------------------------------
 // geometry
 // ----------------------------------------------------------------------------
 
-wxSize wxSpinCtrl::DoGetBestSize() const
+wxSize wxSpinCtrlGenericBase::DoGetBestSize() const
 {
-    wxSize sizeBtn = m_btn->GetBestSize(),
-           sizeText = m_text->GetBestSize();
+    wxSize sizeBtn  = m_spinButton->GetBestSize(),
+           sizeText = m_textCtrl->GetBestSize();
 
     return wxSize(sizeBtn.x + sizeText.x + MARGIN, sizeText.y);
 }
 
-void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
+void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
 {
     wxControl::DoMoveWindow(x, y, width, height);
 
     // position the subcontrols inside the client area
-    wxSize sizeBtn = m_btn->GetSize();
+    wxSize sizeBtn = m_spinButton->GetSize();
 
     wxCoord wText = width - sizeBtn.x;
-    m_text->SetSize(x, y, wText, height);
-    m_btn->SetSize(x + wText + MARGIN, y, wxDefaultCoord, height);
+    m_textCtrl->SetSize(x, y, wText, height);
+    m_spinButton->SetSize(x + wText + MARGIN, y, wxDefaultCoord, height);
 }
 
 // ----------------------------------------------------------------------------
 // operations forwarded to the subcontrols
 // ----------------------------------------------------------------------------
 
-bool wxSpinCtrl::Enable(bool enable)
+bool wxSpinCtrlGenericBase::Enable(bool enable)
 {
     if ( !wxControl::Enable(enable) )
         return false;
 
-    m_btn->Enable(enable);
-    m_text->Enable(enable);
+    m_spinButton->Enable(enable);
+    m_textCtrl->Enable(enable);
 
     return true;
 }
 
-bool wxSpinCtrl::Show(bool show)
+bool wxSpinCtrlGenericBase::Show(bool show)
 {
     if ( !wxControl::Show(show) )
         return false;
 
     // under GTK Show() is called the first time before we are fully
     // constructed
-    if ( m_btn )
+    if ( m_spinButton )
     {
-        m_btn->Show(show);
-        m_text->Show(show);
+        m_spinButton->Show(show);
+        m_textCtrl->Show(show);
     }
 
     return true;
 }
 
-bool wxSpinCtrl::Reparent(wxWindow *newParent)
+bool wxSpinCtrlGenericBase::Reparent(wxWindow *newParent)
 {
-    if ( m_btn )
+    if ( m_spinButton )
     {
-        m_btn->Reparent(newParent);
-        m_text->Reparent(newParent);
+        m_spinButton->Reparent(newParent);
+        m_textCtrl->Reparent(newParent);
     }
 
     return true;
 }
 
 // ----------------------------------------------------------------------------
-// value and range access
+// Handle sub controls events
 // ----------------------------------------------------------------------------
 
-bool wxSpinCtrl::GetTextValue(int *val) const
+void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 {
-    long l;
-    if ( !m_text->GetValue().ToLong(&l) )
+    event.Skip();
+
+    // Sync the textctrl since the user expects that the button will modify
+    // what they see in the textctrl.
+    if ( m_textCtrl && m_textCtrl->IsModified() )
+        SyncSpinToText();
+
+    int spin_value = event.GetPosition();
+    double step = (event.GetEventType() == wxEVT_SCROLL_LINEUP) ? 1 : -1;
+
+    // Use the spinbutton's acceleration, if any, but not if wrapping around
+    if (((spin_value >= 0) && (m_spin_value >= 0)) || ((spin_value <= 0) && (m_spin_value <= 0)))
+        step *= abs(spin_value - m_spin_value);
+
+    double value = m_value + step*m_increment;
+
+    // we can always reach the ends using the spinbutton
+    if (value < m_min) value = m_min;
+    if (value > m_max) value = m_max;
+
+    // Ignore the edges when it wraps since the up/down event may be opposite
+    // They are in GTK and Mac
+    if (abs(spin_value - m_spin_value) > SPINCTRLBUT_MAX)
     {
-        // not a number at all
-        return false;
+        m_spin_value = spin_value;
+        return;
     }
 
-    if ( l < GetMin() || l > GetMax() )
+    m_spin_value = spin_value;
+
+    if (InRange(value) && DoSetValue(value))
+        DoSendEvent();
+}
+
+void wxSpinCtrlGenericBase::OnTextEnter(wxCommandEvent& event)
+{
+    SyncSpinToText();
+    DoSendEvent();
+    event.Skip();
+}
+
+void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)
+{
+    double value = m_value;
+    switch ( event.GetKeyCode() )
     {
-        // out of range
-        return false;
+        case WXK_UP :
+            value += m_increment;
+            break;
+
+        case WXK_DOWN :
+            value -= m_increment;
+            break;
+
+        case WXK_PAGEUP :
+            value += m_increment * 10.0;
+            break;
+
+        case WXK_PAGEDOWN :
+            value -= m_increment * 10.0;
+            break;
+
+        default:
+            event.Skip();
+            return;
     }
 
-    *val = l;
+    if ( m_textCtrl && m_textCtrl->IsModified() )
+        SyncSpinToText();
 
-    return true;
+    if ( DoSetValue(value) )
+        DoSendEvent();
 }
 
-int wxSpinCtrl::GetValue() const
-{
-    return m_btn ? m_btn->GetValue() : 0;
-}
+// ----------------------------------------------------------------------------
+// Textctrl functions
+// ----------------------------------------------------------------------------
 
-int wxSpinCtrl::GetMin() const
+void wxSpinCtrlGenericBase::SyncSpinToText()
 {
-    return m_btn ? m_btn->GetMin() : 0;
-}
+    if (!m_textCtrl)
+        return;
 
-int wxSpinCtrl::GetMax() const
-{
-    return m_btn ? m_btn->GetMax() : 0;
+    double textValue;
+    if ( m_textCtrl->GetValue().ToDouble(&textValue) )
+    {
+        if (textValue > m_max)
+            textValue = m_max;
+        else if (textValue < m_min)
+            textValue = m_min;
+
+        if (m_value != textValue)
+        {
+            DoSetValue(textValue);
+        }
+    }
+    else
+    {
+        // textctrl is out of sync, discard and reset
+        DoSetValue(m_value);
+    }
 }
 
 // ----------------------------------------------------------------------------
 // changing value and range
 // ----------------------------------------------------------------------------
 
-void wxSpinCtrl::SetTextValue(int val)
+void wxSpinCtrlGenericBase::SetValue(const wxString& text)
 {
-    wxCHECK_RET( m_text, _T("invalid call to wxSpinCtrl::SetTextValue") );
+    wxCHECK_RET( m_textCtrl, _T("invalid call to wxSpinCtrl::SetValue") );
 
-    m_text->SetValue(wxString::Format(_T("%d"), val));
-
-    // select all text
-    m_text->SetSelection(0, -1);
-
-    // and give focus to the control!
-    // m_text->SetFocus();    Why???? TODO.
-}
-
-void wxSpinCtrl::SetValue(int val)
-{
-    wxCHECK_RET( m_btn, _T("invalid call to wxSpinCtrl::SetValue") );
-
-    SetTextValue(val);
-
-    m_btn->SetValue(val);
-}
-
-void wxSpinCtrl::SetValue(const wxString& text)
-{
-    wxCHECK_RET( m_text, _T("invalid call to wxSpinCtrl::SetValue") );
-
-    long val;
-    if ( text.ToLong(&val) && ((val > INT_MIN) && (val < INT_MAX)) )
+    double val;
+    if ( text.ToDouble(&val) && InRange(val) )
     {
-        SetValue((int)val);
+        DoSetValue(val);
     }
     else // not a number at all or out of range
     {
-        m_text->SetValue(text);
-        m_text->SetSelection(0, -1);
+        m_textCtrl->SetValue(text);
+        m_textCtrl->SetSelection(0, -1);
     }
 }
 
-void wxSpinCtrl::SetRange(int min, int max)
+bool wxSpinCtrlGenericBase::DoSetValue(double val)
 {
-    wxCHECK_RET( m_btn, _T("invalid call to wxSpinCtrl::SetRange") );
+    wxCHECK_MSG( m_textCtrl, false, _T("invalid call to wxSpinCtrl::SetValue") );
 
-    m_btn->SetRange(min, max);
+    if (!InRange(val))
+        return false;
+
+    if ( m_snap_to_ticks && (m_increment != 0) )
+    {
+        double snap_value = val / m_increment;
+
+        if (wxFinite(snap_value)) // FIXME what to do about a failure?
+        {
+            if ((snap_value - floor(snap_value)) < (ceil(snap_value) - snap_value))
+                val = floor(snap_value) * m_increment;
+            else
+                val = ceil(snap_value) * m_increment;
+        }
+    }
+
+    wxString str(wxString::Format(m_format.c_str(), val));
+
+    if ((val != m_value) || (str != m_textCtrl->GetValue()))
+    {
+        m_value = val;
+        str.ToDouble( &m_value );    // wysiwyg for textctrl
+        m_textCtrl->SetValue( str );
+        m_textCtrl->DiscardEdits();
+        return true;
+    }
+
+    return false;
 }
 
-void wxSpinCtrl::SetSelection(long from, long to)
+void wxSpinCtrlGenericBase::DoSetRange(double min, double max)
 {
-    wxCHECK_RET( m_text, _T("invalid call to wxSpinCtrl::SetSelection") );
-
-    m_text->SetSelection(from, to);
+    m_min = min;
+    m_max = max;
 }
+
+void wxSpinCtrlGenericBase::DoSetIncrement(double inc)
+{
+    m_increment = inc;
+}
+
+void wxSpinCtrlGenericBase::SetSnapToTicks(bool snap_to_ticks)
+{
+    m_snap_to_ticks = snap_to_ticks;
+    DoSetValue(m_value);
+}
+
+void wxSpinCtrlGenericBase::SetSelection(long from, long to)
+{
+    wxCHECK_RET( m_textCtrl, _T("invalid call to wxSpinCtrl::SetSelection") );
+
+    m_textCtrl->SetSelection(from, to);
+}
+
+#ifndef wxHAS_NATIVE_SPINCTRL
+
+//-----------------------------------------------------------------------------
+// wxSpinCtrl
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxSpinCtrlGenericBase)
+
+void wxSpinCtrl::DoSendEvent()
+{
+    wxSpinEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
+    event.SetEventObject( this );
+    event.SetPosition((int)(m_value + 0.5)); // FIXME should be SetValue
+    event.SetString(m_textCtrl->GetValue());
+    GetEventHandler()->ProcessEvent( event );
+}
+
+#endif // !wxHAS_NATIVE_SPINCTRL
+
+//-----------------------------------------------------------------------------
+// wxSpinCtrlDouble
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGenericBase)
+
+void wxSpinCtrlDouble::DoSendEvent()
+{
+    wxSpinDoubleEvent event( wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, GetId());
+    event.SetEventObject( this );
+    event.SetValue(m_value);
+    event.SetString(m_textCtrl->GetValue());
+    GetEventHandler()->ProcessEvent( event );
+}
+
+void wxSpinCtrlDouble::SetDigits(unsigned digits)
+{
+    wxCHECK_RET( digits <= 20, "too many digits for wxSpinCtrlDouble" );
+
+    m_format.Printf(wxT("%%0.%ulf"), digits);
+
+    DoSetValue(m_value);
+}
+
+#endif // wxUSE_SPINBTN
+
+#endif // !wxPort-with-native-spinctrl
 
 #endif // wxUSE_SPINCTRL
-#endif // !wxPort-with-native-spinctrl

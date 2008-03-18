@@ -99,6 +99,7 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOL_RCLICKED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOL_ENTER;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED;
 
     // Sockets and timers send events, too
 extern WXDLLIMPEXP_BASE const wxEventType wxEVT_SOCKET;
