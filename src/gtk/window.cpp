@@ -3827,6 +3827,106 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// Pop-up menu stuff
+// ----------------------------------------------------------------------------
+
+#if wxUSE_MENUS_NATIVE
+
+extern "C" WXDLLIMPEXP_CORE
+void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
+{
+    *is_waiting = false;
+}
+
+WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win )
+{
+    menu->SetInvokingWindow( win );
+
+    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem *menuitem = node->GetData();
+        if (menuitem->IsSubMenu())
+        {
+            SetInvokingWindow( menuitem->GetSubMenu(), win );
+        }
+
+        node = node->GetNext();
+    }
+}
+
+extern "C" WXDLLIMPEXP_CORE
+void wxPopupMenuPositionCallback( GtkMenu *menu,
+                                  gint *x, gint *y,
+                                  gboolean * WXUNUSED(whatever),
+                                  gpointer user_data )
+{
+    // ensure that the menu appears entirely on screen
+    GtkRequisition req;
+    gtk_widget_get_child_requisition(GTK_WIDGET(menu), &req);
+
+    wxSize sizeScreen = wxGetDisplaySize();
+    wxPoint *pos = (wxPoint*)user_data;
+
+    gint xmax = sizeScreen.x - req.width,
+         ymax = sizeScreen.y - req.height;
+
+    *x = pos->x < xmax ? pos->x : xmax;
+    *y = pos->y < ymax ? pos->y : ymax;
+}
+
+bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
+{
+    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
+
+    wxCHECK_MSG( menu != NULL, false, wxT("invalid popup-menu") );
+
+    // NOTE: if you change this code, you need to update
+    //       the same code in taskbar.cpp as well. This
+    //       is ugly code duplication, I know.
+
+    SetInvokingWindow( menu, this );
+
+    menu->UpdateUI();
+
+    wxPoint pos;
+    gpointer userdata;
+    GtkMenuPositionFunc posfunc;
+    if ( x == -1 && y == -1 )
+    {
+        // use GTK's default positioning algorithm
+        userdata = NULL;
+        posfunc = NULL;
+    }
+    else
+    {
+        pos = ClientToScreen(wxPoint(x, y));
+        userdata = &pos;
+        posfunc = wxPopupMenuPositionCallback;
+    }
+
+    menu->m_popupShown = true;
+    gtk_menu_popup(
+                  GTK_MENU(menu->m_menu),
+                  (GtkWidget *) NULL,           // parent menu shell
+                  (GtkWidget *) NULL,           // parent menu item
+                  posfunc,                      // function to position it
+                  userdata,                     // client data
+                  0,                            // button used to activate it
+                  gtk_get_current_event_time()
+                );
+
+    while (menu->m_popupShown)
+    {
+        gtk_main_iteration();
+    }
+
+    return true;
+}
+
+#endif // wxUSE_MENUS_NATIVE
+
 #if wxUSE_DRAG_AND_DROP
 
 void wxWindowGTK::SetDropTarget( wxDropTarget *dropTarget )
