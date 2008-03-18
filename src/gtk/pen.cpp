@@ -230,3 +230,15 @@ wxColour &wxPen::GetColour() const
 
     return M_PENDATA->m_colour;
 }
+
+// stippled pens are not supported by wxGTK
+void wxPen::SetStipple(const wxBitmap& WXUNUSED(stipple))
+{
+    wxFAIL_MSG( "stippled pens not supported" );
+}
+
+wxBitmap *wxPen::GetStipple() const
+{
+    return NULL;
+}
+
