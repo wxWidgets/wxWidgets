@@ -96,8 +96,7 @@ public:
     @wxheader{accel.h}
 
     An accelerator table allows the application to specify a table of keyboard
-    shortcuts for menus or other commands. On Windows and Mac OS X, menu or button
-    commands are supported; on GTK, only menu commands are supported.
+    shortcuts for menu or button commands.
 
     The object ::wxNullAcceleratorTable is defined to be a table with no data, and
     is the initial accelerator table for a window.
