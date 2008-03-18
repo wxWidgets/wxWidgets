@@ -41,10 +41,6 @@ static bool wxGetStockGtkAccelerator(const char *id, GdkModifierType *mod, guint
 static wxString GetGtkHotKey( const wxMenuItem& item );
 #endif
 
-//-----------------------------------------------------------------------------
-// activate message from GTK
-//-----------------------------------------------------------------------------
-
 static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 {
     event.SetEventObject( menu );
@@ -56,32 +52,6 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
     wxWindow *win = menu->GetInvokingWindow();
     if (win)
         win->HandleWindowEvent( event );
-}
-
-extern "C" {
-
-static void
-gtk_menu_open_callback(GtkWidget * WXUNUSED(widget), wxMenu *menu)
-{
-    wxMenuEvent event(wxEVT_MENU_OPEN, -1, menu);
-
-    DoCommonMenuCallbackCode(menu, event);
-}
-
-static void
-gtk_menu_close_callback(GtkWidget * WXUNUSED(widget), wxMenuBar *menubar)
-{
-    if ( !menubar->GetMenuCount() )
-    {
-        // if menubar is empty we can't call GetMenu(0) below
-        return;
-    }
-
-    wxMenuEvent event( wxEVT_MENU_CLOSE, -1, NULL );
-
-    DoCommonMenuCallbackCode(menubar->GetMenu(0), event);
-}
-
 }
 
 //-----------------------------------------------------------------------------
@@ -127,13 +97,6 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
 
     for (size_t i = 0; i < n; ++i )
         Append(menus[i], titles[i]);
-
-    // VZ: for some reason connecting to menus "deactivate" doesn't work (we
-    //     don't get it when the menu is dismissed by clicking outside the
-    //     toolbar) so we connect to the global one, even if it means that we
-    //     can't pass the menu which was closed in wxMenuEvent object
-    g_signal_connect (m_menubar, "deactivate",
-                      G_CALLBACK (gtk_menu_close_callback), this);
 }
 
 wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style)
@@ -324,10 +287,6 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
         gtk_menu_shell_append( GTK_MENU_SHELL(m_menubar), menu->m_owner );
     else
         gtk_menu_shell_insert( GTK_MENU_SHELL(m_menubar), menu->m_owner, pos );
-
-    g_signal_connect (menu->m_owner, "activate",
-                      G_CALLBACK (gtk_menu_open_callback),
-                      menu);
 
     // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
     // addings menu later on.
@@ -948,10 +907,29 @@ bool wxMenuItem::IsChecked() const
 // wxMenu
 //-----------------------------------------------------------------------------
 
+extern "C" {
+// "map" from m_menu
+static void menu_map(GtkWidget*, wxMenu* menu)
+{
+    wxMenuEvent event(wxEVT_MENU_OPEN, menu->m_popupShown ? -1 : 0, menu);
+    DoCommonMenuCallbackCode(menu, event);
+}
+
+// "hide" from m_menu
+static void menu_hide(GtkWidget*, wxMenu* menu)
+{
+    wxMenuEvent event(wxEVT_MENU_CLOSE, menu->m_popupShown ? -1 : 0, menu);
+    menu->m_popupShown = false;
+    DoCommonMenuCallbackCode(menu, event);
+}
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 void wxMenu::Init()
 {
+    m_popupShown = false;
+
     m_accel = gtk_accel_group_new();
     m_menu = gtk_menu_new();
     // NB: keep reference to the menu so that it is not destroyed behind
@@ -979,22 +957,23 @@ void wxMenu::Init()
         Append(wxGTK_TITLE_ID, m_title);
         AppendSeparator();
     }
+
+    // "show" occurs for sub-menus which are not showing, so use "map" instead
+    g_signal_connect(m_menu, "map", G_CALLBACK(menu_map), this);
+    g_signal_connect(m_menu, "hide", G_CALLBACK(menu_hide), this);
 }
 
 wxMenu::~wxMenu()
 {
-   if ( GTK_IS_WIDGET( m_menu ))
-   {
-       // see wxMenu::Init
-       g_object_unref(m_menu);
+    // see wxMenu::Init
+    g_object_unref(m_menu);
 
-       // if the menu is inserted in another menu at this time, there was
-       // one more reference to it:
-       if ( m_owner )
-           gtk_widget_destroy( m_menu );
+    // if the menu is inserted in another menu at this time, there was
+    // one more reference to it:
+    if (m_owner)
+       gtk_widget_destroy(m_menu);
 
-       g_object_unref(m_accel);
-   }
+    g_object_unref(m_accel);
 }
 
 void wxMenu::SetLayoutDirection(const wxLayoutDirection dir)
@@ -1600,12 +1579,6 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     menu->UpdateUI();
 
-    bool is_waiting = true;
-
-    gulong handler = g_signal_connect (menu->m_menu, "hide",
-                                       G_CALLBACK (gtk_pop_hide_callback),
-                                       &is_waiting);
-
     wxPoint pos;
     gpointer userdata;
     GtkMenuPositionFunc posfunc;
@@ -1622,9 +1595,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
         posfunc = wxPopupMenuPositionCallback;
     }
 
-    wxMenuEvent eventOpen(wxEVT_MENU_OPEN, -1, menu);
-    DoCommonMenuCallbackCode(menu, eventOpen);
-
+    menu->m_popupShown = true;
     gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
                   (GtkWidget *) NULL,           // parent menu shell
@@ -1635,15 +1606,10 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
                   gtk_get_current_event_time()
                 );
 
-    while (is_waiting)
+    while (menu->m_popupShown)
     {
         gtk_main_iteration();
     }
-
-    g_signal_handler_disconnect (menu->m_menu, handler);
-
-    wxMenuEvent eventClose(wxEVT_MENU_CLOSE, -1, menu);
-    DoCommonMenuCallbackCode(menu, eventClose);
 
     return true;
 }
