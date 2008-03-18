@@ -72,7 +72,7 @@ public:
                         wxWindowID id = wxID_CONTEXT_HELP,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        long style = 0);
+                        long style = wxBU_AUTODRAW);
 
     void OnContextHelp(wxCommandEvent& event);
 

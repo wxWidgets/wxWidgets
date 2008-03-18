@@ -24,7 +24,7 @@ public:
                    const wxBitmap& bitmap,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = 0,
+                   long style = wxBU_AUTODRAW,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxButtonNameStr)
     {
@@ -38,14 +38,14 @@ public:
                 const wxBitmap& bitmap,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = 0,
+                long style = wxBU_AUTODRAW,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 
     void SetLabel( const wxString &label );
     virtual void SetLabel( const wxBitmap& bitmap ) { SetBitmapLabel(bitmap); }
 
-    virtual bool Enable(bool enable = TRUE);
+    virtual bool Enable(bool enable = true);
 
     // implementation
     // --------------
