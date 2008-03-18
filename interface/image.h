@@ -1475,6 +1475,8 @@ public:
     see wxImage.
 
     @see wxImage, wxImageHandler
+
+    @header{wx/image.h}
 */
 void wxInitAllImageHandlers();
 

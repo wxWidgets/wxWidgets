@@ -671,6 +671,8 @@ wxApp *wxTheApp;
     ::wxTheApp pointer is that the latter is of type wxApp* and so wouldn't
     allow you to access the functions specific to your application class but
     not present in wxApp while wxGetApp() returns the object of the right type.
+
+    @header{wx/app.h}
 */
 wxAppDerivedClass& wxGetApp();
 
@@ -688,6 +690,8 @@ wxAppDerivedClass& wxGetApp();
     is 1 and under Windows platform this requires a compiler with support for
     SEH (structured exception handling) which currently means only Microsoft
     Visual C++ or a recent Borland C++ version.
+
+    @header{wx/app.h}
 */
 bool wxHandleFatalExceptions(bool doIt = true);
 
@@ -702,12 +706,16 @@ bool wxHandleFatalExceptions(bool doIt = true);
 
     This function may be called several times but wxUninitialize() must be
     called for each successful call to this function.
+
+    @header{wx/app.h}
 */
 bool wxInitialize();
 
 /**
     This function is for use in console (wxBase) programs only. It must be called
     once for each previous successful call to wxInitialize().
+
+    @header{wx/app.h}
 */
 void wxUninitialize();
 
@@ -718,6 +726,8 @@ void wxUninitialize();
     some other event would get sent. This is also useful for sending events
     between two threads and is used by the corresponding functions
     wxPostEvent() and wxEvtHandler::AddPendingEvent().
+
+    @header{wx/app.h}
 */
 void wxWakeUpIdle();
 
@@ -727,6 +737,8 @@ void wxWakeUpIdle();
     @deprecated
     This function is kept only for backwards compatibility. Please use
     the wxApp::Yield method instead in any new code.
+
+    @header{wx/app.h}
 */
 bool wxYield();
 
@@ -736,6 +748,8 @@ bool wxYield();
     afterwards. If @a win is not @NULL, this window will remain enabled,
     allowing the implementation of some limited user interaction.
     Returns the result of the call to ::wxYield.
+
+    @header{wx/app.h}
 */
 bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
 
@@ -749,6 +763,8 @@ bool wxSafeYield(wxWindow* win = NULL, bool onlyIfNeeded = false);
     @note This overload of wxEntry is available under all platforms.
 
     @see wxEntryStart()
+
+    @header{wx/app.h}
 */
 int wxEntry(int& argc, wxChar** argv);
 
@@ -772,6 +788,7 @@ int wxEntry(int& argc, wxChar** argv);
              }
              @endcode
 
+    @header{wx/app.h}
 */
 int wxEntry(HINSTANCE hInstance,
             HINSTANCE hPrevInstance = NULL,
@@ -791,6 +808,8 @@ int wxEntry(HINSTANCE hInstance,
     Should only be used in an emergency: normally the top-level frame
     should be deleted (after deleting all other frames) to terminate the
     application. See wxCloseEvent and wxApp.
+
+    @header{wx/app.h}
 */
 void wxExit();
 

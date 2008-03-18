@@ -21,6 +21,8 @@
 
     Notice that parameters @c argc and @c argv may be modified by this
     function.
+
+    @header{wx/init.h}
 */
 bool wxEntryStart(int& argc, wxChar** argv);
 
@@ -32,6 +34,8 @@ bool wxEntryStart(int& argc, wxChar** argv);
 
     @note Under Windows CE platform, and only there, the type of @a pCmdLine is
     @c wchar_t *, otherwise it is @c char *, even in Unicode build.
+
+    @header{wx/init.h}
 */
 bool wxEntryStart(HINSTANCE hInstance,
                   HINSTANCE hPrevInstance = NULL,
@@ -40,6 +44,8 @@ bool wxEntryStart(HINSTANCE hInstance,
 
 /**
     Free resources allocated by a successful call to wxEntryStart().
+
+    @header{wx/init.h}
 */
 void wxEntryCleanup();
 
