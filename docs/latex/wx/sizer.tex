@@ -209,8 +209,7 @@ window size if previously set by
 \helpref{wxWindow::SetMaxSize}{wxwindowsetmaxsize}.
 
 The returned value is suitable for passing to
-\helpref{wxWindow::SetClientSize}{wxwindowsetclientsize} or
-\helpref{wxWindow::SetMinClientSize}{wxwindowsetminclientsize}.
+\helpref{wxWindow::SetClientSize}{wxwindowsetclientsize}.
 
 \newsince{2.8.8}
 
@@ -344,12 +343,12 @@ Returns the minimal size of the sizer. This is either the combined minimal
 size of all the children and their borders or the minimal size set by 
 \helpref{SetMinSize}{wxsizersetminsize}, depending on which is bigger.
 
-Note that the returned value is \emph{client} size, not window size.
-In particular, if you use the value to set toplevel window's minimal or
-actual size, use \helpref{wxWindow::SetMinClientSize}{wxwindowsetminclientsize}
-or \helpref{wxWindow::SetClientSize}{wxwindowsetclientsize}, \emph{not}
-\helpref{wxWindow::SetMinSize}{wxwindowsetminsize}
-or \helpref{wxWindow::SetSize}{wxwindowsetsize}.
+Note that the returned value is \emph{client} size, not window size.  In
+particular, if you use the value to set toplevel window's minimal or actual
+size, you should convert it using
+\helpref{wxWindow::ClientToWindowSize}{wxwindowclienttowindowsize} before
+passing it to \helpref{wxWindow::SetMinSize}{wxwindowsetminsize} or
+\helpref{wxWindow::SetSize}{wxwindowsetsize}.
 
 
 \membersection{wxSizer::Hide}\label{wxsizerhide}
