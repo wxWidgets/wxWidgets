@@ -64,7 +64,7 @@
 -->
 
 <emaillookup name="wx-devs">
-    <xi:include href="include/wx-devs.xml" xpointer="xpointer(//*[@id='MW'])"/>
+    <xi:include href="include/wx-devs.xml"/>
 </emaillookup>
 
 <!--

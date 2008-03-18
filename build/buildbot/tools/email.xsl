@@ -20,7 +20,9 @@
 
 <xsl:template match="/">
     <emaillookup>
-        <xsl:apply-templates select="//table/tr"/>
+        <xsl:apply-templates select="//table/tr">
+            <xsl:sort select="normalize-space(td[1])"/>
+        </xsl:apply-templates>
     </emaillookup>
 </xsl:template>
 
