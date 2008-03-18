@@ -1467,6 +1467,9 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_appinitterm */
+//@{
+
 /**
     Initializes all available image handlers. For a list of available handlers,
     see wxImage.
@@ -1474,4 +1477,6 @@ public:
     @see wxImage, wxImageHandler
 */
 void wxInitAllImageHandlers();
+
+//@}
 

@@ -608,14 +608,6 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/**
-    The global pointer to the singleton wxApp object.
-
-    @see wxApp::GetInstance()
-*/
-wxApp *wxTheApp;
-
-
 
 /** @ingroup group_funcmacro_rtti */
 //@{
@@ -656,40 +648,48 @@ wxApp *wxTheApp;
 
 
 
+/**
+    The global pointer to the singleton wxApp object.
+
+    @see wxApp::GetInstance()
+*/
+wxApp *wxTheApp;
+
+
+
 /** @ingroup group_funcmacro_appinitterm */
 //@{
 
 /**
-    This function doesn't exist in wxWidgets but it is created by using
-    the IMPLEMENT_APP() macro.
+    This function doesn't exist in wxWidgets but it is created by using the
+    IMPLEMENT_APP() macro.
 
     Thus, before using it anywhere but in the same module where this macro is
     used, you must make it available using DECLARE_APP().
 
     The advantage of using this function compared to directly using the global
-    wxTheApp pointer is that the latter is of type wxApp* and so wouldn't
-    allow you to access the functions specific to your application class but not
-    present in wxApp while wxGetApp() returns the object of the right type.
+    ::wxTheApp pointer is that the latter is of type wxApp* and so wouldn't
+    allow you to access the functions specific to your application class but
+    not present in wxApp while wxGetApp() returns the object of the right type.
 */
-wxAppDerivedClass wxGetApp();
+wxAppDerivedClass& wxGetApp();
 
 /**
     If @a doIt is @true, the fatal exceptions (also known as general protection
     faults under Windows or segmentation violations in the Unix world) will be
     caught and passed to wxApp::OnFatalException.
 
-    By default, i.e. before this function is called, they will be handled in the
-    normal way which usually just means that the application will be terminated.
-    Calling wxHandleFatalExceptions() with @a doIt equal to @false will restore
-    this default behaviour.
+    By default, i.e. before this function is called, they will be handled in
+    the normal way which usually just means that the application will be
+    terminated. Calling wxHandleFatalExceptions() with @a doIt equal to @false
+    will restore this default behaviour.
 
-    Notice that this function is only available if @c wxUSE_ON_FATAL_EXCEPTION is 1
-    and under Windows platform this requires a compiler with support for SEH
-    (structured exception handling) which currently means only Microsoft Visual C++
-    or a recent Borland C++ version.
+    Notice that this function is only available if @c wxUSE_ON_FATAL_EXCEPTION
+    is 1 and under Windows platform this requires a compiler with support for
+    SEH (structured exception handling) which currently means only Microsoft
+    Visual C++ or a recent Borland C++ version.
 */
 bool wxHandleFatalExceptions(bool doIt = true);
-
 
 /**
     This function is used in wxBase only and only if you don't create
@@ -710,6 +710,16 @@ bool wxInitialize();
     once for each previous successful call to wxInitialize().
 */
 void wxUninitialize();
+
+/**
+    This function wakes up the (internal and platform dependent) idle system,
+    i.e. it will force the system to send an idle event even if the system
+    currently @e is idle and thus would not send any idle event until after
+    some other event would get sent. This is also useful for sending events
+    between two threads and is used by the corresponding functions
+    wxPostEvent() and wxEvtHandler::AddPendingEvent().
+*/
+void wxWakeUpIdle();
 
 /**
     Calls wxApp::Yield.
