@@ -3833,13 +3833,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
 #if wxUSE_MENUS_NATIVE
 
-extern "C" WXDLLIMPEXP_CORE
-void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
-{
-    *is_waiting = false;
-}
-
-WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win )
+static void SetInvokingWindow( wxMenu *menu, wxWindow* win )
 {
     menu->SetInvokingWindow( win );
 
@@ -3856,7 +3850,8 @@ WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win )
     }
 }
 
-extern "C" WXDLLIMPEXP_CORE
+extern "C" {
+static
 void wxPopupMenuPositionCallback( GtkMenu *menu,
                                   gint *x, gint *y,
                                   gboolean * WXUNUSED(whatever),
@@ -3875,6 +3870,12 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
     *x = pos->x < xmax ? pos->x : xmax;
     *y = pos->y < ymax ? pos->y : ymax;
 }
+}
+
+void wxWindowGTK::DoPopupMenuUpdateUI(wxMenu* menu)
+{
+    menu->UpdateUI();
+}
 
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
@@ -3882,13 +3883,9 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     wxCHECK_MSG( menu != NULL, false, wxT("invalid popup-menu") );
 
-    // NOTE: if you change this code, you need to update
-    //       the same code in taskbar.cpp as well. This
-    //       is ugly code duplication, I know.
-
     SetInvokingWindow( menu, this );
 
-    menu->UpdateUI();
+    DoPopupMenuUpdateUI(menu);
 
     wxPoint pos;
     gpointer userdata;
