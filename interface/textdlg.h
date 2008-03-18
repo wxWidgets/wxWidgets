@@ -96,12 +96,18 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_dialog */
+//@{
+
 /**
-    Pop up a dialog box with title set to @e caption, @e message, and a
-    @e default_value.  The user may type in text and press OK to return this text,
-    or press Cancel to return the empty string.
-    If @a centre is @true, the message text (which may include new line characters)
-    is centred; if @false, the message is left-justified.
+    Pop up a dialog box with title set to @e caption, @c message, and a
+    @c default_value. The user may type in text and press OK to return this
+    text, or press Cancel to return the empty string.
+
+    If @c centre is @true, the message text (which may include new line
+    characters) is centred; if @false, the message is left-justified.
+
+    @header{wx/textdlg.h}
 */
 wxString wxGetTextFromUser(const wxString& message,
                            const wxString& caption = "Input text",
@@ -112,9 +118,11 @@ wxString wxGetTextFromUser(const wxString& message,
                            bool centre = true);
 
 /**
-    Similar to wxGetTextFromUser() but the text entered
-    in the dialog is not shown on screen but replaced with stars. This is intended
-    to be used for entering passwords as the function name implies.
+    Similar to wxGetTextFromUser() but the text entered in the dialog is not
+    shown on screen but replaced with stars. This is intended to be used for
+    entering passwords as the function name implies.
+
+    @header{wx/textdlg.h}
 */
 wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& caption = "Input text",
@@ -123,4 +131,6 @@ wxString wxGetPasswordFromUser(const wxString& message,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,
                                bool centre = true);
+
+//@}
 

@@ -33,127 +33,48 @@ public:
         @param style
             A dialog style (bitlist) containing flags chosen from the following:
         
-        
-        
-        
-        
-        
-        
             wxOK
-        
-        
-        
         
             Show an OK button.
         
-        
-        
-        
-        
             wxCANCEL
-        
-        
-        
         
             Show a Cancel button.
         
-        
-        
-        
-        
             wxYES_NO
-        
-        
-        
         
             Show Yes and No buttons.
         
-        
-        
-        
-        
             wxYES_DEFAULT
-        
-        
-        
         
             Used with wxYES_NO, makes Yes button the default - which is the default
         behaviour.
         
-        
-        
-        
-        
             wxNO_DEFAULT
-        
-        
-        
         
             Used with wxYES_NO, makes No button the default.
         
-        
-        
-        
-        
             wxICON_EXCLAMATION
-        
-        
-        
         
             Shows an exclamation mark icon.
         
-        
-        
-        
-        
             wxICON_HAND
-        
-        
-        
         
             Shows an error icon.
         
-        
-        
-        
-        
             wxICON_ERROR
-        
-        
-        
         
             Shows an error icon - the same as wxICON_HAND.
         
-        
-        
-        
-        
             wxICON_QUESTION
-        
-        
-        
         
             Shows a question mark icon.
         
-        
-        
-        
-        
             wxICON_INFORMATION
-        
-        
-        
         
             Shows an information (i) icon.
         
-        
-        
-        
-        
             wxSTAY_ON_TOP
-        
-        
-        
         
             The message box stays on top of all other window, even those of the other
         applications (Windows only).
@@ -229,62 +150,52 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_dialog */
+//@{
+
 /**
-    General purpose message dialog.  @a style may be a bit list of the
+    General purpose message dialog. @c style may be a bit list of the
     following identifiers:
 
-    wxYES_NO
+    @beginStyleTable
+    @style{wxYES_NO}:
+        Puts Yes and No buttons on the message box. May be combined with
+        wxCANCEL.
+    @style{wxCANCEL}:
+        Puts a Cancel button on the message box. May only be combined with
+        wxYES_NO or wxOK.
+    @style{wxOK}:
+        Puts an Ok button on the message box. May be combined with wxCANCEL.
+    @style{wxICON_EXCLAMATION}:
+        Displays an exclamation mark symbol.
+    @style{wxICON_HAND}:
+        Displays an error symbol.
+    @style{wxICON_ERROR}:
+        Displays an error symbol - the same as wxICON_HAND.
+    @style{wxICON_QUESTION}:
+        Displays a question mark symbol.
+    @style{wxICON_INFORMATION}:
+        Displays an information symbol.
 
-    Puts Yes and No buttons on the message box. May be combined with
-    wxCANCEL.
-
-    wxCANCEL
-
-    Puts a Cancel button on the message box. May only be combined with
-    wxYES_NO or wxOK.
-
-    wxOK
-
-    Puts an Ok button on the message box. May be combined with wxCANCEL.
-
-    wxICON_EXCLAMATION
-
-    Displays an exclamation mark symbol.
-
-    wxICON_HAND
-
-    Displays an error symbol.
-
-    wxICON_ERROR
-
-    Displays an error symbol - the same as wxICON_HAND.
-
-    wxICON_QUESTION
-
-    Displays a question mark symbol.
-
-    wxICON_INFORMATION
-
-    Displays an information symbol.
-
-    The return value is one of: wxYES, wxNO, wxCANCEL, wxOK.
-    For example:
+    The return value is one of: wxYES, wxNO, wxCANCEL, wxOK. For example:
 
     @code
-    ...
-      int answer = wxMessageBox("Quit program?", "Confirm",
-                                wxYES_NO | wxCANCEL, main_frame);
-      if (answer == wxYES)
-        main_frame-Close();
-      ...
+    int answer = wxMessageBox("Quit program?", "Confirm",
+                              wxYES_NO | wxCANCEL, main_frame);
+    if (answer == wxYES)
+        main_frame->Close();
     @endcode
 
-    @a message may contain newline characters, in which case the
-    message will be split into separate lines, to cater for large messages.
+    @a message may contain newline characters, in which case the message will
+    be split into separate lines, to cater for large messages.
+
+    @header{wx/msgdlg.h}
 */
 int wxMessageBox(const wxString& message,
                  const wxString& caption = "Message",
                  int style = wxOK,
                  wxWindow* parent = NULL,
                  int x = -1, int y = -1);
+
+//@}
 

@@ -99,10 +99,14 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_dialog */
+//@{
+
 /**
-    Pops up a directory selector dialog. The arguments have the same meaning as
-    those of wxDirDialog::wxDirDialog(). The message is displayed at the top,
-    and the default_path, if specified, is set as the initial selection.
+    Pops up a directory selector dialog. The arguments have the same meaning
+    as those of wxDirDialog::wxDirDialog(). The message is displayed at the
+    top, and the default_path, if specified, is set as the initial selection.
+
     The application must check for an empty return value (if the user pressed
     Cancel). For example:
 
@@ -110,13 +114,17 @@ public:
     const wxString& dir = wxDirSelector("Choose a folder");
     if ( !dir.empty() )
     {
-      ...
+        ...
     }
     @endcode
+
+    @header{wx/dirdlg.h}
 */
 wxString wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
                        const wxString& default_path = "",
                        long style = 0,
                        const wxPoint& pos = wxDefaultPosition,
                        wxWindow* parent = NULL);
+
+//@}
 

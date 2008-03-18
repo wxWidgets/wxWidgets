@@ -205,24 +205,29 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_dialog */
+//@{
+
 /**
     Pops up a file selector box. In Windows, this is the common file selector
-    dialog. In X, this is a file selector box with the same functionality.
-    The path and filename are distinct elements of a full file pathname.
-    If path is empty, the current directory will be used. If filename is empty,
-    no default filename will be supplied. The wildcard determines what files
-    are displayed in the file selector, and file extension supplies a type
-    extension for the required filename. Flags may be a combination of wxFD_OPEN,
-    wxFD_SAVE, wxFD_OVERWRITE_PROMPT or wxFD_FILE_MUST_EXIST. Note that
-    wxFD_MULTIPLE
-    can only be used with wxFileDialog and not here as this
-    function only returns a single file name.
+    dialog. In X, this is a file selector box with the same functionality. The
+    path and filename are distinct elements of a full file pathname. If path
+    is empty, the current directory will be used. If filename is empty, no
+    default filename will be supplied. The wildcard determines what files are
+    displayed in the file selector, and file extension supplies a type
+    extension for the required filename. Flags may be a combination of
+    wxFD_OPEN, wxFD_SAVE, wxFD_OVERWRITE_PROMPT or wxFD_FILE_MUST_EXIST.
+
+    @note wxFD_MULTIPLE can only be used with wxFileDialog and not here since
+          this function only returns a single file name.
+
     Both the Unix and Windows versions implement a wildcard filter. Typing a
     filename containing wildcards (*, ?) in the filename text item, and
     clicking on Ok, will result in only those files matching the pattern being
     displayed.
-    The wildcard may be a specification for multiple types of file
-    with a description for each, such as:
+
+    The wildcard may be a specification for multiple types of file with a
+    description for each, such as:
 
     @code
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
@@ -240,6 +245,8 @@ public:
     }
     //else: cancelled by user
     @endcode
+
+    @header{wx/filedlg.h}
 */
 wxString wxFileSelector(const wxString& message,
                         const wxString& default_path = "",
@@ -250,4 +257,6 @@ wxString wxFileSelector(const wxString& message,
                         wxWindow* parent = NULL,
                         int x = -1,
                         int y = -1);
+
+//@}
 

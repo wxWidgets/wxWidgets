@@ -68,19 +68,26 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_dialog */
+//@{
+
 /**
     Shows the font selection dialog and returns the font selected by user or
-    invalid font (use @ref wxFont::isok wxFont:IsOk to test whether a font
-    is valid) if the dialog was cancelled.
+    invalid font (use wxFont::IsOk() to test whether a font is valid) if the
+    dialog was cancelled.
 
     @param parent
-        The parent window for the font selection dialog
+        The parent window for the font selection dialog.
     @param fontInit
         If given, this will be the font initially selected in the dialog.
     @param caption
         If given, this will be used for the dialog caption.
+
+    @header{wx/fontdlg.h}
 */
 wxFont wxGetFontFromUser(wxWindow* parent,
                          const wxFont& fontInit,
                          const wxString& caption = wxEmptyString);
+
+//@}
 

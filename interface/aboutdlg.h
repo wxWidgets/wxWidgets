@@ -190,7 +190,7 @@ public:
         info.SetName(_("My Program"));
         info.SetVersion(_("1.2.3 Beta"));
         info.SetDescription(_("This program does something great."));
-        info.SetCopyright(_T("(C) 2007 Me my@email.addre.ss"));
+        info.SetCopyright(_T("(C) 2007 Me <my@email.addre.ss>"));
 
         wxAboutBox(info);
     }
@@ -199,6 +199,8 @@ public:
     Please see the @ref page_utils_samples_dialogs for more examples of
     using this function and wxAboutDialogInfo for the description of the
     information which can be shown in the about dialog.
+
+    @header{wx/aboutdlg.h}
 */
 void wxAboutBox(const wxAboutDialogInfo& info);
 
@@ -214,6 +216,8 @@ void wxAboutBox(const wxAboutDialogInfo& info);
     customization.
 
     @see wxAboutDialogInfo
+
+    @header{wx/aboutdlg.h}
 */
 void wxGenericAboutBox(const wxAboutDialogInfo& info);
 

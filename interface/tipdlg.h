@@ -69,18 +69,46 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_dialog */
+//@{
+
 /**
-    This function creates a wxTipProvider which may be
-    used with wxShowTip().
+    This function creates a wxTipProvider which may be used with wxShowTip().
 
     @param filename
-        The name of the file containing the tips, one per line
+        The name of the file containing the tips, one per line.
     @param currentTip
-        The index of the first tip to show - normally this index
-        is remembered between the 2 program runs.
+        The index of the first tip to show. Normally this index is remembered
+        between the 2 program runs.
 
-    @see @ref overview_tipsoverview "Tips overview"
+    @see @ref overview_tips
+
+    @header{wx/tipdlg.h}
 */
 wxTipProvider* wxCreateFileTipProvider(const wxString& filename,
                                        size_t currentTip);
+
+/**
+    This function shows a "startup tip" to the user. The return value is the
+    state of the "Show tips at startup" checkbox.
+
+    @param parent
+        The parent window for the modal dialog.
+    @param tipProvider
+        An object which is used to get the text of the tips. It may be created
+        with the wxCreateFileTipProvider() function.
+    @param showAtStartup
+        Should be true if startup tips are shown, false otherwise. This is
+        used as the initial value for "Show tips at startup" checkbox which is
+        shown in the tips dialog.
+
+    @see @ref overview_tips
+
+    @header{wx/tipdlg.h}
+*/
+bool wxShowTip(wxWindow *parent,
+               wxTipProvider *tipProvider,
+               bool showAtStartup = true);
+
+//@}
 

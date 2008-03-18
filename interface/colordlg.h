@@ -62,25 +62,31 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_dialog */
+//@{
+
 /**
-    Shows the colour selection dialog and returns the colour selected by user or
-    invalid colour (use @ref wxColour::isok wxColour:IsOk to test whether a colour
-    is valid) if the dialog was cancelled.
+    Shows the colour selection dialog and returns the colour selected by user
+    or invalid colour (use wxColour::IsOk() to test whether a colour is valid)
+    if the dialog was cancelled.
 
     @param parent
-        The parent window for the colour selection dialog
+        The parent window for the colour selection dialog.
     @param colInit
         If given, this will be the colour initially selected in the dialog.
     @param caption
         If given, this will be used for the dialog caption.
     @param data
-        Optional object storing additional colour dialog settings, such
-        as custom colours. If none is provided the same settings as the last time
-    are
-        used.
+        Optional object storing additional colour dialog settings, such as
+        custom colours. If none is provided the same settings as the last time
+        are used.
+
+    @header{wx/colordlg.h}
 */
 wxColour wxGetColourFromUser(wxWindow* parent,
                              const wxColour& colInit,
                              const wxString& caption = wxEmptyString,
                              wxColourData* data = NULL);
+
+//@}
 
