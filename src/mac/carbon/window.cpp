@@ -2115,6 +2115,12 @@ void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
     {
         event.GetDC()->Clear() ;
     }
+    else if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
+    {
+        // don't skip the event here, custom background means that the app
+        // is drawing it itself in its OnPaint(), so don't draw it at all
+        // now to avoid flicker
+    }
     else
     {
         event.Skip() ;
