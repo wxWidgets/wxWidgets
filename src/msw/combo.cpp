@@ -309,7 +309,7 @@ static void wxMSWDrawFocusRect( wxDC& dc, const wxRect& rect )
     //   it employs wxCAP_BUTT hack to have line of width 1.
     dc.SetLogicalFunction(wxINVERT);
 
-    wxPen pen(*wxBLACK,1,wxDOT);
+    wxPen pen(*wxBLACK, 1, wxPENSTYLE_DOT);
     pen.SetCap(wxCAP_BUTT);
     dc.SetPen(pen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);

@@ -218,7 +218,7 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor)
 
     dc2.SetBackground(* wxWHITE_BRUSH);
     dc2.Clear();
-    dc2.SetBackgroundMode(wxTRANSPARENT);
+    dc2.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc2.SetTextForeground(* wxLIGHT_GREY);
     dc2.DrawText(str, 0, 0);
     dc2.DrawText(str, 1, 0);

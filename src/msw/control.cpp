@@ -392,10 +392,9 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
         ::SetBkColor(hdc, wxColourToRGB(colBg));
 
         // draw children with the same colour as the parent
-        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg, wxSOLID);
-
+        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg,
+                                                           wxBRUSHSTYLE_SOLID);
         hbr = (WXHBRUSH)brush->GetResourceHandle();
-
     }
 
     // if we use custom background, we should set foreground ourselves too

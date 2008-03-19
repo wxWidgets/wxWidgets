@@ -279,7 +279,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
 wxColourChanger::wxColourChanger(wxMSWDCImpl& dc) : m_dc(dc)
 {
     const wxBrush& brush = dc.GetBrush();
-    if ( brush.IsOk() && brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE )
+    if ( brush.IsOk() && brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE )
     {
         HDC hdc = GetHdcOf(dc);
         m_colFgOld = ::GetTextColor(hdc);
@@ -300,8 +300,8 @@ wxColourChanger::wxColourChanger(wxMSWDCImpl& dc) : m_dc(dc)
         }
 
         SetBkMode(hdc,
-                  dc.GetBackgroundMode() == wxTRANSPARENT ? TRANSPARENT
-                                                          : OPAQUE);
+                  dc.GetBackgroundMode() == wxBRUSHSTYLE_TRANSPARENT
+                                                  ? TRANSPARENT : OPAQUE);
 
         // flag which telsl us to undo changes in the dtor
         m_changed = true;
@@ -740,7 +740,7 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     wxCoord xxx2 = (wxCoord) (xxc+ray);
     wxCoord yyy2 = (wxCoord) (yyc+ray);
 
-    if ( m_brush.IsOk() && m_brush.GetStyle() != wxTRANSPARENT )
+    if ( m_brush.IsOk() && m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
     {
         // Have to add 1 to bottom-right corner of rectangle
         // to make semi-circles look right (crooked line otherwise).
@@ -948,7 +948,7 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
     // (i.e. drawn with a transparent pen) one pixel smaller in both directions
     // and we want them to have the same size regardless of which pen is used
 #ifndef __WXWINCE__
-    if ( m_pen.GetStyle() == wxTRANSPARENT )
+    if ( m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
     {
         x2dev++;
         y2dev++;
@@ -982,7 +982,7 @@ void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
     // Windows draws the filled rectangles without outline (i.e. drawn with a
     // transparent pen) one pixel smaller in both directions and we want them
     // to have the same size regardless of which pen is used - adjust
-    if ( m_pen.GetStyle() == wxTRANSPARENT )
+    if ( m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
     {
         x2++;
         y2++;
@@ -1349,7 +1349,7 @@ void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
         old_background = SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
     }
 
-    SetBkMode(GetHdc(), m_backgroundMode == wxTRANSPARENT ? TRANSPARENT
+    SetBkMode(GetHdc(), m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT ? TRANSPARENT
                                                           : OPAQUE);
 
 #ifdef __WXWINCE__

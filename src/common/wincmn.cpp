@@ -1399,7 +1399,7 @@ void wxWindowBase::ClearBackground()
     // wxGTK uses its own version, no need to add never used code
 #ifndef __WXGTK__
     wxClientDC dc((wxWindow *)this);
-    wxBrush brush(GetBackgroundColour(), wxSOLID);
+    wxBrush brush(GetBackgroundColour(), wxBRUSHSTYLE_SOLID);
     dc.SetBackground(brush);
     dc.Clear();
 #endif // __WXGTK__

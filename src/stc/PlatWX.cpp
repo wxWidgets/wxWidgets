@@ -289,11 +289,11 @@ bool SurfaceImpl::Initialised() {
 
 
 void SurfaceImpl::PenColour(ColourAllocated fore) {
-    hdc->SetPen(wxPen(wxColourFromCA(fore), 1, wxSOLID));
+    hdc->SetPen(wxPen(wxColourFromCA(fore)));
 }
 
 void SurfaceImpl::BrushColour(ColourAllocated back) {
-    hdc->SetBrush(wxBrush(wxColourFromCA(back), wxSOLID));
+    hdc->SetBrush(wxBrush(wxColourFromCA(back)));
 }
 
 void SurfaceImpl::SetFont(Font &font_) {
@@ -344,7 +344,7 @@ void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
     if (((SurfaceImpl&)surfacePattern).bitmap)
         br = wxBrush(*((SurfaceImpl&)surfacePattern).bitmap);
     else    // Something is wrong so display in red
-        br = wxBrush(*wxRED, wxSOLID);
+        br = wxBrush(*wxRED);
     hdc->SetPen(*wxTRANSPARENT_PEN);
     hdc->SetBrush(br);
     hdc->DrawRectangle(wxRectFromPRectangle(rc));
@@ -475,13 +475,13 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, int ybase,
 
     SetFont(font);
     hdc->SetTextForeground(wxColourFromCA(fore));
-    hdc->SetBackgroundMode(wxTRANSPARENT);
+    hdc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
     hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
 
-    hdc->SetBackgroundMode(wxSOLID);
+    hdc->SetBackgroundMode(wxBRUSHSTYLE_SOLID);
 }
 
 

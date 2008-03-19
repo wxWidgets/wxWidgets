@@ -435,10 +435,12 @@ wxPen::wxPen(const wxColour& col, int width, wxPenStyle style)
     m_refData = new wxPenRefData(col, width, style);
 }
 
+/* error: `wxBrushStyle' has not been declared
 wxPen::wxPen(const wxColour& colour, int width, wxBrushStyle style)
 {
     m_refData = new wxPenRefData(colour, width, (wxPenStyle)style);
 }
+*/
 
 wxPen::wxPen(const wxBitmap& stipple, int width)
 {
