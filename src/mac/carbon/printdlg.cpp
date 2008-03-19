@@ -26,6 +26,7 @@
 
 #include "wx/mac/printdlg.h"
 #include "wx/mac/private/print.h"
+#include "wx/mac/private.h"
 #include "wx/statline.h"
 
 
