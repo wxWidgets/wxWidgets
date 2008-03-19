@@ -237,12 +237,12 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
                     {
                         wxMacCGContextStateSaver sg( cgContext ) ;
-                        float alpha = 1.0 ;
+                        CGFloat alpha = (CGFloat)1.0 ;
                         {
                             wxWindow* iter = thisWindow ;
                             while ( iter )
                             {
-                                alpha *= (float) iter->GetTransparent()/255.0 ;
+                                alpha *= (CGFloat)( iter->GetTransparent()/255.0 ) ;
                                 if ( iter->IsTopLevel() )
                                     iter = NULL ;
                                 else
@@ -2247,7 +2247,7 @@ void  wxWindowMac::MacPaintGrowBox()
         }
         else
         {
-            CGContextSetRGBFillColor( cgContext, 1.0, 1.0 , 1.0 , 1.0 );
+            CGContextSetRGBFillColor( cgContext, (CGFloat) 1.0, (CGFloat)1.0 ,(CGFloat) 1.0 , (CGFloat)1.0 );
         }
         CGContextFillRect( cgContext, cgrect );
         CGContextRestoreGState( cgContext );
