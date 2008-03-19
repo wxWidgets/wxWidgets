@@ -990,17 +990,23 @@ wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
     return wxPoint(0, 0) ;
 }
 
-bool wxTopLevelWindowMac::SetBackgroundColour(const wxColour& col )
+bool wxTopLevelWindowMac::SetBackgroundColour(const wxColour& c )
 {
+    wxColour col = c;
+    if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) )
+        col = wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground));
+    else if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) )
+        col = wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive));
+        
     if ( !wxTopLevelWindowBase::SetBackgroundColour(col) && m_hasBgCol )
         return false ;
     
-    if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) || col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground)) )
+    if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground)) )
     {
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDocumentWindowBackground, false ) ;
         SetBackgroundStyle(wxBG_STYLE_CUSTOM);
     }
-    else if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) || col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)) )
+    else if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)) )
     {
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDialogBackgroundActive, false ) ;
         SetBackgroundStyle(wxBG_STYLE_CUSTOM);
