@@ -11,9 +11,10 @@
 @defgroup group_funcmacro_file Files and Directories
 @ingroup group_funcmacro
 
-@header{wx/filefn.h}
+These functions provide a platform-independent API for common file and
+directory functionality.
 
-@sa wxPathList, wxDir, wxFile, wxFileName
+@see wxPathList, wxDir, wxFile, wxFileName
 
 */
 

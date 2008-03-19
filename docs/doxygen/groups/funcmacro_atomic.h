@@ -14,17 +14,15 @@
 When using multi-threaded applications, it is often required to access or
 modify memory which is shared between threads. Atomic integer and pointer
 operations are an efficient way to handle this issue (another, less efficient,
-way is to use a mutex or critical section). A native implementation exists for
-Windows, Linux, Solaris and Mac OS X, for other OS, a wxCriticalSection is used
-to protect the data.
+way is to use a wxMutex or wxCriticalSection). A native implementation exists
+for Windows, Linux, Solaris and Mac OS X; for others, a wxCriticalSection is
+used to protect the data.
 
-One particular application is reference counting (used by so-called smart
-pointers).
+One particular application is reference counting (used by so-called
+@ref group_class_smartpointers "smart pointers").
 
 You should define your variable with the type wxAtomicInt in order to apply
 atomic operations to it.
-
-@header{wx/atomic.h}
 
 */
 

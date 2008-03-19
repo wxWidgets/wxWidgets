@@ -144,6 +144,57 @@ void wxInfoMessageBox(wxWindow parent = NULL);
 
 
 
+/** @ingroup group_funcmacro_env */
+//@{
+
+/**
+    This is a macro defined as @c getenv() or its wide char version in Unicode
+    mode.
+
+    Note that under Win32 it may not return correct value for the variables set
+    with wxSetEnv(), use wxGetEnv() function instead.
+
+    @header{wx/utils.h}
+*/
+wxChar* wxGetenv(const wxString& var);
+
+/**
+    Returns the current value of the environment variable @c var in @c value.
+    @c value may be @NULL if you just want to know if the variable exists and
+    are not interested in its value.
+
+    Returns @true if the variable exists, @false otherwise.
+
+    @header{wx/utils.h}
+*/
+bool wxGetEnv(const wxString& var, wxString* value);
+
+/**
+    Sets the value of the environment variable @c var (adding it if necessary)
+    to @c value.
+
+    Returns @true on success.
+
+    @see wxUnsetEnv()
+
+    @header{wx/utils.h}
+*/
+bool wxSetEnv(const wxString& var, const wxString& value);
+
+/**
+    Removes the variable @c var from the environment. wxGetEnv() will return
+    @NULL after the call to this function.
+
+    Returns @true on success.
+
+    @header{wx/utils.h}
+*/
+bool wxUnsetEnv(const wxString& var);
+
+//@}
+
+
+
 /**
     Returns the type of power source as one of @c wxPOWER_SOCKET,
     @c wxPOWER_BATTERY or @c wxPOWER_UNKNOWN.
@@ -455,17 +506,6 @@ wxString wxLoadUserResource(const wxString& resourceName,
 */
 wxMemorySize wxGetFreeMemory();
 
-/**
-    This is a macro defined as @c getenv() or its wide char version in Unicode
-    mode.
-    Note that under Win32 it may not return correct value for the variables set
-    with wxSetEnv(), use wxGetEnv() function
-    instead.
-
-    @header{wx/utils.h}
-*/
-wxChar* wxGetEnv(const wxString& var);
-
 //@{
 /**
     Copies the current host machine's name into the supplied buffer. Please note
@@ -485,16 +525,6 @@ wxChar* wxGetEnv(const wxString& var);
 wxString wxGetHostName();
 bool wxGetHostName(char* buf, int sz);
 //@}
-
-/**
-    Returns the current value of the environment variable @a var in @e value.
-    @a value may be @NULL if you just want to know if the variable exists
-    and are not interested in its value.
-    Returns @true if the variable exists, @false otherwise.
-
-    @header{wx/utils.h}
-*/
-bool wxGetEnv(const wxString& var, wxString* value);
 
 /**
     Under X only, returns the current display name. See also wxSetDisplayName().
@@ -722,17 +752,6 @@ bool wxGetEmailAddress(char* buf, int sz);
     @header{wx/utils.h}
 */
 void wxSleep(int secs);
-
-/**
-    Sets the value of the environment variable @a var (adding it if necessary)
-    to @e value.
-    Returns @true on success.
-
-    @see wxUnsetEnv()
-
-    @header{wx/utils.h}
-*/
-bool wxSetEnv(const wxString& var, const wxString& value);
 
 /**
     Returns @true if the current platform is little endian (instead of big

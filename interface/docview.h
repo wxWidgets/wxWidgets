@@ -1448,10 +1448,28 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_file */
+//@{
+
 /**
-    Copies the given file to @e stream. Useful when converting an old application to
-    use streams (within the document/view framework, for example).
+    Copies the given file to @a stream. Useful when converting an old
+    application to use streams (within the document/view framework, for
+    example).
+
+    @header{wx/docview.h}
 */
 bool wxTransferFileToStream(const wxString& filename,
                             ostream& stream);
+
+/**
+    Copies the given stream to the file @a filename. Useful when converting an
+    old application to use streams (within the document/view framework, for
+    example).
+
+    @header{wx/docview.h}
+*/
+bool wxTransferStreamToFile(istream& stream,
+                             const wxString& filename);
+
+//@}
 

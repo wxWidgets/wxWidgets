@@ -11,11 +11,9 @@
 @defgroup group_funcmacro_env Environment
 @ingroup group_funcmacro
 
-The functions in this section allow to access (get) or change value of
-environment variables in a portable way. They are currently implemented under
-Win32 and POSIX-like systems (Unix).
-
-@header{wx/utils.h}
+These functions allow access to get or change the values of environment
+variables in a portable way. They are currently implemented under Win32 and
+POSIX-like systems (Unix).
 
 */
 
