@@ -43,7 +43,10 @@ public:
     virtual wxFontMapper* CreateFontMapper();
 
     /**
-        Creates the default log target for the application.
+        Creates a wxLog class for the application to use for logging errors.
+        The default implementation returns a new wxLogGui class.
+
+        @see wxLog
     */
     virtual wxLog* CreateLogTarget();
 
