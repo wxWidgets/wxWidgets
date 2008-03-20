@@ -2009,7 +2009,7 @@ enum
 /*  (or else they would be always different!). Using wxGetWindowId() which does */
 /*  the cast itself is recommended. Note that this type can't be unsigned */
 /*  because wxID_ANY == -1 is a valid (and largely used) value for window id. */
-#ifdef __cplusplus
+#if defined(__cplusplus) && wxUSE_GUI
     #include "wx/windowid.h"
 #endif
 
