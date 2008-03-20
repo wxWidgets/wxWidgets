@@ -56,7 +56,7 @@ public:
         Broadcasts to all waiting threads, waking all of them up. Note that this method
         may be called whether the mutex associated with this condition is locked or
         not.
-        
+
         @see Signal()
     */
     void Broadcast();
@@ -74,7 +74,7 @@ public:
         signalled again to wake up any thread which may start waiting on it later.
         Note that this method may be called whether the mutex associated with this
         condition is locked or not.
-        
+
         @see Broadcast()
     */
     void Signal();
@@ -90,10 +90,10 @@ public:
         Wait without waking up any thread, the thread would still wait for another one
         and so it is important to ensure that the condition will be signalled after
         Wait or the thread may sleep forever.
-        
+
         @returns Returns wxCOND_NO_ERROR on success, another value if an error
                  occurred.
-        
+
         @see WaitTimeout()
     */
     wxCondError Wait();
@@ -103,7 +103,7 @@ public:
         This method is identical to Wait() except that it
         returns, with the return code of @c wxCOND_TIMEOUT as soon as the given
         timeout expires.
-        
+
         @param milliseconds
             Timeout in milliseconds
     */
@@ -225,7 +225,7 @@ public:
         should call @ref wxThread::run GetThread()-Run to start running
         it.  You may optionally specify the stack size to be allocated to it (Ignored on
         platforms that don't support setting it explicitly, eg. Unix).
-        
+
         @returns One of:
     */
     wxThreadError Create(unsigned int stackSize = 0);
@@ -339,13 +339,13 @@ public:
         does not create or start execution of the real thread -- for this you should
         use the Create() and Run() methods.
         The possible values for @a kind parameters are:
-        
+
         @b wxTHREAD_DETACHED
-        
+
         Creates a detached thread.
-        
+
         @b wxTHREAD_JOINABLE
-        
+
         Creates a joinable thread.
     */
     wxThread(wxThreadKind kind = wxTHREAD_DETACHED);
@@ -381,7 +381,7 @@ public:
         use a lot of threads (say several hundred), virtual adress space can get tight
         unless you explicitly specify a smaller amount of thread stack space for each
         thread.
-        
+
         @returns One of:
     */
     wxThreadError Create(unsigned int stackSize = 0);
@@ -440,7 +440,7 @@ public:
 
     /**
         Returns the number of system CPUs or -1 if the value is unknown.
-        
+
         @see SetConcurrency()
     */
     static int GetCPUCount();
@@ -463,17 +463,17 @@ public:
     /**
         Gets the priority of the thread, between zero and 100.
         The following priorities are defined:
-        
+
         @b WXTHREAD_MIN_PRIORITY
-        
+
         0
-        
+
         @b WXTHREAD_DEFAULT_PRIORITY
-        
+
         50
-        
+
         @b WXTHREAD_MAX_PRIORITY
-        
+
         100
     */
     int GetPriority() const;
@@ -576,17 +576,17 @@ public:
         after calling Create() but before calling
         Run().
         The following priorities are already defined:
-        
+
         @b WXTHREAD_MIN_PRIORITY
-        
+
         0
-        
+
         @b WXTHREAD_DEFAULT_PRIORITY
-        
+
         50
-        
+
         @b WXTHREAD_MAX_PRIORITY
-        
+
         100
     */
     void SetPriority(int priority);
@@ -787,14 +787,14 @@ public:
         Increments the semaphore count and signals one of the waiting
         threads in an atomic way. Returns wxSEMA_OVERFLOW if the count
         would increase the counter past the maximum.
-        
+
         @returns One of:
     */
     wxSemaError Post();
 
     /**
         Same as Wait(), but returns immediately.
-        
+
         @returns One of:
     */
     wxSemaError TryWait();
@@ -802,7 +802,7 @@ public:
     /**
         Wait indefinitely until the semaphore count becomes strictly positive
         and then decrement it and return.
-        
+
         @returns One of:
     */
     wxSemaError Wait();
@@ -893,28 +893,28 @@ public:
     /**
         Locks the mutex object. This is equivalent to
         LockTimeout() with infinite timeout.
-        
+
         @returns One of:
     */
     wxMutexError Lock();
 
     /**
         Try to lock the mutex object during the specified time interval.
-        
+
         @returns One of:
     */
     wxMutexError LockTimeout(unsigned long msec);
 
     /**
         Tries to lock the mutex object. If it can't, returns immediately with an error.
-        
+
         @returns One of:
     */
     wxMutexError TryLock();
 
     /**
         Unlocks the mutex object.
-        
+
         @returns One of:
     */
     wxMutexError Unlock();

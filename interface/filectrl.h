@@ -61,7 +61,7 @@ public:
             Initial size.
         @param name
             Control name.
-        
+
         @returns @true if the control was successfully created or @false if
                  creation failed.
     */
@@ -106,7 +106,7 @@ public:
         function should only be used with the controls having the @c wxFC_MULTIPLE
         style,
         use GetFilename() for the others.
-        
+
         @remarks filenames is emptied first.
     */
     void GetFilenames(wxArrayString& filenames) const;
@@ -127,7 +127,7 @@ public:
         Fills the array @a paths with the full paths of the files chosen. This
         function should be used with the controls having the @c wxFC_MULTIPLE style,
         use GetPath() otherwise.
-        
+
         @remarks paths is emptied first.
     */
     void GetPaths(wxArrayString& paths) const;
@@ -139,14 +139,14 @@ public:
 
     /**
         Sets(changes) the current directory displayed in the control.
-        
+
         @returns Returns @true on success, @false otherwise.
     */
     bool SetDirectory(const wxString& directory);
 
     /**
         Selects a certain file.
-        
+
         @returns Returns @true on success, @false otherwise
     */
     bool SetFilename(const wxString& filename);

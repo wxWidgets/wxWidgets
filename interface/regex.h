@@ -129,7 +129,7 @@ public:
     /**
         Replace all occurrences: this is actually a synonym for
         Replace().
-        
+
         @see ReplaceFirst()
     */
     int ReplaceAll(wxString* text, const wxString& replacement) const;

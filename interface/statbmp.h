@@ -28,7 +28,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a static bitmap control.
-        
+
         @param parent
             Parent window. Should not be @NULL.
         @param id
@@ -43,7 +43,7 @@ public:
             Window style. See wxStaticBitmap.
         @param name
             Window name.
-        
+
         @see Create()
     */
     wxStaticBitmap();
@@ -68,7 +68,7 @@ public:
     /**
         Returns the bitmap currently used in the control. Notice that this method can
         be called even if SetIcon() had been used.
-        
+
         @see SetBitmap()
     */
     wxBitmap GetBitmap() const;
@@ -78,24 +78,24 @@ public:
         only be called if SetIcon() had been used: an icon
         can't be retrieved from the control if a bitmap had been set (using
         wxStaticBitmap::SetBitmap).
-        
+
         @see SetIcon()
     */
     wxIcon GetIcon() const;
 
     /**
         Sets the bitmap label.
-        
+
         @param label
             The new bitmap.
-        
+
         @see GetBitmap()
     */
     virtual void SetBitmap(const wxBitmap& label);
 
     /**
         Sets the label to the given icon.
-        
+
         @param label
             The new icon.
     */

@@ -111,7 +111,7 @@ public:
         wxMBConv::MB2WC method is called to
         convert @a psz to wide string (the default converter uses current locale's
         charset). It is ignored in ANSI build.
-        
+
         @see @ref overview_mbconvclasses "wxMBConv classes", @ref mbstr()
              mb_str, @ref wcstr() wc_str
     */
@@ -149,7 +149,7 @@ public:
         Preallocate enough space for wxString to store @a nLen characters. This function
         may be used to increase speed when the string is constructed by repeated
         concatenation as in
-        
+
         because it will avoid the need to reallocate string memory many times (in case
         of long strings). Note that it does not set the maximal length of a string - it
         will still expand if more than @a nLen characters are stored in it. Also, it
@@ -186,11 +186,11 @@ public:
         return a new string which contains the original text converted to the upper or
         lower case and leave the original string unchanged.
         MakeUpper()
-        
+
         Upper()
-        
+
         MakeLower()
-        
+
         Lower()
     */
 
@@ -209,23 +209,23 @@ public:
         see overview() for the cases where it is necessary to
         use it.
         GetChar()
-        
+
         GetWritableChar()
-        
+
         SetChar()
-        
+
         Last()
-        
+
         @ref operatorbracket() "operator []"
-        
+
         @ref cstr() c_str
-        
+
         @ref mbstr() mb_str
-        
+
         @ref wcstr() wc_str
-        
+
         @ref fnstr() fn_str
-        
+
         @ref operatorconstcharpt() "operator const char*"
     */
 
@@ -285,22 +285,22 @@ public:
         doing direct string comparison as you would also have to precalculate the
         length of the prefix then.
         Cmp()
-        
+
         CmpNoCase()
-        
+
         IsSameAs()
-        
+
         Matches()
-        
+
         StartsWith()
-        
+
         EndsWith()
     */
 
 
     //@{
     /**
-        
+
     */
     bool operator ==(const wxString& x, const wxString& y);
     bool operator ==(const wxString& x, const wxChar* t);
@@ -321,13 +321,13 @@ public:
         append something to a C string (including literal constants), so to do this it
         should be converted to a wxString first.
         @ref operatorout() "operator "
-        
+
         @ref plusequal() "operator +="
-        
+
         @ref operatorplus() "operator +"
-        
+
         Append()
-        
+
         Prepend()
     */
 
@@ -338,9 +338,9 @@ public:
         default which creates an empty string) there is also a corresponding assignment
         operator.
         @ref construct() wxString
-        
+
         @ref operatorassign() "operator ="
-        
+
         @ref destruct() ~wxString
     */
 
@@ -358,13 +358,13 @@ public:
         put the numeric value in and return @true if the @b entire string could be
         converted to a number.
         ToLong()
-        
+
         ToLongLong()
-        
+
         ToULong()
-        
+
         ToULongLong()
-        
+
         ToDouble()
     */
 
@@ -407,7 +407,7 @@ public:
     /**
         This static function returns the string containing the result of calling
         Printf() with the passed parameters on it.
-        
+
         @see FormatV(), Printf()
     */
     static wxString Format(const wxChar format, ...);
@@ -415,7 +415,7 @@ public:
     /**
         This static function returns the string containing the result of calling
         PrintfV() with the passed parameters on it.
-        
+
         @see Format(), PrintfV()
     */
     static wxString FormatV(const wxChar format, va_list argptr);
@@ -433,9 +433,9 @@ public:
         build, the string is interpreted as being in ISO-8859-1 encoding. The version
         without @a len parameter takes NUL-terminated data.
         This is a convenience method useful when storing binary data in wxString.
-        
+
         @wxsince{2.8.4}
-        
+
         @see wxString::To8BitData
     */
     static wxString From8BitData(const char* buf, size_t len);
@@ -614,11 +614,11 @@ public:
         useful when working with some external API which requires the caller to provide
         a writable buffer.
         Alloc()
-        
+
         Shrink()
-        
+
         wxStringBuffer
-        
+
         wxStringBufferLength
     */
 
@@ -632,9 +632,9 @@ public:
     /**
         Other string functions.
         Trim()
-        
+
         Truncate()
-        
+
         Pad()
     */
 
@@ -657,7 +657,7 @@ public:
         characters written, or an integer less than zero on error.
         Note that if @c wxUSE_PRINTF_POS_PARAMS is set to 1, then this function supports
         Unix98-style positional parameters:
-        
+
         @b NB: This function will use a safe version of @e vsprintf() (usually called
         @e vsnprintf()) whenever available to always allocate the buffer of correct
         size. Unfortunately, this function is not available on all platforms and the
@@ -704,7 +704,7 @@ public:
         These functions replace the standard @e strchr() and @e strstr()
         functions.
         Find()
-        
+
         Replace()
     */
 
@@ -733,13 +733,13 @@ public:
         These functions return the string length and check whether the string is empty
         or empty it.
         Len()
-        
+
         IsEmpty()
-        
+
         @ref operatornot() operator!
-        
+
         Empty()
-        
+
         Clear()
     */
 
@@ -765,23 +765,23 @@ public:
         modify the original string and return a new string containing the extracted
         substring.
         Mid()
-        
+
         @ref operatorparenth() operator
-        
+
         Left()
-        
+
         Right()
-        
+
         BeforeFirst()
-        
+
         BeforeLast()
-        
+
         AfterFirst()
-        
+
         AfterLast()
-        
+
         StartsWith()
-        
+
         EndsWith()
     */
 
@@ -791,9 +791,9 @@ public:
         Converts the string to an 8-bit string in ISO-8859-1 encoding in the form of
         a wxCharBuffer (Unicode builds only).
         This is a convenience method useful when storing binary data in wxString.
-        
+
         @wxsince{2.8.4}
-        
+
         @see wxString::From8BitData
     */
     const char* To8BitData() const;
@@ -817,7 +817,7 @@ public:
         success (the number is stored in the location pointed to by @e val) or @false
         if the string does not represent such number (the value of @a val is not
         modified in this case).
-        
+
         @see ToLong(), ToULong()
     */
     bool ToDouble(double val) const;
@@ -835,7 +835,7 @@ public:
         that you may not want to specify the base 0 if you are parsing the numbers
         which may have leading zeroes as they can yield unexpected (to the user not
         familiar with C) results.
-        
+
         @see ToDouble(), ToULong()
     */
     bool ToLong(long val, int base = 10) const;
@@ -846,7 +846,7 @@ public:
         Notice that currently it doesn't work (always returns @false) if parsing of 64
         bit numbers is not supported by the underlying C run-time library. Compilers
         with C99 support and Microsoft Visual C++ version 7 and higher do support this.
-        
+
         @see ToLong(), ToULongLong()
     */
     bool ToLongLong(wxLongLong_t val, int base = 10) const;
@@ -862,7 +862,7 @@ public:
         (e.g. -1 is returned as @c ULONG_MAX).
         See ToLong() for the more detailed
         description of the @a base parameter.
-        
+
         @see ToDouble(), ToLong()
     */
     bool ToULong(unsigned long val, int base = 10) const;
@@ -929,15 +929,15 @@ public:
         insertion operators exist (for basic types only). Additionally, the
         Format() function allows to use simply append
         formatted value to a string:
-        
+
         Format()
-        
+
         FormatV()
-        
+
         Printf()
-        
+
         PrintfV()
-        
+
         @ref operatorout() "operator "
     */
 
@@ -949,7 +949,7 @@ public:
         @c wchar_t*, use @ref charstr() char_str or
         @ref wcharstr() wchar_string if you need to pass string value
         to a function expecting non-const pointer.
-        
+
         @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
              fnstr() fn_str, @ref charstr() char_str, @ref
              wcharstr() wchar_string
@@ -962,7 +962,7 @@ public:
         this function is only usable for passing strings to legacy libraries that
         don't have const-correct API. Use wxStringBuffer if
         you want to modify the string.
-        
+
         @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
              fnstr() fn_str, @ref cstr() c_str, @ref
              wcharstr() wchar_str
@@ -976,7 +976,7 @@ public:
         In Unicode build, returned value can be either wide character string
         or C string in charset matching the @c wxConvFileName object, depending on
         the OS.
-        
+
         @see wxMBConv, @ref wcstr() wc_str, @ref wcstr() mb_str
     */
     const wchar_t* fn_str() const;
@@ -991,7 +991,7 @@ public:
         method and returns wxCharBuffer. In ANSI build, this function is same
         as @ref cstr() c_str.
         The macro wxWX2MBbuf is defined as the correct return type (without const).
-        
+
         @see wxMBConv, @ref cstr() c_str, @ref wcstr() wc_str, @ref
              fnstr() fn_str, @ref charstr() char_str
     */
@@ -1102,7 +1102,7 @@ public:
         method and returns wxWCharBuffer. In Unicode build, this function is same
         as @ref cstr() c_str.
         The macro wxWX2WCbuf is defined as the correct return type (without const).
-        
+
         @see wxMBConv, @ref cstr() c_str, @ref wcstr() mb_str, @ref
              fnstr() fn_str, @ref wcharstr() wchar_str
     */
@@ -1116,7 +1116,7 @@ public:
         not be lost (depending on the build) and so this function is only usable for
         passing strings to legacy libraries that don't have const-correct API. Use
         wxStringBuffer if you want to modify the string.
-        
+
         @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
              fnstr() fn_str, @ref cstr() c_str, @ref
              charstr() char_str
@@ -1127,35 +1127,35 @@ public:
         These functions are deprecated, please consider using new wxWidgets 2.0
         functions instead of them (or, even better, std::string compatible variants).
         CompareTo()
-        
+
         Contains()
-        
+
         First()
-        
+
         Freq()
-        
+
         Index()
-        
+
         IsAscii()
-        
+
         IsNull()
-        
+
         IsNumber()
-        
+
         IsWord()
-        
+
         Last()
-        
+
         Length()
-        
+
         LowerCase()
-        
+
         Remove()
-        
+
         Strip()
-        
+
         SubString()
-        
+
         UpperCase()
     */
 };

@@ -49,7 +49,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a owner-drawn combobox.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -72,7 +72,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxOwnerDrawnComboBox();
@@ -140,7 +140,7 @@ public:
         The base class version implements a reasonable default behaviour which consists
         in drawing the selected item with the standard background colour and drawing a
         border around the item if it is either selected or current.
-        
+
         @remarks flags has the same meaning as with OnDrawItem.
     */
     void OnDrawBackground(wxDC& dc, const wxRect& rect, int item,
@@ -150,7 +150,7 @@ public:
         The derived class may implement this function to actually draw the item
         with the given index on the provided DC. If function is not implemented,
         the item text is simply drawn, as if the control was a normal combobox.
-        
+
         @param dc
             The device context to use for drawing
         @param rect

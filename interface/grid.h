@@ -70,27 +70,27 @@ class wxGridTableBase : public wxObject
 {
 public:
     /**
-        
+
     */
     wxGridTableBase();
 
     /**
-        
+
     */
     ~wxGridTableBase();
 
     /**
-        
+
     */
     bool AppendCols(size_t numCols = 1);
 
     /**
-        
+
     */
     bool AppendRows(size_t numRows = 1);
 
     /**
-        
+
     */
     bool CanGetValueAs(int row, int col, const wxString& typeName);
 
@@ -101,22 +101,22 @@ public:
     bool CanHaveAttributes();
 
     /**
-        
+
     */
     bool CanSetValueAs(int row, int col, const wxString& typeName);
 
     /**
-        
+
     */
     void Clear();
 
     /**
-        
+
     */
     bool DeleteCols(size_t pos = 0, size_t numCols = 1);
 
     /**
-        
+
     */
     bool DeleteRows(size_t pos = 0, size_t numRows = 1);
 
@@ -132,12 +132,12 @@ public:
     wxGridCellAttrProvider* GetAttrProvider() const;
 
     /**
-        
+
     */
     wxString GetColLabelValue(int col);
 
     /**
-        
+
     */
     int GetNumberCols();
 
@@ -147,7 +147,7 @@ public:
     int GetNumberRows();
 
     /**
-        
+
     */
     wxString GetRowLabelValue(int row);
 
@@ -157,12 +157,12 @@ public:
     wxString GetTypeName(int row, int col);
 
     /**
-        
+
     */
     wxString GetValue(int row, int col);
 
     /**
-        
+
     */
     bool GetValueAsBool(int row, int col);
 
@@ -173,32 +173,32 @@ public:
                            const wxString& typeName);
 
     /**
-        
+
     */
     double GetValueAsDouble(int row, int col);
 
     /**
-        
+
     */
     long GetValueAsLong(int row, int col);
 
     /**
-        
+
     */
     wxGrid* GetView() const;
 
     /**
-        
+
     */
     bool InsertCols(size_t pos = 0, size_t numCols = 1);
 
     /**
-        
+
     */
     bool InsertRows(size_t pos = 0, size_t numRows = 1);
 
     /**
-        
+
     */
     bool IsEmptyCell(int row, int col);
 
@@ -214,7 +214,7 @@ public:
     void SetAttrProvider(wxGridCellAttrProvider* attrProvider);
 
     /**
-        
+
     */
     void SetColAttr(wxGridCellAttr* attr, int col);
 
@@ -224,7 +224,7 @@ public:
     void SetColLabelValue() const;
 
     /**
-        
+
     */
     void SetRowAttr(wxGridCellAttr* attr, int row);
 
@@ -234,28 +234,28 @@ public:
     void SetRowLabelValue() const;
 
     /**
-        
+
     */
     void SetValue(int row, int col, const wxString& value);
 
     /**
-        
+
     */
     void SetValueAsBool(int row, int col, bool value);
 
     /**
-        
+
     */
     void SetValueAsCustom(int row, int col, const wxString& typeName,
                           void* value);
 
     /**
-        
+
     */
     void SetValueAsDouble(int row, int col, double value);
 
     /**
-        
+
     */
     void SetValueAsLong(int row, int col, long value);
 
@@ -265,7 +265,7 @@ public:
     void SetView(wxGrid* grid);
 
     /**
-        
+
     */
     void UpdateAttrCols(size_t pos, int numCols);
 
@@ -297,7 +297,7 @@ class wxGridCellEditor
 {
 public:
     /**
-        
+
     */
     wxGridCellEditor();
 
@@ -341,7 +341,7 @@ public:
     void HandleReturn(wxKeyEvent& event);
 
     /**
-        
+
     */
     bool IsCreated();
 
@@ -489,7 +489,7 @@ class wxGridEditorCreatedEvent : public wxCommandEvent
 public:
     //@{
     /**
-        
+
     */
     wxGridEditorCreatedEvent();
     wxGridEditorCreatedEvent(int id, wxEventType type,
@@ -545,7 +545,7 @@ class wxGridRangeSelectEvent : public wxNotifyEvent
 public:
     //@{
     /**
-        
+
     */
     wxGridRangeSelectEvent();
     wxGridRangeSelectEvent(int id, wxEventType type,
@@ -638,7 +638,7 @@ class wxGridCellRenderer
 {
 public:
     /**
-        
+
     */
     wxGridCellRenderer* Clone() const;
 
@@ -717,7 +717,7 @@ class wxGridSizeEvent : public wxNotifyEvent
 public:
     //@{
     /**
-        
+
     */
     wxGridSizeEvent();
     wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
@@ -817,7 +817,7 @@ public:
     wxGridCellAttr* Clone() const;
 
     /**
-        
+
     */
     void DecRef();
 
@@ -827,52 +827,52 @@ public:
     void GetAlignment(int* hAlign, int* vAlign) const;
 
     /**
-        
+
     */
     const wxColour GetBackgroundColour() const;
 
     /**
-        
+
     */
     wxGridCellEditor* GetEditor(wxGrid* grid, int row, int col) const;
 
     /**
-        
+
     */
     const wxFont GetFont() const;
 
     /**
-        
+
     */
     wxGridCellRenderer* GetRenderer(wxGrid* grid, int row, int col) const;
 
     /**
-        
+
     */
     const wxColour GetTextColour() const;
 
     /**
-        
+
     */
     bool HasAlignment() const;
 
     /**
-        
+
     */
     bool HasBackgroundColour() const;
 
     /**
-        
+
     */
     bool HasEditor() const;
 
     /**
-        
+
     */
     bool HasFont() const;
 
     /**
-        
+
     */
     bool HasRenderer() const;
 
@@ -889,7 +889,7 @@ public:
     void IncRef();
 
     /**
-        
+
     */
     bool IsReadOnly() const;
 
@@ -906,12 +906,12 @@ public:
     void SetBackgroundColour(const wxColour& colBack);
 
     /**
-        
+
     */
     void SetDefAttr(wxGridCellAttr* defAttr);
 
     /**
-        
+
     */
     void SetEditor(wxGridCellEditor* editor);
 
@@ -921,7 +921,7 @@ public:
     void SetFont(const wxFont& font);
 
     /**
-        
+
     */
     void SetReadOnly(bool isReadOnly = true);
 
@@ -976,7 +976,7 @@ class wxGridEvent : public wxNotifyEvent
 public:
     //@{
     /**
-        
+
     */
     wxGridEvent();
     wxGridEvent(int id, wxEventType type, wxObject* obj,
@@ -1205,25 +1205,25 @@ public:
 
     /**
         AutoSizeColumn()
-        
+
         AutoSizeRow()
-        
+
         AutoSizeColumns()
-        
+
         AutoSizeRows()
-        
+
         AutoSize()
-        
+
         SetColMinimalWidth()
-        
+
         SetRowMinimalHeight()
-        
+
         SetColMinimalAcceptableWidth()
-        
+
         SetRowMinimalAcceptableHeight()
-        
+
         GetColMinimalAcceptableWidth()
-        
+
         GetRowMinimalAcceptableHeight()
     */
 
@@ -1236,7 +1236,7 @@ public:
         EndBatch(). Code that does a lot of grid
         modification can be enclosed between BeginBatch and EndBatch calls to avoid
         screen flicker. The final EndBatch will cause the grid to be repainted.
-        
+
         @see wxGridUpdateLocker
     */
     void BeginBatch();
@@ -1296,29 +1296,29 @@ public:
 
     /**
         EnableDragRowSize()
-        
+
         EnableDragColSize()
-        
+
         CanDragRowSize()
-        
+
         CanDragColSize()
-        
+
         EnableDragColMove()
-        
+
         CanDragColMove()
-        
+
         EnableDragGridSize()
-        
+
         CanDragGridSize()
-        
+
         GetColAt()
-        
+
         SetColPos()
-        
+
         GetColPos()
-        
+
         EnableDragCell()
-        
+
         CanDragCell()
     */
 
@@ -1348,11 +1348,11 @@ public:
 
     /**
         @ref ctor() wxGrid
-        
+
         @ref dtor() ~wxGrid
-        
+
         CreateGrid()
-        
+
         SetTable()
     */
 
@@ -1371,23 +1371,23 @@ public:
 
     /**
         MoveCursorUp()
-        
+
         MoveCursorDown()
-        
+
         MoveCursorLeft()
-        
+
         MoveCursorRight()
-        
+
         MoveCursorPageUp()
-        
+
         MoveCursorPageDown()
-        
+
         MoveCursorUpBlock()
-        
+
         MoveCursorDownBlock()
-        
+
         MoveCursorLeftBlock()
-        
+
         MoveCursorRightBlock()
     */
 
@@ -1505,7 +1505,7 @@ public:
         EndBatch. Code that does a lot of grid modification can be enclosed between
         BeginBatch and EndBatch calls to avoid screen flicker. The final EndBatch will
         cause the grid to be repainted.
-        
+
         @see wxGridUpdateLocker
     */
     void EndBatch();
@@ -1533,7 +1533,7 @@ public:
         grid cell at the specified location.
         Horizontal alignment will be one of wxALIGN_LEFT, wxALIGN_CENTRE or
         wxALIGN_RIGHT.
-        
+
         Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
     void GetCellAlignment(int row, int col, int* horiz, int* vert) const;
@@ -1605,7 +1605,7 @@ public:
         Sets the arguments to the current column label alignment values.
         Horizontal alignment will be one of wxALIGN_LEFT, wxALIGN_CENTRE or
         wxALIGN_RIGHT.
-        
+
         Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
     void GetColLabelAlignment(int* horiz, int* vert) const;
@@ -1626,7 +1626,7 @@ public:
     wxString GetColLabelValue(int col) const;
 
     /**
-        
+
     */
     int GetColLeft(int col) const;
 
@@ -1648,7 +1648,7 @@ public:
     int GetColPos(int colID) const;
 
     /**
-        
+
     */
     int GetColRight(int col) const;
 
@@ -1662,7 +1662,7 @@ public:
         values.
         Horizontal alignment will be one of wxALIGN_LEFT, wxALIGN_CENTRE or
         wxALIGN_RIGHT.
-        
+
         Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
     void GetDefaultCellAlignment(int* horiz, int* vert) const;
@@ -1702,14 +1702,14 @@ public:
 
     //@{
     /**
-        
+
     */
     wxGridCellEditor* GetDefaultEditorForCell(int row, int col) const;
     const wxGridCellEditor*  GetDefaultEditorForCell(const wxGridCellCoords& c) const;
     //@}
 
     /**
-        
+
     */
     wxGridCellEditor* GetDefaultEditorForType(const wxString& typeName) const;
 
@@ -1717,7 +1717,7 @@ public:
         Returns the pen used for grid lines. This virtual function may be overridden in
         derived classes in order to change the appearance of grid lines. Note that
         currently the pen width must be 1.
-        
+
         @see GetColGridLinePen(), GetRowGridLinePen()
     */
     wxPen GetDefaultGridLinePen();
@@ -1731,12 +1731,12 @@ public:
     wxGridCellRenderer* GetDefaultRenderer() const;
 
     /**
-        
+
     */
     wxGridCellRenderer* GetDefaultRendererForCell(int row, int col) const;
 
     /**
-        
+
     */
     wxGridCellRenderer* GetDefaultRendererForType(const wxString& typeName) const;
 
@@ -1762,7 +1762,7 @@ public:
 
     /**
         Returns the colour used for grid lines.
-        
+
         @see GetDefaultGridLinePen()
     */
     wxColour GetGridLineColour() const;
@@ -1796,7 +1796,7 @@ public:
     int GetNumberRows() const;
 
     /**
-        
+
     */
     wxGridCellAttr* GetOrCreateCellAttr(int row, int col) const;
 
@@ -1811,7 +1811,7 @@ public:
     /**
         Sets the arguments to the current row label alignment values.
         Horizontal alignment will be one of wxLEFT, wxCENTRE or wxRIGHT.
-        
+
         Vertical alignment will be one of wxTOP, wxCENTRE or wxBOTTOM.
     */
     void GetRowLabelAlignment(int* horiz, int* vert) const;
@@ -1838,7 +1838,7 @@ public:
     int GetRowMinimalAcceptableHeight() const;
 
     /**
-        
+
     */
     int GetRowMinimalHeight(int col) const;
 
@@ -1849,14 +1849,14 @@ public:
 
     /**
         Returns the number of pixels per horizontal scroll increment. The default is 15.
-        
+
         @see GetScrollLineY(), SetScrollLineX(), SetScrollLineY()
     */
     int GetScrollLineX() const;
 
     /**
         Returns the number of pixels per vertical scroll increment. The default is 15.
-        
+
         @see GetScrollLineX(), SetScrollLineX(), SetScrollLineY()
     */
     int GetScrollLineY() const;
@@ -1894,7 +1894,7 @@ public:
     wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
 
     /**
-        
+
     */
     wxColour GetSelectionForeground() const;
 
@@ -1915,17 +1915,17 @@ public:
 
     /**
         EnableGridLines()
-        
+
         GridLinesEnabled()
-        
+
         SetGridLineColour()
-        
+
         GetGridLineColour()
-        
+
         GetDefaultGridLinePen()
-        
+
         GetRowGridLinePen()
-        
+
         GetColGridLinePen()
     */
 
@@ -2149,57 +2149,57 @@ public:
 
     /**
         SetRowLabelValue()
-        
+
         SetColLabelValue()
-        
+
         GetRowLabelValue()
-        
+
         GetColLabelValue()
-        
+
         SetUseNativeColLabels()
-        
+
         HideColLabels()
-        
+
         HideRowLabels()
-        
+
         SetRowLabelSize()
-        
+
         SetColLabelSize()
-        
+
         GetRowLabelSize()
-        
+
         GetColLabelSize()
-        
+
         AutoSizeRowLabelSize()
-        
+
         AutoSizeColLabelSize()
-        
+
         GetDefaultRowLabelSize()
-        
+
         GetDefaultColLabelSize()
-        
+
         SetRowLabelAlignment()
-        
+
         SetColLabelAlignment()
-        
+
         GetRowLabelAlignment()
-        
+
         GetColLabelAlignment()
-        
+
         SetLabelFont()
-        
+
         SetLabelTextColour()
-        
+
         SetLabelBackgroundColour()
-        
+
         GetLabelFont()
-        
+
         GetLabelBackgroundColour()
-        
+
         GetLabelTextColour()
-        
+
         SetColLabelTextOrientation()
-        
+
         GetColLabelTextOrientation()
     */
 
@@ -2249,15 +2249,15 @@ public:
 
     /**
         ClearSelection()
-        
+
         IsSelection()
-        
+
         SelectAll()
-        
+
         SelectBlock()
-        
+
         SelectCol()
-        
+
         SelectRow()
     */
 
@@ -2274,7 +2274,7 @@ public:
         location.
         Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or
         wxALIGN_RIGHT.
-        
+
         Vertical alignment should be one of wxALIGN_TOP, wxALIGN_CENTRE or
         wxALIGN_BOTTOM.
     */
@@ -2283,7 +2283,7 @@ public:
     //@}
 
     /**
-        
+
     */
     void SetCellBackgroundColour(int row, int col,
                                  const wxColour& colour);
@@ -2539,7 +2539,7 @@ public:
     int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = true);
 
     /**
-        
+
     */
     int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = true);
 
@@ -2619,7 +2619,7 @@ public:
         Sets the number of pixels per horizontal scroll increment. The default is 15.
         Sometimes wxGrid has trouble setting the scrollbars correctly due to rounding
         errors: setting this to 1 can help.
-        
+
         @see GetScrollLineX(), GetScrollLineY(), SetScrollLineY()
     */
     void SetScrollLineX(int x);
@@ -2628,24 +2628,24 @@ public:
         Sets the number of pixels per vertical scroll increment. The default is 15.
         Sometimes wxGrid has trouble setting the scrollbars correctly due to rounding
         errors: setting this to 1 can help.
-        
+
         @see GetScrollLineX(), GetScrollLineY(), SetScrollLineX()
     */
     void SetScrollLineY(int y);
 
     /**
-        
+
     */
     void SetSelectionBackground(const wxColour& c);
 
     /**
-        
+
     */
     void SetSelectionForeground(const wxColour& c);
 
     /**
         Set the selection behaviour of the grid.
-        
+
         @param wxGridSelectCells()
             The default mode where individual cells are selected.
         @param wxGridSelectRows()

@@ -161,7 +161,7 @@ public:
     /**
         Constructs a sash layout window, which can be a child of a frame, dialog or any
         other non-control window.
-        
+
         @param parent
             Pointer to a parent window.
         @param id
@@ -192,7 +192,7 @@ public:
     /**
         Initializes a sash layout window, which can be a child of a frame, dialog or
         any other non-control window.
-        
+
         @param parent
             Pointer to a parent window.
         @param id

@@ -49,12 +49,12 @@
 
  @section overview_datetime_classes All date/time classes at a glance
 
- There are 3 main classes declared in @c wx/datetime.h: except wxDateTime itself 
+ There are 3 main classes declared in @c wx/datetime.h: except wxDateTime itself
  which represents an absolute moment in time, there are also two classes -
  wxTimeSpan and wxDateSpan - which represent the intervals of time.
 
  There are also helper classes which are used together with wxDateTime:
- wxDateTimeHolidayAuthority which is used to determine whether a given date 
+ wxDateTimeHolidayAuthority which is used to determine whether a given date
  is a holiday or not and wxDateTimeWorkDays which is a derivation of this
  class for which (only) Saturdays and Sundays are the holidays. See more about
  these classes in the discussion of the holidays (see @ref overview_datetime_holidays).

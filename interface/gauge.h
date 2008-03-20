@@ -48,7 +48,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a gauge.
-        
+
         @param parent
             Window parent.
         @param id
@@ -64,7 +64,7 @@ public:
             Gauge style. See wxGauge.
         @param name
             Window name.
-        
+
         @see Create()
     */
     wxGauge();
@@ -94,32 +94,32 @@ public:
 
     /**
         Returns the width of the 3D bezel face.
-        
+
         @remarks This method is not implemented (returns 0) for most platforms.
-        
+
         @see SetBezelFace()
     */
     int GetBezelFace() const;
 
     /**
         Returns the maximum position of the gauge.
-        
+
         @see SetRange()
     */
     int GetRange() const;
 
     /**
         Returns the 3D shadow margin width.
-        
+
         @remarks This method is not implemented (returns 0) for most platforms.
-        
+
         @see SetShadowWidth()
     */
     int GetShadowWidth() const;
 
     /**
         Returns the current position of the gauge.
-        
+
         @see SetValue()
     */
     int GetValue() const;
@@ -141,10 +141,10 @@ public:
 
     /**
         Sets the 3D bezel face width.
-        
+
         @remarks This method is not implemented (doesn't do anything) for most
                  platforms.
-        
+
         @see GetBezelFace()
     */
     void SetBezelFace(int width);
@@ -152,14 +152,14 @@ public:
     /**
         Sets the range (maximum value) of the gauge.
         This function makes the gauge switch to determinate mode, if it's not already.
-        
+
         @see GetRange()
     */
     void SetRange(int range);
 
     /**
         Sets the 3D shadow width.
-        
+
         @remarks This method is not implemented (doesn't do anything) for most
                  platforms.
     */
@@ -170,10 +170,10 @@ public:
         range as returned by GetRange(), inclusive.
         This function makes the gauge switch to determinate mode, if it was in
         indeterminate mode before.
-        
+
         @param pos
             Position for the gauge level.
-        
+
         @see GetValue()
     */
     void SetValue(int pos);

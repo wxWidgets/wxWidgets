@@ -26,7 +26,7 @@ class wxTipWindow : public wxWindow
 public:
     /**
         Constructor. The tip is shown immediately after the window is constructed.
-        
+
         @param parent
             The parent window, must be non-@NULL
         @param text
@@ -55,7 +55,7 @@ public:
         Additionally, if a non-empty @a rectBound is provided, the tip window will
         also automatically close if the mouse leaves this area. This is useful to
         dismiss the tip mouse when the mouse leaves the object it is associated with.
-        
+
         @param rectBound
             The bounding rectangle for the mouse in the screen coordinates
     */

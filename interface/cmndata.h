@@ -493,7 +493,7 @@ public:
         Returns the current print quality. This can be a positive integer, denoting the
         number of dots per inch, or
         one of the following identifiers:
-        
+
         On input you should pass one of these identifiers, but on return you may get
         back a positive integer
         indicating the current resolution setting.
@@ -557,7 +557,7 @@ public:
         Sets the desired print quality. This can be a positive integer, denoting the
         number of dots per inch, or
         one of the following identifiers:
-        
+
         On input you should pass one of these identifiers, but on return you may get
         back a positive integer
         indicating the current resolution setting.

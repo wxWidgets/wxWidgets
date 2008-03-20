@@ -42,7 +42,7 @@ public:
         @b Caution! Unless @a is_dir is @true the @a location parameter
         is not the directory name but the name of the file in this directory. All these
         commands change the path to "dir/subdir/":
-        
+
         @param location
             the new location. Its meaning depends on the value of is_dir
         @param is_dir
@@ -53,7 +53,7 @@ public:
 
     /**
         Converts filename into URL.
-        
+
         @see URLToFileName(), wxFileName
     */
     static wxString FileNameToURL(wxFileName filename);
@@ -64,7 +64,7 @@ public:
         @e path. If the file is found in any directory, returns @true and the full
         path of the file in @e str, otherwise returns @false and doesn't modify
         @e str.
-        
+
         @param str
             Receives the full path of the file, must not be @NULL
         @param path
@@ -107,7 +107,7 @@ public:
         absolute path.  Note that the user is responsible for deleting the returned
         wxFSFile.
         @a flags can be one or more of the following bit values ored together:
-        
+
         A stream opened with just the default @e wxFS_READ flag may
         or may not be seekable depending on the underlying source.
         Passing @e wxFS_READ | wxFS_SEEKABLE for @a flags will
@@ -150,7 +150,7 @@ class wxFSFile : public wxObject
 public:
     /**
         Constructor. You probably won't use it. See Notes for details.
-        
+
         @param stream
             The input stream that will be used to access data
         @param location
@@ -177,7 +177,7 @@ public:
     /**
         Returns anchor (if present). The term of @b anchor can be easily
         explained using few examples:
-        
+
         Usually an anchor is presented only if the MIME type is 'text/html'.
         But it may have some meaning with other files;
         for example myanim.avi#200 may refer to position in animation
@@ -253,7 +253,7 @@ public:
         Returns @true if the handler is able to open this file. This function doesn't
         check whether the file exists or not, it only checks if it knows the protocol.
         Example:
-        
+
         Must be overridden in derived handlers.
     */
     virtual bool CanOpen(const wxString& location);
@@ -313,7 +313,7 @@ public:
     /**
         Opens the file and returns wxFSFile pointer or @NULL if failed.
         Must be overridden in derived handlers.
-        
+
         @param fs
             Parent FS (the FS from that OpenFile was called). See ZIP handler
             for details of how to use it.

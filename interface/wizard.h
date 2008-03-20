@@ -34,7 +34,7 @@ public:
         instead of the default one for this wizard (note that all bitmaps used should
         be of the same size). Notice that no other parameters are needed because the
         wizard will resize and reposition the page anyhow.
-        
+
         @param parent
             The parent wizard
         @param bitmap
@@ -59,7 +59,7 @@ public:
         button: if @NULL is returned, this button will be disabled. The last
         page of the wizard will usually return @NULL from here, but the others
         will not.
-        
+
         @see GetPrev()
     */
     wxWizardPage* GetNext() const;
@@ -69,7 +69,7 @@ public:
         button: if @NULL is returned, this button will be disabled. The first
         page of the wizard will usually return @NULL from here, but the others
         will not.
-        
+
         @see GetNext()
     */
     wxWizardPage* GetPrev() const;
@@ -220,7 +220,7 @@ public:
         parameter in the wxWizard constructor because the wizard will have a predefined
         default size by default. If you want to change this, you should use the
         GetPageAreaSizer() function.
-        
+
         @param parent
             The parent window, may be @NULL.
         @param id
@@ -251,7 +251,7 @@ public:
         parameter in the wxWizard constructor because the wizard will have a predefined
         default size by default. If you want to change this, you should use the
         GetPageAreaSizer() function.
-        
+
         @param parent
             The parent window, may be @NULL.
         @param id
@@ -361,7 +361,7 @@ public:
         class version implements this by calling
         @ref wxWizardPage::getnext page-GetNext but this could be undesirable if,
         for example, the pages are created on demand only.
-        
+
         @see HasPrevPage()
     */
     virtual bool HasNextPage(wxWizardPage* page);
@@ -371,7 +371,7 @@ public:
         class version implements this by calling
         @ref wxWizardPage::getprev page-GetPrev but this could be undesirable if,
         for example, the pages are created on demand only.
-        
+
         @see HasNextPage()
     */
     virtual bool HasPrevPage(wxWizardPage* page);
@@ -402,34 +402,34 @@ public:
         page height. By default, placement is 0 (no expansion is done). @a placement is
         a bitlist with the
         following possible values:
-        
+
         @b wxWIZARD_VALIGN_TOP
-        
+
         Aligns the bitmap at the top.
-        
+
         @b wxWIZARD_VALIGN_CENTRE
-        
+
         Centres the bitmap vertically.
-        
+
         @b wxWIZARD_VALIGN_BOTTOM
-        
+
         Aligns the bitmap at the bottom.
-        
+
         @b wxWIZARD_HALIGN_LEFT
-        
+
         Left-aligns the bitmap.
-        
+
         @b wxWIZARD_HALIGN_CENTRE
-        
+
         Centres the bitmap horizontally.
-        
+
         @b wxWIZARD_HALIGN_RIGHT
-        
+
         Right-aligns the bitmap.
-        
+
         @b wxWIZARD_TILE
-        
-        
+
+
         See also SetMinimumBitmapWidth().
     */
     void SetBitmapPlacement(int placement);

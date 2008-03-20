@@ -75,7 +75,7 @@ public:
          wxPLATFORM_CURRENT
         wxPLATFORM_CURRENT means the platform this binary was compiled for.
         Examples:
-        
+
         Equivalence is defined in terms of convertibility:
         two encodings are equivalent if you can convert text between
         then without losing information (it may - and will - happen
@@ -100,19 +100,19 @@ public:
         it more than once in order to switch to another conversion.
         @e Method affects behaviour of Convert() in case input character
         cannot be converted because it does not exist in output encoding:
-        
+
         @b wxCONVERT_STRICT
-        
+
         follow behaviour of GNU Recode -
         just copy unconvertible  characters to output and don't change them
         (its integer value will stay the same)
-        
+
         @b wxCONVERT_SUBSTITUTE
-        
+
         try some (lossy) substitutions
         - e.g. replace unconvertible latin capitals with acute by ordinary
         capitals, replace en-dash or em-dash by '-' etc.
-        
+
         Both modes guarantee that output string will have same length
         as input string.
     */

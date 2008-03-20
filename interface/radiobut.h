@@ -49,7 +49,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a radio button.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -68,7 +68,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxRadioButton();
@@ -106,7 +106,7 @@ public:
     /**
         Sets the radio button to selected or deselected status. This does not cause a
         wxEVT_COMMAND_RADIOBUTTON_SELECTED event to get emitted.
-        
+
         @param value
             @true to select, @false to deselect.
     */

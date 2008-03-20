@@ -35,7 +35,7 @@ public:
     //@{
     /**
         Copy constructor.
-        
+
         @param red
             The red value.
         @param green
@@ -49,7 +49,7 @@ public:
             The colour name.
         @param colour
             The colour to copy.
-        
+
         @see wxColourDatabase
     */
     wxColour();
@@ -75,7 +75,7 @@ public:
     /**
         is not
         specified in flags.
-        
+
         @wxsince{2.7.0}
     */
     wxString GetAsString(long flags);
@@ -124,7 +124,7 @@ public:
         and the HTML-like syntax (i.e. @c "#" followed by 6 hexadecimal digits
         for red, green, blue components).
         Returns @true if the conversion was successful, @false otherwise.
-        
+
         @wxsince{2.7.0}
     */
     void Set(unsigned char red, unsigned char green,
@@ -143,7 +143,7 @@ public:
     //@{
     /**
         Assignment operator, using a colour name to be found in the colour database.
-        
+
         @see wxColourDatabase
     */
     wxColour operator =(const wxColour& colour);

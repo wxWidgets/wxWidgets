@@ -81,7 +81,7 @@ public:
         Note that you must use a @a type value (aka image format)
         that wxWidgets can save (e.g. JPG, PNG, see wxImage
         documentation())!
-        
+
         @see AddFileWithMimeType()
     */
     static void AddFile(const wxString& filename, wxImage& image,
@@ -96,9 +96,9 @@ public:
         Like AddFile(), but lets you explicitly
         specify added file's MIME type. This version should be used whenever you know
         the MIME type, because it makes accessing the files faster.
-        
+
         @wxsince{2.8.5}
-        
+
         @see AddFile()
     */
     static void AddFileWithMimeType(const wxString& filename,

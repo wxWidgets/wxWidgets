@@ -56,7 +56,7 @@ public:
     //@{
     /**
         Constructor, creating the window.
-        
+
         @param parent
             The window parent. This may be @NULL. If it is non-@NULL, the frame will
             always be displayed on top of the parent window on Windows.
@@ -79,9 +79,9 @@ public:
         item,
             allowing the application user to set Motif resource values for
             individual windows.
-        
+
         @remarks The frame behaves like a normal frame on non-Windows platforms.
-        
+
         @see Create()
     */
     wxMiniFrame();

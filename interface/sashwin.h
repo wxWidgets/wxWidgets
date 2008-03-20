@@ -50,7 +50,7 @@ public:
     /**
         Constructs a sash window, which can be a child of a frame, dialog or any other
         non-control window.
-        
+
         @param parent
             Pointer to a parent window.
         @param id
@@ -104,10 +104,10 @@ public:
 
     /**
         Returns @true if a sash is visible on the given edge, @false otherwise.
-        
+
         @param edge
             Edge. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
-        
+
         @see SetSashVisible()
     */
     bool GetSashVisible(wxSashEdgePosition edge) const;
@@ -115,10 +115,10 @@ public:
     /**
         Returns @true if the sash has a border, @false otherwise.
         This function is obsolete since the sash border property is unused.
-        
+
         @param edge
             Edge. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
-        
+
         @see SetSashBorder()
     */
     bool HasBorder(wxSashEdgePosition edge) const;
@@ -146,7 +146,7 @@ public:
     /**
         Call this function to give the sash a border, or remove the border.
         This function is obsolete since the sash border property is unused.
-        
+
         @param edge
             Edge to change. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
         @param hasBorder
@@ -156,12 +156,12 @@ public:
 
     /**
         Call this function to make a sash visible or invisible on a particular edge.
-        
+
         @param edge
             Edge to change. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
         @param visible
             @true to make the sash visible, @false to make it invisible.
-        
+
         @see GetSashVisible()
     */
     void SetSashVisible(wxSashEdgePosition edge, bool visible);

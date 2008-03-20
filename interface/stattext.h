@@ -50,7 +50,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a text control.
-        
+
         @param parent
             Parent window. Should not be @NULL.
         @param id
@@ -65,7 +65,7 @@ public:
             Window style. See wxStaticText.
         @param name
             Window name.
-        
+
         @see Create()
     */
     wxStaticText();
@@ -116,81 +116,81 @@ public:
         support it (currently only GTK+ 2). For the other platforms, the markup is
         ignored.
         The supported tags are:
-        
+
         b
-        
+
         bold text
-        
+
         big
-        
+
         bigger text
-        
+
         i
-        
+
         italic text
-        
+
         s
-        
+
         strike-through text
-        
+
         sub
-        
+
         subscript text
-        
+
         sup
-        
+
         superscript text
-        
+
         small
-        
+
         smaller text
-        
+
         tt
-        
+
         monospaced text
-        
+
         u
-        
+
         underlined text
-        
+
         span
-        
+
         generic formatter tag; see Pango Markup for more information.
-        
+
         Note that the string must be well-formed (e.g. all tags must be correctly
         closed)
         otherwise it can be not shown correctly or at all.
         Also note that you need to escape the following special characters:
-        
+
         @b Special character
-        
+
         @b Escape as
-        
+
         @c
-        
+
         @c amp; or as @c
-        
+
         @c '
-        
+
         @c apos;
-        
+
         @c "
-        
+
         @c quot;
-        
+
         @c
-        
+
         @c lt;
-        
+
         @c
-        
+
         @c gt;
-        
+
         The non-escaped ampersand @c  characters are interpreted as
         mnemonics; see wxControl::SetLabel.
-        
+
         Example:
-        
+
         @param label
             The new label to set. It may contain newline characters and the markup tags
         described above.
@@ -202,7 +202,7 @@ public:
         most @a width pixels wide if possible (the lines are broken at words
         boundaries so it might not be the case if words are too long). If @e width
         is negative, no wrapping is done.
-        
+
         @wxsince{2.6.2}
     */
     void Wrap(int width);

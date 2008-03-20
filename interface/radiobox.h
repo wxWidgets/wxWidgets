@@ -43,7 +43,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a radiobox.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -70,7 +70,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxRadioBox();
@@ -129,12 +129,12 @@ public:
     //@{
     /**
         Enables or disables an individual button in the radiobox.
-        
+
         @param enable
             @true to enable, @false to disable.
         @param n
             The zero-based button to enable or disable.
-        
+
         @see wxWindow::Enable
     */
     virtual bool Enable(bool enable = true);
@@ -144,7 +144,7 @@ public:
     /**
         Finds a button matching the given string, returning the position if found, or
         -1 if not found.
-        
+
         @param string
             The string to find.
     */
@@ -158,7 +158,7 @@ public:
     /**
         Returns a radio box item under the point, a zero-based item index, or @c
         wxNOT_FOUND if no item is under the point.
-        
+
         @param pt
             Point in client coordinates.
     */
@@ -167,27 +167,27 @@ public:
     /**
         Returns the helptext associated with the specified @a item if any or @c
         wxEmptyString.
-        
+
         @param item
             The zero-based item index.
-        
+
         @see SetItemHelpText()
     */
     wxString GetItemHelpText(unsigned int item) const;
 
     /**
         Returns the tooltip associated with the specified @a item if any or @NULL.
-        
+
         @see SetItemToolTip(), wxWindow::GetToolTip
     */
     wxToolTip* GetItemToolTip(unsigned int item) const;
 
     /**
         Returns the radiobox label.
-        
+
         @param n
             The zero-based button index.
-        
+
         @see SetLabel()
     */
     wxString GetLabel() const;
@@ -204,7 +204,7 @@ public:
 
     /**
         Returns the label for the button at the given position.
-        
+
         @param n
             The zero-based button position.
     */
@@ -220,7 +220,7 @@ public:
         @ref enable() "Enable(n, @false)".
         @b Platform note: Currently only implemented in wxMSW, wxGTK and wxUniversal
         and always returns @true in the other ports.
-        
+
         @param n
             The zero-based button position.
     */
@@ -235,7 +235,7 @@ public:
         if the entire radiobox is not currently shown.
         @b Platform note: Currently only implemented in wxMSW, wxGTK and wxUniversal
         and always returns @true in the other ports.
-        
+
         @param n
             The zero-based button position.
     */
@@ -243,12 +243,12 @@ public:
 
     /**
         Sets the helptext for an item. Empty string erases any existing helptext.
-        
+
         @param item
             The zero-based item index.
         @param helptext
             The help text to set for the item.
-        
+
         @see GetItemHelpText()
     */
     void SetItemHelpText(unsigned int item, const wxString& helptext);
@@ -257,19 +257,19 @@ public:
         Sets the tooltip text for the specified item in the radio group.
         @b Platform note: Currently only implemented in wxMSW and wxGTK2 and does
         nothing in the other ports.
-        
+
         @param item
             Index of the item the tooltip will be shown for.
         @param text
             Tooltip text for the item, the tooltip is removed if empty.
-        
+
         @see GetItemToolTip(), wxWindow::SetToolTip
     */
     void SetItemToolTip(unsigned int item, const wxString& text);
 
     /**
         Sets the radiobox label.
-        
+
         @param label
             The label to set.
         @param n
@@ -280,7 +280,7 @@ public:
     /**
         Sets a button by passing the desired string position. This does not cause
         a wxEVT_COMMAND_RADIOBOX_SELECTED event to get emitted.
-        
+
         @param n
             The zero-based button position.
     */
@@ -290,7 +290,7 @@ public:
         Sets the selection to a button by passing the desired string. This does not
         cause
         a wxEVT_COMMAND_RADIOBOX_SELECTED event to get emitted.
-        
+
         @param string
             The label of the button to select.
     */

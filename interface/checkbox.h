@@ -47,7 +47,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a checkbox.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -66,7 +66,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxCheckBox();
@@ -98,7 +98,7 @@ public:
 
     /**
         Gets the state of a 3-state checkbox.
-        
+
         @returns Returns wxCHK_UNCHECKED when the checkbox is unchecked,
                  wxCHK_CHECKED  when it is checked and
                  wxCHK_UNDETERMINED when it's in the undetermined state.
@@ -109,14 +109,14 @@ public:
 
     /**
         Gets the state of a 2-state checkbox.
-        
+
         @returns Returns @true if it is checked, @false otherwise.
     */
     bool GetValue() const;
 
     /**
         Returns whether or not the checkbox is a 3-state checkbox.
-        
+
         @returns Returns @true if this checkbox is a 3-state checkbox, @false if
                  it's a 2-state checkbox.
     */
@@ -124,7 +124,7 @@ public:
 
     /**
         Returns whether or not the user can set the checkbox to the third state.
-        
+
         @returns Returns @true if the user can set the third state of this
                  checkbox, @false if it can only be set programmatically
                  or if it's a 2-state checkbox.
@@ -141,7 +141,7 @@ public:
     /**
         Sets the checkbox to the given state. This does not cause a
         wxEVT_COMMAND_CHECKBOX_CLICKED event to get emitted.
-        
+
         @param state
             If @true, the check is on, otherwise it is off.
     */

@@ -28,116 +28,116 @@ public:
     //@{
     /**
         Constructor, taking a style and optional pointer to a wxString variable.
-        
+
         @param style
             A bitlist of flags, which can be:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxFILTER_NONE
-        
-        
-        
-        
+
+
+
+
             No filtering takes place.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFILTER_ASCII
-        
-        
-        
-        
+
+
+
+
             Non-ASCII characters are filtered out.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFILTER_ALPHA
-        
-        
-        
-        
+
+
+
+
             Non-alpha characters are filtered out.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFILTER_ALPHANUMERIC
-        
-        
-        
-        
+
+
+
+
             Non-alphanumeric characters are filtered out.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFILTER_NUMERIC
-        
-        
-        
-        
+
+
+
+
             Non-numeric characters are filtered out.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFILTER_INCLUDE_LIST
-        
-        
-        
-        
+
+
+
+
             Use an include list. The validator
             checks if the user input is on the list, complaining if not. See
             SetIncludes().
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFILTER_EXCLUDE_LIST
-        
-        
-        
-        
+
+
+
+
             Use an exclude list. The validator
             checks if the user input is on the list, complaining if it is. See
             SetExcludes().
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFILTER_INCLUDE_CHAR_LIST
-        
-        
-        
-        
+
+
+
+
             Use an include list. The validator
             checks if each input character is in the list (one character per list
         element), complaining if not.
             See SetIncludes().
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFILTER_EXCLUDE_CHAR_LIST
-        
-        
-        
-        
+
+
+
+
             Use an include list. The validator
             checks if each input character is in the list (one character per list
         element), complaining if it is.

@@ -162,7 +162,7 @@ public:
     //@{
     /**
         Draws a circle with the given centre and radius.
-        
+
         @see wxDC::DrawEllipse
     */
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
@@ -174,7 +174,7 @@ public:
         Draws an ellipse contained in the rectangle specified either with the given top
         left corner and the given size or directly. The current pen is used for the
         outline and the current brush for filling the shape.
-        
+
         @see wxDC::DrawCircle
     */
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width,
@@ -339,7 +339,7 @@ public:
 
     /**
         Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
-        
+
         @see wxDC::SetBackgroundMode
     */
     int GetBackgroundMode() const;
@@ -500,7 +500,7 @@ public:
     /**
         Resets the bounding box: after a call to this function, the bounding box
         doesn't contain anything.
-        
+
         @see wxDC::CalcBoundingBox
     */
     void ResetBoundingBox();
@@ -509,7 +509,7 @@ public:
         Sets the x and y axis orientation (i.e., the direction from lowest to
         highest values on the axis). The default orientation is the natural
         orientation, e.g. x axis from left to right and y axis from bottom up.
-        
+
         @param xLeftRight
             True to set the x axis orientation to the natural
             left to right orientation, @false to invert it.
@@ -586,26 +586,26 @@ public:
         uses the current mapping mode, but mapping mode is currently ignored for
         PostScript output.
         The mapping mode can be one of the following:
-        
+
         wxMM_TWIPS
-        
+
         Each logical unit is 1/20 of a point, or 1/1440 of
           an inch.
-        
+
         wxMM_POINTS
-        
+
         Each logical unit is a point, or 1/72 of an inch.
-        
+
         wxMM_METRIC
-        
+
         Each logical unit is 1 mm.
-        
+
         wxMM_LOMETRIC
-        
+
         Each logical unit is 1/10 of a mm.
-        
+
         wxMM_TEXT
-        
+
         Each logical unit is 1 pixel.
     */
     void SetMapMode(int int);

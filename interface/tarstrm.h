@@ -325,7 +325,7 @@ public:
     //@{
     /**
         Returns the type of the entry. It should be one of the following:
-        
+
         When creating archives use just these values. When reading archives
         any other values should be treated as @e wxTAR_REGTYPE.
     */

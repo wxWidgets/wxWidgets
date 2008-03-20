@@ -10,11 +10,11 @@
 /**
 
  @page page_keymodifiers Key Modifiers
- 
+
  @header{wx/defs.h}
- 
+
  The following key modifier constants are defined:
- 
+
  @verbatim
      enum wxKeyModifier
      {
@@ -32,11 +32,11 @@
          wxMOD_ALL       = 0xffff
      };
  @endverbatim
- 
- Notice that @c wxMOD_CMD should be used instead of @c wxMOD_CONTROL 
- in portable code to account for the fact that although 
+
+ Notice that @c wxMOD_CMD should be used instead of @c wxMOD_CONTROL
+ in portable code to account for the fact that although
  @c Control modifier exists under Mac OS, it is not used for the same
- purpose as under Windows or Unix there while the special Mac-specific 
+ purpose as under Windows or Unix there while the special Mac-specific
  @c Command modifier is used in exactly the same way.
 
 */

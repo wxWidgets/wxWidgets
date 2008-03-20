@@ -31,10 +31,10 @@ public:
         or unreserved with UnreserveControlId().
         Only ID values that are not assigned to a wxWindowIDRef()
         need to be unreserved.
-        
+
         @param count
             The number of sequential IDs to reserve.
-        
+
         @returns The value of the first ID in the sequence, or wxID_NONE.
     */
     static wxWindowID ReserveControlId(int count = 1);

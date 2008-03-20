@@ -26,7 +26,7 @@ public:
     /**
         Constructor. Pass a parent window, and optionally a pointer to a block of print
         data, which will be copied to the print dialog's print data.
-        
+
         @see wxPrintDialogData
     */
     wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);

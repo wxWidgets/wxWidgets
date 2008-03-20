@@ -37,7 +37,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a list box.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -54,7 +54,7 @@ public:
             Window style. See wxEditableListBox.
         @param name
             Window name.
-        
+
         @see Create()
     */
     wxEditableListBox();

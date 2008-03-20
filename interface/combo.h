@@ -32,7 +32,7 @@ public:
 
     /**
         The derived class must implement this to create the popup control.
-        
+
         @returns @true if the call succeeded, @false otherwise.
     */
     bool Create(wxWindow* parent);
@@ -45,7 +45,7 @@ public:
     /**
         The derived class may implement this to return adjusted size
         for the popup control, according to the variables given.
-        
+
         @param minWidth
             Preferred minimum width.
         @param prefHeight
@@ -54,7 +54,7 @@ public:
         @param maxWidth
             Max height for window, as limited by
             screen size.
-        
+
         @remarks Called each time popup is about to be shown.
     */
     wxSize GetAdjustedSize(int minWidth, int prefHeight,
@@ -92,7 +92,7 @@ public:
         until the popup is shown for the first time. It is more
         efficient, but on the other hand it is often more convenient
         to have the control created immediately.
-        
+
         @remarks Base implementation returns @false.
     */
     bool LazyCreate();
@@ -192,7 +192,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a combo control.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -211,7 +211,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxComboCtrl();
@@ -233,7 +233,7 @@ public:
         This member function is not normally called in application code.
         Instead, it can be implemented in a derived class to create a
         custom popup animation.
-        
+
         @returns @true if animation finishes before the function returns. @false
                  otherwise. In the latter case you need to manually call
                  DoShowPopup after the animation ends.
@@ -279,7 +279,7 @@ public:
         is properly shown after a popup animation has finished (but only
         if AnimateShow() did not finish
         the animation within it's function scope).
-        
+
         @param rect
             Position to show the popup window at, in screen coordinates.
         @param flags
@@ -296,7 +296,7 @@ public:
     /**
         Returns disabled button bitmap that has been set with
         SetButtonBitmaps().
-        
+
         @returns A reference to the disabled state bitmap.
     */
     const wxBitmap GetBitmapDisabled() const;
@@ -304,7 +304,7 @@ public:
     /**
         Returns button mouse hover bitmap that has been set with
         SetButtonBitmaps().
-        
+
         @returns A reference to the mouse hover state bitmap.
     */
     const wxBitmap GetBitmapHover() const;
@@ -312,7 +312,7 @@ public:
     /**
         Returns default button bitmap that has been set with
         SetButtonBitmaps().
-        
+
         @returns A reference to the normal state bitmap.
     */
     const wxBitmap GetBitmapNormal() const;
@@ -320,7 +320,7 @@ public:
     /**
         Returns depressed button bitmap that has been set with
         SetButtonBitmaps().
-        
+
         @returns A reference to the depressed state bitmap.
     */
     const wxBitmap GetBitmapPressed() const;
@@ -332,7 +332,7 @@ public:
 
     /**
         Returns custom painted area in control.
-        
+
         @see SetCustomPaintWidth().
     */
     int GetCustomPaintWidth() const;
@@ -341,7 +341,7 @@ public:
         Returns features supported by wxComboCtrl. If needed feature is missing,
         you need to instead use wxGenericComboCtrl, which however may lack
         native look and feel (but otherwise sports identical API).
-        
+
         @returns Value returned is a combination of following flags:
     */
     static int GetFeatures();
@@ -403,18 +403,18 @@ public:
     /**
         Returns @true if the popup window is in the given state.
         Possible values are:
-        
+
         @c Hidden()
-        
+
         Popup window is hidden.
-        
+
         @c Animating()
-        
+
         Popup window is being shown, but the
         popup animation has not yet finished.
-        
+
         @c Visible()
-        
+
         Popup window is fully visible.
     */
     bool IsPopupWindowState(int state) const;
@@ -437,7 +437,7 @@ public:
 
     /**
         Removes the text between the two positions in the combo control text field.
-        
+
         @param from
             The first position.
         @param to
@@ -448,7 +448,7 @@ public:
     /**
         Replaces the text between two positions with the given text, in the combo
         control text field.
-        
+
         @param from
             The first position.
         @param to
@@ -460,7 +460,7 @@ public:
 
     /**
         Sets custom dropdown button graphics.
-        
+
         @param bmpNormal
             Default button image.
         @param pushButtonBg
@@ -483,7 +483,7 @@ public:
 
     /**
         Sets size and position of dropdown button.
-        
+
         @param width
             Button width. Value = 0 specifies default.
         @param height
@@ -507,7 +507,7 @@ public:
 
     /**
         Sets the insertion point in the text field.
-        
+
         @param pos
             The new insertion point.
     */
@@ -535,21 +535,21 @@ public:
 
     /**
         Extends popup size horizontally, relative to the edges of the combo control.
-        
+
         @param extLeft
             How many pixel to extend beyond the left edge of the
             control. Default is 0.
         @param extRight
             How many pixel to extend beyond the right edge of the
             control. Default is 0.
-        
+
         @remarks Popup minimum width may override arguments.
     */
     void SetPopupExtents(int extLeft, int extRight);
 
     /**
         Sets preferred maximum height of the popup.
-        
+
         @remarks Value -1 indicates the default.
     */
     void SetPopupMaxHeight(int height);
@@ -557,14 +557,14 @@ public:
     /**
         Sets minimum width of the popup. If wider than combo control, it will extend to
         the left.
-        
+
         @remarks Value -1 indicates the default.
     */
     void SetPopupMinWidth(int width);
 
     /**
         Selects the text between the two positions, in the combo control text field.
-        
+
         @param from
             The first position.
         @param to

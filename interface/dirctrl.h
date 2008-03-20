@@ -26,7 +26,7 @@ public:
     //@{
     /**
         Main constructor.
-        
+
         @param parent
             Parent window.
         @param id

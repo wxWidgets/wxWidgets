@@ -10,7 +10,7 @@
 
  @page overview_docview Document/View Framework
 
- Classes: wxDocument, wxView, wxDocTemplate, wxDocManager, wxDocParentFrame, 
+ Classes: wxDocument, wxView, wxDocTemplate, wxDocManager, wxDocParentFrame,
           wxDocChildFrame, wxDocMDIParentFrame, wxDocMDIChildFrame,
           wxCommand, wxCommandProcessor
 
@@ -25,7 +25,7 @@
  If a document's data changes, all views should be updated to reflect the change.
  The framework can provide many user-interface elements based on this model.
 
- Once you have defined your own classes and the relationships between them, the framework 
+ Once you have defined your own classes and the relationships between them, the framework
  takes care of popping up file selectors, opening and closing files, asking the user to save
  modifications, routing menu commands to appropriate (possibly default) code, even
  some default print/preview functionality and support for command undo/redo.
@@ -33,13 +33,13 @@
  The framework is highly modular, allowing overriding and replacement of functionality
  and objects to achieve more than the default behaviour.
 
- These are the overall steps involved in creating an application based on the 
+ These are the overall steps involved in creating an application based on the
  document/view framework:
 
  @li Define your own document and view classes, overriding a minimal set of
      member functions e.g. for input/output, drawing and initialization.
  @li Define any subwindows (such as a scrolled window) that are needed for the view(s).
-     You may need to route some events to views or documents, for example OnPaint needs 
+     You may need to route some events to views or documents, for example OnPaint needs
      to be routed to wxView::OnDraw.
  @li Decide what style of interface you will use: Microsoft's MDI (multiple
      document child frames surrounded by an overall frame), SDI (a separate, unconstrained frame
@@ -136,7 +136,7 @@
  Class: wxView
 
  The wxView class can be used to model the viewing and editing component of
- an application's file-based data. It is part of the document/view framework 
+ an application's file-based data. It is part of the document/view framework
  supported by wxWidgets, and cooperates with the wxDocument, wxDocTemplate
  and wxDocManager classes.
 
@@ -179,7 +179,7 @@
  document templates, but each would be passed a different view class. When
  the user clicks on the Open menu item, the file selector is displayed
  with a list of possible file filters -- one for each wxDocTemplate. Selecting
- the filter selects the wxDocTemplate, and when a file is selected, that template 
+ the filter selects the wxDocTemplate, and when a file is selected, that template
  will be used for creating a document and view.
 
  For the case where an application has one document type and one view type,
@@ -192,7 +192,7 @@
  See the example application in @c samples/docview.
 
  To use the wxDocTemplate class, you do not need to derive a new class.
- Just pass relevant information to the constructor including CLASSINFO(YourDocumentClass) 
+ Just pass relevant information to the constructor including CLASSINFO(YourDocumentClass)
  and CLASSINFO(YourViewClass) to allow dynamic instance creation.
 
  If you do not wish to use the wxWidgets method of creating document
@@ -210,10 +210,10 @@
  The wxDocManager class is part of the document/view framework supported by wxWidgets,
  and cooperates with the wxView, wxDocument and wxDocTemplate classes.
 
- A wxDocManager instance coordinates documents, views and document templates. 
- It keeps a list of document and template instances, and much functionality is routed 
- through this object, such as providing selection and file dialogs. 
- The application can use this class 'as is' or derive a class and override some members 
+ A wxDocManager instance coordinates documents, views and document templates.
+ It keeps a list of document and template instances, and much functionality is routed
+ through this object, such as providing selection and file dialogs.
+ The application can use this class 'as is' or derive a class and override some members
  to extend or change the functionality.
 
  Create an instance of this class near the beginning of your application initialization,
@@ -271,13 +271,13 @@
  to derive from it to allow different behaviour, such as popping up a scrolling
  list of files.
 
- By calling wxFileHistory::UseMenu() you can associate a file menu with the file history. 
+ By calling wxFileHistory::UseMenu() you can associate a file menu with the file history.
  The menu will then be used for appending filenames that are added to the history.
 
- Please notice that currently if the history already contained filenames when UseMenu() 
+ Please notice that currently if the history already contained filenames when UseMenu()
  is called (e.g. when initializing a second MDI child frame), the menu is not automatically
  initialized with the existing filenames in the history and so you need to call
- wxFileHistory::AddFilesToMenu() after UseMenu() explicitly in order to initialize the menu with 
+ wxFileHistory::AddFilesToMenu() after UseMenu() explicitly in order to initialize the menu with
  the existing list of MRU files (otherwise an assertion failure is raised in debug builds).
 
  The filenames are appended using menu identifiers in the range @c wxID_FILE1 to @c wxID_FILE9.

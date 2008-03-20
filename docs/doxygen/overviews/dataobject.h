@@ -46,7 +46,7 @@
 
  @section overview_dataobject_source The data provider (source) duties
 
- The data provider is responsible for creating a wxDataObject containing the 
+ The data provider is responsible for creating a wxDataObject containing the
  data to be transferred. Then it should either pass it to the clipboard using
  wxClipboard::SetData function or to wxDropSource and call wxDropSource::DoDragDrop
  function.
@@ -69,12 +69,12 @@
  @section overview_dataobject_target The data receiver (target) duties
 
  To receive (paste in usual terminology) data from the clipboard, you should
- create a wxDataObject derived class which supports the data formats you need 
+ create a wxDataObject derived class which supports the data formats you need
  and pass it as argument to wxClipboard::GetData. If it returns @false,
  no data in (any of) the supported format(s) is available. If it returns @true,
  the data has been successfully transferred to wxDataObject.
 
- For drag and drop case, the wxDropTarget::OnData virtual function will be called 
+ For drag and drop case, the wxDropTarget::OnData virtual function will be called
  when a data object is dropped, from which the data itself may be requested by calling
  wxDropTarget::GetData method which fills the data object.
 

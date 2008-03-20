@@ -38,7 +38,7 @@ public:
     //@{
     /**
         Copies this URI from another URI.
-        
+
         @param uri
             URI (Uniform Resource Identifier) to initialize with
     */
@@ -65,12 +65,12 @@ public:
 
     /**
         Creates this URI from the string
-        
+
         @param uri.
-        
+
         Returns the position at which parsing stopped (there
         is no such thing as an "invalid" wxURI).
-        
+
         uri
             string to initialize from
     */
@@ -95,21 +95,21 @@ public:
     /**
         Obtains the host type of this URI, which is of type
         HostType():
-        
+
         @b wxURI_REGNAME
-        
+
         Server is a host name, or the Server component itself is undefined.
-        
+
         @b wxURI_IPV4ADDRESS
-        
+
         Server is a IP version 4 address (XXX.XXX.XXX.XXX)
-        
+
         @b wxURI_IPV6ADDRESS
-        
+
         Server is a IP version 6 address ((XXX:)XXX::(XXX)XXX:XXX
-        
+
         @b wxURI_IPVFUTURE
-        
+
         Server is an IP address, but not versions 4 or 6
     */
     const HostType GetHostType() const;
@@ -233,36 +233,36 @@ public:
         To obtain individual components you can use
         one of the following methods
         GetScheme()
-        
+
         GetUserInfo()
-        
+
         GetServer()
-        
+
         GetPort()
-        
+
         GetPath()
-        
+
         GetQuery()
-        
+
         GetFragment()
         However, you should check HasXXX before
         calling a get method, which determines whether or not the component referred
         to by the method is defined according to RFC 2396.
         Consider an undefined component equivalent to a
         @NULL C string.
-        
+
         HasScheme()
-        
+
         HasUserInfo()
-        
+
         HasServer()
-        
+
         @ref hasserver() HasPort
-        
+
         HasPath()
-        
+
         HasQuery()
-        
+
         HasFragment()
         Example:
     */
@@ -279,7 +279,7 @@ public:
         of this URI is not absolute (does not begin with '/'), the path
         of the base's is merged with this URI's path, resulting in the URI
         "http://mysite.com/john/mydir".
-        
+
         @param base
             Base URI to inherit from.  Must be a full URI and not a reference
         @param flags
@@ -295,7 +295,7 @@ public:
         This is the preferred over deprecated wxURL::ConvertFromURI.
         If you want to unescape an entire wxURI, use BuildUnescapedURI() instead,
         as it performs some optimizations over this method.
-        
+
         @param uri
             string with escaped characters to convert
     */
@@ -304,9 +304,9 @@ public:
     /**
         Compares this URI to another URI, and returns @true if
         this URI equals
-        
+
         @param uricomp, otherwise it returns @false.
-        
+
         uricomp
             URI to compare to
     */

@@ -31,7 +31,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a static line.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -46,7 +46,7 @@ public:
             Window style (either wxLI_HORIZONTAL or wxLI_VERTICAL).
         @param name
             Window name.
-        
+
         @see Create()
     */
     wxStaticLine();

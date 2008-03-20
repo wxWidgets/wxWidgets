@@ -54,7 +54,7 @@
  giving it a menu and a status bar in its constructor. Also, any class
  that wishes to respond to any "event" (such as mouse clicks or
  messages from the menu or a button) must declare an event table
- using the macro below. 
+ using the macro below.
 
  Finally, the way to react to such events must be done in "handlers".
  In our sample, we react to two menu items, one for "Quit" and one for

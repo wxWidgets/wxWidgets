@@ -78,7 +78,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a spin button.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -93,7 +93,7 @@ public:
             Window style. See wxSpinButton.
         @param name
             Window name.
-        
+
         @see Create()
     */
     wxSpinButton();
@@ -121,40 +121,40 @@ public:
 
     /**
         Returns the maximum permissible value.
-        
+
         @see SetRange()
     */
     int GetMax() const;
 
     /**
         Returns the minimum permissible value.
-        
+
         @see SetRange()
     */
     int GetMin() const;
 
     /**
         Returns the current spin button value.
-        
+
         @see SetValue()
     */
     int GetValue() const;
 
     /**
         Sets the range of the spin button.
-        
+
         @param min
             The minimum value for the spin button.
         @param max
             The maximum value for the spin button.
-        
+
         @see GetMin(), GetMax()
     */
     void SetRange(int min, int max);
 
     /**
         Sets the value of the spin button.
-        
+
         @param value
             The value for the spin button.
     */

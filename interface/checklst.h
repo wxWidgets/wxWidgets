@@ -38,7 +38,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a list box.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -86,7 +86,7 @@ public:
     /**
         Checks the given item. Note that calling this method doesn't result in
         wxEVT_COMMAND_CHECKLISTBOX_TOGGLE being emitted.
-        
+
         @param item
             Index of item to check.
         @param check

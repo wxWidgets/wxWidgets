@@ -33,16 +33,16 @@ class wxTreeItemData : public wxClientData
 public:
     /**
         Default constructor.
-        
+
         In addition, the following methods are added in wxPython for accessing
         the object:
-        
+
         @b GetData()
-        
+
         Returns a reference to the Python Object
-        
+
         @b SetData(obj)
-        
+
         Associates a new Python Object with the
         wxTreeItemData
     */
@@ -132,7 +132,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a tree control.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -149,7 +149,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxTreeCtrl();
@@ -228,14 +228,14 @@ public:
 
     /**
         Collapses the root item.
-        
+
         @see ExpandAll()
     */
     void CollapseAll();
 
     /**
         Collapses this item and all of its children, recursively.
-        
+
         @see ExpandAllChildren()
     */
     void CollapseAllChildren(const wxTreeItemId& item);
@@ -286,7 +286,7 @@ public:
         If the user changed the label (i.e. s/he does not press ESC or leave
         the text control without changes, a EVT_TREE_END_LABEL_EDIT event
         will be sent which can be vetoed as well.
-        
+
         @see EndEditLabel(), wxTreeEvent
     */
     void EditLabel(const wxTreeItemId& item);
@@ -294,7 +294,7 @@ public:
     /**
         Ends label editing. If @a cancelEdit is @true, the edit will be cancelled.
         This function is currently supported under Windows only.
-        
+
         @see EditLabel()
     */
     void EndEditLabel(bool cancelEdit);
@@ -370,7 +370,7 @@ public:
         GetFirstChild and GetNextChild should be the same variable.
         Returns an invalid tree item (i.e. IsOk() returns @false) if there are no
         further children.
-        
+
         @see GetNextChild(), GetNextSibling()
     */
     wxTreeItemId GetFirstChild(const wxTreeItemId& item,
@@ -467,7 +467,7 @@ wxPython provides the following shortcut method:
     /**
         Returns the last child of the item (or an invalid tree item if this item has no
         children).
-        
+
         @see GetFirstChild(), GetNextSibling(),
              GetLastChild()
     */
@@ -481,7 +481,7 @@ wxPython provides the following shortcut method:
         enumeration on one and the same object simultaneously). The cookie passed to
         GetFirstChild and GetNextChild should be the same.
         Returns an invalid tree item if there are no further children.
-        
+
         @see GetFirstChild()
     */
     wxTreeItemId GetNextChild(const wxTreeItemId& item,
@@ -491,7 +491,7 @@ wxPython provides the following shortcut method:
         Returns the next sibling of the specified item; call GetPrevSibling() for the
         previous sibling.
         Returns an invalid tree item if there are no further siblings.
-        
+
         @see GetPrevSibling()
     */
     wxTreeItemId GetNextSibling(const wxTreeItemId& item) const;
@@ -507,7 +507,7 @@ wxPython provides the following shortcut method:
         Returns the previous sibling of the specified item; call GetNextSibling() for
         the next sibling.
         Returns an invalid tree item if there are no further children.
-        
+
         @see GetNextSibling()
     */
     wxTreeItemId GetPrevSibling(const wxTreeItemId& item) const;
@@ -522,7 +522,7 @@ wxPython provides the following shortcut method:
     /**
         Returns @true if the control will use a quick calculation for the best size,
         looking only at the first and last items. The default is @false.
-        
+
         @see SetQuickBestSize()
     */
     bool GetQuickBestSize() const;
@@ -557,49 +557,49 @@ wxPython provides the following shortcut method:
         Calculates which (if any) item is under the given point, returning the tree item
         id at this point plus extra information @e flags. @a flags is a bitlist of the
         following:
-        
+
         wxTREE_HITTEST_ABOVE
-        
+
         Above the client area.
-        
+
         wxTREE_HITTEST_BELOW
-        
+
         Below the client area.
-        
+
         wxTREE_HITTEST_NOWHERE
-        
+
         In the client area but below the last item.
-        
+
         wxTREE_HITTEST_ONITEMBUTTON
-        
+
         On the button associated with an item.
-        
+
         wxTREE_HITTEST_ONITEMICON
-        
+
         On the bitmap associated with an item.
-        
+
         wxTREE_HITTEST_ONITEMINDENT
-        
+
         In the indentation associated with an item.
-        
+
         wxTREE_HITTEST_ONITEMLABEL
-        
+
         On the label (string) associated with an item.
-        
+
         wxTREE_HITTEST_ONITEMRIGHT
-        
+
         In the area to the right of an item.
-        
+
         wxTREE_HITTEST_ONITEMSTATEICON
-        
+
         On the state icon for a tree view item that is in a user-defined state.
-        
+
         wxTREE_HITTEST_TOLEFT
-        
+
         To the right of the client area.
-        
+
         wxTREE_HITTEST_TORIGHT
-        
+
         To the left of the client area.
     */
     wxTreeItemId HitTest(const wxPoint& point, int& flags) const;
@@ -770,7 +770,7 @@ wxPython note:
         Sets the item's font. All items in the tree should have the same height to avoid
         text clipping, so the fonts height should be the same for all of them,
         although font attributes may vary.
-        
+
         @see SetItemBold()
     */
     void SetItemFont(const wxTreeItemId& item, const wxFont& font);
@@ -813,7 +813,7 @@ wxPython note:
         the best size,
         looking only at the first and last items. Otherwise, it will look at all items.
         The default is @false.
-        
+
         @see GetQuickBestSize()
     */
     void SetQuickBestSize(bool quickBestSize);
@@ -839,7 +839,7 @@ wxPython note:
         OnCompareItems() method of wxTreeCtrl. You
         should override that method to change the sort order (the default is ascending
         case-sensitive alphabetical order).
-        
+
         @see wxTreeItemData, OnCompareItems()
     */
     void SortChildren(const wxTreeItemId& item);

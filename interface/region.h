@@ -151,7 +151,7 @@ public:
     /**
         Returns a value indicating whether the given rectangle is contained within the
         region.
-        
+
         @returns The return value is one of wxOutRegion, wxPartRegion and
                  wxInRegion.
     */
@@ -181,9 +181,9 @@ public:
     //@{
     /**
         Finds the intersection of this region and another region.
-        
+
         @returns @true if successful, @false otherwise.
-        
+
         @remarks Creates the intersection of the two regions, that is, the parts
                  which are in both regions. The result is stored in this
                  region.
@@ -210,7 +210,7 @@ public:
     /**
         Moves the region by the specified offsets in horizontal and vertical
         directions.
-        
+
         @returns @true if successful, @false otherwise (the region is unchanged
                  then).
     */
@@ -221,9 +221,9 @@ public:
     //@{
     /**
         Subtracts a region from this region.
-        
+
         @returns @true if successful, @false otherwise.
-        
+
         @remarks This operation combines the parts of 'this' region that are not
                  part of the second region. The result is stored in this
                  region.
@@ -238,9 +238,9 @@ public:
         bitmap. Colour to be treated as transparent is specified in the
         @a transColour argument, along with an
         optional colour tolerance value.
-        
+
         @returns @true if successful, @false otherwise.
-        
+
         @remarks This operation creates a region that combines all of this region
                  and the second region. The result is stored in this
                  region.
@@ -256,9 +256,9 @@ public:
     //@{
     /**
         Finds the Xor of this region and another region.
-        
+
         @returns @true if successful, @false otherwise.
-        
+
         @remarks This operation creates a region that combines all of this region
                  and the second region, except for any overlapping
                  areas. The result is stored in this region.

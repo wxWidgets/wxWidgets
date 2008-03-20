@@ -10,12 +10,12 @@
 /**
 
  @page page_keycodes Keycodes
- 
+
  @header{wx/defs.h}
- 
+
  Keypresses are represented by an enumerated type, wxKeyCode. The possible
  values are the ASCII character codes, plus the following:
- 
+
  @verbatim
      WXK_BACK    = 8
      WXK_TAB     = 9
@@ -23,7 +23,7 @@
      WXK_ESCAPE  = 27
      WXK_SPACE   = 32
      WXK_DELETE  = 127
- 
+
      // These are by design not compatible with unicode characters.
      // If you want to get a unicode character from a key event use
      // wxKeyEvent::GetUnicodeKey instead.
@@ -95,7 +95,7 @@
      WXK_SCROLL
      WXK_PAGEUP,
      WXK_PAGEDOWN,
- 
+
      WXK_NUMPAD_SPACE,
      WXK_NUMPAD_TAB,
      WXK_NUMPAD_ENTER,
@@ -121,13 +121,13 @@
      WXK_NUMPAD_SUBTRACT,
      WXK_NUMPAD_DECIMAL,
      WXK_NUMPAD_DIVIDE,
- 
+
      // the following key codes are only generated under Windows currently
      WXK_WINDOWS_LEFT,
      WXK_WINDOWS_RIGHT,
      WXK_WINDOWS_MENU,
      WXK_COMMAND,
- 
+
      // Hardware-specific buttons
      WXK_SPECIAL1 = 193,
      WXK_SPECIAL2,

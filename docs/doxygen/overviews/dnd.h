@@ -29,22 +29,22 @@
 
  @li @b Preparation: First of all, a data object must be created and
      initialized with the data you wish to drag. For example:
-    
+
      @code
      wxTextDataObject my_data("This text will be dragged.");
      @endcode
 
  @li <b>Drag start</b>: To start the dragging process (typically in response to a
      mouse click) you must call wxDropSource::DoDragDrop like this:
-    
+
      @code
      wxDropSource dragSource( this );
      dragSource.SetData( my_data );
      wxDragResult result = dragSource.DoDragDrop( true );
      @endcode
 
- @li @b Dragging: The call to DoDragDrop() blocks the program until the user releases 
-     the mouse button (unless you override the wxDropSource::GiveFeedback function to 
+ @li @b Dragging: The call to DoDragDrop() blocks the program until the user releases
+     the mouse button (unless you override the wxDropSource::GiveFeedback function to
      do something special). When the mouse moves in a window of a program which understands
      the same drag-and-drop protocol (any program under Windows or any program supporting
      the XDnD protocol under X Windows), the corresponding wxDropTarget methods
@@ -56,7 +56,7 @@
      @code
      switch (result)
      {
-        case wxDragCopy: 
+        case wxDragCopy:
             // copy the data
             break;
         case wxDragMove:
@@ -73,7 +73,7 @@
  follow the instructions below:
 
  @li @b Initialization: For a window to be a drop target, it needs to have
-     an associated wxDropTarget object. Normally, you will call wxWindow::SetDropTarget 
+     an associated wxDropTarget object. Normally, you will call wxWindow::SetDropTarget
      during window creation associating your drop target with it. You must derive a class
      from wxDropTarget and override its pure virtual methods. Alternatively, you may
      derive from wxTextDropTarget or wxFileDropTarget and override their OnDropText()
@@ -83,7 +83,7 @@
      asks the associated wxDropTarget object if it accepts the data. For this,
      a wxDataObject must be associated with the drop target and this data object will
      be responsible for the format negotiation between the drag source and the drop target.
-     If all goes well, then wxDropTarget::OnData will get called and the wxDataObject belonging 
+     If all goes well, then wxDropTarget::OnData will get called and the wxDataObject belonging
      to the drop target can get filled with data.
 
  @li <b>The end</b>: After processing the data, DoDragDrop() returns either

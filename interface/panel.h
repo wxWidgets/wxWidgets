@@ -36,7 +36,7 @@ public:
     //@{
     /**
         Constructor.
-        
+
         @param parent
             The parent window.
         @param id
@@ -54,7 +54,7 @@ public:
             Used to associate a name with the window,
             allowing the application user to set Motif resource values for
             individual dialog boxes.
-        
+
         @see Create()
     */
     wxPanel();
@@ -91,24 +91,24 @@ public:
     /**
         Sends a wxInitDialogEvent, which
         in turn transfers data to the dialog via validators.
-        
+
         @see wxInitDialogEvent
     */
     void InitDialog();
 
     /**
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
-        
+
         @param event
             The colour change event.
-        
+
         @remarks Changes the panel's colour to conform to the current settings
                  (Windows only). Add an event table entry for your panel
                  class if you wish the behaviour to be different (such
                  as keeping a user-defined background colour). If you do
                  override this function, call wxEvent::Skip to propagate
                  the notification to child windows and controls.
-        
+
         @see wxSysColourChangedEvent
     */
     void OnSysColourChanged(wxSysColourChangedEvent& event);
@@ -119,7 +119,7 @@ public:
         the focus and TAB logic for controls which usually have child controls.
         In practice, if you call this method and the control has at least
         one child window, the focus will be given to the child window.
-        
+
         @see wxFocusEvent, wxWindow::SetFocus
     */
     virtual void SetFocus();

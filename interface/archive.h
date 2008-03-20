@@ -240,7 +240,7 @@ public:
 
         The names of directory entries are returned without any trailing path
         separator. This gives a canonical name that can be used in comparisons.
-        
+
         @see @ref overview_archive_byname
     */
     wxString GetInternalName() const;
@@ -327,7 +327,7 @@ enum wxStreamProtocolType
     wxArchiveClassFactory::Find can also search for a factory by MIME type
     or wxFileSystem protocol.
 
-    The available factories can be enumerated using 
+    The available factories can be enumerated using
     wxArchiveClassFactory::GetFirst() and wxArchiveClassFactory::GetNext().
 
     @library{wxbase}
@@ -381,13 +381,13 @@ public:
         @code
         wxString list;
         const wxArchiveClassFactory *factory = wxArchiveClassFactory::GetFirst();
-    
+
         while (factory) {
             list << factory->GetProtocol() << _T("\n");
             factory = factory->GetNext();
         }
         @endcode
-        
+
         GetFirst() and GetNext() return a pointer to a factory or @NULL if no more
         are available. They do not give away ownership of the factory.
     */
@@ -418,7 +418,7 @@ public:
         @code
         wxString list;
         const wxChar *const *p;
-        
+
         for (p = factory->GetProtocols(wxSTREAM_FILEEXT); *p; p++)
             list << *p << _T("\n");
         @encode
@@ -529,7 +529,7 @@ public:
 
     The first template parameter should be the type of archive input stream
     (e.g. wxArchiveInputStream) and the second can either be a pointer to an entry
-    (e.g. wxArchiveEntry*), or a string/pointer pair (e.g. std::pairwxString, 
+    (e.g. wxArchiveEntry*), or a string/pointer pair (e.g. std::pairwxString,
     wxArchiveEntry*).
 
     The @c wx/archive.h header defines the following typedefs:

@@ -22,7 +22,7 @@ class wxDisplay
 public:
     /**
         Constructor, setting up a wxDisplay instance with the specified display.
-        
+
         @param index
             The index of the display to use.  This must be non-negative
             and lower than the value returned by GetCount().
@@ -77,7 +77,7 @@ public:
     /**
         Returns the index of the display on which the given point lies.  Returns
         @c wxNOT_FOUND if the point is not on any connected display.
-        
+
         @param pt
             The point to locate.
     */
@@ -88,7 +88,7 @@ public:
         If the window is on more than one display it gets the display that overlaps the
         window the most.
         Returns @c wxNOT_FOUND if the window is not on any connected display.
-        
+
         @param win
             The window to locate.
     */

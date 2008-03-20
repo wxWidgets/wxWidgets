@@ -63,7 +63,7 @@ public:
     /**
         Get the current font mapper object. If there is no current object, creates
         one.
-        
+
         @see Set()
     */
     static wxFontMapper* Get();
@@ -122,7 +122,7 @@ public:
     /**
         Return internal string identifier for the encoding (see also
         wxFontMapper::GetEncodingDescription)
-        
+
         @see GetEncodingFromName()
     */
     static wxString GetEncodingName(wxFontEncoding encoding);
@@ -145,7 +145,7 @@ public:
         Set the current font mapper object and return previous one (may be @NULL).
         This method is only useful if you want to plug-in an alternative font mapper
         into wxWidgets.
-        
+
         @see Get()
     */
     static wxFontMapper* Set(wxFontMapper* mapper);

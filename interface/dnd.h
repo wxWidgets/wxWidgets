@@ -33,7 +33,7 @@ public:
 
     /**
         Override this function to receive dropped text.
-        
+
         @param x
             The x coordinate of the mouse.
         @param y
@@ -108,14 +108,14 @@ public:
     /**
         Called when the mouse is being dragged over the drop target. By default,
         this calls functions return the suggested return value @e def.
-        
+
         @param x
             The x coordinate of the mouse.
         @param y
             The y coordinate of the mouse.
         @param def
             Suggested value for return value. Determined by SHIFT or CONTROL key states.
-        
+
         @returns Returns the desired operation or wxDragNone. This is used for
                  optical feedback from the side of the drop source,
                  typically in form of changing the icon.
@@ -126,12 +126,12 @@ public:
     /**
         Called when the user drops a data object on the target. Return @false to veto
         the operation.
-        
+
         @param x
             The x coordinate of the mouse.
         @param y
             The y coordinate of the mouse.
-        
+
         @returns Return @true to accept the data, @false to veto the operation.
     */
     virtual bool OnDrop(wxCoord x, wxCoord y);
@@ -139,7 +139,7 @@ public:
     /**
         Called when the mouse enters the drop target. By default, this calls
         OnDragOver().
-        
+
         @param x
             The x coordinate of the mouse.
         @param y
@@ -147,7 +147,7 @@ public:
         @param def
             Suggested default for return value. Determined by SHIFT or CONTROL key
         states.
-        
+
         @returns Returns the desired operation or wxDragNone. This is used for
                  optical feedback from the side of the drop source,
                  typically in form of changing the icon.
@@ -195,7 +195,7 @@ public:
         between wxMSW and wxGTK: these are cursors under Windows but icons for GTK.
         You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
-        
+
         @param win
             The window which initiates the drag and drop operation.
         @param iconCopy
@@ -216,7 +216,7 @@ public:
     //@}
 
     /**
-        
+
     */
     ~wxDropSource();
 
@@ -224,13 +224,13 @@ public:
         Do it (call this in response to a mouse button press, for example). This starts
         the drag-and-drop operation which will terminate when the user releases the
         mouse.
-        
+
         @param flags
             If wxDrag_AllowMove is included in the flags, data may
             be moved and not only copied (default). If wxDrag_DefaultMove is
             specified (which includes the previous flag), this is even the default
             operation
-        
+
         @returns Returns the operation requested by the user, may be wxDragCopy,
                  wxDragMove, wxDragLink, wxDragCancel or wxDragNone if
                  an error occurred.
@@ -248,13 +248,13 @@ public:
         in this function. It is called on each mouse move, so your implementation must
         not be too
         slow.
-        
+
         @param effect
             The effect to implement. One of wxDragCopy, wxDragMove, wxDragLink and
         wxDragNone.
         @param scrolling
             @true if the window is scrolling. MSW only.
-        
+
         @returns Return @false if you want default feedback, or @true if you
                  implement your own feedback. The return values is
                  ignored under GTK.
@@ -263,7 +263,7 @@ public:
 
     /**
         Set the icon to use for a certain drag result.
-        
+
         @param res
             The drag result to set the icon for.
         @param cursor
@@ -308,7 +308,7 @@ public:
 
     /**
         Override this function to receive dropped files.
-        
+
         @param x
             The x coordinate of the mouse.
         @param y

@@ -64,7 +64,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a list box.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -85,7 +85,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxListBox();
@@ -135,25 +135,25 @@ public:
 
     /**
         Deselects an item in the list box.
-        
+
         @param n
             The zero-based item to deselect.
-        
+
         @remarks This applies to multiple selection listboxes only.
     */
     void Deselect(int n);
 
     /**
         Fill an array of ints with the positions of the currently selected items.
-        
+
         @param selections
             A reference to an wxArrayInt instance that is used to store the result of
         the query.
-        
+
         @returns The number of selections.
-        
+
         @remarks Use this with a multiple selection listbox.
-        
+
         @see wxControlWithItems::GetSelection, wxControlWithItems::GetStringSelection,
              wxControlWithItems::SetSelection
     */
@@ -162,14 +162,14 @@ public:
     /**
         Returns the item located at @e point, or @c wxNOT_FOUND if there
         is no item located at @e point.
-        
+
         @wxsince{2.7.0}. It is currently implemented
         for wxMSW, wxMac and wxGTK2
         ports.
-        
+
         @param point
             Point of item (in client coordinates) to obtain
-        
+
         @returns Item located at point, or wxNOT_FOUND if unimplemented or the
                  item does not exist.
     */
@@ -178,7 +178,7 @@ public:
     //@{
     /**
         Insert the given number of strings before the specified position.
-        
+
         @param nItems
             Number of items in the array items
         @param items
@@ -196,10 +196,10 @@ public:
 
     /**
         Determines whether an item is selected.
-        
+
         @param n
             The zero-based item index.
-        
+
         @returns @true if the given item is selected, @false otherwise.
     */
     bool IsSelected(int n) const;
@@ -207,14 +207,14 @@ public:
     //@{
     /**
         Clears the list box and adds the given strings to it.
-        
+
         @param n
             The number of strings to set.
         @param choices
             An array of strings to set.
         @param clientData
             Options array of client data pointers
-        
+
         @remarks You may free the array from the calling program after this
                  function has been called.
     */
@@ -226,7 +226,7 @@ public:
     //@{
     /**
         Set the specified item to be the first visible item.
-        
+
         @param n
             The zero-based item index.
         @param string

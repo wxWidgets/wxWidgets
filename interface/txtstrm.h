@@ -58,7 +58,7 @@ public:
     /**
         )
         Constructs a text stream associated to the given input stream.
-        
+
         @param stream
             The underlying input stream.
         @param sep
@@ -149,7 +149,7 @@ public:
     /**
         Reads a word (a sequence of characters until the next separator) from the
         input stream.
-        
+
         @see SetStringSeparators()
     */
     wxString ReadWord();
@@ -194,7 +194,7 @@ public:
     /**
         )
         Constructs a text stream object associated to the given output stream.
-        
+
         @param stream
             The output stream.
         @param mode

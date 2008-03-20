@@ -34,7 +34,7 @@ public:
         It is valid to leave out the hostname but slashes must remain in place -
         i.e. a file URL without a hostname must contain three consecutive slashes
         (e.g. @c file:///somepath/myfile).
-        
+
         @param url
             Url string to parse.
     */
@@ -48,33 +48,33 @@ public:
     /**
         Returns the last error. This error refers to the URL parsing or to the protocol.
         It can be one of these errors:
-        
+
         @b wxURL_NOERR
-        
+
         No error.
-        
+
         @b wxURL_SNTXERR
-        
+
         Syntax error in the URL string.
-        
+
         @b wxURL_NOPROTO
-        
+
         Found no protocol which can get this URL.
-        
+
         @b wxURL_NOHOST
-        
+
         A host name is required for this protocol.
-        
+
         @b wxURL_NOPATH
-        
+
         A path is required for this protocol.
-        
+
         @b wxURL_CONNERR
-        
+
         Connection error.
-        
+
         @b wxURL_PROTOERR
-        
+
         An error occurred during negotiation.
     */
     wxURLError GetError() const;
@@ -86,10 +86,10 @@ public:
         Note that this method is somewhat deprecated, all future wxWidgets applications
         should really use wxFileSystem instead.
         Example:
-        
+
         @returns Returns the initialized stream. You will have to delete it
                  yourself.
-        
+
         @see wxInputStream
     */
     wxInputStream* GetInputStream();
@@ -108,17 +108,17 @@ public:
     /**
         Sets the default proxy server to use to get the URL. The string specifies
         the proxy like this: hostname:port number.
-        
+
         @param url_proxy
             Specifies the proxy to use
-        
+
         @see SetProxy()
     */
     static void SetDefaultProxy(const wxString& url_proxy);
 
     /**
         Sets the proxy to use for this URL.
-        
+
         @see SetDefaultProxy()
     */
     void SetProxy(const wxString& url_proxy);

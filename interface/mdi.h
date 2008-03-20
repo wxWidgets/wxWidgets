@@ -24,15 +24,15 @@ public:
     //@{
     /**
         Constructor, creating the window.
-        
+
         @param parent
             The window parent.
         @param style
             The window style. Currently unused.
-        
+
         @remarks The second style of constructor is called within
                  wxMDIParentFrame::OnCreateClient.
-        
+
         @see wxMDIParentFrame::wxMDIParentFrame, wxMDIParentFrame::OnCreateClient
     */
     wxMDIClientWindow();
@@ -109,7 +109,7 @@ public:
     //@{
     /**
         Constructor, creating the window.
-        
+
         @param parent
             The window parent. This should be @NULL.
         @param id
@@ -131,12 +131,12 @@ public:
         item,
             allowing the application user to set Motif resource values for
             individual windows.
-        
+
         @remarks During the construction of the frame, the client window will be
                  created. To use a different class from
                  wxMDIClientWindow, override
                  OnCreateClient().
-        
+
         @see Create(), OnCreateClient()
     */
     wxMDIParentFrame();
@@ -155,28 +155,28 @@ public:
 
     /**
         Activates the MDI child following the currently active one.
-        
+
         @see ActivatePrevious()
     */
     void ActivateNext();
 
     /**
         Activates the MDI child preceding the currently active one.
-        
+
         @see ActivateNext()
     */
     void ActivatePrevious();
 
     /**
         Arranges any iconized (minimized) MDI child windows.
-        
+
         @see Cascade(), Tile()
     */
     void ArrangeIcons();
 
     /**
         Arranges the MDI child windows in a cascade.
-        
+
         @see Tile(), ArrangeIcons()
     */
     void Cascade();
@@ -199,16 +199,16 @@ public:
 
     /**
         This gets the size of the frame 'client area' in pixels.
-        
+
         @param width
             Receives the client width in pixels.
         @param height
             Receives the client height in pixels.
-        
+
         @remarks The client area is the area which may be drawn on by the
                  programmer, excluding title bar, border, status bar,
                  and toolbar if present.
-        
+
         @see GetToolBar(), SetToolBar(),
              wxMDIClientWindow
     */
@@ -216,14 +216,14 @@ public:
 
     /**
         Returns a pointer to the client window.
-        
+
         @see OnCreateClient()
     */
     wxMDIClientWindow* GetClientWindow() const;
 
     /**
         Returns the window being used as the toolbar for this frame.
-        
+
         @see SetToolBar()
     */
     virtual wxWindow* GetToolBar() const;
@@ -242,11 +242,11 @@ public:
         called,
         due to the way C++ treats virtual functions called from constructors. For
         example:
-        
+
         @remarks You might wish to derive from wxMDIClientWindow in order to
                  implement different erase behaviour, for example, such
                  as painting a bitmap on the background.
-        
+
         @see GetClientWindow(), wxMDIClientWindow
     */
     virtual wxMDIClientWindow* OnCreateClient();
@@ -255,14 +255,14 @@ public:
         Sets the window to be used as a toolbar for this
         MDI parent window. It saves the application having to manage the positioning
         of the toolbar MDI client window.
-        
+
         @param toolbar
             Toolbar to manage.
-        
+
         @remarks When the frame is resized, the toolbar is resized to be the
                  width of the frame client area, and the toolbar height
                  is kept the same.
-        
+
         @see GetToolBar(), GetClientSize()
     */
     virtual void SetToolBar(wxWindow* toolbar);
@@ -331,7 +331,7 @@ public:
     //@{
     /**
         Constructor, creating the window.
-        
+
         @param parent
             The window parent. This should not be @NULL.
         @param id
@@ -353,9 +353,9 @@ public:
         item,
             allowing the application user to set Motif resource values for
             individual windows.
-        
+
         @remarks None.
-        
+
         @see Create()
     */
     wxMDIChildFrame();
@@ -374,7 +374,7 @@ public:
 
     /**
         Activates this MDI child frame.
-        
+
         @see Maximize(), Restore()
     */
     void Activate();
@@ -392,7 +392,7 @@ public:
 
     /**
         Maximizes this MDI child frame.
-        
+
         @see Activate(), Restore()
     */
     void Maximize(bool maximize);

@@ -37,7 +37,7 @@ public:
     /**
         Constructor. Use ShowModal() to show
         the dialog.
-        
+
         @param parent
             Parent window.
         @param message

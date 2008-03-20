@@ -35,7 +35,7 @@ public:
     //@{
     /**
         Returns the state of the specified joystick button.
-        
+
         @param id
             The button id to report, from 0 to GetNumberButtons() - 1
     */
@@ -98,7 +98,7 @@ public:
     //@{
     /**
         Returns the position of the specified joystick axis.
-        
+
         @param axis
             The joystick axis to report, from 0 to GetNumberAxes() - 1.
     */
@@ -239,25 +239,25 @@ public:
 
     /**
         Releases the capture set by @b SetCapture.
-        
+
         @returns @true if the capture release succeeded.
-        
+
         @see SetCapture(), wxJoystickEvent
     */
     bool ReleaseCapture();
 
     /**
         Sets the capture to direct joystick events to @e win.
-        
+
         @param win
             The window that will receive joystick events.
         @param pollingFreq
             If zero, movement events are sent when above the
             threshold. If greater than zero, events are received every pollingFreq
         milliseconds.
-        
+
         @returns @true if the capture succeeded.
-        
+
         @see ReleaseCapture(), wxJoystickEvent
     */
     bool SetCapture(wxWindow* win, int pollingFreq = 0);

@@ -26,14 +26,14 @@
 
  @beginDefList
  @itemdef{Point size, This is the standard way of referring to text size.}
- @itemdef{Family, 
+ @itemdef{Family,
           Supported families are:
            @b wxDEFAULT, @b wxDECORATIVE, @b wxROMAN, @b wxSCRIPT, @b wxSWISS, @b wxMODERN.
            @b wxMODERN is a fixed pitch font; the others are either fixed or variable pitch.}
  @itemdef{Style, The value can be @b wxNORMAL, @b wxSLANT or @b wxITALIC.}
  @itemdef{Weight, The value can be @b wxNORMAL, @b wxLIGHT or @b wxBOLD.}
  @itemdef{Underlining, The value can be @true or @false.}
- @itemdef{Face name, 
+ @itemdef{Face name,
           An optional string specifying the actual typeface to be used. If @NULL,
           a default typeface will chosen based on the family.}
  @itemdef{Encoding,

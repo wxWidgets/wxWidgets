@@ -36,7 +36,7 @@ public:
     //@{
     /**
         Loads an icon from the specified location().
-        
+
         @param bits
             Specifies an array of pixel values.
         @param width
@@ -66,68 +66,68 @@ public:
             wxIconLocation.
         @param type
             May be one of the following:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxBITMAP_TYPE_ICO
-        
-        
-        
-        
+
+
+
+
             Load a Windows icon file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ICO_RESOURCE
-        
-        
-        
-        
+
+
+
+
             Load a Windows icon from the resource database.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_GIF
-        
-        
-        
-        
+
+
+
+
             Load a GIF bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_XBM
-        
-        
-        
-        
+
+
+
+
             Load an X bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_XPM
-        
-        
-        
-        
+
+
+
+
             Load an XPM bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             The validity of these flags depends on the platform and wxWidgets
         configuration.
             If all possible wxWidgets settings are used, the Windows platform supports
@@ -136,7 +136,7 @@ public:
         XPM data, XPM file, and PNG file.
             Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM
         file.
-        
+
         @remarks The first form constructs an icon object with no data; an
                  assignment or another member function such as Create or
                  LoadFile must be called subsequently.
@@ -168,9 +168,9 @@ public:
     /**
         Copies @a bmp bitmap to this icon. Under MS Windows the bitmap
         must have mask colour set.
-        
+
         LoadFile()
-        
+
         Wx::Icon-new( width, height, depth = -1 )
         Wx::Icon-new( name, type, desiredWidth = -1, desiredHeight = -1 )
         Wx::Icon-newFromBits( bits, width, height, depth = 1 )
@@ -191,7 +191,7 @@ public:
 
     /**
         Gets the width of the icon in pixels.
-        
+
         @see GetHeight()
     */
     int GetWidth() const;
@@ -203,86 +203,86 @@ public:
 
     /**
         Loads an icon from a file or resource.
-        
+
         @param name
             Either a filename or a Windows resource name.
             The meaning of name is determined by the type parameter.
         @param type
             One of the following values:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxBITMAP_TYPE_ICO
-        
-        
-        
-        
+
+
+
+
             Load a Windows icon file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ICO_RESOURCE
-        
-        
-        
-        
+
+
+
+
             Load a Windows icon from the resource database.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_GIF
-        
-        
-        
-        
+
+
+
+
             Load a GIF bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_XBM
-        
-        
-        
-        
+
+
+
+
             Load an X bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_XPM
-        
-        
-        
-        
+
+
+
+
             Load an XPM bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             The validity of these flags depends on the platform and wxWidgets
         configuration.
-        
+
         @returns @true if the operation succeeded, @false otherwise.
-        
+
         @see wxIcon()
     */
     bool LoadFile(const wxString& name, wxBitmapType type);
 
     /**
         Sets the depth member (does not affect the icon data).
-        
+
         @param depth
             Icon depth.
     */
@@ -290,7 +290,7 @@ public:
 
     /**
         Sets the height member (does not affect the icon data).
-        
+
         @param height
             Icon height in pixels.
     */
@@ -298,7 +298,7 @@ public:
 
     /**
         Sets the width member (does not affect the icon data).
-        
+
         @param width
             Icon width in pixels.
     */
@@ -306,7 +306,7 @@ public:
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".
-        
+
         @param icon
             Icon to assign.
     */

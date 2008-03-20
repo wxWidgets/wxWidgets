@@ -48,7 +48,7 @@ public:
 
     //@{
     /**
-        
+
     */
     bool operator ==(const wxPosition& p) const;
     const bool operator !=(const wxPosition& p) const;

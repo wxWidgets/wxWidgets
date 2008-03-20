@@ -87,7 +87,7 @@ public:
             Validator which can be used for additional date checks.
         @param name
             Control name.
-        
+
         @returns @true if the control was successfully created or @false if
                  creation failed.
     */
@@ -201,7 +201,7 @@ public:
             Validator which can be used for additional date checks.
         @param name
             Control name.
-        
+
         @returns @true if the control was successfully created or @false if
                  creation failed.
     */

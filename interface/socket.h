@@ -23,7 +23,7 @@ public:
         as this correctly handles multi-homed hosts and avoids other small
         problems. Internally, this is the same as setting the IP address
         to @b INADDR_ANY.
-        
+
         @returns Returns @true on success, @false if something went wrong.
     */
     bool AnyAddress();
@@ -79,7 +79,7 @@ public:
         Constructs a new server and tries to bind to the specified @e address.
         Before trying to accept new connections, test whether it succeeded with
         @ref wxSocketBase::isok wxSocketBase:IsOk.
-        
+
         @param address
             Specifies the local address for the server (e.g. port number).
         @param flags
@@ -106,11 +106,11 @@ public:
         incoming connections with WaitForAccept()
         or catch @b wxSOCKET_CONNECTION events, then call Accept once you know
         that there is an incoming connection waiting to be accepted.
-        
+
         @returns Returns an opened socket connection, or @NULL if an error
                  occurred or if the wait parameter was @false and there
                  were no pending connections.
-        
+
         @see WaitForAccept(), wxSocketBase::SetNotify,
              wxSocketBase::Notify, AcceptWith()
     */
@@ -118,10 +118,10 @@ public:
 
     /**
         Accept an incoming connection using the specified socket object.
-        
+
         @param socket
             Socket to be initialized
-        
+
         @returns Returns @true on success, or @false if an error occurred or if the
                  wait parameter was @false and there were no pending
                  connections.
@@ -133,14 +133,14 @@ public:
         Accept() or AcceptWith()
         with @e wait set to @false, to detect when an incoming connection is waiting
         to be accepted.
-        
+
         @param seconds
             Number of seconds to wait.
             If -1, it will wait for the default timeout,
             as set with SetTimeout.
         @param millisecond
             Number of milliseconds to wait.
-        
+
         @returns Returns @true if an incoming connection arrived, @false if the
                  timeout elapsed.
     */
@@ -169,7 +169,7 @@ public:
         to @b INADDR_ANY.
         On IPV4 implementations, 0.0.0.0
         On IPV6 implementations, ::
-        
+
         @returns Returns @true on success, @false if something went wrong.
     */
     virtual bool AnyAddress();
@@ -178,7 +178,7 @@ public:
         Internally, this is the same as setting the IP address
         to @b INADDR_BROADCAST.
         On IPV4 implementations, 255.255.255.255
-        
+
         @returns Returns @true on success, @false if something went wrong.
     */
     virtual bool BroadcastAddress();
@@ -205,7 +205,7 @@ public:
         Set address to localhost.
         On IPV4 implementations, 127.0.0.1
         On IPV6 implementations, ::1
-        
+
         @returns Returns @true on success, @false if something went wrong.
     */
     virtual bool LocalHost();
@@ -238,7 +238,7 @@ class wxSocketClient : public wxSocketBase
 public:
     /**
         Constructor.
-        
+
         @param flags
             Socket flags (See wxSocketBase::SetFlags)
     */
@@ -260,7 +260,7 @@ public:
         To detect this, use WaitOnConnect(),
         or catch @b wxSOCKET_CONNECTION events (for successful establishment)
         and @b wxSOCKET_LOST events (for connection failure).
-        
+
         @param address
             Address of the server.
         @param local
@@ -269,10 +269,10 @@ public:
             and then using the 2-parameter Connect method.
         @param wait
             If @true, waits for the connection to complete.
-        
+
         @returns Returns @true if the connection is established and no error
                  occurs.
-        
+
         @see WaitOnConnect(), wxSocketBase::SetNotify,
              wxSocketBase::Notify
     */
@@ -285,14 +285,14 @@ public:
         Wait until a connection request completes, or until the specified timeout
         elapses. Use this function after issuing a call
         to Connect() with @e wait set to @false.
-        
+
         @param seconds
             Number of seconds to wait.
             If -1, it will wait for the default timeout,
             as set with SetTimeout.
         @param millisecond
             Number of milliseconds to wait.
-        
+
         @returns WaitOnConnect returns @true if the connection request completes.
                  This does not necessarily mean that the connection was
                  successfully established; it might also happen that the
@@ -422,42 +422,42 @@ public:
     /**
         Functions that perform basic IO functionality.
         Close()
-        
+
         Discard()
-        
+
         Peek()
-        
+
         Read()
-        
+
         ReadMsg()
-        
+
         Unread()
-        
+
         Write()
-        
+
         WriteMsg()
         Functions that perform a timed wait on a certain IO condition.
         InterruptWait()
-        
+
         Wait()
-        
+
         WaitForLost()
-        
+
         WaitForRead()
-        
+
         WaitForWrite()
-        
+
         and also:
         wxSocketServer::WaitForAccept
-        
+
         wxSocketClient::WaitOnConnect
         Functions that allow applications to customize socket IO as needed.
         GetFlags()
-        
+
         SetFlags()
-        
+
         SetTimeout()
-        
+
         SetLocal()
     */
 
@@ -474,9 +474,9 @@ public:
 
     /**
         @ref construct() wxSocketBase
-        
+
         @ref destruct() ~wxSocketBase
-        
+
         Destroy()
     */
 
@@ -489,7 +489,7 @@ public:
         events have been processed. For the same reason, you should avoid creating
         socket objects in the stack.
         Destroy calls Close() automatically.
-        
+
         @returns Always @true.
     */
     bool Destroy();
@@ -524,7 +524,7 @@ public:
         This function returns the local address field of the socket. The local
         address field contains the complete local address of the socket (local
         address, local port, ...).
-        
+
         @returns @true if no error happened, @false otherwise.
     */
     bool GetLocal(wxSockAddress& addr) const;
@@ -533,7 +533,7 @@ public:
         This function returns the peer address field of the socket. The peer
         address field contains the complete peer host address of the socket
         (address, port, ...).
-        
+
         @returns @true if no error happened, @false otherwise.
     */
     bool GetPeer(wxSockAddress& addr) const;
@@ -541,13 +541,13 @@ public:
     /**
         Functions that allow applications to receive socket events.
         Notify()
-        
+
         SetNotify()
-        
+
         GetClientData()
-        
+
         SetClientData()
-        
+
         SetEventHandler()
     */
 
@@ -628,14 +628,14 @@ public:
         Peeking a buffer doesn't delete it from the socket input queue.
         Use LastCount() to verify the number of bytes actually peeked.
         Use Error() to determine if the operation succeeded.
-        
+
         @param buffer
             Buffer where to put peeked data.
         @param nbytes
             Number of bytes.
-        
+
         @returns Returns a reference to the current object.
-        
+
         @see Error(), LastError(), LastCount(),
              SetFlags()
     */
@@ -645,14 +645,14 @@ public:
         This function reads a buffer of @a nbytes bytes from the socket.
         Use LastCount() to verify the number of bytes actually read.
         Use Error() to determine if the operation succeeded.
-        
+
         @param buffer
             Buffer where to put read data.
         @param nbytes
             Number of bytes.
-        
+
         @returns Returns a reference to the current object.
-        
+
         @see Error(), LastError(), LastCount(),
              SetFlags()
     */
@@ -665,14 +665,14 @@ public:
         buffer to be entirely filled, unless an error occurs.
         Use LastCount() to verify the number of bytes actually read.
         Use Error() to determine if the operation succeeded.
-        
+
         @param buffer
             Buffer where to put read data.
         @param nbytes
             Size of the buffer.
-        
+
         @returns Returns a reference to the current object.
-        
+
         @see Error(), LastError(), LastCount(),
              SetFlags(), WriteMsg()
     */
@@ -682,7 +682,7 @@ public:
         This function restores the previous state of the socket, as saved
         with SaveState()
         Calls to SaveState and RestoreState can be nested.
-        
+
         @see SaveState()
     */
     void RestoreState();
@@ -694,7 +694,7 @@ public:
         Notify(), user data, as set with
         SetClientData().
         Calls to SaveState and RestoreState can be nested.
-        
+
         @see RestoreState()
     */
     void SaveState();
@@ -711,12 +711,12 @@ public:
         handler will be called for those events for which notification is
         enabled with SetNotify() and
         Notify().
-        
+
         @param handler
             Specifies the event handler you want to use.
         @param id
             The id of socket event.
-        
+
         @see SetNotify(), Notify(), wxSocketEvent, wxEvtHandler
     */
     void SetEventHandler(wxEvtHandler& handler, int id = -1);
@@ -725,36 +725,36 @@ public:
         Use SetFlags to customize IO operation for this socket.
         The @a flags parameter may be a combination of flags ORed together.
         The following flags can be used:
-        
+
         @b wxSOCKET_NONE
-        
+
         Normal functionality.
-        
+
         @b wxSOCKET_NOWAIT
-        
+
         Read/write as much data as possible and return immediately.
-        
+
         @b wxSOCKET_WAITALL
-        
+
         Wait for all required data to be read/written unless an error occurs.
-        
+
         @b wxSOCKET_BLOCK
-        
+
         Block the GUI (do not yield) while reading/writing data.
-        
+
         @b wxSOCKET_REUSEADDR
-        
+
         Allows the use of an in-use port (wxServerSocket only)
-        
+
         @b wxSOCKET_BROADCAST
-        
+
         Switches the socket to broadcast mode
-        
+
         @b wxSOCKET_NOBIND
-        
+
         Stops the socket from being bound to a specific adapter (normally used in
         conjunction with @b wxSOCKET_BROADCAST)
-        
+
         A brief overview on how to use these flags follows.
         If no flag is specified (this is the same as @b wxSOCKET_NONE),
         IO calls will return after some data has been read or written, even
@@ -826,25 +826,25 @@ public:
         SetNotify specifies which socket events are to be sent to the event handler.
         The @a flags parameter may be combination of flags ORed together. The
         following flags can be used:
-        
+
         @b wxSOCKET_INPUT_FLAG
-        
+
         to receive wxSOCKET_INPUT
-        
+
         @b wxSOCKET_OUTPUT_FLAG
-        
+
         to receive wxSOCKET_OUTPUT
-        
+
         @b wxSOCKET_CONNECTION_FLAG
-        
+
         to receive wxSOCKET_CONNECTION
-        
+
         @b wxSOCKET_LOST_FLAG
-        
+
         to receive wxSOCKET_LOST
-        
+
         For example:
-        
+
         In this example, the user will be notified about incoming socket data and
         whenever the connection is closed.
         For more information on socket events see @ref overview_wxsocketbase "wxSocket
@@ -863,24 +863,24 @@ public:
     /**
         Functions to retrieve current state and miscellaneous info.
         Error()
-        
+
         GetLocal()
-        
+
         GetPeer()
         IsConnected()
-        
+
         IsData()
-        
+
         IsDisconnected()
-        
+
         LastCount()
-        
+
         LastError()
-        
+
         IsOk()
-        
+
         SaveState()
-        
+
         RestoreState()
     */
 
@@ -890,21 +890,21 @@ public:
         in the incoming queue. This function is not affected by wxSocket flags.
         If you use LastCount(), it will always return @e nbytes.
         If you use Error(), it will always return @false.
-        
+
         @param buffer
             Buffer to be unread.
         @param nbytes
             Number of bytes.
-        
+
         @returns Returns a reference to the current object.
-        
+
         @see Error(), LastCount(), LastError()
     */
     wxSocketBase Unread(const void* buffer, wxUint32 nbytes);
 
     /**
         This function waits until any of the following conditions is @true:
-        
+
          The socket becomes readable.
          The socket becomes writable.
          An ongoing connection request has completed (wxSocketClient only)
@@ -912,17 +912,17 @@ public:
          The connection has been closed.
         Note that it is recommended to use the individual Wait functions
         to wait for the required condition, instead of this one.
-        
+
         @param seconds
             Number of seconds to wait.
             If -1, it will wait for the default timeout,
             as set with SetTimeout.
         @param millisecond
             Number of milliseconds to wait.
-        
+
         @returns Returns @true when any of the above conditions is satisfied,
                  @false if the timeout was reached.
-        
+
         @see InterruptWait(), wxSocketServer::WaitForAccept,
              WaitForLost(), WaitForRead(),
              WaitForWrite(), wxSocketClient::WaitOnConnect
@@ -932,17 +932,17 @@ public:
     /**
         This function waits until the connection is lost. This may happen if
         the peer gracefully closes the connection or if the connection breaks.
-        
+
         @param seconds
             Number of seconds to wait.
             If -1, it will wait for the default timeout,
             as set with SetTimeout.
         @param millisecond
             Number of milliseconds to wait.
-        
+
         @returns Returns @true if the connection was lost, @false if the timeout
                  was reached.
-        
+
         @see InterruptWait(), Wait()
     */
     bool Wait(long seconds = -1, long millisecond = 0);
@@ -953,16 +953,16 @@ public:
         the connection has been closed, so that a read operation will complete
         immediately without blocking (unless the @b wxSOCKET_WAITALL flag
         is set, in which case the operation might still block).
-        
+
         @param seconds
             Number of seconds to wait.
             If -1, it will wait for the default timeout,
             as set with SetTimeout.
         @param millisecond
             Number of milliseconds to wait.
-        
+
         @returns Returns @true if the socket becomes readable, @false on timeout.
-        
+
         @see InterruptWait(), Wait()
     */
     bool WaitForRead(long seconds = -1, long millisecond = 0);
@@ -973,16 +973,16 @@ public:
         connection has been closed, so that a write operation is guaranteed to
         complete immediately (unless the @b wxSOCKET_WAITALL flag is set,
         in which case the operation might still block).
-        
+
         @param seconds
             Number of seconds to wait.
             If -1, it will wait for the default timeout,
             as set with SetTimeout.
         @param millisecond
             Number of milliseconds to wait.
-        
+
         @returns Returns @true if the socket becomes writable, @false on timeout.
-        
+
         @see InterruptWait(), Wait()
     */
     bool WaitForWrite(long seconds = -1, long millisecond = 0);
@@ -991,14 +991,14 @@ public:
         This function writes a buffer of @a nbytes bytes to the socket.
         Use LastCount() to verify the number of bytes actually written.
         Use Error() to determine if the operation succeeded.
-        
+
         @param buffer
             Buffer with the data to be sent.
         @param nbytes
             Number of bytes.
-        
+
         @returns Returns a reference to the current object.
-        
+
         @see Error(), LastError(), LastCount(),
              SetFlags()
     */
@@ -1012,12 +1012,12 @@ public:
         buffer to be sent, unless an error occurs.
         Use LastCount() to verify the number of bytes actually written.
         Use Error() to determine if the operation succeeded.
-        
+
         @param buffer
             Buffer with the data to be sent.
         @param nbytes
             Number of bytes to send.
-        
+
         @returns Returns a reference to the current object.
     */
     wxSocketBase WriteMsg(const void* buffer, wxUint32 nbytes);
@@ -1041,7 +1041,7 @@ class wxDatagramSocket : public wxSocketBase
 public:
     /**
         Constructor.
-        
+
         @param flags
             Socket flags (See wxSocketBase::SetFlags)
     */
@@ -1056,7 +1056,7 @@ public:
         This function reads a buffer of @a nbytes bytes from the socket.
         Use wxSocketBase::LastCount to verify the number of bytes actually read.
         Use wxSocketBase::Error to determine if the operation succeeded.
-        
+
         @param address
             Any address - will be overwritten with the address of the peer that sent
         that data.
@@ -1064,10 +1064,10 @@ public:
             Buffer where to put read data.
         @param nbytes
             Number of bytes.
-        
+
         @returns Returns a reference to the current object, and the address of
                  the peer that sent the data on address param.
-        
+
         @see wxSocketBase::Error, wxSocketBase::LastError, wxSocketBase::LastCount,
              wxSocketBase::SetFlags,
     */
@@ -1079,14 +1079,14 @@ public:
         This function writes a buffer of @a nbytes bytes to the socket.
         Use wxSocketBase::LastCount to verify the number of bytes actually wrote.
         Use wxSocketBase::Error to determine if the operation succeeded.
-        
+
         @param address
             The address of the destination peer for this data.
         @param buffer
             Buffer where read data is.
         @param nbytes
             Number of bytes.
-        
+
         @returns Returns a reference to the current object.
     */
     wxDatagramSocket SendTo(const wxSockAddress& address,

@@ -122,7 +122,7 @@ public:
 
     /**
         Return the line number of this frame, 0 if unavailable.
-        
+
         @see GetFileName()
     */
     size_t GetLine() const;

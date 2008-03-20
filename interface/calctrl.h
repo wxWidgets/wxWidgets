@@ -278,42 +278,42 @@ public:
 
     /**
         Gets the background colour of the header part of the calendar window.
-        
+
         @see SetHeaderColours()
     */
     const wxColour GetHeaderColourBg() const;
 
     /**
         Gets the foreground colour of the header part of the calendar window.
-        
+
         @see SetHeaderColours()
     */
     const wxColour GetHeaderColourFg() const;
 
     /**
         Gets the background highlight colour.
-        
+
         @see SetHighlightColours()
     */
     const wxColour GetHighlightColourBg() const;
 
     /**
         Gets the foreground highlight colour.
-        
+
         @see SetHighlightColours()
     */
     const wxColour GetHighlightColourFg() const;
 
     /**
         Return the background colour currently used for holiday highlighting.
-        
+
         @see SetHolidayColours()
     */
     const wxColour GetHolidayColourBg() const;
 
     /**
         Return the foreground colour currently used for holiday highlighting.
-        
+
         @see SetHolidayColours()
     */
     const wxColour GetHolidayColourFg() const;

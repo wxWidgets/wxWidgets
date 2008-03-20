@@ -107,10 +107,10 @@ public:
         memory states.
         This function is only defined in debug build and doesn't exist at all if
         @c __WXDEBUG__ is not defined.
-        
+
         @param stream
             Stream on which to output dump information.
-        
+
         @remarks Currently wxWidgets does not define Dump for derived classes,
                  but programmers may wish to use it for their own
                  applications. Be sure to call the Dump member of the
@@ -127,7 +127,7 @@ public:
 
     /**
         Returns the @b m_refData pointer.
-        
+
         @see Ref(), UnRef(), wxObject::m_refData, SetRefData(),
              wxObjectRefData
     */
@@ -136,11 +136,11 @@ public:
     /**
         Determines whether this class is a subclass of (or the same class as)
         the given class.
-        
+
         @param info
             A pointer to a class information object, which may be obtained
             by using the CLASSINFO macro.
-        
+
         @returns @true if the class represented by info is the same class as this
                  one or is derived from it.
     */
@@ -156,14 +156,14 @@ public:
 
     /**
         Makes this object refer to the data in @e clone.
-        
+
         @param clone
             The object to 'clone'.
-        
+
         @remarks First this function calls UnRef() on itself to decrement
                  (and perhaps free) the data it is currently referring
                  to.
-        
+
         @see UnRef(), wxObject::m_refData, SetRefData(),
              GetRefData(), wxObjectRefData
     */
@@ -171,7 +171,7 @@ public:
 
     /**
         Sets the @b m_refData pointer.
-        
+
         @see Ref(), UnRef(), wxObject::m_refData, GetRefData(),
              wxObjectRefData
     */
@@ -181,7 +181,7 @@ public:
         Decrements the reference count in the associated data, and if it is zero,
         deletes the data.
         The @b m_refData member is set to @NULL.
-        
+
         @see Ref(), wxObject::m_refData, SetRefData(),
              GetRefData(), wxObjectRefData
     */
@@ -198,7 +198,7 @@ public:
     /**
         wxObjectRefData*  m_refData
         Pointer to an object which is the object's reference-counted data.
-        
+
         @see Ref(), UnRef(), SetRefData(),
              GetRefData(), wxObjectRefData
     */

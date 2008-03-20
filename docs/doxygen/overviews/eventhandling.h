@@ -63,9 +63,9 @@
  member function in a derived class will not have any effect. These member
  functions take an event argument, and the class of event differs according to
  the type of event and the class of the originating window. For size events,
- wxSizeEvent is used. For menu commands and most control commands 
+ wxSizeEvent is used. For menu commands and most control commands
  (such as button presses), wxCommandEvent is used. When controls get more
- complicated, then specific event classes are used, such as wxTreeEvent for 
+ complicated, then specific event classes are used, such as wxTreeEvent for
  events from wxTreeCtrl windows.
 
  As well as the event table in the implementation file, there must also be a
@@ -152,9 +152,9 @@
  @li If the object is a wxWindow, @b ProcessEvent is recursively called on the window's
      wxValidator. If this returns @true, the function exits.
  @li @b SearchEventTable is called for this event handler. If this fails, the base
-     class table is tried, and so on until no more tables exist or an appropriate 
+     class table is tried, and so on until no more tables exist or an appropriate
      function was found, in which case the function exits.
- @li The search is applied down the entire chain of event handlers (usually the chain has 
+ @li The search is applied down the entire chain of event handlers (usually the chain has
      a length of one). If this succeeds, the function exits.
  @li If the object is a wxWindow and the event is set to set to propagate (in the library only
      wxCommandEvent based events are set to propagate), @b ProcessEvent is recursively applied
@@ -232,13 +232,13 @@
 
  While generically wxEvents can be generated both by user
  actions (e.g. resize of a wxWindow) and by calls to functions
- (e.g. wxWindow::SetSize), wxWidgets controls normally send wxCommandEvent-derived 
+ (e.g. wxWindow::SetSize), wxWidgets controls normally send wxCommandEvent-derived
  events only for the user-generated events. The only @b exceptions to this rule are:
 
  @li wxNotebook::AddPage: No event-free alternatives
  @li wxNotebook::AdvanceSelection: No event-free alternatives
  @li wxNotebook::DeletePage: No event-free alternatives
- @li wxNotebook::SetSelection: Use wxNotebook::ChangeSelection instead, as 
+ @li wxNotebook::SetSelection: Use wxNotebook::ChangeSelection instead, as
      wxNotebook::SetSelection is deprecated
  @li wxTreeCtrl::Delete: No event-free alternatives
  @li wxTreeCtrl::DeleteAllItems: No event-free alternatives
@@ -255,7 +255,7 @@
 
  In fact, you don't have to derive a new class from a window class
  if you don't want to. You can derive a new class from wxEvtHandler instead,
- defining the appropriate event table, and then call wxWindow::SetEventHandler 
+ defining the appropriate event table, and then call wxWindow::SetEventHandler
  (or, preferably, wxWindow::PushEventHandler) to make this
  event handler the object that responds to events. This way, you can avoid
  a lot of class derivation, and use instances of the same event handler class (but different
@@ -461,7 +461,7 @@
  @row2col{EVT_CUSTOM_RANGE(event\, id1\, id2\, func),
           The same as EVT_CUSTOM, but responds to a range of window identifiers.}
  @row2col{EVT_COMMAND(id\, event\, func),
-          The same as EVT_CUSTOM, but expects a member function with a 
+          The same as EVT_CUSTOM, but expects a member function with a
           wxCommandEvent argument.}
  @row2col{EVT_COMMAND_RANGE(id1\, id2\, event\, func),
           The same as EVT_CUSTOM_RANGE, but

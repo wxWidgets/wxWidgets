@@ -53,7 +53,7 @@ public:
     /**
         Checks the memory blocks for errors, starting from the currently set
         checkpoint.
-        
+
         @returns Returns the number of errors, so a value of zero represents
                  success. Returns -1 if an error was detected that
                  prevents further checking.
@@ -64,7 +64,7 @@ public:
         Performs a memory dump from the currently set checkpoint, writing to the
         current debug stream. Calls the @b Dump member function for each wxObject
         derived instance.
-        
+
         @returns @true if the function succeeded, @false otherwise.
     */
     bool Dump();
@@ -73,7 +73,7 @@ public:
         Returns @true if the memory allocator checks all previous memory blocks for
         errors.
         By default, this is @false since it slows down execution considerably.
-        
+
         @see SetCheckPrevious()
     */
     bool GetCheckPrevious();
@@ -83,7 +83,7 @@ public:
         delete
         operators store or use information about memory allocation. Otherwise,
         a straight malloc and free will be performed by these operators.
-        
+
         @see SetDebugMode()
     */
     bool GetDebugMode();
@@ -96,7 +96,7 @@ public:
         application
         specify a value other than one.
         This is obsolete, replaced by wxLog functionality.
-        
+
         @see SetLevel()
     */
     int GetLevel();
@@ -104,7 +104,7 @@ public:
     /**
         Returns the output stream associated with the debug context.
         This is obsolete, replaced by wxLog functionality.
-        
+
         @see SetStream()
     */
     ostream GetStream();
@@ -121,7 +121,7 @@ public:
         Returns @true if there is a stream currently associated
         with the debug context.
         This is obsolete, replaced by wxLog functionality.
-        
+
         @see SetStream(), GetStream()
     */
     bool HasStream();
@@ -129,7 +129,7 @@ public:
     /**
         Prints a list of the classes declared in this application, giving derivation
         and whether instances of this class can be dynamically created.
-        
+
         @see PrintStatistics()
     */
     bool PrintClasses();
@@ -138,12 +138,12 @@ public:
         Performs a statistics analysis from the currently set checkpoint, writing
         to the current debug stream. The number of object and non-object
         allocations is printed, together with the total size.
-        
+
         @param detailed
             If @true, the function will also print how many
             objects of each class have been allocated, and the space taken by
             these class instances.
-        
+
         @see PrintStatistics()
     */
     bool PrintStatistics(bool detailed = true);
@@ -151,7 +151,7 @@ public:
     /**
         Tells the memory allocator to check all previous memory blocks for errors.
         By default, this is @false since it slows down execution considerably.
-        
+
         @see GetCheckPrevious()
     */
     void SetCheckPrevious(bool check);
@@ -160,7 +160,7 @@ public:
         Sets the current checkpoint: Dump and PrintStatistics operations will
         be performed from this point on. This allows you to ignore allocations
         that have been performed up to this point.
-        
+
         @param all
             If @true, the checkpoint is reset to include all
             memory allocations since the program started.
@@ -176,7 +176,7 @@ public:
         is deallocated with the same value of debug mode. Otherwise, the
         delete operator might try to look for memory information that does not
         exist.
-        
+
         @see GetDebugMode()
     */
     void SetDebugMode(bool debug);
@@ -196,7 +196,7 @@ public:
         application
         specify a value other than one.
         This is obsolete, replaced by wxLog functionality.
-        
+
         @see GetLevel()
     */
     void SetLevel(int level);
@@ -223,7 +223,7 @@ public:
         This operation flushes and deletes the existing stream (and stream buffer if
         any).
         This is obsolete, replaced by wxLog functionality.
-        
+
         @param stream
             Stream to associate with the debug context. Do not set this to @NULL.
         @param streamBuf

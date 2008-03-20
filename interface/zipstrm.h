@@ -88,9 +88,9 @@ public:
         high 16 bits are unix mode bits.
         The following other accessors access these bits:
         @ref wxArchiveEntry::isreadonly IsReadOnly/SetIsReadOnly
-        
+
         @ref wxArchiveEntry::isdir IsDir/SetIsDir
-        
+
         @ref mode() Get/SetMode
     */
     wxUint32 GetExternalAttributes();
@@ -178,7 +178,7 @@ public:
         within the archive. If the third parameter is provided, the bool pointed
         to is set to indicate whether the name looks like a directory name
         (i.e. has a trailing path separator).
-        
+
         @see @ref overview_wxarcbyname "Looking up an archive entry by name"
     */
     wxString GetInternalName();
@@ -211,7 +211,7 @@ public:
         Setting a notifier is not usually necessary. It is used to handle
         certain cases when modifying an zip in a pipeline (i.e. between
         non-seekable streams).
-        
+
         @see @ref overview_wxarcnoseek "Archives on non-seekable streams", wxZipNotifier
     */
     void SetNotifier(wxZipNotifier& notifier);

@@ -46,7 +46,7 @@ public:
     /**
         ,
                  wxPoint&
-        
+
         @param pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -54,10 +54,10 @@ public:
                 const wxValidatorvalidator = wxDefaultValidator,
                 const wxString& name = wxPanelNameStr
                            )
-        
+
         Constructor that calls Create.  You may prefer to call Create directly to check
         to see if wxMediaCtrl is available on the system.
-        
+
         parent
             parent of this control.  Must not be @NULL.
         @param id
@@ -90,35 +90,35 @@ public:
         name of the backend class to
         Create().
         The following are valid backend identifiers -
-        
+
         @b wxMEDIABACKEND_DIRECTSHOW
-        
-        
+
+
         Use ActiveMovie/DirectShow.  Uses the native ActiveMovie
         (I.E. DirectShow) control. Default backend on Windows and
         supported by nearly all Windows versions, even some
         Windows CE versions. May display a windows media player
         logo while inactive.
-        
+
         @b wxMEDIABACKEND_QUICKTIME
-        
+
         Use QuickTime.  Mac Only.
         WARNING: May not working correctly embedded in a wxNotebook.
-        
+
         @b wxMEDIABACKEND_GSTREAMER
-        
+
         Use GStreamer.  Unix Only. Requires GStreamer 0.8 along
         with at the very least the xvimagesink, xoverlay, and
         gst-play modules of gstreamer to function. You need the correct
         modules to play the relavant files, for example the mad module
         to play mp3s, etc.
-        
+
         @b wxMEDIABACKEND_WMP10
-        
+
         Uses Windows Media Player 10 (Windows only) - works on mobile
         machines with Windows Media Player 10 and desktop machines with
         either Windows Media Player 9 or 10
-        
+
         Note that other backends such as wxMEDIABACKEND_MCI can now be
         found at wxCode.
     */
@@ -127,7 +127,7 @@ public:
     /**
         ,
                  wxPoint&
-        
+
         @param pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -135,13 +135,13 @@ public:
                 const wxValidatorvalidator = wxDefaultValidator,
                 const wxString& name = wxPanelNameStr
                            )
-        
+
         Creates this control.  Returns @false if it can't load the movie located at
         fileName or it cannot load one of its native backends.
-        
+
         If you specify a file to open via fileName and you don't specify a backend to
         use, wxMediaCtrl tries each of its backends until one that can render the path referred to by fileName can be found.
-        
+
         parent
             parent of this control.  Must not be @NULL.
         @param id
@@ -196,17 +196,17 @@ public:
 
     /**
         Obtains the state the playback of the media is in -
-        
+
         @b wxMEDIASTATE_STOPPED
-        
+
         The movie has stopped.
-        
+
         @b wxMEDIASTATE_PAUSED
-        
+
         The movie is paused.
-        
+
         @b wxMEDIASTATE_PLAYING
-        
+
         The movie is currently playing.
     */
     wxMediaCtrlState GetState();
@@ -246,7 +246,7 @@ public:
         can choose to veto the event, preventing the stream from actually
         stopping.
         Example:
-        
+
         When wxMediaCtrl stops, either by the EVT_MEDIA_STOP not being
         vetoed, or by manually calling
         Stop(), where it actually
@@ -341,24 +341,24 @@ public:
         calling the function with default parameters tells wxMediaCtrl to use the
         default controls provided by the toolkit. The function takes a
         @c wxMediaCtrlPlayerControls enumeration as follows:
-        
+
         @b wxMEDIACTRLPLAYERCONTROLS_NONE
-        
+
         No controls. return wxMediaCtrl to it's default state.
-        
+
         @b wxMEDIACTRLPLAYERCONTROLS_STEP
-        
+
         Step controls like fastfoward, step one frame etc.
-        
+
         @b wxMEDIACTRLPLAYERCONTROLS_VOLUME
-        
+
         Volume controls like the speaker icon, volume slider, etc.
-        
+
         @b wxMEDIACTRLPLAYERCONTROLS_DEFAULT
-        
+
         Default controls for the toolkit. Currently a typedef for
         wxMEDIACTRLPLAYERCONTROLS_STEP and wxMEDIACTRLPLAYERCONTROLS_VOLUME.
-        
+
         For more see @ref overview_playercontrolswxmediactrl "Player controls".
         Currently
         only implemented on the QuickTime and DirectShow backends. The function

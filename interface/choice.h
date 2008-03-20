@@ -37,7 +37,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a choice.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -58,7 +58,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxChoice();
@@ -104,7 +104,7 @@ public:
 
     /**
         Gets the number of columns in this choice item.
-        
+
         @remarks This is implemented for Motif only and always returns 1 for the
                  other platforms.
     */
@@ -117,7 +117,7 @@ public:
         That is, while the dropdown list is shown, it returns the currently selected
         item in it. When it is not shown, its result is the same as for the other
         function.
-        
+
         @wxsince{2.6.2} (before this version
         wxControlWithItems::GetSelection itself behaved like
         this).
@@ -126,7 +126,7 @@ public:
 
     /**
         Sets the number of columns in this choice item.
-        
+
         @param n
             Number of columns.
     */

@@ -67,7 +67,7 @@ class wxDataViewEvent : public wxNotifyEvent
 public:
     //@{
     /**
-        
+
     */
     wxDataViewEvent(wxEventType commandType = wxEVT_NULL,
                     int winid = 0);
@@ -107,7 +107,7 @@ public:
     const wxVariant GetValue() const;
 
     /**
-        
+
     */
     void SetColumn(int col);
 
@@ -117,12 +117,12 @@ public:
     void SetDataViewColumn(wxDataViewColumn* col);
 
     /**
-        
+
     */
     void SetModel(wxDataViewModel* model);
 
     /**
-        
+
     */
     void SetValue(const wxVariant& value);
 };
@@ -147,7 +147,7 @@ class wxDataViewIconTextRenderer : public wxDataViewRenderer
 {
 public:
     /**
-        
+
     */
     wxDataViewIconTextRenderer(const wxString& varianttype = "wxDataViewIconText",
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
@@ -584,7 +584,7 @@ public:
     */
     virtual bool Activate( wxRect cell,
                            wxDataViewModel* model,
-                           const wxDataViewItem & item, 
+                           const wxDataViewItem & item,
                            unsigned int col );
 
     /**
@@ -626,7 +626,7 @@ public:
     virtual bool LeftClick( wxPoint cursor,
                             wxRect cell,
                             wxDataViewModel * model,
-                            const wxDataViewItem & item, 
+                            const wxDataViewItem & item,
                             unsigned int col );
 
     /**
@@ -651,7 +651,7 @@ public:
     virtual bool RightClick(wxPoint cursor,
                             wxRect cell,
                             wxDataViewModel* model,
-                            const wxDataViewItem & item, 
+                            const wxDataViewItem & item,
                             unsigned int col);
 
     /**
@@ -659,7 +659,7 @@ public:
     */
     virtual bool StartDrag(wxPoint cursor, wxRect cell,
                            wxDataViewModel* model,
-                           const wxDataViewItem & item, 
+                           const wxDataViewItem & item,
                            unsigned int col);
 };
 
@@ -678,7 +678,7 @@ class wxDataViewBitmapRenderer : public wxDataViewRenderer
 {
 public:
     /**
-        
+
     */
     wxDataViewBitmapRenderer(const wxString& varianttype = "wxBitmap",
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
@@ -756,7 +756,7 @@ class wxDataViewItem
 public:
     //@{
     /**
-        
+
     */
     wxDataViewItem(void* id = NULL);
     wxDataViewItem(const wxDataViewItem& item);
@@ -1344,7 +1344,7 @@ class wxDataViewTextRenderer : public wxDataViewRenderer
 {
 public:
     /**
-        
+
     */
     wxDataViewTextRenderer(const wxString& varianttype = "string",
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
@@ -1365,7 +1365,7 @@ class wxDataViewProgressRenderer : public wxDataViewRenderer
 {
 public:
     /**
-        
+
     */
     wxDataViewProgressRenderer(const wxString& label = wxEmptyString,
                                const wxString& varianttype = "long",
@@ -1412,7 +1412,7 @@ class wxDataViewToggleRenderer : public wxDataViewRenderer
 {
 public:
     /**
-        
+
     */
     wxDataViewToggleRenderer(const wxString& varianttype = "bool",
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
@@ -1456,7 +1456,7 @@ public:
     ~wxDataViewTreeCtrl();
 
     /**
-        
+
     */
     wxDataViewItem AppendContainer(const wxDataViewItem& parent,
                                    const wxString& text,
@@ -1465,7 +1465,7 @@ public:
                                    wxClientData* data = NULL);
 
     /**
-        
+
     */
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
@@ -1769,7 +1769,7 @@ class wxDataViewDateRenderer : public wxDataViewRenderer
 {
 public:
     /**
-        
+
     */
     wxDataViewDateRenderer(const wxString& varianttype = "datetime",
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE);
@@ -1795,7 +1795,7 @@ class wxDataViewTextRendererAttr : public wxDataViewTextRenderer
 {
 public:
     /**
-        
+
     */
     wxDataViewTextRendererAttr(const wxString& varianttype = "string",
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,

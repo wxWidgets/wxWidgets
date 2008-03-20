@@ -192,15 +192,15 @@ public:
 
     /**
         wxArray::Add
-        
+
         wxArray::AddAt
-        
+
         wxArray::Insert
-        
+
         wxArray::SetCount
-        
+
         WX_APPEND_ARRAY()
-        
+
         WX_PREPEND_ARRAY()
     */
 
@@ -230,9 +230,9 @@ public:
         never use wxBaseArray anyhow it shouldn't be a problem) and that you should not
         derive your own classes from the array classes.
         @ref wxArray::ctordef "wxArray default constructor"
-        
+
         @ref wxArray::ctorcopy "wxArray copy constructors and assignment operators"
-        
+
         @ref wxArray::dtor ~wxArray
     */
 
@@ -349,25 +349,25 @@ public:
         WX_DECLARE_OBJARRAY macros and must be fully declared before you use
         WX_DEFINE_OBJARRAY macro.
         WX_DEFINE_ARRAY()
-        
+
         WX_DEFINE_EXPORTED_ARRAY()
-        
+
         WX_DEFINE_USER_EXPORTED_ARRAY()
-        
+
         WX_DEFINE_SORTED_ARRAY()
-        
+
         WX_DEFINE_SORTED_EXPORTED_ARRAY()
-        
+
         WX_DEFINE_SORTED_USER_EXPORTED_ARRAY()
-        
+
         WX_DECLARE_EXPORTED_OBJARRAY()
-        
+
         WX_DECLARE_USER_EXPORTED_OBJARRAY()
-        
+
         WX_DEFINE_OBJARRAY()
-        
+
         WX_DEFINE_EXPORTED_OBJARRAY()
-        
+
         WX_DEFINE_USER_EXPORTED_OBJARRAY()
         To slightly complicate the matters even further, the operator - defined by
         default for the array iterators by these macros only makes sense if the array
@@ -375,33 +375,33 @@ public:
         provokes warnings from some compilers and to avoid them you should use the
         @c _PTR versions of the macros above. For example, to define an array of
         pointers to @c double you should use:
-        
+
         Note that the above macros are generally only useful for
         wxObject types.  There are separate macros for declaring an array of a simple
         type,
         such as an int.
         The following simple types are supported:
-        
+
         int
-        
+
         long
-        
+
         size_t
-        
+
         double
         To create an array of a simple type, simply append the type you want in CAPS to
         the array definition.
         For example, for an integer array, you'd use one of the following variants:
         WX_DEFINE_ARRAY_INT()
-        
+
         WX_DEFINE_EXPORTED_ARRAY_INT()
-        
+
         WX_DEFINE_USER_EXPORTED_ARRAY_INT()
-        
+
         WX_DEFINE_SORTED_ARRAY_INT()
-        
+
         WX_DEFINE_SORTED_EXPORTED_ARRAY_INT()
-        
+
         WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_INT()
     */
 
@@ -420,7 +420,7 @@ public:
         going to put in the array and will prevent the array code from reallocating the
         memory more times than needed.
         wxArray::Alloc
-        
+
         wxArray::Shrink
     */
 
@@ -430,11 +430,11 @@ public:
         retrieve them - possibly using just the C array indexing [] operator which
         does exactly the same as wxArray::Item method.
         wxArray::GetCount
-        
+
         wxArray::IsEmpty
-        
+
         wxArray::Item
-        
+
         wxArray::Last
     */
 
@@ -447,7 +447,7 @@ public:
         Detach() if you don't want this to happen. On the
         other hand, when an object is removed from a wxArray nothing happens - you
         should delete it manually if required:
-        
+
         See also WX_CLEAR_ARRAY() macro which deletes all
         elements of a wxArray (supposed to contain pointers).
     */
@@ -459,7 +459,7 @@ public:
         Detach() if you don't want this to happen. On
         the other hand, when an object is removed from a wxArray nothing happens -
         you should delete it manually if required:
-        
+
         See also WX_CLEAR_ARRAY() macro which deletes all
         elements of a wxArray (supposed to contain pointers).
     */
@@ -467,22 +467,22 @@ public:
 
     /**
         WX_CLEAR_ARRAY()
-        
+
         wxArray::Empty
-        
+
         wxArray::Clear
-        
+
         wxArray::RemoveAt
-        
+
         wxArray::Remove
     */
 
 
     /**
         wxArray::Index
-        
+
         wxArray::IndexForInsert
-        
+
         wxArray::Sort
     */
 
@@ -493,7 +493,7 @@ public:
         @e count. If the array has already @a count or more items, nothing is
         done. Otherwise, @c count - GetCount() elements are added and initialized to
         the value @e defval.
-        
+
         @see wxArray::GetCount
     */
     void SetCount(size_t count);
@@ -508,7 +508,7 @@ public:
 
     /**
         The notation CMPFUNCT should be read as if we had the following declaration:
-        
+
         where @e T is the type of the array elements. I.e. it is a function returning
         @e int which is passed two arguments of type @e T *.
         Sorts the array using the specified compare function: this function should
@@ -538,7 +538,7 @@ public:
         a DLL under Windows and array needs to be visible outside the DLL.  The third is
         needed for exporting an array from a user DLL.
         Example:
-        
+
         You must use WX_DEFINE_OBJARRAY() macro to define
         the array class - otherwise you would get link errors.
     */
@@ -554,7 +554,7 @@ public:
         a DLL under Windows and array needs to be visible outside the DLL.  The third is
         needed for exporting an array from a user DLL.
         Example:
-        
+
         Note that wxWidgets predefines the following standard array classes: @b
         wxArrayInt,
         @b wxArrayLong, @b wxArrayShort, @b wxArrayDouble,  @b wxArrayPtrVoid.
@@ -589,7 +589,7 @@ public:
         a DLL under Windows and array needs to be visible outside the DLL.  The third is
         needed for exporting an array from a user DLL.
         Example:
-        
+
         You will have to initialize the objects of this class by passing a comparison
         function to the array object constructor like this:
     */

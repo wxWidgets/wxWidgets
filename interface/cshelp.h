@@ -84,7 +84,7 @@ public:
         the latter if the help doesn't depend on the position.
         Returns @true if help was shown, or @false if no help was available for this
         window.
-        
+
         @param window
             Window to show help text for.
         @param point
@@ -240,7 +240,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a context help button.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id

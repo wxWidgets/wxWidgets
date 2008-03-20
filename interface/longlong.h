@@ -133,7 +133,7 @@ public:
 
     /**
         Assignment operator from unsigned long long. The sign bit will be copied too.
-        
+
         @wxsince{2.7.0}
     */
     wxLongLong& operator operator=(const wxULongLong& ll);

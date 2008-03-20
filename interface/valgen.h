@@ -39,7 +39,7 @@ public:
     /**
         Constructor taking a wxDateTime pointer. This will be
         used for wxDatePickerCtrl.
-        
+
         @param validator
             Validator to copy.
         @param valPtr

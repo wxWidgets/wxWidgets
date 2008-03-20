@@ -55,7 +55,7 @@ public:
 
     /**
         Gets the state of the toggle button.
-        
+
         @returns Returns @true if it is pressed, @false otherwise.
     */
     bool GetValue() const;
@@ -63,7 +63,7 @@ public:
     /**
         Sets the toggle button to the given state. This does not cause a
         @c EVT_TOGGLEBUTTON event to be emitted.
-        
+
         @param state
             If @true, the button is pressed.
     */
@@ -102,7 +102,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a toggle button.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -121,7 +121,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxToggleButton();
@@ -153,7 +153,7 @@ public:
 
     /**
         Gets the state of the toggle button.
-        
+
         @returns Returns @true if it is pressed, @false otherwise.
     */
     bool GetValue() const;
@@ -161,7 +161,7 @@ public:
     /**
         Sets the toggle button to the given state. This does not cause a
         @c EVT_TOGGLEBUTTON event to be emitted.
-        
+
         @param state
             If @true, the button is pressed.
     */

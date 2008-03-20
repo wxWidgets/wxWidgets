@@ -39,7 +39,7 @@ public:
     //@{
     /**
         Constructor, creating the window.
-        
+
         @param parent
             The window parent, usually a frame.
         @param id
@@ -52,7 +52,7 @@ public:
         item,
             allowing the application user to set Motif resource values for
             individual windows.
-        
+
         @see Create()
     */
     wxStatusBar();
@@ -76,14 +76,14 @@ public:
 
     /**
         Returns the size and position of a field's internal bounding rectangle.
-        
+
         @param i
             The field in question.
         @param rect
             The rectangle values are placed in this variable.
-        
+
         @returns @true if the field index is valid, @false otherwise.
-        
+
         @see wxRect
     */
     virtual bool GetFieldRect(int i, wxRect& rect) const;
@@ -95,13 +95,13 @@ public:
 
     /**
         Returns the string associated with a status bar field.
-        
+
         @param i
             The number of the status field to retrieve, starting from zero.
-        
+
         @returns The status field string if the field is valid, otherwise the
                  empty string.
-        
+
         @see SetStatusText()
     */
     virtual wxString GetStatusText(int i = 0) const;
@@ -109,7 +109,7 @@ public:
     /**
         Sets the field text to the top of the stack, and pops the stack of saved
         strings.
-        
+
         @see PushStatusText()
     */
     void PopStatusText(int field = 0);
@@ -122,7 +122,7 @@ public:
 
     /**
         Sets the number of fields, and optionally the field widths.
-        
+
         @param number
             The number of fields.
         @param widths
@@ -142,7 +142,7 @@ public:
         Sets the styles of the fields in the status line which can make fields appear
         flat
         or raised instead of the standard sunken 3D border.
-        
+
         @param n
             The number of fields in the status bar. Must be equal to the
             number passed to SetFieldsCount the last
@@ -150,52 +150,52 @@ public:
         @param styles
             Contains an array of n integers with the styles for each field. There
             are three possible styles:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxSB_NORMAL
-        
-        
-        
-        
+
+
+
+
             (default) The field appears sunken with a standard 3D border.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxSB_FLAT
-        
-        
-        
-        
+
+
+
+
             No border is painted around the field so that it appears flat.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxSB_RAISED
-        
-        
-        
-        
+
+
+
+
             A raised 3D border is painted around the field.
     */
     virtual void SetStatusStyles(int n, int* styles);
 
     /**
         Sets the text for one field.
-        
+
         @param text
             The text to be set. Use an empty string ("") to clear the field.
         @param i
             The field to set, starting from zero.
-        
+
         @see GetStatusText(), wxFrame::SetStatusText
     */
     virtual void SetStatusText(const wxString& text, int i = 0);
@@ -211,7 +211,7 @@ public:
         For example, to create one fixed width field of width 100 in the right part of
         the status bar and two more fields which get 66% and 33% of the remaining
         space correspondingly, you should use an array containing -2, -1 and 100.
-        
+
         @param n
             The number of fields in the status bar. Must be equal to the
             number passed to SetFieldsCount the last
@@ -220,12 +220,12 @@ public:
             Contains an array of n integers, each of which is
             either an absolute status field width in pixels if positive or indicates a
             variable width field if negative.
-        
+
         @remarks The widths of the variable fields are calculated from the total
                  width of all fields, minus the sum of widths of the
                  non-variable fields, divided by the number of variable
                  fields.
-        
+
         @see SetFieldsCount(), wxFrame::SetStatusWidths
     */
     virtual void SetStatusWidths(int n, int* widths);

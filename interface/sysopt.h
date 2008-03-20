@@ -35,7 +35,7 @@ public:
     /**
         Gets an option. The function is case-insensitive to @e name.
         Returns empty string if the option hasn't been set.
-        
+
         @see SetOption(), GetOptionInt(),
              HasOption()
     */
@@ -44,7 +44,7 @@ public:
     /**
         Gets an option as an integer. The function is case-insensitive to @e name.
         If the option hasn't been set, this function returns 0.
-        
+
         @see SetOption(), GetOption(),
              HasOption()
     */
@@ -53,7 +53,7 @@ public:
     /**
         Returns @true if the given option is present. The function is
         case-insensitive to @e name.
-        
+
         @see SetOption(), GetOption(),
              GetOptionInt()
     */

@@ -47,11 +47,11 @@ public:
         If the image file contains more than one image and the image handler is capable
         of retrieving these individually, this function will return the number of
         available images.
-        
+
         @param stream
             Opened input stream for reading image data. Currently, the stream must
         support seeking.
-        
+
         @returns Number of available images. For most image handlers, this is 1
                  (exceptions are TIFF and ICO formats).
     */
@@ -78,7 +78,7 @@ public:
         more than one image and the image handler is capable of retrieving these
         individually, @e index
         indicates which image to read from the stream.
-        
+
         @param image
             The image object which is to be affected by this operation.
         @param stream
@@ -88,9 +88,9 @@ public:
         wxLogMessages.
         @param index
             The index of the image in the file (starting from zero).
-        
+
         @returns @true if the operation succeeded, @false otherwise.
-        
+
         @see wxImage::LoadFile, wxImage::SaveFile, SaveFile()
     */
     bool LoadFile(wxImage* image, wxInputStream& stream,
@@ -98,21 +98,21 @@ public:
 
     /**
         Saves a image in the output stream.
-        
+
         @param image
             The image object which is to be affected by this operation.
         @param stream
             Opened output stream for writing the data.
-        
+
         @returns @true if the operation succeeded, @false otherwise.
-        
+
         @see wxImage::LoadFile, wxImage::SaveFile, LoadFile()
     */
     bool SaveFile(wxImage* image, wxOutputStream& stream);
 
     /**
         Sets the handler extension.
-        
+
         @param extension
             Handler extension.
     */
@@ -120,7 +120,7 @@ public:
 
     /**
         Sets the handler MIME type.
-        
+
         @param mimename
             Handler MIME type.
     */
@@ -128,7 +128,7 @@ public:
 
     /**
         Sets the handler name.
-        
+
         @param name
             Handler name.
     */
@@ -169,7 +169,7 @@ public:
     //@{
     /**
         Creates an image from XPM data.
-        
+
         @param width
             Specifies the width of the image.
         @param height
@@ -181,149 +181,149 @@ public:
         must support seeking.
         @param type
             May be one of the following:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxBITMAP_TYPE_BMP
-        
-        
-        
-        
+
+
+
+
             Load a Windows bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_GIF
-        
-        
-        
-        
+
+
+
+
             Load a GIF bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_JPEG
-        
-        
-        
-        
+
+
+
+
             Load a JPEG bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PNG
-        
-        
-        
-        
+
+
+
+
             Load a PNG bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PCX
-        
-        
-        
-        
+
+
+
+
             Load a PCX bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PNM
-        
-        
-        
-        
+
+
+
+
             Load a PNM bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_TIF
-        
-        
-        
-        
+
+
+
+
             Load a TIFF bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_TGA
-        
-        
-        
-        
+
+
+
+
             Load a TGA bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_XPM
-        
-        
-        
-        
+
+
+
+
             Load a XPM bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ICO
-        
-        
-        
-        
+
+
+
+
             Load a Windows icon file (ICO).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_CUR
-        
-        
-        
-        
+
+
+
+
             Load a Windows cursor file (CUR).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ANI
-        
-        
-        
-        
+
+
+
+
             Load a Windows animated cursor file (ANI).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ANY
-        
-        
-        
-        
+
+
+
+
             Will try to autodetect the format.
         @param mimetype
             MIME type string (for example 'image/jpeg')
@@ -338,10 +338,10 @@ public:
         ICO handler.
         @param xpmData
             A pointer to XPM image data.
-        
+
         @remarks Depending on how wxWidgets has been configured, not all formats
                  may be available.
-        
+
         @see LoadFile()
     */
     wxImage();
@@ -381,7 +381,7 @@ public:
         pixel
         @e blurRadius. This should not be used when using a single mask colour
         for transparency.
-        
+
         @see @ref horzblur() BlurHorizontal, @ref vertblur() BlurVertical
     */
     wxImage Blur(int blurRadius);
@@ -389,7 +389,7 @@ public:
     /**
         Blurs the image in the horizontal direction only. This should not be used
         when using a single mask colour for transparency.
-        
+
         @see Blur(), @ref vertblur() BlurVertical
     */
     wxImage BlurHorizontal(int blurRadius);
@@ -397,7 +397,7 @@ public:
     /**
         Blurs the image in the vertical direction only. This should not be used
         when using a single mask colour for transparency.
-        
+
         @see Blur(), @ref horzblur() BlurHorizontal
     */
     wxImage BlurVertical(int blurRadius);
@@ -412,7 +412,7 @@ public:
         Computes the histogram of the image. @a histogram is a reference to
         wxImageHistogram object. wxImageHistogram is a specialization of
         wxHashMap "template" and is defined as follows:
-        
+
         @returns Returns number of colours in the histogram.
     */
     unsigned long ComputeHistogram(wxImageHistogram& histogram) const;
@@ -424,7 +424,7 @@ public:
         FindFirstUnusedColour().
         If the image image doesn't have alpha channel,
         ConvertAlphaToMask does nothing.
-        
+
         @returns @false if FindFirstUnusedColour returns @false, @true otherwise.
     */
     bool ConvertAlphaToMask(unsigned char threshold = 128);
@@ -461,12 +461,12 @@ public:
         Creates a fresh image.  If @a clear is @true, the new image will be initialized
         to black.
         Otherwise, the image data will be uninitialized.
-        
+
         @param width
             The width of the image in pixels.
         @param height
             The height of the image in pixels.
-        
+
         @returns @true if the call succeeded, @false otherwise.
     */
     bool Create(int width, int height, bool clear = true);
@@ -482,7 +482,7 @@ public:
         @param startR,startG,startB
             Initial values of the colour. Returned colour
             will have RGB values equal to or greater than these.
-        
+
         @returns Returns @false if there is no unused colour left, @true on success.
     */
     bool FindFirstUnusedColour(unsigned char* r, unsigned char* g,
@@ -494,7 +494,7 @@ public:
     //@{
     /**
         Finds the handler associated with the given MIME type.
-        
+
         @param name
             The handler name.
         @param extension
@@ -503,9 +503,9 @@ public:
             The image type, such as wxBITMAP_TYPE_BMP.
         @param mimetype
             MIME type.
-        
+
         @returns A pointer to the handler if found, @NULL otherwise.
-        
+
         @see wxImageHandler
     */
     static wxImageHandler* FindHandler(const wxString& name);
@@ -551,7 +551,7 @@ public:
 
     /**
         Returns the static list of image format handlers.
-        
+
         @see wxImageHandler
     */
     static wxList GetHandlers();
@@ -566,7 +566,7 @@ public:
         If the image file contains more than one image and the image handler is capable
         of retrieving these individually, this function will return the number of
         available images.
-        
+
         @param name
             Name of the file to query.
         @param stream
@@ -574,140 +574,140 @@ public:
         seeking.
         @param type
             May be one of the following:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxBITMAP_TYPE_BMP
-        
-        
-        
-        
+
+
+
+
             Load a Windows bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_GIF
-        
-        
-        
-        
+
+
+
+
             Load a GIF bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_JPEG
-        
-        
-        
-        
+
+
+
+
             Load a JPEG bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PNG
-        
-        
-        
-        
+
+
+
+
             Load a PNG bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PCX
-        
-        
-        
-        
+
+
+
+
             Load a PCX bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PNM
-        
-        
-        
-        
+
+
+
+
             Load a PNM bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_TIF
-        
-        
-        
-        
+
+
+
+
             Load a TIFF bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_XPM
-        
-        
-        
-        
+
+
+
+
             Load a XPM bitmap file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ICO
-        
-        
-        
-        
+
+
+
+
             Load a Windows icon file (ICO).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_CUR
-        
-        
-        
-        
+
+
+
+
             Load a Windows cursor file (CUR).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ANI
-        
-        
-        
-        
+
+
+
+
             Load a Windows animated cursor file (ANI).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ANY
-        
-        
-        
-        
+
+
+
+
             Will try to autodetect the format.
-        
+
         @returns Number of available images. For most image handlers, this is 1
                  (exceptions are TIFF and ICO formats).
     */
@@ -721,10 +721,10 @@ public:
         Iterates all registered wxImageHandler objects, and returns a string containing
         file extension masks
         suitable for passing to file open/save dialog boxes.
-        
+
         @returns The format of the returned string is
                  "(*.ext1;*.ext2)|*.ext1;*.ext2".
-        
+
         @see wxImageHandler
     */
     static wxString GetImageExtWildcard();
@@ -748,7 +748,7 @@ public:
         Gets a user-defined option. The function is case-insensitive to @e name.
         For example, when saving as a JPEG file, the option @b quality is
         used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
-        
+
         @see SetOption(), GetOptionInt(), HasOption()
     */
     wxString GetOption(const wxString& name) const;
@@ -760,29 +760,29 @@ public:
         HasOption() is 0 is a possibly valid value
         for the option.
         Options for wxPNGHandler
-        
+
         wxIMAGE_OPTION_PNG_FORMAT
-        
+
         Format for saving a PNG file.
-        
+
         wxIMAGE_OPTION_PNG_BITDEPTH
-        
+
         Bit depth for every channel (R/G/B/A).
-        
+
         Supported values for wxIMAGE_OPTION_PNG_FORMAT:
-        
+
         wxPNG_TYPE_COLOUR
-        
+
         Stores RGB image.
-        
+
         wxPNG_TYPE_GREY
-        
+
         Stores grey image, converts from RGB.
-        
+
         wxPNG_TYPE_GREY_RED
-        
+
         Stores grey image, uses red value as grey.
-        
+
         @see SetOption(), GetOption()
     */
     int GetOptionInt(const wxString& name) const;
@@ -815,7 +815,7 @@ public:
 
     /**
         Gets the width of the image in pixels.
-        
+
         @see GetHeight()
     */
     int GetWidth() const;
@@ -836,7 +836,7 @@ public:
 
     /**
         Returns @true if this image has alpha channel, @false otherwise.
-        
+
         @see GetAlpha(), SetAlpha()
     */
     bool HasAlpha() const;
@@ -849,7 +849,7 @@ public:
     /**
         Returns @true if the given option is present. The function is case-insensitive
         to @e name.
-        
+
         @see SetOption(), GetOption(), GetOptionInt()
     */
     bool HasOption(const wxString& name) const;
@@ -867,18 +867,18 @@ public:
         for the time being, which is used by wxBitmap.
         This function is called by wxWidgets on startup, and shouldn't be called by
         the user.
-        
+
         @see wxImageHandler, wxInitAllImageHandlers(), wxQuantize
     */
     static void InitStandardHandlers();
 
     /**
         Adds a handler at the start of the static list of format handlers.
-        
+
         @param handler
             A new image format handler object. There is usually only one instance
             of a given handler class in an application session.
-        
+
         @see wxImageHandler
     */
     static void InsertHandler(wxImageHandler* handler);
@@ -898,7 +898,7 @@ public:
     //@{
     /**
         Loads an image from an input stream.
-        
+
         @param name
             Name of the file from which to load the image.
         @param stream
@@ -906,138 +906,138 @@ public:
         must support seeking.
         @param type
             One of the following values:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxBITMAP_TYPE_BMP
-        
-        
-        
-        
+
+
+
+
             Load a Windows image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_GIF
-        
-        
-        
-        
+
+
+
+
             Load a GIF image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_JPEG
-        
-        
-        
-        
+
+
+
+
             Load a JPEG image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PCX
-        
-        
-        
-        
+
+
+
+
             Load a PCX image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PNG
-        
-        
-        
-        
+
+
+
+
             Load a PNG image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PNM
-        
-        
-        
-        
+
+
+
+
             Load a PNM image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_TIF
-        
-        
-        
-        
+
+
+
+
             Load a TIFF image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_XPM
-        
-        
-        
-        
+
+
+
+
             Load a XPM image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ICO
-        
-        
-        
-        
+
+
+
+
             Load a Windows icon file (ICO).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_CUR
-        
-        
-        
-        
+
+
+
+
             Load a Windows cursor file (CUR).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ANI
-        
-        
-        
-        
+
+
+
+
             Load a Windows animated cursor file (ANI).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ANY
-        
-        
-        
-        
+
+
+
+
             Will try to autodetect the format.
         @param mimetype
             MIME type string (for example 'image/jpeg')
@@ -1050,14 +1050,14 @@ public:
         by
             the GIF and TIFF handler and as the largest and most colourful one by the
         ICO handler.
-        
+
         @returns @true if the operation succeeded, @false otherwise. If the
                  optional index parameter is out of range, @false is
                  returned and a call to wxLogError() takes place.
-        
+
         @remarks Depending on how wxWidgets has been configured, not all formats
                  may be available.
-        
+
         @see SaveFile()
     */
     bool LoadFile(const wxString& name,
@@ -1101,12 +1101,12 @@ public:
     /**
         Finds the handler with the given name, and removes it. The handler
         is not deleted.
-        
+
         @param name
             The handler name.
-        
+
         @returns @true if the handler was found and removed, @false otherwise.
-        
+
         @see wxImageHandler
     */
     static bool RemoveHandler(const wxString& name);
@@ -1124,7 +1124,7 @@ public:
         the image will have the given width and height.
         For a description of the @a quality parameter, see the Scale() function.
         Returns the (modified) image itself.
-        
+
         @see Scale()
     */
     wxImage Rescale(int width, int height,
@@ -1139,7 +1139,7 @@ public:
         then use either the  current mask colour if set or find, use, and set a
         suitable mask colour for any newly exposed areas.
         Returns the (modified) image itself.
-        
+
         @see Size()
     */
     wxImage Resize(const wxSize& size, const wxPoint pos,
@@ -1174,123 +1174,123 @@ public:
     //@{
     /**
         Saves an image in the given stream.
-        
+
         @param name
             Name of the file to save the image to.
         @param stream
             Opened output stream to save the image to.
         @param type
             Currently these types can be used:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxBITMAP_TYPE_BMP
-        
-        
-        
-        
+
+
+
+
             Save a BMP image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_JPEG
-        
-        
-        
-        
+
+
+
+
             Save a JPEG image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PNG
-        
-        
-        
-        
+
+
+
+
             Save a PNG image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PCX
-        
-        
-        
-        
+
+
+
+
             Save a PCX image file (tries to save as 8-bit if possible, falls back to
         24-bit otherwise).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_PNM
-        
-        
-        
-        
+
+
+
+
             Save a PNM image file (as raw RGB always).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_TIFF
-        
-        
-        
-        
+
+
+
+
             Save a TIFF image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_XPM
-        
-        
-        
-        
+
+
+
+
             Save a XPM image file.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_ICO
-        
-        
-        
-        
+
+
+
+
             Save a Windows icon file (ICO) (the size may be up to 255 wide by 127 high.
         A single image is saved in 8 colors at the size supplied).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBITMAP_TYPE_CUR
-        
-        
-        
-        
+
+
+
+
             Save a Windows cursor file (CUR).
         @param mimetype
             MIME type.
-        
+
         @returns @true if the operation succeeded, @false otherwise.
-        
+
         @remarks Depending on how wxWidgets has been configured, not all formats
                  may be available.
-        
+
         @see LoadFile()
     */
     bool SaveFile(const wxString& name, int type) const;
@@ -1320,35 +1320,35 @@ public:
         image and will therefore remove the mask partially. Using the alpha channel
         will work.
         Example:
-        
+
         @param quality
             Determines what method to use for resampling the image.  Can be one of the
         following:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxIMAGE_QUALITY_NORMAL
-        
-        
-        
-        
+
+
+
+
             Uses the normal default scaling method of pixel replication
-        
-        
-        
-        
-        
+
+
+
+
+
             wxIMAGE_QUALITY_HIGH
-        
-        
-        
-        
+
+
+
+
             Uses bicubic and box averaging resampling methods for upsampling and
         downsampling respectively
-        
+
         @see Rescale()
     */
     wxImage Scale(int width, int height,
@@ -1396,7 +1396,7 @@ public:
         image.
         @param mr,mg,mb
             RGB value of pixels in mask that will be used to create the mask.
-        
+
         @returns Returns @false if mask does not have same dimensions as the image
                  or if there is no unused colour left. Returns @true if
                  the mask was successfully applied.
@@ -1410,7 +1410,7 @@ public:
         Sets a user-defined option. The function is case-insensitive to @e name.
         For example, when saving as a JPEG file, the option @b quality is
         used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
-        
+
         @see GetOption(), GetOptionInt(), HasOption()
     */
     void SetOption(const wxString& name, const wxString& value);
@@ -1444,7 +1444,7 @@ public:
         transparent by filling them with the image mask colour (which will be allocated
         automatically if it isn't currently set). Otherwise, the areas will be filled
         with the colour with the specified RGB components.
-        
+
         @see Resize()
     */
     wxImage Size(const wxSize& size, const wxPoint pos, int red = -1,
@@ -1452,10 +1452,10 @@ public:
 
     /**
         Assignment operator, using @ref overview_trefcount "reference counting".
-        
+
         @param image
             Image to assign.
-        
+
         @returns Returns 'this' object.
     */
     wxImage operator =(const wxImage& image);

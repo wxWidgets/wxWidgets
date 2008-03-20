@@ -23,7 +23,7 @@ class wxMessageDialog : public wxDialog
 public:
     /**
         Constructor. Use ShowModal() to show the dialog.
-        
+
         @param parent
             Parent window.
         @param message
@@ -32,50 +32,50 @@ public:
             The dialog caption.
         @param style
             A dialog style (bitlist) containing flags chosen from the following:
-        
+
             wxOK
-        
+
             Show an OK button.
-        
+
             wxCANCEL
-        
+
             Show a Cancel button.
-        
+
             wxYES_NO
-        
+
             Show Yes and No buttons.
-        
+
             wxYES_DEFAULT
-        
+
             Used with wxYES_NO, makes Yes button the default - which is the default
         behaviour.
-        
+
             wxNO_DEFAULT
-        
+
             Used with wxYES_NO, makes No button the default.
-        
+
             wxICON_EXCLAMATION
-        
+
             Shows an exclamation mark icon.
-        
+
             wxICON_HAND
-        
+
             Shows an error icon.
-        
+
             wxICON_ERROR
-        
+
             Shows an error icon - the same as wxICON_HAND.
-        
+
             wxICON_QUESTION
-        
+
             Shows a question mark icon.
-        
+
             wxICON_INFORMATION
-        
+
             Shows an information (i) icon.
-        
+
             wxSTAY_ON_TOP
-        
+
             The message box stays on top of all other window, even those of the other
         applications (Windows only).
         @param pos

@@ -82,7 +82,7 @@ public:
     //@{
     /**
         Creates an empty TreeBook control.
-        
+
         @param parent
             The parent window. Must be non-@NULL.
         @param id
@@ -128,7 +128,7 @@ public:
 
     /**
         Sets the image list for the page control and takes ownership of the list.
-        
+
         @see wxImageList, SetImageList()
     */
     void AssignImageList(wxImageList* imageList);
@@ -228,7 +228,7 @@ public:
     /**
         Sets the image list for the page control. It does not take ownership of the
         image list, you must delete it yourself.
-        
+
         @see wxImageList, AssignImageList()
     */
     void SetImageList(wxImageList* imageList);
@@ -249,7 +249,7 @@ public:
         The call to this function generates the page changing events.
         This function is deprecated and should not be used in new code. Please use the
         ChangeSelection() function instead.
-        
+
         @see GetSelection()
     */
     int SetSelection(size_t n);

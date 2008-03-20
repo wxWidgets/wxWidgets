@@ -48,14 +48,14 @@ public:
     /**
         Creates a wxLog class for the application to use for logging errors.
         The default implementation returns a new wxLogGui class.
-        
+
         @see wxLog
     */
     virtual wxLog* CreateLogTarget();
 
     /**
         Creates the wxAppTraits object when GetTraits() needs it for the first time.
-        
+
         @see wxAppTraits
     */
     virtual wxAppTraits* CreateTraits();
@@ -68,7 +68,7 @@ public:
         while (app.Pending())
             Dispatch();
         @endcode
-        
+
         @see Pending()
     */
     virtual void Dispatch();
@@ -92,24 +92,24 @@ public:
     int FilterEvent(wxEvent& event);
 
     /**
-        Returns the user-readable application name. 
-    
+        Returns the user-readable application name.
+
         The difference between this string and the one returned by GetAppName() is that
         this one is meant to be shown to the user and so should be used for the window
         titles, page headers and so on while the other one should be only used internally,
         e.g. for the file names or configuration file keys.
         By default, returns the same string as GetAppName().
-        
+
         @wxsince{2.9.0}
     */
     wxString GetAppDisplayName() const;
 
     /**
         Returns the application name.
-        
+
         @remarks wxWidgets sets this to a reasonable default before calling
                  OnInit(), but the application can reset it at will.
-        
+
         @see GetAppDisplayName()
     */
     wxString GetAppName() const;
@@ -117,7 +117,7 @@ public:
     /**
         Gets the class name of the application. The class name may be used in a
         platform specific manner to refer to the application.
-        
+
         @see SetClassName()
     */
     wxString GetClassName() const;
@@ -125,7 +125,7 @@ public:
     /**
         Returns @true if the application will exit when the top-level window is
         deleted, @false otherwise.
-        
+
         @see SetExitOnFrameDelete(), @ref overview_app_shutdown
     */
     bool GetExitOnFrameDelete() const;
@@ -133,18 +133,18 @@ public:
     /**
         Returns the one and only global application object.
         Usually ::wxTheApp is usead instead.
-        
+
         @see SetInstance()
     */
     static wxAppConsole* GetInstance();
 
     /**
         Returns a pointer to the top window.
-        
+
         @remarks If the top window hasn't been set using SetTopWindow(),
                  this function will find the first top-level window
                  (frame or dialog) and return that.
-        
+
         @see SetTopWindow()
     */
     virtual wxWindow* GetTopWindow() const;
@@ -159,7 +159,7 @@ public:
     /**
         Returns @true if the application will use the best visual on systems that support
         different visuals, @false otherwise.
-        
+
         @see SetUseBestVisual()
     */
     bool GetUseBestVisual() const;
@@ -172,7 +172,7 @@ public:
         configuration file keys.
 
         By default, returns the same string as GetVendorName().
-        
+
         @wxsince{2.9.0}
     */
     wxString GetVendorDisplayName() const;
@@ -196,7 +196,7 @@ public:
     /**
         Returns @true if the application is active, i.e. if one of its windows is
         currently in the foreground.
-        
+
         If this function returns @false and you need to attract users attention to
         the application, you may use wxTopLevelWindow::RequestUserAttention to do it.
     */
@@ -245,7 +245,7 @@ public:
     /**
         Called by wxWidgets on creation of the application. Override this if you wish
         to provide your own (environment-dependent) main loop.
-        
+
         @returns Returns 0 under X, and the wParam of the WM_QUIT message under
                  Windows.
     */
@@ -259,7 +259,7 @@ public:
         asserts are not left in the release code at all.
         The base class version shows the default assert failure dialog box proposing to
         the user to stop the program, continue or ignore all subsequent asserts.
-        
+
         @param file
             the name of the source file where the assert occurred
         @param line
@@ -285,7 +285,7 @@ public:
 
         Return @true to continue normal execution or @false to return
         @false from OnInit() thus terminating the program.
-        
+
         @see OnInitCmdLine()
     */
     bool OnCmdLineError(wxCmdLineParser& parser);
@@ -296,7 +296,7 @@ public:
 
         Return @true to continue normal execution or @false to return
         @false from OnInit() thus terminating the program.
-        
+
         @see OnInitCmdLine()
     */
     bool OnCmdLineHelp(wxCmdLineParser& parser);
@@ -310,7 +310,7 @@ public:
         processing of the standard command line options.
         Return @true to continue normal execution or @false to return @false from
         OnInit() thus terminating the program.
-        
+
         @see OnInitCmdLine()
     */
     bool OnCmdLineParsed(wxCmdLineParser& parser);
@@ -353,7 +353,7 @@ public:
         Generally speaking, this function should only show a message to the user and
         return. You may attempt to save unsaved data but this is not guaranteed to
         work and, in fact, probably won't.
-        
+
         @see wxHandleFatalExceptions()
     */
     void OnFatalException();
@@ -408,7 +408,7 @@ public:
 
     /**
         Returns @true if unprocessed events are in the window system event queue.
-        
+
         @see Dispatch()
     */
     virtual bool Pending();
@@ -420,9 +420,9 @@ public:
         The function returns @true if the message was processed, @false otherwise.
         If you use wxWidgets with another class library with its own message loop,
         you should make sure that this function is called to allow wxWidgets to
-        receive messages. For example, to allow co-existence with the Microsoft 
+        receive messages. For example, to allow co-existence with the Microsoft
         Foundation Classes, override the PreTranslateMessage function:
-        
+
         @code
         // Provide wxWidgets message loop compatibility
         BOOL CTheApp::PreTranslateMessage(MSG *msg)
@@ -440,11 +440,11 @@ public:
         Sends idle events to a window and its children.
         Please note that this function is internal to wxWidgets and shouldn't be used
         by user code.
-        
+
         @remarks These functions poll the top-level windows, and their children,
                  for idle event processing. If @true is returned, more OnIdle
                  processing is requested by one or more window.
-        
+
         @see wxIdleEvent
     */
     bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
@@ -463,7 +463,7 @@ public:
         SetAppDisplayName() is used instead.
 
         By default the application name is set to the name of its executable file.
-        
+
         @see GetAppName()
     */
     void SetAppName(const wxString& name);
@@ -471,7 +471,7 @@ public:
     /**
         Sets the class name of the application. This may be used in a platform specific
         manner to refer to the application.
-        
+
         @see GetClassName()
     */
     void SetClassName(const wxString& name);
@@ -479,11 +479,11 @@ public:
     /**
         Allows the programmer to specify whether the application will exit when the
         top-level frame is deleted.
-        
+
         @param flag
             If @true (the default), the application will exit when the top-level frame
             is deleted. If @false, the application will continue to run.
-        
+
         @see GetExitOnFrameDelete(), @ref overview_app_shutdown
     */
     void SetExitOnFrameDelete(bool flag);
@@ -491,10 +491,10 @@ public:
     /**
         Allows external code to modify global ::wxTheApp, but you should really
         know what you're doing if you call it.
-        
+
         @param app
             Replacement for the global application object.
-        
+
         @see GetInstance()
     */
     static void SetInstance(wxAppConsole* app);
@@ -504,7 +504,7 @@ public:
 
         Currently implemented for wxGTK2-only.
         Return @true if theme was successfully changed.
-        
+
         @param theme
             The name of the new theme or an absolute path to a gtkrc-theme-file
     */
@@ -517,10 +517,10 @@ public:
         can use a specific window as the top window. If no top window is specified by the
         application, wxWidgets just uses the first frame or dialog in its top-level window
         list, when it needs to use the top window.
-        
+
         @param window
             The new top window.
-        
+
         @see GetTopWindow(), OnInit()
     */
     void SetTopWindow(wxWindow* window);
@@ -534,7 +534,7 @@ public:
         Note that this function has to be called in the constructor of the wxApp
         instance and won't have any effect when called later on.
         This function currently only has effect under GTK.
-        
+
         @param flag
             If @true, the app will use the best visual.
         @param forceTrueColour
@@ -553,7 +553,7 @@ public:
     /**
         Sets the name of application's vendor. The name will be used
         in registry access. A default name is set by wxWidgets.
-        
+
         @see GetVendorName()
     */
     void SetVendorName(const wxString& name);
@@ -783,7 +783,7 @@ int wxEntry(int& argc, wxChar** argv);
                 // OnExit isn't called by CleanUp so must be called explicitly.
                 wxTheApp->OnExit();
                 wxApp::CleanUp();
-            
+
                 return CWinApp::ExitInstance();
              }
              @endcode

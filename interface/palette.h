@@ -38,7 +38,7 @@ public:
     /**
         Creates a palette from arrays of size @e n, one for each
         red, blue or green component.
-        
+
         @param palette
             A pointer or reference to the palette to copy.
         @param n
@@ -49,7 +49,7 @@ public:
             An array of green values.
         @param blue
             An array of blue values.
-        
+
         @see Create()
     */
     wxPalette();
@@ -69,7 +69,7 @@ public:
     /**
         Creates a palette from arrays of size @e n, one for each
         red, blue or green component.
-        
+
         @param n
             The number of indices in the palette.
         @param red
@@ -78,9 +78,9 @@ public:
             An array of green values.
         @param blue
             An array of blue values.
-        
+
         @returns @true if the creation was successful, @false otherwise.
-        
+
         @see wxPalette()
     */
     bool Create(int n, const unsigned char* red,
@@ -94,16 +94,16 @@ public:
 
     /**
         Returns a pixel value (index into the palette) for the given RGB values.
-        
+
         @param red
             Red value.
         @param green
             Green value.
         @param blue
             Blue value.
-        
+
         @returns The nearest palette index or wxNOT_FOUND for unexpected errors.
-        
+
         @see GetRGB()
     */
     int GetPixel(unsigned char red, unsigned char green,
@@ -111,7 +111,7 @@ public:
 
     /**
         Returns RGB values for a given palette index.
-        
+
         @param pixel
             The palette index.
         @param red
@@ -120,9 +120,9 @@ public:
             Receives the green value.
         @param blue
             Receives the blue value.
-        
+
         @returns @true if the operation was successful.
-        
+
         @see GetPixel()
     */
     bool GetRGB(int pixel, const unsigned char* red,

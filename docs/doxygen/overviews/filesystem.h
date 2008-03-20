@@ -36,7 +36,7 @@
      Its main methods are ChangePathTo() and OpenFile(). This class
      is most often used by the end user.
  @li The wxFileSystemHandler is the core
-     of virtual file systems mechanism. You can derive your own handler and pass 
+     of virtual file systems mechanism. You can derive your own handler and pass
      it to the VFS mechanism. You can derive your own handler and pass it to
      wxFileSystem's AddHandler() method. In the new handler you only need to
      override the OpenFile() and CanOpen() methods.

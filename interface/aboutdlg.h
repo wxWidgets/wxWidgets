@@ -47,21 +47,21 @@ public:
 
     /**
         Adds an artist name to be shown in the program credits.
-        
+
         @see SetArtists()
     */
     void AddArtist(const wxString& artist);
 
     /**
         Adds a developer name to be shown in the program credits.
-        
+
         @see SetDevelopers()
     */
     void AddDeveloper(const wxString& developer);
 
     /**
         Adds a documentation writer name to be shown in the program credits.
-        
+
         @see SetDocWriters()
     */
     void AddDocWriter(const wxString& docwriter);
@@ -72,14 +72,14 @@ public:
         translation of the string @c translator-credits from the currently used message
         catalog -- this can be used to show just the name of the translator of the
         program in the current language.
-        
+
         @see SetTranslators()
     */
     void AddTranslator(const wxString& translator);
 
     /**
         Sets the the list of artists to be shown in the program credits.
-        
+
         @see AddArtist()
     */
     void SetArtists(const wxArrayString& artists);
@@ -99,14 +99,14 @@ public:
 
     /**
         Set the list of developers of the program.
-        
+
         @see AddDeveloper()
     */
     void SetDevelopers(const wxArrayString& developers);
 
     /**
         Set the list of documentation writers.
-        
+
         @see AddDocWriter()
     */
     void SetDocWriters(const wxArrayString& docwriters);

@@ -147,7 +147,7 @@ public:
     /**
         Associates the file with the given file descriptor, which has already been
         opened.
-        
+
         @param filename
             The filename.
         @param mode
@@ -254,7 +254,7 @@ public:
 
     /**
         Opens the file, returning @true if successful.
-        
+
         @param filename
             The filename.
         @param mode
@@ -275,12 +275,12 @@ public:
 
     /**
         Seeks to the specified position.
-        
+
         @param ofs
             Offset to seek to.
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
-        
+
         @returns The actual offset position achieved, or wxInvalidOffset on
                  failure.
     */
@@ -291,10 +291,10 @@ public:
         Moves the file pointer to the specified number of bytes relative to the end of
         the file. For example, @c SeekEnd(-5) would position the pointer 5
         bytes before the end.
-        
+
         @param ofs
             Number of bytes before the end of the file.
-        
+
         @returns The actual offset position achieved, or wxInvalidOffset on
                  failure.
     */

@@ -217,7 +217,7 @@ The following are relevant to the GDI (Graphics Device Interface).
 
 @warning These functions are deprecated, use the wxClipboard class instead.
 
-These clipboard functions are implemented for Windows only. 
+These clipboard functions are implemented for Windows only.
 
 @header{wx/clipbrd.h}
 

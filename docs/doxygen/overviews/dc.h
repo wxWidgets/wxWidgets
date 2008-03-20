@@ -11,16 +11,16 @@
  @page overview_dc Device Contexts
 
  Classes: wxBufferedDC, wxBufferedPaintDC, wxDC, wxPostScriptDC,
-          wxMetafileDC, wxMemoryDC, wxPrinterDC, wxScreenDC, wxClientDC, 
+          wxMetafileDC, wxMemoryDC, wxPrinterDC, wxScreenDC, wxClientDC,
           wxPaintDC, wxWindowDC.
 
  A wxDC is a @e device context onto which graphics and text can be drawn.
- The device context is intended to represent a number of output devices in a 
+ The device context is intended to represent a number of output devices in a
  generic way, with the same API being used throughout.
 
  Some device contexts are created temporarily in order to draw on a window.
  This is @true of wxScreenDC, wxClientDC, wxPaintDC, and wxWindowDC.
- The following describes the differences between these device contexts and 
+ The following describes the differences between these device contexts and
  when you should use them.
 
  @li @b wxScreenDC. Use this to paint on the screen, as opposed to an individual window.

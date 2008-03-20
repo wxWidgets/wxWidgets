@@ -122,7 +122,7 @@ public:
         Constructs a notebook control.
         Note that sometimes you can reduce flicker by passing the wxCLIP_CHILDREN
         window style.
-        
+
         @param parent
             The parent window. Must be non-@NULL.
         @param id
@@ -152,7 +152,7 @@ public:
     /**
         Adds a new page.
         The call to this function may generate the page changing events.
-        
+
         @param page
             Specifies the new page.
         @param text
@@ -161,11 +161,11 @@ public:
             Specifies whether the page should be selected.
         @param imageId
             Specifies the optional image index for the new page.
-        
+
         @returns @true if successful, @false otherwise.
-        
+
         @remarks Do not delete the page, it will be deleted by the notebook.
-        
+
         @see InsertPage()
     */
     bool AddPage(wxNotebookPage* page, const wxString& text,
@@ -181,7 +181,7 @@ public:
     /**
         Sets the image list for the page control and takes ownership of
         the list.
-        
+
         @see wxImageList, SetImageList()
     */
     void AssignImageList(wxImageList* imageList);
@@ -221,7 +221,7 @@ public:
 
     /**
         Returns the associated image list.
-        
+
         @see wxImageList, SetImageList()
     */
     wxImageList* GetImageList() const;
@@ -274,70 +274,70 @@ public:
         Returns the index of the tab at the specified position or @c wxNOT_FOUND
         if none. If @a flags parameter is non-@NULL, the position of the point
         inside the tab is returned as well.
-        
+
         @param pt
             Specifies the point for the hit test.
         @param flags
             Return value for detailed information. One of the following values:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxBK_HITTEST_NOWHERE
-        
-        
-        
-        
+
+
+
+
             There was no tab under this point.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBK_HITTEST_ONICON
-        
-        
-        
-        
+
+
+
+
             The point was over an icon (currently wxMSW only).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBK_HITTEST_ONLABEL
-        
-        
-        
-        
+
+
+
+
             The point was over a label (currently wxMSW only).
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBK_HITTEST_ONITEM
-        
-        
-        
-        
+
+
+
+
             The point was over an item, but not on the label or icon.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxBK_HITTEST_ONPAGE
-        
-        
-        
-        
+
+
+
+
             The point was over a currently selected page, not over any tab. Note that
         this flag is present only if wxNOT_FOUND is returned.
-        
+
         @returns Returns the zero-based tab index or wxNOT_FOUND if there is no
                  tab is at the specified position.
     */
@@ -345,7 +345,7 @@ public:
 
     /**
         Inserts a new page at the specified position.
-        
+
         @param index
             Specifies the position for the new page.
         @param page
@@ -356,11 +356,11 @@ public:
             Specifies whether the page should be selected.
         @param imageId
             Specifies the optional image index for the new page.
-        
+
         @returns @true if successful, @false otherwise.
-        
+
         @remarks Do not delete the page, it will be deleted by the notebook.
-        
+
         @see AddPage()
     */
     bool InsertPage(size_t index, wxNotebookPage* page,
@@ -370,7 +370,7 @@ public:
 
     /**
         An event handler function, called when the page selection is changed.
-        
+
         @see wxNotebookEvent
     */
     void OnSelChange(wxNotebookEvent& event);
@@ -383,7 +383,7 @@ public:
     /**
         Sets the image list for the page control. It does not take
         ownership of the image list, you must delete it yourself.
-        
+
         @see wxImageList, AssignImageList()
     */
     void SetImageList(wxImageList* imageList);
@@ -416,7 +416,7 @@ public:
         The call to this function generates the page changing events.
         This function is deprecated and should not be used in new code. Please use the
         ChangeSelection() function instead.
-        
+
         @see GetSelection()
     */
     int SetSelection(size_t page);

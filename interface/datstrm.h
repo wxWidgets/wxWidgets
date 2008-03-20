@@ -34,7 +34,7 @@ public:
         )
         Constructs a datastream object from an output stream. Only write methods will
         be available. The second form is only available in Unicode build of wxWidgets.
-        
+
         @param stream
             The output stream.
         @param conv
@@ -169,7 +169,7 @@ public:
         )
         Constructs a datastream object from an input stream. Only read methods will
         be available. The second form is only available in Unicode build of wxWidgets.
-        
+
         @param stream
             The input stream.
         @param conv

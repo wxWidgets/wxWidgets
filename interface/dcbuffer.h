@@ -49,7 +49,7 @@ public:
         Init() methods later in order to use the object.
         The other constructors initialize the object immediately and @c Init()
         must not be called after using them.
-        
+
         @param dc
             The underlying DC: everything drawn to this object will be
             flushed to this DC when this object is destroyed.  You may pass @NULL

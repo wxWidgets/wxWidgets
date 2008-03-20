@@ -103,7 +103,7 @@ size_t wxBase64EncodedSize(size_t len);
         The length of the input string or special value wxNO_LEN if the string is
         NUL-terminated and the length should be computed by this function itself.
     @param mode
-        This parameter specifies the function behaviour when invalid characters 
+        This parameter specifies the function behaviour when invalid characters
         are encountered in input. By default, any such character stops the
         decoding with error. If the mode is wxBase64DecodeMode_SkipWS, then the
         white space characters are silently skipped instead. And if it is
@@ -125,7 +125,7 @@ size_t wxBase64Decode(void* dst, size_t dstLen,
     This overload allocates memory internally and returns it as wxMemoryBuffer
     and is recommended for normal use.
 
-    This overload returns a buffer with the base64 decoded binary equivalent 
+    This overload returns a buffer with the base64 decoded binary equivalent
     of the input string. In neither case is the buffer @NULL-terminated.
 */
 wxMemoryBuffer wxBase64Decode(const char* src,

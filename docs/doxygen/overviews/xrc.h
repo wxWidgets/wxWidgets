@@ -466,7 +466,7 @@ initialized.
 
 A simple example will help understand how the scheme works. Suppose you have a
 XRC file defining a top level window @c TestWnd_Base, which subclasses wxFrame
-(any other class like @c wxDialog will do also), and has subwidgets wxTextCtrl A 
+(any other class like @c wxDialog will do also), and has subwidgets wxTextCtrl A
 and wxButton B.
 
 The XRC file and corresponding class definition in the header file will be
@@ -624,7 +624,7 @@ wxObject *MyControlXmlHandler::DoCreateResource()
     // do most of your work.
     // If e.g. the MyControl::Create function looks like:
     //
-    // bool MyControl::Create(wxWindow *parent, int id, 
+    // bool MyControl::Create(wxWindow *parent, int id,
     //                        const wxBitmap &first, const wxPoint &posFirst,
     //                        const wxBitmap &second, const wxPoint &posSecond,
     //                        const wxString &theTitle, const wxFont &titleFont,

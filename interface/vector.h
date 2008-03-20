@@ -64,7 +64,7 @@ public:
     //@}
 
     /**
-        
+
     */
     size_type capacity() const;
 

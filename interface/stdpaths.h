@@ -57,7 +57,7 @@ public:
              Unix: @c /etc
              Windows: @c C:\Documents and Settings\All Users\Application Data
              Mac: @c /Library/Preferences
-        
+
         @see wxFileConfig
     */
     wxString GetConfigDir() const;
@@ -69,7 +69,7 @@ public:
              Unix: @c @e prefix/share/@e appname
              Windows: the directory where the executable file is located
              Mac: @c @e appname.app/Contents/SharedSupport bundle subdirectory
-        
+
         @see GetLocalDataDir()
     */
     wxString GetDataDir() const;
@@ -80,7 +80,7 @@ public:
              Unix: @c ~ (the home directory)
              Windows: @c C:\Documents and Settings\@e username\Documents
              Mac: @c ~/Documents
-        
+
         @wxsince{2.7.0}
     */
     wxString GetDocumentsDir() const;
@@ -121,7 +121,7 @@ public:
         @c @e lang.lproj under Mac OS X) but is something quite
         different for message catalog category under Unix where it returns the standard
         @c @e prefix/share/locale/@e lang/LC_MESSAGES directory.
-        
+
         @wxsince{2.7.0}
     */
     wxString GetLocalizedResourcesDir(const wxString& lang,
@@ -133,7 +133,7 @@ public:
              Unix: @c @e prefix/lib/@e appname
              Windows: the directory of the executable file
              Mac: @c @e appname.app/Contents/PlugIns bundle subdirectory
-        
+
         @see wxDynamicLibrary
     */
     wxString GetPluginsDir() const;
@@ -148,9 +148,9 @@ public:
              Unix: @c @e prefix/share/@e appname
              Windows: the directory where the executable file is located
              Mac: @c @e appname.app/Contents/Resources bundle subdirectory
-        
+
         @wxsince{2.7.0}
-        
+
         @see GetLocalizedResourcesDir()
     */
     wxString GetResourcesDir() const;
@@ -160,7 +160,7 @@ public:
         files,
         it is best to use wxFileName::CreateTempFileName for correct behaviour when
         multiple processes are attempting to create temporary files.
-        
+
         @wxsince{2.7.2}
     */
     wxString GetTempDir() const;

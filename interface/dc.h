@@ -39,7 +39,7 @@ public:
         Copy from a source DC to this DC, specifying the destination
         coordinates, size of area to copy, source DC, source coordinates,
         logical function, whether to use a bitmap mask, and mask source position.
-        
+
         @param xdest
             Destination device context x position.
         @param ydest
@@ -61,8 +61,8 @@ public:
         with the bitmap
             selected into the source device context. The Windows implementation does
         the following if MaskBlt cannot be used:
-        
-        
+
+
              Creates a temporary bitmap and copies the destination area into it.
              Copies the source area into the temporary bitmap using the specified
         logical function.
@@ -75,8 +75,8 @@ public:
             and the background colour set to WHITE.
              ORs the temporary bitmap with the destination area.
              Deletes the temporary bitmap.
-        
-        
+
+
             This sequence of operations ensures that the source's transparent area need
         not be black,
             and logical functions are supported.
@@ -97,9 +97,9 @@ public:
         and ysrc
             will be assumed for the mask source position. Currently only implemented on
         Windows.
-        
+
         @remarks There is partial support for Blit in wxPostScriptDC, under X.
-        
+
         @see StretchBlit(), wxMemoryDC, wxBitmap, wxMask
     */
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width,
@@ -114,7 +114,7 @@ public:
         Adds the specified point to the bounding box which can be retrieved with
         MinX(), MaxX() and
         MinY(), MaxY() functions.
-        
+
         @see ResetBoundingBox()
     */
     void CalcBoundingBox(wxCoord x, wxCoord y);
@@ -207,7 +207,7 @@ public:
     //@{
     /**
         Draws a circle with the given centre and radius.
-        
+
         @see DrawEllipse()
     */
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
@@ -219,7 +219,7 @@ public:
         Draws an ellipse contained in the rectangle specified either with the given top
         left corner and the given size or directly. The current pen is used for the
         outline and the current brush for filling the shape.
-        
+
         @see DrawCircle()
     */
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width,
@@ -358,7 +358,7 @@ public:
         particular, a font different from @c wxNORMAL_FONT should be used as the
         latter is not a TrueType font. @c wxSWISS_FONT is an example of a font
         which is.
-        
+
         @see DrawText()
     */
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -438,7 +438,7 @@ public:
 
     /**
         Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
-        
+
         @see SetBackgroundMode()
     */
     int GetBackgroundMode() const;
@@ -466,7 +466,7 @@ public:
 
     /**
         Returns the depth (number of bits/pixel) of this DC.
-        
+
         @see wxDisplayDepth()
     */
     int GetDepth() const;
@@ -485,7 +485,7 @@ public:
         is supported, the return value will either be @c wxLayout_LeftToRight or
         @c wxLayout_RightToLeft. If RTL layout is not supported, the return value will
         be @c wxLayout_Default.
-        
+
         @see SetLayoutDirection()
     */
     wxLayoutDirection GetLayoutDirection() const;
@@ -510,7 +510,7 @@ public:
         If the optional parameter @a font is specified and valid, then it is used
         for the text extent calculation. Otherwise the currently selected font is.
         Note that this function works both with single-line and multi-line strings.
-        
+
         @see wxFont, SetFont(), GetPartialTextExtents(), GetTextExtent()
     */
     void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
@@ -533,7 +533,7 @@ public:
         various platforms have a native API function that is faster or more
         accurate than the generic implementation then it should be used
         instead.
-        
+
         @see GetMultiLineTextExtent(), GetTextExtent()
     */
     bool GetPartialTextExtents(const wxString& text,
@@ -559,14 +559,14 @@ public:
         represent the maximum horizontal and vertical 'pixel' values used in your
         application, the following code will scale the graphic to fit on the
         printer page:
-        
-        
+
+
         @b GetSize()
-        
+
         Returns a Wx::Size
-        
+
         @b GetSizeWH()
-        
+
         Returns a 2-element list
           @c ( width, height )
     */
@@ -599,7 +599,7 @@ public:
         If the optional parameter @a font is specified and valid, then it is used
         for the text extent calculation. Otherwise the currently selected font is.
         Note that this function only works with single-line strings.
-        
+
         @see wxFont, SetFont(), GetPartialTextExtents(),
              GetMultiLineTextExtent()
     */
@@ -707,7 +707,7 @@ public:
     /**
         Resets the bounding box: after a call to this function, the bounding box
         doesn't contain anything.
-        
+
         @see CalcBoundingBox()
     */
     void ResetBoundingBox();
@@ -716,7 +716,7 @@ public:
         Sets the x and y axis orientation (i.e., the direction from lowest to
         highest values on the axis). The default orientation is
         x axis from left to right and y axis from top down.
-        
+
         @param xLeftRight
             True to set the x axis orientation to the natural
             left to right orientation, @false to invert it.
@@ -758,7 +758,7 @@ public:
         The clipping region is an area to which drawing is restricted. Possible uses
         for the clipping region are for clipping text or for speeding up window redraws
         when only a known area of the screen is damaged.
-        
+
         @see DestroyClippingRegion(), wxRegion
     */
     void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width,
@@ -786,7 +786,7 @@ public:
     /**
         Sets the current layout direction for the device context. @a dir may be either
         @c wxLayout_Default, @c wxLayout_LeftToRight or @c wxLayout_RightToLeft.
-        
+
         @see GetLayoutDirection()
     */
     void SetLayoutDirection(wxLayoutDirection dir);
@@ -799,7 +799,7 @@ public:
         The possible values
         and their meaning in terms of source and destination pixel values are
         as follows:
-        
+
         The default is wxCOPY, which simply draws with the current colour.
         The others combine the current colour and the background using a
         logical operation.  wxINVERT is commonly used for drawing rubber bands or
@@ -819,26 +819,26 @@ public:
         Drawing to a Windows printer device context uses the current mapping mode,
         but mapping mode is currently ignored for PostScript output.
         The mapping mode can be one of the following:
-        
+
         wxMM_TWIPS
-        
+
         Each logical unit is 1/20 of a point, or 1/1440 of
           an inch.
-        
+
         wxMM_POINTS
-        
+
         Each logical unit is a point, or 1/72 of an inch.
-        
+
         wxMM_METRIC
-        
+
         Each logical unit is 1 mm.
-        
+
         wxMM_LOMETRIC
-        
+
         Each logical unit is 1/10 of a mm.
-        
+
         wxMM_TEXT
-        
+
         Each logical unit is 1 device pixel.
     */
     void SetMapMode(int int);
@@ -896,7 +896,7 @@ public:
         coordinates, destination size, source DC, source coordinates,
         size of source area to copy, logical function, whether to use a bitmap mask,
         and mask source position.
-        
+
         @param xdest
             Destination device context x position.
         @param ydest
@@ -922,8 +922,8 @@ public:
         with the bitmap
             selected into the source device context. The Windows implementation does
         the following if MaskBlt cannot be used:
-        
-        
+
+
              Creates a temporary bitmap and copies the destination area into it.
              Copies the source area into the temporary bitmap using the specified
         logical function.
@@ -936,8 +936,8 @@ public:
             and the background colour set to WHITE.
              ORs the temporary bitmap with the destination area.
              Deletes the temporary bitmap.
-        
-        
+
+
             This sequence of operations ensures that the source's transparent area need
         not be black,
             and logical functions are supported.
@@ -958,7 +958,7 @@ public:
         and ysrc
             will be assumed for the mask source position. Currently only implemented on
         Windows.
-        
+
         @remarks There is partial support for Blit in wxPostScriptDC, under X.
     */
     bool StretchBlit(wxCoord xdest, wxCoord ydest, wxCoord dstWidth,

@@ -141,7 +141,7 @@ public:
         available to use. Returns @false if ISO 8859-1 will be used instead.
         Note this does not mean that a given string will be correctly converted.
         A malformed string may still make conversion functions return @c wxCONV_FAILED.
-        
+
         @wxsince{2.8.2}
     */
     bool IsOk() const;
@@ -320,7 +320,7 @@ public:
         size, i.e. the returned value does not include the trailing @c NUL. But
         when the function is called with a non-@NULL @a out buffer, the @a outLen
         parameter should be one more to allow to properly @c NUL-terminate the string.
-        
+
         @param out
             The output buffer, may be @NULL if the caller is only
             interested in the length of the resulting string
@@ -329,7 +329,7 @@ public:
         @param outLen
             The length of the output buffer but including
             NUL, ignored if out is @NULL
-        
+
         @returns The length of the converted string excluding the trailing NUL.
     */
     virtual size_t MB2WC(wchar_t* out, const char* in,

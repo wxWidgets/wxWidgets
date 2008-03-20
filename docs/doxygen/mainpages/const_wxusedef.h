@@ -35,7 +35,7 @@
 
 
  @section page_wxusedef_multi Generic wxUSE preprocessor symbols
- 
+
  @beginDefList
  @itemdef{wxUSE_ABOUTDLG, Use wxAboutDialogInfo class.}
  @itemdef{wxUSE_ACCEL, Use wxAcceleratorTable/Entry classes and support for them in wxMenu, wxMenuBar.}
@@ -238,7 +238,7 @@
  @itemdef{wxUSE_XRC, Use XRC XML-based resource system.}
  @itemdef{wxUSE_ZIPSTREAM, Enable streams for Zip files.}
  @itemdef{wxUSE_ZLIB, Use wxZlibInput and wxZlibOutputStream classes, required by wxUSE_LIBPNG.}
- @endDefList 
+ @endDefList
 
 
  @section page_wxusedef_unix wxUSE preprocessor symbols used only under Unix platforms
@@ -259,10 +259,10 @@
  @itemdef{wxUSE_NANOX, Use NanoX.}
  @itemdef{wxUSE_UNIV_TEXTCTRL, Use wxUniv's implementation of wxTextCtrl class.}
  @endDefList
- 
+
 
  @section page_wxusedef_gtk wxUSE preprocessor symbols used only in wxGTK port
- 
+
  @beginDefList
  @itemdef{wxUSE_DETECT_SM, Use code to detect X11 session manager.}
  @itemdef{wxUSE_GTKPRINT, Use GTK+ printing support.}
@@ -271,9 +271,9 @@
  @itemdef{wxUSE_LIBHILDON, Use Hildon framework for Nokia 770. Currently has no effect. }
  @endDefList
 
- 
+
  @section page_wxusedef_mac wxUSE preprocessor symbols used only in wxMac port
- 
+
  @beginDefList
  @itemdef{wxUSE_MAC_CRITICAL_REGION_MUTEX, See src/mac/carbon/thread.cpp file.}
  @itemdef{wxUSE_MAC_PTHREADS_MUTEX, See src/mac/carbon/thread.cpp file.}
@@ -281,24 +281,24 @@
  @itemdef{wxUSE_WEBKIT, Use wxWebKitCtrl class.}
  @endDefList
 
- 
+
  @section page_wxusedef_motif wxUSE preprocessor symbols used only in wxMotif port
- 
+
  @beginDefList
  @itemdef{wxUSE_GADGETS, Use xmCascadeButtonGadgetClass, xmLabelGadgetClass, xmPushButtonGadgetClass and xmToggleButtonGadgetClass classes.}
  @itemdef{wxUSE_INVISIBLE_RESIZE, See src/motif/dialog.cpp file.}
  @endDefList
 
- 
+
  @section page_wxusedef_cocoa wxUSE preprocessor symbols used only in Cocoa port
- 
+
  @beginDefList
  @itemdef{wxUSE_OBJC_UNIQUIFYING, Enable Objective-C class name uniquifying.}
  @endDefList
 
- 
+
  @section page_wxusedef_os2 wxUSE preprocessor symbols used only in OS2 port
- 
+
  @beginDefList
  @itemdef{wxUSE_CONSOLEDEBUG, See src/os2/app.cpp file.}
  @itemdef{wxUSE_DDE, See src/os2/mimetype.cpp file.}
@@ -308,9 +308,9 @@
  @itemdef{wxUSE_RESOURCE_LOADING_IN_OS2, See src/os2/gdiimage.cpp file.}
  @endDefList
 
- 
+
  @section page_wxusedef_msw wxUSE preprocessor symbols used only in wxMSW port
- 
+
  @beginDefList
  @itemdef{wxUSE_ACCESSIBILITY, Enable accessibility support}
  @itemdef{wxUSE_ACTIVEX, Use wxActiveXContainer and related classes.}
@@ -345,9 +345,9 @@
  @itemdef{wxUSE_XPM_IN_MSW, See also wxUSE_XPM}
  @endDefList
 
- 
+
  @section page_wxusedef_univ wxUSE preprocessor symbols used only in wxUniversal
- 
+
  @beginDefList
  @itemdef{wxUSE_ALL_THEMES, Use all themes in wxUniversal; See wx/univ/theme.h file.}
  @itemdef{wxUSE_THEME_GTK, Use GTK+ 1-like theme in wxUniversal}

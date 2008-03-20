@@ -77,7 +77,7 @@ public:
         After this function has been called, the clipboard owns the data, so do not
         delete
         the data explicitly.
-        
+
         @see SetData()
     */
     bool AddData(wxDataObject* data);
@@ -141,7 +141,7 @@ public:
         After this function has been called, the clipboard owns the data, so do not
         delete
         the data explicitly.
-        
+
         @see AddData()
     */
     bool SetData(wxDataObject* data);

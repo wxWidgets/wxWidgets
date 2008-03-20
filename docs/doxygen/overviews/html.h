@@ -16,7 +16,7 @@
 
  wxHTML can be used as a generic rich text viewer - for example to display
  a nice About Box (like those of GNOME apps) or to display the result of
- database searching. There is a wxFileSystem class which allows you to use 
+ database searching. There is a wxFileSystem class which allows you to use
  your own virtual file systems.
 
  wxHtmlWindow supports tag handlers. This means that you can easily
@@ -60,7 +60,7 @@
  @endcode
 
  @subsection overview_html_quickstart_disphelp Displaying Help
- 
+
  See wxHtmlHelpController.
 
  @subsection overview_html_quickstart_settingup Setting up wxHtmlWindow
@@ -113,30 +113,30 @@
  wxHtmlPrintout, normal wxWidgets printout class.
 
  And finally there is the low level class wxHtmlDCRenderer which you can use to
- render HTML into a rectangular area on any DC. 
+ render HTML into a rectangular area on any DC.
 
  It supports rendering into multiple rectangles with the same
- width. (The most common use of this is placing one rectangle on each page or 
+ width. (The most common use of this is placing one rectangle on each page or
  printing into two columns.)
 
 
  @section overview_html_helpformats Help Files Format
 
  wxHTML library uses a reduced version of MS HTML Workshop format.
- Tex2RTF can produce these files when generating HTML, if you set 
+ Tex2RTF can produce these files when generating HTML, if you set
  @b htmlWorkshopFiles to @true in your tex2rtf.ini file.
  (See wxHtmlHelpController for help controller description.)
 
- A @b book consists of three files: the header file, the contents file 
+ A @b book consists of three files: the header file, the contents file
  and the index file.
 
- You can make a regular zip archive of these files, plus the HTML and any 
- image files, for wxHTML (or helpview) to read; and the @c .zip file can 
+ You can make a regular zip archive of these files, plus the HTML and any
+ image files, for wxHTML (or helpview) to read; and the @c .zip file can
  optionally be renamed to @c .htb.
 
  @subsection overview_html_helpformats_hhp Header file (.hhp)
 
- The header file must contain these lines (and may contain additional lines 
+ The header file must contain these lines (and may contain additional lines
  which are ignored):
 
  @code
@@ -212,8 +212,8 @@
  @endcode
 
  @subsection overview_html_helpformats_hhk Index file (.hhk)
- 
- Index files have same format as contents file except that ID params are ignored 
+
+ Index files have same format as contents file except that ID params are ignored
  and sublists are @b not allowed.
 
 
@@ -222,7 +222,7 @@
  The wxHTML library provides a mechanism for reading and displaying
  files of many different file formats.
 
- wxHtmlWindow::LoadPage can load not only HTML files but any known file. 
+ wxHtmlWindow::LoadPage can load not only HTML files but any known file.
  To make a file type known to wxHtmlWindow you must create a wxHtmlFilter filter and
  register it using wxHtmlWindow::AddFilter.
 
@@ -251,15 +251,15 @@
 
  @subsection overview_html_cells_conttaghandler Using Containers in Tag Handler
 
- wxHtmlWinParser provides a user-friendly way of managing containers. 
+ wxHtmlWinParser provides a user-friendly way of managing containers.
  It is based on the idea of opening and closing containers.
 
- Use wxHtmlWinParser::OpenContainer to open new a container @e within an already 
+ Use wxHtmlWinParser::OpenContainer to open new a container @e within an already
  opened container.
- This new container is a @e sub-container of the old one. (If you want to create a 
+ This new container is a @e sub-container of the old one. (If you want to create a
  new container with the same depth level you can call @c CloseContainer(); OpenContainer();.)
 
- Use wxHtmlWinParser::CloseContainer to close the container. 
+ Use wxHtmlWinParser::CloseContainer to close the container.
  This doesn't create a new container with same depth level but it returns "control"
  to the parent container. See explanation:
 
@@ -323,7 +323,7 @@
  @li Parse text between the tag and paired ending tag (if present)
  @li Restore original parser state
 
- See wxHtmlWinParser for methods for modifying parser's state. 
+ See wxHtmlWinParser for methods for modifying parser's state.
  In general you can do things like opening/closing containers, changing colors, fonts etc.
 
  @subsection overview_html_handlers_custom Providing own tag handlers
@@ -346,7 +346,7 @@
  for details). Handler definition must start with @b TAG_HANDLER_BEGIN macro
  and end with @b TAG_HANDLER_END macro.
 
- I strongly recommend to have a look at @e include/wxhtml/mod_templ.h file. 
+ I strongly recommend to have a look at @e include/wxhtml/mod_templ.h file.
  Otherwise you won't understand the structure of macros.
 
  See macros reference:
@@ -360,7 +360,7 @@
  @li @b TAG_HANDLER_VARS:
      This macro starts block of variables definitions. (Variables are identical
      to class attributes.) Example:
-    
+
      @code
      TAG_HANDLER_BEGIN(VARS_ONLY, "CRAZYTAG")
         TAG_HANDLER_VARS
@@ -368,14 +368,14 @@
             wxString something_else;
      TAG_HANDLER_END(VARS_ONLY)
      @endcode
-    
+
      This macro is used only in rare cases.
 
  @li @b TAG_HANDLER_CONSTR(@e name):
      This macro supplies object constructor. @e name is same name as the one
      from TAG_HANDLER_BEGIN macro. Body of constructor follow after
      this macro (you must use { and } ). Example:
-    
+
      @code
      TAG_HANDLER_BEGIN(VARS2, "CRAZYTAG")
         TAG_HANDLER_VARS
@@ -386,7 +386,7 @@
             } // !!!!!!
      TAG_HANDLER_END(VARS2)
      @endcode
-    
+
      Never used in wxHTML :-)
 
  @li @b TAG_HANDLER_PROC(@e varib):
@@ -395,7 +395,7 @@
      @e tag. Body of method follows after this macro.
      Note than you must use { and }  !
      Example:
-    
+
      @code
      TAG_HANDLER_BEGIN(TITLE, "TITLE")
         TAG_HANDLER_PROC(tag)
@@ -423,7 +423,7 @@
  @li @b TAGS_MODULE_END(@e modname):
      Ends the definition of module.
      Example:
-    
+
      @code
      TAGS_MODULE_BEGIN(Examples)
         TAGS_MODULE_ADD(VARS_ONLY)
@@ -442,7 +442,7 @@
  Following tables list all tags known to wxHTML, together with supported parameters.
 
  A tag has general form of @c tagname param_1 param_2 ... param_n where param_i is
- either @c paramname="paramvalue" or @c paramname=paramvalue - these two are equivalent. 
+ either @c paramname="paramvalue" or @c paramname=paramvalue - these two are equivalent.
  Unless stated otherwise, wxHTML is case-insensitive.
 
  @subsection overview_html_supptags_commonvalues Table of common parameter values

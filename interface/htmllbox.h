@@ -77,7 +77,7 @@ public:
         wxVListBox::SetSelectionBackground allows to
         change the selection background for all cells at once and doing anything more
         fancy is probably going to look strangely.
-        
+
         @see GetSelectedTextColour()
     */
     wxColour GetSelectedTextBgColour(const wxColour& colBg) const;
@@ -88,7 +88,7 @@ public:
         look inside selection. By default all original colours are completely ignored
         and the standard, system-dependent, selection colour is used but the program
         may wish to override this to achieve some custom appearance.
-        
+
         @see GetSelectedTextBgColour(),
              wxVListBox::SetSelectionBackground, wxSystemSettings::GetColour
     */
@@ -117,12 +117,12 @@ public:
     /**
         Called when the user clicks on hypertext link. Does nothing by default.
         Overloading this method is deprecated; intercept the event instead.
-        
+
         @param n
             Index of the item containing the link.
         @param link
             Description of the link.
-        
+
         @see See also wxHtmlLinkInfo.
     */
     virtual void OnLinkClicked(size_t n, const wxHtmlLinkInfo& link);

@@ -90,7 +90,7 @@ public:
             Validator which can be used for additional date checks.
         @param name
             Control name.
-        
+
         @returns @true if the control was successfully created or @false if
                  creation failed.
     */
@@ -107,14 +107,14 @@ public:
         SetRange(), returns the lower and upper
         bounds of this range. If no range is set (or only one of the bounds is set),
          @a dt1 and/or @a dt2 are set to be invalid.
-        
+
         @param dt1
             Pointer to the object which receives the lower range limit or
             becomes invalid if it is not set. May be @NULL if the caller is not
             interested in lower limit
         @param dt2
             Same as above but for the upper limit
-        
+
         @returns @false if no range limits are currently set, @true if at least one
                  bound is set.
     */
@@ -131,7 +131,7 @@ public:
         control. The native version always uses the current system locale.
         Sets the display format for the date in the control. See wxDateTime for the
         meaning of format strings.
-        
+
         @remarks If the format parameter is invalid, the behaviour is undefined.
     */
     void SetFormat(const wxChar* format);
@@ -140,7 +140,7 @@ public:
         Sets the valid range for the date selection. If @a dt1 is valid, it becomes
         the earliest date (inclusive) accepted by the control. If @a dt2 is valid,
         it becomes the latest possible date.
-        
+
         @remarks If the current value of the control is outside of the newly set
                  range bounds, the behaviour is undefined.
     */

@@ -124,7 +124,7 @@ public:
         @e WinHelp, MS HTML Help @a sectionNo is a context id.
         @e External HTML help: wxExtHelpController implements @a sectionNo as an id in
         a map file, which is of the form:
-        
+
         @e wxHtmlHelpController: @a sectionNo is an identifier as specified in the @c
         .hhc file. See @ref overview_helpformat "Help files format".
         See also the help sample for notes on how to specify section numbers for
@@ -145,7 +145,7 @@ public:
         wxHtmlHelpController returns the frame, size and position.
         For all other help controllers, this function does nothing
         and just returns @NULL.
-        
+
         @param viewer
             This defaults to "netscape" for wxExtHelpController.
         @param flags

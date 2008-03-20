@@ -116,7 +116,7 @@ public:
 
     /**
         Empties the array: after a call to this function GetCount() will return 0.
-        However, this function does not free the memory used by the array and so 
+        However, this function does not free the memory used by the array and so
         should be used when the array is going to be reused for storing other strings.
         Otherwise, you should use Clear() to empty the array and free memory.
     */
@@ -146,7 +146,7 @@ public:
         @code
         Insert("foo", 0);
         @endcode
-        
+
         If @a nIndex is equal to @e GetCount() this function behaves as Add().
     */
     void Insert(const wxString& str, size_t nIndex,
@@ -207,7 +207,7 @@ public:
     /**
         Sorts the array using the specified @a compareFunction for item comparison.
         @e CompareFunction is defined as a function taking two @e const wxString
-        parameters and returning an @e int value less than, equal to or greater 
+        parameters and returning an @e int value less than, equal to or greater
         than 0 if the first string is less than, equal to or greater than the
         second one.
 
@@ -219,16 +219,16 @@ public:
         {
             return first.length() - second.length();
         }
-        
+
         ...
-        
+
         wxArrayString array;
-        
+
         array.Add("one");
         array.Add("two");
         array.Add("three");
         array.Add("four");
-        
+
         array.Sort(CompareStringLen);
         @endcode
     */
@@ -307,7 +307,7 @@ public:
     /**
         @copydoc wxArrayString::Index()
 
-        This function uses binary search for wxSortedArrayString, but it ignores 
+        This function uses binary search for wxSortedArrayString, but it ignores
         the @a bCase and @a bFromEnd parameters.
     */
     int Index(const wxString& sz, bool bCase = true,

@@ -145,34 +145,34 @@ public:
         You can customize the look and feel of the dialog by setting the sheet style.
         It is
         a bit list of the following values:
-        
+
         wxPROPSHEET_DEFAULT
-        
+
         Uses the default look and feel for the controller window,
         normally a notebook except on Smartphone where a choice control is used.
-        
+
         wxPROPSHEET_NOTEBOOK
-        
+
         Uses a notebook for the controller window.
-        
+
         wxPROPSHEET_TOOLBOOK
-        
+
         Uses a toolbook for the controller window.
-        
+
         wxPROPSHEET_CHOICEBOOK
-        
+
         Uses a choicebook for the controller window.
-        
+
         wxPROPSHEET_LISTBOOK
-        
+
         Uses a listbook for the controller window.
-        
+
         wxPROPSHEET_TREEBOOK
-        
+
         Uses a treebook for the controller window.
-        
+
         wxPROPSHEET_SHRINKTOFIT
-        
+
         Shrinks the dialog window to fit the currently selected page (common behaviour
         for
         property sheets on Mac OS X).

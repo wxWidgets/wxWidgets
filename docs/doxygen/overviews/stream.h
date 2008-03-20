@@ -94,7 +94,7 @@ if (in_stream.Read(data, nb_datas).LastError() != wxSTREAM_NOERROR) {
 // You can also get the last number of bytes REALLY put into the buffer.
 size_t really_read = in_stream.LastRead();
 
-// Ok, moves to the beginning of the stream. SeekI returns the last position 
+// Ok, moves to the beginning of the stream. SeekI returns the last position
 // in the stream counted from the beginning.
 off_t old_position = in_stream.SeekI(0, wxFromBeginning);
 

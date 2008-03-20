@@ -30,7 +30,7 @@ public:
     /**
         Constructor specifying the image size, whether image masks should be created,
         and the initial size of the list.
-        
+
         @param width
             Width of the images in the list.
         @param height
@@ -39,7 +39,7 @@ public:
             @true if masks should be created for all images.
         @param initialCount
             The initial size of the list.
-        
+
         @see Create()
     */
     wxImageList();
@@ -50,7 +50,7 @@ public:
     //@{
     /**
         Adds a new image using an icon.
-        
+
         @param bitmap
             Bitmap representing the opaque areas of the image.
         @param mask
@@ -59,9 +59,9 @@ public:
             Colour indicating which parts of the image are transparent.
         @param icon
             Icon to use as the image.
-        
+
         @returns The new zero-based image index.
-        
+
         @remarks The original bitmap or icon is not affected by the Add
                  operation, and can be deleted afterwards.
     */
@@ -79,7 +79,7 @@ public:
 
     /**
         Draws a specified image onto a device context.
-        
+
         @param index
             Image index, starting from zero.
         @param dc
@@ -90,50 +90,50 @@ public:
             Y position on the device context.
         @param flags
             How to draw the image. A bitlist of a selection of the following:
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
             wxIMAGELIST_DRAW_NORMAL
-        
-        
-        
-        
+
+
+
+
             Draw the image normally.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxIMAGELIST_DRAW_TRANSPARENT
-        
-        
-        
-        
+
+
+
+
             Draw the image with transparency.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxIMAGELIST_DRAW_SELECTED
-        
-        
-        
-        
+
+
+
+
             Draw the image in selected state.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxIMAGELIST_DRAW_FOCUSED
-        
-        
-        
-        
+
+
+
+
             Draw the image in a focused state.
         @param solidBackground
             For optimisation - drawing can be faster if the function is told
@@ -161,14 +161,14 @@ public:
     /**
         Retrieves the size of the images in the list. Currently, the @a index
         parameter is ignored as all images in the list have the same size.
-        
+
         @param index
             currently unused, should be 0
         @param width
             receives the width of the images in the list
         @param height
             receives the height of the images in the list
-        
+
         @returns @true if the function succeeded, @false if it failed (for example,
                  if the image list was not yet initialized).
     */
@@ -187,16 +187,16 @@ public:
     //@{
     /**
         Replaces the existing image with the new image.
-        
+
         @param bitmap
             Bitmap representing the opaque areas of the image.
         @param mask
             Monochrome mask bitmap, representing the transparent areas of the image.
         @param icon
             Icon to use as the image.
-        
+
         @returns @true if the replacement was successful, @false otherwise.
-        
+
         @remarks The original bitmap or icon is not affected by the Replace
                  operation, and can be deleted afterwards.
     */

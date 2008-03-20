@@ -82,7 +82,7 @@ Requires @ref page_libs_wxbase.
 
 This contains the Advanced User Interface docking library.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml, 
+Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
@@ -103,7 +103,7 @@ Requires @ref page_libs_wxbase.
 
 This contains generic rich text control functionality.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml, 
+Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
@@ -173,7 +173,7 @@ Requires @ref page_libs_wxxml, @ref page_libs_wxcore, @ref page_libs_wxbase.
 This library contains wxXmlResource class that provides access to XML resource
 files in XRC format.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml, 
+Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 

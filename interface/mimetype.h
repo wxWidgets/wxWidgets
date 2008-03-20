@@ -66,7 +66,7 @@ public:
         NB: You won't normally need to use more than one wxMimeTypesManager object in a
         program.
         @ref ctor() wxMimeTypesManager
-        
+
         @ref dtor() ~wxMimeTypesManager
     */
 
@@ -101,9 +101,9 @@ public:
         default ones which are loaded automatically) containing MIME
         information in either mailcap(5) or mime.types(5) format.
         ReadMailcap()
-        
+
         ReadMimeTypes()
-        
+
         AddFallbacks()
     */
 
@@ -125,7 +125,7 @@ public:
         If the function is successful, it returns a pointer to the wxFileType object
         which @b must be deleted by the caller, otherwise @NULL will be returned.
         GetFileTypeFromMimeType()
-        
+
         GetFileTypeFromExtension()
     */
 
@@ -213,23 +213,23 @@ public:
         usage but may be also used by the application directly if, for example, you want
         to use some non-default command to open the file.
         The function replaces all occurrences of
-        
+
         format specification
-        
+
         with
-        
+
         %s
-        
+
         the full file name
-        
+
         %t
-        
+
         the MIME type
-        
+
         %{param}
-        
+
         the value of the parameter @e param
-        
+
         using the MessageParameters object you pass to it.
         If there is no '%s' in the command string (and the string is not empty), it is
         assumed that the command reads the data on stdin and so the effect is the same
@@ -332,10 +332,10 @@ public:
         there are no other parameters. If you wish to supply additional parameters, you
         must derive your own class from MessageParameters and override GetParamValue()
         function, for example:
-        
+
         Now you only need to create an object of this class and pass it to, for example,
         GetOpenCommand() like this:
-        
+
         @b Windows: As only the file name is used by the program associated with the
         given extension anyhow (but no other message parameters), there is no need to
         ever derive from MessageParameters class for a Windows-only program.

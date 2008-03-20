@@ -415,7 +415,7 @@ public:
 
     /**
         Sets the paragraph alignment. These are the possible values for @e alignment:
-        
+
         Of these, wxTEXT_ALIGNMENT_JUSTIFIED is unimplemented. In future justification
         may be supported
         when printing or previewing, only.
@@ -448,7 +448,7 @@ public:
 
     /**
         Sets the bullet style. The following styles can be passed:
-        
+
         Currently wxTEXT_ATTR_BULLET_STYLE_BITMAP is not supported.
     */
     void SetBulletStyle(int style);
@@ -593,7 +593,7 @@ public:
     /**
         Sets the text effects, a bit list of styles.
         The following styles can be passed:
-        
+
         Of these, only wxTEXT_ATTR_EFFECT_CAPITALS and wxTEXT_ATTR_EFFECT_STRIKETHROUGH
         are implemented.
         wxTEXT_ATTR_EFFECT_CAPITALS capitalises text when displayed (leaving the case
@@ -705,7 +705,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a text control.
-        
+
         @param parent
             Parent window. Should not be @NULL.
         @param id
@@ -722,7 +722,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @remarks The horizontal scrollbar (wxHSCROLL style flag) will only be
                  created for multi-line text controls. Without a
                  horizontal scrollbar, text lines that don't fit in the
@@ -730,7 +730,7 @@ public:
                  character is inserted). Single line controls don't have
                  a horizontal scrollbar, the text is automatically
                  scrolled so that the insertion point is always visible.
-        
+
         @see Create(), wxValidator
     */
     wxTextCtrl();
@@ -750,15 +750,15 @@ public:
 
     /**
         Appends the text to the end of the text control.
-        
+
         @param text
             Text to write to the text control.
-        
+
         @remarks After the text is appended, the insertion point will be at the
                  end of the text control. If this behaviour is not
                  desired, the programmer should use GetInsertionPoint
                  and SetInsertionPoint.
-        
+
         @see WriteText()
     */
     void AppendText(const wxString& text);
@@ -768,13 +768,13 @@ public:
         text control using the given @e choices.
         Notice that currently this function is only implemented in wxGTK2 and wxMSW
         ports and does nothing under the other platforms.
-        
+
         @wxsince{2.9.0}
-        
+
         @returns @true if the auto-completion was enabled or @false if the
                  operation failed, typically because auto-completion is
                  not supported by the current platform.
-        
+
         @see AutoCompleteFileNames()
     */
     bool AutoComplete(const wxArrayString& choices);
@@ -784,13 +784,13 @@ public:
         text control using all valid file system paths.
         Notice that currently this function is only implemented in wxGTK2 port and does
         nothing under the other platforms.
-        
+
         @wxsince{2.9.0}
-        
+
         @returns @true if the auto-completion was enabled or @false if the
                  operation failed, typically because auto-completion is
                  not supported by the current platform.
-        
+
         @see AutoComplete()
     */
     bool AutoCompleteFileNames();
@@ -832,9 +832,9 @@ public:
         event.
         This is the only difference with SetValue().
         See @ref overview_progevent "this topic" for more information.
-        
+
         @wxsince{2.7.1}
-        
+
         @param value
             The new value to set. It may contain newline characters if the text control
         is multi-line.
@@ -883,7 +883,7 @@ public:
         handler previously by wxWidgets.
         Please note that this function doesn't currently work correctly for all keys
         under any platform but MSW.
-        
+
         @returns @true if the event resulted in a change to the control, @false
                  otherwise.
     */
@@ -891,7 +891,7 @@ public:
 
     /**
         Returns the style currently used for the new text.
-        
+
         @see SetDefaultStyle()
     */
     const wxTextAttr GetDefaultStyle() const;
@@ -916,10 +916,10 @@ public:
     /**
         Gets the length of the specified line, not including any trailing newline
         character(s).
-        
+
         @param lineNo
             Line number (starting from zero).
-        
+
         @returns The length of the line, or -1 if lineNo was invalid.
     */
     int GetLineLength(long lineNo) const;
@@ -927,17 +927,17 @@ public:
     /**
         Returns the contents of a given line in the text control, not including
         any trailing newline character(s).
-        
+
         @param lineNo
             The line number, starting from zero.
-        
+
         @returns The contents of the line.
     */
     wxString GetLineText(long lineNo) const;
 
     /**
         Returns the number of lines in the text control buffer.
-        
+
         @remarks Note that even empty text controls have one line (where the
                  insertion point is), so GetNumberOfLines() never
                  returns 0.
@@ -966,7 +966,7 @@ public:
         under Windows (at least,) you should use
         GetStringSelection() to get the selected
         text.
-        
+
         @param from
             The returned first position.
         @param to
@@ -983,10 +983,10 @@ public:
     /**
         Returns the style at this position in the text control. Not all platforms
         support this function.
-        
+
         @returns @true on success, @false if an error occurred - it may also mean
                  that the styles are not supported under this platform.
-        
+
         @see SetStyle(), wxTextAttr
     */
     bool GetStyle(long position, wxTextAttr& style);
@@ -1006,7 +1006,7 @@ public:
         @a row parameters (unless the pointers are @NULL which is allowed).
         Please note that this function is currently only implemented in wxUniv,
         wxMSW and wxGTK2 ports.
-        
+
         @see PositionToXY(), XYToPosition()
     */
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
@@ -1025,7 +1025,7 @@ public:
         Returns @true if the control is currently empty. This is the same as
         @c GetValue().empty() but can be much more efficient for the multiline
         controls containing big amounts of text.
-        
+
         @wxsince{2.7.1}
     */
     bool IsEmpty() const;
@@ -1033,7 +1033,7 @@ public:
     /**
         Returns @true if the text has been modified by user. Note that calling
         SetValue() doesn't make the control modified.
-        
+
         @see MarkDirty()
     */
     bool IsModified() const;
@@ -1041,7 +1041,7 @@ public:
     /**
         Returns @true if this is a multi line edit control and @false
         otherwise.
-        
+
         @see IsSingleLine()
     */
     bool IsMultiLine() const;
@@ -1049,19 +1049,19 @@ public:
     /**
         Returns @true if this is a single line edit control and @false
         otherwise.
-        
+
         @see @ref issingleline() IsMultiLine
     */
     bool IsSingleLine() const;
 
     /**
         Loads and displays the named file, if it exists.
-        
+
         @param filename
             The filename of the file to load.
         @param fileType
             The type of file to load. This is currently ignored in wxTextCtrl.
-        
+
         @returns @true if successful, @false otherwise.
     */
     bool LoadFile(const wxString& filename,
@@ -1069,7 +1069,7 @@ public:
 
     /**
         Mark text as modified (dirty).
-        
+
         @see IsModified()
     */
     void MarkDirty();
@@ -1077,12 +1077,12 @@ public:
     /**
         This event handler function implements default drag and drop behaviour, which
         is to load the first dropped file into the control.
-        
+
         @param event
             The drop files event.
-        
+
         @remarks This is not implemented on non-Windows platforms.
-        
+
         @see wxDropFilesEvent
     */
     void OnDropFiles(wxDropFilesEvent& event);
@@ -1094,17 +1094,17 @@ public:
 
     /**
         Converts given position to a zero-based column, line number pair.
-        
+
         @param pos
             Position.
         @param x
             Receives zero based column number.
         @param y
             Receives zero based line number.
-        
+
         @returns @true on success, @false on failure (most likely due to a too
                  large position parameter).
-        
+
         @see XYToPosition()
     */
     bool PositionToXY(long pos, long* x, long* y) const;
@@ -1119,7 +1119,7 @@ public:
     /**
         Removes the text starting at the first given position up to (but not including)
         the character at the last position.
-        
+
         @param from
             The first position.
         @param to
@@ -1130,7 +1130,7 @@ public:
     /**
         Replaces the text starting at the first position up to (but not including)
         the character at the last position with the given text.
-        
+
         @param from
             The first position.
         @param to
@@ -1142,12 +1142,12 @@ public:
 
     /**
         Saves the contents of the control in a text file.
-        
+
         @param filename
             The name of the file in which to save the text.
         @param fileType
             The type of file to save. This is currently ignored in wxTextCtrl.
-        
+
         @returns @true if the operation was successful, @false otherwise.
     */
     bool SaveFile(const wxString& filename,
@@ -1164,30 +1164,30 @@ public:
         However if the @a style parameter is the default wxTextAttr, then the
         default style is just reset (instead of being combined with the new style which
         wouldn't change it at all).
-        
+
         @param style
             The style for the new text.
-        
+
         @returns @true on success, @false if an error occurred - may also mean that
                  the styles are not supported under this platform.
-        
+
         @see GetDefaultStyle()
     */
     bool SetDefaultStyle(const wxTextAttr& style);
 
     /**
         Makes the text item editable or read-only, overriding the @b wxTE_READONLY flag.
-        
+
         @param editable
             If @true, the control is editable. If @false, the control is read-only.
-        
+
         @see IsEditable()
     */
     virtual void SetEditable(const bool editable);
 
     /**
         Sets the insertion point at the given position.
-        
+
         @param pos
             Position to set.
     */
@@ -1218,7 +1218,7 @@ public:
 
     /**
         Marks the control as being modified by the user or not.
-        
+
         @see MarkDirty(), DiscardEdits()
     */
     void SetModified(bool modified);
@@ -1227,7 +1227,7 @@ public:
         Selects the text starting at the first position up to (but not including) the
         character at the last position. If both parameters are equal to -1 all text
         in the control is selected.
-        
+
         @param from
             The first position.
         @param to
@@ -1238,17 +1238,17 @@ public:
     /**
         Changes the style of the given range. If any attribute within @a style is
         not set, the corresponding attribute from GetDefaultStyle() is used.
-        
+
         @param start
             The start of the range to change.
         @param end
             The end of the range to change.
         @param style
             The new style for the range.
-        
+
         @returns @true on success, @false if an error occurred - it may also mean
                  that the styles are not supported under this platform.
-        
+
         @see GetStyle(), wxTextAttr
     */
     bool SetStyle(long start, long end, const wxTextAttr& style);
@@ -1261,7 +1261,7 @@ public:
         event.
         This function is deprecated and should not be used in new code. Please use the
         ChangeValue() function instead.
-        
+
         @param value
             The new value to set. It may contain newline characters if the text control
         is multi-line.
@@ -1270,7 +1270,7 @@ public:
 
     /**
         Makes the line containing the given position visible.
-        
+
         @param pos
             The position that should be visible.
     */
@@ -1285,10 +1285,10 @@ public:
 
     /**
         Writes the text into the text control at the current insertion position.
-        
+
         @param text
             Text to write to the text control.
-        
+
         @remarks Newlines in the text string are the only control characters
                  allowed, and they will cause appropriate line breaks.
                  See () and AppendText() for more
@@ -1298,12 +1298,12 @@ public:
 
     /**
         Converts the given zero based column and line number to a position.
-        
+
         @param x
             The column number.
         @param y
             The line number.
-        
+
         @returns The position value, or -1 if x or y was invalid.
     */
     long XYToPosition(long x, long y);
@@ -1366,7 +1366,7 @@ public:
     /**
         The constructor starts redirecting output sent to @a ostr or @e cout for
         the default parameter value to the text control @e text.
-        
+
         @param text
             The text control to append output too, must be non-@NULL
         @param ostr

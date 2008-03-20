@@ -47,7 +47,7 @@ public:
         Also, before using the updated bitmap data, make sure to select it out of
         context first
         (for example by selecting wxNullBitmap into the device context).
-        
+
         @see wxDC::DrawBitmap
     */
     void SelectObject(wxBitmap& bitmap);

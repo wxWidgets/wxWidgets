@@ -69,7 +69,7 @@ public:
     //@{
     /**
         Constructor.
-        
+
         @param parent
             Can be @NULL, a frame or another dialog box.
         @param id
@@ -89,7 +89,7 @@ public:
             Used to associate a name with the window,
             allowing the application user to set Motif resource values for
             individual dialog boxes.
-        
+
         @see Create()
     */
     wxDialog();
@@ -125,7 +125,7 @@ public:
 
     /**
         Centres the dialog box on the display.
-        
+
         @param direction
             May be wxHORIZONTAL, wxVERTICAL or wxBOTH.
     */
@@ -200,10 +200,10 @@ public:
     /**
         Ends a modal dialog, passing a value to be returned from the ShowModal()
         invocation.
-        
+
         @param retCode
             The value that should be returned by ShowModal.
-        
+
         @see ShowModal(), GetReturnCode(), SetReturnCode()
     */
     void EndModal(int retCode);
@@ -211,7 +211,7 @@ public:
     /**
         Gets the identifier of the button which works like standard OK button in this
         dialog.
-        
+
         @see SetAffirmativeId()
     */
     int GetAffirmativeId() const;
@@ -229,7 +229,7 @@ public:
     /**
         Gets the identifier of the button to map presses of @c ESC
         button to.
-        
+
         @see SetEscapeId()
     */
     int GetEscapeId() const;
@@ -276,10 +276,10 @@ public:
 
     /**
         Gets the return code for this window.
-        
+
         @remarks A return code is normally associated with a modal dialog, where
                  ShowModal() returns a code to the application.
-        
+
         @see SetReturnCode(), ShowModal(), EndModal()
     */
     int GetReturnCode();
@@ -295,10 +295,10 @@ public:
 
     /**
         Iconizes or restores the dialog. Windows only.
-        
+
         @param iconize
             If @true, iconizes the dialog box; if @false, shows and restores it.
-        
+
         @remarks Note that in Windows, iconization has no effect since dialog
                  boxes cannot be iconized. However, applications may
                  need to explicitly restore dialog boxes under Motif
@@ -310,7 +310,7 @@ public:
 
     /**
         Returns @true if the dialog box is iconized. Windows only.
-        
+
         @remarks Always returns @false under Windows since dialogs cannot be
                  iconized.
     */
@@ -339,10 +339,10 @@ public:
 
     /**
         The default handler for wxEVT_SYS_COLOUR_CHANGED.
-        
+
         @param event
             The colour change event.
-        
+
         @remarks Changes the dialog's colour to conform to the current settings
                  (Windows only). Add an event table entry for your
                  dialog class if you wish the behaviour to be different
@@ -350,7 +350,7 @@ public:
                  you do override this function, call wxEvent::Skip to
                  propagate the notification to child windows and
                  controls.
-        
+
         @see wxSysColourChangedEvent
     */
     void OnSysColourChanged(wxSysColourChangedEvent& event);
@@ -365,7 +365,7 @@ public:
         the special OK button in the PocketPC title bar, an event with this id is
         generated.
         By default, the affirmative id is wxID_OK.
-        
+
         @see GetAffirmativeId(), SetEscapeId()
     */
     void SetAffirmativeId(int id);
@@ -387,7 +387,7 @@ public:
 
     /**
         Sets the icon for this dialog.
-        
+
         @param icon
             The icon to associate with this dialog.
     */
@@ -395,7 +395,7 @@ public:
 
     /**
         Sets the icons for this dialog.
-        
+
         @param icons
             The icons to associate with this dialog.
     */
@@ -422,7 +422,7 @@ public:
     /**
         Sets the adaptation mode, overriding the global adaptation flag. @a mode may be
         one of the following values:
-        
+
         See also @ref overview_autoscrollingdialogs "Automatic scrolling dialogs" for
         more on layout adaptation.
     */
@@ -443,7 +443,7 @@ public:
         Allows the programmer to specify whether the dialog box is modal (Show() blocks
         control
         until the dialog is hidden) or modeless (control returns immediately).
-        
+
         @param flag
             If @true, the dialog will be modal, otherwise it will be modeless.
     */
@@ -451,26 +451,26 @@ public:
 
     /**
         Sets the return code for this window.
-        
+
         @param retCode
             The integer return code, usually a control identifier.
-        
+
         @remarks A return code is normally associated with a modal dialog, where
                  ShowModal() returns a code to the application.
                  The function EndModal() calls SetReturnCode.
-        
+
         @see GetReturnCode(), ShowModal(), EndModal()
     */
     void SetReturnCode(int retCode);
 
     /**
         Hides or shows the dialog.
-        
+
         @param show
             If @true, the dialog box is shown and brought to the front;
             otherwise the box is hidden. If @false and the dialog is
             modal, control is returned to the calling program.
-        
+
         @remarks The preferred way of dismissing a modal dialog is to use
                  EndModal().
     */
@@ -480,7 +480,7 @@ public:
         Shows a modal dialog. Program flow does not return until the dialog has been
         dismissed with
         EndModal().
-        
+
         @returns The return value is the value set with SetReturnCode().
     */
     int ShowModal();

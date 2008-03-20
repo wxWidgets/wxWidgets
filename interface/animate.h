@@ -70,11 +70,11 @@ public:
 
     /**
         Creates the control with the given @a anim animation.
-    
+
         After control creation you must explicitely call Play() to start to play
         the animation. Until that function won't be called, the first frame
         of the animation is displayed.
-        
+
         @param parent
             Parent window, must be non-@NULL.
         @param id
@@ -89,7 +89,7 @@ public:
             The window style, see wxAC_* flags.
         @param name
             Control name.
-        
+
         @returns @true if the control was successfully created or @false if
                  creation failed.
     */
@@ -192,7 +192,7 @@ public:
 
     /**
         Loads an animation from a file.
-        
+
         @param name
             The name of the file to load.
         @param type
@@ -235,7 +235,7 @@ public:
 
     /**
         Loads an animation from the given stream.
-        
+
         @param stream
             The stream to use to load the animation.
         @param type
@@ -243,7 +243,7 @@ public:
              @li wxANIMATION_TYPE_GIF: loads an animated GIF file;
              @li wxANIMATION_TYPE_ANI: load an ANI file;
              @li wxANIMATION_TYPE_ANY: tries to autodetect the filetype.
-        
+
         @returns @true if the operation succeeded, @false otherwise.
     */
     bool Load(wxInputStream& stream,
@@ -251,13 +251,13 @@ public:
 
     /**
         Loads an animation from a file.
-        
+
         @param name
             A filename.
         @param type
             One of the wxAnimationType values; wxANIMATION_TYPE_ANY
             means that the function should try to autodetect the filetype.
-        
+
         @returns @true if the operation succeeded, @false otherwise.
     */
     bool LoadFile(const wxString& name,

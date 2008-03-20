@@ -29,7 +29,7 @@ class wxTipProvider
 public:
     /**
         Constructor.
-        
+
         @param currentTip
             The starting tip index.
     */

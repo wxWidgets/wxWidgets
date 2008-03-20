@@ -41,7 +41,7 @@ public:
         )
         This is the default and only constructor of the wxConfigBase class, and
         derived classes.
-        
+
         @param appName
             The application name. If this is empty, the class will
             normally use wxApp::GetAppName to set it. The
@@ -101,7 +101,7 @@ public:
             This parameter is only used by wxFileConfig when compiled
             in Unicode mode. It specifies the encoding in which the configuration file
             is written.
-        
+
         @remarks By default, environment variable expansion is on and recording
                  defaults is off.
     */
@@ -118,7 +118,7 @@ public:
 
     /**
         @ref ctor() wxConfigBase
-        
+
         @ref dtor() ~wxConfigBase
     */
 
@@ -136,9 +136,9 @@ public:
         config file. @e DeleteAll() is especially useful if you want to erase all
         traces of your program presence: for example, when you uninstall it.
         DeleteEntry()
-        
+
         DeleteGroup()
-        
+
         DeleteAll()
     */
 
@@ -182,19 +182,19 @@ public:
         from running several enumerations simultaneously, that's why you must pass it
         explicitly.
         Having said all this, enumerating the config entries/groups is very simple:
-        
+
         There are also functions to get the number of entries/subgroups without
         actually enumerating them, but you will probably never need them.
         GetFirstGroup()
-        
+
         GetNextGroup()
-        
+
         GetFirstEntry()
-        
+
         GetNextEntry()
-        
+
         GetNumberOfEntries()
-        
+
         GetNumberOfGroups()
     */
 
@@ -253,7 +253,7 @@ public:
     bool GetNextGroup(wxString& str, long& index) const;
 
     /**
-        
+
     */
     uint GetNumberOfEntries(bool bRecursive = false) const;
 
@@ -309,18 +309,18 @@ public:
         Final remark: the @e szKey parameter for all these functions can contain an
         arbitrary path (either relative or absolute), not just the key name.
         Read()
-        
+
         Write()
-        
+
         Flush()
     */
 
 
     /**
         GetAppName()
-        
+
         GetVendorName()
-        
+
         wxFileConfig::SetUmask
     */
 
@@ -330,7 +330,7 @@ public:
         first of them is the expansion of environment variables in the string values
         read from the config file: for example, if you have the following in your
         config file:
-        
+
         the call to @c config-Read("UserData") will return something like
         @c "/home/zeitlin/data" if you're lucky enough to run a Linux system ;-)
         Although this feature is very useful, it may be annoying if you read a value
@@ -341,11 +341,11 @@ public:
         would be to prefix the offending symbols with a backslash.
         The following functions control this option:
         IsExpandingEnvVars()
-        
+
         SetExpandEnvVars()
-        
+
         SetRecordDefaults()
-        
+
         IsRecordingDefaults()
     */
 
@@ -359,18 +359,18 @@ public:
         which makes it possible to use the relative paths. To clarify all this, here
         is an example (it is only for the sake of demonstration, it doesn't do anything
         sensible!):
-        
+
         @e Warning: it is probably a good idea to always restore the path to its
         old value on function exit:
-        
+
         because otherwise the assert in the following example will surely fail
         (we suppose here that @e foo() function is the same as above except that it
         doesn't save and restore the path):
-        
+
         Finally, the path separator in wxConfigBase and derived classes is always '/',
         regardless of the platform (i.e. it is @b not '\\' under Windows).
         SetPath()
-        
+
         GetPath()
     */
 
@@ -382,22 +382,22 @@ public:
         returning @true if the value was found.
         If the value was not found, @a defaultVal is used instead.
         bool Read(const wxStringkey, T* value) const;
-        
-        
+
+
         @b Read(key, default="")
-        
+
         Returns a string
-        
+
         @b ReadInt(key, default=0)
-        
+
         Returns an integer
-        
+
         @b ReadFloat(key, default=0.0)
-        
+
         Returns a floating point number
-        
+
         @b ReadBool(key, default=0)
-        
+
         Returns a boolean
     */
     bool Read(const wxString& key, wxString* str) const;
@@ -453,7 +453,7 @@ public:
         the new name already exists or because the function is not supported in this
         wxConfig implementation.
         RenameEntry()
-        
+
         RenameGroup()
     */
 
@@ -526,22 +526,22 @@ public:
         in it. For example wxFontMapper or Unix version
         of wxFileDialog have the ability to use wxConfig class.
         Set()
-        
+
         Get()
-        
+
         Create()
-        
+
         DontCreateOnDemand()
     */
 
 
     /**
         HasGroup()
-        
+
         HasEntry()
-        
+
         Exists()
-        
+
         GetEntryType()
     */
 
@@ -551,22 +551,22 @@ public:
         These functions write the specified value to the config file and return @true
         on success. In the last one, function wxToString() must be
         defined for type @e T.
-        
-        
+
+
         @b Write(key, value)
-        
+
         Writes a string
-        
+
         @b WriteInt(key, value)
-        
+
         Writes an integer
-        
+
         @b WriteFloat(key, value)
-        
+
         Writes a floating point number
-        
+
         @b WriteBool(key, value)
-        
+
         Writes a boolean
     */
     bool Write(const wxString& key, const wxString& value);

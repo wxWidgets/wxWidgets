@@ -23,7 +23,7 @@ class wxGraphicsPath : public wxGraphicsObject
 public:
     //@{
     /**
-        
+
     */
     void AddArc(wxDouble x, wxDouble y, wxDouble r,
                 wxDouble startAngle,
@@ -49,7 +49,7 @@ public:
 
     //@{
     /**
-        
+
     */
     void AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2,
                          wxDouble cy2,
@@ -67,7 +67,7 @@ public:
 
     //@{
     /**
-        
+
     */
     void AddLineToPoint(wxDouble x, wxDouble y);
     void AddLineToPoint(const wxPoint2DDouble& p);
@@ -220,7 +220,7 @@ public:
     //@{
     /**
         Creates a wxGraphicsContext from a wxWindow.
-        
+
         @see wxGraphicsRenderer:: CreateContext
     */
     wxGraphicsContext* Create(const wxWindowDC& dc);
@@ -242,9 +242,9 @@ public:
         Creates a wxGraphicsContext from a native context. This native context must be
         eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a
         cairo_t pointer for cairo.
-        
+
         Creates a wxGraphicsContext from a native window.
-        
+
         @see wxGraphicsRenderer:: CreateContextFromNativeContext
     */
     wxGraphicsContext* CreateFromNative(void* context);
@@ -617,7 +617,7 @@ class wxGraphicsMatrix : public wxGraphicsObject
 public:
     //@{
     /**
-        
+
     */
     void Concat(const wxGraphicsMatrix* t);
     void Concat(const wxGraphicsMatrix& t);

@@ -29,7 +29,7 @@
 
 
  @section page_cppconst_guisystem GUI system
- 
+
  @beginDefList
  @itemdef{__WINDOWS__, any Windows, you may also use __WXMSW__}
  @itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
@@ -48,7 +48,7 @@
  @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
  @itemdef{__WXMAC__, Mac OS all targets}
  @itemdef{__WXMAC_CLASSIC__, MacOS for Classic}
- @itemdef{__WXMAC_CARBON__, MacOS for Carbon CFM (running under Classic or OSX) 
+ @itemdef{__WXMAC_CARBON__, MacOS for Carbon CFM (running under Classic or OSX)
                             or true OS X Mach-O Builds}
  @itemdef{__WXMAC_OSX__, MacOS X Carbon Mach-O Builds}
  @itemdef{__WXMGL__, SciTech Soft MGL (__WXUNIVERSAL__ will be also defined)}
@@ -64,33 +64,33 @@
                            to one of the symbols above so this should be tested first.}
  @itemdef{__X__, any X11-based GUI toolkit except GTK+}
  @endDefList
- 
- There are two wxWidgets ports to Mac OS. One of them, wxMac, exists in two versions: 
- Classic and Carbon. The Classic version is the only one to work on Mac OS version 8. 
+
+ There are two wxWidgets ports to Mac OS. One of them, wxMac, exists in two versions:
+ Classic and Carbon. The Classic version is the only one to work on Mac OS version 8.
  The Carbon version may be built either as CFM or Mach-O (binary format, like ELF)
  and the former may run under OS 9 while the latter only runs under OS X.
  Finally, there is a new Cocoa port which can only be used under OS X. To
  summarize:
- 
+
  @li If you want to test for all Mac platforms, classic and OS X, you
      should test both @c __WXMAC__ and @c __WXCOCOA__.
  @li If you want to test for any GUI Mac port under OS X, use
      @c __WXOSX__.
  @li If you want to test for any port under Mac OS X, including, for
      example, wxGTK and also wxBase, use @c __DARWIN__ (see below).
- 
+
  The convention is to use the @c __WX prefix for these
  symbols, although this has not always been followed.
- 
+
 
  @section page_cppconst_os Operating systems
- 
+
  @beginDefList
  @itemdef{__APPLE__, any Mac OS version}
  @itemdef{__AIX__, AIX}
  @itemdef{__BSD__, Any *BSD system}
  @itemdef{__CYGWIN__, Cygwin: Unix on Win32}
- @itemdef{__DARWIN__, Mac OS X using the BSD Unix C library 
+ @itemdef{__DARWIN__, Mac OS X using the BSD Unix C library
                       (as opposed to using the Metrowerks MSL C/C++ library)}
  @itemdef{__DATA_GENERAL__, DG-UX}
  @itemdef{__DOS_GENERAL__, DOS (used with wxMGL only)}
@@ -116,12 +116,12 @@
  @endDefList
 
 
- 
+
  @section page_cppconst_cpu Hardware architectures (CPU)
- 
+
  Note that not all of these symbols are always defined, it depends on the
  compiler used.
- 
+
  @beginDefList
  @itemdef{__ALPHA__, DEC Alpha architecture}
  @itemdef{__INTEL__, Intel i386 or compatible}
@@ -130,9 +130,9 @@
  @endDefList
 
 
- 
+
  @section page_cppconst_hardware Hardware type
- 
+
  @beginDefList
  @itemdef{__SMARTPHONE__, Generic mobile devices with phone buttons and a small display}
  @itemdef{__PDA__, Personal digital assistant, usually with touch screen}
@@ -144,9 +144,9 @@
  @endDefList
 
 
- 
+
  @section page_cppconst_compiler Compilers
- 
+
  @beginDefList
  @itemdef{__BORLANDC__, Borland C++. The value of the macro corresponds
                         to the compiler version: $500$ is $5.0$.}
@@ -159,10 +159,10 @@
  @itemdef{__SUNCC__, Sun CC, see also wxCHECK_SUNCC_VERSION}
  @itemdef{__SYMANTECC__, Symantec C++}
  @itemdef{__VISAGECPP__, IBM Visual Age (OS/2)}
- @itemdef{__VISUALC__, Microsoft Visual C++, see also wxCHECK_VISUALC_VERSION. 
-                       The value of this macro corresponds to the compiler version: 
-                       @c 1020 for @c 4.2 (the first supported version), @c 1100 for 
-                       @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols 
+ @itemdef{__VISUALC__, Microsoft Visual C++, see also wxCHECK_VISUALC_VERSION.
+                       The value of this macro corresponds to the compiler version:
+                       @c 1020 for @c 4.2 (the first supported version), @c 1100 for
+                       @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
                        __VISUALCn__ are also defined for each major compiler version from
                        5 to 9, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
                        for compiler version being precisely 7.}
@@ -173,17 +173,17 @@
  @endDefList
 
 
- 
+
  @section page_cppconst_featuretests Feature tests
- 
- Some library features may not be always available even if they were selected 
+
+ Some library features may not be always available even if they were selected
  by the user. To make it possible to check if this is the case, the library
- predefines the symbols in the form @c wxHAS_FEATURE. Unlike 
+ predefines the symbols in the form @c wxHAS_FEATURE. Unlike
  @c wxUSE_FEATURE symbols which are defined by the library user (directly
  in @c setup.h or by running configure script) and which must be always
  defined as either $0$ or $1$, the @c wxHAS symbols are only defined if
  the corresponding feature is available and not defined at all otherwise.
- 
+
  Currently the following symbols exist:
 
  @beginDefList
@@ -198,15 +198,15 @@
  @endDefList
 
 
- 
+
  @section page_cppconst_miscellaneous Miscellaneous
- 
+
  @beginDefList
  @itemdef{__WXWINDOWS__,
           always defined in wxWidgets applications, see also wxCHECK_VERSION}
  @itemdef{__WXDEBUG__, defined in debug mode, undefined in release mode}
  @itemdef{wxUSE_XXX,
-          if defined as $1$, feature XXX is active, see the 
+          if defined as $1$, feature XXX is active, see the
           @ref page_wxusedef (the symbols of this form are always defined,
           use @if_ and not @ifdef_ to test for them)}
  @itemdef{WX_PRECOMP,
@@ -227,20 +227,20 @@
           building wxBase code, either as a standalone library or as part of the
           monolithic wxWidgets library, defined as $0$ when building GUI library only)}
  @itemdef{wxNO_RTTI, is defined if the compiler RTTI support has been switched off}
- @itemdef{wxNO_EXCEPTIONS, 
+ @itemdef{wxNO_EXCEPTIONS,
           is defined if the compiler support for C++ exceptions has been switched off}
- @itemdef{wxNO_THREADS, 
+ @itemdef{wxNO_THREADS,
           if this macro is defined, the compilation options
           don't include compiler flags needed for multithreaded code generation. This
           implies that wxUSE_THREADS is $0$ and also that other (non-wx-based) threading
           packages cannot be used neither.}
- @itemdef{WXMAKINGDLL_XXX, 
+ @itemdef{WXMAKINGDLL_XXX,
           used internally and defined when building the
           library @c XXX as a DLL; when a monolithic wxWidgets build is used only a
           single @c WXMAKINGDLL symbol is defined}
- @itemdef{WXUSINGDLL, 
+ @itemdef{WXUSINGDLL,
           defined when compiling code which uses wxWidgets as a DLL/shared library}
- @itemdef{WXBUILDING, 
+ @itemdef{WXBUILDING,
           defined when building wxWidgets itself, whether as a static or shared library}
  @endDefList
 

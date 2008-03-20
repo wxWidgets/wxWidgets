@@ -35,7 +35,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a scrollbar.
-        
+
         @param parent
             Parent window. Must be non-@NULL.
         @param id
@@ -52,7 +52,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxScrollBar();
@@ -84,35 +84,35 @@ public:
         Returns the page size of the scrollbar. This is the number of scroll units
         that will be scrolled when the user pages up or down. Often it is the
         same as the thumb size.
-        
+
         @see SetScrollbar()
     */
     int GetPageSize() const;
 
     /**
         Returns the length of the scrollbar.
-        
+
         @see SetScrollbar()
     */
     int GetRange() const;
 
     /**
         Returns the current position of the scrollbar thumb.
-        
+
         @see SetThumbPosition()
     */
     int GetThumbPosition() const;
 
     /**
         Returns the thumb or 'view' size.
-        
+
         @see SetScrollbar()
     */
     int GetThumbSize() const;
 
     /**
         Sets the scrollbar properties.
-        
+
         @param position
             The position of the scrollbar in scroll units.
         @param thumbSize
@@ -126,7 +126,7 @@ public:
             the thumb size.
         @param refresh
             @true to redraw the scrollbar, @false otherwise.
-        
+
         @remarks Let's say you wish to display 50 lines of text, using the same
                  font. The window is sized so that you can only see 16
                  lines at a time.
@@ -137,10 +137,10 @@ public:
 
     /**
         Sets the position of the scrollbar.
-        
+
         @param viewStart
             The position of the scrollbar thumb.
-        
+
         @see GetThumbPosition()
     */
     void SetThumbPosition(int viewStart);

@@ -51,7 +51,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a text control.
-        
+
         @param parent
             Parent window. Should not be @NULL.
         @param id
@@ -68,7 +68,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see wxTextCtrl::Create, wxValidator
     */
     wxSearchCtrl();
@@ -105,7 +105,7 @@ public:
         Sets the search control's menu object.  If there is already a menu associated
         with
         the search control it is deleted.
-        
+
         @param menu
             Menu to attach to the search control.
     */

@@ -47,7 +47,7 @@ public:
 
     /**
         Returns the number of columns the target window contains.
-        
+
         @see SetColumnCount()
     */
     size_t GetColumnCount() const;
@@ -176,7 +176,7 @@ public:
 
     /**
         Returns the number of rows the target window contains.
-        
+
         @see SetRowCount()
     */
     size_t GetRowCount() const;
@@ -303,7 +303,7 @@ public:
         represents 10 device units (which may not be the case since this class allows
         for variable scroll unit sizes), a call to this function with a coordinate of
         15 will return -85.
-        
+
         @see CalcUnscrolledPosition()
     */
     int CalcScrolledPosition(int coord) const;
@@ -314,7 +314,7 @@ public:
         unit represents 10 device units (which may not be the case since this class
         allows for variable scroll unit sizes), a call to this function with a
         coordinate of 15 will return 115.
-        
+
         @see CalcScrolledPosition()
     */
     int CalcUnscrolledPosition(int coord) const;
@@ -346,7 +346,7 @@ public:
         This function needs to be overridden in the in the derived class to return the
         window size with respect to the opposing orientation. If this is a vertical
         scrolled window, it should return the height.
-        
+
         @see GetOrientationTargetSize()
     */
     virtual int GetNonOrientationTargetSize() const;
@@ -361,7 +361,7 @@ public:
         This function needs to be overridden in the in the derived class to return the
         window size with respect to the orientation this helper is working with. If
         this is a vertical scrolled window, it should return the width.
-        
+
         @see GetNonOrientationTargetSize()
     */
     virtual int GetOrientationTargetSize() const;
@@ -369,7 +369,7 @@ public:
     /**
         This function will return the target window this helper class is currently
         scrolling.
-        
+
         @see SetTargetWindow()
     */
     wxWindow* GetTargetWindow() const;
@@ -421,7 +421,7 @@ public:
         want it to scroll (part of) another window (e.g. a child of it in order to
         scroll only a portion the area between the scrollbars like a spreadsheet where
         only the cell area will move).
-        
+
         @see GetTargetWindow()
     */
     void SetTargetWindow(wxWindow* target);
@@ -483,7 +483,7 @@ public:
         one.
         Note that @c wxVSCROLL is always automatically added to our style, there is
         no need to specify it explicitly.
-        
+
         @param parent
             The parent window, must not be @NULL
         @param id
@@ -533,7 +533,7 @@ public:
         You are encouraged to update any existing code using these function to use
         the new replacements mentioned below, and avoid using these functions for
         any new code as they are deprecated.
-        
+
         Deprecated for wxVarVScrollHelper::SetRowCount.
     */
     size_t GetFirstVisibleLine();
@@ -597,7 +597,7 @@ public:
         one.
         Note that @c wxHSCROLL and @c wxVSCROLL are always automatically added
         to our styles, there is no need to specify it explicitly.
-        
+
         @param parent
             The parent window, must not be @NULL
         @param id
@@ -679,7 +679,7 @@ public:
         window (pixels) are actually moved. When this is @false, you are
         responsible for repainting any invalidated areas of the window yourself to
         account for the new scroll position.
-        
+
         @param vscrolling
             Specifies if physical scrolling should be turned on when scrolling
         vertically.
@@ -692,7 +692,7 @@ public:
 
     /**
         Returns the number of columns and rows the target window contains.
-        
+
         @see SetRowColumnCount()
     */
     wxSize GetRowColumnCount() const;
@@ -815,7 +815,7 @@ public:
         one.
         Note that @c wxHSCROLL is always automatically added to our style, there is
         no need to specify it explicitly.
-        
+
         @param parent
             The parent window, must not be @NULL
         @param id

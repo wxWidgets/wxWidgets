@@ -52,23 +52,23 @@ public:
          wxTEMPLATE_VISIBLE The template may be displayed to the user in dialogs.
          wxTEMPLATE_INVISIBLE The template may not be displayed to the user in dialogs.
          wxDEFAULT_TEMPLATE_FLAGS Defined as wxTEMPLATE_VISIBLE.
-        
-        
+
+
         @b Wx::DocTemplate-new( docmgr, descr, filter, dir,
         ext, docTypeName, viewTypeName, docClassInfo, viewClassInfo, flags
         )
-        
+
          will construct document and view objects from the class information
-        
+
         @b Wx::DocTemplate-new( docmgr, descr, filter, dir,
         ext, docTypeName, viewTypeName, docClassName, viewClassName, flags
         )
-        
+
          will construct document and view objects from perl packages
-        
+
         @b Wx::DocTemplate-new( docmgr, descr, filter, dir,
         ext, docTypeName, viewTypeName )
-        
+
         @c Wx::DocTemplate::CreateDocument() and
         @c Wx::DocTemplate::CreateView() must be overridden
     */
@@ -367,7 +367,7 @@ public:
 
     /**
         Loads the file history from a config object.
-        
+
         @see wxConfig()
     */
     void FileHistoryLoad(wxConfigBase& config);
@@ -381,7 +381,7 @@ public:
     /**
         Saves the file history into a config object. This must be called
         explicitly by the application.
-        
+
         @see wxConfig()
     */
     void FileHistorySave(wxConfigBase& resourceFile);
@@ -533,7 +533,7 @@ public:
         Returns a document template by asking the user (if there is more than one
         template).
         This function is used in CreateDocument().
-        
+
         @param templates
             Pointer to an array of templates from which to choose a desired template.
         @param noTemplates
@@ -542,7 +542,7 @@ public:
             If more than one template is passed in in templates,
             then this parameter indicates whether the list of templates that the user
             will have to choose from is sorted or not when shown the choice box dialog.
-        
+
             Default is @false.
     */
     wxDocTemplate* SelectDocumentType(wxDocTemplate** templates,
@@ -556,7 +556,7 @@ public:
         The dialog normally will not appear because the array of templates only contains
         those relevant to the document in question, and often there will only be one
         such.
-        
+
         @param templates
             Pointer to an array of templates from which to choose a desired template.
         @param noTemplates
@@ -565,7 +565,7 @@ public:
             If more than one template is passed in in templates,
             then this parameter indicates whether the list of templates that the user
             will have to choose from is sorted or not when shown the choice box dialog.
-        
+
             Default is @false.
     */
     wxDocTemplate* SelectViewType(wxDocTemplate** templates,
@@ -1372,7 +1372,7 @@ public:
 
     /**
         Returns the list of menus that are managed by this file history object.
-        
+
         @see UseMenu()
     */
     const wxList GetMenus() const;
@@ -1380,7 +1380,7 @@ public:
     /**
         Loads the file history from the given config object. This function should be
         called explicitly by the application.
-        
+
         @see wxConfig()
     */
     void Load(wxConfigBase& config);
@@ -1398,7 +1398,7 @@ public:
     /**
         Saves the file history into the given config object. This must be called
         explicitly by the application.
-        
+
         @see wxConfig()
     */
     void Save(wxConfigBase& config);

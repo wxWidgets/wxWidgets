@@ -75,7 +75,7 @@ public:
         Returns @true if any items were changed, i.e. if there had been any
         selected items before, or @false if all the items were already deselected.
         This method is only valid for multi selection listboxes.
-        
+
         @see SelectAll(), Select()
     */
     bool DeselectAll();
@@ -87,14 +87,14 @@ public:
         calls to GetNextSelected(). It is needed in
         order to allow parallel iterations over the selected items.
         Here is a typical example of using these functions:
-        
+
         This method is only valid for multi selection listboxes.
     */
     int GetFirstSelected(unsigned long& cookie) const;
 
     /**
         Get the number of items in the control.
-        
+
         @see SetItemCount()
     */
     size_t GetItemCount() const;
@@ -102,7 +102,7 @@ public:
     /**
         Returns the margins used by the control. The @c x field of the returned
         point is the horizontal margin and the @c y field is the vertical one.
-        
+
         @see SetMargins()
     */
     wxPoint GetMargins() const;
@@ -111,7 +111,7 @@ public:
         Returns the index of the next selected item or @c wxNOT_FOUND if there are
         no more.
         This method is only valid for multi selection listboxes.
-        
+
         @see GetFirstSelected()
     */
     int GetNextSelected(unsigned long& cookie) const;
@@ -120,7 +120,7 @@ public:
         Returns the number of the items currently selected.
         It is valid for both single and multi selection controls. In the former case it
         may only return 0 or 1 however.
-        
+
         @see IsSelected(), GetFirstSelected(),
              GetNextSelected()
     */
@@ -134,7 +134,7 @@ public:
     /**
         Returns the background colour used for the selected cells. By default the
         standard system colour is used.
-        
+
         @see wxSystemSettings::GetColour, SetSelectionBackground()
     */
     const wxColour GetSelectionBackground() const;
@@ -174,7 +174,7 @@ public:
     /**
         The derived class must implement this function to actually draw the item
         with the given index on the provided DC.
-        
+
         @param dc
             The device context to use for drawing
         @param rect
@@ -190,7 +190,7 @@ public:
         passed to it may be modified, typically to deflate it a bit before passing to
         OnDrawItem().
         The base class version of this method doesn't do anything.
-        
+
         @param dc
             The device context to use for drawing
         @param rect
@@ -221,7 +221,7 @@ public:
         Returns @true if any items were changed, i.e. if there had been any
         unselected items before, or @false if all the items were already selected.
         This method is only valid for multi selection listboxes.
-        
+
         @see DeselectAll(), Select()
     */
     bool SelectAll();
@@ -231,7 +231,7 @@ public:
         Return @true if the items selection status has changed or @false
         otherwise.
         This method is only valid for multi selection listboxes.
-        
+
         @see SelectAll(), Select()
     */
     bool SelectRange(size_t from, size_t to);
@@ -269,7 +269,7 @@ public:
         Notice that using non-default background colour may result in control having
         appearance different from the similar native controls and so should in general
         be avoided.
-        
+
         @see GetSelectionBackground()
     */
     void SetSelectionBackground(const wxColour& col);

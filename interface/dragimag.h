@@ -54,7 +54,7 @@ public:
         for
         wxGenericDragImage, and can be used when the application
         supplies DoDrawImage() and GetImageRect().
-        
+
         @param image
             Icon or bitmap to be used as the drag image. The bitmap can
             have a mask.
@@ -93,7 +93,7 @@ public:
         and Move() to show the image on the screen.
         Call EndDrag() when the drag has finished.
         Note that this call automatically calls CaptureMouse.
-        
+
         @param hotspot
             The location of the drag position relative to the upper-left corner
             of the image.

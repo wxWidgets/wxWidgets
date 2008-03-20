@@ -51,7 +51,7 @@ public:
         Constructor. Creates the dialog, displays it and disables user input
         for other windows, or, if wxPD_APP_MODAL flag is not given, for its parent
         window only.
-        
+
         @param title
             Dialog title to show in titlebar.
         @param message
@@ -97,7 +97,7 @@ public:
         dialog
         or ask the user for the confirmation and if the abort is not confirmed the
         dialog may be resumed with Resume() function.
-        
+
         @param value
             The new value of the progress meter. It should be less than or
             equal to the maximum value given to the constructor and the dialog is

@@ -53,7 +53,7 @@ public:
         You might use this pair of functions when implementing a drag feature, for
         example
         as in the wxSplitterWindow implementation.
-        
+
         @remarks This function is probably obsolete since the X implementations
                  allow drawing directly on the screen now. However, the
                  fact that this function allows the screen to be

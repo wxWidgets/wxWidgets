@@ -101,7 +101,7 @@ public:
         of the module needed by CLASSINFO(), however errors are
         not detected until run-time, instead of compile-time, then.
         Note that circular dependencies are detected and result in a fatal error.
-        
+
         @param dep
             The class information object for the dependent module.
         @param classname

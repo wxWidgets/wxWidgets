@@ -295,7 +295,7 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
 {
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
-    // create text ctrl with minimal size 100x60 that is horizontally and 
+    // create text ctrl with minimal size 100x60 that is horizontally and
     // vertically stretchable with a border width of 10
     topsizer->Add(
         new wxTextCtrl( this, -1, "My text.", wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
@@ -303,20 +303,20 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title )
 
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
 
-    //create two buttons that are horizontally unstretchable, 
+    //create two buttons that are horizontally unstretchable,
     // with an all-around border with a width of 10 and implicit top alignment
     button_sizer->Add(
         new wxButton( this, wxID_OK, "OK" ),
-        wxSizerFlags(0).Align().Border(wxALL, 10));       
+        wxSizerFlags(0).Align().Border(wxALL, 10));
 
     button_sizer->Add(
         new wxButton( this, wxID_CANCEL, "Cancel" ),
-        wxSizerFlags(0).Align().Border(wxALL, 10));    
+        wxSizerFlags(0).Align().Border(wxALL, 10));
 
     //create a sizer with no border and centered horizontally
     topsizer->Add(
         button_sizer,
-        wxSizerFlags(0).Center() ); 
+        wxSizerFlags(0).Center() );
 
     SetSizerAndFit(topsizer); // use the sizer for layout and set size and hints
 }

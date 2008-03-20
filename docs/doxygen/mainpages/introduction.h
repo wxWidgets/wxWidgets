@@ -35,7 +35,7 @@
  Julian Smart, Robert Roebling, Vadim Zeitlin, Vaclav Slavik and many others.
 
  This manual contains a class reference and topic overviews.
- For a selection of wxWidgets tutorials, please see the documentation page 
+ For a selection of wxWidgets tutorials, please see the documentation page
  on the wxWidgets web site: http://www.wxwidgets.org.
 
  Please note that in the following, ``MS Windows" often refers to all

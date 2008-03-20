@@ -77,7 +77,7 @@ public:
 
     /**
         Sets the accelerator entry parameters.
-        
+
         @param flags
             A combination of the wxAcceleratorEntryFlags values, which
             indicates which modifier keys are held down.
@@ -138,7 +138,7 @@ public:
 
     /**
         Initializes the accelerator table from an array of wxAcceleratorEntry.
-        
+
         @param n
             Number of accelerator entries.
         @param entries
@@ -148,7 +148,7 @@ public:
 
     /**
         Loads the accelerator table from a Windows resource (Windows only).
-        
+
         @param resource
             Name of a Windows accelerator.
     */
@@ -167,7 +167,7 @@ public:
 
     /**
         Assignment operator, using @ref overview_refcount "reference counting".
-        
+
         @param accel
             Accelerator table to assign.
     */

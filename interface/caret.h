@@ -58,13 +58,13 @@ public:
     //@{
     /**
         Get the caret position (in pixels).
-        
+
         @b GetPosition()
-        
+
         Returns a Wx::Point
-        
+
         @b GetPositionXY()
-        
+
         Returns a 2-element list
          @c ( x, y )
     */
@@ -75,13 +75,13 @@ public:
     //@{
     /**
         Get the caret size.
-        
+
         @b GetSize()
-        
+
         Returns a Wx::Size
-        
+
         @b GetSizeWH()
-        
+
         Returns a 2-element list
          @c ( width, height )
     */
@@ -121,11 +121,11 @@ public:
 
     /**
         Sets the blink time for all the carets.
-        
+
         @remarks Under Windows, this function will change the blink time for all
                  carets permanently (until the next time it is called),
                  even for the carets in other applications.
-        
+
         @see GetBlinkTime()
     */
     static void SetBlinkTime(int milliseconds);

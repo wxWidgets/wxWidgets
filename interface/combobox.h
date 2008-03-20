@@ -66,7 +66,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a combobox.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -89,7 +89,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxComboBox();
@@ -229,7 +229,7 @@ public:
 
     /**
         Removes the text between the two positions in the combobox text field.
-        
+
         @param from
             The first position.
         @param to
@@ -240,7 +240,7 @@ public:
     /**
         Replaces the text between two positions with the given text, in the combobox
         text field.
-        
+
         @param from
             The first position.
         @param to
@@ -252,7 +252,7 @@ public:
 
     /**
         Sets the insertion point in the combobox text field.
-        
+
         @param pos
             The new insertion point.
     */
@@ -265,7 +265,7 @@ public:
 
     /**
         Selects the text between the two positions, in the combobox text field.
-        
+
         @param from
             The first position.
         @param to
@@ -277,7 +277,7 @@ public:
         Sets the text for the combobox text field.
         @b NB: For a combobox with @c wxCB_READONLY style the string must be in
         the combobox choices list, otherwise the call to SetValue() is ignored.
-        
+
         @param text
             The text to set.
     */

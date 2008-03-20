@@ -45,7 +45,7 @@ class wxGLContext : public wxObject
 public:
     /**
         Constructor.
-        
+
         @param win
             The canvas that is used to initialize this context. This parameter is
         needed only temporarily,
@@ -121,9 +121,9 @@ public:
         Creates a window with the given parameters. Notice that you need to create and
         use a wxGLContext to output to this window.
         If
-        
+
         @param attribList is not specified, double buffered RGBA mode is used.
-        
+
         parent
             Pointer to a parent window.
         @param id
@@ -165,7 +165,7 @@ public:
     /**
         Determines if a canvas having the specified attributes is available.
         Returns @true if attributes are supported.
-        
+
         @param attribList
             See attribList for wxGLCanvas().
     */

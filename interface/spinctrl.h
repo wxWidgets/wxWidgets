@@ -33,7 +33,7 @@ public:
     /**
         )
         Constructor, creating and showing a spin control.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param value
@@ -56,7 +56,7 @@ public:
             Initial value.
         @param name
             Window name.
-        
+
         @see Create()
     */
     wxSpinCtrl();

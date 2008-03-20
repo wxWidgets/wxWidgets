@@ -117,7 +117,7 @@
  specific information about the problem will be logged.
 
  You should also use @ref page_macro_cat_debugging as part of a `defensive programming' strategy,
- scattering wxASSERTs liberally to test for problems in your code as early as possible. 
+ scattering wxASSERTs liberally to test for problems in your code as early as possible.
  Forward thinking will save a surprising amount of time in the long run.
 
  See the @ref overview_debugging for further information.

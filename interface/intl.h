@@ -151,7 +151,7 @@ public:
         Returns the information for the given language or @NULL if this language
         is unknown. Note that even if the returned pointer is valid, the caller should
         @e not delete it.
-        
+
         @see GetLanguageInfo()
     */
     static wxLanguageInfo* FindLanguageInfo(const wxString& locale);
@@ -235,7 +235,7 @@ public:
         See GNU gettext manual for additional information on plural forms handling.
         This method is called by the wxGetTranslation()
         function and _() macro.
-        
+
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
     */
@@ -281,7 +281,7 @@ public:
     /**
         The second form is deprecated, use the first one unless you know what you are
         doing.
-        
+
         @param language
             wxLanguage identifier of the locale.
             wxLANGUAGE_DEFAULT has special meaning -- wxLocale will use system's
@@ -289,32 +289,32 @@ public:
             language (see GetSystemLanguage).
         @param flags
             Combination of the following:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxLOCALE_LOAD_DEFAULT
-        
-        
-        
-        
+
+
+
+
             Load the message catalog
             for the given locale containing the translations of standard wxWidgets
         messages
             automatically.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxLOCALE_CONV_ENCODING
-        
-        
-        
-        
+
+
+
+
             Automatically convert message
             catalogs to platform's default encoding. Note that it will do only basic
             conversion between well-known pair like iso8859-1 and windows-1252 or
@@ -363,7 +363,7 @@ public:
         FindLanguageInfo() to obtain its
         wxLanguageInfo structure. See AddLanguage() for
         the wxLanguageInfo description.
-        
+
         @wxsince{2.7.1}.
     */
     static bool IsAvailable(int lang);
@@ -526,7 +526,7 @@ public:
                   @c wxToupper_l()
         We hope to provide many more functions (covering numbers, time and formatted
         IO) in the near future.
-        
+
         @see wxLocale
     */
 };

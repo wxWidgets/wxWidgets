@@ -53,7 +53,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a slider.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -73,7 +73,7 @@ public:
             Window validator.
         @param name
             Window name.
-        
+
         @see Create(), wxValidator
     */
     wxSlider();
@@ -93,14 +93,14 @@ public:
 
     /**
         Clears the selection, for a slider with the @b wxSL_SELRANGE style.
-        
+
         @remarks Windows 95 only.
     */
     void ClearSel();
 
     /**
         Clears the ticks.
-        
+
         @remarks Windows 95 only.
     */
     void ClearTicks();
@@ -119,160 +119,160 @@ public:
 
     /**
         Returns the line size.
-        
+
         @see SetLineSize()
     */
     int GetLineSize() const;
 
     /**
         Gets the maximum slider value.
-        
+
         @see GetMin(), SetRange()
     */
     int GetMax() const;
 
     /**
         Gets the minimum slider value.
-        
+
         @see GetMin(), SetRange()
     */
     int GetMin() const;
 
     /**
         Returns the page size.
-        
+
         @see SetPageSize()
     */
     int GetPageSize() const;
 
     /**
         Returns the selection end point.
-        
+
         @remarks Windows 95 only.
-        
+
         @see GetSelStart(), SetSelection()
     */
     int GetSelEnd() const;
 
     /**
         Returns the selection start point.
-        
+
         @remarks Windows 95 only.
-        
+
         @see GetSelEnd(), SetSelection()
     */
     int GetSelStart() const;
 
     /**
         Returns the thumb length.
-        
+
         @remarks Windows 95 only.
-        
+
         @see SetThumbLength()
     */
     int GetThumbLength() const;
 
     /**
         Returns the tick frequency.
-        
+
         @remarks Windows 95 only.
-        
+
         @see SetTickFreq()
     */
     int GetTickFreq() const;
 
     /**
         Gets the current slider value.
-        
+
         @see GetMin(), GetMax(), SetValue()
     */
     int GetValue() const;
 
     /**
         Sets the line size for the slider.
-        
+
         @param lineSize
             The number of steps the slider moves when the user moves it up or down a
         line.
-        
+
         @see GetLineSize()
     */
     void SetLineSize(int lineSize);
 
     /**
         Sets the page size for the slider.
-        
+
         @param pageSize
             The number of steps the slider moves when the user pages up or down.
-        
+
         @see GetPageSize()
     */
     void SetPageSize(int pageSize);
 
     /**
         Sets the minimum and maximum slider values.
-        
+
         @see GetMin(), GetMax()
     */
     void SetRange(int minValue, int maxValue);
 
     /**
         Sets the selection.
-        
+
         @param startPos
             The selection start position.
         @param endPos
             The selection end position.
-        
+
         @remarks Windows 95 only.
-        
+
         @see GetSelStart(), GetSelEnd()
     */
     void SetSelection(int startPos, int endPos);
 
     /**
         Sets the slider thumb length.
-        
+
         @param len
             The thumb length.
-        
+
         @remarks Windows 95 only.
-        
+
         @see GetThumbLength()
     */
     void SetThumbLength(int len);
 
     /**
         Sets a tick position.
-        
+
         @param tickPos
             The tick position.
-        
+
         @remarks Windows 95 only.
-        
+
         @see SetTickFreq()
     */
     void SetTick(int tickPos);
 
     /**
         Sets the tick mark frequency and position.
-        
+
         @param n
             Frequency. For example, if the frequency is set to two, a tick mark is
         displayed for
             every other increment in the slider's range.
         @param pos
             Position. Must be greater than zero. TODO: what is this for?
-        
+
         @remarks Windows 95 only.
-        
+
         @see GetTickFreq()
     */
     void SetTickFreq(int n, int pos);
 
     /**
         Sets the slider position.
-        
+
         @param value
             The slider position.
     */

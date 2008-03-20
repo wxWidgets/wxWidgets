@@ -35,39 +35,39 @@ public:
         some more complicated calculations to find the answer are under the
         @ref overview_datetimecalculations "Calendar calculations" section.
         IsValid()
-        
+
         GetTicks()
-        
+
         GetCentury()
-        
+
         GetYear()
-        
+
         GetMonth()
-        
+
         GetDay()
-        
+
         GetWeekDay()
-        
+
         GetHour()
-        
+
         GetMinute()
-        
+
         GetSecond()
-        
+
         GetMillisecond()
-        
+
         GetDayOfYear()
-        
+
         GetWeekOfYear()
-        
+
         GetWeekOfMonth()
-        
+
         GetYearDay()
-        
+
         IsWorkDay()
-        
+
         IsGregorianDate()
-        
+
         GetAsDOS()
     */
 
@@ -88,17 +88,17 @@ public:
         @ref getmodifiedjuliandaynumber() MJD or
         @ref getratadie() "Rata Die number" from it.
         @ref wxdatetimejdn() "wxDateTime(double jdn)"
-        
+
         @ref setjdn() "Set(double jdn)"
-        
+
         GetJulianDayNumber()
-        
+
         GetJDN()
-        
+
         GetModifiedJulianDayNumber()
-        
+
         GetMJD()
-        
+
         GetRataDie()
     */
 
@@ -110,33 +110,33 @@ public:
         All (non-const) functions in this section don't modify the time part of the
         wxDateTime -- they only work with the date part of it.
         SetToWeekDayInSameWeek()
-        
+
         GetWeekDayInSameWeek()
-        
+
         SetToNextWeekDay()
-        
+
         GetNextWeekDay()
-        
+
         SetToPrevWeekDay()
-        
+
         GetPrevWeekDay()
-        
+
         SetToWeekDay()
-        
+
         @ref wxDateTime::getweekday2 GetWeekDay
-        
+
         SetToLastWeekDay()
-        
+
         GetLastWeekDay()
-        
+
         SetToWeekOfYear()
-        
+
         SetToLastMonthDay()
-        
+
         GetLastMonthDay()
-        
+
         SetToYearDay()
-        
+
         GetYearDay()
     */
 
@@ -147,49 +147,49 @@ public:
         should use IsValid() method to check that the
         values were correct as constructors can not return an error code.
         @ref wxdatetimedef() wxDateTime
-        
+
         @ref wxdatetimetimet() wxDateTime(time_t)
-        
+
         @ref wxdatetimetm() "wxDateTime(struct tm)"
-        
+
         @ref wxdatetimejdn() "wxDateTime(double jdn)"
-        
+
         @ref wxdatetimetime() "wxDateTime(h, m, s, ms)"
-        
+
         @ref wxdatetimedate() "wxDateTime(day, mon, year, h, m, s, ms)"
-        
+
         SetToCurrent()
-        
+
         @ref settimet() Set(time_t)
-        
+
         @ref settm() "Set(struct tm)"
-        
+
         @ref setjdn() "Set(double jdn)"
-        
+
         @ref settime() "Set(h, m, s, ms)"
-        
+
         @ref setdate() "Set(day, mon, year, h, m, s, ms)"
-        
+
         @ref setfromdos() "SetFromDOS(unsigned long ddt)"
-        
+
         ResetTime()
-        
+
         SetYear()
-        
+
         SetMonth()
-        
+
         @ref setdate() SetDay
-        
+
         SetHour()
-        
+
         SetMinute()
-        
+
         SetSecond()
-        
+
         SetMillisecond()
-        
+
         @ref operatoreqtimet() operator=(time_t)
-        
+
         @ref operatoreqtm() "operator=(struct tm)"
     */
 
@@ -214,21 +214,21 @@ public:
         modifies the object to which it is applied. The operators -= and += are
         defined to be equivalent to the second forms of these functions.
         @ref addts() Add(wxTimeSpan)
-        
+
         @ref addds() Add(wxDateSpan)
-        
+
         @ref subtractts() Subtract(wxTimeSpan)
-        
+
         @ref subtractds() Subtract(wxDateSpan)
-        
+
         @ref subtractdt() Subtract(wxDateTime)
-        
+
         @ref addts() oparator+=(wxTimeSpan)
-        
+
         @ref addds() oparator+=(wxDateSpan)
-        
+
         @ref subtractts() oparator-=(wxTimeSpan)
-        
+
         @ref subtractds() oparator-=(wxDateSpan)
     */
 
@@ -237,19 +237,19 @@ public:
         There are several function to allow date comparison. To supplement them, a few
         global operators ,  etc taking wxDateTime are defined.
         IsEqualTo()
-        
+
         IsEarlierThan()
-        
+
         IsLaterThan()
-        
+
         IsStrictlyBetween()
-        
+
         IsBetween()
-        
+
         IsSameDate()
-        
+
         IsSameTime()
-        
+
         IsEqualUpTo()
     */
 
@@ -260,7 +260,7 @@ public:
         It also accepts a few wxWidgets-specific extensions: you can optionally specify
         the width of the field to follow using @c printf(3)-like syntax and the
         format specification @c %l can be used to get the number of milliseconds.
-        
+
         @see ParseFormat()
     */
     wxString Format(const wxChar* format = wxDefaultDateTimeFormat,
@@ -278,7 +278,7 @@ public:
         result exactly corresponding to the ISO standard, but it can also be useful to
         use a space as seprator if a more human-readable combined date-time
         representation is needed.
-        
+
         @see FormatISODate(), FormatISOTime(),
              ParseISOCombined()
     */
@@ -328,7 +328,7 @@ public:
         Get the beginning of DST for the given country in the given year (current one
         by default). This function suffers from limitations described in
         @ref overview_tdatedst "DST overview".
-        
+
         @see GetEndDST()
     */
     static wxDateTime GetBeginDST(int year = Inv_Year,
@@ -342,7 +342,7 @@ public:
     /**
         Returns the current default country. The default country is used for DST
         calculations, for example.
-        
+
         @see SetCountry()
     */
     static Country GetCountry();
@@ -360,9 +360,9 @@ public:
     /**
         Returns the object having the same date component as this one but time of
         00:00:00.
-        
+
         @wxsince{2.8.2}
-        
+
         @see ResetTime()
     */
     wxDateTime GetDateOnly() const;
@@ -381,7 +381,7 @@ public:
     /**
         Returns the end of DST for the given country in the given year (current one by
         default).
-        
+
         @see GetBeginDST()
     */
     static wxDateTime GetEndDST(int year = Inv_Year,
@@ -400,7 +400,7 @@ public:
     /**
         Returns the @ref setjdn() JDN corresponding to this date. Beware
         of rounding errors!
-        
+
         @see GetModifiedJulianDayNumber()
     */
     double GetJulianDayNumber() const;
@@ -451,7 +451,7 @@ public:
     /**
         Gets the full (default) or abbreviated (specify @c Name_Abbr name of the
         given month.
-        
+
         @see GetWeekDayName()
     */
     static wxString GetMonthName(Month month,
@@ -540,7 +540,7 @@ public:
     /**
         Gets the full (default) or abbreviated (specify @c Name_Abbr name of the
         given week day.
-        
+
         @see GetMonthName()
     */
     static wxString GetWeekDayName(WeekDay weekday,
@@ -584,7 +584,7 @@ public:
     /**
         Returns @true if IsStrictlyBetween()
         is @true or if the date is equal to one of the limit values.
-        
+
         @see IsStrictlyBetween()
     */
     bool IsBetween(const wxDateTime& t1, const wxDateTime& t2) const;
@@ -649,7 +649,7 @@ public:
 
     /**
         Returns @true if this date lies strictly between the two others,
-        
+
         @see IsBetween()
     */
     bool IsStrictlyBetween(const wxDateTime& t1,
@@ -695,11 +695,11 @@ public:
     /**
         Returns the object corresponding to the current time.
         Example:
-        
+
         Note that this function is accurate up to second:
         UNow() should be used for better precision
         (but it is less efficient and might not be available on all platforms).
-        
+
         @see Today()
     */
     static wxDateTime Now();
@@ -861,31 +861,31 @@ public:
         additional argument of wxString::const_iterator type in which, if it is not
         @NULL, an iterator pointing to the end of the scanned string part is returned.
         ParseFormat()
-        
+
         ParseDateTime()
-        
+
         ParseDate()
-        
+
         ParseTime()
-        
+
         ParseISODate()
-        
+
         ParseISOTime()
-        
+
         ParseISOCombined()
-        
+
         wxDateTime::ParseRfc822Date
-        
+
         Format()
-        
+
         FormatDate()
-        
+
         FormatTime()
-        
+
         FormatISOCombined()
-        
+
         FormatISODate()
-        
+
         FormatISOTime()
     */
 
@@ -910,7 +910,7 @@ public:
         calculations, date formatting and other things.
         The possible values for @a country parameter are enumerated in
         @ref overview_wxdatetime "wxDateTime constants section".
-        
+
         @see GetCountry()
     */
     static void SetCountry(Country country);
@@ -1046,43 +1046,43 @@ public:
         Please note that although several function accept an extra @e Calendar
         parameter, it is currently ignored as only the Gregorian calendar is
         supported. Future versions will support other calendars.
-        
+
         SetCountry()
-        
+
         GetCountry()
-        
+
         IsWestEuropeanCountry()
-        
+
         GetCurrentYear()
-        
+
         ConvertYearToBC()
-        
+
         GetCurrentMonth()
-        
+
         IsLeapYear()
-        
+
         @ref getcenturystatic() GetCentury
-        
+
         GetNumberOfDays()
-        
+
         GetNumberOfDays()
-        
+
         GetMonthName()
-        
+
         GetWeekDayName()
-        
+
         GetAmPmStrings()
-        
+
         IsDSTApplicable()
-        
+
         GetBeginDST()
-        
+
         GetEndDST()
-        
+
         Now()
-        
+
         UNow()
-        
+
         Today()
     */
 
@@ -1097,21 +1097,21 @@ public:
         Please see the @ref overview_tdatetimezones "time zone overview" for more
         information about time zones. Normally, these functions should be rarely used.
         FromTimezone()
-        
+
         ToTimezone()
-        
+
         MakeTimezone()
-        
+
         MakeFromTimezone()
-        
+
         ToUTC()
-        
+
         MakeUTC()
-        
+
         GetBeginDST()
-        
+
         GetEndDST()
-        
+
         IsDST()
     */
 
@@ -1132,7 +1132,7 @@ public:
     /**
         Returns the object corresponding to the midnight of the current day (i.e. the
         same as Now(), but the time part is set to 0).
-        
+
         @see Now()
     */
     static wxDateTime Today();
@@ -1141,7 +1141,7 @@ public:
         Returns the object corresponding to the current time including the
         milliseconds if a function to get time with such precision is available on the
         current platform (supported under most Unices and Win32).
-        
+
         @see Now()
     */
     static wxDateTime UNow();
@@ -1236,14 +1236,14 @@ public:
 
     /**
         Returns a date span object corresponding to one day.
-        
+
         @see Days()
     */
     static wxDateSpan Day();
 
     /**
         Returns a date span object corresponding to the given number of days.
-        
+
         @see Day()
     */
     static wxDateSpan Days(int days);
@@ -1251,7 +1251,7 @@ public:
     /**
         Returns the number of days (only, that it not counting the weeks component!)
         in this date span.
-        
+
         @see GetTotalDays()
     */
     int GetDays() const;
@@ -1264,14 +1264,14 @@ public:
     /**
         Returns the combined number of days in this date span, counting both weeks and
         days. It still doesn't take neither months nor years into the account.
-        
+
         @see GetWeeks(), GetDays()
     */
     int GetTotalDays() const;
 
     /**
         Returns the number of weeks in this date span.
-        
+
         @see GetTotalDays()
     */
     int GetWeeks() const;
@@ -1283,14 +1283,14 @@ public:
 
     /**
         Returns a date span object corresponding to one month.
-        
+
         @see Months()
     */
     static wxDateSpan Month();
 
     /**
         Returns a date span object corresponding to the given number of months.
-        
+
         @see Month()
     */
     static wxDateSpan Months(int mon);
@@ -1310,7 +1310,7 @@ public:
     //@{
     /**
         Changes the sign of this date span.
-        
+
         @see Negate()
     */
     wxDateSpan Neg();
@@ -1319,7 +1319,7 @@ public:
 
     /**
         Returns the date span with the opposite sign.
-        
+
         @see Neg()
     */
     wxDateSpan Negate() const;
@@ -1360,28 +1360,28 @@ public:
 
     /**
         Returns a date span object corresponding to one week.
-        
+
         @see Weeks()
     */
     static wxDateSpan Week();
 
     /**
         Returns a date span object corresponding to the given number of weeks.
-        
+
         @see Week()
     */
     static wxDateSpan Weeks(int weeks);
 
     /**
         Returns a date span object corresponding to one year.
-        
+
         @see Years()
     */
     static wxDateSpan Year();
 
     /**
         Returns a date span object corresponding to the given number of years.
-        
+
         @see Year()
     */
     static wxDateSpan Years(int years);
@@ -1433,15 +1433,15 @@ public:
 
     /**
         GetSeconds()
-        
+
         GetMinutes()
-        
+
         GetHours()
-        
+
         GetDays()
-        
+
         GetWeeks()
-        
+
         GetValue()
     */
 
@@ -1473,35 +1473,35 @@ public:
     /**
         Returns the string containing the formatted representation of the time span.
         The following format specifiers are allowed after %:
-        
+
         H
-        
+
         number of @b Hours
-        
+
         M
-        
+
         number of @b Minutes
-        
+
         S
-        
+
         number of @b Seconds
-        
+
         l
-        
+
         number of mi@b lliseconds
-        
+
         D
-        
+
         number of @b Days
-        
+
         E
-        
+
         number of w@b Eeks
-        
+
         %
-        
+
         the percent character
-        
+
         Note that, for example, the number of hours in the description above is not
         well defined: it can be either the total number of hours (for example, for a
         time span of 50 hours this would be 50) or just the hour part of the time
@@ -1643,15 +1643,15 @@ public:
 
     /**
         Add()
-        
+
         Subtract()
-        
+
         Multiply()
-        
+
         Negate()
-        
+
         Neg()
-        
+
         Abs()
     */
 
@@ -1668,27 +1668,27 @@ public:
 
     /**
         Milliseconds()
-        
+
         Millisecond()
-        
+
         Seconds()
-        
+
         Second()
-        
+
         Minutes()
-        
+
         Minute()
-        
+
         Hours()
-        
+
         Hour()
-        
+
         Days()
-        
+
         Day()
-        
+
         Weeks()
-        
+
         Week()
     */
 
@@ -1704,15 +1704,15 @@ public:
 
     /**
         IsNull()
-        
+
         IsPositive()
-        
+
         IsNegative()
-        
+
         IsEqualTo()
-        
+
         IsLongerThan()
-        
+
         IsShorterThan()
     */
 

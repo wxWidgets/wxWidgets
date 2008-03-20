@@ -24,14 +24,14 @@ class wxDynamicLibraryDetails
 public:
     /**
         Retrieves the load address and the size of this module.
-        
+
         @param addr
             the pointer to the location to return load address in, may be
             @NULL
         @param len
             pointer to the location to return the size of this module in
             memory in, may be @NULL
-        
+
         @returns @true if the load address and module size were retrieved, @false
                  if this information is not available.
     */
@@ -150,7 +150,7 @@ public:
         function name.
         Returned value will be @NULL if the symbol was not found in the DLL or if
         an error occurred.
-        
+
         @param dllHandle
             Valid handle previously returned by
             LoadLibrary
@@ -168,7 +168,7 @@ public:
         Returns a handle to the loaded DLL. Use @a success parameter to test if it
         is valid. If the handle is valid, the library must be unloaded later with
         UnloadLibrary().
-        
+
         @param libname
             Name of the shared object to load.
         @param success
@@ -218,16 +218,16 @@ public:
         it adds a @c ".dll" extension under Windows and @c "lib" prefix and
         @c ".so", @c ".sl" or maybe @c ".dylib" extension under Unix.
         The possible values for @a cat are:
-        
-        
+
+
         wxDL_LIBRARY
-        
+
         normal library
-        
+
         wxDL_MODULE
-        
+
         a loadable module or plugin
-        
+
         @see CanonicalizePluginName()
     */
     static wxString CanonicalizeName(const wxString& name,
@@ -240,14 +240,14 @@ public:
         to the name to ensure that the plugin which is going to be loaded will be
         compatible with the main program.
         The possible values for @a cat are:
-        
-        
+
+
         wxDL_PLUGIN_GUI
-        
+
         plugin which uses GUI classes (default)
-        
+
         wxDL_PLUGIN_BASE
-        
+
         plugin which only uses wxBase
     */
     static wxString CanonicalizePluginName(const wxString& name,
@@ -269,7 +269,7 @@ public:
     /**
         Returns pointer to symbol @a name in the library or @NULL if the library
         contains no such symbol.
-        
+
         @see wxDYNLIB_FUNCTION()
     */
     void* GetSymbol(const wxString& name) const;
@@ -289,7 +289,7 @@ public:
         Returns @true if the symbol with the given @a name is present in the dynamic
         library, @false otherwise. Unlike GetSymbol(),
         this function doesn't log an error message if the symbol is not found.
-        
+
         @wxsince{2.5.4}
     */
     bool HasSymbol(const wxString& name) const;
@@ -312,33 +312,33 @@ public:
     /**
         Loads DLL with the given @a name into memory. The @a flags argument can
         be a combination of the following bits:
-        
+
         wxDL_LAZY
-        
+
         equivalent of RTLD_LAZY under Unix, ignored elsewhere
-        
+
         wxDL_NOW
-        
+
         equivalent of RTLD_NOW under Unix, ignored elsewhere
-        
+
         wxDL_GLOBAL
-        
+
         equivalent of RTLD_GLOBAL under Unix, ignored elsewhere
-        
+
         wxDL_VERBATIM
-        
+
         don't try to append the appropriate extension to
         the library name (this is done by default).
-        
+
         wxDL_DEFAULT
-        
+
         default flags, same as wxDL_NOW currently
-        
+
         wxDL_QUIET
-        
+
         don't log an error message if the library couldn't be
         loaded.
-        
+
         Returns @true if the library was successfully loaded, @false otherwise.
     */
     bool Load(const wxString& name, int flags = wxDL_DEFAULT);

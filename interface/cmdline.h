@@ -104,7 +104,7 @@ public:
 
     /**
         Returns @true if long options are enabled, otherwise @false.
-        
+
         @see EnableLongOptions()
     */
     bool AreLongOptionsEnabled() const;
@@ -174,7 +174,7 @@ public:
         Enable or disable support for the long options.
         As long options are not (yet) POSIX-compliant, this option allows to disable
         them.
-        
+
         @see Customization() and AreLongOptionsEnabled()
     */
     void EnableLongOptions(bool enable = true);
@@ -219,7 +219,7 @@ public:
         Parse the command line, return 0 if ok, -1 if @c "-h" or @c "--help"
         option was encountered and the help message was given or a positive value if a
         syntax error occurred.
-        
+
         @param giveUsage
             If @true (default), the usage message is given if a
             syntax error was encountered while parsing the command line or if help was
@@ -273,7 +273,7 @@ public:
         Give the standard usage message describing all program options. It will use the
         options and parameters descriptions specified earlier, so the resulting message
         will not be helpful to the user unless the descriptions were indeed specified.
-        
+
         @see SetLogo()
     */
     void Usage() const;

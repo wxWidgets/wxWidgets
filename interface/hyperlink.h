@@ -81,7 +81,7 @@ class wxHyperlinkCtrl : public wxControl
 public:
     /**
         Creates the hyperlink control.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id

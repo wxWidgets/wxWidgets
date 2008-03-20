@@ -45,7 +45,7 @@ public:
         Appends several items at once to the control. Notice that calling this method
         is usually much faster than appending them one by one if you need to add a lot
         of items.
-        
+
         @param item
             String to add.
         @param stringsArray
@@ -56,7 +56,7 @@ public:
             Number of items in the strings array.
         @param clientData
             Array of client data pointers of size n to associate with the new items.
-        
+
         @returns When appending a single item, the return value is the index of
                  the newly added item which may be different from the
                  last one if the control is sorted (e.g. has wxLB_SORT
@@ -86,22 +86,22 @@ public:
         Note that it is an error (signalled by an assert failure in debug builds) to
         remove an item with the index negative or greater or equal than the number of
         items in the control.
-        
+
         @param n
             The zero-based item index.
-        
+
         @see Clear()
     */
     void Delete(unsigned int n);
 
     /**
         Finds an item whose label matches the given string.
-        
+
         @param string
             String to find.
         @param caseSensitive
             Whether search is case sensitive (default is not).
-        
+
         @returns The zero-based position of the item, or wxNOT_FOUND if the
                  string was not found.
     */
@@ -113,10 +113,10 @@ public:
         It is an error to call this function for a control which doesn't have untyped
         client data at all although it is ok to call it even if the given item doesn't
         have any client data associated with it (but other items do).
-        
+
         @param n
             The zero-based position of the item.
-        
+
         @returns A pointer to the client data, or @NULL if not present.
     */
     void* GetClientData(unsigned int n) const;
@@ -126,17 +126,17 @@ public:
         It is an error to call this function for a control which doesn't have typed
         client data at all although it is ok to call it even if the given item doesn't
         have any client data associated with it (but other items do).
-        
+
         @param n
             The zero-based position of the item.
-        
+
         @returns A pointer to the client data, or @NULL if not present.
     */
     wxClientData* GetClientObject(unsigned int n) const;
 
     /**
         Returns the number of items in the control.
-        
+
         @see IsEmpty()
     */
     unsigned int GetCount() const;
@@ -144,23 +144,23 @@ public:
     /**
         Returns the index of the selected item or @c wxNOT_FOUND if no item is
         selected.
-        
+
         @returns The position of the current selection.
-        
+
         @remarks This method can be used with single selection list boxes only,
                  you should use wxListBox::GetSelections for the list
                  boxes with wxLB_MULTIPLE style.
-        
+
         @see SetSelection(), GetStringSelection()
     */
     int GetSelection() const;
 
     /**
         Returns the label of the item with the given index.
-        
+
         @param n
             The zero-based index.
-        
+
         @returns The label of the item or an empty string if the position was
                  invalid.
     */
@@ -169,7 +169,7 @@ public:
     /**
         Returns the label of the selected item or an empty string if no item is
         selected.
-        
+
         @see GetSelection()
     */
     wxString GetStringSelection() const;
@@ -185,7 +185,7 @@ public:
         is usually much faster than inserting them one by one if you need to insert a
         lot
         of items.
-        
+
         @param item
             String to add.
         @param pos
@@ -198,7 +198,7 @@ public:
             Number of items in the strings array.
         @param clientData
             Array of client data pointers of size n to associate with the new items.
-        
+
         @returns The return value is the index of the newly inserted item. If the
                  insertion failed for some reason, -1 is returned.
     */
@@ -221,7 +221,7 @@ public:
 
     /**
         Returns @true if the control is empty or @false if it has some items.
-        
+
         @see GetCount()
     */
     bool IsEmpty() const;
@@ -238,7 +238,7 @@ public:
         Replaces the current control contents with the given items. Notice that calling
         this method is much faster than appending the items one by one if you need to
         append a lot of them.
-        
+
         @param item
             The single item to insert into the control.
         @param stringsArray
@@ -250,7 +250,7 @@ public:
         'strings'.
         @param clientData
             Client data to associate with the item(s).
-        
+
         @returns When the control is sorted (e.g. has wxLB_SORT or wxCB_SORT
                  style) the return value could be different from
                  (GetCount() - 1). When setting a single item to the
@@ -274,7 +274,7 @@ public:
         Associates the given untyped client data pointer with the given item. Note that
         it is an error to call this function if any typed client data pointers had been
         associated with the control items before.
-        
+
         @param n
             The zero-based item index.
         @param data
@@ -289,7 +289,7 @@ public:
         control itself is destroyed).
         Note that it is an error to call this function if any untyped client data
         pointers had been associated with the control items before.
-        
+
         @param n
             The zero-based item index.
         @param data
@@ -302,17 +302,17 @@ public:
         if @a n == @c wxNOT_FOUND.
         Note that this does not cause any command events to be emitted nor does it
         deselect any other items in the controls which support multiple selections.
-        
+
         @param n
             The string position to select, starting from zero.
-        
+
         @see SetString(), SetStringSelection()
     */
     void SetSelection(int n);
 
     /**
         Sets the label for the given item.
-        
+
         @param n
             The zero-based item index.
         @param string
@@ -323,10 +323,10 @@ public:
     /**
         Selects the item with the specified string in the control. This doesn't cause
         any command events to be emitted.
-        
+
         @param string
             The string to select.
-        
+
         @returns @true if the specified string has been selected, @false if it
                  wasn't found in the control.
     */

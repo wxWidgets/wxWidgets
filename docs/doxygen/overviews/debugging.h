@@ -22,7 +22,7 @@
  @li @ref overview_debugging_dbgctx
  @li @ref overview_debugging_dbgmacros
  @li @ref overview_debugging_logging
- @li @ref overview_debugging_dbgctx2 
+ @li @ref overview_debugging_dbgctx2
 
 
  <hr>
@@ -31,7 +31,7 @@
  @section overview_debugging_dbgctx wxDebugContext
 
  wxDebugContext is a class that never gets instantiated, but ties together
- various static functions and variables. It allows you to dump all objects to that stream, 
+ various static functions and variables. It allows you to dump all objects to that stream,
  write statistics about object allocation, and check memory for errors.
 
  It is good practice to define a wxObject::Dump member function for each class you derive
@@ -47,9 +47,9 @@
  and compiler -- some systems don't allow all memory logging to be enabled). See the
  memcheck sample for example of usage.
 
- For wxDebugContext to do its work, the @e new and @e delete operators for wxObject 
- have been redefined to store extra information about dynamically allocated objects 
- (but not statically declared objects). 
+ For wxDebugContext to do its work, the @e new and @e delete operators for wxObject
+ have been redefined to store extra information about dynamically allocated objects
+ (but not statically declared objects).
 
  This slows down a debugging version of an application, but can
  find difficult-to-detect memory leaks (objects are not
@@ -64,7 +64,7 @@
  @endcode
 
  All occurrences of 'new' in wxWidgets and your own application will use
- the overridden form of the operator with two extra arguments. This means that 
+ the overridden form of the operator with two extra arguments. This means that
  the debugging output (and error messages reporting memory problems) will tell you what
  file and on what line you allocated the object. Unfortunately not all
  compilers allow this definition to work properly, but most do.
@@ -98,7 +98,7 @@
 
  @section overview_debugging_logging Logging functions
 
- You can use the wxLogDebug and wxLogTrace functions to output debugging information in 
+ You can use the wxLogDebug and wxLogTrace functions to output debugging information in
  debug mode; it will do nothing for non-debugging code.
 
 

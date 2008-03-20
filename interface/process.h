@@ -57,7 +57,7 @@ public:
         value of @c wxPROCESS_DEFAULT or @c wxPROCESS_REDIRECT. Specifying the
         former value has no particular effect while using the latter one is equivalent
         to calling Redirect().
-        
+
         @param parent
             The event handler parent.
         @param id
@@ -97,7 +97,7 @@ public:
 
     /**
         Returns @true if the given process exists in the system.
-        
+
         @see Kill(), @ref overview_sampleexec "Exec sample"
     */
     static bool Exists(int pid);
@@ -130,7 +130,7 @@ public:
     /**
         Returns @true if there is data to be read on the child process standard
         error stream.
-        
+
         @see IsInputAvailable()
     */
     bool IsErrorAvailable() const;
@@ -141,7 +141,7 @@ public:
         polling-based code waiting for a better mechanism in future wxWidgets versions.
         See the @ref overview_sampleexec "exec sample" for an example of using this
         function.
-        
+
         @see IsInputOpened()
     */
     bool IsInputAvailable() const;
@@ -153,7 +153,7 @@ public:
 
     /**
         Send the specified signal to the given process. Possible signal values are:
-        
+
         @c wxSIGNONE, @c wxSIGKILL and @c wxSIGTERM have the same meaning
         under both Unix and Windows but all the other signals are equivalent to
         @c wxSIGTERM under Windows.
@@ -162,7 +162,7 @@ public:
         process will be killed too. Note that under Unix, for wxKILL_CHILDREN
         to work you should have created the process passing wxEXEC_MAKE_GROUP_LEADER.
         Returns the element of @c wxKillError enum:
-        
+
         @see Exists(), wxKill(), @ref overview_sampleexec "Exec sample"
     */
     static wxKillError Kill(int pid, wxSignal signal = wxSIGNONE,
@@ -170,10 +170,10 @@ public:
 
     /**
         It is called when the process with the pid
-        
+
         @param pid finishes.
         It raises a wxWidgets event when it isn't overridden.
-        
+
         pid
             The pid of the process which has just terminated.
         @param status
@@ -191,15 +191,15 @@ public:
         object will be destroyed automatically when the child process terminates. This
         does mean that the child process should be told to quit before the main program
         exits to avoid memory leaks.
-        
+
         @param cmd
             The command to execute, including optional arguments.
         @param flags
             The flags to pass to wxExecute.
               NOTE: wxEXEC_SYNC should not be used.
-        
+
         @returns A pointer to new wxProcess object or @NULL on error.
-        
+
         @see wxExecute()
     */
     static wxProcess* Open(const wxString& cmd,

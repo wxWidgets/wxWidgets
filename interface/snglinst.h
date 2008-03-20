@@ -80,7 +80,7 @@ public:
         Note that you can't call Create() more than once, so calling it if the
         @ref wxsingleinstancechecker() "non default ctor"
         had been used is an error.
-        
+
         @param name
             must be given and be as unique as possible. It is used as the
             mutex name under Win32 and the lock file name under Unix.
@@ -90,7 +90,7 @@ public:
             is optional and is ignored under Win32 and used as the directory to
             create the lock file in under Unix (default is
             wxGetHomeDir())
-        
+
         @returns Returns @false if initialization failed, it doesn't mean that
                  another instance is running - use  IsAnotherRunning()
                  to check for it.

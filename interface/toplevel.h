@@ -25,7 +25,7 @@ class wxTopLevelWindow : public wxWindow
 public:
     /**
         Returns @true if the platform supports making the window translucent.
-        
+
         @see SetTransparent()
     */
     virtual bool CanSetTransparent();
@@ -37,11 +37,11 @@ public:
 
     /**
         Centres the window on screen.
-        
+
         @param direction
             Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
             or wxBOTH.
-        
+
         @see wxWindow::CentreOnParent
     */
     void CentreOnScreen(int direction = wxBOTH);
@@ -67,7 +67,7 @@ public:
     /**
         Returns the standard icon of the window. The icon will be invalid if it hadn't
         been previously set by SetIcon().
-        
+
         @see GetIcons()
     */
     const wxIcon GetIcon() const;
@@ -78,14 +78,14 @@ public:
         SetIcons() had been called before.
         Use GetIcon() to get the main icon of the
         window.
-        
+
         @see wxIconBundle
     */
     const wxIconBundle GetIcons() const;
 
     /**
         Gets a string containing the window title.
-        
+
         @see SetTitle()
     */
     wxString GetTitle() const;
@@ -101,10 +101,10 @@ public:
 
     /**
         Iconizes or restores the window.
-        
+
         @param iconize
             If @true, iconizes the window; if @false, shows and restores it.
-        
+
         @see IsIconized(), Maximize().
     */
     void Iconize(bool iconize);
@@ -125,7 +125,7 @@ public:
 
     /**
         Returns @true if the window is in fullscreen mode.
-        
+
         @see ShowFullScreen()
     */
     bool IsFullScreen();
@@ -144,7 +144,7 @@ public:
         @b @c This method is specific to wxUniversal port
         Returns @true if this window is using native decorations, @false if we draw
         them ourselves.
-        
+
         @see UseNativeDecorations(),
              UseNativeDecorationsByDefault()
     */
@@ -152,10 +152,10 @@ public:
 
     /**
         Maximizes or restores the window.
-        
+
         @param maximize
             If @true, maximizes the window, otherwise it restores it.
-        
+
         @see Iconize()
     */
     void Maximize(bool maximize);
@@ -175,17 +175,17 @@ public:
 
     /**
         Changes the default item for the panel, usually @a win is a button.
-        
+
         @see GetDefaultItem()
     */
     void SetDefaultItem(wxWindow win);
 
     /**
         Sets the icon for this window.
-        
+
         @param icon
             The icon to associate with this window.
-        
+
         @remarks The window takes a 'copy' of icon, but since it uses reference
                  counting, the copy is very quick. It is safe to delete
                  icon after calling this function.
@@ -197,10 +197,10 @@ public:
         different icons for different situations (e.g. task switching bar, taskbar,
         window title bar) instead of scaling, with possibly bad looking results, the
         only icon set by SetIcon().
-        
+
         @param icons
             The icons to associate with this window.
-        
+
         @see wxIconBundle.
     */
     void SetIcons(const wxIconBundle& icons);
@@ -209,14 +209,14 @@ public:
         Sets action or menu activated by pressing left hardware button on the smart
         phones.
         Unavailable on full keyboard machines.
-        
+
         @param id
             Identifier for this button.
         @param label
             Text to be displayed on the screen area dedicated to this hardware button.
         @param subMenu
             The menu to be opened after pressing this hardware button.
-        
+
         @see SetRightMenu().
     */
     void SetLeftMenu(int id = wxID_ANY,
@@ -239,14 +239,14 @@ public:
         Sets action or menu activated by pressing right hardware button on the smart
         phones.
         Unavailable on full keyboard machines.
-        
+
         @param id
             Identifier for this button.
         @param label
             Text to be displayed on the screen area dedicated to this hardware button.
         @param subMenu
             The menu to be opened after pressing this hardware button.
-        
+
         @see SetLeftMenu().
     */
     void SetRightMenu(int id = wxID_ANY,
@@ -268,7 +268,7 @@ public:
         Allows specification of minimum and maximum window sizes, and window size
         increments.
         If a pair of values is not set (or set to -1), no constraints will be used.
-        
+
         @param incW
             Specifies the increment for sizing the width (GTK/Motif/Xt only).
         @param incH
@@ -276,7 +276,7 @@ public:
         @param incSize
             Increment size (only taken into account under X11-based
             ports such as wxGTK/wxMotif/wxX11).
-        
+
         @remarks Notice that this function not only prevents the user from
                  resizing the window outside the given bounds but it
                  also prevents the program itself from doing it using
@@ -293,17 +293,17 @@ public:
 
     /**
         Sets the window title.
-        
+
         @param title
             The window title.
-        
+
         @see GetTitle()
     */
     virtual void SetTitle(const wxString& title);
 
     /**
         If the platform supports it will set the window to be translucent
-        
+
         @param alpha
             Determines how opaque or transparent the window will
               be, if the platform supports the opreration.  A value of 0 sets the
@@ -335,7 +335,7 @@ public:
         This function has not been tested with MDI frames.
         Note that showing a window full screen also actually
         @ref wxWindow::show Show()s if it hadn't been shown yet.
-        
+
         @see IsFullScreen()
     */
     bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
@@ -345,7 +345,7 @@ public:
         Use native or custom-drawn decorations for this window only. Notice that to
         have any effect this method must be called before really creating the window,
         i.e. two step creation must be used:
-        
+
         @see UseNativeDecorationsByDefault(),
              IsUsingNativeDecorations()
     */

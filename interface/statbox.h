@@ -35,7 +35,7 @@ public:
     //@{
     /**
         Constructor, creating and showing a static box.
-        
+
         @param parent
             Parent window. Must not be @NULL.
         @param id
@@ -52,7 +52,7 @@ public:
             Window style. See wxStaticBox.
         @param name
             Window name.
-        
+
         @see Create()
     */
     wxStaticBox();

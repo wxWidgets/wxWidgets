@@ -41,9 +41,9 @@ public:
         the menu item is selected) in this parameter.
         Finally note that you can e.g. use a stock menu label without using its stock
         help string:
-        
+
         that is, stock properties are set independently one from the other.
-        
+
         @param parentMenu
             Menu that the menu item belongs to.
         @param id
@@ -110,7 +110,7 @@ public:
     /**
         Returns the text associated with the menu item including any accelerator
         characters that were passed to the constructor or SetItemLabel.
-        
+
         @see GetItemLabelText(), GetLabelText()
     */
     wxString GetItemLabel() const;
@@ -118,7 +118,7 @@ public:
     /**
         Returns the text associated with the menu item, without any accelerator
         characters.
-        
+
         @see GetItemLabel(), GetLabelText()
     */
     wxString GetItemLabelText() const;
@@ -133,7 +133,7 @@ public:
         Returns the text associated with the menu item without any accelerator
         characters it might contain.
         This function is deprecated in favour of GetItemLabelText().
-        
+
         @see GetText(), GetLabelFromText()
     */
     wxString GetLabel() const;
@@ -141,10 +141,10 @@ public:
     /**
         Strips all accelerator characters and mnemonics from the given @e text.
         For example,
-        
+
         will return just @c "Hello".
         This function is deprecated; please use GetLabelText() instead.
-        
+
         @see GetText(), GetLabel()
     */
     static wxString GetLabelFromText(const wxString& text);
@@ -152,9 +152,9 @@ public:
     /**
         Strips all accelerator characters and mnemonics from the given @e text.
         For example,
-        
+
         will return just @c "Hello".
-        
+
         @see GetItemLabelText(), GetItemLabel()
     */
     static wxString GetLabelText(const wxString& text);
@@ -187,7 +187,7 @@ public:
         Returns the text associated with the menu item, such as it was passed to the
         wxMenuItem constructor, i.e. with any accelerator characters it may contain.
         This function is deprecated in favour of GetItemLabel().
-        
+
         @see GetLabel(), GetLabelFromText()
     */
     wxString GetText() const;

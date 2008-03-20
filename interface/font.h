@@ -41,7 +41,7 @@ public:
     //@{
     /**
         Creates a font object with the specified attributes.
-        
+
         @param pointSize
             Size in points.
         @param pixelSize
@@ -53,123 +53,123 @@ public:
         @param family
             Font family, a generic way of referring to fonts without specifying actual
         facename. One of:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxFONTFAMILY_DEFAULT
-        
-        
-        
-        
+
+
+
+
             Chooses a default font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_DECORATIVE
-        
-        
-        
-        
+
+
+
+
             A decorative font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_ROMAN
-        
-        
-        
-        
+
+
+
+
             A formal, serif font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_SCRIPT
-        
-        
-        
-        
+
+
+
+
             A handwriting font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_SWISS
-        
-        
-        
-        
+
+
+
+
             A sans-serif font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_MODERN
-        
-        
-        
-        
+
+
+
+
             A fixed pitch font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_TELETYPE
-        
-        
-        
-        
+
+
+
+
             A teletype font.
         @param style
             One of wxFONTSTYLE_NORMAL, wxFONTSTYLE_SLANT and wxFONTSTYLE_ITALIC.
         @param weight
             Font weight, sometimes also referred to as font boldness. One of:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxFONTWEIGHT_NORMAL
-        
-        
-        
-        
+
+
+
+
             Normal font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTWEIGHT_LIGHT
-        
-        
-        
-        
+
+
+
+
             Light font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTWEIGHT_BOLD
-        
-        
-        
-        
+
+
+
+
             Bold font.
         @param underline
             The value can be @true or @false. At present this has an effect on Windows
@@ -180,75 +180,75 @@ public:
             a default typeface will be chosen based on the family.
         @param encoding
             An encoding which may be one of
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxFONTENCODING_SYSTEM
-        
-        
-        
-        
+
+
+
+
             Default system encoding.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTENCODING_DEFAULT
-        
-        
-        
-        
+
+
+
+
             Default application encoding: this
             is the encoding set by calls to
             SetDefaultEncoding and which may be set to,
             say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
             default application encoding is the same as default system encoding.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTENCODING_ISO8859_1...15
-        
-        
-        
-        
+
+
+
+
             ISO8859 encodings.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTENCODING_KOI8
-        
-        
-        
-        
+
+
+
+
             The standard Russian encoding for Internet.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTENCODING_CP1250...1252
-        
-        
-        
-        
+
+
+
+
             Windows encodings similar to ISO8859 (but not identical).
-        
-        
-        
-        
-        
+
+
+
+
+
             If the specified encoding isn't available, no font is created
             (see also font encoding overview).
-        
+
         @remarks If the desired font does not exist, the closest match will be
                  chosen. Under Windows, only scalable TrueType fonts are
                  used.
@@ -271,7 +271,7 @@ public:
         Destructor.
         See @ref overview_refcountdestruct "reference-counted object destruction" for
         more info.
-        
+
         @remarks Although all remaining fonts are deleted when the application
                  exits, the application should try to clean up all fonts
                  itself. This is because wxWidgets cannot know if a
@@ -282,7 +282,7 @@ public:
 
     /**
         Returns the current application's default encoding.
-        
+
         @see @ref overview_wxfontencodingoverview, SetDefaultEncoding()
     */
     static wxFontEncoding GetDefaultEncoding();
@@ -291,7 +291,7 @@ public:
         Returns the typeface name associated with the font, or the empty string if
         there is no
         typeface information.
-        
+
         @see SetFaceName()
     */
     wxString GetFaceName() const;
@@ -299,7 +299,7 @@ public:
     /**
         Gets the font family. See SetFamily() for a list of valid
         family identifiers.
-        
+
         @see SetFamily()
     */
     wxFontFamily GetFamily() const;
@@ -310,7 +310,7 @@ public:
         Note that the returned string is not meant to be shown or edited by the user: a
         typical
         use of this function is for serializing in string-form a wxFont object.
-        
+
         @see SetNativeFontInfo(),GetNativeFontInfoUserDesc()
     */
     wxString GetNativeFontInfoDesc() const;
@@ -320,14 +320,14 @@ public:
         non-empty.
         Some examples of the formats of returned strings (which are platform-dependent)
         are in SetNativeFontInfoUserDesc().
-        
+
         @see GetNativeFontInfoDesc()
     */
     wxString GetNativeFontInfoUserDesc();
 
     /**
         Gets the point size.
-        
+
         @see SetPointSize()
     */
     int GetPointSize() const;
@@ -335,14 +335,14 @@ public:
     /**
         Gets the font style. See wxFont() for a list of valid
         styles.
-        
+
         @see SetStyle()
     */
     int GetStyle() const;
 
     /**
         Returns @true if the font is underlined, @false otherwise.
-        
+
         @see SetUnderlined()
     */
     bool GetUnderlined() const;
@@ -350,7 +350,7 @@ public:
     /**
         Gets the font weight. See wxFont() for a list of valid
         weight identifiers.
-        
+
         @see SetWeight()
     */
     wxFontWeight GetWeight() const;
@@ -398,7 +398,7 @@ public:
 
     /**
         Sets the default font encoding.
-        
+
         @see @ref overview_wxfontencodingoverview, GetDefaultEncoding()
     */
     static void SetDefaultEncoding(wxFontEncoding encoding);
@@ -406,106 +406,106 @@ public:
     /**
         Sets the facename for the font.
         Returns @true if the given face name exists; @false otherwise.
-        
+
         @param faceName
             A valid facename, which should be on the end-user's system.
-        
+
         @remarks To avoid portability problems, don't rely on a specific face,
                  but specify the font family instead or as well. A
                  suitable font will be found on the end-user's system.
                  If both the family and the facename are specified,
                  wxWidgets will first search for the specific face, and
                  then for a font belonging to the same family.
-        
+
         @see GetFaceName(), SetFamily()
     */
     bool SetFaceName(const wxString& faceName);
 
     /**
         Sets the font family.
-        
+
         @param family
             One of:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxFONTFAMILY_DEFAULT
-        
-        
-        
-        
+
+
+
+
             Chooses a default font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_DECORATIVE
-        
-        
-        
-        
+
+
+
+
             A decorative font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_ROMAN
-        
-        
-        
-        
+
+
+
+
             A formal, serif font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_SCRIPT
-        
-        
-        
-        
+
+
+
+
             A handwriting font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_SWISS
-        
-        
-        
-        
+
+
+
+
             A sans-serif font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_MODERN
-        
-        
-        
-        
+
+
+
+
             A fixed pitch font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTFAMILY_TELETYPE
-        
-        
-        
-        
+
+
+
+
             A teletype font.
-        
+
         @see GetFamily(), SetFaceName()
     */
     void SetFamily(wxFontFamily family);
@@ -519,7 +519,7 @@ public:
         invalid, font is unchanged. This function is typically used for de-serializing
         a wxFont
         object previously saved in a string-form.
-        
+
         @see SetNativeFontInfoUserDesc()
     */
     bool SetNativeFontInfo(const wxString& info);
@@ -531,101 +531,101 @@ public:
         Unlike SetNativeFontInfo(), this function accepts
         strings which are user-friendly.
         Examples of accepted string formats are:
-        
+
         Generic syntax
-        
+
         Example
-        
+
         on @b wxGTK2: @c [FACE-NAME] [bold] [oblique|italic] [POINTSIZE]
-        
+
         Monospace bold 10
-        
+
         on @b wxMSW: @c [light|bold] [italic] [FACE-NAME] [POINTSIZE] [ENCODING]
-        
+
         Tahoma 10 WINDOWS-1252
-        
+
         on @b wxMac: FIXME
-        
+
         FIXME
-        
+
         For more detailed information about the allowed syntaxes you can look at the
         documentation of the native API used for font-rendering (e.g. pango_font_description_from_string).
-        
+
         @see SetNativeFontInfo()
     */
     bool SetNativeFontInfoUserDesc(const wxString& info);
 
     /**
         Sets the point size.
-        
+
         @param pointSize
             Size in points.
-        
+
         @see GetPointSize()
     */
     void SetPointSize(int pointSize);
 
     /**
         Sets the font style.
-        
+
         @param style
             One of wxFONTSTYLE_NORMAL, wxFONTSTYLE_SLANT and wxFONTSTYLE_ITALIC.
-        
+
         @see GetStyle()
     */
     void SetStyle(int style);
 
     /**
         Sets underlining.
-        
+
         @param underlining
             @true to underline, @false otherwise.
-        
+
         @see GetUnderlined()
     */
     void SetUnderlined(const bool underlined);
 
     /**
         Sets the font weight.
-        
+
         @param weight
             One of:
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
             wxFONTWEIGHT_NORMAL
-        
-        
-        
-        
+
+
+
+
             Normal font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTWEIGHT_LIGHT
-        
-        
-        
-        
+
+
+
+
             Light font.
-        
-        
-        
-        
-        
+
+
+
+
+
             wxFONTWEIGHT_BOLD
-        
-        
-        
-        
+
+
+
+
             Bold font.
-        
+
         @see GetWeight()
     */
     void SetWeight(wxFontWeight weight);

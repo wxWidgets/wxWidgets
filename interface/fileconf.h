@@ -32,7 +32,7 @@ public:
         )
         Read the config data from the specified stream instead of the associated file,
         as usual.
-        
+
         @see Save()
     */
     wxFileConfig(wxInputStream& is);
@@ -67,7 +67,7 @@ public:
         after saving it successfully, the dirty flag is reset so no changes will be
         written back to the file this object is associated with until you change its
         contents again.
-        
+
         @see wxConfigBase::Flush
     */
     bool Save(wxOutputStream& os);
@@ -78,7 +78,7 @@ public:
         some sensitive information, such as passwords), you could use
         @c SetUmask(0077).
         This function doesn't do anything on non-Unix platforms.
-        
+
         @see wxCHANGE_UMASK()
     */
     void SetUmask(int mode);

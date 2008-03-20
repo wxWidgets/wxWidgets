@@ -26,7 +26,7 @@ class wxLogWindow : public wxLogInterposer
 public:
     /**
         Creates the log frame window and starts collecting the messages in it.
-        
+
         @param parent
             The parent window for the log frame, may be @NULL
         @param title
@@ -54,7 +54,7 @@ public:
         exits).
         Return @true from here to allow the frame to close, @false to
         prevent this from happening.
-        
+
         @see OnFrameDelete()
     */
     virtual bool OnFrameClose(wxFrame frame);
@@ -384,7 +384,7 @@ public:
     /**
         Add the @a mask to the list of allowed masks for
         wxLogTrace().
-        
+
         @see RemoveTraceMask(), GetTraceMasks()
     */
     static void AddTraceMask(const wxString& mask);
@@ -392,7 +392,7 @@ public:
     /**
         Removes all trace masks previously set with
         AddTraceMask().
-        
+
         @see RemoveTraceMask()
     */
     static void ClearTraceMasks();
@@ -417,12 +417,12 @@ public:
         current mask while a message using string mask will be logged simply if the
         mask had been added before to the list of allowed ones.
         For example,
-        
+
         will do something only if the current trace mask contains both
         @c wxTraceRefCount and @c wxTraceOle, but
-        
+
         will log the message if it was preceded by
-        
+
         Using string masks is simpler and allows to easily add custom ones, so this is
         the preferred way of working with trace messages. The integer trace mask is
         kept for compatibility and for additional (but very rarely needed) flexibility
@@ -442,29 +442,29 @@ public:
         window on the corresponding error message. If you wish to enable it, please use
         SetTimestamp() explicitly.
         AddTraceMask()
-        
+
         RemoveTraceMask()
-        
+
         ClearTraceMasks()
-        
+
         GetTraceMasks()
-        
+
         IsAllowedTraceMask()
-        
+
         SetVerbose()
-        
+
         GetVerbose()
-        
+
         SetTimestamp()
-        
+
         GetTimestamp()
-        
+
         SetTraceMask()
-        
+
         GetTraceMask()
-        
+
         SetRepetitionCounting()
-        
+
         GetRepetitionCounting()
     */
 
@@ -511,7 +511,7 @@ public:
 
     /**
         Flushes the current log target if any, does nothing if there is none.
-        
+
         @see Flush()
     */
     static void FlushActive();
@@ -544,7 +544,7 @@ public:
 
     /**
         Returns the currently allowed list of string trace masks.
-        
+
         @see AddTraceMask().
     */
     static const wxArrayString GetTraceMasks();
@@ -564,15 +564,15 @@ public:
         only useful when the application is terminating and shouldn't be used in other
         situations because it may easily lead to a loss of messages.
         OnLog()
-        
+
         GetActiveTarget()
-        
+
         SetActiveTarget()
-        
+
         DontCreateOnDemand()
-        
+
         Suspend()
-        
+
         Resume()
     */
 
@@ -605,7 +605,7 @@ public:
         Flush() shows them all and clears the buffer contents.
         This function doesn't do anything if the buffer is already empty.
         Flush()
-        
+
         FlushActive()
     */
 
@@ -680,7 +680,7 @@ public:
         logging immediately without waiting for Flush() to be
         called (the standard GUI log target only shows the log dialog when it is
         flushed, so Suspend() works as expected with it).
-        
+
         @see Resume(), wxLogNull
     */
     static void Suspend();

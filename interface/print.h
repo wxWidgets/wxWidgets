@@ -52,25 +52,25 @@ public:
         Constructor.
         The buttons parameter may be a combination of the following, using the bitwise
         'or' operator.
-        
+
         wxPREVIEW_PRINT
-        
+
         Create a print button.
-        
+
         wxPREVIEW_NEXT
-        
+
         Create a next page button.
-        
+
         wxPREVIEW_PREVIOUS
-        
+
         Create a previous page button.
-        
+
         wxPREVIEW_ZOOM
-        
+
         Create a zoom control.
-        
+
         wxPREVIEW_DEFAULT
-        
+
         Equivalent to a combination of wxPREVIEW_PREVIOUS, wxPREVIEW_NEXT and
         wxPREVIEW_ZOOM.
     */
@@ -354,7 +354,7 @@ public:
     /**
         Constructor. Pass an optional pointer to a block of print
         dialog data, which will be copied to the printer object's local data.
-        
+
         @see wxPrintDialogData, wxPrintData
     */
     wxPrinter(wxPrintDialogData* data = NULL);
@@ -375,17 +375,17 @@ public:
         wxPrintPreview::Print. These functions
         set last error to @b wxPRINTER_NO_ERROR if no error happened.
         Returned value is one of the following:
-        
+
         @b wxPRINTER_NO_ERROR
-        
+
         No error happened.
-        
+
         @b wxPRINTER_CANCELLED
-        
+
         The user cancelled printing.
-        
+
         @b wxPRINTER_ERROR
-        
+
         There was an error during printing.
     */
     static wxPrinterError GetLastError();

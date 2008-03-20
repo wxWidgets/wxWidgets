@@ -382,7 +382,7 @@ public:
 
     /**
         Returns a status value and object id to indicate whether the given point
-        was on this or a child object. Can return either a child object, or an 
+        was on this or a child object. Can return either a child object, or an
         integer representing the child element, starting from 1.
 
         @a pt is in screen coordinates.

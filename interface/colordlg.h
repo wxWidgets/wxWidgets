@@ -28,7 +28,7 @@ public:
         Invalid entries in custom colours list will be ignored on some platforms (GTK)
         or replaced with white colour on platforms where custom colours palette has
         fixed size (MSW).
-        
+
         @see wxColourData
     */
     wxColourDialog(wxWindow* parent, wxColourData* data = NULL);

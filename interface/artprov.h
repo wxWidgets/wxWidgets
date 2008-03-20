@@ -132,14 +132,14 @@
     Client is the entity that calls wxArtProvider's GetBitmap or GetIcon function.
     It is represented by wxClientID type and can have one of these values:
 
-    @li wxART_TOOLBAR 
-    @li wxART_MENU 
-    @li wxART_BUTTON 
-    @li wxART_FRAME_ICON 
-    @li wxART_CMN_DIALOG 
-    @li wxART_HELP_BROWSER 
-    @li wxART_MESSAGE_BOX 
-    @li wxART_OTHER (used for all requests that don't fit into any of the 
+    @li wxART_TOOLBAR
+    @li wxART_MENU
+    @li wxART_BUTTON
+    @li wxART_FRAME_ICON
+    @li wxART_CMN_DIALOG
+    @li wxART_HELP_BROWSER
+    @li wxART_MESSAGE_BOX
+    @li wxART_OTHER (used for all requests that don't fit into any of the
         categories above)
 
     Client ID servers as a hint to wxArtProvider that is supposed to help it to
@@ -168,7 +168,7 @@ public:
         resource. Note that returned bitmaps are cached by wxArtProvider and it is
         therefore not necessary to optimize CreateBitmap() for speed (e.g. you may
         create wxBitmap objects from XPMs here).
-        
+
         @param id
             wxArtID unique identifier of the bitmap.
         @param client
@@ -182,7 +182,7 @@ public:
         This is not part of wxArtProvider's public API, use wxArtProvider::GetBitmap
         or wxArtProvider::GetIconBundle or wxArtProvider::GetIcon to query wxArtProvider
         for a resource.
-        
+
         @see CreateIconBundle()
     */
     wxBitmap CreateBitmap(const wxArtID& id,
@@ -203,14 +203,14 @@ public:
 
     /**
         Query registered providers for bitmap with given ID.
-        
+
         @param id
             wxArtID unique identifier of the bitmap.
         @param client
             wxArtClient identifier of the client (i.e. who is asking for the bitmap).
         @param size
             Size of the returned bitmap or wxDefaultSize if size doesn't matter.
-        
+
         @returns The bitmap if one of registered providers recognizes the ID or
                  wxNullBitmap otherwise.
     */
@@ -238,13 +238,13 @@ public:
 
     /**
         Query registered providers for icon bundle with given ID.
-        
+
         @param id
             wxArtID unique identifier of the icon bundle.
         @param client
             wxArtClient identifier of the client (i.e. who is asking for the icon
             bundle).
-        
+
         @returns The icon bundle if one of registered providers recognizes the ID
                  or wxNullIconBundle otherwise.
     */
@@ -254,7 +254,7 @@ public:
     /**
         Register new art provider and add it to the bottom of providers stack
         (i.e. it will be queried as the last one).
-        
+
         @see Push()
     */
     static void Insert(wxArtProvider* provider);
@@ -267,7 +267,7 @@ public:
     /**
         Register new art provider and add it to the top of providers stack
         (i.e. it will be queried as the first provider).
-        
+
         @see Insert()
     */
     static void Push(wxArtProvider* provider);

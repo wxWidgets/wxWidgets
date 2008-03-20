@@ -30,12 +30,12 @@ class wxClientDataContainer
 {
 public:
     /**
-        
+
     */
     wxClientDataContainer();
 
     /**
-        
+
     */
     ~wxClientDataContainer();
 

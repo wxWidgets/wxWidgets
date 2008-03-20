@@ -95,7 +95,7 @@ public:
         buffer continues to be used, trying to call functions in the (destroyed)
         stream. It is advised to use this feature only in very local area of the
         program.
-        
+
         @see @ref setbufferio() wxStreamBuffer:SetBufferIO
     */
     wxStreamBuffer(wxStreamBase& stream, BufMode mode);
@@ -119,7 +119,7 @@ public:
         @e flushable. This flag allows (when it has the @false value) or forbids
         (when it has the @true value) the stream buffer to resize dynamically the IO
         buffer.
-        
+
         @see SetBufferIO()
     */
     void Fixed(bool fixed);
@@ -157,7 +157,7 @@ public:
 
     /**
         Gets a single char from the stream buffer. It acts like the Read call.
-        
+
         @see Read()
     */
     char GetChar();
@@ -179,7 +179,7 @@ public:
 
     /**
         Puts a single char to the stream buffer.
-        
+
         @see Read()
     */
     void PutChar(char c);
@@ -189,7 +189,7 @@ public:
         Copies data to @e buffer. The function returns when @a buffer is full or when
         there isn't
         any more data in the current buffer.
-        
+
         @see Write()
     */
     size_t Read(void* buffer, size_t size);
@@ -204,19 +204,19 @@ public:
     /**
         Changes the current position.
         @a mode may be one of the following:
-        
+
         @b wxFromStart
-        
+
         The position is counted from the start of the stream.
-        
+
         @b wxFromCurrent
-        
+
         The position is counted from the current position of the stream.
-        
+
         @b wxFromEnd
-        
+
         The position is counted from the end of the stream.
-        
+
         @returns Upon successful completion, it returns the new offset as
                  measured in bytes from the beginning of the stream.
                  Otherwise, it returns wxInvalidOffset.
@@ -227,7 +227,7 @@ public:
     /**
         Destroys or invalidates the previous IO buffer and allocates a new one of the
         specified size.
-        
+
         @see Fixed(), Flushable()
     */
     void SetBufferIO(char* buffer_start, char* buffer_end);
@@ -255,7 +255,7 @@ public:
         the @e real position in the stream and from the internal buffer position: so
         it gives you the position in the @e real stream counted from the start of
         the stream.
-        
+
         @returns Returns the current position in the stream if possible,
                  wxInvalidOffset in the other case.
     */
@@ -326,12 +326,12 @@ public:
 
     /**
         Changes the stream current position.
-        
+
         @param pos
             Offset to seek to.
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
-        
+
         @returns The new stream position or wxInvalidOffset on error.
     */
     off_t SeekO(off_t pos, wxSeekMode mode = wxFromStart);
@@ -408,7 +408,7 @@ public:
     /**
         GetFirst and GetNext can be used to enumerate the available factories.
         For example, to list them:
-        
+
         GetFirst()/GetNext() return a pointer to a factory or @NULL if no more
         are available. They do not give away ownership of the factory.
     */
@@ -633,7 +633,7 @@ public:
     /**
         Reads data from the input queue and stores it in the specified output stream.
         The data is read until an error is raised by one of the two streams.
-        
+
         @returns This function returns a reference on the current object, so the
                  user can test any states of the stream right away.
     */
@@ -646,12 +646,12 @@ public:
 
     /**
         Changes the stream current position.
-        
+
         @param pos
             Offset to seek to.
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
-        
+
         @returns The new stream position or wxInvalidOffset on error.
     */
     off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
@@ -701,21 +701,21 @@ public:
 
     /**
         This function returns the last error.
-        
+
         @b wxSTREAM_NO_ERROR
-        
+
         No error occurred.
-        
+
         @b wxSTREAM_EOF
-        
+
         An End-Of-File occurred.
-        
+
         @b wxSTREAM_WRITE_ERROR
-        
+
         A generic error occurred on the last write call.
-        
+
         @b wxSTREAM_READ_ERROR
-        
+
         A generic error occurred on the last read call.
     */
     wxStreamError GetLastError() const;
@@ -724,7 +724,7 @@ public:
         Returns the length of the stream in bytes. If the length cannot be determined
         (this is always the case for socket streams for example), returns
         @c wxInvalidOffset.
-        
+
         @wxsince{2.5.4}
     */
     wxFileOffset GetLength() const;
@@ -738,7 +738,7 @@ public:
 
     /**
         Returns @true if no error occurred on the stream.
-        
+
         @see GetLastError()
     */
     virtual bool IsOk() const;

@@ -12,10 +12,10 @@
 /**
     This is a macro which evaluates to @true if the current wxWidgets version
     is at least major.minor.release.
-    
+
     For example, to test if the program is compiled with wxWidgets 2.2 or
     higher, the following can be done:
-    
+
     @code
         wxString s;
     #if wxCHECK_VERSION(2, 2, 0)

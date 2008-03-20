@@ -41,7 +41,7 @@ public:
 
     /**
         Returns @true if the OS version is at least @c major.minor.
-        
+
         @see GetOSMajorVersion(), GetOSMinorVersion(),
              CheckToolkitVersion()
     */
@@ -49,7 +49,7 @@ public:
 
     /**
         Returns @true if the toolkit version is at least @c major.minor.
-        
+
         @see GetToolkitMajorVersion(),
              GetToolkitMinorVersion(), CheckOSVersion()
     */
@@ -101,7 +101,7 @@ public:
         Returns the run-time major version of the OS associated with this
         wxPlatformInfo instance.
         See wxGetOsVersion() for more info.
-        
+
         @see CheckOSVersion()
     */
     int GetOSMajorVersion() const;
@@ -110,7 +110,7 @@ public:
         Returns the run-time minor version of the OS associated with this
         wxPlatformInfo instance.
         See wxGetOsVersion() for more info.
-        
+
         @see CheckOSVersion()
     */
     int GetOSMinorVersion() const;
@@ -174,7 +174,7 @@ public:
         Note that if GetPortId() returns wxPORT_BASE, then this value is zero (unless
         externally modified with wxPlatformInfo::SetToolkitVersion); that is, no native toolkit is in use.
         See wxAppTraits::GetToolkitVersion for more info.
-        
+
         @see CheckToolkitVersion()
     */
     int GetToolkitMajorVersion() const;
@@ -185,7 +185,7 @@ public:
         Note that if GetPortId() returns wxPORT_BASE, then this value is zero (unless
         externally modified with wxPlatformInfo::SetToolkitVersion); that is, no native toolkit is in use.
         See wxAppTraits::GetToolkitVersion for more info.
-        
+
         @see CheckToolkitVersion()
     */
     int GetToolkitMinorVersion() const;

@@ -27,7 +27,7 @@ public:
     //@{
     /**
         Opens a file with the given file pointer, which has already been opened.
-        
+
         @param filename
             The filename.
         @param mode
@@ -77,7 +77,7 @@ public:
         read.
         Also note that this method may only be called for opened files and may crash if
         the file is not opened.
-        
+
         @see IsOpened()
     */
     bool Eof() const;
@@ -87,7 +87,7 @@ public:
         @c ferror() function.
         Please note that this method may only be called for opened files and may crash
         if the file is not opened.
-        
+
         @see IsOpened()
     */
 
@@ -116,7 +116,7 @@ public:
 
     /**
         Opens the file, returning @true if successful.
-        
+
         @param filename
             The filename.
         @param mode
@@ -127,12 +127,12 @@ public:
     /**
         Reads the specified number of bytes into a buffer, returning the actual number
         read.
-        
+
         @param buffer
             A buffer to receive the data.
         @param count
             The number of bytes to read.
-        
+
         @returns The number of bytes read.
     */
     size_t Read(void* buffer, size_t count);
@@ -140,20 +140,20 @@ public:
     /**
         )
         Reads the entire contents of the file into a string.
-        
+
         @param str
             String to read data into.
         @param conv
             Conversion object to use in Unicode build; by default supposes
             that file contents is encoded in UTF-8.
-        
+
         @returns @true if file was read successfully, @false otherwise.
     */
     bool ReadAll(wxString* str);
 
     /**
         Seeks to the specified position and returns @true on success.
-        
+
         @param ofs
             Offset to seek to.
         @param mode
@@ -165,7 +165,7 @@ public:
         Moves the file pointer to the specified number of bytes before the end of the
         file
         and returns @true on success.
-        
+
         @param ofs
             Number of bytes before the end of the file.
     */

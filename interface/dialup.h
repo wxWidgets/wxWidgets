@@ -43,7 +43,7 @@ public:
         Cancel dialing the number initiated with Dial()
         with async parameter equal to @true.
         Note that this won't result in DISCONNECTED event being sent.
-        
+
         @see IsDialing()
     */
     bool CancelDialing();
@@ -116,7 +116,7 @@ public:
 
     /**
         Returns @true if (async) dialing is in progress.
-        
+
         @see Dial()
     */
     bool IsDialing() const;
@@ -149,7 +149,7 @@ public:
         so, in general, the user should be allowed to override it. This function
         allows to forcefully set the online status - whatever our internal
         algorithm may think about it.
-        
+
         @see IsOnline()
     */
     void SetOnlineStatus(bool isOnline = true);
