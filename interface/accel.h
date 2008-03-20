@@ -118,7 +118,7 @@ public:
     An accelerator takes precedence over normal processing and can be a convenient
     way to program some event handling. For example, you can use an accelerator table
     to enable a dialog with a multi-line text control to accept CTRL-Enter as meaning
-    'OK' (but not in GTK+ at present).
+    'OK'.
 
     @library{wxcore}
     @category{misc}
