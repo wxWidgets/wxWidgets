@@ -15,6 +15,7 @@
 /*!
  * Includes
  */
+#include "wx/spinbutt.h"        // for wxSpinEvent
 
 /*!
  * Forward declarations

@@ -125,6 +125,7 @@ void wxToolBarToolBase::SetDropdownMenu(wxMenu* menu)
     m_dropdownMenu = menu;
 }
 
+
 // ----------------------------------------------------------------------------
 // wxToolBarBase adding/deleting items
 // ----------------------------------------------------------------------------
@@ -595,6 +596,12 @@ void wxToolBarBase::SetRows(int WXUNUSED(nRows))
 {
     // nothing
 }
+
+bool wxToolBarBase::IsVertical() const
+{
+    return HasFlag(wxTB_LEFT | wxTB_RIGHT);
+}
+
 
 // ----------------------------------------------------------------------------
 // event processing

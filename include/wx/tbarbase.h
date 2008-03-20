@@ -394,7 +394,7 @@ public:
     virtual void SetToolDisabledBitmap(int WXUNUSED(id),
                                        const wxBitmap& WXUNUSED(bitmap)) {}
 
-    
+
     // margins/packing/separation
     // --------------------------
 
@@ -443,7 +443,7 @@ public:
     wxToolBarToolBase *FindById(int toolid) const;
 
     // return true if this is a vertical toolbar, otherwise false
-    bool IsVertical() const { return HasFlag(wxTB_LEFT | wxTB_RIGHT); }
+    bool IsVertical() const;
 
 
     // the old versions of the various methods kept for compatibility
