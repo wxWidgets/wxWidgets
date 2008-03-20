@@ -137,11 +137,6 @@ public:
     wxAcceleratorTable();
 
     /**
-        Copy ctor.
-    */
-    wxAcceleratorTable(const wxAcceleratorTable& bitmap);
-
-    /**
         Initializes the accelerator table from an array of wxAcceleratorEntry.
         
         @param n
