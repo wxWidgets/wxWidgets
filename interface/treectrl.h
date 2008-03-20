@@ -399,33 +399,16 @@ public:
     //@{
     /**
         Returns the font of the item label.
+
+        @see wxTreeItemData
+
+        @beginWxPythonOnly
+        wxPython provides the following shortcut method:
+        @li GetPyData(item): Returns the Python Object associated with the
+            wxTreeItemData for the given item Id.
+        @endWxPythonOnly
     */
     wxTreeItemData* GetItemData(const wxTreeItemId& item) const;
-    const See also
-    wxTreeItemData
-wxPython note:
-wxPython provides the following shortcut method:
-
-
-
-
-
-
-
-    GetPyData(item)
-
-
-
-
-    Returns the Python Object
-    associated with the wxTreeItemData for the given item Id.
-
-
-
-
-
-
-
     wxFont  GetItemFont(const wxTreeItemId& item) const;
     //@}
 
