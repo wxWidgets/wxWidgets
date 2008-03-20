@@ -326,12 +326,22 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_gdi */
+//@{
+
 /**
-    This macro creates either a cursor (MSW) or an icon (elsewhere) with the given
-    name. Under MSW, the cursor is loaded from the resource file and the icon is
-    loaded from XPM file under other platforms.
-    This macro should be used with
-    @ref wxDropSource::wxdropsource "wxDropSource constructor".
+    This macro creates either a cursor (MSW) or an icon (elsewhere) with the
+    given @a name (of type <tt>const char*</tt>). Under MSW, the cursor is
+    loaded from the resource file and the icon is loaded from XPM file under
+    other platforms.
+
+    This macro should be used with wxDropSource::wxDropSource().
+
+    @returns wxCursor on MSW, otherwise returns a wxIcon
+
+    @header{wx/dnd.h}
 */
-#define wxIconOrCursor wxDROP_ICON(const char* name)     /* implementation is private */
+#define wxDROP_ICON(name)
+
+//@}
 

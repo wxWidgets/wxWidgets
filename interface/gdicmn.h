@@ -727,54 +727,87 @@ public:
 //@{
 
 /**
-    Returns the dimensions of the work area on the display.  On Windows
-    this means the area not covered by the taskbar, etc.  Other platforms
-    are currently defaulting to the whole display until a way is found to
-    provide this info for all window managers, etc.
+    This macro loads a bitmap from either application resources (on the
+    platforms for which they exist, i.e. Windows and OS2) or from an XPM file.
+    This can help to avoid using @ifdef_ when creating bitmaps.
+
+    @see @ref overview_bitmap, wxICON()
+
+    @header{wx/gdicmn.h}
 */
-void wxClientDisplayRect(int* x, int* y, int* width,
-                         int* height);
-wxRect wxGetClientDisplayRect();
+#define wxBITMAP(bitmapName)
 
 /**
-    Returns the display size in pixels.
-*/
-void wxDisplaySize(int* width, int* height);
-wxSize wxGetDisplaySize();
+    This macro loads an icon from either application resources (on the
+    platforms for which they exist, i.e. Windows and OS2) or from an XPM file.
+    This can help to avoid using @ifdef_ when creating icons.
 
-/**
-    Returns the display size in millimeters.
-*/
-void wxDisplaySizeMM(int* width, int* height);
-wxSize wxGetDisplaySizeMM();
+    @see @ref overview_bitmap, wxBITMAP()
 
-/**
-    This macro loads an icon from either application resources (on the platforms
-    for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
-    avoid using @c #ifdefs when creating icons.
-
-    @see @ref overview_wxbitmapoverview, wxBITMAP()
+    @header{wx/gdicmn.h}
 */
 wxICON();
 
 /**
     Returns @true if the display is colour, @false otherwise.
+
+    @header{wx/gdicmn.h}
 */
 bool wxColourDisplay();
 
 /**
-    This macro loads a bitmap from either application resources (on the platforms
-    for which they exist, i.e. Windows and OS2) or from an XPM file. It allows to
-    avoid using @c #ifdefs when creating bitmaps.
+    Returns the depth of the display (a value of 1 denotes a monochrome
+    display).
 
-    @see @ref overview_wxbitmapoverview, wxICON()
-*/
-#define wxBITMAP() /* implementation is private */
-
-/**
-    Returns the depth of the display (a value of 1 denotes a monochrome display).
+    @header{wx/gdicmn.h}
 */
 int wxDisplayDepth();
 
+/**
+    Globally sets the cursor; only has an effect on Windows, Mac and GTK+. You
+    should call this function with wxNullCursor to restore the system cursor.
+
+    @see wxCursor, wxWindow::SetCursor()
+
+    @header{wx/gdicmn.h}
+*/
+void wxSetCursor(const wxCursor& cursor);
+
+//@}
+
+/** @ingroup group_funcmacro_gdi */
+//@{
+/**
+    Returns the dimensions of the work area on the display. On Windows this
+    means the area not covered by the taskbar, etc. Other platforms are
+    currently defaulting to the whole display until a way is found to provide
+    this info for all window managers, etc.
+
+    @header{wx/gdicmn.h}
+*/
+void wxClientDisplayRect(int* x, int* y, int* width, int* height);
+wxRect wxGetClientDisplayRect();
+//@}
+
+/** @ingroup group_funcmacro_gdi */
+//@{
+/**
+    Returns the display size in pixels.
+
+    @header{wx/gdicmn.h}
+*/
+void wxDisplaySize(int* width, int* height);
+wxSize wxGetDisplaySize();
+//@}
+
+/** @ingroup group_funcmacro_gdi */
+//@{
+/**
+    Returns the display size in millimeters.
+
+    @header{wx/gdicmn.h}
+*/
+void wxDisplaySizeMM(int* width, int* height);
+wxSize wxGetDisplaySizeMM();
 //@}
 

@@ -16,7 +16,5 @@ Interface) access.
 
 Related Overviews: @ref overview_dc
 
-@header{wx/gdicmn.h}
-
 */
 

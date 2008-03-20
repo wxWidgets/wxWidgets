@@ -121,15 +121,14 @@ public:
 //@{
 
 /**
-    @header{wx/metafile.h}
-
     Given a filename for an existing, valid metafile (as constructed using
     wxMetafileDC) makes it into a placeable metafile by prepending a header
     containing the given bounding box. The bounding box may be obtained from a
     device context after drawing into it, using the functions wxDC::MinX(),
-    wxDC::MinY(), wxDC::MaxX() and wxDC::MaxY(). In addition to adding the
-    placeable metafile header, this function adds the equivalent of the
-    following code to the start of the metafile data:
+    wxDC::MinY(), wxDC::MaxX() and wxDC::MaxY().
+
+    In addition to adding the placeable metafile header, this function adds the
+    equivalent of the following code to the start of the metafile data:
 
     @code
     SetMapMode(dc, MM_ANISOTROPIC);
@@ -138,15 +137,20 @@ public:
     @endcode
 
     This simulates the wxMM_TEXT mapping mode, which wxWidgets assumes.
+
     Placeable metafiles may be imported by many Windows applications, and can
-    be used in RTF (Rich Text Format) files. @a scale allows the specification
-    of scale for the metafile. This function is only available under Windows.
+    be used in RTF (Rich Text Format) files.
+
+    @a scale allows the specification of scale for the metafile.
+
+    This function is only available under Windows.
+
+    @header{wx/metafile.h}
 */
-bool wxMakeMetafilePlaceable(const wxString& filename, int minX,
-                             int minY,
-                             int maxX,
-                             int maxY,
-                             float scale = 1.0);
+bool wxMakeMetafilePlaceable(const wxString& filename,
+                              int minX, int minY,
+                              int maxX, int maxY,
+                              float scale = 1.0);
 
 //@}
 
