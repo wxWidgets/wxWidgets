@@ -112,7 +112,8 @@ wxPen::wxPen(const wxColour& col, int Width, wxPenStyle Style)
     RealizeResource();
 }
 
-wxPen::wxPen(const wxColour& col, int Width, wxBrushStyle Style)
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+wxPen::wxPen(const wxColour& col, int Width, int Style)
 {
     m_refData = new wxPenRefData;
 
@@ -126,6 +127,7 @@ wxPen::wxPen(const wxColour& col, int Width, wxBrushStyle Style)
 
     RealizeResource();
 }
+#endif
 
 wxPen::wxPen(const wxBitmap& stipple, int Width)
 {
@@ -162,37 +164,52 @@ bool wxPen::operator==(const wxPen& pen) const
 
 wxColour& wxPen::GetColour() const
 {
-    return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour);
+    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
+
+    return M_PENDATA->m_colour;
 }
 
 int wxPen::GetWidth() const
 {
-    return (M_PENDATA ? M_PENDATA->m_width : 0);
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+
+    return M_PENDATA->m_width;
 }
 
 wxPenStyle wxPen::GetStyle() const
 {
-    return (M_PENDATA ? M_PENDATA->m_style : wxPENSTYLE_SOLID);
+    wxCHECK_MSG( Ok(), wxPENSTYLE_INVALID, wxT("invalid pen") );
+
+    return M_PENDATA->m_style;
 }
 
 wxPenJoin wxPen::GetJoin() const
 {
-    return (M_PENDATA ? M_PENDATA->m_join : wxJOIN_INVALID);
+    wxCHECK_MSG( Ok(), wxJOIN_INVALID, wxT("invalid pen") );
+
+    return M_PENDATA->m_join;
 }
 
 wxPenCap wxPen::GetCap() const
 {
-    return (M_PENDATA ? M_PENDATA->m_cap : wxCAP_INVALID);
+    wxCHECK_MSG( Ok(), wxCAP_INVALID, wxT("invalid pen") );
+
+    return M_PENDATA->m_cap;
 }
 
 int wxPen::GetDashes(wxDash **ptr) const
 {
-    *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+
+    *ptr = M_PENDATA->m_dash;
+    return M_PENDATA->m_nbDash;
 }
 
 wxBitmap *wxPen::GetStipple() const
 {
-    return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL);
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid pen") );
+
+    return &M_PENDATA->m_stipple;
 }
 
 void wxPen::Unshare()

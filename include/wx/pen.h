@@ -15,21 +15,9 @@
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
-#if WXWIN_COMPATIBILITY_2_8
-#include "wx/brush.h"       // needed for some deprecated declarations
-#endif
-
 enum wxPenStyle
 {
-#if WXWIN_COMPATIBILITY_2_8
-    /* start of deprecated values */
-    /* wxSOLID, wxTRANSPARENT, wxSTIPPLE are already defined in wxBrushStyle */
-    wxDOT = 101,
-    wxLONG_DASH = 102,
-    wxSHORT_DASH = 103,
-    wxDOT_DASH = 104,
-    wxUSER_DASH = 105,
-    /* end of deprecated values */
+    wxPENSTYLE_INVALID = -1,
 
     wxPENSTYLE_SOLID = wxSOLID,
     wxPENSTYLE_DOT = wxDOT,
@@ -52,45 +40,7 @@ enum wxPenStyle
     wxPENSTYLE_VERTICAL_HATCH = wxVERTICAL_HATCH,
 
     wxPENSTYLE_FIRST_HATCH = wxFIRST_HATCH,
-    wxPENSTYLE_LAST_HATCH = wxLAST_HATCH,
-
-    wxPENSTYLE_MAX
-#else
-    wxPENSTYLE_SOLID,
-    wxPENSTYLE_DOT,
-    wxPENSTYLE_LONG_DASH,
-    wxPENSTYLE_SHORT_DASH,
-    wxPENSTYLE_DOT_DASH,
-    wxPENSTYLE_USER_DASH,
-
-    wxPENSTYLE_TRANSPARENT,
-
-    /*  Pen Stippling. */
-    wxPENSTYLE_STIPPLE_MASK_OPAQUE,
-        /* mask is used for blitting monochrome using text fore and back ground colors */
-
-    wxPENSTYLE_STIPPLE_MASK,
-        /* mask is used for masking areas in the stipple bitmap (TO DO) */
-
-    wxPENSTYLE_STIPPLE,
-        /*  drawn with a Pen, and without any Brush -- and it can be stippled. */
-
-    /* In wxWidgets < 2.6 use WX_HATCH macro  */
-    /* to verify these wx*_HATCH are in style */
-    /* of wxBrush. In wxWidgets >= 2.6 use    */
-    /* wxBrush::IsHatch() instead.            */
-    wxPENSTYLE_BDIAGONAL_HATCH,
-    wxPENSTYLE_CROSSDIAG_HATCH,
-    wxPENSTYLE_FDIAGONAL_HATCH,
-    wxPENSTYLE_CROSS_HATCH,
-    wxPENSTYLE_HORIZONTAL_HATCH,
-    wxPENSTYLE_VERTICAL_HATCH,
-
-    wxPENSTYLE_FIRST_HATCH = wxPENSTYLE_BDIAGONAL_HATCH,
-    wxPENSTYLE_LAST_HATCH = wxPENSTYLE_VERTICAL_HATCH,
-
-    wxPENSTYLE_MAX
-#endif
+    wxPENSTYLE_LAST_HATCH = wxLAST_HATCH
 };
 
 enum wxPenJoin
@@ -135,8 +85,8 @@ public:
     virtual int GetWidth() const = 0;
     virtual int GetDashes(wxDash **ptr) const = 0;
 
-#if WXWIN_COMPATIBILITY_2_8
-    void SetStyle(wxBrushStyle style)
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_FUTURE( void SetStyle(int style) )
         { SetStyle((wxPenStyle)style); }
 #endif
 };
@@ -167,6 +117,11 @@ class WXDLLIMPEXP_CORE wxPenList: public wxGDIObjListBase
 {
 public:
     wxPen *FindOrCreatePen(const wxColour& colour, int width, wxPenStyle style);
+
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxPen *FindOrCreatePen(const wxColour& colour, int width, int style)
+        { return FindOrCreatePen(colour, width, (wxPenStyle)style); }
+#endif
 #if WXWIN_COMPATIBILITY_2_6
     wxDEPRECATED( void AddPen(wxPen*) );
     wxDEPRECATED( void RemovePen(wxPen*) );

@@ -96,13 +96,15 @@ wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style )
     M_PENDATA->m_colour = colour;
 }
 
-wxPen::wxPen(const wxColour& colour, int width, wxBrushStyle style)
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+wxPen::wxPen(const wxColour& colour, int width, int style)
 {
     m_refData = new wxPenRefData();
     M_PENDATA->m_width = width;
     M_PENDATA->m_style = (wxPenStyle)style;
     M_PENDATA->m_colour = colour;
 }
+#endif
 
 wxPen::~wxPen()
 {
@@ -180,17 +182,23 @@ void wxPen::SetWidth( int width )
 
 int wxPen::GetDashes( wxDash **ptr ) const
 {
-     *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
-     return (M_PENDATA ? M_PENDATA->m_countDashes : 0);
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+
+    *ptr = (wxDash*)M_PENDATA->m_dash;
+    return M_PENDATA->m_countDashes;
 }
 
 int wxPen::GetDashCount() const
 {
+    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+
     return (M_PENDATA->m_countDashes);
 }
 
 wxDash* wxPen::GetDash() const
 {
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid pen") );
+
     return (wxDash*)M_PENDATA->m_dash;
 }
 

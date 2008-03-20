@@ -14,6 +14,11 @@
 #ifndef _WX_DEFS_H_
 #define _WX_DEFS_H_
 
+// NOTE: this symbol will be replaced with "WXWIN_COMPATIBILITY_3_0" as soon
+//       as the development branch for 3.1 is created
+#define FUTURE_WXWIN_COMPATIBILITY_3_0      1
+#define wxDEPRECATED_FUTURE( x )            x
+
 /*  ---------------------------------------------------------------------------- */
 /*  compiler and OS identification */
 /*  ---------------------------------------------------------------------------- */
@@ -2099,6 +2104,40 @@ enum
     /*  Also wxNORMAL for normal (non-italic text) */
     wxITALIC,
     wxSLANT,
+
+
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    /*
+        WARNING: the following styles are deprecated; use the wxBrushStyle,
+                 wxPenStyle, wxPenCap, wxPenJoin enum values instead!
+    */
+
+    /*  Pen styles */
+    wxSOLID      =   100,
+    wxDOT,
+    wxLONG_DASH,
+    wxSHORT_DASH,
+    wxDOT_DASH,
+    wxUSER_DASH,
+
+    wxTRANSPARENT,
+
+    /*  Brush & Pen Stippling. Note that a stippled pen cannot be dashed!! */
+    /*  Note also that stippling a Pen IS meaningfull, because a Line is */
+    wxSTIPPLE_MASK_OPAQUE, /* mask is used for blitting monochrome using text fore and back ground colors */
+    wxSTIPPLE_MASK,        /* mask is used for masking areas in the stipple bitmap (TO DO) */
+    /*  drawn with a Pen, and without any Brush -- and it can be stippled. */
+    wxSTIPPLE =          110,
+
+    wxBDIAGONAL_HATCH,     /* In wxWidgets < 2.6 use WX_HATCH macro  */
+    wxCROSSDIAG_HATCH,     /* to verify these wx*_HATCH are in style */
+    wxFDIAGONAL_HATCH,     /* of wxBrush. In wxWidgets >= 2.6 use    */
+    wxCROSS_HATCH,         /* wxBrush::IsHatch() instead.            */
+    wxHORIZONTAL_HATCH,
+    wxVERTICAL_HATCH,
+    wxFIRST_HATCH = wxBDIAGONAL_HATCH,
+    wxLAST_HATCH = wxVERTICAL_HATCH,
+#endif
 };
 
 /*  Logical ops */

@@ -73,6 +73,20 @@ wxBrush::wxBrush(
     RealizeResource();
 } // end of wxBrush::wxBrush
 
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+wxBrush::wxBrush(const wxColour& col, int style)
+{
+    m_refData = new wxBrushRefData;
+
+    M_BRUSHDATA->m_vColour = col;
+    M_BRUSHDATA->m_nStyle  = (wxBrushStyle)style;
+    M_BRUSHDATA->m_hBrush  = 0;
+    memset(&M_BRUSHDATA->m_vBundle, '\0', sizeof(AREABUNDLE));
+
+    RealizeResource();
+}
+#endif
+
 wxBrush::wxBrush(const wxBitmap& rStipple)
 {
     m_refData = new wxBrushRefData;

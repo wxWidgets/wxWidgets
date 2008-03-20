@@ -33,6 +33,9 @@ class WXDLLIMPEXP_CORE wxBrush : public wxBrushBase
 public:
     wxBrush() {}
     wxBrush(const wxColour &colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_FUTURE( wxBrush(const wxColour& col, int style) );
+#endif
     wxBrush(const wxBitmap &stippleBitmap);
 
     bool operator==(const wxBrush& brush) const;

@@ -100,6 +100,13 @@ wxBrush::wxBrush(const wxColour& col, wxBrushStyle style)
     m_refData = new wxBrushRefData( col, style );
 }
 
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+wxBrush::wxBrush(const wxColour& col, int style)
+{
+    m_refData = new wxBrushRefData(col, (wxBrushStyle)style);
+}
+#endif
+
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData( stipple );
@@ -140,7 +147,7 @@ const wxColour& wxBrush::GetColour() const
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_MAX, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, _T("invalid brush") );
 
     return M_BRUSHDATA->GetStyle();
 }

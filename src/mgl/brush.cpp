@@ -133,6 +133,15 @@ wxBrush::wxBrush(const wxColour &colour, wxBrushStyle style)
     M_BRUSHDATA->m_colour = colour;
 }
 
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+wxBrush::wxBrush(const wxColour& col, int style)
+{
+    m_refData = new wxBrushRefData;
+    M_BRUSHDATA->m_style = (wxBrushStyle)style;
+    M_BRUSHDATA->m_colour = colour;
+}
+#endif
+
 wxBrush::wxBrush(const wxBitmap &stippleBitmap)
 {
     wxCHECK_RET( stippleBitmap.Ok(), _T("invalid bitmap") );
@@ -168,33 +177,21 @@ bool wxBrush::operator != (const wxBrush& brush) const
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    if (m_refData == NULL)
-    {
-        wxFAIL_MSG( wxT("invalid brush") );
-        return 0;
-    }
+    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, _T("invalid brush") );
 
     return M_BRUSHDATA->m_style;
 }
 
 wxColour &wxBrush::GetColour() const
 {
-    if (m_refData == NULL)
-    {
-        wxFAIL_MSG( wxT("invalid brush") );
-        return wxNullColour;
-    }
+    wxCHECK_MSG( Ok(), wxNullColour, _T("invalid brush") );
 
     return M_BRUSHDATA->m_colour;
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    if (m_refData == NULL)
-    {
-        wxFAIL_MSG( wxT("invalid brush") );
-        return &wxNullBitmap;
-    }
+    wxCHECK_MSG( Ok(), NULL, _T("invalid brush") );
 
     return &M_BRUSHDATA->m_stipple;
 }

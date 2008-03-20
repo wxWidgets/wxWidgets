@@ -30,6 +30,9 @@ class WXDLLEXPORT wxBrush: public wxBrushBase
 public:
     wxBrush();
     wxBrush(const wxColour& col, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_FUTURE( wxBrush(const wxColour& col, int style) );
+#endif
     wxBrush(const wxBitmap& stipple);
     virtual ~wxBrush();
 

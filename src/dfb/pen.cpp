@@ -68,10 +68,12 @@ wxPen::wxPen(const wxColour &colour, int width, wxPenStyle style)
     m_refData = new wxPenRefData(colour, style);
 }
 
-wxPen::wxPen(const wxColour& col, int width, wxBrushStyle style)
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+wxPen::wxPen(const wxColour& col, int width, int style)
 {
     m_refData = new wxPenRefData(col, (wxPenStyle)style);
 }
+#endif
 
 wxPen::wxPen(const wxBitmap& WXUNUSED(stipple), int WXUNUSED(width))
 {
@@ -169,7 +171,7 @@ wxPenJoin wxPen::GetJoin() const
 
 wxPenStyle wxPen::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxPENSTYLE_MAX, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxPENSTYLE_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_style;
 }

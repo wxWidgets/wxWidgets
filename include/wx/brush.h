@@ -20,22 +20,7 @@
 // NOTE: these values cannot be combined together!
 enum wxBrushStyle
 {
-#if WXWIN_COMPATIBILITY_2_8
-    /* start of deprecated values */
-    wxSOLID = 100,
-    wxTRANSPARENT = 106,
-    wxSTIPPLE_MASK_OPAQUE = 107,
-    wxSTIPPLE_MASK = 108,
-    wxSTIPPLE = 109,
-    wxBDIAGONAL_HATCH = 110,
-    wxCROSSDIAG_HATCH = 111,
-    wxFDIAGONAL_HATCH = 112,
-    wxCROSS_HATCH = 113,
-    wxHORIZONTAL_HATCH = 114,
-    wxVERTICAL_HATCH = 115,
-    wxFIRST_HATCH = wxBDIAGONAL_HATCH,
-    wxLAST_HATCH = wxVERTICAL_HATCH,
-    /* end of deprecated values */
+    wxBRUSHSTYLE_INVALID = -1,
 
     wxBRUSHSTYLE_SOLID = wxSOLID,
     wxBRUSHSTYLE_TRANSPARENT = wxTRANSPARENT,
@@ -50,38 +35,6 @@ enum wxBrushStyle
     wxBRUSHSTYLE_VERTICAL_HATCH = wxVERTICAL_HATCH,
     wxBRUSHSTYLE_FIRST_HATCH = wxFIRST_HATCH,
     wxBRUSHSTYLE_LAST_HATCH = wxLAST_HATCH,
-    wxBRUSHSTYLE_MAX
-#else
-    wxBRUSHSTYLE_SOLID,
-    wxBRUSHSTYLE_TRANSPARENT,
-
-    /*  Brush Stippling. */
-
-    wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE,
-        /* mask is used for blitting monochrome using text fore and back ground colors */
-
-    wxBRUSHSTYLE_STIPPLE_MASK,
-        /* mask is used for masking areas in the stipple bitmap (TO DO) */
-
-    wxBRUSHSTYLE_STIPPLE,
-        /*  drawn with a Pen, and without any Brush -- and it can be stippled. */
-
-    /* In wxWidgets < 2.6 use WX_HATCH macro  */
-    /* to verify these wx*_HATCH are in style */
-    /* of wxBrush. In wxWidgets >= 2.6 use    */
-    /* wxBrush::IsHatch() instead.            */
-    wxBRUSHSTYLE_BDIAGONAL_HATCH,
-    wxBRUSHSTYLE_CROSSDIAG_HATCH,
-    wxBRUSHSTYLE_FDIAGONAL_HATCH,
-    wxBRUSHSTYLE_CROSS_HATCH,
-    wxBRUSHSTYLE_HORIZONTAL_HATCH,
-    wxBRUSHSTYLE_VERTICAL_HATCH,
-
-    wxBRUSHSTYLE_FIRST_HATCH = wxBRUSHSTYLE_BDIAGONAL_HATCH,
-    wxBRUSHSTYLE_LAST_HATCH = wxBRUSHSTYLE_VERTICAL_HATCH,
-
-    wxBRUSHSTYLE_MAX
-#endif
 };
 
 
@@ -95,6 +48,11 @@ public:
 
     virtual bool IsHatch() const
         { return (GetStyle()>=wxBRUSHSTYLE_FIRST_HATCH) && (GetStyle()<=wxBRUSHSTYLE_LAST_HATCH); }
+
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_FUTURE( void SetStyle(int style) )
+        { SetStyle((wxBrushStyle)style); }
+#endif
 };
 
 #if defined(__WXPALMOS__)
