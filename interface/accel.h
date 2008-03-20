@@ -43,11 +43,6 @@ class wxAcceleratorEntry
 {
 public:
     /**
-        Default ctor.
-    */
-    wxAcceleratorEntry();
-
-    /**
         Constructor.
 
         @param flags
@@ -56,9 +51,17 @@ public:
         @param keyCode
             The keycode to be detected. See @ref page_keycodes for a full list of keycodes.
         @param cmd
-            The menu or control command identifier.
+            The menu or control command identifier (ID).
+        @param item
+            The menu item associated with this accelerator.
     */
-    wxAcceleratorEntry(int flags, int keyCode, int cmd);
+    wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0,
+                       wxMenuItem *item = NULL);
+
+    /**
+        Copy ctor.
+    */
+    wxAcceleratorEntry(const wxAcceleratorEntry& entry);
 
     /**
         Returns the command identifier for the accelerator table entry.
@@ -76,6 +79,11 @@ public:
     int GetKeyCode() const;
 
     /**
+        Returns the menu item associated with this accelerator entry.
+    */
+    wxMenuItem *GetMenuItem() const;
+
+    /**
         Sets the accelerator entry parameters.
 
         @param flags
@@ -84,10 +92,39 @@ public:
         @param keyCode
             The keycode to be detected. See @ref page_keycodes for a full list of keycodes.
         @param cmd
-            The menu or control command identifier.
-
+            The menu or control command identifier (ID).
+        @param item
+            The menu item associated with this accelerator.
     */
-    void Set(int flags, int keyCode, int cmd);
+    void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL);
+
+    /**
+        Returns @true if this object is correctly initialized.
+    */
+    bool IsOk() const;
+
+    /**
+        Returns a wxString for this accelerator.
+        This function formats it using the @c "flags-keycode" format
+        where @c flags maybe a hyphen-separed list of @c "shift|alt|ctrl".
+    */
+    wxString ToString() const;
+
+    /**
+        Parses the given string and sets the accelerator accordingly.
+
+        @param str
+            Should be a string in the form "flags-keycode"
+
+        @returns @true if the given string correctly initialized this object
+                 (i.e. if IsOk() returns true after this call)
+    */
+    bool FromString(const wxString& str);
+
+
+    wxAcceleratorEntry& operator=(const wxAcceleratorEntry& entry);
+    bool operator==(const wxAcceleratorEntry& entry) const;
+    bool operator!=(const wxAcceleratorEntry& entry) const;
 };
 
 
@@ -144,7 +181,7 @@ public:
         @param entries
             The array of entries.
     */
-    wxAcceleratorTable(int n, wxAcceleratorEntry entries[]);
+    wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
 
     /**
         Loads the accelerator table from a Windows resource (Windows only).
@@ -164,14 +201,6 @@ public:
         Returns @true if the accelerator table is valid.
     */
     bool IsOk() const;
-
-    /**
-        Assignment operator, using @ref overview_refcount "reference counting".
-
-        @param accel
-            Accelerator table to assign.
-    */
-    wxAcceleratorTable operator =(const wxAcceleratorTable& accel);
 };
 
 

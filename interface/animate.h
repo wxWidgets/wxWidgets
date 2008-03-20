@@ -62,7 +62,7 @@ public:
         all the parameters.
     */
     wxAnimationCtrl(wxWindow* parent, wxWindowID id,
-                    const wxAnimation& anim,
+                    const wxAnimation& anim = wxNullAnimation,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxAC_DEFAULT_STYLE,
@@ -94,7 +94,7 @@ public:
                  creation failed.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxAnimation& anim,
+                const wxAnimation& anim = wxNullAnimation,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
@@ -187,7 +187,9 @@ public:
 class wxAnimation : public wxGDIObject
 {
 public:
-    wxAnimation();
+    /**
+        Copy ctor.
+    */
     wxAnimation(const wxAnimation& anim);
 
     /**
@@ -266,7 +268,7 @@ public:
     /**
         Assignment operator, using @ref overview_refcount "reference counting".
     */
-    wxAnimation operator =(const wxAnimation& brush);
+    wxAnimation& operator =(const wxAnimation& brush);
 };
 
 
