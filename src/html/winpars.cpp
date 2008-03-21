@@ -427,13 +427,13 @@ void wxHtmlWinParser::DoAddText(wxChar *temp, int& templen)
             temp[j] = wxT(' ');
     }
 
-    wxHtmlCell *c = new wxHtmlWordCell(temp, *(GetDC()));
+    wxHtmlWordCell *c = new wxHtmlWordCell(temp, *(GetDC()));
 
     ApplyStateToCell(c);
 
     m_Container->InsertCell(c);
-    ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
-    m_lastWordCell = (wxHtmlWordCell*)c;
+    c->SetPreviousWord(m_lastWordCell);
+    m_lastWordCell = c;
 }
 
 
