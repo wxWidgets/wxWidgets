@@ -161,6 +161,8 @@ wxMSW:
 - Fixed rendering of borders for wxTextCtrl with wxTE_RICH(2) style when
   using Windows XP's Classic UI theme.
 - Text controls with wxTE_RICH style now also generate wxClipboardTextEvents.
+- Fixed wxSpinCtrl::GetClientSize() to return sensible value and not just
+  spin button's client size.
 
 wxGTK:
 

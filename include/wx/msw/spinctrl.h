@@ -94,6 +94,10 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
     virtual void DoGetSize(int *width, int *height) const;
+#if wxABI_VERSION >= 20808
+    virtual void DoGetClientSize(int *x, int *y) const;
+#endif
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
