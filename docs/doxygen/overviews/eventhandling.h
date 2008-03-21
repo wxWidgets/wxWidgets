@@ -303,75 +303,12 @@
  will never conflict with the user-specified identifiers which must be always
  positive.
 
- The following standard identifiers are supplied. You can use wxID_HIGHEST to
- determine the number above which it is safe to define your own identifiers. Or,
- you can use identifiers below wxID_LOWEST.
-
- @code
- #define wxID_ANY                -1
-
- #define wxID_LOWEST             4999
-
- #define wxID_OPEN               5000
- #define wxID_CLOSE              5001
- #define wxID_NEW                5002
- #define wxID_SAVE               5003
- #define wxID_SAVEAS             5004
- #define wxID_REVERT             5005
- #define wxID_EXIT               5006
- #define wxID_UNDO               5007
- #define wxID_REDO               5008
- #define wxID_HELP               5009
- #define wxID_PRINT              5010
- #define wxID_PRINT_SETUP        5011
- #define wxID_PREVIEW            5012
- #define wxID_ABOUT              5013
- #define wxID_HELP_CONTENTS      5014
- #define wxID_HELP_COMMANDS      5015
- #define wxID_HELP_PROCEDURES    5016
- #define wxID_HELP_CONTEXT       5017
-
- #define wxID_CUT                5030
- #define wxID_COPY               5031
- #define wxID_PASTE              5032
- #define wxID_CLEAR              5033
- #define wxID_FIND               5034
- #define wxID_DUPLICATE          5035
- #define wxID_SELECTALL          5036
- #define wxID_DELETE             5037
- #define wxID_REPLACE            5038
- #define wxID_REPLACE_ALL        5039
- #define wxID_PROPERTIES         5040
-
- #define wxID_VIEW_DETAILS       5041
- #define wxID_VIEW_LARGEICONS    5042
- #define wxID_VIEW_SMALLICONS    5043
- #define wxID_VIEW_LIST          5044
- #define wxID_VIEW_SORTDATE      5045
- #define wxID_VIEW_SORTNAME      5046
- #define wxID_VIEW_SORTSIZE      5047
- #define wxID_VIEW_SORTTYPE      5048
-
- #define wxID_FILE1              5050
- #define wxID_FILE2              5051
- #define wxID_FILE3              5052
- #define wxID_FILE4              5053
- #define wxID_FILE5              5054
- #define wxID_FILE6              5055
- #define wxID_FILE7              5056
- #define wxID_FILE8              5057
- #define wxID_FILE9              5058
-
- #define wxID_OK                 5100
- #define wxID_CANCEL             5101
- #define wxID_APPLY              5102
- #define wxID_YES                5103
- #define wxID_NO                 5104
- #define wxID_STATIC             5105
-
- #define wxID_HIGHEST            5999
- @endcode
-
+ See @ref page_stdevtid for the list of standard identifiers availabel.
+ You can use wxID_HIGHEST to determine the number above which it is safe to
+ define your own identifiers. Or, you can use identifiers below wxID_LOWEST.
+ Finally, you can allocate identifiers dynamically using wxNewId() function to.
+ If you use wxNewId() consistently in your application, you can be sure that
+ the your identifiers don't conflict accidentally.
 
 
  @section overview_eventhandling_custom Custom event summary
