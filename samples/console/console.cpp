@@ -565,8 +565,13 @@ static void TestExecute()
 
     wxPrintf(_T("Testing async wxExecute: "));
     fflush(stdout);
-    if ( wxExecute(ASYNC_COMMAND) != 0 )
+    int pid = wxExecute(ASYNC_COMMAND);
+    if ( pid != 0 )
+    {
         wxPuts(_T("Ok (command launched)."));
+        if ( wxKill(pid) == -1 )
+            wxPuts("ERROR: failed to kill child process.");
+    }
     else
         wxPuts(_T("ERROR."));
 
