@@ -18,8 +18,8 @@
     replace standard art with their own version.
 
     All that is needed is to derive a class from wxArtProvider, override either its
-    wxArtProvider::CreateBitmap and/or its wxArtProvider::CreateIconBundle methods
-    and register the provider with wxArtProvider::Push:
+    wxArtProvider::CreateBitmap() and/or its wxArtProvider::CreateIconBundle() methods
+    and register the provider with wxArtProvider::Push():
 
     @code
       class MyProvider : public wxArtProvider
@@ -185,9 +185,9 @@ public:
 
         @see CreateIconBundle()
     */
-    wxBitmap CreateBitmap(const wxArtID& id,
-                          const wxArtClient& client,
-                          const wxSize& size);
+    virtual wxBitmap CreateBitmap(const wxArtID& id,
+                                  const wxArtClient& client,
+                                  const wxSize& size);
 
     /**
         This method is similar to CreateBitmap() but can be used when a bitmap

@@ -79,7 +79,7 @@ public:
         It's normally the same for wxBase and wxGUI except in the case of wxMac
         and wxCocoa.
     */
-    virtual wxStandardPaths GetStandardPaths();
+    virtual wxStandardPaths& GetStandardPaths();
 
     /**
         Returns the wxWidgets port ID used by the running program and eventually

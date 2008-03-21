@@ -82,15 +82,17 @@ public:
     /**
         Closes the archive, returning @true if it was successfully written.
         Called by the destructor if not called explicitly.
+
+        @see wxOutputStream::Close()
     */
-    bool Close();
+    virtual bool Close();
 
     /**
         Close the current entry.
         It is called implicitly whenever another new entry is created with CopyEntry()
         or PutNextEntry(), or when the archive is closed.
     */
-    bool CloseEntry();
+    virtual bool CloseEntry();
 
     /**
         Some archive formats have additional meta-data that applies to the archive
@@ -109,7 +111,7 @@ public:
         in which case the two streams set up a link and transfer the data
         when it becomes available.
     */
-    bool CopyArchiveMetaData(wxArchiveInputStream& stream);
+    virtual bool CopyArchiveMetaData(wxArchiveInputStream& stream);
 
     /**
         Takes ownership of @a entry and uses it to create a new entry in the
@@ -124,8 +126,8 @@ public:
         accessing. For non-seekable streams, @a entry must also be the last
         thing read from @e stream.
     */
-    bool CopyEntry(wxArchiveEntry* entry,
-                   wxArchiveInputStream& stream);
+    virtual bool CopyEntry(wxArchiveEntry* entry,
+                           wxArchiveInputStream& stream);
 
     /**
         Create a new directory entry (see wxArchiveEntry::IsDir) with the given
@@ -134,20 +136,22 @@ public:
         PutNextEntry() can also be used to create directory entries, by supplying
         a name with a trailing path separator.
     */
-    bool PutNextDirEntry(const wxString& name);
+    virtual bool PutNextDirEntry(const wxString& name,
+                                 const wxDateTime& dt = wxDateTime::Now());
 
     /**
         Takes ownership of entry and uses it to create a new entry in the archive.
         The entry's data can then be written by writing to this wxArchiveOutputStream.
     */
-    bool PutNextEntry(wxArchiveEntry* entry);
+    virtual bool PutNextEntry(wxArchiveEntry* entry);
 
     /**
         Create a new entry with the given name, timestamp and size. The entry's
         data can then be written by writing to this wxArchiveOutputStream.
     */
-    bool PutNextEntry(const wxString& name, const wxDateTime& dt = wxDateTime::Now(),
-                      off_t size = wxInvalidOffset);
+    virtual bool PutNextEntry(const wxString& name,
+                              const wxDateTime& dt = wxDateTime::Now(),
+                              wxFileOffset size = wxInvalidOffset);
 };
 
 
@@ -192,12 +196,12 @@ public:
     /**
         Gets the entry's timestamp.
     */
-    wxDateTime GetDateTime();
+    virtual wxDateTime GetDateTime() const;
 
     /**
         Sets the entry's timestamp.
     */
-    const void SetDateTime(const wxDateTime& dt);
+    virtual void SetDateTime(const wxDateTime& dt);
 
     /**
         Returns the entry's name, by default in the native format.
@@ -206,7 +210,7 @@ public:
         If this is a directory entry, (i.e. if IsDir() is @true) then the
         returned string is the name with a trailing path separator.
     */
-    wxString GetName(wxPathFormat format = wxPATH_NATIVE);
+    virtual wxString GetName(wxPathFormat format = wxPATH_NATIVE) const;
 
     /**
         Sets the entry's name.
@@ -214,24 +218,24 @@ public:
 
         @see GetName()
     */
-    const void SetName(const wxString& name,
-                       wxPathFormat format = wxPATH_NATIVE);
+    virtual void SetName(const wxString& name,
+                         wxPathFormat format = wxPATH_NATIVE);
 
     /**
         Returns the size of the entry's data in bytes.
     */
-    off_t GetSize();
+    virtual wxFileOffset GetSize() const;
 
     /**
         Sets the size of the entry's data in bytes.
     */
-    const void SetSize(off_t size);
+    virtual void SetSize(wxFileOffset size);
 
     /**
         Returns the path format used internally within the archive to store
         filenames.
     */
-    wxPathFormat GetInternalFormat() const;
+    virtual wxPathFormat GetInternalFormat() const;
 
     /**
         Returns the entry's filename in the internal format used within the
@@ -243,12 +247,12 @@ public:
 
         @see @ref overview_archive_byname
     */
-    wxString GetInternalName() const;
+    virtual wxString GetInternalName() const;
 
     /**
         Returns a numeric value unique to the entry within the archive.
     */
-    off_t GetOffset() const;
+    virtual wxFileOffset GetOffset() const;
 
     /**
         Returns @true if this is a directory entry.
@@ -262,22 +266,22 @@ public:
         unarchivers typically create whatever directories are necessary as they
         restore files, even if the archive contains no explicit directory entries.
     */
-    bool IsDir();
+    virtual bool IsDir() const;
 
     /**
         Marks this entry as a directory if @a isDir is @true. See IsDir() for more info.
     */
-    const void SetIsDir(bool isDir = true);
+    virtual void SetIsDir(bool isDir = true);
 
     /**
         Returns @true if the entry is a read-only file.
     */
-    bool IsReadOnly();
+    virtual bool IsReadOnly() const;
 
     /**
         Sets this entry as a read-only file.
     */
-    const void SetIsReadOnly(bool isReadOnly = true);
+    virtual void SetIsReadOnly(bool isReadOnly = true);
 
     /**
         Sets the notifier (see wxArchiveNotifier) for this entry.
@@ -294,7 +298,7 @@ public:
     /**
         Unsets the notifier eventually attached to this entry.
     */
-    void UnsetNotifier();
+    virtual void UnsetNotifier();
 };
 
 
