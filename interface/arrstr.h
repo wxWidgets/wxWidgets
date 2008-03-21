@@ -321,19 +321,16 @@ public:
     void Insert(const wxString& str, size_t nIndex,
                 size_t copies = 1);
 
+    //@{
     /**
         @warning this function should not be used with sorted array because it could
                  break the order of items and, for example, subsequent calls to Index()
-                 would then not work!
+                 would then not work! Also, sorting a wxSortedArrayString doesn't make
+                 sense because its elements are always already sorted.
     */
     void Sort(bool reverseOrder = false);
-
-    /**
-        @warning this function should not be used with sorted array because
-                 it could break the order of items and, for example, subsequent
-                 calls to Index() would then not work!
-    */
     void Sort(CompareFunction compareFunction);
+    //@}
 };
 
 
