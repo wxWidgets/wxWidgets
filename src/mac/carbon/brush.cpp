@@ -81,7 +81,7 @@ bool wxBrushRefData::operator==(const wxBrushRefData& data) const
 void wxBrushRefData::DoSetStipple(const wxBitmap& stipple)
 {
     m_stipple = stipple;
-    m_style = stipple.GetMask() ? wxSTIPPLE_MASK_OPAQUE : wxSTIPPLE;
+    m_style = stipple.GetMask() ? wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE : wxBRUSHSTYLE_STIPPLE;
 }
 //
 //
