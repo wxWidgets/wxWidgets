@@ -41,10 +41,8 @@ static wxString LINKAGEMODE HtmlizeWhitespaces(const wxString& str)
                 while (i < len && str[i] != wxT('>'))
                 {
                     out << str[i++];
-                    linepos++;
                 }
                 out << wxT('>');
-                linepos++;
                 break;
             case wxT(' '):
                 out << wxT("&nbsp;");
