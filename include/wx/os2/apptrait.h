@@ -34,7 +34,7 @@ public:
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
 #endif
-    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
 
     // wxThread helpers
     // ----------------

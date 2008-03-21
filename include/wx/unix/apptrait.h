@@ -46,7 +46,7 @@ public:
 #if (defined(__WXMAC__) || defined(__WXCOCOA__)) && wxUSE_STDPATHS
     virtual wxStandardPathsBase& GetStandardPaths();
 #endif
-    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
 
 #if defined(__WXGTK__) && wxUSE_INTL
     virtual void SetLocale();

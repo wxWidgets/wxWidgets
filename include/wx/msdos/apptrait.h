@@ -24,7 +24,7 @@ class wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
     virtual wxEventLoopBase *CreateEventLoop();
-    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
 
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);

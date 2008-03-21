@@ -141,7 +141,7 @@ public:
     // runtime (not compile-time) version.
     // returns wxPORT_BASE for console applications and one of the remaining
     // wxPORT_* values for GUI applications.
-    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const = 0;
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const = 0;
 
     // return true if the port is using wxUniversal for the GUI, false if not
     virtual bool IsUsingUniversalWidgets() const = 0;
@@ -226,7 +226,7 @@ public:
     virtual void RemoveFromPendingDelete(wxObject *object);
 
     // the GetToolkitVersion for console application is always the same
-    virtual wxPortId GetToolkitVersion(int *verMaj, int *verMin) const
+    virtual wxPortId GetToolkitVersion(int *verMaj = NULL, int *verMin = NULL) const
     {
         // no toolkits (wxBase is for console applications without GUI support)
         // NB: zero means "no toolkit", -1 means "not initialized yet"

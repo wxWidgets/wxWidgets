@@ -50,7 +50,7 @@ public:
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
 #endif
     virtual bool DoMessageFromThreadWait();
-    virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
 };
 
 #endif // wxUSE_GUI
