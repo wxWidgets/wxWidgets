@@ -88,7 +88,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_CMDLINE
+    #define TEST_EXECUTE
 #endif
 
 // some tests are interactive, define this to run them
@@ -536,11 +536,13 @@ static void TestExecute()
     wxPuts(_T("*** testing wxExecute ***"));
 
 #ifdef __UNIX__
-    #define COMMAND "cat -n ../../Makefile" // "echo hi"
+    #define COMMAND "echo hi"
+    #define ASYNC_COMMAND "xclock"
     #define SHELL_COMMAND "echo hi from shell"
-    #define REDIRECT_COMMAND COMMAND // "date"
+    #define REDIRECT_COMMAND COMMAND "cat -n Makefile"
 #elif defined(__WXMSW__)
     #define COMMAND "command.com /c echo hi"
+    #define ASYNC_COMMAND "notepad"
     #define SHELL_COMMAND "echo hi"
     #define REDIRECT_COMMAND COMMAND
 #else
@@ -556,19 +558,17 @@ static void TestExecute()
 
     wxPrintf(_T("Testing wxExecute: "));
     fflush(stdout);
-    if ( wxExecute(_T(COMMAND), true /* sync */) == 0 )
+    if ( wxExecute(_T(COMMAND), wxEXEC_SYNC) == 0 )
         wxPuts(_T("Ok."));
     else
         wxPuts(_T("ERROR."));
 
-#if 0 // no, it doesn't work (yet?)
     wxPrintf(_T("Testing async wxExecute: "));
     fflush(stdout);
-    if ( wxExecute(COMMAND) != 0 )
+    if ( wxExecute(ASYNC_COMMAND) != 0 )
         wxPuts(_T("Ok (command launched)."));
     else
         wxPuts(_T("ERROR."));
-#endif // 0
 
     wxPrintf(_T("Testing wxExecute with redirection:\n"));
     wxArrayString output;
@@ -578,10 +578,10 @@ static void TestExecute()
     }
     else
     {
-        size_t count = output.GetCount();
-        for ( size_t n = 0; n < count; n++ )
+        unsigned count = output.GetCount();
+        for ( unsigned n = 0; n < count; n++ )
         {
-            wxPrintf(_T("\t%s\n"), output[n].c_str());
+            wxPrintf("%04u:\t%s\n", n, output[n]);
         }
 
         wxPuts(_T("Ok."));
