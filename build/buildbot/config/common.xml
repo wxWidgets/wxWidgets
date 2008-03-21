@@ -81,7 +81,7 @@
 -->
 
 <mailnotifier>
-    <extraRecipient>mike.wetherell -at- ntlworld.com</extraRecipient>
+    <extraRecipient>wx-buildbot -at- lists.wxwidgets.org</extraRecipient>
 </mailnotifier>
 
 <!--
