@@ -167,7 +167,7 @@ wxAppConsoleBase::~wxAppConsoleBase()
 // initilization/cleanup
 // ----------------------------------------------------------------------------
 
-bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
+bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **argv)
 {
 #if wxUSE_INTL
     GetTraits()->SetLocale();
@@ -178,7 +178,7 @@ bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 #endif
 
 #ifndef __WXPALMOS__
-    if ( m_appName.empty() && argv )
+    if ( m_appName.empty() && argv && argv[0] )
     {
         // the application name is, by default, the name of its executable file
         wxFileName::SplitPath(argv[0], NULL, &m_appName, NULL);
