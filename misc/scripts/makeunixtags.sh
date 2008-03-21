@@ -30,6 +30,7 @@ ctags --totals --c++-kinds=+px --language-force=c++ \
 	-I WXDLLIMPEXP_DATA_XML+ -I WXDLLIMPEXP_XML \
 	-I WXDLLIMPEXP_DATA_XRC+ -I WXDLLIMPEXP_XRC \
 	include/wx/*.h \
+	include/wx/private/*.h \
 	include/wx/aui/*.h \
 	include/wx/generic/*.h \
 	include/wx/$1/*.h \
