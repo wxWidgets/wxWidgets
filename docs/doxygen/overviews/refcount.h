@@ -53,7 +53,7 @@ provide comparison operators.
 
 Also note that if you only need to do a @c shallow comparison between two
 wxObject derived classes, you should not use the == and != operators but
-rather the wxObject::IsSameAs function.
+rather the wxObject::IsSameAs() function.
 
 
 @section overview_refcount_destruct Object Destruction
@@ -89,6 +89,11 @@ operators and copy constructors since they are reference-counted:
 
 Note that the list above reports the objects which are reference counted in all
 ports of wxWidgets; some ports may use this technique also for other classes.
+
+All the objects implement a function IsOk() to test if they are referencing valid
+data; when the objects are in uninitialized state, you can only use the IsOk() getter;
+trying to call any other getter, e.g. wxBrush::GetStyle() on the ::wxNullBrush object,
+will result in an assert failure in debug builds.
 
 
 @section overview_refcount_object Making Your Own Reference Counted Class
