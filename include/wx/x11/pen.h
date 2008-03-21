@@ -52,7 +52,7 @@ public:
     void SetStyle( wxPenStyle style );
     void SetWidth( int width );
     void SetDashes( int number_of_dashes, const wxDash *dash );
-    void SetStipple( wxBitmap *stipple );
+    void SetStipple( const wxBitmap& stipple );
 
     wxColour &GetColour() const;
     wxPenCap GetCap() const;

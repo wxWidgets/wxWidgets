@@ -156,11 +156,11 @@ void wxPen::SetJoin( wxPenJoin joinStyle )
     M_PENDATA->m_joinStyle = joinStyle;
 }
 
-void wxPen::SetStipple( wxBitmap *stipple )
+void wxPen::SetStipple( const wxBitmap& stipple )
 {
     AllocExclusive();
 
-    M_PENDATA->m_stipple = *stipple;
+    M_PENDATA->m_stipple = stipple;
 }
 
 void wxPen::SetStyle( wxPenStyle style )
@@ -197,21 +197,21 @@ wxDash* wxPen::GetDash() const
 
 wxPenCap wxPen::GetCap() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxCAP_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_capStyle;
 }
 
 wxPenJoin wxPen::GetJoin() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxJOIN_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_joinStyle;
 }
 
 wxPenStyle wxPen::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxPENSTYLE_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_style;
 }
