@@ -7,29 +7,31 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxSharedPtrT
     @wxheader{ptr_shrd.h}
 
-    A smart pointer with non-intrusive reference counting. It is modeled
-    after @b boost::shared_ptr and can be used with STL containers
-    and wxVector() - unlike @b std::auto_ptr
-    and wxScopedPtr().
+    A smart pointer with non-intrusive reference counting. It is modeled after
+    @c boost::shared_ptr and can be used with STL containers and wxVector<T> -
+    unlike @c std::auto_ptr and wxScopedPtr<T>.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{smartpointers}
 
-    @see wxScopedPtr, wxWeakRef, wxObjectDataPtr
+    @see wxScopedPtr<T>, wxWeakRef<T>, wxObjectDataPtr
 */
+template<typename T>
 class wxSharedPtr<T>
 {
 public:
-    //@{
     /**
-        Constructors.
+        Constructor.
+
+        Creates shared pointer from the raw pointer @a ptr and takes ownership
+        of it.
     */
-    wxSharedPtrT(T* ptr = NULL);
-    wxSharedPtrT(const wxSharedPtr<T>& tocopy);
-    //@}
+    wxSharedPtr(T* ptr = NULL);
+
+    /// Copy constructor.
+    wxSharedPtr(const wxSharedPtr<T>& tocopy);
 
     /**
         Destructor.
@@ -50,8 +52,8 @@ public:
     operator unspecified_bool_type() const;
 
     /**
-        Returns a reference to the object. If the internal pointer is @NULL this
-        method will cause an assert in debug mode.
+        Returns a reference to the object. If the internal pointer is @NULL
+        this method will cause an assert in debug mode.
     */
     T operator*() const;
 
