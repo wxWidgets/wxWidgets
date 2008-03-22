@@ -564,18 +564,23 @@ public:
     virtual void FitInside();
 
     /**
-        Freezes the window or, in other words, prevents any updates from taking place
-        on screen, the window is not redrawn at all. Thaw() must
-        be called to reenable window redrawing. Calls to these two functions may be
-        nested but to ensure that the window is properly repainted again, you must thaw
-        it exactly as many times as you froze it.
-        This method is useful for visual appearance optimization (for example, it
-        is a good idea to use it before doing many large text insertions in a row into
-        a wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
-        controls so it is mostly just a hint to wxWidgets and not a mandatory
-        directive.
+        Freezes the window or, in other words, prevents any updates from taking
+        place on screen, the window is not redrawn at all.
 
-        @see wxWindowUpdateLocker
+        Thaw() must be called to reenable window redrawing. Calls to these two
+        functions may be nested but to ensure that the window is properly
+        repainted again, you must thaw it exactly as many times as you froze
+        it.
+
+        If the window has any children, they are recursively frozen too.
+
+        This method is useful for visual appearance optimization (for example,
+        it is a good idea to use it before doing many large text insertions in
+        a row into a wxTextCtrl under wxGTK) but is not implemented on all
+        platforms nor for all controls so it is mostly just a hint to wxWidgets
+        and not a mandatory directive.
+
+        @see wxWindowUpdateLocker, Thaw(), IsFrozen()
     */
     virtual void Freeze();
 
@@ -1315,7 +1320,7 @@ public:
         Returns @true if the window is currently frozen by a call to
         Freeze().
 
-        @see Thaw()
+        @see Freeze(), Thaw()
     */
     virtual bool IsFrozen() const;
 
@@ -2461,11 +2466,14 @@ public:
                                 wxDirection dir = wxBOTTOM);
 
     /**
-        Reenables window updating after a previous call to
-        Freeze(). To really thaw the control, it must be called
-        exactly the same number of times as Freeze().
+        Reenables window updating after a previous call to Freeze().
 
-        @see wxWindowUpdateLocker
+        To really thaw the control, it must be called exactly the same number
+        of times as Freeze().
+
+        If the window has any children, they are recursively thawn too.
+
+        @see wxWindowUpdateLocker, Freeze(), IsFrozen()
     */
     virtual void Thaw();
 
