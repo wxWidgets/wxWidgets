@@ -1447,8 +1447,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     // prepare to wait for the child termination: show to the user that we're
     // busy and refuse all input unless explicitly told otherwise
     wxBusyCursor bc;
-    wxWindowDisabler *wd = flags & wxEXEC_NODISABLE ? NULL
-                                                    : new wxWindowDisabler;
+    wxWindowDisabler wd(!(flags & wxEXEC_NODISABLE));
 
     // endProcData.pid will be set to 0 from wxHandleProcessTermination() when
     // the process terminates
@@ -1479,8 +1478,6 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
         // and also repaint the GUI and handle other accumulated events
         wxYield();
     }
-
-    delete wd;
 
     return endProcData.exitcode;
 }

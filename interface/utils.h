@@ -12,7 +12,8 @@
 
     This class disables all windows of the application (may be with the exception
     of one of them) in its constructor and enables them back in its destructor.
-    This comes in handy when you want to indicate to the user that the application
+
+    This is useful when you want to indicate to the user that the application
     is currently busy and cannot respond to user input.
 
     @library{wxcore}
@@ -24,10 +25,20 @@ class wxWindowDisabler
 {
 public:
     /**
+        Disables all top level windows of the applications.
+
+        If @a disable is @c false nothing is done. This can be convenient if
+        the windows should be disabled depending on some condition.
+
+        @since 2.9.0
+    */
+    wxWindowDisabler(bool disable = true);
+
+    /**
         Disables all top level windows of the applications with the exception of
         @a winToSkip if it is not @NULL.
     */
-    wxWindowDisabler(wxWindow* winToSkip = NULL);
+    wxWindowDisabler(wxWindow* winToSkip);
 
     /**
         Reenables back the windows disabled by the constructor.

@@ -649,16 +649,28 @@ WXDLLEXPORT bool wxCheckForInterrupt(wxWindow *wnd);
 // Consume all events until no more left
 WXDLLEXPORT void wxFlushEvents();
 
-// a class which disables all windows (except, may be, thegiven one) in its
+// a class which disables all windows (except, may be, the given one) in its
 // ctor and enables them back in its dtor
 class WXDLLEXPORT wxWindowDisabler
 {
 public:
-    wxWindowDisabler(wxWindow *winToSkip = (wxWindow *)NULL);
+    // this ctor conditionally disables all windows: if the argument is false,
+    // it doesn't do anything
+    wxWindowDisabler(bool disable = true);
+
+    // ctor disables all windows except winToSkip
+    wxWindowDisabler(wxWindow *winToSkip);
+
+    // dtor enables back all windows disabled by the ctor
     ~wxWindowDisabler();
 
 private:
+    // disable all windows except the given one (used by both ctors)
+    void DoDisable(wxWindow *winToSkip = NULL);
+
+
     wxWindowList *m_winDisabled;
+    bool m_disabled;
 
     DECLARE_NO_COPY_CLASS(wxWindowDisabler)
 };

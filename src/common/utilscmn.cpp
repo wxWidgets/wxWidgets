@@ -1561,7 +1561,20 @@ void wxEnableTopLevelWindows(bool enable)
         node->GetData()->Enable(enable);
 }
 
+wxWindowDisabler::wxWindowDisabler(bool disable)
+{
+    m_disabled = disable;
+    if ( disable )
+        DoDisable();
+}
+
 wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
+{
+    m_disabled = true;
+    DoDisable(winToSkip);
+}
+
+void wxWindowDisabler::DoDisable(wxWindow *winToSkip)
 {
     // remember the top level windows which were already disabled, so that we
     // don't reenable them later
@@ -1593,6 +1606,9 @@ wxWindowDisabler::wxWindowDisabler(wxWindow *winToSkip)
 
 wxWindowDisabler::~wxWindowDisabler()
 {
+    if ( !m_disabled )
+        return;
+
     wxWindowList::compatibility_iterator node;
     for ( node = wxTopLevelWindows.GetFirst(); node; node = node->GetNext() )
     {
