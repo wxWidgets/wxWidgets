@@ -213,46 +213,18 @@ const gchar *wx_pango_version_check (int major, int minor, int micro)
 extern "C" {
 static
 void GTK_EndProcessDetector(gpointer data, gint source,
-                            GdkInputCondition WXUNUSED(condition) )
+                            GdkInputCondition WXUNUSED(condition))
 {
-   wxEndProcessData *proc_data = (wxEndProcessData *)data;
+    wxEndProcessData * const
+        proc_data = wx_static_cast(wxEndProcessData *, data);
 
-   // has the process really terminated? unfortunately GDK (or GLib) seem to
-   // generate G_IO_HUP notification even when it simply tries to read from a
-   // closed fd and hasn't terminated at all
-   int pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
-   int status = 0;
-   int rc = waitpid(pid, &status, WNOHANG);
+    // child exited, end waiting
+    close(source);
 
-    if ( rc == 0 )
-    {
-        // This can only happen if the child application closes our dummy
-        // pipe that is used to monitor its lifetime; in that case, our
-        // best bet is to pretend the process did terminate, because
-        // otherwise wxExecute() would hang indefinitely
-        // (OnExceptionWaiting() won't be called again, the descriptor
-        // is closed now).
-        wxLogDebug("Child process (PID %i) still alive, even though notification was received that it terminated.", pid);
-    }
-    else if ( rc == -1 )
-    {
-        // As above, if waitpid() fails, the best we can do is to log the
-        // error and pretend the child terminated:
-        wxLogSysError(_("Failed to check child process' status"));
-    }
+    // don't call us again!
+    gdk_input_remove(proc_data->tag);
 
-   // set exit code to -1 if something bad happened
-   proc_data->exitcode = (rc > 0 && WIFEXITED(status))
-                         ? WEXITSTATUS(status)
-                         : -1;
-
-   // child exited, end waiting
-   close(source);
-
-   // don't call us again!
-   gdk_input_remove(proc_data->tag);
-
-   wxHandleProcessTermination(proc_data);
+    wxHandleProcessTermination(proc_data);
 }
 }
 

@@ -36,44 +36,8 @@ extern "C" void WXCF_EndProcessDetector(CFSocketRef s,
                                         void const *WXUNUSED(data),
                                         void *info)
 {
-    wxEndProcessData * const proc_data = static_cast<wxEndProcessData*>(info);
-
-/// This code could reasonably be shared between wxMac/wxCocoa and wxGTK ///
-    // PID is always positive on UNIX but wx uses the sign bit as a flag.
-    int pid = (proc_data->pid > 0) ? proc_data->pid : -proc_data->pid;
-    int status = 0;
-    int rc = waitpid(pid, &status, WNOHANG);
-    if(rc == 0)
-    {
-        // Keep waiting in case we got a spurious notification
-        // NOTE: In my limited testing, this doesn't happen.
-        return;
-    }
-
-    if(rc == -1)
-    {   // Error.. really shouldn't happen but try to gracefully handle it
-        wxLogLastError(_T("waitpid"));
-        proc_data->exitcode = -1;
-    }
-    else
-    {   // Process ended for some reason
-        wxASSERT_MSG(rc == pid, _T("unexpected waitpid() return value"));
-
-        if(WIFEXITED(status))
-            proc_data->exitcode = WEXITSTATUS(status);
-        else if(WIFSIGNALED(status))
-            // wxGTK doesn't do this but why not?
-            proc_data->exitcode = -WTERMSIG(status);
-        else
-        {   // Should NEVER happen according to waitpid docs
-            wxLogError(wxT("waitpid indicates process exited but not due to exiting or signalling"));
-            proc_data->exitcode = -1;
-        }
-    }
-/// The above code could reasonably be shared between wxMac/wxCocoa and wxGTK ///
-
     /*
-        Either waitpid failed or the process ended successfully.  Either way,
+        Either our pipe was closed or the process ended successfully.  Either way,
         we're done.  It's not if waitpid is going to magically succeed when
         we get fired again.  CFSocketInvalidate closes the fd for us and also
         invalidates the run loop source for us which should cause it to
@@ -87,7 +51,7 @@ extern "C" void WXCF_EndProcessDetector(CFSocketRef s,
     CFSocketInvalidate(s);
 
     // Now tell wx that the process has ended.
-    wxHandleProcessTermination(proc_data);
+    wxHandleProcessTermination(static_cast<wxEndProcessData *>(info));
 }
 
 /*!

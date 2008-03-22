@@ -1234,47 +1234,11 @@ int wxAppTraits::AddProcessCallback(wxEndProcessData *data, int fd)
     {
         wxEndProcessFDIOHandler(wxEndProcessData *data, int fd)
             : m_data(data), m_fd(fd)
-        {}
+        {
+        }
 
         virtual void OnReadWaiting()
-            { wxFAIL_MSG("this isn't supposed to happen"); }
-        virtual void OnWriteWaiting()
-            { wxFAIL_MSG("this isn't supposed to happen"); }
-
-        virtual void OnExceptionWaiting()
         {
-            const int pid = m_data->pid > 0 ? m_data->pid : -(m_data->pid);
-            int status = 0;
-
-            // has the process really terminated?
-            int rc = waitpid(pid, &status, WNOHANG);
-            if ( rc == 0 )
-            {
-                // This can only happen if the child application closes our
-                // dummy pipe that is used to monitor its lifetime; in that
-                // case, our best bet is to pretend the process did terminate,
-                // because otherwise wxExecute() would hang indefinitely
-                // (OnExceptionWaiting() won't be called again, the descriptor
-                // is closed now).
-                wxLogDebug("Child process (PID %d) still alive, "
-                           "even though pipe was closed.", pid);
-            }
-            else if ( rc == -1 )
-            {
-                // As above, if waitpid() fails, the best we can do is to log the
-                // error and pretend the child terminated:
-                wxLogSysError(_("Failed to check child process' status"));
-            }
-
-            // set exit code to -1 if something bad happened
-            m_data->exitcode = rc > 0 && WIFEXITED(status) ? WEXITSTATUS(status)
-                                                           : -1;
-
-            wxLogTrace("exec",
-                       "Child process (PID %d) terminated with exit code %d",
-                       pid, m_data->exitcode);
-
-            // child exited, end waiting
             wxFDIODispatcher::Get()->UnregisterFD(m_fd);
             close(m_fd);
 
@@ -1282,6 +1246,9 @@ int wxAppTraits::AddProcessCallback(wxEndProcessData *data, int fd)
 
             delete this;
         }
+
+        virtual void OnWriteWaiting() { wxFAIL_MSG("unreachable"); }
+        virtual void OnExceptionWaiting() { wxFAIL_MSG("unreachable"); }
 
         wxEndProcessData * const m_data;
         const int m_fd;
@@ -1291,7 +1258,7 @@ int wxAppTraits::AddProcessCallback(wxEndProcessData *data, int fd)
                              (
                                  fd,
                                  new wxEndProcessFDIOHandler(data, fd),
-                                 wxFDIO_EXCEPTION
+                                 wxFDIO_INPUT
                              );
     return fd; // unused, but return something unique for the tag
 }
@@ -1378,6 +1345,59 @@ private:
 
 #endif // wxUSE_STREAMS
 
+// helper function which calls waitpid() and analyzes the result
+namespace
+{
+
+int DoWaitForChild(int pid, int flags = 0)
+{
+    wxASSERT_MSG( pid > 0, "invalid PID" );
+
+    int status, rc;
+
+    // loop while we're getting EINTR
+    for ( ;; )
+    {
+        rc = waitpid(pid, &status, flags);
+
+        if ( rc != -1 || errno != EINTR )
+            break;
+    }
+
+    if ( rc == 0 )
+    {
+        // This can only happen if the child application closes our dummy pipe
+        // that is used to monitor its lifetime; in that case, our best bet is
+        // to pretend the process did terminate, because otherwise wxExecute()
+        // would hang indefinitely (OnReadWaiting() won't be called again, the
+        // descriptor is closed now).
+        wxLogDebug("Child process (PID %d) still alive but pipe closed so "
+                   "generating a close notification", pid);
+    }
+    else if ( rc == -1 )
+    {
+        wxLogLastError(wxString::Format("waitpid(%d)", pid));
+    }
+    else // child did terminate
+    {
+        wxASSERT_MSG( rc == pid, "unexpected waitpid() return value" );
+
+        if ( WIFEXITED(status) )
+            return WEXITSTATUS(status);
+        else if ( WIFSIGNALED(status) )
+            return -WTERMSIG(status);
+        else
+        {
+            wxLogError("Child process (PID %d) exited for unknown reason, "
+                       "status = %d", pid, status);
+        }
+    }
+
+    return -1;
+}
+
+} // anonymous namespace
+
 int wxAppTraits::WaitForChild(wxExecuteData& execData)
 {
     if ( !(execData.flags & wxEXEC_SYNC) )
@@ -1421,81 +1441,22 @@ int wxAppTraits::WaitForChild(wxExecuteData& execData)
     //else: no IO redirection, just block waiting for the child to exit
 #endif // wxUSE_STREAMS
 
-    int status = 0;
-
-    int result = waitpid(execData.pid, &status, 0);
-#ifdef __DARWIN__
-    /*  DE: waitpid manpage states that waitpid can fail with EINTR
-        if the call is interrupted by a caught signal.  I suppose
-        that means that this ought to be a while loop.
-
-        The odd thing is that it seems to fail EVERY time.  It fails
-        with a quickly exiting process (e.g. echo), and fails with a
-        slowly exiting process (e.g. sleep 2) but clearly after
-        having waited for the child to exit. Maybe it's a bug in
-        my particular version.
-
-        It works, however, from the CFSocket callback without this
-        trick but in that case it's used only after CFSocket calls
-        the callback and with the WNOHANG flag which would seem to
-        preclude it from being interrupted or at least make it much
-        less likely since it would not then be waiting.
-
-        If Darwin's man page is to be believed then this is definitely
-        necessary.  It's just weird that I've never seen it before
-        and apparently no one else has either or you'd think they'd
-        have reported it by now.  Perhaps blocking the GUI while
-        waiting for a child process to exit is simply not that common.
-     */
-    if ( result == -1 && errno == EINTR )
-    {
-        result = waitpid(execData.pid, &status, 0);
-    }
-#endif // __DARWIN__
-
-    if ( result == -1 )
-    {
-        wxLogLastError("waitpid");
-    }
-    else // child terminated
-    {
-        wxASSERT_MSG( result == execData.pid,
-                      "unexpected waitpid() return value" );
-
-        if ( WIFEXITED(status) )
-        {
-            return WEXITSTATUS(status);
-        }
-        else // abnormal termination?
-        {
-            wxASSERT_MSG( WIFSIGNALED(status),
-                          "unexpected child wait status" );
-        }
-    }
-
-    wxLogSysError(_("Waiting for subprocess termination failed"));
-
-    return -1;
+    return DoWaitForChild(execData.pid);
 }
 
-void wxHandleProcessTermination(wxEndProcessData *proc_data)
+void wxHandleProcessTermination(wxEndProcessData *data)
 {
+    data->exitcode = DoWaitForChild(data->pid, WNOHANG);
+
     // notify user about termination if required
-    if ( proc_data->process )
+    if ( data->process )
     {
-        proc_data->process->OnTerminate(proc_data->pid, proc_data->exitcode);
+        data->process->OnTerminate(data->pid, data->exitcode);
     }
 
-    // clean up
-    if ( proc_data->pid > 0 )
-    {
-        // async execution
-        delete proc_data;
-    }
-    else // sync execution
-    {
-        // let wxExecute() know that the process has terminated
-        proc_data->pid = 0;
-    }
+    // this function is only called for asynchronously executing children, now
+    // that we have received the notification about their termination there is
+    // no need to keep it around any longer
+    delete data;
 }
 

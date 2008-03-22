@@ -134,32 +134,16 @@ static
 void GTK_EndProcessDetector(gpointer data, gint source,
                             GdkInputCondition WXUNUSED(condition) )
 {
-   wxEndProcessData *proc_data = (wxEndProcessData *)data;
+    wxEndProcessData * const
+        proc_data = wx_static_cast(wxEndProcessData *, data);
 
-   // has the process really terminated? unfortunately GDK (or GLib) seem to
-   // generate G_IO_HUP notification even when it simply tries to read from a
-   // closed fd and hasn't terminated at all
-   int pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
-   int status = 0;
-   int rc = waitpid(pid, &status, WNOHANG);
+    // child exited, end waiting
+    close(source);
 
-   if ( rc == 0 )
-   {
-       // no, it didn't exit yet, continue waiting
-       return;
-   }
+    // don't call us again!
+    gdk_input_remove(proc_data->tag);
 
-   // set exit code to -1 if something bad happened
-   proc_data->exitcode = rc != -1 && WIFEXITED(status) ? WEXITSTATUS(status)
-                                                      : -1;
-
-   // child exited, end waiting
-   close(source);
-
-   // don't call us again!
-   gdk_input_remove(proc_data->tag);
-
-   wxHandleProcessTermination(proc_data);
+    wxHandleProcessTermination(proc_data);
 }
 }
 
