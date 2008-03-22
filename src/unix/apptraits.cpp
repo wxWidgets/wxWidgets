@@ -47,19 +47,13 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     // to process the GUI events while waiting for the child termination
 
     wxEndProcessData endProcData;
-
-    // we may have process for capturing the program output, but it's
-    // not used in wxEndProcessData in the case of sync execution
-    endProcData.process = NULL;
-
-    // sync execution: indicate it by negating the pid
-    endProcData.pid = -execData.pid;
-
+    endProcData.pid = execData.pid;
     endProcData.tag = AddProcessCallback
                       (
                          &endProcData,
                          execData.GetEndProcReadFD()
                       );
+    endProcData.async = false;
 
 
     // prepare to wait for the child termination: show to the user that we're

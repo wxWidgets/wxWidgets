@@ -1412,18 +1412,24 @@ int wxAppTraits::WaitForChild(wxExecuteData& execData)
 {
     if ( !(execData.flags & wxEXEC_SYNC) )
     {
-        // asynchronous execution: just launch the process and return
+        // asynchronous execution: just launch the process and return,
+        // endProcData will be destroyed when it terminates (currently we leak
+        // it if the process doesn't terminate before we do and this should be
+        // fixed but it's not a real leak so it's not really very high
+        // priority)
         wxEndProcessData *endProcData = new wxEndProcessData;
-        endProcData->process  = execData.process;
-        endProcData->pid      = execData.pid;
+        endProcData->process = execData.process;
+        endProcData->pid = execData.pid;
         endProcData->tag = AddProcessCallback
                            (
                              endProcData,
                              execData.GetEndProcReadFD()
                            );
+        endProcData->async = true;
 
         return execData.pid;
     }
+    //else: synchronous execution case
 
 #if wxUSE_STREAMS
     wxProcess * const process = execData.process;
@@ -1464,9 +1470,16 @@ void wxHandleProcessTermination(wxEndProcessData *data)
         data->process->OnTerminate(data->pid, data->exitcode);
     }
 
-    // this function is only called for asynchronously executing children, now
-    // that we have received the notification about their termination there is
-    // no need to keep it around any longer
-    delete data;
+    if ( data->async )
+    {
+        // in case of asynchronous execution we don't need this data any more
+        // after the child terminates
+        delete data;
+    }
+    else // sync execution
+    {
+        // let wxExecute() know that the process has terminated
+        data->pid = 0;
+    }
 }
 

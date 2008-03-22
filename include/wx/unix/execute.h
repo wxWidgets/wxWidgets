@@ -15,15 +15,22 @@
 class WXDLLIMPEXP_FWD_BASE wxProcess;
 class wxStreamTempInputBuffer;
 
-// if pid > 0, the execution is async and the data is freed in the callback
-// executed when the process terminates, if pid < 0, the execution is
-// synchronous and the caller (wxExecute) frees the data
 struct wxEndProcessData
 {
+    wxEndProcessData()
+    {
+        pid =
+        tag =
+        exitcode = -1;
+        process = NULL;
+        async = false;
+    }
+
     int pid;                // pid of the process
     int tag;                // port dependent value
     wxProcess *process;     // if !NULL: notified on process termination
-    int  exitcode;          // the exit code
+    int exitcode;           // the exit code
+    bool async;             // if true, delete us on process termination
 };
 
 // struct in which information is passed from wxExecute() to wxAppTraits
