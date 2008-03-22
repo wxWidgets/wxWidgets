@@ -27,4 +27,9 @@
         <installable>yes</installable>
     </subproject>
 
+    <subproject id="ifacecheck" template="sub">
+        <dir>ifacecheck/src</dir>
+        <installable>yes</installable>
+    </subproject>
+
 </makefile>

@@ -48,7 +48,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 
 ### Targets: ###
 
-all : .SYMBOLIC emulator helpview tex2rtf helpgen
+all : .SYMBOLIC emulator helpview tex2rtf helpgen ifacecheck
 
 clean : .SYMBOLIC 
 	-if exist .\*.obj del .\*.obj
@@ -66,6 +66,9 @@ clean : .SYMBOLIC
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd HelpGen\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd ifacecheck\src
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 
@@ -86,6 +89,11 @@ tex2rtf : .SYMBOLIC
 
 helpgen : .SYMBOLIC 
 	cd HelpGen\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+ifacecheck : .SYMBOLIC 
+	cd ifacecheck\src
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 

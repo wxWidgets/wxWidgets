@@ -21,13 +21,13 @@ DESTDIR =
 
 ### Targets: ###
 
-all: emulator helpview tex2rtf helpgen
+all: emulator helpview tex2rtf helpgen ifacecheck
 
-install: all install_tex2rtf install_helpgen
+install: all install_tex2rtf install_helpgen install_ifacecheck
 
-uninstall: uninstall_tex2rtf uninstall_helpgen
+uninstall: uninstall_tex2rtf uninstall_helpgen uninstall_ifacecheck
 
-install-strip: install install-strip_tex2rtf install-strip_helpgen
+install-strip: install install-strip_tex2rtf install-strip_helpgen install-strip_ifacecheck
 
 clean: 
 	rm -rf ./.deps ./.pch
@@ -36,6 +36,7 @@ clean:
 	-(cd helpview/src && $(MAKE) clean)
 	-(cd tex2rtf/src && $(MAKE) clean)
 	-(cd HelpGen/src && $(MAKE) clean)
+	-(cd ifacecheck/src && $(MAKE) clean)
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -43,6 +44,7 @@ distclean: clean
 	-(cd helpview/src && $(MAKE) distclean)
 	-(cd tex2rtf/src && $(MAKE) distclean)
 	-(cd HelpGen/src && $(MAKE) distclean)
+	-(cd ifacecheck/src && $(MAKE) distclean)
 
 emulator: 
 	(cd emulator/src && $(MAKE) all)
@@ -74,8 +76,20 @@ uninstall_helpgen:
 install-strip_helpgen: 
 	(cd HelpGen/src && $(MAKE) install-strip)
 
+ifacecheck: 
+	(cd ifacecheck/src && $(MAKE) all)
+
+install_ifacecheck: 
+	(cd ifacecheck/src && $(MAKE) install)
+
+uninstall_ifacecheck: 
+	(cd ifacecheck/src && $(MAKE) uninstall)
+
+install-strip_ifacecheck: 
+	(cd ifacecheck/src && $(MAKE) install-strip)
+
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean emulator helpview tex2rtf install_tex2rtf uninstall_tex2rtf install-strip_tex2rtf helpgen install_helpgen uninstall_helpgen install-strip_helpgen
+.PHONY: all install uninstall clean distclean emulator helpview tex2rtf install_tex2rtf uninstall_tex2rtf install-strip_tex2rtf helpgen install_helpgen uninstall_helpgen install-strip_helpgen ifacecheck install_ifacecheck uninstall_ifacecheck install-strip_ifacecheck

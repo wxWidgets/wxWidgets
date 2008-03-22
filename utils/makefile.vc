@@ -34,7 +34,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: sub_emulator sub_helpview sub_tex2rtf sub_helpgen
+all: sub_emulator sub_helpview sub_tex2rtf sub_helpgen sub_ifacecheck
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -50,6 +50,9 @@ clean:
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 	cd HelpGen\src
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd "$(MAKEDIR)"
+	cd ifacecheck\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
 
@@ -70,6 +73,11 @@ sub_tex2rtf:
 
 sub_helpgen: 
 	cd HelpGen\src
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd "$(MAKEDIR)"
+
+sub_ifacecheck: 
+	cd ifacecheck\src
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 

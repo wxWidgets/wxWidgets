@@ -43,7 +43,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: emulator helpview tex2rtf helpgen
+all: emulator helpview tex2rtf helpgen ifacecheck
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -65,6 +65,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>helpgen.bat
 	call helpgen.bat
 	@del helpgen.bat
+	@echo cd ifacecheck\src >ifacecheck.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>ifacecheck.bat
+	call ifacecheck.bat
+	@del ifacecheck.bat
 
 emulator: 
 	@echo cd emulator\src >emulator.bat
@@ -89,4 +93,10 @@ helpgen:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>helpgen.bat
 	call helpgen.bat
 	@del helpgen.bat
+
+ifacecheck: 
+	@echo cd ifacecheck\src >ifacecheck.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>ifacecheck.bat
+	call ifacecheck.bat
+	@del ifacecheck.bat
 

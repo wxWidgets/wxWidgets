@@ -25,6 +25,7 @@ or directly http://wxcode.sourceforge.net or http://www.wxcommunity.com/ .
 @li @ref page_utils_helpgen
 @li @ref page_utils_helpview
 @li @ref page_utils_hhp2cached
+@li @ref page_utils_ifacecheck
 @li @ref page_utils_tex2rtf
 @li @ref page_utils_wxrc
 
@@ -42,7 +43,7 @@ Xnest-based display emulator for X11-based PDA applications.
 This program can be found in @c utils/emulator.
 
 
-@section page_utils_helpgen Helpgen
+@section page_utils_helpgen Help Generator
 
 Helpgen takes C++ header files and generates a Tex2RTF-compatible
 documentation file for each class it finds, using comments as appropriate.
@@ -51,10 +52,10 @@ This is a good way to start a reference for a set of classes.
 Helpgen can be found in @c utils/HelpGen.
 
 
-@section page_utils_helpview Helpview
+@section page_utils_helpview Help Viewer
 
-Helpview is a program for displaying wxWidgets HTML
-Help files. In many cases, you may wish to use the wxWidgets HTML
+Helpview is a program for displaying wxWidgets HTML Help files.
+In many cases, you may wish to use the wxWidgets HTML
 Help classes from within your application, but this provides a
 handy stand-alone viewer. See @ref overview_html for more details.
 
@@ -70,6 +71,20 @@ of the help viewer. See wxHtmlHelpController for more details.
 You can find HHP2Cached in @c utils/helpview.
 
 
+@section page_utils_ifacecheck Interface checker
+
+This utility compares the wxWidgets real interface contained in the @c include
+hierarchy with the wxWidgets interface used for documentation purposes and
+kept in the @c interface hierarchy.
+
+Ifacecheck warns about incoherences (mainly wrong prototype signatures) and
+can even correct them automatically. It uses the XML outputs of the gccxml utility
+(see http://www.gccxml.org) and of the Doxygen utility (see http://www.doxygen.org)
+to do the comparisons.
+
+You can find it in @c utils/ifacecheck.
+
+
 @section page_utils_tex2rtf Tex2RTF
 
 Supplied with wxWidgets is a utility called Tex2RTF for
@@ -81,7 +96,7 @@ same @e LaTeX source. Please see the separate documentation for Tex2RTF.
 You can find it under @c utils/tex2rtf.
 
 
-@section page_utils_wxrc WxRC
+@section page_utils_wxrc wxWidgets XML Resource Compiler
 
 This utility allows the user to compile @e binary versions of their XRC files,
 which are compressed and can be loaded faster than plain XRC files.
