@@ -987,13 +987,13 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     while ( data->state )
     {
 #if wxUSE_STREAMS && !defined(__WXWINCE__)
-        bufOut.Update();
-        bufErr.Update();
+        if ( !bufOut.Update() && !bufErr.Update() )
 #endif // wxUSE_STREAMS
-
-        // don't eat 100% of the CPU -- ugly but anything else requires
-        // real async IO which we don't have for the moment
-        ::Sleep(50);
+        {
+            // don't eat 100% of the CPU -- ugly but anything else requires
+            // real async IO which we don't have for the moment
+            ::Sleep(50);
+        }
 
         // we must process messages or we'd never get wxWM_PROC_TERMINATED
         traits->AlwaysYield();

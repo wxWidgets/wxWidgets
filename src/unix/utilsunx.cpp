@@ -1313,17 +1313,11 @@ bool wxAppTraits::CheckForRedirectedIO(wxExecuteData& execData)
 #if HAS_PIPE_INPUT_STREAM
     bool hasIO = false;
 
-    if ( execData.bufOut )
-    {
-        execData.bufOut->Update();
+    if ( execData.bufOut && execData.bufOut->Update() )
         hasIO = true;
-    }
 
-    if ( execData.bufErr )
-    {
-        execData.bufErr->Update();
+    if ( execData.bufErr && execData.bufErr->Update() )
         hasIO = true;
-    }
 
     return hasIO;
 #else // !HAS_PIPE_INPUT_STREAM
