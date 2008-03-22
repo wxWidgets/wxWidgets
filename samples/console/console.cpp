@@ -583,10 +583,25 @@ static void TestExecute()
     }
     else
     {
-        unsigned count = output.GetCount();
-        for ( unsigned n = 0; n < count; n++ )
+        // don't show too much output, MAX_LINES is enough
+        static const unsigned MAX_LINES = 20;
+
+        const unsigned count = output.size();
+        for ( unsigned n = 0;
+              n < (count > MAX_LINES ? MAX_LINES/2 : count);
+              n++ )
         {
             wxPrintf("%04u:\t%s\n", n + 1, output[n]);
+        }
+
+        if ( count > MAX_LINES )
+        {
+            wxPrintf("... skipping %u lines...\n", count - MAX_LINES);
+
+            for ( unsigned n = count - MAX_LINES/2; n < count; n++ )
+            {
+                wxPrintf("%04u:\t%s\n", n + 1, output[n]);
+            }
         }
 
         wxPuts(_T("Ok."));
