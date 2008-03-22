@@ -96,5 +96,24 @@ public:
 
 extern WXDLLEXPORT_DATA(wxBrushList*)   wxTheBrushList;
 
-#endif
-    // _WX_BRUSH_H_BASE_
+// provide comparison operators to allow code such as
+//
+//      if ( brush.GetStyle() == wxTRANSPARENT )
+//
+// to compile without warnings which it would otherwise provoke from some
+// compilers as it compares elements of different enums
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+
+inline bool operator==(wxBrushStyle s, wxDeprecatedGUIConstants t)
+{
+    return wx_static_cast(int, s) == wx_static_cast(int, t);
+}
+
+inline bool operator!=(wxBrushStyle s, wxDeprecatedGUIConstants t)
+{
+    return !(s == t);
+}
+
+#endif // FUTURE_WXWIN_COMPATIBILITY_3_0
+
+#endif // _WX_BRUSH_H_BASE_

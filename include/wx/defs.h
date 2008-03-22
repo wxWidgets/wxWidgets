@@ -2083,7 +2083,8 @@ enum wxHitTest
 /*  GDI descriptions */
 /*  ---------------------------------------------------------------------------- */
 
-enum
+/* don't use any elements of this enum in the new code */
+enum wxDeprecatedGUIConstants
 {
     /*  Text font families */
     wxDEFAULT    = 70,
