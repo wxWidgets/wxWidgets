@@ -173,12 +173,12 @@ public:
 
     There are a couple of ways to invoke this behaviour implicitly:
 
-    * Use the wxDIALOG_EX_CONTEXTHELP style for a dialog (Windows only). This
+    - Use the wxDIALOG_EX_CONTEXTHELP style for a dialog (Windows only). This
       will put a question mark in the titlebar, and Windows will put the
       application into context-sensitive help mode automatically, with further
       programming.
 
-    * Create a wxContextHelpButton, whose predefined behaviour is
+    - Create a wxContextHelpButton, whose predefined behaviour is
       to create a context help object.  Normally you will write your application
       so that this button is only added to a dialog for non-Windows platforms
       (use wxDIALOG_EX_CONTEXTHELP on Windows).
