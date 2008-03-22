@@ -14,7 +14,6 @@
 
 struct wxEndProcessData;
 struct wxExecuteData;
-class wxPipe;
 
 // ----------------------------------------------------------------------------
 // wxAppTraits: the Unix version adds extra hooks needed by Unix code
