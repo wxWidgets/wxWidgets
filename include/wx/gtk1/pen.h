@@ -42,8 +42,6 @@ public:
     wxDEPRECATED_FUTURE( wxPen(const wxColour& col, int width, int style) );
 #endif
 
-    virtual ~wxPen();
-
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }
 
@@ -54,6 +52,7 @@ public:
     void SetStyle( wxPenStyle style );
     void SetWidth( int width );
     void SetDashes( int number_of_dashes, const wxDash *dash );
+    void SetStipple(const wxBitmap& stipple);
 
     wxColour &GetColour() const;
     wxPenCap GetCap() const;
@@ -63,6 +62,7 @@ public:
     int GetDashes(wxDash **ptr) const;
     int GetDashCount() const;
     wxDash* GetDash() const;
+    wxBitmap *GetStipple() const;
 
 private:
     virtual wxGDIRefData *CreateGDIRefData() const;

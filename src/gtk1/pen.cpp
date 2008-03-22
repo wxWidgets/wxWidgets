@@ -106,11 +106,6 @@ wxPen::wxPen(const wxColour& colour, int width, int style)
 }
 #endif
 
-wxPen::~wxPen()
-{
-    // m_refData unrefed in ~wxObject
-}
-
 wxGDIRefData *wxPen::CreateGDIRefData() const
 {
     return new wxPenRefData;
@@ -127,7 +122,7 @@ bool wxPen::operator == ( const wxPen& pen ) const
 
     if (!m_refData || !pen.m_refData) return false;
 
-    return ( *(wxPenRefData*)m_refData == *(wxPenRefData*)pen.m_refData );
+    return *(wxPenRefData*)m_refData == *(wxPenRefData*)pen.m_refData;
 }
 
 void wxPen::SetColour( const wxColour &colour )
@@ -180,6 +175,11 @@ void wxPen::SetWidth( int width )
     M_PENDATA->m_width = width;
 }
 
+void wxPen::SetStipple(const wxBitmap& WXUNUSED(stipple))
+{
+    wxFAIL_MSG( "stippled pens not supported" );
+}
+
 int wxPen::GetDashes( wxDash **ptr ) const
 {
     wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
@@ -204,21 +204,21 @@ wxDash* wxPen::GetDash() const
 
 wxPenCap wxPen::GetCap() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxCAP_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_capStyle;
 }
 
 wxPenJoin wxPen::GetJoin() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxJOIN_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_joinStyle;
 }
 
 wxPenStyle wxPen::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), -1, wxT("invalid pen") );
+    wxCHECK_MSG( Ok(), wxPENSTYLE_INVALID, wxT("invalid pen") );
 
     return M_PENDATA->m_style;
 }
@@ -236,3 +236,9 @@ wxColour &wxPen::GetColour() const
 
     return M_PENDATA->m_colour;
 }
+
+wxBitmap *wxPen::GetStipple() const
+{
+    return NULL;
+}
+
