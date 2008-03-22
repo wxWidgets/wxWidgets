@@ -458,23 +458,23 @@ public:
     @class wxNotebookSizer
     @wxheader{sizer.h}
 
-    @b This class is deprecated and should not be used in new code! It is no
+    @deprecated
+    This class is deprecated and should not be used in new code! It is no
     longer needed, wxNotebook control can be inserted
     into any sizer class and its minimal size will be determined correctly.
-    See @ref overview_sizeroverview "wxSizer overview" for more information.
 
     wxNotebookSizer is a specialized sizer to make sizers work in connection
-    with using notebooks. This sizer is different from any other sizer as
-    you must not add any children to it - instead, it queries the notebook class
-    itself.
-    The only thing this sizer does is to determine the size of the biggest
-    page of the notebook and report an adjusted minimal size to a more toplevel
-    sizer.
+    with using notebooks. This sizer is different from any other sizer as you
+    must not add any children to it - instead, it queries the notebook class
+    itself.  The only thing this sizer does is to determine the size of the
+    biggest page of the notebook and report an adjusted minimal size to a more
+    toplevel sizer.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{winlayout}
 
-    @see wxSizer, wxNotebook, @ref overview_sizeroverview "Sizer overview"
+    @see wxSizer, wxNotebook,
+         @ref overview_sizer "Sizers overview"
 */
 class wxNotebookSizer : public wxSizer
 {
