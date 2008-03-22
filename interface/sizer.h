@@ -94,13 +94,13 @@ public:
     @wxheader{sizer.h}
 
     The wxSizerItem class is used to track the position, size and other
-    attributes of each item managed by a wxSizer. It is not
-    usually necessary to use this class because the sizer elements can also be
-    identified by their positions or window or sizer pointers but sometimes it may
-    be more convenient to use it directly.
+    attributes of each item managed by a wxSizer. It is not usually necessary
+    to use this class because the sizer elements can also be identified by
+    their positions or window or sizer pointers but sometimes it may be more
+    convenient to use it directly.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{winlayout}
 */
 class wxSizerItem : public wxObject
 {
@@ -150,6 +150,8 @@ public:
 
     /**
         Return the flags attribute.
+
+        See @ref wxsizer_flags "wxSizer flags list" for details.
     */
     int GetFlag() const;
 
@@ -309,13 +311,13 @@ public:
     example, instead of
 
     @code
-    sizer-Add(ctrl, 0, wxEXPAND | wxALL, 10);
+    sizer->Add(ctrl, 0, wxEXPAND | wxALL, 10);
     @endcode
 
     you can now write
 
     @code
-    sizer-Add(ctrl, wxSizerFlags().Expand().Border(10));
+    sizer->Add(ctrl, wxSizerFlags().Expand().Border(10));
     @endcode
 
     This is more readable and also allows you to create wxSizerFlags objects which
@@ -325,8 +327,8 @@ public:
     wxSizerFlags flagsExpand(1);
         flagsExpand.Expand().Border(10);
 
-        sizer-Add(ctrl1, flagsExpand);
-        sizer-Add(ctrl2, flagsExpand);
+        sizer->Add(ctrl1, flagsExpand);
+        sizer->Add(ctrl2, flagsExpand);
     @endcode
 
     Note that by specification, all methods of wxSizerFlags return the wxSizerFlags
@@ -334,7 +336,7 @@ public:
     above.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{winlayout}
 
     @see wxSizer
 */
@@ -647,22 +649,66 @@ public:
     on Windows.
 
     Sizers may also be used to control the layout of custom drawn items on the
-    window.  The
-    Add, Insert, and Prepend functions return a pointer to the newly added
-    wxSizerItem. Just
-    add empty space of the desired size and attributes, and then use the
-    wxSizerItem::GetRect
-    method to determine where the drawing operations should take place.
+    window.  The Add(), Insert(), and Prepend() functions return a pointer to
+    the newly added wxSizerItem. Just add empty space of the desired size and
+    attributes, and then use the wxSizerItem::GetRect() method to determine
+    where the drawing operations should take place.
 
     Please notice that sizers, like child windows, are owned by the library and
-    will be deleted by it which implies that they must be allocated on the heap.
-    However if you create a sizer and do not add it to another sizer or window, the
-    library wouldn't be able to delete such an orphan sizer and in this, and only
-    this, case it should be deleted explicitly.
+    will be deleted by it which implies that they must be allocated on the
+    heap.  However if you create a sizer and do not add it to another sizer or
+    window, the library wouldn't be able to delete such an orphan sizer and in
+    this, and only this, case it should be deleted explicitly.
 
     @b wxPython note: If you wish to create a sizer class in wxPython you should
     derive the class from @c wxPySizer in order to get Python-aware
     capabilities for the various virtual methods.
+
+    @anchor wxsizer_flags
+    @par wxSizer flags
+    The "flag" argument accepted by wxSizeItem constructors and other
+    functions, e.g. wxSizer::Add(), is OR-combination of the following flags.
+    Two main behaviours are defined using these flags. One is the border around
+    a window: the border parameter determines the border width whereas the
+    flags given here determine which side(s) of the item that the border will
+    be added.  The other flags determine how the sizer item behaves when the
+    space allotted to the sizer changes, and is somewhat dependent on the
+    specific kind of sizer used.
+    @beginDefList
+    @itemdef{wxTOP<br>
+             wxBOTTOM<br>
+             wxLEFT<br>
+             wxRIGHT<br>
+             wxALL,
+             These flags are used to specify which side(s) of the sizer item
+             the border width will apply to.}
+    @itemdef{wxEXPAND,
+             The item will be expanded to fill the space assigned to the item.}
+    @itemdef{wxSHAPED,
+             The item will be expanded as much as possible while also
+             maintaining its aspect ratio.}
+    @itemdef{wxFIXED_MINSIZE,
+             Normally wxSizers will use GetAdjustedBestSize() to determine what
+             the minimal size of window items should be, and will use that size
+             to calculate the layout. This allows layouts to adjust when an
+             item changes and its best size becomes different. If you would
+             rather have a window item stay the size it started with then use
+             wxFIXED_MINSIZE.}
+    @itemdef{wxALIGN_CENTER<br>
+             wxALIGN_CENTRE<br>
+             wxALIGN_LEFT<br>
+             wxALIGN_RIGHT<br>
+             wxALIGN_TOP<br>
+             wxALIGN_BOTTOM<br>
+             wxALIGN_CENTER_VERTICAL<br>
+             wxALIGN_CENTRE_VERTICAL<br>
+             wxALIGN_CENTER_HORIZONTAL<br>
+             wxALIGN_CENTRE_HORIZONTAL,
+             The wxALIGN flags allow you to specify the alignment of the item
+             within the space allotted to it by the sizer, adjusted for the
+             border if any.}
+    @endDefList
+
 
     @library{wxcore}
     @category{winlayout}
@@ -683,172 +729,166 @@ public:
     */
     ~wxSizer();
 
-    //@{
     /**
-        Appends a child to the sizer.  wxSizer itself is an abstract class, but the
-        parameters are
-        equivalent in the derived classes that you will instantiate to use it so they
-        are described
-        here:
+        Appends a child to the sizer.
+
+        wxSizer itself is an abstract class, but the parameters are equivalent
+        in the derived classes that you will instantiate to use it so they are
+        described here:
 
         @param window
             The window to be added to the sizer. Its initial size (either set
-        explicitly by the
-            user or calculated internally when using wxDefaultSize) is interpreted as
-        the minimal and in many
-            cases also the initial size.
-        @param sizer
-            The (child-)sizer to be added to the sizer. This allows placing a child
-        sizer in a
-            sizer and thus to create hierarchies of sizers (typically a vertical box as
-        the top sizer and several
-            horizontal boxes on the level beneath).
-        @param width and height
-            The dimension of a spacer to be added to the sizer. Adding spacers to sizers
-            gives more flexibility in the design of dialogs; imagine for example a
-        horizontal box with two buttons at the
-            bottom of a dialog: you might want to insert a space between the two
-        buttons and make that space stretchable
-            using the proportion flag and the result will be that the left button will
-        be aligned with the left
-            side of the dialog and the right button with the right side - the space in
-        between will shrink and grow with
-            the dialog.
-        @param proportion
-            Although the meaning of this parameter is undefined in wxSizer, it is used
-        in wxBoxSizer
-            to indicate if a child of a sizer can change its size in the main
-        orientation of the wxBoxSizer - where
-            0 stands for not changeable and a value of more than zero is interpreted
-        relative to the value of other
-            children of the same wxBoxSizer. For example, you might have a horizontal
-        wxBoxSizer with three children, two
-            of which are supposed to change their size with the sizer. Then the two
-        stretchable windows would get a
-            value of 1 each to make them grow and shrink equally with the sizer's
-        horizontal dimension.
-        @param flag
-            This parameter can be used to set a number of flags
-            which can be combined using the binary OR operator |. Two main
-            behaviours are defined using these flags. One is the border around a
-            window: the border parameter determines the border width whereas
-            the flags given here determine which side(s) of the item that the
-            border will be added.  The other flags determine how the sizer item
-            behaves when the space allotted to the sizer changes, and is somewhat
-            dependent on the specific kind of sizer used.
-
-
-
-
-
-
-            wxTOP
-
-            wxBOTTOM
-
-            wxLEFT
-
-            wxRIGHT
-
-            wxALL
-
-
-
-
-            These flags are used to specify which side(s) of
-              the sizer item the border width will apply to.
-
-
-
-
-
-            wxEXPAND
-
-
-
-
-            The item will be expanded to fill
-            the space assigned to the item.
-
-
-
-
-
-            wxSHAPED
-
-
-
-
-            The item will be expanded as much
-            as possible while also maintaining its aspect ratio
-
-
-
-
-
-            wxFIXED_MINSIZE
-
-
-
-
-            Normally wxSizers will use
-            GetAdjustedBestSize to
-            determine what the minimal size of window items should be, and will
-            use that size to calculate the layout. This allows layouts to
-            adjust when an item changes and its best size becomes
-            different. If you would rather have a window item stay the size it
-            started with then use wxFIXED_MINSIZE.
-
-
-
-
-
-            wxALIGN_CENTER wxALIGN_CENTRE
-
-            wxALIGN_LEFT
-
-            wxALIGN_RIGHT
-
-            wxALIGN_TOP
-
-            wxALIGN_BOTTOM
-
-            wxALIGN_CENTER_VERTICAL wxALIGN_CENTRE_VERTICAL
-
-            wxALIGN_CENTER_HORIZONTAL wxALIGN_CENTRE_HORIZONTAL
-
-
-
-
-            The wxALIGN flags allow you to
-            specify the alignment of the item within the space allotted to it by
-            the sizer, adjusted for the border if any.
-        @param border
-            Determines the border width, if the flag
-              parameter is set to include any border flag.
-        @param userData
-            Allows an extra object to be attached to the sizer
-            item, for use in derived classes when sizing information is more
-            complex than the proportion and flag will allow for.
+            explicitly by the user or calculated internally when using
+            wxDefaultSize) is interpreted as the minimal and in many cases also
+            the initial size.
         @param flags
-            A wxSizerFlags object that
-            enables you to specify most of the above parameters more conveniently.
+            A wxSizerFlags object that enables you to specify most of the above
+            parameters more conveniently.
     */
     wxSizerItem* Add(wxWindow* window, const wxSizerFlags& flags);
+
+    /**
+        Appends a child to the sizer.
+
+        wxSizer itself is an abstract class, but the parameters are equivalent
+        in the derived classes that you will instantiate to use it so they are
+        described here:
+
+        @param window
+            The window to be added to the sizer. Its initial size (either set
+            explicitly by the user or calculated internally when using
+            wxDefaultSize) is interpreted as the minimal and in many cases also
+            the initial size.
+        @param proportion
+            Although the meaning of this parameter is undefined in wxSizer, it
+            is used in wxBoxSizer to indicate if a child of a sizer can change
+            its size in the main orientation of the wxBoxSizer - where 0 stands
+            for not changeable and a value of more than zero is interpreted
+            relative to the value of other children of the same wxBoxSizer. For
+            example, you might have a horizontal wxBoxSizer with three
+            children, two of which are supposed to change their size with the
+            sizer. Then the two stretchable windows would get a value of 1 each
+            to make them grow and shrink equally with the sizer's horizontal
+            dimension.
+        @param flag
+            OR-combination of flags affecting sizer's behavior. See
+            @ref wxsizer_flags "wxSizer flags list" for details.
+        @param border
+            Determines the border width, if the flag parameter is set to
+            include any border flag.
+        @param userData
+            Allows an extra object to be attached to the sizer item, for use in
+            derived classes when sizing information is more complex than the
+            proportion and flag will allow for.
+    */
     wxSizerItem* Add(wxWindow* window, int proportion = 0,
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
+
+    /**
+        Appends a child to the sizer.
+
+        wxSizer itself is an abstract class, but the parameters are equivalent
+        in the derived classes that you will instantiate to use it so they are
+        described here:
+
+        @param sizer
+            The (child-)sizer to be added to the sizer. This allows placing a
+            child sizer in a sizer and thus to create hierarchies of sizers
+            (typically a vertical box as the top sizer and several horizontal
+            boxes on the level beneath).
+        @param flags
+            A wxSizerFlags object that enables you to specify most of the above
+            parameters more conveniently.
+    */
     wxSizerItem* Add(wxSizer* sizer, const wxSizerFlags& flags);
+
+    /**
+        Appends a child to the sizer.
+
+        wxSizer itself is an abstract class, but the parameters are equivalent
+        in the derived classes that you will instantiate to use it so they are
+        described here:
+
+        @param sizer
+            The (child-)sizer to be added to the sizer. This allows placing a
+            child sizer in a sizer and thus to create hierarchies of sizers
+            (typically a vertical box as the top sizer and several horizontal
+            boxes on the level beneath).
+        @param proportion
+            Although the meaning of this parameter is undefined in wxSizer, it
+            is used in wxBoxSizer to indicate if a child of a sizer can change
+            its size in the main orientation of the wxBoxSizer - where 0 stands
+            for not changeable and a value of more than zero is interpreted
+            relative to the value of other children of the same wxBoxSizer. For
+            example, you might have a horizontal wxBoxSizer with three
+            children, two of which are supposed to change their size with the
+            sizer. Then the two stretchable windows would get a value of 1 each
+            to make them grow and shrink equally with the sizer's horizontal
+            dimension.
+        @param flag
+            OR-combination of flags affecting sizer's behavior. See
+            @ref wxsizer_flags "wxSizer flags list" for details.
+        @param border
+            Determines the border width, if the flag parameter is set to
+            include any border flag.
+        @param userData
+            Allows an extra object to be attached to the sizer item, for use in
+            derived classes when sizing information is more complex than the
+            proportion and flag will allow for.
+    */
     wxSizerItem* Add(wxSizer* sizer, int proportion = 0,
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
+
+    /**
+        Appends a spacer child to the sizer.
+
+        wxSizer itself is an abstract class, but the parameters are equivalent
+        in the derived classes that you will instantiate to use it so they are
+        described here.
+
+        @a width and @a height specify the dimension of a spacer to be added to
+        the sizer. Adding spacers to sizers gives more flexibility in the
+        design of dialogs; imagine for example a horizontal box with two
+        buttons at the bottom of a dialog: you might want to insert a space
+        between the two buttons and make that space stretchable using the
+        proportion flag and the result will be that the left button will be
+        aligned with the left side of the dialog and the right button with the
+        right side - the space in between will shrink and grow with the dialog.
+
+        @param width
+            Width of the spacer.
+        @param height
+            Height of the spacer.
+        @param proportion
+            Although the meaning of this parameter is undefined in wxSizer, it
+            is used in wxBoxSizer to indicate if a child of a sizer can change
+            its size in the main orientation of the wxBoxSizer - where 0 stands
+            for not changeable and a value of more than zero is interpreted
+            relative to the value of other children of the same wxBoxSizer. For
+            example, you might have a horizontal wxBoxSizer with three
+            children, two of which are supposed to change their size with the
+            sizer. Then the two stretchable windows would get a value of 1 each
+            to make them grow and shrink equally with the sizer's horizontal
+            dimension.
+        @param flag
+            OR-combination of flags affecting sizer's behavior. See
+            @ref wxsizer_flags "wxSizer flags list" for details.
+        @param border
+            Determines the border width, if the flag parameter is set to
+            include any border flag.
+        @param userData
+            Allows an extra object to be attached to the sizer item, for use in
+            derived classes when sizing information is more complex than the
+            proportion and flag will allow for.
+    */
     wxSizerItem* Add(int width, int height, int proportion = 0,
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
-    //@}
 
     /**
         Adds non-stretchable space to the sizer. More readable way of calling
@@ -1021,10 +1061,7 @@ public:
 
         See Add() for the meaning of the other parameters.
 
-        @param index.
-
-        index
-            The position this child should assume in the sizer.
+        @param index The position this child should assume in the sizer.
     */
     wxSizerItem* Insert(size_t index, wxWindow* window,
                         const wxSizerFlags& flags);
@@ -1078,32 +1115,50 @@ public:
     */
     void Layout();
 
-    //@{
     /**
         Same as Add(), but prepends the items to the beginning of the
         list of items (windows, subsizers or spaces) owned by this sizer.
     */
     wxSizerItem* Prepend(wxWindow* window, const wxSizerFlags& flags);
+
+    /**
+        Same as Add(), but prepends the items to the beginning of the
+        list of items (windows, subsizers or spaces) owned by this sizer.
+    */
     wxSizerItem* Prepend(wxWindow* window, int proportion = 0,
                          int flag = 0,
                          int border = 0,
                          wxObject* userData = NULL);
+
+    /**
+        Same as Add(), but prepends the items to the beginning of the
+        list of items (windows, subsizers or spaces) owned by this sizer.
+    */
     wxSizerItem* Prepend(wxSizer* sizer,
                          const wxSizerFlags& flags);
+
+    /**
+        Same as Add(), but prepends the items to the beginning of the
+        list of items (windows, subsizers or spaces) owned by this sizer.
+    */
     wxSizerItem* Prepend(wxSizer* sizer, int proportion = 0,
                          int flag = 0,
                          int border = 0,
                          wxObject* userData = NULL);
+
+    /**
+        Same as Add(), but prepends the items to the beginning of the
+        list of items (windows, subsizers or spaces) owned by this sizer.
+    */
     wxSizerItem* Prepend(int width, int height,
                          int proportion = 0,
                          int flag = 0,
                          int border = 0,
                          wxObject* userData = NULL);
-    //@}
 
     /**
-        Prepends non-stretchable space to the sizer. More readable way of calling
-        wxSizer::Prepend(size, size, 0).
+        Prepends non-stretchable space to the sizer. More readable way of
+        calling wxSizer::Prepend(size, size, 0).
     */
     wxSizerItem* PrependSpacer(int size);
 
@@ -1115,30 +1170,58 @@ public:
 
     /**
         This method is abstract and has to be overwritten by any derived class.
-        Here, the sizer will do the actual calculation of its children's positions
-        and sizes.
+        Here, the sizer will do the actual calculation of its children's
+        positions and sizes.
     */
     void RecalcSizes();
 
-    //@{
     /**
-        Removes a child from the sizer and destroys it if it is a sizer or a spacer,
-        but not if it is a window (because windows are owned by their parent window,
-        not the sizer).  @a sizer is the wxSizer to be removed,
-        @a index is the position of the child in the sizer, e.g. 0 for the first item.
-        This method does not cause any layout or resizing to take place, call
-        Layout() to update the layout "on screen" after removing a
-        child from the sizer.
-        @b NB: The method taking a wxWindow* parameter is deprecated as it does not
-        destroy the window as would usually be expected from Remove.  You should use
-        Detach() in new code instead.  There is
-        currently no wxSizer method that will both detach and destroy a wxWindow item.
-        Returns @true if the child item was found and removed, @false otherwise.
+        Removes a child window from the sizer, but does @b not destroy it
+        (because windows are owned by their parent window, not the sizer).
+
+        @deprecated
+        The overload of this method taking a wxWindow* parameter
+        is deprecated as it does not destroy the window as would usually be
+        expected from Remove(). You should use Detach() in new code instead.
+        There is currently no wxSizer method that will both detach and destroy
+        a wxWindow item.
+
+        @note This method does not cause any layout or resizing to take
+              place, call Layout() to update the layout "on screen" after
+              removing a child from the sizer.
+
+        @return @true if the child item was found and removed, @false otherwise.
     */
     bool Remove(wxWindow* window);
+
+    /**
+        Removes a sizer child from the sizer and destroys it.
+
+        @note This method does not cause any layout or resizing to take
+              place, call Layout() to update the layout "on screen" after
+              removing a child from the sizer.
+
+        @param sizer The wxSizer to be removed.
+
+        @return @true if the child item was found and removed, @false otherwise.
+    */
     bool Remove(wxSizer* sizer);
+
+    /**
+        Removes a child from the sizer and destroys it if it is a sizer or a
+        spacer, but not if it is a window (because windows are owned by their
+        parent window, not the sizer).
+
+        @note This method does not cause any layout or resizing to take
+              place, call Layout() to update the layout "on screen" after
+              removing a child from the sizer.
+
+        @param index  The position of the child in the sizer, e.g. 0 for the
+                      first item.
+
+        @return @true if the child item was found and removed, @false otherwise.
+    */
     bool Remove(size_t index);
-    //@}
 
     //@{
     /**
@@ -1161,11 +1244,9 @@ public:
     //@}
 
     /**
-        Call this to force the sizer to take the given dimension and thus force the
-        items owned
-        by the sizer to resize themselves according to the rules defined by the
-        parameter in the
-        Add() and Prepend() methods.
+        Call this to force the sizer to take the given dimension and thus force
+        the items owned by the sizer to resize themselves according to the
+        rules defined by the parameter in the Add() and Prepend() methods.
     */
     void SetDimension(int x, int y, int width, int height);
 
@@ -1182,19 +1263,19 @@ public:
     void SetItemMinSize(size_t index, int width, int height);
     //@}
 
-    //@{
     /**
-        Call this to give the sizer a minimal size. Normally, the sizer will calculate
-        its
-        minimal size based purely on how much space its children need. After calling
-        this
-        method GetMinSize() will return either the minimal size
-        as requested by its children or the minimal size set here, depending on which is
-        bigger.
+        Call this to give the sizer a minimal size. Normally, the sizer will
+        calculate its minimal size based purely on how much space its children
+        need. After calling this method GetMinSize() will return either the
+        minimal size as requested by its children or the minimal size set here,
+        depending on which is bigger.
     */
-    void SetMinSize(int width, int height);
     void SetMinSize(const wxSize& size);
-    //@}
+
+    /**
+        @overload
+     */
+    void SetMinSize(int width, int height);
 
     /**
         This method first calls Fit() and then
