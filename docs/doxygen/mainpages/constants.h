@@ -9,16 +9,16 @@
 
 /**
 
- @page page_constants Constants
+@page page_constants Constants
 
- This chapter describes the constants defined by wxWidgets.
+This chapter describes the constants defined by wxWidgets.
 
- @li @subpage page_keycodes
- @li @subpage page_keymodifiers
- @li @subpage page_languagecodes
- @li @subpage page_stdevtid
- @li @subpage page_stockitems
- @li @subpage page_cppconst
- @li @subpage page_wxusedef
+@li @subpage page_keycodes
+@li @subpage page_keymodifiers
+@li @subpage page_languagecodes
+@li @subpage page_stdevtid
+@li @subpage page_stockitems
+@li @subpage page_cppconst
+@li @subpage page_wxusedef
 
 */
