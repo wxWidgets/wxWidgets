@@ -66,6 +66,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/stdpaths.cpp
     src/unix/timerunx.cpp
     src/unix/stackwalk.cpp
+    src/unix/utilsunx.cpp
 </set>
 
 <set var="BASE_UNIX_AND_DARWIN_HDR" hints="files">
@@ -109,9 +110,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_UNIX_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
     src/common/gsocketiohandler.cpp
-</set>
-<set var="BASE_AND_GUI_UNIX_SRC" hints="files">
-    src/unix/utilsunx.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
@@ -970,6 +968,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xpmhand.h
 </set>
 
+<!-- ====================================================================== -->
+<!--                            Common Unix files:                          -->
+<!-- ====================================================================== -->
+
+<set var="UNIX_SRC" hints="files">
+    src/unix/apptraits.cpp
+</set>
 
 <!-- ====================================================================== -->
 <!--                            Common X11 code:                            -->
@@ -3426,9 +3431,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MAC'">$(BASE_AND_GUI_MAC_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_PLATFORM_SRC" hints="files">
-        <if cond="PLATFORM_UNIX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_AND_GUI_WIN32_SRC)</if>
-        <if cond="PLATFORM_MACOSX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_AND_GUI_PALMOS_SRC)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_AND_GUI_MSDOS_SRC)</if>
         <!-- At the moment, BASE_AND_GUI_TOOLKIT_SRC handles this -->
@@ -3517,6 +3520,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_HDR)</if>
     </set>
 
+    <set var="PLATFORM_SRC" hints="files">
+        <if cond="PLATFORM_UNIX=='1'">$(UNIX_SRC)</if>
+    </set>
+
     <set var="GUI_SRC" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_SRC)</if>
@@ -3540,10 +3547,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <set var="CORE_SRC" hints="files">
         <if cond="USE_GUI=='1' and WXUNIV=='0'">
-            $(LOWLEVEL_SRC) $(GUI_SRC) $(GUI_CMN_SRC)
+            $(LOWLEVEL_SRC) $(PLATFORM_SRC) $(GUI_SRC) $(GUI_CMN_SRC)
         </if>
         <if cond="USE_GUI=='1' and WXUNIV=='1'">
-            $(LOWLEVEL_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC) $(GUI_CMN_SRC)
+            $(LOWLEVEL_SRC) $(PLATFORM_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC) $(GUI_CMN_SRC)
         </if>
     </set>
 
@@ -3672,7 +3679,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(BASE_MSDOS_SRC)
         $(BASE_PALMOS_SRC)
         $(BASE_AND_GUI_CMN_SRC)
-        $(BASE_AND_GUI_UNIX_SRC)
         $(BASE_AND_GUI_MAC_SRC)
         $(BASE_AND_GUI_WIN32_SRC)
         $(NET_CMN_SRC) $(NET_UNIX_SRC) $(NET_WIN32_SRC) $(NET_WINCE_SRC)

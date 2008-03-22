@@ -69,6 +69,12 @@ public:
     // here and not in wxConsoleAppTraits)
     virtual GSocketManager *GetSocketManager();
 #endif
+
+protected:
+    // a helper for the implementation of WaitForChild() in wxGUIAppTraits:
+    // checks the streams used for redirected IO in execData and returns true
+    // if there is any activity in them
+    bool CheckForRedirectedIO(wxExecuteData& execData);
 };
 
 #endif // _WX_UNIX_APPTBASE_H_
