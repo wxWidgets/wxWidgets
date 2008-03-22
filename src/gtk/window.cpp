@@ -4311,16 +4311,68 @@ GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
 // freeze/thaw
 // ----------------------------------------------------------------------------
 
+extern "C"
+{
+
+// this is called if we attempted to freeze unrealized widget when it finally
+// is realized (and so can be frozen):
+static void wx_frozen_widget_realize(GtkWidget* w, void* WXUNUSED(data))
+{
+    wxASSERT( w && !GTK_WIDGET_NO_WINDOW(w) );
+    wxASSERT( GTK_WIDGET_REALIZED(w) );
+
+    g_signal_handlers_disconnect_by_func
+    (
+        w,
+        (void*)wx_frozen_widget_realize,
+        NULL
+    );
+
+    gdk_window_freeze_updates(w->window);
+}
+
+} // extern "C"
+
 void wxWindowGTK::GTKFreezeWidget(GtkWidget *w)
 {
-    if ( w && !GTK_WIDGET_NO_WINDOW(w) )
-        gdk_window_freeze_updates(w->window);
+    if ( !w || GTK_WIDGET_NO_WINDOW(w) )
+        return; // window-less widget, cannot be frozen
+
+    if ( !GTK_WIDGET_REALIZED(w) )
+    {
+        // we can't thaw unrealized widgets because they don't have GdkWindow,
+        // so set it up to be done immediately after realization:
+        g_signal_connect_after
+        (
+            w,
+            "realize",
+            G_CALLBACK(wx_frozen_widget_realize),
+            NULL
+        );
+        return;
+    }
+
+    gdk_window_freeze_updates(w->window);
 }
 
 void wxWindowGTK::GTKThawWidget(GtkWidget *w)
 {
-    if ( w && !GTK_WIDGET_NO_WINDOW(w) )
-        gdk_window_thaw_updates(w->window);
+    if ( !w || GTK_WIDGET_NO_WINDOW(w) )
+        return; // window-less widget, cannot be frozen
+
+    if ( !GTK_WIDGET_REALIZED(w) )
+    {
+        // the widget wasn't realized yet, no need to thaw
+        g_signal_handlers_disconnect_by_func
+        (
+            w,
+            (void*)wx_frozen_widget_realize,
+            NULL
+        );
+        return;
+    }
+
+    gdk_window_thaw_updates(w->window);
 }
 
 void wxWindowGTK::DoFreeze()

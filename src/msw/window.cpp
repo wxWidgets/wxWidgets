@@ -716,6 +716,16 @@ bool wxWindowMSW::Show(bool show)
         ::ShowWindow(hWnd, show ? SW_SHOW : SW_HIDE);
     }
 
+    if ( IsFrozen() )
+    {
+        // DoFreeze/DoThaw don't do anything if the window is not shown, so
+        // we have to call them from here now
+        if ( show )
+            DoFreeze();
+        else
+            DoThaw();
+    }
+
     return true;
 }
 
@@ -1615,20 +1625,22 @@ static inline void SendSetRedraw(HWND hwnd, bool on)
 
 void wxWindowMSW::DoFreeze()
 {
-    if ( IsShown() )
-        SendSetRedraw(GetHwnd(), false);
+    if ( !IsShown() )
+        return; // no point in freezing hidden window
+
+    SendSetRedraw(GetHwnd(), false);
 }
 
 void wxWindowMSW::DoThaw()
 {
-    if ( IsShown() )
-    {
-        SendSetRedraw(GetHwnd(), true);
+    if ( !IsShown() )
+        return; // hidden windows aren't frozen by DoFreeze
 
-        // we need to refresh everything or otherwise the invalidated area
-        // is not going to be repainted
-        Refresh();
-    }
+    SendSetRedraw(GetHwnd(), true);
+
+    // we need to refresh everything or otherwise the invalidated area
+    // is not going to be repainted
+    Refresh();
 }
 
 void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
