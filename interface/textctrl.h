@@ -1224,16 +1224,25 @@ public:
     void SetModified(bool modified);
 
     /**
-        Selects the text starting at the first position up to (but not including) the
-        character at the last position. If both parameters are equal to -1 all text
-        in the control is selected.
+        Selects the text starting at the first position up to (but not
+        including) the character at the last position. If both parameters are
+        equal to -1 all text in the control is selected.
 
         @param from
             The first position.
         @param to
             The last position.
+
+        @see SelectAll()
     */
     virtual void SetSelection(long from, long to);
+
+    /**
+        Selects all text in the control.
+
+        @see SetSelection()
+    */
+    virtual void SelectAll();
 
     /**
         Changes the style of the given range. If any attribute within @a style is
