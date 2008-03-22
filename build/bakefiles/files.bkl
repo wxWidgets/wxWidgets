@@ -3522,6 +3522,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <set var="PLATFORM_SRC" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(UNIX_SRC)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(UNIX_SRC)</if>
     </set>
 
     <set var="GUI_SRC" hints="files">

@@ -34,9 +34,7 @@ class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
 public:
     virtual wxEventLoopBase *CreateEventLoop();
     virtual int WaitForChild(wxExecuteData& execData);
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
     virtual int AddProcessCallback(wxEndProcessData *data, int fd);
-#endif
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
 #endif
