@@ -1280,6 +1280,14 @@ bool wxAppTraits::CheckForRedirectedIO(wxExecuteData& execData)
 #endif // HAS_PIPE_INPUT_STREAM/!HAS_PIPE_INPUT_STREAM
 }
 
+// helper classes/functions used by WaitForChild()
+namespace
+{
+
+// convenient base class for IO handlers which are registered for read
+// notifications only and which also stores the FD we're reading from
+//
+// the derived classes still have to implement OnReadWaiting()
 class wxReadFDIOHandler : public wxFDIOHandler
 {
 public:
@@ -1289,17 +1297,17 @@ public:
             disp.RegisterFD(fd, this, wxFDIO_INPUT);
     }
 
-    int GetFD() const { return m_fd; }
-
     virtual void OnWriteWaiting() { wxFAIL_MSG("unreachable"); }
     virtual void OnExceptionWaiting() { wxFAIL_MSG("unreachable"); }
 
-private:
+protected:
     const int m_fd;
 
     DECLARE_NO_COPY_CLASS(wxReadFDIOHandler)
 };
 
+// class for monitoring our end of the process detection pipe, simply sets a
+// flag when input on the pipe (which must be due to EOF) is detected
 class wxEndHandler : public wxReadFDIOHandler
 {
 public:
@@ -1321,6 +1329,11 @@ private:
 
 #if wxUSE_STREAMS
 
+// class for monitoring our ends of child stdout/err, should be constructed
+// with the FD and stream from wxExecuteData and will do nothing if they're
+// invalid
+//
+// unlike wxEndHandler this class registers itself with the provided dispatcher
 class wxRedirectedIOHandler : public wxReadFDIOHandler
 {
 public:
@@ -1346,9 +1359,6 @@ private:
 #endif // wxUSE_STREAMS
 
 // helper function which calls waitpid() and analyzes the result
-namespace
-{
-
 int DoWaitForChild(int pid, int flags = 0)
 {
     wxASSERT_MSG( pid > 0, "invalid PID" );
