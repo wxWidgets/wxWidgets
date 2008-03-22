@@ -131,17 +131,6 @@ void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
 // wxSelectDispatcher
 // ----------------------------------------------------------------------------
 
-/* static */
-wxSelectDispatcher *wxSelectDispatcher::Create()
-{
-    return new wxSelectDispatcher;
-}
-
-wxSelectDispatcher::wxSelectDispatcher()
-{
-    m_maxFD = -1;
-}
-
 bool wxSelectDispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
 {
     if ( !wxMappedFDIODispatcher::RegisterFD(fd, handler, flags) )

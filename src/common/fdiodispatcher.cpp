@@ -54,7 +54,7 @@ wxFDIODispatcher *wxFDIODispatcher::Get()
         if ( !gs_dispatcher )
 #endif // wxUSE_EPOLL_DISPATCHER
 #if wxUSE_SELECT_DISPATCHER
-            gs_dispatcher = wxSelectDispatcher::Create();
+            gs_dispatcher = new wxSelectDispatcher();
 #endif // wxUSE_SELECT_DISPATCHER
     }
 

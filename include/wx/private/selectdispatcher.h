@@ -82,18 +82,14 @@ private:
 class WXDLLIMPEXP_BASE wxSelectDispatcher : public wxMappedFDIODispatcher
 {
 public:
-    // creates an instance of this class, the caller takes ownership of it
-    static wxSelectDispatcher *Create();
+    // default ctor
+    wxSelectDispatcher() { m_maxFD = -1; }
 
     // implement pure virtual methods of the base class
     virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
     virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
     virtual bool UnregisterFD(int fd);
     virtual void Dispatch(int timeout = TIMEOUT_INFINITE);
-
-protected:
-    // ctor is not public, use Create()
-    wxSelectDispatcher();
 
 private:
     // common part of RegisterFD() and ModifyFD()
