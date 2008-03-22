@@ -41,6 +41,7 @@
 
 #include "wx/wfstream.h"
 
+#include "wx/private/selectdispatcher.h"
 #include "wx/private/fdiodispatcher.h"
 #include "wx/unix/execute.h"
 #include "wx/unix/private.h"
@@ -650,19 +651,17 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
         // called bufOut and not bufIn
         wxStreamTempInputBuffer bufOut,
                                 bufErr;
-#endif // HAS_PIPE_INPUT_STREAM
 
         if ( process && process->IsRedirected() )
         {
-#if HAS_PIPE_INPUT_STREAM
             wxOutputStream *inStream =
                 new wxFileOutputStream(pipeIn.Detach(wxPipe::Write));
 
-            wxPipeInputStream *outStream =
-                new wxPipeInputStream(pipeOut.Detach(wxPipe::Read));
+            const int fdOut = pipeOut.Detach(wxPipe::Read);
+            wxPipeInputStream *outStream = new wxPipeInputStream(fdOut);
 
-            wxPipeInputStream *errStream =
-                new wxPipeInputStream(pipeErr.Detach(wxPipe::Read));
+            const int fdErr = pipeErr.Detach(wxPipe::Read);
+            wxPipeInputStream *errStream = new wxPipeInputStream(fdErr);
 
             process->SetPipeStreams(outStream, inStream, errStream);
 
@@ -671,8 +670,11 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 
             execData.bufOut = &bufOut;
             execData.bufErr = &bufErr;
-#endif // HAS_PIPE_INPUT_STREAM
+
+            execData.fdOut = fdOut;
+            execData.fdErr = fdErr;
         }
+#endif // HAS_PIPE_INPUT_STREAM
 
         if ( pipeIn.IsOk() )
         {
@@ -1325,82 +1327,169 @@ bool wxAppTraits::CheckForRedirectedIO(wxExecuteData& execData)
 #endif // HAS_PIPE_INPUT_STREAM/!HAS_PIPE_INPUT_STREAM
 }
 
+class wxReadFDIOHandler : public wxFDIOHandler
+{
+public:
+    wxReadFDIOHandler(wxFDIODispatcher& disp, int fd) : m_fd(fd)
+    {
+        if ( fd )
+            disp.RegisterFD(fd, this, wxFDIO_INPUT);
+    }
+
+    int GetFD() const { return m_fd; }
+
+    virtual void OnWriteWaiting() { wxFAIL_MSG("unreachable"); }
+    virtual void OnExceptionWaiting() { wxFAIL_MSG("unreachable"); }
+
+private:
+    const int m_fd;
+
+    DECLARE_NO_COPY_CLASS(wxReadFDIOHandler)
+};
+
+class wxEndHandler : public wxReadFDIOHandler
+{
+public:
+    wxEndHandler(wxFDIODispatcher& disp, int fd)
+        : wxReadFDIOHandler(disp, fd)
+    {
+        m_terminated = false;
+    }
+
+    bool Terminated() const { return m_terminated; }
+
+    virtual void OnReadWaiting() { m_terminated = true; }
+
+private:
+    bool m_terminated;
+
+    DECLARE_NO_COPY_CLASS(wxEndHandler)
+};
+
+#if wxUSE_STREAMS
+
+class wxRedirectedIOHandler : public wxReadFDIOHandler
+{
+public:
+    wxRedirectedIOHandler(wxFDIODispatcher& disp,
+                          int fd,
+                          wxStreamTempInputBuffer *buf)
+        : wxReadFDIOHandler(disp, fd),
+          m_buf(buf)
+    {
+    }
+
+    virtual void OnReadWaiting()
+    {
+        m_buf->Update();
+    }
+
+private:
+    wxStreamTempInputBuffer * const m_buf;
+
+    DECLARE_NO_COPY_CLASS(wxRedirectedIOHandler)
+};
+
+#endif // wxUSE_STREAMS
+
 int wxAppTraits::WaitForChild(wxExecuteData& execData)
 {
-    if ( execData.flags & wxEXEC_SYNC )
+    if ( !(execData.flags & wxEXEC_SYNC) )
     {
-        // just block waiting for the child to exit
-        int status = 0;
-
-        int result = waitpid(execData.pid, &status, 0);
-#ifdef __DARWIN__
-        /*  DE: waitpid manpage states that waitpid can fail with EINTR
-            if the call is interrupted by a caught signal.  I suppose
-            that means that this ought to be a while loop.
-
-            The odd thing is that it seems to fail EVERY time.  It fails
-            with a quickly exiting process (e.g. echo), and fails with a
-            slowly exiting process (e.g. sleep 2) but clearly after
-            having waited for the child to exit. Maybe it's a bug in
-            my particular version.
-
-            It works, however, from the CFSocket callback without this
-            trick but in that case it's used only after CFSocket calls
-            the callback and with the WNOHANG flag which would seem to
-            preclude it from being interrupted or at least make it much
-            less likely since it would not then be waiting.
-
-            If Darwin's man page is to be believed then this is definitely
-            necessary.  It's just weird that I've never seen it before
-            and apparently no one else has either or you'd think they'd
-            have reported it by now.  Perhaps blocking the GUI while
-            waiting for a child process to exit is simply not that common.
-         */
-        if ( result == -1 && errno == EINTR )
-        {
-            result = waitpid(execData.pid, &status, 0);
-        }
-#endif // __DARWIN__
-
-        if ( result == -1 )
-        {
-            wxLogLastError("waitpid");
-        }
-        else // child terminated
-        {
-            wxASSERT_MSG( result == execData.pid,
-                          "unexpected waitpid() return value" );
-
-            if ( WIFEXITED(status) )
-            {
-                return WEXITSTATUS(status);
-            }
-            else // abnormal termination?
-            {
-                wxASSERT_MSG( WIFSIGNALED(status),
-                              "unexpected child wait status" );
-            }
-        }
-
-        wxLogSysError(_("Waiting for subprocess termination failed"));
-
-        return -1;
-    }
-    else // asynchronous execution
-    {
+        // asynchronous execution: just launch the process and return
         wxEndProcessData *endProcData = new wxEndProcessData;
         endProcData->process  = execData.process;
         endProcData->pid      = execData.pid;
         endProcData->tag = AddProcessCallback
                            (
                              endProcData,
-                             execData.pipeEndProcDetect.Detach(wxPipe::Read)
+                             execData.GetEndProcReadFD()
                            );
 
-        execData.pipeEndProcDetect.Close();
         return execData.pid;
-
     }
+
+#if wxUSE_STREAMS
+    wxProcess * const process = execData.process;
+    if ( process && process->IsRedirected() )
+    {
+        // we can't simply block waiting for the child to terminate as we would
+        // dead lock if it writes more than the pipe buffer size (typically
+        // 4KB) bytes of output -- it would then block waiting for us to read
+        // the data while we'd block waiting for it to terminate
+        //
+        // so multiplex here waiting for any input from the child or closure of
+        // the pipe used to indicate its termination
+        wxSelectDispatcher disp;
+
+        wxEndHandler endHandler(disp, execData.GetEndProcReadFD());
+
+        wxRedirectedIOHandler outHandler(disp, execData.fdOut, execData.bufOut),
+                              errHandler(disp, execData.fdErr, execData.bufErr);
+
+        while ( !endHandler.Terminated() )
+        {
+            disp.Dispatch();
+        }
+    }
+    //else: no IO redirection, just block waiting for the child to exit
+#endif // wxUSE_STREAMS
+
+    int status = 0;
+
+    int result = waitpid(execData.pid, &status, 0);
+#ifdef __DARWIN__
+    /*  DE: waitpid manpage states that waitpid can fail with EINTR
+        if the call is interrupted by a caught signal.  I suppose
+        that means that this ought to be a while loop.
+
+        The odd thing is that it seems to fail EVERY time.  It fails
+        with a quickly exiting process (e.g. echo), and fails with a
+        slowly exiting process (e.g. sleep 2) but clearly after
+        having waited for the child to exit. Maybe it's a bug in
+        my particular version.
+
+        It works, however, from the CFSocket callback without this
+        trick but in that case it's used only after CFSocket calls
+        the callback and with the WNOHANG flag which would seem to
+        preclude it from being interrupted or at least make it much
+        less likely since it would not then be waiting.
+
+        If Darwin's man page is to be believed then this is definitely
+        necessary.  It's just weird that I've never seen it before
+        and apparently no one else has either or you'd think they'd
+        have reported it by now.  Perhaps blocking the GUI while
+        waiting for a child process to exit is simply not that common.
+     */
+    if ( result == -1 && errno == EINTR )
+    {
+        result = waitpid(execData.pid, &status, 0);
+    }
+#endif // __DARWIN__
+
+    if ( result == -1 )
+    {
+        wxLogLastError("waitpid");
+    }
+    else // child terminated
+    {
+        wxASSERT_MSG( result == execData.pid,
+                      "unexpected waitpid() return value" );
+
+        if ( WIFEXITED(status) )
+        {
+            return WEXITSTATUS(status);
+        }
+        else // abnormal termination?
+        {
+            wxASSERT_MSG( WIFSIGNALED(status),
+                          "unexpected child wait status" );
+        }
+    }
+
+    wxLogSysError(_("Waiting for subprocess termination failed"));
+
+    return -1;
 }
 
 void wxHandleProcessTermination(wxEndProcessData *proc_data)

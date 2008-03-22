@@ -58,10 +58,8 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     endProcData.tag = AddProcessCallback
                       (
                          &endProcData,
-                         execData.pipeEndProcDetect.Detach(wxPipe::Read)
+                         execData.GetEndProcReadFD()
                       );
-
-    execData.pipeEndProcDetect.Close();
 
 
     // prepare to wait for the child termination: show to the user that we're

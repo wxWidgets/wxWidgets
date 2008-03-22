@@ -40,8 +40,21 @@ struct wxExecuteData
 #if wxUSE_STREAMS
         bufOut =
         bufErr = NULL;
+
+        fdOut =
+        fdErr = wxPipe::INVALID_FD;
 #endif // wxUSE_STREAMS
     }
+
+    // get the FD corresponding to the read end of the process end detection
+    // pipe and close the write one
+    int GetEndProcReadFD()
+    {
+        const int fd = pipeEndProcDetect.Detach(wxPipe::Read);
+        pipeEndProcDetect.Close();
+        return fd;
+    }
+
 
     // wxExecute() flags
     int flags;
@@ -60,6 +73,10 @@ struct wxExecuteData
     // called bufOut and not bufIn
     wxStreamTempInputBuffer *bufOut,
                             *bufErr;
+
+    // the corresponding FDs, -1 if not redirected
+    int fdOut,
+        fdErr;
 #endif // wxUSE_STREAMS
 };
 
