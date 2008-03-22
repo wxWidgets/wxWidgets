@@ -539,7 +539,7 @@ static void TestExecute()
     #define COMMAND "echo hi"
     #define ASYNC_COMMAND "xclock"
     #define SHELL_COMMAND "echo hi from shell"
-    #define REDIRECT_COMMAND COMMAND "cat -n Makefile"
+    #define REDIRECT_COMMAND "cat -n Makefile"
 #elif defined(__WXMSW__)
     #define COMMAND "command.com /c echo hi"
     #define ASYNC_COMMAND "notepad"
@@ -586,7 +586,7 @@ static void TestExecute()
         unsigned count = output.GetCount();
         for ( unsigned n = 0; n < count; n++ )
         {
-            wxPrintf("%04u:\t%s\n", n, output[n]);
+            wxPrintf("%04u:\t%s\n", n + 1, output[n]);
         }
 
         wxPuts(_T("Ok."));
