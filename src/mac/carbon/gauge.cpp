@@ -11,7 +11,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_GAUGE 
+#if wxUSE_GAUGE
 
 #include "wx/gauge.h"
 
@@ -51,40 +51,40 @@ bool wxGauge::Create( wxWindow *parent,
         m_peer->SetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag, (Boolean)false );
 
     MacPostControlCreate( pos, size );
-    
+
     return true;
 }
 
 void wxGauge::SetRange(int r)
 {
-    // we are going via the base class in case there is 
+    // we are going via the base class in case there is
     // some change behind the values by it
     wxGaugeBase::SetRange( r ) ;
     if ( m_peer && m_peer->Ok() ){
-        // switch back to determinate mode if not there already 
+        // switch back to determinate mode if not there already
         if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != false )
         {
              m_peer->SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, (Boolean)false );
         }
-    
+
         m_peer->SetMaximum( GetRange() ) ;
     }
 }
 
 void wxGauge::SetValue(int pos)
 {
-    // we are going via the base class in case there is 
+    // we are going via the base class in case there is
     // some change behind the values by it
     wxGaugeBase::SetValue( pos ) ;
 
     if ( m_peer && m_peer->Ok() )
     {
-        // switch back to determinate mode if not there already 
+        // switch back to determinate mode if not there already
         if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != false )
         {
             m_peer->SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, (Boolean)false );
         }
-    
+
         m_peer->SetValue( GetValue() ) ;
 
         // turn off animation in the unnecessary situations as this is consuming a lot of CPU otherwise
@@ -114,9 +114,9 @@ void wxGauge::Pulse()
     {
         if ( m_peer->GetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag ) != true )
         {
-        m_peer->SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, true); 
+        m_peer->SetData<Boolean>( kControlNoPart, kControlProgressBarIndeterminateTag, true);
         }
-        
+
         if ( m_peer->GetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag ) != true )
         {
             m_peer->SetData<Boolean>( kControlEntireControl, kControlProgressBarAnimatingTag, true ) ;

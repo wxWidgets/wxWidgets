@@ -40,7 +40,7 @@ BEGIN_EVENT_TABLE(wxMDIClientWindow, wxWindow)
     EVT_SCROLL(wxMDIClientWindow::OnScroll)
 END_EVENT_TABLE()
 
-static const wxChar *TRACE_MDI = _T("mdi");
+#define TRACE_MDI "mdi"
 
 static const int IDM_WINDOWTILEHOR  = 4001;
 static const int IDM_WINDOWCASCADE = 4002;

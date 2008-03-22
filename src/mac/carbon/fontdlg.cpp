@@ -66,7 +66,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
     OSStatus result = eventNotHandledErr ;
     wxFontDialog *fontdialog = (wxFontDialog*) userData ;
     wxFontData& fontdata= fontdialog->GetFontData() ;
-    
+
     wxMacCarbonEvent cEvent( event );
     switch(cEvent.GetKind())
     {
@@ -92,13 +92,16 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
             {
                 FMFontStyle fontStyle = cEvent.GetParameter<FMFontStyle>(kEventParamFMFontStyle);
                 FMFontSize fontSize = cEvent.GetParameter<FMFontSize>(kEventParamFMFontSize);
-                
+
                 CFStringRef cfName = NULL;
 #if 1
                 FMFontFamily fontFamily = cEvent.GetParameter<FMFontFamily>(kEventParamFMFontFamily);
                 ATSFontFamilyRef atsfontfamilyref = FMGetATSFontFamilyRefFromFontFamily( fontFamily ) ;
                 OSStatus err = ATSFontFamilyGetName( atsfontfamilyref , kATSOptionFlagsDefault , &cfName ) ;
-                wxASSERT_MSG( err == noErr , wxT("ATSFontFamilyGetName failed") );
+                if ( err == noErr )
+                {
+                    wxFAIL_MSG("ATSFontFamilyGetName failed");
+                }
 #else
                 // we don't use the ATSU naming anymore
                 ByteCount actualLength = 0;
@@ -140,7 +143,7 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
                 }
             }
 #endif // wxMAC_USE_ATSU_TEXT
-            
+
             // retrieving the color
             RGBColor fontColor ;
             if ( cEvent.GetParameter<RGBColor>(kEventParamFontColor, &fontColor) == noErr )
@@ -181,9 +184,9 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
                 }
             }
         }
-            break ;
-    } ;
-    
+        break ;
+    }
+
     return result ;
 }
 

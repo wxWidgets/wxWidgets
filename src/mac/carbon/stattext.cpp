@@ -75,7 +75,7 @@ wxSize wxStaticText::DoGetBestSize() const
 {
     Rect bestsize = { 0 , 0 , 0 , 0 } ;
     Point bounds;
-    
+
     // try the built-in best size if available
     Boolean former = m_peer->GetData<Boolean>( kControlStaticTextIsMultilineTag);
     m_peer->SetData( kControlStaticTextIsMultilineTag, (Boolean)0 );

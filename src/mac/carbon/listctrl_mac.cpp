@@ -774,7 +774,8 @@ wxListCtrl::~wxListCtrl()
 }
 
 /*static*/
-wxVisualAttributes wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+wxVisualAttributes
+wxListCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     wxVisualAttributes attr;
 

@@ -52,7 +52,7 @@ END_EVENT_TABLE()
 
 // when embedding native controls in the native toolbar we must make sure the
 // control does not get deleted behind our backs, so the retain count gets increased
-// (after creation it is 1), first be the creation of the custom HIToolbarItem wrapper 
+// (after creation it is 1), first be the creation of the custom HIToolbarItem wrapper
 // object, and second by the code 'creating' the custom HIView (which is the same as the
 // already existing native control, therefore we just increase the ref count)
 // when this view is removed from the native toolbar its count gets decremented again
@@ -119,16 +119,19 @@ public:
         if ( m_toolbarItemRef )
         {
             CFIndex count = CFGetRetainCount( m_toolbarItemRef ) ;
-			// different behaviour under Leopard
-			if ( UMAGetSystemVersion() < 0x1050 )
-			{
-                wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
-			}
+            // different behaviour under Leopard
+            if ( UMAGetSystemVersion() < 0x1050 )
+            {
+                if ( count != 1 )
+                {
+                    wxFAIL_MSG("Reference count of native tool was not 1 in wxToolBarTool destructor");
+                }
+            }
             wxTheApp->MacAddToAutorelease(m_toolbarItemRef);
             CFRelease(m_toolbarItemRef);
             m_toolbarItemRef = NULL;
         }
-#endif
+#endif // wxMAC_USE_NATIVE_TOOLBAR
     }
 
     wxSize GetSize() const
@@ -628,12 +631,15 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                             // depending whether the wxControl corresponding to this HIView has already been destroyed or
                             // not, ref counts differ, so we cannot assert a special value
                             CFIndex count =  CFGetRetainCount( viewRef ) ;
-                            wxASSERT_MSG( count >=1 , wxT("Reference Count of native tool was illegal before removal") );
                             if ( count >= 1 )
+                            {
+                                wxFAIL_MSG("Reference count of native tool was illegal before removal");
+
                                 CFRelease( viewRef ) ;
+                            }
                         }
-	                    free( object ) ;
-    	                result = noErr;
+                        free( object ) ;
+                        result = noErr;
                     }
                     break;
             }
@@ -680,7 +686,7 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
 
                         // Extra width to avoid edge of combobox being cut off
                         sz.x += 3;
-                        
+
                         HISize min, max;
                         min.width = max.width = sz.x ;
                         min.height = max.height = sz.y ;
@@ -868,11 +874,14 @@ wxToolBar::~wxToolBar()
             MacInstallNativeToolbar( false );
 
         CFIndex count = CFGetRetainCount( m_macHIToolbarRef ) ;
-		// Leopard seems to have one refcount more, so we cannot check reliably at the moment
-		if ( UMAGetSystemVersion() < 0x1050 )
-		{
-            wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in wxToolBar destructor") );
-		}
+        // Leopard seems to have one refcount more, so we cannot check reliably at the moment
+        if ( UMAGetSystemVersion() < 0x1050 )
+        {
+            if ( count != 1 )
+            {
+                wxFAIL_MSG("Reference count of native control was not 1 in wxToolBar destructor");
+            }
+        }
         CFRelease( (HIToolbarRef)m_macHIToolbarRef );
         m_macHIToolbarRef = NULL;
     }
@@ -1183,7 +1192,11 @@ bool wxToolBar::Realize()
                                 if ( tool2->IsControl() )
                                 {
                                     CFIndex count = CFGetRetainCount( tool2->GetControl()->GetPeer()->GetControlRef() ) ;
-                                    wxASSERT_MSG( count == 3 || count == 2 , wxT("Reference Count of native tool was illegal before removal") );
+                                    if ( count != 3 && count != 2 )
+                                    {
+                                        wxFAIL_MSG("Reference count of native tool was illegal before removal");
+                                    }
+
                                     wxASSERT( IsValidControlHandle(tool2->GetControl()->GetPeer()->GetControlRef() )) ;
                                 }
                                 err = HIToolbarRemoveItemAtIndex(refTB, idx);
@@ -1195,7 +1208,11 @@ bool wxToolBar::Realize()
                                 if ( tool2->IsControl() )
                                 {
                                     CFIndex count = CFGetRetainCount( tool2->GetControl()->GetPeer()->GetControlRef() ) ;
-                                    wxASSERT_MSG( count == 2 , wxT("Reference Count of native tool was not 2 after removal") );
+                                    if ( count != 2 )
+                                    {
+                                        wxFAIL_MSG("Reference count of native tool was not 2 after removal");
+                                    }
+
                                     wxASSERT( IsValidControlHandle(tool2->GetControl()->GetPeer()->GetControlRef() )) ;
                                 }
 
@@ -1214,7 +1231,10 @@ bool wxToolBar::Realize()
                     if ( tool->IsControl() )
                     {
                         CFIndex count = CFGetRetainCount( tool->GetControl()->GetPeer()->GetControlRef() ) ;
-                        wxASSERT_MSG( count == 3 || count == 2, wxT("Reference Count of native tool was illegal after insertion") );
+                        if ( count != 3 && count != 2 )
+                        {
+                            wxFAIL_MSG("Reference count of native tool was illegal before removal");
+                        }
                         wxASSERT( IsValidControlHandle(tool->GetControl()->GetPeer()->GetControlRef() )) ;
                     }
                 }

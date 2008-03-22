@@ -141,8 +141,10 @@ int RunMixedFontDialog(wxFontDialog* WXUNUSED(dialog))
 {
     int retval = wxID_CANCEL ;
 
-    bool cocoaLoaded = NSApplicationLoad();
-    wxASSERT_MSG(cocoaLoaded,wxT("Couldn't load Cocoa in Carbon Environment")) ;
+    if ( !NSApplicationLoad() )
+    {
+        wxFAIL_MSG("Couldn't load Cocoa in Carbon Environment");
+    }
 
     wxAutoNSAutoreleasePool pool;
 

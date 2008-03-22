@@ -61,7 +61,7 @@
 #define kWindowUnifiedTitleAndToolbarAttribute (1 << 7)
 
 // trace mask for activation tracing messages
-static const wxChar *TRACE_ACTIVATE = _T("activation");
+#define TRACE_ACTIVATE "activation"
 
 // ----------------------------------------------------------------------------
 // globals

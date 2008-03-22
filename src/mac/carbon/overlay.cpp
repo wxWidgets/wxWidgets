@@ -149,7 +149,7 @@ void wxOverlayImpl::EndDrawing( wxDC* dc)
     wxGCDCImpl *win_impl = wxDynamicCast(impl,wxGCDCImpl);
     if (win_impl)
         win_impl->SetGraphicsContext(NULL);
-        
+
     CGContextFlush( m_overlayContext );
 }
 
@@ -166,7 +166,10 @@ void wxOverlayImpl::Reset()
     {
 #ifndef __LP64__
         OSStatus err = QDEndCGContext(GetWindowPort(m_overlayWindow), &m_overlayContext);
-        wxASSERT_MSG(  err == noErr , _("Couldn't end the context on the overlay window") );
+        if ( err != noErr )
+        {
+            wxFAIL_MSG("Couldn't end the context on the overlay window");
+        }
 #endif
         m_overlayContext = NULL ;
     }

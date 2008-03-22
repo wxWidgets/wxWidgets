@@ -314,13 +314,12 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 wxString wxGetOsDescription()
 {
-    char data[128];
     struct utsname name;
     uname(&name);
-	return wxString::Format(_T("Mac OS X (%s %s %s)"),
-			wxString::FromAscii(name.sysname).c_str(),
-			wxString::FromAscii(name.release).c_str(),
-			wxString::FromAscii(name.machine).c_str());
+    return wxString::Format(_T("Mac OS X (%s %s %s)"),
+            wxString::FromAscii(name.sysname).c_str(),
+            wxString::FromAscii(name.release).c_str(),
+            wxString::FromAscii(name.machine).c_str());
 }
 
 #ifndef __DARWIN__
@@ -1561,7 +1560,7 @@ unsigned int wxMacDataItemBrowserControl::GetLineFromItem(const wxMacDataItem* i
 {
     DataBrowserTableViewRowIndex row;
     OSStatus err = GetItemRow( (DataBrowserItemID) item , &row);
-    wxASSERT( err == noErr);
+    wxCHECK( err == noErr, (unsigned)-1 );
     return row;
 }
 
@@ -1569,7 +1568,7 @@ wxMacDataItem*  wxMacDataItemBrowserControl::GetItemFromLine(unsigned int n) con
 {
     DataBrowserItemID id;
     OSStatus err =  GetItemID( (DataBrowserTableViewRowIndex) n , &id);
-    wxASSERT( err == noErr);
+    wxCHECK( err == noErr, NULL );
     return (wxMacDataItem*) id;
 }
 

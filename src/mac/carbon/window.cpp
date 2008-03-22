@@ -232,7 +232,11 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     bool created = false ;
                     CGContextRef cgContext = NULL ;
                     OSStatus err = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, &cgContext) ;
-                    wxASSERT_MSG( err == noErr , wxT("Unable to retrieve CGContextRef") ) ;
+                    if ( err != noErr )
+                    {
+                        wxFAIL_MSG("Unable to retrieve CGContextRef");
+                    }
+
                     thisWindow->MacSetCGContextRef( cgContext ) ;
 
                     {
@@ -3216,13 +3220,13 @@ bool wxWindowMac::IsShownOnScreen() const
             // CS : put a breakpoint here to investigate differences
             // between native an wx visibilities
             // the only place where I've encountered them until now
-            // are the hiding/showing sequences where the vis-changed event is 
+            // are the hiding/showing sequences where the vis-changed event is
             // first sent to the innermost control, while wx does things
             // from the outmost control
             wxVis = wxWindowBase::IsShownOnScreen();
             return wxVis;
         }
-        
+
         return m_peer->IsVisible();
     }
 #endif

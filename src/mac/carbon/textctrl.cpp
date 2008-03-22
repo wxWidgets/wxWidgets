@@ -189,7 +189,7 @@ wxMacPortSaver( (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRe
     m_formerClip = NewRgn() ;
     m_newClip = NewRgn() ;
     GetClip( m_formerClip ) ;
-    
+
     if ( win )
     {
         // guard against half constructed objects, this just leads to a empty clip
@@ -197,13 +197,13 @@ wxMacPortSaver( (GrafPtr) GetWindowPort( (WindowRef) win->MacGetTopLevelWindowRe
         {
             int x = 0 , y = 0;
             win->MacWindowToRootWindow( &x, &y ) ;
-            
+
             // get area including focus rect
             HIShapeGetAsQDRgn( ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip );
             if ( !EmptyRgn( m_newClip ) )
                 OffsetRgn( m_newClip , x , y ) ;
         }
-        
+
         SetClip( m_newClip ) ;
     }
 }
@@ -1763,11 +1763,11 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
             | kTXNSupportFontCommandProcessing
             | kTXNSupportFontCommandUpdating;
 
-        // only spell check when not read-only 
+        // only spell check when not read-only
         // use system options for the default
-        bool checkSpelling = false ; 
+        bool checkSpelling = false ;
         if ( !(m_windowStyle & wxTE_READONLY) )
-        {   
+        {
 #if wxUSE_SYSTEM_OPTIONS
             if ( wxSystemOptions::HasOption( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) && (wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) == 1) )
             {
@@ -1775,11 +1775,11 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
             }
 #endif
         }
-        
+
         if ( checkSpelling )
             options |=
                 kTXNSupportSpellCheckCommandProcessing
-                | kTXNSupportSpellCheckCommandUpdating;              
+                | kTXNSupportSpellCheckCommandUpdating;
 
         TXNSetCommandEventSupport( m_txn , options ) ;
     }

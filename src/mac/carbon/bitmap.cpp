@@ -565,8 +565,9 @@ IconRef wxBitmapRefData::GetIconRef()
         HLock((Handle) iconFamily);
         OSStatus err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &m_iconRef );
         HUnlock((Handle) iconFamily);
-        wxASSERT_MSG( err == noErr , wxT("Error when constructing icon ref") );
         DisposeHandle( (Handle) iconFamily ) ;
+
+        wxCHECK_MSG( err == noErr, NULL, wxT("Error when constructing icon ref") );
     }
 
     return m_iconRef ;

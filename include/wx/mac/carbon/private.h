@@ -269,13 +269,13 @@ private :
     PicHandle    m_backpict ;
     bool        m_shown ;
     long        m_mark ;
-#if wxUSE_TIMER 
+#if wxUSE_TIMER
     wxMacToolTipTimer* m_timer ;
 #endif
     wxCFStringRef m_helpTextRef ;
 } ;
 
-// Quartz 
+// Quartz
 
 WXDLLIMPEXP_CORE void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 );
 WXDLLIMPEXP_CORE void wxMacReleaseBitmapButton( ControlButtonContentInfo*info );
@@ -323,7 +323,7 @@ WXDLLIMPEXP_CORE Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint
 
 ControlActionUPP GetwxMacLiveScrollbarActionProc();
 
-// additional optional event defines 
+// additional optional event defines
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
 enum {
@@ -419,9 +419,12 @@ public :
         T value;
         OSStatus err = GetData<T>( inPartCode , inTag , &value );
 
-        wxASSERT_MSG( err == noErr,
-                      wxString::Format(wxT("GetData Failed for Part [%i] and Tag [%i]"),
-                                       inPartCode, (int)inTag) );
+        if ( err != noErr )
+        {
+            wxFAIL_MSG( wxString::Format(wxT("GetData Failed for Part [%i] and Tag [%i]"),
+                                        inPartCode, (int)inTag) );
+        }
+
         return value;
     }
     template <typename T> OSStatus GetData( ResType inTag , T *data ) const

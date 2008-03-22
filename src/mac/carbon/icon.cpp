@@ -220,7 +220,11 @@ bool wxIcon::LoadFile(
                     HLock((Handle) iconFamily);
                     OSStatus err = GetIconRefFromIconFamilyPtr( *iconFamily, GetHandleSize((Handle) iconFamily), &iconRef );
                     HUnlock((Handle) iconFamily);
-                    wxASSERT_MSG( err == noErr , wxT("Error when constructing icon ref") );
+                    if ( err != noErr )
+                    {
+                        wxFAIL_MSG("Error when constructing icon ref");
+                    }
+
                     ReleaseResource( resHandle ) ;
                 }
               }
