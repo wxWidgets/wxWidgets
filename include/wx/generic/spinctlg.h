@@ -25,7 +25,7 @@
 class WXDLLIMPEXP_FWD_CORE wxSpinButton;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
-class wxSpinCtrlText; // wxTextCtrl used for the wxSpinCtrlGenericBase
+class wxSpinCtrlTextGeneric; // wxTextCtrl used for the wxSpinCtrlGenericBase
 
 // The !wxUSE_SPINBTN version's GetValue() function conflicts with the
 // wxTextCtrl's GetValue() and so you have to input a dummy int value.
@@ -91,7 +91,7 @@ public:
     void OnTextEnter(wxCommandEvent& event);
     void OnTextChar(wxKeyEvent& event);
 
-    friend class wxSpinCtrlText;
+    friend class wxSpinCtrlTextGeneric;
 
 protected:
     // override the base class virtuals involved into geometry calculations

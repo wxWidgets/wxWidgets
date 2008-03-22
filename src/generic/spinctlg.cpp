@@ -52,13 +52,13 @@ static const wxCoord MARGIN = 2;
 #define SPINCTRLBUT_MAX 32000 // large to avoid wrap around trouble
 
 // ----------------------------------------------------------------------------
-// wxSpinCtrlText: text control used by spin control
+// wxSpinCtrlTextGeneric: text control used by spin control
 // ----------------------------------------------------------------------------
 
-class wxSpinCtrlText : public wxTextCtrl
+class wxSpinCtrlTextGeneric : public wxTextCtrl
 {
 public:
-    wxSpinCtrlText(wxSpinCtrlGenericBase *spin, const wxString& value)
+    wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value)
         : wxTextCtrl(spin->GetParent(), wxID_ANY, value, wxDefaultPosition,
                      wxDefaultSize, wxTE_NOHIDESEL|wxTE_PROCESS_ENTER)
     {
@@ -68,7 +68,7 @@ public:
         SetSizeHints(wxDefaultCoord, wxDefaultCoord);
     }
 
-    virtual ~wxSpinCtrlText()
+    virtual ~wxSpinCtrlTextGeneric()
     {
         // MSW sends extra kill focus event on destroy
         if (m_spin)
@@ -106,22 +106,22 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(wxSpinCtrlText, wxTextCtrl)
-    EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlText::OnTextEnter)
+BEGIN_EVENT_TABLE(wxSpinCtrlTextGeneric, wxTextCtrl)
+    EVT_TEXT_ENTER(wxID_ANY, wxSpinCtrlTextGeneric::OnTextEnter)
 
-    EVT_CHAR(wxSpinCtrlText::OnChar)
+    EVT_CHAR(wxSpinCtrlTextGeneric::OnChar)
 
-    EVT_KILL_FOCUS(wxSpinCtrlText::OnKillFocus)
+    EVT_KILL_FOCUS(wxSpinCtrlTextGeneric::OnKillFocus)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
-// wxSpinCtrlButton: spin button used by spin control
+// wxSpinCtrlButtonGeneric: spin button used by spin control
 // ----------------------------------------------------------------------------
 
-class wxSpinCtrlButton : public wxSpinButton
+class wxSpinCtrlButtonGeneric : public wxSpinButton
 {
 public:
-    wxSpinCtrlButton(wxSpinCtrlGenericBase *spin, int style)
+    wxSpinCtrlButtonGeneric(wxSpinCtrlGenericBase *spin, int style)
         : wxSpinButton(spin->GetParent(), wxID_ANY, wxDefaultPosition,
                        wxDefaultSize, style | wxSP_VERTICAL)
     {
@@ -145,9 +145,9 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(wxSpinCtrlButton, wxSpinButton)
-    EVT_SPIN_UP(  wxID_ANY, wxSpinCtrlButton::OnSpinButton)
-    EVT_SPIN_DOWN(wxID_ANY, wxSpinCtrlButton::OnSpinButton)
+BEGIN_EVENT_TABLE(wxSpinCtrlButtonGeneric, wxSpinButton)
+    EVT_SPIN_UP(  wxID_ANY, wxSpinCtrlButtonGeneric::OnSpinButton)
+    EVT_SPIN_DOWN(wxID_ANY, wxSpinCtrlButtonGeneric::OnSpinButton)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -196,8 +196,8 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     m_max   = max;
     m_increment = increment;
 
-    m_textCtrl   = new wxSpinCtrlText(this, value);
-    m_spinButton = new wxSpinCtrlButton(this, style);
+    m_textCtrl   = new wxSpinCtrlTextGeneric(this, value);
+    m_spinButton = new wxSpinCtrlButtonGeneric(this, style);
 
     m_spin_value = m_spinButton->GetValue();
 
@@ -239,10 +239,10 @@ wxSpinCtrlGenericBase::~wxSpinCtrlGenericBase()
 
     if (m_textCtrl)
     {
-        // null this since MSW sends KILL_FOCUS on deletion, see ~wxSpinCtrlText
-        wxDynamicCast(m_textCtrl, wxSpinCtrlText)->m_spin = NULL;
+        // null this since MSW sends KILL_FOCUS on deletion, see ~wxSpinCtrlTextGeneric
+        wxDynamicCast(m_textCtrl, wxSpinCtrlTextGeneric)->m_spin = NULL;
 
-        wxSpinCtrlText *text = (wxSpinCtrlText*)m_textCtrl;
+        wxSpinCtrlTextGeneric *text = (wxSpinCtrlTextGeneric*)m_textCtrl;
         m_textCtrl = NULL;
         delete text;
     }
