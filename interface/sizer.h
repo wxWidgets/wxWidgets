@@ -354,66 +354,68 @@ public:
     wxSizerFlags(int proportion = 0);
 
     /**
-        Sets the alignment of this wxSizerFlags to @e align.
-        Note that if this method is not called, the wxSizerFlags has no specified
-        alignment.
+        Sets the alignment of this wxSizerFlags to @e align.  Note that if this
+        method is not called, the wxSizerFlags has no specified alignment.
 
-        @see Top(), Left(), Right(),
-             Bottom(), Centre()
+        @see Top(), Left(), Right(), Bottom(), Centre()
     */
-    wxSizerFlags Align(int align = 0);
-
-    //@{
-    /**
-        Sets the wxSizerFlags to have a border of a number of pixels specified by
-        @a borderinpixels with the directions specified by @e direction.
-        In the overloaded version without @a borderinpixels parameter, the border of
-        default size, as returned by GetDefaultBorder(),
-        is used.
-    */
-    wxSizerFlags Border(int direction, int borderinpixels);
-    wxSizerFlags Border(int direction = wxALL);
-    //@}
+    wxSizerFlags& Align(int align = 0);
 
     /**
-        Aligns the object to the bottom, shortcut for @c Align(wxALIGN_BOTTOM)
+        Sets the wxSizerFlags to have a border of a number of pixels specified
+        by @a borderinpixels with the directions specified by @e direction.
+    */
+    wxSizerFlags& Border(int direction, int borderinpixels);
+
+    /**
+        Sets the wxSizerFlags to have a border with size as returned by
+        GetDefaultBorder().
+
+        @param direction Direction(s) to apply the border in.
+    */
+    wxSizerFlags& Border(int direction = wxALL);
+
+    /**
+        Aligns the object to the bottom, shortcut for @c Align(wxALIGN_BOTTOM).
 
         @see Align()
     */
-    wxSizerFlags Bottom();
+    wxSizerFlags& Bottom();
 
     /**
-        Sets the object of the wxSizerFlags to center itself in the area it is given.
+        Sets the object of the wxSizerFlags to center itself in the area it is
+        given.
     */
-    wxSizerFlags Center();
+    wxSizerFlags& Center();
 
     /**
-        Center() for people with the other dialect of english.
+        Center() for people with the other dialect of English.
     */
-    wxSizerFlags Centre();
+    wxSizerFlags& Centre();
 
     /**
-        Sets the border in the given @a direction having twice the default border
-        size.
+        Sets the border in the given @a direction having twice the default
+        border size.
     */
-    wxSizerFlags DoubleBorder(int direction = wxALL);
+    wxSizerFlags& DoubleBorder(int direction = wxALL);
 
     /**
-        Sets the border in left and right directions having twice the default border
-        size.
+        Sets the border in left and right directions having twice the default
+        border size.
     */
-    wxSizerFlags DoubleHorzBorder();
+    wxSizerFlags& DoubleHorzBorder();
 
     /**
-        Sets the object of the wxSizerFlags to expand to fill as much area as it can.
+        Sets the object of the wxSizerFlags to expand to fill as much area as
+        it can.
     */
-    wxSizerFlags Expand();
+    wxSizerFlags& Expand();
 
     /**
-        Set the @c wxFIXED_MINSIZE flag which indicates that the initial size of
-        the window should be also set as its minimal size.
+        Set the @c wxFIXED_MINSIZE flag which indicates that the initial size
+        of the window should be also set as its minimal size.
     */
-    wxSizerFlags FixedMinSize();
+    wxSizerFlags& FixedMinSize();
 
     /**
         Set the @c wxRESERVE_SPACE_EVEN_IF_HIDDEN flag. Normally wxSizers
@@ -436,38 +438,38 @@ public:
 
         @see Align()
     */
-    wxSizerFlags Left();
+    wxSizerFlags& Left();
 
     /**
         Sets the proportion of this wxSizerFlags to @e proportion
     */
-    wxSizerFlags Proportion(int proportion = 0);
+    wxSizerFlags& Proportion(int proportion = 0);
 
     /**
         Aligns the object to the right, shortcut for @c Align(wxALIGN_RIGHT)
 
         @see Align()
     */
-    wxSizerFlags Right();
+    wxSizerFlags& Right();
 
     /**
         Set the @c wx_SHAPED flag which indicates that the elements should
         always keep the fixed width to height ratio equal to its original value.
     */
-    wxSizerFlags Shaped();
+    wxSizerFlags& Shaped();
 
     /**
         Aligns the object to the top, shortcut for @c Align(wxALIGN_TOP)
 
         @see Align()
     */
-    wxSizerFlags Top();
+    wxSizerFlags& Top();
 
     /**
-        Sets the border in the given @a direction having thrice the default border
-        size.
+        Sets the border in the given @a direction having thrice the default
+        border size.
     */
-    wxSizerFlags TripleBorder(int direction = wxALL);
+    wxSizerFlags& TripleBorder(int direction = wxALL);
 };
 
 
