@@ -2030,7 +2030,7 @@ public:
         implementation,
         and not in the window object itself.
 
-        @see GetHelpText(), wxHelpProvider
+        @see GetHelpText(), wxHelpProvider::AddHelp()
     */
     virtual void SetHelpText(const wxString& helpText);
 
