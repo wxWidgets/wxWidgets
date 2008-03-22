@@ -314,16 +314,3 @@ void IfaceCheckApp::PrintStatistics(long secs)
     LogMessage("total processing took %d seconds.", secs);
 }
 
-
-/*
-    HACK
-*/
-
-#include "wx/process.h"
-#include "wx/unix/execute.h"
-
-int wxAddProcessCallback(wxEndProcessData *, int )
-{
-    return 0;
-}
-

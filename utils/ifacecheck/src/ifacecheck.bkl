@@ -1,4 +1,6 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
+
 <makefile>
 
     <include file="../../../build/bakefiles/common_samples.bkl"/>

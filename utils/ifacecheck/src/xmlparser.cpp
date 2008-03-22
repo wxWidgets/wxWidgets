@@ -142,84 +142,6 @@ void wxMethod::SetArgumentTypes(const wxTypeArray& arr, const wxArrayString& def
     }
 }
 
-
-/*
-void wxMethod::SetFromString(const wxString& proto)
-{
-    m_strProto=proto.Strip(wxString::both);
-
-    // make sure there is a space separing each token
-    m_strProto.Replace("&", "& ");
-    m_strProto.Replace("*", "* ");
-    m_strProto.Replace(",", ", ");
-
-    wxASSERT(m_strProto.Contains("::"));
-    wxASSERT(m_strProto.Contains("(") && m_strProto.Contains(")"));
-}
-
-wxType wxMethod::GetReturnType() const
-{
-    wxString leftpart = m_strProto.Left(m_strProto.Find("::")).Strip(wxString::both);
-    if (!leftpart.Contains(" "))
-        // this is a dtor or a ctor then...
-        return wxEmptyType;
-
-    // see SetFromString: all tokens are separed by a space!
-    wxType ret(leftpart.BeforeFirst(' ').Strip(wxString::both));
-    wxASSERT(ret.IsOk());
-
-    return ret;
-}
-
-wxString wxMethod::GetName() const
-{
-    int nstart = m_strProto.Find("::")+2,
-        nend = m_strProto.Find("(");
-    wxASSERT(nstart!=wxNOT_FOUND && nend!=wxNOT_FOUND);
-
-    return m_strProto.Mid(nstart, nend-nstart).Strip(wxString::both);
-}
-
-bool wxMethod::IsConst() const
-{
-    return m_strProto.EndsWith("const");
-}
-
-bool wxMethod::IsStatic() const
-{
-    return m_strProto.StartsWith("static");
-}
-
-wxTypeArray wxMethod::GetArgumentTypes() const
-{
-    int nstart = m_strProto.Find('(', false * start from beginning *)+1,
-        nend = m_strProto.Find(')', true * start from end *);
-    wxASSERT(nstart!=wxNOT_FOUND && nend!=wxNOT_FOUND);
-
-    wxString argstr = m_strProto.Mid(nstart, nend-nstart).Strip(wxString::both);
-    wxArrayString args = wxSplit(argstr, ',');
-
-    wxTypeArray ret;
-    for (unsigned int i=0; i<args.GetCount(); i++)
-    {
-        wxString arg = args[i].Strip(wxString::both);
-
-        // arg may contain both the type and the argument name;
-        // we need to get rid of the last one...
-        wxArrayString temp = wxSplit(arg, ' ');
-
-        if (temp.GetCount()>1 &&
-            !temp.Last().Contains("&") &&
-            !temp.Last().Contains("*") &&
-            g_)
-            arg.Replace(temp.Last(), "");   // looks like an argument name - remove it
-
-        ret.Add(wxType(arg));
-    }
-
-    return ret;
-}
-*/
 bool wxMethod::operator==(const wxMethod& m) const
 {
     if (GetReturnType() != m.GetReturnType() ||
@@ -431,9 +353,12 @@ public:
     int attribs;
 };
 
-//WX_DECLARE_STRING_HASH_MAP( toResolveTypeItem, wxToResolveTypeHashMap );
+#if 1
+WX_DECLARE_STRING_HASH_MAP( toResolveTypeItem, wxToResolveTypeHashMap );
+#else
 #include <map>
 typedef std::map<wxString, toResolveTypeItem> wxToResolveTypeHashMap;
+#endif
 
 bool wxXmlGccInterface::Parse(const wxString& filename)
 {
@@ -463,97 +388,6 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     m_classes.Alloc(ESTIMATED_NUM_CLASSES);
     arrMemberIds.Alloc(ESTIMATED_NUM_TYPES);
 
-#if 0
-    // do a quick parsing of the <File> nodes; we take advantage of the fact that
-    // gccxml puts all of them in a contiguos block at the end of the file it produces.
-    child = doc.GetRoot()->GetChildren();
-    while (child && child->GetName() != "File")
-        child = child->GetNext();       // skip everything until first <File> node
-
-    // here starts the <File> node block
-    while (child)
-    {
-        wxString id = child->GetAttribute("id", "");
-        if (!id.StartsWith("f")) {
-            LogError("Unexpected file ID: %s", id);
-            return false;
-        }
-
-        fileIds.Add(id);
-        fileNames.Add(child->GetAttribute("name", ""));
-
-        child = child->GetNext();
-    }
-#endif
-
-#if 0
-    wxString allWxClassesIds, allWxMethodsIds, allWxReferencesIds;
-    allWxClassesIds.Alloc(240000);
-    allWxMethodsIds.Alloc(240000);
-    allWxReferencesIds.Alloc(240000);
-    child = doc.GetRoot()->GetChildren();
-    while (child)
-    {
-        if (child->GetName() == "Class")
-            if (child->GetAttribute("name", wxEmptyString).StartsWith("wx"))
-                allWxClassesIds += " " + child->GetAttribute("members", wxEmptyString);
-        child = child->GetNext();
-    }
-
-    child = doc.GetRoot()->GetChildren();
-    while (child)
-    {
-        wxString n = child->GetName();
-        if ((n == "Method" || n == "Constructor" || n == "Destructor" || n == "OperatorMethod") &&
-            child->GetAttribute("access", wxEmptyString) == "public")
-        {
-            if (allWxClassesIds.Contains(child->GetAttribute("id", wxEmptyString)))
-            {
-                allWxMethodsIds += " " + child->GetAttribute("returns", wxEmptyString);
-
-                wxXmlNode *arg = child->GetChildren();
-                while (arg)
-                {
-                    if (arg->GetName() == "Argument")
-                        allWxMethodsIds += " " + arg->GetAttribute("type", wxEmptyString);
-
-                    arg = arg->GetNext();
-                }
-            }
-        }
-
-        child = child->GetNext();
-    }
-
-    child = doc.GetRoot()->GetChildren();
-    while (child)
-    {
-        if (allWxMethodsIds.Contains(child->GetAttribute("id", wxEmptyString)))
-        {
-            const wxString& type = child->GetAttribute("type", wxEmptyString);
-            allWxReferencesIds += " " + type;
-        }
-
-        child = child->GetNext();
-    }
-
-    child = doc.GetRoot()->GetChildren();
-    while (child)
-    {
-        if (allWxReferencesIds.Contains(child->GetAttribute("id", wxEmptyString)))
-        {
-            const wxString& type = child->GetAttribute("type", wxEmptyString);
-            allWxReferencesIds += " " + type;
-        }
-
-        child = child->GetNext();
-    }
-
-    LogMessage("adfafdasfdas %d-%d-%d", allWxClassesIds.Len(),
-               allWxMethodsIds.Len(), allWxReferencesIds.Len());
-#endif
-
-
     // build a list of wx classes and in general of all existent types
     child = doc.GetRoot()->GetChildren();
     while (child)
@@ -561,34 +395,6 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         const wxString& n = child->GetName();
         const wxString& id = child->GetAttribute("id", wxEmptyString);
 
-#if 0
-        if (!allWxClassesIds.Contains(id) && !allWxMethodsIds.Contains(id) && !allWxReferencesIds.Contains(id))
-            ; // ignore this node
-        else
-#endif
-#if 0
-        wxString fid = child->GetAttribute("file", "");
-        int fileidx = wxNOT_FOUND;
-
-        if (!fid.IsEmpty()) {
-            fileidx = fileIds.Index(fid);
-            if (fileidx == wxNOT_FOUND) {
-                LogError("couldn't find the file ID '%s'", fid);
-                return false;
-            }
-        }
-
-        if (fileidx!=wxNOT_FOUND && !fileNames[fileidx].Contains("wx"))
-        {
-            // skip this node: not wx related!
-        } else
-#endif
-
-        /*if (child->GetAttribute("artificial", "") == "1")
-        {
-            // discard this immediately - we're not interested
-        }
-        else*/
         if (n == "Class")
         {
             wxString cname = child->GetAttribute("name", wxEmptyString);
@@ -606,8 +412,6 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
             }
 
             // register this class also as possible return/argument type:
-            //typeIds.Add(child->GetAttribute("id", wxEmptyString));
-            //typeNames.Add(cname);
             types[id] = cname;
         }
         else if (n == "PointerType" || n == "ReferenceType" ||
@@ -630,9 +434,6 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 attr = ATTRIB_ARRAY;
 
             // these nodes make reference to other types... we'll resolve them later
-            //toResolveTypeIds.Add(id);
-            //toResolveRefType.Add(type);
-            //toResolveAttrib.Add(attr);
             toResolveTypes[id] = toResolveTypeItem(type, attr);
         }
         else if (n == "FunctionType" || n == "MethodType")
@@ -662,10 +463,6 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         {
             // we register everything else as a possible return/argument type:
             const wxString& name = child->GetAttribute("name", wxEmptyString);
-            /*if (id.IsEmpty() || name.IsEmpty()) {
-                LogError("Invalid empty name/id for '%s' node", n);
-                return false;
-            }*/
 
             if (!name.IsEmpty())
             {
@@ -682,8 +479,6 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 if (g_verbose)
                     LogWarning("Type '%s' with ID '%s' does not have name attribute", n, id);
 
-                //typeIds.Add(id);
-                //typeNames.Add("TOFIX");
                 types[id] = "TOFIX";
             }
         }
@@ -766,52 +561,6 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 }
             }
         }
-/*
-        // now get the return types of all wx methods parsed above
-        child = doc.GetRoot()->GetChildren();
-        int idx;
-        while (child) {
-
-            wxString n = child->GetName();
-
-            if (n == "PointerType" || n == "ReferenceType" || n == "CvQualifiedType") {
-                wxString id = child->GetAttribute("id", wxEmptyString);
-                wxString type = child->GetAttribute("type", wxEmptyString);
-
-                // are we interested to this id?
-                while ((idx = retTypeIds.Index(id)) != wxNOT_FOUND)
-                {
-                    // substitute this ID with the ID referenced by this node
-                    retTypeIds[idx] = type;
-                    // leave "incompleteMethods" array untouched
-                }
-            } else {
-                wxString id = child->GetAttribute("id", wxEmptyString);
-                wxString name = child->GetAttribute("name", wxEmptyString);
-                if (!name.IsEmpty())
-                {
-                    // are we interested to this id?
-                    while ((idx = retTypeIds.Index(id)) != wxNOT_FOUND)
-                    {
-                        wxMethod *p = (wxMethod*)incompleteMethods[idx];
-                        p->SetFromString(name + " " + p->GetAsString());
-
-                        //LogMessage("rettype node is named %s and is '%s'", n,
-                        //           child->GetAttribute("name", ""));
-
-                        // prototype is now complete; remove it from the list of protos
-                        // waiting for completion
-                        retTypeIds.RemoveAt(idx);
-                        incompleteMethods.RemoveAt(idx);
-                    }
-                }
-            }
-
-            child = child->GetNext();
-
-            // give feedback to the user about the progress...
-            if ((++nodes%PROGRESS_RATE)==0) ShowProgress();
-        }*/
     }
 
     // resolve header names
