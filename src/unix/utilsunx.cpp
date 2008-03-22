@@ -516,7 +516,7 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
     execData.process = process;
 
     // create pipes
-    if ( !traits->CreateEndProcessPipe(execData) )
+    if ( !execData.pipeEndProcDetect.Create() )
     {
         wxLogError( _("Failed to execute '%s'\n"), *argv );
 
@@ -576,7 +576,7 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
                 if ( fd == pipeIn[wxPipe::Read]
                         || fd == pipeOut[wxPipe::Write]
                         || fd == pipeErr[wxPipe::Write]
-                        || traits->IsWriteFDOfEndProcessPipe(execData, fd) )
+                        || fd == (execData.pipeEndProcDetect)[wxPipe::Write] )
                 {
                     // don't close this one, we still need it
                     continue;
@@ -598,8 +598,10 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 #endif // !__VMS
 
         // reading side can be safely closed but we should keep the write one
-        // opened
-        traits->DetachWriteFDOfEndProcessPipe(execData);
+        // opened, it will be only closed when the process terminates resulting
+        // in a read notification to the parent
+        execData.pipeEndProcDetect.Detach(wxPipe::Write);
+        execData.pipeEndProcDetect.Close();
 
         // redirect stdin, stdout and stderr
         if ( pipeIn.IsOk() )
@@ -1224,22 +1226,6 @@ bool wxHandleFatalExceptions(bool doit)
 // ----------------------------------------------------------------------------
 // wxExecute support
 // ----------------------------------------------------------------------------
-
-bool wxAppTraits::CreateEndProcessPipe(wxExecuteData& execData)
-{
-    return execData.pipeEndProcDetect.Create();
-}
-
-bool wxAppTraits::IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd)
-{
-    return fd == (execData.pipeEndProcDetect)[wxPipe::Write];
-}
-
-void wxAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& execData)
-{
-    execData.pipeEndProcDetect.Detach(wxPipe::Write);
-    execData.pipeEndProcDetect.Close();
-}
 
 int wxAppTraits::AddProcessCallback(wxEndProcessData *data, int fd)
 {

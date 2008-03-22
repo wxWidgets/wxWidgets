@@ -26,20 +26,6 @@ public:
     // wxExecute() support methods
     // ---------------------------
 
-    // called before starting the child process and creates the pipe used for
-    // detecting the process termination asynchronously in GUI, does nothing in
-    // wxBase
-    //
-    // if it returns false, we should return from wxExecute() with an error
-    virtual bool CreateEndProcessPipe(wxExecuteData& execData);
-
-    // test if the given descriptor is the end of the pipe create by the
-    // function above
-    virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
-
-    // ensure that the write end of the pipe is not closed by wxPipe dtor
-    virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
-
     // wait for the process termination, return whatever wxExecute() must
     // return
     //
