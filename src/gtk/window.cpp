@@ -185,9 +185,11 @@ extern wxCursor   g_globalCursor;
 static wxWindowGTK  *g_captureWindow = (wxWindowGTK*) NULL;
 static bool g_captureWindowHasMouse = false;
 
-// The window that currently has focus or is scheduled to get it in the next
-// event loop iteration
-static wxWindowGTK *gs_focusWindow = NULL;
+// The window that currently has focus:
+static wxWindowGTK *gs_currentFocus = NULL;
+// The window that is scheduled to get focus in the next event loop iteration
+// or NULL if there's no pending focus change:
+static wxWindowGTK *gs_pendingFocus = NULL;
 
 // the window that has deferred focus-out event pending, if any (see
 // GTKAddDeferredFocusOut() for details)
@@ -1382,7 +1384,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
         return TRUE;
 
     if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() &&
-        (gs_focusWindow != win) /* && win->IsFocusable() */)
+        (gs_currentFocus != win) /* && win->IsFocusable() */)
     {
         win->SetFocus();
     }
@@ -1901,8 +1903,9 @@ public:
 
 wxWindow *wxWindowBase::DoFindFocus()
 {
+    wxWindowGTK *focus = gs_pendingFocus ? gs_pendingFocus : gs_currentFocus;
     // the cast is necessary when we compile in wxUniversal mode
-    return wx_static_cast(wxWindow*, gs_focusWindow);
+    return wx_static_cast(wxWindow*, focus);
 }
 
 //-----------------------------------------------------------------------------
@@ -2146,8 +2149,10 @@ wxWindowGTK::~wxWindowGTK()
 {
     SendDestroyEvent();
 
-    if (gs_focusWindow == this)
-        gs_focusWindow = NULL;
+    if (gs_currentFocus == this)
+        gs_currentFocus = NULL;
+    if (gs_pendingFocus == this)
+        gs_pendingFocus = NULL;
 
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
@@ -2917,9 +2922,8 @@ bool wxWindowGTK::GTKHandleFocusIn()
     if (m_imData)
         gtk_im_context_focus_in(m_imData->context);
 
-    // NB: SetFocus() does this assignment too, but not all focus changes
-    //     originate from SetFocus() call
-    gs_focusWindow = this;
+    gs_currentFocus = this;
+    gs_pendingFocus = NULL;
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
@@ -2981,22 +2985,22 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
     if (m_imData)
         gtk_im_context_focus_out(m_imData->context);
 
-    if ( gs_focusWindow != this )
+    if ( gs_currentFocus != this )
     {
-        // Something is terribly wrong, gs_focusWindow is out of sync with the
+        // Something is terribly wrong, gs_currentFocus is out of sync with the
         // real focus. We will reset it to NULL anyway, because after this
         // focus-out event is handled, one of the following with happen:
         //
         // * either focus will go out of the app altogether, in which case
-        //   gs_focusWindow _should_ be NULL
+        //   gs_currentFocus _should_ be NULL
         //
         // * or it goes to another control, in which case focus-in event will
-        //   follow immediately and it will set gs_focusWindow to the right
+        //   follow immediately and it will set gs_currentFocus to the right
         //   value
         wxLogDebug("window %s(%p, %s) lost focus even though it didn't have it",
                    GetClassInfo()->GetClassName(), this, GetLabel());
     }
-    gs_focusWindow = NULL;
+    gs_currentFocus = NULL;
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
@@ -3047,7 +3051,7 @@ void wxWindowGTK::SetFocus()
     // Because we want to FindFocus() call immediately following
     // foo->SetFocus() to return foo, we have to keep track of "pending" focus
     // ourselves.
-    gs_focusWindow = this;
+    gs_pendingFocus = this;
 
     GtkWidget *widget = m_wxwindow ? m_wxwindow : m_focusWidget;
 
