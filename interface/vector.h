@@ -18,7 +18,7 @@
 
     Please refer to the STL documentation for further information.
 
-    @library{wxbase}
+    @nolibrary
     @category{containers}
 
     @see @ref overview_container, wxListT, wxArrayT
