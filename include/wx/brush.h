@@ -80,7 +80,14 @@ public:
 class WXDLLIMPEXP_CORE wxBrushList: public wxGDIObjListBase
 {
 public:
-    wxBrush *FindOrCreateBrush(const wxColour& colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
+    wxBrush *FindOrCreateBrush(const wxColour& colour,
+                               wxBrushStyle style = wxBRUSHSTYLE_SOLID);
+
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+    wxBrush *FindOrCreateBrush(const wxColour& colour, int style)
+        { return FindOrCreateBrush(colour, (wxBrushStyle)style); }
+#endif
+
 #if WXWIN_COMPATIBILITY_2_6
     wxDEPRECATED( void AddBrush(wxBrush*) );
     wxDEPRECATED( void RemoveBrush(wxBrush*) );
