@@ -20,6 +20,7 @@
  @li @subpage page_introduction
  @li @subpage page_multiplatform
  @li @subpage page_utils
+ @li @subpage page_samples
  @li @subpage page_strategies
  @li @subpage page_libs
  @li @subpage page_constants

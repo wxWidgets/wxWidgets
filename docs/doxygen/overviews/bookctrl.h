@@ -38,7 +38,7 @@ displayed one page at a time. wxWidgets has five variants of this control:
 @li wxTreebook: controlled by a wxTreeCtrl
 @li wxToolbook: controlled by a wxToolBar
 
-See the @ref page_utils_samples_notebook for an example of wxBookCtrl usage.
+See the @ref page_samples_notebook for an example of wxBookCtrl usage.
 
 
 @section overview_bookctrl_bestbookctrl Best Book
