@@ -77,7 +77,7 @@ public:
     */
     bool GetAttribute(const wxString& attrName, wxString* value) const;
     const wxString  GetAttribute(const wxString& attrName,
-                                 const wxString& defaultVal) const;
+                                 const wxString& defaultVal = wxEmptyString) const;
     //@}
 
     /**
@@ -132,9 +132,9 @@ public:
         This function is very useful since the XML snippet @c
         "tagnametagcontent/tagname" is represented by
         expat with the following tag tree:
-        
+
         or eventually:
-        
+
         An empty string is returned if the node has no children of type @c
         wxXML_TEXT_NODE or @c wxXML_CDATA_SECTION_NODE, or if the content of the first child of such types is empty.
     */

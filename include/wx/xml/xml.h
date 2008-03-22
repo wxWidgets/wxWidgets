@@ -154,7 +154,7 @@ public:
     wxXmlAttribute *GetAttributes() const { return m_attrs; }
     bool GetAttribute(const wxString& attrName, wxString *value) const;
     wxString GetAttribute(const wxString& attrName,
-                         const wxString& defaultVal) const;
+                          const wxString& defaultVal = wxEmptyString) const;
     bool HasAttribute(const wxString& attrName) const;
 
     int GetLineNumber() const { return m_lineNo; }
@@ -208,7 +208,7 @@ private:
     wxString m_content;
     wxXmlAttribute *m_attrs;
     wxXmlNode *m_parent, *m_children, *m_next;
-    int m_lineNo; // line number in original file, or -1 
+    int m_lineNo; // line number in original file, or -1
 
     void DoCopy(const wxXmlNode& node);
 };
@@ -262,7 +262,7 @@ public:
                       const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
     virtual bool Load(wxInputStream& stream,
                       const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
-    
+
     // Saves document as .xml file.
     virtual bool Save(const wxString& filename, int indentstep = 1) const;
     virtual bool Save(wxOutputStream& stream, int indentstep = 1) const;
