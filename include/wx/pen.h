@@ -116,7 +116,9 @@ public:
 class WXDLLIMPEXP_CORE wxPenList: public wxGDIObjListBase
 {
 public:
-    wxPen *FindOrCreatePen(const wxColour& colour, int width, wxPenStyle style);
+    wxPen *FindOrCreatePen(const wxColour& colour,
+                           int width = 1,
+                           wxPenStyle style = wxPENSTYLE_SOLID);
 
 #if FUTURE_WXWIN_COMPATIBILITY_3_0
     wxPen *FindOrCreatePen(const wxColour& colour, int width, int style)

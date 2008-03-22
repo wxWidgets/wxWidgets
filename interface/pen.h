@@ -455,7 +455,9 @@ public:
         @param style
             Pen style. See ::wxPenStyle for a list of styles.
     */
-    wxPen* FindOrCreatePen(const wxColour& colour, int width, wxPenStyle style);
+    wxPen* FindOrCreatePen(const wxColour& colour,
+                           int width = 1,
+                           wxPenStyle style = wxPENSTYLE_SOLID);
 };
 
 /**
