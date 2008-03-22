@@ -1011,20 +1011,20 @@ void wxTabView::OnTabActivate(int /*activateId*/, int /*deactivateId*/)
 void wxTabView::SetHighlightColour(const wxColour& col)
 {
   m_highlightColour = col;
-  m_highlightPen = wxThePenList->FindOrCreatePen(col, 1, wxSOLID);
+  m_highlightPen = wxThePenList->FindOrCreatePen(col);
 }
 
 void wxTabView::SetShadowColour(const wxColour& col)
 {
   m_shadowColour = col;
-  m_shadowPen = wxThePenList->FindOrCreatePen(col, 1, wxSOLID);
+  m_shadowPen = wxThePenList->FindOrCreatePen(col);
 }
 
 void wxTabView::SetBackgroundColour(const wxColour& col)
 {
   m_backgroundColour = col;
-  m_backgroundPen = wxThePenList->FindOrCreatePen(col, 1, wxSOLID);
-  m_backgroundBrush = wxTheBrushList->FindOrCreateBrush(col, wxSOLID);
+  m_backgroundPen = wxThePenList->FindOrCreatePen(col);
+  m_backgroundBrush = wxTheBrushList->FindOrCreateBrush(col);
 }
 
 // this may be called with sel = zero (which doesn't match any page)
