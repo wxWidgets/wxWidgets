@@ -727,6 +727,15 @@ void MyFrame::OnShell(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
 {
+    if ( !m_cmdLast )
+    {
+#ifdef __WXMSW__
+        m_cmdLast = "type Makefile.in";
+#else
+        m_cmdLast = "cat -n Makefile";
+#endif
+    }
+
     wxString cmd = wxGetTextFromUser(_T("Enter the command: "),
                                      DIALOG_TITLE,
                                      m_cmdLast);
