@@ -212,10 +212,15 @@ public:
     wxWindow* GetWindow() const;
 
     /**
-        Returns @true if this item is a window or a spacer and it is shown or if this
-        item is a sizer and not all its elements are hidden. In other words, for sizer
-        items, all of the child elements must be hidden for the sizer itself to be
-        considered hidden.
+        Returns @true if this item is a window or a spacer and it is shown or
+        if this item is a sizer and not all of its elements are hidden.
+
+        In other words, for sizer items, all of the child elements must be
+        hidden for the sizer itself to be considered hidden.
+
+        As an exception, if the @c wxRESERVE_SPACE_EVEN_IF_HIDDEN flag was
+        used for this sizer item, then IsShown() always returns @true for it
+        (see wxSizerFlags::ReserveSpaceEvenIfHidden()).
     */
     bool IsShown() const;
 
@@ -409,6 +414,17 @@ public:
         the window should be also set as its minimal size.
     */
     wxSizerFlags FixedMinSize();
+
+    /**
+        Set the @c wxRESERVE_SPACE_EVEN_IF_HIDDEN flag. Normally wxSizers
+        don't allocate space for hidden windows or other items. This flag
+        overrides this behavior so that sufficient space is allocated for the
+        window even if it isn't visible. This makes it possible to dynamically
+        show and hide controls without resizing parent dialog, for example.
+
+        @since 2.8.8
+    */
+    wxSizerFlags& ReserveSpaceEvenIfHidden();
 
     /**
         Returns the border used by default in Border() method.
@@ -694,6 +710,13 @@ public:
              item changes and its best size becomes different. If you would
              rather have a window item stay the size it started with then use
              wxFIXED_MINSIZE.}
+    @itemdef{wxRESERVE_SPACE_EVEN_IF_HIDDEN,
+             Normally wxSizers don't allocate space for hidden windows or other
+             items. This flag overrides this behavior so that sufficient space
+             is allocated for the window even if it isn't visible. This makes
+             it possible to dynamically show and hide controls without resizing
+             parent dialog, for example. (Available since 2.8.8.)
+             }
     @itemdef{wxALIGN_CENTER<br>
              wxALIGN_CENTRE<br>
              wxALIGN_LEFT<br>
@@ -1096,16 +1119,26 @@ public:
     */
     wxSizerItem* InsertStretchSpacer(size_t index, int prop = 1);
 
-    //@{
     /**
-        Returns @true if the @e window, @e sizer, or item at @a index is shown.
+        Returns @true if the @e window is shown.
 
-        @see Hide(), Show()
+        @see Hide(), Show(), wxSizerItem::IsShown()
     */
     bool IsShown(wxWindow* window) const;
-    const bool IsShown(wxSizer* sizer) const;
-    const bool IsShown(size_t index) const;
-    //@}
+
+    /**
+        Returns @true if the @e sizer is shown.
+
+        @see Hide(), Show(), wxSizerItem::IsShown()
+    */
+    bool IsShown(wxSizer* sizer) const;
+
+    /**
+        Returns @true if the item at @a index is shown.
+
+        @see Hide(), Show(), wxSizerItem::IsShown()
+    */
+    bool IsShown(size_t index) const;
 
     /**
         Call this to force layout of the children anew, e.g. after having added a child
