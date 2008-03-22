@@ -12,6 +12,7 @@
 #ifndef _WX_UNIX_APPTBASE_H_
 #define _WX_UNIX_APPTBASE_H_
 
+struct wxEndProcessData;
 struct wxExecuteData;
 class wxPipe;
 
@@ -41,7 +42,20 @@ public:
 
     // wait for the process termination, return whatever wxExecute() must
     // return
-    virtual int WaitForChild(wxExecuteData& execData) = 0;
+    //
+    // base class implementation handles all cases except wxEXEC_SYNC without
+    // wxEXEC_NOEVENTS one which is implemented at the GUI level
+    virtual int WaitForChild(wxExecuteData& execData);
+
+    // integrate the monitoring of the given fd with the port-specific event
+    // loop: when this fd, which corresponds to a dummy pipe opened between the
+    // parent and child processes, is closed by the child, the parent is
+    // notified about this via a call to wxHandleProcessTermination() function
+    //
+    // the default implementation uses wxFDIODispatcher and so is suitable for
+    // the console applications or ports which don't have any specific event
+    // loop
+    virtual int AddProcessCallback(wxEndProcessData *data, int fd);
 
 
     // wxThread helpers

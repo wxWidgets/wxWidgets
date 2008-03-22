@@ -29,6 +29,7 @@
     #include "wx/event.h"
 #endif
 
+#include "wx/apptrait.h"
 #include "wx/longlong.h"
 
 #include <sys/time.h>
@@ -254,6 +255,11 @@ wxUsecClock_t wxGetLocalTimeUsec()
 #endif // HAVE_GETTIMEOFDAY
 
     return wxGetLocalTimeMillis() * 1000L;
+}
+
+wxTimerImpl *wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+    return new wxUnixTimerImpl(timer);
 }
 
 #endif // wxUSE_TIMER

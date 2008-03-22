@@ -96,7 +96,7 @@ static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
     XtRemoveInput(*id);
 }
 
-int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
+int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
     XtInputId id = XtAppAddInput((XtAppContext) wxTheApp->GetAppContext(),
                                  fd,

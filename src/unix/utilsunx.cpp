@@ -41,6 +41,7 @@
 
 #include "wx/wfstream.h"
 
+#include "wx/private/fdiodispatcher.h"
 #include "wx/unix/execute.h"
 #include "wx/unix/private.h"
 
@@ -1220,29 +1221,9 @@ bool wxHandleFatalExceptions(bool doit)
 
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#endif // wxUSE_BASE
-
-#ifdef __DARWIN__
-    #include <sys/errno.h>
-#endif
 // ----------------------------------------------------------------------------
 // wxExecute support
 // ----------------------------------------------------------------------------
-
-/*
-    NOTE: If this proves not to work well for wxMac then move back to the old
-    behavior.  If, however, it proves to work just fine, nuke all of the code
-    for the old behavior.  I strongly suggest backporting this to 2.8 as well.
-    However, beware that while you can nuke the old code here, you cannot
-    nuke the wxAddProcessCallbackForPid from the 2.8 branch (found in
-    utilsexc_cf since it's an exported symbol).
- */
-// #define USE_OLD_DARWIN_END_PROCESS_DETECT (defined(__DARWIN__) && defined(__WXMAC__))
-#define USE_OLD_DARWIN_END_PROCESS_DETECT 0
-
-// wxMac/wxCocoa don't use the same process end detection mechanisms so we don't
-// need wxExecute-related helpers for them
-#if !USE_OLD_DARWIN_END_PROCESS_DETECT
 
 bool wxAppTraits::CreateEndProcessPipe(wxExecuteData& execData)
 {
@@ -1260,261 +1241,152 @@ void wxAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& execData)
     execData.pipeEndProcDetect.Close();
 }
 
-#else // !Darwin
-
-bool wxAppTraits::CreateEndProcessPipe(wxExecuteData& WXUNUSED(execData))
+int wxAppTraits::AddProcessCallback(wxEndProcessData *data, int fd)
 {
-    return true;
-}
-
-bool
-wxAppTraits::IsWriteFDOfEndProcessPipe(wxExecuteData& WXUNUSED(execData),
-                                          int WXUNUSED(fd))
-{
-    return false;
-}
-
-void
-wxAppTraits::DetachWriteFDOfEndProcessPipe(wxExecuteData& WXUNUSED(execData))
-{
-    // nothing to do here, we don't use the pipe
-}
-
-#endif // !Darwin/Darwin
-
-#if wxUSE_GUI
-
-int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
-{
-    wxEndProcessData *endProcData = new wxEndProcessData;
-
-    const int flags = execData.flags;
-
-    // wxAddProcessCallback is now (with DARWIN) allowed to call the
-    // callback function directly if the process terminates before
-    // the callback can be added to the run loop. Set up the endProcData.
-    if ( flags & wxEXEC_SYNC )
+    // define a custom handler processing only the closure of the descriptor
+    struct wxEndProcessFDIOHandler : public wxFDIOHandler
     {
-        // we may have process for capturing the program output, but it's
-        // not used in wxEndProcessData in the case of sync execution
-        endProcData->process = NULL;
+        wxEndProcessFDIOHandler(wxEndProcessData *data, int fd)
+            : m_data(data), m_fd(fd)
+        {}
 
-        // sync execution: indicate it by negating the pid
-        endProcData->pid = -execData.pid;
+        virtual void OnReadWaiting()
+            { wxFAIL_MSG("this isn't supposed to happen"); }
+        virtual void OnWriteWaiting()
+            { wxFAIL_MSG("this isn't supposed to happen"); }
+
+        virtual void OnExceptionWaiting()
+        {
+            const int pid = m_data->pid > 0 ? m_data->pid : -(m_data->pid);
+            int status = 0;
+
+            // has the process really terminated?
+            int rc = waitpid(pid, &status, WNOHANG);
+            if ( rc == 0 )
+            {
+                // This can only happen if the child application closes our
+                // dummy pipe that is used to monitor its lifetime; in that
+                // case, our best bet is to pretend the process did terminate,
+                // because otherwise wxExecute() would hang indefinitely
+                // (OnExceptionWaiting() won't be called again, the descriptor
+                // is closed now).
+                wxLogDebug("Child process (PID %d) still alive, "
+                           "even though pipe was closed.", pid);
+            }
+            else if ( rc == -1 )
+            {
+                // As above, if waitpid() fails, the best we can do is to log the
+                // error and pretend the child terminated:
+                wxLogSysError(_("Failed to check child process' status"));
+            }
+
+            // set exit code to -1 if something bad happened
+            m_data->exitcode = rc > 0 && WIFEXITED(status) ? WEXITSTATUS(status)
+                                                           : -1;
+
+            wxLogTrace("exec",
+                       "Child process (PID %d) terminated with exit code %d",
+                       pid, m_data->exitcode);
+
+            // child exited, end waiting
+            wxFDIODispatcher::Get()->UnregisterFD(m_fd);
+            close(m_fd);
+
+            wxHandleProcessTermination(m_data);
+
+            delete this;
+        }
+
+        wxEndProcessData * const m_data;
+        const int m_fd;
+    };
+
+    wxFDIODispatcher::Get()->RegisterFD
+                             (
+                                 fd,
+                                 new wxEndProcessFDIOHandler(data, fd),
+                                 wxFDIO_EXCEPTION
+                             );
+    return fd; // unused, but return something unique for the tag
+}
+
+int wxAppTraits::WaitForChild(wxExecuteData& execData)
+{
+    if ( execData.flags & wxEXEC_SYNC )
+    {
+        // just block waiting for the child to exit
+        int status = 0;
+
+        int result = waitpid(execData.pid, &status, 0);
+#ifdef __DARWIN__
+        /*  DE: waitpid manpage states that waitpid can fail with EINTR
+            if the call is interrupted by a caught signal.  I suppose
+            that means that this ought to be a while loop.
+
+            The odd thing is that it seems to fail EVERY time.  It fails
+            with a quickly exiting process (e.g. echo), and fails with a
+            slowly exiting process (e.g. sleep 2) but clearly after
+            having waited for the child to exit. Maybe it's a bug in
+            my particular version.
+
+            It works, however, from the CFSocket callback without this
+            trick but in that case it's used only after CFSocket calls
+            the callback and with the WNOHANG flag which would seem to
+            preclude it from being interrupted or at least make it much
+            less likely since it would not then be waiting.
+
+            If Darwin's man page is to be believed then this is definitely
+            necessary.  It's just weird that I've never seen it before
+            and apparently no one else has either or you'd think they'd
+            have reported it by now.  Perhaps blocking the GUI while
+            waiting for a child process to exit is simply not that common.
+         */
+        if ( result == -1 && errno == EINTR )
+        {
+            result = waitpid(execData.pid, &status, 0);
+        }
+#endif // __DARWIN__
+
+        if ( result == -1 )
+        {
+            wxLogLastError("waitpid");
+        }
+        else // child terminated
+        {
+            wxASSERT_MSG( result == execData.pid,
+                          "unexpected waitpid() return value" );
+
+            if ( WIFEXITED(status) )
+            {
+                return WEXITSTATUS(status);
+            }
+            else // abnormal termination?
+            {
+                wxASSERT_MSG( WIFSIGNALED(status),
+                              "unexpected child wait status" );
+            }
+        }
+
+        wxLogSysError(_("Waiting for subprocess termination failed"));
+
+        return -1;
     }
-    else
+    else // asynchronous execution
     {
-        // async execution, nothing special to do -- caller will be
-        // notified about the process termination if process != NULL, endProcData
-        // will be deleted in GTK_EndProcessDetector
+        wxEndProcessData *endProcData = new wxEndProcessData;
         endProcData->process  = execData.process;
         endProcData->pid      = execData.pid;
-    }
-
-
-    if ( !(flags & wxEXEC_NOEVENTS) )
-    {
-#if USE_OLD_DARWIN_END_PROCESS_DETECT
-        endProcData->tag = wxAddProcessCallbackForPid(endProcData, execData.pid);
-#else
-        endProcData->tag = wxAddProcessCallback
+        endProcData->tag = AddProcessCallback
                            (
                              endProcData,
                              execData.pipeEndProcDetect.Detach(wxPipe::Read)
                            );
 
         execData.pipeEndProcDetect.Close();
-#endif // USE_OLD_DARWIN_END_PROCESS_DETECT
-    }
-
-    if ( flags & wxEXEC_SYNC )
-    {
-        wxBusyCursor bc;
-        int exitcode = 0;
-
-        wxWindowDisabler *wd = flags & (wxEXEC_NODISABLE | wxEXEC_NOEVENTS)
-                                    ? NULL
-                                    : new wxWindowDisabler;
-
-        if ( flags & wxEXEC_NOEVENTS )
-        {
-            // just block waiting for the child to exit
-            int status = 0;
-
-            int result = waitpid(execData.pid, &status, 0);
-#ifdef __DARWIN__
-            /*  DE: waitpid manpage states that waitpid can fail with EINTR
-                if the call is interrupted by a caught signal.  I suppose
-                that means that this ought to be a while loop.
-
-                The odd thing is that it seems to fail EVERY time.  It fails
-                with a quickly exiting process (e.g. echo), and fails with a
-                slowly exiting process (e.g. sleep 2) but clearly after
-                having waited for the child to exit. Maybe it's a bug in
-                my particular version.
-
-                It works, however, from the CFSocket callback without this
-                trick but in that case it's used only after CFSocket calls
-                the callback and with the WNOHANG flag which would seem to
-                preclude it from being interrupted or at least make it much
-                less likely since it would not then be waiting.
-
-                If Darwin's man page is to be believed then this is definitely
-                necessary.  It's just weird that I've never seen it before
-                and apparently no one else has either or you'd think they'd
-                have reported it by now.  Perhaps blocking the GUI while
-                waiting for a child process to exit is simply not that common.
-             */
-            if(result == -1 && errno == EINTR)
-            {
-                result = waitpid(execData.pid, &status, 0);
-            }
-
-#endif
-
-            if ( result == -1 )
-            {
-                wxLogLastError(_T("waitpid"));
-                exitcode = -1;
-            }
-            else
-            {
-                wxASSERT_MSG( result == execData.pid,
-                              _T("unexpected waitpid() return value") );
-
-                if ( WIFEXITED(status) )
-                {
-                    exitcode = WEXITSTATUS(status);
-                }
-                else // abnormal termination?
-                {
-                    wxASSERT_MSG( WIFSIGNALED(status),
-                                  _T("unexpected child wait status") );
-                    exitcode = -1;
-                }
-            }
-        }
-        else // !wxEXEC_NOEVENTS
-        {
-            // endProcData->pid will be set to 0 from
-            // wxHandleProcessTermination when the process terminates
-            while ( endProcData->pid != 0 )
-            {
-                bool idle = true;
-
-#if HAS_PIPE_INPUT_STREAM
-                if ( execData.bufOut )
-                {
-                    execData.bufOut->Update();
-                    idle = false;
-                }
-
-                if ( execData.bufErr )
-                {
-                    execData.bufErr->Update();
-                    idle = false;
-                }
-#endif // HAS_PIPE_INPUT_STREAM
-
-                // don't consume 100% of the CPU while we're sitting in this
-                // loop
-                if ( idle )
-                    wxMilliSleep(1);
-
-                // give GTK+ a chance to call GTK_EndProcessDetector here and
-                // also repaint the GUI
-                wxYield();
-            }
-
-            exitcode = endProcData->exitcode;
-        }
-
-        delete wd;
-        delete endProcData;
-
-        return exitcode;
-    }
-    else // async execution
-    {
         return execData.pid;
+
     }
 }
-
-#endif //wxUSE_GUI
-
-#if wxUSE_BASE
-
-#ifdef wxHAS_GENERIC_PROCESS_CALLBACK
-struct wxEndProcessFDIOHandler : public wxFDIOHandler
-{
-    wxEndProcessFDIOHandler(wxEndProcessData *data, int fd)
-        : m_data(data), m_fd(fd)
-    {}
-
-    virtual void OnReadWaiting()
-        { wxFAIL_MSG("this isn't supposed to happen"); }
-    virtual void OnWriteWaiting()
-        { wxFAIL_MSG("this isn't supposed to happen"); }
-
-    virtual void OnExceptionWaiting()
-    {
-        int pid = (m_data->pid > 0) ? m_data->pid : -(m_data->pid);
-        int status = 0;
-
-        // has the process really terminated?
-        int rc = waitpid(pid, &status, WNOHANG);
-        if ( rc == 0 )
-        {
-            // This can only happen if the child application closes our dummy
-            // pipe that is used to monitor its lifetime; in that case, our
-            // best bet is to pretend the process did terminate, because
-            // otherwise wxExecute() would hang indefinitely
-            // (OnExceptionWaiting() won't be called again, the descriptor
-            // is closed now).
-            wxLogDebug("Child process (PID %i) still alive, even though notification was received that it terminated.", pid);
-        }
-        else if ( rc == -1 )
-        {
-            // As above, if waitpid() fails, the best we can do is to log the
-            // error and pretend the child terminated:
-            wxLogSysError(_("Failed to check child process' status"));
-        }
-
-        // set exit code to -1 if something bad happened
-        m_data->exitcode = (rc > 0 && WIFEXITED(status))
-                           ? WEXITSTATUS(status)
-                           : -1;
-
-        wxLogTrace("exec",
-                   "Child process (PID %i) terminated with exit code %i",
-                   pid, m_data->exitcode);
-
-        // child exited, end waiting
-        wxFDIODispatcher::Get()->UnregisterFD(m_fd);
-        close(m_fd);
-
-        m_data->fdioHandler = NULL;
-        wxHandleProcessTermination(m_data);
-
-        delete this;
-    }
-
-    wxEndProcessData *m_data;
-    int m_fd;
-};
-
-int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
-{
-    proc_data->fdioHandler = new wxEndProcessFDIOHandler(proc_data, fd);
-    wxFDIODispatcher::Get()->RegisterFD
-                             (
-                                 fd,
-                                 proc_data->fdioHandler,
-                                 wxFDIO_EXCEPTION
-                             );
-    return fd; // unused, but return something unique for the tag
-}
-#endif // wxHAS_GENERIC_PROCESS_CALLBACK
 
 void wxHandleProcessTermination(wxEndProcessData *proc_data)
 {
@@ -1527,13 +1399,91 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
     // clean up
     if ( proc_data->pid > 0 )
     {
-       delete proc_data;
+        // async execution
+        delete proc_data;
     }
-    else
+    else // sync execution
     {
-       // let wxExecute() know that the process has terminated
-       proc_data->pid = 0;
+        // let wxExecute() know that the process has terminated
+        proc_data->pid = 0;
     }
 }
 
 #endif // wxUSE_BASE
+
+#if wxUSE_GUI
+
+int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
+{
+    const int flags = execData.flags;
+    if ( !(flags & wxEXEC_SYNC) || (flags & wxEXEC_NOEVENTS) )
+    {
+        // async or blocking sync cases are already handled by the base class
+        // just fine, no need to duplicate its code here
+        return wxAppTraits::WaitForChild(execData);
+    }
+
+    // here we're dealing with the case of synchronous execution when we want
+    // to process the GUI events while waiting for the child termination
+
+    wxEndProcessData endProcData;
+
+    // we may have process for capturing the program output, but it's
+    // not used in wxEndProcessData in the case of sync execution
+    endProcData.process = NULL;
+
+    // sync execution: indicate it by negating the pid
+    endProcData.pid = -execData.pid;
+
+    endProcData.tag = AddProcessCallback
+                      (
+                         &endProcData,
+                         execData.pipeEndProcDetect.Detach(wxPipe::Read)
+                      );
+
+    execData.pipeEndProcDetect.Close();
+
+
+    // prepare to wait for the child termination: show to the user that we're
+    // busy and refuse all input unless explicitly told otherwise
+    wxBusyCursor bc;
+    wxWindowDisabler *wd = flags & wxEXEC_NODISABLE ? NULL
+                                                    : new wxWindowDisabler;
+
+    // endProcData.pid will be set to 0 from wxHandleProcessTermination() when
+    // the process terminates
+    while ( endProcData.pid != 0 )
+    {
+#if HAS_PIPE_INPUT_STREAM
+        bool idle = true;
+
+        if ( execData.bufOut )
+        {
+            execData.bufOut->Update();
+            idle = false;
+        }
+
+        if ( execData.bufErr )
+        {
+            execData.bufErr->Update();
+            idle = false;
+        }
+
+        // don't consume 100% of the CPU while we're sitting in this
+        // loop
+        if ( idle )
+#endif // HAS_PIPE_INPUT_STREAM
+            wxMilliSleep(1);
+
+        // give the toolkit a chance to call wxHandleProcessTermination() here
+        // and also repaint the GUI and handle other accumulated events
+        wxYield();
+    }
+
+    delete wd;
+
+    return endProcData.exitcode;
+}
+
+#endif //wxUSE_GUI
+

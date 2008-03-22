@@ -24,216 +24,6 @@
 
 #include <sys/wait.h>
 
-// Use polling instead of Mach ports, which doesn't work on Intel
-// due to task_for_pid security issues.
-
-// http://developer.apple.com/technotes/tn/tn2050.html
-
-// What's a better test for Intel vs PPC?
-#ifdef WORDS_BIGENDIAN
-#define USE_POLLING 0
-#else
-#define USE_POLLING 1
-#endif
-
-#if USE_POLLING
-
-#if wxUSE_THREADS
-class wxProcessTerminationEventHandler: public wxEvtHandler
-{
-  public:
-    wxProcessTerminationEventHandler(wxEndProcessData* data)
-    {
-        m_data = data;
-        Connect(-1, wxEVT_END_PROCESS, wxProcessEventHandler(wxProcessTerminationEventHandler::OnTerminate));
-    }
-
-    void OnTerminate(wxProcessEvent& event)
-    {
-        Disconnect(-1, wxEVT_END_PROCESS, wxProcessEventHandler(wxProcessTerminationEventHandler::OnTerminate));
-        wxHandleProcessTermination(m_data);
-
-        // NOTE: We don't use this to delay destruction until the next idle run but rather to
-        // avoid killing ourselves while our caller (which is our wxEvtHandler superclass
-        // ProcessPendingEvents) still needs our m_eventsLocker to be valid.
-        // Since we're in the GUI library we can guarantee that ScheduleForDestroy is using
-        // the GUI implementation which delays destruction and not the base implementation
-        // which does it immediately.
-        wxTheApp->GetTraits()->ScheduleForDestroy(this);
-    }
-
-    wxEndProcessData* m_data;
-};
-
-class wxProcessTerminationThread: public wxThread
-{
-  public:
-    wxProcessTerminationThread(wxEndProcessData* data, wxProcessTerminationEventHandler* handler): wxThread(wxTHREAD_DETACHED)
-    {
-        m_data = data;
-        m_handler = handler;
-    }
-
-    virtual void* Entry();
-
-    wxProcessTerminationEventHandler* m_handler;
-    wxEndProcessData* m_data;
-};
-
-// The problem with this is that we may be examining the
-// process e.g. in OnIdle at the point this cleans up the process,
-// so we need to delay until it's safe.
-
-void* wxProcessTerminationThread::Entry()
-{
-    while (true)
-    {
-        usleep(100);
-        int status = 0;
-        int rc = waitpid(abs(m_data->pid), & status, 0);
-        if (rc != 0)
-        {
-            if ((rc != -1) && WIFEXITED(status))
-                m_data->exitcode = WEXITSTATUS(status);
-            else
-                m_data->exitcode = -1;
-
-            wxProcessEvent event;
-            wxPostEvent(m_handler, event);
-
-            break;
-        }
-    }
-
-    return NULL;
-}
-
-int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
-{
-    if (pid < 1)
-        return -1;
-
-    wxProcessTerminationEventHandler* handler = new wxProcessTerminationEventHandler(proc_data);
-    wxProcessTerminationThread* thread = new wxProcessTerminationThread(proc_data, handler);
-
-    if (thread->Create() != wxTHREAD_NO_ERROR)
-    {
-        wxLogDebug(wxT("Could not create termination detection thread."));
-        delete thread;
-        delete handler;
-        return -1;
-    }
-
-    thread->Run();
-
-    return 0;
-}
-#else // !wxUSE_THREADS
-int wxAddProcessCallbackForPid(wxEndProcessData*, int)
-{
-    wxLogDebug(wxT("Could not create termination detection thread."));
-    return -1;
-}
-#endif // wxUSE_THREADS/!wxUSE_THREADS
-
-#else // !USE_POLLING
-
-#include <CoreFoundation/CFMachPort.h>
-extern "C" {
-#include <mach/mach.h>
-}
-
-void wxMAC_MachPortEndProcessDetect(CFMachPortRef WXUNUSED(port), void *data)
-{
-    wxEndProcessData *proc_data = (wxEndProcessData*)data;
-    wxLogDebug(wxT("Process ended"));
-    int status = 0;
-    int rc = waitpid(abs(proc_data->pid), &status, WNOHANG);
-    if(!rc)
-    {
-        wxLogDebug(wxT("Mach port was invalidated, but process hasn't terminated!"));
-        return;
-    }
-    if((rc != -1) && WIFEXITED(status))
-        proc_data->exitcode = WEXITSTATUS(status);
-    else
-        proc_data->exitcode = -1;
-    wxHandleProcessTermination(proc_data);
-}
-
-int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
-{
-    if(pid < 1)
-        return -1;
-    kern_return_t    kernResult;
-    mach_port_t    taskOfOurProcess;
-    mach_port_t    machPortForProcess;
-    taskOfOurProcess = mach_task_self();
-    if(taskOfOurProcess == MACH_PORT_NULL)
-    {
-        wxLogDebug(wxT("No mach_task_self()"));
-        return -1;
-    }
-    wxLogDebug(wxT("pid=%d"),pid);
-    kernResult = task_for_pid(taskOfOurProcess,pid, &machPortForProcess);
-    if(kernResult != KERN_SUCCESS)
-    {
-        wxLogDebug(wxT("no task_for_pid()"));
-        // try seeing if it is already dead or something
-        // FIXME: a better method would be to call the callback function
-        // from idle time until the process terminates. Of course, how
-        // likely is it that it will take more than 0.1 seconds for the
-        // mach terminate event to make its way to the BSD subsystem?
-        usleep(100); // sleep for 0.1 seconds
-        wxMAC_MachPortEndProcessDetect(NULL, (void*)proc_data);
-        return -1;
-    }
-    CFMachPortContext termcb_contextinfo;
-    termcb_contextinfo.version = 0;
-    termcb_contextinfo.info = (void*)proc_data;
-    termcb_contextinfo.retain = NULL;
-    termcb_contextinfo.release = NULL;
-    termcb_contextinfo.copyDescription = NULL;
-    CFMachPortRef    CFMachPortForProcess;
-    Boolean        ShouldFreePort;
-    CFMachPortForProcess = CFMachPortCreateWithPort(NULL, machPortForProcess, NULL, &termcb_contextinfo, &ShouldFreePort);
-    if(!CFMachPortForProcess)
-    {
-        wxLogDebug(wxT("No CFMachPortForProcess"));
-        mach_port_deallocate(taskOfOurProcess, machPortForProcess);
-        return -1;
-    }
-    if(ShouldFreePort)
-    {
-        kernResult = mach_port_deallocate(taskOfOurProcess, machPortForProcess);
-        if(kernResult!=KERN_SUCCESS)
-        {
-            wxLogDebug(wxT("Couldn't deallocate mach port"));
-            return -1;
-        }
-    }
-    CFMachPortSetInvalidationCallBack(CFMachPortForProcess, &wxMAC_MachPortEndProcessDetect);
-    CFRunLoopSourceRef    runloopsource;
-    runloopsource = CFMachPortCreateRunLoopSource(NULL,CFMachPortForProcess, (CFIndex)0);
-    if(!runloopsource)
-    {
-        wxLogDebug(wxT("Couldn't create runloopsource"));
-        return -1;
-    }
-
-    CFRelease(CFMachPortForProcess);
-
-    CFRunLoopAddSource(CFRunLoopGetCurrent(),runloopsource,kCFRunLoopDefaultMode);
-    CFRelease(runloopsource);
-    wxLogDebug(wxT("Successfully added notification to the runloop"));
-    return 0;
-}
-
-#endif // USE_POLLING/!USE_POLLING
-
-/////////////////////////////////////////////////////////////////////////////
-// New implementation avoiding mach ports entirely.
-
 #include <CoreFoundation/CFSocket.h>
 
 /*!
@@ -301,14 +91,14 @@ extern "C" void WXCF_EndProcessDetector(CFSocketRef s,
 }
 
 /*!
-    Implements the GUI-specific wxAddProcessCallback for both wxMac and
+    Implements the GUI-specific AddProcessCallback() for both wxMac and
     wxCocoa using the CFSocket/CFRunLoop API which is available to both.
     Takes advantage of the fact that sockets on UNIX are just regular
     file descriptors and thus even a non-socket file descriptor can
     apparently be used with CFSocket so long as you only tell CFSocket
     to do things with it that would be valid for a non-socket fd.
  */
-int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
+int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
     static int s_last_tag = 0;
     CFSocketContext context =
@@ -354,8 +144,6 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 
 // NOTE: This doesn't really belong here but this was a handy file to
 // put it in because it's already compiled for wxCocoa and wxMac GUI lib.
-#if wxUSE_GUI
-
 #if wxUSE_STDPATHS
 static wxStandardPathsCF gs_stdPaths;
 wxStandardPathsBase& wxGUIAppTraits::GetStandardPaths()
@@ -363,6 +151,4 @@ wxStandardPathsBase& wxGUIAppTraits::GetStandardPaths()
     return gs_stdPaths;
 }
 #endif
-
-#endif // wxUSE_GUI
 

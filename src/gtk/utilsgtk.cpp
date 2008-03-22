@@ -256,7 +256,7 @@ void GTK_EndProcessDetector(gpointer data, gint source,
 }
 }
 
-int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
+int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
     int tag = gdk_input_add(fd,
                             GDK_INPUT_READ,

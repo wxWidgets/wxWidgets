@@ -164,21 +164,3 @@ wxMouseState wxGetMouseState()
     return ms;
 }
 
-
-#ifdef __UNIX__
-
-int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
-{
-    wxFAIL_MSG(wxT("wxAddProcessCallback not implemented in wxMGL!"));
-    return 0;
-#if 0 // FIXME_MGL -do we need it at all?
-    int tag = gdk_input_add(fd,
-                            GDK_INPUT_READ,
-                            GTK_EndProcessDetector,
-                            (gpointer)proc_data);
-
-    return tag;
-#endif
-}
-
-#endif

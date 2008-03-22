@@ -1534,7 +1534,7 @@
 				/>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\gauge95.cpp"
+				RelativePath="..\..\src\msw\gauge.cpp"
 				>
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -1767,6 +1767,26 @@
 				/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\nativewin.cpp"
+				>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\notebook.cpp"
 				>
 				<FileConfiguration
@@ -1894,7 +1914,7 @@
 				RelativePath="..\..\src\msw\settings.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\msw\slider95.cpp"
+				RelativePath="..\..\src\msw\slider.cpp"
 				>
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -1994,26 +2014,6 @@
 				/>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\statbr95.cpp"
-				>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
 				RelativePath="..\..\src\msw\statline.cpp"
 				>
 				<FileConfiguration
@@ -2054,7 +2054,7 @@
 				/>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\tabctrl.cpp"
+				RelativePath="..\..\src\msw\statusbar.cpp"
 				>
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -2074,7 +2074,7 @@
 				/>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\tbar95.cpp"
+				RelativePath="..\..\src\msw\tabctrl.cpp"
 				>
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -2135,6 +2135,26 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\tglbtn.cpp"
+				>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\toolbar.cpp"
 				>
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -3603,7 +3623,7 @@
 				RelativePath="..\..\include\wx\msw\frame.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\msw\gauge95.h"
+				RelativePath="..\..\include\wx\msw\gauge.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\gdiimage.h"
@@ -3800,7 +3820,7 @@
 				RelativePath="..\..\include\wx\msw\setup0.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\msw\slider95.h"
+				RelativePath="..\..\include\wx\msw\slider.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\sound.h"
@@ -3818,22 +3838,19 @@
 				RelativePath="..\..\include\wx\msw\statbox.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\msw\statbr95.h"
-			/>
-			<File
 				RelativePath="..\..\include\wx\msw\statline.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\stattext.h"
 			/>
 			<File
+				RelativePath="..\..\include\wx\msw\statusbar.h"
+			/>
+			<File
 				RelativePath="..\..\include\wx\msw\tabctrl.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\taskbar.h"
-			/>
-			<File
-				RelativePath="..\..\include\wx\msw\tbar95.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\textctrl.h"
@@ -3843,6 +3860,9 @@
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\tglbtn.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\toolbar.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\tooltip.h"
@@ -4583,6 +4603,9 @@
 			/>
 			<File
 				RelativePath="..\..\include\wx\msgdlg.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\nativewin.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\nonownedwnd.h"

@@ -729,7 +729,6 @@ ALL_BASE_SOURCES =  \
 	src/common/selectdispatcher.cpp \
 	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/baseunix.cpp \
 	src/unix/evtloopunix.cpp \
 	src/unix/dlunix.cpp \
 	src/unix/snglinst.cpp \
@@ -3550,7 +3549,6 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_selectdispatcher.o \
 	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_baseunix.o \
 	monodll_evtloopunix.o \
 	monodll_dlunix.o \
 	monodll_snglinst.o \
@@ -3588,7 +3586,6 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_selectdispatcher.o \
 	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_baseunix.o \
 	monodll_evtloopunix.o \
 	monodll_dlunix.o \
 	monodll_snglinst.o \
@@ -3609,7 +3606,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_selectdispatcher.o \
 	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_baseunix.o \
 	monodll_evtloopunix.o \
 	monodll_dlunix.o \
 	monodll_snglinst.o \
@@ -3630,7 +3626,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_selectdispatcher.o \
 	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_baseunix.o \
 	monodll_evtloopunix.o \
 	monodll_dlunix.o \
 	monodll_snglinst.o \
@@ -3660,7 +3655,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_selectdispatcher.o \
 	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_baseunix.o \
 	monodll_evtloopunix.o \
 	monodll_dlunix.o \
 	monodll_snglinst.o \
@@ -3673,7 +3667,6 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_selectdispatcher.o \
 	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_baseunix.o \
 	monodll_evtloopunix.o \
 	monodll_dlunix.o \
 	monodll_snglinst.o \
@@ -3694,7 +3687,6 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_selectdispatcher.o \
 	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_baseunix.o \
 	monodll_evtloopunix.o \
 	monodll_dlunix.o \
 	monodll_snglinst.o \
@@ -5456,7 +5448,6 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_selectdispatcher.o \
 	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_baseunix.o \
 	monolib_evtloopunix.o \
 	monolib_dlunix.o \
 	monolib_snglinst.o \
@@ -5494,7 +5485,6 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_selectdispatcher.o \
 	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_baseunix.o \
 	monolib_evtloopunix.o \
 	monolib_dlunix.o \
 	monolib_snglinst.o \
@@ -5515,7 +5505,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_selectdispatcher.o \
 	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_baseunix.o \
 	monolib_evtloopunix.o \
 	monolib_dlunix.o \
 	monolib_snglinst.o \
@@ -5536,7 +5525,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_selectdispatcher.o \
 	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_baseunix.o \
 	monolib_evtloopunix.o \
 	monolib_dlunix.o \
 	monolib_snglinst.o \
@@ -5566,7 +5554,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_selectdispatcher.o \
 	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_baseunix.o \
 	monolib_evtloopunix.o \
 	monolib_dlunix.o \
 	monolib_snglinst.o \
@@ -5579,7 +5566,6 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_selectdispatcher.o \
 	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_baseunix.o \
 	monolib_evtloopunix.o \
 	monolib_dlunix.o \
 	monolib_snglinst.o \
@@ -5600,7 +5586,6 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_selectdispatcher.o \
 	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_baseunix.o \
 	monolib_evtloopunix.o \
 	monolib_dlunix.o \
 	monolib_snglinst.o \
@@ -7399,7 +7384,6 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_selectdispatcher.o \
 	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_baseunix.o \
 	basedll_evtloopunix.o \
 	basedll_dlunix.o \
 	basedll_snglinst.o \
@@ -7437,7 +7421,6 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_selectdispatcher.o \
 	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_baseunix.o \
 	basedll_evtloopunix.o \
 	basedll_dlunix.o \
 	basedll_snglinst.o \
@@ -7458,7 +7441,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_selectdispatcher.o \
 	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_baseunix.o \
 	basedll_evtloopunix.o \
 	basedll_dlunix.o \
 	basedll_snglinst.o \
@@ -7479,7 +7461,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_selectdispatcher.o \
 	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_baseunix.o \
 	basedll_evtloopunix.o \
 	basedll_dlunix.o \
 	basedll_snglinst.o \
@@ -7509,7 +7490,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_selectdispatcher.o \
 	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_baseunix.o \
 	basedll_evtloopunix.o \
 	basedll_dlunix.o \
 	basedll_snglinst.o \
@@ -7522,7 +7502,6 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_selectdispatcher.o \
 	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_baseunix.o \
 	basedll_evtloopunix.o \
 	basedll_dlunix.o \
 	basedll_snglinst.o \
@@ -7543,7 +7522,6 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_selectdispatcher.o \
 	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_baseunix.o \
 	basedll_evtloopunix.o \
 	basedll_dlunix.o \
 	basedll_snglinst.o \
@@ -7625,7 +7603,6 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_selectdispatcher.o \
 	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_baseunix.o \
 	baselib_evtloopunix.o \
 	baselib_dlunix.o \
 	baselib_snglinst.o \
@@ -7663,7 +7640,6 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_selectdispatcher.o \
 	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_baseunix.o \
 	baselib_evtloopunix.o \
 	baselib_dlunix.o \
 	baselib_snglinst.o \
@@ -7684,7 +7660,6 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_selectdispatcher.o \
 	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_baseunix.o \
 	baselib_evtloopunix.o \
 	baselib_dlunix.o \
 	baselib_snglinst.o \
@@ -7705,7 +7680,6 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_selectdispatcher.o \
 	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_baseunix.o \
 	baselib_evtloopunix.o \
 	baselib_dlunix.o \
 	baselib_snglinst.o \
@@ -7735,7 +7709,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_selectdispatcher.o \
 	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_baseunix.o \
 	baselib_evtloopunix.o \
 	baselib_dlunix.o \
 	baselib_snglinst.o \
@@ -7748,7 +7721,6 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_selectdispatcher.o \
 	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_baseunix.o \
 	baselib_evtloopunix.o \
 	baselib_dlunix.o \
 	baselib_snglinst.o \
@@ -7769,7 +7741,6 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_selectdispatcher.o \
 	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_baseunix.o \
 	baselib_evtloopunix.o \
 	baselib_dlunix.o \
 	baselib_snglinst.o \
@@ -14541,27 +14512,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@monodll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
-@COND_PLATFORM_UNIX_1@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
 @COND_PLATFORM_UNIX_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
@@ -19056,27 +19006,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@monolib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
-@COND_PLATFORM_UNIX_1@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
 @COND_PLATFORM_UNIX_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
@@ -23022,27 +22951,6 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_OS2_1@basedll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
-@COND_PLATFORM_UNIX_1@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
 @COND_PLATFORM_UNIX_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
@@ -23831,27 +23739,6 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 
 @COND_PLATFORM_OS2_1@baselib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
-
-@COND_PLATFORM_UNIX_1@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/baseunix.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
