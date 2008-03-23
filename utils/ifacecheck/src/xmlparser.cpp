@@ -21,23 +21,22 @@
 
 #include "wx/xml/xml.h"
 #include "wx/wfstream.h"
-#include "wx/arrimpl.cpp"
 #include "wx/hashmap.h"
 #include "wx/filename.h"
-
+#include "xmlparser.h"
 #include <errno.h>
 
-#include "xmlparser.h"
-
-#define PROGRESS_RATE             1000     // each PROGRESS_RATE nodes processed print a dot
-#define ESTIMATED_NUM_CLASSES     600      // used by both wxXmlInterface-derived classes to prealloc mem
-
+#include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY(wxTypeArray)
 WX_DEFINE_OBJARRAY(wxMethodArray)
 WX_DEFINE_OBJARRAY(wxClassArray)
 
 
-// declared in ifacecheck.cpp
+#define PROGRESS_RATE             1000     // each PROGRESS_RATE nodes processed print a dot
+#define ESTIMATED_NUM_CLASSES     600      // used by both wxXmlInterface-derived classes to prealloc mem
+
+
+// defined in ifacecheck.cpp
 extern bool g_verbose;
 
 
@@ -149,7 +148,8 @@ bool wxMethod::operator==(const wxMethod& m) const
         GetName() != m.GetName() ||
         IsConst() != m.IsConst() ||
         IsStatic() != m.IsStatic() ||
-        IsVirtual() != m.IsVirtual())
+        IsVirtual() != m.IsVirtual() ||
+        IsDeprecated() != m.IsDeprecated())
         return false;
 
     if (m_args.GetCount()!=m.m_args.GetCount())
@@ -192,6 +192,9 @@ wxString wxMethod::GetAsString() const
     if (m_bVirtual)
         ret = "virtual " + ret;
 
+    if (m_bDeprecated)
+        ret = "wxDEPRECATED( " + ret + " )";
+
     return ret;
 }
 
@@ -209,6 +212,8 @@ void wxMethod::Dump(wxTextOutputStream& stream) const
         stream << " STATIC";
     if (IsVirtual())
         stream << " VIRTUAL";
+    if (IsDeprecated())
+        stream << " DEPRECATED";
 
     // no final newline
 }
@@ -543,16 +548,26 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         }
         else if (n == "FunctionType" || n == "MethodType")
         {
-            /* TODO: incomplete */
+            /*
+                 TODO: parsing FunctionType and MethodType nodes is not as easy
+                       as for other "simple" types.
+            */
 
-            unsigned long ret = 0;
-            if (!getID(&ret, child->GetAttribute("returns")) || ret == 0) {
-                LogError("Invalid empty returns value for '%s' node", n);
-                return false;
+            wxString argstr;
+            wxXmlNode *arg = child->GetChildren();
+            while (arg)
+            {
+                if (arg->GetName() == "Argument")
+                    argstr += arg->GetAttribute("type") + ", ";
+                arg = arg->GetNext();
             }
 
+            if (argstr.Len() > 0)
+                argstr = argstr.Left(argstr.Len()-2);
+
             // these nodes make reference to other types... we'll resolve them later
-            toResolveTypes[id] = toResolveTypeItem(ret, 0);
+            //toResolveTypes[id] = toResolveTypeItem(ret, 0);
+            types[id] = child->GetAttribute("returns") + "(" + argstr + ")";
         }
         else if (n == "File")
         {
@@ -650,19 +665,8 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 }
                 else
                 {
-#if 1
                     LogError("Cannot solve '%s' reference type!", referenced);
                     return false;
-#else
-                    typeIds.Add(toResolveTypeIds[i]);
-                    typeNames.Add("TOFIX");
-
-                    // this one has been resolved!
-                    toResolveTypeIds.RemoveAt(i);
-                    toResolveRefType.RemoveAt(i);
-                    toResolveAttrib.RemoveAt(i);
-                    n--;
-#endif
                 }
             }
         }
@@ -819,6 +823,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     m.SetConst(p->GetAttribute("const") == "1");
     m.SetStatic(p->GetAttribute("static") == "1");
     m.SetVirtual(p->GetAttribute("virtual") == "1");
+    m.SetDeprecated(p->GetAttribute("attributes") == "deprecated");
 
     if (!m.IsOk()) {
         LogError("The prototype '%s' is not valid!", m.GetAsString());
@@ -1012,6 +1017,35 @@ static wxString GetTextFromChildren(const wxXmlNode *n)
     return text;
 }
 
+static bool HasTextNodeContaining(const wxXmlNode *parent, const wxString& name)
+{
+    wxXmlNode *p = parent->GetChildren();
+    while (p)
+    {
+        switch (p->GetType())
+        {
+            case wxXML_TEXT_NODE:
+                if (p->GetContent() == name)
+                    return true;
+                break;
+
+            case wxXML_ELEMENT_NODE:
+                // recurse into this node...
+                if (HasTextNodeContaining(p, name))
+                    return true;
+                break;
+
+            default:
+                // skip it
+                break;
+        }
+
+        p = p->GetNext();
+    }
+
+    return false;
+}
+
 bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxString& header)
 {
     wxTypeArray args;
@@ -1057,6 +1091,13 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
             if (child->GetAttribute("line").ToLong(&line))
                 m.SetLocation((int)line);
             header = child->GetAttribute("file");
+        }
+        else if (child->GetName() == "detaileddescription")
+        {
+            // when a method has a @deprecated tag inside its description,
+            // Doxygen outputs somewhere nested inside <detaileddescription>
+            // a <xreftitle>Deprecated</xreftitle> tag.
+            m.SetDeprecated(HasTextNodeContaining(child, "Deprecated"));
         }
 
         child = child->GetNext();

@@ -70,7 +70,9 @@ WX_DECLARE_OBJARRAY(wxType, wxTypeArray);
 class wxMethod
 {
 public:
-    wxMethod() { m_bConst=m_bVirtual=m_bStatic=false; m_nLine=-1; }
+    wxMethod()
+        { m_bConst=m_bVirtual=m_bStatic=m_bDeprecated=false; m_nLine=-1; }
+
     wxMethod(const wxType& rettype, const wxString& name,
              const wxTypeArray& arguments, const wxArrayString& defaults,
              bool isConst, bool isStatic, bool isVirtual)
@@ -110,6 +112,9 @@ public:     // getters
     bool IsDtor() const
         { return m_retType==wxEmptyType && m_strName.StartsWith("~"); }
 
+    bool IsDeprecated() const
+        { return m_bDeprecated; }
+
 
 public:     // setters
 
@@ -124,6 +129,8 @@ public:     // setters
         { m_bStatic=c; }
     void SetVirtual(bool c = true)
         { m_bVirtual=c; }
+    void SetDeprecated(bool c = true)
+        { m_bDeprecated=c; }
     void SetLocation(int lineNumber)
         { m_nLine=lineNumber; }
 
@@ -143,6 +150,7 @@ protected:
     bool m_bConst;
     bool m_bStatic;
     bool m_bVirtual;
+    bool m_bDeprecated;
     int m_nLine;
 };
 
