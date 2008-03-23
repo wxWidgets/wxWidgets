@@ -2137,7 +2137,7 @@ enum wxDeprecatedGUIConstants
     wxHORIZONTAL_HATCH,
     wxVERTICAL_HATCH,
     wxFIRST_HATCH = wxBDIAGONAL_HATCH,
-    wxLAST_HATCH = wxVERTICAL_HATCH,
+    wxLAST_HATCH = wxVERTICAL_HATCH
 #endif
 };
 

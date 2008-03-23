@@ -49,7 +49,7 @@ enum wxPenJoin
 
     wxJOIN_BEVEL = 120,
     wxJOIN_MITER,
-    wxJOIN_ROUND,
+    wxJOIN_ROUND
 };
 
 enum wxPenCap
