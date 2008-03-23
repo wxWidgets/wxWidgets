@@ -263,139 +263,6 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
     return err;
 }
 
-#define WXEXECUTE_NARGS   127
-
-#if defined(__DARWIN__)
-long wxMacExecute(wxChar **argv,
-               int flags,
-               wxProcess *process);
-#endif
-
-long wxExecute( const wxString& command, int flags, wxProcess *process )
-{
-    wxCHECK_MSG( !command.empty(), 0, wxT("can't exec empty command") );
-
-    wxLogTrace(wxT("exec"), wxT("Executing \"%s\""), command.c_str());
-
-#if wxUSE_THREADS
-    // fork() doesn't mix well with POSIX threads: on many systems the program
-    // deadlocks or crashes for some reason. Probably our code is buggy and
-    // doesn't do something which must be done to allow this to work, but I
-    // don't know what yet, so for now just warn the user (this is the least we
-    // can do) about it
-    wxASSERT_MSG( wxThread::IsMain(),
-                    _T("wxExecute() can be called only from the main thread") );
-#endif // wxUSE_THREADS
-
-    int argc = 0;
-    wxChar *argv[WXEXECUTE_NARGS];
-    wxString argument;
-    const wxChar *cptr = command.c_str();
-    wxChar quotechar = wxT('\0'); // is arg quoted?
-    bool escaped = false;
-
-    // split the command line in arguments
-    do
-    {
-        argument = wxEmptyString;
-        quotechar = wxT('\0');
-
-        // eat leading whitespace:
-        while ( wxIsspace(*cptr) )
-            cptr++;
-
-        if ( *cptr == wxT('\'') || *cptr == wxT('"') )
-            quotechar = *cptr++;
-
-        do
-        {
-            if ( *cptr == wxT('\\') && ! escaped )
-            {
-                escaped = true;
-                cptr++;
-                continue;
-            }
-
-            // all other characters:
-            argument += *cptr++;
-            escaped = false;
-
-            // have we reached the end of the argument?
-            if ( (*cptr == quotechar && ! escaped)
-                 || (quotechar == wxT('\0') && wxIsspace(*cptr))
-                 || *cptr == wxT('\0') )
-            {
-                wxASSERT_MSG( argc < WXEXECUTE_NARGS,
-                              wxT("too many arguments in wxExecute") );
-
-                argv[argc] = new wxChar[argument.length() + 1];
-                wxStrcpy(argv[argc], argument.c_str());
-                argc++;
-
-                // if not at end of buffer, swallow last character:
-                if(*cptr)
-                    cptr++;
-
-                break; // done with this one, start over
-            }
-        } while(*cptr);
-    } while(*cptr);
-    argv[argc] = NULL;
-
-    long lRc;
-#if defined(__DARWIN__)
-    // wxMacExecute only executes app bundles.
-    // It returns an error code if the target is not an app bundle, thus falling
-    // through to the regular wxExecute for non app bundles.
-    lRc = wxMacExecute(argv, flags, process);
-    if( lRc != ((flags & wxEXEC_SYNC) ? -1 : 0))
-        return lRc;
-#endif
-
-    // do execute the command
-    lRc = wxExecute(argv, flags, process);
-
-    // clean up
-    argc = 0;
-    while( argv[argc] )
-        delete [] argv[argc++];
-
-    return lRc;
-}
-
-// ----------------------------------------------------------------------------
-// wxShell
-// ----------------------------------------------------------------------------
-
-static wxString wxMakeShellCommand(const wxString& command)
-{
-    wxString cmd;
-    if ( !command )
-    {
-        // just an interactive shell
-        cmd = _T("xterm");
-    }
-    else
-    {
-        // execute command in a shell
-        cmd << _T("/bin/sh -c '") << command << _T('\'');
-    }
-
-    return cmd;
-}
-
-bool wxShell(const wxString& command)
-{
-    return wxExecute(wxMakeShellCommand(command), wxEXEC_SYNC) == 0;
-}
-
-bool wxShell(const wxString& command, wxArrayString& output)
-{
-    wxCHECK_MSG( !command.empty(), false, _T("can't exec shell non interactively") );
-
-    return wxExecute(wxMakeShellCommand(command), output);
-}
-
 // Shutdown or reboot the PC
 bool wxShutdown(wxShutdownFlags wFlags)
 {
@@ -465,10 +332,174 @@ bool wxPipeInputStream::CanRead() const
 #endif // HAS_PIPE_INPUT_STREAM
 
 // ----------------------------------------------------------------------------
-// wxExecute: the real worker function
+// wxShell
 // ----------------------------------------------------------------------------
 
-long wxExecute(wxChar **argv, int flags, wxProcess *process)
+static wxString wxMakeShellCommand(const wxString& command)
+{
+    wxString cmd;
+    if ( !command )
+    {
+        // just an interactive shell
+        cmd = _T("xterm");
+    }
+    else
+    {
+        // execute command in a shell
+        cmd << _T("/bin/sh -c '") << command << _T('\'');
+    }
+
+    return cmd;
+}
+
+bool wxShell(const wxString& command)
+{
+    return wxExecute(wxMakeShellCommand(command), wxEXEC_SYNC) == 0;
+}
+
+bool wxShell(const wxString& command, wxArrayString& output)
+{
+    wxCHECK_MSG( !command.empty(), false, _T("can't exec shell non interactively") );
+
+    return wxExecute(wxMakeShellCommand(command), output);
+}
+
+namespace
+{
+
+// helper class for storing arguments as char** array suitable for passing to
+// execvp(), whatever form they were passed to us
+class ArgsArray
+{
+public:
+    ArgsArray(const wxArrayString& args)
+    {
+        Init(args.size());
+
+        for ( int i = 0; i < m_argc; i++ )
+        {
+            m_argv[i] = wxStrdup(args[i]);
+        }
+    }
+
+    ArgsArray(wchar_t **wargv)
+    {
+        int argc = 0;
+        while ( *wargv++ )
+            argc++;
+
+        Init(argc);
+
+        for ( int i = 0; i < m_argc; i++ )
+        {
+            m_argv[i] = wxSafeConvertWX2MB(wargv[i]).release();
+        }
+    }
+
+    ~ArgsArray()
+    {
+        for ( int i = 0; i < m_argc; i++ )
+        {
+            free(m_argv[i]);
+        }
+
+        delete [] m_argv;
+    }
+
+    operator char**() const { return m_argv; }
+
+private:
+    void Init(int argc)
+    {
+        m_argc = argc;
+        m_argv = new char *[m_argc + 1];
+        m_argv[m_argc] = NULL;
+    }
+
+    int m_argc;
+    char **m_argv;
+
+    DECLARE_NO_COPY_CLASS(ArgsArray);
+};
+
+} // anonymous namespace
+
+// ----------------------------------------------------------------------------
+// wxExecute implementations
+// ----------------------------------------------------------------------------
+
+#if defined(__DARWIN__)
+bool wxMacLaunch(char **argv);
+#endif
+
+long wxExecute(const wxString& command, int flags, wxProcess *process)
+{
+    wxArrayString args;
+
+    const char *cptr = command.c_str();
+
+    // split the command line in arguments
+    //
+    // TODO: combine this with wxCmdLineParser::ConvertStringToArgs(), it
+    //       doesn't do exactly the same thing right now but it's pretty close
+    //       and we shouldn't maintain 2 copies of this code
+    do
+    {
+        wxString argument;
+        char quotechar = '\0'; // is arg quoted?
+        bool escaped = false;
+
+        // eat leading whitespace:
+        while ( wxIsspace(*cptr) )
+            cptr++;
+
+        if ( *cptr == '\'' || *cptr == '"' )
+            quotechar = *cptr++;
+
+        do
+        {
+            if ( *cptr == '\\' && !escaped )
+            {
+                escaped = true;
+                cptr++;
+                continue;
+            }
+
+            // all other characters:
+            argument += *cptr++;
+            escaped = false;
+
+            // have we reached the end of the argument?
+            if ( (*cptr == quotechar && !escaped)
+                 || (quotechar == '\0' && wxIsspace(*cptr))
+                 || *cptr == '\0' )
+            {
+                args.push_back(argument);
+
+                // if not at end of buffer, swallow last character:
+                if ( *cptr )
+                    cptr++;
+
+                break; // done with this one, start over
+            }
+        } while ( *cptr );
+    } while ( *cptr );
+
+    ArgsArray argv(args);
+
+    // do execute the command
+    return wxExecute(argv, flags, process);
+}
+
+long wxExecute(wchar_t **wargv, int flags, wxProcess *process)
+{
+    ArgsArray argv(wargv);
+
+    return wxExecute(argv, flags, process);
+}
+
+// wxExecute: the real worker function
+long wxExecute(char **argv, int flags, wxProcess *process)
 {
     // for the sync execution, we return -1 to indicate failure, but for async
     // case we return 0 which is never a valid PID
@@ -479,38 +510,29 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 
     wxCHECK_MSG( *argv, ERROR_RETURN_CODE, wxT("can't exec empty command") );
 
-#if wxUSE_UNICODE
-    int mb_argc = 0;
-    char *mb_argv[WXEXECUTE_NARGS];
+#if wxUSE_THREADS
+    // fork() doesn't mix well with POSIX threads: on many systems the program
+    // deadlocks or crashes for some reason. Probably our code is buggy and
+    // doesn't do something which must be done to allow this to work, but I
+    // don't know what yet, so for now just warn the user (this is the least we
+    // can do) about it
+    wxASSERT_MSG( wxThread::IsMain(),
+                    _T("wxExecute() can be called only from the main thread") );
+#endif // wxUSE_THREADS
 
-    while (argv[mb_argc])
+#if defined(__DARWIN__)
+    // wxMacLaunch() only executes app bundles and only does it asynchronously.
+    // It returns false if the target is not an app bundle, thus falling
+    // through to the regular code for non app bundles.
+    if ( !(flags & wxEXEC_SYNC) && wxMacLaunch(argv) )
     {
-        wxWX2MBbuf mb_arg = wxSafeConvertWX2MB(argv[mb_argc]);
-        mb_argv[mb_argc] = strdup(mb_arg);
-        mb_argc++;
+        // we don't have any PID to return so just make up something non null
+        return -1;
     }
-    mb_argv[mb_argc] = (char *) NULL;
+#endif // __DARWIN__
 
-    // this macro will free memory we used above
-    #define ARGS_CLEANUP                                 \
-        for ( mb_argc = 0; mb_argv[mb_argc]; mb_argc++ ) \
-            free(mb_argv[mb_argc])
-#else // ANSI
-    // no need for cleanup
-    #define ARGS_CLEANUP
 
-    wxChar **mb_argv = argv;
-#endif // Unicode/ANSI
-
-    // we want this function to work even if there is no wxApp so ensure that
-    // we have a valid traits pointer
-    wxConsoleAppTraits traitsConsole;
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    if ( !traits )
-        traits = &traitsConsole;
-
-    // this struct contains all information which we pass to and from
-    // wxAppTraits methods
+    // this struct contains all information which we use for housekeeping
     wxExecuteData execData;
     execData.flags = flags;
     execData.process = process;
@@ -519,8 +541,6 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
     if ( !execData.pipeEndProcDetect.Create() )
     {
         wxLogError( _("Failed to execute '%s'\n"), *argv );
-
-        ARGS_CLEANUP;
 
         return ERROR_RETURN_CODE;
     }
@@ -535,8 +555,6 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
         if ( !pipeIn.Create() || !pipeOut.Create() || !pipeErr.Create() )
         {
             wxLogError( _("Failed to execute '%s'\n"), *argv );
-
-            ARGS_CLEANUP;
 
             return ERROR_RETURN_CODE;
         }
@@ -556,8 +574,6 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
    if ( pid == -1 )     // error?
     {
         wxLogSysError( _("Fork failed") );
-
-        ARGS_CLEANUP;
 
         return ERROR_RETURN_CODE;
     }
@@ -618,12 +634,11 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
             pipeErr.Close();
         }
 
-        execvp (*mb_argv, mb_argv);
+        execvp(*argv, argv);
 
         fprintf(stderr, "execvp(");
-        // CS changed ppc to ppc_ as ppc is not available under mac os CW Mach-O
-        for ( char **ppc_ = mb_argv; *ppc_; ppc_++ )
-            fprintf(stderr, "%s%s", ppc_ == mb_argv ? "" : ", ", *ppc_);
+        for ( char **a = argv; *a; a++ )
+            fprintf(stderr, "%s%s", a == argv ? "" : ", ", *a);
         fprintf(stderr, ") failed with error %d!\n", errno);
 
         // there is no return after successful exec()
@@ -641,8 +656,6 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
     }
     else // we're in parent
     {
-        ARGS_CLEANUP;
-
         // save it for WaitForChild() use
         execData.pid = pid;
 
@@ -685,6 +698,13 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
             pipeErr.Close();
         }
 
+        // we want this function to work even if there is no wxApp so ensure
+        // that we have a valid traits pointer
+        wxConsoleAppTraits traitsConsole;
+        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+        if ( !traits )
+            traits = &traitsConsole;
+
         return traits->WaitForChild(execData);
     }
 
@@ -694,7 +714,6 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 }
 
 #undef ERROR_RETURN_CODE
-#undef ARGS_CLEANUP
 
 // ----------------------------------------------------------------------------
 // file and directory functions

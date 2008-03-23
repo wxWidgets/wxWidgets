@@ -624,8 +624,10 @@ wxString wxGetUserHome(const wxString& user = "");
         array, any additional ones are the command parameters and the array must be
         terminated with a @NULL pointer.
     @param flags
-        Combination of bit masks wxEXEC_ASYNC,
-        wxEXEC_SYNC and wxEXEC_NOHIDE
+        Must include either wxEXEC_ASYNC or wxEXEC_SYNC and can also include
+        wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
+        wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
+        their combination, in wxEXEC_SYNC case.
     @param callback
         An optional pointer to wxProcess
 
@@ -633,18 +635,22 @@ wxString wxGetUserHome(const wxString& user = "");
 
     @header{wx/utils.h}
 */
-long wxExecute(const wxString& command, int sync = wxEXEC_ASYNC,
-                wxProcess* callback = NULL);
-wxPerl note: long wxExecute(char** argv,
-                            int flags = wxEXEC_ASYNC,
-                            wxProcess* callback = NULL);
-wxPerl note: long wxExecute(const wxString& command,
-                            wxArrayString& output,
-                            int flags = 0);
-wxPerl note: long wxExecute(const wxString& command,
-                            wxArrayString& output,
-                            wxArrayString& errors,
-                            int flags = 0);
+long wxExecute(const wxString& command,
+               int sync = wxEXEC_ASYNC,
+               wxProcess* callback = NULL);
+long wxExecute(char** argv,
+               int flags = wxEXEC_ASYNC,
+               wxProcess* callback = NULL);
+long wxExecute(wchar_t** argv,
+               int flags = wxEXEC_ASYNC,
+               wxProcess* callback = NULL);
+long wxExecute(const wxString& command,
+               wxArrayString& output,
+               int flags = 0);
+long wxExecute(const wxString& command,
+               wxArrayString& output,
+               wxArrayString& errors,
+               int flags = 0);
 //@}
 
 /**

@@ -1012,9 +1012,11 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     return dwExitCode;
 }
 
-long wxExecute(wxChar **argv, int flags, wxProcess *handler)
+template <typename CharType>
+long wxExecuteImpl(CharType **argv, int flags, wxProcess *handler)
 {
     wxString command;
+    command.reserve(1024);
 
     for ( ;; )
     {
@@ -1022,8 +1024,18 @@ long wxExecute(wxChar **argv, int flags, wxProcess *handler)
         if ( !*argv )
             break;
 
-        command += _T(' ');
+        command += ' ';
     }
 
     return wxExecute(command, flags, handler);
+}
+
+long wxExecute(char **argv, int flags, wxProcess *handler)
+{
+    return wxExecuteImpl(argv, flags, handler);
+}
+
+long wxExecute(wchar_t **argv, int flags, wxProcess *handler)
+{
+    return wxExecuteImpl(argv, flags, handler);
 }

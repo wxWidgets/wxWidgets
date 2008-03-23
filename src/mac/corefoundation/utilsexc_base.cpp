@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        mac/corefoundation/utilsexc_base.cpp
-// Purpose:     wxMacExecute
+// Purpose:     wxMacLaunch
 // Author:      Ryan Norton
 // Modified by:
 // Created:     2005-06-21
@@ -48,25 +48,19 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
-//    wxMacExecute
+//    wxMacLaunch
 //
 // argv is the command line split up, with the application path first
 // flags are the flags from wxExecute
 // process is the process passed from wxExecute for pipe streams etc.
 // returns -1 on error for wxEXEC_SYNC and 0 on error for wxEXEC_ASYNC
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-long wxMacExecute(wxChar **argv,
-               int flags,
-               wxProcess *WXUNUSED(process))
+bool wxMacLaunch(char **argv)
 {
-    // Semi-macros used for return value of wxMacExecute
-    const long errorCode = ((flags & wxEXEC_SYNC) ? -1 : 0);
-    const long successCode = ((flags & wxEXEC_SYNC) ? 0 : -1); // fake PID
-
     // Obtains the number of arguments for determining the size of
     // the CFArray used to hold them
     CFIndex cfiCount = 0;
-    for(wxChar** argvcopy = argv; *argvcopy != NULL ; ++argvcopy)
+    for(char** argvcopy = argv; *argvcopy != NULL ; ++argvcopy)
     {
         ++cfiCount;
     }
@@ -75,8 +69,8 @@ long wxMacExecute(wxChar **argv,
     // to launch
     if(cfiCount == 0)
     {
-        wxLogDebug(wxT("wxMacExecute No file to launch!"));
-        return errorCode ;
+        wxLogDebug(wxT("wxMacLaunch No file to launch!"));
+        return false ;
     }
 
     // Path to bundle
@@ -94,8 +88,8 @@ long wxMacExecute(wxChar **argv,
     // Check for error from the CFURL
     if(!cfurlApp)
     {
-        wxLogDebug(wxT("wxMacExecute Can't open path: %s"), path.c_str());
-        return errorCode ;
+        wxLogDebug(wxT("wxMacLaunch Can't open path: %s"), path.c_str());
+        return false ;
     }
 
     // Create a CFBundle from the CFURL created earlier
@@ -106,9 +100,9 @@ long wxMacExecute(wxChar **argv,
     // at all (maybe a simple directory etc.)
     if(!cfbApp)
     {
-        wxLogDebug(wxT("wxMacExecute Bad bundle: %s"), path.c_str());
+        wxLogDebug(wxT("wxMacLaunch Bad bundle: %s"), path.c_str());
         CFRelease(cfurlApp);
-        return errorCode ;
+        return false ;
     }
 
     // Get the bundle type and make sure its an 'APPL' bundle
@@ -117,10 +111,10 @@ long wxMacExecute(wxChar **argv,
     CFBundleGetPackageInfo(cfbApp, &dwBundleType, &dwBundleCreator);
     if(dwBundleType != 'APPL')
     {
-        wxLogDebug(wxT("wxMacExecute Not an APPL bundle: %s"), path.c_str());
+        wxLogDebug(wxT("wxMacLaunch Not an APPL bundle: %s"), path.c_str());
         CFRelease(cfbApp);
         CFRelease(cfurlApp);
-        return errorCode ;
+        return false ;
     }
 
     // Create a CFArray for dealing with the command line
@@ -129,10 +123,10 @@ long wxMacExecute(wxChar **argv,
                                     cfiCount-1, &kCFTypeArrayCallBacks);
     if(!cfaFiles) //This should never happen
     {
-        wxLogDebug(wxT("wxMacExecute Could not create CFMutableArray"));
+        wxLogDebug(wxT("wxMacLaunch Could not create CFMutableArray"));
         CFRelease(cfbApp);
         CFRelease(cfurlApp);
-        return errorCode ;
+        return false ;
     }
 
     // Loop through command line arguments to the bundle,
@@ -184,7 +178,7 @@ long wxMacExecute(wxChar **argv,
         if(!cfurlCurrentFile)
         {
             wxLogDebug(
-                wxT("wxMacExecute Could not create CFURL for argument:%s"),
+                wxT("wxMacLaunch Could not create CFURL for argument:%s"),
                 *argv);
             continue;
         }
@@ -222,12 +216,12 @@ long wxMacExecute(wxChar **argv,
     // Check for error from LSOpenFromURLSpec
     if(status != noErr)
     {
-        wxLogDebug(wxT("wxMacExecute LSOpenFromURLSpec Error: %d"),
+        wxLogDebug(wxT("wxMacLaunch LSOpenFromURLSpec Error: %d"),
                    (int)status);
-        return errorCode ;
+        return false ;
     }
 
     // No error from LSOpenFromURLSpec, so app was launched
-    return successCode;
+    return true ;
 }
 
