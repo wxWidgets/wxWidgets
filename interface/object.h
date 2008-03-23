@@ -33,7 +33,7 @@ public:
         never
         be destroyed directly but only as result of a DecRef() call.
     */
-    wxObjectRefData();
+    ~wxObjectRefData();
 
     /**
         Decrements the reference count associated with this shared data and, if it

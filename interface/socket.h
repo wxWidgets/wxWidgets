@@ -945,7 +945,7 @@ public:
 
         @see InterruptWait(), Wait()
     */
-    bool Wait(long seconds = -1, long millisecond = 0);
+    bool WaitForLost(long seconds = -1, long millisecond = 0);
 
     /**
         This function waits until the socket is readable. This might mean that
