@@ -22,6 +22,7 @@
 
 #include "wx/cmdline.h"
 #include "wx/textfile.h"
+#include "wx/stopwatch.h"       // for wxGetLocalTime
 #include "xmlparser.h"
 
 // global verbosity flag

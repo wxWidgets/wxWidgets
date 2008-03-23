@@ -24,6 +24,7 @@
 #include "wx/arrimpl.cpp"
 #include "wx/dynarray.h"
 #include "wx/filename.h"
+
 #include "xmlparser.h"
 
 #define PROGRESS_RATE             1000     // each PROGRESS_RATE nodes processed print a dot
@@ -342,22 +343,25 @@ bool wxXmlInterface::CheckParseResults() const
 #define ATTRIB_POINTER      4
 #define ATTRIB_ARRAY        8
 
+#define GCCXML_BASE         35
+
 class toResolveTypeItem
 {
 public:
     toResolveTypeItem() { attribs=0; }
-    toResolveTypeItem(const wxString& namestr, int attribint)
-        : ref(namestr), attribs(attribint) {}
+    toResolveTypeItem(unsigned int refID, unsigned int attribint)
+        : ref(refID), attribs(attribint) {}
 
-    wxString ref;
-    int attribs;
+    unsigned long ref, attribs;
 };
 
 #if 1
-WX_DECLARE_STRING_HASH_MAP( toResolveTypeItem, wxToResolveTypeHashMap );
+WX_DECLARE_HASH_MAP( unsigned long, toResolveTypeItem,
+                     wxIntegerHash, wxIntegerEqual,
+                     wxToResolveTypeHashMap );
 #else
 #include <map>
-typedef std::map<wxString, toResolveTypeItem> wxToResolveTypeHashMap;
+typedef std::map<unsigned long, toResolveTypeItem> wxToResolveTypeHashMap;
 #endif
 
 bool wxXmlGccInterface::Parse(const wxString& filename)
@@ -381,8 +385,8 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
 
     wxToResolveTypeHashMap toResolveTypes;
     wxArrayString arrMemberIds;
-    wxStringHashMap types;
-    wxStringHashMap files;
+    wxTypeIdHashMap types;
+    wxTypeIdHashMap files;
 
     // prealloc quite a lot of memory!
     m_classes.Alloc(ESTIMATED_NUM_CLASSES);
@@ -393,11 +397,20 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     while (child)
     {
         const wxString& n = child->GetName();
-        const wxString& id = child->GetAttribute("id", wxEmptyString);
+        //const wxString& id = child->GetAttribute("id");
+        unsigned long id = 0;
+        if (!child->GetAttribute("id").Mid(1).ToULong(&id, GCCXML_BASE) ||
+            (id == 0 && n != "File")) {
+
+            // NOTE: <File> nodes can have an id == "f0"...
+
+            LogError("Invalid id for node %s: %s", n, child->GetAttribute("id"));
+            return false;
+        }
 
         if (n == "Class")
         {
-            wxString cname = child->GetAttribute("name", wxEmptyString);
+            wxString cname = child->GetAttribute("name");
             if (cname.IsEmpty()) {
                 LogError("Invalid empty name for '%s' node", n);
                 return false;
@@ -405,10 +418,10 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
 
             // only register wx classes (do remember also the IDs of their members)
             if (cname.StartsWith("wx")) {
-                arrMemberIds.Add(child->GetAttribute("members", wxEmptyString));
+                arrMemberIds.Add(child->GetAttribute("members"));
 
                 // NB: "file" attribute contains an ID value that we'll resolve later
-                m_classes.Add(wxClass(cname, child->GetAttribute("file", wxEmptyString)));
+                m_classes.Add(wxClass(cname, child->GetAttribute("file")));
             }
 
             // register this class also as possible return/argument type:
@@ -417,18 +430,18 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         else if (n == "PointerType" || n == "ReferenceType" ||
                  n == "CvQualifiedType" || n == "ArrayType")
         {
-            const wxString& type = child->GetAttribute("type", wxEmptyString);
-            if (id.IsEmpty() || type.IsEmpty()) {
-                LogError("Invalid empty type/id for '%s' node", n);
+            unsigned long type = 0;
+            if (!child->GetAttribute("type").Mid(1).ToULong(&type, GCCXML_BASE) || type == 0) {
+                LogError("Invalid type for node %s: %s", n, child->GetAttribute("type"));
                 return false;
             }
 
-            int attr = 0;
+            unsigned long attr = 0;
             if (n == "PointerType")
                 attr = ATTRIB_POINTER;
             else if (n == "ReferenceType")
                 attr = ATTRIB_REFERENCE;
-            else if (n == "CvQualifiedType" && child->GetAttribute("const", "") == "1")
+            else if (n == "CvQualifiedType" && child->GetAttribute("const") == "1")
                 attr = ATTRIB_CONST;
             else if (n == "ArrayType")
                 attr = ATTRIB_ARRAY;
@@ -440,9 +453,9 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         {
             /* TODO: incomplete */
 
-            const wxString& ret = child->GetAttribute("returns", wxEmptyString);
-            if (id.IsEmpty() || ret.IsEmpty()) {
-                LogError("Invalid empty ret/id for '%s' node", n);
+            unsigned long ret = 0;
+            if (!child->GetAttribute("returns").Mid(1).ToULong(&ret, GCCXML_BASE) || ret == 0) {
+                LogError("Invalid empty returns value for '%s' node", n);
                 return false;
             }
 
@@ -451,18 +464,18 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         }
         else if (n == "File")
         {
-            if (!id.StartsWith("f")) {
+            if (!child->GetAttribute("id").StartsWith("f")) {
                 LogError("Unexpected file ID: %s", id);
                 return false;
             }
 
             // just ignore this node... all file IDs/names were already parsed
-            files[id] = child->GetAttribute("name", "");
+            files[id] = child->GetAttribute("name");
         }
         else
         {
             // we register everything else as a possible return/argument type:
-            const wxString& name = child->GetAttribute("name", wxEmptyString);
+            const wxString& name = child->GetAttribute("name");
 
             if (!name.IsEmpty())
             {
@@ -501,10 +514,10 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         for (wxToResolveTypeHashMap::iterator i = toResolveTypes.begin();
              i != toResolveTypes.end();)
         {
-            const wxString& id = i->first;
-            const wxString& referenced = i->second.ref;
+            unsigned long id = i->first;
+            unsigned long referenced = i->second.ref;
 
-            wxStringHashMap::iterator primary = types.find(referenced);
+            wxTypeIdHashMap::iterator primary = types.find(referenced);
             if (primary != types.end())
             {
                 // this to-resolve-type references a "primary" type
@@ -566,7 +579,14 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     // resolve header names
     for (unsigned int i=0; i<m_classes.GetCount(); i++)
     {
-        wxStringHashMap::const_iterator idx = files.find(m_classes[i].GetHeader());
+        unsigned long fileID = 0;
+        if (!m_classes[i].GetHeader().Mid(1).ToULong(&fileID, GCCXML_BASE) || fileID == 0) {
+            LogError("invalid header id: %s", m_classes[i].GetHeader());
+            return false;
+        }
+
+        // search this file
+        wxTypeIdHashMap::const_iterator idx = files.find(fileID);
         if (idx == files.end())
         {
             // this is an error!
@@ -584,10 +604,10 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
 
         if (n == "Method" || n == "Constructor" || n == "Destructor" || n == "OperatorMethod")
         {
-            wxString id = child->GetAttribute("id", wxEmptyString);
+            wxString id = child->GetAttribute("id");
 
             // only register public methods
-            if (child->GetAttribute("access", wxEmptyString) == "public")
+            if (child->GetAttribute("access") == "public")
             {
                 wxASSERT(arrMemberIds.GetCount()==m_classes.GetCount());
 
@@ -631,11 +651,11 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
 }
 
 bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
-                                    const wxStringHashMap& types,
+                                    const wxTypeIdHashMap& types,
                                     wxMethod& m)
 {
     // get the real name
-    wxString name = p->GetAttribute("name", wxEmptyString).Strip(wxString::both);
+    wxString name = p->GetAttribute("name").Strip(wxString::both);
     if (p->GetName() == "Destructor")
         name = "~" + name;
     else if (p->GetName() == "OperatorMethod")
@@ -643,18 +663,18 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
 
     // resolve return type
     wxType ret;
-    wxString retid = p->GetAttribute("returns", wxEmptyString);
-    if (retid.IsEmpty())
+    unsigned long retid = 0;
+    if (!p->GetAttribute("returns").Mid(1).ToULong(&retid, GCCXML_BASE) || retid == 0)
     {
         if (p->GetName() != "Destructor" && p->GetName() != "Constructor") {
             LogError("Empty return ID for method '%s', with ID '%s'",
-                     name, p->GetAttribute("id", ""));
+                     name, p->GetAttribute("id"));
             return false;
         }
     }
     else
     {
-        wxStringHashMap::const_iterator retidx = types.find(retid);
+        wxTypeIdHashMap::const_iterator retidx = types.find(retid);
         if (retidx == types.end()) {
             LogError("Could not find return type ID '%s'", retid);
             return false;
@@ -663,7 +683,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
         ret = wxType(retidx->second);
         if (!ret.IsOk()) {
             LogError("Invalid return type '%s' for method '%s', with ID '%s'",
-                     retidx->second, name, p->GetAttribute("id", ""));
+                     retidx->second, name, p->GetAttribute("id"));
             return false;
         }
     }
@@ -676,8 +696,14 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     {
         if (arg->GetName() == "Argument")
         {
-            wxString id = arg->GetAttribute("type", wxEmptyString);
-            wxStringHashMap::const_iterator idx = types.find(id);
+            unsigned long id = 0;
+            if (!arg->GetAttribute("type").Mid(1).ToULong(&id, GCCXML_BASE) || id == 0) {
+                LogError("Invalid argument type ID '%s' for method '%s' with ID %s",
+                         arg->GetAttribute("type"), name, p->GetAttribute("id"));
+                return false;
+            }
+
+            wxTypeIdHashMap::const_iterator idx = types.find(id);
             if (idx == types.end()) {
                 LogError("Could not find argument type ID '%s'", id);
                 return false;
@@ -685,7 +711,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
 
             argtypes.Add(wxType(idx->second));
 
-            wxString def = arg->GetAttribute("default", "");
+            wxString def = arg->GetAttribute("default");
             if (def.Contains("wxGetTranslation"))
                 argdefs.Add(wxEmptyString);     // TODO: wxGetTranslation gives problems to gccxml
             else
@@ -698,9 +724,9 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     m.SetReturnType(ret);
     m.SetName(name);
     m.SetArgumentTypes(argtypes, argdefs);
-    m.SetConst(p->GetAttribute("const", "") == "1");
-    m.SetStatic(p->GetAttribute("static", "") == "1");
-    m.SetVirtual(p->GetAttribute("virtual", "") == "1");
+    m.SetConst(p->GetAttribute("const") == "1");
+    m.SetStatic(p->GetAttribute("static") == "1");
+    m.SetVirtual(p->GetAttribute("virtual") == "1");
 
     if (!m.IsOk()) {
         LogError("The prototype '%s' is not valid!", m.GetAsString());
@@ -740,9 +766,9 @@ bool wxXmlDoxygenInterface::Parse(const wxString& filename)
     while (compound)
     {
         if (compound->GetName() == "compound" &&
-            compound->GetAttribute("kind", "") == "class")
+            compound->GetAttribute("kind") == "class")
         {
-            wxString refid = compound->GetAttribute("refid", "");
+            wxString refid = compound->GetAttribute("refid");
 
             wxFileName fn(filename);
             if (!ParseCompoundDefinition(fn.GetPath(wxPATH_GET_SEPARATOR) + refid + ".xml"))
@@ -784,7 +810,7 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
     while (child)
     {
         if (child->GetName() == "compounddef" &&
-            child->GetAttribute("kind", wxEmptyString) == "class")
+            child->GetAttribute("kind") == "class")
         {
             // parse this class
             wxClass klass;
@@ -794,14 +820,14 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
             while (subchild)
             {
                 if (subchild->GetName() == "sectiondef" &&
-                    subchild->GetAttribute("kind", wxEmptyString) == "public-func")
+                    subchild->GetAttribute("kind") == "public-func")
                 {
 
                     wxXmlNode *membernode = subchild->GetChildren();
                     while (membernode)
                     {
                         if (membernode->GetName() == "memberdef" &&
-                            membernode->GetAttribute("kind", wxEmptyString) == "function")
+                            membernode->GetAttribute("kind") == "function")
                         {
 
                             wxMethod m;
@@ -936,18 +962,18 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
         }
         else if (child->GetName() == "location")
         {
-            if (child->GetAttribute("line", "").ToLong(&line))
+            if (child->GetAttribute("line").ToLong(&line))
                 m.SetLocation((int)line);
-            header = child->GetAttribute("file", "");
+            header = child->GetAttribute("file");
         }
 
         child = child->GetNext();
     }
 
     m.SetArgumentTypes(args, defs);
-    m.SetConst(p->GetAttribute("const", "")=="yes");
-    m.SetStatic(p->GetAttribute("static", "")=="yes");
-    m.SetVirtual(p->GetAttribute("virt", "")=="virtual");
+    m.SetConst(p->GetAttribute("const")=="yes");
+    m.SetStatic(p->GetAttribute("static")=="yes");
+    m.SetVirtual(p->GetAttribute("virt")=="virtual");
 
     if (!m.IsOk()) {
         LogError("The prototype '%s' is not valid!", m.GetAsString());

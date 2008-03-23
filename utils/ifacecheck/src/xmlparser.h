@@ -253,11 +253,13 @@ protected:
 };
 
 #if 1
-WX_DECLARE_STRING_HASH_MAP( wxString, wxStringHashMap );
+WX_DECLARE_HASH_MAP( unsigned long, wxString,
+                     wxIntegerHash, wxIntegerEqual,
+                     wxTypeIdHashMap );
 #else
 #include <map>
 typedef std::basic_string<char> stlString;
-typedef std::map<stlString, stlString> wxStringHashMap;
+typedef std::map<unsigned long, stlString> wxTypeIdHashMap;
 #endif
 
 
@@ -280,7 +282,7 @@ public:
 
     bool Parse(const wxString& filename);
     bool ParseMethod(const wxXmlNode *p,
-                     const wxStringHashMap& types,
+                     const wxTypeIdHashMap& types,
                      wxMethod& m);
 };
 
