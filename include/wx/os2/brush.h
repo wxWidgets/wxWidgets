@@ -12,36 +12,8 @@
 #ifndef _WX_BRUSH_H_
 #define _WX_BRUSH_H_
 
-#include "wx/gdicmn.h"
-#include "wx/gdiobj.h"
-#include "wx/bitmap.h"
-
-class WXDLLIMPEXP_FWD_CORE wxBrush;
-
-class WXDLLEXPORT wxBrushRefData: public wxGDIRefData
-{
-    friend class WXDLLIMPEXP_FWD_CORE wxBrush;
-public:
-    wxBrushRefData();
-    wxBrushRefData(const wxBrushRefData& rData);
-    virtual ~wxBrushRefData();
-
-    bool operator == (const wxBrushRefData& data) const
-    {
-        return (m_nStyle == data.m_nStyle &&
-                m_vStipple.IsSameAs(data.m_vStipple) &&
-                m_vColour == data.m_vColour);
-    }
-
-protected:
-    wxBrushStyle m_nStyle;
-    wxBitmap     m_vStipple;
-    wxColour     m_vColour;
-    WXHBRUSH     m_hBrush; // in OS/2 GPI this will be the PS the pen is associated with
-    AREABUNDLE   m_vBundle;
-};
-
-#define M_BRUSHDATA ((wxBrushRefData *)m_refData)
+class WXDLLIMPEXP_FWD_CORE wxColour;
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 // Brush
 class WXDLLEXPORT wxBrush: public wxBrushBase
@@ -64,10 +36,10 @@ public:
     virtual void SetStyle(wxBrushStyle nStyle);
     virtual void SetStipple(const wxBitmap& rStipple);
 
-    inline wxColour& GetColour(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_vColour : wxNullColour); };
-    virtual wxBrushStyle GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : wxBRUSHSTYLE_INVALID); };
-    inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : NULL); };
-    inline int       GetPS(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_hBrush : 0); };
+    wxColour GetColour(void) const;
+    virtual wxBrushStyle GetStyle(void) const;
+    wxBitmap* GetStipple(void) const;
+    int       GetPS(void) const;
 
     //
     // Implementation
