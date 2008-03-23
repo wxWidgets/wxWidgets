@@ -25,6 +25,8 @@
 #include "wx/dynarray.h"
 #include "wx/filename.h"
 
+#include <errno.h>
+
 #include "xmlparser.h"
 
 #define PROGRESS_RATE             1000     // each PROGRESS_RATE nodes processed print a dot
@@ -335,7 +337,7 @@ bool wxXmlInterface::CheckParseResults() const
 }
 
 // ----------------------------------------------------------------------------
-// wxXmlGccInterface
+// wxXmlGccInterface helper declarations
 // ----------------------------------------------------------------------------
 
 #define ATTRIB_CONST        1
@@ -356,13 +358,87 @@ public:
 };
 
 #if 1
+
+// for wxToResolveTypeHashMap, keys == gccXML IDs  and  values == toResolveTypeItem
 WX_DECLARE_HASH_MAP( unsigned long, toResolveTypeItem,
                      wxIntegerHash, wxIntegerEqual,
                      wxToResolveTypeHashMap );
+
+// for wxClassMemberIdHashMap, keys == gccXML IDs  and  values == wxClass which owns that member ID
+WX_DECLARE_HASH_MAP( unsigned long, wxClass*,
+                     wxIntegerHash, wxIntegerEqual,
+                     wxClassMemberIdHashMap );
 #else
 #include <map>
 typedef std::map<unsigned long, toResolveTypeItem> wxToResolveTypeHashMap;
 #endif
+
+
+// utility to parse gccXML ID values;
+// this function is equivalent to wxString(str).Mid(1).ToULong(&id, GCCXML_BASE)
+// but is a little bit faster
+bool getID(unsigned long *id, const wxStringCharType* str)
+{
+    wxStringCharType *end;
+#if wxUSE_UNICODE_UTF8
+    unsigned long val = strtoul(str+1, &end, GCCXML_BASE);
+#else
+    unsigned long val = wcstoul(str+1, &end, GCCXML_BASE);
+#endif
+
+    // return true only if scan was stopped by the terminating NUL and
+    // if the string was not empty to start with and no under/overflow
+    // occurred:
+    if ( *end != '\0' || end == str+1 || errno == ERANGE || errno == EINVAL )
+        return false;
+
+    *id = val;
+    return true;
+}
+
+// utility specialized to parse efficiently the gccXML list of IDs which occur
+// in nodes like <Class> ones... i.e. numeric values separed by " _" token
+bool getMemberIDs(wxClassMemberIdHashMap* map, wxClass* p, const wxStringCharType* str)
+{
+#if wxUSE_UNICODE_UTF8
+    size_t len = strlen(str);
+#else
+    size_t len = wcslen(str);
+#endif
+
+    if (len == 0 || str[0] != '_')
+        return false;
+
+    const wxStringCharType *curpos = str,
+                           *end = str + len;
+    wxStringCharType *nexttoken;
+
+    while (curpos < end)
+    {
+        // curpos always points to the underscore of the next token to parse:
+#if wxUSE_UNICODE_UTF8
+        unsigned long id = strtoul(curpos+1, &nexttoken, GCCXML_BASE);
+#else
+        unsigned long id = wcstoul(curpos+1, &nexttoken, GCCXML_BASE);
+#endif
+        if ( *nexttoken != ' ' || errno == ERANGE || errno == EINVAL )
+            return false;
+
+        // advance current position
+        curpos = nexttoken + 1;
+
+        // add this ID to the hashmap
+        wxClassMemberIdHashMap::value_type v(id, p);
+        map->insert(v);
+    }
+
+    return true;
+}
+
+
+// ----------------------------------------------------------------------------
+// wxXmlGccInterface
+// ----------------------------------------------------------------------------
 
 bool wxXmlGccInterface::Parse(const wxString& filename)
 {
@@ -384,23 +460,23 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     }
 
     wxToResolveTypeHashMap toResolveTypes;
-    wxArrayString arrMemberIds;
+    //wxArrayString arrMemberIds;
+    wxClassMemberIdHashMap members;
     wxTypeIdHashMap types;
     wxTypeIdHashMap files;
 
     // prealloc quite a lot of memory!
     m_classes.Alloc(ESTIMATED_NUM_CLASSES);
-    arrMemberIds.Alloc(ESTIMATED_NUM_TYPES);
+    //arrMemberIds.Alloc(ESTIMATED_NUM_TYPES);
 
     // build a list of wx classes and in general of all existent types
     child = doc.GetRoot()->GetChildren();
     while (child)
     {
         const wxString& n = child->GetName();
-        //const wxString& id = child->GetAttribute("id");
+
         unsigned long id = 0;
-        if (!child->GetAttribute("id").Mid(1).ToULong(&id, GCCXML_BASE) ||
-            (id == 0 && n != "File")) {
+        if (!getID(&id, child->GetAttribute("id")) || (id == 0 && n != "File")) {
 
             // NOTE: <File> nodes can have an id == "f0"...
 
@@ -417,11 +493,31 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
             }
 
             // only register wx classes (do remember also the IDs of their members)
-            if (cname.StartsWith("wx")) {
-                arrMemberIds.Add(child->GetAttribute("members"));
-
+            if (cname.StartsWith("wx"))
+            {
                 // NB: "file" attribute contains an ID value that we'll resolve later
                 m_classes.Add(wxClass(cname, child->GetAttribute("file")));
+
+                const wxString& ids = child->GetAttribute("members");
+                if (ids.IsEmpty())
+                {
+                    if (child->GetAttribute("incomplete") != "1") {
+                        LogError("Invalid member IDs for '%s' class node (ID %s)",
+                                cname, child->GetAttribute("id"));
+                        return false;
+                    }
+                    //else: don't warn the user; it looks like "incomplete" classes
+                    //      never have any member...
+                }
+                else
+                {
+                    // decode the non-empty list of IDs:
+                    if (!getMemberIDs(&members, &m_classes.Last(), ids)) {
+                        LogError("Invalid member IDs for '%s' class node (ID %s)",
+                                cname, child->GetAttribute("id"));
+                        return false;
+                    }
+                }
             }
 
             // register this class also as possible return/argument type:
@@ -431,7 +527,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                  n == "CvQualifiedType" || n == "ArrayType")
         {
             unsigned long type = 0;
-            if (!child->GetAttribute("type").Mid(1).ToULong(&type, GCCXML_BASE) || type == 0) {
+            if (!getID(&type, child->GetAttribute("type")) || type == 0) {
                 LogError("Invalid type for node %s: %s", n, child->GetAttribute("type"));
                 return false;
             }
@@ -454,7 +550,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
             /* TODO: incomplete */
 
             unsigned long ret = 0;
-            if (!child->GetAttribute("returns").Mid(1).ToULong(&ret, GCCXML_BASE) || ret == 0) {
+            if (!getID(&ret, child->GetAttribute("returns")) || ret == 0) {
                 LogError("Invalid empty returns value for '%s' node", n);
                 return false;
             }
@@ -580,7 +676,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     for (unsigned int i=0; i<m_classes.GetCount(); i++)
     {
         unsigned long fileID = 0;
-        if (!m_classes[i].GetHeader().Mid(1).ToULong(&fileID, GCCXML_BASE) || fileID == 0) {
+        if (!getID(&fileID, m_classes[i].GetHeader()) || fileID == 0) {
             LogError("invalid header id: %s", m_classes[i].GetHeader());
             return false;
         }
@@ -602,38 +698,38 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     {
         wxString n = child->GetName();
 
-        if (n == "Method" || n == "Constructor" || n == "Destructor" || n == "OperatorMethod")
+        // only register public methods
+        if (child->GetAttribute("access") == "public" &&
+            (n == "Method" || n == "Constructor" || n == "Destructor" || n == "OperatorMethod"))
         {
-            wxString id = child->GetAttribute("id");
+            unsigned long id = 0;
+            if (!getID(&id, child->GetAttribute("id"))) {
+                LogError("invalid ID for node '%s' with ID '%s'", n, child->GetAttribute("id"));
+                return false;
+            }
 
-            // only register public methods
-            if (child->GetAttribute("access") == "public")
+            wxClassMemberIdHashMap::const_iterator it = members.find(id);
+            if (it != members.end())
             {
-                wxASSERT(arrMemberIds.GetCount()==m_classes.GetCount());
+                wxClass *p = it->second;
 
-                for (unsigned int i=0; i<m_classes.GetCount(); i++)
-                {
-                    if (arrMemberIds[i].Contains(id))
-                    {
-                        // this <Method> node is a method of the i-th class!
-                        wxMethod newfunc;
-                        if (!ParseMethod(child, types, newfunc))
-                            return false;
+                // this <Method> node is a method of the i-th class!
+                wxMethod newfunc;
+                if (!ParseMethod(child, types, newfunc))
+                    return false;
 
-                        if (newfunc.IsCtor() && !m_classes[i].IsValidCtorForThisClass(newfunc)) {
-                            LogError("The method '%s' does not seem to be a ctor for '%s'",
-                                     newfunc.GetName(), m_classes[i].GetName());
-                            return false;
-                        }
-                        if (newfunc.IsDtor() && !m_classes[i].IsValidDtorForThisClass(newfunc)) {
-                            LogError("The method '%s' does not seem to be a dtor for '%s'",
-                                     newfunc.GetName(), m_classes[i].GetName());
-                            return false;
-                        }
-
-                        m_classes[i].AddMethod(newfunc);
-                    }
+                if (newfunc.IsCtor() && !p->IsValidCtorForThisClass(newfunc)) {
+                    LogError("The method '%s' does not seem to be a ctor for '%s'",
+                                newfunc.GetName(), p->GetName());
+                    return false;
                 }
+                if (newfunc.IsDtor() && !p->IsValidDtorForThisClass(newfunc)) {
+                    LogError("The method '%s' does not seem to be a dtor for '%s'",
+                                newfunc.GetName(), p->GetName());
+                    return false;
+                }
+
+                p->AddMethod(newfunc);
             }
         }
 
@@ -664,7 +760,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     // resolve return type
     wxType ret;
     unsigned long retid = 0;
-    if (!p->GetAttribute("returns").Mid(1).ToULong(&retid, GCCXML_BASE) || retid == 0)
+    if (!getID(&retid, p->GetAttribute("returns")) || retid == 0)
     {
         if (p->GetName() != "Destructor" && p->GetName() != "Constructor") {
             LogError("Empty return ID for method '%s', with ID '%s'",
@@ -697,7 +793,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
         if (arg->GetName() == "Argument")
         {
             unsigned long id = 0;
-            if (!arg->GetAttribute("type").Mid(1).ToULong(&id, GCCXML_BASE) || id == 0) {
+            if (!getID(&id, arg->GetAttribute("type")) || id == 0) {
                 LogError("Invalid argument type ID '%s' for method '%s' with ID %s",
                          arg->GetAttribute("type"), name, p->GetAttribute("id"));
                 return false;

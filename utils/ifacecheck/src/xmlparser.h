@@ -253,6 +253,8 @@ protected:
 };
 
 #if 1
+// for wxTypeIdHashMap, keys == gccxml IDs  and  values == associated type strings
+// e.g. key = "0x123f" and value = "const wxAboutDialogInfo&"
 WX_DECLARE_HASH_MAP( unsigned long, wxString,
                      wxIntegerHash, wxIntegerEqual,
                      wxTypeIdHashMap );
