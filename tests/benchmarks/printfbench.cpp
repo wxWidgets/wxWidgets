@@ -9,6 +9,32 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+//
+// Profiling under Linux:
+// =====================
+//
+//   1) configure wxWidgets in release mode
+//   2) make sure that HAVE_UNIX98_PRINTF is undefined (just #defining it to zero
+//      does not work; you must comment out the entire #define) in your setup.h;
+//      and also that wxUSE_PRINTF_POS_PARAMS is set to 1; this will force the
+//      use of wx's own implementation of wxVsnprintf()
+//   3) compile wx
+//   4) set wxTEST_WX_ONLY to 1 and compile tests as well
+//
+// Now you have two main choices:
+//
+//  - using gprof:
+//      5) add to the Makefile of this test program the -pg option both to
+//         CXXFLAGS and to LDFLAGS
+//      6) run the test
+//      7) look at the gmon.out file with gprof utility
+//
+//  - using valgrind:
+//      4) run "valgrind --tool=callgrind ./printfbench"
+//      5) run "kcachegrind dump_file_generated_by_callgrind"
+//
+
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -38,7 +64,7 @@
 // command line
 // ----------------------------------------------------------------------------
 
-#define HELP_SWITCH              "h"
+#define HELP_SWITCH                   "h"
 #define NUMBENCHMARK_OPTION           "n"
 
 static const wxCmdLineEntryDesc g_cmdLineDesc[] =
@@ -61,18 +87,6 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] =
 #define BUFSIZE                  10000
 
 // set wxTEST_WX_ONLY to 1 when you want to profile wx's implementation only.
-// A little reminder about profiling under Linux:
-//
-//   1) configure wxWidgets in release mode
-//   2) make sure that HAVE_UNIX98_PRINTF is undefined (just #defining it to zero
-//      does not work; you must comment out the entire #define) in your setup.h;
-//      and also that wxUSE_PRINTF_POS_PARAMS is set to 1; this will force the
-//      use of wx's own implementation of wxVsnprintf()
-//   3) compile wx
-//   4) set wxTEST_WX_ONLY to 1 and compile tests as well
-//   5) run "callgrind ./printfbench"
-//   6) run "kcachegrind dump_file_generated_by_callgrind"
-//
 #define wxTEST_WX_ONLY           1
 
 
