@@ -22,7 +22,7 @@
 #include "wx/xml/xml.h"
 #include "wx/wfstream.h"
 #include "wx/arrimpl.cpp"
-#include "wx/dynarray.h"
+#include "wx/hashmap.h"
 #include "wx/filename.h"
 
 #include <errno.h>
@@ -31,8 +31,6 @@
 
 #define PROGRESS_RATE             1000     // each PROGRESS_RATE nodes processed print a dot
 #define ESTIMATED_NUM_CLASSES     600      // used by both wxXmlInterface-derived classes to prealloc mem
-#define ESTIMATED_NUM_TYPES       50000    // used only by wxGccXmlInterface to prealloc mem
-#define ESTIMATED_NUM_FILES       800      // used only by wxGccXmlInterface to prealloc mem
 
 WX_DEFINE_OBJARRAY(wxTypeArray)
 WX_DEFINE_OBJARRAY(wxMethodArray)
@@ -460,14 +458,12 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     }
 
     wxToResolveTypeHashMap toResolveTypes;
-    //wxArrayString arrMemberIds;
     wxClassMemberIdHashMap members;
     wxTypeIdHashMap types;
     wxTypeIdHashMap files;
 
     // prealloc quite a lot of memory!
     m_classes.Alloc(ESTIMATED_NUM_CLASSES);
-    //arrMemberIds.Alloc(ESTIMATED_NUM_TYPES);
 
     // build a list of wx classes and in general of all existent types
     child = doc.GetRoot()->GetChildren();
