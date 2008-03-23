@@ -206,61 +206,6 @@ bool wxUnsetEnv(const wxString& var);
 
 
 
-/** @ingroup group_funcmacro_log */
-//@{
-
-/**
-    @deprecated Replaced by wxLogDebug().
-
-    Displays a debugging message. Under Windows, this will appear on the
-    debugger command window, and under Unix, it will be written to standard
-    error.
-
-    The syntax is identical to @e printf(), pass a format string and a variable
-    list of arguments.
-
-    @note Under Windows, if your application crashes before the message appears
-          in the debugging window, put a wxYield() call after each wxDebugMsg()
-          call. wxDebugMsg() seems to be broken under WIN32s (at least for
-          Watcom C++): preformat your messages and use OutputDebugString
-          instead.
-
-    @header{wx/utils.h}
-*/
-void wxDebugMsg(const wxString& format, ... );
-
-/**
-    @deprecated Replaced by wxLogFatalError().
-
-    Displays @a message and exits. This writes to standard error under Unix,
-    and pops up a message box under Windows. Used for fatal internal wxWidgets
-    errors.
-
-    @eee wxError()
-
-    @header{wx/utils.h}
-*/
-void wxFatalError(const wxString& message,
-                   const wxString& title = "wxWidgets Fatal Error");
-
-/**
-    @deprecated Replaced by wxLogError().
-
-    Displays @a message and continues. This writes to standard error under
-    Unix, and pops up a message box under Windows. Used for internal wxWidgets
-    errors.
-
-    @see wxFatalError()
-
-    @header{wx/utils.h}
-*/
-void wxError(const wxString& message,
-              const wxString& title = "wxWidgets Internal Error");
-
-//@}
-
-
-
 /**
     Returns the type of power source as one of @c wxPOWER_SOCKET,
     @c wxPOWER_BATTERY or @c wxPOWER_UNKNOWN.
