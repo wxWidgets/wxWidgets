@@ -1382,16 +1382,6 @@ public:
     void Layout();
 
     /**
-        This is just a wrapper for wxWindow::ScrollLines(1).
-    */
-
-
-    /**
-        This is just a wrapper for wxWindow::ScrollLines(-1).
-    */
-
-
-    /**
         Lowers the window to the bottom of the window hierarchy (Z-order).
 
         @see Raise()
@@ -1508,13 +1498,24 @@ public:
     virtual void OnInternalIdle();
 
     /**
-        This is just a wrapper for wxWindow::ScrollPages(1).
+        Same as #ScrollLines (-1).
     */
-
+    bool LineUp();
 
     /**
-        This is just a wrapper for wxWindow::ScrollPages(-1).
+        Same as #ScrollLines (1).
     */
+    bool LineDown();
+
+    /**
+        Same as #ScrollPages (-1).
+    */
+    bool PageUp();
+
+    /**
+        Same as #ScrollPages (1).
+    */
+    bool PageDown();
 
 
     /**
