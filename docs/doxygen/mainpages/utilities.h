@@ -68,7 +68,7 @@ This utility creates a "cached" version of a @c .hhp file; using cached @c .hhp
 files in wxHtmlHelpController can drammatically improve the performances
 of the help viewer. See wxHtmlHelpController for more details.
 
-You can find HHP2Cached in @c utils/helpview.
+You can find HHP2Cached in @c utils/hhp2cached.
 
 
 @section page_utils_ifacecheck Interface checker
