@@ -12,8 +12,7 @@
 #ifndef _WX_BRUSH_H_
 #define _WX_BRUSH_H_
 
-class WXDLLIMPEXP_FWD_CORE wxColour;
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
+#include "wx/bitmap.h"
 
 // Brush
 class WXDLLEXPORT wxBrush: public wxBrushBase
