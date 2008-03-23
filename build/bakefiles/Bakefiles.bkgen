@@ -65,6 +65,7 @@
     <del-formats files="../../samples/console/*">msevc4prj</del-formats>
     <del-formats files="../../samples/sockets/*">msevc4prj</del-formats>
     <del-formats files="../../utils/HelpGen/src/*">msevc4prj</del-formats>
+    <del-formats files="../../utils/ifacecheck/src/*">msevc4prj</del-formats>
     <del-formats files="../../utils/wxrc/*">msevc4prj</del-formats>
     <del-formats files="../../tests/*">msevc4prj</del-formats>
 
@@ -122,13 +123,13 @@
 
     <add-formats files="wx.bkl">rpmspec</add-formats>
 
-    
+
     <!-- Use different names for Visual C++ 2003 project files: -->
     <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*"
                formats="msvs2003prj">
         -o$(INPUT_FILE_DIR)/$(INPUT_FILE_BASENAME_NOEXT)_vc7.sln
     </add-flags>
-    
+
     <!-- Use different names for Visual C++ 2005 project files: -->
     <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*"
                formats="msvs2005prj">
@@ -242,7 +243,7 @@
         -DOPTIONS_FILE=../../../../build/msw/config.wat
     </add-flags>
 
-    
+
     <!-- Makefiles for out-of-tree building of samples on Unix: -->
     <add-formats files="../../samples/*/*.bkl,../../samples/*/*/*.bkl">
         gnu
