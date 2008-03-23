@@ -23,10 +23,12 @@
     #pragma hdrstop
 #endif
 
+#include "wx/apptrait.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
 
-#include "wx/apptrait.h"
 #include "wx/unix/execute.h"
 
 // ============================================================================
