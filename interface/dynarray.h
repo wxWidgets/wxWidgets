@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxArrayT
     @wxheader{dynarray.h}
 
     This section describes the so called @e dynamic arrays. This is a C
@@ -149,7 +148,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @see @ref overview_wxcontaineroverview, wxListT(), wxVectorT()
+    @see @ref overview_container, wxList<T>, wxVector<T>
 */
 class wxArray<T>
 {

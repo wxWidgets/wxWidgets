@@ -173,7 +173,6 @@ public:
 
 
 /**
-    @class wxScopedPtrT
     @wxheader{ptr_scpd.h}
 
     A scoped pointer template class. It is the template version of

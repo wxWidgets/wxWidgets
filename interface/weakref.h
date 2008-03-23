@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxWeakRefDynamicT
     @wxheader{weakref.h}
 
     wxWeakRefDynamicT is a template class for weak references that is used in
@@ -40,7 +39,6 @@ public:
 
 
 /**
-    @class wxWeakRefT
     @wxheader{weakref.h}
 
     wxWeakRef is a template class for weak references to wxWidgets objects,

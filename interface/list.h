@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxListT
     @wxheader{list.h}
 
     The wxListT class provides linked list functionality. It has been rewritten

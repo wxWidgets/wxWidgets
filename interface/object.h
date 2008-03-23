@@ -302,7 +302,6 @@ public:
 
 
 /**
-    @class wxObjectDataPtrT
     @wxheader{object.h}
 
     This is helper template class primarily written to avoid memory

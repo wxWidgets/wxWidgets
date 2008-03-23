@@ -7,7 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxMessageQueueT
     @wxheader{msgqueue.h}
 
     wxMessageQueue allows passing messages between threads.
