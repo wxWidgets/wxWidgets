@@ -122,9 +122,10 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if ((win->m_x == alloc->x) &&
-        (win->m_y == alloc->y) &&
-        (win->m_width == alloc->width) &&
+    // wxWindowGTK::SetSize() ignores position if parent does not have
+    // m_wxwindow, and infinite sizing loop can result if position is part
+    // of this check. See patch 1907189.
+    if ((win->m_width == alloc->width) &&
         (win->m_height == alloc->height))
     {
         return;
@@ -625,18 +626,24 @@ bool wxNotebook::InsertPage( size_t position,
 
     m_pages.Insert(win, position);
 
+    // set the label image and text
+    // this must be done before adding the page, as GetPageText
+    // and GetPageImage will otherwise return wrong values in
+    // the page-changed event that results from inserting the
+    // first page.
+    nb_page->m_image = imageId;
+    nb_page->m_text = wxStripMenuCodes(text);
+
     nb_page->m_box = gtk_hbox_new( FALSE, 1 );
     gtk_container_set_border_width((GtkContainer*)nb_page->m_box, 2);
 
     g_signal_connect (win->m_widget, "size_allocate",
                       G_CALLBACK (gtk_page_size_callback), win);
 
-    gtk_notebook_insert_page( notebook, win->m_widget, nb_page->m_box, position );
+    gint idx = gtk_notebook_insert_page(notebook, win->m_widget,
+                                        nb_page->m_box, position);
 
-    nb_page->m_page = (GtkNotebookPage*) g_list_last(notebook->children)->data;
-
-    /* set the label image */
-    nb_page->m_image = imageId;
+    nb_page->m_page = (GtkNotebookPage *)gtk_notebook_get_nth_page(notebook, idx);
 
     if (imageId != -1)
     {
@@ -649,10 +656,6 @@ bool wxNotebook::InsertPage( size_t position,
     }
 
     /* set the label text */
-
-    nb_page->m_text = wxStripMenuCodes(text);
-    if (nb_page->m_text.empty()) nb_page->m_text = wxEmptyString;
-
     nb_page->m_label = GTK_LABEL( gtk_label_new(wxGTK_CONV(nb_page->m_text)) );
     gtk_box_pack_end( GTK_BOX(nb_page->m_box), GTK_WIDGET(nb_page->m_label), FALSE, FALSE, m_padding );
 

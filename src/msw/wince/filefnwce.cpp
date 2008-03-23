@@ -122,21 +122,19 @@ int wxClose(int fd)
 
 int wxEof(int fd)
 {
-    LONG high0 = 0;
-    DWORD off0 = SetFilePointer((HANDLE) fd, 0, &high0, FILE_CURRENT);
+    DWORD off0 = SetFilePointer((HANDLE) fd, 0, NULL, FILE_CURRENT);
     if (off0 == 0xFFFFFFFF && GetLastError() != NO_ERROR)
         return -1;
 
-    LONG high1 = 0;
-    DWORD off1 = SetFilePointer((HANDLE) fd, 0, &high0, FILE_END);
+    DWORD off1 = SetFilePointer((HANDLE) fd, 0, NULL, FILE_END);
     if (off1 == 0xFFFFFFFF && GetLastError() != NO_ERROR)
         return -1;
 
-    if (off0 == off1 && high0 == high1)
+    if (off0 == off1)
         return 1;
     else
     {
-        SetFilePointer((HANDLE) fd, off0, &high0, FILE_BEGIN);
+        SetFilePointer((HANDLE) fd, off0, NULL, FILE_BEGIN);
         return 0;
     }
 }
@@ -181,8 +179,7 @@ __int64 wxSeek(int fd, __int64 offset, int origin)
             break;
     }
 
-    LONG high = 0;
-    DWORD res = SetFilePointer((HANDLE) fd, offset, &high, method) ;
+    DWORD res = SetFilePointer((HANDLE) fd, offset, NULL, method) ;
     if (res == 0xFFFFFFFF && GetLastError() != NO_ERROR)
     {
         wxLogSysError(_("can't seek on file descriptor %d"), fd);
@@ -194,15 +191,16 @@ __int64 wxSeek(int fd, __int64 offset, int origin)
 
 __int64 wxTell(int fd)
 {
-    LONG high = 0;
-    DWORD res = SetFilePointer((HANDLE) fd, 0, &high, FILE_CURRENT) ;
+    // WinCE apparently doesn't support lpDistanceToMoveHigh.
+    // LONG high = 0;
+    DWORD res = SetFilePointer((HANDLE) fd, 0, NULL, FILE_CURRENT) ;
     if (res == 0xFFFFFFFF && GetLastError() != NO_ERROR)
     {
         wxLogSysError(_("can't get seek position on file descriptor %d"), fd);
         return wxInvalidOffset;
     }
     else
-        return res + (((__int64)high) << 32);
+        return res ; // + (((__int64)high) << 32);
 }
 
 int wxFsync(int WXUNUSED(fd))

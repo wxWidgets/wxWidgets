@@ -27,11 +27,23 @@
 # public symbols added in 2.8.8 (please keep in alphabetical order):
 @WX_VERSION_TAG@.8 {
     global:
+        *wxApp*MacHideApp*;
         *TimeZone*Make*;
+        *wxBitmapButton*OnFocusChange*;
         *wxRemotelyScrolledTreeCtrl*DoCalcScrolledPosition*;
         *wxRemotelyScrolledTreeCtrl*SetScrollbar*;
+        *wxRichTextCtrl*GetTextCursor*;
+        *wxRichTextCtrl*GetURLCursor*;
+        *wxRichTextCtrl*SetTextCursor*;
+        *wxRichTextCtrl*SetURLCursor*;
         *wxScrollHelper*HandleOnChildFocus*;
+        *wxSizer*ComputeFittingClientSize*;
+        *wxSizer*ComputeFittingWindowSize*;
+        *wxSizerFlags*ReserveSpaceEvenIfHidden*;
+        *wxSizerItem*ShouldAccountFor*;
+        *wxWindowBase*ClientToWindowSize*;
         *wxWindowBase*Get*Sibling*;
+        *wxWindowBase*WindowToClientSize*;
 };
 
 # public symbols added in 2.8.7 (please keep in alphabetical order):

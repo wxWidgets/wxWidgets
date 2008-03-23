@@ -68,7 +68,10 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         opts.Set(kHIAboutBoxNameKey, info.GetName());
 
         if ( info.HasVersion() )
-            opts.Set(kHIAboutBoxVersionKey, info.GetVersion());
+        {
+            opts.Set(kHIAboutBoxVersionKey,
+                     wxString::Format(_("Version %s"), info.GetVersion().c_str()));
+        }
 
         if ( info.HasCopyright() )
             opts.Set(kHIAboutBoxCopyrightKey, info.GetCopyright());

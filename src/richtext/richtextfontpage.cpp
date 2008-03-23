@@ -352,7 +352,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     }
     else
         attr->SetFlags(attr->GetFlags() & (~ wxTEXT_ATTR_TEXT_COLOUR));
-        
+
     if (m_strikethroughCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
     {
         attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_STRIKETHROUGH);
@@ -366,7 +366,7 @@ bool wxRichTextFontPage::TransferDataFromWindow()
     if (m_capitalsCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
     {
         attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_CAPITALS);
-    
+
         if (m_capitalsCtrl->Get3StateValue() == wxCHK_CHECKED)
             attr->SetTextEffects(attr->GetTextEffects() | wxTEXT_ATTR_EFFECT_CAPITALS);
         else
@@ -445,7 +445,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
 
     if (attr->HasTextColour())
     {
-        m_colourCtrl->SetBackgroundColour(attr->GetTextColour());
+        m_colourCtrl->SetColour(attr->GetTextColour());
         m_colourPresent = true;
     }
 
@@ -543,7 +543,7 @@ void wxRichTextFontPage::UpdatePreview()
 
         font.SetUnderlined(underlined);
     }
-    
+
     int textEffects = 0;
 
     if (m_strikethroughCtrl->Get3StateValue() == wxCHK_CHECKED)

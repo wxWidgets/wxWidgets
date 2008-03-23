@@ -256,6 +256,20 @@
 #undef UNICODE
 #endif
 
+/*
+   Notice that Turbo Explorer (BCC 5.82) is available for free at
+   http://www.turboexplorer.com/downloads, you can get it if you have trouble
+   compiling wxWidgets with your current Borland compiler.
+*/
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x540)
+#   error "wxWidgets requires a newer version of Borland, we recommend upgrading to 5.82 (Turbo Explorer). You may at your own risk remove this line and try building but be prepared to get build errors."
+#endif /* __BORLANDC__ */
+
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x582) && (__BORLANDC__ > 0x559)
+#   ifndef _USE_OLD_RW_STL
+#       error "wxWidgets is incompatible with default Borland C++ 5.6 STL library, please add -D_USE_OLD_RW_STL to your bcc32.cfg to use RogueWave STL implementation."
+#   endif
+#endif /* __BORLANDC__ */
 
 /*
    This macro can be used to test the Open Watcom version.

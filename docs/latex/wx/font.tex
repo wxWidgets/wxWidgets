@@ -482,8 +482,10 @@ Creates the font corresponding to the given native font description string and r
 the creation was successful.
 which must have been previously returned by
 \helpref{GetNativeFontInfoDesc}{wxfontgetnativefontinfodesc}. If the string is
-invalid, font is unchanged. This function is typically used for de-serializing a wxFont
-object previously saved in a string-form.
+invalid, font state is undefined (it becomes invalid in 2.8 but this shouldn't
+be relied on as the next wxWidgets version leaves it unchanged instead). This
+function is typically used for de-serializing a wxFont object previously saved
+in a string-form.
 
 \wxheading{See also}
 

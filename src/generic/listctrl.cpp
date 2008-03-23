@@ -1577,6 +1577,9 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         int xOld = x;
         x += width;
 
+        const int wText = width - 8;
+        wxDCClipper clipper(*dc, xOld, rect.y, wText, rect.height);
+
         if ( item->HasImage() )
         {
             int ix, iy;
@@ -1590,7 +1593,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         }
 
         if ( item->HasText() )
-            DrawTextFormatted(dc, item->GetText(), col, xOld, yMid, width - 8);
+            DrawTextFormatted(dc, item->GetText(), col, xOld, yMid, wText);
     }
 }
 

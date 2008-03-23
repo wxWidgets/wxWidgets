@@ -1273,6 +1273,9 @@ enum wxStretch
     wxEXPAND                  = wxGROW,
     wxSHAPED                  = 0x4000,
     wxFIXED_MINSIZE           = 0x8000,
+#if wxABI_VERSION >= 20808
+    wxRESERVE_SPACE_EVEN_IF_HIDDEN = 0x0002,
+#endif
     wxTILE                    = 0xc000,
 
     /* for compatibility only, default now, don't use explicitly any more */

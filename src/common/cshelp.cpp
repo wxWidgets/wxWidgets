@@ -388,6 +388,11 @@ void wxSimpleHelpProvider::RemoveHelp(wxWindowBase* window)
 bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
 {
 #if wxUSE_MS_HTML_HELP || wxUSE_TIPWINDOW
+#if wxUSE_MS_HTML_HELP
+    // m_helptextAtPoint will be reset by GetHelpTextMaybeAtPoint(), stash it
+    const wxPoint posTooltip = m_helptextAtPoint;
+#endif // wxUSE_MS_HTML_HELP
+
     const wxString text = GetHelpTextMaybeAtPoint(window);
 
     if ( !text.empty() )
@@ -397,7 +402,7 @@ bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
         if ( !wxCHMHelpController::ShowContextHelpPopup
                                    (
                                         text,
-                                        wxGetMousePosition(),
+                                        posTooltip,
                                         (wxWindow *)window
                                    ) )
 #endif // wxUSE_MS_HTML_HELP

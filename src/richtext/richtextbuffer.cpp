@@ -308,7 +308,8 @@ int wxRichTextCompositeObject::HitTest(wxDC& dc, const wxPoint& pt, long& textPo
         node = node->GetNext();
     }
 
-    return wxRICHTEXT_HITTEST_NONE;
+    textPosition = GetRange().GetEnd()-1;
+    return wxRICHTEXT_HITTEST_AFTER|wxRICHTEXT_HITTEST_OUTSIDE;
 }
 
 /// Finds the absolute position and row height for the given character position
@@ -958,7 +959,17 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text,
     wxTextAttrEx defaultCharStyle;
     wxTextAttrEx defaultParaStyle;
 
-    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
+    // If the default style is a named paragraph style, don't apply any character formatting
+    // to the initial text string.
+    if (GetDefaultStyle().HasParagraphStyleName() && GetStyleSheet())
+    {
+        wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(GetDefaultStyle().GetParagraphStyleName());
+        if (def)
+            defaultParaStyle = def->GetStyleMergedWithBase(GetStyleSheet());
+    }
+    else
+        wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
+
     wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
     wxTextAttrEx* cStyle = & defaultCharStyle;
 
@@ -981,7 +992,17 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
 
     wxTextAttrEx defaultCharStyle;
     wxTextAttrEx defaultParaStyle;
-    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
+
+    // If the default style is a named paragraph style, don't apply any character formatting
+    // to the initial text string.
+    if (GetDefaultStyle().HasParagraphStyleName() && GetStyleSheet())
+    {
+        wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(GetDefaultStyle().GetParagraphStyleName());
+        if (def)
+            defaultParaStyle = def->GetStyleMergedWithBase(GetStyleSheet());
+    }
+    else
+        wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 
     wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
     wxTextAttrEx* cStyle = & defaultCharStyle;
@@ -1047,7 +1068,17 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxT
 
     wxTextAttrEx defaultCharStyle;
     wxTextAttrEx defaultParaStyle;
-    wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
+
+    // If the default style is a named paragraph style, don't apply any character formatting
+    // to the initial text string.
+    if (GetDefaultStyle().HasParagraphStyleName() && GetStyleSheet())
+    {
+        wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(GetDefaultStyle().GetParagraphStyleName());
+        if (def)
+            defaultParaStyle = def->GetStyleMergedWithBase(GetStyleSheet());
+    }
+    else
+        wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
 
     wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
     wxTextAttrEx* cStyle = & defaultCharStyle;
@@ -1144,7 +1175,8 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
             wxRichTextParagraph* firstPara = wxDynamicCast(firstParaNode->GetData(), wxRichTextParagraph);
             wxASSERT(firstPara != NULL);
 
-            para->SetAttributes(firstPara->GetAttributes());
+            if (!(fragment.GetAttributes().GetFlags() & wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE))
+                para->SetAttributes(firstPara->GetAttributes());
 
             // Save empty paragraph attributes for appending later
             // These are character attributes deliberately set for a new paragraph. Without this,
@@ -1220,7 +1252,9 @@ bool wxRichTextParagraphLayoutBox::InsertFragment(long position, wxRichTextParag
                 }
             }
 
-            if (finalPara && finalPara != para)
+            if ((fragment.GetAttributes().GetFlags() & wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE) && firstPara)
+                finalPara->SetAttributes(firstPara->GetAttributes());
+            else if (finalPara && finalPara != para)
                 finalPara->SetAttributes(originalAttr);
 
             return true;
@@ -1419,6 +1453,7 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
         if (!obj->GetRange().IsOutside(range))
         {
             wxRichTextRange thisRange = obj->GetRange();
+            wxTextAttrEx thisAttr = obj->GetAttributes();
 
             // Deletes the content of this object within the given range
             obj->DeleteRange(range);
@@ -1455,7 +1490,14 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
 
                 wxTextAttrEx nextParaAttr;
                 if (applyFinalParagraphStyle)
-                    nextParaAttr = nextParagraph->GetAttributes();
+                {
+                    // Special case when deleting the end of a paragraph - use _this_ paragraph's style,
+                    // not the next one.
+                    if (range.GetStart() == range.GetEnd() && range.GetStart() == thisRange.GetEnd())
+                        nextParaAttr = thisAttr;
+                    else
+                        nextParaAttr = nextParagraph->GetAttributes();
+                }
 
                 if (firstPara && nextParagraph && firstPara != nextParagraph)
                 {
@@ -1466,15 +1508,7 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
                     {
                         wxRichTextObject* obj1 = node1->GetData();
 
-                        // If the object is empty, optimise it out
-                        if (obj1->IsEmpty())
-                        {
-                            delete obj1;
-                        }
-                        else
-                        {
-                            firstPara->AppendChild(obj1);
-                        }
+                        firstPara->AppendChild(obj1);
 
                         wxRichTextObjectList::compatibility_iterator next1 = node1->GetNext();
                         nextParagraph->GetChildren().Erase(node1);
@@ -1484,6 +1518,13 @@ bool wxRichTextParagraphLayoutBox::DeleteRange(const wxRichTextRange& range)
 
                     // Delete the paragraph
                     RemoveChild(nextParagraph, true);
+                }
+
+                // Avoid empty paragraphs
+                if (firstPara && firstPara->GetChildren().GetCount() == 0)
+                {
+                    wxRichTextPlainText* text = new wxRichTextPlainText(wxEmptyString);
+                    firstPara->AppendChild(text);
                 }
 
                 if (applyFinalParagraphStyle)
@@ -1765,7 +1806,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                         splitPoint ++;
 
                     // Find last object
-                    if (splitPoint == newPara->GetRange().GetEnd() || splitPoint == (newPara->GetRange().GetEnd() - 1))
+                    if (splitPoint == newPara->GetRange().GetEnd())
                         lastObject = newPara->GetChildren().GetLast()->GetData();
                     else
                         // lastObject is set as a side-effect of splitting. It's
@@ -3793,7 +3834,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
         wxSize lineSize = line->GetSize();
         wxRichTextRange lineRange = line->GetAbsoluteRange();
 
-        if (pt.y >= linePos.y && pt.y <= linePos.y + lineSize.y)
+        if (pt.y <= linePos.y + lineSize.y)
         {
             if (pt.x < linePos.x)
             {
@@ -4970,16 +5011,18 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
     wxRichTextParagraph* para = GetParagraphAtPosition(pos, false);
     long pos1 = pos;
 
+    if (p)
+        newPara->SetAttributes(*p);
+
     if (flags & wxRICHTEXT_INSERT_INTERACTIVE)
     {
         if (para && para->GetRange().GetEnd() == pos)
             pos1 ++;
+        if (newPara->GetAttributes().HasBulletNumber())
+            newPara->GetAttributes().SetBulletNumber(newPara->GetAttributes().GetBulletNumber()+1);
     }
 
     action->SetPosition(pos);
-
-    if (p)
-        newPara->SetAttributes(*p);
 
     // Use the default character style
     if (!GetDefaultStyle().IsDefault() && newPara->GetChildren().GetFirst())
@@ -5122,6 +5165,22 @@ bool wxRichTextBuffer::DeleteRangeWithUndo(const wxRichTextRange& range, wxRichT
 
     // Copy the fragment that we'll need to restore in Undo
     CopyFragment(range, action->GetOldParagraphs());
+
+    // See if we're deleting a paragraph marker, in which case we need to
+    // make a note not to copy the attributes from the 2nd paragraph to the 1st.
+    if (range.GetStart() == range.GetEnd())
+    {
+        wxRichTextParagraph* para = GetParagraphAtPosition(range.GetStart());
+        if (para && para->GetRange().GetEnd() == range.GetEnd())
+        {
+            wxRichTextParagraph* nextPara = GetParagraphAtPosition(range.GetStart()+1);
+            if (nextPara && nextPara != para)
+            {
+                action->GetOldParagraphs().GetChildren().GetFirst()->GetData()->SetAttributes(nextPara->GetAttributes());
+                action->GetOldParagraphs().GetAttributes().SetFlags(action->GetOldParagraphs().GetAttributes().GetFlags() | wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE);
+            }
+        }
+    }
 
     SubmitAction(action);
 
@@ -5754,6 +5813,8 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 if (richTextBuffer)
                 {
                     InsertParagraphsWithUndo(position+1, *richTextBuffer, GetRichTextCtrl(), wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+                    if (GetRichTextCtrl())
+                        GetRichTextCtrl()->ShowPosition(position + richTextBuffer->GetRange().GetEnd());
                     delete richTextBuffer;
                 }
             }
@@ -5776,6 +5837,9 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                 wxString text2 = text;
 #endif
                 InsertTextWithUndo(position+1, text2, GetRichTextCtrl());
+
+                if (GetRichTextCtrl())
+                    GetRichTextCtrl()->ShowPosition(position + text2.Length());
 
                 success = true;
             }
@@ -6292,7 +6356,11 @@ bool wxRichTextAction::Do()
             m_buffer->UpdateRanges();
             m_buffer->Invalidate(wxRichTextRange(GetRange().GetStart(), GetRange().GetStart()));
 
-            UpdateAppearance(GetRange().GetStart()-1, true /* send update event */);
+            long caretPos = GetRange().GetStart()-1;
+            if (caretPos >= m_buffer->GetRange().GetEnd())
+                caretPos --;
+
+            UpdateAppearance(caretPos, true /* send update event */);
 
             wxRichTextEvent cmdEvent(
                 wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED,

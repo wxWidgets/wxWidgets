@@ -88,8 +88,13 @@ public:
         : wxToolBarToolBase(tbar, control)
     {
         Init();
+#if 0 
+// TODO REMOVE if no other problems arise, embedded controls should
+// not be mistaken for simple tools
+
         if (control != NULL)
             SetControlHandle( (ControlRef) control->GetHandle() );
+#endif
     }
 
     virtual ~wxToolBarTool()

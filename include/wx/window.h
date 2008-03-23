@@ -326,6 +326,12 @@ public:
         return wxRect(GetClientAreaOrigin(), GetClientSize());
     }
 
+#if wxABI_VERSION >= 20808
+    // client<->window size conversion
+    wxSize ClientToWindowSize(const wxSize& size) const;
+    wxSize WindowToClientSize(const wxSize& size) const;
+#endif
+
         // get the size best suited for the window (in fact, minimal
         // acceptable size using which it will still look "nice" in
         // most situations)

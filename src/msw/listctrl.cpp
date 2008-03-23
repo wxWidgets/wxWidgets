@@ -338,15 +338,21 @@ bool wxListCtrl::Create(wxWindow *parent,
     // GetTextColour will always return black
     SetTextColour(GetDefaultAttributes().colFg);
 
+    if ( InReportView() )
+        MSWSetExListStyles();
+
+    return true;
+}
+
+void wxListCtrl::MSWSetExListStyles()
+{
     // for comctl32.dll v 4.70+ we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
-    if ( InReportView() && wxApp::GetComCtl32Version() >= 470 )
+    if ( wxApp::GetComCtl32Version() >= 470 )
     {
         ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE,
                       0, LVS_EX_LABELTIP | LVS_EX_FULLROWSELECT | LVS_EX_SUBITEMIMAGES);
     }
-
-    return true;
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -445,6 +451,11 @@ void wxListCtrl::UpdateStyle()
         if ( dwStyleOld != dwStyleNew )
         {
             ::SetWindowLong(GetHwnd(), GWL_STYLE, dwStyleNew);
+
+            // if we switched to the report view, set the extended styles for
+            // it too
+            if ( !(dwStyleOld & LVS_REPORT) && (dwStyleNew & LVS_REPORT) )
+                MSWSetExListStyles();
         }
     }
 }
@@ -1851,28 +1862,40 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // where did the click occur?
                     POINT ptClick;
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
-                  if(nmhdr->code == GN_CONTEXTMENU) {
-                      ptClick = ((NMRGINFO*)nmhdr)->ptAction;
-                  } else
+                    if ( nmhdr->code == GN_CONTEXTMENU )
+                    {
+                        ptClick = ((NMRGINFO*)nmhdr)->ptAction;
+                    }
+                    else
 #endif //__WXWINCE__
                     if ( !::GetCursorPos(&ptClick) )
                     {
                         wxLogLastError(_T("GetCursorPos"));
                     }
 
-                    if ( !::ScreenToClient(GetHwnd(), &ptClick) )
+                    // we need to use listctrl coordinates for the event point
+                    // but for comparison with Header_GetItemRect() result
+                    // below we need to use header window coordinates
+                    POINT ptClickList = ptClick;
+                    if ( ::ScreenToClient(GetHwnd(), &ptClickList) )
+                    {
+                        event.m_pointDrag.x = ptClickList.x;
+                        event.m_pointDrag.y = ptClickList.y;
+                    }
+                    else
+                    {
+                        wxLogLastError(_T("ScreenToClient(listctrl)"));
+                    }
+
+                    if ( !::ScreenToClient(hwndHdr, &ptClick) )
                     {
                         wxLogLastError(_T("ScreenToClient(listctrl header)"));
                     }
 
-                    event.m_pointDrag.x = ptClick.x;
-                    event.m_pointDrag.y = ptClick.y;
-
-                    int colCount = Header_GetItemCount(hwndHdr);
-
-                    RECT rect;
+                    const int colCount = Header_GetItemCount(hwndHdr);
                     for ( int col = 0; col < colCount; col++ )
                     {
+                        RECT rect;
                         if ( Header_GetItemRect(hwndHdr, col, &rect) )
                         {
                             if ( ::PtInRect(&rect, ptClick) )

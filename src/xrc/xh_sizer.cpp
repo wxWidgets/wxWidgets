@@ -79,6 +79,7 @@ wxSizerXmlHandler::wxSizerXmlHandler()
 
     XRC_ADD_STYLE(wxADJUST_MINSIZE);
     XRC_ADD_STYLE(wxFIXED_MINSIZE);
+    XRC_ADD_STYLE(wxRESERVE_SPACE_EVEN_IF_HIDDEN);
 }
 
 

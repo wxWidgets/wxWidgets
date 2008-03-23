@@ -10,6 +10,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// WARNING: Parts of this file are generated. See misc/languages/README for
+// details.
+
 #ifndef _WX_INTL_H_
 #define _WX_INTL_H_
 
@@ -308,6 +311,15 @@ enum wxLanguage
 
     // for custom, user-defined languages:
     wxLANGUAGE_USER_DEFINED
+
+
+#if wxABI_VERSION >= 20808
+    // for binary compatibility, we can't put wxLANGUAGE_VALENCIAN in its
+    // normal position in the enum, because it would change other values.
+    // We have to put it somewhere well outside normal range -- the particular
+    // value used is arbitrary:
+    , wxLANGUAGE_VALENCIAN = 0x1fffffff
+#endif
 };
 
 // --- --- --- generated code ends here --- --- ---

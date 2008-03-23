@@ -1912,7 +1912,7 @@ void wxDb::logError(const wxString &errMsg, const wxString &SQLState)
     }
 
     wxStrncpy(errorList[pLast], errMsg, DB_MAX_ERROR_MSG_LEN);
-    errorList[pLast][DB_MAX_ERROR_MSG_LEN] = 0;
+    errorList[pLast][DB_MAX_ERROR_MSG_LEN-1] = 0;
 
     if (SQLState.length())
         if ((dbStatus = TranslateSqlState(SQLState)) != DB_ERR_FUNCTION_SEQUENCE_ERROR)

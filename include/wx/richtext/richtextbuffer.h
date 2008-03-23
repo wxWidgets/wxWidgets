@@ -213,6 +213,11 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 #define wxTEXT_ATTR_EFFECTS                 0x00800000
 #define wxTEXT_ATTR_OUTLINE_LEVEL           0x01000000
 
+// A special flag telling the buffer to keep the first paragraph style
+// as-is, when deleting a paragraph marker. In future we might pass a
+// flag to InsertFragment and DeleteRange to indicate the appropriate mode.
+#define wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE   0x10000000
+
 /*!
  * Styles for wxTextAttrEx::SetBulletStyle
  */

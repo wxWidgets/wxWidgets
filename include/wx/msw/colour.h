@@ -24,9 +24,13 @@ public:
     // constructors
     // ------------
 
-    // default
     wxColour() { Init(); }
-    DEFINE_STD_WXCOLOUR_CONSTRUCTORS
+    wxColour( ChannelType red, ChannelType green, ChannelType blue,
+              ChannelType alpha = wxALPHA_OPAQUE )
+        { Set(red, green, blue, alpha); }
+    wxColour( unsigned long colRGB ) { Set(colRGB); }
+    wxColour(const wxString& colourName) { Init(); Set(colourName); }
+    wxColour(const wxChar *colourName) { Init(); Set(colourName); }
 
 
     // dtor

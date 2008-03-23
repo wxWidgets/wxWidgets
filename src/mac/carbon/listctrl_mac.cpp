@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
+    #include "wx/settings.h"
 #endif
 
 #include "wx/mac/uma.h"
@@ -752,6 +753,12 @@ bool wxListCtrl::Create(wxWindow *parent,
             (EventHandlerRef *)&m_macListCtrlEventHandler);
     }
 
+    // set the default font to slightly smaller font that the native
+    // DataBrowser control uses:
+    wxFont font;
+    font.MacCreateThemeFont(kThemeViewsFont);
+    m_font = font;
+
     return true;
 }
 
@@ -770,6 +777,18 @@ wxListCtrl::~wxListCtrl()
         delete m_imageListState;
 
     delete m_renameTimer;
+}
+
+/*static*/
+wxVisualAttributes wxListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+{
+    wxVisualAttributes attr;
+
+    attr.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attr.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+    attr.font.MacCreateThemeFont(kThemeViewsFont);
+
+    return attr;
 }
 
 // ----------------------------------------------------------------------------
@@ -2302,9 +2321,26 @@ void wxListCtrl::RefreshItem(long item)
         return;
     }
 
-    wxRect rect;
-    GetItemRect(item, rect);
-    RefreshRect(rect);
+    if (m_dbImpl)
+    {
+        DataBrowserItemID id;
+
+        if ( !IsVirtual() )
+        {
+            wxMacDataItem* thisItem = m_dbImpl->GetItemFromLine(item);
+            id = (DataBrowserItemID) thisItem;
+        }
+        else
+            id = item+1;
+
+        m_dbImpl->wxMacDataBrowserControl::UpdateItems
+                  (
+                    kDataBrowserNoItem,
+                    1, &id,
+                    kDataBrowserItemNoProperty, // preSortProperty
+                    kDataBrowserNoItem // update all columns
+                  );
+    }
 }
 
 void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
@@ -2315,14 +2351,35 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
         return;
     }
 
-    wxRect rect1, rect2;
-    GetItemRect(itemFrom, rect1);
-    GetItemRect(itemTo, rect2);
+    if (m_dbImpl)
+    {
+        const long count = itemTo - itemFrom + 1;
+        DataBrowserItemID *ids = new DataBrowserItemID[count];
 
-    wxRect rect = rect1;
-    rect.height = rect2.GetBottom() - rect1.GetTop();
+        if ( !IsVirtual() )
+        {
+            for ( long i = 0; i < count; i++ )
+            {
+                wxMacDataItem* thisItem = m_dbImpl->GetItemFromLine(itemFrom+i);
+                ids[i] = (DataBrowserItemID) thisItem;
+            }
+        }
+        else
+        {
+            for ( long i = 0; i < count; i++ )
+                ids[i] = itemFrom+i+1;
+        }
 
-    RefreshRect(rect);
+        m_dbImpl->wxMacDataBrowserControl::UpdateItems
+                  (
+                    kDataBrowserNoItem,
+                    count, ids,
+                    kDataBrowserItemNoProperty, // preSortProperty
+                    kDataBrowserNoItem // update all columns
+                  );
+
+        delete[] ids;
+    }
 }
 
 void wxListCtrl::SetDropTarget( wxDropTarget *dropTarget )
@@ -2669,9 +2726,8 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     if (bgColor == wxNullColour)
         bgColor = listBgColor;
 
-    wxFont listFont = list->GetFont();
-    if (font == wxNullFont)
-        font = listFont;
+    if (!font.Ok())
+        font = list->GetFont();
 
     wxMacCFStringHolder cfString;
     cfString.Assign( text, wxLocale::GetSystemEncoding() );
@@ -2794,8 +2850,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
 
     if (font.Ok())
     {
-        if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
-            info.fontID = font.MacGetThemeFontID();
+        info.fontID = font.MacGetThemeFontID();
 
         ::TextSize( (short)(font.MacGetFontSize()) ) ;
         ::TextFace( font.MacGetFontStyle() ) ;

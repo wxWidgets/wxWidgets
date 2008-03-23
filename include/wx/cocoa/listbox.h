@@ -76,10 +76,14 @@ protected:
     WX_NSMutableArray m_cocoaItems;
     wxArrayPtrVoid m_itemClientData;
     struct objc_object *m_cocoaDataSource;
+    inline bool _WxCocoa_GetNeedsUpdate();
+    inline void _WxCocoa_SetNeedsUpdate(bool needsUpdate);
+    void _WxCocoa_OnIdle(wxIdleEvent &event);
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
 public:
+    virtual wxSize DoGetBestSize() const;
 // pure virtuals from wxListBoxBase
     virtual bool IsSelected(int n) const;
     virtual int GetSelections(wxArrayInt& aSelections) const;

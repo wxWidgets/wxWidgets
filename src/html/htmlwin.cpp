@@ -533,6 +533,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
         {
             wxLogError(_("Unable to open requested HTML document: %s"), location.c_str());
             m_tmpCanDrawLocks--;
+            SetHTMLStatusText(wxEmptyString);
             return false;
         }
 

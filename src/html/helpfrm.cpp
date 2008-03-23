@@ -90,6 +90,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
                              wxConfigBase *config, const wxString& rootpath)
 {
     m_HtmlHelpWin = new wxHtmlHelpWindow(m_Data);
+    m_HtmlHelpWin->SetController(m_helpController);
     if ( config)
         m_HtmlHelpWin->UseConfig(config, rootpath);
     

@@ -87,12 +87,13 @@ void wxHtmlHelpController::OnCloseFrame(wxCloseEvent& evt)
 {
     if (m_Config)
         WriteCustomization(m_Config, m_ConfigRoot);
-    
+
     evt.Skip();
 
     OnQuit();
 
-    m_helpWindow->SetController(NULL);
+    if ( m_helpWindow )
+        m_helpWindow->SetController(NULL);
     m_helpWindow = NULL;
     m_helpDialog = NULL;
     m_helpFrame = NULL;
