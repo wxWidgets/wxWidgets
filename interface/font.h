@@ -654,19 +654,7 @@ public:
 /**
     FIXME
 */
-wxFont Objects:
-;
-
-/**
-    FIXME
-*/
 wxFont wxNullFont;
-
-/**
-    FIXME
-*/
-wxFont Pointers:
-;
 
 /**
     FIXME
@@ -688,4 +676,33 @@ wxFont wxITALIC_FONT;
 */
 wxFont wxSWISS_FONT;
 
+
+
+// ============================================================================
+// Global functions/macros
+// ============================================================================
+
+/** @ingroup group_funcmacro_misc */
+//@{
+
+/**
+    Converts string to a wxFont best represented by the given string. Returns
+    @true on success.
+
+    @see wxToString(const wxFont&)
+
+    @header{wx/font.h}
+*/
+bool wxFromString(const wxString& string, wxFont* font);
+
+/**
+    Converts the given wxFont into a string.
+
+    @see wxFromString(const wxString&, wxFont*)
+
+    @header{wx/font.h}
+*/
+wxString wxToString(const wxFont& font);
+
+//@}
 

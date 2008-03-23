@@ -10,11 +10,10 @@
     @class wxColour
     @wxheader{colour.h}
 
-    A colour is an object representing a combination of Red, Green, and Blue (RGB)
-    intensity values,
-    and is used to determine drawing colours. See the
-    entry for wxColourDatabase for how a pointer to a predefined,
-    named colour may be returned instead of creating a new colour.
+    A colour is an object representing a combination of Red, Green, and Blue
+    (RGB) intensity values, and is used to determine drawing colours. See the
+    entry for wxColourDatabase for how a pointer to a predefined, named colour
+    may be returned instead of creating a new colour.
 
     Valid RGB values are in the range 0 to 255.
 
@@ -24,18 +23,21 @@
     @category{gdi}
 
     @stdobjects
-    ::Objects:, ::wxNullColour, ::Pointers:, ::wxBLACK, ::wxWHITE, ::wxRED,
-    ::wxBLUE, ::wxGREEN, ::wxCYAN, ::wxLIGHT_GREY,
+    ::wxNullColour, ::wxBLACK, ::wxWHITE, ::wxRED, ::wxBLUE, ::wxGREEN,
+    ::wxCYAN, ::wxLIGHT_GREY
 
     @see wxColourDatabase, wxPen, wxBrush, wxColourDialog, wxSystemSettings
 */
 class wxColour : public wxObject
 {
 public:
-    //@{
-    /**
-        Copy constructor.
 
+    /**
+        Default constructor.
+    */
+    wxColour();
+
+    /**
         @param red
             The red value.
         @param green
@@ -43,22 +45,22 @@ public:
         @param blue
             The blue value.
         @param alpha
-            The alpha value. Alpha values range from 0 (wxALPHA_TRANSPARENT) to 255
-        (wxALPHA_OPAQUE).
+            The alpha value. Alpha values range from 0 (wxALPHA_TRANSPARENT) to
+            255 (wxALPHA_OPAQUE).
+    */
+    wxColour(unsigned char red, unsigned char green, unsigned char blue,
+             unsigned char alpha = wxALPHA_OPAQUE);
+
+    /**
         @param colourName
             The colour name.
-        @param colour
-            The colour to copy.
-
-        @see wxColourDatabase
     */
-    wxColour();
-    wxColour(unsigned char red, unsigned char green,
-             unsigned char blue,
-             unsigned char alpha = wxALPHA_OPAQUE);
-    wxColour(const wxString& colourNname);
+    wxColour(const wxString& colourName);
+
+    /**
+        Copy constructor.
+    */
     wxColour(const wxColour& colour);
-    //@}
 
     /**
         Returns the alpha value, on platforms where alpha is not yet supported, this
@@ -71,24 +73,24 @@ public:
     */
     unsigned char Blue() const;
 
-    //@{
     /**
-        is not
+        Converts this colour to a wxString using the given flags.
+
+        The supported flags are wxC2S_NAME, to obtain the colour name (e.g.
+        wxColour(255,0,0) == "red"), wxC2S_CSS_SYNTAX, to obtain the colour in
+        the "rgb(r,g,b)" or "rgba(r,g,b,a)" syntax (e.g.
+        wxColour(255,0,0,85) == "rgba(255,0,0,0.333)"), and wxC2S_HTML_SYNTAX,
+        to obtain the colour as "#" followed by 6 hexadecimal digits (e.g.
+        wxColour(255,0,0) == "#FF0000").
+
+        This function never fails and always returns a non-empty string but
+        asserts if the colour has alpha channel (i.e. is non opaque) but
+        wxC2S_CSS_SYNTAX (which is the only one supporting alpha) is not
         specified in flags.
 
         @wxsince{2.7.0}
     */
     wxString GetAsString(long flags);
-    const wxC2S_NAME, to obtain the colour name (e.g.
-            wxColour(255,0,0) - "red"), wxC2S_CSS_SYNTAX, to obtain
-    the colour in the "rgb(r,g,b)" or "rgba(r,g,b,a)" syntax
-    (e.g. wxColour(255,0,0,85) - "rgba(255,0,0,0.333)"), and
-    wxC2S_HTML_SYNTAX, to obtain the colour as  "#" followed
-    by 6 hexadecimal digits (e.g. wxColour(255,0,0) - "#FF0000").
-    This function never fails and always returns a non-empty string but asserts if
-    the colour has alpha channel (i.e. is non opaque) but
-        wxC2S_CSS_SYNTAX();
-    //@}
 
     /**
         Returns a pixel value which is platform-dependent. On Windows, a COLORREF is
@@ -117,12 +119,15 @@ public:
     //@{
     /**
         Sets the RGB intensity values using the given values (first overload),
-        extracting them from the packed long (second overload), using the given string (third overloard).
+        extracting them from the packed long (second overload), using the given
+        string (third overloard).
+
         When using third form, Set() accepts: colour names (those listed in
-        wxTheColourDatabase()), the CSS-like
-        @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax (case insensitive)
-        and the HTML-like syntax (i.e. @c "#" followed by 6 hexadecimal digits
-        for red, green, blue components).
+        wxTheColourDatabase()), the CSS-like @c "rgb(r,g,b)" or
+        @c "rgba(r,g,b,a)" syntax (case insensitive) and the HTML-like syntax
+        (i.e. @c "#" followed by 6 hexadecimal digits for red, green, blue
+        components).
+
         Returns @true if the conversion was successful, @false otherwise.
 
         @wxsince{2.7.0}
@@ -161,19 +166,7 @@ public:
 /**
     FIXME
 */
-wxColour Objects:
-;
-
-/**
-    FIXME
-*/
 wxColour wxNullColour;
-
-/**
-    FIXME
-*/
-wxColour Pointers:
-;
 
 /**
     FIXME
@@ -210,4 +203,33 @@ wxColour wxCYAN;
 */
 wxColour wxLIGHT_GREY;
 
+
+
+// ============================================================================
+// Global functions/macros
+// ============================================================================
+
+/** @ingroup group_funcmacro_misc */
+//@{
+
+/**
+    Converts string to a wxColour best represented by the given string. Returns
+    @true on success.
+
+    @see wxToString(const wxColour&)
+
+    @header{wx/colour.h}
+*/
+bool wxFromString(const wxString& string, wxColour* colour);
+
+/**
+    Converts the given wxColour into a string.
+
+    @see wxFromString(const wxString&, wxColour*)
+
+    @header{wx/colour.h}
+*/
+wxString wxToString(const wxColour& colour);
+
+//@}
 

@@ -11,7 +11,5 @@
 @defgroup group_funcmacro_math Math
 @ingroup group_funcmacro
 
-@header{wx/math.h}
-
 */
 

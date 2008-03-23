@@ -314,20 +314,30 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_misc */
+//@{
+
 /**
-    Called when wxWidgets exits, to clean up the DDE system. This no longer needs
-    to be
-    called by the application.
-    See also wxDDEInitialize().
+    Called when wxWidgets exits, to clean up the DDE system. This no longer
+    needs to be called by the application.
+
+    @see wxDDEInitialize()
+
+    @header{wx/dde.h}
 */
 void wxDDECleanUp();
 
 /**
     Initializes the DDE system. May be called multiple times without harm.
-    This no longer needs to be called by the application: it will be called
-    by wxWidgets if necessary.
-    See also wxDDEServer, wxDDEClient, wxDDEConnection,
-    wxDDECleanUp().
+
+    This no longer needs to be called by the application: it will be called by
+    wxWidgets if necessary.
+
+    @see wxDDEServer, wxDDEClient, wxDDEConnection, wxDDECleanUp()
+
+    @header{wx/dde.h}
 */
 void wxDDEInitialize();
+
+//@}
 

@@ -2781,11 +2781,24 @@ public:
 
 
 
+// ============================================================================
+// Global functions/macros
+// ============================================================================
+
+/** @ingroup group_funcmacro_misc */
+//@{
+
 /**
     In a GUI application, this function posts @a event to the specified @e dest
-    object using wxEvtHandler::AddPendingEvent.
+    object using wxEvtHandler::AddPendingEvent().
 
-    Otherwise, it dispatches @a event immediately using wxEvtHandler::ProcessEvent.
-    See the respective documentation for details (and caveats).
+    Otherwise, it dispatches @a event immediately using
+    wxEvtHandler::ProcessEvent(). See the respective documentation for details
+    (and caveats).
+
+    @header{wx/event.h}
 */
 void wxPostEvent(wxEvtHandler* dest, wxEvent& event);
+
+//@}
+

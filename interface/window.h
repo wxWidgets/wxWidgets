@@ -2613,27 +2613,32 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/**
-    Find the deepest window at the given mouse position in screen coordinates,
-    returning the window if found, or @NULL if not.
-*/
-wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
+/** @ingroup group_funcmacro_misc */
+//@{
 
 /**
     Find the deepest window at the mouse pointer position, returning the window
     and current pointer position in screen coordinates.
+
+    @header{wx/window.h}
 */
 wxWindow* wxFindWindowAtPointer(wxPoint& pt);
 
 /**
-    Gets the currently active window (implemented for MSW and GTK only currently,
-    always returns @NULL in the other ports).
+    Gets the currently active window (implemented for MSW and GTK only
+    currently, always returns @NULL in the other ports).
+
+    @header{wx/window.h}
 */
 wxWindow* wxGetActiveWindow();
 
 /**
-    Returns the first top level parent of the given window, or in other words, the
-    frame or dialog containing it, or @NULL.
+    Returns the first top level parent of the given window, or in other words,
+    the frame or dialog containing it, or @NULL.
+
+    @header{wx/window.h}
 */
-wxWindow* wxGetTopLevelParent(wxWindow win);
+wxWindow* wxGetTopLevelParent(wxWindow* window);
+
+//@}
 

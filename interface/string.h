@@ -1248,27 +1248,3 @@ public:
     wxChar* operator wxChar *();
 };
 
-
-
-// ============================================================================
-// Global functions/macros
-// ============================================================================
-
-//@{
-/**
-    Converts its argument to string.
-    See also: wxFromString().
-*/
-wxString wxToString(const wxColour& col);
-wxString wxToString(const wxFont& col);
-//@}
-
-//@{
-/**
-    Converts string to the type of the second argument. Returns @true on success.
-    See also: wxToString().
-*/
-bool wxFromString(const wxString& str, wxColour* col);
-bool wxFromString(const wxString& str, wxFont* col);
-//@}
-

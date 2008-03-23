@@ -145,6 +145,9 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_misc */
+//@{
+
 /**
     This macro is defined to contain the @c printf() format specifier using
     which 64 bit integer numbers (i.e. those of type @c wxLongLong_t) can be
@@ -152,40 +155,48 @@ public:
 
     @code
     #ifdef wxLongLong_t
-            wxLongLong_t ll = wxLL(0x1234567890abcdef);
-            printf("Long long = %" wxLongLongFmtSpec "x\n", ll);
-        #endif
+        wxLongLong_t ll = wxLL(0x1234567890abcdef);
+        printf("Long long = %" wxLongLongFmtSpec "x\n", ll);
+    #endif
     @endcode
 
     @see wxLL()
-*/
 
+    @header{wx/longlong.h}
+*/
+#define wxLongLongFmtSpec
 
 /**
-    This macro is defined for the platforms with a native 64 bit integer type and
-    allows to define unsigned 64 bit compile time constants:
+    This macro is defined for the platforms with a native 64 bit integer type
+    and allow the use of 64 bit compile time constants:
 
     @code
     #ifdef wxLongLong_t
-            unsigned wxLongLong_t ll = wxULL(0x1234567890abcdef);
-        #endif
-    @endcode
-
-    @see wxLL(), wxLongLong
-*/
-wxLongLong_t wxULL(number);
-
-/**
-    This macro is defined for the platforms with a native 64 bit integer type and
-    allows to define 64 bit compile time constants:
-
-    @code
-    #ifdef wxLongLong_t
-            wxLongLong_t ll = wxLL(0x1234567890abcdef);
-        #endif
+        wxLongLong_t ll = wxLL(0x1234567890abcdef);
+    #endif
     @endcode
 
     @see wxULL(), wxLongLong
+
+    @header{wx/longlong.h}
 */
 wxLongLong_t wxLL(number);
+
+/**
+    This macro is defined for the platforms with a native 64 bit integer type
+    and allow the use of 64 bit compile time constants:
+
+    @code
+    #ifdef wxLongLong_t
+        unsigned wxLongLong_t ll = wxULL(0x1234567890abcdef);
+    #endif
+    @endcode
+
+    @see wxLL(), wxLongLong
+
+    @header{wx/longlong.h}
+*/
+wxLongLong_t wxULL(number);
+
+//@}
 

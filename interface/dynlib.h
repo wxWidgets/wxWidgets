@@ -363,24 +363,31 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_misc */
+//@{
+
 /**
     When loading a function from a DLL you always have to cast the returned
-    @c void * pointer to the correct type and, even more annoyingly, you have to
-    repeat this type twice if you want to declare and define a function pointer all
-    in one line
+    <tt>void *</tt> pointer to the correct type and, even more annoyingly, you
+    have to repeat this type twice if you want to declare and define a function
+    pointer all in one line.
+
     This macro makes this slightly less painful by allowing you to specify the
-    type only once, as the first parameter, and creating a variable of this type
-    named after the function but with @c pfn prefix and initialized with the
-    function @a name from the wxDynamicLibrary
-    @e dynlib.
+    type only once, as the first parameter, and creating a variable of this
+    type named after the function but with @c pfn prefix and initialized with
+    the function @a name from the wxDynamicLibrary @a dynlib.
 
     @param type
-        the type of the function
+        The type of the function.
     @param name
-        the name of the function to load, not a string (without quotes,
-        it is quoted automatically by the macro)
+        The name of the function to load, not a string (without quotes, it is
+        quoted automatically by the macro).
     @param dynlib
-        the library to load the function from
+        The library to load the function from.
+
+    @header{wx/dynlib.h}
 */
-#define wxDYNLIB_FUNCTION(type, name, dynlib)     /* implementation is private */
+#define wxDYNLIB_FUNCTION(type, name, dynlib)
+
+//@}
 
