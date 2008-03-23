@@ -35,8 +35,8 @@ public:
                m_nJoin == data.m_nJoin &&
                m_nCap == data.m_nCap &&
                m_vColour == data.m_vColour &&
-               (m_nStyle != wxSTIPPLE || m_vStipple.IsSameAs(data.m_vStipple)) &&
-               (m_nStyle != wxUSER_DASH ||
+               (m_nStyle != wxPENSTYLE_STIPPLE || m_vStipple.IsSameAs(data.m_vStipple)) &&
+               (m_nStyle != wxPENSTYLE_USER_DASH ||
                 (m_dash == data.m_dash &&
                     memcmp(m_dash, data.m_dash, m_nbDash*sizeof(wxDash)) == 0));
     }
@@ -101,15 +101,15 @@ public:
     void SetPS(HPS hPS);
 
     inline wxColour& GetColour(void) const { return (M_PENDATA ? M_PENDATA->m_vColour : wxNullColour); };
-    inline int       GetWidth(void) const { return (M_PENDATA ? M_PENDATA->m_nWidth : 0); };
-    inline wxPenStyle GetStyle(void) const { return (M_PENDATA ? M_PENDATA->m_nStyle : 0); };
-    inline wxPenJoin  GetJoin(void) const { return (M_PENDATA ? M_PENDATA->m_nJoin : 0); };
-    inline wxPenCap   GetCap(void) const { return (M_PENDATA ? M_PENDATA->m_nCap : 0); };
+    inline int       GetWidth(void) const { return (M_PENDATA ? M_PENDATA->m_nWidth : -1); };
+    inline wxPenStyle GetStyle(void) const { return (M_PENDATA ? M_PENDATA->m_nStyle : wxPENSTYLE_INVALID); };
+    inline wxPenJoin  GetJoin(void) const { return (M_PENDATA ? M_PENDATA->m_nJoin : wxJOIN_INVALID); };
+    inline wxPenCap   GetCap(void) const { return (M_PENDATA ? M_PENDATA->m_nCap : wxCAP_INVALID); };
     inline int       GetPS(void) const { return (M_PENDATA ? M_PENDATA->m_hPen : 0); };
     inline int       GetDashes(wxDash **ptr) const
     {
         *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
-        return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
+        return (M_PENDATA ? M_PENDATA->m_nbDash : -1);
     }
     inline wxDash*   GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*)NULL); };
     inline int       GetDashCount() const { return (M_PENDATA ? M_PENDATA->m_nbDash : 0); };

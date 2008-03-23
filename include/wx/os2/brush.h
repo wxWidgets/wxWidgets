@@ -65,8 +65,8 @@ public:
     virtual void SetStipple(const wxBitmap& rStipple);
 
     inline wxColour& GetColour(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_vColour : wxNullColour); };
-    virtual wxBrushStyle GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : 0); };
-    inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : 0); };
+    virtual wxBrushStyle GetStyle(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_nStyle : wxBRUSHSTYLE_INVALID); };
+    inline wxBitmap* GetStipple(void) const { return (M_BRUSHDATA ? & M_BRUSHDATA->m_vStipple : NULL); };
     inline int       GetPS(void) const { return (M_BRUSHDATA ? M_BRUSHDATA->m_hBrush : 0); };
 
     //
