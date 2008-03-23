@@ -18,7 +18,5 @@ the beginning of the program).
 
 Related Overviews: @ref overview_log
 
-@header{wx/log.h}
-
 */
 

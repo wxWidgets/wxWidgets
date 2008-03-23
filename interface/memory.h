@@ -238,31 +238,58 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/**
-    @b NB: This function is now obsolete, replaced by @ref overview_logfunctions
-    "Log functions".
-    Calls wxTraceLevel with printf-style variable argument syntax. Output
-    is directed to the current output stream (see wxDebugContext).
-    The first argument should be the level at which this information is appropriate.
-    It will only be output if the level returned by wxDebugContext::GetLevel is
-    equal to or greater than
-    this value.
-*/
-#define WXTRACELEVEL()     /* implementation is private */
+/** @ingroup group_funcmacro_log */
+//@{
 
 /**
-    @b NB: This function is now obsolete, replaced by @ref overview_logfunctions
-    "Log functions".
-    Takes printf-style variable argument syntax. Output
-    is directed to the current output stream (see wxDebugContext).
+    @deprecated Use one of the wxLogTrace() functions or one of the
+                wxVLogTrace() functions instead.
+
+    Calls wxTrace() with printf-style variable argument syntax. Output is
+    directed to the current output stream (see wxDebugContext).
+
+    @header{wx/memory.h}
 */
-void wxTrace(const wxString& fmt, ... );
+#define WXTRACE(format, ...)
 
 /**
-    @b NB: This macro is now obsolete, replaced by @ref overview_logfunctions "Log
-    functions".
-    Calls wxTrace with printf-style variable argument syntax. Output
-    is directed to the current output stream (see wxDebugContext).
+    @deprecated Use one of the wxLogTrace() functions or one of the
+                wxVLogTrace() functions instead.
+
+    Calls wxTraceLevel with printf-style variable argument syntax. Output is
+    directed to the current output stream (see wxDebugContext). The first
+    argument should be the level at which this information is appropriate. It
+    will only be output if the level returned by wxDebugContext::GetLevel is
+    equal to or greater than this value.
+
+    @header{wx/memory.h}
 */
-#define Include files WXTRACE()     /* implementation is private */
+#define WXTRACELEVEL(level, format, ...)
+
+/**
+    @deprecated Use one of the wxLogTrace() functions or one of the
+                wxVLogTrace() functions instead.
+
+    Takes printf-style variable argument syntax. Output is directed to the
+    current output stream (see wxDebugContext).
+
+    @header{wx/memory.h}
+*/
+void wxTrace(const wxString& format, ...);
+
+/**
+    @deprecated Use one of the wxLogTrace() functions or one of the
+                wxVLogTrace() functions instead.
+
+    Takes @e printf() style variable argument syntax. Output is directed to the
+    current output stream (see wxDebugContext). The first argument should be
+    the level at which this information is appropriate. It will only be output
+    if the level returned by wxDebugContext::GetLevel() is equal to or greater
+    than this value.
+
+    @header{wx/memory.h}
+*/
+void wxTraceLevel(int level, const wxString& format, ...);
+
+//@}
 

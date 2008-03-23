@@ -206,6 +206,61 @@ bool wxUnsetEnv(const wxString& var);
 
 
 
+/** @ingroup group_funcmacro_log */
+//@{
+
+/**
+    @deprecated Replaced by wxLogDebug().
+
+    Displays a debugging message. Under Windows, this will appear on the
+    debugger command window, and under Unix, it will be written to standard
+    error.
+
+    The syntax is identical to @e printf(), pass a format string and a variable
+    list of arguments.
+
+    @note Under Windows, if your application crashes before the message appears
+          in the debugging window, put a wxYield() call after each wxDebugMsg()
+          call. wxDebugMsg() seems to be broken under WIN32s (at least for
+          Watcom C++): preformat your messages and use OutputDebugString
+          instead.
+
+    @header{wx/utils.h}
+*/
+void wxDebugMsg(const wxString& format, ... );
+
+/**
+    @deprecated Replaced by wxLogFatalError().
+
+    Displays @a message and exits. This writes to standard error under Unix,
+    and pops up a message box under Windows. Used for fatal internal wxWidgets
+    errors.
+
+    @eee wxError()
+
+    @header{wx/utils.h}
+*/
+void wxFatalError(const wxString& message,
+                   const wxString& title = "wxWidgets Fatal Error");
+
+/**
+    @deprecated Replaced by wxLogError().
+
+    Displays @a message and continues. This writes to standard error under
+    Unix, and pops up a message box under Windows. Used for internal wxWidgets
+    errors.
+
+    @see wxFatalError()
+
+    @header{wx/utils.h}
+*/
+void wxError(const wxString& message,
+              const wxString& title = "wxWidgets Internal Error");
+
+//@}
+
+
+
 /**
     Returns the type of power source as one of @c wxPOWER_SOCKET,
     @c wxPOWER_BATTERY or @c wxPOWER_UNKNOWN.
@@ -235,18 +290,6 @@ wxPowerType wxGetPowerType();
 wxString wxGetUserId();
 bool wxGetUserId(char* buf, int sz);
 //@}
-
-/**
-    @b NB: This function is now obsolete, please use
-    wxLogFatalError() instead.
-    Displays @a msg and exits. This writes to standard error under Unix,
-    and pops up a message box under Windows. Used for fatal internal
-    wxWidgets errors. See also wxError().
-
-    @header{wx/utils.h}
-*/
-void wxFatalError(const wxString& msg,
-                  const wxString& title = "wxWidgets Fatal Error");
 
 /**
     Returns battery state as one of @c wxBATTERY_NORMAL_STATE,
@@ -294,24 +337,6 @@ long wxNewId();
     @header{wx/utils.h}
 */
 void wxRegisterId(long id);
-
-/**
-    @b NB: This function is now obsolete, replaced by Log
-    functions() and wxLogDebug() in particular.
-    Display a debugging message; under Windows, this will appear on the
-    debugger command window, and under Unix, it will be written to standard
-    error.
-    The syntax is identical to @b printf: pass a format string and a
-    variable list of arguments.
-    @b Tip: under Windows, if your application crashes before the
-    message appears in the debugging window, put a wxYield call after
-    each wxDebugMsg call. wxDebugMsg seems to be broken under WIN32s
-    (at least for Watcom C++): preformat your messages and use OutputDebugString
-    instead.
-
-    @header{wx/utils.h}
-*/
-void wxDebugMsg(const wxString& fmt, ... );
 
 /**
     For normal keys, returns @true if the specified key is currently down.
@@ -397,18 +422,6 @@ void wxEnableTopLevelWindows(bool enable = true);
 */
 wxString wxStripMenuCodes(const wxString& str,
                             int flags = wxStrip_All);
-
-/**
-    @b NB: This function is now obsolete, please use wxLogError()
-    instead.
-    Displays @a msg and continues. This writes to standard error under
-    Unix, and pops up a message box under Windows. Used for internal
-    wxWidgets errors. See also wxFatalError().
-
-    @header{wx/utils.h}
-*/
-void wxError(const wxString& msg,
-            const wxString& title = "wxWidgets Internal Error");
 
 /**
     Open the @a url in user's default browser. If @a flags parameter contains
