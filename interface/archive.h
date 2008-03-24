@@ -34,7 +34,7 @@ public:
         Closes the current entry. On a non-seekable stream reads to the end of
         the current entry first.
     */
-    bool CloseEntry();
+    virtual bool CloseEntry();
 
     /**
         Closes the current entry if one is open, then reads the meta-data for
@@ -50,7 +50,7 @@ public:
         @a entry must be from the same archive file that this wxArchiveInputStream
         is reading, and it must be reading it from a seekable stream.
     */
-    bool OpenEntry(wxArchiveEntry& entry);
+    virtual bool OpenEntry(wxArchiveEntry& entry);
 };
 
 
@@ -77,7 +77,7 @@ public:
     /**
         Calls Close() if it has not already been called.
     */
-    ~wxArchiveOutputStream();
+    virtual ~wxArchiveOutputStream();
 
     /**
         Closes the archive, returning @true if it was successfully written.

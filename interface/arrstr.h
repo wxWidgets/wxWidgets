@@ -135,8 +135,7 @@ public:
         This function uses linear search for wxArrayString.
         Returns index of the first item matched or @c wxNOT_FOUND if there is no match.
     */
-    int Index(const wxString& sz, bool bCase = true,
-              bool bFromEnd = false);
+    int Index(const wxString& sz, bool bCase = true, bool bFromEnd = false) const;
 
     /**
         Insert the given number of @a copies of the new element in the array before the
@@ -156,23 +155,23 @@ public:
         Returns @true if the array is empty, @false otherwise. This function returns the
         same result as @e GetCount() == 0 but is probably easier to read.
     */
-    bool IsEmpty();
+    bool IsEmpty() const;
 
     /**
-        Return the array element at position @e nIndex. An assert failure will
+        Return the array element at position @a nIndex. An assert failure will
         result from an attempt to access an element beyond the end of array in debug
         mode, but no check is done in release mode.
 
         @see operator[] for the operator version.
     */
-    wxString Item(size_t nIndex) const;
+    wxString& Item(size_t nIndex) const;
 
     /**
         Returns the last element of the array. Attempt to access the last element of
         an empty array will result in assert failure in debug build, however no checks
         are done in release mode.
     */
-    wxString Last();
+    wxString& Last() const;
 
     /**
         Removes the first item matching this value. An assert failure is provoked by
@@ -243,7 +242,7 @@ public:
     /**
         Assignment operator.
     */
-    wxArrayString operator =(const wxArrayString& array);
+    wxArrayString& operator=(const wxArrayString&);
 
     /**
         Compares 2 arrays respecting the case. Returns @true only if the arrays have
@@ -252,13 +251,13 @@ public:
     bool operator ==(const wxArrayString& array) const;
 
     /**
-        Return the array element at position @e nIndex. An assert failure will
+        Return the array element at position @a nIndex. An assert failure will
         result from an attempt to access an element beyond the end of array in
         debug mode, but no check is done in release mode.
 
         This is the operator version of the Item() method.
     */
-    wxString operator[](size_t nIndex);
+    wxString& operator[](size_t nIndex) const;
 };
 
 

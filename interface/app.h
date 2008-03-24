@@ -225,10 +225,11 @@ public:
             the message specified as argument to wxASSERT_MSG or wxFAIL_MSG, will
             be @NULL if just wxASSERT or wxFAIL was used
     */
-    virtual void OnAssertFailure(const wxChar file, int line,
-                                 const wxChar func,
-                                 const wxChar cond,
-                                 const wxChar msg);
+    virtual void OnAssertFailure(const wxChar *file,
+                                 int line,
+                                 const wxChar *func,
+                                 const wxChar *cond,
+                                 const wxChar *msg);
 
     /**
         Called when command line parsing fails (i.e. an incorrect command line option
@@ -537,7 +538,7 @@ public:
         If this function returns @false and you need to attract users attention to
         the application, you may use wxTopLevelWindow::RequestUserAttention to do it.
     */
-    bool IsActive() const;
+    virtual bool IsActive() const;
 
     /**
         Windows-only function for processing a message. This function is called
@@ -573,7 +574,7 @@ public:
 
         @see wxIdleEvent
     */
-    bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
+    virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
 
     /**
         Allows the programmer to specify whether the application will exit when the

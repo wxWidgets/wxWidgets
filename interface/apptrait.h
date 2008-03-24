@@ -78,6 +78,11 @@ public:
         Returns the wxStandardPaths object for the application.
         It's normally the same for wxBase and wxGUI except in the case of wxMac
         and wxCocoa.
+
+        @todo the real function returns a reference to wxStandardPathsBase;
+              user looking at these docs will write code:
+                    wxStandardPaths &ref = ...->GetStandardPaths();
+              which won't compile...
     */
     virtual wxStandardPaths& GetStandardPaths();
 
@@ -93,8 +98,7 @@ public:
         and put in given pointers the versions of the GTK library in use.
         See wxPlatformInfo for more details.
     */
-    virtual wxPortId GetToolkitVersion(int* major = NULL,
-                                       int* minor = NULL);
+    virtual wxPortId GetToolkitVersion(int* major = NULL, int* minor = NULL) const;
 
     /**
         Returns @true if @c fprintf(stderr) goes somewhere, @false otherwise.
@@ -105,7 +109,7 @@ public:
         Returns @true if the library was built as wxUniversal.
         Always returns @false for wxBase-only apps.
     */
-    bool IsUsingUniversalWidgets() const;
+    virtual bool IsUsingUniversalWidgets() const;
 
     /**
         Shows the assert dialog with the specified message in GUI mode or just prints

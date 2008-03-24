@@ -98,7 +98,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxAC_DEFAULT_STYLE,
-                const wxString& name = "animationctrl");
+                const wxString& name = wxAnimationCtrlNameStr);
 
     /**
         Returns the animation associated with this control.
@@ -156,7 +156,7 @@ public:
         Note that the inactive bitmap, if smaller than the control's size, will be
         centered in the control; if bigger, it will be stretched to fit it.
     */
-    void SetInactiveBitmap(const wxBitmap& bmp);
+    virtual void SetInactiveBitmap(const wxBitmap& bmp);
 
     /**
         Stops playing the animation.
@@ -207,7 +207,7 @@ public:
         Destructor.
         See @ref overview_refcount_destruct for more info.
     */
-    ~wxAnimation();
+    virtual ~wxAnimation();
 
     /**
         Returns the delay for the i-th frame in milliseconds.

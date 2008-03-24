@@ -161,7 +161,7 @@ public:
         The destructor automatically removes the provider from the provider stack used
         by GetBitmap().
     */
-    ~wxArtProvider();
+    virtual ~wxArtProvider();
 
     /**
         Derived art provider classes must override this method to create requested art
