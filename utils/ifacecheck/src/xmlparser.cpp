@@ -177,11 +177,11 @@ wxString wxMethod::GetAsString() const
         ret += m_args[i].GetAsString();
         if (!m_argDefaults[i].IsEmpty())
             ret += " = " + m_argDefaults[i];
-        ret += ",";
+        ret += ", ";
     }
 
     if (m_args.GetCount()>0)
-        ret.RemoveLast();
+        ret = ret.Left(ret.Len()-2);
 
     ret += ")";
 
@@ -192,8 +192,9 @@ wxString wxMethod::GetAsString() const
     if (m_bVirtual)
         ret = "virtual " + ret;
 
-    if (m_bDeprecated)
-        ret = "wxDEPRECATED( " + ret + " )";
+    // in doxygen headers we don't need wxDEPRECATED:
+    //if (m_bDeprecated)
+    //    ret = "wxDEPRECATED( " + ret + " )";
 
     return ret;
 }
@@ -629,17 +630,18 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
             {
                 // this to-resolve-type references a "primary" type
 
-                wxString newtype;
+                wxString newtype = primary->second;
                 int attribs = i->second.attribs;
 
+                // attribs may contain a combination of ATTRIB_* flags:
                 if (attribs & ATTRIB_CONST)
-                    newtype = "const " + primary->second;
+                    newtype = "const " + newtype;
                 if (attribs & ATTRIB_REFERENCE)
-                    newtype = primary->second + "&";
+                    newtype = newtype + "&";
                 if (attribs & ATTRIB_POINTER)
-                    newtype = primary->second + "*";
+                    newtype = newtype + "*";
                 if (attribs & ATTRIB_ARRAY)
-                    newtype = primary->second + "[]";
+                    newtype = newtype + "[]";
 
                 // add the resolved type to the list of "primary" types
                 types[id] = newtype;
@@ -1088,6 +1090,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
         }
         else if (child->GetName() == "location")
         {
+            line = -1;
             if (child->GetAttribute("line").ToLong(&line))
                 m.SetLocation((int)line);
             header = child->GetAttribute("file");
