@@ -1782,6 +1782,17 @@ static void AddStdXRCID_Records()
 
 // --------------- module and globals -----------------------------
 
+// normally we would do the cleanup from wxXmlResourceModule::OnExit() but it
+// can happen that some XRC records have been created because of the use of
+// XRCID() in event tables, which happens during static objects initialization,
+// but then the application initialization failed and so the wx modules were
+// neither initialized nor cleaned up -- this static object does the cleanup in
+// this case
+static struct wxXRCStaticCleanup
+{
+    ~wxXRCStaticCleanup() { CleanXRCID_Records(); }
+} s_staticCleanup;
+
 class wxXmlResourceModule: public wxModule
 {
 DECLARE_DYNAMIC_CLASS(wxXmlResourceModule)
