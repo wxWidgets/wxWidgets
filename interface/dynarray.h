@@ -517,92 +517,6 @@ public:
     */
     void Sort(CMPFUNC<T> compareFunction);
 
-    /**
-        This macro may be used to append all elements of the @a other array to the
-        @e array. The two arrays must be of the same type.
-    */
-#define void WX_APPEND_ARRAY(wxArray& array, wxArray& other)     /* implementation is private */
-
-    /**
-        This macro may be used to delete all elements of the array before emptying it.
-        It can not be used with wxObjArrays - but they will delete their elements anyhow
-        when you call Empty().
-    */
-#define void WX_CLEAR_ARRAY(wxArray& array)     /* implementation is private */
-
-    //@{
-    /**
-        This macro declares a new object array class named @a name and containing
-        the elements of type @e T. The second form is used when compiling wxWidgets as
-        a DLL under Windows and array needs to be visible outside the DLL.  The third is
-        needed for exporting an array from a user DLL.
-        Example:
-
-        You must use WX_DEFINE_OBJARRAY() macro to define
-        the array class - otherwise you would get link errors.
-    */
-    WX_DECLARE_OBJARRAY(T, name);
-    WX_DECLARE_EXPORTED_OBJARRAY(T, name);
-    WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name);
-    //@}
-
-    //@{
-    /**
-        This macro defines a new array class named @a name and containing the
-        elements of type @e T. The second form is used when compiling wxWidgets as
-        a DLL under Windows and array needs to be visible outside the DLL.  The third is
-        needed for exporting an array from a user DLL.
-        Example:
-
-        Note that wxWidgets predefines the following standard array classes: @b
-        wxArrayInt,
-        @b wxArrayLong, @b wxArrayShort, @b wxArrayDouble,  @b wxArrayPtrVoid.
-    */
-    WX_DEFINE_ARRAY(T, name);
-    WX_DEFINE_EXPORTED_ARRAY(T, name);
-    WX_DEFINE_USER_EXPORTED_ARRAY(T, name, exportspec);
-    //@}
-
-    //@{
-    /**
-        This macro defines the methods of the array class @a name not defined by the
-        WX_DECLARE_OBJARRAY() macro. You must include the
-        file wx/arrimpl.cpp before using this macro and you must have the full
-        declaration of the class of array elements in scope! If you forget to do the
-        first, the error will be caught by the compiler, but, unfortunately, many
-        compilers will not give any warnings if you forget to do the second - but the
-        objects of the class will not be copied correctly and their real destructor will
-        not be called.  The latter two forms are merely aliases of the first to satisfy
-        some people's sense of symmetry when using the exported declarations.
-        Example of usage:
-    */
-    WX_DEFINE_OBJARRAY(name);
-    WX_DEFINE_EXPORTED_OBJARRAY(name);
-    WX_DEFINE_USER_EXPORTED_OBJARRAY(name);
-    //@}
-
-    //@{
-    /**
-        This macro defines a new sorted array class named @a name and containing
-        the elements of type @e T. The second form is used when compiling wxWidgets as
-        a DLL under Windows and array needs to be visible outside the DLL.  The third is
-        needed for exporting an array from a user DLL.
-        Example:
-
-        You will have to initialize the objects of this class by passing a comparison
-        function to the array object constructor like this:
-    */
-    WX_DEFINE_SORTED_ARRAY(T, name);
-    WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name);
-    WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name);
-    //@}
-
-    /**
-        This macro may be used to prepend all elements of the @a other array to the
-        @e array. The two arrays must be of the same type.
-    */
-#define void WX_PREPEND_ARRAY(wxArray& array, wxArray& other)     /* implementation is private */
-
     //@{
     /**
         The copy constructors and assignment operators perform a shallow array copy
@@ -630,3 +544,89 @@ public:
     //@}
 };
 
+
+/**
+    This macro may be used to append all elements of the @a other array to the
+    @e array. The two arrays must be of the same type.
+*/
+#define WX_APPEND_ARRAY(wxArray& array, wxArray& other)     /* implementation is private */
+
+/**
+    This macro may be used to delete all elements of the array before emptying it.
+    It can not be used with wxObjArrays - but they will delete their elements anyhow
+    when you call Empty().
+*/
+#define WX_CLEAR_ARRAY(wxArray& array)     /* implementation is private */
+
+//@{
+/**
+    This macro declares a new object array class named @a name and containing
+    the elements of type @e T. The second form is used when compiling wxWidgets as
+    a DLL under Windows and array needs to be visible outside the DLL.  The third is
+    needed for exporting an array from a user DLL.
+    Example:
+
+    You must use WX_DEFINE_OBJARRAY() macro to define
+    the array class - otherwise you would get link errors.
+*/
+#define WX_DECLARE_OBJARRAY(T, name)                   /* implementation is private */
+#define WX_DECLARE_EXPORTED_OBJARRAY(T, name)          /* implementation is private */
+#define WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name)     /* implementation is private */
+//@}
+
+//@{
+/**
+    This macro defines a new array class named @a name and containing the
+    elements of type @e T. The second form is used when compiling wxWidgets as
+    a DLL under Windows and array needs to be visible outside the DLL.  The third is
+    needed for exporting an array from a user DLL.
+    Example:
+
+    Note that wxWidgets predefines the following standard array classes: @b
+    wxArrayInt,
+    @b wxArrayLong, @b wxArrayShort, @b wxArrayDouble,  @b wxArrayPtrVoid.
+*/
+#define WX_DEFINE_ARRAY(T, name)                            /* implementation is private */
+#define WX_DEFINE_EXPORTED_ARRAY(T, name)                   /* implementation is private */
+#define WX_DEFINE_USER_EXPORTED_ARRAY(T, name, exportspec)  /* implementation is private */
+//@}
+
+//@{
+/**
+    This macro defines the methods of the array class @a name not defined by the
+    WX_DECLARE_OBJARRAY() macro. You must include the
+    file wx/arrimpl.cpp before using this macro and you must have the full
+    declaration of the class of array elements in scope! If you forget to do the
+    first, the error will be caught by the compiler, but, unfortunately, many
+    compilers will not give any warnings if you forget to do the second - but the
+    objects of the class will not be copied correctly and their real destructor will
+    not be called.  The latter two forms are merely aliases of the first to satisfy
+    some people's sense of symmetry when using the exported declarations.
+    Example of usage:
+*/
+#define WX_DEFINE_OBJARRAY(name)                    /* implementation is private */
+#define WX_DEFINE_EXPORTED_OBJARRAY(name)           /* implementation is private */
+#define WX_DEFINE_USER_EXPORTED_OBJARRAY(name)      /* implementation is private */
+//@}
+
+//@{
+/**
+    This macro defines a new sorted array class named @a name and containing
+    the elements of type @e T. The second form is used when compiling wxWidgets as
+    a DLL under Windows and array needs to be visible outside the DLL.  The third is
+    needed for exporting an array from a user DLL.
+    Example:
+
+    You will have to initialize the objects of this class by passing a comparison
+    function to the array object constructor like this:
+*/
+#define WX_DEFINE_SORTED_ARRAY(T, name)                 /* implementation is private */
+#define WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name)        /* implementation is private */
+#define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name)   /* implementation is private */
+//@}
+
+/**
+    This macro may be used to prepend all elements of the @a other array to the
+    @e array. The two arrays must be of the same type.
+*/
+#define WX_PREPEND_ARRAY(wxArray& array, wxArray& other)     /* implementation is private */
