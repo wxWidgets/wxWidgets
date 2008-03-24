@@ -90,11 +90,13 @@ wxExtHelpController::~wxExtHelpController()
     DeleteList();
 }
 
+#if WXWIN_COMPATIBILITY_2_8
 void wxExtHelpController::SetBrowser(const wxString& browsername, bool isNetscape)
 {
     m_BrowserName = browsername;
     m_BrowserIsNetscape = isNetscape;
 }
+#endif
 
 void wxExtHelpController::SetViewer(const wxString& viewer, long flags)
 {
