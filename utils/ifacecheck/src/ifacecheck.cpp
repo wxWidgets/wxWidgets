@@ -37,10 +37,10 @@ bool g_verbose = false;
 #define API_DUMP_FILE           "dump.api.txt"
 #define INTERFACE_DUMP_FILE     "dump.interface.txt"
 
-#define MODIFY_SWITCH       "m"
-#define DUMP_SWITCH         "dump"
-#define HELP_SWITCH         "h"
-#define VERBOSE_SWITCH      "v"
+#define MODIFY_SWITCH           "m"
+#define DUMP_SWITCH             "dump"
+#define HELP_SWITCH             "h"
+#define VERBOSE_SWITCH          "v"
 
 static const wxCmdLineEntryDesc g_cmdLineDesc[] =
 {
@@ -199,7 +199,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
     for (unsigned int i=0; i<iface->GetMethodCount(); i++)
     {
         const wxMethod& m = iface->GetMethod(i);
-        wxString tofind = m.GetAsString();
+        const wxString& tofind = m.GetAsString();
         int matches = 0;
 
         // search in the methods of the api classes provided
@@ -271,35 +271,47 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
         return;
     }
 
-#if 0
-    // fix iface signature to match that of "api" method:
-    file.RemoveLine(iface->GetLocation());
-    file.InsertLine(api->GetAsString(), iface->GetLocation());
-#else
     // GetLocation() returns the line where the last part of the prototype is placed:
     int end = iface->GetLocation()-1;
+    if (end <= 0 || end >= (int)file.GetLineCount()) {
+        LogWarning("invalid location info for method '%s': %d.",
+                   iface->GetAsString(), iface->GetLocation());
+        return;
+    }
 
     // find the start point of this prototype declaration:
     int start = end;
-    while (!file.GetLine(start).Contains(";") && !file.GetLine(start).Contains("*/"))
-    {
+    while (start > 0 &&
+           !file.GetLine(start).Contains(";") &&
+            !file.GetLine(start).Contains("*/"))
         start--;
-        if (start <= 0)
-        {
-            LogError("can't find the beginning of the declaration of '%s' method in '%s' header",
-                     iface->GetAsString(), header);
-            return;
-        }
+
+    if (start <= 0)
+    {
+        LogError("can't find the beginning of the declaration of '%s' method in '%s' header",
+                    iface->GetAsString(), header);
+        return;
     }
 
     // remove the old prototype
     for (int i=start; i<=end; i++)
-        file.RemoveLine(i);
+        file.RemoveLine(start);     // remove (end-start)-nth times the start-th line
+
+#define INDENTATION_STR  wxString("    ")
+
+    // if possible, add also the @deprecated tag in the doxygen comment
+    if (file.GetLine(start-1).Contains("*/") && api->IsDeprecated())
+    {
+        file.RemoveLine(start-1);
+        file.InsertLine(INDENTATION_STR + INDENTATION_STR +
+                        "@deprecated @todo provide deprecation description", start-1);
+        file.InsertLine(INDENTATION_STR + "*/", start++);
+    }
 
     // insert the new one
-    file.InsertLine("    " + api->GetAsString(), start);
-#endif
+    file.InsertLine(INDENTATION_STR + api->GetAsString() + ";", start);
 
+    // now save the modification
     if (!file.Write()) {
         LogError("can't save the '%s' header file.", header);
         return;
