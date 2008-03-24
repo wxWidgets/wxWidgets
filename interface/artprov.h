@@ -197,7 +197,7 @@ public:
                                   const wxArtClient& client);
 
     /**
-        Delete the given @e provider.
+        Delete the given @a provider.
     */
     static bool Delete(wxArtProvider* provider);
 

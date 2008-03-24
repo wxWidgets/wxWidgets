@@ -115,7 +115,7 @@ public:
 
     /**
         Takes ownership of @a entry and uses it to create a new entry in the
-        archive. @a entry is then opened in the input stream @e stream
+        archive. @a entry is then opened in the input stream @a stream
         and its contents copied to this stream.
 
         For archive types which compress entry data, CopyEntry() is likely to be
@@ -124,7 +124,7 @@ public:
 
         @a entry must be from the same archive file that @a stream is
         accessing. For non-seekable streams, @a entry must also be the last
-        thing read from @e stream.
+        thing read from @a stream.
     */
     virtual bool CopyEntry(wxArchiveEntry* entry,
                            wxArchiveInputStream& stream);
@@ -616,7 +616,7 @@ public:
 
     /**
         Construct the iterator that returns all the entries in the archive input
-        stream @e arc.
+        stream @a arc.
     */
     wxArchiveIterator(Arc& arc);
 

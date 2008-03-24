@@ -27,7 +27,7 @@
     (wxArrayString uses its knowledge of internals of wxString class to achieve this).
 
     This class is used in the same way as other dynamic arrays(), except that no
-    @e WX_DEFINE_ARRAY declaration is needed for it.
+    ::WX_DEFINE_ARRAY declaration is needed for it.
     When a string is added or inserted in the array, a copy of the string is created,
     so the original string may be safely deleted (e.g. if it was a @e wxChar *
     pointer the memory it was using can be freed immediately after this).
@@ -71,14 +71,14 @@ public:
 
     //@{
     /**
-        Constructor from a C string array. Pass a size sz and array arr.
+        Constructor from a C string array. Pass a size @a sz and an array @a arr.
     **/
     wxArrayString(size_t sz, const char** arr);
     wxArrayString(size_t sz, const wchar_t** arr);
     //@}
 
     /**
-        Constructor from a wxString array. Pass a size @a sz and array @e arr.
+        Constructor from a wxString array. Pass a size @a sz and array @a arr.
     */
     wxArrayString(size_t sz, const wxString* arr);
 
@@ -129,7 +129,7 @@ public:
 
     /**
         Search the element in the array, starting from the beginning if @a bFromEnd
-        is @false or from end otherwise. If @e bCase, comparison is case sensitive
+        is @false or from end otherwise. If @a bCase, comparison is case sensitive
         (default), otherwise the case is ignored.
 
         This function uses linear search for wxArrayString.
@@ -139,21 +139,21 @@ public:
 
     /**
         Insert the given number of @a copies of the new element in the array before the
-        position @e nIndex. Thus, for example, to insert the string in the beginning of
+        position @a nIndex. Thus, for example, to insert the string in the beginning of
         the array you would write:
 
         @code
         Insert("foo", 0);
         @endcode
 
-        If @a nIndex is equal to @e GetCount() this function behaves as Add().
+        If @a nIndex is equal to GetCount() this function behaves as Add().
     */
     void Insert(const wxString& str, size_t nIndex,
                 size_t copies = 1);
 
     /**
         Returns @true if the array is empty, @false otherwise. This function returns the
-        same result as @e GetCount() == 0 but is probably easier to read.
+        same result as GetCount() == 0 but is probably easier to read.
     */
     bool IsEmpty() const;
 
@@ -205,7 +205,7 @@ public:
 
     /**
         Sorts the array using the specified @a compareFunction for item comparison.
-        @e CompareFunction is defined as a function taking two @e const wxString
+        @a CompareFunction is defined as a function taking two @e const wxString
         parameters and returning an @e int value less than, equal to or greater
         than 0 if the first string is less than, equal to or greater than the
         second one.
@@ -359,7 +359,7 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
     @a sep and returns the result as a wxString.
 
     If the @a escape character is non-@NULL, then it's used as prefix for each
-    occurrence of @e sep in the strings contained in @a arr before joining them
+    occurrence of @a sep in the strings contained in @a arr before joining them
     which is necessary in order to be able to recover the original array contents
     from the string later using wxSplit().
 

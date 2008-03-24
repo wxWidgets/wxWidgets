@@ -288,7 +288,7 @@ public:
     virtual wxAccStatus GetChild(int childId, wxAccessible** child);
 
     /**
-        Returns the number of children in @e childCount.
+        Returns the number of children in @a childCount.
     */
     virtual wxAccStatus GetChildCount(int* childCount);
 
@@ -391,7 +391,7 @@ public:
                                 wxAccessible** childObject);
 
     /**
-        Navigates from @a fromId to @e toId or to @e toObject.
+        Navigates from @a fromId to @a toId or to @a toObject.
     */
     virtual wxAccStatus Navigate(wxNavDir navDir, int fromId,
                                  int* toId,
