@@ -18,7 +18,7 @@
 
 // helper macros
 #define LogMessage(fmt, ...)   { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }
-#define LogWarning(fmt, ...)   { wxPrintf("WARNING: " fmt "\n", __VA_ARGS__); fflush(stdout); }
+#define LogWarning(fmt, ...)   { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }
 #define LogError(fmt, ...)     { wxPrintf("ERROR: " fmt "\n", __VA_ARGS__); fflush(stdout); }
 #define wxPrint(str)           { wxPrintf(str); fflush(stdout); }
 

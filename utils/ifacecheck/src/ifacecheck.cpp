@@ -165,8 +165,11 @@ bool IfaceCheckApp::Compare()
 
         } else {
 
+            // shorten the name of the header so the log file is more readable
+            wxString header = interface[i].GetHeader().AfterLast('/');
+
             LogMessage("%s: couldn't find the real interface for the '%s' class",
-                       interface[i].GetHeader(), cname);
+                       header, cname);
             ccount++;
         }
     }
@@ -244,6 +247,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
 
                 LogWarning("%s: the method '%s' of classes '%s' has a different signature%s",
                            header, tofind, searchedclasses, tmp);
+                count++;
 
                 // try to modify it!
                 if (m_modify)
