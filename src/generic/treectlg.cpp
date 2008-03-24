@@ -51,7 +51,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxGenericTreeItem;
 
-WX_DEFINE_EXPORTED_ARRAY_PTR(wxGenericTreeItem *, wxArrayGenericTreeItems);
+WX_DEFINE_ARRAY_PTR(wxGenericTreeItem *, wxArrayGenericTreeItems);
 
 // ----------------------------------------------------------------------------
 // constants
