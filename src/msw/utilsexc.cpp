@@ -1035,7 +1035,11 @@ long wxExecute(char **argv, int flags, wxProcess *handler)
     return wxExecuteImpl(argv, flags, handler);
 }
 
+#if wxUSE_UNICODE
+
 long wxExecute(wchar_t **argv, int flags, wxProcess *handler)
 {
     return wxExecuteImpl(argv, flags, handler);
 }
+
+#endif // wxUSE_UNICODE

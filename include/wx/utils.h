@@ -347,15 +347,17 @@ enum
 // If flags contain wxEXEC_SYNC, return -1 on failure and the exit code of the
 // process if everything was ok. Otherwise (i.e. if wxEXEC_ASYNC), return 0 on
 // failure and the PID of the launched process if ok.
-WXDLLIMPEXP_BASE long wxExecute(wchar_t **argv,
+WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL);
 WXDLLIMPEXP_BASE long wxExecute(char **argv,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL);
-WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
+#if wxUSE_UNICODE
+WXDLLIMPEXP_BASE long wxExecute(wchar_t **argv,
                                 int flags = wxEXEC_ASYNC,
                                 wxProcess *process = NULL);
+#endif // wxUSE_UNICODE
 
 // execute the command capturing its output into an array line by line, this is
 // always synchronous
