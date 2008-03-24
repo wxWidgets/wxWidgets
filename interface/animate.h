@@ -103,7 +103,7 @@ public:
     /**
         Returns the animation associated with this control.
     */
-    wxAnimation GetAnimation() const;
+    virtual wxAnimation GetAnimation() const;
 
     /**
         Returns the inactive bitmap shown in this control when the;
@@ -114,14 +114,14 @@ public:
     /**
         Returns @true if the animation is being played.
     */
-    bool IsPlaying() const;
+    virtual bool IsPlaying() const;
 
     /**
         Loads the animation from the given file and calls SetAnimation().
         See wxAnimation::LoadFile for more info.
     */
-    bool LoadFile(const wxString& file,
-                  wxAnimationType animType = wxANIMATION_TYPE_ANY);
+    virtual bool LoadFile(const wxString& file,
+                          wxAnimationType animType = wxANIMATION_TYPE_ANY);
 
     /**
         Starts playing the animation.
@@ -130,7 +130,7 @@ public:
         animation has an infinite delay time) and always start from the first frame
         even if you @ref Stop "stopped" it while some other frame was displayed.
     */
-    bool Play();
+    virtual bool Play();
 
     /**
         Sets the animation to play in this control.
@@ -140,7 +140,7 @@ public:
         animation or the background colour will be shown
         (see SetInactiveBitmap() for more info).
     */
-    void SetAnimation(const wxAnimation& anim);
+    virtual void SetAnimation(const wxAnimation& anim);
 
     /**
         Sets the bitmap to show on the control when it's not playing an animation.
@@ -163,7 +163,7 @@ public:
         The control will show the first frame of the animation, a custom static image or
         the window's background colour as specified by the last SetInactiveBitmap() call.
     */
-    void Stop();
+    virtual void Stop();
 };
 
 
@@ -213,27 +213,27 @@ public:
         Returns the delay for the i-th frame in milliseconds.
         If @c -1 is returned the frame is to be displayed forever.
     */
-    int GetDelay(unsigned int i) const;
+    virtual int GetDelay(unsigned int i) const;
 
     /**
         Returns the i-th frame as a wxImage.
     */
-    wxImage GetFrame(unsigned int i) const;
+    virtual wxImage GetFrame(unsigned int i) const;
 
     /**
         Returns the number of frames for this animation.
     */
-    unsigned int GetFrameCount() const;
+    virtual unsigned int GetFrameCount() const;
 
     /**
         Returns the size of the animation.
     */
-    wxSize GetSize() const;
+    virtual wxSize GetSize() const;
 
     /**
         Returns @true if animation data is present.
     */
-    bool IsOk() const;
+    virtual bool IsOk() const;
 
     /**
         Loads an animation from the given stream.
@@ -248,8 +248,8 @@ public:
 
         @returns @true if the operation succeeded, @false otherwise.
     */
-    bool Load(wxInputStream& stream,
-              wxAnimationType type = wxANIMATION_TYPE_ANY);
+    virtual bool Load(wxInputStream& stream,
+                      wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     /**
         Loads an animation from a file.
@@ -262,8 +262,8 @@ public:
 
         @returns @true if the operation succeeded, @false otherwise.
     */
-    bool LoadFile(const wxString& name,
-                  wxAnimationType type = wxANIMATION_TYPE_ANY);
+    virtual bool LoadFile(const wxString& name,
+                          wxAnimationType type = wxANIMATION_TYPE_ANY);
 
     /**
         Assignment operator, using @ref overview_refcount "reference counting".

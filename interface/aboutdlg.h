@@ -196,9 +196,9 @@ public:
     }
     @endcode
 
-    Please see the @ref page_utils_samples_dialogs for more examples of
-    using this function and wxAboutDialogInfo for the description of the
-    information which can be shown in the about dialog.
+    Please see the @ref page_samples_dialogs for more examples of using this
+    function and wxAboutDialogInfo for the description of the information which
+    can be shown in the about dialog.
 
     @header{wx/aboutdlg.h}
 */
@@ -212,7 +212,7 @@ void wxAboutBox(const wxAboutDialogInfo& info);
     custom controls to it (customizing the native dialog is not currently
     supported).
 
-    See the @ref page_utils_samples_dialogs for an example of about dialog
+    See the @ref page_samples_dialogs for an example of about dialog
     customization.
 
     @see wxAboutDialogInfo

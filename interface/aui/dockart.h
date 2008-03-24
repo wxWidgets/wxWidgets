@@ -81,7 +81,7 @@ enum wxAuiButtonId
     wxAuiDockArt is the art provider: provides all drawing functionality to the
     wxAui dock manager. This allows the dock manager to have a plugable look-and-feel.
 
-    By default, a wxAuiManager uses an instance of this class called 
+    By default, a wxAuiManager uses an instance of this class called
     wxAuiDefaultDockArt which provides bitmap art and a colour scheme that is
     adapted to the major platforms' look. You can either derive from that class
     to alter its behaviour or write a completely new dock art class.
@@ -103,7 +103,7 @@ public:
     /**
         Destructor.
     */
-    ~wxAuiDockArt();
+    virtual ~wxAuiDockArt();
 
     /**
         Draws a background.
@@ -151,17 +151,11 @@ public:
     virtual void DrawSash(wxDC& dc, wxWindow* window,
                           int orientation,
                           const wxRect& rect);
-
-    /**
-        The same as GetColour().
-    */
-    virtual wxColour GetColor(int id);
-
     /**
         Get the colour of a certain setting.
         @a id can be one of the colour values of @b wxAuiPaneDockArtSetting.
     */
-    virtual wxColour GetColour(int id);
+    virtual wxColour GetColour(int id) = 0;
 
     /**
         Get a font setting.
@@ -175,15 +169,10 @@ public:
     virtual int GetMetric(int id);
 
     /**
-        The same as SetColour().
-    */
-    virtual void SetColor(int id, const wxColour& color);
-
-    /**
         Set a certain setting with the value @e colour.
         @a id can be one of the colour values of @b wxAuiPaneDockArtSetting.
     */
-    virtual void SetColour(int id, const wxColor& colour);
+    virtual void SetColour(int id, const wxColor& colour) = 0;
 
     /**
         Set a font setting.

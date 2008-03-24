@@ -55,7 +55,7 @@
     Every bitmap and icon bundle are known to wxArtProvider under an unique ID that
     is used when requesting a resource from it. The ID is represented by wxArtID type
     and can have one of these predefined values (you can see bitmaps represented by these
-    constants in the @ref page_utils_samples_artprovider):
+    constants in the @ref page_samples_artprovider):
 
     <table>
     <tr><td>
@@ -152,7 +152,7 @@
     @library{wxcore}
     @category{misc,data}
 
-    @see the @ref page_utils_samples_artprovider for an example of wxArtProvider usage.
+    @see the @ref page_samples_artprovider for an example of wxArtProvider usage.
 */
 class wxArtProvider : public wxObject
 {
@@ -162,39 +162,6 @@ public:
         by GetBitmap().
     */
     virtual ~wxArtProvider();
-
-    /**
-        Derived art provider classes must override this method to create requested art
-        resource. Note that returned bitmaps are cached by wxArtProvider and it is
-        therefore not necessary to optimize CreateBitmap() for speed (e.g. you may
-        create wxBitmap objects from XPMs here).
-
-        @param id
-            wxArtID unique identifier of the bitmap.
-        @param client
-            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
-            This only servers as a hint.
-        @param size
-            Preferred size of the bitmap. The function may return a bitmap of different
-            dimensions, it will be automatically rescaled to meet client's request.
-
-        @note
-        This is not part of wxArtProvider's public API, use wxArtProvider::GetBitmap
-        or wxArtProvider::GetIconBundle or wxArtProvider::GetIcon to query wxArtProvider
-        for a resource.
-
-        @see CreateIconBundle()
-    */
-    virtual wxBitmap CreateBitmap(const wxArtID& id,
-                                  const wxArtClient& client,
-                                  const wxSize& size);
-
-    /**
-        This method is similar to CreateBitmap() but can be used when a bitmap
-        (or an icon) exists in several sizes.
-    */
-    wxIconBundle CreateIconBundle(const wxArtID& id,
-                                  const wxArtClient& client);
 
     /**
         Delete the given @a provider.
@@ -277,5 +244,40 @@ public:
         deleted, unlike when using Delete().
     */
     static bool Remove(wxArtProvider* provider);
+
+protected:
+
+    /**
+        Derived art provider classes must override this method to create requested art
+        resource. Note that returned bitmaps are cached by wxArtProvider and it is
+        therefore not necessary to optimize CreateBitmap() for speed (e.g. you may
+        create wxBitmap objects from XPMs here).
+
+        @param id
+            wxArtID unique identifier of the bitmap.
+        @param client
+            wxArtClient identifier of the client (i.e. who is asking for the bitmap).
+            This only servers as a hint.
+        @param size
+            Preferred size of the bitmap. The function may return a bitmap of different
+            dimensions, it will be automatically rescaled to meet client's request.
+
+        @note
+        This is not part of wxArtProvider's public API, use wxArtProvider::GetBitmap
+        or wxArtProvider::GetIconBundle or wxArtProvider::GetIcon to query wxArtProvider
+        for a resource.
+
+        @see CreateIconBundle()
+    */
+    virtual wxBitmap CreateBitmap(const wxArtID& id,
+                                  const wxArtClient& client,
+                                  const wxSize& size);
+
+    /**
+        This method is similar to CreateBitmap() but can be used when a bitmap
+        (or an icon) exists in several sizes.
+    */
+    virtual wxIconBundle CreateIconBundle(const wxArtID& id,
+                                          const wxArtClient& client);
 };
 
