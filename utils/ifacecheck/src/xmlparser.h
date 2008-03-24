@@ -32,13 +32,11 @@ class wxType
 public:
     wxType() {}
     wxType(const wxString& type)
-        { SetFromString(type); }
+        { SetTypeFromString(type); }
 
-    void SetFromString(const wxString& t);
+    void SetTypeFromString(const wxString& t);
     wxString GetAsString() const
         { return m_strType; }
-
-    wxString GetClean() const;
 
     bool IsConst() const
         { return m_strType.Contains("const"); }
@@ -57,11 +55,48 @@ public:
 
 protected:
     wxString m_strType;
+
+    // utility for doing comparisons
+    wxString GetClean() const;
 };
 
 extern wxType wxEmptyType;
 WX_DECLARE_OBJARRAY(wxType, wxTypeArray);
 
+
+// ----------------------------------------------------------------------------
+// Represents a type used as argument for some wxMethod
+// ----------------------------------------------------------------------------
+class wxArgumentType : public wxType
+{
+public:
+    wxArgumentType() {}
+    wxArgumentType(const wxString& type, const wxString& defVal,
+                   const wxString& argName = wxEmptyString)
+        { SetTypeFromString(type); SetDefaultValue(defVal); m_strArgName = argName; }
+
+    void SetArgumentName(const wxString& name)
+        { m_strArgName=name.Strip(wxString::both); }
+    wxString GetArgumentName() const
+        { return m_strArgName; }
+
+    void SetDefaultValue(const wxString& defval);
+    wxString GetDefaultValue() const
+        { return m_strDefaultValue; }
+
+    bool operator==(const wxArgumentType& m) const;
+    bool operator!=(const wxArgumentType& m) const
+        { return !(*this == m); }
+
+protected:
+    wxString m_strDefaultValue;
+    wxString m_strArgName;      // this one only makes sense when this wxType is
+                                // used as argument type (and not as return type)
+                                // and can be empty.
+};
+
+extern wxArgumentType wxEmptyArgumentType;
+WX_DECLARE_OBJARRAY(wxArgumentType, wxArgumentTypeArray);
 
 
 // ----------------------------------------------------------------------------
@@ -74,17 +109,16 @@ public:
         { m_bConst=m_bVirtual=m_bPureVirtual=m_bStatic=m_bDeprecated=false; m_nLine=-1; }
 
     wxMethod(const wxType& rettype, const wxString& name,
-             const wxTypeArray& arguments, const wxArrayString& defaults,
+             const wxArgumentTypeArray& arguments,
              bool isConst, bool isStatic, bool isVirtual)
         : m_retType(rettype), m_strName(name.Strip(wxString::both)),
           m_bConst(isConst), m_bStatic(isStatic), m_bVirtual(isVirtual)
-        { SetArgumentTypes(arguments,defaults); m_nLine=-1; }
+        { SetArgumentTypes(arguments); m_nLine=-1; }
 
 
 public:     // getters
 
-    //void SetFromString(const wxString& proto);
-    wxString GetAsString() const;
+    wxString GetAsString(bool bWithArgumentNames = true) const;
 
     // parser of the prototype:
     // all these functions return strings with spaces stripped
@@ -92,10 +126,8 @@ public:     // getters
         { return m_retType; }
     wxString GetName() const
         { return m_strName; }
-    wxTypeArray GetArgumentTypes() const
+    wxArgumentTypeArray GetArgumentTypes() const
         { return m_args; }
-    wxArrayString GetArgumentDefaults() const
-        { return m_argDefaults; }
     int GetLocation() const
         { return m_nLine; }
 
@@ -124,7 +156,8 @@ public:     // setters
         { m_retType=t; }
     void SetName(const wxString& name)
         { m_strName=name; }
-    void SetArgumentTypes(const wxTypeArray& arr, const wxArrayString& defaults);
+    void SetArgumentTypes(const wxArgumentTypeArray& arr)
+        { m_args=arr; }
     void SetConst(bool c = true)
         { m_bConst=c; }
     void SetStatic(bool c = true)
@@ -149,8 +182,7 @@ public:     // misc
 protected:
     wxType m_retType;
     wxString m_strName;
-    wxTypeArray m_args;
-    wxArrayString m_argDefaults;
+    wxArgumentTypeArray m_args;
     bool m_bConst;
     bool m_bStatic;
     bool m_bVirtual;

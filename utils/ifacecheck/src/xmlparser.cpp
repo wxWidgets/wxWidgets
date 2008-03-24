@@ -28,6 +28,7 @@
 
 #include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY(wxTypeArray)
+WX_DEFINE_OBJARRAY(wxArgumentTypeArray)
 WX_DEFINE_OBJARRAY(wxMethodArray)
 WX_DEFINE_OBJARRAY(wxClassArray)
 
@@ -47,7 +48,7 @@ extern bool g_verbose;
 
 wxType wxEmptyType;
 
-void wxType::SetFromString(const wxString& t)
+void wxType::SetTypeFromString(const wxString& t)
 {
     /*
         TODO: optimize the following code writing a single function
@@ -109,6 +110,44 @@ bool wxType::operator==(const wxType& m) const
     return false;
 }
 
+
+// ----------------------------------------------------------------------------
+// wxArgumentType
+// ----------------------------------------------------------------------------
+
+void wxArgumentType::SetDefaultValue(const wxString& defval)
+{
+    m_strDefaultValue=defval;
+
+    // in order to make valid&simple comparison on argument defaults,
+    // we reduce some of the multiple forms in which the same things may appear
+    // to a single form:
+    m_strDefaultValue.Replace("0u", "0");
+
+    if (IsPointer())
+        m_strDefaultValue.Replace("0", "NULL");
+    else
+        m_strDefaultValue.Replace("NULL", "0");
+
+
+    if (m_strDefaultValue.Contains("wxGetTranslation"))
+        m_strDefaultValue = wxEmptyString;     // TODO: wxGetTranslation gives problems to gccxml
+}
+
+bool wxArgumentType::operator==(const wxArgumentType& m) const
+{
+    if ((const wxType&)(*this) != (const wxType&)m)
+        return false;
+
+    if (m_strDefaultValue != m.m_strDefaultValue)
+        return false;
+
+    // we deliberately avoid checks on the argument name
+
+    return true;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxMethod
 // ----------------------------------------------------------------------------
@@ -145,23 +184,6 @@ bool wxMethod::IsOk() const
     return true;
 }
 
-void wxMethod::SetArgumentTypes(const wxTypeArray& arr, const wxArrayString& defaults)
-{
-    wxASSERT(arr.GetCount()==defaults.GetCount());
-
-    m_args=arr;
-    m_argDefaults=defaults;
-
-    // in order to make valid&simple comparison on argument defaults,
-    // we reduce some of the multiple forms in which the same things may appear
-    // to a single form
-    for (unsigned int i=0; i<m_argDefaults.GetCount(); i++)
-    {
-        m_argDefaults[i].Replace("NULL", "0");
-        m_argDefaults[i].Replace("0u", "0");
-    }
-}
-
 bool wxMethod::operator==(const wxMethod& m) const
 {
     if (GetReturnType() != m.GetReturnType() ||
@@ -177,13 +199,13 @@ bool wxMethod::operator==(const wxMethod& m) const
         return false;
 
     for (unsigned int i=0; i<m_args.GetCount(); i++)
-        if (m_args[i] != m.m_args[i] || m_argDefaults[i] != m.m_argDefaults[i])
+        if (m_args[i] != m.m_args[i])
             return false;
 
     return true;
 }
 
-wxString wxMethod::GetAsString() const
+wxString wxMethod::GetAsString(bool bWithArgumentNames) const
 {
     wxString ret;
 
@@ -196,8 +218,15 @@ wxString wxMethod::GetAsString() const
     for (unsigned int i=0; i<m_args.GetCount(); i++)
     {
         ret += m_args[i].GetAsString();
-        if (!m_argDefaults[i].IsEmpty())
-            ret += " = " + m_argDefaults[i];
+
+        const wxString& name = m_args[i].GetArgumentName();
+        if (bWithArgumentNames && !name.IsEmpty())
+            ret += " " + name;
+
+        const wxString& def = m_args[i].GetDefaultValue();
+        if (!def.IsEmpty())
+            ret += " = " + def;
+
         ret += ", ";
     }
 
@@ -228,7 +257,8 @@ void wxMethod::Dump(wxTextOutputStream& stream) const
     stream << "[" + m_strName + "]";
 
     for (unsigned int i=0; i<m_args.GetCount(); i++)
-        stream << "[" + m_args[i].GetAsString() + "=" + m_argDefaults[i] + "]";
+        stream << "[" + m_args[i].GetAsString() + " " + m_args[i].GetArgumentName() +
+                  "=" + m_args[i].GetDefaultValue() + "]";
 
     if (IsConst())
         stream << " CONST";
@@ -812,8 +842,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     }
 
     // resolve argument types
-    wxTypeArray argtypes;
-    wxArrayString argdefs;
+    wxArgumentTypeArray argtypes;
     wxXmlNode *arg = p->GetChildren();
     while (arg)
     {
@@ -832,13 +861,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
                 return false;
             }
 
-            argtypes.Add(wxType(idx->second));
-
-            wxString def = arg->GetAttribute("default");
-            if (def.Contains("wxGetTranslation"))
-                argdefs.Add(wxEmptyString);     // TODO: wxGetTranslation gives problems to gccxml
-            else
-                argdefs.Add(def);
+            argtypes.Add(wxArgumentType(idx->second, arg->GetAttribute("default")));
         }
 
         arg = arg->GetNext();
@@ -846,7 +869,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
 
     m.SetReturnType(ret);
     m.SetName(name);
-    m.SetArgumentTypes(argtypes, argdefs);
+    m.SetArgumentTypes(argtypes);
     m.SetConst(p->GetAttribute("const") == "1");
     m.SetStatic(p->GetAttribute("static") == "1");
     m.SetVirtual(p->GetAttribute("virtual") == "1");
@@ -1076,8 +1099,7 @@ static bool HasTextNodeContaining(const wxXmlNode *parent, const wxString& name)
 
 bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxString& header)
 {
-    wxTypeArray args;
-    wxArrayString defs;
+    wxArgumentTypeArray args;
     long line;
 
     wxXmlNode *child = p->GetChildren();
@@ -1089,7 +1111,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
             m.SetReturnType(wxType(GetTextFromChildren(child)));
         else if (child->GetName() == "param")
         {
-            wxString typestr, defstr, arrstr;
+            wxString typestr, namestr, defstr, arrstr;
             wxXmlNode *n = child->GetChildren();
             while (n)
             {
@@ -1097,8 +1119,9 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
                     // if the <type> node has children, they should be all TEXT and <ref> nodes
                     // and we need to take the text they contain, in the order they appear
                     typestr = GetTextFromChildren(n);
+                else if (n->GetName() == "declname")
+                    namestr = GetTextFromChildren(n);
                 else if (n->GetName() == "defval")
-                    // same for the <defval> node
                     defstr = GetTextFromChildren(n);
                 else if (n->GetName() == "array")
                     arrstr = GetTextFromChildren(n);
@@ -1111,8 +1134,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
                 return false;
             }
 
-            args.Add(wxType(typestr + arrstr));
-            defs.Add(defstr);
+            args.Add(wxArgumentType(typestr + arrstr, defstr, namestr));
         }
         else if (child->GetName() == "location")
         {
@@ -1132,7 +1154,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
         child = child->GetNext();
     }
 
-    m.SetArgumentTypes(args, defs);
+    m.SetArgumentTypes(args);
     m.SetConst(p->GetAttribute("const")=="yes");
     m.SetStatic(p->GetAttribute("static")=="yes");
     m.SetVirtual(p->GetAttribute("virt")=="virtual");

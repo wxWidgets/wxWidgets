@@ -336,8 +336,22 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
         file.InsertLine(INDENTATION_STR + "*/", start++);
     }
 
+    wxMethod tmp(*api);
+
+    // discard API argument names and replace them with those parsed from doxygen XML:
+    const wxArgumentTypeArray& doxygenargs = iface->GetArgumentTypes();
+    const wxArgumentTypeArray& realargs = api->GetArgumentTypes();
+    if (realargs.GetCount() == doxygenargs.GetCount())
+    {
+        for (unsigned int j=0; j<doxygenargs.GetCount(); j++)
+            if (doxygenargs[j]==realargs[j])
+                realargs[j].SetArgumentName(doxygenargs[j].GetArgumentName());
+
+        tmp.SetArgumentTypes(realargs);
+    }
+
     // insert the new one
-    file.InsertLine(INDENTATION_STR + api->GetAsString() + ";", start);
+    file.InsertLine(INDENTATION_STR + tmp.GetAsString() + ";", start);
 
     // now save the modification
     if (!file.Write()) {
