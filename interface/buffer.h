@@ -60,17 +60,17 @@ public:
     /**
         Returns the size of the buffer.
     */
-    size_t GetBufSize();
+    size_t GetBufSize() const;
 
     /**
         Return a pointer to the data in the buffer.
     */
-    void* GetData();
+    void* GetData() const;
 
     /**
         Returns the length of the valid data in the buffer.
     */
-    size_t GetDataLen();
+    size_t GetDataLen() const;
 
     /**
         Ensure the buffer is big enough and return a pointer to the

@@ -157,7 +157,7 @@ public:
     /**
         Returns an array of all panes managed by the frame manager.
     */
-    wxAuiPaneInfoArray GetAllPanes();
+    wxAuiPaneInfoArray& GetAllPanes();
 
     /**
         Returns the current art provider being used.
@@ -169,7 +169,7 @@ public:
         Returns the current dock constraint values.
         See SetDockSizeConstraint() for more information.
     */
-    void GetDockSizeConstraint(double* widthpct, double* heightpct);
+    void GetDockSizeConstraint(double* widthpct, double* heightpct) const;
 
     /**
         Returns the current manager's flags.
@@ -210,7 +210,7 @@ public:
     /**
         HideHint() hides any docking hint that may be visible.
     */
-    void HideHint();
+    virtual void HideHint();
 
     /**
         This method is used to insert either a previously unmanaged pane window
@@ -307,7 +307,7 @@ public:
         implementing custom pane drag/drop behaviour.
         The specified rectangle should be in screen coordinates.
     */
-    void ShowHint(const wxRect& rect);
+    virtual void ShowHint(const wxRect& rect);
 
     /**
         Uninitializes the framework and should be called before a managed frame or
@@ -373,24 +373,24 @@ public:
         Bottom() sets the pane dock position to the bottom side of the frame. This is
         the same thing as calling Direction(wxAUI_DOCK_BOTTOM).
     */
-    wxAuiPaneInfo Bottom();
+    wxAuiPaneInfo& Bottom();
 
     /**
         BottomDockable() indicates whether a pane can be docked at the bottom of the
         frame.
     */
-    wxAuiPaneInfo BottomDockable(bool b = true);
+    wxAuiPaneInfo& BottomDockable(bool b = true);
 
     /**
         Caption() sets the caption of the pane.
     */
-    wxAuiPaneInfo Caption(const wxString& c);
+    wxAuiPaneInfo& Caption(const wxString& c);
 
     /**
         CaptionVisible indicates that a pane caption should be visible. If @false, no
         pane caption is drawn.
     */
-    wxAuiPaneInfo CaptionVisible(bool visible = true);
+    wxAuiPaneInfo& CaptionVisible(bool visible = true);
 
     //@{
     /**
@@ -417,12 +417,12 @@ public:
     /**
         CloseButton() indicates that a close button should be drawn for the pane.
     */
-    wxAuiPaneInfo CloseButton(bool visible = true);
+    wxAuiPaneInfo& CloseButton(bool visible = true);
 
     /**
         DefaultPane() specifies that the pane should adopt the default pane settings.
     */
-    wxAuiPaneInfo DefaultPane();
+    wxAuiPaneInfo& DefaultPane();
 
     /**
         DestroyOnClose() indicates whether a pane should be detroyed when it is closed.
@@ -430,49 +430,49 @@ public:
         Setting DestroyOnClose to @true will cause the window to be destroyed when
         the user clicks the pane's close button.
     */
-    wxAuiPaneInfo DestroyOnClose(bool b = true);
+    wxAuiPaneInfo& DestroyOnClose(bool b = true);
 
     /**
         Direction() determines the direction of the docked pane. It is functionally the
         same as calling Left(), Right(), Top() or Bottom(), except that docking direction
         may be specified programmatically via the parameter.
     */
-    wxAuiPaneInfo Direction(int direction);
+    wxAuiPaneInfo& Direction(int direction);
 
     /**
         Dock() indicates that a pane should be docked.  It is the opposite of Float().
     */
-    wxAuiPaneInfo Dock();
+    wxAuiPaneInfo& Dock();
 
     /**
         DockFixed() causes the containing dock to have no resize sash.  This is useful
         for creating panes that span the entire width or height of a dock, but should
         not be resizable in the other direction.
     */
-    wxAuiPaneInfo DockFixed(bool b = true);
+    wxAuiPaneInfo& DockFixed(bool b = true);
 
     /**
         Dockable() specifies whether a frame can be docked or not. It is the same as
         specifying TopDockable(b).BottomDockable(b).LeftDockable(b).RightDockable(b).
     */
-    wxAuiPaneInfo Dockable(bool b = true);
+    wxAuiPaneInfo& Dockable(bool b = true);
 
     /**
         Fixed() forces a pane to be fixed size so that it cannot be resized. After
         calling Fixed(), IsFixed() will return @true.
     */
-    wxAuiPaneInfo Fixed();
+    wxAuiPaneInfo& Fixed();
 
     /**
         Float() indicates that a pane should be floated.  It is the opposite of Dock().
     */
-    wxAuiPaneInfo Float();
+    wxAuiPaneInfo& Float();
 
     /**
         Floatable() sets whether the user will be able to undock a pane and turn it
         into a floating window.
     */
-    wxAuiPaneInfo Floatable(bool b = true);
+    wxAuiPaneInfo& Floatable(bool b = true);
 
     //@{
     /**
@@ -493,12 +493,12 @@ public:
     /**
         Gripper() indicates that a gripper should be drawn for the pane.
     */
-    wxAuiPaneInfo Gripper(bool visible = true);
+    wxAuiPaneInfo& Gripper(bool visible = true);
 
     /**
         GripperTop() indicates that a gripper should be drawn at the top of the pane.
     */
-    wxAuiPaneInfo GripperTop(bool attop = true);
+    wxAuiPaneInfo& GripperTop(bool attop = true);
 
     /**
         HasBorder() returns @true if the pane displays a border.
@@ -551,7 +551,7 @@ public:
     /**
         Hide() indicates that a pane should be hidden.
     */
-    wxAuiPaneInfo Hide();
+    wxAuiPaneInfo& Hide();
 
     /**
         IsBottomDockable() returns @true if the pane can be docked at the bottom of the
@@ -631,18 +631,18 @@ public:
         direction has a higher layer number. This allows for more complex docking layout
         formation.
     */
-    wxAuiPaneInfo Layer(int layer);
+    wxAuiPaneInfo& Layer(int layer);
 
     /**
         Left() sets the pane dock position to the left side of the frame. This is the
         same thing as calling Direction(wxAUI_DOCK_LEFT).
     */
-    wxAuiPaneInfo Left();
+    wxAuiPaneInfo& Left();
 
     /**
         LeftDockable() indicates whether a pane can be docked on the left of the frame.
     */
-    wxAuiPaneInfo LeftDockable(bool b = true);
+    wxAuiPaneInfo& LeftDockable(bool b = true);
 
     //@{
     /**
@@ -655,7 +655,7 @@ public:
     /**
         MaximizeButton() indicates that a maximize button should be drawn for the pane.
     */
-    wxAuiPaneInfo MaximizeButton(bool visible = true);
+    wxAuiPaneInfo& MaximizeButton(bool visible = true);
 
     //@{
     /**
@@ -669,56 +669,56 @@ public:
     /**
         MinimizeButton() indicates that a minimize button should be drawn for the pane.
     */
-    wxAuiPaneInfo MinimizeButton(bool visible = true);
+    wxAuiPaneInfo& MinimizeButton(bool visible = true);
 
     /**
         Movable indicates whether a frame can be moved.
     */
-    wxAuiPaneInfo Movable(bool b = true);
+    wxAuiPaneInfo& Movable(bool b = true);
 
     /**
         Name() sets the name of the pane so it can be referenced in lookup functions.
         If a name is not specified by the user, a random name is assigned to the pane
         when it is added to the manager.
     */
-    wxAuiPaneInfo Name(const wxString& n);
+    wxAuiPaneInfo& Name(const wxString& n);
 
     /**
         PaneBorder indicates that a border should be drawn for the pane.
     */
-    wxAuiPaneInfo PaneBorder(bool visible = true);
+    wxAuiPaneInfo& PaneBorder(bool visible = true);
 
     /**
         PinButton() indicates that a pin button should be drawn for the pane.
     */
-    wxAuiPaneInfo PinButton(bool visible = true);
+    wxAuiPaneInfo& PinButton(bool visible = true);
 
     /**
         Position() determines the position of the docked pane.
     */
-    wxAuiPaneInfo Position(int pos);
+    wxAuiPaneInfo& Position(int pos);
 
     /**
         Resizable() allows a pane to be resized if the parameter is @true, and forces it
         to be a fixed size if the parameter is @false. This is simply an antonym for Fixed().
     */
-    wxAuiPaneInfo Resizable(bool resizable = true);
+    wxAuiPaneInfo& Resizable(bool resizable = true);
 
     /**
         Right() sets the pane dock position to the right side of the frame.
     */
-    wxAuiPaneInfo Right();
+    wxAuiPaneInfo& Right();
 
     /**
         RightDockable() indicates whether a pane can be docked on the right of the
         frame.
     */
-    wxAuiPaneInfo RightDockable(bool b = true);
+    wxAuiPaneInfo& RightDockable(bool b = true);
 
     /**
         Row() determines the row of the docked pane.
     */
-    wxAuiPaneInfo Row(int row);
+    wxAuiPaneInfo& Row(int row);
 
     /**
         Write the safe parts of a newly loaded PaneInfo structure "source" into "this"
@@ -730,28 +730,28 @@ public:
         SetFlag() turns the property given by flag on or off with the option_state
         parameter.
     */
-    wxAuiPaneInfo SetFlag(unsigned int flag, bool option_state);
+    wxAuiPaneInfo& SetFlag(unsigned int flag, bool option_state);
 
     /**
         Show() indicates that a pane should be shown.
     */
-    wxAuiPaneInfo Show(bool show = true);
+    wxAuiPaneInfo& Show(bool show = true);
 
     /**
         ToolbarPane() specifies that the pane should adopt the default toolbar pane
         settings.
     */
-    wxAuiPaneInfo ToolbarPane();
+    wxAuiPaneInfo& ToolbarPane();
 
     /**
         Top() sets the pane dock position to the top of the frame.
     */
-    wxAuiPaneInfo Top();
+    wxAuiPaneInfo& Top();
 
     /**
         TopDockable() indicates whether a pane can be docked at the top of the frame.
     */
-    wxAuiPaneInfo TopDockable(bool b = true);
+    wxAuiPaneInfo& TopDockable(bool b = true);
 
     /**
         Window() assigns the window pointer that the wxAuiPaneInfo should use.
@@ -759,7 +759,7 @@ public:
         automatically assigned to the wxAuiPaneInfo structure as soon as it is added
         to the manager.
     */
-    wxAuiPaneInfo Window(wxWindow* w);
+    wxAuiPaneInfo& Window(wxWindow* w);
 
     /**
         Makes a copy of the wxAuiPaneInfo object.

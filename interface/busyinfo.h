@@ -67,6 +67,6 @@ public:
     /**
         Hides and closes the window containing the information text.
     */
-    ~wxBusyInfo();
+    virtual ~wxBusyInfo();
 };
 

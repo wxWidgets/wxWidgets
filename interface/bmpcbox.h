@@ -111,7 +111,7 @@ public:
     /**
         Destructor, destroying the combobox.
     */
-    ~wxBitmapComboBox();
+    virtual ~wxBitmapComboBox();
 
     /**
         Adds the item to the end of the combo box.

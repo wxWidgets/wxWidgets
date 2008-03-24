@@ -160,29 +160,29 @@ public:
     /**
         Get a font setting.
     */
-    virtual wxFont GetFont(int id);
+    virtual wxFont GetFont(int id) = 0;
 
     /**
         Get the value of a certain setting.
         @a id can be one of the size values of @b wxAuiPaneDockArtSetting.
     */
-    virtual int GetMetric(int id);
+    virtual int GetMetric(int id) = 0;
 
     /**
         Set a certain setting with the value @e colour.
         @a id can be one of the colour values of @b wxAuiPaneDockArtSetting.
     */
-    virtual void SetColour(int id, const wxColor& colour) = 0;
+    virtual void SetColour(int id, const wxColour& colour) = 0;
 
     /**
         Set a font setting.
     */
-    virtual void SetFont(int id, const wxFont& font);
+    virtual void SetFont(int id, const wxFont& font) = 0;
 
     /**
         Set a certain setting with the value @e new_val.
         @a id can be one of the size values of @b wxAuiPaneDockArtSetting.
     */
-    virtual void SetMetric(int id, int new_val);
+    virtual void SetMetric(int id, int new_val) = 0;
 };
 

@@ -10,7 +10,7 @@
     @class wxArchiveInputStream
     @wxheader{archive.h}
 
-    An abstract base class which serves as a common interface to
+    This is an abstract base class which serves as a common interface to
     archive input streams such as wxZipInputStream.
 
     wxArchiveInputStream::GetNextEntry returns an wxArchiveEntry object containing
@@ -34,7 +34,7 @@ public:
         Closes the current entry. On a non-seekable stream reads to the end of
         the current entry first.
     */
-    virtual bool CloseEntry();
+    virtual bool CloseEntry() = 0;
 
     /**
         Closes the current entry if one is open, then reads the meta-data for
@@ -50,7 +50,7 @@ public:
         @a entry must be from the same archive file that this wxArchiveInputStream
         is reading, and it must be reading it from a seekable stream.
     */
-    virtual bool OpenEntry(wxArchiveEntry& entry);
+    virtual bool OpenEntry(wxArchiveEntry& entry) = 0;
 };
 
 
@@ -59,7 +59,7 @@ public:
     @class wxArchiveOutputStream
     @wxheader{archive.h}
 
-    An abstract base class which serves as a common interface to
+    This is an abstract base class which serves as a common interface to
     archive output streams such as wxZipOutputStream.
 
     wxArchiveOutputStream::PutNextEntry is used to create a new entry in the
@@ -92,7 +92,7 @@ public:
         It is called implicitly whenever another new entry is created with CopyEntry()
         or PutNextEntry(), or when the archive is closed.
     */
-    virtual bool CloseEntry();
+    virtual bool CloseEntry() = 0;
 
     /**
         Some archive formats have additional meta-data that applies to the archive
@@ -111,7 +111,7 @@ public:
         in which case the two streams set up a link and transfer the data
         when it becomes available.
     */
-    virtual bool CopyArchiveMetaData(wxArchiveInputStream& stream);
+    virtual bool CopyArchiveMetaData(wxArchiveInputStream& stream) = 0;
 
     /**
         Takes ownership of @a entry and uses it to create a new entry in the
@@ -160,7 +160,7 @@ public:
     @class wxArchiveEntry
     @wxheader{archive.h}
 
-    An abstract base class which serves as a common interface to
+    This is an abstract base class which serves as a common interface to
     archive entry classes such as wxZipEntry.
     These hold the meta-data (filename, timestamp, etc.), for entries
     in archive files such as zips and tars.
@@ -196,12 +196,12 @@ public:
     /**
         Gets the entry's timestamp.
     */
-    virtual wxDateTime GetDateTime() const;
+    virtual wxDateTime GetDateTime() const = 0;
 
     /**
         Sets the entry's timestamp.
     */
-    virtual void SetDateTime(const wxDateTime& dt);
+    virtual void SetDateTime(const wxDateTime& dt) = 0;
 
     /**
         Returns the entry's name, by default in the native format.
@@ -210,7 +210,7 @@ public:
         If this is a directory entry, (i.e. if IsDir() is @true) then the
         returned string is the name with a trailing path separator.
     */
-    virtual wxString GetName(wxPathFormat format = wxPATH_NATIVE) const;
+    virtual wxString GetName(wxPathFormat format = wxPATH_NATIVE) const = 0;
 
     /**
         Sets the entry's name.
@@ -224,18 +224,18 @@ public:
     /**
         Returns the size of the entry's data in bytes.
     */
-    virtual wxFileOffset GetSize() const;
+    virtual wxFileOffset GetSize() const = 0;
 
     /**
         Sets the size of the entry's data in bytes.
     */
-    virtual void SetSize(wxFileOffset size);
+    virtual void SetSize(wxFileOffset size) = 0;
 
     /**
         Returns the path format used internally within the archive to store
         filenames.
     */
-    virtual wxPathFormat GetInternalFormat() const;
+    virtual wxPathFormat GetInternalFormat() const = 0;
 
     /**
         Returns the entry's filename in the internal format used within the
@@ -247,12 +247,12 @@ public:
 
         @see @ref overview_archive_byname
     */
-    virtual wxString GetInternalName() const;
+    virtual wxString GetInternalName() const = 0;
 
     /**
         Returns a numeric value unique to the entry within the archive.
     */
-    virtual wxFileOffset GetOffset() const;
+    virtual wxFileOffset GetOffset() const = 0;
 
     /**
         Returns @true if this is a directory entry.
@@ -266,22 +266,22 @@ public:
         unarchivers typically create whatever directories are necessary as they
         restore files, even if the archive contains no explicit directory entries.
     */
-    virtual bool IsDir() const;
+    virtual bool IsDir() const = 0;
 
     /**
         Marks this entry as a directory if @a isDir is @true. See IsDir() for more info.
     */
-    virtual void SetIsDir(bool isDir = true);
+    virtual void SetIsDir(bool isDir = true) = 0;
 
     /**
         Returns @true if the entry is a read-only file.
     */
-    virtual bool IsReadOnly() const;
+    virtual bool IsReadOnly() const = 0;
 
     /**
         Sets this entry as a read-only file.
     */
-    virtual void SetIsReadOnly(bool isReadOnly = true);
+    virtual void SetIsReadOnly(bool isReadOnly = true) = 0;
 
     /**
         Sets the notifier (see wxArchiveNotifier) for this entry.

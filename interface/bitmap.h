@@ -43,7 +43,7 @@ public:
     /**
         Destroys the wxBitmapHandler object.
     */
-    ~wxBitmapHandler();
+    virtual ~wxBitmapHandler();
 
     /**
         Creates a bitmap from the given data, which can be of arbitrary type.
@@ -100,7 +100,7 @@ public:
 
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, SaveFile()
     */
-    bool LoadFile(wxBitmap* bitmap, const wxString& name, wxBitmapType type);
+    virtual bool LoadFile(wxBitmap* bitmap, const wxString& name, wxBitmapType type);
 
     /**
         Saves a bitmap in the named file.
@@ -311,7 +311,7 @@ public:
         @warning
         Do not delete a bitmap that is selected into a memory device context.
     */
-    ~wxBitmap();
+    virtual ~wxBitmap();
 
     /**
         Adds a handler to the end of the static list of format handlers.
@@ -348,7 +348,7 @@ public:
 
         This overload works on all platforms.
     */
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /*
         Creates a bitmap from the given data, which can be of arbitrary type.
@@ -657,7 +657,7 @@ public:
     /**
         Destroys the wxMask object and the underlying bitmap data.
     */
-    ~wxMask();
+    virtual ~wxMask();
 
     /**
         Constructs a mask from a bitmap and a palette index that indicates the

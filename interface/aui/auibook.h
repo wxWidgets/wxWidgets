@@ -170,7 +170,7 @@ public:
         Sets the font for drawing the tab labels, using a bold version of the font for
         selected tab labels.
     */
-    bool SetFont(const wxFont& font);
+    virtual bool SetFont(const wxFont& font);
 
     /**
         Sets the font for measuring tab labels.
@@ -213,7 +213,7 @@ public:
         Specifying -1 as the height will return the control to its default auto-sizing
         behaviour.
     */
-    void SetTabCtrlHeight(int height);
+    virtual void SetTabCtrlHeight(int height);
 
     //@{
     /**
@@ -259,12 +259,12 @@ public:
     /**
         Clones the art object.
     */
-    wxAuiTabArt* Clone();
+    virtual wxAuiTabArt* Clone() = 0;
 
     /**
         Draws a background on the given area.
     */
-    void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect);
+    virtual void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect) = 0;
 
     /**
         Draws a button.
@@ -297,7 +297,7 @@ public:
     /**
         Returns the indent size.
     */
-    int GetIndentSize();
+    virtual int GetIndentSize() = 0;
 
     /**
         Returns the tab size for the given caption, bitmap and state.
@@ -312,27 +312,27 @@ public:
     /**
         Sets flags.
     */
-    void SetFlags(unsigned int flags);
+    virtual void SetFlags(unsigned int flags) = 0;
 
     /**
         Sets the font used for calculating measurements.
     */
-    void SetMeasuringFont(const wxFont& font);
+    virtual void SetMeasuringFont(const wxFont& font) = 0;
 
     /**
         Sets the normal font for drawing labels.
     */
-    void SetNormalFont(const wxFont& font);
+    virtual void SetNormalFont(const wxFont& font) = 0;
 
     /**
         Sets the font for drawing text for selected UI elements.
     */
-    void SetSelectedFont(const wxFont& font);
+    virtual void SetSelectedFont(const wxFont& font) = 0;
 
     /**
         Sets sizing information.
     */
-    void SetSizingInfo(const wxSize& tab_ctrl_size, size_t tab_count);
+    virtual void SetSizingInfo(const wxSize& tab_ctrl_size, size_t tab_count) = 0;
 
     /**
         Pops up a menu to show the list of windows managed by wxAui.

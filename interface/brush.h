@@ -141,14 +141,14 @@ public:
                  object is stored in an application data structure, and there is
                  a risk of double deletion.
     */
-    ~wxBrush();
+    virtual ~wxBrush();
 
     /**
         Returns a reference to the brush colour.
 
         @see SetColour()
     */
-    wxColour GetColour() const;
+    wxColour& GetColour() const;
 
     /**
         Gets a pointer to the stipple bitmap. If the brush does not have a wxBRUSHSTYLE_STIPPLE
@@ -170,7 +170,7 @@ public:
 
         @see GetStyle()
     */
-    bool IsHatch() const;
+    virtual bool IsHatch() const;
 
     /**
         Returns @true if the brush is initialised. It will return @false if the default

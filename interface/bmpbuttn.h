@@ -113,7 +113,7 @@ public:
     /**
         Destructor, destroying the button.
     */
-    ~wxBitmapButton();
+    virtual ~wxBitmapButton();
 
     /**
         Button creation function for two-step creation.
@@ -191,7 +191,7 @@ public:
         @see GetBitmapDisabled(), SetBitmapLabel(),
              SetBitmapSelected(), SetBitmapFocus()
     */
-    void SetBitmapDisabled(const wxBitmap& bitmap);
+    virtual void SetBitmapDisabled(const wxBitmap& bitmap);
 
     /**
         Sets the bitmap for the button appearance when it has the keyboard focus.
@@ -202,7 +202,7 @@ public:
         @see GetBitmapFocus(), SetBitmapLabel(),
              SetBitmapSelected(), SetBitmapDisabled()
     */
-    void SetBitmapFocus(const wxBitmap& bitmap);
+    virtual void SetBitmapFocus(const wxBitmap& bitmap);
 
     /**
         Sets the bitmap to be shown when the mouse is over the button.
@@ -213,7 +213,7 @@ public:
 
         @see GetBitmapHover()
     */
-    void SetBitmapHover(const wxBitmap& bitmap);
+    virtual void SetBitmapHover(const wxBitmap& bitmap);
 
     /**
         Sets the bitmap label for the button.
@@ -226,7 +226,7 @@ public:
 
         @see GetBitmapLabel()
     */
-    void SetBitmapLabel(const wxBitmap& bitmap);
+    virtual void SetBitmapLabel(const wxBitmap& bitmap);
 
     /**
         Sets the bitmap for the selected (depressed) button appearance.
@@ -234,6 +234,6 @@ public:
         @param bitmap
             The bitmap to set.
     */
-    void SetBitmapSelected(const wxBitmap& bitmap);
+    virtual void SetBitmapSelected(const wxBitmap& bitmap);
 };
 

@@ -91,7 +91,7 @@ public:
     /**
         Destructor, destroying the button.
     */
-    ~wxButton();
+    virtual ~wxButton();
 
     /**
         Button creation function for two-step creation.
@@ -110,7 +110,7 @@ public:
         buttons of the same size and this function allows to retrieve the (platform and
         current font dependent size) which should be the best suited for this.
     */
-    wxSize GetDefaultSize();
+    static wxSize GetDefaultSize();
 
     /**
         Returns the string label for the button.
