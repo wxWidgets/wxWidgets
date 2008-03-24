@@ -71,7 +71,7 @@ class wxMethod
 {
 public:
     wxMethod()
-        { m_bConst=m_bVirtual=m_bStatic=m_bDeprecated=false; m_nLine=-1; }
+        { m_bConst=m_bVirtual=m_bPureVirtual=m_bStatic=m_bDeprecated=false; m_nLine=-1; }
 
     wxMethod(const wxType& rettype, const wxString& name,
              const wxTypeArray& arguments, const wxArrayString& defaults,
@@ -105,6 +105,8 @@ public:     // getters
         { return m_bStatic; }
     bool IsVirtual() const
         { return m_bVirtual; }
+    bool IsPureVirtual() const
+        { return m_bPureVirtual; }
 
     bool IsOk() const;
     bool IsCtor() const
@@ -129,6 +131,8 @@ public:     // setters
         { m_bStatic=c; }
     void SetVirtual(bool c = true)
         { m_bVirtual=c; }
+    void SetPureVirtual(bool c = true)
+        { m_bPureVirtual=c; }
     void SetDeprecated(bool c = true)
         { m_bDeprecated=c; }
     void SetLocation(int lineNumber)
@@ -150,6 +154,7 @@ protected:
     bool m_bConst;
     bool m_bStatic;
     bool m_bVirtual;
+    bool m_bPureVirtual;
     bool m_bDeprecated;
     int m_nLine;
 };

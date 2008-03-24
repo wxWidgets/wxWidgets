@@ -195,27 +195,20 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
         searchedclasses += "/" + api[j]->GetName();
     searchedclasses.Remove(0, 1);
 
-
     // shorten the name of the header so the log file is more readable
     wxString header = iface->GetHeader().AfterLast('/');
 
     for (unsigned int i=0; i<iface->GetMethodCount(); i++)
     {
         const wxMethod& m = iface->GetMethod(i);
-        const wxString& tofind = m.GetAsString();
         int matches = 0;
 
         // search in the methods of the api classes provided
         for (unsigned int j=0; j<api.GetCount(); j++)
         {
             real = api[j]->FindMethod(m);
-            if (real) {
-
-                // there is a matching prototype! It's ok!
-                //LogMessage("the doxygen method '%s' has a match in the real interface of '%s'!",
-                //           tofind, api[j]->GetName());
-                matches++;
-            }
+            if (real)
+                matches++;                // there is a real matching prototype! It's ok!
         }
 
         if (matches == 0)
@@ -232,33 +225,54 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
                 WX_APPEND_ARRAY(overloads, results);
             }
 
-            if (overloads.GetCount()>1)
+            if (overloads.GetCount()==0)
             {
-                // TODO: decide which of these overloads is the most "similar" to m
-                //       and eventually modify it
-                LogWarning("%s: there are %d overloads of method '%s' in the classes '%s' "
-                           "all with different signatures; manual fix is required",
-                           header, overloads.GetCount(), tofind, searchedclasses);
-            }
-            else if (overloads.GetCount() == 1)
-            {
-                wxString tmp;
-                if (m_modify) tmp = "; fixing it...";
-
-                LogWarning("%s: the method '%s' of classes '%s' has a different signature%s",
-                           header, tofind, searchedclasses, tmp);
-                count++;
-
-                // try to modify it!
-                if (m_modify)
-                    FixMethod(iface->GetHeader(), &m, overloads[0]);
+                LogMessage("%s: real '%s' class has no method '%s'",
+                            header, searchedclasses, m.GetAsString());
+                // we've found no overloads
             }
             else
             {
-                LogMessage("%s: real '%s' class has no method '%s'",
-                           header, searchedclasses, tofind);
-                count++;        // count this type of warnings
+                // first, output a warning
+                wxString warning = header;
+                if (overloads.GetCount()>1)
+                    warning += wxString::Format(": in the real headers there are %d overloads of '%s' for "
+                                                "'%s' all with different signatures:\n",
+                                                overloads.GetCount(), m.GetName(), searchedclasses);
+                else
+                    warning += wxString::Format(": in the real headers there is a method '%s' for '%s'"
+                                                " but has different signature:\n",
+                                                m.GetName(), searchedclasses);
+
+                warning += "\tdoxy header: " + m.GetAsString();
+                for (unsigned int j=0; j<overloads.GetCount(); j++)
+                    warning += "\n\treal header: " + overloads[j]->GetAsString();
+
+                wxPrint(warning + "\n");
+                count++;
+
+                if (overloads.GetCount()>1)
+                {
+                    // TODO: decide which of these overloads is the most "similar" to m
+                    //       and eventually modify it
+                    if (m_modify)
+                        wxPrint("\tmanual fix is required\n");
+                }
+                else
+                {
+                    wxASSERT(overloads.GetCount() == 1);
+
+                    if (m_modify)
+                    {
+                        wxPrint("\tfixing it...\n");
+
+                        // try to modify it!
+                        FixMethod(iface->GetHeader(), &m, overloads[0]);
+                    }
+                }
             }
+
+            count++;
         }
     }
 
@@ -283,11 +297,17 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
         return;
     }
 
+    if (!file.GetLine(end).Contains(iface->GetName())) {
+        LogWarning("invalid location info for method '%s': %d.",
+                   iface->GetAsString(), iface->GetLocation());
+        return;
+    }
+
     // find the start point of this prototype declaration:
-    int start = end;
+    int start = end-1;
     while (start > 0 &&
            !file.GetLine(start).Contains(";") &&
-            !file.GetLine(start).Contains("*/"))
+           !file.GetLine(start).Contains("*/"))
         start--;
 
     if (start <= 0)
@@ -296,6 +316,10 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
                     iface->GetAsString(), header);
         return;
     }
+
+    // start-th line contains either the declaration of another prototype
+    // or the closing tag */ of a doxygen comment; start one line below
+    start++;
 
     // remove the old prototype
     for (int i=start; i<=end; i++)

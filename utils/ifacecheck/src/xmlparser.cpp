@@ -49,10 +49,30 @@ wxType wxEmptyType;
 
 void wxType::SetFromString(const wxString& t)
 {
-    m_strType = t.Strip(wxString::both);
+    /*
+        TODO: optimize the following code writing a single function
+              which works at char-level and does everything in a single pass
+    */
+
+    m_strType = t;
 
     // [] is the same as * for gccxml
     m_strType.Replace("[]", "*");
+    m_strType.Replace("long int", "long");      // in wx typically we never write "long int", just "long"
+
+    // make sure the * and & operator always use the same spacing rules
+    // (to make sure GetAsString() output is always consistent)
+    m_strType.Replace("*", "* ");
+    m_strType.Replace("&", "& ");
+    m_strType.Replace(" *", "*");
+    m_strType.Replace(" &", "&");
+
+    while (m_strType.Contains("  "))
+        m_strType.Replace("  ", " ");       // do it once again
+
+    m_strType.Replace(" ,", ",");
+
+    m_strType = m_strType.Strip(wxString::both);
 }
 
 bool wxType::IsOk() const
@@ -106,7 +126,7 @@ bool wxMethod::IsOk() const
         return false;
 
     // a function can't be both const and static or virtual and static!
-    if ((m_bConst && m_bStatic) || (m_bVirtual && m_bStatic)) {
+    if ((m_bConst && m_bStatic) || ((m_bVirtual || m_bPureVirtual) && m_bStatic)) {
         LogError("'%s' method can't be both const/static or virtual/static", m_strName);
         return false;
     }
@@ -149,6 +169,7 @@ bool wxMethod::operator==(const wxMethod& m) const
         IsConst() != m.IsConst() ||
         IsStatic() != m.IsStatic() ||
         IsVirtual() != m.IsVirtual() ||
+        IsPureVirtual() != m.IsPureVirtual() ||
         IsDeprecated() != m.IsDeprecated())
         return false;
 
@@ -189,8 +210,10 @@ wxString wxMethod::GetAsString() const
         ret += " const";
     if (m_bStatic)
         ret = "static " + ret;
-    if (m_bVirtual)
+    if (m_bVirtual || m_bPureVirtual)
         ret = "virtual " + ret;
+    if (m_bPureVirtual)
+        ret = ret + " = 0";
 
     // in doxygen headers we don't need wxDEPRECATED:
     //if (m_bDeprecated)
@@ -213,6 +236,8 @@ void wxMethod::Dump(wxTextOutputStream& stream) const
         stream << " STATIC";
     if (IsVirtual())
         stream << " VIRTUAL";
+    if (IsPureVirtual())
+        stream << " PURE-VIRTUAL";
     if (IsDeprecated())
         stream << " DEPRECATED";
 
@@ -825,6 +850,7 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     m.SetConst(p->GetAttribute("const") == "1");
     m.SetStatic(p->GetAttribute("static") == "1");
     m.SetVirtual(p->GetAttribute("virtual") == "1");
+    m.SetPureVirtual(p->GetAttribute("pure_virtual") == "1");
     m.SetDeprecated(p->GetAttribute("attributes") == "deprecated");
 
     if (!m.IsOk()) {
@@ -1110,6 +1136,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
     m.SetConst(p->GetAttribute("const")=="yes");
     m.SetStatic(p->GetAttribute("static")=="yes");
     m.SetVirtual(p->GetAttribute("virt")=="virtual");
+    m.SetPureVirtual(p->GetAttribute("virt")=="pure-virtual");
 
     if (!m.IsOk()) {
         LogError("The prototype '%s' is not valid!", m.GetAsString());
