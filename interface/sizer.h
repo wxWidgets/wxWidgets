@@ -167,6 +167,19 @@ public:
     wxSize GetMinSize() const;
 
     /**
+        Sets the minimum size to be allocated for this item.
+
+        If this item is a window, the @a size is also passed to
+        wxWindow::SetMinSize().
+     */
+    void SetMinSize(const wxSize& size);
+
+    /**
+        @overload
+     */
+    void SetMinSize(int x, int y);
+
+    /**
         What is the current position of the item, as set in the last Layout.
     */
     wxPoint GetPosition() const;
@@ -1287,11 +1300,13 @@ public:
 
     //@{
     /**
-        Set an item's minimum size by window, sizer, or position. The item will be
-        found recursively
-        in the sizer's descendants. This function enables an application to set the
-        size of an item
-        after initial creation.
+        Set an item's minimum size by window, sizer, or position.
+
+        The item will be found recursively in the sizer's descendants. This
+        function enables an application to set the size of an item after
+        initial creation.
+
+        @see wxSizerItem::SetMinSize()
     */
     void SetItemMinSize(wxWindow* window, int width, int height);
     void SetItemMinSize(wxSizer* sizer, int width, int height);
