@@ -165,7 +165,10 @@ public:     // setters
     void SetVirtual(bool c = true)
         { m_bVirtual=c; }
     void SetPureVirtual(bool c = true)
-        { m_bPureVirtual=c; }
+        {
+            m_bPureVirtual=c;
+            if (c) m_bVirtual=c;        // pure virtual => virtual
+        }
     void SetDeprecated(bool c = true)
         { m_bDeprecated=c; }
     void SetLocation(int lineNumber)

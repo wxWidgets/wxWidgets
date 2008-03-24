@@ -170,6 +170,8 @@ bool wxMethod::IsOk() const
         return false;
     }
 
+    wxASSERT((m_bVirtual && m_bPureVirtual) || !m_bVirtual);
+
     for (unsigned int i=0; i<m_args.GetCount(); i++)
         if (!m_args[i].IsOk()) {
             LogError("'%s' method has invalid %d-th argument type: %s",

@@ -22,6 +22,7 @@
 
 #include "wx/cmdline.h"
 #include "wx/textfile.h"
+#include "wx/filename.h"
 #include "wx/stopwatch.h"       // for wxGetLocalTime
 #include "xmlparser.h"
 
@@ -37,17 +38,21 @@ bool g_verbose = false;
 #define API_DUMP_FILE           "dump.api.txt"
 #define INTERFACE_DUMP_FILE     "dump.interface.txt"
 
+#define PROCESS_ONLY_SWITCH     "p"
 #define MODIFY_SWITCH           "m"
-#define DUMP_SWITCH             "dump"
+#define DUMP_SWITCH             "d"
 #define HELP_SWITCH             "h"
 #define VERBOSE_SWITCH          "v"
 
 static const wxCmdLineEntryDesc g_cmdLineDesc[] =
 {
+    { wxCMD_LINE_OPTION, PROCESS_ONLY_SWITCH, "process-only",
+        "processes only header files matching the given wildcard",
+        wxCMD_LINE_VAL_STRING, wxCMD_LINE_NEEDS_SEPARATOR },
     { wxCMD_LINE_SWITCH, MODIFY_SWITCH, "modify",
         "modify the interface headers to match the real ones" },
-    { wxCMD_LINE_SWITCH, "", DUMP_SWITCH,
-        "dump both interface and API to plain text" },
+    { wxCMD_LINE_SWITCH, DUMP_SWITCH, "dump",
+        "dump both interface and API to plain text dump.*.txt files" },
     { wxCMD_LINE_SWITCH, HELP_SWITCH, "help",
         "show help message", wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
     { wxCMD_LINE_SWITCH, VERBOSE_SWITCH, "verbose",
@@ -73,12 +78,23 @@ public:
     void ShowProgress();
     void PrintStatistics(long secs);
 
+    bool IsToProcess(const wxString& headername) const
+    {
+        if (m_strToMatch.IsEmpty())
+            return true;
+        return wxMatchWild(m_strToMatch, headername, false);
+    }
+
 protected:
     wxXmlGccInterface m_api;                  // "real" headers API
     wxXmlDoxygenInterface m_interface;        // doxygen-commented headers API
 
     // was the MODIFY_SWITCH passed?
     bool m_modify;
+
+    // if non-empty, then PROCESS_ONLY_SWITCH was passed and this is the
+    // wildcard expression to match
+    wxString m_strToMatch;
 };
 
 IMPLEMENT_APP_CONSOLE(IfaceCheckApp)
@@ -117,6 +133,15 @@ int IfaceCheckApp::OnRun()
                 if (parser.Found(MODIFY_SWITCH))
                     m_modify = true;
 
+                if (parser.Found(PROCESS_ONLY_SWITCH, &m_strToMatch))
+                {
+                    size_t len = m_strToMatch.Len();
+                    if (m_strToMatch.StartsWith("\"") &&
+                        m_strToMatch.EndsWith("\"") &&
+                        len > 2)
+                        m_strToMatch = m_strToMatch.Mid(1, len-2);
+                }
+
                 ok = Compare();
             }
 
@@ -143,8 +168,18 @@ bool IfaceCheckApp::Compare()
     LogMessage("Comparing the interface API to the real API (%d classes to compare)...",
                interface.GetCount());
 
+    if (!m_strToMatch.IsEmpty())
+        LogMessage("Processing only header files matching '%s' expression.", m_strToMatch);
+
     for (unsigned int i=0; i<interface.GetCount(); i++)
     {
+        // shorten the name of the header so the log file is more readable
+        // and also for calling IsToProcess() against it
+        wxString header = wxFileName(interface[i].GetHeader()).GetFullName();
+
+        if (!IsToProcess(header))
+            continue;       // skip this one
+
         wxString cname = interface[i].GetName();
 
         api.Empty();
@@ -164,9 +199,6 @@ bool IfaceCheckApp::Compare()
             mcount += CompareClasses(&interface[i], api);
 
         } else {
-
-            // shorten the name of the header so the log file is more readable
-            wxString header = interface[i].GetHeader().AfterLast('/');
 
             LogMessage("%s: couldn't find the real interface for the '%s' class",
                        header, cname);
@@ -196,7 +228,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
     searchedclasses.Remove(0, 1);
 
     // shorten the name of the header so the log file is more readable
-    wxString header = iface->GetHeader().AfterLast('/');
+    wxString header = wxFileName(iface->GetHeader()).GetFullName();
 
     for (unsigned int i=0; i<iface->GetMethodCount(); i++)
     {
