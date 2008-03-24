@@ -260,6 +260,16 @@ public:
                              bool underline = false,
                              const wxString& face = wxEmptyString,
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+#if FUTURE_WXWIN_COMPATIBILITY_3_0
+     wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
+                              bool underline = false,
+                              const wxString& face = wxEmptyString,
+                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+        { return FindOrCreateFont(pointSize, (wxFontFamily)family, (wxFontStyle)style,
+                                  (wxFontWeight)weight, underline, face, encoding); }
+#endif
+
 #if WXWIN_COMPATIBILITY_2_6
     wxDEPRECATED( void AddFont(wxFont*) );
     wxDEPRECATED( void RemoveFont(wxFont*) );
