@@ -33,7 +33,7 @@
 #include "corner4.xpm"
 #include "wxpoem.xpm"
 
-#define         buf_size 10000
+#define         BUFFER_SIZE 10000
 #define         DEFAULT_POETRY_DAT "wxpoem"
 #define         DEFAULT_POETRY_IND "wxpoem"
 #define         DEFAULT_CHAR_HEIGHT 18
@@ -48,7 +48,7 @@
 #define         X_SIZE 30
 #define         Y_SIZE 20
 
-static wxChar   *poem_buffer;          // Storage for each poem
+static wxChar   *poem_buffer;                   // Storage for each poem
 static wxChar   line[150];                      // Storage for a line
 static int      pages[30];                      // For multipage poems -
                                                 // store the start of each page
@@ -79,8 +79,8 @@ static int      current_page = 0;               // Currently viewed page
 // Backing bitmap
 wxBitmap        *backingBitmap = NULL;
 
-void            PoetryError(wxChar *, wxChar *caption=_T("wxPoem Error"));
-void            PoetryNotify(wxChar *Msg, wxChar *caption=_T("wxPoem"));
+void            PoetryError(const wxChar *, const wxChar *caption=_T("wxPoem Error"));
+void            PoetryNotify(const wxChar *Msg, const wxChar *caption=_T("wxPoem"));
 void            TryLoadIndex();
 bool            LoadPoem(wxChar *, long);
 int             GetIndex();
@@ -325,7 +325,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     // Write (cont'd)
     if (page_break)
     {
-        wxChar *cont = _T("(cont'd)");
+        const wxChar *cont = _T("(cont'd)");
 
         dc->SetFont(* m_normalFont);
 
@@ -517,7 +517,7 @@ void MainWindow::Search(bool ask)
 
 bool MyApp::OnInit()
 {
-    poem_buffer = new wxChar[buf_size];
+    poem_buffer = new wxChar[BUFFER_SIZE];
 
     // Seed the random number generator
 #ifdef __WXWINCE__
@@ -828,7 +828,7 @@ bool LoadPoem(wxChar *file_name, long position)
         poem_buffer[i] = (wxChar)ch;
         i ++;
 
-        if (i == buf_size)
+        if (i == BUFFER_SIZE)
         {
             wxSprintf(error_buf, _T("%s"), _T("Poetry buffer exceeded."));
             PoetryError(error_buf);
@@ -934,13 +934,13 @@ void TryLoadIndex()
 }
 
 // Error message
-void PoetryError(wxChar *msg, wxChar *caption)
+void PoetryError(const wxChar *msg, const wxChar *caption)
 {
     wxMessageBox(msg, caption, wxOK|wxICON_EXCLAMATION);
 }
 
 // Notification (change icon to something appropriate!)
-void PoetryNotify(wxChar *Msg, wxChar *caption)
+void PoetryNotify(const wxChar *Msg, const wxChar *caption)
 {
     wxMessageBox(Msg, caption, wxOK | wxICON_INFORMATION);
 }

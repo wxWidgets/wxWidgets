@@ -14,6 +14,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WXPOEM_H_
+#define _WXPOEM_H_
+
+
 // Define a new application
 class MyApp: public wxApp
 {
@@ -46,7 +50,8 @@ class MainWindow: public wxFrame
 {
 public:
     MyCanvas *canvas;
-    MainWindow(wxFrame *frame, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style);
+    MainWindow(wxFrame *frame, wxWindowID id, const wxString& title,
+               const wxPoint& pos, const wxSize& size, long style);
     virtual ~MainWindow();
 
     void OnCloseWindow(wxCloseEvent& event);
@@ -107,3 +112,5 @@ enum
     POEM_SEARCH        = wxID_FIND,
     POEM_MINIMIZE      = wxID_ICONIZE_FRAME
 };
+
+#endif      // _WXPOEM_H_
