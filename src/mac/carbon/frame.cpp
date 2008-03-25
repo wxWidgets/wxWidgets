@@ -26,8 +26,6 @@
 
 #include "wx/mac/uma.h"
 
-extern wxWindowList wxModelessWindows;
-
 BEGIN_EVENT_TABLE(wxFrame, wxFrameBase)
   EVT_ACTIVATE(wxFrame::OnActivate)
  // EVT_MENU_HIGHLIGHT_ALL(wxFrame::OnMenuHighlight)
@@ -60,8 +58,6 @@ bool wxFrame::Create(wxWindow *parent,
 
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return false;
-
-    wxModelessWindows.Append(this);
 
     return true;
 }

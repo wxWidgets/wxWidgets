@@ -415,28 +415,31 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
 // set back to 0 if problems arise
 #if 1
-                    ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
-                    // synthesize the event focus changed event
-                    EventRef evRef = NULL ;
+                    if ( result == noErr )
+                    {
+                        ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
+                        // synthesize the event focus changed event
+                        EventRef evRef = NULL ;
 
-                    OSStatus err = MacCreateEvent(
-                                         NULL , kEventClassControl , kEventControlFocusPartChanged , TicksToEventTime( TickCount() ) ,
-                                         kEventAttributeUserEvent , &evRef );
-                    verify_noerr( err );
+                        OSStatus err = MacCreateEvent(
+                                             NULL , kEventClassControl , kEventControlFocusPartChanged , TicksToEventTime( TickCount() ) ,
+                                             kEventAttributeUserEvent , &evRef );
+                        verify_noerr( err );
 
-                    wxMacCarbonEvent iEvent( evRef ) ;
-                    iEvent.SetParameter<ControlRef>( kEventParamDirectObject , controlRef );
-                    iEvent.SetParameter<EventTargetRef>( kEventParamPostTarget, typeEventTargetRef, GetControlEventTarget( controlRef ) );
-                    iEvent.SetParameter<ControlPartCode>( kEventParamControlPreviousPart, typeControlPartCode, previousControlPart );
-                    iEvent.SetParameter<ControlPartCode>( kEventParamControlCurrentPart, typeControlPartCode, currentControlPart );
-
+                        wxMacCarbonEvent iEvent( evRef ) ;
+                        iEvent.SetParameter<ControlRef>( kEventParamDirectObject , controlRef );
+                        iEvent.SetParameter<EventTargetRef>( kEventParamPostTarget, typeEventTargetRef, GetControlEventTarget( controlRef ) );
+                        iEvent.SetParameter<ControlPartCode>( kEventParamControlPreviousPart, typeControlPartCode, previousControlPart );
+                        iEvent.SetParameter<ControlPartCode>( kEventParamControlCurrentPart, typeControlPartCode, currentControlPart );
+        
 #if 1
-                    // TODO test this first, avoid double posts etc...
-                    PostEventToQueue( GetMainEventQueue(), evRef , kEventPriorityHigh );
+                        // TODO test this first, avoid double posts etc...
+                        PostEventToQueue( GetMainEventQueue(), evRef , kEventPriorityHigh );
 #else
-                    wxMacWindowControlEventHandler( NULL , evRef , data ) ;
+                        wxMacWindowControlEventHandler( NULL , evRef , data ) ;
 #endif
-                    ReleaseEvent( evRef ) ;
+                        ReleaseEvent( evRef ) ;
+                    }
 #else
                     // old implementation, to be removed if the new one works
                     if ( controlPart == kControlFocusNoPart )
@@ -1203,10 +1206,13 @@ void wxWindowMac::SetFocus()
 
     // as we cannot rely on the control features to find out whether we are in full keyboard mode,
     // we can only leave in case of an error
-    wxLogTrace(_T("Focus"), _T("before wxWindow::SetFocus(%p)"), wx_static_cast(void*, this));
+    wxLogTrace(_T("Focus"), _T("before wxWindow::SetFocus(%p) %d"), wx_static_cast(void*, this), GetName().c_str());
     OSStatus err = m_peer->SetFocus( kControlFocusNextPart ) ;
     if ( err == errCouldntSetFocus )
+    {
+        wxLogTrace(_T("Focus"), _T("in wxWindow::SetFocus(%p) errCouldntSetFocus"), wx_static_cast(void*, this));
         return ;
+    }
     wxLogTrace(_T("Focus"), _T("after wxWindow::SetFocus(%p)"), wx_static_cast(void*, this));
 
     SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );

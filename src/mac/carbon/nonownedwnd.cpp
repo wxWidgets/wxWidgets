@@ -42,9 +42,6 @@
 // globals
 // ----------------------------------------------------------------------------
 
-// list of all frames and modeless dialogs
-wxWindowList       wxModelessWindows;
-
 static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 message, SInt32 param);
 
 // ============================================================================
@@ -852,8 +849,6 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     if (GetExtraStyle() & wxFRAME_EX_METAL)
         MacSetMetalAppearance(true);
 
-    wxTopLevelWindows.Append(this);
-
     if ( parent )
         parent->AddChild(this);
 
@@ -878,9 +873,6 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 
     wxRemoveMacWindowAssociation( this ) ;
 
-    if ( wxModelessWindows.Find(this) )
-        wxModelessWindows.DeleteObject(this);
-
     // avoid dangling refs
     if ( s_macDeactivateWindow == this )
         s_macDeactivateWindow = NULL;
@@ -903,7 +895,7 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
     else if ( col == wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ) )
         col = wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive));
         
-    if ( !wxWindowBase::SetBackgroundColour(col) && m_hasBgCol )
+    if ( !wxWindow::SetBackgroundColour(col) && m_hasBgCol )
         return false ;
     
     if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground)) )
@@ -915,6 +907,10 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
     {
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDialogBackgroundActive, false ) ;
         SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    }
+    else
+    {
+        SetBackgroundStyle(wxBG_STYLE_COLOUR);
     }
     return true;
 }    

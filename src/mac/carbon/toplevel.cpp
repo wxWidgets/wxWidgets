@@ -91,6 +91,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 
     wxWindow::SetLabel( title ) ;
     SetWindowTitleWithCFString( (WindowRef) m_macWindow , wxCFStringRef( title , GetFont().GetEncoding() ) );
+    wxTopLevelWindows.Append(this);
 
     return true;
 }
