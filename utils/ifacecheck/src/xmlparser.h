@@ -294,6 +294,9 @@ public:
             return methods;
         }
 
+    // pass a full-path header filename:
+    wxClassPtrArray FindClassesDefinedIn(const wxString& headerfile) const;
+
     void ShowProgress()
         { /*wxPrint(".");*/ }
 

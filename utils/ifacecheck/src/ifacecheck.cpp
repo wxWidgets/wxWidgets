@@ -324,34 +324,39 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
 
     wxTextFile file;
     if (!file.Open(header)) {
-        LogError("can't open the '%s' header file.", header);
+        LogError("\tcan't open the '%s' header file.", header);
         return;
     }
 
     // GetLocation() returns the line where the last part of the prototype is placed:
     int end = iface->GetLocation()-1;
     if (end <= 0 || end >= (int)file.GetLineCount()) {
-        LogWarning("invalid location info for method '%s': %d.",
+        LogWarning("\tinvalid location info for method '%s': %d.",
                    iface->GetAsString(), iface->GetLocation());
         return;
     }
 
-    if (!file.GetLine(end).Contains(iface->GetName())) {
-        LogWarning("invalid location info for method '%s': %d.",
+    if (!file.GetLine(end).Contains(";")) {
+        LogWarning("\tinvalid location info for method '%s': %d.",
                    iface->GetAsString(), iface->GetLocation());
         return;
     }
 
     // find the start point of this prototype declaration:
     int start = end-1;
+    bool founddecl = false;
     while (start > 0 &&
            !file.GetLine(start).Contains(";") &&
            !file.GetLine(start).Contains("*/"))
+    {
         start--;
 
-    if (start <= 0)
+        founddecl |= file.GetLine(start).Contains(iface->GetName());
+    }
+
+    if (start <= 0 || !founddecl)
     {
-        LogError("can't find the beginning of the declaration of '%s' method in '%s' header",
+        LogError("\tcan't find the beginning of the declaration of '%s' method in '%s' header",
                     iface->GetAsString(), header);
         return;
     }
@@ -366,13 +371,18 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
 
 #define INDENTATION_STR  wxString("    ")
 
-    // if possible, add also the @deprecated tag in the doxygen comment
-    if (file.GetLine(start-1).Contains("*/") && api->IsDeprecated())
+    // if possible, add also the @deprecated tag in the doxygen comment if it's missing
+    int deprecationOffset = 0;
+    if (file.GetLine(start-1).Contains("*/") &&
+        (api->IsDeprecated() && !iface->IsDeprecated()))
     {
         file.RemoveLine(start-1);
         file.InsertLine(INDENTATION_STR + INDENTATION_STR +
                         "@deprecated @todo provide deprecation description", start-1);
         file.InsertLine(INDENTATION_STR + "*/", start++);
+
+        // we have added a new line in the final balance
+        deprecationOffset=1;
     }
 
     wxMethod tmp(*api);
@@ -389,13 +399,66 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
         tmp.SetArgumentTypes(realargs);
     }
 
-    // insert the new one
-    file.InsertLine(INDENTATION_STR + tmp.GetAsString() + ";", start);
+#define WRAP_COLUMN     80
+
+    wxArrayString toinsert;
+    toinsert.Add(INDENTATION_STR + tmp.GetAsString() + ";");
+
+    int nStartColumn = toinsert[0].Find('(');
+    wxASSERT(nStartColumn != wxNOT_FOUND);
+
+    // wrap lines too long at comma boundaries
+    for (unsigned int i=0; i<toinsert.GetCount(); i++)
+    {
+        size_t len = toinsert[i].Len();
+        if (len > WRAP_COLUMN)
+        {
+            wxASSERT(i == toinsert.GetCount()-1);
+
+            // break this line
+            wxString tmpleft = toinsert[i].Left(WRAP_COLUMN);
+            int comma = tmpleft.Find(',', true /* from end */);
+            if (comma == wxNOT_FOUND)
+                break;     // break out of the for cycle...
+
+            toinsert.Add(wxString(' ', nStartColumn+1) +
+                         toinsert[i].Right(len-comma-2));   // exclude the comma and the space after it
+            toinsert[i] = tmpleft.Left(comma+1);            // include the comma
+        }
+    }
+
+    // insert the new lines
+    for (unsigned int i=0; i<toinsert.GetCount(); i++)
+        file.InsertLine(toinsert[i], start+i);
 
     // now save the modification
     if (!file.Write()) {
-        LogError("can't save the '%s' header file.", header);
+        LogError("\tcan't save the '%s' header file.", header);
         return;
+    }
+
+    // how many lines did we add/remove in total?
+    int nOffset = toinsert.GetCount() + deprecationOffset - (end-start+1);
+    if (nOffset == 0)
+        return;
+
+    if (g_verbose)
+        LogMessage("\tthe final row offset for following methods is %d lines.", nOffset);
+
+    // update the other method's locations for those methods which belong to the modified header
+    // and are placed _below_ the modified method
+    wxClassPtrArray cToUpdate = m_interface.FindClassesDefinedIn(header);
+    for (unsigned int i=0; i < cToUpdate.GetCount(); i++)
+    {
+        for (unsigned int j=0; j < cToUpdate[i]->GetMethodCount(); j++)
+        {
+            wxMethod& m = cToUpdate[i]->GetMethod(j);
+            if (m.GetLocation() > iface->GetLocation())
+            {
+                // update the location of this method
+                m.SetLocation(m.GetLocation()+nOffset);
+            }
+        }
     }
 }
 

@@ -412,6 +412,18 @@ bool wxXmlInterface::CheckParseResults() const
     return true;
 }
 
+wxClassPtrArray wxXmlInterface::FindClassesDefinedIn(const wxString& headerfile) const
+{
+    wxClassPtrArray ret;
+
+    for (unsigned int i=0; i<m_classes.GetCount(); i++)
+        if (m_classes[i].GetHeader() == headerfile)
+            ret.Add(&m_classes[i]);
+
+    return ret;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxXmlGccInterface helper declarations
 // ----------------------------------------------------------------------------
@@ -576,7 +588,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 if (ids.IsEmpty())
                 {
                     if (child->GetAttribute("incomplete") != "1") {
-                        LogError("Invalid member IDs for '%s' class node (ID %s)",
+                        LogError("Invalid member IDs for '%s' class node: %s",
                                 cname, child->GetAttribute("id"));
                         return false;
                     }
@@ -587,7 +599,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 {
                     // decode the non-empty list of IDs:
                     if (!getMemberIDs(&members, &m_classes.Last(), ids)) {
-                        LogError("Invalid member IDs for '%s' class node (ID %s)",
+                        LogError("Invalid member IDs for '%s' class node: %s",
                                 cname, child->GetAttribute("id"));
                         return false;
                     }
@@ -645,7 +657,7 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         else if (n == "File")
         {
             if (!child->GetAttribute("id").StartsWith("f")) {
-                LogError("Unexpected file ID: %s", id);
+                LogError("Unexpected file ID: %s", child->GetAttribute("id"));
                 return false;
             }
 
@@ -670,7 +682,8 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 // they're never used as return/argument types by wxWidgets methods
 
                 if (g_verbose)
-                    LogWarning("Type '%s' with ID '%s' does not have name attribute", n, id);
+                    LogWarning("Type node '%s' with ID '%s' does not have name attribute",
+                               n, child->GetAttribute("id"));
 
                 types[id] = "TOFIX";
             }
@@ -797,12 +810,12 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
 
                 if (newfunc.IsCtor() && !p->IsValidCtorForThisClass(newfunc)) {
                     LogError("The method '%s' does not seem to be a ctor for '%s'",
-                                newfunc.GetName(), p->GetName());
+                             newfunc.GetName(), p->GetName());
                     return false;
                 }
                 if (newfunc.IsDtor() && !p->IsValidDtorForThisClass(newfunc)) {
                     LogError("The method '%s' does not seem to be a dtor for '%s'",
-                                newfunc.GetName(), p->GetName());
+                             newfunc.GetName(), p->GetName());
                     return false;
                 }
 
