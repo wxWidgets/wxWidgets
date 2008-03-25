@@ -72,12 +72,12 @@ wxIcon::wxIcon(const char bits[], int width, int height)
 }
 
 wxIcon::wxIcon(const wxString& iconfile,
-               long flags,
+               wxBitmapType type,
                int desiredWidth,
                int desiredHeight)
 
 {
-    LoadFile(iconfile, flags, desiredWidth, desiredHeight);
+    LoadFile(iconfile, type, desiredWidth, desiredHeight);
 }
 
 wxIcon::wxIcon(const wxIconLocation& loc)
@@ -135,7 +135,7 @@ void wxIcon::CreateIconFromXpm(const char* const* data)
 }
 
 bool wxIcon::LoadFile(const wxString& filename,
-                      long type,
+                      wxBitmapType type,
                       int desiredWidth, int desiredHeight)
 {
     UnRef();

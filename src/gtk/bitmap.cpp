@@ -968,12 +968,6 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
     return newRef;
 }
 
-//-----------------------------------------------------------------------------
-// wxBitmapHandler
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
-
 /* static */ void wxBitmap::InitStandardHandlers()
 {
     // TODO: Insert handler based on GdkPixbufs handler later

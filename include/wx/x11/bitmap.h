@@ -62,11 +62,6 @@ private:
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
-{
-    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
-};
-
 class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:

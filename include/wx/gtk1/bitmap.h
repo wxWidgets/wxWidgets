@@ -146,13 +146,5 @@ private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
-//-----------------------------------------------------------------------------
-// wxBitmapHandler
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
-{
-    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
-};
 
 #endif // __GTKBITMAPH__

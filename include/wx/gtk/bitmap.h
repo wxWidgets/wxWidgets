@@ -51,23 +51,22 @@ class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
     wxBitmap() { }
-    wxBitmap( int width, int height, int depth = -1 );
+    wxBitmap( int width, int height, int depth = wxBITMAP_SCREEN_DEPTH );
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
 #ifdef wxNEEDS_CHARPP
     // needed for old GCC
     wxBitmap(char** data)
-    {
-        *this = wxBitmap(wx_const_cast(const char* const*, data));
-    }
+    { *this = wxBitmap(wx_const_cast(const char* const*, data)); }
 #endif
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM );
 #if wxUSE_IMAGE
-    wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
+    wxBitmap( const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH )
+        { (void)CreateFromImage(image, depth); }
 #endif // wxUSE_IMAGE
     virtual ~wxBitmap();
 
-    bool Create(int width, int height, int depth = -1);
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     virtual int GetHeight() const;
     virtual int GetWidth() const;
@@ -112,7 +111,8 @@ public:
     GdkPixbuf *GetPixbuf() const;
 
     // Basically, this corresponds to Win32 StretchBlt()
-    wxBitmap Rescale(int clipx, int clipy, int clipwidth, int clipheight, int width, int height) const;
+    wxBitmap Rescale(int clipx, int clipy, int clipwidth, int clipheight,
+                     int width, int height) const;
 
     // raw bitmap access support functions
     void *GetRawData(wxPixelDataBase& data, int bpp);
@@ -148,15 +148,6 @@ public:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
-};
-
-//-----------------------------------------------------------------------------
-// wxBitmapHandler
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
-{
-    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
 #endif // _WX_GTK_BITMAP_H_

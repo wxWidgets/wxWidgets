@@ -40,6 +40,8 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxBitmap,WXDLLEXPORT)
 // wxMask represents the transparent area of the bitmap
 // ----------------------------------------------------------------------------
 
+// TODO: all implementation of wxMask, except the generic one,
+//       do not derive from wxMaskBase,,, they should
 class WXDLLEXPORT wxMaskBase : public wxObject
 {
 public:
@@ -78,8 +80,13 @@ protected:
     #define wxUSE_BITMAP_BASE 0
 #endif
 
-// Only used by some ports
-// FIXME -- make all ports (but MSW which uses wxGDIImage) use these base classes
+// a more readable way to tell
+#define wxBITMAP_SCREEN_DEPTH       (-1)
+
+
+// All ports except wxMSW,wxOS2,wxPalmOS use wxBitmapHandler and wxBitmapBase as base class
+// for wxBitmapHandler; wxMSW,wxOS2,wxPalmOS use wxGDIImageHandler as base class
+// since it allows some code reuse there.
 #if wxUSE_BITMAP_BASE
 
 // ----------------------------------------------------------------------------
@@ -87,18 +94,29 @@ protected:
 // different formats
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmapHandlerBase : public wxObject
+class WXDLLEXPORT wxBitmapHandler : public wxObject
 {
 public:
-    wxBitmapHandlerBase() { m_type = wxBITMAP_TYPE_INVALID; }
-    virtual ~wxBitmapHandlerBase() { }
+    wxBitmapHandler() { m_type = wxBITMAP_TYPE_INVALID; }
+    virtual ~wxBitmapHandler() { }
 
-    virtual bool Create(wxBitmap *bitmap, const void* data, long flags,
-                        int width, int height, int depth = 1);
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-                          int desiredWidth, int desiredHeight);
-    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name,
-                          int type, const wxPalette *palette = NULL);
+    // NOTE: the following functions should be pure virtuals, but they aren't
+    //       because otherwise almost all ports would have to implement
+    //       them as "return false"...
+
+    virtual bool Create(wxBitmap *WXUNUSED(bitmap), const void* WXUNUSED(data),
+                         wxBitmapType WXUNUSED(type), int WXUNUSED(width), int WXUNUSED(height),
+                         int WXUNUSED(depth) = 1)
+        { return false; }
+
+    virtual bool LoadFile(wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name),
+                           wxBitmapType WXUNUSED(type), int WXUNUSED(desiredWidth),
+                           int WXUNUSED(desiredHeight))
+        { return false; }
+
+    virtual bool SaveFile(const wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name),
+                           wxBitmapType WXUNUSED(type), const wxPalette *WXUNUSED(palette) = NULL) const
+        { return false; }
 
     void SetName(const wxString& name)      { m_name = name; }
     void SetExtension(const wxString& ext)  { m_extension = ext; }
@@ -112,8 +130,13 @@ private:
     wxString      m_extension;
     wxBitmapType  m_type;
 
-    DECLARE_ABSTRACT_CLASS(wxBitmapHandlerBase)
+    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
+
+
+// ----------------------------------------------------------------------------
+// wxBitmap: class which represents platform-dependent bitmap (unlike wxImage)
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxBitmapBase : public wxGDIObject
 {
@@ -122,16 +145,17 @@ public:
     Derived class must implement these:
 
     wxBitmap();
-    wxBitmap(int width, int height, int depth = -1);
+    wxBitmap(const wxBitmap& bmp);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
+    wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
-    wxBitmap(const wxImage& image, int depth = -1);
-
-    bool Create(int width, int height, int depth = -1);
+    wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH);
 
     static void InitStandardHandlers();
     */
+
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
 
     virtual int GetHeight() const = 0;
     virtual int GetWidth() const = 0;
@@ -173,8 +197,8 @@ public:
 
     // Format handling
     static inline wxList& GetHandlers() { return sm_handlers; }
-    static void AddHandler(wxBitmapHandlerBase *handler);
-    static void InsertHandler(wxBitmapHandlerBase *handler);
+    static void AddHandler(wxBitmapHandler *handler);
+    static void InsertHandler(wxBitmapHandler *handler);
     static bool RemoveHandler(const wxString& name);
     static wxBitmapHandler *FindHandler(const wxString& name);
     static wxBitmapHandler *FindHandler(const wxString& extension, wxBitmapType bitmapType);

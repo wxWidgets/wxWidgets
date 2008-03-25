@@ -39,7 +39,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
 // ============================================================================
 // implementation
@@ -1457,7 +1456,7 @@ bool wxMask::Create(
 
 bool wxBitmapHandler::Create( wxGDIImage* pImage,
                               const void* pData,
-                              long        WXUNUSED(lFlags),
+                              wxBitmapType WXUNUSED(lFlags),
                               int         nWidth,
                               int         nHeight,
                               int         nDepth)
@@ -1477,7 +1476,7 @@ bool wxBitmapHandler::Create( wxGDIImage* pImage,
 bool wxBitmapHandler::Load(
   wxGDIImage*                       pImage
 , int                               nId
-, long                              lFlags
+, wxBitmapType                      lFlags
 , int                               nWidth
 , int                               nHeight
 )
@@ -1498,7 +1497,7 @@ bool wxBitmapHandler::Save(
   wxGDIImage*                       pImage
 , const wxString&                   rName
 , int                               lType
-)
+) const
 {
     wxBitmap*                       pBitmap = wxDynamicCast( pImage
                                                             ,wxBitmap
@@ -1513,7 +1512,7 @@ bool wxBitmapHandler::Save(
 bool wxBitmapHandler::Create(
   wxBitmap*                         WXUNUSED(pBitmap)
 , const void*                       WXUNUSED(pData)
-, long                              WXUNUSED(lType)
+, wxBitmapType                      WXUNUSED(lType)
 , int                               WXUNUSED(nWidth)
 , int                               WXUNUSED(nHeight)
 , int                               WXUNUSED(nDepth)
@@ -1525,7 +1524,7 @@ bool wxBitmapHandler::Create(
 bool wxBitmapHandler::LoadFile(
   wxBitmap*                         WXUNUSED(pBitmap)
 , int                               WXUNUSED(nId)
-, long                              WXUNUSED(lType)
+, wxBitmapType                      WXUNUSED(lType)
 , int                               WXUNUSED(nDesiredWidth)
 , int                               WXUNUSED(nDesiredHeight)
 )
@@ -1536,7 +1535,7 @@ bool wxBitmapHandler::LoadFile(
 bool wxBitmapHandler::LoadFile(
   wxBitmap*                         WXUNUSED(pBitmap)
 , const wxString&                   WXUNUSED(rName)
-, long                              WXUNUSED(lType)
+, wxBitmapType                      WXUNUSED(lType)
 , int                               WXUNUSED(nDesiredWidth)
 , int                               WXUNUSED(nDesiredHeight)
 )
@@ -1547,9 +1546,9 @@ bool wxBitmapHandler::LoadFile(
 bool wxBitmapHandler::SaveFile(
   wxBitmap*                         WXUNUSED(pBitmap)
 , const wxString&                   WXUNUSED(rName)
-, int                               WXUNUSED(nType)
+, wxBitmapType                      WXUNUSED(nType)
 , const wxPalette*                  WXUNUSED(pPalette)
-)
+) const
 {
     return false;
 }

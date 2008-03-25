@@ -1373,12 +1373,6 @@ bool wxBitmap::HasAlpha() const
     return false;
 }
 
-//-----------------------------------------------------------------------------
-// wxBitmapHandler
-//-----------------------------------------------------------------------------
-
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
-
 /* static */ void wxBitmap::InitStandardHandlers()
 {
     // TODO: Insert handler based on GdkPixbufs handler later

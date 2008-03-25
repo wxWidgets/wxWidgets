@@ -41,6 +41,7 @@ enum wxBitmapTransparency
 
 // ----------------------------------------------------------------------------
 // wxBitmap: a mono or colour bitmap
+// NOTE: for wxMSW we don't use the wxBitmapBase base class declared in bitmap.h!
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxBitmap : public wxGDIImage
@@ -65,7 +66,7 @@ public:
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
 
     // New constructor for generalised creation from data
-    wxBitmap(const void* data, long type, int width, int height, int depth = 1);
+    wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
 
     // Create a new, uninitialized bitmap of the given size and depth (if it
     // is omitted, will create a bitmap compatible with the display)
@@ -135,11 +136,11 @@ public:
     bool CopyFromDIB(const wxDIB& dib);
 #endif
 
-    virtual bool Create(int width, int height, int depth = -1);
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     virtual bool Create(int width, int height, const wxDC& dc);
-    virtual bool Create(const void* data, long type, int width, int height, int depth = 1);
-    virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
-    virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
+    virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
+    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_BMP_RESOURCE);
+    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
 
     wxBitmapRefData *GetBitmapData() const
         { return (wxBitmapRefData *)m_refData; }
@@ -244,45 +245,49 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxMask)
 };
 
+
 // ----------------------------------------------------------------------------
 // wxBitmapHandler is a class which knows how to load/save bitmaps to/from file
+// NOTE: for wxMSW we don't use the wxBitmapHandler class declared in bitmap.h!
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxBitmapHandler : public wxGDIImageHandler
 {
 public:
     wxBitmapHandler() { }
-    wxBitmapHandler(const wxString& name, const wxString& ext, long type)
-        : wxGDIImageHandler(name, ext, type)
-    {
-    }
+    wxBitmapHandler(const wxString& name, const wxString& ext, wxBitmapType type)
+        : wxGDIImageHandler(name, ext, type) { }
 
-    // keep wxBitmapHandler derived from wxGDIImageHandler compatible with the
-    // old class which worked only with bitmaps
-    virtual bool Create(wxBitmap *bitmap,
-                        const void* data,
-                        long flags,
-                        int width, int height, int depth = 1);
-    virtual bool LoadFile(wxBitmap *bitmap,
-                          const wxString& name,
-                          long flags,
-                          int desiredWidth, int desiredHeight);
-    virtual bool SaveFile(wxBitmap *bitmap,
-                          const wxString& name,
-                          int type,
-                          const wxPalette *palette = NULL);
+    // implement wxGDIImageHandler's pure virtuals:
 
     virtual bool Create(wxGDIImage *image,
                         const void* data,
-                        long flags,
+                        wxBitmapType type,
                         int width, int height, int depth = 1);
     virtual bool Load(wxGDIImage *image,
                       const wxString& name,
-                      long flags,
+                      wxBitmapType type,
                       int desiredWidth, int desiredHeight);
-    virtual bool Save(wxGDIImage *image,
+    virtual bool Save(const wxGDIImage *image,
                       const wxString& name,
-                      int type);
+                      wxBitmapType type) const;
+
+
+    // make wxBitmapHandler compatible with the wxBitmapHandler interface
+    // declared in bitmap.h, even if it's derived from wxGDIImageHandler:
+
+    virtual bool Create(wxBitmap *bitmap,
+                        const void* data,
+                        wxBitmapType type,
+                        int width, int height, int depth = 1);
+    virtual bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType type,
+                          int desiredWidth, int desiredHeight);
+    virtual bool SaveFile(const wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType type,
+                          const wxPalette *palette = NULL) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapHandler)

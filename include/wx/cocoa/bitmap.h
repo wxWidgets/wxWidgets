@@ -135,7 +135,7 @@ public:
     wxMask *GetMask() const;
     void SetMask(wxMask *mask) ;
 
-    int GetBitmapType() const;
+    wxBitmapType GetBitmapType() const;
 
     // wxCocoa
     WX_NSBitmapImageRep GetNSBitmapImageRep();
@@ -152,9 +152,5 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
-class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
-{
-    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
-};
 
 #endif // __WX_COCOA_BITMAP_H__

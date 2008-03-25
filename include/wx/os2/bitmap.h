@@ -287,7 +287,7 @@ public:
 
     inline wxBitmapHandler( const wxString& rName
                     ,const wxString& rExt
-                    ,long            lType
+                    ,wxBitmapType lType
                    )
                    : wxGDIImageHandler( rName
                                        ,rExt
@@ -299,28 +299,28 @@ public:
     // old class which worked only with bitmaps
     virtual bool Create( wxBitmap* pBitmap
                         ,const void* pData
-                        ,long      lFlags
+                        ,wxBitmapType lType
                         ,int       nWidth
                         ,int       nHeight
                         ,int       nDepth = 1
                        );
     virtual bool LoadFile( wxBitmap*       pBitmap
                           ,int             nId
-                          ,long            lFlags
+                          ,wxBitmapType    lType
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight
                          );
     virtual bool LoadFile( wxBitmap*       pBitmap
                           ,const wxString& rName
-                          ,long            lFlags
+                          ,wxBitmapType    lType
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight
                          );
     virtual bool SaveFile( wxBitmap*        pBitmap
                           ,const wxString&  rName
-                          ,int              lType
+                          ,wxBitmapType     lType
                           ,const wxPalette* pPalette = NULL
-                         );
+                         ) const;
 
     virtual bool Create( wxGDIImage* pImage
                         ,const void* pData
@@ -338,7 +338,7 @@ public:
     virtual bool Save( wxGDIImage*     pImage
                       ,const wxString& rName
                       ,int             lType
-                     );
+                     ) const;
 private:
     inline virtual bool Load( wxGDIImage*     WXUNUSED(pImage)
                              ,const wxString& WXUNUSED(rName)

@@ -80,11 +80,6 @@ private:
 
 };
 
-class WXDLLIMPEXP_CORE wxBitmapHandler: public wxBitmapHandlerBase
-{
-    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
-};
-
 class WXDLLEXPORT wxBitmap: public wxBitmapBase
 {
     DECLARE_DYNAMIC_CLASS(wxBitmap)

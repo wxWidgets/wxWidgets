@@ -1296,8 +1296,6 @@ int GrGetPixelColor(GR_SCREEN_INFO* sinfo, GR_PALETTE* palette, GR_PIXELVAL pixe
 // Bitmap handlers
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
-
 #define M_BMPHANDLERDATA ((wxBitmapRefData *)bitmap->GetRefData())
 
 #if wxUSE_XPM

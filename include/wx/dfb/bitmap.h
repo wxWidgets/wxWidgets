@@ -21,11 +21,6 @@ wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxBitmapHandler : public wxBitmapHandlerBase
-{
-    DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
-};
-
 class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
 {
 public:
@@ -55,7 +50,8 @@ public:
 
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
 
-    virtual bool SaveFile(const wxString &name, wxBitmapType type, const wxPalette *palette = (wxPalette *) NULL) const;
+    virtual bool SaveFile(const wxString &name, wxBitmapType type,
+                          const wxPalette *palette = (wxPalette *) NULL) const;
     virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
 
 #if wxUSE_PALETTE

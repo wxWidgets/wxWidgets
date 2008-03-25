@@ -77,51 +77,6 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// wxGDIImageHandler: a class which knows how to load/save wxGDIImages.
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxGDIImageHandler : public wxObject
-{
-public:
-    // ctor
-    wxGDIImageHandler() { m_type = wxBITMAP_TYPE_INVALID; }
-    wxGDIImageHandler(const wxString& name,
-                      const wxString& ext,
-                      long type)
-        : m_name(name), m_extension(ext)
-    {
-        m_type = type;
-    }
-
-    // accessors
-    void SetName(const wxString& name) { m_name = name; }
-    void SetExtension(const wxString& ext) { m_extension = ext; }
-    void SetType(long type) { m_type = type; }
-
-    const wxString& GetName() const { return m_name; }
-    const wxString& GetExtension() const { return m_extension; }
-    long GetType() const { return m_type; }
-
-    // real handler operations: to implement in derived classes
-    virtual bool Create(wxGDIImage *image,
-                        const void* data,
-                        long flags,
-                        int width, int height, int depth = 1) = 0;
-    virtual bool Load(wxGDIImage *image,
-                      const wxString& name,
-                      long flags,
-                      int desiredWidth, int desiredHeight) = 0;
-    virtual bool Save(wxGDIImage *image,
-                      const wxString& name,
-                      int type) = 0;
-
-protected:
-    wxString  m_name;
-    wxString  m_extension;
-    long      m_type;
-};
-
-// ----------------------------------------------------------------------------
 // wxGDIImage: this class supports GDI image handlers which may be registered
 // dynamically and will be used for loading/saving the images in the specified
 // format. It also falls back to wxImage if no appropriate image is found.
@@ -190,6 +145,48 @@ protected:
     }
 
     static wxGDIImageHandlerList ms_handlers;
+};
+
+// ----------------------------------------------------------------------------
+// wxGDIImageHandler: a class which knows how to load/save wxGDIImages.
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGDIImageHandler : public wxObject
+{
+public:
+    // ctor
+    wxGDIImageHandler() { m_type = wxBITMAP_TYPE_INVALID; }
+    wxGDIImageHandler(const wxString& name,
+                      const wxString& ext,
+                      wxBitmapType type)
+        : m_name(name), m_extension(ext), m_type(type) { }
+
+    // accessors
+    void SetName(const wxString& name) { m_name = name; }
+    void SetExtension(const wxString& ext) { m_extension = ext; }
+    void SetType(wxBitmapType type) { m_type = type; }
+
+    const wxString& GetName() const { return m_name; }
+    const wxString& GetExtension() const { return m_extension; }
+    wxBitmapType GetType() const { return m_type; }
+
+    // real handler operations: to implement in derived classes
+    virtual bool Create(wxGDIImage *image,
+                        const void* data,
+                        wxBitmapType flags,
+                        int width, int height, int depth = 1) = 0;
+    virtual bool Load(wxGDIImage *image,
+                      const wxString& name,
+                      wxBitmapType flags,
+                      int desiredWidth, int desiredHeight) = 0;
+    virtual bool Save(const wxGDIImage *image,
+                      const wxString& name,
+                      wxBitmapType type) const = 0;
+
+protected:
+    wxString  m_name;
+    wxString  m_extension;
+    wxBitmapType m_type;
 };
 
 #endif // _WX_MSW_GDIIMAGE_H_

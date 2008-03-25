@@ -520,14 +520,14 @@ wxBitmap::wxBitmap(int w, int h, const wxDC& dc)
     (void)Create(w, h, dc);
 }
 
-wxBitmap::wxBitmap(const void* data, long type, int width, int height, int depth)
+wxBitmap::wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth)
 {
     (void)Create(data, type, width, height, depth);
 }
 
 wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 {
-    LoadFile(filename, (int)type);
+    LoadFile(filename, type);
 }
 
 bool wxBitmap::Create(int width, int height, int depth)
@@ -1027,7 +1027,7 @@ wxImage wxBitmap::ConvertToImage() const
 // loading and saving bitmaps
 // ----------------------------------------------------------------------------
 
-bool wxBitmap::LoadFile(const wxString& filename, long type)
+bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
 {
     UnRef();
 
@@ -1055,7 +1055,7 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
     return false;
 }
 
-bool wxBitmap::Create(const void* data, long type, int width, int height, int depth)
+bool wxBitmap::Create(const void* data, wxBitmapType type, int width, int height, int depth)
 {
     UnRef();
 
@@ -1074,8 +1074,8 @@ bool wxBitmap::Create(const void* data, long type, int width, int height, int de
 }
 
 bool wxBitmap::SaveFile(const wxString& filename,
-                        int type,
-                        const wxPalette *palette)
+                        wxBitmapType type,
+                        const wxPalette *palette) const
 {
     wxBitmapHandler *handler = wxDynamicCast(FindHandler(type), wxBitmapHandler);
 
@@ -1563,27 +1563,27 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 
 bool wxBitmapHandler::Create(wxGDIImage *image,
                              const void* data,
-                             long flags,
+                             wxBitmapType type,
                              int width, int height, int depth)
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap && Create(bitmap, data, flags, width, height, depth);
+    return bitmap && Create(bitmap, data, type, width, height, depth);
 }
 
 bool wxBitmapHandler::Load(wxGDIImage *image,
                            const wxString& name,
-                           long flags,
+                           wxBitmapType type,
                            int width, int height)
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap && LoadFile(bitmap, name, flags, width, height);
+    return bitmap && LoadFile(bitmap, name, type, width, height);
 }
 
-bool wxBitmapHandler::Save(wxGDIImage *image,
+bool wxBitmapHandler::Save(const wxGDIImage *image,
                            const wxString& name,
-                           int type)
+                           wxBitmapType type) const
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
@@ -1592,7 +1592,7 @@ bool wxBitmapHandler::Save(wxGDIImage *image,
 
 bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
                              const void* WXUNUSED(data),
-                             long WXUNUSED(type),
+                             wxBitmapType WXUNUSED(type),
                              int WXUNUSED(width),
                              int WXUNUSED(height),
                              int WXUNUSED(depth))
@@ -1602,17 +1602,17 @@ bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
 
 bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap),
                                const wxString& WXUNUSED(name),
-                               long WXUNUSED(type),
+                               wxBitmapType WXUNUSED(type),
                                int WXUNUSED(desiredWidth),
                                int WXUNUSED(desiredHeight))
 {
     return false;
 }
 
-bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
+bool wxBitmapHandler::SaveFile(const wxBitmap *WXUNUSED(bitmap),
                                const wxString& WXUNUSED(name),
-                               int WXUNUSED(type),
-                               const wxPalette *WXUNUSED(palette))
+                               wxBitmapType WXUNUSED(type),
+                               const wxPalette *WXUNUSED(palette)) const
 {
     return false;
 }
