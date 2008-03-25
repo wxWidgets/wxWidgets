@@ -17,7 +17,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
-class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowMac;
+class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
 
 class WXDLLIMPEXP_FWD_CORE wxMacControl ;
 
@@ -177,7 +177,7 @@ public:
     void                MacInvalidateBorders() ;
 
     WXWindow            MacGetTopLevelWindowRef() const ;
-    wxTopLevelWindowMac* MacGetTopLevelWindow() const ;
+    wxNonOwnedWindow*   MacGetTopLevelWindow() const ;
 
     virtual long        MacGetLeftBorderSize() const ;
     virtual long        MacGetRightBorderSize() const ;
