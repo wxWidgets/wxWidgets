@@ -102,7 +102,7 @@ trivial programs.
 @subsection page_strategies_debug_uselogging Use logging functions
 
 There is a variety of logging functions that you can use in your program:
-see @ref page_func_cat_log.
+see @ref group_funcmacro_log.
 
 Using tracing statements may be more convenient than using the debugger
 in some circumstances (such as when your debugger doesn't support a lot
@@ -116,7 +116,7 @@ automatically check for memory leaks at the end of the program if wxWidgets is s
 configured. Depending on the operating system and compiler, more or less
 specific information about the problem will be logged.
 
-You should also use @ref page_macro_cat_debugging as part of a `defensive programming' strategy,
+You should also use @ref group_funcmacro_debugging as part of a `defensive programming' strategy,
 scattering wxASSERTs liberally to test for problems in your code as early as possible.
 Forward thinking will save a surprising amount of time in the long run.
 

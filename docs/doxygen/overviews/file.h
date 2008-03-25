@@ -12,7 +12,7 @@
 
 Classes: wxFile, wxDir, wxTempFile,  wxTextFile
 
-Functions: see @ref page_func_cat_file.
+Functions: see @ref group_funcmacro_file.
 
 wxWidgets provides some functions and classes to facilitate working with files.
 As usual, the accent is put on cross-platform features which explains, for

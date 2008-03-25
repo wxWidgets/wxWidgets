@@ -22,7 +22,7 @@ be used for placing controls, with the following exceptions:
     until the dialog box is dismissed.
 
 For a set of dialog convenience functions, including file selection, see
-@ref page_func_cat_dialog.
+@ref group_funcmacro_dialog.
 
 See also wxTopLevelWindow and wxWindow for inherited
 member functions. Validation of data in controls is covered in @ref overview_validator.

@@ -203,7 +203,7 @@ which is either wxBIG_ENDIAN or wxLITTLE_ENDIAN (in the future maybe wxPDP_ENDIA
 as well).
 
 The macros handling bit-swapping with respect to the applications endianness
-are described in the @ref page_macro_cat_byteorder section.
+are described in the @ref group_funcmacro_byteorder section.
 
 
 
@@ -305,7 +305,7 @@ from these differences.
 Of course, there are also 3rd party utilities such as @c dos2unix and @c unix2dos
 which do the EOL conversions.
 
-See also the @ref page_func_cat_file section of the reference
+See also the @ref group_funcmacro_file section of the reference
 manual for the description of miscellaneous file handling functions.
 
 */

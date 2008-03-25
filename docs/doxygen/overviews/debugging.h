@@ -11,7 +11,7 @@
 @page overview_debugging Debugging
 
 Classes, functions and macros: wxDebugContext, wxObject, wxLog,
-                                @ref page_func_cat_log, @ref page_macro_cat_debugging
+                                @ref group_funcmacro_log, @ref group_funcmacro_debugging
 
 Various classes, functions and macros are provided in wxWidgets to help you debug
 your application. Most of these are only available if you compile both wxWidgets,
@@ -73,7 +73,7 @@ compilers allow this definition to work properly, but most do.
 
 @section overview_debugging_dbgmacros Debug macros
 
-You should also use @ref page_macro_cat_debugging as part of a 'defensive programming'
+You should also use @ref group_funcmacro_debugging as part of a 'defensive programming'
 strategy, scattering wxASSERTs liberally to test for problems in your code as early as
 possible.
 Forward thinking will save a surprising amount of time in the long run.

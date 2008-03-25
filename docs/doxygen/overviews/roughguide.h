@@ -50,13 +50,13 @@ you need wxHelp and the wxHelpController class to control wxHelp.
 
 GUI applications aren't all graphical wizardry. List and hash table needs are
 catered for by wxList and wxHashMap. You will undoubtedly need some
-platform-independent @ref page_func_cat_file, and you may find it handy to
+platform-independent @ref group_funcmacro_file, and you may find it handy to
 maintain and search a list of paths using wxPathList. There's many
-@ref page_func_cat_misc of operating system methods and other functions.
+@ref group_funcmacro_misc of operating system methods and other functions.
 
 @see
 
-@li @ref page_class_cat
+@li @ref group_class
 
 */
 
