@@ -235,6 +235,24 @@ public:
         if ( item.HasAttributes() )
             m_attr = new wxListItemAttr(*item.GetAttributes());
     }
+
+    wxListItem& operator=(const wxListItem& item)
+    {
+        m_mask = item.m_mask;
+        m_itemId = item.m_itemId;
+        m_col = item.m_col;
+        m_state = item.m_state;
+        m_stateMask = item.m_stateMask;
+        m_text = item.m_text;
+        m_image = item.m_image;
+        m_data = item.m_data;
+        m_format = item.m_format;
+        m_width = item.m_width;
+        m_attr = item.m_attr ? new wxListItemAttr(*item.m_attr) : NULL;
+
+        return *this;
+    }
+
     virtual ~wxListItem() { delete m_attr; }
 
     // resetting
@@ -346,9 +364,6 @@ protected:
     wxListItemAttr *m_attr;     // optional pointer to the items style
 
 private:
-    // VZ: this is strange, we have a copy ctor but not operator=(), why?
-    wxListItem& operator=(const wxListItem& item);
-
     DECLARE_DYNAMIC_CLASS(wxListItem)
 };
 
