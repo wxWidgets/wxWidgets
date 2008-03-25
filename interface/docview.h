@@ -1248,6 +1248,28 @@ public:
     */
     void UpdateAllViews(wxView* sender = NULL, wxObject* hint = NULL);
 
+protected:
+    /**
+        This method is called by OnSaveDocument() to really save the document
+        contents to the specified file.
+
+        Base class version creates a file-based stream and calls SaveObject().
+        Override this if you need to do something else or prefer not to use
+        SaveObject() at all.
+     */
+    virtual bool DoSaveDocument(const wxString& file);
+
+    /**
+        This method is called by OnOpenDocument() to really load the document
+        contents from the specified file.
+
+        Base class version creates a file-based stream and calls LoadObject().
+        Override this if you need to do something else or prefer not to use
+        LoadObject() at all.
+     */
+    virtual bool DoOpenDocument(const wxString& file);
+
+
     /**
         wxCommandProcessor* m_commandProcessor
         A pointer to the command processor associated with this document.
