@@ -1418,15 +1418,21 @@ void wxDataViewRenderer::SetMode( wxDataViewCellMode mode )
     GtkCellRendererMode gtkMode;
     switch (mode)
     {
-    case wxDATAVIEW_CELL_INERT:
-        gtkMode = GTK_CELL_RENDERER_MODE_INERT;
-        break;
-    case wxDATAVIEW_CELL_ACTIVATABLE:
-        gtkMode = GTK_CELL_RENDERER_MODE_ACTIVATABLE;
-        break;
-    case wxDATAVIEW_CELL_EDITABLE:
-        gtkMode = GTK_CELL_RENDERER_MODE_EDITABLE;
-        break;
+        case wxDATAVIEW_CELL_INERT:
+            gtkMode = GTK_CELL_RENDERER_MODE_INERT;
+            break;
+
+        case wxDATAVIEW_CELL_ACTIVATABLE:
+            gtkMode = GTK_CELL_RENDERER_MODE_ACTIVATABLE;
+            break;
+
+        case wxDATAVIEW_CELL_EDITABLE:
+            gtkMode = GTK_CELL_RENDERER_MODE_EDITABLE;
+            break;
+
+        default:
+            wxFAIL_MSG( "unknown wxDataViewCellMode value" );
+            return;
     }
 
     // This value is most often ignored in GtkTreeView
@@ -1446,15 +1452,21 @@ wxDataViewCellMode wxDataViewRenderer::GetMode() const
 
     switch (g_value_get_enum(&gvalue))
     {
-    case GTK_CELL_RENDERER_MODE_INERT:
-        ret = wxDATAVIEW_CELL_INERT;
-        break;
-    case GTK_CELL_RENDERER_MODE_ACTIVATABLE:
-        ret = wxDATAVIEW_CELL_ACTIVATABLE;
-        break;
-    case GTK_CELL_RENDERER_MODE_EDITABLE:
-        ret = wxDATAVIEW_CELL_EDITABLE;
-        break;
+        default:
+            wxFAIL_MSG( "unknown GtkCellRendererMode value" );
+            // fall through (we have to return something)
+
+        case GTK_CELL_RENDERER_MODE_INERT:
+            ret = wxDATAVIEW_CELL_INERT;
+            break;
+
+        case GTK_CELL_RENDERER_MODE_ACTIVATABLE:
+            ret = wxDATAVIEW_CELL_ACTIVATABLE;
+            break;
+
+        case GTK_CELL_RENDERER_MODE_EDITABLE:
+            ret = wxDATAVIEW_CELL_EDITABLE;
+            break;
     }
 
     g_value_unset( &gvalue );
@@ -3603,7 +3615,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     g_signal_connect (m_treeview, "size_allocate",
                      G_CALLBACK (gtk_dataviewctrl_size_callback), this);
 
-    gs_target.target = "UTF8_STRING";
+    gs_target.target = const_cast<char *>("UTF8_STRING");
     gs_target.flags = 0;
     gs_target.info = -1;
     gtk_tree_view_enable_model_drag_source( GTK_TREE_VIEW(m_treeview),
