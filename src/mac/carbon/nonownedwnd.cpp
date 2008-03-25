@@ -21,6 +21,8 @@
 #include "wx/nonownedwnd.h"
 
 #include "wx/mac/private.h"
+#include "wx/settings.h"
+#include "wx/frame.h"
 
 #if wxUSE_SYSTEM_OPTIONS
     #include "wx/sysopt.h"
