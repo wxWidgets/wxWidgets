@@ -80,6 +80,17 @@ class wxHyperlinkCtrl : public wxControl
 {
 public:
     /**
+        Constructor. See Create() for more info.
+    */
+    wxHyperLink(wxWindow* parent, wxWindowID id,
+                const wxString& label,
+                const wxString& url,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxHL_DEFAULT_STYLE,
+                const wxString& name = "hyperlink");
+
+    /**
         Creates the hyperlink control.
 
         @param parent
@@ -107,7 +118,7 @@ public:
                 const wxString& url,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style,
+                long style = wxHL_DEFAULT_STYLE,
                 const wxString& name = "hyperlink");
 
     /**
@@ -132,7 +143,7 @@ public:
         Returns @true if the hyperlink has already been clicked by the user at least
         one time.
     */
-    bool GetVisited() const;
+    virtual bool GetVisited() const = 0;
 
     /**
         Returns the colour used to print the label when the mouse is not over the
@@ -163,7 +174,7 @@ public:
     /**
         Marks the hyperlink as visited (see wxHyperlinkCtrl::SetVisitedColour).
     */
-    void SetVisited(bool visited = true);
+    virtual void SetVisited(bool visited = true) = 0;
 
     /**
         Sets the colour used to print the label when the mouse is not over the control
@@ -171,16 +182,5 @@ public:
         visited).
     */
     void SetVisitedColour(const wxColour& colour);
-
-    /**
-        Constructor. See Create() for more info.
-    */
-    wxHyperLink(wxWindow* parent, wxWindowID id,
-                const wxString& label,
-                const wxString& url,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style,
-                const wxString& name = "hyperlink");
 };
 

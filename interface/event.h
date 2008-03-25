@@ -165,12 +165,12 @@ public:
     /**
         Returns the X position (in client coordinates) of the event.
     */
-    long GetX() const;
+    wxCoord GetX() const;
 
     /**
         Returns the Y (in client coordinates) position of the event.
     */
-    long GetY() const;
+    wxCoord GetY() const;
 
     /**
         Returns @true if either CTRL or ALT keys was down
@@ -774,7 +774,7 @@ public:
     /**
         Returns @true if the Alt key was down at the time of the event.
     */
-    bool AltDown();
+    bool AltDown() const;
 
     /**
         Returns @true if the event was a first extra button double click.
@@ -848,7 +848,7 @@ public:
 
         check if any button was pressed
     */
-    bool Button(int button);
+    bool Button(int button) const;
 
     /**
         If the argument is omitted, this returns @true if the event was a mouse
@@ -856,7 +856,7 @@ public:
         was generated (see Button() for the possible
         values).
     */
-    bool ButtonDClick(int but = wxMOUSE_BTN_ANY);
+    bool ButtonDClick(int but = wxMOUSE_BTN_ANY) const;
 
     /**
         If the argument is omitted, this returns @true if the event was a mouse
@@ -864,7 +864,7 @@ public:
         was generated (see Button() for the possible
         values).
     */
-    bool ButtonDown(int but = -1);
+    bool ButtonDown(int = wxMOUSE_BTN_ANY) const;
 
     /**
         If the argument is omitted, this returns @true if the event was a mouse
@@ -872,7 +872,7 @@ public:
         was generated (see Button() for the possible
         values).
     */
-    bool ButtonUp(int but = -1);
+    bool ButtonUp(int = wxMOUSE_BTN_ANY) const;
 
     /**
         Same as MetaDown() under Mac, same as
@@ -885,20 +885,20 @@ public:
     /**
         Returns @true if the control key was down at the time of the event.
     */
-    bool ControlDown();
+    bool ControlDown() const;
 
     /**
         Returns @true if this was a dragging event (motion while a button is depressed).
 
         @see Moving()
     */
-    bool Dragging();
+    bool Dragging() const;
 
     /**
         Returns @true if the mouse was entering the window.
         See also Leaving().
     */
-    bool Entering();
+    bool Entering() const;
 
     /**
         Returns the mouse button which generated this event or @c wxMOUSE_BTN_NONE
@@ -966,12 +966,12 @@ public:
     /**
         Returns X coordinate of the physical mouse event position.
     */
-    long GetX() const;
+    wxCoord GetX() const;
 
     /**
         Returns Y coordinate of the physical mouse event position.
     */
-    long GetY();
+    wxCoord GetY() const;
 
     /**
         Returns @true if the event was a mouse button event (not necessarily a button
@@ -1247,13 +1247,13 @@ public:
         Returns client data pointer for a listbox or choice selection event
         (not valid for a deselection).
     */
-    void* GetClientData();
+    void* GetClientData() const;
 
     /**
         Returns client object pointer for a listbox or choice selection event
         (not valid for a deselection).
     */
-    wxClientData* GetClientObject();
+    wxClientData* GetClientObject() const;
 
     /**
         Returns extra information dependant on the event objects type.
@@ -1263,26 +1263,26 @@ public:
         multiple-selection boxes, and in this case the index and string values
         are indeterminate and the listbox must be examined by the application.
     */
-    long GetExtraLong();
+    long GetExtraLong() const;
 
     /**
         Returns the integer identifier corresponding to a listbox, choice or
         radiobox selection (only if the event was a selection, not a
         deselection), or a boolean value representing the value of a checkbox.
     */
-    int GetInt();
+    int GetInt() const;
 
     /**
         Returns item index for a listbox or choice selection event (not valid for
         a deselection).
     */
-    int GetSelection();
+    int GetSelection() const;
 
     /**
         Returns item string for a listbox or choice selection event (not valid for
         a deselection).
     */
-    wxString GetString();
+    wxString GetString() const;
 
     /**
         This method can be used with checkbox and menu events: for the checkboxes, the
@@ -1299,7 +1299,7 @@ public:
         For a listbox or similar event, returns @true if it is a selection, @false if it
         is a deselection.
     */
-    bool IsSelection();
+    bool IsSelection() const;
 
     /**
         Sets the client data for this event.
@@ -1405,7 +1405,7 @@ public:
         If the event originated from a keyboard event, the value returned from this
         function will be wxDefaultPosition.
     */
-    wxPoint GetPosition() const;
+    const wxPoint& GetPosition() const;
 
     /**
         Sets the position at which the menu should be shown.
@@ -1642,11 +1642,21 @@ public:
 class wxHelpEvent : public wxCommandEvent
 {
 public:
+    // how was this help event generated?
+    enum Origin
+    {
+        Origin_Unknown,    // unrecognized event source
+        Origin_Keyboard,   // event generated from F1 key press
+        Origin_HelpButton  // event from [?] button on the title bar (Windows)
+    };
+
     /**
         Constructor.
     */
-    wxHelpEvent(WXTYPE eventType = 0, wxWindowID id = 0,
-                const wxPoint& point);
+    wxHelpEvent(wxEventType type = wxEVT_NULL,
+                wxWindowID winid = 0,
+                const wxPoint& pt = wxDefaultPosition,
+                Origin origin = Origin_Unknown);
 
     /**
         Returns the origin of the help event which is one of the following values:
@@ -1671,20 +1681,20 @@ public:
 
         @see SetOrigin()
     */
-    wxHelpEvent::Origin GetOrigin() const;
+    Origin GetOrigin() const;
 
     /**
         Returns the left-click position of the mouse, in screen coordinates. This allows
         the application to position the help appropriately.
     */
-    const wxPoint GetPosition() const;
+    const wxPoint& GetPosition() const;
 
     /**
         Set the help event origin, only used internally by wxWidgets normally.
 
         @see GetOrigin()
     */
-    void SetOrigin(wxHelpEvent::Origin origin);
+    void SetOrigin(Origin);
 
     /**
         Sets the left-click position of the mouse, in screen coordinates.
@@ -2045,7 +2055,7 @@ public:
         force the application to exit, and so this function must be called to check
         this.
     */
-    bool CanVeto();
+    bool CanVeto() const;
 
     /**
         Returns @true if the user is just logging off or @false if the system is
@@ -2067,7 +2077,7 @@ public:
     /**
         Sets the 'logging off' flag.
     */
-    void SetLoggingOff(bool loggingOff) const;
+    void SetLoggingOff(bool loggingOff);
 
     /**
         Call this from your event handler to veto a system shutdown or to signal
@@ -2168,14 +2178,14 @@ public:
         Note that the @a win window @b must remain alive until the
         wxEventBlocker object destruction.
     */
-    wxEventBlocker(wxWindow* win, wxEventType type = wxEVT_ANY);
+    wxEventBlocker(wxWindow* win, wxEventType = -0x000000001);
 
     /**
         Destructor. The blocker will remove itself from the chain of event handlers for
         the window provided in the constructor, thus restoring normal processing of
         events.
     */
-    ~wxEventBlocker();
+    virtual ~wxEventBlocker();
 
     /**
         Adds to the list of event types which should be blocked the given @e eventType.
@@ -2217,7 +2227,7 @@ public:
         unlink itself and restore the previous and next handlers so that they point to
         each other.
     */
-    ~wxEvtHandler();
+    virtual ~wxEvtHandler();
 
     /**
         This function posts an event to be processed later.
@@ -2324,7 +2334,7 @@ public:
 
         @see SetClientData()
     */
-    void* GetClientData();
+    void* GetClientData() const;
 
     /**
         Get a pointer to the user-supplied client data object.
@@ -2338,7 +2348,7 @@ public:
 
         @see SetEvtHandlerEnabled()
     */
-    bool GetEvtHandlerEnabled();
+    bool GetEvtHandlerEnabled() const;
 
     /**
         Gets the pointer to the next handler in the chain.
@@ -2347,7 +2357,7 @@ public:
              SetPreviousHandler(), wxWindow::PushEventHandler,
              wxWindow::PopEventHandler
     */
-    wxEvtHandler* GetNextHandler();
+    wxEvtHandler* GetNextHandler() const;
 
     /**
         Gets the pointer to the previous handler in the chain.
@@ -2356,7 +2366,7 @@ public:
              SetNextHandler(), wxWindow::PushEventHandler,
              wxWindow::PopEventHandler
     */
-    wxEvtHandler* GetPreviousHandler();
+    wxEvtHandler* GetPreviousHandler() const;
 
     /**
         Processes an event, searching event tables and calling zero or more suitable
@@ -2570,19 +2580,19 @@ public:
         implementing the Clone function is to implement a copy constructor for
         a new event (call it MyEvent) and then define the Clone function like this:
     */
-    virtual wxEvent* Clone() const;
+    virtual wxEvent* Clone() const = 0;
 
     /**
         Returns the object (usually a window) associated with the
         event, if any.
     */
-    wxObject* GetEventObject();
+    wxObject* GetEventObject() const;
 
     /**
         Returns the identifier of the given event type,
         such as @c wxEVT_COMMAND_BUTTON_CLICKED.
     */
-    wxEventType GetEventType();
+    wxEventType GetEventType() const;
 
     /**
         Returns the identifier associated with this event, such as a button command id.
@@ -2600,7 +2610,7 @@ public:
         only differences between the timestamps and not their absolute values usually
         make sense).
     */
-    long GetTimestamp();
+    long GetTimestamp() const;
 
     /**
         Returns @true if the event is or is derived from
@@ -2633,7 +2643,7 @@ public:
     /**
         Sets the timestamp for the event.
     */
-    void SetTimestamp(long timeStamp);
+    void SetTimestamp(long = 0);
 
     /**
         Test if this event should be propagated or not, i.e. if the propagation level
@@ -2753,7 +2763,7 @@ public:
     /**
         Returns a reference to the cursor specified by this event.
     */
-    wxCursor GetCursor() const;
+    const wxCursor& GetCursor() const;
 
     /**
         Returns the X coordinate of the mouse in client coordinates.

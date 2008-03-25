@@ -147,7 +147,7 @@ public:
     /**
         Destroys the wxNotebook object.
     */
-    ~wxNotebook();
+    virtual ~wxNotebook();
 
     /**
         Adds a new page.
@@ -192,7 +192,7 @@ public:
         This is the only difference with SetSelection().
         See @ref overview_progevent "this topic" for more info.
     */
-    int ChangeSelection(size_t page);
+    virtual int ChangeSelection(size_t page);
 
     /**
         Creates a notebook control. See wxNotebook() for a description
@@ -200,13 +200,14 @@ public:
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size, long style = 0,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
                 const wxString& name = wxNotebookNameStr);
 
     /**
         Deletes all pages.
     */
-    bool DeleteAllPages();
+    virtual bool DeleteAllPages();
 
     /**
         Deletes the specified page, and the associated window.
@@ -239,17 +240,17 @@ public:
     /**
         Returns the image index for the given page.
     */
-    int GetPageImage(size_t nPage) const;
+    virtual int GetPageImage(size_t nPage) const;
 
     /**
         Returns the string for the given page.
     */
-    wxString GetPageText(size_t nPage) const;
+    virtual wxString GetPageText(size_t nPage) const;
 
     /**
         Returns the number of rows in the notebook control.
     */
-    int GetRowCount() const;
+    virtual int GetRowCount() const;
 
     /**
         Returns the currently selected page, or -1 if none was selected.
@@ -259,7 +260,7 @@ public:
         wxNotebookEvent::GetSelection should be
         used instead in this case.
     */
-    int GetSelection() const;
+    virtual int GetSelection() const;
 
     /**
         If running under Windows and themes are enabled for the application, this
@@ -268,7 +269,7 @@ public:
         can be passed
         to @c SetBackgroundColour. Otherwise, an uninitialised colour will be returned.
     */
-    wxColour GetThemeBackgroundColour() const;
+    virtual wxColour GetThemeBackgroundColour() const;
 
     /**
         Returns the index of the tab at the specified position or @c wxNOT_FOUND
@@ -341,7 +342,7 @@ public:
         @returns Returns the zero-based tab index or wxNOT_FOUND if there is no
                  tab is at the specified position.
     */
-    int HitTest(const wxPoint& pt, long flags = NULL);
+    virtual int HitTest(const wxPoint& pt, long* = NULL) const;
 
     /**
         Inserts a new page at the specified position.
@@ -398,18 +399,18 @@ public:
         Sets the image index for the given page. @a image is an index into
         the image list which was set with SetImageList().
     */
-    bool SetPageImage(size_t page, int image);
+    virtual bool SetPageImage(size_t page, int image);
 
     /**
         Sets the width and height of the pages.
         @b NB: This method is currently not implemented for wxGTK.
     */
-    void SetPageSize(const wxSize& size);
+    virtual void SetPageSize(const wxSize& size);
 
     /**
         Sets the text for the given page.
     */
-    bool SetPageText(size_t page, const wxString& text);
+    virtual bool SetPageText(size_t page, const wxString& text);
 
     /**
         Sets the selection for the given page, returning the previous selection.
@@ -419,6 +420,6 @@ public:
 
         @see GetSelection()
     */
-    int SetSelection(size_t page);
+    virtual int SetSelection(size_t page);
 };
 

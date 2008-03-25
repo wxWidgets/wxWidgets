@@ -86,7 +86,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = "button");
+             const wxString& name = wxButtonNameStr);
 
     /**
         Destructor, destroying the button.
@@ -102,8 +102,8 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxValidator& validator,
-                const wxString& name = "button");
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxButtonNameStr);
 
     /**
         Returns the default size for the buttons. It is advised to make all the dialog

@@ -6,71 +6,6 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/**
-    @class wxBitmapToggleButton
-    @wxheader{tglbtn.h}
-
-    wxBitmapToggleButton is a wxToggleButton
-    that contains a bitmap instead of text.
-
-    This control emits an update UI event.
-
-    @beginEventTable
-    @event{EVT_TOGGLEBUTTON(id, func)}:
-           Handles a toggle button click event.
-    @endEventTable
-
-    @library{wxcore}
-    @category{ctrl}
-    @appearance{bitmaptogglebutton.png}
-*/
-class wxBitmapToggleButton : public wxControl
-{
-public:
-    //@{
-    /**
-        Constructor, creating and showing a toggle button with the bitmap @e label.
-        Internally calls Create().
-    */
-    wxBitmapToggleButton();
-    wxBitmapToggleButton(wxWindow* parent, wxWindowID id,
-                         const wxBitmap& label,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& size = wxDefaultSize,
-                         long style = 0,
-                         const wxValidator& val,
-                         const wxString& name = "checkBox");
-    //@}
-
-    /**
-        Create method for two-step construction.
-    */
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxBitmap& label,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = 0,
-                const wxValidator& val,
-                const wxString& name = "checkBox");
-
-    /**
-        Gets the state of the toggle button.
-
-        @returns Returns @true if it is pressed, @false otherwise.
-    */
-    bool GetValue() const;
-
-    /**
-        Sets the toggle button to the given state. This does not cause a
-        @c EVT_TOGGLEBUTTON event to be emitted.
-
-        @param state
-            If @true, the button is pressed.
-    */
-    void SetValue(bool state);
-};
-
-
 
 /**
     @class wxToggleButton
@@ -130,14 +65,14 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   const wxValidator& val,
+                   const wxValidator& val = wxDefaultValidator,
                    const wxString& name = "checkBox");
     //@}
 
     /**
         Destructor, destroying the toggle button.
     */
-    ~wxToggleButton();
+    virtual ~wxToggleButton();
 
     /**
         Creates the toggle button for two-step construction. See wxToggleButton()
@@ -148,7 +83,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxValidator& val,
+                const wxValidator& val = wxDefaultValidator,
                 const wxString& name = "checkBox");
 
     /**
@@ -166,5 +101,70 @@ public:
             If @true, the button is pressed.
     */
     void SetValue(bool state);
+};
+
+
+/**
+    @class wxBitmapToggleButton
+    @wxheader{tglbtn.h}
+
+    wxBitmapToggleButton is a wxToggleButton
+    that contains a bitmap instead of text.
+
+    This control emits an update UI event.
+
+    @beginEventTable
+    @event{EVT_TOGGLEBUTTON(id, func)}:
+           Handles a toggle button click event.
+    @endEventTable
+
+    @library{wxcore}
+    @category{ctrl}
+    @appearance{bitmaptogglebutton.png}
+*/
+class wxBitmapToggleButton : public wxControl
+{
+public:
+    //@{
+    /**
+        Constructor, creating and showing a toggle button with the bitmap @e label.
+        Internally calls Create().
+    */
+    wxBitmapToggleButton();
+    wxBitmapToggleButton(wxWindow* parent, wxWindowID id,
+                         const wxBitmap& label,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = 0,
+                         const wxValidator& val = wxDefaultValidator,
+                         const wxString& name = "checkBox");
+    //@}
+
+    /**
+        Create method for two-step construction.
+    */
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxBitmap& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& val = wxDefaultValidator,
+                const wxString& name = "checkBox");
+
+    /**
+        Gets the state of the toggle button.
+
+        @returns Returns @true if it is pressed, @false otherwise.
+    */
+    virtual bool GetValue() const;
+
+    /**
+        Sets the toggle button to the given state. This does not cause a
+        @c EVT_TOGGLEBUTTON event to be emitted.
+
+        @param state
+            If @true, the button is pressed.
+    */
+    virtual void SetValue(bool state);
 };
 
