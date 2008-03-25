@@ -861,7 +861,7 @@ void wxMacControl::GetRectInWindowCoords( Rect *r )
 
     WindowRef tlwref = GetControlOwner( m_controlRef ) ;
 
-    wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
+    wxNonOwnedWindow* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
     if ( tlwwx != NULL )
     {
         ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
