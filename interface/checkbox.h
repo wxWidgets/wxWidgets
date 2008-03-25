@@ -75,7 +75,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxValidator& val,
+               const wxValidator& val = wxDefaultValidator,
                const wxString& name = "checkBox");
     //@}
 
@@ -93,7 +93,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                const wxValidator& val,
+                const wxValidator& val = wxDefaultValidator,
                 const wxString& name = "checkBox");
 
     /**

@@ -25,7 +25,7 @@ public:
         Same as @ref setdate() Set
     */
     wxDateTime(wxDateTime_t day, Month month = Inv_Month,
-               int Inv_Year, wxDateTime_t hour = 0,
+               int year = Inv_Year, wxDateTime_t hour = 0,
                wxDateTime_t minute = 0,
                wxDateTime_t second = 0,
                wxDateTime_t millisec = 0);
@@ -322,7 +322,7 @@ public:
         DOS
         format.
     */
-    unsigned long GetAsDOS() const;
+    long unsigned int GetAsDOS() const;
 
     /**
         Get the beginning of DST for the given country in the given year (current one
@@ -370,13 +370,13 @@ public:
     /**
         Returns the day in the given timezone (local one by default).
     */
-    wxDateTime_t GetDay(const TimeZone& tz = Local) const;
+    short unsigned int GetDay(const TimeZone& tz = Local) const;
 
     /**
         Returns the day of the year (in 1...366 range) in the given timezone
         (local one by default).
     */
-    wxDateTime_t GetDayOfYear(const TimeZone& tz = Local) const;
+    short unsigned int GetDayOfYear(const TimeZone& tz = Local) const;
 
     /**
         Returns the end of DST for the given country in the given year (current one by
@@ -390,7 +390,7 @@ public:
     /**
         Returns the hour in the given timezone (local one by default).
     */
-    wxDateTime_t GetHour(const TimeZone& tz = Local) const;
+    short unsigned int GetHour(const TimeZone& tz = Local) const;
 
     /**
         Synonym for GetJulianDayNumber().
@@ -428,12 +428,12 @@ public:
     /**
         Returns the milliseconds in the given timezone (local one by default).
     */
-    wxDateTime_t GetMillisecond(const TimeZone& tz = Local) const;
+    short unsigned int GetMillisecond(const TimeZone& tz = Local) const;
 
     /**
         Returns the minute in the given timezone (local one by default).
     */
-    wxDateTime_t GetMinute(const TimeZone& tz = Local) const;
+    short unsigned int GetMinute(const TimeZone& tz = Local) const;
 
     /**
         Returns the @e Modified Julian Day Number (MJD) which is, by definition,
@@ -493,7 +493,7 @@ public:
     /**
         Returns the seconds in the given timezone (local one by default).
     */
-    wxDateTime_t GetSecond(const TimeZone& tz = Local) const;
+    short unsigned int GetSecond(const TimeZone& tz = Local) const;
 
     /**
         Returns the number of seconds since Jan 1, 1970. An assert failure will occur
@@ -579,7 +579,7 @@ public:
         Returns the copy of this object to which
         SetToYearDay() was applied.
     */
-    wxDateTime GetYearDay(wxDateTime_t yday) const;
+    wxDateTime GetYearDay(short unsigned int) const;
 
     /**
         Returns @true if IsStrictlyBetween()
@@ -690,7 +690,7 @@ public:
         This is the same as calling MakeTimezone() with
         the argument @c GMT0.
     */
-    wxDateTime MakeUTC(bool noDST = false);
+    wxDateTime& MakeUTC(bool noDST = false);
 
     /**
         Returns the object corresponding to the current time.
@@ -893,7 +893,7 @@ public:
     /**
         Reset time to midnight (00:00:00) without changing the date.
     */
-    wxDateTime ResetTime();
+    wxDateTime& ResetTime();
 
     /**
         Sets the date and time from the parameters.
@@ -918,7 +918,7 @@ public:
     /**
         Sets the day without changing other date components.
     */
-    wxDateTime SetDay(wxDateTime_t day);
+    wxDateTime& SetDay(short unsigned int);
 
     /**
         Sets the date from the date and time in
@@ -930,33 +930,33 @@ public:
     /**
         Sets the hour without changing other date components.
     */
-    wxDateTime SetHour(wxDateTime_t hour);
+    wxDateTime& SetHour(short unsigned int);
 
     /**
         Sets the millisecond without changing other date components.
     */
-    wxDateTime SetMillisecond(wxDateTime_t millisecond);
+    wxDateTime& SetMillisecond(short unsigned int);
 
     /**
         Sets the minute without changing other date components.
     */
-    wxDateTime SetMinute(wxDateTime_t minute);
+    wxDateTime& SetMinute(short unsigned int);
 
     /**
         Sets the month without changing other date components.
     */
-    wxDateTime SetMonth(Month month);
+    wxDateTime& SetMonth(Month month);
 
     /**
         Sets the second without changing other date components.
     */
-    wxDateTime SetSecond(wxDateTime_t second);
+    wxDateTime& SetSecond(short unsigned int);
 
     /**
         Sets the date and time of to the current values. Same as assigning the result
         of Now() to this object.
     */
-    wxDateTime SetToCurrent();
+    wxDateTime& SetToCurrent();
 
     /**
         Sets the date to the last day in the specified month (the current one by
@@ -980,14 +980,14 @@ public:
         date.
         Returns the reference to the modified object itself.
     */
-    wxDateTime SetToNextWeekDay(WeekDay weekday);
+    wxDateTime& SetToNextWeekDay(WeekDay weekday);
 
     /**
         Sets the date so that it will be the last @a weekday before the current
         date.
         Returns the reference to the modified object itself.
     */
-    wxDateTime SetToPrevWeekDay(WeekDay weekday);
+    wxDateTime& SetToPrevWeekDay(WeekDay weekday);
 
     /**
         Sets the date to the @e n-th @a weekday in the given month of the given
@@ -1031,12 +1031,12 @@ public:
         the other ones.
         Returns the reference to the modified object itself.
     */
-    wxDateTime SetToYearDay(wxDateTime_t yday);
+    wxDateTime& SetToYearDay(short unsigned int);
 
     /**
         Sets the year without changing other date components.
     */
-    wxDateTime SetYear(int year);
+    wxDateTime& SetYear(int year);
 
     /**
         For convenience, all static functions are collected here. These functions
@@ -1328,25 +1328,25 @@ public:
         Sets the number of days (without modifying any other components) in this date
         span.
     */
-    wxDateSpan SetDays(int n);
+    wxDateSpan& SetDays(int n);
 
     /**
         Sets the number of months (without modifying any other components) in this
         date span.
     */
-    wxDateSpan SetMonths(int n);
+    wxDateSpan& SetMonths(int n);
 
     /**
         Sets the number of weeks (without modifying any other components) in this date
         span.
     */
-    wxDateSpan SetWeeks(int n);
+    wxDateSpan& SetWeeks(int n);
 
     /**
         Sets the number of years (without modifying any other components) in this date
         span.
     */
-    wxDateSpan SetYears(int n);
+    wxDateSpan& SetYears(int n);
 
     //@{
     /**
@@ -1389,14 +1389,14 @@ public:
     /**
         Returns @true if this date span is different from the other one.
     */
-    bool operator!=(wxDateSpan& other) const;
+    bool operator!=(const wxDateSpan&) const;
 
     /**
         Returns @true if this date span is equal to the other one. Two date spans
         are considered equal if and only if they have the same number of years and
         months and the same total number of days (counting both days and weeks).
     */
-    bool operator==(wxDateSpan& other) const;
+    bool operator==(const wxDateSpan&) const;
 };
 
 
@@ -1513,7 +1513,7 @@ public:
         The same applies to all other format specifiers: if they follow a specifier of
         larger unit, only the rest part is taken, otherwise the full value is used.
     */
-    wxString Format(const wxChar* format = wxDefaultTimeSpanFormat);
+    wxString Format(const wxString& = wxDefaultTimeSpanFormat) const;
 
     /**
         Format()

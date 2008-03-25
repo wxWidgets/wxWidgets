@@ -125,7 +125,7 @@ public:
     size_t GetPageCount() const;
 
     /**
-        Returns the page index for the specified window. 
+        Returns the page index for the specified window.
         If the window is not found in the notebook, wxNOT_FOUND is returned.
     */
     int GetPageIndex(wxWindow* page_wnd) const;
@@ -269,30 +269,21 @@ public:
     /**
         Draws a button.
     */
-    void DrawButton(wxDC& dc, wxWindow* wnd, const wxRect& in_rect,
-                    int bitmap_id,
-                    int button_state,
-                    int orientation,
-                    const wxBitmap& bitmap_override,
-                    wxRect* out_rect);
+    virtual void DrawButton(wxDC& dc, wxWindow* wnd, const wxRect& in_rect,
+                            int bitmap_id, int button_state, int orientation,
+                            wxRect* out_rect) = 0;
 
     /**
         Draws a tab.
     */
-    void DrawTab(wxDC& dc, wxWindow* wnd, const wxRect& in_rect,
-                 const wxString& caption,
-                 const wxBitmap& bitmap,
-                 bool active,
-                 int close_button_state,
-                 wxRect* out_tab_rect,
-                 wxRect* out_button_rect,
-                 int* x_extent);
+    virtual void DrawTab(wxDC& dc, wxWindow* wnd, const wxAuiNotebookPage& page,
+                         const wxRect& rect, int close_button_state,
+                         wxRect* out_tab_rect, wxRect* out_button_rect, int* x_extent) = 0;
 
     /**
         Returns the tab control size.
     */
-    int GetBestTabCtrlSize(wxWindow* wnd,
-                           wxAuiNotebookPageArray& pages);
+    virtual int GetBestTabCtrlSize(wxWindow*, const wxAuiNotebookPageArray&, const wxSize&) = 0;
 
     /**
         Returns the indent size.
@@ -302,12 +293,9 @@ public:
     /**
         Returns the tab size for the given caption, bitmap and state.
     */
-    wxSize GetTabSize(wxDC& dc, wxWindow* wnd,
-                      const wxString& caption,
-                      const wxBitmap& bitmap,
-                      bool active,
-                      int close_button_state,
-                      int* x_extent);
+    virtual wxSize GetTabSize(wxDC& dc, wxWindow* wnd, const wxString& caption,
+                              const wxBitmap& bitmap, bool active,
+                              int close_button_state, int* x_extent) = 0;
 
     /**
         Sets flags.
@@ -333,11 +321,5 @@ public:
         Sets sizing information.
     */
     virtual void SetSizingInfo(const wxSize& tab_ctrl_size, size_t tab_count) = 0;
-
-    /**
-        Pops up a menu to show the list of windows managed by wxAui.
-    */
-    int ShowWindowList(wxWindow* wnd, const wxArrayString& items,
-                       int active_idx);
 };
 

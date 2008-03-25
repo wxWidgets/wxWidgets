@@ -951,7 +951,7 @@ public:
     /**
         Constructor.
     */
-    wxListEvent(WXTYPE commandType = 0, int id = 0);
+    wxListEvent(wxEventType commandType = 0, int id = 0);
 
     /**
         For @c EVT_LIST_CACHE_HINT event only: return the first item which the

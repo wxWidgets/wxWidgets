@@ -74,7 +74,7 @@ public:
         Constructor. Currently, the only valid event types are wxEVT_CHAR and
         wxEVT_CHAR_HOOK.
     */
-    wxKeyEvent(WXTYPE keyEventType);
+    wxKeyEvent(wxEventType keyEventType);
 
     /**
         Returns @true if the Alt key was down at the time of the key event.
@@ -270,7 +270,7 @@ public:
     /**
         Constructor.
     */
-    wxJoystickEvent(WXTYPE eventType = 0, int state = 0,
+    wxJoystickEvent(wxEventType eventType = 0, int state = 0,
                     int joystick = wxJOYSTICK1,
                     int change = 0);
 
@@ -369,7 +369,7 @@ public:
     /**
         Constructor.
     */
-    wxScrollWinEvent(WXTYPE commandType = 0, int pos = 0,
+    wxScrollWinEvent(wxEventType commandType = 0, int pos = 0,
                      int orientation = 0);
 
     /**
@@ -769,7 +769,7 @@ public:
          @b wxEVT_MOTION
          @b wxEVT_MOUSEWHEEL
     */
-    wxMouseEvent(WXTYPE mouseEventType = 0);
+    wxMouseEvent(wxEventType mouseEventType = 0);
 
     /**
         Returns @true if the Alt key was down at the time of the event.
@@ -1179,7 +1179,7 @@ public:
     /**
         Constructor.
     */
-    wxDropFilesEvent(WXTYPE id = 0, int noFiles = 0,
+    wxDropFilesEvent(wxEventType id = 0, int noFiles = 0,
                      wxString* files = NULL);
 
     /**
@@ -1236,7 +1236,7 @@ public:
     /**
         Constructor.
     */
-    wxCommandEvent(WXTYPE commandEventType = 0, int id = 0);
+    wxCommandEvent(wxEventType commandEventType = 0, int id = 0);
 
     /**
         Deprecated, use IsChecked() instead.
@@ -1351,7 +1351,7 @@ public:
     /**
         Constructor.
     */
-    wxActivateEvent(WXTYPE eventType = 0, bool active = true,
+    wxActivateEvent(wxEventType eventType = wxEVT_NULL, bool active = true,
                     int id = 0);
 
     /**
@@ -1393,7 +1393,7 @@ public:
     /**
         Constructor.
     */
-    wxContextMenuEvent(WXTYPE id = 0, int id = 0,
+    wxContextMenuEvent(wxEventType id = 0, int id = 0,
                        const wxPoint& pos = wxDefaultPosition);
 
     /**
@@ -1478,7 +1478,7 @@ public:
     /**
         Constructor.
     */
-    wxFocusEvent(WXTYPE eventType = 0, int id = 0);
+    wxFocusEvent(wxEventType eventType = 0, int id = 0);
 
     /**
         Returns the window associated with this event, that is the window which had the
@@ -1728,7 +1728,7 @@ public:
     /**
         Constructor.
     */
-    wxScrollEvent(WXTYPE commandType = 0, int id = 0, int pos = 0,
+    wxScrollEvent(wxEventType commandType = 0, int id = 0, int pos = 0,
                   int orientation = 0);
 
     /**
@@ -2047,7 +2047,7 @@ public:
     /**
         Constructor.
     */
-    wxCloseEvent(WXTYPE commandEventType = 0, int id = 0);
+    wxCloseEvent(wxEventType commandEventType = 0, int id = 0);
 
     /**
         Returns @true if you can veto a system shutdown or a window close event.
@@ -2113,7 +2113,7 @@ public:
     /**
         Constructor.
     */
-    wxMenuEvent(WXTYPE id = 0, int id = 0, wxMenu* menu = NULL);
+    wxMenuEvent(wxEventType id = 0, int id = 0, wxMenu* menu = NULL);
 
     /**
         Returns the menu which is being opened or closed. This method should only be

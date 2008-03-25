@@ -108,49 +108,41 @@ public:
     /**
         Draws a background.
     */
-    virtual void DrawBackground(wxDC& dc, wxWindow* window,
-                                int orientation,
-                                const wxRect& rect);
+    virtual void DrawBackground(wxDC& dc, wxWindow* window, int orientation,
+                                const wxRect& rect) = 0;
 
     /**
         Draws a border.
     */
-    virtual void DrawBorder(wxDC& dc, wxWindow* window,
-                            const wxRect& rect,
-                            wxAuiPaneInfo& pane);
+    virtual void DrawBorder(wxDC& dc, wxWindow* window, const wxRect& rect,
+                            wxAuiPaneInfo& pane) = 0;
 
     /**
         Draws a caption.
     */
-    virtual void DrawCaption(wxDC& dc, wxWindow* window,
-                             const wxString& text,
-                             const wxRect& rect,
-                             wxAuiPaneInfo& pane);
+    virtual void DrawCaption(wxDC& dc, wxWindow* window, const wxString& text,
+                             const wxRect& rect, wxAuiPaneInfo& pane) = 0;
 
     /**
         Draws a gripper.
     */
-    virtual void DrawGripper(wxDC& dc, wxWindow* window,
-                             const wxRect& rect,
-                             wxAuiPaneInfo& pane);
+    virtual void DrawGripper(wxDC& dc, wxWindow* window, const wxRect& rect,
+                             wxAuiPaneInfo& pane) = 0;
 
     /**
         Draws a button in the pane's title bar.
         @a button can be one of the values of @b wxAuiButtonId.
         @a button_state can be one of the values of @b wxAuiPaneButtonState.
     */
-    virtual void DrawPaneButton(wxDC& dc, wxWindow* window,
-                                int button,
-                                int button_state,
-                                const wxRect& rect,
-                                wxAuiPaneInfo& pane);
+    virtual void DrawPaneButton(wxDC& dc, wxWindow* window, int button,
+                                int button_state, const wxRect& rect,
+                                wxAuiPaneInfo& pane) = 0;
 
     /**
         Draws a sash between two windows.
     */
-    virtual void DrawSash(wxDC& dc, wxWindow* window,
-                          int orientation,
-                          const wxRect& rect);
+    virtual void DrawSash(wxDC& dc, wxWindow* window, int orientation,
+                          const wxRect& rect) = 0;
     /**
         Get the colour of a certain setting.
         @a id can be one of the colour values of @b wxAuiPaneDockArtSetting.

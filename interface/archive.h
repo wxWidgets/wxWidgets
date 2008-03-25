@@ -127,7 +127,7 @@ public:
         thing read from @a stream.
     */
     virtual bool CopyEntry(wxArchiveEntry* entry,
-                           wxArchiveInputStream& stream);
+                           wxArchiveInputStream& stream) = 0;
 
     /**
         Create a new directory entry (see wxArchiveEntry::IsDir) with the given
@@ -137,13 +137,13 @@ public:
         a name with a trailing path separator.
     */
     virtual bool PutNextDirEntry(const wxString& name,
-                                 const wxDateTime& dt = wxDateTime::Now());
+                                 const wxDateTime& dt = wxDateTime::Now()) = 0;
 
     /**
         Takes ownership of entry and uses it to create a new entry in the archive.
         The entry's data can then be written by writing to this wxArchiveOutputStream.
     */
-    virtual bool PutNextEntry(wxArchiveEntry* entry);
+    virtual bool PutNextEntry(wxArchiveEntry* entry) = 0;
 
     /**
         Create a new entry with the given name, timestamp and size. The entry's
@@ -151,7 +151,7 @@ public:
     */
     virtual bool PutNextEntry(const wxString& name,
                               const wxDateTime& dt = wxDateTime::Now(),
-                              wxFileOffset size = wxInvalidOffset);
+                              wxFileOffset size = wxInvalidOffset) = 0;
 };
 
 
@@ -219,7 +219,7 @@ public:
         @see GetName()
     */
     virtual void SetName(const wxString& name,
-                         wxPathFormat format = wxPATH_NATIVE);
+                         wxPathFormat format = wxPATH_NATIVE) = 0;
 
     /**
         Returns the size of the entry's data in bytes.

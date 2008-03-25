@@ -242,13 +242,6 @@ public:
                          bool update = true);
 
     /**
-        ProcessDockResult() is a protected member of the wxAUI layout manager.
-        It can be overridden by derived classes to provide custom docking calculations.
-    */
-    bool ProcessDockResult(wxAuiPaneInfo& target,
-                           const wxAuiPaneInfo& new_pos);
-
-    /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
         saves information about a single pane.  It is used in combination with
         LoadPaneInfo().
@@ -328,6 +321,15 @@ public:
         pane flicker to be avoided by updating the whole layout at one time.
     */
     void Update();
+
+protected:
+
+    /**
+        ProcessDockResult() is a protected member of the wxAUI layout manager.
+        It can be overridden by derived classes to provide custom docking calculations.
+    */
+    virtual bool ProcessDockResult(wxAuiPaneInfo& target,
+                                   const wxAuiPaneInfo& new_pos);
 };
 
 
@@ -764,6 +766,6 @@ public:
     /**
         Makes a copy of the wxAuiPaneInfo object.
     */
-    wxAuiPaneInfo& operator operator=(const wxAuiPaneInfo& c);
+    wxAuiPaneInfo& operator=(const wxAuiPaneInfo& c);
 };
 
