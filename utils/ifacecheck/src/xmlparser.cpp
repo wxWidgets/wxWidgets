@@ -904,6 +904,12 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
     m.SetArgumentTypes(argtypes);
     m.SetConst(p->GetAttribute("const") == "1");
     m.SetStatic(p->GetAttribute("static") == "1");
+
+    // NOTE: gccxml is smart enough to mark as virtual those functions
+    //       which are declared virtual in base classes but don't have
+    //       the "virtual" keyword explicitely indicated in the derived
+    //       classes... so we don't need any further logic for virtuals
+
     m.SetVirtual(p->GetAttribute("virtual") == "1");
     m.SetPureVirtual(p->GetAttribute("pure_virtual") == "1");
     m.SetDeprecated(p->GetAttribute("attributes") == "deprecated");
@@ -1192,6 +1198,12 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
     m.SetArgumentTypes(args);
     m.SetConst(p->GetAttribute("const")=="yes");
     m.SetStatic(p->GetAttribute("static")=="yes");
+
+    // NOTE: Doxygen is smart enough to mark as virtual those functions
+    //       which are declared virtual in base classes but don't have
+    //       the "virtual" keyword explicitely indicated in the derived
+    //       classes... so we don't need any further logic for virtuals
+
     m.SetVirtual(p->GetAttribute("virt")=="virtual");
     m.SetPureVirtual(p->GetAttribute("virt")=="pure-virtual");
 
