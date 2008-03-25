@@ -391,7 +391,8 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     if (parent)
         parent->AddChild(this);
 
-    MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
+    MacCreateRealWindow( pos , size , MacRemoveBordersFromStyle(style) , name ) ;
+    SetTitle( title );
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
