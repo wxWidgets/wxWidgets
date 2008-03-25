@@ -537,29 +537,34 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/**
-    This macro is identical to _() but for the plural variant
-    of wxGetTranslation().
-*/
-#define const wxString wxPLURAL(const wxString& sing,
-const wxString& plur,
-size_t n)     /* implementation is private */
+/** @ingroup group_funcmacro_string */
+//@{
 
 /**
-    This macro doesn't do anything in the program code -- it simply expands to the
-    value of its argument.
+    This macro is identical to _() but for the plural variant of
+    wxGetTranslation().
+
+    @returns A const wxString.
+
+    @header{wx/intl.h}
+*/
+#define wxPLURAL(string, plural, n)
+
+/**
+    This macro doesn't do anything in the program code -- it simply expands to
+    the value of its argument.
+
     However it does have a purpose which is to mark the literal strings for the
     extraction into the message catalog created by @c xgettext program. Usually
-    this is achieved using _() but that macro not only marks
-    the string for extraction but also expands into a
-    wxGetTranslation() function call which means that it
-    cannot be used in some situations, notably for static array
+    this is achieved using _() but that macro not only marks the string for
+    extraction but also expands into a wxGetTranslation() call which means that
+    it cannot be used in some situations, notably for static array
     initialization.
+
     Here is an example which should make it more clear: suppose that you have a
     static array of strings containing the weekday names and which have to be
-    translated (note that it is a bad example, really, as
-    wxDateTime already can be used to get the localized week
-    day names already). If you write
+    translated (note that it is a bad example, really, as wxDateTime already
+    can be used to get the localized week day names already). If you write:
 
     @code
     static const char * const weekdays[] = { _("Mon"), ..., _("Sun") };
@@ -567,8 +572,8 @@ size_t n)     /* implementation is private */
     // use weekdays[n] as usual
     @endcode
 
-    the code wouldn't compile because the function calls are forbidden in the array
-    initializer. So instead you should do
+    The code wouldn't compile because the function calls are forbidden in the
+    array initializer. So instead you should do this:
 
     @code
     static const char * const weekdays[] = { wxTRANSLATE("Mon"), ...,
@@ -577,60 +582,80 @@ size_t n)     /* implementation is private */
     // use wxGetTranslation(weekdays[n])
     @endcode
 
-    here.
     Note that although the code @b would compile if you simply omit
-    wxTRANSLATE() in the above, it wouldn't work as expected because there would be
-    no translations for the weekday names in the program message catalog and
-    wxGetTranslation wouldn't find them.
+    wxTRANSLATE() in the above, it wouldn't work as expected because there
+    would be no translations for the weekday names in the program message
+    catalog and wxGetTranslation() wouldn't find them.
+
+    @returns A const wxChar*.
+
+    @header{wx/intl.h}
 */
-#define const wxChar* wxTRANSLATE(const char* s)     /* implementation is private */
+#define wxTRANSLATE(string)
 
 /**
-    This macro expands into a call to wxGetTranslation()
-    function, so it marks the message for the extraction by @c xgettext just as
-    wxTRANSLATE() does, but also returns the translation of
-    the string for the current locale during execution.
-    Don't confuse this macro with _T()!
-*/
-const wxString _(const wxString& s);
+    This function returns the translation of @a string in the current
+    @c locale(). If the string is not found in any of the loaded message
+    catalogs (see @ref overview_i18n), the original string is returned. In
+    debug build, an error message is logged -- this should help to find the
+    strings which were not yet translated.  If @a domain is specified then only
+    that domain/catalog is searched for a matching string.  As this function is
+    used very often, an alternative (and also common in Unix world) syntax is
+    provided: the _() macro is defined to do the same thing as
+    wxGetTranslation().
 
-//@{
-/**
-    This function returns the translation of string @a str in the current
-    locale(). If the string is not found in any of the loaded
-    message catalogs (see @ref overview_internationalization "internationalization
-    overview"), the
-    original string is returned. In debug build, an error message is logged -- this
-    should help to find the strings which were not yet translated.  If
-    @a domain is specified then only that domain/catalog is searched
-    for a matching string.  As this function
-    is used very often, an alternative (and also common in Unix world) syntax is
-    provided: the _() macro is defined to do the same thing
-    as wxGetTranslation.
-    The second form is used when retrieving translation of string that has
-    different singular and plural form in English or different plural forms in some
-    other language. It takes two extra arguments: as above, @e str
-    parameter must contain the singular form of the string to be converted and
-    is used as the key for the search in the catalog. The @a strPlural parameter
-    is the plural form (in English). The parameter @a n is used to determine the
-    plural form.  If no message catalog is found @a str is returned if 'n == 1',
-    otherwise @e strPlural.
-    See GNU gettext manual
-    for additional information on plural forms handling. For a shorter alternative
-    see the wxPLURAL() macro.
-    Both versions call wxLocale::GetString.
-    Note that this function is not suitable for literal strings in Unicode
-    builds, since the literal strings must be enclosed into
-    _T() or wxT() macro which makes them
-    unrecognised by @c xgettext, and so they are not extracted to the message
-    catalog. Instead, use the _() and
-    wxPLURAL() macro for all literal strings.
+    This function calls wxLocale::GetString().
+
+    @note This function is not suitable for literal strings in Unicode builds
+          since the literal strings must be enclosed into _T() or wxT() macro
+          which makes them unrecognised by @c xgettext, and so they are not
+          extracted to the message catalog. Instead, use the _() and wxPLURAL()
+          macro for all literal strings.
+
+    @see wxGetTranslation(const wxString&, const wxString&, size_t, const wxString&)
+
+    @header{wx/intl.h}
 */
-const wxString wxGetTranslation(const wxString& str,
-                                const wxString& domain = wxEmptyString);
-const wxString wxGetTranslation(const wxString& str,
-                                const wxString& strPlural,
-                                size_t n,
-                                const wxString& domain = wxEmptyString);
+const wxString wxGetTranslation(const wxString& string,
+                                 const wxString& domain = wxEmptyString);
+
+/**
+    This is an overloaded version of
+    wxGetTranslation(const wxString&, const wxString&), please see its
+    documentation for general information.
+
+    This version is used when retrieving translation of string that has
+    different singular and plural forms in English or different plural forms in
+    some other language. Like wxGetTranslation(const wxString&,const wxString&),
+    the @a string parameter must contain the singular form of the string to be
+    converted and is used as the key for the search in the catalog. The
+    @a plural parameter is the plural form (in English). The parameter @a n is
+    used to determine the plural form. If no message catalog is found,
+    @a string is returned if "n == 1", otherwise @a plural is returned.
+
+    See GNU gettext Manual for additional information on plural forms handling:
+    <http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms>
+    For a shorter alternative see the wxPLURAL() macro.
+
+    This function calls wxLocale::GetString().
+
+    @header{wx/intl.h}
+*/
+const wxString wxGetTranslation(const wxString& string,
+                                 const wxString& plural, size_t n,
+                                 const wxString& domain = wxEmptyString);
+
+/**
+    This macro expands into a call to wxGetTranslation(), so it marks the
+    message for the extraction by @c xgettext just as wxTRANSLATE() does, but
+    also returns the translation of the string for the current locale during
+    execution.
+
+    Don't confuse this with _T()!
+
+    @header{wx/intl.h}
+*/
+const wxString _(const wxString& string);
+
 //@}
 

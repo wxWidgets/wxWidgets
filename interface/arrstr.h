@@ -350,6 +350,8 @@ public:
     separators.
 
     @see wxJoin()
+
+    @header{wx/arrstr.h}
 */
 wxArrayString wxSplit(const wxString& str, const wxChar sep,
                       const wxChar escape = '\\');
@@ -360,12 +362,15 @@ wxArrayString wxSplit(const wxString& str, const wxChar sep,
 
     If the @a escape character is non-@NULL, then it's used as prefix for each
     occurrence of @a sep in the strings contained in @a arr before joining them
-    which is necessary in order to be able to recover the original array contents
-    from the string later using wxSplit().
+    which is necessary in order to be able to recover the original array
+    contents from the string later using wxSplit().
 
     @see wxSplit()
+
+    @header{wx/arrstr.h}
 */
 wxString wxJoin(const wxArrayString& arr, const wxChar sep,
                 const wxChar escape = '\\');
 
 //@}
+

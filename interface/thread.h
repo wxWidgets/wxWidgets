@@ -926,17 +926,41 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/**
-    Returns @true if this thread is the main one. Always returns @true if
-    @c wxUSE_THREADS is 0.
-*/
-bool wxIsMainThread();
+/** @ingroup group_funcmacro_thread */
+//@{
 
 /**
-    This macro combines wxCRIT_SECT_DECLARE() and
-    wxCRIT_SECT_LOCKER(): it creates a static critical
-    section object and also the lock object associated with it. Because of this, it
-    can be only used inside a function, not at global scope. For example:
+    This macro declares a (static) critical section object named @a cs if
+    @c wxUSE_THREADS is 1 and does nothing if it is 0.
+
+    @header{wx/thread.h}
+*/
+#define wxCRIT_SECT_DECLARE(cs)
+
+/**
+    This macro declares a critical section object named @a cs if
+    @c wxUSE_THREADS is 1 and does nothing if it is 0. As it doesn't include
+    the @c static keyword (unlike wxCRIT_SECT_DECLARE()), it can be used to
+    declare a class or struct member which explains its name.
+
+    @header{wx/thread.h}
+*/
+#define wxCRIT_SECT_DECLARE_MEMBER(cs)
+
+/**
+    This macro creates a wxCriticalSectionLocker named @a name and associated
+    with the critical section @a cs if @c wxUSE_THREADS is 1 and does nothing
+    if it is 0.
+
+    @header{wx/thread.h}
+*/
+#define wxCRIT_SECT_LOCKER(name, cs)
+
+/**
+    This macro combines wxCRIT_SECT_DECLARE() and wxCRIT_SECT_LOCKER(): it
+    creates a static critical section object and also the lock object
+    associated with it. Because of this, it can be only used inside a function,
+    not at global scope. For example:
 
     @code
     int IncCount()
@@ -949,35 +973,56 @@ bool wxIsMainThread();
     }
     @endcode
 
-    (note that we suppose that the function is called the first time from the main
-    thread so that the critical section object is initialized correctly by the time
-    other threads start calling it, if this is not the case this approach can
-    @b not be used and the critical section must be made a global instead).
+    Note that this example assumes that the function is called the first time
+    from the main thread so that the critical section object is initialized
+    correctly by the time other threads start calling it, if this is not the
+    case this approach can @b not be used and the critical section must be made
+    a global instead.
+
+    @header{wx/thread.h}
 */
-#define wxCRITICAL_SECTION(name)     /* implementation is private */
+#define wxCRITICAL_SECTION(name)
 
 /**
-    This macro declares a critical section object named @a cs if
-    @c wxUSE_THREADS is 1 and does nothing if it is 0. As it doesn't
-    include the @c static keyword (unlike
-    wxCRIT_SECT_DECLARE()), it can be used to declare
-    a class or struct member which explains its name.
+    This macro is equivalent to
+    @ref wxCriticalSection::Leave "critical_section.Leave()" if
+    @c wxUSE_THREADS is 1 and does nothing if it is 0.
+
+    @header{wx/thread.h}
 */
-#define wxCRIT_SECT_DECLARE(cs)     /* implementation is private */
+#define wxLEAVE_CRIT_SECT(critical_section)
+
+/**
+    This macro is equivalent to
+    @ref wxCriticalSection::Enter "critical_section.Enter()" if
+    @c wxUSE_THREADS is 1 and does nothing if it is 0.
+
+    @header{wx/thread.h}
+*/
+#define wxENTER_CRIT_SECT(critical_section)
+
+/**
+    Returns @true if this thread is the main one. Always returns @true if
+    @c wxUSE_THREADS is 0.
+
+    @header{wx/thread.h}
+*/
+bool wxIsMainThread();
 
 /**
     This function must be called when any thread other than the main GUI thread
-    wants to get access to the GUI library. This function will block the execution
-    of the calling thread until the main thread (or any other thread holding the
-    main GUI lock) leaves the GUI library and no other thread will enter the GUI
-    library until the calling thread calls ::wxMutexGuiLeave.
+    wants to get access to the GUI library. This function will block the
+    execution of the calling thread until the main thread (or any other thread
+    holding the main GUI lock) leaves the GUI library and no other thread will
+    enter the GUI library until the calling thread calls wxMutexGuiLeave().
+
     Typically, these functions are used like this:
 
     @code
     void MyThread::Foo(void)
     {
-        // before doing any GUI calls we must ensure that this thread is the only
-        // one doing it!
+        // before doing any GUI calls we must ensure that
+        // this thread is the only one doing it!
 
         wxMutexGuiEnter();
 
@@ -988,36 +1033,25 @@ bool wxIsMainThread();
     }
     @endcode
 
-    Note that under GTK, no creation of top-level windows is allowed in any
-    thread but the main one.
     This function is only defined on platforms which support preemptive
     threads.
+
+    @note Under GTK, no creation of top-level windows is allowed in any thread
+          but the main one.
+
+    @header{wx/thread.h}
 */
 void wxMutexGuiEnter();
 
 /**
-    This macro declares a (static) critical section object named @a cs if
-    @c wxUSE_THREADS is 1 and does nothing if it is 0.
-*/
-#define wxCRIT_SECT_DECLARE(cs)     /* implementation is private */
+    This function is only defined on platforms which support preemptive
+    threads.
 
-/**
-    This macro is equivalent to @ref wxCriticalSection::leave cs.Leave if
-    @c wxUSE_THREADS is 1 and does nothing if it is 0.
-*/
-#define wxLEAVE_CRIT_SECT(wxCriticalSection& cs)     /* implementation is private */
+    @see wxMutexGuiEnter()
 
-/**
-    This macro creates a @ref overview_wxcriticalsectionlocker "critical section
-    lock"
-    object named @a name and associated with the critical section @a cs if
-    @c wxUSE_THREADS is 1 and does nothing if it is 0.
+    @header{wx/thread.h}
 */
-#define wxCRIT_SECT_LOCKER(name, cs)     /* implementation is private */
+void wxMutexGuiLeave();
 
-/**
-    This macro is equivalent to @ref wxCriticalSection::enter cs.Enter if
-    @c wxUSE_THREADS is 1 and does nothing if it is 0.
-*/
-#define wxENTER_CRIT_SECT(wxCriticalSection& cs)     /* implementation is private */
+//@}
 

@@ -72,24 +72,35 @@ public:
 // Global functions/macros
 // ============================================================================
 
+/** @ingroup group_funcmacro_time */
+//@{
+
 /**
     Returns the number of seconds since local time 00:00:00 Jan 1st 1970.
 
-    @see wxDateTime::Now
+    @see wxDateTime::Now()
+
+    @header{wx/stopwatch.h}
 */
 long wxGetLocalTime();
 
 /**
+    Returns the number of milliseconds since local time 00:00:00 Jan 1st 1970.
+
+    @see wxDateTime::Now(), wxLongLong
+
+    @header{wx/stopwatch.h}
+*/
+wxLongLong wxGetLocalTimeMillis();
+
+/**
     Returns the number of seconds since GMT 00:00:00 Jan 1st 1970.
 
-    @see wxDateTime::Now
+    @see wxDateTime::Now()
+
+    @header{wx/stopwatch.h}
 */
 long wxGetUTCTime();
 
-/**
-    Returns the number of milliseconds since local time 00:00:00 Jan 1st 1970.
-
-    @see wxDateTime::Now, wxLongLong
-*/
-wxLongLong wxGetLocalTimeMillis();
+//@}
 
