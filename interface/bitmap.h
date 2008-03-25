@@ -21,7 +21,7 @@
     It is used within wxBitmap and is not normally seen by the application.
 
     If you wish to extend the capabilities of wxBitmap, derive a class from
-    wxBitmapHandler and add the handler using wxBitmap::AddHandler in your
+    wxBitmapHandler and add the handler using wxBitmap::AddHandler() in your
     application initialisation.
 
     @library{wxcore}
@@ -67,7 +67,7 @@ public:
         @returns @true if the call succeeded, @false otherwise (the default).
     */
     virtual bool Create(wxBitmap* bitmap, const void* data, wxBitmapType type,
-                        int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+                        int width, int height, int depth = 1);
 
     /**
         Gets the file extension associated with this handler.
@@ -100,7 +100,8 @@ public:
 
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, SaveFile()
     */
-    virtual bool LoadFile(wxBitmap* bitmap, const wxString& name, wxBitmapType type);
+    virtual bool LoadFile(wxBitmap* bitmap, const wxString& name, wxBitmapType type,
+                          int desiredWidth, int desiredHeight);
 
     /**
         Saves a bitmap in the named file.
@@ -118,8 +119,8 @@ public:
 
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, LoadFile()
     */
-    bool SaveFile(wxBitmap* bitmap, const wxString& name, wxBitmapType type,
-                  wxPalette* palette = NULL);
+    virtual bool SaveFile(const wxBitmap* bitmap, const wxString& name, wxBitmapType type,
+                          wxPalette* palette = NULL) const;
 
     /**
         Sets the handler extension.
@@ -218,7 +219,7 @@ public:
     wxBitmap(const void* data, int type, int width, int height, int depth = -1);
 
 
-        NOTE: this ctor is not implemented by all port, is somewhat useless
+        NOTE: this ctor is not implemented by all ports, is somewhat useless
               without further description of the "data" supported formats and
               uses 'int type' instead of wxBitmapType, so don't document it.
     */
@@ -249,6 +250,7 @@ public:
     /**
         Creates a new bitmap. A depth of ::wxBITMAP_SCREEN_DEPTH indicates the
         depth of the current screen or visual.
+
         Some platforms only support 1 for monochrome and ::wxBITMAP_SCREEN_DEPTH for
         the current colour setting.
 
@@ -335,12 +337,12 @@ public:
         mask information so that bitmaps and images can be converted back
         and forth without loss in that respect.
     */
-    wxImage ConvertToImage();
+    virtual wxImage ConvertToImage() const;
 
     /**
         Creates the bitmap from an icon.
     */
-    bool CopyFromIcon(const wxIcon& icon);
+    virtual bool CopyFromIcon(const wxIcon& icon);
 
     /**
         Creates a fresh bitmap.
@@ -348,7 +350,7 @@ public:
 
         This overload works on all platforms.
     */
-    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /*
         Creates a bitmap from the given data, which can be of arbitrary type.
@@ -412,7 +414,7 @@ public:
         Gets the colour depth of the bitmap.
         A value of 1 indicates a monochrome bitmap.
     */
-    int GetDepth() const;
+    virtual int GetDepth() const;
 
     /**
         Returns the static list of bitmap format handlers.
@@ -424,7 +426,7 @@ public:
     /**
         Gets the height of the bitmap in pixels.
     */
-    int GetHeight() const;
+    virtual int GetHeight() const;
 
     /**
         Gets the associated mask (if any) which may have been loaded from a file
@@ -432,7 +434,7 @@ public:
 
         @see SetMask(), wxMask
     */
-    wxMask* GetMask() const;
+    virtual wxMask* GetMask() const;
 
     /**
         Gets the associated palette (if any) which may have been loaded from a file
@@ -440,20 +442,20 @@ public:
 
         @see wxPalette
     */
-    wxPalette* GetPalette() const;
+    virtual wxPalette* GetPalette() const;
 
     /**
         Returns a sub bitmap of the current one as long as the rect belongs entirely to
         the bitmap. This function preserves bit depth and mask information.
     */
-    wxBitmap GetSubBitmap(const wxRect& rect) const;
+    virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
 
     /**
         Gets the width of the bitmap in pixels.
 
         @see GetHeight()
     */
-    int GetWidth() const;
+    virtual int GetWidth() const;
 
     /**
         Adds the standard bitmap format handlers, which, depending on wxWidgets
@@ -501,7 +503,7 @@ public:
 
         @see SaveFile()
     */
-    bool LoadFile(const wxString& name, wxBitmapType type);
+    virtual bool LoadFile(const wxString& name, wxBitmapType type);
 
     /**
         Finds the handler with the given name, and removes it.
@@ -534,8 +536,8 @@ public:
 
         @see LoadFile()
     */
-    bool SaveFile(const wxString& name, wxBitmapType type,
-                  const wxPalette* palette = NULL);
+    virtual bool SaveFile(const wxString& name, wxBitmapType type,
+                          const wxPalette* palette = NULL) const;
 
     /**
         Sets the depth member (does not affect the bitmap data).
@@ -546,7 +548,7 @@ public:
         @param depth
             Bitmap depth.
     */
-    void SetDepth(int depth);
+    virtual void SetDepth(int depth);
 
     /**
         Sets the height member (does not affect the bitmap data).
@@ -554,7 +556,7 @@ public:
         @param height
             Bitmap height in pixels.
     */
-    void SetHeight(int height);
+    virtual void SetHeight(int height);
 
     /**
         Sets the mask for this bitmap.
@@ -563,7 +565,7 @@ public:
 
         @see GetMask(), wxMask
     */
-    void SetMask(wxMask* mask);
+    virtual void SetMask(wxMask* mask);
 
     /**
         Sets the associated palette. (Not implemented under GTK+).
@@ -573,7 +575,7 @@ public:
 
         @see wxPalette
     */
-    void SetPalette(const wxPalette& palette);
+    virtual void SetPalette(const wxPalette& palette);
 
     /**
         Sets the width member (does not affect the bitmap data).
@@ -581,15 +583,7 @@ public:
         @param width
             Bitmap width in pixels.
     */
-    void SetWidth(int width);
-
-    /**
-        Assignment operator, using @ref overview_refcount "reference counting".
-
-        @param bitmap
-            Bitmap to assign.
-    */
-    wxBitmap operator =(const wxBitmap& bitmap);
+    virtual void SetWidth(int width);
 };
 
 /**

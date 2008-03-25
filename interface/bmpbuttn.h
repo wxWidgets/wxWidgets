@@ -180,7 +180,7 @@ public:
 
         @see SetBitmapSelected()
     */
-    wxBitmap& GetBitmapSelected() const;
+    const wxBitmap& GetBitmapSelected() const;
 
     /**
         Sets the bitmap for the disabled button appearance.

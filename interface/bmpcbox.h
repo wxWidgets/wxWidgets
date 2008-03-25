@@ -157,12 +157,12 @@ public:
     /**
         Returns size of bitmaps used in the list.
     */
-    wxSize GetBitmapSize() const;
+    virtual wxSize GetBitmapSize() const;
 
     /**
         Returns the bitmap of the item with the given index.
     */
-    wxBitmap GetItemBitmap(unsigned int n) const;
+    virtual wxBitmap GetItemBitmap(unsigned int n) const;
 
     /**
         Inserts the item into the list before @a pos.
@@ -189,6 +189,6 @@ public:
     /**
         Sets the bitmap for the given item.
     */
-    void SetItemBitmap(unsigned int n, const wxBitmap& bitmap);
+    virtual void SetItemBitmap(unsigned int n, const wxBitmap& bitmap);
 };
 

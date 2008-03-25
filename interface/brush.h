@@ -11,6 +11,8 @@
 */
 enum wxBrushStyle
 {
+    wxBRUSHSTYLE_INVALID = -1,
+
     wxBRUSHSTYLE_SOLID = wxSOLID,
         /**< Solid. */
 
@@ -46,7 +48,6 @@ enum wxBrushStyle
 
     wxBRUSHSTYLE_FIRST_HATCH = wxFIRST_HATCH,
     wxBRUSHSTYLE_LAST_HATCH = wxLAST_HATCH,
-    wxBRUSHSTYLE_MAX
 };
 
 
@@ -105,19 +106,7 @@ public:
         @param style
             One of the ::wxBrushStyle enumeration values.
     */
-    wxBrush(const wxColour& colour, wxBrushStyle style = wxSOLID);
-
-    /**
-        Constructs a brush from a colour name and @a style.
-
-        @param colourName
-            Colour name. The name will be looked up in the colour database.
-        @param style
-            One of the ::wxBrushStyle enumeration values.
-
-        @see wxColourDatabase
-    */
-    wxBrush(const wxString& colourName, wxBrushStyle style);
+    wxBrush(const wxColour& colour, wxBrushStyle style = wxBRUSHSTYLE_SOLID);
 
     /**
         Constructs a stippled brush using a bitmap.
@@ -163,7 +152,7 @@ public:
 
         @see SetStyle(), SetColour(), SetStipple()
     */
-    wxBrushStyle GetStyle() const;
+    virtual wxBrushStyle GetStyle() const;
 
     /**
         Returns @true if the style of the brush is any of hatched fills.
@@ -187,8 +176,7 @@ public:
     */
     void SetColour(wxColour& colour);
     void SetColour(const wxString& colourName);
-    void SetColour(unsigned char red, unsigned char green,
-                   unsigned char blue);
+    void SetColour(unsigned char red, unsigned char green, unsigned char blue);
     //@}
 
     /**
@@ -219,18 +207,13 @@ public:
         Inequality operator.
         See @ref overview_refcount_equality for more info.
     */
-    bool operator !=(const wxBrush& brush);
-
-    /**
-        Assignment operator, using @ref overview_refcount "reference counting".
-    */
-    wxBrush operator =(const wxBrush& brush);
+    bool operator !=(const wxBrush& brush) const;
 
     /**
         Equality operator.
         See @ref overview_refcount_equality for more info.
     */
-    bool operator ==(const wxBrush& brush);
+    bool operator ==(const wxBrush& brush) const;
 };
 
 /**
@@ -296,6 +279,9 @@ wxBrush* wxRED_BRUSH;
 
     A brush list is a list containing all brushes which have been created.
 
+    The application should not construct its own brush list: it should use the
+    object pointer ::wxTheBrushList.
+
     @library{wxcore}
     @category{gdi}
 
@@ -304,12 +290,6 @@ wxBrush* wxRED_BRUSH;
 class wxBrushList : public wxList
 {
 public:
-    /**
-        Constructor. The application should not construct its own brush list:
-        use the object pointer ::wxTheBrushList.
-    */
-    wxBrushList();
-
     /**
         Finds a brush with the specified attributes and returns it, else creates a new
         brush, adds it to the brush list, and returns it.

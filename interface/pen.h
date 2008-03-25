@@ -11,6 +11,8 @@
 */
 enum wxPenStyle
 {
+    wxPENSTYLE_INVALID = -1,
+
     wxPENSTYLE_SOLID,
         /**< Solid style. */
 
@@ -60,8 +62,7 @@ enum wxPenStyle
         /**< Vertical hatch. */
 
     wxPENSTYLE_FIRST_HATCH = wxPENSTYLE_BDIAGONAL_HATCH,
-    wxPENSTYLE_LAST_HATCH = wxPENSTYLE_VERTICAL_HATCH,
-    wxPENSTYLE_MAX
+    wxPENSTYLE_LAST_HATCH = wxPENSTYLE_VERTICAL_HATCH
 };
 
 /**
@@ -145,12 +146,7 @@ public:
     /**
         Constructs a pen from a colour object, pen width and style.
     */
-    wxPen(const wxColour& colour, int width = 1, wxPenStyle style = wxSOLID);
-
-    /**
-        Constructs a pen from a colour name, pen width and style.
-    */
-    wxPen(const wxString& colourName, int width, wxPenStyle style);
+    wxPen(const wxColour& colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
 
     /**
         Constructs a stippled pen from a stipple bitmap and a width.
