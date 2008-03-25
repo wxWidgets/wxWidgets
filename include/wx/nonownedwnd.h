@@ -14,6 +14,8 @@
 
 #if defined(__WXDFB__)
     #include "wx/dfb/nonownedwnd.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/nonownedwnd.h"
 #else
     // other ports can derive both wxTLW and wxPopupWindow directly
     // from wxWindow:

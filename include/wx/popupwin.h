@@ -129,7 +129,7 @@ protected:
     // get alerted when child gets deleted from under us
     void OnDestroy(wxWindowDestroyEvent& event);
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
     // check if the mouse needs captured or released
     void OnIdle(wxIdleEvent& event);
 #endif
