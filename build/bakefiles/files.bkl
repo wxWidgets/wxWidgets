@@ -2256,6 +2256,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/metafile.cpp
     src/mac/carbon/minifram.cpp
     src/mac/carbon/msgdlg.cpp
+    src/mac/carbon/nonownedwnd.cpp
     src/mac/carbon/notebmac.cpp
     src/mac/carbon/overlay.cpp
     src/mac/carbon/palette.cpp
@@ -2351,6 +2352,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/mimetype.h
     wx/mac/minifram.h
     wx/mac/msgdlg.h
+    wx/mac/nonownedwnd.h
     wx/mac/notebook.h
     wx/mac/palette.h
     wx/mac/pen.h
@@ -2435,6 +2437,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/mimetype.h
     wx/mac/carbon/minifram.h
     wx/mac/carbon/msgdlg.h
+    wx/mac/carbon/nonownedwnd.h
     wx/mac/carbon/notebook.h
     wx/mac/carbon/palette.h
     wx/mac/carbon/pen.h
