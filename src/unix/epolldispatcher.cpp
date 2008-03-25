@@ -189,11 +189,15 @@ void wxEpollDispatcher::Dispatch(int timeout)
             continue;
         }
 
-        if ( p->events & EPOLLIN )
+        // note that for compatibility with wxSelectDispatcher we call
+        // OnReadWaiting() on EPOLLHUP as this is what epoll_wait() returns
+        // when the write end of a pipe is closed while with select() the
+        // remaining pipe end becomes ready for reading when this happens
+        if ( p->events & (EPOLLIN | EPOLLHUP) )
             handler->OnReadWaiting();
         else if ( p->events & EPOLLOUT )
             handler->OnWriteWaiting();
-        else if ( p->events & (EPOLLERR | EPOLLHUP) )
+        else if ( p->events & EPOLLERR )
             handler->OnExceptionWaiting();
     }
 }
