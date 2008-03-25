@@ -84,6 +84,9 @@ public:
     wxString GetDefaultValue() const
         { return m_strDefaultValue; }
 
+    bool HasDefaultValue() const
+        { return !m_strDefaultValue.IsEmpty(); }
+
     bool operator==(const wxArgumentType& m) const;
     bool operator!=(const wxArgumentType& m) const
         { return !(*this == m); }

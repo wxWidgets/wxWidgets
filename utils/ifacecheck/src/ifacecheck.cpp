@@ -259,6 +259,13 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
 
             if (overloads.GetCount()==0)
             {
+                /*
+                    TODO: sometimes the interface headers re-document a method
+                          inherited from a base class even if the real header does
+                          not actually re-implement it.
+                          To avoid false positives, we'd need to search in the base classes
+                          of api[] classes and search for a matching method.
+                */
                 LogMessage("%s: real '%s' class has no method '%s'",
                             header, searchedclasses, m.GetAsString());
                 // we've found no overloads

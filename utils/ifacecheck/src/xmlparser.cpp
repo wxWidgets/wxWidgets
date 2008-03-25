@@ -117,7 +117,7 @@ bool wxType::operator==(const wxType& m) const
 
 void wxArgumentType::SetDefaultValue(const wxString& defval)
 {
-    m_strDefaultValue=defval;
+    m_strDefaultValue=defval.Strip(wxString::both);
 
     // in order to make valid&simple comparison on argument defaults,
     // we reduce some of the multiple forms in which the same things may appear
@@ -131,7 +131,7 @@ void wxArgumentType::SetDefaultValue(const wxString& defval)
 
 
     if (m_strDefaultValue.Contains("wxGetTranslation"))
-        m_strDefaultValue = wxEmptyString;     // TODO: wxGetTranslation gives problems to gccxml
+        m_strDefaultValue = "_(TOFIX)";     // TODO: wxGetTranslation gives problems to gccxml
 }
 
 bool wxArgumentType::operator==(const wxArgumentType& m) const
@@ -175,13 +175,28 @@ bool wxMethod::IsOk() const
     for (unsigned int i=0; i<m_args.GetCount(); i++)
         if (!m_args[i].IsOk()) {
             LogError("'%s' method has invalid %d-th argument type: %s",
-                     m_strName, i, m_args[i].GetAsString());
+                     m_strName, i+1, m_args[i].GetAsString());
             return false;
         }
 
     // NB: the default value of the arguments can contain pretty much everything
     //     (think to e.g. wxPoint(3+4/2,0)   or   *wxBLACK   or  someClass<type>)
-    //     so we don't do any test on them.
+    //     so we don't do any test on their contents
+    if (m_args.GetCount()>0)
+    {
+        bool previousArgHasDefault = m_args[0].HasDefaultValue();
+        for (unsigned int i=1; i<m_args.GetCount(); i++)
+        {
+            if (previousArgHasDefault && !m_args[i].HasDefaultValue()) {
+                LogError("'%s' method has %d-th argument which has no default value "
+                         "(while the previous one had one!)",
+                         m_strName, i+1);
+                return false;
+            }
+
+            previousArgHasDefault = m_args[i].HasDefaultValue();
+        }
+    }
 
     return true;
 }
@@ -774,8 +789,11 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
 
                 // this <Method> node is a method of the i-th class!
                 wxMethod newfunc;
-                if (!ParseMethod(child, types, newfunc))
+                if (!ParseMethod(child, types, newfunc)) {
+                    LogError("The method '%s' could not be added to class '%s'",
+                             child->GetAttribute("demangled"), p->GetName());
                     return false;
+                }
 
                 if (newfunc.IsCtor() && !p->IsValidCtorForThisClass(newfunc)) {
                     LogError("The method '%s' does not seem to be a ctor for '%s'",
@@ -798,7 +816,6 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
         if ((++nodes%PROGRESS_RATE)==0) ShowProgress();
     }
 
-    //wxPrint("\n");
     if (!CheckParseResults())
         return false;
 
@@ -981,20 +998,23 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
                         {
 
                             wxMethod m;
-                            if (ParseMethod(membernode, m, header))
-                            {
-                                if (absoluteFile.IsEmpty())
-                                    absoluteFile = header;
-                                else if (header != absoluteFile)
-                                {
-                                    LogError("The method '%s' is documented in a different "
-                                             "file from others (which belong to '%s') ?",
-                                             header, absoluteFile);
-                                    return false;
-                                }
-
-                                klass.AddMethod(m);
+                            if (!ParseMethod(membernode, m, header)) {
+                                LogError("The method '%s' could not be added to class '%s'",
+                                         m.GetName(), klass.GetName());
+                                return false;
                             }
+
+                            if (absoluteFile.IsEmpty())
+                                absoluteFile = header;
+                            else if (header != absoluteFile)
+                            {
+                                LogError("The method '%s' is documented in a different "
+                                            "file from others (which belong to '%s') ?",
+                                            header, absoluteFile);
+                                return false;
+                            }
+
+                            klass.AddMethod(m);
                         }
 
                         membernode = membernode->GetNext();
