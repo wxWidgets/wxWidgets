@@ -83,7 +83,4 @@ private :
     DECLARE_EVENT_TABLE()
 };
 
-// list of all frames and modeless dialogs
-extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
-
 #endif // _WX_MSW_TOPLEVEL_H_
