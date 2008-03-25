@@ -51,12 +51,12 @@ IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxObject)
 
 wxList wxBitmapBase::sm_handlers;
 
-void wxBitmapBase::AddHandler(wxBitmapHandlerBase *handler)
+void wxBitmapBase::AddHandler(wxBitmapHandler *handler)
 {
     sm_handlers.Append(handler);
 }
 
-void wxBitmapBase::InsertHandler(wxBitmapHandlerBase *handler)
+void wxBitmapBase::InsertHandler(wxBitmapHandler *handler)
 {
     sm_handlers.Insert(handler);
 }
