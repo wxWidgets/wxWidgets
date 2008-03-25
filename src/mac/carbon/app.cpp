@@ -1472,7 +1472,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
 
     bool handled = false ;
 
-    wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
+    wxNonOwnedWindow *tlw = focus->MacGetTopLevelWindow() ;
 
     if (tlw)
     {
