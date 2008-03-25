@@ -310,7 +310,7 @@ WXDLLIMPEXP_CORE void wxMacPointToNative( const wxPoint* wx , Point *n );
 WXDLLIMPEXP_CORE void wxMacNativeToPoint( const Point *n , wxPoint* wx );
 
 WXDLLIMPEXP_CORE wxWindow * wxFindControlFromMacControl(ControlRef inControl );
-WXDLLIMPEXP_CORE wxTopLevelWindowMac* wxFindWinFromMacWindow( WindowRef inWindow );
+WXDLLIMPEXP_CORE wxNonOwnedWindow* wxFindWinFromMacWindow( WindowRef inWindow );
 WXDLLIMPEXP_CORE wxMenu* wxFindMenuFromMacMenu(MenuRef inMenuRef);
 
 WXDLLIMPEXP_CORE int wxMacCommandToId( UInt32 macCommandId );
