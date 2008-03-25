@@ -72,7 +72,7 @@ bool wxDrawerWindow::Create(wxWindow *parent,
     bool success  = wxWindow::Create(parent, id, pos, dummySize, style, name);
     if (success)
     {
-        this->MacCreateRealWindow(title, pos, size, style, name);
+        this->MacCreateRealWindow(pos, size, style, name);
         success = (m_macWindow != NULL);
     }
     
