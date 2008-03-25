@@ -219,7 +219,7 @@ static pascal OSStatus wxWebKitCtrlEventHandler( EventHandlerCallRef handler , E
 
     ControlRef controlRef ;
     wxWebKitCtrl* thisWindow = (wxWebKitCtrl*) data ;
-    wxTopLevelWindowMac* tlw = NULL;
+    wxNonOwnedWindow* tlw = NULL;
     if (thisWindow)
         tlw = thisWindow->MacGetTopLevelWindow();
 
