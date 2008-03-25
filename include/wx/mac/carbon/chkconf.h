@@ -77,7 +77,11 @@
     #endif
     #define wxMAC_USE_QUICKDRAW 0
 #else
-    #define wxMAC_USE_QUICKDRAW 1
+    #ifdef __WXASPEN__
+        #define wxMAC_USE_QUICKDRAW 0
+    #else
+        #define wxMAC_USE_QUICKDRAW 1
+    #endif
 #endif
 
 /* 
