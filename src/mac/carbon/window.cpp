@@ -168,11 +168,11 @@ static const EventTypeSpec eventList[] =
 //    { kEventClassControl , kEventControlBoundsChanged } ,
 } ;
 
-wxWindowMac* targetWindow = NULL;
-
 static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
+    static wxWindowMac* targetFocusWindow = NULL;
+    static wxWindowMac* formerFocusWindow = NULL;
 
     wxMacCarbonEvent cEvent( event ) ;
 
@@ -320,6 +320,11 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
         case kEventControlFocusPartChanged :
             // the event is emulated by wxmac for systems lower than 10.5
             {
+                if ( UMAGetSystemVersion() < 0x1050 )
+                {
+                    // as it is synthesized here, we have to manually avoid propagation
+                    result = noErr;
+                }
                 ControlPartCode previousControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPreviousPart , typeControlPartCode );
                 ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlCurrentPart , typeControlPartCode );
 
@@ -346,9 +351,10 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         inKillFocusEvent = true ;
                         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
                         event.SetEventObject(thisWindow);
-                        event.SetWindow(targetWindow);
+                        event.SetWindow(targetFocusWindow);
                         thisWindow->HandleWindowEvent(event) ;
                         inKillFocusEvent = false ;
+                        targetFocusWindow = NULL;
                     }
                 }
                 else if ( previousControlPart == 0 )
@@ -366,7 +372,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
                     wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
                     event.SetEventObject(thisWindow);
+                    event.SetWindow(formerFocusWindow);
                     thisWindow->HandleWindowEvent(event) ;
+                    formerFocusWindow = NULL;
                 }
             }
             break;
@@ -381,8 +389,16 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif
                 ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
                 if ( controlPart != kControlFocusNoPart )
-                    targetWindow = thisWindow;
-                    
+                {
+                    targetFocusWindow = thisWindow;
+                    wxLogTrace(_T("Focus"), _T("focus to be set(%p)"), wx_static_cast(void*, thisWindow));
+                }
+                else
+                {
+                    formerFocusWindow = thisWindow;
+                    wxLogTrace(_T("Focus"), _T("focus to be lost(%p)"), wx_static_cast(void*, thisWindow));
+                }
+                
                 ControlPartCode previousControlPart = 0;
                 verify_noerr( HIViewGetFocusPart(controlRef, &previousControlPart));
 
@@ -409,11 +425,12 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     verify_noerr( err );
 
                     wxMacCarbonEvent iEvent( evRef ) ;
-                    iEvent.SetParameter<ControlRef>( kEventParamDirectObject , controlRef ) ;
-                    iEvent.SetParameter<ControlPartCode>( kEventParamControlPreviousPart, typeControlPartCode, previousControlPart ) ;
-                    iEvent.SetParameter<ControlPartCode>( kEventParamControlCurrentPart, typeControlPartCode, currentControlPart ) ;
+                    iEvent.SetParameter<ControlRef>( kEventParamDirectObject , controlRef );
+                    iEvent.SetParameter<EventTargetRef>( kEventParamPostTarget, typeEventTargetRef, GetControlEventTarget( controlRef ) );
+                    iEvent.SetParameter<ControlPartCode>( kEventParamControlPreviousPart, typeControlPartCode, previousControlPart );
+                    iEvent.SetParameter<ControlPartCode>( kEventParamControlCurrentPart, typeControlPartCode, currentControlPart );
 
-#if 0
+#if 1
                     // TODO test this first, avoid double posts etc...
                     PostEventToQueue( GetMainEventQueue(), evRef , kEventPriorityHigh );
 #else
@@ -1186,9 +1203,11 @@ void wxWindowMac::SetFocus()
 
     // as we cannot rely on the control features to find out whether we are in full keyboard mode,
     // we can only leave in case of an error
+    wxLogTrace(_T("Focus"), _T("before wxWindow::SetFocus(%p)"), wx_static_cast(void*, this));
     OSStatus err = m_peer->SetFocus( kControlFocusNextPart ) ;
     if ( err == errCouldntSetFocus )
         return ;
+    wxLogTrace(_T("Focus"), _T("after wxWindow::SetFocus(%p)"), wx_static_cast(void*, this));
 
     SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
 }
