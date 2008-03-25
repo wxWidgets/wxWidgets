@@ -420,7 +420,10 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         wxString name = data.GetPrinterName();
         if (!name.empty())
         {
-            wxStrncpy(devMode->dmDeviceName, name.wx_str(),
+            // NB: the cast is needed in the ANSI build, strangely enough
+            //     dmDeviceName is BYTE[] and not char[] there
+            wxStrncpy(wx_static_cast(wxChar *, devMode->dmDeviceName),
+                      name.wx_str(),
                       WXSIZEOF(devMode->dmDeviceName) - 1);
             devMode->dmDeviceName[WXSIZEOF(devMode->dmDeviceName) - 1] = wxT('\0');
         }
