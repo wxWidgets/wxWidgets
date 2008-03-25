@@ -2429,6 +2429,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/mimetype.h \
 	wx/mac/minifram.h \
 	wx/mac/msgdlg.h \
+	wx/mac/nonownedwnd.h \
 	wx/mac/notebook.h \
 	wx/mac/palette.h \
 	wx/mac/pen.h \
@@ -2510,6 +2511,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/carbon/mimetype.h \
 	wx/mac/carbon/minifram.h \
 	wx/mac/carbon/msgdlg.h \
+	wx/mac/carbon/nonownedwnd.h \
 	wx/mac/carbon/notebook.h \
 	wx/mac/carbon/palette.h \
 	wx/mac/carbon/pen.h \
@@ -4687,6 +4689,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_metafile.o \
 	monodll_minifram.o \
 	monodll_msgdlg.o \
+	monodll_nonownedwnd.o \
 	monodll_notebmac.o \
 	monodll_overlay.o \
 	monodll_palette.o \
@@ -6592,6 +6595,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_metafile.o \
 	monolib_minifram.o \
 	monolib_msgdlg.o \
+	monolib_nonownedwnd.o \
 	monolib_notebmac.o \
 	monolib_overlay.o \
 	monolib_palette.o \
@@ -8782,6 +8786,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_metafile.o \
 	coredll_minifram.o \
 	coredll_msgdlg.o \
+	coredll_nonownedwnd.o \
 	coredll_notebmac.o \
 	coredll_overlay.o \
 	coredll_palette.o \
@@ -10277,6 +10282,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_metafile.o \
 	corelib_minifram.o \
 	corelib_msgdlg.o \
+	corelib_nonownedwnd.o \
 	corelib_notebmac.o \
 	corelib_overlay.o \
 	corelib_palette.o \
@@ -16146,6 +16152,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/nonownedwnd.cpp
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_nonownedwnd.o: $(srcdir)/src/mac/carbon/nonownedwnd.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/nonownedwnd.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
 
@@ -20660,6 +20669,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/nonownedwnd.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_nonownedwnd.o: $(srcdir)/src/mac/carbon/nonownedwnd.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/nonownedwnd.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
@@ -25758,6 +25770,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/nonownedwnd.cpp
 
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_nonownedwnd.o: $(srcdir)/src/mac/carbon/nonownedwnd.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/nonownedwnd.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
 
@@ -28829,6 +28844,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/nonownedwnd.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_nonownedwnd.o: $(srcdir)/src/mac/carbon/nonownedwnd.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/nonownedwnd.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
