@@ -107,7 +107,7 @@ BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
     EVT_IDLE(wxPopupTransientWindow::OnIdle)
 #endif
 END_EVENT_TABLE()
@@ -263,7 +263,7 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     m_focus = winFocus ? winFocus : this;
     m_focus->SetFocus();
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
     // MSW doesn't allow to set focus to the popup window, but we need to
     // subclass the window which has the focus, and not winFocus passed in or
     // otherwise everything else breaks down
@@ -301,7 +301,7 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
     if (!show && m_child && m_child->HasCapture())
     {
         m_child->ReleaseMouse();
@@ -343,7 +343,7 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
     if (show && m_child)
     {
         // Assume that the mouse is outside the popup to begin with
@@ -377,7 +377,7 @@ bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
     return false;
 }
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WXMAC__)
 void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
 {
     event.Skip();
