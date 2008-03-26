@@ -1954,7 +1954,10 @@ void wxRichTextCtrl::SelectAll()
 void wxRichTextCtrl::SelectNone()
 {
     if (!(GetSelectionRange() == wxRichTextRange(-2, -2)))
-        SetSelection(-2, -2);
+    {
+        Refresh(false);
+        m_selectionRange = wxRichTextRange(-2, -2);
+    }
     m_selectionAnchor = -2;
 }
 
@@ -2332,13 +2335,20 @@ void wxRichTextCtrl::SetSelection(long from, long to)
 
 void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCaret))
 {
-    m_selectionAnchor = from;
-    m_selectionRange.SetRange(from, to-1);
-    if (from > -2)
-        m_caretPosition = from-1;
+    if (from == to)
+    {
+        SelectNone();
+    }
+    else
+    {
+        m_selectionAnchor = from;
+        m_selectionRange.SetRange(from, to-1);
+        if (from > -2)
+            m_caretPosition = from-1;
 
-    Refresh(false);
-    PositionCaret();
+        Refresh(false);
+        PositionCaret();
+    }
 }
 
 // ----------------------------------------------------------------------------
