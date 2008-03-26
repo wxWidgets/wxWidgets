@@ -4549,7 +4549,7 @@ if test "$wxUSE_TARSTREAM" = "yes"; then
                     getgrgid_r(0, &grp, buf, sizeof(buf), &pgrp)
                    ]])
 fi
- 
+
 fi
 
 
@@ -7845,6 +7845,11 @@ AC_CONFIG_FILES([ lib/wx/config/${TOOLCHAIN_FULLNAME}:wx-config.in ],
 AC_CONFIG_FILES([ lib/wx/config/inplace-${TOOLCHAIN_FULLNAME}:wx-config-inplace.in ],
                 [ chmod +x lib/wx/config/inplace-${TOOLCHAIN_FULLNAME} ],
                 [ TOOLCHAIN_FULLNAME="${TOOLCHAIN_FULLNAME}" ])
+
+dnl this is used to run ifacecheck with the same flags used by the compiler
+dnl for the real compilation:
+AC_CONFIG_FILES([ utils/ifacecheck/rungccxml.sh ],
+                [ chmod +x utils/ifacecheck/rungccxml.sh ])
 
 if test "$wx_cv_version_script" = "yes"; then
     AC_CONFIG_FILES(version-script)

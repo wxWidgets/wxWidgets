@@ -211,7 +211,15 @@
    Note that it must be included before defining hardware symbols below as they
    could be already defined by configure
  */
-#include "wx/setup.h"
+#ifdef __GCCXML__
+    /*
+        we're using gccxml to create an XML representation of the entire
+        wxWidgets interface; pass it a special setup.h file
+    */
+    #include "wx/setup_gccxml.h"
+#else
+    #include "wx/setup.h"
+#endif
 
 /*
    Hardware platform detection.
@@ -277,7 +285,7 @@
 
 /*
    test for old versions of Borland C, normally need at least 5.82, Turbo
-   explorer, available for free at http://www.turboexplorer.com/downloads 
+   explorer, available for free at http://www.turboexplorer.com/downloads
 */
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x550)
 #   error "wxWidgets requires a newer version of Borland, we recommend upgrading to 5.82 (Turbo Explorer). You may at your own risk remove this line and try building but be prepared to get build errors."

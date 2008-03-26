@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# $Id$
+#
+# Runs gccxml on the wxWidgets include folder, in order to build the XML
+# file to fetch to ifacecheck to check the coherency of the wxWidgets
+# interface headers with the "real" ones.
+
+
+## CONSTANTS
+############
+
+
+gccxmloutput="wxapi.xml"        # where do we put the gccXML output:
+allheaders="/tmp/wx-all.h"      # headers which includes all wx public headers
+
+# the list of all wxWidgets public headers
+listcmd="ls wx/*.h wx/aui/*.h wx/html/*.h wx/protocol/*.h wx/richtext/*.h wx/stc/*.h wx/xml/*.h wx/xrc/*.h"
+
+
+
+## MAIN
+#######
+
+if [[ ! -z "$1" ]]; then
+    echo "This script does not accept arguments."
+    echo "Usage: $0"
+    echo "Creates a '$gccxmloutput' file which you can pass to ifacecheck."
+    exit 1
+fi
+
+me=$(basename $0)
+path=${0%%/$me}
+current=$(pwd)         # current path
+
+gccxmloutput="$current/$gccxmloutput"
+
+cd @top_srcdir@/include              # go to wx include folder
+
+# now filter it
+headerlist=`$listcmd | grep -v wxshl | grep -v wx_cw | grep -v setup | grep -v xti | grep -v dde.h | grep -v fmappriv`
+
+cd $current                          # return to the original path
+
+# create the header file to pass to gccxml
+if [[ -f $allheaders ]]; then rm $allheaders; fi
+for f in $headerlist; do
+    echo "#include <$f>" >> $allheaders
+done
+
+# filter the configure flags to pass to gccxml
+flags="@CXXFLAGS@"
+
+# NOTE: it's important to define __WXDEBUG__ because some functions of wx
+#       are declared (and thus parsed by gcc) only if that symbol is defined;
+#       so we remove __WXDEBUG__ symbol from $flags, in case it's defined:
+flags=`echo "$flags" | sed -e 's/-pthread//g' | sed -e 's/__WXDEBUG__//g'`
+
+# run gccxml with the same flag used for the real compilation of wx sources:
+echo "Running gccxml on the $allheaders file..."
+if [[ -f "$gccxmloutput" ]]; then rm $gccxmloutput; fi
+gccxml -I . -I @top_srcdir@/include $flags -D__WX@TOOLKIT@__ -DWXBUILDING $allheaders -fxml=$gccxmloutput
+
+# cleanup
+rm $allheaders
