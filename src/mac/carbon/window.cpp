@@ -211,7 +211,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 if ( thisWindow->MacIsUserPane() )
                 {
                     static float color = 0.5 ;
-                    static channel = 0 ;
+                    static int channel = 0 ;
                     HIRect bounds;
                     CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
 
@@ -3171,11 +3171,15 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
 
 void wxWindowMac::OnPaint( wxPaintEvent & WXUNUSED(event) )
 {
-    if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL
-         && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
-        CallNextEventHandler(
-            (EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() ,
-            (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
+    // for native controls: call their native paint method
+    if ( !MacIsUserPane() || ( IsTopLevel() && GetBackgroundStyle() == wxBG_STYLE_SYSTEM ) )
+    {
+        if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL
+             && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+            CallNextEventHandler(
+                (EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() ,
+                (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
+    }
 }
 
 void wxWindowMac::MacHandleControlClick(WXWidget WXUNUSED(control),
