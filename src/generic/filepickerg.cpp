@@ -55,7 +55,7 @@ bool wxGenericFileDirButton::Create( wxWindow *parent, wxWindowID id,
     }
 
     // and handle user clicks on it
-    Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
             wxCommandEventHandler(wxGenericFileDirButton::OnButtonClick),
             NULL, this);
 
