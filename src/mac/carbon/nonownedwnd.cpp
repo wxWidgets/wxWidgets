@@ -898,19 +898,18 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
     if ( !wxWindow::SetBackgroundColour(col) && m_hasBgCol )
         return false ;
     
-    if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground)) )
+    if ( GetBackgroundStyle() != wxBG_STYLE_CUSTOM )
     {
-        SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDocumentWindowBackground, false ) ;
-        SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-    }
-    else if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)) )
-    {
-        SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDialogBackgroundActive, false ) ;
-        SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-    }
-    else
-    {
-        SetBackgroundStyle(wxBG_STYLE_COLOUR);
+        if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground)) )
+        {
+            SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDocumentWindowBackground, false ) ;
+            SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+        }
+        else if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)) )
+        {
+            SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDialogBackgroundActive, false ) ;
+            SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+        }
     }
     return true;
 }    
