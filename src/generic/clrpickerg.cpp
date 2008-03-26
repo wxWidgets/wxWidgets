@@ -58,7 +58,7 @@ bool wxGenericColourButton::Create( wxWindow *parent, wxWindowID id,
     }
 
     // and handle user clicks on it
-    Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
             wxCommandEventHandler(wxGenericColourButton::OnButtonClick),
             NULL, this);
 
@@ -105,7 +105,7 @@ void wxGenericColourButton::UpdateColour()
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( wxBrush(m_colour) );
     dc.DrawRectangle( 0,0,m_bitmap.GetWidth(),m_bitmap.GetHeight() );
-    
+
     if ( HasFlag(wxCLRP_SHOW_LABEL) )
     {
         wxColour col( ~m_colour.Red(), ~m_colour.Green(), ~m_colour.Blue() );
@@ -113,7 +113,7 @@ void wxGenericColourButton::UpdateColour()
         dc.SetFont( GetFont() );
         dc.DrawText( m_colour.GetAsString(wxC2S_HTML_SYNTAX), 0, 0 );
     }
-    
+
     dc.SelectObject( wxNullBitmap );
     SetBitmapLabel( m_bitmap );
 }
