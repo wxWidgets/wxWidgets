@@ -1000,17 +1000,19 @@ void  wxNonOwnedWindow::DoMacCreateRealWindow(
     }
     else if ( HasFlag( wxPOPUP_WINDOW ) )
     {
-        // TEMPORARY HACK!
-        // Until we've got a real wxPopupWindow class on wxMac make it a
-        // little easier for wxFrame to be used to emulate it and workaround
-        // the lack of wxPopupWindow.
         if ( HasFlag( wxBORDER_NONE ) )
+        {
             wclass = kHelpWindowClass ;   // has no border
+            attr |= kWindowNoShadowAttribute;
+        }
         else
+        {
             wclass = kPlainWindowClass ;  // has a single line border, it will have to do for now
-        //attr |= kWindowNoShadowAttribute; // turn off the shadow  Should we??
-        group = GetWindowGroupOfClass(    // float above other windows
-            kFloatingWindowClass) ;
+        }
+        group = GetWindowGroupOfClass(kFloatingWindowClass) ;
+        // make sure we don't deactivate something
+        activationScopeSet = true;
+        activationScope = kWindowActivationScopeNone;
     }
     else if ( HasFlag( wxCAPTION ) )
     {
