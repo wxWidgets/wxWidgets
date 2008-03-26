@@ -32,7 +32,7 @@ class WXDLLIMPEXP_FWD_CORE wxClipboard;
 // with wxDataObject.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxClipboardBase : public wxObject
+class WXDLLIMPEXP_CORE wxClipboardBase : public wxObject
 {
 public:
     wxClipboardBase() { m_usePrimary = false; }
@@ -129,7 +129,7 @@ public:
 // helpful class for opening the clipboard and automatically closing it
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxClipboardLocker
+class WXDLLIMPEXP_CORE wxClipboardLocker
 {
 public:
     wxClipboardLocker(wxClipboard *clipboard = (wxClipboard *)NULL)

@@ -27,7 +27,7 @@
 //-----------------------------------------------------------------------------
 
 
-class WXDLLEXPORT wxPostScriptDC : public wxDC
+class WXDLLIMPEXP_CORE wxPostScriptDC : public wxDC
 {
 public:
     wxPostScriptDC();
@@ -39,7 +39,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPostScriptDC)
 };
 
-class WXDLLEXPORT wxPostScriptDCImpl : public wxDCImpl
+class WXDLLIMPEXP_CORE wxPostScriptDCImpl : public wxDCImpl
 {
 public:
     wxPostScriptDCImpl( wxPrinterDC *owner );

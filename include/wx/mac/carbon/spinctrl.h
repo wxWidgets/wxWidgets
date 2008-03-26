@@ -33,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxSpinCtrlButton;
 // wxSpinCtrl is a combination of wxTextCtrl and wxSpinButton
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSpinCtrl : public wxControl
+class WXDLLIMPEXP_CORE wxSpinCtrl : public wxControl
 {
 public:
     wxSpinCtrl() { Init(); }
@@ -125,7 +125,7 @@ private:
 
 #include "wx/textctrl.h"
 
-class WXDLLEXPORT wxSpinCtrl : public wxTextCtrl
+class WXDLLIMPEXP_CORE wxSpinCtrl : public wxTextCtrl
 {
 public:
     wxSpinCtrl() { Init(); }

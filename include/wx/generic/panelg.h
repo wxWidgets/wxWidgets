@@ -21,13 +21,13 @@
 
 class WXDLLIMPEXP_FWD_CORE wxControlContainer;
 
-extern WXDLLEXPORT_DATA(const char) wxPanelNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxPanelNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxPanel contains other controls and implements TAB traversal between them
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPanel : public wxWindow
+class WXDLLIMPEXP_CORE wxPanel : public wxWindow
 {
 public:
     wxPanel() { Init(); }

@@ -32,7 +32,7 @@ class WXDLLIMPEXP_FWD_CORE wxSelectionStore;
     It emits the same events as wxListBox and the same event macros may be used
     with it.
  */
-class WXDLLEXPORT wxVListBox : public wxVScrolledWindow
+class WXDLLIMPEXP_CORE wxVListBox : public wxVScrolledWindow
 {
 public:
     // constructors and such

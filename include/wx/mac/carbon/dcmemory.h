@@ -14,7 +14,7 @@
 
 #include "wx/mac/carbon/dcclient.h"
 
-class WXDLLEXPORT wxMemoryDCImpl: public wxPaintDCImpl
+class WXDLLIMPEXP_CORE wxMemoryDCImpl: public wxPaintDCImpl
 {
 public:
     wxMemoryDCImpl( wxMemoryDC *owner );

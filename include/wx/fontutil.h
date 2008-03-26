@@ -65,7 +65,7 @@ enum wxXLFDField
 // functions, the user code can only get the objects of this type from
 // somewhere and pass it somewhere else (possibly save them somewhere using
 // ToString() and restore them using FromString())
-class WXDLLEXPORT wxNativeFontInfo
+class WXDLLIMPEXP_CORE wxNativeFontInfo
 {
 public:
 #if wxUSE_PANGO

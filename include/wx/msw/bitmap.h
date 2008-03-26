@@ -44,7 +44,7 @@ enum wxBitmapTransparency
 // NOTE: for wxMSW we don't use the wxBitmapBase base class declared in bitmap.h!
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmap : public wxGDIImage
+class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later
@@ -207,7 +207,7 @@ private:
 // wxMask: a mono bitmap used for drawing bitmaps transparently.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMask : public wxObject
+class WXDLLIMPEXP_CORE wxMask : public wxObject
 {
 public:
     wxMask();
@@ -251,7 +251,7 @@ protected:
 // NOTE: for wxMSW we don't use the wxBitmapHandler class declared in bitmap.h!
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmapHandler : public wxGDIImageHandler
+class WXDLLIMPEXP_CORE wxBitmapHandler : public wxGDIImageHandler
 {
 public:
     wxBitmapHandler() { }

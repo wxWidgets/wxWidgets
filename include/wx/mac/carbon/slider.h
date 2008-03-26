@@ -16,10 +16,10 @@
 #include "wx/slider.h"
 #include "wx/stattext.h"
 
-WXDLLEXPORT_DATA(extern const char) wxSliderNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxSliderNameStr[];
 
 // Slider
-class WXDLLEXPORT wxSlider: public wxSliderBase
+class WXDLLIMPEXP_CORE wxSlider: public wxSliderBase
 {
     DECLARE_DYNAMIC_CLASS(wxSlider)
 

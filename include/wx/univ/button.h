@@ -29,7 +29,7 @@ class WXDLLIMPEXP_FWD_CORE wxInputHandler;
 // wxButton: a push button
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxButton : public wxButtonBase
+class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
 public:
     wxButton() { Init(); }

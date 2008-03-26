@@ -15,7 +15,7 @@
 #include "wx/defs.h"
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxBitmapCache
+class WXDLLIMPEXP_CORE wxBitmapCache
 {
 public:
     wxBitmapCache()

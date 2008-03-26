@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 #define wxFILTER_INCLUDE_CHAR_LIST 0x0040
 #define wxFILTER_EXCLUDE_CHAR_LIST 0x0080
 
-class WXDLLEXPORT wxTextValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
 {
 DECLARE_DYNAMIC_CLASS(wxTextValidator)
 public:

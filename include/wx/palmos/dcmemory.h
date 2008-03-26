@@ -15,7 +15,7 @@
 #include "wx/dcmemory.h"
 #include "wx/palmos/dc.h"
 
-class WXDLLEXPORT wxMemoryDCImpl: public wxPalmDCImpl
+class WXDLLIMPEXP_CORE wxMemoryDCImpl: public wxPalmDCImpl
 {
 public:
     wxMemoryDCImpl( wxMemoryDC *owner );

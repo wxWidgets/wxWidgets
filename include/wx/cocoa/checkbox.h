@@ -17,7 +17,7 @@
 // ========================================================================
 // wxCheckBox
 // ========================================================================
-class WXDLLEXPORT wxCheckBox: public wxCheckBoxBase , protected wxCocoaNSButton
+class WXDLLIMPEXP_CORE wxCheckBox: public wxCheckBoxBase , protected wxCocoaNSButton
 {
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
     DECLARE_EVENT_TABLE()

@@ -29,7 +29,7 @@ class WXDLLIMPEXP_FWD_CORE wxSpinButton;
 // wxNotebook
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNotebook : public wxNotebookBase
+class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {
 public:
     // ctors and such

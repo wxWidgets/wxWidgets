@@ -28,7 +28,7 @@
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
+class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase
 {
 public:
     // checkbox constants

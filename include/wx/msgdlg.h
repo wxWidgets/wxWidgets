@@ -18,9 +18,9 @@
 
 #include "wx/dialog.h"
 
-WXDLLEXPORT_DATA(extern const char) wxMessageBoxCaptionStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxMessageBoxCaptionStr[];
 
-class WXDLLEXPORT wxMessageDialogBase : public wxDialog
+class WXDLLIMPEXP_CORE wxMessageDialogBase : public wxDialog
 {
 public:
     // ctors
@@ -135,7 +135,7 @@ protected:
 // wxMessageBox: the simplest way to use wxMessageDialog
 // ----------------------------------------------------------------------------
 
-int WXDLLEXPORT wxMessageBox(const wxString& message,
+int WXDLLIMPEXP_CORE wxMessageBox(const wxString& message,
                              const wxString& caption = wxMessageBoxCaptionStr,
                              long style = wxOK | wxCENTRE,
                              wxWindow *parent = NULL,

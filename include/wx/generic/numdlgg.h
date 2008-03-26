@@ -28,7 +28,7 @@
 // wxNumberEntryDialog: a dialog with spin control, [ok] and [cancel] buttons
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNumberEntryDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxNumberEntryDialog : public wxDialog
 {
 public:
     wxNumberEntryDialog(wxWindow *parent,
@@ -64,15 +64,15 @@ private:
 // function to get a number from user
 // ----------------------------------------------------------------------------
 
-long WXDLLEXPORT
-wxGetNumberFromUser(const wxString& message,
-                    const wxString& prompt,
-                    const wxString& caption,
-                    long value = 0,
-                    long min = 0,
-                    long max = 100,
-                    wxWindow *parent = (wxWindow *)NULL,
-                    const wxPoint& pos = wxDefaultPosition);
+WXDLLIMPEXP_CORE long
+    wxGetNumberFromUser(const wxString& message,
+                        const wxString& prompt,
+                        const wxString& caption,
+                        long value = 0,
+                        long min = 0,
+                        long max = 100,
+                        wxWindow *parent = (wxWindow *)NULL,
+                        const wxPoint& pos = wxDefaultPosition);
 
 #endif // wxUSE_NUMBERDLG
 

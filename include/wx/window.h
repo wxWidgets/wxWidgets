@@ -87,7 +87,7 @@ class WXDLLIMPEXP_FWD_CORE wxAccessible;
 // ----------------------------------------------------------------------------
 
 // struct containing all the visual attributes of a control
-struct WXDLLEXPORT wxVisualAttributes
+struct WXDLLIMPEXP_CORE wxVisualAttributes
 {
     // the font used for control label/text inside it
     wxFont font;
@@ -129,13 +129,13 @@ enum wxShowEffect
 // (pseudo)template list classes
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_3(wxWindow, wxWindowBase, wxWindowList, wxWindowListNode, class WXDLLEXPORT);
+WX_DECLARE_LIST_3(wxWindow, wxWindowBase, wxWindowList, wxWindowListNode, class WXDLLIMPEXP_CORE);
 
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(wxWindowList) wxTopLevelWindows;
+extern WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
 extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
 
 // ----------------------------------------------------------------------------
@@ -149,7 +149,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
 // temporarily switches event handlers).
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowBase : public wxEvtHandler
+class WXDLLIMPEXP_CORE wxWindowBase : public wxEvtHandler
 {
 public:
     // creating the window
@@ -517,10 +517,10 @@ public:
     virtual wxSize GetWindowBorderSize() const;
 
     // wxSizer and friends use this to give a chance to a component to recalc
-    // its min size once one of the final size components is known. Override 
-    // this function when that is useful (such as for wxStaticText which can 
+    // its min size once one of the final size components is known. Override
+    // this function when that is useful (such as for wxStaticText which can
     // stretch over several lines). Parameter availableOtherDir
-    // tells the item how much more space there is available in the opposite 
+    // tells the item how much more space there is available in the opposite
     // direction (-1 if unknown).
     virtual bool InformFirstDirection( int WXUNUSED(direction), int WXUNUSED(size), int WXUNUSED(availableOtherDir) )
     { return false; }
@@ -1758,16 +1758,16 @@ inline wxWindow *wxWindowBase::GetGrandParent() const
 
 // Find the wxWindow at the current mouse position, also returning the mouse
 // position.
-extern WXDLLEXPORT wxWindow* wxFindWindowAtPointer(wxPoint& pt);
+extern WXDLLIMPEXP_CORE wxWindow* wxFindWindowAtPointer(wxPoint& pt);
 
 // Get the current mouse position.
-extern WXDLLEXPORT wxPoint wxGetMousePosition();
+extern WXDLLIMPEXP_CORE wxPoint wxGetMousePosition();
 
 // get the currently active window of this application or NULL
-extern WXDLLEXPORT wxWindow *wxGetActiveWindow();
+extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 
 // get the (first) top level parent window
-WXDLLEXPORT wxWindow* wxGetTopLevelParent(wxWindow *win);
+WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 #if WXWIN_COMPATIBILITY_2_6
     // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
@@ -1780,7 +1780,7 @@ WXDLLEXPORT wxWindow* wxGetTopLevelParent(wxWindow *win);
 // accessible object for windows
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowAccessible: public wxAccessible
+class WXDLLIMPEXP_CORE wxWindowAccessible: public wxAccessible
 {
 public:
     wxWindowAccessible(wxWindow* win): wxAccessible(win) { if (win) win->SetAccessible(this); }

@@ -38,7 +38,7 @@ class WXDLLIMPEXP_FWD_CORE wxSizer;
 // wxSizerFlags: flags used for an item in the sizer
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSizerFlags
+class WXDLLIMPEXP_CORE wxSizerFlags
 {
 public:
     // construct the flags object initialized with the given proportion (0 by
@@ -199,7 +199,7 @@ private:
 // wxSizerSpacer: used by wxSizerItem to represent a spacer
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSizerSpacer
+class WXDLLIMPEXP_CORE wxSizerSpacer
 {
 public:
     wxSizerSpacer(const wxSize& size) : m_size(size), m_isShown(true) { }
@@ -222,7 +222,7 @@ private:
 // wxSizerItem
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSizerItem : public wxObject
+class WXDLLIMPEXP_CORE wxSizerItem : public wxObject
 {
 public:
     // window
@@ -457,7 +457,7 @@ WX_DECLARE_EXPORTED_LIST( wxSizerItem, wxSizerItemList );
 // wxSizer
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSizer: public wxObject, public wxClientDataContainer
+class WXDLLIMPEXP_CORE wxSizer: public wxObject, public wxClientDataContainer
 {
 public:
     wxSizer() { m_containingWindow = NULL; }
@@ -687,7 +687,7 @@ private:
 // wxGridSizer
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridSizer: public wxSizer
+class WXDLLIMPEXP_CORE wxGridSizer: public wxSizer
 {
 public:
     wxGridSizer( int rows, int cols, int vgap, int hgap );
@@ -738,7 +738,7 @@ enum wxFlexSizerGrowMode
     wxFLEX_GROWMODE_ALL
 };
 
-class WXDLLEXPORT wxFlexGridSizer: public wxGridSizer
+class WXDLLIMPEXP_CORE wxFlexGridSizer: public wxGridSizer
 {
 public:
     // ctors/dtor
@@ -809,7 +809,7 @@ private:
 // wxBoxSizer
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBoxSizer: public wxSizer
+class WXDLLIMPEXP_CORE wxBoxSizer: public wxSizer
 {
 public:
     wxBoxSizer(int orient)
@@ -900,7 +900,7 @@ private:
 // Borrow unused flag value
 #define wxEXTEND_LAST_ON_EACH_LINE	wxFULL_REPAINT_ON_RESIZE
 
-class WXDLLEXPORT wxWrapSizer: public wxBoxSizer
+class WXDLLIMPEXP_CORE wxWrapSizer: public wxBoxSizer
 {
 public:
     wxWrapSizer( int orient=wxHORIZONTAL, int flags=wxEXTEND_LAST_ON_EACH_LINE );
@@ -930,7 +930,7 @@ protected:
 
 class WXDLLIMPEXP_FWD_CORE wxStaticBox;
 
-class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
+class WXDLLIMPEXP_CORE wxStaticBoxSizer: public wxBoxSizer
 {
 public:
     wxStaticBoxSizer(wxStaticBox *box, int orient);
@@ -962,7 +962,7 @@ private:
 
 #if wxUSE_BUTTON
 
-class WXDLLEXPORT wxStdDialogButtonSizer: public wxBoxSizer
+class WXDLLIMPEXP_CORE wxStdDialogButtonSizer: public wxBoxSizer
 {
 public:
     // Constructor just creates a new wxBoxSizer, not much else.

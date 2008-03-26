@@ -12,7 +12,7 @@
 #ifndef _WX_UNIV_STATTEXT_H_
 #define _WX_UNIV_STATTEXT_H_
 
-class WXDLLEXPORT wxStaticText : public wxStaticTextBase
+class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
 {
 public:
     wxStaticText() { }

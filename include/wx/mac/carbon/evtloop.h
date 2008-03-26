@@ -29,7 +29,7 @@
 
 #if wxMAC_USE_RUN_APP_EVENT_LOOP
 
-class WXDLLEXPORT wxGUIEventLoop : public wxEventLoopBase
+class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 {
 public:
     wxGUIEventLoop() { m_exitcode = 0; }
@@ -46,7 +46,7 @@ private:
 
 #else // manual event loop
 
-class WXDLLEXPORT wxGUIEventLoop : public wxEventLoopManual
+class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopManual
 {
 public:
     wxGUIEventLoop() { }

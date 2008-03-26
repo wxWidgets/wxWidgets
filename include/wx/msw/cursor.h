@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_FWD_CORE wxImage;
 
 // Cursor
-class WXDLLEXPORT wxCursor : public wxGDIImage
+class WXDLLIMPEXP_CORE wxCursor : public wxGDIImage
 {
 public:
     // constructors

@@ -13,7 +13,7 @@
 #define _WX_SCROLBAR_H_
 
 // Scrollbar item
-class WXDLLEXPORT wxScrollBar: public wxScrollBarBase
+class WXDLLIMPEXP_CORE wxScrollBar: public wxScrollBarBase
 {
 public:
     wxScrollBar() { m_pageSize = 0; m_viewSize = 0; m_objectSize = 0; }

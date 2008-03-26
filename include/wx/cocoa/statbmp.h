@@ -17,7 +17,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSImageView);
 // ========================================================================
 // wxStaticBitmap
 // ========================================================================
-class WXDLLEXPORT wxStaticBitmap : public wxStaticBitmapBase //, protected wxCocoaNSxxx
+class WXDLLIMPEXP_CORE wxStaticBitmap : public wxStaticBitmapBase //, protected wxCocoaNSxxx
 {
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
     DECLARE_EVENT_TABLE()

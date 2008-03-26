@@ -40,7 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 // wxWindow declaration for OS/2 PM
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowOS2 : public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindowOS2 : public wxWindowBase
 {
 public:
     wxWindowOS2()
@@ -556,8 +556,8 @@ public:
 // ---------------------------------------------------------------------------
 
 // kbd code translation
-WXDLLEXPORT int wxCharCodeOS2ToWX(int nKeySym);
-WXDLLEXPORT int wxCharCodeWXToOS2( int   nId
+WXDLLIMPEXP_CORE int wxCharCodeOS2ToWX(int nKeySym);
+WXDLLIMPEXP_CORE int wxCharCodeWXToOS2( int   nId
                                   ,bool* pbIsVirtual = NULL
                                  );
 

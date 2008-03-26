@@ -15,13 +15,13 @@
 #include "wx/gdiobj.h"
 #include "wx/os2/private.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
+WXDLLIMPEXP_DATA_CORE(extern const wxChar*) wxEmptyString;
 
 // ----------------------------------------------------------------------------
 // wxFont
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFont : public wxFontBase
+class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
     // ctors and such

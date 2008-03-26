@@ -46,7 +46,7 @@ enum wxGIFErrorCode
 // wxGIFDecoder class
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGIFDecoder : public wxAnimationDecoder
+class WXDLLIMPEXP_CORE wxGIFDecoder : public wxAnimationDecoder
 {
 public:
     // constructor, destructor, etc.

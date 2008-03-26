@@ -47,13 +47,13 @@
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
-extern WXDLLEXPORT_DATA(const char) wxButtonNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxButton: a push button
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxButtonBase : public wxControl
+class WXDLLIMPEXP_CORE wxButtonBase : public wxControl
 {
 public:
     wxButtonBase() { }

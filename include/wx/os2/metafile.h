@@ -33,7 +33,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxMetafile;
 
-class WXDLLEXPORT wxMetafileRefData: public wxGDIRefData
+class WXDLLIMPEXP_CORE wxMetafileRefData: public wxGDIRefData
 {
     friend class WXDLLIMPEXP_FWD_CORE wxMetafile;
 public:
@@ -49,7 +49,7 @@ public:
 
 #define M_METAFILEDATA ((wxMetafileRefData *)m_refData)
 
-class WXDLLEXPORT wxMetafile: public wxGDIObject
+class WXDLLIMPEXP_CORE wxMetafile: public wxGDIObject
 {
     DECLARE_DYNAMIC_CLASS(wxMetafile)
 public:
@@ -73,7 +73,7 @@ protected:
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 };
 
-class WXDLLEXPORT wxMetafileDCImpl: public wxPMDCImpl
+class WXDLLIMPEXP_CORE wxMetafileDCImpl: public wxPMDCImpl
 {
 public:
     wxMetafileDCImpl(wxDC *owner, const wxString& file = wxEmptyString);
@@ -106,7 +106,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxMetafileDCImpl)
 };
 
-class WXDLLEXPORT wxMetafileDC: public wxDC
+class WXDLLIMPEXP_CORE wxMetafileDC: public wxDC
 {
 public:
     // Don't supply origin and extent
@@ -148,10 +148,10 @@ private:
 
 // No origin or extent
 #define wxMakeMetaFilePlaceable wxMakeMetafilePlaceable
-bool WXDLLEXPORT wxMakeMetafilePlaceable(const wxString& filename, float scale = 1.0);
+bool WXDLLIMPEXP_CORE wxMakeMetafilePlaceable(const wxString& filename, float scale = 1.0);
 
 // Optional origin and extent
-bool WXDLLEXPORT wxMakeMetaFilePlaceable( const wxString& filename
+bool WXDLLIMPEXP_CORE wxMakeMetaFilePlaceable( const wxString& filename
                                          ,int x1
                                          ,int y1
                                          ,int x2
@@ -168,7 +168,7 @@ bool WXDLLEXPORT wxMakeMetaFilePlaceable( const wxString& filename
 // use.
 
 #if wxUSE_DRAG_AND_DROP
-class WXDLLEXPORT wxMetafileDataObject : public wxDataObject
+class WXDLLIMPEXP_CORE wxMetafileDataObject : public wxDataObject
 {
 public:
     // ctors

@@ -54,13 +54,13 @@ enum
 
 typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 
-extern WXDLLEXPORT_DATA(const char) wxNotebookNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxNotebookNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxNotebookBase: define wxNotebook interface
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNotebookBase : public wxBookCtrlBase
+class WXDLLIMPEXP_CORE wxNotebookBase : public wxBookCtrlBase
 {
 public:
     // ctors
@@ -118,7 +118,7 @@ protected:
 // notebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNotebookEvent : public wxBookCtrlBaseEvent
+class WXDLLIMPEXP_CORE wxNotebookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,

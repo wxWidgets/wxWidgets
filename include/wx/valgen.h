@@ -3,7 +3,7 @@
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
 // Created:     Jan 22 1999
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Julian Smart (assigned from Kevin)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ class WXDLLIMPEXP_FWD_BASE wxDateTime;
 // It doesn't do any validation so its name is a slight misnomer.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxGenericValidator: public wxValidator
 {
 public:
     // Different constructors: each of them creates a validator which can only

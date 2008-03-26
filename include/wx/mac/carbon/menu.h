@@ -20,7 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 // Menu
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenu : public wxMenuBase
+class WXDLLIMPEXP_CORE wxMenu : public wxMenuBase
 {
 public:
     // ctors & dtor
@@ -99,7 +99,7 @@ private:
 // Menu Bar (a la Windows)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenuBar : public wxMenuBarBase
+class WXDLLIMPEXP_CORE wxMenuBar : public wxMenuBarBase
 {
 public:
     // ctors & dtor

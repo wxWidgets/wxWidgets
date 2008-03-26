@@ -15,7 +15,7 @@
 #include "wx/dcscreen.h"
 #include "wx/cocoa/dc.h"
 
-class WXDLLEXPORT wxScreenDCImpl: public wxCocoaDCImpl
+class WXDLLIMPEXP_CORE wxScreenDCImpl: public wxCocoaDCImpl
 {
     DECLARE_DYNAMIC_CLASS(wxScreenDCImpl)
 public:

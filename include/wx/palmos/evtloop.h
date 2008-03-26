@@ -16,7 +16,7 @@
 // wxEventLoop
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGUIEventLoop : public wxEventLoopBase
+class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 {
 public:
     wxGUIEventLoop();

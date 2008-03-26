@@ -38,7 +38,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollTimer;
 // wxScrollBar
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxScrollBar : public wxScrollBarBase,
+class WXDLLIMPEXP_CORE wxScrollBar : public wxScrollBarBase,
                                 public wxControlWithArrows
 {
 public:
@@ -192,7 +192,7 @@ private:
     // the object handling the arrows
     wxScrollArrows m_arrows;
 
-    friend WXDLLEXPORT class wxControlRenderer; // for geometry methods
+    friend WXDLLIMPEXP_CORE class wxControlRenderer; // for geometry methods
     friend class wxStdScrollBarInputHandler; // for geometry methods
 
     DECLARE_EVENT_TABLE()
@@ -203,7 +203,7 @@ private:
 // Standard scrollbar input handler which can be used as a base class
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStdScrollBarInputHandler : public wxStdInputHandler
+class WXDLLIMPEXP_CORE wxStdScrollBarInputHandler : public wxStdInputHandler
 {
 public:
     // constructor takes a renderer (used for scrollbar hit testing) and the

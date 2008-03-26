@@ -20,7 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 // ========================================================================
 // wxTopLevelWindowCocoa
 // ========================================================================
-class WXDLLEXPORT wxTopLevelWindowCocoa : public wxTopLevelWindowBase, protected wxCocoaNSWindow
+class WXDLLIMPEXP_CORE wxTopLevelWindowCocoa : public wxTopLevelWindowBase, protected wxCocoaNSWindow
 {
     DECLARE_EVENT_TABLE();
     DECLARE_NO_COPY_CLASS(wxTopLevelWindowCocoa);
@@ -126,6 +126,6 @@ protected:
 };
 
 // list of all frames and modeless dialogs
-extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
+extern WXDLLIMPEXP_DATA_CORE(wxWindowList) wxModelessWindows;
 
 #endif // __WX_COCOA_TOPLEVEL_H__

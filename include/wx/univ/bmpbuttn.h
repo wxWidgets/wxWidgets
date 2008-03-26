@@ -12,7 +12,7 @@
 #ifndef _WX_UNIV_BMPBUTTN_H_
 #define _WX_UNIV_BMPBUTTN_H_
 
-class WXDLLEXPORT wxBitmapButton : public wxBitmapButtonBase
+class WXDLLIMPEXP_CORE wxBitmapButton : public wxBitmapButtonBase
 {
 public:
     wxBitmapButton() { }

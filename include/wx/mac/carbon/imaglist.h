@@ -19,7 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxColour;
 
-class WXDLLEXPORT wxImageList: public wxObject
+class WXDLLIMPEXP_CORE wxImageList: public wxObject
 {
 public:
     wxImageList() { m_width = m_height = 0; }

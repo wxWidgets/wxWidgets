@@ -25,8 +25,8 @@
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
-extern WXDLLEXPORT_DATA(const char) wxGetTextFromUserPromptStr[];
-extern WXDLLEXPORT_DATA(const char) wxGetPasswordFromUserPromptStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxGetTextFromUserPromptStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxGetPasswordFromUserPromptStr[];
 
 #define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
 
@@ -34,7 +34,7 @@ extern WXDLLEXPORT_DATA(const char) wxGetPasswordFromUserPromptStr[];
 // wxTextEntryDialog: a dialog with text control, [ok] and [cancel] buttons
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextEntryDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxTextEntryDialog : public wxDialog
 {
 public:
     wxTextEntryDialog(wxWindow *parent,
@@ -72,7 +72,7 @@ private:
 // wxPasswordEntryDialog: dialog with password control, [ok] and [cancel]
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPasswordEntryDialog : public wxTextEntryDialog
+class WXDLLIMPEXP_CORE wxPasswordEntryDialog : public wxTextEntryDialog
 {
 public:
     wxPasswordEntryDialog(wxWindow *parent,
@@ -90,23 +90,23 @@ private:
 // function to get a string from user
 // ----------------------------------------------------------------------------
 
-wxString WXDLLEXPORT
-wxGetTextFromUser(const wxString& message,
-                  const wxString& caption = wxGetTextFromUserPromptStr,
-                  const wxString& default_value = wxEmptyString,
-                  wxWindow *parent = (wxWindow *) NULL,
-                  wxCoord x = wxDefaultCoord,
-                  wxCoord y = wxDefaultCoord,
-                  bool centre = true);
+WXDLLIMPEXP_CORE wxString
+    wxGetTextFromUser(const wxString& message,
+                    const wxString& caption = wxGetTextFromUserPromptStr,
+                    const wxString& default_value = wxEmptyString,
+                    wxWindow *parent = (wxWindow *) NULL,
+                    wxCoord x = wxDefaultCoord,
+                    wxCoord y = wxDefaultCoord,
+                    bool centre = true);
 
-wxString WXDLLEXPORT
-wxGetPasswordFromUser(const wxString& message,
-                      const wxString& caption = wxGetPasswordFromUserPromptStr,
-                      const wxString& default_value = wxEmptyString,
-                      wxWindow *parent = (wxWindow *) NULL,
-                      wxCoord x = wxDefaultCoord,
-                      wxCoord y = wxDefaultCoord,
-                      bool centre = true);
+WXDLLIMPEXP_CORE wxString
+    wxGetPasswordFromUser(const wxString& message,
+                        const wxString& caption = wxGetPasswordFromUserPromptStr,
+                        const wxString& default_value = wxEmptyString,
+                        wxWindow *parent = (wxWindow *) NULL,
+                        wxCoord x = wxDefaultCoord,
+                        wxCoord y = wxDefaultCoord,
+                        bool centre = true);
 
 #endif
     // wxUSE_TEXTDLG

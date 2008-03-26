@@ -35,7 +35,7 @@ typedef wxString wxControlAction;
 // wxControl and wxTopLevelWindow).
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxInputConsumer
+class WXDLLIMPEXP_CORE wxInputConsumer
 {
 public:
     wxInputConsumer() { m_inputHandler = NULL; }

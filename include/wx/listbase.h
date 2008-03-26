@@ -161,7 +161,7 @@ enum
 // TODO: this should be renamed to wxItemAttr or something general like this
 //       and used as base class for wxTextAttr which duplicates this class
 //       entirely currently
-class WXDLLEXPORT wxListItemAttr
+class WXDLLIMPEXP_CORE wxListItemAttr
 {
 public:
     // ctors
@@ -213,7 +213,7 @@ private:
 // wxListItem: the item or column info, used to exchange data with wxListCtrl
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListItem : public wxObject
+class WXDLLIMPEXP_CORE wxListItem : public wxObject
 {
 public:
     wxListItem() { Init(); m_attr = NULL; }
@@ -371,7 +371,7 @@ private:
 // wxListEvent - the event class for the wxListCtrl notifications
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListEvent : public wxNotifyEvent
+class WXDLLIMPEXP_CORE wxListEvent : public wxNotifyEvent
 {
 public:
     wxListEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)

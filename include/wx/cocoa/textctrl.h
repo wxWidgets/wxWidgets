@@ -17,7 +17,7 @@
 // ========================================================================
 // wxTextCtrl
 // ========================================================================
-class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase, protected wxCocoaNSTextField
+class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase, protected wxCocoaNSTextField
 {
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
     DECLARE_EVENT_TABLE()

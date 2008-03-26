@@ -23,7 +23,7 @@
  * Use this instead of wxMDIParentFrame
  */
 
-class WXDLLEXPORT wxDocMDIParentFrame: public wxMDIParentFrame
+class WXDLLIMPEXP_CORE wxDocMDIParentFrame: public wxMDIParentFrame
 {
 public:
     wxDocMDIParentFrame();
@@ -58,7 +58,7 @@ private:
  * Use this instead of wxMDIChildFrame
  */
 
-class WXDLLEXPORT wxDocMDIChildFrame: public wxMDIChildFrame
+class WXDLLIMPEXP_CORE wxDocMDIChildFrame: public wxMDIChildFrame
 {
 public:
     wxDocMDIChildFrame();

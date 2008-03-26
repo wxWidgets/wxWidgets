@@ -93,7 +93,7 @@
 
 #if wxUSE_GUI
 
-WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
+WXDLLIMPEXP_CORE int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
                                   WXLPARAM lData, WXWPARAM wData,
                                   int x, int y, int cx, int cy,
                                   unsigned int flags);
@@ -101,10 +101,10 @@ WXDLLEXPORT int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
     wxMSLU_DrawStateW((WXHDC)dc,(WXHBRUSH)br,(WXFARPROC)func, \
                       ld, wd, x, y, cx, cy, flags)
 
-WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn);
+WXDLLIMPEXP_CORE int wxMSLU_GetOpenFileNameW(void *ofn);
 #define GetOpenFileNameW(ofn) wxMSLU_GetOpenFileNameW((void*)ofn)
 
-WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn);
+WXDLLIMPEXP_CORE int wxMSLU_GetSaveFileNameW(void *ofn);
 #define GetSaveFileNameW(ofn) wxMSLU_GetSaveFileNameW((void*)ofn)
 
 #endif // wxUSE_GUI

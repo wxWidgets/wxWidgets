@@ -12,7 +12,7 @@
 #ifndef _WX_PNGHAND_H_
 #define _WX_PNGHAND_H_
 
-class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
+class WXDLLIMPEXP_CORE wxPNGFileHandler: public wxBitmapHandler
 {
     DECLARE_DYNAMIC_CLASS(wxPNGFileHandler)
 public:

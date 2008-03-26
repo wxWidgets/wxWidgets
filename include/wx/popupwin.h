@@ -23,7 +23,7 @@
 // combobox popups and such.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPopupWindowBase : public wxNonOwnedWindow
+class WXDLLIMPEXP_CORE wxPopupWindowBase : public wxNonOwnedWindow
 {
 public:
     wxPopupWindowBase() { }
@@ -82,7 +82,7 @@ public:
 class WXDLLIMPEXP_FWD_CORE wxPopupWindowHandler;
 class WXDLLIMPEXP_FWD_CORE wxPopupFocusHandler;
 
-class WXDLLEXPORT wxPopupTransientWindow : public wxPopupWindow
+class WXDLLIMPEXP_CORE wxPopupTransientWindow : public wxPopupWindow
 {
 public:
     // ctors
@@ -162,7 +162,7 @@ protected:
 class WXDLLIMPEXP_FWD_CORE wxComboBox;
 class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 
-class WXDLLEXPORT wxPopupComboWindow : public wxPopupTransientWindow
+class WXDLLIMPEXP_CORE wxPopupComboWindow : public wxPopupTransientWindow
 {
 public:
     wxPopupComboWindow() { m_combo = NULL; }

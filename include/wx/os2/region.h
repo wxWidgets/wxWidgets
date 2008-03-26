@@ -15,7 +15,7 @@
 #include "wx/list.h"
 #include "wx/os2/private.h"
 
-class WXDLLEXPORT wxRegion : public wxRegionWithCombine
+class WXDLLIMPEXP_CORE wxRegion : public wxRegionWithCombine
 {
 public:
     wxRegion( wxCoord x
@@ -80,7 +80,7 @@ protected:
 
 }; // end of CLASS wxRegion
 
-class WXDLLEXPORT wxRegionIterator : public wxObject
+class WXDLLIMPEXP_CORE wxRegionIterator : public wxObject
 {
 public:
     wxRegionIterator();

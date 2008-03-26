@@ -17,7 +17,7 @@
 // Message box dialog
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMessageDialog : public wxMessageDialogBase
+class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase
 {
 public:
     wxMessageDialog(wxWindow *parent,

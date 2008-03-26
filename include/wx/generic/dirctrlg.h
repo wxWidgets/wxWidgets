@@ -58,7 +58,7 @@ enum
 // wxDirItemData
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirItemData : public wxTreeItemData
+class WXDLLIMPEXP_CORE wxDirItemData : public wxTreeItemData
 {
 public:
     wxDirItemData(const wxString& path, const wxString& name, bool isDir);
@@ -80,7 +80,7 @@ public:
 
 class WXDLLIMPEXP_FWD_CORE wxDirFilterListCtrl;
 
-class WXDLLEXPORT wxGenericDirCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxGenericDirCtrl: public wxControl
 {
 public:
     wxGenericDirCtrl();
@@ -206,7 +206,7 @@ private:
 // wxDirFilterListCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirFilterListCtrl: public wxChoice
+class WXDLLIMPEXP_CORE wxDirFilterListCtrl: public wxChoice
 {
 public:
     wxDirFilterListCtrl() { Init(); }
@@ -258,7 +258,7 @@ protected:
 
 #if wxUSE_DIRDLG || wxUSE_FILEDLG
 
-class WXDLLEXPORT wxFileIconsTable
+class WXDLLIMPEXP_CORE wxFileIconsTable
 {
 public:
     wxFileIconsTable();
@@ -288,7 +288,7 @@ protected:
 };
 
 // The global fileicons table
-extern WXDLLEXPORT_DATA(wxFileIconsTable *) wxTheFileIconsTable;
+extern WXDLLIMPEXP_DATA_CORE(wxFileIconsTable *) wxTheFileIconsTable;
 
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG
 

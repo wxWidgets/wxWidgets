@@ -18,7 +18,7 @@
 
 #include "wx/helpbase.h"
 
-class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
+class WXDLLIMPEXP_CORE wxWinHelpController: public wxHelpControllerBase
 {
   DECLARE_CLASS(wxWinHelpController)
 

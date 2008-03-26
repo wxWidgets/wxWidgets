@@ -18,7 +18,7 @@
 #include "wx/cmndata.h"
 #include "wx/os2/dc.h"
 
-class WXDLLEXPORT wxPrinterDCImpl: public wxPMDCImpl
+class WXDLLIMPEXP_CORE wxPrinterDCImpl: public wxPMDCImpl
 {
  public:
     // Create a printer DC
@@ -64,7 +64,7 @@ private:
 }; // end of CLASS wxPrinterDC
 
 // Gets an HDC for the specified printer configuration
-WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& rData);
+WXHDC WXDLLIMPEXP_CORE wxGetPrinterDC(const wxPrintData& rData);
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 

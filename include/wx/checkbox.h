@@ -49,13 +49,13 @@ enum wxCheckBoxState
 };
 
 
-extern WXDLLEXPORT_DATA(const char) wxCheckBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxCheckBox: a control which shows a label and a box which may be checked
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCheckBoxBase : public wxControl
+class WXDLLIMPEXP_CORE wxCheckBoxBase : public wxControl
 {
 public:
     wxCheckBoxBase() { }

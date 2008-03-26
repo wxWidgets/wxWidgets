@@ -14,7 +14,7 @@
 
 #include "wx/list.h"
 
-class WXDLLEXPORT wxRegion : public wxRegionWithCombine
+class WXDLLIMPEXP_CORE wxRegion : public wxRegionWithCombine
 {
 public:
     wxRegion(long x, long y, long w, long h);
@@ -59,7 +59,7 @@ private:
     friend class WXDLLIMPEXP_FWD_CORE wxRegionIterator;
 };
 
-class WXDLLEXPORT wxRegionIterator : public wxObject
+class WXDLLIMPEXP_CORE wxRegionIterator : public wxObject
 {
 public:
     wxRegionIterator();

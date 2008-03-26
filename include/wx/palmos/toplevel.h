@@ -16,7 +16,7 @@
 // wxTopLevelWindowPalm
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTopLevelWindowPalm : public wxTopLevelWindowBase
+class WXDLLIMPEXP_CORE wxTopLevelWindowPalm : public wxTopLevelWindowBase
 {
 public:
     // constructors and such

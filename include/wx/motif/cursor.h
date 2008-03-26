@@ -18,7 +18,7 @@
 class WXDLLIMPEXP_FWD_CORE wxImage;
 
 // Cursor
-class WXDLLEXPORT wxCursor : public wxGDIObject
+class WXDLLIMPEXP_CORE wxCursor : public wxGDIObject
 {
 public:
     wxCursor();
@@ -57,7 +57,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 
-extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);
+extern WXDLLIMPEXP_CORE void wxSetCursor(const wxCursor& cursor);
 
 #endif
 // _WX_CURSOR_H_

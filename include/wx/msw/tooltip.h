@@ -16,7 +16,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
-class WXDLLEXPORT wxToolTip : public wxObject
+class WXDLLIMPEXP_CORE wxToolTip : public wxObject
 {
 public:
     // ctor & dtor

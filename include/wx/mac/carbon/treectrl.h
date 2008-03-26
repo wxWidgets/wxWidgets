@@ -69,7 +69,7 @@ enum {
     };
 #endif
 
-class WXDLLEXPORT wxTreeItem: public wxObject
+class WXDLLIMPEXP_CORE wxTreeItem: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxTreeItem)
 
@@ -109,7 +109,7 @@ public:
     inline void SetData(long data) { m_data = data; }
 };
 
-class WXDLLEXPORT wxTreeCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxTreeCtrl: public wxControl
 {
 public:
    /*
@@ -252,7 +252,7 @@ protected:
  wxEVT_COMMAND_TREE_KEY_DOWN
 */
 
-class WXDLLEXPORT wxTreeEvent: public wxCommandEvent
+class WXDLLIMPEXP_CORE wxTreeEvent: public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS(wxTreeEvent)
 

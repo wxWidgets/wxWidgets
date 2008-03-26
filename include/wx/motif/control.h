@@ -17,7 +17,7 @@
 #include "wx/validate.h"
 
 // General item class
-class WXDLLEXPORT wxControl: public wxControlBase
+class WXDLLIMPEXP_CORE wxControl: public wxControlBase
 {
     DECLARE_ABSTRACT_CLASS(wxControl)
 

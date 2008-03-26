@@ -25,7 +25,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindowMGL;
 // wxWindowDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowDC : public wxDC
+class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
 {
 public:
     wxWindowDC() {}
@@ -44,7 +44,7 @@ private:
 // wxClientDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxClientDC : public wxWindowDC
+class WXDLLIMPEXP_CORE wxClientDC : public wxWindowDC
 {
 public:
     wxClientDC() : wxWindowDC() {}
@@ -58,7 +58,7 @@ private:
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPaintDC : public wxClientDC
+class WXDLLIMPEXP_CORE wxPaintDC : public wxClientDC
 {
 public:
     wxPaintDC() : wxClientDC() {}

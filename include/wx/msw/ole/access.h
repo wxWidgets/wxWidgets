@@ -29,7 +29,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 // wxAccessible implements accessibility behaviour.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAccessible : public wxAccessibleBase
+class WXDLLIMPEXP_CORE wxAccessible : public wxAccessibleBase
 {
 public:
     wxAccessible(wxWindow *win = NULL);

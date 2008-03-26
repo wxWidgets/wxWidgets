@@ -29,7 +29,7 @@
 // element or one unchangeable bitmap otherwise.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxOwnerDrawn
+class WXDLLIMPEXP_CORE wxOwnerDrawn
 {
 public:
   // ctor & dtor

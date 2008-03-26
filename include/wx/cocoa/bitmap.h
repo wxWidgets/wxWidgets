@@ -26,7 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 // ========================================================================
 
 // A mask is a 1-bit alpha bitmap used for drawing bitmaps transparently.
-class WXDLLEXPORT wxMask: public wxObject
+class WXDLLIMPEXP_CORE wxMask: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxMask)
 public:
@@ -62,7 +62,7 @@ protected:
 // ========================================================================
 // wxBitmap
 // ========================================================================
-class WXDLLEXPORT wxBitmap: public wxGDIObject
+class WXDLLIMPEXP_CORE wxBitmap: public wxGDIObject
 {
 // ------------------------------------------------------------------------
 // initialization

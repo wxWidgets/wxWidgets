@@ -12,7 +12,7 @@
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
 
-class WXDLLEXPORT wxRadioButton: public wxControl
+class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
 {
 public:
     // ctors and creation functions

@@ -22,7 +22,7 @@ class WXDLLIMPEXP_FWD_CORE wxSearchTextCtrl;
 // wxSearchCtrl is a combination of wxTextCtrl and wxSearchButton
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSearchCtrl : public wxSearchCtrlBase
+class WXDLLIMPEXP_CORE wxSearchCtrl : public wxSearchCtrlBase
 {
 public:
     // creation

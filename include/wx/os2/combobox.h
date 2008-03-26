@@ -18,7 +18,7 @@
 #if wxUSE_COMBOBOX
 
 // Combobox item
-class WXDLLEXPORT wxComboBox : public wxChoice,
+class WXDLLIMPEXP_CORE wxComboBox : public wxChoice,
                                public wxTextEntry
 {
 

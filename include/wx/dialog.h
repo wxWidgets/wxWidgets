@@ -53,9 +53,9 @@ enum wxDialogLayoutAdaptationMode
     wxDIALOG_ADAPTATION_MODE_DISABLED = 2   // disable this dialog overriding global status
 };
 
-extern WXDLLEXPORT_DATA(const char) wxDialogNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
 
-class WXDLLEXPORT wxDialogBase : public wxTopLevelWindow
+class WXDLLIMPEXP_CORE wxDialogBase : public wxTopLevelWindow
 {
 public:
     enum
@@ -235,7 +235,7 @@ private:
  * a help mechanism.
  */
 
-class WXDLLEXPORT wxDialogLayoutAdapter: public wxObject
+class WXDLLIMPEXP_CORE wxDialogLayoutAdapter: public wxObject
 {
     DECLARE_CLASS(wxDialogLayoutAdapter)
 public:
@@ -253,7 +253,7 @@ public:
  *
  */
 
-class WXDLLEXPORT wxStandardDialogLayoutAdapter: public wxDialogLayoutAdapter
+class WXDLLIMPEXP_CORE wxStandardDialogLayoutAdapter: public wxDialogLayoutAdapter
 {
     DECLARE_CLASS(wxStandardDialogLayoutAdapter)
 public:

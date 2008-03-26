@@ -22,7 +22,7 @@
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxMenuItem: public wxMenuItemBase
+class WXDLLIMPEXP_CORE wxMenuItem: public wxMenuItemBase
 {
 public:
     // ctor & dtor

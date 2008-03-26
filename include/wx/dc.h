@@ -46,7 +46,7 @@ class WXDLLIMPEXP_FWD_CORE wxPrintData;
 // wxDrawObject helper class
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDrawObject
+class WXDLLIMPEXP_CORE wxDrawObject
 {
 public:
 
@@ -1108,7 +1108,7 @@ private:
 // restore it automatically when the object goes out of scope
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDCTextColourChanger
+class WXDLLIMPEXP_CORE wxDCTextColourChanger
 {
 public:
     wxDCTextColourChanger(wxDC& dc) : m_dc(dc), m_colFgOld() { }
@@ -1144,7 +1144,7 @@ private:
 // restore it automatically when the object goes out of scope
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDCPenChanger
+class WXDLLIMPEXP_CORE wxDCPenChanger
 {
 public:
     wxDCPenChanger(wxDC& dc, const wxPen& pen) : m_dc(dc), m_penOld(dc.GetPen())
@@ -1171,7 +1171,7 @@ private:
 // restore it automatically when the object goes out of scope
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDCBrushChanger
+class WXDLLIMPEXP_CORE wxDCBrushChanger
 {
 public:
     wxDCBrushChanger(wxDC& dc, const wxBrush& brush) : m_dc(dc), m_brushOld(dc.GetBrush())
@@ -1198,7 +1198,7 @@ private:
 // destroys it in the dtor
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDCClipper
+class WXDLLIMPEXP_CORE wxDCClipper
 {
 public:
     wxDCClipper(wxDC& dc, const wxRegion& r) : m_dc(dc)

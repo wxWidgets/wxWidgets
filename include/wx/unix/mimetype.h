@@ -21,7 +21,7 @@ class wxMimeTypeCommands;
 WX_DEFINE_ARRAY_PTR(wxMimeTypeCommands *, wxMimeCommandsArray);
 
 // this is the real wxMimeTypesManager for Unix
-class WXDLLEXPORT wxMimeTypesManagerImpl
+class WXDLLIMPEXP_CORE wxMimeTypesManagerImpl
 {
 public:
     // ctor and dtor
@@ -145,7 +145,7 @@ protected:
 
 
 
-class WXDLLEXPORT wxFileTypeImpl
+class WXDLLIMPEXP_CORE wxFileTypeImpl
 {
 public:
     // initialization functions

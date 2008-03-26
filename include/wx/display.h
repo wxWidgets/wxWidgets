@@ -22,7 +22,7 @@
     WX_DECLARE_EXPORTED_OBJARRAY(wxVideoMode, wxArrayVideoModes);
 
     // default, uninitialized, video mode object
-    extern WXDLLEXPORT_DATA(const wxVideoMode) wxDefaultVideoMode;
+    extern WXDLLIMPEXP_DATA_CORE(const wxVideoMode) wxDefaultVideoMode;
 #endif // wxUSE_DISPLAY
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
@@ -37,7 +37,7 @@ class WXDLLIMPEXP_FWD_CORE wxDisplayImpl;
 // wxDisplay: represents a display/monitor attached to the system
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDisplay
+class WXDLLIMPEXP_CORE wxDisplay
 {
 public:
     // initialize the object containing all information about the given

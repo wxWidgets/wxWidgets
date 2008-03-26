@@ -39,7 +39,7 @@ enum wxBrushStyle
 
 
 // wxBrushBase
-class WXDLLEXPORT wxBrushBase: public wxGDIObject
+class WXDLLIMPEXP_CORE wxBrushBase: public wxGDIObject
 {
 public:
     virtual ~wxBrushBase() { }
@@ -94,7 +94,7 @@ public:
 #endif
 };
 
-extern WXDLLEXPORT_DATA(wxBrushList*)   wxTheBrushList;
+extern WXDLLIMPEXP_DATA_CORE(wxBrushList*)   wxTheBrushList;
 
 // provide comparison operators to allow code such as
 //

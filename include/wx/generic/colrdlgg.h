@@ -29,7 +29,7 @@
 
 #endif // wxUSE_SLIDER
 
-class WXDLLEXPORT wxGenericColourDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxGenericColourDialog : public wxDialog
 {
 public:
     wxGenericColourDialog();

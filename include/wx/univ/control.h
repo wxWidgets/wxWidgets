@@ -38,7 +38,7 @@ typedef wxString wxControlAction;
 // wxControl: the base class for all GUI controls
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxControl : public wxControlBase, public wxInputConsumer
+class WXDLLIMPEXP_CORE wxControl : public wxControlBase, public wxInputConsumer
 {
 public:
     wxControl() { Init(); }

@@ -123,7 +123,7 @@ protected:
 
 class WXDLLIMPEXP_FWD_CORE wxEventLoopImpl;
 
-class WXDLLEXPORT wxGUIEventLoop : public wxEventLoopBase
+class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 {
 public:
     wxGUIEventLoop() { m_impl = NULL; }
@@ -174,7 +174,7 @@ inline bool wxEventLoopBase::IsRunning() const { return GetActive() == this; }
 // implement modality, we will surely need platform-specific implementations
 // too, this generic implementation is here only temporarily to see how it
 // works
-class WXDLLEXPORT wxModalEventLoop : public wxGUIEventLoop
+class WXDLLIMPEXP_CORE wxModalEventLoop : public wxGUIEventLoop
 {
 public:
     wxModalEventLoop(wxWindow *winModal)

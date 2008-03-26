@@ -18,7 +18,7 @@
 #include "wx/cmndata.h"
 
 
-class WXDLLEXPORT wxColourDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {
 public:
     wxColourDialog() {}

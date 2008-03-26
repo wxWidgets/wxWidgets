@@ -16,7 +16,7 @@
 #include "wx/bitmap.h"
 #include "wx/brush.h"
 
-class WXDLLEXPORT wxBitmapButton : public wxBitmapButtonBase
+class WXDLLIMPEXP_CORE wxBitmapButton : public wxBitmapButtonBase
 {
 public:
     wxBitmapButton() { Init(); }

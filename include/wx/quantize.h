@@ -34,7 +34,7 @@ class WXDLLIMPEXP_FWD_CORE wxPalette;
 #define wxQUANTIZE_RETURN_8BIT_DATA             0x02
 #define wxQUANTIZE_FILL_DESTINATION_IMAGE       0x04
 
-class WXDLLEXPORT wxQuantize: public wxObject
+class WXDLLIMPEXP_CORE wxQuantize: public wxObject
 {
 public:
 DECLARE_DYNAMIC_CLASS(wxQuantize)

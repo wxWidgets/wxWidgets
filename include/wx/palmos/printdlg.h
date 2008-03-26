@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxDC;
 // wxPrinterDialog: the common dialog for printing.
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPrintDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxPrintDialog : public wxDialog
 {
     DECLARE_DYNAMIC_CLASS(wxPrintDialog)
 
@@ -49,7 +49,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxPrintDialog)
 };
 
-class WXDLLEXPORT wxPageSetupDialog: public wxDialog
+class WXDLLIMPEXP_CORE wxPageSetupDialog: public wxDialog
 {
     DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
 

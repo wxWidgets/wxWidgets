@@ -20,9 +20,9 @@
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const char) wxDirDialogNameStr[];
-extern WXDLLEXPORT_DATA(const char) wxDirDialogDefaultFolderStr[];
-extern WXDLLEXPORT_DATA(const char) wxDirSelectorPromptStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogDefaultFolderStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDirSelectorPromptStr[];
 
 #define wxDD_CHANGE_DIR         0x0100
 #define wxDD_DIR_MUST_EXIST     0x0200
@@ -40,7 +40,7 @@ extern WXDLLEXPORT_DATA(const char) wxDirSelectorPromptStr[];
 // wxDirDialogBase
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirDialogBase : public wxDialog
+class WXDLLIMPEXP_CORE wxDirDialogBase : public wxDialog
 {
 public:
     wxDirDialogBase() {}
@@ -128,7 +128,7 @@ protected:
 // common ::wxDirSelector() function
 // ----------------------------------------------------------------------------
 
-WXDLLEXPORT wxString
+WXDLLIMPEXP_CORE wxString
 wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
               const wxString& defaultPath = wxEmptyString,
               long style = wxDD_DEFAULT_STYLE,

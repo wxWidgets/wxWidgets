@@ -20,7 +20,7 @@ class WXDLLIMPEXP_FWD_BASE wxSortedArrayString;
 // ========================================================================
 // wxChoice
 // ========================================================================
-class WXDLLEXPORT wxChoice: public wxChoiceBase /*, protected wxCocoaNSPopUpButton */, protected wxCocoaNSMenu
+class WXDLLIMPEXP_CORE wxChoice: public wxChoiceBase /*, protected wxCocoaNSPopUpButton */, protected wxCocoaNSMenu
 {
     DECLARE_DYNAMIC_CLASS(wxChoice)
     DECLARE_EVENT_TABLE()

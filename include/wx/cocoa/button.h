@@ -17,7 +17,7 @@
 // ========================================================================
 // wxButton
 // ========================================================================
-class WXDLLEXPORT wxButton : public wxButtonBase, protected wxCocoaNSButton
+class WXDLLIMPEXP_CORE wxButton : public wxButtonBase, protected wxCocoaNSButton
 {
     DECLARE_DYNAMIC_CLASS(wxButton)
     DECLARE_EVENT_TABLE()

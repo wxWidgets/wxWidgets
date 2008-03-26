@@ -18,7 +18,7 @@
 // Represents the printer: manages printing a wxPrintout object
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowsPrinter : public wxPrinterBase
+class WXDLLIMPEXP_CORE wxWindowsPrinter : public wxPrinterBase
 {
     DECLARE_DYNAMIC_CLASS(wxWindowsPrinter)
 
@@ -44,7 +44,7 @@ private:
 // wxPrintout.
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowsPrintPreview : public wxPrintPreviewBase
+class WXDLLIMPEXP_CORE wxWindowsPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxWindowsPrintPreview(wxPrintout *printout,

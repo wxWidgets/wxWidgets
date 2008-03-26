@@ -33,7 +33,7 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 
-class WXDLLEXPORT wxGenericComboCtrl : public wxComboCtrlBase
+class WXDLLIMPEXP_CORE wxGenericComboCtrl : public wxComboCtrlBase
 {
 public:
     // ctors and such
@@ -101,7 +101,7 @@ private:
 // If native wxComboCtrl was not defined, then prepare a simple
 // front-end so that wxRTTI works as expected.
 
-class WXDLLEXPORT wxComboCtrl : public wxGenericComboCtrl
+class WXDLLIMPEXP_CORE wxComboCtrl : public wxGenericComboCtrl
 {
 public:
     wxComboCtrl() : wxGenericComboCtrl() {}

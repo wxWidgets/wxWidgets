@@ -23,7 +23,7 @@
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxIconBundle;
 
-extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusLineNameStr[];
 
 
 //-----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ class WXDLLIMPEXP_FWD_CORE wxGenericMDIChildFrame;
 // wxGenericMDIParentFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericMDIParentFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxGenericMDIParentFrame: public wxFrame
 {
 public:
     wxGenericMDIParentFrame();
@@ -111,7 +111,7 @@ private:
 // wxGenericMDIChildFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericMDIChildFrame: public wxPanel
+class WXDLLIMPEXP_CORE wxGenericMDIChildFrame: public wxPanel
 {
 public:
     wxGenericMDIChildFrame();
@@ -224,7 +224,7 @@ private:
 // wxGenericMDIClientWindow
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericMDIClientWindow: public wxNotebook
+class WXDLLIMPEXP_CORE wxGenericMDIClientWindow: public wxNotebook
 {
 public:
     wxGenericMDIClientWindow();
@@ -266,7 +266,7 @@ class wxMDIChildFrame ;
 // wxMDIParentFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMDIParentFrame: public wxGenericMDIParentFrame
+class WXDLLIMPEXP_CORE wxMDIParentFrame: public wxGenericMDIParentFrame
 {
 public:
     wxMDIParentFrame() {}
@@ -292,7 +292,7 @@ private:
 // wxMDIChildFrame
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMDIChildFrame: public wxGenericMDIChildFrame
+class WXDLLIMPEXP_CORE wxMDIChildFrame: public wxGenericMDIChildFrame
 {
 public:
     wxMDIChildFrame() {}
@@ -315,7 +315,7 @@ private:
 // wxMDIClientWindow
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMDIClientWindow: public wxGenericMDIClientWindow
+class WXDLLIMPEXP_CORE wxMDIClientWindow: public wxGenericMDIClientWindow
 {
 public:
     wxMDIClientWindow() {}

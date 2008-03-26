@@ -29,7 +29,7 @@ class CIDropTarget;
 // wxDropSource
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDropSource: public wxDropSourceBase
+class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
     /* constructor. set data later with SetData() */
@@ -59,7 +59,7 @@ protected:
 // wxDropTarget
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDropTarget : public wxDropTargetBase
+class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
     wxDropTarget(wxDataObject* pDataObject = (wxDataObject*)NULL);

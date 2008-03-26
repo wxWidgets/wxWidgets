@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxPalette;
 // wxDIB: represents a DIB section
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDIB
+class WXDLLIMPEXP_CORE wxDIB
 {
 public:
     // ctors and such

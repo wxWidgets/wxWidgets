@@ -36,7 +36,7 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
 // wxChoicebook
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxChoicebook : public wxBookCtrlBase
+class WXDLLIMPEXP_CORE wxChoicebook : public wxBookCtrlBase
 {
 public:
     wxChoicebook()
@@ -118,7 +118,7 @@ private:
 // choicebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxChoicebookEvent : public wxBookCtrlBaseEvent
+class WXDLLIMPEXP_CORE wxChoicebookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxChoicebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,

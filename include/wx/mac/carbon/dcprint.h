@@ -18,7 +18,7 @@
 
 class wxNativePrinterDC ;
 
-class WXDLLEXPORT wxPrinterDCImpl: public wxGCDCImpl
+class WXDLLIMPEXP_CORE wxPrinterDCImpl: public wxGCDCImpl
 {
 public:
 #if wxUSE_PRINTING_ARCHITECTURE

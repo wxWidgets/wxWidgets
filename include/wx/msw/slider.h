@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_FWD_CORE wxSubwindows;
 
 // Slider
-class WXDLLEXPORT wxSlider : public wxSliderBase
+class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {
 public:
     wxSlider() { Init(); }

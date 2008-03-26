@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 //                  Can be used in exactly same way as wxBusyCursor
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBusyInfo : public wxObject
+class WXDLLIMPEXP_CORE wxBusyInfo : public wxObject
 {
 public:
     wxBusyInfo(const wxString& message, wxWindow *parent = NULL);

@@ -34,7 +34,7 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 // List box control
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListBox : public wxListBoxBase
+class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
 public:
     // ctors and such

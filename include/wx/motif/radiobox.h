@@ -21,7 +21,7 @@
 
 #include "wx/arrstr.h"
 
-class WXDLLEXPORT wxRadioBox : public wxControl, public wxRadioBoxBase
+class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
 public:
     wxRadioBox() { Init(); }

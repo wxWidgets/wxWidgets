@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 // wxTreebook
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTreebook : public wxBookCtrlBase
+class WXDLLIMPEXP_CORE wxTreebook : public wxBookCtrlBase
 {
 public:
     // Constructors and such
@@ -233,7 +233,7 @@ private:
 // treebook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTreebookEvent : public wxBookCtrlBaseEvent
+class WXDLLIMPEXP_CORE wxTreebookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxTreebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,

@@ -17,7 +17,7 @@
 // ========================================================================
 // wxStaticLine
 // ========================================================================
-class WXDLLEXPORT wxStaticLine: public wxStaticLineBase// , protected wxCocoaNSButton
+class WXDLLIMPEXP_CORE wxStaticLine: public wxStaticLineBase// , protected wxCocoaNSButton
 {
     DECLARE_DYNAMIC_CLASS(wxStaticLine)
     DECLARE_EVENT_TABLE()

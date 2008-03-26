@@ -31,7 +31,7 @@ class WXDLLIMPEXP_FWD_CORE wxToolBar;
 // Menu
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenu : public wxMenuBase
+class WXDLLIMPEXP_CORE wxMenu : public wxMenuBase
 {
 public:
     // ctors & dtor
@@ -103,7 +103,7 @@ private:
 // Menu Bar (a la Windows)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenuInfo : public wxObject
+class WXDLLIMPEXP_CORE wxMenuInfo : public wxObject
 {
 public :
     wxMenuInfo() { m_menu = NULL ; }
@@ -122,7 +122,7 @@ private :
 
 WX_DECLARE_EXPORTED_LIST(wxMenuInfo, wxMenuInfoList );
 
-class WXDLLEXPORT wxMenuBar : public wxMenuBarBase
+class WXDLLIMPEXP_CORE wxMenuBar : public wxMenuBarBase
 {
 public:
     // ctors & dtor

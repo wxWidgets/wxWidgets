@@ -37,7 +37,7 @@ class wxMetafileRefData ;
 
 #define M_METAFILEDATA ((wxMetafileRefData *)m_refData)
 
-class WXDLLEXPORT wxMetafile : public wxGDIObject
+class WXDLLIMPEXP_CORE wxMetafile : public wxGDIObject
 {
 public:
     wxMetafile(const wxString& file = wxEmptyString);
@@ -71,7 +71,7 @@ protected:
 };
 
 
-class WXDLLEXPORT wxMetafileDCImpl: public wxGCDCImpl
+class WXDLLIMPEXP_CORE wxMetafileDCImpl: public wxGCDCImpl
 {
 public:
     wxMetafileDCImpl( wxDC *owner,
@@ -98,7 +98,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxMetafileDCImpl)
 };
 
-class WXDLLEXPORT wxMetafileDC: public wxDC
+class WXDLLIMPEXP_CORE wxMetafileDC: public wxDC
 {
  public:
     // the ctor parameters specify the filename (empty for memory metafiles),
@@ -130,17 +130,17 @@ private:
 
 // No origin or extent
 #define wxMakeMetaFilePlaceable wxMakeMetafilePlaceable
-bool WXDLLEXPORT wxMakeMetafilePlaceable(const wxString& filename, float scale = 1.0);
+bool WXDLLIMPEXP_CORE wxMakeMetafilePlaceable(const wxString& filename, float scale = 1.0);
 
 // Optional origin and extent
-bool WXDLLEXPORT wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale = 1.0, bool useOriginAndExtent = TRUE);
+bool WXDLLIMPEXP_CORE wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y1, int x2, int y2, float scale = 1.0, bool useOriginAndExtent = TRUE);
 
 // ----------------------------------------------------------------------------
 // wxMetafileDataObject is a specialization of wxDataObject for metafile data
 // ----------------------------------------------------------------------------
 
 #if wxUSE_DATAOBJ
-class WXDLLEXPORT wxMetafileDataObject : public wxDataObjectSimple
+class WXDLLIMPEXP_CORE wxMetafileDataObject : public wxDataObjectSimple
 {
 public:
   // ctors

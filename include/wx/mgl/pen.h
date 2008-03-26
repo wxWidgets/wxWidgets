@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxPen;
 // wxPen
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPen : public wxPenBase
+class WXDLLIMPEXP_CORE wxPen : public wxPenBase
 {
 public:
     wxPen() {}

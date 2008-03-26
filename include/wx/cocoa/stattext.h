@@ -17,7 +17,7 @@
 // ========================================================================
 // wxStaticText
 // ========================================================================
-class WXDLLEXPORT wxStaticText : public wxStaticTextBase, protected wxCocoaNSTextField
+class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase, protected wxCocoaNSTextField
 {
     DECLARE_DYNAMIC_CLASS(wxStaticText)
     DECLARE_EVENT_TABLE()

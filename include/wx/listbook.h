@@ -36,7 +36,7 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING;
 // wxListbook
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListbook : public wxBookCtrlBase
+class WXDLLIMPEXP_CORE wxListbook : public wxBookCtrlBase
 {
 public:
     wxListbook()
@@ -116,7 +116,7 @@ private:
 // listbook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListbookEvent : public wxBookCtrlBaseEvent
+class WXDLLIMPEXP_CORE wxListbookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxListbookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,

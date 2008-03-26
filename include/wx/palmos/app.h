@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_BASE wxLog;
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
-class WXDLLEXPORT wxApp : public wxAppBase
+class WXDLLIMPEXP_CORE wxApp : public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
 
@@ -84,8 +84,7 @@ protected:
     #define SW_SHOWNORMAL 1
 #endif
 
-extern int WXDLLEXPORT
-wxEntry();
+extern WXDLLIMPEXP_CORE int wxEntry();
 
 #define IMPLEMENT_WXWIN_MAIN                                              \
                                                                           \

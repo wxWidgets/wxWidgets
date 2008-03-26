@@ -205,7 +205,7 @@ private:
 // optimisation, it will be reenabled as soon as the object goes out from scope.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNoOptimize
+class WXDLLIMPEXP_CORE wxNoOptimize
 {
 public:
     wxNoOptimize() { ms_count++; }

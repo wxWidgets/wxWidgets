@@ -14,7 +14,7 @@
 
 #include "wx/frame.h"
 
-class WXDLLEXPORT wxMiniFrame : public wxFrame
+class WXDLLIMPEXP_CORE wxMiniFrame : public wxFrame
 {
 public:
   wxMiniFrame() { }

@@ -60,7 +60,7 @@ enum
 
 #define wxMAX_FILE_HISTORY 9
 
-class WXDLLEXPORT wxDocument : public wxEvtHandler
+class WXDLLIMPEXP_CORE wxDocument : public wxEvtHandler
 {
 public:
     wxDocument(wxDocument *parent = (wxDocument *) NULL);
@@ -181,7 +181,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxDocument)
 };
 
-class WXDLLEXPORT wxView: public wxEvtHandler
+class WXDLLIMPEXP_CORE wxView: public wxEvtHandler
 {
 public:
     //  wxView(wxDocument *doc = (wxDocument *) NULL);
@@ -241,7 +241,7 @@ private:
 };
 
 // Represents user interface (and other) properties of documents and views
-class WXDLLEXPORT wxDocTemplate: public wxObject
+class WXDLLIMPEXP_CORE wxDocTemplate: public wxObject
 {
 
 friend class WXDLLIMPEXP_FWD_CORE wxDocManager;
@@ -322,7 +322,7 @@ private:
 
 // One object of this class may be created in an application, to manage all
 // the templates and documents.
-class WXDLLEXPORT wxDocManager: public wxEvtHandler
+class WXDLLIMPEXP_CORE wxDocManager: public wxEvtHandler
 {
 public:
     wxDocManager(long flags = wxDEFAULT_DOCMAN_FLAGS, bool initialize = true);
@@ -475,7 +475,7 @@ inline size_t wxDocManager::GetNoHistoryFiles() const
 // A default child frame
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDocChildFrame : public wxFrame
+class WXDLLIMPEXP_CORE wxDocChildFrame : public wxFrame
 {
 public:
     wxDocChildFrame(wxDocument *doc,
@@ -515,7 +515,7 @@ private:
 // A default parent frame
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDocParentFrame : public wxFrame
+class WXDLLIMPEXP_CORE wxDocParentFrame : public wxFrame
 {
 public:
     wxDocParentFrame();
@@ -561,7 +561,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if wxUSE_PRINTING_ARCHITECTURE
-class WXDLLEXPORT wxDocPrintout : public wxPrintout
+class WXDLLIMPEXP_CORE wxDocPrintout : public wxPrintout
 {
 public:
     wxDocPrintout(wxView *view = (wxView *) NULL, const wxString& title = wxT("Printout"));
@@ -585,7 +585,7 @@ private:
 // File history management
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFileHistory : public wxObject
+class WXDLLIMPEXP_CORE wxFileHistory : public wxObject
 {
 public:
     wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1);
@@ -651,13 +651,13 @@ inline size_t wxFileHistory::GetNoHistoryFiles() const
 #if wxUSE_STD_IOSTREAM
 // For compatibility with existing file formats:
 // converts from/to a stream to/from a temporary file.
-bool WXDLLEXPORT wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream);
-bool WXDLLEXPORT wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename);
+bool WXDLLIMPEXP_CORE wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream);
+bool WXDLLIMPEXP_CORE wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename);
 #else
 // For compatibility with existing file formats:
 // converts from/to a stream to/from a temporary file.
-bool WXDLLEXPORT wxTransferFileToStream(const wxString& filename, wxOutputStream& stream);
-bool WXDLLEXPORT wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
+bool WXDLLIMPEXP_CORE wxTransferFileToStream(const wxString& filename, wxOutputStream& stream);
+bool WXDLLIMPEXP_CORE wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
 #endif // wxUSE_STD_IOSTREAM
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE

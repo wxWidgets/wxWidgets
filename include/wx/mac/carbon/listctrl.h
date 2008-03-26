@@ -24,7 +24,7 @@ class wxListCtrlRenameTimer;
 
 WX_DECLARE_EXPORTED_LIST(wxListItem, wxColumnList);
 
-class WXDLLEXPORT wxListCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxListCtrl)
  public:

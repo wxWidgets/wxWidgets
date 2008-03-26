@@ -33,11 +33,10 @@
 class WXDLLIMPEXP_FWD_CORE wxColourData;
 
 // get the colour from user and return it
-wxColour WXDLLEXPORT
-wxGetColourFromUser(wxWindow *parent = (wxWindow *)NULL,
-                    const wxColour& colInit = wxNullColour,
-                    const wxString& caption = wxEmptyString,
-                    wxColourData *data = NULL);
+WXDLLIMPEXP_CORE wxColour wxGetColourFromUser(wxWindow *parent = (wxWindow *)NULL,
+                                              const wxColour& colInit = wxNullColour,
+                                              const wxString& caption = wxEmptyString,
+                                              wxColourData *data = NULL);
 
 #endif // wxUSE_COLOURDLG
 

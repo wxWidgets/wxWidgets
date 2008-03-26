@@ -14,7 +14,7 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxCursorRefData : public wxGDIRefData
+class WXDLLIMPEXP_CORE wxCursorRefData : public wxGDIRefData
 {
 public:
     wxCursorRefData();
@@ -34,7 +34,7 @@ protected:
 #define M_CURSORHANDLERDATA ((wxCursorRefData *)bitmap->m_refData)
 
 // Cursor
-class WXDLLEXPORT wxCursor: public wxBitmap
+class WXDLLIMPEXP_CORE wxCursor: public wxBitmap
 {
 public:
     wxCursor();
@@ -58,7 +58,7 @@ public:
     DECLARE_DYNAMIC_CLASS(wxCursor)
 };
 
-extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);
+extern WXDLLIMPEXP_CORE void wxSetCursor(const wxCursor& cursor);
 
 #endif
     // _WX_COCOA_CURSOR_H_

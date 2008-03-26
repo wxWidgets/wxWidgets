@@ -16,7 +16,7 @@
 
 #include "wx/helpbase.h"
 
-class WXDLLEXPORT wxWinceHelpController : public wxHelpControllerBase
+class WXDLLIMPEXP_CORE wxWinceHelpController : public wxHelpControllerBase
 {
 public:
     wxWinceHelpController(wxWindow* parentWindow = NULL): wxHelpControllerBase(parentWindow) {}

@@ -139,7 +139,7 @@ private :
 };
 
 // list of all frames and modeless dialogs
-extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
+extern WXDLLIMPEXP_DATA_CORE(wxWindowList) wxModelessWindows;
 
 
 #endif // _WX_MAC_NONOWNEDWND_H_

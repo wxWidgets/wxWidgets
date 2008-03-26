@@ -16,7 +16,7 @@
 
 #include "wx/dcmemory.h"
 
-class WXDLLEXPORT wxMemoryDCImpl: public wxCocoaDCImpl
+class WXDLLIMPEXP_CORE wxMemoryDCImpl: public wxCocoaDCImpl
 {
     DECLARE_DYNAMIC_CLASS(wxMemoryDCImpl)
 

@@ -29,7 +29,7 @@ WX_DEFINE_EXPORTED_ARRAY_PTR(wxChoice *, wxArrayChoiceSpins);
 // Choice item
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxChoice : public wxChoiceBase
+class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
     // ctors

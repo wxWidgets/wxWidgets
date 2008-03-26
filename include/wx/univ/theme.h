@@ -27,7 +27,7 @@ class WXDLLIMPEXP_FWD_CORE wxInputHandler;
 class WXDLLIMPEXP_FWD_CORE wxRenderer;
 struct WXDLLIMPEXP_FWD_CORE wxThemeInfo;
 
-class WXDLLEXPORT wxTheme
+class WXDLLIMPEXP_CORE wxTheme
 {
 public:
     // static methods
@@ -108,7 +108,7 @@ protected:
 // dynamic theme creation helpers
 // ----------------------------------------------------------------------------
 
-struct WXDLLEXPORT wxThemeInfo
+struct WXDLLIMPEXP_CORE wxThemeInfo
 {
     typedef wxTheme *(*Constructor)();
 
@@ -137,7 +137,7 @@ struct WXDLLEXPORT wxThemeInfo
     WX_USE_THEME_IMPL(themename)
 
 #define WX_USE_THEME_IMPL(themename)                                        \
-    extern WXDLLEXPORT_DATA(bool) wxThemeUse##themename;                    \
+    extern WXDLLIMPEXP_DATA_CORE(bool) wxThemeUse##themename;                    \
     static struct wxThemeUserFor##themename                                 \
     {                                                                       \
         wxThemeUserFor##themename() { wxThemeUse##themename = true; }       \
@@ -153,7 +153,7 @@ struct WXDLLEXPORT wxThemeInfo
 
 // and this one must be inserted in the source file
 #define WX_IMPLEMENT_THEME(classname, themename, themedesc)                 \
-    WXDLLEXPORT_DATA(bool) wxThemeUse##themename = true;                    \
+    WXDLLIMPEXP_DATA_CORE(bool) wxThemeUse##themename = true;                    \
     wxTheme *wxCtorFor##themename() { return new classname; }               \
     wxThemeInfo classname::ms_info##themename(wxCtorFor##themename,         \
                                               wxT( #themename ), themedesc)

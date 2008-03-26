@@ -14,9 +14,9 @@
 
 #include "wx/dialog.h"
 
-WXDLLEXPORT_DATA(extern const wxChar) wxFileSelectorPromptStr[];
+WXDLLIMPEXP_DATA_CORE(extern const wxChar) wxFileSelectorPromptStr[];
 
-class WXDLLEXPORT wxDirDialog: public wxDirDialogBase
+class WXDLLIMPEXP_CORE wxDirDialog: public wxDirDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxDirDialog)
 public:

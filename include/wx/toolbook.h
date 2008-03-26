@@ -40,7 +40,7 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING;
 // wxToolbook
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolbook : public wxBookCtrlBase
+class WXDLLIMPEXP_CORE wxToolbook : public wxBookCtrlBase
 {
 public:
     wxToolbook()
@@ -135,7 +135,7 @@ private:
 // listbook event class and related stuff
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolbookEvent : public wxBookCtrlBaseEvent
+class WXDLLIMPEXP_CORE wxToolbookEvent : public wxBookCtrlBaseEvent
 {
 public:
     wxToolbookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,

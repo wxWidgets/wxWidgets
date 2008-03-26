@@ -16,7 +16,7 @@
 // Choice item
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxChoice: public wxChoiceBase
+class WXDLLIMPEXP_CORE wxChoice: public wxChoiceBase
 {
   DECLARE_DYNAMIC_CLASS(wxChoice)
 

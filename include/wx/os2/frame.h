@@ -17,7 +17,7 @@
 //
 #include "wx/os2/wxrsc.h"
 
-class WXDLLEXPORT wxFrame : public wxFrameBase
+class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
     // construction

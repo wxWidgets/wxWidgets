@@ -12,7 +12,7 @@
 #ifndef _WX_GENERIC_MSGDLGG_H_
 #define _WX_GENERIC_MSGDLGG_H_
 
-class WXDLLEXPORT wxGenericMessageDialog : public wxMessageDialogBase
+class WXDLLIMPEXP_CORE wxGenericMessageDialog : public wxMessageDialogBase
 {
 public:
     wxGenericMessageDialog(wxWindow *parent,

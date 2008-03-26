@@ -16,7 +16,7 @@
 
 // VS: This is only a *temporary* implementation, real wxChoice should not
 //     derive from wxComboBox and may have different l&f 
-class WXDLLEXPORT wxChoice : public wxComboBox
+class WXDLLIMPEXP_CORE wxChoice : public wxComboBox
 {
 public:
     wxChoice() {}

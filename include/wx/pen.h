@@ -62,7 +62,7 @@ enum wxPenCap
 };
 
 
-class WXDLLEXPORT wxPenBase : public wxGDIObject
+class WXDLLIMPEXP_CORE wxPenBase : public wxGDIObject
 {
 public:
     virtual ~wxPenBase() { }
@@ -130,7 +130,7 @@ public:
 #endif
 };
 
-extern WXDLLEXPORT_DATA(wxPenList*)   wxThePenList;
+extern WXDLLIMPEXP_DATA_CORE(wxPenList*)   wxThePenList;
 
 // provide comparison operators to allow code such as
 //

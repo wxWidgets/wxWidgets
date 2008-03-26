@@ -45,7 +45,7 @@ class MGLDevCtx;
 class MGLRegion;
 struct font_t;
 
-class WXDLLEXPORT wxDC : public wxDCBase
+class WXDLLIMPEXP_CORE wxDC : public wxDCBase
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
 

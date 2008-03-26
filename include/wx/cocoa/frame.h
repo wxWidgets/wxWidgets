@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class WXDLLIMPEXP_FWD_CORE wxStatusBar;
 
-class WXDLLEXPORT wxFrame: public wxFrameBase
+class WXDLLIMPEXP_CORE wxFrame: public wxFrameBase
 {
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)

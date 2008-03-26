@@ -79,7 +79,7 @@ typedef HRESULT (__stdcall *PFNWXUENABLETHEMING)(BOOL);
     #define wxUX_THEME_DECLARE(type, func) type func(...) { return 0; }
 #endif
 
-class WXDLLEXPORT wxUxThemeEngine
+class WXDLLIMPEXP_CORE wxUxThemeEngine
 {
 public:
     // get the theme engine or NULL if themes are not available

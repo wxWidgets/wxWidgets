@@ -16,7 +16,7 @@
 // wxFindReplaceDialog: dialog for searching / replacing text
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFindReplaceDialog : public wxFindReplaceDialogBase
+class WXDLLIMPEXP_CORE wxFindReplaceDialog : public wxFindReplaceDialogBase
 {
 public:
     // ctors and such

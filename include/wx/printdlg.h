@@ -26,7 +26,7 @@
 // wxPrintDialogBase: interface for the dialog for printing
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPrintDialogBase : public wxDialog
+class WXDLLIMPEXP_CORE wxPrintDialogBase : public wxDialog
 {
 public:
     wxPrintDialogBase() { }
@@ -50,7 +50,7 @@ private:
 // wxPrintDialog: the dialog for printing.
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPrintDialog : public wxObject
+class WXDLLIMPEXP_CORE wxPrintDialog : public wxObject
 {
 public:
     wxPrintDialog(wxWindow *parent, wxPrintDialogData* data = NULL);
@@ -75,7 +75,7 @@ private:
 // wxPageSetupDialogBase: interface for the page setup dialog
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPageSetupDialogBase: public wxDialog
+class WXDLLIMPEXP_CORE wxPageSetupDialogBase: public wxDialog
 {
 public:
     wxPageSetupDialogBase() { }
@@ -97,7 +97,7 @@ private:
 // wxPageSetupDialog: the page setup dialog
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPageSetupDialog: public wxObject
+class WXDLLIMPEXP_CORE wxPageSetupDialog: public wxObject
 {
 public:
     wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);

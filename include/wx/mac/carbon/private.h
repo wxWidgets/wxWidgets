@@ -33,7 +33,7 @@ typedef SInt32 SRefCon;
 #include "wx/mac/carbon/dcclient.h"
 #include "wx/mac/carbon/dcmemory.h"
 
-class WXDLLEXPORT wxMacCGContextStateSaver
+class WXDLLIMPEXP_CORE wxMacCGContextStateSaver
 {
     DECLARE_NO_COPY_CLASS(wxMacCGContextStateSaver)
 
@@ -100,7 +100,7 @@ template<> inline EventParamType wxMacGetEventParamType<CGContextRef>() { return
  template<> EventParamType wxMacGetEventParamType<GWorldPtr>() { return typeGWorldPtr; }
  */
 
-class WXDLLEXPORT wxMacCarbonEvent
+class WXDLLIMPEXP_CORE wxMacCarbonEvent
 {
 
 public :
@@ -245,7 +245,7 @@ typedef wxMacUPP<NMProcPtr,NMUPP,NewNMUPP,DisposeNMUPP> wxMacNMUPP;
 
 class WXDLLIMPEXP_FWD_CORE wxMacToolTipTimer ;
 
-class WXDLLEXPORT wxMacToolTip
+class WXDLLIMPEXP_CORE wxMacToolTip
 {
 public :
     wxMacToolTip() ;
@@ -331,7 +331,7 @@ enum {
 };
 #endif
 
-class WXDLLEXPORT wxMacControl : public wxObject
+class WXDLLIMPEXP_CORE wxMacControl : public wxObject
 {
 public :
     wxMacControl( wxWindow* peer , bool isRootControl = false );
@@ -513,7 +513,7 @@ protected :
 // basing on DataBrowserItemIDs
 //
 
-class WXDLLEXPORT wxMacDataBrowserControl : public wxMacControl
+class WXDLLIMPEXP_CORE wxMacDataBrowserControl : public wxMacControl
 {
 public :
     wxMacDataBrowserControl( wxWindow* peer, const wxPoint& pos, const wxSize& size, long style);
@@ -666,7 +666,7 @@ const DataBrowserPropertyID kMinColumnId = 1050;
 
 // base API for high-level databrowser operations
 
-class WXDLLEXPORT wxMacListControl
+class WXDLLIMPEXP_CORE wxMacListControl
 {
 public:
     virtual void            MacDelete( unsigned int n ) = 0;
@@ -696,7 +696,7 @@ enum DataItemType {
     DataItem_Text
 };
 
-class WXDLLEXPORT wxMacDataItem
+class WXDLLIMPEXP_CORE wxMacDataItem
 {
 public :
     wxMacDataItem();
@@ -748,7 +748,7 @@ const wxMacDataItemPtr wxMacDataBrowserRootContainer = NULL;
 
 WX_DEFINE_USER_EXPORTED_ARRAY_PTR(wxMacDataItemPtr, wxArrayMacDataItemPtr, class WXDLLIMPEXP_CORE);
 
-class WXDLLEXPORT wxMacDataItemBrowserControl : public wxMacDataBrowserControl, public wxMacListControl
+class WXDLLIMPEXP_CORE wxMacDataItemBrowserControl : public wxMacDataBrowserControl, public wxMacListControl
 {
 public :
     wxMacDataItemBrowserControl( wxWindow* peer , const wxPoint& pos, const wxSize& size, long style);
@@ -881,7 +881,7 @@ private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataItemBrowserControl)
 };
 
-class WXDLLEXPORT wxMacDataItemBrowserSelectionSuppressor
+class WXDLLIMPEXP_CORE wxMacDataItemBrowserSelectionSuppressor
 {
 public :
     wxMacDataItemBrowserSelectionSuppressor(wxMacDataItemBrowserControl *browser);
@@ -899,7 +899,7 @@ private :
 
 // exposed for reuse in wxCheckListBox
 
-class WXDLLEXPORT wxMacListBoxItem : public wxMacDataItem
+class WXDLLIMPEXP_CORE wxMacListBoxItem : public wxMacDataItem
 {
 public :
     wxMacListBoxItem();
@@ -911,7 +911,7 @@ public :
         DataBrowserItemDataRef itemData ) const;
 };
 
-class WXDLLEXPORT wxMacDataBrowserListControl : public wxMacDataItemBrowserControl
+class WXDLLIMPEXP_CORE wxMacDataBrowserListControl : public wxMacDataItemBrowserControl
 {
 public:
     wxMacDataBrowserListControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style );
@@ -944,7 +944,7 @@ CGColorSpaceRef WXDLLIMPEXP_CORE wxMacGetGenericRGBColorSpace(void);
 
 // toplevel.cpp
 
-class WXDLLEXPORT wxMacDeferredWindowDeleter : public wxObject
+class WXDLLIMPEXP_CORE wxMacDeferredWindowDeleter : public wxObject
 {
 public :
     wxMacDeferredWindowDeleter( WindowRef windowRef );
@@ -996,7 +996,7 @@ void wxMacGlobalToLocal( WindowRef window , Point*pt );
 
 bool wxMacInitCocoa();
 
-class WXDLLEXPORT wxMacAutoreleasePool
+class WXDLLIMPEXP_CORE wxMacAutoreleasePool
 {
 public :
     wxMacAutoreleasePool();

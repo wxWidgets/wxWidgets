@@ -28,7 +28,7 @@ class WXDLLIMPEXP_FWD_CORE wxAcceleratorTable;
  // Hold no key down
 #define wxACCEL_NORMAL  0x00
 
-class WXDLLEXPORT wxAcceleratorTable: public wxObject
+class WXDLLIMPEXP_CORE wxAcceleratorTable: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
 public:
@@ -51,8 +51,8 @@ public:
                   ) const;
 };
 
-WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;
+WXDLLIMPEXP_DATA_CORE(extern wxAcceleratorTable) wxNullAcceleratorTable;
 
-WXDLLEXPORT wxString wxPMTextToLabel(const wxString& rsTitle);
+WXDLLIMPEXP_CORE wxString wxPMTextToLabel(const wxString& rsTitle);
 #endif
     // _WX_ACCEL_H_

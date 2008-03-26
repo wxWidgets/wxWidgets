@@ -24,8 +24,8 @@
 #include "wx/hashmap.h"
 
 // fwd decl
-class  WXDLLEXPORT wxImageList;
-class  WXDLLEXPORT wxDragImage;
+class  WXDLLIMPEXP_CORE wxImageList;
+class  WXDLLIMPEXP_CORE wxDragImage;
 struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
 // hash storing attributes for our items
@@ -35,7 +35,7 @@ WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);
 // wxTreeCtrl
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTreeCtrl : public wxControl
+class WXDLLIMPEXP_CORE wxTreeCtrl : public wxControl
 {
 public:
     // creation

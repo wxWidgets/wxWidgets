@@ -19,7 +19,7 @@
 
 class wxOwnerDrawn; // so the compiler knows, it is a class.
 
-class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
+class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
 public:
     //

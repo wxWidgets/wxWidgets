@@ -36,7 +36,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const char) wxSearchCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxSearchCtrlNameStr[];
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN;
@@ -46,7 +46,7 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN;
 // it is based on the MacOSX 10.3 control HISearchFieldCreate
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSearchCtrlBase : public wxSearchCtrlBaseBaseClass
+class WXDLLIMPEXP_CORE wxSearchCtrlBase : public wxSearchCtrlBaseBaseClass
 {
 public:
     wxSearchCtrlBase() { }

@@ -43,14 +43,14 @@ class WXDLLIMPEXP_FWD_CORE wxApp;
 class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 class WXDLLIMPEXP_FWD_BASE wxLog;
 
-WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
-WXDLLEXPORT_DATA(extern HAB)    vHabmain;
+WXDLLIMPEXP_DATA_CORE(extern wxApp*) wxTheApp;
+WXDLLIMPEXP_DATA_CORE(extern HAB)    vHabmain;
 
 // Force an exit from main loop
-void WXDLLEXPORT wxExit(void);
+void WXDLLIMPEXP_CORE wxExit(void);
 
 // Yield to other apps/messages
-bool WXDLLEXPORT wxYield(void);
+bool WXDLLIMPEXP_CORE wxYield(void);
 
 extern MRESULT EXPENTRY wxWndProc( HWND
                                   ,ULONG
@@ -61,7 +61,7 @@ extern MRESULT EXPENTRY wxWndProc( HWND
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
-class WXDLLEXPORT wxApp : public wxAppBase
+class WXDLLIMPEXP_CORE wxApp : public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
 

@@ -15,10 +15,10 @@
 #include "wx/control.h"
 #include "wx/gdicmn.h"
 
-WXDLLEXPORT_DATA(extern const char) wxButtonNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxButtonNameStr[];
 
 // Pushbutton
-class WXDLLEXPORT wxButton: public wxButtonBase
+class WXDLLIMPEXP_CORE wxButton: public wxButtonBase
 {
 public:
     wxButton() {}
@@ -55,7 +55,7 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
-class WXDLLEXPORT wxDisclosureTriangle: public wxControl
+class WXDLLIMPEXP_CORE wxDisclosureTriangle: public wxControl
 {
 public:
     wxDisclosureTriangle(wxWindow *parent,

@@ -13,7 +13,7 @@
 #ifndef _WX_STATBAR_H_
 #define _WX_STATBAR_H_
 
-class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
+class WXDLLIMPEXP_CORE wxStatusBarMac : public wxStatusBarGeneric
 {
     DECLARE_DYNAMIC_CLASS(wxStatusBarMac)
 

@@ -39,7 +39,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSAlert);
 
 
 
-class WXDLLEXPORT wxCocoaMessageDialog: public wxMessageDialogBase
+class WXDLLIMPEXP_CORE wxCocoaMessageDialog: public wxMessageDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxCocoaMessageDialog)
     DECLARE_NO_COPY_CLASS(wxCocoaMessageDialog)

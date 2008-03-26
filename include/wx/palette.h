@@ -20,7 +20,7 @@
 #include "wx/gdiobj.h"
 
 // wxPaletteBase
-class WXDLLEXPORT wxPaletteBase: public wxGDIObject
+class WXDLLIMPEXP_CORE wxPaletteBase: public wxGDIObject
 {
 public:
     virtual ~wxPaletteBase() { }

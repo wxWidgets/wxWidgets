@@ -58,7 +58,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #include "wx/icon.h"
 
 // helper class used by wxMenu-related functions
-class WXDLLEXPORT wxMenuGeometryInfo
+class WXDLLIMPEXP_CORE wxMenuGeometryInfo
 {
 public:
     // get the total size of the menu
@@ -71,7 +71,7 @@ public:
 // wxRenderer: abstract renderers interface
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRenderer : public wxDelegateRendererNative
+class WXDLLIMPEXP_CORE wxRenderer : public wxDelegateRendererNative
 {
 public:
     // drawing functions
@@ -493,7 +493,7 @@ public:
 // will be left to the original renderer
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDelegateRenderer : public wxRenderer
+class WXDLLIMPEXP_CORE wxDelegateRenderer : public wxRenderer
 {
 public:
     wxDelegateRenderer(wxRenderer *renderer) : m_renderer(renderer) { }
@@ -863,7 +863,7 @@ protected:
 // OnPaint()
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxControlRenderer
+class WXDLLIMPEXP_CORE wxControlRenderer
 {
 public:
     // create a renderer for this dc with this "fundamental" renderer

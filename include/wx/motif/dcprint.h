@@ -14,7 +14,7 @@
 
 #include "wx/motif/dc.h"
 
-class WXDLLEXPORT wxPrinterDC : public wxMotifDCImpl
+class WXDLLIMPEXP_CORE wxPrinterDC : public wxMotifDCImpl
 {
 public:
     // Create a printer DC

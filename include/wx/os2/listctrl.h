@@ -24,7 +24,7 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 typedef int (wxCALLBACK *wxListCtrlCompare)(long lItem1, long lItem2, long lSortData);
 
-class WXDLLEXPORT wxListCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
 {
 public:
     wxListCtrl() { Init(); }

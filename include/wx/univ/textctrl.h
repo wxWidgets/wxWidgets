@@ -66,7 +66,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrlCommandProcessor;
 // wxTextCtrl
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase,
+class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase,
                                public wxScrollHelper
 {
 public:

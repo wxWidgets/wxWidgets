@@ -48,7 +48,7 @@ class WXDLLIMPEXP_FWD_BASE wxTimer;
 //
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxScrollHelper
+class WXDLLIMPEXP_CORE wxScrollHelper
 {
 public:
     // ctor must be given the associated window
@@ -260,7 +260,7 @@ public:                                                                       \
 // wxScrolledWindow: a wxWindow which knows how to scroll
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxScrolledWindow : public wxPanel,
+class WXDLLIMPEXP_CORE wxScrolledWindow : public wxPanel,
                                      public wxScrollHelperNative
 {
 public:

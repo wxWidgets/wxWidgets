@@ -15,7 +15,7 @@
 
 class MGLRegion;
 
-class WXDLLEXPORT wxRegion : public wxRegionBase
+class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {
 public:
     wxRegion();
@@ -68,7 +68,7 @@ private:
 
 WX_DECLARE_EXPORTED_LIST(wxRect, wxRegionRectList);
 
-class WXDLLEXPORT wxRegionIterator : public wxObject
+class WXDLLIMPEXP_CORE wxRegionIterator : public wxObject
 {
 public:
     wxRegionIterator(void);

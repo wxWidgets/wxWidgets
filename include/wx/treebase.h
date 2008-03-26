@@ -47,7 +47,7 @@ enum
 // Using this typedef removes an ambiguity when calling Remove()
 typedef void *wxTreeItemIdValue;
 
-class WXDLLEXPORT wxTreeItemId
+class WXDLLIMPEXP_CORE wxTreeItemId
 {
     friend bool operator==(const wxTreeItemId&, const wxTreeItemId&);
 public:
@@ -99,7 +99,7 @@ inline bool operator!=(const wxTreeItemId& i1, const wxTreeItemId& i2)
 // always be allocated on the heap!
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTreeItemData: public wxClientData
+class WXDLLIMPEXP_CORE wxTreeItemData: public wxClientData
 {
 friend class WXDLLIMPEXP_FWD_CORE wxTreeCtrl;
 friend class WXDLLIMPEXP_FWD_CORE wxGenericTreeCtrl;
@@ -124,7 +124,7 @@ WX_DEFINE_EXPORTED_ARRAY_PTR(wxTreeItemIdValue, wxArrayTreeItemIdsBase);
 // this is a wrapper around the array class defined above which allow to wok
 // with vaue of natural wxTreeItemId type instead of using wxTreeItemIdValue
 // and does it without any loss of efficiency
-class WXDLLEXPORT wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
+class WXDLLIMPEXP_CORE wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
 {
 public:
     void Add(const wxTreeItemId& id)
@@ -225,13 +225,13 @@ static const int wxTREE_HITTEST_ONITEM  = wxTREE_HITTEST_ONITEMICON |
                                           wxTREE_HITTEST_ONITEMLABEL;
 
 // tree ctrl default name
-extern WXDLLEXPORT_DATA(const char) wxTreeCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxTreeCtrlNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxTreeItemAttr: a structure containing the visual attributes of an item
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTreeItemAttr
+class WXDLLIMPEXP_CORE wxTreeItemAttr
 {
 public:
     // ctors
@@ -270,7 +270,7 @@ private:
 
 class WXDLLIMPEXP_FWD_CORE wxTreeCtrlBase;
 
-class WXDLLEXPORT wxTreeEvent : public wxNotifyEvent
+class WXDLLIMPEXP_CORE wxTreeEvent : public wxNotifyEvent
 {
 public:
     wxTreeEvent(wxEventType commandType,

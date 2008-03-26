@@ -246,7 +246,7 @@ public:
 
 #if wxUSE_GUI
 
-class WXDLLEXPORT wxGUIAppTraitsBase : public wxAppTraits
+class WXDLLIMPEXP_CORE wxGUIAppTraitsBase : public wxAppTraits
 {
 public:
 #if wxUSE_LOG

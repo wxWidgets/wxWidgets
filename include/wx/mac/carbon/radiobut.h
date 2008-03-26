@@ -12,7 +12,7 @@
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
 
-class WXDLLEXPORT wxRadioButton: public wxControl
+class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxRadioButton)
  protected:
@@ -56,9 +56,9 @@ public:
 #if 0
 class WXDLLIMPEXP_FWD_CORE wxBitmap ;
 
-WXDLLEXPORT_DATA(extern const wxChar) wxBitmapRadioButtonNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const wxChar) wxBitmapRadioButtonNameStr[];
 
-class WXDLLEXPORT wxBitmapRadioButton: public wxRadioButton
+class WXDLLIMPEXP_CORE wxBitmapRadioButton: public wxRadioButton
 {
   DECLARE_DYNAMIC_CLASS(wxBitmapRadioButton)
  protected:

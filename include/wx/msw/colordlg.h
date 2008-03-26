@@ -20,7 +20,7 @@
 // wxColourDialog: dialog for choosing a colours
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxColourDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {
 public:
     wxColourDialog() { Init(); }

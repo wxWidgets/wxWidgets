@@ -26,7 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxStaticText;
 /* Progress dialog which shows a moving progress bar.
     Taken from the Mahogany project.*/
 
-class WXDLLEXPORT wxProgressDialog : public wxDialog
+class WXDLLIMPEXP_CORE wxProgressDialog : public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxProgressDialog)
 public:

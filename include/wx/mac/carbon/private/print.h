@@ -16,7 +16,7 @@
 #include "wx/print.h"
 #include "wx/mac/private.h"
 
-class WXDLLEXPORT wxMacCarbonPrintData : public wxPrintNativeDataBase
+class WXDLLIMPEXP_CORE wxMacCarbonPrintData : public wxPrintNativeDataBase
 {
 public :
                             wxMacCarbonPrintData() ;

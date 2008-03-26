@@ -72,7 +72,7 @@
  */
 
 /*
-    Note: we do not use WXDLLEXPORT with classes in this file because VC++ has
+    Note: we do not use WXDLLIMPEXP_CORE with classes in this file because VC++ has
     problems with exporting inner class defined inside a specialization of a
     template class from a DLL. Besides, as all the methods are inline it's not
     really necessary to put them in DLL at all.

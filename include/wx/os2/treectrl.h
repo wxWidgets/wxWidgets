@@ -27,8 +27,8 @@
 typedef long wxDataType;
 
 // fwd decl
-class  WXDLLEXPORT wxImageList;
-class  WXDLLEXPORT wxDragImage;
+class  WXDLLIMPEXP_CORE wxImageList;
+class  WXDLLIMPEXP_CORE wxDragImage;
 struct WXDLLIMPEXP_FWD_CORE wxTreeViewItem;
 
 // a callback function used for sorting tree items, it should return -1 if the
@@ -48,7 +48,7 @@ WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);
 // ----------------------------------------------------------------------------
 // wxTreeCtrl
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxTreeCtrl : public wxControl
+class WXDLLIMPEXP_CORE wxTreeCtrl : public wxControl
 {
 public:
     // creation

@@ -19,7 +19,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSSavePanel);
 // wxDirDialog
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirDialog: public wxDirDialogBase
+class WXDLLIMPEXP_CORE wxDirDialog: public wxDirDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxDirDialog)
     DECLARE_NO_COPY_CLASS(wxDirDialog)

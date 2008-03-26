@@ -16,7 +16,7 @@
 // wxTopLevelWindowX11
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTopLevelWindowX11 : public wxTopLevelWindowBase
+class WXDLLIMPEXP_CORE wxTopLevelWindowX11 : public wxTopLevelWindowBase
 {
 public:
     // constructors and such
@@ -112,6 +112,6 @@ protected:
 };
 
 // list of all frames and modeless dialogs
-//extern WXDLLEXPORT_DATA(wxWindowList) wxModelessWindows;
+//extern WXDLLIMPEXP_DATA_CORE(wxWindowList) wxModelessWindows;
 
 #endif // _WX_X11_TOPLEVEL_H_

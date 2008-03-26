@@ -18,7 +18,7 @@
 // ========================================================================
 // wxIcon
 // ========================================================================
-class WXDLLEXPORT wxIcon : public wxGDIObject
+class WXDLLIMPEXP_CORE wxIcon : public wxGDIObject
 {
 public:
     wxIcon();

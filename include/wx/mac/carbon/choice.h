@@ -17,12 +17,12 @@
 #include  "wx/dynarray.h"
 #include  "wx/arrstr.h"
 
-WXDLLEXPORT_DATA(extern const char) wxChoiceNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxChoiceNameStr[];
 
 WX_DEFINE_ARRAY( char * , wxChoiceDataArray ) ;
 
 // Choice item
-class WXDLLEXPORT wxChoice: public wxChoiceBase
+class WXDLLIMPEXP_CORE wxChoice: public wxChoiceBase
 {
     DECLARE_DYNAMIC_CLASS(wxChoice)
 

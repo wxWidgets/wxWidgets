@@ -17,7 +17,7 @@
 // ========================================================================
 // wxNotebook
 // ========================================================================
-class WXDLLEXPORT wxNotebook: public wxNotebookBase, protected wxCocoaNSTabView
+class WXDLLIMPEXP_CORE wxNotebook: public wxNotebookBase, protected wxCocoaNSTabView
 {
     DECLARE_DYNAMIC_CLASS(wxNotebook)
     DECLARE_EVENT_TABLE()

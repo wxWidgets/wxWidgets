@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_BASE wxLog;
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
-class WXDLLEXPORT wxApp : public wxAppBase
+class WXDLLIMPEXP_CORE wxApp : public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
 
@@ -122,17 +122,17 @@ inline int wxApp::GetShell32Version()
 
 // wxMSW-only overloads of wxEntry() and wxEntryStart() which take the
 // parameters passed to WinMain() instead of those passed to main()
-extern bool WXDLLEXPORT
-wxEntryStart(HINSTANCE hInstance,
-             HINSTANCE hPrevInstance = NULL,
-             wxCmdLineArgType pCmdLine = NULL,
-             int nCmdShow = SW_SHOWNORMAL);
+extern WXDLLIMPEXP_CORE bool
+    wxEntryStart(HINSTANCE hInstance,
+                HINSTANCE hPrevInstance = NULL,
+                wxCmdLineArgType pCmdLine = NULL,
+                int nCmdShow = SW_SHOWNORMAL);
 
-extern int WXDLLEXPORT
-wxEntry(HINSTANCE hInstance,
-        HINSTANCE hPrevInstance = NULL,
-        wxCmdLineArgType pCmdLine = NULL,
-        int nCmdShow = SW_SHOWNORMAL);
+extern WXDLLIMPEXP_CORE int
+    wxEntry(HINSTANCE hInstance,
+            HINSTANCE hPrevInstance = NULL,
+            wxCmdLineArgType pCmdLine = NULL,
+            int nCmdShow = SW_SHOWNORMAL);
 
 #define IMPLEMENT_WXWIN_MAIN \
     extern "C" int WINAPI WinMain(HINSTANCE hInstance,                    \

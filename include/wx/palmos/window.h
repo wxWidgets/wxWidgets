@@ -27,7 +27,7 @@
 // wxWindow declaration for Palm
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowPalm : public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindowPalm : public wxWindowBase
 {
 public:
     wxWindowPalm() { Init(); }

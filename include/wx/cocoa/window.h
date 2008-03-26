@@ -43,7 +43,7 @@ class wxCocoaTrackingRectManager;
 // ========================================================================
 // wxWindowCocoa
 // ========================================================================
-class WXDLLEXPORT wxWindowCocoa: public wxWindowBase, protected wxCocoaNSView
+class WXDLLIMPEXP_CORE wxWindowCocoa: public wxWindowBase, protected wxCocoaNSView
 {
     DECLARE_DYNAMIC_CLASS(wxWindowCocoa)
     DECLARE_NO_COPY_CLASS(wxWindowCocoa)

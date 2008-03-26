@@ -15,7 +15,7 @@
 #include "wx/dcscreen.h"
 #include "wx/palmos/dc.h"
 
-class WXDLLEXPORT wxScreenDCImpl : public wxPalmDCImpl
+class WXDLLIMPEXP_CORE wxScreenDCImpl : public wxPalmDCImpl
 {
 public:
     // Create a DC representing the whole screen

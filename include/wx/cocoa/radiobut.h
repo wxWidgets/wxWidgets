@@ -21,7 +21,7 @@ WX_DECLARE_EXPORTED_LIST(wxRadioButton, wxRadioButtonList);
 // ========================================================================
 // wxRadioButton
 // ========================================================================
-class WXDLLEXPORT wxRadioButton: public wxControl, protected wxCocoaNSButton
+class WXDLLIMPEXP_CORE wxRadioButton: public wxControl, protected wxCocoaNSButton
 {
     DECLARE_DYNAMIC_CLASS(wxRadioButton)
     DECLARE_EVENT_TABLE()

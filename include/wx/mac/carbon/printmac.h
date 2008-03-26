@@ -18,7 +18,7 @@
  * Represents the printer: manages printing a wxPrintout object
  */
  
-class WXDLLEXPORT wxMacPrinter: public wxPrinterBase
+class WXDLLIMPEXP_CORE wxMacPrinter: public wxPrinterBase
 {
   DECLARE_DYNAMIC_CLASS(wxMacPrinter)
 
@@ -39,7 +39,7 @@ class WXDLLEXPORT wxMacPrinter: public wxPrinterBase
  * Programmer creates an object of this class to preview a wxPrintout.
  */
  
-class WXDLLEXPORT wxMacPrintPreview: public wxPrintPreviewBase
+class WXDLLIMPEXP_CORE wxMacPrintPreview: public wxPrintPreviewBase
 {
   DECLARE_CLASS(wxMacPrintPreview)
 

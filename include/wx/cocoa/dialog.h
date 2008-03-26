@@ -20,7 +20,7 @@
 // ========================================================================
 // wxDialog
 // ========================================================================
-class WXDLLEXPORT wxDialog : public wxDialogBase, protected wxCocoaNSPanel
+class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase, protected wxCocoaNSPanel
 {
     DECLARE_DYNAMIC_CLASS(wxDialog)
     WX_DECLARE_COCOA_OWNER(NSPanel,NSWindow,NSWindow)

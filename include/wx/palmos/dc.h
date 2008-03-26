@@ -43,7 +43,7 @@ public:
 
 // this is an ABC: use one of the derived classes to create a DC associated
 // with a window, screen, printer and so on
-class WXDLLEXPORT wxPalmDCImpl: public wxDCImpl
+class WXDLLIMPEXP_CORE wxPalmDCImpl: public wxDCImpl
 {
 public:
     wxPalmDCImpl(wxDC *owner, WXHDC hDC);
@@ -319,7 +319,7 @@ protected:
 // only/mainly)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDCTempImpl : public wxPalmDCImpl
+class WXDLLIMPEXP_CORE wxDCTempImpl : public wxPalmDCImpl
 {
 public:
     // construct a temporary DC with the specified HDC and size (it should be
@@ -355,7 +355,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxDCTempImpl)
 };
 
-class WXDLLEXPORT wxDCTemp : public wxDC
+class WXDLLIMPEXP_CORE wxDCTemp : public wxDC
 {
 public:
     wxDCTemp(WXHDC hdc, const wxSize& size = wxDefaultSize)

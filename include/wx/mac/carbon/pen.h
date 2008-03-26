@@ -17,7 +17,7 @@
 #include "wx/bitmap.h"
 
 // Pen
-class WXDLLEXPORT wxPen : public wxPenBase
+class WXDLLIMPEXP_CORE wxPen : public wxPenBase
 {
 public:
     wxPen();

@@ -21,7 +21,7 @@ class WXDLLIMPEXP_FWD_BASE wxInputStream;
 // wxXPMDecoder class
 // --------------------------------------------------------------------------
 
-class WXDLLEXPORT wxXPMDecoder
+class WXDLLIMPEXP_CORE wxXPMDecoder
 {
 public:
     // constructor, destructor, etc.

@@ -15,7 +15,7 @@
 #include "wx/containr.h"
 #include "wx/choice.h"
 
-WXDLLEXPORT_DATA(extern const char) wxComboBoxNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxComboBoxNameStr[];
 
 // forward declaration of private implementation classes
 
@@ -23,7 +23,7 @@ class wxComboBoxText;
 class wxComboBoxChoice;
 
 // Combobox item
-class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
+class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 {
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 

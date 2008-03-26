@@ -12,7 +12,7 @@
 #ifndef _WX_UNIV_STATBOX_H_
 #define _WX_UNIV_STATBOX_H_
 
-class WXDLLEXPORT wxStaticBox : public wxStaticBoxBase
+class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
     wxStaticBox() { }

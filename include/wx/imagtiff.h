@@ -26,7 +26,7 @@
 #define wxIMAGE_OPTION_COMPRESSION                 wxString(_T("Compression"))
 #define wxIMAGE_OPTION_IMAGEDESCRIPTOR             wxString(_T("ImageDescriptor"))
 
-class WXDLLEXPORT wxTIFFHandler: public wxImageHandler
+class WXDLLIMPEXP_CORE wxTIFFHandler: public wxImageHandler
 {
 public:
     wxTIFFHandler();

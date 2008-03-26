@@ -16,7 +16,7 @@ class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 // wxAcceleratorTable
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAcceleratorTable : public wxObject
+class WXDLLIMPEXP_CORE wxAcceleratorTable : public wxObject
 {
 public:
     wxAcceleratorTable();

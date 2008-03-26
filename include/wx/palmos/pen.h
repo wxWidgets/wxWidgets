@@ -21,7 +21,7 @@ typedef WXDWORD wxMSWDash;
 class WXDLLIMPEXP_FWD_CORE wxPen;
 
 // VZ: this class should be made private
-class WXDLLEXPORT wxPenRefData : public wxGDIRefData
+class WXDLLIMPEXP_CORE wxPenRefData : public wxGDIRefData
 {
 public:
     wxPenRefData();
@@ -71,7 +71,7 @@ private:
 // Pen
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPen : public wxPenBase
+class WXDLLIMPEXP_CORE wxPen : public wxPenBase
 {
 public:
     wxPen();

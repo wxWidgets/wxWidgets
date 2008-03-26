@@ -12,7 +12,7 @@
 #ifndef _WX_STATTEXT_H_
 #define _WX_STATTEXT_H_
 
-class WXDLLEXPORT wxStaticText: public wxStaticTextBase
+class WXDLLIMPEXP_CORE wxStaticText: public wxStaticTextBase
 {
     DECLARE_DYNAMIC_CLASS(wxStaticText)
 

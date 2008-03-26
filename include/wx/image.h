@@ -79,14 +79,14 @@ class WXDLLIMPEXP_FWD_CORE wxPalette;
 
 #if wxUSE_VARIANT
 #include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxImage,WXDLLEXPORT)
+DECLARE_VARIANT_OBJECT_EXPORTED(wxImage,WXDLLIMPEXP_CORE)
 #endif
 
 //-----------------------------------------------------------------------------
 // wxImageHandler
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxImageHandler: public wxObject
+class WXDLLIMPEXP_CORE wxImageHandler: public wxObject
 {
 public:
     wxImageHandler()
@@ -140,7 +140,7 @@ private:
 // wxImageHistogram
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxImageHistogramEntry
+class WXDLLIMPEXP_CORE wxImageHistogramEntry
 {
 public:
     wxImageHistogramEntry() { index = value = 0; }
@@ -152,7 +152,7 @@ WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
                              wxIntegerHash, wxIntegerEqual,
                              wxImageHistogramBase);
 
-class WXDLLEXPORT wxImageHistogram : public wxImageHistogramBase
+class WXDLLIMPEXP_CORE wxImageHistogram : public wxImageHistogramBase
 {
 public:
     wxImageHistogram() : wxImageHistogramBase(256) { }
@@ -182,7 +182,7 @@ public:
 // wxImage
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxImage: public wxObject
+class WXDLLIMPEXP_CORE wxImage: public wxObject
 {
 public:
     // red, green and blue are 8 bit unsigned integers in the range of 0..255
@@ -444,9 +444,9 @@ private:
 };
 
 
-extern void WXDLLEXPORT wxInitAllImageHandlers();
+extern void WXDLLIMPEXP_CORE wxInitAllImageHandlers();
 
-extern WXDLLEXPORT_DATA(wxImage)    wxNullImage;
+extern WXDLLIMPEXP_DATA_CORE(wxImage)    wxNullImage;
 
 //-----------------------------------------------------------------------------
 // wxImage handlers

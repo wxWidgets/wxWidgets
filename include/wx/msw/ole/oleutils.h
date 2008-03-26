@@ -204,7 +204,7 @@ void wxLogRelease(const wxChar *szInterface, ULONG cRef);
 
 // wrapper around BSTR type (by Vadim Zeitlin)
 
-class WXDLLEXPORT wxBasicString
+class WXDLLIMPEXP_CORE wxBasicString
 {
 public:
     // ctors & dtor
@@ -229,15 +229,15 @@ private:
 // Convert variants
 class WXDLLIMPEXP_FWD_BASE wxVariant;
 
-WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant);
-WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant);
+WXDLLIMPEXP_CORE bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant);
+WXDLLIMPEXP_CORE bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant);
 #endif // wxUSE_VARIANT
 
 // Convert string to Unicode
-WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str);
+WXDLLIMPEXP_CORE BSTR wxConvertStringToOle(const wxString& str);
 
 // Convert string from BSTR to wxString
-WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr);
+WXDLLIMPEXP_CORE wxString wxConvertStringFromOle(BSTR bStr);
 
 #else // !wxUSE_OLE
 

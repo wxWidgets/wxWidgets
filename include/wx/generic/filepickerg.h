@@ -17,8 +17,8 @@
 #include "wx/dirdlg.h"
 
 
-extern WXDLLEXPORT_DATA(const wxEventType) wxEVT_COMMAND_DIRPICKER_CHANGED;
-extern WXDLLEXPORT_DATA(const wxEventType) wxEVT_COMMAND_FILEPICKER_CHANGED;
+extern WXDLLIMPEXP_DATA_CORE(const wxEventType) wxEVT_COMMAND_DIRPICKER_CHANGED;
+extern WXDLLIMPEXP_DATA_CORE(const wxEventType) wxEVT_COMMAND_FILEPICKER_CHANGED;
 
 
 //-----------------------------------------------------------------------------

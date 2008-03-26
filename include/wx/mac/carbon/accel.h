@@ -15,7 +15,7 @@
 #include "wx/string.h"
 #include "wx/event.h"
 
-class WXDLLEXPORT wxAcceleratorTable: public wxObject
+class WXDLLIMPEXP_CORE wxAcceleratorTable: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
 public:
@@ -30,7 +30,7 @@ public:
     int GetCommand( wxKeyEvent &event );
 };
 
-// WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;
+// WXDLLIMPEXP_DATA_CORE(extern wxAcceleratorTable) wxNullAcceleratorTable;
 
 #endif
     // _WX_ACCEL_H_

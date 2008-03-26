@@ -137,7 +137,7 @@ struct wxComboCtrlFeatures
 };
 
 
-class WXDLLEXPORT wxComboCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxControl
 {
     friend class wxComboPopup;
 public:
@@ -645,7 +645,7 @@ enum
 };
 
 
-class WXDLLEXPORT wxComboPopup
+class WXDLLIMPEXP_CORE wxComboPopup
 {
     friend class wxComboCtrlBase;
 public:

@@ -32,9 +32,9 @@ class WXDLLIMPEXP_FWD_CORE wxImage;
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const char) wxToolBarNameStr[];
-extern WXDLLEXPORT_DATA(const wxSize) wxDefaultSize;
-extern WXDLLEXPORT_DATA(const wxPoint) wxDefaultPosition;
+extern WXDLLIMPEXP_DATA_CORE(const char) wxToolBarNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const wxSize) wxDefaultSize;
+extern WXDLLIMPEXP_DATA_CORE(const wxPoint) wxDefaultPosition;
 
 enum wxToolBarToolStyle
 {
@@ -54,7 +54,7 @@ enum wxToolBarToolStyle
 // for the applications status bar.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolBarToolBase : public wxObject
+class WXDLLIMPEXP_CORE wxToolBarToolBase : public wxObject
 {
 public:
     // ctors & dtor
@@ -247,7 +247,7 @@ WX_DECLARE_EXPORTED_LIST(wxToolBarToolBase, wxToolBarToolsList);
 // the base class for all toolbars
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolBarBase : public wxControl
+class WXDLLIMPEXP_CORE wxToolBarBase : public wxControl
 {
 public:
     wxToolBarBase();

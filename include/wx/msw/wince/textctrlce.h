@@ -17,7 +17,7 @@
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 WX_DEFINE_EXPORTED_ARRAY_PTR(wxTextCtrl *, wxArrayTextSpins);
 
-class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
+class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
     // creation

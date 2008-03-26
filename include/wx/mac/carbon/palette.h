@@ -16,7 +16,7 @@
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
 
-class WXDLLEXPORT wxPalette : public wxPaletteBase
+class WXDLLIMPEXP_CORE wxPalette : public wxPaletteBase
 {
 public:
     wxPalette();

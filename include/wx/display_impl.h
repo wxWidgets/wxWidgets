@@ -17,7 +17,7 @@
 // wxDisplayFactory: allows to create wxDisplay objects
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDisplayFactory
+class WXDLLIMPEXP_CORE wxDisplayFactory
 {
 public:
     wxDisplayFactory() { }
@@ -44,7 +44,7 @@ public:
 // wxDisplayImpl: base class for all wxDisplay implementations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDisplayImpl
+class WXDLLIMPEXP_CORE wxDisplayImpl
 {
 public:
     // virtual dtor for this base class
@@ -98,7 +98,7 @@ protected:
 
 // this is a stub implementation using single/main display only, it is
 // available even if wxUSE_DISPLAY == 0
-class WXDLLEXPORT wxDisplayFactorySingle : public wxDisplayFactory
+class WXDLLIMPEXP_CORE wxDisplayFactorySingle : public wxDisplayFactory
 {
 public:
     virtual wxDisplayImpl *CreateDisplay(unsigned n);

@@ -35,7 +35,7 @@
 // same as appname). The file name (strAppName parameter) may, in fact,
 // contain the full path to the file. If it doesn't, the file is searched for
 // in the Windows directory.
-class WXDLLEXPORT wxIniConfig : public wxConfigBase
+class WXDLLIMPEXP_CORE wxIniConfig : public wxConfigBase
 {
 public:
   // ctor & dtor

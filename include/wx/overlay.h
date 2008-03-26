@@ -31,7 +31,7 @@
 class WXDLLIMPEXP_FWD_CORE wxOverlayImpl;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 
-class WXDLLEXPORT wxOverlay
+class WXDLLIMPEXP_CORE wxOverlay
 {
 public:
     wxOverlay();
@@ -67,7 +67,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxDCOverlay
+class WXDLLIMPEXP_CORE wxDCOverlay
 {
 public:
     // connects this overlay to the corresponding drawing dc, if the overlay is

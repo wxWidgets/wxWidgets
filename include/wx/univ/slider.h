@@ -36,7 +36,7 @@
 // wxSlider
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSlider : public wxSliderBase,
+class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase,
                              public wxControlWithThumb
 {
 public:

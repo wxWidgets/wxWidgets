@@ -16,7 +16,7 @@
 
 // Checkbox item (single checkbox)
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
-class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
+class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase
 {
  public:
     inline wxCheckBox() { }
@@ -66,7 +66,7 @@ private:
   DECLARE_DYNAMIC_CLASS(wxCheckBox)
 };
 
-class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
+class WXDLLIMPEXP_CORE wxBitmapCheckBox: public wxCheckBox
 {
  public:
 

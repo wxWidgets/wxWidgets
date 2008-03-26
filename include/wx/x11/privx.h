@@ -148,7 +148,7 @@ bool wxWindowIsVisible(Window win);
 
 bool wxDoSetShape( Display* xdisplay, Window xwindow, const wxRegion& region );
 
-class WXDLLEXPORT wxXVisualInfo
+class WXDLLIMPEXP_CORE wxXVisualInfo
 {
 public:
     wxXVisualInfo();

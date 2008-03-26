@@ -12,7 +12,7 @@
 #ifndef _WX_GAUGE_H_
 #define _WX_GAUGE_H_
 
-class WXDLLEXPORT wxGauge: public wxGaugeBase
+class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
 public:
     inline wxGauge() { m_nRangeMax = 0; m_nGaugePos = 0; }

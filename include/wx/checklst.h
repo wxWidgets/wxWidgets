@@ -20,7 +20,7 @@
 // wxCheckListBox: a listbox whose items may be checked
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCheckListBoxBase : public
+class WXDLLIMPEXP_CORE wxCheckListBoxBase : public
                                               #ifdef __WXWINCE__
                                                   // keep virtuals synchronised
                                                   wxListBoxBase

@@ -14,7 +14,7 @@
 
 #if wxUSE_NATIVE_STATUSBAR
 
-class WXDLLEXPORT wxStatusBarPalm : public wxStatusBarBase
+class WXDLLIMPEXP_CORE wxStatusBarPalm : public wxStatusBarBase
 {
 public:
     // ctors and such

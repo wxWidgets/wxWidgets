@@ -19,7 +19,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSProgressIndicator);
 // ========================================================================
 // wxGauge
 // ========================================================================
-class WXDLLEXPORT wxGauge: public wxGaugeBase// , protected wxCocoaNSProgressIndicator
+class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase// , protected wxCocoaNSProgressIndicator
 {
     DECLARE_DYNAMIC_CLASS(wxGauge)
     DECLARE_EVENT_TABLE()

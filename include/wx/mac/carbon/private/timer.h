@@ -16,7 +16,7 @@
 
 struct MacTimerInfo;
 
-class WXDLLEXPORT wxCarbonTimerImpl : public wxTimerImpl
+class WXDLLIMPEXP_CORE wxCarbonTimerImpl : public wxTimerImpl
 {
 public:
     wxCarbonTimerImpl(wxTimer *timer);

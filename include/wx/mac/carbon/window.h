@@ -21,7 +21,7 @@ class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
 
 class WXDLLIMPEXP_FWD_CORE wxMacControl ;
 
-class WXDLLEXPORT wxWindowMac: public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindowMac: public wxWindowBase
 {
     DECLARE_DYNAMIC_CLASS(wxWindowMac)
 

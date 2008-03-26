@@ -34,7 +34,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 // appear. It can be either a solid block or a custom bitmap (TODO)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCaretBase
+class WXDLLIMPEXP_CORE wxCaretBase
 {
 public:
     // ctors
@@ -208,7 +208,7 @@ private:
 #ifdef wxHAS_CARET_USING_OVERLAYS
 
 // we don't need to hide the caret if it's rendered using overlays
-class WXDLLEXPORT wxCaretSuspend
+class WXDLLIMPEXP_CORE wxCaretSuspend
 {
 public:
     wxCaretSuspend(wxWindow *WXUNUSED(win)) {}
@@ -218,7 +218,7 @@ public:
 
 #else // !wxHAS_CARET_USING_OVERLAYS
 
-class WXDLLEXPORT wxCaretSuspend
+class WXDLLIMPEXP_CORE wxCaretSuspend
 {
 public:
     wxCaretSuspend(wxWindow *win)

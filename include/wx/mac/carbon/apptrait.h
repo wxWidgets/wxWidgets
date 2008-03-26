@@ -31,7 +31,7 @@ public:
 
 #if wxUSE_GUI
 
-class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
+class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
 #if wxUSE_TIMER

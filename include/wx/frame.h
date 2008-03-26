@@ -19,8 +19,8 @@
 #include "wx/toplevel.h"      // the base class
 
 // the default names for various classs
-extern WXDLLEXPORT_DATA(const char) wxStatusLineNameStr[];
-extern WXDLLEXPORT_DATA(const char) wxToolBarNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusLineNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxToolBarNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
@@ -50,7 +50,7 @@ class WXDLLIMPEXP_FWD_CORE wxToolBar;
 // CreateXXXBar() is called.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFrameBase : public wxTopLevelWindow
+class WXDLLIMPEXP_CORE wxFrameBase : public wxTopLevelWindow
 {
 public:
     // construction

@@ -131,7 +131,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
     for mingw 3.2.3 compiler bug that prevents a static function of liT class
     from being exported into dll. A minimal code snippet reproducing the bug:
 
-         struct WXDLLEXPORT Foo
+         struct WXDLLIMPEXP_CORE Foo
          {
             static void Bar();
             struct SomeInnerClass
@@ -342,7 +342,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
     WX_DECLARE_LIST(elementtype, listname)
 
 #define WX_DECLARE_EXPORTED_LIST(elementtype, listname)                     \
-    WX_DECLARE_LIST_WITH_DECL(elementtype, listname, class WXDLLEXPORT)
+    WX_DECLARE_LIST_WITH_DECL(elementtype, listname, class WXDLLIMPEXP_CORE)
 #define WX_DECLARE_EXPORTED_LIST_PTR(elementtype, listname)                 \
     WX_DECLARE_EXPORTED_LIST(elementtype, listname)
 
@@ -1097,11 +1097,11 @@ private:
     WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, decl)
 
 #define WX_DECLARE_EXPORTED_LIST(elementtype, listname)                     \
-    WX_DECLARE_LIST_WITH_DECL(elementtype, listname, class WXDLLEXPORT)
+    WX_DECLARE_LIST_WITH_DECL(elementtype, listname, class WXDLLIMPEXP_CORE)
 
 #define WX_DECLARE_EXPORTED_LIST_PTR(elementtype, listname)                     \
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
-    WX_DECLARE_LIST_PTR_2(elementtype, listname, wx##listname##Node, class WXDLLEXPORT)
+    WX_DECLARE_LIST_PTR_2(elementtype, listname, wx##listname##Node, class WXDLLIMPEXP_CORE)
 
 #define WX_DECLARE_USER_EXPORTED_LIST(elementtype, listname, usergoo)       \
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \

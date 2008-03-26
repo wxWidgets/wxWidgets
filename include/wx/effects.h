@@ -28,7 +28,7 @@
 #include "wx/gdicmn.h"
 #include "wx/dc.h"
 
-class WXDLLEXPORT wxEffectsImpl: public wxObject
+class WXDLLIMPEXP_CORE wxEffectsImpl: public wxObject
 {
 public:
     // Assume system colours

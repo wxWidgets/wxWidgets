@@ -22,7 +22,7 @@
 #define wxACTION_SPIN_INC    _T("inc")
 #define wxACTION_SPIN_DEC    _T("dec")
 
-class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase,
+class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase,
                                  public wxControlWithArrows
 {
 public:
@@ -104,7 +104,7 @@ private:
 // wxStdScrollBarInputHandler) and processes keyboard events too
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStdSpinButtonInputHandler : public wxStdInputHandler
+class WXDLLIMPEXP_CORE wxStdSpinButtonInputHandler : public wxStdInputHandler
 {
 public:
     wxStdSpinButtonInputHandler(wxInputHandler *inphand);

@@ -31,7 +31,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 // wxControlContainerBase: common part used in both native and generic cases
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxControlContainerBase
+class WXDLLIMPEXP_CORE wxControlContainerBase
 {
 public:
     // default ctor, SetContainerWindow() must be called later
@@ -163,7 +163,7 @@ protected:                                                                    \
 // ----------------------------------------------------------------------------
 
 // this must be a real class as we forward-declare it elsewhere
-class WXDLLEXPORT wxControlContainer : public wxControlContainerBase
+class WXDLLIMPEXP_CORE wxControlContainer : public wxControlContainerBase
 {
 protected:
     // set the focus to the child which had it the last time
@@ -198,7 +198,7 @@ class WXDLLIMPEXP_FWD_CORE wxNavigationKeyEvent;
 // wxControlContainer for TAB navigation implemented in wx itself
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxControlContainer : public wxControlContainerBase
+class WXDLLIMPEXP_CORE wxControlContainer : public wxControlContainerBase
 {
 public:
     // default ctor, SetContainerWindow() must be called later

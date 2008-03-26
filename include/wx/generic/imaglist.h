@@ -20,7 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxColour;
 
 
-class WXDLLEXPORT wxGenericImageList: public wxObject
+class WXDLLIMPEXP_CORE wxGenericImageList: public wxObject
 {
 public:
     wxGenericImageList() { m_width = m_height = 0; }
@@ -64,7 +64,7 @@ private:
  * the run-time information.
  */
 
-class WXDLLEXPORT wxImageList: public wxGenericImageList
+class WXDLLIMPEXP_CORE wxImageList: public wxGenericImageList
 {
     DECLARE_DYNAMIC_CLASS(wxImageList)
 

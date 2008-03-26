@@ -21,7 +21,7 @@ class WXDLLIMPEXP_FWD_CORE wxBitmap;
 // ========================================================================
 // wxPen
 // ========================================================================
-class WXDLLEXPORT wxPen: public wxGDIObject
+class WXDLLIMPEXP_CORE wxPen: public wxGDIObject
 {
 public:
     wxPen();

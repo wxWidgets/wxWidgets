@@ -25,7 +25,7 @@
     wxSP_WRAP:         value wraps at either end
  */
 
-class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase
+class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
 public:
     // construction

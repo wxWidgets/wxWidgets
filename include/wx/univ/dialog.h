@@ -11,12 +11,12 @@
 #ifndef _WX_UNIV_DIALOG_H_
 #define _WX_UNIV_DIALOG_H_
 
-extern WXDLLEXPORT_DATA(const char) wxDialogNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
 class WXDLLIMPEXP_FWD_CORE wxWindowDisabler;
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // Dialog boxes
-class WXDLLEXPORT wxDialog : public wxDialogBase
+class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
 {
 public:
     wxDialog() { Init(); }

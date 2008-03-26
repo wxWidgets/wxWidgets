@@ -35,7 +35,7 @@ class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 // wxListCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericListCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxControl
 {
 public:
 
@@ -253,7 +253,7 @@ private:
  * the run-time information.
  */
 
-class WXDLLEXPORT wxListCtrl: public wxGenericListCtrl
+class WXDLLIMPEXP_CORE wxListCtrl: public wxGenericListCtrl
 {
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
 

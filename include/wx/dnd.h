@@ -47,14 +47,14 @@ enum wxDragResult
 
 // return true if res indicates that something was done during a dnd operation,
 // i.e. is neither error nor none nor cancel
-WXDLLEXPORT bool wxIsDragResultOk(wxDragResult res);
+WXDLLIMPEXP_CORE bool wxIsDragResultOk(wxDragResult res);
 
 // ----------------------------------------------------------------------------
 // wxDropSource is the object you need to create (and call DoDragDrop on it)
 // to initiate a drag-and-drop operation
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDropSourceBase
+class WXDLLIMPEXP_CORE wxDropSourceBase
 {
 public:
     wxDropSourceBase(const wxCursor &cursorCopy = wxNullCursor,
@@ -129,7 +129,7 @@ protected:
 // OnData() is called)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDropTargetBase
+class WXDLLIMPEXP_CORE wxDropTargetBase
 {
 public:
     // ctor takes a pointer to heap-allocated wxDataObject which will be owned
@@ -233,7 +233,7 @@ protected:
 
 // A simple wxDropTarget derived class for text data: you only need to
 // override OnDropText() to get something working
-class WXDLLEXPORT wxTextDropTarget : public wxDropTarget
+class WXDLLIMPEXP_CORE wxTextDropTarget : public wxDropTarget
 {
 public:
     wxTextDropTarget();
@@ -247,7 +247,7 @@ private:
 };
 
 // A drop target which accepts files (dragged from File Manager or Explorer)
-class WXDLLEXPORT wxFileDropTarget : public wxDropTarget
+class WXDLLIMPEXP_CORE wxFileDropTarget : public wxDropTarget
 {
 public:
     wxFileDropTarget();

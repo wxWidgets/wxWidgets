@@ -24,14 +24,14 @@ class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 class WXDLLIMPEXP_FWD_BASE wxLog;
 
 // Force an exit from main loop
-void WXDLLEXPORT wxExit();
+void WXDLLIMPEXP_CORE wxExit();
 
 // Yield to other apps/messages
-bool WXDLLEXPORT wxYield();
+bool WXDLLIMPEXP_CORE wxYield();
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
-class WXDLLEXPORT wxApp: public wxAppBase
+class WXDLLIMPEXP_CORE wxApp: public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
 

@@ -50,7 +50,7 @@ const unsigned char wxALPHA_OPAQUE = 0xff;
 
 #if wxUSE_VARIANT
 #include "wx/variant.h"
-DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLEXPORT)
+DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLIMPEXP_CORE)
 #endif
 
 //-----------------------------------------------------------------------------
@@ -68,7 +68,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLEXPORT)
 #define wxCOLOUR_IS_GDIOBJECT 1
 #endif
 
-class WXDLLEXPORT wxColourBase : public 
+class WXDLLIMPEXP_CORE wxColourBase : public
 #if wxCOLOUR_IS_GDIOBJECT
     wxGDIObject
 #else
@@ -121,7 +121,7 @@ public:
 
 #if !wxCOLOUR_IS_GDIOBJECT
     virtual bool IsOk() const= 0;
-    
+
     // older version, for backwards compatibility only (but not deprecated
     // because it's still widely used)
     bool Ok() const { return IsOk(); }

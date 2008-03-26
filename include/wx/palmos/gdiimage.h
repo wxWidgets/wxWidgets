@@ -30,7 +30,7 @@ WX_DECLARE_EXPORTED_LIST(wxGDIImageHandler, wxGDIImageHandlerList);
 // wxGDIImageRefData: common data fields for all derived classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGDIImageRefData : public wxGDIRefData
+class WXDLLIMPEXP_CORE wxGDIImageRefData : public wxGDIRefData
 {
 public:
     wxGDIImageRefData()
@@ -70,7 +70,7 @@ public:
 // wxGDIImageHandler: a class which knows how to load/save wxGDIImages.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGDIImageHandler : public wxObject
+class WXDLLIMPEXP_CORE wxGDIImageHandler : public wxObject
 {
 public:
     // ctor
@@ -117,7 +117,7 @@ protected:
 // format. It also falls back to wxImage if no appropriate image is found.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGDIImage : public wxGDIObject
+class WXDLLIMPEXP_CORE wxGDIImage : public wxGDIObject
 {
 public:
     // handlers list interface

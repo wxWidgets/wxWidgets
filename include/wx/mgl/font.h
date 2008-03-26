@@ -26,7 +26,7 @@ struct font_t;
 // wxFont
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFont : public wxFontBase
+class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
     // ctors and such

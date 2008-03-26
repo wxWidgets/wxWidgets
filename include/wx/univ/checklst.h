@@ -22,7 +22,7 @@
 // wxCheckListBox
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
+class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
 public:
     // ctors

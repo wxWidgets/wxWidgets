@@ -97,7 +97,7 @@ public:
 
 // this is an ABC: use one of the derived classes to create a DC associated
 // with a window, screen, printer and so on
-class WXDLLEXPORT wxPMDCImpl : public wxDCImpl
+class WXDLLIMPEXP_CORE wxPMDCImpl : public wxDCImpl
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
 

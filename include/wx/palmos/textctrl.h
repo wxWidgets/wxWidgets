@@ -12,7 +12,7 @@
 #ifndef _WX_TEXTCTRL_H_
 #define _WX_TEXTCTRL_H_
 
-class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
+class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
     // creation

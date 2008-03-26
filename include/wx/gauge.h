@@ -41,13 +41,13 @@
     #define wxGAUGE_EMULATE_INDETERMINATE_MODE 0
 #endif
 
-extern WXDLLEXPORT_DATA(const char) wxGaugeNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxGaugeNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxGauge: a progress bar
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGaugeBase : public wxControl
+class WXDLLIMPEXP_CORE wxGaugeBase : public wxControl
 {
 public:
     wxGaugeBase() { m_rangeMax = m_gaugePos = 0; }

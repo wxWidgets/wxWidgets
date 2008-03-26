@@ -24,7 +24,7 @@
 // There are two kinds for number types T=integer or T=double.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSpinCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxSpinCtrlBase : public wxControl
 {
 public:
     wxSpinCtrlBase() {}
@@ -56,7 +56,7 @@ private:
 // wxSpinDoubleEvent - a wxSpinEvent for double valued controls
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSpinDoubleEvent : public wxNotifyEvent
+class WXDLLIMPEXP_CORE wxSpinDoubleEvent : public wxNotifyEvent
 {
 public:
     wxSpinDoubleEvent(wxEventType commandType = wxEVT_NULL, int winid = 0,

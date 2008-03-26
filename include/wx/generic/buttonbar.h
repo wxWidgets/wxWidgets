@@ -22,7 +22,7 @@ class WXDLLIMPEXP_FWD_CORE wxButtonToolBarTool;
 // wxButtonToolBar
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxButtonToolBar : public wxToolBarBase
+class WXDLLIMPEXP_CORE wxButtonToolBar : public wxToolBarBase
 {
 public:
     // construction/destruction

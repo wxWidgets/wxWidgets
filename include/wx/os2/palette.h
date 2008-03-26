@@ -17,7 +17,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxPalette;
 
-class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
+class WXDLLIMPEXP_CORE wxPaletteRefData: public wxGDIRefData
 {
     friend class WXDLLIMPEXP_FWD_CORE wxPalette;
 public:
@@ -30,7 +30,7 @@ public:
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
 
-class WXDLLEXPORT wxPalette: public wxPaletteBase
+class WXDLLIMPEXP_CORE wxPalette: public wxPaletteBase
 {
 public:
     wxPalette();

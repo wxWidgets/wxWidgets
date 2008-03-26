@@ -15,7 +15,7 @@
 #include "wx/dcclient.h"
 #include "wx/mac/carbon/dcclient.h"
 
-class WXDLLEXPORT wxScreenDCImpl: public wxWindowDCImpl
+class WXDLLIMPEXP_CORE wxScreenDCImpl: public wxWindowDCImpl
 {
 public:
     wxScreenDCImpl( wxDC *owner );

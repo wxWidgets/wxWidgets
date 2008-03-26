@@ -18,7 +18,7 @@
 // wxMotifDCImpl
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMotifDCImpl : public wxDCImpl
+class WXDLLIMPEXP_CORE wxMotifDCImpl : public wxDCImpl
 {
 public:
     wxMotifDCImpl(wxDC *owner);

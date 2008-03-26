@@ -33,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxRenderer;
 // wxScrollArrows: an abstraction of scrollbar arrow
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxScrollArrows
+class WXDLLIMPEXP_CORE wxScrollArrows
 {
 public:
     enum Arrow
@@ -79,7 +79,7 @@ private:
 // wxControlWithArrows: interface implemented by controls using wxScrollArrows
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxControlWithArrows
+class WXDLLIMPEXP_CORE wxControlWithArrows
 {
 public:
     virtual ~wxControlWithArrows() {}

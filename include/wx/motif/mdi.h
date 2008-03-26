@@ -26,7 +26,7 @@ but wxMDIChildFrame::GetParent should return the parent frame.
 class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
 class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 
-class WXDLLEXPORT wxMDIParentFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIParentFrame: public wxFrame
 {
     DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 
@@ -112,7 +112,7 @@ protected:
     DECLARE_EVENT_TABLE()
 };
 
-class WXDLLEXPORT wxMDIChildFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIChildFrame: public wxFrame
 {
     DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 
@@ -205,7 +205,7 @@ protected:
 * of the children. Phew! So the children are sort of 'adopted'...
 */
 
-class WXDLLEXPORT wxMDIClientWindow: public wxNotebook
+class WXDLLIMPEXP_CORE wxMDIClientWindow: public wxNotebook
 {
     DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 

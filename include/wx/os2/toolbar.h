@@ -19,7 +19,7 @@
 #define ID_TOOLTIMER                100
 #define ID_TOOLEXPTIMER             101
 
-class WXDLLEXPORT wxToolBar: public wxToolBarBase
+class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
 {
 public:
     /*

@@ -19,7 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxRadioButton;
 // wxRadioBox
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRadioBox : public wxControl, public wxRadioBoxBase
+class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
 public:
     wxRadioBox():m_radios(wxKEY_INTEGER,32)

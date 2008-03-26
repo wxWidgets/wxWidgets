@@ -14,7 +14,7 @@
 
 class wxImageList;
 
-// WXDLLEXPORT_DATA(extern const wxChar) wxToolBarNameStr[];
+// WXDLLIMPEXP_DATA_CORE(extern const wxChar) wxToolBarNameStr[];
 
 /*
  * Flags returned by HitTest
@@ -25,7 +25,7 @@ class wxImageList;
 #define wxTAB_HITTEST_ONLABEL           4
 #define wxTAB_HITTEST_ONITEM            6
 
-class WXDLLEXPORT wxTabCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxTabCtrl: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxTabCtrl)
  public:
@@ -120,7 +120,7 @@ DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTabCtrl)
 };
 
-class WXDLLEXPORT wxTabEvent : public wxNotifyEvent
+class WXDLLIMPEXP_CORE wxTabEvent : public wxNotifyEvent
 {
 public:
     wxTabEvent(wxEventType commandType = wxEVT_NULL, int id = 0,

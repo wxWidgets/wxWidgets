@@ -14,7 +14,7 @@
 
 #include "wx/control.h"
 
-class WXDLLEXPORT wxStaticText : public wxStaticTextBase
+class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
 {
 public:
     inline wxStaticText() { }

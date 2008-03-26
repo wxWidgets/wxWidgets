@@ -29,7 +29,7 @@
 class wxMacTextControl;
 
 
-class WXDLLEXPORT wxTextCtrl: public wxTextCtrlBase
+class WXDLLIMPEXP_CORE wxTextCtrl: public wxTextCtrlBase
 {
   DECLARE_DYNAMIC_CLASS(wxTextCtrl)
 

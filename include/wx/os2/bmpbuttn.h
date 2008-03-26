@@ -15,11 +15,11 @@
 #include "wx/button.h"
 #include "wx/dcclient.h"
 
-WXDLLEXPORT_DATA(extern const char) wxButtonNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxButtonNameStr[];
 
 #define wxDEFAULT_BUTTON_MARGIN 4
 
-class WXDLLEXPORT wxBitmapButton: public wxBitmapButtonBase
+class WXDLLIMPEXP_CORE wxBitmapButton: public wxBitmapButtonBase
 {
 public:
     inline wxBitmapButton()

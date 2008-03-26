@@ -26,7 +26,7 @@ WX_DEFINE_EXPORTED_ARRAY_PTR(wxToolTip *, wxToolTipArray);
 
 #endif // wxUSE_TOOLTIPS
 
-extern WXDLLEXPORT_DATA(const char) wxRadioBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxRadioBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxRadioBoxBase is not a normal base class, but rather a mix-in because the
@@ -34,7 +34,7 @@ extern WXDLLEXPORT_DATA(const char) wxRadioBoxNameStr[];
 // example, it is a wxStaticBox in wxUniv and wxMSW but not in other ports
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRadioBoxBase : public wxItemContainerImmutable
+class WXDLLIMPEXP_CORE wxRadioBoxBase : public wxItemContainerImmutable
 {
 public:
     virtual ~wxRadioBoxBase();

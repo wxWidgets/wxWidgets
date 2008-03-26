@@ -278,9 +278,9 @@ name##PluginSentinel  m_pluginsentinel;
 #endif  // wxUSE_NESTED_CLASSES
 
 #define DECLARE_PLUGGABLE_CLASS(name) \
- DECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLEXPORT)
+ DECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLIMPEXP_CORE)
 #define DECLARE_ABSTRACT_PLUGGABLE_CLASS(name)  \
- DECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLEXPORT)
+ DECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLIMPEXP_CORE)
 
 #define DECLARE_USER_EXPORTED_PLUGGABLE_CLASS(name, usergoo) \
  DECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, usergoo)
@@ -442,21 +442,21 @@ public:
     wxEXPLICIT wxObjectDataPtr(T *ptr = NULL) : m_ptr(ptr) {}
 
     // copy ctor
-    wxObjectDataPtr(const wxObjectDataPtr<T> &tocopy) 
+    wxObjectDataPtr(const wxObjectDataPtr<T> &tocopy)
         : m_ptr(tocopy.m_ptr)
-    { 
+    {
         if (m_ptr)
-            m_ptr->IncRef(); 
+            m_ptr->IncRef();
     }
 
-    ~wxObjectDataPtr() 
-    { 
-        if (m_ptr) 
-            m_ptr->DecRef(); 
+    ~wxObjectDataPtr()
+    {
+        if (m_ptr)
+            m_ptr->DecRef();
     }
 
     T *get() const { return m_ptr; }
-    
+
     // test for pointer validity: defining conversion to unspecified_bool_type
     // and not more obvious bool to avoid implicit conversions to integer types
     typedef T *(wxObjectDataPtr<T>::*unspecified_bool_type)() const;
@@ -466,15 +466,15 @@ public:
     }
 
     T& operator*() const
-    { 
-        wxASSERT(m_ptr != NULL);    
+    {
+        wxASSERT(m_ptr != NULL);
         return *(m_ptr);
     }
-    
+
     T *operator->() const
-    { 
-        wxASSERT(m_ptr != NULL);    
-        return get(); 
+    {
+        wxASSERT(m_ptr != NULL);
+        return get();
     }
 
     void reset(T *ptr)
@@ -485,20 +485,20 @@ public:
     }
 
     wxObjectDataPtr& operator=(const wxObjectDataPtr &tocopy)
-    { 
-        if (m_ptr) 
-            m_ptr->DecRef(); 
-        m_ptr = tocopy.m_ptr; 
+    {
         if (m_ptr)
-            m_ptr->IncRef(); 
+            m_ptr->DecRef();
+        m_ptr = tocopy.m_ptr;
+        if (m_ptr)
+            m_ptr->IncRef();
         return *this;
     }
 
     wxObjectDataPtr& operator=(T *ptr)
-    { 
-        if (m_ptr) 
-            m_ptr->DecRef(); 
-        m_ptr = ptr; 
+    {
+        if (m_ptr)
+            m_ptr->DecRef();
+        m_ptr = ptr;
         return *this;
     }
 

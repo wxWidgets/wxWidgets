@@ -16,12 +16,12 @@
 
 #include "wx/frame.h"
 
-WXDLLEXPORT_DATA(extern const char) wxStatusLineNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxStatusLineNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
 class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 
-class WXDLLEXPORT wxMDIParentFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIParentFrame: public wxFrame
 {
   DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 
@@ -110,7 +110,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-class WXDLLEXPORT wxMDIChildFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIChildFrame: public wxFrame
 {
 DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 public:
@@ -162,7 +162,7 @@ protected:
  * of the children. Phew! So the children are sort of 'adopted'...
  */
 
-class WXDLLEXPORT wxMDIClientWindow: public wxWindow
+class WXDLLIMPEXP_CORE wxMDIClientWindow: public wxWindow
 {
   DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
  public:

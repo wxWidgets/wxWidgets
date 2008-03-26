@@ -40,7 +40,7 @@ public:
 // ========================================================================
 // wxComboBox
 // ========================================================================
-class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase, protected wxCocoaNSComboBox, protected wxCocoaNSTextField
+class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase, protected wxCocoaNSComboBox, protected wxCocoaNSTextField
 {
     DECLARE_DYNAMIC_CLASS(wxComboBox)
     DECLARE_EVENT_TABLE()

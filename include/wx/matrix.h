@@ -32,7 +32,7 @@
 //  at a certain coordinate and angle within another parent picture.
 //  At all times m_isIdentity is set if the matrix itself is an Identity matrix.
 //  It is used where possible to optimize calculations.
-class WXDLLEXPORT wxTransformMatrix: public wxObject
+class WXDLLIMPEXP_CORE wxTransformMatrix: public wxObject
 {
 public:
     wxTransformMatrix(void);

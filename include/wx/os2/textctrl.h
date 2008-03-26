@@ -14,7 +14,7 @@
 
 typedef int (wxCALLBACK *wxTreeCtrlCompare)(long lItem1, long lItem2, long lSortData);
 
-class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
+class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
     wxTextCtrl();

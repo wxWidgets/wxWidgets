@@ -53,7 +53,7 @@ typedef long wxTextCoord;
 // constants
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(const char) wxTextCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxTextCtrlNameStr[];
 
 // this is intentionally not enum to avoid warning fixes with
 // typecasting from enum type to wxTextCoord
@@ -252,7 +252,7 @@ enum wxTextAttrAlignment
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextAttr
+class WXDLLIMPEXP_CORE wxTextAttr
 {
 public:
     // ctors
@@ -591,7 +591,7 @@ private:
 // wxTextCtrl: a single or multiple line text zone where user can edit text
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextCtrlBase : public wxControl,
+class WXDLLIMPEXP_CORE wxTextCtrlBase : public wxControl,
 #if wxHAS_TEXT_WINDOW_STREAM
                                    public wxSTD streambuf,
 #endif
@@ -705,7 +705,7 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TEXT_ENTER;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TEXT_URL;
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TEXT_MAXLEN;
 
-class WXDLLEXPORT wxTextUrlEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxTextUrlEvent : public wxCommandEvent
 {
 public:
     wxTextUrlEvent(int winid, const wxMouseEvent& evtMouse,
@@ -763,7 +763,7 @@ typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 // C++ stream to the wxTextCtrl given to its ctor during its lifetime.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStreamToTextRedirector
+class WXDLLIMPEXP_CORE wxStreamToTextRedirector
 {
 private:
     void Init(wxTextCtrl *text)

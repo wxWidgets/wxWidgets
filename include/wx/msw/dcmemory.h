@@ -15,7 +15,7 @@
 #include "wx/dcmemory.h"
 #include "wx/msw/dc.h"
 
-class WXDLLEXPORT wxMemoryDCImpl: public wxMSWDCImpl
+class WXDLLIMPEXP_CORE wxMemoryDCImpl: public wxMSWDCImpl
 {
 public:
     wxMemoryDCImpl( wxMemoryDC *owner );

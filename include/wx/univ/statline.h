@@ -11,7 +11,7 @@
 #ifndef _WX_UNIV_STATLINE_H_
 #define _WX_UNIV_STATLINE_H_
 
-class WXDLLEXPORT wxStaticLine : public wxStaticLineBase
+class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
 public:
     // constructors and pseudo-constructors

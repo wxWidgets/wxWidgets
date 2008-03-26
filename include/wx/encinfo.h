@@ -32,7 +32,7 @@
 // to create a font of non-standard encoding (like KOI8) under Windows - the
 // facename specifies the encoding then)
 
-struct WXDLLEXPORT wxNativeEncodingInfo
+struct WXDLLIMPEXP_CORE wxNativeEncodingInfo
 {
     wxString facename;          // may be empty meaning "any"
 #ifndef __WXPALMOS__

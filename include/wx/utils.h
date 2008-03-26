@@ -200,18 +200,18 @@ inline bool wxPlatformIs(int platform) { return wxPlatform::Is(platform); }
 // Get the state of a key (true if pressed, false if not)
 // This is generally most useful getting the state of
 // the modifier or toggle keys.
-WXDLLEXPORT bool wxGetKeyState(wxKeyCode key);
+WXDLLIMPEXP_CORE bool wxGetKeyState(wxKeyCode key);
 
 
 // Don't synthesize KeyUp events holding down a key and producing
 // KeyDown events with autorepeat. On by default and always on
 // in wxMSW.
-WXDLLEXPORT bool wxSetDetectableAutoRepeat( bool flag );
+WXDLLIMPEXP_CORE bool wxSetDetectableAutoRepeat( bool flag );
 
 
 // wxMouseState is used to hold information about button and modifier state
 // and is what is returned from wxGetMouseState.
-class WXDLLEXPORT wxMouseState
+class WXDLLIMPEXP_CORE wxMouseState
 {
 public:
     wxMouseState()
@@ -276,7 +276,7 @@ private:
 
 
 // Returns the current state of the mouse position, buttons and modifers
-WXDLLEXPORT wxMouseState wxGetMouseState();
+WXDLLIMPEXP_CORE wxMouseState wxGetMouseState();
 
 #endif // wxUSE_GUI
 
@@ -595,13 +595,13 @@ enum
 };
 
 // strip mnemonics and/or accelerators from the label
-WXDLLEXPORT wxString
+WXDLLIMPEXP_CORE wxString
 wxStripMenuCodes(const wxString& str, int flags = wxStrip_All);
 
 #if WXWIN_COMPATIBILITY_2_6
 // obsolete and deprecated version, do not use, use the above overload instead
 wxDEPRECATED(
-    WXDLLEXPORT wxChar* wxStripMenuCodes(const wxChar *in, wxChar *out = NULL)
+    WXDLLIMPEXP_CORE wxChar* wxStripMenuCodes(const wxChar *in, wxChar *out = NULL)
 );
 
 #if wxUSE_ACCEL
@@ -609,7 +609,7 @@ class WXDLLIMPEXP_FWD_CORE wxAcceleratorEntry;
 
 // use wxAcceleratorEntry::Create() or FromString() methods instead
 wxDEPRECATED(
-    WXDLLEXPORT wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
+    WXDLLIMPEXP_CORE wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
 );
 #endif // wxUSE_ACCEL
 
@@ -620,45 +620,45 @@ wxDEPRECATED(
 // ----------------------------------------------------------------------------
 
 // Returns menu item id or wxNOT_FOUND if none.
-WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, const wxString& itemString);
+WXDLLIMPEXP_CORE int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, const wxString& itemString);
 
 // Find the wxWindow at the given point. wxGenericFindWindowAtPoint
 // is always present but may be less reliable than a native version.
-WXDLLEXPORT wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt);
-WXDLLEXPORT wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
+WXDLLIMPEXP_CORE wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt);
+WXDLLIMPEXP_CORE wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 
 // NB: this function is obsolete, use wxWindow::FindWindowByLabel() instead
 //
 // Find the window/widget with the given title or label.
 // Pass a parent to begin the search from, or NULL to look through
 // all windows.
-WXDLLEXPORT wxWindow* wxFindWindowByLabel(const wxString& title, wxWindow *parent = (wxWindow *) NULL);
+WXDLLIMPEXP_CORE wxWindow* wxFindWindowByLabel(const wxString& title, wxWindow *parent = (wxWindow *) NULL);
 
 // NB: this function is obsolete, use wxWindow::FindWindowByName() instead
 //
 // Find window by name, and if that fails, by label.
-WXDLLEXPORT wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent = (wxWindow *) NULL);
+WXDLLIMPEXP_CORE wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent = (wxWindow *) NULL);
 
 // ----------------------------------------------------------------------------
 // Message/event queue helpers
 // ----------------------------------------------------------------------------
 
 // Yield to other apps/messages and disable user input
-WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL, bool onlyIfNeeded = false);
+WXDLLIMPEXP_CORE bool wxSafeYield(wxWindow *win = NULL, bool onlyIfNeeded = false);
 
 // Enable or disable input to all top level windows
-WXDLLEXPORT void wxEnableTopLevelWindows(bool enable = true);
+WXDLLIMPEXP_CORE void wxEnableTopLevelWindows(bool enable = true);
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
-WXDLLEXPORT bool wxCheckForInterrupt(wxWindow *wnd);
+WXDLLIMPEXP_CORE bool wxCheckForInterrupt(wxWindow *wnd);
 
 // Consume all events until no more left
-WXDLLEXPORT void wxFlushEvents();
+WXDLLIMPEXP_CORE void wxFlushEvents();
 
 // a class which disables all windows (except, may be, the given one) in its
 // ctor and enables them back in its dtor
-class WXDLLEXPORT wxWindowDisabler
+class WXDLLIMPEXP_CORE wxWindowDisabler
 {
 public:
     // this ctor conditionally disables all windows: if the argument is false,
@@ -690,13 +690,13 @@ private:
 WXDLLIMPEXP_CORE void wxBeginBusyCursor(const wxCursor *cursor = wxHOURGLASS_CURSOR);
 
 // Restore cursor to normal
-WXDLLEXPORT void wxEndBusyCursor();
+WXDLLIMPEXP_CORE void wxEndBusyCursor();
 
 // true if we're between the above two calls
-WXDLLEXPORT bool wxIsBusy();
+WXDLLIMPEXP_CORE bool wxIsBusy();
 
 // Convenience class so we can just create a wxBusyCursor object on the stack
-class WXDLLEXPORT wxBusyCursor
+class WXDLLIMPEXP_CORE wxBusyCursor
 {
 public:
     wxBusyCursor(const wxCursor* cursor = wxHOURGLASS_CURSOR)
@@ -713,13 +713,13 @@ public:
     static const wxCursor GetBusyCursor();
 };
 
-void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
+void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
 
 // MSW only: get user-defined resource from the .res file.
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 #ifdef __WXMSW__
-    extern WXDLLEXPORT const wxChar* wxUserResourceStr;
-    WXDLLEXPORT wxChar* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
+    extern WXDLLIMPEXP_CORE const wxChar* wxUserResourceStr;
+    WXDLLIMPEXP_CORE wxChar* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
 #endif // MSW
 
 // ----------------------------------------------------------------------------

@@ -19,7 +19,7 @@
 class WXDLLIMPEXP_FWD_CORE wxOwnerDrawn;
 class WXDLLIMPEXP_FWD_CORE wxCheckListBoxItem; // fwd decl, defined in checklst.cpp
 
-class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
+class WXDLLIMPEXP_CORE wxCheckListBox : public wxCheckListBoxBase
 {
 public:
   // ctors

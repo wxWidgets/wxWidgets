@@ -228,7 +228,7 @@ class WXDLLIMPEXP_FWD_CORE wxAccessible;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxPoint;
 class WXDLLIMPEXP_FWD_CORE wxRect;
-class WXDLLEXPORT wxAccessibleBase : public wxObject
+class WXDLLIMPEXP_CORE wxAccessibleBase : public wxObject
 {
     DECLARE_NO_COPY_CLASS(wxAccessibleBase)
 

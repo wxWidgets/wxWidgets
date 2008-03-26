@@ -31,7 +31,7 @@ class WXDLLIMPEXP_FWD_CORE wxListBox;
 // wxComboBox: a combination of text control and a listbox
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxComboBox : public wxComboCtrl, public wxComboBoxBase
+class WXDLLIMPEXP_CORE wxComboBox : public wxComboCtrl, public wxComboBoxBase
 {
 public:
     // ctors and such

@@ -37,7 +37,7 @@ WX_DECLARE_LIST(wxString, wxListString);
 // wxStatusBar: a window near the bottom of the frame used for status info
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStatusBarBase : public wxWindow
+class WXDLLIMPEXP_CORE wxStatusBarBase : public wxWindow
 {
 public:
     wxStatusBarBase();

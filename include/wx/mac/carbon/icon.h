@@ -15,7 +15,7 @@
 #include "wx/bitmap.h"
 
 // Icon
-class WXDLLEXPORT wxIcon : public wxGDIObject
+class WXDLLIMPEXP_CORE wxIcon : public wxGDIObject
 {
 public:
     wxIcon();
@@ -63,7 +63,7 @@ private:
 };
 
 /*
-class WXDLLEXPORT wxICONFileHandler: public wxBitmapHandler
+class WXDLLIMPEXP_CORE wxICONFileHandler: public wxBitmapHandler
 {
   DECLARE_DYNAMIC_CLASS(wxICONFileHandler)
 public:
@@ -79,7 +79,7 @@ public:
 };
 */
 
-class WXDLLEXPORT wxICONResourceHandler: public wxBitmapHandler
+class WXDLLIMPEXP_CORE wxICONResourceHandler: public wxBitmapHandler
 {
   DECLARE_DYNAMIC_CLASS(wxICONResourceHandler)
 public:

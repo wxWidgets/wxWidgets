@@ -14,10 +14,10 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char) wxGaugeNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxGaugeNameStr[];
 
 // Group box
-class WXDLLEXPORT wxGauge: public wxGaugeBase
+class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
 {
  public:
   inline wxGauge() { }

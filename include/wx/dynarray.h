@@ -633,7 +633,7 @@ private:                                                                 \
     WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DECLARE_EXPORTED_BASEARRAY(T, name)                    \
-    WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, WXDLLEXPORT)
+    WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, WXDLLIMPEXP_CORE)
 
 #define WX_DECLARE_USER_EXPORTED_BASEARRAY(T, name, expmode)      \
     typedef T _wxArray##name;                                     \
@@ -654,10 +654,10 @@ private:                                                                 \
     WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DEFINE_EXPORTED_TYPEARRAY(T, name, base)               \
-    WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class WXDLLEXPORT)
+    WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class WXDLLIMPEXP_CORE)
 
 #define WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, base)               \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class WXDLLEXPORT)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, base, class WXDLLIMPEXP_CORE)
 
 #define WX_DEFINE_USER_EXPORTED_TYPEARRAY(T, name, base, expdecl) \
     WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, base, class expdecl)
@@ -710,7 +710,7 @@ private:                                                                 \
                                              wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, base)                \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base, WXDLLEXPORT)
+    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base, WXDLLIMPEXP_CORE)
 
 #define WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base, expmode)  \
     typedef T _wxArray##name;                                             \
@@ -736,7 +736,7 @@ private:                                                                 \
 
 #define WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base)      \
     WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base,     \
-                                                 WXDLLEXPORT)
+                                                 WXDLLIMPEXP_CORE)
 
 #define WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, base, \
                                                      expmode)                \
@@ -789,7 +789,7 @@ private:                                                                 \
     WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, wxARRAY_DEFAULT_EXPORT)
 
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)               \
-    WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, WXDLLEXPORT)
+    WX_DECLARE_USER_EXPORTED_OBJARRAY(T, name, WXDLLIMPEXP_CORE)
 
 #define WX_DECLARE_OBJARRAY_WITH_DECL(T, name, decl) \
     typedef T _wxObjArray##name;                            \

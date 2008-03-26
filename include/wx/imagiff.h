@@ -18,7 +18,7 @@
 
 #if wxUSE_IMAGE && wxUSE_IFF
 
-class WXDLLEXPORT wxIFFHandler : public wxImageHandler
+class WXDLLIMPEXP_CORE wxIFFHandler : public wxImageHandler
 {
 public:
     wxIFFHandler()

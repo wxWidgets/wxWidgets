@@ -22,7 +22,7 @@ class WXDLLIMPEXP_FWD_CORE wxScreenDC;
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxScreenDC: public wxDC
+class WXDLLIMPEXP_CORE wxScreenDC: public wxDC
 {
 public:
     wxScreenDC();

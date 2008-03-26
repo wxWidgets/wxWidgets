@@ -23,7 +23,7 @@ enum ETemplateID
 // wxTopLevelWindowOS2
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTopLevelWindowOS2 : public wxTopLevelWindowBase
+class WXDLLIMPEXP_CORE wxTopLevelWindowOS2 : public wxTopLevelWindowBase
 {
 public:
     // constructors and such

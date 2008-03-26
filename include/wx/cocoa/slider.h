@@ -19,7 +19,7 @@
 // ========================================================================
 // wxSlider
 // ========================================================================
-class WXDLLEXPORT wxSlider: public wxSliderBase, protected wxCocoaNSSlider
+class WXDLLIMPEXP_CORE wxSlider: public wxSliderBase, protected wxCocoaNSSlider
 {
     DECLARE_DYNAMIC_CLASS(wxSlider)
     DECLARE_EVENT_TABLE()

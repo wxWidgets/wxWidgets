@@ -16,7 +16,7 @@
 
 #if wxUSE_COMBOBOX
 
-extern WXDLLEXPORT_DATA(const char) wxComboBoxNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxComboBoxBase: this interface defines the methods wxComboBox must implement
@@ -25,7 +25,7 @@ extern WXDLLEXPORT_DATA(const char) wxComboBoxNameStr[];
 #include "wx/ctrlsub.h"
 #include "wx/textentry.h"
 
-class WXDLLEXPORT wxComboBoxBase : public wxItemContainer,
+class WXDLLIMPEXP_CORE wxComboBoxBase : public wxItemContainer,
                                    public wxTextEntry
 {
 public:

@@ -34,7 +34,7 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
 // DC classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowDCImpl : public wxPMDCImpl
+class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxPMDCImpl
 {
 public:
     // default ctor
@@ -55,7 +55,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxWindowDCImpl)
 }; // end of CLASS wxWindowDC
 
-class WXDLLEXPORT wxClientDCImpl : public wxWindowDCImpl
+class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 {
 public:
     // default ctor
@@ -76,7 +76,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxClientDCImpl)
 }; // end of CLASS wxClientDC
 
-class WXDLLEXPORT wxPaintDCImpl : public wxClientDCImpl
+class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
 {
 public:
     wxPaintDCImpl( wxDC *owner );

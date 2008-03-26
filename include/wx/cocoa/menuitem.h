@@ -25,7 +25,7 @@
 class wxMenuItemCocoa;
 WX_DECLARE_HASH_MAP(WX_NSMenuItem,wxMenuItem*,wxPointerHash,wxPointerEqual,wxMenuItemCocoaHash);
 
-class WXDLLEXPORT wxMenuItemCocoa : public wxMenuItemBase
+class WXDLLIMPEXP_CORE wxMenuItemCocoa : public wxMenuItemBase
 {
 public:
 // ------------------------------------------------------------------------

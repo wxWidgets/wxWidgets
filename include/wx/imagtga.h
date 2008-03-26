@@ -18,7 +18,7 @@
 
 #if wxUSE_TGA
 
-class WXDLLEXPORT wxTGAHandler : public wxImageHandler
+class WXDLLIMPEXP_CORE wxTGAHandler : public wxImageHandler
 {
 public:
     wxTGAHandler()

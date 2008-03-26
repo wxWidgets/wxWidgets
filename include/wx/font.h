@@ -108,7 +108,7 @@ enum
 
 class WXDLLIMPEXP_FWD_CORE wxNativeFontInfo;
 
-class WXDLLEXPORT wxFontBase : public wxGDIObject
+class WXDLLIMPEXP_CORE wxFontBase : public wxGDIObject
 {
 public:
     // creator function
@@ -276,7 +276,7 @@ public:
 #endif
 };
 
-extern WXDLLEXPORT_DATA(wxFontList*)    wxTheFontList;
+extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;
 
 #endif
     // _WX_FONT_H_BASE_

@@ -19,7 +19,7 @@
 // ========================================================================
 // wxListBox
 // ========================================================================
-class WXDLLEXPORT wxListBox: public wxListBoxBase, protected wxCocoaNSTableView
+class WXDLLIMPEXP_CORE wxListBox: public wxListBoxBase, protected wxCocoaNSTableView
 {
     DECLARE_DYNAMIC_CLASS(wxListBox)
     DECLARE_EVENT_TABLE()

@@ -359,7 +359,7 @@ private:
 // wxTextCtrl types
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStdTextCtrlInputHandler : public wxStdInputHandler
+class WXDLLIMPEXP_CORE wxStdTextCtrlInputHandler : public wxStdInputHandler
 {
 public:
     wxStdTextCtrlInputHandler(wxInputHandler *inphand) : wxStdInputHandler(inphand) {}

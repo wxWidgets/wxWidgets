@@ -28,7 +28,7 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxDataObject;
-class WXDLLEXPORT wxClipboard : public wxClipboardBase
+class WXDLLIMPEXP_CORE wxClipboard : public wxClipboardBase
 {
     DECLARE_DYNAMIC_CLASS(wxClipboard)
 

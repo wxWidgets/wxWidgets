@@ -19,7 +19,7 @@
 class WXDLLIMPEXP_FWD_CORE wxBrush;
 
 // Brush
-class WXDLLEXPORT wxBrush: public wxBrushBase
+class WXDLLIMPEXP_CORE wxBrush: public wxBrushBase
 {
 public:
     wxBrush();

@@ -24,7 +24,7 @@ WX_DECLARE_EXPORTED_LIST(wxMDIChildFrame, wxCocoaMDIChildFrameList);
 // ========================================================================
 // wxMDIParentFrame
 // ========================================================================
-class WXDLLEXPORT wxMDIParentFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIParentFrame: public wxFrame
 {
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
     DECLARE_EVENT_TABLE()
@@ -96,7 +96,7 @@ protected:
 // ========================================================================
 // wxMDIChildFrame
 // ========================================================================
-class WXDLLEXPORT wxMDIChildFrame: public wxFrame
+class WXDLLIMPEXP_CORE wxMDIChildFrame: public wxFrame
 {
     friend class WXDLLIMPEXP_FWD_CORE wxMDIParentFrame;
     DECLARE_EVENT_TABLE()

@@ -36,7 +36,7 @@ class WXDLLIMPEXP_FWD_CORE wxDropSource;
 // wxDropTarget
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDropTarget: public wxObject
+class WXDLLIMPEXP_CORE wxDropTarget: public wxObject
 {
 public:
     
@@ -59,7 +59,7 @@ public:
 // wxTextDropTarget
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextDropTarget: public wxDropTarget
+class WXDLLIMPEXP_CORE wxTextDropTarget: public wxDropTarget
 {
 public:
     
@@ -77,7 +77,7 @@ protected:
 // wxPrivateDropTarget
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPrivateDropTarget: public wxDropTarget
+class WXDLLIMPEXP_CORE wxPrivateDropTarget: public wxDropTarget
 {
 public:
     
@@ -107,7 +107,7 @@ private:
 // A drop target which accepts files (dragged from File Manager or Explorer)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFileDropTarget: public wxDropTarget
+class WXDLLIMPEXP_CORE wxFileDropTarget: public wxDropTarget
 {
 public:
     
@@ -136,7 +136,7 @@ enum wxDragResult
         wxDragCancel    // the operation was cancelled by user (not an error)
 };
 
-class WXDLLEXPORT wxDropSource: public wxObject
+class WXDLLIMPEXP_CORE wxDropSource: public wxObject
 {
 public:
     

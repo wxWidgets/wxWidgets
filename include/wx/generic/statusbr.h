@@ -19,7 +19,7 @@
 #include "wx/pen.h"
 #include "wx/arrstr.h"
 
-class WXDLLEXPORT wxStatusBarGeneric : public wxStatusBarBase
+class WXDLLIMPEXP_CORE wxStatusBarGeneric : public wxStatusBarBase
 {
 public:
     wxStatusBarGeneric() { Init(); }

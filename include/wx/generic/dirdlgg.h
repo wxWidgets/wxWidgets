@@ -20,8 +20,8 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxTreeEvent;
 
 // we may be included directly as well as from wx/dirdlg.h (FIXME)
-extern WXDLLEXPORT_DATA(const char) wxDirDialogNameStr[];
-extern WXDLLEXPORT_DATA(const char) wxDirSelectorPromptStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDirDialogNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDirSelectorPromptStr[];
 
 #ifndef wxDD_DEFAULT_STYLE
 #ifdef __WXWINCE__
@@ -37,7 +37,7 @@ extern WXDLLEXPORT_DATA(const char) wxDirSelectorPromptStr[];
 // wxGenericDirDialog
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericDirDialog : public wxDirDialogBase
+class WXDLLIMPEXP_CORE wxGenericDirDialog : public wxDirDialogBase
 {
 public:
     wxGenericDirDialog() : wxDirDialogBase() { }

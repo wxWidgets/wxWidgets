@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 // wxTreeCtrlBase
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTreeCtrlBase : public wxControl
+class WXDLLIMPEXP_CORE wxTreeCtrlBase : public wxControl
 {
 public:
     wxTreeCtrlBase()

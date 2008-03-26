@@ -26,7 +26,7 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOGGLEBUTTON_CLICKED;
 // wxToggleButtonBase
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToggleButtonBase : public wxControl
+class WXDLLIMPEXP_CORE wxToggleButtonBase : public wxControl
 {
 public:
     wxToggleButtonBase() { }

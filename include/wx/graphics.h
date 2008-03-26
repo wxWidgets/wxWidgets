@@ -80,7 +80,7 @@ private :
     DECLARE_DYNAMIC_CLASS(wxGraphicsPen)
 } ;
 
-extern WXDLLEXPORT_DATA(wxGraphicsPen) wxNullGraphicsPen;
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
 
 class WXDLLIMPEXP_CORE wxGraphicsBrush : public wxGraphicsObject
 {
@@ -91,7 +91,7 @@ private :
     DECLARE_DYNAMIC_CLASS(wxGraphicsBrush)
 } ;
 
-extern WXDLLEXPORT_DATA(wxGraphicsBrush) wxNullGraphicsBrush;
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
 
 class WXDLLIMPEXP_CORE wxGraphicsFont : public wxGraphicsObject
 {
@@ -102,7 +102,7 @@ private :
     DECLARE_DYNAMIC_CLASS(wxGraphicsFont)
 } ;
 
-extern WXDLLEXPORT_DATA(wxGraphicsFont) wxNullGraphicsFont;
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
 
 class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
 {
@@ -113,7 +113,7 @@ private :
     DECLARE_DYNAMIC_CLASS(wxGraphicsBitmap)
 } ;
  
-extern WXDLLEXPORT_DATA(wxGraphicsBitmap) wxNullGraphicsBitmap;
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
 
 class WXDLLIMPEXP_CORE wxGraphicsMatrix : public wxGraphicsObject
 {
@@ -179,7 +179,7 @@ private :
     DECLARE_DYNAMIC_CLASS(wxGraphicsMatrix)
 } ;
 
-extern WXDLLEXPORT_DATA(wxGraphicsMatrix) wxNullGraphicsMatrix;
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsMatrix) wxNullGraphicsMatrix;
 
 class WXDLLIMPEXP_CORE wxGraphicsPath : public wxGraphicsObject
 {
@@ -265,7 +265,7 @@ private :
     DECLARE_DYNAMIC_CLASS(wxGraphicsPath)
 } ;
 
-extern WXDLLEXPORT_DATA(wxGraphicsPath) wxNullGraphicsPath;
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPath) wxNullGraphicsPath;
 
 
 class WXDLLIMPEXP_CORE wxGraphicsContext : public wxGraphicsObject

@@ -13,10 +13,10 @@
 #ifndef _WX_TOGGLEBUTTON_H_
 #define _WX_TOGGLEBUTTON_H_
 
-WXDLLEXPORT_DATA(extern const char) wxCheckBoxNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const char) wxCheckBoxNameStr[];
 
 
-class WXDLLEXPORT wxBitmapToggleButton : public wxToggleButtonBase
+class WXDLLIMPEXP_CORE wxBitmapToggleButton : public wxToggleButtonBase
 {
 public:
     wxBitmapToggleButton() {}
@@ -60,7 +60,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxToggleButton : public wxToggleButtonBase
+class WXDLLIMPEXP_CORE wxToggleButton : public wxToggleButtonBase
 {
 public:
     wxToggleButton() {}

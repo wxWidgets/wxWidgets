@@ -35,7 +35,7 @@ class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 // wxBitmap: a mono or colour bitmap
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmap : public wxGDIImage
+class WXDLLIMPEXP_CORE wxBitmap : public wxGDIImage
 {
 public:
     // default ctor creates an invalid bitmap, you must Create() it later
@@ -176,7 +176,7 @@ private:
 // wxMask: a mono bitmap used for drawing bitmaps transparently.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMask : public wxObject
+class WXDLLIMPEXP_CORE wxMask : public wxObject
 {
 public:
     wxMask();
@@ -215,7 +215,7 @@ protected:
 // wxBitmapHandler is a class which knows how to load/save bitmaps to/from file
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmapHandler : public wxGDIImageHandler
+class WXDLLIMPEXP_CORE wxBitmapHandler : public wxGDIImageHandler
 {
 public:
     wxBitmapHandler() { m_type = wxBITMAP_TYPE_INVALID; }

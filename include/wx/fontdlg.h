@@ -23,7 +23,7 @@
 // wxFontDialog interface
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFontDialogBase : public wxDialog
+class WXDLLIMPEXP_CORE wxFontDialogBase : public wxDialog
 {
 public:
     // create the font dialog
@@ -74,7 +74,7 @@ inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
 // platform-specific wxFontDialog implementation
 // ----------------------------------------------------------------------------
 
-#if defined( __WXMAC_OSX__ ) 
+#if defined( __WXMAC_OSX__ )
 //set to 1 to use native mac font and color dialogs
 #define USE_NATIVE_FONT_DIALOG_FOR_MACOSX 1
 #else
@@ -108,9 +108,9 @@ inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
 
 // get the font from user and return it, returns wxNullFont if the dialog was
 // cancelled
-wxFont WXDLLEXPORT
-wxGetFontFromUser(wxWindow *parent = (wxWindow *)NULL,
-                  const wxFont& fontInit = wxNullFont, const wxString& caption = wxEmptyString);
+WXDLLIMPEXP_CORE wxFont wxGetFontFromUser(wxWindow *parent = (wxWindow *)NULL,
+                                          const wxFont& fontInit = wxNullFont,
+                                          const wxString& caption = wxEmptyString);
 
 #endif // wxUSE_FONTDLG
 

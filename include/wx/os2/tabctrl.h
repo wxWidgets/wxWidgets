@@ -23,7 +23,7 @@ class wxImageList;
 #define wxTAB_HITTEST_ONLABEL           4
 #define wxTAB_HITTEST_ONITEM            6
 
-class WXDLLEXPORT wxTabCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxTabCtrl: public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxTabCtrl)
  public:
@@ -118,7 +118,7 @@ protected:
 DECLARE_EVENT_TABLE()
 };
 
-class WXDLLEXPORT wxTabEvent: public wxCommandEvent
+class WXDLLIMPEXP_CORE wxTabEvent: public wxCommandEvent
 {
   DECLARE_DYNAMIC_CLASS(wxTabEvent)
 

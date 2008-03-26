@@ -34,7 +34,7 @@ class WXDLLIMPEXP_FWD_CORE wxXVisualInfo;
 // the wxApp class for wxX11 - see wxAppBase for more details
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxApp : public wxAppBase
+class WXDLLIMPEXP_CORE wxApp : public wxAppBase
 {
 public:
     wxApp();

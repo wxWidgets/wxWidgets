@@ -17,7 +17,7 @@
 // ========================================================================
 // wxStaticBox
 // ========================================================================
-class WXDLLEXPORT wxStaticBox: public wxStaticBoxBase, protected wxCocoaNSBox
+class WXDLLIMPEXP_CORE wxStaticBox: public wxStaticBoxBase, protected wxCocoaNSBox
 {
     DECLARE_DYNAMIC_CLASS(wxStaticBox)
     DECLARE_EVENT_TABLE()

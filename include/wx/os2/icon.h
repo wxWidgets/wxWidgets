@@ -22,7 +22,7 @@
 #define wxIconRefDataBase   wxGDIImageRefData
 #define wxIconBase          wxGDIImage
 
-class WXDLLEXPORT wxIconRefData: public wxIconRefDataBase
+class WXDLLIMPEXP_CORE wxIconRefData: public wxIconRefDataBase
 {
 public:
     wxIconRefData() { };
@@ -35,7 +35,7 @@ public:
 // Icon
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxIcon: public wxIconBase
+class WXDLLIMPEXP_CORE wxIcon: public wxIconBase
 {
 public:
     wxIcon();

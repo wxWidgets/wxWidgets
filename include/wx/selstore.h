@@ -39,7 +39,7 @@ WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_SIZE_T(size_t,
 // individual items) without changing its API.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSelectionStore
+class WXDLLIMPEXP_CORE wxSelectionStore
 {
 public:
     wxSelectionStore() : m_itemsSel(wxSizeTCmpFn) { Init(); }

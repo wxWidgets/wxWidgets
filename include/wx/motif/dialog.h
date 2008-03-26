@@ -15,7 +15,7 @@
 class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // Dialog boxes
-class WXDLLEXPORT wxDialog : public wxDialogBase
+class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
 {
 public:
     wxDialog();

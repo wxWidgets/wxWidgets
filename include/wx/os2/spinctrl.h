@@ -23,7 +23,7 @@ WX_DEFINE_EXPORTED_ARRAY_PTR(wxSpinCtrl *, wxArraySpins);
 // control is clicked.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSpinCtrl : public wxSpinButton
+class WXDLLIMPEXP_CORE wxSpinCtrl : public wxSpinButton
 {
 public:
     wxSpinCtrl() { }

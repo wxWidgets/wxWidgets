@@ -23,7 +23,7 @@
 #include "wx/containr.h"
 
 // the default names for various classes
-extern WXDLLEXPORT_DATA(const char) wxFrameNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxFrameNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 
@@ -116,7 +116,7 @@ enum
 // wxTopLevelWindow: a top level (as opposed to child) window
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTopLevelWindowBase : public wxNonOwnedWindow
+class WXDLLIMPEXP_CORE wxTopLevelWindowBase : public wxNonOwnedWindow
 {
 public:
     // construction
@@ -348,7 +348,7 @@ protected:
     #include "wx/univ/toplevel.h"
 #else // !__WXUNIVERSAL__
     #ifdef wxTopLevelWindowNative
-        class WXDLLEXPORT wxTopLevelWindow : public wxTopLevelWindowNative
+        class WXDLLIMPEXP_CORE wxTopLevelWindow : public wxTopLevelWindowNative
         {
         public:
             // construction

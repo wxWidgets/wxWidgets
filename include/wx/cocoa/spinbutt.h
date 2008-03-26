@@ -17,7 +17,7 @@
 // ========================================================================
 // wxSpinButton
 // ========================================================================
-class WXDLLEXPORT wxSpinButton: public wxSpinButtonBase// , protected wxCocoaNSStepper
+class WXDLLIMPEXP_CORE wxSpinButton: public wxSpinButtonBase// , protected wxCocoaNSStepper
 {
     DECLARE_DYNAMIC_CLASS(wxSpinButton)
     DECLARE_EVENT_TABLE()

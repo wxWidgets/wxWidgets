@@ -18,7 +18,7 @@
 // wxControl
 // ========================================================================
 
-class WXDLLEXPORT wxControl : public wxControlBase, public wxCocoaNSControl
+class WXDLLIMPEXP_CORE wxControl : public wxControlBase, public wxCocoaNSControl
 {
     DECLARE_ABSTRACT_CLASS(wxControl)
     WX_DECLARE_COCOA_OWNER(NSControl,NSView,NSView)

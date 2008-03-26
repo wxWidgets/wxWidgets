@@ -12,7 +12,7 @@
 #ifndef _WX_PALMOS_TOOLTIP_H_
 #define _WX_PALMOS_TOOLTIP_H_
 
-class WXDLLEXPORT wxToolTip : public wxObject
+class WXDLLIMPEXP_CORE wxToolTip : public wxObject
 {
 public:
     // ctor & dtor

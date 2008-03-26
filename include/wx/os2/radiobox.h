@@ -15,7 +15,7 @@
 // List box item
 class WXDLLIMPEXP_FWD_CORE wxBitmap ;
 
-class WXDLLEXPORT wxRadioBox: public wxControl, public wxRadioBoxBase
+class WXDLLIMPEXP_CORE wxRadioBox: public wxControl, public wxRadioBoxBase
 {
 public:
     wxRadioBox();

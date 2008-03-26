@@ -21,7 +21,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(wxMenuBarManagerObserver);
 // ========================================================================
 // wxMenuBarManager
 // ========================================================================
-class WXDLLEXPORT wxMenuBarManager : public wxObject
+class WXDLLIMPEXP_CORE wxMenuBarManager : public wxObject
 {
 // ------------------------------------------------------------------------
 // initialization/destruction

@@ -60,7 +60,7 @@ enum wxFindReplaceDialogStyles
 // wxFindReplaceData: holds Setup Data/Feedback Data for wxFindReplaceDialog
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFindReplaceData : public wxObject
+class WXDLLIMPEXP_CORE wxFindReplaceData : public wxObject
 {
 public:
     wxFindReplaceData() { Init(); }
@@ -93,7 +93,7 @@ private:
 // wxFindReplaceDialogBase
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFindReplaceDialogBase : public wxDialog
+class WXDLLIMPEXP_CORE wxFindReplaceDialogBase : public wxDialog
 {
 public:
     // ctors and such
@@ -137,7 +137,7 @@ protected:
 // wxFindReplaceDialog events
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFindDialogEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxFindDialogEvent : public wxCommandEvent
 {
 public:
     wxFindDialogEvent(wxEventType commandType = wxEVT_NULL, int id = 0)

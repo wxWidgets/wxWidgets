@@ -18,7 +18,7 @@
 //-----------------------------------------------------------------------------
 
 #if wxUSE_PCX
-class WXDLLEXPORT wxPCXHandler : public wxImageHandler
+class WXDLLIMPEXP_CORE wxPCXHandler : public wxImageHandler
 {
 public:
     inline wxPCXHandler()

@@ -16,7 +16,7 @@
 // wxFrame
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFrame : public wxFrameBase
+class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
     wxFrame() {}

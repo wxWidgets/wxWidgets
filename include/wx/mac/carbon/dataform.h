@@ -12,7 +12,7 @@
 #ifndef _WX_MAC_DATAFORM_H
 #define _WX_MAC_DATAFORM_H
 
-class WXDLLEXPORT wxDataFormat
+class WXDLLIMPEXP_CORE wxDataFormat
 {
 public:
     typedef unsigned long NativeFormat;

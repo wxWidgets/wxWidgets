@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMemoryDC : public wxDC, public wxMemoryDCBase
+class WXDLLIMPEXP_CORE wxMemoryDC : public wxDC, public wxMemoryDCBase
 {
 public:
     wxMemoryDC() { Init(); }

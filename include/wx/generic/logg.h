@@ -23,7 +23,7 @@
 #if wxUSE_TEXTCTRL
 
 // log everything to a text window (GUI only of course)
-class WXDLLEXPORT wxLogTextCtrl : public wxLog
+class WXDLLIMPEXP_CORE wxLogTextCtrl : public wxLog
 {
 public:
     wxLogTextCtrl(wxTextCtrl *pTextCtrl);
@@ -49,7 +49,7 @@ private:
 
 #if wxUSE_LOGGUI
 
-class WXDLLEXPORT wxLogGui : public wxLog
+class WXDLLIMPEXP_CORE wxLogGui : public wxLog
 {
 public:
     // ctor
@@ -86,7 +86,7 @@ protected:
 
 #if wxUSE_LOGWINDOW
 
-class WXDLLEXPORT wxLogWindow : public wxLogPassThrough
+class WXDLLIMPEXP_CORE wxLogWindow : public wxLogPassThrough
 {
 public:
     wxLogWindow(wxWindow *pParent,        // the parent frame (can be NULL)

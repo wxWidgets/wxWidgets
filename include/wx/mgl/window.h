@@ -23,7 +23,7 @@ class MGLDevCtx;
 // wxWindow declaration for MGL
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowMGL : public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindowMGL : public wxWindowBase
 {
 public:
     wxWindowMGL() { Init(); }

@@ -22,7 +22,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxCaret;
 
-class WXDLLEXPORT wxCaretTimer : public wxTimer
+class WXDLLIMPEXP_CORE wxCaretTimer : public wxTimer
 {
 public:
     wxCaretTimer(wxCaret *caret);

@@ -26,7 +26,7 @@
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
 
 
-class WXDLLEXPORT wxColourData : public wxObject
+class WXDLLIMPEXP_CORE wxColourData : public wxObject
 {
 public:
     // number of custom colours we store
@@ -64,7 +64,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxColourData)
 };
 
-class WXDLLEXPORT wxFontData : public wxObject
+class WXDLLIMPEXP_CORE wxFontData : public wxObject
 {
 public:
     wxFontData();
@@ -181,7 +181,7 @@ enum wxPrintBin
 
 const int wxPRINTMEDIA_DEFAULT = 0;
 
-class WXDLLEXPORT wxPrintData: public wxObject
+class WXDLLIMPEXP_CORE wxPrintData: public wxObject
 {
 public:
     wxPrintData();
@@ -274,7 +274,7 @@ private:
  * from the dialog.
  */
 
-class WXDLLEXPORT wxPrintDialogData: public wxObject
+class WXDLLIMPEXP_CORE wxPrintDialogData: public wxObject
 {
 public:
     wxPrintDialogData();
@@ -349,7 +349,7 @@ private:
 // Compatibility with old name
 #define wxPageSetupData wxPageSetupDialogData
 
-class WXDLLEXPORT wxPageSetupDialogData: public wxObject
+class WXDLLIMPEXP_CORE wxPageSetupDialogData: public wxObject
 {
 public:
     wxPageSetupDialogData();

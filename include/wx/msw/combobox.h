@@ -21,7 +21,7 @@
 // Combobox control
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxComboBox : public wxChoice,
+class WXDLLIMPEXP_CORE wxComboBox : public wxChoice,
                                public wxTextEntry
 {
 public:

@@ -75,7 +75,7 @@ enum
 // ----------------------------------------------------------------------------
 
 // wxSplitterWindow parameters
-struct WXDLLEXPORT wxSplitterRenderParams
+struct WXDLLIMPEXP_CORE wxSplitterRenderParams
 {
     // the only way to initialize this struct is by using this ctor
     wxSplitterRenderParams(wxCoord widthSash_, wxCoord border_, bool isSens_)
@@ -95,7 +95,7 @@ struct WXDLLEXPORT wxSplitterRenderParams
 
 
 // extra optional parameters for DrawHeaderButton
-struct WXDLLEXPORT wxHeaderButtonParams
+struct WXDLLIMPEXP_CORE wxHeaderButtonParams
 {
     wxHeaderButtonParams()
         : m_labelAlignment(wxALIGN_LEFT)
@@ -118,7 +118,7 @@ enum wxHeaderSortIconType {
 
 
 // wxRendererNative interface version
-struct WXDLLEXPORT wxRendererVersion
+struct WXDLLIMPEXP_CORE wxRendererVersion
 {
     wxRendererVersion(int version_, int age_) : version(version_), age(age_) { }
 
@@ -152,7 +152,7 @@ struct WXDLLEXPORT wxRendererVersion
 // wxRendererNative: abstracts drawing methods needed by the native controls
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRendererNative
+class WXDLLIMPEXP_CORE wxRendererNative
 {
 public:
     // drawing functions
@@ -305,7 +305,7 @@ public:
 // wxDelegateRendererNative: allows reuse of renderers code
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDelegateRendererNative : public wxRendererNative
+class WXDLLIMPEXP_CORE wxDelegateRendererNative : public wxRendererNative
 {
 public:
     wxDelegateRendererNative()

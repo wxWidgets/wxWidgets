@@ -16,7 +16,7 @@
 
 #if wxUSE_LIBPNG
 
-class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
+class WXDLLIMPEXP_CORE wxPNGFileHandler: public wxBitmapHandler
 {
   DECLARE_DYNAMIC_CLASS(wxPNGFileHandler)
 public:

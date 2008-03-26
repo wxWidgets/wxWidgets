@@ -20,7 +20,7 @@
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSTimer);
 
-class WXDLLEXPORT wxCocoaTimerImpl : public wxTimerImpl
+class WXDLLIMPEXP_CORE wxCocoaTimerImpl : public wxTimerImpl
 {
 public:
     wxCocoaTimerImpl(wxTimer* timer) : wxTimerImpl(timer) { Init(); }

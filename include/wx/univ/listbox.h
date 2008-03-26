@@ -48,7 +48,7 @@
 // wxListBox: a list of selectable items
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListBox : public wxListBoxBase, public wxScrollHelper
+class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase, public wxScrollHelper
 {
 public:
     // ctors and such

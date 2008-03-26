@@ -12,7 +12,7 @@
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
-class WXDLLEXPORT wxFrame : public wxFrameBase
+class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
     // construction

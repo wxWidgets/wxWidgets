@@ -34,7 +34,7 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxPaintDCInfo, wxArrayDCInfo);
 // DC classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindowDCImpl : public wxMSWDCImpl
+class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxMSWDCImpl
 {
 public:
     // default ctor
@@ -53,7 +53,7 @@ protected:
     DECLARE_NO_COPY_CLASS(wxWindowDCImpl)
 };
 
-class WXDLLEXPORT wxClientDCImpl : public wxWindowDCImpl
+class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 {
 public:
     // default ctor
@@ -73,7 +73,7 @@ protected:
     DECLARE_NO_COPY_CLASS(wxClientDCImpl)
 };
 
-class WXDLLEXPORT wxPaintDCImpl : public wxClientDCImpl
+class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
 {
 public:
     wxPaintDCImpl( wxDC *owner );
@@ -102,7 +102,7 @@ protected:
  * message. It is used in HandlePaint and need not be used by an application.
  */
 
-class WXDLLEXPORT wxPaintDCEx : public wxPaintDC
+class WXDLLIMPEXP_CORE wxPaintDCEx : public wxPaintDC
 {
 public:
     wxPaintDCEx(wxWindow *canvas, WXHDC dc);

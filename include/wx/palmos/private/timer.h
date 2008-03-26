@@ -14,7 +14,7 @@
 
 #include "wx/private/timer.h"
 
-class WXDLLEXPORT wxPalmOSTimerImpl : public wxTimerImpl
+class WXDLLIMPEXP_CORE wxPalmOSTimerImpl : public wxTimerImpl
 {
 friend void wxProcessTimer(wxTimer& timer);
 

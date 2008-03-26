@@ -13,7 +13,7 @@
 
 #include "wx/private/timer.h"
 
-class WXDLLEXPORT wxMotifTimerImpl : public wxTimerImpl
+class WXDLLIMPEXP_CORE wxMotifTimerImpl : public wxTimerImpl
 {
 public:
     wxMotifTimerImpl(wxTimer* timer) : wxTimerImpl(timer) { m_id = 0; }

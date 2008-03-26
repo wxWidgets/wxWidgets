@@ -16,7 +16,7 @@
 // Pushbutton
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxButton : public wxButtonBase
+class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
 public:
     wxButton() { }

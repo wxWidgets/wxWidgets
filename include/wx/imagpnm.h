@@ -17,7 +17,7 @@
 //-----------------------------------------------------------------------------
 
 #if wxUSE_PNM
-class WXDLLEXPORT wxPNMHandler : public wxImageHandler
+class WXDLLIMPEXP_CORE wxPNMHandler : public wxImageHandler
 {
 public:
     inline wxPNMHandler()

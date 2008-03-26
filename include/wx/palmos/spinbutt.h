@@ -15,7 +15,7 @@
 #include "wx/control.h"
 #include "wx/event.h"
 
-class WXDLLEXPORT wxSpinButton : public wxSpinButtonBase
+class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
 public:
     // construction

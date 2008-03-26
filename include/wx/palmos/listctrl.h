@@ -73,7 +73,7 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 
  */
 
-class WXDLLEXPORT wxListCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
 {
 public:
     /*

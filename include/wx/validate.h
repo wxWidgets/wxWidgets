@@ -33,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindowBase;
  Note that wxValidator and derived classes use reference counting.
 */
 
-class WXDLLEXPORT wxValidator : public wxEvtHandler
+class WXDLLIMPEXP_CORE wxValidator : public wxEvtHandler
 {
 public:
     wxValidator();
@@ -77,7 +77,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxValidator)
 };
 
-extern WXDLLEXPORT_DATA(const wxValidator) wxDefaultValidator;
+extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
 
 #define wxVALIDATOR_PARAM(val) val
 

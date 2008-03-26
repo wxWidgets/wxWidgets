@@ -15,7 +15,7 @@
 #include "wx/control.h"
 
 // Pushbutton
-class WXDLLEXPORT wxButton: public wxButtonBase
+class WXDLLIMPEXP_CORE wxButton: public wxButtonBase
 {
 public:
     inline wxButton() {}

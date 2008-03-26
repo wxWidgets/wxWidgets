@@ -12,7 +12,7 @@
 #ifndef _WX_CARET_H_
 #define _WX_CARET_H_
 
-class WXDLLEXPORT wxCaret : public wxCaretBase
+class WXDLLIMPEXP_CORE wxCaret : public wxCaretBase
 {
 public:
     wxCaret() { Init(); }

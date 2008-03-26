@@ -18,7 +18,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 // the accel table has all accelerators for a given window or menu
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAcceleratorTable : public wxObject
+class WXDLLIMPEXP_CORE wxAcceleratorTable : public wxObject
 {
 public:
     // default ctor

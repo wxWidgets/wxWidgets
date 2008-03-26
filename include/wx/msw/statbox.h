@@ -13,7 +13,7 @@
 #define _WX_MSW_STATBOX_H_
 
 // Group box
-class WXDLLEXPORT wxStaticBox : public wxStaticBoxBase
+class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
     wxStaticBox() { }

@@ -16,7 +16,7 @@
 // wxFontDialog
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFontDialog : public wxFontDialogBase
+class WXDLLIMPEXP_CORE wxFontDialog : public wxFontDialogBase
 {
 public:
     wxFontDialog() : wxFontDialogBase() { /* must be Create()d later */ }

@@ -16,7 +16,7 @@
 // wxGauge: a progress bar
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGauge : public wxGaugeBase
+class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
 {
 public:
     wxGauge() { Init(); }

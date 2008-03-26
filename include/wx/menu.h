@@ -40,7 +40,7 @@ WX_DECLARE_EXPORTED_LIST(wxMenuItem, wxMenuItemList);
 // wxMenu
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenuBase : public wxEvtHandler
+class WXDLLIMPEXP_CORE wxMenuBase : public wxEvtHandler
 {
 public:
     // create a menu
@@ -384,7 +384,7 @@ protected:
 // wxMenuBar
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenuBarBase : public wxWindow
+class WXDLLIMPEXP_CORE wxMenuBarBase : public wxWindow
 {
 public:
     // default ctor

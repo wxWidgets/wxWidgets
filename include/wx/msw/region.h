@@ -12,7 +12,7 @@
 #ifndef _WX_MSW_REGION_H_
 #define _WX_MSW_REGION_H_
 
-class WXDLLEXPORT wxRegion : public wxRegionWithCombine
+class WXDLLIMPEXP_CORE wxRegion : public wxRegionWithCombine
 {
 public:
     wxRegion();
@@ -59,7 +59,7 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxRegion)
 };
 
-class WXDLLEXPORT wxRegionIterator : public wxObject
+class WXDLLIMPEXP_CORE wxRegionIterator : public wxObject
 {
 public:
     wxRegionIterator() { Init(); }

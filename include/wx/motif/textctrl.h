@@ -13,7 +13,7 @@
 #define _WX_TEXTCTRL_H_
 
 // Single-line text item
-class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
+class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
     // creation

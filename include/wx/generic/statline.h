@@ -17,7 +17,7 @@ class wxStaticBox;
 // wxStaticLine
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStaticLine : public wxStaticLineBase
+class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
 {
     DECLARE_DYNAMIC_CLASS(wxStaticLine)
 

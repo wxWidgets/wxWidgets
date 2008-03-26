@@ -14,7 +14,7 @@
 
 #include "wx/control.h"
 
-class WXDLLEXPORT wxRadioButton: public wxControl
+class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
 {
 public:
     inline wxRadioButton() { Init(); }

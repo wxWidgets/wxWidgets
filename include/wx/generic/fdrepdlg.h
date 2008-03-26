@@ -20,7 +20,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 // wxGenericFindReplaceDialog: dialog for searching / replacing text
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericFindReplaceDialog : public wxFindReplaceDialogBase
+class WXDLLIMPEXP_CORE wxGenericFindReplaceDialog : public wxFindReplaceDialogBase
 {
 public:
     wxGenericFindReplaceDialog() { Init(); }

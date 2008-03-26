@@ -23,7 +23,7 @@ struct bitmap_t;
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmap: public wxBitmapBase
+class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
     wxBitmap() {}

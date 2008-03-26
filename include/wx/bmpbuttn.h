@@ -19,14 +19,14 @@
 #include "wx/bitmap.h"
 #include "wx/button.h"
 
-extern WXDLLEXPORT_DATA(const char) wxButtonNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxBitmapButton: a button which shows bitmaps instead of the usual string.
 // It has different bitmaps for different states (focused/disabled/pressed)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmapButtonBase : public wxButton
+class WXDLLIMPEXP_CORE wxBitmapButtonBase : public wxButton
 {
 public:
     wxBitmapButtonBase()

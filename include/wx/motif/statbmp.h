@@ -15,7 +15,7 @@
 #include "wx/motif/bmpmotif.h"
 #include "wx/icon.h"
 
-class WXDLLEXPORT wxStaticBitmap : public wxStaticBitmapBase
+class WXDLLIMPEXP_CORE wxStaticBitmap : public wxStaticBitmapBase
 {
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
 

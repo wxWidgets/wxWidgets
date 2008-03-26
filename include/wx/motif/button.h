@@ -13,7 +13,7 @@
 #define _WX_BUTTON_H_
 
 // Pushbutton
-class WXDLLEXPORT wxButton: public wxButtonBase
+class WXDLLIMPEXP_CORE wxButton: public wxButtonBase
 {
 public:
     wxButton() { }

@@ -14,7 +14,7 @@
 
 #include "wx/frame.h"
 
-WXDLLEXPORT_DATA(extern const wxChar) wxStatusLineNameStr[];
+WXDLLIMPEXP_DATA_CORE(extern const wxChar) wxStatusLineNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxMDIClientWindow;
 class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 // wxMDIParentFrame
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMDIParentFrame : public wxFrame
+class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxFrame
 {
 public:
     wxMDIParentFrame();
@@ -110,7 +110,7 @@ private:
 // wxMDIChildFrame
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMDIChildFrame : public wxFrame
+class WXDLLIMPEXP_CORE wxMDIChildFrame : public wxFrame
 {
 public:
     wxMDIChildFrame() { Init(); }
@@ -183,7 +183,7 @@ private:
 // wxMDIClientWindow
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMDIClientWindow : public wxWindow
+class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxWindow
 {
 public:
     wxMDIClientWindow() { Init(); }

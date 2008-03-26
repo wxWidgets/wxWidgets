@@ -67,7 +67,7 @@
    support arbitrary combinations of libs/DLLs: either we build all of them as
    DLLs (in which case WXMAKINGDLL is defined) or none (it isn't).
 
-   However we have a problem because we need separate WXDLLEXPORT versions for
+   However we have a problem because we need separate WXDLLIMPEXP versions for
    different libraries as, for example, wxString class should be dllexported
    when compiled in wxBase and dllimported otherwise, so we do define separate
    WXMAKING/USINGDLL_XYZ constants for each component XYZ.
@@ -92,7 +92,7 @@
 #endif /* WXMAKINGDLL */
 
 /*
-   WXDLLEXPORT maps to export declaration when building the DLL, to import
+   WXDLLIMPEXP_CORE maps to export declaration when building the DLL, to import
    declaration if using it or to nothing at all if we don't use wxWin as DLL
  */
 #ifdef WXMAKINGDLL_BASE
@@ -273,7 +273,7 @@
     #else
         /*
            We need to disable this warning when using this macro, as
-           recommended by Microsoft itself: 
+           recommended by Microsoft itself:
 
            http://support.microsoft.com/default.aspx?scid=kb%3ben-us%3b168958
          */

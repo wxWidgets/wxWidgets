@@ -50,7 +50,7 @@ WX_DECLARE_EXPORTED_VOIDPTR_HASH_MAP(wxTreeItemAttr *, wxMapTreeAttr);
 // wxTreeCtrl
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTreeCtrl : public wxTreeCtrlBase
+class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
 public:
     // creation

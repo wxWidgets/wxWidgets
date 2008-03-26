@@ -18,7 +18,7 @@
 // wxMirrorDC allows to write the same code for horz/vertical layout
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMirrorDCImpl : public wxDCImpl
+class WXDLLIMPEXP_CORE wxMirrorDCImpl : public wxDCImpl
 {
 public:
     // constructs a mirror DC associated with the given real DC
@@ -275,7 +275,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxMirrorDCImpl)
 };
 
-class WXDLLEXPORT wxMirrorDC : public wxDC
+class WXDLLIMPEXP_CORE wxMirrorDC : public wxDC
 {
 public:
     wxMirrorDC(wxDC& dc, bool mirror)

@@ -28,13 +28,13 @@
 // ----------------------------------------------------------------------------
 
 // the default name for objects of class wxStaticLine
-extern WXDLLEXPORT_DATA(const char) wxStaticLineNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticLineNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxStaticLine - a line in a dialog
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStaticLineBase : public wxControl
+class WXDLLIMPEXP_CORE wxStaticLineBase : public wxControl
 {
 public:
     // constructor

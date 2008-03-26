@@ -18,7 +18,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSMatrix);
 // ========================================================================
 // wxRadioBox
 // ========================================================================
-class WXDLLEXPORT wxRadioBox: public wxControl, public wxRadioBoxBase// , protected wxCocoaNSButton
+class WXDLLIMPEXP_CORE wxRadioBox: public wxControl, public wxRadioBoxBase// , protected wxCocoaNSButton
 {
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
     DECLARE_EVENT_TABLE()

@@ -319,7 +319,7 @@ private:
 // from scope.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNoOptimize
+class WXDLLIMPEXP_CORE wxNoOptimize
 {
 public:
     wxNoOptimize() { ms_count++; }

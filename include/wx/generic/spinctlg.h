@@ -40,7 +40,7 @@ class wxSpinCtrlTextGeneric; // wxTextCtrl used for the wxSpinCtrlGenericBase
 // function ambiguity.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSpinCtrlGenericBase : public wxSpinCtrlBase
+class WXDLLIMPEXP_CORE wxSpinCtrlGenericBase : public wxSpinCtrlBase
 {
 public:
     wxSpinCtrlGenericBase() { Init(); }
@@ -140,7 +140,7 @@ private:
 
 #include "wx/textctrl.h"
 
-class WXDLLEXPORT wxSpinCtrlGenericBase : public wxTextCtrl
+class WXDLLIMPEXP_CORE wxSpinCtrlGenericBase : public wxTextCtrl
 {
 public:
     wxSpinCtrlGenericBase() : m_value(0), m_min(0), m_max(100),
