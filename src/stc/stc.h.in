@@ -39,12 +39,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #endif
 #endif
 
-//----------------------------------------------------------------------
-
-// Should a wxPopupWindow be used for the call tips and autocomplete windows?
-#ifndef wxSTC_USE_POPUP
-#define wxSTC_USE_POPUP 1
-#endif
 
 //----------------------------------------------------------------------
 // BEGIN generated section.  The following code is automatically generated
