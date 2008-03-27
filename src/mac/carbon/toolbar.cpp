@@ -113,7 +113,6 @@ public:
             }
             m_controlHandle = NULL ;
         }
-        m_control = NULL;
 
 #if wxMAC_USE_NATIVE_TOOLBAR
         if ( m_toolbarItemRef )
@@ -1461,7 +1460,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     Rect toolrect = { 0, 0, toolSize.y, toolSize.x };
     ControlRef controlHandle = NULL;
     OSStatus err = 0;
-    tool->Attach( this );
 
 #if wxMAC_USE_NATIVE_TOOLBAR
     wxString label = tool->GetLabel();
@@ -1653,8 +1651,6 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
 
     wxSize sz = ((wxToolBarTool*)tool)->GetSize();
 
-    tool->Detach();
-
 #if wxMAC_USE_NATIVE_TOOLBAR
     CFIndex removeIndex = tool->GetIndex();
 #endif
@@ -1669,21 +1665,7 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
         }
     }
 #endif
-    switch ( tool->GetStyle() )
-    {
-        case wxTOOL_STYLE_CONTROL:
-            if ( tool->GetControl() )
-                tool->GetControl()->Destroy();
-            break;
 
-        case wxTOOL_STYLE_BUTTON:
-        case wxTOOL_STYLE_SEPARATOR:
-            // nothing special
-            break;
-
-        default:
-            break;
-    }
     tool->ClearControl();
 
     // and finally reposition all the controls after this one

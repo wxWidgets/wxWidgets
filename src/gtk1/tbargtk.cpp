@@ -489,12 +489,19 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_CONTROL:
-            tool->GetControl()->Destroy();
+            // don't destroy the control here as we can be called from
+            // RemoveTool() and then we need to keep the control alive;
+            // while if we're called from DeleteTool() the control will
+            // be destroyed when wxToolBarToolBase itself is deleted
             break;
 
         case wxTOOL_STYLE_BUTTON:
             gtk_widget_destroy( tool->m_item );
             break;
+
+        default:
+            wxFAIL_MSG( "unknown tool style" );
+            return false;
     }
 
     InvalidateBestSize();

@@ -62,6 +62,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBarToolBase, wxObject)
 wxToolBarToolBase::~wxToolBarToolBase()
 {
     delete m_dropdownMenu;
+    if ( IsControl() )
+        GetControl()->Destroy();
 }
 
 
@@ -208,6 +210,7 @@ wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool)
     }
 
     m_tools.Insert(pos, tool);
+    tool->Attach(this);
 
     return tool;
 }
@@ -314,16 +317,18 @@ wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)
     {
         // don't give any error messages - sometimes we might call RemoveTool()
         // without knowing whether the tool is or not in the toolbar
-        return (wxToolBarToolBase *)NULL;
+        return NULL;
     }
 
     wxToolBarToolBase *tool = node->GetData();
+    wxCHECK_MSG( tool, NULL, "NULL tool in the tools list?" );
+
     if ( !DoDeleteTool(pos, tool) )
-    {
-        return (wxToolBarToolBase *)NULL;
-    }
+        return NULL;
 
     m_tools.Erase(node);
+
+    tool->Detach();
 
     return tool;
 }

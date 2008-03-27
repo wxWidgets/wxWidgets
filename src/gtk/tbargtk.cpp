@@ -103,6 +103,17 @@ public:
         Init();
     }
 
+    virtual ~wxToolBarTool()
+    {
+        if ( IsControl() && !m_item )
+        {
+            // if we're a control which is not currently attached to the
+            // toolbar (as indicated by NULL m_item), we must undo the extra
+            // reference we added in DoDeleteTool()
+            g_object_unref(GetControl()->m_widget);
+        }
+    }
+
     // is this a radio button?
     //
     // unlike GetKind(), can be called for any kind of tools, not just buttons
@@ -139,8 +150,12 @@ public:
         }
     }
 
-    GtkWidget            *m_item;
-    GtkWidget            *m_image;
+    // the toolbar element for button tools or a GtkAlignment containing the
+    // control for control tools
+    GtkWidget *m_item;
+
+    // a GtkImage containing the image for a button-type tool, may be NULL
+    GtkWidget *m_image;
 
 protected:
     void Init();
@@ -611,36 +626,29 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                         (tool->m_item, &req );
                     gtk_widget_set_size_request( dropdown, -1, req.height );
 
-                    gtk_toolbar_insert_widget(
-                                       m_toolbar,
-                                       dropdown,
-                                       (const char *) NULL,
-                                       (const char *) NULL,
-                                       posGtk+1
-                                      );
+                    gtk_toolbar_insert_widget(m_toolbar, dropdown, NULL, NULL,
+                                              posGtk + 1);
                 }
             }
             break;
 
         case wxTOOL_STYLE_SEPARATOR:
             gtk_toolbar_insert_space( m_toolbar, posGtk );
-
-            // skip the rest
-            return true;
+            break;
 
         case wxTOOL_STYLE_CONTROL:
-            GtkWidget* align = gtk_alignment_new(0.5, 0.5, 0, 0);
+            GtkWidget * const align = gtk_alignment_new(0.5, 0.5, 0, 0);
             gtk_widget_show(align);
-            gtk_container_add((GtkContainer*)align, tool->GetControl()->m_widget);
-            gtk_toolbar_insert_widget(
-                                       m_toolbar,
-                                       align,
-                                       (const char *) NULL,
-                                       (const char *) NULL,
-                                       posGtk
-                                      );
+            gtk_container_add(GTK_CONTAINER(align),
+                              tool->GetControl()->m_widget);
+            gtk_toolbar_insert_widget(m_toolbar, align, NULL, NULL, posGtk);
+
             // release reference obtained by wxInsertChildInToolBar
             g_object_unref(tool->GetControl()->m_widget);
+
+            // remember the container we're in so that we could remove
+            // ourselves from it when we're detached from the toolbar
+            tool->m_item = align;
             break;
     }
 
@@ -656,16 +664,29 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_CONTROL:
-            tool->GetControl()->Destroy();
-            break;
+            // don't destroy the control here as we can be called from
+            // RemoveTool() and then we need to keep the control alive;
+            // while if we're called from DeleteTool() the control will
+            // be destroyed when wxToolBarToolBase itself is deleted
+            {
+                GtkWidget * const w = tool->GetControl()->m_widget;
+                g_object_ref(w);
+                gtk_container_remove(GTK_CONTAINER(tool->m_item), w);
+            }
+            // fall through
 
         case wxTOOL_STYLE_BUTTON:
             gtk_widget_destroy( tool->m_item );
+            tool->m_item = NULL;
             break;
 
         case wxTOOL_STYLE_SEPARATOR:
             gtk_toolbar_remove_space( m_toolbar, pos );
             break;
+
+        default:
+            wxFAIL_MSG( "unknown tool style" );
+            return false;
     }
 
     InvalidateBestSize();

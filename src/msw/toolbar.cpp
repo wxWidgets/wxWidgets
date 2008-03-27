@@ -477,8 +477,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 {
     // nothing special to do here - we really create the toolbar buttons in
     // Realize() later
-    tool->Attach(this);
-
     InvalidateBestSize();
     return true;
 }
@@ -524,7 +522,6 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     {
         nButtonsToDelete = ((wxToolBarTool *)tool)->GetSeparatorsCount();
         width *= nButtonsToDelete;
-        tool->GetControl()->Destroy();
     }
 
     // do delete all buttons
@@ -538,8 +535,6 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
             return false;
         }
     }
-
-    tool->Detach();
 
     // and finally reposition all the controls after this button (the toolbar
     // takes care of all normal items)
