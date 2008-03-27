@@ -44,3 +44,16 @@
 #define wxON_BLOCK_EXIT_OBJ2(object, method, p1, p2)
 //@}
 
+/** @ingroup group_funcmacro_misc */
+//@{
+/**
+    This family of macros is similar to wxON_BLOCK_OBJ0(), but calls a method
+    of @c this object instead of a method of the specified object.
+
+    @header{wx/scopeguard.h}
+*/
+#define wxON_BLOCK_EXIT_THIS0(method)
+#define wxON_BLOCK_EXIT_THIS1(method, p1)
+#define wxON_BLOCK_EXIT_THIS2(method, p1, p2)
+//@}
+
