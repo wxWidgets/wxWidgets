@@ -518,6 +518,7 @@ MyFrame::MyFrame(wxFrame* parent,
     m_horzText = false;
     m_useCustomDisabled = false;
     m_showTooltips = true;
+    m_searchTool = NULL;
 
     m_rows = 1;
     m_nPrint = 1;
@@ -588,7 +589,7 @@ MyFrame::MyFrame(wxFrame* parent,
     toolMenu->Append(IDM_TOOLBAR_DELETEPRINT, _T("&Delete print button\tCtrl-D"));
     toolMenu->Append(IDM_TOOLBAR_INSERTPRINT, _T("&Insert print button\tCtrl-I"));
     toolMenu->Append(IDM_TOOLBAR_TOGGLEHELP, _T("Toggle &help button\tCtrl-T"));
-    toolMenu->Append(IDM_TOOLBAR_TOGGLESEARCH, _T("Toggle &search field\tCtrl-F"));
+    toolMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLESEARCH, _T("Toggle &search field\tCtrl-F"));
     toolMenu->AppendSeparator();
     toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN1, _T("Toggle &1st radio button\tCtrl-1"));
     toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, _T("Toggle &2nd radio button\tCtrl-2"));
@@ -874,16 +875,21 @@ void MyFrame::OnToggleSearch(wxCommandEvent& WXUNUSED(event))
     }
     else // tool already exists
     {
+        wxControl * const win = m_searchTool->GetControl();
         if ( m_searchTool->GetToolBar() )
         {
             // attached now, remove it
+            win->Hide();
             tb->RemoveTool(m_searchTool->GetId());
         }
         else // tool exists in detached state, attach it back
         {
             tb->InsertTool(searchPos, m_searchTool);
+            win->Show();
         }
     }
+
+    tb->Realize();
 }
 
 void MyFrame::OnUpdateCopyAndCut(wxUpdateUIEvent& event)
