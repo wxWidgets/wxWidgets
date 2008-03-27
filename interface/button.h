@@ -120,7 +120,8 @@ public:
     wxString GetLabel() const;
 
     /**
-        This sets the button to be the default item for the panel or dialog box.
+        This sets the button to be the default item in its top-level window
+        (e.g. the panel or the dialog box containing it).
 
         As normal, pressing return causes the default button to be depressed when
         the return key is pressed.
@@ -129,8 +130,10 @@ public:
         and text panel items, and wxTopLevelWindow::SetDefaultItem().
 
         @remarks Under Windows, only dialog box buttons respond to this function.
+
+        @returns the old default item (possibly NULL)
     */
-    void SetDefault();
+    virtual wxWindow* SetDefault();
 
     /**
         Sets the string label for the button.

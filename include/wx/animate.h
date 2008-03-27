@@ -65,7 +65,7 @@ protected:
 
 // default style does not include wxAC_NO_AUTORESIZE, that is, the control
 // auto-resizes by default to fit the new animation when SetAnimation() is called
-#define wxAC_DEFAULT_STYLE       (wxNO_BORDER)
+#define wxAC_DEFAULT_STYLE       (wxBORDER_NONE)
 
 class WXDLLIMPEXP_ADV wxAnimationCtrlBase : public wxControl
 {

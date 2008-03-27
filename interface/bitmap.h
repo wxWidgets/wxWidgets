@@ -95,6 +95,10 @@ public:
             The meaning of name is determined by the type parameter.
         @param type
             See ::wxBitmapType for values this can take.
+        @param desiredWidth
+            The desired width for the loaded bitmap.
+        @param desiredHeight
+            The desired height for the loaded bitmap.
 
         @returns @true if the operation succeeded, @false otherwise.
 
@@ -120,7 +124,7 @@ public:
         @see wxBitmap::LoadFile, wxBitmap::SaveFile, LoadFile()
     */
     virtual bool SaveFile(const wxBitmap* bitmap, const wxString& name, wxBitmapType type,
-                          wxPalette* palette = NULL) const;
+                          const wxPalette* palette = NULL) const;
 
     /**
         Sets the handler extension.
