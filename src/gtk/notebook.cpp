@@ -60,13 +60,13 @@ public:
     wxGtkNotebookPage()
     {
         m_image = -1;
-        m_page = (GtkNotebookPage *) NULL;
-        m_box = (GtkWidget *) NULL;
+        m_page = NULL;
+        m_box = NULL;
     }
 
     wxString           m_text;
     int                m_image;
-    GtkNotebookPage   *m_page;
+    GtkWidget         *m_page;
     GtkLabel          *m_label;
     GtkWidget         *m_box;     // in which the label and image are packed
 };
@@ -640,10 +640,9 @@ bool wxNotebook::InsertPage( size_t position,
     g_signal_connect (win->m_widget, "size_allocate",
                       G_CALLBACK (gtk_page_size_callback), win);
 
-    gint idx = gtk_notebook_insert_page(notebook, win->m_widget,
-                                        nb_page->m_box, position);
+    gtk_notebook_insert_page(notebook, win->m_widget, nb_page->m_box, position);
 
-    nb_page->m_page = (GtkNotebookPage *)gtk_notebook_get_nth_page(notebook, idx);
+    nb_page->m_page = gtk_notebook_get_nth_page(notebook, position);
 
     if (imageId != -1)
     {
