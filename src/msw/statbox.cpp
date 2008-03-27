@@ -538,14 +538,16 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.Blit(border, 0, rc.right - border, borderTop,
             &memdc, border, 0);
     // bottom
-    dc.Blit(border, rc.bottom - border, rc.right - border, rc.bottom,
+    dc.Blit(border, rc.bottom - border, rc.right - border, border,
             &memdc, border, rc.bottom - border);
     // left
     dc.Blit(0, 0, border, rc.bottom,
             &memdc, 0, 0);
-    // right
-    dc.Blit(rc.right - border, 0, rc.right, rc.bottom,
-            &memdc, rc.right - border, 0);
+    // right (note that upper and bottom right corners were already part of the
+    // first two blits so we shouldn't overwrite them here to avoi flicker)
+    dc.Blit(rc.right - border, borderTop,
+            border, rc.bottom - borderTop - border,
+            &memdc, rc.right - border, borderTop);
 
 
     // create the region excluding box children
