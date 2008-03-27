@@ -34,11 +34,6 @@ protected:
 public:
 
     /**
-        Constructor.
-    */
-    wxAppConsole();
-
-    /**
         Destructor.
     */
     virtual ~wxAppConsole();
@@ -165,32 +160,42 @@ public:
     static bool IsMainLoopRunning();
 
     /**
-        Mac specific. Called in response of an "open-application" Apple event.
+        Called in response of an "open-application" Apple event.
         Override this to create a new document in your app.
+
+        @onlyfor{wxmac}
     */
     virtual void MacNewFile();
 
     /**
-        Mac specific. Called in response of an "open-document" Apple event.
+        Called in response of an "open-document" Apple event.
 
         You need to override this method in order to open a document file after the
         user double clicked on it or if the document file was dropped on either the
         running application or the application icon in Finder.
+
+        @onlyfor{wxmac}
     */
     virtual void MacOpenFile(const wxString& fileName);
 
     /**
-        Mac specific. Called in response of a "get-url" Apple event.
+        Called in response of a "get-url" Apple event.
+
+        @onlyfor{wxmac}
     */
     virtual void MacOpenURL(const wxString& url);
 
     /**
-        Mac specific. Called in response of a "print-document" Apple event.
+        Called in response of a "print-document" Apple event.
+
+        @onlyfor{wxmac}
     */
     virtual void MacPrintFile(const wxString& fileName);
 
     /**
-        Mac specific. Called in response of a "reopen-application" Apple event.
+        Called in response of a "reopen-application" Apple event.
+
+        @onlyfor{wxmac}
     */
     virtual void MacReopenApp();
 
@@ -560,6 +565,8 @@ public:
                 return CWinApp::PreTranslateMessage(msg);
         }
         @endcode
+
+        @onlyfor{wxmsw}
     */
     bool ProcessMessage(WXMSG* msg);
 

@@ -10,13 +10,16 @@
     @class wxActiveXEvent
     @headerfile ole/activex.h wx/msw/ole/activex.h
 
-    An event class for handling activex events passed from
-    wxActiveXContainer. ActiveX events are basically
-    a function call with the parameters passed through an array of wxVariants along
-    with a return value that is a wxVariant itself. What type the parameters or
-    return value are depends on the context (i.e. what the .idl specifies).
+    An event class for handling activex events passed from wxActiveXContainer.
+
+    ActiveX events are basically a function call with the parameters passed
+    through an array of wxVariants along with a return value that is a wxVariant
+    itself. What type the parameters or return value are depends on the context
+    (i.e. what the .idl specifies).
 
     Note that unlike the third party wxActiveX function names are not supported.
+
+    @onlyfor{wxmsw}
 
     @library{wxbase}
     @category{FIXME}
@@ -71,6 +74,8 @@ public:
     You can also process activex events through wxEVT_ACTIVEX or the
     corresponding message map macro EVT_ACTIVEX.
 
+    @onlyfor{wxmsw}
+
     @library{wxbase}
     @category{FIXME}
 
@@ -81,13 +86,13 @@ class wxActiveXContainer : public wxControl
 public:
     /**
         Creates this activex container.
-        
+
         @param parent
             parent of this control.  Must not be @NULL.
         @param iid
             COM IID of pUnk to query. Must be a valid interface to an activex control.
         @param pUnk
-            Interface of activex control
+            Interface of activex control.
     */
     wxActiveXContainer(wxWindow* parent, REFIID iid, IUnknown* pUnk);
 };

@@ -186,6 +186,8 @@ public:
     /**
         Loads the accelerator table from a Windows resource (Windows only).
 
+        @onlyfor{wxmsw}
+
         @param resource
             Name of a Windows accelerator.
     */

@@ -66,7 +66,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxAC_DEFAULT_STYLE,
-                    const wxString& name = "animationctrl");
+                    const wxString& name = wxAnimationCtrlNameStr);
 
     /**
         Creates the control with the given @a anim animation.

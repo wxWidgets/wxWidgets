@@ -31,6 +31,7 @@
      Multi String Value
      Expandable String Value
 
+    @onlyfor{wxmsw}
 
     @library{wxbase}
     @category{FIXME}
@@ -91,7 +92,7 @@ public:
 
     /**
         Gets information about the key.
-        
+
         @param pnSubKeys
             The number of subkeys.
         @param pnMaxKeyLen

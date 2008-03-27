@@ -31,6 +31,8 @@
 
     Note that this class obviously works under Windows only.
 
+    @onlyfor{wxmsw}
+
     @library{wxcore}
     @category{misc}
 
@@ -62,7 +64,7 @@ public:
         data types, and C++ provides temporary objects automatically, both of the
         following lines
         are syntactically valid:
-        
+
         Note that @a method can contain dot-separated property names, to save the
         application
         needing to call GetProperty several times using several temporary objects. For
@@ -106,7 +108,7 @@ public:
         from other objects.
         Note that an IDispatch pointer is stored as a void* pointer in wxVariant
         objects.
-        
+
         @see GetProperty()
     */
     bool GetObject(wxAutomationObject& obj, const wxString& property,
@@ -124,7 +126,7 @@ public:
         data types, and C++ provides temporary objects automatically, both of the
         following lines
         are syntactically valid:
-        
+
         Note that @a property can contain dot-separated property names, to save the
         application
         needing to call GetProperty several times using several temporary objects.
@@ -139,7 +141,7 @@ public:
         Invoke function.
         It is not meant to be called directly by the application, but is used by other
         convenience functions.
-        
+
         @param member
             The member function or property name.
         @param action
@@ -153,9 +155,9 @@ public:
             If non-null, contains an array of variants.
         @param ptrArgs
             If non-null, contains an array of constant pointers to variants.
-        
+
         @returns @true if the operation was successful, @false otherwise.
-        
+
         @remarks Two types of argument array are provided, so that when possible
                  pointers are used for efficiency.
     */
@@ -175,7 +177,7 @@ public:
         data types, and C++ provides temporary objects automatically, both of the
         following lines
         are syntactically valid:
-        
+
         Note that @a property can contain dot-separated property names, to save the
         application
         needing to call GetProperty several times using several temporary objects.

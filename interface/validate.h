@@ -15,27 +15,30 @@
 
     A validator has three major roles:
 
-     to transfer data from a C++ variable or own storage to and from a control;
-     to validate data in a control, and show an appropriate error message;
-     to filter events (such as keystrokes), thereby changing the behaviour of the
-    associated control.
+    @li to transfer data from a C++ variable or own storage to and from a control;
+    @li to validate data in a control, and show an appropriate error message;
+    @li to filter events (such as keystrokes), thereby changing the behaviour of the
+        associated control.
 
     Validators can be plugged into controls dynamically.
 
-    To specify a default, 'null' validator, use the symbol @b wxDefaultValidator.
+    To specify a default, 'null' validator, use the symbol ::wxDefaultValidator.
 
-    For more information, please see @ref overview_validatoroverview "Validator
-    overview".
+    For more information, please see @ref overview_validator.
 
-    @b wxPython note: If you wish to create a validator class in wxPython you should
+    @beginWxPythonOnly
+    If you wish to create a validator class in wxPython you should
     derive the class from @c wxPyValidator in order to get Python-aware
     capabilities for the various virtual methods.
+    @endWxPythonOnly
 
     @library{wxcore}
     @category{validator}
 
-    @see @ref overview_validatoroverview "Validator overview", wxTextValidator,
-    wxGenericValidator,
+    @stdobjects
+    ::wxDefaultValidator
+
+    @see @ref overview_validator, wxTextValidator, wxGenericValidator
 */
 class wxValidator : public wxEvtHandler
 {
@@ -51,13 +54,15 @@ public:
     ~wxValidator();
 
     /**
-        All validator classes must implement the @b Clone function, which returns
-        an identical copy of itself. This is because validators are passed to control
-        constructors as references which must be copied. Unlike objects such as pens
-        and brushes, it does not make sense to have a reference counting scheme
-        to do this cloning, because all validators should have separate
-        data.
-        This base function returns @NULL.
+        All validator classes must implement the Clone() function, which returns
+        an identical copy of itself.
+
+        This is because validators are passed to control constructors as references
+        which must be copied. Unlike objects such as pens and brushes, it does not
+        make sense to have a reference counting scheme to do this cloning, because
+        all validators should have separate data.
+
+        @returns this base function returns @NULL.
     */
     virtual wxObject* Clone() const;
 
@@ -79,23 +84,31 @@ public:
 
     /**
         This overridable function is called when the value in the window must be
-        transferred to the validator. Return @false if there is a problem.
+        transferred to the validator.
+
+        @return @false if there is a problem.
     */
-    virtual bool TransferToWindow();
+    virtual bool TransferFromWindow();
 
     /**
         This overridable function is called when the value associated with the
-        validator must be
-        transferred to the window. Return @false if there is a problem.
+        validator must be transferred to the window.
+
+        @return @false if there is a problem.
     */
     virtual bool TransferToWindow();
 
     /**
         This overridable function is called when the value in the associated window
         must be validated.
-        Return @false if the value in the window is not valid; you may pop up an error
-        dialog.
+
+        @return @false if the value in the window is not valid; you may pop up an error
+                dialog.
     */
     virtual bool Validate(wxWindow* parent);
 };
 
+/**
+    An empty wxValidator instance.
+*/
+wxValidator wxDefaultValidator;
