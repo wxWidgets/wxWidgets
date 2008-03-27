@@ -37,6 +37,7 @@
 
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
+#include "wx/msw/dc.h"
 
 #include "wx/stack.h"
 
@@ -246,6 +247,20 @@ private :
     GraphicsPath* m_brushPath;
 };
 
+class WXDLLIMPEXP_CORE wxGDIPlusBitmapData : public wxGraphicsObjectRefData
+{
+public:
+    wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, Bitmap* bitmap );
+    wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, const wxBitmap &bmp );
+    ~wxGDIPlusBitmapData ();
+
+    virtual Bitmap* GetGDIPlusBitmap() { return m_bitmap; }
+
+private :
+    Bitmap* m_bitmap;
+    Bitmap* m_helper;
+};
+
 class wxGDIPlusFontData : public wxGraphicsObjectRefData
 {
 public:
@@ -300,6 +315,7 @@ public:
     // gets the matrix of this context
     virtual wxGraphicsMatrix GetTransform() const;
 
+    virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void PushState();
@@ -628,6 +644,115 @@ wxGDIPlusFontData::~wxGDIPlusFontData()
 {
     delete m_textBrush;
     delete m_font;
+}
+
+// the built-in conversions functions create non-premultiplied bitmaps, while GDIPlus needs them in the
+// premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied
+// bytes as parameter, since there is no real copying of the data going in, only references are stored
+// m_helper has to be kept alive as well
+
+//-----------------------------------------------------------------------------
+// wxGDIPlusBitmapData implementation
+//-----------------------------------------------------------------------------
+
+wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, Bitmap* bitmap ) :
+    wxGraphicsObjectRefData( renderer ), m_bitmap( bitmap )
+{
+    m_helper = NULL;
+}
+
+wxGDIPlusBitmapData::wxGDIPlusBitmapData( wxGraphicsRenderer* renderer, 
+                        const wxBitmap &bmp) : wxGraphicsObjectRefData( renderer )
+{
+    m_bitmap = NULL;
+    m_helper = NULL;
+
+    Bitmap* image = NULL;
+    if ( bmp.GetMask() )
+    {
+        Bitmap interim((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE()) ;
+
+        size_t width = interim.GetWidth();
+        size_t height = interim.GetHeight();
+        Rect bounds(0,0,width,height);
+
+        image = new Bitmap(width,height,PixelFormat32bppPARGB) ;
+
+        Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),NULL);
+        wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
+
+        BitmapData dataMask ;
+        interimMask.LockBits(&bounds,ImageLockModeRead,
+            interimMask.GetPixelFormat(),&dataMask);
+
+
+        BitmapData imageData ;
+        image->LockBits(&bounds,ImageLockModeWrite, PixelFormat32bppPARGB, &imageData);
+
+        BYTE maskPattern = 0 ;
+        BYTE maskByte = 0;
+        size_t maskIndex ;
+
+        for ( size_t y = 0 ; y < height ; ++y)
+        {
+            maskIndex = 0 ;
+            for( size_t x = 0 ; x < width; ++x)
+            {
+                if ( x % 8 == 0)
+                {
+                    maskPattern = 0x80;
+                    maskByte = *((BYTE*)dataMask.Scan0 + dataMask.Stride*y + maskIndex);
+                    maskIndex++;
+                }
+                else
+                    maskPattern = maskPattern >> 1;
+
+                ARGB *dest = (ARGB*)((BYTE*)imageData.Scan0 + imageData.Stride*y + x*4);
+                if ( (maskByte & maskPattern) == 0 )
+                    *dest = 0x00000000;
+                else
+                {
+                    Color c ;
+                    interim.GetPixel(x,y,&c) ;
+                    *dest = (c.GetValue() | Color::AlphaMask);
+                }
+            }
+        }
+
+        image->UnlockBits(&imageData);
+
+        interimMask.UnlockBits(&dataMask);
+        interim.UnlockBits(&dataMask);
+    }
+    else
+    {
+        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());
+        if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
+        {
+            size_t width = image->GetWidth();
+            size_t height = image->GetHeight();
+            Rect bounds(0,0,width,height);
+            static BitmapData data ;
+
+            m_helper = image ;
+            image = NULL ;
+            m_helper->LockBits(&bounds, ImageLockModeRead,
+                m_helper->GetPixelFormat(),&data);
+
+            image = new Bitmap(data.Width, data.Height, data.Stride,
+                PixelFormat32bppPARGB , (BYTE*) data.Scan0);
+
+            m_helper->UnlockBits(&data);
+        }
+    }
+    if ( image )
+        m_bitmap = image;
+}
+
+wxGDIPlusBitmapData::~wxGDIPlusBitmapData()
+{
+    delete m_bitmap;
+    delete m_helper;
 }
 
 //-----------------------------------------------------------------------------
@@ -1048,95 +1173,27 @@ void wxGDIPlusContext::PopState()
     m_context->Restore(state);
 }
 
-// the built-in conversions functions create non-premultiplied bitmaps, while GDIPlus needs them in the
-// premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied
-// bytes as parameter
+void wxGDIPlusContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bmp.GetRefData())->GetGDIPlusBitmap();
+    if ( image )
+    {
+        if( image->GetWidth() != (UINT) w || image->GetHeight() != (UINT) h )
+        {
+            Rect drawRect((REAL) x, (REAL)y, (REAL)w, (REAL)h);
+            m_context->SetPixelOffsetMode( PixelOffsetModeNone );
+            m_context->DrawImage(image, drawRect, 0 , 0 , image->GetWidth()-1, image->GetHeight()-1, UnitPixel ) ;
+            m_context->SetPixelOffsetMode( PixelOffsetModeHalf );
+        }
+        else
+            m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
+    }
+}
 
 void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    Bitmap* image = NULL;
-    Bitmap* helper = NULL;
-    if ( bmp.GetMask() )
-    {
-        Bitmap interim((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE()) ;
-
-        size_t width = interim.GetWidth();
-        size_t height = interim.GetHeight();
-        Rect bounds(0,0,width,height);
-
-        image = new Bitmap(width,height,PixelFormat32bppPARGB) ;
-
-        Bitmap interimMask((HBITMAP)bmp.GetMask()->GetMaskBitmap(),NULL);
-        wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
-
-        BitmapData dataMask ;
-        interimMask.LockBits(&bounds,ImageLockModeRead,
-            interimMask.GetPixelFormat(),&dataMask);
-
-
-        BitmapData imageData ;
-        image->LockBits(&bounds,ImageLockModeWrite, PixelFormat32bppPARGB, &imageData);
-
-        BYTE maskPattern = 0 ;
-        BYTE maskByte = 0;
-        size_t maskIndex ;
-
-        for ( size_t y = 0 ; y < height ; ++y)
-        {
-            maskIndex = 0 ;
-            for( size_t x = 0 ; x < width; ++x)
-            {
-                if ( x % 8 == 0)
-                {
-                    maskPattern = 0x80;
-                    maskByte = *((BYTE*)dataMask.Scan0 + dataMask.Stride*y + maskIndex);
-                    maskIndex++;
-                }
-                else
-                    maskPattern = maskPattern >> 1;
-
-                ARGB *dest = (ARGB*)((BYTE*)imageData.Scan0 + imageData.Stride*y + x*4);
-                if ( (maskByte & maskPattern) == 0 )
-                    *dest = 0x00000000;
-                else
-                {
-                    Color c ;
-                    interim.GetPixel(x,y,&c) ;
-                    *dest = (c.GetValue() | Color::AlphaMask);
-                }
-            }
-        }
-
-        image->UnlockBits(&imageData);
-
-        interimMask.UnlockBits(&dataMask);
-        interim.UnlockBits(&dataMask);
-    }
-    else
-    {
-        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());
-        if ( bmp.HasAlpha() && GetPixelFormatSize(image->GetPixelFormat()) == 32 )
-        {
-            size_t width = image->GetWidth();
-            size_t height = image->GetHeight();
-            Rect bounds(0,0,width,height);
-            BitmapData data ;
-
-            helper = image ;
-            image = NULL ;
-            helper->LockBits(&bounds, ImageLockModeRead,
-                helper->GetPixelFormat(),&data);
-
-            image = new Bitmap(data.Width, data.Height, data.Stride,
-                PixelFormat32bppPARGB , (BYTE*) data.Scan0);
-
-            helper->UnlockBits(&data);
-        }
-    }
-    if ( image )
-        m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
-    delete image ;
-    delete helper ;
+    wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
+    DrawBitmap(bitmap, x, y, w, h);
 }
 
 void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -1384,6 +1441,13 @@ public :
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
+
+    // create a native bitmap representation
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
+    
+    // create a subimage from a native image representation
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
+
 protected :
     void EnsureIsLoaded();
     void Load();
@@ -1563,6 +1627,33 @@ wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColou
     }
     else
         return wxNullGraphicsFont;
+}
+
+wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap &bitmap )
+{
+    EnsureIsLoaded();
+    if ( bitmap.Ok() )
+    {
+        wxGraphicsBitmap p;
+        p.SetRefData(new wxGDIPlusBitmapData( this , bitmap ));
+        return p;
+    }
+    else
+        return wxNullGraphicsBitmap;
+}
+
+wxGraphicsBitmap wxGDIPlusRenderer::CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  )
+{
+    EnsureIsLoaded();
+    Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bitmap.GetRefData())->GetGDIPlusBitmap();
+    if ( image )
+    {
+        wxGraphicsBitmap p;
+        p.SetRefData(new wxGDIPlusBitmapData( this , image->Clone( (REAL) x , (REAL) y , (REAL) w , (REAL) h , PixelFormat32bppPARGB) ));
+        return p;
+    }
+    else
+        return wxNullGraphicsBitmap;
 }
 
 // Shutdown GDI+ at app exit, before possible dll unload
