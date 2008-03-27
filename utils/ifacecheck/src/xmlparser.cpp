@@ -119,12 +119,13 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
 {
     m_strDefaultValue=defval.Strip(wxString::both);
     m_strDefaultValueForCmp=defvalForCmp.Strip(wxString::both);
-/*
+
     // in order to make valid&simple comparison on argument defaults,
     // we reduce some of the multiple forms in which the same things may appear
     // to a single form:
-    m_strDefaultValue.Replace("0u", "0");
-
+    if (m_strDefaultValue == "0u")
+        m_strDefaultValue = "0";
+/*
     if (IsPointer())
         m_strDefaultValue.Replace("0", "NULL");
     else
@@ -144,7 +145,20 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
     const wxString& def2 = m.m_strDefaultValueForCmp.IsEmpty() ? m.m_strDefaultValue : m.m_strDefaultValueForCmp;
 
     if (def1 != def2)
+    {
+        // maybe the default values are numbers.
+        // in this case gccXML gives as default values things like '-0x0000001' instead of just '-1'.
+        // To handle these cases, we try to convert the default value strings to numbers:
+        long def1val, def2val;
+        if (def1.ToLong(&def1val, 0 /* auto-detect */) &&
+            def2.ToLong(&def2val, 0 /* auto-detect */))
+        {
+            if (def1val == def2val)
+                return true;        // the default values match
+        }
+
         return false;
+    }
 
     // we deliberately avoid checks on the argument name
 
