@@ -124,8 +124,8 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent )
                      NULL, this);
 
     wxStaticText *text = new wxStaticText( m_panel, wxID_ANY,
-                          wxT("wx.PopupTransientWindow is a\n")
-                          wxT("wx.PopupWindow which disappears\n")
+                          wxT("wxPopupTransientWindow is a\n")
+                          wxT("wxPopupWindow which disappears\n")
                           wxT("automatically when the user\n")
                           wxT("clicks the mouse outside it or if it\n")
                           wxT("(or its first child) loses focus in \n")
@@ -317,7 +317,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+: wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(500,300))
 {
     m_simplePopup = m_scrolledPopup = NULL;
 
