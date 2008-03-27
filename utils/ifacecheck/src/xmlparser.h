@@ -15,6 +15,7 @@
 #include <wx/txtstrm.h>
 #include <wx/dynarray.h>
 #include <wx/xml/xml.h>
+#include <wx/platinfo.h>
 
 // helper macros
 #define LogMessage(fmt, ...)   { wxPrintf(fmt "\n", __VA_ARGS__); fflush(stdout); }
