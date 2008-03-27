@@ -17,16 +17,6 @@
         <installable>no</installable>
     </subproject>
 
-    <subproject id="tex2rtf" template="sub">
-        <dir>tex2rtf/src</dir>
-        <installable>yes</installable>
-    </subproject>
-
-    <subproject id="helpgen" template="sub">
-        <dir>HelpGen/src</dir>
-        <installable>yes</installable>
-    </subproject>
-
     <subproject id="ifacecheck" template="sub">
         <dir>ifacecheck/src</dir>
         <installable>yes</installable>

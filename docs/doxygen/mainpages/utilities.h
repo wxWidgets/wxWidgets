@@ -22,11 +22,9 @@ see the wxWidgets download page: http://www.wxwidgets.org/downloads
 or directly http://wxcode.sourceforge.net or http://www.wxcommunity.com/ .
 
 @li @ref page_utils_emulator
-@li @ref page_utils_helpgen
 @li @ref page_utils_helpview
 @li @ref page_utils_hhp2cached
 @li @ref page_utils_ifacecheck
-@li @ref page_utils_tex2rtf
 @li @ref page_utils_wxrc
 
 
@@ -41,15 +39,6 @@ Xnest-based display emulator for X11-based PDA applications.
 'skin' window. THIS ISN'T THE PLACE FOR THIS STATEMENT I THINK -->
 
 This program can be found in @c utils/emulator.
-
-
-@section page_utils_helpgen Help Generator
-
-Helpgen takes C++ header files and generates a Tex2RTF-compatible
-documentation file for each class it finds, using comments as appropriate.
-This is a good way to start a reference for a set of classes.
-
-Helpgen can be found in @c utils/HelpGen.
 
 
 @section page_utils_helpview Help Viewer
@@ -83,17 +72,6 @@ can even correct them automatically. It uses the XML outputs of the gccxml utili
 to do the comparisons.
 
 You can find it in @c utils/ifacecheck.
-
-
-@section page_utils_tex2rtf Tex2RTF
-
-Supplied with wxWidgets is a utility called Tex2RTF for
-converting @e LaTeX manuals HTML, MS HTML Help, wxHTML Help, RTF, and Windows
-Help RTF formats. Tex2RTF was used for the wxWidgets manuals and can be used
-independently by authors wishing to create on-line and printed manuals from the
-same @e LaTeX source. Please see the separate documentation for Tex2RTF.
-
-You can find it under @c utils/tex2rtf.
 
 
 @section page_utils_wxrc wxWidgets XML Resource Compiler

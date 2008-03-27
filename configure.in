@@ -7905,8 +7905,7 @@ for subdir in $SUBDIRS; do
             fi
         else
             dnl we build wxBase only
-            dnl don't take all samples/utils, just those which build with
-            dnl wxBase
+            dnl don't take all samples/utils, just those which build with wxBase
             if test ${subdir} = "samples"; then
                 dnl only take those samples which compile in the current
                 dnl configuration and which exist
@@ -7918,10 +7917,9 @@ for subdir in $SUBDIRS; do
                 done
             elif test ${subdir} = "utils"; then
                 makefiles=""
-                for util in HelpGen tex2rtf ; do
+                for util in ifacecheck ; do
                     if test -d $srcdir/utils/$util ; then
-                        makefiles="utils/$util/Makefile.in \
-                                   utils/$util/src/Makefile.in \
+                        makefiles="utils/$util/src/Makefile.in \
                                    $makefiles"
                     fi
                 done

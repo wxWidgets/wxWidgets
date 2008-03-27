@@ -35,15 +35,13 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: emulator helpview tex2rtf helpgen ifacecheck
+all: emulator helpview ifacecheck
 
 clean: 
 	-if exist .\*.o del .\*.o
 	-if exist .\*.d del .\*.d
 	$(MAKE) -C emulator\src -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C helpview\src -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C tex2rtf\src -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C HelpGen\src -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C ifacecheck\src -f makefile.gcc $(MAKEARGS) clean
 
 emulator: 
@@ -52,16 +50,10 @@ emulator:
 helpview: 
 	$(MAKE) -C helpview\src -f makefile.gcc $(MAKEARGS) all
 
-tex2rtf: 
-	$(MAKE) -C tex2rtf\src -f makefile.gcc $(MAKEARGS) all
-
-helpgen: 
-	$(MAKE) -C HelpGen\src -f makefile.gcc $(MAKEARGS) all
-
 ifacecheck: 
 	$(MAKE) -C ifacecheck\src -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean emulator helpview tex2rtf helpgen ifacecheck
+.PHONY: all clean emulator helpview ifacecheck
 
 
 SHELL := $(COMSPEC)
