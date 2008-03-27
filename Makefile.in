@@ -2097,6 +2097,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/minifram.h \
 	wx/gtk/pen.h \
 	wx/gtk/popupwin.h \
+	wx/gtk/private/win_gtk.h \
 	wx/gtk/region.h \
 	wx/gtk/tooltip.h \
 	wx/gtk/toplevel.h \

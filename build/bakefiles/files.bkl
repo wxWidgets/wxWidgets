@@ -1058,6 +1058,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/minifram.h
     wx/gtk/pen.h
     wx/gtk/popupwin.h
+    wx/gtk/private/win_gtk.h
     wx/gtk/region.h
     wx/gtk/tooltip.h
     wx/gtk/toplevel.h
