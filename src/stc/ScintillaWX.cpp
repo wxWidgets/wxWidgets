@@ -97,14 +97,12 @@ void  wxSTCDropTarget::OnLeave() {
 #endif // wxUSE_DRAG_AND_DROP
 
 
-#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+#if wxUSE_POPUPWIN
 #include "wx/popupwin.h"
 #define wxSTCCallTipBase wxPopupWindow
-#define param2  wxBORDER_NONE  // popup's 2nd param is flags
 #else
 #include "wx/frame.h"
 #define wxSTCCallTipBase wxFrame
-#define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
 #include "wx/dcbuffer.h"
@@ -112,7 +110,7 @@ void  wxSTCDropTarget::OnLeave() {
 class wxSTCCallTip : public wxSTCCallTipBase {
 public:
     wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
-#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+#if wxUSE_POPUPWIN
         wxSTCCallTipBase(parent, wxBORDER_NONE),
 #else
         wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
@@ -126,10 +124,11 @@ public:
 #endif
           m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
         {
+            SetBackgroundStyle(wxBG_STYLE_CUSTOM);
         }
 
     ~wxSTCCallTip() {
-#if wxUSE_POPUPWIN && wxSTC_USE_POPUP && defined(__WXGTK__)
+#if wxUSE_POPUPWIN && defined(__WXGTK__)
         wxRect rect = GetRect();
         rect.x = m_cx;
         rect.y = m_cy;
@@ -141,7 +140,7 @@ public:
 
     void OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
-        wxBufferedPaintDC dc(this);
+        wxAutoBufferedPaintDC dc(this);
         Surface* surfaceWindow = Surface::Allocate();
         surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
         m_ct->PaintCT(surfaceWindow);
@@ -179,7 +178,7 @@ public:
         wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
     }
 
-#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+#if wxUSE_POPUPWIN
 #else
     virtual bool Show( bool show = true )
     {
@@ -1129,7 +1128,7 @@ void ScintillaWX::ClipChildren(wxDC& WXUNUSED(dc), PRectangle WXUNUSED(rect))
 //     if (ct.inCallTipMode) {
 //         wxSTCCallTip* tip = (wxSTCCallTip*)ct.wCallTip.GetID();
 //         wxRect childRect = tip->GetRect();
-// #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+// #if wxUSE_POPUPWIN
 //         childRect.SetPosition(tip->GetMyPosition());
 // #endif
 //         rgn.Subtract(childRect);

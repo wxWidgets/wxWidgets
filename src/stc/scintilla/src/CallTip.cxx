@@ -229,7 +229,7 @@ void CallTip::PaintCT(Surface *surfaceWindow) {
 	offsetMain = insetX;    // initial alignment assuming no arrows
 	PaintContents(surfaceWindow, true);
 
-#ifndef __APPLE__
+#if !defined(__APPLE__) || defined(__WX__)
 	// OSX doesn't put borders on "help tags"
 	// Draw a raised border around the edges of the window
 	surfaceWindow->MoveTo(0, rcClientSize.bottom - 1);
