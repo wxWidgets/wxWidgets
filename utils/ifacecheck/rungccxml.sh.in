@@ -34,7 +34,7 @@ me=$(basename $0)
 path=${0%%/$me}
 current=$(pwd)         # current path
 
-gccxmloutput="$current/$gccxmloutput"
+#gccxmloutput="$current/$gccxmloutput"
 
 cd @top_srcdir@/include              # go to wx include folder
 
@@ -61,13 +61,13 @@ flags=`echo "$flags" | sed -e 's/-pthread//g' | sed -e 's/__WXDEBUG__//g'`
 flags="-I . -I @top_srcdir@/include $flags -D__WXDEBUG__ -D__WX@TOOLKIT@__ -DWXBUILDING $allheaders"
 
 # run gccxml with the same flag used for the real compilation of wx sources:
-echo "Running gccxml on the $allheaders file..."
+echo "Running gccxml on the $allheaders file... results in $gccxmloutput"
 if [[ -f "$gccxmloutput" ]]; then rm $gccxmloutput; fi
 gccxml $flags -fxml=$gccxmloutput
 
 # now get the list of the #defined values for wx headers, so that the result
 # can be passed to ifacecheck to aid the comparison
-echo "Running gccxml's preprocessor on the $allheaders file..."
+echo "Running gccxml's preprocessor on the $allheaders file... results in $preprocoutput"
 gccxml -E -dM $flags >$preprocoutput
 
 # cleanup

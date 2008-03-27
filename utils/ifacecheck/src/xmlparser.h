@@ -114,7 +114,8 @@ class wxMethod
 {
 public:
     wxMethod()
-        { m_bConst=m_bVirtual=m_bPureVirtual=m_bStatic=m_bDeprecated=false; m_nLine=-1; }
+        { m_bConst=m_bVirtual=m_bPureVirtual=m_bStatic=m_bDeprecated=false;
+          m_nLine=-1; m_nAvailability=wxPORT_UNKNOWN; }
 
     wxMethod(const wxType& rettype, const wxString& name,
              const wxArgumentTypeArray& arguments,
@@ -138,6 +139,8 @@ public:     // getters
         { return m_args; }
     int GetLocation() const
         { return m_nLine; }
+    int GetAvailability() const
+        { return m_nAvailability; }
 
     bool IsConst() const
         { return m_bConst; }
@@ -181,6 +184,8 @@ public:     // setters
         { m_bDeprecated=c; }
     void SetLocation(int lineNumber)
         { m_nLine=lineNumber; }
+    void SetAvailability(int nAvail)
+        { m_nAvailability=nAvail; }
 
 public:     // misc
 
@@ -194,12 +199,22 @@ protected:
     wxType m_retType;
     wxString m_strName;
     wxArgumentTypeArray m_args;
+
+    // misc attributes:
     bool m_bConst;
     bool m_bStatic;
     bool m_bVirtual;
     bool m_bPureVirtual;
     bool m_bDeprecated;
+
+    // m_nLine can be -1 if no location infos are available
     int m_nLine;
+
+    // this is a combination of wxPORT_* flags (see wxPortId) or wxPORT_UNKNOWN
+    // if this method should be available for all wxWidgets ports.
+    // NOTE: this is not used for comparing wxMethod objects
+    //       (gccXML never gives this kind of info).
+    int m_nAvailability;
 };
 
 WX_DECLARE_OBJARRAY(wxMethod, wxMethodArray);
@@ -216,18 +231,18 @@ public:
     wxClass(const wxString& name, const wxString& headername)
         : m_strName(name), m_strHeader(headername) {}
 
-    void AddMethod(const wxMethod& func)
-        { m_methods.Add(func); }
+
+public:     // setters
 
     void SetHeader(const wxString& header)
         { m_strHeader=header; }
     void SetName(const wxString& name)
         { m_strName=name; }
-    wxString GetName() const
-        { return m_strName; }
-    wxString GetHeader() const
-        { return m_strHeader; }
-    wxString GetNameWithoutTemplate() const;
+    void SetAvailability(int nAvail)
+        { m_nAvailability=nAvail; }
+
+
+public:     // getters
 
     bool IsOk() const
         { return !m_strName.IsEmpty() && !m_methods.IsEmpty(); }
@@ -235,12 +250,26 @@ public:
     bool IsValidCtorForThisClass(const wxMethod& m) const;
     bool IsValidDtorForThisClass(const wxMethod& m) const;
 
+    wxString GetName() const
+        { return m_strName; }
+    wxString GetHeader() const
+        { return m_strHeader; }
+    wxString GetNameWithoutTemplate() const;
+
     unsigned int GetMethodCount() const
         { return m_methods.GetCount(); }
     wxMethod& GetMethod(unsigned int n) const
         { return m_methods[n]; }
     wxMethod& GetLastMethod() const
         { return m_methods.Last(); }
+
+    int GetAvailability() const
+        { return m_nAvailability; }
+
+public:     // misc
+
+    void AddMethod(const wxMethod& func)
+        { m_methods.Add(func); }
 
     // returns a single result (the first, which is also the only
     // one if CheckConsistency() return true)
@@ -260,6 +289,9 @@ protected:
     wxString m_strName;
     wxString m_strHeader;
     wxMethodArray m_methods;
+
+    // see the wxMethod::m_nAvailability field for more info
+    int m_nAvailability;
 };
 
 WX_DECLARE_OBJARRAY(wxClass, wxClassArray);
@@ -333,12 +365,27 @@ typedef std::map<unsigned long, stlString> wxTypeIdHashMap;
 class wxXmlGccInterface : public wxXmlInterface
 {
 public:
-    wxXmlGccInterface() {}
+    wxXmlGccInterface()
+    {
+        // FIXME: we should retrieve this from the XML file!
+        //        here we suppose the XML was created for the currently-running port
+        m_portId = wxPlatformInfo::Get().GetPortId();
+    }
 
     bool Parse(const wxString& filename);
     bool ParseMethod(const wxXmlNode *p,
                      const wxTypeIdHashMap& types,
                      wxMethod& m);
+
+    wxPortId GetInterfacePort() const
+        { return m_portId; }
+
+    wxString GetInterfacePortName() const
+        { return wxPlatformInfo::GetPortIdName(m_portId, false); }
+
+protected:
+    // the port for which the gcc XML was generated
+    wxPortId m_portId;
 };
 
 

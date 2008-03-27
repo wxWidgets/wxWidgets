@@ -77,10 +77,12 @@ ALIASES += nativeimpl{3}="<div><span class='impl'>Implementations:</span>&nbsp;&
 ALIASES += nativeimpl{4}="<div><span class='impl'>Implementations:</span>&nbsp;&nbsp;native under \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports; a generic implementation is used elsewhere.</div>"
 
 # onlyfor infos:
-ALIASES += onlyfor{1}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1 port.</div>"
-ALIASES += onlyfor{2}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2 ports.</div>"
-ALIASES += onlyfor{3}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports.</div>"
-ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports.</div>"
+# NOTE: we need to be able to retrieve these infos also from the XML output, thus
+#       we use the \xmlonly and \endxmlonly commands to include custom XML tags
+ALIASES += onlyfor{1}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1 port.</div>       \xmlonly <onlyfor>\1</onlyfor> \endxmlonly"
+ALIASES += onlyfor{2}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2 ports.</div>       \xmlonly <onlyfor>\1,\2</onlyfor> \endxmlonly"
+ALIASES += onlyfor{3}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports.</div>       \xmlonly <onlyfor>\1,\2,\3</onlyfor> \endxmlonly"
+ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports.</div>       \xmlonly <onlyfor>\1,\2,\3,\4</onlyfor> \endxmlonly"
 
 # creates appearance section: this should be used for all main GUI controls
 ALIASES += appearance{1}="@htmlonly <div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> @endhtmlonly"

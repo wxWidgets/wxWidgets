@@ -927,6 +927,121 @@ bool wxXmlGccInterface::ParseMethod(const wxXmlNode *p,
 }
 
 
+
+// ----------------------------------------------------------------------------
+// wxXmlDoxygenInterface global helpers
+// ----------------------------------------------------------------------------
+
+static wxString GetTextFromChildren(const wxXmlNode *n)
+{
+    wxString text;
+
+    // consider the tree
+    //
+    //  <a><b>this</b> is a <b>string</b></a>
+    //
+    // <a>
+    // |- <b>
+    // |   |- this
+    // |- is a
+    // |- <b>
+    //     |- string
+    //
+    // unlike wxXmlNode::GetNodeContent() which would return " is a "
+    // this function returns "this is a string"
+
+    wxXmlNode *ref = n->GetChildren();
+    while (ref) {
+        if (ref->GetType() == wxXML_ELEMENT_NODE)
+            text += ref->GetNodeContent();
+        else if (ref->GetType() == wxXML_TEXT_NODE)
+            text += ref->GetContent();
+        else
+            LogWarning("Unexpected node type while getting text from '%s' node", n->GetName());
+
+        ref = ref->GetNext();
+    }
+
+    return text;
+}
+
+static bool HasTextNodeContaining(const wxXmlNode *parent, const wxString& name)
+{
+    if (!parent)
+        return false;
+
+    wxXmlNode *p = parent->GetChildren();
+    while (p)
+    {
+        switch (p->GetType())
+        {
+            case wxXML_TEXT_NODE:
+                if (p->GetContent() == name)
+                    return true;
+                break;
+
+            case wxXML_ELEMENT_NODE:
+                // recurse into this node...
+                if (HasTextNodeContaining(p, name))
+                    return true;
+                break;
+
+            default:
+                // skip it
+                break;
+        }
+
+        p = p->GetNext();
+    }
+
+    return false;
+}
+
+static const wxXmlNode* FindNodeNamed(const wxXmlNode* parent, const wxString& name)
+{
+    if (!parent)
+        return NULL;
+
+    const wxXmlNode *p = parent->GetChildren();
+    while (p)
+    {
+        if (p->GetName() == name)
+            return p;       // found!
+
+        // search recursively in the children of this node
+        const wxXmlNode *ret = FindNodeNamed(p, name);
+        if (ret)
+            return ret;
+
+        p = p->GetNext();
+    }
+
+    return NULL;
+}
+
+int GetAvailabilityFor(const wxXmlNode *node)
+{
+    // identify <onlyfor> custom XML tags
+    const wxXmlNode* onlyfor = FindNodeNamed(node, "onlyfor");
+    if (!onlyfor)
+        return wxPORT_UNKNOWN;
+
+    wxArrayString ports = wxSplit(onlyfor->GetNodeContent(), ',');
+    int nAvail = wxPORT_UNKNOWN;
+    for (unsigned int i=0; i < ports.GetCount(); i++)
+    {
+        if (!ports[i].StartsWith("wx")) {
+            LogError("unexpected port ID '%s'", ports[i]);
+            return false;
+        }
+
+        nAvail |= wxPlatformInfo::GetPortId(ports[i].Mid(2));
+    }
+
+    return nAvail;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxXmlDoxygenInterface
 // ----------------------------------------------------------------------------
@@ -1059,6 +1174,11 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
 
                     klass.SetHeader(subchild->GetNodeContent());
                 }*/
+                else if (subchild->GetName() == "detaileddescription")
+                {
+                    // identify <onlyfor> custom XML tags
+                    klass.SetAvailability(GetAvailabilityFor(subchild));
+                }
 
                 subchild = subchild->GetNext();
             }
@@ -1078,68 +1198,6 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
     }
 
     return true;
-}
-
-static wxString GetTextFromChildren(const wxXmlNode *n)
-{
-    wxString text;
-
-    // consider the tree
-    //
-    //  <a><b>this</b> is a <b>string</b></a>
-    //
-    // <a>
-    // |- <b>
-    // |   |- this
-    // |- is a
-    // |- <b>
-    //     |- string
-    //
-    // unlike wxXmlNode::GetNodeContent() which would return " is a "
-    // this function returns "this is a string"
-
-    wxXmlNode *ref = n->GetChildren();
-    while (ref) {
-        if (ref->GetType() == wxXML_ELEMENT_NODE)
-            text += ref->GetNodeContent();
-        else if (ref->GetType() == wxXML_TEXT_NODE)
-            text += ref->GetContent();
-        else
-            LogWarning("Unexpected node type while getting text from '%s' node", n->GetName());
-
-        ref = ref->GetNext();
-    }
-
-    return text;
-}
-
-static bool HasTextNodeContaining(const wxXmlNode *parent, const wxString& name)
-{
-    wxXmlNode *p = parent->GetChildren();
-    while (p)
-    {
-        switch (p->GetType())
-        {
-            case wxXML_TEXT_NODE:
-                if (p->GetContent() == name)
-                    return true;
-                break;
-
-            case wxXML_ELEMENT_NODE:
-                // recurse into this node...
-                if (HasTextNodeContaining(p, name))
-                    return true;
-                break;
-
-            default:
-                // skip it
-                break;
-        }
-
-        p = p->GetNext();
-    }
-
-    return false;
 }
 
 bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxString& header)
@@ -1202,6 +1260,9 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
             // Doxygen outputs somewhere nested inside <detaileddescription>
             // a <xreftitle>Deprecated</xreftitle> tag.
             m.SetDeprecated(HasTextNodeContaining(child, "Deprecated"));
+
+            // identify <onlyfor> custom XML tags
+            m.SetAvailability(GetAvailabilityFor(child));
         }
 
         child = child->GetNext();

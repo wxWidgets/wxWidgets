@@ -93,8 +93,8 @@ public:
     }
 
 protected:
-    wxXmlGccInterface m_api;                  // "real" headers API
-    wxXmlDoxygenInterface m_interface;        // doxygen-commented headers API
+    wxXmlGccInterface m_gccInterface;                  // "real" headers API
+    wxXmlDoxygenInterface m_doxyInterface;             // doxygen-commented headers API
 
     // was the MODIFY_SWITCH passed?
     bool m_modify;
@@ -133,21 +133,21 @@ int IfaceCheckApp::OnRun()
             }
 
             // in any case set basic std preprocessor #defines:
-            m_interface.AddPreprocessorValue("NULL", "0");
+            m_doxyInterface.AddPreprocessorValue("NULL", "0");
 
             // parse the two XML files which contain the real and the doxygen interfaces
             // for wxWidgets API:
-            if (!m_api.Parse(parser.GetParam(0)) ||
-                !m_interface.Parse(parser.GetParam(1)))
+            if (!m_gccInterface.Parse(parser.GetParam(0)) ||
+                !m_doxyInterface.Parse(parser.GetParam(1)))
                 return 1;
 
             if (parser.Found(DUMP_SWITCH))
             {
                 LogMessage("Dumping real API to '%s'...", API_DUMP_FILE);
-                m_api.Dump(API_DUMP_FILE);
+                m_gccInterface.Dump(API_DUMP_FILE);
 
                 LogMessage("Dumping interface API to '%s'...", INTERFACE_DUMP_FILE);
-                m_interface.Dump(INTERFACE_DUMP_FILE);
+                m_doxyInterface.Dump(INTERFACE_DUMP_FILE);
             }
             else
             {
@@ -195,7 +195,7 @@ void IfaceCheckApp::ShowProgress()
 
 bool IfaceCheckApp::Compare()
 {
-    const wxClassArray& interface = m_interface.GetClasses();
+    const wxClassArray& interface = m_doxyInterface.GetClasses();
     const wxClass* c;
     wxClassPtrArray api;
     int mcount = 0, ccount = 0;
@@ -208,6 +208,18 @@ bool IfaceCheckApp::Compare()
 
     for (unsigned int i=0; i<interface.GetCount(); i++)
     {
+        // only compare the methods which are available for the port
+        // for which the gcc XML was produced
+        if (interface[i].GetAvailability() != wxPORT_UNKNOWN &&
+            (interface[i].GetAvailability() & m_gccInterface.GetInterfacePort()) == 0) {
+
+            if (g_verbose)
+                LogMessage("skipping class '%s' since it's not available for the %s port.",
+                           interface[i].GetName(), m_gccInterface.GetInterfacePortName());
+
+            continue;       // skip this method
+        }
+
         // shorten the name of the header so the log file is more readable
         // and also for calling IsToProcess() against it
         wxString header = wxFileName(interface[i].GetHeader()).GetFullName();
@@ -223,9 +235,9 @@ bool IfaceCheckApp::Compare()
         // for both class cname and cnameBase as in wxWidgets world, most often
         // class cname is platform-specific while the real public interface of
         // that class is part of the cnameBase class.
-        c = m_api.FindClass(cname);
+        c = m_gccInterface.FindClass(cname);
         if (c) api.Add(c);
-        c = m_api.FindClass(cname + "Base");
+        c = m_gccInterface.FindClass(cname + "Base");
         if (c) api.Add(c);
 
         if (api.GetCount()>0) {
@@ -242,9 +254,9 @@ bool IfaceCheckApp::Compare()
     }
 
     LogMessage("%d methods (%.1f%%) of the interface headers do not exist in the real headers",
-               mcount, (float)(100.0 * mcount/m_interface.GetMethodCount()));
+               mcount, (float)(100.0 * mcount/m_doxyInterface.GetMethodCount()));
     LogMessage("%d classes (%.1f%%) of the interface headers do not exist in the real headers",
-               ccount, (float)(100.0 * ccount/m_interface.GetClassesCount()));
+               ccount, (float)(100.0 * ccount/m_doxyInterface.GetClassesCount()));
 
     return true;
 }
@@ -269,6 +281,18 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClassPtrArray& a
     {
         const wxMethod& m = iface->GetMethod(i);
         int matches = 0;
+
+        // only compare the methods which are available for the port
+        // for which the gcc XML was produced
+        if (m.GetAvailability() != wxPORT_UNKNOWN &&
+            (m.GetAvailability() & m_gccInterface.GetInterfacePort()) == 0) {
+
+            if (g_verbose)
+                LogMessage("skipping method '%s' since it's not available for the %s port.",
+                           m.GetAsString(), m_gccInterface.GetInterfacePortName());
+
+            continue;       // skip this method
+        }
 
         // search in the methods of the api classes provided
         for (unsigned int j=0; j<api.GetCount(); j++)
@@ -482,7 +506,7 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
 
     // update the other method's locations for those methods which belong to the modified header
     // and are placed _below_ the modified method
-    wxClassPtrArray cToUpdate = m_interface.FindClassesDefinedIn(header);
+    wxClassPtrArray cToUpdate = m_doxyInterface.FindClassesDefinedIn(header);
     for (unsigned int i=0; i < cToUpdate.GetCount(); i++)
     {
         for (unsigned int j=0; j < cToUpdate[i]->GetMethodCount(); j++)
@@ -529,7 +553,7 @@ bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
             defval = defval.Mid(1, defval.Len()-2);
 
         // store this pair in the doxygen interface, where it can be useful
-        m_interface.AddPreprocessorValue(defname, defval);
+        m_doxyInterface.AddPreprocessorValue(defname, defval);
         useful++;
     }
 
@@ -542,9 +566,9 @@ bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
 void IfaceCheckApp::PrintStatistics(long secs)
 {
     LogMessage("wx real headers contains declaration of %d classes (%d methods)",
-               m_api.GetClassesCount(), m_api.GetMethodCount());
+               m_gccInterface.GetClassesCount(), m_gccInterface.GetMethodCount());
     LogMessage("wx interface headers contains declaration of %d classes (%d methods)",
-               m_interface.GetClassesCount(), m_interface.GetMethodCount());
+               m_doxyInterface.GetClassesCount(), m_doxyInterface.GetMethodCount());
     LogMessage("total processing took %d seconds.", secs);
 }
 
