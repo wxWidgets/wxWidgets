@@ -80,7 +80,7 @@ public:
     wxString GetArgumentName() const
         { return m_strArgName; }
 
-    void SetDefaultValue(const wxString& defval);
+    void SetDefaultValue(const wxString& defval, const wxString& defvalForCmp = wxEmptyString);
     wxString GetDefaultValue() const
         { return m_strDefaultValue; }
 
@@ -93,6 +93,11 @@ public:
 
 protected:
     wxString m_strDefaultValue;
+
+    // this string may differ from m_strDefaultValue if there were
+    // preprocessor substitutions; can be wxEmptyString.
+    wxString m_strDefaultValueForCmp;
+
     wxString m_strArgName;      // this one only makes sense when this wxType is
                                 // used as argument type (and not as return type)
                                 // and can be empty.
@@ -312,6 +317,8 @@ protected:
 WX_DECLARE_HASH_MAP( unsigned long, wxString,
                      wxIntegerHash, wxIntegerEqual,
                      wxTypeIdHashMap );
+
+WX_DECLARE_STRING_HASH_MAP( wxString, wxStringHashMap );
 #else
 #include <map>
 typedef std::basic_string<char> stlString;
@@ -327,14 +334,6 @@ class wxXmlGccInterface : public wxXmlInterface
 {
 public:
     wxXmlGccInterface() {}
-
-    // !!SPEEDUP-TODO!!
-    // Using wxXmlDocument::Load as is, all the types contained in the
-    // the entire gccXML file are stored in memory while parsing;
-    // however we are only interested to wx's own structs/classes/funcs/etc
-    // so that we could use the file IDs to avoid loading stuff which does
-    // not belong to wx. See the very end of the gccXML file: it contains
-    // a set of <File> nodes referenced by all nodes above.
 
     bool Parse(const wxString& filename);
     bool ParseMethod(const wxXmlNode *p,
@@ -363,6 +362,14 @@ public:
     bool Parse(const wxString& filename);
     bool ParseCompoundDefinition(const wxString& filename);
     bool ParseMethod(const wxXmlNode*, wxMethod&, wxString& header);
+
+    // this class can take advantage of the preprocessor output to give
+    // a minor number of false positive warnings in the final comparison
+    void AddPreprocessorValue(const wxString& name, const wxString& val)
+        { m_preproc[name]=val; }
+
+protected:
+    wxStringHashMap m_preproc;
 };
 
 

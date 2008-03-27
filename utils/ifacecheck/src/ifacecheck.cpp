@@ -35,18 +35,23 @@ bool g_verbose = false;
 // IfaceCheckApp
 // ----------------------------------------------------------------------------
 
-#define API_DUMP_FILE           "dump.api.txt"
-#define INTERFACE_DUMP_FILE     "dump.interface.txt"
+#define API_DUMP_FILE               "dump.api.txt"
+#define INTERFACE_DUMP_FILE         "dump.interface.txt"
 
-#define PROCESS_ONLY_SWITCH     "p"
-#define MODIFY_SWITCH           "m"
-#define DUMP_SWITCH             "d"
-#define HELP_SWITCH             "h"
-#define VERBOSE_SWITCH          "v"
+#define PROCESS_ONLY_OPTION         "p"
+#define USE_PREPROCESSOR_OPTION     "u"
+
+#define MODIFY_SWITCH               "m"
+#define DUMP_SWITCH                 "d"
+#define HELP_SWITCH                 "h"
+#define VERBOSE_SWITCH              "v"
 
 static const wxCmdLineEntryDesc g_cmdLineDesc[] =
 {
-    { wxCMD_LINE_OPTION, PROCESS_ONLY_SWITCH, "process-only",
+    { wxCMD_LINE_OPTION, USE_PREPROCESSOR_OPTION, "use-preproc",
+        "uses the preprocessor output to increase the checker accuracy",
+        wxCMD_LINE_VAL_STRING, wxCMD_LINE_NEEDS_SEPARATOR },
+    { wxCMD_LINE_OPTION, PROCESS_ONLY_OPTION, "process-only",
         "processes only header files matching the given wildcard",
         wxCMD_LINE_VAL_STRING, wxCMD_LINE_NEEDS_SEPARATOR },
     { wxCMD_LINE_SWITCH, MODIFY_SWITCH, "modify",
@@ -71,6 +76,8 @@ public:
     virtual bool OnInit() { m_modify=false; return true; }
     virtual int OnRun();
 
+    bool ParsePreprocessorOutput(const wxString& filename);
+
     bool Compare();
     int CompareClasses(const wxClass* iface, const wxClassPtrArray& api);
     void FixMethod(const wxString& header, const wxMethod* iface, const wxMethod* api);
@@ -92,7 +99,7 @@ protected:
     // was the MODIFY_SWITCH passed?
     bool m_modify;
 
-    // if non-empty, then PROCESS_ONLY_SWITCH was passed and this is the
+    // if non-empty, then PROCESS_ONLY_OPTION was passed and this is the
     // wildcard expression to match
     wxString m_strToMatch;
 };
@@ -103,19 +110,33 @@ int IfaceCheckApp::OnRun()
 {
     long startTime = wxGetLocalTime();      // for timing purpose
 
-    // parse the command line...
     wxCmdLineParser parser(g_cmdLineDesc, argc, argv);
+    parser.SetLogo(
+        wxString::Format("wxWidgets Interface checker utility (built %s against %s)",
+                         __DATE__, wxVERSION_STRING));
+
+    // parse the command line...
     bool ok = true;
+    wxString preprocFile;
     switch (parser.Parse())
     {
-        case -1:
-            // HELP_SWITCH was passed
-            return 0;
-
         case 0:
             if (parser.Found(VERBOSE_SWITCH))
                 g_verbose = true;
 
+            // IMPORTANT: parsing #define values must be done _before_ actually
+            //            parsing the GCC/doxygen XML files
+            if (parser.Found(USE_PREPROCESSOR_OPTION, &preprocFile))
+            {
+                if (!ParsePreprocessorOutput(preprocFile))
+                    return 1;
+            }
+
+            // in any case set basic std preprocessor #defines:
+            m_interface.AddPreprocessorValue("NULL", "0");
+
+            // parse the two XML files which contain the real and the doxygen interfaces
+            // for wxWidgets API:
             if (!m_api.Parse(parser.GetParam(0)) ||
                 !m_interface.Parse(parser.GetParam(1)))
                 return 1;
@@ -133,7 +154,7 @@ int IfaceCheckApp::OnRun()
                 if (parser.Found(MODIFY_SWITCH))
                     m_modify = true;
 
-                if (parser.Found(PROCESS_ONLY_SWITCH, &m_strToMatch))
+                if (parser.Found(PROCESS_ONLY_OPTION, &m_strToMatch))
                 {
                     size_t len = m_strToMatch.Len();
                     if (m_strToMatch.StartsWith("\"") &&
@@ -147,6 +168,20 @@ int IfaceCheckApp::OnRun()
 
             PrintStatistics(wxGetLocalTime() - startTime);
             return ok ? 0 : 1;
+
+        default:
+            wxPrintf("\nThis utility checks that the interface XML files created by Doxygen are in\n");
+            wxPrintf("synch with the real headers (whose contents are extracted by the gcc XML file).\n\n");
+            wxPrintf("The 'gccXML' parameter should be the wxapi.xml file created by the 'rungccxml.sh'\n");
+            wxPrintf("script which resides in 'utils/ifacecheck'.\n");
+            wxPrintf("The 'doxygenXML' parameter should be the index.xml file created by Doxygen\n");
+            wxPrintf("for the wxWidgets 'interface' folder.\n\n");
+            wxPrintf("Since the gcc XML file does not contain info about #defines, if you use\n");
+            wxPrintf("the -%s option, you'll get a smaller number of false warnings.\n",
+                     USE_PREPROCESSOR_OPTION);
+
+            // HELP_SWITCH was passed or a syntax error occurred
+            return 0;
     }
 
     return 1;
@@ -460,6 +495,48 @@ void IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
             }
         }
     }
+}
+
+bool IfaceCheckApp::ParsePreprocessorOutput(const wxString& filename)
+{
+    wxTextFile tf;
+    if (!tf.Open(filename)) {
+        LogError("can't open the '%s' preprocessor output file.", filename);
+        return false;
+    }
+
+    size_t useful = 0;
+    for (unsigned int i=0; i < tf.GetLineCount(); i++)
+    {
+        const wxString& line = tf.GetLine(i);
+        wxString defnameval = line.Mid(8);     // what follows the "#define " string
+
+        // the format of this line should be:
+        //    #define DEFNAME DEFVALUE
+        if (!line.StartsWith("#define ") || !defnameval.Contains(" ")) {
+            LogError("unexpected content in '%s' at line %d.", filename, i);
+            return false;
+        }
+
+        // get DEFNAME
+        wxString defname = defnameval.BeforeFirst(' ');
+        if (defname.Contains("("))
+            continue;       // this is a macro, skip it!
+
+        // get DEFVAL
+        wxString defval = defnameval.AfterFirst(' ').Strip(wxString::both);
+        if (defval.StartsWith("(") && defval.EndsWith(")"))
+            defval = defval.Mid(1, defval.Len()-2);
+
+        // store this pair in the doxygen interface, where it can be useful
+        m_interface.AddPreprocessorValue(defname, defval);
+        useful++;
+    }
+
+    LogMessage("Parsed %d preprocessor #defines from '%s' which will be used later...",
+               useful, filename);
+
+    return true;
 }
 
 void IfaceCheckApp::PrintStatistics(long secs)

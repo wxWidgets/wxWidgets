@@ -115,10 +115,11 @@ bool wxType::operator==(const wxType& m) const
 // wxArgumentType
 // ----------------------------------------------------------------------------
 
-void wxArgumentType::SetDefaultValue(const wxString& defval)
+void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& defvalForCmp)
 {
     m_strDefaultValue=defval.Strip(wxString::both);
-
+    m_strDefaultValueForCmp=defvalForCmp.Strip(wxString::both);
+/*
     // in order to make valid&simple comparison on argument defaults,
     // we reduce some of the multiple forms in which the same things may appear
     // to a single form:
@@ -128,7 +129,7 @@ void wxArgumentType::SetDefaultValue(const wxString& defval)
         m_strDefaultValue.Replace("0", "NULL");
     else
         m_strDefaultValue.Replace("NULL", "0");
-
+*/
 
     if (m_strDefaultValue.Contains("wxGetTranslation"))
         m_strDefaultValue = "_(TOFIX)";     // TODO: wxGetTranslation gives problems to gccxml
@@ -139,7 +140,10 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
     if ((const wxType&)(*this) != (const wxType&)m)
         return false;
 
-    if (m_strDefaultValue != m.m_strDefaultValue)
+    const wxString& def1 = m_strDefaultValueForCmp.IsEmpty() ? m_strDefaultValue : m_strDefaultValueForCmp;
+    const wxString& def2 = m.m_strDefaultValueForCmp.IsEmpty() ? m.m_strDefaultValue : m.m_strDefaultValueForCmp;
+
+    if (def1 != def2)
         return false;
 
     // we deliberately avoid checks on the argument name
@@ -170,7 +174,7 @@ bool wxMethod::IsOk() const
         return false;
     }
 
-    wxASSERT((m_bVirtual && m_bPureVirtual) || !m_bVirtual);
+    wxASSERT(!m_bPureVirtual || (m_bPureVirtual && m_bVirtual));
 
     for (unsigned int i=0; i<m_args.GetCount(); i++)
         if (!m_args[i].IsOk()) {
@@ -403,11 +407,11 @@ void wxXmlInterface::Dump(const wxString& filename)
 bool wxXmlInterface::CheckParseResults() const
 {
     // this check can be quite slow, so do it only for debug releases:
-#ifdef __WXDEBUG__
+//#ifdef __WXDEBUG__
     for (unsigned int i=0; i<m_classes.GetCount(); i++)
         if (!m_classes[i].CheckConsistency())
             return false;
-#endif
+//#endif
 
     return true;
 }
@@ -1163,7 +1167,7 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
                 else if (n->GetName() == "declname")
                     namestr = GetTextFromChildren(n);
                 else if (n->GetName() == "defval")
-                    defstr = GetTextFromChildren(n);
+                    defstr = GetTextFromChildren(n).Strip(wxString::both);
                 else if (n->GetName() == "array")
                     arrstr = GetTextFromChildren(n);
 
@@ -1175,7 +1179,15 @@ bool wxXmlDoxygenInterface::ParseMethod(const wxXmlNode* p, wxMethod& m, wxStrin
                 return false;
             }
 
-            args.Add(wxArgumentType(typestr + arrstr, defstr, namestr));
+            wxArgumentType newarg(typestr + arrstr, defstr, namestr);
+
+            // can we use preprocessor output to transform the default value
+            // into the same form which gets processed by wxXmlGccInterface?
+            wxStringHashMap::const_iterator it = m_preproc.find(defstr);
+            if (it != m_preproc.end())
+                newarg.SetDefaultValue(defstr, it->second);
+
+            args.Add(newarg);
         }
         else if (child->GetName() == "location")
         {
