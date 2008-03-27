@@ -226,6 +226,7 @@ All:
   if the wxVariantData::Clone function is implemented.
 - Added wxWeakRef<T>, wxScopedPtr<T>, wxSharedPtr<T> class templates
 - Added wxVector<T> class templates
+- Added wxON_BLOCK_EXIT_SET() and wxON_BLOCK_EXIT_NULL() to wx/scopeguard.h.
 
 All (Unix):
 

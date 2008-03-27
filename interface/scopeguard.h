@@ -10,7 +10,7 @@
 //@{
 /**
     This macro ensures that the global @a function with 0, 1, 2 or more
-    parameters (up to some implementaton-defined limit) is executed on scope
+    parameters (up to some implementation-defined limit) is executed on scope
     exit, whether due to a normal function return or because an exception has
     been thrown. A typical example of its usage:
 
@@ -55,5 +55,41 @@
 #define wxON_BLOCK_EXIT_THIS0(method)
 #define wxON_BLOCK_EXIT_THIS1(method, p1)
 #define wxON_BLOCK_EXIT_THIS2(method, p1, p2)
+//@}
+
+/** @ingroup group_funcmacro_misc */
+//@{
+/**
+    This macro sets a variable to the specified value on scope exit.
+
+    Example of usage:
+    @code
+    void foo()
+    {
+        bool isDoingSomething = true;
+        {
+            wxON_BLOCK_EXIT_SET(isDoingSomething, false);
+            ... do something ...
+        }
+        ... isDoingSomething is false now ...
+    }
+    @endcode
+
+    @see wxON_BLOCK_EXIT_OBJ0(), wxON_BLOCK_EXIT_NULL()
+
+    @header{wx/scopeguard.h}
+*/
+#define wxON_BLOCK_EXIT_SET(var, value)
+
+/**
+    This macro sets the pointer passed to it as argument to NULL on scope exit.
+
+    It must be used instead of wxON_BLOCK_EXIT_SET() when the value being set
+    is @c NULL.
+
+    @header{wx/scopeguard.h}
+ */
+#define wxON_BLOCK_EXIT_NULL(ptr)
+
 //@}
 

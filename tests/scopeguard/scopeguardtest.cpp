@@ -61,6 +61,7 @@ public:
         CPPUNIT_TEST(BlockExit);
         CPPUNIT_TEST(BlockExitObj);
         CPPUNIT_TEST(BlockExitThis);
+        CPPUNIT_TEST(BlockExitSetVar);
     CPPUNIT_TEST_SUITE_END();
 
     void Normal();
@@ -68,6 +69,7 @@ public:
     void BlockExit();
     void BlockExitObj();
     void BlockExitThis();
+    void BlockExitSetVar();
 
 private:
     void Zero() { m_count = 0; }
@@ -206,3 +208,39 @@ void ScopeGuardTestCase::BlockExitThis()
     CPPUNIT_ASSERT_EQUAL( 5, m_count );
 }
 
+void ScopeGuardTestCase::BlockExitSetVar()
+{
+    m_count = 1;
+    {
+        wxON_BLOCK_EXIT_SET(m_count, 17);
+
+        CPPUNIT_ASSERT_EQUAL( 1, m_count );
+    }
+    CPPUNIT_ASSERT_EQUAL( 17, m_count );
+
+
+    int count = 1;
+    {
+        wxON_BLOCK_EXIT_SET(count, 17);
+
+        CPPUNIT_ASSERT_EQUAL( 1, count );
+    }
+    CPPUNIT_ASSERT_EQUAL( 17, count );
+
+
+    wxString s("hi");
+    {
+        wxON_BLOCK_EXIT_SET(s, "bye");
+
+        WX_ASSERT_STR_EQUAL( "hi", s );
+    }
+    WX_ASSERT_STR_EQUAL( "bye", s );
+
+    ScopeGuardTestCase *p = this;
+    {
+        wxON_BLOCK_EXIT_NULL(p);
+
+        CPPUNIT_ASSERT( p );
+    }
+    CPPUNIT_ASSERT( !p );
+}
