@@ -22,7 +22,7 @@
 
     A listbox callback gets an event wxEVT_COMMAND_LISTBOX_SELECTED for single
     clicks, and
-    wxEVT_COMMAND_LISTBOX_DOUBLE_CLICKED for double clicks.
+    wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
 
     @beginStyleTable
     @style{wxLB_SINGLE}:
@@ -48,7 +48,7 @@
            Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
            list is selected or the selection changes.
     @event{EVT_LISTBOX_DCLICK(id, func)}:
-           Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the
+           Process a wxEVT_COMMAND_LISTBOXDOUBLECLICKED event, when the
            listbox is double-clicked.
     @endEventTable
 
