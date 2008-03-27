@@ -1187,7 +1187,17 @@ void wxEvtHandler::ProcessPendingEvents()
     // if there are no more pending events left, we don't need to stay in this
     // list
     if ( m_pendingEvents->IsEmpty() )
+    {
+#if wxUSE_THREADS
+        if (wxPendingEventsLocker)
+            wxENTER_CRIT_SECT(*wxPendingEventsLocker);
+#endif
         wxPendingEvents->DeleteObject(this);
+#if wxUSE_THREADS
+        if (wxPendingEventsLocker)
+            wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
+#endif
+    }
 
     wxLEAVE_CRIT_SECT( m_pendingEventsLock );
 
