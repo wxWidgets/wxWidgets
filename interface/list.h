@@ -140,12 +140,12 @@ public:
     wxListT::compatibility_iterator Item(size_t index) const;
 
     /**
-        @b NB: This function is deprecated, use wxList::Find instead.
+        @note This function is deprecated, use wxList::Find instead.
     */
     wxListT::compatibility_iterator Member(T* object) const;
 
     /**
-        @b NB: This function is deprecated, use @ref wxList::itemfunc Item instead.
+        @note This function is deprecated, use @ref wxList::itemfunc Item instead.
         Returns the @e nth node in the list, indexing from zero (@NULL if the list is
         empty
         or the nth node could not be found).
@@ -153,7 +153,7 @@ public:
     wxListT::compatibility_iterator Nth(int n) const;
 
     /**
-        @b NB: This function is deprecated, use wxList::GetCount instead.
+        @note This function is deprecated, use wxList::GetCount instead.
         Returns the number of elements in the list.
     */
     int Number() const;

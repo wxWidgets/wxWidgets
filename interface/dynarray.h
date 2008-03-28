@@ -282,7 +282,7 @@ public:
         Linear search is used for the wxArray and wxObjArray classes but binary search
         in the sorted array is used for wxSortedArray (this is why searchFromEnd
         parameter doesn't make sense for it).
-        @b NB: even for wxObjArray classes, the operator==() of the elements in the
+        @note even for wxObjArray classes, the operator==() of the elements in the
         array is @b not used by this function. It searches exactly the given
         element in the array and so will only succeed if this element had been
         previously added to the array, but fail even if another, identical, element is

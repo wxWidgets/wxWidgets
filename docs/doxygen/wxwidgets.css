@@ -11,7 +11,7 @@
 /*
   Doxygen classic styles
   ======================
-*/   
+*/
 
 BODY,H1,H2,H3,H4,H5,H6,P,CENTER,TD,TH,UL,DL,DIV {
 	font-family: Geneva, Arial, Helvetica, sans-serif;
@@ -30,8 +30,8 @@ H2 {
 H3 {
 	font-size: 100%;
 }
-CAPTION { 
-	font-weight: bold 
+CAPTION {
+	font-weight: bold
 }
 DIV.qindex {
 	width: 100%;
@@ -88,42 +88,42 @@ A.qindexHL:hover {
 	background-color: #6666cc;
 	color: #ffffff;
 }
-A.qindexHL:visited { 
-	text-decoration: none; 
-	background-color: #6666cc; 
-	color: #ffffff 
+A.qindexHL:visited {
+	text-decoration: none;
+	background-color: #6666cc;
+	color: #ffffff
 }
-A.el { 
-	text-decoration: none; 
-	font-weight: bold 
+A.el {
+	text-decoration: none;
+	font-weight: bold
 }
-A.elRef { 
-	font-weight: bold 
+A.elRef {
+	font-weight: bold
 }
-A.code:link { 
-	text-decoration: none; 
-	font-weight: normal; 
+A.code:link {
+	text-decoration: none;
+	font-weight: normal;
 	color: #0000FF
 }
-A.code:visited { 
-	text-decoration: none; 
-	font-weight: normal; 
+A.code:visited {
+	text-decoration: none;
+	font-weight: normal;
 	color: #0000FF
 }
-A.codeRef:link { 
-	font-weight: normal; 
+A.codeRef:link {
+	font-weight: normal;
 	color: #0000FF
 }
-A.codeRef:visited { 
-	font-weight: normal; 
+A.codeRef:visited {
+	font-weight: normal;
 	color: #0000FF
 }
-A:hover { 
-	text-decoration: none; 	
-	background-color: #f2f2ff 
+A:hover {
+	text-decoration: none;
+	background-color: #f2f2ff
 }
-DL.el { 
-	margin-left: -1cm 
+DL.el {
+	margin-left: -1cm
 }
 .fragment {
 	font-family: monospace, fixed;
@@ -141,12 +141,12 @@ PRE.fragment {
 	padding-top: 4px;
 	padding-bottom: 4px;
 }
-DIV.ah { 
-	background-color: black; 
-	font-weight: bold; 
-	color: #ffffff; 
-	margin-bottom: 3px; 
-	margin-top: 3px 
+DIV.ah {
+	background-color: black;
+	font-weight: bold;
+	color: #ffffff;
+	margin-bottom: 3px;
+	margin-top: 3px
 }
 
 DIV.groupHeader {
@@ -155,10 +155,10 @@ DIV.groupHeader {
 	margin-bottom: 6px;
 	font-weight: bold;
 }
-DIV.groupText { 
-	margin-left: 16px; 
-	font-style: italic; 
-	font-size: 90% 
+DIV.groupText {
+	margin-left: 16px;
+	font-style: italic;
+	font-size: 90%
 }
 BODY {
 	background: white;
@@ -193,15 +193,15 @@ TD.indexvalue {
 	border: 1px solid #CCCCCC;
 }
 TR.memlist {
-	background-color: #f0f0f0; 
+	background-color: #f0f0f0;
 }
-P.formulaDsp { 
-	text-align: center; 
+P.formulaDsp {
+	text-align: center;
 }
 IMG.formulaDsp {
 }
-IMG.formulaInl { 
-	vertical-align: middle; 
+IMG.formulaInl {
+	vertical-align: middle;
 }
 SPAN.keyword       { color: #008000 }
 SPAN.keywordtype   { color: #604020 }
@@ -328,7 +328,7 @@ SPAN.vhdllogic     { color: #ff0000 }
 	background-color: #FAFAFA;
 	font-size: 90%;
 }
-.search { 
+.search {
 	color: #003399;
 	font-weight: bold;
 }
@@ -336,13 +336,13 @@ FORM.search {
 	margin-bottom: 0px;
 	margin-top: 0px;
 }
-INPUT.search { 
+INPUT.search {
 	font-size: 75%;
 	color: #000080;
 	font-weight: normal;
 	background-color: #e8eef2;
 }
-TD.tiny { 
+TD.tiny {
 	font-size: 75%;
 }
 a {
@@ -351,16 +351,16 @@ a {
 a:visited {
 	color: #2A3798;
 }
-.dirtab { 
+.dirtab {
 	padding: 4px;
 	border-collapse: collapse;
 	border: 1px solid #84b0c7;
 }
-TH.dirtab { 
+TH.dirtab {
 	background: #e8eef2;
 	font-weight: bold;
 }
-HR { 
+HR {
 	height: 1px;
 	border: none;
 	border-top: 1px solid black;
@@ -372,8 +372,8 @@ HR {
 	color: #606060;
 	font-weight: normal;
 	margin-left: 3px;
-} 
-.memnav { 
+}
+.memnav {
 	background-color: #e8eef2;
 	border: 1px solid #84b0c7;
 	text-align: center;
@@ -423,28 +423,28 @@ HR {
 	font-family: sans-serif;
 	margin:0.5em;
 }
-.directory { 
-	font-size: 9pt; 
-	font-weight: bold; 
+.directory {
+	font-size: 9pt;
+	font-weight: bold;
 }
-.directory h3 { 
-	margin: 0px; 
-	margin-top: 1em; 
-	font-size: 11pt; 
+.directory h3 {
+	margin: 0px;
+	margin-top: 1em;
+	font-size: 11pt;
 }
-.directory > h3 { 
-	margin-top: 0; 
+.directory > h3 {
+	margin-top: 0;
 }
-.directory p { 
-	margin: 0px; 
-	white-space: nowrap; 
+.directory p {
+	margin: 0px;
+	white-space: nowrap;
 }
-.directory div { 
-	display: none; 
-	margin: 0px; 
+.directory div {
+	display: none;
+	margin: 0px;
 }
-.directory img { 
-	vertical-align: -30%; 
+.directory img {
+	vertical-align: -30%;
 }
 
 
@@ -466,7 +466,7 @@ IMG.appearance {
 TABLE.appearance {
 	width: 100%;
 	text-align: center;
-	font-style: italic; 
+	font-style: italic;
 	font-size: 90%;
 	/*font-weight: bold;*/
 }
@@ -489,6 +489,12 @@ SPAN.itemdef, SPAN.lib, SPAN.category, SPAN.stdobj, SPAN.styles, SPAN.events, SP
 SPAN.style, SPAN.event {
 	font-weight: bold;
 	color: #880000;
+}
+
+SPAN.eventHandler {
+    padding: 5px;
+    background-color: #eeeeee;
+    font-family: monospace, fixed;
 }
 
 A[HREF="modules.html"] SPAN:before {

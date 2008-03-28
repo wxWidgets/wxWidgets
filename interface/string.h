@@ -658,7 +658,7 @@ public:
         Note that if @c wxUSE_PRINTF_POS_PARAMS is set to 1, then this function supports
         Unix98-style positional parameters:
 
-        @b NB: This function will use a safe version of @e vsprintf() (usually called
+        @note This function will use a safe version of @e vsprintf() (usually called
         @e vsnprintf()) whenever available to always allocate the buffer of correct
         size. Unfortunately, this function is not available on all platforms and the
         dangerous @e vsprintf() will be used then which may lead to buffer overflows.

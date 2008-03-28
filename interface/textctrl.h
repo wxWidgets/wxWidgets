@@ -1339,7 +1339,7 @@ public:
     This class can be used to (temporarily) redirect all output sent to a C++
     ostream object to a wxTextCtrl instead.
 
-    @b NB: Some compilers and/or build configurations don't support multiply
+    @note Some compilers and/or build configurations don't support multiply
     inheriting wxTextCtrl from @c std::streambuf in which
     case this class is not compiled in. You also must have @c wxUSE_STD_IOSTREAM
     option on (i.e. set to 1) in your setup.h to be able to use it. Under Unix,

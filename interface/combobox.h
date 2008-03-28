@@ -18,9 +18,8 @@
     A combobox permits a single selection only. Combobox items are numbered from
     zero.
 
-    If you need a customized combobox, have a look at wxComboCtrl,
-    wxOwnerDrawnComboBox, wxComboPopup
-    and the ready-to-use wxBitmapComboBox.
+    If you need a customized combobox, have a look at wxComboCtrl, wxOwnerDrawnComboBox,
+    wxComboPopup and the ready-to-use wxBitmapComboBox.
 
     @beginStyleTable
     @style{wxCB_SIMPLE}:
@@ -40,7 +39,7 @@
            only.
     @endStyleTable
 
-    @beginEventTable
+    @beginEventTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}:
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected. Note that calling GetValue returns the new
@@ -275,8 +274,9 @@ public:
 
     /**
         Sets the text for the combobox text field.
-        @b NB: For a combobox with @c wxCB_READONLY style the string must be in
-        the combobox choices list, otherwise the call to SetValue() is ignored.
+
+        @note For a combobox with @c wxCB_READONLY style the string must be in
+              the combobox choices list, otherwise the call to SetValue() is ignored.
 
         @param text
             The text to set.

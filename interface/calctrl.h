@@ -215,7 +215,7 @@ public:
            selection controls. (only generic)
     @endStyleTable
 
-    @beginEventTable
+    @beginEventTable{wxCalendarEvent}
     @event{EVT_CALENDAR(id, func)}:
            A day was double clicked in the calendar.
     @event{EVT_CALENDAR_SEL_CHANGED(id, func)}:
@@ -232,8 +232,8 @@ public:
 
     @nativeimpl{wxgtk}
 
-    @see @ref overview_samplecalendar "Calendar sample", wxCalendarDateAttr,
-    wxCalendarEvent, wxDatePickerCtrl
+    @see @ref page_samples_calendar, wxCalendarDateAttr, wxCalendarEvent,
+         wxDatePickerCtrl
 */
 class wxCalendarCtrl : public wxControl
 {

@@ -438,7 +438,7 @@ public:
     static wxDialogLayoutAdapter* SetLayoutAdapter(wxDialogLayoutAdapter* adapter);
 
     /**
-        @b NB: This function is deprecated and doesn't work for all ports, just use
+        @note This function is deprecated and doesn't work for all ports, just use
         ShowModal() to show a modal dialog instead.
         Allows the programmer to specify whether the dialog box is modal (Show() blocks
         control

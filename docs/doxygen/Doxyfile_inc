@@ -47,7 +47,7 @@ SUBGROUPING            = YES
 # us to keep the headers readable and "implement" wxWidgets-specific commands.
 
 # event aliases
-ALIASES = beginEventTable="\n<span class='events'>Events:</span>"
+ALIASES = beginEventTable{1}="\n<span class='events'>Events:</span><p>The following event handler macros redirect the events to member functions with a prototype: <span class='eventHandler'>void handler(\1& event)</span></p>"
 ALIASES += event{1}="\li <span class='event'>\1</span>"
 ALIASES += event{2}="\li <span class='event'>\1, \2</span>"
 ALIASES += event{3}="\li <span class='event'>\1, \2, \3</span>"

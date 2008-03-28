@@ -31,7 +31,7 @@
            only on PalmOS).
     @endStyleTable
 
-    @beginEventTable
+    @beginEventTable{wxCommandEvent}
     @event{EVT_RADIOBUTTON(id, func)}:
            Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the
            radiobutton is clicked.
@@ -41,7 +41,7 @@
     @category{ctrl}
     @appearance{radiobutton.png}
 
-    @see @ref overview_eventhandlingoverview, wxRadioBox, wxCheckBox
+    @see @ref overview_eventhandling, wxRadioBox, wxCheckBox
 */
 class wxRadioButton : public wxControl
 {

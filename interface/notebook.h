@@ -48,7 +48,7 @@ public:
 
     /**
         Returns the currently selected page, or -1 if none was selected.
-        @b NB: under Windows, GetSelection() will return the same value as
+        @note under Windows, GetSelection() will return the same value as
         GetOldSelection() when called from
         @c EVT_NOTEBOOK_PAGE_CHANGING handler and not the page which is going to
         be selected. Also note that the values of selection and old selection returned
@@ -391,7 +391,7 @@ public:
 
     /**
         Sets the amount of space around each page's icon and label, in pixels.
-        @b NB: The vertical padding cannot be changed in wxGTK.
+        @note The vertical padding cannot be changed in wxGTK.
     */
     void SetPadding(const wxSize& padding);
 
@@ -403,7 +403,7 @@ public:
 
     /**
         Sets the width and height of the pages.
-        @b NB: This method is currently not implemented for wxGTK.
+        @note This method is currently not implemented for wxGTK.
     */
     virtual void SetPageSize(const wxSize& size);
 

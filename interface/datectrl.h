@@ -42,10 +42,9 @@
            default date representation in the system.
     @endStyleTable
 
-    @beginEventTable
+    @beginEventTable{wxDateEvent}
     @event{EVT_DATE_CHANGED(id, func)}:
-           This event fires when the user changes the current selection in the
-           control.
+           This event fires when the user changes the current selection in the control.
     @endEventTable
 
     @library{wxadv}

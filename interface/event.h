@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        event.h
-// Purpose:     interface of wxKeyEvent
+// Purpose:     interface of wx*Event classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -23,9 +23,10 @@
     Both key events provide untranslated key codes while the char event carries
     the translated one. The untranslated code for alphanumeric keys is always
     an upper case value. For the other keys it is one of @c WXK_XXX values
-    from the @ref overview_keycodes "keycodes table". The translated key is, in
-    general, the character the user expects to appear as the result of the key
-    combination when typing the text into a text entry zone, for example.
+    from the @ref page_keycodes.
+    The translated key is, in general, the character the user expects to appear
+    as the result of the key combination when typing the text into a text entry
+    zone, for example.
 
     A few examples to clarify this (all assume that CAPS LOCK is unpressed
     and the standard US keyboard): when the @c 'A' key is pressed, the key down
@@ -37,32 +38,42 @@
 
     Although in this simple case it is clear that the correct key code could be
     found in the key down event handler by checking the value returned by
-    wxKeyEvent::ShiftDown, in general you should use
-    @c EVT_CHAR for this as for non-alphanumeric keys the translation is
-    keyboard-layout dependent and can only be done properly by the system itself.
+    wxKeyEvent::ShiftDown(), in general you should use @c EVT_CHAR for this as
+    for non-alphanumeric keys the translation is keyboard-layout dependent and
+    can only be done properly by the system itself.
 
     Another kind of translation is done when the control key is pressed: for
     example, for CTRL-A key press the key down event still carries the
-    same key code @c 'a' as usual but the char event will have key code of
-    1, the ASCII value of this key combination.
+    same key code @c 'a' as usual but the char event will have key code of 1,
+    the ASCII value of this key combination.
 
     You may discover how the other keys on your system behave interactively by
-    running the text() wxWidgets sample and pressing some keys
+    running the @ref page_samples_text wxWidgets sample and pressing some keys
     in any of the text controls shown in it.
-
-    @b Note: If a key down (@c EVT_KEY_DOWN) event is caught and
-    the event handler does not call @c event.Skip() then the corresponding
-    char event (@c EVT_CHAR) will not happen.  This is by design and
-    enables the programs that handle both types of events to be a bit
-    simpler.
-
-    @b Note for Windows programmers: The key and char events in wxWidgets are
-    similar to but slightly different from Windows @c WM_KEYDOWN and
-    @c WM_CHAR events. In particular, Alt-x combination will generate a char
-    event in wxWidgets (unless it is used as an accelerator).
 
     @b Tip: be sure to call @c event.Skip() for events that you don't process in
     key event function, otherwise menu shortcuts may cease to work under Windows.
+
+    @note If a key down (@c EVT_KEY_DOWN) event is caught and the event handler
+          does not call @c event.Skip() then the corresponding char event
+          (@c EVT_CHAR) will not happen.
+          This is by design and enables the programs that handle both types of
+          events to be a bit simpler.
+
+    @note For Windows programmers: The key and char events in wxWidgets are
+          similar to but slightly different from Windows @c WM_KEYDOWN and
+          @c WM_CHAR events. In particular, Alt-x combination will generate a
+          char event in wxWidgets (unless it is used as an accelerator).
+
+
+    @beginEventTable{wxKeyEvent}
+    @event{EVT_KEY_DOWN(func)}:
+           Process a wxEVT_KEY_DOWN event (any key has been pressed).
+    @event{EVT_KEY_UP(func)}:
+           Process a wxEVT_KEY_UP event (any key has been released).
+    @event{EVT_CHAR(func)}:
+           Process a wxEVT_CHAR event.
+    @endEventTable
 
     @library{wxcore}
     @category{events}
@@ -71,61 +82,70 @@ class wxKeyEvent : public wxEvent
 {
 public:
     /**
-        Constructor. Currently, the only valid event types are wxEVT_CHAR and
-        wxEVT_CHAR_HOOK.
+        Constructor.
+        Currently, the only valid event types are @c wxEVT_CHAR and @c wxEVT_CHAR_HOOK.
     */
-    wxKeyEvent(wxEventType keyEventType);
+    wxKeyEvent(wxEventType keyEventType = wxEVT_NULL);
 
     /**
         Returns @true if the Alt key was down at the time of the key event.
-        Notice that GetModifiers() is easier to use
-        correctly than this function so you should consider using it in new code.
+
+        Notice that GetModifiers() is easier to use correctly than this function
+        so you should consider using it in new code.
     */
     bool AltDown() const;
 
     /**
         CMD is a pseudo key which is the same as Control for PC and Unix
-        platforms but the special APPLE (a.k.a as COMMAND) key under
-        Macs: it makes often sense to use it instead of, say, ControlDown() because Cmd
+        platforms but the special APPLE (a.k.a as COMMAND) key under Macs:
+        it makes often sense to use it instead of, say, ControlDown() because Cmd
         key is used for the same thing under Mac as Ctrl elsewhere (but Ctrl still
         exists, just not used for this purpose under Mac). So for non-Mac platforms
-        this is the same as ControlDown() and under
-        Mac this is the same as MetaDown().
+        this is the same as ControlDown() and under Mac this is the same as MetaDown().
     */
     bool CmdDown() const;
 
     /**
         Returns @true if the control key was down at the time of the key event.
-        Notice that GetModifiers() is easier to use
-        correctly than this function so you should consider using it in new code.
+
+        Notice that GetModifiers() is easier to use correctly than this function
+        so you should consider using it in new code.
     */
     bool ControlDown() const;
 
     /**
         Returns the virtual key code. ASCII events return normal ASCII values,
-        while non-ASCII events return values such as @b WXK_LEFT for the
-        left cursor key. See Keycodes() for a full list of
-        the virtual key codes.
+        while non-ASCII events return values such as @b WXK_LEFT for the left cursor
+        key. See @ref page_keycodes for a full list of the virtual key codes.
+
         Note that in Unicode build, the returned value is meaningful only if the
         user entered a character that can be represented in current locale's default
-        charset. You can obtain the corresponding Unicode character using
-        GetUnicodeKey().
+        charset. You can obtain the corresponding Unicode character using GetUnicodeKey().
     */
     int GetKeyCode() const;
 
     /**
         Return the bitmask of modifier keys which were pressed when this event
-        happened. See @ref overview_keymodifiers "key modifier constants" for the full
-        list
-        of modifiers.
-        Notice that this function is easier to use correctly than, for example,
-        ControlDown() because when using the latter you
-        also have to remember to test that none of the other modifiers is pressed:
+        happened. See @ref page_keymodifiers for the full list of modifiers.
 
-        and forgetting to do it can result in serious program bugs (e.g. program not
-        working with European keyboard layout where ALTGR key which is seen by
-        the program as combination of CTRL and ALT is used). On the
-        other hand, you can simply write
+        Notice that this function is easier to use correctly than, for example,
+        ControlDown() because when using the latter you also have to remember to
+        test that none of the other modifiers is pressed:
+
+        @code
+        if ( ControlDown() && !AltDown() && !ShiftDown() && !MetaDown() )
+            ... handle Ctrl-XXX ...
+        @endcode
+
+        and forgetting to do it can result in serious program bugs (e.g. program
+        not working with European keyboard layout where ALTGR key which is seen by
+        the program as combination of CTRL and ALT is used). On the other hand,
+        you can simply write:
+
+        @code
+        if ( GetModifiers() == wxMOD_CONTROL )
+            ... handle Ctrl-XXX ...
+        @endcode
 
         with this function.
     */
@@ -136,27 +156,30 @@ public:
         Obtains the position (in client coordinates) at which the key was pressed.
     */
     wxPoint GetPosition() const;
-    const void GetPosition(long* x, long* y) const;
+    void GetPosition(long* x, long* y) const;
     //@}
 
     /**
         Returns the raw key code for this event. This is a platform-dependent scan code
         which should only be used in advanced applications.
-        @b NB: Currently the raw key codes are not supported by all ports, use
-        @c #ifdef wxHAS_RAW_KEY_CODES to determine if this feature is available.
+
+        @note Currently the raw key codes are not supported by all ports, use
+              @ifdef_ wxHAS_RAW_KEY_CODES to determine if this feature is available.
     */
     wxUint32 GetRawKeyCode() const;
 
     /**
         Returns the low level key flags for this event. The flags are
         platform-dependent and should only be used in advanced applications.
-        @b NB: Currently the raw key flags are not supported by all ports, use
-        @c #ifdef wxHAS_RAW_KEY_CODES to determine if this feature is available.
+
+        @note Currently the raw key flags are not supported by all ports, use
+              @ifdef_ wxHAS_RAW_KEY_CODES to determine if this feature is available.
     */
     wxUint32 GetRawKeyFlags() const;
 
     /**
         Returns the Unicode character corresponding to this key event.
+
         This function is only available in Unicode build, i.e. when
         @c wxUSE_UNICODE is 1.
     */
@@ -168,86 +191,36 @@ public:
     wxCoord GetX() const;
 
     /**
-        Returns the Y (in client coordinates) position of the event.
+        Returns the Y position (in client coordinates) of the event.
     */
     wxCoord GetY() const;
 
     /**
-        Returns @true if either CTRL or ALT keys was down
-        at the time of the key event. Note that this function does not take into
-        account neither SHIFT nor META key states (the reason for ignoring
-        the latter is that it is common for NUMLOCK key to be configured as
-        META under X but the key presses even while NUMLOCK is on should
-        be still processed normally).
+        Returns @true if either CTRL or ALT keys was down at the time of the
+        key event.
+
+        Note that this function does not take into account neither SHIFT nor
+        META key states (the reason for ignoring the latter is that it is
+        common for NUMLOCK key to be configured as META under X but the key
+        presses even while NUMLOCK is on should be still processed normally).
     */
     bool HasModifiers() const;
 
     /**
         Returns @true if the Meta key was down at the time of the key event.
-        Notice that GetModifiers() is easier to use
-        correctly than this function so you should consider using it in new code.
+
+        Notice that GetModifiers() is easier to use correctly than this function
+        so you should consider using it in new code.
     */
     bool MetaDown() const;
 
     /**
         Returns @true if the shift key was down at the time of the key event.
-        Notice that GetModifiers() is easier to use
-        correctly than this function so you should consider using it in new code.
+
+        Notice that GetModifiers() is easier to use correctly than this function
+        so you should consider using it in new code.
     */
     bool ShiftDown() const;
-
-    /**
-        bool m_altDown
-        @b Deprecated: Please use GetModifiers()
-        instead!
-        @true if the Alt key is pressed down.
-    */
-
-
-    /**
-        bool m_controlDown
-        @b Deprecated: Please use GetModifiers()
-        instead!
-        @true if control is pressed down.
-    */
-
-
-    /**
-        long m_keyCode
-        @b Deprecated: Please use GetKeyCode()
-        instead!
-        Virtual keycode. See Keycodes() for a list of identifiers.
-    */
-
-
-    /**
-        bool m_metaDown
-        @b Deprecated: Please use GetModifiers()
-        instead!
-        @true if the Meta key is pressed down.
-    */
-
-
-    /**
-        bool m_shiftDown
-        @b Deprecated: Please use GetModifiers()
-        instead!
-        @true if shift is pressed down.
-    */
-
-
-    /**
-        int m_x
-        @b Deprecated: Please use GetX() instead!
-        X position of the event.
-    */
-
-
-    /**
-        int m_y
-        @b Deprecated: Please use GetY() instead!
-        Y position of the event.
-    */
 };
 
 
@@ -256,8 +229,21 @@ public:
     @class wxJoystickEvent
     @wxheader{event.h}
 
-    This event class contains information about mouse events, particularly
+    This event class contains information about joystick events, particularly
     events received by windows.
+
+    @beginEventTable{wxJoystickEvent}
+    @style{EVT_JOY_BUTTON_DOWN(func)}:
+        Process a wxEVT_JOY_BUTTON_DOWN event.
+    @style{EVT_JOY_BUTTON_UP(func)}:
+        Process a wxEVT_JOY_BUTTON_UP event.
+    @style{EVT_JOY_MOVE(func)}:
+        Process a wxEVT_JOY_MOVE event.
+    @style{EVT_JOY_ZMOVE(func)}:
+        Process a wxEVT_JOY_ZMOVE event.
+    @style{EVT_JOYSTICK_EVENTS(func)}:
+        Processes all joystick events.
+    @endEventTable
 
     @library{wxcore}
     @category{events}
@@ -270,16 +256,16 @@ public:
     /**
         Constructor.
     */
-    wxJoystickEvent(wxEventType eventType = 0, int state = 0,
+    wxJoystickEvent(wxEventType eventType = wxEVT_NULL, int state = 0,
                     int joystick = wxJOYSTICK1,
                     int change = 0);
 
     /**
-        Returns @true if the event was a down event from the specified button (or any
-        button).
+        Returns @true if the event was a down event from the specified button
+        (or any button).
 
         @param button
-            Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
+            Can be @c wxJOY_BUTTONn where @c n is 1, 2, 3 or 4; or @c wxJOY_BUTTON_ANY to
             indicate any button down event.
     */
     bool ButtonDown(int button = wxJOY_BUTTON_ANY) const;
@@ -288,32 +274,32 @@ public:
         Returns @true if the specified button (or any button) was in a down state.
 
         @param button
-            Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
+            Can be @c wxJOY_BUTTONn where @c n is 1, 2, 3 or 4; or @c wxJOY_BUTTON_ANY to
             indicate any button down event.
     */
     bool ButtonIsDown(int button = wxJOY_BUTTON_ANY) const;
 
     /**
-        Returns @true if the event was an up event from the specified button (or any
-        button).
+        Returns @true if the event was an up event from the specified button
+        (or any button).
 
         @param button
-            Can be wxJOY_BUTTONn where n is 1, 2, 3 or 4; or wxJOY_BUTTON_ANY to
+            Can be @c wxJOY_BUTTONn where @c n is 1, 2, 3 or 4; or @c wxJOY_BUTTON_ANY to
             indicate any button down event.
     */
     bool ButtonUp(int button = wxJOY_BUTTON_ANY) const;
 
     /**
-        Returns the identifier of the button changing state. This is a wxJOY_BUTTONn
-        identifier, where
-        n is one of 1, 2, 3, 4.
+        Returns the identifier of the button changing state.
+
+        This is a @c wxJOY_BUTTONn identifier, where @c n is one of 1, 2, 3, 4.
     */
     int GetButtonChange() const;
 
     /**
-        Returns the down state of the buttons. This is a bitlist of wxJOY_BUTTONn
-        identifiers, where
-        n is one of 1, 2, 3, 4.
+        Returns the down state of the buttons.
+
+        This is a @c wxJOY_BUTTONn identifier, where @c n is one of 1, 2, 3, 4.
     */
     int GetButtonState() const;
 
@@ -334,8 +320,8 @@ public:
     int GetZPosition() const;
 
     /**
-        Returns @true if this was a button up or down event (@e not 'is any button
-        down?').
+        Returns @true if this was a button up or down event
+        (@e not 'is any button down?').
     */
     bool IsButton() const;
 
@@ -358,10 +344,36 @@ public:
 
     A scroll event holds information about events sent from scrolling windows.
 
+
+    @beginEventTable{wxScrollWinEvent}
+    You can use the EVT_SCROLLWIN* macros for intercepting scroll window events
+    from the receiving window.
+    @event{EVT_SCROLLWIN(func)}:
+        Process all scroll events.
+    @event{EVT_SCROLLWIN_TOP(func)}:
+        Process wxEVT_SCROLLWIN_TOP scroll-to-top events.
+    @event{EVT_SCROLLWIN_BOTTOM(func)}:
+        Process wxEVT_SCROLLWIN_BOTTOM scroll-to-bottom events.
+    @event{EVT_SCROLLWIN_LINEUP(func)}:
+        Process wxEVT_SCROLLWIN_LINEUP line up events.
+    @event{EVT_SCROLLWIN_LINEDOWN(func)}:
+        Process wxEVT_SCROLLWIN_LINEDOWN line down events.
+    @event{EVT_SCROLLWIN_PAGEUP(func)}:
+        Process wxEVT_SCROLLWIN_PAGEUP page up events.
+    @event{EVT_SCROLLWIN_PAGEDOWN(func)}:
+        Process wxEVT_SCROLLWIN_PAGEDOWN page down events.
+    @event{EVT_SCROLLWIN_THUMBTRACK(func)}:
+        Process wxEVT_SCROLLWIN_THUMBTRACK thumbtrack events
+        (frequent events sent as the user drags the thumbtrack).
+    @event{EVT_SCROLLWIN_THUMBRELEASE(func)}:
+        Process wxEVT_SCROLLWIN_THUMBRELEASE thumb release events.
+    @endEventTable
+
+
     @library{wxcore}
     @category{events}
 
-    @see wxScrollEvent, @ref overview_eventhandlingoverview
+    @see wxScrollEvent, @ref overview_eventhandling
 */
 class wxScrollWinEvent : public wxEvent
 {
@@ -369,17 +381,20 @@ public:
     /**
         Constructor.
     */
-    wxScrollWinEvent(wxEventType commandType = 0, int pos = 0,
+    wxScrollWinEvent(wxEventType commandType = wxEVT_NULL, int pos = 0,
                      int orientation = 0);
 
     /**
         Returns wxHORIZONTAL or wxVERTICAL, depending on the orientation of the
         scrollbar.
+
+        @todo wxHORIZONTAL and wxVERTICAL should go in their own enum
     */
     int GetOrientation() const;
 
     /**
         Returns the position of the scrollbar for the thumb track and release events.
+
         Note that this field can't be used for the other events, you need to query
         the window itself for the current position in that case.
     */
@@ -396,10 +411,21 @@ public:
     when the user changes the colour settings using the control panel.
     This is only appropriate under Windows.
 
+    @remarks
+        The default event handler for this event propagates the event to child windows,
+        since Windows only sends the events to top-level windows.
+        If intercepting this event for a top-level window, remember to call the base
+        class handler, or to pass the event on to the window's children explicitly.
+
+    @beginEventTable{wxSysColourChangedEvent}
+    @event{EVT_SYS_COLOUR_CHANGED(func)}:
+        Process a wxEVT_SYS_COLOUR_CHANGED event.
+    @endEventTable
+
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxSysColourChangedEvent : public wxEvent
 {
@@ -417,15 +443,20 @@ public:
     @wxheader{event.h}
 
     This event is sent just after the actual window associated with a wxWindow
-    object
-    has been created. Since it is derived from wxCommandEvent, the event propagates
-    up
+    object has been created.
+
+    Since it is derived from wxCommandEvent, the event propagates up
     the window hierarchy.
+
+    @beginEventTable{wxWindowCreateEvent}
+    @event{EVT_WINDOW_CREATE(func)}:
+        Process a wxEVT_CREATE event.
+    @endEventTable
 
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview, wxWindowDestroyEvent
+    @see @ref overview_eventhandling, wxWindowDestroyEvent
 */
 class wxWindowCreateEvent : public wxCommandEvent
 {
@@ -445,14 +476,69 @@ public:
     A paint event is sent when a window's contents needs to be repainted.
 
     Please notice that in general it is impossible to change the drawing of a
-    standard control (such as wxButton) and so you shouldn't
-    attempt to handle paint events for them as even if it might work on some
-    platforms, this is inherently not portable and won't work everywhere.
+    standard control (such as wxButton) and so you shouldn't attempt to handle
+    paint events for them as even if it might work on some platforms, this is
+    inherently not portable and won't work everywhere.
+
+    @remarks
+    Note that in a paint event handler, the application must always create a
+    wxPaintDC object, even if you do not use it. Otherwise, under MS Windows,
+    refreshing for this and other windows will go wrong.
+    For example:
+    @code
+    void MyWindow::OnPaint(wxPaintEvent& event)
+    {
+        wxPaintDC dc(this);
+
+        DrawMyDocument(dc);
+    }
+    @endcode
+    You can optimize painting by retrieving the rectangles that have been damaged
+    and only repainting these. The rectangles are in terms of the client area,
+    and are unscrolled, so you will need to do some calculations using the current
+    view position to obtain logical, scrolled units.
+    Here is an example of using the wxRegionIterator class:
+    @code
+    // Called when window needs to be repainted.
+    void MyWindow::OnPaint(wxPaintEvent& event)
+    {
+        wxPaintDC dc(this);
+
+        // Find Out where the window is scrolled to
+        int vbX,vbY;                     // Top left corner of client
+        GetViewStart(&vbX,&vbY);
+
+        int vX,vY,vW,vH;                 // Dimensions of client area in pixels
+        wxRegionIterator upd(GetUpdateRegion()); // get the update rect list
+
+        while (upd)
+        {
+            vX = upd.GetX();
+            vY = upd.GetY();
+            vW = upd.GetW();
+            vH = upd.GetH();
+
+            // Alternatively we can do this:
+            // wxRect rect(upd.GetRect());
+
+            // Repaint this rectangle
+            ...some code...
+
+            upd ++ ;
+        }
+    }
+    @endcode
+
+
+    @beginEventTable{wxPaintEvent}
+    @event{EVT_PAINT(func)}:
+        Process a wxEVT_PAINT event.
+    @endEventTable
 
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxPaintEvent : public wxEvent
 {
@@ -471,14 +557,18 @@ public:
 
     An event being sent when a top level window is maximized. Notice that it is
     not sent when the window is restored to its original size after it had been
-    maximized, only a normal wxSizeEvent is generated in
-    this case.
+    maximized, only a normal wxSizeEvent is generated in this case.
+
+    @beginEventTable{wxMaximizeEvent}
+    @event{EVT_MAXIMIZE(func)}:
+        Process a wxEVT_MAXIMIZE event.
+    @endEventTable
 
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview, wxTopLevelWindow::Maximize,
-    wxTopLevelWindow::IsMaximized
+    @see @ref overview_eventhandling, wxTopLevelWindow::Maximize,
+         wxTopLevelWindow::IsMaximized
 */
 class wxMaximizeEvent : public wxEvent
 {
@@ -498,10 +588,51 @@ public:
     This class is used for pseudo-events which are called by wxWidgets
     to give an application the chance to update various user interface elements.
 
+    @remarks
+    Without update UI events, an application has to work hard to check/uncheck,
+    enable/disable, show/hide, and set the text for elements such as menu items
+    and toolbar buttons. The code for doing this has to be mixed up with the code
+    that is invoked when an action is invoked for a menu item or button.
+    With update UI events, you define an event handler to look at the state of the
+    application and change UI elements accordingly. wxWidgets will call your member
+    functions in idle time, so you don't have to worry where to call this code.
+    In addition to being a clearer and more declarative method, it also means you don't
+    have to worry whether you're updating a toolbar or menubar identifier. The same
+    handler can update a menu item and toolbar button, if the identifier is the same.
+    Instead of directly manipulating the menu or button, you call functions in the event
+    object, such as wxUpdateUIEvent::Check. wxWidgets will determine whether such a
+    call has been made, and which UI element to update.
+    These events will work for popup menus as well as menubars. Just before a menu is
+    popped up, wxMenu::UpdateUI is called to process any UI events for the window that
+    owns the menu.
+    If you find that the overhead of UI update processing is affecting your application,
+    you can do one or both of the following:
+    @li Call wxUpdateUIEvent::SetMode with a value of wxUPDATE_UI_PROCESS_SPECIFIED,
+        and set the extra style wxWS_EX_PROCESS_UI_UPDATES for every window that should
+        receive update events. No other windows will receive update events.
+    @li Call wxUpdateUIEvent::SetUpdateInterval with a millisecond value to set the delay
+        between updates. You may need to call wxWindow::UpdateWindowUI at critical points,
+        for example when a dialog is about to be shown, in case the user sees a slight
+        delay before windows are updated.
+    Note that although events are sent in idle time, defining a wxIdleEvent handler
+    for a window does not affect this because the events are sent from wxWindow::OnInternalIdle
+    which is always called in idle time.
+    wxWidgets tries to optimize update events on some platforms.
+    On Windows and GTK+, events for menubar items are only sent when the menu is about
+    to be shown, and not in idle time.
+
+    @beginEventTable{wxUpdateUIEvent}
+    @event{EVT_UPDATE_UI(id, func)}:
+        Process a wxEVT_UPDATE_UI event for the command with the given id.
+    @event{EVT_UPDATE_UI_RANGE(id1, id2, func)}:
+        Process a wxEVT_UPDATE_UI event for any command with id included in the given range.
+    @endEventTable
+
+
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxUpdateUIEvent : public wxCommandEvent
 {
@@ -665,7 +796,7 @@ public:
     makes it possible to only process the latter if it doesn't matter if the
     text was copied or cut.
 
-    @beginEventTable
+    @beginEventTable{wxClipboardTextEvent}
     @event{EVT_TEXT_COPY(id, func)}:
            Some or all of the controls content was copied to the clipboard.
     @event{EVT_TEXT_CUT(id, func)}:
@@ -717,14 +848,14 @@ public:
     parent window receives @c wxEVT_LEAVE_WINDOW event not only when the
     mouse leaves the window entirely but also when it enters one of its children.
 
-    @b NB: Note that under Windows CE mouse enter and leave events are not natively
+    @note Note that under Windows CE mouse enter and leave events are not natively
     supported
     by the system but are generated by wxWidgets itself. This has several
     drawbacks: the LEAVE_WINDOW event might be received some time after the mouse
     left the window and the state variables for it may have changed during this
     time.
 
-    @b NB: Note the difference between methods like
+    @note Note the difference between methods like
     wxMouseEvent::LeftDown and
     wxMouseEvent::LeftIsDown: the former returns @true
     when the event corresponds to the left mouse button click while the latter
@@ -1171,7 +1302,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxDropFilesEvent : public wxEvent
 {
@@ -1343,7 +1474,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview, wxApp::IsActive
+    @see @ref overview_eventhandling, wxApp::IsActive
 */
 class wxActivateEvent : public wxEvent
 {
@@ -1385,7 +1516,7 @@ public:
     @category{events}
 
     @see @ref overview_wxcommandevent "Command events", @ref
-    overview_eventhandlingoverview
+    overview_eventhandling
 */
 class wxContextMenuEvent : public wxCommandEvent
 {
@@ -1437,7 +1568,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxEraseEvent : public wxEvent
 {
@@ -1470,7 +1601,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxFocusEvent : public wxEvent
 {
@@ -1505,7 +1636,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxChildFocusEvent : public wxCommandEvent
 {
@@ -1546,7 +1677,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxMouseCaptureChangedEvent, @ref overview_eventhandlingoverview,
+    @see wxMouseCaptureChangedEvent, @ref overview_eventhandling,
     wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
 */
 class wxMouseCaptureLostEvent : public wxEvent
@@ -1635,9 +1766,9 @@ public:
     since processing would stop after the first window found.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{events}
 
-    @see wxContextHelp, wxDialog, @ref overview_eventhandlingoverview
+    @see wxContextHelp, wxDialog, @ref overview_eventhandling
 */
 class wxHelpEvent : public wxCommandEvent
 {
@@ -1720,7 +1851,7 @@ public:
     @category{events}
 
     @see wxScrollBar, wxSlider, wxSpinButton, , wxScrollWinEvent, @ref
-    overview_eventhandlingoverview
+    overview_eventhandling
 */
 class wxScrollEvent : public wxCommandEvent
 {
@@ -1769,7 +1900,7 @@ public:
     @library{wxbase}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview, wxUpdateUIEvent,
+    @see @ref overview_eventhandling, wxUpdateUIEvent,
     wxWindow::OnInternalIdle
 */
 class wxIdleEvent : public wxEvent
@@ -1849,7 +1980,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxInitDialogEvent : public wxEvent
 {
@@ -1882,7 +2013,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview, wxWindowCreateEvent
+    @see @ref overview_eventhandling, wxWindowCreateEvent
 */
 class wxWindowDestroyEvent : public wxCommandEvent
 {
@@ -1990,7 +2121,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxMouseCaptureLostEvent, @ref overview_eventhandlingoverview,
+    @see wxMouseCaptureLostEvent, @ref overview_eventhandling,
     wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
 */
 class wxMouseCaptureChangedEvent : public wxEvent
@@ -2105,7 +2236,7 @@ public:
     @category{events}
 
     @see @ref overview_wxcommandevent "Command events", @ref
-    overview_eventhandlingoverview
+    overview_eventhandling
 */
 class wxMenuEvent : public wxEvent
 {
@@ -2163,9 +2294,9 @@ public:
     @endcode
 
     @library{wxcore}
-    @category{FIXME}
+    @category{events}
 
-    @see @ref overview_eventhandlingoverview, wxEvtHandler
+    @see @ref overview_eventhandling, wxEvtHandler
 */
 class wxEventBlocker : public wxEvtHandler
 {
@@ -2210,9 +2341,9 @@ public:
     will be identical to the "this" pointer for the wxEvtHandler portion.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{events}
 
-    @see @ref overview_eventhandlingoverview
+    @see @ref overview_eventhandling
 */
 class wxEvtHandler : public wxObject
 {
@@ -2495,7 +2626,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandlingoverview, wxTopLevelWindow::Iconize,
+    @see @ref overview_eventhandling, wxTopLevelWindow::Iconize,
     wxTopLevelWindow::IsIconized
 */
 class wxIconizeEvent : public wxEvent
@@ -2524,7 +2655,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxPoint, @ref overview_eventhandlingoverview
+    @see wxPoint, @ref overview_eventhandling
 */
 class wxMoveEvent : public wxEvent
 {
@@ -2550,7 +2681,7 @@ public:
     callback or member function. @b wxEvent used to be a multipurpose
     event object, and is an abstract base class for other event classes (see below).
 
-    For more information about events, see the @ref overview_eventhandlingoverview.
+    For more information about events, see the @ref overview_eventhandling.
 
     @b wxPerl note: In wxPerl custom event classes should be derived from
     @c Wx::PlEvent and @c Wx::PlCommandEvent.
@@ -2718,7 +2849,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxSize, @ref overview_eventhandlingoverview
+    @see wxSize, @ref overview_eventhandling
 */
 class wxSizeEvent : public wxEvent
 {
@@ -2747,7 +2878,7 @@ public:
     specify the cursor you want to be displayed.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{events}
 
     @see ::wxSetCursor, wxWindow::wxSetCursor
 */

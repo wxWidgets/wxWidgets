@@ -106,7 +106,7 @@ public:
         Select the text in the text part of the control between  positions
         @a from (inclusive) and @a to (exclusive). This is similar to
         wxTextCtrl::SetSelection.
-        @b NB: this is currently only implemented for Windows and generic versions
+        @note this is currently only implemented for Windows and generic versions
         of the control.
     */
     void SetSelection(long from, long to);

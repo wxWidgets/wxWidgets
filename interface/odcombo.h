@@ -30,7 +30,7 @@
            painted unless SetCustomPaintWidth is called.
     @endStyleTable
 
-    @beginEventTable
+    @beginEventTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}:
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected. Note that calling GetValue returns the new

@@ -172,7 +172,7 @@ public:
 
     /**
         Returns the text associated with the menu item.
-        @b NB: this function is deprecated, please use
+        @note this function is deprecated, please use
         GetItemLabel() or GetItemLabelText()
         instead.
     */

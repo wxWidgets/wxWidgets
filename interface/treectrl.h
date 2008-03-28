@@ -357,7 +357,7 @@ public:
     /**
         Returns the edit control being currently used to edit a label. Returns @NULL
         if no label is being edited.
-        @b NB: It is currently only implemented for wxMSW.
+        @note It is currently only implemented for wxMSW.
     */
     wxTextCtrl* GetEditControl() const;
 

@@ -357,7 +357,7 @@ public:
     with a special identifier -1 is a separator item and doesn't have an
     associated command but just makes a separator line appear in the menu.
 
-    @b NB: Please note that @e wxID_ABOUT and @e wxID_EXIT are
+    @note Please note that @e wxID_ABOUT and @e wxID_EXIT are
     predefined by wxWidgets and have a special meaning since entries
     using these IDs will be taken out of the normal menus under MacOS X
     and will be inserted into the system menu (following the appropriate

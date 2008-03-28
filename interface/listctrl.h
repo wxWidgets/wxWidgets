@@ -179,7 +179,7 @@ public:
 
     /**
         Deletes all items in the list control.
-        @b NB: This function does @e not send the
+        @note This function does @e not send the
         @c wxEVT_COMMAND_LIST_DELETE_ITEM event because deleting many items
         from the control would be too slow then (unlike wxListCtrl::DeleteItem).
     */
@@ -275,7 +275,7 @@ public:
     /**
         Returns the edit control being currently used to edit a label. Returns @NULL
         if no label is being edited.
-        @b NB: It is currently only implemented for wxMSW and the generic version,
+        @note It is currently only implemented for wxMSW and the generic version,
         not for the native Mac OS X version.
     */
     wxTextCtrl* GetEditControl() const;
@@ -399,7 +399,7 @@ public:
 
         Searches for an item to the right of the specified item.
 
-        @b NB: this parameter is only supported by wxMSW currently and ignored on
+        @note this parameter is only supported by wxMSW currently and ignored on
         other platforms.
         @a state can be a bitlist of the following:
 
@@ -628,7 +628,7 @@ public:
         @a dx specifies the number of pixels to scroll. If in list view mode,
         @a dx specifies the number of columns to scroll. @a dy always specifies
         the number of pixels to scroll vertically.
-        @b NB: This method is currently only implemented in the Windows version.
+        @note This method is currently only implemented in the Windows version.
     */
     bool ScrollList(int dx, int dy);
 

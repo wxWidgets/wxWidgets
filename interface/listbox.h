@@ -43,7 +43,7 @@
            The listbox contents are sorted in alphabetical order.
     @endStyleTable
 
-    @beginEventTable
+    @beginEventTable{wxCommandEvent}
     @event{EVT_LISTBOX(id, func)}:
            Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
            list is selected or the selection changes.

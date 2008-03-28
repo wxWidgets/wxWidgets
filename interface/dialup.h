@@ -108,7 +108,7 @@ public:
     /**
         Returns @true if the computer has a permanent network connection (i.e. is
         on a LAN) and so there is no need to use Dial() function to go online.
-        @b NB: this functions tries to guess the result and it is not always
+        @note this functions tries to guess the result and it is not always
         guaranteed to be correct, so it is better to ask user for
         confirmation or give him a possibility to override it.
     */

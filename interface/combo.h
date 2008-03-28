@@ -10,9 +10,10 @@
     @class wxComboPopup
     @wxheader{combo.h}
 
-    In order to use a custom popup with wxComboCtrl,
-    an interface class must be derived from wxComboPopup. For more information
-    how to use it, see @ref overview_wxcomboctrl "Setting Custom Popup for
+    In order to use a custom popup with wxComboCtrl, an interface class must
+    be derived from wxComboPopup.
+
+    For more information on how to use it, see @ref overview_wxcomboctrl "Setting Custom Popup for
     wxComboCtrl".
 
     @library{wxcore}
@@ -148,10 +149,108 @@ public:
     @class wxComboCtrl
     @wxheader{combo.h}
 
-    A combo control is a generic combobox that allows totally
-    custom popup. In addition it has other customization features.
-    For instance, position and size of the dropdown button
-    can be changed.
+    A combo control is a generic combobox that allows totally custom popup.
+    In addition it has other customization features.
+    For instance, position and size of the dropdown button can be changed.
+
+    @section wxcomboctrl_custompopup Setting Custom Popup for wxComboCtrl
+
+    wxComboCtrl needs to be told somehow which control to use and this is done
+    by SetPopupControl().
+    However, we need something more than just a wxControl in this method as,
+    for example, we need to call SetStringValue("initial text value") and
+    wxControl doesn't have such method. So we also need a wxComboPopup which
+    is an interface which must be implemented by a control to be usable as a popup.
+
+    We couldn't derive wxComboPopup from wxControl as this would make it
+    impossible to have a class deriving from a wxWidgets control and from it,
+    so instead it is just a mix-in.
+
+    Here's a minimal sample of wxListView popup:
+
+    @code
+    #include <wx/combo.h>
+    #include <wx/listctrl.h>
+
+    class wxListViewComboPopup : public wxListView,
+                                public wxComboPopup
+    {
+    public:
+
+        // Initialize member variables
+        virtual void Init()
+        {
+            m_value = -1;
+        }
+
+        // Create popup control
+        virtual bool Create(wxWindow* parent)
+        {
+            return wxListView::Create(parent,1,wxPoint(0,0),wxDefaultSize);
+        }
+
+        // Return pointer to the created control
+        virtual wxWindow *GetControl() { return this; }
+
+        // Translate string into a list selection
+        virtual void SetStringValue(const wxString& s)
+        {
+            int n = wxListView::FindItem(-1,s);
+            if ( n >= 0 && n < wxListView::GetItemCount() )
+                wxListView::Select(n);
+        }
+
+        // Get list selection as a string
+        virtual wxString GetStringValue() const
+        {
+            if ( m_value >= 0 )
+                return wxListView::GetItemText(m_value);
+            return wxEmptyString;
+        }
+
+        // Do mouse hot-tracking (which is typical in list popups)
+        void OnMouseMove(wxMouseEvent& event)
+        {
+            // TODO: Move selection to cursor
+        }
+
+        // On mouse left up, set the value and close the popup
+        void OnMouseClick(wxMouseEvent& WXUNUSED(event))
+        {
+            m_value = wxListView::GetFirstSelected();
+
+            // TODO: Send event as well
+
+            Dismiss();
+        }
+
+    protected:
+        int             m_value; // current item index
+
+    private:
+        DECLARE_EVENT_TABLE()
+    };
+
+    BEGIN_EVENT_TABLE(wxListViewComboPopup, wxListView)
+        EVT_MOTION(wxListViewComboPopup::OnMouseMove)
+        EVT_LEFT_UP(wxListViewComboPopup::OnMouseClick)
+    END_EVENT_TABLE()
+    @endcode
+
+    Here's how you would create and populate it in a dialog constructor:
+
+    @code
+    wxComboCtrl* comboCtrl = new wxComboCtrl(this,wxID_ANY,wxEmptyString);
+
+    wxListViewComboPopup* popupCtrl = new wxListViewComboPopup();
+
+    comboCtrl->SetPopupControl(popupCtrl);
+
+    // Populate using wxListView methods
+    popupCtrl->InsertItem(popupCtrl->GetItemCount(),wxT("First Item"));
+    popupCtrl->InsertItem(popupCtrl->GetItemCount(),wxT("Second Item"));
+    popupCtrl->InsertItem(popupCtrl->GetItemCount(),wxT("Third Item"));
+    @endcode
 
     @beginStyleTable
     @style{wxCB_READONLY}:
@@ -172,7 +271,7 @@ public:
            Drop button will behave more like a standard push button.
     @endStyleTable
 
-    @beginEventTable
+    @beginEventTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}:
            Process a wxEVT_COMMAND_TEXT_UPDATED event, when the text changes.
     @event{EVT_TEXT_ENTER(id, func)}:
@@ -588,7 +687,7 @@ public:
 
     /**
         Sets the text for the combo control text field.
-        @b NB: For a combo control with @c wxCB_READONLY style the
+        @note For a combo control with @c wxCB_READONLY style the
         string must be accepted by the popup (for instance, exist in the dropdown
         list), otherwise the call to SetValue() is ignored
     */

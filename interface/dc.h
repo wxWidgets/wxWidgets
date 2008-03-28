@@ -354,7 +354,7 @@ public:
 
     /**
         Draws the text rotated by @a angle degrees.
-        @b NB: Under Win9x only TrueType fonts can be drawn by this function. In
+        @note Under Win9x only TrueType fonts can be drawn by this function. In
         particular, a font different from @c wxNORMAL_FONT should be used as the
         latter is not a TrueType font. @c wxSWISS_FONT is an example of a font
         which is.
@@ -400,7 +400,7 @@ public:
         the string. See GetTextExtent() for how
         to get the dimensions of a text string, which can be used to position the
         text more precisely.
-        @b NB: under wxGTK the current
+        @note under wxGTK the current
         @ref getlogicalfunction() "logical function" is used by this function
         but it is ignored by wxMSW. Thus, you should avoid using logical functions
         with this function in portable programs.

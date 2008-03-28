@@ -70,7 +70,7 @@ public:
 
     /**
         Frees resources allocated by the object.
-        @b NB: destructor is not virtual, don't use this class polymorphically.
+        @note destructor is not virtual, don't use this class polymorphically.
     */
     ~wxCmdLineParser();
 

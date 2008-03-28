@@ -140,7 +140,7 @@ public:
         This function returns a valid handle for the main program itself. Notice that
         the @NULL return value is valid for some systems (i.e. doesn't mean that
         the function failed).
-        @b NB: This function is Unix specific. It will always fail under Windows
+        @note This function is Unix specific. It will always fail under Windows
         or OS/2.
     */
     wxDllType GetProgramHandle();

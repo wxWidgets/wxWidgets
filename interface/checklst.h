@@ -20,7 +20,7 @@
     Please note that wxCheckListBox uses client data in its implementation,
     and therefore this is not available to the application.
 
-    @beginEventTable
+    @beginEventTable{wxCommandEvent}
     @event{EVT_CHECKLISTBOX(id, func)}:
            Process a wxEVT_COMMAND_CHECKLISTBOX_TOGGLED event, when an item in
            the check list box is checked or unchecked.

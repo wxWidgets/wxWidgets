@@ -28,7 +28,7 @@
            Draws a thin black border.
     @endStyleTable
 
-    @beginEventTable
+    @beginEventTable{wxSashEvent}
     @event{EVT_SASH_DRAGGED(id, func)}:
            Process a wxEVT_SASH_DRAGGED event, when the user has finished
            dragging a sash.
@@ -41,7 +41,7 @@
     @library{wxadv}
     @category{miscwnd}
 
-    @see wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandlingoverview
+    @see wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandling
 */
 class wxSashWindow : public wxWindow
 {

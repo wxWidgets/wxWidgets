@@ -165,7 +165,7 @@ public:
 
     /**
         Destructor will close the file.
-        @b NB: it is not virtual so you should not use wxFile polymorphically.
+        @note it is not virtual so you should not use wxFile polymorphically.
     */
     ~wxFile();
 

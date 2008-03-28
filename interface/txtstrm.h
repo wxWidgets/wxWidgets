@@ -140,7 +140,7 @@ public:
     wxString ReadLine();
 
     /**
-        @b NB: This method is deprecated, use ReadLine()
+        @note This method is deprecated, use ReadLine()
         or ReadWord() instead.
         Same as ReadLine().
     */

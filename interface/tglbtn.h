@@ -20,7 +20,7 @@
     You can see wxToggleButton in action in the sixth page of the
     controls() sample.
 
-    @beginEventTable
+    @beginEventTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}:
            Handles a toggle button click event.
     @endEventTable
@@ -113,7 +113,7 @@ public:
 
     This control emits an update UI event.
 
-    @beginEventTable
+    @beginEventTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}:
            Handles a toggle button click event.
     @endEventTable

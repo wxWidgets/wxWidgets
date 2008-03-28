@@ -2596,7 +2596,7 @@ public:
 
     /**
         Moves the pointer to the given position on the window.
-        @b NB: This function is not supported under Mac because Apple Human
+        @note This function is not supported under Mac because Apple Human
         Interface Guidelines forbid moving the mouse cursor programmatically.
 
         @param x

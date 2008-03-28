@@ -49,7 +49,7 @@ public:
     as wxSpinButton is not implemented for all platforms but wxSpinCtrl is as it
     degenerates to a simple wxTextCtrl on such platforms.
 
-    @b NB: the range supported by this control (and wxSpinCtrl) depends on the
+    @note the range supported by this control (and wxSpinCtrl) depends on the
     platform but is at least @c -0x8000 to @c 0x7fff. Under GTK and
     Win32 with sufficiently new version of @c comctrl32.dll (at least 4.71 is
     required, 5.80 is recommended) the full 32 bit range is supported.
