@@ -3617,7 +3617,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
     gs_target.target = const_cast<char *>("UTF8_STRING");
     gs_target.flags = 0;
-    gs_target.info = -1;
+    gs_target.info = static_cast<guint>(-1);
     gtk_tree_view_enable_model_drag_source( GTK_TREE_VIEW(m_treeview),
        GDK_BUTTON1_MASK, &gs_target, 1, (GdkDragAction) GDK_ACTION_COPY );
 
