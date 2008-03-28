@@ -5171,7 +5171,7 @@ SOURCE=..\..\include\wx\generic\buttonbar.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\calctrl.h
+SOURCE=..\..\include\wx\generic\calctrlg.h
 # End Source File
 # Begin Source File
 

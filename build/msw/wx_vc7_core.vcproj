@@ -2913,7 +2913,7 @@
 			<File
 				RelativePath="..\..\include\wx\generic\buttonbar.h"/>
 			<File
-				RelativePath="..\..\include\wx\generic\calctrl.h"/>
+				RelativePath="..\..\include\wx\generic\calctrlg.h"/>
 			<File
 				RelativePath="..\..\include\wx\generic\choicdgg.h"/>
 			<File

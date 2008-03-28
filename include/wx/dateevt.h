@@ -57,11 +57,5 @@ typedef void (wxEvtHandler::*wxDateEventFunction)(wxDateEvent&);
 #define EVT_DATE_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_DATE_CHANGED, id, wxDateEventHandler(fn))
 
-#ifdef _WX_DEFINE_DATE_EVENTS_
-    const wxEventType wxEVT_DATE_CHANGED = wxNewEventType();
-
-    IMPLEMENT_DYNAMIC_CLASS(wxDateEvent, wxCommandEvent)
-#endif
-
 #endif // _WX_DATEEVT_H_
 

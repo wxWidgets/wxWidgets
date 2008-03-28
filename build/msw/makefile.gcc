@@ -1956,11 +1956,12 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_animatecmn.o \
+	$(OBJS)\monodll_calctrlcmn.o \
 	$(OBJS)\monodll_datavcmn.o \
 	$(OBJS)\monodll_hyperlnkcmn.o \
 	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
-	$(OBJS)\monodll_calctrl.o \
+	$(OBJS)\monodll_calctrlg.o \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_editlbox.o \
@@ -1989,11 +1990,12 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_animatecmn.o \
+	$(OBJS)\monodll_calctrlcmn.o \
 	$(OBJS)\monodll_datavcmn.o \
 	$(OBJS)\monodll_hyperlnkcmn.o \
 	$(OBJS)\monodll_aboutdlgg.o \
 	$(OBJS)\monodll_bmpcboxg.o \
-	$(OBJS)\monodll_calctrl.o \
+	$(OBJS)\monodll_calctrlg.o \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_datectlg.o \
 	$(OBJS)\monodll_editlbox.o \
@@ -2606,11 +2608,12 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_animatecmn.o \
+	$(OBJS)\monolib_calctrlcmn.o \
 	$(OBJS)\monolib_datavcmn.o \
 	$(OBJS)\monolib_hyperlnkcmn.o \
 	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
-	$(OBJS)\monolib_calctrl.o \
+	$(OBJS)\monolib_calctrlg.o \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_editlbox.o \
@@ -2639,11 +2642,12 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_animatecmn.o \
+	$(OBJS)\monolib_calctrlcmn.o \
 	$(OBJS)\monolib_datavcmn.o \
 	$(OBJS)\monolib_hyperlnkcmn.o \
 	$(OBJS)\monolib_aboutdlgg.o \
 	$(OBJS)\monolib_bmpcboxg.o \
-	$(OBJS)\monolib_calctrl.o \
+	$(OBJS)\monolib_calctrlg.o \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_datectlg.o \
 	$(OBJS)\monolib_editlbox.o \
@@ -3668,11 +3672,12 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_animatecmn.o \
+	$(OBJS)\advdll_calctrlcmn.o \
 	$(OBJS)\advdll_datavcmn.o \
 	$(OBJS)\advdll_hyperlnkcmn.o \
 	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
-	$(OBJS)\advdll_calctrl.o \
+	$(OBJS)\advdll_calctrlg.o \
 	$(OBJS)\advdll_datavgen.o \
 	$(OBJS)\advdll_datectlg.o \
 	$(OBJS)\advdll_editlbox.o \
@@ -3701,11 +3706,12 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_animatecmn.o \
+	$(OBJS)\advdll_calctrlcmn.o \
 	$(OBJS)\advdll_datavcmn.o \
 	$(OBJS)\advdll_hyperlnkcmn.o \
 	$(OBJS)\advdll_aboutdlgg.o \
 	$(OBJS)\advdll_bmpcboxg.o \
-	$(OBJS)\advdll_calctrl.o \
+	$(OBJS)\advdll_calctrlg.o \
 	$(OBJS)\advdll_datavgen.o \
 	$(OBJS)\advdll_datectlg.o \
 	$(OBJS)\advdll_editlbox.o \
@@ -3742,11 +3748,12 @@ endif
 ifeq ($(WXUNIV),0)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_animatecmn.o \
+	$(OBJS)\advlib_calctrlcmn.o \
 	$(OBJS)\advlib_datavcmn.o \
 	$(OBJS)\advlib_hyperlnkcmn.o \
 	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
-	$(OBJS)\advlib_calctrl.o \
+	$(OBJS)\advlib_calctrlg.o \
 	$(OBJS)\advlib_datavgen.o \
 	$(OBJS)\advlib_datectlg.o \
 	$(OBJS)\advlib_editlbox.o \
@@ -3775,11 +3782,12 @@ endif
 ifeq ($(WXUNIV),1)
 ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_animatecmn.o \
+	$(OBJS)\advlib_calctrlcmn.o \
 	$(OBJS)\advlib_datavcmn.o \
 	$(OBJS)\advlib_hyperlnkcmn.o \
 	$(OBJS)\advlib_aboutdlgg.o \
 	$(OBJS)\advlib_bmpcboxg.o \
-	$(OBJS)\advlib_calctrl.o \
+	$(OBJS)\advlib_calctrlg.o \
 	$(OBJS)\advlib_datavgen.o \
 	$(OBJS)\advlib_datectlg.o \
 	$(OBJS)\advlib_editlbox.o \
@@ -7407,6 +7415,11 @@ $(OBJS)\monodll_animatecmn.o: ../../src/common/animatecmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_calctrlcmn.o: ../../src/common/calctrlcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7427,7 +7440,7 @@ $(OBJS)\monodll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_calctrl.o: ../../src/generic/calctrl.cpp
+$(OBJS)\monodll_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9642,6 +9655,11 @@ $(OBJS)\monolib_animatecmn.o: ../../src/common/animatecmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_calctrlcmn.o: ../../src/common/calctrlcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9662,7 +9680,7 @@ $(OBJS)\monolib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_calctrl.o: ../../src/generic/calctrl.cpp
+$(OBJS)\monolib_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13381,6 +13399,9 @@ $(OBJS)\advdll_datectrl.o: ../../src/msw/datectrl.cpp
 $(OBJS)\advdll_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advdll_calctrlcmn.o: ../../src/common/calctrlcmn.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advdll_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13393,7 +13414,7 @@ $(OBJS)\advdll_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
 $(OBJS)\advdll_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_calctrl.o: ../../src/generic/calctrl.cpp
+$(OBJS)\advdll_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_datavgen.o: ../../src/generic/datavgen.cpp
@@ -13479,6 +13500,9 @@ $(OBJS)\advlib_datectrl.o: ../../src/msw/datectrl.cpp
 $(OBJS)\advlib_animatecmn.o: ../../src/common/animatecmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\advlib_calctrlcmn.o: ../../src/common/calctrlcmn.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\advlib_datavcmn.o: ../../src/common/datavcmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13491,7 +13515,7 @@ $(OBJS)\advlib_aboutdlgg.o: ../../src/generic/aboutdlgg.cpp
 $(OBJS)\advlib_bmpcboxg.o: ../../src/generic/bmpcboxg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advlib_calctrl.o: ../../src/generic/calctrl.cpp
+$(OBJS)\advlib_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_datavgen.o: ../../src/generic/datavgen.cpp

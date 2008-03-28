@@ -80,6 +80,11 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - wxWindow::Freeze/Thaw() are not virtual any more, if you overrode them in
   your code you need to override DoFreeze/Thaw() instead now.
 
+- wxCalendarCtrl has native implementation in wxGTK, but it has less features
+  than the generic one. The native implementation is used by default, but you
+  can still use wxGenericCalendarCtrl instead of wxCalendarCtrl in your code if
+  you need the extra features.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
@@ -176,6 +181,11 @@ Deprecated methods and their replacements
   respectively a wxBrushStyle and a wxPenStyle value instead of a plain "int style";
   use the new wxBrush/wxPen style names (wxBRUSHSTYLE_XXX and wxPENSTYLE_XXX) instead
   of the old deprecated wxXXX styles (which however are still available).
+- EVT_CALENDAR_DAY event has been deprecated, use EVT_CALENDAR_SEL_CHANGED.
+- EVT_CALENDAR_MONTH and EVT_CALENDAR_YEAR events are deprecated,
+  use EVT_CALENDAR_PAGE_CHANGED which replaces both of them.
+- wxCalendarCtrl::EnableYearChange() and wxCAL_NO_YEAR_CHANGE are deprecated.
+
 
 
 Major new features in this release

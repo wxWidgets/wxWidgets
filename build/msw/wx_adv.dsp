@@ -248,6 +248,10 @@ SOURCE=..\..\src\common\animatecmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\calctrlcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\datavcmn.cpp
 # End Source File
 # Begin Source File
@@ -403,7 +407,7 @@ SOURCE=..\..\src\generic\bmpcboxg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\calctrl.cpp
+SOURCE=..\..\src\generic\calctrlg.cpp
 # End Source File
 # Begin Source File
 
@@ -744,7 +748,7 @@ SOURCE=..\..\include\wx\generic\bmpcbox.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\calctrl.h
+SOURCE=..\..\include\wx\generic\calctrlg.h
 # End Source File
 # Begin Source File
 

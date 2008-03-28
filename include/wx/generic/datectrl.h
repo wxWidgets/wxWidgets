@@ -13,7 +13,7 @@
 #define _WX_GENERIC_DATECTRL_H_
 
 class WXDLLIMPEXP_FWD_ADV wxCalendarDateAttr;
-class WXDLLIMPEXP_FWD_ADV wxCalendarCtrl;
+class WXDLLIMPEXP_FWD_ADV wxGenericCalendarCtrl;
 class WXDLLIMPEXP_FWD_ADV wxCalendarEvent;
 class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 class WXDLLIMPEXP_FWD_ADV wxCalendarComboPopup;
@@ -59,7 +59,7 @@ public:
 
     // extra methods available only in this (generic) implementation
     bool SetFormat(const wxString& fmt);
-    wxCalendarCtrl *GetCalendar() const;
+    wxGenericCalendarCtrl *GetCalendar() const;
 
 
     // implementation only from now on

@@ -9,13 +9,6 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
-   TODO
-
-   1. implement multiple selections for date ranges
-   2. background bitmap for the calendar?
- */
-
 #ifndef _WX_CALCTRL_H_
 #define _WX_CALCTRL_H_
 
@@ -26,6 +19,7 @@
 #include "wx/dateevt.h"
 #include "wx/colour.h"
 #include "wx/font.h"
+#include "wx/control.h"
 
 // ----------------------------------------------------------------------------
 // wxCalendarCtrl flags
@@ -43,6 +37,7 @@ enum
     wxCAL_SHOW_HOLIDAYS              = 0x0002,
 
     // disable the year change control, show only the month change one
+    // deprecated
     wxCAL_NO_YEAR_CHANGE             = 0x0004,
 
     // don't allow changing neither month nor year (implies
@@ -85,20 +80,9 @@ enum wxCalendarDateBorder
 
 class WXDLLIMPEXP_ADV wxCalendarDateAttr
 {
-#if !defined(__VISAGECPP__)
-protected:
-    // This has to be before the use of Init(), for MSVC++ 1.5
-    // But dorks up Visualage!
-    void Init(wxCalendarDateBorder border = wxCAL_BORDER_NONE)
-    {
-        m_border = border;
-        m_holiday = false;
-    }
-#endif
 public:
     // ctors
-    wxCalendarDateAttr() { Init(); }
-    wxCalendarDateAttr(const wxColour& colText,
+    wxCalendarDateAttr(const wxColour& colText = wxNullColour,
                        const wxColour& colBack = wxNullColour,
                        const wxColour& colBorder = wxNullColour,
                        const wxFont& font = wxNullFont,
@@ -137,16 +121,22 @@ public:
     const wxColour& GetBorderColour() const { return m_colBorder; }
     const wxFont& GetFont() const { return m_font; }
     wxCalendarDateBorder GetBorder() const { return m_border; }
-#if defined(__VISAGECPP__)
+
+    // get or change the "mark" attribute, i.e. the one used for the items
+    // marked with wxCalendarCtrl::Mark()
+    static const wxCalendarDateAttr& GetMark() { return m_mark; }
+    static void SetMark(wxCalendarDateAttr const& m) { m_mark = m; }
+
 protected:
-    // This has to be here for VisualAge
     void Init(wxCalendarDateBorder border = wxCAL_BORDER_NONE)
     {
         m_border = border;
         m_holiday = false;
     }
-#endif
+
 private:
+    static wxCalendarDateAttr m_mark;
+
     wxColour m_colText,
              m_colBack,
              m_colBorder;
@@ -163,19 +153,16 @@ class WXDLLIMPEXP_FWD_ADV wxCalendarCtrl;
 
 class WXDLLIMPEXP_ADV wxCalendarEvent : public wxDateEvent
 {
-friend class wxCalendarCtrl;
 public:
-    wxCalendarEvent() { Init(); }
-    inline wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type);
+    wxCalendarEvent() : m_wday(wxDateTime::Inv_WeekDay)  { }
+    wxCalendarEvent(wxWindow *win, const wxDateTime& dt, wxEventType type)
+        : wxDateEvent(win, dt, type),
+          m_wday(wxDateTime::Inv_WeekDay)
+    {
+    }
 
     void SetWeekDay(const wxDateTime::WeekDay wd) { m_wday = wd; }
     wxDateTime::WeekDay GetWeekDay() const { return m_wday; }
-
-protected:
-    void Init()
-    {
-        m_wday = wxDateTime::Inv_WeekDay;
-    }
 
 private:
     wxDateTime::WeekDay m_wday;
@@ -184,30 +171,102 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// wxCalendarCtrlBase
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxCalendarCtrlBase : public wxControl
+{
+public:
+    // do we allow changing the month/year?
+    bool AllowMonthChange() const { return !HasFlag(wxCAL_NO_MONTH_CHANGE); }
+
+    // get/set the current date
+    virtual wxDateTime GetDate() const = 0;
+    virtual bool SetDate(const wxDateTime& date) = 0;
+
+
+    // returns one of wxCAL_HITTEST_XXX constants and fills either date or wd
+    // with the corresponding value (none for NOWHERE, the date for DAY and wd
+    // for HEADER)
+    //
+    // notice that this is not implemented in all versions
+    virtual wxCalendarHitTestResult
+    HitTest(const wxPoint& WXUNUSED(pos),
+            wxDateTime* WXUNUSED(date) = NULL,
+            wxDateTime::WeekDay* WXUNUSED(wd) = NULL)
+    {
+        return wxCAL_HITTEST_NOWHERE;
+    }
+
+    // allow or disable changing the current month (and year), return true if
+    // the value of this option really changed or false if it was already set
+    // to the required value
+    //
+    // NB: we provide implementation for this pure virtual function, derived
+    //     classes should call it
+    virtual bool EnableMonthChange(bool enable) = 0;
+
+
+    // an item without custom attributes is drawn with the default colours and
+    // font and without border, setting custom attributes allows to modify this
+    //
+    // the day parameter should be in 1..31 range, for days 29, 30, 31 the
+    // corresponding attribute is just unused if there is no such day in the
+    // current month
+    //
+    // notice that currently arbitrary attributes are supported only in the
+    // generic version, the native controls only support Mark() which assigns
+    // some special appearance (which can be customized using SetMark() for the
+    // generic version) to the given day
+
+    virtual void Mark(size_t day, bool mark) = 0;
+
+    virtual wxCalendarDateAttr *GetAttr(size_t WXUNUSED(day)) const
+        { return NULL; }
+    virtual void SetAttr(size_t WXUNUSED(day), wxCalendarDateAttr *attr)
+        { delete attr; }
+    virtual void ResetAttr(size_t WXUNUSED(day)) { }
+
+
+    // implementation only from now on
+
+    // generate the given calendar event(s)
+    void GenerateEvent(wxEventType type)
+    {
+        wxCalendarEvent event(this, GetDate(), type);
+        HandleWindowEvent(event);
+    }
+};
+
+// ----------------------------------------------------------------------------
 // wxCalendarCtrl
 // ----------------------------------------------------------------------------
 
-// so far we only have a generic version, so keep it simple
-#include "wx/generic/calctrl.h"
+#define wxCalendarNameStr "CalendarCtrl"
 
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+    #define wxHAS_NATIVE_CALENDARCTRL
+    #include "wx/gtk/calctrl.h"
+    #define wxCalendarCtrl wxGtkCalendarCtrl
+#else
+    #include "wx/generic/calctrlg.h"
+    #define wxCalendarCtrl wxGenericCalendarCtrl
+#endif
 
-// now we can define the inline ctor using wxCalendarCtrl
-inline
-wxCalendarEvent::wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type)
-               : wxDateEvent(cal, cal->GetDate(), type)
-{
-}
 
 // ----------------------------------------------------------------------------
 // calendar event types and macros for handling them
 // ----------------------------------------------------------------------------
 
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_SEL_CHANGED;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_PAGE_CHANGED;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
+
+// deprecated events
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_DAY_CHANGED;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_MONTH_CHANGED;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_YEAR_CHANGED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
 
 typedef void (wxEvtHandler::*wxCalendarEventFunction)(wxCalendarEvent&);
 
@@ -219,10 +278,13 @@ typedef void (wxEvtHandler::*wxCalendarEventFunction)(wxCalendarEvent&);
 
 #define EVT_CALENDAR(id, fn) wx__DECLARE_CALEVT(DOUBLECLICKED, id, fn)
 #define EVT_CALENDAR_SEL_CHANGED(id, fn) wx__DECLARE_CALEVT(SEL_CHANGED, id, fn)
+#define EVT_CALENDAR_PAGE_CHANGED(id, fn) wx__DECLARE_CALEVT(PAGE_CHANGED, id, fn)
+#define EVT_CALENDAR_WEEKDAY_CLICKED(id, fn) wx__DECLARE_CALEVT(WEEKDAY_CLICKED, id, fn)
+
+// deprecated events
 #define EVT_CALENDAR_DAY(id, fn) wx__DECLARE_CALEVT(DAY_CHANGED, id, fn)
 #define EVT_CALENDAR_MONTH(id, fn) wx__DECLARE_CALEVT(MONTH_CHANGED, id, fn)
 #define EVT_CALENDAR_YEAR(id, fn) wx__DECLARE_CALEVT(YEAR_CHANGED, id, fn)
-#define EVT_CALENDAR_WEEKDAY_CLICKED(id, fn) wx__DECLARE_CALEVT(WEEKDAY_CLICKED, id, fn)
 
 #endif // wxUSE_CALENDARCTRL
 

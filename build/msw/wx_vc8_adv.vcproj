@@ -726,6 +726,9 @@
 				RelativePath="..\..\src\common\animatecmn.cpp"
 			/>
 			<File
+				RelativePath="..\..\src\common\calctrlcmn.cpp"
+			/>
+			<File
 				RelativePath="..\..\src\common\datavcmn.cpp"
 			/>
 			<File
@@ -877,7 +880,7 @@
 				RelativePath="..\..\src\generic\bmpcboxg.cpp"
 			/>
 			<File
-				RelativePath="..\..\src\generic\calctrl.cpp"
+				RelativePath="..\..\src\generic\calctrlg.cpp"
 			/>
 			<File
 				RelativePath="..\..\src\generic\datavgen.cpp"
@@ -1179,7 +1182,7 @@
 				RelativePath="..\..\include\wx\generic\bmpcbox.h"
 			/>
 			<File
-				RelativePath="..\..\include\wx\generic\calctrl.h"
+				RelativePath="..\..\include\wx\generic\calctrlg.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\generic\dataview.h"

@@ -2814,11 +2814,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/common/animatecmn.cpp
+    src/common/calctrlcmn.cpp
     src/common/datavcmn.cpp
     src/common/hyperlnkcmn.cpp
     src/generic/aboutdlgg.cpp
     src/generic/bmpcboxg.cpp
-    src/generic/calctrl.cpp
+    src/generic/calctrlg.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
     src/generic/editlbox.cpp
@@ -2849,7 +2850,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/editlbox.h
     wx/generic/aboutdlgg.h
     wx/generic/bmpcbox.h
-    wx/generic/calctrl.h
+    wx/generic/calctrlg.h
     wx/generic/datectrl.h
     wx/generic/dataview.h
     wx/generic/grid.h
@@ -2988,11 +2989,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_GTK_NATIVE_SRC" hints="files">
     src/gtk/aboutdlg.cpp
     src/gtk/animate.cpp
+    src/gtk/calctrl.cpp
     src/gtk/dataview.cpp
     src/gtk/hyperlink.cpp
 </set>
 <set var="ADVANCED_GTK_NATIVE_HDR" hints="files">
     wx/gtk/animate.h
+    wx/gtk/calctrl.h
     wx/gtk/dataview.h
     wx/gtk/hyperlink.h
 </set>

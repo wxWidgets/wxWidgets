@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        generic/calctrl.h
+// Name:        generic/calctrlg.h
 // Purpose:     generic implementation of date-picker control
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GENERIC_CALCTRL_H
-#define _WX_GENERIC_CALCTRL_H
+#ifndef _WX_GENERIC_CALCTRLG_H
+#define _WX_GENERIC_CALCTRLG_H
 
 #include "wx/control.h"         // the base class
 #include "wx/dcclient.h"        // for wxPaintDC
@@ -19,52 +19,54 @@ class WXDLLIMPEXP_FWD_CORE wxComboBox;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
 class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
 
-#define wxCalendarNameStr _T("CalendarCtrl")
-
 // ----------------------------------------------------------------------------
-// wxCalendarCtrl: a control allowing the user to pick a date interactively
+// wxGenericCalendarCtrl
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxControl
+class WXDLLIMPEXP_ADV wxGenericCalendarCtrl : public wxCalendarCtrlBase
 {
 public:
     // construction
-    wxCalendarCtrl() { Init(); }
-    wxCalendarCtrl(wxWindow *parent,
-                   wxWindowID id,
-                   const wxDateTime& date = wxDefaultDateTime,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
-                   const wxString& name = wxCalendarNameStr);
+    wxGenericCalendarCtrl() { Init(); }
+    wxGenericCalendarCtrl(wxWindow *parent,
+                          wxWindowID id,
+                          const wxDateTime& date = wxDefaultDateTime,
+                          const wxPoint& pos = wxDefaultPosition,
+                          const wxSize& size = wxDefaultSize,
+                          long style = wxCAL_SHOW_HOLIDAYS,
+                          const wxString& name = wxCalendarNameStr);
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxDateTime& date = wxDefaultDateTime,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
+                long style = wxCAL_SHOW_HOLIDAYS,
                 const wxString& name = wxCalendarNameStr);
 
-    virtual ~wxCalendarCtrl();
+    virtual ~wxGenericCalendarCtrl();
 
     virtual bool Destroy();
 
     // set/get the current date
     // ------------------------
 
-    bool SetDate(const wxDateTime& date); // we need to be able to control if the event should be sent in SetDateAndNotify(...)
-    const wxDateTime& GetDate() const { return m_date; }
+    virtual bool SetDate(const wxDateTime& date);
+    virtual wxDateTime GetDate() const { return m_date; }
+
 
     // set/get the range in which selection can occur
     // ---------------------------------------------
 
+    // all functions in this section are for generic version only
     bool SetLowerDateLimit(const wxDateTime& date = wxDefaultDateTime);
     const wxDateTime& GetLowerDateLimit() const { return m_lowdate; }
     bool SetUpperDateLimit(const wxDateTime& date = wxDefaultDateTime);
     const wxDateTime& GetUpperDateLimit() const { return m_highdate; }
 
-    bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime, const wxDateTime& upperdate = wxDefaultDateTime);
+    bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
+                      const wxDateTime& upperdate = wxDefaultDateTime);
+
 
     // calendar mode
     // -------------
@@ -73,17 +75,22 @@ public:
     // just using SetWindowStyle() and Refresh() and the functions below
     // should be used instead for them
 
-    // corresponds to wxCAL_NO_YEAR_CHANGE bit
+    // corresponds to wxCAL_NO_MONTH_CHANGE bit
+    virtual bool EnableMonthChange(bool enable = true);
+
+    // corresponds to wxCAL_NO_YEAR_CHANGE bit, deprecated, generic only
     void EnableYearChange(bool enable = true);
 
-    // corresponds to wxCAL_NO_MONTH_CHANGE bit
-    void EnableMonthChange(bool enable = true);
-
-    // corresponds to wxCAL_SHOW_HOLIDAYS bit
+    // corresponds to wxCAL_SHOW_HOLIDAYS bit, generic only
     void EnableHolidayDisplay(bool display = true);
+
 
     // customization
     // -------------
+
+    virtual void Mark(size_t day, bool mark);
+
+    // all other functions in this section are for generic version only
 
     // header colours are used for painting the weekdays at the top
     void SetHeaderColours(const wxColour& colFg, const wxColour& colBg)
@@ -115,21 +122,14 @@ public:
     const wxColour& GetHolidayColourFg() const { return m_colHolidayFg; }
     const wxColour& GetHolidayColourBg() const { return m_colHolidayBg; }
 
-    // an item without custom attributes is drawn with the default colours and
-    // font and without border, setting custom attributes allows to modify this
-    //
-    // the day parameter should be in 1..31 range, for days 29, 30, 31 the
-    // corresponding attribute is just unused if there is no such day in the
-    // current month
-
-    wxCalendarDateAttr *GetAttr(size_t day) const
+    virtual wxCalendarDateAttr *GetAttr(size_t day) const
     {
         wxCHECK_MSG( day > 0 && day < 32, NULL, _T("invalid day") );
 
         return m_attrs[day - 1];
     }
 
-    void SetAttr(size_t day, wxCalendarDateAttr *attr)
+    virtual void SetAttr(size_t day, wxCalendarDateAttr *attr)
     {
         wxCHECK_RET( day > 0 && day < 32, _T("invalid day") );
 
@@ -137,16 +137,13 @@ public:
         m_attrs[day - 1] = attr;
     }
 
+    virtual void ResetAttr(size_t day) { SetAttr(day, NULL); }
+
     void SetHoliday(size_t day);
 
-    void ResetAttr(size_t day) { SetAttr(day, (wxCalendarDateAttr *)NULL); }
-
-    // returns one of wxCAL_HITTEST_XXX constants and fills either date or wd
-    // with the corresponding value (none for NOWHERE, the date for DAY and wd
-    // for HEADER)
-    wxCalendarHitTestResult HitTest(const wxPoint& pos,
-                                    wxDateTime *date = NULL,
-                                    wxDateTime::WeekDay *wd = NULL);
+    virtual wxCalendarHitTestResult HitTest(const wxPoint& pos,
+                                            wxDateTime *date = NULL,
+                                            wxDateTime::WeekDay *wd = NULL);
 
     // implementation only from now on
     // -------------------------------
@@ -223,25 +220,7 @@ private:
     // reset all holidays
     void ResetHolidayAttrs();
 
-    // generate the given calendar event(s)
-    void GenerateEvent(wxEventType type)
-    {
-        wxCalendarEvent event(this, type);
-        (void)GetEventHandler()->ProcessEvent(event);
-    }
-
-    void GenerateEvents(wxEventType type1, wxEventType type2)
-    {
-        GenerateEvent(type1);
-        GenerateEvent(type2);
-    }
-
-    // do we allow changing the month/year?
-    bool AllowMonthChange() const
-    {
-        return (GetWindowStyle() & wxCAL_NO_MONTH_CHANGE)
-                != wxCAL_NO_MONTH_CHANGE;
-    }
+    // deprecated
     bool AllowYearChange() const
     {
         return !(GetWindowStyle() & wxCAL_NO_YEAR_CHANGE);
@@ -316,9 +295,9 @@ private:
     // the year control
     bool m_userChangedYear;
 
-    DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
+    DECLARE_DYNAMIC_CLASS(wxGenericCalendarCtrl)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxCalendarCtrl)
+    DECLARE_NO_COPY_CLASS(wxGenericCalendarCtrl)
 };
 
-#endif // _WX_GENERIC_CALCTRL_H
+#endif // _WX_GENERIC_CALCTRLG_H

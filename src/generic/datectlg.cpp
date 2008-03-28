@@ -44,16 +44,12 @@
     // this header is not included from wx/datectrl.h if we have a native
     // version, but we do need it here
     #include "wx/generic/datectrl.h"
-#else
-    // we need to define _WX_DEFINE_DATE_EVENTS_ before including wx/dateevt.h to
-    // define the event types we use if we're the only date picker control version
-    // being compiled -- otherwise it's defined in the native version implementation
-    #define _WX_DEFINE_DATE_EVENTS_
 #endif
 
 #include "wx/dateevt.h"
 
 #include "wx/calctrl.h"
+#include "wx/generic/calctrlg.h"
 #include "wx/combo.h"
 
 // ----------------------------------------------------------------------------
@@ -75,12 +71,12 @@
 // local classes
 // ----------------------------------------------------------------------------
 
-class wxCalendarComboPopup : public wxCalendarCtrl,
+class wxCalendarComboPopup : public wxGenericCalendarCtrl,
                              public wxComboPopup
 {
 public:
 
-    wxCalendarComboPopup() : wxCalendarCtrl(),
+    wxCalendarComboPopup() : wxGenericCalendarCtrl(),
                              wxComboPopup()
     {
     }
@@ -94,12 +90,12 @@ public:
     //     certainly introduce new bugs.
     virtual bool Create(wxWindow* parent)
     {
-        if ( !wxCalendarCtrl::Create(parent, wxID_ANY, wxDefaultDateTime,
+        if ( !wxGenericCalendarCtrl::Create(parent, wxID_ANY, wxDefaultDateTime,
                               wxPoint(0, 0), wxDefaultSize,
                               wxCAL_SHOW_HOLIDAYS | wxBORDER_SUNKEN) )
             return false;
 
-        wxWindow *yearControl = wxCalendarCtrl::GetYearControl();
+        wxWindow *yearControl = wxGenericCalendarCtrl::GetYearControl();
 
         wxClientDC dc(yearControl);
         dc.SetFont(yearControl->GetFont());
@@ -107,7 +103,7 @@ public:
         dc.GetTextExtent(wxT("2000"), &width, &dummy);
         width += ConvertDialogToPixels(wxSize(20, 0)).x;
 
-        wxSize calSize = wxCalendarCtrl::GetBestSize();
+        wxSize calSize = wxGenericCalendarCtrl::GetBestSize();
         wxSize yearSize = yearControl->GetSize();
         yearSize.x = width;
 
@@ -125,10 +121,10 @@ public:
             calPos = 0;
             width += 2;
         }
-        wxCalendarCtrl::SetSize(calPos, 0, calSize.x, calSize.y);
+        wxGenericCalendarCtrl::SetSize(calPos, 0, calSize.x, calSize.y);
         yearControl->SetSize(width-yearSize.x-CALBORDER/2, yearPosition.y,
                              yearSize.x, yearSize.y);
-        wxCalendarCtrl::GetMonthControl()->Move(0, 0);
+        wxGenericCalendarCtrl::GetMonthControl()->Move(0, 0);
 
         m_useSize.x = width+CALBORDER/2;
         m_useSize.y = calSize.y-2+CALBORDER;
@@ -186,14 +182,10 @@ public:
 
     void SendDateEvent(const wxDateTime& dt)
     {
-        //
         // Sends both wxCalendarEvent and wxDateEvent
         wxWindow* datePicker = m_combo->GetParent();
 
-        wxCalendarEvent cev((wxCalendarCtrl*) this, wxEVT_CALENDAR_SEL_CHANGED);
-        cev.SetEventObject(datePicker);
-        cev.SetId(datePicker->GetId());
-        cev.SetDate(dt);
+        wxCalendarEvent cev(datePicker, dt, wxEVT_CALENDAR_SEL_CHANGED);
         datePicker->GetEventHandler()->ProcessEvent(cev);
 
         wxDateEvent event(datePicker, dt, wxEVT_DATE_CHANGED);
@@ -353,12 +345,10 @@ private:
 };
 
 
-BEGIN_EVENT_TABLE(wxCalendarComboPopup, wxCalendarCtrl)
+BEGIN_EVENT_TABLE(wxCalendarComboPopup, wxGenericCalendarCtrl)
     EVT_KEY_DOWN(wxCalendarComboPopup::OnCalKey)
     EVT_CALENDAR_SEL_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
-    EVT_CALENDAR_DAY(wxID_ANY, wxCalendarComboPopup::OnSelChange)
-    EVT_CALENDAR_MONTH(wxID_ANY, wxCalendarComboPopup::OnSelChange)
-    EVT_CALENDAR_YEAR(wxID_ANY, wxCalendarComboPopup::OnSelChange)
+    EVT_CALENDAR_PAGE_CHANGED(wxID_ANY, wxCalendarComboPopup::OnSelChange)
     EVT_CALENDAR(wxID_ANY, wxCalendarComboPopup::OnSelChange)
 END_EVENT_TABLE()
 
@@ -493,7 +483,7 @@ wxDatePickerCtrlGeneric::SetRange(const wxDateTime &dt1, const wxDateTime &dt2)
     m_popup->SetDateRange(dt1, dt2);
 }
 
-wxCalendarCtrl *wxDatePickerCtrlGeneric::GetCalendar() const
+wxGenericCalendarCtrl *wxDatePickerCtrlGeneric::GetCalendar() const
 {
     return m_popup;
 }

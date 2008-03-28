@@ -3009,9 +3009,12 @@ COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_HDR)
 @COND_TOOLKIT_X11@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_X11@	wx/unix/joystick.h wx/unix/sound.h wx/unix/taskbarx11.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_NATIVE_HDR \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= wx/gtk/animate.h wx/gtk/dataview.h \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	wx/gtk/hyperlink.h
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR =  \
+	wx/gtk/animate.h \
+	wx/gtk/calctrl.h \
+	wx/gtk/dataview.h \
+	wx/gtk/hyperlink.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR)
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
@@ -3026,7 +3029,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/editlbox.h \
 	wx/generic/aboutdlgg.h \
 	wx/generic/bmpcbox.h \
-	wx/generic/calctrl.h \
+	wx/generic/calctrlg.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
 	wx/generic/grid.h \
@@ -3068,7 +3071,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/editlbox.h \
 	wx/generic/aboutdlgg.h \
 	wx/generic/bmpcbox.h \
-	wx/generic/calctrl.h \
+	wx/generic/calctrlg.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
 	wx/generic/grid.h \
@@ -5313,11 +5316,12 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_animatecmn.o \
+	monodll_calctrlcmn.o \
 	monodll_datavcmn.o \
 	monodll_hyperlnkcmn.o \
 	monodll_aboutdlgg.o \
 	monodll_bmpcboxg.o \
-	monodll_calctrl.o \
+	monodll_calctrlg.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
 	monodll_editlbox.o \
@@ -5339,11 +5343,12 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_animatecmn.o \
+	monodll_calctrlcmn.o \
 	monodll_datavcmn.o \
 	monodll_hyperlnkcmn.o \
 	monodll_aboutdlgg.o \
 	monodll_bmpcboxg.o \
-	monodll_calctrl.o \
+	monodll_calctrlg.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
 	monodll_editlbox.o \
@@ -5366,6 +5371,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_aboutdlg.o \
 	monodll_animate.o \
+	monodll_calctrl.o \
 	monodll_dataview.o \
 	monodll_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
@@ -7220,11 +7226,12 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_animatecmn.o \
+	monolib_calctrlcmn.o \
 	monolib_datavcmn.o \
 	monolib_hyperlnkcmn.o \
 	monolib_aboutdlgg.o \
 	monolib_bmpcboxg.o \
-	monolib_calctrl.o \
+	monolib_calctrlg.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
 	monolib_editlbox.o \
@@ -7246,11 +7253,12 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_animatecmn.o \
+	monolib_calctrlcmn.o \
 	monolib_datavcmn.o \
 	monolib_hyperlnkcmn.o \
 	monolib_aboutdlgg.o \
 	monolib_bmpcboxg.o \
-	monolib_calctrl.o \
+	monolib_calctrlg.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
 	monolib_editlbox.o \
@@ -7273,6 +7281,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_aboutdlg.o \
 	monolib_animate.o \
+	monolib_calctrl.o \
 	monolib_dataview.o \
 	monolib_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
@@ -10961,11 +10970,12 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_WIN32_1@__advdll___win32rc = advdll_version_rc.o
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_animatecmn.o \
+	advdll_calctrlcmn.o \
 	advdll_datavcmn.o \
 	advdll_hyperlnkcmn.o \
 	advdll_aboutdlgg.o \
 	advdll_bmpcboxg.o \
-	advdll_calctrl.o \
+	advdll_calctrlg.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
 	advdll_editlbox.o \
@@ -10987,11 +10997,12 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_animatecmn.o \
+	advdll_calctrlcmn.o \
 	advdll_datavcmn.o \
 	advdll_hyperlnkcmn.o \
 	advdll_aboutdlgg.o \
 	advdll_bmpcboxg.o \
-	advdll_calctrl.o \
+	advdll_calctrlg.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
 	advdll_editlbox.o \
@@ -11011,9 +11022,13 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_8) \
 	advdll_animateg.o
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= advdll_aboutdlg.o advdll_animate.o \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	advdll_dataview.o advdll_hyperlink.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
+	advdll_aboutdlg.o \
+	advdll_animate.o \
+	advdll_calctrl.o \
+	advdll_dataview.o \
+	advdll_hyperlink.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
 @COND_TOOLKIT_MSW@	= advdll_datectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
@@ -11034,11 +11049,12 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 @COND_USE_PCH_1@	= .pch/wxprec_advlib/wx/wxprec.h.gch
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_animatecmn.o \
+	advlib_calctrlcmn.o \
 	advlib_datavcmn.o \
 	advlib_hyperlnkcmn.o \
 	advlib_aboutdlgg.o \
 	advlib_bmpcboxg.o \
-	advlib_calctrl.o \
+	advlib_calctrlg.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
 	advlib_editlbox.o \
@@ -11060,11 +11076,12 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 @COND_WXUNIV_0@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3)
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_animatecmn.o \
+	advlib_calctrlcmn.o \
 	advlib_datavcmn.o \
 	advlib_hyperlnkcmn.o \
 	advlib_aboutdlgg.o \
 	advlib_bmpcboxg.o \
-	advlib_calctrl.o \
+	advlib_calctrlg.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
 	advlib_editlbox.o \
@@ -11084,9 +11101,13 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_9) \
 	advlib_animateg.o
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= advlib_aboutdlg.o advlib_animate.o \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	advlib_dataview.o advlib_hyperlink.o
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
+	advlib_aboutdlg.o \
+	advlib_animate.o \
+	advlib_calctrl.o \
+	advlib_dataview.o \
+	advlib_hyperlink.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
 @COND_TOOLKIT_MSW@	= advlib_datectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
@@ -14130,6 +14151,9 @@ monodll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONODLL_ODEP)
 
 monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+monodll_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
 
 monodll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
@@ -17836,6 +17860,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
 
+@COND_USE_GUI_1@monodll_calctrlcmn.o: $(srcdir)/src/common/calctrlcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/calctrlcmn.cpp
+
 @COND_USE_GUI_1@monodll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
@@ -17848,8 +17875,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
-@COND_USE_GUI_1@monodll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
+@COND_USE_GUI_1@monodll_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
 @COND_USE_GUI_1@monodll_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
@@ -18648,6 +18675,9 @@ monolib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONOLIB_ODEP)
 
 monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
+
+monolib_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
 
 monolib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
@@ -22354,6 +22384,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
 
+@COND_USE_GUI_1@monolib_calctrlcmn.o: $(srcdir)/src/common/calctrlcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/calctrlcmn.cpp
+
 @COND_USE_GUI_1@monolib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
@@ -22366,8 +22399,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
-@COND_USE_GUI_1@monolib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
+@COND_USE_GUI_1@monolib_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
 @COND_USE_GUI_1@monolib_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
@@ -30496,6 +30529,9 @@ advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 advdll_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+advdll_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
 advdll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
@@ -30504,6 +30540,9 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 
 advdll_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
+
+advdll_calctrlcmn.o: $(srcdir)/src/common/calctrlcmn.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/calctrlcmn.cpp
 
 advdll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
@@ -30517,8 +30556,8 @@ advdll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVDLL_ODEP)
 advdll_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
-advdll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
+advdll_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
 advdll_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
@@ -30754,6 +30793,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 advlib_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+advlib_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
 advlib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
@@ -30762,6 +30804,9 @@ advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 
 advlib_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/animatecmn.cpp
+
+advlib_calctrlcmn.o: $(srcdir)/src/common/calctrlcmn.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/calctrlcmn.cpp
 
 advlib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
@@ -30775,8 +30820,8 @@ advlib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVLIB_ODEP)
 advlib_bmpcboxg.o: $(srcdir)/src/generic/bmpcboxg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/bmpcboxg.cpp
 
-advlib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrl.cpp
+advlib_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
 advlib_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/datavgen.cpp
