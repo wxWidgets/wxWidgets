@@ -199,14 +199,14 @@ public:
 
         @see SetCap()
     */
-    wxPenCap GetCap() const;
+    virtual wxPenCap GetCap() const;
 
     /**
         Returns a reference to the pen colour.
 
         @see SetColour()
     */
-    wxColour GetColour() const;
+    virtual wxColour GetColour() const;
 
     /**
         Gets an array of dashes (defined as char in X, DWORD under Windows).
@@ -216,7 +216,7 @@ public:
 
         @see SetDashes()
     */
-    int GetDashes(wxDash** dashes) const;
+    virtual int GetDashes(wxDash** dashes) const;
 
     /**
         Returns the pen join style, which may be one of @b wxJOIN_BEVEL, @b
@@ -225,28 +225,28 @@ public:
 
         @see SetJoin()
     */
-    wxPenJoin GetJoin() const;
+    virtual wxPenJoin GetJoin() const;
 
     /**
         Gets a pointer to the stipple bitmap.
 
         @see SetStipple()
     */
-    wxBitmap* GetStipple() const;
+    virtual wxBitmap* GetStipple() const;
 
     /**
         Returns the pen style.
 
         @see wxPen(), SetStyle()
     */
-    wxPenStyle GetStyle() const;
+    virtual wxPenStyle GetStyle() const;
 
     /**
         Returns the pen width.
 
         @see SetWidth()
     */
-    int GetWidth() const;
+    virtual int GetWidth() const;
 
     /**
         Returns @true if the pen is initialised.
@@ -260,7 +260,7 @@ public:
 
         @see GetCap()
     */
-    void SetCap(wxPenCap capStyle);
+    virtual void SetCap(wxPenCap capStyle);
 
     //@{
     /**
@@ -268,10 +268,8 @@ public:
 
         @see GetColour()
     */
-    void SetColour(wxColour& colour);
-    void SetColour(const wxString& colourName);
-    void SetColour(unsigned char red, unsigned char green,
-                   unsigned char blue);
+    virtual void SetColour(wxColour& colour);
+    virtual void SetColour(unsigned char red, unsigned char green, unsigned char blue);
     //@}
 
     /**
@@ -283,7 +281,7 @@ public:
 
         @see GetDashes()
     */
-    void SetDashes(int n, wxDash* dashes);
+    virtual void SetDashes(int n, wxDash* dashes);
 
     /**
         Sets the pen join style, which may be one of @b wxJOIN_BEVEL, @b wxJOIN_ROUND
@@ -292,28 +290,28 @@ public:
 
         @see GetJoin()
     */
-    void SetJoin(wxPenJoin join_style);
+    virtual void SetJoin(wxPenJoin join_style);
 
     /**
         Sets the bitmap for stippling.
 
         @see GetStipple()
     */
-    void SetStipple(wxBitmap* stipple);
+    virtual void SetStipple(wxBitmap* stipple);
 
     /**
         Set the pen style.
 
         @see wxPen()
     */
-    void SetStyle(wxPenStyle style);
+    virtual void SetStyle(wxPenStyle style);
 
     /**
         Sets the pen width.
 
         @see GetWidth()
     */
-    void SetWidth(int width);
+    virtual void SetWidth(int width);
 
     /**
         Inequality operator.
@@ -336,57 +334,57 @@ public:
 };
 
 /**
-    FIXME
+    An empty pen.
 */
 wxPen wxNullPen;
 
 /**
-    FIXME
+    Red pen.
 */
 wxPen wxRED_PEN;
 
 /**
-    FIXME
+    Cyan pen.
 */
 wxPen wxCYAN_PEN;
 
 /**
-    FIXME
+    Green pen.
 */
 wxPen wxGREEN_PEN;
 
 /**
-    FIXME
+    Black pen.
 */
 wxPen wxBLACK_PEN;
 
 /**
-    FIXME
+    White pen.
 */
 wxPen wxWHITE_PEN;
 
 /**
-    FIXME
+    Transparent pen.
 */
 wxPen wxTRANSPARENT_PEN;
 
 /**
-    FIXME
+    Black dashed pen.
 */
 wxPen wxBLACK_DASHED_PEN;
 
 /**
-    FIXME
+    Grey pen.
 */
 wxPen wxGREY_PEN;
 
 /**
-    FIXME
+    Medium-grey pen.
 */
 wxPen wxMEDIUM_GREY_PEN;
 
 /**
-    FIXME
+    Light-grey pen.
 */
 wxPen wxLIGHT_GREY_PEN;
 

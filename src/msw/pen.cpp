@@ -540,7 +540,7 @@ void wxPen::SetCap(wxPenCap cap)
     M_PENDATA->SetCap(cap);
 }
 
-wxColour& wxPen::GetColour() const
+wxColour wxPen::GetColour() const
 {
     wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
 

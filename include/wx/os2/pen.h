@@ -58,7 +58,7 @@ public:
     void SetCap(wxPenCap nCap);
     void SetPS(HPS hPS);
 
-    wxColour& GetColour(void) const;
+    wxColour GetColour(void) const;
     int       GetWidth(void) const;
     wxPenStyle GetStyle(void) const;
     wxPenJoin  GetJoin(void) const;

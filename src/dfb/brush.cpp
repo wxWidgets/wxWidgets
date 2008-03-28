@@ -96,7 +96,7 @@ wxBrushStyle wxBrush::GetStyle() const
     return M_BRUSHDATA->m_style;
 }
 
-wxColour& wxBrush::GetColour() const
+wxColour wxBrush::GetColour() const
 {
     wxCHECK_MSG( Ok(), wxNullColour, _T("invalid brush") );
 

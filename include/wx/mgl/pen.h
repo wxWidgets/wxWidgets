@@ -50,7 +50,7 @@ public:
     void SetDashes(int number_of_dashes, const wxDash *dash);
     void SetStipple(const wxBitmap& stipple);
 
-    wxColour &GetColour() const;
+    wxColour GetColour() const;
     wxPenCap GetCap() const;
     wxPenJoin GetJoin() const;
     wxPenStyle GetStyle() const;

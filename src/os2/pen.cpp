@@ -479,7 +479,7 @@ void wxPen::SetCap(
     RealizeResource();
 } // end of wxPen::SetCap
 
-wxColour& wxPen::GetColour() const
+wxColour wxPen::GetColour() const
 {
     wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
 

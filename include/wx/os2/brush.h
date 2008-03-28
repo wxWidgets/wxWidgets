@@ -36,7 +36,7 @@ public:
     virtual void SetStipple(const wxBitmap& rStipple);
 
     wxColour GetColour(void) const;
-    virtual wxBrushStyle GetStyle(void) const;
+    wxBrushStyle GetStyle(void) const;
     wxBitmap* GetStipple(void) const;
     int       GetPS(void) const;
 

@@ -138,7 +138,7 @@ wxGDIRefData *wxBrush::CloneGDIRefData(const wxGDIRefData *data) const
 // wxBrush accessors
 // ----------------------------------------------------------------------------
 
-const wxColour& wxBrush::GetColour() const
+wxColour wxBrush::GetColour() const
 {
     wxCHECK_MSG( Ok(), wxNullColour, _T("invalid brush") );
 

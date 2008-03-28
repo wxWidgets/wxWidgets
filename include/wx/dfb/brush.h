@@ -41,8 +41,8 @@ public:
     bool operator==(const wxBrush& brush) const;
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 
-    virtual wxBrushStyle GetStyle() const;
-    wxColour& GetColour() const;
+    wxBrushStyle GetStyle() const;
+    wxColour GetColour() const;
     wxBitmap *GetStipple() const;
 
     void SetColour(const wxColour& col);

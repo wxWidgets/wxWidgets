@@ -45,7 +45,7 @@ public:
     void SetJoin(wxPenJoin join);
     void SetCap(wxPenCap cap);
 
-    wxColour& GetColour() const;
+    wxColour GetColour() const;
     int GetWidth() const;
     wxPenStyle GetStyle() const;
     wxPenJoin GetJoin() const;

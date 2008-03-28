@@ -42,7 +42,7 @@ public:
     bool operator!=(const wxBrush& brush) const { return !(*this == brush); }
 
     wxColour GetColour() const;
-    virtual wxBrushStyle GetStyle() const;
+    wxBrushStyle GetStyle() const;
     wxBitmap *GetStipple() const;
 
     // return the HBRUSH for this brush

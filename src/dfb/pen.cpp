@@ -183,7 +183,7 @@ int wxPen::GetWidth() const
     return 1;
 }
 
-wxColour &wxPen::GetColour() const
+wxColour wxPen::GetColour() const
 {
     wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
 

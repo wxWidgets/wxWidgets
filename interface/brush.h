@@ -137,7 +137,7 @@ public:
 
         @see SetColour()
     */
-    wxColour& GetColour() const;
+    virtual wxColour GetColour() const;
 
     /**
         Gets a pointer to the stipple bitmap. If the brush does not have a wxBRUSHSTYLE_STIPPLE
@@ -145,7 +145,7 @@ public:
 
         @see SetStipple()
     */
-    wxBitmap* GetStipple() const;
+    virtual wxBitmap* GetStipple() const;
 
     /**
         Returns the brush style, one of the ::wxBrushStyle values.
@@ -174,9 +174,8 @@ public:
 
         @see GetColour()
     */
-    void SetColour(wxColour& colour);
-    void SetColour(const wxString& colourName);
-    void SetColour(unsigned char red, unsigned char green, unsigned char blue);
+    virtual void SetColour(wxColour& colour);
+    virtual void SetColour(unsigned char red, unsigned char green, unsigned char blue);
     //@}
 
     /**
@@ -191,7 +190,7 @@ public:
 
         @see wxBitmap
     */
-    void SetStipple(const wxBitmap& bitmap);
+    virtual void SetStipple(const wxBitmap& bitmap);
 
     /**
         Sets the brush style.
@@ -201,7 +200,7 @@ public:
 
         @see GetStyle()
     */
-    void SetStyle(wxBrushStyle style);
+    virtual void SetStyle(wxBrushStyle style);
 
     /**
         Inequality operator.

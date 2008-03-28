@@ -327,7 +327,7 @@ void wxPen::SetStipple(const wxBitmap& Stipple)
     M_PENDATA->SetStipple(Stipple);
 }
 
-wxColour& wxPen::GetColour() const
+wxColour wxPen::GetColour() const
 {
     return (M_PENDATA ? M_PENDATA->m_colour : wxNullColour);
 }

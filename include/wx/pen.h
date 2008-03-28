@@ -77,7 +77,7 @@ public:
     virtual void SetJoin(wxPenJoin join) = 0;
     virtual void SetCap(wxPenCap cap) = 0;
 
-    virtual wxColour& GetColour() const = 0;
+    virtual wxColour GetColour() const = 0;
     virtual wxBitmap *GetStipple() const = 0;
     virtual wxPenStyle GetStyle() const = 0;
     virtual wxPenJoin GetJoin() const = 0;

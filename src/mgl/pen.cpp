@@ -251,7 +251,7 @@ int wxPen::GetWidth() const
     return M_PENDATA->m_width;
 }
 
-wxColour &wxPen::GetColour() const
+wxColour wxPen::GetColour() const
 {
     wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
 

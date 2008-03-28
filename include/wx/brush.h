@@ -44,7 +44,14 @@ class WXDLLIMPEXP_CORE wxBrushBase: public wxGDIObject
 public:
     virtual ~wxBrushBase() { }
 
+    virtual void SetColour(const wxColour& col) = 0;
+    virtual void SetColour(unsigned char r, unsigned char g, unsigned char b) = 0;
+    virtual void SetStyle(wxBrushStyle style) = 0;
+    virtual void SetStipple(const wxBitmap& stipple) = 0;
+
+    virtual wxColour GetColour() const = 0;
     virtual wxBrushStyle GetStyle() const = 0;
+    virtual wxBitmap *GetStipple() const = 0;
 
     virtual bool IsHatch() const
         { return (GetStyle()>=wxBRUSHSTYLE_FIRST_HATCH) && (GetStyle()<=wxBRUSHSTYLE_LAST_HATCH); }

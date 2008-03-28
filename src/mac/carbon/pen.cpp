@@ -162,7 +162,7 @@ bool wxPen::operator==(const wxPen& pen) const
     return m_refData ? penData && *M_PENDATA == *penData : !penData;
 }
 
-wxColour& wxPen::GetColour() const
+wxColour wxPen::GetColour() const
 {
     wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid pen") );
 
