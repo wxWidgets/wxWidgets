@@ -357,7 +357,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
 
     GetDragAttributes( theDrag, &attributes );
 
-    wxTopLevelWindowMac* toplevel = wxFindWinFromMacWindow( theWindow );
+    wxNonOwnedWindow* toplevel = wxFindWinFromMacWindow( theWindow );
 
     bool optionDown = GetCurrentKeyModifiers() & optionKey;
     wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
@@ -389,8 +389,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
             {
                 wxWindowMac *win = NULL;
                 ControlPartCode controlPart;
-                ControlRef control = wxMacFindControlUnderMouse(
-                    toplevel, localMouse, theWindow, &controlPart );
+                ControlRef control = FindControlUnderMouse( localMouse, theWindow, &controlPart );
                 if ( control )
                     win = wxFindControlFromMacControl( control );
                 else

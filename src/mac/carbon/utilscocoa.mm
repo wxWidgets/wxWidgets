@@ -13,6 +13,7 @@
 
 #include <Cocoa/Cocoa.h>
 
+#include "wx/toplevel.h"
 #include "wx/mac/private.h"
 
 bool wxMacInitCocoa()

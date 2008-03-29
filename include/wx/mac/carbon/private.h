@@ -515,7 +515,7 @@ void wxMacPointToNative( const wxPoint* wx , Point *n );
 void wxMacNativeToPoint( const Point *n , wxPoint* wx );
 
 wxWindowMac *           wxFindControlFromMacControl(ControlRef inControl );
-wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow );
+wxNonOwnedWindow*       wxFindWinFromMacWindow( WindowRef inWindow );
 wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef);
 
 int                     wxMacCommandToId( UInt32 macCommandId );
@@ -1356,8 +1356,6 @@ public :
 protected :
     WindowRef m_macWindow ;
 } ;
-
-ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, const Point& location , WindowRef window , ControlPartCode *outPart );
 
 #ifndef __LP64__
 

@@ -62,8 +62,6 @@ void wxDialog::SetModal( bool flag )
     {
         m_isModalStyle = true;
 
-        wxModelessWindows.DeleteObject( this );
-
 #if TARGET_CARBON
         SetWindowModality( (WindowRef)MacGetWindowRef(), kWindowModalityAppModal, NULL ) ;
 #endif
@@ -71,8 +69,6 @@ void wxDialog::SetModal( bool flag )
     else
     {
         m_isModalStyle = false;
-
-        wxModelessWindows.Append( this );
     }
 }
 

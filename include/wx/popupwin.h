@@ -23,7 +23,7 @@
 // combobox popups and such.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPopupWindowBase : public wxWindow
+class WXDLLEXPORT wxPopupWindowBase : public wxNonOwnedWindow
 {
 public:
     wxPopupWindowBase() { }

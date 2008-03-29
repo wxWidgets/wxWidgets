@@ -25,8 +25,6 @@
 #include "wx/mac/private.h"
 #include "wx/mac/uma.h"
 
-extern wxWindowList wxModelessWindows;
-
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
@@ -360,11 +358,10 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
     if (parent)
         parent->AddChild(this);
 
-    MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
+    MacCreateRealWindow( pos , size , MacRemoveBordersFromStyle(style) , name ) ;
+    SetTitle( title );
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
-
-    wxModelessWindows.Append(this);
 
     return true;
 }
@@ -467,8 +464,6 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
     if ( !wxWindow::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style) )
         return false;
-
-    wxModelessWindows.Append(this);
 
     return true;
 }

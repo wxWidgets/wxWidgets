@@ -202,6 +202,8 @@ static const EventTypeSpec eventList[] =
 //    { kEventClassControl , kEventControlBoundsChanged } ,
 } ;
 
+wxWindowMac* targetWindow = NULL;
+
 static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
@@ -362,6 +364,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         inKillFocusEvent = true ;
                         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
                         event.SetEventObject(thisWindow);
+                        event.SetWindow(targetWindow);
                         thisWindow->GetEventHandler()->ProcessEvent(event) ;
                         inKillFocusEvent = false ;
                     }
@@ -395,6 +398,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 }
 #endif
                 ControlPartCode controlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlPart , typeControlPartCode );
+
+                if ( controlPart != kControlFocusNoPart )
+                    targetWindow = thisWindow;                    
 
                 ControlPartCode previousControlPart = 0;
                 verify_noerr( HIViewGetFocusPart(controlRef, &previousControlPart));
@@ -1651,7 +1657,7 @@ void wxWindowMac::MacWindowToRootWindow( int *x , int *y ) const
 
     if ( !IsTopLevel() )
     {
-        wxTopLevelWindowMac* top = MacGetTopLevelWindow();
+        wxNonOwnedWindow* top = MacGetTopLevelWindow();
         if (top)
         {
             pt.x -= MacGetLeftBorderSize() ;
@@ -1694,7 +1700,7 @@ void wxWindowMac::MacRootWindowToWindow( int *x , int *y ) const
 
     if ( !IsTopLevel() )
     {
-        wxTopLevelWindowMac* top = MacGetTopLevelWindow();
+        wxNonOwnedWindow* top = MacGetTopLevelWindow();
         if (top)
         {
             wxMacControl::Convert( &pt , top->m_peer , m_peer ) ;
@@ -1828,7 +1834,7 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 
     wxWindowMac *mouseWin = 0 ;
     {
-        wxTopLevelWindowMac *tlw = MacGetTopLevelWindow() ;
+        wxNonOwnedWindow *tlw = MacGetTopLevelWindow() ;
         WindowRef window = (WindowRef) ( tlw ? tlw->MacGetWindowRef() : 0 ) ;
 
         ControlPartCode part ;
@@ -1849,7 +1855,7 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 
         GetMouse( &pt ) ;
 #endif
-        control = wxMacFindControlUnderMouse( tlw , pt , window , &part ) ;
+        control = FindControlUnderMouse( pt, window, &part );
         if ( control )
             mouseWin = wxFindControlFromMacControl( control ) ;
 
@@ -3019,7 +3025,7 @@ void wxWindowMac::Update()
     if ( m_peer == NULL )
         return ;
 #if TARGET_API_MAC_OSX
-    wxTopLevelWindowMac* top = MacGetTopLevelWindow();
+    wxNonOwnedWindow* top = MacGetTopLevelWindow();
     if (top)
         top->MacPerformUpdates() ;
 #else
@@ -3027,9 +3033,9 @@ void wxWindowMac::Update()
 #endif
 }
 
-wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
+wxNonOwnedWindow* wxWindowMac::MacGetTopLevelWindow() const
 {
-    wxTopLevelWindowMac* win = NULL ;
+    wxNonOwnedWindow* win = NULL ;
     WindowRef window = (WindowRef) MacGetTopLevelWindowRef() ;
     if ( window )
         win = wxFindWinFromMacWindow( window ) ;
@@ -3292,7 +3298,7 @@ WXWindow wxWindowMac::MacGetTopLevelWindowRef() const
 #if wxUSE_POPUPWIN
             wxPopupWindow* popupwin = wxDynamicCast(iter,wxPopupWindow);
             if ( popupwin )
-                return popupwin->MacGetPopupWindowRef();
+                return popupwin->MacGetWindowRef();
 #endif
         }
         iter = iter->GetParent() ;

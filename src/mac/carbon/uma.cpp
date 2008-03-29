@@ -13,7 +13,7 @@
 
 #if wxUSE_GUI
 
-#include "wx/toplevel.h"
+#include "wx/nonownedwnd.h"
 #include "wx/dc.h"
 
 #ifndef __DARWIN__
@@ -729,7 +729,7 @@ Rect * UMAGetControlBoundsInWindowCoords( ControlRef theControl, Rect *bounds )
 #if TARGET_API_MAC_OSX
     WindowRef tlwref = GetControlOwner( theControl ) ;
 
-    wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
+    wxNonOwnedWindow* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
     if ( tlwwx != NULL )
     {
         ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;

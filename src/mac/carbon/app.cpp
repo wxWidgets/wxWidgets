@@ -35,6 +35,7 @@
     #include "wx/module.h"
 #endif
 
+#include "wx/nonownedwnd.h"
 #include "wx/tooltip.h"
 #include "wx/docview.h"
 #include "wx/filename.h"
@@ -1516,7 +1517,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
 
     bool handled = false ;
 
-    wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
+    wxNonOwnedWindow *tlw = focus->MacGetTopLevelWindow() ;
 
     if (tlw)
     {
