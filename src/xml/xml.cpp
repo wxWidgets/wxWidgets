@@ -187,39 +187,42 @@ void wxXmlNode::AddChild(wxXmlNode *child)
     child->m_parent = this;
 }
 
-bool wxXmlNode::InsertChild(wxXmlNode *child, wxXmlNode *before_node)
+// inserts a new node in front of 'followingNode'
+bool wxXmlNode::InsertChild(wxXmlNode *child, wxXmlNode *followingNode)
 {
-    wxCHECK_MSG(before_node == NULL || before_node->GetParent() == this, false,
-                 wxT("wxXmlNode::InsertChild - the node has incorrect parent"));
-    wxCHECK_MSG(child, false, wxT("Cannot insert a NULL pointer!"));
+    wxCHECK_MSG( child, false, "cannot insert a NULL node!" );
+    wxCHECK_MSG( child->m_parent == NULL, false, "node already has a parent" );
+    wxCHECK_MSG( child->m_next == NULL, false, "node already has m_next" );
+    wxCHECK_MSG( followingNode == NULL || followingNode->GetParent() == this,
+                 false,
+                 "wxXmlNode::InsertChild - followingNode has incorrect parent" );
 
-    if (m_children == before_node)
-       m_children = child;
-    else if (m_children == NULL)
+    // this is for backward compatibility, NULL was allowed here thanks to
+    // the confusion about followingNode's meaning
+    if ( followingNode == NULL )
+        followingNode = m_children;
+
+    if ( m_children == followingNode )
     {
-        if (before_node != NULL)
-            return false;       // we have no children so we don't need to search
-        m_children = child;
-    }
-    else if (before_node == NULL)
-    {
-        // prepend child
-        child->m_parent = this;
         child->m_next = m_children;
         m_children = child;
-        return true;
     }
     else
     {
         wxXmlNode *ch = m_children;
-        while (ch && ch->m_next != before_node) ch = ch->m_next;
-        if (!ch)
-            return false;       // before_node not found
+        while ( ch && ch->m_next != followingNode )
+            ch = ch->m_next;
+        if ( !ch )
+        {
+            wxFAIL_MSG( "followingNode has this node as parent, but couldn't be found among children" );
+            return false;
+        }
+
+        child->m_next = followingNode;
         ch->m_next = child;
     }
 
     child->m_parent = this;
-    child->m_next = before_node;
     return true;
 }
 

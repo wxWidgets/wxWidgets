@@ -73,9 +73,11 @@
             weakref/evtconnection.cpp
             weakref/weakref.cpp
             xlocale/xlocale.cpp
+            xml/xmltest.cpp
         </sources>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
+        <wx-lib>xml</wx-lib>
     </exe>
 
 

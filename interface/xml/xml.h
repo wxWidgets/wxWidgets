@@ -157,14 +157,19 @@ public:
     bool HasAttribute(const wxString& attrName) const;
 
     /**
-        Inserts the @a child node after @a before_node in the children list.
-        If @a before_node is @NULL, then @a child is prepended to the list of
-        children and
-        becomes the first child of this node.
-        Returns @true if @a before_node has been found and the @a child node has been
-        inserted.
+        Inserts the @a child node immediately before @a followingNode in the
+        children list.
+
+        @return @true if @a followingNode has been found and the @a child
+                node has been inserted.
+
+        @note
+        For historical reasons, @a followingNode may be @NULL. In that case,
+        then @a child is prepended to the list of children and becomes the
+        first child of this node, i.e. it behaves identically to using the
+        first children (as returned by GetChildren()) for @a followingNode).
     */
-    bool InsertChild(wxXmlNode* child, wxXmlNode* before_node);
+    bool InsertChild(wxXmlNode* child, wxXmlNode* followingNode);
 
     /**
         Returns @true if the content of this node is a string containing only
