@@ -311,7 +311,7 @@ wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
     while ((i < end_pos) &&
            ((c = *(i++)) != wxT(' ') && c != wxT('\r') &&
              c != wxT('\n') && c != wxT('\t') &&
-             c != wxT('>')))
+             c != wxT('>') && c != wxT('/')))
     {
         if ((c >= wxT('a')) && (c <= wxT('z')))
             c -= (wxT('a') - wxT('A'));
