@@ -2140,6 +2140,8 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
     m_focusWidget = m_wxwindow;
 
+    SetCanFocus(AcceptsFocus());
+
     PostCreation();
 
     return true;
