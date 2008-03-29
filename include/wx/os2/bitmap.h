@@ -26,6 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxCursor;
 class WXDLLIMPEXP_FWD_CORE wxControl;
 class WXDLLIMPEXP_FWD_CORE wxImage;
+class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
 // ----------------------------------------------------------------------------
 // Bitmap data
@@ -96,17 +97,17 @@ public:
 
     // Load a resource
     wxBitmap( int             nId
-             ,long            lType = wxBITMAP_TYPE_BMP_RESOURCE
+             ,wxBitmapType    lType = wxBITMAP_TYPE_BMP_RESOURCE
             );
 
     // For compatiability with other ports, under OS/2 does same as default ctor
     inline wxBitmap( const wxString& WXUNUSED(rFilename)
-                    ,long            WXUNUSED(lType)
+                    ,wxBitmapType    WXUNUSED(lType)
                    )
     { Init(); }
     // New constructor for generalised creation from data
     wxBitmap( const void* pData
-             ,long  lType
+             ,wxBitmapType lType
              ,int   nWidth
              ,int   nHeight
              ,int   nDepth = 1
@@ -154,24 +155,28 @@ public:
                         ,int nDepth = -1
                        );
     virtual bool Create( const void* pData
-                        ,long  lType
+                        ,wxBitmapType lType
                         ,int   nWidth
                         ,int   nHeight
                         ,int   nDepth = 1
                        );
     virtual bool LoadFile( int             nId
-                          ,long            lType = wxBITMAP_TYPE_BMP_RESOURCE
+                          ,wxBitmapType    lType = wxBITMAP_TYPE_BMP_RESOURCE
                          );
     virtual bool LoadFile( const wxString& rName
-                          ,long            lType = wxBITMAP_TYPE_XPM
+                          ,wxBitmapType    lType = wxBITMAP_TYPE_XPM
                          );
     virtual bool SaveFile( const wxString&  rName
-                          ,int              lType
+                          ,wxBitmapType     lType
                           ,const wxPalette* pCmap = NULL
                          );
 
     inline wxBitmapRefData* GetBitmapData() const
       { return (wxBitmapRefData *)m_refData; }
+
+    // raw bitmap access support functions
+    void *GetRawData(wxPixelDataBase& data, int bpp);
+    void UngetRawData(wxPixelDataBase& data);
 
     inline int GetQuality() const
       { return (GetBitmapData() ? GetBitmapData()->m_nQuality : 0); }
@@ -324,26 +329,26 @@ public:
 
     virtual bool Create( wxGDIImage* pImage
                         ,const void* pData
-                        ,long        lFlags
+                        ,wxBitmapType lFlags
                         ,int         nWidth
                         ,int         nHeight
                         ,int         nDepth = 1
                        );
     virtual bool Load( wxGDIImage*     pImage
                       ,int             nId
-                      ,long            lFlags
+                      ,wxBitmapType    lFlags
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight
                      );
-    virtual bool Save( wxGDIImage*     pImage
-                      ,const wxString& rName
-                      ,int             lType
+    virtual bool Save( const wxGDIImage* pImage
+                      ,const wxString&   rName
+                      ,wxBitmapType      lType
                      ) const;
 private:
     inline virtual bool Load( wxGDIImage*     WXUNUSED(pImage)
                              ,const wxString& WXUNUSED(rName)
                              ,WXHANDLE        WXUNUSED(hPs)
-                             ,long            WXUNUSED(lFlags)
+                             ,wxBitmapType    WXUNUSED(lFlags)
                              ,int             WXUNUSED(nDesiredWidth)
                              ,int             WXUNUSED(nDesiredHeight)
                             )

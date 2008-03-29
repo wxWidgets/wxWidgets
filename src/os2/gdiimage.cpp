@@ -50,20 +50,20 @@ public:
     virtual bool LoadFile( wxBitmap*       pBitmap
                           ,const wxString& rName
                           ,HPS             hPs
-                          ,long            lFlags
+                          ,wxBitmapType    lFlags
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight
                          );
     virtual bool SaveFile( wxBitmap*        pBitmap
                           ,const wxString&  rName
-                          ,int              lType
+                          ,wxBitmapType     lType
                           ,const wxPalette* pPalette = NULL
                          );
 
 private:
     inline virtual bool LoadFile( wxBitmap*       pBitmap
                                  ,int             nId
-                                 ,long            lFlags
+                                 ,wxBitmapType    lFlags
                                  ,int             nDesiredWidth
                                  ,int             nDesiredHeight
                                 )
@@ -89,7 +89,7 @@ public:
 
     virtual bool LoadFile( wxBitmap*       pBitmap
                           ,int             nId
-                          ,long            lFlags
+                          ,wxBitmapType    lFlags
                           ,int             nDesiredWidth
                           ,int             nDesiredHeight
                          );
@@ -103,7 +103,7 @@ class WXDLLEXPORT wxIconHandler : public wxGDIImageHandler
 public:
     wxIconHandler( const wxString& rName
                   ,const wxString& rExt
-                  ,long            lType
+                  ,wxBitmapType    lType
                  ) : wxGDIImageHandler( rName
                                        ,rExt
                                        ,lType
@@ -114,7 +114,7 @@ public:
     // creating and saving icons is not supported
     virtual bool Create( wxGDIImage* WXUNUSED(pImage)
                         ,const void* WXUNUSED(pData)
-                        ,long        WXUNUSED(lFlags)
+                        ,wxBitmapType WXUNUSED(lFlags)
                         ,int         WXUNUSED(nWidth)
                         ,int         WXUNUSED(nHeight)
                         ,int         WXUNUSED(nDepth) = 1
@@ -123,17 +123,17 @@ public:
         return false;
     }
 
-    virtual bool Save( wxGDIImage*     WXUNUSED(pImage)
-                      ,const wxString& WXUNUSED(rName)
-                      ,int             WXUNUSED(nType)
-                     )
+    virtual bool Save( const wxGDIImage* WXUNUSED(pImage)
+                      ,const wxString&   WXUNUSED(rName)
+                      ,wxBitmapType      WXUNUSED(nType)
+                     ) const
     {
         return false;
     }
     virtual bool Load( wxGDIImage*     pImage
                       ,const wxString& rName
                       ,HPS             hPs
-                      ,long            lFlags
+                      ,wxBitmapType    lFlags
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight
                      )
@@ -154,14 +154,14 @@ protected:
     virtual bool LoadIcon( wxIcon*         pIcon
                           ,const wxString& rName
                           ,HPS             hPs
-                          ,long            lFlags
+                          ,wxBitmapType    lFlags
                           ,int             nDesiredWidth = -1
                           ,int             nDesiredHeight = -1
                          ) = 0;
 private:
     inline virtual bool Load( wxGDIImage* WXUNUSED(pImage),
                               int         WXUNUSED(nId),
-                              long        WXUNUSED(lFlags),
+                              wxBitmapType WXUNUSED(lFlags),
                               int         WXUNUSED(nDesiredWidth),
                               int         WXUNUSED(nDesiredHeight) )
     {
@@ -181,7 +181,7 @@ public:
     virtual bool LoadIcon( wxIcon *        pIcon
                           ,const wxString& rName
                           ,HPS             hPs
-                          ,long            lFlags
+                          ,wxBitmapType    lFlags
                           ,int             nDesiredWidth = -1
                           ,int             nDesiredHeight = -1
                          );
@@ -202,7 +202,7 @@ public:
     virtual bool LoadIcon( wxIcon*         pIcon
                           ,const wxString& rName
                           ,HPS             hPs
-                          ,long            lFlags
+                          ,wxBitmapType    lFlags
                           ,int             nDesiredWidth = -1
                           ,int             nDesiredHeight = -1
                          );
@@ -292,7 +292,7 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
 
 wxGDIImageHandler* wxGDIImage::FindHandler(
   const wxString&                   rExtension
-, long                              lType
+, wxBitmapType                      lType
 )
 {
     wxGDIImageHandlerList::compatibility_iterator   pNode = ms_handlers.GetFirst();
@@ -311,7 +311,7 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
 }
 
 wxGDIImageHandler* wxGDIImage::FindHandler(
-  long                              lType
+  wxBitmapType                           lType
 )
 {
     wxGDIImageHandlerList::compatibility_iterator   pNode = ms_handlers.GetFirst();
@@ -356,7 +356,7 @@ void wxGDIImage::InitStandardHandlers()
 
 bool wxBMPResourceHandler::LoadFile( wxBitmap* pBitmap,
                                      int       nId,
-                                     long      WXUNUSED(lFlags),
+                                     wxBitmapType WXUNUSED(lFlags),
                                      int       WXUNUSED(nDesiredWidth),
                                      int       WXUNUSED(nDesiredHeight) )
 {
@@ -391,7 +391,7 @@ bool wxBMPResourceHandler::LoadFile( wxBitmap* pBitmap,
 bool wxBMPFileHandler::LoadFile( wxBitmap*       pBitmap,
                                  const wxString& WXUNUSED(rName),
                                  HPS             WXUNUSED(hPs),
-                                 long            WXUNUSED(lFlags),
+                                 wxBitmapType    WXUNUSED(lFlags),
                                  int             WXUNUSED(nDesiredWidth),
                                  int             WXUNUSED(nDesiredHeight) )
 {
@@ -419,7 +419,7 @@ bool wxBMPFileHandler::LoadFile( wxBitmap*       pBitmap,
 
 bool wxBMPFileHandler::SaveFile( wxBitmap*        pBitmap,
                                  const wxString&  WXUNUSED(rName),
-                                 int              WXUNUSED(nType),
+                                 wxBitmapType     WXUNUSED(nType),
                                  const wxPalette* pPal )
 {
 #if defined(wxUSE_IMAGE_LOADING_IN_OS2) && wxUSE_IMAGE_LOADING_IN_OS2
@@ -446,7 +446,7 @@ bool wxBMPFileHandler::SaveFile( wxBitmap*        pBitmap,
 bool wxICOFileHandler::LoadIcon( wxIcon*         pIcon,
                                  const wxString& WXUNUSED(rName),
                                  HPS             WXUNUSED(hPs),
-                                 long            WXUNUSED(lFlags),
+                                 wxBitmapType    WXUNUSED(lFlags),
                                  int             WXUNUSED(nDesiredWidth),
                                  int             WXUNUSED(nDesiredHeight) )
 {
@@ -463,7 +463,7 @@ bool wxICOFileHandler::LoadIcon( wxIcon*         pIcon,
 bool wxICOResourceHandler::LoadIcon( wxIcon*         pIcon,
                                      const wxString& rName,
                                      HPS             WXUNUSED(hPs),
-                                     long            WXUNUSED(lFlags),
+                                     wxBitmapType    WXUNUSED(lFlags),
                                      int             WXUNUSED(nDesiredWidth),
                                      int             WXUNUSED(nDesiredHeight) )
 {

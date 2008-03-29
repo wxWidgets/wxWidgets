@@ -49,7 +49,7 @@ public:
     wxIcon(char** ppData) { CreateIconFromXpm(wx_const_cast(const char* const*, ppData)); }
 #endif
     wxIcon( const wxString& rName
-           ,long            lFlags = wxBITMAP_TYPE_ICO_RESOURCE
+           ,wxBitmapType    lFlags = wxBITMAP_TYPE_ICO_RESOURCE
            ,int             nDesiredWidth = -1
            ,int             nDesiredHeight = -1
           );
@@ -61,7 +61,7 @@ public:
     virtual ~wxIcon();
 
     bool LoadFile( const wxString& rName
-                  ,long            lFlags = wxBITMAP_TYPE_ICO_RESOURCE
+                  ,wxBitmapType    lFlags = wxBITMAP_TYPE_ICO_RESOURCE
                   ,int             nDesiredWidth = -1
                   ,int             nDesiredHeight = -1
                  );

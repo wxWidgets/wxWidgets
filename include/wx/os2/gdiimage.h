@@ -88,7 +88,7 @@ public:
     wxGDIImageHandler() { m_lType = wxBITMAP_TYPE_INVALID; }
     wxGDIImageHandler( const wxString& rName
                       ,const wxString& rExt
-                      ,long            lType
+                      ,wxBitmapType    lType
                      )
                      : m_sName(rName)
                      , m_sExtension(rExt)
@@ -99,16 +99,16 @@ public:
     // accessors
     void SetName(const wxString& rName) { m_sName = rName; }
     void SetExtension(const wxString& rExt) { m_sExtension = rExt; }
-    void SetType(long lType) { m_lType = lType; }
+    void SetType(wxBitmapType lType) { m_lType = lType; }
 
     wxString GetName() const { return m_sName; }
     wxString GetExtension() const { return m_sExtension; }
-    long GetType() const { return m_lType; }
+    wxBitmapType GetType() const { return m_lType; }
 
     // real handler operations: to implement in derived classes
     virtual bool Create( wxGDIImage* pImage
                         ,const void* pData
-                        ,long        lFlags
+                        ,wxBitmapType lFlags
                         ,int         nWidth
                         ,int         nHeight
                         ,int         nDepth = 1
@@ -116,25 +116,25 @@ public:
     virtual bool Load( wxGDIImage*     pImage
                       ,const wxString& rName
                       ,HPS             hPs
-                      ,long            lFlags
+                      ,wxBitmapType    lFlags
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight
                      ) = 0;
     virtual bool Load( wxGDIImage*     pImage
                       ,int             nId
-                      ,long            lFlags
+                      ,wxBitmapType    lFlags
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight
                      ) = 0;
-    virtual bool Save( wxGDIImage*     pImage
-                      ,const wxString& rName
-                      ,int             lType
-                     ) = 0;
+    virtual bool Save( const wxGDIImage* pImage
+                      ,const wxString&   rName
+                      ,wxBitmapType      lType
+                     ) const = 0;
 
 protected:
     wxString                        m_sName;
     wxString                        m_sExtension;
-    long                            m_lType;
+    wxBitmapType                    m_lType;
 }; // end of wxGDIImageHandler
 
 // ----------------------------------------------------------------------------
@@ -154,8 +154,8 @@ public:
     static bool RemoveHandler(const wxString& rName);
 
     static wxGDIImageHandler* FindHandler(const wxString& rName);
-    static wxGDIImageHandler* FindHandler(const wxString& rExtension, long lType);
-    static wxGDIImageHandler* FindHandler(long lType);
+    static wxGDIImageHandler* FindHandler(const wxString& rExtension, wxBitmapType lType);
+    static wxGDIImageHandler* FindHandler(wxBitmapType lType);
 
     static void InitStandardHandlers();
     static void CleanUpHandlers();
