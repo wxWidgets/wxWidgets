@@ -168,6 +168,15 @@ wxPen::wxPen(
     RealizeResource();
 } // end of wxPen::wxPen
 
+bool wxPen::operator==(const wxPen& pen) const
+{
+    const wxPenRefData *
+        penData = wx_static_cast(const wxPenRefData *, pen.m_refData);
+
+    // an invalid pen is only equal to another invalid pen
+    return m_refData ? penData && *M_PENDATA == *penData : !penData;
+}
+
 int wx2os2PenStyle(
   wxPenStyle                               nWxStyle
 );

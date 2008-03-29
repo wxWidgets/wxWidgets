@@ -39,6 +39,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
 // ============================================================================
 // implementation
