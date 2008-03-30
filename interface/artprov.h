@@ -47,7 +47,7 @@
     wxArtProvider::GetIcon.
 
     @todo IS THIS NB TRUE?
-    (NB: this is not yet really possible as of wxWidgets 2.3.3, the set of wxArtProvider
+    (@note this is not yet really possible as of wxWidgets 2.3.3, the set of wxArtProvider
      bitmaps is too small).
 
     @section wxartprovider_identify Identifying art resources

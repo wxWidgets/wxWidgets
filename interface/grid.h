@@ -1960,7 +1960,7 @@ public:
     void InitColWidths();
 
     /**
-        NB: @e never access m_row/col arrays directly because they are created
+        @note @e never access m_row/col arrays directly because they are created
         on demand, @e always use accessor functions instead!
         Init the m_rowHeights/Bottoms arrays with default values.
     */

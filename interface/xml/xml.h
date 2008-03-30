@@ -440,7 +440,7 @@ public:
     /**
         Returns encoding of in-memory representation of the document
         (same as passed to Load() or constructor, defaults to UTF-8).
-        NB: this is meaningless in Unicode build where data are stored as @c wchar_t*.
+        @note this is meaningless in Unicode build where data are stored as @c wchar_t*.
     */
     wxString GetEncoding() const;
 

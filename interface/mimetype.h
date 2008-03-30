@@ -32,7 +32,7 @@
     If GNOME or KDE desktop environment is installed, then wxMimeTypesManager
     gathers MIME information from respective files (e.g. .kdelnk files under KDE).
 
-    NB: Currently, wxMimeTypesManager is limited to reading MIME type information
+    @note Currently, wxMimeTypesManager is limited to reading MIME type information
     but it will support modifying it as well in future versions.
 
     @library{wxbase}
@@ -63,7 +63,7 @@ public:
     void AddFallbacks(const wxFileTypeInfo* fallbacks);
 
     /**
-        NB: You won't normally need to use more than one wxMimeTypesManager object in a
+        @note You won't normally need to use more than one wxMimeTypesManager object in a
         program.
         @ref ctor() wxMimeTypesManager
 
