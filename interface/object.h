@@ -10,15 +10,111 @@
     @class wxObjectRefData
     @wxheader{object.h}
 
-    This class is used to store reference-counted data. Derive classes from this to
-    store your own data. When retrieving information from a @b wxObject's reference
-    data,
-    you will need to cast to your own derived class.
+    This class is used to store reference-counted data. Derive classes from this
+    to store your own data. When retrieving information from a wxObject's reference
+    data, you will need to cast to your own derived class.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{rtti}
 
-    @see wxObject, wxObjectDataPtrT(), @ref overview_trefcount "Reference counting"
+    @see wxObject, wxObjectDataPtr<T>, @ref overview_refcount "Reference counting"
+
+    @b Example:
+
+    @code
+    // include file
+
+    class MyCar: public wxObject
+    {
+    public:
+        MyCar() { }
+        MyCar( int price );
+
+        bool IsOk() const { return m_refData != NULL; }
+
+        bool operator == ( const MyCar& car ) const;
+        bool operator != (const MyCar& car) const { return !(*this == car); }
+
+        void SetPrice( int price );
+        int GetPrice() const;
+
+    protected:
+        virtual wxObjectRefData *CreateRefData() const;
+        virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
+        DECLARE_DYNAMIC_CLASS(MyCar)
+    };
+
+
+    // implementation
+
+    class MyCarRefData: public wxObjectRefData
+    {
+    public:
+        MyCarRefData()
+        {
+            m_price = 0;
+        }
+
+        MyCarRefData( const MyCarRefData& data )
+            : wxObjectRefData()
+        {
+            m_price = data.m_price;
+        }
+
+        bool operator == (const MyCarRefData& data) const
+        {
+            return m_price == data.m_price;
+        }
+
+        int m_price;
+    };
+
+
+    #define M_CARDATA ((MyCarRefData *)m_refData)
+
+    IMPLEMENT_DYNAMIC_CLASS(MyCar,wxObject)
+
+    MyCar::MyCar( int price )
+    {
+        m_refData = new MyCarRefData();
+        M_CARDATA->m_price = price;
+    }
+
+    wxObjectRefData *MyCar::CreateRefData() const
+    {
+        return new MyCarRefData;
+    }
+
+    wxObjectRefData *MyCar::CloneRefData(const wxObjectRefData *data) const
+    {
+        return new MyCarRefData(*(MyCarRefData *)data);
+    }
+
+    bool MyCar::operator == ( const MyCar& car ) const
+    {
+        if (m_refData == car.m_refData) return true;
+
+        if (!m_refData || !car.m_refData) return false;
+
+        return ( *(MyCarRefData*)m_refData == *(MyCarRefData*)car.m_refData );
+    }
+
+    void MyCar::SetPrice( int price )
+    {
+        UnShare();
+
+        M_CARDATA->m_price = price;
+    }
+
+    int MyCar::GetPrice() const
+    {
+        wxCHECK_MSG( IsOk(), -1, "invalid car" );
+
+        return (M_CARDATA->m_price);
+    }
+    @endcode
+
 */
 class wxObjectRefData
 {
@@ -29,26 +125,26 @@ public:
     wxObjectRefData();
 
     /**
-        Destructor. It's declared @c protected so that wxObjectRefData instances will
-        never
-        be destroyed directly but only as result of a DecRef() call.
+        Destructor. It's declared @c protected so that wxObjectRefData instances
+         will never be destroyed directly but only as result of a DecRef() call.
     */
     ~wxObjectRefData();
 
     /**
-        Decrements the reference count associated with this shared data and, if it
-        reaches zero,
-        destroys this instance of wxObjectRefData releasing its memory.
-        Please note that after calling this function, the caller should absolutely
-        avoid to use
-        the pointer to this instance since it may not be valid anymore.
+        Decrements the reference count associated with this shared data and, if
+        it reaches zero, destroys this instance of wxObjectRefData releasing its
+        memory.
+
+        Please note that after calling this function, the caller should
+        absolutely avoid to use the pointer to this instance since it may not be
+        valid anymore.
     */
     void DecRef();
 
     /**
         Returns the reference count associated with this shared data.
-        When this goes to zero during a DecRef() call, the object
-        will auto-free itself.
+        When this goes to zero during a DecRef() call, the object will auto-free
+        itself.
     */
     int GetRefCount() const;
 
@@ -65,36 +161,35 @@ public:
     @wxheader{object.h}
 
     This is the root class of many of the wxWidgets classes.
-    It declares a virtual destructor which ensures that
-    destructors get called for all derived class objects where necessary.
+    It declares a virtual destructor which ensures that destructors get called
+    for all derived class objects where necessary.
 
-    wxObject is the hub of a dynamic object creation
-    scheme, enabling a program to create instances of a class only knowing
-    its string class name, and to query the class hierarchy.
+    wxObject is the hub of a dynamic object creation scheme, enabling a program
+    to create instances of a class only knowing its string class name, and to
+    query the class hierarchy.
 
-    The class contains optional debugging versions
-    of @b new and @b delete, which can help trace memory allocation
-    and deallocation problems.
+    The class contains optional debugging versions of @b new and @b delete, which
+    can help trace memory allocation and deallocation problems.
 
-    wxObject can be used to implement @ref overview_trefcount "reference counted"
-    objects,
-    such as wxPen, wxBitmap and others (see @ref overview_refcountlist "this list").
+    wxObject can be used to implement @ref overview_refcount "reference counted"
+    objects, such as wxPen, wxBitmap and others (see @ref overview_refcount_list
+     "this list").
 
     @library{wxbase}
     @category{rtti}
 
-    @see wxClassInfo, @ref overview_debuggingoverview, wxObjectRefData
+    @see wxClassInfo, @ref overview_debugging, wxObjectRefData
 */
 class wxObject
 {
 public:
-    //@{
+
+    wxObject();
     /**
         Default and copy constructors.
     */
-    wxObject();
     wxObject(const wxObject& other);
-    //@}
+
 
     /**
         Destructor. Performs dereferencing, for those objects
@@ -105,6 +200,7 @@ public:
     /**
         A virtual function that may be redefined by derived classes to allow dumping of
         memory states.
+
         This function is only defined in debug build and doesn't exist at all if
         @c __WXDEBUG__ is not defined.
 
@@ -116,12 +212,17 @@ public:
                  applications. Be sure to call the Dump member of the
                  class's base class to allow all information to be
                  dumped.
+
+                 The implementation of this function in wxObject just writes
+                 the class name of the object.
+
+
     */
     void Dump(ostream& stream);
 
     /**
         This virtual function is redefined for every class that requires run-time
-        type information, when using DECLARE_CLASS macros.
+        type information, when using @c DECLARE_CLASS macros.
     */
     wxClassInfo* GetClassInfo();
 
@@ -139,16 +240,22 @@ public:
 
         @param info
             A pointer to a class information object, which may be obtained
-            by using the CLASSINFO macro.
+            by using the @c CLASSINFO macro.
 
         @returns @true if the class represented by info is the same class as this
                  one or is derived from it.
+
+        @b Example:
+        @code
+        bool tmp = obj->IsKindOf(CLASSINFO(wxFrame));
+        @endcode
     */
     bool IsKindOf(wxClassInfo* info);
 
     /**
-        Returns @true if this object has the same data pointer as @e obj. Notice
+        @returns @true if this object has the same data pointer as @e obj. Notice
         that @true is returned if the data pointers are @NULL in both objects.
+
         This function only does a shallow comparison, i.e. it doesn't compare
         the objects pointed to by the data pointers of these objects.
     */
@@ -163,6 +270,9 @@ public:
         @remarks First this function calls UnRef() on itself to decrement
                  (and perhaps free) the data it is currently referring
                  to.
+
+                 It then sets its own m_refData to point to that of clone,
+                 and increments the reference count inside the data.
 
         @see UnRef(), wxObject::m_refData, SetRefData(),
              GetRefData(), wxObjectRefData
@@ -189,37 +299,37 @@ public:
 
     /**
         Ensure that this object's data is not shared with any other object.
-        if we have no
-        data, it is created using CreateRefData() below, if we have shared data
-        it is copied using CloneRefData(), otherwise nothing is done.
+
+        If we have no data, it is created using CreateRefData() below,
+        if we have shared data, it is copied using CloneRefData(),
+        otherwise nothing is done.
     */
     void UnShare();
 
     /**
-        wxObjectRefData*  m_refData
+        The @e delete operator is defined for debugging versions of the library only,
+        when the identifier @c __WXDEBUG__ is defined.
+        It takes over memory deallocation, allowing wxDebugContext operations.
+    */
+    void operator delete(void *buf);
+
+    /**
+        The @e new operator is defined for debugging versions of the library only, when
+        the identifier @c __WXDEBUG__ is defined. It takes over memory allocation, allowing
+        wxDebugContext operations.
+    */
+    void* operator new(size_t size, const wxString& filename = NULL,
+              int lineNum = 0);
+
+private:
+
+    /**
         Pointer to an object which is the object's reference-counted data.
 
         @see Ref(), UnRef(), SetRefData(),
              GetRefData(), wxObjectRefData
     */
-
-
-    /**
-        The @e delete operator is defined for debugging versions of the library only,
-        when
-        the identifier __WXDEBUG__ is defined. It takes over memory deallocation,
-        allowing
-        wxDebugContext operations.
-    */
-    void delete(void buf);
-
-    /**
-        The @e new operator is defined for debugging versions of the library only, when
-        the identifier __WXDEBUG__ is defined. It takes over memory allocation, allowing
-        wxDebugContext operations.
-    */
-    void* new(size_t size, const wxString& filename = NULL,
-              int lineNum = 0);
+    wxObjectRefData*  m_refData;
 };
 
 
@@ -235,7 +345,7 @@ public:
     @library{wxbase}
     @category{rtti}
 
-    @see Overview(), wxObject
+    @see @ref overview_rtti_classinfo "Overview", wxObject
 */
 class wxClassInfo
 {
@@ -312,28 +422,108 @@ public:
     counting interface which only consists of the two methods
     @b T::IncRef() and @b T::DecRef().
 
-    The difference to wxSharedPtr is that
-    wxObjectDataPtr relies on the reference counting to be in
-    the class pointed to where as wxSharedPtr implements the
+    The difference to wxSharedPtr<T> is that
+    wxObjectDataPtr<T> relies on the reference counting to be in
+    the class pointed to where as wxSharedPtr<T> implements the
     reference counting itself.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{rtti,smartpointers}
 
-    @see wxObject, wxObjectRefData, @ref overview_trefcount "Reference counting"
+    @see wxObject, wxObjectRefData, @ref overview_refcount "Reference counting",
+    wxSharedPtr<T>, wxScopedPtr<T>, wxWeakRef<T>
+
+    <b>Data structures:</b>
+
+    @code
+    typedef T element_type
+    @endcode
+
+    @b Example:
+
+    @code
+    class MyCarRefData: public wxObjectRefData
+    {
+    public:
+        MyCarRefData()  { m_price = 0; }
+
+        MyCarRefData( const MyCarRefData& data )
+            : wxObjectRefData()
+        {
+            m_price = data.m_price;
+        }
+
+        void SetPrice( int price )  { m_price = price; }
+        int GetPrice()              { return m_price; }
+
+    protected:
+        int m_price;
+    };
+
+    class MyCar
+    {
+    public:
+        MyCar( int price ) : m_data( new MyCarRefData )
+        {
+            m_data->SetPrice( price );
+        }
+
+        MyCar& operator =( const MyCar& tocopy )
+        {
+            m_data = tocopy.m_data;
+            return *this;
+        }
+
+        bool operator == ( const MyCar& other ) const
+        {
+            if (m_data.get() == other.m_data.get()) return true;
+            return (m_data->GetPrice() == other.m_data->GetPrice());
+        }
+
+        void SetPrice( int price )
+        {
+           UnShare();
+           m_data->SetPrice( price );
+        }
+
+        int GetPrice() const
+        {
+           return m_data->GetPrice();
+        }
+
+        wxObjectDataPtr<MyCarRefData> m_data;
+
+    protected:
+        void UnShare()
+        {
+            if (m_data->GetRefCount() == 1)
+                return;
+
+            m_data.reset( new MyCarRefData( *m_data ) );
+        }
+    };
+
+    @endcode
+
 */
 class wxObjectDataPtr<T>
 {
 public:
-    //@{
+
+    /**
+        Constructor. @a ptr is a pointer to the reference counted object
+        to which this class points.
+        If @a ptr is not NULL @b T::IncRef() will be called on the object.
+    */
+    wxObjectDataPtr<T>(T* ptr = NULL);
+
     /**
         This copy constructor increases the count of the reference
         counted object to which @a tocopy points and then this
         class will point to, as well.
     */
-    wxObjectDataPtrT(T* ptr = NULL);
-    wxObjectDataPtrT(const wxObjectDataPtr<T>& tocopy);
-    //@}
+    wxObjectDataPtr<T>(const wxObjectDataPtr<T>& tocopy);
+
 
     /**
         Decreases the reference count of the object to which this
@@ -359,7 +549,7 @@ public:
         Returns a reference to the object. If the internal pointer is @NULL
         this method will cause an assert in debug mode.
     */
-    T operator*() const;
+    T& operator*() const;
 
     /**
         Returns a pointer to the reference counted object to which
@@ -372,8 +562,8 @@ public:
     /**
         Assignment operators.
     */
-    wxObjectDataPtrT& operator operator=(const wxObjectDataPtr<T>& tocopy);
-    wxObjectDataPtrT& operator operator=(T* ptr);
+    wxObjectDataPtr<T>& operator=(const wxObjectDataPtr<T>& tocopy);
+    wxObjectDataPtr<T>& operator=(T* ptr);
     //@}
 };
 
@@ -525,9 +715,9 @@ public:
 #define IMPLEMENT_DYNAMIC_CLASS2( className, baseClassName1, baseClassName2 )
 
 /**
-    Same as const_cast<T>(x) if the compiler supports const cast or (T)x for
-    old compilers. Unlike wxConstCast(), the cast it to the type T and not to
-    T * and also the order of arguments is the same as for the standard cast.
+    Same as @c const_cast<T>(x) if the compiler supports const cast or @c (T)x for
+    old compilers. Unlike wxConstCast(), the cast it to the type @c T and not to
+    <tt>T *</tt> and also the order of arguments is the same as for the standard cast.
 
     @header{wx/defs.h}
 
@@ -536,8 +726,8 @@ public:
 #define wx_const_cast(T, x)
 
 /**
-    Same as reinterpret_cast<T>(x) if the compiler supports reinterpret cast or
-    (T)x for old compilers.
+    Same as @c reinterpret_cast<T>(x) if the compiler supports reinterpret cast or
+    @c (T)x for old compilers.
 
     @header{wx/defs.h}
 
@@ -546,10 +736,10 @@ public:
 #define wx_reinterpret_cast(T, x)
 
 /**
-    Same as static_cast<T>(x) if the compiler supports static cast or (T)x for
+    Same as @c static_cast<T>(x) if the compiler supports static cast or @c (T)x for
     old compilers. Unlike wxStaticCast(), there are no checks being done and
     the meaning of the macro arguments is exactly the same as for the standard
-    static cast, i.e. T is the full type name and star is not appended to it.
+    static cast, i.e. @a T is the full type name and star is not appended to it.
 
     @header{wx/defs.h}
 
@@ -567,7 +757,7 @@ public:
 #define wx_truncate_cast(T, x)
 
 /**
-    This macro expands into const_cast<classname *>(ptr) if the compiler
+    This macro expands into <tt>const_cast<classname *>(ptr)</tt> if the compiler
     supports const_cast or into an old, C-style cast, otherwise.
 
     @header{wx/defs.h}
@@ -615,13 +805,13 @@ public:
     }
     @endcode
 
-    @see @ref overview_runtimeclassoverview "RTTI Overview",
+    @see @ref overview_rtti "RTTI Overview",
          wxDynamicCastThis(), wxConstCast(), wxStaticCast()
 */
 #define wxDynamicCast( ptr, classname )
 
 /**
-    This macro is equivalent to wxDynamicCast() but the latter provokes
+    This macro is equivalent to <tt>wxDynamicCast(this, classname)</tt> but the latter provokes
     spurious compilation warnings from some compilers (because it tests whether
     @c this pointer is non-@NULL which is always true), so this macro should be
     used to avoid them.
@@ -635,7 +825,7 @@ public:
 /**
     This macro checks that the cast is valid in debug mode (an assert failure
     will result if wxDynamicCast(ptr, classname) == @NULL) and then returns the
-    result of executing an equivalent of static_cast<classname *>(ptr).
+    result of executing an equivalent of <tt>static_cast<classname *>(ptr)</tt>.
 
     @header{wx/object.h}
 
