@@ -58,9 +58,16 @@ public:
     //@}
 
     /**
-        Adds the given node as child of this node. To attach a second children to this
-        node, use the
-        SetNext() function of the @a child node.
+        Adds node @a child as the last child of this node.
+
+        @note
+        Note that this function works in O(n) time where @e n is the number
+        of existing children. Consequently, adding large number of child
+        nodes using this method can be expensive, because it has O(n^2) time
+        complexity in number of nodes to be added. Use InsertChildAfter() to
+        populate XML tree in linear time.
+
+        @see InsertChild(), InsertChildAfter()
     */
     void AddChild(wxXmlNode* child);
 
@@ -168,8 +175,28 @@ public:
         then @a child is prepended to the list of children and becomes the
         first child of this node, i.e. it behaves identically to using the
         first children (as returned by GetChildren()) for @a followingNode).
+
+        @see AddChild(), InsertChildAfter()
     */
     bool InsertChild(wxXmlNode* child, wxXmlNode* followingNode);
+
+    /**
+        Inserts the @a child node immediately after @a precedingNode in the
+        children list.
+
+        @return @true if @a precedingNode has been found and the @a child
+                node has been inserted.
+
+        @param precedingNode
+            The node to insert @a child after. As a special case, this can be
+            @NULL if this node has no children yet -- in that case, @a child
+            will become this node's only child node.
+
+        @since 2.8.8
+
+        @see InsertChild(), AddChild()
+    */
+    bool InsertChildAfter(wxXmlNode* child, wxXmlNode* precedingNode);
 
     /**
         Returns @true if the content of this node is a string containing only

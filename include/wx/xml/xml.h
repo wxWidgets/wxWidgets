@@ -128,6 +128,7 @@ public:
               int lineNo = -1);
     virtual void AddChild(wxXmlNode *child);
     virtual bool InsertChild(wxXmlNode *child, wxXmlNode *followingNode);
+    virtual bool InsertChildAfter(wxXmlNode *child, wxXmlNode *precedingNode);
     virtual bool RemoveChild(wxXmlNode *child);
     virtual void AddAttribute(const wxString& name, const wxString& value);
     virtual bool DeleteAttribute(const wxString& name);

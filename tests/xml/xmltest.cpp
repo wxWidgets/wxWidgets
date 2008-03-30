@@ -72,9 +72,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( XmlTestCase );
         CPPUNIT_TEST( InsertChild );
+        CPPUNIT_TEST( InsertChildAfter );
     CPPUNIT_TEST_SUITE_END();
 
     void InsertChild();
+    void InsertChildAfter();
 
     DECLARE_NO_COPY_CLASS(XmlTestCase)
 };
@@ -103,4 +105,28 @@ void XmlTestCase::InsertChild()
     // and in the middle:
     root->InsertChild(new wxXmlNode(wxXML_ELEMENT_NODE, "C"), two);
     CheckXml(root, "B", "A", "1", "C", "2", "3", NULL);
+}
+
+void XmlTestCase::InsertChildAfter()
+{
+    wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, "root");
+
+    root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "1"), NULL);
+    CheckXml(root, "1", NULL);
+
+    wxXmlNode *two = new wxXmlNode(wxXML_ELEMENT_NODE, "2");
+    root->AddChild(two);
+    wxXmlNode *three = new wxXmlNode(wxXML_ELEMENT_NODE, "3");
+    root->AddChild(three);
+    CheckXml(root, "1", "2", "3", NULL);
+
+    // check inserting in the middle:
+    root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "A"), root->GetChildren());
+    CheckXml(root, "1", "A", "2", "3", NULL);
+    root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "B"), two);
+    CheckXml(root, "1", "A", "2", "B", "3", NULL);
+
+    // and at the end:
+    root->InsertChildAfter(new wxXmlNode(wxXML_ELEMENT_NODE, "C"), three);
+    CheckXml(root, "1", "A", "2", "B", "3", "C", NULL);
 }
