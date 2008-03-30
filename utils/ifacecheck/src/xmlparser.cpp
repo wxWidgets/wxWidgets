@@ -74,6 +74,15 @@ void wxType::SetTypeFromString(const wxString& t)
     m_strType.Replace(" ,", ",");
 
     m_strType = m_strType.Strip(wxString::both);
+
+    // now set the clean version
+    m_strTypeClean = m_strType;
+    m_strTypeClean.Replace("const", "");
+    m_strTypeClean.Replace("static", "");
+    m_strTypeClean.Replace("*", "");
+    m_strTypeClean.Replace("&", "");
+    m_strTypeClean.Replace("[]", "");
+    m_strTypeClean = m_strTypeClean.Strip(wxString::both);
 }
 
 bool wxType::IsOk() const
@@ -82,25 +91,14 @@ bool wxType::IsOk() const
     //     "reverse_iterator_impl<wxString::const_iterator>" type
     //     It can also contain commas, * and & operators etc
 
-    return !GetClean().IsEmpty();
-}
-
-wxString wxType::GetClean() const
-{
-    wxString ret(m_strType);
-    ret.Replace("const", "");
-    ret.Replace("static", "");
-    ret.Replace("*", "");
-    ret.Replace("&", "");
-    ret.Replace("[]", "");
-    return ret.Strip(wxString::both);
+    return !m_strTypeClean.IsEmpty();
 }
 
 bool wxType::operator==(const wxType& m) const
 {
     // brain-dead comparison:
 
-    if (GetClean() == m.GetClean() &&
+    if (m_strTypeClean == m.m_strTypeClean &&
         IsConst() == m.IsConst() &&
         IsStatic() == m.IsStatic() &&
         IsPointer() == m.IsPointer() &&

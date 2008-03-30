@@ -55,10 +55,9 @@ public:
     bool IsOk() const;
 
 protected:
-    wxString m_strType;
-
-    // utility for doing comparisons
-    wxString GetClean() const;
+    wxString m_strType,
+             m_strTypeClean;   // m_strType "cleaned" of its attributes
+                               // (only for internal use)
 };
 
 extern wxType wxEmptyType;
