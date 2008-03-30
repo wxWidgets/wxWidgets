@@ -1,37 +1,184 @@
-<HTML>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<HEAD>
-<TITLE>Welcome to wxWidgets</TITLE>
+<html xmlns="http://www.w3.org/1999/xhtml">
 
-</HEAD>
+  <!--
+    Name:        index.htm
+    Purpose:     gateway to wxWidgets documentation
+    Author:      wxWidgets team
+    RCS-ID:      $Id$
+    Licence:     wxWindows license
+  -->
 
-<BODY BGCOLOR="#FFFFFF" TEXT=#000000 LINK=#FF0000 VLINK=#000000>
+  <head>
+    <title>wxWidgets Documentation</title>
+    <style type="text/css">
+      <!--
+          li { line-height: 150%; }
+      -->
+    </style>
+  </head>
 
-<font face="Arial, Lucida Sans, Helvetica">
+  <body>
+    <a name="top"/>
 
-<a name="top"></a>
+    <h1 style="font-size: 145%">Welcome to <em style="font-size: 150%">wxWidgets</em>: a portable C++ and Python GUI toolkit</h1>
 
-<table width=100% border=4 cellpadding=5 cellspacing=0>
-<tr>
-<td bgcolor="#660000">
-<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
-Welcome to wxWidgets
-</font>
-</td>
-</tr>
-</table>
+    <center>
+    <img src="doxygen/images/main_wxlogo.png" alt="wxWidgets logo" />
+    </center>
+    <br/>
 
-<P>
+    <p>This page lets you access various resources for <a href="http://www.wxwidgets.org">wxWidgets</a> development. Enjoy!</p>
 
-Welcome to wxWidgets, the premiere cross-platform GUI C++ framework.<P>
+    <br/>
+    <center><font size="-1">[<a href="#install">Install</a>] [<a href="#doc">Documentation</a>] [<a href="#technotes">Technical Notes</a>] [<a href="#demos">Demos</a>]</font></center>
+    <br/>
 
-Please click on <a href="html/index.htm">docs/html/index.htm</a> to view the main document index.<P>
 
-Have fun!<P>
 
-</font>
 
-</BODY>
 
-</HTML>
+    <!--
+        INSTALLATION AND RELEASE NOTES
+    -->
 
+    <table width="100%" border="0" cellpadding="3" cellspacing="0">
+    <tr>
+      <td bgcolor="#004080">
+        <font size="+1" color="#FFFFFF"><b><a name="install">Installation and release notes</a></b></font>
+      </td>
+    </tr>
+    </table>
+
+    <p>Unless you installed a binary version of wxWidgets (e.g. under Linux using your distro's package manager),
+    you will probably have to <strong>compile</strong> the wxWidgets library before you can start use it.</p>
+    <p>Please read the platform-specific <tt>readme.txt</tt> and <tt>install.txt</tt> for how to do this:</p>
+
+    <ul>
+    <li>ReadMe:
+      <a href="readme.txt"><b>General ReadMe</b></a>, <a href="msw/readme.txt">wxMSW</a> (<a href="msw/winxp.txt">wxMSW for WinXP</a>), <a href="gtk/readme.txt">wxGTK</a>, <a href="mac/readme.txt">wxMac</a>, <a href="cocoa/readme.txt">wxCocoa</a>, <a href="mgl/readme.txt">wxMGL</a>, <a href="motif/readme.txt">wxMotif</a>, <a href="x11/readme.txt">wxX11</a>, <a href="univ/readme.txt">Univ</a>
+    </li>
+    <li>Installation:
+        <a href="msw/install.txt">wxMSW</a>, <a href="gtk/install.txt">wxGTK</a>, <a href="motif/install.txt">wxMotif</a>, <a href="x11/install.txt">wxX11</a>, <a href="mac/install.txt">wxMac</a>, <a href="cocoa/install.txt">wxCocoa</a>, <a href="mgl/install.txt">wxMGL</a>, <a href="os2/install.txt">wxOS2</a>
+    </li>
+    <li>
+        <a href="changes.txt"><b>General change log</b></a>
+    </li>
+    <li>Licence:
+        <a href="preamble.txt">Preamble</a>, <a href="licence.txt">Licence</a>, <a href="licendoc.txt">Documentation Licence</a>, <a href="lgpl.txt">L-GPL</a>, <a href="gpl.txt">GPL</a>
+    </li>
+
+    <!-- FIXME: FAQs are very out-of-date; should be moved in the wx docs or
+                to the website or to the wiki...
+
+
+    <li><a href=
+    "faq.htm"><b>FAQ</b></a>:</font>
+    <ul>
+    <li><a href=
+    "faqgen.htm">General questions</a></font></li>
+    <li><a href=
+    "faqcmn.htm">Questions common to all platforms</a></font></li>
+    <li><a href=
+    "faqmsw.htm">wxWidgets for Windows</a></font></li>
+    <li><a href=
+    "faqgtk.htm">wxWidgets for GTK+</a></font></li>
+    <li><a href=
+    "faqmot.htm">wxWidgets for Motif</a></font></li>
+    <li><a href=
+    "faqx11.htm">wxWidgets for X11</a></font></li>
+    <li><a href=
+    "faqmac.htm">wxWidgets for Mac</a></font></li>
+    </ul>
+    </li>
+    -->
+
+    <!-- FIXME: todo lists are in the wiki now....  -->
+    <li>ToDo: <a href="todo.txt"><b>General ToDo</b></a>, <a href="gtk/todo.txt">wxGTK</a>, <a href="motif/todo.txt">wxMotif</a>, <a href="mac/todo.txt">wxMac</a></li>
+    </ul>
+
+
+
+    <!--
+        DOCUMENTATION
+    -->
+
+    <table width="100%" border="0" cellpadding="3" cellspacing="0">
+    <tr>
+      <td bgcolor="#004080">
+        <font size="+1" color="#FFFFFF"><b><a name="doc">Documentation</a></b></font>
+      </td>
+    </tr>
+    </table>
+
+    <p>The wxWidgets manual is available in various formats; the availability of the following formats depends on what you've downloaded from the <a href="http://www.wxwidgets.org">wxWidgets Web site</a>:</p>
+
+    <ul>
+      <li><a href="doxygen/out/html/index.html">HTML</a></li>
+      <li><a href="doxygen/out/wx.chm">MS HTML Help (CHM)</a></li>
+      <li><a href="doxygen/out/wx.htb">wxHTML Help (HTB)</a></li>
+      <li><a href="doxygen/out/rtf/refman.rtf">Rich Text Format (RTF)</a></li>
+      <li><a href="doxygen/out/wx.pdf">Portable Document Format (PDF)</a></li>
+    </ul>
+
+    <p>To use the manual in the <b>wxHTML Help</b> format (extension <tt>htb</tt>), you can use the <b>HelpView</b> application, compiling it from the <tt>utils/helpview</tt> folder in the wxWidgets distribution.</p>
+
+
+
+
+    <!--
+        TECHNICAL NOTES
+    -->
+
+    <table width="100%" border="0" cellpadding="3" cellspacing="0">
+    <tr>
+      <td bgcolor="#004080">
+        <font size="+1" color="#FFFFFF"><b><a name="technotes">Technical notes</a></b></font>
+      </td>
+    </tr>
+    </table>
+
+    <p>Technical notes contains informations useful only to wxWidgets developers for the maintainance of the project:</p>
+
+    <ul>
+      <li><a href="tech/index.txt">Index of technical notes</a></li>
+      <li><a href="tech/">Technical notes</a></li>
+
+      <!-- FIXME: should be either removed or integrated with doxy docs
+      <li><a href="platform.htm">Platforms supported</a></font></li>
+      <li><a href="i18n.htm">Languages supported by wxWidgets</a></font></li>
+      -->
+    </ul>
+
+
+
+    <!--
+        DEMOS
+    -->
+
+    <table width="100%" border="0" cellpadding="3" cellspacing="0">
+    <tr>
+    <td bgcolor="#004080">
+      <font size="+1" color="#FFFFFF"><b><a name="demos">Demos</a></b></font>
+    </td>
+    </tr>
+    </table>
+
+    <p>The following are fully-fledged applications which demonstrate some features of wxWidgets
+       (for a list of the 70+ samples please look at the manual):</p>
+    <ul>
+      <li><a href="../demos/bombs">bombs</a>: minesweeper-like game.</li>
+      <li><a href="../demos/forty">forty</a>: a great little card game by Chris Breeze.</li>
+      <li><a href="../demos/fractal">fractal</a>: fractal mountains by Andrew Davison.</li>
+      <li><a href="../demos/life">life</a>: the game of Life by J. H. Conway,
+          implemented in wxWidgets by Guillermo Rodriguez Garcia.</li>
+      <li><a href="../demos/poem">poem</a>: a little poetry display program.</li>
+    </ul>
+
+  </body>
+
+  <!-- kate: space-indent on; indent-width 2; indent-mode xml; -->
+
+</html>
