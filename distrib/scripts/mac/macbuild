@@ -2,7 +2,8 @@
 
 # you need to change this if you run from outside this dir.
 if [ "$WXROOT" = "" ]; then
-  WXROOT=../../..
+  scriptDir="$(cd $(dirname $0);pwd)"
+  WXROOT=$scriptDir/../../..
 fi
 
 . $WXROOT/distrib/scripts/includes/configure_build.inc
@@ -13,11 +14,18 @@ fi
 # configure-based build scripts, which is why this looks a little empty.
 
 if [ "$UNIVERSAL" = "1" ]; then
-  OTHER_OPTS="--enable-universal_binary "
+  OTHER_OPTS="$OTHER_OPTS --enable-universal_binary --with-libjpeg=builtin --with-libpng=builtin"
 fi
 
+mkdir -p builds
+cd builds
 do_build
 
 make prefix=$INSTALLDIR install
+
+if [ "$WXPYTHON" == "1" ]; then
+    make -C contrib/src/gizmos prefix=$INSTALLDIR install
+    make -C contrib/src/stc prefix=$INSTALLDIR install
+fi 
 
 cd $OLDDIR
