@@ -665,7 +665,7 @@ public:
     This is used in headers to create a forward declaration of the wxGetApp()
     function implemented by IMPLEMENT_APP().
 
-    It creates the declaration @a className wxGetApp(void).
+    It creates the declaration <tt>className& wxGetApp()</tt>.
 
     @header{wx/app.h}
 
