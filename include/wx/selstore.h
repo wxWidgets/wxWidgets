@@ -18,14 +18,12 @@
 // wxSelectedIndices is just a sorted array of indices
 // ----------------------------------------------------------------------------
 
-inline int CMPFUNC_CONV wxSizeTCmpFn(size_t n1, size_t n2)
+inline int CMPFUNC_CONV wxUIntCmp(unsigned n1, unsigned n2)
 {
     return (int)(n1 - n2);
 }
 
-WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_SIZE_T(size_t,
-                                           wxSizeTCmpFn,
-                                           wxSelectedIndices);
+WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_INT(unsigned, wxUIntCmp, wxSelectedIndices);
 
 // ----------------------------------------------------------------------------
 // wxSelectionStore is used to store the selected items in the virtual
@@ -42,24 +40,24 @@ WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_SIZE_T(size_t,
 class WXDLLIMPEXP_CORE wxSelectionStore
 {
 public:
-    wxSelectionStore() : m_itemsSel(wxSizeTCmpFn) { Init(); }
+    wxSelectionStore() : m_itemsSel(wxUIntCmp) { Init(); }
 
     // set the total number of items we handle
-    void SetItemCount(size_t count) { m_count = count; }
+    void SetItemCount(unsigned count) { m_count = count; }
 
     // special case of SetItemCount(0)
     void Clear() { m_itemsSel.Clear(); m_count = 0; m_defaultState = false; }
 
     // must be called when a new item is inserted/added
-    void OnItemAdd(size_t WXUNUSED(item)) { wxFAIL_MSG( _T("TODO") ); }
+    void OnItemAdd(unsigned WXUNUSED(item)) { wxFAIL_MSG( _T("TODO") ); }
 
     // must be called when an item is deleted
-    void OnItemDelete(size_t item);
+    void OnItemDelete(unsigned item);
 
     // select one item, use SelectRange() insted if possible!
     //
     // returns true if the items selection really changed
-    bool SelectItem(size_t item, bool select = true);
+    bool SelectItem(unsigned item, bool select = true);
 
     // select the range of items
     //
@@ -67,15 +65,15 @@ public:
     // which have changed state if "few" of them did, otherwise return false
     // (meaning that too many items changed state to bother counting them
     // individually)
-    bool SelectRange(size_t itemFrom, size_t itemTo,
+    bool SelectRange(unsigned itemFrom, unsigned itemTo,
                      bool select = true,
                      wxArrayInt *itemsChanged = NULL);
 
     // return true if the given item is selected
-    bool IsSelected(size_t item) const;
+    bool IsSelected(unsigned item) const;
 
     // return the total number of selected items
-    size_t GetSelectedCount() const
+    unsigned GetSelectedCount() const
     {
         return m_defaultState ? m_count - m_itemsSel.GetCount()
                               : m_itemsSel.GetCount();
@@ -86,7 +84,7 @@ private:
     void Init() { m_defaultState = false; }
 
     // the total number of items we handle
-    size_t m_count;
+    unsigned m_count;
 
     // the default state: normally, false (i.e. off) but maybe set to true if
     // there are more selected items than non selected ones - this allows to
@@ -98,7 +96,6 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxSelectionStore)
 };
-
 
 #endif // _WX_SELSTORE_H_
 

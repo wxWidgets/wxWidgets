@@ -33,7 +33,7 @@
 // tests
 // ----------------------------------------------------------------------------
 
-bool wxSelectionStore::IsSelected(size_t item) const
+bool wxSelectionStore::IsSelected(unsigned item) const
 {
     bool isSel = m_itemsSel.Index(item) != wxNOT_FOUND;
 
@@ -46,7 +46,7 @@ bool wxSelectionStore::IsSelected(size_t item) const
 // Select*()
 // ----------------------------------------------------------------------------
 
-bool wxSelectionStore::SelectItem(size_t item, bool select)
+bool wxSelectionStore::SelectItem(unsigned item, bool select)
 {
     // search for the item ourselves as like this we get the index where to
     // insert it later if needed, so we do only one search in the array instead
@@ -75,14 +75,14 @@ bool wxSelectionStore::SelectItem(size_t item, bool select)
     return false;
 }
 
-bool wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo,
+bool wxSelectionStore::SelectRange(unsigned itemFrom, unsigned itemTo,
                                    bool select,
                                    wxArrayInt *itemsChanged)
 {
     // 100 is hardcoded but it shouldn't matter much: the important thing is
     // that we don't refresh everything when really few (e.g. 1 or 2) items
     // change state
-    static const size_t MANY_ITEMS = 100;
+    static const unsigned MANY_ITEMS = 100;
 
     wxASSERT_MSG( itemFrom <= itemTo, _T("should be in order") );
 
@@ -102,7 +102,7 @@ bool wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo,
             // TODO: it should be possible to optimize the searches a bit
             //       knowing the possible range
 
-            size_t item;
+            unsigned item;
             for ( item = 0; item < itemFrom; item++ )
             {
                 if ( selOld.Index(item) == wxNOT_FOUND )
@@ -166,7 +166,7 @@ bool wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo,
         }
 
         // just add the items to the selection
-        for ( size_t item = itemFrom; item <= itemTo; item++ )
+        for ( unsigned item = itemFrom; item <= itemTo; item++ )
         {
             if ( SelectItem(item, select) && itemsChanged )
             {
@@ -191,7 +191,7 @@ bool wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo,
 // callbacks
 // ----------------------------------------------------------------------------
 
-void wxSelectionStore::OnItemDelete(size_t item)
+void wxSelectionStore::OnItemDelete(unsigned item)
 {
     size_t count = m_itemsSel.GetCount(),
            i = m_itemsSel.IndexForInsert(item);
