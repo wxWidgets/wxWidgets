@@ -26,6 +26,15 @@
     there are also versions which accept single @c wxPoint parameter instead of
     two @c wxCoord ones or @c wxPoint and @c wxSize instead of four of
     them.
+    
+    @todo Precise definition of default/initial state.
+    
+    @todo Pixelwise definition of operations (e.g. last point of a line not drawn).
+    
+    @todo Coordinates: state clearly which type of coordinates are returned by the 
+          various Get*Point() or similar functions - often they are client coordinates 
+          but not always
+    
 
     @library{wxcore}
     @category{dc,gdi}
