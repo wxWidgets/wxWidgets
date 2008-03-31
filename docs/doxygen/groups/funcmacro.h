@@ -8,7 +8,7 @@
 
 /**
 
-@defgroup group_funcmacro Functions and Macros
+@defgroup group_funcmacro Functions and Macros by Category
 
 This group defines all major function and macro groups.
 

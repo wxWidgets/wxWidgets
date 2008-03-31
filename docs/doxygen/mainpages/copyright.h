@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        copyright.h
-// Purpose:     Copyright page of the Doxygen manual
+// Purpose:     Copyright and license page of the Doxygen manual
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -9,7 +9,7 @@
 
 /**
 
-@page page_copyright Copyright notice
+@page page_copyright Copyright and license
 
 <center>
 Copyright (c) 1992-2008 Julian Smart, Robert Roebling, Vadim Zeitlin and other

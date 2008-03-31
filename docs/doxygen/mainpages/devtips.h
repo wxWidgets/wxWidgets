@@ -9,22 +9,23 @@
 
 /**
 
-@page page_multiplatform Multi-platform development with wxWidgets
+@page page_multiplatform Multi-platform development
 
-This chapter describes the practical details of using wxWidgets. Please
-see the file install.txt for up-to-date installation instructions, and
-changes.txt for differences between versions.
+This chapter describes some tips related to multi-platform development.
 
 @li @ref page_multiplatform_includefiles
 @li @ref page_multiplatform_libraries
 @li @ref page_multiplatform_configuration
 @li @ref page_multiplatform_makefiles
-@li @ref page_multiplatform_windowsfiles
+@li @ref page_multiplatform_winresources
 @li @ref page_multiplatform_allocatingobjects
 @li @ref page_multiplatform_architecturedependency
 @li @ref page_multiplatform_conditionalcompilation
 @li @ref page_multiplatform_cpp
 @li @ref page_multiplatform_filehandling
+@li @ref page_multiplatform_reducingerr
+@li @ref page_multiplatform_gui
+@li @ref page_multiplatform_debug
 
 <hr>
 
@@ -35,7 +36,7 @@ The main include file is @c "wx/wx.h"; this includes the most commonly
 used modules of wxWidgets.
 
 To save on compilation time, include only those header files relevant to the
-source file. If you are using precompiled headers, you should include
+source file. If you are using @b precompiled headers, you should include
 the following section before any other includes:
 
 @verbatim
@@ -67,8 +68,33 @@ build environment up as necessary for the support.
 
 @section page_multiplatform_libraries Libraries
 
-Most ports of wxWidgets can create either a static library or a shared
-library. wxWidgets can also be built in multilib and monolithic variants.
+All ports of wxWidgets can create either a @b static library or a @b shared library.
+
+When a program is linked against a @e static library, the machine code from the object 
+files for any external functions used by the program is copied from the library into 
+the final executable.
+
+@e Shared libraries are handled with a more advanced form of linking, which makes the 
+executable file smaller. They use the extension @c ‘.so’ (Shared Object) under Linux 
+and @c '.dll' (Dynamic Link Library) under Windows.
+
+An executable file linked against a shared library contains only a small table of the 
+functions it requires, instead of the complete machine code from the object files for 
+the external functions. 
+Before the executable file starts running, the machine code for the external functions 
+is copied into memory from the shared library file on disk by the operating 
+system - a process referred to as @e dynamic linking.
+
+Dynamic linking makes executable files smaller and saves disk space, because one copy 
+of a library can be shared between multiple programs. 
+Most operating systems also provide a virtual memory mechanism which allows one copy 
+of a shared library in physical memory to be used by all running programs, saving 
+memory as well as disk space.
+
+Furthermore, shared libraries make it possible to update a library without recompiling 
+the programs which use it (provided the interface to the library does not change).  
+
+wxWidgets can also be built in @b multilib and @b monolithic variants.
 See the @ref page_libs for more information on these.
 
 
@@ -77,15 +103,19 @@ See the @ref page_libs for more information on these.
 
 When using project files and makefiles directly to build wxWidgets,
 options are configurable in the file
-@c "wx/XXX/setup.h" where XXX is the required platform (such as msw, motif, gtk, mac). Some
-settings are a matter of taste, some help with platform-specific problems, and
-others can be set to minimize the size of the library. Please see the setup.h file
+@c "wx/XXX/setup.h" where XXX is the required platform (such as @c msw, @c motif, 
+@c gtk, @c mac). 
+
+Some settings are a matter of taste, some help with platform-specific problems, and
+others can be set to minimize the size of the library. Please see the @c setup.h file
 and @c install.txt files for details on configuration.
 
-When using the 'configure' script to configure wxWidgets (on Unix and other platforms where
-configure is available), the corresponding setup.h files are generated automatically
-along with suitable makefiles. When using the RPM packages
-for installing wxWidgets on Linux, a correct setup.h is shipped in the package and
+When using the @c 'configure' script to configure wxWidgets (on Unix and other platforms
+where configure is available), the corresponding @c setup.h files are generated automatically
+along with suitable makefiles. 
+
+When using the RPM packages (or DEB or other forms of @e binaries) for installing 
+wxWidgets on Linux, a correct @c setup.h is shipped in the package and
 this must not be changed.
 
 
@@ -93,42 +123,42 @@ this must not be changed.
 @section page_multiplatform_makefiles Makefiles
 
 On Microsoft Windows, wxWidgets has a different set of makefiles for each
-compiler, because each compiler's 'make' tool is slightly different.
+compiler, because each compiler's @c 'make' tool is slightly different.
 Popular Windows compilers that we cater for, and the corresponding makefile
 extensions, include: Microsoft Visual C++ (.vc), Borland C++ (.bcc),
 OpenWatcom C++ (.wat) and MinGW/Cygwin (.gcc). Makefiles are provided
 for the wxWidgets library itself, samples, demos, and utilities.
 
-On Linux, Mac and OS/2, you use the 'configure' command to
-generate the necessary makefiles. You should also use this method when
-building with MinGW/Cygwin on Windows.
+On Linux, Mac and OS/2, you use the @c 'configure' command to generate the 
+necessary makefiles. You should also use this method when building with 
+MinGW/Cygwin on Windows.
 
-We also provide project files for some compilers, such as
-Microsoft VC++. However, we recommend using makefiles
-to build the wxWidgets library itself, because makefiles
-can be more powerful and less manual intervention is required.
+We also provide project files for some compilers, such as Microsoft VC++. 
+However, we recommend using makefiles to build the wxWidgets library itself, 
+because makefiles can be more powerful and less manual intervention is required.
 
-On Windows using a compiler other than MinGW/Cygwin, you would
-build the wxWidgets library from the build/msw directory
-which contains the relevant makefiles.
+On Windows using a compiler other than MinGW/Cygwin, you would build the wxWidgets 
+library from the @c build/msw directory which contains the relevant makefiles.
 
 On Windows using MinGW/Cygwin, and on Unix, MacOS X and OS/2, you invoke
 'configure' (found in the top-level of the wxWidgets source hierarchy),
-from within a suitable empty directory for containing makefiles, object files and
-libraries.
+from within a suitable empty directory for containing makefiles, object 
+files and libraries.
 
 For details on using makefiles, configure, and project files,
-please see docs/xxx/install.txt in your distribution, where
-xxx is the platform of interest, such as msw, gtk, x11, mac.
+please see @c docs/xxx/install.txt in your distribution, where
+@c xxx is the platform of interest, such as @c msw, @c gtk, @c x11, @c mac.
+
+All wxWidgets makefiles are generated using @link http://www.bakefile.org Bakefile @endlink.
+wxWidgets also provides (in the @c build/bakefiles/wxpresets) the
+<b>wxWidgets bakefile presets</b>: these files allow you to create bakefiles for
+your own wxWidgets-based applications very easily.
 
 
-
-@section page_multiplatform_windowsfiles Windows-specific files
+@section page_multiplatform_winresources Windows Resource files
 
 wxWidgets application compilation under MS Windows requires at least one
 extra file: a resource file.
-
-@subsection page_multiplatform_windowsfiles_resources Resource file
 
 The least that must be defined in the Windows resource file (extension RC)
 is the following statement:
@@ -307,5 +337,106 @@ which do the EOL conversions.
 
 See also the @ref group_funcmacro_file section of the reference
 manual for the description of miscellaneous file handling functions.
+
+
+@section page_multiplatform_reducingerr Reducing programming errors
+
+@subsection page_multiplatform_reducingerr_useassert Use ASSERT
+
+It is good practice to use ASSERT statements liberally, that check for conditions
+that should or should not hold, and print out appropriate error messages.
+
+These can be compiled out of a non-debugging version of wxWidgets
+and your application. Using ASSERT is an example of `defensive programming':
+it can alert you to problems later on.
+
+See ::wxASSERT for more info.
+
+@subsection page_multiplatform_reducingerr_usewxstring Use wxString in preference to character arrays
+
+Using wxString can be much safer and more convenient than using @c wxChar*.
+
+You can reduce the possibility of memory leaks substantially, and it is much more
+convenient to use the overloaded operators than functions such as @c strcmp.
+wxString won't add a significant overhead to your program; the overhead is compensated
+for by easier manipulation (which means less code).
+
+The same goes for other data types: use classes wherever possible.
+
+
+
+@section page_multiplatform_gui GUI design
+
+@subsection page_multiplatform_gui_usesizers Use sizers
+
+Don't use absolute panel item positioning if you can avoid it. Different GUIs have
+very differently sized panel items. Consider using the @ref overview_sizer instead.
+
+@subsection page_multiplatform_gui_useresources Use wxWidgets resource files
+
+Use @c XRC (wxWidgets resource files) where possible, because they can be easily changed
+independently of source code. See the @ref overview_xrc for more info.
+
+
+
+@section page_multiplatform_debug Debugging
+
+@subsection page_multiplatform_debug_positivethinking Positive thinking
+
+It is common to blow up the problem in one's imagination, so that it seems to threaten
+weeks, months or even years of work. The problem you face may seem insurmountable:
+but almost never is. Once you have been programming for some time, you will be able
+to remember similar incidents that threw you into the depths of despair. But
+remember, you always solved the problem, somehow!
+
+Perseverance is often the key, even though a seemingly trivial problem
+can take an apparently inordinate amount of time to solve. In the end,
+you will probably wonder why you worried so much. That's not to say it
+isn't painful at the time. Try not to worry -- there are many more important
+things in life.
+
+@subsection page_multiplatform_debug_simplifyproblem Simplify the problem
+
+Reduce the code exhibiting the problem to the smallest program possible
+that exhibits the problem. If it is not possible to reduce a large and
+complex program to a very small program, then try to ensure your code
+doesn't hide the problem (you may have attempted to minimize the problem
+in some way: but now you want to expose it).
+
+With luck, you can add a small amount of code that causes the program
+to go from functioning to non-functioning state. This should give a clue
+to the problem. In some cases though, such as memory leaks or wrong
+deallocation, this can still give totally spurious results!
+
+@subsection page_multiplatform_debug_usedebugger Use a debugger
+
+This sounds like facetious advice, but it is surprising how often people
+don't use a debugger. Often it is an overhead to install or learn how to
+use a debugger, but it really is essential for anything but the most
+trivial programs.
+
+@subsection page_multiplatform_debug_uselogging Use logging functions
+
+There is a variety of logging functions that you can use in your program:
+see @ref group_funcmacro_log.
+
+Using tracing statements may be more convenient than using the debugger
+in some circumstances (such as when your debugger doesn't support a lot
+of debugging code, or you wish to print a bunch of variables).
+
+@subsection page_multiplatform_debug_usedebuggingfacilities Use the wxWidgets debugging facilities
+
+You can use wxDebugContext to check for
+memory leaks and corrupt memory: in fact in debugging mode, wxWidgets will
+automatically check for memory leaks at the end of the program if wxWidgets is suitably
+configured. Depending on the operating system and compiler, more or less
+specific information about the problem will be logged.
+
+You should also use @ref group_funcmacro_debugging as part of a `defensive programming' strategy,
+scattering wxASSERTs liberally to test for problems in your code as early as possible.
+Forward thinking will save a surprising amount of time in the long run.
+
+See the @ref overview_debugging for further information.
+
 
 */

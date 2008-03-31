@@ -15,18 +15,21 @@
 
 @image html main_wxlogo.png
 
-@section manual_contents Contents
+@section manual_user User manual:
+
 @li @subpage page_copyright
 @li @subpage page_introduction
 @li @subpage page_multiplatform
 @li @subpage page_utils
 @li @subpage page_samples
-@li @subpage page_strategies
 @li @subpage page_libs
+@li @subpage page_topics
+@li @subpage page_port
+
+@section manual_reference Reference manual:
+
 @li @subpage page_constants
 @li @subpage group_class
 @li @subpage group_funcmacro
-@li @subpage page_topics
-@li @subpage page_port
 
 */
