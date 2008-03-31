@@ -214,3 +214,19 @@ void wxSelectionStore::OnItemDelete(unsigned item)
     }
 }
 
+void wxSelectionStore::SetItemCount(unsigned count)
+{
+    // forget about all items whose indices are now invalid if the size
+    // decreased
+    if ( count < m_count )
+    {
+        for ( size_t i = m_itemsSel.GetCount(); i > 0; i-- )
+        {
+            if ( m_itemsSel[i - 1] >= count )
+                m_itemsSel.RemoveAt(i - 1);
+        }
+    }
+
+    // remember the new number of items
+    m_count = count;
+}

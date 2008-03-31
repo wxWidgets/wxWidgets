@@ -96,7 +96,8 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_point.o \
 	$(OBJS)\test_gui_config.o \
 	$(OBJS)\test_gui_clientsize.o \
-	$(OBJS)\test_gui_textctrltest.o
+	$(OBJS)\test_gui_textctrltest.o \
+	$(OBJS)\test_gui_selstoretest.o
 PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -513,6 +514,9 @@ $(OBJS)\test_gui_clientsize.o: ./controls/clientsize.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_textctrltest.o: ./controls/textctrltest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_selstoretest.o: ./misc/selstoretest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\printfbench_dummy.o: ./dummy.cpp

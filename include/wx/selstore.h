@@ -43,7 +43,7 @@ public:
     wxSelectionStore() : m_itemsSel(wxUIntCmp) { Init(); }
 
     // set the total number of items we handle
-    void SetItemCount(unsigned count) { m_count = count; }
+    void SetItemCount(unsigned count);
 
     // special case of SetItemCount(0)
     void Clear() { m_itemsSel.Clear(); m_count = 0; m_defaultState = false; }
@@ -59,7 +59,7 @@ public:
     // returns true if the items selection really changed
     bool SelectItem(unsigned item, bool select = true);
 
-    // select the range of items
+    // select the range of items (inclusive)
     //
     // return true and fill the itemsChanged array with the indices of items
     // which have changed state if "few" of them did, otherwise return false
