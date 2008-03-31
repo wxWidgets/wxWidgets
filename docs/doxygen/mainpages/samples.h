@@ -18,14 +18,15 @@ make it easier to find the relevant one if a simple grep through all sources
 didn't help. They also provide some notes about using the samples and what
 features of wxWidgets are they supposed to test.
 
-There are currently more than 50 different samples as part of wxWidgets and
-this list is not complete. You should start your tour of wxWidgets with the
-minimal sample which is the wxWidgets version of
-"Hello, world!". It shows the basic structure of wxWidgets program and is the
-most commented sample of all - looking at its source code is recommended.
+There are currently more than 70 different samples as part of wxWidgets:
+the list in this page is not complete!
+You should start your tour of wxWidgets with the @ref page_samples_minimal
+which is the wxWidgets version of "Hello, world!".
+It shows the basic structure of wxWidgets program and is the most commented
+sample of all - looking at its source code is recommended.
 
-The next most useful samples are probably widgets
-and controls which show many of wxWidgets native and
+The next most useful samples are probably @ref page_samples_widgets and
+@ref page_samples_controls which show many of wxWidgets native and
 generic controls, such as buttons, listboxes, checkboxes, comboboxes etc.
 
 Other, more complicated controls, have their own samples. In this category you
@@ -42,9 +43,10 @@ name. Most classes contained in wxWidgets occur in at least one of the samples.
 
 @beginInvisibleTable
 <tr><td>
-@li @ref page_samples_minimal
+@li @ref page_samples_access
 @li @ref page_samples_animate
 @li @ref page_samples_artprovider
+@li @ref page_samples_aui
 @li @ref page_samples_calendar
 @li @ref page_samples_config
 @li @ref page_samples_controls
@@ -53,19 +55,21 @@ name. Most classes contained in wxWidgets occur in at least one of the samples.
 @li @ref page_samples_dialup
 @li @ref page_samples_dnd
 @li @ref page_samples_event
+</td><td>
 @li @ref page_samples_except
 @li @ref page_samples_exec
 @li @ref page_samples_font
 @li @ref page_samples_grid
 @li @ref page_samples_html
 @li @ref page_samples_image
-</td><td>
 @li @ref page_samples_internat
 @li @ref page_samples_layout
 @li @ref page_samples_listctrl
 @li @ref page_samples_mediaplayer
+@li @ref page_samples_minimal
 @li @ref page_samples_notebook
 @li @ref page_samples_render
+</td><td>
 @li @ref page_samples_scrollsub
 @li @ref page_samples_sockets
 @li @ref page_samples_sound
@@ -81,16 +85,69 @@ name. Most classes contained in wxWidgets occur in at least one of the samples.
 @endTable
 
 
+<!--
+
+TODO: write descriptions for the samples:
+
+aui
+caret
+collpane
+combo
+console
+dataview
+display
+docview
+docvwmdi
+dragimag
+drawing
+editlbox
+erase
+event
+except
+help
+htlbox
+ipc
+joytest
+keyboard
+mdi
+memcheck
+menu
+mfc
+mobile
+nativdlg
+oleauto
+opengl
+ownerdrw
+popup
+power
+printing
+regtest
+richtext
+sashtest
+scroll
+shaped
+splash
+splitter
+stc
+svg
+taskbar
+typetest
+validate
+vscroll
+xrc
+
+-->
+
+
+
+
 <hr>
 
 
+@section page_samples_access Accessibility sample
 
-@section page_samples_minimal Minimal sample
-
-The minimal sample is what most people will know under the term Hello World,
-i.e. a minimal program that doesn't demonstrate anything apart from what is
-needed to write a program that will display a "hello" dialog. This is usually
-a good starting point for learning how to use wxWidgets.
+The @c access sample shows how you can use the wxAccessible classes in a
+simple GUI program.
 
 
 @section page_samples_animate Animate sample
@@ -376,6 +433,14 @@ wxMediaCtrl and play various types of sound, video,
 and other files.
 
 It replaces the old dynamic sample.
+
+
+@section page_samples_minimal Minimal sample
+
+The minimal sample is what most people will know under the term Hello World,
+i.e. a minimal program that doesn't demonstrate anything apart from what is
+needed to write a program that will display a "hello" dialog. This is usually
+a good starting point for learning how to use wxWidgets.
 
 
 @section page_samples_notebook Notebook sample
