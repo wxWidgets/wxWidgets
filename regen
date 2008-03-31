@@ -12,6 +12,11 @@ if test "x$1" = "x"; then
     exit 1
 fi
 
+if [ ! -x ./config.status ]; then
+    echo "Must be run from the top level wxWidgets build directory" >&2
+    exit 1
+fi
+
 CONFIG_FILES=$*
 CONFIG_HEADERS=
 export CONFIG_FILES CONFIG_HEADERS
