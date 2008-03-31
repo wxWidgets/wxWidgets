@@ -473,7 +473,8 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
 // adding/removing tools
 // ----------------------------------------------------------------------------
 
-bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
+bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
+                             wxToolBarToolBase * WXUNUSED(tool))
 {
     // nothing special to do here - we really create the toolbar buttons in
     // Realize() later
