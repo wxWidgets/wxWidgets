@@ -29,6 +29,7 @@
 @section manual_reference Reference manual:
 
 @li @subpage page_constants
+@li @subpage page_translations
 @li @subpage group_class
 @li @subpage group_funcmacro
 
