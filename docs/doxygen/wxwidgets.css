@@ -508,3 +508,6 @@ DIV.navigation A SPAN {
 	font-weight: normal;
 }
 
+LI {
+ line-height: 130%;
+}
