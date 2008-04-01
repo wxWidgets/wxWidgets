@@ -60,6 +60,9 @@
 #elif defined(__GNUG__)||defined(__GNUWIN32__)||defined(__DJGPP__)|| \
       defined(__SGI_CC__)||defined(__SUNCC__)||defined(__XLC__)|| \
       defined(__HPUX__)||defined(__MWERKS__)
+#ifdef __SOLARIS__
+#include <ieeefp.h>
+#endif
     #define wxFinite(x) finite(x)
 #else
     #define wxFinite(x) ((x) == (x))
