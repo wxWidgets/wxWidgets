@@ -432,7 +432,6 @@ private:
     // it wasn't vetoed, i.e. if we should proceed
     bool SendListEvent(wxEventType type, const wxPoint& pos);
 
-    DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
     DECLARE_EVENT_TABLE()
 };
 
@@ -492,7 +491,7 @@ WX_DECLARE_LIST(wxListHeaderData, wxListHeaderDataList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListHeaderDataList)
 
-class wxListMainWindow : public wxScrolledWindow
+class wxListMainWindow : public wxScrolledCanvas
 {
 public:
     wxListMainWindow();
@@ -701,7 +700,7 @@ public:
     // override base class virtual to reset m_lineHeight when the font changes
     virtual bool SetFont(const wxFont& font)
     {
-        if ( !wxScrolledWindow::SetFont(font) )
+        if ( !wxScrolledCanvas::SetFont(font) )
             return false;
 
         m_lineHeight = 0;
@@ -849,7 +848,6 @@ private:
     wxListTextCtrlWrapper *m_textctrlWrapper;
 
 
-    DECLARE_DYNAMIC_CLASS(wxListMainWindow)
     DECLARE_EVENT_TABLE()
 
     friend class wxGenericListCtrl;
@@ -1686,8 +1684,6 @@ void wxListLineData::ReverseHighlight( void )
 //  wxListHeaderWindow
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListHeaderWindow,wxWindow)
-
 BEGIN_EVENT_TABLE(wxListHeaderWindow,wxWindow)
     EVT_PAINT         (wxListHeaderWindow::OnPaint)
     EVT_MOUSE_EVENTS  (wxListHeaderWindow::OnMouse)
@@ -2160,7 +2156,7 @@ void wxListTextCtrlWrapper::Finish( bool setfocus )
     wxPendingDelete.Append( this );
 
     if (setfocus)
-        m_owner->SetFocusIgnoringChildren();
+        m_owner->SetFocus();
 }
 
 bool wxListTextCtrlWrapper::AcceptChanges()
@@ -2237,9 +2233,7 @@ void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 //  wxListMainWindow
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxListMainWindow,wxScrolledWindow)
-
-BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
+BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledCanvas)
   EVT_PAINT          (wxListMainWindow::OnPaint)
   EVT_MOUSE_EVENTS   (wxListMainWindow::OnMouse)
   EVT_CHAR           (wxListMainWindow::OnChar)
@@ -2295,7 +2289,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
                                     const wxSize& size,
                                     long style,
                                     const wxString &name )
-                : wxScrolledWindow( parent, id, pos, size,
+                : wxScrolledCanvas( parent, id, pos, size,
                                     style | wxHSCROLL | wxVSCROLL, name )
 {
     Init();
@@ -2994,7 +2988,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 #endif // __WXMAC__
 
     if ( event.LeftDown() )
-        SetFocusIgnoringChildren();
+        SetFocus();
 
     event.SetEventObject( GetParent() );
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
@@ -4860,7 +4854,7 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
     // FIXME
 #if ( defined(__WXGTK__) || defined(__WXMAC__) ) && !defined(__WXUNIVERSAL__)
-    wxScrolledWindow::OnScroll(event);
+    wxScrolledCanvas::OnScroll(event);
 #else
     HandleOnScroll( event );
 #endif

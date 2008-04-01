@@ -264,12 +264,14 @@
        template <typename T> class Foo { ... };
        WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( Foo<int> )
 
-   (notice that currently we only need this for the wxBase library)
+   (notice that currently we only need this for wxBase and wxCore libraries)
  */
 #if defined(__VISUALC__) && (__VISUALC__ <= 1200)
     #ifdef WXMAKINGDLL_BASE
         #define WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE(decl) \
             template class WXDLLIMPEXP_BASE decl;
+        #define WXDLLIMPEXP_TEMPLATE_INSTANCE_CORE(decl) \
+            template class WXDLLIMPEXP_CORE decl;
     #else
         /*
            We need to disable this warning when using this macro, as
@@ -281,9 +283,12 @@
 
         #define WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE(decl) \
             extern template class WXDLLIMPEXP_BASE decl;
+        #define WXDLLIMPEXP_TEMPLATE_INSTANCE_CORE(decl) \
+            extern template class WXDLLIMPEXP_CORE decl;
     #endif
 #else /* not VC <= 6 */
     #define WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE(decl)
+    #define WXDLLIMPEXP_TEMPLATE_INSTANCE_CORE(decl)
 #endif /* VC6/others */
 
 #endif /* _WX_DLIMPEXP_H_ */

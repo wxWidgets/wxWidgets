@@ -438,6 +438,12 @@ void wxScrollHelper::DeleteEvtHandler()
     }
 }
 
+void wxScrollHelper::ResetDrawnFlag()
+{
+    wxCHECK_RET( m_handler, "invalid use of ResetDrawnFlag - no handler?" );
+    m_handler->ResetDrawnFlag();
+}
+
 void wxScrollHelper::DoSetTargetWindow(wxWindow *target)
 {
     m_targetWindow = target;
@@ -1398,52 +1404,12 @@ void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// wxScrolledWindow implementation
+// wxScrolled<T> and wxScrolledWindow implementation
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
-
-BEGIN_EVENT_TABLE(wxScrolledWindow, wxPanel)
-    EVT_PAINT(wxScrolledWindow::OnPaint)
-END_EVENT_TABLE()
-
-bool wxScrolledWindow::Create(wxWindow *parent,
-                              wxWindowID id,
-                              const wxPoint& pos,
-                              const wxSize& size,
-                              long style,
-                              const wxString& name)
-{
-    m_targetWindow = this;
-#ifdef __WXMAC__
-    MacSetClipChildren( true ) ;
-#endif
-
-    // by default, we're scrollable in both directions (but if one of the
-    // styles is specified explicitly, we shouldn't add the other one
-    // automatically)
-    if ( !(style & (wxHSCROLL | wxVSCROLL)) )
-        style |= wxHSCROLL | wxVSCROLL;
-
-    bool ok = wxPanel::Create(parent, id, pos, size, style, name);
-
-    return ok;
-}
-
-wxScrolledWindow::~wxScrolledWindow()
-{
-}
-
-void wxScrolledWindow::OnPaint(wxPaintEvent& event)
-{
-    // the user code didn't really draw the window if we got here, so set this
-    // flag to try to call OnDraw() later
-    m_handler->ResetDrawnFlag();
-
-    event.Skip();
-}
-
-wxSize wxScrolledWindow::DoGetBestSize() const
+wxSize wxScrolledT_Helper::FilterBestSize(const wxWindow *win,
+                                          const wxScrollHelperNative *helper,
+                                          const wxSize& origBest)
 {
     // NB: We don't do this in WX_FORWARD_TO_SCROLL_HELPER, because not
     //     all scrollable windows should behave like this, only those that
@@ -1451,15 +1417,15 @@ wxSize wxScrolledWindow::DoGetBestSize() const
     //     (i.e., wxScrolledWindow) and other some scrollable windows may
     //     have different DoGetBestSize() implementation (e.g. wxTreeCtrl).
 
-    wxSize best = wxPanel::DoGetBestSize();
+    wxSize best = origBest;
 
-    if ( GetAutoLayout() )
+    if ( win->GetAutoLayout() )
     {
         // Only use the content to set the window size in the direction
         // where there's no scrolling; otherwise we're going to get a huge
         // window in the direction in which scrolling is enabled
         int ppuX, ppuY;
-        GetScrollPixelsPerUnit(&ppuX, &ppuY);
+        helper->GetScrollPixelsPerUnit(&ppuX, &ppuY);
 
         // NB: This code used to use *current* size if min size wasn't
         //     specified, presumably to get some reasonable (i.e., larger than
@@ -1471,7 +1437,7 @@ wxSize wxScrolledWindow::DoGetBestSize() const
         //
         //     See also http://svn.wxwidgets.org/viewvc/wx?view=rev&revision=45864
 
-        wxSize minSize = GetMinSize();
+        wxSize minSize = win->GetMinSize();
 
         if ( ppuX > 0 )
             best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
@@ -1484,12 +1450,8 @@ wxSize wxScrolledWindow::DoGetBestSize() const
 }
 
 #ifdef __WXMSW__
-WXLRESULT wxScrolledWindow::MSWWindowProc(WXUINT nMsg,
-                                       WXWPARAM wParam,
-                                       WXLPARAM lParam)
+WXLRESULT wxScrolledT_Helper::FilterMSWWindowProc(WXLRESULT rc)
 {
-    WXLRESULT rc = wxPanel::MSWWindowProc(nMsg, wParam, lParam);
-
 #ifndef __WXWINCE__
     // we need to process arrows ourselves for scrolling
     if ( nMsg == WM_GETDLGCODE )
@@ -1497,8 +1459,10 @@ WXLRESULT wxScrolledWindow::MSWWindowProc(WXUINT nMsg,
         rc |= DLGC_WANTARROWS;
     }
 #endif
-
     return rc;
 }
-
 #endif // __WXMSW__
+
+// NB: skipping wxScrolled<T> in wxRTTI information because being a templte,
+//     it doesn't and can't implement wxRTTI support
+IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
