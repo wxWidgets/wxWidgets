@@ -271,7 +271,7 @@ struct WXDLLIMPEXP_CORE wxScrolledT_Helper
                                  const wxScrollHelperNative *helper,
                                  const wxSize& origBest);
 #ifdef __WXMSW__
-    static WXLRESULT FilterMSWWindowProc(WXLRESULT origResult);
+    static WXLRESULT FilterMSWWindowProc(WXUINT nMsg, WXLRESULT origResult);
 #endif
 };
 
@@ -325,7 +325,7 @@ public:
 #ifdef __WXMSW__
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     {
-        return FilterMSWWindowProc(T::MSWWindowProc(nMsg, wParam, lParam));
+        return FilterMSWWindowProc(nMsg, T::MSWWindowProc(nMsg, wParam, lParam));
     }
 #endif // __WXMSW__
 
