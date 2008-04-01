@@ -1014,7 +1014,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     if (pinfo.name.empty() || already_exists)
     {
         pinfo.name.Printf(wxT("%08lx%08x%08x%08lx"),
-             ((unsigned long)pinfo.window) & 0xffffffff,
+             wxPtrToUInt(pinfo.window) & 0xffffffff,
              (unsigned int)time(NULL),
 #ifdef __WXWINCE__
              (unsigned int)GetTickCount(),

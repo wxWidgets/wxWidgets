@@ -1154,7 +1154,7 @@ bool wxQTMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 //              | (1<< 4) /*mcFlagDontInvalidate*/ // if we take care of repainting ourselves
                       ;
 
-            m_lib.MCDoAction(m_pMC, 38/*mcActionSetFlags*/, (void*)mcFlags);
+            m_lib.MCDoAction(m_pMC, 38/*mcActionSetFlags*/, wxUIntToPtr(mcFlags));
 
             // intercept the wndproc of our control window
             wxSetWindowProc((HWND)m_ctrl->GetHWND(), wxQTMediaBackend::QTWndProc);
