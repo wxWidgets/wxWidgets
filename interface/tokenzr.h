@@ -61,7 +61,7 @@
 
     In this mode, the empty tokens in the
     middle of the string will be returned, i.e. @c "a::b:" will be tokenized in
-    three tokens 'a', '' and 'b'. Notice that all trailing delimiters are ignored
+    three tokens 'a', " and 'b'. Notice that all trailing delimiters are ignored
     in this mode, not just the last one, i.e. a string @c "a::b::" would
     still result in the same set of tokens.
 

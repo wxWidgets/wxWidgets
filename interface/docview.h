@@ -696,7 +696,7 @@ public:
     wxDocManager* GetDocumentManager() const;
 
     /**
-        Gets the frame associated with the view (if any). Note that this "frame'' is
+        Gets the frame associated with the view (if any). Note that this "frame" is
         not a wxFrame at all in the generic MDI implementation which uses the notebook
         pages instead of the frames and this is why this method returns a wxWindow and
         not a wxFrame.
@@ -787,7 +787,7 @@ public:
         Sets the frame associated with this view. The application should call this
         if possible, to tell the view about the frame.
         See GetFrame() for the explanation about the mismatch
-        between the "Frame'' in the method name and the type of its parameter.
+        between the "Frame" in the method name and the type of its parameter.
     */
     void SetFrame(wxWindow* frame);
 

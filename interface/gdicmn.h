@@ -270,9 +270,9 @@ public:
         rectangle thus change by 2*@a dx and 2*@e dy, respectively.) If one or
         both of @a dx and @a dy are negative, the opposite happens: the rectangle
         size decreases in the respective direction.
-        Inflating and deflating behaves "naturally''. Defined more precisely, that
+        Inflating and deflating behaves "naturally". Defined more precisely, that
         means:
-             "Real'' inflates (that is, @a dx and/or @a dy = 0) are not
+             "Real" inflates (that is, @a dx and/or @a dy = 0) are not
                 constrained. Thus inflating a rectangle can cause its upper left corner
                 to move into the negative numbers. (the versions prior to 2.5.4 forced
                 the top left coordinate to not fall below (0, 0), which implied a
@@ -475,7 +475,7 @@ public:
     @wxheader{gdicmn.h}
 
     wxWidgets maintains a database of standard RGB colours for a predefined
-    set of named colours (such as "BLACK'', "LIGHT GREY''). The
+    set of named colours (such as "BLACK", "LIGHT GREY"). The
     application may add to this set if desired by using
     wxColourDatabase::AddColour and may use it to look up
     colours by names using wxColourDatabase::Find or find the names

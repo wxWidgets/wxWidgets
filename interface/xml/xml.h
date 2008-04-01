@@ -382,7 +382,7 @@ public:
     }
     @endcode
 
-    @b Note: if you want to preserve the original formatting of the loaded file
+    @note if you want to preserve the original formatting of the loaded file
     including whitespaces
     and indentation, you need to turn off whitespace-only textnode removal and
     automatic indentation:

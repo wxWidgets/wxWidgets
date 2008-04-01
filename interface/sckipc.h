@@ -42,7 +42,7 @@ public:
         message and this member is called. The application should derive a
         member to intercept this message and return a connection object of
         either the standard wxTCPConnection type, or of a user-derived type. If the
-        topic is "STDIO'', the application may wish to refuse the connection.
+        topic is "STDIO", the application may wish to refuse the connection.
         Under Unix, when a server is created the OnAcceptConnection message is
         always sent for standard input and output.
     */

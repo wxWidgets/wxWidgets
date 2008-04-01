@@ -134,7 +134,7 @@ public:
     It provides more information than wxWindow's input stream
     (stream, filename, mime type, anchor).
 
-    @b Note: Any pointer returned by a method of wxFSFile is valid
+    @note Any pointer returned by a method of wxFSFile is valid
     only as long as the wxFSFile object exists. For example a call to GetStream()
     doesn't @e create the stream but only returns the pointer to it. In
     other words after 10 calls to GetStream() you will have obtained ten identical
@@ -279,7 +279,7 @@ public:
         Returns the anchor if present in the location.
         See @ref wxFSFile::getanchor wxFSFile for details.
         Example: GetAnchor("index.htm#chapter2") == "chapter2"
-        @b Note: the anchor is NOT part of the left location.
+        @note the anchor is NOT part of the left location.
     */
     wxString GetAnchor(const wxString& location) const;
 

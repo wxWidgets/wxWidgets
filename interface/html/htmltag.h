@@ -58,7 +58,7 @@ public:
 
     /**
         Returns tag's name. The name is always in uppercase and it doesn't contain
-        '' or '/' characters. (So the name of @c FONT SIZE=+2 tag is "FONT"
+        " or '/' characters. (So the name of @c FONT SIZE=+2 tag is "FONT"
         and name of @c /table is "TABLE")
     */
     wxString GetName() const;

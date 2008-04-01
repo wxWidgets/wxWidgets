@@ -18,7 +18,7 @@
     have a little better run-time performance. The role of wxWeakRefDynamic
     is to handle objects which derived type one does not know.
 
-    @b Note: wxWeakRefT selects an implementation based on the static type
+    @note wxWeakRefT selects an implementation based on the static type
     of T. If T does not have wxTrackable statically, it defaults to to a mixed-
     mode operation, where it uses @c dynamic_cast as the last measure (if
     available from the compiler and enabled when building wxWidgets).

@@ -86,7 +86,7 @@ public:
     ~wxRecursionGuard();
 
     /**
-        Returns @true if we're already inside the code block "protected'' by this
+        Returns @true if we're already inside the code block "protected" by this
         wxRecursionGuard (i.e. between this line and the end of current scope). Usually
         the function using wxRecursionGuard takes some specific actions in such case
         (may be simply returning) to prevent reentrant calls to itself.

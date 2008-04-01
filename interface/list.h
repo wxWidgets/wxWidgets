@@ -318,7 +318,7 @@ public:
     compatibility only and usage of this class is strongly deprecated.
 
     In the documentation below, the type @c T should be thought of as a
-    "template'' parameter: this is the type of data stored in the linked list or,
+    "template" parameter: this is the type of data stored in the linked list or,
     in other words, the first argument of WX_DECLARE_LIST macro. Also, wxNode is
     written as wxNodeT even though it isn't really a template class -- but it
     helps to think of it as if it were.

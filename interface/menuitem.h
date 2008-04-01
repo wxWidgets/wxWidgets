@@ -27,7 +27,7 @@ class wxMenuItem : public wxObject
 public:
     /**
         Constructs a wxMenuItem object.
-        Menu items can be standard, or "stock menu items'', or custom. For the
+        Menu items can be standard, or "stock menu items", or custom. For the
         standard menu items (such as commands to open a file, exit the program and so
         on, see @ref overview_stockitems "stock items" for the full list) it is enough
         to
@@ -50,7 +50,7 @@ public:
             Identifier for this menu item, or wxID_SEPARATOR to indicate a separator.
         @param text
             Text for the menu item, as shown on the menu. An accelerator
-            key can be specified using the ampersand '' character. In order to embed an
+            key can be specified using the ampersand " character. In order to embed an
             ampersand character in the menu item text, the ampersand must be doubled.
         @param helpString
             Optional help string that will be shown on the status bar.

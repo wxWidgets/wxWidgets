@@ -193,7 +193,7 @@ public:
 
     /**
         Returns the insertion point for the combobox's text field.
-        @b Note: Under wxMSW, this function always returns 0 if the combobox
+        @note Under wxMSW, this function always returns 0 if the combobox
         doesn't have the focus.
     */
     long GetInsertionPoint() const;

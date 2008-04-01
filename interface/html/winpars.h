@@ -126,7 +126,7 @@ public:
     /**
         Returns (average) char height in standard font. It is used as DC-independent
         metrics.
-        @b Note: This function doesn't return the @e actual height. If you want to
+        @note This function doesn't return the @e actual height. If you want to
         know the height of the current font, call @c GetDC - GetCharHeight().
     */
     int GetCharHeight() const;
@@ -134,7 +134,7 @@ public:
     /**
         Returns average char width in standard font. It is used as DC-independent
         metrics.
-        @b Note: This function doesn't return the @e actual width. If you want to
+        @note This function doesn't return the @e actual width. If you want to
         know the height of the current font, call @c GetDC - GetCharWidth()
     */
     int GetCharWidth() const;

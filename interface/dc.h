@@ -638,7 +638,7 @@ public:
         @a circleCenter are the relative coordinates of centre of the circle in
         the specified @e rect. If not specified, the cercle is placed at the
         centre of rect.
-        @b Note: Currently this function is very slow, don't use it for
+        @note Currently this function is very slow, don't use it for
         real-time drawing.
     */
     void GradientFillConcentric(const wxRect& rect,

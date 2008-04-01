@@ -16,7 +16,7 @@
 
     An example of mini frame can be seen in the @ref overview_sampledialogs
     "dialogs sample"
-    using the "Mini frame'' command of the "Generic dialogs'' submenu.
+    using the "Mini frame" command of the "Generic dialogs" submenu.
 
     @beginStyleTable
     @style{wxICONIZE}:

@@ -521,7 +521,7 @@ public:
         you may forget about calling @e Set(). When @e Get() is called and there
         is no current object, it will create one using @e Create() function. To
         disable this behaviour @e DontCreateOnDemand() is provided.
-        @b Note: You should use either @e Set() or @e Get() because wxWidgets
+        @note You should use either @e Set() or @e Get() because wxWidgets
         library itself would take advantage of it and could save various information
         in it. For example wxFontMapper or Unix version
         of wxFileDialog have the ability to use wxConfig class.

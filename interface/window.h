@@ -697,7 +697,7 @@ public:
         ignore under other platforms. Under Mac, it will change the size of the
         returned font. See SetWindowVariant()
         for more about this.
-        This static method is "overridden'' in many derived classes and so calling,
+        This static method is "overridden" in many derived classes and so calling,
         for example, wxButton::GetClassDefaultAttributes() will typically
         return the values appropriate for a button which will be normally different
         from those returned by, say, wxListCtrl::GetClassDefaultAttributes().
@@ -755,7 +755,7 @@ public:
         the call is automatically dispatched to the correct class (as usual with
         virtual functions) and you don't have to specify the class name explicitly.
         The other one is that in the future this function could return different
-        results, for example it might return a different font for an "Ok'' button
+        results, for example it might return a different font for an "Ok" button
         than for a generic button if the users GUI is configured to show such buttons
         in bold font. Of course, the down side is that it is impossible to call this
         function without actually having an object to apply it to whereas the static
@@ -1249,7 +1249,7 @@ public:
         This function is (or should be, in case of custom controls) called during
         window creation to intelligently set up the window visual attributes, that is
         the font and the foreground and background colours.
-        By "intelligently'' the following is meant: by default, all windows use their
+        By "intelligently" the following is meant: by default, all windows use their
         own @ref getclassdefaultattributes() default attributes. However
         if some of the parents attributes are explicitly (that is, using
         SetFont() and not

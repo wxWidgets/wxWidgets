@@ -185,7 +185,7 @@ public:
         Returns pointer to the first cell in the list.
         You can then use child's GetNext()
         method to obtain pointer to the next cell in list.
-        @b Note: This shouldn't be used by the end user. If you need some way of
+        @note This shouldn't be used by the end user. If you need some way of
         finding particular cell in the list, try Find() method
         instead.
     */
@@ -353,7 +353,7 @@ public:
 
     /**
         Returns the indentation. @a ind is one of the @b wxHTML_INDENT_* constants.
-        @b Note: You must call GetIndentUnits()
+        @note You must call GetIndentUnits()
         with same @a ind parameter in order to correctly interpret the returned integer
         value.
         It is NOT always in pixels!

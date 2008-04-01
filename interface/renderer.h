@@ -52,7 +52,7 @@ public:
     thus allowing you to only modify some of its methods -- without having to
     reimplement all of them.
 
-    Note that the "normal'', inheritance-based approach, doesn't work with the
+    Note that the "normal", inheritance-based approach, doesn't work with the
     renderers as it is impossible to derive from a class unknown at compile-time
     and the renderer is only chosen at run-time. So suppose that you want to only
     add something to the drawing of the tree control buttons but leave all the
@@ -63,7 +63,7 @@ public:
 
     Except for the constructor, it has exactly the same methods as
     wxRendererNative and their implementation is
-    trivial: they are simply forwarded to the real renderer. Note that the "real''
+    trivial: they are simply forwarded to the real renderer. Note that the "real"
     renderer may, in turn, be a wxDelegateRendererNative as well and that there may
     be arbitrarily many levels like this -- but at the end of the chain there must
     be a real renderer which does the drawing.
@@ -105,7 +105,7 @@ public:
     First, a brief introduction to wxRenderer and why it is needed.
 
     Usually wxWidgets uses the underlying low level GUI system to draw all the
-    controls - this is what we mean when we say that it is a "native'' framework.
+    controls - this is what we mean when we say that it is a "native" framework.
     However not all controls exist under all (or even any) platforms and in this
     case wxWidgets provides a default, generic, implementation of them written in
     wxWidgets itself.

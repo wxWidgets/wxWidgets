@@ -21,7 +21,7 @@
     deleted when the smart pointer goes out of scope. This class is different from
     the @c std::auto_ptr in so far as it doesn't provide copy constructor
     nor assignment operator. This limits what you can do with it but is much less
-    surprizing than the "destructive copy'' behaviour of the standard class.
+    surprizing than the "destructive copy" behaviour of the standard class.
 
     @library{wxbase}
     @category{FIXME}
@@ -139,7 +139,7 @@ public:
     @wxheader{ptr_scpd.h}
 
     This is a variation on the topic of wxScopedPtr. This
-    class is also a smart pointer but in addition it "ties'' the pointer value to
+    class is also a smart pointer but in addition it "ties" the pointer value to
     another variable. In other words, during the life time of this class the value
     of that variable is set to be the same as the value of the pointer itself and
     it is reset to its old value when the object is destroyed. This class is

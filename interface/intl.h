@@ -29,9 +29,9 @@
       # ....
 
       # use the functions
-      print gettext( ``Panic!'' );
+      print gettext( "Panic!" );
 
-      button = Wx::Button-new( window, -1, gettext( ``Label'' ) );
+      button = Wx::Button-new( window, -1, gettext( "Label" ) );
     @endcode
 
     If you need to translate a lot of strings, then adding gettext( ) around
@@ -46,7 +46,7 @@
       # ...
 
       # use the functions
-      print t( ``Panic!!'' );
+      print t( "Panic!!" );
 
       # ...
     @endcode

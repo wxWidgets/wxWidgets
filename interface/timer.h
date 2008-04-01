@@ -32,7 +32,7 @@
     after constructing it before it actually starts sending notifications. It can
     be stopped later with wxTimer::Stop.
 
-    @b Note: A timer can only be used from the main thread.
+    @note A timer can only be used from the main thread.
 
     @library{wxbase}
     @category{misc}

@@ -366,7 +366,7 @@ public:
         This member function is not normally called in application code.
         Instead, it can be implemented in a derived class to return
         default wxComboPopup, incase @c popup is @NULL.
-        @b Note: If you have implemented OnButtonClick to do
+        @note If you have implemented OnButtonClick to do
         something else than show the popup, then DoSetPopupControl
         must always return @NULL.
     */
@@ -447,7 +447,7 @@ public:
 
     /**
         Returns the insertion point for the combo control's text field.
-        @b Note: Under wxMSW, this function always returns 0 if the combo control
+        @note Under wxMSW, this function always returns 0 if the combo control
         doesn't have the focus.
     */
     long GetInsertionPoint() const;
@@ -522,7 +522,7 @@ public:
         Implement in a derived class to define what happens on
         dropdown button click.
         Default action is to show the popup.
-        @b Note: If you implement this to do something else than
+        @note If you implement this to do something else than
         show the popup, you must then also implement
         DoSetPopupControl() to always
         return @NULL.

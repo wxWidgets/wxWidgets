@@ -936,7 +936,7 @@ public:
         without leading dot. All three of them may be empty if the corresponding
         component is. The old contents of the strings pointed to by these parameters
         will be overwritten in any case (if the pointers are not @NULL).
-        Note that for a filename "foo.'' the extension is present, as indicated by the
+        Note that for a filename "foo." the extension is present, as indicated by the
         trailing dot, but empty. If you need to cope with such cases, you should use
         @a hasExt instead of relying on testing whether @a ext is empty or not.
     */

@@ -95,7 +95,7 @@ public:
     wxString GetExecutablePath() const;
 
     /**
-        @b Note: This function is only available under Unix.
+        @note This function is only available under Unix.
         Return the program installation prefix, e.g. @c /usr, @c /opt or
         @c /home/zeitlin.
         If the prefix had been previously by
@@ -196,7 +196,7 @@ public:
     wxString GetUserLocalDataDir() const;
 
     /**
-        @b Note: This function is only available under Unix.
+        @note This function is only available under Unix.
         Lets wxStandardPaths know about the real program installation prefix on a Unix
         system. By default, the value returned by
         GetInstallPrefix() is used.

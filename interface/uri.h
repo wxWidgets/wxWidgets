@@ -86,7 +86,7 @@ public:
     /**
         Obtains the fragment of this URI.
         The fragment of a URI is the last value of the URI,
-        and is the value after a '' character after the path
+        and is the value after a " character after the path
         of the URI.
         @c http://mysite.com/mypath#fragment
     */

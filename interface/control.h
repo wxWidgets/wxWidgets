@@ -10,7 +10,7 @@
     @class wxControl
     @wxheader{control.h}
 
-    This is the base class for a control or "widget''.
+    This is the base class for a control or "widget".
 
     A control is generally a small window which processes user input and/or
     displays one or more item of data.
