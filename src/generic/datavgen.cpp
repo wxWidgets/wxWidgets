@@ -3851,8 +3851,11 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size,
            long style, const wxValidator& validator )
 {
+    if ( (style & wxBORDER_MASK) == 0)
+        style |= wxBORDER_SUNKEN;
+    
     if (!wxControl::Create( parent, id, pos, size,
-                            style | wxScrolledWindowStyle|wxBORDER_SUNKEN, validator))
+                            style | wxScrolledWindowStyle, validator))
         return false;
 
     SetInitialSize(size);
