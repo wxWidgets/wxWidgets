@@ -18,7 +18,9 @@
 #ifdef __WATCOMC__
   #include <types.h>
   #include <sys/ioctl.h>
+  #include <sys/time.h>
   #include <sys/select.h>
+  #include <tcpustd.h>
 #else
   #include <sys/types.h>
 #endif
