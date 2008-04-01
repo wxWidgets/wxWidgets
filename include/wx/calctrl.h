@@ -228,6 +228,47 @@ public:
     virtual void ResetAttr(size_t WXUNUSED(day)) { }
 
 
+    // holidays support
+    //
+    // currently all functions in this section are implemented in the generic
+    // version of the control only and are simply ignored by native ones
+
+    // equivalent to changing wxCAL_SHOW_HOLIDAYS flag but should be called
+    // instead of just changing it
+    virtual void EnableHolidayDisplay(bool WXUNUSED(display) = true) { }
+
+    // set/get the colours to use for holidays (if they're enabled)
+    virtual void SetHolidayColours(const wxColour& WXUNUSED(colFg),
+                                   const wxColour& WXUNUSED(colBg)) { }
+
+    virtual const wxColour& GetHolidayColourFg() const { return wxNullColour; }
+    virtual const wxColour& GetHolidayColourBg() const { return wxNullColour; }
+
+    // mark the given day of the current month as being a holiday
+    virtual void SetHoliday(size_t WXUNUSED(day)) { }
+
+
+    // customizing the colours of the controls
+    //
+    // most of the methods in this section are only implemented by the native
+    // version of the control and do nothing in the native ones
+
+    // set/get the colours to use for the display of the week day names at the
+    // top of the controls
+    virtual void SetHeaderColours(const wxColour& WXUNUSED(colFg),
+                                  const wxColour& WXUNUSED(colBg)) { }
+
+    virtual const wxColour& GetHeaderColourFg() const { return wxNullColour; }
+    virtual const wxColour& GetHeaderColourBg() const { return wxNullColour; }
+
+    // set/get the colours used for the currently selected date
+    virtual void SetHighlightColours(const wxColour& WXUNUSED(colFg),
+                                     const wxColour& WXUNUSED(colBg)) { }
+
+    virtual const wxColour& GetHighlightColourFg() const { return wxNullColour; }
+    virtual const wxColour& GetHighlightColourBg() const { return wxNullColour; }
+
+
     // implementation only from now on
 
     // generate the given calendar event(s)

@@ -82,7 +82,7 @@ public:
     void EnableYearChange(bool enable = true);
 
     // corresponds to wxCAL_SHOW_HOLIDAYS bit, generic only
-    void EnableHolidayDisplay(bool display = true);
+    virtual void EnableHolidayDisplay(bool display = true);
 
 
     // customization
@@ -93,34 +93,34 @@ public:
     // all other functions in this section are for generic version only
 
     // header colours are used for painting the weekdays at the top
-    void SetHeaderColours(const wxColour& colFg, const wxColour& colBg)
+    virtual void SetHeaderColours(const wxColour& colFg, const wxColour& colBg)
     {
         m_colHeaderFg = colFg;
         m_colHeaderBg = colBg;
     }
 
-    const wxColour& GetHeaderColourFg() const { return m_colHeaderFg; }
-    const wxColour& GetHeaderColourBg() const { return m_colHeaderBg; }
+    virtual const wxColour& GetHeaderColourFg() const { return m_colHeaderFg; }
+    virtual const wxColour& GetHeaderColourBg() const { return m_colHeaderBg; }
 
     // highlight colour is used for the currently selected date
-    void SetHighlightColours(const wxColour& colFg, const wxColour& colBg)
+    virtual void SetHighlightColours(const wxColour& colFg, const wxColour& colBg)
     {
         m_colHighlightFg = colFg;
         m_colHighlightBg = colBg;
     }
 
-    const wxColour& GetHighlightColourFg() const { return m_colHighlightFg; }
-    const wxColour& GetHighlightColourBg() const { return m_colHighlightBg; }
+    virtual const wxColour& GetHighlightColourFg() const { return m_colHighlightFg; }
+    virtual const wxColour& GetHighlightColourBg() const { return m_colHighlightBg; }
 
     // holiday colour is used for the holidays (if style & wxCAL_SHOW_HOLIDAYS)
-    void SetHolidayColours(const wxColour& colFg, const wxColour& colBg)
+    virtual void SetHolidayColours(const wxColour& colFg, const wxColour& colBg)
     {
         m_colHolidayFg = colFg;
         m_colHolidayBg = colBg;
     }
 
-    const wxColour& GetHolidayColourFg() const { return m_colHolidayFg; }
-    const wxColour& GetHolidayColourBg() const { return m_colHolidayBg; }
+    virtual const wxColour& GetHolidayColourFg() const { return m_colHolidayFg; }
+    virtual const wxColour& GetHolidayColourBg() const { return m_colHolidayBg; }
 
     virtual wxCalendarDateAttr *GetAttr(size_t day) const
     {
@@ -139,7 +139,7 @@ public:
 
     virtual void ResetAttr(size_t day) { SetAttr(day, NULL); }
 
-    void SetHoliday(size_t day);
+    virtual void SetHoliday(size_t day);
 
     virtual wxCalendarHitTestResult HitTest(const wxPoint& pos,
                                             wxDateTime *date = NULL,

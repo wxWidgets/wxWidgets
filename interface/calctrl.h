@@ -308,13 +308,18 @@ public:
     /**
         Gets the background colour of the header part of the calendar window.
 
+        This method is currently only implemented in generic wxCalendarCtrl and
+        always returns @c wxNullColour in the native versions.
+
         @see SetHeaderColours()
     */
     const wxColour GetHeaderColourBg() const;
 
     /**
         Gets the foreground colour of the header part of the calendar window.
-        Only in generic wxCalendarCtrl.
+
+        This method is currently only implemented in generic wxCalendarCtrl and
+        always returns @c wxNullColour in the native versions.
 
         @see SetHeaderColours()
     */
@@ -323,6 +328,9 @@ public:
     /**
         Gets the background highlight colour. Only in generic wxCalendarCtrl.
 
+        This method is currently only implemented in generic wxCalendarCtrl and
+        always returns @c wxNullColour in the native versions.
+
         @see SetHighlightColours()
     */
     const wxColour GetHighlightColourBg() const;
@@ -330,13 +338,18 @@ public:
     /**
         Gets the foreground highlight colour. Only in generic wxCalendarCtrl.
 
+        This method is currently only implemented in generic wxCalendarCtrl and
+        always returns @c wxNullColour in the native versions.
+
         @see SetHighlightColours()
     */
     const wxColour GetHighlightColourFg() const;
 
     /**
         Return the background colour currently used for holiday highlighting.
-        Only in generic wxCalendarCtrl.
+
+        Only useful with generic wxCalendarCtrl as native versions currently
+        don't support holidays display at all and always return @c wxNullColour.
 
         @see SetHolidayColours()
     */
@@ -344,7 +357,9 @@ public:
 
     /**
         Return the foreground colour currently used for holiday highlighting.
-        Only in generic wxCalendarCtrl.
+
+        Only useful with generic wxCalendarCtrl as native versions currently
+        don't support holidays display at all and always return @c wxNullColour.
 
         @see SetHolidayColours()
     */
@@ -381,27 +396,38 @@ public:
 
     /**
         Set the colours used for painting the weekdays at the top of the control.
-        Only in generic wxCalendarCtrl.
+
+        This method is currently only implemented in generic wxCalendarCtrl and
+        does nothing in the native versions.
     */
     void SetHeaderColours(const wxColour& colFg,
                           const wxColour& colBg);
 
     /**
         Set the colours to be used for highlighting the currently selected date.
-        Only in generic wxCalendarCtrl.
+
+        This method is currently only implemented in generic wxCalendarCtrl and
+        does nothing in the native versions.
     */
     void SetHighlightColours(const wxColour& colFg,
                              const wxColour& colBg);
 
     /**
         Marks the specified day as being a holiday in the current month.
+
+        This method is only implemented in the generic version of the control
+        and does nothing in the native ones.
     */
     void SetHoliday(size_t day);
 
     /**
-        Sets the colours to be used for the holidays highlighting (only used if the
-        window style includes @c wxCAL_SHOW_HOLIDAYS flag).
-        Only in generic wxCalendarCtrl.
+        Sets the colours to be used for the holidays highlighting.
+        
+        This method is only implemented in the generic version of the control
+        and does nothing in the native ones. It should also only be called if
+        the window style includes @c wxCAL_SHOW_HOLIDAYS flag or
+        EnableHolidayDisplay() had been called.
+
     */
     void SetHolidayColours(const wxColour& colFg,
                            const wxColour& colBg);

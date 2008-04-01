@@ -449,13 +449,7 @@ void MyFrame::OnCalMonday(wxCommandEvent& event)
 
 void MyFrame::OnCalHolidays(wxCommandEvent& event)
 {
-    wxCalendarCtrlBase * cal = m_panel->GetCal();
-#ifdef wxHAS_NATIVE_CALENDARCTRL
-    wxStaticCast(cal, wxGenericCalendarCtrl)
-#else
-    cal
-#endif
-    ->EnableHolidayDisplay(event.IsChecked());
+    m_panel->GetCal()->EnableHolidayDisplay(event.IsChecked());
 }
 
 void MyFrame::OnCalSpecial(wxCommandEvent& event)
