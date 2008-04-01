@@ -12,13 +12,32 @@
 
     This class represents the file chooser dialog.
 
+    It pops up a file selector box (native for Windows and GTK2.4+).
+
+    The path and filename are distinct elements of a full file pathname.
+    If path is "", the current directory will be used. If filename is "", no default
+    filename will be supplied. The wildcard determines what files are displayed in the
+    file selector, and file extension supplies a type extension for the required filename.
+
+    @remarks
+    All implementations of the wxFileDialog provide a wildcard filter. Typing a filename
+    containing wildcards (*, ?) in the filename text item, and clicking on Ok, will
+    result in only those files matching the pattern being displayed.
+    The wildcard may be a specification for multiple types of file with a description
+    for each, such as:
+         "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png"
+    It must be noted that wildcard support in the native Motif file dialog is quite
+    limited: only one alternative is supported, and it is displayed without the
+    descriptive test; "BMP files (*.bmp)|*.bmp" is displayed as "*.bmp", and both
+    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif" and "Image files|*.bmp;*.gif"
+    are errors.
+
     @beginStyleTable
     @style{wxFD_DEFAULT_STYLE}:
            Equivalent to wxFD_OPEN.
     @style{wxFD_OPEN}:
            This is an open dialog; usually this means that the default
-           button's label of the dialog is "Open". Cannot be combined with
-           wxFD_SAVE.
+           button's label of the dialog is "Open". Cannot be combined with wxFD_SAVE.
     @style{wxFD_SAVE}:
            This is a save dialog; usually this means that the default button's
            label of the dialog is "Save". Cannot be combined with wxFD_OPEN.
@@ -26,8 +45,7 @@
            For save dialog only: prompt for a confirmation if a file will be
            overwritten.
     @style{wxFD_FILE_MUST_EXIST}:
-           For open dialog only: the user may only select files that actually
-           exist.
+           For open dialog only: the user may only select files that actually exist.
     @style{wxFD_MULTIPLE}:
            For open dialog only: allows selecting multiple files.
     @style{wxFD_CHANGE_DIR}:
@@ -41,8 +59,7 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @see @ref overview_wxfiledialogoverview "wxFileDialog overview",
-    wxFileSelector()
+    @see @ref overview_wxfiledialog, ::wxFileSelector()
 */
 class wxFileDialog : public wxDialog
 {
@@ -59,8 +76,7 @@ public:
         @param defaultFile
             The default filename, or the empty string.
         @param wildcard
-            A wildcard, such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files
-        (*.gif)|*.gif".
+            A wildcard, such as "*.*" or "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
             Note that the native Motif dialog has some limitations with respect to
             wildcards; see the Remarks section above.
         @param style
@@ -93,9 +109,7 @@ public:
     wxString GetDirectory() const;
 
     /**
-        If functions
-        SetExtraControlCreator()
-        and ShowModal() were called,
+        If functions SetExtraControlCreator() and ShowModal() were called,
         returns the extra window. Otherwise returns @NULL.
     */
     wxWindow* GetExtraControl() const;
@@ -106,9 +120,11 @@ public:
     wxString GetFilename() const;
 
     /**
-        Fills the array @a filenames with the names of the files chosen. This
-        function should only be used with the dialogs which have @c wxFD_MULTIPLE style,
+        Fills the array @a filenames with the names of the files chosen.
+
+        This function should only be used with the dialogs which have @c wxFD_MULTIPLE style,
         use GetFilename() for the others.
+
         Note that under Windows, if the user selects shortcuts, the filenames
         include paths, since the application cannot determine the full path
         of each referenced file by appending the directory containing the shortcuts
@@ -119,8 +135,10 @@ public:
     /**
         Returns the index into the list of filters supplied, optionally, in the
         wildcard parameter.
+
         Before the dialog is shown, this is the index which will be used when the
         dialog is first displayed.
+
         After the dialog is shown, this is the index selected by the user.
     */
     int GetFilterIndex() const;
@@ -136,8 +154,9 @@ public:
     wxString GetPath() const;
 
     /**
-        Fills the array @a paths with the full paths of the files chosen. This
-        function should only be used with the dialogs which have @c wxFD_MULTIPLE style,
+        Fills the array @a paths with the full paths of the files chosen.
+
+        This function should only be used with the dialogs which have @c wxFD_MULTIPLE style,
         use GetPath() for the others.
     */
     void GetPaths(wxArrayString& paths) const;
@@ -155,10 +174,12 @@ public:
     /**
         Customize file dialog by adding extra window, which is typically placed
         below the list of files and above the buttons.
-        SetExtraControlCreator can be called only once, before calling
-        ShowModal().
+
+        SetExtraControlCreator() can be called only once, before calling ShowModal().
+
         The @c creator function should take pointer to parent window (file dialog)
         and should return a window allocated with operator new.
+
         Supported platforms: wxGTK, wxUniv.
     */
     bool SetExtraControlCreator(t_extraControlCreator creator);
@@ -186,7 +207,8 @@ public:
 
     /**
         Sets the wildcard, which can contain multiple file types, for example:
-        "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+        "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".
+
         Note that the native Motif dialog has some limitations with respect to
         wildcards; see the Remarks section above.
     */

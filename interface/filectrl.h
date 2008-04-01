@@ -10,9 +10,10 @@
     @class wxFileCtrl
     @wxheader{filectrl.h}
 
-    This control allows the user to select a file. two implemetations exist, one
-    for Gtk and another generic one for anything other than Gtk.
-    It is only available if @c wxUSE_FILECTRL is set to 1.
+    This control allows the user to select a file.
+
+    Two implemetations exist, one for Gtk and another generic one for anything
+    other than Gtk. It is only available if @c wxUSE_FILECTRL is set to 1.
 
     @beginStyleTable
     @style{wxFC_DEFAULT_STYLE}:
@@ -30,16 +31,31 @@
            Hides the "Show Hidden Files" checkbox (Generic only)
     @endStyleTable
 
+
+    @beginEventTable{wxFileCtrlEvent}
+    @event{EVT_FILECTRL_FILEACTIVATED(id, func)}:
+        The user activated a file(by double-clicking or pressing Enter)
+    @event{EVT_FILECTRL_SELECTIONCHANGED(id, func)}:
+        The user changed the current selection(by selecting or deselecting a file)
+    @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}:
+        The current folder of the file control has been changed
+    @endEventTable
+
+    @nativeimpl{gtk}
+
     @library{wxbase}
-    @category{FIXME}
+    @category{miscwnd}
 
     @see wxGenericDirCtrl
 */
 class wxFileCtrl : public wxWindow
 {
 public:
-    //@{
+    wxFileCtrl();
+
     /**
+        Constructs the window.
+
         @param parent
             Parent window, must not be non-@NULL.
         @param id
@@ -65,7 +81,7 @@ public:
         @returns @true if the control was successfully created or @false if
                  creation failed.
     */
-    wxFileCtrl();
+
     wxFileCtrl(wxWindow* parent, wxWindowID id,
                const wxString& defaultDirectory = wxEmptyString,
                const wxString& defaultFilename = wxEmptyString,
@@ -74,7 +90,6 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                const wxString& name = "filectrl");
-    //@}
 
     /**
         Create function for two-step construction. See wxFileCtrl() for details.
@@ -89,23 +104,22 @@ public:
                 const wxString& name = "filectrl");
 
     /**
-        Returns the current directory of the file control (i.e. the directory shown by
-        it).
+        Returns the current directory of the file control (i.e. the directory shown by it).
     */
     wxString GetDirectory() const;
 
     /**
         Returns the currently selected filename.
-        For the controls having the @c wxFC_MULTIPLE style, use GetFilenames()
-        instead
+
+        For the controls having the @c wxFC_MULTIPLE style, use GetFilenames() instead.
     */
     wxString GetFilename() const;
 
     /**
-        Fills the array @a filenames with the filenames only of selected items. This
-        function should only be used with the controls having the @c wxFC_MULTIPLE
-        style,
-        use GetFilename() for the others.
+        Fills the array @a filenames with the filenames only of selected items.
+
+        This function should only be used with the controls having the @c wxFC_MULTIPLE
+        style, use GetFilename() for the others.
 
         @remarks filenames is emptied first.
     */
@@ -118,14 +132,14 @@ public:
 
     /**
         Returns the full path (directory and filename) of the currently selected file.
-        For the controls having the @c wxFC_MULTIPLE style, use GetPaths()
-        instead
+        For the controls having the @c wxFC_MULTIPLE style, use GetPaths() instead.
     */
     wxString GetPath() const;
 
     /**
-        Fills the array @a paths with the full paths of the files chosen. This
-        function should be used with the controls having the @c wxFC_MULTIPLE style,
+        Fills the array @a paths with the full paths of the files chosen.
+
+        This function should be used with the controls having the @c wxFC_MULTIPLE style,
         use GetPath() otherwise.
 
         @remarks paths is emptied first.
@@ -177,8 +191,17 @@ public:
     A file control event holds information about events associated with
     wxFileCtrl objects.
 
+    @beginEventTable{wxFileCtrlEvent}
+    @event{EVT_FILECTRL_FILEACTIVATED(id, func)}:
+        The user activated a file(by double-clicking or pressing Enter)
+    @event{EVT_FILECTRL_SELECTIONCHANGED(id, func)}:
+        The user changed the current selection(by selecting or deselecting a file)
+    @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}:
+        The current folder of the file control has been changed
+    @endEventTable
+
     @library{wxbase}
-    @category{FIXME}
+    @category{events}
 */
 class wxFileCtrlEvent : public wxCommandEvent
 {
@@ -190,18 +213,20 @@ public:
 
     /**
         Returns the current directory.
+
         In case of a @b EVT_FILECTRL_FOLDERCHANGED, this method returns the new
         directory.
     */
     wxString GetDirectory() const;
 
     /**
-        Returns the file selected(assuming it is only one file).
+        Returns the file selected (assuming it is only one file).
     */
     wxString GetFile() const;
 
     /**
         Returns the files selected.
+
         In case of a @b EVT_FILECTRL_SELECTIONCHANGED, this method returns the
         files selected after the event.
     */
@@ -210,6 +235,12 @@ public:
     /**
         Sets the files changed by this event.
     */
-    wxFileCtrlEvent::SetFiles(const wxArrayString files);
+    void SetFiles(const wxArrayString files);
+
+
+    /**
+        Sets the directory of this event.
+    */
+    void SetDirectory( const wxString &directory );
 };
 

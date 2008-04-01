@@ -25,70 +25,70 @@
 class wxPathList : public wxArrayString
 {
 public:
-    //@{
+    wxPathList();
+
     /**
         Constructs the object calling the Add() function.
     */
-    wxPathList();
     wxPathList(const wxArrayString& arr);
-    //@}
 
-    //@{
     /**
-        The first form adds the given directory to the path list, if the path is not
-        already in the list.
+        Adds the given directory to the path list, if the @a path is not already in the list.
         If the path cannot be normalized for some reason, it returns @false.
-        The second form just calls the first form on all elements of the given array.
-        The @a path is always considered a directory but no existence checks will be
-        done on it
-        (because if it doesn't exist, it could be created later and thus result a valid
-        path when
-        FindValidPath() is called).
-        @b Note: if the given path is relative, it won't be made absolute before adding
-        it
-        (this is why FindValidPath() may return relative paths).
+
+        The @a path is always considered to be a directory but no existence checks will be
+        done on it (because if it doesn't exist, it could be created later and thus result a
+        valid path when FindValidPath() is called).
+
+        @note if the given path is relative, it won't be made absolute before adding it
+              (this is why FindValidPath() may return relative paths).
     */
     bool Add(const wxString& path);
+
+    /**
+        Adds all elements of the given array as paths.
+    */
     void Add(const wxArrayString& arr);
-    //@}
 
     /**
         Finds the value of the given environment variable, and adds all paths
-        to the path list. Useful for finding files in the @c PATH variable, for
-        example.
+        to the path list.
+
+        Useful for finding files in the @c PATH variable, for example.
     */
     void AddEnvList(const wxString& env_variable);
 
     /**
-        Given a full filename (with path), calls Add() with the path
-        of the file.
+        Given a full filename (with path), calls Add() with the path of the file.
     */
     bool EnsureFileAccessible(const wxString& filename);
 
     /**
-        Like FindValidPath() but this function always
-        returns an absolute path (eventually prepending the current working directory
-        to the value returned wxPathList::FindValidPath) or an
-        empty string.
+        Like FindValidPath() but this function always returns an absolute path
+        (eventually prepending the current working directory to the value returned
+        wxPathList::FindValidPath()) or an empty string.
     */
     wxString FindAbsoluteValidPath(const wxString& file) const;
 
     /**
         Searches the given file in all paths stored in this class.
+
         The first path which concatenated to the given string points to an existing
         file (see wxFileExists()) is returned.
-        If the file wasn't found in any of the stored paths, an empty string is
-        returned.
+
+        If the file wasn't found in any of the stored paths, an empty string is returned.
+
         The given string must be a file name, eventually with a path prefix (if the path
         prefix is absolute, only its name will be searched); i.e. it must not end with
-        a directory separator (see wxFileName::GetPathSeparator)
-        otherwise an assertion will fail.
+        a directory separator (see wxFileName::GetPathSeparator) otherwise an assertion
+        will fail.
+
         The returned path may be relative to the current working directory.
+
         Note in fact that wxPathList can be used to store both relative and absolute
-        paths so that
-        if you Added() relative paths, then the current working directory
-        (see wxGetCwd() and wxSetWorkingDirectory())
-        may affect the value returned by this function!
+        paths so that if you added relative paths, then the current working directory
+        (see wxGetCwd() and wxSetWorkingDirectory()) may affect the value returned
+        by this function!
     */
     wxString FindValidPath(const wxString& file) const;
 };
