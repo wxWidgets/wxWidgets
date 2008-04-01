@@ -871,16 +871,22 @@ void wxGCDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *heig
                               wxCoord *descent, wxCoord *externalLeading ,
                               wxFont *theFont ) const
 {
-    wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoGetTextExtent - invalid DC") );
+    bool isMeasuringContext = false;
+    wxGraphicsContext* context = m_graphicContext;
+    if (!context)
+    {
+        context = wxGraphicsRenderer::GetDefaultRenderer()->CreateMeasuringContext();
+        isMeasuringContext = true;
+    }
 
     if ( theFont )
     {
-        m_graphicContext->SetFont( *theFont, m_textForegroundColour );
+        context->SetFont( *theFont, m_textForegroundColour );
     }
 
     wxDouble h , d , e , w;
 
-    m_graphicContext->GetTextExtent( str, &w, &h, &d, &e );
+    context->GetTextExtent( str, &w, &h, &d, &e );
 
     if ( height )
         *height = (wxCoord)(h+0.5);
@@ -891,15 +897,26 @@ void wxGCDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *heig
     if ( width )
         *width = (wxCoord)(w+0.5);
 
-    if ( theFont )
+    if ( !isMeasuringContext && theFont )
     {
-        m_graphicContext->SetFont( m_font, m_textForegroundColour );
+        context->SetFont( m_font, m_textForegroundColour );
     }
+    
+    if (isMeasuringContext)
+        delete context;
 }
 
 bool wxGCDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
-    wxCHECK_MSG( Ok(), false, wxT("wxGCDC(cg)::DoGetPartialTextExtents - invalid DC") );
+
+    bool isMeasuringContext = false;
+    wxGraphicsContext* context = m_graphicContext;
+    if (!context)
+    {
+        context = wxGraphicsRenderer::GetDefaultRenderer()->CreateMeasuringContext();
+        isMeasuringContext = true;
+    }
+
     widths.Clear();
     widths.Add(0,text.Length());
     if ( text.IsEmpty() )
@@ -907,9 +924,12 @@ bool wxGCDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) c
 
     wxArrayDouble widthsD;
 
-    m_graphicContext->GetPartialTextExtents( text, widthsD );
+    context->GetPartialTextExtents( text, widthsD );
     for ( size_t i = 0; i < widths.GetCount(); ++i )
         widths[i] = (wxCoord)(widthsD[i] + 0.5);
+
+    if (isMeasuringContext)
+        delete context;
 
     return true;
 }
