@@ -509,5 +509,10 @@ DIV.navigation A SPAN {
 }
 
 LI {
- line-height: 130%;
+	line-height: 115%;
 }
+
+DIV.tags LI {
+	line-height: 100%;
+}
+
