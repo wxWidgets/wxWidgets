@@ -8,7 +8,7 @@
 
 /**
 
-@page page_samples Samples supplied with wxWidgets
+@page page_samples Included Samples
 
 Probably the best way to learn wxWidgets is by reading the source of some 70+
 samples provided with it. Many aspects of wxWidgets programming can be learnt
@@ -665,3 +665,4 @@ features supported:
     wxWizardPage)
 
 */
+

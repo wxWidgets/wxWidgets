@@ -9,7 +9,7 @@
 
 /**
 
-@page page_port Platform details
+@page page_port Platform Details
 
 wxWidgets defines a common API across platforms, but uses the native graphical
 user interface (GUI) on each platform, so your program will take on the native

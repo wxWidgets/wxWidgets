@@ -770,20 +770,6 @@ public:
 #define wxConstCast( ptr, classname )
 
 /**
-    This is defined in debug mode to be call the redefined new operator
-    with filename and line number arguments. The definition is:
-
-    @code
-    #define WXDEBUG_NEW new(__FILE__,__LINE__)
-    @endcode
-
-    In non-debug mode, this is defined as the normal new operator.
-
-    @header{wx/object.h}
-*/
-#define WXDEBUG_NEW( arg )
-
-/**
     This macro returns the pointer @e ptr cast to the type @e classname * if
     the pointer is of this type (the check is done during the run-time) or
     @NULL otherwise. Usage of this macro is preferred over obsoleted
@@ -843,6 +829,25 @@ public:
     @header{wx/object.h}
 */
 wxObject *wxCreateDynamicObject(const wxString& className);
+
+//@}
+
+/** @ingroup group_funcmacro_debug */
+//@{
+
+/**
+    This is defined in debug mode to be call the redefined new operator
+    with filename and line number arguments. The definition is:
+
+    @code
+    #define WXDEBUG_NEW new(__FILE__,__LINE__)
+    @endcode
+
+    In non-debug mode, this is defined as the normal new operator.
+
+    @header{wx/object.h}
+*/
+#define WXDEBUG_NEW( arg )
 
 //@}
 

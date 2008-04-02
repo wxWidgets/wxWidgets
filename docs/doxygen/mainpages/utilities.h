@@ -8,7 +8,7 @@
 
 /**
 
-@page page_utils Utilities supplied with wxWidgets
+@page page_utils Included Utilities
 
 In addition to the wxWidgets libraries (see @ref page_libs), some utilities
 are available to the users in the @c utils hierarchy (even if some of them are
@@ -82,5 +82,5 @@ See @ref overview_xrc for more info.
 
 You can find it under @c utils/wxrc.
 
-
 */
+

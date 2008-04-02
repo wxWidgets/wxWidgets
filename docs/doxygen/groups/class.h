@@ -8,9 +8,10 @@
 
 /**
 
-@defgroup group_class Classes by Category
+@defgroup group_class Full Class List by Category
 
-This group defines all class groups.
+This group contains all full class list groups. The @ref page_class_cat
+provides a quick summary of these groups on one page.
 
 */
 

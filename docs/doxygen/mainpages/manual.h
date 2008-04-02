@@ -15,7 +15,7 @@
 
 @image html main_wxlogo.png
 
-@section manual_user User manual:
+@section manual_user User Manual:
 
 @li @subpage page_copyright
 @li @subpage page_introduction
@@ -23,10 +23,11 @@
 @li @subpage page_utils
 @li @subpage page_samples
 @li @subpage page_libs
+@li @subpage page_class_cat
 @li @subpage page_topics
 @li @subpage page_port
 
-@section manual_reference Reference manual:
+@section manual_reference Reference Manual:
 
 @li @subpage page_constants
 @li @subpage page_translations
