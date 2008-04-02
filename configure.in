@@ -4027,7 +4027,7 @@ dnl
 dnl so we first check if the function is in the library
 dnl
 dnl FIXME: replace this mess with WX_CHECK_FUNCS()
-AC_CHECK_FUNCS(snprintf vsnprintf)
+AC_CHECK_FUNCS(snprintf vsnprintf vsscanf)
 
 if test "$ac_cv_func_vsnprintf" = "yes"; then
     dnl yes it is -- now check if it is in the headers
@@ -4161,6 +4161,37 @@ define HAVE_UNIX98_PRINTF as 1 in setup.h if it is available.])
         if test "$wx_cv_func_snprintf_pos_params" = "yes"; then
             AC_DEFINE(HAVE_UNIX98_PRINTF)
         fi
+    fi
+fi
+
+dnl the same as above but for vsscanf() now: it's not present in at least
+dnl Solaris 9 headers for gcc-3.4 (due to fixinclude's processing of stdio.h)
+if test "$ac_cv_func_vsscanf" = "yes"; then
+    AC_CACHE_CHECK([for vsscanf declaration], wx_cv_func_vsscanf_decl,
+        [
+            AC_TRY_COMPILE(
+                [
+                    #include <stdio.h>
+                    #include <stdarg.h>
+                    #ifdef __MSL__
+                    #if __MSL__ >= 0x6000
+                    namespace std {}
+                    using namespace std;
+                    #endif
+                    #endif
+                ],
+                [
+                    char *buf, *parse;
+                    vsscanf(buf, "%s", parse);
+                ],
+                wx_cv_func_vsscanf_decl=yes,
+                wx_cv_func_vsscanf_decl=no
+            )
+        ]
+    )
+
+    if test "$wx_cv_func_vsscanf_decl" = "yes"; then
+        AC_DEFINE(HAVE_VSSCANF_DECL)
     fi
 fi
 

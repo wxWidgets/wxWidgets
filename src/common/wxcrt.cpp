@@ -1290,7 +1290,7 @@ wchar_t *wxFgets(wchar_t *s, int size, FILE *stream)
 // wxScanf() and friends
 // ----------------------------------------------------------------------------
 
-#ifndef HAVE_NO_VSSCANF // __VISUALC__ and __DMC__ see wx/crt.h
+#ifdef HAVE_VSSCANF // __VISUALC__ and __DMC__ see wx/crt.h
 int wxVsscanf(const char *str, const char *format, va_list ap)
     { return wxCRT_VsscanfA(str, format, ap); }
 int wxVsscanf(const wchar_t *str, const wchar_t *format, va_list ap)

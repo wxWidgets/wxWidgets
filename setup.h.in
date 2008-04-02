@@ -896,6 +896,12 @@
  * with 'char*' for the 3rd parameter instead of 'const char*' */
 #undef HAVE_BROKEN_VSNPRINTF_DECL
 
+/* Define if you have vsscanf() */
+#undef HAVE_VSSCANF
+
+/* Define if you have vsscanf() declaration in the header */
+#undef HAVE_VSSCANF_DECL
+
 /* Define if you have usleep() */
 #undef HAVE_USLEEP
 

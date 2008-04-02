@@ -31,8 +31,8 @@
 /* printf() family saga */
 
 /*
-   For some systems [v]snprintf() exists in the system libraries but not in the
-   headers, so we need to declare it ourselves to be able to use it.
+   For some systems [v]snprintf()/vsscanf() exists in the system libraries but
+   not in the headers, so we need to declare it ourselves to be able to use it.
  */
 #if defined(HAVE_VSNPRINTF) && !defined(HAVE_VSNPRINTF_DECL)
 #ifdef __cplusplus
@@ -50,6 +50,15 @@
     extern
 #endif
     int snprintf(char *str, size_t size, const char *format, ...);
+#endif /* !HAVE_SNPRINTF_DECL */
+
+#if defined(HAVE_VSSCANF) && !defined(HAVE_VSSCANF_DECL)
+#ifdef __cplusplus
+    extern "C"
+#else
+    extern
+#endif
+    int vsscanf(const char *str, const char *format, va_list ap);
 #endif /* !HAVE_SNPRINTF_DECL */
 
 /* Wrapper for vsnprintf if it's 3rd parameter is non-const. Note: the

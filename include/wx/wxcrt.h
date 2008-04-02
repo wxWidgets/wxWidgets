@@ -19,8 +19,11 @@
 #include "wx/wxcrtbase.h"
 #include "wx/string.h"
 
-#if defined (__VISUALC__) || defined (__DMC__)
-    #define HAVE_NO_VSSCANF 1
+#ifndef __WX_SETUP_H__
+// For non-configure builds assume vsscanf is available, if not Visual C or DMC
+#if !defined (__VISUALC__) && !defined (__DMC__)
+    #define HAVE_VSSCANF 1
+#endif
 #endif
 
 // ============================================================================
