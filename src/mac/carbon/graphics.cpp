@@ -1726,9 +1726,9 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
         else
         {
             ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
-            HIViewDrawCGImage( m_cgContext , &r , image );
         }
     }
+    HIViewDrawCGImage( m_cgContext , &r , image );
 }
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
