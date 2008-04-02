@@ -116,6 +116,9 @@ public:
               const wxString& content = wxEmptyString);
     virtual void AddChild(wxXmlNode *child);
     virtual bool InsertChild(wxXmlNode *child, wxXmlNode *followingNode);
+#if wxABI_VERSION >= 20808
+    bool InsertChildAfter(wxXmlNode *child, wxXmlNode *precedingNode);
+#endif
     virtual bool RemoveChild(wxXmlNode *child);
     virtual void AddProperty(const wxString& name, const wxString& value);
     virtual bool DeleteProperty(const wxString& name);

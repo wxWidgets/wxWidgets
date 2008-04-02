@@ -44,6 +44,7 @@
         *wxWindowBase*ClientToWindowSize*;
         *wxWindowBase*Get*Sibling*;
         *wxWindowBase*WindowToClientSize*;
+        *wxXmlNode*InsertChildAfter*;
 };
 
 # public symbols added in 2.8.7 (please keep in alphabetical order):

@@ -232,6 +232,23 @@ to the list of children and becomes the first child of this node.  Returns
 \true if {\it followingNode} has been found and the {\it child} node has been
 inserted.
 
+\membersection{wxXmlNode::InsertChildAfter}\label{wxxmlnodeinsertchildafter}
+
+\func{bool}{InsertChildAfter}{\param{wxXmlNode* }{child}, \param{wxXmlNode* }{precedingNode}}
+
+Inserts the \arg{child} node immediately after \arg{precedingNode} in the
+children list. Returns \true if \arg{precedingNode} has been found and the
+\arg{child} node has been inserted.
+
+\wxheading{Parameters}
+
+\docparam{child}{Node to insert.}
+\docparam{precedingNode}{The node to insert \arg{child} after.
+    As a special case, this can be \NULL if this node has no children yet --
+    in that case, \arg{child} will become this node's only child node.}
+
+\newsince{2.8.8}
+
 \membersection{wxXmlNode::IsWhitespaceOnly}\label{wxxmlnodecontainsiswhitespaceonly}
 
 \constfunc{bool}{IsWhitespaceOnly}{\void}
