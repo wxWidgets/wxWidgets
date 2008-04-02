@@ -124,7 +124,10 @@ void wxStaticText::SetLabel( const wxString &label )
 
     // adjust the label size to the new label unless disabled
     if ( !HasFlag(wxST_NO_AUTORESIZE) )
+    {
+        InvalidateBestSize();
         SetSize( GetBestSize() );
+    }
 }
 
 bool wxStaticText::SetFont( const wxFont &font )
