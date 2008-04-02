@@ -315,9 +315,10 @@ bool wxGLCanvas::SwapBuffers()
 {
     if ( !::SwapBuffers(m_hDC) )
     {
-        return false;
         wxLogLastError(_T("SwapBuffers"));
+        return false;
     }
+
     return true;
 }
 
