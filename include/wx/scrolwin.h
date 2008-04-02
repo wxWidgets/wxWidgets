@@ -306,7 +306,7 @@ public:
         m_targetWindow = this;
 
 #ifdef __WXMAC__
-        MacSetClipChildren(true);
+        this->MacSetClipChildren(true);
 #endif
 
         this->Connect(wxEVT_PAINT, wxPaintEventHandler(wxScrolled::OnPaint));
