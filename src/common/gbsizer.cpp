@@ -572,11 +572,11 @@ void wxGridBagSizer::AdjustForOverflow()
 {
     int row, col;
     
-    for (row=0; row<m_rowHeights.GetCount(); row++)
+    for (row=0; row<(int)m_rowHeights.GetCount(); row++)
     {
         int rowExtra=INT_MAX;
         int rowHeight = m_rowHeights[row];
-        for (col=0; col<m_colWidths.GetCount(); col++)
+        for (col=0; col<(int)m_colWidths.GetCount(); col++)
         {
             wxGBPosition pos(row,col);
             wxGBSizerItem* item = FindItemAtPosition(pos);
@@ -615,11 +615,11 @@ void wxGridBagSizer::AdjustForOverflow()
     }
 
     // Now do the same thing for columns
-    for (col=0; col<m_colWidths.GetCount(); col++)
+    for (col=0; col<(int)m_colWidths.GetCount(); col++)
     {
         int colExtra=INT_MAX;
         int colWidth = m_colWidths[col];
-        for (row=0; row<m_rowHeights.GetCount(); row++)
+        for (row=0; row<(int)m_rowHeights.GetCount(); row++)
         {
             wxGBPosition pos(row,col);
             wxGBSizerItem* item = FindItemAtPosition(pos);
