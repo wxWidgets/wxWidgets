@@ -388,7 +388,10 @@ wxHtmlImageCell::wxHtmlImageCell(wxHtmlWindowInterface *windowIface,
                         if ( m_gifDecoder->IsAnimation() )
                         {
                             m_gifTimer = new wxGIFTimer(this);
-                            m_gifTimer->Start(m_gifDecoder->GetDelay(0), true);
+                            long delay = m_gifDecoder->GetDelay(0);
+                            if ( delay == 0 )
+                                delay = 1;
+                            m_gifTimer->Start(delay, true);
                         }
                         else
                         {
@@ -522,7 +525,10 @@ void wxHtmlImageCell::AdvanceAnimation(wxTimer *timer)
         win->Refresh(img.HasMask(), &rect);
     }
 
-    timer->Start(m_gifDecoder->GetDelay(m_nCurrFrame), true);
+    long delay = m_gifDecoder->GetDelay(m_nCurrFrame);
+    if ( delay == 0 )
+        delay = 1;
+    timer->Start(delay, true);
 }
 
 void wxHtmlImageCell::Layout(int w)
