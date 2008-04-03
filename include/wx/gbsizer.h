@@ -286,6 +286,7 @@ public:
 
 protected:
     wxGBPosition FindEmptyCell();
+    void AdjustForOverflow();
 
     wxSize m_emptyCellSize;
 
