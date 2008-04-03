@@ -59,7 +59,7 @@ void UMAInitToolbox( UInt16 WXUNUSED(inMoreMastersCalls),
 
 // menu manager
 
-#if wxMAC_USE_COCOA == 0
+#if 1 // not yet wxMAC_USE_COCOA == 0
 
 MenuRef UMANewMenu( SInt16 id , const wxString& title , wxFontEncoding encoding )
 {
@@ -273,7 +273,7 @@ void UMAInsertMenuItem( MenuRef menu , const wxString& title, wxFontEncoding enc
 
 #endif
 
-#if wxMAC_USE_COCOA == 0
+#if 1 // not yet wxMAC_USE_COCOA == 0
 
 static OSStatus UMAGetHelpMenu(
                                MenuRef *        outHelpMenu,
