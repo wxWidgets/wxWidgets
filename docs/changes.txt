@@ -129,6 +129,7 @@ All (GUI):
 - Fixed generic art provider to scale bitmaps down to client-specific
   best size if needed.
 - Made wxSpinCtrl::Reparent() in MSW and generic versions (Angelo Mottola)
+- Fixed timing of malformed animated GIFs in wxHTML (Gennady Feller)
 
 All (Unix):
 
