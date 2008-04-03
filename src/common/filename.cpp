@@ -1825,7 +1825,7 @@ wxString wxFileName::GetLongPath() const
 
 #if defined(__WIN32__) && !defined(__WXWINCE__) && !defined(__WXMICROWIN__)
 
-#if wxUSE_DYNAMIC_LOADER
+#if wxUSE_DYNLIB_CLASS
     typedef DWORD (WINAPI *GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
     // this is MT-safe as in the worst case we're going to resolve the function
@@ -1876,7 +1876,7 @@ wxString wxFileName::GetLongPath() const
             }
         }
     }
-#endif // wxUSE_DYNAMIC_LOADER
+#endif // wxUSE_DYNLIB_CLASS
 
     // The OS didn't support GetLongPathName, or some other error.
     // We need to call FindFirstFile on each component in turn.
