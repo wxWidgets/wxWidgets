@@ -590,7 +590,7 @@ void wxGridBagSizer::AdjustForOverflow()
             // just look at the whole item height
             if ( item->GetPos() == pos && endrow == row )
             {
-                int itemHeight = item->GetSize().GetHeight();
+                int itemHeight = item->CalcMin().GetHeight();
                 rowExtra = wxMin(rowExtra, rowHeight - itemHeight);
                 continue;
             }
@@ -599,7 +599,7 @@ void wxGridBagSizer::AdjustForOverflow()
             if ( endrow == row )
             {
                 // first deduct the portions of the item that are on prior rows
-                int itemHeight = item->GetSize().GetHeight();
+                int itemHeight = item->CalcMin().GetHeight();
                 for (int r=item->GetPos().GetRow(); r<row; r++)
                     itemHeight -= (m_rowHeights[r] + GetHGap());
 
@@ -631,14 +631,14 @@ void wxGridBagSizer::AdjustForOverflow()
             
             if ( item->GetPos() == pos && endcol == col )
             {
-                int itemWidth = item->GetSize().GetWidth();
+                int itemWidth = item->CalcMin().GetWidth();
                 colExtra = wxMin(colExtra, colWidth - itemWidth);
                 continue;
             }
 
             if ( endcol == col )
             {
-                int itemWidth = item->GetSize().GetWidth();
+                int itemWidth = item->CalcMin().GetWidth();
                 for (int c=item->GetPos().GetCol(); c<col; c++)
                     itemWidth -= (m_colWidths[c] + GetVGap());
 
