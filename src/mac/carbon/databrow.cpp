@@ -680,6 +680,10 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
       wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
       dataViewColumnPtr = dataViewCtrlPtr->GetColumnPtr(propertyID);
       wxCHECK_MSG((dataViewColumnPtr != NULL) && (dataViewColumnPtr->GetRenderer() != NULL),errDataBrowserNotConfigured,_("There is no column or renderer for the specified column index."));
+
+      wxDataViewItem      dvItem(reinterpret_cast<void*>(itemID));
+      unsigned int        col = dataViewColumnPtr->GetModelColumn();
+            
       switch (dataViewColumnPtr->GetRenderer()->GetPropertyType())
       {
         case kDataBrowserCheckboxType:
@@ -695,14 +699,26 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
                // variable definition and initialization:
                 wxVariant modifiedData(true);
 
-                return (dataViewCtrlPtr->GetModel()->SetValue(modifiedData,wxDataViewItem(reinterpret_cast<void*>(itemID)),dataViewColumnPtr->GetModelColumn()) ? OSStatus(noErr) : OSStatus(errDataBrowserNotConfigured));
+                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col))
+                {
+                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col);
+                    return noErr;
+                }
+                else
+                    return errDataBrowserNotConfigured;
               } /* if */
               else if (buttonValue == kThemeButtonOff)
               {
                // variable definition and initialization:
                 wxVariant modifiedData(false);
 
-                return (dataViewCtrlPtr->GetModel()->SetValue(modifiedData,wxDataViewItem(reinterpret_cast<void*>(itemID)),dataViewColumnPtr->GetModelColumn()) ? OSStatus(noErr) : OSStatus(errDataBrowserNotConfigured));
+                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col))
+                {
+                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col);
+                    return noErr;
+                }
+                else
+                    return errDataBrowserNotConfigured;
               } /* if */
               else
                 return errDataBrowserInvalidPropertyData;
@@ -725,9 +741,12 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
               wxMacCFStringHolder modifiedString(stringReference);
 #endif
               wxVariant           modifiedData(modifiedString.AsString());
-
-              if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData,wxDataViewItem(reinterpret_cast<void*>(itemID)),dataViewColumnPtr->GetModelColumn()))
-                return noErr;
+              
+              if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col))
+              {
+                  dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col);
+                  return noErr;
+              }
               else
                 return errDataBrowserNotConfigured;
             } /* if */
