@@ -47,8 +47,9 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 int wxColourDialog::ShowModal()
 {
-    RGBColor currentColor = *((RGBColor*)m_colourData.m_dataColour.GetPixel()) ;
-
+    RGBColor currentColor ;
+    
+    m_colourData.m_dataColour.GetRGBColor( currentColor );
     NColorPickerInfo info;
     OSStatus err ;
     memset(&info, 0, sizeof(info)) ;
