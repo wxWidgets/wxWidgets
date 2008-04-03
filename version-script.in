@@ -30,6 +30,7 @@
         *wxApp*MacHideApp*;
         *TimeZone*Make*;
         *wxBitmapButton*OnFocusChange*;
+	*wxGridBagSizer*AdjustForOverflow*;
         *wxRemotelyScrolledTreeCtrl*DoCalcScrolledPosition*;
         *wxRemotelyScrolledTreeCtrl*SetScrollbar*;
         *wxRichTextCtrl*GetTextCursor*;

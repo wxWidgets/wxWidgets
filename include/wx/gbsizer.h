@@ -286,6 +286,9 @@ public:
 
 protected:
     wxGBPosition FindEmptyCell();
+#if wxABI_VERSION >= 20808
+    void AdjustForOverflow();
+#endif
 
     wxSize m_emptyCellSize;
 
