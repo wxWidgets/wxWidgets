@@ -457,7 +457,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
 
                 maskbits |= ( 1 << (15 - x) ) ;
 
-                col = *((RGBColor*) wxColor( r , g , b ).GetPixel()) ;
+                wxColor( r , g , b ).GetRGBColor( &col );
             }
 
             *((*(**ch).crsrData) + y * bytesPerRow + x) =
