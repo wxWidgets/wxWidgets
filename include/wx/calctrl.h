@@ -298,11 +298,11 @@ public:
     // implementation only from now on
 
 protected:
-    // generate the given calendar event(s)
-    void GenerateEvent(wxEventType type)
+    // generate the given calendar event, return true if it was processed
+    bool GenerateEvent(wxEventType type)
     {
         wxCalendarEvent event(this, GetDate(), type);
-        HandleWindowEvent(event);
+        return HandleWindowEvent(event);
     }
 
     // generate all the events for the selection change from dateOld to current

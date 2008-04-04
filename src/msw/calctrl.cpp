@@ -60,11 +60,37 @@ wxCalendarCtrl::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
 
-    // create the native control
-    if ( !MSWCreateControl(MONTHCAL_CLASS, wxEmptyString, pos, size) )
+    // create the native control: this is a bit tricky as we want to receive
+    // double click events but the MONTHCAL_CLASS doesn't use CS_DBLCLKS style
+    // and so we create our own copy of it which does
+    static ClassRegistrar s_clsMonthCal;
+    if ( !s_clsMonthCal.IsInitialized() )
+    {
+        // get a copy of standard class and modify it
+        WNDCLASS wc;
+        if ( ::GetClassInfo(NULL, MONTHCAL_CLASS, &wc) )
+        {
+            wc.lpszClassName = wxT("_wx_SysMonthCtl32");
+            wc.style |= CS_DBLCLKS;
+            s_clsMonthCal.Register(wc);
+        }
+        else
+        {
+            wxLogLastError(_T("GetClassInfoEx(SysMonthCal32)"));
+        }
+    }
+
+    const wxChar * const clsname = s_clsMonthCal.IsRegistered()
+        ? s_clsMonthCal.GetName().wx_str()
+        : MONTHCAL_CLASS;
+
+    if ( !MSWCreateControl(clsname, wxEmptyString, pos, size) )
         return false;
 
     SetDate(dt.IsValid() ? dt : wxDateTime::Today());
+
+    Connect(wxEVT_LEFT_DOWN,
+            wxMouseEventHandler(wxCalendarCtrl::MSWOnDoubleClick));
 
     return true;
 }
@@ -298,6 +324,17 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     }
 
     return wxCalendarCtrlBase::MSWOnNotify(idCtrl, lParam, result);
+}
+
+void wxCalendarCtrl::MSWOnDoubleClick(wxMouseEvent& event)
+{
+    if ( HitTest(event.GetPosition()) == wxCAL_HITTEST_DAY )
+    {
+        if ( GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED) )
+            return; // skip event.Skip() below
+    }
+
+    event.Skip();
 }
 
 #endif // wxUSE_CALENDARCTRL

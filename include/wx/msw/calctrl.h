@@ -55,6 +55,8 @@ protected:
 
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
+    void MSWOnDoubleClick(wxMouseEvent& event);
+
 private:
     wxDateTime m_date;
 
