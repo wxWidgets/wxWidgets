@@ -103,6 +103,52 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
     return best;
 }
 
+wxCalendarHitTestResult
+wxCalendarCtrl::HitTest(const wxPoint& pos,
+                        wxDateTime *date,
+                        wxDateTime::WeekDay *wd)
+{
+    WinStruct<MCHITTESTINFO> hti;
+    hti.pt.x = pos.x;
+    hti.pt.y = pos.y;
+    switch ( MonthCal_HitTest(GetHwnd(), &hti) )
+    {
+        default:
+        case MCHT_CALENDARWEEKNUM:
+            wxFAIL_MSG( "unexpected" );
+            // fall through
+
+        case MCHT_NOWHERE:
+        case MCHT_CALENDARBK:
+        case MCHT_TITLEBK:
+        case MCHT_TITLEMONTH:
+        case MCHT_TITLEYEAR:
+            return wxCAL_HITTEST_NOWHERE;
+
+        case MCHT_CALENDARDATE:
+            if ( date )
+                wxMSWDateControls::FromSystemTime(date, hti.st);
+            return wxCAL_HITTEST_DAY;
+
+        case MCHT_CALENDARDAY:
+            if ( wd )
+            {
+                *wd = wx_static_cast(wxDateTime::WeekDay, hti.st.wDayOfWeek);
+            }
+            return wxCAL_HITTEST_HEADER;
+
+        case MCHT_TITLEBTNNEXT:
+            return wxCAL_HITTEST_INCMONTH;
+
+        case MCHT_TITLEBTNPREV:
+            return wxCAL_HITTEST_DECMONTH;
+
+        case MCHT_CALENDARDATENEXT:
+        case MCHT_CALENDARDATEPREV:
+            return wxCAL_HITTEST_SURROUNDING_WEEK;
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxCalendarCtrl operations
 // ----------------------------------------------------------------------------

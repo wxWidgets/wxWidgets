@@ -102,6 +102,8 @@ public:
     void SetDate(const wxDateTime& dt) { m_calendar->SetDate(dt); }
 
 private:
+    wxCalendarCtrlBase *DoCreateCalendar(const wxDateTime& dt, long style);
+
     void RecreateCalendar(long style);
 
     wxCalendarCtrlBase *m_calendar;
@@ -158,6 +160,8 @@ public:
     {
         event.Enable(m_panel->IsUsingGeneric());
     }
+
+    void OnCalRClick(wxMouseEvent& event);
 
 private:
     MyPanel *m_panel;
@@ -506,6 +510,48 @@ void MyFrame::OnCalToggleResizable(wxCommandEvent& event)
     sizer->Layout();
 }
 
+void MyFrame::OnCalRClick(wxMouseEvent& event)
+{
+    wxDateTime dt;
+    wxDateTime::WeekDay wd;
+
+    const wxPoint pt = event.GetPosition();
+    wxString msg = wxString::Format("Point (%d, %d) is ", pt.x, pt.y);
+
+    switch ( m_panel->GetCal()->HitTest(pt, &dt, &wd) )
+    {
+        default:
+            wxFAIL_MSG( "unexpected" );
+            // fall through
+
+        case wxCAL_HITTEST_NOWHERE:
+            msg += "nowhere";
+            break;
+
+        case wxCAL_HITTEST_HEADER:
+            msg += wxString::Format("over %s", wxDateTime::GetWeekDayName(wd));
+            break;
+
+        case wxCAL_HITTEST_DAY:
+            msg += wxString::Format("over %s", dt.FormatISODate());
+            break;
+
+        case wxCAL_HITTEST_INCMONTH:
+            msg += "over next month button";
+            break;
+
+        case wxCAL_HITTEST_DECMONTH:
+            msg += "over previous month button";
+            break;
+
+        case wxCAL_HITTEST_SURROUNDING_WEEK:
+            msg += "over a day from another month";
+            break;
+    }
+
+    wxLogMessage("%s", msg);
+}
+
 #if wxUSE_DATEPICKCTRL
 
 void MyFrame::OnUpdateUIStartWithNone(wxUpdateUIEvent& event)
@@ -575,13 +621,8 @@ MyPanel::MyPanel(wxWindow *parent)
     date.Printf(wxT("Selected date: %s"),
                 wxDateTime::Today().FormatISODate().c_str());
     m_date = new wxStaticText(this, wxID_ANY, date);
-    m_calendar = new wxCalendarCtrl(this, Calendar_CalCtrl,
-                                    wxDefaultDateTime,
-                                    wxDefaultPosition,
-                                    wxDefaultSize,
-                                    wxCAL_MONDAY_FIRST |
-                                    wxCAL_SHOW_HOLIDAYS |
-                                    wxRAISED_BORDER);
+    m_calendar = DoCreateCalendar(wxDefaultDateTime,
+                                  wxCAL_MONDAY_FIRST | wxCAL_SHOW_HOLIDAYS);
 
     // adjust to vertical/horizontal display, check mostly dedicated to WinCE
     bool horizontal = ( wxSystemSettings::GetMetric(wxSYS_SCREEN_X) > wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
@@ -623,23 +664,35 @@ void MyPanel::OnCalendarWeekDayClick(wxCalendarEvent& event)
                  wxDateTime::GetWeekDayName(event.GetWeekDay()).c_str());
 }
 
-void MyPanel::RecreateCalendar(long style)
+wxCalendarCtrlBase *MyPanel::DoCreateCalendar(const wxDateTime& dt, long style)
 {
     wxCalendarCtrlBase *calendar;
 #ifdef wxHAS_NATIVE_CALENDARCTRL
     if ( m_usingGeneric )
         calendar = new wxGenericCalendarCtrl(this, Calendar_CalCtrl,
-                                             m_calendar->GetDate(),
+                                             dt,
                                              wxDefaultPosition,
                                              wxDefaultSize,
                                              style);
     else
 #endif // wxHAS_NATIVE_CALENDARCTRL
         calendar = new wxCalendarCtrl(this, Calendar_CalCtrl,
-                                      m_calendar->GetDate(),
+                                      dt,
                                       wxDefaultPosition,
                                       wxDefaultSize,
                                       style);
+
+    calendar->Connect(wxEVT_RIGHT_DOWN,
+                      wxMouseEventHandler(MyFrame::OnCalRClick),
+                      NULL,
+                      wxGetTopLevelParent(this));
+
+    return calendar;
+}
+
+void MyPanel::RecreateCalendar(long style)
+{
+    wxCalendarCtrlBase *calendar = DoCreateCalendar(m_calendar->GetDate(), style);
 
     m_sizer->Replace(m_calendar, calendar);
     delete m_calendar;

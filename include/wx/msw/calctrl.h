@@ -44,6 +44,10 @@ public:
 
     virtual void Mark(size_t day, bool mark);
 
+    virtual wxCalendarHitTestResult HitTest(const wxPoint& pos,
+                                            wxDateTime *date = NULL,
+                                            wxDateTime::WeekDay *wd = NULL);
+
 protected:
     virtual wxSize wxCalendarCtrl::DoGetBestSize() const;
 
