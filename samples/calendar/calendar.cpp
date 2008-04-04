@@ -637,9 +637,15 @@ MyPanel::MyPanel(wxWindow *parent)
 
 void MyPanel::OnCalendar(wxCalendarEvent& event)
 {
-    m_calendar->Mark(event.GetDate().GetDay(), true);
-    wxLogMessage(wxT("Selected (and marked) %s from calendar."),
-                 event.GetDate().FormatISODate().c_str());
+    // clicking the same date twice unmarks it (convenient for testing)
+    static wxDateTime s_dateLast;
+    const bool mark = !s_dateLast.IsValid() || event.GetDate() != s_dateLast;
+
+    s_dateLast = event.GetDate();
+
+    m_calendar->Mark(event.GetDate().GetDay(), mark);
+    wxLogMessage(wxT("Selected (and %smarked) %s from calendar."),
+                 mark ? "" : "un", s_dateLast.FormatISODate().c_str());
 }
 
 void MyPanel::OnCalendarChange(wxCalendarEvent& event)

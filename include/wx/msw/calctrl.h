@@ -13,7 +13,7 @@
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase
 {
 public:
-    wxCalendarCtrl() { }
+    wxCalendarCtrl() { Init(); }
     wxCalendarCtrl(wxWindow *parent,
                    wxWindowID id,
                    const wxDateTime& date = wxDefaultDateTime,
@@ -22,6 +22,8 @@ public:
                    long style = wxCAL_SHOW_HOLIDAYS,
                    const wxString& name = wxCalendarNameStr)
     {
+        Init();
+
         Create(parent, id, date, pos, size, style, name);
     }
 
@@ -58,7 +60,19 @@ protected:
     void MSWOnDoubleClick(wxMouseEvent& event);
 
 private:
+    void Init() { m_marks = 0; }
+
+    void UpdateMarks();
+
+
+    // current date, we need to store it instead of simply retrieving it from
+    // the control as needed in order to be able to generate the correct events
+    // from MSWOnNotify()
     wxDateTime m_date;
+
+    // bit field containing the state (marked or not) of all days in the month
+    wxUint32 m_marks;
+
 
     DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
     DECLARE_NO_COPY_CLASS(wxCalendarCtrl)

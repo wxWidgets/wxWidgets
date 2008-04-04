@@ -89,7 +89,9 @@ wxCalendarCtrl::Create(wxWindow *parent,
 
     SetDate(dt.IsValid() ? dt : wxDateTime::Today());
 
-    Connect(wxEVT_LEFT_DOWN,
+    UpdateMarks();
+
+    Connect(wxEVT_LEFT_DCLICK,
             wxMouseEventHandler(wxCalendarCtrl::MSWOnDoubleClick));
 
     return true;
@@ -106,6 +108,9 @@ WXDWORD wxCalendarCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     // for compatibility with the other versions, just turn off today display
     // unconditionally for now
     styleMSW |= MCS_NOTODAY;
+
+    // we also need this style for Mark() to work
+    styleMSW |= MCS_DAYSTATE;
 
     return styleMSW;
 }
@@ -292,7 +297,31 @@ bool wxCalendarCtrl::EnableMonthChange(bool enable)
 
 void wxCalendarCtrl::Mark(size_t day, bool mark)
 {
-    wxFAIL_MSG( "not implemented" );
+    wxCHECK_RET( day > 0 && day < 32, "invalid day" );
+
+    int mask = 1 << (day - 1);
+    if ( mark )
+        m_marks |= mask;
+    else
+        m_marks &= ~mask;
+
+    // calling Refresh() here is not enough to change the day appearance
+    UpdateMarks();
+}
+
+void wxCalendarCtrl::UpdateMarks()
+{
+    MONTHDAYSTATE states[3];
+    const int nMonths = MonthCal_GetMonthRange(GetHwnd(), GMR_DAYSTATE, NULL);
+    wxCHECK_RET( nMonths <= WXSIZEOF(states), "unexpected months range" );
+
+    for ( int i = 0; i < nMonths; i++ )
+        states[i] = m_marks;
+
+    if ( !MonthCal_SetDayState(GetHwnd(), nMonths, states) )
+    {
+        wxLogLastError(_T("MonthCal_SetDayState"));
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -305,25 +334,39 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( hdr->code )
     {
         case MCN_SELCHANGE:
-            // we need to update m_date first, before calling the user code
-            // which expects GetDate() to return the new date
-            const wxDateTime dateOld = m_date;
-            const NMSELCHANGE * const sch = (NMSELCHANGE *)lParam;
-            wxMSWDateControls::FromSystemTime(&m_date, sch->stSelStart);
-
-            // changing the year or the month results in a second dummy
-            // MCN_SELCHANGE event on this system which doesn't really change
-            // anything -- filter it out
-            if ( m_date != dateOld )
             {
-                GenerateAllChangeEvents(dateOld);
+                // we need to update m_date first, before calling the user code
+                // which expects GetDate() to return the new date
+                const wxDateTime dateOld = m_date;
+                const NMSELCHANGE * const sch = (NMSELCHANGE *)lParam;
+                wxMSWDateControls::FromSystemTime(&m_date, sch->stSelStart);
 
-                *result = 0;
-                return true;
+                // changing the year or the month results in a second dummy
+                // MCN_SELCHANGE event on this system which doesn't really
+                // change anything -- filter it out
+                if ( m_date != dateOld )
+                {
+                    GenerateAllChangeEvents(dateOld);
+                }
             }
+            break;
+
+        case MCN_GETDAYSTATE:
+            {
+                const NMDAYSTATE * const ds = (NMDAYSTATE *)lParam;
+                for ( int i = 0; i < ds->cDayState; i++ )
+                {
+                    ds->prgDayState[i] = m_marks;
+                }
+            }
+            break;
+
+        default:
+            return wxCalendarCtrlBase::MSWOnNotify(idCtrl, lParam, result);
     }
 
-    return wxCalendarCtrlBase::MSWOnNotify(idCtrl, lParam, result);
+    *result = 0;
+    return true;
 }
 
 void wxCalendarCtrl::MSWOnDoubleClick(wxMouseEvent& event)
