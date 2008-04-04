@@ -189,9 +189,22 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *dt1, wxDateTime *dt2) const
 
 bool wxCalendarCtrl::EnableMonthChange(bool enable)
 {
-    wxFAIL_MSG( "not implemented" );
+    if ( !wxCalendarCtrlBase::EnableMonthChange(enable) )
+        return false;
 
-    return false;
+    wxDateTime dtStart, dtEnd;
+    if ( !enable )
+    {
+        dtStart = GetDate();
+        dtStart.SetDay(1);
+
+        dtEnd = dtStart.GetLastMonthDay();
+    }
+    //else: leave them invalid to remove the restriction
+
+    SetDateRange(dtStart, dtEnd);
+
+    return true;
 }
 
 void wxCalendarCtrl::Mark(size_t day, bool mark)
