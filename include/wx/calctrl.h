@@ -185,6 +185,32 @@ public:
     virtual bool SetDate(const wxDateTime& date) = 0;
 
 
+    // restricting the dates shown by the control to the specified range: only
+    // implemented in the generic and MSW versions for now
+
+    // if either date is set, the corresponding limit will be enforced and true
+    // returned; if none are set, the existing restrictions are removed and
+    // false is returned
+    virtual bool
+    SetDateRange(const wxDateTime& WXUNUSED(lowerdate) = wxDefaultDateTime,
+                 const wxDateTime& WXUNUSED(upperdate) = wxDefaultDateTime)
+    {
+        return false;
+    }
+
+    // retrieves the limits currently in use (wxDefaultDateTime if none) in the
+    // provided pointers (which may be NULL) and returns true if there are any
+    // limits or false if none
+    virtual bool
+    GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const
+    {
+        if ( lowerdate )
+            *lowerdate = wxDefaultDateTime;
+        if ( upperdate )
+            *upperdate = wxDefaultDateTime;
+        return false;
+    }
+
     // returns one of wxCAL_HITTEST_XXX constants and fills either date or wd
     // with the corresponding value (none for NOWHERE, the date for DAY and wd
     // for HEADER)
@@ -285,15 +311,21 @@ public:
 
 #define wxCalendarNameStr "CalendarCtrl"
 
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
-    #define wxHAS_NATIVE_CALENDARCTRL
-    #include "wx/gtk/calctrl.h"
-    #define wxCalendarCtrl wxGtkCalendarCtrl
-#else
+#ifndef __WXUNIVERSAL__
+    #if defined(__WXGTK20__)
+        #define wxHAS_NATIVE_CALENDARCTRL
+        #include "wx/gtk/calctrl.h"
+        #define wxCalendarCtrl wxGtkCalendarCtrl
+    #elif defined(__WXMSW__)
+        #define wxHAS_NATIVE_CALENDARCTRL
+        #include "wx/msw/calctrl.h"
+    #endif
+#endif // !__WXUNIVERSAL__
+
+#ifndef wxHAS_NATIVE_CALENDARCTRL
     #include "wx/generic/calctrlg.h"
     #define wxCalendarCtrl wxGenericCalendarCtrl
 #endif
-
 
 // ----------------------------------------------------------------------------
 // calendar event types and macros for handling them

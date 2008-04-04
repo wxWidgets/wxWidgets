@@ -438,5 +438,53 @@ public:
         In generic wxCalendarCtrl,
     */
     void Mark(size_t day, bool mark);
+
+
+    /**
+        @name Date range.
+
+        The functions in this section are currently implemented in the generic
+        and MSW versions and do nothing in the native GTK implementation.
+     */
+    //@{
+
+    /**
+        Restrict the dates shown by the control to the specified range.
+
+        If either date is set, the corresponding limit will be enforced and
+        @true returned. If none are set, the existing restrictions are removed
+        and @false is returned.
+
+        @param lowerdate
+            the low limit for the dates shown by the control or @c
+            wxDefaultDateTime
+        @param highlighting
+            the high limit for the dates shown by the control or @c
+            wxDefaultDateTime
+        @return
+            @true if either limit is valid, @false otherwise
+     */
+    virtual bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
+                              const wxDateTime& upperdate = wxDefaultDateTime);
+
+    /**
+        Returns the limits currently being used.
+
+        @see SetDateRange()
+
+        @param lowerdate
+            if non-@NULL, the value of the low limit for the dates shown by the
+            control is returned (which may be @c wxDefaultDateTime if no limit
+            is set)
+        @param upperdate
+            if non-@NULL, the value of the upper limit for the dates shown by the
+            control is returned (which may be @c wxDefaultDateTime if no limit
+            is set)
+        @return
+            @true if either limit is set, @false otherwise
+     */
+    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const
+
+    //@}
 };
 

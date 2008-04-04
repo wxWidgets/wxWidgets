@@ -3015,8 +3015,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/gtk/dataview.h \
 	wx/gtk/hyperlink.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR)
-@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
-@COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
+@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = \
+@COND_TOOLKIT_MSW@	wx/msw/calctrl.h wx/msw/datecontrols.h wx/msw/datectrl.h
+@COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = \
+@COND_TOOLKIT_WINCE@	wx/msw/calctrl.h wx/msw/datecontrols.h \
+@COND_TOOLKIT_WINCE@	wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
 	wx/animate.h \
@@ -5376,9 +5379,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS \
-@COND_TOOLKIT_MSW@	= monodll_datectrl.o
+@COND_TOOLKIT_MSW@	= monodll_calctrl.o monodll_datecontrols.o \
+@COND_TOOLKIT_MSW@	monodll_datectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS \
-@COND_TOOLKIT_WINCE@	= monodll_datectrl.o
+@COND_TOOLKIT_WINCE@	= monodll_calctrl.o monodll_datecontrols.o \
+@COND_TOOLKIT_WINCE@	monodll_datectrl.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o 
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_mediactrl.o
@@ -7286,9 +7291,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 \
-@COND_TOOLKIT_MSW@	= monolib_datectrl.o
+@COND_TOOLKIT_MSW@	= monolib_calctrl.o monolib_datecontrols.o \
+@COND_TOOLKIT_MSW@	monolib_datectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 \
-@COND_TOOLKIT_WINCE@	= monolib_datectrl.o
+@COND_TOOLKIT_WINCE@	= monolib_calctrl.o monolib_datecontrols.o \
+@COND_TOOLKIT_WINCE@	monolib_datectrl.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o 
 @COND_TOOLKIT_MAC@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_mediactrl.o
@@ -11030,9 +11037,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
-@COND_TOOLKIT_MSW@	= advdll_datectrl.o
+@COND_TOOLKIT_MSW@	= advdll_calctrl.o advdll_datecontrols.o \
+@COND_TOOLKIT_MSW@	advdll_datectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 \
-@COND_TOOLKIT_WINCE@	= advdll_datectrl.o
+@COND_TOOLKIT_WINCE@	= advdll_calctrl.o advdll_datecontrols.o \
+@COND_TOOLKIT_WINCE@	advdll_datectrl.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_2 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advdll_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
@@ -11109,9 +11118,11 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 @COND_TOOLKIT_MSW@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
-@COND_TOOLKIT_MSW@	= advlib_datectrl.o
+@COND_TOOLKIT_MSW@	= advlib_calctrl.o advlib_datecontrols.o \
+@COND_TOOLKIT_MSW@	advlib_datectrl.o
 @COND_TOOLKIT_WINCE@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 \
-@COND_TOOLKIT_WINCE@	= advlib_datectrl.o
+@COND_TOOLKIT_WINCE@	= advlib_calctrl.o advlib_datecontrols.o \
+@COND_TOOLKIT_WINCE@	advlib_datectrl.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_3 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advlib_sound_sdl.o
 @COND_SHARED_1@____wxadv_namedll_DEP = $(__advdll___depname)
@@ -14151,9 +14162,6 @@ monodll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONODLL_ODEP)
 
 monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-monodll_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
 
 monodll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
@@ -18073,6 +18081,21 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_calctrl.o: $(srcdir)/src/msw/calctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/calctrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_calctrl.o: $(srcdir)/src/msw/calctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/calctrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
@@ -18675,9 +18698,6 @@ monolib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONOLIB_ODEP)
 
 monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-monolib_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
 
 monolib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
@@ -22596,6 +22616,21 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_calctrl.o: $(srcdir)/src/msw/calctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/calctrl.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_calctrl.o: $(srcdir)/src/msw/calctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/calctrl.cpp
+
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
@@ -30529,9 +30564,6 @@ advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 advdll_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
-advdll_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
-
 advdll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
@@ -30784,6 +30816,21 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advdll_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advdll_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_MSW_WXUNIV_0@advdll_calctrl.o: $(srcdir)/src/msw/calctrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/calctrl.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advdll_calctrl.o: $(srcdir)/src/msw/calctrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/calctrl.cpp
+
+@COND_TOOLKIT_MSW_WXUNIV_0@advdll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advdll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
+
 @COND_TOOLKIT_MSW_WXUNIV_0@advdll_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp
 
@@ -30792,9 +30839,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 advlib_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
-
-advlib_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
 
 advlib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
@@ -31047,6 +31091,21 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@advlib_eggtrayicon.o: $(srcdir)/src/gtk1/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk1/eggtrayicon.c
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@advlib_calctrl.o: $(srcdir)/src/gtk/calctrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/calctrl.cpp
+
+@COND_TOOLKIT_MSW_WXUNIV_0@advlib_calctrl.o: $(srcdir)/src/msw/calctrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/calctrl.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advlib_calctrl.o: $(srcdir)/src/msw/calctrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/calctrl.cpp
+
+@COND_TOOLKIT_MSW_WXUNIV_0@advlib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advlib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
 @COND_TOOLKIT_MSW_WXUNIV_0@advlib_datectrl.o: $(srcdir)/src/msw/datectrl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/datectrl.cpp

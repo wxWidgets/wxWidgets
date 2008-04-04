@@ -2896,9 +2896,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <!-- not used with wxUniv -->
 <set var="ADVANCED_MSW_NATIVE_SRC" hints="files">
+    src/msw/calctrl.cpp
+    src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
+    wx/msw/calctrl.h
+    wx/msw/datecontrols.h
     wx/msw/datectrl.h
 </set>
 

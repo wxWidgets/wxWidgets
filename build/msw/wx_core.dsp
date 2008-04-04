@@ -4692,6 +4692,10 @@ SOURCE=..\..\include\wx\msw\button.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\calctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\caret.h
 # End Source File
 # Begin Source File
@@ -4749,6 +4753,10 @@ SOURCE=..\..\include\wx\msw\ole\dataobj.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\ole\dataobj2.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\datecontrols.h
 # End Source File
 # Begin Source File
 

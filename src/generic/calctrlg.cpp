@@ -639,6 +639,17 @@ bool wxGenericCalendarCtrl::SetDateRange(const wxDateTime& lowerdate /* = wxDefa
     return retval;
 }
 
+bool wxGenericCalendarCtrl::GetDateRange(wxDateTime *lowerdate,
+                                         wxDateTime *upperdate) const
+{
+    if ( lowerdate )
+        *lowerdate = m_lowdate;
+    if ( upperdate )
+        *upperdate = m_highdate;
+
+    return m_lowdate.IsValid() || m_highdate.IsValid();
+}
+
 // ----------------------------------------------------------------------------
 // date helpers
 // ----------------------------------------------------------------------------

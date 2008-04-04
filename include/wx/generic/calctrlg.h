@@ -58,14 +58,17 @@ public:
     // set/get the range in which selection can occur
     // ---------------------------------------------
 
-    // all functions in this section are for generic version only
+    virtual bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
+                              const wxDateTime& upperdate = wxDefaultDateTime);
+
+    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const;
+
+    // these functions are for generic version only, don't use them but use the
+    // Set/GetDateRange() above instead
     bool SetLowerDateLimit(const wxDateTime& date = wxDefaultDateTime);
     const wxDateTime& GetLowerDateLimit() const { return m_lowdate; }
     bool SetUpperDateLimit(const wxDateTime& date = wxDefaultDateTime);
     const wxDateTime& GetUpperDateLimit() const { return m_highdate; }
-
-    bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
-                      const wxDateTime& upperdate = wxDefaultDateTime);
 
 
     // calendar mode

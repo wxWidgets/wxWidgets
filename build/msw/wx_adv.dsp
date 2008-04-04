@@ -278,6 +278,76 @@ SOURCE=..\..\src\msw\aboutdlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\calctrl.cpp
+
+!IF  "$(CFG)" == "adv - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\datecontrols.cpp
+
+!IF  "$(CFG)" == "adv - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "adv - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\datectrl.cpp
 
 !IF  "$(CFG)" == "adv - Win32 DLL Universal Release"
@@ -623,6 +693,14 @@ InputPath=..\..\include\wx\univ\setup.h
 # Begin Group "MSW Headers"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\calctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\datecontrols.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\datectrl.h

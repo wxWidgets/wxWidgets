@@ -245,6 +245,7 @@ All (Unix):
 All (GUI):
 
 - Added wxDataViewCtrl class and helper classes
+- Provide native implementation of wxCalendarCtrl under wxMSW and wxGTK
 - Added {wxTextCtrl,wxComboBox}::AutoComplete() and AutoCompleteFileNames()
 - Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty).
 - Added wxNotificationMessage class for non-intrusive notifications
