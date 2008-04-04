@@ -3,7 +3,7 @@
 // Purpose:     wxCalendarCtrl implementation
 // Author:      Vadim Zeitlin
 // Created:     2008-04-04
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (C) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -27,6 +27,7 @@
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapwin.h"
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
+    #include "wx/msw/private.h"
 #endif
 
 #include "wx/calctrl.h"
