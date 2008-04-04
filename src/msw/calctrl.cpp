@@ -97,6 +97,8 @@ wxCalendarCtrl::Create(wxWindow *parent,
 
     UpdateMarks();
 
+    Connect(wxEVT_LEFT_DOWN,
+            wxMouseEventHandler(wxCalendarCtrl::MSWOnClick));
     Connect(wxEVT_LEFT_DCLICK,
             wxMouseEventHandler(wxCalendarCtrl::MSWOnDoubleClick));
 
@@ -396,6 +398,15 @@ void wxCalendarCtrl::MSWOnDoubleClick(wxMouseEvent& event)
         if ( GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED) )
             return; // skip event.Skip() below
     }
+
+    event.Skip();
+}
+
+void wxCalendarCtrl::MSWOnClick(wxMouseEvent& event)
+{
+    // for some reason, the control doesn't get focus on its own when the user
+    // clicks in it
+    SetFocus();
 
     event.Skip();
 }

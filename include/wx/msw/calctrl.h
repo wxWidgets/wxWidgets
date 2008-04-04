@@ -59,6 +59,7 @@ protected:
 
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
+    void MSWOnClick(wxMouseEvent& event);
     void MSWOnDoubleClick(wxMouseEvent& event);
 
 private:
