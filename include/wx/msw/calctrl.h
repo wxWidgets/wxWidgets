@@ -50,6 +50,8 @@ public:
                                             wxDateTime *date = NULL,
                                             wxDateTime::WeekDay *wd = NULL);
 
+    virtual void SetWindowStyleFlag(long style);
+
 protected:
     virtual wxSize wxCalendarCtrl::DoGetBestSize() const;
 
@@ -62,7 +64,12 @@ protected:
 private:
     void Init() { m_marks = 0; }
 
+    // bring the control in sync with m_marks
     void UpdateMarks();
+
+    // set first day of week in the control to correspond to our
+    // wxCAL_MONDAY_FIRST flag
+    void UpdateFirstDayOfWeek();
 
 
     // current date, we need to store it instead of simply retrieving it from

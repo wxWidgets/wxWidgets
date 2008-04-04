@@ -222,9 +222,9 @@ enum wxCalendarHitTestResult
 
     @beginStyleTable
     @style{wxCAL_SUNDAY_FIRST}:
-           Show Sunday as the first day in the week (only generic)
+           Show Sunday as the first day in the week (not in wxGTK)
     @style{wxCAL_MONDAY_FIRST}:
-           Show Monday as the first day in the week (only generic)
+           Show Monday as the first day in the week (not in wxGTK)
     @style{wxCAL_SHOW_HOLIDAYS}:
            Highlight holidays in the calendar (only generic)
     @style{wxCAL_NO_YEAR_CHANGE}:
@@ -233,7 +233,7 @@ enum wxCalendarHitTestResult
            Disable the month (and, implicitly, the year) changing
     @style{wxCAL_SHOW_SURROUNDING_WEEKS}:
            Show the neighbouring weeks in the previous and next months
-           (only generic)
+           (only generic, always on for the native controls)
     @style{wxCAL_SEQUENTIAL_MONTH_SELECTION}:
            Use alternative, more compact, style for the month and year
            selection controls. (only generic)
@@ -400,7 +400,9 @@ public:
     /**
         Returns one of wxCalendarHitTestResult constants and fills either
         @a date or @a wd pointer with the corresponding value depending on the
-        hit test code. Only in generic wxCalendarCtrl.
+        hit test code.
+        
+        Not implemented in wxGTK currently.
     */
     wxCalendarHitTestResult HitTest(const wxPoint& pos,
                                     wxDateTime* date = NULL,
@@ -421,6 +423,8 @@ public:
 
     /**
         Sets the current date.
+
+        The @a date parameter must be valid.
     */
     void SetDate(const wxDateTime& date);
 

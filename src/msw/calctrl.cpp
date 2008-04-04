@@ -87,6 +87,9 @@ wxCalendarCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(clsname, wxEmptyString, pos, size) )
         return false;
 
+    // initialize the control 
+    UpdateFirstDayOfWeek();
+
     SetDate(dt.IsValid() ? dt : wxDateTime::Today());
 
     UpdateMarks();
@@ -115,12 +118,21 @@ WXDWORD wxCalendarCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return styleMSW;
 }
 
-// TODO: handle WM_WININICHANGE
+void wxCalendarCtrl::SetWindowStyleFlag(long style)
+{
+    const bool hadMondayFirst = HasFlag(wxCAL_MONDAY_FIRST);
+
+    wxCalendarCtrlBase::SetWindowStyleFlag(style);
+
+    if ( HasFlag(wxCAL_MONDAY_FIRST) != hadMondayFirst )
+        UpdateFirstDayOfWeek();
+}
 
 // ----------------------------------------------------------------------------
 // wxCalendarCtrl geometry
 // ----------------------------------------------------------------------------
 
+// TODO: handle WM_WININICHANGE
 wxSize wxCalendarCtrl::DoGetBestSize() const
 {
     RECT rc;
@@ -322,6 +334,11 @@ void wxCalendarCtrl::UpdateMarks()
     {
         wxLogLastError(_T("MonthCal_SetDayState"));
     }
+}
+
+void wxCalendarCtrl::UpdateFirstDayOfWeek()
+{
+    MonthCal_SetFirstDayOfWeek(GetHwnd(), HasFlag(wxCAL_MONDAY_FIRST) ? 0 : 6);
 }
 
 // ----------------------------------------------------------------------------
