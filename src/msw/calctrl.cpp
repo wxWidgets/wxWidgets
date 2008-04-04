@@ -166,18 +166,29 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
         return false;
     }
 
+    m_date = dt;
+
     return true;
 }
 
 wxDateTime wxCalendarCtrl::GetDate() const
 {
+#ifdef __WXDEBUG__
     SYSTEMTIME st;
     if ( !MonthCal_GetCurSel(GetHwnd(), &st) )
+    {
+        wxASSERT_MSG( !m_date.IsValid(), "mismatch between data and control" );
+
         return wxDefaultDateTime;
+    }
 
     wxDateTime dt;
     wxMSWDateControls::FromSystemTime(&dt, st);
-    return dt;
+
+    wxASSERT_MSG( dt == m_date, "mismatch between data and control" );
+#endif // __WXDEBUG__
+
+    return m_date;
 }
 
 bool wxCalendarCtrl::SetDateRange(const wxDateTime& dt1, const wxDateTime& dt2)
@@ -267,11 +278,23 @@ bool wxCalendarCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     NMHDR* hdr = (NMHDR *)lParam;
     switch ( hdr->code )
     {
-        case MCN_SELECT:
-            NMSELCHANGE *sch = (NMSELCHANGE *)hdr;
-            GenerateEvent(wxEVT_CALENDAR_SEL_CHANGED);
-            *result = 0;
-            return true;
+        case MCN_SELCHANGE:
+            // we need to update m_date first, before calling the user code
+            // which expects GetDate() to return the new date
+            const wxDateTime dateOld = m_date;
+            const NMSELCHANGE * const sch = (NMSELCHANGE *)lParam;
+            wxMSWDateControls::FromSystemTime(&m_date, sch->stSelStart);
+
+            // changing the year or the month results in a second dummy
+            // MCN_SELCHANGE event on this system which doesn't really change
+            // anything -- filter it out
+            if ( m_date != dateOld )
+            {
+                GenerateAllChangeEvents(dateOld);
+
+                *result = 0;
+                return true;
+            }
     }
 
     return wxCalendarCtrlBase::MSWOnNotify(idCtrl, lParam, result);

@@ -56,6 +56,8 @@ protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
 private:
+    wxDateTime m_date;
+
     DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
     DECLARE_NO_COPY_CLASS(wxCalendarCtrl)
 };

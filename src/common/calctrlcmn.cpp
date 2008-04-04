@@ -60,5 +60,23 @@ bool wxCalendarCtrlBase::EnableMonthChange(bool enable)
     return true;
 }
 
+void wxCalendarCtrlBase::GenerateAllChangeEvents(const wxDateTime& dateOld)
+{
+    const wxDateTime::Tm tm1 = dateOld.GetTm(),
+                         tm2 = GetDate().GetTm();
+
+    GenerateEvent(wxEVT_CALENDAR_SEL_CHANGED);
+    if ( tm1.year != tm2.year || tm1.mon != tm2.mon )
+        GenerateEvent(wxEVT_CALENDAR_PAGE_CHANGED);
+
+    // send also one of the deprecated events
+    if ( tm1.year != tm2.year )
+        GenerateEvent(wxEVT_CALENDAR_YEAR_CHANGED);
+    else if ( tm1.mon != tm2.mon )
+        GenerateEvent(wxEVT_CALENDAR_MONTH_CHANGED);
+    else
+        GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
+}
+
 #endif // wxUSE_CALENDARCTRL
 

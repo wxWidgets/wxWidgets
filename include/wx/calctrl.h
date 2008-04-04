@@ -297,12 +297,18 @@ public:
 
     // implementation only from now on
 
+protected:
     // generate the given calendar event(s)
     void GenerateEvent(wxEventType type)
     {
         wxCalendarEvent event(this, GetDate(), type);
         HandleWindowEvent(event);
     }
+
+    // generate all the events for the selection change from dateOld to current
+    // date: SEL_CHANGED, PAGE_CHANGED if necessary and also one of (deprecated)
+    // YEAR/MONTH/DAY_CHANGED ones
+    void GenerateAllChangeEvents(const wxDateTime& dateOld);
 };
 
 // ----------------------------------------------------------------------------

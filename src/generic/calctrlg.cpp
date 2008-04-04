@@ -560,27 +560,10 @@ void wxGenericCalendarCtrl::ChangeDay(const wxDateTime& date)
 
 void wxGenericCalendarCtrl::SetDateAndNotify(const wxDateTime& date)
 {
-    wxDateTime::Tm tm1 = m_date.GetTm(),
-                   tm2 = date.GetTm();
-
-    const bool pageChanged = tm1.year != tm2.year || tm1.mon != tm2.mon;
-
-    if ( !pageChanged && tm1.mday == tm2.mday )
-        return;
-
-    if ( SetDate(date) )
+    const wxDateTime dateOld = GetDate();
+    if ( date != dateOld && SetDate(date) )
     {
-        GenerateEvent(wxEVT_CALENDAR_SEL_CHANGED);
-        if ( !pageChanged )
-            GenerateEvent(wxEVT_CALENDAR_PAGE_CHANGED);
-
-        // send also one of the deprecated events
-        if ( tm1.year != tm2.year )
-            GenerateEvent(wxEVT_CALENDAR_YEAR_CHANGED);
-        else if ( tm1.mon != tm2.mon )
-            GenerateEvent(wxEVT_CALENDAR_MONTH_CHANGED);
-        else
-            GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
+        GenerateAllChangeEvents(dateOld);
     }
 }
 
@@ -1486,6 +1469,10 @@ void wxGenericCalendarCtrl::OnClick(wxMouseEvent& event)
                 ChangeDay(date);
 
                 GenerateEvent(wxEVT_CALENDAR_SEL_CHANGED);
+
+                // we know that the month/year never change when the user
+                // clicks on the control so there is no need to call
+                // GenerateAllChangeEvents() here, we know which event to send
                 GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
             }
             break;
