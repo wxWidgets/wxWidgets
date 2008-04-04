@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        calctrl.h
-// Purpose:     interface of wxCalendarEvent
+// Purpose:     interface of wxCalendarCtrl
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -10,8 +10,7 @@
     @class wxCalendarEvent
     @wxheader{calctrl.h}
 
-    The wxCalendarEvent class is used together with
-    wxCalendarCtrl.
+    The wxCalendarEvent class is used together with wxCalendarCtrl.
 
     @library{wxadv}
     @category{events}
@@ -29,8 +28,8 @@ public:
     wxDateTime::WeekDay GetWeekDay() const;
 
     /**
-        Sets the week day carried by the event,
-        normally only used by the library internally.
+        Sets the week day carried by the event, normally only used by the
+        library internally.
     */
     void SetWeekDay(wxDateTime::WeekDay day);
 };
@@ -38,11 +37,22 @@ public:
 
 
 /**
+    Possible kinds of borders which may be used to decorate a date using
+    wxCalendarDateAttr.
+*/
+enum wxCalendarDateBorder
+{
+    wxCAL_BORDER_NONE,      ///< No Border (Default)
+    wxCAL_BORDER_SQUARE,    ///< Rectangular Border
+    wxCAL_BORDER_ROUND      ///< Round Border
+};
+
+/**
     @class wxCalendarDateAttr
     @wxheader{calctrl.h}
 
-    wxCalendarDateAttr is a custom attributes for a calendar date. The objects of
-    this class are used with wxCalendarCtrl.
+    wxCalendarDateAttr is a custom attributes for a calendar date. The objects
+    of this class are used with wxCalendarCtrl.
 
     @library{wxadv}
     @category{misc}
@@ -52,74 +62,78 @@ public:
 class wxCalendarDateAttr
 {
 public:
-    //@{
     /**
-        The constructors.
+        Default constructor.
     */
     wxCalendarDateAttr();
+
+    /**
+        Constructor for specifying all wxCalendarDateAttr properties.
+    */
     wxCalendarDateAttr(const wxColour& colText,
                        const wxColour& colBack = wxNullColour,
                        const wxColour& colBorder = wxNullColour,
                        const wxFont& font = wxNullFont,
                        wxCalendarDateBorder border = wxCAL_BORDER_NONE);
-    wxCalendarDateAttr(wxCalendarDateBorder border,
-                       const wxColour& colBorder = wxNullColour);
-    //@}
 
     /**
-        Returns the background colour to use for the item with this attribute.
+        Constructor using default properties except the given border.
+    */
+    wxCalendarDateAttr(wxCalendarDateBorder border,
+                       const wxColour& colBorder = wxNullColour);
+
+    /**
+        Returns the background colour set for the calendar date.
     */
     const wxColour GetBackgroundColour() const;
 
     /**
-        Returns the border() to use for the item with this attribute.
+        Returns the border set for the calendar date.
     */
     wxCalendarDateBorder GetBorder() const;
 
     /**
-        Returns the border colour to use for the item with this attribute.
+        Returns the border colour set for the calendar date.
     */
     const wxColour GetBorderColour() const;
 
     /**
-        Returns the font to use for the item with this attribute.
+        Returns the font set for the calendar date.
     */
     const wxFont GetFont() const;
 
     /**
-        Returns the text colour to use for the item with this attribute.
+        Returns the text colour set for the calendar date.
     */
     const wxColour GetTextColour() const;
 
     /**
-        Returns @true if this attribute specifies a non-default text background
-        colour.
+        Returns @true if a non-default text background colour is set.
     */
     bool HasBackgroundColour() const;
 
     /**
-        Returns @true if this attribute specifies a non-default (i.e. any) border.
+        Returns @true if a non-default (i.e. any) border is set.
     */
     bool HasBorder() const;
 
     /**
-        Returns @true if this attribute specifies a non-default border colour.
+        Returns @true if a non-default border colour is set.
     */
     bool HasBorderColour() const;
 
     /**
-        Returns @true if this attribute specifies a non-default font.
+        Returns @true if a non-default font is set.
     */
     bool HasFont() const;
 
     /**
-        Returns @true if this item has a non-default text foreground colour.
+        Returns @true if a non-default text foreground colour is set.
     */
     bool HasTextColour() const;
 
     /**
-        Returns @true if this attribute specifies that this item should be
-        displayed as a holiday.
+        Returns @true if this calendar day is displayed as a holiday.
     */
     bool IsHoliday() const;
 
@@ -129,7 +143,7 @@ public:
     void SetBackgroundColour(const wxColour& colBack);
 
     /**
-        Sets the @ref overview_wxcalendardateattr "border kind"
+        Sets the border to use.
     */
     void SetBorder(wxCalendarDateBorder border);
 
@@ -144,7 +158,8 @@ public:
     void SetFont(const wxFont& font);
 
     /**
-        Display the date with this attribute as a holiday.
+        If @a holiday is @true, this calendar day will be displayed as a
+        holiday.
     */
     void SetHoliday(bool holiday);
 
@@ -154,13 +169,13 @@ public:
     void SetTextColour(const wxColour& colText);
 
     /**
-        Used (internally) by generic wxCalendarCtrl::Mark()
+        Used (internally) by the generic wxCalendarCtrl::Mark().
     */
     static const wxCalendarDateAttr& GetMark();
 
     /**
-       Set the attribute that will be used to Mark() days
-       on generic wxCalendarCtrl
+        Set the attributes that will be used to Mark() days on the generic
+        wxCalendarCtrl.
     */
     static void SetMark(wxCalendarDateAttr const& m);
 };
@@ -168,32 +183,41 @@ public:
 
 
 /**
+    Possible return values from wxCalendarCtrl::HitTest().
+*/
+enum wxCalendarHitTestResult
+{
+    wxCAL_HITTEST_NOWHERE,  ///< Hit outside of anything.
+    wxCAL_HITTEST_HEADER,   ///< Hit on the header (weekdays).
+    wxCAL_HITTEST_DAY       ///< Hit on a day in the calendar.
+};
+
+/**
     @class wxCalendarCtrl
     @wxheader{calctrl.h}
 
     The calendar control allows the user to pick a date.  The user can move the
     current selection using the keyboard and select the date (generating
-    @c EVT_CALENDAR event) by pressing @c Return or double clicking it.
+    @c EVT_CALENDAR event) by pressing @c @<Return@> or double clicking it.
 
     Generic calendar has advanced possibilities for the customization of its
-    display, described below. If you want to use these possibilities on
-    every platform, use wxGenericCalendarCtrl instead of wxCalendarCtrl.
+    display, described below. If you want to use these possibilities on every
+    platform, use wxGenericCalendarCtrl instead of wxCalendarCtrl.
 
-    All global settings (such as colours and fonts used) can, of course,
-    be changed. But also, the display style for each day in the month can
-    be set independently using wxCalendarDateAttr class.
+    All global settings (such as colours and fonts used) can, of course, be
+    changed. But also, the display style for each day in the month can be set
+    independently using wxCalendarDateAttr class.
 
     An item without custom attributes is drawn with the default colours and
-    font and without border, but setting custom attributes with
-    wxCalendarCtrl::SetAttr allows to modify its appearance. Just
-    create a custom attribute object and set it for the day you want to be
-    displayed specially (note that the control will take ownership of
-    the pointer, i.e. it will delete it itself).
+    font and without border, but setting custom attributes with SetAttr()
+    allows to modify its appearance. Just create a custom attribute object and
+    set it for the day you want to be displayed specially (note that the
+    control will take ownership of the pointer, i.e. it will delete it itself).
     A day may be marked as being a holiday, even if it is not recognized as
-    one by wxDateTime using wxCalendarDateAttr::SetHoliday method.
+    one by wxDateTime using the wxCalendarDateAttr::SetHoliday() method.
 
-    As the attributes are specified for each day, they may change when the month
-    is changed, so you will often want to update them in
+    As the attributes are specified for each day, they may change when the
+    month is changed, so you will often want to update them in
     @c EVT_CALENDAR_PAGE_CHANGED event handler.
 
     @beginStyleTable
@@ -226,9 +250,12 @@ public:
            User clicked on the week day header (only generic).
     @endEventTable
 
+    @note Changing the selected date will trigger an EVT_CALENDAR_DAY, MONTH or
+          YEAR event as well as an EVT_CALENDAR_SEL_CHANGED event.
+
     @library{wxadv}
     @category{ctrl}
-    @appearance{calendarctrl.png}
+    <!-- @appearance{calendarctrl.png} -->
 
     @nativeimpl{wxgtk}
 
@@ -238,18 +265,20 @@ public:
 class wxCalendarCtrl : public wxControl
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxCalendarCtrl();
+
     /**
         Does the same as Create() method.
     */
-    wxCalendarCtrl();
     wxCalendarCtrl(wxWindow* parent, wxWindowID id,
                    const wxDateTime& date = wxDefaultDateTime,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxCAL_SHOW_HOLIDAYS,
                    const wxString& name = wxCalendarNameStr);
-    //@}
 
     /**
         Destroys the control.
@@ -257,8 +286,8 @@ public:
     ~wxCalendarCtrl();
 
     /**
-        Creates the control. See @ref wxWindow::ctor wxWindow for the meaning of
-        the parameters and the control overview for the possible styles.
+        Creates the control. See wxWindow::wxWindow() for the meaning of the
+        parameters and the control overview for the possible styles.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxDateTime& date = wxDefaultDateTime,
@@ -269,34 +298,35 @@ public:
 
     /**
         This function should be used instead of changing @c wxCAL_SHOW_HOLIDAYS
-        style bit directly. It enables or disables the special highlighting of the
-        holidays.
+        style bit directly. It enables or disables the special highlighting of
+        the holidays.
     */
     void EnableHolidayDisplay(bool display = true);
 
     /**
         This function should be used instead of changing
         @c wxCAL_NO_MONTH_CHANGE style bit. It allows or disallows the user to
-        change the month interactively. Note that if the month can not
-        be changed, the year can not be changed neither.
+        change the month interactively. Note that if the month can not be
+        changed, the year can not be changed neither.
 
-        @return @true if the value of this option really changed or @false
-                if it was already set to the requested value.
+        @return @true if the value of this option really changed or @false if
+                it was already set to the requested value.
     */
     bool EnableMonthChange(bool enable = true);
 
     /**
         @deprecated
 
-        This function should be used instead of changing @c wxCAL_NO_YEAR_CHANGE
-        style bit directly. It allows or disallows the user to change the year
-        interactively. Only in generic wxCalendarCtrl.
+        This function should be used instead of changing
+        @c wxCAL_NO_YEAR_CHANGE style bit directly. It allows or disallows the
+        user to change the year interactively. Only in generic wxCalendarCtrl.
     */
     void EnableYearChange(bool enable = true);
 
     /**
-        Returns the attribute for the given date (should be in the range 1...31).
-        The returned pointer may be @NULL. Only in generic wxCalendarCtrl.
+        Returns the attribute for the given date (should be in the range
+        1...31). The returned pointer may be @NULL. Only in generic
+        wxCalendarCtrl.
     */
     wxCalendarDateAttr* GetAttr(size_t day) const;
 
@@ -349,7 +379,8 @@ public:
         Return the background colour currently used for holiday highlighting.
 
         Only useful with generic wxCalendarCtrl as native versions currently
-        don't support holidays display at all and always return @c wxNullColour.
+        don't support holidays display at all and always return
+        @c wxNullColour.
 
         @see SetHolidayColours()
     */
@@ -359,17 +390,17 @@ public:
         Return the foreground colour currently used for holiday highlighting.
 
         Only useful with generic wxCalendarCtrl as native versions currently
-        don't support holidays display at all and always return @c wxNullColour.
+        don't support holidays display at all and always return
+        @c wxNullColour.
 
         @see SetHolidayColours()
     */
     const wxColour GetHolidayColourFg() const;
 
     /**
-        Returns one of @c wxCAL_HITTEST_XXX
-        constants() and fills either @a date or @a wd pointer with
-        the corresponding value depending on the hit test code.
-        Only in generic wxCalendarCtrl.
+        Returns one of wxCalendarHitTestResult constants and fills either
+        @a date or @a wd pointer with the corresponding value depending on the
+        hit test code. Only in generic wxCalendarCtrl.
     */
     wxCalendarHitTestResult HitTest(const wxPoint& pos,
                                     wxDateTime* date = NULL,
@@ -377,15 +408,14 @@ public:
 
     /**
         Clears any attributes associated with the given day (in the range
-        1...31).
-        Only in generic wxCalendarCtrl.
+        1...31). Only in generic wxCalendarCtrl.
     */
     void ResetAttr(size_t day);
 
     /**
         Associates the attribute with the specified date (in the range 1...31).
-        If the pointer is @NULL, the items attribute is cleared.
-        Only in generic wxCalendarCtrl.
+        If the pointer is @NULL, the items attribute is cleared. Only in
+        generic wxCalendarCtrl.
     */
     void SetAttr(size_t day, wxCalendarDateAttr* attr);
 
@@ -395,7 +425,8 @@ public:
     void SetDate(const wxDateTime& date);
 
     /**
-        Set the colours used for painting the weekdays at the top of the control.
+        Set the colours used for painting the weekdays at the top of the
+        control.
 
         This method is currently only implemented in generic wxCalendarCtrl and
         does nothing in the native versions.
@@ -404,7 +435,8 @@ public:
                           const wxColour& colBg);
 
     /**
-        Set the colours to be used for highlighting the currently selected date.
+        Set the colours to be used for highlighting the currently selected
+        date.
 
         This method is currently only implemented in generic wxCalendarCtrl and
         does nothing in the native versions.
@@ -433,15 +465,13 @@ public:
                            const wxColour& colBg);
 
     /**
-        Mark or unmark the day.
-        This day of month will be marked in every month.
-        In generic wxCalendarCtrl,
+        Mark or unmark the day. This day of month will be marked in every
+        month. In generic wxCalendarCtrl,
     */
     void Mark(size_t day, bool mark);
 
-
     /**
-        @name Date range.
+        @name Date Range Functions
 
         The functions in this section are currently implemented in the generic
         and MSW versions and do nothing in the native GTK implementation.
@@ -455,17 +485,19 @@ public:
         @true returned. If none are set, the existing restrictions are removed
         and @false is returned.
 
+        @see GetDateRange()
+
         @param lowerdate
-            the low limit for the dates shown by the control or @c
-            wxDefaultDateTime
+            The low limit for the dates shown by the control or
+            @c wxDefaultDateTime.
         @param highlighting
-            the high limit for the dates shown by the control or @c
-            wxDefaultDateTime
+            The high limit for the dates shown by the control or
+            @c wxDefaultDateTime.
         @return
             @true if either limit is valid, @false otherwise
      */
     virtual bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
-                              const wxDateTime& upperdate = wxDefaultDateTime);
+                                const wxDateTime& upperdate = wxDefaultDateTime);
 
     /**
         Returns the limits currently being used.
@@ -473,17 +505,18 @@ public:
         @see SetDateRange()
 
         @param lowerdate
-            if non-@NULL, the value of the low limit for the dates shown by the
+            If non-@NULL, the value of the low limit for the dates shown by the
             control is returned (which may be @c wxDefaultDateTime if no limit
-            is set)
+            is set).
         @param upperdate
-            if non-@NULL, the value of the upper limit for the dates shown by the
-            control is returned (which may be @c wxDefaultDateTime if no limit
-            is set)
+            If non-@NULL, the value of the upper limit for the dates shown by
+            the control is returned (which may be @c wxDefaultDateTime if no
+            limit is set).
         @return
             @true if either limit is set, @false otherwise
      */
-    virtual bool GetDateRange(wxDateTime *lowerdate, wxDateTime *upperdate) const
+    virtual bool GetDateRange(wxDateTime *lowerdate,
+                                wxDateTime *upperdate) const;
 
     //@}
 };
