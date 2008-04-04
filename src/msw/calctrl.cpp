@@ -56,6 +56,9 @@ wxCalendarCtrl::Create(wxWindow *parent,
     if ( !wxMSWDateControls::CheckInitialization() )
         return false;
 
+    // we need the arrows for the navigation
+    style |= wxWANTS_CHARS;
+
     // initialize the base class
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
