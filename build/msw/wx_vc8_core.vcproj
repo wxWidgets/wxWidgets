@@ -3521,6 +3521,9 @@
 				RelativePath="..\..\include\wx\msw\button.h"
 			/>
 			<File
+				RelativePath="..\..\include\wx\msw\calctrl.h"
+			/>
+			<File
 				RelativePath="..\..\include\wx\msw\caret.h"
 			/>
 			<File
@@ -3564,6 +3567,9 @@
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\ole\dataobj2.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\msw\datecontrols.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\msw\datectrl.h"
