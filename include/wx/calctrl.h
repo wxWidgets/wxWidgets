@@ -297,14 +297,16 @@ public:
 
     // implementation only from now on
 
-protected:
     // generate the given calendar event, return true if it was processed
+    //
+    // NB: this is public because it's used from GTK+ callbacks
     bool GenerateEvent(wxEventType type)
     {
         wxCalendarEvent event(this, GetDate(), type);
         return HandleWindowEvent(event);
     }
 
+protected:
     // generate all the events for the selection change from dateOld to current
     // date: SEL_CHANGED, PAGE_CHANGED if necessary and also one of (deprecated)
     // YEAR/MONTH/DAY_CHANGED ones
