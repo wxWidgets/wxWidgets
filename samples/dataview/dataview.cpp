@@ -599,7 +599,7 @@ public:
     
     virtual wxSize GetSize() const
     { 
-        return wxSize(40,20); 
+        return wxSize(60,20); 
     }
     
     virtual bool SetValue( const wxVariant &WXUNUSED(value) ) { return true; }
@@ -800,16 +800,16 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE);
 #endif
     
-    m_musicCtrl->AppendTextColumn( wxT("Artist"), 1, wxDATAVIEW_CELL_EDITABLE, 150, DEFAULT_ALIGN, 
+    m_musicCtrl->AppendTextColumn( wxT("Artist"), 1, wxDATAVIEW_CELL_EDITABLE, 150, wxALIGN_LEFT, 
                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE  | wxDATAVIEW_COL_RESIZABLE);
 
     wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010 );
-    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("year"), sr, 2, -1, wxALIGN_CENTRE, 
+    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("year"), sr, 2, 80, wxALIGN_CENTRE, 
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column1 );
 
     MyCustomRenderer *cr = new MyCustomRenderer;
-    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_CENTRE, 
+    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_RIGHT, 
         wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column2 );
 
@@ -824,10 +824,15 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     
     m_list_model = new MyListModel;
     m_listCtrl->AssociateModel( m_list_model.get() );
-    
+
+#if 1
     m_listCtrl->AppendTextColumn    (wxT("editable string"), 0, wxDATAVIEW_CELL_EDITABLE, 120 );
     m_listCtrl->AppendIconTextColumn(wxT("icon"),            1, wxDATAVIEW_CELL_INERT,     60 );
-    
+#else
+    m_listCtrl->AppendTextColumn    (wxT("editable string"), 0, wxDATAVIEW_CELL_EDITABLE );
+    m_listCtrl->AppendIconTextColumn(wxT("icon"),            1, wxDATAVIEW_CELL_INERT );
+#endif
+
     wxDataViewTextRendererAttr *ra = new wxDataViewTextRendererAttr;
     wxDataViewColumn *column3 = new wxDataViewColumn(wxT("attributes"), ra, 2 );
     m_listCtrl->AppendColumn( column3 );
