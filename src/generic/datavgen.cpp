@@ -1464,7 +1464,7 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
 
         case HDN_BEGINDRAG:
             // user has started to reorder a column
-            if (!GetColumn(nmHDR->iItem)->IsReorderable())
+            if ((nmHDR->iItem != -1) && (!GetColumn(nmHDR->iItem)->IsReorderable()))
             {
                 // veto it!
                 *result = TRUE;
