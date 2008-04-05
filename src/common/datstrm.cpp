@@ -100,25 +100,27 @@ double wxDataInputStream::ReadDouble()
 
 wxString wxDataInputStream::ReadString()
 {
-  size_t len;
-
-  len = Read32();
-
-  if (len > 0)
-  {
-#if wxUSE_UNICODE
-    wxCharBuffer tmp(len + 1);
-    m_input->Read(tmp.data(), len);
-    tmp.data()[len] = '\0';
-    wxString ret(m_conv->cMB2WX(tmp.data()));
-#else
     wxString ret;
-    m_input->Read( wxStringBuffer(ret, len), len);
+
+    const size_t len = Read32();
+    if ( len > 0 )
+    {
+#if wxUSE_UNICODE
+        wxCharBuffer tmp(len + 1);
+        if ( tmp )
+        {
+            m_input->Read(tmp.data(), len);
+            tmp.data()[len] = '\0';
+            ret = m_conv->cMB2WX(tmp.data());
+        }
+#else
+        wxStringBuffer buf(ret, len);
+        if ( buf )
+            m_input->Read(buf, len);
 #endif
+    }
+
     return ret;
-  }
-  else
-    return wxEmptyString;
 }
 
 #if wxUSE_LONGLONG
