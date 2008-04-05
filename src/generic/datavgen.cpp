@@ -1921,7 +1921,7 @@ void wxDataViewRenameTimer::Notify()
 //-----------------------------------------------------------------------------
 
 //The tree building helper, declared firstly
-void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node);
+static void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node);
 
 int LINKAGEMODE wxDataViewSelectionCmp( unsigned int row1, unsigned int row2 )
 {
@@ -2196,19 +2196,15 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                     else
                         wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
                 }
-                else
-                {
-                     // I am wondering whether we should draw dot lines between tree nodes
-                     if (node)
-                         delete node;
-                     // Yes, if the node does not have any child, it must be a leaf which
-                     // mean that it is a temporarily created by GetTreeNodeByRow
-                }
-
                  //force the expander column to left-center align
                  cell->SetAlignment( wxALIGN_CENTER_VERTICAL );
             }
-
+            if (node && !node->HasChildren())
+            {
+                // Yes, if the node does not have any child, it must be a leaf which
+                // mean that it is a temporarily created by GetTreeNodeByRow
+                wxDELETE(node)
+            }
 
             // cannot be bigger than allocated space
             wxSize size = cell->GetSize();
@@ -2399,7 +2395,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
     return true;
 }
 
-void DestroyTreeHelper( wxDataViewTreeNode * node);
+static void DestroyTreeHelper( wxDataViewTreeNode * node);
 
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
                                        const wxDataViewItem& item)
@@ -2457,7 +2453,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 
         node->GetNodes().Remove( n );
         sub -= n->GetSubTreeCount();
-        DestroyTreeHelper(n);
+        ::DestroyTreeHelper(n);
     }
     //Make the row number invalid and get a new valid one when user call GetRowCount
     m_count = -1;
@@ -3073,7 +3069,7 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
                if( node->GetChildrenNumber() == 0 )
                {
                    SortPrepare();
-                   BuildTreeHelper(GetOwner()->GetModel(), node->GetItem(), node);
+                   ::BuildTreeHelper(GetOwner()->GetModel(), node->GetItem(), node);
                }
                m_count = -1;
                UpdateDisplay();
@@ -3157,7 +3153,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             if( node->GetChildrenNumber() == 0 )
             {
                 SortPrepare();
-                BuildTreeHelper(model, node->GetItem(), node);
+                ::BuildTreeHelper(model, node->GetItem(), node);
             }
 
             wxDataViewTreeNodes nodes = node->GetNodes();
@@ -3320,7 +3316,7 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item)
     }
 }
 
-void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node)
+static void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wxDataViewTreeNode * node)
 {
     if( !model->IsContainer( item ) )
         return ;
@@ -3370,13 +3366,13 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
     m_count = -1 ;
 }
 
-void DestroyTreeHelper( wxDataViewTreeNode * node )
+static void DestroyTreeHelper( wxDataViewTreeNode * node )
 {
     if( node->GetNodeNumber() != 0 )
     {
         int len = node->GetNodeNumber();
         int i = 0 ;
-        wxDataViewTreeNodes nodes = node->GetNodes();
+        wxDataViewTreeNodes& nodes = node->GetNodes();
         for( ; i < len; i ++ )
         {
             DestroyTreeHelper(nodes[i]);
@@ -3389,7 +3385,7 @@ void wxDataViewMainWindow::DestroyTree()
 {
     if (m_root)
     {
-        DestroyTreeHelper(m_root);
+       ::DestroyTreeHelper(m_root);
         m_count = 0;
         m_root = NULL;
     }
@@ -3666,6 +3662,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                         OnExpanding( current );
                 }
             }
+            if (node && !node->HasChildren())
+               delete node;
         }
         //If the user click the expander, we do not do editing even if the column with expander are editable
         if (m_lastOnSame && !expander && !ignore_other_columns)
@@ -3842,6 +3840,12 @@ wxDataViewCtrl::~wxDataViewCtrl()
 {
     if (m_notifier)
         GetModel()->RemoveNotifier( m_notifier );
+
+    wxDataViewColumnList::const_iterator iter;
+    for (iter = m_cols.begin(); iter!=m_cols.end(); iter++)
+    {
+        delete *iter;
+    }
 }
 
 void wxDataViewCtrl::Init()
