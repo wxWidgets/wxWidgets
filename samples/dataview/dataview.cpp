@@ -800,7 +800,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE);
 #endif
     
-    m_musicCtrl->AppendTextColumn( wxT("Artist"), 1, wxDATAVIEW_CELL_EDITABLE, 150, wxALIGN_LEFT, 
+    m_musicCtrl->AppendTextColumn( wxT("Artist"), 1, wxDATAVIEW_CELL_EDITABLE, 150, wxALIGN_RIGHT, 
                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE  | wxDATAVIEW_COL_RESIZABLE);
 
     wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010 );
