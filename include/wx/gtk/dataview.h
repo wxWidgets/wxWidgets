@@ -150,9 +150,6 @@ public:
     virtual bool LeftClick( wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), 
                            wxDataViewModel *WXUNUSED(model), const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col) )   
                            { return false; }
-    virtual bool RightClick( wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell),
-                           wxDataViewModel *WXUNUSED(model), const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col) )   
-                           { return false; }
     virtual bool StartDrag( wxPoint WXUNUSED(cursor), wxRect WXUNUSED(cell), 
                            wxDataViewModel *WXUNUSED(model), const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col) )   
                            { return false; }

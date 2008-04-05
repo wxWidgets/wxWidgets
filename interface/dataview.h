@@ -580,7 +580,8 @@ public:
     ~wxDataViewCustomRenderer();
 
     /**
-        Override this to react to double clicks or ENTER.
+        Override this to react to double clicks or ENTER. This method will
+        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
     */
     virtual bool Activate( wxRect cell,
                            wxDataViewModel* model,
@@ -621,7 +622,8 @@ public:
     virtual bool HasEditorCtrl();
 
     /**
-        Overrride this to react to a left click.
+        Overrride this to react to a left click. This method will
+        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
     */
     virtual bool LeftClick( wxPoint cursor,
                             wxRect cell,
@@ -646,16 +648,8 @@ public:
                     wxDC* dc, int state);
 
     /**
-        Overrride this to react to a right click.
-    */
-    virtual bool RightClick(wxPoint cursor,
-                            wxRect cell,
-                            wxDataViewModel* model,
-                            const wxDataViewItem & item,
-                            unsigned int col);
-
-    /**
-        Overrride this to start a drag operation.
+        Overrride this to start a drag operation. Not yet
+        supported
     */
     virtual bool StartDrag(wxPoint cursor, wxRect cell,
                            wxDataViewModel* model,

@@ -3671,7 +3671,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         if (m_lastOnSame && !expander && !ignore_other_columns)
         {
             if ((col == m_currentCol) && (current == m_currentRow) &&
-                (cell->GetMode() == wxDATAVIEW_CELL_EDITABLE) )
+                (cell->GetMode() & wxDATAVIEW_CELL_EDITABLE) )
             {
                 m_renameTimer->Start( 100, true );
             }
@@ -3704,28 +3704,18 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             SendSelectionChangedEvent(GetItemByRow( m_currentRow ) );
         }
 
-        // notify cell about right click
         wxVariant value;
         model->GetValue( value, item, col->GetModelColumn() );
-        cell->SetValue( value );
-        wxRect cell_rect( xpos, current * m_lineHeight,
-                          col->GetWidth(), m_lineHeight );
-        if (!cell->RightClick( event.GetPosition(), cell_rect, model, item, col->GetModelColumn()))
-        {
-            wxWindow *parent = GetParent();
-            wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
-            le.SetItem( item );
-            le.SetEventObject(parent);
-            le.SetModel(GetOwner()->GetModel());
-            le.SetValue(value);
-
-            parent->GetEventHandler()->ProcessEvent(le);
-        }
+        wxWindow *parent = GetParent();
+        wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
+        le.SetItem( item );
+        le.SetEventObject(parent);
+        le.SetModel(GetOwner()->GetModel());
+        le.SetValue(value);
+        parent->GetEventHandler()->ProcessEvent(le);
     }
     else if (event.MiddleDown())
     {
-        // notify cell about middle click
-        // cell->...
     }
     if (event.LeftDown() || forceClick)
     {
@@ -3783,7 +3773,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 wxFAIL_MSG( _T("how did we get here?") );
             }
         }
-
+        
         if (m_currentRow != oldCurrentRow)
             RefreshRow( oldCurrentRow );
 
@@ -3794,6 +3784,18 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
         m_lastOnSame = !forceClick && ((col == oldCurrentCol) &&
                         (current == oldCurrentRow)) && oldWasSelected;
+
+        // Call LeftClick after everything else as under GTK+
+        if (cell->GetMode() & wxDATAVIEW_CELL_ACTIVATABLE)
+        {
+            // notify cell about right click
+            wxVariant value;
+            model->GetValue( value, item, col->GetModelColumn() );
+            cell->SetValue( value );
+            wxRect cell_rect( xpos, current * m_lineHeight,
+                          col->GetWidth(), m_lineHeight );
+            /* ignore ret */ cell->LeftClick( event.GetPosition(), cell_rect, model, item, col->GetModelColumn());
+        }
     }
 }
 

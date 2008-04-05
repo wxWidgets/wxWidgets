@@ -1172,12 +1172,6 @@ gtk_wx_cell_renderer_activate(
                 if (cell->Activate( renderrect, model, item, model_col ))
                     ret = true;
         }
-        if (button_event->button == 3)
-        {
-            if (cell->RightClick( pt, renderrect, model, item, model_col ))
-                ret = true;
-        }
-
         wxrenderer->last_click = button_event->time;
 
         return ret;

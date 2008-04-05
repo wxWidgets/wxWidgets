@@ -563,6 +563,50 @@ public:
 };
 
 // -------------------------------------
+// MyCustomRenderer
+// -------------------------------------
+
+class MyCustomRenderer: public wxDataViewCustomRenderer
+{
+public:
+    MyCustomRenderer( wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+//    MyCustomRenderer( wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                      int alignment = wxDVR_DEFAULT_ALIGNMENT ) :
+       wxDataViewCustomRenderer( wxString("long"), mode, alignment ) { }
+       
+    virtual bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
+    {
+        dc->SetBrush( *wxRED_BRUSH );
+        dc->SetPen( *wxTRANSPARENT_PEN );
+        dc->DrawRectangle( rect );
+        return true;
+    }
+
+
+    virtual bool Activate( wxRect WXUNUSED(cell),
+                           wxDataViewModel *WXUNUSED(model), const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col) )   
+    { 
+        wxLogMessage( wxT("MyCustomRenderer Activate()") );
+        return false;
+    }
+
+    virtual bool LeftClick( wxPoint cursor, wxRect WXUNUSED(cell), 
+                           wxDataViewModel *WXUNUSED(model), const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col) )   
+    { 
+        wxLogMessage( wxT("MyCustomRenderer LeftClick( %d, %d )"), cursor.x, cursor.y );
+        return false;
+    }
+    
+    virtual wxSize GetSize() const
+    { 
+        return wxSize(40,20); 
+    }
+    
+    virtual bool SetValue( const wxVariant &WXUNUSED(value) ) { return true; }
+    virtual bool GetValue( wxVariant &WXUNUSED(value) ) const { return true; }
+};
+
+// -------------------------------------
 // MyApp
 // -------------------------------------
 
@@ -645,7 +689,7 @@ bool MyApp::OnInit(void)
 
     // build the first frame
     MyFrame *frame = 
-        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 40, 40, 800, 540);
+        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 40, 40, 1000, 540);
     frame->Show(true);
 
     SetTopWindow(frame);
@@ -748,19 +792,26 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 #if 0 
     // Call this and sorting is enabled
     // immediatly upon start up.                                    
-    wxDataViewColumn *col = m_musicCtrl->AppendTextColumn( wxT("Title"), 0, wxDATAVIEW_CELL_INERT, 200, 
-                                     DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE);
+    wxDataViewColumn *col = m_musicCtrl->AppendTextColumn( wxT("Title"), 0, wxDATAVIEW_CELL_INERT, 200, DEFAULT_ALIGN, 
+               wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE);
     col->SetSortOrder( true );
 #else
-    m_musicCtrl->AppendTextColumn(wxT("Title"),0,wxDATAVIEW_CELL_INERT,200,DEFAULT_ALIGN,wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE);
+    m_musicCtrl->AppendTextColumn( wxT("Title"), 0, wxDATAVIEW_CELL_INERT, 200, DEFAULT_ALIGN,
+               wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE);
 #endif
     
-    m_musicCtrl->AppendTextColumn( wxT("Artist"), 1, wxDATAVIEW_CELL_EDITABLE, 150,
-                                     DEFAULT_ALIGN, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE);
+    m_musicCtrl->AppendTextColumn( wxT("Artist"), 1, wxDATAVIEW_CELL_EDITABLE, 150, DEFAULT_ALIGN, 
+               wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE  | wxDATAVIEW_COL_RESIZABLE);
 
     wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010 );
-    wxDataViewColumn *column = new wxDataViewColumn( wxT("year"), sr, 2, -1, wxALIGN_CENTRE, wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE);
-    m_musicCtrl->AppendColumn( column );
+    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("year"), sr, 2, -1, wxALIGN_CENTRE, 
+        wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+    m_musicCtrl->AppendColumn( column1 );
+
+    MyCustomRenderer *cr = new MyCustomRenderer;
+    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_CENTRE, 
+        wxDATAVIEW_COL_RESIZABLE );
+    m_musicCtrl->AppendColumn( column2 );
 
     data_sizer->Add( m_musicCtrl, 3, wxGROW );
     
@@ -778,8 +829,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_listCtrl->AppendIconTextColumn(wxT("icon"),            1, wxDATAVIEW_CELL_INERT,     60 );
     
     wxDataViewTextRendererAttr *ra = new wxDataViewTextRendererAttr;
-    column = new wxDataViewColumn(wxT("attributes"), ra, 2 );
-    m_listCtrl->AppendColumn( column );
+    wxDataViewColumn *column3 = new wxDataViewColumn(wxT("attributes"), ra, 2 );
+    m_listCtrl->AppendColumn( column3 );
     
     data_sizer->Add( m_listCtrl, 2, wxGROW );
  
@@ -823,7 +874,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     treectrl->AssociateModel( store );
     store->DecRef();
 
-    treectrl->AppendIconTextColumn(wxT("no label"), 0, wxDATAVIEW_CELL_INERT, -1 );
+    treectrl->AppendIconTextColumn( wxT("no label"), 0, wxDATAVIEW_CELL_INERT, -1, (wxAlignment) 0, 
+        wxDATAVIEW_COL_RESIZABLE );
 
     bottom_sizer->Add( treectrl, 1 );
 
@@ -983,6 +1035,7 @@ void MyFrame::OnContextMenu( wxDataViewEvent &event )
     
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s"),title.GetData());
+//    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s Value: %s"),title.GetData(), event.GetValue().GetString());
 }
 
 void MyFrame::OnHeaderClick( wxDataViewEvent &event )
