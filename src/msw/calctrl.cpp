@@ -330,7 +330,7 @@ void wxCalendarCtrl::UpdateMarks()
 {
     MONTHDAYSTATE states[3];
     const int nMonths = MonthCal_GetMonthRange(GetHwnd(), GMR_DAYSTATE, NULL);
-    wxCHECK_RET( nMonths <= WXSIZEOF(states), "unexpected months range" );
+    wxCHECK_RET( nMonths <= (int)WXSIZEOF(states), "unexpected months range" );
 
     for ( int i = 0; i < nMonths; i++ )
         states[i] = m_marks;
