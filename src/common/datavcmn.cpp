@@ -1177,7 +1177,7 @@ wxControl* wxDataViewSpinRenderer::CreateEditorCtrl( wxWindow *parent, wxRect la
     size = wxSize( wxMax(70,labelRect.width ), -1 );
 #endif
     wxString str;
-    str.Printf( wxT("%d\n"), (int) l );
+    str.Printf( wxT("%d"), (int) l );
     wxSpinCtrl *sc = new wxSpinCtrl( parent, wxID_ANY, str,
                labelRect.GetTopLeft(), size, wxSP_ARROW_KEYS, m_min, m_max, l );
 #ifdef __WXMAC__
