@@ -2458,11 +2458,6 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
     //Make the row number invalid and get a new valid one when user call GetRowCount
     m_count = -1;
     node->ChangeSubTreeCount(sub);
-    if( node->GetChildrenNumber() == 0)
-    {
-        node->GetParent()->GetNodes().Remove( node );
-        delete node;
-    }
 
     //Change the current row to the last row if the current exceed the max row number
     if( m_currentRow > GetRowCount() )
@@ -3157,22 +3152,28 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
             }
 
             wxDataViewTreeNodes nodes = node->GetNodes();
-            unsigned int i = 0;
-            for (; i < nodes.GetCount(); i ++)
+            unsigned int i;
+            bool found = false;
+            
+            for (i = 0; i < nodes.GetCount(); i ++)
             {
                 if (nodes[i]->GetItem() == (**iter))
                 {
+                    if (nodes[i]->GetItem() == item)
+                       return nodes[i];
+                       
                     node = nodes[i];
+                    found = true;
                     break;
                 }
             }
-            if (i == nodes.GetCount())
+            if (!found)
                 return NULL;
         }
         else
             return NULL;
     }
-    return node;
+    return NULL;
 }
 
 void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column )
