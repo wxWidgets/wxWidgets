@@ -35017,6 +35017,12 @@ fi
 done
 
 
+    ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
 if test "$ac_cv_func_vsnprintf" = "yes"; then
         { echo "$as_me:$LINENO: checking for vsnprintf declaration" >&5
 echo $ECHO_N "checking for vsnprintf declaration... $ECHO_C" >&6; }
@@ -35401,6 +35407,12 @@ _ACEOF
 
     fi
 fi
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 if test "$wxUSE_UNICODE" = yes; then
 

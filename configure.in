@@ -4029,6 +4029,7 @@ dnl
 dnl FIXME: replace this mess with WX_CHECK_FUNCS()
 AC_CHECK_FUNCS(snprintf vsnprintf vsscanf)
 
+AC_LANG_PUSH(C++)
 if test "$ac_cv_func_vsnprintf" = "yes"; then
     dnl yes it is -- now check if it is in the headers
     AC_CACHE_CHECK([for vsnprintf declaration], wx_cv_func_vsnprintf_decl,
@@ -4194,6 +4195,7 @@ if test "$ac_cv_func_vsscanf" = "yes"; then
         AC_DEFINE(HAVE_VSSCANF_DECL)
     fi
 fi
+AC_LANG_POP()
 
 if test "$wxUSE_UNICODE" = yes; then
 
