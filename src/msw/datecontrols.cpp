@@ -24,6 +24,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/msw/wrapcctl.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_DATEPICKCTRL || wxUSE_CALENDARCTRL
