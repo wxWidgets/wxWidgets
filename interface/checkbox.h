@@ -7,13 +7,24 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    The possible states of a 3-state wxCheckBox (Compatible with the 2-state
+    wxCheckBox).
+*/
+enum wxCheckBoxState
+{
+    wxCHK_UNCHECKED,
+    wxCHK_CHECKED,
+    wxCHK_UNDETERMINED  ///< 3-state checkbox only
+};
+
+/**
     @class wxCheckBox
     @wxheader{checkbox.h}
 
     A checkbox is a labelled box which by default is either on (checkmark is
-    visible) or off (no checkmark). Optionally (when the wxCHK_3STATE style flag
-    is set) it can have a third state, called the mixed or undetermined state.
-    Often this is used as a "Does Not Apply" state.
+    visible) or off (no checkmark). Optionally (when the wxCHK_3STATE style
+    flag is set) it can have a third state, called the mixed or undetermined
+    state. Often this is used as a "Does Not Apply" state.
 
     @beginStyleTable
     @style{wxCHK_2STATE}:
@@ -37,14 +48,20 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{checkbox.png}
+    <!-- @appearance{checkbox.png} -->
 
     @see wxRadioButton, wxCommandEvent
 */
 class wxCheckBox : public wxControl
 {
 public:
-    //@{
+    /**
+        Default constructor.
+
+        @see Create(), wxValidator
+    */
+    wxCheckBox();
+
     /**
         Constructor, creating and showing a checkbox.
 
@@ -56,10 +73,10 @@ public:
             Text to be displayed next to the checkbox.
         @param pos
             Checkbox position. If wxDefaultPosition is specified then a default
-        position is chosen.
+            position is chosen.
         @param size
-            Checkbox size. If wxDefaultSize is specified then a default
-        size is chosen.
+            Checkbox size. If wxDefaultSize is specified then a default size is
+            chosen.
         @param style
             Window style. See wxCheckBox.
         @param validator
@@ -69,7 +86,6 @@ public:
 
         @see Create(), wxValidator
     */
-    wxCheckBox();
     wxCheckBox(wxWindow* parent, wxWindowID id,
                const wxString& label,
                const wxPoint& pos = wxDefaultPosition,
@@ -77,7 +93,6 @@ public:
                long style = 0,
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = "checkBox");
-    //@}
 
     /**
         Destructor, destroying the checkbox.
@@ -97,17 +112,6 @@ public:
                 const wxString& name = "checkBox");
 
     /**
-        Gets the state of a 3-state checkbox.
-
-        @returns Returns wxCHK_UNCHECKED when the checkbox is unchecked,
-                 wxCHK_CHECKED  when it is checked and
-                 wxCHK_UNDETERMINED when it's in the undetermined state.
-                 Asserts when the function is used with a 2-state
-                 checkbox.
-    */
-    wxCheckBoxState Get3StateValue() const;
-
-    /**
         Gets the state of a 2-state checkbox.
 
         @returns Returns @true if it is checked, @false otherwise.
@@ -115,26 +119,33 @@ public:
     bool GetValue() const;
 
     /**
+        Gets the state of a 3-state checkbox. Asserts when the function is used
+        with a 2-state checkbox.
+    */
+    wxCheckBoxState Get3StateValue() const;
+
+    /**
         Returns whether or not the checkbox is a 3-state checkbox.
 
-        @returns Returns @true if this checkbox is a 3-state checkbox, @false if
-                 it's a 2-state checkbox.
+        @returns Returns @true if this checkbox is a 3-state checkbox, @false
+                 if it's a 2-state checkbox.
     */
     bool Is3State() const;
 
     /**
-        Returns whether or not the user can set the checkbox to the third state.
+        Returns whether or not the user can set the checkbox to the third
+        state.
 
         @returns Returns @true if the user can set the third state of this
-                 checkbox, @false if it can only be set programmatically
-                 or if it's a 2-state checkbox.
+                 checkbox, @false if it can only be set programmatically or if
+                 it's a 2-state checkbox.
     */
     bool Is3rdStateAllowedForUser() const;
 
     /**
-        This is just a maybe more readable synonym for
-        GetValue(): just as the latter, it returns
-        @true if the checkbox is checked and @false otherwise.
+        This is just a maybe more readable synonym for GetValue(): just as the
+        latter, it returns @true if the checkbox is checked and @false
+        otherwise.
     */
     bool IsChecked() const;
 
@@ -146,5 +157,14 @@ public:
             If @true, the check is on, otherwise it is off.
     */
     void SetValue(bool state);
+
+    /**
+        Sets the checkbox to the given state. This does not cause a
+        wxEVT_COMMAND_CHECKBOX_CLICKED event to get emitted.
+
+        Asserts when the checkbox is a 2-state checkbox and setting the state
+        to wxCHK_UNDETERMINED.
+    */
+    void Set3StateValue(const wxCheckBoxState state);
 };
 

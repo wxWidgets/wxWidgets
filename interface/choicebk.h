@@ -10,20 +10,18 @@
     @class wxChoicebook
     @wxheader{choicebk.h}
 
-    wxChoicebook is a class similar to wxNotebook but which
-    uses a wxChoice to show the labels instead of the
-    tabs.
+    wxChoicebook is a class similar to wxNotebook, but uses a wxChoice control
+    to show the labels instead of the tabs.
 
-    There is no documentation for this class yet but its usage is
-    identical to wxNotebook (except for the features clearly related to tabs
-    only), so please refer to that class documentation for now. You can also
-    use the @ref overview_samplenotebook "notebook sample" to see wxChoicebook in
-    action.
+    There is no documentation for this class yet but its usage is identical to
+    wxNotebook (except for the features clearly related to tabs only), so
+    please refer to that class documentation for now. You can also use the
+    @ref page_samples_notebook to see wxChoicebook in action.
 
-    wxChoicebook allows the use of wxBookCtrl::GetControlSizer, allowing a program
-    to add other controls next to the choice control. This is particularly useful
-    when screen space is restricted, as it often is when wxChoicebook is being
-    employed.
+    wxChoicebook allows the use of wxBookCtrlBase::GetControlSizer(), allowing
+    a program to add other controls next to the choice control. This is
+    particularly useful when screen space is restricted, as it often is when
+    wxChoicebook is being employed.
 
     @beginStyleTable
     @style{wxCHB_DEFAULT}:
@@ -39,12 +37,25 @@
            Place labels below the page area.
     @endStyleTable
 
+    @beginEventTable{wxChoicebookEvent}
+    @event{EVT_CHOICEBOOK_PAGE_CHANGED(id, func)}:
+           The page selection was changed. Processes a
+           wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED event.
+    @event{EVT_CHOICEBOOK_PAGE_CHANGING(id, func)}:
+           The page selection is about to be changed. Processes a
+           wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event. This event can be
+           vetoed (using wxNotifyEvent::Veto()).
+    @endEventTable
+
     @library{wxcore}
     @category{miscwnd}
 
-    @see wxBookCtrl(), wxNotebook, @ref overview_samplenotebook "notebook sample"
+    @see @ref overview_bookctrl, wxNotebook, @ref page_samples_notebook
+
+    @todo Write up wxBookCtrlBase documentation, where most of this class'
+          functionality comes from.
 */
-class wxChoicebook : public wxBookCtrl overview
+class wxChoicebook : public wxBookCtrlBase
 {
 public:
     //@{
@@ -58,5 +69,10 @@ public:
                  long style = 0,
                  const wxString& name = wxEmptyStr);
     //@}
+
+    /**
+        Returns the wxChoice associated with the control.
+    */
+    wxChoice * GetChoiceCtrl() const;
 };
 

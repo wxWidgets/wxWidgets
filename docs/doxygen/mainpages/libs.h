@@ -55,8 +55,8 @@ digraph Dependancies
 @enddot
 
 Please note that arrows indicate the "depends from" relation and that all blue
-boxes depend on the @ref page_libs_wxbase library (i.e. they are non-GUI
-libraries), and all green boxes depend on the @ref page_libs_wxcore library
+libraries depend on the @ref page_libs_wxbase library (i.e. they are non-GUI
+libraries), and all green libraries depend on the @ref page_libs_wxcore library
 (i.e. they are GUI libraries).
 
 

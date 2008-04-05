@@ -10,8 +10,8 @@
     @class wxMultiChoiceDialog
     @wxheader{choicdlg.h}
 
-    This class represents a dialog that shows a list of strings, and allows
-    the user to select one or more.
+    This class represents a dialog that shows a list of strings, and allows the
+    user to select one or more.
 
     @library{wxbase}
     @category{cmndlg}
@@ -53,11 +53,18 @@ public:
         @endStyleTable
 
         @remarks Use ShowModal() to show the dialog.
+
+        @beginWxPythonOnly
+
+        For Python the two parameters @a n and @a choices are collapsed into a
+        multi parameter @a choices which is expected to be a Python list of
+        strings.
+
+        @endWxPythonOnly
     */
     wxMultiChoiceDialog(wxWindow* parent, const wxString& message,
                         const wxString& caption,
-                        int n,
-                        const wxString* choices,
+                        int n, const wxString* choices,
                         long style = wxCHOICEDLG_STYLE,
                         const wxPoint& pos = wxDefaultPosition);
     wxMultiChoiceDialog(wxWindow* parent,
@@ -90,8 +97,8 @@ public:
     @class wxSingleChoiceDialog
     @wxheader{choicdlg.h}
 
-    This class represents a dialog that shows a list of strings, and allows
-    the user to select one. Double-clicking on a list item is equivalent to
+    This class represents a dialog that shows a list of strings, and allows the
+    user to select one. Double-clicking on a list item is equivalent to
     single-clicking and then pressing OK.
 
     @library{wxbase}
@@ -118,8 +125,8 @@ public:
         @param choices
             An array of strings, or a string list, containing the choices.
         @param clientData
-            An array of client data to be associated with the items.
-            See GetSelectionClientData.
+            An array of client data to be associated with the items. See
+            GetSelectionClientData().
         @param style
             A dialog style (bitlist) containing flags chosen from standard
             dialog styles and the ones listed below. The default value is
@@ -138,11 +145,18 @@ public:
         @endStyleTable
 
         @remarks Use ShowModal() to show the dialog.
+
+        @beginWxPythonOnly
+
+        For Python the two parameters @a n and @a choices are collapsed into a
+        multi parameter @a choices which is expected to be a Python list of
+        strings.
+
+        @endWxPythonOnly
     */
     wxSingleChoiceDialog(wxWindow* parent, const wxString& message,
                          const wxString& caption,
-                         int n,
-                         const wxString* choices,
+                         int n, const wxString* choices,
                          void** clientData = NULL,
                          long style = wxCHOICEDLG_STYLE,
                          const wxPoint& pos = wxDefaultPosition);
