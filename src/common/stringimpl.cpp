@@ -207,8 +207,8 @@ bool wxStringImpl::AllocBuffer(size_t nLen)
   wxASSERT( nLen >  0 );
 
   // make sure that we don't overflow
-  wxASSERT( nLen < (INT_MAX / sizeof(wxStringCharType)) -
-                   (sizeof(wxStringData) + EXTRA_ALLOC + 1) );
+  wxCHECK( nLen < (INT_MAX / sizeof(wxStringCharType)) -
+                  (sizeof(wxStringData) + EXTRA_ALLOC + 1), false );
 
   STATISTICS_ADD(Length, nLen);
 
