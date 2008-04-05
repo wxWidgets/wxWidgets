@@ -2649,7 +2649,16 @@ void wxDataViewColumn::SetWidth( int width )
 {
     if (width < 0)
     {
+#if 1
+        gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_FIXED );
+
+        // TODO find a better calculation
+        gtk_tree_view_column_set_fixed_width( GTK_TREE_VIEW_COLUMN(m_column), 80 );
+#else
+        // this is unpractical for large numbers of items and disables
+        // user resizing, which is totally unexpected
         gtk_tree_view_column_set_sizing( GTK_TREE_VIEW_COLUMN(m_column), GTK_TREE_VIEW_COLUMN_AUTOSIZE );
+#endif
     }
     else
     {
