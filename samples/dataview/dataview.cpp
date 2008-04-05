@@ -796,7 +796,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE);
     col->SetSortOrder( true );
 #else
-    m_musicCtrl->AppendTextColumn( wxT("Title"), 0, wxDATAVIEW_CELL_INERT, 200, DEFAULT_ALIGN,
+    m_musicCtrl->AppendTextColumn( wxT("Title"), 0, wxDATAVIEW_CELL_INERT, 200, wxALIGN_RIGHT,
                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE);
 #endif
     
