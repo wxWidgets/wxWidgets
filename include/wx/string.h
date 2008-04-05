@@ -1729,7 +1729,7 @@ public:
   // raw access to string memory
     // ensure that string has space for at least nLen characters
     // only works if the data of this string is not shared
-  bool Alloc(size_t nLen) { reserve(nLen); /*return capacity() >= nLen;*/ return true; }
+  bool Alloc(size_t nLen) { reserve(nLen); return capacity() >= nLen; }
     // minimize the string's memory
     // only works if the data of this string is not shared
   bool Shrink();

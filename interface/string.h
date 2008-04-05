@@ -146,18 +146,43 @@ public:
     wxString AfterLast(wxChar ch) const;
 
     /**
-        Preallocate enough space for wxString to store @a nLen characters. This function
-        may be used to increase speed when the string is constructed by repeated
-        concatenation as in
+        Preallocate enough space for wxString to store @a nLen characters.
 
-        because it will avoid the need to reallocate string memory many times (in case
-        of long strings). Note that it does not set the maximal length of a string - it
-        will still expand if more than @a nLen characters are stored in it. Also, it
-        does not truncate the existing string (use
-        Truncate() for this) even if its current length is
-        greater than @e nLen
+        Please note that this method does the same thing as the standard
+        reserve() one and shouldn't be used in new code.
+
+        This function may be used to increase speed when the string is
+        constructed by repeated concatenation as in
+
+        @code
+            // delete all vowels from the string
+            wxString DeleteAllVowels(const wxString& original)
+            {
+                wxString result;
+
+                size_t len = original.length();
+
+                result.Alloc(len);
+
+                for ( size_t n = 0; n < len; n++ )
+                {
+                    if ( strchr("aeuio", tolower(original[n])) == NULL )
+                        result += original[n];
+                }
+
+                return result;
+            }
+        @endcode
+
+        because it will avoid the need to reallocate string memory many times
+        (in case of long strings). Note that it does not set the maximal length
+        of a string -- it will still expand if more than @a nLen characters are
+        stored in it. Also, it does not truncate the existing string (use
+        Truncate() for this) even if its current length is greater than @a nLen.
+
+        @return @true if memory was successfully allocated, @false otherwise.
     */
-    void Alloc(size_t nLen);
+    bool Alloc(size_t nLen);
 
     //@{
     /**
