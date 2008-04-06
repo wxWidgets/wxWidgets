@@ -699,26 +699,22 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
                // variable definition and initialization:
                 wxVariant modifiedData(true);
 
-                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col))
-                {
-                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col);
+                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col) &&
+                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col))
                     return noErr;
-                }
                 else
-                    return errDataBrowserNotConfigured;
+                    return errDataBrowserInvalidPropertyData;
               } /* if */
               else if (buttonValue == kThemeButtonOff)
               {
                // variable definition and initialization:
                 wxVariant modifiedData(false);
 
-                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col))
-                {
-                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col);
+                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col) &&
+                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col))
                     return noErr;
-                }
                 else
-                    return errDataBrowserNotConfigured;
+                    return errDataBrowserInvalidPropertyData;
               } /* if */
               else
                 return errDataBrowserInvalidPropertyData;
@@ -742,13 +738,11 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
 #endif
               wxVariant           modifiedData(modifiedString.AsString());
               
-              if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col))
-              {
-                  dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col);
-                  return noErr;
-              }
-              else
-                return errDataBrowserNotConfigured;
+                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col) &&
+                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col))
+                    return noErr;
+                else
+                    return errDataBrowserInvalidPropertyData;
             } /* if */
             else
               return errorStatus;
