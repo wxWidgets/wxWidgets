@@ -73,9 +73,13 @@ public:
     virtual void OnDraw(wxDC *dc);
     virtual void OnUpdate(wxView *sender, wxObject *hint = NULL);
     virtual bool OnClose(bool deleteWindow = true);
-    virtual bool ProcessEvent(wxEvent&);
 
 private:
+    void OnCopy(wxCommandEvent& WXUNUSED(event)) { m_textsw->Copy(); }
+    void OnPaste(wxCommandEvent& WXUNUSED(event)) { m_textsw->Paste(); }
+    void OnSelectAll(wxCommandEvent& WXUNUSED(event)) { m_textsw->SelectAll(); }
+
+    DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(TextEditView)
 };
 

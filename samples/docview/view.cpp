@@ -156,6 +156,12 @@ void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
 
+BEGIN_EVENT_TABLE(TextEditView, wxView)
+    EVT_MENU(wxID_COPY, TextEditView::OnCopy)
+    EVT_MENU(wxID_PASTE, TextEditView::OnPaste)
+    EVT_MENU(wxID_SELECTALL, TextEditView::OnSelectAll)
+END_EVENT_TABLE()
+
 bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
     m_frame = wxGetApp().CreateChildFrame(doc, this, false);
@@ -199,21 +205,6 @@ bool TextEditView::OnClose(bool deleteWindow)
         return true;
     }
     return true;
-}
-
-bool TextEditView::ProcessEvent(wxEvent& event)
-{
-    bool processed = false;
-    if (!processed) switch (event.GetId())
-    {
-        case wxID_COPY:
-        case wxID_PASTE:
-        case wxID_SELECTALL:
-            processed = m_textsw->ProcessEvent(event);
-            break;
-    }
-    if (!processed) processed = wxView::ProcessEvent(event);
-    return processed;
 }
 
 /*
