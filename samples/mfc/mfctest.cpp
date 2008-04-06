@@ -49,6 +49,10 @@
 //     first: mfc[version][u]d.lib
 //     -  [version] -> 42 or 70 or 80 etc
 //     -  u if using Unicode
+//
+// (4) Unicode builds may produce the linker error "unresolved external symbol _WinMain@16".
+//     MFC requires you to manually add the Unicode entry point to the linker settings,
+//     Entry point symbol -> wWinMainCRTStartup
 
 #include "stdafx.h"
 
