@@ -360,7 +360,7 @@ bool wxFrameBase::ShowMenuHelp(int menuId)
     if ( menuId != wxID_SEPARATOR && menuId != -3 /* wxID_TITLE */ )
     {
         const wxMenuItem * const item = FindItemInMenuBar(menuId);
-        if ( item )
+        if ( item && !item->IsSeparator() )
             helpString = item->GetHelp();
 
         // notice that it's ok if we don't find the item because it might

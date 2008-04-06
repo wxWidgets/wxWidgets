@@ -68,7 +68,7 @@ public:
     }
 
     // append a separator to the menu
-    wxMenuItem* AppendSeparator() { return Append(wxID_SEPARATOR, wxEmptyString); }
+    wxMenuItem* AppendSeparator() { return Append(wxID_SEPARATOR); }
 
     // append a check item
     wxMenuItem* AppendCheckItem(int itemid,

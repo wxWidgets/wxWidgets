@@ -170,7 +170,7 @@ void wxMenuItem::Init()
     ResetOwnerDrawn();
 
     //  switch ownerdraw back on if using a non default margin
-    if ( GetId() != wxID_SEPARATOR )
+    if ( !IsSeparator() )
         SetMarginWidth(GetMarginWidth());
 
     // tell the owner drawing code to show the accel string as well
@@ -203,7 +203,7 @@ bool wxMenuItem::IsChecked() const
 {
     // fix that RTTI is always getting the correct state (separators cannot be checked, but the call below
     // returns true
-    if ( GetId() == wxID_SEPARATOR )
+    if ( IsSeparator() )
         return false ;
 
     int flag = ::GetMenuState(GetHMenuOf(m_parentMenu), GetMSWId(), MF_BYCOMMAND);

@@ -56,7 +56,6 @@ public:
     // get/set id
     void SetId(int itemid) { m_id = itemid; }
     int  GetId() const { return m_id; }
-    bool IsSeparator() const { return m_id == wxID_SEPARATOR; }
 
     // the item's text (or name)
     //
@@ -81,6 +80,7 @@ public:
     // what kind of menu item we are
     wxItemKind GetKind() const { return m_kind; }
     void SetKind(wxItemKind kind) { m_kind = kind; }
+    bool IsSeparator() const { return m_kind == wxITEM_SEPARATOR; }
 
     virtual void SetCheckable(bool checkable) { m_kind = checkable ? wxITEM_CHECK : wxITEM_NORMAL; }
     bool IsCheckable() const

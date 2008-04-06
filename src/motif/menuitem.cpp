@@ -284,7 +284,7 @@ void wxMenuItem::DestroyItem(bool full)
                 wxMenuItemDisarmCallback, (XtPointer) this);
         }
     }
-    else if (GetId() == wxID_SEPARATOR)
+    else if (IsSeparator())
     {
         ;      // Nothing
 

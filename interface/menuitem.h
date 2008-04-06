@@ -47,7 +47,8 @@ public:
         @param parentMenu
             Menu that the menu item belongs to.
         @param id
-            Identifier for this menu item, or wxID_SEPARATOR to indicate a separator.
+            Identifier for this menu item. May be wxID_SEPARATOR, in which case the
+            given kind is ignored and taken to be wxITEM_SEPARATOR instead.
         @param text
             Text for the menu item, as shown on the menu. An accelerator
             key can be specified using the ampersand " character. In order to embed an
