@@ -1434,7 +1434,7 @@ static void InitAboutInfoWebsite(wxAboutDialogInfo& info)
 
 static void InitAboutInfoAll(wxAboutDialogInfo& info)
 {
-    InitAboutInfoMinimal(info);
+    InitAboutInfoWebsite(info);
 
     // we can add a second developer
     info.AddDeveloper(_T("A.N. Other"));
