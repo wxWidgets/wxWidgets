@@ -252,9 +252,9 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& mode)
         for (int i = 0; i < nNumModes; ++i)
         {
             if (!bRet &&
-                ppXModes[i]->hdisplay == mode.w &&
-                ppXModes[i]->vdisplay == mode.h &&
-                wxCRR((*ppXModes[i])) == mode.refresh)
+                ppXModes[i]->hdisplay == mode.GetWidth() &&
+                ppXModes[i]->vdisplay == mode.GetHeight() &&
+                wxCRR((*ppXModes[i])) == mode.GetRefresh())
             {
                 //switch!
                 bRet = XF86VidModeSwitchToMode((Display*)wxGetDisplay(), DefaultScreen((Display*)wxGetDisplay()),

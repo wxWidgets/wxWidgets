@@ -55,6 +55,7 @@ public:
     int GetWidth() const { return w; }
     int GetHeight() const { return h; }
     int GetDepth() const { return bpp; }
+    int GetRefresh() const { return refresh; }
 
     // returns true if the object has been initialized
     bool IsOk() const { return w && h; }
