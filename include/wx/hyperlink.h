@@ -134,13 +134,6 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
 #define EVT_HYPERLINK(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_HYPERLINK, id, wxHyperlinkEventHandler(fn))
 
-#ifdef _WX_DEFINE_DATE_EVENTS_
-    const wxEventType wxEVT_COMMAND_HYPERLINK = wxNewEventType();
-
-    IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
-#endif
-
-
 
 #if defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/hyperlink.h"

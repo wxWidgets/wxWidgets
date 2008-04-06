@@ -38,7 +38,6 @@
 
 #include "wx/msw/private/datecontrols.h"
 
-#define _WX_DEFINE_DATE_EVENTS_
 #include "wx/dateevt.h"
 
 // apparently some versions of mingw define these macros erroneously
