@@ -40,7 +40,7 @@ enum
 //
 // Callback flags (see wxOwnerDrawnComboBox::OnDrawItem)
 //
-enum
+enum wxOwnerDrawnComboBoxPaintingFlags
 {
     // when set, we are painting the selected item in control,
     // not in the popup
@@ -140,9 +140,10 @@ protected:
     // item: item index to be drawn, may be wxNOT_FOUND when painting combo control itself
     //       and there is no valid selection
     // flags: wxODCB_PAINTING_CONTROL is set if painting to combo control instead of list
-    // NOTE: If wxVListBoxComboPopup is used with wxComboCtrl class not derived from
+    //
+    // NOTE: If wxVListBoxComboPopup is used with a wxComboCtrl class not derived from
     //       wxOwnerDrawnComboBox, this method must be overridden.
-    virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const;
+    virtual void OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags) const;
 
     // This is same as in wxVListBox
     virtual wxCoord OnMeasureItem( size_t item ) const;

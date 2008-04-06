@@ -6,6 +6,22 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+enum wxOwnerDrawnComboBoxPaintingFlags
+{
+    /**
+        Combo control is being painted, instead of a list item.
+        Argument item may be @c wxNOT_FOUND in this case.
+    */
+    wxODCB_PAINTING_CONTROL         = 0x0001,
+
+    /**
+        An item with selection background is being painted.
+        DC text colour should already be correct.
+    */
+    wxODCB_PAINTING_SELECTED        = 0x0002
+};
+
 /**
     @class wxOwnerDrawnComboBox
     @wxheader{odcombo.h}
@@ -27,6 +43,8 @@
            style is not used, writable wxOwnerDrawnComboBox is never custom
            painted unless SetCustomPaintWidth() is called.
     @endStyleTable
+
+    @see wxComboCtrl window styles and @ref overview_windowstyles.
 
     @beginEventTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}
@@ -64,8 +82,8 @@ public:
         @param pos
             Window position.
         @param size
-            Window size. If @c wxDefaultSize is specified then the window is sized
-            appropriately.
+            Window size.
+            If ::wxDefaultSize is specified then the window is sized appropriately.
         @param n
             Number of strings with which to initialise the control.
         @param choices
@@ -165,16 +183,7 @@ public:
         @param item
             The index of the item to be drawn
         @param flags
-            Combines any of the following flag values:
-
-            @beginStyleTable
-            @style{wxODCB_PAINTING_CONTROL}
-                   Combo control is being painted, instead of a list item.
-                   Argument item may be @c wxNOT_FOUND in this case.
-            @style{wxODCB_PAINTING_SELECTED}
-                   An item with selection background is being painted.
-                   DC text colour should already be correct.
-            @endStyleTable
+            A combination of the ::wxOwnerDrawnComboBoxPaintingFlags enumeration values.
     */
     void OnDrawItem(wxDC& dc, const wxRect& rect, int item,
                     int flags) const;
