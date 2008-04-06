@@ -13,28 +13,28 @@
     A static text control displays one or more lines of read-only text.
 
     @beginStyleTable
-    @style{wxALIGN_LEFT}:
+    @style{wxALIGN_LEFT}
            Align the text to the left
-    @style{wxALIGN_RIGHT}:
+    @style{wxALIGN_RIGHT}
            Align the text to the right
-    @style{wxALIGN_CENTRE}:
+    @style{wxALIGN_CENTRE}
            Center the text (horizontally)
-    @style{wxST_NO_AUTORESIZE}:
+    @style{wxST_NO_AUTORESIZE}
            By default, the control will adjust its size to exactly fit to the
            size of the text when  SetLabel is called. If this style flag is
            given, the control will not change its size (this style is
            especially useful with controls which also have wxALIGN_RIGHT or
            CENTER style because otherwise they won't make sense any longer
            after a call to SetLabel)
-    @style{wxST_ELLIPSIZE_START}:
+    @style{wxST_ELLIPSIZE_START}
            If the text width exceeds the control width, replace the beginning
            of the text with an ellipsis
-    @style{wxST_ELLIPSIZE_MIDDLE}:
+    @style{wxST_ELLIPSIZE_MIDDLE}
            Same as above, but replace the text in the middle of the control
            with an ellipsis
-    @style{wxST_ELLIPSIZE_END}:
+    @style{wxST_ELLIPSIZE_END}
            Same as above, but replace the end of the text with an ellipsis
-    @style{wxST_MARKUP}:
+    @style{wxST_MARKUP}
            Support markup in the label; see SetLabel for more information
     @endStyleTable
 

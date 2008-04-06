@@ -88,7 +88,7 @@ public:
     It is only available if @c wxUSE_COLLPANE is set to 1 (the default).
 
     @beginStyleTable
-    @style{wxCP_DEFAULT_STYLE}:
+    @style{wxCP_DEFAULT_STYLE}
            The default style: 0.
     @endStyleTable
 

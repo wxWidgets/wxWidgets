@@ -221,32 +221,32 @@ enum wxCalendarHitTestResult
     @c EVT_CALENDAR_PAGE_CHANGED event handler.
 
     @beginStyleTable
-    @style{wxCAL_SUNDAY_FIRST}:
+    @style{wxCAL_SUNDAY_FIRST}
            Show Sunday as the first day in the week (not in wxGTK)
-    @style{wxCAL_MONDAY_FIRST}:
+    @style{wxCAL_MONDAY_FIRST}
            Show Monday as the first day in the week (not in wxGTK)
-    @style{wxCAL_SHOW_HOLIDAYS}:
+    @style{wxCAL_SHOW_HOLIDAYS}
            Highlight holidays in the calendar (only generic)
-    @style{wxCAL_NO_YEAR_CHANGE}:
+    @style{wxCAL_NO_YEAR_CHANGE}
            Disable the year changing (deprecated, only generic)
-    @style{wxCAL_NO_MONTH_CHANGE}:
+    @style{wxCAL_NO_MONTH_CHANGE}
            Disable the month (and, implicitly, the year) changing
-    @style{wxCAL_SHOW_SURROUNDING_WEEKS}:
+    @style{wxCAL_SHOW_SURROUNDING_WEEKS}
            Show the neighbouring weeks in the previous and next months
            (only generic, always on for the native controls)
-    @style{wxCAL_SEQUENTIAL_MONTH_SELECTION}:
+    @style{wxCAL_SEQUENTIAL_MONTH_SELECTION}
            Use alternative, more compact, style for the month and year
            selection controls. (only generic)
     @endStyleTable
 
     @beginEventTable{wxCalendarEvent}
-    @event{EVT_CALENDAR(id, func)}:
+    @event{EVT_CALENDAR(id, func)}
            A day was double clicked in the calendar.
-    @event{EVT_CALENDAR_SEL_CHANGED(id, func)}:
+    @event{EVT_CALENDAR_SEL_CHANGED(id, func)}
            The selected date changed.
-    @event{EVT_CALENDAR_PAGE_CHANGED(id, func)}:
+    @event{EVT_CALENDAR_PAGE_CHANGED(id, func)}
            The selected month (and/or year) changed.
-    @event{EVT_CALENDAR_WEEKDAY_CLICKED(id, func)}:
+    @event{EVT_CALENDAR_WEEKDAY_CLICKED(id, func)}
            User clicked on the week day header (only generic).
     @endEventTable
 

@@ -16,28 +16,28 @@
     other than Gtk. It is only available if @c wxUSE_FILECTRL is set to 1.
 
     @beginStyleTable
-    @style{wxFC_DEFAULT_STYLE}:
+    @style{wxFC_DEFAULT_STYLE}
            The default style: wxFC_OPEN
-    @style{wxFC_OPEN}:
+    @style{wxFC_OPEN}
            Creates an file control suitable for opening files. Cannot be
            combined with wxFC_SAVE.
-    @style{wxFC_SAVE}:
+    @style{wxFC_SAVE}
            Creates an file control suitable for saving files. Cannot be
            combined with wxFC_OPEN.
-    @style{wxFC_MULTIPLE}:
+    @style{wxFC_MULTIPLE}
            For open control only, Allows selecting multiple files. Cannot be
            combined with wxFC_SAVE
-    @style{wxFC_NOSHOWHIDDEN}:
+    @style{wxFC_NOSHOWHIDDEN}
            Hides the "Show Hidden Files" checkbox (Generic only)
     @endStyleTable
 
 
     @beginEventTable{wxFileCtrlEvent}
-    @event{EVT_FILECTRL_FILEACTIVATED(id, func)}:
+    @event{EVT_FILECTRL_FILEACTIVATED(id, func)}
         The user activated a file(by double-clicking or pressing Enter)
-    @event{EVT_FILECTRL_SELECTIONCHANGED(id, func)}:
+    @event{EVT_FILECTRL_SELECTIONCHANGED(id, func)}
         The user changed the current selection(by selecting or deselecting a file)
-    @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}:
+    @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}
         The current folder of the file control has been changed
     @endEventTable
 
@@ -192,11 +192,11 @@ public:
     wxFileCtrl objects.
 
     @beginEventTable{wxFileCtrlEvent}
-    @event{EVT_FILECTRL_FILEACTIVATED(id, func)}:
+    @event{EVT_FILECTRL_FILEACTIVATED(id, func)}
         The user activated a file(by double-clicking or pressing Enter)
-    @event{EVT_FILECTRL_SELECTIONCHANGED(id, func)}:
+    @event{EVT_FILECTRL_SELECTIONCHANGED(id, func)}
         The user changed the current selection(by selecting or deselecting a file)
-    @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}:
+    @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}
         The current folder of the file control has been changed
     @endEventTable
 

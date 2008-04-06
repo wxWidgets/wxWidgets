@@ -37,9 +37,9 @@ enum wxAnimationType
     It is only available if @c wxUSE_ANIMATIONCTRL is set to 1 (the default).
 
     @beginStyleTable
-    @style{wxAC_DEFAULT_STYLE}:
+    @style{wxAC_DEFAULT_STYLE}
            The default style: wxBORDER_NONE.
-    @style{wxAC_NO_AUTORESIZE}:
+    @style{wxAC_NO_AUTORESIZE}
            By default, the control will adjust its size to exactly fit to the
            size of the animation when SetAnimation is called. If this style
            flag is given, the control will not change its size

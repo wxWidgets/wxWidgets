@@ -25,29 +25,29 @@
     wxEVT_COMMAND_LISTBOX_DOUBLECLICKED for double clicks.
 
     @beginStyleTable
-    @style{wxLB_SINGLE}:
+    @style{wxLB_SINGLE}
            Single-selection list.
-    @style{wxLB_MULTIPLE}:
+    @style{wxLB_MULTIPLE}
            Multiple-selection list: the user can toggle multiple items on and
            off.
-    @style{wxLB_EXTENDED}:
+    @style{wxLB_EXTENDED}
            Extended-selection list: the user can select multiple items using
            the SHIFT key and the mouse or special key combinations.
-    @style{wxLB_HSCROLL}:
+    @style{wxLB_HSCROLL}
            Create horizontal scrollbar if contents are too wide (Windows only).
-    @style{wxLB_ALWAYS_SB}:
+    @style{wxLB_ALWAYS_SB}
            Always show a vertical scrollbar.
-    @style{wxLB_NEEDED_SB}:
+    @style{wxLB_NEEDED_SB}
            Only create a vertical scrollbar if needed.
-    @style{wxLB_SORT}:
+    @style{wxLB_SORT}
            The listbox contents are sorted in alphabetical order.
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_LISTBOX(id, func)}:
+    @event{EVT_LISTBOX(id, func)}
            Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
            list is selected or the selection changes.
-    @event{EVT_LISTBOX_DCLICK(id, func)}:
+    @event{EVT_LISTBOX_DCLICK(id, func)}
            Process a wxEVT_COMMAND_LISTBOXDOUBLECLICKED event, when the
            listbox is double-clicked.
     @endEventTable

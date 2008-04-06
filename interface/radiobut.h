@@ -19,20 +19,20 @@
     created, or there are no more radio buttons.
 
     @beginStyleTable
-    @style{wxRB_GROUP}:
+    @style{wxRB_GROUP}
            Marks the beginning of a new group of radio buttons.
-    @style{wxRB_SINGLE}:
+    @style{wxRB_SINGLE}
            In some circumstances, radio buttons that are not consecutive
            siblings trigger a hang bug in Windows (only). If this happens, add
            this style to mark the button as not belonging to a group, and
            implement the mutually-exclusive group behaviour yourself.
-    @style{wxRB_USE_CHECKBOX}:
+    @style{wxRB_USE_CHECKBOX}
            Use a checkbox button instead of radio button (currently supported
            only on PalmOS).
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_RADIOBUTTON(id, func)}:
+    @event{EVT_RADIOBUTTON(id, func)}
            Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the
            radiobutton is clicked.
     @endEventTable

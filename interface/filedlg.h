@@ -33,25 +33,25 @@
     are errors.
 
     @beginStyleTable
-    @style{wxFD_DEFAULT_STYLE}:
+    @style{wxFD_DEFAULT_STYLE}
            Equivalent to wxFD_OPEN.
-    @style{wxFD_OPEN}:
+    @style{wxFD_OPEN}
            This is an open dialog; usually this means that the default
            button's label of the dialog is "Open". Cannot be combined with wxFD_SAVE.
-    @style{wxFD_SAVE}:
+    @style{wxFD_SAVE}
            This is a save dialog; usually this means that the default button's
            label of the dialog is "Save". Cannot be combined with wxFD_OPEN.
-    @style{wxFD_OVERWRITE_PROMPT}:
+    @style{wxFD_OVERWRITE_PROMPT}
            For save dialog only: prompt for a confirmation if a file will be
            overwritten.
-    @style{wxFD_FILE_MUST_EXIST}:
+    @style{wxFD_FILE_MUST_EXIST}
            For open dialog only: the user may only select files that actually exist.
-    @style{wxFD_MULTIPLE}:
+    @style{wxFD_MULTIPLE}
            For open dialog only: allows selecting multiple files.
-    @style{wxFD_CHANGE_DIR}:
+    @style{wxFD_CHANGE_DIR}
            Change the current working directory to the directory where the
            file(s) chosen by the user are.
-    @style{wxFD_PREVIEW}:
+    @style{wxFD_PREVIEW}
            Show the preview of the selected files (currently only supported by
            wxGTK using GTK+ 2.4 or later).
     @endStyleTable

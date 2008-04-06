@@ -18,21 +18,21 @@
     via a wxSashEvent notification.
 
     @beginStyleTable
-    @style{wxSW_3D}:
+    @style{wxSW_3D}
            Draws a 3D effect sash and border.
-    @style{wxSW_3DSASH}:
+    @style{wxSW_3DSASH}
            Draws a 3D effect sash.
-    @style{wxSW_3DBORDER}:
+    @style{wxSW_3DBORDER}
            Draws a 3D effect border.
-    @style{wxSW_BORDER}:
+    @style{wxSW_BORDER}
            Draws a thin black border.
     @endStyleTable
 
     @beginEventTable{wxSashEvent}
-    @event{EVT_SASH_DRAGGED(id, func)}:
+    @event{EVT_SASH_DRAGGED(id, func)}
            Process a wxEVT_SASH_DRAGGED event, when the user has finished
            dragging a sash.
-    @event{EVT_SASH_DRAGGED_RANGE(id1, id2, func)}:
+    @event{EVT_SASH_DRAGGED_RANGE(id1, id2, func)}
            Process a wxEVT_SASH_DRAGGED_RANGE event, when the user has
            finished dragging a sash. The event handler is called when windows
            with ids in the given range have their sashes dragged.

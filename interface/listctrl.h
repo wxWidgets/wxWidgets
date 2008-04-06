@@ -44,41 +44,41 @@
     1.
 
     @beginStyleTable
-    @style{wxLC_LIST}:
+    @style{wxLC_LIST}
            Multicolumn list view, with optional small icons. Columns are
            computed automatically, i.e. you don't set columns as in
            wxLC_REPORT. In other words, the list wraps, unlike a wxListBox.
-    @style{wxLC_REPORT}:
+    @style{wxLC_REPORT}
            Single or multicolumn report view, with optional header.
-    @style{wxLC_VIRTUAL}:
+    @style{wxLC_VIRTUAL}
            The application provides items text on demand. May only be used
            with wxLC_REPORT.
-    @style{wxLC_ICON}:
+    @style{wxLC_ICON}
            Large icon view, with optional labels.
-    @style{wxLC_SMALL_ICON}:
+    @style{wxLC_SMALL_ICON}
            Small icon view, with optional labels.
-    @style{wxLC_ALIGN_TOP}:
+    @style{wxLC_ALIGN_TOP}
            Icons align to the top. Win32 default, Win32 only.
-    @style{wxLC_ALIGN_LEFT}:
+    @style{wxLC_ALIGN_LEFT}
            Icons align to the left.
-    @style{wxLC_AUTOARRANGE}:
+    @style{wxLC_AUTOARRANGE}
            Icons arrange themselves. Win32 only.
-    @style{wxLC_EDIT_LABELS}:
+    @style{wxLC_EDIT_LABELS}
            Labels are editable: the application will be notified when editing
            starts.
-    @style{wxLC_NO_HEADER}:
+    @style{wxLC_NO_HEADER}
            No header in report mode.
-    @style{wxLC_SINGLE_SEL}:
+    @style{wxLC_SINGLE_SEL}
            Single selection (default is multiple).
-    @style{wxLC_SORT_ASCENDING}:
+    @style{wxLC_SORT_ASCENDING}
            Sort in ascending order (must still supply a comparison callback in
            SortItems.
-    @style{wxLC_SORT_DESCENDING}:
+    @style{wxLC_SORT_DESCENDING}
            Sort in descending order (must still supply a comparison callback
            in SortItems.
-    @style{wxLC_HRULES}:
+    @style{wxLC_HRULES}
            Draws light horizontal rules between rows in report mode.
-    @style{wxLC_VRULES}:
+    @style{wxLC_VRULES}
            Draws light vertical rules between columns in report mode.
     @endStyleTable
 

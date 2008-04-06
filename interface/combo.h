@@ -253,28 +253,28 @@ public:
     @endcode
 
     @beginStyleTable
-    @style{wxCB_READONLY}:
+    @style{wxCB_READONLY}
            Text will not be editable.
-    @style{wxCB_SORT}:
+    @style{wxCB_SORT}
            Sorts the entries in the list alphabetically.
-    @style{wxTE_PROCESS_ENTER}:
+    @style{wxTE_PROCESS_ENTER}
            The control will generate the event wxEVT_COMMAND_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls). Windows
            only.
-    @style{wxCC_SPECIAL_DCLICK}:
+    @style{wxCC_SPECIAL_DCLICK}
            Double-clicking triggers a call to popup's OnComboDoubleClick.
            Actual behaviour is defined by a derived class. For instance,
            wxOwnerDrawnComboBox will cycle an item. This style only applies if
            wxCB_READONLY is used as well.
-    @style{wxCC_STD_BUTTON}:
+    @style{wxCC_STD_BUTTON}
            Drop button will behave more like a standard push button.
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_TEXT(id, func)}:
+    @event{EVT_TEXT(id, func)}
            Process a wxEVT_COMMAND_TEXT_UPDATED event, when the text changes.
-    @event{EVT_TEXT_ENTER(id, func)}:
+    @event{EVT_TEXT_ENTER(id, func)}
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combo control.
     @endEventTable

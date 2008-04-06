@@ -17,23 +17,23 @@
     or indeed on almost any other window.
 
     @beginStyleTable
-    @style{wxBU_LEFT}:
+    @style{wxBU_LEFT}
            Left-justifies the label. Windows and GTK+ only.
-    @style{wxBU_TOP}:
+    @style{wxBU_TOP}
            Aligns the label to the top of the button. Windows and GTK+ only.
-    @style{wxBU_RIGHT}:
+    @style{wxBU_RIGHT}
            Right-justifies the bitmap label. Windows and GTK+ only.
-    @style{wxBU_BOTTOM}:
+    @style{wxBU_BOTTOM}
            Aligns the label to the bottom of the button. Windows and GTK+ only.
-    @style{wxBU_EXACTFIT}:
+    @style{wxBU_EXACTFIT}
            Creates the button as small as possible instead of making it of the
            standard size (which is the default behaviour ).
-    @style{wxBORDER_NONE}:
+    @style{wxBORDER_NONE}
            Creates a flat button. Windows and GTK+ only.
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_BUTTON(id, func)}:
+    @event{EVT_BUTTON(id, func)}
            Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.
     @endEventTable
 

@@ -158,23 +158,23 @@ public:
     following identifiers:
 
     @beginStyleTable
-    @style{wxYES_NO}:
+    @style{wxYES_NO}
         Puts Yes and No buttons on the message box. May be combined with
         wxCANCEL.
-    @style{wxCANCEL}:
+    @style{wxCANCEL}
         Puts a Cancel button on the message box. May only be combined with
         wxYES_NO or wxOK.
-    @style{wxOK}:
+    @style{wxOK}
         Puts an Ok button on the message box. May be combined with wxCANCEL.
-    @style{wxICON_EXCLAMATION}:
+    @style{wxICON_EXCLAMATION}
         Displays an exclamation mark symbol.
-    @style{wxICON_HAND}:
+    @style{wxICON_HAND}
         Displays an error symbol.
-    @style{wxICON_ERROR}:
+    @style{wxICON_ERROR}
         Displays an error symbol - the same as wxICON_HAND.
-    @style{wxICON_QUESTION}:
+    @style{wxICON_QUESTION}
         Displays a question mark symbol.
-    @style{wxICON_INFORMATION}:
+    @style{wxICON_INFORMATION}
         Displays an information symbol.
 
     The return value is one of: wxYES, wxNO, wxCANCEL, wxOK. For example:

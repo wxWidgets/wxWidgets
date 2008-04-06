@@ -16,9 +16,9 @@
     events are received.
 
     @beginStyleTable
-    @style{wxSB_HORIZONTAL}:
+    @style{wxSB_HORIZONTAL}
            Specifies a horizontal scrollbar.
-    @style{wxSB_VERTICAL}:
+    @style{wxSB_VERTICAL}
            Specifies a vertical scrollbar.
     @endStyleTable
 

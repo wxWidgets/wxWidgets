@@ -55,14 +55,14 @@ public:
     required, 5.80 is recommended) the full 32 bit range is supported.
 
     @beginStyleTable
-    @style{wxSP_HORIZONTAL}:
+    @style{wxSP_HORIZONTAL}
            Specifies a horizontal spin button (note that this style is not
            supported in wxGTK).
-    @style{wxSP_VERTICAL}:
+    @style{wxSP_VERTICAL}
            Specifies a vertical spin button.
-    @style{wxSP_ARROW_KEYS}:
+    @style{wxSP_ARROW_KEYS}
            The user can use arrow keys to change the value.
-    @style{wxSP_WRAP}:
+    @style{wxSP_WRAP}
            The value wraps at the minimum and maximum.
     @endStyleTable
 

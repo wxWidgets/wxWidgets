@@ -33,37 +33,37 @@
     changes the behaviour of the latter.
 
     @beginStyleTable
-    @style{wxBORDER_DEFAULT}:
+    @style{wxBORDER_DEFAULT}
            The window class will decide the kind of border to show, if any.
-    @style{wxBORDER_SIMPLE}:
+    @style{wxBORDER_SIMPLE}
            Displays a thin border around the window. wxSIMPLE_BORDER is the
            old name for this style.
-    @style{wxBORDER_SUNKEN}:
+    @style{wxBORDER_SUNKEN}
            Displays a sunken border. wxSUNKEN_BORDER is the old name for this
            style.
-    @style{wxBORDER_RAISED}:
+    @style{wxBORDER_RAISED}
            Displays a raised border. wxRAISED_BORDER is the old name for this
            style.
-    @style{wxBORDER_STATIC}:
+    @style{wxBORDER_STATIC}
            Displays a border suitable for a static control.  wxSTATIC_BORDER
            is the old name for this style. Windows only.
-    @style{wxBORDER_THEME}:
+    @style{wxBORDER_THEME}
            Displays a native border suitable for a control, on the current
            platform. On Windows XP or Vista, this will be a themed border; on
            most other platforms a sunken border will be used. For more
            information for themed borders on Windows, please see Themed
            borders on Windows.
-    @style{wxBORDER_NONE}:
+    @style{wxBORDER_NONE}
            Displays no border, overriding the default border style for the
            window. wxNO_BORDER is the old name for this style.
-    @style{wxBORDER_DOUBLE}:
+    @style{wxBORDER_DOUBLE}
            This style is obsolete and should not be used.
-    @style{wxTRANSPARENT_WINDOW}:
+    @style{wxTRANSPARENT_WINDOW}
            The window is transparent, that is, it will not receive paint
            events. Windows only.
-    @style{wxTAB_TRAVERSAL}:
+    @style{wxTAB_TRAVERSAL}
            Use this to enable tab traversal for non-dialog windows.
-    @style{wxWANTS_CHARS}:
+    @style{wxWANTS_CHARS}
            Use this to indicate that the window wants to get all char/key
            events for all keys - even for keys like TAB or ENTER which are
            usually used for dialog navigation and which wouldn't be generated
@@ -71,27 +71,27 @@
            the arrows or etc., but would still like to have normal keyboard
            navigation take place, you should call Navigate in response to the
            key events for Tab and Shift-Tab.
-    @style{wxNO_FULL_REPAINT_ON_RESIZE}:
+    @style{wxNO_FULL_REPAINT_ON_RESIZE}
            On Windows, this style used to disable repainting the window
            completely when its size is changed. Since this behaviour is now
            the default, the style is now obsolete and no longer has an effect.
-    @style{wxVSCROLL}:
+    @style{wxVSCROLL}
            Use this style to enable a vertical scrollbar. Notice that this
            style cannot be used with native controls which don't support
            scrollbars nor with top-level windows in most ports.
-    @style{wxHSCROLL}:
+    @style{wxHSCROLL}
            Use this style to enable a horizontal scrollbar. The same
            limitations as for wxVSCROLL apply to this style.
-    @style{wxALWAYS_SHOW_SB}:
+    @style{wxALWAYS_SHOW_SB}
            If a window has scrollbars, disable them instead of hiding them
            when they are not needed (i.e. when the size of the window is big
            enough to not require the scrollbars to navigate it). This style is
            currently implemented for wxMSW, wxGTK and wxUniversal and does
            nothing on the other platforms.
-    @style{wxCLIP_CHILDREN}:
+    @style{wxCLIP_CHILDREN}
            Use this style to eliminate flicker caused by the background being
            repainted, then children being painted over them. Windows only.
-    @style{wxFULL_REPAINT_ON_RESIZE}:
+    @style{wxFULL_REPAINT_ON_RESIZE}
            Use this style to force a complete redraw of the window whenever it
            is resized instead of redrawing just the part of the window
            affected by resizing. Note that this was the behaviour by default
@@ -102,25 +102,25 @@
     @endStyleTable
 
     @beginExtraStyleTable
-    @style{wxWS_EX_VALIDATE_RECURSIVELY}:
+    @style{wxWS_EX_VALIDATE_RECURSIVELY}
            By default, Validate/TransferDataTo/FromWindow() only work on
            direct children of the window (compatible behaviour). Set this flag
            to make them recursively descend into all subwindows.
-    @style{wxWS_EX_BLOCK_EVENTS}:
+    @style{wxWS_EX_BLOCK_EVENTS}
            wxCommandEvents and the objects of the derived classes are
            forwarded to the parent window and so on recursively by default.
            Using this flag for the given window allows to block this
            propagation at this window, i.e. prevent the events from being
            propagated further upwards. Dialogs have this flag on by default.
-    @style{wxWS_EX_TRANSIENT}:
+    @style{wxWS_EX_TRANSIENT}
            Don't use this window as an implicit parent for the other windows:
            this must be used with transient windows as otherwise there is the
            risk of creating a dialog/frame with this window as a parent which
            would lead to a crash if the parent is destroyed before the child.
-    @style{wxWS_EX_PROCESS_IDLE}:
+    @style{wxWS_EX_PROCESS_IDLE}
            This window should always process idle events, even if the mode set
            by wxIdleEvent::SetMode is wxIDLE_PROCESS_SPECIFIED.
-    @style{wxWS_EX_PROCESS_UI_UPDATES}:
+    @style{wxWS_EX_PROCESS_UI_UPDATES}
            This window should always process UI update events, even if the
            mode set by wxUpdateUIEvent::SetMode is
            wxUPDATE_UI_PROCESS_SPECIFIED.

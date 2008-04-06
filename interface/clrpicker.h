@@ -18,15 +18,15 @@
     It is only available if @c wxUSE_COLOURPICKERCTRL is set to 1 (the default).
 
     @beginStyleTable
-    @style{wxCLRP_DEFAULT_STYLE}:
+    @style{wxCLRP_DEFAULT_STYLE}
            The default style: 0.
-    @style{wxCLRP_USE_TEXTCTRL}:
+    @style{wxCLRP_USE_TEXTCTRL}
            Creates a text control to the left of the picker button which is
            completely managed by the wxColourPickerCtrl and which can be used
            by the user to specify a colour (see SetColour). The text control
            is automatically synchronized with button's value. Use functions
            defined in wxPickerBase to modify the text control.
-    @style{wxCLRP_SHOW_LABEL}:
+    @style{wxCLRP_SHOW_LABEL}
            Shows the colour in HTML form (AABBCC) as colour button label
            (instead of no label at all).
     @endStyleTable

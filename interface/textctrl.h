@@ -630,65 +630,65 @@ public:
     single line or multi-line.
 
     @beginStyleTable
-    @style{wxTE_PROCESS_ENTER}:
+    @style{wxTE_PROCESS_ENTER}
            The control will generate the event wxEVT_COMMAND_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls).
-    @style{wxTE_PROCESS_TAB}:
+    @style{wxTE_PROCESS_TAB}
            The control will receive wxEVT_CHAR events for TAB pressed -
            normally, TAB is used for passing to the next control in a dialog
            instead. For the control created with this style, you can still use
            Ctrl-Enter to pass to the next control from the keyboard.
-    @style{wxTE_MULTILINE}:
+    @style{wxTE_MULTILINE}
            The text control allows multiple lines.
-    @style{wxTE_PASSWORD}:
+    @style{wxTE_PASSWORD}
            The text will be echoed as asterisks.
-    @style{wxTE_READONLY}:
+    @style{wxTE_READONLY}
            The text will not be user-editable.
-    @style{wxTE_RICH}:
+    @style{wxTE_RICH}
            Use rich text control under Win32, this allows to have more than
            64KB of text in the control even under Win9x. This style is ignored
            under other platforms.
-    @style{wxTE_RICH2}:
+    @style{wxTE_RICH2}
            Use rich text control version 2.0 or 3.0 under Win32, this style is
            ignored under other platforms
-    @style{wxTE_AUTO_URL}:
+    @style{wxTE_AUTO_URL}
            Highlight the URLs and generate the wxTextUrlEvents when mouse
            events occur over them. This style is only supported for wxTE_RICH
            Win32 and multi-line wxGTK2 text controls.
-    @style{wxTE_NOHIDESEL}:
+    @style{wxTE_NOHIDESEL}
            By default, the Windows text control doesn't show the selection
            when it doesn't have focus - use this style to force it to always
            show it. It doesn't do anything under other platforms.
-    @style{wxHSCROLL}:
+    @style{wxHSCROLL}
            A horizontal scrollbar will be created and used, so that text won't
            be wrapped. No effect under wxGTK1.
-    @style{wxTE_NO_VSCROLL}:
+    @style{wxTE_NO_VSCROLL}
            For multiline controls only: vertical scrollbar will never be
            created. This limits the amount of text which can be entered into
            the control to what can be displayed in it under MSW but not under
            GTK2. Currently not implemented for the other platforms.
-    @style{wxTE_LEFT}:
+    @style{wxTE_LEFT}
            The text in the control will be left-justified (default).
-    @style{wxTE_CENTRE}:
+    @style{wxTE_CENTRE}
            The text in the control will be centered (currently wxMSW and
            wxGTK2 only).
-    @style{wxTE_RIGHT}:
+    @style{wxTE_RIGHT}
            The text in the control will be right-justified (currently wxMSW
            and wxGTK2 only).
-    @style{wxTE_DONTWRAP}:
+    @style{wxTE_DONTWRAP}
            Same as wxHSCROLL style: don't wrap at all, show horizontal
            scrollbar instead.
-    @style{wxTE_CHARWRAP}:
+    @style{wxTE_CHARWRAP}
            Wrap the lines too long to be shown entirely at any position
            (wxUniv and wxGTK2 only).
-    @style{wxTE_WORDWRAP}:
+    @style{wxTE_WORDWRAP}
            Wrap the lines too long to be shown entirely at word boundaries
            (wxUniv and wxGTK2 only).
-    @style{wxTE_BESTWRAP}:
+    @style{wxTE_BESTWRAP}
            Wrap the lines at word boundaries or at any other character if
            there are words longer than the window width (this is the default).
-    @style{wxTE_CAPITALIZE}:
+    @style{wxTE_CAPITALIZE}
            On PocketPC and Smartphone, causes the first letter to be
            capitalized.
     @endStyleTable

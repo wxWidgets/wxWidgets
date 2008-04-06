@@ -19,29 +19,29 @@
     using the "Mini frame" command of the "Generic dialogs" submenu.
 
     @beginStyleTable
-    @style{wxICONIZE}:
+    @style{wxICONIZE}
            Display the frame iconized (minimized) (Windows only).
-    @style{wxCAPTION}:
+    @style{wxCAPTION}
            Puts a caption on the frame.
-    @style{wxMINIMIZE}:
+    @style{wxMINIMIZE}
            Identical to wxICONIZE.
-    @style{wxMINIMIZE_BOX}:
+    @style{wxMINIMIZE_BOX}
            Displays a minimize box on the frame (Windows and Motif only).
-    @style{wxMAXIMIZE}:
+    @style{wxMAXIMIZE}
            Displays the frame maximized (Windows only).
-    @style{wxMAXIMIZE_BOX}:
+    @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the frame (Windows and Motif only).
-    @style{wxCLOSE_BOX}:
+    @style{wxCLOSE_BOX}
            Displays a close box on the frame.
-    @style{wxSTAY_ON_TOP}:
+    @style{wxSTAY_ON_TOP}
            Stay on top of other windows (Windows only).
-    @style{wxSYSTEM_MENU}:
+    @style{wxSYSTEM_MENU}
            Displays a system menu (Windows and Motif only).
-    @style{wxTINY_CAPTION_HORIZ}:
+    @style{wxTINY_CAPTION_HORIZ}
            This style is obsolete and not used any longer.
-    @style{wxTINY_CAPTION_VERT}:
+    @style{wxTINY_CAPTION_VERT}
            This style is obsolete and not used any longer.
-    @style{wxRESIZE_BORDER}:
+    @style{wxRESIZE_BORDER}
            Displays a resizeable border around the window.
     @endStyleTable
 

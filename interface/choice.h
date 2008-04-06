@@ -15,12 +15,12 @@
     menu of choices.
 
     @beginStyleTable
-    @style{wxCB_SORT}:
+    @style{wxCB_SORT}
            Sorts the entries alphabetically.
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_CHOICE(id, func)}:
+    @event{EVT_CHOICE(id, func)}
            Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the
            list is selected.
     @endEventTable

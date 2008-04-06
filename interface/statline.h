@@ -14,9 +14,9 @@
     groups of controls. The line may be only vertical or horizontal.
 
     @beginStyleTable
-    @style{wxLI_HORIZONTAL}:
+    @style{wxLI_HORIZONTAL}
            Creates a horizontal line.
-    @style{wxLI_VERTICAL}:
+    @style{wxLI_VERTICAL}
            Creates a vertical line.
     @endStyleTable
 

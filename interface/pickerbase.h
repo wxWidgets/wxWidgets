@@ -20,7 +20,7 @@
     (see @c wxPB_USE_TEXTCTRL style) and to 0 otherwise.
 
     @beginStyleTable
-    @style{wxPB_USE_TEXTCTRL}:
+    @style{wxPB_USE_TEXTCTRL}
            Creates a text control to the left of the picker which is
            completely managed by this wxPickerBase class.
     @endStyleTable

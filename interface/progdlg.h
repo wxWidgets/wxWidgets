@@ -15,29 +15,29 @@
     the elapsed, remaining and estimated time for the end of the progress.
 
     @beginStyleTable
-    @style{wxPD_APP_MODAL}:
+    @style{wxPD_APP_MODAL}
            Make the progress dialog modal. If this flag is not given, it is
            only "locally" modal - that is the input to the parent window is
            disabled, but not to the other ones.
-    @style{wxPD_AUTO_HIDE}:
+    @style{wxPD_AUTO_HIDE}
            Causes the progress dialog to disappear from screen as soon as the
            maximum value of the progress meter has been reached.
-    @style{wxPD_SMOOTH}:
+    @style{wxPD_SMOOTH}
            Causes smooth progress of the gauge control.
-    @style{wxPD_CAN_ABORT}:
+    @style{wxPD_CAN_ABORT}
            This flag tells the dialog that it should have a "Cancel" button
            which the user may press. If this happens, the next call to
            Update() will return @false.
-    @style{wxPD_CAN_SKIP}:
+    @style{wxPD_CAN_SKIP}
            This flag tells the dialog that it should have a "Skip" button
            which the user may press. If this happens, the next call to
            Update() will return @true in its skip parameter.
-    @style{wxPD_ELAPSED_TIME}:
+    @style{wxPD_ELAPSED_TIME}
            This flag tells the dialog that it should show elapsed time (since
            creating the dialog).
-    @style{wxPD_ESTIMATED_TIME}:
+    @style{wxPD_ESTIMATED_TIME}
            This flag tells the dialog that it should show estimated time.
-    @style{wxPD_REMAINING_TIME}:
+    @style{wxPD_REMAINING_TIME}
            This flag tells the dialog that it should show remaining time.
     @endStyleTable
 

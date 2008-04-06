@@ -18,21 +18,21 @@
     It is only available if @c wxUSE_FONTPICKERCTRL is set to 1 (the default).
 
     @beginStyleTable
-    @style{wxFNTP_DEFAULT_STYLE}:
+    @style{wxFNTP_DEFAULT_STYLE}
            The default style: wxFNTP_FONTDESC_AS_LABEL |
            wxFNTP_USEFONT_FOR_LABEL.
-    @style{wxFNTP_USE_TEXTCTRL}:
+    @style{wxFNTP_USE_TEXTCTRL}
            Creates a text control to the left of the picker button which is
            completely managed by the wxFontPickerCtrl and which can be used by
            the user to specify a font (see SetSelectedFont). The text control
            is automatically synchronized with button's value. Use functions
            defined in wxPickerBase to modify the text control.
-    @style{wxFNTP_FONTDESC_AS_LABEL}:
+    @style{wxFNTP_FONTDESC_AS_LABEL}
            Keeps the label of the button updated with the fontface name and
            the font size. E.g. choosing "Times New Roman bold, italic with
            size 10" from the fontdialog, will update the label (overwriting
            any previous label) with the "Times New Roman, 10" text.
-    @style{wxFNTP_USEFONT_FOR_LABEL}:
+    @style{wxFNTP_USEFONT_FOR_LABEL}
            Uses the currently selected font to draw the label of the button.
     @endStyleTable
 

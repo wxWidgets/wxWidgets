@@ -47,21 +47,21 @@ SUBGROUPING            = YES
 # us to keep the headers readable and "implement" wxWidgets-specific commands.
 
 # event aliases
-ALIASES = beginEventTable{1}="\n<span class='events'>Events:</span><p>The following event handler macros redirect the events to member functions with a prototype: <span class='eventHandler'>void handler(\1& event)</span></p>"
-ALIASES += event{1}="\li <span class='event'>\1</span>"
-ALIASES += event{2}="\li <span class='event'>\1, \2</span>"
-ALIASES += event{3}="\li <span class='event'>\1, \2, \3</span>"
-ALIASES += event{4}="\li <span class='event'>\1, \2, \3, \4</span>"
-ALIASES += endEventTable="\n"
+ALIASES = beginEventTable{1}="\n<span class='events'>Events:</span><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p><br>Event macros:<div>"
+ALIASES += event{1}="</div>\li <span class='event'>\1</span>:<div class='eventDesc'>"
+ALIASES += event{2}="</div>\li <span class='event'>\1, \2</span>:<div class='eventDesc'>"
+ALIASES += event{3}="</div>\li <span class='event'>\1, \2, \3</span>:<div class='eventDesc'>"
+ALIASES += event{4}="</div>\li <span class='event'>\1, \2, \3, \4</span>:<div class='eventDesc'>"
+ALIASES += endEventTable="</div>\n"
 
 # style aliases
-ALIASES += beginStyleTable="\n<span class='styles'>Styles:</span>"
-ALIASES += style{1}="\li <span class='style'>\1</span>"
-ALIASES += endStyleTable="\n"
+ALIASES += beginStyleTable="\n<span class='styles'>Styles:</span><div>"
+ALIASES += style{1}="</div>\li <span class='style'>\1</span>:<div class='styleDesc'>"
+ALIASES += endStyleTable="</div>\n"
 
 # extra style aliases
-ALIASES += beginExtraStyleTable="<div><span class='styles'>Extra styles:</span>"
-ALIASES += endExtraStyleTable="</div>"
+ALIASES += beginExtraStyleTable="\n<span class='styles'>Extra styles:</span><div>"
+ALIASES += endExtraStyleTable="</div>\n"
 
 # aliases for additional wx-specific infos
 ALIASES += category{1}="\ingroup group_class_\1 \n<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1</span></div>"
@@ -85,7 +85,7 @@ ALIASES += onlyfor{3}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;
 ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports.</div>       \xmlonly <onlyfor>\1,\2,\3,\4</onlyfor> \endxmlonly"
 
 # creates appearance section: this should be used for all main GUI controls
-ALIASES += appearance{1}="@htmlonly <div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> @endhtmlonly"
+ALIASES += appearance{1}="@htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> @endhtmlonly"
 
 # IMPORTANT: the \headerfile command does not work everywhere we'd need it,
 #            e.g. in the constants page we need to specify an header file

@@ -54,18 +54,18 @@ public:
     wxWindow::SetFont, wxWindow::SetCursor, wxWindow::SetLabel can be used to customize appearance of the hyperlink.
 
     @beginStyleTable
-    @style{wxHL_ALIGN_LEFT}:
+    @style{wxHL_ALIGN_LEFT}
            Align the text to the left.
-    @style{wxHL_ALIGN_RIGHT}:
+    @style{wxHL_ALIGN_RIGHT}
            Align the text to the right.
-    @style{wxHL_ALIGN_CENTRE}:
+    @style{wxHL_ALIGN_CENTRE}
            Center the text (horizontally).
-    @style{wxHL_CONTEXTMENU}:
+    @style{wxHL_CONTEXTMENU}
            Pop up a context menu when the hyperlink is right-clicked. The
            context menu contains a "Copy URL" menu item which is automatically
            handled by the hyperlink and which just copies in the clipboard the
            URL (not the label) of the control.
-    @style{wxHL_DEFAULT_STYLE}:
+    @style{wxHL_DEFAULT_STYLE}
            The default style for wxHyperlinkCtrl:
            wxBORDER_NONE|wxHL_CONTEXTMENU|wxHL_ALIGN_CENTRE.
     @endStyleTable

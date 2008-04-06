@@ -49,15 +49,15 @@ enum wxFindReplaceDialogStyles
     wxFindReplaceDialog events
 
     @beginEventTable{wxFindDialogEvent}
-    @event{EVT_FIND(id, func)}:
+    @event{EVT_FIND(id, func)}
         Find button was pressed in the dialog.
-    @event{EVT_FIND_NEXT(id, func)}:
+    @event{EVT_FIND_NEXT(id, func)}
         Find next button was pressed in the dialog.
-    @event{EVT_FIND_REPLACE(id, func)}:
+    @event{EVT_FIND_REPLACE(id, func)}
         Replace button was pressed in the dialog.
-    @event{EVT_FIND_REPLACE_ALL(id, func)}:
+    @event{EVT_FIND_REPLACE_ALL(id, func)}
         Replace all button was pressed in the dialog.
-    @event{EVT_FIND_CLOSE(id, func)}:
+    @event{EVT_FIND_CLOSE(id, func)}
         The dialog is being destroyed, any pointers to it cannot be used any longer.
     @endEventTable
 

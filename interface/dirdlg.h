@@ -13,15 +13,15 @@
     This class represents the directory chooser dialog.
 
     @beginStyleTable
-    @style{wxDD_DEFAULT_STYLE}:
+    @style{wxDD_DEFAULT_STYLE}
            Equivalent to a combination of wxDEFAULT_DIALOG_STYLE and
            wxRESIZE_BORDER (the last one is not used under wxWinCE).
-    @style{wxDD_DIR_MUST_EXIST}:
+    @style{wxDD_DIR_MUST_EXIST}
            The dialog will allow the user to choose only an existing folder.
            When this style is not given, a "Create new directory" button is
            added to the dialog (on Windows) or some other way is provided to
            the user to type the name of a new folder.
-    @style{wxDD_CHANGE_DIR}:
+    @style{wxDD_CHANGE_DIR}
            Change the current working directory to the directory chosen by the
            user.
     @endStyleTable

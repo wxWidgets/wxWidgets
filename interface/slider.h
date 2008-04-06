@@ -18,25 +18,25 @@
     Slider events are handled in the same way as a scrollbar.
 
     @beginStyleTable
-    @style{wxSL_HORIZONTAL}:
+    @style{wxSL_HORIZONTAL}
            Displays the slider horizontally (this is the default).
-    @style{wxSL_VERTICAL}:
+    @style{wxSL_VERTICAL}
            Displays the slider vertically.
-    @style{wxSL_AUTOTICKS}:
+    @style{wxSL_AUTOTICKS}
            Displays tick marks.
-    @style{wxSL_LABELS}:
+    @style{wxSL_LABELS}
            Displays minimum, maximum and value labels.
-    @style{wxSL_LEFT}:
+    @style{wxSL_LEFT}
            Displays ticks on the left and forces the slider to be vertical.
-    @style{wxSL_RIGHT}:
+    @style{wxSL_RIGHT}
            Displays ticks on the right and forces the slider to be vertical.
-    @style{wxSL_TOP}:
+    @style{wxSL_TOP}
            Displays ticks on the top.
-    @style{wxSL_BOTTOM}:
+    @style{wxSL_BOTTOM}
            Displays ticks on the bottom (this is the default).
-    @style{wxSL_SELRANGE}:
+    @style{wxSL_SELRANGE}
            Allows the user to select a range on the slider. Windows only.
-    @style{wxSL_INVERSE}:
+    @style{wxSL_INVERSE}
            Inverses the mininum and maximum endpoints on the slider. Not
            compatible with wxSL_SELRANGE.
     @endStyleTable

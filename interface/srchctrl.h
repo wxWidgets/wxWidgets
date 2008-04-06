@@ -14,28 +14,28 @@
     control, and a cancel button.
 
     @beginStyleTable
-    @style{wxTE_PROCESS_ENTER}:
+    @style{wxTE_PROCESS_ENTER}
            The control will generate the event wxEVT_COMMAND_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls).
-    @style{wxTE_PROCESS_TAB}:
+    @style{wxTE_PROCESS_TAB}
            The control will receive wxEVT_CHAR events for TAB pressed -
            normally, TAB is used for passing to the next control in a dialog
            instead. For the control created with this style, you can still use
            Ctrl-Enter to pass to the next control from the keyboard.
-    @style{wxTE_NOHIDESEL}:
+    @style{wxTE_NOHIDESEL}
            By default, the Windows text control doesn't show the selection
            when it doesn't have focus - use this style to force it to always
            show it. It doesn't do anything under other platforms.
-    @style{wxTE_LEFT}:
+    @style{wxTE_LEFT}
            The text in the control will be left-justified (default).
-    @style{wxTE_CENTRE}:
+    @style{wxTE_CENTRE}
            The text in the control will be centered (currently wxMSW and
            wxGTK2 only).
-    @style{wxTE_RIGHT}:
+    @style{wxTE_RIGHT}
            The text in the control will be right-justified (currently wxMSW
            and wxGTK2 only).
-    @style{wxTE_CAPITALIZE}:
+    @style{wxTE_CAPITALIZE}
            On PocketPC and Smartphone, causes the first letter to be
            capitalized.
     @endStyleTable

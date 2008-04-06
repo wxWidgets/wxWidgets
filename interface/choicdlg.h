@@ -44,11 +44,11 @@ public:
             Dialog position. Not Windows.
 
         @beginStyleTable
-        @style{wxOK}:
+        @style{wxOK}
             Show an OK button.
-        @style{wxCANCEL}:
+        @style{wxCANCEL}
             Show a Cancel button.
-        @style{wxCENTRE}:
+        @style{wxCENTRE}
             Centre the message. Not Windows.
         @endStyleTable
 
@@ -136,11 +136,11 @@ public:
             Dialog position. Not Windows.
 
         @beginStyleTable
-        @style{wxOK}:
+        @style{wxOK}
             Show an OK button.
-        @style{wxCANCEL}:
+        @style{wxCANCEL}
             Show a Cancel button.
-        @style{wxCENTRE}:
+        @style{wxCENTRE}
             Centre the message. Not Windows.
         @endStyleTable
 

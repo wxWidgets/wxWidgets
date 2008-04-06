@@ -805,15 +805,15 @@ public:
     from wxVariant::GetType.
 
     @beginStyleTable
-    @style{wxDV_SINGLE}:
+    @style{wxDV_SINGLE}
            Single selection mode. This is the default.
-    @style{wxDV_MULTIPLE}:
+    @style{wxDV_MULTIPLE}
            Multiple selection mode.
-    @style{wxDV_ROW_LINES}:
+    @style{wxDV_ROW_LINES}
            Use alternating colours for rows if supported by platform and theme.
-    @style{wxDV_HORIZ_RULES}:
+    @style{wxDV_HORIZ_RULES}
            Display fine rules between row if supported.
-    @style{wxDV_VERT_RULES}:
+    @style{wxDV_VERT_RULES}
            Display fine rules between columns is supported.
     @endStyleTable
 

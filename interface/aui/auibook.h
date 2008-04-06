@@ -28,30 +28,30 @@
     The theme can be changed by calling wxAuiNotebook::SetArtProvider.
 
     @beginStyleTable
-    @style{wxAUI_NB_DEFAULT_STYLE}:
+    @style{wxAUI_NB_DEFAULT_STYLE}
            Defined as wxAUI_NB_TOP | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
            wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ACTIVE_TAB.
-    @style{wxAUI_NB_TAB_SPLIT}:
+    @style{wxAUI_NB_TAB_SPLIT}
            Allows the tab control to be split by dragging a tab.
-    @style{wxAUI_NB_TAB_MOVE}:
+    @style{wxAUI_NB_TAB_MOVE}
            Allows a tab to be moved horizontally by dragging.
-    @style{wxAUI_NB_TAB_EXTERNAL_MOVE}:
+    @style{wxAUI_NB_TAB_EXTERNAL_MOVE}
            Allows a tab to be moved to another tab control.
-    @style{wxAUI_NB_TAB_FIXED_WIDTH}:
+    @style{wxAUI_NB_TAB_FIXED_WIDTH}
            With this style, all tabs have the same width.
-    @style{wxAUI_NB_SCROLL_BUTTONS}:
+    @style{wxAUI_NB_SCROLL_BUTTONS}
            With this style, left and right scroll buttons are displayed.
-    @style{wxAUI_NB_WINDOWLIST_BUTTON}:
+    @style{wxAUI_NB_WINDOWLIST_BUTTON}
            With this style, a drop-down list of windows is available.
-    @style{wxAUI_NB_CLOSE_BUTTON}:
+    @style{wxAUI_NB_CLOSE_BUTTON}
            With this style, a close button is available on the tab bar.
-    @style{wxAUI_NB_CLOSE_ON_ACTIVE_TAB}:
+    @style{wxAUI_NB_CLOSE_ON_ACTIVE_TAB}
            With this style, the close button is visible on the active tab.
-    @style{wxAUI_NB_CLOSE_ON_ALL_TABS}:
+    @style{wxAUI_NB_CLOSE_ON_ALL_TABS}
            With this style, the close button is visible on all tabs.
-    @style{wxAUI_NB_TOP}:
+    @style{wxAUI_NB_TOP}
            With this style, tabs are drawn along the top of the notebook.
-    @style{wxAUI_NB_BOTTOM}:
+    @style{wxAUI_NB_BOTTOM}
            With this style, tabs are drawn along the bottom of the notebook.
     @endStyleTable
 

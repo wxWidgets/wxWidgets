@@ -24,12 +24,12 @@
     wxHtmlWindow::LoadFile.
 
     @beginStyleTable
-    @style{wxHW_SCROLLBAR_NEVER}:
+    @style{wxHW_SCROLLBAR_NEVER}
            Never display scrollbars, not even when the page is larger than the
            window.
-    @style{wxHW_SCROLLBAR_AUTO}:
+    @style{wxHW_SCROLLBAR_AUTO}
            Display scrollbars only if page's size exceeds window's size.
-    @style{wxHW_NO_SELECTION}:
+    @style{wxHW_NO_SELECTION}
            Don't allow the user to select text.
     @endStyleTable
 

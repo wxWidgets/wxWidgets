@@ -14,15 +14,15 @@
     delete and reorder a list of strings.
 
     @beginStyleTable
-    @style{wxEL_ALLOW_NEW}:
+    @style{wxEL_ALLOW_NEW}
            Allows the user to enter new strings.
-    @style{wxEL_ALLOW_EDIT}:
+    @style{wxEL_ALLOW_EDIT}
            Allows the user to edit existing strings.
-    @style{wxEL_ALLOW_DELETE}:
+    @style{wxEL_ALLOW_DELETE}
            Allows the user to delete existing strings.
-    @style{wxEL_NO_REORDER}:
+    @style{wxEL_NO_REORDER}
            Does not allow the user to reorder the strings.
-    @style{wxEL_DEFAULT_STYLE}:
+    @style{wxEL_DEFAULT_STYLE}
            Default style: wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE.
     @endStyleTable
 

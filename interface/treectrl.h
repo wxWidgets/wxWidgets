@@ -80,41 +80,41 @@ public:
     in wxTreeEvent.
 
     @beginStyleTable
-    @style{wxTR_EDIT_LABELS}:
+    @style{wxTR_EDIT_LABELS}
            Use this style if you wish the user to be able to edit labels in
            the tree control.
-    @style{wxTR_NO_BUTTONS}:
+    @style{wxTR_NO_BUTTONS}
            For convenience to document that no buttons are to be drawn.
-    @style{wxTR_HAS_BUTTONS}:
+    @style{wxTR_HAS_BUTTONS}
            Use this style to show + and - buttons to the left of parent items.
-    @style{wxTR_NO_LINES}:
+    @style{wxTR_NO_LINES}
            Use this style to hide vertical level connectors.
-    @style{wxTR_FULL_ROW_HIGHLIGHT}:
+    @style{wxTR_FULL_ROW_HIGHLIGHT}
            Use this style to have the background colour and the selection
            highlight extend over the entire horizontal row of the tree control
            window. (This flag is ignored under Windows unless you specify
            wxTR_NO_LINES as well.)
-    @style{wxTR_LINES_AT_ROOT}:
+    @style{wxTR_LINES_AT_ROOT}
            Use this style to show lines between root nodes. Only applicable if
            wxTR_HIDE_ROOT is set and wxTR_NO_LINES is not set.
-    @style{wxTR_HIDE_ROOT}:
+    @style{wxTR_HIDE_ROOT}
            Use this style to suppress the display of the root node,
            effectively causing the first-level nodes to appear as a series of
            root nodes.
-    @style{wxTR_ROW_LINES}:
+    @style{wxTR_ROW_LINES}
            Use this style to draw a contrasting border between displayed rows.
-    @style{wxTR_HAS_VARIABLE_ROW_HEIGHT}:
+    @style{wxTR_HAS_VARIABLE_ROW_HEIGHT}
            Use this style to cause row heights to be just big enough to fit
            the content. If not set, all rows use the largest row height. The
            default is that this flag is unset. Generic only.
-    @style{wxTR_SINGLE}:
+    @style{wxTR_SINGLE}
            For convenience to document that only one item may be selected at a
            time. Selecting another item causes the current selection, if any,
            to be deselected.  This is the default.
-    @style{wxTR_MULTIPLE}:
+    @style{wxTR_MULTIPLE}
            Use this style to allow a range of items to be selected. If a
            second range is selected, the current range, if any, is deselected.
-    @style{wxTR_DEFAULT_STYLE}:
+    @style{wxTR_DEFAULT_STYLE}
            The set of flags that are closest to the defaults for the native
            control for a particular toolkit.
     @endStyleTable

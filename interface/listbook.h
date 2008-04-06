@@ -21,16 +21,16 @@
     action.
 
     @beginStyleTable
-    @style{wxLB_DEFAULT}:
+    @style{wxLB_DEFAULT}
            Choose the default location for the labels depending on the current
            platform (left everywhere except Mac where it is top).
-    @style{wxLB_TOP}:
+    @style{wxLB_TOP}
            Place labels above the page area.
-    @style{wxLB_LEFT}:
+    @style{wxLB_LEFT}
            Place labels on the left side.
-    @style{wxLB_RIGHT}:
+    @style{wxLB_RIGHT}
            Place labels on the right side.
-    @style{wxLB_BOTTOM}:
+    @style{wxLB_BOTTOM}
            Place labels below the page area.
     @endStyleTable
 

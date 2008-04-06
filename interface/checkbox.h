@@ -27,21 +27,21 @@ enum wxCheckBoxState
     state. Often this is used as a "Does Not Apply" state.
 
     @beginStyleTable
-    @style{wxCHK_2STATE}:
+    @style{wxCHK_2STATE}
            Create a 2-state checkbox. This is the default.
-    @style{wxCHK_3STATE}:
+    @style{wxCHK_3STATE}
            Create a 3-state checkbox. Not implemented in wxMGL, wxOS2 and
            wxGTK built against GTK+ 1.2.
-    @style{wxCHK_ALLOW_3RD_STATE_FOR_USER}:
+    @style{wxCHK_ALLOW_3RD_STATE_FOR_USER}
            By default a user can't set a 3-state checkbox to the third state.
            It can only be done from code. Using this flags allows the user to
            set the checkbox to the third state by clicking.
-    @style{wxALIGN_RIGHT}:
+    @style{wxALIGN_RIGHT}
            Makes the text appear on the left of the checkbox.
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_CHECKBOX(id, func)}:
+    @event{EVT_CHECKBOX(id, func)}
            Process a wxEVT_COMMAND_CHECKBOX_CLICKED event, when the checkbox
            is clicked.
     @endEventTable

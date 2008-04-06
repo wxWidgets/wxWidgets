@@ -27,11 +27,11 @@
     There are no user commands for the gauge.
 
     @beginStyleTable
-    @style{wxGA_HORIZONTAL}:
+    @style{wxGA_HORIZONTAL}
            Creates a horizontal gauge.
-    @style{wxGA_VERTICAL}:
+    @style{wxGA_VERTICAL}
            Creates a vertical gauge.
-    @style{wxGA_SMOOTH}:
+    @style{wxGA_SMOOTH}
            Creates smooth progress bar with one pixel wide update step (not
            supported by all platforms).
     @endStyleTable

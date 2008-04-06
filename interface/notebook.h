@@ -89,22 +89,22 @@ public:
     @b wxNotebookPage is a typedef for wxWindow.
 
     @beginStyleTable
-    @style{wxNB_TOP}:
+    @style{wxNB_TOP}
            Place tabs on the top side.
-    @style{wxNB_LEFT}:
+    @style{wxNB_LEFT}
            Place tabs on the left side.
-    @style{wxNB_RIGHT}:
+    @style{wxNB_RIGHT}
            Place tabs on the right side.
-    @style{wxNB_BOTTOM}:
+    @style{wxNB_BOTTOM}
            Place tabs under instead of above the notebook pages.
-    @style{wxNB_FIXEDWIDTH}:
+    @style{wxNB_FIXEDWIDTH}
            (Windows only) All tabs will have same width.
-    @style{wxNB_MULTILINE}:
+    @style{wxNB_MULTILINE}
            (Windows only) There can be several rows of tabs.
-    @style{wxNB_NOPAGETHEME}:
+    @style{wxNB_NOPAGETHEME}
            (Windows only) Display a solid colour on notebook pages, and not a
            gradient, which can reduce performance.
-    @style{wxNB_FLAT}:
+    @style{wxNB_FLAT}
            (Windows CE only) Show tabs in a flat style.
     @endStyleTable
 

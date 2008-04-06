@@ -168,9 +168,9 @@ public:
     or @c body tags.
 
     @beginStyleTable
-    @style{wxHLB_DEFAULT_STYLE}:
+    @style{wxHLB_DEFAULT_STYLE}
            The default style: wxBORDER_SUNKEN
-    @style{wxHLB_MULTIPLE}:
+    @style{wxHLB_MULTIPLE}
            Multiple-selection list: the user can toggle multiple items on and
            off.
     @endStyleTable

@@ -21,33 +21,33 @@
     application windows.
 
     @beginStyleTable
-    @style{wxDEFAULT_FRAME_STYLE}:
+    @style{wxDEFAULT_FRAME_STYLE}
            Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxRESIZE_BORDER |
            wxSYSTEM_MENU |  wxCAPTION |  wxCLOSE_BOX |  wxCLIP_CHILDREN.
-    @style{wxICONIZE}:
+    @style{wxICONIZE}
            Display the frame iconized (minimized). Windows only.
-    @style{wxCAPTION}:
+    @style{wxCAPTION}
            Puts a caption on the frame.
-    @style{wxMINIMIZE}:
+    @style{wxMINIMIZE}
            Identical to wxICONIZE. Windows only.
-    @style{wxMINIMIZE_BOX}:
+    @style{wxMINIMIZE_BOX}
            Displays a minimize box on the frame.
-    @style{wxMAXIMIZE}:
+    @style{wxMAXIMIZE}
            Displays the frame maximized. Windows only.
-    @style{wxMAXIMIZE_BOX}:
+    @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the frame.
-    @style{wxCLOSE_BOX}:
+    @style{wxCLOSE_BOX}
            Displays a close box on the frame.
-    @style{wxSTAY_ON_TOP}:
+    @style{wxSTAY_ON_TOP}
            Stay on top of all other windows, see also wxFRAME_FLOAT_ON_PARENT.
-    @style{wxSYSTEM_MENU}:
+    @style{wxSYSTEM_MENU}
            Displays a system menu.
-    @style{wxRESIZE_BORDER}:
+    @style{wxRESIZE_BORDER}
            Displays a resizeable border around the window.
-    @style{wxFRAME_TOOL_WINDOW}:
+    @style{wxFRAME_TOOL_WINDOW}
            Causes a frame with a small titlebar to be created; the frame does
            not appear in the taskbar under Windows or GTK+.
-    @style{wxFRAME_NO_TASKBAR}:
+    @style{wxFRAME_NO_TASKBAR}
            Creates an otherwise normal frame but it does not appear in the
            taskbar under Windows or GTK+ (note that it will minimize to the
            desktop window under Windows which may seem strange to the users
@@ -56,11 +56,11 @@
            is at least version 2.2 and the window manager supports
            _NET_WM_STATE_SKIP_TASKBAR hint. Has no effect under other
            platforms.
-    @style{wxFRAME_FLOAT_ON_PARENT}:
+    @style{wxFRAME_FLOAT_ON_PARENT}
            The frame will always be on top of its parent (unlike
            wxSTAY_ON_TOP). A frame created with this style must have a
            non-@NULL parent.
-    @style{wxFRAME_EX_CONTEXTHELP}:
+    @style{wxFRAME_EX_CONTEXTHELP}
            Under Windows, puts a query button on the caption. When pressed,
            Windows will go into a context-sensitive help mode and wxWidgets
            will send a wxEVT_HELP event if the user clicked on an application
@@ -71,10 +71,10 @@
            wxDEFAULT_FRAME_STYLE  ~ (wxMINIMIZE_BOX | wxMAXIMIZE_BOX) for the
            frames having this style (the dialogs don't have a minimize or a
            maximize box by default)
-    @style{wxFRAME_SHAPED}:
+    @style{wxFRAME_SHAPED}
            Windows with this style are   allowed to have their shape changed
            with the SetShape method.
-    @style{wxFRAME_EX_METAL}:
+    @style{wxFRAME_EX_METAL}
            On Mac OS X, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endStyleTable

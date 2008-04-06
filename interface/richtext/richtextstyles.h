@@ -25,7 +25,7 @@
     so that when a style is double-clicked, it is applied to the selection.
 
     @beginStyleTable
-    @style{wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR}:
+    @style{wxRICHTEXTSTYLELIST_HIDE_TYPE_SELECTOR}
            This style hides the category selection control.
     @endStyleTable
 

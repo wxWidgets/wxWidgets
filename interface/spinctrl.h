@@ -14,9 +14,9 @@
     wxSpinButton in one control.
 
     @beginStyleTable
-    @style{wxSP_ARROW_KEYS}:
+    @style{wxSP_ARROW_KEYS}
            The user can use arrow keys to change the value.
-    @style{wxSP_WRAP}:
+    @style{wxSP_WRAP}
            The value wraps at the minimum and maximum.
     @endStyleTable
 

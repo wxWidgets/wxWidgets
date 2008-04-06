@@ -18,26 +18,26 @@
     It is only available if @c wxUSE_FILEPICKERCTRL is set to 1 (the default).
 
     @beginStyleTable
-    @style{wxFLP_DEFAULT_STYLE}:
+    @style{wxFLP_DEFAULT_STYLE}
            The default style: includes wxFLP_OPEN | wxFLP_FILE_MUST_EXIST and,
            under wxMSW only, wxFLP_USE_TEXTCTRL.
-    @style{wxFLP_USE_TEXTCTRL}:
+    @style{wxFLP_USE_TEXTCTRL}
            Creates a text control to the left of the picker button which is
            completely managed by the wxFilePickerCtrl and which can be used by
            the user to specify a path (see SetPath). The text control is
            automatically synchronized with button's value. Use functions
            defined in wxPickerBase to modify the text control.
-    @style{wxFLP_OPEN}:
+    @style{wxFLP_OPEN}
            Creates a picker which allows the user to select a file to open.
-    @style{wxFLP_SAVE}:
+    @style{wxFLP_SAVE}
            Creates a picker which allows the user to select a file to save.
-    @style{wxFLP_OVERWRITE_PROMPT}:
+    @style{wxFLP_OVERWRITE_PROMPT}
            Can be combined with wxFLP_SAVE only: ask confirmation to the user
            before selecting a file.
-    @style{wxFLP_FILE_MUST_EXIST}:
+    @style{wxFLP_FILE_MUST_EXIST}
            Can be combined with wxFLP_OPEN only: the selected file must be an
            existing file.
-    @style{wxFLP_CHANGE_DIR}:
+    @style{wxFLP_CHANGE_DIR}
            Change current working directory on each user file selection change.
     @endStyleTable
 
@@ -141,20 +141,20 @@ public:
     It is only available if @c wxUSE_DIRPICKERCTRL is set to 1 (the default).
 
     @beginStyleTable
-    @style{wxDIRP_DEFAULT_STYLE}:
+    @style{wxDIRP_DEFAULT_STYLE}
            The default style: includes wxDIRP_DIR_MUST_EXIST and, under wxMSW
            only, wxDIRP_USE_TEXTCTRL.
-    @style{wxDIRP_USE_TEXTCTRL}:
+    @style{wxDIRP_USE_TEXTCTRL}
            Creates a text control to the left of the picker button which is
            completely managed by the wxDirPickerCtrl and which can be used by
            the user to specify a path (see SetPath). The text control is
            automatically synchronized with button's value. Use functions
            defined in wxPickerBase to modify the text control.
-    @style{wxDIRP_DIR_MUST_EXIST}:
+    @style{wxDIRP_DIR_MUST_EXIST}
            Creates a picker which allows to select only existing directories.
            wxGTK control always adds this flag internally as it does not
            support its absence.
-    @style{wxDIRP_CHANGE_DIR}:
+    @style{wxDIRP_CHANGE_DIR}
            Change current working directory on each user directory selection
            change.
     @endStyleTable

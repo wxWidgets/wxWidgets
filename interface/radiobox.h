@@ -15,18 +15,18 @@
     labelled buttons.
 
     @beginStyleTable
-    @style{wxRA_SPECIFY_ROWS}:
+    @style{wxRA_SPECIFY_ROWS}
            The major dimension parameter refers to the maximum number of rows.
-    @style{wxRA_SPECIFY_COLS}:
+    @style{wxRA_SPECIFY_COLS}
            The major dimension parameter refers to the maximum number of
            columns.
-    @style{wxRA_USE_CHECKBOX}:
+    @style{wxRA_USE_CHECKBOX}
            Use of the checkbox controls instead of radio buttons (currently
            supported only on PalmOS)
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_RADIOBOX(id, func)}:
+    @event{EVT_RADIOBOX(id, func)}
            Process a wxEVT_COMMAND_RADIOBOX_SELECTED event, when a radiobutton
            is clicked.
     @endEventTable

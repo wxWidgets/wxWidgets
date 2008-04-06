@@ -22,7 +22,7 @@
     and therefore this is not available to the application.
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_CHECKLISTBOX(id, func)}:
+    @event{EVT_CHECKLISTBOX(id, func)}
            Process a wxEVT_COMMAND_CHECKLISTBOX_TOGGLED event, when an item in
            the check list box is checked or unchecked.
     @endEventTable

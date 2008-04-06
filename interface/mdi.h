@@ -63,37 +63,37 @@ public:
     and is used in many popular Windows applications, such as Microsoft Word(TM).
 
     @beginStyleTable
-    @style{wxCAPTION}:
+    @style{wxCAPTION}
            Puts a caption on the frame.
-    @style{wxDEFAULT_FRAME_STYLE}:
+    @style{wxDEFAULT_FRAME_STYLE}
            Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxTHICK_FRAME |
            wxSYSTEM_MENU |  wxCAPTION.
-    @style{wxHSCROLL}:
+    @style{wxHSCROLL}
            Displays a horizontal scrollbar in the client window, allowing the
            user to view child frames that are off the current view.
-    @style{wxICONIZE}:
+    @style{wxICONIZE}
            Display the frame iconized (minimized) (Windows only).
-    @style{wxMAXIMIZE}:
+    @style{wxMAXIMIZE}
            Displays the frame maximized (Windows only).
-    @style{wxMAXIMIZE_BOX}:
+    @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the frame (Windows and Motif only).
-    @style{wxMINIMIZE}:
+    @style{wxMINIMIZE}
            Identical to wxICONIZE.
-    @style{wxMINIMIZE_BOX}:
+    @style{wxMINIMIZE_BOX}
            Displays a minimize box on the frame (Windows and Motif only).
-    @style{wxRESIZE_BORDER}:
+    @style{wxRESIZE_BORDER}
            Displays a resizeable border around the window (Motif only; for
            Windows, it is implicit in wxTHICK_FRAME).
-    @style{wxSTAY_ON_TOP}:
+    @style{wxSTAY_ON_TOP}
            Stay on top of other windows (Windows only).
-    @style{wxSYSTEM_MENU}:
+    @style{wxSYSTEM_MENU}
            Displays a system menu (Windows and Motif only).
-    @style{wxTHICK_FRAME}:
+    @style{wxTHICK_FRAME}
            Displays a thick frame around the window (Windows and Motif only).
-    @style{wxVSCROLL}:
+    @style{wxVSCROLL}
            Displays a vertical scrollbar in the client window, allowing the
            user to view child frames that are off the current view.
-    @style{wxFRAME_NO_WINDOW_MENU}:
+    @style{wxFRAME_NO_WINDOW_MENU}
            Under Windows, removes the Window menu that is normally added
            automatically.
     @endStyleTable
@@ -294,29 +294,29 @@ public:
     which is itself a child of wxMDIParentFrame.
 
     @beginStyleTable
-    @style{wxCAPTION}:
+    @style{wxCAPTION}
            Puts a caption on the frame.
-    @style{wxDEFAULT_FRAME_STYLE}:
+    @style{wxDEFAULT_FRAME_STYLE}
            Defined as wxMINIMIZE_BOX |  wxMAXIMIZE_BOX |  wxTHICK_FRAME |
            wxSYSTEM_MENU |  wxCAPTION.
-    @style{wxICONIZE}:
+    @style{wxICONIZE}
            Display the frame iconized (minimized) (Windows only).
-    @style{wxMAXIMIZE}:
+    @style{wxMAXIMIZE}
            Displays the frame maximized (Windows only).
-    @style{wxMAXIMIZE_BOX}:
+    @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the frame (Windows and Motif only).
-    @style{wxMINIMIZE}:
+    @style{wxMINIMIZE}
            Identical to wxICONIZE.
-    @style{wxMINIMIZE_BOX}:
+    @style{wxMINIMIZE_BOX}
            Displays a minimize box on the frame (Windows and Motif only).
-    @style{wxRESIZE_BORDER}:
+    @style{wxRESIZE_BORDER}
            Displays a resizeable border around the window (Motif only; for
            Windows, it is implicit in wxTHICK_FRAME).
-    @style{wxSTAY_ON_TOP}:
+    @style{wxSTAY_ON_TOP}
            Stay on top of other windows (Windows only).
-    @style{wxSYSTEM_MENU}:
+    @style{wxSYSTEM_MENU}
            Displays a system menu (Windows and Motif only).
-    @style{wxTHICK_FRAME}:
+    @style{wxTHICK_FRAME}
            Displays a thick frame around the window (Windows and Motif only).
     @endStyleTable
 

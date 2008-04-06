@@ -22,17 +22,17 @@
     wxComboPopup and the ready-to-use wxBitmapComboBox.
 
     @beginStyleTable
-    @style{wxCB_SIMPLE}:
+    @style{wxCB_SIMPLE}
            Creates a combobox with a permanently displayed list. Windows only.
-    @style{wxCB_DROPDOWN}:
+    @style{wxCB_DROPDOWN}
            Creates a combobox with a drop-down list.
-    @style{wxCB_READONLY}:
+    @style{wxCB_READONLY}
            Same as wxCB_DROPDOWN but only the strings specified as the
            combobox choices can be selected, it is impossible to select (even
            from a program) a string which is not in the choices list.
-    @style{wxCB_SORT}:
+    @style{wxCB_SORT}
            Sorts the entries in the list alphabetically.
-    @style{wxTE_PROCESS_ENTER}:
+    @style{wxTE_PROCESS_ENTER}
            The control will generate the event wxEVT_COMMAND_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls). Windows
@@ -40,14 +40,14 @@
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_COMBOBOX(id, func)}:
+    @event{EVT_COMBOBOX(id, func)}
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected. Note that calling GetValue returns the new
            value of selection.
-    @event{EVT_TEXT(id, func)}:
+    @event{EVT_TEXT(id, func)}
            Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text
            changes.
-    @event{EVT_TEXT_ENTER(id, func)}:
+    @event{EVT_TEXT_ENTER(id, func)}
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combobox (notice that the combobox must have been created with
            wxTE_PROCESS_ENTER style to receive this event).

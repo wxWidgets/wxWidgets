@@ -21,29 +21,29 @@
     It is only available if @c wxUSE_DATEPICKCTRL is set to 1.
 
     @beginStyleTable
-    @style{wxDP_SPIN}:
+    @style{wxDP_SPIN}
            Creates a control without a month calendar drop down but with
            spin-control-like arrows to change individual date components. This
            style is not supported by the generic version.
-    @style{wxDP_DROPDOWN}:
+    @style{wxDP_DROPDOWN}
            Creates a control with a month calendar drop-down part from which
            the user can select a date.
-    @style{wxDP_DEFAULT}:
+    @style{wxDP_DEFAULT}
            Creates a control with the style that is best supported for the
            current platform (currently wxDP_SPIN under Windows and
            wxDP_DROPDOWN elsewhere).
-    @style{wxDP_ALLOWNONE}:
+    @style{wxDP_ALLOWNONE}
            With this style, the control allows the user to not enter any valid
            date at all. Without it - the default - the control always has some
            valid date.
-    @style{wxDP_SHOWCENTURY}:
+    @style{wxDP_SHOWCENTURY}
            Forces display of the century in the default date format. Without
            this style the century could be displayed, or not, depending on the
            default date representation in the system.
     @endStyleTable
 
     @beginEventTable{wxDateEvent}
-    @event{EVT_DATE_CHANGED(id, func)}:
+    @event{EVT_DATE_CHANGED(id, func)}
            This event fires when the user changes the current selection in the control.
     @endEventTable
 

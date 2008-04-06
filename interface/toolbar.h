@@ -19,36 +19,36 @@
 
 
     @beginStyleTable
-    @style{wxTB_FLAT}:
+    @style{wxTB_FLAT}
            Gives the toolbar a flat look (Windows and GTK only).
-    @style{wxTB_DOCKABLE}:
+    @style{wxTB_DOCKABLE}
            Makes the toolbar floatable and dockable (GTK only).
-    @style{wxTB_HORIZONTAL}:
+    @style{wxTB_HORIZONTAL}
            Specifies horizontal layout (default).
-    @style{wxTB_VERTICAL}:
+    @style{wxTB_VERTICAL}
            Specifies vertical layout.
-    @style{wxTB_TEXT}:
+    @style{wxTB_TEXT}
            Shows the text in the toolbar buttons; by default only icons are
            shown.
-    @style{wxTB_NOICONS}:
+    @style{wxTB_NOICONS}
            Specifies no icons in the toolbar buttons; by default they are
            shown.
-    @style{wxTB_NODIVIDER}:
+    @style{wxTB_NODIVIDER}
            Specifies no divider (border) above the toolbar (Windows only).
-    @style{wxTB_NOALIGN}:
+    @style{wxTB_NOALIGN}
            Specifies no alignment with the parent window (Windows only, not
            very useful).
-    @style{wxTB_HORZ_LAYOUT}:
+    @style{wxTB_HORZ_LAYOUT}
            Shows the text and the icons alongside, not vertically stacked
            (Windows and GTK 2 only). This style must be used with wxTB_TEXT.
-    @style{wxTB_HORZ_TEXT}:
+    @style{wxTB_HORZ_TEXT}
            Combination of wxTB_HORZ_LAYOUT and wxTB_TEXT.
-    @style{wxTB_NO_TOOLTIPS}:
+    @style{wxTB_NO_TOOLTIPS}
            Don't show the short help tooltips for the tools when the mouse
            hovers over them.
-    @style{wxTB_BOTTOM}:
+    @style{wxTB_BOTTOM}
            Align the toolbar at the bottom of parent window.
-    @style{wxTB_RIGHT}:
+    @style{wxTB_RIGHT}
            Align the toolbar at the right side of parent window.
     @endStyleTable
 

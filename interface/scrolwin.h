@@ -87,7 +87,7 @@
     of (10,-90).
 
     @beginStyleTable
-    @style{wxRETAINED}:
+    @style{wxRETAINED}
            Uses a backing pixmap to speed refreshes. Motif only.
     @endStyleTable
 

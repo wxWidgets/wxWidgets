@@ -17,24 +17,24 @@
     either programmatically or via the wxSplitterWindow user interface.
 
     @beginStyleTable
-    @style{wxSP_3D}:
+    @style{wxSP_3D}
            Draws a 3D effect border and sash.
-    @style{wxSP_3DSASH}:
+    @style{wxSP_3DSASH}
            Draws a 3D effect sash.
-    @style{wxSP_3DBORDER}:
+    @style{wxSP_3DBORDER}
            Synonym for wxSP_BORDER.
-    @style{wxSP_BORDER}:
+    @style{wxSP_BORDER}
            Draws a standard border.
-    @style{wxSP_NOBORDER}:
+    @style{wxSP_NOBORDER}
            No border (default).
-    @style{wxSP_NO_XP_THEME}:
+    @style{wxSP_NO_XP_THEME}
            Under Windows XP, switches off the attempt to draw the splitter
            using Windows XP theming, so the borders and sash will take on the
            pre-XP look.
-    @style{wxSP_PERMIT_UNSPLIT}:
+    @style{wxSP_PERMIT_UNSPLIT}
            Always allow to unsplit, even with the minimum pane size other than
            zero.
-    @style{wxSP_LIVE_UPDATE}:
+    @style{wxSP_LIVE_UPDATE}
            Don't draw XOR line but resize the child windows immediately.
     @endStyleTable
 

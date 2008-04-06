@@ -24,24 +24,24 @@
     wxChoicebook is being employed.
 
     @beginStyleTable
-    @style{wxCHB_DEFAULT}:
+    @style{wxCHB_DEFAULT}
            Choose the default location for the labels depending on the current
            platform (left everywhere except Mac where it is top).
-    @style{wxCHB_TOP}:
+    @style{wxCHB_TOP}
            Place labels above the page area.
-    @style{wxCHB_LEFT}:
+    @style{wxCHB_LEFT}
            Place labels on the left side.
-    @style{wxCHB_RIGHT}:
+    @style{wxCHB_RIGHT}
            Place labels on the right side.
-    @style{wxCHB_BOTTOM}:
+    @style{wxCHB_BOTTOM}
            Place labels below the page area.
     @endStyleTable
 
     @beginEventTable{wxChoicebookEvent}
-    @event{EVT_CHOICEBOOK_PAGE_CHANGED(id, func)}:
+    @event{EVT_CHOICEBOOK_PAGE_CHANGED(id, func)}
            The page selection was changed. Processes a
            wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED event.
-    @event{EVT_CHOICEBOOK_PAGE_CHANGING(id, func)}:
+    @event{EVT_CHOICEBOOK_PAGE_CHANGING(id, func)}
            The page selection is about to be changed. Processes a
            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event. This event can be
            vetoed (using wxNotifyEvent::Veto()).

@@ -35,19 +35,19 @@
         to get reasonably good behaviour on all platforms.
 
     @beginStyleTable
-    @style{wxBU_AUTODRAW}:
+    @style{wxBU_AUTODRAW}
            If this is specified, the button will be drawn automatically using
            the label bitmap only, providing a 3D-look border. If this style is
            not specified, the button will be drawn without borders and using
            all provided bitmaps. Has effect only under MS Windows.
-    @style{wxBU_LEFT}:
+    @style{wxBU_LEFT}
            Left-justifies the bitmap label. Has effect only under MS Windows.
-    @style{wxBU_TOP}:
+    @style{wxBU_TOP}
            Aligns the bitmap label to the top of the button.
            Has effect only under MS Windows.
-    @style{wxBU_RIGHT}:
+    @style{wxBU_RIGHT}
            Right-justifies the bitmap label. Has effect only under MS Windows.
-    @style{wxBU_BOTTOM}:
+    @style{wxBU_BOTTOM}
            Aligns the bitmap label to the bottom of the button.
            Has effect only under MS Windows.
     @endStyleTable
@@ -56,7 +56,7 @@
     class as bitmap buttons don't have any minimal standard size by default.
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_BUTTON(id, func)}:
+    @event{EVT_BUTTON(id, func)}
            Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.
     @endEventTable
 

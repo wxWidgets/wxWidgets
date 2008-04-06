@@ -23,7 +23,7 @@
     wxObject
 
     @beginStyleTable
-    @style{wxST_SIZEGRIP}:
+    @style{wxST_SIZEGRIP}
            On Windows 95, displays a gripper at right-hand side of the status
            bar.
     @endStyleTable

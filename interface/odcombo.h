@@ -19,17 +19,17 @@
     OnDrawItem(), OnMeasureItem() and OnMeasureItemWidth().
 
     @beginStyleTable
-    @style{wxODCB_DCLICK_CYCLES}:
+    @style{wxODCB_DCLICK_CYCLES}
            Double-clicking cycles item if wxCB_READONLY is also used.
            Synonymous with wxCC_SPECIAL_DCLICK.
-    @style{wxODCB_STD_CONTROL_PAINT}:
+    @style{wxODCB_STD_CONTROL_PAINT}
            Control itself is not custom painted using OnDrawItem. Even if this
            style is not used, writable wxOwnerDrawnComboBox is never custom
            painted unless SetCustomPaintWidth() is called.
     @endStyleTable
 
     @beginEventTable{wxCommandEvent}
-    @event{EVT_COMBOBOX(id, func)}:
+    @event{EVT_COMBOBOX(id, func)}
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected. Note that calling GetValue() returns the new
            value of selection.
@@ -46,11 +46,11 @@
 class wxOwnerDrawnComboBox : public wxComboCtrl
 {
 public:
-
     /**
         Default constructor.
     */
     wxOwnerDrawnComboBox();
+
     //@{
     /**
         Constructor, creating and showing a owner-drawn combobox.
@@ -64,8 +64,7 @@ public:
         @param pos
             Window position.
         @param size
-            Window size. If @c wxDefaultSize is specified then the window is
-        sized
+            Window size. If @c wxDefaultSize is specified then the window is sized
             appropriately.
         @param n
             Number of strings with which to initialise the control.
@@ -169,10 +168,10 @@ public:
             Combines any of the following flag values:
 
             @beginStyleTable
-            @style{wxODCB_PAINTING_CONTROL}:
+            @style{wxODCB_PAINTING_CONTROL}
                    Combo control is being painted, instead of a list item.
                    Argument item may be @c wxNOT_FOUND in this case.
-            @style{wxODCB_PAINTING_SELECTED}:
+            @style{wxODCB_PAINTING_SELECTED}
                    An item with selection background is being painted.
                    DC text colour should already be correct.
             @endStyleTable

@@ -21,10 +21,10 @@
     action.
 
     @beginStyleTable
-    @style{wxTBK_BUTTONBAR}:
+    @style{wxTBK_BUTTONBAR}
            Use wxButtonToolBar-based implementation under Mac OS (ignored
            under other platforms.)
-    @style{wxTBK_HORZ_LAYOUT}:
+    @style{wxTBK_HORZ_LAYOUT}
            Shows the text and the icons alongside, not vertically stacked
            (only implement under Windows and GTK 2 platforms as it relies on
            wxTB_HORZ_LAYOUT flag support).

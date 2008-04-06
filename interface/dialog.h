@@ -18,41 +18,41 @@
     overview_autoscrollingdialogs "Automatic scrolling dialogs" for further details.
 
     @beginStyleTable
-    @style{wxCAPTION}:
+    @style{wxCAPTION}
            Puts a caption on the dialog box.
-    @style{wxDEFAULT_DIALOG_STYLE}:
+    @style{wxDEFAULT_DIALOG_STYLE}
            Equivalent to a combination of wxCAPTION, wxCLOSE_BOX and
            wxSYSTEM_MENU (the last one is not used under Unix)
-    @style{wxRESIZE_BORDER}:
+    @style{wxRESIZE_BORDER}
            Display a resizeable frame around the window.
-    @style{wxSYSTEM_MENU}:
+    @style{wxSYSTEM_MENU}
            Display a system menu.
-    @style{wxCLOSE_BOX}:
+    @style{wxCLOSE_BOX}
            Displays a close box on the frame.
-    @style{wxMAXIMIZE_BOX}:
+    @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the dialog.
-    @style{wxMINIMIZE_BOX}:
+    @style{wxMINIMIZE_BOX}
            Displays a minimize box on the dialog.
-    @style{wxTHICK_FRAME}:
+    @style{wxTHICK_FRAME}
            Display a thick frame around the window.
-    @style{wxSTAY_ON_TOP}:
+    @style{wxSTAY_ON_TOP}
            The dialog stays on top of all other windows.
-    @style{wxNO_3D}:
+    @style{wxNO_3D}
            Under Windows, specifies that the child controls should not have 3D
            borders unless specified in the control.
-    @style{wxDIALOG_NO_PARENT}:
+    @style{wxDIALOG_NO_PARENT}
            By default, a dialog created with a @NULL parent window will be
            given the application's top level window as parent. Use this style
            to prevent this from happening and create an orphan dialog. This is
            not recommended for modal dialogs.
-    @style{wxDIALOG_EX_CONTEXTHELP}:
+    @style{wxDIALOG_EX_CONTEXTHELP}
            Under Windows, puts a query button on the caption. When pressed,
            Windows will go into a context-sensitive help mode and wxWidgets
            will send a wxEVT_HELP event if the user clicked on an application
            window. Note that this is an extended style and must be set by
            calling SetExtraStyle before Create is called (two-step
            construction).
-    @style{wxDIALOG_EX_METAL}:
+    @style{wxDIALOG_EX_METAL}
            On Mac OS X, frames with this style will be shown with a metallic
            look. This is an extra style.
     @endStyleTable
