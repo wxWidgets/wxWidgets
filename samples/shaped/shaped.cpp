@@ -107,7 +107,6 @@ public:
     void OnMouseMove(wxMouseEvent& evt);
     void OnExit(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
-    void OnWindowCreate(wxWindowCreateEvent& evt);
 
 private:
     bool     m_hasShape;
@@ -290,12 +289,7 @@ BEGIN_EVENT_TABLE(ShapedFrame, wxFrame)
     EVT_LEFT_UP(ShapedFrame::OnLeftUp)
     EVT_MOTION(ShapedFrame::OnMouseMove)
     EVT_RIGHT_UP(ShapedFrame::OnExit)
-
     EVT_PAINT(ShapedFrame::OnPaint)
-
-#ifdef __WXGTK__
-    EVT_WINDOW_CREATE(ShapedFrame::OnWindowCreate)
-#endif
 END_EVENT_TABLE()
 
 
@@ -314,14 +308,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
     m_bmp = wxBitmap(_T("star.png"), wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
     SetToolTip(wxT("Right-click to close"));
-
-#ifndef __WXGTK__
-    // On wxGTK we can't do this yet because the window hasn't been created
-    // yet so we wait until the EVT_WINDOW_CREATE event happens.  On wxMSW and
-    // wxMac the window has been created at this point so we go ahead and set
-    // the shape now.
     SetWindowShape();
-#endif
 }
 
 void ShapedFrame::SetWindowShape()
@@ -379,11 +366,6 @@ void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxPaintDC dc(this);
     dc.DrawBitmap(m_bmp, 0, 0, true);
-}
-
-void ShapedFrame::OnWindowCreate(wxWindowCreateEvent& WXUNUSED(evt))
-{
-    SetWindowShape();
 }
 
 // ----------------------------------------------------------------------------

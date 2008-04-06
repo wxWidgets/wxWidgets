@@ -324,6 +324,9 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
         win->SetIcon( wxNullIcon );
         win->SetIcons( iconsOld );
     }
+
+    if (win->HasFlag(wxFRAME_SHAPED))
+        win->SetShape(win->m_shape); // it will really set the window shape now
 }
 }
 
@@ -1164,13 +1167,22 @@ bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
                  _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
-    GdkWindow *window = NULL;
-    if (m_wxwindow)
+    if ( GTK_WIDGET_REALIZED(m_widget) )
     {
-        do_shape_combine_region(m_wxwindow->window, region);
+        if ( m_wxwindow )
+            do_shape_combine_region(m_wxwindow->window, region);
+
+        return do_shape_combine_region(m_widget->window, region);
     }
-    window = m_widget->window;
-    return do_shape_combine_region(window, region);
+    else // not realized yet
+    {
+        // store the shape to set, it will be really set once we're realized
+        m_shape = region;
+
+        // we don't know if we're going to succeed or fail, be optimistic by
+        // default
+        return true;
+    }
 }
 
 bool wxTopLevelWindowGTK::IsActive()

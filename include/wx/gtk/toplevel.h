@@ -107,6 +107,9 @@ public:
     // size of WM decorations
     wxSize m_decorSize;
 
+    // shape of the frame
+    wxRegion m_shape;
+
     // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
     int m_urgency_hint;
