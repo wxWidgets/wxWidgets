@@ -541,144 +541,6 @@ public:
 
 
 
-/**
-    @class wxDataViewCustomRenderer
-    @wxheader{dataview.h}
-
-    You need to derive a new class from wxDataViewCustomRenderer in
-    order to write a new renderer. You need to override at least
-    wxDataViewRenderer::SetValue,
-    wxDataViewRenderer::GetValue,
-    wxDataViewCustomRenderer::GetSize
-    and wxDataViewCustomRenderer::Render.
-
-    If you want your renderer to support in-place editing then you
-    also need to override
-    wxDataViewCustomRenderer::HasEditorCtrl,
-    wxDataViewCustomRenderer::CreateEditorCtrl
-    and wxDataViewCustomRenderer::GetValueFromEditorCtrl.
-    Note that a special event handler will be pushed onto that
-    editor control which handles ENTER and focus out events
-    in order to end the editing.
-
-    @library{wxadv}
-    @category{FIXME}
-*/
-class wxDataViewCustomRenderer : public wxDataViewRenderer
-{
-public:
-    /**
-        Constructor.
-    */
-    wxDataViewCustomRenderer(const wxString& varianttype = "string",
-                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                             bool no_init = false);
-
-    /**
-        Destructor.
-    */
-    ~wxDataViewCustomRenderer();
-
-    /**
-        Override this to react to double clicks or ENTER. This method will
-        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
-    */
-    virtual bool Activate( wxRect cell,
-                           wxDataViewModel* model,
-                           const wxDataViewItem & item,
-                           unsigned int col );
-
-    /**
-        Override this to create the actual editor control once editing
-        is about to start. @a parent is the parent of the editor
-        control, @a labelRect indicates the position and
-        size of the editor control and @a value is its initial value:
-    */
-    virtual wxControl* CreateEditorCtrl(wxWindow* parent,
-                                        wxRect labelRect,
-                                        const wxVariant& value);
-
-    /**
-        Create DC on request. Internal.
-    */
-    virtual wxDC* GetDC();
-
-    /**
-        Return size required to show content.
-    */
-    virtual wxSize GetSize();
-
-    /**
-        Overrride this so that the renderer can get the value
-        from the editor control (pointed to by @e editor):
-    */
-    virtual bool GetValueFromEditorCtrl(wxControl* editor,
-                                        wxVariant& value);
-
-    /**
-        Override this and make it return @e @true in order to
-        indicate that this renderer supports in-place editing.
-    */
-    virtual bool HasEditorCtrl();
-
-    /**
-        Overrride this to react to a left click. This method will
-        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
-    */
-    virtual bool LeftClick( wxPoint cursor,
-                            wxRect cell,
-                            wxDataViewModel * model,
-                            const wxDataViewItem & item,
-                            unsigned int col );
-
-    /**
-        Override this to render the cell. Before this is called,
-        wxDataViewRenderer::SetValue was called
-        so that this instance knows what to render.
-    */
-    virtual bool Render(wxRect cell, wxDC* dc, int state);
-
-    /**
-        This method should be called from within Render()
-        whenever you need to render simple text. This will ensure that the
-        correct colour, font and vertical alignment will be chosen so the
-        text will look the same as text drawn by native renderers.
-    */
-    bool RenderText(const wxString& text, int xoffset, wxRect cell,
-                    wxDC* dc, int state);
-
-    /**
-        Overrride this to start a drag operation. Not yet
-        supported
-    */
-    virtual bool StartDrag(wxPoint cursor, wxRect cell,
-                           wxDataViewModel* model,
-                           const wxDataViewItem & item,
-                           unsigned int col);
-};
-
-
-
-/**
-    @class wxDataViewBitmapRenderer
-    @wxheader{dataview.h}
-
-    wxDataViewBitmapRenderer
-
-    @library{wxadv}
-    @category{FIXME}
-*/
-class wxDataViewBitmapRenderer : public wxDataViewRenderer
-{
-public:
-    /**
-
-    */
-    wxDataViewBitmapRenderer(const wxString& varianttype = "wxBitmap",
-                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
-};
-
-
 
 /**
     @class wxDataViewItemAttr
@@ -1271,7 +1133,7 @@ public:
     */
     wxDataViewRenderer(const wxString& varianttype,
                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                       int alignment = wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL);
+                       int align = wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL);
 
     /**
         Returns the alignment.
@@ -1350,7 +1212,8 @@ public:
 
     */
     wxDataViewTextRenderer(const wxString& varianttype = "string",
-                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
+                           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                           int align = wxDVR_DEFAULT_ALIGNMENT );
 };
 
 
@@ -1372,7 +1235,8 @@ public:
     */
     wxDataViewProgressRenderer(const wxString& label = wxEmptyString,
                                const wxString& varianttype = "long",
-                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
+                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                               int align = wxDVR_DEFAULT_ALIGNMENT );
 };
 
 
@@ -1397,7 +1261,7 @@ public:
     */
     wxDataViewSpinRenderer(int min, int max,
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
-                           int alignment = wxDVR_DEFAULT_ALIGNMENT);
+                           int align = wxDVR_DEFAULT_ALIGNMENT);
 };
 
 
@@ -1805,6 +1669,144 @@ public:
                                int align = wxDVR_DEFAULT_ALIGNMENT);
 };
 
+
+/**
+    @class wxDataViewCustomRenderer
+    @wxheader{dataview.h}
+
+    You need to derive a new class from wxDataViewCustomRenderer in
+    order to write a new renderer. You need to override at least
+    wxDataViewRenderer::SetValue,
+    wxDataViewRenderer::GetValue,
+    wxDataViewCustomRenderer::GetSize
+    and wxDataViewCustomRenderer::Render.
+
+    If you want your renderer to support in-place editing then you
+    also need to override
+    wxDataViewCustomRenderer::HasEditorCtrl,
+    wxDataViewCustomRenderer::CreateEditorCtrl
+    and wxDataViewCustomRenderer::GetValueFromEditorCtrl.
+    Note that a special event handler will be pushed onto that
+    editor control which handles ENTER and focus out events
+    in order to end the editing.
+
+    @library{wxadv}
+    @category{FIXME}
+*/
+class wxDataViewCustomRenderer : public wxDataViewRenderer
+{
+public:
+    /**
+        Constructor.
+    */
+    wxDataViewCustomRenderer(const wxString& varianttype = "string",
+                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                             int align = wxDVR_DEFAULT_ALIGNMENT );
+
+    /**
+        Destructor.
+    */
+    ~wxDataViewCustomRenderer();
+
+    /**
+        Override this to react to double clicks or ENTER. This method will
+        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
+    */
+    virtual bool Activate( wxRect cell,
+                           wxDataViewModel* model,
+                           const wxDataViewItem & item,
+                           unsigned int col );
+
+    /**
+        Override this to create the actual editor control once editing
+        is about to start. @a parent is the parent of the editor
+        control, @a labelRect indicates the position and
+        size of the editor control and @a value is its initial value:
+    */
+    virtual wxControl* CreateEditorCtrl(wxWindow* parent,
+                                        wxRect labelRect,
+                                        const wxVariant& value);
+
+    /**
+        Create DC on request. Internal.
+    */
+    virtual wxDC* GetDC();
+
+    /**
+        Return size required to show content.
+    */
+    virtual wxSize GetSize();
+
+    /**
+        Overrride this so that the renderer can get the value
+        from the editor control (pointed to by @e editor):
+    */
+    virtual bool GetValueFromEditorCtrl(wxControl* editor,
+                                        wxVariant& value);
+
+    /**
+        Override this and make it return @e @true in order to
+        indicate that this renderer supports in-place editing.
+    */
+    virtual bool HasEditorCtrl();
+
+    /**
+        Overrride this to react to a left click. This method will
+        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
+    */
+    virtual bool LeftClick( wxPoint cursor,
+                            wxRect cell,
+                            wxDataViewModel * model,
+                            const wxDataViewItem & item,
+                            unsigned int col );
+
+    /**
+        Override this to render the cell. Before this is called,
+        wxDataViewRenderer::SetValue was called
+        so that this instance knows what to render.
+    */
+    virtual bool Render(wxRect cell, wxDC* dc, int state);
+
+    /**
+        This method should be called from within Render()
+        whenever you need to render simple text. This will ensure that the
+        correct colour, font and vertical alignment will be chosen so the
+        text will look the same as text drawn by native renderers.
+    */
+    bool RenderText(const wxString& text, int xoffset, wxRect cell,
+                    wxDC* dc, int state);
+
+    /**
+        Overrride this to start a drag operation. Not yet
+        supported
+    */
+    virtual bool StartDrag(wxPoint cursor, wxRect cell,
+                           wxDataViewModel* model,
+                           const wxDataViewItem & item,
+                           unsigned int col);
+};
+
+
+
+/**
+    @class wxDataViewBitmapRenderer
+    @wxheader{dataview.h}
+
+    wxDataViewBitmapRenderer
+
+    @library{wxadv}
+    @category{FIXME}
+*/
+class wxDataViewBitmapRenderer : public wxDataViewRenderer
+{
+public:
+    /**
+
+    */
+    wxDataViewBitmapRenderer(const wxString& varianttype = "wxBitmap",
+                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                             int align = wxDVR_DEFAULT_ALIGNMENT,
+};
 
 
 /**
