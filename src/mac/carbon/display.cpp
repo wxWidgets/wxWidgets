@@ -229,10 +229,10 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
     boolean_t bExactMatch;
     CFDictionaryRef theCGMode = CGDisplayBestModeForParametersAndRefreshRate(
         m_id,
-        (size_t)mode.bpp,
-        (size_t)mode.w,
-        (size_t)mode.h,
-        (double)mode.refresh,
+        (size_t)mode.GetDepth(),
+        (size_t)mode.GetWidth(),
+        (size_t)mode.GetHeight(),
+        (double)mode.GetRefresh(),
         &bExactMatch );
 
     bool bOK = bExactMatch;
