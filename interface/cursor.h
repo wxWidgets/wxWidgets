@@ -28,8 +28,7 @@
     @category{gdi}
 
     @stdobjects
-    ::Objects:, ::wxNullCursor, ::Pointers:, ::wxSTANDARD_CURSOR,
-    ::wxHOURGLASS_CURSOR, ::wxCROSS_CURSOR,
+    ::wxNullCursor, ::wxSTANDARD_CURSOR, ::wxHOURGLASS_CURSOR, ::wxCROSS_CURSOR
 
     @see wxBitmap, wxIcon, wxWindow::SetCursor, ::wxSetCursor
 */
@@ -461,23 +460,10 @@ public:
     wxCursor operator =(const wxCursor& cursor);
 };
 
-
 /**
-    FIXME
-*/
-wxCursor Objects:
-;
-
-/**
-    FIXME
+    An empty wxCursor.
 */
 wxCursor wxNullCursor;
-
-/**
-    FIXME
-*/
-wxCursor Pointers:
-;
 
 /**
     FIXME

@@ -8,7 +8,9 @@
 
 
 /**
-    Bitmap flags.
+    Bitmap type flags.
+
+    See wxBitmap and wxImage classes.
 */
 enum wxBitmapType
 {
@@ -50,6 +52,8 @@ enum wxBitmapType
 
 /**
     Standard cursors.
+
+    See wxCursor.
 */
 enum wxStockCursor
 {
@@ -98,6 +102,7 @@ enum wxStockCursor
     @wxheader{gdicmn.h}
 
     A @b wxRealPoint is a useful data structure for graphics operations.
+
     It contains floating point @e x and @e y members.
     See also wxPoint for an integer version.
 
@@ -109,16 +114,22 @@ enum wxStockCursor
 class wxRealPoint
 {
 public:
-    //@{
-    /**
-        Create a point.
-        double  x
-        double  y
-        Members of the @b wxRealPoint object.
-    */
     wxRealPoint();
+
+    /**
+        Initializes the point with the given coordinates.
+    */
     wxRealPoint(double x, double y);
-    //@}
+
+    /**
+        X coordinate of this point.
+    */
+    double x;
+
+    /**
+        Y coordinate of this point.
+    */
+    double y;
 };
 
 
@@ -423,6 +434,9 @@ public:
     @library{wxcore}
     @category{data}
 
+    @stdobjects
+    ::wxDefaultPosition
+
     @see wxRealPoint
 */
 class wxPoint
@@ -468,6 +482,10 @@ public:
     */
 };
 
+/**
+    Global istance of a wxPoint initialized with values -1;-1.
+*/
+wxPoint wxDefaultPosition;
 
 
 /**
@@ -524,49 +542,6 @@ public:
 };
 
 
-
-/**
-    @class wxFontList
-    @wxheader{gdicmn.h}
-
-    A font list is a list containing all fonts which have been created. There
-    is only one instance of this class: @b wxTheFontList.  Use this object to search
-    for a previously created font of the desired type and create it if not already
-    found.
-    In some windowing systems, the font may be a scarce resource, so it is best to
-    reuse old resources if possible.  When an application finishes, all fonts will
-    be
-    deleted and their resources freed, eliminating the possibility of 'memory
-    leaks'.
-
-    @library{wxcore}
-    @category{gdi}
-
-    @see wxFont
-*/
-class wxFontList : public wxList
-{
-public:
-    /**
-        Constructor. The application should not construct its own font list:
-        use the object pointer @b wxTheFontList.
-    */
-    wxFontList();
-
-    /**
-        Finds a font of the given specification, or creates one and adds it to the
-        list. See the @ref wxFont::ctor "wxFont constructor" for
-        details of the arguments.
-    */
-    wxFont* FindOrCreateFont(int point_size, int family, int style,
-                             int weight,
-                             bool underline = false,
-                             const wxString& facename = NULL,
-                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-};
-
-
-
 /**
     @class wxSize
     @wxheader{gdicmn.h}
@@ -582,9 +557,11 @@ public:
     named @c width and @c height since it makes much more sense for
     sizes.
 
-
     @library{wxcore}
     @category{data}
+
+    @stdobjects
+    ::wxDefaultSize
 
     @see wxPoint, wxRealPoint
 */
@@ -715,6 +692,10 @@ public:
     void SetWidth(int width);
 };
 
+/**
+    Global instance of a wxSize object initialized with values -1;-1.
+*/
+wxSize wxDefaultSize;
 
 
 

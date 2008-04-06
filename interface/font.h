@@ -29,8 +29,7 @@
     @category{gdi}
 
     @stdobjects
-    ::Objects:, ::wxNullFont, ::Pointers:, ::wxNORMAL_FONT, ::wxSMALL_FONT,
-    ::wxITALIC_FONT, ::wxSWISS_FONT,
+    ::wxNullFont, ::wxNORMAL_FONT, ::wxSMALL_FONT, ::wxITALIC_FONT, ::wxSWISS_FONT
 
     @see @ref overview_wxfontoverview, wxDC::SetFont, wxDC::DrawText,
     wxDC::GetTextExtent, wxFontDialog, wxSystemSettings
@@ -652,7 +651,7 @@ public:
 
 
 /**
-    FIXME
+    An empty wxFont.
 */
 wxFont wxNullFont;
 
@@ -675,6 +674,47 @@ wxFont wxITALIC_FONT;
     FIXME
 */
 wxFont wxSWISS_FONT;
+
+
+/**
+    @class wxFontList
+    @wxheader{gdicmn.h}
+
+    A font list is a list containing all fonts which have been created. There
+    is only one instance of this class: @b wxTheFontList.  Use this object to search
+    for a previously created font of the desired type and create it if not already
+    found.
+    In some windowing systems, the font may be a scarce resource, so it is best to
+    reuse old resources if possible.  When an application finishes, all fonts will
+    be
+    deleted and their resources freed, eliminating the possibility of 'memory
+    leaks'.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxFont
+*/
+class wxFontList : public wxList
+{
+public:
+    /**
+        Constructor. The application should not construct its own font list:
+        use the object pointer @b wxTheFontList.
+    */
+    wxFontList();
+
+    /**
+        Finds a font of the given specification, or creates one and adds it to the
+        list. See the @ref wxFont::ctor "wxFont constructor" for
+        details of the arguments.
+    */
+    wxFont* FindOrCreateFont(int point_size, int family, int style,
+                             int weight,
+                             bool underline = false,
+                             const wxString& facename = NULL,
+                             wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+};
 
 
 

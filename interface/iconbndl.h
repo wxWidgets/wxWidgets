@@ -18,7 +18,7 @@
     @category{FIXME}
 
     @stdobjects
-    ::wxNullIconBundle,
+    ::wxNullIconBundle
 */
 class wxIconBundle : public wxGDIObject
 {
@@ -82,7 +82,7 @@ public:
 
 
 /**
-    FIXME
+    An empty wxIconBundle.
 */
 wxIconBundle wxNullIconBundle;
 

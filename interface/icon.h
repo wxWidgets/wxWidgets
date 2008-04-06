@@ -25,7 +25,7 @@
     @category{gdi}
 
     @stdobjects
-    ::Objects:, ::wxNullIcon,
+    ::wxNullIcon
 
     @see @ref overview_wxbitmapoverview "Bitmap and icon overview", @ref
     overview_supportedbitmapformats "supported bitmap file formats", wxDC::DrawIcon, wxCursor
@@ -313,15 +313,8 @@ public:
     wxIcon operator =(const wxIcon& icon);
 };
 
-
 /**
-    FIXME
-*/
-wxIcon Objects:
-;
-
-/**
-    FIXME
+    An empty wxIcon.
 */
 wxIcon wxNullIcon;
 

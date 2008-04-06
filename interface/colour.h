@@ -164,7 +164,7 @@ public:
 
 
 /**
-    FIXME
+    An empty colour.
 */
 wxColour wxNullColour;
 

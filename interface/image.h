@@ -155,11 +155,13 @@ public:
     be drawn in a device context, using wxDC::DrawBitmap.
 
     One colour value of the image may be used as a mask colour which will lead to
-    the automatic
-    creation of a wxMask object associated to the bitmap object.
+    the automatic creation of a wxMask object associated to the bitmap object.
 
     @library{wxcore}
     @category{gdi}
+
+    @stdobjects
+    ::wxNullImage
 
     @see wxBitmap, wxInitAllImageHandlers()
 */
@@ -1461,6 +1463,10 @@ public:
     wxImage operator =(const wxImage& image);
 };
 
+/**
+    An empty wxImage.
+*/
+wxImage wxNullImage;
 
 
 // ============================================================================

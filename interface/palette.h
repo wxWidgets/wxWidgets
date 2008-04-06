@@ -39,12 +39,14 @@ public:
         Default constructor.
     */
     wxPalette();
+
     /**
         Copy constructor, uses @ref overview_refcount.
     */
     wxPalette(const wxPalette& palette);
+
     /**
-        Creates a palette from arrays of size @e n, one for each red, blue or
+        Creates a palette from arrays of size @a n, one for each red, blue or
         green component.
 
         @param palette
@@ -72,7 +74,7 @@ public:
     ~wxPalette();
 
     /**
-        Creates a palette from arrays of size @e n, one for each red, blue or
+        Creates a palette from arrays of size @a n, one for each red, blue or
         green component.
 
         @param n
@@ -147,7 +149,7 @@ public:
 
 
 /**
-    FIXME
+    An empty palette.
 */
 wxPalette wxNullPalette;
 

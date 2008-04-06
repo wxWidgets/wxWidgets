@@ -15,6 +15,9 @@
     @library{wxbase}
     @category{data}
 
+    @stdobjects
+    ::wxDefaultDateTime
+
     @see @ref overview_wxdatetimeoverview "Date classes overview", wxTimeSpan,
     wxDateSpan, wxCalendarCtrl
 */
@@ -1151,6 +1154,14 @@ public:
     */
     wxDateTime operator(const struct tm& tm);
 };
+
+/**
+    Global instance of an empty wxDateTime object.
+
+    @todo wouldn't be better to rename it wxNullDateTime as for the rest of wx global objects
+          which are initialized to an empty value?
+*/
+wxDateTime wxDefaultDateTime;
 
 
 
