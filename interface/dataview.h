@@ -1274,6 +1274,11 @@ public:
                        int alignment = wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL);
 
     /**
+        Returns the alignment.
+    */
+    virtual int GetAlignment() const;
+
+    /**
         Returns the cell mode.
     */
     virtual wxDataViewCellMode GetMode();
@@ -1296,6 +1301,10 @@ public:
     */
     virtual wxString GetVariantType();
 
+    /**
+        Sets the alignment.
+    */
+    virtual void SetAlignment( int align );
     /**
         Sets the owning wxDataViewColumn. This
         is usually called from within wxDataViewColumn.
