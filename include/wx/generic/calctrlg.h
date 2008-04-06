@@ -278,7 +278,7 @@ private:
              m_colHeaderFg,
              m_colHeaderBg,
              m_colBackground,
-             m_colSorrounding;
+             m_colSurrounding;
 
     // the attributes for each of the month days
     wxCalendarDateAttr *m_attrs[31];

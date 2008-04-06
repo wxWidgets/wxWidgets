@@ -211,7 +211,7 @@ void wxGenericCalendarCtrl::InitColours()
     m_colHighlightFg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_colHighlightBg = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     m_colBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-    m_colSorrounding = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+    m_colSurrounding = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
 
     m_colHolidayFg = *wxRED;
     // don't set m_colHolidayBg - by default, same as our bg colour
@@ -1092,9 +1092,8 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
                 if ( date.GetMonth() != m_date.GetMonth() || !IsDateInRange(date) )
                 {
-                    // surrounding week or out-of-range
-                    // draw "disabled"
-                    dc.SetTextForeground(m_colSorrounding);
+                    // draw the days of adjacent months in different colour
+                    dc.SetTextForeground(m_colSurrounding);
                     changedColours = true;
                 }
                 else
