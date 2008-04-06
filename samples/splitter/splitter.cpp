@@ -51,6 +51,8 @@ enum
     SPLIT_VERTICAL,
     SPLIT_UNSPLIT,
     SPLIT_LIVE,
+    SPLIT_BORDER,
+    SPLIT_3DSASH,
     SPLIT_SETPOSITION,
     SPLIT_SETMINSIZE,
     SPLIT_SETGRAVITY,
@@ -81,7 +83,13 @@ public:
     void SplitHorizontal(wxCommandEvent& event);
     void SplitVertical(wxCommandEvent& event);
     void Unsplit(wxCommandEvent& event);
-    void ToggleLive(wxCommandEvent& event);
+    void ToggleFlag(int flag, bool enable);
+    void ToggleLive(wxCommandEvent& event) 
+                  { ToggleFlag(wxSP_LIVE_UPDATE, event.IsChecked()); }
+    void ToggleBorder(wxCommandEvent& event) 
+                  { ToggleFlag(wxSP_BORDER, event.IsChecked()); }
+    void Toggle3DSash(wxCommandEvent& event) 
+                  { ToggleFlag(wxSP_3DSASH, event.IsChecked()); }
     void SetPosition(wxCommandEvent& event);
     void SetMinSize(wxCommandEvent& event);
     void SetGravity(wxCommandEvent& event);
@@ -168,6 +176,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(SPLIT_HORIZONTAL, MyFrame::SplitHorizontal)
     EVT_MENU(SPLIT_UNSPLIT, MyFrame::Unsplit)
     EVT_MENU(SPLIT_LIVE, MyFrame::ToggleLive)
+    EVT_MENU(SPLIT_BORDER, MyFrame::ToggleBorder)
+    EVT_MENU(SPLIT_3DSASH, MyFrame::Toggle3DSash)
     EVT_MENU(SPLIT_SETPOSITION, MyFrame::SetPosition)
     EVT_MENU(SPLIT_SETMINSIZE, MyFrame::SetMinSize)
     EVT_MENU(SPLIT_SETGRAVITY, MyFrame::SetGravity)
@@ -206,6 +216,14 @@ MyFrame::MyFrame()
     splitMenu->AppendCheckItem(SPLIT_LIVE,
                                _T("&Live update\tCtrl-L"),
                                _T("Toggle live update mode"));
+    splitMenu->AppendCheckItem(SPLIT_BORDER,
+                               _T("3D &Border"),
+                               _T("Toggle wxSP_BORDER flag"));
+    splitMenu->Check(SPLIT_BORDER, true);
+    splitMenu->AppendCheckItem(SPLIT_3DSASH,
+                               _T("&3D Sash"),
+                               _T("Toggle wxSP_3DSASH flag"));
+    splitMenu->Check(SPLIT_3DSASH, true);
     splitMenu->Append(SPLIT_SETPOSITION,
                       _T("Set splitter &position\tCtrl-P"),
                       _T("Set the splitter position"));
@@ -314,22 +332,29 @@ void MyFrame::Unsplit(wxCommandEvent& WXUNUSED(event) )
 #endif // wxUSE_STATUSBAR
 }
 
-void MyFrame::ToggleLive(wxCommandEvent& event )
+void MyFrame::ToggleFlag(int flag, bool enable)
 {
     long style = m_splitter->GetWindowStyleFlag();
-    if ( event.IsChecked() )
-        style |= wxSP_LIVE_UPDATE;
+    if ( enable )
+        style |= flag;
     else
-        style &= ~wxSP_LIVE_UPDATE;
+        style &= ~flag;
 
     m_splitter->SetWindowStyleFlag(style);
+
+    // we need to move sash to redraw it
+    int pos = m_splitter->GetSashPosition();
+    m_splitter->SetSashPosition(pos + 1);
+    m_splitter->SetSashPosition(pos);
 }
 
 void MyFrame::SetPosition(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
     str.Printf( wxT("%d"), m_splitter->GetSashPosition());
+#if wxUSE_TEXTDLG
     str = wxGetTextFromUser(_T("Enter splitter position:"), _T(""), str, this);
+#endif
     if ( str.empty() )
         return;
 
@@ -349,7 +374,9 @@ void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
     str.Printf( wxT("%d"), m_splitter->GetMinimumPaneSize());
+#if wxUSE_TEXTDLG
     str = wxGetTextFromUser(_T("Enter minimal size for panes:"), _T(""), str, this);
+#endif
     if ( str.empty() )
         return;
 
@@ -364,7 +391,9 @@ void MyFrame::SetGravity(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
     str.Printf( wxT("%g"), m_splitter->GetSashGravity());
+#if wxUSE_TEXTDLG
     str = wxGetTextFromUser(_T("Enter sash gravity (0,1):"), _T(""), str, this);
+#endif
     if ( str.empty() )
         return;
 
@@ -482,7 +511,7 @@ void MyCanvas::OnDraw(wxDC& dcOrig)
     dc.SetPen(*wxBLACK_PEN);
     dc.DrawLine(0, 0, 100, 200);
 
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc.DrawText(_T("Testing"), 50, 50);
 
     dc.SetPen(*wxRED_PEN);
