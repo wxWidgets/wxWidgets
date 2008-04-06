@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DOCVIEWSAMPLEH__
-#define __DOCVIEWSAMPLEH__
+#ifndef __DOCVIEW_H__
+#define __DOCVIEW_H__
 
 #include "wx/mdi.h"
 #include "wx/docview.h"
@@ -21,14 +21,14 @@ class wxDocManager;
 // Define a new application
 class MyApp: public wxApp
 {
-  public:
+public:
     MyApp(void);
-    bool OnInit(void);
-    int OnExit(void);
+    virtual bool OnInit();
+    virtual int OnExit();
 
-    wxMDIChildFrame *CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas);
+    wxMDIChildFrame* CreateChildFrame(wxDocument*, wxView*, bool isCanvas);
 
-  protected:
+protected:
     wxDocManager* m_docManager;
 };
 
@@ -36,22 +36,24 @@ DECLARE_APP(MyApp)
 
 // Define a new frame
 class MyCanvas;
+class DrawingView;
 class MyFrame: public wxDocMDIParentFrame
 {
-  DECLARE_CLASS(MyFrame)
- public:
-  wxMenu *editMenu;
-  
-  MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size,
-    long type);
+public:
+    wxMenu* m_editMenu;
 
-  void OnAbout(wxCommandEvent& event);
-  MyCanvas *CreateCanvas(wxView *view, wxMDIChildFrame *parent);
+    MyFrame(wxDocManager*, wxFrame*, const wxString& title, const wxPoint&, const wxSize&, long type);
 
-DECLARE_EVENT_TABLE()
+    MyCanvas* CreateCanvas(DrawingView*, wxMDIChildFrame*);
+
+protected:
+    void OnAbout(wxCommandEvent&);
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(MyFrame)
 };
 
-extern MyFrame *GetMainFrame(void);
+extern MyFrame* GetMainFrame();
 
 #define DOCVIEW_CUT     1
 #define DOCVIEW_ABOUT   wxID_ABOUT

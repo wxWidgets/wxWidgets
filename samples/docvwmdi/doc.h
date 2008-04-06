@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DOCSAMPLEH__
-#define __DOCSAMPLEH__
+#ifndef __DOC_H__
+#define __DOC_H__
 
 #include "wx/docview.h"
 #include "wx/cmdproc.h"
@@ -18,88 +18,89 @@
 // Plots a line from one point to the other
 class DoodleLine: public wxObject
 {
- public:
-  wxInt32 x1;
-  wxInt32 y1;
-  wxInt32 x2;
-  wxInt32 y2;
+public:
+    wxInt32 x1;
+    wxInt32 y1;
+    wxInt32 x2;
+    wxInt32 y2;
 };
 
 // Contains a list of lines: represents a mouse-down doodle
 class DoodleSegment: public wxObject
 {
- public:
-  wxList lines;
+public:
+    wxList m_lines;
 
-  DoodleSegment(void){};
-  DoodleSegment(const DoodleSegment& seg);
-  ~DoodleSegment(void);
+    DoodleSegment() : wxObject() {}
+    DoodleSegment(const DoodleSegment&);
+    virtual ~DoodleSegment();
 
-  void Draw(wxDC *dc);
+    void Draw(wxDC* dc);
 
 #if wxUSE_STD_IOSTREAM
-  wxSTD ostream& SaveObject(wxSTD ostream& text_stream);
-  wxSTD istream& LoadObject(wxSTD istream& text_stream);
+    wxSTD ostream& SaveObject(wxSTD ostream&);
+    wxSTD istream& LoadObject(wxSTD istream&);
 #else
-  wxOutputStream& SaveObject(wxOutputStream& stream);
-  wxInputStream& LoadObject(wxInputStream& stream);
+    wxOutputStream& SaveObject(wxOutputStream&);
+    wxInputStream& LoadObject(wxInputStream&);
 #endif
 };
 
 class DrawingDocument: public wxDocument
 {
-  DECLARE_DYNAMIC_CLASS(DrawingDocument)
- private:
- public:
-  wxList doodleSegments;
+    DECLARE_DYNAMIC_CLASS(DrawingDocument)
+public:
+    wxList m_doodleSegments;
 
-  DrawingDocument(void){};
-  ~DrawingDocument(void);
+    DrawingDocument() : wxDocument() {}
+    virtual ~DrawingDocument();
 
 #if wxUSE_STD_IOSTREAM
-  wxSTD ostream& SaveObject(wxSTD ostream& text_stream);
-  wxSTD istream& LoadObject(wxSTD istream& text_stream);
+    wxSTD ostream& SaveObject(wxSTD ostream&);
+    wxSTD istream& LoadObject(wxSTD istream&);
 #else
-  wxOutputStream& SaveObject(wxOutputStream& stream);
-  wxInputStream& LoadObject(wxInputStream& stream);
+    wxOutputStream& SaveObject(wxOutputStream&);
+    wxInputStream& LoadObject(wxInputStream&);
 #endif
 
-  inline wxList& GetDoodleSegments(void) const { return (wxList&) doodleSegments; };
+    inline wxList& GetDoodleSegments() const { return (wxList&) m_doodleSegments; };
 };
 
 #define DOODLE_CUT          1
 #define DOODLE_ADD          2
 
-class DrawingCommand: public wxCommand
+class DrawingCommand : public wxCommand
 {
- protected:
-  DoodleSegment *segment;
-  DrawingDocument *doc;
-  int cmd;
- public:
-  DrawingCommand(const wxString& name, int cmd, DrawingDocument *ddoc, DoodleSegment *seg);
-  ~DrawingCommand(void);
+protected:
+    DoodleSegment*   m_segment;
+    DrawingDocument* m_doc;
+    int m_cmd;
+public:
+    DrawingCommand(const wxString& name, int cmd, DrawingDocument*, DoodleSegment*);
+    virtual ~DrawingCommand();
 
-  bool Do(void);
-  bool Undo(void);
+    bool Do();
+    bool Undo();
 };
 
-class TextEditDocument: public wxDocument
+class TextEditView;
+class TextEditDocument : public wxDocument
 {
   DECLARE_DYNAMIC_CLASS(TextEditDocument)
- private:
- public:
+public:
 /*
-  wxSTD ostream& SaveObject(wxSTD ostream& stream);
-  wxSTD istream& LoadObject(wxSTD istream& stream);
+    wxSTD ostream& SaveObject(wxSTD ostream&);
+    wxSTD istream& LoadObject(wxSTD istream&);
 */
-  virtual bool OnSaveDocument(const wxString& filename);
-  virtual bool OnOpenDocument(const wxString& filename);
-  virtual bool IsModified(void) const;
-  virtual void Modify(bool mod);
+    TextEditView* GetFirstView() const;
 
-  TextEditDocument(void) {}
-  ~TextEditDocument(void) {}
+    virtual bool OnSaveDocument(const wxString& filename);
+    virtual bool OnOpenDocument(const wxString& filename);
+    virtual bool IsModified() const;
+    virtual void Modify(bool mod);
+
+    TextEditDocument() {}
+    virtual ~TextEditDocument() {}
 };
 
 

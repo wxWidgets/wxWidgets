@@ -9,23 +9,23 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DOCVIEWSAMPLEH__
-#define __DOCVIEWSAMPLEH__
+#ifndef __DOCVIEW_H__
+#define __DOCVIEW_H__
 
 #include "wx/docview.h"
 
 class wxDocManager;
 
 // Define a new application
-class MyApp: public wxApp
+class MyApp : public wxApp
 {
 public:
     MyApp(void);
     bool OnInit(void);
     int OnExit(void);
-    
+
     wxFrame *CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas);
-    
+
 protected:
     wxDocManager* m_docManager;
 };
@@ -34,25 +34,27 @@ DECLARE_APP(MyApp)
 
 // Define a new frame
 class MyCanvas;
-class MyFrame: public wxDocParentFrame
+class DrawingView;
+class MyFrame : public wxDocParentFrame
 {
     DECLARE_CLASS(MyFrame)
 public:
-    wxMenu *editMenu;
-    
+    wxMenu* m_editMenu;
+
     // This pointer only needed if in single window mode
-    MyCanvas *canvas;
-    
+    MyCanvas* m_canvas;
+
     MyFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size,
         const long type);
-    
+
+    MyCanvas* CreateCanvas(DrawingView*, wxFrame *parent);
+
+protected:
     void OnAbout(wxCommandEvent& event);
-    MyCanvas *CreateCanvas(wxView *view, wxFrame *parent);
-    
     DECLARE_EVENT_TABLE()
 };
 
-extern MyFrame *GetMainFrame(void);
+extern MyFrame *GetMainFrame();
 
 #define DOCVIEW_CUT     1
 #define DOCVIEW_ABOUT   wxID_ABOUT
