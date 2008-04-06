@@ -476,6 +476,7 @@ void wxMDIChildFrame::Restore()
 
 void wxMDIChildFrame::Activate()
 {
+    Raise ();
 }
 
 //-----------------------------------------------------------------------------
