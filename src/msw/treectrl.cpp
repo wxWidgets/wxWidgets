@@ -1531,10 +1531,22 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     tvIns.item.lParam = (LPARAM)param;
     tvIns.item.mask = mask;
 
+    const bool firstChild = !TreeView_GetChild(GetHwnd(), HITEM(parent));
+
     HTREEITEM id = TreeView_InsertItem(GetHwnd(), &tvIns);
     if ( id == 0 )
     {
         wxLogLastError(wxT("TreeView_InsertItem"));
+    }
+
+    // apparently some Windows versions (2000 and XP are reported to do this)
+    // sometimes don't refresh the tree after adding the first child and so we
+    // need this to make the "[+]" appear
+    if ( firstChild )
+    {
+        RECT rect;
+        TreeView_GetItemRect(GetHwnd(), HITEM(parent), &rect, FALSE);
+        ::InvalidateRect(GetHwnd(), &rect, FALSE);
     }
 
     // associate the application tree item with Win32 tree item handle
