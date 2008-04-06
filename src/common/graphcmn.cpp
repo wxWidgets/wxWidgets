@@ -767,6 +767,72 @@ wxGraphicsContext* wxGraphicsContext::Create()
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateMeasuringContext();
 }
 
+void wxGraphicsContext::GetMultiLineTextExtent(const wxString& text,
+                                      wxDouble *x,
+                                      wxDouble *y,
+                                      wxDouble *h) const
+{
+    wxDouble widthTextMax = 0, widthLine,
+            heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
+
+    wxString curLine;
+    for ( const wxChar *pc = text; ; pc++ )
+    {
+        if ( *pc == _T('\n') || *pc == _T('\0') )
+        {
+            if ( curLine.empty() )
+            {
+                // we can't use GetTextExtent - it will return 0 for both width
+                // and height and an empty line should count in height
+                // calculation
+
+                // assume that this line has the same height as the previous
+                // one
+                if ( !heightLineDefault )
+                    heightLineDefault = heightLine;
+
+                if ( !heightLineDefault )
+                {
+                    // but we don't know it yet - choose something reasonable
+                    GetTextExtent(_T("W"), NULL, &heightLineDefault,
+                                  NULL, NULL);
+                }
+
+                heightTextTotal += heightLineDefault;
+            }
+            else
+            {
+                GetTextExtent(curLine, &widthLine, &heightLine,
+                              NULL, NULL);
+                if ( widthLine > widthTextMax )
+                    widthTextMax = widthLine;
+                heightTextTotal += heightLine;
+            }
+
+            if ( *pc == _T('\n') )
+            {
+               curLine.clear();
+            }
+            else
+            {
+               // the end of string
+               break;
+            }
+        }
+        else
+        {
+            curLine += *pc;
+        }
+    }
+
+    if ( x )
+        *x = widthTextMax;
+    if ( y )
+        *y = heightTextTotal;
+    if ( h )
+        *h = heightLine;
+}
+
 //-----------------------------------------------------------------------------
 // wxGraphicsRenderer
 //-----------------------------------------------------------------------------
