@@ -788,7 +788,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_musicCtrl->AssociateModel( m_music_model.get() );
 
     wxDataViewTextRenderer *tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_INERT, wxALIGN_RIGHT );
-    wxDataViewColumn *column0 = new wxDataViewColumn( wxT("title"), tr, 0, 200, wxALIGN_CENTRE, 
+    wxDataViewColumn *column0 = new wxDataViewColumn( wxT("title"), tr, 0, 200, wxALIGN_LEFT, 
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column0 );
 #if 0 
@@ -797,18 +797,20 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     column0->SetSortOrder( true );
 #endif
     
-    m_musicCtrl->AppendTextColumn( wxT("Artist"), 1, wxDATAVIEW_CELL_EDITABLE, 150, wxALIGN_RIGHT, 
-               wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE  | wxDATAVIEW_COL_RESIZABLE);
-
-    wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010 );
-    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("year"), sr, 2, 80, wxALIGN_CENTRE, 
+    tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
+    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("artist"), tr, 1, 150, wxALIGN_LEFT, 
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column1 );
 
-    MyCustomRenderer *cr = new MyCustomRenderer( wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_RIGHT );
-    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_LEFT, 
-        wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewSpinRenderer *sr = new wxDataViewSpinRenderer( 0, 2010, wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
+    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("year"), sr, 2, 80, wxALIGN_LEFT, 
+        wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column2 );
+
+    MyCustomRenderer *cr = new MyCustomRenderer( wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_RIGHT );
+    wxDataViewColumn *column3 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_LEFT, 
+        wxDATAVIEW_COL_RESIZABLE );
+    m_musicCtrl->AppendColumn( column3 );
 
     data_sizer->Add( m_musicCtrl, 3, wxGROW );
     
@@ -831,8 +833,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 #endif
 
     wxDataViewTextRendererAttr *ra = new wxDataViewTextRendererAttr;
-    wxDataViewColumn *column3 = new wxDataViewColumn(wxT("attributes"), ra, 2 );
-    m_listCtrl->AppendColumn( column3 );
+    wxDataViewColumn *column4 = new wxDataViewColumn(wxT("attributes"), ra, 2 );
+    m_listCtrl->AppendColumn( column4 );
     
     data_sizer->Add( m_listCtrl, 2, wxGROW );
  
