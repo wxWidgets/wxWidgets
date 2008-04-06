@@ -104,9 +104,7 @@ enum wxPenCap
     lines and painting the outline of rectangles, ellipses, etc.
     It has a colour, a width and a style.
 
-    @remarks
-
-    On a monochrome display, wxWidgets shows all non-white pens as black.
+    @note On a monochrome display, wxWidgets shows all non-white pens as black.
 
     Do not initialize objects on the stack before the program commences,
     since other required structures may not have been set up yet.
@@ -118,7 +116,7 @@ enum wxPenCap
     be created. Therefore an application may wish to get a pointer to a pen by using
     the global list of pens ::wxThePenList, and calling the member function
     wxPenList::FindOrCreatePen().
-    See the entry for wxPenList.
+    See wxPenList for more info.
 
     This class uses @ref overview_refcount "reference counting and copy-on-write" internally
     so that assignments between two instances of this class are very cheap.
@@ -131,11 +129,9 @@ enum wxPenCap
     @category{gdi}
 
     @stdobjects
-    ::wxNullPen
-
-    <b>Predefined pointers:</b> ::wxRED_PEN, ::wxCYAN_PEN, ::wxGREEN_PEN,
-    ::wxBLACK_PEN, ::wxWHITE_PEN, ::wxTRANSPARENT_PEN, ::wxBLACK_DASHED_PEN,
-    ::wxGREY_PEN, ::wxMEDIUM_GREY_PEN, ::wxLIGHT_GREY_PEN
+    ::wxNullPen, ::wxRED_PEN, ::wxCYAN_PEN, ::wxGREEN_PEN, ::wxBLACK_PEN, ::wxWHITE_PEN,
+    ::wxTRANSPARENT_PEN, ::wxBLACK_DASHED_PEN, ::wxGREY_PEN, ::wxMEDIUM_GREY_PEN,
+    ::wxLIGHT_GREY_PEN
 
     @see wxPenList, wxDC, wxDC::SetPen()
 */
@@ -327,6 +323,7 @@ public:
 
     /**
         Inequality operator.
+
         See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
@@ -339,6 +336,7 @@ public:
 
     /**
         Equality operator.
+
         See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
@@ -353,52 +351,52 @@ wxPen wxNullPen;
 /**
     Red pen.
 */
-wxPen wxRED_PEN;
+wxPen* wxRED_PEN;
 
 /**
     Cyan pen.
 */
-wxPen wxCYAN_PEN;
+wxPen* wxCYAN_PEN;
 
 /**
     Green pen.
 */
-wxPen wxGREEN_PEN;
+wxPen* wxGREEN_PEN;
 
 /**
     Black pen.
 */
-wxPen wxBLACK_PEN;
+wxPen* wxBLACK_PEN;
 
 /**
     White pen.
 */
-wxPen wxWHITE_PEN;
+wxPen* wxWHITE_PEN;
 
 /**
     Transparent pen.
 */
-wxPen wxTRANSPARENT_PEN;
+wxPen* wxTRANSPARENT_PEN;
 
 /**
     Black dashed pen.
 */
-wxPen wxBLACK_DASHED_PEN;
+wxPen* wxBLACK_DASHED_PEN;
 
 /**
     Grey pen.
 */
-wxPen wxGREY_PEN;
+wxPen* wxGREY_PEN;
 
 /**
     Medium-grey pen.
 */
-wxPen wxMEDIUM_GREY_PEN;
+wxPen* wxMEDIUM_GREY_PEN;
 
 /**
     Light-grey pen.
 */
-wxPen wxLIGHT_GREY_PEN;
+wxPen* wxLIGHT_GREY_PEN;
 
 
 

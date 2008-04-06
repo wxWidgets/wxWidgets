@@ -16,14 +16,16 @@
     for TAB traversal implemented by wxWidgets itself as well as native TAB
     traversal (such as for GTK 2.0).
 
-    @e Note: Tab traversal is implemented through an otherwise undocumented
-    intermediate wxControlContainer class from which any class can derive
-    in addition to the normal wxWindow base class. Please see @e wx/containr.h
-    and @e wx/panel.h to find out how this is achieved.
+    @note Tab traversal is implemented through an otherwise undocumented
+          intermediate wxControlContainer class from which any class can derive
+          in addition to the normal wxWindow base class. Please see @c wx/containr.h
+          and @c wx/panel.h to find out how this is achieved.
 
-    @e Note: if not all characters are being intercepted by your OnKeyDown or
-    OnChar handler, it may be because you are using the @c wxTAB_TRAVERSAL style,
-    which grabs some keypresses for use by child controls.
+    @note if not all characters are being intercepted by your OnKeyDown or
+          OnChar handler, it may be because you are using the @c wxTAB_TRAVERSAL style,
+          which grabs some keypresses for use by child controls.
+
+    @remarks By default, a panel has the same colouring as a dialog.
 
     @library{wxbase}
     @category{miscwnd}
@@ -38,6 +40,7 @@ public:
         Default constructor.
     */
     wxPanel();
+
     /**
         Constructor.
 
@@ -47,17 +50,14 @@ public:
             An identifier for the panel. @c wxID_ANY is taken to mean a default.
         @param pos
             The panel position. The value @c wxDefaultPosition indicates a default position,
-        chosen by
-            either the windowing system or wxWidgets, depending on platform.
+            chosen by either the windowing system or wxWidgets, depending on platform.
         @param size
             The panel size. The value @c wxDefaultSize indicates a default size, chosen by
             either the windowing system or wxWidgets, depending on platform.
         @param style
             The window style. See wxPanel.
         @param name
-            Used to associate a name with the window,
-            allowing the application user to set Motif resource values for
-            individual dialog boxes.
+            Window name.
 
         @see Create()
     */
@@ -115,9 +115,11 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     /**
-        Overrides wxWindow::SetFocus(). This method
-        uses the (undocumented) mix-in class wxControlContainer which manages
+        Overrides wxWindow::SetFocus().
+
+        This method uses the (undocumented) mix-in class wxControlContainer which manages
         the focus and TAB logic for controls which usually have child controls.
+
         In practice, if you call this method and the control has at least
         one child window, the focus will be given to the child window.
 
@@ -126,9 +128,8 @@ public:
     virtual void SetFocus();
 
     /**
-        In contrast to SetFocus() (see above)
-        this will set the focus to the panel even if there are child windows
-        in the panel. This is only rarely needed.
+        In contrast to SetFocus() (see above) this will set the focus to the panel
+        even if there are child windows in the panel. This is only rarely needed.
     */
     virtual void SetFocusIgnoringChildren();
 };

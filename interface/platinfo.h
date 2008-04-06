@@ -6,6 +6,108 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    The following are the operating systems which are recognized by wxWidgets and
+    whose version can be detected at run-time.
+
+    The values of the constants are chosen so that they can be combined as flags;
+    this allows to check for operating system families like e.g. wxOS_MAC and wxOS_UNIX.
+*/
+enum wxOperatingSystemId
+{
+    wxOS_UNKNOWN = 0,                 //!< returned on error
+
+    wxOS_MAC_OS         = 1 << 0,     //!< Apple Mac OS 8/9/X with Mac paths
+    wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple Mac OS X with Unix paths
+    wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
+
+    wxOS_WINDOWS_9X     = 1 << 2,     //!< Windows 9x family (95/98/ME)
+    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (NT/2000/XP)
+    wxOS_WINDOWS_MICRO  = 1 << 4,     //!< MicroWindows
+    wxOS_WINDOWS_CE     = 1 << 5,     //!< Windows CE (Window Mobile)
+    wxOS_WINDOWS = wxOS_WINDOWS_9X       |
+                    wxOS_WINDOWS_NT      |
+                    wxOS_WINDOWS_MICRO   |
+                    wxOS_WINDOWS_CE,
+
+    wxOS_UNIX_LINUX     = 1 << 6,       //!< Linux
+    wxOS_UNIX_FREEBSD   = 1 << 7,       //!< FreeBSD
+    wxOS_UNIX_OPENBSD   = 1 << 8,       //!< OpenBSD
+    wxOS_UNIX_NETBSD    = 1 << 9,       //!< NetBSD
+    wxOS_UNIX_SOLARIS   = 1 << 10,      //!< SunOS
+    wxOS_UNIX_AIX       = 1 << 11,      //!< AIX
+    wxOS_UNIX_HPUX      = 1 << 12,      //!< HP/UX
+    wxOS_UNIX = wxOS_UNIX_LINUX     |
+                wxOS_UNIX_FREEBSD   |
+                wxOS_UNIX_OPENBSD   |
+                wxOS_UNIX_NETBSD    |
+                wxOS_UNIX_SOLARIS   |
+                wxOS_UNIX_AIX       |
+                wxOS_UNIX_HPUX,
+
+    wxOS_DOS            = 1 << 15,      //!< Microsoft DOS
+    wxOS_OS2            = 1 << 16       //!< OS/2
+};
+
+/**
+    The list of wxWidgets ports.
+
+    Some of them can be used with more than a single (native) toolkit;
+    e.g. wxWinCE port sources can be used with smartphones, pocket PCs
+    and handheld devices SDKs.
+*/
+enum wxPortId
+{
+    wxPORT_UNKNOWN  = 0,            //!< returned on error
+
+    wxPORT_BASE     = 1 << 0,       //!< wxBase, no native toolkit used
+
+    wxPORT_MSW      = 1 << 1,       //!< wxMSW, native toolkit is Windows API
+    wxPORT_MOTIF    = 1 << 2,       //!< wxMotif, using [Open]Motif or Lesstif
+    wxPORT_GTK      = 1 << 3,       //!< wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
+    wxPORT_MGL      = 1 << 4,       //!< wxMGL, using wxUniversal
+    wxPORT_X11      = 1 << 5,       //!< wxX11, using wxUniversal
+    wxPORT_OS2      = 1 << 6,       //!< wxOS2, using OS/2 Presentation Manager
+    wxPORT_MAC      = 1 << 7,       //!< wxMac, using Carbon or Classic Mac API
+    wxPORT_COCOA    = 1 << 8,       //!< wxCocoa, using Cocoa NextStep/Mac API
+    wxPORT_WINCE    = 1 << 9,       //!< wxWinCE, toolkit is WinCE SDK API
+    wxPORT_PALMOS   = 1 << 10,      //!< wxPalmOS, toolkit is PalmOS API
+    wxPORT_DFB      = 1 << 11       //!< wxDFB, using wxUniversal
+};
+
+
+/**
+    The architecture of the operating system
+    (regardless of the build environment of wxWidgets library
+    - see ::wxIsPlatform64bit documentation for more info).
+*/
+enum wxArchitecture
+{
+    wxARCH_INVALID = -1,        //!< returned on error
+
+    wxARCH_32,                  //!< 32 bit
+    wxARCH_64,
+
+    wxARCH_MAX
+}
+
+
+/**
+    The endian-ness of the machine.
+*/
+enum wxEndianness
+{
+    wxENDIAN_INVALID = -1,      //!< returned on error
+
+    wxENDIAN_BIG,               //!< 4321
+    wxENDIAN_LITTLE,            //!< 1234
+    wxENDIAN_PDP,               //!< 3412
+
+    wxENDIAN_MAX
+}
+
+
 /**
     @class wxPlatformInfo
     @wxheader{platinfo.h}
@@ -18,120 +120,7 @@
     @category{misc}
 
     @see ::wxGetOsVersion(), wxIsPlatformLittleEndian(), wxIsPlatform64Bit(),
-    wxAppTraits
-
-    <b>Data structures:</b>
-
-    The following are the operating systems which are recognized by wxWidgets and
-    whose version can be detected at run-time.
-    The values of the constants are chosen so that they can be combined as flags;
-    this allows to check for operating system families like
-    e.g. wxOS_MAC and wxOS_UNIX.
-
-    @code
-
-    enum wxOperatingSystemId
-    {
-        wxOS_UNKNOWN = 0,                 // returned on error
-
-        wxOS_MAC_OS         = 1 << 0,     // Apple Mac OS 8/9/X with Mac paths
-        wxOS_MAC_OSX_DARWIN = 1 << 1,     // Apple Mac OS X with Unix paths
-        wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
-
-        wxOS_WINDOWS_9X     = 1 << 2,     // Windows 9x family (95/98/ME)
-        wxOS_WINDOWS_NT     = 1 << 3,     // Windows NT family (NT/2000/XP)
-        wxOS_WINDOWS_MICRO  = 1 << 4,     // MicroWindows
-        wxOS_WINDOWS_CE     = 1 << 5,     // Windows CE (Window Mobile)
-        wxOS_WINDOWS = wxOS_WINDOWS_9X      |
-                       wxOS_WINDOWS_NT      |
-                       wxOS_WINDOWS_MICRO   |
-                       wxOS_WINDOWS_CE,
-
-        wxOS_UNIX_LINUX     = 1 << 6,       // Linux
-        wxOS_UNIX_FREEBSD   = 1 << 7,       // FreeBSD
-        wxOS_UNIX_OPENBSD   = 1 << 8,       // OpenBSD
-        wxOS_UNIX_NETBSD    = 1 << 9,       // NetBSD
-        wxOS_UNIX_SOLARIS   = 1 << 10,      // SunOS
-        wxOS_UNIX_AIX       = 1 << 11,      // AIX
-        wxOS_UNIX_HPUX      = 1 << 12,      // HP/UX
-        wxOS_UNIX = wxOS_UNIX_LINUX     |
-                    wxOS_UNIX_FREEBSD   |
-                    wxOS_UNIX_OPENBSD   |
-                    wxOS_UNIX_NETBSD    |
-                    wxOS_UNIX_SOLARIS   |
-                    wxOS_UNIX_AIX       |
-                    wxOS_UNIX_HPUX,
-
-        wxOS_DOS            = 1 << 15,      // Microsoft DOS
-        wxOS_OS2            = 1 << 16       // OS/2
-    };
-
-    @endcode
-
-    The list of wxWidgets ports.
-    Some of them can be used with more than a single (native) toolkit;
-    e.g. wxWinCE port sources can be used with smartphones, pocket PCs
-    and handheld devices SDKs.
-
-    @code
-
-    enum wxPortId
-    {
-        wxPORT_UNKNOWN  = 0,            // returned on error
-
-        wxPORT_BASE     = 1 << 0,       // wxBase, no native toolkit used
-
-        wxPORT_MSW      = 1 << 1,       // wxMSW, native toolkit is Windows API
-        wxPORT_MOTIF    = 1 << 2,       // wxMotif, using [Open]Motif or Lesstif
-        wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
-        wxPORT_MGL      = 1 << 4,       // wxMGL, using wxUniversal
-        wxPORT_X11      = 1 << 5,       // wxX11, using wxUniversal
-        wxPORT_OS2      = 1 << 6,       // wxOS2, using OS/2 Presentation Manager
-        wxPORT_MAC      = 1 << 7,       // wxMac, using Carbon or Classic Mac API
-        wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
-        wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
-        wxPORT_PALMOS   = 1 << 10,      // wxPalmOS, toolkit is PalmOS API
-        wxPORT_DFB      = 1 << 11       // wxDFB, using wxUniversal
-    };
-
-    @endcode
-
-    The architecture of the operating system
-    (regardless of the build environment of wxWidgets library
-    - see wxIsPlatform64bit documentation for more info).
-
-    @code
-
-    enum wxArchitecture
-    {
-        wxARCH_INVALID = -1,        // returned on error
-
-        wxARCH_32,                  // 32 bit
-        wxARCH_64,
-
-        wxARCH_MAX
-    }
-
-    @endcode
-
-    The endian-ness of the machine.
-
-    @code
-
-    enum wxEndianness
-    {
-        wxENDIAN_INVALID = -1,      // returned on error
-
-        wxENDIAN_BIG,               // 4321
-        wxENDIAN_LITTLE,            // 1234
-        wxENDIAN_PDP,               // 3412
-
-        wxENDIAN_MAX
-    }
-
-    @endcode
-
-
+         wxAppTraits
 */
 class wxPlatformInfo : public wxObject
 {
@@ -314,8 +303,7 @@ public:
         The @a usingUniversal argument specifies whether the port is in its native
         or wxUniversal variant.
 
-        The returned string does not start with the "wx" prefix and is always lower
-        case.
+        The returned string does not start with the "wx" prefix and is always lower case.
     */
     static wxString GetPortIdShortName(wxPortId port,
                                        bool usingUniversal) const;

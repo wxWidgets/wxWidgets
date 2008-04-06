@@ -15,6 +15,7 @@
     This class handles all positioning and sizing of the text control like a
     an horizontal wxBoxSizer would do, with the text control on the left of the
     picker button.
+
     The proportion (see wxSizer documentation for more info about proportion values)
     of the picker control defaults to 1 when there isn't a text control associated
     (see @c wxPB_USE_TEXTCTRL style) and to 0 otherwise.
@@ -99,7 +100,7 @@ public:
     /**
         Sets the proportion value of the picker.
 
-        Look at the overview of wxPickerBase for more details about this.
+        Look at the detailed description of wxPickerBase for more info.
     */
     void SetPickerCtrlProportion(int prop);
 
@@ -113,7 +114,8 @@ public:
     /**
         Sets the proportion value of the text control.
 
-        Look at the overview of wxPickerBase for more details about this.
+        Look at the detailed description of wxPickerBase for more info.
+
         This function can be used only when HasTextCtrl() returns @true.
     */
     void SetTextCtrlProportion(int prop);
