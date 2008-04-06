@@ -13,11 +13,12 @@
 #define _WX_VMODE_H_
 
 // ----------------------------------------------------------------------------
-// wxVideoMode: a simple struct containing video mode parameters for a display
+// wxVideoMode: a simple class containing video mode parameters for a display
 // ----------------------------------------------------------------------------
 
-struct WXDLLIMPEXP_CORE wxVideoMode
+class WXDLLIMPEXP_CORE wxVideoMode
 {
+public:
     wxVideoMode(int width = 0, int height = 0, int depth = 0, int freq = 0)
     {
         w = width;
@@ -58,6 +59,8 @@ struct WXDLLIMPEXP_CORE wxVideoMode
     // returns true if the object has been initialized
     bool IsOk() const { return w && h; }
 
+
+protected:
 
     // the screen size in pixels (e.g. 640*480), 0 means unspecified
     int w, h;
