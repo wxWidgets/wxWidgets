@@ -2159,13 +2159,19 @@ int wxImage::GetImageCount( wxInputStream &stream, long type )
 
     if ( type == wxBITMAP_TYPE_ANY )
     {
-        wxList &list=GetHandlers();
+        const wxList& list = GetHandlers();
 
-        for (wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext())
+        for ( wxList::compatibility_iterator node = list.GetFirst();
+              node;
+              node = node->GetNext() )
         {
-             handler=(wxImageHandler*)node->GetData();
+             handler = (wxImageHandler*)node->GetData();
              if ( handler->CanRead(stream) )
-                 return handler->GetImageCount(stream);
+             {
+                 const int count = handler->GetImageCount(stream);
+                 if ( count >= 0 )
+                     return count;
+             }
 
         }
 
@@ -2202,17 +2208,22 @@ bool wxImage::LoadFile( wxInputStream& stream, long type, int index )
 
     if ( type == wxBITMAP_TYPE_ANY )
     {
-        wxList &list=GetHandlers();
-
-        for ( wxList::compatibility_iterator node = list.GetFirst(); node; node = node->GetNext() )
+        const wxList& list = GetHandlers();
+        for ( wxList::compatibility_iterator node = list.GetFirst();
+              node;
+              node = node->GetNext() )
         {
-             handler=(wxImageHandler*)node->GetData();
-             if ( handler->CanRead(stream) )
-                 return handler->LoadFile(this, stream, true/*verbose*/, index);
+             handler = (wxImageHandler*)node->GetData();
+             if ( handler->CanRead(stream) &&
+                    handler->LoadFile(this, stream, true/*verbose*/, index) )
+             {
+                 return true;
+             }
 
         }
 
         wxLogWarning( _("No handler found for image type.") );
+
         return false;
     }
 
