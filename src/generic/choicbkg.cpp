@@ -259,28 +259,28 @@ wxChoicebook::InsertPage(size_t n,
 
 wxWindow *wxChoicebook::DoRemovePage(size_t page)
 {
-    const size_t page_count = GetPageCount();
     wxWindow *win = wxBookCtrlBase::DoRemovePage(page);
 
     if ( win )
     {
         GetChoiceCtrl()->Delete(page);
 
-        if (m_selection >= (int)page)
+        if ( m_selection >= (int)page )
         {
-            // force new sel valid if possible
-            int sel = m_selection - 1;
-            if (page_count == 1)
+            // ensure that the selection is valid
+            int sel;
+            if ( GetPageCount() == 0 )
                 sel = wxNOT_FOUND;
-            else if ((page_count == 2) || (sel == -1))
-                sel = 0;
+            else
+                sel = m_selection ? m_selection - 1 : 0;
 
-            // force sel invalid if deleting current page - don't try to hide it
-            m_selection = (m_selection == (int)page) ? wxNOT_FOUND : m_selection - 1;
+            // if deleting current page we shouldn't try to hide it
+            m_selection = m_selection == (int)page ? wxNOT_FOUND
+                                                   : m_selection - 1;
 
-            if ((sel != wxNOT_FOUND) && (sel != m_selection))
+            if ( sel != wxNOT_FOUND && sel != m_selection )
                 SetSelection(sel);
-           }
+        }
     }
 
     return win;
@@ -289,6 +289,7 @@ wxWindow *wxChoicebook::DoRemovePage(size_t page)
 
 bool wxChoicebook::DeleteAllPages()
 {
+    m_selection = wxNOT_FOUND;
     GetChoiceCtrl()->Clear();
     return wxBookCtrlBase::DeleteAllPages();
 }
