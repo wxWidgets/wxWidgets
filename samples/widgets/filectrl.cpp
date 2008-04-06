@@ -306,33 +306,11 @@ void FileCtrlWidgetsPage::OnRadioBox( wxCommandEvent& WXUNUSED( event ) )
 void FileCtrlWidgetsPage::OnFileCtrl( wxFileCtrlEvent& event )
 {
     if ( event.GetEventType() == wxEVT_FILECTRL_FOLDERCHANGED )
-        wxLogMessage( _T( "Folder changed event, new folder: %s" ), event.GetDirectory() );
+        wxLogMessage("Folder changed event, new folder: %s", event.GetDirectory());
     else if ( event.GetEventType() == wxEVT_FILECTRL_FILEACTIVATED )
-    {
-        wxLogMessage( _T( "File activated event: " ) );
-        wxString filesString;
-
-        const wxArrayString &files = event.GetFiles();
-        for ( unsigned int i = 0; i < files.Count(); i ++ )
-        {
-            filesString += files[i] + _T( " " );
-        }
-
-        wxLogMessage( filesString );
-    }
+        wxLogMessage("File activated event: %s", wxJoin(event.GetFiles(), ' '));
     else if ( event.GetEventType() == wxEVT_FILECTRL_SELECTIONCHANGED )
-    {
-        wxLogMessage( _T( "Selection changed event: " ) );
-        wxString filesString;
-
-        const wxArrayString &files = event.GetFiles();
-        for ( unsigned int i = 0; i < files.Count(); i ++ )
-        {
-            filesString += files[i] + _T( " " );
-        }
-
-        wxLogMessage( filesString );
-    }
+        wxLogMessage("Selection changed event: %s", wxJoin(event.GetFiles(), ' '));
 }
 
 #endif // wxUSE_FILECTRL
