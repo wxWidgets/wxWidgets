@@ -569,9 +569,7 @@ public:
 class MyCustomRenderer: public wxDataViewCustomRenderer
 {
 public:
-    MyCustomRenderer( wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-//    MyCustomRenderer( wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                      int alignment = wxDVR_DEFAULT_ALIGNMENT ) :
+    MyCustomRenderer( wxDataViewCellMode mode, int alignment ) :
        wxDataViewCustomRenderer( wxString("long"), mode, alignment ) { }
        
     virtual bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
@@ -789,15 +787,14 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
 
+    wxDataViewTextRenderer *tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_INERT, wxALIGN_RIGHT );
+    wxDataViewColumn *column0 = new wxDataViewColumn( wxT("title"), tr, 0, 200, wxALIGN_CENTRE, 
+        wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+    m_musicCtrl->AppendColumn( column0 );
 #if 0 
     // Call this and sorting is enabled
     // immediatly upon start up.                                    
-    wxDataViewColumn *col = m_musicCtrl->AppendTextColumn( wxT("Title"), 0, wxDATAVIEW_CELL_INERT, 200, DEFAULT_ALIGN, 
-               wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE);
-    col->SetSortOrder( true );
-#else
-    m_musicCtrl->AppendTextColumn( wxT("Title"), 0, wxDATAVIEW_CELL_INERT, 200, wxALIGN_RIGHT,
-               wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE);
+    column0->SetSortOrder( true );
 #endif
     
     m_musicCtrl->AppendTextColumn( wxT("Artist"), 1, wxDATAVIEW_CELL_EDITABLE, 150, wxALIGN_RIGHT, 
@@ -808,8 +805,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column1 );
 
-    MyCustomRenderer *cr = new MyCustomRenderer;
-    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_RIGHT, 
+    MyCustomRenderer *cr = new MyCustomRenderer( wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_RIGHT );
+    wxDataViewColumn *column2 = new wxDataViewColumn( wxT("custom"), cr, 2, -1, wxALIGN_LEFT, 
         wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column2 );
 
