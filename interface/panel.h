@@ -18,11 +18,11 @@
 
     @e Note: Tab traversal is implemented through an otherwise undocumented
     intermediate wxControlContainer class from which any class can derive
-    in addition to the normal wxWindow base class. Please see wx/containr.h
-    and wx/panel.h to find out how this is achieved.
+    in addition to the normal wxWindow base class. Please see @e wx/containr.h
+    and @e wx/panel.h to find out how this is achieved.
 
     @e Note: if not all characters are being intercepted by your OnKeyDown or
-    OnChar handler, it may be because you are using the wxTAB_TRAVERSAL style,
+    OnChar handler, it may be because you are using the @c wxTAB_TRAVERSAL style,
     which grabs some keypresses for use by child controls.
 
     @library{wxbase}
@@ -33,20 +33,24 @@
 class wxPanel : public wxWindow
 {
 public:
-    //@{
+
+    /**
+        Default constructor.
+    */
+    wxPanel();
     /**
         Constructor.
 
         @param parent
             The parent window.
         @param id
-            An identifier for the panel. A value of -1 is taken to mean a default.
+            An identifier for the panel. @c wxID_ANY is taken to mean a default.
         @param pos
-            The panel position. The value wxDefaultPosition indicates a default position,
+            The panel position. The value @c wxDefaultPosition indicates a default position,
         chosen by
             either the windowing system or wxWidgets, depending on platform.
         @param size
-            The panel size. The value wxDefaultSize indicates a default size, chosen by
+            The panel size. The value @c wxDefaultSize indicates a default size, chosen by
             either the windowing system or wxWidgets, depending on platform.
         @param style
             The window style. See wxPanel.
@@ -57,13 +61,11 @@ public:
 
         @see Create()
     */
-    wxPanel();
     wxPanel(wxWindow* parent, wxWindowID id = wxID_ANY,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL,
             const wxString& name = "panel");
-    //@}
 
     /**
         Destructor. Deletes any child windows before deleting the physical window.
@@ -71,7 +73,7 @@ public:
     ~wxPanel();
 
     /**
-        This method is overridden from wxWindow::AcceptsFocus
+        This method is overridden from wxWindow::AcceptsFocus()
         and returns @true only if there is no child window in the panel which
         can accept the focus. This is reevaluated each time a child
         window is added or removed from the panel.
@@ -79,8 +81,7 @@ public:
     bool AcceptsFocus() const;
 
     /**
-        Used for two-step panel construction. See wxPanel()
-        for details.
+        Used for two-step panel construction. See wxPanel() for details.
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
@@ -89,8 +90,8 @@ public:
                 const wxString& name = "panel");
 
     /**
-        Sends a wxInitDialogEvent, which
-        in turn transfers data to the dialog via validators.
+        Sends a wxInitDialogEvent, which in turn transfers data to the dialog via
+        validators.
 
         @see wxInitDialogEvent
     */
@@ -106,7 +107,7 @@ public:
                  (Windows only). Add an event table entry for your panel
                  class if you wish the behaviour to be different (such
                  as keeping a user-defined background colour). If you do
-                 override this function, call wxEvent::Skip to propagate
+                 override this function, call wxEvent::Skip() to propagate
                  the notification to child windows and controls.
 
         @see wxSysColourChangedEvent
@@ -114,13 +115,13 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     /**
-        Overrides wxWindow::SetFocus. This method
+        Overrides wxWindow::SetFocus(). This method
         uses the (undocumented) mix-in class wxControlContainer which manages
         the focus and TAB logic for controls which usually have child controls.
         In practice, if you call this method and the control has at least
         one child window, the focus will be given to the child window.
 
-        @see wxFocusEvent, wxWindow::SetFocus
+        @see wxFocusEvent, wxWindow::SetFocus()
     */
     virtual void SetFocus();
 

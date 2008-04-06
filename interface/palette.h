@@ -27,17 +27,25 @@
     @category{gdi}
 
     @stdobjects
-    ::Objects:, ::wxNullPalette,
+    ::wxNullPalette
 
-    @see wxDC::SetPalette, wxBitmap
+    @see wxDC::SetPalette(), wxBitmap
 */
 class wxPalette : public wxGDIObject
 {
 public:
-    //@{
+
     /**
-        Creates a palette from arrays of size @e n, one for each
-        red, blue or green component.
+        Default constructor.
+    */
+    wxPalette();
+    /**
+        Copy constructor, uses @ref overview_refcount.
+    */
+    wxPalette(const wxPalette& palette);
+    /**
+        Creates a palette from arrays of size @e n, one for each red, blue or
+        green component.
 
         @param palette
             A pointer or reference to the palette to copy.
@@ -52,23 +60,20 @@ public:
 
         @see Create()
     */
-    wxPalette();
-    wxPalette(const wxPalette& palette);
     wxPalette(int n, const unsigned char* red,
               const unsigned char* green,
               const unsigned char* blue);
-    //@}
 
     /**
         Destructor.
-        See @ref overview_refcountdestruct "reference-counted object destruction" for
-        more info.
+
+        @see @ref overview_refcount_destruct "reference-counted object destruction"
     */
     ~wxPalette();
 
     /**
-        Creates a palette from arrays of size @e n, one for each
-        red, blue or green component.
+        Creates a palette from arrays of size @e n, one for each red, blue or
+        green component.
 
         @param n
             The number of indices in the palette.
@@ -102,7 +107,7 @@ public:
         @param blue
             Blue value.
 
-        @returns The nearest palette index or wxNOT_FOUND for unexpected errors.
+        @returns The nearest palette index or @c wxNOT_FOUND for unexpected errors.
 
         @see GetRGB()
     */
@@ -135,17 +140,11 @@ public:
     bool IsOk() const;
 
     /**
-        Assignment operator, using @ref overview_trefcount "reference counting".
+        Assignment operator, using @ref overview_refcount.
     */
-    wxPalette operator =(const wxPalette& palette);
+    wxPalette& operator =(const wxPalette& palette);
 };
 
-
-/**
-    FIXME
-*/
-wxPalette Objects:
-;
 
 /**
     FIXME

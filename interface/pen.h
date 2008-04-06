@@ -104,22 +104,24 @@ enum wxPenCap
     lines and painting the outline of rectangles, ellipses, etc.
     It has a colour, a width and a style.
 
+    @remarks
+
     On a monochrome display, wxWidgets shows all non-white pens as black.
 
     Do not initialize objects on the stack before the program commences,
     since other required structures may not have been set up yet.
-    Instead, define global pointers to objects and create them in wxApp::OnInit
+    Instead, define global pointers to objects and create them in wxApp::OnInit()
     or when required.
 
     An application may wish to dynamically create pens with different characteristics,
     and there is the consequent danger that a large number of duplicate pens will
     be created. Therefore an application may wish to get a pointer to a pen by using
-    the global list of pens wxThePenList, and calling the member function
+    the global list of pens ::wxThePenList, and calling the member function
     wxPenList::FindOrCreatePen().
     See the entry for wxPenList.
 
-    This class uses reference counting and copy-on-write internally so that
-    assignments between two instances of this class are very cheap.
+    This class uses @ref overview_refcount "reference counting and copy-on-write" internally
+    so that assignments between two instances of this class are very cheap.
     You can therefore use actual objects instead of pointers without efficiency problems.
     If an instance of this class is changed it will create its own data internally
     so that other instances, which previously shared the data using the reference
@@ -129,44 +131,30 @@ enum wxPenCap
     @category{gdi}
 
     @stdobjects
-    ::wxNullPen, ::wxRED_PEN, ::wxCYAN_PEN, ::wxGREEN_PEN, ::wxBLACK_PEN,
-    ::wxWHITE_PEN, ::wxTRANSPARENT_PEN, ::wxBLACK_DASHED_PEN, ::wxGREY_PEN,
-    ::wxMEDIUM_GREY_PEN, ::wxLIGHT_GREY_PEN
+    ::wxNullPen
 
-    @see wxPenList, wxDC, wxDC::SetPen
+    <b>Predefined pointers:</b> ::wxRED_PEN, ::wxCYAN_PEN, ::wxGREEN_PEN,
+    ::wxBLACK_PEN, ::wxWHITE_PEN, ::wxTRANSPARENT_PEN, ::wxBLACK_DASHED_PEN,
+    ::wxGREY_PEN, ::wxMEDIUM_GREY_PEN, ::wxLIGHT_GREY_PEN
+
+    @see wxPenList, wxDC, wxDC::SetPen()
 */
 class wxPen : public wxGDIObject
 {
 public:
     /**
-        Default constructor. The pen will be uninitialised, and wxPen:IsOk will return @false.
+        Default constructor. The pen will be uninitialised, and IsOk() will return @false.
     */
     wxPen();
 
     /**
         Constructs a pen from a colour object, pen width and style.
-    */
-    wxPen(const wxColour& colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
-
-    /**
-        Constructs a stippled pen from a stipple bitmap and a width.
-    */
-    wxPen(const wxBitmap& stipple, int width);
-
-    /**
-        Copy constructor, uses @ref overview_refcount "reference counting".
 
         @param colour
             A colour object.
-        @param colourName
-            A colour name.
         @param width
             Pen width. Under Windows, the pen width cannot be greater than 1 if
-            the style is wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, or wxUSER_DASH.
-        @param stipple
-            A stipple bitmap.
-        @param pen
-            A pointer or reference to a pen to copy.
+            the style is @c wxDOT, @c wxLONG_DASH, @c wxSHORT_DASH, @c wxDOT_DASH, or @c wxUSER_DASH.
         @param style
             The style may be one of the ::wxPenStyle values.
 
@@ -175,14 +163,34 @@ public:
                  above - there is no similarity even between Windows95
                  and Windows98 - so handle with care.
 
-        @see SetStyle(), SetColour(), SetWidth(), SetStipple()
+        @see SetStyle(), SetColour(), SetWidth()
+    */
+    wxPen(const wxColour& colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
+
+    /**
+        Constructs a stippled pen from a stipple bitmap and a width.
+
+        @param width
+            Pen width. Under Windows, the pen width cannot be greater than 1 if
+            the style is @c wxDOT, @c wxLONG_DASH, @c wxSHORT_DASH, @c wxDOT_DASH, or @c wxUSER_DASH.
+        @param stipple
+            A stipple bitmap.
+
+        @see SetWidth(), SetStipple()
+    */
+    wxPen(const wxBitmap& stipple, int width);
+
+    /**
+        Copy constructor, uses @ref overview_refcount.
+
+        @param pen
+            A pointer or reference to a pen to copy.
     */
     wxPen(const wxPen& pen);
 
     /**
         Destructor.
-        See @ref overview_refcountdestruct "reference-counted object destruction" for
-        more info.
+        @see @ref overview_refcount_destruct "reference-counted object destruction"
 
         @remarks Although all remaining pens are deleted when the application
                  exits, the application should try to clean up all pens
@@ -193,9 +201,10 @@ public:
     ~wxPen();
 
     /**
-        Returns the pen cap style, which may be one of @b wxCAP_ROUND, @b
-        wxCAP_PROJECTING and
-        @b wxCAP_BUTT. The default is @b wxCAP_ROUND.
+        Returns the pen cap style, which may be one of @c wxCAP_ROUND, @c
+        wxCAP_PROJECTING and @c wxCAP_BUTT.
+
+        The default is @c wxCAP_ROUND.
 
         @see SetCap()
     */
@@ -212,16 +221,18 @@ public:
         Gets an array of dashes (defined as char in X, DWORD under Windows).
         @a dashes is a pointer to the internal array. Do not deallocate or store this
         pointer.
-        The function returns the number of dashes associated with this pen.
+
+        @return The number of dashes associated with this pen.
 
         @see SetDashes()
     */
     virtual int GetDashes(wxDash** dashes) const;
 
     /**
-        Returns the pen join style, which may be one of @b wxJOIN_BEVEL, @b
-        wxJOIN_ROUND and
-        @b wxJOIN_MITER. The default is @b wxJOIN_ROUND.
+        Returns the pen join style, which may be one of @c wxJOIN_BEVEL, @c
+        wxJOIN_ROUND and @c wxJOIN_MITER.
+
+        The default is @c wxJOIN_ROUND.
 
         @see SetJoin()
     */
@@ -254,9 +265,8 @@ public:
     bool IsOk() const;
 
     /**
-        Sets the pen cap style, which may be one of @b wxCAP_ROUND, @b wxCAP_PROJECTING
-        and
-        @b wxCAP_BUTT. The default is @b wxCAP_ROUND.
+        Sets the pen cap style, which may be one of @c wxCAP_ROUND, @c wxCAP_PROJECTING
+        and @c wxCAP_BUTT. The default is @c wxCAP_ROUND.
 
         @see GetCap()
     */
@@ -274,19 +284,21 @@ public:
 
     /**
         Associates an array of pointers to dashes (defined as char in X, DWORD under
-        Windows)
-        with the pen. The array is not deallocated by wxPen, but neither must it be
-        deallocated by the calling application until the pen is deleted or this
-        function is called with a @NULL array.
+        Windows) with the pen.
+
+        The array is not deallocated by wxPen, but neither must it be deallocated by
+        the calling application until the pen is deleted or this function is called
+        with a @NULL array.
 
         @see GetDashes()
     */
     virtual void SetDashes(int n, wxDash* dashes);
 
     /**
-        Sets the pen join style, which may be one of @b wxJOIN_BEVEL, @b wxJOIN_ROUND
-        and
-        @b wxJOIN_MITER. The default is @b wxJOIN_ROUND.
+        Sets the pen join style, which may be one of @c wxJOIN_BEVEL, @c wxJOIN_ROUND
+        and @c wxJOIN_MITER.
+
+        The default is @c wxJOIN_ROUND.
 
         @see GetJoin()
     */
@@ -315,19 +327,19 @@ public:
 
     /**
         Inequality operator.
-        See @ref overview_refcountequality "reference-counted object comparison" for
+        See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
     bool operator !=(const wxPen& pen);
 
     /**
-        Assignment operator, using @ref overview_trefcount "reference counting".
+        Assignment operator, using @ref overview_refcount.
     */
     wxPen operator =(const wxPen& pen);
 
     /**
         Equality operator.
-        See @ref overview_refcountequality "reference-counted object comparison" for
+        See @ref overview_refcount_equality "reference-counted object comparison" for
         more info.
     */
     bool operator ==(const wxPen& pen);
