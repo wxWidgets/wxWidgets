@@ -1531,7 +1531,10 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     tvIns.item.lParam = (LPARAM)param;
     tvIns.item.mask = mask;
 
-    const bool firstChild = !TreeView_GetChild(GetHwnd(), HITEM(parent));
+    // don't use the hack below for the children of hidden root: this results
+    // in a crash inside comctl32.dll when we call TreeView_GetItemRect()
+    const bool firstChild = !IsHiddenRoot(parent) &&
+                                !TreeView_GetChild(GetHwnd(), HITEM(parent));
 
     HTREEITEM id = TreeView_InsertItem(GetHwnd(), &tvIns);
     if ( id == 0 )
