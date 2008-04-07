@@ -699,26 +699,26 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
     }
     else // change to the given mode
     {
-        wxCHECK_MSG( mode.w && mode.h, false,
+        wxCHECK_MSG( mode.GetWidth() && mode.GetHeight(), false,
                         _T("at least the width and height must be specified") );
 
         wxZeroMemory(dm);
         dm.dmSize = sizeof(dm);
         dm.dmDriverExtra = 0;
         dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
-        dm.dmPelsWidth = mode.w;
-        dm.dmPelsHeight = mode.h;
+        dm.dmPelsWidth = mode.GetWidth();
+        dm.dmPelsHeight = mode.GetHeight();
 
-        if ( mode.bpp )
+        if ( mode.GetDepth() )
         {
             dm.dmFields |= DM_BITSPERPEL;
-            dm.dmBitsPerPel = mode.bpp;
+            dm.dmBitsPerPel = mode.GetDepth();
         }
 
-        if ( mode.refresh )
+        if ( mode.GetRefresh() )
         {
             dm.dmFields |= DM_DISPLAYFREQUENCY;
-            dm.dmDisplayFrequency = mode.refresh;
+            dm.dmDisplayFrequency = mode.GetRefresh();
         }
 
         pDevMode = &dm;
@@ -776,7 +776,7 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
                 if (frameTop && frameTop->IsFullScreen())
                 {
                     wxVideoMode current = GetCurrentMode();
-                    frameTop->SetClientSize(current.w, current.h);
+                    frameTop->SetClientSize(current.GetWidth(), current.GetHeight());
                 }
             }
             return true;
