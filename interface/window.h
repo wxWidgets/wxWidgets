@@ -445,6 +445,20 @@ public:
         Gets the size which best suits the window: for a control, it would be
         the minimal size which doesn't truncate the control, for a panel - the
         same size as it would have after a call to Fit().
+
+        The default implementation of this function is designed for use in container
+        windows, such as wxPanel, and works something like this:
+        -# If the window has a sizer then it is used to calculate the best size.
+        -# Otherwise if the window has layout constraints then those are used to
+           calculate the best size.
+        -# Otherwise if the window has children then the best size is set to be large
+           enough to show all the children.
+        -# Otherwise if there are no children then the window's minimal size will be
+           used as its best size.
+        -# Otherwise if there is no minimal size set, then the current size is used
+           for the best size.
+
+        @see @ref overview_windowsizing
     */
     virtual wxSize DoGetBestSize() const;
 
@@ -544,13 +558,22 @@ public:
                                       wxWindow* parent = NULL);
 
     /**
-        Sizes the window so that it fits around its subwindows. This function won't do
-        anything if there are no subwindows and will only really work correctly if
-        sizers are used for the subwindows layout. Also, if the window has exactly one
-        subwindow it is better (faster and the result is more precise as Fit adds some
-        margin to account for fuzziness of its calculations) to call
+        Sizes the window so that it fits around its subwindows.
 
-        instead of calling Fit.
+        This function won't do anything if there are no subwindows and will only really
+        work correctly if sizers are used for the subwindows layout.
+
+        Also, if the window has exactly one subwindow it is better (faster and the result
+        is more precise as Fit() adds some margin to account for fuzziness of its calculations)
+        to call:
+
+        @begincode
+            window->SetClientSize(child->GetSize());
+        @endcode
+
+        instead of calling Fit().
+
+        @see @ref overview_windowsizing
     */
     virtual void Fit();
 
@@ -596,8 +619,7 @@ public:
     wxAccessible* GetAccessible();
 
     /**
-        This method is deprecated, use GetEffectiveMinSize()
-        instead.
+        This method is deprecated, use GetEffectiveMinSize() instead.
     */
     wxSize GetAdjustedBestSize() const;
 
@@ -771,11 +793,11 @@ public:
     wxDropTarget* GetDropTarget() const;
 
     /**
-        Merges the window's best size into the min size and returns the
-        result.  This is the value used by sizers to determine the appropriate
+        Merges the window's best size into the min size and returns the result.
+        This is the value used by sizers to determine the appropriate
         ammount of space to allocate for the widget.
 
-        @see GetBestSize(), SetInitialSize()
+        @see GetBestSize(), SetInitialSize(), @ref overview_windowsizing
     */
     wxSize GetEffectiveMinSize() const;
 
@@ -1375,9 +1397,11 @@ public:
     /**
         Invokes the constraint-based layout algorithm or the sizer-based algorithm
         for this window.
-        See SetAutoLayout(): when auto
-        layout is on, this function gets called automatically when the window is
-        resized.
+
+        See SetAutoLayout(): when auto layout is on, this function gets called automatically
+        when the window is resized.
+
+        @see @ref overview_windowsizing
     */
     void Layout();
 
@@ -2055,15 +2079,18 @@ public:
 
     /**
         A @e smart SetSize that will fill in default size components with the
-        window's @e best size values.  Also sets the window's minsize to
-        the value passed in for use with sizers.  This means that if a full or
-        partial size is passed to this function then the sizers will use that
-        size instead of the results of GetBestSize to determine the minimum
-        needs of the window for layout.
+        window's @e best size values.
+
+        Also sets the window's minsize to the value passed in for use with sizers.
+        This means that if a full or partial size is passed to this function then
+        the sizers will use that size instead of the results of GetBestSize() to
+        determine the minimum needs of the window for layout.
+
         Most controls will use this to set their initial size, and their min
         size to the passed in value (if any.)
 
-        @see SetSize(), GetBestSize(), GetEffectiveMinSize()
+        @see SetSize(), GetBestSize(), GetEffectiveMinSize(),
+             @ref overview_windowsizing
     */
     void SetInitialSize(const wxSize& size = wxDefaultSize);
 
