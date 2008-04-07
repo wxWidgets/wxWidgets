@@ -789,37 +789,28 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
     wx_const_cast(wxGenericCalendarCtrl *, this)->RecalcGeometry();
 
     wxCoord width = 7*m_widthCol,
-            height = 7*m_heightRow + m_rowOffset + VERT_MARGIN;
+            height = 7*m_heightRow + m_rowOffset;
 
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
-        // the combobox doesn't report its height correctly (it returns the
-        // height including the drop down list) so don't use it
-        height += m_spinYear->GetBestSize().y;
+        const wxSize bestSizeCombo = m_comboMonth->GetBestSize();
 
+        height += wxMax(bestSizeCombo.y, m_spinYear->GetBestSize().y)
+                    + VERT_MARGIN;
 
-        wxCoord w2 = m_comboMonth->GetBestSize().x + HORZ_MARGIN + GetCharWidth()*6;
-        if (width < w2)
+        wxCoord w2 = bestSizeCombo.x + HORZ_MARGIN + GetCharWidth()*6;
+        if ( width < w2 )
             width = w2;
     }
 
+    wxSize best(width, height);
     if ( !HasFlag(wxBORDER_NONE) )
     {
-        // the border would clip the last line otherwise
-        height += 6;
-        width += 4;
+        best += GetWindowBorderSize();
     }
 
-    wxSize best(width, height);
     CacheBestSize(best);
     return best;
-}
-
-void wxGenericCalendarCtrl::DoSetSize(int x, int y,
-                               int width, int height,
-                               int sizeFlags)
-{
-    wxControl::DoSetSize(x, y, width, height, sizeFlags);
 }
 
 void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
@@ -832,26 +823,17 @@ void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
         wxSize sizeStatic = m_staticMonth->GetSize();
         wxSize sizeSpin = m_spinYear->GetSize();
 
-        // wxMSW sometimes reports the wrong combo height,
-        // so on this platform we'll use the spin control
-        // height instead.
-#ifdef __WXMSW__
-        int maxHeight = sizeSpin.y;
-        int requiredSpinHeight = -1;
-#else
-        int maxHeight = sizeCombo.y;
-        int requiredSpinHeight = sizeCombo.y;
-#endif
+        int maxHeight = wxMax(sizeSpin.y, sizeCombo.y);
         int dy = (maxHeight - sizeStatic.y) / 2;
         m_comboMonth->Move(x, y);
         m_staticMonth->SetSize(x, y + dy, sizeCombo.x, -1, sizeStatic.y);
 
         int xDiff = sizeCombo.x + HORZ_MARGIN;
 
-        m_spinYear->SetSize(x + xDiff, y, width - xDiff, requiredSpinHeight);
+        m_spinYear->SetSize(x + xDiff, y, width - xDiff, maxHeight);
         m_staticYear->SetSize(x + xDiff, y + dy, width - xDiff, sizeStatic.y);
 
-        yDiff = wxMax(sizeSpin.y, maxHeight) + VERT_MARGIN;
+        yDiff = maxHeight + VERT_MARGIN;
     }
     else // no controls on the top
     {
@@ -859,36 +841,6 @@ void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
     }
 
     wxControl::DoMoveWindow(x, y + yDiff, width, height - yDiff);
-}
-
-void wxGenericCalendarCtrl::DoGetPosition(int *x, int *y) const
-{
-    wxControl::DoGetPosition(x, y);
-#ifndef __WXPM__
-    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && GetMonthControl() )
-    {
-        // our real top corner is not in this position
-        if ( y )
-        {
-            *y -= GetMonthControl()->GetSize().y + VERT_MARGIN;
-        }
-    }
-#endif
-}
-
-void wxGenericCalendarCtrl::DoGetSize(int *width, int *height) const
-{
-    wxControl::DoGetSize(width, height);
-#ifndef __WXPM__
-    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
-    {
-        // our real height is bigger
-        if ( height && GetMonthControl())
-        {
-            *height += GetMonthControl()->GetSize().y + VERT_MARGIN;
-        }
-    }
-#endif
 }
 
 void wxGenericCalendarCtrl::RecalcGeometry()

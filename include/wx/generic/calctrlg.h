@@ -168,9 +168,6 @@ public:
 protected:
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;
-    virtual void DoGetPosition(int *x, int *y) const;
-    virtual void DoGetSize(int *width, int *height) const;
-    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
 private:
@@ -255,6 +252,7 @@ private:
     // Set the flag for SetDate(): otherwise it would overwrite the year
     // typed in by the user
     void SetUserChangedYear() { m_userChangedYear = true; }
+
 
     // the subcontrols
     wxStaticText *m_staticMonth;
