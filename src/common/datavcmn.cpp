@@ -297,29 +297,22 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
 // wxDataViewIndexListModel
 // ---------------------------------------------------------
 
+static int my_sort( int *v1, int *v2 )
+{
+   return *v2-*v1;
+}
+
+
 wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
 {
-#ifndef __WXMAC__
-    m_useHash = false;
-#else
-    m_useHash = true;
-#endif
-
-    if (m_useHash)
-    {
-        // IDs are ordered until an item gets deleted or inserted
-        m_ordered = true;
-        
-        // build initial index
-        unsigned int i;
-        for (i = 1; i < initial_size+1; i++)
+    // IDs are ordered until an item gets deleted or inserted
+    m_ordered = true;
+    
+    // build initial index
+    unsigned int i;
+    for (i = 1; i < initial_size+1; i++)
             m_hash.Add( (void*) i );
-        m_lastIndex = initial_size + 1;
-    }
-    else
-    {
-        m_lastIndex = initial_size-1;
-    }
+    m_lastIndex = initial_size + 1;
 }
 
 wxDataViewIndexListModel::~wxDataViewIndexListModel()
@@ -328,103 +321,55 @@ wxDataViewIndexListModel::~wxDataViewIndexListModel()
 
 void wxDataViewIndexListModel::Reset( unsigned int new_size )
 {
-    if (m_useHash)
-    {
-        m_hash.Clear();
+    m_hash.Clear();
     
-        // IDs are ordered until an item gets deleted or inserted
-        m_ordered = true;
+    // IDs are ordered until an item gets deleted or inserted
+    m_ordered = true;
         
-        // build initial index
-        unsigned int i;
-        for (i = 1; i < new_size+1; i++)
+    // build initial index
+    unsigned int i;
+    for (i = 1; i < new_size+1; i++)
             m_hash.Add( (void*) i );
-        m_lastIndex = new_size + 1;
-    }
-    else
-    {
-        m_lastIndex = new_size-1;
-    }
+    m_lastIndex = new_size + 1;
     
     wxDataViewModel::Cleared();
 }
 
 void wxDataViewIndexListModel::RowPrepended()
 {
-    if (m_useHash)
-    {
-        m_ordered = false;
+    m_ordered = false;
     
-        unsigned int id = m_lastIndex++;
-        m_hash.Insert( (void*) id, 0 );
-        wxDataViewItem item( (void*) id );
-        ItemAdded( wxDataViewItem(0), item );
-    }
-    else
-    {
-        m_lastIndex++;
-        wxDataViewItem item( (void*) 0 );
-        ItemAdded( wxDataViewItem(0), item );
-    }
+    unsigned int id = m_lastIndex++;
+    m_hash.Insert( (void*) id, 0 );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowInserted( unsigned int before )
 {
-    if (m_useHash)
-    {
-        m_ordered = false;
+    m_ordered = false;
     
-        unsigned int id = m_lastIndex++;
-        m_hash.Insert( (void*) id, before );
-        wxDataViewItem item( (void*) id );
-        ItemAdded( wxDataViewItem(0), item );
-    }
-    else
-    {
-        m_lastIndex++;
-        wxDataViewItem item( (void*) before );
-        ItemAdded( wxDataViewItem(0), item );
-    }
+    unsigned int id = m_lastIndex++;
+    m_hash.Insert( (void*) id, before );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowAppended()
 {
-    if (m_useHash)
-    {
-        unsigned int id = m_lastIndex++;
-        m_hash.Add( (void*) id );
-        wxDataViewItem item( (void*) id );
-        ItemAdded( wxDataViewItem(0), item );
-    }
-    else
-    {
-        m_lastIndex++;
-        wxDataViewItem item( (void*) m_lastIndex );
-        ItemAdded( wxDataViewItem(0), item );
-    }
+    unsigned int id = m_lastIndex++;
+    m_hash.Add( (void*) id );
+    wxDataViewItem item( (void*) id );
+    ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewIndexListModel::RowDeleted( unsigned int row )
 {
-    if (m_useHash)
-    {
-        m_ordered = false;
+    m_ordered = false;
         
-        wxDataViewItem item( m_hash[row] );
-        wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
-        m_hash.RemoveAt( row );
-    }
-    else
-    {
-        wxDataViewItem item( (void*) row );
-        wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
-        m_lastIndex++;
-    }
-}
-
-static int my_sort( int *v1, int *v2 )
-{
-   return *v2-*v1;
+    wxDataViewItem item( m_hash[row] );
+    wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
+    m_hash.RemoveAt( row );
 }
 
 void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
@@ -432,35 +377,19 @@ void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
     wxArrayInt sorted = rows;
     sorted.Sort( my_sort );
     
-    if (m_useHash)
-    {
-        m_ordered = false;
+    m_ordered = false;
         
-        wxDataViewItemArray array;
-        unsigned int i;
-        for (i = 0; i < rows.GetCount(); i++)
-        {
+    wxDataViewItemArray array;
+    unsigned int i;
+    for (i = 0; i < rows.GetCount(); i++)
+    {
             wxDataViewItem item( m_hash[rows[i]] );
             array.Add( item );
-        }
-        wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
+    }
+    wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
         
-        for (i = 0; i < sorted.GetCount(); i++)
+    for (i = 0; i < sorted.GetCount(); i++)
            m_hash.RemoveAt( sorted[i] );
-    }
-    else
-    {
-        wxDataViewItemArray array;
-        unsigned int i;
-        for (i = 0; i < sorted.GetCount(); i++)
-        {
-            wxDataViewItem item( (void*) sorted[i] );
-            array.Add( item );
-        }
-        wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
-    
-        m_lastIndex -= rows.GetCount();
-    }
 }
 
 void wxDataViewIndexListModel::RowChanged( unsigned int row )
@@ -475,34 +404,20 @@ void wxDataViewIndexListModel::RowValueChanged( unsigned int row, unsigned int c
 
 unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) const
 {
-    if (m_useHash)
+    if (m_ordered)
     {
-        if (m_ordered)
-        {
             unsigned int pos = wxPtrToUInt( item.GetID() );
             return pos-1;
-        }
+    }
     
-        // assert for not found
-        return (unsigned int) m_hash.Index( item.GetID() );
-    }
-    else
-    {
-        return wxPtrToUInt( item.GetID() );
-    }
+    // assert for not found
+    return (unsigned int) m_hash.Index( item.GetID() );
 }
 
 wxDataViewItem wxDataViewIndexListModel::GetItem( unsigned int row ) const
 {
-    if (m_useHash)
-    {
-        wxASSERT( row < m_hash.GetCount() );
-        return wxDataViewItem( m_hash[row] );
-    }
-    else
-    {
-        return wxDataViewItem( (void*) row  );
-    }
+    wxASSERT( row < m_hash.GetCount() );
+    return wxDataViewItem( m_hash[row] );
 }
 
 bool wxDataViewIndexListModel::HasDefaultCompare() const
@@ -515,7 +430,7 @@ int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
                                       unsigned int WXUNUSED(column),
                                       bool ascending)
 {
-    if (m_ordered || !m_useHash)
+    if (m_ordered)
     {
         unsigned int pos1 = wxPtrToUInt(item1.GetID());
         unsigned int pos2 = wxPtrToUInt(item2.GetID());
@@ -565,9 +480,6 @@ bool wxDataViewIndexListModel::IsContainer( const wxDataViewItem &item ) const
 
 unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const
 {
-    if (!m_useHash)
-        return 0;  // error
-        
     if (item.IsOk())
         return 0;
 
@@ -575,6 +487,150 @@ unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, 
     
     return m_hash.GetCount();
 }
+
+// ---------------------------------------------------------
+// wxDataViewVirtualListModel
+// ---------------------------------------------------------
+
+#ifndef __WXMAC__
+
+wxDataViewVirtualListModel::wxDataViewVirtualListModel( unsigned int initial_size )
+{
+    m_lastIndex = initial_size-1;
+}
+
+wxDataViewVirtualListModel::~wxDataViewVirtualListModel()
+{
+}
+
+void wxDataViewVirtualListModel::Reset( unsigned int new_size )
+{
+    m_lastIndex = new_size-1;
+    
+    wxDataViewModel::Cleared();
+}
+
+void wxDataViewVirtualListModel::RowPrepended()
+{
+    m_lastIndex++;
+    wxDataViewItem item( (void*) 0 );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewVirtualListModel::RowInserted( unsigned int before )
+{
+    m_lastIndex++;
+    wxDataViewItem item( (void*) before );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewVirtualListModel::RowAppended()
+{
+    m_lastIndex++;
+    wxDataViewItem item( (void*) m_lastIndex );
+    ItemAdded( wxDataViewItem(0), item );
+}
+
+void wxDataViewVirtualListModel::RowDeleted( unsigned int row )
+{
+    wxDataViewItem item( (void*) row );
+    wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
+    m_lastIndex++;
+}
+
+void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
+{
+    wxArrayInt sorted = rows;
+    sorted.Sort( my_sort );
+    
+    wxDataViewItemArray array;
+    unsigned int i;
+    for (i = 0; i < sorted.GetCount(); i++)
+    {
+            wxDataViewItem item( (void*) sorted[i] );
+            array.Add( item );
+    }
+    wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
+    
+    m_lastIndex -= rows.GetCount();
+}
+
+void wxDataViewVirtualListModel::RowChanged( unsigned int row )
+{
+    wxDataViewModel::ItemChanged( GetItem(row) );
+}
+
+void wxDataViewVirtualListModel::RowValueChanged( unsigned int row, unsigned int col )
+{
+    wxDataViewModel::ValueChanged( GetItem(row), col );
+}
+
+unsigned int wxDataViewVirtualListModel::GetRow( const wxDataViewItem &item ) const
+{
+    return wxPtrToUInt( item.GetID() );
+}
+
+wxDataViewItem wxDataViewVirtualListModel::GetItem( unsigned int row ) const
+{
+    return wxDataViewItem( (void*) row  );
+}
+
+bool wxDataViewVirtualListModel::HasDefaultCompare() const
+{ 
+    return true;
+}
+
+int wxDataViewVirtualListModel::Compare(const wxDataViewItem& item1,
+                                      const wxDataViewItem& item2,
+                                      unsigned int WXUNUSED(column),
+                                      bool ascending)
+{
+    unsigned int pos1 = wxPtrToUInt(item1.GetID());
+    unsigned int pos2 = wxPtrToUInt(item2.GetID());
+        
+    if (ascending)
+       return pos1 - pos2;
+    else 
+       return pos2 - pos1;
+}
+
+void wxDataViewVirtualListModel::GetValue( wxVariant &variant,
+                           const wxDataViewItem &item, unsigned int col ) const
+{
+    GetValue( variant, GetRow(item), col );
+}
+
+bool wxDataViewVirtualListModel::SetValue( const wxVariant &variant,
+                           const wxDataViewItem &item, unsigned int col )
+{
+    return SetValue( variant, GetRow(item), col );
+}
+
+bool wxDataViewVirtualListModel::GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr )
+{
+    return GetAttr( GetRow(item), col, attr );
+}
+
+wxDataViewItem wxDataViewVirtualListModel::GetParent( const wxDataViewItem & WXUNUSED(item) ) const
+{
+    return wxDataViewItem(0);
+}
+
+bool wxDataViewVirtualListModel::IsContainer( const wxDataViewItem &item ) const
+{
+    // only the invisible root item has children
+    if (!item.IsOk())
+        return true;
+
+    return false;
+}
+
+unsigned int wxDataViewVirtualListModel::GetChildren( const wxDataViewItem &WXUNUSED(item), wxDataViewItemArray &WXUNUSED(children) ) const
+{
+    return 0;  // should we report an error ?
+}
+
+#endif  // __WXMAC__
 
 //-----------------------------------------------------------------------------
 // wxDataViewIconText

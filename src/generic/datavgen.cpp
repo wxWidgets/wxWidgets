@@ -3351,7 +3351,7 @@ void wxDataViewMainWindow::BuildTree(wxDataViewModel * model)
 {
     DestroyTree();
 
-    if (GetOwner()->GetModel()->IsIndexListModel())
+    if (GetOwner()->GetModel()->IsVirtualListModel())
     {
         m_count = -1 ;
         return;

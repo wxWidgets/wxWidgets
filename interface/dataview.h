@@ -156,127 +156,6 @@ public:
 
 
 /**
-    @class wxDataViewIndexListModel
-    @wxheader{dataview.h}
-
-    wxDataViewIndexListModel is a specialized data model which lets
-    you address an item by its position (row) rather than its
-    wxDataViewItem (which you can obtain from this class).
-    This model also provides its own
-    wxDataViewIndexListModel::Compare method
-    which sorts the model's data by the index.
-
-    This model is special in the it is implemented differently under OS X
-    and other platforms. Under OS X a wxDataViewItem is always persistent
-    and this is also the case for this class. Under other platforms, the
-    meaning of a wxDataViewItem is changed to reflect a row number for
-    wxDataViewIndexListModel. The consequence of this is that
-    wxDataViewIndexListModel can be used as a virtual model with an
-    almost infinate number of items on platforms other than OS X.
-
-    @library{wxbase}
-    @category{FIXME}
-*/
-class wxDataViewIndexListModel : public wxDataViewModel
-{
-public:
-    /**
-        Constructor.
-    */
-    wxDataViewIndexListModel(unsigned int initial_size = 0);
-
-    /**
-        Destructor.
-    */
-    ~wxDataViewIndexListModel();
-
-    /**
-        Compare method that sorts the items by their index.
-    */
-    int Compare(const wxDataViewItem& item1,
-                const wxDataViewItem& item2,
-                unsigned int column, bool ascending);
-
-    /**
-        Oberride this to indicate that the row has special font attributes.
-        This only affects the
-        wxDataViewTextRendererText() renderer.
-        See also wxDataViewItemAttr.
-    */
-    bool GetAttr(unsigned int row, unsigned int col,
-                 wxDataViewItemAttr& attr);
-
-    /**
-        Returns the wxDataViewItem at the given @e row.
-    */
-    wxDataViewItem GetItem(unsigned int row) const;
-
-    /**
-        Returns the position of given @e item.
-    */
-    unsigned int GetRow(const wxDataViewItem& item) const;
-
-    /**
-        Override this to allow getting values from the model.
-    */
-    void GetValue(wxVariant& variant, unsigned int row,
-                  unsigned int col) const;
-
-    /**
-        Call this after if the data has to be read again from
-        the model. This is useful after major changes when
-        calling the methods below (possibly thousands of times)
-        doesn't make sense.
-    */
-    void Reset(unsigned int new_size);
-
-    /**
-        Call this after a row has been appended to the model.
-    */
-    void RowAppended();
-
-    /**
-        Call this after a row has been changed.
-    */
-    void RowChanged(unsigned int row);
-
-    /**
-        Call this after a row has been deleted.
-    */
-    void RowDeleted(unsigned int row);
-
-    /**
-        Call this after a row has been inserted at the given position.
-    */
-    void RowInserted(unsigned int before);
-
-    /**
-        Call this after a row has been prepended to the model.
-    */
-    void RowPrepended();
-
-    /**
-        Call this after a value has been changed.
-    */
-    void RowValueChanged(unsigned int row, unsigned int col);
-
-    /**
-        Call this after rows have been deleted. The array will internally
-        get copied and sorted in descending order so that the rows with
-        the highest position will be deleted first.
-    */
-    void RowsDeleted(const wxArrayInt& rows);
-
-    /**
-        Called in order to set a value in the model.
-    */
-    bool SetValue(const wxVariant& variant, unsigned int row,
-                  unsigned int col);
-};
-
-
-
-/**
     @class wxDataViewModel
     @wxheader{dataview.h}
 
@@ -341,6 +220,7 @@ public:
     Currently wxWidgets provides the following models apart
     from the base model:
     wxDataViewIndexListModel,
+    wxDataViewVirtualListModel,
     wxDataViewTreeStore.
 
     Note that wxDataViewModel is reference counted, derives from
@@ -543,6 +423,154 @@ public:
 
 
 /**
+    @class wxDataViewIndexListModel
+    @wxheader{dataview.h}
+
+    wxDataViewIndexListModel is a specialized data model which lets
+    you address an item by its position (row) rather than its
+    wxDataViewItem (which you can obtain from this class).
+    This model also provides its own wxDataViewIndexListModel::Compare
+    method which sorts the model's data by the index.
+    
+    This model is not a virtual model since the control stores 
+    each wxDataViewItem. Use wxDataViewVirtualListModel if you
+    need to display millions of items or have other reason to
+    use a virtual control.
+
+    @library{wxbase}
+    @category{FIXME}
+*/
+class wxDataViewIndexListModel : public wxDataViewModel
+{
+public:
+    /**
+        Constructor.
+    */
+    wxDataViewIndexListModel(unsigned int initial_size = 0);
+
+    /**
+        Destructor.
+    */
+    ~wxDataViewIndexListModel();
+
+    /**
+        Compare method that sorts the items by their index.
+    */
+    int Compare(const wxDataViewItem& item1,
+                const wxDataViewItem& item2,
+                unsigned int column, bool ascending);
+
+    /**
+        Oberride this to indicate that the row has special font attributes.
+        This only affects the
+        wxDataViewTextRendererText() renderer.
+        See also wxDataViewItemAttr.
+    */
+    bool GetAttr(unsigned int row, unsigned int col,
+                 wxDataViewItemAttr& attr);
+
+    /**
+        Returns the wxDataViewItem at the given @e row.
+    */
+    wxDataViewItem GetItem(unsigned int row) const;
+
+    /**
+        Returns the position of given @e item.
+    */
+    unsigned int GetRow(const wxDataViewItem& item) const;
+
+    /**
+        Override this to allow getting values from the model.
+    */
+    void GetValue(wxVariant& variant, unsigned int row,
+                  unsigned int col) const;
+
+    /**
+        Call this after if the data has to be read again from
+        the model. This is useful after major changes when
+        calling the methods below (possibly thousands of times)
+        doesn't make sense.
+    */
+    void Reset(unsigned int new_size);
+
+    /**
+        Call this after a row has been appended to the model.
+    */
+    void RowAppended();
+
+    /**
+        Call this after a row has been changed.
+    */
+    void RowChanged(unsigned int row);
+
+    /**
+        Call this after a row has been deleted.
+    */
+    void RowDeleted(unsigned int row);
+
+    /**
+        Call this after a row has been inserted at the given position.
+    */
+    void RowInserted(unsigned int before);
+
+    /**
+        Call this after a row has been prepended to the model.
+    */
+    void RowPrepended();
+
+    /**
+        Call this after a value has been changed.
+    */
+    void RowValueChanged(unsigned int row, unsigned int col);
+
+    /**
+        Call this after rows have been deleted. The array will internally
+        get copied and sorted in descending order so that the rows with
+        the highest position will be deleted first.
+    */
+    void RowsDeleted(const wxArrayInt& rows);
+
+    /**
+        Called in order to set a value in the model.
+    */
+    bool SetValue(const wxVariant& variant, unsigned int row,
+                  unsigned int col);
+};
+
+
+
+/**
+    @class wxDataViewVirtualListModel
+    @wxheader{dataview.h}
+
+    wxDataViewVirtualListModel is a specialized data model which lets
+    you address an item by its position (row) rather than its
+    wxDataViewItem and as such offers the exact same interface as
+    wxDataViewIndexListModel. The important difference is that under
+    platforms other than OS X, using this model will result in a
+    truely virtual control able to handle millions of items as the
+    control doesn't store any item (a feature not supported by the
+    Carbon API under OS X).
+
+    @see wxDataViewIndexListModel for the API.
+
+    @library{wxbase}
+    @category{FIXME}
+*/
+class wxDataViewVirtualListModel : public wxDataViewModel
+{
+public:
+    /**
+        Constructor.
+    */
+    wxDataViewVirtualListModel(unsigned int initial_size = 0);
+}
+
+
+
+
+
+/**
     @class wxDataViewItemAttr
     @wxheader{dataview.h}
 
@@ -703,6 +731,14 @@ public:
     */
     ~wxDataViewCtrl();
 
+    /**
+        Add a wxDataViewColumn to the control. Returns
+        @e @true on success.
+        Note that there is a number of short cut methods which implicitly create
+        a wxDataViewColumn and a wxDataViewRenderer for it (see below).
+    */
+    virtual bool AppendColumn(wxDataViewColumn* col);
+
     //@{
     /**
         Appends a column for rendering a bitmap. Returns the wxDataViewColumn
@@ -722,19 +758,13 @@ public:
                                          int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
-    /**
-        Add a wxDataViewColumn to the control. Returns
-        @e @true on success.
-        Note that there is a number of short cut methods which implicitly create
-        a wxDataViewColumn and a
-        wxDataViewRenderer for it (see below).
-    */
-    virtual bool AppendColumn(wxDataViewColumn* col);
-
     //@{
     /**
         Appends a column for rendering a date. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
+        
+        NB: The @e align parameter is applied to both the column header and
+        the column renderer.
     */
     wxDataViewColumn* AppendDateColumn(const wxString& label,
                                        unsigned int model_column,
@@ -753,8 +783,11 @@ public:
     //@{
     /**
         Appends a column for rendering text with an icon. Returns the wxDataViewColumn
-        created in the function or @NULL on failure. This uses the
-        wxDataViewIconTextRenderer.
+        created in the function or @NULL on failure. This method uses the
+        wxDataViewIconTextRenderer class.
+        
+        NB: The @e align parameter is applied to both the column header and
+        the column renderer.
     */
     wxDataViewColumn* AppendIconTextColumn(const wxString& label,
                                            unsigned int model_column,
@@ -773,8 +806,10 @@ public:
     //@{
     /**
         Appends a column for rendering a progress indicator. Returns the
-        wxDataViewColumn
-        created in the function or @NULL on failure.
+        wxDataViewColumn created in the function or @NULL on failure.
+        
+        NB: The @e align parameter is applied to both the column header and
+        the column renderer.
     */
     wxDataViewColumn* AppendProgressColumn(const wxString& label,
                                            unsigned int model_column,
@@ -794,6 +829,9 @@ public:
     /**
         Appends a column for rendering text. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
+        
+        NB: The @e align parameter is applied to both the column header and
+        the column renderer.
     */
     wxDataViewColumn* AppendTextColumn(const wxString& label,
                                        unsigned int model_column,
@@ -813,6 +851,9 @@ public:
     /**
         Appends a column for rendering a toggle. Returns the wxDataViewColumn
         created in the function or @NULL on failure.
+        
+        NB: The @e align parameter is applied to both the column header and
+        the column renderer.
     */
     wxDataViewColumn* AppendToggleColumn(const wxString& label,
                                          unsigned int model_column,
@@ -829,8 +870,8 @@ public:
     //@}
 
     /**
-        Associates a wxDataViewModel with the
-        control. This increases the reference count of the model by 1.
+        Associates a wxDataViewModel with the control. This increases the reference
+        count of the model by 1.
     */
     virtual bool AssociateModel(wxDataViewModel* model);
 

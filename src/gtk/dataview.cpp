@@ -1080,7 +1080,7 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     rect.y += cell_area->y;
     rect.width  -= renderer->xpad * 2;
     rect.height -= renderer->ypad * 2;
-
+        
     GdkRectangle dummy;
     if (gdk_rectangle_intersect (expose_area, &rect, &dummy))
     {
@@ -2262,7 +2262,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     wxDataViewModel *wx_model = tree_model->internal->GetDataViewModel();
 
-    if (!wx_model->IsIndexListModel())
+    if (!wx_model->IsVirtualListModel())
     {
 
     if (wx_model->IsContainer( item ))
@@ -2752,7 +2752,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
     m_sort_column = -1;
     m_dataview_sort_column = NULL;
 
-    if (!m_wx_model->IsIndexListModel())
+    if (!m_wx_model->IsVirtualListModel())
         InitTree();
 }
 
@@ -2871,13 +2871,13 @@ bool wxDataViewCtrlInternal::Cleared()
 
 void wxDataViewCtrlInternal::Resort()
 {
-    if (!m_wx_model->IsIndexListModel())
+    if (!m_wx_model->IsVirtualListModel())
         m_root->Resort();
 }
 
 bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    if (!m_wx_model->IsIndexListModel())
+    if (!m_wx_model->IsVirtualListModel())
     {
         wxGtkTreeModelNode *parent_node = FindNode( parent );
         if (m_wx_model->IsContainer( item ))
@@ -2891,7 +2891,7 @@ bool wxDataViewCtrlInternal::ItemAdded( const wxDataViewItem &parent, const wxDa
 
 bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    if (!m_wx_model->IsIndexListModel())
+    if (!m_wx_model->IsVirtualListModel())
     {
         wxGtkTreeModelNode *parent_node = FindNode( parent );
         parent_node->DeleteChild( item.GetID() );
@@ -2928,7 +2928,7 @@ bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned 
 
 GtkTreeModelFlags wxDataViewCtrlInternal::get_flags()
 {
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
         return GTK_TREE_MODEL_LIST_ONLY;
     else
         return GTK_TREE_MODEL_ITERS_PERSIST;
@@ -2936,7 +2936,7 @@ GtkTreeModelFlags wxDataViewCtrlInternal::get_flags()
 
 gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path )
 {
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
     {
         wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
 
@@ -2996,7 +2996,7 @@ GtkTreePath *wxDataViewCtrlInternal::get_path( GtkTreeIter *iter )
 {
     GtkTreePath *retval = gtk_tree_path_new ();
 
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
     {
         // user_data is just the index
         int i = (wxUIntPtr) iter->user_data;
@@ -3023,7 +3023,7 @@ GtkTreePath *wxDataViewCtrlInternal::get_path( GtkTreeIter *iter )
 
 gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
 {
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
     {
         wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
 
@@ -3057,7 +3057,7 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
 
 gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *parent )
 {
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
     {
         // this is a list, nodes have no children
         if (parent)
@@ -3090,7 +3090,7 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
 
 gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 {
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
     {
         // this is a list, nodes have no children
         return FALSE;
@@ -3113,7 +3113,7 @@ gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 
 gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
 {
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
     {
         wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
 
@@ -3140,7 +3140,7 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
 
 gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter *parent, gint n )
 {
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
     {
         wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
 
@@ -3181,7 +3181,7 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
 
 gboolean wxDataViewCtrlInternal::iter_parent( GtkTreeIter *iter, GtkTreeIter *child )
 {
-    if (m_wx_model->IsIndexListModel())
+    if (m_wx_model->IsVirtualListModel())
     {
         return FALSE;
     }

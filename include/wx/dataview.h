@@ -224,7 +224,7 @@ public:
     virtual bool HasDefaultCompare() const { return false; }
 
     // internal
-    virtual bool IsIndexListModel() const { return false; }
+    virtual bool IsVirtualListModel() const { return false; }
 
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
@@ -284,7 +284,7 @@ public:
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
 
     // internal
-    virtual bool IsIndexListModel() const { return true; }
+    virtual bool IsVirtualListModel() const { return false; }
     unsigned int GetLastIndex() const { return m_lastIndex; }
 
 private:
@@ -294,6 +294,71 @@ private:
     bool m_useHash;
 };
 
+// ---------------------------------------------------------
+// wxDataViewVirtualListModel
+// ---------------------------------------------------------
+
+#ifdef __WXMAC__
+// better than nothing
+typedef wxDataViewVirtualListModel wxDataViewIndexListModel
+#else
+
+class WXDLLIMPEXP_ADV wxDataViewVirtualListModel: public wxDataViewModel
+{
+public:
+    wxDataViewVirtualListModel( unsigned int initial_size = 0 );
+    ~wxDataViewVirtualListModel();
+
+    virtual void GetValue( wxVariant &variant,
+                           unsigned int row, unsigned int col ) const = 0;
+
+    virtual bool SetValue( const wxVariant &variant,
+                           unsigned int row, unsigned int col ) = 0;
+
+    virtual bool GetAttr( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
+        { return false; }
+
+    void RowPrepended();
+    void RowInserted( unsigned int before );
+    void RowAppended();
+    void RowDeleted( unsigned int row );
+    void RowsDeleted( const wxArrayInt &rows );
+    void RowChanged( unsigned int row );
+    void RowValueChanged( unsigned int row, unsigned int col );
+    void Reset( unsigned int new_size );
+
+    // convert to/from row/wxDataViewItem
+
+    unsigned int GetRow( const wxDataViewItem &item ) const;
+    wxDataViewItem GetItem( unsigned int row ) const;
+
+    // compare based on index
+
+    virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
+                         unsigned int column, bool ascending );
+    virtual bool HasDefaultCompare() const;
+
+    // implement base methods
+
+    virtual void GetValue( wxVariant &variant,
+                           const wxDataViewItem &item, unsigned int col ) const;
+    virtual bool SetValue( const wxVariant &variant,
+                           const wxDataViewItem &item, unsigned int col );
+    virtual bool GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr );
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
+    virtual bool IsContainer( const wxDataViewItem &item ) const;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
+
+    // internal
+    virtual bool IsVirtualListModel() const { return true; }
+    unsigned int GetLastIndex() const { return m_lastIndex; }
+
+private:
+    wxDataViewItemArray m_hash;
+    unsigned int m_lastIndex;
+    bool m_ordered;
+};
+#endif
 
 //-----------------------------------------------------------------------------
 // wxDataViewEditorCtrlEvtHandler

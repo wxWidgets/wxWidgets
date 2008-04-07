@@ -402,14 +402,14 @@ static int my_sort( int *v1, int *v2 )
    return *v1-*v2;
 }
 
-class MyListModel: public wxDataViewIndexListModel
+class MyListModel: public wxDataViewVirtualListModel
 {
 public:
     MyListModel() : 
 #ifdef __WXMAC__
-        wxDataViewIndexListModel( 1000 + 100 )
+        wxDataViewVirtualListModel( 1000 + 100 )
 #else
-        wxDataViewIndexListModel( 100000 + 100 )
+        wxDataViewVirtualListModel( 100000 + 100 )
 #endif
     {
 #ifdef __WXMAC__
@@ -825,7 +825,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_listCtrl->AssociateModel( m_list_model.get() );
 
 #if 1
-    m_listCtrl->AppendTextColumn    (wxT("editable string"), 0, wxDATAVIEW_CELL_EDITABLE, 120 );
+    m_listCtrl->AppendTextColumn    (wxT("editable string"), 0, wxDATAVIEW_CELL_EDITABLE, 120, wxALIGN_RIGHT );
     m_listCtrl->AppendIconTextColumn(wxT("icon"),            1, wxDATAVIEW_CELL_INERT,     60 );
 #else
     m_listCtrl->AppendTextColumn    (wxT("editable string"), 0, wxDATAVIEW_CELL_EDITABLE );
