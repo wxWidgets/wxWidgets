@@ -33,12 +33,58 @@
     then wxList<T> will actually derive from std::list and just add a legacy
     compatibility layer for the old wxList class.
 
+    @code
+    // this part might be in a header or source (.cpp) file
+    class MyListElement
+    {
+        ... // whatever
+    };
+
+    // this macro declares and partly implements MyList class
+    WX_DECLARE_LIST(MyListElement, MyList);
+
+    ...
+
+    // the only requirement for the rest is to be AFTER the full declaration of
+    // MyListElement (for WX_DECLARE_LIST forward declaration is enough), but
+    // usually it will be found in the source file and not in the header
+
+    #include <wx/listimpl.cpp>
+    WX_DEFINE_LIST(MyList);
+
+
+    MyList list;
+    MyListElement element;
+    list.Append(&element);     // ok
+    list.Append(17);           // error: incorrect type
+
+    // let's iterate over the list in STL syntax
+    MyList::iterator iter;
+    for (iter = list.begin(); iter != list.end(); ++iter)
+    {
+        MyListElement *current = *iter;
+
+        ...process the current element...
+    }
+
+    // the same with the legacy API from the old wxList class
+    MyList::compatibility_iterator node = list.GetFirst();
+    while (node)
+    {
+        MyListElement *current = node->GetData();
+
+        ...process the current element...
+        
+        node = node->GetNext();
+    }
+    @endcode
+
+
     @library{wxbase}
     @category{FIXME}
 
-    @see wxArray, wxVector
+    @see wxArray<T>, wxVector<T>
 */
-template<typename T>
 class wxList<T>
 {
 public:
@@ -46,15 +92,15 @@ public:
     /**
         Constructors.
     */
-    wxList();
-    wxList(size_t count, T* elements[]);
+    wxList<T>();
+    wxList<T>(size_t count, T* elements[]);
     //@}
 
     /**
         Destroys the list, but does not delete the objects stored in the list
         unless you called DeleteContents(@true ).
     */
-    ~wxList();
+    ~wxList<T>();
 
     /**
         Appends the pointer to @a object to the list.
@@ -327,9 +373,9 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxList, wxHashTable
+    @see wxList<T>, wxHashTable
 */
-class wxNode
+class wxNode<T>
 {
 public:
     /**

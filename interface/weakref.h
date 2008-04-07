@@ -9,8 +9,8 @@
 /**
     @wxheader{weakref.h}
 
-    wxWeakRefDynamicT is a template class for weak references that is used in
-    the same way as wxWeakRefT. The only difference is that wxWeakRefDynamic
+    wxWeakRefDynamic<T> is a template class for weak references that is used in
+    the same way as wxWeakRef<T>. The only difference is that wxWeakRefDynamic
     defaults to using @c dynamic_cast for establishing the object
     reference (while wxWeakRef defaults to @c static_cast).
 
@@ -18,14 +18,14 @@
     have a little better run-time performance. The role of wxWeakRefDynamic
     is to handle objects which derived type one does not know.
 
-    @note wxWeakRefT selects an implementation based on the static type
+    @note wxWeakRef<T> selects an implementation based on the static type
     of T. If T does not have wxTrackable statically, it defaults to to a mixed-
     mode operation, where it uses @c dynamic_cast as the last measure (if
     available from the compiler and enabled when building wxWidgets).
 
-    For general cases, wxWeakRefT is the better choice.
+    For general cases, wxWeakRef<T> is the better choice.
 
-    For API documentation, see: wxWeakRef
+    For API documentation, see: wxWeakRef<T>
 
     @library{wxcore}
     @category{FIXME}
@@ -48,17 +48,17 @@ public:
     pointer, but when the object pointed is destroyed, the weak reference is
     automatically reset to a @NULL pointer.
 
-    wxWeakRefT can be used whenever one must keep a pointer to an object
+    wxWeakRef<T> can be used whenever one must keep a pointer to an object
     that one does not directly own, and that may be destroyed before the object
     holding the reference.
 
-    wxWeakRefT is a small object and the mechanism behind it is fast
+    wxWeakRef<T> is a small object and the mechanism behind it is fast
     (@b O(1)). So the overall cost of using it is small.
 
     @library{wxbase}
     @category{FIXME}
 
-    @see wxSharedPtr, wxScopedPtr
+    @see wxSharedPtr<T>, wxScopedPtr<T>
 */
 template<typename T>
 class wxWeakRef<T>

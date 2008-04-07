@@ -16,7 +16,7 @@
     @library{wxbase}
     @category{smartpointers}
 
-    @see wxScopedPtr<T>, wxWeakRef<T>, wxObjectDataPtr
+    @see wxScopedPtr<T>, wxWeakRef<T>, wxObjectDataPtr<T>
 */
 template<typename T>
 class wxSharedPtr<T>
