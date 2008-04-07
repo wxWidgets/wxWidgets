@@ -92,6 +92,53 @@ inline void wxCheckSetBrush(wxDC& dc, const wxBrush& brush)
     dc.SetBrush(brush);
 }
 
+// Functions that set properties without using the accessors
+
+inline void wxFontSetPointSize(wxFont& font, int pointSize)
+{
+    if (font.Ok() && font.GetPointSize() != pointSize)
+    {
+        wxFont tempFont(pointSize, font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
+        font = tempFont;
+    }
+}
+
+inline void wxFontSetStyle(wxFont& font, int fontStyle)
+{
+    if (font.Ok() && font.GetStyle() != fontStyle)
+    {
+        wxFont tempFont(font.GetPointSize(), font.GetFamily(), fontStyle, font.GetWeight(), font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
+        font = tempFont;
+    }
+}
+
+inline void wxFontSetWeight(wxFont& font, int fontWeight)
+{
+    if (font.Ok() && font.GetWeight() != fontWeight)
+    {
+        wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), fontWeight, font.GetUnderlined(), font.GetFaceName(), font.GetEncoding());
+        font = tempFont;
+    }
+}
+
+inline void wxFontSetUnderlined(wxFont& font, bool underlined)
+{
+    if (font.Ok() && font.GetUnderlined() != underlined)
+    {
+        wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), underlined, font.GetFaceName(), font.GetEncoding());
+        font = tempFont;
+    }
+}
+
+inline void wxFontSetFaceName(wxFont& font, const wxString& faceName)
+{
+    if (font.Ok() && font.GetFaceName() != faceName)
+    {
+        wxFont tempFont(font.GetPointSize(), font.GetFamily(), font.GetStyle(), font.GetWeight(), font.GetUnderlined(), faceName, font.GetEncoding());
+        font = tempFont;
+    }
+}
+
 /*!
  * wxRichTextObject
  * This is the base for drawable objects.
@@ -1985,7 +2032,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
                 if (!currentStyle.GetFont().Ok())
                     wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
                 wxFont font(currentStyle.GetFont());
-                font.SetPointSize(style.GetFont().GetPointSize());
+                wxFontSetPointSize(font, style.GetFont().GetPointSize());
 
                 wxSetFontPreservingStyles(currentStyle, font);
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_SIZE);
@@ -2008,7 +2055,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
                 if (!currentStyle.GetFont().Ok())
                     wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
                 wxFont font(currentStyle.GetFont());
-                font.SetStyle(style.GetFont().GetStyle());
+                wxFontSetStyle(font, style.GetFont().GetStyle());
                 wxSetFontPreservingStyles(currentStyle, font);
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_ITALIC);
             }
@@ -2030,7 +2077,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
                 if (!currentStyle.GetFont().Ok())
                     wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
                 wxFont font(currentStyle.GetFont());
-                font.SetWeight(style.GetFont().GetWeight());
+                wxFontSetWeight(font, style.GetFont().GetWeight());
                 wxSetFontPreservingStyles(currentStyle, font);
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_WEIGHT);
             }
@@ -2055,7 +2102,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
                 if (!currentStyle.GetFont().Ok())
                     wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
                 wxFont font(currentStyle.GetFont());
-                font.SetFaceName(style.GetFont().GetFaceName());
+                wxFontSetFaceName(font, style.GetFont().GetFaceName());
                 wxSetFontPreservingStyles(currentStyle, font);
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_FACE);
             }
@@ -2077,7 +2124,7 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttrEx& currentStyle, cons
                 if (!currentStyle.GetFont().Ok())
                     wxSetFontPreservingStyles(currentStyle, *wxNORMAL_FONT);
                 wxFont font(currentStyle.GetFont());
-                font.SetUnderlined(style.GetFont().GetUnderlined());
+                wxFontSetUnderlined(font, style.GetFont().GetUnderlined());
                 wxSetFontPreservingStyles(currentStyle, font);
                 currentStyle.SetFlags(currentStyle.GetFlags() | wxTEXT_ATTR_FONT_UNDERLINE);
             }
@@ -7021,48 +7068,55 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxTextAttrEx& style)
     // Whole font
     if (style.GetFont().Ok() && ((style.GetFlags() & (wxTEXT_ATTR_FONT)) == (wxTEXT_ATTR_FONT)))
         destStyle.SetFont(style.GetFont());
-    else if (style.GetFont().Ok())
+    else if (style.GetFont().Ok() && !destStyle.GetFont().Ok())
     {
-        wxFont font = destStyle.GetFont();
+        long oldFlags = destStyle.GetFlags();
+        destStyle.SetFont(style.GetFont());
+        destStyle.SetFlags(oldFlags | (style.GetFlags() & wxTEXT_ATTR_FONT));
+    }
+    else if (style.GetFont().Ok() && destStyle.GetFont().Ok())
+    {
+        int fontSize = destStyle.GetFont().GetPointSize();
+        int fontFamily = destStyle.GetFont().GetFamily();
+        int fontStyle = destStyle.GetFont().GetStyle();
+        int fontWeight = destStyle.GetFont().GetWeight();
+        bool fontUnderlined = destStyle.GetFont().GetUnderlined();
+        wxString fontFaceName = destStyle.GetFont().GetFaceName();
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_FACE)
         {
             destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_FACE);
-            font.SetFaceName(style.GetFont().GetFaceName());
+            fontFaceName = style.GetFont().GetFaceName();
         }
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_SIZE)
         {
             destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_SIZE);
-            font.SetPointSize(style.GetFont().GetPointSize());
+            fontSize = style.GetFont().GetPointSize();
         }
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_ITALIC)
         {
             destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_ITALIC);
-            font.SetStyle(style.GetFont().GetStyle());
+            fontStyle = style.GetFont().GetStyle();
         }
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_WEIGHT)
         {
             destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_WEIGHT);
-            font.SetWeight(style.GetFont().GetWeight());
+            fontWeight = style.GetFont().GetWeight();
         }
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_UNDERLINE)
         {
             destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_UNDERLINE);
-            font.SetUnderlined(style.GetFont().GetUnderlined());
+            fontUnderlined = style.GetFont().GetUnderlined();
         }
 
-        if (font != destStyle.GetFont())
-        {
-            int oldFlags = destStyle.GetFlags();
+        int oldFlags = destStyle.GetFlags();
 
-            destStyle.SetFont(font);
-
-            destStyle.SetFlags(oldFlags);
-        }
+        destStyle.SetFont(wxFont(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName));
+        destStyle.SetFlags(oldFlags);
     }
 
     if ( style.GetTextColour().Ok() && style.HasTextColour())
@@ -7167,7 +7221,21 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
     }
     else if (style.GetFlags() & (wxTEXT_ATTR_FONT))
     {
-        wxFont font = destStyle.GetFont();
+        int fontSize = 12;
+        int fontFamily = wxDEFAULT;
+        int fontStyle = wxNORMAL;
+        int fontWeight = wxNORMAL;
+        bool fontUnderlined = false;
+        wxString fontFaceName;
+        if (destStyle.GetFont().Ok())
+        {
+            fontSize = destStyle.GetFont().GetPointSize();
+            fontFamily = destStyle.GetFont().GetFamily();
+            fontStyle = destStyle.GetFont().GetStyle();
+            fontWeight = destStyle.GetFont().GetWeight();
+            fontUnderlined = destStyle.GetFont().GetUnderlined();
+            fontFaceName = destStyle.GetFont().GetFaceName();
+        }
 
         if (style.GetFlags() & wxTEXT_ATTR_FONT_FACE)
         {
@@ -7178,10 +7246,9 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             else
             {
                 destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_FACE);
-                font.SetFaceName(style.GetFontFaceName());
+                fontFaceName = style.GetFontFaceName();
             }
         }
-
         if (style.GetFlags() & wxTEXT_ATTR_FONT_SIZE)
         {
             if (compareWith && compareWith->HasFontSize() && compareWith->GetFontSize() == style.GetFontSize())
@@ -7191,7 +7258,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             else
             {
                 destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_SIZE);
-                font.SetPointSize(style.GetFontSize());
+                fontSize = style.GetFontSize();
             }
         }
 
@@ -7204,7 +7271,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             else
             {
                 destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_ITALIC);
-                font.SetStyle(style.GetFontStyle());
+                fontStyle = style.GetFontStyle();
             }
         }
 
@@ -7217,7 +7284,7 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             else
             {
                 destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_WEIGHT);
-                font.SetWeight(style.GetFontWeight());
+                fontWeight = style.GetFontWeight();
             }
         }
 
@@ -7230,16 +7297,17 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
             else
             {
                 destStyle.SetFlags(destStyle.GetFlags() | wxTEXT_ATTR_FONT_UNDERLINE);
-                font.SetUnderlined(style.GetFontUnderlined());
+                fontUnderlined = style.GetFontUnderlined();
             }
         }
+
+        wxFont font(fontSize, fontFamily, fontStyle, fontWeight, fontUnderlined, fontFaceName);
 
         if (font != destStyle.GetFont())
         {
             int oldFlags = destStyle.GetFlags();
 
             destStyle.SetFont(font);
-
             destStyle.SetFlags(oldFlags);
         }
     }
@@ -8027,27 +8095,27 @@ wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
             if (attr.HasFontSize())
             {
                 flags |= wxTEXT_ATTR_FONT_SIZE;
-                font.SetPointSize(attr.GetFont().GetPointSize());
+                wxFontSetPointSize(font, attr.GetFont().GetPointSize());
             }
             if (attr.HasFontItalic())
             {
                 flags |= wxTEXT_ATTR_FONT_ITALIC;;
-                font.SetStyle(attr.GetFont().GetStyle());
+                wxFontSetStyle(font, attr.GetFont().GetStyle());
             }
             if (attr.HasFontWeight())
             {
                 flags |= wxTEXT_ATTR_FONT_WEIGHT;
-                font.SetWeight(attr.GetFont().GetWeight());
+                wxFontSetWeight(font, attr.GetFont().GetWeight());
             }
             if (attr.HasFontFaceName())
             {
                 flags |= wxTEXT_ATTR_FONT_FACE;
-                font.SetFaceName(attr.GetFont().GetFaceName());
+                wxFontSetFaceName(font, attr.GetFont().GetFaceName());
             }
             if (attr.HasFontUnderlined())
             {
                 flags |= wxTEXT_ATTR_FONT_UNDERLINE;
-                font.SetUnderlined(attr.GetFont().GetUnderlined());
+                wxFontSetUnderlined(font, attr.GetFont().GetUnderlined());
             }
             newAttr.SetFont(font);
             newAttr.SetFlags(newAttr.GetFlags()|flags);
