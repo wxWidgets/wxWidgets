@@ -31,7 +31,7 @@ class WXDLLIMPEXP_FWD_BASE wxLog;
 class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
 
 #if wxUSE_GUI
-    struct WXDLLIMPEXP_FWD_CORE wxVideoMode;
+    class WXDLLIMPEXP_FWD_CORE wxVideoMode;
 #endif
 
 // ----------------------------------------------------------------------------
