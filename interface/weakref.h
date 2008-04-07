@@ -55,6 +55,42 @@ public:
     wxWeakRef<T> is a small object and the mechanism behind it is fast
     (@b O(1)). So the overall cost of using it is small.
 
+    Example
+    
+    @code
+    wxWindow *wnd = new wxWindow( parent, wxID_ANY, "wxWindow" );
+    wxWeakRef<wxWindow> wr = wnd;  
+    wxWindowRef wr2 = wnd;        // Same as above, but using a typedef
+    // Do things with window
+    wnd->Show( true );
+    // Weak ref is used like an ordinary pointer 
+    wr->Show( false );
+    wnd->Destroy(); 
+    // Now the weak ref has been reset, so we don't risk accessing
+    // a dangling pointer:
+    wxASSERT( wr==NULL );
+    @endcode
+
+    wxWeakRef<T> works for any objects that are derived from wxTrackable. By default,
+    wxEvtHandler and wxWindow derive from wxTrackable. However, wxObject does not, so
+    types like wxFont and wxColour are not trackable. The example below shows how to
+    create a wxObject derived class that is trackable:
+
+    @code
+    class wxMyTrackableObject : public wxObject, public wxTrackable
+    { 
+        // ... other members here 
+    }; 
+    @endcode
+
+    The following types of weak references are predefined:
+
+    @code
+    typedef wxWeakRef<wxEvtHandler>  wxEvtHandlerRef;
+    typedef wxWeakRef<wxWindow>      wxWindowRef;
+    @endcode
+
+
     @library{wxbase}
     @category{FIXME}
 
