@@ -30,6 +30,7 @@
     @library{wxcore}
     @category{FIXME}
 */
+template<typename T>
 class wxWeakRefDynamic<T>
 {
 public:
@@ -59,18 +60,19 @@ public:
 
     @see wxSharedPtr, wxScopedPtr
 */
+template<typename T>
 class wxWeakRef<T>
 {
 public:
     /**
         Constructor. The weak reference is initialized to @e pobj.
     */
-    wxWeakRefT(T* pobj = NULL);
+    wxWeakRef(T* pobj = NULL);
 
     /**
         Destructor.
     */
-    ~wxWeakRefT();
+    ~wxWeakRef();
 
     /**
         Called when the tracked object is destroyed. Be default sets

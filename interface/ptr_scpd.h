@@ -183,18 +183,19 @@ public:
 
     @see wxSharedPtr, wxWeakRef
 */
+template<typename T>
 class wxScopedPtr<T>
 {
 public:
     /**
         Constructor.
     */
-    wxScopedPtrT(T* ptr = NULL);
+    wxScopedPtr(T* ptr = NULL);
 
     /**
         Destructor.
     */
-    ~wxScopedPtrT();
+    ~wxScopedPtr();
 
     /**
         Returns pointer to object or @NULL.

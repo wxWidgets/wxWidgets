@@ -36,7 +36,7 @@ public:
     /**
         Destructor.
     */
-    ~wxSharedPtrT();
+    ~wxSharedPtr();
 
     /**
         Returns pointer to its object or @NULL.
@@ -66,7 +66,7 @@ public:
         Assignment operator. Releases any previously held pointer
         and creates a reference to @e ptr.
     */
-    wxSharedPtrT& operator operator=(T* ptr);
+    wxSharedPtr& operator operator=(T* ptr);
 
     /**
         Reset pointer to @e ptr. If the reference count of the

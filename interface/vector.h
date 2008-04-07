@@ -21,7 +21,7 @@
     @nolibrary
     @category{containers}
 
-    @see @ref overview_container, wxListT, wxArrayT
+    @see @ref overview_container, wxList, wxArray
 */
 template<typename T>
 class wxVector<T>

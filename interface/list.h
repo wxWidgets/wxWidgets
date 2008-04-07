@@ -9,15 +9,15 @@
 /**
     @wxheader{list.h}
 
-    The wxListT class provides linked list functionality. It has been rewritten
+    The wxList<T> class provides linked list functionality. It has been rewritten
     to be type safe and to provide the full API of the STL std::list container and
-    should be used like it. The exception is that wxListT actually stores
+    should be used like it. The exception is that wxList<T> actually stores
     pointers and therefore its iterators return pointers and not references
     to the actual objets in the list (see example below) and @e value_type
-    is defined as @e T*. wxListT destroys an object after removing it only
+    is defined as @e T*. wxList<T> destroys an object after removing it only
     if wxList::DeleteContents has been called.
 
-    wxListT is not a real template and it requires that you declare and define
+    wxList<T> is not a real template and it requires that you declare and define
     each wxListT class in your program. This is done with @e WX_DECLARE_LIST
     and @e WX_DEFINE_LIST macros (see example). We hope that we'll be able
     to provide a proper template class providing both the STL std::list
@@ -30,14 +30,15 @@
     the the same class.
 
     Note that if you compile wxWidgets in STL mode (wxUSE_STL defined as 1)
-    then wxListT will actually derive from std::list and just add a legacy
+    then wxList<T> will actually derive from std::list and just add a legacy
     compatibility layer for the old wxList class.
 
     @library{wxbase}
     @category{FIXME}
 
-    @see wxArrayT(), wxVectorT()
+    @see wxArray, wxVector
 */
+template<typename T>
 class wxList<T>
 {
 public:
@@ -45,20 +46,20 @@ public:
     /**
         Constructors.
     */
-    wxListT();
-    wxListT(size_t count, T* elements[]);
+    wxList();
+    wxList(size_t count, T* elements[]);
     //@}
 
     /**
         Destroys the list, but does not delete the objects stored in the list
         unless you called DeleteContents(@true ).
     */
-    ~wxListT();
+    ~wxList();
 
     /**
         Appends the pointer to @a object to the list.
     */
-    wxListT::compatibility_iterator Append(T* object);
+    wxList<T>::compatibility_iterator Append(T* object);
 
     /**
         Clears the list, but does not delete the objects stored in the list
@@ -94,7 +95,7 @@ public:
     /**
         Returns the iterator refering to @a object or @NULL if none found.
     */
-    wxListT::compatibility_iterator Find(T* object) const;
+    wxList<T>::compatibility_iterator Find(T* object) const;
 
     /**
         Returns the number of elements in the list.
@@ -104,12 +105,12 @@ public:
     /**
         Returns the first iterator in the list (@NULL if the list is empty).
     */
-    wxListT::compatibility_iterator GetFirst() const;
+    wxList<T>::compatibility_iterator GetFirst() const;
 
     /**
         Returns the last iterator in the list (@NULL if the list is empty).
     */
-    wxListT::compatibility_iterator GetLast() const;
+    wxList<T>::compatibility_iterator GetLast() const;
 
     /**
         Returns the index of @a obj within the list or @c wxNOT_FOUND if
@@ -121,10 +122,10 @@ public:
     /**
         Inserts the object before the object refered to be @e iter.
     */
-    wxListT::compatibility_iterator Insert(T* object);
-    wxListT::compatibility_iterator Insert(size_t position,
+    wxList<T>::compatibility_iterator Insert(T* object);
+    wxList<T>::compatibility_iterator Insert(size_t position,
                                            T* object);
-    wxListT::compatibility_iterator Insert(compatibility_iterator iter,
+    wxList<T>::compatibility_iterator Insert(compatibility_iterator iter,
                                            T* object);
     //@}
 
@@ -137,12 +138,12 @@ public:
         Returns the iterator refering to the object at the given
         @c index in the list.
     */
-    wxListT::compatibility_iterator Item(size_t index) const;
+    wxList<T>::compatibility_iterator Item(size_t index) const;
 
     /**
         @note This function is deprecated, use wxList::Find instead.
     */
-    wxListT::compatibility_iterator Member(T* object) const;
+    wxList<T>::compatibility_iterator Member(T* object) const;
 
     /**
         @note This function is deprecated, use @ref wxList::itemfunc Item instead.
@@ -150,7 +151,7 @@ public:
         empty
         or the nth node could not be found).
     */
-    wxListT::compatibility_iterator Nth(int n) const;
+    wxList<T>::compatibility_iterator Nth(int n) const;
 
     /**
         @note This function is deprecated, use wxList::GetCount instead.
@@ -339,12 +340,12 @@ public:
     /**
         Retrieves the next node or @NULL if this node is the last one.
     */
-    wxNodeT* GetNext() const;
+    wxNode<T>* GetNext() const;
 
     /**
         Retrieves the previous node or @NULL if this node is the first one in the list.
     */
-    wxNodeT* GetPrevious();
+    wxNode<T>* GetPrevious();
 
     /**
         Returns the zero-based index of this node within the list. The return value
