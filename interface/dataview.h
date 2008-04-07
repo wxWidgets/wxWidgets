@@ -1072,10 +1072,9 @@ public:
     @class wxDataViewRenderer
     @wxheader{dataview.h}
 
-    This class is used by wxDataViewCtrl to
-    render the individual cells. One instance of a renderer class is
-    owned by wxDataViewColumn. There is
-    a number of ready-to-use renderers provided:
+    This class is used by wxDataViewCtrl to render the individual cells.
+    One instance of a renderer class is owned by a wxDataViewColumn. There
+    is a number of ready-to-use renderers provided:
     wxDataViewTextRenderer,
     wxDataViewTextRendererAttr,
     wxDataViewIconTextRenderer,
@@ -1085,6 +1084,11 @@ public:
     wxDataViewDateRenderer.
     wxDataViewSpinRenderer.
 
+    Note that the @e alignment parameter is ignored under OS X and
+    the alignment is controlled by wxDataViewColumn::GetAlignment()
+    so that under OS X, column header alignment and column content
+    alignment are always the same and cannot be set independently.
+    
     Additionally, the user can write own renderers by deriving from
     wxDataViewCustomRenderer.
 
@@ -1129,7 +1133,7 @@ class wxDataViewRenderer : public wxObject
 {
 public:
     /**
-        Constructor.
+        Constructor. 
     */
     wxDataViewRenderer(const wxString& varianttype,
                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
@@ -1283,6 +1287,322 @@ public:
     */
     wxDataViewToggleRenderer(const wxString& varianttype = "bool",
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
+};
+
+
+
+/**
+    @class wxDataViewDateRenderer
+    @wxheader{dataview.h}
+
+    wxDataViewDateRenderer
+
+    @library{wxadv}
+    @category{FIXME}
+*/
+class wxDataViewDateRenderer : public wxDataViewRenderer
+{
+public:
+    /**
+
+    */
+    wxDataViewDateRenderer(const wxString& varianttype = "datetime",
+                           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE);
+};
+
+
+
+/**
+    @class wxDataViewTextRendererAttr
+    @wxheader{dataview.h}
+
+    The same as wxDataViewTextRenderer but with
+    support for font attributes. Font attributes are currently only supported
+    under GTK+ and MSW.
+
+    See also wxDataViewModel::GetAttr and
+    wxDataViewItemAttr.
+
+    @library{wxadv}
+    @category{FIXME}
+*/
+class wxDataViewTextRendererAttr : public wxDataViewTextRenderer
+{
+public:
+    /**
+
+    */
+    wxDataViewTextRendererAttr(const wxString& varianttype = "string",
+                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                               int align = wxDVR_DEFAULT_ALIGNMENT);
+};
+
+
+/**
+    @class wxDataViewCustomRenderer
+    @wxheader{dataview.h}
+
+    You need to derive a new class from wxDataViewCustomRenderer in
+    order to write a new renderer. You need to override at least
+    wxDataViewRenderer::SetValue,
+    wxDataViewRenderer::GetValue,
+    wxDataViewCustomRenderer::GetSize
+    and wxDataViewCustomRenderer::Render.
+
+    If you want your renderer to support in-place editing then you
+    also need to override
+    wxDataViewCustomRenderer::HasEditorCtrl,
+    wxDataViewCustomRenderer::CreateEditorCtrl
+    and wxDataViewCustomRenderer::GetValueFromEditorCtrl.
+    Note that a special event handler will be pushed onto that
+    editor control which handles ENTER and focus out events
+    in order to end the editing.
+
+    @library{wxadv}
+    @category{FIXME}
+*/
+class wxDataViewCustomRenderer : public wxDataViewRenderer
+{
+public:
+    /**
+        Constructor.
+    */
+    wxDataViewCustomRenderer(const wxString& varianttype = "string",
+                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                             int align = wxDVR_DEFAULT_ALIGNMENT );
+
+    /**
+        Destructor.
+    */
+    ~wxDataViewCustomRenderer();
+
+    /**
+        Override this to react to double clicks or ENTER. This method will
+        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
+    */
+    virtual bool Activate( wxRect cell,
+                           wxDataViewModel* model,
+                           const wxDataViewItem & item,
+                           unsigned int col );
+
+    /**
+        Override this to create the actual editor control once editing
+        is about to start. @a parent is the parent of the editor
+        control, @a labelRect indicates the position and
+        size of the editor control and @a value is its initial value:
+    */
+    virtual wxControl* CreateEditorCtrl(wxWindow* parent,
+                                        wxRect labelRect,
+                                        const wxVariant& value);
+
+    /**
+        Create DC on request. Internal.
+    */
+    virtual wxDC* GetDC();
+
+    /**
+        Return size required to show content.
+    */
+    virtual wxSize GetSize();
+
+    /**
+        Overrride this so that the renderer can get the value
+        from the editor control (pointed to by @e editor):
+    */
+    virtual bool GetValueFromEditorCtrl(wxControl* editor,
+                                        wxVariant& value);
+
+    /**
+        Override this and make it return @e @true in order to
+        indicate that this renderer supports in-place editing.
+    */
+    virtual bool HasEditorCtrl();
+
+    /**
+        Overrride this to react to a left click. This method will
+        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
+    */
+    virtual bool LeftClick( wxPoint cursor,
+                            wxRect cell,
+                            wxDataViewModel * model,
+                            const wxDataViewItem & item,
+                            unsigned int col );
+
+    /**
+        Override this to render the cell. Before this is called,
+        wxDataViewRenderer::SetValue was called
+        so that this instance knows what to render.
+    */
+    virtual bool Render(wxRect cell, wxDC* dc, int state);
+
+    /**
+        This method should be called from within Render()
+        whenever you need to render simple text. This will ensure that the
+        correct colour, font and vertical alignment will be chosen so the
+        text will look the same as text drawn by native renderers.
+    */
+    bool RenderText(const wxString& text, int xoffset, wxRect cell,
+                    wxDC* dc, int state);
+
+    /**
+        Overrride this to start a drag operation. Not yet
+        supported
+    */
+    virtual bool StartDrag(wxPoint cursor, wxRect cell,
+                           wxDataViewModel* model,
+                           const wxDataViewItem & item,
+                           unsigned int col);
+};
+
+
+
+/**
+    @class wxDataViewBitmapRenderer
+    @wxheader{dataview.h}
+
+    wxDataViewBitmapRenderer
+
+    @library{wxadv}
+    @category{FIXME}
+*/
+class wxDataViewBitmapRenderer : public wxDataViewRenderer
+{
+public:
+    /**
+
+    */
+    wxDataViewBitmapRenderer(const wxString& varianttype = "wxBitmap",
+                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                             int align = wxDVR_DEFAULT_ALIGNMENT,
+};
+
+
+
+
+/**
+    @class wxDataViewColumn
+    @wxheader{dataview.h}
+
+    This class represents a column in a wxDataViewCtrl.
+    One wxDataViewColumn is bound to one column in the data model,
+    to which the wxDataViewCtrl has been associated.
+
+    An instance of wxDataViewRenderer is used by
+    this class to render its data.
+
+    @library{wxadv}
+    @category{FIXME}
+*/
+class wxDataViewColumn : public wxObject
+{
+public:
+    //@{
+    /**
+        Constructors.
+    */
+    wxDataViewColumn(const wxString& title,
+                     wxDataViewRenderer* renderer,
+                     unsigned int model_column,
+                     int width = wxDVC_DEFAULT_WIDTH,
+                     wxAlignment align = wxALIGN_CENTRE,
+                     int flags = wxDATAVIEW_COL_RESIZABLE);
+    wxDataViewColumn(const wxBitmap& bitmap,
+                     wxDataViewRenderer* renderer,
+                     unsigned int model_column,
+                     int width = wxDVC_DEFAULT_WIDTH,
+                     wxAlignment align = wxALIGN_CENTRE,
+                     int flags = wxDATAVIEW_COL_RESIZABLE);
+    //@}
+
+    /**
+        Destructor.
+    */
+    ~wxDataViewColumn();
+
+    /**
+        Returns the bitmap in the header of the column, if any.
+    */
+    const wxBitmap GetBitmap();
+
+    /**
+        Returns the index of the column of the model, which this
+        wxDataViewColumn is displaying.
+    */
+    unsigned int GetModelColumn();
+
+    /**
+        Returns the owning wxDataViewCtrl.
+    */
+    wxDataViewCtrl* GetOwner();
+
+    /**
+        Returns the renderer of this wxDataViewColumn.
+        See also wxDataViewRenderer.
+    */
+    wxDataViewRenderer* GetRenderer();
+
+    /**
+        Returns @true if the column is reorderable.
+    */
+    bool GetReorderable();
+
+    /**
+        Returns @true if the column is sortable.
+        See SetSortable()
+    */
+    bool GetSortable();
+
+    /**
+        Returns the width of the column.
+    */
+    int GetWidth();
+
+    /**
+        Returns @true, if the sort order is ascending.
+        See also SetSortOrder()
+    */
+    bool IsSortOrderAscending();
+
+    /**
+        Set the alignment of the column header.
+    */
+    void SetAlignment(wxAlignment align);
+
+    /**
+        Set the bitmap of the column header.
+    */
+    void SetBitmap(const wxBitmap& bitmap);
+
+    /**
+        Indicate wether the column can be reordered by the
+        user using the mouse. This is typically implemented
+        visually by dragging the header button around.
+    */
+    void SetReorderable(bool reorderable);
+
+    /**
+        Indicate the sort order if the implementation of the
+        wxDataViewCtrl supports it, most commonly by showing
+        a little arrow.
+    */
+    void SetSortOrder(bool ascending);
+
+    /**
+        Indicate that the column is sortable. This does
+        not show any sorting indicate yet, but it does
+        make the column header clickable. Call
+        SetSortOrder()
+        afterwards to actually make the sort indicator appear.
+        If @a sortable is @false, the column header is
+        no longer clickable and the sort indicator (little
+        arrow) will disappear.
+    */
+    void SetSortable(bool sortable);
+
+    /**
+        Set the title of the column header to @e title.
+    */
+    void SetTitle(const wxString& title);
 };
 
 
@@ -1622,316 +1942,4 @@ public:
 };
 
 
-
-/**
-    @class wxDataViewDateRenderer
-    @wxheader{dataview.h}
-
-    wxDataViewDateRenderer
-
-    @library{wxadv}
-    @category{FIXME}
-*/
-class wxDataViewDateRenderer : public wxDataViewRenderer
-{
-public:
-    /**
-
-    */
-    wxDataViewDateRenderer(const wxString& varianttype = "datetime",
-                           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE);
-};
-
-
-
-/**
-    @class wxDataViewTextRendererAttr
-    @wxheader{dataview.h}
-
-    The same as wxDataViewTextRenderer but with
-    support for font attributes. Font attributes are currently only supported
-    under GTK+ and MSW.
-
-    See also wxDataViewModel::GetAttr and
-    wxDataViewItemAttr.
-
-    @library{wxadv}
-    @category{FIXME}
-*/
-class wxDataViewTextRendererAttr : public wxDataViewTextRenderer
-{
-public:
-    /**
-
-    */
-    wxDataViewTextRendererAttr(const wxString& varianttype = "string",
-                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                               int align = wxDVR_DEFAULT_ALIGNMENT);
-};
-
-
-/**
-    @class wxDataViewCustomRenderer
-    @wxheader{dataview.h}
-
-    You need to derive a new class from wxDataViewCustomRenderer in
-    order to write a new renderer. You need to override at least
-    wxDataViewRenderer::SetValue,
-    wxDataViewRenderer::GetValue,
-    wxDataViewCustomRenderer::GetSize
-    and wxDataViewCustomRenderer::Render.
-
-    If you want your renderer to support in-place editing then you
-    also need to override
-    wxDataViewCustomRenderer::HasEditorCtrl,
-    wxDataViewCustomRenderer::CreateEditorCtrl
-    and wxDataViewCustomRenderer::GetValueFromEditorCtrl.
-    Note that a special event handler will be pushed onto that
-    editor control which handles ENTER and focus out events
-    in order to end the editing.
-
-    @library{wxadv}
-    @category{FIXME}
-*/
-class wxDataViewCustomRenderer : public wxDataViewRenderer
-{
-public:
-    /**
-        Constructor.
-    */
-    wxDataViewCustomRenderer(const wxString& varianttype = "string",
-                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                             int align = wxDVR_DEFAULT_ALIGNMENT );
-
-    /**
-        Destructor.
-    */
-    ~wxDataViewCustomRenderer();
-
-    /**
-        Override this to react to double clicks or ENTER. This method will
-        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
-    */
-    virtual bool Activate( wxRect cell,
-                           wxDataViewModel* model,
-                           const wxDataViewItem & item,
-                           unsigned int col );
-
-    /**
-        Override this to create the actual editor control once editing
-        is about to start. @a parent is the parent of the editor
-        control, @a labelRect indicates the position and
-        size of the editor control and @a value is its initial value:
-    */
-    virtual wxControl* CreateEditorCtrl(wxWindow* parent,
-                                        wxRect labelRect,
-                                        const wxVariant& value);
-
-    /**
-        Create DC on request. Internal.
-    */
-    virtual wxDC* GetDC();
-
-    /**
-        Return size required to show content.
-    */
-    virtual wxSize GetSize();
-
-    /**
-        Overrride this so that the renderer can get the value
-        from the editor control (pointed to by @e editor):
-    */
-    virtual bool GetValueFromEditorCtrl(wxControl* editor,
-                                        wxVariant& value);
-
-    /**
-        Override this and make it return @e @true in order to
-        indicate that this renderer supports in-place editing.
-    */
-    virtual bool HasEditorCtrl();
-
-    /**
-        Overrride this to react to a left click. This method will
-        only be called in wxDATAVIEW_CELL_ACTIVATABLE mode.
-    */
-    virtual bool LeftClick( wxPoint cursor,
-                            wxRect cell,
-                            wxDataViewModel * model,
-                            const wxDataViewItem & item,
-                            unsigned int col );
-
-    /**
-        Override this to render the cell. Before this is called,
-        wxDataViewRenderer::SetValue was called
-        so that this instance knows what to render.
-    */
-    virtual bool Render(wxRect cell, wxDC* dc, int state);
-
-    /**
-        This method should be called from within Render()
-        whenever you need to render simple text. This will ensure that the
-        correct colour, font and vertical alignment will be chosen so the
-        text will look the same as text drawn by native renderers.
-    */
-    bool RenderText(const wxString& text, int xoffset, wxRect cell,
-                    wxDC* dc, int state);
-
-    /**
-        Overrride this to start a drag operation. Not yet
-        supported
-    */
-    virtual bool StartDrag(wxPoint cursor, wxRect cell,
-                           wxDataViewModel* model,
-                           const wxDataViewItem & item,
-                           unsigned int col);
-};
-
-
-
-/**
-    @class wxDataViewBitmapRenderer
-    @wxheader{dataview.h}
-
-    wxDataViewBitmapRenderer
-
-    @library{wxadv}
-    @category{FIXME}
-*/
-class wxDataViewBitmapRenderer : public wxDataViewRenderer
-{
-public:
-    /**
-
-    */
-    wxDataViewBitmapRenderer(const wxString& varianttype = "wxBitmap",
-                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                             int align = wxDVR_DEFAULT_ALIGNMENT,
-};
-
-
-/**
-    @class wxDataViewColumn
-    @wxheader{dataview.h}
-
-    This class represents a column in a wxDataViewCtrl.
-    One wxDataViewColumn is bound to one column in the data model,
-    to which the wxDataViewCtrl has been associated.
-
-    An instance of wxDataViewRenderer is used by
-    this class to render its data.
-
-    @library{wxadv}
-    @category{FIXME}
-*/
-class wxDataViewColumn : public wxObject
-{
-public:
-    //@{
-    /**
-        Constructors.
-    */
-    wxDataViewColumn(const wxString& title,
-                     wxDataViewRenderer* renderer,
-                     unsigned int model_column,
-                     int width = wxDVC_DEFAULT_WIDTH,
-                     wxAlignment align = wxALIGN_CENTRE,
-                     int flags = wxDATAVIEW_COL_RESIZABLE);
-    wxDataViewColumn(const wxBitmap& bitmap,
-                     wxDataViewRenderer* renderer,
-                     unsigned int model_column,
-                     int width = wxDVC_DEFAULT_WIDTH,
-                     wxAlignment align = wxALIGN_CENTRE,
-                     int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
-
-    /**
-        Destructor.
-    */
-    ~wxDataViewColumn();
-
-    /**
-        Returns the bitmap in the header of the column, if any.
-    */
-    const wxBitmap GetBitmap();
-
-    /**
-        Returns the index of the column of the model, which this
-        wxDataViewColumn is displaying.
-    */
-    unsigned int GetModelColumn();
-
-    /**
-        Returns the owning wxDataViewCtrl.
-    */
-    wxDataViewCtrl* GetOwner();
-
-    /**
-        Returns the renderer of this wxDataViewColumn.
-        See also wxDataViewRenderer.
-    */
-    wxDataViewRenderer* GetRenderer();
-
-    /**
-        Returns @true if the column is reorderable.
-    */
-    bool GetReorderable();
-
-    /**
-        Returns @true if the column is sortable.
-        See SetSortable()
-    */
-    bool GetSortable();
-
-    /**
-        Returns the width of the column.
-    */
-    int GetWidth();
-
-    /**
-        Returns @true, if the sort order is ascending.
-        See also SetSortOrder()
-    */
-    bool IsSortOrderAscending();
-
-    /**
-        Set the alignment of the column header.
-    */
-    void SetAlignment(wxAlignment align);
-
-    /**
-        Set the bitmap of the column header.
-    */
-    void SetBitmap(const wxBitmap& bitmap);
-
-    /**
-        Indicate wether the column can be reordered by the
-        user using the mouse. This is typically implemented
-        visually by dragging the header button around.
-    */
-    void SetReorderable(bool reorderable);
-
-    /**
-        Indicate the sort order if the implementation of the
-        wxDataViewCtrl supports it, most commonly by showing
-        a little arrow.
-    */
-    void SetSortOrder(bool ascending);
-
-    /**
-        Indicate that the column is sortable. This does
-        not show any sorting indicate yet, but it does
-        make the column header clickable. Call
-        SetSortOrder()
-        afterwards to actually make the sort indicator appear.
-        If @a sortable is @false, the column header is
-        no longer clickable and the sort indicator (little
-        arrow) will disappear.
-    */
-    void SetSortable(bool sortable);
-
-    /**
-        Set the title of the column header to @e title.
-    */
-    void SetTitle(const wxString& title);
-};
 
