@@ -300,7 +300,7 @@ private:
 
 #ifdef __WXMAC__
 // better than nothing
-typedef wxDataViewVirtualListModel wxDataViewIndexListModel
+typedef wxDataViewIndexListModel wxDataViewVirtualListModel;
 #else
 
 class WXDLLIMPEXP_ADV wxDataViewVirtualListModel: public wxDataViewModel
