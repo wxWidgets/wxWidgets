@@ -7331,7 +7331,7 @@ if test "$wxUSE_TREECTRL" = "yes"; then
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 -o "$wxUSE_PM" = 1 \
+    if test "$wxUSE_COCOA" = 1 -o "$wxUSE_PM" = 1 \
             -o "$wxUSE_DFB" = 1; then
         AC_MSG_WARN([Popup window not yet supported on this platform... disabled])
     else
