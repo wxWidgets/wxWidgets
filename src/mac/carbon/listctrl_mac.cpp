@@ -1995,7 +1995,7 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
         m_dbImpl->GetItemID( (DataBrowserTableViewRowIndex) row, &id );
 
         // TODO: Use GetDataBrowserItemPartBounds to return if we are in icon or label
-        if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL ) )
+        if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL ) && row < GetItemCount() )
         {
             wxMacListCtrlItem* lcItem;
             lcItem = (wxMacListCtrlItem*) id;
