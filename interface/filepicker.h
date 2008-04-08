@@ -42,7 +42,7 @@
     @endStyleTable
 
     @library{wxcore}
-    @category{miscpickers}
+    @category{pickers}
     @appearance{filepickerctrl.png}
 
     @see wxFileDialog, wxFileDirPickerEvent
@@ -160,7 +160,7 @@ public:
     @endStyleTable
 
     @library{wxcore}
-    @category{miscpickers}
+    @category{pickers}
     @appearance{dirpickerctrl.png}
 
     @see wxDirDialog, wxFileDirPickerEvent

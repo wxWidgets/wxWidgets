@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        clntdata.h
-// Purpose:     interface of wxClientDataContainer
+// Purpose:     interface of wxClientData[Container] and wxStringClientData
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -12,17 +12,16 @@
 
     This class is a mixin that provides storage and management of "client
     data." This data can either be of type void - in which case the data
-    @e container does not take care of freeing the data again
-    or it is of type wxClientData or its derivatives. In that case the
-    container will free the memory itself later.
-    Note that you @e must not assign both void data and data
-    derived from the wxClientData class to a container.
+    @e container does not take care of freeing the data again or it is of
+    type wxClientData or its derivatives. In that case the container will free
+    the memory itself later. Note that you @e must not assign both void data
+    and data derived from the wxClientData class to a container.
 
-    NOTE: This functionality is currently duplicated in wxEvtHandler in
-    order to avoid having more than one vtable in that class hierarchy.
+    @note This functionality is currently duplicated in wxEvtHandler in order
+          to avoid having more than one vtable in that class hierarchy.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{containers}
 
     @see wxEvtHandler, wxClientData
 */
@@ -30,12 +29,12 @@ class wxClientDataContainer
 {
 public:
     /**
-
+        Default constructor.
     */
     wxClientDataContainer();
 
     /**
-
+        Destructor.
     */
     ~wxClientDataContainer();
 
@@ -66,33 +65,30 @@ public:
     @class wxClientData
     @wxheader{clntdata.h}
 
-    All classes deriving from wxEvtHandler
-    (such as all controls and wxApp)
-    can hold arbitrary data which is here referred to as "client data".
-    This is useful e.g. for scripting languages which need to handle
-    shadow objects for most of wxWidgets' classes and which store
-    a handle to such a shadow class as client data in that class.
-    This data can either be of type void - in which case the data
-    @e container does not take care of freeing the data again
-    or it is of type wxClientData or its derivatives. In that case the
-    container (e.g. a control) will free the memory itself later.
-    Note that you @e must not assign both void data and data
-    derived from the wxClientData class to a container.
+    All classes deriving from wxEvtHandler (such as all controls and wxApp) can
+    hold arbitrary data which is here referred to as "client data". This is
+    useful e.g. for scripting languages which need to handle shadow objects for
+    most of wxWidgets' classes and which store a handle to such a shadow class
+    as client data in that class. This data can either be of type void - in
+    which case the data @e container does not take care of freeing the data
+    again or it is of type wxClientData or its derivatives. In that case the
+    container (e.g. a control) will free the memory itself later. Note that you
+    @e must not assign both void data and data derived from the wxClientData
+    class to a container.
 
-    Some controls can hold various items and these controls can
-    additionally hold client data for each item. This is the case for
-    wxChoice, wxComboBox
-    and wxListBox. wxTreeCtrl
-    has a specialized class wxTreeItemData
-    for each item in the tree.
+    Some controls can hold various items and these controls can additionally
+    hold client data for each item. This is the case for wxChoice, wxComboBox
+    and wxListBox. wxTreeCtrl has a specialized class wxTreeItemData for each
+    item in the tree.
 
-    If you want to add client data to your own classes, you may
-    use the mix-in class wxClientDataContainer.
+    If you want to add client data to your own classes, you may use the mix-in
+    class wxClientDataContainer.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{containers}
 
-    @see wxEvtHandler, wxTreeItemData, wxStringClientData, wxClientDataContainer
+    @see wxEvtHandler, wxTreeItemData, wxStringClientData,
+         wxClientDataContainer
 */
 class wxClientData
 {
@@ -117,18 +113,20 @@ public:
     Predefined client data class for holding a string.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{containers}
 */
 class wxStringClientData : public wxClientData
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxStringClientData();
+
     /**
         Create client data with string.
     */
-    wxStringClientData();
     wxStringClientData(const wxString& data);
-    //@}
 
     /**
         Get string client data.

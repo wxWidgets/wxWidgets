@@ -48,7 +48,7 @@
     @endEventTable
 
     @library{wxadv}
-    @category{miscpickers}
+    @category{pickers}
     @appearance{datepickerctrl.png}
 
     @see wxCalendarCtrl, wxDateEvent

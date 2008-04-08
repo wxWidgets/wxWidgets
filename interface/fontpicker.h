@@ -37,7 +37,7 @@
     @endStyleTable
 
     @library{wxcore}
-    @category{miscpickers}
+    @category{pickers}
     @appearance{fontpickerctrl.png}
 
     @see wxFontDialog, wxFontPickerEvent

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        cmndata.h
-// Purpose:     interface of wxFontData
+// Purpose:     interface of common wx*Data classes (font, colour, print)
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -10,86 +10,92 @@
     @class wxFontData
     @wxheader{cmndata.h}
 
-    @ref overview_wxfontdialogoverview "wxFontDialog overview"
-
     This class holds a variety of information related to font dialogs.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{cmndlg}
 
-    @see Overview(), wxFont, wxFontDialog
+    @see @ref overview_cmndlg_font, wxFont, wxFontDialog
 */
 class wxFontData : public wxObject
 {
 public:
     /**
-        Constructor. Initializes @e fontColour to black, @e showHelp to black,
-        @e allowSymbols to @true, @e enableEffects to @true,
-        @e minSize to 0 and @e maxSize to 0.
+        Constructor. Initializes @e fontColour to black, @e showHelp to @false,
+        @e allowSymbols to @true, @e enableEffects to @true, @e minSize to 0
+        and @e maxSize to 0.
     */
     wxFontData();
 
     /**
-        Enables or disables 'effects' under MS Windows or generic only. This refers to
-        the
-        controls for manipulating colour, strikeout and underline properties.
+        Enables or disables "effects" under Windows or generic only. This
+        refers to the controls for manipulating colour, strikeout and underline
+        properties.
+
         The default value is @true.
     */
     void EnableEffects(bool enable);
 
     /**
-        Under MS Windows, returns a flag determining whether symbol fonts can be
-        selected. Has no
-        effect on other platforms.
+        Under Windows, returns a flag determining whether symbol fonts can be
+        selected. Has no effect on other platforms.
+
         The default value is @true.
     */
     bool GetAllowSymbols();
 
     /**
         Gets the font chosen by the user if the user pressed OK
-        (wxFontDialog::ShowModal returned wxID_OK).
+        (wxFontDialog::ShowModal() returned wxID_OK).
     */
     wxFont GetChosenFont();
 
     /**
         Gets the colour associated with the font dialog.
+
         The default value is black.
     */
-    wxColour GetColour();
+    wxColour& GetColour();
 
     /**
-        Determines whether 'effects' are enabled under Windows. This refers to the
-        controls for manipulating colour, strikeout and underline properties.
+        Determines whether "effects" are enabled under Windows. This refers to
+        the controls for manipulating colour, strikeout and underline
+        properties.
+
         The default value is @true.
     */
     bool GetEnableEffects();
 
     /**
-        Gets the font that will be initially used by the font dialog. This should have
-        previously been set by the application.
+        Gets the font that will be initially used by the font dialog. This
+        should have previously been set by the application.
     */
     wxFont GetInitialFont();
 
     /**
         Returns @true if the Help button will be shown (Windows only).
+
         The default value is @false.
     */
     bool GetShowHelp();
 
     /**
-        Under MS Windows, determines whether symbol fonts can be selected. Has no
+        Under Windows, determines whether symbol fonts can be selected. Has no
         effect on other platforms.
+
         The default value is @true.
     */
     void SetAllowSymbols(bool allowSymbols);
 
     /**
-        Sets the font that will be returned to the user (for internal use only).
+        Sets the font that will be returned to the user (for internal use
+        only).
     */
     void SetChosenFont(const wxFont& font);
 
     /**
         Sets the colour that will be used for the font foreground colour.
+
         The default colour is black.
     */
     void SetColour(const wxColour& colour);
@@ -101,6 +107,7 @@ public:
 
     /**
         Sets the valid range for the font point size (Windows only).
+
         The default is 0, 0 (unrestricted range).
     */
     void SetRange(int min, int max);
@@ -108,6 +115,7 @@ public:
     /**
         Determines whether the Help button will be displayed in the font dialog
         (Windows only).
+
         The default value is @false.
     */
     void SetShowHelp(bool showHelp);
@@ -127,26 +135,31 @@ public:
     This class holds a variety of information related to wxPageSetupDialog.
 
     It contains a wxPrintData member which is used to hold basic printer
-    configuration data (as opposed to the
-    user-interface configuration settings stored by wxPageSetupDialogData).
+    configuration data (as opposed to the user-interface configuration settings
+    stored by wxPageSetupDialogData).
 
     @library{wxcore}
     @category{printing}
 
-    @see @ref overview_printingoverview "Printing framework overview",
-    wxPageSetupDialog
+    @see @ref overview_printing, wxPageSetupDialog
 */
 class wxPageSetupDialogData : public wxObject
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxPageSetupDialogData();
+
+    /**
+        Copy constructor.
+    */
+    wxPageSetupDialogData(wxPageSetupDialogData& data);
+
     /**
         Construct an object from a print data object.
     */
-    wxPageSetupDialogData();
-    wxPageSetupDialogData(wxPageSetupDialogData& data);
     wxPageSetupDialogData(wxPrintData& printData);
-    //@}
 
     /**
         Destructor.
@@ -154,7 +167,7 @@ public:
     ~wxPageSetupDialogData();
 
     /**
-        Enables or disables the 'Help' button (Windows only).
+        Enables or disables the "Help" button (Windows only).
     */
     void EnableHelp(bool flag);
 
@@ -174,21 +187,21 @@ public:
     void EnablePaper(bool flag);
 
     /**
-        Enables or disables the @b Printer button, which invokes a printer setup dialog.
+        Enables or disables the "Printer" button, which invokes a printer setup
+        dialog.
     */
     void EnablePrinter(bool flag);
 
     /**
-        Returns @true if the dialog will simply return default printer information (such
-        as orientation)
-        instead of showing a dialog. Windows only.
+        Returns @true if the dialog will simply return default printer
+        information (such as orientation) instead of showing a dialog (Windows
+        only).
     */
     bool GetDefaultInfo() const;
 
     /**
-        Returns @true if the page setup dialog will take its minimum margin values from
-        the currently
-        selected printer properties. Windows only.
+        Returns @true if the page setup dialog will take its minimum margin
+        values from the currently selected printer properties (Windows only).
     */
     bool GetDefaultMinMargins() const;
 
@@ -229,21 +242,20 @@ public:
 
     /**
         Returns the right (x) and bottom (y) minimum margins the user can enter
-        (Windows only). Units
-        are in millimetres
+        (Windows only). Units are in millimetres.
     */
     wxPoint GetMinMarginBottomRight() const;
 
     /**
-        Returns the left (x) and top (y) minimum margins the user can enter (Windows
-        only). Units
-        are in millimetres
+        Returns the left (x) and top (y) minimum margins the user can enter
+        (Windows only). Units are in millimetres.
     */
     wxPoint GetMinMarginTopLeft() const;
 
     /**
         Returns the paper id (stored in the internal wxPrintData object).
-        For further information, see wxPrintData::SetPaperId.
+
+        @see wxPrintData::SetPaperId()
     */
     wxPaperSize GetPaperId() const;
 
@@ -253,29 +265,27 @@ public:
     wxSize GetPaperSize() const;
 
     /**
-        Returns a reference to the @ref overview_wxprintdata "print data" associated
-        with this object.
+        Returns a reference to the print data associated with this object.
     */
     wxPrintData GetPrintData();
 
     /**
-        Returns @true if the print data associated with the dialog data is valid.
-        This can return @false on Windows if the current printer is not set, for example.
-        On all other platforms, it returns @true.
+        Returns @true if the print data associated with the dialog data is
+        valid. This can return @false on Windows if the current printer is not
+        set, for example. On all other platforms, it returns @true.
     */
     bool IsOk() const;
 
     /**
-        Pass @true if the dialog will simply return default printer information (such as
-        orientation)
-        instead of showing a dialog. Windows only.
+        Pass @true if the dialog will simply return default printer information
+        (such as orientation) instead of showing a dialog (Windows only).
     */
     void SetDefaultInfo(bool flag);
 
     /**
-        Pass @true if the page setup dialog will take its minimum margin values from the
-        currently
-        selected printer properties. Windows only. Units are in millimetres
+        Pass @true if the page setup dialog will take its minimum margin values
+        from the currently selected printer properties (Windows only). Units
+        are in millimetres.
     */
     void SetDefaultMinMargins(bool flag);
 
@@ -290,45 +300,46 @@ public:
     void SetMarginTopLeft(const wxPoint& pt);
 
     /**
-        Sets the right (x) and bottom (y) minimum margins the user can enter (Windows
-        only). Units are
-        in millimetres.
+        Sets the right (x) and bottom (y) minimum margins the user can enter
+        (Windows only). Units are in millimetres.
     */
     void SetMinMarginBottomRight(const wxPoint& pt);
 
     /**
-        Sets the left (x) and top (y) minimum margins the user can enter (Windows
-        only). Units are
-        in millimetres.
+        Sets the left (x) and top (y) minimum margins the user can enter
+        (Windows only). Units are in millimetres.
     */
     void SetMinMarginTopLeft(const wxPoint& pt);
 
     /**
-        Sets the paper size id. For further information, see wxPrintData::SetPaperId.
-        Calling this function overrides the explicit paper dimensions passed in
-        SetPaperSize().
+        Sets the paper size id. Calling this function overrides the explicit
+        paper dimensions passed in SetPaperSize().
+
+        @see wxPrintData::SetPaperId()
     */
     void SetPaperId(wxPaperSize& id);
 
     /**
-        Sets the paper size in millimetres. If a corresponding paper id is found, it
-        will be set in the
-        internal wxPrintData object, otherwise the paper size overrides the paper id.
+        Sets the paper size in millimetres. If a corresponding paper id is
+        found, it will be set in the internal wxPrintData object, otherwise the
+        paper size overrides the paper id.
     */
     void SetPaperSize(const wxSize& size);
 
     /**
-        Sets the @ref overview_wxprintdata "print data" associated with this object.
+        Sets the print data associated with this object.
     */
     void SetPrintData(const wxPrintData& printData);
 
-    //@{
+    /**
+        Assigns print data to this object.
+    */
+    void operator =(const wxPrintData& data);
+
     /**
         Assigns page setup data to this object.
     */
-    void operator =(const wxPrintData& data);
     void operator =(const wxPageSetupDialogData& data);
-    //@}
 };
 
 
@@ -340,18 +351,17 @@ public:
     This class holds a variety of information related to colour dialogs.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{cmndlg}
 
-    @see wxColour, wxColourDialog, @ref overview_wxcolourdialogoverview
-    "wxColourDialog overview"
+    @see wxColour, wxColourDialog, @ref overview_cmndlg_colour
 */
 class wxColourData : public wxObject
 {
 public:
     /**
-        Constructor. Initializes the custom colours to @c wxNullColour,
-        the @e data colour setting
-        to black, and the @e choose full setting to @true.
+        Constructor. Initializes the custom colours to @c wxNullColour, the
+        @e data colour setting to black, and the @e choose full setting to
+        @true.
     */
     wxColourData();
 
@@ -361,46 +371,55 @@ public:
     ~wxColourData();
 
     /**
-        Under Windows, determines whether the Windows colour dialog will display the
-        full dialog
-        with custom colour selection controls. Under PalmOS, determines whether colour
-        dialog
-        will display full rgb colour picker or only available palette indexer.
-        Has no meaning under other platforms.
+        Under Windows, determines whether the Windows colour dialog will
+        display the full dialog with custom colour selection controls. Under
+        PalmOS, determines whether colour dialog will display full rgb colour
+        picker or only available palette indexer. Has no meaning under other
+        platforms.
+
         The default value is @true.
     */
     bool GetChooseFull() const;
 
     /**
         Gets the current colour associated with the colour dialog.
+
         The default colour is black.
     */
-    wxColour GetColour() const;
+    wxColour& GetColour() const;
 
     /**
-        Gets the @e ith custom colour associated with the colour dialog. @a i should
-        be an integer between 0 and 15.
-        The default custom colours are invalid colours.
+        Returns custom colours associated with the colour dialog.
+
+        @param i
+            An integer between 0 and 15, being any of the 15 custom colours
+            that the user has saved. The default custom colours are invalid
+            colours.
     */
-    wxColour GetCustomColour(int i) const;
+    wxColour& GetCustomColour(int i) const;
 
     /**
-        Under Windows, tells the Windows colour dialog to display the full dialog
-        with custom colour selection controls. Under other platforms, has no effect.
+        Under Windows, tells the Windows colour dialog to display the full
+        dialog with custom colour selection controls. Under other platforms,
+        has no effect.
+
         The default value is @true.
     */
     void SetChooseFull(const bool flag);
 
     /**
         Sets the default colour for the colour dialog.
+
         The default colour is black.
     */
     void SetColour(const wxColour& colour);
 
     /**
-        Sets the @e ith custom colour for the colour dialog. @a i should
-        be an integer between 0 and 15.
-        The default custom colours are invalid colours.
+        Sets custom colours for the colour dialog.
+
+        @param i
+            An integer between 0 and 15 for whatever custom colour you want to
+            set. The default custom colours are invalid colours.
     */
     void SetCustomColour(int i, const wxColour& colour);
 
@@ -413,31 +432,92 @@ public:
 
 
 /**
+    Enumeration of various printer bin sources.
+
+    @see wxPrintData::SetBin()
+*/
+enum wxPrintBin
+{
+    wxPRINTBIN_DEFAULT,
+
+    wxPRINTBIN_ONLYONE,
+    wxPRINTBIN_LOWER,
+    wxPRINTBIN_MIDDLE,
+    wxPRINTBIN_MANUAL,
+    wxPRINTBIN_ENVELOPE,
+    wxPRINTBIN_ENVMANUAL,
+    wxPRINTBIN_AUTO,
+    wxPRINTBIN_TRACTOR,
+    wxPRINTBIN_SMALLFMT,
+    wxPRINTBIN_LARGEFMT,
+    wxPRINTBIN_LARGECAPACITY,
+    wxPRINTBIN_CASSETTE,
+    wxPRINTBIN_FORMSOURCE,
+
+    wxPRINTBIN_USER,
+};
+
+/**
     @class wxPrintData
     @wxheader{cmndata.h}
 
-    This class holds a variety of information related to printers and
-    printer device contexts. This class is used to create a wxPrinterDC
-    and a wxPostScriptDC. It is also used as a data member of wxPrintDialogData
-    and wxPageSetupDialogData, as part of the mechanism for transferring data
+    This class holds a variety of information related to printers and printer
+    device contexts. This class is used to create a wxPrinterDC and a
+    wxPostScriptDC. It is also used as a data member of wxPrintDialogData and
+    wxPageSetupDialogData, as part of the mechanism for transferring data
     between the print dialogs and the application.
+
+    @remarks
+    
+    The following functions are specific to PostScript printing and have not
+    yet been documented:
+
+    @code
+    const wxString& GetPrinterCommand() const ;
+    const wxString& GetPrinterOptions() const ;
+    const wxString& GetPreviewCommand() const ;
+    const wxString& GetFilename() const ;
+    const wxString& GetFontMetricPath() const ;
+    double GetPrinterScaleX() const ;
+    double GetPrinterScaleY() const ;
+    long GetPrinterTranslateX() const ;
+    long GetPrinterTranslateY() const ;
+    // wxPRINT_MODE_PREVIEW, wxPRINT_MODE_FILE, wxPRINT_MODE_PRINTER
+    wxPrintMode GetPrintMode() const ;
+
+    void SetPrinterCommand(const wxString& command) ;
+    void SetPrinterOptions(const wxString& options) ;
+    void SetPreviewCommand(const wxString& command) ;
+    void SetFilename(const wxString& filename) ;
+    void SetFontMetricPath(const wxString& path) ;
+    void SetPrinterScaleX(double x) ;
+    void SetPrinterScaleY(double y) ;
+    void SetPrinterScaling(double x, double y) ;
+    void SetPrinterTranslateX(long x) ;
+    void SetPrinterTranslateY(long y) ;
+    void SetPrinterTranslation(long x, long y) ;
+    void SetPrintMode(wxPrintMode printMode) ;
+    @endcode
 
     @library{wxcore}
     @category{printing}
 
-    @see @ref overview_printingoverview "Printing framework overview",
-    wxPrintDialog, wxPageSetupDialog, wxPrintDialogData, wxPageSetupDialogData, @ref overview_wxprintdialogoverview "wxPrintDialog Overview", wxPrinterDC, wxPostScriptDC
+    @see @ref overview_printing, wxPrintDialog, wxPageSetupDialog,
+         wxPrintDialogData, wxPageSetupDialogData, @ref overview_cmndlg_print,
+         wxPrinterDC, wxPostScriptDC
 */
 class wxPrintData : public wxObject
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxPrintData();
+
     /**
         Copy constructor.
     */
-    wxPrintData();
     wxPrintData(const wxPrintData& data);
-    //@}
 
     /**
         Destructor.
@@ -445,8 +525,9 @@ public:
     ~wxPrintData();
 
     /**
-        Returns the current bin (papersource). By default, the system is left to select
-        the bin (@c wxPRINTBIN_DEFAULT is returned).
+        Returns the current bin (papersource). By default, the system is left
+        to select the bin (@c wxPRINTBIN_DEFAULT is returned).
+
         See SetBin() for the full list of bin values.
     */
     wxPrintBin GetBin() const;
@@ -478,37 +559,43 @@ public:
     int GetOrientation() const;
 
     /**
-        Returns the paper size id. For more information, see SetPaperId().
+        Returns the paper size id.
+
+        @see SetPaperId()
     */
     wxPaperSize GetPaperId() const;
 
     /**
-        Returns the printer name. If the printer name is the empty string, it indicates
-        that the default
-        printer should be used.
+        Returns the printer name. If the printer name is the empty string, it
+        indicates that the default printer should be used.
     */
     const wxString GetPrinterName() const;
 
     /**
-        Returns the current print quality. This can be a positive integer, denoting the
-        number of dots per inch, or
-        one of the following identifiers:
+        Returns the current print quality. This can be a positive integer,
+        denoting the number of dots per inch, or  one of the following
+        identifiers:
 
-        On input you should pass one of these identifiers, but on return you may get
-        back a positive integer
-        indicating the current resolution setting.
+        - wxPRINT_QUALITY_HIGH
+        - wxPRINT_QUALITY_MEDIUM
+        - wxPRINT_QUALITY_LOW
+        - wxPRINT_QUALITY_DRAFT
+
+        On input you should pass one of these identifiers, but on return you
+        may get back a positive integer indicating the current resolution
+        setting.
     */
     wxPrintQuality GetQuality() const;
 
     /**
         Returns @true if the print data is valid for using in print dialogs.
-        This can return @false on Windows if the current printer is not set, for example.
-        On all other platforms, it returns @true.
+        This can return @false on Windows if the current printer is not set,
+        for example. On all other platforms, it returns @true.
     */
     bool IsOk() const;
 
     /**
-        Sets the current bin. Possible values are:
+        Sets the current bin.
     */
     void SetBin(wxPrintBin flag);
 
@@ -539,39 +626,38 @@ public:
     void SetOrientation(int orientation);
 
     /**
-        Sets the paper id. This indicates the type of paper to be used. For a mapping
-        between
-        paper id, paper size and string name, see wxPrintPaperDatabase in @c paper.h
-        (not yet documented).
-        @a paperId can be one of:
+        Sets the paper id. This indicates the type of paper to be used. For a
+        mapping between paper id, paper size and string name, see
+        wxPrintPaperDatabase in @c "paper.h" (not yet documented).
     */
     void SetPaperId(wxPaperSize paperId);
 
     /**
-        Sets the printer name. This can be the empty string to indicate that the default
-        printer should be used.
+        Sets the printer name. This can be the empty string to indicate that
+        the default printer should be used.
     */
     void SetPrinterName(const wxString& printerName);
 
     /**
-        Sets the desired print quality. This can be a positive integer, denoting the
-        number of dots per inch, or
-        one of the following identifiers:
+        Sets the desired print quality. This can be a positive integer,
+        denoting the number of dots per inch, or one of the following
+        identifiers:
 
-        On input you should pass one of these identifiers, but on return you may get
-        back a positive integer
-        indicating the current resolution setting.
+        - wxPRINT_QUALITY_HIGH
+        - wxPRINT_QUALITY_MEDIUM
+        - wxPRINT_QUALITY_LOW
+        - wxPRINT_QUALITY_DRAFT
+
+        On input you should pass one of these identifiers, but on return you
+        may get back a positive integer indicating the current resolution
+        setting.
     */
     void SetQuality(wxPrintQuality quality);
 
-    //@{
     /**
-        Assigns print setup data to this object. wxPrintSetupData is deprecated,
-        but retained for backward compatibility.
+        Assigns print data to this object.
     */
     void operator =(const wxPrintData& data);
-    void operator =(const wxPrintSetupData& data);
-    //@}
 };
 
 
@@ -581,26 +667,31 @@ public:
     @wxheader{cmndata.h}
 
     This class holds information related to the visual characteristics of
-    wxPrintDialog.
-    It contains a wxPrintData object with underlying printing settings.
+    wxPrintDialog. It contains a wxPrintData object with underlying printing
+    settings.
 
     @library{wxcore}
     @category{printing}
 
-    @see @ref overview_printingoverview "Printing framework overview",
-    wxPrintDialog, @ref overview_wxprintdialogoverview "wxPrintDialog Overview"
+    @see @ref overview_printing, wxPrintDialog, @ref overview_cmndlg_print
 */
 class wxPrintDialogData : public wxObject
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxPrintDialogData();
+
+    /**
+        Copy constructor.
+    */
+    wxPrintDialogData(wxPrintDialogData& dialogData);
+
     /**
         Construct an object from a print dialog data object.
     */
-    wxPrintDialogData();
-    wxPrintDialogData(wxPrintDialogData& dialogData);
     wxPrintDialogData(wxPrintData& printData);
-    //@}
 
     /**
         Destructor.
@@ -608,22 +699,22 @@ public:
     ~wxPrintDialogData();
 
     /**
-        Enables or disables the 'Help' button.
+        Enables or disables the "Help" button.
     */
     void EnableHelp(bool flag);
 
     /**
-        Enables or disables the 'Page numbers' controls.
+        Enables or disables the "Page numbers" controls.
     */
     void EnablePageNumbers(bool flag);
 
     /**
-        Enables or disables the 'Print to file' checkbox.
+        Enables or disables the "Print to file" checkbox.
     */
     void EnablePrintToFile(bool flag);
 
     /**
-        Enables or disables the 'Selection' radio button.
+        Enables or disables the "Selection" radio button.
     */
     void EnableSelection(bool flag);
 
@@ -660,7 +751,7 @@ public:
     /**
         Returns a reference to the internal wxPrintData object.
     */
-    wxPrintData GetPrintData();
+    wxPrintData& GetPrintData();
 
     /**
         Returns @true if the user has selected printing to a file.
@@ -668,26 +759,25 @@ public:
     bool GetPrintToFile() const;
 
     /**
-        Returns @true if the user requested that the selection be printed (where
-        'selection' is
-        a concept specific to the application).
+        Returns @true if the user requested that the selection be printed
+        (where "selection" is a concept specific to the application).
     */
     bool GetSelection() const;
 
     /**
-        Returns the @e to page number, as entered by the user.
+        Returns the @e "print to" page number, as entered by the user.
     */
     int GetToPage() const;
 
     /**
         Returns @true if the print data is valid for using in print dialogs.
-        This can return @false on Windows if the current printer is not set, for example.
-        On all other platforms, it returns @true.
+        This can return @false on Windows if the current printer is not set,
+        for example. On all other platforms, it returns @true.
     */
     bool IsOk() const;
 
     /**
-        Sets the 'Collate' checkbox to @true or @false.
+        Sets the "Collate" checkbox to @true or @false.
     */
     void SetCollate(bool flag);
 
@@ -707,7 +797,8 @@ public:
     void SetMinPage(int page);
 
     /**
-        Sets the default number of copies the user has requested to be printed out.
+        Sets the default number of copies the user has requested to be printed
+        out.
     */
     void SetNoCopies(int n);
 
@@ -717,35 +808,39 @@ public:
     void SetPrintData(const wxPrintData& printData);
 
     /**
-        Sets the 'Print to file' checkbox to @true or @false.
+        Sets the "Print to file" checkbox to @true or @false.
     */
     void SetPrintToFile(bool flag);
 
     /**
-        Selects the 'Selection' radio button. The effect of printing the selection
-        depends on how the application
-        implements this command, if at all.
+        Selects the "Selection" radio button. The effect of printing the
+        selection depends on how the application implements this command, if at
+        all.
     */
     void SetSelection(bool flag);
 
     /**
+        @deprecated This function has been deprecated since version 2.5.4.
+
         Determines whether the dialog to be shown will be the Print dialog
         (pass @false) or Print Setup dialog (pass @true).
-        This function has been deprecated since version 2.5.4.
+        
     */
     void SetSetupDialog(bool flag);
 
     /**
-        Sets the @e to page number.
+        Sets the @e "print to" page number.
     */
     void SetToPage(int page);
 
-    //@{
+    /**
+        Assigns print data to this object.
+    */
+    void operator =(const wxPrintData& data);
+
     /**
         Assigns another print dialog data object to this object.
     */
-    void operator =(const wxPrintData& data);
     void operator =(const wxPrintDialogData& data);
-    //@}
 };
 
