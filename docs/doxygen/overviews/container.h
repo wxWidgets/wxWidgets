@@ -14,17 +14,14 @@ Classes: wxList<T>, wxArray<T>, wxVector<T>
 
 wxWidgets uses itself several container classes including doubly-linked lists
 and dynamic arrays (i.e. arrays which expand automatically when they become
-full). For both historical and portability reasons wxWidgets does not use STL
-which provides the standard implementation of many container classes in C++.
+full). For both historical and portability reasons wxWidgets does not require
+the use of STL (which provides the standard implementation of many container
+classes in C++) but it can be compiled in STL mode. Additionally, wxWidgets
+provides the new wxVector<T> class template which can be used like the std::vector
+class and is actually just a typedef to std::vector if wxWidgets is compiled
+in STL mode.
 
-First of all, wxWidgets has existed since well before STL was written, and
-secondly we don't believe that today compilers can deal really well with all of
-STL classes (this is especially true for some less common platforms). Of
-course, the compilers are evolving quite rapidly and hopefully their progress
-will allow to base future versions of wxWidgets on STL - but this is not yet
-the case.
-
-wxWidgets container classes don't pretend to be as powerful or full as STL
+wxWidgets non-template container classes don't pretend to be as powerful or full as STL
 ones, but they are quite useful and may be compiled with absolutely any C++
 compiler. They're used internally by wxWidgets, but may, of course, be used in
 your programs as well if you wish.
