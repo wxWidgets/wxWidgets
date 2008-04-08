@@ -126,35 +126,6 @@ public:
     */
     void SetValue(const wxVariant& value);
 };
-
-
-
-/**
-    @class wxDataViewIconTextRenderer
-    @wxheader{dataview.h}
-
-    The wxDataViewIconTextRenderer class is used to display text with
-    a small icon next to it as it is typically done in a file manager.
-    This classes uses the wxDataViewIconText
-    helper class to store its data. wxDataViewIonText can be converted
-    to a from a wxVariant using the left shift
-    operator.
-
-    @library{wxadv}
-    @category{FIXME}
-*/
-class wxDataViewIconTextRenderer : public wxDataViewRenderer
-{
-public:
-    /**
-
-    */
-    wxDataViewIconTextRenderer(const wxString& varianttype = "wxDataViewIconText",
-                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT);
-};
-
-
-
 /**
     @class wxDataViewModel
     @wxheader{dataview.h}
@@ -1125,11 +1096,6 @@ public:
     wxDataViewDateRenderer.
     wxDataViewSpinRenderer.
 
-    Note that the @e alignment parameter is ignored under OS X and
-    the alignment is controlled by wxDataViewColumn::GetAlignment()
-    so that under OS X, column header alignment and column content
-    alignment are always the same and cannot be set independently.
-    
     Additionally, the user can write own renderers by deriving from
     wxDataViewCustomRenderer.
 
@@ -1178,10 +1144,10 @@ public:
     */
     wxDataViewRenderer(const wxString& varianttype,
                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                       int align = wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL);
+                       int align = wxDVR_DEFAULT_ALIGNMENT );
 
     /**
-        Returns the alignment.
+        Returns the alignment. See SetAlignment()
     */
     virtual int GetAlignment() const;
 
@@ -1209,7 +1175,12 @@ public:
     virtual wxString GetVariantType();
 
     /**
-        Sets the alignment.
+        Sets the alignment of the renderer's content. The default value
+        of wxDVR_DEFAULT_ALIGMENT indicates that the content should 
+        have the same alignment as the column header. The method is
+        not implemented under OS X and the renderer always aligns its
+        contents as the column header on that platform. The other platforms
+        support both vertical and horizontal alignment.
     */
     virtual void SetAlignment( int align );
     /**
@@ -1260,6 +1231,35 @@ public:
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                            int align = wxDVR_DEFAULT_ALIGNMENT );
 };
+
+
+
+/**
+    @class wxDataViewIconTextRenderer
+    @wxheader{dataview.h}
+
+    The wxDataViewIconTextRenderer class is used to display text with
+    a small icon next to it as it is typically done in a file manager.
+    This classes uses the wxDataViewIconText
+    helper class to store its data. wxDataViewIonText can be converted
+    to a from a wxVariant using the left shift
+    operator.
+
+    @library{wxadv}
+    @category{FIXME}
+*/
+class wxDataViewIconTextRenderer : public wxDataViewRenderer
+{
+public:
+    /**
+
+    */
+    wxDataViewIconTextRenderer(const wxString& varianttype = "wxDataViewIconText",
+                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+                               int align = wxDVR_DEFAULT_ALIGNMENT );
+};
+
+
 
 
 

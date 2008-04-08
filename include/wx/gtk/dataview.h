@@ -41,9 +41,11 @@ public:
     GtkCellRenderer* GetGtkHandle() { return m_renderer; }
     void GtkInitHandlers();
     virtual bool GtkHasAttributes() { return false; }
+    void GtkUpdateAlignment();
 
 protected:
     GtkCellRenderer   *m_renderer;
+    int                m_alignment;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)

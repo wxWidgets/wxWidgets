@@ -60,8 +60,9 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 // the default minimal width of the columns:
 #define wxDVC_DEFAULT_MINWIDTH          30
 
-// the default alignment of wxDataViewRenderers:
-#define wxDVR_DEFAULT_ALIGNMENT         (wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL)
+// The default alignment of wxDataViewRenderers is to take
+// the alignment from the column it owns.
+#define wxDVR_DEFAULT_ALIGNMENT         -1
 
 
 // ---------------------------------------------------------

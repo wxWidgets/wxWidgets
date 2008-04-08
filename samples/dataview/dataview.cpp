@@ -797,8 +797,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     column0->SetSortOrder( true );
 #endif
     
-    tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE, wxALIGN_RIGHT );
-    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("artist"), tr, 1, 150, wxALIGN_LEFT, 
+    tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    wxDataViewColumn *column1 = new wxDataViewColumn( wxT("artist"), tr, 1, 150, wxALIGN_RIGHT, 
         wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
     m_musicCtrl->AppendColumn( column1 );
 

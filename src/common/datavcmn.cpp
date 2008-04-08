@@ -659,6 +659,7 @@ wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype,
 {
     m_variantType = varianttype;
     m_editorCtrl = NULL;
+    m_owner = NULL;
 }
 
 const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
@@ -771,6 +772,7 @@ void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
+            wxPrintf( "OnChar RETURN\n" );
             m_finished = true;
             m_owner->FinishEditing();
             break;
@@ -789,6 +791,7 @@ void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
 {
     if (!m_finished)
     {
+        wxPrintf( "OnKillFocus\n" );
         m_finished = true;
         m_owner->FinishEditing();
     }
@@ -914,7 +917,7 @@ wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewTextRenderer( wxT("string"), mode, (int)align ),
+        new wxDataViewTextRenderer( wxT("string"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -925,7 +928,7 @@ wxDataViewCtrlBase::AppendIconTextColumn( const wxString &label, unsigned int mo
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode, (int)align ),
+        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -937,7 +940,7 @@ wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, unsigned int mode
 {
 
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewToggleRenderer( wxT("bool"), mode, (int)align ),
+        new wxDataViewToggleRenderer( wxT("bool"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -948,7 +951,7 @@ wxDataViewCtrlBase::AppendProgressColumn( const wxString &label, unsigned int mo
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode, (int)align ),
+        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -959,7 +962,7 @@ wxDataViewCtrlBase::AppendDateColumn( const wxString &label, unsigned int model_
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewDateRenderer( wxT("datetime"), mode, (int)align ),
+        new wxDataViewDateRenderer( wxT("datetime"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -970,7 +973,7 @@ wxDataViewCtrlBase::AppendBitmapColumn( const wxString &label, unsigned int mode
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewBitmapRenderer( wxT("wxBitmap"), mode, (int)align ),
+        new wxDataViewBitmapRenderer( wxT("wxBitmap"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -981,7 +984,7 @@ wxDataViewCtrlBase::AppendTextColumn( const wxBitmap &label, unsigned int model_
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewTextRenderer( wxT("string"), mode, (int)align ),
+        new wxDataViewTextRenderer( wxT("string"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -992,7 +995,7 @@ wxDataViewCtrlBase::AppendIconTextColumn( const wxBitmap &label, unsigned int mo
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode, (int)align ),
+        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -1003,7 +1006,7 @@ wxDataViewCtrlBase::AppendToggleColumn( const wxBitmap &label, unsigned int mode
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewToggleRenderer( wxT("bool"), mode, (int)align ),
+        new wxDataViewToggleRenderer( wxT("bool"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -1014,7 +1017,7 @@ wxDataViewCtrlBase::AppendProgressColumn( const wxBitmap &label, unsigned int mo
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode, (int)align ),
+        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -1025,7 +1028,7 @@ wxDataViewCtrlBase::AppendDateColumn( const wxBitmap &label, unsigned int model_
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewDateRenderer( wxT("datetime"), mode, (int)align ),
+        new wxDataViewDateRenderer( wxT("datetime"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -1036,7 +1039,7 @@ wxDataViewCtrlBase::AppendBitmapColumn( const wxBitmap &label, unsigned int mode
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewBitmapRenderer( wxT("wxBitmap"), mode, (int)align ),
+        new wxDataViewBitmapRenderer( wxT("wxBitmap"), mode ),
         model_column, width, align, flags );
     AppendColumn( ret );
     return ret;
@@ -1047,7 +1050,7 @@ wxDataViewCtrlBase::PrependTextColumn( const wxString &label, unsigned int model
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewTextRenderer( wxT("string"), mode, (int)align ),
+        new wxDataViewTextRenderer( wxT("string"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1058,7 +1061,7 @@ wxDataViewCtrlBase::PrependIconTextColumn( const wxString &label, unsigned int m
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode, (int)align ),
+        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1070,7 +1073,7 @@ wxDataViewCtrlBase::PrependToggleColumn( const wxString &label, unsigned int mod
 {
 
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewToggleRenderer( wxT("bool"), mode, (int)align ),
+        new wxDataViewToggleRenderer( wxT("bool"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1081,7 +1084,7 @@ wxDataViewCtrlBase::PrependProgressColumn( const wxString &label, unsigned int m
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode, (int)align ),
+        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1092,7 +1095,7 @@ wxDataViewCtrlBase::PrependDateColumn( const wxString &label, unsigned int model
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewDateRenderer( wxT("datetime"), mode, (int)align ),
+        new wxDataViewDateRenderer( wxT("datetime"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1103,7 +1106,7 @@ wxDataViewCtrlBase::PrependBitmapColumn( const wxString &label, unsigned int mod
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewBitmapRenderer( wxT("wxBitmap"), mode, (int)align ),
+        new wxDataViewBitmapRenderer( wxT("wxBitmap"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1114,7 +1117,7 @@ wxDataViewCtrlBase::PrependTextColumn( const wxBitmap &label, unsigned int model
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewTextRenderer( wxT("string"), mode, (int)align ),
+        new wxDataViewTextRenderer( wxT("string"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1125,7 +1128,7 @@ wxDataViewCtrlBase::PrependIconTextColumn( const wxBitmap &label, unsigned int m
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode, (int)align ),
+        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1136,7 +1139,7 @@ wxDataViewCtrlBase::PrependToggleColumn( const wxBitmap &label, unsigned int mod
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewToggleRenderer( wxT("bool"), mode, (int)align ),
+        new wxDataViewToggleRenderer( wxT("bool"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1147,7 +1150,7 @@ wxDataViewCtrlBase::PrependProgressColumn( const wxBitmap &label, unsigned int m
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode, (int)align ),
+        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1158,7 +1161,7 @@ wxDataViewCtrlBase::PrependDateColumn( const wxBitmap &label, unsigned int model
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewDateRenderer( wxT("datetime"), mode, (int)align ),
+        new wxDataViewDateRenderer( wxT("datetime"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;
@@ -1169,7 +1172,7 @@ wxDataViewCtrlBase::PrependBitmapColumn( const wxBitmap &label, unsigned int mod
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     wxDataViewColumn *ret = new wxDataViewColumn( label,
-        new wxDataViewBitmapRenderer( wxT("wxBitmap"), mode, (int)align ),
+        new wxDataViewBitmapRenderer( wxT("wxBitmap"), mode ),
         model_column, width, align, flags );
     PrependColumn( ret );
     return ret;

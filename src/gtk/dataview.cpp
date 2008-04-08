@@ -1468,8 +1468,21 @@ wxDataViewCellMode wxDataViewRenderer::GetMode() const
     return ret;
 }
 
-void wxDataViewRenderer::SetAlignment( int align )
+void wxDataViewRenderer::GtkUpdateAlignment()
 {
+    int align = m_alignment;
+    
+    // query alignment from column ?
+    if (align == -1)
+    {
+        // None there yet
+        if (GetOwner() == NULL)
+            return;
+        
+        align = GetOwner()->GetAlignment();
+        align |= wxALIGN_CENTRE_VERTICAL;
+    }
+    
     // horizontal alignment:
 
     gfloat xalign = 0.0;
@@ -1499,40 +1512,16 @@ void wxDataViewRenderer::SetAlignment( int align )
     g_value_unset( &gvalue2 );
 }
 
-int wxDataViewRenderer::GetAlignment() const
+void wxDataViewRenderer::SetAlignment( int align )
 {
-    int ret = 0;
-    GValue gvalue;
-
-    // horizontal alignment:
-
-    g_object_get( G_OBJECT(m_renderer), "xalign", &gvalue, NULL );
-    float xalign = g_value_get_float( &gvalue );
-    if (xalign < 0.5)
-        ret |= wxALIGN_LEFT;
-    else if (xalign == 0.5)
-        ret |= wxALIGN_CENTER_HORIZONTAL;
-    else
-        ret |= wxALIGN_RIGHT;
-    g_value_unset( &gvalue );
-
-
-    // vertical alignment:
-
-    g_object_get( G_OBJECT(m_renderer), "yalign", &gvalue, NULL );
-    float yalign = g_value_get_float( &gvalue );
-    if (yalign < 0.5)
-        ret |= wxALIGN_TOP;
-    else if (yalign == 0.5)
-        ret |= wxALIGN_CENTER_VERTICAL;
-    else
-        ret |= wxALIGN_BOTTOM;
-    g_value_unset( &gvalue );
-
-    return ret;
+    m_alignment = align;
+    GtkUpdateAlignment();
 }
 
-
+int wxDataViewRenderer::GetAlignment() const
+{
+    return m_alignment;
+}
 
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
@@ -2564,6 +2553,9 @@ void wxDataViewColumn::SetAlignment( wxAlignment align )
         xalign = 0.5;
 
     gtk_tree_view_column_set_alignment( column, xalign );
+    
+    if (m_renderer && m_renderer->GetAlignment() == -1)
+        m_renderer->GtkUpdateAlignment();
 }
 
 wxAlignment wxDataViewColumn::GetAlignment() const
