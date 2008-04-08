@@ -33,6 +33,8 @@
 #endif //WX_PRECOMP
 
 #include "wx/filename.h"
+#include "wx/log.h"
+#include "wx/textfile.h"
 
 #if defined( __LINUX__ ) || defined( __VMS )
     #include <unistd.h>
@@ -51,6 +53,7 @@ wxString wxStandardPaths::GetUserConfigDir() const
 {
     return wxFileName::GetHomeDir();
 }
+
 
 // ============================================================================
 // wxStandardPaths implementation for VMS
@@ -213,6 +216,46 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxString& lang,
         return wxStandardPathsBase::GetLocalizedResourcesDir(lang, category);
 
     return GetInstallPrefix() + _T("/share/locale/") + lang + _T("/LC_MESSAGES");
+}
+
+wxString wxStandardPaths::GetDocumentsDir() const
+{
+    {
+        wxLogNull logNull;
+        wxString homeDir = wxFileName::GetHomeDir();
+        wxString configPath;
+        if (wxGetenv(wxT("XDG_CONFIG_HOME")))
+            configPath = wxGetenv(wxT("XDG_CONFIG_HOME"));
+        else
+            configPath = homeDir + wxT("/.config");
+        wxString dirsFile = configPath + wxT("/user-dirs.dirs");
+        if (wxFileExists(dirsFile))
+        {
+            wxTextFile textFile;
+            if (textFile.Open(dirsFile))
+            {
+                size_t i;
+                for (i = 0; i < textFile.GetLineCount(); i++)
+                {
+                    wxString line(textFile[i]);
+                    int pos = line.Find(wxT("XDG_DOCUMENTS_DIR"));
+                    if (pos != wxNOT_FOUND)
+                    {
+                        wxString value = line.AfterFirst(wxT('='));
+                        value.Replace(wxT("$HOME"), homeDir);
+                        value.Trim(true);
+                        value.Trim(false);
+                        if (!value.IsEmpty() && wxDirExists(value))
+                            return value;
+                        else
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    return wxStandardPathsBase::GetDocumentsDir();
 }
 
 #endif // __VMS/!__VMS
