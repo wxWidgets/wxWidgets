@@ -1026,7 +1026,7 @@ public:
     /**
         Get owning wxDataViewModel.
     */
-    wxDataViewModel* GetOwner();
+    wxDataViewModel* GetOwner() const;
 
     /**
         Called by owning model.
@@ -1159,7 +1159,7 @@ public:
     /**
         Returns pointer to the owning wxDataViewColumn.
     */
-    virtual wxDataViewColumn* GetOwner();
+    virtual wxDataViewColumn* GetOwner() const;
 
     /**
         This methods retrieves the value from the renderer in order to
@@ -1574,7 +1574,7 @@ public:
     /**
         Returns the owning wxDataViewCtrl.
     */
-    wxDataViewCtrl* GetOwner();
+    wxDataViewCtrl* GetOwner() const;
 
     /**
         Returns the renderer of this wxDataViewColumn.

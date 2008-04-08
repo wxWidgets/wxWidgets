@@ -41,10 +41,8 @@ public:
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
     virtual wxSize GetSize() const = 0;
 
-    virtual void SetAlignment( int align )
-        { m_align=align; }
-    virtual int GetAlignment() const
-        { return m_align; }
+    virtual void SetAlignment( int align );
+    virtual int GetAlignment() const;
 
     virtual void SetMode( wxDataViewCellMode mode )
         { m_mode=mode; }
@@ -82,6 +80,9 @@ public:
     void SetHasAttr( bool set )  { m_hasAttr = set; }
     void SetAttr( const wxDataViewItemAttr &attr ) { m_attr = attr; }
     bool GetWantsAttr() { return m_wantsAttr; }
+
+    // implementation
+    int CalculateAlignment() const;
 
 private:
     wxDC                        *m_dc;

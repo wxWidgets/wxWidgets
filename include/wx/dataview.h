@@ -114,7 +114,7 @@ public:
     virtual void Resort() = 0;
 
     void SetOwner( wxDataViewModel *owner ) { m_owner = owner; }
-    wxDataViewModel *GetOwner()             { return m_owner; }
+    wxDataViewModel *GetOwner() const       { return m_owner; }
 
 private:
     wxDataViewModel *m_owner;
@@ -418,7 +418,7 @@ public:
         { return true; }
 
     void SetOwner( wxDataViewColumn *owner )    { m_owner = owner; }
-    wxDataViewColumn* GetOwner()                { return m_owner; }
+    wxDataViewColumn* GetOwner() const          { return m_owner; }
 
     // renderer properties:
 

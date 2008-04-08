@@ -641,6 +641,29 @@ wxDC *wxDataViewRenderer::GetDC()
     return m_dc;
 }
 
+void wxDataViewRenderer::SetAlignment( int align )
+{ 
+    m_align=align;
+}
+
+int wxDataViewRenderer::GetAlignment() const
+{
+    return m_align;
+}
+
+int wxDataViewRenderer::CalculateAlignment() const
+{ 
+    if (m_align == wxDVR_DEFAULT_ALIGNMENT)
+    {
+        if (GetOwner() == NULL)
+           return wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL;
+           
+        return GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+    }
+    
+    return m_align;
+}
+
 // ---------------------------------------------------------
 // wxDataViewCustomRenderer
 // ---------------------------------------------------------
@@ -2214,7 +2237,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             size.y = cell_rect.height;
 
             wxRect item_rect(cell_rect.GetTopLeft(), size);
-            int align = cell->GetAlignment();
+            int align = cell->CalculateAlignment();
 
             // horizontal alignment:
             item_rect.x = cell_rect.x;
