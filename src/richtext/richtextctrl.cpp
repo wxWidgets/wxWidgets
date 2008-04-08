@@ -2089,13 +2089,27 @@ wxString wxRichTextCtrl::GetRange(long from, long to) const
 
 void wxRichTextCtrl::DoSetValue(const wxString& value, int flags)
 {
-    Clear();
+    // Don't call Clear here, since it always sends a text updated event
+    m_buffer.ResetAndClearCommands();
+    m_buffer.SetDirty(true);
+    m_caretPosition = -1;
+    m_caretPositionForDefaultStyle = -2;
+    m_caretAtLineStart = false;
+    m_selectionRange.SetRange(-2, -2);
+
+    Scroll(0,0);
+
+    if (!IsFrozen())
+    {
+        LayoutContent();
+        Refresh(false);
+    }
 
     if (!value.IsEmpty())
     {
         // Remove empty paragraph
         GetBuffer().Clear();
-        DoWriteText(value);
+        DoWriteText(value, flags);
 
         // for compatibility, don't move the cursor when doing SetValue()
         SetInsertionPoint(0);
