@@ -2064,6 +2064,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/menu.cpp
     src/os2/menuitem.cpp
     src/os2/metafile.cpp
+    src/os2/minifram.cpp
     src/os2/msgdlg.cpp
     src/os2/nativdlg.cpp
     src/os2/notebook.cpp
