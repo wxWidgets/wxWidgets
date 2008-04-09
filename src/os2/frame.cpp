@@ -54,6 +54,12 @@ END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 
+#if wxUSE_MINIFRAME
+#include "wx/minifram.h"
+IMPLEMENT_DYNAMIC_CLASS(wxMiniFrame, wxFrame)
+#endif // wxUSE_MINIFRAME
+
+
 // ============================================================================
 // implementation
 // ============================================================================
