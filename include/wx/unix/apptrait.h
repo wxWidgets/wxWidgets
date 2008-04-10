@@ -29,11 +29,23 @@ public:
 
 #if wxUSE_GUI
 
+// GTK+ and Motif integrate sockets and child processes monitoring directly in
+// their main loop, the other Unix ports do it at wxEventLoop level and so use
+// the non-GUI traits and don't need anything here
+//
+// TODO: Should we use XtAddInput() for wxX11 too? Or, vice versa, if there is
+//       no advantage in doing this compared to the generic way currently used
+//       by wxX11, should we continue to use GTK/Motif- specific stuff?
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+    #define wxHAS_GUI_CALLBACKS
+#endif
+
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
     virtual wxEventLoopBase *CreateEventLoop();
     virtual int WaitForChild(wxExecuteData& execData);
+#ifdef wxHAS_GUI_CALLBACKS
     virtual int AddProcessCallback(wxEndProcessData *data, int fd);
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
@@ -62,14 +74,7 @@ public:
     virtual bool ShowAssertDialog(const wxString& msg);
 #endif
 
-    // GTK+ and Motif integrate sockets directly in their main loop, the other
-    // Unix ports do it at wxEventLoop level
-    //
-    // TODO: Should we use XtAddInput() for wxX11 too? Or, vice versa, if there
-    //       is no advantage in doing this compared to the generic way
-    //       currently used by wxX11, should we continue to use GTK/Motif-
-    //       specific stuff?
-#if wxUSE_SOCKETS && (defined(__WXGTK__) || defined(__WXMOTIF__))
+#if wxUSE_SOCKETS && defined(wxHAS_GUI_CALLBACKS)
     virtual GSocketManager *GetSocketManager();
 #endif
 };
