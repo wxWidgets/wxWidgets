@@ -26,6 +26,7 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_cmndlg
 @li @ref page_class_cat_html
 @li @ref page_class_cat_richtext
+@li @ref page_class_cat_stc
 </td><td>
 @li @ref page_class_cat_dc
 @li @ref page_class_cat_gdi
@@ -52,7 +53,6 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_xrc
 @li @ref page_class_cat_net
 @li @ref page_class_cat_ipc
-@li @ref page_class_cat_stc
 @li @ref page_class_cat_help
 @li @ref page_class_cat_media
 @li @ref page_class_cat_gl
@@ -314,6 +314,17 @@ with character and paragraph formatting.
 @li wxRichTextPrinting: A class for easy printing of rich text buffers.
 @li wxRichTextPrintout: A class used by wxRichTextPrinting.
 @li wxRichTextHeaderFooterData: Header and footer data specification.
+
+
+
+@section page_class_cat_stc Scintilla Text Editor
+
+wxWidgets also provides a wrapper around the Scintilla text editor control,
+which is a control for plain-text editing with support for highlighting, smart
+indentation, etc.
+
+@li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code
+    editing component.
 
 
 
@@ -601,7 +612,6 @@ Related Overviews: @ref overview_thread
 @li wxCriticalSectionLocker: Critical section locker utility class
 @li wxCondition: Condition class
 @li wxSemaphore: Semaphore class
-@section page_class_cat_stc Scintilla Text Editor
 
 
 
@@ -732,7 +742,17 @@ standard stream libraries, and to provide enhanced functionality.
 
 
 
-****
+@section page_class_cat_xrc XML Based Resource System (XRC)
+
+Resources allow your application to create controls and other user interface
+elements from specifications stored in an XML format.
+
+Related Overviews: @ref overview_xrc
+
+@li wxXmlResource: The main class for working with resources
+@li wxXmlResourceHandler: The base class for XML resource handlers
+
+
 
 @section page_class_cat_net Networking
 
@@ -763,27 +783,6 @@ Related Overviews: @ref overview_ipc
 @li wxConnection, wxDDEConnection: Represents the connection between a client
     and a server
 @li wxServer, wxDDEServer: Represents a server
-
-
-
-wxWidgets also provides a wrapper around the Scintilla text editor control,
-which is a control for plain-text editing with support for highlighting, smart
-indentation, etc.
-
-@li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code
-    editing component.
-
-
-
-@section page_class_cat_xrc XML Based Resource System (XRC)
-
-Resources allow your application to create controls and other user interface
-elements from specifications stored in an XML format.
-
-Related Overviews: @ref overview_xrc
-
-@li wxXmlResource: The main class for working with resources
-@li wxXmlResourceHandler: The base class for XML resource handlers
 
 
 
