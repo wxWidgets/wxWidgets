@@ -290,7 +290,6 @@ public:
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxBitmapBase)
 
 wxBitmap::wxBitmap(int width, int height, int depth)
