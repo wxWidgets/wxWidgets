@@ -11,9 +11,9 @@
     @wxheader{ctrlsub.h}
 
     This class is an abstract base class for some wxWidgets controls which contain
-    several items, such as wxListBox and
-    wxCheckListBox derived from it,
-    wxChoice and wxComboBox.
+    several items such as wxListBox, wxCheckListBox, wxChoice and wxComboBox derive
+    from it.
+    
 
     It defines the methods for accessing the controls items and although each of
     the derived classes implements them differently, they still all conform to the
@@ -24,16 +24,18 @@
     different kinds: either simple untyped (@c void *) pointers which are simply
     stored by the control but not used in any way by it, or typed pointers
     (@c wxClientData *) which are owned by the control meaning that the typed
-    client data (and only it) will be deleted when an item is
-    @ref wxControlWithItems::delete deleted or the entire control is
-    @ref wxControlWithItems::clear cleared (which also happens when it is
-    destroyed). Finally note that in the same control all items must have client
-    data of the same type (typed or untyped), if any. This type is determined by
+    client data (and only it) will be deleted when an item is deleted
+    (using wxControlWithItems::Delete) or the entire control is cleared
+    (using wxControlWithItems::Clear) which also happens when it is
+    destroyed. 
+    
+    Finally note that in the same control all items must have client data of the
+    same type (typed or untyped), if any. This type is determined by
     the first call to wxControlWithItems::Append (the version with
     client data pointer) or wxControlWithItems::SetClientData.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{controls}
 
     @see wxControlWithItems::Clear
 */
