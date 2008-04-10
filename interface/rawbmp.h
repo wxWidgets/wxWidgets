@@ -21,13 +21,13 @@
     wxNativePixelData data(bmp);
     if ( !data )
     {
-        ... raw access to bitmap data unavailable, do something else ...
+        // ... raw access to bitmap data unavailable, do something else ...
         return;
     }
 
     if ( data.GetWidth() < 20 || data.GetHeight() < 20 )
     {
-        ... complain: the bitmap it too small ...
+        // ... complain: the bitmap it too small ...
         return;
     }
 

@@ -163,7 +163,7 @@ public:
     @stdobjects
     ::wxNullImage
 
-    @see wxBitmap, wxInitAllImageHandlers()
+    @see wxBitmap, wxInitAllImageHandlers(), wxPixelData
 */
 class wxImage : public wxObject
 {
@@ -180,8 +180,10 @@ public:
             Specifies the height of the image.
         @param data
             A pointer to RGB data
-        @param apha
+        @param alpha
             A pointer to alpha-channel data
+        @param static_data
+            Indicates if the data should be free'd after use
         
     */
     wxImage(int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
@@ -191,12 +193,6 @@ public:
     /**
          Creates an image with the given size and clears it if requested.
          Does not create an alpha channel.
-    */
-    wxImage(int width, int height, bool clear = true);
-    
-    /**
-         Creates an empty wxImage object. Does not create
-         an alpha channel.
          
         @param width
             Specifies the width of the image.
@@ -204,6 +200,12 @@ public:
             Specifies the height of the image.
         @clear
             Clear the image with zeros.
+    */
+    wxImage(int width, int height, bool clear = true);
+    
+    /**
+         Creates an empty wxImage object. Does not create
+         an alpha channel.
     */
     wxImage();
     
@@ -223,19 +225,19 @@ public:
             the stream must support seeking.
         @param type
             May be one of the following:
-            wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
-            wxBITMAP_TYPE_GIF: Load a GIF bitmap file.
-            wxBITMAP_TYPE_JPEG: Load a JPEG bitmap file.
-            wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
-            wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
-            wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-            wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
-            wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
-            wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
-            wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
-            wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
-            wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
-            wxBITMAP_TYPE_ANY: Will try to autodetect the format.
+            @li wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
+            @li wxBITMAP_TYPE_GIF: Load a GIF bitmap file.
+            @li wxBITMAP_TYPE_JPEG: Load a JPEG bitmap file.
+            @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
+            @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
+            @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
+            @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+            @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
+            @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
+            @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
+            @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
+            @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
+            @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
             
         @param mimetype
             MIME type string (for example 'image/jpeg')
@@ -471,19 +473,19 @@ public:
             support seeking.
         @param type
             May be one of the following:
-            wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
-            wxBITMAP_TYPE_GIF: Load a GIF bitmap file.
-            wxBITMAP_TYPE_JPEG: Load a JPEG bitmap file.
-            wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
-            wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
-            wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-            wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
-            wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
-            wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
-            wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
-            wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
-            wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
-            wxBITMAP_TYPE_ANY: Will try to autodetect the format.
+            @li wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
+            @li wxBITMAP_TYPE_GIF: Load a GIF bitmap file.
+            @li wxBITMAP_TYPE_JPEG: Load a JPEG bitmap file.
+            @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
+            @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
+            @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
+            @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+            @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
+            @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
+            @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
+            @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
+            @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
+            @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
 
         @returns Number of available images. For most image handlers, this is 1
                  (exceptions are TIFF and ICO formats).
@@ -531,34 +533,17 @@ public:
     wxString GetOption(const wxString& name) const;
 
     /**
-        Gets a user-defined option as an integer. The function is case-insensitive to
-        @e name.
-        If the given option is not present, the function returns 0. Use
-        HasOption() is 0 is a possibly valid value
-        for the option.
+        Gets a user-defined option as an integer. The function is case-insensitive
+        to @e name. If the given option is not present, the function returns 0. 
+        Use HasOption() is 0 is a possibly valid value for the option.
         Options for wxPNGHandler
-
-        wxIMAGE_OPTION_PNG_FORMAT
-
-        Format for saving a PNG file.
-
-        wxIMAGE_OPTION_PNG_BITDEPTH
-
-        Bit depth for every channel (R/G/B/A).
-
+        @li wxIMAGE_OPTION_PNG_FORMAT: Format for saving a PNG file.
+        @li wxIMAGE_OPTION_PNG_BITDEPTH: Bit depth for every channel (R/G/B/A).
+        
         Supported values for wxIMAGE_OPTION_PNG_FORMAT:
-
-        wxPNG_TYPE_COLOUR
-
-        Stores RGB image.
-
-        wxPNG_TYPE_GREY
-
-        Stores grey image, converts from RGB.
-
-        wxPNG_TYPE_GREY_RED
-
-        Stores grey image, uses red value as grey.
+        @li wxPNG_TYPE_COLOUR: Stores RGB image.
+        @li wxPNG_TYPE_GREY: Stores grey image, converts from RGB.
+        @li wxPNG_TYPE_GREY_RED: Stores grey image, uses red value as grey.
 
         @see SetOption(), GetOption()
     */
@@ -683,19 +668,19 @@ public:
             stream must support seeking.
         @param type
             May be one of the following:
-            wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
-            wxBITMAP_TYPE_GIF: Load a GIF bitmap file.
-            wxBITMAP_TYPE_JPEG: Load a JPEG bitmap file.
-            wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
-            wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
-            wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-            wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
-            wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
-            wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
-            wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
-            wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
-            wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
-            wxBITMAP_TYPE_ANY: Will try to autodetect the format.
+            @li wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
+            @li wxBITMAP_TYPE_GIF: Load a GIF bitmap file.
+            @li wxBITMAP_TYPE_JPEG: Load a JPEG bitmap file.
+            @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
+            @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
+            @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
+            @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+            @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
+            @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
+            @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
+            @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
+            @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
+            @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
         @param mimetype
             MIME type string (for example 'image/jpeg')
         @param index
@@ -835,18 +820,18 @@ public:
             Opened output stream to save the image to.
         @param type
             Currently these types can be used:
-            wxBITMAP_TYPE_BMP: Save a BMP image file.
-            wxBITMAP_TYPE_JPEG: Save a JPEG image file.
-            wxBITMAP_TYPE_PNG: Save a PNG image file.
-            wxBITMAP_TYPE_PCX: Save a PCX image file (tries to save as 8-bit if possible,
+            @li wxBITMAP_TYPE_BMP: Save a BMP image file.
+            @li wxBITMAP_TYPE_JPEG: Save a JPEG image file.
+            @li wxBITMAP_TYPE_PNG: Save a PNG image file.
+            @li wxBITMAP_TYPE_PCX: Save a PCX image file (tries to save as 8-bit if possible,
                 falls back to 24-bit otherwise).
-            wxBITMAP_TYPE_PNM: Save a PNM image file (as raw RGB always).
-            wxBITMAP_TYPE_TIFF: Save a TIFF image file.
-            wxBITMAP_TYPE_XPM: Save a XPM image file.
-            wxBITMAP_TYPE_ICO: Save a Windows icon file (ICO) (the size may
+            @li wxBITMAP_TYPE_PNM: Save a PNM image file (as raw RGB always).
+            @li wxBITMAP_TYPE_TIFF: Save a TIFF image file.
+            @li wxBITMAP_TYPE_XPM: Save a XPM image file.
+            @li wxBITMAP_TYPE_ICO: Save a Windows icon file (ICO) (the size may
                 be up to 255 wide by 127 high. A single image is saved in 8 colors
                 at the size supplied).
-            wxBITMAP_TYPE_CUR: Save a Windows cursor file (CUR).
+            @li wxBITMAP_TYPE_CUR: Save a Windows cursor file (CUR).
         @param mimetype
             MIME type.
 
@@ -887,11 +872,11 @@ public:
 
         @param quality
             Determines what method to use for resampling the image. 
-            Can be one of the following:
             
-            wxIMAGE_QUALITY_NORMAL: Uses the normal default scaling method of
+            Can be one of the following:
+            @li wxIMAGE_QUALITY_NORMAL: Uses the normal default scaling method of
                 pixel replication
-            wxIMAGE_QUALITY_HIGH: Uses bicubic and box averaging resampling
+            @li wxIMAGE_QUALITY_HIGH: Uses bicubic and box averaging resampling
                 methods for upsampling and downsampling respectively
 
         @see Rescale()
