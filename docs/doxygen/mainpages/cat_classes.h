@@ -15,45 +15,47 @@ This page contains a summarized listing of classes, please see the
 
 @beginInvisibleTable
 <tr><td>
-@li @ref page_class_cat_managedwnd
-@li @ref page_class_cat_miscwnd
-@li @ref page_class_cat_aui
+@li @ref page_class_cat_basicwnd
 @li @ref page_class_cat_winlayout
-@li @ref page_class_cat_cmndlg
+@li @ref page_class_cat_managedwnd
+@li @ref page_class_cat_menus
 @li @ref page_class_cat_ctrl
 @li @ref page_class_cat_pickers
-@li @ref page_class_cat_menus
+@li @ref page_class_cat_miscwnd
+@li @ref page_class_cat_aui
+@li @ref page_class_cat_cmndlg
+@li @ref page_class_cat_html
+@li @ref page_class_cat_richtext
+</td><td>
 @li @ref page_class_cat_dc
 @li @ref page_class_cat_gdi
 @li @ref page_class_cat_events
 @li @ref page_class_cat_validator
-@li @ref page_class_cat_data
+@li @ref page_class_cat_appmanagement
+@li @ref page_class_cat_printing
+@li @ref page_class_cat_dvf
+@li @ref page_class_cat_dnd
+@li @ref page_class_cat_vfs
 </td><td>
+@li @ref page_class_cat_rtti
+@li @ref page_class_cat_debugging
+@li @ref page_class_cat_logging
+@li @ref page_class_cat_threading
+@li @ref page_class_cat_data
 @li @ref page_class_cat_containers
 @li @ref page_class_cat_smartpointers
-@li @ref page_class_cat_logging
-@li @ref page_class_cat_debugging
-@li @ref page_class_cat_net
-@li @ref page_class_cat_ipc
-@li @ref page_class_cat_dvf
-@li @ref page_class_cat_printing
-@li @ref page_class_cat_dnd
+@li @ref page_class_cat_xml
 @li @ref page_class_cat_file
-@li @ref page_class_cat_vfs
+@li @ref page_class_cat_archive
 @li @ref page_class_cat_streams
 </td><td>
-@li @ref page_class_cat_threading
-@li @ref page_class_cat_rtti
-@li @ref page_class_cat_appmanagement
-@li @ref page_class_cat_html
-@li @ref page_class_cat_richtext
-@li @ref page_class_cat_stc
-@li @ref page_class_cat_xml
 @li @ref page_class_cat_xrc
+@li @ref page_class_cat_net
+@li @ref page_class_cat_ipc
+@li @ref page_class_cat_stc
 @li @ref page_class_cat_help
 @li @ref page_class_cat_media
 @li @ref page_class_cat_gl
-@li @ref page_class_cat_archive
 @li @ref page_class_cat_misc
 </td></tr>
 @endTable
@@ -62,65 +64,17 @@ This page contains a summarized listing of classes, please see the
 <hr>
 
 
-@section page_class_cat_managedwnd Managed Windows
+@section page_class_cat_basicwnd Basic Windows
 
-There are several types of window that are directly controlled by the window
-manager (such as MS Windows, or the Motif Window Manager). Frames and dialogs
-are similar in wxWidgets, but only dialogs may be modal.
+The following are the most important window classes
 
-Related Overviews: @ref overview_cmndlg
-
-@li wxTopLevelWindow: Any top level window, dialog or frame
-@li wxDialog: Dialog box
-@li wxFrame: Normal frame
-@li wxMDIChildFrame: MDI child frame
-@li wxMDIParentFrame: MDI parent frame
-@li wxMiniFrame: A frame with a small title bar
-@li wxPropertySheetDialog: Property sheet dialog
-@li wxSplashScreen: Splash screen class
-@li wxTipWindow: Shows text in a small window
-@li wxWizard: A wizard dialog
-
-
-
-@section page_class_cat_miscwnd Miscellaneous Windows
-
-The following are a variety of classes that are derived from wxWindow.
-
-@li wxPanel: A window whose colour changes according to current user settings
+@li wxWindow: base class for all windows and controls
+@li wxControl: base class (mostly) for native controls/widgets
+@li wxPanel: window which can smartly manage child windows
 @li wxScrolledWindow: Window with automatically managed scrollbars
-@li wxGrid: A grid (table) window
-@li wxSplitterWindow: Window which can be split vertically or horizontally
-@li wxStatusBar: Implements the status bar on a frame
-@li wxToolBar: Toolbar class
-@li wxNotebook: Notebook class
-@li wxListbook: Similar to notebook but using list control
-@li wxChoicebook: Similar to notebook but using choice control
-@li wxTreebook: Similar to notebook but using tree control
-@li wxSashWindow: Window with four optional sashes that can be dragged
-@li wxSashLayoutWindow: Window that can be involved in an IDE-like layout
-    arrangement
 @li wxVScrolledWindow: As wxScrolledWindow but supports lines of variable
     height
-@li wxWizardPage: A base class for the page in wizard dialog.
-@li wxWizardPageSimple: A page in wizard dialog.
-
-
-
-@section page_class_cat_aui Window Docking (wxAUI)
-
-wxAUI is a set classes for writing a customizable application interface
-with built-in docking, floatable panes and a flexible MDI-like interface.
-
-Related Overviews: @ref overview_aui
-
-@li wxAuiManager: The central class for managing the interface
-@li wxAuiNotebook: A replacement notebook class with extra features
-@li wxAuiPaneInfo: Describes a single pane
-@li wxAuiDockArt: Art and metrics provider for customizing the docking user
-    interface
-@li wxAuiTabArt: Art and metrics provider for customizing the notebook user
-    interface
+@li wxTopLevelWindow: Any top level window, dialog or frame
 
 
 
@@ -157,32 +111,32 @@ Other layout classes:
 
 
 
-@section page_class_cat_cmndlg Common Dialogs
+@section page_class_cat_managedwnd Managed Windows
 
-Common dialogs are ready-made dialog classes which are frequently used in an
-application.
+There are several types of window that are directly controlled by the window
+manager (such as MS Windows, or the Motif Window Manager). Frames and dialogs
+are similar in wxWidgets, but only dialogs may be modal.
 
 Related Overviews: @ref overview_cmndlg
 
-@li wxDialog: Base class for common dialogs
-@li wxColourDialog: Colour chooser dialog
-@li wxDirDialog: Directory selector dialog
-@li wxFileDialog: File selector dialog
-@li wxFindReplaceDialog: Text search/replace dialog
-@li wxMultiChoiceDialog: Dialog to get one or more selections from a list
-@li wxSingleChoiceDialog: Dialog to get a single selection from a list and
-    return the string
-@li wxTextEntryDialog: Dialog to get a single line of text from the user
-@li wxPasswordEntryDialog: Dialog to get a password from the user
-@li wxFontDialog: Font chooser dialog
-@li wxPageSetupDialog: Standard page setup dialog
-@li wxPrintDialog: Standard print dialog
-@li wxProgressDialog: Progress indication dialog
-@li wxMessageDialog: Simple message box dialog
-@li wxSymbolPickerDialog: Symbol selector dialog
-@li wxRichTextFormattingDialog: A dialog for formatting the content of a
-    wxRichTextCtrl
-@li wxWizard: A wizard dialog.
+@li wxDialog: Dialog box
+@li wxFrame: Normal frame
+@li wxMDIChildFrame: MDI child frame
+@li wxMDIParentFrame: MDI parent frame
+@li wxMiniFrame: A frame with a small title bar
+@li wxPopupWindow: A toplevel window without decorations, e.g. for a combobox pop-up
+@li wxPropertySheetDialog: Property sheet dialog
+@li wxSplashScreen: Splash screen class
+@li wxTipWindow: Shows text in a small window
+@li wxWizard: A wizard dialog
+
+
+
+@section page_class_cat_menus Menus
+
+@li wxMenu: Displays a series of menu items for selection
+@li wxMenuBar: Contains a series of menus for use with a frame
+@li wxMenuItem: Represents a single menu item
 
 
 
@@ -249,11 +203,117 @@ platform-dependent.
 
 
 
-@section page_class_cat_menus Menus
+@section page_class_cat_miscwnd Miscellaneous Windows
 
-@li wxMenu: Displays a series of menu items for selection
-@li wxMenuBar: Contains a series of menus for use with a frame
-@li wxMenuItem: Represents a single menu item
+The following are a variety of classes that are derived from wxWindow.
+
+@li wxPanel: A window whose colour changes according to current user settings
+@li wxScrolledWindow: Window with automatically managed scrollbars
+@li wxGrid: A grid (table) window
+@li wxSplitterWindow: Window which can be split vertically or horizontally
+@li wxStatusBar: Implements the status bar on a frame
+@li wxToolBar: Toolbar class
+@li wxNotebook: Notebook class
+@li wxListbook: Similar to notebook but using list control
+@li wxChoicebook: Similar to notebook but using choice control
+@li wxTreebook: Similar to notebook but using tree control
+@li wxSashWindow: Window with four optional sashes that can be dragged
+@li wxSashLayoutWindow: Window that can be involved in an IDE-like layout
+    arrangement
+@li wxVScrolledWindow: As wxScrolledWindow but supports lines of variable
+    height
+@li wxWizardPage: A base class for the page in wizard dialog.
+@li wxWizardPageSimple: A page in wizard dialog.
+
+
+
+@section page_class_cat_aui Window Docking (wxAUI)
+
+wxAUI is a set classes for writing a customizable application interface
+with built-in docking, floatable panes and a flexible MDI-like interface.
+
+Related Overviews: @ref overview_aui
+
+@li wxAuiManager: The central class for managing the interface
+@li wxAuiNotebook: A replacement notebook class with extra features
+@li wxAuiPaneInfo: Describes a single pane
+@li wxAuiDockArt: Art and metrics provider for customizing the docking user
+    interface
+@li wxAuiTabArt: Art and metrics provider for customizing the notebook user
+    interface
+
+
+
+@section page_class_cat_cmndlg Common Dialogs
+
+Common dialogs are ready-made dialog classes which are frequently used in an
+application.
+
+Related Overviews: @ref overview_cmndlg
+
+@li wxDialog: Base class for common dialogs
+@li wxColourDialog: Colour chooser dialog
+@li wxDirDialog: Directory selector dialog
+@li wxFileDialog: File selector dialog
+@li wxFindReplaceDialog: Text search/replace dialog
+@li wxMultiChoiceDialog: Dialog to get one or more selections from a list
+@li wxSingleChoiceDialog: Dialog to get a single selection from a list and
+    return the string
+@li wxTextEntryDialog: Dialog to get a single line of text from the user
+@li wxPasswordEntryDialog: Dialog to get a password from the user
+@li wxFontDialog: Font chooser dialog
+@li wxPageSetupDialog: Standard page setup dialog
+@li wxPrintDialog: Standard print dialog
+@li wxProgressDialog: Progress indication dialog
+@li wxMessageDialog: Simple message box dialog
+@li wxSymbolPickerDialog: Symbol selector dialog
+@li wxRichTextFormattingDialog: A dialog for formatting the content of a
+    wxRichTextCtrl
+@li wxWizard: A wizard dialog.
+
+
+
+@section page_class_cat_html HTML
+
+wxWidgets provides a set of classes to display text in HTML format. These
+classes include a help system based on the HTML widget.
+
+@li wxHtmlHelpController: HTML help controller class
+@li wxHtmlWindow: HTML window class
+@li wxHtmlEasyPrinting: Simple class for printing HTML
+@li wxHtmlPrintout: Generic HTML wxPrintout class
+@li wxHtmlParser: Generic HTML parser class
+@li wxHtmlTagHandler: HTML tag handler, pluginable into wxHtmlParser
+@li wxHtmlWinParser: HTML parser class for wxHtmlWindow
+@li wxHtmlWinTagHandler: HTML tag handler, pluginable into wxHtmlWinParser
+
+
+
+@section page_class_cat_richtext Rich Text
+
+wxWidgets provides a set of generic classes to edit and print simple rich text
+with character and paragraph formatting.
+
+@li wxTextAttr: Attributes specifying text styling.
+@li wxRichTextCtrl: A rich text control.
+@li wxRichTextBuffer: The content of a rich text control.
+@li wxRichTextCharacterStyleDefinition: Definition of character styling.
+@li wxRichTextParagraphStyleDefinition: Definition of paragraph styling.
+@li wxRichTextListStyleDefinition: Definition of list styling.
+@li wxRichTextStyleSheet: A set of style definitions.
+@li wxRichTextStyleComboCtrl: A drop-down control for applying styles.
+@li wxRichTextStyleListBox: A listbox for applying styles.
+@li wxRichTextStyleOrganiserDialog: A dialog that can be used for managing or
+    browsing styles.
+@li wxRichTextEvent: A rich text event.
+@li wxRichTextRange: Specification for ranges in a rich text control or buffer.
+@li wxRichTextFileHandler: File handler base class.
+@li wxRichTextHTMLHandler: A handler for converting rich text to HTML.
+@li wxRichTextXMLHandler: A handler for loading and saving rich text XML.
+@li wxRichTextFormattingDialog: A dialog for rich text formatting.
+@li wxRichTextPrinting: A class for easy printing of rich text buffers.
+@li wxRichTextPrintout: A class used by wxRichTextPrinting.
+@li wxRichTextHeaderFooterData: Header and footer data specification.
 
 
 
@@ -684,50 +744,6 @@ Related Overviews: @ref overview_rtti
 @li wxCmdLineParser: Command line parser class
 @li wxDllLoader: Class to work with shared libraries.
 @li wxProcess: Process class
-
-
-
-@section page_class_cat_html HTML
-
-wxWidgets provides a set of classes to display text in HTML format. These
-classes include a help system based on the HTML widget.
-
-@li wxHtmlHelpController: HTML help controller class
-@li wxHtmlWindow: HTML window class
-@li wxHtmlEasyPrinting: Simple class for printing HTML
-@li wxHtmlPrintout: Generic HTML wxPrintout class
-@li wxHtmlParser: Generic HTML parser class
-@li wxHtmlTagHandler: HTML tag handler, pluginable into wxHtmlParser
-@li wxHtmlWinParser: HTML parser class for wxHtmlWindow
-@li wxHtmlWinTagHandler: HTML tag handler, pluginable into wxHtmlWinParser
-
-
-
-@section page_class_cat_richtext Rich Text
-
-wxWidgets provides a set of generic classes to edit and print simple rich text
-with character and paragraph formatting.
-
-@li wxTextAttr: Attributes specifying text styling.
-@li wxRichTextCtrl: A rich text control.
-@li wxRichTextBuffer: The content of a rich text control.
-@li wxRichTextCharacterStyleDefinition: Definition of character styling.
-@li wxRichTextParagraphStyleDefinition: Definition of paragraph styling.
-@li wxRichTextListStyleDefinition: Definition of list styling.
-@li wxRichTextStyleSheet: A set of style definitions.
-@li wxRichTextStyleComboCtrl: A drop-down control for applying styles.
-@li wxRichTextStyleListBox: A listbox for applying styles.
-@li wxRichTextStyleOrganiserDialog: A dialog that can be used for managing or
-    browsing styles.
-@li wxRichTextEvent: A rich text event.
-@li wxRichTextRange: Specification for ranges in a rich text control or buffer.
-@li wxRichTextFileHandler: File handler base class.
-@li wxRichTextHTMLHandler: A handler for converting rich text to HTML.
-@li wxRichTextXMLHandler: A handler for loading and saving rich text XML.
-@li wxRichTextFormattingDialog: A dialog for rich text formatting.
-@li wxRichTextPrinting: A class for easy printing of rich text buffers.
-@li wxRichTextPrintout: A class used by wxRichTextPrinting.
-@li wxRichTextHeaderFooterData: Header and footer data specification.
 
 
 
