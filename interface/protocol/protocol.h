@@ -7,12 +7,30 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Error values returned by wxProtocol.
+*/
+enum wxProtocolError
+{
+    wxPROTO_NOERR = 0,          //!< No error.
+    wxPROTO_NETERR,             //!< A generic network error occurred.
+    wxPROTO_PROTERR,            //!< An error occurred during negotiation.
+    wxPROTO_CONNERR,            //!< The client failed to connect the server.
+    wxPROTO_INVVAL,             //!< Invalid value.
+    wxPROTO_NOHNDLR,            //!< Not currently used.
+    wxPROTO_NOFILE,             //!< The remote file doesn't exist.
+    wxPROTO_ABRT,               //!< Last action aborted.
+    wxPROTO_RCNCT,              //!< An error occurred during reconnection.
+    wxPROTO_STREAMING           //!< Someone tried to send a command during a transfer.
+};
+
+/**
     @class wxProtocol
     @headerfile protocol.h wx/protocol/protocol.h
 
+    Represents a protocol for use with wxURL.
 
     @library{wxnet}
-    @category{FIXME}
+    @category{net}
 
     @see wxSocketBase, wxURL
 */
@@ -21,7 +39,11 @@ class wxProtocol : public wxSocketClient
 public:
     /**
         Abort the current stream.
-        
+
+        @warning
+        It is advised to destroy the input stream instead of aborting the stream
+        this way.
+
         @returns Returns @true, if successful, else @false.
     */
     bool Abort();
@@ -33,60 +55,24 @@ public:
 
     /**
         Returns the last occurred error.
-        
-        @b wxPROTO_NOERR
-        
-        No error.
-        
-        @b wxPROTO_NETERR
-        
-        A generic network error occurred.
-        
-        @b wxPROTO_PROTERR
-        
-        An error occurred during negotiation.
-        
-        @b wxPROTO_CONNERR
-        
-        The client failed to connect the server.
-        
-        @b wxPROTO_INVVAL
-        
-        Invalid value.
-        
-        @b wxPROTO_NOHNDLR
-        
-        .
-        
-        @b wxPROTO_NOFILE
-        
-        The remote file doesn't exist.
-        
-        @b wxPROTO_ABRT
-        
-        Last action aborted.
-        
-        @b wxPROTO_RCNCT
-        
-        An error occurred during reconnection.
-        
-        @b wxPROTO_STREAM
-        
-        Someone tried to send a command during a transfer.
+
+        @see wxProtocolError
     */
     wxProtocolError GetError();
 
     /**
-        Creates a new input stream on the specified path. You can use all but seek
-        functionality of wxStream. Seek isn't available on all streams. For example,
-        HTTP or FTP streams don't deal with it. Other functions like StreamSize and
-        Tell aren't available for the moment for this sort of stream.
+        Creates a new input stream on the specified path.
+
+        You can use all but seek() functionality of wxStream.
+        Seek() isn't available on all streams. For example, HTTP or FTP streams
+        don't deal with it. Other functions like StreamSize() and Tell() aren't
+        available for the moment for this sort of stream.
         You will be notified when the EOF is reached by an error.
-        
+
         @returns Returns the initialized stream. You will have to delete it
                  yourself once you don't use it anymore. The destructor
                  closes the network connection.
-        
+
         @see wxInputStream
     */
     wxInputStream* GetInputStream(const wxString& path);
@@ -94,7 +80,7 @@ public:
     /**
         Tries to reestablish a previous opened connection (close and renegotiate
         connection).
-        
+
         @returns @true, if the connection is established, else @false.
     */
     bool Reconnect();

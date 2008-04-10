@@ -7,6 +7,16 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Transfer modes used by wxFTP.
+*/
+enum TransferMode
+{
+    NONE,       //!< not set by user explicitly.
+    ASCII,
+    BINARY
+};
+
+/**
     @class wxFTP
     @headerfile ftp.h wx/protocol/ftp.h
 
@@ -14,16 +24,16 @@
     usual operations. Please consult the RFC 959 for more details about the FTP
     protocol.
 
-    To use a commands which doesn't involve file transfer (i.e. directory oriented
+    To use a command which doesn't involve file transfer (i.e. directory oriented
     commands) you just need to call a corresponding member function or use the
-    generic wxFTP::SendCommand method. However to actually
-    transfer files you just get or give a stream to or from this class and the
-    actual data are read or written using the usual stream methods.
+    generic wxFTP::SendCommand() method.
+    However to actually transfer files you just get or give a stream to or from this
+    class and the actual data are read or written using the usual stream methods.
 
     Example of using wxFTP for file downloading:
 
     @code
-    wxFTP ftp;
+        wxFTP ftp;
 
         // if you don't use these lines anonymous login will be used
         ftp.SetUser("user");
@@ -45,7 +55,7 @@
         {
             size_t size = in-GetSize();
             char *data = new char[size];
-            if ( !in-Read(data, size) )
+            if ( !in->Read(data, size) )
             {
                 wxLogError("Read error");
             }
@@ -64,12 +74,12 @@
     successfully):
 
     @code
-    wxOutputStream *out = ftp.GetOutputStream("filename");
-            if ( out )
-            {
-                out-Write(...); // your data
-                delete out;
-            }
+        wxOutputStream *out = ftp.GetOutputStream("filename");
+        if ( out )
+        {
+            out->Write(...); // your data
+            delete out;
+        }
     @endcode
 
     @library{wxnet}
@@ -105,7 +115,7 @@ public:
     /**
         Send the specified @a command to the FTP server. @a ret specifies
         the expected result.
-        
+
         @returns @true if the command has been sent successfully, else @false.
     */
     bool CheckCommand(const wxString& command, char ret);
@@ -116,17 +126,31 @@ public:
     bool FileExists(const wxString& filename);
 
     /**
-        The GetList function is quite low-level. It returns the list of the files in
+        The GetList() function is quite low-level. It returns the list of the files in
         the current directory. The list can be filtered using the @a wildcard string.
+
         If @a wildcard is empty (default), it will return all files in directory.
         The form of the list can change from one peer system to another. For example,
         for a UNIX peer system, it will look like this:
-        
+
+        @verbatim
+        -r--r--r--   1 guilhem  lavaux      12738 Jan 16 20:17 cmndata.cpp
+        -r--r--r--   1 guilhem  lavaux      10866 Jan 24 16:41 config.cpp
+        -rw-rw-rw-   1 guilhem  lavaux      29967 Dec 21 19:17 cwlex_yy.c
+        -rw-rw-rw-   1 guilhem  lavaux      14342 Jan 22 19:51 cwy_tab.c
+        -r--r--r--   1 guilhem  lavaux      13890 Jan 29 19:18 date.cpp
+        -r--r--r--   1 guilhem  lavaux       3989 Feb  8 19:18 datstrm.cpp
+        @endverbatim
+
         But on Windows system, it will look like this:
-        
-        Return value: @true if the file list was successfully retrieved, @false
-        otherwise.
-        
+
+        @verbatim
+        winamp~1 exe    520196 02-25-1999  19:28  winamp204.exe
+            1 file(s)           520 196 bytes
+        @endverbatim
+
+        @return @true if the file list was successfully retrieved, @false otherwise.
+
         @see GetFilesList()
     */
     bool GetDirList(wxArrayString& files,
@@ -134,48 +158,56 @@ public:
 
     /**
         Returns the file size in bytes or -1 if the file doesn't exist or the size
-        couldn't be determined. Notice that this size can be approximative size only
-        and shouldn't be used for allocating the buffer in which the remote file is
-        copied, for example.
+        couldn't be determined.
+
+        Notice that this size can be approximative size only and shouldn't be used
+        for allocating the buffer in which the remote file is copied, for example.
     */
     int GetFileSize(const wxString& filename);
 
     /**
         This function returns the computer-parsable list of the files in the current
         directory (optionally only of the files matching the @e wildcard, all files
-        by default). This list always has the same format and contains one full
-        (including the directory path) file name per line.
-        Return value: @true if the file list was successfully retrieved, @false
-        otherwise.
+        by default).
+
+        This list always has the same format and contains one full (including the
+        directory path) file name per line.
+
+        @returns @true if the file list was successfully retrieved, @false otherwise.
+
+        @see GetDirList()
     */
     bool GetFilesList(wxArrayString& files,
                       const wxString& wildcard = "");
 
     /**
-        Creates a new input stream on the specified path. You can use all but the seek
-        functionality of wxStream. Seek isn't available on all streams. For example,
-        HTTP or FTP streams do not deal with it. Other functions like Tell
-        are not available for this sort of stream, at present.
+        Creates a new input stream on the specified path.
+
+        You can use all but the seek functionality of wxStreamBase.
+        wxStreamBase::Seek() isn't available on all streams. For example, HTTP or FTP
+        streams do not deal with it. Other functions like wxStreamBase::Tell() are
+        not available for this sort of stream, at present.
+
         You will be notified when the EOF is reached by an error.
-        
+
         @returns Returns @NULL if an error occurred (it could be a network failure
                  or the fact that the file doesn't exist).
     */
     wxInputStream* GetInputStream(const wxString& path);
 
     /**
-        Returns the last command result, i.e. the full server reply for the last
-        command.
+        Returns the last command result, i.e. the full server reply for the last command.
     */
     const wxString GetLastResult();
 
     /**
-        Initializes an output stream to the specified @e file. The returned
-        stream has all but the seek functionality of wxStreams. When the user finishes
-        writing data, he has to delete the stream to close it.
-        
+        Initializes an output stream to the specified @e file.
+
+        The returned stream has all but the seek functionality of wxStreams.
+        When the user finishes writing data, he has to delete the stream to close it.
+
         @returns An initialized write-only stream.
-        
+
         @see wxOutputStream
     */
     wxOutputStream* GetOutputStream(const wxString& file);
@@ -224,10 +256,11 @@ public:
     bool SetBinary();
 
     /**
-        If @a pasv is @true, passive connection to the FTP server is used. This is
-        the default as it works with practically all firewalls. If the server doesn't
-        support passive move, you may call this function with @false argument to use
-        active connection.
+        If @a pasv is @true, passive connection to the FTP server is used.
+
+        This is the default as it works with practically all firewalls.
+        If the server doesn't support passive move, you may call this function with
+        @false argument to use active connection.
     */
     void SetPassive(bool pasv);
 
@@ -239,6 +272,7 @@ public:
     /**
         Sets the transfer mode to the specified one. It will be used for the next
         transfer.
+
         If this function is never called, binary transfer mode is used by default.
     */
     bool SetTransferMode(TransferMode mode);
