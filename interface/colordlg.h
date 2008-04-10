@@ -15,19 +15,21 @@
     @library{wxcore}
     @category{cmndlg}
 
-    @see @ref overview_wxcolourdialogoverview "wxColourDialog Overview", wxColour,
-    wxColourData, wxGetColourFromUser()
+    @see @ref overview_cmndlg_colour, wxColour, wxColourData,
+         wxGetColourFromUser()
 */
 class wxColourDialog : public wxDialog
 {
 public:
     /**
-        Constructor. Pass a parent window, and optionally a pointer to a block of colour
-        data, which will be copied to the colour dialog's colour data. Custom
-        colours from colour data object will be be used in dialog's colour palette.
-        Invalid entries in custom colours list will be ignored on some platforms (GTK)
-        or replaced with white colour on platforms where custom colours palette has
-        fixed size (MSW).
+        Constructor. Pass a parent window, and optionally a pointer to a block
+        of colour data, which will be copied to the colour dialog's colour
+        data.
+
+        Custom colours from colour data object will be be used in the dialog's
+        colour palette. Invalid entries in custom colours list will be ignored
+        on some platforms(GTK) or replaced with white colour on platforms where
+        custom colours palette has fixed size (MSW).
 
         @see wxColourData
     */
@@ -39,19 +41,18 @@ public:
     ~wxColourDialog();
 
     /**
-        Same as @ref ctor() constructor.
+        Same as wxColourDialog().
     */
     bool Create(wxWindow* parent, wxColourData* data = NULL);
 
     /**
-        Returns the @ref overview_wxcolourdata "colour data" associated with the colour
-        dialog.
+        Returns the colour data associated with the colour dialog.
     */
     wxColourData GetColourData();
 
     /**
-        Shows the dialog, returning wxID_OK if the user pressed OK, and wxID_CANCEL
-        otherwise.
+        Shows the dialog, returning wxID_OK if the user pressed OK, and
+        wxID_CANCEL otherwise.
     */
     int ShowModal();
 };

@@ -23,8 +23,14 @@
     @category{gdi}
 
     @stdobjects
-    ::wxNullColour, ::wxBLACK, ::wxWHITE, ::wxRED, ::wxBLUE, ::wxGREEN,
-    ::wxCYAN, ::wxLIGHT_GREY
+    - ::wxNullColour - An empty, invalid colour.
+    - ::wxBLACK
+    - ::wxBLUE
+    - ::wxCYAN
+    - ::wxGREEN
+    - ::wxLIGHT_GREY
+    - ::wxRED
+    - ::wxWHITE
 
     @see wxColourDatabase, wxPen, wxBrush, wxColourDialog, wxSystemSettings
 */
@@ -163,45 +169,17 @@ public:
 };
 
 
-/**
-    An empty colour.
-*/
+/** @name Predefined colors. */
+//@{
 wxColour wxNullColour;
-
-/**
-    FIXME
-*/
-wxColour wxBLACK;
-
-/**
-    FIXME
-*/
-wxColour wxWHITE;
-
-/**
-    FIXME
-*/
-wxColour wxRED;
-
-/**
-    FIXME
-*/
-wxColour wxBLUE;
-
-/**
-    FIXME
-*/
-wxColour wxGREEN;
-
-/**
-    FIXME
-*/
-wxColour wxCYAN;
-
-/**
-    FIXME
-*/
-wxColour wxLIGHT_GREY;
+wxColour* wxBLACK;
+wxColour* wxBLUE;
+wxColour* wxCYAN;
+wxColour* wxGREEN;
+wxColour* wxLIGHT_GREY;
+wxColour* wxRED;
+wxColour* wxWHITE;
+//@}
 
 
 
