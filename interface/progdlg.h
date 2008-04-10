@@ -49,8 +49,8 @@ class wxProgressDialog : public wxDialog
 public:
     /**
         Constructor. Creates the dialog, displays it and disables user input
-        for other windows, or, if wxPD_APP_MODAL flag is not given, for its parent
-        window only.
+        for other windows, or, if @c wxPD_APP_MODAL flag is not given, for its
+        parent window only.
 
         @param title
             Dialog title to show in titlebar.
@@ -74,41 +74,38 @@ public:
     ~wxProgressDialog();
 
     /**
-        Just like Update() but makes
-        the gauge control run in indeterminate mode (see wxGauge documentation),
-        sets the remaining and the estimated time labels (if present) to @c Unknown and
-        moves
-        the progress bar a bit to indicate that some progress was done.
+        Works like Update() but makes the gauge control run in indeterminate mode
+        (see wxGauge documentation); sets the remaining and the estimated time labels
+        (if present) to "Unknown" or to @a newmsg (if it's non-empty); moves the progress
+        bar a bit to indicate that some progress was done.
     */
     virtual bool Pulse(const wxString& newmsg = "",
                        bool* skip = NULL);
 
     /**
-        Can be used to continue with the dialog, after the user had chosen
-        ABORT.
+        Can be used to continue with the dialog, after the user had clicked the "Abort" button.
     */
     void Resume();
 
     /**
         Updates the dialog, setting the progress bar to the new value and, if
-        given changes the message above it. Returns @true unless the Cancel button
+        given changes the message above it. Returns @true unless the "Cancel" button
         has been pressed.
+
         If @false is returned, the application can either immediately destroy the
-        dialog
-        or ask the user for the confirmation and if the abort is not confirmed the
-        dialog may be resumed with Resume() function.
+        dialog or ask the user for the confirmation and if the abort is not confirmed
+        the dialog may be resumed with Resume() function.
 
         @param value
-            The new value of the progress meter. It should be less than or
-            equal to the maximum value given to the constructor and the dialog is
-        closed if
+            The new value of the progress meter. It should be less than or equal to
+            the maximum value given to the constructor and the dialog is closed if
             it is equal to the maximum.
         @param newmsg
             The new messages for the progress dialog text, if it is
             empty (which is the default) the message is not changed.
         @param skip
-            If "Skip" button was pressed since last
-            Update call, this is set to @true.
+            If "Skip" button was pressed since last Update() call,
+            this is set to @true.
     */
     virtual bool Update(int value, const wxString& newmsg = "",
                         bool* skip = NULL);

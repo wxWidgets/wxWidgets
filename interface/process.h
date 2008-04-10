@@ -7,67 +7,96 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Signal constants used by wxProcess.
+*/
+enum wxSignal
+{
+    wxSIGNONE = 0,  //!< verify if the process exists under Unix
+    wxSIGHUP,
+    wxSIGINT,
+    wxSIGQUIT,
+    wxSIGILL,
+    wxSIGTRAP,
+    wxSIGABRT,
+    wxSIGEMT,
+    wxSIGFPE,
+    wxSIGKILL,      //!< forcefully kill, dangerous!
+    wxSIGBUS,
+    wxSIGSEGV,
+    wxSIGSYS,
+    wxSIGPIPE,
+    wxSIGALRM,
+    wxSIGTERM       //!< terminate the process gently
+};
+
+/**
+    Return values for wxProcess::Kill.
+*/
+enum wxKillError
+{
+    wxKILL_OK,              //!< no error
+    wxKILL_BAD_SIGNAL,      //!< no such signal
+    wxKILL_ACCESS_DENIED,   //!< permission denied
+    wxKILL_NO_PROCESS,      //!< no such process
+    wxKILL_ERROR            //!< another, unspecified error
+};
+
+
+/**
     @class wxProcess
     @wxheader{process.h}
 
-    The objects of this class are used in conjunction with the
-    wxExecute() function. When a wxProcess object is passed to
-    wxExecute(), its wxProcess::OnTerminate virtual method
-    is called when the process terminates. This allows the program to be
-    (asynchronously) notified about the process termination and also retrieve its
-    exit status which is unavailable from wxExecute() in the case of
-    asynchronous execution.
+    The objects of this class are used in conjunction with the ::wxExecute() function.
+    When a wxProcess object is passed to ::wxExecute(), its OnTerminate() virtual method
+    is called when the process terminates. This allows the program to be (asynchronously)
+    notified about the process termination and also retrieve its exit status which is
+    unavailable from ::wxExecute() in the case of asynchronous execution.
 
-    Please note that if the process termination notification is processed by the
+    @note If the process termination notification is processed by the
     parent, it is responsible for deleting the wxProcess object which sent it.
     However, if it is not processed, the object will delete itself and so the
     library users should only delete those objects whose notifications have been
     processed (and call wxProcess::Detach for others).
 
     wxProcess also supports IO redirection of the child process. For this, you have
-    to call its wxProcess::Redirect method before passing it to
-    wxExecute(). If the child process was launched successfully,
-    wxProcess::GetInputStream,
-    wxProcess::GetOutputStream and
-    wxProcess::GetErrorStream can then be used to retrieve
-    the streams corresponding to the child process standard output, input and
-    error output respectively.
-
-    @b wxPerl note: In wxPerl this class has an additional @c Destroy method,
-    for explicit destruction.
+    to call its Redirect() method before passing it to ::wxExecute().
+    If the child process was launched successfully, GetInputStream(), GetOutputStream()
+    and GetErrorStream() can then be used to retrieve the streams corresponding to the
+    child process standard output, input and error output respectively.
 
     @library{wxbase}
     @category{appmanagement}
 
-    @see wxExecute(), @ref overview_sampleexec "exec sample"
+    @see wxExecute(), @ref page_samples_exec "exec sample"
 */
 class wxProcess : public wxEvtHandler
 {
 public:
-    //@{
     /**
         Constructs a process object. @a id is only used in the case you want to
         use wxWidgets events. It identifies this object, or another window that will
         receive the event.
+
         If the @a parent parameter is different from @NULL, it will receive
-        a wxEVT_END_PROCESS notification event (you should insert EVT_END_PROCESS
-        macro in the event table of the parent to handle it) with the given @e id.
-        The second constructor creates an object without any associated parent (and
-        hence no id neither) but allows to specify the @a flags which can have the
-        value of @c wxPROCESS_DEFAULT or @c wxPROCESS_REDIRECT. Specifying the
-        former value has no particular effect while using the latter one is equivalent
-        to calling Redirect().
+        a @c wxEVT_END_PROCESS notification event (you should insert @c EVT_END_PROCESS
+        macro in the event table of the parent to handle it) with the given @a id.
 
         @param parent
             The event handler parent.
         @param id
             id of an event.
-        @param flags
-            either wxPROCESS_DEFAULT or wxPROCESS_REDIRECT
     */
     wxProcess(wxEvtHandler* parent = NULL, int id = -1);
+
+    /**
+        Creates an object without any associated parent (and hence no id neither)
+        but allows to specify the @a flags which can have the value of
+        @c wxPROCESS_DEFAULT or @c wxPROCESS_REDIRECT.
+
+        Specifying the former value has no particular effect while using the latter
+        one is equivalent to calling Redirect().
+    */
     wxProcess(int flags);
-    //@}
 
     /**
         Destroys the wxProcess object.
@@ -76,7 +105,9 @@ public:
 
     /**
         Closes the output stream (the one connected to the stdin of the child
-        process). This function can be used to indicate to the child process that
+        process).
+
+        This function can be used to indicate to the child process that
         there is no more data to be read - usually, a filter program will only
         terminate when the input stream is closed.
     */
@@ -98,7 +129,7 @@ public:
     /**
         Returns @true if the given process exists in the system.
 
-        @see Kill(), @ref overview_sampleexec "Exec sample"
+        @see Kill(), @ref page_samples_exec "Exec sample"
     */
     static bool Exists(int pid);
 
@@ -111,14 +142,16 @@ public:
     /**
         It returns an input stream corresponding to the standard output stream of the
         subprocess. If it is @NULL, you have not turned on the redirection.
-        See Redirect().
+
+        @see Redirect().
     */
     wxInputStream* GetInputStream() const;
 
     /**
         It returns an output stream correspoding to the input stream of the subprocess.
         If it is @NULL, you have not turned on the redirection.
-        See Redirect().
+
+        @see Redirect().
     */
     wxOutputStream* GetOutputStream() const;
 
@@ -137,9 +170,11 @@ public:
 
     /**
         Returns @true if there is data to be read on the child process standard
-        output stream. This allows to write simple (and extremely inefficient)
-        polling-based code waiting for a better mechanism in future wxWidgets versions.
-        See the @ref overview_sampleexec "exec sample" for an example of using this
+        output stream.
+
+        This allows to write simple (and extremely inefficient) polling-based code
+        waiting for a better mechanism in future wxWidgets versions.
+        See the @ref page_samples_exec "exec sample" for an example of using this
         function.
 
         @see IsInputOpened()
@@ -152,29 +187,30 @@ public:
     bool IsInputOpened() const;
 
     /**
-        Send the specified signal to the given process. Possible signal values are:
+        Send the specified signal to the given process. Possible signal values
+        can be one of the ::wxSignal enumeration values.
 
         @c wxSIGNONE, @c wxSIGKILL and @c wxSIGTERM have the same meaning
         under both Unix and Windows but all the other signals are equivalent to
         @c wxSIGTERM under Windows.
-        The @a flags parameter can be wxKILL_NOCHILDREN (the default),
-        or wxKILL_CHILDREN, in which case the child processes of this
-        process will be killed too. Note that under Unix, for wxKILL_CHILDREN
-        to work you should have created the process passing wxEXEC_MAKE_GROUP_LEADER.
-        Returns the element of @c wxKillError enum:
 
-        @see Exists(), wxKill(), @ref overview_sampleexec "Exec sample"
+        The @a flags parameter can be @c wxKILL_NOCHILDREN (the default),
+        or @c wxKILL_CHILDREN, in which case the child processes of this
+        process will be killed too. Note that under Unix, for @c wxKILL_CHILDREN
+        to work you should have created the process passing @c wxEXEC_MAKE_GROUP_LEADER.
+
+        Returns the element of ::wxKillError enum.
+
+        @see Exists(), wxKill(), @ref page_samples_exec "Exec sample"
     */
     static wxKillError Kill(int pid, wxSignal signal = wxSIGNONE,
                             int flags = wxKILL_NOCHILDREN);
 
     /**
-        It is called when the process with the pid
-
-        @param pid finishes.
+        It is called when the process with the pid @a pid finishes.
         It raises a wxWidgets event when it isn't overridden.
 
-        pid
+        @param pid
             The pid of the process which has just terminated.
         @param status
             The exit code of the process.
@@ -186,8 +222,11 @@ public:
         the process specified by the @a cmd parameter and returns the wxProcess
         object which can be used to retrieve the streams connected to the standard
         input, output and error output of the child process.
-        If the process couldn't be launched, @NULL is returned. Note that in any
-        case the returned pointer should @b not be deleted, rather the process
+
+        If the process couldn't be launched, @NULL is returned.
+
+        @remarks
+        In any case the returned pointer should @b not be deleted, rather the process
         object will be destroyed automatically when the child process terminates. This
         does mean that the child process should be told to quit before the main program
         exits to avoid memory leaks.
@@ -195,21 +234,22 @@ public:
         @param cmd
             The command to execute, including optional arguments.
         @param flags
-            The flags to pass to wxExecute.
-              NOTE: wxEXEC_SYNC should not be used.
+            The flags to pass to ::wxExecute().
+            Note: @c wxEXEC_SYNC should not be used.
 
         @returns A pointer to new wxProcess object or @NULL on error.
 
-        @see wxExecute()
+        @see ::wxExecute()
     */
     static wxProcess* Open(const wxString& cmd,
                            int flags = wxEXEC_ASYNC);
 
     /**
-        Turns on redirection. wxExecute will try to open a couple of pipes
-        to catch the subprocess stdio. The caught input stream is returned by
-        GetOutputStream() as a non-seekable stream. The caught output stream is returned
-        by GetInputStream() as a non-seekable stream.
+        Turns on redirection.
+
+        ::wxExecute() will try to open a couple of pipes to catch the subprocess stdio.
+        The caught input stream is returned by GetOutputStream() as a non-seekable stream.
+        The caught output stream is returned by GetInputStream() as a non-seekable stream.
     */
     void Redirect();
 };
@@ -222,17 +262,25 @@ public:
 
     A process event is sent when a process is terminated.
 
+    @beginEventTable{wxProcessEvent}
+    @event{EVT_END_PROCESS(id, func)}
+           Process a @c wxEVT_END_PROCESS event. @a id is the identifier of the process
+           object (the id passed to the wxProcess constructor) or a window to receive
+           the event.
+    @endEventTable
+
     @library{wxbase}
     @category{events}
 
-    @see wxProcess, @ref overview_eventhandlingoverview
+    @see wxProcess, @ref overview_eventhandling
 */
 class wxProcessEvent : public wxEvent
 {
 public:
     /**
-        Constructor. Takes a wxProcessObject or window id, a process id and an
-        exit status.
+        Constructor.
+
+        Takes a wxProcessObject or window id, a process id and an exit status.
     */
     wxProcessEvent(int id = 0, int pid = 0, int exitcode = 0);
 

@@ -8,7 +8,7 @@
 
 /**
 
-@page overview_sizer Sizers
+@page overview_sizer Sizers Overview
 
 Classes: wxSizer, wxGridSizer, wxFlexGridSizer, wxBoxSizer, wxStaticBoxSizer
 

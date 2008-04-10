@@ -129,9 +129,17 @@ enum wxPenCap
     @category{gdi}
 
     @stdobjects
-    ::wxNullPen, ::wxRED_PEN, ::wxCYAN_PEN, ::wxGREEN_PEN, ::wxBLACK_PEN, ::wxWHITE_PEN,
-    ::wxTRANSPARENT_PEN, ::wxBLACK_DASHED_PEN, ::wxGREY_PEN, ::wxMEDIUM_GREY_PEN,
-    ::wxLIGHT_GREY_PEN
+    @li ::wxNullPen
+    @li ::wxRED_PEN
+    @li ::wxCYAN_PEN
+    @li ::wxGREEN_PEN
+    @li ::wxBLACK_PEN
+    @li ::wxWHITE_PEN
+    @li ::wxTRANSPARENT_PEN
+    @li ::wxBLACK_DASHED_PEN
+    @li ::wxGREY_PEN
+    @li ::wxMEDIUM_GREY_PEN
+    @li ::wxLIGHT_GREY_PEN
 
     @see wxPenList, wxDC, wxDC::SetPen()
 */

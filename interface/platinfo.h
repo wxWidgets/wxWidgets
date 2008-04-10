@@ -79,8 +79,8 @@ enum wxPortId
 
 /**
     The architecture of the operating system
-    (regardless of the build environment of wxWidgets library
-    - see ::wxIsPlatform64bit documentation for more info).
+    (regardless of the build environment of wxWidgets library - see ::wxIsPlatform64bit()
+    documentation for more info).
 */
 enum wxArchitecture
 {

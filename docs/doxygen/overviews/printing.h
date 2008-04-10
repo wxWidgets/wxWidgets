@@ -8,7 +8,7 @@
 
 /**
 
-@page overview_printing Printing
+@page overview_printing Printing Framework Overview
 
 Classes:
 @li wxPrintout

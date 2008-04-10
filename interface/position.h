@@ -11,25 +11,30 @@
     @wxheader{position.h}
 
     This class represents the position of an item in any kind of grid of rows and
-    columns such as wxGridBagSizer, or
-    wxHVScrolledWindow.
+    columns such as wxGridBagSizer, or wxHVScrolledWindow.
+
+    @todo rename this class to wxItemPosition or such, wxPosition is too generic
 
     @library{wxbase}
-    @category{FIXME}
+    @category{data}
 
     @see wxPoint, wxSize
 */
 class wxPosition
 {
 public:
-    //@{
+
     /**
-        Construct a new wxPosition, optionally setting the row and column. The
-        default value is (0, 0).
+        Construct a new wxPosition, setting the row and column to the
+        default value of (0, 0).
     */
     wxPosition();
+
+    /**
+        Construct a new wxPosition, setting the row and column to the
+        value of (@a row, @a col).
+    */
     wxPosition(int row, int col);
-    //@}
 
     /**
         A synonym for GetColumn().
@@ -46,22 +51,6 @@ public:
     */
     int GetRow() const;
 
-    //@{
-    /**
-
-    */
-    bool operator ==(const wxPosition& p) const;
-    const bool operator !=(const wxPosition& p) const;
-    const wxPosition&  operator +=(const wxPosition& p) const;
-    wxPosition operator -=(const wxPosition& p) const;
-    wxPosition operator +=(const wxSize& s) const;
-    wxPosition operator -=(const wxSize& s) const;
-    wxPosition operator +(const wxPosition& p) const;
-    const wxPosition  operator -(const wxPosition& p) const;
-    const wxPosition  operator +(const wxSize& s) const;
-    const wxPosition  operator -(const wxSize& s) const;
-    //@}
-
     /**
         A synonym for SetColumn().
     */
@@ -76,5 +65,23 @@ public:
         Set a new row value.
     */
     void SetRow(int row);
+
+
+    /**
+        @name Miscellaneous operators
+
+        @{
+    */
+    bool operator ==(const wxPosition& p) const;
+    bool operator !=(const wxPosition& p) const;
+    wxPosition& operator +=(const wxPosition& p) const;
+    wxPosition& operator -=(const wxPosition& p) const;
+    wxPosition& operator +=(const wxSize& s) const;
+    wxPosition& operator -=(const wxSize& s) const;
+    wxPosition& operator +(const wxPosition& p) const;
+    wxPosition& operator -(const wxPosition& p) const;
+    wxPosition& operator +(const wxSize& s) const;
+    wxPosition& operator -(const wxSize& s) const;
+    //@}
 };
 
