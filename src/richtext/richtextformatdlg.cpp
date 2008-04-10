@@ -411,6 +411,12 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxSize size = GetSize();
     wxFont font = GetFont();
 
+    if ((GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) || (GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT))
+    {
+        double size = static_cast<double>(font.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
+        font.SetPointSize( static_cast<int>(size) );
+    }
+
     if ( font.Ok() )
     {
         dc.SetFont(font);
@@ -424,6 +430,11 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.GetTextExtent( text, &w, &h);
         int cx = wxMax(2, (size.x/2) - (w/2));
         int cy = wxMax(2, (size.y/2) - (h/2));
+
+        if ( GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT )
+            cy -= h/2;
+        if ( GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT )
+            cy += h/2;
 
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);

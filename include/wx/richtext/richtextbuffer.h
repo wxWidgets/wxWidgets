@@ -203,6 +203,12 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 #define wxTEXT_ATTR_KEEP_FIRST_PARA_STYLE   0x10000000
 
 /*!
+ * Default superscript/subscript font multiplication factor
+ */
+
+#define wxSCRIPT_MUL_FACTOR             1.5
+
+/*!
  * wxRichTextFontTable
  * Manages quick access to a pool of fonts for rendering rich text
  */

@@ -4317,16 +4317,44 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     long len = range.GetLength();
     wxString stringChunk = str.Mid(range.GetStart() - offset, (size_t) len);
 
-    int charHeight = dc.GetCharHeight();
-
-    int x = rect.x;
-    int y = rect.y + (rect.height - charHeight - (descent - m_descent));
-
     // Test for the optimized situations where all is selected, or none
     // is selected.
 
-    wxFont font(GetBuffer()->GetFontTable().FindFont(textAttr));
-    wxCheckSetFont(dc, font);
+    wxFont textFont(GetBuffer()->GetFontTable().FindFont(textAttr));
+    wxCheckSetFont(dc, textFont);
+    int charHeight = dc.GetCharHeight();
+
+    int x, y;
+    if ( textFont.Ok() )
+    {
+        if ( textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) )
+        {
+            double size = static_cast<double>(textFont.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
+            textFont.SetPointSize( static_cast<int>(size) );
+            x = rect.x;
+            y = rect.y;
+            wxCheckSetFont(dc, textFont);
+        }
+        else if ( textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT) )
+        {
+            double size = static_cast<double>(textFont.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
+            textFont.SetPointSize( static_cast<int>(size) );
+            x = rect.x;
+            int sub_height = static_cast<int>( static_cast<double>(charHeight) / wxSCRIPT_MUL_FACTOR);
+            y = rect.y + (rect.height - sub_height + (descent - m_descent));
+            wxCheckSetFont(dc, textFont);
+        }
+        else
+        {
+            x = rect.x;
+            y = rect.y + (rect.height - charHeight - (descent - m_descent));
+        }
+    }
+    else
+    {
+        x = rect.x;
+        y = rect.y + (rect.height - charHeight - (descent - m_descent));
+    }
 
     // (a) All selected.
     if (selectionRange.GetStart() <= range.GetStart() && selectionRange.GetEnd() >= range.GetEnd())
@@ -4581,8 +4609,24 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     // of line breaks - and we don't need it, since we'll calculate size within
     // formatted text by doing it in chunks according to the line ranges
 
+    bool bScript(false);
     wxFont font(GetBuffer()->GetFontTable().FindFont(textAttr));
-    wxCheckSetFont(dc, font);
+    if (font.Ok())
+    {
+        if ( textAttr.HasTextEffects() && ( (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT)
+            || (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT) ) )
+        {
+            wxFont textFont = font;
+            double size = static_cast<double>(textFont.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
+            textFont.SetPointSize( static_cast<int>(size) );
+            wxCheckSetFont(dc, textFont);
+            bScript = true;
+        }
+        else
+        {
+            wxCheckSetFont(dc, font);
+        }
+    }
 
     int startPos = range.GetStart() - GetRange().GetStart();
     long len = range.GetLength();
@@ -4650,8 +4694,13 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             }
         }
     }
+
     dc.GetTextExtent(stringChunk, & w, & h, & descent);
     width += w;
+
+    if ( bScript )
+        dc.SetFont(font);
+
     size = wxSize(width, dc.GetCharHeight());
 
     return true;

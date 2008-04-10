@@ -35,6 +35,7 @@ class wxRichTextFontPreviewCtrl;
 
 ////@begin control identifiers
 #define SYMBOL_WXRICHTEXTFONTPAGE_STYLE wxTAB_TRAVERSAL
+#define SYMBOL_WXRICHTEXTFONTPAGE_TITLE _("wxRichTextFontPage")
 #define SYMBOL_WXRICHTEXTFONTPAGE_IDNAME ID_RICHTEXTFONTPAGE
 #define SYMBOL_WXRICHTEXTFONTPAGE_SIZE wxSize(200, 100)
 #define SYMBOL_WXRICHTEXTFONTPAGE_POSITION wxDefaultPosition
@@ -102,6 +103,12 @@ public:
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
     void OnCapsctrlClick( wxCommandEvent& event );
 
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_SUPERSCRIPT
+    void OnRichtextfontpageSuperscriptClick( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_SUBSCRIPT
+    void OnRichtextfontpageSubscriptClick( wxCommandEvent& event );
+
 ////@end wxRichTextFontPage event handler declarations
 
 ////@begin wxRichTextFontPage member function declarations
@@ -127,6 +134,8 @@ public:
     wxRichTextColourSwatchCtrl* m_colourCtrl;
     wxCheckBox* m_strikethroughCtrl;
     wxCheckBox* m_capitalsCtrl;
+    wxCheckBox* m_superscriptCtrl;
+    wxCheckBox* m_subscriptCtrl;
     wxRichTextFontPreviewCtrl* m_previewCtrl;
     /// Control identifiers
     enum {
@@ -141,6 +150,8 @@ public:
         ID_RICHTEXTFONTPAGE_COLOURCTRL = 10009,
         ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL = 10010,
         ID_RICHTEXTFONTPAGE_CAPSCTRL = 10011,
+        ID_RICHTEXTFONTPAGE_SUPERSCRIPT = 10012,
+        ID_RICHTEXTFONTPAGE_SUBSCRIPT = 10013,
         ID_RICHTEXTFONTPAGE_PREVIEWCTRL = 10003
     };
 ////@end wxRichTextFontPage member variables
