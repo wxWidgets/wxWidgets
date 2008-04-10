@@ -10,14 +10,16 @@
     @class wxImageHandler
     @wxheader{image.h}
 
-    This is the base class for implementing image file loading/saving, and image
-    creation from data.
+    This is the base class for implementing image file loading/saving, and
+    image creation from data.
     It is used within wxImage and is not normally seen by the application.
 
     If you wish to extend the capabilities of wxImage, derive a class from
-    wxImageHandler
-    and add the handler using wxImage::AddHandler in your
+    wxImageHandler and add the handler using wxImage::AddHandler in your
     application initialisation.
+
+    @stdobjects
+    ::wxNullImage
 
     @library{wxcore}
     @category{FIXME}
@@ -141,18 +143,16 @@ public:
     @class wxImage
     @wxheader{image.h}
 
-    This class encapsulates a platform-independent image. An image can be created
-    from data, or using wxBitmap::ConvertToImage. An image
-    can be loaded from a file in a variety of formats, and is extensible to new
-    formats
-    via image format handlers. Functions are available to set and get image bits, so
-    it can be used for basic image manipulation.
+    This class encapsulates a platform-independent image. An image can be
+    created from data, or using wxBitmap::ConvertToImage. An image can be
+    loaded from a file in a variety of formats, and is extensible to new
+    formats via image format handlers. Functions are available to set and
+    get image bits, so it can be used for basic image manipulation.
 
     A wxImage cannot (currently) be drawn directly to a wxDC. Instead,
     a platform-specific wxBitmap object must be created from it using
     the wxBitmap::wxBitmap(wxImage,int depth) constructor.
-    This bitmap can then
-    be drawn in a device context, using wxDC::DrawBitmap.
+    This bitmap can then be drawn in a device context, using wxDC::DrawBitmap.
 
     One colour value of the image may be used as a mask colour which will lead to
     the automatic creation of a wxMask object associated to the bitmap object.
@@ -168,7 +168,42 @@ public:
 class wxImage : public wxObject
 {
 public:
-    //@{
+    
+    /**
+         Creates an empty wxImage object without an alpha channel.
+    */
+    wxImage();
+    
+    /**
+         Creates an image with the given size and clears it if requested.
+         Does not create an alpha channel.
+         
+        @param width
+            Specifies the width of the image.
+        @param height
+            Specifies the height of the image.
+        @clear
+            Clear the image with zeros.
+    */
+    wxImage(int width, int height, bool clear = true);
+    
+    /**
+        Creates an image from data in memory. If static_data is false
+        then the wxImage will take ownership of the data and free it
+        afterwards. For this, it has to be allocated with @e malloc.
+    
+        @param width
+            Specifies the width of the image.
+        @param height
+            Specifies the height of the image.
+        @param data
+            A pointer to RGB data
+        @param static_data
+            Indicates if the data should be free'd after use
+        
+    */
+    wxImage(int width, int height, unsigned char* data,  bool static_data = false);
+    
     /**
         Creates an image from data in memory. If static_data is false
         then the wxImage will take ownership of the data and free it
@@ -187,27 +222,6 @@ public:
         
     */
     wxImage(int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
-    wxImage(int width, int height, unsigned char* data,  bool static_data = false);
-    //@}
-    
-    /**
-         Creates an image with the given size and clears it if requested.
-         Does not create an alpha channel.
-         
-        @param width
-            Specifies the width of the image.
-        @param height
-            Specifies the height of the image.
-        @clear
-            Clear the image with zeros.
-    */
-    wxImage(int width, int height, bool clear = true);
-    
-    /**
-         Creates an empty wxImage object. Does not create
-         an alpha channel.
-    */
-    wxImage();
     
     /**
         Creates an image from XPM data.
@@ -216,13 +230,12 @@ public:
             A pointer to XPM image data.
     */
     wxImage(const char* const* xpmData);
-    //@{
+    
     /**
+        Creates an image from a file.
+    
         @param name
             Name of the file from which to load the image.
-        @param stream
-            Opened input stream from which to load the image. Currently,
-            the stream must support seeking.
         @param type
             May be one of the following:
             @li wxBITMAP_TYPE_BMP: Load a Windows bitmap file.
@@ -238,9 +251,6 @@ public:
             @li wxBITMAP_TYPE_CUR: Load a Windows cursor file (CUR).
             @li wxBITMAP_TYPE_ANI: Load a Windows animated cursor file (ANI).
             @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
-            
-        @param mimetype
-            MIME type string (for example 'image/jpeg')
         @param index
             Index of the image to load in the case that the image file contains
             multiple images. This is only used by GIF, ICO and TIFF handlers.
@@ -254,10 +264,46 @@ public:
         @see LoadFile()
     */
     wxImage(const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1);
+    
+    /**
+        Creates an image from a file using MIME-types to specify the type.
+    
+        @param name
+            Name of the file from which to load the image.
+        @param type
+            See above
+        @param mimetype
+            MIME type string (for example 'image/jpeg')
+        @param index
+            See above
+    */
     wxImage(const wxString& name, const wxString& mimetype, int index = -1);
-    wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1);
+    
+    /**
+        Creates an image from a stream.
+    
+        @param stream
+            Opened input stream from which to load the image. Currently,
+            the stream must support seeking.
+        @param type
+            See above
+        @param index
+            See above.
+    */
+    wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1);    
+    
+    /**
+        Creates an image from a stream using MIME-types to specify the type.
+    
+        @param stream
+            Opened input stream from which to load the image. Currently,
+            the stream must support seeking.
+        @param mimetype
+            MIME type string (for example 'image/jpeg')
+        @param index
+            See above.
+    */
     wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1);
-    //@}
     
 
     /**
@@ -267,21 +313,17 @@ public:
     */
     ~wxImage();
 
-    //@{
     /**
-        returns @true if the current image handlers can read this file
+        Register an image handler.
     */
     static void AddHandler(wxImageHandler* handler);
-    See also bool CanRead(const wxString& filename);
-    //@}
 
     /**
-        Blurs the image in both horizontal and vertical directions by the specified
-        pixel
-        @e blurRadius. This should not be used when using a single mask colour
-        for transparency.
+        Blurs the image in both horizontal and vertical directions by the
+        specified pixel @e blurRadius. This should not be used when using
+        a single mask colour for transparency.
 
-        @see @ref horzblur() BlurHorizontal, @ref vertblur() BlurVertical
+        @see BlurHorizontal(), BlurVertical()
     */
     wxImage Blur(int blurRadius);
 
@@ -289,7 +331,7 @@ public:
         Blurs the image in the horizontal direction only. This should not be used
         when using a single mask colour for transparency.
 
-        @see Blur(), @ref vertblur() BlurVertical
+        @see Blur(), BlurVertical()
     */
     wxImage BlurHorizontal(int blurRadius);
 
@@ -297,9 +339,14 @@ public:
         Blurs the image in the vertical direction only. This should not be used
         when using a single mask colour for transparency.
 
-        @see Blur(), @ref horzblur() BlurHorizontal
+        @see Blur(), BlurHorizontal()
     */
     wxImage BlurVertical(int blurRadius);
+    
+    /**
+        Returns @true if the current image handlers can read this file
+    */
+    bool CanRead(const wxString& filename);
 
     /**
         Deletes all image handlers.
@@ -414,16 +461,18 @@ public:
     static wxImageHandler* FindHandlerMime(const wxString& mimetype);
     //@}
 
-    //@{
+    /**
+        Return alpha value at given pixel location.
+    */
+    unsigned char GetAlpha(int x, int y) const;
+    
     /**
         Returns pointer to the array storing the alpha values for this image. This
         pointer is @NULL for the images without the alpha channel. If the image
         does have it, this pointer may be used to directly manipulate the alpha values
-        which are stored as the @ref getdata() RGB ones.
+        which are stored as the RGB ones.
     */
-    unsigned char GetAlpha(int x, int y) const;
     const unsigned char * GetAlpha() const;
-    //@}
 
     /**
         Returns the blue intensity at the given coordinate.
@@ -884,16 +933,20 @@ public:
     wxImage Scale(int width, int height,
                   int quality = wxIMAGE_QUALITY_NORMAL) const;
 
-    //@{
-    /**
-        Sets the alpha value for the given pixel. This function should only be called
-        if the image has alpha channel data, use HasAlpha() to
-        check for this.
+    /** 
+       Assigns new data as alpha channel to the image.
+       If @e static_data is false the data will be
+       free()'d after use.
     */
     void SetAlpha(unsigned char* alpha = NULL,
                   bool static_data = false);
+                  
+    /**
+        Sets the alpha value for the given pixel. This function should only be
+        called if the image has alpha channel data, use HasAlpha() to
+        check for this.
+    */
     void SetAlpha(int x, int y, unsigned char alpha);
-    //@}
 
     /**
         Sets the image data without performing checks. The data given must have
@@ -990,12 +1043,6 @@ public:
     */
     wxImage operator =(const wxImage& image);
 };
-
-/**
-    An empty wxImage.
-*/
-wxImage wxNullImage;
-
 
 // ============================================================================
 // Global functions/macros
