@@ -44,10 +44,10 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_data
 @li @ref page_class_cat_containers
 @li @ref page_class_cat_smartpointers
-@li @ref page_class_cat_xml
 @li @ref page_class_cat_file
-@li @ref page_class_cat_archive
 @li @ref page_class_cat_streams
+@li @ref page_class_cat_xml
+@li @ref page_class_cat_archive
 </td><td>
 @li @ref page_class_cat_xrc
 @li @ref page_class_cat_net
@@ -447,6 +447,164 @@ Related Overviews: @ref overview_validator
 
 
 
+@section page_class_cat_appmanagement Application and Process Management
+
+@li wxApp: Application class
+@li wxCmdLineParser: Command line parser class
+@li wxDllLoader: Class to work with shared libraries.
+@li wxProcess: Process class
+
+
+
+@section page_class_cat_printing Printing Framework
+
+A printing and previewing framework is implemented to make it relatively
+straightforward to provide document printing facilities.
+
+Related Overviews: @ref overview_printing
+
+@li wxPreviewFrame: Frame for displaying a print preview
+@li wxPreviewCanvas: Canvas for displaying a print preview
+@li wxPreviewControlBar: Standard control bar for a print preview
+@li wxPrintDialog: Standard print dialog
+@li wxPageSetupDialog: Standard page setup dialog
+@li wxPrinter: Class representing the printer
+@li wxPrinterDC: Printer device context
+@li wxPrintout: Class representing a particular printout
+@li wxPrintPreview: Class representing a print preview
+@li wxPrintData: Represents information about the document being printed
+@li wxPrintDialogData: Represents information about the print dialog
+@li wxPageSetupDialogData: Represents information about the page setup dialog
+
+
+
+@section page_class_cat_dvf Document/View Framework
+
+wxWidgets supports a document/view framework which provides housekeeping for a
+document-centric application.
+
+Related Overviews: @ref overview_docview
+
+@li wxCommand: Base class for undo/redo actions
+@li wxCommandProcessor: Maintains the undo/redo stack
+@li wxDocument: Represents a document
+@li wxView: Represents a view
+@li wxDocTemplate: Manages the relationship between a document class and a
+    view class
+@li wxDocManager: Manages the documents and views in an application
+@li wxDocChildFrame: A child frame for showing a document view
+@li wxDocParentFrame: A parent frame to contain views
+@li wxDocMDIChildFrame: An MDI child frame for showing a document view
+@li wxDocMDIParentFrame: An MDI parent frame to contain views
+@li wxFileHistory: Maintains a list of the most recently visited files
+
+
+
+@section page_class_cat_dnd Clipboard and Drag & Drop
+
+Related Overviews: @ref overview_dnd
+
+@li wxDataObject: Data object class
+@li wxDataFormat: Represents a data format
+@li wxTextDataObject: Text data object class
+@li wxFileDataObject: File data object class
+@li wxBitmapDataObject: Bitmap data object class
+@li wxURLDataObject: URL data object class
+@li wxCustomDataObject: Custom data object class
+@li wxClipboard: Clipboard class
+@li wxDropTarget: Drop target class
+@li wxFileDropTarget: File drop target class
+@li wxTextDropTarget: Text drop target class
+@li wxDropSource: Drop source class
+
+
+
+@section page_class_cat_vfs Virtual File System
+
+wxWidgets provides a set of classes that implement an extensible virtual file
+system, used internally by the HTML classes.
+
+@li wxFSFile: Represents a file in the virtual file system
+@li wxFileSystem: Main interface for the virtual file system
+@li wxFileSystemHandler: Class used to announce file system type
+
+
+
+@section page_class_cat_rtti Runtime Type Information (RTTI)
+
+wxWidgets supports runtime manipulation of class information, and dynamic
+creation of objects given class names.
+
+Related Overviews: @ref overview_rtti
+
+@see @ref group_funcmacro_rtti "RTTI Functions and Macros"
+
+@li wxClassInfo: Holds runtime class information
+@li wxObject: Root class for classes with runtime information
+
+
+
+@section page_class_cat_debugging Debugging
+
+wxWidgets supports some aspects of debugging an application through classes,
+functions and macros.
+
+Related Overviews: @ref overview_debugging
+
+@see @ref group_funcmacro_debug "Debugging Functions and Macros"
+
+@li wxDebugContext: Provides memory-checking facilities
+@li wxDebugReport: Base class for creating debug reports in case of a program
+    crash.
+@li wxDebugReportCompress: Class for creating compressed debug reports.
+@li wxDebugReportUpload: Class for uploading compressed debug reports via HTTP.
+@li wxDebugReportPreview: Abstract base class for previewing the contents of a
+    debug report.
+@li wxDebugReportPreviewStd: Standard implementation of wxDebugReportPreview.
+
+
+
+@section page_class_cat_logging Logging
+
+wxWidgets provides several classes and functions for message logging.
+
+Related Overviews: @ref overview_log
+
+@see @ref group_funcmacro_log "Logging Functions and Macros"
+
+@li wxLog: The base log class
+@li wxLogStderr: Log messages to a C STDIO stream
+@li wxLogStream: Log messages to a C++ iostream
+@li wxLogTextCtrl: Log messages to a wxTextCtrl
+@li wxLogWindow: Log messages to a log frame
+@li wxLogGui: Default log target for GUI programs
+@li wxLogNull: Temporarily suppress message logging
+@li wxLogChain: Allows to chain two log targets
+@li wxLogInterposer: Allows to filter the log messages
+@li wxLogInterposerTemp: Allows to filter the log messages
+@li wxStreamToTextRedirector: Allows to redirect output sent to @c cout to a wxTextCtrl
+
+
+
+@section page_class_cat_threading Threading
+
+wxWidgets provides a set of classes to make use of the native thread
+capabilities of the various platforms.
+
+Related Overviews: @ref overview_thread
+
+@li wxThread: Thread class
+@li wxThreadHelper: Manages background threads easily
+@li wxMutex: Mutex class
+@li wxMutexLocker: Mutex locker utility class
+@li wxCriticalSection: Critical section class
+@li wxCriticalSectionLocker: Critical section locker utility class
+@li wxCondition: Condition class
+@li wxSemaphore: Semaphore class
+@section page_class_cat_stc Scintilla Text Editor
+
+
+
 @section page_class_cat_data Data Structures
 
 These are the data structure classes supported by wxWidgets.
@@ -500,143 +658,6 @@ wxWidgets provides a few smart pointer class templates.
 
 
 
-@section page_class_cat_logging Logging
-
-wxWidgets provides several classes and functions for message logging.
-
-Related Overviews: @ref overview_log
-
-@see @ref group_funcmacro_log "Logging Functions and Macros"
-
-@li wxLog: The base log class
-@li wxLogStderr: Log messages to a C STDIO stream
-@li wxLogStream: Log messages to a C++ iostream
-@li wxLogTextCtrl: Log messages to a wxTextCtrl
-@li wxLogWindow: Log messages to a log frame
-@li wxLogGui: Default log target for GUI programs
-@li wxLogNull: Temporarily suppress message logging
-@li wxLogChain: Allows to chain two log targets
-@li wxLogInterposer: Allows to filter the log messages
-@li wxLogInterposerTemp: Allows to filter the log messages
-@li wxStreamToTextRedirector: Allows to redirect output sent to @c cout to a wxTextCtrl
-
-
-
-@section page_class_cat_debugging Debugging
-
-wxWidgets supports some aspects of debugging an application through classes,
-functions and macros.
-
-Related Overviews: @ref overview_debugging
-
-@see @ref group_funcmacro_debug "Debugging Functions and Macros"
-
-@li wxDebugContext: Provides memory-checking facilities
-@li wxDebugReport: Base class for creating debug reports in case of a program
-    crash.
-@li wxDebugReportCompress: Class for creating compressed debug reports.
-@li wxDebugReportUpload: Class for uploading compressed debug reports via HTTP.
-@li wxDebugReportPreview: Abstract base class for previewing the contents of a
-    debug report.
-@li wxDebugReportPreviewStd: Standard implementation of wxDebugReportPreview.
-
-
-
-@section page_class_cat_net Networking
-
-wxWidgets provides its own classes for socket based networking.
-
-@li wxDialUpManager: Provides functions to check the status of network
-    connection and to establish one
-@li wxIPV4address: Represents an Internet address
-@li wxIPaddress: Represents an Internet address
-@li wxSocketBase: Represents a socket base object
-@li wxSocketClient: Represents a socket client
-@li wxSocketServer: Represents a socket server
-@li wxSocketEvent: A socket event
-@li wxFTP: FTP protocol class
-@li wxHTTP: HTTP protocol class
-@li wxURL: Represents a Universal Resource Locator
-
-
-
-@section page_class_cat_ipc Interprocess Communication
-
-wxWidgets provides simple interprocess communications facilities based on
-Windows DDE, but available on most platforms using TCP.
-
-Related Overviews: @ref overview_ipc
-
-@li wxClient, wxDDEClient: Represents a client
-@li wxConnection, wxDDEConnection: Represents the connection between a client
-    and a server
-@li wxServer, wxDDEServer: Represents a server
-
-
-
-@section page_class_cat_dvf Document/View Framework
-
-wxWidgets supports a document/view framework which provides housekeeping for a
-document-centric application.
-
-Related Overviews: @ref overview_docview
-
-@li wxCommand: Base class for undo/redo actions
-@li wxCommandProcessor: Maintains the undo/redo stack
-@li wxDocument: Represents a document
-@li wxView: Represents a view
-@li wxDocTemplate: Manages the relationship between a document class and a
-    view class
-@li wxDocManager: Manages the documents and views in an application
-@li wxDocChildFrame: A child frame for showing a document view
-@li wxDocParentFrame: A parent frame to contain views
-@li wxDocMDIChildFrame: An MDI child frame for showing a document view
-@li wxDocMDIParentFrame: An MDI parent frame to contain views
-@li wxFileHistory: Maintains a list of the most recently visited files
-
-
-
-@section page_class_cat_printing Printing Framework
-
-A printing and previewing framework is implemented to make it relatively
-straightforward to provide document printing facilities.
-
-Related Overviews: @ref overview_printing
-
-@li wxPreviewFrame: Frame for displaying a print preview
-@li wxPreviewCanvas: Canvas for displaying a print preview
-@li wxPreviewControlBar: Standard control bar for a print preview
-@li wxPrintDialog: Standard print dialog
-@li wxPageSetupDialog: Standard page setup dialog
-@li wxPrinter: Class representing the printer
-@li wxPrinterDC: Printer device context
-@li wxPrintout: Class representing a particular printout
-@li wxPrintPreview: Class representing a print preview
-@li wxPrintData: Represents information about the document being printed
-@li wxPrintDialogData: Represents information about the print dialog
-@li wxPageSetupDialogData: Represents information about the page setup dialog
-
-
-
-@section page_class_cat_dnd Clipboard and Drag & Drop
-
-Related Overviews: @ref overview_dnd
-
-@li wxDataObject: Data object class
-@li wxDataFormat: Represents a data format
-@li wxTextDataObject: Text data object class
-@li wxFileDataObject: File data object class
-@li wxBitmapDataObject: Bitmap data object class
-@li wxURLDataObject: URL data object class
-@li wxCustomDataObject: Custom data object class
-@li wxClipboard: Clipboard class
-@li wxDropTarget: Drop target class
-@li wxFileDropTarget: File drop target class
-@li wxTextDropTarget: Text drop target class
-@li wxDropSource: Drop source class
-
-
-
 @section page_class_cat_file File Handling
 
 wxWidgets has several small classes to work with disk files and directories.
@@ -653,17 +674,6 @@ Related Overviews: @ref overview_file
 @li wxTextFile: Class for working with text files as with arrays of lines
 @li wxStandardPaths: Paths for standard directories
 @li wxPathList: A class to help search multiple paths
-
-
-
-@section page_class_cat_vfs Virtual File System
-
-wxWidgets provides a set of classes that implement an extensible virtual file
-system, used internally by the HTML classes.
-
-@li wxFSFile: Represents a file in the virtual file system
-@li wxFileSystem: Main interface for the virtual file system
-@li wxFileSystemHandler: Class used to announce file system type
 
 
 
@@ -706,48 +716,55 @@ standard stream libraries, and to provide enhanced functionality.
 
 
 
-@section page_class_cat_threading Threading
+@section page_class_cat_xml XML
 
-wxWidgets provides a set of classes to make use of the native thread
-capabilities of the various platforms.
-
-Related Overviews: @ref overview_thread
-
-@li wxThread: Thread class
-@li wxThreadHelper: Manages background threads easily
-@li wxMutex: Mutex class
-@li wxMutexLocker: Mutex locker utility class
-@li wxCriticalSection: Critical section class
-@li wxCriticalSectionLocker: Critical section locker utility class
-@li wxCondition: Condition class
-@li wxSemaphore: Semaphore class
+@li wxXmlDocument: A class to parse XML files
+@li wxXmlNode: A class which represents XML nodes
+@li wxXmlAttribute: A class which represent an XML attribute
 
 
 
-@section page_class_cat_rtti Runtime Type Information (RTTI)
+@section page_class_cat_archive Archive
 
-wxWidgets supports runtime manipulation of class information, and dynamic
-creation of objects given class names.
-
-Related Overviews: @ref overview_rtti
-
-@see @ref group_funcmacro_rtti "RTTI Functions and Macros"
-
-@li wxClassInfo: Holds runtime class information
-@li wxObject: Root class for classes with runtime information
+@li wxArchiveInputStream
+@li wxArchiveOutputStream
+@li wxArchiveEntry
 
 
 
-@section page_class_cat_appmanagement Application and Process Management
+****
 
-@li wxApp: Application class
-@li wxCmdLineParser: Command line parser class
-@li wxDllLoader: Class to work with shared libraries.
-@li wxProcess: Process class
+@section page_class_cat_net Networking
+
+wxWidgets provides its own classes for socket based networking.
+
+@li wxDialUpManager: Provides functions to check the status of network
+    connection and to establish one
+@li wxIPV4address: Represents an Internet address
+@li wxIPaddress: Represents an Internet address
+@li wxSocketBase: Represents a socket base object
+@li wxSocketClient: Represents a socket client
+@li wxSocketServer: Represents a socket server
+@li wxSocketEvent: A socket event
+@li wxFTP: FTP protocol class
+@li wxHTTP: HTTP protocol class
+@li wxURL: Represents a Universal Resource Locator
 
 
 
-@section page_class_cat_stc Scintilla Text Editor
+@section page_class_cat_ipc Interprocess Communication
+
+wxWidgets provides simple interprocess communications facilities based on
+Windows DDE, but available on most platforms using TCP.
+
+Related Overviews: @ref overview_ipc
+
+@li wxClient, wxDDEClient: Represents a client
+@li wxConnection, wxDDEConnection: Represents the connection between a client
+    and a server
+@li wxServer, wxDDEServer: Represents a server
+
+
 
 wxWidgets also provides a wrapper around the Scintilla text editor control,
 which is a control for plain-text editing with support for highlighting, smart
@@ -755,14 +772,6 @@ indentation, etc.
 
 @li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code
     editing component.
-
-
-
-@section page_class_cat_xml XML
-
-@li wxXmlDocument: A class to parse XML files
-@li wxXmlNode: A class which represents XML nodes
-@li wxXmlAttribute: A class which represent an XML attribute
 
 
 
@@ -803,14 +812,6 @@ Related Overviews: @ref overview_xrc
 
 @li wxGLCanvas: Canvas that you can render OpenGL calls to.
 @li wxGLContext: Class to ease sharing of OpenGL data resources.
-
-
-
-@section page_class_cat_archive Archive
-
-@li wxArchiveInputStream
-@li wxArchiveOutputStream
-@li wxArchiveEntry
 
 
 
