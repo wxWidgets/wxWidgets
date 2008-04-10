@@ -481,17 +481,17 @@ SPAN.literal {
 /* we make all the following <span> tags render the text just like
    the standard Doxygen @remarks, @see tags do, to obtain a uniform
    look and feel */
-SPAN.itemdef, SPAN.lib, SPAN.category, SPAN.stdobj, SPAN.styles, SPAN.events, SPAN.appearance, SPAN.impl, SPAN.avail {
+SPAN.itemdef, SPAN.lib, SPAN.category, SPAN.stdobj, SPAN.styles, SPAN.events, SPAN.flags, SPAN.appearance, SPAN.impl, SPAN.avail {
 	font-weight: bold;
 	line-height: 130%;
 }
 
-SPAN.style, SPAN.event {
+SPAN.style, SPAN.event, SPAN.flag {
 	font-weight: bold;
 	color: #880000;
 }
 
-DIV.styleDesc, DIV.eventDesc {
+DIV.styleDesc, DIV.eventDesc, DIV.flagDesc {
     margin-left: 3%;
     margin-bottom: 1ex;
 }

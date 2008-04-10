@@ -31,19 +31,19 @@ public:
         The @a buttons parameter may be a combination of the following, using the bitwise
         'or' operator:
 
-        @beginStyleTable
-        @style{wxPREVIEW_PRINT}:
+        @beginFlagTable
+        @flag{wxPREVIEW_PRINT}
             Create a print button.
-        @style{wxPREVIEW_NEXT}:
+        @flag{wxPREVIEW_NEXT}
             Create a next page button.
-        @style{wxPREVIEW_PREVIOUS}:
+        @flag{wxPREVIEW_PREVIOUS}
             Create a previous page button.
-        @style{wxPREVIEW_ZOOM}:
+        @flag{wxPREVIEW_ZOOM}
             Create a zoom control.
-        @style{wxPREVIEW_DEFAULT}:
+        @flag{wxPREVIEW_DEFAULT}
             Equivalent to a combination of @c wxPREVIEW_PREVIOUS, @c wxPREVIEW_NEXT
             and @c wxPREVIEW_ZOOM.
-        @endStyleTable
+        @endFlagTable
     */
     wxPreviewControlBar(wxPrintPreview* preview,
                         long buttons,
