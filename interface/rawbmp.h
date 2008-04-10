@@ -10,11 +10,11 @@
     image content.
     
     Implemented on Windows, GTK+ and OS X:
-    wxNativePixelData: Class to access to wxBitmap's internal data without alpha channel (RGB).
-    wxAlphaPixelData: Class to access to wxBitmap's internal data with alpha channel (RGBA).
+       @li wxNativePixelData: Class to access to wxBitmap's internal data without alpha channel (RGB).
+       @li wxAlphaPixelData: Class to access to wxBitmap's internal data with alpha channel (RGBA).
     
     Implemented everywhere:
-    wxImagePixelData: Class to access to wxImage's internal data with alpha channel (RGBA).
+       @li wxImagePixelData: Class to access to wxImage's internal data with alpha channel (RGBA).
     
     @code
     wxBitmap bmp;
