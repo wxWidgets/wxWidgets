@@ -158,6 +158,11 @@ public:
 
     This class encapsulates the concept of a platform-dependent bitmap,
     either monochrome or colour or colour with alpha channel support.
+    
+    If you need direct access the bitmap data instead going through
+    drawing to it using wxMemoryDC you need to use the wxPixelData
+    class (either wxNativePixelData for RGB bitmaps or wxAlphaPixelData
+    for bitmaps with an additionaly alpha channel).
 
     @note
     Many wxBitmap functions take a @e type parameter, which is a value of the
@@ -178,7 +183,7 @@ public:
     ::wxNullBitmap
 
     @see @ref overview_bitmap, @ref overview_bitmap_supportedformats,
-         wxDC::Blit, wxIcon, wxCursor, wxBitmap, wxMemoryDC
+         wxDC::Blit, wxIcon, wxCursor, wxMemoryDC, wxImage, wxPixelData
 */
 class wxBitmap : public wxGDIObject
 {

@@ -20,7 +20,10 @@
     See wxPaintEvent for an example of use.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
+
+    @stdobjects
+    ::wxNullRegion
 
     @see wxPaintEvent
 */
