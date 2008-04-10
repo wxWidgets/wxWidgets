@@ -268,7 +268,7 @@ public:
     @library{wxbase}
     @category{smartpointers}
 */
-class wxScopedTiedPtr
+class wxScopedTiedPtr : public wxScopedPtr
 {
 public:
     /**

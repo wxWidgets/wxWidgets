@@ -60,6 +60,8 @@ public:
 
     /**
         Creates buttons, according to value of the button style flags.
+
+        @todo which flags??
     */
     void CreateButtons();
 
@@ -170,12 +172,10 @@ public:
     void CreateControlBar();
 
     /**
-        Creates the preview canvas and control bar, and calls
-        wxWindow::MakeModal(@true) to disable other top-level windows
-        in the application.
+        Creates the preview canvas and control bar, and calls wxWindow::MakeModal(@true)
+        to disable other top-level windows in the application.
 
-        This function should be called by the application prior to
-        showing the frame.
+        This function should be called by the application prior to showing the frame.
     */
     void Initialize();
 
@@ -202,9 +202,8 @@ public:
     @library{wxbase}
     @category{printing}
 
-    @see @ref overview_printing "Printing framework overview", wxPrinterDC,
-    wxPrintDialog, wxPrintout, wxPrinter, wxPreviewCanvas, wxPreviewControlBar,
-    wxPreviewFrame.
+    @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPrintout, wxPrinter,
+         wxPreviewCanvas, wxPreviewControlBar, wxPreviewFrame
 */
 class wxPrintPreview : public wxObject
 {
@@ -216,7 +215,7 @@ public:
         printing, and the address of an optional block of printer data, which will
         be copied to the print preview object's print data.
 
-        If @a printoutForPrinting is non-@NULL, a @b Print... button will be placed on
+        If @a printoutForPrinting is non-@NULL, a @b "Print..." button will be placed on
         the preview frame so that the user can print directly from the preview interface.
 
         @remarks
@@ -224,8 +223,7 @@ public:
         called, since they will be deleted in the wxPrintPreview constructor.
         The same does not apply to the @a data argument.
 
-        Test the Ok() to check whether the wxPrintPreview object was created
-        correctly.
+        Use IsOk() to check whether the wxPrintPreview object was created correctly.
     */
     wxPrintPreview(wxPrintout* printout,
                    wxPrintout* printoutForPrinting,
@@ -283,7 +281,7 @@ public:
         It could return @false if there was a problem initializing the printer
         device context (current printer not set, for example).
     */
-    bool Ok();
+    bool IsOk();
 
     /**
         This refreshes the preview window with the preview image.
@@ -332,8 +330,7 @@ public:
     void SetPrintout(wxPrintout* printout);
 
     /**
-        Sets the percentage preview zoom, and refreshes the preview canvas
-        accordingly.
+        Sets the percentage preview zoom, and refreshes the preview canvas accordingly.
     */
     void SetZoom(int percent);
 };
@@ -346,6 +343,7 @@ public:
 
     This class represents the Windows or PostScript printer, and is the vehicle
     through which printing may be launched by an application.
+
     Printing can also be achieved through using of lower functions and classes,
     but this and associated classes provide a more convenient and general method
     of printing.
@@ -353,8 +351,7 @@ public:
     @library{wxbase}
     @category{printing}
 
-    @see @ref overview_printing "Printing framework overview", wxPrinterDC,
-    wxPrintDialog, wxPrintout, wxPrintPreview.
+    @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPrintout, wxPrintPreview
 */
 class wxPrinter : public wxObject
 {
@@ -382,15 +379,15 @@ public:
     /**
         Return last error. Valid after calling Print(), PrintDialog() or
         wxPrintPreview::Print().
-        These functions set last error to @c wxPRINTER_NO_ERROR if no error
-        happened.
+
+        These functions set last error to @c wxPRINTER_NO_ERROR if no error happened.
 
         Returned value is one of the following:
 
         @beginTable
-        @row2col{wxPRINTER_NO_ERROR,No error happened.}
-        @row2col{wxPRINTER_CANCELLED,The user cancelled printing.}
-        @row2col{wxPRINTER_ERROR,There was an error during printing.}
+        @row2col{wxPRINTER_NO_ERROR, No error happened.}
+        @row2col{wxPRINTER_CANCELLED, The user cancelled printing.}
+        @row2col{wxPRINTER_ERROR, There was an error during printing.}
         @endTable
     */
     static wxPrinterError GetLastError();
@@ -417,9 +414,8 @@ public:
         Invokes the print dialog.
 
         If successful (the user did not press Cancel and no error occurred),
-        a suitable device context will be returned;
-        otherwise @NULL is returned -- call GetLastError() to get detailed
-        information about the kind of the error.
+        a suitable device context will be returned; otherwise @NULL is returned;
+        call GetLastError() to get detailed information about the kind of the error.
 
         @remarks
         The application must delete this device context to avoid a memory leak.
@@ -474,8 +470,8 @@ public:
     @library{wxbase}
     @category{printing}
 
-    @see @ref overview_printing "Printing framework overview", wxPrinterDC,
-    wxPrintDialog, wxPageSetupDialog, wxPrinter, wxPrintPreview
+    @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPageSetupDialog,
+         wxPrinter, wxPrintPreview
 */
 class wxPrintout : public wxObject
 {
@@ -672,7 +668,9 @@ public:
     wxRect GetPaperRectPixels();
 
     /**
-        Returns the title of the printout
+        Returns the title of the printout.
+
+        @todo the python note here was wrong
     */
     wxString GetTitle();
 
@@ -726,8 +724,9 @@ public:
         Set the user scale and device origin of the wxDC associated with this wxPrintout
         so that the printed page matches the screen size as closely as possible
         and the logical origin is in the top left corner of the paper rectangle.
-        That is, a 100-pixel object on screen should appear at the same size on the printed
-        page.
+
+        That is, a 100-pixel object on screen should appear at the same size on the
+        printed page.
         (It will, of course, be larger or smaller in the preview image, depending on the
         zoom factor.)
 
