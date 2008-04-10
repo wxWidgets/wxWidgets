@@ -278,6 +278,12 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 #define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 
 /*!
+ * Default superscript/subscript font multiplication factor
+ */
+
+#define wxSCRIPT_MUL_FACTOR             1.5
+
+/*!
  * wxRichTextRange class declaration
  * This stores beginning and end positions for a range of data.
  */

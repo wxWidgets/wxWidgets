@@ -107,6 +107,7 @@ All (GUI):
 - Added <scrollrate> parameter to wxScrolledWindow XRC handler.
 - wxRichTextCtrl performance has been improved considerably.
 - Several wxRichTextCtrl style, paste and undo bugs fixed.
+- Added wxRichTextCtrl superscript and subscript support (Knut Petter Lehre).
 - wxNotebook RTTI corrected, so now wxDynamicCast(notebook, wxBookCtrlBase)
   works.
 - When focus is set to wxScrolledWindow child, scroll it into view.
@@ -128,8 +129,8 @@ All (GUI):
 - Fixed crash in wxHtmlHelpController if the help window is still open.
 - Fixed generic art provider to scale bitmaps down to client-specific
   best size if needed.
-- Made wxSpinCtrl::Reparent() in MSW and generic versions (Angelo Mottola)
-- Fixed timing of malformed animated GIFs in wxHTML (Gennady Feller)
+- Made wxSpinCtrl::Reparent() in MSW and generic versions (Angelo Mottola).
+- Fixed timing of malformed animated GIFs in wxHTML (Gennady Feller).
 
 All (Unix):
 
