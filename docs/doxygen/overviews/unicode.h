@@ -38,7 +38,7 @@ use UTF8 is prefered under Linux and partially OS X.
 
 More details about Unicode may be found at <http://www.unicode.org/>.
 
-Writing internationalized programs is much easier with Unicode Moreover
+Writing internationalized programs is much easier with Unicode. Moreover
 even a program which uses only standard ASCII can benefit from using Unicode
 for string representation because there will be no need to convert all
 strings the program uses to/from Unicode each time a system call is made.
@@ -48,15 +48,17 @@ strings the program uses to/from Unicode each time a system call is made.
 Until wxWidgets 3.0 it was possible to compile the library both in
 ANSI (=8-bit) mode as well as in wide char mode (16-bit per character
 on Windows and 32-but on most Unix versions, Linux and OS X). This
-has been changed in wxWidget with the removal of the ANSI mode.
+has been changed in wxWidget with the removal of the ANSI mode,
+but much effort has been made so that most of the previous ANSI
+code should still compile and work as before.
 
 @section overview_unicode_supportin Unicode Support in wxWidgets
 
 Since wxWidgets 3.0 Unicode support is always enabled meaning
 that the wxString class always uses Unicode to encode its content.
-Under Windows wxString uses the standard Windows encoding UCS-2
-(basically an array of 16-bit wchar_t). Under Unix and OS X however,
-wxString uses UTF8 to encode its content.
+Under Windows wxString uses UCS-2 (basically an array of 16-bit
+wchar_t). Under Unix, Linux  and OS X however, wxString uses UTF8
+to encode its content.
 
 For the programmer, the biggest change is that iterating over
 a string can be slower than before since wxString has to parse
