@@ -213,10 +213,10 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
     bool SetClip(const DFBRegion *clip)
         { return Check(m_ptr->SetClip(m_ptr, clip)); }
 
-    bool SetColor(__u8 r, __u8 g, __u8 b, __u8 a)
+    bool SetColor(u8 r, u8 g, u8 b, u8 a)
         { return Check(m_ptr->SetColor(m_ptr, r, g, b, a)); }
 
-    bool Clear(__u8 r, __u8 g, __u8 b, __u8 a)
+    bool Clear(u8 r, u8 g, u8 b, u8 a)
         { return Check(m_ptr->Clear(m_ptr, r, g, b, a)); }
 
     bool DrawLine(int x1, int y1, int x2, int y2)
@@ -421,7 +421,7 @@ struct wxIDirectFBWindow : public wxDfbWrapper<IDirectFBWindow>
     bool Resize(int w, int h)
         { return Check(m_ptr->Resize(m_ptr, w, h)); }
 
-    bool SetOpacity(__u8 opacity)
+    bool SetOpacity(u8 opacity)
         { return Check(m_ptr->SetOpacity(m_ptr, opacity)); }
 
     bool SetStackingClass(DFBWindowStackingClass klass)
