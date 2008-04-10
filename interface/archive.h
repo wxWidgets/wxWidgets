@@ -165,9 +165,10 @@ public:
     These hold the meta-data (filename, timestamp, etc.), for entries
     in archive files such as zips and tars.
 
-    <b>About non-seekable streams</b>: this information applies only when reading
-    archives from non-seekable streams. When the stream is seekable GetNextEntry()
-    returns a fully populated wxArchiveEntry.
+    @section wxarchiveentry_nonseekable About non-seekable streams
+
+    This information applies only when reading archives from non-seekable streams.
+    When the stream is seekable GetNextEntry() returns a fully populated wxArchiveEntry.
     See @ref overview_archive_noseek for more information.
 
     For generic programming, when the worst case must be assumed, you can rely on
