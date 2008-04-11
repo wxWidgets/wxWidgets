@@ -20,25 +20,30 @@
 class wxMenuBar : public wxWindow
 {
 public:
-    //@{
+    /**
+        Construct an empty menu barM
+
+        @param style
+            If wxMB_DOCKABLE the menu bar can be detached (wxGTK only).
+    */
+    wxMenuBar(long style = 0);
+    
     /**
         Construct a menu bar from arrays of menus and titles.
 
         @param n
             The number of menus.
         @param menus
-            An array of menus. Do not use this array again - it now belongs to the
-            menu bar.
+            An array of menus. Do not use this array again - it now belongs to
+            the menu bar.
         @param titles
-            An array of title strings. Deallocate this array after creating the menu
-        bar.
+            An array of title strings. Deallocate this array after creating
+            the menu bar.
         @param style
             If wxMB_DOCKABLE the menu bar can be detached (wxGTK only).
     */
-    wxMenuBar(long style = 0);
     wxMenuBar(size_t n, wxMenu* menus[], const wxString titles[],
               long style = 0);
-    //@}
 
     /**
         Destructor, destroying the menu bar and removing it from the parent frame (if
@@ -391,17 +396,24 @@ public:
 class wxMenu : public wxEvtHandler
 {
 public:
-    //@{
     /**
         Constructs a wxMenu object.
 
         @param style
             If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK only).
     */
-    wxMenu(const wxString& title = "", long style = 0);
     wxMenu(long style);
-    //@}
 
+    /**
+        Constructs a wxMenu object with a title
+
+        @param title
+            Title at the top of the menu (not always supported).
+        @param style
+            If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK only).
+    */
+    wxMenu(const wxString& title = "", long style = 0);
+    
     /**
         Destructor, destroying the menu.
         Note: under Motif, a popup menu must have a valid parent (the window
@@ -413,19 +425,13 @@ public:
     */
     ~wxMenu();
 
-    //@{
     /**
-        Adds a menu item object. This is the most generic variant of Append() method
-        because it may be used for both items (including separators) and submenus and
-        because you can also specify various extra properties of a menu item this way,
-        such as bitmaps and fonts.
+        Adds a menu item. 
 
         @param id
             The menu command identifier.
         @param item
             The string to appear on the menu item.
-        @param menu
-            Pull-right submenu.
         @param kind
             May be wxITEM_SEPARATOR, wxITEM_NORMAL,
             wxITEM_CHECK or wxITEM_RADIO
@@ -433,12 +439,6 @@ public:
             An optional help string associated with the item.
             By default, the handler for the wxEVT_MENU_HIGHLIGHT event displays
             this string in the status line.
-        @param menuItem
-            A menuitem object. It will be owned by the wxMenu object after this function
-            is called, so do not delete it yourself.
-
-        @remarks This command can be used after the menu has been shown, as well
-                 as on initial creation of a menu or menubar.
 
         @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
              AppendSubMenu(), Insert(), SetLabel(),
@@ -447,11 +447,44 @@ public:
     wxMenuItem* Append(int id, const wxString& item = "",
                        const wxString& helpString = "",
                        wxItemKind kind = wxITEM_NORMAL);
+                       
+    /**
+        Adds a submenu.
+
+        @param id
+            The menu command identifier.
+        @param item
+            The string to appear on the menu item.
+        @param menu
+            Pull-right submenu.
+        @param helpString
+            An optional help string associated with the item.
+            By default, the handler for the wxEVT_MENU_HIGHLIGHT event displays
+            this string in the status line.
+
+        @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
+             AppendSubMenu(), Insert(), SetLabel(),
+             GetHelpString(), SetHelpString(), wxMenuItem
+    */
     wxMenuItem* Append(int id, const wxString& item,
                        wxMenu* subMenu,
                        const wxString& helpString = "");
+                       
+    /**
+        Adds a menu item object. This is the most generic variant of Append() method
+        because it may be used for both items (including separators) and submenus and
+        because you can also specify various extra properties of a menu item this way,
+        such as bitmaps and fonts.
+
+        @param menuItem
+            A menuitem object. It will be owned by the wxMenu object after this function
+            is called, so do not delete it yourself.
+
+        @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
+             AppendSubMenu(), Insert(), SetLabel(),
+             GetHelpString(), SetHelpString(), wxMenuItem
+    */
     wxMenuItem* Append(wxMenuItem* menuItem);
-    //@}
 
     /**
         Adds a checkable item to the end of the menu.
@@ -504,39 +537,51 @@ public:
     */
     void Check(int id, const bool check);
 
-    //@{
     /**
         Deletes the menu item from the menu. If the item is a submenu, it will
-        @b not be deleted. Use Destroy() if you want to
-        delete a submenu.
+        @b not be deleted. Use Destroy() if you want to delete a submenu.
 
         @param id
             Id of the menu item to be deleted.
+
+        @see FindItem(), Destroy(), Remove()
+    */
+    void Delete(int id);
+
+    /**
+        Deletes the menu item from the menu. If the item is a submenu, it will
+        @b not be deleted. Use Destroy() if you want to delete a submenu.
+
         @param item
             Menu item to be deleted.
 
         @see FindItem(), Destroy(), Remove()
     */
-    void Delete(int id);
     void Delete(wxMenuItem* item);
-    //@}
 
-    //@{
     /**
         Deletes the menu item from the menu. If the item is a submenu, it will
-        be deleted. Use Remove() if you want to keep the submenu
-        (for example, to reuse it later).
+        be deleted. Use Remove() if you want to keep the submenu (for example,
+        to reuse it later).
 
         @param id
             Id of the menu item to be deleted.
+
+        @see FindItem(), Deletes(), Remove()
+    */
+    void Destroy(int id);
+
+    /**
+        Deletes the menu item from the menu. If the item is a submenu, it will
+        be deleted. Use Remove() if you want to keep the submenu (for example,
+        to reuse it later).
+
         @param item
             Menu item to be deleted.
 
         @see FindItem(), Deletes(), Remove()
     */
-    void Destroy(int id);
     void Destroy(wxMenuItem* item);
-    //@}
 
     /**
         Enables or disables (greys out) a menu item.
@@ -550,28 +595,32 @@ public:
     */
     void Enable(int id, const bool enable);
 
-    //@{
+    /**
+        Finds the menu id for a menu item string.
+
+        @param itemString
+            Menu item string to find.
+
+        @returns Menu item identifier, or wxNOT_FOUND if none is found.
+
+        @remarks Any special menu codes are stripped out of source and target
+                 strings before matching.
+    */
+    int FindItem(const wxString& itemString) const;
+
     /**
         Finds the menu item object associated with the given menu item identifier and,
         optionally, the (sub)menu it belongs to.
 
-        @param itemString
-            Menu item string to find.
         @param id
             Menu item identifier.
         @param menu
             If the pointer is not @NULL, it will be filled with the item's
             parent menu (if the item was found)
 
-        @returns First form: menu item identifier, or wxNOT_FOUND if none is
-                 found.
-
-        @remarks Any special menu codes are stripped out of source and target
-                 strings before matching.
+        @returns Menu item object or NULL if none is found.
     */
-    int FindItem(const wxString& itemString) const;
     const wxMenuItem *  FindItem(int id, wxMenu** menu = NULL) const;
-    //@}
 
     /**
         Returns the wxMenuItem given a position in the menu.
@@ -637,7 +686,6 @@ public:
     */
     wxString GetTitle() const;
 
-    //@{
     /**
         Inserts the given @a item before the position @e pos. Inserting the item
         at position GetMenuItemCount() is the same
@@ -646,11 +694,18 @@ public:
         @see Append(), Prepend()
     */
     wxMenuItem* Insert(size_t pos, wxMenuItem* item);
+    
+    /**
+        Inserts the given @a item before the position @e pos. Inserting the item
+        at position GetMenuItemCount() is the same
+        as appending it.
+
+        @see Append(), Prepend()
+    */
     wxMenuItem* Insert(size_t pos, int id,
                        const wxString& item = "",
                        const wxString& helpString = "",
                        wxItemKind kind = wxITEM_NORMAL);
-    //@}
 
     /**
         Inserts a checkable item at the given position.
@@ -701,7 +756,6 @@ public:
     */
     bool IsEnabled(int id) const;
 
-    //@{
     /**
         Inserts the given @a item at position 0, i.e. before all the other
         existing items.
@@ -709,10 +763,16 @@ public:
         @see Append(), Insert()
     */
     wxMenuItem* Prepend(wxMenuItem* item);
+
+    /**
+        Inserts the given @a item at position 0, i.e. before all the other
+        existing items.
+
+        @see Append(), Insert()
+    */
     wxMenuItem* Prepend(int id, const wxString& item = "",
                         const wxString& helpString = "",
                         wxItemKind kind = wxITEM_NORMAL);
-    //@}
 
     /**
         Inserts a checkable item at position 0.
@@ -737,7 +797,6 @@ public:
     */
     wxMenuItem* PrependSeparator();
 
-    //@{
     /**
         Removes the menu item from the menu but doesn't delete the associated C++
         object. This allows to reuse the same item later by adding it back to the menu
@@ -745,14 +804,22 @@ public:
 
         @param id
             The identifier of the menu item to remove.
+
+        @returns The item which was detached from the menu.
+    */
+    wxMenuItem* Remove(int id);
+    
+    /**
+        Removes the menu item from the menu but doesn't delete the associated C++
+        object. This allows to reuse the same item later by adding it back to the menu
+        (especially useful with submenus).
+
         @param item
             The menu item to remove.
 
         @returns The item which was detached from the menu.
     */
-    wxMenuItem* Remove(int id);
     wxMenuItem* Remove(wxMenuItem* item);
-    //@}
 
     /**
         Sets an item's help string.
