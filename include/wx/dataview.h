@@ -23,6 +23,7 @@
 #include "wx/dynarray.h"
 #include "wx/icon.h"
 #include "wx/imaglist.h"
+#include "wx/weakref.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDataFormat;
 
@@ -413,6 +414,7 @@ public:
     wxDataViewRendererBase( const wxString &varianttype,
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int alignment = wxDVR_DEFAULT_ALIGNMENT );
+    ~wxDataViewRendererBase();
 
     virtual bool Validate( wxVariant& WXUNUSED(value) )
         { return true; }
@@ -456,7 +458,7 @@ public:
 protected:
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
-    wxControl              *m_editorCtrl;
+    wxWeakRef<wxControl>    m_editorCtrl;
     wxDataViewItem          m_item; // for m_editorCtrl
 
     // internal utility:

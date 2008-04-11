@@ -27,9 +27,7 @@
 #include "wx/numdlg.h"
 #include "wx/dataview.h"
 #include "wx/spinctrl.h"
-
-#include "wx/ptr_shrd.h"
-#include "wx/vector.h"
+#include "wx/menu.h"
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
@@ -1039,6 +1037,14 @@ void MyFrame::OnContextMenu( wxDataViewEvent &event )
     
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s"),title.GetData());
+    
+    wxMenu *menu = new wxMenu;
+    menu->Append( 1, wxT("entry 1") );
+    menu->Append( 2, wxT("entry 2") );
+    menu->Append( 3, wxT("entry 3") );
+    
+    m_musicCtrl->PopupMenu( menu );
+    
 //    wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, Item: %s Value: %s"),title.GetData(), event.GetValue().GetString());
 }
 

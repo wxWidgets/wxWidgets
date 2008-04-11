@@ -18,8 +18,9 @@
 #if wxUSE_DATAVIEWCTRL
 
 #include "wx/dataview.h"
-
 #include "wx/spinctrl.h"
+
+#include "wx/weakref.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
@@ -658,14 +659,28 @@ wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype,
                                                 int WXUNUSED(align) )
 {
     m_variantType = varianttype;
-    m_editorCtrl = NULL;
     m_owner = NULL;
+}
+
+wxDataViewRendererBase::~wxDataViewRendererBase()
+{
 }
 
 const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
 {
     return wx_const_cast(wxDataViewRendererBase*, this)->GetOwner()->GetOwner();
 }
+
+class wxKillRef: public wxWindowRef
+{       
+public: 
+   wxKillRef( wxWindow *win ) : wxWindowRef( win ) { }
+   virtual void OnObjectDestroy()
+   {
+      get()->PopEventHandler( true );
+      delete this;
+   }
+};
 
 bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect labelRect )
 {
@@ -676,6 +691,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     GetOwner()->GetOwner()->GetModel()->GetValue( value, item, col );
 
     m_editorCtrl = CreateEditorCtrl( GetOwner()->GetOwner()->GetMainWindow(), labelRect, value );
+    (void) new wxKillRef( m_editorCtrl.get() );
 
     wxDataViewEditorCtrlEvtHandler *handler =
         new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, (wxDataViewRenderer*) this );
@@ -700,11 +716,10 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
 void wxDataViewRendererBase::CancelEditing()
 {
-    wxPendingDelete.Append( m_editorCtrl );
-
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
-
-    // m_editorCtrl->PopEventHandler( true );
+    
+    m_editorCtrl->Hide();
+    wxPendingDelete.Append( m_editorCtrl );
 }
 
 bool wxDataViewRendererBase::FinishEditing()
@@ -712,18 +727,17 @@ bool wxDataViewRendererBase::FinishEditing()
     wxVariant value;
     GetValueFromEditorCtrl( m_editorCtrl, value );
 
-    wxPendingDelete.Append( m_editorCtrl );
-
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
+    m_editorCtrl->Hide();
+    wxPendingDelete.Append( m_editorCtrl );
+    
     if (!Validate(value))
         return false;
 
     unsigned int col = GetOwner()->GetModelColumn();
     GetOwner()->GetOwner()->GetModel()->SetValue( value, m_item, col );
     GetOwner()->GetOwner()->GetModel()->ValueChanged( m_item, col );
-
-    // m_editorCtrl->PopEventHandler( true );
 
     // Now we should send Editing Done event
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, GetOwner()->GetOwner()->GetId() );
@@ -772,7 +786,6 @@ void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
-            wxPrintf( "OnChar RETURN\n" );
             m_finished = true;
             m_owner->FinishEditing();
             break;
@@ -791,7 +804,6 @@ void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
 {
     if (!m_finished)
     {
-        wxPrintf( "OnKillFocus\n" );
         m_finished = true;
         m_owner->FinishEditing();
     }

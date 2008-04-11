@@ -975,7 +975,13 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
 {
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
+    
+    // Renderer doesn't support in-place editing
     if (!cell->HasEditorCtrl())
+        return NULL;
+        
+    // An in-place editing control is still around
+    if (cell->GetEditorCtrl())
         return NULL;
 
     GdkRectangle rect;
