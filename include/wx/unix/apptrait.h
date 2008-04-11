@@ -42,7 +42,7 @@ public:
 #endif
 
 #ifdef __DARWIN__
-    #define wxHAS_GUI_SOCKET_MANAGER
+    #define wxHAS_GUI_PROCESS_CALLBACKS
 #endif
 
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
