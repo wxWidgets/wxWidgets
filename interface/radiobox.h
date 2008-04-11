@@ -37,7 +37,7 @@
 
     @see @ref overview_eventhandling, wxRadioButton, wxCheckBox
 */
-class wxRadioBox : public wxControlWithItems
+class wxRadioBox : public wxControl, wxItemContainerImmutable
 {
 public:
     //@{

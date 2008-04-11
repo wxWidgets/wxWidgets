@@ -59,7 +59,7 @@
 
     @see wxListBox, wxTextCtrl, wxChoice, wxCommandEvent
 */
-class wxComboBox : public wxControlWithItems
+class wxComboBox : public wxControl, public wxItemContainer
 {
 public:
     //@{
