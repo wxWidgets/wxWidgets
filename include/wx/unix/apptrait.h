@@ -36,8 +36,13 @@ public:
 // TODO: Should we use XtAddInput() for wxX11 too? Or, vice versa, if there is
 //       no advantage in doing this compared to the generic way currently used
 //       by wxX11, should we continue to use GTK/Motif- specific stuff?
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__DARWIN__)
-    #define wxHAS_GUI_CALLBACKS
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+    #define wxHAS_GUI_PROCESS_CALLBACKS
+    #define wxHAS_GUI_SOCKET_MANAGER
+#endif
+
+#ifdef __DARWIN__
+    #define wxHAS_GUI_SOCKET_MANAGER
 #endif
 
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
@@ -45,7 +50,7 @@ class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 public:
     virtual wxEventLoopBase *CreateEventLoop();
     virtual int WaitForChild(wxExecuteData& execData);
-#ifdef wxHAS_GUI_CALLBACKS
+#ifdef wxHAS_GUI_PROCESS_CALLBACKS
     virtual int AddProcessCallback(wxEndProcessData *data, int fd);
 #endif
 #if wxUSE_TIMER
@@ -75,7 +80,7 @@ public:
     virtual bool ShowAssertDialog(const wxString& msg);
 #endif
 
-#if wxUSE_SOCKETS && defined(wxHAS_GUI_CALLBACKS)
+#if wxUSE_SOCKETS && defined(wxHAS_GUI_SOCKET_MANAGER)
     virtual GSocketManager *GetSocketManager();
 #endif
 };
