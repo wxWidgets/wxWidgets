@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 10 January 2008                                                     *
+# Date : 9 April 2008                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -62,6 +62,7 @@ OBJECTS = \
 		bmpbase.obj,\
 		btncmn.obj,\
 		bookctrl.obj,\
+		calctrlcmn.obj,\
 		choiccmn.obj,\
 		clipcmn.obj,\
 		clntdata.obj,\
@@ -234,6 +235,7 @@ SOURCES = \
 		bmpbase.cpp,\
 		btncmn.cpp,\
 		bookctrl.cpp,\
+		calctrlcmn.cpp,\
 		cairo.cpp,\
 		choiccmn.cpp,\
 		clipcmn.cpp,\
@@ -630,3 +632,4 @@ filectrlcmn.obj : filectrlcmn.cpp
 cairo.obj : cairo.cpp
 overlaycmn.obj : overlaycmn.cpp
 windowid.obj : windowid.cpp
+calctrlcmn.obj : calctrlcmn.cpp

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 3 January 2008                                                      *
+# Date : 8 April 2008                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -47,7 +47,7 @@ CC_DEFINE =
 OBJECTS = \
 		aboutdlgg.obj,\
 		busyinfo.obj,\
-		calctrl.obj,\
+		calctrlg.obj,\
 		caret.obj,\
 		choicbkg.obj,\
 		choicdgg.obj,\
@@ -98,7 +98,7 @@ SOURCES = \
 		accel.cpp,\
 		animateg.cpp,\
 		busyinfo.cpp,\
-		calctrl.cpp,\
+		calctrlg.cpp,\
 		caret.cpp,\
 		choicbkg.cpp,\
 		choicdgg.cpp,\
@@ -208,7 +208,7 @@ aboutdlgg.obj : aboutdlgg.cpp
 accel.obj : accel.cpp
 animateg.obj : animateg.cpp
 busyinfo.obj : busyinfo.cpp
-calctrl.obj : calctrl.cpp
+calctrlg.obj : calctrlg.cpp
 caret.obj : caret.cpp
 choicdgg.obj : choicdgg.cpp
 clrpickerg.obj : clrpickerg.cpp

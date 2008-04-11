@@ -1736,7 +1736,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
             pixel = m_backgroundPixel;
         else
         {
-            pixel = CalculatePixel(m_pen.GetColour(), m_currentColour, false);
+            pixel = CalculatePixel( (wxColour&) m_pen.GetColour(), m_currentColour, false);
         }
 
         // Finally, set the GC to the required colour
@@ -1898,7 +1898,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
     // must test m_logicalFunction, because it involves background!
     if (!sameColour || !GET_OPTIMIZATION || m_logicalFunction == wxXOR)
     {
-        WXPixel pixel = CalculatePixel(m_brush.GetColour(), m_currentColour, true);
+        WXPixel pixel = CalculatePixel( (wxColour&) m_brush.GetColour(), m_currentColour, true);
 
         if (pixel > -1)
             SetForegroundPixelWithLogicalFunction(pixel);

@@ -421,7 +421,7 @@ private:
     int m_argc;
     char **m_argv;
 
-    DECLARE_NO_COPY_CLASS(ArgsArray);
+    DECLARE_NO_COPY_CLASS(ArgsArray)
 };
 
 } // anonymous namespace
