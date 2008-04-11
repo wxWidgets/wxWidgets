@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxVideoMode
+    @struct wxVideoMode
     @wxheader{display.h}
 
     Determines the sizes and locations of displays connected to the system.
@@ -20,7 +20,7 @@
 
     @see wxClientDisplayRect(), wxDisplaySize(), wxDisplaySizeMM()
 */
-class wxVideoMode
+struct wxVideoMode
 {
 public:
     /**
@@ -38,14 +38,38 @@ public:
     */
     bool Matches(const wxVideoMode& other) const;
 
+    /**
+        Returns the screen width in pixels (e.g. 640), 0 means unspecified.
+    */
     int GetWidth() const;
+
+    /**
+        Returns the screen height in pixels (e.g. 480), 0 means unspecified.
+    */
     int GetHeight() const;
+
+    /**
+        Returns bits per pixel (e.g. 32), 1 is monochrome and 0 means
+        unspecified/known.
+    */
     int GetDepth() const;
 
     /**
         Returns true if the object has been initialized
     */
     bool IsOk() const;
+
+    /// The screen width in pixels (e.g. 640), 0 means unspecified.
+    int w;
+
+    /// The screen height in pixels (e.g. 480), 0 means unspecified.
+    int h;
+
+    /// Bits per pixel (e.g. 32), 1 is monochrome and 0 means unspecified/known.
+    int bpp;
+
+    /// Refresh frequency in Hz, 0 means unspecified/unknown.
+    int refresh;
 };
 
 /**
