@@ -3918,7 +3918,7 @@ bool wxWindowMSW::HandleEndSession(bool endSession, long logOff)
     wxCloseEvent event(wxEVT_END_SESSION, wxID_ANY);
     event.SetEventObject(wxTheApp);
     event.SetCanVeto(false);
-    event.SetLoggingOff( (logOff == (long)ENDSESSION_LOGOFF) );
+    event.SetLoggingOff((logOff & ENDSESSION_LOGOFF) != 0);
 
     return wxTheApp->ProcessEvent(event);
 #else
