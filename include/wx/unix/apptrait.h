@@ -36,7 +36,7 @@ public:
 // TODO: Should we use XtAddInput() for wxX11 too? Or, vice versa, if there is
 //       no advantage in doing this compared to the generic way currently used
 //       by wxX11, should we continue to use GTK/Motif- specific stuff?
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__DARWIN__)
     #define wxHAS_GUI_CALLBACKS
 #endif
 
