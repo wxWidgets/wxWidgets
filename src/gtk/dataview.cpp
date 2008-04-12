@@ -2440,6 +2440,16 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
 
     SetWidth( width );
 
+    // Create container for icon and label
+    GtkWidget *box = gtk_hbox_new( FALSE, 1 );
+    gtk_widget_show( box );
+    // gtk_container_set_border_width((GtkContainer*)box, 2);
+    m_image = gtk_image_new();
+    gtk_box_pack_start(GTK_BOX(box), m_image, FALSE, FALSE, 1);
+    m_label = gtk_label_new("");
+    gtk_box_pack_end( GTK_BOX(box), GTK_WIDGET(m_label), FALSE, FALSE, 1 );
+    gtk_tree_view_column_set_widget( column, box );
+    
     gtk_tree_view_column_pack_end( column, renderer, TRUE );
 
     gtk_tree_view_column_set_cell_data_func( column, renderer,
@@ -2479,39 +2489,27 @@ void wxDataViewColumn::SetOwner( wxDataViewCtrl *owner )
 
 void wxDataViewColumn::SetTitle( const wxString &title )
 {
-    GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
-
-    if (m_isConnected)
-    {
-        // disconnect before column->button gets recreated
-        g_signal_handlers_disconnect_by_func( column->button,
-                      (GtkWidget*) gtk_dataview_header_button_press_callback, this);
-
-        m_isConnected = false;
-    }
-
-    // FIXME: can it really happen that we don't have the owner here??
     wxDataViewCtrl *ctrl = GetOwner();
-    gtk_tree_view_column_set_title( column, ctrl ? wxGTK_CONV_FONT(title, ctrl->GetFont())
+    gtk_label_set_text( GTK_LABEL(m_label), ctrl ? wxGTK_CONV_FONT(title, ctrl->GetFont())
                                                  : wxGTK_CONV_SYS(title) );
-
-    gtk_tree_view_column_set_widget( column, NULL );
+    if (title.empty())
+        gtk_widget_hide( m_label );
+    else
+        gtk_widget_show( m_label );
 }
 
 wxString wxDataViewColumn::GetTitle() const
 {
-    const gchar *str = gtk_tree_view_column_get_title( GTK_TREE_VIEW_COLUMN(m_column) );
-    return wxConvFileName->cMB2WX(str);
+    return wxGTK_CONV_BACK( gtk_label_get_text( GTK_LABEL(m_label) ) );
 }
 
 void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
 {
     wxDataViewColumnBase::SetBitmap( bitmap );
 
-    GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
     if (bitmap.Ok())
     {
-        GtkImage *gtk_image = GTK_IMAGE( gtk_image_new() );
+        GtkImage *gtk_image = GTK_IMAGE(m_image);
 
         GdkBitmap *mask = (GdkBitmap *) NULL;
         if (bitmap.GetMask())
@@ -2527,13 +2525,11 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
             gtk_image_set_from_pixmap(GTK_IMAGE(gtk_image),
                                       bitmap.GetPixmap(), mask);
         }
-        gtk_widget_show( GTK_WIDGET(gtk_image) );
-
-        gtk_tree_view_column_set_widget( column, GTK_WIDGET(gtk_image) );
+        gtk_widget_show( m_image );
     }
     else
     {
-        gtk_tree_view_column_set_widget( column, NULL );
+        gtk_widget_hide( m_image );
     }
 }
 

@@ -325,6 +325,10 @@ private:
     // holds the GTK handle
     GtkWidget   *m_column;
     
+    // holds GTK handles for title/bitmap in the header
+    GtkWidget   *m_image;
+    GtkWidget   *m_label;
+    
     // delayed connection to mouse events
     friend class wxDataViewCtrl;
     void OnInternalIdle();

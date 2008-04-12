@@ -174,13 +174,23 @@ static bool InitializeColumnDescription(DataBrowserListViewColumnDesc& columnDes
   } /* switch */
   columnDescription.headerBtnDesc.btnFontStyle.font  = kControlFontViewSystemFont;
   columnDescription.headerBtnDesc.btnFontStyle.style = normal;
-  columnDescription.headerBtnDesc.btnContentInfo.contentType = kControlContentIconRef;
-  if (columnPtr->GetBitmap().Ok())
+  if (columnPtr->GetBitmap().IsOk())
+  {
+    columnDescription.headerBtnDesc.btnContentInfo.contentType = kControlContentIconRef;
 #if wxCHECK_VERSION(2,9,0)
     columnDescription.headerBtnDesc.btnContentInfo.u.iconRef = columnPtr->GetBitmap().GetIconRef();
 #else
     columnDescription.headerBtnDesc.btnContentInfo.u.iconRef = columnPtr->GetBitmap().GetBitmapData()->GetIconRef();
 #endif
+  }
+  else
+  {
+    // not text only as we otherwise could not add a bitmap later
+    // columnDescription.headerBtnDesc.btnContentInfo.contentType = kControlContentTextOnly;
+    columnDescription.headerBtnDesc.btnContentInfo.contentType = kControlContentIconRef;
+    columnDescription.headerBtnDesc.btnContentInfo.u.iconRef = NULL;
+  }
+    
  // done:
   return true;
 } /* InitializeColumnDescription(DataBrowserListViewColumnDesc&, wxDataViewColumn const*, DataBrowserPropertyID, wxMacCFStringHolder const&) */
