@@ -948,7 +948,7 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
     // (i.e. drawn with a transparent pen) one pixel smaller in both directions
     // and we want them to have the same size regardless of which pen is used
 #ifndef __WXWINCE__
-    if ( m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( m_pen.IsOk() && m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
     {
         x2dev++;
         y2dev++;
