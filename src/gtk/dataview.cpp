@@ -155,7 +155,7 @@ public:
 
     ~wxGtkTreeModelNode()
     {
-        size_t count = m_children.GetCount();
+        size_t count = m_nodes.GetCount();
         size_t i;
         for (i = 0; i < count; i++)
         {
