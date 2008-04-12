@@ -17,7 +17,6 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{control.png}
 
     @see wxValidator
 */
@@ -25,35 +24,38 @@ class wxControl : public wxWindow
 {
 public:
     /**
-        Simulates the effect of the user issuing a command to the item. See
-        wxCommandEvent.
+        Simulates the effect of the user issuing a command to the item.
+
+        @see wxCommandEvent
     */
     void Command(wxCommandEvent& event);
 
     /**
         Returns the control's text.
-        Note that the returned string contains the mnemonics (@c  characters) if
-        any, use GetLabelText() if they are
-        undesired.
+
+        @note The returned string contains mnemonics ("&" characters) if it has
+              any, use GetLabelText() if they are undesired.
     */
     wxString GetLabel() const;
 
-    //@{
     /**
-        Returns the control's label, or the given @a label string for the static
-        version, without the mnemonics characters.
+        Returns the control's label without mnemonics.
     */
     const wxString GetLabelText();
-    const static wxString  GetLabelText(const wxString& label);
-    //@}
+
+    /**
+        Returns the given @a label string without mnemonics.
+    */
+    static wxString GetLabelText(const wxString& label);
 
     /**
         Sets the item's text.
-        The @c  characters in the @a label are special and indicate that the
-        following character is a mnemonic for this control and can be used to activate
-        it from the keyboard (typically by using @e Alt key in combination with
-        it). To insert a literal ampersand character, you need to double it, i.e. use
-        @c "".
+
+        Any "&" characters in the @a label are special and indicate that the
+        following character is a mnemonic for this control and can be used to
+        activate it from the keyboard (typically by using @e Alt key in
+        combination with it). To insert a literal ampersand character, you need
+        to double it, i.e. use "&&".
     */
     void SetLabel(const wxString& label);
 };

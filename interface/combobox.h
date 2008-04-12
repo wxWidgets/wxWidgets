@@ -10,16 +10,15 @@
     @class wxComboBox
     @wxheader{combobox.h}
 
-    A combobox is like a combination of an edit control and a listbox. It can be
-    displayed as static list with editable or read-only text field; or a drop-down
-    list with
-    text field; or a drop-down list without a text field.
+    A combobox is like a combination of an edit control and a listbox. It can
+    be displayed as static list with editable or read-only text field; or a
+    drop-down list with text field; or a drop-down list without a text field.
 
-    A combobox permits a single selection only. Combobox items are numbered from
-    zero.
+    A combobox permits a single selection only. Combobox items are numbered
+    from zero.
 
-    If you need a customized combobox, have a look at wxComboCtrl, wxOwnerDrawnComboBox,
-    wxComboPopup and the ready-to-use wxBitmapComboBox.
+    If you need a customized combobox, have a look at wxComboCtrl,
+    wxOwnerDrawnComboBox, wxComboPopup and the ready-to-use wxBitmapComboBox.
 
     @beginStyleTable
     @style{wxCB_SIMPLE}
@@ -27,9 +26,9 @@
     @style{wxCB_DROPDOWN}
            Creates a combobox with a drop-down list.
     @style{wxCB_READONLY}
-           Same as wxCB_DROPDOWN but only the strings specified as the
-           combobox choices can be selected, it is impossible to select (even
-           from a program) a string which is not in the choices list.
+           Same as wxCB_DROPDOWN but only the strings specified as the combobox
+           choices can be selected, it is impossible to select (even from a
+           program) a string which is not in the choices list.
     @style{wxCB_SORT}
            Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
@@ -42,7 +41,7 @@
     @beginEventTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
-           the list is selected. Note that calling GetValue returns the new
+           the list is selected. Note that calling GetValue() returns the new
            value of selection.
     @event{EVT_TEXT(id, func)}
            Process a wxEVT_COMMAND_TEXT_UPDATED event, when the combobox text
@@ -55,13 +54,18 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{combobox.png}
+    <!-- @appearance{combobox.png} -->
 
     @see wxListBox, wxTextCtrl, wxChoice, wxCommandEvent
 */
 class wxComboBox : public wxControl, public wxItemContainer
 {
 public:
+    /**
+        Default constructor.
+    */
+    wxComboBox();
+
     //@{
     /**
         Constructor, creating and showing a combobox.
@@ -75,8 +79,7 @@ public:
         @param pos
             Window position.
         @param size
-            Window size. If wxDefaultSize is specified then the window is
-        sized
+            Window size. If wxDefaultSize is specified then the window is sized
             appropriately.
         @param n
             Number of strings with which to initialise the control.
@@ -89,9 +92,13 @@ public:
         @param name
             Window name.
 
+        @beginWxPythonOnly
+        The wxComboBox constructor in wxPython reduces the @a n and @a choices
+        arguments are to a single argument, which is a list of strings.
+        @endWxPythonOnly
+
         @see Create(), wxValidator
     */
-    wxComboBox();
     wxComboBox(wxWindow* parent, wxWindowID id,
                const wxString& value = "",
                const wxPoint& pos = wxDefaultPosition,
@@ -116,49 +123,10 @@ public:
     */
     ~wxComboBox();
 
-    /**
-        Returns @true if the combobox is editable and there is a text selection to copy
-        to the clipboard.
-        Only available on Windows.
-    */
-    bool CanCopy() const;
-
-    /**
-        Returns @true if the combobox is editable and there is a text selection to copy
-        to the clipboard.
-        Only available on Windows.
-    */
-    bool CanCut() const;
-
-    /**
-        Returns @true if the combobox is editable and there is text on the clipboard
-        that can be pasted into the
-        text field. Only available on Windows.
-    */
-    bool CanPaste() const;
-
-    /**
-        Returns @true if the combobox is editable and the last undo can be redone.
-        Only available on Windows.
-    */
-    bool CanRedo() const;
-
-    /**
-        Returns @true if the combobox is editable and the last edit can be undone.
-        Only available on Windows.
-    */
-    bool CanUndo() const;
-
-    /**
-        Copies the selected text to the clipboard.
-    */
-    void Copy();
-
     //@{
     /**
-        Creates the combobox for two-step construction. Derived classes
-        should call or replace this function. See wxComboBox()
-        for further details.
+        Creates the combobox for two-step construction. Derived classes should
+        call or replace this function. See wxComboBox() for further details.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxString& value = "",
@@ -179,22 +147,58 @@ public:
     //@}
 
     /**
+        Returns @true if the combobox is editable and there is a text selection
+        to copy to the clipboard. Only available on Windows.
+    */
+    bool CanCopy() const;
+
+    /**
+        Returns @true if the combobox is editable and there is a text selection
+        to copy to the clipboard. Only available on Windows.
+    */
+    bool CanCut() const;
+
+    /**
+        Returns @true if the combobox is editable and there is text on the
+        clipboard that can be pasted into the text field. Only available on
+        Windows.
+    */
+    bool CanPaste() const;
+
+    /**
+        Returns @true if the combobox is editable and the last undo can be
+        redone. Only available on Windows.
+    */
+    bool CanRedo() const;
+
+    /**
+        Returns @true if the combobox is editable and the last edit can be
+        undone. Only available on Windows.
+    */
+    bool CanUndo() const;
+
+    /**
+        Copies the selected text to the clipboard.
+    */
+    void Copy();
+
+    /**
         Copies the selected text to the clipboard and removes the selection.
     */
     void Cut();
 
     /**
-        This function does the same things as
-        wxChoice::GetCurrentSelection and
-        returns the item currently selected in the dropdown list if it's open or the
-        same thing as wxControlWithItems::GetSelection otherwise.
+        This function does the same things as wxChoice::GetCurrentSelection()
+        and returns the item currently selected in the dropdown list if it's
+        open or the same thing as wxControlWithItems::GetSelection() otherwise.
     */
     int GetCurrentSelection() const;
 
     /**
         Returns the insertion point for the combobox's text field.
+
         @note Under wxMSW, this function always returns 0 if the combobox
-        doesn't have the focus.
+              doesn't have the focus.
     */
     long GetInsertionPoint() const;
 
@@ -204,9 +208,10 @@ public:
     virtual wxTextPos GetLastPosition() const;
 
     /**
-        This is the same as wxTextCtrl::GetSelection
-        for the text control which is part of the combobox. Notice that this is a
-        different method from wxControlWithItems::GetSelection.
+        This is the same as wxTextCtrl::GetSelection() for the text control
+        which is part of the combobox. Notice that this is a different method
+        from wxControlWithItems::GetSelection().
+
         Currently this method is only implemented in wxMSW and wxGTK.
     */
     void GetSelection(long* from, long* to) const;
@@ -237,8 +242,8 @@ public:
     void Remove(long from, long to);
 
     /**
-        Replaces the text between two positions with the given text, in the combobox
-        text field.
+        Replaces the text between two positions with the given text, in the
+        combobox text field.
 
         @param from
             The first position.
@@ -269,6 +274,11 @@ public:
             The first position.
         @param to
             The second position.
+
+        @beginWxPythonOnly
+        This method is called SetMark() in wxPython, "SetSelection" is kept for
+        wxControlWithItems::SetSelection().
+        @endWxPythonOnly
     */
     void SetSelection(long from, long to);
 
@@ -276,7 +286,8 @@ public:
         Sets the text for the combobox text field.
 
         @note For a combobox with @c wxCB_READONLY style the string must be in
-              the combobox choices list, otherwise the call to SetValue() is ignored.
+              the combobox choices list, otherwise the call to SetValue() is
+              ignored.
 
         @param text
             The text to set.
