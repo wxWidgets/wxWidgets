@@ -42,7 +42,7 @@
     @category{file}
 
     @see wxFileConfig
-*/
+        */
 class wxStandardPaths
 {
 public:
@@ -54,9 +54,9 @@ public:
     /**
         Return the directory containing the system config files.
         Example return values:
-             Unix: @c /etc
-             Windows: @c C:\Documents and Settings\All Users\Application Data
-             Mac: @c /Library/Preferences
+             @li Unix: @c /etc
+             @li Windows: @c C:\Documents and Settings\All Users\Application Data
+             @li Mac: @c /Library/Preferences
 
         @see wxFileConfig
     */
@@ -66,9 +66,9 @@ public:
         Return the location of the applications global, i.e. not user-specific,
         data files.
         Example return values:
-             Unix: @c @e prefix/share/@e appname
-             Windows: the directory where the executable file is located
-             Mac: @c @e appname.app/Contents/SharedSupport bundle subdirectory
+             @li Unix: @c @e prefix/share/@e appname
+             @li Windows: the directory where the executable file is located
+             @li Mac: @c @e appname.app/Contents/SharedSupport bundle subdirectory
 
         @see GetLocalDataDir()
     */
@@ -77,9 +77,9 @@ public:
     /**
         Return the directory containing the current user's documents.
         Example return values:
-             Unix: @c ~ (the home directory)
-             Windows: @c C:\Documents and Settings\@e username\Documents
-             Mac: @c ~/Documents
+             @li Unix: @c ~ (the home directory)
+             @li Windows: @c C:\Documents and Settings\@e username\Documents
+             @li Mac: @c ~/Documents
 
         @wxsince{2.7.0}
     */
@@ -88,9 +88,9 @@ public:
     /**
         Return the directory and the filename for the current executable.
         Example return values:
-             Unix: @c /usr/local/bin/exename
-             Windows: @c C:\Programs\AppFolder\exename.exe
-             Mac: @c /Programs/exename
+             @li Unix: @c /usr/local/bin/@e exename
+             @li Windows: @c C:\Programs\AppFolder\@e exename.exe
+             @li Mac: @c /Programs/@e exename
     */
     wxString GetExecutablePath() const;
 
@@ -98,8 +98,7 @@ public:
         @note This function is only available under Unix.
         Return the program installation prefix, e.g. @c /usr, @c /opt or
         @c /home/zeitlin.
-        If the prefix had been previously by
-        SetInstallPrefix(), returns that
+        If the prefix had been previously by SetInstallPrefix(), returns that
         value, otherwise tries to determine it automatically (Linux only right
         now) and finally returns the default @c /usr/local value if it failed.
     */
@@ -117,8 +116,7 @@ public:
         Return the localized resources directory containing the resource files of the
         specified category for the given language.
         In general this is just the same as @a lang subdirectory of
-        GetResourcesDir() (or
-        @c @e lang.lproj under Mac OS X) but is something quite
+        GetResourcesDir() (or @e lang.lproj under Mac OS X) but is something quite
         different for message catalog category under Unix where it returns the standard
         @c @e prefix/share/locale/@e lang/LC_MESSAGES directory.
 
@@ -130,9 +128,9 @@ public:
     /**
         Return the directory where the loadable modules (plugins) live.
         Example return values:
-             Unix: @c @e prefix/lib/@e appname
-             Windows: the directory of the executable file
-             Mac: @c @e appname.app/Contents/PlugIns bundle subdirectory
+             @li Unix: @c @e prefix/lib/@e appname
+             @li Windows: the directory of the executable file
+             @li Mac: @c @e appname.app/Contents/PlugIns bundle subdirectory
 
         @see wxDynamicLibrary
     */
@@ -145,9 +143,9 @@ public:
         This function is the same as GetDataDir() for
         all platforms except Mac OS X.
         Example return values:
-             Unix: @c @e prefix/share/@e appname
-             Windows: the directory where the executable file is located
-             Mac: @c @e appname.app/Contents/Resources bundle subdirectory
+             @li Unix: @c @e prefix/share/@e appname
+             @li Windows: the directory where the executable file is located
+             @li Mac: @c @e appname.app/Contents/Resources bundle subdirectory
 
         @wxsince{2.7.0}
 
@@ -167,9 +165,9 @@ public:
 
     /**
         Return the directory for the user config files:
-             Unix: @c ~ (the home directory)
-             Windows: @c C:\Documents and Settings\@e username\Application Data
-             Mac: @c ~/Library/Preferences
+             @li Unix: @c ~ (the home directory)
+             @li Windows: @c C:\Documents and Settings\@e username\Application Data
+             @li Mac: @c ~/Library/Preferences
         Only use this method if you have a single configuration file to put in this
         directory, otherwise GetUserDataDir() is
         more appropriate.
@@ -178,10 +176,10 @@ public:
 
     /**
         Return the directory for the user-dependent application data files:
-             Unix: @c ~/.@e appname
-             Windows: @c C:\Documents and Settings\@e username\Application Data\@e
-        appname
-             Mac: @c ~/Library/Application Support/@e appname
+             @li Unix: @c ~/.@e appname
+             @li Windows: @c C:\Documents and Settings\@e username\Application Data\
+                 @e appname
+             @li Mac: @c ~/Library/Application Support/@e appname
     */
     wxString GetUserDataDir() const;
 
