@@ -55,7 +55,7 @@ public:
         Return the directory containing the system config files.
         Example return values:
              @li Unix: @c /etc
-             @li Windows: @c C:\Documents and Settings\All Users\Application Data
+             @li Windows: @c C:\\Documents and Settings\\All Users\\Application Data
              @li Mac: @c /Library/Preferences
 
         @see wxFileConfig
@@ -66,9 +66,9 @@ public:
         Return the location of the applications global, i.e. not user-specific,
         data files.
         Example return values:
-             @li Unix: @c @e prefix/share/@e appname
+             @li Unix: @c prefix/share/appname
              @li Windows: the directory where the executable file is located
-             @li Mac: @c @e appname.app/Contents/SharedSupport bundle subdirectory
+             @li Mac: @c appname.app/Contents/SharedSupport bundle subdirectory
 
         @see GetLocalDataDir()
     */
@@ -78,7 +78,7 @@ public:
         Return the directory containing the current user's documents.
         Example return values:
              @li Unix: @c ~ (the home directory)
-             @li Windows: @c C:\Documents and Settings\@e username\Documents
+             @li Windows: @c C:\\Documents and Settings\\username\\Documents
              @li Mac: @c ~/Documents
 
         @wxsince{2.7.0}
@@ -88,9 +88,9 @@ public:
     /**
         Return the directory and the filename for the current executable.
         Example return values:
-             @li Unix: @c /usr/local/bin/@e exename
-             @li Windows: @c C:\Programs\AppFolder\@e exename.exe
-             @li Mac: @c /Programs/@e exename
+             @li Unix: @c /usr/local/bin/exename
+             @li Windows: @c C:\\Programs\\AppFolder\\exename.exe
+             @li Mac: @c /Programs/exename
     */
     wxString GetExecutablePath() const;
 
