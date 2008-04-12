@@ -593,8 +593,8 @@ public:
 
     /**
         Pauses the thread execution for the given amount of time.
-        This function should be used instead of wxSleep() by all worker
-        threads (i.e. all except the main one).
+
+        This is the same as wxMilliSleep().
     */
     static void Sleep(unsigned long milliseconds);
 

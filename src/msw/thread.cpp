@@ -916,11 +916,6 @@ void wxThread::Yield()
     ::Sleep(0);
 }
 
-void wxThread::Sleep(unsigned long milliseconds)
-{
-    ::Sleep(milliseconds);
-}
-
 int wxThread::GetCPUCount()
 {
     SYSTEM_INFO si;

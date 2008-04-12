@@ -336,3 +336,17 @@ wxSemaError wxSemaphore::Post()
     return m_internal->Post();
 }
 
+// ----------------------------------------------------------------------------
+// wxThread
+// ----------------------------------------------------------------------------
+
+#ifndef __WXMAC__
+
+#include "wx/utils.h"
+
+void wxThread::Sleep(unsigned long milliseconds)
+{
+    wxMilliSleep(milliseconds);
+}
+
+#endif // __WXMAC__

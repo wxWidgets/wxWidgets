@@ -569,13 +569,6 @@ void wxThread::Yield()
     ::DosSleep(0);
 }
 
-void wxThread::Sleep(
-  unsigned long                     ulMilliseconds
-)
-{
-    ::DosSleep(ulMilliseconds);
-}
-
 int wxThread::GetCPUCount()
 {
     ULONG CPUCount;

@@ -412,10 +412,6 @@ void wxThread::Yield()
 {
 }
 
-void wxThread::Sleep(unsigned long milliseconds)
-{
-}
-
 int wxThread::GetCPUCount()
 {
     return 1;

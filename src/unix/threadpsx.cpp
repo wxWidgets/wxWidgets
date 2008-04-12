@@ -1050,11 +1050,6 @@ void wxThread::Yield()
 #endif
 }
 
-void wxThread::Sleep(unsigned long milliseconds)
-{
-    wxMilliSleep(milliseconds);
-}
-
 int wxThread::GetCPUCount()
 {
 #if defined(_SC_NPROCESSORS_ONLN)

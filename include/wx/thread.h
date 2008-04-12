@@ -22,11 +22,6 @@
 
 #if wxUSE_THREADS
 
-// Windows headers define it
-#ifdef Yield
-    #undef Yield
-#endif
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -452,7 +447,7 @@ public:
 
         // Sleep during the specified period of time in milliseconds
         //
-        // NB: at least under MSW worker threads can not call ::wxSleep()!
+        // This is the same as wxMilliSleep().
     static void Sleep(unsigned long milliseconds);
 
         // get the number of system CPUs - useful with SetConcurrency()
