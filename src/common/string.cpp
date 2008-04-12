@@ -1239,31 +1239,24 @@ size_t wxString::Replace(const wxString& strOld,
     size_t uiOldLen = strOld.length();
     size_t uiNewLen = strNew.length();
 
-    size_t dwPos = 0;
-
-    while ( (*this)[dwPos] != wxT('\0') )
+    for ( size_t dwPos = 0; dwPos < length(); )
     {
-        //DO NOT USE STRSTR HERE
-        //this string can contain embedded null characters,
-        //so strstr will function incorrectly
         dwPos = find(strOld, dwPos);
         if ( dwPos == npos )
-            break;                  // exit the loop
-        else
-        {
-            //replace this occurance of the old string with the new one
-            replace(dwPos, uiOldLen, strNew, uiNewLen);
+            break;
 
-            //move up pos past the string that was replaced
-            dwPos += uiNewLen;
+        // replace this occurance of the old string with the new one
+        replace(dwPos, uiOldLen, strNew, uiNewLen);
 
-            //increase replace count
-            ++uiCount;
+        // move up pos past the string that was replaced
+        dwPos += uiNewLen;
 
-            // stop now?
-            if ( !bReplaceAll )
-                break;                  // exit the loop
-        }
+        // increase replace count
+        ++uiCount;
+
+        // stop after the first one?
+        if ( !bReplaceAll )
+            break;
     }
 
     return uiCount;
