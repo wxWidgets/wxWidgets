@@ -660,6 +660,8 @@
 			<File
 				RelativePath=".\streams\bstream.cpp"/>
 			<File
+				RelativePath=".\cmdline\cmdlinetest.cpp"/>
+			<File
 				RelativePath=".\mbconv\convautotest.cpp"/>
 			<File
 				RelativePath=".\strings\crt.cpp"/>

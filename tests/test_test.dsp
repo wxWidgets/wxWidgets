@@ -255,6 +255,10 @@ SOURCE=.\streams\bstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\cmdline\cmdlinetest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbconv\convautotest.cpp
 # End Source File
 # Begin Source File

@@ -248,6 +248,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_tartest.obj &
 	$(OBJS)\test_arrays.obj &
 	$(OBJS)\test_base64.obj &
+	$(OBJS)\test_cmdlinetest.obj &
 	$(OBJS)\test_fileconf.obj &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_filekind.obj &
@@ -405,6 +406,9 @@ $(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_base64.obj :  .AUTODEPEND .\base64\base64.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_cmdlinetest.obj :  .AUTODEPEND .\cmdline\cmdlinetest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_fileconf.obj :  .AUTODEPEND .\config\fileconf.cpp

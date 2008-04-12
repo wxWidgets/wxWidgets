@@ -87,6 +87,22 @@
 // Use this macro to compare a size_t with a literal integer
 #define WX_ASSERT_SIZET_EQUAL(n, m) CPPUNIT_ASSERT_EQUAL(((size_t)n), m)
 
+// Use this macro to compare a wxArrayString with the pipe-separated elements
+// of the given string
+//
+// NB: it's a macro and not a function to have the correct line numbers in the
+//     test failure messages
+#define WX_ASSERT_STRARRAY_EQUAL(s, a)                                        \
+    {                                                                         \
+        wxArrayString expected(wxSplit(s, '|', '\0'));                        \
+                                                                              \
+        CPPUNIT_ASSERT_EQUAL( expected.size(), a.size() );                    \
+                                                                              \
+        for ( size_t n = 0; n < a.size(); n++ )                               \
+        {                                                                     \
+            CPPUNIT_ASSERT_EQUAL( expected[n], a[n] );                        \
+        }                                                                     \
+    }
 
 // Use this macro to assert with the given formatted message (it should contain
 // the format string and arguments in a separate pair of parentheses)

@@ -43,6 +43,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_tartest.obj \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_base64.obj \
+	$(OBJS)\test_cmdlinetest.obj \
 	$(OBJS)\test_fileconf.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_filekind.obj \
@@ -375,6 +376,9 @@ $(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
 
 $(OBJS)\test_base64.obj: .\base64\base64.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\base64\base64.cpp
+
+$(OBJS)\test_cmdlinetest.obj: .\cmdline\cmdlinetest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\cmdline\cmdlinetest.cpp
 
 $(OBJS)\test_fileconf.obj: .\config\fileconf.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\config\fileconf.cpp

@@ -29,6 +29,7 @@
             archive/tartest.cpp
             arrays/arrays.cpp
             base64/base64.cpp
+            cmdline/cmdlinetest.cpp
             config/fileconf.cpp
             datetime/datetimetest.cpp
             filekind/filekind.cpp

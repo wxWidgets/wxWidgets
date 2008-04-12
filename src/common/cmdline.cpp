@@ -1255,62 +1255,47 @@ wxArrayString wxCmdLineParser::ConvertStringToArgs(const wxString& cmdline)
 
     bool isInsideQuotes = false;
 
+    const wxString::const_iterator end = cmdline.end();
     wxString::const_iterator p = cmdline.begin();
 
     for ( ;; )
     {
         // skip white space
-        while ( p != cmdline.end() && (*p == _T(' ') || *p == _T('\t')) )
+        while ( p != end && (*p == ' ' || *p == '\t') )
             ++p;
 
         // anything left?
-        if ( p == cmdline.end() )
+        if ( p == end )
             break;
 
         // parse this parameter
-        bool endParam = false;
         bool lastBS = false;
-        for ( arg.clear(); !endParam; p++ )
+        for ( arg.clear(); p != end; ++p )
         {
-            switch ( (*p).GetValue() )
+            const wxChar ch = *p;
+            if ( ch == '"' )
             {
-                case _T('"'):
-                    if ( !lastBS )
-                    {
-                        isInsideQuotes = !isInsideQuotes;
+                if ( !lastBS )
+                {
+                    isInsideQuotes = !isInsideQuotes;
 
-                        // don't put quote in arg
-                        continue;
-                    }
-                    //else: quote has no special meaning but the backslash
-                    //      still remains -- makes no sense but this is what
-                    //      Windows does
-                    break;
-
-                case _T(' '):
-                case _T('\t'):
-                    // backslash does *not* quote the space, only quotes do
-                    if ( isInsideQuotes )
-                    {
-                        // skip assignment below
-                        break;
-                    }
-                    // fall through
-
-                case _T('\0'):
-                    endParam = true;
-
-                    break;
+                    // don't put quote in arg
+                    continue;
+                }
+                //else: quote has no special meaning but the backslash
+                //      still remains -- makes no sense but this is what
+                //      Windows does
             }
-
-            if ( endParam )
+            // note that backslash does *not* quote the space, only quotes do
+            else if ( !isInsideQuotes && (ch == ' ' || ch == '\t') )
             {
+                ++p;    // skip this space anyhow
                 break;
             }
 
-            lastBS = *p == _T('\\');
+            lastBS = ch == '\\';
 
-            arg += *p;
+            arg += ch;
         }
 
         args.push_back(arg);
