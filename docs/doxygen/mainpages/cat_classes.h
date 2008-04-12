@@ -71,7 +71,7 @@ The following are the most important window classes
 @li wxWindow: base class for all windows and controls
 @li wxControl: base class (mostly) for native controls/widgets
 @li wxPanel: window which can smartly manage child windows
-@li wxScrolledWindow: Window with automatically managed scrollbars
+@li wxScrolledWindow: Window with automatically managed scrollbars (see wxScrolled)
 @li wxVScrolledWindow: As wxScrolledWindow but supports lines of variable
     height
 @li wxTopLevelWindow: Any top level window, dialog or frame
