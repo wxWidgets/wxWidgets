@@ -44,3 +44,8 @@ utils/helpview/src/*.xml
 utils/helpview/src/*.bkl
 utils/helpview/src/test.zip
 utils/helpview/src/bitmaps/*.xpm
+
+utils/ifacecheck/src/*.*
+utils/ifacecheck/gcc*.*
+utils/ifacecheck/rungccxml.sh.in
+
