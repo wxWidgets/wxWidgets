@@ -149,26 +149,133 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
 // private classes
 // ----------------------------------------------------------------------------
 
+// various classes to change some DC property temporarily
+
+// text background and foreground colours
+class wxTextColoursChanger
+{
+public:
+    wxTextColoursChanger(HDC hdc, const wxMSWDCImpl& dc)
+        : m_hdc(hdc)
+    {
+        Change(dc.GetTextForeground(), dc.GetTextBackground());
+    }
+
+    wxTextColoursChanger(HDC hdc, const wxColour& colFg, const wxColour& colBg)
+        : m_hdc(hdc)
+    {
+        Change(colFg, colBg);
+    }
+
+    ~wxTextColoursChanger()
+    {
+        if ( m_oldColFg != CLR_INVALID )
+            ::SetTextColor(m_hdc, m_oldColFg);
+        if ( m_oldColBg != CLR_INVALID )
+            ::SetBkColor(m_hdc, m_oldColBg);
+    }
+
+protected:
+    // this ctor doesn't change mode immediately, call Change() later to do it
+    // only if needed
+    wxTextColoursChanger(HDC hdc)
+        : m_hdc(hdc)
+    {
+        m_oldColFg =
+        m_oldColBg = CLR_INVALID;
+    }
+
+    void Change(const wxColour& colFg, const wxColour& colBg)
+    {
+        if ( colFg.IsOk() )
+        {
+            m_oldColFg = ::SetTextColor(m_hdc, colFg.GetPixel());
+            if ( m_oldColFg == CLR_INVALID )
+            {
+                wxLogLastError(_T("SetTextColor"));
+            }
+        }
+        else
+        {
+            m_oldColFg = CLR_INVALID;
+        }
+
+        if ( colBg.IsOk() )
+        {
+            m_oldColBg = ::SetBkColor(m_hdc, colBg.GetPixel());
+            if ( m_oldColBg == CLR_INVALID )
+            {
+                wxLogLastError(_T("SetBkColor"));
+            }
+        }
+        else
+        {
+            m_oldColBg = CLR_INVALID;
+        }
+    }
+
+private:
+    const HDC m_hdc;
+    COLORREF m_oldColFg,
+             m_oldColBg;
+
+    DECLARE_NO_COPY_CLASS(wxTextColoursChanger)
+};
+
+// background mode
+class wxBkModeChanger
+{
+public:
+    // set background mode to opaque if mode != wxBRUSHSTYLE_TRANSPARENT
+    wxBkModeChanger(HDC hdc, int mode)
+        : m_hdc(hdc)
+    {
+        Change(mode);
+    }
+
+    ~wxBkModeChanger()
+    {
+        if ( m_oldMode )
+            ::SetBkMode(m_hdc, m_oldMode);
+    }
+
+protected:
+    // this ctor doesn't change mode immediately, call Change() later to do it
+    // only if needed
+    wxBkModeChanger(HDC hdc) : m_hdc(hdc) { m_oldMode = 0; }
+
+    void Change(int mode)
+    {
+        m_oldMode = ::SetBkMode(m_hdc, mode == wxBRUSHSTYLE_TRANSPARENT
+                                        ? TRANSPARENT
+                                        : OPAQUE);
+        if ( !m_oldMode )
+        {
+            wxLogLastError(_T("SetBkMode"));
+        }
+    }
+
+private:
+    const HDC m_hdc;
+    int m_oldMode;
+
+    DECLARE_NO_COPY_CLASS(wxBkModeChanger)
+};
+
 // instead of duplicating the same code which sets and then restores text
 // colours in each wxDC method working with wxSTIPPLE_MASK_OPAQUE brushes,
 // encapsulate this in a small helper class
 
-// wxColourChanger: changes the text colours in the ctor if required and
+// wxBrushAttrsSetter: changes the text colours in the ctor if required and
 //                  restores them in the dtor
-class wxColourChanger
+class wxBrushAttrsSetter : private wxBkModeChanger,
+                           private wxTextColoursChanger
 {
 public:
-    wxColourChanger(wxMSWDCImpl& dc);
-   ~wxColourChanger();
+    wxBrushAttrsSetter(wxMSWDCImpl& dc);
 
 private:
-    wxMSWDCImpl& m_dc;
-
-    COLORREF m_colFgOld, m_colBgOld;
-
-    bool m_changed;
-
-    DECLARE_NO_COPY_CLASS(wxColourChanger)
+    DECLARE_NO_COPY_CLASS(wxBrushAttrsSetter)
 };
 
 // this class saves the old stretch blit mode during its life time
@@ -273,56 +380,22 @@ IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
 // ===========================================================================
 
 // ----------------------------------------------------------------------------
-// wxColourChanger
+// wxBrushAttrsSetter
 // ----------------------------------------------------------------------------
 
-wxColourChanger::wxColourChanger(wxMSWDCImpl& dc) : m_dc(dc)
+wxBrushAttrsSetter::wxBrushAttrsSetter(wxMSWDCImpl& dc)
+                  : wxBkModeChanger(GetHdcOf(dc)),
+                    wxTextColoursChanger(GetHdcOf(dc))
 {
     const wxBrush& brush = dc.GetBrush();
     if ( brush.IsOk() && brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE )
     {
-        HDC hdc = GetHdcOf(dc);
-        m_colFgOld = ::GetTextColor(hdc);
-        m_colBgOld = ::GetBkColor(hdc);
-
         // note that Windows convention is opposite to wxWidgets one, this is
         // why text colour becomes the background one and vice versa
-        const wxColour& colFg = dc.GetTextForeground();
-        if ( colFg.IsOk() )
-        {
-            ::SetBkColor(hdc, colFg.GetPixel());
-        }
+        wxTextColoursChanger::Change(dc.GetTextBackground(),
+                                     dc.GetTextForeground());
 
-        const wxColour& colBg = dc.GetTextBackground();
-        if ( colBg.IsOk() )
-        {
-            ::SetTextColor(hdc, colBg.GetPixel());
-        }
-
-        SetBkMode(hdc,
-                  dc.GetBackgroundMode() == wxBRUSHSTYLE_TRANSPARENT
-                                                  ? TRANSPARENT : OPAQUE);
-
-        // flag which telsl us to undo changes in the dtor
-        m_changed = true;
-    }
-    else
-    {
-        // nothing done, nothing to undo
-        m_changed = false;
-    }
-}
-
-wxColourChanger::~wxColourChanger()
-{
-    if ( m_changed )
-    {
-        // restore the colours we changed
-        HDC hdc = GetHdcOf(m_dc);
-
-        ::SetBkMode(hdc, TRANSPARENT);
-        ::SetTextColor(hdc, m_colFgOld);
-        ::SetBkColor(hdc, m_colBgOld);
+        wxBkModeChanger::Change(dc.GetBackgroundMode());
     }
 }
 
@@ -713,7 +786,7 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
 
     WXMICROWIN_CHECK_HDC
 
-    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     double dx = xc - x1;
     double dy = yc - y1;
@@ -809,7 +882,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
 {
     WXMICROWIN_CHECK_HDC
 
-    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
@@ -861,7 +934,7 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
 #else
     WXMICROWIN_CHECK_HDC
 
-    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
     int i, cnt;
     for (i = cnt = 0; i < n; i++)
         cnt += count[i];
@@ -936,7 +1009,7 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 {
     WXMICROWIN_CHECK_HDC
 
-    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     wxCoord x2 = x + width;
     wxCoord y2 = y + height;
@@ -965,7 +1038,7 @@ void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
 {
     WXMICROWIN_CHECK_HDC
 
-    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     // Now, a negative radius value is interpreted to mean
     // 'the proportion of the smallest X or Y dimension'
@@ -999,7 +1072,7 @@ void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 {
     WXMICROWIN_CHECK_HDC
 
-    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     wxCoord x2 = (x+width);
     wxCoord y2 = (y+height);
@@ -1118,7 +1191,7 @@ void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
 
     WXMICROWIN_CHECK_HDC
 
-    wxColourChanger cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
 
     wxCoord x2 = x + w;
     wxCoord y2 = y + h;
@@ -1285,16 +1358,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
         wxASSERT_MSG( hbitmap, wxT("bitmap is ok but HBITMAP is NULL?") );
 
-        COLORREF old_textground = ::GetTextColor(GetHdc());
-        COLORREF old_background = ::GetBkColor(GetHdc());
-        if (m_textForegroundColour.IsOk())
-        {
-            ::SetTextColor(GetHdc(), m_textForegroundColour.GetPixel() );
-        }
-        if (m_textBackgroundColour.IsOk())
-        {
-            ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
-        }
+        wxTextColoursChanger textCol(GetHdc(), *this);
 
 #if wxUSE_PALETTE
         wxPalette *pal = bmp.GetPalette();
@@ -1315,9 +1379,6 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
         ::SelectObject( memdc, hOldBitmap );
         ::DeleteDC( memdc );
-
-        ::SetTextColor(GetHdc(), old_textground);
-        ::SetBkColor(GetHdc(), old_background);
     }
 }
 
@@ -1340,39 +1401,15 @@ void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
     WXMICROWIN_CHECK_HDC
 
     // prepare for drawing the text
-    if ( m_textForegroundColour.IsOk() )
-        SetTextColor(GetHdc(), m_textForegroundColour.GetPixel());
+    wxTextColoursChanger textCol(GetHdc(), *this);
 
-    DWORD old_background = 0;
-    if ( m_textBackgroundColour.IsOk() )
-    {
-        old_background = SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
-    }
+    wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
 
-    SetBkMode(GetHdc(), m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT ? TRANSPARENT
-                                                          : OPAQUE);
-
-#ifdef __WXWINCE__
     if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, NULL,
                    text.c_str(), text.length(), NULL) == 0 )
     {
         wxLogLastError(wxT("TextOut"));
     }
-#else
-    if ( ::TextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y),
-                   text.c_str(), text.length()) == 0 )
-    {
-        wxLogLastError(wxT("TextOut"));
-    }
-#endif
-
-    // restore the old parameters (text foreground colour may be left because
-    // it never is set to anything else, but background should remain
-    // transparent even if we just drew an opaque string)
-    if ( m_textBackgroundColour.IsOk() )
-        (void)SetBkColor(GetHdc(), old_background);
-
-    SetBkMode(GetHdc(), TRANSPARENT);
 }
 
 void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
@@ -2066,16 +2103,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         xsrcMask = xsrc; ysrcMask = ysrc;
     }
 
-    COLORREF old_textground = ::GetTextColor(GetHdc());
-    COLORREF old_background = ::GetBkColor(GetHdc());
-    if (m_textForegroundColour.IsOk())
-    {
-        ::SetTextColor(GetHdc(), m_textForegroundColour.GetPixel() );
-    }
-    if (m_textBackgroundColour.IsOk())
-    {
-        ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
-    }
+    wxTextColoursChanger textCol(GetHdc(), *this);
 
     DWORD dwRop;
     switch (rop)
@@ -2163,7 +2191,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
             HGDIOBJ hOldBufferBitmap = ::SelectObject(dc_buffer, buffer_bmap);
 
             // copy dest to buffer
-            if ( !::BitBlt(dc_buffer, 0, 0, (int)dstWidth, (int)dstHeight,
+            if ( !::BitBlt(dc_buffer, 0, 0, dstWidth, dstHeight,
                            GetHdc(), xdest, ydest, SRCCOPY) )
             {
                 wxLogLastError(wxT("BitBlt"));
@@ -2174,35 +2202,35 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 #endif
 
             // copy src to buffer using selected raster op
-            if ( !::StretchBlt(dc_buffer, 0, 0, (int)dstWidth, (int)dstHeight,
+            if ( !::StretchBlt(dc_buffer, 0, 0, dstWidth, dstHeight,
                                hdcSrc, xsrc, ysrc, srcWidth, srcHeight, dwRop) )
             {
                 wxLogLastError(wxT("StretchBlt"));
             }
 
-            // set masked area in buffer to BLACK (pixel value 0)
-            COLORREF prevBkCol = ::SetBkColor(GetHdc(), RGB(255, 255, 255));
-            COLORREF prevCol = ::SetTextColor(GetHdc(), RGB(0, 0, 0));
-            if ( !::StretchBlt(dc_buffer, 0, 0, (int)dstWidth, (int)dstHeight,
-                           dc_mask, xsrcMask, ysrcMask, srcWidth, srcHeight, SRCAND) )
+            // set masked area in buffer to BLACK
             {
-                wxLogLastError(wxT("StretchBlt"));
-            }
+                wxTextColoursChanger textCol2(GetHdc(), *wxBLACK, *wxWHITE);
+                if ( !::StretchBlt(dc_buffer, 0, 0, dstWidth, dstHeight,
+                                   dc_mask, xsrcMask, ysrcMask,
+                                   srcWidth, srcHeight, SRCAND) )
+                {
+                    wxLogLastError(wxT("StretchBlt"));
+                }
 
-            // set unmasked area in dest to BLACK
-            ::SetBkColor(GetHdc(), RGB(0, 0, 0));
-            ::SetTextColor(GetHdc(), RGB(255, 255, 255));
-            if ( !::StretchBlt(GetHdc(), xdest, ydest, (int)dstWidth, (int)dstHeight,
-                           dc_mask, xsrcMask, ysrcMask, srcWidth, srcHeight, SRCAND) )
-            {
-                wxLogLastError(wxT("StretchBlt"));
-            }
-            ::SetBkColor(GetHdc(), prevBkCol);   // restore colours to original values
-            ::SetTextColor(GetHdc(), prevCol);
+                // set unmasked area in dest to BLACK
+                ::SetBkColor(GetHdc(), RGB(0, 0, 0));
+                ::SetTextColor(GetHdc(), RGB(255, 255, 255));
+                if ( !::StretchBlt(GetHdc(), xdest, ydest, dstWidth, dstHeight,
+                                   dc_mask, xsrcMask, ysrcMask,
+                                   srcWidth, srcHeight, SRCAND) )
+                {
+                    wxLogLastError(wxT("StretchBlt"));
+                }
+            } // restore the original text and background colours
 
             // OR buffer to dest
-            success = ::BitBlt(GetHdc(), xdest, ydest,
-                               (int)dstWidth, (int)dstHeight,
+            success = ::BitBlt(GetHdc(), xdest, ydest, dstWidth, dstHeight,
                                dc_buffer, 0, 0, SRCPAINT) != 0;
             if ( !success )
             {
@@ -2301,15 +2329,8 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 
         if ( !success )
         {
-            if ( !::BitBlt
-                    (
-                        GetHdc(),
-                        xdest, ydest,
-                        (int)dstWidth, (int)dstHeight,
-                        hdcSrc,
-                        xsrc, ysrc,
-                        dwRop
-                    ) )
+            if ( !::BitBlt(GetHdc(), xdest, ydest, dstWidth, dstHeight,
+                           hdcSrc, xsrc, ysrc, dwRop) )
             {
                 wxLogLastError(_T("BitBlt"));
             }
@@ -2319,9 +2340,6 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
             }
         }
     }
-
-    ::SetTextColor(GetHdc(), old_textground);
-    ::SetBkColor(GetHdc(), old_background);
 
     return success;
 }
