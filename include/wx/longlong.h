@@ -86,8 +86,8 @@
 
 #ifndef wxUSE_LONGLONG_WX
     #define wxUSE_LONGLONG_WX 0
-    class WXDLLIMPEXP_BASE wxLongLongNative;
-    class WXDLLIMPEXP_BASE wxULongLongNative;
+    class WXDLLIMPEXP_FWD_BASE wxLongLongNative;
+    class WXDLLIMPEXP_FWD_BASE wxULongLongNative;
     typedef wxLongLongNative wxLongLong;
     typedef wxULongLongNative wxULongLong;
 #endif

@@ -15,7 +15,7 @@
 
 #if wxUSE_XRC && wxUSE_BITMAPCOMBOBOX
 
-class WXDLLIMPEXP_ADV wxBitmapComboBox;
+class WXDLLIMPEXP_FWD_ADV wxBitmapComboBox;
 
 class WXDLLIMPEXP_XRC wxBitmapComboBoxXmlHandler : public wxXmlResourceHandler
 {

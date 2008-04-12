@@ -45,7 +45,7 @@ public:
     wxOverlayImpl *GetImpl() { return m_impl; }
 
 private:
-    friend class WXDLLEXPORT wxDCOverlay;
+    friend class WXDLLIMPEXP_FWD_CORE wxDCOverlay;
 
     // returns true if it has been setup
     bool IsOk();

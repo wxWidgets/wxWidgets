@@ -20,9 +20,9 @@
 #include "wx/gdicmn.h"          // wxBITMAP_TYPE_INVALID
 #include "wx/list.h"
 
-class WXDLLEXPORT wxGDIImageRefData;
-class WXDLLEXPORT wxGDIImageHandler;
-class WXDLLEXPORT wxGDIImage;
+class WXDLLIMPEXP_FWD_CORE wxGDIImageRefData;
+class WXDLLIMPEXP_FWD_CORE wxGDIImageHandler;
+class WXDLLIMPEXP_FWD_CORE wxGDIImage;
 
 WX_DECLARE_EXPORTED_LIST(wxGDIImageHandler, wxGDIImageHandlerList);
 

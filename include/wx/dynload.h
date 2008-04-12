@@ -25,7 +25,7 @@
 #include "wx/hashmap.h"
 #include "wx/module.h"
 
-class WXDLLIMPEXP_BASE wxPluginLibrary;
+class WXDLLIMPEXP_FWD_BASE wxPluginLibrary;
 
 
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxPluginLibrary *, wxDLManifest,

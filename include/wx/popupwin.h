@@ -77,8 +77,8 @@ public:
 // when the user clicks mouse outside it or if it loses focus in any other way
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPopupWindowHandler;
-class WXDLLEXPORT wxPopupFocusHandler;
+class WXDLLIMPEXP_FWD_CORE wxPopupWindowHandler;
+class WXDLLIMPEXP_FWD_CORE wxPopupFocusHandler;
 
 class WXDLLEXPORT wxPopupTransientWindow : public wxPopupWindow
 {

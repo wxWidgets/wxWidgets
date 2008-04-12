@@ -105,7 +105,7 @@ enum
 // wxFontBase represents a font object
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNativeFontInfo;
+class WXDLLIMPEXP_FWD_CORE wxNativeFontInfo;
 
 class WXDLLEXPORT wxFontBase : public wxGDIObject
 {

@@ -22,7 +22,7 @@
 #include "wx/dynarray.h"
 #include "wx/font.h"
 
-class WXDLLIMPEXP_HTML wxHtmlHelpData;
+class WXDLLIMPEXP_FWD_HTML wxHtmlHelpData;
 
 //--------------------------------------------------------------------------------
 // helper classes & structs

@@ -38,8 +38,8 @@ enum wxIPCFormat
   wxIPC_PRIVATE =          20
 };
 
-class WXDLLIMPEXP_BASE wxServerBase;
-class WXDLLIMPEXP_BASE wxClientBase;
+class WXDLLIMPEXP_FWD_BASE wxServerBase;
+class WXDLLIMPEXP_FWD_BASE wxClientBase;
 
 class WXDLLIMPEXP_BASE wxConnectionBase: public wxObject
 {

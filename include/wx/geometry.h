@@ -20,8 +20,8 @@
 #include "wx/gdicmn.h"
 #include "wx/math.h"
 
-class WXDLLIMPEXP_BASE wxDataInputStream;
-class WXDLLIMPEXP_BASE wxDataOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxDataInputStream;
+class WXDLLIMPEXP_FWD_BASE wxDataOutputStream;
 
 // clipping from Cohen-Sutherland
 

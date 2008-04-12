@@ -15,7 +15,7 @@
 #include "wx/window.h"                      // base class declaration
 #include "wx/containr.h"                    // wxControlContainer
 
-class WXDLLEXPORT wxSplitterEvent;
+class WXDLLIMPEXP_FWD_CORE wxSplitterEvent;
 
 // ---------------------------------------------------------------------------
 // splitter constants

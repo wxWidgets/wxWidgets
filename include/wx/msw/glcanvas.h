@@ -19,7 +19,7 @@
 
 #include <GL/gl.h>
 
-class WXDLLIMPEXP_GL wxGLCanvas;     /* forward reference */
+class WXDLLIMPEXP_FWD_GL wxGLCanvas;     /* forward reference */
 
 class WXDLLIMPEXP_GL wxGLContext: public wxObject
 {

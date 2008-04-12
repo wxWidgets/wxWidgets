@@ -19,11 +19,11 @@
 #include "wx/html/htmlcell.h"
 #include "wx/encconv.h"
 
-class WXDLLIMPEXP_HTML wxHtmlWindow;
-class WXDLLIMPEXP_HTML wxHtmlWindowInterface;
-class WXDLLIMPEXP_HTML wxHtmlWinParser;
-class WXDLLIMPEXP_HTML wxHtmlWinTagHandler;
-class WXDLLIMPEXP_HTML wxHtmlTagsModule;
+class WXDLLIMPEXP_FWD_HTML wxHtmlWindow;
+class WXDLLIMPEXP_FWD_HTML wxHtmlWindowInterface;
+class WXDLLIMPEXP_FWD_HTML wxHtmlWinParser;
+class WXDLLIMPEXP_FWD_HTML wxHtmlWinTagHandler;
+class WXDLLIMPEXP_FWD_HTML wxHtmlTagsModule;
 
 
 //--------------------------------------------------------------------------------

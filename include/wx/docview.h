@@ -246,7 +246,7 @@ private:
 class WXDLLEXPORT wxDocTemplate: public wxObject
 {
 
-friend class WXDLLEXPORT wxDocManager;
+friend class WXDLLIMPEXP_FWD_CORE wxDocManager;
 
 public:
     // Associate document and view types. They're for identifying what view is

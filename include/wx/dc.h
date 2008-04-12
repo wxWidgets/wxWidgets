@@ -30,8 +30,8 @@
 #include "wx/dynarray.h"
 #include "wx/math.h"
 
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxDCBase;
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxDCBase;
 
 class WXDLLEXPORT wxDrawObject
 {

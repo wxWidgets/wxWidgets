@@ -312,7 +312,7 @@ private:
 
 class WXDLLIMPEXP_BASE wxHashTable_Node : public wxHashTableBase_Node
 {
-    friend class WXDLLIMPEXP_BASE wxHashTable;
+    friend class WXDLLIMPEXP_FWD_BASE wxHashTable;
 public:
     wxHashTable_Node( long key, void* value,
                       wxHashTableBase* table )

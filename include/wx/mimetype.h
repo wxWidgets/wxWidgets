@@ -203,7 +203,7 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo,
 
 class WXDLLIMPEXP_BASE wxFileType
 {
-friend class WXDLLIMPEXP_BASE wxMimeTypesManagerImpl;  // it has access to m_impl
+friend class WXDLLIMPEXP_FWD_BASE wxMimeTypesManagerImpl;  // it has access to m_impl
 
 public:
     // An object of this class must be passed to Get{Open|Print}Command. The

@@ -16,7 +16,7 @@
 #include "wx/gdiobj.h"
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxBrush;
+class WXDLLIMPEXP_FWD_CORE wxBrush;
 
 // ----------------------------------------------------------------------------
 // wxBrush

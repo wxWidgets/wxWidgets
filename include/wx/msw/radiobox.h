@@ -14,7 +14,7 @@
 
 #include "wx/statbox.h"
 
-class WXDLLEXPORT wxSubwindows;
+class WXDLLIMPEXP_FWD_CORE wxSubwindows;
 
 // ----------------------------------------------------------------------------
 // wxRadioBox

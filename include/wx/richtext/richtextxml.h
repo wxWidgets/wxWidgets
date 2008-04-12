@@ -25,7 +25,7 @@
  * wxRichTextXMLHandler
  */
 
-class WXDLLIMPEXP_XML wxXmlNode;
+class WXDLLIMPEXP_FWD_XML wxXmlNode;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextXMLHandler: public wxRichTextFileHandler
 {
