@@ -213,7 +213,7 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
 
 bool wxCHMHelpController::Quit()
 {
-    return CallHtmlHelp(NULL, HH_CLOSE_ALL);
+    return CallHtmlHelp(NULL, NULL, HH_CLOSE_ALL);
 }
 
 wxString wxCHMHelpController::GetValidFilename() const
