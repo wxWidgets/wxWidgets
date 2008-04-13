@@ -134,14 +134,44 @@ extern WXDLLIMPEXP_CORE int
             wxCmdLineArgType pCmdLine = NULL,
             int nCmdShow = SW_SHOWNORMAL);
 
+#if defined(__BORLANDC__) && wxUSE_UNICODE
+    // Borland C++ has the following nonstandard behaviour: when the -WU
+    // command line flag is used, the linker expects to find wWinMain instead
+    // of WinMain. This flag causes the compiler to define _UNICODE and
+    // UNICODE symbols and there's no way to detect its use, so we have to
+    // define both WinMain and wWinMain so that IMPLEMENT_WXWIN_MAIN works
+    // for both code compiled with and without -WU.
+    // See http://sourceforge.net/tracker/?func=detail&atid=309863&aid=1935997&group_id=9863
+    // for more details.
+    #define IMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD                        \
+        extern "C" int WINAPI wWinMain(HINSTANCE hInstance,                 \
+                                      HINSTANCE hPrevInstance,              \
+                                      wchar_t * WXUNUSED(lpCmdLine),        \
+                                      int nCmdShow)                         \
+        {                                                                   \
+            /* NB: wxEntry expects lpCmdLine argument to be char*, not */   \
+            /*     wchar_t*, but fortunately it's not used anywhere    */   \
+            /*     and we can simply pass NULL in:                     */   \
+            return wxEntry(hInstance, hPrevInstance, NULL, nCmdShow);       \
+        }
+#else
+    #define IMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD
+#endif // defined(__BORLANDC__) && wxUSE_UNICODE
+
 #define IMPLEMENT_WXWIN_MAIN \
-    extern "C" int WINAPI WinMain(HINSTANCE hInstance,                    \
-                                  HINSTANCE hPrevInstance,                \
-                                  wxCmdLineArgType lpCmdLine,             \
-                                  int nCmdShow)                           \
-    {                                                                     \
-        return wxEntry(hInstance, hPrevInstance, lpCmdLine, nCmdShow);    \
-    }
+    extern "C" int WINAPI WinMain(HINSTANCE hInstance,                      \
+                                  HINSTANCE hPrevInstance,                  \
+                                  wxCmdLineArgType WXUNUSED(lpCmdLine),     \
+                                  int nCmdShow)                             \
+    {                                                                       \
+        /* NB: We pass NULL in place of lpCmdLine to behave the same as  */ \
+        /*     Borland-specific wWinMain() above. If it becomes needed   */ \
+        /*     to pass lpCmdLine to wxEntry() here, you'll have to fix   */ \
+        /*     wWinMain() above too.                                     */ \
+        return wxEntry(hInstance, hPrevInstance, NULL, nCmdShow);           \
+    }                                                                       \
+    IMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD
+
 
 #endif // _WX_APP_H_
 
