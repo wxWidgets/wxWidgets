@@ -1909,9 +1909,9 @@ bool wxMSWDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widt
 
 void wxMSWDCImpl::RealizeScaleAndOrigin()
 {
-    // VZ: it seems very wasteful to always use MM_ANISOTROPIC when in 99% of
-    //     cases we could do with MM_TEXT and in the remaining 0.9% with
-    //     MM_ISOTROPIC (TODO!)
+    // although it may seem wasteful to always use MM_ANISOTROPIC here instead
+    // of using MM_TEXT if there is no scaling, benchmarking doesn't detect any
+    // noticeable difference between these mapping modes
 #ifndef __WXWINCE__
     ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
 
