@@ -166,6 +166,8 @@ wxMSW:
 - Text controls with wxTE_RICH style now also generate wxClipboardTextEvents.
 - Fixed wxSpinCtrl::GetClientSize() to return sensible value and not just
   spin button's client size.
+- Fixed IMPLEMENT_APP() to be compatible with the -WU flag of Borland C++
+  compiler (Matthias Bohm).
 
 wxGTK:
 
