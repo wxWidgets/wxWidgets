@@ -23,6 +23,7 @@ always tested using @ifdef_ and not @if_.
 @li @ref page_cppconst_hardware
 @li @ref page_cppconst_compiler
 @li @ref page_cppconst_featuretests
+@li @ref page_cppconst_msvc_setup_h
 @li @ref page_cppconst_miscellaneous
 
 <hr>
@@ -197,6 +198,35 @@ Currently the following symbols exist:
 @itemdef{wxHAS_TASK_BAR_ICON, Defined if wxTaskBarIcon is available on the current platform.}
 @endDefList
 
+
+
+@section page_cppconst_msvc_setup_h Libraries selection for MSVC setup.h
+
+Microsoft Visual C++ users may use the special @c wx/setup.h file for this
+compiler in @c include/msvc subdirectory. This file implicitly links in all the
+wxWidgets libraries using MSVC-specific pragmas which usually is much more
+convenient than manually specifying the libraries list in all of the project
+configurations. However sometimes linking with all the libraries is not
+desirable, for example because some of them were not built and this is where
+the symbols in this section can be helpful: defining them allows to not link
+with the corresponding library. The following symbols are honoured:
+    - wxNO_ADV_LIB
+    - wxNO_AUI_LIB
+    - wxNO_HTML_LIB
+    - wxNO_MEDIA_LIB
+    - wxNO_NET_LIB
+    - wxNO_QA_LIB
+    - wxNO_RICHTEXT_LIB
+    - wxNO_XML_LIB
+    - wxNO_REGEX_LIB
+    - wxNO_EXPAT_LIB
+    - wxNO_JPEG_LIB
+    - wxNO_PNG_LIB
+    - wxNO_TIFF_LIB
+    - wxNO_ZLIB_LIB
+
+Notice that the base library is always included and the core is always included
+for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
 
 
 @section page_cppconst_miscellaneous Miscellaneous
