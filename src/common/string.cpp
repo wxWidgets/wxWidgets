@@ -369,6 +369,9 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
         // UTF-8 sequence and psz may be invalid:
         if ( wxStringOperations::IsValidUtf8String(psz, nLength) )
         {
+            // we must pass the real string length to SubstrBufFromMB ctor
+            if ( nLength == npos )
+                nLength = psz ? strlen(psz) : 0;
             return SubstrBufFromMB(wxCharBuffer::CreateNonOwned(psz), nLength);
         }
         // else: do the roundtrip through wchar_t*

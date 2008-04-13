@@ -431,7 +431,10 @@ private:
       size_t len;
 
       SubstrBufFromType(const T& data_, size_t len_)
-          : data(data_), len(len_) {}
+          : data(data_), len(len_)
+      {
+          wxASSERT_MSG( len != npos, "must have real length" );
+      }
   };
 
 #if wxUSE_UNICODE_UTF8
