@@ -48,7 +48,7 @@ public:
         if ( style != wxSOLID && style != wxTRANSPARENT )
         {
             wxFAIL_MSG( wxT("only wxSOLID and wxTRANSPARENT styles are supported") );
-            style = wxSOLID;
+            style = wxBRUSHSTYLE_SOLID;
         }
 
         m_style = style;

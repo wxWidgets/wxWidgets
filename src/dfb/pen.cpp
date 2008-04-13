@@ -40,7 +40,7 @@ public:
 
     virtual bool IsOk() const { return m_colour.IsOk(); }
 
-    void SetStyle(int style)
+    void SetStyle(wxPenStyle style)
     {
         if ( style != wxPENSTYLE_SOLID && style != wxPENSTYLE_TRANSPARENT )
         {
