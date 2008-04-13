@@ -131,6 +131,7 @@ All (GUI):
   best size if needed.
 - Made wxSpinCtrl::Reparent() in MSW and generic versions (Angelo Mottola).
 - Fixed timing of malformed animated GIFs in wxHTML (Gennady Feller).
+- Fixed incorrect layout width caching in wxHTML (Jeff Tupper).
 
 All (Unix):
 

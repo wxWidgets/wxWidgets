@@ -750,7 +750,9 @@ void wxHtmlContainerCell::Layout(int w)
 {
     wxHtmlCell::Layout(w);
 
-    if (m_LastLayout == w) return;
+    if (m_LastLayout == w)
+        return;
+    m_LastLayout = w;
 
     // VS: Any attempt to layout with negative or zero width leads to hell,
     // but we can't ignore such attempts completely, since it sometimes
@@ -1006,8 +1008,6 @@ void wxHtmlContainerCell::Layout(int w)
     m_MaxTotalWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
     MaxLineWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
     if (m_Width < MaxLineWidth) m_Width = MaxLineWidth;
-
-    m_LastLayout = w;
 }
 
 void wxHtmlContainerCell::UpdateRenderingStatePre(wxHtmlRenderingInfo& info,
