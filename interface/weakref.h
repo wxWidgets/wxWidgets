@@ -112,7 +112,8 @@ public:
 
     /**
         Called when the tracked object is destroyed. Be default sets
-        internal pointer to @NULL.
+        internal pointer to @NULL. You need to call this method if
+        you override it.
     */
     virtual void OnObjectDestroy();
 
