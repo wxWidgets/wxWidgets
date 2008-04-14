@@ -617,6 +617,9 @@
 #        define wxHAVE_RAW_BITMAP
 #    endif
 #endif
+#if defined(__WXGTK20__) || defined(__WXMAC__)
+#    define wxHAVE_RAW_BITMAP
+#endif
 
 /*
     Handle Darwin gcc universal compilation.  Don't do this in an Apple-
