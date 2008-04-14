@@ -1393,10 +1393,18 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
 
         HDITEM hdi;
         hdi.mask = HDI_TEXT | HDI_FORMAT | HDI_WIDTH;
+        if (col->GetBitmap().IsOk())
+        {
+           hdi.mask |= HDI_BITMAP;
+           hdi.hbm = (HBITMAP) col->GetBitmap().GetHBITMAP();
+        }
         hdi.pszText = (wxChar *) col->GetTitle().wx_str();
         hdi.cxy = col->GetWidth();
         hdi.cchTextMax = sizeof(hdi.pszText)/sizeof(hdi.pszText[0]);
         hdi.fmt = HDF_LEFT | HDF_STRING;
+        if (col->GetBitmap().IsOk())
+            hdi.fmt |= HDF_BITMAP;
+        
         //hdi.fmt &= ~(HDF_SORTDOWN|HDF_SORTUP);
 
         if (col->IsSortable() && GetOwner()->GetSortingColumn() == col)
