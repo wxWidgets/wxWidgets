@@ -678,6 +678,7 @@ public:
    virtual void OnObjectDestroy()
    {
       get()->PopEventHandler( true );
+      m_pobj = NULL;
       delete this;
    }
 };
