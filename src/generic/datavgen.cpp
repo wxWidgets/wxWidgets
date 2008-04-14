@@ -44,6 +44,7 @@
 #include "wx/icon.h"
 #include "wx/list.h"
 #include "wx/listimpl.cpp"
+#include "wx/imaglist.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -159,9 +160,10 @@ protected:
     wxDataViewColumn *GetColumnFromHeader(NMHEADER *nmHDR)
         { return GetColumn(GetColumnIdxFromHeader(nmHDR)); }
 
-    int   m_scrollOffsetX;
-    int   m_buttonHeight;
-    bool  m_delayedUpdate;
+    int          m_scrollOffsetX;
+    int          m_buttonHeight;
+    bool         m_delayedUpdate;
+    wxImageList *m_imageList;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewHeaderWindowMSW)
@@ -1185,7 +1187,7 @@ wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *
     SetAlignment(align);
     SetFlags(flags);
 
-    Init(width < 0 ? wxDVC_TOGGLE_DEFAULT_WIDTH : width);
+    Init(width < 0 ? wxDVC_DEFAULT_WIDTH : width);
 }
 
 wxDataViewColumn::~wxDataViewColumn()
@@ -1346,6 +1348,9 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
         return false;
     }
 
+    m_imageList = new wxImageList( 16, 16 );
+    Header_SetImageList( (HWND) m_hWnd, m_imageList->GetHIMAGELIST() );
+
     // we need to subclass the m_hWnd to force wxWindow::HandleNotify
     // to call wxDataViewHeaderWindow::MSWOnNotify
     SubclassWin(m_hWnd);
@@ -1359,6 +1364,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
 
 wxDataViewHeaderWindowMSW::~wxDataViewHeaderWindow()
 {
+    delete m_imageList;
     UnsubclassWin();
 }
 
@@ -1381,6 +1387,8 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
     // remove old columns
     for (int j=0, max=Header_GetItemCount((HWND)m_hWnd); j < max; j++)
         Header_DeleteItem((HWND)m_hWnd, 0);
+        
+    m_imageList->RemoveAll();
 
     // add the updated array of columns to the header control
     unsigned int cols = GetOwner()->GetColumnCount();
@@ -1395,15 +1403,16 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         hdi.mask = HDI_TEXT | HDI_FORMAT | HDI_WIDTH;
         if (col->GetBitmap().IsOk())
         {
-           hdi.mask |= HDI_BITMAP;
-           hdi.hbm = (HBITMAP) col->GetBitmap().GetHBITMAP();
+           m_imageList->Add( col->GetBitmap() );
+           hdi.mask |= HDI_IMAGE;
+           hdi.iImage = m_imageList->GetImageCount()-1;
         }
         hdi.pszText = (wxChar *) col->GetTitle().wx_str();
         hdi.cxy = col->GetWidth();
         hdi.cchTextMax = sizeof(hdi.pszText)/sizeof(hdi.pszText[0]);
         hdi.fmt = HDF_LEFT | HDF_STRING;
         if (col->GetBitmap().IsOk())
-            hdi.fmt |= HDF_BITMAP;
+            hdi.fmt |= HDF_IMAGE;
         
         //hdi.fmt &= ~(HDF_SORTDOWN|HDF_SORTUP);
 

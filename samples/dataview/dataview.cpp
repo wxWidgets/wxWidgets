@@ -823,8 +823,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_listCtrl->AssociateModel( m_list_model.get() );
 
 #if 1
-    m_listCtrl->AppendTextColumn    (wxT("editable string"), 0, wxDATAVIEW_CELL_EDITABLE, 120, wxALIGN_RIGHT );
-    m_listCtrl->AppendIconTextColumn(wxIcon(small1_xpm),            1, wxDATAVIEW_CELL_INERT )->SetTitle( wxT("icon") );
+    m_listCtrl->AppendTextColumn    (wxT("editable string"), 0, wxDATAVIEW_CELL_EDITABLE, 120 );
+    m_listCtrl->AppendIconTextColumn(wxIcon(small1_xpm), 1, wxDATAVIEW_CELL_INERT )->SetTitle( wxT("icon") );
 #else
     m_listCtrl->AppendTextColumn    (wxT("editable string"), 0, wxDATAVIEW_CELL_EDITABLE );
     m_listCtrl->AppendIconTextColumn(wxT("icon"),            1, wxDATAVIEW_CELL_INERT );
