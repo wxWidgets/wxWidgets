@@ -844,6 +844,16 @@ bool wxStringBase::ConcatSelf(size_t nSrcLen, const wxChar *pszSrcData,
     size_t nLen = pData->nDataLength;
     size_t nNewLen = nLen + nSrcLen;
 
+    // take special care when appending part of this string to itself: the code
+    // below reallocates our buffer and this invalidates pszSrcData pointer so
+    // we have to copy it in another temporary string in this case (but avoid
+    // doing this unnecessarily)
+    if ( pszSrcData >= m_pchData && pszSrcData < m_pchData + nLen )
+    {
+        wxStringBase tmp(pszSrcData, nSrcLen);
+        return ConcatSelf(nSrcLen, tmp.m_pchData, nSrcLen);
+    }
+
     // alloc new buffer if current is too small
     if ( pData->IsShared() ) {
       STATISTICS_ADD(ConcatHit, 0);
