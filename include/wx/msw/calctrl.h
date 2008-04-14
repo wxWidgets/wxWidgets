@@ -53,7 +53,7 @@ public:
     virtual void SetWindowStyleFlag(long style);
 
 protected:
-    virtual wxSize wxCalendarCtrl::DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const;
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
