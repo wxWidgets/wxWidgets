@@ -8,6 +8,7 @@
 
 
 /**
+    @class wxItemContainerImmutable
     @wxheader{ctrlsub.h}
 
     wxItemContainer defines an interface which is implemented by all controls
@@ -48,7 +49,6 @@ public:
         @see GetCount()
     */
     bool IsEmpty() const;
-
 
     /**
         Returns the label of the item with the given index.
@@ -91,8 +91,7 @@ public:
 
     //@}
 
-    // selection
-    // ---------
+    /// @name Selection
     //@{
 
     /**
@@ -155,6 +154,7 @@ public:
 
 
 /**
+    @class wxItemContainer
     @wxheader{ctrlsub.h}
 
     This class is an abstract base class for some wxWidgets controls which
@@ -175,13 +175,13 @@ public:
     simply stored by the control but not used in any way by it, or typed
     pointers (wxClientData*) which are owned by the control meaning that the
     typed client data (and only it) will be deleted when an item is deleted
-    using wxItemContainer::Delete() or the entire control is cleared using
-    wxItemContainer::Clear(), which also happens when it is destroyed.
+    using Delete() or the entire control is cleared using Clear(), which also
+    happens when it is destroyed.
 
     Finally note that in the same control all items must have client data of
     the same type (typed or untyped), if any. This type is determined by the
-    first call to wxItemContainer::Append() (the version with client data
-    pointer) or wxItemContainer::SetClientData().
+    first call to Append() (the version with client data pointer) or
+    SetClientData().
 
     Note that this is not a control, it's a mixin interface that classes
     have to derive from in addition to wxControl or wxWindow. Convenience

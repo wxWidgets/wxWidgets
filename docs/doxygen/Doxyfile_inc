@@ -147,7 +147,7 @@ ALIASES += endTable="</table></center>"
 # In any case a definition list differs from a table because of its semantic
 # nature and because it is always the association of a "title" with a "description"
 # (in contrast a table may have more than 2 columns of data)...
-ALIASES += beginDefList="<table class='doclist'>"
+ALIASES += beginDefList="<table class='doclist' border='1' cellspacing='0'>"
 ALIASES += itemdef{2}="<tr><td><span class='itemdef'>\1</span></td> <td>\2</td></tr>"
 ALIASES += itemdef{3}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3</td></tr>"
 ALIASES += itemdef{4}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\4</td></tr>"
@@ -160,9 +160,9 @@ ALIASES += itemdef{10}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\
 ALIASES += endDefList="</table>"
 
 # See ENABLED_SECTIONS configuration key for more info about these:
-ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL \n <b>wxPerl note</b>\n\n"
+ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL \n <b>wxPerl Note:</b>\n\n"
 ALIASES += endWxPerlOnly="\endif"
-ALIASES += beginWxPythonOnly="\if WXPYTHON_MANUAL \n <b>wxPython note</b>\n\n"
+ALIASES += beginWxPythonOnly="\if WXPYTHON_MANUAL \n <b>wxPython Note:</b>\n\n"
 ALIASES += endWxPythonOnly="\endif"
 
 # This is to get around a bug in Doxygen that prevents use of '{' or '}'
@@ -198,7 +198,7 @@ GENERATE_BUGLIST       = YES
 GENERATE_DEPRECATEDLIST= YES
 
 # can contain WXPERL_MANUAL, WXPYTHON_MANUAL keywords
-ENABLED_SECTIONS       =
+ENABLED_SECTIONS       = WXPERL_MANUAL WXPYTHON_MANUAL
 
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES

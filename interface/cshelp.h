@@ -14,7 +14,7 @@
     context-sensitive help to show the help text for the given window.
 
     The current help provider must be explicitly set by the application using
-    wxHelpProvider::Set().
+    Set().
 
     @library{wxcore}
     @category{help}
@@ -29,7 +29,7 @@ public:
     /**
         Virtual destructor for any base class.
     */
-    ~wxHelpProvider();
+    virtual ~wxHelpProvider();
 
     /**
         Associates the text with the given window.
@@ -69,7 +69,6 @@ public:
     */
     virtual wxString GetHelp(const wxWindowBase* window);
 
-
     /**
         Removes the association between the window pointer and the help text.
         This is called by the wxWindow destructor. Without this, the table of
@@ -99,8 +98,7 @@ public:
         This function may be overridden to show help for the window when it
         should depend on the position inside the window, By default this method
         forwards to ShowHelp(), so it is enough to only implement the latter if
-        the help doesn't depend on the position.  Returns @true if help was
-        shown, or @false if no help was available for this window.
+        the help doesn't depend on the position.
 
         @param window
             Window to show help text for.
@@ -108,9 +106,14 @@ public:
             Coordinates of the mouse at the moment of help event emission.
         @param origin
             Help event origin, see wxHelpEvent::GetOrigin.
+
+        @returns @true if help was shown, or @false if no help was available
+                 for this window.
+
+        @wxsince{2.7.0}
     */
     virtual bool ShowHelpAtPoint(wxWindowBase* window, const wxPoint point,
-                                 wxHelpEvent::Origin origin);
+                                   wxHelpEvent::Origin origin);
 };
 
 
@@ -121,7 +124,7 @@ public:
 
     wxHelpControllerHelpProvider is an implementation of wxHelpProvider which
     supports both context identifiers and plain text help strings. If the help
-    text is an integer, it is passed to wxHelpController::DisplayContextPopup.
+    text is an integer, it is passed to wxHelpController::DisplayContextPopup().
     Otherwise, it shows the string in a tooltip as per wxSimpleHelpProvider. If
     you use this with a wxCHMHelpController instance on windows, it will use
     the native style of tip window instead of wxTipWindow.
@@ -197,6 +200,7 @@ public:
     /**
         Constructs a context help object, calling BeginContextHelp() if
         @a doNow is @true (the default).
+
         If @a window is @NULL, the top window is used.
     */
     wxContextHelp(wxWindow* window = NULL, bool doNow = true);
@@ -258,11 +262,14 @@ public:
         @param pos
             Button position.
         @param size
-            Button size. If wxDefaultSize is specified then the button is
-        sized
+            Button size. If wxDefaultSize is specified then the button is sized
             appropriately for the question mark bitmap.
         @param style
             Window style.
+
+        @remarks
+        Normally you only need pass the parent window to the constructor, and
+        use the defaults for the remaining parameters.
     */
     wxContextHelpButton(wxWindow* parent,
                         wxWindowID id = wxID_CONTEXT_HELP,
