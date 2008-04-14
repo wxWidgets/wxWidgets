@@ -42,8 +42,7 @@
 // wxRendererPtr: auto pointer holding the global renderer
 // ----------------------------------------------------------------------------
 
-wxDECLARE_SCOPED_PTR(wxRendererNative, wxRendererPtrBase)
-wxDEFINE_SCOPED_PTR(wxRendererNative, wxRendererPtrBase)
+typedef wxScopedPtr<wxRendererNative> wxRendererPtrBase;
 
 class wxRendererPtr : public wxRendererPtrBase
 {
