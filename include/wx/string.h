@@ -1442,6 +1442,16 @@ public:
     { append(psz); return *this; }
   wxString& Append(const wxWCharBuffer& psz)
     { append(psz); return *this; }
+  wxString& Append(const char* psz, size_t nLen)
+    { append(psz, nLen); return *this; }
+  wxString& Append(const wchar_t* pwz, size_t nLen)
+    { append(pwz, nLen); return *this; }
+  wxString& Append(const wxCStrData& psz, size_t nLen)
+    { append(psz, nLen); return *this; }
+  wxString& Append(const wxCharBuffer& psz, size_t nLen)
+    { append(psz, nLen); return *this; }
+  wxString& Append(const wxWCharBuffer& psz, size_t nLen)
+    { append(psz, nLen); return *this; }
     // append count copies of given character
   wxString& Append(wxUniChar ch, size_t count = 1u)
     { append(count, ch); return *this; }
@@ -1453,10 +1463,6 @@ public:
     { append(count, ch); return *this; }
   wxString& Append(wchar_t ch, size_t count = 1u)
     { append(count, ch); return *this; }
-  wxString& Append(const char* psz, size_t nLen)
-    { append(psz, nLen); return *this; }
-  wxString& Append(const wchar_t* pwz, size_t nLen)
-    { append(pwz, nLen); return *this; }
 
     // prepend a string, return the string itself
   wxString& Prepend(const wxString& str)
@@ -1881,6 +1887,12 @@ public:
     { return append(str.data()); }
   wxString& append(const wxWCharBuffer& str)
     { return append(str.data()); }
+  wxString& append(const wxCStrData& str, size_t n)
+    { return append(str.AsString(), 0, n); }
+  wxString& append(const wxCharBuffer& str, size_t n)
+    { return append(str.data(), n); }
+  wxString& append(const wxWCharBuffer& str, size_t n)
+    { return append(str.data(), n); }
 
     // append n copies of ch
   wxString& append(size_t n, wxUniChar ch)
@@ -1893,6 +1905,15 @@ public:
         m_impl.append(n, (wxStringCharType)ch);
     return *this;
   }
+  wxString& append(size_t n, wxUniCharRef ch)
+    { return append(n, wxUniChar(ch)); }
+  wxString& append(size_t n, char ch)
+    { return append(n, wxUniChar(ch)); }
+  wxString& append(size_t n, unsigned char ch)
+    { return append(n, wxUniChar(ch)); }
+  wxString& append(size_t n, wchar_t ch)
+    { return append(n, wxUniChar(ch)); }
+
     // append from first to last
   wxString& append(const_iterator first, const_iterator last)
     { m_impl.append(first.impl(), last.impl()); return *this; }
