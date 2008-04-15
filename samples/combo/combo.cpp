@@ -383,9 +383,7 @@ public:
     {
         return wxTreeCtrl::Create(parent,1,
                                   wxPoint(0,0),wxDefaultSize,
-                                  wxTR_HIDE_ROOT|wxTR_HAS_BUTTONS|
-                                  wxTR_SINGLE|wxTR_LINES_AT_ROOT|
-                                  wxSIMPLE_BORDER);
+                                  wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxSIMPLE_BORDER );
     }
 
     virtual void OnShow()
