@@ -68,7 +68,7 @@
 
     Usage:
         <fetch branch="Daily_HEAD/wxX11.tar.gz"/>
-    
+
     Fetches the URL given by <baseURL>/$branch, where the current default
     for <baseURL> is "http://biolpc22.york.ac.uk/pub".
 

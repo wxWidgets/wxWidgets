@@ -14,16 +14,16 @@ td {
 }
 
 /* Activity states */
-.offline { 
+.offline {
         background-color: red;
 }
 .idle {
 	background-color: white;
 }
-.waiting { 
+.waiting {
         background-color: yellow;
 }
-.building { 
+.building {
         background-color: yellow;
 }
 

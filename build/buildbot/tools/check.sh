@@ -145,7 +145,7 @@ preprocess()
         return 1
     fi
 }
-        
+
 validate()
 {
     NAME="$1"
@@ -174,7 +174,7 @@ while [ $# -gt 0 ]; do
         errout "$NAME" >&2
         ERR=1
     }
-            
+
     rm -f "$XSLT" "$PREP" "$STDERR"
 
     shift

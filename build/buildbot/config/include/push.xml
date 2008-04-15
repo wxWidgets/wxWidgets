@@ -15,7 +15,7 @@
 <xi:include href="defs.xml"/>
 
 <!--
-    Usage: <show log="filename" [ name="title" ]/> 
+    Usage: <show log="filename" [ name="title" ]/>
 
     A build step displayed as 'title' in the waterfall display, the output
     comes from 'filename.log' in the uploaded log tarball, and the exit code
