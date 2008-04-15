@@ -598,8 +598,17 @@ void wxApp::WakeUpIdle()
 
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 {
-    if (GetTopWindow())
-        GetTopWindow()->Close(true);
+    // Windows will terminate the process soon after we return from
+    // WM_ENDSESSION handler anyhow, so make sure we at least execute our
+    // cleanup code before
+    const int rc = OnExit();
+
+    wxEntryCleanup();
+
+    // calling exit() instead of ExitProcess() or not doing anything at all and
+    // being killed by Windows has the advantage of executing the dtors of
+    // global objects
+    exit(rc);
 }
 
 // Default behaviour: close the application with prompts. The

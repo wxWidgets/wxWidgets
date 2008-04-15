@@ -2934,16 +2934,28 @@ public:
     This allows the wxWindow::Close function to return @true or @false depending
     on whether the close instruction was honoured or not.
 
+    The EVT_END_SESSION event is slightly different as it is sent by the system
+    when the user session is ending (e.g. because of log out or shutdown) and
+    so all windows are being forcefully closed. At least under MSW, after the
+    handler for this event is executed the program is simply killed by the
+    system. Because of this, the default handler for this event provided by
+    wxWidgets calls all the usual cleanup code (including wxApp::OnExit()) so
+    that it could still be executed and exit()s the process itself, without
+    waiting for being killed. If this behaviour is for some reason undesirable,
+    make sure that you define a handler for this event in your wxApp-derived
+    class and do not call @c event.Skip() in it (but be aware that the system
+    will still kill your application).
+
     @beginEventTable{wxCloseEvent}
     @event{EVT_CLOSE(func)}
         Process a close event, supplying the member function.
         This event applies to wxFrame and wxDialog classes.
     @event{EVT_QUERY_END_SESSION(func)}
         Process a query end session event, supplying the member function.
-        This event applies to wxApp only.
+        This event can be handled in wxApp-derived class only.
     @event{EVT_END_SESSION(func)}
         Process an end session event, supplying the member function.
-        This event applies to wxApp only.
+        This event can be handled in wxApp-derived class only.
     @endEventTable
 
     @library{wxcore}
