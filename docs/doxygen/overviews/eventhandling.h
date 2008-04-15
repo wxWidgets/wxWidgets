@@ -13,6 +13,8 @@
 Classes: wxEvtHandler, wxWindow, wxEvent
 
 @li @ref overview_eventhandling_introduction
+@li @ref overview_eventhandling_eventtables
+@li @ref overview_eventhandling_connect
 @li @ref overview_eventhandling_processing
 @li @ref overview_eventhandling_prog
 @li @ref overview_eventhandling_pluggable
@@ -26,77 +28,260 @@ Classes: wxEvtHandler, wxWindow, wxEvent
 
 @section overview_eventhandling_introduction Introduction
 
-Before version 2.0 of wxWidgets, events were handled by the application
-either by supplying callback functions, or by overriding virtual member
-functions such as @b OnSize.
+There are two principal ways to handle events in wxWidgets. One of them uses
+<em>event table</em> macros and allows to define the connection between events
+and their handlers only statically, i.e. during program compilation. The other
+one uses wxEvtHandler::Connect() call and can be used to connect, and
+disconnect, the handlers dynamically, i.e. during run-time depending on some
+conditions. It also allows directly connecting the events of one object to a
+handler method in another object while the static event tables can only handle
+events in the object where they are defined so using Connect() is more flexible
+than using the event tables. On the other hand, event tables are more succinct
+and centralize all event handlers connection in one place. You can either
+choose a single approach which you find preferable or freely combine both
+methods in your program in different classes or even in one and the same class,
+although this is probably sufficiently confusing to be a bad idea.
 
-From wxWidgets 2.0, @e event tables are used instead, with a few exceptions.
-An event table is placed in an implementation file to tell wxWidgets how to map
-events to member functions. These member functions are not virtual functions, but
-they are all similar in form: they take a single wxEvent-derived argument,
-and have a void return type.
-Here's an example of an event table.
+But before you make this choice, let us discuss these two ways in some more
+details: in the next section we provide a short introduction to handling the
+events using the event tables, please see @ref overview_eventhandling_connect
+for the discussion of Connect().
+
+@section overview_eventhandling_eventtables Event Handling with Event Tables
+
+To use an <em>event table</em> you must first decide in which class you wish to
+handle the events. The only requirement imposed by wxWidgets is that this class
+must derive from wxEvtHandler and so, considering that wxWindow derives from
+it, any classes representing windows can handle events. Simple events such as
+menu commands are usually processed at the level of a top-level window
+containing the menu, so let's suppose that you need to handle some events in @c
+MyFrame class deriving from wxFrame.
+
+First thing to do is to define one or more <em>event handlers</em>. They
+are just simple (non-virtual) methods of the class which take as a parameter a
+reference to an object of wxEvent-derived class and have no return value (any
+return information is passed via the argument, which is why it is non-const).
+You also need to insert a macro
 
 @code
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-EVT_MENU(DO_TEST, MyFrame::DoTest)
-EVT_SIZE(MyFrame::OnSize)
-EVT_BUTTON(BUTTON1, MyFrame::OnButton1)
-END_EVENT_TABLE()
+DECLARE_EVENT_TABLE()
 @endcode
 
-The first two entries map menu commands to two different member functions. The
-EVT_SIZE macro doesn't need a window identifier, since normally you are only
-interested in the current window's size events.
-
-The EVT_BUTTON macro demonstrates that the originating event does not have to
-come from the window class implementing the event table -- if the event source
-is a button within a panel within a frame, this will still work, because event
-tables are searched up through the hierarchy of windows for the command events.
-In this case, the button's event table will be searched, then the parent
-panel's, then the frame's.
-
-As mentioned before, the member functions that handle events do not have to be
-virtual. Indeed, the member functions should not be virtual as the event
-handler ignores that the functions are virtual, i.e. overriding a virtual
-member function in a derived class will not have any effect. These member
-functions take an event argument, and the class of event differs according to
-the type of event and the class of the originating window. For size events,
-wxSizeEvent is used. For menu commands and most control commands
-(such as button presses), wxCommandEvent is used. When controls get more
-complicated, then specific event classes are used, such as wxTreeEvent for
-events from wxTreeCtrl windows.
-
-As well as the event table in the implementation file, there must also be a
-DECLARE_EVENT_TABLE macro somewhere in the class declaration. For example:
+somewhere in the class declaration. It doesn't matter where does it occur but
+it's customary to put it at the end of it because the macro changes the access
+type internally and so it's safest if there is nothing that follows it. So the
+full class declaration might look like this:
 
 @code
 class MyFrame : public wxFrame
 {
 public:
-...
-void OnExit(wxCommandEvent& event);
-void OnSize(wxSizeEvent& event);
+    MyFrame(...) : wxFrame(...) { }
+
+    ...
 
 protected:
-int       m_count;
-...
+    int m_whatever;
 
-DECLARE_EVENT_TABLE()
+private:
+    // notice that as the event handlers normally are not called from outside
+    // the class, they normally be private, in particular they don't need at
+    // all to be public
+    void OnExit(wxCommandEvent& event);
+    void OnButton1(wxCommandEvent& event);
+    void OnSize(wxSizeEvent& event);
+
+    // it's common to call the event handlers OnSomething() but there is no
+    // obligation to it, this one is an event handler too:
+    void DoTest(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE()
 };
 @endcode
 
-Note that this macro may occur in any section of the class (public, protected
-or private) but that it is probably better to insert it at the end, as shown,
-because this macro implicitly changes the access to protected which may be
-quite unexpected if there is anything following it.
+Next the event table must be defined and, as any definition, it must be placed
+in an implementation file to tell. The event table tells wxWidgets how to map
+events to member functions and in our example it could look like this:
 
-Finally, if you don't like using macros for static initialization of the event
-tables you may also use wxEvtHandler::Connect to
-connect the events to the handlers dynamically, during run-time. See the
-@ref page_samples_event for an example of doing it.
+@code
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(wxID_EXIT, MyFrame::OnExit)
+    EVT_MENU(DO_TEST, MyFrame::DoTest)
+    EVT_SIZE(MyFrame::OnSize)
+    EVT_BUTTON(BUTTON1, MyFrame::OnButton1)
+END_EVENT_TABLE()
+@endcode
 
+Notice that you must mention a method you want to use for the event handling in
+the event table definition, just defining it in MyFrame class is @e not enough.
+
+Let us now look at the details of this definition: the first line means that we
+are defining the event table for MyFrame class and that its base class is
+wxFrame, so events not processed by MyFrame will, by default, be handled to
+wxFrame. The next four lines define connections of individual events to their
+handlers: the first two of them map menu commands from the items with the
+identifiers specified as the first macro parameter to two different member
+functions. In the next one, @c EVT_SIZE means that any changes in the size of
+the frame will result in calling OnSize() method. Note that this macro doesn't
+need a window identifier, since normally you are only interested in the current
+window's size events.
+
+The EVT_BUTTON macro demonstrates that the originating event does not have to
+come from the window class implementing the event table -- if the event source
+is a button within a panel within a frame, this will still work, because event
+tables are searched up through the hierarchy of windows for the command events
+(but only command events, so you can't catch mouse move events in a child
+control in the parent window in the same way because wxMouseEvent doesn't
+derive from wxCommandEvent, see below for how you can do it). In this case, the
+button's event table will be searched, then the parent panel's, then the
+frame's.
+
+Finally, you need to implement the event handlers. As mentioned before, all
+event handlers take a wxEvent-derived argument whose exact class differs
+according to the type of event and the class of the originating window. For
+size events, wxSizeEvent is used. For menu commands and most control commands
+(such as button presses), wxCommandEvent is used. And when controls get more
+complicated, more specific wxCommandEvent-derived event classes providing
+additional control-specific information can be used, such as wxTreeEvent for
+events from wxTreeCtrl windows.
+
+In the simplest possible case an event handler may not use the @c event
+parameter at all, e.g.
+
+@code
+void MyFrame::OnExit(wxCommandEvent&)
+{
+    // when the user selects "Exit" from the menu we should close
+    Close(true);
+}
+@endcode
+
+In other cases you may need some information carried by the @c event argument,
+as in:
+
+@code
+void MyFrame::OnSize(wxSizeEvent& event)
+{
+    wxSize size = event.GetSize();
+
+    ... update the frame using the new size ...
+}
+@endcode
+
+You will find the details about the event table macros and the corresponding
+wxEvent-derived classes in the discussion of each control generating these
+events.
+
+
+@section overview_eventhandling_connect Dynamic Event Handling
+
+As with the event tables, you need to decide in which class do you intend to
+handle the events first and, also as before, this class must still derive from
+wxEvtHandler (usually indirectly via wxWindow), see the declaration of MyFrame
+in the previous section. However the similarities end here and both the syntax
+and the possibilities of this way of handling events in this way are rather
+different.
+
+Let us start by looking at the syntax: the first obvious difference is that you
+don't need to use neither @c DECLARE_EVENT_TABLE() nor @c BEGIN_EVENT_TABLE and 
+associated macros any more. Instead, in any place in your code, but usually in
+the code of the class defining the handlers itself (and definitely not in the
+global scope as with the event tables), you should call its Connect() method
+like this:
+
+@code
+MyFrame::MyFrame(...)
+{
+      Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
+                wxCommandEventHandler(MyFrame::OnExit));
+}
+@endcode
+
+This class should be self-explanatory except for wxCommandEventHandler part:
+this is a macro which ensures that the method is of correct type by using
+static_cast in the same way as event table macros do it inside them.
+
+Now let us describe the semantic differences:
+<ul>
+    <li>
+        Event handlers can be connected at any moment, e.g. it's possible to do
+        some initialization first and only connect the handlers if and when it
+        succeeds. This can avoid the need to test that the object was properly
+        initialized in the event handlers themselves: with Connect() they
+        simply won't be called at all if it wasn't.
+    </li>
+
+    <li>
+        As a slight extension of the above, the handlers can also be
+        Disconnect()-ed at any time. And maybe later reconnected again. Of
+        course, it's also possible to emulate this behaviour with the classic
+        static (i.e. connected via event tables) handlers by using an internal
+        flag indicating whether the handler is currently enabled and returning
+        from it if it isn't, but using dynamically connected handlers requires
+        less code and is also usually more clear.
+    </li>
+
+    <li>
+        Also notice that you must derive a class inherited from, say,
+        wxTextCtrl even if you don't want to modify the control behaviour at
+        all but just want to handle some of its events. This is especially
+        inconvenient when the control is loaded from the XRC. Connecting the
+        event handler dynamically bypasses the need for this unwanted
+        sub-classing.
+    </li>
+
+    <li>
+        Last but very, very far from least is the possibility to connect an
+        event of some object to a method of another object. This is impossible
+        to do with event tables because there is no possibility to specify the
+        object to dispatch the event to so it necessarily needs to be sent to
+        the same object which generated the event. Not so with Connect() which
+        has an optional @c eventSink parameter which can be used to specify the
+        object which will handle the event. Of course, in this case the method
+        being connected must belong to the class which is the type of the
+        @c eventSink object! To give a quick example, people often want to catch
+        mouse movement events happening when the mouse is in one of the frame
+        children in the frame itself. Doing it in a naive way doesn't work:
+        <ul>
+            <li>
+                A @c EVT_LEAVE_WINDOW(MyFrame::OnMouseLeave) line in the frame
+                event table has no effect as mouse move (including entering and
+                leaving) events are not propagated upwards to the parent window
+                (at least not by default).
+            </li>
+
+            <li>
+                Putting the same line in a child event table will crash during
+                run-time because the MyFrame method will be called on a wrong
+                object -- it's easy to convince oneself that the only object
+                which can be used here is the pointer to the child, as
+                wxWidgets has nothing else. But calling a frame method with the
+                child window pointer instead of the pointer to the frame is, of
+                course, disastrous.
+            </li>
+        </ul>
+
+        However writing
+        @code
+            MyFrame::MyFrame(...)
+            {
+              m_child->Connect(wxID_ANY, wxEVT_LEAVE_WINDOW,
+                               wxMouseEventHandler(MyFrame::OnMouseLeave),
+                               NULL,  // unused extra data parameter
+                               this); // this indicates the object to connect to
+            }
+        @endcode
+        will work exactly as expected. Note that you can get the object which
+        generated the event -- and which is not the same as the frame -- via
+        wxEvent::GetEventObject() method of @c event argument passed to the
+        event handler.
+    <li>
+</ul>
+
+To summarize, using Connect() requires slightly more typing but is much more
+flexible than using static event tables so don't hesitate to use it when you
+need this extra power. On the other hand, event tables are still perfectly fine
+in simple situations where this extra flexibility is not needed.
 
 
 @section overview_eventhandling_processing How Events are Processed
