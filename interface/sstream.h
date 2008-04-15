@@ -44,20 +44,29 @@ class wxStringOutputStream : public wxOutputStream
 {
 public:
     /**
+        Construct a new stream object writing the data to a string.
+
         If the provided pointer is non-@NULL, data will be written to it.
-        Otherwise, an internal string is used for the data written to this stream, use
-        GetString() to get access to it.
+        Otherwise, an internal string is used for the data written to this
+        stream, use GetString() to get access to it.
+
         If @a str is used, data written to the stream is appended to the current
         contents of it, i.e. the string is not cleared here. However if it is not
         empty, the positions returned by wxOutputStream::TellO will be
         offset by the initial string length, i.e. initial stream position will be the
         initial length of the string and not 0.
+
+        Notice that the life time of @a conv must be greater than the life time
+        of this object itself as it stores a reference to it. Also notice that
+        with default value of this argument the data written to the stream must
+        be valid UTF-8, pass @c wxConvISO8859_1 to deal with arbitrary 8 bit
+        data.
     */
-    wxStringOutputStream(wxString str = NULL);
+    wxStringOutputStream(wxString str = NULL, wxMBConv& conv = wxConvUTF8);
 
     /**
         Returns the string containing all the data written to the stream so far.
     */
-    const wxString GetString() const;
+    const wxString& GetString() const;
 };
 

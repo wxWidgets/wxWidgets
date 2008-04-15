@@ -59,9 +59,14 @@ class WXDLLIMPEXP_BASE wxStringOutputStream : public wxOutputStream
 public:
     // The stream will write data either to the provided string or to an
     // internal string which can be retrieved using GetString()
-    wxStringOutputStream(wxString *pString = NULL)
+    //
+    // Note that the conversion object should have the life time greater than
+    // this stream.
+    wxStringOutputStream(wxString *pString = NULL,
+                         wxMBConv& conv = wxConvUTF8)
+        : m_conv(conv)
 #if wxUSE_UNICODE_WCHAR
-        : m_unconv(0)
+        , m_unconv(0)
 #endif // wxUSE_UNICODE_WCHAR
     {
         m_str = pString ? pString : &m_strInternal;
@@ -85,12 +90,10 @@ private:
     // position in the stream in bytes, *not* in chars
     size_t m_pos;
 
-#if wxUSE_WCHAR_T
-    // string encoding converter (UTF8 is the standard)
-    wxMBConvUTF8 m_conv;
-#else
-    wxMBConv m_conv;
-#endif
+    // converter to use: notice that with the default UTF-8 one the input
+    // stream must contain valid UTF-8 data, use wxConvISO8859_1 to work with
+    // arbitrary 8 bit data
+    wxMBConv& m_conv;
 
 #if wxUSE_UNICODE_WCHAR
     // unconverted data from the last call to OnSysWrite()

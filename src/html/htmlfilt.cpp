@@ -21,37 +21,17 @@
 #endif
 
 #include "wx/strconv.h"
+#include "wx/sstream.h"
 #include "wx/html/htmlfilt.h"
 #include "wx/html/htmlwin.h"
 
-// utility function: read a wxString from a wxInputStream
+// utility function: read entire contents of an wxInputStream into a wxString
+//
+// TODO: error handling?
 static void ReadString(wxString& str, wxInputStream* s, wxMBConv& conv)
 {
-    size_t streamSize = s->GetSize();
-
-    if (streamSize == ~(size_t)0)
-    {
-        const size_t bufSize = 4095;
-        char buffer[bufSize+1];
-        size_t lastRead;
-
-        do
-        {
-            s->Read(buffer, bufSize);
-            lastRead = s->LastRead();
-            buffer[lastRead] = 0;
-            str.Append(wxString(buffer, conv));
-        }
-        while (lastRead == bufSize);
-    }
-    else
-    {
-        char* src = new char[streamSize+1];
-        s->Read(src, streamSize);
-        src[streamSize] = 0;
-        str = wxString(src, conv);
-        delete[] src;
-    }
+    wxStringOutputStream out(&str, conv);
+    s->Read(out);
 }
 
 /*
