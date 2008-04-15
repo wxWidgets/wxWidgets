@@ -102,6 +102,11 @@ class wxCollapsiblePane : public wxControl
 {
 public:
     /**
+        Default constructor.
+    */
+    wxCollapsiblePane();
+    
+    /**
         Initializes the object and calls Create() with all the parameters.
     */
     wxCollapsiblePane(wxWindow* parent, wxWindowID id,
