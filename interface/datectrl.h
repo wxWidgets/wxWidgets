@@ -10,13 +10,12 @@
     @class wxDatePickerCtrl
     @wxheader{datectrl.h}
 
-    This control allows the user to select a date. Unlike
-    wxCalendarCtrl, which is a relatively big control,
-    wxDatePickerCtrl is implemented as a small window showing the currently
-    selected date.
-    The control can be edited using the keyboard, and can also display a popup
-    window for more user-friendly date selection, depending on the styles used and
-    the platform, except PalmOS where date is selected using native dialog.
+    This control allows the user to select a date. Unlike wxCalendarCtrl, which
+    is a relatively big control, wxDatePickerCtrl is implemented as a small
+    window showing the currently selected date. The control can be edited using
+    the keyboard, and can also display a popup window for more user-friendly
+    date selection, depending on the styles used and the platform, except
+    PalmOS where date is selected using native dialog.
 
     It is only available if @c wxUSE_DATEPICKCTRL is set to 1.
 
@@ -44,12 +43,13 @@
 
     @beginEventTable{wxDateEvent}
     @event{EVT_DATE_CHANGED(id, func)}
-           This event fires when the user changes the current selection in the control.
+           This event fires when the user changes the current selection in the
+           control.
     @endEventTable
 
     @library{wxadv}
     @category{pickers}
-    @appearance{datepickerctrl.png}
+    <!-- @appearance{datepickerctrl.png} -->
 
     @see wxCalendarCtrl, wxDateEvent
 */
@@ -57,8 +57,7 @@ class wxDatePickerCtrl : public wxControl
 {
 public:
     /**
-        Initializes the object and calls Create() with
-        all the parameters.
+        Initializes the object and calls Create() with all the parameters.
     */
     wxDatePickerCtrl(wxWindow* parent, wxWindowID id,
                      const wxDateTime& dt = wxDefaultDateTime,
@@ -79,12 +78,12 @@ public:
         @param pos
             Initial position.
         @param size
-            Initial size. If left at default value, the control chooses its
-            own best size by using the height approximately equal to a text control and
-            width large enough to show the date string fully.
+            Initial size. If left at default value, the control chooses its own
+            best size by using the height approximately equal to a text control
+            and width large enough to show the date string fully.
         @param style
-            The window style, should be left at 0 as there are no
-            special styles for this control in this version.
+            The window style, should be left at 0 as there are no special
+            styles for this control in this version.
         @param validator
             Validator which can be used for additional date checks.
         @param name
@@ -103,51 +102,54 @@ public:
 
     /**
         If the control had been previously limited to a range of dates using
-        SetRange(), returns the lower and upper
-        bounds of this range. If no range is set (or only one of the bounds is set),
-         @a dt1 and/or @a dt2 are set to be invalid.
+        SetRange(), returns the lower and upper bounds of this range. If no
+        range is set (or only one of the bounds is set), @a dt1 and/or @a dt2
+        are set to be invalid.
 
         @param dt1
             Pointer to the object which receives the lower range limit or
             becomes invalid if it is not set. May be @NULL if the caller is not
-            interested in lower limit
+            interested in lower limit.
         @param dt2
-            Same as above but for the upper limit
+            Same as above but for the upper limit.
 
-        @returns @false if no range limits are currently set, @true if at least one
-                 bound is set.
+        @returns @false if no range limits are currently set, @true if at least
+                 one bound is set.
     */
     bool GetRange(wxDateTime* dt1, wxDateTime dt2) const;
 
     /**
-        Returns the currently selected. If there is no selection or the selection is
-        outside of the current range, an invalid object is returned.
+        Returns the currently selected. If there is no selection or the
+        selection is outside of the current range, an invalid object is
+        returned.
     */
     wxDateTime GetValue() const;
 
     /**
-        Please note that this function is only available in the generic version of this
-        control. The native version always uses the current system locale.
-        Sets the display format for the date in the control. See wxDateTime for the
-        meaning of format strings.
+        Sets the display format for the date in the control. See wxDateTime for
+        the meaning of format strings.
+
+        @note This function is only available in the generic version of this
+              control. The native version always uses the current system locale.
 
         @remarks If the format parameter is invalid, the behaviour is undefined.
     */
     void SetFormat(const wxChar* format);
 
     /**
-        Sets the valid range for the date selection. If @a dt1 is valid, it becomes
-        the earliest date (inclusive) accepted by the control. If @a dt2 is valid,
-        it becomes the latest possible date.
+        Sets the valid range for the date selection. If @a dt1 is valid, it
+        becomes the earliest date (inclusive) accepted by the control. If
+        @a dt2 is valid, it becomes the latest possible date.
 
-        @remarks If the current value of the control is outside of the newly set
-                 range bounds, the behaviour is undefined.
+        @remarks If the current value of the control is outside of the newly
+                 set range bounds, the behaviour is undefined.
     */
     void SetRange(const wxDateTime& dt1, const wxDateTime& dt2);
 
     /**
-        Changes the current value of the control. The date should be valid and included
-        in the currently selected range, if any.
+        Changes the current value of the control. The date should be valid and
+        included in the currently selected range, if any.
+
         Calling this method does not result in a date change event.
     */
     void SetValue(const wxDateTime& dt);

@@ -12,250 +12,632 @@
 
     wxDateTime class represents an absolute moment in the time.
 
+    The type @c wxDateTime_t is typedefed as <tt>unsigned short</tt> and is
+    used to contain the number of years, hours, minutes, seconds and
+    milliseconds.
+
+
+    @section datetime_constants Constants
+
+    Global constant wxDefaultDateTime and synonym for it wxInvalidDateTime are
+    defined. This constant will be different from any valid wxDateTime object.
+
+    All the following constants are defined inside wxDateTime class (i.e., to
+    refer to them you should prepend their names with "wxDateTime::").
+
+    Time zone symbolic names:
+
+    @code
+    enum TZ
+    {
+        // the time in the current time zone
+        Local,
+
+        // zones from GMT (= Greenwhich Mean Time): they're guaranteed to be
+        // consequent numbers, so writing something like `GMT0 + offset' is
+        // safe if abs(offset) <= 12
+
+        // underscore stands for minus
+        GMT_12, GMT_11, GMT_10, GMT_9, GMT_8, GMT_7,
+        GMT_6, GMT_5, GMT_4, GMT_3, GMT_2, GMT_1,
+        GMT0,
+        GMT1, GMT2, GMT3, GMT4, GMT5, GMT6,
+        GMT7, GMT8, GMT9, GMT10, GMT11, GMT12, GMT13,
+        // Note that GMT12 and GMT_12 are not the same: there is a difference
+        // of exactly one day between them
+
+        // some symbolic names for TZ
+
+        // Europe
+        WET = GMT0,                         // Western Europe Time
+        WEST = GMT1,                        // Western Europe Summer Time
+        CET = GMT1,                         // Central Europe Time
+        CEST = GMT2,                        // Central Europe Summer Time
+        EET = GMT2,                         // Eastern Europe Time
+        EEST = GMT3,                        // Eastern Europe Summer Time
+        MSK = GMT3,                         // Moscow Time
+        MSD = GMT4,                         // Moscow Summer Time
+
+        // US and Canada
+        AST = GMT_4,                        // Atlantic Standard Time
+        ADT = GMT_3,                        // Atlantic Daylight Time
+        EST = GMT_5,                        // Eastern Standard Time
+        EDT = GMT_4,                        // Eastern Daylight Saving Time
+        CST = GMT_6,                        // Central Standard Time
+        CDT = GMT_5,                        // Central Daylight Saving Time
+        MST = GMT_7,                        // Mountain Standard Time
+        MDT = GMT_6,                        // Mountain Daylight Saving Time
+        PST = GMT_8,                        // Pacific Standard Time
+        PDT = GMT_7,                        // Pacific Daylight Saving Time
+        HST = GMT_10,                       // Hawaiian Standard Time
+        AKST = GMT_9,                       // Alaska Standard Time
+        AKDT = GMT_8,                       // Alaska Daylight Saving Time
+
+        // Australia
+
+        A_WST = GMT8,                       // Western Standard Time
+        A_CST = GMT13 + 1,                  // Central Standard Time (+9.5)
+        A_EST = GMT10,                      // Eastern Standard Time
+        A_ESST = GMT11,                     // Eastern Summer Time
+
+        // New Zealand
+        NZST = GMT12,                       // Standard Time
+        NZDT = GMT13,                       // Daylight Saving Time
+
+        // Universal Coordinated Time = the new and politically correct name
+        // for GMT
+        UTC = GMT0
+    };
+    @endcode
+
+    Month names: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec and
+    Inv_Month for an invalid month are the values of @c wxDateTime::Month enum.
+
+    Likewise, Sun, Mon, Tue, Wed, Thu, Fri, Sat, and Inv_WeekDay are the values
+    in @c wxDateTime::WeekDay enum.
+
+    Finally, Inv_Year is defined to be an invalid value for year parameter.
+
+    GetMonthName() and GetWeekDayName() functions use the following flags:
+
+    @code
+    enum NameFlags
+    {
+        Name_Full = 0x01,       // return full name
+        Name_Abbr = 0x02        // return abbreviated name
+    };
+    @endcode
+
+    Several functions accept an extra parameter specifying the calendar to use
+    (although most of them only support now the Gregorian calendar). This
+    parameters is one of the following values:
+
+    @code
+    enum Calendar
+    {
+        Gregorian,  // calendar currently in use in Western countries
+        Julian      // calendar in use since -45 until the 1582 (or later)
+    };
+    @endcode
+
+    Date calculations often depend on the country and wxDateTime allows to set
+    the country whose conventions should be used using SetCountry(). It takes
+    one of the following values as parameter:
+
+    @code
+    enum Country
+    {
+        Country_Unknown, // no special information for this country
+        Country_Default, // set the default country with SetCountry() method
+                         // or use the default country with any other
+
+        Country_WesternEurope_Start,
+        Country_EEC = Country_WesternEurope_Start,
+        France,
+        Germany,
+        UK,
+        Country_WesternEurope_End = UK,
+
+        Russia,
+
+        USA
+    };
+    @endcode
+
+    Different parts of the world use different conventions for the week start.
+    In some countries, the week starts on Sunday, while in others -- on Monday.
+    The ISO standard doesn't address this issue, so we support both conventions
+    in the functions whose result depends on it (GetWeekOfYear() and
+    GetWeekOfMonth()).
+
+    The desired behvaiour may be specified by giving one of the following
+    constants as argument to these functions:
+
+    @code
+    enum WeekFlags
+    {
+        Default_First,   // Sunday_First for US, Monday_First for the rest
+        Monday_First,    // week starts with a Monday
+        Sunday_First     // week starts with a Sunday
+    };
+    @endcode
+
+
+    @section datetime_static Static Functions
+
+    All static functions either set or return the static variables of
+    wxDateSpan (the country), return the current moment, year, month or number
+    of days in it, or do some general calendar-related actions.
+
+    Please note that although several function accept an extra Calendar
+    parameter, it is currently ignored as only the Gregorian calendar is
+    supported. Future versions will support other calendars.
+
+    @beginWxPythonOnly
+    These methods are standalone functions named
+    "wxDateTime_<StaticMethodName>" in wxPython.
+    @endWxPythonOnly
+
+
+    @section datetime_formatting Date Formatting and Parsing
+
+    The date formatting and parsing functions convert wxDateTime objects to and
+    from text. The conversions to text are mostly trivial: you can either do it
+    using the default date and time representations for the current locale
+    (FormatDate() and FormatTime()), using the international standard
+    representation defined by ISO 8601 (FormatISODate(), FormatISOTime() and
+    FormatISOCombined()) or by specifying any format at all and using Format()
+    directly.
+
+    The conversions from text are more interesting, as there are much more
+    possibilities to care about. The simplest cases can be taken care of with
+    ParseFormat() which can parse any date in the given (rigid) format.
+    ParseRfc822Date() is another function for parsing dates in predefined
+    format -- the one of RFC 822 which (still...) defines the format of email
+    messages on the Internet. This format can not be described with
+    @c strptime(3)-like format strings used by Format(), hence the need for a
+    separate function.
+
+    But the most interesting functions are ParseTime(), ParseDate() and
+    ParseDateTime(). They try to parse the date and time (or only one of them)
+    in 'free' format, i.e. allow them to be specified in any of possible ways.
+    These functions will usually be used to parse the (interactive) user input
+    which is not bound to be in any predefined format. As an example,
+    ParseDateTime() can parse the strings such as "tomorrow", "March first" and
+    even "next Sunday".
+
+    Finally notice that each of the parsing functions is available in several
+    overloads: if the input string is a narrow (@c char *) string, then a
+    narrow pointer is returned. If the input string is a wide string, a wide
+    char pointer is returned. Finally, if the input parameter is a wxString, a
+    narrow char pointer is also returned for backwards compatibility but there
+    is also an additional argument of wxString::const_iterator type in which,
+    if it is not @NULL, an iterator pointing to the end of the scanned string
+    part is returned.
+
+
     @library{wxbase}
     @category{data}
 
     @stdobjects
-    ::wxDefaultDateTime
+    - ::wxDefaultDateTime
 
-    @see @ref overview_wxdatetimeoverview "Date classes overview", wxTimeSpan,
-    wxDateSpan, wxCalendarCtrl
+    @see @ref overview_datetime, wxTimeSpan, wxDateSpan, wxCalendarCtrl
 */
 class wxDateTime
 {
 public:
     /**
-        Same as @ref setdate() Set
+        @name Constructors, Assignment Operators and Setters
+
+        Constructors and various Set() methods are collected here. If you
+        construct a date object from separate values for day, month and year,
+        you should use IsValid() method to check that the values were correct
+        as constructors can not return an error code.
+    */
+    //@{
+
+    /**
+        Default constructor. Use one of the Set() functions to initialize the
+        object later.
+    */
+    wxDateTime();
+    /**
+        Same as Set().
+
+        @beginWxPythonOnly
+        This constructor is named "wxDateTimeFromTimeT" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& wxDateTime(time_t timet);
+    /**
+        Same as Set().
+
+        @beginWxPythonOnly Unsupported. @endWxPythonOnly
+    */
+    wxDateTime& wxDateTime(const struct tm& tm);
+    /**
+        Same as Set().
+
+        @beginWxPythonOnly
+        This constructor is named "wxDateTimeFromJDN" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& wxDateTime(double jdn);
+    /**
+        Same as Set().
+
+        @beginWxPythonOnly
+        This constructor is named "wxDateTimeFromHMS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& wxDateTime(wxDateTime_t hour, wxDateTime_t minute = 0,
+                           wxDateTime_t second = 0, wxDateTime_t millisec = 0);
+    /**
+        Same as Set().
+
+        @beginWxPythonOnly
+        This constructor is named "wxDateTimeFromDMY" in wxPython.
+        @endWxPythonOnly
     */
     wxDateTime(wxDateTime_t day, Month month = Inv_Month,
                int year = Inv_Year, wxDateTime_t hour = 0,
-               wxDateTime_t minute = 0,
-               wxDateTime_t second = 0,
+               wxDateTime_t minute = 0, wxDateTime_t second = 0,
                wxDateTime_t millisec = 0);
 
     /**
-        Here are the trivial accessors. Other functions, which might have to perform
-        some more complicated calculations to find the answer are under the
-        @ref overview_datetimecalculations "Calendar calculations" section.
-        IsValid()
-
-        GetTicks()
-
-        GetCentury()
-
-        GetYear()
-
-        GetMonth()
-
-        GetDay()
-
-        GetWeekDay()
-
-        GetHour()
-
-        GetMinute()
-
-        GetSecond()
-
-        GetMillisecond()
-
-        GetDayOfYear()
-
-        GetWeekOfYear()
-
-        GetWeekOfMonth()
-
-        GetYearDay()
-
-        IsWorkDay()
-
-        IsGregorianDate()
-
-        GetAsDOS()
+        Reset time to midnight (00:00:00) without changing the date.
     */
+    wxDateTime& ResetTime();
+
+    /**
+        Constructs the object from @a timet value holding the number of seconds
+        since Jan 1, 1970.
+
+        @beginWxPythonOnly
+        This method is named "SetTimeT" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& Set(time_t timet);
+    /**
+        Sets the date and time from the broken down representation in the
+        standard @a tm structure.
+
+        @beginWxPythonOnly Unsupported. @endWxPythonOnly
+    */
+    wxDateTime& Set(const struct tm& tm);
+    /**
+        Sets the date from the so-called Julian Day Number.
+
+        By definition, the Julian Day Number, usually abbreviated as JDN, of a
+        particular instant is the fractional number of days since 12 hours
+        Universal Coordinated Time (Greenwich mean noon) on January 1 of the
+        year -4712 in the Julian proleptic calendar.
+
+        @beginWxPythonOnly
+        This method is named "SetJDN" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& Set(double jdn);
+    /**
+        Sets the date to be equal to Today() and the time from supplied
+        parameters.
+
+        @beginWxPythonOnly
+        This method is named "SetHMS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& Set(wxDateTime_t hour, wxDateTime_t minute = 0,
+                    wxDateTime_t second = 0, wxDateTime_t millisec = 0);
+    /**
+        Sets the date and time from the parameters.
+    */
+    wxDateTime& Set(wxDateTime_t day, Month month = Inv_Month,
+                    int year = Inv_Year, wxDateTime_t hour = 0,
+                    wxDateTime_t minute = 0, wxDateTime_t second = 0,
+                    wxDateTime_t millisec = 0);
+
+    /**
+        Sets the day without changing other date components.
+    */
+    wxDateTime& SetDay(short unsigned int);
+
+    /**
+        Sets the date from the date and time in DOS format.
+    */
+    wxDateTime& SetFromDOS(unsigned long ddt);
+
+    /**
+        Sets the hour without changing other date components.
+    */
+    wxDateTime& SetHour(short unsigned int);
+
+    /**
+        Sets the millisecond without changing other date components.
+    */
+    wxDateTime& SetMillisecond(short unsigned int);
+
+    /**
+        Sets the minute without changing other date components.
+    */
+    wxDateTime& SetMinute(short unsigned int);
+
+    /**
+        Sets the month without changing other date components.
+    */
+    wxDateTime& SetMonth(Month month);
+
+    /**
+        Sets the second without changing other date components.
+    */
+    wxDateTime& SetSecond(short unsigned int);
+
+    /**
+        Sets the date and time of to the current values. Same as assigning the
+        result of Now() to this object.
+    */
+    wxDateTime& SetToCurrent();
+
+    /**
+        Sets the year without changing other date components.
+    */
+    wxDateTime& SetYear(int year);
+
+    /**
+        Same as Set().
+    */
+    wxDateTime& operator=(time_t timet);
+    /**
+        Same as Set().
+    */
+    wxDateTime& operator=(const struct tm& tm);
+
+    //@}
 
 
+
+    /**
+        @name Accessors
+
+        Here are the trivial accessors. Other functions, which might have to
+        perform some more complicated calculations to find the answer are under
+        the "Date Arithmetics" section.
+    */
     //@{
+
+    /**
+        Returns the date and time in DOS format.
+    */
+    long unsigned int GetAsDOS() const;
+
+    /**
+        Returns the century of this date.
+    */
+    int GetCentury(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the day in the given timezone (local one by default).
+    */
+    short unsigned int GetDay(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the day of the year (in 1...366 range) in the given timezone
+        (local one by default).
+    */
+    short unsigned int GetDayOfYear(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the milliseconds in the given timezone (local one by default).
+    */
+    short unsigned int GetMillisecond(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the minute in the given timezone (local one by default).
+    */
+    short unsigned int GetMinute(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the month in the given timezone (local one by default).
+    */
+    Month GetMonth(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the seconds in the given timezone (local one by default).
+    */
+    short unsigned int GetSecond(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the number of seconds since Jan 1, 1970. An assert failure will occur
+        if the date is not in the range covered by @c time_t type.
+    */
+    time_t GetTicks() const;
+
+    /**
+        Returns the hour in the given timezone (local one by default).
+    */
+    short unsigned int GetHour(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the copy of this object to which
+        SetToWeekDay() was applied.
+    */
+    wxDateTime GetWeekDay(WeekDay weekday, int n = 1,
+                          Month month = Inv_Month,
+                          int year = Inv_Year) const;
+
+    /**
+        Returns the ordinal number of the week in the month (in 1...5  range).
+        As GetWeekOfYear(), this function supports
+        both conventions for the week start. See the description of these
+        @ref overview_wxdatetime "week start" conventions.
+    */
+    wxDateTime_t GetWeekOfMonth(WeekFlags flags = Monday_First,
+                                const TimeZone& tz = Local) const;
+
+    /**
+        Returns the number of the week of the year this date is in. The first week of
+        the year is, according to international standards, the one containing Jan 4 or,
+        equivalently, the first week which has Thursday in this year. Both of these
+        definitions are the same as saying that the first week of the year must contain
+        more than half of its days in this year. Accordingly, the week number will
+        always be in 1...53 range (52 for non-leap years).
+        The function depends on the @ref overview_wxdatetime "week start" convention
+        specified by the @a flags argument but its results for
+        @c Sunday_First are not well-defined as the ISO definition quoted above
+        applies to the weeks starting on Monday only.
+    */
+    wxDateTime_t GetWeekOfYear(WeekFlags flags = Monday_First,
+                               const TimeZone& tz = Local) const;
+
+    /**
+        Returns the year in the given timezone (local one by default).
+    */
+    int GetYear(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the copy of this object to which
+        SetToYearDay() was applied.
+    */
+    wxDateTime GetYearDay(short unsigned int) const;
+
+    /**
+        Returns @true if the given date is later than the date of adoption of the
+        Gregorian calendar in the given country (and hence the Gregorian calendar
+        calculations make sense for it).
+    */
+    bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
+
+    /**
+        Returns @true if the object represents a valid time moment.
+    */
+    bool IsValid() const;
+
+    /**
+        Returns @true is this day is not a holiday in the given country.
+    */
+    bool IsWorkDay(Country country = Country_Default) const;
+
+    //@}
+
+
+
+    /**
+        @name Date Comparison
+
+        There are several functions to allow date comparison. To supplement
+        them, a few global operators, etc taking wxDateTime are defined.
+    */
+    //@{
+
+    /**
+        Returns @true if this date precedes the given one.
+    */
+    bool IsEarlierThan(const wxDateTime& datetime) const;
+
+    /**
+        Returns @true if the two dates are strictly identical.
+    */
+    bool IsEqualTo(const wxDateTime& datetime) const;
+
+    /**
+        Returns @true if the date is equal to another one up to the given time
+        interval, i.e. if the absolute difference between the two dates is less than
+        this interval.
+    */
+    bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const;
+
+    /**
+        Returns @true if this date is later than the given one.
+    */
+    bool IsLaterThan(const wxDateTime& datetime) const;
+
+    /**
+        Returns @true if the date is the same without comparing the time parts.
+    */
+    bool IsSameDate(const wxDateTime& dt) const;
+
+    /**
+        Returns @true if the time is the same (although dates may differ).
+    */
+    bool IsSameTime(const wxDateTime& dt) const;
+
+    /**
+        Returns @true if this date lies strictly between the two others,
+
+        @see IsBetween()
+    */
+    bool IsStrictlyBetween(const wxDateTime& t1,
+                            const wxDateTime& t2) const;
+
+    /**
+        Returns @true if IsStrictlyBetween()
+        is @true or if the date is equal to one of the limit values.
+
+        @see IsStrictlyBetween()
+    */
+    bool IsBetween(const wxDateTime& t1, const wxDateTime& t2) const;
+
+    //@}
+
+
+
+    /**
+        @name Date Arithmetics
+
+        These functions carry out
+        @ref overview_datetime_arithmetics "arithmetics" on the wxDateTime
+        objects. As explained in the overview, either wxTimeSpan or wxDateSpan
+        may be added to wxDateTime, hence all functions are overloaded to
+        accept both arguments.
+
+        Also, both Add() and Subtract() have both const and non-const version.
+        The first one returns a new object which represents the sum/difference
+        of the original one with the argument while the second form modifies
+        the object to which it is applied. The operators "-=" and "+=" are
+        defined to be equivalent to the second forms of these functions.
+
+        <!--
+        Add(wxTimeSpan)
+        Subtract(wxTimeSpan)
+        Subtract(wxDateSpan)
+        oparator+=(wxTimeSpan)
+        oparator-=(wxTimeSpan)
+        oparator-=(wxDateSpan)
+        -->
+    */
+    //@{
+
     /**
         Adds the given date span to this object.
     */
     wxDateTime Add(const wxDateSpan& diff);
-    const wxDateTime&  Add(const wxDateSpan& diff);
+
+    /**
+        Adds the given date span to this object.
+    */
+    const wxDateTime& Add(const wxDateSpan& diff);
+
+    /**
+        Adds the given date span to this object.
+    */
     wxDateTime operator+=(const wxDateSpan& diff);
+
+    /**
+        Subtracts another date from this one and returns the difference between them
+        as wxTimeSpan.
+    */
+    wxTimeSpan Subtract(const wxDateTime& dt) const;
+
     //@}
 
-    /**
-        Some degree of support for the date units used in astronomy and/or history is
-        provided. You can construct a wxDateTime object from a
-        @ref setjdn() JDN and you may also get its JDN,
-        @ref getmodifiedjuliandaynumber() MJD or
-        @ref getratadie() "Rata Die number" from it.
-        @ref wxdatetimejdn() "wxDateTime(double jdn)"
-
-        @ref setjdn() "Set(double jdn)"
-
-        GetJulianDayNumber()
-
-        GetJDN()
-
-        GetModifiedJulianDayNumber()
-
-        GetMJD()
-
-        GetRataDie()
-    */
 
 
     /**
-        The functions in this section perform the basic calendar calculations, mostly
-        related to the week days. They allow to find the given week day in the
-        week with given number (either in the month or in the year) and so on.
-        All (non-const) functions in this section don't modify the time part of the
-        wxDateTime -- they only work with the date part of it.
-        SetToWeekDayInSameWeek()
+        @name Date Formatting and Parsing
 
-        GetWeekDayInSameWeek()
-
-        SetToNextWeekDay()
-
-        GetNextWeekDay()
-
-        SetToPrevWeekDay()
-
-        GetPrevWeekDay()
-
-        SetToWeekDay()
-
-        @ref wxDateTime::getweekday2 GetWeekDay
-
-        SetToLastWeekDay()
-
-        GetLastWeekDay()
-
-        SetToWeekOfYear()
-
-        SetToLastMonthDay()
-
-        GetLastMonthDay()
-
-        SetToYearDay()
-
-        GetYearDay()
+        See @ref datetime_formatting
     */
-
-
-    /**
-        Constructors and various @c Set() methods are collected here. If you
-        construct a date object from separate values for day, month and year, you
-        should use IsValid() method to check that the
-        values were correct as constructors can not return an error code.
-        @ref wxdatetimedef() wxDateTime
-
-        @ref wxdatetimetimet() wxDateTime(time_t)
-
-        @ref wxdatetimetm() "wxDateTime(struct tm)"
-
-        @ref wxdatetimejdn() "wxDateTime(double jdn)"
-
-        @ref wxdatetimetime() "wxDateTime(h, m, s, ms)"
-
-        @ref wxdatetimedate() "wxDateTime(day, mon, year, h, m, s, ms)"
-
-        SetToCurrent()
-
-        @ref settimet() Set(time_t)
-
-        @ref settm() "Set(struct tm)"
-
-        @ref setjdn() "Set(double jdn)"
-
-        @ref settime() "Set(h, m, s, ms)"
-
-        @ref setdate() "Set(day, mon, year, h, m, s, ms)"
-
-        @ref setfromdos() "SetFromDOS(unsigned long ddt)"
-
-        ResetTime()
-
-        SetYear()
-
-        SetMonth()
-
-        @ref setdate() SetDay
-
-        SetHour()
-
-        SetMinute()
-
-        SetSecond()
-
-        SetMillisecond()
-
-        @ref operatoreqtimet() operator=(time_t)
-
-        @ref operatoreqtm() "operator=(struct tm)"
-    */
-
-
-    /**
-        Converts the year in absolute notation (i.e. a number which can be negative,
-        positive or zero) to the year in BC/AD notation. For the positive years,
-        nothing is done, but the year 0 is year 1 BC and so for other years there is a
-        difference of 1.
-        This function should be used like this:
-    */
-    static int ConvertYearToBC(int year);
-
-    /**
-        These functions carry out arithmetics() on the wxDateTime
-        objects. As explained in the overview, either wxTimeSpan or wxDateSpan may be
-        added to wxDateTime, hence all functions are overloaded to accept both
-        arguments.
-        Also, both @c Add() and @c Subtract() have both const and non-const
-        version. The first one returns a new object which represents the
-        sum/difference of the original one with the argument while the second form
-        modifies the object to which it is applied. The operators -= and += are
-        defined to be equivalent to the second forms of these functions.
-        @ref addts() Add(wxTimeSpan)
-
-        @ref addds() Add(wxDateSpan)
-
-        @ref subtractts() Subtract(wxTimeSpan)
-
-        @ref subtractds() Subtract(wxDateSpan)
-
-        @ref subtractdt() Subtract(wxDateTime)
-
-        @ref addts() oparator+=(wxTimeSpan)
-
-        @ref addds() oparator+=(wxDateSpan)
-
-        @ref subtractts() oparator-=(wxTimeSpan)
-
-        @ref subtractds() oparator-=(wxDateSpan)
-    */
-
-
-    /**
-        There are several function to allow date comparison. To supplement them, a few
-        global operators ,  etc taking wxDateTime are defined.
-        IsEqualTo()
-
-        IsEarlierThan()
-
-        IsLaterThan()
-
-        IsStrictlyBetween()
-
-        IsBetween()
-
-        IsSameDate()
-
-        IsSameTime()
-
-        IsEqualUpTo()
-    */
-
+    //@{
 
     /**
         This function does the same as the standard ANSI C @c strftime(3) function.
@@ -306,409 +688,6 @@ public:
     wxString FormatTime() const;
 
     /**
-        Transform the date from the given time zone to the local one. If @a noDST is
-        @true, no DST adjustments will be made.
-        Returns the date in the local time zone.
-    */
-    wxDateTime FromTimezone(const TimeZone& tz,
-                            bool noDST = false) const;
-
-    /**
-        Returns the translations of the strings @c AM and @c PM used for time
-        formatting for the current locale. Either of the pointers may be @NULL if
-        the corresponding value is not needed.
-    */
-    static void GetAmPmStrings(wxString* am, wxString* pm);
-
-    /**
-        Returns the date and time in
-        DOS
-        format.
-    */
-    long unsigned int GetAsDOS() const;
-
-    /**
-        Get the beginning of DST for the given country in the given year (current one
-        by default). This function suffers from limitations described in
-        @ref overview_tdatedst "DST overview".
-
-        @see GetEndDST()
-    */
-    static wxDateTime GetBeginDST(int year = Inv_Year,
-                                  Country country = Country_Default);
-
-    /**
-        Returns the century of this date.
-    */
-    int GetCentury(const TimeZone& tz = Local) const;
-
-    /**
-        Returns the current default country. The default country is used for DST
-        calculations, for example.
-
-        @see SetCountry()
-    */
-    static Country GetCountry();
-
-    /**
-        Get the current month in given calendar (only Gregorian is currently supported).
-    */
-    static Month GetCurrentMonth(Calendar cal = Gregorian);
-
-    /**
-        Get the current year in given calendar (only Gregorian is currently supported).
-    */
-    static int GetCurrentYear(Calendar cal = Gregorian);
-
-    /**
-        Returns the object having the same date component as this one but time of
-        00:00:00.
-
-        @wxsince{2.8.2}
-
-        @see ResetTime()
-    */
-    wxDateTime GetDateOnly() const;
-
-    /**
-        Returns the day in the given timezone (local one by default).
-    */
-    short unsigned int GetDay(const TimeZone& tz = Local) const;
-
-    /**
-        Returns the day of the year (in 1...366 range) in the given timezone
-        (local one by default).
-    */
-    short unsigned int GetDayOfYear(const TimeZone& tz = Local) const;
-
-    /**
-        Returns the end of DST for the given country in the given year (current one by
-        default).
-
-        @see GetBeginDST()
-    */
-    static wxDateTime GetEndDST(int year = Inv_Year,
-                                Country country = Country_Default);
-
-    /**
-        Returns the hour in the given timezone (local one by default).
-    */
-    short unsigned int GetHour(const TimeZone& tz = Local) const;
-
-    /**
-        Synonym for GetJulianDayNumber().
-    */
-    double GetJDN() const;
-
-    /**
-        Returns the @ref setjdn() JDN corresponding to this date. Beware
-        of rounding errors!
-
-        @see GetModifiedJulianDayNumber()
-    */
-    double GetJulianDayNumber() const;
-
-    /**
-        Returns the copy of this object to which
-        SetToLastMonthDay() was applied.
-    */
-    wxDateTime GetLastMonthDay(Month month = Inv_Month,
-                               int year = Inv_Year) const;
-
-    /**
-        Returns the copy of this object to which
-        SetToLastWeekDay() was applied.
-    */
-    wxDateTime GetLastWeekDay(WeekDay weekday,
-                              Month month = Inv_Month,
-                              int year = Inv_Year);
-
-    /**
-        Synonym for GetModifiedJulianDayNumber().
-    */
-    double GetMJD() const;
-
-    /**
-        Returns the milliseconds in the given timezone (local one by default).
-    */
-    short unsigned int GetMillisecond(const TimeZone& tz = Local) const;
-
-    /**
-        Returns the minute in the given timezone (local one by default).
-    */
-    short unsigned int GetMinute(const TimeZone& tz = Local) const;
-
-    /**
-        Returns the @e Modified Julian Day Number (MJD) which is, by definition,
-        equal to JDN - 2400000.5. The MJDs are simpler to work with as the integral
-        MJDs correspond to midnights of the dates in the Gregorian calendar and not th
-        noons like JDN. The MJD 0 is Nov 17, 1858.
-    */
-    double GetModifiedJulianDayNumber() const;
-
-    /**
-        Returns the month in the given timezone (local one by default).
-    */
-    Month GetMonth(const TimeZone& tz = Local) const;
-
-    /**
-        Gets the full (default) or abbreviated (specify @c Name_Abbr name of the
-        given month.
-
-        @see GetWeekDayName()
-    */
-    static wxString GetMonthName(Month month,
-                                 NameFlags flags = Name_Full);
-
-    /**
-        Returns the copy of this object to which
-        SetToNextWeekDay() was applied.
-    */
-    wxDateTime GetNextWeekDay(WeekDay weekday) const;
-
-    //@{
-    /**
-        Returns the number of days in the given year or in the given month of the
-        year.
-        The only supported value for @a cal parameter is currently @c Gregorian.
-    */
-    static wxDateTime_t GetNumberOfDays(int year,
-                                        Calendar cal = Gregorian);
-    static wxDateTime_t GetNumberOfDays(Month month,
-                                        int year = Inv_Year,
-                                        Calendar cal = Gregorian);
-    //@}
-
-    /**
-        Returns the copy of this object to which
-        SetToPrevWeekDay() was applied.
-    */
-    wxDateTime GetPrevWeekDay(WeekDay weekday) const;
-
-    /**
-        Return the @e Rata Die number of this date.
-        By definition, the Rata Die number is a date specified as the number of days
-        relative to a base date of December 31 of the year 0. Thus January 1 of the
-        year 1 is Rata Die day 1.
-    */
-    double GetRataDie() const;
-
-    /**
-        Returns the seconds in the given timezone (local one by default).
-    */
-    short unsigned int GetSecond(const TimeZone& tz = Local) const;
-
-    /**
-        Returns the number of seconds since Jan 1, 1970. An assert failure will occur
-        if the date is not in the range covered by @c time_t type.
-    */
-    time_t GetTicks() const;
-
-    /**
-        Returns the current time.
-    */
-    static time_t GetTimeNow();
-
-    /**
-        Returns broken down representation of the date and time.
-    */
-    Tm GetTm(const TimeZone& tz = Local) const;
-
-    /**
-        Returns the current time broken down. Note that this function returns a
-        pointer to a static buffer that's reused by calls to this function and
-        certain C library functions (e.g. localtime). If there is any chance your
-        code might be used in a multi-threaded application, you really should use
-        the flavour of function GetTmNow()
-        taking a parameter.
-    */
-    static struct tm* GetTmNow();
-
-    /**
-        Returns the copy of this object to which
-        SetToWeekDay() was applied.
-    */
-    wxDateTime GetWeekDay(WeekDay weekday, int n = 1,
-                          Month month = Inv_Month,
-                          int year = Inv_Year) const;
-
-    /**
-        Returns the copy of this object to which
-        SetToWeekDayInSameWeek() was
-        applied.
-    */
-    wxDateTime GetWeekDayInSameWeek(WeekDay weekday,
-                                    WeekFlags flags = Monday_First) const;
-
-    /**
-        Gets the full (default) or abbreviated (specify @c Name_Abbr name of the
-        given week day.
-
-        @see GetMonthName()
-    */
-    static wxString GetWeekDayName(WeekDay weekday,
-                                   NameFlags flags = Name_Full);
-
-    /**
-        Returns the ordinal number of the week in the month (in 1...5  range).
-        As GetWeekOfYear(), this function supports
-        both conventions for the week start. See the description of these
-        @ref overview_wxdatetime "week start" conventions.
-    */
-    wxDateTime_t GetWeekOfMonth(WeekFlags flags = Monday_First,
-                                const TimeZone& tz = Local) const;
-
-    /**
-        Returns the number of the week of the year this date is in. The first week of
-        the year is, according to international standards, the one containing Jan 4 or,
-        equivalently, the first week which has Thursday in this year. Both of these
-        definitions are the same as saying that the first week of the year must contain
-        more than half of its days in this year. Accordingly, the week number will
-        always be in 1...53 range (52 for non-leap years).
-        The function depends on the @ref overview_wxdatetime "week start" convention
-        specified by the @a flags argument but its results for
-        @c Sunday_First are not well-defined as the ISO definition quoted above
-        applies to the weeks starting on Monday only.
-    */
-    wxDateTime_t GetWeekOfYear(WeekFlags flags = Monday_First,
-                               const TimeZone& tz = Local) const;
-
-    /**
-        Returns the year in the given timezone (local one by default).
-    */
-    int GetYear(const TimeZone& tz = Local) const;
-
-    /**
-        Returns the copy of this object to which
-        SetToYearDay() was applied.
-    */
-    wxDateTime GetYearDay(short unsigned int) const;
-
-    /**
-        Returns @true if IsStrictlyBetween()
-        is @true or if the date is equal to one of the limit values.
-
-        @see IsStrictlyBetween()
-    */
-    bool IsBetween(const wxDateTime& t1, const wxDateTime& t2) const;
-
-    /**
-        Returns @true if the DST is applied for this date in the given country.
-    */
-    int IsDST(Country country = Country_Default) const;
-
-    /**
-        Returns @true if DST was used n the given year (the current one by
-        default) in the given country.
-    */
-    static bool IsDSTApplicable(int year = Inv_Year,
-                                Country country = Country_Default);
-
-    /**
-        Returns @true if this date precedes the given one.
-    */
-    bool IsEarlierThan(const wxDateTime& datetime) const;
-
-    /**
-        Returns @true if the two dates are strictly identical.
-    */
-    bool IsEqualTo(const wxDateTime& datetime) const;
-
-    /**
-        Returns @true if the date is equal to another one up to the given time
-        interval, i.e. if the absolute difference between the two dates is less than
-        this interval.
-    */
-    bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const;
-
-    /**
-        Returns @true if the given date is later than the date of adoption of the
-        Gregorian calendar in the given country (and hence the Gregorian calendar
-        calculations make sense for it).
-    */
-    bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
-
-    /**
-        Returns @true if this date is later than the given one.
-    */
-    bool IsLaterThan(const wxDateTime& datetime) const;
-
-    /**
-        Returns @true if the @a year is a leap one in the specified calendar.
-        This functions supports Gregorian and Julian calendars.
-    */
-    static bool IsLeapYear(int year = Inv_Year,
-                           Calendar cal = Gregorian);
-
-    /**
-        Returns @true if the date is the same without comparing the time parts.
-    */
-    bool IsSameDate(const wxDateTime& dt) const;
-
-    /**
-        Returns @true if the time is the same (although dates may differ).
-    */
-    bool IsSameTime(const wxDateTime& dt) const;
-
-    /**
-        Returns @true if this date lies strictly between the two others,
-
-        @see IsBetween()
-    */
-    bool IsStrictlyBetween(const wxDateTime& t1,
-                           const wxDateTime& t2) const;
-
-    /**
-        Returns @true if the object represents a valid time moment.
-    */
-    bool IsValid() const;
-
-    /**
-        This function returns @true if the specified (or default) country is one
-        of Western European ones. It is used internally by wxDateTime to determine the
-        DST convention and date and time formatting rules.
-    */
-    static bool IsWestEuropeanCountry(Country country = Country_Default);
-
-    /**
-        Returns @true is this day is not a holiday in the given country.
-    */
-    bool IsWorkDay(Country country = Country_Default) const;
-
-    /**
-        Same as FromTimezone() but modifies the object
-        in place.
-    */
-    wxDateTime MakeFromTimezone(const TimeZone& tz,
-                                bool noDST = false);
-
-    /**
-        Modifies the object in place to represent the date in another time zone. If
-        @a noDST is @true, no DST adjustments will be made.
-    */
-    wxDateTime MakeTimezone(const TimeZone& tz,
-                            bool noDST = false);
-
-    /**
-        This is the same as calling MakeTimezone() with
-        the argument @c GMT0.
-    */
-    wxDateTime& MakeUTC(bool noDST = false);
-
-    /**
-        Returns the object corresponding to the current time.
-        Example:
-
-        Note that this function is accurate up to second:
-        UNow() should be used for better precision
-        (but it is less efficient and might not be available on all platforms).
-
-        @see Today()
-    */
-    static wxDateTime Now();
-
-    //@{
-    /**
         This function is like ParseDateTime(), but it
         only allows the date to be specified. It is thus less flexible then
         ParseDateTime(), but also has less chances to
@@ -717,12 +696,16 @@ public:
         the character which stopped the scan.
     */
     const char* ParseDate(const wxString& date,
-                          wxString::const_iterator* end = NULL);
-    const char* ParseDate(const char* date);
-    const wchar_t* ParseDate(const wchar_t* date);
-    //@}
+                           wxString::const_iterator* end = NULL);
+    /**
 
-    //@{
+    */
+    const char* ParseDate(const char* date);
+    /**
+
+    */
+    const wchar_t* ParseDate(const wchar_t* date);
+
     /**
         Parses the string @a datetime containing the date and time in free format.
         This function tries as hard as it can to interpret the given string as date
@@ -734,11 +717,15 @@ public:
     */
     const char* ParseDateTime(const wxString& datetime,
                               wxString::const_iterator* end = NULL);
-    const char* ParseDateTime(const char* datetime);
-    const wchar_t* ParseDateTime(const wchar_t* datetime);
-    //@}
+    /**
 
-    //@{
+    */
+    const char* ParseDateTime(const char* datetime);
+    /**
+
+    */
+    const wchar_t* ParseDateTime(const wchar_t* datetime);
+
     /**
         This function parses the string @a date according to the given
         @e format. The system @c strptime(3) function is used whenever available,
@@ -758,16 +745,21 @@ public:
         the character which stopped the scan.
     */
     const char* ParseFormat(const wxString& date,
-                            const wxString& format = wxDefaultDateTimeFormat,
-                            const wxDateTime& dateDef = wxDefaultDateTime,
-                            wxString::const_iterator* end = NULL);
+                             const wxString& format = wxDefaultDateTimeFormat,
+                             const wxDateTime& dateDef = wxDefaultDateTime,
+                             wxString::const_iterator* end = NULL);
+    /**
+
+    */
     const char* ParseFormat(const char* date,
-                            const wxString& format = wxDefaultDateTimeFormat,
-                            const wxDateTime& dateDef = wxDefaultDateTime);
+                              const wxString& format = wxDefaultDateTimeFormat,
+                              const wxDateTime& dateDef = wxDefaultDateTime);
+    /**
+
+    */
     const wchar_t* ParseFormat(const wchar_t* date,
-                               const wxString& format = wxDefaultDateTimeFormat,
-                               const wxDateTime& dateDef = wxDefaultDateTime);
-    //@}
+                                 const wxString& format = wxDefaultDateTimeFormat,
+                                 const wxDateTime& dateDef = wxDefaultDateTime);
 
     /**
         This function parses the string containing the date and time in ISO 8601
@@ -792,7 +784,6 @@ public:
     */
     bool ParseISOTime(const wxString& date);
 
-    //@{
     /**
         Parses the string @a date looking for a date formatted according to the RFC
         822 in it. The exact description of this format may, of course, be found in
@@ -810,11 +801,15 @@ public:
     */
     const char* ParseRfc822Date(const wxString& date,
                                 wxString::const_iterator* end = NULL);
+    /**
+        This function parses the string @a date according to the given..
+    */
     const char* ParseRfc822Date(const char* date);
+    /**
+        This function parses the string @a date according to the given..
+    */
     const wchar_t* ParseRfc822Date(const wchar_t* date);
-    //@}
 
-    //@{
     /**
         This functions is like ParseDateTime(), but
         only allows the time to be specified in the input string.
@@ -822,149 +817,77 @@ public:
         the character which stopped the scan.
     */
     const char* ParseTime(const wxString& time,
-                          wxString::const_iterator* end = NULL);
+                           wxString::const_iterator* end = NULL);
+    /**
+
+    */
     const char* ParseTime(const char* time);
+    /**
+
+    */
     const wchar_t* ParseTime(const wchar_t* time);
+
     //@}
 
+
+
     /**
-        These functions convert wxDateTime objects to and from text. The
-        conversions to text are mostly trivial: you can either do it using the default
-        date and time representations for the current locale (
-        FormatDate() and
-        wxDateTime::FormatTime), using the international standard
-        representation defined by ISO 8601 (
-        FormatISODate(),
-        FormatISOTime() and
-        wxDateTime::FormatISOCombined) or by specifying any
-        format at all and using Format() directly.
-        The conversions from text are more interesting, as there are much more
-        possibilities to care about. The simplest cases can be taken care of with
-        ParseFormat() which can parse any date in the
-        given (rigid) format. wxDateTime::ParseRfc822Date is
-        another function for parsing dates in predefined format -- the one of RFC 822
-        which (still...) defines the format of email messages on the Internet. This
-        format can not be described with @c strptime(3)-like format strings used by
-        Format(), hence the need for a separate function.
-        But the most interesting functions are
-        ParseTime(),
-        ParseDate() and
-        ParseDateTime(). They try to parse the date
-        ans time (or only one of them) in 'free' format, i.e. allow them to be
-        specified in any of possible ways. These functions will usually be used to
-        parse the (interactive) user input which is not bound to be in any predefined
-        format. As an example, ParseDateTime() can
-        parse the strings such as @c "tomorrow", @c "March first" and even
-        @c "next Sunday".
-        Finally notice that each of the parsing functions is available in several
-        overloads: if the input string is a narrow (@c char *) string, then a
-        narrow pointer is returned. If the input string is a wide string, a wide char
-        pointer is returned. Finally, if the input parameter is a wxString, a narrow
-        char pointer is also returned for backwards compatibility but there is also an
-        additional argument of wxString::const_iterator type in which, if it is not
-        @NULL, an iterator pointing to the end of the scanned string part is returned.
-        ParseFormat()
+        @name Calendar Calculations
 
-        ParseDateTime()
+        The functions in this section perform the basic calendar calculations,
+        mostly related to the week days. They allow to find the given week day
+        in the week with given number (either in the month or in the year) and
+        so on.
 
-        ParseDate()
+        None of the functions in this section modify the time part of the
+        wxDateTime, they only work with the date part of it.
 
-        ParseTime()
-
-        ParseISODate()
-
-        ParseISOTime()
-
-        ParseISOCombined()
-
-        wxDateTime::ParseRfc822Date
-
-        Format()
-
-        FormatDate()
-
-        FormatTime()
-
-        FormatISOCombined()
-
-        FormatISODate()
-
-        FormatISOTime()
+        <!--
+        GetWeekDay()
+        GetYearDay()
+        -->
     */
-
+    //@{
 
     /**
-        Reset time to midnight (00:00:00) without changing the date.
+        Returns the copy of this object to which
+        SetToLastMonthDay() was applied.
     */
-    wxDateTime& ResetTime();
+    wxDateTime GetLastMonthDay(Month month = Inv_Month,
+                               int year = Inv_Year) const;
 
     /**
-        Sets the date and time from the parameters.
+        Returns the copy of this object to which SetToLastWeekDay() was
+        applied.
     */
-    wxDateTime Set(wxDateTime_t day, Month month = Inv_Month,
-                   int year = Inv_Year,
-                   wxDateTime_t hour = 0,
-                   wxDateTime_t minute = 0,
-                   wxDateTime_t second = 0,
-                   wxDateTime_t millisec = 0);
+    wxDateTime GetLastWeekDay(WeekDay weekday,
+                              Month month = Inv_Month,
+                              int year = Inv_Year);
 
     /**
-        Sets the country to use by default. This setting influences the DST
-        calculations, date formatting and other things.
-        The possible values for @a country parameter are enumerated in
-        @ref overview_wxdatetime "wxDateTime constants section".
-
-        @see GetCountry()
+        Returns the copy of this object to which SetToNextWeekDay() was
+        applied.
     */
-    static void SetCountry(Country country);
+    wxDateTime GetNextWeekDay(WeekDay weekday) const;
 
     /**
-        Sets the day without changing other date components.
+        Returns the copy of this object to which SetToPrevWeekDay() was
+        applied.
     */
-    wxDateTime& SetDay(short unsigned int);
+    wxDateTime GetPrevWeekDay(WeekDay weekday) const;
 
     /**
-        Sets the date from the date and time in
-        DOS
-        format.
+        Returns the copy of this object to which SetToWeekDayInSameWeek() was
+        applied.
     */
-    wxDateTime Set(unsigned long ddt);
+    wxDateTime GetWeekDayInSameWeek(WeekDay weekday,
+                                    WeekFlags flags = Monday_First) const;
 
     /**
-        Sets the hour without changing other date components.
-    */
-    wxDateTime& SetHour(short unsigned int);
+        Sets the date to the last day in the specified month (the current one
+        by default).
 
-    /**
-        Sets the millisecond without changing other date components.
-    */
-    wxDateTime& SetMillisecond(short unsigned int);
-
-    /**
-        Sets the minute without changing other date components.
-    */
-    wxDateTime& SetMinute(short unsigned int);
-
-    /**
-        Sets the month without changing other date components.
-    */
-    wxDateTime& SetMonth(Month month);
-
-    /**
-        Sets the second without changing other date components.
-    */
-    wxDateTime& SetSecond(short unsigned int);
-
-    /**
-        Sets the date and time of to the current values. Same as assigning the result
-        of Now() to this object.
-    */
-    wxDateTime& SetToCurrent();
-
-    /**
-        Sets the date to the last day in the specified month (the current one by
-        default).
-        Returns the reference to the modified object itself.
+        @returns The reference to the modified object itself.
     */
     wxDateTime SetToLastMonthDay(Month month = Inv_Month,
                                  int year = Inv_Year);
@@ -981,14 +904,16 @@ public:
     /**
         Sets the date so that it will be the first @a weekday following the current
         date.
-        Returns the reference to the modified object itself.
+
+        @returns The reference to the modified object itself.
     */
     wxDateTime& SetToNextWeekDay(WeekDay weekday);
 
     /**
         Sets the date so that it will be the last @a weekday before the current
         date.
-        Returns the reference to the modified object itself.
+
+        @returns The reference to the modified object itself.
     */
     wxDateTime& SetToPrevWeekDay(WeekDay weekday);
 
@@ -997,23 +922,327 @@ public:
         year (the current month and year are used by default). The parameter @e n
         may be either positive (counting from the beginning of the month) or negative
         (counting from the end of it).
-        For example, @c SetToWeekDay(2, wxDateTime::Wed) will set the date to the
+
+        For example, SetToWeekDay(2, wxDateTime::Wed) will set the date to the
         second Wednesday in the current month and
-        @c SetToWeekDay(-1, wxDateTime::Sun) -- to the last Sunday in it.
-        Returns @true if the date was modified successfully, @false
-        otherwise meaning that the specified date doesn't exist.
+        SetToWeekDay(-1, wxDateTime::Sun) will set the date to the last Sunday
+        in the current month.
+
+        @returns @true if the date was modified successfully, @false otherwise
+                 meaning that the specified date doesn't exist.
     */
     bool SetToWeekDay(WeekDay weekday, int n = 1,
-                      Month month = Inv_Month,
-                      int year = Inv_Year);
+                       Month month = Inv_Month, int year = Inv_Year);
 
     /**
-        Adjusts the date so that it will still lie in the same week as before, but its
-        week day will be the given one.
-        Returns the reference to the modified object itself.
+        Adjusts the date so that it will still lie in the same week as before,
+        but its week day will be the given one.
+
+        @returns The reference to the modified object itself.
     */
     wxDateTime SetToWeekDayInSameWeek(WeekDay weekday,
                                       WeekFlags flags = Monday_First);
+
+    /**
+        Sets the date to the day number @a yday in the same year (i.e., unlike the
+        other functions, this one does not use the current year). The day number
+        should be in the range 1...366 for the leap years and 1...365 for
+        the other ones.
+        Returns the reference to the modified object itself.
+    */
+    wxDateTime& SetToYearDay(short unsigned int);
+
+    //@}
+
+
+
+    /**
+        @name Astronomical/Historical Functions
+
+        Some degree of support for the date units used in astronomy and/or
+        history is provided. You can construct a wxDateTime object from a
+        JDN and you may also get its JDN, MJD or Rata Die number from it.
+
+        <!--
+        wxDateTime(double jdn)
+        Set(double jdn)
+        -->
+    */
+    //@{
+
+    /**
+        Synonym for GetJulianDayNumber().
+    */
+    double GetJDN() const;
+
+    /**
+        Returns the @ref setjdn() JDN corresponding to this date. Beware
+        of rounding errors!
+
+        @see GetModifiedJulianDayNumber()
+    */
+    double GetJulianDayNumber() const;
+
+    /**
+        Synonym for GetModifiedJulianDayNumber().
+    */
+    double GetMJD() const;
+
+    /**
+        Returns the @e Modified Julian Day Number (MJD) which is, by definition,
+        equal to JDN - 2400000.5. The MJDs are simpler to work with as the integral
+        MJDs correspond to midnights of the dates in the Gregorian calendar and not th
+        noons like JDN. The MJD 0 is Nov 17, 1858.
+    */
+    double GetModifiedJulianDayNumber() const;
+
+    /**
+        Return the @e Rata Die number of this date.
+        By definition, the Rata Die number is a date specified as the number of days
+        relative to a base date of December 31 of the year 0. Thus January 1 of the
+        year 1 is Rata Die day 1.
+    */
+    double GetRataDie() const;
+
+    //@}
+
+
+
+    /**
+        @name Time Zone and DST Support
+
+        Please see the @ref overview_datetime_timezones "time zone overview"
+        for more information about time zones. Normally, these functions should
+        be rarely used.
+
+        See also GetBeginDST() and GetEndDST().
+    */
+    //@{
+
+    /**
+        Transform the date from the given time zone to the local one. If
+        @a noDST is @true, no DST adjustments will be made.
+
+        @returns The date in the local time zone.
+    */
+    wxDateTime FromTimezone(const TimeZone& tz, bool noDST = false) const;
+
+    /**
+        Returns @true if the DST is applied for this date in the given country.
+    */
+    int IsDST(Country country = Country_Default) const;
+
+    /**
+        Same as FromTimezone() but modifies the object in place.
+    */
+    wxDateTime MakeFromTimezone(const TimeZone& tz, bool noDST = false);
+
+    /**
+        Modifies the object in place to represent the date in another time
+        zone. If @a noDST is @true, no DST adjustments will be made.
+    */
+    wxDateTime MakeTimezone(const TimeZone& tz, bool noDST = false);
+
+    /**
+        This is the same as calling MakeTimezone() with the argument @c GMT0.
+    */
+    wxDateTime& MakeUTC(bool noDST = false);
+
+    /**
+        Transform the date to the given time zone. If @a noDST is @true, no DST
+        adjustments will be made.
+
+        @returns The date in the new time zone.
+    */
+    wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
+
+    /**
+        This is the same as calling ToTimezone() with the argument @c GMT0.
+    */
+    wxDateTime ToUTC(bool noDST = false) const;
+
+    //@}
+
+
+
+
+
+    /**
+        Converts the year in absolute notation (i.e. a number which can be
+        negative, positive or zero) to the year in BC/AD notation. For the
+        positive years, nothing is done, but the year 0 is year 1 BC and so for
+        other years there is a difference of 1.
+
+        This function should be used like this:
+
+        @code
+        wxDateTime dt(...);
+        int y = dt.GetYear();
+        printf("The year is %d%s", wxDateTime::ConvertYearToBC(y), y > 0 ? "AD" : "BC");
+        @endcode
+    */
+    static int ConvertYearToBC(int year);
+
+    /**
+        Returns the translations of the strings @c AM and @c PM used for time
+        formatting for the current locale. Either of the pointers may be @NULL
+        if the corresponding value is not needed.
+    */
+    static void GetAmPmStrings(wxString* am, wxString* pm);
+
+    /**
+        Get the beginning of DST for the given country in the given year
+        (current one by default). This function suffers from limitations
+        described in the @ref overview_datetime_dst "DST overview".
+
+        @see GetEndDST()
+    */
+    static wxDateTime GetBeginDST(int year = Inv_Year,
+                                   Country country = Country_Default);
+
+    /**
+        Returns the end of DST for the given country in the given year (current
+        one by default).
+
+        @see GetBeginDST()
+    */
+    static wxDateTime GetEndDST(int year = Inv_Year,
+                                 Country country = Country_Default);
+
+    /**
+        Get the current century, i.e. first two digits of the year, in given
+        calendar (only Gregorian is currently supported).
+    */
+    static int GetCentury(int year);
+
+    /**
+        Returns the current default country. The default country is used for
+        DST calculations, for example.
+
+        @see SetCountry()
+    */
+    static Country GetCountry();
+
+    /**
+        Get the current month in given calendar (only Gregorian is currently
+        supported).
+    */
+    static Month GetCurrentMonth(Calendar cal = Gregorian);
+
+    /**
+        Get the current year in given calendar (only Gregorian is currently
+        supported).
+    */
+    static int GetCurrentYear(Calendar cal = Gregorian);
+
+    /**
+        Gets the full (default) or abbreviated (specify @c Name_Abbr name of
+        the given month.
+
+        @see GetWeekDayName()
+    */
+    static wxString GetMonthName(Month month, NameFlags flags = Name_Full);
+
+    /**
+        Returns the number of days in the given year. The only supported value
+        for @a cal currently is @c Gregorian.
+
+        @beginWxPythonOnly
+        This method is named "GetNumberOfDaysInYear" in wxPython.
+        @endWxPythonOnly
+    */
+    static wxDateTime_t GetNumberOfDays(int year, Calendar cal = Gregorian);
+
+    /**
+        Returns the number of days in the given month of the given year. The
+        only supported value for @a cal currently is @c Gregorian.
+
+        @beginWxPythonOnly
+        This method is named "GetNumberOfDaysInMonth" in wxPython.
+        @endWxPythonOnly
+    */
+    static wxDateTime_t GetNumberOfDays(Month month,
+                                        int year = Inv_Year,
+                                        Calendar cal = Gregorian);
+
+    /**
+        Returns the current time.
+    */
+    static time_t GetTimeNow();
+
+    /**
+        Returns the current time broken down using the buffer whose adress is
+        passed to the function with @a tm to store the result.
+    */
+    static struct tm* GetTmNow(struct tm *tm);
+
+    /**
+        Returns the current time broken down. Note that this function returns a
+        pointer to a static buffer that's reused by calls to this function and
+        certain C library functions (e.g. localtime). If there is any chance
+        your code might be used in a multi-threaded application, you really
+        should use GetTmNow(struct tm *) instead.
+    */
+    static struct tm* GetTmNow();
+
+    /**
+        Gets the full (default) or abbreviated (specify @c Name_Abbr) name of
+        the given week day.
+
+        @see GetMonthName()
+    */
+    static wxString GetWeekDayName(WeekDay weekday,
+                                    NameFlags flags = Name_Full);
+
+    /**
+        Returns @true if DST was used n the given year (the current one by
+        default) in the given country.
+    */
+    static bool IsDSTApplicable(int year = Inv_Year,
+                                  Country country = Country_Default);
+
+    /**
+        Returns @true if the @a year is a leap one in the specified calendar.
+        This functions supports Gregorian and Julian calendars.
+    */
+    static bool IsLeapYear(int year = Inv_Year,
+                             Calendar cal = Gregorian);
+
+    /**
+        This function returns @true if the specified (or default) country is
+        one of Western European ones. It is used internally by wxDateTime to
+        determine the DST convention and date and time formatting rules.
+    */
+    static bool IsWestEuropeanCountry(Country country = Country_Default);
+
+    /**
+        Returns the object corresponding to the current time.
+
+        Example:
+
+        @code
+        wxDateTime now = wxDateTime::Now();
+        printf("Current time in Paris:\t%s\n", now.Format("%c", wxDateTime::CET).c_str());
+        @endcode
+
+        @note This function is accurate up to seconds. UNow() should be used
+              for better precision, but it is less efficient and might not be
+              available on all platforms.
+
+        @see Today()
+    */
+    static wxDateTime Now();
+
+    /**
+        Sets the country to use by default. This setting influences the DST
+        calculations, date formatting and other things.
+
+        The possible values for @a country parameter are enumerated in the
+        @ref datetime_constants section.
+
+        @see GetCountry()
+    */
+    static void SetCountry(Country country);
 
     /**
         Set the date to the given @a weekday in the week number @a numWeek of the
@@ -1025,116 +1254,11 @@ public:
         year weeks are counted.
     */
     static wxDateTime SetToWeekOfYear(int year, wxDateTime_t numWeek,
-                                      WeekDay weekday = Mon);
+                                       WeekDay weekday = Mon);
 
     /**
-        Sets the date to the day number @a yday in the same year (i.e., unlike the
-        other functions, this one does not use the current year). The day number
-        should be in the range 1...366 for the leap years and 1...365 for
-        the other ones.
-        Returns the reference to the modified object itself.
-    */
-    wxDateTime& SetToYearDay(short unsigned int);
-
-    /**
-        Sets the year without changing other date components.
-    */
-    wxDateTime& SetYear(int year);
-
-    /**
-        For convenience, all static functions are collected here. These functions
-        either set or return the static variables of wxDateSpan (the country), return
-        the current moment, year, month or number of days in it, or do some general
-        calendar-related actions.
-        Please note that although several function accept an extra @e Calendar
-        parameter, it is currently ignored as only the Gregorian calendar is
-        supported. Future versions will support other calendars.
-
-        SetCountry()
-
-        GetCountry()
-
-        IsWestEuropeanCountry()
-
-        GetCurrentYear()
-
-        ConvertYearToBC()
-
-        GetCurrentMonth()
-
-        IsLeapYear()
-
-        @ref getcenturystatic() GetCentury
-
-        GetNumberOfDays()
-
-        GetNumberOfDays()
-
-        GetMonthName()
-
-        GetWeekDayName()
-
-        GetAmPmStrings()
-
-        IsDSTApplicable()
-
-        GetBeginDST()
-
-        GetEndDST()
-
-        Now()
-
-        UNow()
-
-        Today()
-    */
-
-
-    /**
-        Subtracts another date from this one and returns the difference between them
-        as wxTimeSpan.
-    */
-    wxTimeSpan Subtract(const wxDateTime& dt) const;
-
-    /**
-        Please see the @ref overview_tdatetimezones "time zone overview" for more
-        information about time zones. Normally, these functions should be rarely used.
-        FromTimezone()
-
-        ToTimezone()
-
-        MakeTimezone()
-
-        MakeFromTimezone()
-
-        ToUTC()
-
-        MakeUTC()
-
-        GetBeginDST()
-
-        GetEndDST()
-
-        IsDST()
-    */
-
-
-    /**
-        Transform the date to the given time zone. If @a noDST is @true, no
-        DST adjustments will be made.
-        Returns the date in the new time zone.
-    */
-    wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
-
-    /**
-        This is the same as calling ToTimezone() with
-        the argument @c GMT0.
-    */
-    wxDateTime ToUTC(bool noDST = false) const;
-
-    /**
-        Returns the object corresponding to the midnight of the current day (i.e. the
-        same as Now(), but the time part is set to 0).
+        Returns the object corresponding to the midnight of the current day
+        (i.e. the same as Now(), but the time part is set to 0).
 
         @see Now()
     */
@@ -1142,17 +1266,35 @@ public:
 
     /**
         Returns the object corresponding to the current time including the
-        milliseconds if a function to get time with such precision is available on the
-        current platform (supported under most Unices and Win32).
+        milliseconds if a function to get time with such precision is available
+        on the current platform (supported under most Unices and Win32).
 
         @see Now()
     */
     static wxDateTime UNow();
 
+
+
+
+// Uncategorized Functions:
+
+
+
+
     /**
-        Same as @ref settm() Set.
+        Returns the object having the same date component as this one but time of
+        00:00:00.
+
+        @wxsince{2.8.2}
+
+        @see ResetTime()
     */
-    wxDateTime operator(const struct tm& tm);
+    wxDateTime GetDateOnly() const;
+
+    /**
+        Returns broken down representation of the date and time.
+    */
+    Tm GetTm(const TimeZone& tz = Local) const;
 };
 
 /**
@@ -1223,7 +1365,7 @@ public:
     @library{wxbase}
     @category{data}
 
-    @see @ref overview_wxdatetimeoverview "Date classes overview", wxDateTime
+    @see @ref overview_datetime, wxDateTime
 */
 class wxDateSpan
 {
@@ -1421,7 +1563,7 @@ public:
     @library{wxbase}
     @category{data}
 
-    @see @ref overview_wxdatetimeoverview "Date classes overview", wxDateTime
+    @see @ref overview_datetime, wxDateTime
 */
 class wxTimeSpan
 {
