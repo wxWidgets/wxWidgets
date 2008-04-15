@@ -16,7 +16,7 @@
     a wxVariant.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewIconText : public wxObject
 {
@@ -60,7 +60,7 @@ public:
     wxDataViewEvent - the event class for the wxDataViewCtrl notifications
 
     @library{wxadv}
-    @category{FIXME}
+    @category{events,dvc}
 */
 class wxDataViewEvent : public wxNotifyEvent
 {
@@ -126,6 +126,9 @@ public:
     */
     void SetValue(const wxVariant& value);
 };
+
+
+
 /**
     @class wxDataViewModel
     @wxheader{dataview.h}
@@ -210,7 +213,7 @@ public:
 
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewModel : public wxObjectRefData
 {
@@ -392,7 +395,6 @@ public:
 
 
 
-
 /**
     @class wxDataViewIndexListModel
     @wxheader{dataview.h}
@@ -409,7 +411,7 @@ public:
     use a virtual control.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewIndexListModel : public wxDataViewModel
 {
@@ -526,7 +528,7 @@ public:
     @see wxDataViewIndexListModel for the API.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewVirtualListModel : public wxDataViewModel
 {
@@ -536,8 +538,6 @@ public:
     */
     wxDataViewVirtualListModel(unsigned int initial_size = 0);
 }
-
-
 
 
 
@@ -554,7 +554,7 @@ public:
     wxDataViewTextRendererText().
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewItemAttr
 {
@@ -604,7 +604,7 @@ public:
     wxDataViewModel::GetChildren.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewItem
 {
@@ -679,8 +679,8 @@ public:
     @endStyleTable
 
     @library{wxadv}
-    @category{ctrl}
-    @appearance{dataviewctrl.png}
+    @category{ctrl,dvc}
+    <!-- @appearance{dataviewctrl.png} -->
 */
 class wxDataViewCtrl : public wxControl
 {
@@ -1003,7 +1003,7 @@ public:
     information.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewModelNotifier
 {
@@ -1134,7 +1134,7 @@ public:
 
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewRenderer : public wxObject
 {
@@ -1219,7 +1219,7 @@ public:
     in-place editing if desired.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewTextRenderer : public wxDataViewRenderer
 {
@@ -1246,7 +1246,7 @@ public:
     operator.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewIconTextRenderer : public wxDataViewRenderer
 {
@@ -1261,8 +1261,6 @@ public:
 
 
 
-
-
 /**
     @class wxDataViewProgressRenderer
     @wxheader{dataview.h}
@@ -1270,7 +1268,7 @@ public:
     wxDataViewProgressRenderer
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewProgressRenderer : public wxDataViewRenderer
 {
@@ -1295,7 +1293,7 @@ public:
     The renderer only support variants of type @e long.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewSpinRenderer : public wxDataViewCustomRenderer
 {
@@ -1318,7 +1316,7 @@ public:
     wxDataViewToggleRenderer
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewToggleRenderer : public wxDataViewRenderer
 {
@@ -1339,7 +1337,7 @@ public:
     wxDataViewDateRenderer
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewDateRenderer : public wxDataViewRenderer
 {
@@ -1365,7 +1363,7 @@ public:
     wxDataViewItemAttr.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewTextRendererAttr : public wxDataViewTextRenderer
 {
@@ -1377,6 +1375,7 @@ public:
                                wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                int align = wxDVR_DEFAULT_ALIGNMENT);
 };
+
 
 
 /**
@@ -1400,7 +1399,7 @@ public:
     in order to end the editing.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewCustomRenderer : public wxDataViewRenderer
 {
@@ -1504,7 +1503,7 @@ public:
     wxDataViewBitmapRenderer
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewBitmapRenderer : public wxDataViewRenderer
 {
@@ -1516,7 +1515,6 @@ public:
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT,
 };
-
 
 
 
@@ -1532,7 +1530,7 @@ public:
     this class to render its data.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewColumn : public wxObject
 {
@@ -1660,8 +1658,8 @@ public:
     to the wxDataViewCtrl class simpler.
 
     @library{wxbase}
-    @category{ctrl}
-    @appearance{dataviewtreectrl.png}
+    @category{ctrl,dvc}
+    <!-- @appearance{dataviewtreectrl.png} -->
 */
 class wxDataViewTreeCtrl : public wxDataViewCtrl
 {
@@ -1851,7 +1849,7 @@ public:
     This comes at the price of much reduced flexibility.
 
     @library{wxadv}
-    @category{FIXME}
+    @category{dvc}
 */
 class wxDataViewTreeStore : public wxDataViewModel
 {
@@ -1981,6 +1979,4 @@ public:
     */
     void SetItemIcon(const wxDataViewItem& item, const wxIcon& icon);
 };
-
-
 
