@@ -63,7 +63,7 @@
 
 <build>
     <name>Linux IA64 wxGTK Stable</name>
-    <sandbox>td156.testdrive.hp.com</sandbox>
+    <sandbox>td187.testdrive.hp.com</sandbox>
     <builddir>td_gtk_stable</builddir>
     <scheduler>stable_quick</scheduler>
 
