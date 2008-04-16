@@ -25,14 +25,15 @@ cd $path
 mkdir -p out/html       # we need to copy files in this folder below
 mkdir -p out/html/wxmsw out/html/wxgtk out/html/wxmac
 
-# these images are not automatically copied by Doxygen because they're not
-# used in doxygen documentation but only in our html footer and by our
+# These are not automatically copied by Doxygen because they're not
+# used in doxygen documentation, only in our html footer and by our
 # custom aliases
 cp images/powered-by-wxwidgets.png out/html
 cp images/*logo.png out/html
 cp images/wxmsw/*png out/html/wxmsw
 cp images/wxmac/*png out/html/wxmac
 cp images/wxgtk/*png out/html/wxgtk
+cp wxwidgets.js out/html
 
 # this CSS is not automatically copied by Doxygen because it's
 # included by our custom html header...

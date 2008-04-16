@@ -16,6 +16,8 @@
 </tr>
 </table>
 
+<script src="wxwidgets.js" type="text/javascript"></script>
+
 </body>
 </html>
 

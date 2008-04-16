@@ -11,13 +11,14 @@ mkdir out\html\wxgtk 2>&1 >NUL
 mkdir out\html\wxmsw 2>&1 >NUL
 mkdir out\html\wxmac 2>&1 >NUL
 
-REM this image is not automatically copied by Doxygen because it's not
-REM used in doxygen documentation but only in our html footer...
+REM These not automatically copied by Doxygen because it's not
+REM used in doxygen documentation, only in our html footer.
 copy images\powered-by-wxwidgets.png out\html 2>&1 >NUL
 copy images\*logo.png out\html 2>&1 >NUL
 copy images\wxgtk\*png out\html\wxgtk 2>&1 >NUL
 copy images\wxmsw\*png out\html\wxmsw 2>&1 >NUL
 copy images\wxmac\*png out\html\wxmac 2>&1 >NUL
+copy wxwidgets.js out\html 2>&1 >NUL
 
 REM this CSS is automatically copied by Doxygen because it's
 REM included by our custom html header...
