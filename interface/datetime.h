@@ -416,15 +416,30 @@ public:
     int GetCentury(const TimeZone& tz = Local) const;
 
     /**
+        Returns the object having the same date component as this one but time
+        of 00:00:00.
+
+        @wxsince{2.8.2}
+
+        @see ResetTime()
+    */
+    wxDateTime GetDateOnly() const;
+
+    /**
         Returns the day in the given timezone (local one by default).
     */
     short unsigned int GetDay(const TimeZone& tz = Local) const;
 
     /**
-        Returns the day of the year (in 1...366 range) in the given timezone
+        Returns the day of the year (in 1-366 range) in the given timezone
         (local one by default).
     */
     short unsigned int GetDayOfYear(const TimeZone& tz = Local) const;
+
+    /**
+        Returns the hour in the given timezone (local one by default).
+    */
+    short unsigned int GetHour(const TimeZone& tz = Local) const;
 
     /**
         Returns the milliseconds in the given timezone (local one by default).
@@ -447,42 +462,42 @@ public:
     short unsigned int GetSecond(const TimeZone& tz = Local) const;
 
     /**
-        Returns the number of seconds since Jan 1, 1970. An assert failure will occur
-        if the date is not in the range covered by @c time_t type.
+        Returns the number of seconds since Jan 1, 1970. An assert failure will
+        occur if the date is not in the range covered by @c time_t type.
     */
     time_t GetTicks() const;
 
     /**
-        Returns the hour in the given timezone (local one by default).
+        Returns broken down representation of the date and time.
     */
-    short unsigned int GetHour(const TimeZone& tz = Local) const;
+    Tm GetTm(const TimeZone& tz = Local) const;
 
     /**
-        Returns the copy of this object to which
-        SetToWeekDay() was applied.
+        Returns the week day in the given timezone (local one by default).
     */
-    wxDateTime GetWeekDay(WeekDay weekday, int n = 1,
-                          Month month = Inv_Month,
-                          int year = Inv_Year) const;
+    WeekDay GetWeekDay(const TimeZone& tz = Local) const;
 
     /**
-        Returns the ordinal number of the week in the month (in 1...5  range).
-        As GetWeekOfYear(), this function supports
-        both conventions for the week start. See the description of these
-        @ref overview_wxdatetime "week start" conventions.
+        Returns the ordinal number of the week in the month (in 1-5 range).
+
+        As GetWeekOfYear(), this function supports both conventions for the
+        week start. See the description of these @c WeekFlags in the
+        @ref datetime_constants section.
     */
     wxDateTime_t GetWeekOfMonth(WeekFlags flags = Monday_First,
                                 const TimeZone& tz = Local) const;
 
     /**
-        Returns the number of the week of the year this date is in. The first week of
-        the year is, according to international standards, the one containing Jan 4 or,
-        equivalently, the first week which has Thursday in this year. Both of these
-        definitions are the same as saying that the first week of the year must contain
-        more than half of its days in this year. Accordingly, the week number will
-        always be in 1...53 range (52 for non-leap years).
-        The function depends on the @ref overview_wxdatetime "week start" convention
-        specified by the @a flags argument but its results for
+        Returns the number of the week of the year this date is in. The first
+        week of the year is, according to international standards, the one
+        containing Jan 4 or, equivalently, the first week which has Thursday in
+        this year. Both of these definitions are the same as saying that the
+        first week of the year must contain more than half of its days in this
+        year. Accordingly, the week number will always be in 1-53 range (52 for
+        non-leap years).
+
+        The function depends on the @ref datetime_constants "week start"
+        convention specified by the @a flags argument but its results for
         @c Sunday_First are not well-defined as the ISO definition quoted above
         applies to the weeks starting on Monday only.
     */
@@ -495,15 +510,9 @@ public:
     int GetYear(const TimeZone& tz = Local) const;
 
     /**
-        Returns the copy of this object to which
-        SetToYearDay() was applied.
-    */
-    wxDateTime GetYearDay(short unsigned int) const;
-
-    /**
-        Returns @true if the given date is later than the date of adoption of the
-        Gregorian calendar in the given country (and hence the Gregorian calendar
-        calculations make sense for it).
+        Returns @true if the given date is later than the date of adoption of
+        the Gregorian calendar in the given country (and hence the Gregorian
+        calendar calculations make sense for it).
     */
     bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
 
@@ -541,8 +550,8 @@ public:
 
     /**
         Returns @true if the date is equal to another one up to the given time
-        interval, i.e. if the absolute difference between the two dates is less than
-        this interval.
+        interval, i.e. if the absolute difference between the two dates is less
+        than this interval.
     */
     bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const;
 
@@ -562,7 +571,7 @@ public:
     bool IsSameTime(const wxDateTime& dt) const;
 
     /**
-        Returns @true if this date lies strictly between the two others,
+        Returns @true if this date lies strictly between the two given dates.
 
         @see IsBetween()
     */
@@ -570,8 +579,8 @@ public:
                             const wxDateTime& t2) const;
 
     /**
-        Returns @true if IsStrictlyBetween()
-        is @true or if the date is equal to one of the limit values.
+        Returns @true if IsStrictlyBetween() is @true or if the date is equal
+        to one of the limit values.
 
         @see IsStrictlyBetween()
     */
@@ -595,38 +604,96 @@ public:
         of the original one with the argument while the second form modifies
         the object to which it is applied. The operators "-=" and "+=" are
         defined to be equivalent to the second forms of these functions.
-
-        <!--
-        Add(wxTimeSpan)
-        Subtract(wxTimeSpan)
-        Subtract(wxDateSpan)
-        oparator+=(wxTimeSpan)
-        oparator-=(wxTimeSpan)
-        oparator-=(wxDateSpan)
-        -->
     */
     //@{
 
     /**
         Adds the given date span to this object.
-    */
-    wxDateTime Add(const wxDateSpan& diff);
 
+        @beginWxPythonOnly
+        This method is named "AddDS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime Add(const wxDateSpan& diff) const;
     /**
         Adds the given date span to this object.
+
+        @beginWxPythonOnly
+        This method is named "AddDS" in wxPython.
+        @endWxPythonOnly
     */
-    const wxDateTime& Add(const wxDateSpan& diff);
+    wxDateTime Add(const wxDateSpan& diff);
+    /**
+        Adds the given time span to this object.
+
+        @beginWxPythonOnly
+        This method is named "AddTS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime Add(const wxTimeSpan& diff) const;
+    /**
+        Adds the given time span to this object.
+
+        @beginWxPythonOnly
+        This method is named "AddTS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& Add(const wxTimeSpan& diff);
+
+    /**
+        Subtracts the given time span from this object.
+
+        @beginWxPythonOnly
+        This method is named "SubtractTS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime Subtract(const wxTimeSpan& diff) const;
+    /**
+        Subtracts the given time span from this object.
+
+        @beginWxPythonOnly
+        This method is named "SubtractTS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& Subtract(const wxTimeSpan& diff);
+    /**
+        Subtracts the given date span from this object.
+
+        @beginWxPythonOnly
+        This method is named "SubtractDS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime Subtract(const wxDateSpan& diff) const;
+    /**
+        Subtracts the given date span from this object.
+
+        @beginWxPythonOnly
+        This method is named "SubtractDS" in wxPython.
+        @endWxPythonOnly
+    */
+    wxDateTime& Subtract(const wxDateSpan& diff);
+    /**
+        Subtracts another date from this one and returns the difference between
+        them as a wxTimeSpan.
+    */
+    wxTimeSpan Subtract(const wxDateTime& dt) const;
 
     /**
         Adds the given date span to this object.
     */
     wxDateTime operator+=(const wxDateSpan& diff);
-
     /**
-        Subtracts another date from this one and returns the difference between them
-        as wxTimeSpan.
+        Subtracts the given date span from this object.
     */
-    wxTimeSpan Subtract(const wxDateTime& dt) const;
+    wxDateTime& operator-=(const wxDateSpan& diff);
+    /**
+        Adds the given time span to this object.
+    */
+    wxDateTime& operator+=(const wxTimeSpan& diff);
+    /**
+        Subtracts the given time span from this object.
+    */
+    wxDateTime& operator-=(const wxTimeSpan& diff);
 
     //@}
 
@@ -640,11 +707,14 @@ public:
     //@{
 
     /**
-        This function does the same as the standard ANSI C @c strftime(3) function.
-        Please see its description for the meaning of @a format parameter.
-        It also accepts a few wxWidgets-specific extensions: you can optionally specify
-        the width of the field to follow using @c printf(3)-like syntax and the
-        format specification @c %l can be used to get the number of milliseconds.
+        This function does the same as the standard ANSI C @c strftime(3)
+        function. Please see its description for the meaning of @a format
+        parameter.
+
+        It also accepts a few wxWidgets-specific extensions: you can optionally
+        specify the width of the field to follow using @c printf(3)-like syntax
+        and the format specification @c "%l" can be used to get the number of
+        milliseconds.
 
         @see ParseFormat()
     */
@@ -652,178 +722,290 @@ public:
                     const TimeZone& tz = Local) const;
 
     /**
-        Identical to calling Format() with @c "%x"
-        argument (which means 'preferred date representation for the current locale').
+        Identical to calling Format() with @c "%x" argument (which means
+        "preferred date representation for the current locale").
     */
     wxString FormatDate() const;
 
     /**
         Returns the combined date-time representation in the ISO 8601 format
-        (YYYY-MM-DDTHH:MM:SS). The @a sep parameter default value produces the
-        result exactly corresponding to the ISO standard, but it can also be useful to
-        use a space as seprator if a more human-readable combined date-time
-        representation is needed.
+        @c "YYYY-MM-DDTHH:MM:SS". The @a sep parameter default value produces
+        the result exactly corresponding to the ISO standard, but it can also
+        be useful to use a space as seprator if a more human-readable combined
+        date-time representation is needed.
 
-        @see FormatISODate(), FormatISOTime(),
-             ParseISOCombined()
+        @see FormatISODate(), FormatISOTime(), ParseISOCombined()
     */
     wxString FormatISOCombined(char sep = 'T') const;
 
     /**
         This function returns the date representation in the ISO 8601 format
-        (YYYY-MM-DD).
+        @c "YYYY-MM-DD".
     */
     wxString FormatISODate() const;
 
     /**
         This function returns the time representation in the ISO 8601 format
-        (HH:MM:SS).
+        @c "HH:MM:SS".
     */
     wxString FormatISOTime() const;
 
     /**
-        Identical to calling Format() with @c "%X"
-        argument (which means 'preferred time representation for the current locale').
+        Identical to calling Format() with @c "%X" argument (which means
+        "preferred time representation for the current locale").
     */
     wxString FormatTime() const;
 
     /**
-        This function is like ParseDateTime(), but it
-        only allows the date to be specified. It is thus less flexible then
-        ParseDateTime(), but also has less chances to
-        misinterpret the user input.
-        Returns @NULL if the conversion failed, otherwise return the pointer to
-        the character which stopped the scan.
+        This function is like ParseDateTime(), but it only allows the date to
+        be specified. It is thus less flexible then ParseDateTime(), but also
+        has less chances to misinterpret the user input.
+
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const char* ParseDate(const wxString& date,
                            wxString::const_iterator* end = NULL);
     /**
+        This function is like ParseDateTime(), but it only allows the date to
+        be specified. It is thus less flexible then ParseDateTime(), but also
+        has less chances to misinterpret the user input.
 
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const char* ParseDate(const char* date);
     /**
+        This function is like ParseDateTime(), but it only allows the date to
+        be specified. It is thus less flexible then ParseDateTime(), but also
+        has less chances to misinterpret the user input.
 
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const wchar_t* ParseDate(const wchar_t* date);
 
     /**
-        Parses the string @a datetime containing the date and time in free format.
-        This function tries as hard as it can to interpret the given string as date
-        and time. Unlike wxDateTime::ParseRfc822Date, it
-        will accept anything that may be accepted and will only reject strings which
-        can not be parsed in any way at all.
-        Returns @NULL if the conversion failed, otherwise return the pointer to
-        the character which stopped the scan.
+        Parses the string @a datetime containing the date and time in free
+        format. This function tries as hard as it can to interpret the given
+        string as date and time. Unlike ParseRfc822Date(), it will accept
+        anything that may be accepted and will only reject strings which can
+        not be parsed in any way at all.
+
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const char* ParseDateTime(const wxString& datetime,
                               wxString::const_iterator* end = NULL);
     /**
+        Parses the string @a datetime containing the date and time in free
+        format. This function tries as hard as it can to interpret the given
+        string as date and time. Unlike ParseRfc822Date(), it will accept
+        anything that may be accepted and will only reject strings which can
+        not be parsed in any way at all.
 
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const char* ParseDateTime(const char* datetime);
     /**
+        Parses the string @a datetime containing the date and time in free
+        format. This function tries as hard as it can to interpret the given
+        string as date and time. Unlike ParseRfc822Date(), it will accept
+        anything that may be accepted and will only reject strings which can
+        not be parsed in any way at all.
 
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const wchar_t* ParseDateTime(const wchar_t* datetime);
 
     /**
         This function parses the string @a date according to the given
-        @e format. The system @c strptime(3) function is used whenever available,
-        but even if it is not, this function is still implemented, although support
-        for locale-dependent format specifiers such as @c "%c", @c "%x" or @c "%X" may
-        not be perfect and GNU extensions such as @c "%z" and @c "%Z" are
-        not implemented. This function does handle the month and weekday
-        names in the current locale on all platforms, however.
-        Please see the description of the ANSI C function @c strftime(3) for the syntax
-        of the format string.
-        The @a dateDef parameter is used to fill in the fields which could not be
-        determined from the format string. For example, if the format is @c "%d" (the
-        ay of the month), the month and the year are taken from @e dateDef. If
-        it is not specified, Today() is used as the
-        default date.
-        Returns @NULL if the conversion failed, otherwise return the pointer to
-        the character which stopped the scan.
+        @e format. The system @c strptime(3) function is used whenever
+        available, but even if it is not, this function is still implemented,
+        although support for locale-dependent format specifiers such as
+        @c "%c", @c "%x" or @c "%X" may not be perfect and GNU extensions such
+        as @c "%z" and @c "%Z" are not implemented. This function does handle
+        the month and weekday names in the current locale on all platforms,
+        however.
+
+        Please see the description of the ANSI C function @c strftime(3) for
+        the syntax of the format string.
+
+        The @a dateDef parameter is used to fill in the fields which could not
+        be determined from the format string. For example, if the format is
+        @c "%d" (the day of the month), the month and the year are taken from
+        @a dateDef. If it is not specified, Today() is used as the default
+        date.
+
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const char* ParseFormat(const wxString& date,
                              const wxString& format = wxDefaultDateTimeFormat,
                              const wxDateTime& dateDef = wxDefaultDateTime,
                              wxString::const_iterator* end = NULL);
     /**
+        This function parses the string @a date according to the given
+        @e format. The system @c strptime(3) function is used whenever
+        available, but even if it is not, this function is still implemented,
+        although support for locale-dependent format specifiers such as
+        @c "%c", @c "%x" or @c "%X" may not be perfect and GNU extensions such
+        as @c "%z" and @c "%Z" are not implemented. This function does handle
+        the month and weekday names in the current locale on all platforms,
+        however.
 
+        Please see the description of the ANSI C function @c strftime(3) for
+        the syntax of the format string.
+
+        The @a dateDef parameter is used to fill in the fields which could not
+        be determined from the format string. For example, if the format is
+        @c "%d" (the day of the month), the month and the year are taken from
+        @a dateDef. If it is not specified, Today() is used as the default
+        date.
+
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const char* ParseFormat(const char* date,
                               const wxString& format = wxDefaultDateTimeFormat,
                               const wxDateTime& dateDef = wxDefaultDateTime);
     /**
+        This function parses the string @a date according to the given
+        @e format. The system @c strptime(3) function is used whenever
+        available, but even if it is not, this function is still implemented,
+        although support for locale-dependent format specifiers such as
+        @c "%c", @c "%x" or @c "%X" may not be perfect and GNU extensions such
+        as @c "%z" and @c "%Z" are not implemented. This function does handle
+        the month and weekday names in the current locale on all platforms,
+        however.
 
+        Please see the description of the ANSI C function @c strftime(3) for
+        the syntax of the format string.
+
+        The @a dateDef parameter is used to fill in the fields which could not
+        be determined from the format string. For example, if the format is
+        @c "%d" (the day of the month), the month and the year are taken from
+        @a dateDef. If it is not specified, Today() is used as the default
+        date.
+
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const wchar_t* ParseFormat(const wchar_t* date,
                                  const wxString& format = wxDefaultDateTimeFormat,
                                  const wxDateTime& dateDef = wxDefaultDateTime);
 
     /**
-        This function parses the string containing the date and time in ISO 8601
-        combined format (YYYY-MM-DDTHH:MM:SS). The separator between the date and time
-        parts must be equal to @a sep for the function to succeed.
-        Returns @true if the entire string was parsed successfully, @false
-        otherwise.
+        This function parses the string containing the date and time in ISO
+        8601 combined format @c "YYYY-MM-DDTHH:MM:SS". The separator between
+        the date and time parts must be equal to @a sep for the function to
+        succeed.
+
+        @returns @true if the entire string was parsed successfully, @false
+                 otherwise.
     */
     bool ParseISOCombined(const wxString& date, char sep = 'T');
 
     /**
-        This function parses the date in ISO 8601 format (YYYY-MM-DD).
-        Returns @true if the entire string was parsed successfully, @false
-        otherwise.
+        This function parses the date in ISO 8601 format @c "YYYY-MM-DD".
+
+        @returns @true if the entire string was parsed successfully, @false
+                 otherwise.
     */
     bool ParseISODate(const wxString& date);
 
     /**
-        This function parses the time in ISO 8601 format (HH:MM:SS).
-        Returns @true if the entire string was parsed successfully, @false
-        otherwise.
+        This function parses the time in ISO 8601 format @c "HH:MM:SS".
+
+        @returns @true if the entire string was parsed successfully, @false
+                 otherwise.
     */
     bool ParseISOTime(const wxString& date);
 
     /**
-        Parses the string @a date looking for a date formatted according to the RFC
-        822 in it. The exact description of this format may, of course, be found in
-        the RFC (section 5), but, briefly, this is the format used in the headers of
-        Internet email messages and one of the most common strings expressing date in
-        this format may be something like @c "Sat, 18 Dec 1999 00:48:30 +0100".
+        Parses the string @a date looking for a date formatted according to the
+        RFC 822 in it. The exact description of this format may, of course, be
+        found in the RFC (section 5), but, briefly, this is the format used in
+        the headers of Internet email messages and one of the most common
+        strings expressing date in this format may be something like
+        @c "Sat, 18 Dec 1999 00:48:30 +0100".
+
         Returns @NULL if the conversion failed, otherwise return the pointer to
-        the character immediately following the part of the string which could be
-        parsed. If the entire string contains only the date in RFC 822 format,
-        the returned pointer will be pointing to a @c NUL character.
-        This function is intentionally strict, it will return an error for any string
-        which is not RFC 822 compliant. If you need to parse date formatted in more
-        free ways, you should use ParseDateTime() or
+        the character immediately following the part of the string which could
+        be parsed. If the entire string contains only the date in RFC 822
+        format, the returned pointer will be pointing to a @c NUL character.
+
+        This function is intentionally strict, it will return an error for any
+        string which is not RFC 822 compliant. If you need to parse date
+        formatted in more free ways, you should use ParseDateTime() or
         ParseDate() instead.
     */
     const char* ParseRfc822Date(const wxString& date,
-                                wxString::const_iterator* end = NULL);
+                                  wxString::const_iterator* end = NULL);
     /**
-        This function parses the string @a date according to the given..
+        Parses the string @a date looking for a date formatted according to the
+        RFC 822 in it. The exact description of this format may, of course, be
+        found in the RFC (section 5), but, briefly, this is the format used in
+        the headers of Internet email messages and one of the most common
+        strings expressing date in this format may be something like
+        @c "Sat, 18 Dec 1999 00:48:30 +0100".
+
+        Returns @NULL if the conversion failed, otherwise return the pointer to
+        the character immediately following the part of the string which could
+        be parsed. If the entire string contains only the date in RFC 822
+        format, the returned pointer will be pointing to a @c NUL character.
+
+        This function is intentionally strict, it will return an error for any
+        string which is not RFC 822 compliant. If you need to parse date
+        formatted in more free ways, you should use ParseDateTime() or
+        ParseDate() instead.
     */
     const char* ParseRfc822Date(const char* date);
     /**
-        This function parses the string @a date according to the given..
+        Parses the string @a date looking for a date formatted according to the
+        RFC 822 in it. The exact description of this format may, of course, be
+        found in the RFC (section 5), but, briefly, this is the format used in
+        the headers of Internet email messages and one of the most common
+        strings expressing date in this format may be something like
+        @c "Sat, 18 Dec 1999 00:48:30 +0100".
+
+        Returns @NULL if the conversion failed, otherwise return the pointer to
+        the character immediately following the part of the string which could
+        be parsed. If the entire string contains only the date in RFC 822
+        format, the returned pointer will be pointing to a @c NUL character.
+
+        This function is intentionally strict, it will return an error for any
+        string which is not RFC 822 compliant. If you need to parse date
+        formatted in more free ways, you should use ParseDateTime() or
+        ParseDate() instead.
     */
     const wchar_t* ParseRfc822Date(const wchar_t* date);
 
     /**
-        This functions is like ParseDateTime(), but
-        only allows the time to be specified in the input string.
-        Returns @NULL if the conversion failed, otherwise return the pointer to
-        the character which stopped the scan.
+        This functions is like ParseDateTime(), but only allows the time to be
+        specified in the input string.
+
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const char* ParseTime(const wxString& time,
                            wxString::const_iterator* end = NULL);
     /**
+        This functions is like ParseDateTime(), but only allows the time to be
+        specified in the input string.
 
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const char* ParseTime(const char* time);
     /**
+        This functions is like ParseDateTime(), but only allows the time to be
+        specified in the input string.
 
+        @returns @NULL if the conversion failed, otherwise return the pointer
+                 to the character which stopped the scan.
     */
     const wchar_t* ParseTime(const wchar_t* time);
 
@@ -841,17 +1023,12 @@ public:
 
         None of the functions in this section modify the time part of the
         wxDateTime, they only work with the date part of it.
-
-        <!--
-        GetWeekDay()
-        GetYearDay()
-        -->
     */
     //@{
 
     /**
-        Returns the copy of this object to which
-        SetToLastMonthDay() was applied.
+        Returns the copy of this object to which SetToLastMonthDay() was
+        applied.
     */
     wxDateTime GetLastMonthDay(Month month = Inv_Month,
                                int year = Inv_Year) const;
@@ -860,8 +1037,7 @@ public:
         Returns the copy of this object to which SetToLastWeekDay() was
         applied.
     */
-    wxDateTime GetLastWeekDay(WeekDay weekday,
-                              Month month = Inv_Month,
+    wxDateTime GetLastWeekDay(WeekDay weekday, Month month = Inv_Month,
                               int year = Inv_Year);
 
     /**
@@ -877,11 +1053,22 @@ public:
     wxDateTime GetPrevWeekDay(WeekDay weekday) const;
 
     /**
+        Returns the copy of this object to which SetToWeekDay() was applied.
+    */
+    wxDateTime GetWeekDay(WeekDay weekday, int n = 1, Month month = Inv_Month,
+                          int year = Inv_Year) const;
+
+    /**
         Returns the copy of this object to which SetToWeekDayInSameWeek() was
         applied.
     */
     wxDateTime GetWeekDayInSameWeek(WeekDay weekday,
                                     WeekFlags flags = Monday_First) const;
+
+    /**
+        Returns the copy of this object to which SetToYearDay() was applied.
+    */
+    wxDateTime GetYearDay(wxDateTime_t yday) const;
 
     /**
         Sets the date to the last day in the specified month (the current one
@@ -894,16 +1081,16 @@ public:
 
     /**
         The effect of calling this function is the same as of calling
-        @c SetToWeekDay(-1, weekday, month, year). The date will be set to the last
-        @a weekday in the given month and year (the current ones by default).
-        Always returns @true.
+        @c SetToWeekDay(-1, weekday, month, year). The date will be set to the
+        last @a weekday in the given month and year (the current ones by
+        default). Always returns @true.
     */
     bool SetToLastWeekDay(WeekDay weekday, Month month = Inv_Month,
                           int year = Inv_Year);
 
     /**
-        Sets the date so that it will be the first @a weekday following the current
-        date.
+        Sets the date so that it will be the first @a weekday following the
+        current date.
 
         @returns The reference to the modified object itself.
     */
@@ -919,9 +1106,9 @@ public:
 
     /**
         Sets the date to the @e n-th @a weekday in the given month of the given
-        year (the current month and year are used by default). The parameter @e n
-        may be either positive (counting from the beginning of the month) or negative
-        (counting from the end of it).
+        year (the current month and year are used by default). The parameter
+        @a n may be either positive (counting from the beginning of the month)
+        or negative (counting from the end of it).
 
         For example, SetToWeekDay(2, wxDateTime::Wed) will set the date to the
         second Wednesday in the current month and
@@ -944,13 +1131,14 @@ public:
                                       WeekFlags flags = Monday_First);
 
     /**
-        Sets the date to the day number @a yday in the same year (i.e., unlike the
-        other functions, this one does not use the current year). The day number
-        should be in the range 1...366 for the leap years and 1...365 for
+        Sets the date to the day number @a yday in the same year (i.e., unlike
+        the other functions, this one does not use the current year). The day
+        number should be in the range 1-366 for the leap years and 1-365 for
         the other ones.
-        Returns the reference to the modified object itself.
+
+        @returns The reference to the modified object itself.
     */
-    wxDateTime& SetToYearDay(short unsigned int);
+    wxDateTime& SetToYearDay(wxDateTime_t yday);
 
     //@}
 
@@ -963,10 +1151,7 @@ public:
         history is provided. You can construct a wxDateTime object from a
         JDN and you may also get its JDN, MJD or Rata Die number from it.
 
-        <!--
-        wxDateTime(double jdn)
-        Set(double jdn)
-        -->
+        Related functions in other groups: wxDateTime(double), Set(double)
     */
     //@{
 
@@ -976,8 +1161,7 @@ public:
     double GetJDN() const;
 
     /**
-        Returns the @ref setjdn() JDN corresponding to this date. Beware
-        of rounding errors!
+        Returns the JDN corresponding to this date. Beware of rounding errors!
 
         @see GetModifiedJulianDayNumber()
     */
@@ -989,18 +1173,20 @@ public:
     double GetMJD() const;
 
     /**
-        Returns the @e Modified Julian Day Number (MJD) which is, by definition,
-        equal to JDN - 2400000.5. The MJDs are simpler to work with as the integral
-        MJDs correspond to midnights of the dates in the Gregorian calendar and not th
-        noons like JDN. The MJD 0 is Nov 17, 1858.
+        Returns the @e "Modified Julian Day Number" (MJD) which is, by
+        definition, is equal to JDN - 2400000.5. The MJDs are simpler to work
+        with as the integral MJDs correspond to midnights of the dates in the
+        Gregorian calendar and not the noons like JDN. The MJD 0 represents
+        Nov 17, 1858.
     */
     double GetModifiedJulianDayNumber() const;
 
     /**
         Return the @e Rata Die number of this date.
-        By definition, the Rata Die number is a date specified as the number of days
-        relative to a base date of December 31 of the year 0. Thus January 1 of the
-        year 1 is Rata Die day 1.
+
+        By definition, the Rata Die number is a date specified as the number of
+        days relative to a base date of December 31 of the year 0. Thus January
+        1 of the year 1 is Rata Die day 1.
     */
     double GetRataDie() const;
 
@@ -1015,7 +1201,7 @@ public:
         for more information about time zones. Normally, these functions should
         be rarely used.
 
-        See also GetBeginDST() and GetEndDST().
+        Related functions in other groups: GetBeginDST(), GetEndDST()
     */
     //@{
 
@@ -1029,6 +1215,8 @@ public:
 
     /**
         Returns @true if the DST is applied for this date in the given country.
+
+        @see GetBeginDST(), GetEndDST()
     */
     int IsDST(Country country = Country_Default) const;
 
@@ -1161,8 +1349,7 @@ public:
         This method is named "GetNumberOfDaysInMonth" in wxPython.
         @endWxPythonOnly
     */
-    static wxDateTime_t GetNumberOfDays(Month month,
-                                        int year = Inv_Year,
+    static wxDateTime_t GetNumberOfDays(Month month, int year = Inv_Year,
                                         Calendar cal = Gregorian);
 
     /**
@@ -1205,8 +1392,7 @@ public:
         Returns @true if the @a year is a leap one in the specified calendar.
         This functions supports Gregorian and Julian calendars.
     */
-    static bool IsLeapYear(int year = Inv_Year,
-                             Calendar cal = Gregorian);
+    static bool IsLeapYear(int year = Inv_Year, Calendar cal = Gregorian);
 
     /**
         This function returns @true if the specified (or default) country is
@@ -1245,13 +1431,13 @@ public:
     static void SetCountry(Country country);
 
     /**
-        Set the date to the given @a weekday in the week number @a numWeek of the
-        given @a year . The number should be in range 1...53.
-        Note that the returned date may be in a different year than the one passed to
-        this function because both the week 1 and week 52 or 53 (for leap years)
-        contain days from different years. See
-        GetWeekOfYear() for the explanation of how the
-        year weeks are counted.
+        Set the date to the given @a weekday in the week number @a numWeek of
+        the given @a year . The number should be in range 1-53.
+
+        Note that the returned date may be in a different year than the one
+        passed to this function because both the week 1 and week 52 or 53 (for
+        leap years) contain days from different years. See GetWeekOfYear() for
+        the explanation of how the year weeks are counted.
     */
     static wxDateTime SetToWeekOfYear(int year, wxDateTime_t numWeek,
                                        WeekDay weekday = Mon);
@@ -1272,38 +1458,15 @@ public:
         @see Now()
     */
     static wxDateTime UNow();
-
-
-
-
-// Uncategorized Functions:
-
-
-
-
-    /**
-        Returns the object having the same date component as this one but time of
-        00:00:00.
-
-        @wxsince{2.8.2}
-
-        @see ResetTime()
-    */
-    wxDateTime GetDateOnly() const;
-
-    /**
-        Returns broken down representation of the date and time.
-    */
-    Tm GetTm(const TimeZone& tz = Local) const;
 };
 
 /**
     Global instance of an empty wxDateTime object.
 
-    @todo wouldn't be better to rename it wxNullDateTime as for the rest of wx global objects
-          which are initialized to an empty value?
+    @todo Would it be better to rename this wxNullDateTime so it's consistent
+          with the rest of the "empty/invalid/null" global objects?
 */
-wxDateTime wxDefaultDateTime;
+const wxDateTime wxDefaultDateTime;
 
 
 
@@ -1311,9 +1474,10 @@ wxDateTime wxDefaultDateTime;
     @class wxDateTimeWorkDays
     @wxheader{datetime.h}
 
+    @todo Write wxDateTimeWorkDays documentation.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{data}
 */
 class wxDateTimeWorkDays
 {
@@ -1338,29 +1502,27 @@ public:
     Jan 31 + 1 month will be Feb 28, not (non-existing) Feb 31.
 
     Because of this feature, adding and subtracting back again the same
-    wxDateSpan will @b not, in general give back the original date: Feb 28 - 1
+    wxDateSpan will @b not, in general, give back the original date: Feb 28 - 1
     month will be Jan 28, not Jan 31!
 
     wxDateSpan objects can be either positive or negative. They may be
     multiplied by scalars which multiply all deltas by the scalar: i.e.
-    2*(1  month and  1  day) is 2 months and 2 days. They can
-    be added together and with wxDateTime or
-    wxTimeSpan, but the type of result is different for each
+    2*(1  month and  1  day) is 2 months and 2 days. They can be added together
+    with wxDateTime or wxTimeSpan, but the type of result is different for each
     case.
 
-    Beware about weeks: if you specify both weeks and days, the total number of
-    days added will be 7*weeks + days! See also GetTotalDays()
-    function.
+    @warning If you specify both weeks and days, the total number of days added
+             will be 7*weeks + days! See also GetTotalDays().
 
-    Equality operators are defined for wxDateSpans. Two datespans are equal if
-    and only if they both give the same target date when added to @b every
-    source date. Thus wxDateSpan::Months(1) is not equal to wxDateSpan::Days(30),
-    because they don't give the same date when added to 1 Feb. But
-    wxDateSpan::Days(14) is equal to wxDateSpan::Weeks(2)
+    Equality operators are defined for wxDateSpans. Two wxDateSpans are equal
+    if and only if they both give the same target date when added to @b every
+    source date. Thus wxDateSpan::Months(1) is not equal to
+    wxDateSpan::Days(30), because they don't give the same date when added to
+    Feb 1st. But wxDateSpan::Days(14) is equal to wxDateSpan::Weeks(2).
 
-    Finally, notice that for adding hours, minutes and so on you don't need this
-    class at all: wxTimeSpan will do the job because there
-    are no subtleties associated with those (we don't support leap seconds).
+    Finally, notice that for adding hours, minutes and so on you don't need
+    this class at all: wxTimeSpan will do the job because there are no
+    subtleties associated with those (we don't support leap seconds).
 
     @library{wxbase}
     @category{data}
@@ -1371,21 +1533,23 @@ class wxDateSpan
 {
 public:
     /**
-        Constructs the date span object for the given number of years, months, weeks
-        and days. Note that the weeks and days add together if both are given.
+        Constructs the date span object for the given number of years, months,
+        weeks and days. Note that the weeks and days add together if both are
+        given.
     */
-    wxDateSpan(int years = 0, int months = 0, int weeks = 0,
-               int days = 0);
+    wxDateSpan(int years = 0, int months = 0, int weeks = 0, int days = 0);
 
-    //@{
     /**
-        Returns the sum of two date spans. The first version returns a new object, the
-        second and third ones modify this object in place.
+        Returns the sum of two date spans.
+
+        @returns A new wxDateSpan object with the result.
     */
-    wxDateSpan Add(const wxDateSpan& other);
-    const wxDateSpan&  Add(const wxDateSpan& other);
-    wxDateSpan operator+=(const wxDateSpan& other);
-    //@}
+    wxDateSpan Add(const wxDateSpan& other) const;
+    /**
+        Adds the given wxDateSpan to this wxDateSpan and returns a reference
+        to itself.
+    */
+    wxDateSpan& Add(const wxDateSpan& other);
 
     /**
         Returns a date span object corresponding to one day.
@@ -1402,21 +1566,22 @@ public:
     static wxDateSpan Days(int days);
 
     /**
-        Returns the number of days (only, that it not counting the weeks component!)
-        in this date span.
+        Returns the number of days (not counting the weeks component) in this
+        date span.
 
         @see GetTotalDays()
     */
     int GetDays() const;
 
     /**
-        Returns the number of the months (not counting the years) in this date span.
+        Returns the number of the months (not counting the years) in this date
+        span.
     */
     int GetMonths() const;
 
     /**
-        Returns the combined number of days in this date span, counting both weeks and
-        days. It still doesn't take neither months nor years into the account.
+        Returns the combined number of days in this date span, counting both
+        weeks and days. This doesn't take months or years into account.
 
         @see GetWeeks(), GetDays()
     */
@@ -1448,68 +1613,71 @@ public:
     */
     static wxDateSpan Months(int mon);
 
-    //@{
     /**
-        Returns the product of the date span by the specified @e factor. The
-        product is computed by multiplying each of the components by the factor.
-        The first version returns a new object, the second and third ones modify this
-        object in place.
-    */
-    wxDateSpan Multiply(int factor);
-    const wxDateSpan&  Multiply(int factor);
-    wxDateSpan operator*=(int factor);
-    //@}
+        Returns the product of the date span by the specified @a factor. The
+        product is computed by multiplying each of the components by the
+        @a factor.
 
-    //@{
+        @returns A new wxDateSpan object with the result.
+    */
+    wxDateSpan Multiply(int factor) const;
+    /**
+        Multiplies this date span by the specified @a factor. The product is
+        computed by multiplying each of the components by the @a factor.
+
+        @returns A reference to this wxDateSpan object modified in place.
+    */
+    wxDateSpan& Multiply(int factor);
+
     /**
         Changes the sign of this date span.
 
         @see Negate()
     */
-    wxDateSpan Neg();
-    wxDateSpan operator-();
-    //@}
+    wxDateSpan& Neg();
 
     /**
-        Returns the date span with the opposite sign.
+        Returns a date span with the opposite sign.
 
         @see Neg()
     */
     wxDateSpan Negate() const;
 
     /**
-        Sets the number of days (without modifying any other components) in this date
-        span.
+        Sets the number of days (without modifying any other components) in
+        this date span.
     */
     wxDateSpan& SetDays(int n);
 
     /**
-        Sets the number of months (without modifying any other components) in this
-        date span.
+        Sets the number of months (without modifying any other components) in
+        this date span.
     */
     wxDateSpan& SetMonths(int n);
 
     /**
-        Sets the number of weeks (without modifying any other components) in this date
-        span.
+        Sets the number of weeks (without modifying any other components) in
+        this date span.
     */
     wxDateSpan& SetWeeks(int n);
 
     /**
-        Sets the number of years (without modifying any other components) in this date
-        span.
+        Sets the number of years (without modifying any other components) in
+        this date span.
     */
     wxDateSpan& SetYears(int n);
 
-    //@{
     /**
-        Returns the difference of two date spans. The first version returns a new
-        object, the second and third ones modify this object in place.
+        Returns the difference of two date spans.
+
+        @returns A new wxDateSpan object with the result.
     */
-    wxDateSpan Subtract(const wxDateSpan& other);
-    const wxDateSpan&  Subtract(const wxDateSpan& other);
-    wxDateSpan operator+=(const wxDateSpan& other);
-    //@}
+    wxDateSpan Subtract(const wxDateSpan& other) const;
+    /**
+        Subtracts the given wxDateSpan to this wxDateSpan and returns a
+        reference to itself.
+    */
+    wxDateSpan& Subtract(const wxDateSpan& other);
 
     /**
         Returns a date span object corresponding to one week.
@@ -1540,14 +1708,41 @@ public:
     static wxDateSpan Years(int years);
 
     /**
+        Adds the given wxDateSpan to this wxDateSpan and returns the result.
+    */
+    wxDateSpan& operator+=(const wxDateSpan& other);
+
+    /**
+        Subtracts the given wxDateSpan to this wxDateSpan and returns the
+        result.
+    */
+    wxDateSpan& operator-=(const wxDateSpan& other);
+
+    /**
+        Changes the sign of this date span.
+
+        @see Negate()
+    */
+    wxDateSpan& operator-();
+
+    /**
+        Multiplies this date span by the specified @a factor. The product is
+        computed by multiplying each of the components by the @a factor.
+
+        @returns A reference to this wxDateSpan object modified in place.
+    */
+    wxDateSpan& operator*=(int factor);
+
+    /**
         Returns @true if this date span is different from the other one.
     */
     bool operator!=(const wxDateSpan&) const;
 
     /**
-        Returns @true if this date span is equal to the other one. Two date spans
-        are considered equal if and only if they have the same number of years and
-        months and the same total number of days (counting both days and weeks).
+        Returns @true if this date span is equal to the other one. Two date
+        spans are considered equal if and only if they have the same number of
+        years and months and the same total number of days (counting both days
+        and weeks).
     */
     bool operator==(const wxDateSpan&) const;
 };
@@ -1568,50 +1763,33 @@ public:
 class wxTimeSpan
 {
 public:
-    //@{
     /**
-        Constructs timespan from separate values for each component, with the date
-        set to 0. Hours are not restricted to 0..24 range, neither are
-        minutes, seconds or milliseconds.
+        Default constructor, constructs a zero timespan.
     */
     wxTimeSpan();
+    /**
+        Constructs timespan from separate values for each component, with the
+        date set to 0. Hours are not restricted to 0-24 range, neither are
+        minutes, seconds or milliseconds.
+    */
     wxTimeSpan(long hours, long min, long sec, long msec);
-    //@}
 
     /**
-        Returns the absolute value of the timespan: does not modify the
-        object.
+        Returns the absolute value of the timespan: does not modify the object.
     */
     wxTimeSpan Abs() const;
 
     /**
-        GetSeconds()
+        Returns the sum of two time spans.
 
-        GetMinutes()
-
-        GetHours()
-
-        GetDays()
-
-        GetWeeks()
-
-        GetValue()
+        @returns A new wxDateSpan object with the result.
     */
-
-
-    //@{
+    wxTimeSpan Add(const wxTimeSpan& diff) const;
     /**
-        Returns the sum of two timespans.
+        Adds the given wxTimeSpan to this wxTimeSpan and returns a reference
+        to itself.
     */
-    wxTimeSpan Add(const wxTimeSpan& diff);
-    const wxTimeSpan&  Add(const wxTimeSpan& diff);
-    wxTimeSpan operator+=(const wxTimeSpan& diff);
-    //@}
-
-    /**
-        @ref ctor() wxTimeSpan
-    */
-
+    wxTimeSpan& Add(const wxTimeSpan& diff);
 
     /**
         Returns the timespan for one day.
@@ -1624,54 +1802,32 @@ public:
     static wxTimespan Days(long days);
 
     /**
-        Returns the string containing the formatted representation of the time span.
-        The following format specifiers are allowed after %:
+        Returns the string containing the formatted representation of the time
+        span. The following format specifiers are allowed after %:
 
-        H
+        - @c H - Number of Hours
+        - @c M - Number of Minutes
+        - @c S - Number of Seconds
+        - @c l - Number of Milliseconds
+        - @c D - Number of Days
+        - @c E - Number of Weeks
+        - @c % - The percent character
 
-        number of @b Hours
+        Note that, for example, the number of hours in the description above is
+        not well defined: it can be either the total number of hours (for
+        example, for a time span of 50 hours this would be 50) or just the hour
+        part of the time span, which would be 2 in this case as 50 hours is
+        equal to 2 days and 2 hours.
 
-        M
+        wxTimeSpan resolves this ambiguity in the following way: if there had
+        been, indeed, the @c %D format specified preceding the @c %H, then it
+        is interpreted as 2. Otherwise, it is 50.
 
-        number of @b Minutes
-
-        S
-
-        number of @b Seconds
-
-        l
-
-        number of mi@b lliseconds
-
-        D
-
-        number of @b Days
-
-        E
-
-        number of w@b Eeks
-
-        %
-
-        the percent character
-
-        Note that, for example, the number of hours in the description above is not
-        well defined: it can be either the total number of hours (for example, for a
-        time span of 50 hours this would be 50) or just the hour part of the time
-        span, which would be 2 in this case as 50 hours is equal to 2 days and
-        2 hours.
-        wxTimeSpan resolves this ambiguity in the following way: if there had been,
-        indeed, the @c %D format specified preceding the @c %H, then it is
-        interpreted as 2. Otherwise, it is 50.
-        The same applies to all other format specifiers: if they follow a specifier of
-        larger unit, only the rest part is taken, otherwise the full value is used.
+        The same applies to all other format specifiers: if they follow a
+        specifier of larger unit, only the rest part is taken, otherwise the
+        full value is used.
     */
     wxString Format(const wxString& = wxDefaultTimeSpanFormat) const;
-
-    /**
-        Format()
-    */
-
 
     /**
         Returns the difference in number of days.
@@ -1724,9 +1880,9 @@ public:
     bool IsEqualTo(const wxTimeSpan& ts) const;
 
     /**
-        Compares two timespans: works with the absolute values, i.e. -2
-        hours is longer than 1 hour. Also, it will return @false if
-        the timespans are equal in absolute value.
+        Compares two timespans: works with the absolute values, i.e. -2 hours
+        is longer than 1 hour. Also, it will return @false if the timespans are
+        equal in absolute value.
     */
     bool IsLongerThan(const wxTimeSpan& ts) const;
 
@@ -1746,9 +1902,9 @@ public:
     bool IsPositive() const;
 
     /**
-        Compares two timespans: works with the absolute values, i.e. 1
-        hour is shorter than -2 hours. Also, it will return @false if
-        the timespans are equal in absolute value.
+        Compares two timespans: works with the absolute values, i.e. 1 hour is
+        shorter than -2 hours. Also, it will return @false if the timespans are
+        equal in absolute value.
     */
     bool IsShorterThan(const wxTimeSpan& ts) const;
 
@@ -1772,42 +1928,32 @@ public:
     */
     static wxTimespan Minutes(long min);
 
-    //@{
     /**
-        Multiplies timespan by a scalar.
-    */
-    wxTimeSpan Multiply(int n);
-    const wxTimeSpan&  Multiply(int n);
-    wxTimeSpan operator*=(int n);
-    //@}
+        Returns the product of this time span by @a n.
 
-    //@{
+        @returns A new wxTimeSpan object with the result.
+    */
+    wxTimeSpan Multiply(int n) const;
+    /**
+        Multiplies this time span by @a n.
+
+        @returns A reference to this wxTimeSpan object modified in place.
+    */
+    wxTimeSpan& Multiply(int n);
+
     /**
         Negate the value of the timespan.
+
+        @see Negate()
     */
-    wxTimeSpan Neg();
-    wxTimeSpan operator-();
-    //@}
+    wxTimeSpan& Neg();
 
     /**
         Returns timespan with inverted sign.
+
+        @see Neg()
     */
     wxTimeSpan Negate() const;
-
-    /**
-        Add()
-
-        Subtract()
-
-        Multiply()
-
-        Negate()
-
-        Neg()
-
-        Abs()
-    */
-
 
     /**
         Returns the timespan for one second.
@@ -1820,55 +1966,16 @@ public:
     static wxTimespan Seconds(long sec);
 
     /**
-        Milliseconds()
+        Returns the difference of two time spans.
 
-        Millisecond()
-
-        Seconds()
-
-        Second()
-
-        Minutes()
-
-        Minute()
-
-        Hours()
-
-        Hour()
-
-        Days()
-
-        Day()
-
-        Weeks()
-
-        Week()
+        @returns A new wxDateSpan object with the result.
     */
-
-
-    //@{
+    wxTimeSpan Subtract(const wxTimeSpan& diff) const;
     /**
-        Returns the difference of two timespans.
+        Subtracts the given wxTimeSpan to this wxTimeSpan and returns a
+        reference to itself.
     */
-    wxTimeSpan Subtract(const wxTimeSpan& diff);
-    const wxTimeSpan&  Subtract(const wxTimeSpan& diff);
-    wxTimeSpan operator-=(const wxTimeSpan& diff);
-    //@}
-
-    /**
-        IsNull()
-
-        IsPositive()
-
-        IsNegative()
-
-        IsEqualTo()
-
-        IsLongerThan()
-
-        IsShorterThan()
-    */
-
+    wxTimeSpan& Subtract(const wxTimeSpan& diff);
 
     /**
         Returns the timespan for one week.
@@ -1879,6 +1986,31 @@ public:
         Returns the timespan for the given number of weeks.
     */
     static wxTimespan Weeks(long weeks);
+
+    /**
+        Adds the given wxTimeSpan to this wxTimeSpan and returns the result.
+    */
+    wxTimeSpan& operator+=(const wxTimeSpan& diff);
+
+    /**
+        Multiplies this time span by @a n.
+
+        @returns A reference to this wxTimeSpan object modified in place.
+    */
+    wxTimeSpan& operator*=(int n);
+
+    /**
+        Negate the value of the timespan.
+
+        @see Negate()
+    */
+    wxTimeSpan& operator-();
+
+    /**
+        Subtracts the given wxTimeSpan to this wxTimeSpan and returns the
+        result.
+    */
+    wxTimeSpan& operator-=(const wxTimeSpan& diff);
 };
 
 
@@ -1887,9 +2019,10 @@ public:
     @class wxDateTimeHolidayAuthority
     @wxheader{datetime.h}
 
+    @todo Write wxDateTimeHolidayAuthority documentation.
 
     @library{wxbase}
-    @category{FIXME}
+    @category{misc}
 */
 class wxDateTimeHolidayAuthority
 {
