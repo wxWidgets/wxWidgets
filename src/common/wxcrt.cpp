@@ -133,27 +133,6 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 }
 #endif // wxUSE_WCHAR_T
 
-WXDLLIMPEXP_BASE bool wxOKlibc()
-{
-#if wxUSE_WCHAR_T && defined(__UNIX__) && defined(__GLIBC__) && !defined(__WINE__)
-  // glibc 2.0 uses UTF-8 even when it shouldn't
-  wchar_t res = 0;
-  if ((MB_CUR_MAX == 2) &&
-      (wxMB2WC(&res, "\xdd\xa5", 1) == 1) &&
-      (res==0x765)) {
-    // this is UTF-8 allright, check whether that's what we want
-    char *cur_locale = setlocale(LC_CTYPE, NULL);
-    if ((strlen(cur_locale) < 4) ||
-            (strcasecmp(cur_locale + strlen(cur_locale) - 4, "utf8")) ||
-            (strcasecmp(cur_locale + strlen(cur_locale) - 5, "utf-8"))) {
-      // nope, don't use libc conversion
-      return false;
-    }
-  }
-#endif
-  return true;
-}
-
 char* wxSetlocale(int category, const char *locale)
 {
 #ifdef __WXWINCE__

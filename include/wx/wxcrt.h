@@ -39,9 +39,6 @@ inline bool wxIsEmpty(const wxString& s) { return s.empty(); }
 inline bool wxIsEmpty(const wxCStrData& s) { return s.AsString().empty(); }
 
 
-// FIXME-UTF8: get rid of this, it's ANSI only anyway
-WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
-
 
 /* multibyte to wide char conversion functions and macros */
 

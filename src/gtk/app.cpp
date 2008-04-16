@@ -364,14 +364,8 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     }
 #endif // wxUSE_THREADS
 
-    // We should have the wxUSE_WCHAR_T test on the _outside_
-#if wxUSE_WCHAR_T
     // gtk+ 2.0 supports Unicode through UTF-8 strings
     wxConvCurrent = &wxConvUTF8;
-#else // !wxUSE_WCHAR_T
-    if (!wxOKlibc())
-        wxConvCurrent = (wxMBConv*) NULL;
-#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
     // decide which conversion to use for the file names
 
