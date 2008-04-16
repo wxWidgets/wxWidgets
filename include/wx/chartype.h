@@ -38,8 +38,8 @@
 #endif /* !defined(wxUSE_WCHAR_T) */
 
 /* Unicode support requires wchar_t */
-#if wxUSE_UNICODE && !wxUSE_WCHAR_T
-    #error "wchar_t must be available in Unicode build"
+#if !wxUSE_WCHAR_T
+    #error "wchar_t must be available"
 #endif /* Unicode */
 
 /*
