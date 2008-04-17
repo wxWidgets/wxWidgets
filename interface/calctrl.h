@@ -237,6 +237,8 @@ enum wxCalendarHitTestResult
     @style{wxCAL_SEQUENTIAL_MONTH_SELECTION}
            Use alternative, more compact, style for the month and year
            selection controls. (only generic)
+    @style{wxCAL_SHOW_WEEK_NUMBERS}
+           Show week numbers on the left side of the calendar. (not in generic)
     @endStyleTable
 
     @beginEventTable{wxCalendarEvent}
@@ -257,7 +259,7 @@ enum wxCalendarHitTestResult
     @category{ctrl}
     <!-- @appearance{calendarctrl.png} -->
 
-    @nativeimpl{wxgtk}
+    @nativeimpl{wxgtk,wxmsw}
 
     @see @ref page_samples_calendar, wxCalendarDateAttr, wxCalendarEvent,
          wxDatePickerCtrl

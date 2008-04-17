@@ -48,7 +48,10 @@ enum
     wxCAL_SEQUENTIAL_MONTH_SELECTION = 0x0010,
 
     // show the neighbouring weeks in the previous and next month
-    wxCAL_SHOW_SURROUNDING_WEEKS     = 0x0020
+    wxCAL_SHOW_SURROUNDING_WEEKS     = 0x0020,
+
+    // show week numbers on the left side of the calendar.
+    wxCAL_SHOW_WEEK_NUMBERS          = 0x0040
 };
 
 // ----------------------------------------------------------------------------

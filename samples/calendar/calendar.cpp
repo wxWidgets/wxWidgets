@@ -149,6 +149,7 @@ public:
 
     void OnCalSeqMonth(wxCommandEvent& event);
     void OnCalShowSurroundingWeeks(wxCommandEvent& event);
+    void OnCalShowWeekNumbers(wxCommandEvent& event);
 
     void OnSetDate(wxCommandEvent& event);
     void OnToday(wxCommandEvent& event);
@@ -212,6 +213,7 @@ enum
     Calendar_Cal_Month,
     Calendar_Cal_SeqMonth,
     Calendar_Cal_SurroundWeeks,
+    Calendar_Cal_WeekNumbers,
     Calendar_Cal_SetDate,
     Calendar_Cal_Today,
     Calendar_Cal_BeginDST,
@@ -260,6 +262,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Calendar_Cal_SeqMonth, MyFrame::OnCalSeqMonth)
     EVT_MENU(Calendar_Cal_SurroundWeeks, MyFrame::OnCalShowSurroundingWeeks)
+    EVT_MENU(Calendar_Cal_WeekNumbers, MyFrame::OnCalShowWeekNumbers)
 
     EVT_MENU(Calendar_Cal_SetDate, MyFrame::OnSetDate)
     EVT_MENU(Calendar_Cal_Today, MyFrame::OnToday)
@@ -366,6 +369,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuCal->Append(Calendar_Cal_SurroundWeeks,
                     _T("Show s&urrounding weeks\tCtrl-W"),
                     _T("Show the neighbouring weeks in the prev/next month"),
+                    true);
+    menuCal->Append(Calendar_Cal_WeekNumbers,
+                    _T("Show &week numbers"),
+                    _T("Toggle week numbers"),
                     true);
     menuCal->AppendSeparator();
     menuCal->Append(Calendar_Cal_SeqMonth,
@@ -477,6 +484,11 @@ void MyFrame::OnCalSeqMonth(wxCommandEvent& event)
 void MyFrame::OnCalShowSurroundingWeeks(wxCommandEvent& event)
 {
     m_panel->ToggleCalStyle(event.IsChecked(), wxCAL_SHOW_SURROUNDING_WEEKS);
+}
+
+void MyFrame::OnCalShowWeekNumbers(wxCommandEvent& event)
+{
+    m_panel->ToggleCalStyle(event.IsChecked(), wxCAL_SHOW_WEEK_NUMBERS);
 }
 
 void MyFrame::OnSetDate(wxCommandEvent &WXUNUSED(event))
@@ -717,7 +729,8 @@ void MyPanel::ToggleCalStyle(bool on, int flag)
     else
         style &= ~flag;
 
-    if ( flag == wxCAL_SEQUENTIAL_MONTH_SELECTION )
+    if ( flag == wxCAL_SEQUENTIAL_MONTH_SELECTION 
+        || flag == wxCAL_SHOW_WEEK_NUMBERS)
     {
         // changing this style requires recreating the control
         RecreateCalendar(style);

@@ -42,6 +42,10 @@ public:
 
     virtual void Mark(size_t day, bool mark);
 
+    // implementation
+    // --------------
+    wxDateTime m_selectedDate;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGtkCalendarCtrl)
     DECLARE_NO_COPY_CLASS(wxGtkCalendarCtrl)

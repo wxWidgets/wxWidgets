@@ -28,7 +28,14 @@ extern "C" {
 static void gtk_day_selected_callback(GtkWidget *WXUNUSED(widget),
                                       wxGtkCalendarCtrl *cal)
 {
+    wxDateTime date = cal->GetDate();
+    if (cal->m_selectedDate == date)
+        return;
+
+    cal->m_selectedDate = date;
+
     cal->GenerateEvent(wxEVT_CALENDAR_SEL_CHANGED);
+    // send deprecated event
     cal->GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
 }
 
@@ -85,6 +92,8 @@ bool wxGtkCalendarCtrl::Create(wxWindow *parent,
 
     if (style & wxCAL_NO_MONTH_CHANGE)
         g_object_set (G_OBJECT (m_widget), "no-month-change", true, NULL);
+    if (style & wxCAL_SHOW_WEEK_NUMBERS)
+        g_object_set (G_OBJECT (m_widget), "show-week-numbers", true, NULL);
 
     g_signal_connect_after(m_widget, "day-selected",
                            G_CALLBACK (gtk_day_selected_callback),
@@ -127,13 +136,22 @@ bool wxGtkCalendarCtrl::EnableMonthChange(bool enable)
     return true;
 }
 
+
 bool wxGtkCalendarCtrl::SetDate(const wxDateTime& date)
 {
+    g_signal_handlers_block_by_func(m_widget,
+        (gpointer) gtk_day_selected_callback, this);
+        
+    m_selectedDate = date;
     int year = date.GetYear();
     int month = date.GetMonth();
     int day = date.GetDay();
     gtk_calendar_select_month(GTK_CALENDAR(m_widget), month, year);
     gtk_calendar_select_day(GTK_CALENDAR(m_widget), day);
+    
+    g_signal_handlers_unblock_by_func( m_widget,
+        (gpointer) gtk_day_selected_callback, this);
+    
     return true;
 }
 
