@@ -828,6 +828,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
     int key = event.GetKeyCode() ;
     bool eat_key = false ;
+    long from, to;
 
     if ( key == 'a' && event.MetaDown() )
     {
@@ -855,10 +856,11 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     // Check if we have reached the max # of chars (if it is set), but still
     // allow navigation and deletion
+    GetSelection( &from, &to );
     if ( !IsMultiLine() && m_maxLength && GetValue().length() >= m_maxLength &&
         key != WXK_LEFT && key != WXK_RIGHT && key != WXK_TAB &&
-        key != WXK_BACK && !( key == WXK_RETURN && (m_windowStyle & wxTE_PROCESS_ENTER) )
-       )
+        key != WXK_BACK && key != WXK_DELETE && !( key == WXK_RETURN && (m_windowStyle & wxTE_PROCESS_ENTER) ) &&
+        from == to )
     {
         // eat it, we don't want to add more than allowed # of characters
 
