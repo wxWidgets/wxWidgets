@@ -362,7 +362,8 @@ static wxString wxTarUserName(int uid)
     wxCharBuffer buf(bufsize);
     struct passwd pw;
 
-    if (getpwuid_r(uid, &pw, buf.data(), bufsize, &ppw) == 0)
+    memset(&pw, 0, sizeof(pw));
+    if (getpwuid_r(uid, &pw, buf.data(), bufsize, &ppw) == 0 && pw.pw_name)
         return wxString(pw.pw_name, wxConvLibc);
 #else
     if ((ppw = getpwuid(uid)) != NULL)
@@ -384,7 +385,8 @@ static wxString wxTarGroupName(int gid)
     wxCharBuffer buf(bufsize);
     struct group gr;
 
-    if (getgrgid_r(gid, &gr, buf.data(), bufsize, &pgr) == 0)
+    memset(&gr, 0, sizeof(gr));
+    if (getgrgid_r(gid, &gr, buf.data(), bufsize, &pgr) == 0 && gr.gr_name)
         return wxString(gr.gr_name, wxConvLibc);
 #else
     if ((pgr = getgrgid(gid)) != NULL)
