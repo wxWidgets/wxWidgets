@@ -2066,8 +2066,7 @@ bool wxImage::SaveFile( const wxString& filename ) const
     wxImageHandler * pHandler = FindHandler(ext, -1);
     if (pHandler)
     {
-        SaveFile(filename, pHandler->GetType());
-        return true;
+        return SaveFile(filename, pHandler->GetType());
     }
 
     wxLogError(_("Can't save image to file '%s': unknown extension."), filename.c_str());
