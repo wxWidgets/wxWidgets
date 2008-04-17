@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        scrolwin.h
-// Purpose:     interface of wxScrolledWindow
+// Purpose:     interface of wxScrolled template
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -9,7 +9,7 @@
 /**
     @wxheader{scrolwin.h}
 
-    The wxScrolled<T> class manages scrolling for its client area, transforming
+    The wxScrolled class manages scrolling for its client area, transforming
     the coordinates according to the scrollbar positions, and setting the
     scroll positions, thumb sizes and ranges according to the area in view.
 
@@ -26,8 +26,8 @@
       implementating scrollable controls such as tree or list controls.
 
     Starting from version 2.4 of wxWidgets, there are several ways to use a
-    wxScrolled<T>. In particular, there are now three ways to set the
-    size of the scrolling area:
+    wxScrolled. In particular, there are now three ways to set the size of the
+    scrolling area:
 
     One way is to set the scrollbars directly using a call to SetScrollbars().
     This is the way it used to be in any previous version of wxWidgets and it
@@ -42,7 +42,7 @@
 
     The most automatic and newest way is to simply let sizers determine the
     scrolling area. This is now the default when you set an interior sizer into
-    a wxScrolled<T> with wxWindow::SetSizer().  The scrolling area will be
+    a wxScrolled with wxWindow::SetSizer().  The scrolling area will be
     set to the size requested by the sizer and the scrollbars will be assigned
     for each orientation according to the need for them and the scrolling
     increment set by SetScrollRate().  As above, scrolling is only enabled in
@@ -59,18 +59,18 @@
     wxWindow::SetVirtualSizeHints() with wxWindow::SetMinVirtualSize() or
     similar and remove it entirely in future.
 
-    As with all windows, an application can draw onto a wxScrolled<T> using
-    a @ref overview_dcoverview "device context".
+    As with all windows, an application can draw onto a wxScrolled using a
+    @ref overview_dc "device context".
 
     You have the option of handling the OnPaint handler or overriding the
-    wxScrolled<T>::OnDraw() function, which is passed a pre-scrolled device
-    context (prepared by wxScrolled<T>::DoPrepareDC()).
+    wxScrolled::OnDraw() function, which is passed a pre-scrolled device
+    context (prepared by wxScrolled::DoPrepareDC()).
 
     If you don't wish to calculate your own scrolling, you must call
     DoPrepareDC() when not drawing from within OnDraw(), to set the device
     origin for the device context according to the current scroll position.
 
-    A wxScrolled<T> will normally scroll itself and therefore its child windows
+    A wxScrolled will normally scroll itself and therefore its child windows
     as well. It might however be desired to scroll a different window than
     itself: e.g. when designing a spreadsheet, you will normally only have to
     scroll the (usually white) cell area, whereas the (usually grey) label area
@@ -92,15 +92,15 @@
     @endStyleTable
 
     @remarks
-    Use wxScrolled<T> for applications where the user scrolls by a fixed
-    amount, and where a 'page' can be interpreted to be the current visible
-    portion of the window. For more sophisticated applications, use the
-    wxScrolled<T> implementation as a guide to build your own scroll
-    behaviour or use wxVScrolledWindow or its variants.
+    Use wxScrolled for applications where the user scrolls by a fixed amount,
+    and where a 'page' can be interpreted to be the current visible portion of
+    the window. For more sophisticated applications, use the wxScrolled
+    implementation as a guide to build your own scroll behaviour or use
+    wxVScrolledWindow or its variants.
 
-    @since wxScrolled<T> template exists since version 2.9.0. In older
-           versions, only ::wxScrolledWindow (equivalent of wxScrolled<wxPanel>)
-           was available.
+    @since wxScrolled template exists since version 2.9.0. In older versions,
+           only ::wxScrolledWindow (equivalent of wxScrolled<wxPanel>) was
+           available.
 
     @library{wxcore}
     @category{miscwnd}
@@ -129,7 +129,7 @@ public:
             Window size. If a size of @c wxDefaultSize is specified then the
             window is sized appropriately.
         @param style
-            Window style. See wxScrolled<T>.
+            Window style. See wxScrolled.
         @param name
             Window name.
 
@@ -168,7 +168,7 @@ public:
 
     /**
         Creates the window for two-step construction. Derived classes
-        should call or replace this function. See wxScrolled<T> constructor
+        should call or replace this function. See wxScrolled::wxScrolled()
         for details.
     */
     bool Create(wxWindow* parent, wxWindowID id = -1,
@@ -347,7 +347,7 @@ public:
         window->SetScrollbars(20, 20, 50, 50);
         @endcode
 
-        wxScrolled<T> manages the page size itself, using the current client
+        wxScrolled manages the page size itself, using the current client
         window size as the page size.
 
         Note that for more sophisticated scrolling applications, for example
@@ -392,20 +392,20 @@ public:
 /**
     Scrolled window derived from wxPanel.
 
-    See wxScrolled<T> for detailed description.
+    See wxScrolled for detailed description.
 
     @note Note that because this class derives from wxPanel, it shares its
           behavior with regard to TAB traversal and focus handling (in
           particular, it forwards focus to its children). If you don't want
           this behaviour, use ::wxScrolledCanvas instead.
 
-    @note wxScrolledWindow is an alias for wxScrolled<wxPanel> since version
+    @note ::wxScrolledWindow is an alias for wxScrolled<wxPanel> since version
           2.9.0. In older versions, it was a standalone class.
 
     @library{wxcore}
     @category{miscwnd}
 
-    @see wxScrolled, wxScrolledCanvas
+    @see wxScrolled, ::wxScrolledCanvas
 */
 typedef wxScrolled<wxPanel> wxScrolledWindow;
 

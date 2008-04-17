@@ -43,7 +43,7 @@ class wxHtmlWindow : public wxScrolledWindow
 public:
     //@{
     /**
-        Constructor. The parameters are the same as for the wxScrolledWindow
+        Constructor. The parameters are the same as wxScrolled::wxScrolled()
         constructor.
         
         @param style
@@ -289,7 +289,7 @@ public:
     /**
         Selects the line of text that @a pos points at. Note that @e pos
         is relative to the top of displayed page, not to window's origin, use
-        wxScrolledWindow::CalcUnscrolledPosition
+        wxScrolled::CalcUnscrolledPosition()
         to convert physical coordinate.
         
         @see SelectAll(), SelectWord()
@@ -299,7 +299,7 @@ public:
     /**
         Selects the word at position @e pos. Note that @e pos
         is relative to the top of displayed page, not to window's origin, use
-        wxScrolledWindow::CalcUnscrolledPosition
+        wxScrolled::CalcUnscrolledPosition()
         to convert physical coordinate.
         
         @see SelectAll(), SelectLine()

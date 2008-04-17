@@ -1016,7 +1016,7 @@ public:
         in
         windows which manage it.
 
-        @see wxScrolledWindow::SetScrollbars, SetVirtualSizeHints()
+        @see wxScrolled::SetScrollbars(), SetVirtualSizeHints()
     */
     void FitInside(wxWindow* window);
 
@@ -1347,7 +1347,7 @@ public:
         minimal size. For windows with managed scrollbars this will set them
         appropriately.
 
-        @see wxScrolledWindow::SetScrollbars
+        @see wxScrolled::SetScrollbars()
     */
     void SetVirtualSizeHints(wxWindow* window);
 

@@ -1740,8 +1740,8 @@ public:
                  on top/bottom and nothing was done.
 
         @remarks This function is currently only implemented under MSW and
-                 wxTextCtrl under wxGTK (it also works for
-                 wxScrolledWindow derived classes under all platforms).
+                 wxTextCtrl under wxGTK (it also works for wxScrolled classes
+                 under all platforms).
 
         @see ScrollPages()
     */
@@ -1772,8 +1772,8 @@ public:
             scrolled (this is always the case under wxGTK which doesn't support this
             parameter)
 
-        @remarks Note that you can often use wxScrolledWindow instead of using
-                 this function directly.
+        @remarks Note that you can often use wxScrolled instead of using this
+                 function directly.
     */
     virtual void ScrollWindow(int dx, int dy,
                               const wxRect* rect = NULL);
@@ -2194,8 +2194,8 @@ public:
                  window: it is up to the application to take note of
                  scrollbar attributes and redraw contents accordingly.
 
-        @see SetScrollbar(), GetScrollPos(), GetScrollThumb(),
-             wxScrollBar, wxScrolledWindow
+        @see SetScrollbar(), GetScrollPos(), GetScrollThumb(), wxScrollBar,
+             wxScrolled
     */
     virtual void SetScrollPos(int orientation, int pos,
                               bool refresh = true);
@@ -2219,8 +2219,7 @@ public:
                  font. The window is sized so that you can only see 16
                  lines at a time.
 
-        @see @ref overview_scrollingoverview "Scrolling overview", wxScrollBar,
-             wxScrolledWindow, wxScrollWinEvent
+        @see @ref overview_scrolling, wxScrollBar, wxScrolled, wxScrollWinEvent
     */
     virtual void SetScrollbar(int orientation, int position,
                               int thumbSize,

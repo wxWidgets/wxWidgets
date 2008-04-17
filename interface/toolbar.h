@@ -55,7 +55,7 @@
     @library{wxbase}
     @category{miscwnd}
 
-    @see @ref overview_wxtoolbaroverview "Toolbar overview", wxScrolledWindow
+    @see @ref overview_toolbar
 */
 class wxToolBar : public wxControl
 {

@@ -589,11 +589,10 @@ public:
     are shown on the screen need to be measured; or even "vertical", because
     this class only supports scrolling vertically.
 
-    In any case, this is a generalization of the
-    wxScrolledWindow class which can be only used when
-    all rows have the same heights. It lacks some other wxScrolledWindow features
-    however, notably it can't scroll only a rectangle of the window and not its
-    entire client area.
+    In any case, this is a generalization of wxScrolled which can be only used
+    when all rows have the same heights. It lacks some other wxScrolled
+    features however, notably it can't scroll only a rectangle of the window
+    and not its entire client area.
 
     To use this class, you need to derive from it and implement the
     wxVarVScrollHelper::OnGetRowHeight pure virtual
@@ -702,11 +701,10 @@ public:
     the widths of all columns in advance -- only those which are shown on the
     screen need to be measured.
 
-    In any case, this is a generalization of the
-    wxScrolledWindow class which can be only used when
-    all columns have the same widths. It lacks some other wxScrolledWindow features
-    however, notably it can't scroll only a rectangle of the window and not its
-    entire client area.
+    In any case, this is a generalization of wxScrolled which can be only used
+    when all columns have the same widths. It lacks some other wxScrolled
+    features however, notably it can't scroll only a rectangle of the window
+    and not its entire client area.
 
     To use this class, you need to derive from it and implement the
     wxVarHScrollHelper::OnGetColumnWidth pure virtual
@@ -782,10 +780,10 @@ public:
     scroll both axis simultaneously with both variable row heights and variable
     column widths.
 
-    This is a generalization of the wxScrolledWindow
-    class which can be only used when all rows and columns are the same size. It
-    lacks some other wxScrolledWindow features however, notably it can't scroll
-    only a rectangle of the window and not its entire client area.
+    In any case, this is a generalization of wxScrolled which can be only used
+    when all rows and columns are the same size. It lacks some other wxScrolled
+    features however, notably it can't scroll only a rectangle of the window
+    and not its entire client area.
 
     To use this class, you must derive from it and implement both the
     wxVarVScrollHelper::OnGetRowHeight and

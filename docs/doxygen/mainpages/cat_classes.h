@@ -71,9 +71,8 @@ The following are the most important window classes
 @li wxWindow: base class for all windows and controls
 @li wxControl: base class (mostly) for native controls/widgets
 @li wxPanel: window which can smartly manage child windows
-@li wxScrolledWindow: Window with automatically managed scrollbars (see wxScrolled)
-@li wxVScrolledWindow: As wxScrolledWindow but supports lines of variable
-    height
+@li ::wxScrolledWindow: Window with automatically managed scrollbars (see
+    wxScrolled)
 @li wxTopLevelWindow: Any top level window, dialog or frame
 
 
@@ -208,7 +207,14 @@ platform-dependent.
 The following are a variety of classes that are derived from wxWindow.
 
 @li wxPanel: A window whose colour changes according to current user settings
-@li wxScrolledWindow: Window with automatically managed scrollbars
+@li ::wxScrolledWindow: Window with automatically managed scrollbars (see
+    wxScrolled)
+@li wxHScrolledWindow: As ::wxScrolledWindow but supports columns of variable
+    widths
+@li wxVScrolledWindow: As ::wxScrolledWindow but supports rows of variable
+    heights
+@li wxHVScrolledWindow: As ::wxScrolledWindow but supports scroll units of
+    variable sizes.
 @li wxGrid: A grid (table) window
 @li wxSplitterWindow: Window which can be split vertically or horizontally
 @li wxStatusBar: Implements the status bar on a frame
@@ -220,8 +226,6 @@ The following are a variety of classes that are derived from wxWindow.
 @li wxSashWindow: Window with four optional sashes that can be dragged
 @li wxSashLayoutWindow: Window that can be involved in an IDE-like layout
     arrangement
-@li wxVScrolledWindow: As wxScrolledWindow but supports lines of variable
-    height
 @li wxWizardPage: A base class for the page in wizard dialog.
 @li wxWizardPageSimple: A page in wizard dialog.
 

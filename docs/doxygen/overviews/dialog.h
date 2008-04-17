@@ -67,7 +67,7 @@ within wxDialog::Show or wxDialog::ShowModal:
 @li If that search failed too, wxWidgets finds 'loose' standard buttons (in any kind of sizer)
     and adds them to a wxStdDialogButtonSizer.
     If no standard buttons were found, the whole dialog content will scroll.
-@li All the children apart from standard buttons are reparented onto a new wxScrolledWindow
+@li All the children apart from standard buttons are reparented onto a new ::wxScrolledWindow
     object, using the old top-level sizer for the scrolled window and creating a new top-level
     sizer to lay out the scrolled window and standard button sizer.
 

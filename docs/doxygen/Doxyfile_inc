@@ -160,9 +160,9 @@ ALIASES += itemdef{10}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\
 ALIASES += endDefList="</table>"
 
 # See ENABLED_SECTIONS configuration key for more info about these:
-ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL \n <b>wxPerl Note:</b>\n\n"
+ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL <b>wxPerl Note:</b> "
 ALIASES += endWxPerlOnly="\endif"
-ALIASES += beginWxPythonOnly="\if WXPYTHON_MANUAL \n <b>wxPython Note:</b>\n\n"
+ALIASES += beginWxPythonOnly="\if WXPYTHON_MANUAL <b>wxPython Note:</b> "
 ALIASES += endWxPythonOnly="\endif"
 
 # This is to get around a bug in Doxygen that prevents use of '{' or '}'

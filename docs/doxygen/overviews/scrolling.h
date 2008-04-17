@@ -12,7 +12,7 @@
 
 Classes:
 @li wxWindow
-@li wxScrolledWindow
+@li ::wxScrolledWindow
 @li wxScrollBar
 
 @li @ref overview_scrolling_model
@@ -35,7 +35,7 @@ events. If you created a wxWindow object with scrollbars, and then clicked on
 the scrollbars, nothing at all would happen. This is deliberate, because the
 @e interpretation of scroll events varies from one window class to another.
 
-wxScrolledWindow (formerly wxCanvas) is an example of a window that adds
+::wxScrolledWindow (formerly wxCanvas) is an example of a window that adds
 functionality to make scrolling really work. It assumes that scrolling happens
 in consistent units, not different-sized jumps, and that page size is
 represented by the visible portion of the window. It is suited to drawing

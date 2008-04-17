@@ -45,7 +45,7 @@ There is a generic wxHtmlParser class, independent of wxHtmlWindow.
 
 First of all, you must include @c wx/wxhtml.h.
 
-Class wxHtmlWindow (derived from wxScrolledWindow) is used to display HTML documents.
+Class wxHtmlWindow (derived from ::wxScrolledWindow) is used to display HTML documents.
 
 It has two important methods: wxHtmlWindow::LoadPage and wxHtmlWindow::SetPage.
 LoadPage loads and displays HTML file while SetPage displays directly the
@@ -65,7 +65,7 @@ See wxHtmlHelpController.
 
 @subsection overview_html_quickstart_settingup Setting up wxHtmlWindow
 
-Because wxHtmlWindow is derived from wxScrolledWindow and not from
+Because wxHtmlWindow is derived from ::wxScrolledWindow and not from
 wxFrame, it doesn't have visible frame. But the user usually wants to see
 the title of HTML page displayed somewhere and the frame's titlebar is
 the ideal place for it.

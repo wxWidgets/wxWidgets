@@ -415,7 +415,7 @@ spec over time.
 @li wxScreenDC
 @li wxScrollBar
 @li wxScrollEvent
-@li wxScrolledWindow
+@li ::wxScrolledWindow
 @li wxScrollWinEvent
 @li wxShowEvent
 @li wxSingleChoiceDialog

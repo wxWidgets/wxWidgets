@@ -49,40 +49,40 @@
         // some symbolic names for TZ
 
         // Europe
-        WET = GMT0,                         // Western Europe Time
-        WEST = GMT1,                        // Western Europe Summer Time
-        CET = GMT1,                         // Central Europe Time
-        CEST = GMT2,                        // Central Europe Summer Time
-        EET = GMT2,                         // Eastern Europe Time
-        EEST = GMT3,                        // Eastern Europe Summer Time
-        MSK = GMT3,                         // Moscow Time
-        MSD = GMT4,                         // Moscow Summer Time
+        WET = GMT0,         // Western Europe Time
+        WEST = GMT1,        // Western Europe Summer Time
+        CET = GMT1,         // Central Europe Time
+        CEST = GMT2,        // Central Europe Summer Time
+        EET = GMT2,         // Eastern Europe Time
+        EEST = GMT3,        // Eastern Europe Summer Time
+        MSK = GMT3,         // Moscow Time
+        MSD = GMT4,         // Moscow Summer Time
 
         // US and Canada
-        AST = GMT_4,                        // Atlantic Standard Time
-        ADT = GMT_3,                        // Atlantic Daylight Time
-        EST = GMT_5,                        // Eastern Standard Time
-        EDT = GMT_4,                        // Eastern Daylight Saving Time
-        CST = GMT_6,                        // Central Standard Time
-        CDT = GMT_5,                        // Central Daylight Saving Time
-        MST = GMT_7,                        // Mountain Standard Time
-        MDT = GMT_6,                        // Mountain Daylight Saving Time
-        PST = GMT_8,                        // Pacific Standard Time
-        PDT = GMT_7,                        // Pacific Daylight Saving Time
-        HST = GMT_10,                       // Hawaiian Standard Time
-        AKST = GMT_9,                       // Alaska Standard Time
-        AKDT = GMT_8,                       // Alaska Daylight Saving Time
+        AST = GMT_4,        // Atlantic Standard Time
+        ADT = GMT_3,        // Atlantic Daylight Time
+        EST = GMT_5,        // Eastern Standard Time
+        EDT = GMT_4,        // Eastern Daylight Saving Time
+        CST = GMT_6,        // Central Standard Time
+        CDT = GMT_5,        // Central Daylight Saving Time
+        MST = GMT_7,        // Mountain Standard Time
+        MDT = GMT_6,        // Mountain Daylight Saving Time
+        PST = GMT_8,        // Pacific Standard Time
+        PDT = GMT_7,        // Pacific Daylight Saving Time
+        HST = GMT_10,       // Hawaiian Standard Time
+        AKST = GMT_9,       // Alaska Standard Time
+        AKDT = GMT_8,       // Alaska Daylight Saving Time
 
         // Australia
 
-        A_WST = GMT8,                       // Western Standard Time
-        A_CST = GMT13 + 1,                  // Central Standard Time (+9.5)
-        A_EST = GMT10,                      // Eastern Standard Time
-        A_ESST = GMT11,                     // Eastern Summer Time
+        A_WST = GMT8,       // Western Standard Time
+        A_CST = GMT13 + 1,  // Central Standard Time (+9.5)
+        A_EST = GMT10,      // Eastern Standard Time
+        A_ESST = GMT11,     // Eastern Summer Time
 
         // New Zealand
-        NZST = GMT12,                       // Standard Time
-        NZDT = GMT13,                       // Daylight Saving Time
+        NZST = GMT12,       // Standard Time
+        NZDT = GMT13,       // Daylight Saving Time
 
         // Universal Coordinated Time = the new and politically correct name
         // for GMT

@@ -462,7 +462,7 @@ renderer and also how to write a shared library
 
 @section page_samples_scrollsub Scroll subwindow sample
 
-This sample demonstrates use of the wxScrolledWindow
+This sample demonstrates use of the ::wxScrolledWindow
 class including placing subwindows into it and drawing simple graphics. It uses the
 SetTargetWindow method and thus the effect
 of scrolling does not show in the scrolled window itself, but in one of its subwindows.

@@ -24,10 +24,9 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{scrollbar.png}
+    <!-- @appearance{scrollbar.png} -->
 
-    @see @ref overview_scrollingoverview "Scrolling overview", @ref
-    overview_eventhandlingoverview, wxScrolledWindow
+    @see @ref overview_scrolling, @ref overview_eventhandling, wxScrolled
 */
 class wxScrollBar : public wxControl
 {
