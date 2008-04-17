@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 9 April 2008                                                        *
+# Date : 16 April 2008                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -209,7 +209,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		fontpickercmn.obj,\
 		pickerbase.obj,\
 		listctrlcmn.obj,gsocketiohandler.obj,fdiodispatcher.obj,\
-		selectdispatcher.obj,overlaycmn.obj,windowid.obj
+		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -346,6 +346,7 @@ SOURCES = \
 		socket.cpp,\
 		selectdispatcher.cpp,\
 		settcmn.cpp,\
+		sstream.cpp,\
 		statbar.cpp,\
 		stattextcmn.cpp,\
 		stdpbase.cpp,\
@@ -633,3 +634,4 @@ cairo.obj : cairo.cpp
 overlaycmn.obj : overlaycmn.cpp
 windowid.obj : windowid.cpp
 calctrlcmn.obj : calctrlcmn.cpp
+sstream.obj : sstream.cpp
