@@ -353,6 +353,8 @@ void MyCanvas::OnEraseBackground( wxEraseEvent& event )
     {
         dc.DrawLine(0, y, size.x, y);
     }
+    
+    wxPrintf( "hello\n" );
 
     dc.SetTextForeground(*wxRED);
     dc.DrawText(_T("This text is drawn from OnEraseBackground"), 60, 160);

@@ -249,7 +249,6 @@ bool wxGenericCalendarCtrl::Create(wxWindow *parent,
         m_staticYear = new wxStaticText(GetParent(), wxID_ANY, m_date.Format(_T("%Y")),
                                         wxDefaultPosition, wxDefaultSize,
                                         wxALIGN_CENTRE);
-
         CreateMonthComboBox();
         m_staticMonth = new wxStaticText(GetParent(), wxID_ANY, m_date.Format(_T("%B")),
                                          wxDefaultPosition, wxDefaultSize,
@@ -339,6 +338,9 @@ void wxGenericCalendarCtrl::CreateYearSpinCtrl()
                                 wxDefaultSize,
                                 wxSP_ARROW_KEYS | wxCLIP_SIBLINGS,
                                 -4300, 10000, GetDate().GetYear());
+#ifdef __WXMAC__
+    m_spinYear->SetSize( 90, -1 );
+#endif
 
     m_spinYear->Connect(m_spinYear->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
                         wxCommandEventHandler(wxGenericCalendarCtrl::OnYearTextChange),
@@ -777,12 +779,9 @@ size_t wxGenericCalendarCtrl::GetWeek(const wxDateTime& date) const
 // the same space
 
 // the constants used for the layout
-#define VERT_MARGIN     5           // distance between combo and calendar
-#ifdef __WXMAC__
+#define VERT_MARGIN    5           // distance between combo and calendar
 #define HORZ_MARGIN    5           //                            spin
-#else
-#define HORZ_MARGIN    15           //                            spin
-#endif
+
 wxSize wxGenericCalendarCtrl::DoGetBestSize() const
 {
     // calc the size of the calendar
@@ -797,6 +796,10 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
 
         height += wxMax(bestSizeCombo.y, m_spinYear->GetBestSize().y)
                     + VERT_MARGIN;
+#ifdef __WXMAC__
+        // the spin control get clipped otherwise
+        width += 10;
+#endif
 
         wxCoord w2 = bestSizeCombo.x + HORZ_MARGIN + GetCharWidth()*6;
         if ( width < w2 )
@@ -810,6 +813,7 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
     }
 
     CacheBestSize(best);
+    
     return best;
 }
 
@@ -825,12 +829,16 @@ void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 
         int maxHeight = wxMax(sizeSpin.y, sizeCombo.y);
         int dy = (maxHeight - sizeStatic.y) / 2;
-        m_comboMonth->Move(x, y);
+#ifdef __WXMAC__
+        m_comboMonth->Move(x, y + (maxHeight - sizeCombo.y)/2 + 2); // FIXME, something is reporting the wrong size..
+#else
+        m_comboMonth->Move(x, y + (maxHeight - sizeCombo.y)/2);
+#endif
         m_staticMonth->SetSize(x, y + dy, sizeCombo.x, -1, sizeStatic.y);
 
         int xDiff = sizeCombo.x + HORZ_MARGIN;
 
-        m_spinYear->SetSize(x + xDiff, y, width - xDiff, maxHeight);
+        m_spinYear->SetSize(x + xDiff, y + (maxHeight - sizeSpin.y)/2, width - xDiff, maxHeight);
         m_staticYear->SetSize(x + xDiff, y + dy, width - xDiff, sizeStatic.y);
 
         yDiff = maxHeight + VERT_MARGIN;
