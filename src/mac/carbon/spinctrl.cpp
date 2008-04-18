@@ -29,7 +29,10 @@
 // we handle these problems right now in an extended vis region of a window
 static const wxCoord TEXTBORDER = 4 ;
 // the margin between the text control and the spin
-static const wxCoord MARGIN = 8 - TEXTBORDER;
+// HIG says 2px between text and stepper control,
+// but a value of 3 leads to the same look as the
+// spin controls in Apple's apps
+static const wxCoord MARGIN = 3;
 
 // ----------------------------------------------------------------------------
 // wxSpinCtrlText: text control used by spin control
@@ -307,7 +310,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
     wxCoord wText = width - sizeBtn.x - MARGIN - 2 * TEXTBORDER;
 
     m_text->SetSize(TEXTBORDER, (height - sizeText.y) / 2, wText, -1);
-    m_btn->SetSize(0 + wText + MARGIN + 2 * TEXTBORDER , (height - sizeBtn.y) / 2 , -1, -1 );
+    m_btn->SetSize(0 + wText + MARGIN + TEXTBORDER , (height - sizeBtn.y) / 2 , -1, -1 );
 }
 
 // ----------------------------------------------------------------------------
