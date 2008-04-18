@@ -88,6 +88,49 @@ public:
 };
 
 
+/**
+    @class wxMouseState
+    @wxheader{utils.h}
+
+    Represents the mouse state.
+
+    The methods of this class generally mirror the corresponding methods of
+    wxMouseEvent.
+
+    @see wxGetMouseState()
+ */
+class wxMouseState
+{
+public:
+    /// Returns X coordinate of the physical mouse event position.
+    wxCoord GetX() const;
+
+    /// Returns Y coordinate of the physical mouse event position.
+    wxCoord GetY() const;
+
+    /// Returns @true if the left mouse button changed to down.
+    bool LeftDown() const;
+    /// Returns @true if the middle mouse button changed to down.
+    bool MiddleDown() const;
+    /// Returns @true if the right mouse button changed to down.
+    bool RightDown() const;
+    /// Returns @true if the first extra button mouse button changed to down.
+    bool Aux1Down() const;
+    /// Returns @true if the second extra button mouse button changed to down.
+    bool Aux2Down() const;
+
+    /// Returns @true if the control key is down.
+    bool ControlDown() const;
+    /// Returns @true if the shift key is down.
+    bool ShiftDown() const;
+    /// Returns @true if the alt key is down.
+    bool AltDown() const;
+    /// Returns @true if the meta key is down.
+    bool MetaDown() const;
+    /// Same as MetaDown() under Mac systems, ControlDown() for the others.
+    bool CmdDown() const;
+};
+
 
 // ============================================================================
 // Global functions/macros

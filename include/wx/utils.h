@@ -222,20 +222,20 @@ public:
           m_metaDown(false)
     {}
 
-    wxCoord     GetX() { return m_x; }
-    wxCoord     GetY() { return m_y; }
+    wxCoord GetX() const { return m_x; }
+    wxCoord GetY() const { return m_y; }
 
-    bool        LeftDown()    { return m_leftDown; }
-    bool        MiddleDown()  { return m_middleDown; }
-    bool        RightDown()   { return m_rightDown; }
-    bool        Aux1Down()    { return m_aux1Down; }
-    bool        Aux2Down()    { return m_aux2Down; }
+    bool LeftDown()    const { return m_leftDown; }
+    bool MiddleDown()  const { return m_middleDown; }
+    bool RightDown()   const { return m_rightDown; }
+    bool Aux1Down()    const { return m_aux1Down; }
+    bool Aux2Down()    const { return m_aux2Down; }
 
-    bool        ControlDown() { return m_controlDown; }
-    bool        ShiftDown()   { return m_shiftDown; }
-    bool        AltDown()     { return m_altDown; }
-    bool        MetaDown()    { return m_metaDown; }
-    bool        CmdDown()
+    bool ControlDown() const { return m_controlDown; }
+    bool ShiftDown()   const { return m_shiftDown; }
+    bool AltDown()     const { return m_altDown; }
+    bool MetaDown()    const { return m_metaDown; }
+    bool CmdDown() const
     {
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
         return MetaDown();
@@ -244,34 +244,34 @@ public:
 #endif
     }
 
-    void        SetX(wxCoord x) { m_x = x; }
-    void        SetY(wxCoord y) { m_y = y; }
+    void SetX(wxCoord x) { m_x = x; }
+    void SetY(wxCoord y) { m_y = y; }
 
-    void        SetLeftDown(bool down)   { m_leftDown = down; }
-    void        SetMiddleDown(bool down) { m_middleDown = down; }
-    void        SetRightDown(bool down)  { m_rightDown = down; }
-    void        SetAux1Down(bool down)   { m_aux1Down = down; }
-    void        SetAux2Down(bool down)   { m_aux2Down = down; }
+    void SetLeftDown(bool down)   { m_leftDown = down; }
+    void SetMiddleDown(bool down) { m_middleDown = down; }
+    void SetRightDown(bool down)  { m_rightDown = down; }
+    void SetAux1Down(bool down)   { m_aux1Down = down; }
+    void SetAux2Down(bool down)   { m_aux2Down = down; }
 
-    void        SetControlDown(bool down) { m_controlDown = down; }
-    void        SetShiftDown(bool down)   { m_shiftDown = down; }
-    void        SetAltDown(bool down)     { m_altDown = down; }
-    void        SetMetaDown(bool down)    { m_metaDown = down; }
+    void SetControlDown(bool down) { m_controlDown = down; }
+    void SetShiftDown(bool down)   { m_shiftDown = down; }
+    void SetAltDown(bool down)     { m_altDown = down; }
+    void SetMetaDown(bool down)    { m_metaDown = down; }
 
 private:
-    wxCoord     m_x;
-    wxCoord     m_y;
+    wxCoord m_x,
+            m_y;
 
-    bool        m_leftDown : 1;
-    bool        m_middleDown : 1;
-    bool        m_rightDown : 1;
-    bool        m_aux1Down : 1;
-    bool        m_aux2Down : 1;
+    bool m_leftDown     : 1;
+    bool m_middleDown   : 1;
+    bool m_rightDown    : 1;
+    bool m_aux1Down     : 1;
+    bool m_aux2Down     : 1;
 
-    bool        m_controlDown : 1;
-    bool        m_shiftDown : 1;
-    bool        m_altDown : 1;
-    bool        m_metaDown : 1;
+    bool m_controlDown  : 1;
+    bool m_shiftDown    : 1;
+    bool m_altDown      : 1;
+    bool m_metaDown     : 1;
 };
 
 
