@@ -401,7 +401,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     INIT_TOOL_BMP(paste);
     INIT_TOOL_BMP(print);
     INIT_TOOL_BMP(help);
-    
+
     int w = toolBarBitmaps[Tool_new].GetWidth(),
         h = toolBarBitmaps[Tool_new].GetHeight();
 
@@ -412,22 +412,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 
         for ( size_t n = Tool_new; n < WXSIZEOF(toolBarBitmaps); n++ )
         {
-#if 0
-            wxBitmap source = toolBarBitmaps[n];
-            wxBitmap target( w, h );
-            wxMemoryDC dc( target );
-            dc.SetPen( wxPen( wxColour(100,100,100), 1, wxSOLID ) );
-            dc.SetBrush( *wxTRANSPARENT_BRUSH );
-            dc.DrawRectangle( 0, 0, w, h );
-            wxRect inner(1,1,w-2,h-2);
-            dc.GradientFillLinear( inner, wxColour(240,240,240), wxColour(150,150,150), wxSOUTH );
-            
-            dc.DrawBitmap( source, w/4, h/4, true );
-            toolBarBitmaps[n] = target;
-#else       
             toolBarBitmaps[n] =
                 wxBitmap(toolBarBitmaps[n].ConvertToImage().Scale(w, h));
-#endif
         }
     }
 
