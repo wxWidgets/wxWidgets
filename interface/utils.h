@@ -104,9 +104,10 @@ class wxMouseState
 public:
     /// Returns X coordinate of the physical mouse event position.
     wxCoord GetX() const;
-
     /// Returns Y coordinate of the physical mouse event position.
     wxCoord GetY() const;
+    /// Returns the physical mouse position.
+    wxPoint GetPosition() const;
 
     /// Returns @true if the left mouse button changed to down.
     bool LeftDown() const;

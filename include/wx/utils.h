@@ -224,6 +224,7 @@ public:
 
     wxCoord GetX() const { return m_x; }
     wxCoord GetY() const { return m_y; }
+    wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
 
     bool LeftDown()    const { return m_leftDown; }
     bool MiddleDown()  const { return m_middleDown; }
