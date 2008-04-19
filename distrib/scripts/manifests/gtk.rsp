@@ -20,6 +20,7 @@ src/gtk/*.c
 src/gtk/*.xbm
 src/gtk/*.h
 src/gtk/gnome/*.cpp
+src/gtk/hildon/*.cpp
 
 misc/afm/*.afm
 misc/gs_afm/*.afm
