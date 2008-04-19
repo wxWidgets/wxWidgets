@@ -851,6 +851,24 @@ void wxGenericCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
     wxControl::DoMoveWindow(x, y + yDiff, width, height - yDiff);
 }
 
+void wxGenericCalendarCtrl::DoGetSize(int *width, int *height) const
+{
+#ifdef __WXMAC__
+    wxControl::DoGetSize( width, height );
+    
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && m_staticMonth && height )
+    {
+        wxSize sizeCombo = m_comboMonth->GetEffectiveMinSize();
+        wxSize sizeSpin = m_spinYear->GetSize();
+
+        int maxHeight = wxMax(sizeSpin.y, sizeCombo.y);
+        *height += maxHeight + VERT_MARGIN;
+    }
+#else
+    wxControl::DoGetSize( width, height );
+#endif
+}
+
 void wxGenericCalendarCtrl::RecalcGeometry()
 {
     wxClientDC dc(this);

@@ -169,6 +169,7 @@ protected:
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoGetSize(int *width, int *height) const;
 
 private:
     // common part of all ctors
