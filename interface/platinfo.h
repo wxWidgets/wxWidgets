@@ -90,7 +90,7 @@ enum wxArchitecture
     wxARCH_64,
 
     wxARCH_MAX
-}
+};
 
 
 /**
@@ -105,7 +105,7 @@ enum wxEndianness
     wxENDIAN_PDP,               //!< 3412
 
     wxENDIAN_MAX
-}
+};
 
 
 /**

@@ -10,33 +10,29 @@
     @class wxSVGFileDC
     @wxheader{dcsvg.h}
 
-    A wxSVGFileDC is a @e device context onto which graphics and text can be drawn,
-    and the output
-    produced as a vector file, in the SVG format
-    (see W3C specifications).
-    This format can be read by a range of programs, including a Netscape plugin
-    (Adobe), full details
-    in the SVG Implementation and Resource Directory.
-    Vector formats may often be smaller than raster formats.
+    A wxSVGFileDC is a device context onto which graphics and text can be
+    drawn, and the output produced as a vector file, in SVG format (see the W3C
+    SVG Specifications <http://www.w3.org/TR/2001/REC-SVG-20010904/>). This
+    format can be read by a range of programs, including a Netscape plugin
+    (Adobe), full details are given in the SVG Implementation and Resource
+    Directory <http://www.svgi.org/>. Vector formats may often be smaller than
+    raster formats.
 
     The intention behind wxSVGFileDC is that it can be used to produce a file
-    corresponding
-    to the screen display context, wxSVGFileDC, by passing the wxSVGFileDC as a
-    parameter instead of a wxSVGFileDC. Thus the wxSVGFileDC is a write-only class.
+    corresponding to the screen display context, wxSVGFileDC, by passing the
+    wxSVGFileDC as a parameter instead of a wxSVGFileDC. Thus the wxSVGFileDC
+    is a write-only class.
 
-    As the wxSVGFileDC is a vector format, raster operations like GetPixel are
-    unlikely to be supported.
-    However, the SVG specification allows for PNG format raster files to be
-    embedded in the SVG, and so
-    bitmaps, icons and blit operations into the wxSVGFileDC are supported.
+    As the wxSVGFileDC is a vector format, raster operations like GetPixel()
+    are unlikely to be supported. However, the SVG specification allows for PNG
+    format raster files to be embedded in the SVG, and so bitmaps, icons and
+    blit operations in wxSVGFileDC are supported.
 
-    A more substantial SVG library (for reading and writing) is available at the
-    wxArt2D website.
+    A more substantial SVG library (for reading and writing) is available at
+    the wxArt2D website <http://wxart2d.sourceforge.net/>.
 
     @library{wxcore}
-    @category{FIXME}
-
-    @see @b Members
+    @category{dc}
 */
 class wxSVGFileDC : public wxDC
 {

@@ -152,11 +152,10 @@ For details on using makefiles, configure, and project files, please see
 @c "docs/xxx/install.txt" in your distribution, where @c "xxx" is the platform
 of interest, such as @c msw, @c gtk, @c x11, @c mac.
 
-All wxWidgets makefiles are generated using
-@link http://www.bakefile.org Bakefile @endlink. wxWidgets also provides (in
-the @c "build/bakefiles/wxpresets" folder) the wxWidgets bakefile presets.
-These files allow you to create bakefiles for your own wxWidgets-based
-applications very easily.
+All wxWidgets makefiles are generated using Bakefile <http://www.bakefile.org/>.
+wxWidgets also provides (in the @c "build/bakefiles/wxpresets" folder) the
+wxWidgets bakefile presets. These files allow you to create bakefiles for your
+own wxWidgets-based applications very easily.
 
 
 
