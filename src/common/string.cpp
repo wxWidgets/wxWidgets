@@ -1239,17 +1239,17 @@ size_t wxString::Replace(const wxString& strOld,
 
     size_t uiCount = 0;   // count of replacements made
 
-    size_t uiOldLen = strOld.length();
-    size_t uiNewLen = strNew.length();
+    const size_t uiOldLen = strOld.m_impl.length();
+    const size_t uiNewLen = strNew.m_impl.length();
 
-    for ( size_t dwPos = 0; dwPos < length(); )
+    for ( size_t dwPos = 0; dwPos < m_impl.length(); )
     {
-        dwPos = find(strOld, dwPos);
+        dwPos = m_impl.find(strOld.m_impl, dwPos);
         if ( dwPos == npos )
             break;
 
         // replace this occurance of the old string with the new one
-        replace(dwPos, uiOldLen, strNew, uiNewLen);
+        m_impl.replace(dwPos, uiOldLen, strNew.m_impl);
 
         // move up pos past the string that was replaced
         dwPos += uiNewLen;
