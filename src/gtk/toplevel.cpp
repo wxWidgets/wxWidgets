@@ -761,7 +761,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    bool deferShow = show && m_deferShow;
+    bool deferShow = show && m_deferShow && !m_isShown;
     if (deferShow)
     {
         m_deferShow =
