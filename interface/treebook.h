@@ -100,7 +100,7 @@ public:
     wxTreebook(wxWindow* parent, wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxTBK_DEFAULT,
+               long style = wxBK_DEFAULT,
                const wxString& name = wxEmptyString);
     //@}
 
@@ -153,7 +153,7 @@ public:
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxTBK_DEFAULT,
+                long style = wxBK_DEFAULT,
                 const wxString& name = wxEmptyString);
 
     /**
