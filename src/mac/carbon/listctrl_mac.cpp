@@ -1056,12 +1056,12 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
             for (int column = 0; column < GetColumnCount(); column++)
             {
                 wxListItem colInfo;
-                GetColumn(col, colInfo);
+                GetColumn(column, colInfo);
 
                 colInfo.SetWidth(width);
-                SetColumn(col, colInfo);
+                SetColumn(column, colInfo);
 
-                m_dbImpl->SetColumnWidth(col, mywidth);
+                m_dbImpl->SetColumnWidth(column, mywidth);
             }
         }
         else
