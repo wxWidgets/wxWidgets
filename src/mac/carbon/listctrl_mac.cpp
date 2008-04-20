@@ -1047,9 +1047,10 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
 
     if (m_dbImpl)
     {
-        int mywidth = width;
-        if (width == wxLIST_AUTOSIZE || width == wxLIST_AUTOSIZE_USEHEADER)
-            mywidth = 150;
+        if ( width == wxLIST_AUTOSIZE_USEHEADER )
+        {
+            width = 150; // FIXME
+        }
 
         if (col == -1)
         {
@@ -1061,17 +1062,22 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
                 colInfo.SetWidth(width);
                 SetColumn(column, colInfo);
 
+                const int mywidth = (width == wxLIST_AUTOSIZE)
+                                    ? CalcColumnAutoWidth(column) : width;
                 m_dbImpl->SetColumnWidth(column, mywidth);
             }
         }
         else
         {
+            if ( width == wxLIST_AUTOSIZE )
+                width = CalcColumnAutoWidth(col);
+
             wxListItem colInfo;
             GetColumn(col, colInfo);
 
             colInfo.SetWidth(width);
             SetColumn(col, colInfo);
-            m_dbImpl->SetColumnWidth(col, mywidth);
+            m_dbImpl->SetColumnWidth(col, width);
         }
         return true;
     }
@@ -3327,6 +3333,37 @@ void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
             }
         }
     }
+}
+
+int wxListCtrl::CalcColumnAutoWidth(int col) const
+{
+    int width = 0;
+
+    for ( int i = 0; i < GetItemCount(); i++ )
+    {
+        wxListItem info;
+        info.SetMask(wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE);
+        info.SetId(i);
+        info.SetColumn(col);
+        GetItem(info);
+
+        const wxFont font = info.GetFont();
+
+        int w = 0;
+        if ( font.IsOk() )
+            GetTextExtent(info.GetText(), &w, NULL, NULL, NULL, &font);
+        else
+            GetTextExtent(info.GetText(), &w, NULL);
+
+        w += 2 * kItemPadding;
+
+        if ( info.GetImage() != -1 )
+            w += kIconWidth;
+
+        width = wxMax(width, w);
+    }
+
+    return width;
 }
 
 #endif // wxUSE_LISTCTRL

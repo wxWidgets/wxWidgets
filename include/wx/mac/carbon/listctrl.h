@@ -414,6 +414,8 @@ protected:
   int               m_count; // for virtual lists, store item count
 
 private:
+  int CalcColumnAutoWidth(int col) const;
+
   DECLARE_EVENT_TABLE()
 };
 
