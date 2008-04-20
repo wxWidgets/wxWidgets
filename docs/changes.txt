@@ -188,6 +188,7 @@ wxMac:
 
 - Fixed cursor for wxBusyCursor and wxContextHelp.
 - Fixed wxListCtrl to respect items' non-default fonts.
+- wxListCtrl::SetColumnWidth() now supports wxLIST_AUTOSIZE.
 
 
 2.8.7

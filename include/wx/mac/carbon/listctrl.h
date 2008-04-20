@@ -419,6 +419,9 @@ protected:
                                   // keep track of inserted/deleted columns
 
   int               m_count; // for virtual lists, store item count
+
+private:
+  int CalcColumnAutoWidth(int col) const;
   
 private: 
   DECLARE_EVENT_TABLE()
