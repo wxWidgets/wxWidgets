@@ -6291,7 +6291,7 @@ bool wxRichTextAction::Do()
 
             m_buffer->InsertFragment(GetRange().GetStart(), m_newParagraphs);
             m_buffer->UpdateRanges();
-            m_buffer->Invalidate(wxRichTextRange(GetRange().GetStart()-1, GetRange().GetEnd()));
+            m_buffer->Invalidate(wxRichTextRange(wxMax(0, GetRange().GetStart()-1), GetRange().GetEnd()));
 
             long newCaretPosition = GetPosition() + m_newParagraphs.GetRange().GetLength();
 
