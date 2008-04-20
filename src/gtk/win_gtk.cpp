@@ -341,6 +341,30 @@ void wxPizza::move(GtkWidget* widget, int x, int y)
     }
 }
 
+struct AdjustData {
+    GdkWindow* window;
+    int dx, dy;
+};
+
+// Adjust allocations for all widgets using the GdkWindow which was just scrolled
+extern "C" {
+static void scroll_adjust(GtkWidget* widget, void* data)
+{
+    const AdjustData* p = static_cast<AdjustData*>(data);
+    if (widget->window == p->window)
+    {
+        widget->allocation.x += p->dx;
+        widget->allocation.y += p->dy;
+        // GtkFrame requires a queue_resize, otherwise parts of
+        // the frame newly exposed by the scroll are not drawn.
+        // To be safe, do it for all widgets.
+        gtk_widget_queue_resize_no_redraw(widget);
+        if (GTK_IS_CONTAINER(widget))
+            gtk_container_forall(GTK_CONTAINER(widget), scroll_adjust, data);
+    }
+}
+}
+
 void wxPizza::scroll(int dx, int dy)
 {
     GtkWidget* widget = GTK_WIDGET(this);
@@ -349,13 +373,12 @@ void wxPizza::scroll(int dx, int dy)
     m_scroll_x -= dx;
     m_scroll_y -= dy;
     if (widget->window)
-        gdk_window_scroll(widget->window, dx, dy);
-    const GList* list = m_fixed.children;
-    if (list)
     {
-        const GtkFixedChild* child = static_cast<GtkFixedChild*>(list->data);
-        // queueing a resize on any child will update them all
-        gtk_widget_queue_resize(child->widget);
+        gdk_window_scroll(widget->window, dx, dy);
+        // Adjust child allocations. Doing a queue_resize on the children is not
+        // enough, sometimes they redraw in the wrong place during fast scrolling.
+        AdjustData data = { widget->window, dx, dy };
+        gtk_container_forall(GTK_CONTAINER(widget), scroll_adjust, &data);
     }
 }
 
