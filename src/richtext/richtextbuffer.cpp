@@ -49,6 +49,16 @@ WX_DEFINE_LIST(wxRichTextLineList)
 
 const wxChar wxRichTextLineBreakChar = (wxChar) 29;
 
+// Use GetPartialTextExtents for platforms that support it natively
+#define wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS 1
+
+// Use global array for binary compatibility; in 2.9+ it will be done more elegantly
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+wxArrayInt g_GlobalPartialTextExtents;
+bool       g_UseGlobalPartialTextExtents = false;
+#endif
+
+
 // Helpers for efficiency
 
 inline void wxCheckSetFont(wxDC& dc, const wxFont& font)
@@ -3399,6 +3409,18 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         node = node->GetNext();
     }
 
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    g_GlobalPartialTextExtents.Clear();
+    g_UseGlobalPartialTextExtents = true;
+
+    wxSize paraSize;
+    int paraDescent;
+
+    // This calculates the partial text extents
+    GetRangeSize(GetRange(), paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED, wxPoint(0,0));
+    g_UseGlobalPartialTextExtents = false;
+#endif
+
     // Split up lines
 
     // We may need to go back to a previous child, in which case create the new line,
@@ -3566,6 +3588,10 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     SetCachedSize(wxSize(maxWidth, currentPosition.y + spaceBeforePara + spaceAfterPara));
 
     m_dirty = false;
+
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    g_GlobalPartialTextExtents.Clear();
+#endif
 
     return true;
 }
@@ -4102,49 +4128,75 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
     wxSize sz;
     long breakPosition = range.GetEnd();
 
-    // Binary chop for speed
-    long minPos = range.GetStart();
-    long maxPos = range.GetEnd();
-    while (true)
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    if (g_GlobalPartialTextExtents.GetCount() >= (size_t) (GetRange().GetLength()-1)) // the final position in a paragraph is the newline
     {
-        if (minPos == maxPos)
-        {
-            int descent = 0;
-            GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+        int widthBefore;
 
-            if (sz.x > availableSpace)
-                breakPosition = minPos - 1;
-            break;
-        }
-        else if ((maxPos - minPos) == 1)
-        {
-            int descent = 0;
-            GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
-
-            if (sz.x > availableSpace)
-                breakPosition = minPos - 1;
-            else
-            {
-                GetRangeSize(wxRichTextRange(range.GetStart(), maxPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
-                if (sz.x > availableSpace)
-                    breakPosition = maxPos-1;
-            }
-            break;
-        }
+        if (range.GetStart() > GetRange().GetStart())
+            widthBefore = g_GlobalPartialTextExtents[range.GetStart() - GetRange().GetStart() - 1];
         else
+            widthBefore = 0;
+
+        size_t i;
+        for (i = (size_t) range.GetStart(); i < (size_t) range.GetEnd(); i++)
         {
-            long nextPos = minPos + ((maxPos - minPos) / 2);
+            int widthFromStartOfThisRange = g_GlobalPartialTextExtents[i - GetRange().GetStart()] - widthBefore;
 
-            int descent = 0;
-            GetRangeSize(wxRichTextRange(range.GetStart(), nextPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
-
-            if (sz.x > availableSpace)
+            if (widthFromStartOfThisRange >= availableSpace)
             {
-                maxPos = nextPos;
+                breakPosition = i-1;
+                break;
+            }
+        }
+    }
+    else
+#endif
+    {
+        // Binary chop for speed
+        long minPos = range.GetStart();
+        long maxPos = range.GetEnd();
+        while (true)
+        {
+            if (minPos == maxPos)
+            {
+                int descent = 0;
+                GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+                if (sz.x > availableSpace)
+                    breakPosition = minPos - 1;
+                break;
+            }
+            else if ((maxPos - minPos) == 1)
+            {
+                int descent = 0;
+                GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+                if (sz.x > availableSpace)
+                    breakPosition = minPos - 1;
+                else
+                {
+                    GetRangeSize(wxRichTextRange(range.GetStart(), maxPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+                    if (sz.x > availableSpace)
+                        breakPosition = maxPos-1;
+                }
+                break;
             }
             else
             {
-                minPos = nextPos;
+                long nextPos = minPos + ((maxPos - minPos) / 2);
+
+                int descent = 0;
+                GetRangeSize(wxRichTextRange(range.GetStart(), nextPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+                if (sz.x > availableSpace)
+                {
+                    maxPos = nextPos;
+                }
+                else
+                {
+                    minPos = nextPos;
+                }
             }
         }
     }
@@ -4747,6 +4799,10 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     int startPos = range.GetStart() - GetRange().GetStart();
     long len = range.GetLength();
 
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    wxArrayInt textExtents;
+#endif
+
     wxString str(m_text);
     wxString toReplace = wxRichTextLineBreakChar;
     str.Replace(toReplace, wxT(" "));
@@ -4785,8 +4841,24 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             wxString stringFragment = stringChunk.BeforeFirst(wxT('\t'));
             stringChunk = stringChunk.AfterFirst(wxT('\t'));
             dc.GetTextExtent(stringFragment, & w, & h);
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+            int oldWidth = width;
+#endif
             width += w;
             int absoluteWidth = width + position.x;
+
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+            if (g_UseGlobalPartialTextExtents)
+            {
+                // Add these partial extents
+                wxArrayInt p;
+                dc.GetPartialTextExtents(stringFragment, p);
+                size_t j;
+                for (j = 0; j < p.GetCount(); j++)
+                    textExtents.Add(oldWidth + p[j]);
+            }
+#endif
+
             bool notFound = true;
             for (int i = 0; i < tabCount && notFound; ++i)
             {
@@ -4805,12 +4877,50 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
                     notFound = false;
                     width = nextTabPos - position.x;
+
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+                    if (g_UseGlobalPartialTextExtents)
+                        textExtents.Add(width);
+#endif
                 }
             }
         }
     }
-    dc.GetTextExtent(stringChunk, & w, & h, & descent);
-    width += w;
+
+    if (!stringChunk.IsEmpty())
+    {
+        dc.GetTextExtent(stringChunk, & w, & h, & descent);
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+        int oldWidth = width;
+#endif
+        width += w;
+
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+        if (g_UseGlobalPartialTextExtents)
+        {
+            // Add these partial extents
+            wxArrayInt p;
+            dc.GetPartialTextExtents(stringChunk, p);
+            size_t j;
+            for (j = 0; j < p.GetCount(); j++)
+                textExtents.Add(oldWidth + p[j]);
+        }
+#endif
+    }
+
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    if (g_UseGlobalPartialTextExtents)
+    {
+        // Now add this child's extents to the global extents
+        int lastExtent = 0;
+        if (g_GlobalPartialTextExtents.GetCount() > 0)
+            lastExtent = g_GlobalPartialTextExtents[g_GlobalPartialTextExtents.GetCount()-1];
+
+        size_t j;
+        for (j = 0; j < textExtents.GetCount(); j++)
+            g_GlobalPartialTextExtents.Add(lastExtent + textExtents[j]);
+    }
+#endif
 
     if ( bScript )
         dc.SetFont(font);
@@ -6818,6 +6928,25 @@ bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
 {
     if (!range.IsWithin(GetRange()))
         return false;
+
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    if (g_UseGlobalPartialTextExtents)
+    {
+        // Now add this child's extents to the global extents
+        int lastExtent = 0;
+        if (g_GlobalPartialTextExtents.GetCount() > 0)
+            lastExtent = g_GlobalPartialTextExtents[g_GlobalPartialTextExtents.GetCount()-1];
+
+        int thisExtent;
+
+        if (m_image.Ok())
+            thisExtent = lastExtent + m_image.GetWidth();
+        else
+            thisExtent = lastExtent;
+
+        g_GlobalPartialTextExtents.Add(thisExtent);
+    }
+#endif
 
     if (!m_image.Ok())
         return false;
