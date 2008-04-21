@@ -725,7 +725,7 @@ public:
         (this is always the case for socket streams for example), returns
         @c wxInvalidOffset.
 
-        @wxsince{2.5.4}
+        @since 2.5.4
     */
     wxFileOffset GetLength() const;
 

@@ -119,7 +119,7 @@ public:
     and @a free parameters may be @NULL if the corresponding information is not
     needed.
 
-    @wxsince{2.3.2}
+    @since 2.3.2
 
     @note The generic Unix implementation depends on the system having the
           @c statfs() or @c statvfs() function.

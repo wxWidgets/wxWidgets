@@ -97,7 +97,7 @@ public:
         specify added file's MIME type. This version should be used whenever you know
         the MIME type, because it makes accessing the files faster.
 
-        @wxsince{2.8.5}
+        @since 2.8.5
 
         @see AddFile()
     */

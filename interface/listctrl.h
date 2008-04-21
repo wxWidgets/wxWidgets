@@ -442,7 +442,7 @@ public:
         @a code can be one of @c wxLIST_RECT_BOUNDS,
         @c wxLIST_RECT_ICON or @c wxLIST_RECT_LABEL.
 
-        @wxsince{2.7.0}
+        @since 2.7.0
     */
     bool GetSubItemRect(long item, long subItem, wxRect& rect,
                         int code = wxLIST_RECT_BOUNDS) const;
@@ -875,7 +875,7 @@ The m_stateMask and m_state members take flags from the following:
         guaranteed to be large enough to be able to contain all integer types and
         pointers.
 
-        @wxsince{2.8.4}
+        @since 2.8.4
     */
     bool SetItemPtrData(long item, wxUIntPtr data);
 

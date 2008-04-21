@@ -459,7 +459,7 @@ public:
         without @a len parameter takes NUL-terminated data.
         This is a convenience method useful when storing binary data in wxString.
 
-        @wxsince{2.8.4}
+        @since 2.8.4
 
         @see wxString::To8BitData
     */
@@ -817,7 +817,7 @@ public:
         a wxCharBuffer (Unicode builds only).
         This is a convenience method useful when storing binary data in wxString.
 
-        @wxsince{2.8.4}
+        @since 2.8.4
 
         @see wxString::From8BitData
     */

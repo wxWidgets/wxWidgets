@@ -1071,7 +1071,7 @@ public:
 
         See wxMemoryDC for typical usage.
 
-        @wxsince{2.9.0}
+        @since 2.9.0
 
         @see Blit(), wxMemoryDC, wxBitmap, wxMask
     */

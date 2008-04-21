@@ -163,15 +163,15 @@ public:
         Returns the item located at @e point, or @c wxNOT_FOUND if there
         is no item located at @e point.
 
-        @wxsince{2.7.0}. It is currently implemented
-        for wxMSW, wxMac and wxGTK2
-        ports.
+        It is currently implemented for wxMSW, wxMac and wxGTK2 ports.
 
         @param point
             Point of item (in client coordinates) to obtain
 
         @returns Item located at point, or wxNOT_FOUND if unimplemented or the
                  item does not exist.
+
+        @since 2.7.0
     */
     int HitTest(const wxPoint point) const;
 

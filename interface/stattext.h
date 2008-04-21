@@ -203,7 +203,7 @@ public:
         boundaries so it might not be the case if words are too long). If @e width
         is negative, no wrapping is done.
 
-        @wxsince{2.6.2}
+        @since 2.6.2
     */
     void Wrap(int width);
 };

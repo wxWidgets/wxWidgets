@@ -189,7 +189,7 @@ void wxBell();
     and can be invoked by Ctrl-Alt-middle clicking on any wxWindow which
     doesn't otherwise handle this event.
 
-    @wxsince{2.9.0}
+    @since 2.9.0
 
     @header{wx/utils.h}
 */

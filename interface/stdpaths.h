@@ -81,7 +81,7 @@ public:
              - Windows: @c C:\\Documents @c and @c Settings\\username\\Documents
              - Mac: @c ~/Documents
 
-        @wxsince{2.7.0}
+        @since 2.7.0
     */
     wxString GetDocumentsDir() const;
 
@@ -120,7 +120,7 @@ public:
         different for message catalog category under Unix where it returns the standard
         @c prefix/share/locale/lang/LC_MESSAGES directory.
 
-        @wxsince{2.7.0}
+        @since 2.7.0
     */
     wxString GetLocalizedResourcesDir(const wxString& lang,
                                       ResourceCat category = ResourceCat_None) const;
@@ -147,7 +147,7 @@ public:
              - Windows: the directory where the executable file is located
              - Mac: @c appname.app/Contents/Resources bundle subdirectory
 
-        @wxsince{2.7.0}
+        @since 2.7.0
 
         @see GetLocalizedResourcesDir()
     */
@@ -159,7 +159,7 @@ public:
         it is best to use wxFileName::CreateTempFileName for correct behaviour when
         multiple processes are attempting to create temporary files.
 
-        @wxsince{2.7.2}
+        @since 2.7.2
     */
     wxString GetTempDir() const;
 

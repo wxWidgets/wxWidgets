@@ -419,7 +419,7 @@ public:
         Returns the object having the same date component as this one but time
         of 00:00:00.
 
-        @wxsince{2.8.2}
+        @since 2.8.2
 
         @see ResetTime()
     */

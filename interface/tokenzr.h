@@ -130,7 +130,7 @@ public:
         there had been no calls to this function yet or if it returned the trailing
         empty token in @c wxTOKEN_RET_EMPTY_ALL mode.
 
-        @wxsince{2.7.0}
+        @since 2.7.0
     */
     wxChar GetLastDelimiter();
 

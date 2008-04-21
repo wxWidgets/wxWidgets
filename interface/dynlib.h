@@ -290,7 +290,7 @@ public:
         library, @false otherwise. Unlike GetSymbol(),
         this function doesn't log an error message if the symbol is not found.
 
-        @wxsince{2.5.4}
+        @since 2.5.4
     */
     bool HasSymbol(const wxString& name) const;
 

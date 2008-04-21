@@ -83,7 +83,7 @@ public:
         e.g. for the file names or configuration file keys.
         By default, returns the same string as GetAppName().
 
-        @wxsince{2.9.0}
+        @since 2.9.0
     */
     wxString GetAppDisplayName() const;
 
@@ -129,7 +129,7 @@ public:
 
         By default, returns the same string as GetVendorName().
 
-        @wxsince{2.9.0}
+        @since 2.9.0
     */
     const wxString& GetVendorDisplayName() const;
 

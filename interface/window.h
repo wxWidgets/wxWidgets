@@ -212,7 +212,7 @@ public:
         Call this function to force one or both scrollbars to be always shown, even if
         the window is big enough to show its entire contents without scrolling.
 
-        @wxsince{2.9.0}
+        @since 2.9.0
 
         @param hflag
             Whether the horizontal scroll bar should always be visible.
@@ -951,7 +951,7 @@ public:
         Returns the next window after this one among the parent children or @NULL if
         this window is the last child.
 
-        @wxsince{2.8.8}
+        @since 2.8.8
 
         @see GetPrevSibling()
     */
@@ -1008,7 +1008,7 @@ public:
         @NULL if
         this window is the first child.
 
-        @wxsince{2.8.8}
+        @since 2.8.8
 
         @see GetNextSibling()
     */
@@ -1261,7 +1261,7 @@ public:
         ShowWithEffect(), please see their
         description there.
 
-        @wxsince{2.9.0}
+        @since 2.9.0
     */
     virtual bool HideWithEffect(wxShowEffect effect,
                                 unsigned timeout = 0,
@@ -2484,7 +2484,7 @@ public:
         Currently this function is only implemented in wxMSW and does the same thing as
         Show() in the other ports.
 
-        @wxsince{2.9.0}
+        @since 2.9.0
 
         @see HideWithEffect()
     */

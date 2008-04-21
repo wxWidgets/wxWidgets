@@ -110,7 +110,7 @@ public:
         @returns @true if help was shown, or @false if no help was available
                  for this window.
 
-        @wxsince{2.7.0}
+        @since 2.7.0
     */
     virtual bool ShowHelpAtPoint(wxWindowBase* window, const wxPoint point,
                                    wxHelpEvent::Origin origin);

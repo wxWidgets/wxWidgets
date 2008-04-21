@@ -142,7 +142,7 @@ public:
         Note this does not mean that a given string will be correctly converted.
         A malformed string may still make conversion functions return @c wxCONV_FAILED.
 
-        @wxsince{2.8.2}
+        @since 2.8.2
     */
     bool IsOk() const;
 

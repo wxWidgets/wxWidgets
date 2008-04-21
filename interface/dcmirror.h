@@ -16,7 +16,7 @@
     makes it possible to reuse the same code to draw a figure and its mirror --
     i.e. reflection related to the diagonal line x == y.
 
-    @wxsince{2.5.0}
+    @since 2.5.0
 
     @library{wxcore}
     @category{dc}

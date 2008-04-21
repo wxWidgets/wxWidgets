@@ -1673,7 +1673,7 @@ public:
         other platforms (you can still distinguish simple clicks from double-clicks as
         they generate different kinds of events however).
 
-        @wxsince{2.9.0}
+        @since 2.9.0
     */
     int GetClickCount() const;
 

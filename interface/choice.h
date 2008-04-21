@@ -130,9 +130,9 @@ public:
         currently selected item in it. When it is not shown, its result is the
         same as for the other function.
 
-        @wxsince{2.6.2} (before this version,
-                         wxControlWithItems::GetSelection() itself behaved like
-                         this).
+        @since 2.6.2.
+               In older versions, wxControlWithItems::GetSelection() itself
+               behaved like this.
     */
     int GetCurrentSelection() const;
 

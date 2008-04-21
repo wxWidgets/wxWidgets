@@ -364,7 +364,7 @@ public:
         wxLanguageInfo structure. See AddLanguage() for
         the wxLanguageInfo description.
 
-        @wxsince{2.7.1}.
+        @since 2.7.1.
     */
     static bool IsAvailable(int lang);
 

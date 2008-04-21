@@ -101,9 +101,6 @@ ALIASES += header{1}="Include file:\n \verbatim #include <\1> \endverbatim"
 #            and not twice as the \headerfile command requires:
 ALIASES += wxheader{1}="\headerfile \1 wx/\1"
 
-# the following alias avoids to repeat lots of times the same statement:
-ALIASES += wxsince{1}="\since This feature is available in wxWidgets version \1 or higher."
-
 # some formatting aliases
 ALIASES += true="<span class='literal'>true</span>"
 ALIASES += false="<span class='literal'>false</span>"

@@ -94,7 +94,7 @@ public:
         wxC2S_CSS_SYNTAX (which is the only one supporting alpha) is not
         specified in flags.
 
-        @wxsince{2.7.0}
+        @since 2.7.0
     */
     wxString GetAsString(long flags);
 
@@ -136,7 +136,7 @@ public:
 
         Returns @true if the conversion was successful, @false otherwise.
 
-        @wxsince{2.7.0}
+        @since 2.7.0
     */
     void Set(unsigned char red, unsigned char green,
              unsigned char blue,

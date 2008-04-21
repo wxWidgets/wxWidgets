@@ -207,7 +207,7 @@ public:
     /**
         Sets the bitmap to be shown when the mouse is over the button.
 
-        @wxsince{2.7.0}
+        @since 2.7.0
 
         The hover bitmap is currently only supported in wxMSW.
 

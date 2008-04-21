@@ -769,7 +769,7 @@ public:
         Notice that currently this function is only implemented in wxGTK2 and wxMSW
         ports and does nothing under the other platforms.
 
-        @wxsince{2.9.0}
+        @since 2.9.0
 
         @returns @true if the auto-completion was enabled or @false if the
                  operation failed, typically because auto-completion is
@@ -785,7 +785,7 @@ public:
         Notice that currently this function is only implemented in wxGTK2 port and does
         nothing under the other platforms.
 
-        @wxsince{2.9.0}
+        @since 2.9.0
 
         @returns @true if the auto-completion was enabled or @false if the
                  operation failed, typically because auto-completion is
@@ -833,7 +833,7 @@ public:
         This is the only difference with SetValue().
         See @ref overview_progevent "this topic" for more information.
 
-        @wxsince{2.7.1}
+        @since 2.7.1
 
         @param value
             The new value to set. It may contain newline characters if the text control
@@ -1026,7 +1026,7 @@ public:
         @c GetValue().empty() but can be much more efficient for the multiline
         controls containing big amounts of text.
 
-        @wxsince{2.7.1}
+        @since 2.7.1
     */
     bool IsEmpty() const;
 
