@@ -445,7 +445,7 @@ protected:
 
     // Draws dropbutton. Using wxRenderer or bitmaps, as appropriate.
     // Flags are defined above.
-    void DrawButton( wxDC& dc, const wxRect& rect, int flags = Button_PaintBackground );
+    virtual void DrawButton( wxDC& dc, const wxRect& rect, int flags = Button_PaintBackground );
 
     // Call if cursor is on button area or mouse is captured for the button.
     //bool HandleButtonMouseEvent( wxMouseEvent& event, bool isInside );
