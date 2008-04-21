@@ -507,7 +507,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
                     winUnder->ScreenToClient(&event2.m_x, &event2.m_y);
 
                     event2.SetEventObject(winUnder);
-                    wxPostEvent(winUnder, event2);
+                    wxPostEvent(winUnder->GetEventHandler(), event2);
                 }
             }
             break;
