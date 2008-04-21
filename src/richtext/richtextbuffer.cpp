@@ -48,6 +48,9 @@ WX_DEFINE_LIST(wxRichTextLineList)
 // Switch off if the platform doesn't like it for some reason
 #define wxRICHTEXT_USE_OPTIMIZED_DRAWING 1
 
+// Use GetPartialTextExtents for platforms that support it natively
+#define wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS 1
+
 const wxChar wxRichTextLineBreakChar = (wxChar) 29;
 
 // Helpers for efficiency
@@ -510,13 +513,13 @@ bool wxRichTextBox::Layout(wxDC& dc, const wxRect& rect, int style)
 }
 
 /// Get/set the size for the given range. Assume only has one child.
-bool wxRichTextBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position) const
+bool wxRichTextBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position, wxArrayInt* partialExtents) const
 {
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     if (node)
     {
         wxRichTextObject* child = node->GetData();
-        return child->GetRangeSize(range, size, descent, dc, flags, position);
+        return child->GetRangeSize(range, size, descent, dc, flags, position, partialExtents);
     }
     else
         return false;
@@ -741,7 +744,7 @@ void wxRichTextParagraphLayoutBox::Copy(const wxRichTextParagraphLayoutBox& obj)
 }
 
 /// Get/set the size for the given range.
-bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position) const
+bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position, wxArrayInt* WXUNUSED(partialExtents)) const
 {
     wxSize sz;
 
@@ -3284,6 +3287,16 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         node = node->GetNext();
     }
 
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    wxArrayInt partialExtents;
+
+    wxSize paraSize;
+    int paraDescent;
+
+    // This calculates the partial text extents
+    GetRangeSize(GetRange(), paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED, wxPoint(0,0), & partialExtents);
+#endif
+
     // Split up lines
 
     // We may need to go back to a previous child, in which case create the new line,
@@ -3341,7 +3354,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 
             // Find a place to wrap. This may walk back to previous children,
             // for example if a word spans several objects.
-            if (!FindWrapPosition(wxRichTextRange(lastCompletedEndPos+1, child->GetRange().GetEnd()), dc, availableSpaceForText, wrapPosition))
+            if (!FindWrapPosition(wxRichTextRange(lastCompletedEndPos+1, child->GetRange().GetEnd()), dc, availableSpaceForText, wrapPosition, & partialExtents))
             {
                 // If the function failed, just cut it off at the end of this child.
                 wrapPosition = child->GetRange().GetEnd();
@@ -3568,7 +3581,7 @@ void wxRichTextParagraph::ClearLines()
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position) const
+bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position, wxArrayInt* partialExtents) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
@@ -3580,9 +3593,17 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
         wxSize sz;
 
+        wxArrayInt childExtents;
+        wxArrayInt* p;
+        if (partialExtents)
+            p = & childExtents;
+        else
+            p = NULL;
+
         wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
         while (node)
         {
+
             wxRichTextObject* child = node->GetData();
             if (!child->GetRange().IsOutside(range))
             {
@@ -3592,12 +3613,30 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                 rangeToUse.LimitTo(child->GetRange());
                 int childDescent = 0;
 
-                if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, wxPoint(position.x + sz.x, position.y)))
+                if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, wxPoint(position.x + sz.x, position.y), p))
                 {
                     sz.y = wxMax(sz.y, childSize.y);
                     sz.x += childSize.x;
                     descent = wxMax(descent, childDescent);
+
+                    if (partialExtents)
+                    {
+                        int lastSize;
+                        if (partialExtents->GetCount() > 0)
+                            lastSize = (*partialExtents)[partialExtents->GetCount()-1];
+                        else
+                            lastSize = 0;
+
+                        size_t i;
+                        for (i = 0; i < childExtents.GetCount(); i++)
+                        {
+                            partialExtents->Add(childExtents[i] + lastSize);
+                        }
+                    }
                 }
+
+                if (p)
+                    p->Clear();
             }
 
             node = node->GetNext();
@@ -3981,55 +4020,81 @@ bool wxRichTextParagraph::GetContiguousPlainText(wxString& text, const wxRichTex
 }
 
 /// Find a suitable wrap position.
-bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& dc, int availableSpace, long& wrapPosition)
+bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& dc, int availableSpace, long& wrapPosition, wxArrayInt* partialExtents)
 {
     // Find the first position where the line exceeds the available space.
     wxSize sz;
     long breakPosition = range.GetEnd();
 
-    // Binary chop for speed
-    long minPos = range.GetStart();
-    long maxPos = range.GetEnd();
-    while (true)
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    if (partialExtents && partialExtents->GetCount() >= (size_t) (GetRange().GetLength()-1)) // the final position in a paragraph is the newline
     {
-        if (minPos == maxPos)
-        {
-            int descent = 0;
-            GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+        int widthBefore;
 
-            if (sz.x > availableSpace)
-                breakPosition = minPos - 1;
-            break;
-        }
-        else if ((maxPos - minPos) == 1)
-        {
-            int descent = 0;
-            GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
-
-            if (sz.x > availableSpace)
-                breakPosition = minPos - 1;
-            else
-            {
-                GetRangeSize(wxRichTextRange(range.GetStart(), maxPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
-                if (sz.x > availableSpace)
-                    breakPosition = maxPos-1;
-            }
-            break;
-        }
+        if (range.GetStart() > GetRange().GetStart())
+            widthBefore = (*partialExtents)[range.GetStart() - GetRange().GetStart() - 1];
         else
+            widthBefore = 0;
+
+        size_t i;
+        for (i = (size_t) range.GetStart(); i < (size_t) range.GetEnd(); i++)
         {
-            long nextPos = minPos + ((maxPos - minPos) / 2);
+            int widthFromStartOfThisRange = (*partialExtents)[i - GetRange().GetStart()] - widthBefore;
 
-            int descent = 0;
-            GetRangeSize(wxRichTextRange(range.GetStart(), nextPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
-
-            if (sz.x > availableSpace)
+            if (widthFromStartOfThisRange >= availableSpace)
             {
-                maxPos = nextPos;
+                breakPosition = i-1;
+                break;
+            }
+        }
+    }
+    else
+#endif
+    {
+        // Binary chop for speed
+        long minPos = range.GetStart();
+        long maxPos = range.GetEnd();
+        while (true)
+        {
+            if (minPos == maxPos)
+            {
+                int descent = 0;
+                GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+                if (sz.x > availableSpace)
+                    breakPosition = minPos - 1;
+                break;
+            }
+            else if ((maxPos - minPos) == 1)
+            {
+                int descent = 0;
+                GetRangeSize(wxRichTextRange(range.GetStart(), minPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+                if (sz.x > availableSpace)
+                    breakPosition = minPos - 1;
+                else
+                {
+                    GetRangeSize(wxRichTextRange(range.GetStart(), maxPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+                    if (sz.x > availableSpace)
+                        breakPosition = maxPos-1;
+                }
+                break;
             }
             else
             {
-                minPos = nextPos;
+                long nextPos = minPos + ((maxPos - minPos) / 2);
+
+                int descent = 0;
+                GetRangeSize(wxRichTextRange(range.GetStart(), nextPos), sz, descent, dc, wxRICHTEXT_UNFORMATTED);
+
+                if (sz.x > availableSpace)
+                {
+                    maxPos = nextPos;
+                }
+                else
+                {
+                    minPos = nextPos;
+                }
             }
         }
     }
@@ -4595,7 +4660,7 @@ void wxRichTextPlainText::Copy(const wxRichTextPlainText& obj)
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int WXUNUSED(flags), wxPoint position) const
+bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int WXUNUSED(flags), wxPoint position, wxArrayInt* partialExtents) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
@@ -4668,9 +4733,20 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             // break up the string at the Tab
             wxString stringFragment = stringChunk.BeforeFirst(wxT('\t'));
             stringChunk = stringChunk.AfterFirst(wxT('\t'));
+            int oldWidth = width;
             dc.GetTextExtent(stringFragment, & w, & h);
             width += w;
             int absoluteWidth = width + position.x;
+
+            if (partialExtents)
+            {
+                // Add these partial extents
+                wxArrayInt p;
+                dc.GetPartialTextExtents(stringFragment, p);
+                size_t j;
+                for (j = 0; j < p.GetCount(); j++)
+                    partialExtents->Add(oldWidth + p[j]);
+            }
 
             bool notFound = true;
             for (int i = 0; i < tabCount && notFound; ++i)
@@ -4690,13 +4766,30 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
                     notFound = false;
                     width = nextTabPos - position.x;
+
+                    if (partialExtents)
+                        partialExtents->Add(width);
                 }
             }
         }
     }
 
-    dc.GetTextExtent(stringChunk, & w, & h, & descent);
-    width += w;
+    if (!stringChunk.IsEmpty())
+    {
+        dc.GetTextExtent(stringChunk, & w, & h, & descent);
+        int oldWidth = width;
+        width += w;
+
+        if (partialExtents)
+        {
+            // Add these partial extents
+            wxArrayInt p;
+            dc.GetPartialTextExtents(stringChunk, p);
+            size_t j;
+            for (j = 0; j < p.GetCount(); j++)
+                partialExtents->Add(oldWidth + p[j]);
+        }
+    }
 
     if ( bScript )
         dc.SetFont(font);
@@ -6694,10 +6787,18 @@ bool wxRichTextImage::Layout(wxDC& WXUNUSED(dc), const wxRect& rect, int WXUNUSE
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& WXUNUSED(descent), wxDC& WXUNUSED(dc), int WXUNUSED(flags), wxPoint WXUNUSED(position)) const
+bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& WXUNUSED(descent), wxDC& WXUNUSED(dc), int WXUNUSED(flags), wxPoint WXUNUSED(position), wxArrayInt* partialExtents) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
+
+    if (partialExtents)
+    {
+        if (m_image.Ok())
+            partialExtents->Add(m_image.GetWidth());
+        else
+            partialExtents->Add(0);
+    }
 
     if (!m_image.Ok())
         return false;
