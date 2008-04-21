@@ -317,7 +317,7 @@ wxManualNotifMsgImpl::~wxManualNotifMsgImpl()
 bool
 wxManualNotifMsgImpl::DoShow(const wxString& title,
                              const wxString& message,
-                             int timeout,
+                             int WXUNUSED_UNLESS_DEBUG(timeout),
                              int flags)
 {
     wxASSERT_MSG( timeout == wxNotificationMessage::Timeout_Never,
