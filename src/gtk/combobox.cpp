@@ -116,6 +116,11 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     m_widget = gtk_combo_box_entry_new_text();
 
+    // Set it up to trigger default item on enter key press 
+    GtkWidget *widget = gtk_bin_get_child(GTK_BIN(m_widget));
+    gtk_entry_set_activates_default(GTK_ENTRY(widget),
+                                    !HasFlag(wxTE_PROCESS_ENTER));
+    
     if (HasFlag(wxBORDER_NONE))
     {
         // Doesn't seem to work
@@ -381,17 +386,6 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                     // down list upon RETURN.
                     return;
                 }
-            }
-
-            // On enter key press, we must give a signal to default control, 
-            // Otherwise, nothing happens when pressing Enter from inside a 
-            // combo box in a dialog. 
-            wxWindow *top_frame = wxGetTopLevelParent(this);
-            if( top_frame && GTK_IS_WINDOW(top_frame->m_widget) )
-            {
-                GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
-                if ( window->default_widget )
-                    gtk_widget_activate( window->default_widget );
             }
             break;
     }
