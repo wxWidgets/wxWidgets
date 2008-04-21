@@ -464,6 +464,8 @@ void wxHtmlWordCell::Split(const wxDC& dc,
 
     pos1 = i;
     pos2 = j;
+
+    wxASSERT( pos2 >= pos1 );
 }
 
 void wxHtmlWordCell::SetSelectionPrivPos(const wxDC& dc, wxHtmlSelection *s) const
@@ -617,6 +619,17 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
     }
 }
 
+wxCursor wxHtmlWordCell::GetMouseCursor(wxHtmlWindowInterface *window) const
+{
+    if ( !GetLink() )
+    {
+        return window->GetHTMLCursor(wxHtmlWindowInterface::HTMLCursor_Text);
+    }
+    else
+    {
+        return wxHtmlCell::GetMouseCursor(window);
+    }
+}
 
 wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
 {
@@ -634,27 +647,75 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
         // TODO: but this really needs to be fixed in some better way later...
         if ( priv != wxDefaultPosition )
         {
-            int part1 = priv.x;
-            int part2 = priv.y;
-            return m_Word.Mid(part1, part2-part1);
+            const int part1 = priv.x;
+            const int part2 = priv.y;
+            if ( part1 == part2 )
+                return wxEmptyString;
+            return GetPartAsText(part1, part2);
         }
         //else: return the whole word below
     }
 
-    return m_Word;
+    return GetAllAsText();
 }
 
-wxCursor wxHtmlWordCell::GetMouseCursor(wxHtmlWindowInterface *window) const
+wxString wxHtmlWordWithTabsCell::GetAllAsText() const
 {
-    if ( !GetLink() )
-    {
-        return window->GetHTMLCursor(wxHtmlWindowInterface::HTMLCursor_Text);
-    }
-    else
-    {
-        return wxHtmlCell::GetMouseCursor(window);
-    }
+    return m_wordOrig;
 }
+
+wxString wxHtmlWordWithTabsCell::GetPartAsText(int begin, int end) const
+{
+    // NB: The 'begin' and 'end' positions are in the _displayed_ text
+    //     (stored in m_Word) and not in the text with tabs that should
+    //     be copied to clipboard (m_wordOrig).
+    //
+    // NB: Because selection is performed on displayed text, it's possible
+    //     to select e.g. "half of TAB character" -- IOW, 'begin' and 'end'
+    //     may be in the middle of TAB character expansion into ' 's. In this
+    //     case, we copy the TAB character to clipboard once.
+
+    wxASSERT( begin < end );
+
+    const unsigned SPACES_PER_TAB = 8;
+
+    wxString sel;
+
+    int pos = 0;
+    wxString::const_iterator i = m_wordOrig.begin();
+
+    // find the beginning of text to copy:
+    for ( ; pos < begin; ++i )
+    {
+        if ( *i == '\t' )
+        {
+            pos += 8 - (m_linepos + pos) % SPACES_PER_TAB;
+            if ( pos >= begin )
+            {
+                sel += '\t';
+            }
+        }
+        else
+        {
+            ++pos;
+        }
+    }
+
+    // copy the content until we reach 'end':
+    for ( ; pos < end; ++i )
+    {
+        const wxChar c = *i;
+        sel += c;
+
+        if ( c == '\t' )
+            pos += 8 - (m_linepos + pos) % SPACES_PER_TAB;
+        else
+            ++pos;
+    }
+
+    return sel;
+}
+
 
 
 //-----------------------------------------------------------------------------

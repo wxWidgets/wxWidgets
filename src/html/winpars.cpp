@@ -52,7 +52,9 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
     m_InputEnc = wxFONTENCODING_ISO8859_1;
     m_OutputEnc = wxFONTENCODING_DEFAULT;
 #endif
+    m_whitespaceMode = Whitespace_Normal;
     m_lastWordCell = NULL;
+    m_posColumn = 0;
 
     {
         int i, j, k, l, m;
@@ -345,67 +347,7 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
 
 void wxHtmlWinParser::AddText(const wxString& txt)
 {
-    register wxChar d;
-    int templen = 0;
-
-    size_t lng = txt.length();
-    if (lng+1 > m_tmpStrBufSize)
-    {
-        delete[] m_tmpStrBuf;
-        m_tmpStrBuf = new wxChar[lng+1];
-        m_tmpStrBufSize = lng+1;
-    }
-    wxChar *temp = m_tmpStrBuf;
-
-    wxString::const_iterator i = txt.begin();
-    wxString::const_iterator end = txt.end();
-
-    if (m_tmpLastWasSpace)
-    {
-        while ( (i < end) &&
-                (*i == wxT('\n') || *i == wxT('\r') || *i == wxT(' ') ||
-                 *i == wxT('\t')) )
-        {
-            ++i;
-        }
-    }
-
-    while (i < end)
-    {
-        size_t x = 0;
-        d = temp[templen++] = *i;
-        if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
-        {
-            ++i, ++x;
-            while ( (i < end) &&
-                    (*i == wxT('\n') || *i == wxT('\r') ||
-                     *i == wxT(' ') || *i == wxT('\t')) )
-            {
-                ++i;
-                ++x;
-            }
-        }
-        else
-            ++i;
-
-        if (x)
-        {
-            temp[templen-1] = wxT(' ');
-            DoAddText(temp, templen);
-            m_tmpLastWasSpace = true;
-        }
-    }
-
-    if (templen && (templen > 1 || temp[0] != wxT(' ')))
-    {
-        DoAddText(temp, templen);
-        m_tmpLastWasSpace = false;
-    }
-}
-
-void wxHtmlWinParser::DoAddText(wxChar *temp, int& templen)
-{
-    #define NBSP_UNICODE_VALUE 160
+    #define NBSP_UNICODE_VALUE  (wxChar(160))
 #if !wxUSE_UNICODE
     if ( m_nbsp == 0 )
         m_nbsp = GetEntitiesParser()->GetCharForCode(NBSP_UNICODE_VALUE);
@@ -414,34 +356,167 @@ void wxHtmlWinParser::DoAddText(wxChar *temp, int& templen)
     #define CUR_NBSP_VALUE NBSP_UNICODE_VALUE
 #endif
 
-    temp[templen] = 0;
-    templen = 0;
-#if !wxUSE_UNICODE
-    if (m_EncConv)
-        m_EncConv->Convert(temp);
-#endif
-    size_t len = wxStrlen(temp);
-    for (size_t j = 0; j < len; j++)
+    if ( m_whitespaceMode == Whitespace_Normal )
     {
-        if (temp[j] == CUR_NBSP_VALUE)
-            temp[j] = wxT(' ');
+        int templen = 0;
+
+        size_t lng = txt.length();
+        if (lng+1 > m_tmpStrBufSize)
+        {
+            delete[] m_tmpStrBuf;
+            m_tmpStrBuf = new wxChar[lng+1];
+            m_tmpStrBufSize = lng+1;
+        }
+        wxChar *temp = m_tmpStrBuf;
+
+        wxString::const_iterator i = txt.begin();
+        const wxString::const_iterator end = txt.end();
+
+        if (m_tmpLastWasSpace)
+        {
+            while ( (i < end) &&
+                    (*i == wxT('\n') || *i == wxT('\r') || *i == wxT(' ') ||
+                     *i == wxT('\t')) )
+            {
+                ++i;
+            }
+        }
+
+        while (i < end)
+        {
+            size_t x = 0;
+            wxChar d = *i;
+            if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
+            {
+                ++i, ++x;
+                while ( (i < end) &&
+                        (*i == wxT('\n') || *i == wxT('\r') ||
+                         *i == wxT(' ') || *i == wxT('\t')) )
+                {
+                    ++i;
+                    ++x;
+                }
+            }
+            else
+            {
+                ++i;
+            }
+
+            if (d == CUR_NBSP_VALUE)
+                d = ' ';
+
+            temp[templen++] = d;
+
+            if (x)
+            {
+                temp[templen-1] = wxT(' ');
+                FlushWordBuf(temp, templen);
+                m_tmpLastWasSpace = true;
+            }
+        }
+
+        if (templen && (templen > 1 || temp[0] != wxT(' ')))
+        {
+            FlushWordBuf(temp, templen);
+            m_tmpLastWasSpace = false;
+        }
     }
+    else // m_whitespaceMode == Whitespace_Pre
+    {
+        if ( txt.find(CUR_NBSP_VALUE) != wxString::npos )
+        {
+            // we need to substitute spaces for &nbsp; here just like we
+            // did in the Whitespace_Normal branch above
+            wxString txt2(txt);
+            txt2.Replace(CUR_NBSP_VALUE, ' ');
+            AddPreBlock(txt2);
+        }
+        else
+        {
+            AddPreBlock(txt);
+        }
 
-    wxHtmlWordCell *c = new wxHtmlWordCell(temp, *(GetDC()));
-
-    ApplyStateToCell(c);
-
-    m_Container->InsertCell(c);
-    c->SetPreviousWord(m_lastWordCell);
-    m_lastWordCell = c;
+        // don't eat any whitespace in <pre> block
+        m_tmpLastWasSpace = false;
+    }
 }
 
+void wxHtmlWinParser::FlushWordBuf(wxChar *buf, int& len)
+{
+    buf[len] = 0;
+
+#if !wxUSE_UNICODE
+    if (m_EncConv)
+        m_EncConv->Convert(buf);
+#endif
+
+    AddWord(wxString(buf, len));
+
+    len = 0;
+}
+
+void wxHtmlWinParser::AddWord(wxHtmlWordCell *word)
+{
+    ApplyStateToCell(word);
+
+    m_Container->InsertCell(word);
+    word->SetPreviousWord(m_lastWordCell);
+    m_lastWordCell = word;
+}
+
+void wxHtmlWinParser::AddPreBlock(const wxString& text)
+{
+    if ( text.find('\t') != wxString::npos )
+    {
+        wxString text2;
+        text2.reserve(text.length());
+
+        const wxString::const_iterator end = text.end();
+        wxString::const_iterator copyFrom = text.begin();
+        size_t posFrom = 0;
+        size_t pos = 0;
+        int posColumn = m_posColumn;
+        for ( wxString::const_iterator i = copyFrom; i != end; ++i, ++pos )
+        {
+            if ( *i == '\t' )
+            {
+                if ( copyFrom != i )
+                    text2.append(copyFrom, i);
+
+                const unsigned SPACES_PER_TAB = 8;
+                const size_t expandTo = SPACES_PER_TAB - posColumn % SPACES_PER_TAB;
+                text2.append(expandTo, ' ');
+
+                posColumn += expandTo;
+                copyFrom = i + 1;
+                posFrom = pos + 1;
+            }
+            else
+            {
+                ++posColumn;
+            }
+        }
+        if ( copyFrom != text.end() )
+            text2.append(copyFrom, text.end());
+
+        AddWord(new wxHtmlWordWithTabsCell(text2, text, m_posColumn, *(GetDC())));
+
+        m_posColumn = posColumn;
+    }
+    else
+    {
+        // no special formatting needed
+        AddWord(text);
+        m_posColumn += text.length();
+    }
+}
 
 
 wxHtmlContainerCell* wxHtmlWinParser::OpenContainer()
 {
     m_Container = new wxHtmlContainerCell(m_Container);
     m_Container->SetAlignHor(m_Align);
+    m_posColumn = 0;
     m_tmpLastWasSpace = true;
         /* to avoid space being first character in paragraph */
     return m_Container;

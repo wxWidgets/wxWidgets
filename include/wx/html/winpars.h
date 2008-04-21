@@ -145,11 +145,25 @@ public:
     // creates font depending on m_Font* members.
     virtual wxFont* CreateCurrentFont();
 
+    enum WhitespaceMode
+    {
+        Whitespace_Normal,  // normal mode, collapse whitespace
+        Whitespace_Pre      // inside <pre>, keep whitespace as-is
+    };
+
+    // change the current whitespace handling mode
+    void SetWhitespaceMode(WhitespaceMode mode) { m_whitespaceMode = mode; }
+    WhitespaceMode GetWhitespaceMode() const { return m_whitespaceMode; }
+
 protected:
     virtual void AddText(const wxString& txt);
 
 private:
-    void DoAddText(wxChar *temp, int& templen);
+    void FlushWordBuf(wxChar *temp, int& len);
+    void AddWord(wxHtmlWordCell *word);
+    void AddWord(const wxString& word)
+        { AddWord(new wxHtmlWordCell(word, *(GetDC()))); }
+    void AddPreBlock(const wxString& text);
 
     bool m_tmpLastWasSpace;
     wxChar *m_tmpStrBuf;
@@ -207,7 +221,14 @@ private:
     wxEncodingConverter *m_EncConv;
 #endif
 
+    // current whitespace handling mode
+    WhitespaceMode m_whitespaceMode;
+
     wxHtmlWordCell *m_lastWordCell;
+
+    // current position on line, in num. of characters; used to properly
+    // expand TABs; only updated while inside <pre>
+    int m_posColumn;
 
     DECLARE_NO_COPY_CLASS(wxHtmlWinParser)
 };
