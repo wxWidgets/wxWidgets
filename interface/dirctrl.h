@@ -10,20 +10,35 @@
     @class wxGenericDirCtrl
     @wxheader{dirctrl.h}
 
-    This control can  be used to place a directory listing (with optional files) on
-    an arbitrary window.
+    This control can  be used to place a directory listing (with optional
+    files) on an arbitrary window.
 
     The control contains a wxTreeCtrl window representing the directory
     hierarchy, and optionally, a wxChoice window containing a list of filters.
 
+    @beginStyleTable
+    @style{wxDIRCTRL_DIR_ONLY}
+           Only show directories, and not files.
+    @style{wxDIRCTRL_3D_INTERNAL}
+           Use 3D borders for internal controls.
+    @style{wxDIRCTRL_SELECT_FIRST}
+           When setting the default path, select the first file in the
+           directory.
+    @style{wxDIRCTRL_EDIT_LABELS}
+           Allow the folder and file labels to be editable.
+    @endStyleTable
+
     @library{wxbase}
     @category{ctrl}
-    @appearance{genericdirctrl.png}
+    <!-- @appearance{genericdirctrl.png} -->
 */
 class wxGenericDirCtrl : public wxControl
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxGenericDirCtrl();
     /**
         Main constructor.
 
@@ -38,18 +53,17 @@ public:
         @param size
             Size.
         @param style
-            Window style. Please see wxGenericDirCtrl for a list of possible styles.
+            Window style. Please see wxGenericDirCtrl for a list of possible
+            styles.
         @param filter
-            A filter string, using the same syntax as that for wxFileDialog. This may
-        be empty if filters
-            are not being used.
-            Example: "All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg"
+            A filter string, using the same syntax as that for wxFileDialog.
+            This may be empty if filters are not being used. Example:
+            @c "All files (*.*)|*.*|JPEG files (*.jpg)|*.jpg"
         @param defaultFilter
             The zero-indexed default filter setting.
         @param name
             The window name.
     */
-    wxGenericDirCtrl();
     wxGenericDirCtrl(wxWindow* parent, const wxWindowID id = -1,
                      const wxString& dir = wxDirDialogDefaultFolderStr,
                      const wxPoint& pos = wxDefaultPosition,
@@ -58,7 +72,6 @@ public:
                      const wxString& filter = wxEmptyString,
                      int defaultFilter = 0,
                      const wxString& name = wxTreeCtrlNameStr);
-    //@}
 
     /**
         Destructor.
@@ -66,7 +79,7 @@ public:
     ~wxGenericDirCtrl();
 
     /**
-        Collapse the given path.
+        Collapse the given @a path.
     */
     bool CollapsePath(const wxString& path);
 
@@ -76,7 +89,8 @@ public:
     void CollapseTree();
 
     /**
-        Create function for two-step construction. See wxGenericDirCtrl() for details.
+        Create function for two-step construction. See wxGenericDirCtrl() for
+        details.
     */
     bool Create(wxWindow* parent, const wxWindowID id = -1,
                 const wxString& dir = wxDirDialogDefaultFolderStr,
@@ -88,8 +102,8 @@ public:
                 const wxString& name = wxTreeCtrlNameStr);
 
     /**
-        Tries to expand as much of the given path as possible, so that the filename or
-        directory is visible in the tree control.
+        Tries to expand as much of the given @a path as possible, so that the
+        filename or directory is visible in the tree control.
     */
     bool ExpandPath(const wxString& path);
 
@@ -100,6 +114,7 @@ public:
 
     /**
         Gets selected filename path only (else empty string).
+
         This function doesn't count a directory as a selection.
     */
     wxString GetFilePath() const;
@@ -140,8 +155,8 @@ public:
     void Init();
 
     /**
-        Collapse and expand the tree, thus re-creating it from scratch.
-        May be used to update the displayed directory content.
+        Collapse and expand the tree, thus re-creating it from scratch. May be
+        used to update the displayed directory content.
     */
     void ReCreateTree();
 

@@ -26,17 +26,19 @@
            user.
     @endStyleTable
 
+    @note On Windows the new directory button is only available with recent
+          versions of the common dialogs.
+
     @library{wxcore}
     @category{cmndlg}
 
-    @see @ref overview_wxdirdialogoverview "wxDirDialog overview", wxFileDialog
+    @see @ref overview_cmndlg_dir, wxFileDialog
 */
 class wxDirDialog : public wxDialog
 {
 public:
     /**
-        Constructor. Use ShowModal() to show
-        the dialog.
+        Constructor. Use ShowModal() to show the dialog.
 
         @param parent
             Parent window.
@@ -87,8 +89,8 @@ public:
     void SetPath(const wxString& path);
 
     /**
-        Shows the dialog, returning wxID_OK if the user pressed OK, and wxID_CANCEL
-        otherwise.
+        Shows the dialog, returning wxID_OK if the user pressed OK, and
+        wxID_CANCEL otherwise.
     */
     int ShowModal();
 };
