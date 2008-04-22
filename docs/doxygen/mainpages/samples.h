@@ -54,6 +54,8 @@ name. Most classes contained in wxWidgets occur in at least one of the samples.
 @li @ref page_samples_dialogs
 @li @ref page_samples_dialup
 @li @ref page_samples_dnd
+@li @ref page_samples_docview
+@li @ref page_samples_dragimag
 @li @ref page_samples_event
 </td><td>
 @li @ref page_samples_except
@@ -89,16 +91,13 @@ name. Most classes contained in wxWidgets occur in at least one of the samples.
 
 TODO: write descriptions for the samples:
 
-aui
 caret
 collpane
 combo
 console
 dataview
 display
-docview
 docvwmdi
-dragimag
 drawing
 editlbox
 erase
@@ -144,20 +143,20 @@ xrc
 <hr>
 
 
-@section page_samples_access Accessibility sample
+@section page_samples_access Accessibility Sample
 
 The @c access sample shows how you can use the wxAccessible classes in a
 simple GUI program.
 
 
-@section page_samples_animate Animate sample
+@section page_samples_animate Animate Sample
 
 The @c animate sample shows how you can use wxAnimationCtrl
 control and shows concept of a platform-dependent animation encapsulated
 in wxAnimation.
 
 
-@section page_samples_artprovider Art provider sample
+@section page_samples_artprovider Art Provider Sample
 
 The @c artprov sample shows how you can customize the look of standard
 wxWidgets dialogs by replacing default bitmaps/icons with your own versions.
@@ -165,14 +164,19 @@ It also shows how you can use wxArtProvider to
 get stock bitmaps for use in your application.
 
 
-@section page_samples_calendar Calendar sample
+@section page_samples_aui wxAUI Sample
+
+@todo Write sample description.
+
+
+@section page_samples_calendar Calendar Sample
 
 This font shows the calendar control in action. It
 shows how to configure the control (see the different options in the calendar
 menu) and also how to process the notifications from it.
 
 
-@section page_samples_config Config sample
+@section page_samples_config Config Sample
 
 This sample demonstrates the wxConfig classes in a platform
 independent way, i.e. it uses text based files to store a given configuration under
@@ -181,7 +185,7 @@ Unix and uses the Registry under Windows.
 See @ref overview_config for the descriptions of all features of this class.
 
 
-@section page_samples_controls Controls sample
+@section page_samples_controls Controls Sample
 
 The controls sample is the main test program for most simple controls used in
 wxWidgets. The sample tests their basic functionality, events, placement,
@@ -211,7 +215,7 @@ The various controls tested are listed here:
 @li wxSlider
 
 
-@section page_samples_debugrpt DebugRpt sample
+@section page_samples_debugrpt DebugRpt Sample
 
 This sample shows how to use wxDebugReport class to
 generate a debug report in case of a program crash or otherwise. On start up,
@@ -226,13 +230,13 @@ a Web server accepting form uploads, otherwise
 wxDebugReportUpload will report an error.
 
 
-@section page_samples_dialogs Dialogs sample
+@section page_samples_dialogs Dialogs Sample
 
 This sample shows how to use the common dialogs available from wxWidgets. These
 dialogs are described in detail in the @ref overview_cmndlg.
 
 
-@section page_samples_dialup Dialup sample
+@section page_samples_dialup Dialup Sample
 
 This sample shows the wxDialUpManager
 class. In the status bar, it displays the information gathered through its
@@ -246,7 +250,7 @@ modem attached and (this only makes sense for Windows) list the available
 connections.
 
 
-@section page_samples_dnd DnD sample
+@section page_samples_dnd DnD Sample
 
 This sample shows both clipboard and drag and drop in action. It is quite non
 trivial and may be safely used as a basis for implementing the clipboard and
@@ -285,7 +289,17 @@ Take a look at DnDShapeDataObject class to see how you may use
 wxDataObject to achieve this.
 
 
-@section page_samples_event Event sample
+@section page_samples_docview Document/View Sample
+
+@todo Write sample description.
+
+
+@section page_samples_dragimag wxDragImage Sample
+
+@todo Write sample description.
+
+
+@section page_samples_event Event Sample
 
 The event sample demonstrates various features of the wxWidgets events. It
 shows using dynamic events and connecting/disconnecting the event handlers
@@ -294,7 +308,7 @@ PushEventHandler() and
 PopEventHandler().
 
 
-@section page_samples_except Except(ions) sample
+@section page_samples_except Except(ions) Sample
 
 This very simple sample shows how to use C++ exceptions in wxWidgets programs,
 i.e. where to catch the exception which may be thrown by the program code. It
@@ -306,7 +320,7 @@ and compile your code with C++ exceptions support to be able to build this
 sample.
 
 
-@section page_samples_exec Exec sample
+@section page_samples_exec Exec Sample
 
 The exec sample demonstrates the wxExecute and
 wxShell functions. Both of them are used to execute the
@@ -319,7 +333,7 @@ wxProcess::Kill and test for their existence with
 wxProcess::Exists.
 
 
-@section page_samples_font Font sample
+@section page_samples_font Font Sample
 
 The font sample demonstrates wxFont,
 wxFontEnumerator and
@@ -328,12 +342,12 @@ available (to wxWidgets) on the computer and shows all characters of the
 chosen font as well.
 
 
-@section page_samples_grid Grid sample
+@section page_samples_grid Grid Sample
 
-@todo WRITE THIS DESCRIPTION.
+@todo Write sample description.
 
 
-@section page_samples_html HTML samples
+@section page_samples_html HTML Sample
 
 Eight HTML samples (you can find them in directory @c samples/html)
 cover all features of the HTML sub-library.
@@ -365,7 +379,7 @@ while @e Helpview is a simple tool that only pops up the help window and
 displays help books given at command line.
 
 
-@section page_samples_image Image sample
+@section page_samples_image Image Sample
 
 The image sample demonstrates use of the wxImage class
 and shows how to download images in a variety of formats, currently PNG, GIF,
@@ -387,7 +401,7 @@ This sample also contains the code for testing the image rotation and resizing
 and using raw bitmap access, see the corresponding menu commands.
 
 
-@section page_samples_internat Internat(ionalization) sample
+@section page_samples_internat Internat(ionalization) Sample
 
 The not very clearly named internat sample demonstrates the wxWidgets
 internationalization (i18n for short from now on) features. To be more
@@ -399,7 +413,7 @@ More information about this sample can be found in the @c readme.txt file in
 its directory. Please also see the @ref overview_i18n.
 
 
-@section page_samples_layout Layout sample
+@section page_samples_layout Layout Sample
 
 The layout sample demonstrates the two different layout systems offered
 by wxWidgets. When starting the program, you will see a frame with some
@@ -416,7 +430,7 @@ showing how to use sizers in connection with a wxNotebook
 class. See also wxSizer.
 
 
-@section page_samples_listctrl Listctrl sample
+@section page_samples_listctrl Listctrl Sample
 
 This sample shows the wxListCtrl control. Different modes
 supported by the control (list, icons, small icons, report) may be chosen from
@@ -426,7 +440,7 @@ The sample also provides some timings for adding/deleting/sorting a lot of
 (several thousands) items into the control.
 
 
-@section page_samples_mediaplayer Mediaplayer sample
+@section page_samples_mediaplayer Mediaplayer Sample
 
 This sample demonstrates how to use all the features of
 wxMediaCtrl and play various types of sound, video,
@@ -435,7 +449,7 @@ and other files.
 It replaces the old dynamic sample.
 
 
-@section page_samples_minimal Minimal sample
+@section page_samples_minimal Minimal Sample
 
 The minimal sample is what most people will know under the term Hello World,
 i.e. a minimal program that doesn't demonstrate anything apart from what is
@@ -443,7 +457,7 @@ needed to write a program that will display a "hello" dialog. This is usually
 a good starting point for learning how to use wxWidgets.
 
 
-@section page_samples_notebook Notebook sample
+@section page_samples_notebook Notebook Sample
 
 This samples shows wxBookCtrl family of controls.
 Although initially it was written to demonstrate wxNotebook
@@ -453,14 +467,14 @@ Test each of the controls, their orientation, images and pages using
 commands through menu.
 
 
-@section page_samples_render Render sample
+@section page_samples_render Render Sample
 
 This sample shows how to replace the default wxWidgets
 renderer and also how to write a shared library
 (DLL) implementing a renderer and load and unload it during the run-time.
 
 
-@section page_samples_scrollsub Scroll subwindow sample
+@section page_samples_scrollsub Scroll Subwindow Sample
 
 This sample demonstrates use of the ::wxScrolledWindow
 class including placing subwindows into it and drawing simple graphics. It uses the
@@ -473,7 +487,7 @@ the aim to prevent unnecessary drawing in the window and thus reducing or removi
 flicker on screen.
 
 
-@section page_samples_sockets Sockets sample
+@section page_samples_sockets Sockets Sample
 
 The sockets sample demonstrates how to use the communication facilities
 provided by wxSocket. There are two different
@@ -524,13 +538,13 @@ The sockets sample is work in progress. Some things to do:
 @li New samples which actually do something useful (suggestions accepted).
 
 
-@section page_samples_sound Sound sample
+@section page_samples_sound Sound Sample
 
 The @c sound sample shows how to use wxSound for simple
 audio output (e.g. notifications).
 
 
-@section page_samples_statbar Statbar sample
+@section page_samples_statbar Statbar Sample
 
 This sample shows how to create and use wxStatusBar. Although most of the
 samples have a statusbar, they usually only create a default one and only
@@ -541,7 +555,7 @@ of fields) and how to use it to show icons/bitmaps and/or put arbitrary
 controls into it.
 
 
-@section page_samples_taborder Tab order sample
+@section page_samples_taborder Tab Order Sample
 
 This sample allows to test keyboard navigation (mostly done using the
 @c TAB key, hence the sample name) between different controls.
@@ -552,7 +566,7 @@ wxWindow::Navigate() for moving focus along this
 chain.
 
 
-@section page_samples_text Text sample
+@section page_samples_text Text Sample
 
 This sample demonstrates four features: firstly the use and many variants of
 the wxTextCtrl class (single line, multi line, read only,
@@ -574,7 +588,7 @@ Last not least: some of the text controls have tooltips and the sample also show
 how tooltips can be centrally disabled and their latency controlled.
 
 
-@section page_samples_thread Thread sample
+@section page_samples_thread Thread Sample
 
 This sample demonstrates use of threads in connection with GUI programs.
 There are two fundamentally different ways to use threads in GUI programs and
@@ -595,7 +609,7 @@ used and tested in the sample as well.
 See also @ref overview_thread and wxThread.
 
 
-@section page_samples_toolbar Toolbar sample
+@section page_samples_toolbar Toolbar Sample
 
 The toolbar sample shows the wxToolBar class in action.
 
@@ -620,7 +634,7 @@ group, i.e. checking any of them automatically unchecks the previously
 checked one.
 
 
-@section page_samples_treectrl Treectrl sample
+@section page_samples_treectrl Treectrl Sample
 
 This sample demonstrates using the wxTreeCtrl class. Here
 you may see how to process various notification messages sent by this control
@@ -632,7 +646,7 @@ sorting (in default alphabetical order as well as in custom one) is
 demonstrated here as well - try the corresponding menu entries.
 
 
-@section page_samples_widgets Widgets sample
+@section page_samples_widgets Widgets Sample
 
 The widgets sample is the main presentation program for most simple and advanced
 native controls and complex generic widgets provided by wxWidgets.
@@ -642,7 +656,7 @@ the controls programmatically, such as adding an item to a list box etc.
 All widgets are categorized for easy browsing.
 
 
-@section page_samples_wizard Wizard sample
+@section page_samples_wizard Wizard Sample
 
 This sample shows the so-called wizard dialog (implemented using
 wxWizard and related classes). It shows almost all

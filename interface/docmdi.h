@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        docmdi.h
-// Purpose:     interface of wxDocMDIParentFrame
+// Purpose:     interface of wxDocMDIParentFrame and wxDocMDIChildFrame
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -11,18 +11,16 @@
     @wxheader{docmdi.h}
 
     The wxDocMDIParentFrame class provides a default top-level frame for
-    applications using the document/view framework. This class can only be used for
-    MDI parent frames.
+    applications using the document/view framework. This class can only be used
+    for MDI parent frames.
 
-    It cooperates with the wxView, wxDocument,
-    wxDocManager and wxDocTemplates() classes.
-
-    See the example application in @c samples/docview.
+    It cooperates with the wxView, wxDocument, wxDocManager and wxDocTemplate
+    classes.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{docview}
 
-    @see @ref overview_docviewoverview, wxMDIParentFrame
+    @see @ref overview_docview, @ref page_samples_docview, wxMDIParentFrame
 */
 class wxDocMDIParentFrame : public wxMDIParentFrame
 {
@@ -59,8 +57,21 @@ public:
     /**
         Deletes all views and documents. If no user input cancelled the
         operation, the frame will be destroyed and the application will exit.
-        Since understanding how document/view clean-up takes place can be difficult,
-        the implementation of this function is shown below.
+
+        Since understanding how document/view clean-up takes place can be
+        difficult, the implementation of this function is shown below:
+
+        @code
+        void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
+        {
+            if (m_docManager->Clear(!event.CanVeto()))
+            {
+                this->Destroy();
+            }
+            else
+                event.Veto();
+        }
+        @endcode
     */
     void OnCloseWindow(wxCloseEvent& event);
 };
@@ -71,19 +82,18 @@ public:
     @class wxDocMDIChildFrame
     @wxheader{docmdi.h}
 
-    The wxDocMDIChildFrame class provides a default frame for displaying documents
-    on separate windows. This class can only be used for MDI child frames.
+    The wxDocMDIChildFrame class provides a default frame for displaying
+    documents on separate windows. This class can only be used for MDI child
+    frames.
 
     The class is part of the document/view framework supported by wxWidgets,
-    and cooperates with the wxView, wxDocument,
-    wxDocManager and wxDocTemplate classes.
-
-    See the example application in @c samples/docview.
+    and cooperates with the wxView, wxDocument, wxDocManager and wxDocTemplate
+    classes.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{docview}
 
-    @see @ref overview_docviewoverview, wxMDIChildFrame
+    @see @ref overview_docview, @ref page_samples_docview, wxMDIChildFrame
 */
 class wxDocMDIChildFrame : public wxMDIChildFrame
 {
@@ -92,8 +102,7 @@ public:
         Constructor.
     */
     wxDocMDIChildFrame(wxDocument* doc, wxView* view,
-                       wxFrame* parent,
-                       wxWindowID id,
+                       wxFrame* parent, wxWindowID id,
                        const wxString& title,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
@@ -136,16 +145,5 @@ public:
         Sets the view for this frame.
     */
     void SetView(wxView* view);
-
-    /**
-        wxDocument* m_childDocument
-        The document associated with the frame.
-    */
-
-
-    /**
-        wxView* m_childView
-        The view associated with the frame.
-    */
 };
 
