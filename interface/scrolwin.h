@@ -19,15 +19,15 @@
     - ::wxScrolledWindow, aka wxScrolled<wxPanel>, is equivalent to
       ::wxScrolledWindow from earlier versions. Derived from wxPanel, it shares
       wxPanel's behaviour with regard to TAB traversal and focus handling. Use
-      this if the scrolled window will have children controls.
+      this if the scrolled window will have child controls.
 
     - ::wxScrolledCanvas, aka wxScrolled<wxWindow>, derives from wxWindow and
       so doesn't handle children specially. This is suitable e.g. for
       implementating scrollable controls such as tree or list controls.
 
     Starting from version 2.4 of wxWidgets, there are several ways to use a
-    wxScrolled. In particular, there are now three ways to set the size of the
-    scrolling area:
+    ::wxScrolledWindow (and now wxScrolled). In particular, there are
+    three ways to set the size of the scrolling area:
 
     One way is to set the scrollbars directly using a call to SetScrollbars().
     This is the way it used to be in any previous version of wxWidgets and it
@@ -98,7 +98,7 @@
     implementation as a guide to build your own scroll behaviour or use
     wxVScrolledWindow or its variants.
 
-    @since wxScrolled template exists since version 2.9.0. In older versions,
+    @since The wxScrolled template exists since version 2.9.0. In older versions,
            only ::wxScrolledWindow (equivalent of wxScrolled<wxPanel>) was
            available.
 
