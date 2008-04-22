@@ -439,7 +439,7 @@ public:
 
     wxCommandEvent(const wxCommandEvent& event)
         : wxEvent(event),
-          m_cmdString(event.m_cmdString),
+          m_cmdString(event.m_cmdString.c_str()), // "thread-safe"
           m_commandInt(event.m_commandInt),
           m_extraLong(event.m_extraLong),
           m_clientData(event.m_clientData),
