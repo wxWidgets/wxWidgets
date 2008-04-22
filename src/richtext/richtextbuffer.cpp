@@ -4124,6 +4124,9 @@ bool wxRichTextParagraph::GetContiguousPlainText(wxString& text, const wxRichTex
 /// Find a suitable wrap position.
 bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& dc, int availableSpace, long& wrapPosition)
 {
+    if (range.GetLength() <= 0)
+        return false;
+
     // Find the first position where the line exceeds the available space.
     wxSize sz;
     long breakPosition = range.GetEnd();
@@ -4143,7 +4146,7 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
         {
             int widthFromStartOfThisRange = g_GlobalPartialTextExtents[i - GetRange().GetStart()] - widthBefore;
 
-            if (widthFromStartOfThisRange >= availableSpace)
+            if (widthFromStartOfThisRange > availableSpace)
             {
                 breakPosition = i-1;
                 break;
