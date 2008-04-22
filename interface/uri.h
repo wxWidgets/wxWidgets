@@ -7,25 +7,54 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Host type of URI returned from wxURI::GetHostType().
+*/
+enum wxURIHostType
+{
+    wxURI_REGNAME,      ///< Host is a normal register name (@c "www.mysite.com").
+    wxURI_IPV4ADDRESS,  ///< Host is a version 4 ip address (@c "192.168.1.100").
+    wxURI_IPV6ADDRESS,  ///< Host is a version 6 ip address (@c "[aa:aa:aa:aa::aa:aa]:5050").
+    wxURI_IPVFUTURE     ///< Host is a future ip address, wxURI is unsure what kind.
+};
+
+/**
     @class wxURI
     @wxheader{uri.h}
 
-    wxURI is used to extract information from
-    a URI (Uniform Resource Identifier).
+    wxURI is used to extract information from a URI (Uniform Resource
+    Identifier).
 
-    For information about URIs, see
-    RFC 3986.
+    For information about URIs, see RFC 3986
+    <http://www.ietf.org/rfc/rfc3986.txt>.
 
-    In short, a URL is a URI.  In other
-    words, URL is a subset of a URI - all
+    In short, a URL is a URI. In other words, URL is a subset of a URI - all
     acceptable URLs are also acceptable URIs.
 
-    wxURI automatically escapes invalid characters in a string,
-    so there is no chance of wxURI "failing" on construction/creation.
+    wxURI automatically escapes invalid characters in a string, so there is no
+    chance of wxURI "failing" on construction/creation.
 
-    wxURI supports copy construction and standard assignment
-    operators.  wxURI can also be inherited from to provide
-    furthur functionality.
+    wxURI supports copy construction and standard assignment operators. wxURI
+    can also be inherited from to provide furthur functionality.
+
+    To obtain individual components you can use one of the GetXXX() methods.
+    However, you should check HasXXX() before calling a get method, which
+    determines whether or not the component referred to by the method is
+    defined according to RFC 2396. Consider an undefined component equivalent
+    to a @NULL C string.
+
+    Example:
+
+    @code
+    //protocol will hold the http protocol (i.e. "http")
+    wxString protocol;
+    wxURI myuri("http://mysite.com");
+    if( myuri.HasScheme() )
+        protocol = myuri.GetScheme();
+    @endcode
+
+    @note On URIs with a "file" scheme wxURI does not parse the userinfo,
+          server, or port portion. This is to keep compatability with
+          wxFileSystem, the old wxURL, and older url specifications.
 
     @library{wxbase}
     @category{data}
@@ -35,157 +64,153 @@
 class wxURI : public wxObject
 {
 public:
-    //@{
+    /**
+        Creates an empty URI.
+    */
+    wxURI();
+    /**
+        Constructor for quick creation.
+
+        @param uri
+            URI (Uniform Resource Identifier) to initialize with.
+    */
+    wxURI(const wxChar* uri);
     /**
         Copies this URI from another URI.
 
         @param uri
-            URI (Uniform Resource Identifier) to initialize with
+            URI (Uniform Resource Identifier) to initialize with.
     */
-    wxURI();
-    wxURI(const wxChar* uri);
     wxURI(const wxURI& uri);
-    //@}
 
     /**
-        Builds the URI from its individual components and adds proper separators.
-        If the URI is not a reference or is not resolved,
-        the URI that is returned from Get is the same one
-        passed to Create.
+        Builds the URI from its individual components and adds proper
+        separators.
+
+        If the URI is not a reference or is not resolved, the URI that is
+        returned is the same one passed to the constructor or Create().
     */
     wxString BuildURI() const;
 
     /**
-        Builds the URI from its individual components, adds proper separators, and
-        returns escape sequences to normal characters.
-        Note that it is preferred to call this over Unescape(BuildURI()) since
-        BuildUnescapedURI() performs some optimizations over the plain method.
+        Builds the URI from its individual components, adds proper separators,
+        and returns escape sequences to normal characters.
+
+        @note It is preferred to call this over Unescape(BuildURI()) since
+              BuildUnescapedURI() performs some optimizations over the plain
+              method.
     */
     wxString BuildUnescapedURI() const;
 
     /**
-        Creates this URI from the string
+        Creates this URI from the @a uri string.
 
-        @param uri.
+        Returns the position at which parsing stopped (there is no such thing
+        as an "invalid" wxURI).
 
-        Returns the position at which parsing stopped (there
-        is no such thing as an "invalid" wxURI).
-
-        uri
-            string to initialize from
+        @param uri
+            String to initialize from.
     */
     const wxChar* Create(const wxString uri);
 
     /**
-        Note that on URIs with a "file" scheme wxURI does not
-        parse the userinfo, server, or port portion.  This is to keep
-        compatability with wxFileSystem, the old wxURL, and older url specifications.
-    */
-
-
-    /**
         Obtains the fragment of this URI.
-        The fragment of a URI is the last value of the URI,
-        and is the value after a " character after the path
-        of the URI.
-        @c http://mysite.com/mypath#fragment
+
+        The fragment of a URI is the last value of the URI, and is the value
+        after a "#" character after the path of the URI.
+
+        @c "http://mysite.com/mypath#<fragment>"
     */
-    const wxString GetFragment() const;
+    const wxString& GetFragment() const;
 
     /**
-        Obtains the host type of this URI, which is of type
-        HostType():
-
-        @b wxURI_REGNAME
-
-        Server is a host name, or the Server component itself is undefined.
-
-        @b wxURI_IPV4ADDRESS
-
-        Server is a IP version 4 address (XXX.XXX.XXX.XXX)
-
-        @b wxURI_IPV6ADDRESS
-
-        Server is a IP version 6 address ((XXX:)XXX::(XXX)XXX:XXX
-
-        @b wxURI_IPVFUTURE
-
-        Server is an IP address, but not versions 4 or 6
+        Obtains the host type of this URI, which is one of wxURIHostType.
     */
-    const HostType GetHostType() const;
+    const wxURIHostType& GetHostType() const;
 
     /**
-        Returns the password part of the userinfo component of
-        this URI.  Note that this is explicitly depreciated by
-        RFC 1396 and should generally be avoided if possible.
-        @c http://user:password@mysite.com/mypath
+        Returns the password part of the userinfo component of this URI. Note
+        that this is explicitly depreciated by RFC 1396 and should generally be
+        avoided if possible.
+
+        @c "http://<user>:<password>@mysite.com/mypath"
     */
-    const wxString GetPassword() const;
+    const wxString& GetPassword() const;
 
     /**
         Returns the (normalized) path of the URI.
-        The path component of a URI comes
-        directly after the scheme component
-        if followed by zero or one slashes ('/'),
-        or after the server/port component.
-        Absolute paths include the leading '/'
-        character.
-        @c http://mysite.compath
+
+        The path component of a URI comes directly after the scheme component
+        if followed by zero or one slashes ('/'), or after the server/port
+        component.
+
+        Absolute paths include the leading '/' character.
+
+        @c "http://mysite.com<path>"
     */
-    const wxString GetPath() const;
+    const wxString& GetPath() const;
 
     /**
         Returns a string representation of the URI's port.
-        The Port of a URI is a value after the server, and
-        must come after a colon (:).
-        @c http://mysite.com:port
-        Note that you can easily get the numeric value of the port
-        by using wxAtoi or wxString::Format.
+
+        The Port of a URI is a value after the server, and must come after a
+        colon (:).
+
+        @c "http://mysite.com:<port>"
+
+        @note You can easily get the numeric value of the port by using
+              wxAtoi() or wxString::Format().
     */
-    const wxString GetPort() const;
+    const wxString& GetPort() const;
 
     /**
         Returns the Query component of the URI.
-        The query component is what is commonly passed to a
-        cgi application, and must come after the path component,
-        and after a '?' character.
-        @c http://mysite.com/mypath?query
+
+        The query component is what is commonly passed to a cgi application,
+        and must come after the path component, and after a '?' character.
+
+        @c "http://mysite.com/mypath?<query>"
     */
-    const wxString GetQuery() const;
+    const wxString& GetQuery() const;
 
     /**
         Returns the Scheme component of the URI.
-        The first part of the uri.
-        @c scheme://mysite.com
+
+        The first part of the URI.
+
+        @c "<scheme>://mysite.com"
     */
-    const wxString GetScheme() const;
+    const wxString& GetScheme() const;
 
     /**
         Returns the Server component of the URI.
-        The server of the uri can be a server name or
-        a type of ip address.  See
-        GetHostType() for the
-        possible values for the host type of the
-        server component.
-        @c http://server/mypath
+
+        The server of the URI can be a server name or a type of IP address. See
+        GetHostType() for the possible values for the host type of the server
+        component.
+
+        @c "http://<server>/mypath"
     */
-    const wxString GetServer() const;
+    const wxString& GetServer() const;
 
     /**
-        Returns the username part of the userinfo component of
-        this URI.  Note that this is explicitly depreciated by
-        RFC 1396 and should generally be avoided if possible.
-        @c http://user:password@mysite.com/mypath
+        Returns the username part of the userinfo component of this URI. Note
+        that this is explicitly depreciated by RFC 1396 and should generally be
+        avoided if possible.
+
+        @c "http://<user>:<password>@mysite.com/mypath"
     */
-    const wxString GetUser() const;
+    const wxString& GetUser() const;
 
     /**
         Returns the UserInfo component of the URI.
-        The component of a URI before the server component
-        that is postfixed by a '@' character.
-        @c http://userinfo@mysite.com/mypath
+
+        The component of a URI before the server component that is postfixed by
+        a '@' character.
+
+        @c "http://<userinfo>@mysite.com/mypath"
     */
-    const wxString GetUserInfo() const;
+    const wxString& GetUserInfo() const;
 
     /**
         Returns @true if the Fragment component of the URI exists.
@@ -223,92 +248,51 @@ public:
     bool HasUser() const;
 
     /**
-        Returns @true if a valid [absolute] URI, otherwise this URI
-        is a URI reference and not a full URI, and IsReference
-        returns @false.
+        Returns @true if a valid [absolute] URI, otherwise this URI is a URI
+        reference and not a full URI, and this function returns @false.
     */
     bool IsReference() const;
 
     /**
-        To obtain individual components you can use
-        one of the following methods
-        GetScheme()
+        Inherits this URI from a base URI - components that do not exist in
+        this URI are copied from the base, and if this URI's path is not an
+        absolute path (prefixed by a '/'), then this URI's path is merged with
+        the base's path.
 
-        GetUserInfo()
-
-        GetServer()
-
-        GetPort()
-
-        GetPath()
-
-        GetQuery()
-
-        GetFragment()
-        However, you should check HasXXX before
-        calling a get method, which determines whether or not the component referred
-        to by the method is defined according to RFC 2396.
-        Consider an undefined component equivalent to a
-        @NULL C string.
-
-        HasScheme()
-
-        HasUserInfo()
-
-        HasServer()
-
-        @ref hasserver() HasPort
-
-        HasPath()
-
-        HasQuery()
-
-        HasFragment()
-        Example:
-    */
-
-
-    /**
-        Inherits this URI from a base URI - components that do not
-        exist in this URI are copied from the base, and if this URI's
-        path is not an absolute path (prefixed by a '/'), then this URI's
-        path is merged with the base's path.
         For instance, resolving "../mydir" from "http://mysite.com/john/doe"
-        results in the scheme (http) and server (mysite.com) being copied into
-        this URI, since they do not exist.  In addition, since the path
-        of this URI is not absolute (does not begin with '/'), the path
-        of the base's is merged with this URI's path, resulting in the URI
+        results in the scheme (http) and server ("mysite.com") being copied
+        into this URI, since they do not exist. In addition, since the path of
+        this URI is not absolute (does not begin with '/'), the path of the
+        base's is merged with this URI's path, resulting in the URI
         "http://mysite.com/john/mydir".
 
         @param base
-            Base URI to inherit from.  Must be a full URI and not a reference
+            Base URI to inherit from. Must be a full URI and not a reference.
         @param flags
-            Currently either wxURI_STRICT or 0, in non-strict
-            mode some compatibility layers are enabled to allow loopholes from RFCs
-        prior
-            to 2396
+            Currently either wxURI_STRICT or 0, in non-strict mode some
+            compatibility layers are enabled to allow loopholes from RFCs prior
+            to 2396.
     */
     void Resolve(const wxURI& base, int flags = wxURI_STRICT);
 
     /**
-        Translates all escape sequences (normal characters and returns the result.
-        This is the preferred over deprecated wxURL::ConvertFromURI.
-        If you want to unescape an entire wxURI, use BuildUnescapedURI() instead,
-        as it performs some optimizations over this method.
+        Translates all escape sequences (normal characters and returns the
+        result.
+
+        If you want to unescape an entire wxURI, use BuildUnescapedURI()
+        instead, as it performs some optimizations over this method.
 
         @param uri
-            string with escaped characters to convert
+            String with escaped characters to convert.
     */
     wxString Unescape(const wxString& uri);
 
     /**
-        Compares this URI to another URI, and returns @true if
-        this URI equals
+        Compares this URI to another URI, and returns @true if this URI equals
+        @a uricomp, otherwise it returns @false.
 
-        @param uricomp, otherwise it returns @false.
-
-        uricomp
-            URI to compare to
+        @param uricomp
+            URI to compare to.
     */
     void operator ==(const wxURI& uricomp);
 };

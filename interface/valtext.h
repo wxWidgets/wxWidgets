@@ -13,145 +13,59 @@
     wxTextValidator validates text controls, providing a variety of filtering
     behaviours.
 
-    For more information, please see @ref overview_validatoroverview "Validator
-    overview".
+    For more information, please see @ref overview_validator.
+
+    @beginStyleTable
+    @style{wxFILTER_NONE}
+           No filtering takes place.
+    @style{wxFILTER_ASCII}
+           Non-ASCII characters are filtered out.
+    @style{wxFILTER_ALPHA}
+           Non-alpha characters are filtered out.
+    @style{wxFILTER_ALPHANUMERIC}
+           Non-alphanumeric characters are filtered out.
+    @style{wxFILTER_NUMERIC}
+           Non-numeric characters are filtered out.
+    @style{wxFILTER_INCLUDE_LIST}
+           Use an include list. The validator checks if the user input is on
+           the list, complaining if not. See SetIncludes().
+    @style{wxFILTER_EXCLUDE_LIST}
+           Use an exclude list. The validator checks if the user input is on
+           the list, complaining if it is. See SetExcludes().
+    @style{wxFILTER_INCLUDE_CHAR_LIST}
+           Use an include list. The validator checks if each input character is
+           in the list (one character per list element), complaining if not.
+           See SetIncludes().
+    @style{wxFILTER_EXCLUDE_CHAR_LIST}
+           Use an include list. The validator checks if each input character is
+           in the list (one character per list element), complaining if it is.
+           See SetExcludes().
+    @endStyleTable
 
     @library{wxcore}
     @category{validator}
 
-    @see @ref overview_validatoroverview "Validator overview", wxValidator,
-    wxGenericValidator
+    @see @ref overview_validator, wxValidator, wxGenericValidator
 */
 class wxTextValidator : public wxValidator
 {
 public:
-    //@{
     /**
-        Constructor, taking a style and optional pointer to a wxString variable.
-
-        @param style
-            A bitlist of flags, which can be:
-
-
-
-
-
-
-
-            wxFILTER_NONE
-
-
-
-
-            No filtering takes place.
-
-
-
-
-
-            wxFILTER_ASCII
-
-
-
-
-            Non-ASCII characters are filtered out.
-
-
-
-
-
-            wxFILTER_ALPHA
-
-
-
-
-            Non-alpha characters are filtered out.
-
-
-
-
-
-            wxFILTER_ALPHANUMERIC
-
-
-
-
-            Non-alphanumeric characters are filtered out.
-
-
-
-
-
-            wxFILTER_NUMERIC
-
-
-
-
-            Non-numeric characters are filtered out.
-
-
-
-
-
-            wxFILTER_INCLUDE_LIST
-
-
-
-
-            Use an include list. The validator
-            checks if the user input is on the list, complaining if not. See
-            SetIncludes().
-
-
-
-
-
-            wxFILTER_EXCLUDE_LIST
-
-
-
-
-            Use an exclude list. The validator
-            checks if the user input is on the list, complaining if it is. See
-            SetExcludes().
-
-
-
-
-
-            wxFILTER_INCLUDE_CHAR_LIST
-
-
-
-
-            Use an include list. The validator
-            checks if each input character is in the list (one character per list
-        element), complaining if not.
-            See SetIncludes().
-
-
-
-
-
-            wxFILTER_EXCLUDE_CHAR_LIST
-
-
-
-
-            Use an include list. The validator
-            checks if each input character is in the list (one character per list
-        element), complaining if it is.
-            See SetExcludes().
-        @param valPtr
-            A pointer to a wxString variable that contains the value. This variable
-            should have a lifetime equal to or longer than the validator lifetime
-        (which is usually
-            determined by the lifetime of the window).
+        Default constructor.
     */
     wxTextValidator(const wxTextValidator& validator);
-    wxTextValidator(long style = wxFILTER_NONE,
-                    wxString* valPtr = NULL);
-    //@}
+    /**
+        Constructor taking a style and optional pointer to a wxString variable.
+
+        @param style
+            A bitlist of flags documented in the class description.
+        @param valPtr
+            A pointer to a wxString variable that contains the value. This
+            variable should have a lifetime equal to or longer than the
+            validator lifetime (which is usually determined by the lifetime of
+            the window).
+    */
+    wxTextValidator(long style = wxFILTER_NONE, wxString* valPtr = NULL);
 
     /**
         Clones the text validator using the copy constructor.
@@ -161,12 +75,12 @@ public:
     /**
         Returns a reference to the exclude list (the list of invalid values).
     */
-    wxArrayString GetExcludes() const;
+    wxArrayString& GetExcludes() const;
 
     /**
         Returns a reference to the include list (the list of valid values).
     */
-    wxArrayString GetIncludes() const;
+    wxArrayString& GetIncludes() const;
 
     /**
         Returns the validator style.
@@ -174,8 +88,8 @@ public:
     long GetStyle() const;
 
     /**
-        Receives character input from the window and filters it according to the
-        current validator style.
+        Receives character input from the window and filters it according to
+        the current validator style.
     */
     void OnChar(wxKeyEvent& event);
 
@@ -205,8 +119,8 @@ public:
     virtual bool TransferToWindow();
 
     /**
-        Validates the window contents against the include or exclude lists, depending
-        on the validator style.
+        Validates the window contents against the include or exclude lists,
+        depending on the validator style.
     */
     virtual bool Validate(wxWindow* parent);
 };

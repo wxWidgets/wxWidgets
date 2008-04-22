@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        utils.h
-// Purpose:     interface of wxWindowDisabler
+// Purpose:     interface of various utility classes and functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -10,14 +10,15 @@
     @class wxWindowDisabler
     @wxheader{utils.h}
 
-    This class disables all windows of the application (may be with the exception
-    of one of them) in its constructor and enables them back in its destructor.
+    This class disables all windows of the application (may be with the
+    exception of one of them) in its constructor and enables them back in its
+    destructor.
 
     This is useful when you want to indicate to the user that the application
     is currently busy and cannot respond to user input.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{misc}
 
     @see wxBusyCursor
 */
@@ -35,13 +36,13 @@ public:
     wxWindowDisabler(bool disable = true);
 
     /**
-        Disables all top level windows of the applications with the exception of
-        @a winToSkip if it is not @NULL.
+        Disables all top level windows of the applications with the exception
+        of @a winToSkip if it is not @NULL.
     */
     wxWindowDisabler(wxWindow* winToSkip);
 
     /**
-        Reenables back the windows disabled by the constructor.
+        Reenables the windows disabled by the constructor.
     */
     ~wxWindowDisabler();
 };
@@ -52,24 +53,24 @@ public:
     @class wxBusyCursor
     @wxheader{utils.h}
 
-    This class makes it easy to tell your user that the program is temporarily busy.
-    Just create a wxBusyCursor object on the stack, and within the current scope,
-    the hourglass will be shown.
+    This class makes it easy to tell your user that the program is temporarily
+    busy. Just create a wxBusyCursor object on the stack, and within the
+    current scope, the hourglass will be shown.
 
     For example:
 
     @code
     wxBusyCursor wait;
 
-      for (int i = 0; i  100000; i++)
+    for (int i = 0; i < 100000; i++)
         DoACalculation();
     @endcode
 
-    It works by calling wxBeginBusyCursor() in the constructor,
-    and wxEndBusyCursor() in the destructor.
+    It works by calling wxBeginBusyCursor() in the constructor, and
+    wxEndBusyCursor() in the destructor.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{misc}
 
     @see wxBeginBusyCursor(), wxEndBusyCursor(), wxWindowDisabler
 */
@@ -88,6 +89,7 @@ public:
 };
 
 
+
 /**
     @class wxMouseState
     @wxheader{utils.h}
@@ -97,38 +99,74 @@ public:
     The methods of this class generally mirror the corresponding methods of
     wxMouseEvent.
 
+    This class is implemented entirely in @<wx/utils.h@>, meaning no extra
+    library needs to be linked to use this class.
+
+    @category{misc}
+
     @see wxGetMouseState()
  */
 class wxMouseState
 {
 public:
-    /// Returns X coordinate of the physical mouse event position.
+    /**
+        Default constructor.
+    */
+    wxMouseState();
+
+    /**
+        Returns X coordinate of the physical mouse event position.
+    */
     wxCoord GetX() const;
-    /// Returns Y coordinate of the physical mouse event position.
+    /**
+        Returns Y coordinate of the physical mouse event position.
+    */
     wxCoord GetY() const;
-    /// Returns the physical mouse position.
+    /**
+        Returns the physical mouse position.
+    */
     wxPoint GetPosition() const;
 
-    /// Returns @true if the left mouse button changed to down.
+    /**
+        Returns @true if the left mouse button changed to down.
+    */
     bool LeftDown() const;
-    /// Returns @true if the middle mouse button changed to down.
+    /**
+        Returns @true if the middle mouse button changed to down.
+    */
     bool MiddleDown() const;
-    /// Returns @true if the right mouse button changed to down.
+    /**
+        Returns @true if the right mouse button changed to down.
+    */
     bool RightDown() const;
-    /// Returns @true if the first extra button mouse button changed to down.
+    /**
+        Returns @true if the first extra button mouse button changed to down.
+    */
     bool Aux1Down() const;
-    /// Returns @true if the second extra button mouse button changed to down.
+    /**
+        Returns @true if the second extra button mouse button changed to down.
+    */
     bool Aux2Down() const;
 
-    /// Returns @true if the control key is down.
+    /**
+        Returns @true if the control key is down.
+    */
     bool ControlDown() const;
-    /// Returns @true if the shift key is down.
+    /**
+        Returns @true if the shift key is down.
+    */
     bool ShiftDown() const;
-    /// Returns @true if the alt key is down.
+    /**
+        Returns @true if the alt key is down.
+    */
     bool AltDown() const;
-    /// Returns @true if the meta key is down.
+    /**
+        Returns @true if the meta key is down.
+    */
     bool MetaDown() const;
-    /// Same as MetaDown() under Mac systems, ControlDown() for the others.
+    /**
+        Same as MetaDown() under Mac systems, ControlDown() for the others.
+    */
     bool CmdDown() const;
 };
 
