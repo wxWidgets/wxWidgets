@@ -293,7 +293,6 @@ private:
     wxDataViewItemArray m_hash;
     unsigned int m_lastIndex;
     bool m_ordered;
-    bool m_useHash;
 };
 
 // ---------------------------------------------------------
