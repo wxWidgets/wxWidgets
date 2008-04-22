@@ -399,6 +399,28 @@ void wxapp_install_idle_handler()
     wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 }
 
+static bool wxOKlibc()
+{
+#if defined(__UNIX__) && defined(__GLIBC__)
+    // glibc 2.0 uses UTF-8 even when it shouldn't
+    wchar_t res = 0;
+    if ((MB_CUR_MAX == 2) &&
+        (wxMB2WC(&res, "\xdd\xa5", 1) == 1) &&
+        (res==0x765))
+    {
+        // this is UTF-8 allright, check whether that's what we want
+        char *cur_locale = setlocale(LC_CTYPE, NULL);
+        if ((strlen(cur_locale) < 4) ||
+        (strcasecmp(cur_locale + strlen(cur_locale) - 4, "utf8")) ||
+        (strcasecmp(cur_locale + strlen(cur_locale) - 5, "utf-8"))) {
+        // nope, don't use libc conversion
+        return false;
+        }
+    }
+#endif
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 // Access to the root window global
 //-----------------------------------------------------------------------------
@@ -573,13 +595,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     gtk_set_locale();
 
     // We should have the wxUSE_WCHAR_T test on the _outside_
-#if wxUSE_WCHAR_T
-        if (!wxOKlibc())
-            wxConvCurrent = &wxConvLocal;
-#else // !wxUSE_WCHAR_T
     if (!wxOKlibc())
-        wxConvCurrent = (wxMBConv*) NULL;
-#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
+        wxConvCurrent = &wxConvLocal;
 
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
