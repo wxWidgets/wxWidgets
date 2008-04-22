@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.5.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-29 14:59+0100\n"
-"PO-Revision-Date: 2004-08-14 15:36+0100\n"
-"Last-Translator: Herbert Breunung <herbert_breunung@web.de>\n"
+"PO-Revision-Date: 2008-04-22 12:47+0100\n"
+"Last-Translator: Václav Slavík <vslavik@fastmail.fm>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -21,7 +21,8 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 
-#: ../src/palmos/utils.cpp:216 ../src/richtext/richtextstyledlg.cpp:203
+#: ../src/palmos/utils.cpp:216
+#: ../src/richtext/richtextstyledlg.cpp:203
 #: ../src/richtext/richtextstyledlg.cpp:215
 msgid " "
 msgstr ""
@@ -39,12 +40,14 @@ msgstr " (chyba %ld: %s)"
 msgid " - "
 msgstr " - "
 
-#: ../src/common/strconv.cpp:3063 ../src/common/strconv.cpp:3071
+#: ../src/common/strconv.cpp:3063
+#: ../src/common/strconv.cpp:3071
 #, fuzzy
 msgid " Couldn't create the UnicodeConverter"
 msgstr "Nemohu vytvořit časovač"
 
-#: ../src/html/htmprint.cpp:579 ../src/richtext/richtextprint.cpp:535
+#: ../src/html/htmprint.cpp:579
+#: ../src/richtext/richtextprint.cpp:535
 msgid " Preview"
 msgstr " Náhled"
 
@@ -114,8 +117,10 @@ msgstr ""
 msgid "%.*f kB"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:1021 ../src/html/helpwnd.cpp:1023
-#: ../src/html/helpwnd.cpp:1655 ../src/html/helpwnd.cpp:1693
+#: ../src/html/helpwnd.cpp:1021
+#: ../src/html/helpwnd.cpp:1023
+#: ../src/html/helpwnd.cpp:1655
+#: ../src/html/helpwnd.cpp:1693
 #, c-format
 msgid "%i of %i"
 msgstr "%i z %i"
@@ -186,11 +191,12 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:110
 msgid "&About"
-msgstr ""
+msgstr "O &aplikaci"
 
-#: ../src/html/helpfrm.cpp:122 ../src/html/helpfrm.cpp:124
+#: ../src/html/helpfrm.cpp:122
+#: ../src/html/helpfrm.cpp:124
 msgid "&About..."
-msgstr ""
+msgstr "O &aplikaci..."
 
 #: ../src/common/stockitem.cpp:160
 msgid "&Actual Size"
@@ -204,11 +210,11 @@ msgstr "devatenáctého"
 
 #: ../src/common/stockitem.cpp:112
 msgid "&Apply"
-msgstr ""
+msgstr "&Použít"
 
 #: ../src/richtext/richtextstyledlg.cpp:238
 msgid "&Apply Style"
-msgstr ""
+msgstr "&Použít styl"
 
 #: ../src/msw/mdi.cpp:175
 msgid "&Arrange Icons"
@@ -233,8 +239,10 @@ msgstr "Tučné"
 msgid "&Bullet style:"
 msgstr ""
 
-#: ../src/common/stockitem.cpp:114 ../src/generic/fontdlgg.cpp:377
-#: ../src/generic/fontdlgg.cpp:396 ../src/generic/wizard.cpp:451
+#: ../src/common/stockitem.cpp:114
+#: ../src/generic/fontdlgg.cpp:377
+#: ../src/generic/fontdlgg.cpp:396
+#: ../src/generic/wizard.cpp:451
 #: ../src/mac/carbon/fontdlg.cpp:525
 msgid "&Cancel"
 msgstr "&Zrušit"
@@ -252,18 +260,22 @@ msgstr ""
 msgid "&Clear"
 msgstr "&Vymazat"
 
-#: ../src/common/prntbase.cpp:1101 ../src/common/stockitem.cpp:116
-#: ../src/generic/logg.cpp:510 ../src/html/helpfrm.cpp:119
+#: ../src/common/prntbase.cpp:1101
+#: ../src/common/stockitem.cpp:116
+#: ../src/generic/logg.cpp:510
+#: ../src/html/helpfrm.cpp:119
 #: ../src/html/helpdlg.cpp:91
 msgid "&Close"
 msgstr "&Zavřít"
 
 #: ../src/richtext/richtextfontpage.cpp:201
 msgid "&Colour:"
-msgstr ""
+msgstr " &Barva:"
 
-#: ../src/common/stockitem.cpp:117 ../src/mac/carbon/textctrl.cpp:1118
-#: ../src/msw/textctrl.cpp:2210 ../src/richtext/richtextctrl.cpp:2424
+#: ../src/common/stockitem.cpp:117
+#: ../src/mac/carbon/textctrl.cpp:1118
+#: ../src/msw/textctrl.cpp:2210
+#: ../src/richtext/richtextctrl.cpp:2424
 msgid "&Copy"
 msgstr "&Kopírovat"
 
@@ -271,8 +283,10 @@ msgstr "&Kopírovat"
 msgid "&Debug report preview:"
 msgstr ""
 
-#: ../src/common/stockitem.cpp:119 ../src/mac/carbon/textctrl.cpp:1120
-#: ../src/msw/textctrl.cpp:2212 ../src/richtext/richtextctrl.cpp:2426
+#: ../src/common/stockitem.cpp:119
+#: ../src/mac/carbon/textctrl.cpp:1120
+#: ../src/msw/textctrl.cpp:2212
+#: ../src/richtext/richtextctrl.cpp:2426
 #: ../src/richtext/richtexttabspage.cpp:142
 msgid "&Delete"
 msgstr "&Odstranit"
@@ -299,7 +313,8 @@ msgstr ""
 msgid "&Edit Style..."
 msgstr ""
 
-#: ../src/common/stockitem.cpp:122 ../src/html/helpfrm.cpp:126
+#: ../src/common/stockitem.cpp:122
+#: ../src/html/helpfrm.cpp:126
 msgid "&File"
 msgstr "&Soubor"
 
@@ -340,8 +355,10 @@ msgstr "Od:"
 msgid "&Goto..."
 msgstr ""
 
-#: ../src/common/stockitem.cpp:128 ../src/generic/wizard.cpp:447
-#: ../src/generic/wizard.cpp:454 ../src/html/helpfrm.cpp:127
+#: ../src/common/stockitem.cpp:128
+#: ../src/generic/wizard.cpp:447
+#: ../src/generic/wizard.cpp:454
+#: ../src/html/helpfrm.cpp:127
 msgid "&Help"
 msgstr "Nápověda"
 
@@ -398,17 +415,20 @@ msgstr "&Log"
 msgid "&Move"
 msgstr "&Přesunout"
 
-#: ../src/common/stockitem.cpp:137 ../src/richtext/richtexttabspage.cpp:136
+#: ../src/common/stockitem.cpp:137
+#: ../src/richtext/richtexttabspage.cpp:136
 #, fuzzy
 msgid "&New"
 msgstr "&Další"
 
-#: ../src/generic/mdig.cpp:118 ../src/aui/tabmdi.cpp:107
+#: ../src/generic/mdig.cpp:118
+#: ../src/aui/tabmdi.cpp:107
 #: ../src/msw/mdi.cpp:176
 msgid "&Next"
 msgstr "&Další"
 
-#: ../src/generic/wizard.cpp:450 ../src/generic/wizard.cpp:646
+#: ../src/generic/wizard.cpp:450
+#: ../src/generic/wizard.cpp:646
 msgid "&Next >"
 msgstr "&Další >"
 
@@ -435,8 +455,10 @@ msgstr "Ne"
 msgid "&Number:"
 msgstr ""
 
-#: ../src/common/stockitem.cpp:139 ../src/generic/fontdlgg.cpp:382
-#: ../src/generic/fontdlgg.cpp:389 ../src/mac/carbon/fontdlg.cpp:531
+#: ../src/common/stockitem.cpp:139
+#: ../src/generic/fontdlgg.cpp:382
+#: ../src/generic/fontdlgg.cpp:389
+#: ../src/mac/carbon/fontdlg.cpp:531
 #, fuzzy
 msgid "&OK"
 msgstr "OK"
@@ -450,8 +472,10 @@ msgstr "&Otevřít..."
 msgid "&Open..."
 msgstr "&Otevřít..."
 
-#: ../src/common/stockitem.cpp:141 ../src/mac/carbon/textctrl.cpp:1119
-#: ../src/msw/textctrl.cpp:2211 ../src/richtext/richtextctrl.cpp:2425
+#: ../src/common/stockitem.cpp:141
+#: ../src/mac/carbon/textctrl.cpp:1119
+#: ../src/msw/textctrl.cpp:2211
+#: ../src/richtext/richtextctrl.cpp:2425
 msgid "&Paste"
 msgstr "&Vložit"
 
@@ -468,7 +492,8 @@ msgstr ""
 msgid "&Preferences"
 msgstr ""
 
-#: ../src/generic/mdig.cpp:119 ../src/aui/tabmdi.cpp:108
+#: ../src/generic/mdig.cpp:119
+#: ../src/aui/tabmdi.cpp:108
 #: ../src/msw/mdi.cpp:177
 msgid "&Previous"
 msgstr "&Předchozí"
@@ -491,13 +516,17 @@ msgstr "&Předchozí"
 msgid "&Quit"
 msgstr ""
 
-#: ../src/common/cmdproc.cpp:288 ../src/common/cmdproc.cpp:295
-#: ../src/common/stockitem.cpp:147 ../src/mac/carbon/textctrl.cpp:1115
-#: ../src/msw/textctrl.cpp:2207 ../src/richtext/richtextctrl.cpp:2421
+#: ../src/common/cmdproc.cpp:288
+#: ../src/common/cmdproc.cpp:295
+#: ../src/common/stockitem.cpp:147
+#: ../src/mac/carbon/textctrl.cpp:1115
+#: ../src/msw/textctrl.cpp:2207
+#: ../src/richtext/richtextctrl.cpp:2421
 msgid "&Redo"
 msgstr "&Zopakovat"
 
-#: ../src/common/cmdproc.cpp:284 ../src/common/cmdproc.cpp:304
+#: ../src/common/cmdproc.cpp:284
+#: ../src/common/cmdproc.cpp:304
 msgid "&Redo "
 msgstr "&Zopakovat "
 
@@ -561,7 +590,8 @@ msgstr ""
 msgid "&Stop"
 msgstr "Nastavení"
 
-#: ../src/generic/fontdlgg.cpp:289 ../src/richtext/richtextstylepage.cpp:103
+#: ../src/generic/fontdlgg.cpp:289
+#: ../src/richtext/richtextstylepage.cpp:103
 msgid "&Style:"
 msgstr ""
 
@@ -579,7 +609,8 @@ msgstr ""
 msgid "&Symbol:"
 msgstr ""
 
-#: ../src/common/stockitem.cpp:156 ../src/generic/fontdlgg.cpp:351
+#: ../src/common/stockitem.cpp:156
+#: ../src/generic/fontdlgg.cpp:351
 #, fuzzy
 msgid "&Underline"
 msgstr "Podtržené"
@@ -589,8 +620,10 @@ msgstr "Podtržené"
 msgid "&Underlining:"
 msgstr "Podtržené"
 
-#: ../src/common/cmdproc.cpp:266 ../src/common/stockitem.cpp:157
-#: ../src/mac/carbon/textctrl.cpp:1114 ../src/msw/textctrl.cpp:2206
+#: ../src/common/cmdproc.cpp:266
+#: ../src/common/stockitem.cpp:157
+#: ../src/mac/carbon/textctrl.cpp:1114
+#: ../src/msw/textctrl.cpp:2206
 #: ../src/richtext/richtextctrl.cpp:2420
 msgid "&Undo"
 msgstr "&Vrátit"
@@ -614,10 +647,15 @@ msgstr "Nahoru"
 msgid "&Weight:"
 msgstr "osmého"
 
-#: ../src/generic/mdig.cpp:298 ../src/generic/mdig.cpp:314
-#: ../src/generic/mdig.cpp:318 ../src/aui/tabmdi.cpp:272
-#: ../src/aui/tabmdi.cpp:288 ../src/aui/tabmdi.cpp:290 ../src/msw/mdi.cpp:1417
-#: ../src/msw/mdi.cpp:1424 ../src/msw/mdi.cpp:1454
+#: ../src/generic/mdig.cpp:298
+#: ../src/generic/mdig.cpp:314
+#: ../src/generic/mdig.cpp:318
+#: ../src/aui/tabmdi.cpp:272
+#: ../src/aui/tabmdi.cpp:288
+#: ../src/aui/tabmdi.cpp:290
+#: ../src/msw/mdi.cpp:1417
+#: ../src/msw/mdi.cpp:1424
+#: ../src/msw/mdi.cpp:1454
 msgid "&Window"
 msgstr "&Okno"
 
@@ -626,12 +664,14 @@ msgstr "&Okno"
 msgid "&Yes"
 msgstr "Ano"
 
-#: ../src/common/config.cpp:451 ../src/msw/regconf.cpp:253
+#: ../src/common/config.cpp:451
+#: ../src/msw/regconf.cpp:253
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' obsahuje přebytečné '..', ignoruji."
 
-#: ../src/common/valtext.cpp:128 ../src/common/valtext.cpp:158
+#: ../src/common/valtext.cpp:128
+#: ../src/common/valtext.cpp:158
 #: ../src/common/valtext.cpp:164
 #, c-format
 msgid "'%s' is invalid"
@@ -677,7 +717,8 @@ msgstr "'%s' má obsahovat pouze písmena nebo číslice."
 msgid "(*)"
 msgstr ""
 
-#: ../src/html/htmlhelp.cpp:638 ../src/html/helpwnd.cpp:956
+#: ../src/html/htmlhelp.cpp:638
+#: ../src/html/helpwnd.cpp:956
 msgid "(Help)"
 msgstr "(Nápověda)"
 
@@ -691,7 +732,8 @@ msgstr ""
 msgid "(Normal text)"
 msgstr "Normální písmo:"
 
-#: ../src/html/helpwnd.cpp:408 ../src/html/helpwnd.cpp:1092
+#: ../src/html/helpwnd.cpp:408
+#: ../src/html/helpwnd.cpp:1092
 #: ../src/html/helpwnd.cpp:1720
 msgid "(bookmarks)"
 msgstr "(záložky)"
@@ -804,37 +846,43 @@ msgstr "< &Zpět"
 msgid "<<"
 msgstr "<<"
 
-#: ../src/mac/carbon/fontdlg.cpp:545 ../src/mac/carbon/fontdlg.cpp:752
+#: ../src/mac/carbon/fontdlg.cpp:545
+#: ../src/mac/carbon/fontdlg.cpp:752
 #: ../src/mac/carbon/fontdlg.cpp:772
 #, fuzzy
 msgid "<Any Decorative>"
 msgstr "Ozdobné"
 
-#: ../src/mac/carbon/fontdlg.cpp:546 ../src/mac/carbon/fontdlg.cpp:754
+#: ../src/mac/carbon/fontdlg.cpp:546
+#: ../src/mac/carbon/fontdlg.cpp:754
 #: ../src/mac/carbon/fontdlg.cpp:774
 #, fuzzy
 msgid "<Any Modern>"
 msgstr "Moderní"
 
-#: ../src/mac/carbon/fontdlg.cpp:544 ../src/mac/carbon/fontdlg.cpp:750
+#: ../src/mac/carbon/fontdlg.cpp:544
+#: ../src/mac/carbon/fontdlg.cpp:750
 #: ../src/mac/carbon/fontdlg.cpp:770
 #, fuzzy
 msgid "<Any Roman>"
 msgstr "Patkové"
 
-#: ../src/mac/carbon/fontdlg.cpp:547 ../src/mac/carbon/fontdlg.cpp:756
+#: ../src/mac/carbon/fontdlg.cpp:547
+#: ../src/mac/carbon/fontdlg.cpp:756
 #: ../src/mac/carbon/fontdlg.cpp:776
 #, fuzzy
 msgid "<Any Script>"
 msgstr "Psací"
 
-#: ../src/mac/carbon/fontdlg.cpp:548 ../src/mac/carbon/fontdlg.cpp:761
+#: ../src/mac/carbon/fontdlg.cpp:548
+#: ../src/mac/carbon/fontdlg.cpp:761
 #: ../src/mac/carbon/fontdlg.cpp:780
 #, fuzzy
 msgid "<Any Swiss>"
 msgstr "Bezpatkové"
 
-#: ../src/mac/carbon/fontdlg.cpp:549 ../src/mac/carbon/fontdlg.cpp:758
+#: ../src/mac/carbon/fontdlg.cpp:549
+#: ../src/mac/carbon/fontdlg.cpp:758
 #: ../src/mac/carbon/fontdlg.cpp:778
 #, fuzzy
 msgid "<Any Teletype>"
@@ -844,16 +892,19 @@ msgstr "Neproporcionální"
 msgid "<Any>"
 msgstr ""
 
-#: ../src/generic/filedlgg.cpp:331 ../src/generic/filedlgg.cpp:354
+#: ../src/generic/filedlgg.cpp:331
+#: ../src/generic/filedlgg.cpp:354
 msgid "<DIR>"
 msgstr "<ADR>"
 
-#: ../src/generic/filedlgg.cpp:335 ../src/generic/filedlgg.cpp:358
+#: ../src/generic/filedlgg.cpp:335
+#: ../src/generic/filedlgg.cpp:358
 #, fuzzy
 msgid "<DRIVE>"
 msgstr "<ADR>"
 
-#: ../src/generic/filedlgg.cpp:333 ../src/generic/filedlgg.cpp:356
+#: ../src/generic/filedlgg.cpp:333
+#: ../src/generic/filedlgg.cpp:356
 msgid "<LINK>"
 msgstr "<LINK>"
 
@@ -985,7 +1036,8 @@ msgstr "10 x 14 palců"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "stránka A5, 148 x 210 mm"
 
-#: ../src/generic/fontdlgg.cpp:87 ../src/mac/carbon/fontdlg.cpp:276
+#: ../src/generic/fontdlgg.cpp:87
+#: ../src/mac/carbon/fontdlg.cpp:276
 #: ../src/richtext/richtextformatdlg.cpp:401
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
@@ -994,7 +1046,8 @@ msgstr "ABCDEFGabcdefg12345"
 msgid "ADD"
 msgstr ""
 
-#: ../src/common/ftp.cpp:381 ../src/richtext/richtextsymboldlg.cpp:457
+#: ../src/common/ftp.cpp:381
+#: ../src/richtext/richtextsymboldlg.cpp:457
 #: ../src/richtext/richtextsymboldlg.cpp:460
 #: ../src/richtext/richtextsymboldlg.cpp:461
 msgid "ASCII"
@@ -1171,7 +1224,8 @@ msgstr ""
 msgid "BIG5"
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:474 ../src/common/imagbmp.cpp:490
+#: ../src/common/imagbmp.cpp:474
+#: ../src/common/imagbmp.cpp:490
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: Nemohu alokovat paměť."
 
@@ -1199,7 +1253,8 @@ msgstr "BMP: Nemohu zapsat hlavičku souboru (BitmapInfo)."
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage nemá vlastní wxPalette."
 
-#: ../src/mac/carbon/fontdlg.cpp:343 ../src/richtext/richtextformatdlg.cpp:481
+#: ../src/mac/carbon/fontdlg.cpp:343
+#: ../src/richtext/richtextformatdlg.cpp:481
 msgid "Background colour"
 msgstr ""
 
@@ -1226,7 +1281,8 @@ msgstr ""
 msgid "Bitmap resource specification %s not found."
 msgstr "XRC zdroj '%s' (třída '%s') nenalezen!"
 
-#: ../src/generic/fontdlgg.cpp:240 ../src/mac/carbon/fontdlg.cpp:477
+#: ../src/generic/fontdlgg.cpp:240
+#: ../src/mac/carbon/fontdlg.cpp:477
 #: ../src/richtext/richtextfontpage.cpp:226
 #: ../src/richtext/richtextfontpage.cpp:297
 #: ../src/richtext/richtextfontpage.cpp:457
@@ -1290,7 +1346,8 @@ msgstr ""
 msgid "CAPITAL"
 msgstr ""
 
-#: ../src/html/chm.cpp:797 ../src/html/chm.cpp:856
+#: ../src/html/chm.cpp:797
+#: ../src/html/chm.cpp:856
 #, fuzzy
 msgid "CHM handler currently supports only local files!"
 msgstr "ZIP soubory lze otevřít jenom z disku!"
@@ -1313,7 +1370,8 @@ msgstr "Nemohu vytvořit vlákno"
 msgid "Can not enumerate files '%s'"
 msgstr "Nemohu zjistit soubory odpovídající masce '%s'"
 
-#: ../src/msw/dir.cpp:201 ../src/unix/dir.cpp:228
+#: ../src/msw/dir.cpp:201
+#: ../src/unix/dir.cpp:228
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Nemohu zjistit soubory v adresáři '%s'"
@@ -1323,7 +1381,8 @@ msgstr "Nemohu zjistit soubory v adresáři '%s'"
 msgid "Can not resume thread %lu"
 msgstr "Nemohu obnovit vlákno %lu"
 
-#: ../src/mac/classic/thread.cpp:487 ../src/msw/thread.cpp:868
+#: ../src/mac/classic/thread.cpp:487
+#: ../src/msw/thread.cpp:868
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Nemohu obnovit vlákno %x"
@@ -1337,7 +1396,8 @@ msgstr "Nemohu spustit vlákno: chyba při zápisu TLS."
 msgid "Can not suspend thread %lu"
 msgstr "Nemohu ukončit vlákno %lu"
 
-#: ../src/mac/classic/thread.cpp:460 ../src/msw/thread.cpp:853
+#: ../src/mac/classic/thread.cpp:460
+#: ../src/msw/thread.cpp:853
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Nemohu pozastavit vlákno %x"
@@ -1370,8 +1430,10 @@ msgstr "Nemohu kopírovat hodnoty nepodporovaného typu %d"
 msgid "Can't create registry key '%s'"
 msgstr "Nemohu vytvořit registrový klíč '%s'"
 
-#: ../src/mac/carbon/mpthread.cpp:906 ../src/mac/classic/thread.cpp:435
-#: ../src/msw/thread.cpp:641 ../src/os2/thread.cpp:483
+#: ../src/mac/carbon/mpthread.cpp:906
+#: ../src/mac/classic/thread.cpp:435
+#: ../src/msw/thread.cpp:641
+#: ../src/os2/thread.cpp:483
 msgid "Can't create thread"
 msgstr "Nemohu vytvořit vlákno"
 
@@ -1385,7 +1447,8 @@ msgstr "Nelze vytvořit okno třídy %s"
 msgid "Can't delete key '%s'"
 msgstr "Nemohu smazat klíč '%s'"
 
-#: ../src/msw/iniconf.cpp:435 ../src/os2/iniconf.cpp:466
+#: ../src/msw/iniconf.cpp:435
+#: ../src/os2/iniconf.cpp:466
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Nemohu smazat INI soubor '%s'"
@@ -1430,7 +1493,8 @@ msgstr "Nemohu inicializovat obrazovku."
 msgid "Can't initialize zlib inflate stream."
 msgstr "Nemohu inicializovat obrazovku."
 
-#: ../src/common/image.cpp:2015 ../src/common/image.cpp:2037
+#: ../src/common/image.cpp:2015
+#: ../src/common/image.cpp:2037
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Nemohu načíst obrázek ze souboru '%s': soubor neexistuje."
@@ -1454,7 +1518,8 @@ msgstr ""
 msgid "Can't read value of '%s'"
 msgstr "Nemohu přečíst hodnotu '%s'"
 
-#: ../src/msw/registry.cpp:790 ../src/msw/registry.cpp:820
+#: ../src/msw/registry.cpp:790
+#: ../src/msw/registry.cpp:820
 #: ../src/msw/registry.cpp:880
 #, c-format
 msgid "Can't read value of key '%s'"
@@ -1465,15 +1530,18 @@ msgstr "Nemohu načíst hodnotu klíče '%s'"
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Nemohu uložit do souboru '%s': neznámá přípona."
 
-#: ../src/generic/logg.cpp:570 ../src/generic/logg.cpp:1021
+#: ../src/generic/logg.cpp:570
+#: ../src/generic/logg.cpp:1021
 msgid "Can't save log contents to file."
 msgstr "Nemohu uložit obsah logu do souboru."
 
-#: ../src/msw/thread.cpp:597 ../src/os2/thread.cpp:466
+#: ../src/msw/thread.cpp:597
+#: ../src/os2/thread.cpp:466
 msgid "Can't set thread priority"
 msgstr "Nemohu nastavit prioritu vlákna"
 
-#: ../src/msw/registry.cpp:807 ../src/msw/registry.cpp:849
+#: ../src/msw/registry.cpp:807
+#: ../src/msw/registry.cpp:849
 #: ../src/msw/registry.cpp:970
 #, c-format
 msgid "Can't set value of '%s'"
@@ -1484,14 +1552,18 @@ msgstr "Nemohu nastavit hodnotu '%s'"
 msgid "Can't write to deflate stream: %s"
 msgstr "nemohu zapisovat do deskriptoru: %s"
 
-#: ../src/generic/dirdlgg.cpp:105 ../src/html/htmlhelp.cpp:434
-#: ../src/mac/carbon/msgdlg.cpp:66 ../src/motif/msgdlg.cpp:204
-#: ../src/richtext/richtextstyledlg.cpp:290 ../src/gtk1/fontdlg.cpp:145
+#: ../src/generic/dirdlgg.cpp:105
+#: ../src/html/htmlhelp.cpp:434
+#: ../src/mac/carbon/msgdlg.cpp:66
+#: ../src/motif/msgdlg.cpp:204
+#: ../src/richtext/richtextstyledlg.cpp:290
+#: ../src/gtk1/fontdlg.cpp:145
 #: ../contrib/src/deprecated/proplist.cpp:514
 msgid "Cancel"
 msgstr "Storno"
 
-#: ../src/xrc/xmlres.cpp:1270 ../src/xrc/xmlres.cpp:1318
+#: ../src/xrc/xmlres.cpp:1270
+#: ../src/xrc/xmlres.cpp:1318
 msgid "Cannot convert dialog units: dialog unknown."
 msgstr "Nemohu převést dialogové jednotky: dialog není znám."
 
@@ -1606,7 +1678,8 @@ msgstr "Nemohu ze '%s' získat rozměry."
 msgid "Cannot print empty page."
 msgstr "Nemohu tisknout prázdnou stránku."
 
-#: ../src/msw/volume.cpp:158 ../src/msw/volume.cpp:490
+#: ../src/msw/volume.cpp:158
+#: ../src/msw/volume.cpp:490
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Nemohu přečíst typ z '%s'!"
@@ -1702,15 +1775,18 @@ msgstr ""
 msgid "Check to enclose the bullet in parentheses."
 msgstr ""
 
-#: ../src/mac/carbon/fontdlg.cpp:479 ../src/mac/carbon/fontdlg.cpp:481
+#: ../src/mac/carbon/fontdlg.cpp:479
+#: ../src/mac/carbon/fontdlg.cpp:481
 msgid "Check to make the font bold."
 msgstr ""
 
-#: ../src/mac/carbon/fontdlg.cpp:486 ../src/mac/carbon/fontdlg.cpp:488
+#: ../src/mac/carbon/fontdlg.cpp:486
+#: ../src/mac/carbon/fontdlg.cpp:488
 msgid "Check to make the font italic."
 msgstr ""
 
-#: ../src/mac/carbon/fontdlg.cpp:495 ../src/mac/carbon/fontdlg.cpp:497
+#: ../src/mac/carbon/fontdlg.cpp:495
+#: ../src/mac/carbon/fontdlg.cpp:497
 msgid "Check to make the font underlined."
 msgstr ""
 
@@ -1723,13 +1799,15 @@ msgstr ""
 msgid "Choose ISP to dial"
 msgstr "Vyberte ISP, ke kterému se má volat"
 
-#: ../src/generic/colrdlgg.cpp:144 ../src/gtk/colordlg.cpp:41
+#: ../src/generic/colrdlgg.cpp:144
+#: ../src/gtk/colordlg.cpp:41
 #: ../src/palmos/colordlg.cpp:74
 #, fuzzy
 msgid "Choose colour"
 msgstr "Vyberte písmo"
 
-#: ../src/gtk/fontdlg.cpp:107 ../src/gtk1/fontdlg.cpp:126
+#: ../src/gtk/fontdlg.cpp:107
+#: ../src/gtk1/fontdlg.cpp:126
 msgid "Choose font"
 msgstr "Vyberte písmo"
 
@@ -1738,7 +1816,8 @@ msgstr "Vyberte písmo"
 msgid "Circular dependency involving module \"%s\" detected."
 msgstr ""
 
-#: ../src/generic/mdig.cpp:115 ../src/aui/tabmdi.cpp:104
+#: ../src/generic/mdig.cpp:115
+#: ../src/aui/tabmdi.cpp:104
 msgid "Cl&ose"
 msgstr "&Zavřít"
 
@@ -1758,11 +1837,13 @@ msgstr ""
 msgid "Click to browse for a symbol."
 msgstr ""
 
-#: ../src/mac/carbon/fontdlg.cpp:526 ../src/mac/carbon/fontdlg.cpp:528
+#: ../src/mac/carbon/fontdlg.cpp:526
+#: ../src/mac/carbon/fontdlg.cpp:528
 msgid "Click to cancel changes to the font."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:379 ../src/generic/fontdlgg.cpp:398
+#: ../src/generic/fontdlgg.cpp:379
+#: ../src/generic/fontdlgg.cpp:398
 msgid "Click to cancel the font selection."
 msgstr ""
 
@@ -1772,7 +1853,8 @@ msgstr ""
 msgid "Click to cancel this window."
 msgstr "Zavřít okno"
 
-#: ../src/mac/carbon/fontdlg.cpp:507 ../src/mac/carbon/fontdlg.cpp:509
+#: ../src/mac/carbon/fontdlg.cpp:507
+#: ../src/mac/carbon/fontdlg.cpp:509
 msgid "Click to change the font colour."
 msgstr ""
 
@@ -1792,12 +1874,15 @@ msgstr ""
 msgid "Click to close this window."
 msgstr "Zavřít okno"
 
-#: ../src/mac/carbon/fontdlg.cpp:533 ../src/mac/carbon/fontdlg.cpp:535
+#: ../src/mac/carbon/fontdlg.cpp:533
+#: ../src/mac/carbon/fontdlg.cpp:535
 msgid "Click to confirm changes to the font."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:384 ../src/generic/fontdlgg.cpp:386
-#: ../src/generic/fontdlgg.cpp:391 ../src/generic/fontdlgg.cpp:393
+#: ../src/generic/fontdlgg.cpp:384
+#: ../src/generic/fontdlgg.cpp:386
+#: ../src/generic/fontdlgg.cpp:391
+#: ../src/generic/fontdlgg.cpp:393
 msgid "Click to confirm the font selection."
 msgstr ""
 
@@ -1851,8 +1936,10 @@ msgstr ""
 msgid "Click to rename the selected style."
 msgstr ""
 
-#: ../src/generic/dbgrptg.cpp:93 ../src/generic/progdlgg.cpp:658
-#: ../src/generic/progdlgg.cpp:663 ../src/richtext/richtextsymboldlg.cpp:482
+#: ../src/generic/dbgrptg.cpp:93
+#: ../src/generic/progdlgg.cpp:658
+#: ../src/generic/progdlgg.cpp:663
+#: ../src/richtext/richtextsymboldlg.cpp:482
 #: ../src/richtext/richtextsymboldlg.cpp:496
 #: ../src/richtext/richtextstyledlg.cpp:264
 #: ../contrib/src/deprecated/proplist.cpp:509
@@ -1863,7 +1950,8 @@ msgstr "Zavřít"
 msgid "Close\tAlt-F4"
 msgstr "Zavřít\tAlt-F4"
 
-#: ../src/generic/mdig.cpp:116 ../src/aui/tabmdi.cpp:105
+#: ../src/generic/mdig.cpp:116
+#: ../src/aui/tabmdi.cpp:105
 msgid "Close All"
 msgstr "Zavřít vše"
 
@@ -1899,7 +1987,8 @@ msgstr "Počítač"
 msgid "Config entry name cannot start with '%c'."
 msgstr "Položka konfigurace nemůže začínat na '%c'"
 
-#: ../src/generic/filedlgg.cpp:1466 ../src/gtk/filedlg.cpp:61
+#: ../src/generic/filedlgg.cpp:1466
+#: ../src/gtk/filedlg.cpp:61
 msgid "Confirm"
 msgstr "Potvrdit"
 
@@ -1911,7 +2000,8 @@ msgstr "Potvrďte aktualizaci registru"
 msgid "Connecting..."
 msgstr "Připojuji se..."
 
-#: ../src/html/htmlhelp.cpp:565 ../src/html/helpwnd.cpp:453
+#: ../src/html/htmlhelp.cpp:565
+#: ../src/html/helpwnd.cpp:453
 msgid "Contents"
 msgstr "Obsah"
 
@@ -1930,9 +2020,8 @@ msgid "Copies:"
 msgstr "Kopie:"
 
 #: ../src/common/stockitem.cpp:203
-#, fuzzy
 msgid "Copy selection"
-msgstr "Sekce"
+msgstr "Kopírovat výběr"
 
 #: ../src/html/chm.cpp:703
 #, fuzzy, c-format
@@ -1977,7 +2066,8 @@ msgstr ""
 msgid "Could not start document preview."
 msgstr "Nemohu zobrazit náhled dokumentu."
 
-#: ../src/generic/printps.cpp:181 ../src/gtk/gnome/gprint.cpp:773
+#: ../src/generic/printps.cpp:181
+#: ../src/gtk/gnome/gprint.cpp:773
 #: ../src/msw/printwin.cpp:230
 msgid "Could not start printing."
 msgstr "Nemohu zahájit tisk."
@@ -1986,7 +2076,8 @@ msgstr "Nemohu zahájit tisk."
 msgid "Could not transfer data to window"
 msgstr "Nemohu přenést data do okna."
 
-#: ../src/mac/carbon/mpthread.cpp:222 ../src/mac/carbon/mpthread.cpp:301
+#: ../src/mac/carbon/mpthread.cpp:222
+#: ../src/mac/carbon/mpthread.cpp:301
 #, fuzzy
 msgid "Could not unlock mutex"
 msgstr "Nemohu vytvořit časovač"
@@ -1996,17 +2087,21 @@ msgstr "Nemohu vytvořit časovač"
 msgid "Couldn't acquire a mutex lock"
 msgstr "Nemohu vytvořit časovač"
 
-#: ../src/msw/dragimag.cpp:156 ../src/msw/dragimag.cpp:196
-#: ../src/msw/imaglist.cpp:147 ../src/msw/imaglist.cpp:165
+#: ../src/msw/dragimag.cpp:156
+#: ../src/msw/dragimag.cpp:196
+#: ../src/msw/imaglist.cpp:147
+#: ../src/msw/imaglist.cpp:165
 #: ../src/msw/imaglist.cpp:177
 msgid "Couldn't add an image to the image list."
 msgstr "Nemohu přidat obrázek do seznamu."
 
-#: ../src/msw/timer.cpp:101 ../src/os2/timer.cpp:144
+#: ../src/msw/timer.cpp:101
+#: ../src/os2/timer.cpp:144
 msgid "Couldn't create a timer"
 msgstr "Nemohu vytvořit časovač"
 
-#: ../src/mgl/cursor.cpp:132 ../src/mgl/cursor.cpp:163
+#: ../src/mgl/cursor.cpp:132
+#: ../src/mgl/cursor.cpp:163
 msgid "Couldn't create cursor."
 msgstr "Nemohu vytvořit kurzor."
 
@@ -2025,7 +2120,8 @@ msgstr "Nemohu získat ukazatel na aktuální vlákno"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Nemohu v dynamické knihovně nalézt symbol '%s'"
 
-#: ../src/mac/classic/thread.cpp:517 ../src/msw/thread.cpp:894
+#: ../src/mac/classic/thread.cpp:517
+#: ../src/msw/thread.cpp:894
 msgid "Couldn't get the current thread pointer"
 msgstr "Nemohu získat ukazatel na aktuální vlákno"
 
@@ -2036,9 +2132,7 @@ msgstr "Nemohu získat ukazatel na aktuální vlákno"
 
 #: ../src/common/imagpng.cpp:621
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr ""
-"Nemohu načíst PNG obrázek - buď je poškozený soubor nebo je nedostatek "
-"paměti."
+msgstr "Nemohu načíst PNG obrázek - buď je poškozený soubor nebo je nedostatek paměti."
 
 #: ../src/unix/sound.cpp:471
 #, fuzzy, c-format
@@ -2065,12 +2159,14 @@ msgstr "Nemohu vytvořit časovač"
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Nemohu získat informace o položce %d v seznamu."
 
-#: ../src/common/imagpng.cpp:670 ../src/common/imagpng.cpp:679
+#: ../src/common/imagpng.cpp:670
+#: ../src/common/imagpng.cpp:679
 #: ../src/common/imagpng.cpp:687
 msgid "Couldn't save PNG image."
 msgstr "Nemohu uložit PNG obrázek."
 
-#: ../src/mac/classic/thread.cpp:775 ../src/msw/thread.cpp:658
+#: ../src/mac/classic/thread.cpp:775
+#: ../src/msw/thread.cpp:658
 msgid "Couldn't terminate thread"
 msgstr "Nemohu přerušit vlákno"
 
@@ -2082,17 +2178,19 @@ msgstr ""
 msgid "Create directory"
 msgstr "Vytváření adresáře"
 
-#: ../src/generic/dirdlgg.cpp:129 ../src/generic/filedlgg.cpp:1088
+#: ../src/generic/dirdlgg.cpp:129
+#: ../src/generic/filedlgg.cpp:1088
 msgid "Create new directory"
 msgstr "Vytvořit nový adresář"
 
 #: ../src/common/menucmn.cpp:316
-#, fuzzy
 msgid "Ctrl-"
-msgstr "ctrl"
+msgstr "Ctrl-"
 
-#: ../src/common/stockitem.cpp:118 ../src/mac/carbon/textctrl.cpp:1117
-#: ../src/msw/textctrl.cpp:2209 ../src/richtext/richtextctrl.cpp:2423
+#: ../src/common/stockitem.cpp:118
+#: ../src/mac/carbon/textctrl.cpp:1117
+#: ../src/msw/textctrl.cpp:2209
+#: ../src/richtext/richtextctrl.cpp:2423
 msgid "Cu&t"
 msgstr "&Vyjmout"
 
@@ -2185,9 +2283,8 @@ msgid "Default encoding"
 msgstr "Výchozí znaková sada"
 
 #: ../src/generic/prntdlgg.cpp:504
-#, fuzzy
 msgid "Default printer"
-msgstr "Výchozí znaková sada"
+msgstr "Výchozí tiskárna"
 
 #: ../src/richtext/richtextbuffer.cpp:4827
 #, fuzzy
@@ -2204,7 +2301,8 @@ msgstr "Vybrat &vše"
 msgid "Delete Style"
 msgstr "Odstranit položku."
 
-#: ../src/richtext/richtextctrl.cpp:560 ../src/richtext/richtextctrl.cpp:589
+#: ../src/richtext/richtextctrl.cpp:560
+#: ../src/richtext/richtextctrl.cpp:589
 #, fuzzy
 msgid "Delete Text"
 msgstr "Odstranit položku."
@@ -2242,12 +2340,8 @@ msgid "Developed by "
 msgstr ""
 
 #: ../src/msw/dialup.cpp:396
-msgid ""
-"Dial up functions are unavailable because the remote access service (RAS) is "
-"not installed on this machine. Please install it."
-msgstr ""
-"Vytáčené připojení není dostupné, protože Remote Access Service (RAS) není "
-"nainstalován. Prosím, nainstalujte ho."
+msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
+msgstr "Vytáčené připojení není dostupné, protože Remote Access Service (RAS) není nainstalován. Prosím, nainstalujte ho."
 
 #: ../src/generic/tipdlg.cpp:242
 msgid "Did you know..."
@@ -2259,9 +2353,8 @@ msgid "DirectFB error %d occured."
 msgstr ""
 
 #: ../src/motif/filedlg.cpp:222
-#, fuzzy
 msgid "Directories"
-msgstr "Ozdobné"
+msgstr "Adresáře"
 
 #: ../src/common/filefn.cpp:1219
 #, c-format
@@ -2283,12 +2376,8 @@ msgid "Directory doesn't exist."
 msgstr "Adresář neexistuje"
 
 #: ../src/html/helpwnd.cpp:480
-msgid ""
-"Display all index items that contain given substring. Search is case "
-"insensitive."
-msgstr ""
-"Zobrazí všechny položky rejstříku, které obsahují daný podřetězec. "
-"Nerozlišuje velká a malá písmena."
+msgid "Display all index items that contain given substring. Search is case insensitive."
+msgstr "Zobrazí všechny položky rejstříku, které obsahují daný podřetězec. Nerozlišuje velká a malá písmena."
 
 #: ../src/html/helpwnd.cpp:671
 msgid "Display options dialog"
@@ -2300,8 +2389,7 @@ msgstr ""
 
 #: ../src/msw/mimetype.cpp:667
 msgid ""
-"Do you want to overwrite the command used to %s files with extension \"%s"
-"\" ?\n"
+"Do you want to overwrite the command used to %s files with extension \"%s\" ?\n"
 "Current value is \n"
 "%s, \n"
 "New value is \n"
@@ -2326,7 +2414,8 @@ msgstr ""
 msgid "Don't Save"
 msgstr ""
 
-#: ../src/html/htmlwin.cpp:556 ../src/msw/frame.cpp:195
+#: ../src/html/htmlwin.cpp:556
+#: ../src/msw/frame.cpp:195
 msgid "Done"
 msgstr "Hotovo"
 
@@ -2412,17 +2501,21 @@ msgstr "Obálka DL, 110 x 220 mm"
 
 #: ../src/common/config.cpp:402
 #, fuzzy, c-format
-msgid ""
-"Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr ""
-"Chyba během expanze proměnných prostředí: chybí '%c' na pozici %d v '%s'."
+msgid "Environment variables expansion failed: missing '%c' at position %u in '%s'."
+msgstr "Chyba během expanze proměnných prostředí: chybí '%c' na pozici %d v '%s'."
 
-#: ../src/generic/dirctrlg.cpp:708 ../src/generic/dirctrlg.cpp:726
-#: ../src/generic/dirctrlg.cpp:737 ../src/generic/dirdlgg.cpp:350
-#: ../src/generic/filedlgg.cpp:712 ../src/generic/filedlgg.cpp:830
-#: ../src/generic/filedlgg.cpp:844 ../src/generic/filedlgg.cpp:862
-#: ../src/generic/filedlgg.cpp:1416 ../src/generic/filedlgg.cpp:1444
-#: ../src/generic/filedlgg.cpp:1472 ../src/gtk1/fontdlg.cpp:75
+#: ../src/generic/dirctrlg.cpp:708
+#: ../src/generic/dirctrlg.cpp:726
+#: ../src/generic/dirctrlg.cpp:737
+#: ../src/generic/dirdlgg.cpp:350
+#: ../src/generic/filedlgg.cpp:712
+#: ../src/generic/filedlgg.cpp:830
+#: ../src/generic/filedlgg.cpp:844
+#: ../src/generic/filedlgg.cpp:862
+#: ../src/generic/filedlgg.cpp:1416
+#: ../src/generic/filedlgg.cpp:1444
+#: ../src/generic/filedlgg.cpp:1472
+#: ../src/gtk1/fontdlg.cpp:75
 msgid "Error"
 msgstr "Chyba"
 
@@ -2499,8 +2592,7 @@ msgstr ""
 
 #: ../src/msw/registry.cpp:1135
 #, c-format
-msgid ""
-"Exporting registry key: file \"%s\" already exists and won't be overwritten."
+msgid "Exporting registry key: file \"%s\" already exists and won't be overwritten."
 msgstr ""
 
 #: ../src/common/fmapbase.cpp:150
@@ -2512,7 +2604,8 @@ msgstr "Rozšířená unixová kódová stránka pro Japonštinu (EUC-JP)"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Extrakce '%s' do '%s' selhala."
 
-#: ../src/common/menucmn.cpp:251 ../src/common/menucmn.cpp:325
+#: ../src/common/menucmn.cpp:251
+#: ../src/common/menucmn.cpp:325
 msgid "F"
 msgstr ""
 
@@ -2650,7 +2743,8 @@ msgstr "Nemohu vytvořit standardní dialog 'Najít' (chyba %d)"
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Nelze zobrati HTML dokument v kódování %s"
 
-#: ../src/mac/classic/clipbrd.cpp:187 ../src/msw/clipbrd.cpp:125
+#: ../src/mac/classic/clipbrd.cpp:187
+#: ../src/msw/clipbrd.cpp:125
 msgid "Failed to empty the clipboard."
 msgstr "Nemohu vyprázdnit shcránku."
 
@@ -2667,7 +2761,8 @@ msgstr "Nelze navázat 'advise loop' s DDE serverem"
 msgid "Failed to establish dialup connection: %s"
 msgstr "Nepodařilo se navázat vytáčené spojení: %s"
 
-#: ../src/unix/utilsunx.cpp:508 ../src/unix/utilsunx.cpp:524
+#: ../src/unix/utilsunx.cpp:508
+#: ../src/unix/utilsunx.cpp:524
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Nepodařilo se spustit '%s'\n"
@@ -2697,7 +2792,8 @@ msgid ""
 "Forgot to use wxResourceLoadBitmapData?"
 msgstr ""
 
-#: ../src/common/regex.cpp:425 ../src/common/regex.cpp:473
+#: ../src/common/regex.cpp:425
+#: ../src/common/regex.cpp:473
 #, fuzzy, c-format
 msgid "Failed to find match for regular expression: %s"
 msgstr "Chyba při hledání výskytu regulárního výrazu v '%s': %s"
@@ -2747,12 +2843,8 @@ msgid "Failed to inspect the lock file '%s'"
 msgstr "Nelze zamknout zámkový soubor '%s'"
 
 #: ../src/unix/threadpsx.cpp:910
-msgid ""
-"Failed to join a thread, potential memory leak detected - please restart the "
-"program"
-msgstr ""
-"Nemohu připojit vlákno, zjištěna možná chybná alokace paměti - restartujte "
-"prosím program"
+msgid "Failed to join a thread, potential memory leak detected - please restart the program"
+msgstr "Nemohu připojit vlákno, zjištěna možná chybná alokace paměti - restartujte prosím program"
 
 #: ../src/msw/utils.cpp:725
 #, c-format
@@ -2869,9 +2961,7 @@ msgstr "Nelze přejmenovat registrový klíč '%s' na '%s'."
 
 #: ../src/common/filefn.cpp:1137
 #, c-format
-msgid ""
-"Failed to rename the file '%s' to '%s' because the destination file already "
-"exists."
+msgid "Failed to rename the file '%s' to '%s' because the destination file already exists."
 msgstr ""
 
 #: ../src/msw/registry.cpp:563
@@ -2928,7 +3018,8 @@ msgstr "Nelze nastavit přístupová práva k dočasnému souboru"
 msgid "Failed to set text in the text control."
 msgstr "Nemohu zjistit aktuální pracovní adresář"
 
-#: ../src/unix/threadpsx.cpp:1253 ../src/unix/threadpsx.cpp:1263
+#: ../src/unix/threadpsx.cpp:1253
+#: ../src/unix/threadpsx.cpp:1263
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Nemohu nastavit prioritu vlákna %d."
@@ -2938,7 +3029,8 @@ msgstr "Nemohu nastavit prioritu vlákna %d."
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "Nepodařilo se uložit obrázek '%s' do paměťového VFS!"
 
-#: ../src/mac/carbon/mpthread.cpp:1268 ../src/unix/threadpsx.cpp:1436
+#: ../src/mac/carbon/mpthread.cpp:1268
+#: ../src/unix/threadpsx.cpp:1436
 msgid "Failed to terminate a thread."
 msgstr "Nemohu ukončit vlákno."
 
@@ -2990,16 +3082,16 @@ msgid "Fatal error: "
 msgstr "Kritická chyba: "
 
 #: ../src/msw/wince/filedlgwce.cpp:119
-#, fuzzy
 msgid "File"
-msgstr "&Soubor"
+msgstr "Soubor"
 
 #: ../src/mgl/bitmap.cpp:422
 #, c-format
 msgid "File %s does not exist."
 msgstr "Soubor %s neexistuje."
 
-#: ../src/generic/filedlgg.cpp:1464 ../src/gtk/filedlg.cpp:58
+#: ../src/generic/filedlgg.cpp:1464
+#: ../src/gtk/filedlg.cpp:58
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Soubor '%s' existuje, opravdu ho chcete přepsat?"
@@ -3013,22 +3105,24 @@ msgstr ""
 "Soubor '%s' již existuje.\n"
 "Opravdu ho chcete přepsat?"
 
-#: ../src/common/textcmn.cpp:218 ../src/richtext/richtextctrl.cpp:1764
+#: ../src/common/textcmn.cpp:218
+#: ../src/richtext/richtextctrl.cpp:1764
 msgid "File couldn't be loaded."
 msgstr "Soubor nelze načíst."
 
-#: ../src/common/docview.cpp:566 ../src/common/docview.cpp:1606
+#: ../src/common/docview.cpp:566
+#: ../src/common/docview.cpp:1606
 msgid "File error"
 msgstr "Chyba souboru"
 
-#: ../src/generic/dirctrlg.cpp:726 ../src/generic/filedlgg.cpp:844
+#: ../src/generic/dirctrlg.cpp:726
+#: ../src/generic/filedlgg.cpp:844
 msgid "File name exists already."
 msgstr "Soubor tohoto jména již existuje."
 
 #: ../src/motif/filedlg.cpp:223
-#, fuzzy
 msgid "Files"
-msgstr "&Soubor"
+msgstr "Soubory"
 
 #: ../src/common/filefn.cpp:1775
 #, fuzzy, c-format
@@ -3056,7 +3150,8 @@ msgstr ""
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 palců"
 
-#: ../src/mac/carbon/fontdlg.cpp:410 ../src/richtext/richtextformatdlg.cpp:272
+#: ../src/mac/carbon/fontdlg.cpp:410
+#: ../src/richtext/richtextformatdlg.cpp:272
 msgid "Font"
 msgstr ""
 
@@ -3075,9 +3170,8 @@ msgid "Font st&yle:"
 msgstr "Velikost písma:"
 
 #: ../src/mac/carbon/fontdlg.cpp:452
-#, fuzzy
 msgid "Font:"
-msgstr "Velikost písma:"
+msgstr "Písmo:"
 
 #: ../src/unix/utilsunx.cpp:545
 msgid "Fork failed"
@@ -3099,7 +3193,8 @@ msgstr ""
 msgid "Found "
 msgstr "Najít"
 
-#: ../src/html/htmlhelp.cpp:460 ../src/html/helpwnd.cpp:867
+#: ../src/html/htmlhelp.cpp:460
+#: ../src/html/helpwnd.cpp:867
 #, c-format
 msgid "Found %i matches"
 msgstr "Nalezeno výskytů: %i"
@@ -3181,7 +3276,8 @@ msgstr ""
 msgid "Go one level up in document hierarchy"
 msgstr "Jdi o úroveň výš"
 
-#: ../src/generic/dirdlgg.cpp:134 ../src/generic/filedlgg.cpp:1078
+#: ../src/generic/dirdlgg.cpp:134
+#: ../src/generic/filedlgg.cpp:1078
 msgid "Go to home directory"
 msgstr "Jít do domovského adresáře"
 
@@ -3201,7 +3297,8 @@ msgstr ""
 msgid "Greek (ISO-8859-7)"
 msgstr "Řecké (ISO-8859-7)"
 
-#: ../src/common/zstream.cpp:149 ../src/common/zstream.cpp:302
+#: ../src/common/zstream.cpp:149
+#: ../src/common/zstream.cpp:302
 msgid "Gzip not supported by this version of zlib"
 msgstr ""
 
@@ -3227,16 +3324,15 @@ msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr ""
 
 #: ../src/html/htmprint.cpp:379
-msgid ""
-"HTML pagination algorithm generated more than the allowed maximum number of "
-"pages and it can continue any longer!"
+msgid "HTML pagination algorithm generated more than the allowed maximum number of pages and it can continue any longer!"
 msgstr ""
 
 #: ../src/common/fmapbase.cpp:113
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebrejské (ISO-8859-8)"
 
-#: ../src/html/helpfrm.cpp:96 ../src/html/helpdlg.cpp:67
+#: ../src/html/helpfrm.cpp:96
+#: ../src/html/helpdlg.cpp:67
 #: ../contrib/src/deprecated/proplist.cpp:519
 msgid "Help"
 msgstr "Nápověda"
@@ -3250,7 +3346,8 @@ msgstr "Nápověda: %s"
 msgid "Help Browser Options"
 msgstr "Nastavení prohlížeče nápovědy"
 
-#: ../src/generic/helpext.cpp:461 ../src/generic/helpext.cpp:462
+#: ../src/generic/helpext.cpp:461
+#: ../src/generic/helpext.cpp:462
 msgid "Help Index"
 msgstr "Index nápovědy"
 
@@ -3259,9 +3356,8 @@ msgid "Help Printing"
 msgstr "Tisk nápovědy"
 
 #: ../src/html/helpwnd.cpp:796
-#, fuzzy
 msgid "Help Topics"
-msgstr "Nápověda: %s"
+msgstr "Témata nápovědy"
 
 #: ../src/html/helpwnd.cpp:1525
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
@@ -3288,9 +3384,8 @@ msgid "Home"
 msgstr "bezejmenná"
 
 #: ../src/generic/dirctrlg.cpp:670
-#, fuzzy
 msgid "Home directory"
-msgstr "Vytváření adresáře"
+msgstr "Domácí složka"
 
 #: ../include/wx/filefn.h:141
 msgid "I64"
@@ -3300,9 +3395,12 @@ msgstr ""
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Chyba při načítání DIB masky."
 
-#: ../src/common/imagbmp.cpp:1045 ../src/common/imagbmp.cpp:1104
-#: ../src/common/imagbmp.cpp:1113 ../src/common/imagbmp.cpp:1124
-#: ../src/common/imagbmp.cpp:1168 ../src/common/imagbmp.cpp:1178
+#: ../src/common/imagbmp.cpp:1045
+#: ../src/common/imagbmp.cpp:1104
+#: ../src/common/imagbmp.cpp:1113
+#: ../src/common/imagbmp.cpp:1124
+#: ../src/common/imagbmp.cpp:1168
+#: ../src/common/imagbmp.cpp:1178
 #: ../src/common/imagbmp.cpp:1187
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Chyba při ukládání obrázku!"
@@ -3357,8 +3455,7 @@ msgstr ""
 
 #: ../src/generic/dbgrptg.cpp:311
 msgid ""
-"If you wish to suppress this debug report completely, please choose the "
-"\"Cancel\" button,\n"
+"If you wish to suppress this debug report completely, please choose the \"Cancel\" button,\n"
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
@@ -3384,7 +3481,8 @@ msgstr ""
 msgid "Illegal Parameter Count for Create Method"
 msgstr ""
 
-#: ../src/generic/dirctrlg.cpp:708 ../src/generic/filedlgg.cpp:830
+#: ../src/generic/dirctrlg.cpp:708
+#: ../src/generic/filedlgg.cpp:830
 msgid "Illegal directory name."
 msgstr "Nedovolené jméno adresáře."
 
@@ -3397,7 +3495,8 @@ msgstr "Neplatná specifikace souboru."
 msgid "Image and mask have different sizes."
 msgstr "Obrázek a maska mají různé rozměry"
 
-#: ../src/common/image.cpp:2176 ../src/common/image.cpp:2216
+#: ../src/common/image.cpp:2176
+#: ../src/common/image.cpp:2216
 #, fuzzy, c-format
 msgid "Image file is not of type %ld."
 msgstr "Obrázek není typu %d."
@@ -3408,12 +3507,8 @@ msgid "Image file is not of type %s."
 msgstr "Obrázek není typu %d."
 
 #: ../src/msw/textctrl.cpp:454
-msgid ""
-"Impossible to create a rich edit control, using simple text control instead. "
-"Please reinstall riched32.dll"
-msgstr ""
-"Není možné vytvořit rich edit prvek, použiji obyčejný. Přeinstalujte prosím "
-"riched32.dll."
+msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
+msgstr "Není možné vytvořit rich edit prvek, použiji obyčejný. Přeinstalujte prosím riched32.dll."
 
 #: ../src/unix/utilsunx.cpp:434
 msgid "Impossible to get child process input"
@@ -3443,7 +3538,8 @@ msgstr "Rejtřík"
 msgid "Indents && Spacing"
 msgstr ""
 
-#: ../src/html/htmlhelp.cpp:578 ../src/html/helpwnd.cpp:493
+#: ../src/html/htmlhelp.cpp:578
+#: ../src/html/helpwnd.cpp:493
 msgid "Index"
 msgstr "Rejtřík"
 
@@ -3457,9 +3553,8 @@ msgstr ""
 
 #: ../src/richtext/richtextsymboldlg.cpp:475
 #: ../src/richtext/richtextsymboldlg.cpp:502
-#, fuzzy
 msgid "Insert"
-msgstr "Rejtřík"
+msgstr "Vložit"
 
 #: ../src/richtext/richtextbuffer.cpp:4724
 #: ../src/richtext/richtextbuffer.cpp:5503
@@ -3469,7 +3564,8 @@ msgstr ""
 #: ../src/richtext/richtextbuffer.cpp:4600
 #: ../src/richtext/richtextbuffer.cpp:4644
 #: ../src/richtext/richtextbuffer.cpp:4686
-#: ../src/richtext/richtextctrl.cpp:532 ../src/richtext/richtextctrl.cpp:748
+#: ../src/richtext/richtextctrl.cpp:532
+#: ../src/richtext/richtextctrl.cpp:748
 msgid "Insert Text"
 msgstr ""
 
@@ -3508,7 +3604,8 @@ msgstr "Špatné určení geometrie '%s'."
 msgid "Invalid lock file '%s'."
 msgstr "Chybný zamykací soubor '%s'."
 
-#: ../src/common/xtistrm.cpp:361 ../src/common/xtistrm.cpp:376
+#: ../src/common/xtistrm.cpp:361
+#: ../src/common/xtistrm.cpp:376
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
 msgstr ""
 
@@ -3521,7 +3618,8 @@ msgstr ""
 msgid "Invalid regular expression '%s': %s"
 msgstr "Špatný regulární výraz '%s': %s"
 
-#: ../src/generic/fontdlgg.cpp:236 ../src/mac/carbon/fontdlg.cpp:484
+#: ../src/generic/fontdlgg.cpp:236
+#: ../src/mac/carbon/fontdlg.cpp:484
 #: ../src/richtext/richtextfontpage.cpp:223
 #: ../src/richtext/richtextfontpage.cpp:281
 #: ../src/richtext/richtextfontpage.cpp:446
@@ -3611,7 +3709,8 @@ msgstr "KOI8-R"
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/common/menucmn.cpp:267 ../src/common/menucmn.cpp:327
+#: ../src/common/menucmn.cpp:267
+#: ../src/common/menucmn.cpp:327
 msgid "KP_"
 msgstr ""
 
@@ -3711,7 +3810,8 @@ msgstr ""
 msgid "LEFT"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:862
+#: ../src/generic/prntdlgg.cpp:607
+#: ../src/generic/prntdlgg.cpp:862
 msgid "Landscape"
 msgstr "Na šířku"
 
@@ -3846,7 +3946,8 @@ msgstr ""
 msgid "Log saved to the file '%s'."
 msgstr "Log uložen do souboru '%s'."
 
-#: ../include/wx/xti.h:497 ../include/wx/xti.h:501
+#: ../include/wx/xti.h:497
+#: ../include/wx/xti.h:501
 msgid "Long Conversions not supported"
 msgstr ""
 
@@ -3860,7 +3961,8 @@ msgstr ""
 msgid "Lower case roman numerals"
 msgstr ""
 
-#: ../src/gtk/mdi.cpp:466 ../src/gtk1/mdi.cpp:462
+#: ../src/gtk/mdi.cpp:466
+#: ../src/gtk1/mdi.cpp:462
 msgid "MDI child"
 msgstr "MDI syn"
 
@@ -3869,12 +3971,8 @@ msgid "MENU"
 msgstr ""
 
 #: ../src/msw/helpchm.cpp:57
-msgid ""
-"MS HTML Help functions are unavailable because the MS HTML Help library is "
-"not installed on this machine. Please install it."
-msgstr ""
-"Funkčnost MS HTML Helpu není dostupná, protože chybí příslušná komponenta. "
-"Prosím nainstalujte ji."
+msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
+msgstr "Funkčnost MS HTML Helpu není dostupná, protože chybí příslušná komponenta. Prosím nainstalujte ji."
 
 #: ../src/univ/themes/win32.cpp:3740
 msgid "Ma&ximize"
@@ -3890,9 +3988,8 @@ msgid "Memory VFS already contains file '%s'!"
 msgstr "Paměťový VFS už obsahuje soubor '%s'!"
 
 #: ../src/msw/frame.cpp:366
-#, fuzzy
 msgid "Menu"
-msgstr "Moderní"
+msgstr "Menu"
 
 #: ../src/univ/themes/metal.cpp:169
 msgid "Metal theme"
@@ -3958,36 +4055,38 @@ msgstr ""
 #: ../src/richtext/richtextstyledlg.cpp:623
 #: ../src/richtext/richtextstyledlg.cpp:772
 #: ../src/richtext/richtextstyledlg.cpp:777
-#, fuzzy
 msgid "New Style"
-msgstr "Nova položka"
+msgstr "Nový styl"
 
 #: ../src/generic/dirdlgg.cpp:100
-#, fuzzy
 msgid "New directory"
-msgstr "Vytváření adresáře"
+msgstr "Nový adresář"
 
 #: ../contrib/src/gizmos/editlbox.cpp:155
 msgid "New item"
 msgstr "Nova položka"
 
-#: ../src/generic/dirdlgg.cpp:324 ../src/generic/dirdlgg.cpp:334
-#: ../src/generic/filedlgg.cpp:688 ../src/generic/filedlgg.cpp:697
+#: ../src/generic/dirdlgg.cpp:324
+#: ../src/generic/dirdlgg.cpp:334
+#: ../src/generic/filedlgg.cpp:688
+#: ../src/generic/filedlgg.cpp:697
 msgid "NewName"
 msgstr "NoveJmeno"
 
 #: ../src/generic/tipdlg.cpp:301
-#, fuzzy
 msgid "Next"
-msgstr "&Další"
+msgstr "Další"
 
 #: ../src/html/helpwnd.cpp:651
 msgid "Next page"
 msgstr "Následující stránka"
 
-#: ../src/mac/carbon/msgdlg.cpp:63 ../src/mac/carbon/msgdlg.cpp:119
-#: ../src/mac/carbon/msgdlg.cpp:203 ../src/mac/classic/msgdlg.cpp:59
-#: ../src/mac/classic/msgdlg.cpp:143 ../src/motif/msgdlg.cpp:204
+#: ../src/mac/carbon/msgdlg.cpp:63
+#: ../src/mac/carbon/msgdlg.cpp:119
+#: ../src/mac/carbon/msgdlg.cpp:203
+#: ../src/mac/classic/msgdlg.cpp:59
+#: ../src/mac/classic/msgdlg.cpp:143
+#: ../src/motif/msgdlg.cpp:204
 msgid "No"
 msgstr "Ne"
 
@@ -4014,8 +4113,7 @@ msgstr "Nenalezeny žádné položky."
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
 "but an alternative encoding '%s' is available.\n"
-"Do you want to use this encoding (otherwise you will have to choose another "
-"one)?"
+"Do you want to use this encoding (otherwise you will have to choose another one)?"
 msgstr ""
 "Nenalezen žádný font použitelný k zobrazení textu v kódování '%s',\n"
 "ale je k dispozici alternativní kódování '%s'.\n"
@@ -4042,7 +4140,8 @@ msgstr "Nenalezen žádný ovladač pro XML uzel '%s' třídy '%s'!"
 msgid "No handler found for animation type."
 msgstr "Nenalezen žádný ovladač pro tento typ obrázků."
 
-#: ../src/common/image.cpp:2158 ../src/common/image.cpp:2201
+#: ../src/common/image.cpp:2158
+#: ../src/common/image.cpp:2201
 msgid "No handler found for image type."
 msgstr "Nenalezen žádný ovladač pro tento typ obrázků."
 
@@ -4051,17 +4150,20 @@ msgstr "Nenalezen žádný ovladač pro tento typ obrázků."
 msgid "No image handler for type %d defined."
 msgstr "Žádný ovladač pro typ obrázků %d."
 
-#: ../src/common/image.cpp:2166 ../src/common/image.cpp:2209
+#: ../src/common/image.cpp:2166
+#: ../src/common/image.cpp:2209
 #, fuzzy, c-format
 msgid "No image handler for type %ld defined."
 msgstr "Žádný ovladač pro typ obrázků %d."
 
-#: ../src/common/image.cpp:2233 ../src/common/image.cpp:2269
+#: ../src/common/image.cpp:2233
+#: ../src/common/image.cpp:2269
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Žádný ovladač pro typ obrázků %s."
 
-#: ../src/html/htmlhelp.cpp:436 ../src/html/htmlhelp.cpp:441
+#: ../src/html/htmlhelp.cpp:436
+#: ../src/html/htmlhelp.cpp:441
 #: ../src/html/helpwnd.cpp:850
 msgid "No matching page found yet"
 msgstr "Žádný výskyt nenalezen"
@@ -4070,7 +4172,8 @@ msgstr "Žádný výskyt nenalezen"
 msgid "No sound"
 msgstr "žádny zvuk"
 
-#: ../src/common/image.cpp:1838 ../src/common/image.cpp:1879
+#: ../src/common/image.cpp:1838
+#: ../src/common/image.cpp:1879
 #, fuzzy
 msgid "No unused colour in image being masked."
 msgstr "V obrázku není žádná nepoužitá barva"
@@ -4089,7 +4192,8 @@ msgstr ""
 msgid "Nordic (ISO-8859-10)"
 msgstr "Severské (ISO-8859-10)"
 
-#: ../src/generic/fontdlgg.cpp:235 ../src/generic/fontdlgg.cpp:238
+#: ../src/generic/fontdlgg.cpp:235
+#: ../src/generic/fontdlgg.cpp:238
 msgid "Normal"
 msgstr "Normální"
 
@@ -4115,8 +4219,10 @@ msgstr "Note, 8 1/2 x 11 palců"
 msgid "Numbered outline"
 msgstr ""
 
-#: ../src/mac/carbon/msgdlg.cpp:65 ../src/msw/dialog.cpp:180
-#: ../src/richtext/richtextstyledlg.cpp:283 ../src/gtk1/fontdlg.cpp:139
+#: ../src/mac/carbon/msgdlg.cpp:65
+#: ../src/msw/dialog.cpp:180
+#: ../src/richtext/richtextstyledlg.cpp:283
+#: ../src/gtk1/fontdlg.cpp:139
 #: ../contrib/src/deprecated/proplist.cpp:502
 msgid "OK"
 msgstr "OK"
@@ -4125,12 +4231,14 @@ msgstr "OK"
 msgid "Objects must have an id attribute"
 msgstr ""
 
-#: ../src/common/docview.cpp:1279 ../src/common/docview.cpp:1629
+#: ../src/common/docview.cpp:1279
+#: ../src/common/docview.cpp:1629
 #: ../src/common/docview.cpp:1589
 msgid "Open File"
 msgstr "Otevři Soubor"
 
-#: ../src/html/helpwnd.cpp:659 ../src/html/helpwnd.cpp:1531
+#: ../src/html/helpwnd.cpp:659
+#: ../src/html/helpwnd.cpp:1531
 msgid "Open HTML document"
 msgstr "Otevři HTML dokument"
 
@@ -4139,8 +4247,10 @@ msgstr "Otevři HTML dokument"
 msgid "Open file \"%s\""
 msgstr "Otevři Soubor"
 
-#: ../src/generic/dirctrlg.cpp:737 ../src/generic/dirdlgg.cpp:350
-#: ../src/generic/filedlgg.cpp:712 ../src/generic/filedlgg.cpp:862
+#: ../src/generic/dirctrlg.cpp:737
+#: ../src/generic/dirdlgg.cpp:350
+#: ../src/generic/filedlgg.cpp:712
+#: ../src/generic/filedlgg.cpp:862
 msgid "Operation not permitted."
 msgstr "Zakázaná operace."
 
@@ -4159,11 +4269,13 @@ msgstr "Volba '%s' vyžaduje hodnotu."
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Volba '%s': '%s' neudává datum."
 
-#: ../src/generic/dirdlgg.cpp:185 ../src/generic/prntdlgg.cpp:612
+#: ../src/generic/dirdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:612
 msgid "Options"
 msgstr "Nastavení"
 
-#: ../src/generic/prntdlgg.cpp:609 ../src/generic/prntdlgg.cpp:863
+#: ../src/generic/prntdlgg.cpp:609
+#: ../src/generic/prntdlgg.cpp:863
 msgid "Orientation"
 msgstr "Orientace"
 
@@ -4179,7 +4291,8 @@ msgstr ""
 msgid "PAUSE"
 msgstr ""
 
-#: ../src/common/imagpcx.cpp:456 ../src/common/imagpcx.cpp:479
+#: ../src/common/imagpcx.cpp:456
+#: ../src/common/imagpcx.cpp:479
 msgid "PCX: couldn't allocate memory"
 msgstr "PCX: Nemohu alokovat paměť."
 
@@ -4195,7 +4308,8 @@ msgstr "PCX: poškozený obrázek"
 msgid "PCX: this is not a PCX file."
 msgstr "PCX: tento soubor není PCX."
 
-#: ../src/common/imagpcx.cpp:458 ../src/common/imagpcx.cpp:480
+#: ../src/common/imagpcx.cpp:458
+#: ../src/common/imagpcx.cpp:480
 msgid "PCX: unknown error !!!"
 msgstr "PCX: neznámá chyba !!!"
 
@@ -4219,7 +4333,8 @@ msgstr "PNM: Nemohu alokovat paměť."
 msgid "PNM: File format is not recognized."
 msgstr "PNM: formát souboru nerozeznán."
 
-#: ../src/common/imagpnm.cpp:104 ../src/common/imagpnm.cpp:121
+#: ../src/common/imagpnm.cpp:104
+#: ../src/common/imagpnm.cpp:121
 #: ../src/common/imagpnm.cpp:138
 msgid "PNM: File seems truncated."
 msgstr "PNM: Soubor je nejspíš uříznutý před koncem."
@@ -4366,7 +4481,8 @@ msgstr "Strana %d z %d"
 msgid "Page Setup"
 msgstr "Nastavení stránky"
 
-#: ../src/common/prntbase.cpp:460 ../src/gtk/gnome/gprint.cpp:548
+#: ../src/common/prntbase.cpp:460
+#: ../src/gtk/gnome/gprint.cpp:548
 #, fuzzy
 msgid "Page setup"
 msgstr "Nastavení stránky"
@@ -4375,12 +4491,14 @@ msgstr "Nastavení stránky"
 msgid "Pages"
 msgstr "Strany"
 
-#: ../src/generic/prntdlgg.cpp:795 ../src/generic/prntdlgg.cpp:849
+#: ../src/generic/prntdlgg.cpp:795
+#: ../src/generic/prntdlgg.cpp:849
 #: ../src/generic/prntdlgg.cpp:1051
 msgid "Paper Size"
 msgstr "Velikost papíru"
 
-#: ../src/generic/prntdlgg.cpp:596 ../src/generic/prntdlgg.cpp:836
+#: ../src/generic/prntdlgg.cpp:596
+#: ../src/generic/prntdlgg.cpp:836
 #: ../src/generic/prntdlgg.cpp:1046
 msgid "Paper size"
 msgstr "Velikost papíru"
@@ -4397,14 +4515,14 @@ msgstr ""
 msgid "Passing a already registered object to SetObjectName"
 msgstr ""
 
-#: ../src/common/xtistrm.cpp:432 ../src/common/xtistrm.cpp:652
+#: ../src/common/xtistrm.cpp:432
+#: ../src/common/xtistrm.cpp:652
 msgid "Passing an unkown object to GetObject"
 msgstr ""
 
 #: ../src/richtext/richtextctrl.cpp:2077
-#, fuzzy
 msgid "Paste"
-msgstr "&Vložit"
+msgstr "Vložit"
 
 #: ../src/common/stockitem.cpp:207
 #, fuzzy
@@ -4456,7 +4574,8 @@ msgstr ""
 msgid "Please wait while printing\n"
 msgstr "Vyčkejte prosím, až skončí tisk\n"
 
-#: ../src/generic/prntdlgg.cpp:606 ../src/generic/prntdlgg.cpp:861
+#: ../src/generic/prntdlgg.cpp:606
+#: ../src/generic/prntdlgg.cpp:861
 msgid "Portrait"
 msgstr "Na výšku"
 
@@ -4468,7 +4587,8 @@ msgstr "soubor PostScript"
 msgid "Preparing help window..."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:362 ../src/html/helpwnd.cpp:1207
+#: ../src/generic/fontdlgg.cpp:362
+#: ../src/html/helpwnd.cpp:1207
 #: ../src/mac/carbon/fontdlg.cpp:513
 msgid "Preview:"
 msgstr "Náhled:"
@@ -4477,8 +4597,10 @@ msgstr "Náhled:"
 msgid "Previous page"
 msgstr "Předchozí stránka"
 
-#: ../src/common/prntbase.cpp:402 ../src/generic/prntdlgg.cpp:139
-#: ../src/generic/prntdlgg.cpp:152 ../src/gtk/gnome/gprint.cpp:403
+#: ../src/common/prntbase.cpp:402
+#: ../src/generic/prntdlgg.cpp:139
+#: ../src/generic/prntdlgg.cpp:152
+#: ../src/gtk/gnome/gprint.cpp:403
 #: ../src/gtk/gnome/gprint.cpp:415
 msgid "Print"
 msgstr "Vytisknout"
@@ -4487,7 +4609,8 @@ msgstr "Vytisknout"
 msgid "Print Preview"
 msgstr "Náhled tisku"
 
-#: ../src/common/prntbase.cpp:1494 ../src/common/prntbase.cpp:1520
+#: ../src/common/prntbase.cpp:1494
+#: ../src/common/prntbase.cpp:1520
 msgid "Print Preview Failure"
 msgstr "Chyba během vytváření náhledu."
 
@@ -4551,7 +4674,8 @@ msgstr "Tiskárna..."
 msgid "Printer:"
 msgstr "Tiskárna..."
 
-#: ../src/common/prntbase.cpp:319 ../src/common/prntbase.cpp:540
+#: ../src/common/prntbase.cpp:319
+#: ../src/common/prntbase.cpp:540
 msgid "Printing "
 msgstr "Tisknu "
 
@@ -4570,8 +4694,7 @@ msgstr "Tisknu..."
 
 #: ../src/common/debugrpt.cpp:552
 #, c-format
-msgid ""
-"Processing debug report has failed, leaving the files in \"%s\" directory."
+msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
 
 #: ../src/common/log.cpp:431
@@ -4599,7 +4722,8 @@ msgstr ""
 msgid "RIGHT"
 msgstr ""
 
-#: ../src/common/ffile.cpp:125 ../src/common/ffile.cpp:144
+#: ../src/common/ffile.cpp:125
+#: ../src/common/ffile.cpp:144
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "Chyba při čtení ze souboru '%s'"
@@ -4759,7 +4883,8 @@ msgstr ""
 msgid "SPACE"
 msgstr ""
 
-#: ../src/common/menucmn.cpp:270 ../src/common/menucmn.cpp:329
+#: ../src/common/menucmn.cpp:270
+#: ../src/common/menucmn.cpp:329
 msgid "SPECIAL"
 msgstr ""
 
@@ -4768,9 +4893,8 @@ msgid "SUBTRACT"
 msgstr ""
 
 #: ../src/common/sizer.cpp:2018
-#, fuzzy
 msgid "Save"
-msgstr "&Uložit..."
+msgstr "Uložit"
 
 #: ../src/common/fldlgcmn.cpp:271
 #, c-format
@@ -4778,9 +4902,8 @@ msgid "Save %s file"
 msgstr "Uložit soubor %s"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "Save &As..."
-msgstr "&Uložit..."
+msgstr "Uložit &jako..."
 
 #: ../src/common/docview.cpp:300
 msgid "Save As"
@@ -4803,18 +4926,15 @@ msgstr "Uložit obsah logu do souboru"
 msgid "Script"
 msgstr "Psací"
 
-#: ../src/html/htmlhelp.cpp:610 ../src/html/helpwnd.cpp:513
+#: ../src/html/htmlhelp.cpp:610
+#: ../src/html/helpwnd.cpp:513
 #: ../src/html/helpwnd.cpp:528
 msgid "Search"
 msgstr "Hledat"
 
 #: ../src/html/helpwnd.cpp:515
-msgid ""
-"Search contents of help book(s) for all occurences of the text you typed "
-"above"
-msgstr ""
-"Prohledá obsah knih(y) s nápovědou a vypíše všechny výskyty textu, který "
-"jste zadal"
+msgid "Search contents of help book(s) for all occurences of the text you typed above"
+msgstr "Prohledá obsah knih(y) s nápovědou a vypíše všechny výskyty textu, který jste zadal"
 
 #: ../src/generic/fdrepdlg.cpp:159
 msgid "Search direction"
@@ -4833,7 +4953,8 @@ msgstr "Hledej ve všech knihách"
 msgid "Search!"
 msgstr "Hledat"
 
-#: ../src/html/htmlhelp.cpp:383 ../src/html/htmlhelp.cpp:441
+#: ../src/html/htmlhelp.cpp:383
+#: ../src/html/htmlhelp.cpp:441
 #: ../src/html/helpwnd.cpp:849
 msgid "Searching..."
 msgstr "Hledám..."
@@ -4852,7 +4973,8 @@ msgstr "Chyba při nastavování pozice v souboru '%s'"
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr ""
 
-#: ../src/mac/carbon/textctrl.cpp:1122 ../src/msw/textctrl.cpp:2214
+#: ../src/mac/carbon/textctrl.cpp:1122
+#: ../src/msw/textctrl.cpp:2214
 #: ../src/richtext/richtextctrl.cpp:2428
 msgid "Select &All"
 msgstr "Vybrat &vše"
@@ -4910,8 +5032,7 @@ msgstr "Nastavení..."
 
 #: ../src/msw/dialup.cpp:568
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr ""
-"Nalezeno několik aktivních vytáčených připojení, vybírám jedno náhodně."
+msgstr "Nalezeno několik aktivních vytáčených připojení, vybírám jedno náhodně."
 
 #: ../src/common/menucmn.cpp:318
 #, fuzzy
@@ -4944,7 +5065,8 @@ msgstr "Zobrazí všechny položky v rejstříku"
 msgid "Show hidden directories"
 msgstr "Ukázat skryté adresáře"
 
-#: ../src/html/htmlhelp.cpp:538 ../src/html/helpwnd.cpp:632
+#: ../src/html/htmlhelp.cpp:538
+#: ../src/html/helpwnd.cpp:632
 msgid "Show/hide navigation panel"
 msgstr "Zobraz/schovej navigační panel"
 
@@ -4965,7 +5087,8 @@ msgstr ""
 msgid "Shows a preview of the font settings."
 msgstr ""
 
-#: ../src/mac/carbon/fontdlg.cpp:517 ../src/mac/carbon/fontdlg.cpp:519
+#: ../src/mac/carbon/fontdlg.cpp:517
+#: ../src/mac/carbon/fontdlg.cpp:519
 msgid "Shows a preview of the font."
 msgstr ""
 
@@ -4974,7 +5097,8 @@ msgstr ""
 msgid "Shows a preview of the paragraph settings."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:367 ../src/generic/fontdlgg.cpp:369
+#: ../src/generic/fontdlgg.cpp:367
+#: ../src/generic/fontdlgg.cpp:369
 msgid "Shows the font preview."
 msgstr ""
 
@@ -5000,7 +5124,8 @@ msgstr "Velikost"
 msgid "Size:"
 msgstr "Velikost"
 
-#: ../src/generic/progdlgg.cpp:218 ../src/generic/progdlgg.cpp:236
+#: ../src/generic/progdlgg.cpp:218
+#: ../src/generic/progdlgg.cpp:236
 #: ../src/generic/progdlgg.cpp:627
 #, fuzzy
 msgid "Skip"
@@ -5014,7 +5139,8 @@ msgstr "Skloněné"
 msgid "Sorry, could not open this file for saving."
 msgstr "Tento soubor nelze otevřít pro zápis."
 
-#: ../src/common/docview.cpp:612 ../src/common/docview.cpp:1608
+#: ../src/common/docview.cpp:612
+#: ../src/common/docview.cpp:1608
 msgid "Sorry, could not open this file."
 msgstr "Tento soubor nelze otevřít."
 
@@ -5023,8 +5149,7 @@ msgid "Sorry, could not save this file."
 msgstr "Tento soubor nelze uložit."
 
 #: ../contrib/src/fl/controlbar.cpp:384
-msgid ""
-"Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
+msgid "Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
 msgstr ""
 
 #: ../src/common/prntbase.cpp:1494
@@ -5041,7 +5166,8 @@ msgstr ""
 msgid "Sorry, that name is taken. Please choose another."
 msgstr ""
 
-#: ../src/common/docview.cpp:1278 ../src/common/docview.cpp:1628
+#: ../src/common/docview.cpp:1278
+#: ../src/common/docview.cpp:1628
 #, fuzzy
 msgid "Sorry, the format for this file is unknown."
 msgstr "Tento soubor nelze otevřít."
@@ -5087,7 +5213,8 @@ msgstr ""
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Vlakno do Barvy: chybný popis barvy : %s"
 
-#: ../include/wx/xti.h:424 ../include/wx/xti.h:428
+#: ../include/wx/xti.h:424
+#: ../include/wx/xti.h:428
 msgid "String conversions not supported"
 msgstr ""
 
@@ -5147,7 +5274,8 @@ msgstr ""
 msgid "TIFF library warning."
 msgstr ""
 
-#: ../src/common/imagtiff.cpp:277 ../src/common/imagtiff.cpp:288
+#: ../src/common/imagtiff.cpp:277
+#: ../src/common/imagtiff.cpp:288
 #: ../src/common/imagtiff.cpp:434
 msgid "TIFF: Couldn't allocate memory."
 msgstr "TIFF: Nemohu alokovat paměť."
@@ -5286,11 +5414,13 @@ msgstr ""
 msgid "The first line indent."
 msgstr "Velikost písma"
 
-#: ../src/generic/fontdlgg.cpp:321 ../src/generic/fontdlgg.cpp:323
+#: ../src/generic/fontdlgg.cpp:321
+#: ../src/generic/fontdlgg.cpp:323
 msgid "The font colour."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:282 ../src/generic/fontdlgg.cpp:284
+#: ../src/generic/fontdlgg.cpp:282
+#: ../src/generic/fontdlgg.cpp:284
 msgid "The font family."
 msgstr ""
 
@@ -5299,22 +5429,27 @@ msgstr ""
 msgid "The font from which to take the symbol."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:334 ../src/generic/fontdlgg.cpp:336
-#: ../src/generic/fontdlgg.cpp:341 ../src/generic/fontdlgg.cpp:343
+#: ../src/generic/fontdlgg.cpp:334
+#: ../src/generic/fontdlgg.cpp:336
+#: ../src/generic/fontdlgg.cpp:341
+#: ../src/generic/fontdlgg.cpp:343
 #, fuzzy
 msgid "The font point size."
 msgstr "Velikost písma"
 
-#: ../src/mac/carbon/fontdlg.cpp:466 ../src/mac/carbon/fontdlg.cpp:468
+#: ../src/mac/carbon/fontdlg.cpp:466
+#: ../src/mac/carbon/fontdlg.cpp:468
 #, fuzzy
 msgid "The font size in points."
 msgstr "Velikost písma"
 
-#: ../src/generic/fontdlgg.cpp:293 ../src/generic/fontdlgg.cpp:295
+#: ../src/generic/fontdlgg.cpp:293
+#: ../src/generic/fontdlgg.cpp:295
 msgid "The font style."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:304 ../src/generic/fontdlgg.cpp:306
+#: ../src/generic/fontdlgg.cpp:304
+#: ../src/generic/fontdlgg.cpp:306
 msgid "The font weight."
 msgstr ""
 
@@ -5357,8 +5492,7 @@ msgstr ""
 
 #: ../src/generic/dbgrptg.cpp:309
 msgid ""
-"The report contains the files listed below. If any of these files contain "
-"private information,\n"
+"The report contains the files listed below. If any of these files contain private information,\n"
 "please uncheck them and they will be removed from the report.\n"
 msgstr ""
 
@@ -5413,7 +5547,8 @@ msgstr "Velikost písma"
 msgid "The tab positions."
 msgstr "Velikost písma"
 
-#: ../src/common/textcmn.cpp:254 ../src/richtext/richtextctrl.cpp:1781
+#: ../src/common/textcmn.cpp:254
+#: ../src/richtext/richtextctrl.cpp:1781
 msgid "The text couldn't be saved."
 msgstr "Text nelze uložit."
 
@@ -5424,43 +5559,29 @@ msgstr "Musíte zadat hodnotu volby '%s'."
 
 #: ../src/msw/dialup.cpp:456
 #, c-format
-msgid ""
-"The version of remote access service (RAS) installed on this machine is "
-"tooold, please upgrade (the following required function is missing: %s)."
-msgstr ""
-"Verze Remote Access Service (RAS) na tomto počítači je příliš stará, prosím "
-"upgradujte (chybí tato funkce: %s)."
+msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
+msgstr "Verze Remote Access Service (RAS) na tomto počítači je příliš stará, prosím upgradujte (chybí tato funkce: %s)."
 
-#: ../src/html/htmprint.cpp:610 ../src/richtext/richtextprint.cpp:561
-msgid ""
-"There was a problem during page setup: you may need to set a default printer."
+#: ../src/html/htmprint.cpp:610
+#: ../src/richtext/richtextprint.cpp:561
+msgid "There was a problem during page setup: you may need to set a default printer."
 msgstr "Při nastavování stránky nastala chyba: nastavte výchozí tiskárnu."
 
 #: ../src/msw/datectrl.cpp:110
-msgid ""
-"This system doesn't support date picker control, please upgrade your version "
-"of comctl32.dll"
+msgid "This system doesn't support date picker control, please upgrade your version of comctl32.dll"
 msgstr ""
 
 #: ../src/msw/thread.cpp:1247
-msgid ""
-"Thread module initialization failed: can not store value in thread local "
-"storage"
-msgstr ""
-"Modul s vlákny se nepodařilo iniciovat: nemohu ukládat hodnoty v 'local "
-"storage'"
+msgid "Thread module initialization failed: can not store value in thread local storage"
+msgstr "Modul s vlákny se nepodařilo iniciovat: nemohu ukládat hodnoty v 'local storage'"
 
 #: ../src/unix/threadpsx.cpp:1618
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Selhala inicializace modulu s vlákny: nelze vytvořit klíč"
 
 #: ../src/msw/thread.cpp:1235
-msgid ""
-"Thread module initialization failed: impossible to allocate index in thread "
-"local storage"
-msgstr ""
-"Modul s vlákny se nepodařilo iniciovat: nemohu alokovat index v 'local "
-"storage'"
+msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
+msgstr "Modul s vlákny se nepodařilo iniciovat: nemohu alokovat index v 'local storage'"
 
 #: ../src/unix/threadpsx.cpp:1136
 msgid "Thread priority setting is ignored."
@@ -5479,7 +5600,8 @@ msgstr "Vyrovnat &svisle"
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
 msgstr "FTP server nepodporuje pasivní mód."
 
-#: ../src/msw/timer.cpp:111 ../src/os2/timer.cpp:130
+#: ../src/msw/timer.cpp:111
+#: ../src/os2/timer.cpp:130
 #, fuzzy
 msgid "Timer creation failed."
 msgstr "Nelze vytvořit rouru"
@@ -5517,7 +5639,8 @@ msgstr ""
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "Soubor '%s' nelze odebrat z paměťového VFS, protože nebyl načten!"
 
-#: ../src/common/sckaddr.cpp:144 ../src/common/sckaddr.cpp:247
+#: ../src/common/sckaddr.cpp:144
+#: ../src/common/sckaddr.cpp:247
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "Snažím se zjistit NULLové jméno počítače: vzdávám to"
 
@@ -5540,7 +5663,8 @@ msgstr ""
 msgid "Type a size in points."
 msgstr ""
 
-#: ../src/common/xtistrm.cpp:277 ../src/common/xtixml.cpp:348
+#: ../src/common/xtistrm.cpp:277
+#: ../src/common/xtixml.cpp:348
 #: ../src/common/xtixml.cpp:495
 msgid "Type must have enum - long conversion"
 msgstr ""
@@ -5554,11 +5678,11 @@ msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr "US Std Fanfold, 17 7/8 x 11 palců"
 
 #: ../src/common/fmapbase.cpp:151
-#, fuzzy
 msgid "US-ASCII"
-msgstr "ASCII"
+msgstr "US-ASCII"
 
-#: ../src/common/strconv.cpp:2771 ../src/common/strconv.cpp:2775
+#: ../src/common/strconv.cpp:2771
+#: ../src/common/strconv.cpp:2775
 msgid "Unable to create TextEncodingConverter"
 msgstr ""
 
@@ -5572,14 +5696,13 @@ msgid "Unable to play sound asynchronously."
 msgstr ""
 
 #: ../src/common/stockitem.cpp:155
-#, fuzzy
 msgid "Undelete"
-msgstr "Podtržené"
+msgstr "Obnovit smazané"
 
-#: ../src/mac/carbon/fontdlg.cpp:493 ../src/richtext/richtextfontpage.cpp:229
+#: ../src/mac/carbon/fontdlg.cpp:493
+#: ../src/richtext/richtextfontpage.cpp:229
 #: ../src/richtext/richtextfontpage.cpp:313
 #: ../src/richtext/richtextfontpage.cpp:468
-#, fuzzy
 msgid "Underlined"
 msgstr "Podtržené"
 
@@ -5615,9 +5738,10 @@ msgstr "Neočekávaný parametr '%s'"
 #: ../src/richtext/richtextsymboldlg.cpp:458
 #, fuzzy
 msgid "Unicode"
-msgstr "devatenáctého"
+msgstr "Unicode"
 
-#: ../src/common/fmapbase.cpp:140 ../src/common/fmapbase.cpp:146
+#: ../src/common/fmapbase.cpp:140
+#: ../src/common/fmapbase.cpp:146
 msgid "Unicode 16 bit (UTF-16)"
 msgstr "Unicode 16 bit (UTF-16)"
 
@@ -5631,7 +5755,8 @@ msgstr "Unicode 8 bit (UTF-8)"
 msgid "Unicode 16 bit Little Endian (UTF-16LE)"
 msgstr "Unicode 8 bit (UTF-8)"
 
-#: ../src/common/fmapbase.cpp:142 ../src/common/fmapbase.cpp:148
+#: ../src/common/fmapbase.cpp:142
+#: ../src/common/fmapbase.cpp:148
 msgid "Unicode 32 bit (UTF-32)"
 msgstr "Unicode 32 bit (UTF-32)"
 
@@ -5681,7 +5806,8 @@ msgstr "Neznámá znaková sada (%d)"
 msgid "Unknown long option '%s'"
 msgstr "Neznámá 'dlouhá' volba '%s'"
 
-#: ../src/common/cmdline.cpp:608 ../src/common/cmdline.cpp:630
+#: ../src/common/cmdline.cpp:608
+#: ../src/common/cmdline.cpp:630
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Neznámá volba '%s'"
@@ -5700,7 +5826,8 @@ msgstr "Neznámá volba '%s'"
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "Přebytečná '{' v popisu mime typu %s."
 
-#: ../src/common/cmdproc.cpp:257 ../src/common/cmdproc.cpp:283
+#: ../src/common/cmdproc.cpp:257
+#: ../src/common/cmdproc.cpp:283
 #: ../src/common/cmdproc.cpp:303
 msgid "Unnamed command"
 msgstr "Nepojmenovaný příkaz"
@@ -5710,7 +5837,8 @@ msgstr "Nepojmenovaný příkaz"
 msgid "Unrecognized style %s while parsing resource."
 msgstr ""
 
-#: ../src/mac/classic/clipbrd.cpp:66 ../src/msw/clipbrd.cpp:267
+#: ../src/mac/classic/clipbrd.cpp:66
+#: ../src/msw/clipbrd.cpp:267
 #: ../src/msw/clipbrd.cpp:439
 msgid "Unsupported clipboard format."
 msgstr "Nepodporovaný formát obsahu schránky."
@@ -5782,7 +5910,8 @@ msgstr ""
 msgid "Waiting for subprocess termination failed"
 msgstr "Čekání na ukončení podprocesu selhalo"
 
-#: ../src/common/docview.cpp:456 ../src/html/htmprint.cpp:380
+#: ../src/common/docview.cpp:456
+#: ../src/html/htmprint.cpp:380
 msgid "Warning"
 msgstr "Varování"
 
@@ -5802,7 +5931,8 @@ msgstr "Západoevropské (ISO-8859-1)"
 msgid "Western European with Euro (ISO-8859-15)"
 msgstr "Západoevropské s eurem (ISO-8859-15)"
 
-#: ../src/generic/fontdlgg.cpp:353 ../src/generic/fontdlgg.cpp:355
+#: ../src/generic/fontdlgg.cpp:353
+#: ../src/generic/fontdlgg.cpp:355
 msgid "Whether the font is underlined."
 msgstr ""
 
@@ -5828,29 +5958,25 @@ msgid "Windows 2000 (build %lu"
 msgstr ""
 
 #: ../src/msw/utils.cpp:1094
-#, fuzzy
 msgid "Windows 95"
-msgstr "Windows 9%c"
+msgstr "Windows 95"
 
 #: ../src/msw/utils.cpp:1090
-#, fuzzy
 msgid "Windows 95 OSR2"
-msgstr "Windows 9%c"
+msgstr "Windows 95 OSR2"
 
 #: ../src/msw/utils.cpp:1105
-#, fuzzy
 msgid "Windows 98"
-msgstr "Windows 9%c"
+msgstr "Windows 98"
 
 #: ../src/msw/utils.cpp:1101
-#, fuzzy
 msgid "Windows 98 SE"
-msgstr "Windows 9%c"
+msgstr "Windows 98 SE"
 
 #: ../src/msw/utils.cpp:1112
-#, fuzzy, c-format
+#, c-format
 msgid "Windows 9x (%d.%d)"
-msgstr "Windows 9%c"
+msgstr "Windows 9x (%d.%d)"
 
 #: ../src/common/fmapbase.cpp:134
 msgid "Windows Arabic (CP 1256)"
@@ -5861,9 +5987,9 @@ msgid "Windows Baltic (CP 1257)"
 msgstr "Baltské pro Windows (CP 1257)"
 
 #: ../src/msw/utils.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Windows CE (%d.%d)"
-msgstr "Windows 9%c"
+msgstr "Windows CE (%d.%d)"
 
 #: ../src/common/fmapbase.cpp:128
 msgid "Windows Central European (CP 1250)"
@@ -5898,9 +6024,8 @@ msgid "Windows Korean (CP 949)"
 msgstr "Korejské pro Windows (CP 949)"
 
 #: ../src/msw/utils.cpp:1109
-#, fuzzy
 msgid "Windows ME"
-msgstr "Windows 9%c"
+msgstr "Windows ME"
 
 #: ../src/msw/utils.cpp:1144
 #, c-format
@@ -5913,9 +6038,8 @@ msgid "Windows Server 2003 (build %lu"
 msgstr ""
 
 #: ../src/common/fmapbase.cpp:123
-#, fuzzy
 msgid "Windows Thai (CP 874)"
-msgstr "Baltské pro Windows (CP 1257)"
+msgstr "Windows Thai (CP 874)"
 
 #: ../src/common/fmapbase.cpp:132
 msgid "Windows Turkish (CP 1254)"
@@ -5957,7 +6081,8 @@ msgstr "XPM: špatná definice barvy '%s'!"
 msgid "XPM: incorrect header format!"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:720 ../src/common/xpmdecod.cpp:729
+#: ../src/common/xpmdecod.cpp:720
+#: ../src/common/xpmdecod.cpp:729
 #, fuzzy, c-format
 msgid "XPM: malformed colour definition '%s' at line %d!"
 msgstr "XPM: špatná definice barvy '%s'!"
@@ -5972,12 +6097,14 @@ msgstr ""
 msgid "XRC resource '%s' (class '%s') not found!"
 msgstr "XRC zdroj '%s' (třída '%s') nenalezen!"
 
-#: ../src/xrc/xmlres.cpp:1154 ../src/xrc/xmlres.cpp:1166
+#: ../src/xrc/xmlres.cpp:1154
+#: ../src/xrc/xmlres.cpp:1166
 #, fuzzy, c-format
 msgid "XRC resource: Cannot create animation from '%s'."
 msgstr "XRC zdroje: nemohu vytvořit bitmapu z '%s'."
 
-#: ../src/xrc/xmlres.cpp:1122 ../src/xrc/xmlres.cpp:1134
+#: ../src/xrc/xmlres.cpp:1122
+#: ../src/xrc/xmlres.cpp:1134
 #, c-format
 msgid "XRC resource: Cannot create bitmap from '%s'."
 msgstr "XRC zdroje: nemohu vytvořit bitmapu z '%s'."
@@ -5987,9 +6114,12 @@ msgstr "XRC zdroje: nemohu vytvořit bitmapu z '%s'."
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
 msgstr "XRC zdroje: chybný popis barvy '%s' u vlastnosti '%s'."
 
-#: ../src/mac/carbon/msgdlg.cpp:64 ../src/mac/carbon/msgdlg.cpp:120
-#: ../src/mac/carbon/msgdlg.cpp:202 ../src/mac/classic/msgdlg.cpp:60
-#: ../src/mac/classic/msgdlg.cpp:142 ../src/motif/msgdlg.cpp:204
+#: ../src/mac/carbon/msgdlg.cpp:64
+#: ../src/mac/carbon/msgdlg.cpp:120
+#: ../src/mac/carbon/msgdlg.cpp:202
+#: ../src/mac/classic/msgdlg.cpp:60
+#: ../src/mac/classic/msgdlg.cpp:142
+#: ../src/motif/msgdlg.cpp:204
 msgid "Yes"
 msgstr "Ano"
 
@@ -5998,7 +6128,8 @@ msgstr "Ano"
 msgid "You cannot Clear an overlay that is not inited"
 msgstr "Nemůžete přidat nový adresář do této sekce."
 
-#: ../src/mac/carbon/overlay.cpp:104 ../src/dfb/overlay.cpp:55
+#: ../src/mac/carbon/overlay.cpp:104
+#: ../src/dfb/overlay.cpp:55
 msgid "You cannot Init an overlay twice"
 msgstr ""
 
@@ -6028,8 +6159,7 @@ msgstr "DDEML aplikace způsobila prodlouženou vzácnou podmínku."
 
 #: ../src/msw/dde.cpp:1043
 msgid ""
-"a DDEML function was called without first calling the DdeInitialize "
-"function,\n"
+"a DDEML function was called without first calling the DdeInitialize function,\n"
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
@@ -6132,7 +6262,7 @@ msgstr ""
 
 #: ../src/html/chm.cpp:342
 msgid "bad signature"
-msgstr ""
+msgstr "špatný podpis"
 
 #: ../src/common/zipstrm.cpp:1712
 msgid "bad zipfile offset to entry"
@@ -6180,7 +6310,8 @@ msgstr "nemohu smazat uživatelský konfigurační soubor '%s'"
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "nemohu zjistit, jestli byl dosažen konec souboru v deskriptoru %d"
 
-#: ../src/msdos/utilsdos.cpp:299 ../src/msdos/utilsdos.cpp:458
+#: ../src/msdos/utilsdos.cpp:299
+#: ../src/msdos/utilsdos.cpp:458
 #, fuzzy, c-format
 msgid "can't execute '%s'"
 msgstr "Nepodařilo se spustit '%s'\n"
@@ -6204,7 +6335,8 @@ msgstr "nemohu najít uživatelův domovský adresář, použiji aktuální adre
 msgid "can't flush file descriptor %d"
 msgstr "nemohu vyprázdnit (flush) deskriptor %d"
 
-#: ../src/common/file.cpp:393 ../src/msw/wince/filefnwce.cpp:198
+#: ../src/common/file.cpp:393
+#: ../src/msw/wince/filefnwce.cpp:198
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "nemohu zjistit pozici v deskriptoru %d"
@@ -6213,7 +6345,8 @@ msgstr "nemohu zjistit pozici v deskriptoru %d"
 msgid "can't load any font, aborting"
 msgstr "nemohu načíst žádný font, končím"
 
-#: ../src/common/ffile.cpp:75 ../src/common/file.cpp:265
+#: ../src/common/ffile.cpp:75
+#: ../src/common/file.cpp:265
 #, c-format
 msgid "can't open file '%s'"
 msgstr "nemohu otevřít soubor '%s'"
@@ -6257,7 +6390,8 @@ msgstr "nemohu odstranit soubor '%s'"
 msgid "can't remove temporary file '%s'"
 msgstr "nemohu odstranit dočasný soubor '%s'"
 
-#: ../src/common/file.cpp:379 ../src/msw/wince/filefnwce.cpp:185
+#: ../src/common/file.cpp:379
+#: ../src/msw/wince/filefnwce.cpp:185
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "nemohu seekovat v deskriptoru %d"
@@ -6514,7 +6648,8 @@ msgstr "žádná chyba DDE."
 msgid "no error"
 msgstr "žadná chyba"
 
-#: ../src/html/helpdata.cpp:655 ../src/html/htmlhelp.cpp:201
+#: ../src/html/helpdata.cpp:655
+#: ../src/html/htmlhelp.cpp:201
 msgid "noname"
 msgstr "bezejmenná"
 
@@ -6608,8 +6743,10 @@ msgstr ""
 msgid "str"
 msgstr "řetězec"
 
-#: ../src/common/tarstrm.cpp:927 ../src/common/tarstrm.cpp:949
-#: ../src/common/tarstrm.cpp:1417 ../src/common/tarstrm.cpp:1439
+#: ../src/common/tarstrm.cpp:927
+#: ../src/common/tarstrm.cpp:949
+#: ../src/common/tarstrm.cpp:1417
+#: ../src/common/tarstrm.cpp:1439
 msgid "tar entry not open"
 msgstr ""
 
@@ -6629,7 +6766,8 @@ msgstr "třetího"
 msgid "thirteenth"
 msgstr "třináctého"
 
-#: ../src/common/imagtiff.cpp:174 ../src/common/imagtiff.cpp:190
+#: ../src/common/imagtiff.cpp:174
+#: ../src/common/imagtiff.cpp:190
 #, c-format
 msgid "tiff module: %s"
 msgstr ""
@@ -6656,7 +6794,8 @@ msgstr "dvanáctého"
 msgid "twentieth"
 msgstr "dvacátého"
 
-#: ../src/common/fontcmn.cpp:602 ../src/common/fontcmn.cpp:687
+#: ../src/common/fontcmn.cpp:602
+#: ../src/common/fontcmn.cpp:687
 msgid "underlined"
 msgstr "podtržené"
 
@@ -6669,7 +6808,8 @@ msgstr "neočekávané \" na pozici %d v '%s'."
 msgid "unexpected end of file"
 msgstr ""
 
-#: ../src/common/tarstrm.cpp:351 ../src/generic/progdlgg.cpp:303
+#: ../src/common/tarstrm.cpp:351
+#: ../src/generic/progdlgg.cpp:303
 msgid "unknown"
 msgstr "neznámý"
 
@@ -6678,7 +6818,8 @@ msgstr "neznámý"
 msgid "unknown class %s"
 msgstr "neznámá třida %s"
 
-#: ../src/common/regex.cpp:257 ../src/html/chm.cpp:352
+#: ../src/common/regex.cpp:257
+#: ../src/html/chm.cpp:352
 msgid "unknown error"
 msgstr "neznámá chyba"
 
@@ -6691,7 +6832,8 @@ msgstr "neznámá chyba (kód %08x)."
 msgid "unknown line terminator"
 msgstr "neznámý konec řádku"
 
-#: ../src/common/file.cpp:361 ../src/msw/wince/filefnwce.cpp:166
+#: ../src/common/file.cpp:361
+#: ../src/msw/wince/filefnwce.cpp:166
 msgid "unknown seek origin"
 msgstr "neznámý počátek pro nastavení pozice"
 
@@ -6709,7 +6851,8 @@ msgstr "nepojmenovaný"
 msgid "unnamed%d"
 msgstr "nepojmenovaný%d"
 
-#: ../src/common/zipstrm.cpp:1793 ../src/common/zipstrm.cpp:2174
+#: ../src/common/zipstrm.cpp:1793
+#: ../src/common/zipstrm.cpp:2174
 msgid "unsupported Zip compression method"
 msgstr ""
 
@@ -6752,7 +6895,8 @@ msgstr ""
 msgid "wxSearchEngine::LookFor must be called before scanning!"
 msgstr ""
 
-#: ../src/common/socket.cpp:412 ../src/common/socket.cpp:466
+#: ../src/common/socket.cpp:412
+#: ../src/common/socket.cpp:466
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket: chybná signatura v ReadMsg."
 
@@ -6777,7 +6921,8 @@ msgstr ""
 msgid "yesterday"
 msgstr "včera"
 
-#: ../src/common/zstream.cpp:245 ../src/common/zstream.cpp:413
+#: ../src/common/zstream.cpp:245
+#: ../src/common/zstream.cpp:413
 #, c-format
 msgid "zlib error %d"
 msgstr "zlib chyba %d"
@@ -6793,37 +6938,26 @@ msgstr ""
 
 #~ msgid "."
 #~ msgstr "."
-
 #~ msgid ".."
 #~ msgstr ".."
-
 #~ msgid "Cannot open URL '%s'"
 #~ msgstr "Nemohu otevřít URL '%s'"
-
 #~ msgid "Error "
 #~ msgstr "Chyba"
-
 #~ msgid "Failed to create directory %s/.gnome."
 #~ msgstr "Nelze vytvořit uživatelský %s/.gnome."
-
 #~ msgid "Failed to create directory %s/mime-info."
 #~ msgstr "Nelze vytvořit adresář %s/mime-info."
-
 #~ msgid "Mailcap file %s, line %d: incomplete entry ignored."
 #~ msgstr "Soubor Mailcap %s, řádka %d: nekompletní položka ignorována."
-
 #~ msgid "Mime.types file %s, line %d: unterminated quoted string."
 #~ msgstr "Soubor Mime.types %s, řádka %d: neukončený uzávorkovaný řetězec."
-
 #~ msgid "Unknown field in file %s, line %d: '%s'."
 #~ msgstr "Neznámá položka v souboru %s, řádka %d: '%s'."
-
 #~ msgid "bold "
 #~ msgstr "tučné "
-
 #~ msgid "light "
 #~ msgstr "tenké "
-
 #~ msgid "underlined "
 #~ msgstr "podtržené "
 
@@ -6832,20 +6966,16 @@ msgstr ""
 #~ "Failed to get stack backtrace:\n"
 #~ "%s"
 #~ msgstr "Nepodařilo se získat jména ISP: %s"
-
 #~ msgid "Loading Grey Ascii PNM image is not yet implemented."
 #~ msgstr "Načítání šedých ascii PNM obrázků není ještě implementováno."
-
 #~ msgid "Loading Grey Raw PNM image is not yet implemented."
 #~ msgstr "Načítání šedých raw PNM obrázků není ještě implementováno."
 
 #, fuzzy
 #~ msgid "Cannot wait on thread to exit."
 #~ msgstr "Nemohu počkat na ukončení vlákna"
-
 #~ msgid "Could not load Rich Edit DLL '%s'"
 #~ msgstr "Nemohu načíst Rich Edit DLL '%s'"
-
 #~ msgid "ZIP handler currently supports only local files!"
 #~ msgstr "ZIP soubory lze otevřít jenom z disku!"
 
@@ -6853,15 +6983,12 @@ msgstr ""
 #~ msgid ""
 #~ "can't seek on file descriptor %d, large files support is not enabled."
 #~ msgstr "nemohu seekovat v deskriptoru %d"
-
 #~ msgid "More..."
 #~ msgstr "Více..."
-
 #~ msgid "Setup"
 #~ msgstr "Nastavení"
-
 #~ msgid "Backward"
 #~ msgstr "Zpět"
-
 #~ msgid "GetUnusedColour:: No Unused Color in image "
 #~ msgstr "GetUnusedColour: v obrázku není žádná nepoužitá barva"
+
