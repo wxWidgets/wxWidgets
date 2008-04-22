@@ -10,61 +10,51 @@
     @class wxVariant
     @wxheader{variant.h}
 
-    The @b wxVariant class represents a container for any type.
-    A variant's value can be changed at run time, possibly to a different type of
-    value.
+    The @b wxVariant class represents a container for any type. A variant's value
+    can be changed at run time, possibly to a different type of value.
 
     As standard, wxVariant can store values of type bool, wxChar, double, long,
-    string,
-    string list, time, date, void pointer, list of strings, and list of variants.
+    string, string list, time, date, void pointer, list of strings, and list of variants.
     However, an application can extend wxVariant's capabilities by deriving from the
-    class wxVariantData and using the wxVariantData form of
-    the wxVariant constructor or assignment operator to assign this data to a
-    variant.
-    Actual values for user-defined types will need to be accessed via the
-    wxVariantData
+    class wxVariantData and using the wxVariantData form of the wxVariant constructor
+    or assignment operator to assign this data to a variant.
+    Actual values for user-defined types will need to be accessed via the wxVariantData
     object, unlike the case for basic data types where convenience functions such as
     wxVariant::GetLong can be used.
 
-    Pointers to any wxObject derived class can also easily be stored
-    in a wxVariant. wxVariant will then use wxWidgets' built-in RTTI system to set
-    the
-    type name (returned by wxVariant::GetType) and to perform
-    type-safety checks at runtime.
+    Pointers to any wxObject derived class can also easily be stored in a wxVariant.
+    wxVariant will then use wxWidgets' built-in RTTI system to set the type name 
+    (returned by wxVariant::GetType) and to perform type-safety checks at runtime.
 
-    This class is useful for reducing the programming for certain tasks, such as an
-    editor
-    for different data types, or a remote procedure call protocol.
+    This class is useful for reducing the programming for certain tasks, such as
+    an editor for different data types, or a remote procedure call protocol.
 
-    An optional name member is associated with a wxVariant. This might be used, for
-    example,
-    in CORBA or OLE automation classes, where named parameters are required.
+    An optional name member is associated with a wxVariant. This might be used,
+    for example, in CORBA or OLE automation classes, where named parameters are required.
 
     Note that as of wxWidgets 2.7.1, wxVariant is @ref overview_trefcount
     "reference counted".
     Additionally, the convenience macros @b DECLARE_VARIANT_OBJECT and
     @b IMPLEMENT_VARIANT_OBJECT were added so that adding (limited) support
-    for conversion to and from wxVariant can be very easily implemented without
-    modifying
-    either wxVariant or the class to be stored by wxVariant. Since assignment
-    operators
-    cannot be declared outside the class, the shift left operators are used like
-    this:
+    for conversion to and from wxVariant can be very easily implemented
+    without modifying either wxVariant or the class to be stored by wxVariant.
+    Since assignment operators cannot be declared outside the class, the shift
+    left operators are used like this:
 
     @code
     // in the header file
-        DECLARE_VARIANT_OBJECT(MyClass)
+    DECLARE_VARIANT_OBJECT(MyClass)
 
-        // in the implementation file
-        IMPLEMENT_VARIANT_OBJECT(MyClass)
+    // in the implementation file
+    IMPLEMENT_VARIANT_OBJECT(MyClass)
 
-        // in the user code
-        wxVariant variant;
-        MyClass value;
-        variant  value;
+    // in the user code
+    wxVariant variant;
+    MyClass value;
+    variant << value;
 
-        // or
-        value  variant;
+    // or
+    value << variant;
     @endcode
 
     For this to work, MyClass must derive from wxObject, implement
@@ -90,11 +80,9 @@
     Clone is implemented automatically by IMPLEMENT_VARIANT_OBJECT.
 
     Since wxVariantData no longer derives from wxObject, any code that tests the
-    type
-    of the data using wxDynamicCast will require adjustment. You can use the macro
-    wxDynamicCastVariantData with the same arguments as wxDynamicCast, to use C++
-    RTTI
-    type information instead of wxWidgets RTTI.
+    type of the data using wxDynamicCast will require adjustment. You can use the
+    macro wxDynamicCastVariantData with the same arguments as wxDynamicCast, to
+    use C++ RTTI type information instead of wxWidgets RTTI.
 
     @library{wxbase}
     @category{data}
@@ -104,30 +92,80 @@
 class wxVariant : public wxObject
 {
 public:
-    //@{
     /**
-        Construction from a ODBC timestamp value.  Represented internally by a
-        wxDateTime value.
+        Default constructor.
     */
     wxVariant();
+    
+    /**
+        Constructs a variant directly with a wxVariantData
+        object. wxVariant will take ownership of the wxVariantData
+        and will not increase its reference count.
+    */
+    wxVariant(wxVariantData* data, const wxString& name = "");
+    
+    /**
+        Constructs a variant from another variant by increasing the
+        reference count.
+    */
     wxVariant(const wxVariant& variant);
+    
+    /**
+        Constructs a variant from a wide string literal.
+    */
     wxVariant(const wxChar* value, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a string.
+    */
     wxVariant(const wxString& value, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a wide char.
+    */
     wxVariant(wxChar value, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a long.
+    */
     wxVariant(long value, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a bool.
+    */
     wxVariant(bool value, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a double.
+    */
     wxVariant(double value, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a list of variants
+    */
     wxVariant(const wxVariantList& value,
               const wxString& name = "");
+    
+    /**
+        Constructs a variant from a void pointer.
+    */
     wxVariant(void* value, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a pointer to an wxObject
+        derived class.
+    */
     wxVariant(wxObject* value, const wxString& name = "");
-    wxVariant(wxVariantData* data, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a wxDateTime.
+    */
     wxVariant(wxDateTime& val, const wxString& name = "");
+    
+    /**
+        Constructs a variant from a wxArrayString.
+    */
     wxVariant(wxArrayString& val, const wxString& name = "");
-    wxVariant(DATE_STRUCT* val, const wxString& name = "");
-    wxVariant(TIME_STRUCT* val, const wxString& name = "");
-    wxVariant(TIMESTAMP_STRUCT* val, const wxString& name = "");
-    //@}
 
     /**
         Destructor.
@@ -139,20 +177,54 @@ public:
     ~wxVariant();
 
     /**
+        @name List functionality
+    */
+    //@{
+    /**
+        Returns the value at @a idx (zero-based).
+    */
+    wxVariant operator [](size_t idx);
+    /**
+        Returns a reference to the value at @a idx (zero-based). This can be used
+        to change the value at this index.
+    */
+    const wxVariant& operator [](size_t idx);
+    /**
         Appends a value to the list.
     */
     void Append(const wxVariant& value);
-
+    /**
+        Deletes the contents of the list.
+    */
+    void ClearList();
+    /**
+        Deletes the zero-based @a item from the list.
+    */
+    bool Delete(size_t item);
+    /**
+        Returns the number of elements in the list.
+    */
+    size_t GetCount() const;
+    /**
+        Returns a reference to the wxVariantList class used by
+        wxVariant if this wxVariant is currently a list of variants.
+    */
+    wxVariantList& GetList() const;
     /**
         Makes the variant null by deleting the internal data and
         set the name to @e wxEmptyString.
     */
     void Clear();
-
     /**
-        Deletes the contents of the list.
+        Inserts a value at the front of the list.
     */
-    void ClearList();
+    void Insert(const wxVariant& value);
+    /**
+        Makes an empty list. This differs from a null variant which has no data;
+        a null list is of type list, but the number of elements in the list is zero.
+    */
+    void NullList();
+    //@}
 
     //@{
     /**
@@ -165,11 +237,6 @@ public:
     const bool Convert(wxChar* value) const;
     const bool Convert(wxDateTime* value) const;
     //@}
-
-    /**
-        Deletes the zero-based @a item from the list.
-    */
-    bool Delete(size_t item);
 
     /**
         Returns the string array value.
@@ -185,11 +252,6 @@ public:
         Returns the character value.
     */
     wxChar GetChar() const;
-
-    /**
-        Returns the number of elements in the list.
-    */
-    size_t GetCount() const;
 
     /**
         Returns a pointer to the internal variant data. To take ownership
@@ -208,12 +270,6 @@ public:
         Returns the floating point value.
     */
     double GetDouble() const;
-
-    /**
-        Returns a reference to the wxVariantList class used by
-        wxVariant if this wxVariant is currently a list of variants.
-    */
-    wxVariantList GetList() const;
 
     /**
         Returns the integer value.
@@ -249,11 +305,6 @@ public:
     wxObject* GetWxObjectPtr() const;
 
     /**
-        Inserts a value at the front of the list.
-    */
-    void Insert(const wxVariant& value);
-
-    /**
         Returns @true if there is no data associated with this variant, @false if there
         is data.
     */
@@ -284,13 +335,6 @@ public:
         Returns @true if @a value matches an element in the list.
     */
     bool Member(const wxVariant& value) const;
-
-    /**
-        Makes an empty list. This differs from a null variant which has no data; a null
-        list
-        is of type list, but the number of elements in the list is zero.
-    */
-    void NullList();
 
     /**
         Sets the internal variant data, deleting the existing data if there is any.
@@ -362,15 +406,6 @@ public:
     const bool operator ==(const wxVariantList& value) const;
     const bool operator ==(const wxArrayString& value) const;
     const bool operator ==(const wxDateTime& value) const;
-    //@}
-
-    //@{
-    /**
-        Returns a reference to the value at @a idx (zero-based). This can be used
-        to change the value at this index.
-    */
-    wxVariant operator [](size_t idx);
-    const wxVariant&  operator [](size_t idx);
     //@}
 
     //@{
