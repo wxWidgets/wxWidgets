@@ -244,14 +244,14 @@ public:
         @a filespec. If @a filespec is empty, look for any files at all. In any
         case, even hidden files are taken into account.
     */
-    bool HasFiles(const wxString& filespec = wxEmptyString);
+    bool HasFiles(const wxString& filespec = wxEmptyString) const;
 
     /**
         Returns @true if the directory contains any subdirectories (if a non
         empty @a filespec is given, only check for directories matching it).
         The hidden subdirectories are taken into account as well.
     */
-    bool HasSubDirs(const wxString& dirspec = wxEmptyString);
+    bool HasSubDirs(const wxString& dirspec = wxEmptyString) const;
 
     /**
         Returns @true if the directory was successfully opened by a previous

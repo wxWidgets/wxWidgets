@@ -290,7 +290,7 @@ bool wxDir::GetNext(wxString *filename) const
     return M_DIR->Read(filename);
 }
 
-bool wxDir::HasSubDirs(const wxString& spec)
+bool wxDir::HasSubDirs(const wxString& spec) const
 {
     wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
 

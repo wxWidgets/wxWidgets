@@ -55,7 +55,7 @@ wxDirTraverser::OnOpenError(const wxString& WXUNUSED(dirname))
 
 // dumb generic implementation
 
-bool wxDir::HasFiles(const wxString& spec)
+bool wxDir::HasFiles(const wxString& spec) const
 {
     wxString s;
     return GetFirst(&s, spec, wxDIR_FILES | wxDIR_HIDDEN);
@@ -64,7 +64,7 @@ bool wxDir::HasFiles(const wxString& spec)
 // we have a (much) faster version for Unix
 #if (defined(__CYGWIN__) && defined(__WINDOWS__)) || !defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__EMX__) || defined(__WINE__)
 
-bool wxDir::HasSubDirs(const wxString& spec)
+bool wxDir::HasSubDirs(const wxString& spec) const
 {
     wxString s;
     return GetFirst(&s, spec, wxDIR_DIRS | wxDIR_HIDDEN);
