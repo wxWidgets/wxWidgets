@@ -148,6 +148,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 
 #define wxRICHTEXT_FORMATTED        0x01
 #define wxRICHTEXT_UNFORMATTED      0x02
+#define wxRICHTEXT_CACHE_SIZE       0x04
 
 /*!
  * Flags for SetStyle/SetListStyle
@@ -282,6 +283,9 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
  */
 
 #define wxSCRIPT_MUL_FACTOR             1.5
+
+// Switch off for binary compatibility, on for faster drawing
+#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 0
 
 /*!
  * wxRichTextRange class declaration
@@ -1242,6 +1246,11 @@ public:
     void SetDescent(int descent) { m_descent = descent; }
     int GetDescent() const { return m_descent; }
 
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
+    wxArrayInt& GetObjectSizes() { return m_objectSizes; }
+    const wxArrayInt& GetObjectSizes() const { return m_objectSizes; }
+#endif
+
 // Operations
 
     /// Initialisation
@@ -1268,6 +1277,11 @@ protected:
 
     // The parent object
     wxRichTextParagraph* m_parent;
+
+    // Sizes of the objects within a line so we don't have to get text extents
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
+    wxArrayInt          m_objectSizes;
+#endif
 };
 
 WX_DECLARE_LIST_WITH_DECL( wxRichTextLine, wxRichTextLineList , class WXDLLIMPEXP_RICHTEXT );

@@ -3311,6 +3311,8 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 
         // Loop through objects until we get to the one within range
         wxRichTextObjectList::compatibility_iterator node2 = m_children.GetFirst();
+
+        int i = 0;
         while (node2)
         {
             wxRichTextObject* child = node2->GetData();
@@ -3322,14 +3324,25 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
                 objectRange.LimitTo(lineRange);
 
                 wxSize objectSize;
-                int descent = 0;
-                child->GetRangeSize(objectRange, objectSize, descent, dc, wxRICHTEXT_UNFORMATTED, objectPosition);
+
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING && wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+                if (i < (int) line->GetObjectSizes().GetCount())
+                {
+                    objectSize.x = line->GetObjectSizes()[(size_t) i];
+                }
+                else
+#endif
+                {
+                    int descent = 0;
+                    child->GetRangeSize(objectRange, objectSize, descent, dc, wxRICHTEXT_UNFORMATTED, objectPosition);
+                }
 
                 // Use the child object's width, but the whole line's height
                 wxRect childRect(objectPosition, wxSize(objectSize.x, line->GetSize().y));
                 child->Draw(dc, objectRange, selectionRange, childRect, maxDescent, style);
 
                 objectPosition.x += objectSize.x;
+                i ++;
             }
             else if (child->GetRange().GetStart() > lineRange.GetEnd())
                 // Can break out of inner loop now since we've passed this line's range
@@ -3395,10 +3408,24 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     int lineHeight = 0;
     int maxWidth = 0;
     int maxDescent = 0;
-
     int lineCount = 0;
 
-    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    wxRichTextObjectList::compatibility_iterator node;
+
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+    wxUnusedVar(style);
+
+    g_GlobalPartialTextExtents.Clear();
+    g_UseGlobalPartialTextExtents = true;
+
+    wxSize paraSize;
+    int paraDescent;
+
+    // This calculates the partial text extents
+    GetRangeSize(GetRange(), paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_CACHE_SIZE, wxPoint(0,0));
+    g_UseGlobalPartialTextExtents = false;
+#else
+    node = m_children.GetFirst();
     while (node)
     {
         wxRichTextObject* child = node->GetData();
@@ -3409,16 +3436,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         node = node->GetNext();
     }
 
-#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
-    g_GlobalPartialTextExtents.Clear();
-    g_UseGlobalPartialTextExtents = true;
-
-    wxSize paraSize;
-    int paraDescent;
-
-    // This calculates the partial text extents
-    GetRangeSize(GetRange(), paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED, wxPoint(0,0));
-    g_UseGlobalPartialTextExtents = false;
 #endif
 
     // Split up lines
@@ -3590,6 +3607,46 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     m_dirty = false;
 
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
+    // Use the text extents to calculate the size of each fragment in each line
+    wxRichTextLineList::compatibility_iterator lineNode = m_cachedLines.GetFirst();
+    while (lineNode)
+    {
+        wxRichTextLine* line = lineNode->GetData();
+        wxRichTextRange lineRange = line->GetAbsoluteRange();
+
+        // Loop through objects until we get to the one within range
+        wxRichTextObjectList::compatibility_iterator node2 = m_children.GetFirst();
+
+        while (node2)
+        {
+            wxRichTextObject* child = node2->GetData();
+
+            if (!child->GetRange().IsOutside(lineRange))
+            {
+                wxRichTextRange rangeToUse = lineRange;
+                rangeToUse.LimitTo(child->GetRange());
+
+                // Find the size of the child from the text extents, and store in an array
+                // for drawing later
+                int left = 0;
+                if (rangeToUse.GetStart() > GetRange().GetStart())
+                    left = g_GlobalPartialTextExtents[(rangeToUse.GetStart()-1) - GetRange().GetStart()];
+                int right = g_GlobalPartialTextExtents[rangeToUse.GetEnd() - GetRange().GetStart()];
+                int sz = right - left;
+                line->GetObjectSizes().Add(sz);
+            }
+            else if (child->GetRange().GetStart() > lineRange.GetEnd())
+                // Can break out of inner loop now since we've passed this line's range
+                break;
+
+            node2 = node2->GetNext();
+        }
+
+        lineNode = lineNode->GetNext();
+    }
+#endif
+
     g_GlobalPartialTextExtents.Clear();
 #endif
 
@@ -3738,6 +3795,12 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                     sz.y = wxMax(sz.y, childSize.y);
                     sz.x += childSize.x;
                     descent = wxMax(descent, childDescent);
+
+                    if ((flags & wxRICHTEXT_CACHE_SIZE) && (rangeToUse == child->GetRange()))
+                    {
+                        child->SetCachedSize(childSize);
+                        child->SetDescent(childDescent);
+                    }
                 }
             }
 
@@ -3921,6 +3984,45 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
             }
             else
             {
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+                g_GlobalPartialTextExtents.Clear();
+                g_UseGlobalPartialTextExtents = true;
+
+                wxSize paraSize;
+                int paraDescent;
+
+                // This calculates the partial text extents
+                GetRangeSize(lineRange, paraSize, paraDescent, dc, wxRICHTEXT_UNFORMATTED, wxPoint(0,0));
+                g_UseGlobalPartialTextExtents = false;
+
+                int lastX = linePos.x;
+                size_t i;
+                for (i = 0; i < g_GlobalPartialTextExtents.GetCount(); i++)
+                {
+                    int nextX = g_GlobalPartialTextExtents[i] + linePos.x;
+
+                    if (pt.x >= lastX && pt.x <= nextX)
+                    {
+                        textPosition = i + lineRange.GetStart(); // minus 1?
+
+                        g_GlobalPartialTextExtents.Clear();
+
+                        // So now we know it's between i-1 and i.
+                        // Let's see if we can be more precise about
+                        // which side of the position it's on.
+
+                        int midPoint = (nextX - lastX)/2 + lastX;
+                        if (pt.x >= midPoint)
+                            return wxRICHTEXT_HITTEST_AFTER;
+                        else
+                            return wxRICHTEXT_HITTEST_BEFORE;
+                    }
+
+                    lastX = nextX;
+                }
+
+                g_GlobalPartialTextExtents.Clear();
+#else
                 long i;
                 int lastX = linePos.x;
                 for (i = lineRange.GetStart(); i <= lineRange.GetEnd(); i++)
@@ -3953,6 +4055,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
                         lastX = nextX;
                     }
                 }
+#endif
             }
         }
 
@@ -4424,12 +4527,18 @@ void wxRichTextLine::Init(wxRichTextParagraph* parent)
     m_pos = wxPoint(0, 0);
     m_size = wxSize(0, 0);
     m_descent = 0;
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
+    m_objectSizes.Clear();
+#endif
 }
 
 /// Copy
 void wxRichTextLine::Copy(const wxRichTextLine& obj)
 {
     m_range = obj.m_range;
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
+    m_objectSizes = obj.m_objectSizes;
+#endif
 }
 
 /// Get the absolute object position
