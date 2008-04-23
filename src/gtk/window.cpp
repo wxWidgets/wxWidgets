@@ -203,6 +203,7 @@ static wxWindowGTK  *g_captureWindow = (wxWindowGTK*) NULL;
 static bool g_captureWindowHasMouse = false;
 
 wxWindowGTK  *g_focusWindow = (wxWindowGTK*) NULL;
+wxWindowGTK  *g_focusWindowPending = (wxWindowGTK*) NULL;
 
 // the last window which had the focus - this is normally never NULL (except
 // if we never had focus at all) as even when g_focusWindow is NULL it still
@@ -269,7 +270,7 @@ gdk_window_warp_pointer (GdkWindow      *window,
 // Note: can't be static, needed by textctrl.cpp.
 wxWindow *wxFindFocusedChild(wxWindowGTK *win)
 {
-    wxWindow *winFocus = wxWindowGTK::FindFocus();
+    wxWindow *winFocus = g_focusWindow;
     if ( !winFocus )
         return (wxWindow *)NULL;
 
@@ -1025,7 +1026,7 @@ gtk_window_key_press_callback( GtkWidget *widget,
     // widgets has both IM context and input focus, the event should be filtered
     // by gtk_im_context_filter_keypress().
     // Then, we should, according to GTK+ 2.0 API doc, return whatever it returns.
-    if ((!ret) && (win->m_imData != NULL) && ( wxWindow::FindFocus() == win ))
+    if ((!ret) && (win->m_imData != NULL) && ( g_focusWindow == win ))
     {
         // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
         // docs, if IM filter returns true, no further processing should be done.
@@ -1051,8 +1052,18 @@ gtk_window_key_press_callback( GtkWidget *widget,
             int command = ancestor->GetAcceleratorTable()->GetCommand( event );
             if (command != -1)
             {
-                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
-                ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
+                wxCommandEvent menu_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                ret = ancestor->GetEventHandler()->ProcessEvent( menu_event );
+
+                if ( !ret )
+                {
+                    // if the accelerator wasn't handled as menu event, try
+                    // it as button click (for compatibility with other
+                    // platforms):
+                    wxCommandEvent button_event( wxEVT_COMMAND_BUTTON_CLICKED, command );
+                    ret = ancestor->GetEventHandler()->ProcessEvent( button_event );
+                }
+
                 break;
             }
             if (ancestor->IsTopLevel())
@@ -1832,6 +1843,7 @@ gtk_window_focus_in_callback( GtkWidget *widget,
 
     g_focusWindowLast =
     g_focusWindow = win;
+    g_focusWindowPending = NULL;
 
     wxLogTrace(TRACE_FOCUS,
                _T("%s: focus in"), win->GetName().c_str());
@@ -2218,7 +2230,7 @@ public:
 wxWindow *wxWindowBase::DoFindFocus()
 {
     // the cast is necessary when we compile in wxUniversal mode
-    return (wxWindow *)g_focusWindow;
+    return (wxWindow *)(g_focusWindowPending ? g_focusWindowPending : g_focusWindow);
 }
 
 //-----------------------------------------------------------------------------
@@ -2460,6 +2472,8 @@ wxWindowGTK::~wxWindowGTK()
 
     if (g_focusWindow == this)
         g_focusWindow = NULL;
+    if (g_focusWindowPending == this)
+        g_focusWindowPending = NULL;
 
     if ( g_delayedFocus == this )
         g_delayedFocus = NULL;
@@ -3266,7 +3280,7 @@ void wxWindowGTK::SetFocus()
     // Because we want to FindFocus() call immediately following
     // foo->SetFocus() to return foo, we have to keep track of "pending" focus
     // ourselves.
-    g_focusWindow = this;
+    g_focusWindowPending = this;
 
     if (m_wxwindow)
     {

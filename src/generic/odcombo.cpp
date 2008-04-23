@@ -246,8 +246,14 @@ void wxVListBoxComboPopup::SendComboBoxEvent( int selection )
 // returns true if key was consumed
 bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode )
 {
+    const int itemCount = GetCount();
+
+    // keys do nothing in the empty control and returning immediately avoids
+    // using invalid indices below
+    if ( !itemCount )
+        return false;
+
     int value = m_value;
-    int itemCount = GetCount();
     int comboStyle = m_combo->GetWindowStyle();
 
     // this is the character equivalent of the code

@@ -219,6 +219,34 @@ bool wxXmlNode::InsertChild(wxXmlNode *child, wxXmlNode *before_node)
     return true;
 }
 
+// inserts a new node right after 'precedingNode'
+bool wxXmlNode::InsertChildAfter(wxXmlNode *child, wxXmlNode *precedingNode)
+{
+    wxCHECK_MSG( child, false, wxT("cannot insert a NULL node!") );
+    wxCHECK_MSG( child->m_parent == NULL, false, wxT("node already has a parent") );
+    wxCHECK_MSG( child->m_next == NULL, false, wxT("node already has m_next") );
+    wxCHECK_MSG( precedingNode == NULL || precedingNode->m_parent == this, false,
+                 wxT("precedingNode has wrong parent") );
+
+    if ( precedingNode )
+    {
+        child->m_next = precedingNode->m_next;
+        precedingNode->m_next = child;
+    }
+    else // precedingNode == NULL
+    {
+        wxCHECK_MSG( m_children == NULL, false,
+                     wxT("NULL precedingNode only makes sense when there are no children") );
+
+        child->m_next = m_children;
+        m_children = child;
+    }
+
+    child->m_parent = this;
+    return true;
+}
+
+
 bool wxXmlNode::RemoveChild(wxXmlNode *child)
 {
     if (m_children == NULL)
@@ -455,14 +483,31 @@ bool wxIsWhiteOnly(const wxChar *buf)
 
 struct wxXmlParsingContext
 {
+    wxXmlParsingContext()
+        : conv(NULL),
+          root(NULL),
+          node(NULL),
+          lastChild(NULL),
+          lastAsText(NULL),
+          removeWhiteOnlyNodes(false)
+    {}
+
     wxMBConv  *conv;
     wxXmlNode *root;
-    wxXmlNode *node;
-    wxXmlNode *lastAsText;
+    wxXmlNode *node;                    // the node being parsed
+    wxXmlNode *lastChild;               // the last child of "node"
+    wxXmlNode *lastAsText;              // the last _text_ child of "node"
     wxString   encoding;
     wxString   version;
     bool       removeWhiteOnlyNodes;
 };
+
+// checks that ctx->lastChild is in consistent state
+#define ASSERT_LAST_CHILD_OK(ctx)                                   \
+    wxASSERT( ctx->lastChild == NULL ||                             \
+              ctx->lastChild->GetNext() == NULL );                  \
+    wxASSERT( ctx->lastChild == NULL ||                             \
+              ctx->lastChild->GetParent() == ctx->node )
 
 extern "C" {
 static void StartElementHnd(void *userData, const char *name, const char **atts)
@@ -476,11 +521,19 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
         a += 2;
     }
     if (ctx->root == NULL)
+    {
         ctx->root = node;
+    }
     else
-        ctx->node->AddChild(node);
-    ctx->node = node;
+    {
+        ASSERT_LAST_CHILD_OK(ctx);
+        ctx->node->InsertChildAfter(node, ctx->lastChild);
+    }
+
     ctx->lastAsText = NULL;
+    ctx->lastChild = NULL; // our new node "node" has no children yet
+
+    ctx->node = node;
 }
 }
 
@@ -488,6 +541,11 @@ extern "C" {
 static void EndElementHnd(void *userData, const char* WXUNUSED(name))
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
+
+    // we're exiting the last children of ctx->node->GetParent() and going
+    // back one level up, so current value of ctx->node points to the last
+    // child of ctx->node->GetParent()
+    ctx->lastChild = ctx->node;
 
     ctx->node = ctx->node->GetParent();
     ctx->lastAsText = NULL;
@@ -512,8 +570,12 @@ static void TextHnd(void *userData, const char *s, int len)
 
         if (!whiteOnly)
         {
-            ctx->lastAsText = new wxXmlNode(wxXML_TEXT_NODE, wxT("text"), str);
-            ctx->node->AddChild(ctx->lastAsText);
+            wxXmlNode *textnode =
+                new wxXmlNode(wxXML_TEXT_NODE, wxT("text"), str);
+
+            ASSERT_LAST_CHILD_OK(ctx);
+            ctx->node->InsertChildAfter(textnode, ctx->lastChild);
+            ctx->lastChild= ctx->lastAsText = textnode;
         }
     }
 }
@@ -524,8 +586,12 @@ static void StartCdataHnd(void *userData)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
-    ctx->lastAsText = new wxXmlNode(wxXML_CDATA_SECTION_NODE, wxT("cdata"),wxT(""));
-    ctx->node->AddChild(ctx->lastAsText);
+    wxXmlNode *textnode =
+        new wxXmlNode(wxXML_CDATA_SECTION_NODE, wxT("cdata"),wxT(""));
+
+    ASSERT_LAST_CHILD_OK(ctx);
+    ctx->node->InsertChildAfter(textnode, ctx->lastChild);
+    ctx->lastChild= ctx->lastAsText = textnode;
 }
 }
 
@@ -539,8 +605,12 @@ static void CommentHnd(void *userData, const char *data)
         // VS: ctx->node == NULL happens if there is a comment before
         //     the root element (e.g. wxDesigner's output). We ignore such
         //     comments, no big deal...
-        ctx->node->AddChild(new wxXmlNode(wxXML_COMMENT_NODE,
-                            wxT("comment"), CharToString(ctx->conv, data)));
+        wxXmlNode *commentnode =
+            new wxXmlNode(wxXML_COMMENT_NODE,
+                          wxT("comment"), CharToString(ctx->conv, data));
+        ASSERT_LAST_CHILD_OK(ctx);
+        ctx->node->InsertChildAfter(commentnode, ctx->lastChild);
+        ctx->lastChild = commentnode;
     }
     ctx->lastAsText = NULL;
 }

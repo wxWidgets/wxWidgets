@@ -1502,10 +1502,17 @@ void wxGridCellChoiceEditor::Create(wxWindow* parent,
                                     wxWindowID id,
                                     wxEvtHandler* evtHandler)
 {
+    int style = wxTE_PROCESS_ENTER |
+                wxTE_PROCESS_TAB |
+                wxBORDER_NONE;
+
+    if ( !m_allowOthers )
+        style |= wxCB_READONLY;
+
     m_control = new wxComboBox(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,
                                m_choices,
-                               m_allowOthers ? 0 : wxCB_READONLY);
+                               style);
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
