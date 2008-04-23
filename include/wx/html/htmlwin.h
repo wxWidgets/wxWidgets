@@ -28,9 +28,9 @@ class wxHtmlProcessor;
 class wxHtmlWinModule;
 class wxHtmlHistoryArray;
 class wxHtmlProcessorList;
-class WXDLLIMPEXP_HTML wxHtmlWinAutoScrollTimer;
-class WXDLLIMPEXP_HTML wxHtmlCellEvent;
-class WXDLLIMPEXP_HTML wxHtmlLinkEvent;
+class WXDLLIMPEXP_FWD_HTML wxHtmlWinAutoScrollTimer;
+class WXDLLIMPEXP_FWD_HTML wxHtmlCellEvent;
+class WXDLLIMPEXP_FWD_HTML wxHtmlLinkEvent;
 
 
 // wxHtmlWindow flags:

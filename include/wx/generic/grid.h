@@ -2006,7 +2006,7 @@ private:
     // Calculate the minimum acceptable size for labels area
     wxCoord CalcColOrRowLabelAreaMinSize(bool column /* or row? */);
 
-    friend class WXDLLIMPEXP_ADV wxGridSelection;
+    friend class WXDLLIMPEXP_FWD_ADV wxGridSelection;
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()

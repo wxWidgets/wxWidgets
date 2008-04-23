@@ -186,7 +186,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     HDC hdc = (HDC)dc.GetHDC();
 
     // create pens, brushes &c
-    COLORREF colBg = ::GetSysColor(COLOR_WINDOW);
+    COLORREF colBg = wxColourToRGB(GetBackgroundColour());
     AutoHPEN hpenBack(colBg),
              hpenGray(RGB(0xc0, 0xc0, 0xc0));
 

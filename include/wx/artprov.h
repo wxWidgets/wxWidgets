@@ -16,8 +16,8 @@
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 
-class WXDLLEXPORT wxArtProvidersList;
-class WXDLLEXPORT wxArtProviderCache;
+class WXDLLIMPEXP_FWD_CORE wxArtProvidersList;
+class WXDLLIMPEXP_FWD_CORE wxArtProviderCache;
 class wxArtProviderModule;
 
 // ----------------------------------------------------------------------------

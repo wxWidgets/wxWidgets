@@ -79,7 +79,7 @@ extern WXDLLEXPORT_DATA(const wxGBSpan) wxDefaultSpan;
 // wxGBSizerItem
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridBagSizer;
+class WXDLLIMPEXP_FWD_CORE wxGridBagSizer;
 
 
 class WXDLLEXPORT wxGBSizerItem : public wxSizerItem
@@ -286,6 +286,9 @@ public:
 
 protected:
     wxGBPosition FindEmptyCell();
+#if wxABI_VERSION >= 20808
+    void AdjustForOverflow();
+#endif
 
     wxSize m_emptyCellSize;
 

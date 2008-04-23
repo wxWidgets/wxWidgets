@@ -68,7 +68,7 @@ enum
 // wxRegEx: a regular expression
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxRegExImpl;
+class WXDLLIMPEXP_FWD_BASE wxRegExImpl;
 
 class WXDLLIMPEXP_BASE wxRegEx
 {

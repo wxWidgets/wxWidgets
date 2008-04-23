@@ -17,7 +17,7 @@
 #include "wx/dynarray.h"
 
 // declare a linked list of modules
-class WXDLLIMPEXP_BASE wxModule;
+class WXDLLIMPEXP_FWD_BASE wxModule;
 WX_DECLARE_USER_EXPORTED_LIST(wxModule, wxModuleList, WXDLLIMPEXP_BASE);
 
 // and an array of class info objects

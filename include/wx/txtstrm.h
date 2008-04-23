@@ -17,8 +17,8 @@
 
 #if wxUSE_STREAMS
 
-class WXDLLIMPEXP_BASE wxTextInputStream;
-class WXDLLIMPEXP_BASE wxTextOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxTextInputStream;
+class WXDLLIMPEXP_FWD_BASE wxTextOutputStream;
 
 typedef wxTextInputStream& (*__wxTextInputManip)(wxTextInputStream&);
 typedef wxTextOutputStream& (*__wxTextOutputManip)(wxTextOutputStream&);

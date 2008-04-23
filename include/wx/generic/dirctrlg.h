@@ -76,7 +76,7 @@ public:
 // wxDirCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirFilterListCtrl;
+class WXDLLIMPEXP_FWD_CORE wxDirFilterListCtrl;
 
 class WXDLLEXPORT wxGenericDirCtrl: public wxControl
 {

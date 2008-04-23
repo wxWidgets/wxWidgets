@@ -14,7 +14,7 @@
 
 #include "wx/utils.h"
 
-class WXDLLEXPORT wxEventLoop;
+class WXDLLIMPEXP_FWD_CORE wxEventLoop;
 
 // ----------------------------------------------------------------------------
 // wxEventLoop: a GUI event loop

@@ -19,7 +19,7 @@
 
 #include "wx/memory.h"
 
-class WXDLLIMPEXP_BASE wxObject;
+class WXDLLIMPEXP_FWD_BASE wxObject;
 
 #ifndef wxUSE_EXTENDED_RTTI
 #define wxUSE_EXTENDED_RTTI 0
@@ -33,9 +33,9 @@ class WXDLLIMPEXP_BASE wxObject;
 // conditional compilation
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxClassInfo;
-class WXDLLIMPEXP_BASE wxHashTable;
-class WXDLLIMPEXP_BASE wxObjectRefData;
+class WXDLLIMPEXP_FWD_BASE wxClassInfo;
+class WXDLLIMPEXP_FWD_BASE wxHashTable;
+class WXDLLIMPEXP_FWD_BASE wxObjectRefData;
 
 // ----------------------------------------------------------------------------
 // wxClassInfo
@@ -388,7 +388,7 @@ inline void* wxCheckCast(void *ptr)
 
 class WXDLLIMPEXP_BASE wxObjectRefData
 {
-    friend class WXDLLIMPEXP_BASE wxObject;
+    friend class WXDLLIMPEXP_FWD_BASE wxObject;
 
 public:
     wxObjectRefData() : m_count(1) { }

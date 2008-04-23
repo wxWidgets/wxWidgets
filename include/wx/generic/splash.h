@@ -27,7 +27,7 @@
 #define wxSPLASH_TIMEOUT            0x04
 #define wxSPLASH_NO_TIMEOUT         0x00
 
-class WXDLLIMPEXP_ADV wxSplashScreenWindow;
+class WXDLLIMPEXP_FWD_ADV wxSplashScreenWindow;
 
 /*
  * wxSplashScreen

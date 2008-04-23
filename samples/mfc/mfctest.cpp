@@ -40,6 +40,10 @@
 //
 //     Unless the run-time library settings match for wxWidgets and MFC, you will get
 //     link errors for symbols such as __mbctype, __argc, and __argv 
+//
+// (3) Unicode builds may produce the linker error "unresolved external symbol _WinMain@16".
+//     MFC requires you to manually add the Unicode entry point to the linker settings,
+//     Entry point symbol -> wWinMainCRTStartup
 
 #include "stdafx.h"
 

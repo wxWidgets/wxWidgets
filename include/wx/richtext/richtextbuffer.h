@@ -91,19 +91,19 @@ extern WXDLLIMPEXP_RICHTEXT const wxChar wxRichTextLineBreakChar;
  * Forward declarations
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl;
-class WXDLLIMPEXP_RICHTEXT wxRichTextObject;
-class WXDLLIMPEXP_RICHTEXT wxRichTextCacheObject;
-class WXDLLIMPEXP_RICHTEXT wxRichTextObjectList;
-class WXDLLIMPEXP_RICHTEXT wxRichTextLine;
-class WXDLLIMPEXP_RICHTEXT wxRichTextParagraph;
-class WXDLLIMPEXP_RICHTEXT wxRichTextFileHandler;
-class WXDLLIMPEXP_RICHTEXT wxRichTextStyleSheet;
-class WXDLLIMPEXP_RICHTEXT wxTextAttrEx;
-class WXDLLIMPEXP_RICHTEXT wxRichTextListStyleDefinition;
-class WXDLLIMPEXP_RICHTEXT wxRichTextEvent;
-class WXDLLIMPEXP_RICHTEXT wxRichTextRenderer;
-class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCtrl;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObject;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCacheObject;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObjectList;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextLine;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextParagraph;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextFileHandler;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextStyleSheet;
+class WXDLLIMPEXP_FWD_RICHTEXT wxTextAttrEx;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextListStyleDefinition;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextEvent;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextRenderer;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 
 /*!
  * Flags determining the available space, passed to Layout
@@ -148,6 +148,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 
 #define wxRICHTEXT_FORMATTED        0x01
 #define wxRICHTEXT_UNFORMATTED      0x02
+#define wxRICHTEXT_CACHE_SIZE       0x04
 
 /*!
  * Flags for SetStyle/SetListStyle
@@ -276,6 +277,15 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
     wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL)
 
 #define wxTEXT_ATTR_ALL (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
+
+/*!
+ * Default superscript/subscript font multiplication factor
+ */
+
+#define wxSCRIPT_MUL_FACTOR             1.5
+
+// Switch off for binary compatibility, on for faster drawing
+#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 0
 
 /*!
  * wxRichTextRange class declaration
@@ -1236,6 +1246,11 @@ public:
     void SetDescent(int descent) { m_descent = descent; }
     int GetDescent() const { return m_descent; }
 
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
+    wxArrayInt& GetObjectSizes() { return m_objectSizes; }
+    const wxArrayInt& GetObjectSizes() const { return m_objectSizes; }
+#endif
+
 // Operations
 
     /// Initialisation
@@ -1262,6 +1277,11 @@ protected:
 
     // The parent object
     wxRichTextParagraph* m_parent;
+
+    // Sizes of the objects within a line so we don't have to get text extents
+#if wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING
+    wxArrayInt          m_objectSizes;
+#endif
 };
 
 WX_DECLARE_LIST_WITH_DECL( wxRichTextLine, wxRichTextLineList , class WXDLLIMPEXP_RICHTEXT );
@@ -1466,8 +1486,8 @@ protected:
  * wxRichTextImageBlock stores information about an image, in binary in-memory form
  */
 
-class WXDLLIMPEXP_BASE wxDataInputStream;
-class WXDLLIMPEXP_BASE wxDataOutputStream;
+class WXDLLIMPEXP_FWD_BASE wxDataInputStream;
+class WXDLLIMPEXP_FWD_BASE wxDataOutputStream;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextImageBlock: public wxObject
 {
@@ -1614,8 +1634,8 @@ protected:
  * This is a kind of box, used to represent the whole buffer
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCommand;
-class WXDLLIMPEXP_RICHTEXT wxRichTextAction;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCommand;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextAction;
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer: public wxRichTextParagraphLayoutBox
 {
@@ -2004,7 +2024,7 @@ enum wxRichTextCommandId
  *
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextAction;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextAction;
 class WXDLLIMPEXP_RICHTEXT wxRichTextCommand: public wxCommand
 {
 public:

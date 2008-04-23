@@ -228,7 +228,7 @@ bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
         if ( data->m_wasResizable )
             MacChangeWindowAttributes( kWindowNoAttributes , kWindowResizableAttribute ) ;
     }
-    else
+    else if ( m_macFullScreenData != NULL )
     {
         ShowMenuBar() ;
         FullScreenData *data = (FullScreenData *) m_macFullScreenData ;

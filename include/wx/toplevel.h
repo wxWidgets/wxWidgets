@@ -25,7 +25,7 @@
 // the default names for various classes
 extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[];
 
-class WXDLLEXPORT wxTopLevelWindowBase;
+class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 
 // ----------------------------------------------------------------------------
 // constants

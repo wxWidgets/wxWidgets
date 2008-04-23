@@ -137,7 +137,7 @@ private:
     wxMenuItem *m_item;
 
     // for compatibility with old code, use accessors now!
-    friend class WXDLLEXPORT wxMenu;
+    friend class WXDLLIMPEXP_FWD_CORE wxMenu;
 };
 
 // ----------------------------------------------------------------------------

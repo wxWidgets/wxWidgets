@@ -64,11 +64,12 @@ wxObject *wxHyperlinkCtrlXmlHandler::DoCreateResource()
 {
     XRC_MAKE_INSTANCE(control, wxHyperlinkCtrl)
 
-    SetupWindow(control);
     control->Create(m_parentAsWindow, GetID(),
         GetParamValue(wxT("label")), GetParamValue(wxT("url")),
         GetPosition(), GetSize(),
         GetStyle(wxT("style"), wxHL_DEFAULT_STYLE));
+
+    SetupWindow(control);
 
     return control;
 }

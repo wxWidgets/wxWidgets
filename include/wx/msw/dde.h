@@ -38,8 +38,8 @@
  *
  */
 
-class WXDLLIMPEXP_BASE wxDDEServer;
-class WXDLLIMPEXP_BASE wxDDEClient;
+class WXDLLIMPEXP_FWD_BASE wxDDEServer;
+class WXDLLIMPEXP_FWD_BASE wxDDEClient;
 
 class WXDLLIMPEXP_BASE wxDDEConnection: public wxConnectionBase
 {
