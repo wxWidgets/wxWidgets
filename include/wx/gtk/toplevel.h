@@ -143,6 +143,8 @@ protected:
     wxString m_title;
 
 private:
+    wxSize& GetCachedDecorSize();
+
     // is the frame currently iconized?
     bool m_isIconized;
 

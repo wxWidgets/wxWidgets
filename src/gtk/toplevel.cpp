@@ -624,7 +624,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         }
     }
 
-    gtk_window_set_default_size(GTK_WINDOW(m_widget), m_width, m_height);
+    m_decorSize = GetCachedDecorSize();
+    int w, h;
+    GTKDoGetSize(&w, &h);
+    gtk_window_set_default_size(GTK_WINDOW(m_widget), w, h);
 
     return true;
 }
@@ -975,6 +978,8 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
 
 void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
 {
+    if (!IsMaximized() && !IsFullScreen())
+        GetCachedDecorSize() = decorSize;
     if (m_decorSize != decorSize)
     {
         const wxSize diff = decorSize - m_decorSize;
@@ -1019,6 +1024,23 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
         showEvent.SetEventObject(this);
         HandleWindowEvent(showEvent);
     }
+}
+
+wxSize& wxTopLevelWindowGTK::GetCachedDecorSize()
+{
+    static wxSize size[8];
+
+    int index = 0;
+    // title bar
+    if (m_gdkDecor & (GDK_DECOR_MENU | GDK_DECOR_MINIMIZE | GDK_DECOR_MAXIMIZE | GDK_DECOR_TITLE))
+        index = 1;
+    // border
+    if (m_gdkDecor & GDK_DECOR_BORDER)
+        index |= 2;
+    // utility window decor can be different
+    if (m_windowStyle & wxFRAME_TOOL_WINDOW)
+        index |= 4;
+    return size[index];
 }
 
 void wxTopLevelWindowGTK::OnInternalIdle()
