@@ -599,8 +599,15 @@ void wxApp::WakeUpIdle()
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 {
     // Windows will terminate the process soon after we return from
-    // WM_ENDSESSION handler anyhow, so make sure we at least execute our
-    // cleanup code before
+    // WM_ENDSESSION handler or when we delete our last window, so make sure we
+    // at least execute our cleanup code before
+
+    // prevent the window from being destroyed when the corresponding wxTLW is
+    // destroyed: this will result in a leak of a HWND, of course, but who
+    // cares when the process is being killed anyhow
+    if ( !wxTopLevelWindows.empty() )
+        wxTopLevelWindows[0]->SetHWND(0);
+
     const int rc = OnExit();
 
     wxEntryCleanup();
