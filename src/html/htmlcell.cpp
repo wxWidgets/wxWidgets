@@ -631,6 +631,8 @@ wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
         {
             int part1 = priv.x;
             int part2 = priv.y;
+            if ( part1 == part2 )
+                return wxEmptyString;
             return m_Word.Mid(part1, part2-part1);
         }
         //else: return the whole word below

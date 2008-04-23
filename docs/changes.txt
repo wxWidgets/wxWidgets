@@ -132,6 +132,7 @@ All (GUI):
 - Made wxSpinCtrl::Reparent() in MSW and generic versions (Angelo Mottola).
 - Fixed timing of malformed animated GIFs in wxHTML (Gennady Feller).
 - Fixed incorrect layout width caching in wxHTML (Jeff Tupper).
+- wxHTML: preserve TAB characters when copying <pre> content to clipboard.
 
 All (Unix):
 

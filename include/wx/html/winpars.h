@@ -145,11 +145,26 @@ public:
     // creates font depending on m_Font* members.
     virtual wxFont* CreateCurrentFont();
 
+#if wxABI_VERSION >= 20808
+    enum WhitespaceMode
+    {
+        Whitespace_Normal,  // normal mode, collapse whitespace
+        Whitespace_Pre      // inside <pre>, keep whitespace as-is
+    };
+
+    // change the current whitespace handling mode
+    void SetWhitespaceMode(WhitespaceMode mode);
+    WhitespaceMode GetWhitespaceMode() const;
+#endif // wxABI_VERSION >= 20808
+
 protected:
     virtual void AddText(const wxChar* txt);
 
 private:
-    void DoAddText(wxChar *temp, int& templen, wxChar nbsp);
+    void FlushWordBuf(wxChar *temp, int& templen);
+    void AddWord(wxHtmlWordCell *c);
+    void AddWord(const wxString& word);
+    void AddPreBlock(const wxString& text);
 
     bool m_tmpLastWasSpace;
     wxChar *m_tmpStrBuf;
@@ -206,7 +221,22 @@ private:
     wxEncodingConverter *m_EncConv;
 #endif
 
-    wxHtmlWordCell *m_lastWordCell;
+    struct TextParsingState
+    {
+        // current whitespace handling mode
+        WhitespaceMode m_whitespaceMode;
+
+        wxHtmlWordCell *m_lastWordCell;
+
+        // current position on line, in num. of characters; used to properly
+        // expand TABs; only updated while inside <pre>
+        int m_posColumn;
+    };
+
+    // NB: this pointer replaces m_lastWordCell pointer in wx<=2.8.7; this
+    //     way, wxHtmlWinParser remains ABI compatible with older versions
+    //     despite addition of two fields in TextParsingState
+    TextParsingState *m_textParsingState;
 
     DECLARE_NO_COPY_CLASS(wxHtmlWinParser)
 };
