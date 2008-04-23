@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 February 2006                                                    *
+# Date : 23 April 2008                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -92,5 +92,6 @@ m_list.obj : m_list.cpp
 m_pre.obj : m_pre.cpp
 m_tables.obj : m_tables.cpp
 winpars.obj : winpars.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn winpars.cpp
 chm.obj : chm.cpp
 m_style.obj : m_style.cpp
