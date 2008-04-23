@@ -223,7 +223,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             wxASSERT_MSG( pSubMenu->m_hMenu != NULL , wxT("invalid submenu added"));
             pSubMenu->m_menuParent = this ;
 
-            if (wxMenuBar::MacGetInstalledMenuBar() == GetMenuBar())
+            // We need the !GetMenuBar() check to make sure we run MacBeforeDisplay()
+            // for popup menus and other menus which may not be part of the main
+            // menu bar. 
+            if (!GetMenuBar() || wxMenuBar::MacGetInstalledMenuBar() == GetMenuBar())
                 pSubMenu->MacBeforeDisplay( true ) ;
 
             if ( pos == (size_t)-1 )
