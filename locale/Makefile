@@ -33,9 +33,7 @@ wxstd.pot:
 	touch $@
 	find ../include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
 	find ../src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
-	find ../contrib/include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
-	find ../contrib/src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.pot
-	find ../contrib/src/stc/scintilla/src -name "*.cxx" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -kAddToPopUp -o wxstd.pot
+	find ../src/stc/scintilla/src -name "*.cxx" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -kAddToPopUp -o wxstd.pot
 
 allpo: force-update
 	@-for t in $(WX_LINGUAS_UPDATE); do $(MAKE) $$t.po; done
