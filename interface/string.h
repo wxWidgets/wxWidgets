@@ -261,6 +261,20 @@ public:
     */
     void Clear();
 
+    /**
+        Returns a deep copy of the string.
+
+        That is, the returned string is guaranteed to not share data with this
+        string when using reference-counted wxString implementation.
+
+        This method is primarily useful for passing strings between threads
+        (because wxString is not thread-safe). Unlike creating a copy using
+        @c wxString(c_str()), Clone() handles embedded NULs correctly.
+
+        @since 2.9.0
+     */
+    wxString Clone() const;
+
     //@{
     /**
         Case-sensitive comparison.

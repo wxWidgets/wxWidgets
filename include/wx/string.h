@@ -953,8 +953,11 @@ public:
   wxString(const wxWCharBuffer& buf)
     { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
 
+    // NB: this version uses m_impl.c_str() to force making a copy of the
+    //     string, so that "wxString(str.c_str())" idiom for passing strings
+    //     between threads works
   wxString(const wxCStrData& cstr)
-      : m_impl(cstr.AsString().m_impl) { }
+      : m_impl(cstr.AsString().m_impl.c_str()) { }
 
     // as we provide both ctors with this signature for both char and unsigned
     // char string, we need to provide one for wxCStrData to resolve ambiguity
@@ -1013,6 +1016,13 @@ public:
         { return std::string(mb_str()); }
   #endif
 #endif // wxUSE_STL
+
+  wxString Clone() const
+  {
+      // make a deep copy of the string, i.e. the returned string will have
+      // ref count = 1 with refcounted implementation
+      return wxString::FromImpl(wxStringImpl(m_impl.c_str(), m_impl.length()));
+  }
 
   // first valid index position
   const_iterator begin() const { return const_iterator(this, m_impl.begin()); }
