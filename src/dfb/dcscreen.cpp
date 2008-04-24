@@ -31,7 +31,7 @@
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-#warning "FIXME: this doesn't work (neither single app nor multiapp core)
+#warning "FIXME: this doesn't work (neither single app nor multiapp core)"
 // FIXME: maybe use a subsurface as well?
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxDFBDCImpl)
