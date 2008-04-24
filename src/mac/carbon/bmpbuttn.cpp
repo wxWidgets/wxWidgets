@@ -14,6 +14,7 @@
 #if wxUSE_BMPBUTTON
 
 #include "wx/bmpbuttn.h"
+#include "wx/image.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dcmemory.h"
@@ -63,14 +64,12 @@ static wxBitmap wxMakeStdSizeBitmap(const wxBitmap& bitmap)
             wxASSERT_MSG( width <= sizeStd && height <= sizeStd,
                           _T("bitmap shouldn't be cropped") );
 
-            newBmp.Create(sizeStd, sizeStd);
-            wxMemoryDC dcMem;
-            dcMem.SelectObject(newBmp);
-            dcMem.Clear();
-
-            dcMem.DrawBitmap(bitmap,
-                             (sizeStd - width)/2, (sizeStd-height)/2,
-                             true);
+            wxImage square_image = bitmap.ConvertToImage();
+            newBmp = square_image.Size
+                     (
+                         wxSize(sizeStd, sizeStd),
+                         wxPoint((sizeStd - width)/2, (sizeStd-height)/2)
+                     );
         }
     }
     //else: let the system rescale the bitmap
