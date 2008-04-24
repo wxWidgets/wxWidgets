@@ -3238,6 +3238,22 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
     return true;
 }
 
+// Get the range width using partial extents calculated for the whole paragraph.
+static int wxRichTextGetRangeWidth(const wxRichTextParagraph& para, const wxRichTextRange& range, const wxArrayInt& partialExtents)
+{
+    wxASSERT(partialExtents.GetCount() >= (size_t) range.GetLength());
+
+    int leftMostPos = 0;
+    if (range.GetStart() - para.GetRange().GetStart() > 0)
+        leftMostPos = partialExtents[range.GetStart() - para.GetRange().GetStart() - 1];
+
+    int rightMostPos = partialExtents[range.GetEnd() - para.GetRange().GetStart()];
+
+    int w = rightMostPos - leftMostPos;
+
+    return w;
+}
+
 /// Lay the item out
 bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 {
@@ -3361,7 +3377,15 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
             childDescent = child->GetDescent();
         }
         else
+        {
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+            // Get height only, then the width using the partial extents
+            GetRangeSize(wxRichTextRange(lastEndPos+1, lastPosToUse), childSize, childDescent, dc, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_HEIGHT_ONLY);
+            childSize.x = wxRichTextGetRangeWidth(*this, wxRichTextRange(lastEndPos+1, lastPosToUse), partialExtents);
+#else
             GetRangeSize(wxRichTextRange(lastEndPos+1, lastPosToUse), childSize, childDescent, dc, wxRICHTEXT_UNFORMATTED, rect.GetPosition());
+#endif
+        }
 
         // Cases:
         // 1) There was a line break BEFORE the natural break
@@ -3390,7 +3414,15 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
             // Let's find the actual size of the current line now
             wxSize actualSize;
             wxRichTextRange actualRange(lastCompletedEndPos+1, wrapPosition);
+
+#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
+            // Get height only, then the width using the partial extents
+            GetRangeSize(actualRange, actualSize, childDescent, dc, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_HEIGHT_ONLY);
+            actualSize.x = wxRichTextGetRangeWidth(*this, actualRange, partialExtents);
+#else
             GetRangeSize(actualRange, actualSize, childDescent, dc, wxRICHTEXT_UNFORMATTED);
+#endif
+
             currentWidth = actualSize.x;
             lineHeight = wxMax(lineHeight, actualSize.y);
             maxDescent = wxMax(childDescent, maxDescent);
@@ -3676,7 +3708,18 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                 rangeToUse.LimitTo(child->GetRange());
                 int childDescent = 0;
 
-                if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, wxPoint(position.x + sz.x, position.y), p))
+                // At present wxRICHTEXT_HEIGHT_ONLY is only fast if we're already cached the size,
+                // but it's only going to be used after caching has taken place.
+                if ((flags & wxRICHTEXT_HEIGHT_ONLY) && child->GetCachedSize().y != 0)
+                {
+                    childDescent = child->GetDescent();
+                    childSize = child->GetCachedSize();
+
+                    sz.y = wxMax(sz.y, childSize.y);
+                    sz.x += childSize.x;
+                    descent = wxMax(descent, childDescent);
+                }
+                else if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, wxPoint(position.x + sz.x, position.y), p))
                 {
                     sz.y = wxMax(sz.y, childSize.y);
                     sz.x += childSize.x;

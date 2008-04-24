@@ -152,6 +152,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 #define wxRICHTEXT_FORMATTED        0x01
 #define wxRICHTEXT_UNFORMATTED      0x02
 #define wxRICHTEXT_CACHE_SIZE       0x04
+#define wxRICHTEXT_HEIGHT_ONLY      0x08
 
 /*!
  * Flags for SetStyle/SetListStyle
