@@ -24,7 +24,10 @@ XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -s -j
 	$(MSGFMT) -c -o $@ $<
 
 # a PO file must be updated from wxstd.pot to include new translations
-%.po: wxstd.pot
+# (but not manually maintained platform-specific files like msw/it.po)
+$(foreach lang,$(WX_LINGUAS_UPDATE),$(lang).po): wxstd.pot
+
+%.po:
 	if [ -f $@ ]; then $(MSGMERGE) $@ wxstd.pot > $@.new && mv $@.new $@; else cp wxstd.pot $@; fi
 
 # note the extra -kAddToPopUp used for Scintilla files: this is a hack to
