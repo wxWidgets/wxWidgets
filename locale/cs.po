@@ -186,11 +186,11 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:110
 msgid "&About"
-msgstr ""
+msgstr "O &aplikaci"
 
 #: ../src/html/helpfrm.cpp:123 ../src/html/helpfrm.cpp:125
 msgid "&About..."
-msgstr ""
+msgstr "O &aplikaci..."
 
 #: ../src/common/stockitem.cpp:160
 msgid "&Actual Size"
@@ -208,11 +208,11 @@ msgstr "devatenáctého"
 
 #: ../src/common/stockitem.cpp:112
 msgid "&Apply"
-msgstr ""
+msgstr "&Použít"
 
 #: ../src/richtext/richtextstyledlg.cpp:237
 msgid "&Apply Style"
-msgstr ""
+msgstr "&Použít styl"
 
 #: ../src/msw/mdi.cpp:175
 msgid "&Arrange Icons"
@@ -267,7 +267,7 @@ msgstr "&Zavřít"
 
 #: ../src/richtext/richtextfontpage.cpp:213
 msgid "&Colour:"
-msgstr ""
+msgstr " &Barva:"
 
 #: ../src/common/stockitem.cpp:117 ../src/richtext/richtextctrl.cpp:2582
 #: ../src/msw/textctrl.cpp:2304 ../src/mac/carbon/textctrl.cpp:1043
@@ -2015,9 +2015,8 @@ msgid "Copies:"
 msgstr "Kopie:"
 
 #: ../src/common/stockitem.cpp:203
-#, fuzzy
 msgid "Copy selection"
-msgstr "Sekce"
+msgstr "Kopírovat výběr"
 
 #: ../src/html/chm.cpp:703
 #, fuzzy, c-format
@@ -2172,9 +2171,8 @@ msgid "Create new directory"
 msgstr "Vytvořit nový adresář"
 
 #: ../src/common/menucmn.cpp:316
-#, fuzzy
 msgid "Ctrl-"
-msgstr "ctrl"
+msgstr "Ctrl-"
 
 #: ../src/common/stockitem.cpp:118 ../src/richtext/richtextctrl.cpp:2581
 #: ../src/msw/textctrl.cpp:2303 ../src/mac/carbon/textctrl.cpp:1042
@@ -2270,9 +2268,8 @@ msgid "Default encoding"
 msgstr "Výchozí znaková sada"
 
 #: ../src/generic/prntdlgg.cpp:508
-#, fuzzy
 msgid "Default printer"
-msgstr "Výchozí znaková sada"
+msgstr "Výchozí tiskárna"
 
 #: ../src/richtext/richtextbuffer.cpp:5478
 #, fuzzy
@@ -2348,9 +2345,8 @@ msgid "DirectFB error %d occured."
 msgstr ""
 
 #: ../src/motif/filedlg.cpp:216
-#, fuzzy
 msgid "Directories"
-msgstr "Ozdobné"
+msgstr "Adresáře"
 
 #: ../src/common/filefn.cpp:1257
 #, c-format
@@ -3093,9 +3089,8 @@ msgid "Fatal error: "
 msgstr "Kritická chyba: "
 
 #: ../src/msw/wince/filedlgwce.cpp:119
-#, fuzzy
 msgid "File"
-msgstr "&Soubor"
+msgstr "Soubor"
 
 #: ../src/mgl/bitmap.cpp:414
 #, c-format
@@ -3129,9 +3124,8 @@ msgid "File name exists already."
 msgstr "Soubor tohoto jména již existuje."
 
 #: ../src/motif/filedlg.cpp:217
-#, fuzzy
 msgid "Files"
-msgstr "&Soubor"
+msgstr "Soubory"
 
 #: ../src/common/filefn.cpp:1821
 #, fuzzy, c-format
@@ -3178,9 +3172,8 @@ msgid "Font st&yle:"
 msgstr "Velikost písma:"
 
 #: ../src/mac/carbon/fontdlg.cpp:452
-#, fuzzy
 msgid "Font:"
-msgstr "Velikost písma:"
+msgstr "Písmo:"
 
 #: ../src/dfb/fontmgr.cpp:167
 #, c-format
@@ -3349,9 +3342,8 @@ msgid "Help Printing"
 msgstr "Tisk nápovědy"
 
 #: ../src/html/helpwnd.cpp:820
-#, fuzzy
 msgid "Help Topics"
-msgstr "Nápověda: %s"
+msgstr "Témata nápovědy"
 
 #: ../src/html/helpwnd.cpp:1549
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
@@ -3378,9 +3370,8 @@ msgid "Home"
 msgstr "bezejmenná"
 
 #: ../src/generic/dirctrlg.cpp:670
-#, fuzzy
 msgid "Home directory"
-msgstr "Vytváření adresáře"
+msgstr "Domácí složka"
 
 #: ../include/wx/filefn.h:141
 msgid "I64"
@@ -3547,9 +3538,8 @@ msgstr ""
 
 #: ../src/richtext/richtextsymboldlg.cpp:474
 #: ../src/richtext/richtextsymboldlg.cpp:501
-#, fuzzy
 msgid "Insert"
-msgstr "Rejtřík"
+msgstr "Vložit"
 
 #: ../src/richtext/richtextbuffer.cpp:5379
 #: ../src/richtext/richtextbuffer.cpp:6172
@@ -3987,9 +3977,8 @@ msgid "Memory VFS already contains file '%s'!"
 msgstr "Paměťový VFS už obsahuje soubor '%s'!"
 
 #: ../src/msw/frame.cpp:415
-#, fuzzy
 msgid "Menu"
-msgstr "Moderní"
+msgstr "Menu"
 
 #: ../src/univ/themes/metal.cpp:169
 msgid "Metal theme"
@@ -4057,14 +4046,12 @@ msgstr ""
 #: ../src/richtext/richtextstyledlg.cpp:775
 #: ../src/richtext/richtextstyledlg.cpp:843
 #: ../src/richtext/richtextstyledlg.cpp:851
-#, fuzzy
 msgid "New Style"
-msgstr "Nova položka"
+msgstr "Nový styl"
 
 #: ../src/generic/dirdlgg.cpp:100
-#, fuzzy
 msgid "New directory"
-msgstr "Vytváření adresáře"
+msgstr "Nový adresář"
 
 #: ../contrib/src/gizmos/editlbox.cpp:155
 msgid "New item"
@@ -4076,9 +4063,8 @@ msgid "NewName"
 msgstr "NoveJmeno"
 
 #: ../src/generic/tipdlg.cpp:303
-#, fuzzy
 msgid "Next"
-msgstr "&Další"
+msgstr "Další"
 
 #: ../src/html/helpwnd.cpp:675
 msgid "Next page"
@@ -4507,9 +4493,8 @@ msgid "Passing an unkown object to GetObject"
 msgstr ""
 
 #: ../src/richtext/richtextctrl.cpp:2220
-#, fuzzy
 msgid "Paste"
-msgstr "&Vložit"
+msgstr "Vložit"
 
 #: ../src/common/stockitem.cpp:207
 #, fuzzy
@@ -4869,9 +4854,8 @@ msgid "SUBTRACT"
 msgstr ""
 
 #: ../src/common/sizer.cpp:2093
-#, fuzzy
 msgid "Save"
-msgstr "&Uložit..."
+msgstr "Uložit"
 
 #: ../src/common/fldlgcmn.cpp:285
 #, c-format
@@ -4879,9 +4863,8 @@ msgid "Save %s file"
 msgstr "Uložit soubor %s"
 
 #: ../src/common/stockitem.cpp:152
-#, fuzzy
 msgid "Save &As..."
-msgstr "&Uložit..."
+msgstr "Uložit &jako..."
 
 #: ../src/common/docview.cpp:303
 msgid "Save as"
@@ -5674,9 +5657,8 @@ msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr "US Std Fanfold, 17 7/8 x 11 palců"
 
 #: ../src/common/fmapbase.cpp:151
-#, fuzzy
 msgid "US-ASCII"
-msgstr "ASCII"
+msgstr "US-ASCII"
 
 #: ../src/common/strconv.cpp:2771 ../src/common/strconv.cpp:2775
 msgid "Unable to create TextEncodingConverter"
@@ -5692,14 +5674,12 @@ msgid "Unable to play sound asynchronously."
 msgstr ""
 
 #: ../src/common/stockitem.cpp:155
-#, fuzzy
 msgid "Undelete"
-msgstr "Podtržené"
+msgstr "Obnovit smazané"
 
 #: ../src/richtext/richtextfontpage.cpp:272
 #: ../src/richtext/richtextfontpage.cpp:356
 #: ../src/richtext/richtextfontpage.cpp:603 ../src/mac/carbon/fontdlg.cpp:493
-#, fuzzy
 msgid "Underlined"
 msgstr "Podtržené"
 
@@ -5953,29 +5933,25 @@ msgid "Windows 2000 (build %lu"
 msgstr ""
 
 #: ../src/msw/utils.cpp:1094
-#, fuzzy
 msgid "Windows 95"
-msgstr "Windows 9%c"
+msgstr "Windows 95"
 
 #: ../src/msw/utils.cpp:1090
-#, fuzzy
 msgid "Windows 95 OSR2"
-msgstr "Windows 9%c"
+msgstr "Windows 95 OSR2"
 
 #: ../src/msw/utils.cpp:1105
-#, fuzzy
 msgid "Windows 98"
-msgstr "Windows 9%c"
+msgstr "Windows 98"
 
 #: ../src/msw/utils.cpp:1101
-#, fuzzy
 msgid "Windows 98 SE"
-msgstr "Windows 9%c"
+msgstr "Windows 98 SE"
 
 #: ../src/msw/utils.cpp:1112
-#, fuzzy, c-format
+#, c-format
 msgid "Windows 9x (%d.%d)"
-msgstr "Windows 9%c"
+msgstr "Windows 9x (%d.%d)"
 
 #: ../src/common/fmapbase.cpp:134
 msgid "Windows Arabic (CP 1256)"
@@ -5986,9 +5962,9 @@ msgid "Windows Baltic (CP 1257)"
 msgstr "Baltské pro Windows (CP 1257)"
 
 #: ../src/msw/utils.cpp:1074
-#, fuzzy, c-format
+#, c-format
 msgid "Windows CE (%d.%d)"
-msgstr "Windows 9%c"
+msgstr "Windows CE (%d.%d)"
 
 #: ../src/common/fmapbase.cpp:128
 msgid "Windows Central European (CP 1250)"
@@ -6023,9 +5999,8 @@ msgid "Windows Korean (CP 949)"
 msgstr "Korejské pro Windows (CP 949)"
 
 #: ../src/msw/utils.cpp:1109
-#, fuzzy
 msgid "Windows ME"
-msgstr "Windows 9%c"
+msgstr "Windows ME"
 
 #: ../src/msw/utils.cpp:1144
 #, c-format
@@ -6038,9 +6013,8 @@ msgid "Windows Server 2003 (build %lu"
 msgstr ""
 
 #: ../src/common/fmapbase.cpp:123
-#, fuzzy
 msgid "Windows Thai (CP 874)"
-msgstr "Baltské pro Windows (CP 1257)"
+msgstr "Windows Thai (CP 874)"
 
 #: ../src/common/fmapbase.cpp:132
 msgid "Windows Turkish (CP 1254)"
@@ -6257,7 +6231,7 @@ msgstr ""
 
 #: ../src/html/chm.cpp:342
 msgid "bad signature"
-msgstr ""
+msgstr "špatný podpis"
 
 #: ../src/common/zipstrm.cpp:1712
 msgid "bad zipfile offset to entry"
@@ -6912,6 +6886,13 @@ msgstr "|<<"
 #: ../src/richtext/richtextbulletspage.cpp:296
 msgid "~"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Failed to convert file contents to Unicode."
+#~ msgstr "Nemohu uzavřít soubor."
+
+#~ msgid "Save As"
+#~ msgstr "Uložit Jako"
 
 #, fuzzy
 #~ msgid "Help : %s"

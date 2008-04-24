@@ -4271,7 +4271,7 @@ msgstr ""
 
 #: ../src/common/docview.cpp:1282 ../src/common/docview.cpp:1632
 msgid "Open File"
-msgstr ""
+msgstr "Selecciona un Fitxer"
 
 #: ../src/html/helpwnd.cpp:683 ../src/html/helpwnd.cpp:1555
 msgid "Open HTML document"
@@ -6983,6 +6983,13 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:296
 msgid "~"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Failed to convert file contents to Unicode."
+#~ msgstr "No s'ha pogut tancar el manegador de fitxers"
+
+#~ msgid "Save As"
+#~ msgstr "Anomena i Desa"
 
 #, fuzzy
 #~ msgid "Help : %s"
