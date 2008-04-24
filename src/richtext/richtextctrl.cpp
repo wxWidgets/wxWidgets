@@ -1140,7 +1140,9 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             }
         }
     }
-    PositionCaret();
+
+    if (scrolled)
+        PositionCaret();
 
     return scrolled;
 }

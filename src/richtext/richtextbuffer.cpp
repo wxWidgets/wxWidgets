@@ -425,26 +425,31 @@ wxString wxRichTextCompositeObject::GetTextForRange(const wxRichTextRange& range
 }
 
 /// Recursively merge all pieces that can be merged.
-bool wxRichTextCompositeObject::Defragment()
+bool wxRichTextCompositeObject::Defragment(const wxRichTextRange& range)
 {
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
         wxRichTextObject* child = node->GetData();
-        wxRichTextCompositeObject* composite = wxDynamicCast(child, wxRichTextCompositeObject);
-        if (composite)
-            composite->Defragment();
-
-        if (node->GetNext())
+        if (!child->GetRange().IsOutside(range))
         {
-            wxRichTextObject* nextChild = node->GetNext()->GetData();
-            if (child->CanMerge(nextChild) && child->Merge(nextChild))
-            {
-                nextChild->Dereference();
-                m_children.Erase(node->GetNext());
+            wxRichTextCompositeObject* composite = wxDynamicCast(child, wxRichTextCompositeObject);
+            if (composite)
+                composite->Defragment();
 
-                // Don't set node -- we'll see if we can merge again with the next
-                // child.
+            if (node->GetNext())
+            {
+                wxRichTextObject* nextChild = node->GetNext()->GetData();
+                if (child->CanMerge(nextChild) && child->Merge(nextChild))
+                {
+                    nextChild->Dereference();
+                    m_children.Erase(node->GetNext());
+
+                    // Don't set node -- we'll see if we can merge again with the next
+                    // child.
+                }
+                else
+                    node = node->GetNext();
             }
             else
                 node = node->GetNext();
@@ -4800,6 +4805,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
         }
     }
 
+    bool haveDescent = false;
     int startPos = range.GetStart() - GetRange().GetStart();
     long len = range.GetLength();
 
@@ -4836,23 +4842,39 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
         while (stringChunk.Find(wxT('\t')) >= 0)
         {
+            int absoluteWidth = 0;
+
             // the string has a tab
             // break up the string at the Tab
             wxString stringFragment = stringChunk.BeforeFirst(wxT('\t'));
             stringChunk = stringChunk.AfterFirst(wxT('\t'));
-            int oldWidth = width;
-            dc.GetTextExtent(stringFragment, & w, & h);
-            width += w;
-            int absoluteWidth = width + position.x;
 
             if (partialExtents)
             {
+                int oldWidth;
+                if (partialExtents->GetCount() > 0)
+                    oldWidth = (*partialExtents)[partialExtents->GetCount()-1];
+                else
+                    oldWidth = 0;
+
                 // Add these partial extents
                 wxArrayInt p;
                 dc.GetPartialTextExtents(stringFragment, p);
                 size_t j;
                 for (j = 0; j < p.GetCount(); j++)
                     partialExtents->Add(oldWidth + p[j]);
+
+                if (partialExtents->GetCount() > 0)
+                    absoluteWidth = (*partialExtents)[(*partialExtents).GetCount()-1] + position.x;
+                else
+                    absoluteWidth = position.x;
+            }
+            else
+            {
+                dc.GetTextExtent(stringFragment, & w, & h);
+                width += w;
+                absoluteWidth = width + position.x;
+                haveDescent = true;
             }
 
             bool notFound = true;
@@ -4883,12 +4905,14 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     if (!stringChunk.IsEmpty())
     {
-        dc.GetTextExtent(stringChunk, & w, & h, & descent);
-        int oldWidth = width;
-        width += w;
-
         if (partialExtents)
         {
+            int oldWidth;
+            if (partialExtents->GetCount() > 0)
+                oldWidth = (*partialExtents)[partialExtents->GetCount()-1];
+            else
+                oldWidth = 0;
+
             // Add these partial extents
             wxArrayInt p;
             dc.GetPartialTextExtents(stringChunk, p);
@@ -4896,12 +4920,33 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             for (j = 0; j < p.GetCount(); j++)
                 partialExtents->Add(oldWidth + p[j]);
         }
+        else
+        {
+            dc.GetTextExtent(stringChunk, & w, & h, & descent);
+            width += w;
+            haveDescent = true;
+        }
     }
+
+    if (partialExtents)
+    {
+        int charHeight = dc.GetCharHeight();
+        if ((*partialExtents).GetCount() > 0)
+            w = (*partialExtents)[partialExtents->GetCount()-1];
+        else
+            w = 0;
+        size = wxSize(w, charHeight);
+    }
+    else
+    {
+        size = wxSize(width, dc.GetCharHeight());
+    }
+
+    if (!haveDescent)
+        dc.GetTextExtent(wxT("X"), & w, & h, & descent);
 
     if ( bScript )
         dc.SetFont(font);
-
-    size = wxSize(width, dc.GetCharHeight());
 
     return true;
 }
@@ -6655,7 +6700,6 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
         if (!m_ctrl->IsFrozen())
         {
             m_ctrl->LayoutContent();
-            m_ctrl->PositionCaret();
 
 #if wxRICHTEXT_USE_OPTIMIZED_DRAWING
             // Find refresh rectangle if we are in a position to optimise refresh

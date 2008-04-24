@@ -539,7 +539,7 @@ public:
     bool DeleteChildren() ;
 
     /// Recursively merge all pieces that can be merged.
-    bool Defragment();
+    bool Defragment(const wxRichTextRange& range = wxRICHTEXT_ALL);
 
 protected:
     wxRichTextObjectList    m_children;
