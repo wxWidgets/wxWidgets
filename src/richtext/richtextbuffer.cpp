@@ -4914,6 +4914,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
     wxArrayInt textExtents;
 #endif
+    bool haveDescent = false;
 
     wxString str(m_text);
     wxString toReplace = wxRichTextLineBreakChar;
@@ -4948,28 +4949,42 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
         while (stringChunk.Find(wxT('\t')) >= 0)
         {
+            int absoluteWidth = 0;
+
             // the string has a tab
             // break up the string at the Tab
             wxString stringFragment = stringChunk.BeforeFirst(wxT('\t'));
             stringChunk = stringChunk.AfterFirst(wxT('\t'));
-            dc.GetTextExtent(stringFragment, & w, & h);
-#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
-            int oldWidth = width;
-#endif
-            width += w;
-            int absoluteWidth = width + position.x;
 
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
             if (g_UseGlobalPartialTextExtents)
             {
+                int oldWidth;
+                if (textExtents.GetCount() > 0)
+                    oldWidth = textExtents[textExtents.GetCount()-1];
+                else
+                    oldWidth = 0;
+
                 // Add these partial extents
                 wxArrayInt p;
                 dc.GetPartialTextExtents(stringFragment, p);
                 size_t j;
                 for (j = 0; j < p.GetCount(); j++)
                     textExtents.Add(oldWidth + p[j]);
+
+                if (textExtents.GetCount() > 0)
+                    absoluteWidth = textExtents[textExtents.GetCount()-1] + position.x;
+                else
+                    absoluteWidth = position.x;
             }
+            else
 #endif
+            {
+                dc.GetTextExtent(stringFragment, & w, & h, & descent);
+                width += w;
+                absoluteWidth = width + position.x;
+                haveDescent = true;
+            }
 
             bool notFound = true;
             for (int i = 0; i < tabCount && notFound; ++i)
@@ -4988,6 +5003,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                     }
 
                     notFound = false;
+
                     width = nextTabPos - position.x;
 
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
@@ -5001,15 +5017,15 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     if (!stringChunk.IsEmpty())
     {
-        dc.GetTextExtent(stringChunk, & w, & h, & descent);
-#if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
-        int oldWidth = width;
-#endif
-        width += w;
-
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
         if (g_UseGlobalPartialTextExtents)
         {
+            int oldWidth;
+            if (textExtents.GetCount() > 0)
+                oldWidth = textExtents[textExtents.GetCount()-1];
+            else
+                oldWidth = 0;
+
             // Add these partial extents
             wxArrayInt p;
             dc.GetPartialTextExtents(stringChunk, p);
@@ -5017,7 +5033,13 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             for (j = 0; j < p.GetCount(); j++)
                 textExtents.Add(oldWidth + p[j]);
         }
+        else
 #endif
+        {
+            dc.GetTextExtent(stringChunk, & w, & h, & descent);
+            width += w;
+            haveDescent = true;
+        }
     }
 
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
@@ -5031,13 +5053,25 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
         size_t j;
         for (j = 0; j < textExtents.GetCount(); j++)
             g_GlobalPartialTextExtents.Add(lastExtent + textExtents[j]);
+
+        int charHeight = dc.GetCharHeight();
+        if (textExtents.GetCount() > 0)
+            w = textExtents[textExtents.GetCount()-1];
+        else
+            w = 0;
+        size = wxSize(w, charHeight);
     }
+    else
 #endif
+    {
+        size = wxSize(width, dc.GetCharHeight());
+    }
+
+    if (!haveDescent)
+        dc.GetTextExtent(wxT("X"), & w, & h, & descent);
 
     if ( bScript )
         dc.SetFont(font);
-
-    size = wxSize(width, dc.GetCharHeight());
 
     return true;
 }
@@ -6797,7 +6831,6 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
         if (!m_ctrl->IsFrozen())
         {
             m_ctrl->LayoutContent();
-            m_ctrl->PositionCaret();
 
 #if wxRICHTEXT_USE_OPTIMIZED_DRAWING
             // Find refresh rectangle if we are in a position to optimise refresh
