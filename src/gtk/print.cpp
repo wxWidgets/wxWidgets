@@ -39,6 +39,10 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkpagesetupunixdialog.h>
 
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/graphics.h"
+#endif
+
 #include "wx/link.h"
 wxFORCE_LINK_THIS_MODULE(gtk_print)
 
@@ -1154,6 +1158,13 @@ bool wxGtkPrinterDCImpl::IsOk() const
 {
     return m_gpc != NULL;
 }
+
+#if wxUSE_GRAPHICS_CONTEXT
+wxGraphicsContext* wxGtkPrinterDCImpl::CreateGraphicsContext()
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeContext( (void*) m_cairo );
+}
+#endif
 
 bool wxGtkPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
                                wxCoord WXUNUSED(y1),

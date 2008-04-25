@@ -16,6 +16,10 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/graphics.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // wxMemoryDCImpl
 //-----------------------------------------------------------------------------
@@ -59,6 +63,14 @@ void wxMemoryDCImpl::Init()
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( pango_context_get_font_description( m_context ) );
 }
+
+#if wxUSE_GRAPHICS_CONTEXT
+wxGraphicsContext* wxMemoryDCImpl::CreateGraphicsContext()
+{
+    wxMemoryDC *memdc = (wxMemoryDC*) GetOwner();
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext( *memdc );
+}
+#endif
 
 void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {

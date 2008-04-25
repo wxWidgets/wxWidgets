@@ -227,6 +227,10 @@ public:
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual wxGraphicsContext* CreateGraphicsContext();
+#endif
+
     bool CanDrawBitmap() const { return true; }
     void Clear();
     void SetFont( const wxFont& font );

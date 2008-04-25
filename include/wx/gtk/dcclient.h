@@ -28,6 +28,10 @@ public:
 
     virtual ~wxWindowDCImpl();
 
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual wxGraphicsContext* CreateGraphicsContext();
+#endif
+
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }
 
