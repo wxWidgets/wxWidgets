@@ -774,12 +774,20 @@ wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColou
 
 wxGraphicsBitmap wxGraphicsContext::CreateBitmap( const wxBitmap& bmp ) const
 {
+#ifndef __WXGTK20__
     return GetRenderer()->CreateBitmap(bmp);
+#else
+    return wxNullGraphicsBitmap;
+#endif
 }
 
 wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h   ) const
 {
+#ifndef __WXGTK20__
     return GetRenderer()->CreateSubBitmap(bmp,x,y,w,h);
+#else
+    return wxNullGraphicsBitmap;
+#endif
 }
 
 wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc) 
