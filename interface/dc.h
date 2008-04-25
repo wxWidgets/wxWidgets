@@ -15,6 +15,10 @@
     a window can have a device context associated with it, and a printer also
     has a device context. In this way, the same piece of code may write to a
     number of different devices, if the device context is used as a parameter.
+    
+    wxWidgets offers alternative drawing classes based on the modern drawing
+    backends GDI+, CoreGraphics and Cairo. See wxGraphicsContext, wxGraphicsRenderer
+    and related classes.
 
     Notice that wxDC is an abstract base class and can't be created directly,
     please use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or
@@ -32,9 +36,8 @@
 
     @section dc_alpha Support for Transparency / Alpha Channel
 
-    On Mac OS X, when using Core Graphics (wxMAC_USE_CORE_GRAPHICS set to 1),
-    colors with alpha are supported. Instances wxPen or wxBrush that are built
-    from wxColour use the color's alpha values when stroking or filling.
+    On Mac OS X colors with alpha are supported. Instances wxPen or wxBrush
+    that are built from wxColour use the color's alpha values when stroking or filling.
 
     @library{wxcore}
     @category{dc,gdi}
