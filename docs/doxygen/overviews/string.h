@@ -25,20 +25,21 @@ Classes: wxString, wxArrayString, wxStringTokenizer
 
 @section overview_string_intro Introduction
 
-wxString is a class which represents a character string of arbitrary length
-(limited by @c MAX_INT which is usually 2147483647 on 32 bit machines) and
+wxString is a class which represents a character string of arbitrary length and
 containing arbitrary characters. The ASCII NUL character is allowed, but be
 aware that in the current string implementation some methods might not work
 correctly in this case.
 
-wxString works with both ASCII (traditional, 7 or 8 bit, characters) as well as
-Unicode (wide characters) strings.
+Since wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
+character wchar_t) under Windows and UTF-8 under Unix, Linux and
+OS X to store its content. Much work has been done to make
+existing code using ANSI string literals work as before.
 
 This class has all the standard operations you can expect to find in a string
 class: dynamic memory management (string extends to accommodate new
-characters), construction from other strings, C strings and characters,
-assignment operators, access to individual characters, string concatenation and
-comparison, substring extraction, case conversion, trimming and padding (with
+characters), construction from other strings, C strings, wide character C strings 
+and characters, assignment operators, access to individual characters, string
+concatenation and comparison, substring extraction, case conversion, trimming and padding (with
 spaces), searching and replacing and both C-like @c printf (wxString::Printf)
 and stream-like insertion functions as well as much more - see wxString for a
 list of all functions.
