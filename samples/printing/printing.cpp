@@ -417,6 +417,7 @@ void MyFrame::Draw(wxDC& dc)
     {
         // make a path that contains a circle and some lines, centered at 100,100
         gc->SetPen( *wxRED_PEN );
+        gc->SetFont( wxGetApp().m_testFont, *wxGREEN );
         wxGraphicsPath path = gc->CreatePath();
         path.AddCircle( 50.0, 50.0, 50.0 );
         path.MoveToPoint(0.0, 50.0);
