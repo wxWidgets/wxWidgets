@@ -30,6 +30,8 @@ This page contains a summarized listing of classes, please see the
 </td><td>
 @li @ref page_class_cat_dc
 @li @ref page_class_cat_gdi
+@li @ref page_class_cat_gc
+@li @ref page_class_cat_image
 @li @ref page_class_cat_events
 @li @ref page_class_cat_validator
 @li @ref page_class_cat_appmanagement
@@ -360,33 +362,59 @@ Related Overviews: @ref overview_dc
 
 
 
+@section page_class_cat_gc Graphics Context classes
+
+These classes are related to drawing using a new vector based drawing API and
+are based on the modern drawing backend GDI+, CoreGraphics and Cairo.
+
+@li wxGraphicsRenderer: Represents a drawing engine.
+@li wxGraphicsContext: Represents a graphics context currently being drawn on.
+@li wxGraphicsBrush: Brush for drawing into a wxGraphicsContext
+@li wxGraphicsPen: Pen for drawing into a wxGraphicsContext
+@li wxGraphicsFont: Font for drawing text on a wxGraphicsContext
+@li wxGraphicsMatrix: Represents an affine matrix for drawing transformation
+
+
+
 @section page_class_cat_gdi Graphics Device Interface
 
 These classes are related to drawing on device contexts and windows.
 
-Related Overviews: @ref overview_bitmap
-
 @li wxColour: Represents the red, blue and green elements of a colour
 @li wxDCClipper: Wraps the operations of setting and destroying the clipping
     region
-@li wxBitmap: Represents a bitmap
 @li wxBrush: Used for filling areas on a device context
 @li wxBrushList: The list of previously-created brushes
-@li wxCursor: A small, transparent bitmap representing the cursor
 @li wxFont: Represents fonts
 @li wxFontList: The list of previously-created fonts
-@li wxIcon: A small, transparent bitmap for assigning to frames and drawing on
-    device contexts
-@li wxImage: A platform-independent image class
-@li wxImageList: A list of images, used with some controls
-@li wxMask: Represents a mask to be used with a bitmap for transparent drawing
 @li wxPen: Used for drawing lines on a device context
 @li wxPenList: The list of previously-created pens
 @li wxPalette: Represents a table of indices into RGB values
 @li wxRegion: Represents a simple or complex region on a window or device
     context
-@li wxAnimation: Represents an animation
 @li wxRendererNative: Abstracts high-level drawing primitives
+
+
+
+@section page_class_cat_image Image and bitmap classes
+
+These classes represent images and bitmap in various formats and ways
+to access and create them.
+
+Related Overviews: @ref overview_bitmap
+
+@li wxAnimation: Represents an animation
+@li wxBitmap: Represents a platform dependent bitmap
+@li wxBitmapHandler: Class for loading a saving a wxBitmap in a specific format
+@li wxCursor: A small, transparent bitmap representing the cursor
+@li wxIcon: A small, transparent bitmap for assigning to frames and drawing on
+    device contexts
+@li wxImage: A platform-independent image class
+@li wxImageHandler: Class for loading a saving a wxImage in a specific format
+@li wxImageList: A list of images, used with some controls
+@li wxMask: Represents a mask to be used with a bitmap for transparent drawing
+@li wxMemoryDC: A device context for drawing into bitmaps
+@li wxPixelData: Class template for direct access to wxBitmap's and wxImage's internal data
 
 
 
