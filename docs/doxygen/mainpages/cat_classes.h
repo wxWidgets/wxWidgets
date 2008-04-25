@@ -26,7 +26,6 @@ This page contains a summarized listing of classes, please see the
 @li @ref page_class_cat_cmndlg
 @li @ref page_class_cat_html
 @li @ref page_class_cat_richtext
-@li @ref page_class_cat_stc
 </td><td>
 @li @ref page_class_cat_dc
 @li @ref page_class_cat_gdi
