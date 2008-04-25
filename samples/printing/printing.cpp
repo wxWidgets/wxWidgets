@@ -40,6 +40,10 @@
 #include "wx/generic/prntdlgg.h"
 #endif
 
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/graphics.h"
+#endif
+
 #ifdef __WXMAC__
 #include "wx/mac/printdlg.h"
 #endif
@@ -338,6 +342,7 @@ void MyFrame::Draw(wxDC& dc)
 
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxLIGHT_GREY_BRUSH);
+    
     dc.DrawRectangle(0, 0, 230, 350);
     dc.DrawLine(0, 0, 229, 349);
     dc.DrawLine(229, 0, 0, 349);
@@ -357,7 +362,7 @@ void MyFrame::Draw(wxDC& dc)
     dc.DrawText( wxT("Test message: this is in 10 point text"), 10, 180);
     
 #if wxUSE_UNICODE
-    char *test = "Hebrew    שלום -- Japanese (日本語)";
+    const char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
     dc.DrawText( tmp, 10, 200 );
 #endif
@@ -405,6 +410,28 @@ void MyFrame::Draw(wxDC& dc)
 
     if (m_bitmap.Ok())
         dc.DrawBitmap( m_bitmap, 10, 10 );
+
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsContext *gc = dc.CreateGraphicsContext();
+    if (gc)
+    {
+        // make a path that contains a circle and some lines, centered at 100,100
+        gc->SetPen( *wxRED_PEN );
+        wxGraphicsPath path = gc->CreatePath();
+        path.AddCircle( 50.0, 50.0, 50.0 );
+        path.MoveToPoint(0.0, 50.0);
+        path.AddLineToPoint(100.0, 50.0);
+        path.MoveToPoint(50.0, 0.0);
+        path.AddLineToPoint(50.0, 100.0 );
+        path.CloseSubpath();
+        path.AddRectangle(25.0, 25.0, 50.0, 50.0);
+        
+        gc->StrokePath(path);
+        
+        delete gc;
+    }
+#endif
+
 }
 
 void MyFrame::OnSize(wxSizeEvent& event )

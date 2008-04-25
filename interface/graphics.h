@@ -205,17 +205,24 @@ public:
         // Create graphics context from it
         wxGraphicsContext *gc = dc.CreateGraphicsContext();
     
-        // make a path that contains a circle and some lines, centered at 100,100
-        wxGraphicsPath path = gc->CreatePath();
-        path.AddCircle( 0.0, 0.0, 100.0 );
-        path.MoveToPoint(0.0, -100.0);
-        path.AddLineToPoint(0.0, 100.0);
-        path.MoveToPoint(-100.0, 0.0);
-        path.AddLineToPoint(100.0, 0);
-        path.CloseSubpath();
-        path.AddRectangle(-50.0, -25.0, 100.0, 50.0);
+        if (gc)
+        {
+            // make a path that contains a circle and some lines, centered at 100,100
+            gc->SetPen( *wxRED_PEN );
+            wxGraphicsPath path = gc->CreatePath();
+            path.AddCircle( 50.0, 50.0, 50.0 );
+            path.MoveToPoint(0.0, 50.0);
+            path.AddLineToPoint(100.0, 50.0);
+            path.MoveToPoint(50.0, 0.0);
+            path.AddLineToPoint(50.0, 100.0 );
+            path.CloseSubpath();
+            path.AddRectangle(25.0, 25.0, 50.0, 50.0);
         
-        delete gc;
+           gc->StrokePath(path);
+        
+           delete gc;
+        }
+    }
     @endcode
 
 
