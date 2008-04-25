@@ -72,22 +72,27 @@ public:
     @class wxString
     @wxheader{string.h}
 
-    wxString is a class representing a character string. Please see the
-    @ref overview_wxstringoverview "wxString overview" for more information about
-    it.
+    wxString is a class representing a character string. It uses 
+    reference counting and copy-on-write internally and is not
+    thread-safe. Please see the 
+    @ref overview_string "wxString overview" and the 
+    @ref overview_unicode "Unicode overview" for more information
+    about it.
+    
+    Since wxWidgets 3.0 internally uses UCS-2 (basically 2-byte per
+    character wchar_t) under Windows and UTF-8 under Unix, Linux and
+    OS X to store its content. Much work has been done to make
+    existing code using ANSI string literals work as before.
 
-    As explained there, wxString implements most of the methods of the std::string
-    class.
-    These standard functions are not documented in this manual, please see the
-    STL documentation).
-    The behaviour of all these functions is identical to the behaviour described
-    there.
+    wxString implements most of the methods of the
+    std::string class. These standard functions are not documented in
+    this manual, please see the STL documentation. The behaviour of
+    all these functions is identical to the behaviour described there.
 
-    You may notice that wxString sometimes has many functions which do the same
-    thing like, for example, wxString::Length,
-    wxString::Len and @c length() which all return the string
-    length. In all cases of such duplication the @c std::string-compatible
-    method (@c length() in this case, always the lowercase version) should be
+    You may notice that wxString sometimes has many functions which do
+    the same thing like, for example, wxString::Length, wxString::Len and @c length()
+    which all return the string length. In all cases of such duplication the @c std::string
+    compatible method (@c length() in this case, always the lowercase version) should be
     used as it will ensure smoother transition to @c std::string when wxWidgets
     starts using it instead of wxString.
 
@@ -97,35 +102,80 @@ public:
     @stdobjects
     ::Objects:, ::wxEmptyString,
 
-    @see @ref overview_wxstringoverview "wxString overview", @ref overview_unicode
+    @see @ref overview_string "wxString overview", @ref overview_unicode
     "Unicode overview"
 */
 class wxString
 {
 public:
-    //@{
     /**
-        Initializes the string from first @a nLength characters of C string.
-        The default value of @c wxSTRING_MAXLEN means take all the string.
-        In Unicode build, @e conv's
-        wxMBConv::MB2WC method is called to
-        convert @a psz to wide string (the default converter uses current locale's
-        charset). It is ignored in ANSI build.
-
-        @see @ref overview_mbconvclasses "wxMBConv classes", @ref mbstr()
-             mb_str, @ref wcstr() wc_str
+       Default constructor
     */
     wxString();
-    wxString(const wxString& x);
-    wxString(wxChar ch, size_t n = 1);
-    wxString(const wxChar* psz, size_t nLength = wxSTRING_MAXLEN);
-    wxString(const unsigned char* psz,
-             size_t nLength = wxSTRING_MAXLEN);
-    wxString(const wchar_t* psz, const wxMBConv& conv,
-             size_t nLength = wxSTRING_MAXLEN);
-    wxString(const char* psz, const wxMBConv& conv = wxConvLibc,
-             size_t nLength = wxSTRING_MAXLEN);
-    //@}
+    
+    /**
+       Creates a string from another string. Just increases the ref 
+       count by 1.
+    */
+    wxString(const wxString& stringSrc);
+    
+
+    /**
+       Constructs a string from the string literal @c psz using
+       the current locale encoding to convert it to Unicode.
+    */
+    wxString(const char *psz);
+
+    /**
+       Constructs a string from the string literal @c psz using
+       @c conv to convert it Unicode.
+    */
+    wxString(const char *psz, const wxMBConv& conv);
+
+    /**
+       Constructs a string from the first @ nLength character of the string literal @c psz using
+       the current locale encoding to convert it to Unicode.
+    */
+    wxString(const char *psz, size_t nLength);
+
+    /**
+       Constructs a string from the first @ nLength character of the string literal @c psz using
+       @c conv to convert it Unicode.
+    */
+    wxString(const char *psz, const wxMBConv& conv, size_t nLength);
+
+    /**
+       Constructs a string from the string literal @c pwz.
+    */
+    wxString(const wchar_t *pwz);
+
+    /**
+       Constructs a string from the first @ nLength characters of the string literal @c pwz.
+    */
+    wxString(const wchar_t *pwz, size_t nLength);
+
+    /**
+       Constructs a string from @c buf using the using
+       the current locale encoding to convert it to Unicode.
+    */
+    wxString(const wxCharBuffer& buf);
+    
+    /**
+       Constructs a string from @c buf.
+    */
+    wxString(const wxWCharBuffer& buf);
+
+    /**
+       Constructs a string from @str using the using
+       the current locale encoding to convert it to Unicode.
+    */
+    wxString(const std::string& str);
+    
+    /**
+       Constructs a string from @str.
+    */
+    wxString(const std::wstring& str);
+    
 
     /**
         String destructor. Note that this is not virtual, so wxString must not be
