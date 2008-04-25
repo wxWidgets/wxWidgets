@@ -96,6 +96,152 @@ public:
     used as it will ensure smoother transition to @c std::string when wxWidgets
     starts using it instead of wxString.
 
+        Anything may be concatenated (appended to) with a string. However, you can't
+        append something to a C string (including literal constants), so to do this it
+        should be converted to a wxString first.
+        
+        @li @ref operatorout() "operator "
+        @li operator+=()
+        @li operator+()
+        @li Append()
+        @li Prepend()
+
+        A string may be constructed either from a C string, (some number of copies of)
+        a single character or a wide (UNICODE) string. For all constructors (except the
+        default which creates an empty string) there is also a corresponding assignment
+        operator.
+        
+        @li wxString()
+        @li operator=()
+        @li ~wxString
+
+        The MakeXXX() variants modify the string in place, while the other functions
+        return a new string which contains the original text converted to the upper or
+        lower case and leave the original string unchanged.
+        
+        @li MakeUpper()
+        @li Upper()
+        @li MakeLower()
+        @li Lower()
+
+
+        Many functions in this section take a character index in the string. As with C
+        strings and/or arrays, the indices start from 0, so the first character of a
+        string is string[0]. Attempt to access a character beyond the end of the
+        string (which may be even 0 if the string is empty) will provoke an assert
+        failure in @ref overview_debugging "debug build", but no checks are
+        done in release builds.
+        This section also contains both implicit and explicit conversions to C style
+        strings. Although implicit conversion is quite convenient, it is advised to use
+        explicit c_str() method for the sake of clarity. 
+        
+        @li GetChar()
+        @li GetWritableChar()
+        @li SetChar()
+        @li Last()
+        @li operator[]
+        @li c_str()
+        @li mb_str()
+        @li wc_str()
+        @li fn_str()
+        @li operator const char*()
+
+        The default comparison function Cmp() is case-sensitive and
+        so is the default version of IsSameAs(). For case
+        insensitive comparisons you should use CmpNoCase() or
+        give a second parameter to IsSameAs. This last function is may be more
+        convenient if only equality of the strings matters because it returns a boolean
+        @true value if the strings are the same and not 0 (which is usually @false
+        in C)as Cmp() does.
+        Matches() is a poor man's regular expression matcher: it only understands 
+        '*' and '?' metacharacters in the sense of DOS command line interpreter.
+        StartsWith() is helpful when parsing a line of text which should start
+        with some predefined prefix and is more efficient than doing direct string
+        comparison as you would also have to precalculate the length of the prefix then.
+        
+        @li Cmp()
+        @li CmpNoCase()
+        @li IsSameAs()
+        @li Matches()
+        @li StartsWith()
+        @li EndsWith()
+
+        The string provides functions for conversion to signed and unsigned integer and
+        floating point numbers. All three functions take a pointer to the variable to
+        put the numeric value in and return @true if the @b entire string could be
+        converted to a number.
+        
+        @li ToLong()
+        @li ToLongLong()
+        @li ToULong()
+        @li ToULongLong()
+        @li ToDouble()
+
+        These are "advanced" functions and they will be needed quite rarely.
+        Alloc() and Shrink() are only interesting for optimization purposes.
+        wxStringBuffer and wxStringBufferLength classes may be very useful
+        when working with some external API which requires the caller to provide
+        a writable buffer.
+        
+        @li Alloc()
+        @li Shrink()
+        @li wxStringBuffer
+        @li wxStringBufferLength
+
+        Misc. other string functions.
+        
+        @li Trim()
+        @li Truncate()
+        @li Pad()
+
+        These functions return the string length and check whether the string
+        is empty or empty it.
+        
+        @li Len()
+        @li IsEmpty()
+        @li operator!()
+        @li Empty()
+        @li Clear()
+
+
+        These functions allow to extract substring from this string. All of them don't
+        modify the original string and return a new string containing the extracted
+        substring.
+        
+        @li Mid()
+        @li operator()()
+        @li Left()
+        @li Right()
+        @li BeforeFirst()
+        @li BeforeLast()
+        @li AfterFirst()
+        @li AfterLast()
+        @li StartsWith()
+        @li EndsWith()
+
+        These functions replace the standard @e strchr() and @e strstr()
+        functions.
+        
+        @li Find()
+        @li Replace()
+
+        Both formatted versions (Printf/() and stream-like insertion operators
+        exist (for basic types only). Additionally, the Format() function allows
+        to use simply append formatted value to a string:
+
+        @li Format()
+        @li FormatV()
+        @li Printf()
+        @li PrintfV()
+        @li operator>>()
+
+        These functions are deprecated, please consider using new wxWidgets 2.0
+        functions instead of them (or, even better, std::string compatible variants).
+        
+        CompareTo(), Contains(), First(), Freq(), Index(), IsAscii(), IsNull(),
+        IsNumber(), IsWord(), Last(), Length(), LowerCase(), Remove(), Strip(),
+        SubString(), UpperCase()
+
     @library{wxbase}
     @category{data}
 
@@ -256,54 +402,6 @@ public:
     */
     wxString BeforeLast(wxChar ch) const;
 
-    /**
-        The MakeXXX() variants modify the string in place, while the other functions
-        return a new string which contains the original text converted to the upper or
-        lower case and leave the original string unchanged.
-        MakeUpper()
-
-        Upper()
-
-        MakeLower()
-
-        Lower()
-    */
-
-
-    /**
-        Many functions in this section take a character index in the string. As with C
-        strings and/or arrays, the indices start from 0, so the first character of a
-        string is string[0]. Attempt to access a character beyond the end of the
-        string (which may be even 0 if the string is empty) will provoke an assert
-        failure in @ref overview_debuggingoverview "debug build", but no checks are
-        done in
-        release builds.
-        This section also contains both implicit and explicit conversions to C style
-        strings. Although implicit conversion is quite convenient, it is advised to use
-        explicit @ref cstr() c_str method for the sake of clarity. Also
-        see overview() for the cases where it is necessary to
-        use it.
-        GetChar()
-
-        GetWritableChar()
-
-        SetChar()
-
-        Last()
-
-        @ref operatorbracket() "operator []"
-
-        @ref cstr() c_str
-
-        @ref mbstr() mb_str
-
-        @ref wcstr() wc_str
-
-        @ref fnstr() fn_str
-
-        @ref operatorconstcharpt() "operator const char*"
-    */
-
 
     /**
         Empties the string and frees memory occupied by it.
@@ -357,34 +455,6 @@ public:
     */
     int CompareTo(const wxChar* psz, caseCompare cmp = exact) const;
 
-    /**
-        The default comparison function Cmp() is case-sensitive and
-        so is the default version of IsSameAs(). For case
-        insensitive comparisons you should use CmpNoCase() or
-        give a second parameter to IsSameAs. This last function is may be more
-        convenient if only equality of the strings matters because it returns a boolean
-        @true value if the strings are the same and not 0 (which is usually @false in
-        C)
-        as @c Cmp() does.
-        Matches() is a poor man's regular expression matcher:
-        it only understands '*' and '?' metacharacters in the sense of DOS command line
-        interpreter.
-        StartsWith() is helpful when parsing a line of
-        text which should start with some predefined prefix and is more efficient than
-        doing direct string comparison as you would also have to precalculate the
-        length of the prefix then.
-        Cmp()
-
-        CmpNoCase()
-
-        IsSameAs()
-
-        Matches()
-
-        StartsWith()
-
-        EndsWith()
-    */
 
 
     //@{
@@ -405,34 +475,6 @@ public:
     bool operator =(const wxString& x, const wxChar* t);
     //@}
 
-    /**
-        Anything may be concatenated (appended to) with a string. However, you can't
-        append something to a C string (including literal constants), so to do this it
-        should be converted to a wxString first.
-        @ref operatorout() "operator "
-
-        @ref plusequal() "operator +="
-
-        @ref operatorplus() "operator +"
-
-        Append()
-
-        Prepend()
-    */
-
-
-    /**
-        A string may be constructed either from a C string, (some number of copies of)
-        a single character or a wide (UNICODE) string. For all constructors (except the
-        default which creates an empty string) there is also a corresponding assignment
-        operator.
-        @ref construct() wxString
-
-        @ref operatorassign() "operator ="
-
-        @ref destruct() ~wxString
-    */
-
 
     /**
         Returns @true if target appears anywhere in wxString; else @false.
@@ -440,22 +482,6 @@ public:
         code.
     */
     bool Contains(const wxString& str) const;
-
-    /**
-        The string provides functions for conversion to signed and unsigned integer and
-        floating point numbers. All three functions take a pointer to the variable to
-        put the numeric value in and return @true if the @b entire string could be
-        converted to a number.
-        ToLong()
-
-        ToLongLong()
-
-        ToULong()
-
-        ToULongLong()
-
-        ToDouble()
-    */
 
 
     /**
@@ -695,43 +721,15 @@ public:
     bool Matches(const wxString& mask) const;
 
     /**
-        These are "advanced" functions and they will be needed quite rarely.
-        Alloc() and Shrink() are only
-        interesting for optimization purposes.
-        wxStringBuffer
-        and wxStringBufferLength classes may be very
-        useful when working with some external API which requires the caller to provide
-        a writable buffer.
-        Alloc()
-
-        Shrink()
-
-        wxStringBuffer
-
-        wxStringBufferLength
-    */
-
-
-    /**
         Returns a substring starting at @e first, with length @e count, or the rest of
         the string if @a count is the default value.
     */
     wxString Mid(size_t first, size_t count = wxSTRING_MAXLEN) const;
 
-    /**
-        Other string functions.
-        Trim()
-
-        Truncate()
-
-        Pad()
-    */
-
 
     /**
-        Adds @a count copies of @a pad to the beginning, or to the end of the string
-        (the default).
-        Removes spaces from the left or from the right (default).
+        Adds @a count copies of @a pad to the beginning, or to the end of the
+        string (the default).  Removes spaces from the left or from the right (default).
     */
     wxString Pad(size_t count, wxChar pad = ' ',
                  bool fromRight = true);
@@ -790,15 +788,6 @@ public:
     wxString Right(size_t count) const;
 
     /**
-        These functions replace the standard @e strchr() and @e strstr()
-        functions.
-        Find()
-
-        Replace()
-    */
-
-
-    /**
         Sets the character at position @e n.
     */
     void SetChar(size_t n, wxChar ch);
@@ -819,21 +808,6 @@ public:
     bool StartsWith(const wxString& prefix, wxString rest = NULL) const;
 
     /**
-        These functions return the string length and check whether the string is empty
-        or empty it.
-        Len()
-
-        IsEmpty()
-
-        @ref operatornot() operator!
-
-        Empty()
-
-        Clear()
-    */
-
-
-    /**
         Strip characters at the front and/or end. The same as Trim except that it
         doesn't change this string.
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
@@ -848,32 +822,6 @@ public:
         instead (but note that parameters have different meaning).
     */
     wxString SubString(size_t from, size_t to) const;
-
-    /**
-        These functions allow to extract substring from this string. All of them don't
-        modify the original string and return a new string containing the extracted
-        substring.
-        Mid()
-
-        @ref operatorparenth() operator
-
-        Left()
-
-        Right()
-
-        BeforeFirst()
-
-        BeforeLast()
-
-        AfterFirst()
-
-        AfterLast()
-
-        StartsWith()
-
-        EndsWith()
-    */
-
 
     //@{
     /**
@@ -1012,24 +960,6 @@ public:
         code.
     */
     void UpperCase();
-
-    /**
-        Both formatted versions (wxString::Printf) and stream-like
-        insertion operators exist (for basic types only). Additionally, the
-        Format() function allows to use simply append
-        formatted value to a string:
-
-        Format()
-
-        FormatV()
-
-        Printf()
-
-        PrintfV()
-
-        @ref operatorout() "operator "
-    */
-
 
     /**
         Returns a pointer to the string data (@c const char* in ANSI build,
@@ -1187,13 +1117,11 @@ public:
     //@{
     /**
         Returns wide character representation of the string.
-        In ANSI build, converts using @e conv's wxMBConv::cMB2WC
-        method and returns wxWCharBuffer. In Unicode build, this function is same
-        as @ref cstr() c_str.
-        The macro wxWX2WCbuf is defined as the correct return type (without const).
+        In Unicode build, this function is same as c_str().
+        The macro wxWX2WCbuf is defined as the correct return
+        type (without const).
 
-        @see wxMBConv, @ref cstr() c_str, @ref wcstr() mb_str, @ref
-             fnstr() fn_str, @ref wcharstr() wchar_str
+        @see wxMBConv, c_str(), mb_str(), fn_str(), wchar_str()
     */
     const wchar_t* wc_str(const wxMBConv& conv) const;
     const const wxWCharBuffer wc_str(const wxMBConv& conv) const;
@@ -1206,47 +1134,10 @@ public:
         passing strings to legacy libraries that don't have const-correct API. Use
         wxStringBuffer if you want to modify the string.
 
-        @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
-             fnstr() fn_str, @ref cstr() c_str, @ref
-             charstr() char_str
+        @see mb_str(), wc_str(), fn_str(), c_str(), char_str()
     */
     wxWritableWCharBuffer wchar_str() const;
 
-    /**
-        These functions are deprecated, please consider using new wxWidgets 2.0
-        functions instead of them (or, even better, std::string compatible variants).
-        CompareTo()
-
-        Contains()
-
-        First()
-
-        Freq()
-
-        Index()
-
-        IsAscii()
-
-        IsNull()
-
-        IsNumber()
-
-        IsWord()
-
-        Last()
-
-        Length()
-
-        LowerCase()
-
-        Remove()
-
-        Strip()
-
-        SubString()
-
-        UpperCase()
-    */
 };
 
 
