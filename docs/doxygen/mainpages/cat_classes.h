@@ -373,6 +373,7 @@ are based on the modern drawing backend GDI+, CoreGraphics and Cairo.
 @li wxGraphicsPen: Pen for drawing into a wxGraphicsContext
 @li wxGraphicsFont: Font for drawing text on a wxGraphicsContext
 @li wxGraphicsMatrix: Represents an affine matrix for drawing transformation
+@li wxGraphicsPath: Represents a path for drawing
 
 
 
