@@ -962,16 +962,11 @@ public:
     void UpperCase();
 
     /**
-        Returns a pointer to the string data (@c const char* in ANSI build,
-        @c const wchar_t* in Unicode build).
+        Returns a pointer to the string data (@c const char* when using UTF-8
+        internally, @c const wchar_t* when using UCS-2 internally).
         Note that the returned value is not convertible to @c char* or
-        @c wchar_t*, use @ref charstr() char_str or
-        @ref wcharstr() wchar_string if you need to pass string value
-        to a function expecting non-const pointer.
-
-        @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
-             fnstr() fn_str, @ref charstr() char_str, @ref
-             wcharstr() wchar_string
+        @c wchar_t*, use char_str() or wchar_str() if you need to pass
+        string value to a function expecting non-const pointer.
     */
     const wxChar* c_str() const;
 
@@ -979,24 +974,17 @@ public:
         Returns an object with string data that is implicitly convertible to
         @c char* pointer. Note that any change to the returned buffer is lost and so
         this function is only usable for passing strings to legacy libraries that
-        don't have const-correct API. Use wxStringBuffer if
-        you want to modify the string.
+        don't have const-correct API. Use wxStringBuffer if you want to modify
+        the string.
 
-        @see @ref mbstr() mb_str, @ref wcstr() wc_str, @ref
-             fnstr() fn_str, @ref cstr() c_str, @ref
-             wcharstr() wchar_str
+        @see c_str()
     */
     wxWritableCharBuffer char_str(const wxMBConv& conv = wxConvLibc) const;
 
     //@{
     /**
         Returns string representation suitable for passing to OS' functions for
-        file handling. In ANSI build, this is same as @ref cstr() c_str.
-        In Unicode build, returned value can be either wide character string
-        or C string in charset matching the @c wxConvFileName object, depending on
-        the OS.
-
-        @see wxMBConv, @ref wcstr() wc_str, @ref wcstr() mb_str
+        file handling. 
     */
     const wchar_t* fn_str() const;
     const const char* fn_str() const;
@@ -1011,8 +999,7 @@ public:
         as @ref cstr() c_str.
         The macro wxWX2MBbuf is defined as the correct return type (without const).
 
-        @see wxMBConv, @ref cstr() c_str, @ref wcstr() wc_str, @ref
-             fnstr() fn_str, @ref charstr() char_str
+        @see wxMBConv, c_str(), wc_str(), fn_str(), char_str()
     */
     const char* mb_str(const wxMBConv& conv = wxConvLibc) const;
     const const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
@@ -1027,8 +1014,7 @@ public:
     /**
         These functions work as C++ stream insertion operators: they insert the given
         value into the string. Precision or format cannot be set using them, you can
-        use
-        Printf() for this.
+        use Printf() for this.
     */
     wxString operator(const wxString& str);
     wxString operator(const wxChar* psz);
