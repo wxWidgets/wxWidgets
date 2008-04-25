@@ -79,7 +79,7 @@ public:
     @ref overview_unicode "Unicode overview" for more information
     about it.
     
-    Since wxWidgets 3.0 internally uses UCS-2 (basically 2-byte per
+    Since wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
     character wchar_t) under Windows and UTF-8 under Unix, Linux and
     OS X to store its content. Much work has been done to make
     existing code using ANSI string literals work as before.
