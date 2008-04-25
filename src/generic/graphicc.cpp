@@ -1516,6 +1516,20 @@ public :
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
 
+    // create a native bitmap representation
+#if 0
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap )
+    {
+      return wxGraphicsBitmap;
+    }
+    
+    // create a subimage from a native image representation
+    virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  )
+    {
+      return wxGraphicsBitmap;
+    }
+#endif
+
 private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoRenderer)
 } ;
