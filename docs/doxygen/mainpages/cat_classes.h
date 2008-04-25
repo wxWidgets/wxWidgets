@@ -186,6 +186,8 @@ Controls that are not static can have wxValidator associated with them.
 @li wxRadioBox: A group of radio buttons
 @li wxRadioButton: A round button to be used with others in a mutually
     exclusive way
+@li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code
+    editing component for plain text editing.
 @li wxSlider: A slider that can be dragged by the user
 @li wxVListBox: A listbox supporting variable height rows
 
@@ -320,18 +322,6 @@ with character and paragraph formatting.
 @li wxRichTextPrinting: A class for easy printing of rich text buffers.
 @li wxRichTextPrintout: A class used by wxRichTextPrinting.
 @li wxRichTextHeaderFooterData: Header and footer data specification.
-
-
-
-@section page_class_cat_stc Scintilla Text Editor
-
-wxWidgets also provides a wrapper around the Scintilla text editor control,
-which is a control for plain-text editing with support for highlighting, smart
-indentation, etc.
-
-@li wxStyledTextCtrl: A wxWidgets implementation of the Scintilla source code
-    editing component.
-
 
 
 @section page_class_cat_dc Device Contexts
