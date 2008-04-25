@@ -84,7 +84,7 @@ should be replaced (especially in time critical places) with:
 
 @code
 wxString s = "hello";
-wxString::iterator i;
+wxString::const_iterator i;
 for (i = s.begin(); i != s.end(); ++i)
 {
     wxUniChar uni_ch = *i;
