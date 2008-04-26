@@ -74,6 +74,8 @@ public:
     WXEVENTHANDLERREF    MacGetCurrentEventHandlerCallRef() { return m_macCurrentEventHandlerCallRef ; }
     void MacSetCurrentEvent( WXEVENTREF event , WXEVENTHANDLERCALLREF handler )
     { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
+    
+    void MacRequestUserAttention(wxNotificationOptions options);
 
     // adding a CFType object to be released only at the end of the current event cycle (increases the
     // refcount of the object passed), needed in case we are in the middle of an event concering an object
@@ -101,6 +103,7 @@ public:
     static long           s_macPreferencesMenuItemId ;
     static long           s_macExitMenuItemId ;
     static wxString       s_macHelpMenuTitleName ;
+    static void*          s_macNotificationRecord ;
 
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
     void                  MacHandleOneEvent( WXEVENTREF ev ) ;
