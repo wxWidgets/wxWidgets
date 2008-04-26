@@ -718,7 +718,7 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
         else for (i = 0; i < len; i++)
         {
             int c = (int) text[i];
-            if (c < 32 && c != 9 && c != 10 && c != 13)
+            if ((c < 32 || c == 34) && c != 9 && c != 10 && c != 13)
             {
                 if (i > 0)
                 {
