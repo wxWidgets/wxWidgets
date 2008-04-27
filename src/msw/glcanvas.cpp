@@ -332,21 +332,22 @@ AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, const int *attribList)
     if ( !attribList )
         return;
 
+    // remove default attributes
     pfd.dwFlags &= ~PFD_DOUBLEBUFFER;
     pfd.iPixelType = PFD_TYPE_COLORINDEX;
-    pfd.cColorBits = 0;
-    int arg=0;
 
-    while ( attribList[arg] )
+    for ( int arg = 0; attribList[arg]; )
     {
         switch ( attribList[arg++] )
         {
             case WX_GL_RGBA:
                 pfd.iPixelType = PFD_TYPE_RGBA;
                 break;
+
             case WX_GL_BUFFER_SIZE:
                 pfd.cColorBits = attribList[arg++];
                 break;
+
             case WX_GL_LEVEL:
                 // this member looks like it may be obsolete
                 if ( attribList[arg] > 0 )
@@ -357,52 +358,58 @@ AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, const int *attribList)
                     pfd.iLayerType = PFD_MAIN_PLANE;
                 arg++;
                 break;
+
             case WX_GL_DOUBLEBUFFER:
                 pfd.dwFlags |= PFD_DOUBLEBUFFER;
                 break;
+
             case WX_GL_STEREO:
                 pfd.dwFlags |= PFD_STEREO;
                 break;
+
             case WX_GL_AUX_BUFFERS:
                 pfd.cAuxBuffers = attribList[arg++];
                 break;
+
             case WX_GL_MIN_RED:
-                pfd.cColorBits = (pfd.cColorBits +
-                        (pfd.cRedBits = attribList[arg++]));
+                pfd.cColorBits += (pfd.cRedBits = attribList[arg++]);
                 break;
+
             case WX_GL_MIN_GREEN:
-                pfd.cColorBits = (pfd.cColorBits +
-                        (pfd.cGreenBits = attribList[arg++]));
+                pfd.cColorBits += (pfd.cGreenBits = attribList[arg++]);
                 break;
+
             case WX_GL_MIN_BLUE:
-                pfd.cColorBits = (pfd.cColorBits +
-                        (pfd.cBlueBits = attribList[arg++]));
+                pfd.cColorBits += (pfd.cBlueBits = attribList[arg++]);
                 break;
+
             case WX_GL_MIN_ALPHA:
                 // doesn't count in cColorBits
                 pfd.cAlphaBits = attribList[arg++];
                 break;
+
             case WX_GL_DEPTH_SIZE:
                 pfd.cDepthBits = attribList[arg++];
                 break;
+
             case WX_GL_STENCIL_SIZE:
                 pfd.cStencilBits = attribList[arg++];
                 break;
+
             case WX_GL_MIN_ACCUM_RED:
-                pfd.cAccumBits = (pfd.cAccumBits +
-                        (pfd.cAccumRedBits = attribList[arg++]));
+                pfd.cAccumBits += (pfd.cAccumRedBits = attribList[arg++]);
                 break;
+
             case WX_GL_MIN_ACCUM_GREEN:
-                pfd.cAccumBits = (pfd.cAccumBits +
-                        (pfd.cAccumGreenBits = attribList[arg++]));
+                pfd.cAccumBits += (pfd.cAccumGreenBits = attribList[arg++]);
                 break;
+
             case WX_GL_MIN_ACCUM_BLUE:
-                pfd.cAccumBits = (pfd.cAccumBits +
-                        (pfd.cAccumBlueBits = attribList[arg++]));
+                pfd.cAccumBits += (pfd.cAccumBlueBits = attribList[arg++]);
                 break;
+
             case WX_GL_MIN_ACCUM_ALPHA:
-                pfd.cAccumBits = (pfd.cAccumBits +
-                        (pfd.cAccumAlphaBits = attribList[arg++]));
+                pfd.cAccumBits += (pfd.cAccumAlphaBits = attribList[arg++]);
                 break;
         }
     }
@@ -421,14 +428,13 @@ wxGLCanvas::ChooseMatchingPixelFormat(HDC hdc,
         1,                              // version
         PFD_SUPPORT_OPENGL |
         PFD_DRAW_TO_WINDOW |
-        PFD_DOUBLEBUFFER,               // support double-buffering
-        PFD_TYPE_RGBA,                  // color type
-        16,                             // preferred color depth
-        0, 0, 0, 0, 0, 0,               // color bits (ignored)
-        0,                              // no alpha buffer
-        0,                              // alpha bits (ignored)
-        0,                              // no accumulation buffer
-        0, 0, 0, 0,                     // accumulator bits (ignored)
+        PFD_DOUBLEBUFFER,               // use double-buffering by default
+        PFD_TYPE_RGBA,                  // default pixel type
+        0,                              // preferred color depth (don't care)
+        0, 0, 0, 0, 0, 0,               // color bits and shift bits (ignored)
+        0, 0,                           // alpha bits and shift (ignored)
+        0,                              // accumulation total bits
+        0, 0, 0, 0,                     // accumulator RGBA bits (not used)
         16,                             // depth buffer
         0,                              // no stencil buffer
         0,                              // no auxiliary buffers

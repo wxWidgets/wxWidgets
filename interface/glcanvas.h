@@ -71,7 +71,64 @@ public:
     void SetCurrent(const wxGLCanvas& win);
 };
 
+/**
+    Constants for use with wxGLCanvas.
 
+    Notice that not all implementation support options such as stereo,
+    auxiliary buffers, alpha channel, and accumulator buffer, use
+    wxGLCanvas::IsDisplaySupported() to check for individual attributes support.
+ */
+enum
+{
+    /// Use true color palette (on if no attributes at all specified).
+    WX_GL_RGBA = 1,
+
+    /// Specifies the number of bits for buffer if not WX_GL_RGBA.
+    WX_GL_BUFFER_SIZE,
+
+    /// Must be followed by 0 for main buffer, >0 for overlay, <0 for underlay.
+    WX_GL_LEVEL,
+
+    /// Use double buffering if present (on if no attributes specified).
+    WX_GL_DOUBLEBUFFER,
+
+    /// Use stereoscopic display.
+    WX_GL_STEREO,
+
+    /// Specifies number of auxiliary buffers.
+    WX_GL_AUX_BUFFERS,
+
+    /// Use red buffer with most bits (> MIN_RED bits)
+    WX_GL_MIN_RED,
+
+    /// Use green buffer with most bits (> MIN_GREEN bits)
+    WX_GL_MIN_GREEN,
+
+    /// Use blue buffer with most bits (> MIN_BLUE bits)
+    WX_GL_MIN_BLUE,
+
+    /// Use alpha buffer with most bits (> MIN_ALPHA bits)
+    WX_GL_MIN_ALPHA,
+
+    /// Specifies number of bits for Z-buffer (typically 0, 16 or 32).
+    WX_GL_DEPTH_SIZE,
+
+    /// Specifies number of bits for stencil buffer.
+    WX_GL_STENCIL_SIZE,
+
+    /// Specifies minimal number of red accumulator bits.
+    WX_GL_MIN_ACCUM_RED,
+
+    /// Specifies minimal number of green accumulator bits.
+    WX_GL_MIN_ACCUM_GREEN,
+
+    /// Specifies minimal number of blue accumulator bits.
+    WX_GL_MIN_ACCUM_BLUE,
+
+    /// Specifies minimal number of alpha accumulator bits.
+    WX_GL_MIN_ACCUM_ALPHA
+
+};
 
 /**
     @class wxGLCanvas
@@ -141,15 +198,23 @@ public:
         @param name
             Window name.
         @param attribList
-            Array of integers. With this parameter you can set the device context
-        attributes associated to this window.
-            This array is zero-terminated: it should be set up with constants described
-        in the table above.
-            If a constant should be followed by a value, put it in the next array
-        position.
-            For example, the WX_GL_DEPTH_SIZE should be followed by the value that
-        indicates the number of
-            bits for the depth buffer, so:
+            Array of integers. With this parameter you can set the device
+            context attributes associated to this window. This array is
+            zero-terminated: it should be set up with constants described in
+            the table above. If a constant should be followed by a value, put
+            it in the next array position. For example, the WX_GL_DEPTH_SIZE
+            should be followed by the value that indicates the number of bits
+            for the depth buffer, e.g:
+            @code
+            attribList[n++] = WX_GL_DEPTH_SIZE;
+            attribList[n++] = 32;
+            attribList[n] = 0; // terminate the list
+            @endcode
+            If the attribute list is not specified at all, i.e. if this
+            parameter is @NULL, the default attributes including @c WX_GL_RGBA
+            and @c WX_GL_DOUBLEBUFFER are used. But notice that if you do
+            specify some attributes you also need to explicitly include these
+            two default attributes in the list if you need them.
         @param palette
             Palette for indexed colour (i.e. non WX_GL_RGBA) mode.
             Ignored under most platforms.
