@@ -129,26 +129,26 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 
     if ( !wxattrs )
     {
-        if ( GetGLXVersion() >= 13 )
-        {
-            // leave GLX >= 1.3 choose the default attributes
-            glattrs[0] = None;
-        }
-        else // GLX < 1.3
+        size_t i = 0;
+
+        // use double-buffered true colour by default
+        glattrs[i++] = GLX_RGBA;            glattrs[i++] = True;
+        glattrs[i++] = GLX_DOUBLEBUFFER;    glattrs[i++] = True;
+
+        if ( GetGLXVersion() < 13 )
         {
             // default settings if attriblist = 0
-            size_t i = 0;
-            glattrs[i++] = GLX_RGBA;
-            glattrs[i++] = GLX_DOUBLEBUFFER;
             glattrs[i++] = GLX_DEPTH_SIZE;   glattrs[i++] = 1;
             glattrs[i++] = GLX_RED_SIZE;     glattrs[i++] = 1;
             glattrs[i++] = GLX_GREEN_SIZE;   glattrs[i++] = 1;
             glattrs[i++] = GLX_BLUE_SIZE;    glattrs[i++] = 1;
             glattrs[i++] = GLX_ALPHA_SIZE;   glattrs[i++] = 0;
-            glattrs[i++] = None;
-
-            wxASSERT_MSG( i < n, _T("GL attributes buffer too small") );
         }
+        //else: recent GLX can choose the defaults on its own just fine
+
+        glattrs[i] = None;
+
+        wxASSERT_MSG( i < n, _T("GL attributes buffer too small") );
     }
     else // have non-default attributes
     {
@@ -158,25 +158,11 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
             // check if we have any space left, knowing that we may insert 2
             // more elements during this loop iteration and we always need to
             // terminate the list with None (hence -3)
-            if ( p >= n - 2 )
+            if ( p > n - 3 )
                 return false;
 
             switch ( wxattrs[arg++] )
             {
-                case WX_GL_RGBA:
-                    // for GLX >= 1.3, GLX_RGBA is useless and apparently
-                    // harmful for some implementations
-                    //
-                    // FIXME: is this true?
-                    if ( GetGLXVersion() <= 12 )
-                    {
-                        glattrs[p++] = GLX_RGBA;
-                    }
-
-                    // use "continue" to skip the assignment of the attribute
-                    // value at the end of the loop
-                    continue;
-
                 case WX_GL_BUFFER_SIZE:
                     glattrs[p++] = GLX_BUFFER_SIZE;
                     break;
@@ -190,6 +176,11 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
                     // OpenGL, so do put them into glattrs and also skip the
                     // copy of wx value after switch by using "continue"
                     // instead of "break"
+                case WX_GL_RGBA:
+                    glattrs[p++] = GLX_RGBA;
+                    glattrs[p++] = True;
+                    continue;
+
                 case WX_GL_DOUBLEBUFFER:
                     glattrs[p++] = GLX_DOUBLEBUFFER;
                     glattrs[p++] = True;
