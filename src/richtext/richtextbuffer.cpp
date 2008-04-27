@@ -3326,7 +3326,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             {
                 wxRichTextObject* child = node2->GetData();
 
-                if (!child->GetRange().IsOutside(lineRange) && !lineRange.IsOutside(range))
+                if (child->GetRange().GetLength() > 0 && !child->GetRange().IsOutside(lineRange) && !lineRange.IsOutside(range))
                 {
                     // Draw this part of the line at the correct position
                     wxRichTextRange objectRange(child->GetRange());
@@ -3371,6 +3371,9 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 static int wxRichTextGetRangeWidth(const wxRichTextParagraph& para, const wxRichTextRange& range, const wxArrayInt& partialExtents)
 {
     wxASSERT(partialExtents.GetCount() >= (size_t) range.GetLength());
+
+    if (partialExtents.GetCount() < (size_t) range.GetLength())
+        return 0;
 
     int leftMostPos = 0;
     if (range.GetStart() - para.GetRange().GetStart() > 0)
@@ -3474,6 +3477,12 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     while (node)
     {
         wxRichTextObject* child = node->GetData();
+
+        if (child->GetRange().GetLength() == 0)
+        {
+            node = node->GetNext();
+            continue;
+        }
 
         // If this is e.g. a composite text box, it will need to be laid out itself.
         // But if just a text fragment or image, for example, this will
@@ -3664,7 +3673,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         {
             wxRichTextObject* child = node2->GetData();
 
-            if (!child->GetRange().IsOutside(lineRange))
+            if (child->GetRange().GetLength() > 0 && !child->GetRange().IsOutside(lineRange))
             {
                 wxRichTextRange rangeToUse = lineRange;
                 rangeToUse.LimitTo(child->GetRange());
