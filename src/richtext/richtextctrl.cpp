@@ -35,6 +35,10 @@
 
 // DLL options compatibility check:
 #include "wx/app.h"
+
+// Refresh the area affected by a selection change
+bool wxRichTextCtrlRefreshForSelectionChange(wxRichTextCtrl& ctrl, const wxRichTextRange& oldSelection, const wxRichTextRange& newSelection);
+
 WX_CHECK_BUILD_OPTIONS("wxRichTextCtrl")
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_LEFT_CLICK)
@@ -382,14 +386,10 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
 
         if (event.ShiftDown())
         {
-            bool extendSel = false;
             if (m_selectionRange.GetStart() == -2)
-                extendSel = ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
+                ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
             else
-                extendSel = ExtendSelection(m_caretPosition, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
-
-            if (extendSel)
-                Refresh(false);
+                ExtendSelection(m_caretPosition, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
         }
         else
             SelectNone();
@@ -509,13 +509,10 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 
         if (m_caretPosition != position)
         {
-            bool extendSel = ExtendSelection(m_caretPosition, position, wxRICHTEXT_SHIFT_DOWN);
+            ExtendSelection(m_caretPosition, position, wxRICHTEXT_SHIFT_DOWN);
 
             MoveCaret(position, caretAtLineStart);
             SetDefaultStyleToCursorStyle();
-
-            if (extendSel)
-                Refresh(false);
         }
     }
 }
@@ -992,6 +989,8 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
 {
     if (flags & wxRICHTEXT_SHIFT_DOWN)
     {
+        wxRichTextRange oldSelection = m_selectionRange;
+
         // If not currently selecting, start selecting
         if (m_selectionRange.GetStart() == -2)
         {
@@ -1011,6 +1010,8 @@ bool wxRichTextCtrl::ExtendSelection(long oldPos, long newPos, int flags)
             else
                 m_selectionRange.SetRange(newPos+1, m_selectionAnchor);
         }
+
+        wxRichTextCtrlRefreshForSelectionChange(*this, oldSelection, m_selectionRange);
 
         if (m_selectionRange.GetStart() > m_selectionRange.GetEnd())
         {
@@ -1126,7 +1127,9 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
             }
         }
     }
-    PositionCaret();
+
+    if (scrolled)
+        PositionCaret();
 
     return scrolled;
 }
@@ -1281,8 +1284,6 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
     else
@@ -1310,8 +1311,6 @@ bool wxRichTextCtrl::MoveLeft(int noPositions, int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
     else
@@ -1401,8 +1400,6 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
 
@@ -1424,8 +1421,6 @@ bool wxRichTextCtrl::MoveToParagraphEnd(int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
 
@@ -1447,8 +1442,6 @@ bool wxRichTextCtrl::MoveToParagraphStart(int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
 
@@ -1472,8 +1465,6 @@ bool wxRichTextCtrl::MoveToLineEnd(int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
 
@@ -1499,8 +1490,6 @@ bool wxRichTextCtrl::MoveToLineStart(int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
 
@@ -1520,8 +1509,6 @@ bool wxRichTextCtrl::MoveHome(int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
     else
@@ -1543,8 +1530,6 @@ bool wxRichTextCtrl::MoveEnd(int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
     else
@@ -1584,8 +1569,6 @@ bool wxRichTextCtrl::PageDown(int noPages, int flags)
                 PositionCaret();
                 SetDefaultStyleToCursorStyle();
 
-                if (extendSel)
-                    Refresh(false);
                 return true;
             }
         }
@@ -1703,8 +1686,6 @@ bool wxRichTextCtrl::WordLeft(int WXUNUSED(n), int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
 
@@ -1727,8 +1708,6 @@ bool wxRichTextCtrl::WordRight(int WXUNUSED(n), int flags)
         PositionCaret();
         SetDefaultStyleToCursorStyle();
 
-        if (extendSel)
-            Refresh(false);
         return true;
     }
 
@@ -1818,11 +1797,24 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop)
     int maxPositionX = 0; // wxMax(sz.x - clientSize.x, 0);
     int maxPositionY = (int) ((((float)(wxMax((unitsY*pixelsPerUnit) - clientSize.y, 0)))/((float)pixelsPerUnit)) + 0.5);
 
+    int newStartX = wxMin(maxPositionX, startX);
+    int newStartY = wxMin(maxPositionY, startY);
+
+    int oldPPUX, oldPPUY;
+    int oldStartX, oldStartY;
+    int oldVirtualSizeX = 0, oldVirtualSizeY = 0;
+    GetScrollPixelsPerUnit(& oldPPUX, & oldPPUY);
+    GetViewStart(& oldStartX, & oldStartY);
+    GetVirtualSize(& oldVirtualSizeX, & oldVirtualSizeY);
+    if (oldPPUY > 0)
+        oldVirtualSizeY /= oldPPUY;
+
+    if (oldPPUX == 0 && oldPPUY == pixelsPerUnit && oldVirtualSizeY == unitsY && oldStartX == newStartX && oldStartY == newStartY)
+        return;
+
     // Move to previous scroll position if
     // possible
-    SetScrollbars(0, pixelsPerUnit,
-        0, unitsY,
-        wxMin(maxPositionX, startX), wxMin(maxPositionY, startY));
+    SetScrollbars(0, pixelsPerUnit, 0, unitsY, newStartX, newStartY);
 }
 
 /// Paint the background
@@ -1941,8 +1933,11 @@ void wxRichTextCtrl::SelectNone()
 {
     if (!(GetSelectionRange() == wxRichTextRange(-2, -2)))
     {
-        Refresh(false);
+        wxRichTextRange oldSelection = m_selectionRange;
+
         m_selectionRange = wxRichTextRange(-2, -2);
+
+        wxRichTextCtrlRefreshForSelectionChange(*this, oldSelection, m_selectionRange);
     }
     m_selectionAnchor = -2;
 }
@@ -2341,12 +2336,13 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
     }
     else
     {
+        wxRichTextRange oldSelection = m_selectionRange;
         m_selectionAnchor = from;
         m_selectionRange.SetRange(from, to-1);
         if (from > -2)
             m_caretPosition = from-1;
 
-        Refresh(false);
+        wxRichTextCtrlRefreshForSelectionChange(*this, oldSelection, m_selectionRange);
         PositionCaret();
     }
 }
@@ -3236,6 +3232,54 @@ const wxArrayString& wxRichTextCtrl::GetAvailableFontNames()
 void wxRichTextCtrl::ClearAvailableFontNames()
 {
     sm_availableFontNames.Clear();
+}
+
+// Refresh the area affected by a selection change
+bool wxRichTextCtrlRefreshForSelectionChange(wxRichTextCtrl& ctrl, const wxRichTextRange& oldSelection, const wxRichTextRange& newSelection)
+{
+    // Calculate the refresh rectangle - just the affected lines
+    long firstPos, lastPos;
+    if (oldSelection.GetStart() == -2 && newSelection.GetStart() != -2)
+    {
+        firstPos = newSelection.GetStart();
+        lastPos = newSelection.GetEnd();
+    }
+    else if (oldSelection.GetStart() != -2 && newSelection.GetStart() == -2)
+    {
+        firstPos = oldSelection.GetStart();
+        lastPos = oldSelection.GetEnd();
+    }
+    else if (oldSelection.GetStart() == -2 && newSelection.GetStart() == -2)
+    {
+        return false;
+    }
+    else
+    {
+        firstPos = wxMin(oldSelection.GetStart(), newSelection.GetStart());
+        lastPos = wxMax(oldSelection.GetEnd(), newSelection.GetEnd());
+    }
+
+    wxRichTextLine* firstLine = ctrl.GetBuffer().GetLineAtPosition(firstPos);
+    wxRichTextLine* lastLine = ctrl.GetBuffer().GetLineAtPosition(lastPos);
+
+    if (firstLine && lastLine)
+    {
+        wxSize clientSize = ctrl.GetClientSize();
+        wxPoint pt1 = ctrl.GetPhysicalPoint(firstLine->GetAbsolutePosition());
+        wxPoint pt2 = ctrl.GetPhysicalPoint(lastLine->GetAbsolutePosition()) + wxPoint(0, lastLine->GetSize().y);
+
+        pt1.x = 0;
+        pt1.y = wxMax(0, pt1.y);
+        pt2.x = 0;
+        pt2.y = wxMin(clientSize.y, pt2.y);
+
+        wxRect rect(pt1, wxSize(clientSize.x, pt2.y - pt1.y));
+        ctrl.RefreshRect(rect, false);
+    }
+    else
+        ctrl.Refresh(false);
+
+    return true;
 }
 
 #endif

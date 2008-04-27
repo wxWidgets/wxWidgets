@@ -24,7 +24,10 @@ XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -s -j
 	$(MSGFMT) -c -o $@ $<
 
 # a PO file must be updated from wxstd.po to include new translations
-%.po: wxstd.po
+# (but not manually maintained platform-specific files like msw/it.po)
+$(foreach lang,$(WX_LINGUAS_UPDATE),$(lang).po): wxstd.po
+
+%.po:
 	if [ -f $@ ]; then $(MSGMERGE) $@ wxstd.po > $@.new && mv $@.new $@; else cp wxstd.po $@; fi
 
 wxstd.po:

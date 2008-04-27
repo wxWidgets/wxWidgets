@@ -99,6 +99,8 @@ wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
 
 bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
 
+void*     wxApp::s_macNotificationRecord = NULL;
+
 //----------------------------------------------------------------------
 // Core Apple Event Support
 //----------------------------------------------------------------------
@@ -301,7 +303,18 @@ void wxApp::MacPrintFile(const wxString & fileName )
 #endif //docview
 }
 
-
+void wxApp::MacRequestUserAttention(wxNotificationOptions options)
+{
+    NMRec nmRec = {0};
+    nmRec.qType = nmType;
+    nmRec.nmMark = 1;
+    NMInstall(&nmRec);
+    
+    if (options == wxNOTIFY_ONCE)
+        NMRemove (&nmRec);
+    else // save the reference and remove it on app activation
+        wxApp::s_macNotificationRecord = &nmRec;
+}
 
 void wxApp::MacNewFile()
 {
@@ -614,8 +627,17 @@ static pascal OSStatus wxMacAppApplicationEventHandler( EventHandlerCallRef hand
     switch ( GetEventKind( event ) )
     {
         case kEventAppActivated :
-            if ( wxTheApp )
+            if ( wxTheApp ) {
                 wxTheApp->SetActive( true , NULL ) ;
+                // If MacRequestUserAttention is set to repeat, then we need
+                // to shut down the notification upon app activation. This
+                // should happen automatically, but let's add the handler 
+                // just in case.
+                if (wxApp::s_macNotificationRecord) {
+                    NMRemove((NMRec*)wxApp::s_macNotificationRecord);
+                    wxApp::s_macNotificationRecord = NULL;
+                }
+            }
             result = noErr ;
             break ;
 

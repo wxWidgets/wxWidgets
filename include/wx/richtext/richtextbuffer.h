@@ -149,6 +149,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
 #define wxRICHTEXT_FORMATTED        0x01
 #define wxRICHTEXT_UNFORMATTED      0x02
 #define wxRICHTEXT_CACHE_SIZE       0x04
+#define wxRICHTEXT_HEIGHT_ONLY      0x08
 
 /*!
  * Flags for SetStyle/SetListStyle
@@ -2072,6 +2073,11 @@ public:
 
     /// Replace the buffer paragraphs with the given fragment.
     void ApplyParagraphs(const wxRichTextParagraphLayoutBox& fragment);
+
+#if wxABI_VERSION >= 20808
+    // Create arrays to be used in refresh optimization
+    void CalculateRefreshOptimizations(wxArrayInt& optimizationLineCharPositions, wxArrayInt& optimizationLineYPositions);
+#endif
 
     /// Get the fragments
     wxRichTextParagraphLayoutBox& GetNewParagraphs() { return m_newParagraphs; }
