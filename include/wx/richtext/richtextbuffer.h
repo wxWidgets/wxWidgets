@@ -2074,6 +2074,11 @@ public:
     /// Replace the buffer paragraphs with the given fragment.
     void ApplyParagraphs(const wxRichTextParagraphLayoutBox& fragment);
 
+#if wxABI_VERSION >= 20808
+    // Create arrays to be used in refresh optimization
+    void CalculateRefreshOptimizations(wxArrayInt& optimizationLineCharPositions, wxArrayInt& optimizationLineYPositions);
+#endif
+
     /// Get the fragments
     wxRichTextParagraphLayoutBox& GetNewParagraphs() { return m_newParagraphs; }
     wxRichTextParagraphLayoutBox& GetOldParagraphs() { return m_oldParagraphs; }
