@@ -683,6 +683,9 @@ public:
     /// Scroll into view. This takes a _caret_ position.
     virtual bool ScrollIntoView(long position, int keyCode);
 
+    /// Refresh the area affected by a selection change
+    bool RefreshForSelectionChange(const wxRichTextRange& oldSelection, const wxRichTextRange& newSelection);
+
     /// The caret position is the character position just before the caret.
     /// A value of -1 means the caret is at the start of the buffer.
     void SetCaretPosition(long position, bool showAtLineStart = false) ;

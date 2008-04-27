@@ -1698,7 +1698,7 @@ public:
 
     /// Update the control appearance
     void UpdateAppearance(long caretPosition, bool sendUpdateEvent = false,
-                            wxArrayInt* optimizationLineCharPositions = NULL, wxArrayInt* optimizationLineYPositions = NULL);
+                            wxArrayInt* optimizationLineCharPositions = NULL, wxArrayInt* optimizationLineYPositions = NULL, bool isDoCmd = true);
 
     /// Replace the buffer paragraphs with the given fragment.
     void ApplyParagraphs(const wxRichTextParagraphLayoutBox& fragment);
@@ -1706,6 +1706,9 @@ public:
     /// Get the fragments
     wxRichTextParagraphLayoutBox& GetNewParagraphs() { return m_newParagraphs; }
     wxRichTextParagraphLayoutBox& GetOldParagraphs() { return m_oldParagraphs; }
+
+    /// Calculate arrays for refresh optimization
+    void CalculateRefreshOptimizations(wxArrayInt& optimizationLineCharPositions, wxArrayInt& optimizationLineYPositions);
 
     /// Set/get the position used for e.g. insertion
     void SetPosition(long pos) { m_position = pos; }
