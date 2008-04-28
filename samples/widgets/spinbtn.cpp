@@ -100,6 +100,7 @@ protected:
     void OnSpinCtrl(wxSpinEvent& event);
     void OnSpinCtrlDouble(wxSpinDoubleEvent& event);
     void OnSpinText(wxCommandEvent& event);
+    void OnSpinTextEnter(wxCommandEvent& event);
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
     void OnUpdateUIMinMaxButton(wxUpdateUIEvent& event);
@@ -167,6 +168,7 @@ BEGIN_EVENT_TABLE(SpinBtnWidgetsPage, WidgetsPage)
     EVT_SPINCTRL(SpinBtnPage_SpinCtrl, SpinBtnWidgetsPage::OnSpinCtrl)
     EVT_SPINCTRLDOUBLE(SpinBtnPage_SpinCtrlDouble, SpinBtnWidgetsPage::OnSpinCtrlDouble)
     EVT_TEXT(SpinBtnPage_SpinCtrl, SpinBtnWidgetsPage::OnSpinText)
+    EVT_TEXT_ENTER(SpinBtnPage_SpinCtrl, SpinBtnWidgetsPage::OnSpinTextEnter)
     EVT_TEXT(SpinBtnPage_SpinCtrlDouble, SpinBtnWidgetsPage::OnSpinText)
 
     EVT_CHECKBOX(wxID_ANY, SpinBtnWidgetsPage::OnCheckOrRadioBox)
@@ -473,6 +475,12 @@ void SpinBtnWidgetsPage::OnSpinText(wxCommandEvent& event)
 {
     wxLogMessage(_T("Text changed in spin control, now \"%s\""),
                  event.GetString().c_str());
+}
+
+void SpinBtnWidgetsPage::OnSpinTextEnter(wxCommandEvent& event)
+{
+    wxLogMessage("\"Enter\" pressed in spin control, text is \"%s\"",
+                 event.GetString());
 }
 
 #endif // wxUSE_SPINBTN

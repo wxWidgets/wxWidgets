@@ -178,7 +178,7 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
 
         case WM_GETDLGCODE:
             // we want to get WXK_RETURN in order to generate the event for it
-            return DLGC_WANTCHARS;
+            return DLGC_WANTALLKEYS;
     }
 
     return ::CallWindowProc(CASTWNDPROC spin->GetBuddyWndProc(),
