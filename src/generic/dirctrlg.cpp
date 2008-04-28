@@ -668,7 +668,8 @@ void wxGenericDirCtrl::SetFocus()
 {
     // we don't need focus ourselves, give it to the tree so that the user
     // could navigate it
-    m_treeCtrl->SetFocus();
+    if (m_treeCtrl)
+        m_treeCtrl->SetFocus();
 }
 
 void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
