@@ -220,21 +220,25 @@ public:
     void assign(size_type n);
     //@}
 
-    //@{
     /**
         Returns the last item of the list.
     */
     reference back() const;
-    const_reference back() const;
-    //@}
 
-    //@{
     /**
-        Returns a (const) iterator pointing to the beginning of the list.
+        Returns the last item of the list as a const reference.
+    */
+    const_reference back() const;
+
+    /**
+        Returns an iterator pointing to the beginning of the list.
     */
     iterator begin() const;
+
+    /**
+        Returns a const iterator pointing to the beginning of the list.
+    */
     const_iterator begin() const;
-    //@}
 
     /**
         Removes all items from the list.
@@ -246,40 +250,52 @@ public:
     */
     bool empty() const;
 
-    //@{
     /**
-        Returns a (const) iterator pointing at the end of the list.
+        Returns a const iterator pointing at the end of the list.
+    */
+    const_iterator end() const;
+
+    /**
+        Returns a iterator pointing at the end of the list.
     */
     iterator end() const;
-    const_iterator end() const;
-    //@}
 
-    //@{
     /**
-        Erases the items from @a first to @e last.
+        Erases the given item
     */
     iterator erase(const iterator& it);
+
+    /**
+        Erases the items from @e first to @e last.
+    */
     iterator erase(const iterator& first,
                    const iterator& last);
-    //@}
 
-    //@{
     /**
         Returns the first item in the list.
     */
     reference front() const;
-    const_reference front() const;
-    //@}
 
-    //@{
     /**
-        Inserts an item (or several) at the given position.
+        Returns the first item in the list as a const reference.
+    */
+    const_reference front() const;
+
+    /**
+        Inserts an item at the head of the list
     */
     iterator insert(const iterator& it);
+
+    /**
+        Inserts an item at the given position
+    */
     void insert(const iterator& it, size_type n);
+
+    /**
+        Inserts several items at the given position.
+    */
     void insert(const iterator& it, const_iterator first,
                 const const_iterator& last);
-    //@}
 
     /**
         Returns the largest possible size of the list.
@@ -297,42 +313,45 @@ public:
     void pop_front();
 
     /**
-        )
         Adds an item to end of the list.
     */
     void push_back();
 
     /**
-        )
         Adds an item to the front of the list.
     */
     void push_front();
 
-    //@{
     /**
-        Returns a (const) reverse iterator pointing to the beginning of the
+        Returns a reverse iterator pointing to the beginning of the
         reversed list.
     */
     reverse_iterator rbegin() const;
+
+    /**
+        Returns a const reverse iterator pointing to the beginning of the
+        reversed list.
+    */
     const_reverse_iterator rbegin() const;
-    //@}
 
     /**
         Removes an item from the list.
     */
     void remove(const_reference v);
 
-    //@{
     /**
-        Returns a (const) reverse iterator pointing to the end of the
+        Returns a reverse iterator pointing to the end of the
         reversed list.
     */
     reverse_iterator rend() const;
-    const_reverse_iterator rend() const;
-    //@}
 
     /**
-        )
+        Returns a const reverse iterator pointing to the end of the
+        reversed list.
+    */
+    const_reverse_iterator rend() const;
+
+    /**
         Resizes the list. If the the list is enlarges items with
         the value @e v are appended to the list.
     */
