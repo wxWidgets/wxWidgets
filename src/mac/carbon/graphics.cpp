@@ -2151,6 +2151,8 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         status = ::ATSUSetTransientFontMatching( atsuLayout , true );
         wxASSERT_MSG( status == noErr , wxT("couldn't setup transient font matching") );
 
+// new implementation from JS, keep old one just in case
+#if 0
         for ( int pos = 0; pos < (int)chars; pos ++ )
         {
             unsigned long actualNumberOfBounds = 0;
@@ -2166,7 +2168,31 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
             widths[pos] = FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x );
             //unsigned char uch = s[i];
         }
-
+#else
+        ATSLayoutRecord *layoutRecords = NULL;
+        ItemCount glyphCount = 0;
+        
+        // Get the glyph extents
+        OSStatus err = ::ATSUDirectGetLayoutDataArrayPtrFromTextLayout(atsuLayout,
+                                                                       0,
+                                                                       kATSUDirectDataLayoutRecordATSLayoutRecordCurrent,
+                                                                       (void **)
+                                                                       &layoutRecords,
+                                                                       &glyphCount);
+        wxASSERT(glyphCount == (text.length()+1));
+        
+        if ( err == noErr && glyphCount == (text.length()+1))
+        {
+            for ( int pos = 1; pos < (int)glyphCount ; pos ++ )
+            {
+                widths[pos-1] = FixedToInt( layoutRecords[pos].realPos );
+            }
+        }
+        
+        ::ATSUDirectReleaseLayoutDataArrayPtr(NULL,
+                                              kATSUDirectDataLayoutRecordATSLayoutRecordCurrent,
+                                              (void **) &layoutRecords);
+#endif
         ::ATSUDisposeTextLayout(atsuLayout);
     }
 #endif
