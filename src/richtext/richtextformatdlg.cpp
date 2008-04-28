@@ -102,6 +102,10 @@ bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxSt
 
     GetFormattingDialogFactory()->SetSheetStyle(this);
 
+#ifdef __WXMAC__
+    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif
+
     wxPropertySheetDialog::Create(parent, id, title, pos, sz,
         style | (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
     );
