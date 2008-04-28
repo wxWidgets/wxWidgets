@@ -472,12 +472,24 @@ void TextWindow::LogEvent(const wxChar *name, wxKeyEvent& event)
             if ( keycode < 256 )
             {
                 if ( keycode == 0 )
-                    key.Printf(_T("NUL"));
+                {
+#if wxUSE_UNICODE
+                    const wxChar u = event.GetUnicodeKey();
+                    if ( u )
+                        key.Printf(_T("Unicode char '%c' (U+%04x)"), u, u);
+                    else
+#endif
+                        key.Printf(_T("NUL"));
+                }
                 else if ( keycode < 27 )
+                {
                     key.Printf(_T("Ctrl-%c"),
                                 (unsigned char)(_T('A') + keycode - 1));
+                }
                 else
+                {
                     key.Printf(_T("'%c'"), (unsigned char)keycode);
+                }
             }
             else
             {
