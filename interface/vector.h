@@ -12,16 +12,16 @@
     wxVector<T> is a template class which implements most of the @c std::vector
     class and can be used like it.
 
-    If wxWidgets is compiled in STL mode, wxVector will just be a typedef to @c
-    std::vector. Just like for @c std::vector, objects stored in wxVector<T>
-    need to be @e assignable but don't have to be @e default constructible.
+    If wxWidgets is compiled in STL mode, wxVector will just be a typedef to
+    @c std::vector. Just like for @c std::vector, objects stored in wxVector<T>
+    need to be @e assignable but don't have to be @e "default constructible".
 
     Please refer to the STL documentation for further information.
 
     @nolibrary
     @category{containers}
 
-    @see @ref overview_container, wxList, wxArray
+    @see @ref overview_container, wxList<T>, wxArray<T>
 */
 template<typename T>
 class wxVector<T>
@@ -49,12 +49,12 @@ public:
     ~wxVector();
 
     /**
-        Returns item at position @e idx.
+        Returns item at position @a idx.
     */
     const value_type& at(size_type idx) const;
 
     /**
-        Returns item at position @e idx.
+        Returns item at position @a idx.
     */
     value_type& at(size_type idx);
 
@@ -115,8 +115,8 @@ public:
     /**
         Erase items in the range @a first to @a last (@a last is not erased).
 
-        @return Iterator pointing to the item immediately after the
-                erased range.
+        @return Iterator pointing to the item immediately after the erased
+                range.
     */
     iterator erase(iterator first, iterator last);
 
@@ -140,15 +140,15 @@ public:
     /**
         Assignment operator.
     */
-    wxVectorT& operator operator=(const wxVector<T>& vb);
+    wxVector& operator=(const wxVector& vb);
 
     /**
-        Returns item at position @e idx.
+        Returns item at position @a idx.
     */
     const value_type& operator[](size_type idx) const;
 
     /**
-        Returns item at position @e idx.
+        Returns item at position @a idx.
     */
     value_type& operator[](size_type idx);
 
@@ -168,5 +168,10 @@ public:
         @see capacity()
     */
     void reserve(size_type n);
+
+    /**
+        Returns the size of the vector.
+    */
+    size_type size() const;
 };
 

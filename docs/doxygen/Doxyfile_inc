@@ -200,6 +200,7 @@ ENABLED_SECTIONS       = WXPERL_MANUAL WXPYTHON_MANUAL
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
 SHOW_DIRECTORIES       = YES
+#SHOW_FILES             = NO   # Doxygen 1.5.6+
 FILE_VERSION_FILTER    =
 
 #---------------------------------------------------------------------------
@@ -314,7 +315,7 @@ GENERATE_XML           = NO # Only change in format output configs
 XML_OUTPUT             = xml
 XML_SCHEMA             =
 XML_DTD                =
-XML_PROGRAMLISTING     = YES
+XML_PROGRAMLISTING     = NO
 
 #---------------------------------------------------------------------------
 # configuration options for the AutoGen Definitions output

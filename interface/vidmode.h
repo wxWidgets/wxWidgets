@@ -13,7 +13,7 @@
     Determines the sizes and locations of displays connected to the system.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{misc}
 
     @stdobjects
     ::wxDefaultVideoMode
@@ -59,16 +59,25 @@ public:
     */
     bool IsOk() const;
 
-    /// The screen width in pixels (e.g. 640), 0 means unspecified.
+    /**
+        The screen width in pixels (e.g. 640), 0 means unspecified.
+    */
     int w;
 
-    /// The screen height in pixels (e.g. 480), 0 means unspecified.
+    /**
+        The screen height in pixels (e.g. 480), 0 means unspecified.
+    */
     int h;
 
-    /// Bits per pixel (e.g. 32), 1 is monochrome and 0 means unspecified/known.
+    /**
+        Bits per pixel (e.g. 32), 1 is monochrome and 0 means
+        unspecified/known.
+    */
     int bpp;
 
-    /// Refresh frequency in Hz, 0 means unspecified/unknown.
+    /**
+        Refresh frequency in Hz, 0 means unspecified/unknown.
+    */
     int refresh;
 };
 
@@ -76,3 +85,4 @@ public:
     A global wxVideoMode instance used by wxDisplay.
 */
 wxVideoMode wxDefaultVideoMode;
+

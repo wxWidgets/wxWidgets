@@ -86,7 +86,7 @@ thinking and calculating and will in almost all cases produce dialogs looking
 equally well on all platforms, the other is based on so-called constraints and
 is deprecated, though still available.
 
-Related Overviews: @ref overview_sizer, @ref overview_constraints
+Related Overviews: @ref overview_sizer
 
 These are the classes relevant to sizer-based layout:
 
@@ -99,11 +99,6 @@ These are the classes relevant to sizer-based layout:
 @li wxBoxSizer: A sizer for laying out windows in a row or column
 @li wxStaticBoxSizer: Same as wxBoxSizer, but with a surrounding static box
 @li wxWrapSizer: A sizer which wraps its child controls as size permits
-
-These are the classes relevant to constraints-based window layout:
-
-@li wxIndividualLayoutConstraint: Represents a single constraint dimension
-@li wxLayoutConstraints: Represents the constraints for a window class
 
 Other layout classes:
 
@@ -484,7 +479,7 @@ Related Overviews: @ref overview_validator
 
 @li wxApp: Application class
 @li wxCmdLineParser: Command line parser class
-@li wxDllLoader: Class to work with shared libraries.
+@li wxDynamicLibrary: Class to work with shared libraries.
 @li wxProcess: Process class
 
 
