@@ -116,7 +116,7 @@ private:
         }
     }
 
-    virtual void DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+    virtual void DoLogString(const wxString& szString, time_t WXUNUSED(t))
     {
         wxString msg;
         TimeStamp(&msg);
