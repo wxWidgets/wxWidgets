@@ -165,7 +165,7 @@ export LD_LIBRARY_PATH
 if { ccache -V; } >/dev/null 2>&amp;1; then
     CCACHE_DIR=$TOPDIR/ccache
     export CCACHE_DIR
-    ccache -M 90M
+    ccache -M 120M
 fi
 cd $BUILDDIR
 if [ -f wx-config ]; then
