@@ -79,7 +79,6 @@ void wxGCDC::SetGraphicsContext( wxGraphicsContext* ctx )
 wxGCDC::wxGCDC(const wxWindowDC& dc)
 {
     Init();
-    m_baseDC = (wxDC*)&dc;
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
 }
 
@@ -87,7 +86,6 @@ wxGCDC::wxGCDC(const wxWindowDC& dc)
 wxGCDC::wxGCDC(const wxMemoryDC& dc)
 {
     Init();
-    m_baseDC = (wxDC*)&dc;
     SetGraphicsContext( wxGraphicsContext::Create(dc) );
 }
 #endif    
@@ -104,7 +102,6 @@ void wxGCDC::Init()
     m_brush = *wxWHITE_BRUSH;
 
     m_graphicContext = NULL;
-    m_baseDC = NULL;
     m_logicalFunctionSupported = true;
 }
 
