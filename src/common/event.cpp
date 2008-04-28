@@ -1130,23 +1130,17 @@ bool wxEvtHandler::ProcessThreadEvent(const wxEvent& event)
 
 #endif // wxUSE_THREADS
 
-void wxEvtHandler::AddPendingEvent(const wxEvent& event)
+void wxEvtHandler::QueueEvent(wxEvent *event)
 {
-    // 1) Add event to list of pending events of this event handler
+    wxCHECK_RET( event, "NULL event can't be posted" );
 
-    wxEvent *eventCopy = event.Clone();
-
-    // we must be able to copy the events here so the event class must
-    // implement Clone() properly instead of just providing a NULL stab for it
-    wxCHECK_RET( eventCopy,
-                 _T("events of this type aren't supposed to be posted") );
-
+    // 1) Add this event to our list of pending events
     wxENTER_CRIT_SECT( m_pendingEventsLock );
 
     if ( !m_pendingEvents )
       m_pendingEvents = new wxList;
 
-    m_pendingEvents->Append(eventCopy);
+    m_pendingEvents->Append(event);
 
     wxLEAVE_CRIT_SECT( m_pendingEventsLock );
 

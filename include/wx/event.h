@@ -439,7 +439,7 @@ public:
 
     wxCommandEvent(const wxCommandEvent& event)
         : wxEvent(event),
-          m_cmdString(event.m_cmdString.c_str()), // "thread-safe"
+          m_cmdString(event.m_cmdString),
           m_commandInt(event.m_commandInt),
           m_extraLong(event.m_extraLong),
           m_clientData(event.m_clientData),
@@ -2276,7 +2276,9 @@ public:
     void SetEvtHandlerEnabled(bool enabled) { m_enabled = enabled; }
     bool GetEvtHandlerEnabled() const { return m_enabled; }
 
-    // process an event right now
+    // Process an event right now: this can only be called from the main
+    // thread, use QueueEvent() for scheduling the events for
+    // processing from other threads.
     virtual bool ProcessEvent(wxEvent& event);
 
     // Process an event by calling ProcessEvent and handling any exceptions
@@ -2285,8 +2287,25 @@ public:
     // wouldn't correctly propagate to wxEventLoop.
     bool SafelyProcessEvent(wxEvent& event);
 
-    // add an event to be processed later
-    virtual void AddPendingEvent(const wxEvent& event);
+    // Schedule the given event to be processed later. It takes ownership of
+    // the event pointer, i.e. it will be deleted later. This is safe to call
+    // from multiple threads although you still need to ensure that wxString
+    // fields of the event object are deep copies and not use the same string
+    // buffer as other wxString objects in this thread.
+    virtual void QueueEvent(wxEvent *event);
+
+    // Add an event to be processed later: notice that this function is not
+    // safe to call from threads other than main, use QueueEvent()
+    virtual void AddPendingEvent(const wxEvent& event)
+    {
+        // notice that the thread-safety problem comes from the fact that
+        // Clone() doesn't make deep copies of wxString fields of wxEvent
+        // object and so the same wxString could be used from both threads when
+        // the event object is destroyed in this one -- QueueEvent() avoids
+        // this problem as the event pointer is not used any more in this
+        // thread at all after it is called.
+        QueueEvent(event.Clone());
+    }
 
     void ProcessPendingEvents();
 
@@ -2491,13 +2510,25 @@ private:
 };
 #endif // wxUSE_WEAKREF
 
-// Post a message to the given eventhandler which will be processed during the
-// next event loop iteration
+// Post a message to the given event handler which will be processed during the
+// next event loop iteration.
+//
+// Notice that this one is not thread-safe, use wxQueueEvent()
 inline void wxPostEvent(wxEvtHandler *dest, const wxEvent& event)
 {
-    wxCHECK_RET( dest, wxT("need an object to post event to in wxPostEvent") );
+    wxCHECK_RET( dest, "need an object to post event to" );
 
     dest->AddPendingEvent(event);
+}
+
+// Wrapper around wxEvtHandler::QueueEvent(): adds an event for later
+// processing, unlike wxPostEvent it is safe to use from different thread even
+// for events with wxString members
+inline void wxQueueEvent(wxEvtHandler *dest, wxEvent *event)
+{
+    wxCHECK_RET( dest, "need an object to queue event for" );
+
+    dest->QueueEvent(event);
 }
 
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);

@@ -42,8 +42,9 @@ public:
     /**
         Returns a copy of the event.
 
-        Any event that is posted to the wxWidgets event system for later action (via
-        wxEvtHandler::AddPendingEvent or wxPostEvent()) must implement this method.
+        Any event that is posted to the wxWidgets event system for later action
+        (via wxEvtHandler::AddPendingEvent or wxPostEvent()) must implement
+        this method.
 
         All wxWidgets events fully implement this method, but any derived events
         implemented by the user should also implement this method just in case they
@@ -265,31 +266,72 @@ public:
     virtual ~wxEvtHandler();
 
     /**
-        This function posts an event to be processed later.
+        Queue event for a later processing.
 
-        The difference between sending an event (using the ProcessEvent
-        method) and posting it is that in the first case the event is
-        processed before the function returns, while in the second case,
-        the function returns immediately and the event will be processed
-        sometime later (usually during the next event loop iteration).
+        This method is similar to ProcessEvent() but while the latter is
+        synchronous, i.e. the event is processed immediately, before the
+        function returns, this one is asynchronous and returns immediately
+        while the event will be processed at some later time (usually during
+        the next event loop iteration).
 
-        A copy of event is made by the function, so the original can be deleted as
-        soon as function returns (it is common that the original is created on the
-        stack). This requires that the wxEvent::Clone method be implemented by event
-        so that it can be duplicated and stored until it gets processed.
+        Another important difference is that this method takes ownership of the
+        @a event parameter, i.e. it will delete it itself. This implies that
+        the event should be allocated on the heap and that the pointer can't be
+        used any more after the function returns (as it can be deleted at any
+        moment).
 
-        This is also the method to call for inter-thread communication - it will post
-        events safely between different threads which means that this method is
-        thread-safe by using critical sections where needed. In a multi-threaded program,
-        you often need to inform the main GUI thread about the status of other working
-        threads and such notification should be done using this method.
+        QueueEvent() can be used for inter-thread communication from the worker
+        threads to the main thread, it is safe in the sense that it uses
+        locking internally and avoids the problem mentioned in AddPendingEvent()
+        documentation by ensuring that the @a event object is not used by the
+        calling thread any more. Care should still be taken to avoid that some
+        fields of this object are used by it, notably any wxString members of
+        the event object must not be shallow copies of another wxString object
+        as this would result in them still using the same string buffer behind
+        the scenes. For example
+        @code
+            void FunctionInAWorkerThread(const wxString& str)
+            {
+                wxCommandEvent * const e = new wxCommandEvent;
 
-        This method automatically wakes up idle handling if the underlying window
-        system is currently idle and thus would not send any idle events.
-        (Waking up idle handling is done calling ::wxWakeUpIdle.)
+                // NOT e->SetString(str) as this would be a shallow copy
+                e->SetString(str.c_str()); // make a deep copy
+
+                wxTheApp->QueueEvent(new wxCommandEvent
+            }
+        @endcode
+
+        Finally notice that this method automatically wakes up the event loop
+        if it is currently idle by calling ::wxWakeUpIdle() so there is no need
+        to do it manually when using it.
+
+        @since 2.9.0
 
         @param event
-            Event to add to process queue.
+            A heap-allocated event to be queued, QueueEvent() takes ownership
+            of it. This parameter shouldn't be @c NULL.
+     */
+    virtual void QueueEvent(wxEvent *event);
+
+    /**
+        Post an event to be processed later.
+
+        This function is similar to QueueEvent() but can't be used to post
+        events from worker threads for the event objects with wxString fields
+        (i.e. in practice most of them) because of an unsafe use of the same
+        wxString object which happens because the wxString field in the
+        original @a event object and its copy made internally by this function
+        share the same string buffer internally. Use QueueEvent() to avoid
+        this. 
+
+        A copy of event is made by the function, so the original can be deleted
+        as soon as function returns (it is common that the original is created
+        on the stack). This requires that the wxEvent::Clone() method be
+        implemented by event so that it can be duplicated and stored until it
+        gets processed.
+
+        @param event
+            Event to add to the pending events queue.
     */
     virtual void AddPendingEvent(const wxEvent& event);
 
@@ -3264,11 +3306,29 @@ public:
 
     Otherwise, it dispatches @a event immediately using
     wxEvtHandler::ProcessEvent(). See the respective documentation for details
-    (and caveats).
+    (and caveats). Because of limitation of wxEvtHandler::AddPendingEvent()
+    this function is not thread-safe for event objects having wxString fields,
+    use wxQueueEvent() instead.
 
     @header{wx/event.h}
 */
-void wxPostEvent(wxEvtHandler* dest, wxEvent& event);
+void wxPostEvent(wxEvtHandler* dest, const wxEvent& event);
+
+/**
+    Queue an event for processing on the given object.
+
+    This is a wrapper around wxEvtHandler::QueueEvent(), see its documentation
+    for more details.
+
+    @header{wx/event.h}
+
+    @param dest
+        The object to queue the event on, can't be @c NULL.
+    @param event
+        The heap-allocated and non-@c NULL event to queue, the function takes
+        ownership of it.
+ */
+void wxQueueEvent(wxEvtHandler* dest, wxEvent *event);
 
 //@}
 
