@@ -1408,6 +1408,8 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
 
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
+    
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
@@ -1501,6 +1503,13 @@ void wxGDIPlusRenderer::Unload()
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
+{
+    EnsureIsLoaded();
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC());
+}
+
+wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
 {
     EnsureIsLoaded();
     wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );

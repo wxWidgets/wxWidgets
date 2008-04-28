@@ -1481,6 +1481,7 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
@@ -1560,6 +1561,16 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxWindowDC& dc)
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
 {
     return new wxCairoContext(this,dc);
+}
+
+wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
+{
+    const wxDCImpl *impl = dc.GetImpl();
+    cairo_t* context = (cairo_t*) impl->GetCairoContext();
+    if (context)
+       return new wxCairoContext(this,context);
+    else
+       return NULL;
 }
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * context )

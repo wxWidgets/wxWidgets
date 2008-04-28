@@ -2259,6 +2259,7 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
@@ -2351,6 +2352,16 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
         return new wxMacCoreGraphicsContext( this,
             (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
     }
+#endif
+    return NULL;
+}
+
+wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC& dc )
+{
+#ifdef __WXMAC__
+    const wxDCImpl* impl = dc.GetImpl();
+    
+    // TODO
 #endif
     return NULL;
 }

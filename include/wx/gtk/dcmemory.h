@@ -26,10 +26,6 @@ public:
     
     virtual ~wxMemoryDCImpl();
 
-#if wxUSE_GRAPHICS_CONTEXT
-    virtual wxGraphicsContext* CreateGraphicsContext();
-#endif
-
     // these get reimplemented for mono-bitmaps to behave
     // more like their Win32 couterparts. They now interpret
     // wxWHITE, wxWHITE_BRUSH and wxWHITE_PEN as drawing 0

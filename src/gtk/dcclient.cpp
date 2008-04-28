@@ -31,11 +31,6 @@
 
 #include <gdk/gdkx.h>
 
-#if wxUSE_GRAPHICS_CONTEXT
-#include "wx/graphics.h"
-#endif
-
-
 //-----------------------------------------------------------------------------
 // local defines
 //-----------------------------------------------------------------------------
@@ -369,14 +364,6 @@ wxWindowDCImpl::~wxWindowDCImpl()
     if (m_fontdesc)
         pango_font_description_free( m_fontdesc );
 }
-
-#if wxUSE_GRAPHICS_CONTEXT
-wxGraphicsContext* wxWindowDCImpl::CreateGraphicsContext()
-{
-    wxWindowDC *windowdc = (wxWindowDC*) GetOwner();
-    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext( *windowdc );
-}
-#endif
 
 void wxWindowDCImpl::SetUpDC( bool isMemDC )
 {

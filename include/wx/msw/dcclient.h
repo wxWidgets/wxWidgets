@@ -43,10 +43,6 @@ public:
     // Create a DC corresponding to the whole window
     wxWindowDCImpl( wxDC *owner, wxWindow *win );
 
-#if wxUSE_GRAPHICS_CONTEXT
-    virtual wxGraphicsContext* CreateGraphicsContext();
-#endif
-
     virtual void DoGetSize(int *width, int *height) const;
 
 protected:

@@ -790,12 +790,17 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 #endif
 }
 
-wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc) 
+/* static */ wxGraphicsContext* wxGraphicsContext::Create( const wxWindowDC& dc) 
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }
 
-wxGraphicsContext* wxGraphicsContext::Create( const wxMemoryDC& dc) 
+/* static */ wxGraphicsContext* wxGraphicsContext::Create( const wxMemoryDC& dc) 
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
+}
+
+/* static */ wxGraphicsContext* wxGraphicsContext::Create( const wxPrinterDC& dc) 
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(dc);
 }

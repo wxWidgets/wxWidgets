@@ -33,10 +33,6 @@
     #include "wx/window.h"
 #endif
 
-#if wxUSE_GRAPHICS_CONTEXT
-#include "wx/graphics.h"
-#endif
-
 #include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
@@ -121,14 +117,6 @@ void wxWindowDCImpl::InitDC()
     InitializePalette();
 #endif
 }
-
-#if wxUSE_GRAPHICS_CONTEXT
-wxGraphicsContext* wxWindowDCImpl::CreateGraphicsContext()
-{
-    wxWindowDC *windowdc = (wxWindowDC*) GetOwner();
-    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext( *windowdc );
-}
-#endif
 
 void wxWindowDCImpl::DoGetSize(int *width, int *height) const
 {

@@ -227,9 +227,7 @@ public:
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 
-#if wxUSE_GRAPHICS_CONTEXT
-    virtual wxGraphicsContext* CreateGraphicsContext();
-#endif
+    virtual void* GetCairoContext() const;
 
     bool CanDrawBitmap() const { return true; }
     void Clear();

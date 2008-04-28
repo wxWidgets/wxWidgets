@@ -32,10 +32,6 @@
     #include "wx/log.h"
 #endif
 
-#if wxUSE_GRAPHICS_CONTEXT
-#include "wx/graphics.h"
-#endif
-
 #include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
@@ -81,14 +77,6 @@ void wxMemoryDCImpl::Init()
         ::SetBkMode( GetHdc(), TRANSPARENT );
     }
 }
-
-#if wxUSE_GRAPHICS_CONTEXT
-wxGraphicsContext* wxMemoryDCImpl::CreateGraphicsContext()
-{
-    wxMemoryDC *memdc = (wxMemoryDC*) GetOwner();
-    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext( *memdc );
-}
-#endif
 
 bool wxMemoryDCImpl::CreateCompatible(wxDC *dc)
 {

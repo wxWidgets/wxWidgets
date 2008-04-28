@@ -192,9 +192,9 @@ public:
     @wxheader{graphics.h}
 
     A wxGraphicsContext instance is the object that is drawn upon. It is created by
-    a renderer using the CreateContext calls.., this can be either directly using a renderer
-    instance, or indirectly using the static convenience CreateXXX functions of
-    wxGraphicsContext that always delegate the task to the default renderer.
+    a renderer using wxGraphicsRenderer::CreateContext(). This can be either directly
+    using a renderer instance, or indirectly using the static convenience Create()
+    functions of wxGraphicsContext that always delegate the task to the default renderer.
 
     @code
     void MyCanvas::OnPaint(wxPaintEvent &event)
@@ -203,11 +203,11 @@ public:
         wxPaintDC dc(this);
         
         // Create graphics context from it
-        wxGraphicsContext *gc = dc.CreateGraphicsContext();
+        wxGraphicsContext *gc = wxGraphicsContext::CreateContext( dc );
     
         if (gc)
         {
-            // make a path that contains a circle and some lines, centered at 100,100
+            // make a path that contains a circle and some lines
             gc->SetPen( *wxRED_PEN );
             wxGraphicsPath path = gc->CreatePath();
             path.AddCircle( 50.0, 50.0, 50.0 );
@@ -234,28 +234,49 @@ public:
 class wxGraphicsContext : public wxGraphicsObject
 {
 public:
-    //@{
+    /**
+        Creates a wxGraphicsContext from a wxWindow.
+
+        @see wxGraphicsRenderer::CreateContext()
+    */
+    static wxGraphicsContext* Create( wxWindow* window ) ;
+    
+    /**
+        Creates a wxGraphicsContext from a wxWindowDC
+
+        @see wxGraphicsRenderer::CreateContext()
+    */
+    static wxGraphicsContext* Create( const wxWindowDC& dc) ;
+    
+    /**
+        Creates a wxGraphicsContext from a wxMemoryDC
+
+        @see wxGraphicsRenderer::CreateContext()
+    */
+    static wxGraphicsContext * Create( const wxMemoryDC& dc) ;
+    
+    /**
+        Creates a wxGraphicsContext from a wxPrinterDC
+
+        @see wxGraphicsRenderer::CreateContext()
+    */
+    static wxGraphicsContext * Create( const wxPrinterDC& dc) ;
+
+    /**
+        Clips drawings to the region
+    */
+    void Clip(const wxRegion& region);
+
     /**
         Clips drawings to the rectangle.
     */
-    void Clip(const wxRegion& region);
     void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h);
-    //@}
 
     /**
         Concatenates the passed in transform with the current transform of this context
     */
     void ConcatTransform(const wxGraphicsMatrix& matrix);
 
-    //@{
-    /**
-        Creates a wxGraphicsContext from a wxWindow.
-
-        @see wxGraphicsRenderer:: CreateContext
-    */
-    wxGraphicsContext* Create(const wxWindowDC& dc);
-    wxGraphicsContext* Create(wxWindow* window);
-    //@}
 
     /**
         Creates a native brush from a wxBrush.

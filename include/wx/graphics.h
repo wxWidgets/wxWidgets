@@ -21,6 +21,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
+class WXDLLIMPEXP_FWD_CORE wxPrinterDC;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsContext;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsPath;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsMatrix;
@@ -277,6 +278,7 @@ public:
     
     static wxGraphicsContext* Create( const wxWindowDC& dc) ;
     static wxGraphicsContext * Create( const wxMemoryDC& dc) ;
+    static wxGraphicsContext * Create( const wxPrinterDC& dc) ;
 
     static wxGraphicsContext* CreateFromNative( void * context ) ;
 
@@ -543,6 +545,7 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) = 0 ;
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) = 0 ;
     
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
 

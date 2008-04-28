@@ -42,11 +42,6 @@ class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 class WXDLLIMPEXP_FWD_CORE wxPrinterDC;
 class WXDLLIMPEXP_FWD_CORE wxPrintData;
 
-
-#if wxUSE_GRAPHICS_CONTEXT
-class WXDLLIMPEXP_FWD_CORE wxGraphicsContext;
-#endif
-
 //-----------------------------------------------------------------------------
 // wxDrawObject helper class
 //-----------------------------------------------------------------------------
@@ -187,14 +182,11 @@ public:
     virtual bool CanDrawBitmap() const = 0;
     virtual bool CanGetTextExtent() const = 0;
 
-    // get graphics context from 
-
-#if wxUSE_GRAPHICS_CONTEXT
-    virtual wxGraphicsContext* CreateGraphicsContext()
+    // get Cairo context
+    virtual void* GetCairoContext() const
     {
         return NULL;
     }
-#endif
 
     // query dimension, colour deps, resolution
 
@@ -633,11 +625,6 @@ public:
 
     bool IsOk() const
         { return m_pimpl && m_pimpl->IsOk(); }
-
-#if wxUSE_GRAPHICS_CONTEXT
-    wxGraphicsContext* CreateGraphicsContext()
-        { return m_pimpl->CreateGraphicsContext(); }
-#endif
 
     // query capabilities
 

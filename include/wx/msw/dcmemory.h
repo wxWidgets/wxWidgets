@@ -22,10 +22,6 @@ public:
     wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap );
     wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc ); // Create compatible DC
 
-#if wxUSE_GRAPHICS_CONTEXT
-    virtual wxGraphicsContext* CreateGraphicsContext();
-#endif
-
     // override some base class virtuals
     virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     virtual void DoGetSize(int* width, int* height) const;
