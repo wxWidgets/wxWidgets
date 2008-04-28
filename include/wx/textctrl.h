@@ -615,9 +615,10 @@ public:
     wxTextCtrl& operator<<(const wxString& s);
     wxTextCtrl& operator<<(int i);
     wxTextCtrl& operator<<(long i);
-    wxTextCtrl& operator<<(float f);
+    wxTextCtrl& operator<<(float f) { return *this << double(f); }
     wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(const wxChar c);
+    wxTextCtrl& operator<<(char c) { return *this << wxString(c); }
+    wxTextCtrl& operator<<(wchar_t c) { return *this << wxString(c); }
 
     // insert the character which would have resulted from this key event,
     // return true if anything has been inserted

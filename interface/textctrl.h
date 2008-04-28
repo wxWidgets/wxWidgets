@@ -1319,14 +1319,15 @@ public:
 
     //@{
     /**
-        Operator definitions for appending to a text control, for example:
+        Operator definitions for appending to a text control.
     */
-    wxTextCtrl operator(const wxString& s);
-    wxTextCtrl operator(int i);
-    wxTextCtrl operator(long i);
-    wxTextCtrl operator(float f);
-    wxTextCtrl operator(double d);
-    wxTextCtrl operator(char c);
+    wxTextCtrl& operator<<(const wxString& s);
+    wxTextCtrl& operator<<(int i);
+    wxTextCtrl& operator<<(long i);
+    wxTextCtrl& operator<<(float f);
+    wxTextCtrl& operator<<(double d);
+    wxTextCtrl& operator<<(char c);
+    wxTextCtrl& operator<<(wchar_t c);
     //@}
 };
 

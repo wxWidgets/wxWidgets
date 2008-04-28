@@ -772,41 +772,19 @@ wxTextCtrl& wxTextCtrlBase::operator<<(const wxString& s)
     return *TEXTCTRL(this);
 }
 
-wxTextCtrl& wxTextCtrlBase::operator<<(float f)
-{
-    wxString str;
-    str.Printf(wxT("%.2f"), f);
-    AppendText(str);
-    return *TEXTCTRL(this);
-}
-
 wxTextCtrl& wxTextCtrlBase::operator<<(double d)
 {
-    wxString str;
-    str.Printf(wxT("%.2f"), d);
-    AppendText(str);
-    return *TEXTCTRL(this);
+    return *this << wxString::Format("%.2f", d);
 }
 
 wxTextCtrl& wxTextCtrlBase::operator<<(int i)
 {
-    wxString str;
-    str.Printf(wxT("%d"), i);
-    AppendText(str);
-    return *TEXTCTRL(this);
+    return *this << wxString::Format("%d", i);
 }
 
-wxTextCtrl& wxTextCtrlBase::operator<<(long i)
+wxTextCtrl& wxTextCtrlBase::operator<<(long l)
 {
-    wxString str;
-    str.Printf(wxT("%ld"), i);
-    AppendText(str);
-    return *TEXTCTRL(this);
-}
-
-wxTextCtrl& wxTextCtrlBase::operator<<(const wxChar c)
-{
-    return operator<<(wxString(c));
+    return *this << wxString::Format("%ld", l);
 }
 
 // ----------------------------------------------------------------------------
