@@ -325,6 +325,7 @@ class WXDLLIMPEXP_CORE wxCairoContext : public wxGraphicsContext
 public:
     wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc );
     wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
+    wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc );
 #ifdef __WXGTK__
     wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable );
 #endif
@@ -1034,13 +1035,56 @@ public :
     bool m_offset;
 } ;
 
+wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc )
+: wxGraphicsContext(renderer)
+{
+#ifdef __WXGTK20__
+    const wxDCImpl *impl = dc.GetImpl();
+    Init( (cairo_t*) impl->GetCairoContext() );
+
+#if 0 
+    wxGraphicsMatrix matrix = CreateMatrix();
+    
+    wxPoint org = dc.GetDeviceOrigin();
+    matrix.Translate( org.x, org.y );
+    
+    org = dc.GetLogicalOrigin();
+    matrix.Translate( -org.x, -org.y );
+
+    double sx,sy;
+    dc.GetUserScale( &sx, &sy );
+    matrix.Scale( sx, sy );
+
+    ConcatTransform( matrix );
+#endif
+
+#endif
+}
+
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
 : wxGraphicsContext(renderer)
 {
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
+    
+#if 0 
+    wxGraphicsMatrix matrix = CreateMatrix();
+    
+    wxPoint org = dc.GetDeviceOrigin();
+    matrix.Translate( org.x, org.y );
+    
+    org = dc.GetLogicalOrigin();
+    matrix.Translate( -org.x, -org.y );
+
+    double sx,sy;
+    dc.GetUserScale( &sx, &sy );
+    matrix.Scale( sx, sy );
+
+    ConcatTransform( matrix );
 #endif
+#endif
+
 #ifdef __WXMAC__
     int width, height;
     dc.GetSize( &width, &height );
@@ -1054,10 +1098,27 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
 : wxGraphicsContext(renderer)
 {
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
     wxGTKDCImpl *impldc = (wxGTKDCImpl*) dc.GetImpl();
     Init( gdk_cairo_create( impldc->GetGDKWindow() ) );
+    
+#if 0 
+    wxGraphicsMatrix matrix = CreateMatrix();
+    
+    wxPoint org = dc.GetDeviceOrigin();
+    matrix.Translate( org.x, org.y );
+    
+    org = dc.GetLogicalOrigin();
+    matrix.Translate( -org.x, -org.y );
+
+    double sx,sy;
+    dc.GetUserScale( &sx, &sy );
+    matrix.Scale( sx, sy );
+
+    ConcatTransform( matrix );
 #endif
+#endif
+
 #ifdef __WXMAC__
     int width, height;
     dc.GetSize( &width, &height );
@@ -1068,7 +1129,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 }
 
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawable )
 : wxGraphicsContext(renderer)
 {
@@ -1565,11 +1626,13 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
 
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 {
+#ifdef __WXGTK20__
     const wxDCImpl *impl = dc.GetImpl();
     cairo_t* context = (cairo_t*) impl->GetCairoContext();
     if (context)
-       return new wxCairoContext(this,context);
+       return new wxCairoContext(this,dc);
     else
+#endif
        return NULL;
 }
 
