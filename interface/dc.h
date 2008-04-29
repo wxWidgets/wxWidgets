@@ -11,38 +11,36 @@
     @wxheader{dc.h}
 
     A wxDC is a @e "device context" onto which graphics and text can be drawn.
-    It is intended to represent a number of output devices in a generic way, so
-    a window can have a device context associated with it, and a printer also
-    has a device context. In this way, the same piece of code may write to a
-    number of different devices, if the device context is used as a parameter.
+    It is intended to represent different output devices and offers a common
+    abstract API for drawing on any of them.
     
-    wxWidgets offers alternative drawing classes based on the modern drawing
+    wxWidgets offers an alternative drawing API based on the modern drawing
     backends GDI+, CoreGraphics and Cairo. See wxGraphicsContext, wxGraphicsRenderer
     and related classes.
 
-    Notice that wxDC is an abstract base class and can't be created directly,
-    please use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or
+    wxDC is an abstract base class and cannot be created directly.
+    Use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or
     wxPrinterDC.
 
-    Please note that in addition to the versions of the methods documented
-    here, there are also versions which accept single wxPoint parameter instead
-    of two wxCoord ones or wxPoint and wxSize instead of four of them.
+    In addition to the versions of the methods documented below, there
+    are also versions which accept single wxPoint parameter instead
+    of the two wxCoord ones or wxPoint and wxSize instead of the four
+    wxCoord parameters.
 
-    @note Beginning with wxWidgets 2.9.0 the entire wxDC code has been
-          reorganized. All platform dependent code (actual all drawing code)
-          has been moved into backend classes which derive from a common
-          wxDCImpl class. The user-visible classes such as wxClientDC and
-          wxPaintDC merely forward all calls to the backend implementation.
+    Beginning with wxWidgets 2.9.0 the entire wxDC code has been
+    reorganized. All platform dependent code (actually all drawing code)
+    has been moved into backend classes which derive from a common
+    wxDCImpl class. The user-visible classes such as wxClientDC and
+    wxPaintDC merely forward all calls to the backend implementation.
 
-    @section dc_alpha Support for Transparency / Alpha Channel
-
-    On Mac OS X colors with alpha are supported. Instances wxPen or wxBrush
-    that are built from wxColour use the color's alpha values when stroking or filling.
+    On Mac OS X colours with alpha channel are supported. Instances wxPen
+    or wxBrush that are built from wxColour use the colour's alpha values
+    when stroking or filling.
 
     @library{wxcore}
     @category{dc,gdi}
 
-    @see @ref overview_dc
+    @see @ref overview_dc, wxGraphicsContext
 
     @todo Precise definition of default/initial state.
     @todo Pixelwise definition of operations (e.g. last point of a line not
