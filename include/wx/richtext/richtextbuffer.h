@@ -70,6 +70,14 @@
 #include "wx/dataobj.h"
 #endif
 
+// Setting wxRICHTEXT_USE_OWN_CARET to 1 implements a non-flashing
+// cursor reliably without using wxClientDC in case there
+// are platform-specific problems with the generic caret.
+#define wxRICHTEXT_USE_OWN_CARET 0
+
+// Switch off for binary compatibility, on for faster drawing
+#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 0
+
 /*!
  * Special characters
  */
@@ -284,9 +292,6 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
  */
 
 #define wxSCRIPT_MUL_FACTOR             1.5
-
-// Switch off for binary compatibility, on for faster drawing
-#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 0
 
 /*!
  * wxRichTextRange class declaration
