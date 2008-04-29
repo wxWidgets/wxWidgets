@@ -52,6 +52,9 @@
     int snprintf(char *str, size_t size, const char *format, ...);
 #endif /* !HAVE_SNPRINTF_DECL */
 
+#ifdef __WATCOMC__
+    #define HAVE_VSSCANF_DECL
+#endif
 #if defined(HAVE_VSSCANF) && !defined(HAVE_VSSCANF_DECL)
 #ifdef __cplusplus
     extern "C"
