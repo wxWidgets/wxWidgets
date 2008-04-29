@@ -292,12 +292,12 @@ public:
         @code
             void FunctionInAWorkerThread(const wxString& str)
             {
-                wxCommandEvent * const e = new wxCommandEvent;
+                wxCommandEvent* evt = new wxCommandEvent;
 
-                // NOT e->SetString(str) as this would be a shallow copy
-                e->SetString(str.c_str()); // make a deep copy
+                // NOT evt->SetString(str) as this would be a shallow copy
+                evt->SetString(str.c_str()); // make a deep copy
 
-                wxTheApp->QueueEvent(new wxCommandEvent
+                wxTheApp->QueueEvent( evt );
             }
         @endcode
 

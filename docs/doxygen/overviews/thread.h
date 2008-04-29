@@ -45,7 +45,7 @@ Win32 a thread can only access GDI objects such as pens, brushes, c created by
 itself and not by the other threads).
 
 For communication between secondary threads and the main thread, you may use
-wxEvtHandler::AddPendingEvent or its short version wxPostEvent. These functions
+wxEvtHandler::QueueEvent or its short version ::wxQueueEvent. These functions
 have a thread-safe implementation so that they can be used as they are for
 sending events from one thread to another. However there is no built in method
 to send messages to the worker threads and you will need to use the available
