@@ -23,6 +23,7 @@
     #include "wx/icon.h"
 #endif
 
+
 #ifdef __MSL__
     #if __MSL__ >= 0x6000
         #include "math.h"
@@ -34,6 +35,7 @@
 
 #ifdef __WXMAC__
     #include "wx/mac/uma.h"
+    #include "wx/mac/dcprint.h"
 #else
     #include "CoreServices/CoreServices.h"
     #include "ApplicationServices/ApplicationServices.h"
@@ -2360,8 +2362,14 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxPrinterDC&
 {
 #ifdef __WXMAC__
     const wxDCImpl* impl = dc.GetImpl();
-    
-    // TODO
+    wxPrinterDCImpl *print_impl = wxDynamicCast( impl, wxPrinterDCImpl );
+    if (print_impl)
+    {
+        int w, h;
+        print_impl->GetSize( &w, &h );
+        return new wxMacCoreGraphicsContext( this,
+            (CGContextRef)(print_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
+    }
 #endif
     return NULL;
 }
