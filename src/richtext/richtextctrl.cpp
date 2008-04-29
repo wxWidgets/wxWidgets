@@ -56,6 +56,69 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_BUFFER_RESET)
 
+#if wxRICHTEXT_USE_OWN_CARET
+
+/*!
+ * wxRichTextCaret
+ *
+ * This implements a non-flashing cursor in case there
+ * are platform-specific problems with the generic caret.
+ * wxRICHTEXT_USE_OWN_CARET is set in richtextbuffer.h.
+ */
+
+class wxRichTextCaret: public wxCaret
+{
+public:
+    // ctors
+    // -----
+        // default - use Create()
+    wxRichTextCaret() { Init(); }
+        // creates a block caret associated with the given window
+    wxRichTextCaret(wxRichTextCtrl *window, int width, int height)
+        : wxCaret(window, width, height) { Init(); m_richTextCtrl = window; }
+    wxRichTextCaret(wxRichTextCtrl *window, const wxSize& size)
+        : wxCaret(window, size) { Init(); m_richTextCtrl = window; }
+
+    virtual ~wxRichTextCaret();
+
+    // implementation
+    // --------------
+
+    // called by wxWindow (not using the event tables)
+    virtual void OnSetFocus();
+    virtual void OnKillFocus();
+
+    // draw the caret on the given DC
+    void DoDraw(wxDC *dc);
+
+    // get the visible count
+    int GetVisibleCount() const { return m_countVisible; }
+
+    // delay repositioning
+    bool GetNeedsUpdate() const { return m_needsUpdate; }
+    void SetNeedsUpdate(bool needsUpdate = true ) { m_needsUpdate = needsUpdate; }
+
+protected:
+    virtual void DoShow();
+    virtual void DoHide();
+    virtual void DoMove();
+    virtual void DoSize();
+
+    // refresh the caret
+    void Refresh();
+
+private:
+    void Init();
+
+    int           m_xOld,
+                  m_yOld;
+    bool          m_hasFocus;       // true => our window has focus
+    bool          m_needsUpdate;    // must be repositioned
+
+    wxRichTextCtrl* m_richTextCtrl;
+};
+#endif
+
 IMPLEMENT_CLASS( wxRichTextCtrl, wxControl )
 
 IMPLEMENT_CLASS( wxRichTextEvent, wxNotifyEvent )
@@ -168,8 +231,11 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     GetBuffer().Reset();
     GetBuffer().SetRichTextCtrl(this);
 
+#if wxRICHTEXT_USE_OWN_CARET
+    SetCaret(new wxRichTextCaret(this, wxRICHTEXT_DEFAULT_CARET_WIDTH, 16));
+#else
     SetCaret(new wxCaret(this, wxRICHTEXT_DEFAULT_CARET_WIDTH, 16));
-    GetCaret()->Show();
+#endif
 
     // Tell the sizers to use the given or best size
     SetInitialSize(size);
@@ -250,8 +316,10 @@ void wxRichTextCtrl::Clear()
 /// Painting
 void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    if (GetCaret() && GetCaret()->IsVisible())
+#if !wxRICHTEXT_USE_OWN_CARET
+    if (GetCaret() && !IsFrozen())
         GetCaret()->Hide();
+#endif
 
     {
 #if wxRICHTEXT_BUFFERED_PAINTING
@@ -284,12 +352,19 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         }
 
         GetBuffer().Draw(dc, GetBuffer().GetRange(), GetInternalSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
+#if wxRICHTEXT_USE_OWN_CARET
+        if (GetCaret()->IsVisible())
+        {
+            ((wxRichTextCaret*) GetCaret())->DoDraw(& dc);
+        }
+#endif
     }
 
-    if (GetCaret() && !GetCaret()->IsVisible())
+#if !wxRICHTEXT_USE_OWN_CARET
+    if (GetCaret())
         GetCaret()->Show();
-
     PositionCaret();
+#endif
 }
 
 // Empty implementation, to prevent flicker
@@ -301,22 +376,33 @@ void wxRichTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
 {
     if (GetCaret())
     {
-        if (!GetCaret()->IsVisible())
-            GetCaret()->Show();
+#if !wxRICHTEXT_USE_OWN_CARET
         PositionCaret();
+#endif
+        GetCaret()->Show();
     }
 
-    // if (!IsFrozen())
-    //    Refresh(false);
+#if defined(__WXGTK__) && !wxRICHTEXT_USE_OWN_CARET
+    // Work around dropouts when control is focused
+    if (!IsFrozen())
+    {
+        Refresh(false);
+    }
+#endif
 }
 
 void wxRichTextCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
 {
-    if (GetCaret() && GetCaret()->IsVisible())
+    if (GetCaret())
         GetCaret()->Hide();
 
-    // if (!IsFrozen())
-    //    Refresh(false);
+#if defined(__WXGTK__) && !wxRICHTEXT_USE_OWN_CARET
+    // Work around dropouts when control is focused
+    if (!IsFrozen())
+    {
+        Refresh(false);
+    }
+#endif
 }
 
 void wxRichTextCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
@@ -1138,7 +1224,9 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
         }
     }
 
+#if !wxRICHTEXT_USE_OWN_CARET
     if (scrolled)
+#endif
         PositionCaret();
 
     return scrolled;
@@ -1749,6 +1837,15 @@ void wxRichTextCtrl::OnSize(wxSizeEvent& event)
 /// Idle-time processing
 void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
 {
+#if wxRICHTEXT_USE_OWN_CARET
+    if (((wxRichTextCaret*) GetCaret())->GetNeedsUpdate())
+    {
+        ((wxRichTextCaret*) GetCaret())->SetNeedsUpdate(false);
+        PositionCaret();
+        GetCaret()->Show();
+    }
+#endif
+
     const int layoutInterval = wxRICHTEXT_DEFAULT_LAYOUT_INTERVAL;
 
     if (m_fullLayoutRequired && (wxGetLocalTimeMillis() > (m_fullLayoutTime + layoutInterval)))
@@ -1774,7 +1871,14 @@ void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
 /// Scrolling
 void wxRichTextCtrl::OnScroll(wxScrollWinEvent& event)
 {
-    // Not used
+#if wxRICHTEXT_USE_OWN_CARET
+    if (!((wxRichTextCaret*) GetCaret())->GetNeedsUpdate())
+    {
+        GetCaret()->Hide();
+        ((wxRichTextCaret*) GetCaret())->SetNeedsUpdate();
+    }
+#endif
+
     event.Skip();
 }
 
@@ -2694,8 +2798,11 @@ void wxRichTextCtrl::PositionCaret()
         wxPoint pt = GetPhysicalPoint(newPt);
         if (GetCaret()->GetPosition() != pt || GetCaret()->GetSize() != newSz)
         {
+            GetCaret()->Hide();
+            if (GetCaret()->GetSize() != newSz)
+                GetCaret()->SetSize(newSz);
             GetCaret()->Move(pt);
-            GetCaret()->SetSize(newSz);
+            GetCaret()->Show();
         }
     }
 }
@@ -3236,6 +3343,128 @@ bool wxRichTextCtrl::RefreshForSelectionChange(const wxRichTextRange& oldSelecti
 
     return true;
 }
+
+#if wxRICHTEXT_USE_OWN_CARET
+
+// ----------------------------------------------------------------------------
+// initialization and destruction
+// ----------------------------------------------------------------------------
+
+void wxRichTextCaret::Init()
+{
+    m_hasFocus = true;
+
+    m_xOld =
+    m_yOld = -1;
+    m_richTextCtrl = NULL;
+    m_needsUpdate = false;
+}
+
+wxRichTextCaret::~wxRichTextCaret()
+{
+}
+
+// ----------------------------------------------------------------------------
+// showing/hiding/moving the caret (base class interface)
+// ----------------------------------------------------------------------------
+
+void wxRichTextCaret::DoShow()
+{
+    Refresh();
+}
+
+void wxRichTextCaret::DoHide()
+{
+    Refresh();
+}
+
+void wxRichTextCaret::DoMove()
+{
+    if (IsVisible())
+    {
+        Refresh();
+
+        if (m_xOld != -1 && m_yOld != -1)
+        {
+            if (m_richTextCtrl)
+            {
+                wxRect rect(GetPosition(), GetSize());
+                m_richTextCtrl->RefreshRect(rect, false);
+            }
+        }
+    }
+
+    m_xOld = m_x;
+    m_yOld = m_y;
+}
+
+void wxRichTextCaret::DoSize()
+{
+    int countVisible = m_countVisible;
+    if (countVisible > 0)
+    {
+        m_countVisible = 0;
+        DoHide();
+    }
+
+    if (countVisible > 0)
+    {
+        m_countVisible = countVisible;
+        DoShow();
+    }
+}
+
+// ----------------------------------------------------------------------------
+// handling the focus
+// ----------------------------------------------------------------------------
+
+void wxRichTextCaret::OnSetFocus()
+{
+    m_hasFocus = true;
+
+    if ( IsVisible() )
+        Refresh();
+}
+
+void wxRichTextCaret::OnKillFocus()
+{
+    m_hasFocus = false;
+}
+
+// ----------------------------------------------------------------------------
+// drawing the caret
+// ----------------------------------------------------------------------------
+
+void wxRichTextCaret::Refresh()
+{
+    if (m_richTextCtrl)
+    {
+        wxRect rect(GetPosition(), GetSize());
+        m_richTextCtrl->RefreshRect(rect, false);
+    }
+}
+
+void wxRichTextCaret::DoDraw(wxDC *dc)
+{
+    dc->SetPen( *wxBLACK_PEN );
+
+    dc->SetBrush(*(m_hasFocus ? wxBLACK_BRUSH : wxTRANSPARENT_BRUSH));
+    dc->SetPen(*wxBLACK_PEN);
+
+    // VZ: unfortunately, the rectangle comes out a pixel smaller when this is
+    //     done under wxGTK - no idea why
+    //dc->SetLogicalFunction(wxINVERT);
+
+    wxPoint pt(m_x, m_y);
+
+    if (m_richTextCtrl)
+    {
+        pt = m_richTextCtrl->GetLogicalPoint(pt);
+    }
+    dc->DrawRectangle(pt.x, pt.y, m_width, m_height);
+}
+#endif
+    // wxRICHTEXT_USE_OWN_CARET
 
 #endif
     // wxUSE_RICHTEXT

@@ -6922,6 +6922,9 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
 #endif
                 m_ctrl->Refresh(false);
 
+#if wxRICHTEXT_USE_OWN_CARET
+            m_ctrl->PositionCaret();
+#endif
             if (sendUpdateEvent)
                 wxTextCtrl::SendTextUpdatedEvent(m_ctrl);
         }
@@ -7070,6 +7073,9 @@ bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
 {
     if (!range.IsWithin(GetRange()))
         return false;
+
+    if (!m_image.Ok())
+        ((wxRichTextImage*) this)->LoadFromBlock();
 
     if (partialExtents)
     {

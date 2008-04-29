@@ -74,6 +74,14 @@
 #define wxRichTextAttr wxTextAttr
 #define wxTextAttrEx wxTextAttr
 
+// Setting wxRICHTEXT_USE_OWN_CARET to 1 implements a non-flashing
+// cursor reliably without using wxClientDC in case there
+// are platform-specific problems with the generic caret.
+#define wxRICHTEXT_USE_OWN_CARET 0
+
+// Switch off for binary compatibility, on for faster drawing
+#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 1
+
 /*!
  * Special characters
  */
@@ -209,9 +217,6 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
  */
 
 #define wxSCRIPT_MUL_FACTOR             1.5
-
-// Leave on for faster drawing, by storing the length of each object in a line
-#define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 1
 
 /*!
  * wxRichTextFontTable
