@@ -203,7 +203,7 @@ public:
         wxPaintDC dc(this);
         
         // Create graphics context from it
-        wxGraphicsContext *gc = wxGraphicsContext::CreateContext( dc );
+        wxGraphicsContext *gc = wxGraphicsContext::Create( dc );
     
         if (gc)
         {
@@ -218,9 +218,9 @@ public:
             path.CloseSubpath();
             path.AddRectangle(25.0, 25.0, 50.0, 50.0);
         
-           gc->StrokePath(path);
+            gc->StrokePath(path);
         
-           delete gc;
+            delete gc;
         }
     }
     @endcode
@@ -515,7 +515,18 @@ public:
     @wxheader{graphics.h}
 
     A wxGraphicsRenderer is the instance corresponding to the rendering engine
-    used. There may be multiple instances on a system, if there are different rendering engines present, but there is always one instance per engine, eg there is ONE core graphics renderer instance on OSX. This instance is pointed back to by all objects created by it (wxGraphicsContext, wxGraphicsPath etc). Therefore you can create ag additional instances of paths etc. by calling GetRenderer() and then using the appropriate CreateXXX function.
+    used. There may be multiple instances on a system, if there are different
+    rendering engines present, but there is always only one instance per engine.
+    This instance is pointed back to by all objects created by it (wxGraphicsContext,
+    wxGraphicsPath etc) and can be retrieved through their wxGraphicsObject::GetRenderer()
+    method. Therefore you can create an additional instance of a path etc. by calling
+    wxGraphicsObject::GetRenderer() and then using the appropriate CreateXXX function
+    of that renderer.
+
+    @code
+    wxGraphicsPath *path = // from somewhere
+    wxGraphicsBrush *brush = path->GetRenderer()->CreateBrush( *wxBLACK_BRUSH );
+    @endcode
 
     @library{wxcore}
     @category{FIXME}
@@ -524,21 +535,35 @@ class wxGraphicsRenderer : public wxObject
 {
 public:
     /**
+        Creates a wxGraphicsContext from a wxWindow.
+    */
+    virtual wxGraphicsContext* CreateContext(wxWindow* window) = 0;
+    
+    /**
+        Creates a wxGraphicsContext from a wxWindowDC
+    */
+    virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;
+    
+    /**
+        Creates a wxGraphicsContext from a wxMemoryDC
+    */
+    virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc) = 0 ;
+    
+    /**
+        Creates a wxGraphicsContext from a wxPrinterDC
+    */
+    virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc) = 0 ;
+
+    /**
         Creates a native brush from a wxBrush.
     */
     wxGraphicsBrush CreateBrush(const wxBrush& brush);
 
-    //@{
-    /**
-        Creates a wxGraphicsContext from a wxWindow.
-    */
-    wxGraphicsContext* CreateContext(const wxWindowDC& dc);
-    wxGraphicsContext* CreateContext(wxWindow* window);
-    //@}
 
     /**
         Creates a wxGraphicsContext from a native context. This native context must be
-        eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a cairo_t pointer for cairo.
+        eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a cairo_t
+        pointer for cairo.
     */
     wxGraphicsContext* CreateContextFromNativeContext(void* context);
 
@@ -600,7 +625,7 @@ public:
         Returns the default renderer on this platform. On OS X this is the Core
         Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and on GTK we currently default to the cairo renderer.
     */
-    wxGraphicsRenderer* GetDefaultRenderer();
+    static wxGraphicsRenderer* GetDefaultRenderer();
 };
 
 
