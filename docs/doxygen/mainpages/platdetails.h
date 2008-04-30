@@ -20,6 +20,7 @@ and ports.
 
 @li @ref page_port_wxgtk
 @li @ref page_port_wxmac
+@li @ref page_port_wxcocoa
 @li @ref page_port_wxos2
 @li @ref page_port_wxmgl
 @li @ref page_port_wxx11
@@ -47,7 +48,7 @@ such as the new DirectFB backend.
 All work is being done on GTK+ version 2.0 and above. Support for
 GTK+ 1.2 will be deprecated in a later release.
 
-You will need GTK+ 2.0 or higher which is available from:
+You will need GTK+ 2.6 or higher which is available from:
 
 http://www.gtk.org
 
@@ -79,34 +80,46 @@ in the distribution.
 @endhtmlonly
 
 wxMac is a port of wxWidgets for the Macintosh OS platform.
-Currently MacOS 8.6 or higher, MacOS 9.0 or higher and
-MacOS X 10.0 or higher are supported, although most development
-effort goes into MacOS X support. wxMac can be compiled both
-using Apple's developer tools and MetroWerks CodeWarrior in
-different versions. Support for MacOS 8.X and MacOS 9.X is
-only available through CodeWarrior. wxMac uses the Carbon
-API (and optionally the Classic API under MacOS 8.X). You
-will need wxWidgets version 2.3.3 or higher for a stable
-version of wxMac.
+Currently MacOS X 10.4 or higher are supported. wxMac can
+be compiled both using Apple's command line developer tools
+as well as Apple's XCode IDE. wxMac supports both the Intel
+and PowerPC architectures and can be used to produce
+"universal binaries" in order create application which can run
+both architecture. Unfortunately, wxMac does not support any
+64-bit architecture since Apple decided not to port its Carbon
+API entirely to 64-bit.
 
 For further information, please see the files in docs/mac
 in the distribution.
 
 
 
+@section page_port_wxmac wxCocoa
+
+@htmlonly
+<img src="osxleopard_logo.png" alt="Mac OS X (Leopard) logo"
+    title="Mac OS X (Leopard) logo" class="logo">
+@endhtmlonly
+
+wxCocoa is another port of wxWidgets for the Macintosh OS
+platform. But in contrat to wxMac, it uses the Cocoa API.
+Much work has gone into this port and many controls are
+functional, but the port has not reached the maturity
+of the wxMac port yet. It should be possible to use wxCocoa
+on 64-bit architectures.
+
 
 @section page_port_wxmgl wxMGL
 
 wxMGL is a port of wxWidgets using the MGL library available
 from SciTech as the underlying graphics backend. wxMGL draws
-its widgets using the wxUniversal widget set which is now
-part of wxWidgets. MGL itself runs on a variety of platforms
+its widgets using the wxUniversal widget set which is part
+of wxWidgets. MGL itself runs on a variety of platforms
 including DOS, Linux hardware (similar to the Linux framebuffer)
 and various graphics systems such as Win32, X11 and OS/2.
 Note that currently MGL for Linux runs only on x86-based systems.
 
-You will need wxWidgets 2.3.3 or higher and MGL 5.0 or higher.
-The latter is available from
+You will MGL 5.0 or higher which is available from
 
 http://www.scitechsoft.com/products/product_download.html
 
@@ -127,9 +140,6 @@ in the distribution.
 wxOS2 is a port of wxWidgets for the IBM OS/2 Warp3 and Warp4 platforms.
 This port is currently under construction and in beta phase.
 
-For more info about OS2 see:
-
-
 
 
 @section page_port_wxx11 wxX11
@@ -143,8 +153,7 @@ as the underlying graphics backend. wxX11 draws its widgets
 using the wxUniversal widget set which is now part of wxWidgets.
 wxX11 is well-suited for a number of special applications such
 as those running on systems with few resources (PDAs) or for
-applications which need to use a special themed look. You will need
-wxWidgets 2.3.2 or higher.
+applications which need to use a special themed look. 
 
 In order to configure wxWidgets to compile wxX11 you will
 need to type:
@@ -609,5 +618,7 @@ necessary to use the underlying toolkit API directly:
 
 @li wxMSW port uses win32 API: see MSDN docs at http://msdn2.microsoft.com/en-us/library/ms649779.aspx
 @li wxGTK port uses GTK+: see GTK+ 2.x docs at http://developer.gnome.org/doc/API/2.0/gtk/index.html
+@li wxMac port uses the Carbon API: see Carbon docs at http://developer.apple.com/carbon
+@li wxCocoa port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/carbon
 
 */
