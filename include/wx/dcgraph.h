@@ -26,6 +26,7 @@ class WXDLLIMPEXP_CORE wxGCDC: public wxDC
 public:
     wxGCDC( const wxWindowDC& dc );
     wxGCDC( const wxMemoryDC& dc );
+    wxGCDC( const wxPrinterDC& dc );
     wxGCDC();
     virtual ~wxGCDC();
  
@@ -42,6 +43,7 @@ class WXDLLIMPEXP_CORE wxGCDCImpl: public wxDCImpl
 public:
     wxGCDCImpl( wxDC *owner, const wxWindowDC& dc );
     wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc );
+    wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc );
     wxGCDCImpl( wxDC *owner );
     
     virtual ~wxGCDCImpl();

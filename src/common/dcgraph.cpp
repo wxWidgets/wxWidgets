@@ -65,6 +65,11 @@ wxGCDC::wxGCDC( const wxMemoryDC& dc) :
 {
 }
 
+wxGCDC::wxGCDC( const wxPrinterDC& dc) :
+  wxDC( new wxGCDCImpl( this, dc ) )
+{
+}
+
 wxGCDC::wxGCDC() :
   wxDC( new wxGCDCImpl( this ) )
 {
@@ -121,6 +126,13 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxWindowDC& dc ) :
 }
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc ) :
+   wxDCImpl( owner )
+{
+    Init();
+    SetGraphicsContext( wxGraphicsContext::Create(dc) );
+}
+
+wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc ) :
    wxDCImpl( owner )
 {
     Init();
