@@ -256,9 +256,11 @@ public:
     static wxGraphicsContext * Create( const wxMemoryDC& dc) ;
     
     /**
-        Creates a wxGraphicsContext from a wxPrinterDC
+        Creates a wxGraphicsContext from a wxPrinterDC. Under
+        GTK+, this will only work when using the GtkPrint
+        printing backend which is available since GTK+ 2.10.
 
-        @see wxGraphicsRenderer::CreateContext()
+        @see wxGraphicsRenderer::CreateContext(), @ref overview_unixprinting "Printing under Unix"
     */
     static wxGraphicsContext * Create( const wxPrinterDC& dc) ;
 
@@ -294,13 +296,13 @@ public:
         eg a CGContextRef for Core Graphics, a Graphics pointer for GDIPlus or a
         cairo_t pointer for cairo.
 
-        Creates a wxGraphicsContext from a native window.
-
         @see wxGraphicsRenderer:: CreateContextFromNativeContext
     */
     wxGraphicsContext* CreateFromNative(void* context);
 
     /**
+        Creates a wxGraphicsContext from a native window.
+
         @see wxGraphicsRenderer:: CreateContextFromNativeWindow
     */
     wxGraphicsContext* CreateFromNativeWindow(void* window);
