@@ -1099,11 +1099,23 @@ bool wxGtkPrinter::Setup( wxWindow * WXUNUSED(parent) )
 // wxGtkPrinterDC
 //-----------------------------------------------------------------------------
 
+#define wxCAIRO_SCALE 1
+
+#if wxCAIRO_SCALE
+
+#define XLOG2DEV(x)     LogicalToDeviceX(x)
+#define XLOG2DEVREL(x)  LogicalToDeviceXRel(x)
+#define YLOG2DEV(x)     LogicalToDeviceY(x)
+#define YLOG2DEVREL(x)  LogicalToDeviceYRel(x)
+
+#else
+
 #define XLOG2DEV(x)     ((double)(LogicalToDeviceX(x)) * m_DEV2PS)
 #define XLOG2DEVREL(x)  ((double)(LogicalToDeviceXRel(x)) * m_DEV2PS)
 #define YLOG2DEV(x)     ((double)(LogicalToDeviceY(x)) * m_DEV2PS)
 #define YLOG2DEVREL(x)  ((double)(LogicalToDeviceYRel(x)) * m_DEV2PS)
 
+#endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDCImpl, wxDCImpl)
 
@@ -1122,14 +1134,21 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
     if (m_resolution < 0)
         m_resolution = (1 << (m_resolution+4)) *150;
 
-    m_PS2DEV = (double)m_resolution / 72.0;
-    m_DEV2PS = 72.0 / (double)m_resolution;
-
     m_context = gtk_print_context_create_pango_context( m_gpc );
     m_layout = gtk_print_context_create_pango_layout ( m_gpc );
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
 
     m_cairo = gtk_print_context_get_cairo_context ( m_gpc );
+
+#if wxCAIRO_SCALE
+    m_PS2DEV = 1.0;
+    m_DEV2PS = 1.0;
+    
+    gs_cairo->cairo_scale( m_cairo, 72.0 / (double)m_resolution, 72.0 / (double)m_resolution );
+#else
+    m_PS2DEV = (double)m_resolution / 72.0;
+    m_DEV2PS = 72.0 / (double)m_resolution;
+#endif
 
     m_currentRed = 0;
     m_currentBlue = 0;
@@ -2227,9 +2246,9 @@ void wxGtkPrinterDCImpl::DoGetSize(int* width, int* height) const
     GtkPageSetup *setup = gtk_print_context_get_page_setup( m_gpc );
 
     if (width)
-        *width = wxRound( gtk_page_setup_get_paper_width( setup, GTK_UNIT_POINTS ) * m_PS2DEV );
+        *width = wxRound( (double)gtk_page_setup_get_paper_width( setup, GTK_UNIT_POINTS ) * (double)m_resolution / 72.0 );
     if (height)
-        *height = wxRound( gtk_page_setup_get_paper_height( setup, GTK_UNIT_POINTS ) * m_PS2DEV );
+        *height = wxRound( (double)gtk_page_setup_get_paper_height( setup, GTK_UNIT_POINTS ) * (double)m_resolution / 72.0 );
 }
 
 void wxGtkPrinterDCImpl::DoGetSizeMM(int *width, int *height) const
@@ -2363,9 +2382,9 @@ void wxGtkPrintPreview::DetermineScaling()
 
         // Get width and height in points (1/72th of an inch)
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
-
         sizeDevUnits.x = wxRound((double)sizeDevUnits.x * (double)m_resolution / 72.0);
         sizeDevUnits.y = wxRound((double)sizeDevUnits.y * (double)m_resolution / 72.0);
+        
         wxSize sizeTenthsMM(paper->GetSize());
         wxSize sizeMM(sizeTenthsMM.x / 10, sizeTenthsMM.y / 10);
 

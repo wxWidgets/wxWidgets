@@ -1042,22 +1042,15 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     const wxDCImpl *impl = dc.GetImpl();
     Init( (cairo_t*) impl->GetCairoContext() );
 
-#if 0 
-    wxGraphicsMatrix matrix = CreateMatrix();
-    
     wxPoint org = dc.GetDeviceOrigin();
-    matrix.Translate( org.x, org.y );
+    cairo_translate( m_context, org.x, org.y );
     
-    org = dc.GetLogicalOrigin();
-    matrix.Translate( -org.x, -org.y );
-
     double sx,sy;
     dc.GetUserScale( &sx, &sy );
-    matrix.Scale( sx, sy );
+    cairo_scale( m_context, sx, sy );
 
-    ConcatTransform( matrix );
-#endif
-
+    org = dc.GetLogicalOrigin();
+    cairo_translate( m_context, -org.x, -org.y );
 #endif
 }
 
