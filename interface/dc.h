@@ -16,7 +16,8 @@
     
     wxWidgets offers an alternative drawing API based on the modern drawing
     backends GDI+, CoreGraphics and Cairo. See wxGraphicsContext, wxGraphicsRenderer
-    and related classes.
+    and related classes. There is also a wxGCDC linking the APIs by offering
+    the wxDC API ontop of a wxGraphicsContext.
 
     wxDC is an abstract base class and cannot be created directly.
     Use wxPaintDC, wxClientDC, wxWindowDC, wxScreenDC, wxMemoryDC or

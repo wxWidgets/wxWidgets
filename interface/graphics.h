@@ -229,7 +229,7 @@ public:
     @library{wxcore}
     @category{FIXME}
 
-    @see wxGraphicsRenderer:: CreateContext
+    @see wxGraphicsRenderer::CreateContext(), wxGCDC, wxDC
 */
 class wxGraphicsContext : public wxGraphicsObject
 {
