@@ -129,7 +129,14 @@ public:
   // Callbacks to SERVER - override at will
   virtual bool OnExec(const wxString& WXUNUSED(topic),
                       const wxString& WXUNUSED(data))
-      { return false; }
+  {
+      wxFAIL_MSG( "This method shouldn't be called, if it is, it probably "
+                  "means that you didn't update your old code overriding "
+                  "OnExecute() to use the new parameter types (\"const void *\" "
+                  "instead of \"wxChar *\" and \"size_t\" instead of \"int\"), "
+                  "you must do it or your code wouldn't be executed at all!" );
+      return false;
+  }
 
   // deprecated function kept for backwards compatibility: usually you will
   // want to override OnExec() above instead which receives its data in a more

@@ -37,6 +37,8 @@ changes:
   to work with "wxChar *" before use "void *" now (some int parameters were
   also changed to size_t). While wxIPC_TEXT can still be used to transfer 7
   bit text, the new wxIPC_UTF8TEXT format is used for transferring wxStrings.
+  Also notice that connection classes should change the parameter types of
+  their overridden OnExecute() or override a more convenient OnExec() instead.
 
 
 wxODBC and contrib libraries removal
