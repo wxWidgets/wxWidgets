@@ -121,7 +121,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{treectrl.png}
+    <!-- @appearance{treectrl.png} -->
 
     @see wxTreeItemData, @ref overview_wxtreectrloverview "wxTreeCtrl overview",
     wxListBox, wxListCtrl, wxImageList, wxTreeEvent

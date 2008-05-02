@@ -22,7 +22,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{spinctrl.png}
+    <!-- @appearance{spinctrl.png} -->
 
     @see @ref overview_eventhandlingoverview, wxSpinButton, wxControl
 */

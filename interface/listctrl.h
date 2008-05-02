@@ -84,7 +84,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{listctrl.png}
+    <!-- @appearance{listctrl.png} -->
 
     @see @ref overview_wxlistctrloverview "wxListCtrl overview", wxListView,
     wxListBox, wxTreeCtrl, wxImageList, wxListEvent, wxListItem
@@ -1122,7 +1122,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{listview.png}
+    <!-- @appearance{listview.png} -->
 
     @see wxListView::SetColumnImage
 */

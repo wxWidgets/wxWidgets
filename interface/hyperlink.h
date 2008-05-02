@@ -72,7 +72,7 @@ public:
 
     @library{wxadv}
     @category{ctrl}
-    @appearance{hyperlinkctrl.png}
+    <!-- @appearance{hyperlinkctrl.png} -->
 
     @see wxURL, wxHyperlinkEvent
 */

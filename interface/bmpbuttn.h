@@ -62,7 +62,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{bitmapbutton.png}
+    <!-- @appearance{bitmapbutton.png} -->
 
     @see wxButton
 */

@@ -27,7 +27,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{togglebutton.png}
+    <!-- @appearance{togglebutton.png} -->
 
     @see wxCheckBox, wxButton, wxBitmapToggleButton
 */
@@ -120,7 +120,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{bitmaptogglebutton.png}
+    <!-- @appearance{bitmaptogglebutton.png} -->
 */
 class wxBitmapToggleButton : public wxControl
 {

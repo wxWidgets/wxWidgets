@@ -39,7 +39,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{button.png}
+    <!-- @appearance{button.png} -->
 
     @see wxBitmapButton
 */

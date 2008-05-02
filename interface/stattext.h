@@ -40,7 +40,7 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{statictext.png}
+    <!-- @appearance{statictext.png} -->
 
     @see wxStaticBitmap, wxStaticBox
 */
