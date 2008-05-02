@@ -10,23 +10,23 @@
     @class wxGBPosition
     @wxheader{gbsizer.h}
 
-    This class represents the position of an item in a virtual grid of
-    rows and columns managed by a wxGridBagSizer.
+    This class represents the position of an item in a virtual grid of rows and
+    columns managed by a wxGridBagSizer.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{winlayout}
 */
 class wxGBPosition
 {
 public:
-    //@{
     /**
-        Construct a new wxGBPosition, optionally setting the row and column.
-        The default is (0,0).
+        Default constructor, setting the row and column to (0,0).
     */
     wxGBPosition();
+    /**
+        Construct a new wxGBPosition, setting the row and column.
+    */
     wxGBPosition(int row, int col);
-    //@}
 
     /**
         Get the current column value.
@@ -49,14 +49,14 @@ public:
     void SetRow(int row);
 
     /**
-        Is the wxGBPosition valid?  (An invalid wxGBPosition is (-1,-1). )
+        Checks if the position is valid. An invalid position is (-1,-1).
     */
     bool operator!(const wxGBPosition& p) const;
 
     /**
         Compare equality of two wxGBPositions.
     */
-    bool operator operator==(const wxGBPosition& p) const;
+    bool operator==(const wxGBPosition& p) const;
 };
 
 
@@ -65,11 +65,10 @@ public:
     @class wxGridBagSizer
     @wxheader{gbsizer.h}
 
-    A wxSizer that can lay out items in a virtual grid
-    like a wxFlexGridSizer but in this case
-    explicit positioning of the items is allowed using
-    wxGBPosition, and items can optionally span
-    more than one row and/or column using wxGBSpan.
+    A wxSizer that can lay out items in a virtual grid like a wxFlexGridSizer
+    but in this case explicit positioning of the items is allowed using
+    wxGBPosition, and items can optionally span more than one row and/or column
+    using wxGBSpan.
 
     @library{wxcore}
     @category{winlayout}
@@ -85,26 +84,20 @@ public:
 
     //@{
     /**
-        The Add methods return a valid pointer if the item was successfully placed at
-        the
-        given position, @NULL if something was already there.
+        Adds the given item to the given position.
+        
+        @returns A valid pointer if the item was successfully placed at the
+                 given position, or @NULL if something was already there.
     */
     wxSizerItem* Add(wxWindow* window, const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
-                     int flag = 0,
-                     int border = 0,
-                     wxObject* userData = NULL);
+                     int flag = 0, int border = 0, wxObject* userData = NULL);
     wxSizerItem* Add(wxSizer* sizer, const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
-                     int flag = 0,
-                     int border = 0,
-                     wxObject* userData = NULL);
-    wxSizerItem* Add(int width, int height,
-                     const wxGBPosition& pos,
+                     int flag = 0, int border = 0, wxObject* userData = NULL);
+    wxSizerItem* Add(int width, int height, const wxGBPosition& pos,
                      const wxGBSpan& span = wxDefaultSpan,
-                     int flag = 0,
-                     int border = 0,
-                     wxObject* userData = NULL);
+                     int flag = 0, int border = 0, wxObject* userData = NULL);
     wxSizerItem* Add(wxGBSizerItem* item);
     //@}
 
@@ -118,13 +111,12 @@ public:
     /**
         Look at all items and see if any intersect (or would overlap) the given
         item. Returns @true if so, @false if there would be no overlap. If an
-        excludeItem is given then it will not be checked for intersection, for
-        example it may be the item we are checking the position of.
+        @a excludeItem is given then it will not be checked for intersection,
+        for example it may be the item we are checking the position of.
     */
     bool CheckForIntersection(wxGBSizerItem* item,
                               wxGBSizerItem* excludeItem = NULL);
-    bool CheckForIntersection(const wxGBPosition& pos,
-                              const wxGBSpan& span,
+    bool CheckForIntersection(const wxGBPosition& pos, const wxGBSpan& span,
                               wxGBSizerItem* excludeItem = NULL);
     //@}
 
@@ -139,8 +131,8 @@ public:
 
     /**
         Return the sizer item located at the point given in pt, or @NULL if
-        there is no item at that point. The (x,y) coordinates in pt correspond
-        to the client coordinates of the window using the sizer for
+        there is no item at that point. The (x,y) coordinates in @a pt
+        correspond to the client coordinates of the window using the sizer for
         layout. (non-recursive)
     */
     wxGBSizerItem* FindItemAtPoint(const wxPoint& pt);
@@ -158,8 +150,8 @@ public:
     wxGBSizerItem* FindItemWithData(const wxObject* userData);
 
     /**
-        Get the size of the specified cell, including hgap and vgap. Only
-        valid after a Layout.
+        Get the size of the specified cell, including hgap and vgap. Only valid
+        after window layout has been performed.
     */
     wxSize GetCellSize(int row, int col) const;
 
@@ -179,7 +171,7 @@ public:
 
     //@{
     /**
-        Get the row/col spanning of the specified item
+        Get the row/col spanning of the specified item.
     */
     wxGBSpan GetItemSpan(wxWindow* window);
     wxGBSpan GetItemSpan(wxSizer* sizer);
@@ -226,40 +218,39 @@ public:
     @class wxGBSizerItem
     @wxheader{gbsizer.h}
 
-    The wxGBSizerItem class is used by the
-    wxGridBagSizer for tracking the items in the
-    sizer. It adds grid position and spanning information to the normal
-    wxSizerItem by adding
-    wxGBPosition and wxGBSpan
-    attrbibutes. Most of the time you will not need to use a
-    wxGBSizerItem directly in your code, but there are a couple of cases
-    where it is handy.
+    The wxGBSizerItem class is used by the wxGridBagSizer for tracking the
+    items in the sizer. It adds grid position and spanning information to the
+    normal wxSizerItem by adding wxGBPosition and wxGBSpan attrbibutes. Most of
+    the time you will not need to use a wxGBSizerItem directly in your code,
+    but there are a couple of cases where it is handy.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{winlayout}
 */
 class wxGBSizerItem : public wxSizerItem
 {
 public:
-    //@{
+    /**
+        Construct a sizer item for tracking a spacer.
+    */
+    wxGBSizerItem(int width, int height, const wxGBPosition& pos,
+                  const wxGBSpan& span, int flag, int border,
+                  wxObject* userData);
+    /**
+        Construct a sizer item for tracking a window.
+    */
+    wxGBSizerItem(wxWindow* window, const wxGBPosition& pos,
+                  const wxGBSpan& span, int flag, int border,
+                  wxObject* userData);
     /**
         Construct a sizer item for tracking a subsizer.
     */
-    wxGBSizerItem(int width, int height, const wxGBPosition& pos,
-                  const wxGBSpan& span, int flag,
-                  int border, wxObject* userData);
-    wxGBSizerItem(wxWindow* window, const wxGBPosition& pos,
-                  const wxGBSpan& span,
-                  int flag, int border,
-                  wxObject* userData);
     wxGBSizerItem(wxSizer* sizer, const wxGBPosition& pos,
-                  const wxGBSpan& span,
-                  int flag, int border,
+                  const wxGBSpan& span, int flag, int border,
                   wxObject* userData);
-    //@}
 
     /**
-        Get the row and column of the endpoint of this item
+        Get the row and column of the endpoint of this item.
     */
     void GetEndPos(int& row, int& col);
 
@@ -268,7 +259,7 @@ public:
         Get the grid position of the item.
     */
     wxGBPosition GetPos() const;
-    const void GetPos(int& row, int& col) const;
+    void GetPos(int& row, int& col) const;
     //@}
 
     //@{
@@ -276,29 +267,29 @@ public:
         Get the row and column spanning of the item.
     */
     wxGBSpan GetSpan() const;
-    const void GetSpan(int& rowspan, int& colspan) const;
+    void GetSpan(int& rowspan, int& colspan) const;
     //@}
 
-    //@{
+    /**
+        Returns @true if this item and the @a other item instersect.
+    */
+    bool Intersects(const wxGBSizerItem& other);
     /**
         Returns @true if the given pos/span would intersect with this item.
     */
-    bool Intersects(const wxGBSizerItem& other);
-    bool Intersects(const wxGBPosition& pos,
-                    const wxGBSpan& span);
-    //@}
+    bool Intersects(const wxGBPosition& pos, const wxGBSpan& span);
 
     /**
-        If the item is already a member of a sizer then first ensure that
-        there is no other item that would intersect with this one at the new
+        If the item is already a member of a sizer then first ensure that there
+        is no other item that would intersect with this one at the new
         position, then set the new position. Returns @true if the change is
         successful and after the next Layout the item will be moved.
     */
     bool SetPos(const wxGBPosition& pos);
 
     /**
-        If the item is already a member of a sizer then first ensure that
-        there is no other item that would intersect with this one with its new
+        If the item is already a member of a sizer then first ensure that there
+        is no other item that would intersect with this one with its new
         spanning size, then set the new spanning. Returns @true if the change
         is successful and after the next Layout the item will be resized.
     */
@@ -311,24 +302,24 @@ public:
     @class wxGBSpan
     @wxheader{gbsizer.h}
 
-    This class is used to hold the row and column spanning attributes of
-    items in a wxGridBagSizer.
+    This class is used to hold the row and column spanning attributes of items
+    in a wxGridBagSizer.
 
     @library{wxcore}
-    @category{FIXME}
+    @category{winlayout}
 */
 class wxGBSpan
 {
 public:
-    //@{
     /**
-        Construct a new wxGBSpan, optionally setting the rowspan and colspan.
-        The default is (1,1).  (Meaning that the item occupies one cell in
-        each direction.
+        Default constructor, setting the rowspan and colspan to (1,1) meaning
+        that the item occupies one cell in each direction.
     */
     wxGBSpan();
+    /**
+        Construct a new wxGBSpan, setting the @a rowspan and @a colspan.
+    */
     wxGBSpan(int rowspan, int colspan);
-    //@}
 
     /**
         Get the current colspan value.
@@ -351,13 +342,13 @@ public:
     void SetRowspan(int rowspan);
 
     /**
-        Is the wxGBSpan valid?  (An invalid wxGBSpan is (-1,-1). )
+        Checks if the span is valid. An invalid span is (-1,-1).
     */
     bool operator!(const wxGBSpan& o) const;
 
     /**
         Compare equality of two wxGBSpans.
     */
-    bool operator operator==(const wxGBSpan& o) const;
+    bool operator==(const wxGBSpan& o) const;
 };
 

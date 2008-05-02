@@ -79,7 +79,8 @@
     - ::wxHOURGLASS_CURSOR
     - ::wxCROSS_CURSOR
 
-    @see wxBitmap, wxIcon, wxWindow::SetCursor(), wxSetCursor()
+    @see wxBitmap, wxIcon, wxWindow::SetCursor(), wxSetCursor(),
+         ::wxStockCursor
 */
 class wxCursor : public wxBitmap
 {
@@ -153,42 +154,9 @@ public:
         Constructs a cursor using a cursor identifier.
 
         @param cursorId
-            A stock cursor identifier. May be one of the following (note that
-            not all cursors are available on all platforms):
-            - wxCURSOR_ARROW          - A standard arrow cursor.
-            - wxCURSOR_RIGHT_ARROW    - A standard arrow cursor pointing to the
-                                        right.
-            - wxCURSOR_BLANK          - Transparent cursor.
-            - wxCURSOR_BULLSEYE       - Bullseye cursor.
-            - wxCURSOR_CHAR           - Rectangular character cursor.
-            - wxCURSOR_CROSS          - A cross cursor.
-            - wxCURSOR_HAND           - A hand cursor.
-            - wxCURSOR_IBEAM          - An I-beam cursor (vertical line).
-            - wxCURSOR_LEFT_BUTTON    - Represents a mouse with the left button
-                                        depressed.
-            - wxCURSOR_MAGNIFIER      - A magnifier icon.
-            - wxCURSOR_MIDDLE_BUTTON  - Represents a mouse with the middle
-                                        button depressed.
-            - wxCURSOR_NO_ENTRY       - A no-entry sign cursor.
-            - wxCURSOR_PAINT_BRUSH    - A paintbrush cursor.
-            - wxCURSOR_PENCIL         - A pencil cursor.
-            - wxCURSOR_POINT_LEFT     - A cursor that points left.
-            - wxCURSOR_POINT_RIGHT    - A cursor that points right.
-            - wxCURSOR_QUESTION_ARROW - An arrow and question mark.
-            - wxCURSOR_RIGHT_BUTTON   - Represents a mouse with the right
-                                        button depressed.
-            - wxCURSOR_SIZENESW       - A sizing cursor pointing NE-SW.
-            - wxCURSOR_SIZENS         - A sizing cursor pointing N-S.
-            - wxCURSOR_SIZENWSE       - A sizing cursor pointing NW-SE.
-            - wxCURSOR_SIZEWE         - A sizing cursor pointing W-E.
-            - wxCURSOR_SIZING         - A general sizing cursor.
-            - wxCURSOR_SPRAYCAN       - A spraycan cursor.
-            - wxCURSOR_WAIT           - A wait cursor.
-            - wxCURSOR_WATCH          - A watch cursor.
-            - wxCURSOR_ARROWWAIT      - A cursor with both an arrow and an
-                                        hourglass, (windows.)
+            A stock cursor identifier. See ::wxStockCursor.
     */
-    wxCursor(int cursorId);
+    wxCursor(wxStockCursor cursorId);
     /**
         Constructs a cursor from a wxImage. If cursor are monochrome on the
         current platform, colors with the RGB elements all greater than 127
@@ -238,7 +206,11 @@ public:
 };
 
 
-/** @name Predefined cursors. */
+/**
+    @name Predefined cursors.
+
+    @see wxStockCursor
+*/
 //@{
 wxCursor wxNullCursor;
 wxCursor* wxSTANDARD_CURSOR;

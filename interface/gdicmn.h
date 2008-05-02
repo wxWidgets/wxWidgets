@@ -8,9 +8,7 @@
 
 
 /**
-    Bitmap type flags.
-
-    See wxBitmap and wxImage classes.
+    Bitmap type flags. See wxBitmap and wxImage classes.
 */
 enum wxBitmapType
 {
@@ -51,47 +49,44 @@ enum wxBitmapType
 };
 
 /**
-    Standard cursors.
-
-    See wxCursor.
+    Standard cursors. See wxCursor.
 */
 enum wxStockCursor
 {
     wxCURSOR_NONE,
-    wxCURSOR_ARROW,
-    wxCURSOR_RIGHT_ARROW,
-    wxCURSOR_BULLSEYE,
-    wxCURSOR_CHAR,
-    wxCURSOR_CROSS,
-    wxCURSOR_HAND,
-    wxCURSOR_IBEAM,
-    wxCURSOR_LEFT_BUTTON,
-    wxCURSOR_MAGNIFIER,
-    wxCURSOR_MIDDLE_BUTTON,
-    wxCURSOR_NO_ENTRY,
-    wxCURSOR_PAINT_BRUSH,
-    wxCURSOR_PENCIL,
-    wxCURSOR_POINT_LEFT,
-    wxCURSOR_POINT_RIGHT,
-    wxCURSOR_QUESTION_ARROW,
-    wxCURSOR_RIGHT_BUTTON,
-    wxCURSOR_SIZENESW,
-    wxCURSOR_SIZENS,
-    wxCURSOR_SIZENWSE,
-    wxCURSOR_SIZEWE,
-    wxCURSOR_SIZING,
-    wxCURSOR_SPRAYCAN,
-    wxCURSOR_WAIT,
-    wxCURSOR_WATCH,
-    wxCURSOR_BLANK,
-    wxCURSOR_DEFAULT,       //!< standard X11 cursor
-    wxCURSOR_COPY_ARROW ,   //!< MacOS Theme Plus arrow
-    // Not yet implemented for Windows
-    wxCURSOR_CROSS_REVERSE,
-    wxCURSOR_DOUBLE_ARROW,
-    wxCURSOR_BASED_ARROW_UP,
-    wxCURSOR_BASED_ARROW_DOWN,
-    wxCURSOR_ARROWWAIT,
+    wxCURSOR_ARROW,             ///< A standard arrow cursor.
+    wxCURSOR_RIGHT_ARROW,       ///< A standard arrow cursor pointing to the right.
+    wxCURSOR_BULLSEYE,          ///< Bullseye cursor.
+    wxCURSOR_CHAR,              ///< Rectangular character cursor.
+    wxCURSOR_CROSS,             ///< A cross cursor.
+    wxCURSOR_HAND,              ///< A hand cursor.
+    wxCURSOR_IBEAM,             ///< An I-beam cursor (vertical line).
+    wxCURSOR_LEFT_BUTTON,       ///< Represents a mouse with the left button depressed.
+    wxCURSOR_MAGNIFIER,         ///< A magnifier icon.
+    wxCURSOR_MIDDLE_BUTTON,     ///< Represents a mouse with the middle button depressed.
+    wxCURSOR_NO_ENTRY,          ///< A no-entry sign cursor.
+    wxCURSOR_PAINT_BRUSH,       ///< A paintbrush cursor.
+    wxCURSOR_PENCIL,            ///< A pencil cursor.
+    wxCURSOR_POINT_LEFT,        ///< A cursor that points left.
+    wxCURSOR_POINT_RIGHT,       ///< A cursor that points right.
+    wxCURSOR_QUESTION_ARROW,    ///< An arrow and question mark.
+    wxCURSOR_RIGHT_BUTTON,      ///< Represents a mouse with the right button depressed.
+    wxCURSOR_SIZENESW,          ///< A sizing cursor pointing NE-SW.
+    wxCURSOR_SIZENS,            ///< A sizing cursor pointing N-S.
+    wxCURSOR_SIZENWSE,          ///< A sizing cursor pointing NW-SE.
+    wxCURSOR_SIZEWE,            ///< A sizing cursor pointing W-E.
+    wxCURSOR_SIZING,            ///< A general sizing cursor.
+    wxCURSOR_SPRAYCAN,          ///< A spraycan cursor.
+    wxCURSOR_WAIT,              ///< A wait cursor.
+    wxCURSOR_WATCH,             ///< A watch cursor.
+    wxCURSOR_BLANK,             ///< Transparent cursor.
+    wxCURSOR_DEFAULT,           ///< Standard X11 cursor (only in wxGTK).
+    wxCURSOR_COPY_ARROW ,       ///< MacOS Theme Plus arrow (only in wxMac).
+    wxCURSOR_CROSS_REVERSE,     ///< Only available on wxX11.
+    wxCURSOR_DOUBLE_ARROW,      ///< Only available on wxX11.
+    wxCURSOR_BASED_ARROW_UP,    ///< Only available on wxX11.
+    wxCURSOR_BASED_ARROW_DOWN,  ///< Only available on wxX11.
+    wxCURSOR_ARROWWAIT,         ///< A wait cursor with a standard arrow.
     wxCURSOR_MAX
 };
 
@@ -101,10 +96,10 @@ enum wxStockCursor
     @class wxRealPoint
     @wxheader{gdicmn.h}
 
-    A @b wxRealPoint is a useful data structure for graphics operations.
+    A wxRealPoint is a useful data structure for graphics operations.
 
-    It contains floating point @e x and @e y members.
-    See also wxPoint for an integer version.
+    It contains floating point @e x and @e y members. See wxPoint for an
+    integer version.
 
     @library{wxcore}
     @category{data}
@@ -148,51 +143,65 @@ public:
 class wxRect
 {
 public:
-    //@{
     /**
-        Creates a wxRect object from size values at the origin.
+        Default constructor.
     */
     wxRect();
+    /**
+        Creates a wxRect object from @a x, @a y, @a width and @a height values.
+    */
     wxRect(int x, int y, int width, int height);
+    /**
+        Creates a wxRect object from top-left and bottom-right points.
+    */
     wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
+    /**
+        Creates a wxRect object from position and @a size values.
+    */
     wxRect(const wxPoint& pos, const wxSize& size);
+    /**
+        Creates a wxRect object from @a size values at the origin.
+    */
     wxRect(const wxSize& size);
-    //@}
 
     //@{
     /**
-        Returns the rectangle having the same size as this one but centered relatively
-        to the given rectangle @e r. By default, rectangle is centred in both
-        directions but if @a dir includes only @c wxVERTICAL or only
-        @c wxHORIZONTAL flag, then it is only centered in this direction while
+        Returns the rectangle having the same size as this one but centered
+        relatively to the given rectangle @a r. By default, rectangle is
+        centred in both directions but if @a dir includes only @c wxVERTICAL or
+        only @c wxHORIZONTAL, then it is only centered in this direction while
         the other component of its position remains unchanged.
     */
     wxRect CentreIn(const wxRect& r, int dir = wxBOTH) const;
-    const wxRect  CenterIn(const wxRect& r, int dir = wxBOTH) const;
+    wxRect CenterIn(const wxRect& r, int dir = wxBOTH) const;
     //@}
 
-    //@{
     /**
-        Returns @true if the given rectangle is completely inside this rectangle
-        (or touches its boundary) and @false otherwise.
+        Returns @true if the given point is inside the rectangle (or on its
+        boundary) and @false otherwise.
     */
     bool Contains(int x, int y) const;
-    const bool Contains(const wxPoint& pt) const;
-    const bool Contains(const wxRect& rect) const;
-    //@}
+    /**
+        Returns @true if the given point is inside the rectangle (or on its
+        boundary) and @false otherwise.
+    */
+    bool Contains(const wxPoint& pt) const;
+    /**
+        Returns @true if the given rectangle is completely inside this
+        rectangle (or touches its boundary) and @false otherwise.
+    */
+    bool Contains(const wxRect& rect) const;
 
     //@{
     /**
         Decrease the rectangle size.
-        This method is the opposite from Inflate():
-        Deflate(a, b) is equivalent to Inflate(-a, -b).
-        Please refer to Inflate() for full description.
 
-        @see Inflate()
+        This method is the opposite from Inflate(): Deflate(a, b) is equivalent
+        to Inflate(-a, -b). Please refer to Inflate() for full description.
     */
-    void Deflate(wxCoord dx, wxCoord dy) const;
-    void Deflate(const wxSize& diff) const;
-    void Deflate(wxCoord diff) const;
+    void Deflate(wxCoord dx, wxCoord dy);
+    void Deflate(const wxSize& diff);
+    void Deflate(wxCoord diff);
     wxRect Deflate(wxCoord dx, wxCoord dy) const;
     //@}
 
@@ -217,7 +226,7 @@ public:
     int GetHeight() const;
 
     /**
-        Gets the left point of the rectangle (the same as wxRect::GetX).
+        Gets the left point of the rectangle (the same as GetX()).
     */
     int GetLeft() const;
 
@@ -239,7 +248,7 @@ public:
     wxSize GetSize() const;
 
     /**
-        Gets the top point of the rectangle (the same as wxRect::GetY).
+        Gets the top point of the rectangle (the same as GetY()).
     */
     int GetTop() const;
 
@@ -272,47 +281,45 @@ public:
     //@{
     /**
         Increases the size of the rectangle.
-        The second form uses the same @a diff for both @a dx and @e dy.
-        The first two versions modify the rectangle in place, the last one returns a
-        new rectangle leaving this one unchanged.
-        The left border is moved farther left and the right border is moved farther
-        right by @e dx. The upper border is moved farther up and the bottom border
-        is moved farther down by @e dy. (Note the the width and height of the
-        rectangle thus change by 2*@a dx and 2*@e dy, respectively.) If one or
-        both of @a dx and @a dy are negative, the opposite happens: the rectangle
-        size decreases in the respective direction.
-        Inflating and deflating behaves "naturally". Defined more precisely, that
-        means:
-             "Real" inflates (that is, @a dx and/or @a dy = 0) are not
-                constrained. Thus inflating a rectangle can cause its upper left corner
-                to move into the negative numbers. (the versions prior to 2.5.4 forced
-                the top left coordinate to not fall below (0, 0), which implied a
-                forced move of the rectangle.)
-             Deflates are clamped to not reduce the width or height of the
-                rectangle below zero. In such cases, the top-left corner is nonetheless
-                handled properly. For example, a rectangle at (10, 10) with size (20,
-                40) that is inflated by (-15, -15) will become located at (20, 25) at
-                size (0, 10). Finally, observe that the width and height are treated
-                independently. In the above example, the width is reduced by 20,
-                whereas the height is reduced by the full 30 (rather than also stopping
-                at 20, when the width reached zero).
+
+        The left border is moved farther left and the right border is moved
+        farther right by @a dx. The upper border is moved farther up and the
+        bottom border is moved farther down by @a dy. (Note the the width and
+        height of the rectangle thus change by 2*dx and 2*dy, respectively.) If
+        one or both of @a dx and @a dy are negative, the opposite happens: the
+        rectangle size decreases in the respective direction.
+
+        Inflating and deflating behaves "naturally". Defined more precisely,
+        that means:
+        -# "Real" inflates (that is, @a dx and/or @a dy = 0) are not
+           constrained. Thus inflating a rectangle can cause its upper left
+           corner to move into the negative numbers. (2.5.4 and older forced
+           the top left coordinate to not fall below (0, 0), which implied a
+           forced move of the rectangle.)
+        -# Deflates are clamped to not reduce the width or height of the
+           rectangle below zero. In such cases, the top-left corner is
+           nonetheless handled properly. For example, a rectangle at (10, 10)
+           with size (20, 40) that is inflated by (-15, -15) will become
+           located at (20, 25) at size (0, 10). Finally, observe that the width
+           and height are treated independently. In the above example, the
+           width is reduced by 20, whereas the height is reduced by the full 30
+           (rather than also stopping at 20, when the width reached zero).
 
         @see Deflate()
     */
-    void Inflate(wxCoord dx, wxCoord dy) const;
-    void Inflate(const wxSize& diff) const;
-    void Inflate(wxCoord diff) const;
+    void Inflate(wxCoord dx, wxCoord dy);
+    void Inflate(const wxSize& diff);
+    void Inflate(wxCoord diff);
     wxRect Inflate(wxCoord dx, wxCoord dy) const;
     //@}
 
     //@{
     /**
-        Modifies the rectangle to contain the overlapping box of this rectangle and the
-        one passed in as parameter. The const version returns the new rectangle, the
-        other one modifies this rectangle in place.
+        Modifies the rectangle to contain the overlapping box of this rectangle
+        and the one passed in as parameter.
     */
-    wxRect Intersect(const wxRect& rect);
-    const wxRect&  Intersect(const wxRect& rect);
+    wxRect Intersect(const wxRect& rect) const;
+    wxRect& Intersect(const wxRect& rect);
     //@}
 
     /**
@@ -322,8 +329,8 @@ public:
     bool Intersects(const wxRect& rect) const;
 
     /**
-        Returns @true if this rectangle has a width or height less than or equal to
-        0 and @false otherwise.
+        Returns @true if this rectangle has a width or height less than or
+        equal to 0 and @false otherwise.
     */
     bool IsEmpty() const;
 
@@ -366,30 +373,32 @@ public:
 
     //@{
     /**
-        Modifies the rectangle to contain the bounding box of this rectangle and the
-        one passed in as parameter. The const version returns the new rectangle, the
-        other one modifies this rectangle in place.
+        Modifies the rectangle to contain the bounding box of this rectangle
+        and the one passed in as parameter.
     */
-    wxRect Union(const wxRect& rect);
-    const wxRect&  Union(const wxRect& rect);
+    wxRect Union(const wxRect& rect) const;
+    wxRect& Union(const wxRect& rect);
     //@}
 
     /**
-        int height
-        Height member.
+        Inequality operator.
     */
+    bool operator !=(const wxRect& r1, const wxRect& r2);
 
+    //@{
+    /**
+        Like Union(), but doesn't treat empty rectangles specially.
+    */
+    wxRect operator +(const wxRect& r1, const wxRect& r2);
+    wxRect& operator +=(const wxRect& r);
+    //@}
 
     //@{
     /**
         Returns the intersection of two rectangles (which may be empty).
     */
-    bool operator !=(const wxRect& r1, const wxRect& r2);
-    wxRect operator +(const wxRect& r1, const wxRect& r2);
-    wxRect operator +=(const wxRect& r);
-    See also wxRect  operator *(const wxRect& r1,
-                                const wxRect& r2);
-    wxRect operator *=(const wxRect& r);
+    wxRect operator *(const wxRect& r1, const wxRect& r2);
+    wxRect& operator *=(const wxRect& r);
     //@}
 
     /**
@@ -403,21 +412,24 @@ public:
     bool operator ==(const wxRect& r1, const wxRect& r2);
 
     /**
-        int width
+        Height member.
+    */
+    int height;
+
+    /**
         Width member.
     */
-
+    int width;
 
     /**
-        int x
         x coordinate of the top-level corner of the rectangle.
     */
-
+    int x;
 
     /**
-        int y
         y coordinate of the top-level corner of the rectangle.
     */
+    int y;
 };
 
 
@@ -426,10 +438,10 @@ public:
     @class wxPoint
     @wxheader{gdicmn.h}
 
-    A @b wxPoint is a useful data structure for graphics operations.
-    It simply contains integer @e x and @e y members.
+    A wxPoint is a useful data structure for graphics operations.
 
-    See also wxRealPoint for a floating point version.
+    It contains integer @e x and @e y members. See wxRealPoint for a floating
+    point version.
 
     @library{wxcore}
     @category{data}
@@ -444,46 +456,47 @@ class wxPoint
 public:
     //@{
     /**
-        Create a point.
+        Constructs a point.
     */
     wxPoint();
     wxPoint(int x, int y);
     //@}
 
-    //@{
     /**
-        Operators for sum and subtraction between a wxPoint object and a
-        wxSize object.
+        Assignment operator.
     */
     void operator =(const wxPoint& pt);
+
     bool operator ==(const wxPoint& p1, const wxPoint& p2);
     bool operator !=(const wxPoint& p1, const wxPoint& p2);
+
     wxPoint operator +(const wxPoint& p1, const wxPoint& p2);
     wxPoint operator -(const wxPoint& p1, const wxPoint& p2);
-    wxPoint operator +=(const wxPoint& pt);
-    wxPoint operator -=(const wxPoint& pt);
+
+    wxPoint& operator +=(const wxPoint& pt);
+    wxPoint& operator -=(const wxPoint& pt);
+
     wxPoint operator +(const wxPoint& pt, const wxSize& sz);
     wxPoint operator -(const wxPoint& pt, const wxSize& sz);
     wxPoint operator +(const wxSize& sz, const wxPoint& pt);
     wxPoint operator -(const wxSize& sz, const wxPoint& pt);
-    wxPoint operator +=(const wxSize& sz);
-    wxPoint operator -=(const wxSize& sz);
-    //@}
+
+    wxPoint& operator +=(const wxSize& sz);
+    wxPoint& operator -=(const wxSize& sz);
 
     /**
-        int x
         x member.
     */
-
+    int x;
 
     /**
-        int  y
         y member.
     */
+    int  y;
 };
 
 /**
-    Global istance of a wxPoint initialized with values -1;-1.
+    Global istance of a wxPoint initialized with values (-1,-1).
 */
 wxPoint wxDefaultPosition;
 
@@ -493,17 +506,93 @@ wxPoint wxDefaultPosition;
     @wxheader{gdicmn.h}
 
     wxWidgets maintains a database of standard RGB colours for a predefined
-    set of named colours (such as "BLACK", "LIGHT GREY"). The
-    application may add to this set if desired by using
-    wxColourDatabase::AddColour and may use it to look up
-    colours by names using wxColourDatabase::Find or find the names
-    for the standard colour suing wxColourDatabase::FindName.
+    set of named colours. The application may add to this set if desired by
+    using AddColour() and may use it to look up colours by names using Find()
+    or find the names for the standard colour using FindName().
 
-    There is one predefined instance of this class called
-    @b wxTheColourDatabase.
+    There is one predefined, global instance of this class called
+    ::wxTheColourDatabase.
+
+    The standard database contains at least the following colours:
+
+    @beginTable
+    <tr><td>
+       AQUAMARINE
+    @n BLACK
+    @n BLUE
+    @n BLUE VIOLET
+    @n BROWN
+    @n CADET BLUE
+    @n CORAL
+    @n CORNFLOWER BLUE
+    @n CYAN
+    @n DARK GREY
+    @n DARK GREEN
+    @n DARK OLIVE GREEN
+    @n DARK ORCHID
+    @n DARK SLATE BLUE
+    @n DARK SLATE GREY
+    @n DARK TURQUOISE
+    @n DIM GREY
+    </td><td>
+       FIREBRICK
+    @n FOREST GREEN
+    @n GOLD
+    @n GOLDENROD
+    @n GREY
+    @n GREEN
+    @n GREEN YELLOW
+    @n INDIAN RED
+    @n KHAKI
+    @n LIGHT BLUE
+    @n LIGHT GREY
+    @n LIGHT STEEL BLUE
+    @n LIME GREEN
+    @n MAGENTA
+    @n MAROON
+    @n MEDIUM AQUAMARINE
+    @n MEDIUM BLUE
+    </td><td>
+       MEDIUM FOREST GREEN
+    @n MEDIUM GOLDENROD
+    @n MEDIUM ORCHID
+    @n MEDIUM SEA GREEN
+    @n MEDIUM SLATE BLUE
+    @n MEDIUM SPRING GREEN
+    @n MEDIUM TURQUOISE
+    @n MEDIUM VIOLET RED
+    @n MIDNIGHT BLUE
+    @n NAVY
+    @n ORANGE
+    @n ORANGE RED
+    @n ORCHID
+    @n PALE GREEN
+    @n PINK
+    @n PLUM
+    @n PURPLE
+    </td><td>
+       RED
+    @n SALMON
+    @n SEA GREEN
+    @n SIENNA
+    @n SKY BLUE
+    @n SLATE BLUE
+    @n SPRING GREEN
+    @n STEEL BLUE
+    @n TAN
+    @n THISTLE
+    @n TURQUOISE
+    @n VIOLET
+    @n VIOLET RED
+    @n WHEAT
+    @n WHITE
+    @n YELLOW
+    @n YELLOW GREEN
+    </td></tr>
+    @endTable
 
     @library{wxcore}
-    @category{FIXME}
+    @category{gdi}
 
     @see wxColour
 */
@@ -511,32 +600,27 @@ class wxColourDatabase
 {
 public:
     /**
-        Constructs the colour database. It will be initialized at the first use.
+        Constructs the colour database. It will be initialized at the first
+        use.
     */
     wxColourDatabase();
 
-    //@{
     /**
-        Adds a colour to the database. If a colour with the same name already exists,
-        it is replaced.
-        Please note that the overload taking a pointer is deprecated and will be
-        removed in the next wxWidgets version, please don't use it.
+        Adds a colour to the database. If a colour with the same name already
+        exists, it is replaced.
     */
-    void AddColour(const wxString& colourName,
-                   const wxColour& colour);
-    void AddColour(const wxString& colourName, wxColour* colour);
-    //@}
+    void AddColour(const wxString& colourName, const wxColour& colour);
 
     /**
-        Finds a colour given the name. Returns an invalid colour object (that is, such
-        that its @ref wxColour::isok Ok method returns @false) if the colour wasn't
-        found in the database.
+        Finds a colour given the name. Returns an invalid colour object (that
+        is, wxColour::IsOk() will return @false) if the colour wasn't found in
+        the database.
     */
     wxColour Find(const wxString& colourName);
 
     /**
-        Finds a colour name given the colour. Returns an empty string if the colour is
-        not found in the database.
+        Finds a colour name given the colour. Returns an empty string if the
+        colour is not found in the database.
     */
     wxString FindName(const wxColour& colour) const;
 };
@@ -546,16 +630,17 @@ public:
     @class wxSize
     @wxheader{gdicmn.h}
 
-    A @b wxSize is a useful data structure for graphics operations.
-    It simply contains integer @e width and @e height members.
+    A wxSize is a useful data structure for graphics operations. It simply
+    contains integer @e width and @e height members.
 
-    wxSize is used throughout wxWidgets as well as wxPoint which, although almost
-    equivalent to wxSize, has a different meaning: wxPoint represents a position
-    while wxSize - the size.
+    wxSize is used throughout wxWidgets as well as wxPoint which, although
+    almost equivalent to wxSize, has a different meaning: wxPoint represents a
+    position while wxSize represents the size.
 
-    @b wxPython note: wxPython defines aliases for the @c x and @c y members
-    named @c width and @c height since it makes much more sense for
-    sizes.
+    @beginWxPythonOnly
+    wxPython defines aliases for the @e x and @e y members named @e width and
+    @e height since it makes much more sense for sizes.
+    @endWxPythonOnly
 
     @library{wxcore}
     @category{data}
@@ -578,10 +663,7 @@ public:
 
     //@{
     /**
-        Decreases the size in x- and y- directions
-             By @e size.x and @e size.y for the first overload
-             By @a dx and @a dy for the second one
-             By @a d and @a d for the third one
+        Decreases the size in both x and y directions.
 
         @see IncBy()
     */
@@ -591,8 +673,8 @@ public:
     //@}
 
     /**
-        Decrements this object so that both of its dimensions are not greater than the
-        corresponding dimensions of the @e size.
+        Decrements this object so that both of its dimensions are not greater
+        than the corresponding dimensions of the @a size.
 
         @see IncTo()
     */
@@ -610,10 +692,7 @@ public:
 
     //@{
     /**
-        Increases the size in x- and y- directions
-             By @e size.x and @e size.y for the first overload
-             By @a dx and @a dy for the second one
-             By @a d and @a d for the third one
+        Increases the size in both x and y directions.
 
         @see DecBy()
     */
@@ -623,49 +702,31 @@ public:
     //@}
 
     /**
-        Increments this object so that both of its dimensions are not less than the
-        corresponding dimensions of the @e size.
+        Increments this object so that both of its dimensions are not less than
+        the corresponding dimensions of the @a size.
 
         @see DecTo()
     */
     void IncTo(const wxSize& size);
 
     /**
-        Returns @true if neither of the size object components is equal to -1, which
-        is used as default for the size values in wxWidgets (hence the predefined
-        @c wxDefaultSize has both of its components equal to -1).
-        This method is typically used before calling
-        SetDefaults().
+        Returns @true if neither of the size object components is equal to -1,
+        which is used as default for the size values in wxWidgets (hence the
+        predefined ::wxDefaultSize has both of its components equal to -1).
+
+        This method is typically used before calling SetDefaults().
     */
     bool IsFullySpecified() const;
 
-    //@{
     /**
-        Operators for division and multiplication between a wxSize object and an
-        integer.
-    */
-    void operator =(const wxSize& sz);
-    bool operator ==(const wxSize& s1, const wxSize& s2);
-    bool operator !=(const wxSize& s1, const wxSize& s2);
-    wxSize operator +(const wxSize& s1, const wxSize& s2);
-    wxSize operator -(const wxSize& s1, const wxSize& s2);
-    wxSize operator +=(const wxSize& sz);
-    wxSize operator -=(const wxSize& sz);
-    wxSize operator /(const wxSize& sz, int factor);
-    wxSize operator *(const wxSize& sz, int factor);
-    wxSize operator *(int factor, const wxSize& sz);
-    wxSize operator /=(int factor);
-    wxSize operator *=(int factor);
-    //@}
+        Scales the dimensions of this object by the given factors. If you want
+        to scale both dimensions by the same factor you can also use
+        operator*=().
 
-    /**
-        Scales the dimensions of this object by the given factors.
-        If you want to scale both dimensions by the same factor you can also use
-        the @ref operators() "operator *="
-        Returns a reference to this object (so that you can concatenate other
-        operations in the same line).
+        @returns A reference to this object (so that you can concatenate other
+                 operations in the same line).
     */
-    wxSize Scale(float xscale, float yscale);
+    wxSize& Scale(float xscale, float yscale);
 
     /**
         Sets the width and height members.
@@ -673,9 +734,16 @@ public:
     void Set(int width, int height);
 
     /**
-        Combine this size object with another one replacing the default (i.e. equal
-        to -1) components of this object with those of the other. It is typically
-        used like this:
+        Combine this size object with another one replacing the default (i.e.
+        equal to -1) components of this object with those of the other. It is
+        typically used like this:
+
+        @code
+        if ( !size.IsFullySpecified() )
+        {
+            size.SetDefaults(GetDefaultSize());
+        }
+        @endcode
 
         @see IsFullySpecified()
     */
@@ -690,10 +758,29 @@ public:
         Sets the width.
     */
     void SetWidth(int width);
+
+    /**
+        Assignment operator.
+    */
+    void operator =(const wxSize& sz);
+
+    bool operator ==(const wxSize& s1, const wxSize& s2);
+    bool operator !=(const wxSize& s1, const wxSize& s2);
+
+    wxSize operator +(const wxSize& s1, const wxSize& s2);
+    wxSize operator -(const wxSize& s1, const wxSize& s2);
+    wxSize& operator +=(const wxSize& sz);
+    wxSize& operator -=(const wxSize& sz);
+
+    wxSize operator /(const wxSize& sz, int factor);
+    wxSize operator *(const wxSize& sz, int factor);
+    wxSize operator *(int factor, const wxSize& sz);
+    wxSize& operator /=(int factor);
+    wxSize& operator *=(int factor);
 };
 
 /**
-    Global instance of a wxSize object initialized with values -1;-1.
+    Global instance of a wxSize object initialized to (-1,-1).
 */
 wxSize wxDefaultSize;
 

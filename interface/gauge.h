@@ -10,17 +10,17 @@
     @class wxGauge
     @wxheader{gauge.h}
 
-    A gauge is a horizontal or vertical bar which shows a quantity (often time).
+    A gauge is a horizontal or vertical bar which shows a quantity (often
+    time).
 
     wxGauge supports two working modes: determinate and indeterminate progress.
 
-    The first is the usual working mode (see wxGauge::SetValue
-    and wxGauge::SetRange) while the second can be used when
-    the program is doing some processing but you don't know how much progress is
-    being done.
-    In this case, you can periodically call the wxGauge::Pulse
-    function to make the progress bar switch to indeterminate mode (graphically
-    it's usually a set of blocks which move or bounce in the bar control).
+    The first is the usual working mode (see SetValue() and SetRange()) while
+    the second can be used when the program is doing some processing but you
+    don't know how much progress is being done. In this case, you can
+    periodically call the Pulse() function to make the progress bar switch to
+    indeterminate mode (graphically it's usually a set of blocks which move or
+    bounce in the bar control).
 
     wxGauge supports dynamic switch between these two work modes.
 
@@ -38,14 +38,17 @@
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{gauge.png}
+    <!-- @appearance{gauge.png} -->
 
     @see wxSlider, wxScrollBar
 */
 class wxGauge : public wxControl
 {
 public:
-    //@{
+    /**
+        Default constructor.
+    */
+    wxGauge();
     /**
         Constructor, creating and showing a gauge.
 
@@ -54,27 +57,25 @@ public:
         @param id
             Window identifier.
         @param range
-            Integer range (maximum value) of the gauge. It is ignored when the gauge is
-        used in indeterminate mode.
+            Integer range (maximum value) of the gauge. It is ignored when the
+            gauge is used in indeterminate mode.
         @param pos
             Window position.
         @param size
             Window size.
         @param style
-            Gauge style. See wxGauge.
+            Gauge style.
         @param name
             Window name.
 
         @see Create()
     */
-    wxGauge();
     wxGauge(wxWindow* parent, wxWindowID id, int range,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = "gauge");
-    //@}
 
     /**
         Destructor, destroying the gauge.
@@ -82,8 +83,8 @@ public:
     ~wxGauge();
 
     /**
-        Creates the gauge for two-step construction. See wxGauge()
-        for further details.
+        Creates the gauge for two-step construction. See wxGauge() for further
+        details.
     */
     bool Create(wxWindow* parent, wxWindowID id, int range,
                 const wxPoint& pos = wxDefaultPosition,
@@ -131,11 +132,12 @@ public:
     bool IsVertical() const;
 
     /**
-        Switch the gauge to indeterminate mode (if required) and makes the gauge move
-        a bit to indicate the user that some progress has been made.
-        Note that after calling this function the value returned by GetValue()
-        is undefined and thus you need to explicitely call SetValue() if you
-        want to restore the determinate mode.
+        Switch the gauge to indeterminate mode (if required) and makes the
+        gauge move a bit to indicate the user that some progress has been made.
+
+        @note After calling this function the value returned by GetValue() is
+              undefined and thus you need to explicitely call SetValue() if you
+              want to restore the determinate mode.
     */
     void Pulse();
 
@@ -150,8 +152,8 @@ public:
     void SetBezelFace(int width);
 
     /**
-        Sets the range (maximum value) of the gauge.
-        This function makes the gauge switch to determinate mode, if it's not already.
+        Sets the range (maximum value) of the gauge. This function makes the
+        gauge switch to determinate mode, if it's not already.
 
         @see GetRange()
     */
@@ -166,8 +168,9 @@ public:
     void SetShadowWidth(int width);
 
     /**
-        Sets the position of the gauge. The @a pos must be between 0 and the gauge
-        range as returned by GetRange(), inclusive.
+        Sets the position of the gauge. The @a pos must be between 0 and the
+        gauge range as returned by GetRange(), inclusive.
+
         This function makes the gauge switch to determinate mode, if it was in
         indeterminate mode before.
 
