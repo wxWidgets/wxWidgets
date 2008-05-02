@@ -48,8 +48,7 @@ public:
     wxVListBox(wxWindow* parent, wxWindowID id = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               size_t countItems = 0, long style = 0,
-               const wxString& name = wxVListBoxNameStr);
+               long style = 0, const wxString& name = wxVListBoxNameStr);
 
     /**
         Destructor.
