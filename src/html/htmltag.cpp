@@ -524,11 +524,15 @@ bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
 
 bool wxHtmlTag::GetParamAsInt(const wxString& par, int *clr) const
 {
-    if (!HasParam(par)) return false;
+    if ( !HasParam(par) )
+        return false;
+
     long i;
-    bool succ = GetParam(par).ToLong(&i);
+    if ( !GetParam(par).ToLong(&i) )
+        return false;
+
     *clr = (int)i;
-    return succ;
+    return true;
 }
 
 wxString wxHtmlTag::GetAllParams() const
