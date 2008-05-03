@@ -1221,7 +1221,9 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
         if ( m_winLastFocused )
         {
             // let it know that it doesn't have focus any more
-            m_winLastFocused->HandleKillFocus((WXHWND)NULL);
+            // But this will already be done via WM_KILLFOCUS, so we'll get two kill
+            // focus events if we call it explicitly.
+            // m_winLastFocused->HandleKillFocus((WXHWND)NULL);
 
             // and don't remember it if it's a child from some other frame
             if ( wxGetTopLevelParent(m_winLastFocused) != this )
