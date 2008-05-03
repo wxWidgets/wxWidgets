@@ -12,9 +12,8 @@
 #if wxUSE_RICHTEXT
 
 #include "wx/spinctrl.h"
-
+#include "wx/utils.h"
 #include "wx/richtext/richtextbulletspage.h"
-
 #include "wx/richtext/richtextsymboldlg.h"
 
 /*!
@@ -214,24 +213,24 @@ void wxRichTextBulletsPage::CreateControls()
     wxBoxSizer* itemBoxSizer18 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer4->Add(itemBoxSizer18, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText19 = new wxStaticText( itemPanel1, ID_RICHTEXTBULLETSPAGE_SYMBOLSTATIC, _("&Symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer18->Add(itemStaticText19, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
+    wxBoxSizer* itemBoxSizer19 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer18->Add(itemBoxSizer19, 0, wxGROW, 5);
 
-    wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer18->Add(itemBoxSizer20, 0, wxGROW, 5);
+    wxStaticText* itemStaticText20 = new wxStaticText( itemPanel1, ID_RICHTEXTBULLETSPAGE_SYMBOLSTATIC, _("&Symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemBoxSizer19->Add(itemStaticText20, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_symbolCtrlStrings;
     m_symbolCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, _T(""), wxDefaultPosition, wxSize(60, -1), m_symbolCtrlStrings, wxCB_DROPDOWN );
     m_symbolCtrl->SetHelpText(_("The bullet character."));
     if (wxRichTextBulletsPage::ShowToolTips())
         m_symbolCtrl->SetToolTip(_("The bullet character."));
-    itemBoxSizer20->Add(m_symbolCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
+    itemBoxSizer19->Add(m_symbolCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
 
     wxButton* itemButton22 = new wxButton( itemPanel1, ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, _("Ch&oose..."), wxDefaultPosition, wxDefaultSize, 0 );
     itemButton22->SetHelpText(_("Click to browse for a symbol."));
     if (wxRichTextBulletsPage::ShowToolTips())
         itemButton22->SetToolTip(_("Click to browse for a symbol."));
-    itemBoxSizer20->Add(itemButton22, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer19->Add(itemButton22, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer18->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
@@ -277,6 +276,9 @@ void wxRichTextBulletsPage::CreateControls()
     itemBoxSizer3->Add(m_previewCtrl, 1, wxGROW|wxALL, 5);
 
 ////@end wxRichTextBulletsPage content construction
+
+    if (wxGetDisplaySize().y < 600)
+        m_previewCtrl->SetMinSize(wxSize(350, 50));
 
     m_styleListBox->Append(_("(None)"));
     m_styleListBox->Append(_("Arabic"));
