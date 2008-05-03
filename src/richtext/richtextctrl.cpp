@@ -32,6 +32,7 @@
 #include "wx/dcbuffer.h"
 #include "wx/arrimpl.cpp"
 #include "wx/fontenum.h"
+#include "wx/accel.h"
 
 // DLL options compatibility check:
 #include "wx/app.h"
@@ -254,6 +255,17 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
         SetValue(value);
 
     GetBuffer().AddEventHandler(this);
+
+    // Accelerators
+    wxAcceleratorEntry entries[4];
+
+    entries[0].Set(wxACCEL_CMD,   (int) 'C',       wxID_COPY);
+    entries[1].Set(wxACCEL_CMD,   (int) 'X',       wxID_CUT);
+    entries[2].Set(wxACCEL_CMD,   (int) 'V',       wxID_PASTE);
+    entries[3].Set(wxACCEL_CMD,   (int) 'A',       wxID_SELECTALL);
+
+    wxAcceleratorTable accel(4, entries);
+    SetAcceleratorTable(accel);
 
     return true;
 }
