@@ -282,14 +282,19 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
             if (wd[wd.length()-1] == wxT('%'))
             {
-                wxSscanf(wd.c_str(), wxT("%i%%"), &m_ColsInfo[c].width);
-                m_ColsInfo[c].units = wxHTML_UNITS_PERCENT;
+                if ( wxSscanf(wd.c_str(), wxT("%i%%"), &m_ColsInfo[c].width) == 1 )
+                {
+                    m_ColsInfo[c].units = wxHTML_UNITS_PERCENT;
+                }
             }
             else
             {
-                wxSscanf(wd.c_str(), wxT("%i"), &m_ColsInfo[c].width);
-                m_ColsInfo[c].width = (int)(m_PixelScale * (double)m_ColsInfo[c].width);
-                m_ColsInfo[c].units = wxHTML_UNITS_PIXELS;
+                long width;
+                if ( wd.ToLong(&width) )
+                {
+                    m_ColsInfo[c].width = (int)(m_PixelScale * (double)width);
+                    m_ColsInfo[c].units = wxHTML_UNITS_PIXELS;
+                }
             }
         }
     }
