@@ -33,16 +33,19 @@ static wxString LINKAGEMODE HtmlizeLinebreaks(const wxString& str)
     wxString out;
     out.reserve(str.length()); // we'll certainly need at least that
 
-    for ( wxString::const_iterator i = str.begin(); i != str.end(); ++i )
+    const wxString::const_iterator end = str.end();
+    for ( wxString::const_iterator i = str.begin(); i != end; ++i )
     {
         switch ( (*i).GetValue() )
         {
             case '<':
-                while ( i != str.end() && *i != '>')
+                while ( i != end && *i != '>' )
                 {
                     out << *i++;
                 }
                 out << '>';
+                if ( i == end )
+                    return out;
                 break;
             case '\n':
                 out << "<br>";
@@ -52,6 +55,7 @@ static wxString LINKAGEMODE HtmlizeLinebreaks(const wxString& str)
                 break;
         }
     }
+
     return out;
 }
 
