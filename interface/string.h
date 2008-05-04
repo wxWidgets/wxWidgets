@@ -544,14 +544,19 @@ public:
 
     //@{
     /**
-        Converts given buffer of binary data from 8-bit string to wxString. In Unicode
-        build, the string is interpreted as being in ISO-8859-1 encoding. The version
-        without @a len parameter takes NUL-terminated data.
-        This is a convenience method useful when storing binary data in wxString.
+        Converts given buffer of binary data from 8-bit string to wxString. In
+        Unicode build, the string is interpreted as being in ISO-8859-1
+        encoding. The version without @a len parameter takes NUL-terminated
+        data.
+
+        This is a convenience method useful when storing binary data in
+        wxString. It should be used @em only for that purpose and only in
+        conjunction with To8BitData(). Use mb_str() for conversion of character
+        data to known encoding.
 
         @since 2.8.4
 
-        @see wxString::To8BitData
+        @see wxString::To8BitData()
     */
     static wxString From8BitData(const char* buf, size_t len);
     static wxString From8BitData(const char* buf);
@@ -825,13 +830,16 @@ public:
 
     //@{
     /**
-        Converts the string to an 8-bit string in ISO-8859-1 encoding in the form of
-        a wxCharBuffer (Unicode builds only).
-        This is a convenience method useful when storing binary data in wxString.
+        Converts the string to an 8-bit string in ISO-8859-1 encoding in the
+        form of a wxCharBuffer (Unicode builds only).
+
+        This is a convenience method useful when storing binary data in
+        wxString. It should be used @em only for this purpose. It is only valid
+        to call this method on strings created using From8BitData().
 
         @since 2.8.4
 
-        @see wxString::From8BitData
+        @see wxString::From8BitData()
     */
     const char* To8BitData() const;
     const const wxCharBuffer To8BitData() const;
