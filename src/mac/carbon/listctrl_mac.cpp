@@ -771,6 +771,8 @@ wxListCtrl::~wxListCtrl()
         delete m_imageListState;
 
     delete m_renameTimer;
+    
+    WX_CLEAR_LIST(wxColumnList, m_colsInfo);
 }
 
 /*static*/
@@ -2418,6 +2420,7 @@ void wxListCtrl::SetFocus()
 
 wxMacListCtrlItem::~wxMacListCtrlItem()
 {
+    WX_CLEAR_HASH_MAP( wxListItemList, m_rowItems );
 }
 
 void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
@@ -2997,18 +3000,27 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
 
 void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
     DataBrowserItemNotification message,
-    DataBrowserItemDataRef WXUNUSED(itemData) )
+    DataBrowserItemDataRef itemData )
 {
-    // we want to depend on as little as possible to make sure tear-down of controls is safe
-    if ( message == kDataBrowserItemRemoved)
+    wxMacListCtrlItem *item = NULL;
+    if ( !m_isVirtual )
     {
-        // make sure MacDelete does the proper teardown.
+        item = (wxMacListCtrlItem *) itemID;
+    }
+    
+    // we want to depend on as little as possible to make sure tear-down of controls is safe
+    if ( message == kDataBrowserItemRemoved )
+    {
+        if ( item )
+            item->Notification(this, message, itemData);
         return;
     }
     else if ( message == kDataBrowserItemAdded )
     {
         // we don't issue events on adding, the item is not really stored in the list yet, so we
         // avoid asserts by getting out now
+        if ( item )
+            item->Notification(this, message, itemData);
         return  ;
     }
 
