@@ -10,7 +10,8 @@
 
 @page overview_python wxPython Overview
 
-This topic was written by Robin Dunn, author of the wxPython wrapper.
+This topic was written by Robin Dunn, author of the
+<a href="http://www.python.org/">wxPython</a> wrapper.
 
 @li @ref overview_python_what
 @li @ref overview_python_why
@@ -120,19 +121,19 @@ pieces you need without having to use the GUI portions.
 There are quite a few other GUI modules available for Python, some in active
 use, some that haven't been updated for ages. Most are simple wrappers around
 some C or C++ toolkit or another, and most are not cross-platform compatible.
-See http://pypi.python.org/pypi?:action=browse&show=all&c=433 for a listing of
-a few of them.
+See <a href="http://pypi.python.org/pypi?:action=browse&show=all&c=433">this link</a>
+for a listing of a few of them.
 
 
 @section overview_python_using Using wxPython
 
 I'm not going to try and teach the Python language here. You can do that at the
-<http://www.python.org/doc/tut/tut.html>. I'm also going to assume that you
-know a bit about wxWidgets already, enough to notice the similarities in the
-classes used.
+<a href="http://www.python.org/doc/tut/tut.html">Python Tutorial</a>. I'm also
+going to assume that you know a bit about wxWidgets already, enough to notice
+the similarities in the classes used.
 
 Take a look at the following wxPython program. You can find a similar program
-in the wxPython/demo directory, named "DialogUnits.py". If your Python and
+in the @c wxPython/demo directory, named @c DialogUnits.py. If your Python and
 wxPython are properly installed, you should be able to run it by issuing this
 command:
 
@@ -221,8 +222,8 @@ python DialogUnits.py
 
 At line 2 the wxPython classes, constants, and etc. are imported into the
 current module's namespace. If you prefer to reduce namespace pollution you can
-use "from wxPython import wx" and then access all the wxPython identifiers
-through the wx module, for example, "wx.wxFrame".
+use @c "from wxPython import wx" and then access all the wxPython identifiers
+through the wx module, for example, @c "wx.wxFrame".
 
 At line 13 the frame's sizing and moving events are connected to methods of the
 class. These helper functions are intended to be like the event table macros
@@ -235,13 +236,13 @@ Notice the use of @c wxDLG_PNT and @c wxDLG_SZE in lines 19-29 to convert from
 dialog units to pixels. These helpers are unique to wxPython since Python can't
 do method overloading like C++.
 
-There is an @c OnCloseWindow method at line 34 but no call to EVT_CLOSE to
+There is an @c OnCloseWindow method at line 34 but no call to @c EVT_CLOSE to
 attach the event to the method. Does it really get called?  The answer is, yes
 it does. This is because many of the standard events are attached to windows
 that have the associated standard method names. I have tried to follow the lead
 of the C++ classes in this area to determine what is standard but since that
 changes from time to time I can make no guarantees, nor will it be fully
-documented. When in doubt, use an EVT_*** function.
+documented. When in doubt, use an @c EVT_*** function.
 
 At lines 17 to 21 notice that there are no saved references to the panel or the
 static text items that are created. Those of you who know Python might be
@@ -250,7 +251,7 @@ scope. Do they disappear from the GUI?  They don't. Remember that in wxPython
 the Python objects are just shadows of the corresponding C++ objects. Once the
 C++ windows and controls are attached to their parents, the parents manage them
 and delete them when necessary. For this reason, most wxPython objects do not
-need to have a __del__ method that explicitly causes the C++ object to be
+need to have a @c __del__ method that explicitly causes the C++ object to be
 deleted. If you ever have the need to forcibly delete a window, use the
 Destroy() method as shown on line 36.
 
@@ -300,7 +301,7 @@ spec over time.
 @li wxColour
 @li wxComboBox
 @li wxCommandEvent
-@li wxConfig
+@li wxConfigBase
 @li wxControl
 @li wxCursor
 @li wxCustomDataObject
@@ -355,7 +356,7 @@ spec over time.
 @li wxIndividualLayoutConstraint
 @li wxInitDialogEvent
 @li wxInputStream
-@li wxInternetFSHandler
+@li @ref wxFileSystem "wxInternetFSHandler"
 @li wxJoystickEvent
 @li wxJPEGHandler
 @li wxKeyEvent
@@ -377,7 +378,7 @@ spec over time.
 @li wxMenuItem
 @li wxMenu
 @li wxMessageDialog
-@li wxMetaFileDC
+@li wxMetafileDC
 @li wxMiniFrame
 @li wxMouseEvent
 @li wxMoveEvent
@@ -454,7 +455,7 @@ spec over time.
 @li wxValidator
 @li wxWindowDC
 @li wxWindow
-@li wxZipFSHandler
+@li @ref wxFileSystem "wxZipFSHandler"
 
 
 @section overview_python_help Where to Go for Help

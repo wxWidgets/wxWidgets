@@ -97,7 +97,7 @@ printing under MSW and Mac), or a wxPostScriptDC (for printing under GTK or
 generating PostScript output).
 
 The @ref overview_docview "document/view framework" creates a default
-wxPrintout object for every view, calling wxView::OnDraw to achieve a
+wxPrintout object for every view, calling wxView::OnDraw() to achieve a
 prepackaged print/preview facility.
 
 If your window classes have a Draw(wxDC *dc) routine to do screen rendering,
@@ -141,7 +141,7 @@ There are two important rectangles in printing: the <em>page rectangle</em>
 defines the printable area seen by the application, and under MSW and Mac, it
 is the printable area specified by the printer. (For PostScript printing, the
 page rectangle is the entire page.) The inherited function
-wxDC::GetSize returns the page size in device pixels. The
+wxDC::GetSize() returns the page size in device pixels. The
 point (0,0) on the wxPrinterDC represents the top left corner of the page
 rectangle; that is, the page rect is given by wxRect(0, 0, w, h), where (w,h)
 are the values returned by GetSize.
@@ -150,7 +150,7 @@ The <em>paper rectangle</em>, on the other hand, represents the entire paper
 area including the non-printable border. Thus, the coordinates of the top left
 corner of the paper rectangle will have small negative values, while the width
 and height will be somewhat larger than that of the page rectangle. The
-wxPrinterDC-specific function wxPrinterDC::GetPaperRect returns the paper
+wxPrinterDC-specific function wxPrinterDC::GetPaperRect() returns the paper
 rectangle of the given wxPrinterDC.
 
 

@@ -1,3 +1,10 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        rawbmp.h
+// Purpose:     interface of wxPixelData
+// Author:      wxWidgets team
+// RCS-ID:      $Id$
+// Licence:     wxWindows license
+/////////////////////////////////////////////////////////////////////////////
 
 /**
     @class wxPixelData
@@ -8,14 +15,19 @@
     wxImage's internal data through a standard interface. It is
     possible to extend this class (interface) to other types of
     image content.
-    
+
     Implemented on Windows, GTK+ and OS X:
-       @li wxNativePixelData: Class to access to wxBitmap's internal data without alpha channel (RGB).
-       @li wxAlphaPixelData: Class to access to wxBitmap's internal data with alpha channel (RGBA).
-    
+       @li wxNativePixelData: Class to access to wxBitmap's internal data
+           without alpha channel (RGB).
+       @li wxAlphaPixelData: Class to access to wxBitmap's internal data with
+           alpha channel (RGBA).
+
     Implemented everywhere:
-       @li wxImagePixelData: Class to access to wxImage's internal data with alpha channel (RGBA).
-    
+       @li wxImagePixelData: Class to access to wxImage's internal data with
+           alpha channel (RGBA).
+
+    Example:
+
     @code
     wxBitmap bmp;
     wxNativePixelData data(bmp);
@@ -54,7 +66,7 @@
 
     @library{wxcore}
     @category{gdi}
-    
+
     @see wxBitmap, wxImage
 */
 template <class Image, class PixelFormat = wxPixelFormatFor<Image> >
@@ -62,140 +74,142 @@ class wxPixelData :
     public wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
 {
 public:
-    /** 
-        the type of the class we're working with
+    /**
+        The type of the class we're working with.
     */
     typedef Image ImageType;
-    
+
     /**
-        Create pixel data object representing the entire image
+        Create pixel data object representing the entire image.
     */
     wxPixelData(Image& image);
-    
-    
+
+
     /**
-        Create pixel data object representing the area
-        of the image defined by @e rect.
+        Create pixel data object representing the area of the image defined by
+        @a rect.
     */
     wxPixelData(Image& i, const wxRect& rect);
-    
+
     /**
-        Create pixel data object representing the area
-        of the image defined by @e pt and @e sz.
+        Create pixel data object representing the area of the image defined by
+        @a pt and @a sz.
     */
     wxPixelData(Image& i, const wxPoint& pt, const wxSize& sz)
-    
+
     /**
-        Return true of if we could get access to bitmap data
-        successfully
+        Return @true of if we could get access to bitmap data successfully.
     */
     operator bool() const:
 
-    /** 
-       Return the iterator pointing to the origin of the image
+    /**
+        Return the iterator pointing to the origin of the image.
     */
     Iterator GetPixels() const;
 
     /**
-        Returns origin of the rectangular region we represent
+        Returns origin of the rectangular region this wxPixelData represents.
     */
     wxPoint GetOrigin() const;
 
-    /** 
-         Return width of the region we represent
+    /**
+        Return width of the region this wxPixelData represents.
     */
     int GetWidth() const;
 
-    /** 
-         Return height of the region we represent
+    /**
+        Return height of the region this wxPixelData represents.
     */
     int GetHeight() const;
 
-    /*
-        Return area which this class represents in the image
+    /**
+        Return the area which this wxPixelData represents in the image.
     */
     wxSize GetSize() const;
 
     /**
-       Return the distance between two rows
+        Return the distance between two rows.
     */
     int GetRowStride() const;
 
 
     /**
-        Iterator
+        The iterator of class wxPixelData.
     */
-        class Iterator
-        {
-        public:
-            /**
-               go back to (0, 0)
-            */
-            void Reset(const PixelData& data);
-            
-            /**
-               Initializes the iterator to point to the origin of the given
-               pixel data
-            */
-            Iterator(PixelData& data);
+    class Iterator
+    {
+    public:
 
-            /**
-               Initializes the iterator to point to the origin of the given
-               Bitmap
-            */
-            Iterator(wxBitmap& bmp, PixelData& data);
+        /**
+            Reset the iterator to point to (0, 0).
+        */
+        void Reset(const PixelData& data);
 
-            /**
-               Default constructor
-            */
-            Iterator();
+        /**
+            Initializes the iterator to point to the origin of the given pixel
+            data.
+        */
+        Iterator(PixelData& data);
 
-            /**
-               Return true if this iterator is valid
-            */
-            bool IsOk() const;
+        /**
+            Initializes the iterator to point to the origin of the given Bitmap.
+        */
+        Iterator(wxBitmap& bmp, PixelData& data);
 
-            /**
-               Advance the iterator to the next pixel, prefix version
-            */
-            Iterator& operator++();
+        /**
+            Default constructor.
+        */
+        Iterator();
 
-            /**
-               Postfix (hence less efficient -- don't use it unless you
-               absolutely must) version
-            */
-            Iterator operator++(int);
+        /**
+            Return @true if this iterator is valid.
+        */
+        bool IsOk() const;
 
-            /**
-               Move x pixels to the right and y down
-               note that the rows don't wrap!
-            */
-            void Offset(const PixelData& data, int x, int y);
+        /**
+            Advance the iterator to the next pixel, prefix version.
+        */
+        Iterator& operator++();
 
-            /**
-               Move x pixels to the right (again, no row wrapping)
-            */
-            void OffsetX(const PixelData&data, int x);
+        /**
+            Advance the iterator to the next pixel, postfix (hence less
+            efficient -- don't use it unless you absolutely must) version.
+        */
+        Iterator operator++(int);
 
-            /**
-               Move y rows to the bottom
-            */
-            void OffsetY(const PixelData& data, int y);
+        /**
+            Move @a x pixels to the right and @a y down.
 
-            /**
-               Go to the given position
-            */
-            void MoveTo(const PixelData& data, int x, int y);
+            @note The rows won't wrap automatically.
+        */
+        void Offset(const PixelData& data, int x, int y);
 
-    //@{
-            /**
-               Data access: gives access to invidividual colour components.
-            */
-            ChannelType& Red();
-            ChannelType& Green();
-            ChannelType& Blue();
-            ChannelType& Alpha();
-    //@}
-        };
+        /**
+            Move @a x pixels to the right.
+
+            @note The rows won't wrap automatically.
+        */
+        void OffsetX(const PixelData&data, int x);
+
+        /**
+            Move @a y rows to the bottom
+        */
+        void OffsetY(const PixelData& data, int y);
+
+        /**
+            Go to the given position
+        */
+        void MoveTo(const PixelData& data, int x, int y);
+
+        //@{
+        /**
+            Data Access: Access to invidividual colour components.
+        */
+        ChannelType& Red();
+        ChannelType& Green();
+        ChannelType& Blue();
+        ChannelType& Alpha();
+        //@}
+    };
 };
 

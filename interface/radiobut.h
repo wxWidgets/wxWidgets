@@ -10,13 +10,13 @@
     @class wxRadioButton
     @wxheader{radiobut.h}
 
-    A radio button item is a button which usually denotes one of several mutually
-    exclusive options. It has a text label next to a (usually) round button.
+    A radio button item is a button which usually denotes one of several
+    mutually exclusive options. It has a text label next to a (usually) round
+    button.
 
-    You can create a group of mutually-exclusive radio buttons by specifying @c
-    wxRB_GROUP for
-    the first in the group. The group ends when another radio button group is
-    created, or there are no more radio buttons.
+    You can create a group of mutually-exclusive radio buttons by specifying
+    @c wxRB_GROUP for the first in the group. The group ends when another
+    radio button group is created, or there are no more radio buttons.
 
     @beginStyleTable
     @style{wxRB_GROUP}
@@ -33,7 +33,7 @@
 
     @beginEventTable{wxCommandEvent}
     @event{EVT_RADIOBUTTON(id, func)}
-           Process a wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the
+           Process a @c wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the
            radiobutton is clicked.
     @endEventTable
 
@@ -46,21 +46,28 @@
 class wxRadioButton : public wxControl
 {
 public:
-    //@{
+
+    /**
+        Default constructor.
+
+        @see Create(), wxValidator
+    */
+    wxRadioButton();
+
     /**
         Constructor, creating and showing a radio button.
 
         @param parent
             Parent window. Must not be @NULL.
         @param id
-            Window identifier. The value wxID_ANY indicates a default value.
+            Window identifier. The value @c wxID_ANY indicates a default value.
         @param label
             Label for the radio button.
         @param pos
-            Window position. If wxDefaultPosition is specified then a default
+            Window position. If @c wxDefaultPosition is specified then a default
         position is chosen.
         @param size
-            Window size. If wxDefaultSize is specified then a default size
+            Window size. If @c wxDefaultSize is specified then a default size
         is chosen.
         @param style
             Window style. See wxRadioButton.
@@ -71,7 +78,6 @@ public:
 
         @see Create(), wxValidator
     */
-    wxRadioButton();
     wxRadioButton(wxWindow* parent, wxWindowID id,
                   const wxString& label,
                   const wxPoint& pos = wxDefaultPosition,
@@ -79,7 +85,6 @@ public:
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
                   const wxString& name = "radioButton");
-    //@}
 
     /**
         Destructor, destroying the radio button item.
@@ -105,7 +110,7 @@ public:
 
     /**
         Sets the radio button to selected or deselected status. This does not cause a
-        wxEVT_COMMAND_RADIOBUTTON_SELECTED event to get emitted.
+        @c wxEVT_COMMAND_RADIOBUTTON_SELECTED event to get emitted.
 
         @param value
             @true to select, @false to deselect.

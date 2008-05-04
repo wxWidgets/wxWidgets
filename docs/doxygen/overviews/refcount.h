@@ -41,9 +41,10 @@ operation on it is the same.
 
 @section overview_refcount_equality Object Comparison
 
-The == and != operators of the reference counted classes always do a @c deep
-comparison. This means that the equality operator will return @true if two
-objects are identical and not only if they share the same data.
+The == and != operators of @ref overview_refcount_list "the reference counted classes"
+always do a <em>deep comparison</em>. This means that the equality operator
+will return @true if two objects are identical and not only if they share the
+same data.
 
 Note that wxWidgets follows the <em>STL philosophy</em>: when a comparison
 operator can not be implemented efficiently (like for e.g. wxImage's ==
@@ -90,8 +91,8 @@ operators and copy constructors since they are reference-counted:
 Note that the list above reports the objects which are reference counted in all
 ports of wxWidgets; some ports may use this technique also for other classes.
 
-All the objects implement a function IsOk() to test if they are referencing valid
-data; when the objects are in uninitialized state, you can only use the IsOk() getter;
+All the objects implement a function @b IsOk() to test if they are referencing valid
+data; when the objects are in uninitialized state, you can only use the @b IsOk() getter;
 trying to call any other getter, e.g. wxBrush::GetStyle() on the ::wxNullBrush object,
 will result in an assert failure in debug builds.
 
@@ -120,7 +121,7 @@ In fact, any time you need to read the data from your wxObject-derived class,
 you will need to call this function.
 
 @note Any time you need to actually modify the data placed inside your wxObject
-derived class, you must first call the wxObject::UnShare function to ensure
+derived class, you must first call the wxObject::UnShare() function to ensure
 that the modifications won't affect other instances which are eventually
 sharing your object's data.
 

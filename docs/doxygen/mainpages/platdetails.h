@@ -189,7 +189,7 @@ in the distribution.
 
 @subsection page_port_wxmsw_themedborders Themed borders on Windows
 
-Starting with wxWidgets 2.8.5, you can specify the wxBORDER_THEME style to have wxWidgets
+Starting with wxWidgets 2.8.5, you can specify the @c wxBORDER_THEME style to have wxWidgets
 use a themed border. Using the default XP theme, this is a thin 1-pixel blue border,
 with an extra 1-pixel border in the window client background colour (usually white) to
 separate the client area's scrollbars from the border.
@@ -198,11 +198,11 @@ If you don't specify a border style for a wxTextCtrl in rich edit mode, wxWidget
 the control themed borders automatically, where previously they would take the Windows 95-style
 sunken border. Other native controls such as wxTextCtrl in non-rich edit mode, and wxComboBox,
 already paint themed borders where appropriate. To use themed borders on other windows, such
-as wxPanel, pass the wxBORDER_THEME style, or (apart from wxPanel) pass no border style.
+as wxPanel, pass the @c wxBORDER_THEME style, or (apart from wxPanel) pass no border style.
 
-In general, specifying wxBORDER_THEME will cause a border of some kind to be used, chosen by the platform
-and control class. To leave the border decision entirely to wxWidgets, pass wxBORDER_DEFAULT.
-This is not to be confused with specifying wxBORDER_NONE, which says that there should
+In general, specifying @c wxBORDER_THEME will cause a border of some kind to be used, chosen by the platform
+and control class. To leave the border decision entirely to wxWidgets, pass @c wxBORDER_DEFAULT.
+This is not to be confused with specifying @c wxBORDER_NONE, which says that there should
 definitely be @e no border.
 
 @subsubsection page_port_wxmsw_themedborders_details More detail on border implementation
@@ -241,7 +241,7 @@ of listboxes where appropriate. You also need to reduce
 the amount of spacing used by sizers, for which you can
 use a macro such as this:
 
-@verbatim
+@code
 #if defined(__WXWINCE__)
     #define wxLARGESMALL(large,small) small
 #else
@@ -250,7 +250,7 @@ use a macro such as this:
 
 // Usage
 topsizer->Add( CreateTextSizer( message ), 0, wxALL, wxLARGESMALL(10,0) );
-@endverbatim
+@endcode
 
 There is only ever one instance of a Windows CE application running,
 and wxWidgets will take care of showing the current instance and
@@ -306,7 +306,7 @@ If the screen orientation changes, the windows will automatically be resized
 so no further action needs to be taken (unless you want to change the layout
 according to the orientation, which you could detect in idle time, for example).
 When input panel (SIP) is shown, top level windows (frames and dialogs) resize
-accordingly (see wxTopLevelWindow::HandleSettingChange).
+accordingly (see wxTopLevelWindow::HandleSettingChange()).
 
 @subsubsection page_port_wxmsw_wince_toplevel Closing top-level windows in wxWinCE
 
@@ -316,24 +316,24 @@ event to force the application to close down.
 
 @subsubsection page_port_wxmsw_wince_hibernation Hibernation in wxWinCE
 
-Smartphone and PocketPC will send a wxEVT_HIBERNATE to the application object in low
+Smartphone and PocketPC will send a @c wxEVT_HIBERNATE to the application object in low
 memory conditions. Your application should release memory and close dialogs,
-and wake up again when the next wxEVT_ACTIVATE or wxEVT_ACTIVATE_APP message is received.
-(wxEVT_ACTIVATE_APP is generated whenever a wxEVT_ACTIVATE event is received
-in Smartphone and PocketPC, since these platforms do not support WM_ACTIVATEAPP.)
+and wake up again when the next @c wxEVT_ACTIVATE or @c wxEVT_ACTIVATE_APP message is received.
+(@c wxEVT_ACTIVATE_APP is generated whenever a @c wxEVT_ACTIVATE event is received
+in Smartphone and PocketPC, since these platforms do not support @c WM_ACTIVATEAPP.)
 
 @subsubsection page_port_wxmsw_wince_hwbutt Hardware buttons in wxWinCE
 
-Special hardware buttons are sent to a window via the wxEVT_HOTKEY event
+Special hardware buttons are sent to a window via the @c wxEVT_HOTKEY event
 under Smartphone and PocketPC. You should first register each required button with
-wxWindow::RegisterHotKey, and unregister the button when you're done with it. For example:
+wxWindow::RegisterHotKey(), and unregister the button when you're done with it. For example:
 
-@verbatim
+@code
 win->RegisterHotKey(0, wxMOD_WIN, WXK_SPECIAL1);
 win->UnregisterHotKey(0);
-@endverbatim
+@endcode
 
-You may have to register the buttons in a wxEVT_ACTIVATE event handler
+You may have to register the buttons in a @c wxEVT_ACTIVATE event handler
 since other applications will grab the buttons.
 
 There is currently no method of finding out the names of the special
@@ -345,15 +345,15 @@ PocketPC dialogs have an OK button on the caption, and so you should generally
 not repeat an OK button on the dialog. You can add a Cancel button if necessary, but some dialogs
 simply don't offer you the choice (the guidelines recommend you offer an Undo facility
 to make up for it). When the user clicks on the OK button, your dialog will receive
-a wxID_OK event by default. If you wish to change this, call wxDialog::SetAffirmativeId
-with the required identifier to be used. Or, override wxDialog::DoOK (return @false to
+a @c wxID_OK event by default. If you wish to change this, call wxDialog::SetAffirmativeId()
+with the required identifier to be used. Or, override wxDialog::DoOK() (return @false to
 have wxWidgets simply call Close to dismiss the dialog).
 
 Smartphone dialogs do @e not have an OK button on the caption, and are closed
 using one of the two menu buttons. You need to assign these using wxTopLevelWindow::SetLeftMenu
-and wxTopLevelWindow::SetRightMenu, for example:
+and wxTopLevelWindow::SetRightMenu(), for example:
 
-@verbatim
+@code
 #ifdef __SMARTPHONE__
     SetLeftMenu(wxID_OK);
     SetRightMenu(wxID_CANCEL, _("Cancel"));
@@ -362,9 +362,9 @@ and wxTopLevelWindow::SetRightMenu, for example:
 #else
     topsizer->Add( CreateButtonSizer( wxOK|wxCANCEL ), 0, wxEXPAND | wxALL, 10 );
 #endif
-@endverbatim
+@endcode
 
-For implementing property sheets (flat tabs), use a wxNotebook with wxNB_FLAT|wxNB_BOTTOM
+For implementing property sheets (flat tabs), use a wxNotebook with @c wxNB_FLAT|wxNB_BOTTOM
 and have the notebook left, top and right sides overlap the dialog by about 3 pixels
 to eliminate spurious borders. You can do this by using a negative spacing in your
 sizer Add() call. The cross-platform property sheet dialog wxPropertySheetDialog is
@@ -387,7 +387,7 @@ Menubars and toolbars are implemented using a combined control,
 but you can use essentially the usual wxWidgets API; wxWidgets will combine the menubar
 and toolbar. However, there are some restrictions:
 
-@li You must create the frame's primary toolbar with wxFrame::CreateToolBar,
+@li You must create the frame's primary toolbar with wxFrame::CreateToolBar(),
 because this uses the special wxToolMenuBar class (derived from wxToolBar)
 to implement the combined toolbar and menubar. Otherwise, you can create and manage toolbars
 using the wxToolBar class as usual, for example to implement an optional
@@ -402,8 +402,8 @@ or with transparency (for example, using XPMs).
 controls.
 
 Unlike in all other ports, a wxDialog has a wxToolBar, automatically created
-for you. You may either leave it blank, or access it with wxDialog::GetToolBar
-and add buttons, then calling wxToolBar::Realize. You cannot set or recreate
+for you. You may either leave it blank, or access it with wxDialog::GetToolBar()
+and add buttons, then calling wxToolBar::Realize(). You cannot set or recreate
 the toolbar.
 
 @subsubsection page_port_wxmsw_wince_smart Menubars and toolbars in Smartphone
@@ -424,7 +424,7 @@ wxID_EXIT, it will do the right thing.
 
 @subsubsection page_port_wxmsw_wince_ctx Context menus in wxWinCE
 
-To enable context menus in PocketPC, you currently need to call wxWindow::EnableContextMenu,
+To enable context menus in PocketPC, you currently need to call wxWindow::EnableContextMenu(),
 a wxWinCE-only function. Otherwise the context menu event (wxContextMenuEvent) will
 never be sent. This API is subject to change.
 
@@ -434,7 +434,7 @@ Context menus are not supported in Smartphone.
 
 These controls and styles are specific to wxWinCE:
 
-@li wxTextCtrl The wxTE_CAPITALIZE style causes a CAPEDIT control to
+@li wxTextCtrl The @c wxTE_CAPITALIZE style causes a CAPEDIT control to
 be created, which capitalizes the first letter.
 
 These controls are missing from wxWinCE:
@@ -447,9 +447,9 @@ tooltips are distinct controls, and it will be hard to add dynamic
 tooltip support.
 
 Control borders on PocketPC and Smartphone should normally be specified with
-wxBORDER_SIMPLE instead of wxBORDER_SUNKEN. Controls will usually adapt
+@c wxBORDER_SIMPLE instead of @c wxBORDER_SUNKEN. Controls will usually adapt
 appropriately by virtue of their GetDefaultBorder() function, but if you
-wish to specify a style explicitly you can use wxDEFAULT_CONTROL_BORDER
+wish to specify a style explicitly you can use @c wxDEFAULT_CONTROL_BORDER
 which will give a simple border on PocketPC and Smartphone, and the sunken border on
 other platforms.
 
@@ -569,11 +569,11 @@ icons, should be implemented. This will be quite straightforward.
 and the remaining area, by calling SHSipInfo. We also may need to be able to show and hide
 the SIP programmatically, with SHSipPreference. See also the <em>Input Dialogs</em> topic in
 the <em>Programming Windows CE</em> guide for more on this, and how to have dialogs
-show the SIP automatically using the WC_SIPREF control.
+show the SIP automatically using the @c WC_SIPREF control.
 @li <b>wxStaticBitmap.</b> The About box in the "Life!" demo shows a bitmap that is
 the correct size on the emulator, but too small on a VGA Pocket Loox device.
 @li <b>wxStaticLine.</b> Lines don't show up, and the documentation suggests that
-missing styles are implemented with WM_PAINT.
+missing styles are implemented with @c WM_PAINT.
 @li <b>HTML control.</b> PocketPC has its own HTML control which can be used for showing
 local pages or navigating the web. We should create a version of wxHtmlWindow that uses this
 control, or have a separately-named control (wxHtmlCtrl), with a syntax as close as possible
@@ -587,7 +587,7 @@ between controls. The focus handling in wxWidgets needs investigation. See in pa
 src/common/containr.cpp, and note that the default OnActivate handler in src/msw/toplevel.cpp
 sets the focus to the first child of the dialog.
 @li <b>OK button.</b> We should allow the OK button on a dialog to be optional, perhaps
-by using wxCLOSE_BOX to indicate when the OK button should be displayed.
+by using @c wxCLOSE_BOX to indicate when the OK button should be displayed.
 @li <b>Dynamic adaptation.</b> We should probably be using run-time tests more
 than preprocessor tests, so that the same WinCE application can run on different
 versions of the operating system.
