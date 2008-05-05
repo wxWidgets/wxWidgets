@@ -458,6 +458,7 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
         long oldCaretPos = m_caretPosition;
 
         MoveCaret(position, caretAtLineStart);
+        SetDefaultStyleToCursorStyle();
 
         if (event.ShiftDown())
         {
@@ -596,6 +597,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
             ExtendSelection(m_caretPosition, position, wxRICHTEXT_SHIFT_DOWN);
 
             MoveCaret(position, caretAtLineStart);
+            SetDefaultStyleToCursorStyle();
         }
     }
 }
@@ -686,7 +688,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
     if (event.GetKeyCode() == WXK_RETURN)
     {
-        SetDefaultStyleToCursorStyle();
         BeginBatchUndo(_("Insert Text"));
 
         long newPos = m_caretPosition;
@@ -703,6 +704,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE|wxRICHTEXT_INSERT_INTERACTIVE);
 
         EndBatchUndo();
+        SetDefaultStyleToCursorStyle();
 
         ScrollIntoView(m_caretPosition, WXK_RIGHT);
 
@@ -756,6 +758,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
             m_caretPosition = -1;
             PositionCaret();
+            SetDefaultStyleToCursorStyle();
         }
 
         ScrollIntoView(m_caretPosition, WXK_LEFT);
@@ -790,6 +793,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
             m_caretPosition = -1;
             PositionCaret();
+            SetDefaultStyleToCursorStyle();
         }
 
         wxRichTextEvent cmdEvent(
@@ -951,7 +955,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     }
                 }
 
-                SetDefaultStyleToCursorStyle();
                 BeginBatchUndo(_("Insert Text"));
 
                 long newPos = m_caretPosition;
@@ -966,6 +969,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
                 EndBatchUndo();
 
+                SetDefaultStyleToCursorStyle();
                 ScrollIntoView(m_caretPosition, WXK_RIGHT);
 
                 GetEventHandler()->ProcessEvent(cmdEvent);
@@ -1082,6 +1086,7 @@ bool wxRichTextCtrl::KeyboardNavigate(int keyCode, int flags)
     if (success)
     {
         ScrollIntoView(m_caretPosition, keyCode);
+        SetDefaultStyleToCursorStyle();
     }
 
     return success;
@@ -1303,11 +1308,13 @@ void wxRichTextCtrl::MoveCaretForward(long oldPosition)
                     m_caretPosition = oldPosition;
                     m_caretAtLineStart = true;
                 }
+                SetDefaultStyleToCursorStyle();
                 return;
             }
         }
     }
     m_caretPosition ++;
+    SetDefaultStyleToCursorStyle();
 }
 
 /// Move caret one visual step backward: this may mean setting a flag
@@ -1351,11 +1358,13 @@ void wxRichTextCtrl::MoveCaretBack(long oldPosition)
                     // to the previous character position.
                     m_caretPosition = oldPosition - 1;
                 }
+                SetDefaultStyleToCursorStyle();
                 return;
             }
         }
     }
     m_caretPosition --;
+    SetDefaultStyleToCursorStyle();
 }
 
 /// Move right
@@ -1383,6 +1392,7 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
             SetCaretPosition(newPos);
 
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1409,6 +1419,7 @@ bool wxRichTextCtrl::MoveLeft(int noPositions, int flags)
             SetCaretPosition(newPos);
 
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1497,6 +1508,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
 
         SetCaretPosition(newPos, caretLineStart);
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1517,6 +1529,7 @@ bool wxRichTextCtrl::MoveToParagraphEnd(int flags)
 
         SetCaretPosition(newPos);
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1537,6 +1550,7 @@ bool wxRichTextCtrl::MoveToParagraphStart(int flags)
 
         SetCaretPosition(newPos);
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1559,6 +1573,7 @@ bool wxRichTextCtrl::MoveToLineEnd(int flags)
 
         SetCaretPosition(newPos);
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1583,6 +1598,7 @@ bool wxRichTextCtrl::MoveToLineStart(int flags)
 
         SetCaretPosition(newPos, para->GetRange().GetStart() != lineRange.GetStart());
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1601,6 +1617,7 @@ bool wxRichTextCtrl::MoveHome(int flags)
 
         SetCaretPosition(-1);
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1621,6 +1638,7 @@ bool wxRichTextCtrl::MoveEnd(int flags)
 
         SetCaretPosition(endPos);
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1659,6 +1677,7 @@ bool wxRichTextCtrl::PageDown(int noPages, int flags)
 
                 SetCaretPosition(pos, para->GetRange().GetStart() != lineRange.GetStart());
                 PositionCaret();
+                SetDefaultStyleToCursorStyle();
 
                 return true;
             }
@@ -1775,6 +1794,7 @@ bool wxRichTextCtrl::WordLeft(int WXUNUSED(n), int flags)
 
         SetCaretPosition(pos, para->GetRange().GetStart() != pos);
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -1796,6 +1816,7 @@ bool wxRichTextCtrl::WordRight(int WXUNUSED(n), int flags)
 
         SetCaretPosition(pos, para->GetRange().GetStart() != pos);
         PositionCaret();
+        SetDefaultStyleToCursorStyle();
 
         return true;
     }
@@ -2104,6 +2125,7 @@ bool wxRichTextCtrl::SelectWord(long position)
     if (positionStart >= 0)
     {
         MoveCaret(positionStart-1, true);
+        SetDefaultStyleToCursorStyle();
     }
 
     return true;
@@ -2221,7 +2243,6 @@ void wxRichTextCtrl::DoWriteText(const wxString& value, int flags)
 {
     wxString valueUnix = wxTextFile::Translate(value, wxTextFileType_Unix);
 
-    SetDefaultStyleToCursorStyle();
     GetBuffer().InsertTextWithUndo(m_caretPosition+1, valueUnix, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
     if ( flags & SetValue_SendEvent )
@@ -2321,7 +2342,6 @@ void wxRichTextCtrl::Paste()
 {
     if (CanPaste())
     {
-        SetDefaultStyleToCursorStyle();
         BeginBatchUndo(_("Paste"));
 
         long newPos = m_caretPosition;
