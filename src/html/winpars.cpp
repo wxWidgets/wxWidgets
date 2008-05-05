@@ -345,15 +345,18 @@ wxFSFile *wxHtmlWinParser::OpenURL(wxHtmlURLType type,
     return GetFS()->OpenFile(myurl, flags);
 }
 
-void wxHtmlWinParser::AddText(const wxString& txt)
-{
-    #define NBSP_UNICODE_VALUE  (wxChar(160))
+#define NBSP_UNICODE_VALUE  (wxChar(160))
 #if !wxUSE_UNICODE
-    if ( m_nbsp == 0 )
-        m_nbsp = GetEntitiesParser()->GetCharForCode(NBSP_UNICODE_VALUE);
     #define CUR_NBSP_VALUE m_nbsp
 #else
     #define CUR_NBSP_VALUE NBSP_UNICODE_VALUE
+#endif
+
+void wxHtmlWinParser::AddText(const wxString& txt)
+{
+#if !wxUSE_UNICODE
+    if ( m_nbsp == 0 )
+        m_nbsp = GetEntitiesParser()->GetCharForCode(NBSP_UNICODE_VALUE);
 #endif
 
     if ( m_whitespaceMode == Whitespace_Normal )
@@ -385,7 +388,7 @@ void wxHtmlWinParser::AddText(const wxString& txt)
         while (i < end)
         {
             size_t x = 0;
-            wxChar d = *i;
+            const wxChar d = temp[templen++] = *i;
             if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
             {
                 ++i, ++x;
@@ -401,11 +404,6 @@ void wxHtmlWinParser::AddText(const wxString& txt)
             {
                 ++i;
             }
-
-            if (d == CUR_NBSP_VALUE)
-                d = ' ';
-
-            temp[templen++] = d;
 
             if (x)
             {
@@ -444,6 +442,12 @@ void wxHtmlWinParser::AddText(const wxString& txt)
 void wxHtmlWinParser::FlushWordBuf(wxChar *buf, int& len)
 {
     buf[len] = 0;
+
+    for ( int i = 0; i < len; i++ )
+    {
+        if ( buf[i] == CUR_NBSP_VALUE )
+            buf[i] = ' ';
+    }
 
 #if !wxUSE_UNICODE
     if (m_EncConv)
