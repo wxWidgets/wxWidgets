@@ -190,6 +190,8 @@ public:
         consists in drawing the selected item with the standard background
         colour and drawing a border around the item if it is either selected or
         current.
+
+        @todo Change this function signature to non-const.
     */
     void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 
@@ -204,6 +206,8 @@ public:
             region is set to this rectangle before calling this function).
         @param n
             The index of the item to be drawn.
+
+        @todo Change this function signature to non-const.
     */
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
 
@@ -220,6 +224,8 @@ public:
             The bounding rectangle for the item.
         @param n
             The index of the item.
+
+        @todo Change this function signature to non-const.
     */
     virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
 
