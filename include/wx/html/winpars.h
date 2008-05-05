@@ -161,7 +161,7 @@ protected:
     virtual void AddText(const wxChar* txt);
 
 private:
-    void FlushWordBuf(wxChar *temp, int& templen);
+    void FlushWordBuf(wxChar *temp, int& templen, wxChar nbsp);
     void AddWord(wxHtmlWordCell *c);
     void AddWord(const wxString& word);
     void AddPreBlock(const wxString& text);

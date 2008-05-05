@@ -496,7 +496,7 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         while (i < lng)
         {
             x = 0;
-            wxChar d = txt[i];
+            const wxChar d = temp[templen++] = txt[i];
             if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t')))
             {
                 i++, x++;
@@ -505,22 +505,17 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
             }
             else i++;
 
-            if ( d == nbsp )
-                d = wxT(' ');
-
-            temp[templen++] = d;
-
             if (x)
             {
                 temp[templen-1] = wxT(' ');
-                FlushWordBuf(temp, templen);
+                FlushWordBuf(temp, templen, nbsp);
                 m_tmpLastWasSpace = true;
             }
         }
 
         if (templen && (templen > 1 || temp[0] != wxT(' ')))
         {
-            FlushWordBuf(temp, templen);
+            FlushWordBuf(temp, templen, nbsp);
             m_tmpLastWasSpace = false;
         }
     }
@@ -547,9 +542,15 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
     }
 }
 
-void wxHtmlWinParser::FlushWordBuf(wxChar *buf, int& len)
+void wxHtmlWinParser::FlushWordBuf(wxChar *buf, int& len, wxChar nbsp)
 {
     buf[len] = 0;
+
+    for ( int i = 0; i < len; i++ )
+    {
+        if ( buf[i] == nbsp )
+            buf[i] = ' ';
+    }
 
 #if !wxUSE_UNICODE
     if (m_EncConv)
