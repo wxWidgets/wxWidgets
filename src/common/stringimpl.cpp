@@ -111,19 +111,26 @@ extern const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyString = &g_strEmpty.dumm
 // ----------------------------------------------------------------------------
 
 // this small class is used to gather statistics for performance tuning
+
+// uncomment this to enable gathering of some statistics about wxString
+// efficiency
 //#define WXSTRING_STATISTICS
+
 #ifdef  WXSTRING_STATISTICS
   class Averager
   {
   public:
     Averager(const wxStringCharType *sz) { m_sz = sz; m_nTotal = m_nCount = 0; }
    ~Averager()
-   { wxPrintf("wxString: average %s = %f\n", m_sz, ((float)m_nTotal)/m_nCount); }
+    {
+        wxPrintf("wxString %s: total = %lu, average = %f\n",
+                 m_sz, m_nTotal, ((float)m_nTotal)/m_nCount);
+    }
 
     void Add(size_t n) { m_nTotal += n; m_nCount++; }
 
   private:
-    size_t m_nCount, m_nTotal;
+    unsigned long m_nCount, m_nTotal;
     const wxStringCharType *m_sz;
   } g_averageLength("allocation size"),
     g_averageSummandLength("summand length"),
@@ -335,6 +342,8 @@ bool wxStringImpl::Alloc(size_t nLen)
   wxStringData *pData = GetStringData();
   if ( pData->nAllocLength <= nLen ) {
     if ( pData->IsEmpty() ) {
+      STATISTICS_ADD(Length, nLen);
+
       nLen += EXTRA_ALLOC;
 
       pData = (wxStringData *)
