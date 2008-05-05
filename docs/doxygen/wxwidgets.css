@@ -492,18 +492,19 @@ SPAN.style, SPAN.event, SPAN.flag {
 }
 
 DIV.styleDesc, DIV.eventDesc, DIV.flagDesc {
-    margin-left: 3%;
-    margin-bottom: 1ex;
+	margin-left: 3%;
+	margin-bottom: 1ex;
 }
 
 DIV.eventHandler {
-    text-indent: 3%;
+	margin: 1em;
+	text-indent: 3%;
 }
 
 DIV.eventHandler SPAN {
-    padding: 5px;
-    background-color: #eeeeee;
-    font-family: monospace, fixed;
+	padding: 5px;
+	background-color: #eeeeee;
+	font-family: monospace, fixed;
 }
 
 A[HREF="modules.html"] SPAN:before {
