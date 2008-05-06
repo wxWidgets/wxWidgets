@@ -200,6 +200,12 @@ public:
         Assign(pobj);
     }
 
+    // We need this copy ctor, since otherwise a default compiler (binary) copy happens
+    wxWeakRef(const wxWeakRef<T>& wr)
+    {
+        Assign(wr.get());
+    }
+    
     template <class TDerived>
     wxWeakRef<T>& operator=(TDerived* pobj)
     {

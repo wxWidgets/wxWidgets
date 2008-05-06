@@ -106,6 +106,11 @@ public:
     wxWeakRef(T* pobj = NULL);
 
     /**
+        Copy constructor.
+    */
+    wxWeakRef(const wxWeakRef<T>& wr);
+    
+    /**
         Destructor.
     */
     ~wxWeakRef();
