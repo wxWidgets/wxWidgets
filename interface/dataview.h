@@ -537,7 +537,7 @@ public:
         Constructor.
     */
     wxDataViewVirtualListModel(unsigned int initial_size = 0);
-}
+};
 
 
 

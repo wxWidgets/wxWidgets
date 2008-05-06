@@ -90,7 +90,7 @@ ALIASES += onlyfor{3}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;
 ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports.</div>       \xmlonly <onlyfor>\1,\2,\3,\4</onlyfor> \endxmlonly"
 
 # creates appearance section: this should be used for all main GUI controls
-ALIASES += appearance{1}="@htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> @endhtmlonly"
+ALIASES += appearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> \endhtmlonly"
 
 # IMPORTANT: the \headerfile command does not work everywhere we'd need it,
 #            e.g. in the constants page we need to specify an header file
