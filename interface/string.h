@@ -63,7 +63,7 @@ public:
         Returns the writable pointer to a buffer of the size at least equal to the
         length specified in the constructor.
     */
-    wxChar* operator wxChar *();
+    wxStringCharType* operator wxStringCharType *();
 };
 
 
@@ -113,7 +113,7 @@ public:
         
         @li wxString()
         @li operator=()
-        @li ~wxString
+        @li ~wxString()
 
         The MakeXXX() variants modify the string in place, while the other functions
         return a new string which contains the original text converted to the upper or
@@ -139,12 +139,11 @@ public:
         @li GetWritableChar()
         @li SetChar()
         @li Last()
-        @li operator[]
+        @li operator[]()
         @li c_str()
         @li mb_str()
         @li wc_str()
         @li fn_str()
-        @li operator const char*()
 
         The default comparison function Cmp() is case-sensitive and
         so is the default version of IsSameAs(). For case
@@ -238,7 +237,7 @@ public:
         These functions are deprecated, please consider using new wxWidgets 2.0
         functions instead of them (or, even better, std::string compatible variants).
         
-        CompareTo(), Contains(), First(), Freq(), Index(), IsAscii(), IsNull(),
+        Contains(), First(), Freq(), IsAscii(), IsNull(),
         IsNumber(), IsWord(), Last(), Length(), LowerCase(), Remove(), Strip(),
         SubString(), UpperCase()
 
@@ -254,6 +253,24 @@ public:
 class wxString
 {
 public:
+    /**
+        An 'invalid' value for string index
+    */
+    static const size_t npos;
+
+    //@{
+    /** 
+        standard types
+    */
+    typedef wxUniChar value_type;
+    typedef wxUniChar char_type;
+    typedef wxUniCharRef reference;
+    typedef wxChar* pointer;
+    typedef const wxChar* const_pointer;
+    typedef size_t size_type;
+    typedef wxUniChar const_reference;
+    //@}
+
     /**
        Default constructor
     */
@@ -333,13 +350,13 @@ public:
         Gets all the characters after the first occurrence of @e ch.
         Returns the empty string if @a ch is not found.
     */
-    wxString AfterFirst(wxChar ch) const;
+    wxString AfterFirst(wxUniChar ch) const;
 
     /**
         Gets all the characters after the last occurrence of @e ch.
         Returns the whole string if @a ch is not found.
     */
-    wxString AfterLast(wxChar ch) const;
+    wxString AfterLast(wxUniChar ch) const;
 
     /**
         Preallocate enough space for wxString to store @a nLen characters.
@@ -382,25 +399,25 @@ public:
 
     //@{
     /**
-        Concatenates character @a ch to this string, @a count times, returning a
-        reference
-        to it.
+       Appends the string or string literal or character.
     */
-    wxString Append(const wxChar* psz);
-    wxString Append(wxChar ch, int count = 1);
+    wxString& Append(const char* psz, size_t nLen);
+    wxString& Append(const wchar_t* pwz, size_t nLen)
+    wxString &Append(const wxString &s);
+    wxString &Append(wxUniChar ch, size_t count = 1u);
     //@}
 
     /**
         Gets all characters before the first occurrence of @e ch.
         Returns the whole string if @a ch is not found.
     */
-    wxString BeforeFirst(wxChar ch) const;
+    wxString BeforeFirst(wxUniChar ch) const;
 
     /**
         Gets all characters before the last occurrence of @e ch.
         Returns the empty string if @a ch is not found.
     */
-    wxString BeforeLast(wxChar ch) const;
+    wxString BeforeLast(wxUniChar ch) const;
 
 
     /**
@@ -423,56 +440,43 @@ public:
      */
     wxString Clone() const;
 
-    //@{
     /**
         Case-sensitive comparison.
-        Returns a positive value if the string is greater than the argument, zero if
-        it is equal to it or a negative value if it is less than the argument (same
-        semantics
-        as the standard @e strcmp() function).
+        Returns a positive value if the string is greater than the argument,
+        zero if it is equal to it or a negative value if it is less than the
+        argument (same semantics as the standard @e strcmp() function).
+        
         See also CmpNoCase(), IsSameAs().
     */
     int Cmp(const wxString& s) const;
-    const int Cmp(const wxChar* psz) const;
-    //@}
 
-    //@{
     /**
         Case-insensitive comparison.
-        Returns a positive value if the string is greater than the argument, zero if
-        it is equal to it or a negative value if it is less than the argument (same
-        semantics
-        as the standard @e strcmp() function).
+        Returns a positive value if the string is greater than the argument,
+        zero if it is equal to it or a negative value if it is less than the
+        argument (same semantics as the standard @e strcmp() function).
+        
         See also Cmp(), IsSameAs().
     */
     int CmpNoCase(const wxString& s) const;
-    const int CmpNoCase(const wxChar* psz) const;
-    //@}
-
-    /**
-        Case-sensitive comparison. Returns 0 if equal, 1 if greater or -1 if less.
-        This is a wxWidgets 1.xx compatibility function; use Cmp() instead.
-    */
-    int CompareTo(const wxChar* psz, caseCompare cmp = exact) const;
-
 
 
     //@{
     /**
-
+        Comparison operators
     */
     bool operator ==(const wxString& x, const wxString& y);
-    bool operator ==(const wxString& x, const wxChar* t);
+    bool operator ==(const wxString& x, wxUniChar ch);
     bool operator !=(const wxString& x, const wxString& y);
-    bool operator !=(const wxString& x, const wxChar* t);
+    bool operator !=(const wxString& x, wxUniChar ch);
     bool operator(const wxString& x, const wxString& y);
-    bool operator(const wxString& x, const wxChar* t);
+    bool operator(const wxString& x, wxUniChar ch);
     bool operator =(const wxString& x, const wxString& y);
-    bool operator =(const wxString& x, const wxChar* t);
+    bool operator =(const wxString& x, wxUniChar ch);
     bool operator(const wxString& x, const wxString& y);
-    bool operator(const wxString& x, const wxChar* t);
+    bool operator(const wxString& x, wxUniChar ch);
     bool operator =(const wxString& x, const wxString& y);
-    bool operator =(const wxString& x, const wxChar* t);
+    bool operator =(const wxString& x, wxUniChar ch);
     //@}
 
 
@@ -501,22 +505,21 @@ public:
 
     //@{
     /**
-        Searches for the given string. Returns the starting index, or @c wxNOT_FOUND if
-        not found.
+        Searches for the given string. Returns the starting index, or
+        @c wxNOT_FOUND if not found.
     */
     int Find(wxUniChar ch, bool fromEnd = false) const;
-    const int Find(const wxString& sub) const;
+    int Find(const wxString& sub) const;
     //@}
 
     //@{
     /**
         Same as Find().
-        This is a wxWidgets 1.xx compatibility function; you should not use it in new
-        code.
+        This is a wxWidgets 1.xx compatibility function; 
+        you should not use it in new code.
     */
-    int First(wxChar c) const;
-    int First(const wxChar* psz) const;
-    const int First(const wxString& str) const;
+    int First(wxUniChar ch) const;
+    int First(const wxString& str) const;
     //@}
 
     /**
@@ -540,7 +543,7 @@ public:
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
-    int Freq(wxChar ch) const;
+    int Freq(wxUniChar ch) const;
 
     //@{
     /**
@@ -565,10 +568,7 @@ public:
     //@{
     /**
         Converts the string or character from an ASCII, 7-bit form
-        to the native wxString representation. Most useful when using
-        a Unicode build of wxWidgets (note the use of @c char instead of @c wxChar).
-        Use @ref construct() "wxString constructors" if you
-        need to convert from another charset.
+        to the native wxString representation. 
     */
     static wxString FromAscii(const char* s);
     static wxString FromAscii(const unsigned char* s);
@@ -591,40 +591,28 @@ public:
     /**
         Returns the character at position @a n (read-only).
     */
-    wxChar GetChar(size_t n) const;
+    wxUniChar GetChar(size_t n) const;
 
     /**
-        wxWidgets compatibility conversion. Returns a constant pointer to the data in
-        the string.
+        wxWidgets compatibility conversion. Same as c_str().
     */
-    const wxChar* GetData() const;
+    const wxCStrData* GetData() const;
 
     /**
         Returns a reference to the character at position @e n.
     */
-    wxChar GetWritableChar(size_t n);
+    wxUniCharRef GetWritableChar(size_t n);
 
     /**
         Returns a writable buffer of at least @a len bytes.
         It returns a pointer to a new memory block, and the
         existing data will not be copied.
-        Call UngetWriteBuf() as soon as
-        possible to put the string back into a reasonable state.
-        This method is deprecated, please use
-        wxStringBuffer or
+        Call UngetWriteBuf() as soon as possible to put the
+        string back into a reasonable state.
+        This method is deprecated, please use wxStringBuffer or
         wxStringBufferLength instead.
     */
-    wxChar* GetWriteBuf(size_t len);
-
-    //@{
-    /**
-        Same as Find().
-        This is a wxWidgets 1.xx compatibility function; you should not use it in new
-        code.
-    */
-    size_t Index(wxChar ch) const;
-    const size_t Index(const wxChar* sz) const;
-    //@}
+    wxStringCharType* GetWriteBuf(size_t len);
 
     /**
         Returns @true if the string contains only ASCII characters.
@@ -660,8 +648,8 @@ public:
         Returns @true if the string is equal to the character, @false otherwise.
         See also Cmp(), CmpNoCase()
     */
-    bool IsSameAs(const wxChar* psz, bool caseSensitive = true) const;
-    const bool IsSameAs(wxChar c, bool caseSensitive = true) const;
+    bool IsSameAs(const wxString &s, bool caseSensitive = true) const;
+    bool IsSameAs(wxUniChar ch, bool caseSensitive = true) const;
     //@}
 
     /**
@@ -674,11 +662,11 @@ public:
     //@{
     /**
         Returns a reference to the last character (writable).
-        This is a wxWidgets 1.xx compatibility function; you should not use it in new
-        code.
+        This is a wxWidgets 1.xx compatibility function; 
+        you should not use it in new code.
     */
-    wxChar Last();
-    const wxChar Last();
+    wxUniCharRef Last();
+    const wxUniChar Last();
     //@}
 
     /**
@@ -713,12 +701,12 @@ public:
     /**
         Converts all characters to lower case and returns the result.
     */
-    wxString MakeLower();
+    wxString& MakeLower();
 
     /**
         Converts all characters to upper case and returns the result.
     */
-    wxString MakeUpper();
+    wxString& MakeUpper();
 
     /**
         Returns @true if the string contents matches a mask containing '*' and '?'.
@@ -736,13 +724,13 @@ public:
         Adds @a count copies of @a pad to the beginning, or to the end of the
         string (the default).  Removes spaces from the left or from the right (default).
     */
-    wxString Pad(size_t count, wxChar pad = ' ',
+    wxString& Pad(size_t count, wxUniChar pad = ' ',
                  bool fromRight = true);
 
     /**
         Prepends @a str to this string, returning a reference to this string.
     */
-    wxString Prepend(const wxString& str);
+    wxString& Prepend(const wxString& str);
 
     /**
         Similar to the standard function @e sprintf(). Returns the number of
@@ -795,7 +783,7 @@ public:
     /**
         Sets the character at position @e n.
     */
-    void SetChar(size_t n, wxChar ch);
+    void SetChar(size_t n, wxUniChar ch);
 
     /**
         Minimizes the string's memory. This can be useful after a call to
@@ -921,7 +909,7 @@ public:
 
     //@{
     /**
-        Same as @ref wxString::utf8str utf8_str.
+        Same as utf8_str().
     */
     const char* ToUTF8() const;
     const const wxCharBuffer ToUF8() const;
@@ -931,12 +919,12 @@ public:
         Removes white-space (space, tabs, form feed, newline and carriage return) from
         the left or from the right end of the string (right is default).
     */
-    wxString Trim(bool fromRight = true);
+    wxString& Trim(bool fromRight = true);
 
     /**
         Truncate the string to the given length.
     */
-    wxString Truncate(size_t len);
+    wxString& Truncate(size_t len);
 
     //@{
     /**
@@ -972,11 +960,12 @@ public:
     /**
         Returns a pointer to the string data (@c const char* when using UTF-8
         internally, @c const wchar_t* when using UCS-2 internally).
+        
         Note that the returned value is not convertible to @c char* or
         @c wchar_t*, use char_str() or wchar_str() if you need to pass
         string value to a function expecting non-const pointer.
     */
-    const wxChar* c_str() const;
+    const wxCStrData c_str() const;
 
     /**
         Returns an object with string data that is implicitly convertible to
@@ -991,20 +980,20 @@ public:
 
     //@{
     /**
-        Returns string representation suitable for passing to OS' functions for
-        file handling. 
+        Returns string representation suitable for passing to OS' functions
+        for file handling. 
     */
     const wchar_t* fn_str() const;
-    const const char* fn_str() const;
-    const const wxCharBuffer fn_str() const;
+    const char* fn_str() const;
+    const wxCharBuffer fn_str() const;
     //@}
 
     //@{
     /**
         Returns multibyte (C string) representation of the string.
         In Unicode build, converts using @e conv's wxMBConv::cWC2MB
-        method and returns wxCharBuffer. In ANSI build, this function is same
-        as @ref cstr() c_str.
+        method and returns wxCharBuffer. In ANSI build, this function
+        is same as c_str().
         The macro wxWX2MBbuf is defined as the correct return type (without const).
 
         @see wxMBConv, c_str(), wc_str(), fn_str(), char_str()
@@ -1025,8 +1014,7 @@ public:
         use Printf() for this.
     */
     wxString operator(const wxString& str);
-    wxString operator(const wxChar* psz);
-    wxString operator(wxChar ch);
+    wxString operator(wxUniChar ch);
     wxString operator(int i);
     wxString operator(float f);
     wxString operator(double d);
@@ -1039,13 +1027,11 @@ public:
 
     //@{
     /**
-        Concatenation: all these operators return a new string equal to the
+        Concatenation: these operators return a new string equal to the
         concatenation of the operands.
     */
     wxString operator +(const wxString& x, const wxString& y);
-    wxString operator +(const wxString& x, const wxChar* y);
-    wxString operator +(const wxString& x, wxChar y);
-    wxString operator +(const wxChar* x, const wxString& y);
+    wxString operator +(const wxString& x, wxUniChar y);
     //@}
 
     //@{
@@ -1053,8 +1039,7 @@ public:
         Concatenation in place: the argument is appended to the string.
     */
     void operator +=(const wxString& str);
-    void operator +=(const wxChar* psz);
-    void operator +=(wxChar c);
+    void operator +=(wxUniChar c);
     //@}
 
     //@{
@@ -1063,62 +1048,49 @@ public:
         constructor (see @ref construct() "wxString constructors").
     */
     wxString operator =(const wxString& str);
-    wxString operator =(const wxChar* psz);
-    wxString operator =(wxChar c);
+    wxString operator =(wxUniChar c);
     //@}
 
     //@{
     /**
         Element extraction.
     */
-    wxChar operator [](size_t i) const;
-    wxChar operator [](size_t i) const;
-    const wxChar operator [](int i) const;
-    wxChar operator [](int i) const;
+    wxUniChar operator [](size_t i) const;
+    wxUniCharRef operator [](size_t i);
     //@}
 
     /**
-        Implicit conversion to a C string.
-    */
-    operator const wxChar*() const;
-
-    /**
-        Empty string is @false, so !string will only return @true if the string is
-        empty.
-        This allows the tests for @NULLness of a @e const wxChar * pointer and emptiness
-        of the string to look the same in the code and makes it easier to port old code
-        to wxString.
+        Empty string is @false, so !string will only return @true if the
+        string is empty.
+        
         See also IsEmpty().
     */
     bool operator!() const;
 
-    /**
-        The supported functions are only listed here, please see any STL reference for
-        their documentation.
-    */
-
 
     //@{
     /**
-        Converts the strings contents to UTF-8 and returns it either as a temporary
-        wxCharBuffer object or as a pointer to the internal string contents in
-        UTF-8 build.
+        Converts the strings contents to UTF-8 and returns it either as a
+        temporary wxCharBuffer object or as a pointer to the internal
+        string contents in UTF-8 build.
     */
     const char* utf8_str() const;
-    const const wxCharBuffer utf8_str() const;
+    const wxCharBuffer utf8_str() const;
     //@}
 
     //@{
     /**
-        Returns wide character representation of the string.
-        In Unicode build, this function is same as c_str().
+        Converts the strings contents to the wide character represention
+        and returns it as a temporary wxWCharBuffer object or returns a
+        pointer to the internal string contents in wide character mode.
+        
         The macro wxWX2WCbuf is defined as the correct return
         type (without const).
 
         @see wxMBConv, c_str(), mb_str(), fn_str(), wchar_str()
     */
-    const wchar_t* wc_str(const wxMBConv& conv) const;
-    const const wxWCharBuffer wc_str(const wxMBConv& conv) const;
+    const wchar_t* wc_str() const;
+    const wxWCharBuffer wc_str() const;
     //@}
 
     /**
@@ -1131,6 +1103,106 @@ public:
         @see mb_str(), wc_str(), fn_str(), c_str(), char_str()
     */
     wxWritableWCharBuffer wchar_str() const;
+
+    /**
+        The supported STL functions are listed here. Please see any 
+        STL reference for their documentation.
+    */
+    //@{
+        const_iterator begin() const;
+        iterator begin();
+        const_iterator end() const;
+        iterator end();
+
+        const_reverse_iterator rbegin() const;
+        reverse_iterator rbegin();
+        const_reverse_iterator rend() const;
+        reverse_iterator rend();
+
+        size_t length() const;
+        size_type size() const;
+        size_type max_size() const;
+        size_type capacity() const;
+        void reserve(size_t sz);
+
+        void resize(size_t nSize, wxUniChar ch = wxT('\0'))
+
+        wxString& append(const wxString& str, size_t pos, size_t n);
+        wxString& append(const wxString& str);
+        wxString& append(const char *sz, size_t n);
+        wxString& append(const wchar_t *sz, size_t n);
+        wxString& append(size_t n, wxUniChar ch);
+        wxString& append(const_iterator first, const_iterator last);
+
+        wxString& assign(const wxString& str, size_t pos, size_t n);
+        wxString& assign(const wxString& str);
+        wxString& assign(const char *sz, size_t n);
+        wxString& assign(const wchar_t *sz, size_t n);
+        wxString& assign(size_t n, wxUniChar ch);
+        wxString& assign(const_iterator first, const_iterator last);
+
+        void clear();
+        
+        int compare(const wxString& str) const;
+        int compare(size_t nStart, size_t nLen, const wxString& str) const;
+        int compare(size_t nStart, size_t nLen,
+              const wxString& str, size_t nStart2, size_t nLen2) const;
+        int compare(size_t nStart, size_t nLen,
+              const char* sz, size_t nCount = npos) const;
+        int compare(size_t nStart, size_t nLen,
+              const wchar_t* sz, size_t nCount = npos) const;
+
+        bool empty() const;
+
+        wxString& erase(size_type pos = 0, size_type n = npos);
+        iterator erase(iterator first, iterator last);
+        iterator erase(iterator first);
+
+        size_t find(const wxString& str, size_t nStart = 0) const;
+        size_t find(const char* sz, size_t nStart = 0, size_t n = npos) const;
+        size_t find(const wchar_t* sz, size_t nStart = 0, size_t n = npos) const;
+        size_t find(wxUniChar ch, size_t nStart = 0) const;
+
+        wxString& insert(size_t nPos, const wxString& str);
+        wxString& insert(size_t nPos, const wxString& str, size_t nStart, size_t n);
+        wxString& insert(size_t nPos, const char *sz, size_t n);
+        wxString& insert(size_t nPos, const wchar_t *sz, size_t n);
+        wxString& insert(size_t nPos, size_t n, wxUniChar ch);
+        iterator insert(iterator it, wxUniChar ch);
+        void insert(iterator it, const_iterator first, const_iterator last);
+        void insert(iterator it, size_type n, wxUniChar ch);
+
+        wxString& replace(size_t nStart, size_t nLen, const wxString& str);
+        wxString& replace(size_t nStart, size_t nLen, size_t nCount, wxUniChar ch);
+        wxString& replace(size_t nStart, size_t nLen,
+                    const wxString& str, size_t nStart2, size_t nLen2);
+        wxString& replace(size_t nStart, size_t nLen,
+                    const char* sz, size_t nCount);
+        wxString& replace(size_t nStart, size_t nLen,
+                    const wchar_t* sz, size_t nCount);
+        wxString& replace(size_t nStart, size_t nLen,
+                    const wxString& s, size_t nCount);
+        wxString& replace(iterator first, iterator last, const wxString& s);
+        wxString& replace(iterator first, iterator last, const char* s, size_type n);
+        wxString& replace(iterator first, iterator last, const wchar_t* s, size_type n);
+        wxString& replace(iterator first, iterator last, size_type n, wxUniChar ch);
+        wxString& replace(iterator first, iterator last,
+                    const_iterator first1, const_iterator last1);
+        wxString& replace(iterator first, iterator last,
+                    const char *first1, const char *last1);
+        wxString& replace(iterator first, iterator last,
+                    const wchar_t *first1, const wchar_t *last1)
+
+        size_t rfind(const wxString& str, size_t nStart = npos) const;
+        size_t rfind(const char* sz, size_t nStart = npos, size_t n = npos) const;
+        size_t rfind(const wchar_t* sz, size_t nStart = npos, size_t n = npos) const;
+        size_t rfind(wxUniChar ch, size_t nStart = npos) const;
+
+        wxString substr(size_t nStart = 0, size_t nLen = npos) const;
+    
+        void swap(wxString& str)
+  
+    //@}
 
 };
 
