@@ -1105,7 +1105,7 @@ public:
     wxWritableWCharBuffer wchar_str() const;
 
     /**
-        @name iterator 
+        @name Iterator interface
         
         These methods return iterators to the beginnnig or
         end of the string.
@@ -1135,12 +1135,12 @@ public:
         size_type capacity() const;
         void reserve(size_t sz);
 
-        void resize(size_t nSize, wxUniChar ch = wxT('\0'))
+        void resize(size_t nSize, wxUniChar ch = '\0');
 
         wxString& append(const wxString& str, size_t pos, size_t n);
         wxString& append(const wxString& str);
         wxString& append(const char *sz, size_t n);
-                wxString& append(const wchar_t *sz, size_t n);
+        wxString& append(const wchar_t *sz, size_t n);
         wxString& append(size_t n, wxUniChar ch);
         wxString& append(const_iterator first, const_iterator last);
 
