@@ -2777,7 +2777,7 @@ void wxWin32Renderer::DrawScrollbarShaft(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 /* Copyright (c) Julian Smart */
-static char *error_xpm[]={
+static const char *error_xpm[]={
 /* columns rows colors chars-per-pixel */
 "32 32 70 1",
 "- c #BF0101",
@@ -2886,7 +2886,7 @@ static char *error_xpm[]={
 };
 
 /* Copyright (c) Julian Smart */
-static char *info_xpm[]={
+static const char *info_xpm[]={
 /* columns rows colors chars-per-pixel */
 "32 32 17 1",
 "* c #A1A3FB",
@@ -2942,7 +2942,7 @@ static char *info_xpm[]={
 };
 
 /* Copyright (c) Julian Smart */
-static char *question_xpm[]={
+static const char *question_xpm[]={
 /* columns rows colors chars-per-pixel */
 "32 32 16 1",
 "O c #A3A3FF",
@@ -2997,7 +2997,7 @@ static char *question_xpm[]={
 };
 
 /* Copyright (c) Julian Smart */
-static char *warning_xpm[]={
+static const char *warning_xpm[]={
 /* columns rows colors chars-per-pixel */
 "32 32 9 1",
 "@ c Black",
