@@ -107,7 +107,7 @@ void wxWindowDCImpl::InitForWin(wxWindow *win, const wxRect *rect)
 {
     wxCHECK_RET( win, "invalid window" );
 
-    m_win = win;
+    m_window = win;
 
     // obtain the surface used for painting:
     wxPoint origin;
@@ -211,7 +211,7 @@ wxWindowDCImpl::~wxWindowDCImpl()
     {
         // paint overlays on top of the surface being drawn to by this DC
         // before showing anything on the screen:
-        m_win->PaintOverlays(m_winRect);
+        GetWindow()->PaintOverlays(m_winRect);
 
         DFBSurfaceCapabilities caps = DSCAPS_NONE;
         surface->GetCapabilities(&caps);
