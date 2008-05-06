@@ -18,6 +18,8 @@
 #include "wx/fontenum.h"
 #include "wx/private/fontmgr.h"
 
+#if wxUSE_FONTENUM
+
 // ----------------------------------------------------------------------------
 // wxFontEnumerator
 // ----------------------------------------------------------------------------
@@ -49,3 +51,5 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& facename)
 {
     return EnumerateEncodingsUTF8(facename);
 }
+
+#endif // wxUSE_FONTENUM

@@ -1440,8 +1440,9 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     if (hasFacename)
     {
         wxString faces = GetParamValue(wxT("face"));
-        wxArrayString facenames(wxFontEnumerator::GetFacenames());
         wxStringTokenizer tk(faces, wxT(","));
+#if wxUSE_FONTENUM
+        wxArrayString facenames(wxFontEnumerator::GetFacenames());
         while (tk.HasMoreTokens())
         {
             int index = facenames.Index(tk.GetNextToken(), false);
@@ -1451,6 +1452,11 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
                 break;
             }
         }
+#else // !wxUSE_FONTENUM
+        // just use the first face name if we can't check its availability:
+        if (tk.HasMoreTokens())
+            facename = tk.GetNextToken();
+#endif // wxUSE_FONTENUM/!wxUSE_FONTENUM
     }
 
     // encoding
