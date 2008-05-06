@@ -258,10 +258,10 @@ public:
     */
     static const size_t npos;
 
-    //@{
     /** 
-        standard types
+        @name Standard types
     */
+    //@{
     typedef wxUniChar value_type;
     typedef wxUniChar char_type;
     typedef wxUniCharRef reference;
@@ -1105,8 +1105,10 @@ public:
     wxWritableWCharBuffer wchar_str() const;
 
     /**
-        The supported STL functions are listed here. Please see any 
-        STL reference for their documentation.
+        @name iterator 
+        
+        These methods return iterators to the beginnnig or
+        end of the string.
     */
     //@{
         const_iterator begin() const;
@@ -1118,7 +1120,15 @@ public:
         reverse_iterator rbegin();
         const_reverse_iterator rend() const;
         reverse_iterator rend();
+    //@}
 
+    /**
+        @name STL interface
+    
+        The supported STL functions are listed here. Please see any 
+        STL reference for their documentation.
+    */
+    //@{
         size_t length() const;
         size_type size() const;
         size_type max_size() const;
@@ -1130,7 +1140,7 @@ public:
         wxString& append(const wxString& str, size_t pos, size_t n);
         wxString& append(const wxString& str);
         wxString& append(const char *sz, size_t n);
-        wxString& append(const wchar_t *sz, size_t n);
+                wxString& append(const wchar_t *sz, size_t n);
         wxString& append(size_t n, wxUniChar ch);
         wxString& append(const_iterator first, const_iterator last);
 
@@ -1191,7 +1201,7 @@ public:
         wxString& replace(iterator first, iterator last,
                     const char *first1, const char *last1);
         wxString& replace(iterator first, iterator last,
-                    const wchar_t *first1, const wchar_t *last1)
+                    const wchar_t *first1, const wchar_t *last1);
 
         size_t rfind(const wxString& str, size_t nStart = npos) const;
         size_t rfind(const char* sz, size_t nStart = npos, size_t n = npos) const;
@@ -1200,7 +1210,7 @@ public:
 
         wxString substr(size_t nStart = 0, size_t nLen = npos) const;
     
-        void swap(wxString& str)
+        void swap(wxString& str);
   
     //@}
 
