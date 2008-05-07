@@ -28,16 +28,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
-    #include "wx/app.h"
-    #include "wx/bitmap.h"
-    #include "wx/module.h"
+    #include "wx/intl.h"
+    #include "wx/palette.h"
+    #include "wx/stream.h"
 #endif
 
-#include "png.h"
-#include "wx/filefn.h"
-#include "wx/wfstream.h"
-#include "wx/intl.h"
-#include "wx/palette.h"
+#include <png.h>
 
 // For memcpy
 #include <string.h>
@@ -99,7 +95,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 #if wxUSE_STREAMS
 
 #ifndef PNGLINKAGEMODE
-    #ifdef __WATCOMC__
+    #ifdef PNGAPI
+        #define PNGLINKAGEMODE PNGAPI
+    #elif defined(__WATCOMC__)
         // we need an explicit cdecl for Watcom, at least according to
         //
         // http://sf.net/tracker/index.php?func=detail&aid=651492&group_id=9863&atid=109863
