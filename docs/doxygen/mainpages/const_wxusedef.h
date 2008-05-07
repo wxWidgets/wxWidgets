@@ -18,6 +18,7 @@ active or not depends on their value: if defined as @c 1, feature is active,
 otherwise it is disabled. Because of this these symbols should be always tested
 using @if_ and not @ifdef_.
 
+@li @ref page_wxusedef_important
 @li @ref page_wxusedef_multi
 @li @ref page_wxusedef_unix
 @li @ref page_wxusedef_x11
@@ -32,6 +33,30 @@ using @if_ and not @ifdef_.
 
 <hr>
 
+@section page_wxusedef_multi Most important wxUSE symbols
+
+This table summarizes some of the global build features affecting the entire
+library:
+
+@beginDefList
+@itemdef{wxUSE_STL, Container classes and wxString are implemented using
+    standard classes and provide the same standard API.}
+@itemdef{wxUSE_STD_IOSTREAM, Standard C++ classes are used instead of or in
+    addition to wx stream classes.}
+@itemdef{wxUSE_STD_STRING, wxString can be constructed from std::string (but
+    provides wxWidgets-compatible API).}
+@itemdef{wxUSE_UNICODE, Compiled with Unicode support (default in wxWidgets
+    3.0, non-Unicode build will be deprecated in the future).}
+@itemdef{wxUSE_UNICODE_WCHAR, wxString uses wchar_t buffer for internal storage
+    (default under MSW).}
+@itemdef{wxUSE_UNICODE_UTF8, wxString uses UTF-8 for internal storage (default
+    under Unix and Mac systems).}
+@itemdef{wxUSE_UTF8_LOCALE_ONLY, Library supports running only under UTF-8 (and
+    C) locale. This eliminates the code necessary for conversions from the
+    other locales and reduces the library size; useful for embedded systems.}
+@itemdef{wxUSE_GUI, Use the GUI classes; if set to 0 only non-GUI classes are
+    available.}
+@endDefList
 
 
 @section page_wxusedef_multi Generic wxUSE preprocessor symbols
@@ -114,7 +139,6 @@ using @if_ and not @ifdef_.
 @itemdef{wxUSE_GLOBAL_MEMORY_OPERATORS, Override global operators @c new and @c delete to use wxWidgets memory leak detection}
 @itemdef{wxUSE_GRAPHICS_CONTEXT, Use wxGraphicsContext and related classes.}
 @itemdef{wxUSE_GRID, Use wxGrid and related classes.}
-@itemdef{wxUSE_GUI, Use the GUI classes; if set to 0 only non-GUI classes are available.}
 @itemdef{wxUSE_HELP, Use wxHelpController and related classes.}
 @itemdef{wxUSE_HTML, Use wxHtmlWindow and related classes.}
 @itemdef{wxUSE_HYPERLINKCTRL, Use wxHyperlinkCtrl}
@@ -196,10 +220,7 @@ using @if_ and not @ifdef_.
 @itemdef{wxUSE_STATTEXT, Use wxStaticText class.}
 @itemdef{wxUSE_STATUSBAR, Use wxStatusBar class.}
 @itemdef{wxUSE_STC, Use wxStyledTextCtrl.}
-@itemdef{wxUSE_STD_IOSTREAM, Use standard C++ stream classes.}
-@itemdef{wxUSE_STD_STRING, Use standard C++ string classes.}
 @itemdef{wxUSE_STDPATHS, Use wxStandardPaths class.}
-@itemdef{wxUSE_STL, Use Standard Template Library for the container classes and wxString implementation.}
 @itemdef{wxUSE_STOPWATCH, Use wxStopWatch class.}
 @itemdef{wxUSE_STREAMS, Enable stream classes.}
 @itemdef{wxUSE_SVG, Use wxSVGFileDC class.}
@@ -223,12 +244,8 @@ using @if_ and not @ifdef_.
 @itemdef{wxUSE_TREEBOOK, Use wxTreebook class.}
 @itemdef{wxUSE_TREECTRL, Use wxTreeCtrl class.}
 @itemdef{wxUSE_TTM_WINDOWFROMPOINT, Obsolete, do not use.}
-@itemdef{wxUSE_UNICODE, Compiled with Unicode support.}
-@itemdef{wxUSE_UNICODE_UTF8, Compiled with UTF8 support.}
-@itemdef{wxUSE_UNICODE_WCHAR, Compiled with Unicode support and using wchar_t type.}
 @itemdef{wxUSE_URL, Use wxURL class.}
 @itemdef{wxUSE_URL_NATIVE, Use native support for some operations with wxURL.}
-@itemdef{wxUSE_UTF8_LOCALE_ONLY, Build wxWidgets to support running only under UTF-8 (and C) locale. This eliminates the code necessary for conversions from the other locales and reduces the library size; useful for embedded systems.}
 @itemdef{wxUSE_VALIDATORS, Use wxValidator class.}
 @itemdef{wxUSE_VARIANT, Use wxVariant class.}
 @itemdef{wxUSE_WIZARDDLG, Use wxWizard class.}
