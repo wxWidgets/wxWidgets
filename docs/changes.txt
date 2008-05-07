@@ -241,6 +241,8 @@ All:
 - Added wxON_BLOCK_EXIT_SET() and wxON_BLOCK_EXIT_NULL() to wx/scopeguard.h.
 - Added wxEvtHandler::QueueEvent() replacing AddPendingEvent() and
   wxQueueEvent() replacing wxPostEvent().
+- wxString now uses std::[w]string internally by default, meaning that it is
+  now thread-safe if the standard library provided with your compiler is.
 
 All (Unix):
 

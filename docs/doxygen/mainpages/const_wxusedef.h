@@ -41,10 +41,11 @@ library:
 @beginDefList
 @itemdef{wxUSE_STL, Container classes and wxString are implemented using
     standard classes and provide the same standard API.}
+@itemdef{wxUSE_STD_STRING, wxString is implemented using std::[w]string and can
+    be constructed from it (but provides wxWidgets-compatible API, in
+    particular is implicitly convertible to @c char* and not std::[w]string).}
 @itemdef{wxUSE_STD_IOSTREAM, Standard C++ classes are used instead of or in
     addition to wx stream classes.}
-@itemdef{wxUSE_STD_STRING, wxString can be constructed from std::string (but
-    provides wxWidgets-compatible API).}
 @itemdef{wxUSE_UNICODE, Compiled with Unicode support (default in wxWidgets
     3.0, non-Unicode build will be deprecated in the future).}
 @itemdef{wxUSE_UNICODE_WCHAR, wxString uses wchar_t buffer for internal storage

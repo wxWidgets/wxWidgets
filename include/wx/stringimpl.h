@@ -53,7 +53,18 @@ extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
 // deal with STL/non-STL/non-STL-but-wxUSE_STD_STRING
 // ----------------------------------------------------------------------------
 
-#define wxUSE_STL_BASED_WXSTRING  wxUSE_STL
+// using STL implies using std::string
+#if wxUSE_STL
+    #undef wxUSE_STD_STRING
+    #define wxUSE_STD_STRING 1
+#endif
+
+// we use STL-based string internally if we use std::string at all now, there
+// should be no reason to prefer our internal implement but if you really need
+// it you can predefine wxUSE_STL_BASED_WXSTRING as 0 when building the library
+#ifndef wxUSE_STL_BASED_WXSTRING
+    #define wxUSE_STL_BASED_WXSTRING  wxUSE_STD_STRING
+#endif
 
 // in both cases we need to define wxStdString
 #if wxUSE_STL_BASED_WXSTRING || wxUSE_STD_STRING
