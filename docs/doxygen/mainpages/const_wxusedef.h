@@ -67,7 +67,7 @@ using @if_ and not @ifdef_.
 @itemdef{wxUSE_CONFIG_NATIVE, When enabled use native OS configuration instead of the wxFileConfig class.}
 @itemdef{wxUSE_CONSOLE_EVENTLOOP, Enable event loop in console programs.}
 @itemdef{wxUSE_CONSTRAINTS, Use wxLayoutConstraints}
-@itemdef{wxUSE_CONTROLS, If set to $0$, no classes deriving from wxControl can be used.}
+@itemdef{wxUSE_CONTROLS, If set to 0, no classes deriving from wxControl can be used.}
 @itemdef{wxUSE_DATAOBJ, Use wxDataObject and related classes.}
 @itemdef{wxUSE_DATAVIEWCTRL, Use wxDataViewCtrl class.}
 @itemdef{wxUSE_DATEPICKCTRL, Use wxDatePickerCtrl class.}
@@ -114,7 +114,7 @@ using @if_ and not @ifdef_.
 @itemdef{wxUSE_GLOBAL_MEMORY_OPERATORS, Override global operators @c new and @c delete to use wxWidgets memory leak detection}
 @itemdef{wxUSE_GRAPHICS_CONTEXT, Use wxGraphicsContext and related classes.}
 @itemdef{wxUSE_GRID, Use wxGrid and related classes.}
-@itemdef{wxUSE_GUI, Use the GUI classes; if set to $0$ only non-GUI classes are available.}
+@itemdef{wxUSE_GUI, Use the GUI classes; if set to 0 only non-GUI classes are available.}
 @itemdef{wxUSE_HELP, Use wxHelpController and related classes.}
 @itemdef{wxUSE_HTML, Use wxHtmlWindow and related classes.}
 @itemdef{wxUSE_HYPERLINKCTRL, Use wxHyperlinkCtrl}
@@ -340,7 +340,7 @@ using @if_ and not @ifdef_.
 @itemdef{wxUSE_VC_CRTDBG, See wx/msw/msvcrt.h file.}
 @itemdef{wxUSE_UNICODE_MSLU, Use MSLU for Unicode support under Windows 9x systems.}
 @itemdef{wxUSE_UXTHEME, Enable support for XP themes.}
-@itemdef{wxUSE_WIN_METAFILES_ALWAYS, Use wxMetaFile even when wxUSE_ENH_METAFILE=$1$.}
+@itemdef{wxUSE_WIN_METAFILES_ALWAYS, Use wxMetaFile even when wxUSE_ENH_METAFILE=1.}
 @itemdef{wxUSE_WXDIB, Use wxDIB class.}
 @itemdef{wxUSE_XPM_IN_MSW, See also wxUSE_XPM}
 @endDefList

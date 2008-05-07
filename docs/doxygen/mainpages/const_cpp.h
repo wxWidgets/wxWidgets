@@ -35,7 +35,7 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WINDOWS__, any Windows, you may also use __WXMSW__}
 @itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
 @itemdef{__WIN32__, Win32 API}
-@itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI $== 0$)}
+@itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
 @itemdef{__WXCOCOA__, OS X using Cocoa API}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
 @itemdef{__WXWINCE__, Windows CE}
@@ -150,7 +150,7 @@ compiler used.
 
 @beginDefList
 @itemdef{__BORLANDC__, Borland C++. The value of the macro corresponds
-                        to the compiler version: $500$ is $5.0$.}
+                        to the compiler version: 500 is 5.0.}
 @itemdef{__DJGPP__, DJGPP}
 @itemdef{__DIGITALMARS__, Digital Mars}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
@@ -182,7 +182,7 @@ by the user. To make it possible to check if this is the case, the library
 predefines the symbols in the form @c wxHAS_FEATURE. Unlike
 @c wxUSE_FEATURE symbols which are defined by the library user (directly
 in @c setup.h or by running configure script) and which must be always
-defined as either $0$ or $1$, the @c wxHAS symbols are only defined if
+defined as either 0 or 1, the @c wxHAS symbols are only defined if
 the corresponding feature is available and not defined at all otherwise.
 
 Currently the following symbols exist:
@@ -236,7 +236,7 @@ for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
         always defined in wxWidgets applications, see also wxCHECK_VERSION}
 @itemdef{__WXDEBUG__, defined in debug mode, undefined in release mode}
 @itemdef{wxUSE_XXX,
-        if defined as $1$, feature XXX is active, see the
+        if defined as 1, feature XXX is active, see the
         @ref page_wxusedef (the symbols of this form are always defined,
         use @if_ and not @ifdef_ to test for them)}
 @itemdef{WX_PRECOMP,
@@ -249,20 +249,20 @@ for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
         headers you need.}
 @itemdef{_UNICODE and UNICODE, both are defined if wxUSE_UNICODE is set to @c 1}
 @itemdef{wxUSE_GUI,
-        this particular feature test macro is defined to $1$
+        this particular feature test macro is defined to 1
         when compiling or using the library with the GUI features activated,
         if it is defined as @c 0, only wxBase is available.}
 @itemdef{wxUSE_BASE,
-        only used by wxWidgets internally (defined as $1$ when
+        only used by wxWidgets internally (defined as 1 when
         building wxBase code, either as a standalone library or as part of the
-        monolithic wxWidgets library, defined as $0$ when building GUI library only)}
+        monolithic wxWidgets library, defined as 0 when building GUI library only)}
 @itemdef{wxNO_RTTI, is defined if the compiler RTTI support has been switched off}
 @itemdef{wxNO_EXCEPTIONS,
         is defined if the compiler support for C++ exceptions has been switched off}
 @itemdef{wxNO_THREADS,
         if this macro is defined, the compilation options
         don't include compiler flags needed for multithreaded code generation. This
-        implies that wxUSE_THREADS is $0$ and also that other (non-wx-based) threading
+        implies that wxUSE_THREADS is 0 and also that other (non-wx-based) threading
         packages cannot be used neither.}
 @itemdef{WXMAKINGDLL_XXX,
         used internally and defined when building the
