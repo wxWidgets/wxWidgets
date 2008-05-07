@@ -72,35 +72,56 @@ public:
     @class wxString
     @wxheader{string.h}
 
-    wxString is a class representing a character string. It uses 
-    reference counting and copy-on-write internally and is not
-    thread-safe. Please see the 
-    @ref overview_string "wxString overview" and the 
-    @ref overview_unicode "Unicode overview" for more information
-    about it.
+    wxString is a class representing a Unicode character string.  
+    wxString uses @c std::string internally to store its content
+    unless this is not supported by the compiler or disabled
+    specifically when building wxWidgets. Therefore wxString 
+    inherits many features from @c std::string's. Most
+    implementations of @std::string are thread-safe and don't
+    use reference counting. By default, wxString uses @c std::string
+    internally even if wxUSE_STL is not defined.
     
     Since wxWidgets 3.0 wxString internally uses UCS-2 (basically 2-byte per
     character wchar_t) under Windows and UTF-8 under Unix, Linux and
-    OS X to store its content. Much work has been done to make
-    existing code using ANSI string literals work as before.
+    OS X to store its content. Much work has been done to make existing
+    code using ANSI string literals work as before. If you need to have a 
+    wxString that uses wchar_t on Unix and Linux, too, you can specify
+    this on the command line with the @c configure @c --disable-utf8 switch.
 
-    wxString implements most of the methods of the
-    std::string class. These standard functions are not documented in
-    this manual, please see the STL documentation. The behaviour of
-    all these functions is identical to the behaviour described there.
+    As a consequence of this change, iterating over a wxString by index
+    can become inefficient in UTF8 mode and iterators should be used instead:
+    
+    @code
+    wxString s = "hello";
+    wxString::const_iterator i;
+    for (i = s.begin(); i != s.end(); ++i)
+    {
+        wxUniChar uni_ch = *i;
+        // do something with it
+    }
+    @endcode
+    
+    Please see the 
+    @ref overview_string "wxString overview" and the 
+    @ref overview_unicode "Unicode overview" for more information
+    about it.
+
+    wxString implements most of the methods of the @c std::string class.
+    These standard functions are only listed here, but there are not 
+    fully documented in this manual. Please see the STL documentation.
+    The behaviour of all these functions is identical to the behaviour
+    described there.
 
     You may notice that wxString sometimes has many functions which do
-    the same thing like, for example, wxString::Length, wxString::Len and @c length()
-    which all return the string length. In all cases of such duplication the @c std::string
-    compatible method (@c length() in this case, always the lowercase version) should be
-    used as it will ensure smoother transition to @c std::string when wxWidgets
-    starts using it instead of wxString.
+    the same thing like, for example, Length(), Len() and length() which
+    all return the string length. In all cases of such duplication the
+    @c std::string compatible method should be used.
 
         Anything may be concatenated (appended to) with a string. However, you can't
         append something to a C string (including literal constants), so to do this it
         should be converted to a wxString first.
         
-        @li @ref operatorout() "operator "
+        @li operator<<()
         @li operator+=()
         @li operator+()
         @li Append()
@@ -123,7 +144,6 @@ public:
         @li Upper()
         @li MakeLower()
         @li Lower()
-
 
         Many functions in this section take a character index in the string. As with C
         strings and/or arrays, the indices start from 0, so the first character of a
