@@ -386,7 +386,7 @@ public:
         string.
     */
     const wxWCharBuffer cMB2WC(const char* in) const;
-    const const wxWCharBuffer cMB2WC(const char* in,
+    const wxWCharBuffer cMB2WC(const char* in,
                                      size_t inLen,
                                      size_t outLen) const;
     //@}
@@ -400,7 +400,7 @@ public:
         return type (without const).
     */
     const char* cMB2WX(const char* psz) const;
-    const const wxWCharBuffer cMB2WX(const char* psz) const;
+    const wxWCharBuffer cMB2WX(const char* psz) const;
     //@}
 
     //@{
@@ -417,7 +417,7 @@ public:
         string.
     */
     const wxCharBuffer cWC2MB(const wchar_t* in) const;
-    const const wxCharBuffer cWC2MB(const wchar_t* in,
+    const wxCharBuffer cWC2MB(const wchar_t* in,
                                     size_t inLen,
                                     size_t outLen) const;
     //@}
@@ -430,7 +430,7 @@ public:
         return type (without const).
     */
     const wchar_t* cWC2WX(const wchar_t* psz) const;
-    const const wxCharBuffer cWC2WX(const wchar_t* psz) const;
+    const wxCharBuffer cWC2WX(const wchar_t* psz) const;
     //@}
 
     //@{
@@ -441,7 +441,7 @@ public:
         return type (without const).
     */
     const char* cWX2MB(const wxChar* psz) const;
-    const const wxCharBuffer cWX2MB(const wxChar* psz) const;
+    const wxCharBuffer cWX2MB(const wxChar* psz) const;
     //@}
 
     //@{
@@ -452,7 +452,7 @@ public:
         return type (without const).
     */
     const wchar_t* cWX2WC(const wxChar* psz) const;
-    const const wxWCharBuffer cWX2WC(const wxChar* psz) const;
+    const wxWCharBuffer cWX2WC(const wxChar* psz) const;
     //@}
 };
 
