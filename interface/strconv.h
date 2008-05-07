@@ -18,7 +18,7 @@
     @library{wxbase}
     @category{FIXME}
 
-    @see wxMBConvUTF8, @ref overview_mbconvclasses "wxMBConv classes overview"
+    @see wxMBConvUTF8, @ref overview_mbconv "wxMBConv classes overview"
 */
 class wxMBConvUTF7 : public wxMBConv
 {
@@ -48,7 +48,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxMBConvUTF7, @ref overview_mbconvclasses "wxMBConv classes overview"
+    @see wxMBConvUTF7, @ref overview_mbconv "wxMBConv classes overview"
 */
 class wxMBConvUTF8 : public wxMBConv
 {
@@ -83,7 +83,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconvclasses "wxMBConv classes
+    @see wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconv "wxMBConv classes
     overview"
 */
 class wxMBConvUTF16 : public wxMBConv
@@ -115,21 +115,25 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxMBConv, wxEncodingConverter, @ref overview_mbconvclasses "wxMBConv
+    @see wxMBConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv
     classes overview"
 */
 class wxCSConv : public wxMBConv
 {
 public:
-    //@{
     /**
-        Constructor. You may specify either the name of the character set you want to
-        convert from/to or an encoding constant. If the character set name (or the
-        encoding) is not recognized, ISO 8859-1 is used as fall back.
+        Constructor. You can specify the name of the character set you want to
+        convert from/to. If the character set name is not recognized, ISO 8859-1
+        is used as fall back.
     */
     wxCSConv(const wxChar* charset);
+    
+    /**
+        Constructor. You can specify an encoding constant for the 
+        character set you want to convert from/to or. If the encoding
+        is not recognized, ISO 8859-1 is used as fall back.
+    */
     wxCSConv(wxFontEncoding encoding);
-    //@}
 
     /**
         Destructor frees any resources needed to perform the conversion.
@@ -193,7 +197,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see @ref overview_mbconvclasses "wxMBConv classes overview"
+    @see @ref overview_mbconv "wxMBConv classes overview"
 */
 class wxMBConvFile : public wxMBConv
 {
@@ -228,7 +232,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconvclasses "wxMBConv classes
+    @see wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconv "wxMBConv classes
     overview"
 */
 class wxMBConvUTF32 : public wxMBConv
@@ -267,7 +271,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxCSConv, wxEncodingConverter, @ref overview_mbconvclasses "wxMBConv
+    @see wxCSConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv
     classes overview"
 */
 class wxMBConv

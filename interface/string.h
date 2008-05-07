@@ -106,6 +106,11 @@ public:
     @ref overview_unicode "Unicode overview" for more information
     about it.
 
+    wxString uses the current locale encoding to convert any C string
+    literal to Unicode. The same is done for converting to and from
+    @c std::string and for the return value of c_str(). For this
+    conversion, the @a wxConvLocal class instance is used. See wxCSConv.
+
     wxString implements most of the methods of the @c std::string class.
     These standard functions are only listed here, but there are not 
     fully documented in this manual. Please see the STL documentation.
