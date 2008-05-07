@@ -83,8 +83,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconv "wxMBConv classes
-    overview"
+    @see wxMBConvUTF8, wxMBConvUTF32, @ref overview_mbconv "wxMBConv classes overview"
 */
 class wxMBConvUTF16 : public wxMBConv
 {
@@ -115,8 +114,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxMBConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv
-    classes overview"
+    @see wxMBConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv classes overview"
 */
 class wxCSConv : public wxMBConv
 {
@@ -232,8 +230,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconv "wxMBConv classes
-    overview"
+    @see wxMBConvUTF8, wxMBConvUTF16, @ref overview_mbconv "wxMBConv classes overview"
 */
 class wxMBConvUTF32 : public wxMBConv
 {
@@ -271,8 +268,7 @@ public:
     @library{wxbase}
     @category{FIXME}
 
-    @see wxCSConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv
-    classes overview"
+    @see wxCSConv, wxEncodingConverter, @ref overview_mbconv "wxMBConv classes overview"
 */
 class wxMBConv
 {

@@ -109,15 +109,15 @@ public:
     wxString uses the current locale encoding to convert any C string
     literal to Unicode. The same is done for converting to and from
     @c std::string and for the return value of c_str(). For this
-    conversion, the @a wxConvLocal class instance is used. See wxCSConv.
+    conversion, the @a wxConvLibc class instance is used. See wxCSConv and wxMBConv.
 
     wxString implements most of the methods of the @c std::string class.
-    These standard functions are only listed here, but there are not 
+    These standard functions are only listed here, but they are not 
     fully documented in this manual. Please see the STL documentation.
     The behaviour of all these functions is identical to the behaviour
     described there.
 
-    You may notice that wxString sometimes has many functions which do
+    You may notice that wxString sometimes has several functions which do
     the same thing like, for example, Length(), Len() and length() which
     all return the string length. In all cases of such duplication the
     @c std::string compatible method should be used.
@@ -310,7 +310,7 @@ public:
 
     /**
        Constructs a string from the string literal @c psz using
-       the current locale encoding to convert it to Unicode.
+       the current locale encoding to convert it to Unicode (wxConvLibc).
     */
     wxString(const char *psz);
 
@@ -322,7 +322,7 @@ public:
 
     /**
        Constructs a string from the first @ nLength character of the string literal @c psz using
-       the current locale encoding to convert it to Unicode.
+       the current locale encoding to convert it to Unicode (wxConvLibc).
     */
     wxString(const char *psz, size_t nLength);
 
@@ -354,8 +354,8 @@ public:
     wxString(const wxWCharBuffer& buf);
 
     /**
-       Constructs a string from @str using the using
-       the current locale encoding to convert it to Unicode.
+       Constructs a string from @str using the using the current locale encoding 
+       to convert it to Unicode (wxConvLibc).
     */
     wxString(const std::string& str);
     
@@ -855,7 +855,7 @@ public:
         @see wxString::From8BitData()
     */
     const char* To8BitData() const;
-    const const wxCharBuffer To8BitData() const;
+    const wxCharBuffer To8BitData() const;
     //@}
 
     //@{
@@ -867,7 +867,7 @@ public:
         powerful means of converting wxString to C string.
     */
     const char* ToAscii() const;
-    const const wxCharBuffer ToAscii() const;
+    const wxCharBuffer ToAscii() const;
     //@}
 
     /**
@@ -937,7 +937,7 @@ public:
         Same as utf8_str().
     */
     const char* ToUTF8() const;
-    const const wxCharBuffer ToUF8() const;
+    const wxCharBuffer ToUF8() const;
     //@}
 
     /**
@@ -1024,7 +1024,7 @@ public:
         @see wxMBConv, c_str(), wc_str(), fn_str(), char_str()
     */
     const char* mb_str(const wxMBConv& conv = wxConvLibc) const;
-    const const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
+    const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
     //@}
 
     /**
