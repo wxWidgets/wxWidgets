@@ -199,7 +199,7 @@ public:
                                         double radius);
     virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
-#if wxUSE_SPLINES
+#if wxUSE_SPLINES && !defined(__WXWINCE__)
     virtual void DoDrawSpline(const wxPointList *points);
 #endif
 

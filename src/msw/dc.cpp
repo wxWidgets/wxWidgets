@@ -1083,13 +1083,9 @@ void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     CalcBoundingBox(x2, y2);
 }
 
-#if wxUSE_SPLINES
+#if wxUSE_SPLINES && !defined(__WXWINCE__)
 void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
 {
-#ifdef  __WXWINCE__
-    // WinCE does not support ::PolyBezier so use generic version
-    wxDCImpl::DoDrawSpline(points);
-#else
     // quadratic b-spline to cubic bezier spline conversion
     //
     // quadratic spline with control points P0,P1,P2
@@ -1178,9 +1174,8 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     ::PolyBezier( GetHdc(), lppt, bezier_pos );
 
     free(lppt);
-#endif
 }
-#endif
+#endif // wxUSE_SPLINES
 
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
 void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
