@@ -219,6 +219,33 @@ private:
     DECLARE_NO_COPY_CLASS(wxToolBarTool)
 };
 
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+// return the rectangle of the item at the given index
+//
+// returns an empty (0, 0, 0, 0) rectangle if fails so the caller may compare
+// r.right or r.bottom with 0 to check for this
+static RECT wxGetTBItemRect(HWND hwnd, int index)
+{
+    RECT r;
+
+    // note that we use TB_GETITEMRECT and not TB_GETRECT because the latter
+    // only appeared in v4.70 of comctl32.dll
+    if ( !::SendMessage(hwnd, TB_GETITEMRECT, index, (LPARAM)&r) )
+    {
+        wxLogLastError(wxT("TB_GETITEMRECT"));
+
+        r.top =
+        r.left =
+        r.right =
+        r.bottom = 0;
+    }
+
+    return r;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -401,13 +428,27 @@ wxSize wxToolBar::DoGetBestSize() const
             sizeBest.y = t;
         }
     }
-    else
+    else // TB_GETMAXSIZE succeeded
     {
+        // but it could still return an incorrect result due to what appears to
+        // be a bug in old comctl32.dll versions which don't handle controls in
+        // the toolbar correctly, so work around it (see SF patch 1902358)
+        if ( !IsVertical() && wxApp::GetComCtl32Version() < 600 )
+        {
+            // calculate the toolbar width in alternative way
+            const RECT rcFirst = wxGetTBItemRect(GetHwnd(), 0);
+            const RECT rcLast = wxGetTBItemRect(GetHwnd(), GetToolsCount() - 1);
+
+            const int widthAlt = rcLast.right - rcFirst.left;
+            if ( widthAlt > size.cx )
+                size.cx = widthAlt;
+        }
+
         sizeBest.x = size.cx;
         sizeBest.y = size.cy;
     }
 
-    if (!IsVertical())
+    if ( !IsVertical() )
     {
         // Without the extra height, DoGetBestSize can report a size that's
         // smaller than the actual window, causing windows to overlap slightly
@@ -511,11 +552,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     size_t nButtonsToDelete = 1;
 
     // get the size of the button we're going to delete
-    RECT r;
-    if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT, pos, (LPARAM)&r) )
-    {
-        wxLogLastError(_T("TB_GETITEMRECT"));
-    }
+    const RECT r = wxGetTBItemRect(GetHwnd(), pos);
 
     int width = r.right - r.left;
 
@@ -1012,15 +1049,7 @@ bool wxToolBar::Realize()
         if ( !isControl && !IsVertical() )
             continue;
 
-        // note that we use TB_GETITEMRECT and not TB_GETRECT because the
-        // latter only appeared in v4.70 of comctl32.dll
-        RECT r;
-        if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT,
-                            index, (LPARAM)(LPRECT)&r) )
-        {
-            wxLogLastError(wxT("TB_GETITEMRECT"));
-        }
-
+        const RECT r = wxGetTBItemRect(GetHwnd(), index);
         if ( !isControl )
         {
             // can only be control if isVertical
@@ -1240,8 +1269,8 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
             return false;
 
         // Display popup menu below button
-        RECT r;
-        if (::SendMessage(GetHwnd(), TB_GETITEMRECT, GetToolPos(tbhdr->iItem), (LPARAM)&r))
+        const RECT r = wxGetTBItemRect(GetHwnd(), GetToolPos(tbhdr->iItem));
+        if ( r.right )
             PopupMenu(menu, r.left, r.bottom);
 
         return true;
@@ -1615,46 +1644,44 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
     // calculate our minor dimension ourselves - we're confusing the standard
     // logic (TB_AUTOSIZE) with our horizontal toolbars and other hacks
-    RECT r;
-    if ( ::SendMessage(GetHwnd(), TB_GETITEMRECT, 0, (LPARAM)&r) )
+    const RECT r = wxGetTBItemRect(GetHwnd(), 0);
+    if ( !r.right )
+        return false;
+
+    int w, h;
+
+    if ( IsVertical() )
     {
-        int w, h;
-
-        if ( IsVertical() )
+        w = r.right - r.left;
+        if ( m_maxRows )
         {
-            w = r.right - r.left;
-            if ( m_maxRows )
-            {
-                w *= (m_nButtons + m_maxRows - 1)/m_maxRows;
-            }
-            h = HIWORD(lParam);
+            w *= (m_nButtons + m_maxRows - 1)/m_maxRows;
         }
+        h = HIWORD(lParam);
+    }
+    else
+    {
+        w = LOWORD(lParam);
+        if (HasFlag( wxTB_FLAT ))
+            h = r.bottom - r.top - 3;
         else
+            h = r.bottom - r.top;
+        if ( m_maxRows )
         {
-            w = LOWORD(lParam);
-            if (HasFlag( wxTB_FLAT ))
-                h = r.bottom - r.top - 3;
-            else
-                h = r.bottom - r.top;
-            if ( m_maxRows )
-            {
-                // FIXME: hardcoded separator line height...
-                h += HasFlag(wxTB_NODIVIDER) ? 4 : 6;
-                h *= m_maxRows;
-            }
+            // FIXME: hardcoded separator line height...
+            h += HasFlag(wxTB_NODIVIDER) ? 4 : 6;
+            h *= m_maxRows;
         }
-
-        if ( MAKELPARAM(w, h) != lParam )
-        {
-            // size really changed
-            SetSize(w, h);
-        }
-
-        // message processed
-        return true;
     }
 
-    return false;
+    if ( MAKELPARAM(w, h) != lParam )
+    {
+        // size really changed
+        SetSize(w, h);
+    }
+
+    // message processed
+    return true;
 }
 
 bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
@@ -1735,14 +1762,9 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                     continue;
 
                 // get the bounding rect of the separator
-                RECT r;
-                if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT,
-                                    n, (LPARAM)&r) )
-                {
-                    wxLogDebug(_T("TB_GETITEMRECT failed?"));
-
+                RECT r = wxGetTBItemRect(GetHwnd(), n);
+                if ( !r.right )
                     continue;
-                }
 
                 // does it intersect the control?
                 wxRect rectItem;
