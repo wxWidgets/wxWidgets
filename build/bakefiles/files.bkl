@@ -741,6 +741,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/valtext.cpp
     src/common/wincmn.cpp
     src/common/windowid.cpp
+    src/common/wrapsizer.cpp
     src/common/xpmdecod.cpp
     src/generic/busyinfo.cpp
     src/generic/buttonbar.cpp
@@ -863,6 +864,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/valtext.h
     wx/window.h
     wx/windowid.h
+    wx/wrapsizer.h
     wx/wupdlock.h
 
     wx/accel.h

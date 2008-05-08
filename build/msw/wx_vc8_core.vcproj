@@ -1091,6 +1091,9 @@
 				RelativePath="..\..\src\common\windowid.cpp"
 			/>
 			<File
+				RelativePath="..\..\src\common\wrapsizer.cpp"
+			/>
+			<File
 				RelativePath="..\..\src\common\xpmdecod.cpp"
 			/>
 		</Filter>
@@ -4858,6 +4861,9 @@
 			/>
 			<File
 				RelativePath="..\..\include\wx\wizard.h"
+			/>
+			<File
+				RelativePath="..\..\include\wx\wrapsizer.h"
 			/>
 			<File
 				RelativePath="..\..\include\wx\wupdlock.h"

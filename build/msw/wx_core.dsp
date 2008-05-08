@@ -650,6 +650,10 @@ SOURCE=..\..\src\common\windowid.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\wrapsizer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\xpmdecod.cpp
 # End Source File
 # End Group
@@ -6428,6 +6432,10 @@ SOURCE=..\..\include\wx\windowid.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wizard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wrapsizer.h
 # End Source File
 # Begin Source File
 

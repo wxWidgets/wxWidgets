@@ -1689,6 +1689,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_valtext.o \
 	$(OBJS)\monodll_wincmn.o \
 	$(OBJS)\monodll_windowid.o \
+	$(OBJS)\monodll_wrapsizer.o \
 	$(OBJS)\monodll_xpmdecod.o \
 	$(OBJS)\monodll_busyinfo.o \
 	$(OBJS)\monodll_buttonbar.o \
@@ -1922,6 +1923,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_valtext.o \
 	$(OBJS)\monodll_wincmn.o \
 	$(OBJS)\monodll_windowid.o \
+	$(OBJS)\monodll_wrapsizer.o \
 	$(OBJS)\monodll_xpmdecod.o \
 	$(OBJS)\monodll_busyinfo.o \
 	$(OBJS)\monodll_buttonbar.o \
@@ -2343,6 +2345,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_valtext.o \
 	$(OBJS)\monolib_wincmn.o \
 	$(OBJS)\monolib_windowid.o \
+	$(OBJS)\monolib_wrapsizer.o \
 	$(OBJS)\monolib_xpmdecod.o \
 	$(OBJS)\monolib_busyinfo.o \
 	$(OBJS)\monolib_buttonbar.o \
@@ -2576,6 +2579,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_valtext.o \
 	$(OBJS)\monolib_wincmn.o \
 	$(OBJS)\monolib_windowid.o \
+	$(OBJS)\monolib_wrapsizer.o \
 	$(OBJS)\monolib_xpmdecod.o \
 	$(OBJS)\monolib_busyinfo.o \
 	$(OBJS)\monolib_buttonbar.o \
@@ -2922,6 +2926,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_valtext.o \
 	$(OBJS)\coredll_wincmn.o \
 	$(OBJS)\coredll_windowid.o \
+	$(OBJS)\coredll_wrapsizer.o \
 	$(OBJS)\coredll_xpmdecod.o \
 	$(OBJS)\coredll_busyinfo.o \
 	$(OBJS)\coredll_buttonbar.o \
@@ -3155,6 +3160,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_valtext.o \
 	$(OBJS)\coredll_wincmn.o \
 	$(OBJS)\coredll_windowid.o \
+	$(OBJS)\coredll_wrapsizer.o \
 	$(OBJS)\coredll_xpmdecod.o \
 	$(OBJS)\coredll_busyinfo.o \
 	$(OBJS)\coredll_buttonbar.o \
@@ -3395,6 +3401,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_valtext.o \
 	$(OBJS)\corelib_wincmn.o \
 	$(OBJS)\corelib_windowid.o \
+	$(OBJS)\corelib_wrapsizer.o \
 	$(OBJS)\corelib_xpmdecod.o \
 	$(OBJS)\corelib_busyinfo.o \
 	$(OBJS)\corelib_buttonbar.o \
@@ -3628,6 +3635,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_valtext.o \
 	$(OBJS)\corelib_wincmn.o \
 	$(OBJS)\corelib_windowid.o \
+	$(OBJS)\corelib_wrapsizer.o \
 	$(OBJS)\corelib_xpmdecod.o \
 	$(OBJS)\corelib_busyinfo.o \
 	$(OBJS)\corelib_buttonbar.o \
@@ -7279,6 +7287,11 @@ $(OBJS)\monodll_windowid.o: ../../src/common/windowid.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_wrapsizer.o: ../../src/common/wrapsizer.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_xpmdecod.o: ../../src/common/xpmdecod.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9521,6 +9534,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_windowid.o: ../../src/common/windowid.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_wrapsizer.o: ../../src/common/wrapsizer.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11825,6 +11843,11 @@ $(OBJS)\coredll_windowid.o: ../../src/common/windowid.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_wrapsizer.o: ../../src/common/wrapsizer.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_xpmdecod.o: ../../src/common/xpmdecod.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13259,6 +13282,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_windowid.o: ../../src/common/windowid.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_wrapsizer.o: ../../src/common/wrapsizer.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

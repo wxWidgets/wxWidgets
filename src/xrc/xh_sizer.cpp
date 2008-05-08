@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/gbsizer.h"
+#include "wx/wrapsizer.h"
 #include "wx/notebook.h"
 #include "wx/tokenzr.h"
 
@@ -113,7 +114,8 @@ bool wxSizerXmlHandler::IsSizerNode(wxXmlNode *node)
            (IsOfClass(node, wxT("wxStaticBoxSizer"))) ||
            (IsOfClass(node, wxT("wxGridSizer"))) ||
            (IsOfClass(node, wxT("wxFlexGridSizer"))) ||
-           (IsOfClass(node, wxT("wxGridBagSizer")));
+           (IsOfClass(node, wxT("wxGridBagSizer"))) ||
+           (IsOfClass(node, wxT("wxWrapSizer")));
 }
 
 
@@ -204,6 +206,9 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
         sizer = Handle_wxFlexGridSizer();
 
     else if (m_class == wxT("wxGridBagSizer"))
+        sizer = Handle_wxGridBagSizer();
+
+    else if (m_class == wxT("wxWrapSizer"))
         sizer = Handle_wxGridBagSizer();
 
     if ( !sizer )
@@ -306,6 +311,11 @@ wxSizer*  wxSizerXmlHandler::Handle_wxGridBagSizer()
     return sizer;
 }
 
+wxSizer*  wxSizerXmlHandler::Handle_wxWrapSizer()
+{
+    wxWrapSizer *sizer = new wxWrapSizer(GetStyle("orient"), wxHORIZONTAL);
+    return sizer;
+}
 
 
 
