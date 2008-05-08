@@ -33,6 +33,7 @@ The following is a basic categorization of them:
 
 @section page_topics_programming Programming with wxWidgets
 
+@li @subpage overview_changes_since28
 @li @subpage overview_backwardcompat
 @li @subpage overview_rtti
 @li @subpage overview_refcount
